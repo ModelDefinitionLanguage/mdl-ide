@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="MDL Editor" url="https://sourceforge.net/projects/ddmore/files/update/mdleditor">
+      This is the installation of the MDL Editor - an xText-based DSL for description of statistical models for drug analysis.
+The MDL models are universal and automatically converted into other languages such as NM-TRAN. The MDL Editor plugin requires Eclipse configuration with xText support which can be installed from http://www.eclipse.org/Xtext/download.html
+   </description>
+   <feature url="features/org.ddmore.mdl.sdk_1.0.0.201303141453.jar" id="org.ddmore.mdl.sdk" version="1.0.0.201303141453">
+      <category name="DDMoRe tools"/>
+   </feature>
+   <category-def name="DDMoRe tools" label="DDMoRe tools"/>
+</site>

@@ -1,0 +1,18 @@
+«IMPORT org::ddmore::mdl::ui::wizard»
+
+«DEFINE main FOR MdlProjectInfo»
+«EXPAND models FOR this»
+«EXPAND data FOR this»
+«ENDDEFINE»
+
+«DEFINE models FOR MdlProjectInfo»
+«FILE "src/models/Model.mdl"-»
+ #New MDL model!
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE data FOR MdlProjectInfo»
+«FILE "src/data/Data.csv"-»
+ #New data file!
+«ENDFILE»
+«ENDDEFINE»

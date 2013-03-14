@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+    <extension
+            point="org.eclipse.ui.editors">
+        <editor
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+            default="true"
+            extensions="mdl"
+            id="org.ddmore.mdl.Mdl"
+            name="Mdl Editor">
+        </editor>
+    </extension>
+    <extension
+        point="org.eclipse.ui.handlers">
+        <handler
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+            commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+            <activeWhen>
+                <reference
+                    definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+        <handler
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+            commandId="org.ddmore.mdl.Mdl.validate">
+         <activeWhen>
+            <reference
+                    definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+            </reference>
+         </activeWhen>
+      </handler>
+      <!-- N.K. -->
+      <handler
+	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToNONMEMHandler"
+	    commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM">
+      </handler>
+      <handler
+	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.RunWithNONMEMHandler"
+	    commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM">
+      </handler>
+      <handler
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToNONMEMHandler_PE"
+            commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE">
+      </handler>
+      <handler
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.RunWithNONMEMHandler_PE"
+            commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM_PE">
+      </handler>
+    </extension>
+    <extension point="org.eclipse.core.expressions.definitions">
+        <definition id="org.ddmore.mdl.Mdl.Editor.opened">
+            <and>
+                <reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+                <with variable="activeEditor">
+                    <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
+                        value="org.ddmore.mdl.Mdl" 
+                        forcePluginActivation="true"/>
+                </with>        
+            </and>
+        </definition>
+    </extension>
+    <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="org.ddmore.mdl.Mdl"
+            name="MDL">
+            <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
+        </page>
+        <page
+            category="org.ddmore.mdl.Mdl"
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+            id="org.ddmore.mdl.Mdl.coloring"
+            name="Syntax Coloring">
+            <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
+        </page>
+        <page
+            category="org.ddmore.mdl.Mdl"
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+            id="org.ddmore.mdl.Mdl.templates"
+            name="Templates">
+            <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
+        </page>
+        <page
+              category="org.ddmore.mdl.Mdl"
+              class="org.ddmore.mdl.ui.preference.ExternalToolsPreferencePage"
+              id="org.ddmore.mdl.Mdl.external"
+              name="External Tools">
+            <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
+        </page>
+    </extension>
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="org.ddmore.mdl.Mdl"
+            name="Mdl">
+            <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+    <extension
+        point="org.eclipse.ui.keywords">
+        <keyword
+            id="org.ddmore.mdl.ui.keyword_Mdl"
+            label="MDL"/>
+    </extension>
+    <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="Trigger expensive validation"
+            id="org.ddmore.mdl.Mdl.validate"
+            name="Validate">
+      </command>
+      <command
+            id="org.ddmore.mdl.ui.handler.ConvertToNONMEM"
+            name="Convert to NONMEM">
+      </command>
+      <command
+            id="org.ddmore.mdl.ui.handler.RunWithNONMEM"
+            name="Run with NONMEM">
+      </command>
+      <command
+            id="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE"
+            name="Convert to NONMEM">
+      </command>
+      <command
+            id="org.ddmore.mdl.ui.handler.RunWithNONMEM_PE"
+            name="Run with NONMEM">
+      </command>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+        <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+             <command
+                 commandId="org.ddmore.mdl.Mdl.validate"
+                 style="push"
+                 tooltip="Trigger expensive validation">
+            <visibleWhen checkEnabled="false">
+                <reference
+                    definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+                </reference>
+            </visibleWhen>
+         </command>  
+         </menuContribution>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+                	<reference definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+                	</reference>
+            	</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+	    <handler
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+            commandId="org.eclipse.xtext.ui.editor.FindReferences">
+            <activeWhen>
+                <reference
+                    definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+    </extension>   
+
+<!-- adding resource factories -->
+
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="mdl">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+        <resourceServiceProvider
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+            uriExtension="mdl">
+        </resourceServiceProvider>
+    </extension>
+
+    <!-- marker definitions for org.ddmore.mdl.Mdl -->
+    <extension
+            id="mdl.check.fast"
+            name="Mdl Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.fast"/>
+        <persistent value="true"/>
+    </extension>
+    <extension
+            id="mdl.check.normal"
+            name="Mdl Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.normal"/>
+        <persistent value="true"/>
+    </extension>
+    <extension
+            id="mdl.check.expensive"
+            name="Mdl Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.expensive"/>
+        <persistent value="true"/>
+    </extension>
+ 
+   <!-- N.K. -->
+   <extension
+         point="org.eclipse.xtext.builder.participant">
+      <participant
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
+      </participant>
+   </extension>
+   
+   <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            category="org.ddmore.mdl.Mdl"
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="org.ddmore.mdl.Mdl.compiler.preferencePage"
+            name="Compiler">
+            <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
+        </page>
+    </extension>
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            category="org.ddmore.mdl.Mdl"
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="org.ddmore.mdl.Mdl.compiler.propertyPage"
+            name="Compiler">
+            <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler 
+			class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="org.ddmore.mdl.Mdl.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+    <!-- quickfix marker resolution generator for org.ddmore.mdl.Mdl -->
+    <extension
+            point="org.eclipse.ui.ide.markerResolution">
+        <markerResolutionGenerator
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.ddmore.mdl.ui.mdl.check.fast">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.ddmore.mdl.ui.mdl.check.normal">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.ddmore.mdl.ui.mdl.check.expensive">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+    </extension>
+   	<!-- Rename Refactoring -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler 
+			class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.IRenameElementHandler"
+			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
+			<activeWhen>
+				<reference
+					definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+    <extension point="org.eclipse.ui.menus">
+         <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+         <command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+               style="push">
+            <visibleWhen checkEnabled="false">
+               <reference
+                     definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+               </reference>
+            </visibleWhen>
+         </command>
+         <separator
+               name="org.ddmore.mdl.ui.separatorEditFinished"
+               visible="true">
+         </separator>
+      </menuContribution>
+   </extension>
+   <extension point="org.eclipse.ui.preferencePages">
+	    <page
+	        category="org.ddmore.mdl.Mdl"
+	        class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+	        id="org.ddmore.mdl.Mdl.refactoring"
+	        name="Refactoring">
+	        <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
+	    </page>
+	</extension>
+
+  <extension point="org.eclipse.compare.contentViewers">
+    <viewer id="org.ddmore.mdl.Mdl.compare.contentViewers"
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="mdl">
+    </viewer>
+  </extension>
+  <extension point="org.eclipse.compare.contentMergeViewers">
+    <viewer id="org.ddmore.mdl.Mdl.compare.contentMergeViewers"
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="mdl" label="Mdl Compare">
+     </viewer>
+  </extension>
+  <extension point="org.eclipse.ui.editors.documentProviders">
+    <provider id="org.ddmore.mdl.Mdl.editors.documentProviders"
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+            extensions="mdl">
+    </provider>
+  </extension>
+  <extension
+        point="org.eclipse.ui.newWizards">
+     <category
+           id="org.ddmore.mdl.ui.wizard"
+           name="MDL Project">
+     </category>
+     <wizard
+           category="org.ddmore.mdl.ui.wizard"
+           class="org.ddmore.mdl.ui.wizard.FileNewWizard"
+           finalPerspective="org.ddmore.mdl.ui.perspective.MDL"
+           icon="icons/sample.gif"
+           id="org.ddmore.mdl.ui.wizard.FileNewWizard"
+           name="MDL File"
+           project="false">
+     </wizard>
+     <wizard
+           category="org.ddmore.mdl.ui.wizard"
+           class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.wizard.MdlNewProjectWizard"
+           finalPerspective="org.ddmore.mdl.ui.perspective.MDL"
+           icon="icons/sample.gif"
+           id="org.ddmore.mdl.ui.wizard.MdlNewProjectWizard"
+           name="Plug-in MDL Project"
+           project="true">
+     </wizard>
+     <wizard
+           category="org.ddmore.mdl.ui.wizard"
+           class="org.ddmore.mdl.ui.wizard.SimpleMDLProject"
+           finalPerspective="org.ddmore.mdl.ui.perspective.MDL"
+           icon="icons/sample.gif"
+           id="org.ddmore.mdl.ui.wizard.SimpleMDLProject"
+           name="MDL Project"
+           project="true">
+     </wizard>
+ 	</extension>
+  
+  	<extension point="org.eclipse.ui.perspectives">
+	   <perspective
+	         name="MDL"
+	         class="org.ddmore.mdl.ui.perspective.MDLPerspective"
+	         id="org.ddmore.mdl.ui.perspective.MDL">
+	   </perspective>
+	</extension>
+	
+
+	<extension point="org.eclipse.ui.perspectiveExtensions"> 
+        <perspectiveExtension 
+            targetID="org.eclipse.ui.resourcePerspective"> 
+            <actionSet id="org.eclipse.jdt.ui.JavaActionSet"/> 
+            <viewShortcut id="org.eclipse.jdt.ui.PackageExplorer"/> 
+            <newWizardShortcut id="org.ddmore.mdl.ui.wizard.FileNewWizard"/> 
+            <perspectiveShortcut id="org.ddmore.mdl.ui.perspective.MDL"/> 
+            <view id="org.eclipse.jdt.ui.PackageExplorer" 
+                relative="org.eclipse.ui.views.ResourceNavigator" 
+                relationship="stack"/> 
+            <view id="org.eclipse.jdt.ui.TypeHierarchy" 
+                relative="org.eclipse.ui.views.ResourceNavigator" 
+                relationship="left" 
+                ratio="0.50"/> 
+        </perspectiveExtension>
+    </extension>
+ <extension
+       point="org.eclipse.ui.importWizards">
+    <category
+          id="org.ddmore.mdl.ui.wizard.ImportMDLCategory"
+          name="MDL">
+    </category>
+    <wizard
+          category="org.ddmore.mdl.ui.wizard.ImportMDLCategory"
+          class="org.ddmore.mdl.ui.wizard.FileImportWizard"
+          icon="icons/sample.gif"
+          id="org.ddmore.mdl.ui.wizard.FileImportWizard"
+          name="MDL File">
+       <description>
+          Import an MDL file from the local file system into the workspace.
+       </description>
+    </wizard>
+    <wizard
+          category="org.ddmore.mdl.ui.wizard.ImportMDLCategory"
+          class="org.ddmore.mdl.ui.wizard.DataSetImportWizard"
+          icon="icons/sample.gif"
+          id="org.ddmore.mdl.ui.wizard.DataSetFileImportWizard"
+          name="Data File">
+       <description>
+          Import a file from the local file system into the workspace.
+       </description>
+    </wizard>
+ </extension>
+ <extension
+       point="org.eclipse.ui.views">
+ </extension>
+ <extension
+       point="org.eclipse.ui.navigator.viewer">
+    <viewerActionBinding
+          viewerId="org.ddmore.mdl.ui.navigator">
+       <includes>
+          <actionExtension
+                pattern="org.eclipse.ui.navigator.resources.*">
+          </actionExtension>
+       </includes>
+    </viewerActionBinding>
+    <viewerContentBinding
+          viewerId="org.ddmore.mdl.ui.navigator">
+       <includes>
+          <contentExtension
+                pattern="org.eclipse.ui.navigator.resourceContent">
+          </contentExtension>
+          <contentExtension
+                pattern="org.eclipse.ui.navigator.resources.filters.*">
+          </contentExtension>
+          <contentExtension
+                pattern="org.eclipse.ui.navigator.resources.linkHelper">
+          </contentExtension>
+          <contentExtension
+                pattern="org.eclipse.ui.navigator.resources.workingSets">
+          </contentExtension>
+       </includes>
+    </viewerContentBinding>
+ </extension>
+    <!--Convert to NONMEM -->
+    <extension point="org.eclipse.ui.menus">
+    <menuContribution
+          locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
+            <separator
+               name="org.ddmore.mdl.ui.separatorNONMEMPackage_PE"
+               visible="true">
+            </separator>
+	        <command
+	            commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE" style="push">
+	            <visibleWhen checkEnabled="false">
+                	<iterate>
+				       <adapt type="org.eclipse.core.resources.IResource">
+		        			<test property="org.eclipse.core.resources.name"
+				              value="*.mdl"/>
+		    		   </adapt>
+	 	    		</iterate>
+ 	            </visibleWhen>
+	        </command>
+	</menuContribution>
+	<menuContribution locationURI="popup:#TextEditorContext?after=group.edit">
+	        <command
+	            commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM"
+	            style="push">
+	            <visibleWhen
+	                      checkEnabled="false">
+	                   <reference
+	                         definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+	                   </reference>
+	                </visibleWhen>
+	        </command>
+	    </menuContribution>
+	</extension>
+	<!--Run with NONMEM -->
+	<extension
+       point="org.eclipse.ui.menus">
+        <menuContribution
+            locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
+	        <command
+	            commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM_PE" style="push">
+	            <visibleWhen checkEnabled="false">
+	            		<iterate>
+					       <adapt type="org.eclipse.core.resources.IResource">
+		          				<test property="org.eclipse.core.resources.name"
+				                value="*.mdl"/>
+		    			   </adapt>
+	 	    			</iterate>
+	            </visibleWhen>
+	        </command>
+         <separator
+               name="org.ddmore.mdl.ui.separatorNONMEMPackage_PE"
+               visible="true">
+         </separator>
+	</menuContribution>
+	<menuContribution locationURI="popup:#TextEditorContext?after=group.edit">
+	        <command
+	            commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM"
+	            style="push">
+	            <visibleWhen
+	                      checkEnabled="false">
+	                   <reference
+	                         definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+	                   </reference>
+	                </visibleWhen>
+	        </command>
+         <separator
+               name="org.ddmore.mdl.ui.separatorNONMEMPackage"
+               visible="true">
+         </separator>
+	    </menuContribution>
+ </extension>
+ <!--N.K. -->     
+ 
+</plugin>
