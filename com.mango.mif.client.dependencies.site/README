@@ -1,0 +1,4 @@
+That project is a contents of a p2 update site containing MIF client and its' dependencies bundles.
+
+To build it run the 'build p2 site.launch' eclipse launch configuration. As a result there should be p2 update
+site created in 'target' directory. That should be published to SF *before* running MDL editor build.

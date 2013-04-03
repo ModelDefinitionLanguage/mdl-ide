@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.ddmore.mdl.sdk_1.0.1.qualifier.jar" id="org.ddmore.mdl.sdk" version="1.0.1.qualifier">
+      <category name="DDMoRe tools"/>
+   </feature>
+   <category-def name="DDMoRe tools" label="DDMoRe tools"/>
+</site>

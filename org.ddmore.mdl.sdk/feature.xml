@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<feature id="org.ddmore.mdl.sdk"
-	label="Mdl SDK Feature "
-	version="1.0.0.qualifier">
-	<plugin
-			id="org.ddmore.mdl"
-			download-size="0"
-			install-size="0"
-			version="0.0.0"
-			unpack="false"/>
-	<plugin
-			id="org.ddmore.mdl.ui"
-			download-size="0"
-			install-size="0"
-			version="0.0.0"
-			unpack="false"/>
+<feature
+      id="org.ddmore.mdl.sdk"
+      label="Mdl SDK Feature "
+      version="1.0.1.qualifier"
+      provider-name="DDMoRe">
+
+   <url>
+      <update label="DDMoRe Tools" url="https://sourceforge.net/projects/ddmore/files/update/ddmore-tools/"/>
+   </url>
+
+   <plugin
+         id="org.ddmore.mdl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.ddmore.mdl.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.ddmore.mdleditor.application"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

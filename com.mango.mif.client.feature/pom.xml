@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<relativePath>../eu.ddmore.mdleditor.build/pom.xml</relativePath>
+		<groupId>eu.ddmore</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>com.mango.mif.client.feature</artifactId>
+	<packaging>eclipse-feature</packaging>
+</project> 

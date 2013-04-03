@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.ddmore.mdl.ui
 Bundle-Vendor: My Company
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-SymbolicName: org.ddmore.mdl.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.ddmore.mdl;visibility:=reexport,
@@ -24,7 +24,7 @@ Require-Bundle: org.ddmore.mdl;visibility:=reexport,
  org.eclipse.ui.navigator.resources
 Import-Package: org.apache.log4j,
  org.eclipse.ui.console
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.ddmore.mdl.ui.contentassist,
  org.ddmore.mdl.ui.contentassist.antlr,
  org.ddmore.mdl.ui.internal
