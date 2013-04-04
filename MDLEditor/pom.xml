@@ -5,7 +5,7 @@
   <parent>
     <relativePath>../eu.ddmore.mdleditor.build/pom.xml</relativePath>
     <groupId>eu.ddmore</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>eu.ddmore.parent</artifactId>
     <version>1.0.1-SNAPSHOT</version>
   </parent>
 

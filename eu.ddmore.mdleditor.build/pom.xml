@@ -2,7 +2,7 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.ddmore</groupId>
-  <artifactId>parent</artifactId>
+  <artifactId>eu.ddmore.parent</artifactId>
   <version>1.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
