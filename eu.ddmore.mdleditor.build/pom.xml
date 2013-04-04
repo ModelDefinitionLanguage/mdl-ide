@@ -143,7 +143,7 @@
           <groupId>org.eclipse.tycho</groupId>
           <artifactId>tycho-packaging-plugin</artifactId>
           <version>${tycho.version}</version>
-    <!-- <dependencies>
+    	 <dependencies>
             <dependency>
               <groupId>org.eclipse.tycho.extras</groupId>
               <artifactId>tycho-buildtimestamp-jgit</artifactId>
@@ -156,7 +156,7 @@
             <timestampProvider>jgit</timestampProvider>
             <jgit.ignore>
             </jgit.ignore>
-          </configuration> -->      
+          </configuration>      
         </plugin>
         <plugin>
           <groupId>org.eclipse.tycho</groupId>
