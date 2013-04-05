@@ -1,27 +1,42 @@
 package org.ddmore.mdl.ui.preference;
+
 import java.util.HashMap;
 
 public class MDLPreferenceConstants {
-	public static final String NONMEM_HOME = "nonmemHome";
-	public static final String MLXTRAN_HOME = "mlxtranHome";
-	public static final String R_HOME = "rHome";
-	public static final String MATHLAB_HOME = "mathlabHome";
 
-	public static final String LOGIN = "login";
-	public static final String PASSWORD = "password";	
+    public static final String NONMEM_HOME = "nonmemHome";
+    public static final String MLXTRAN_HOME = "mlxtranHome";
+    public static final String R_HOME = "rHome";
+    public static final String MATHLAB_HOME = "mathlabHome";
 
-	// Default values.
-	public static HashMap<String,Object> DEFAULTS;
+    public static final String LOGIN = "login";
+    public static final String PASSWORD = "password";
 
-	static {
-		DEFAULTS = new HashMap<String, Object>();
-		DEFAULTS.put(NONMEM_HOME, "C://Programs/NONMEM");
-		DEFAULTS.put(MLXTRAN_HOME, "C://Programs/MLXTRAN");
-		DEFAULTS.put(R_HOME, "C://Programs/RStudio");
-		DEFAULTS.put(MATHLAB_HOME, "C://Programs/MATHLAB");
+    // TES
+    public static final String TES_HOST = "tes.host";
+    public static final String TES_PORT = "tes.port";
 
-		DEFAULTS.put(LOGIN, "login");
-		DEFAULTS.put(PASSWORD, "password");
-	}
+    public static final String TES_UNAME = "tes.username";
+    public static final String TES_PWORD = "tes.password";
+
+    // TODO PROXY
+    
+    public static final String TES_SHARED_DIR = "tes.shared.dir";
+    public static final String TES_SHARED_DIR_INPUT = "tes.shared.input.dir";
+    public static final String TES_SHARED_DIR_OUTPUT = "tes.shared.output.dir";
+
+    // Default values.
+    public static HashMap<String, Object> DEFAULTS;
+
+    static {
+        DEFAULTS = new HashMap<String, Object>();
+        DEFAULTS.put(NONMEM_HOME, "C://Programs/NONMEM");
+        DEFAULTS.put(MLXTRAN_HOME, "C://Programs/MLXTRAN");
+        DEFAULTS.put(R_HOME, "C://Programs/RStudio");
+        DEFAULTS.put(MATHLAB_HOME, "C://Programs/MATHLAB");
+
+        DEFAULTS.put(LOGIN, "login");
+        DEFAULTS.put(PASSWORD, "password");
+    }
 
 }

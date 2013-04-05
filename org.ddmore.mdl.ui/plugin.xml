@@ -92,6 +92,15 @@
               name="External Tools">
             <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
         </page>
+        <page
+              category="org.ddmore.mdl.Mdl"
+              class="org.ddmore.mdl.ui.preference.TESPreferencePage"
+              id="org.ddmore.mdl.Mdl.TES"
+              name="Task Execution Service">
+           <keywordReference
+                 id="org.ddmore.mdl.ui.keyword_Mdl">
+           </keywordReference>
+        </page>
     </extension>
     <extension
             point="org.eclipse.ui.propertyPages">
@@ -129,7 +138,7 @@
       </command>
       <command
             id="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE"
-            name="Convert to NONMEM">
+            name="Convert to NONMEM (PE)">
       </command>
       <command
             id="org.ddmore.mdl.ui.handler.RunWithNONMEM_PE"
