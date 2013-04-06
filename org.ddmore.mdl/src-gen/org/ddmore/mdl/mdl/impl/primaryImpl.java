@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.ddmore.mdl.mdl.impl.primaryImpl#getLiteral <em>Literal</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.primaryImpl#getNumber <em>Number</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.impl.primaryImpl#getIdentifier <em>Identifier</em>}</li>
  * </ul>
  * </p>
@@ -32,24 +32,24 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 public class primaryImpl extends MinimalEObjectImpl.Container implements primary
 {
   /**
-   * The default value of the '{@link #getLiteral() <em>Literal</em>}' attribute.
+   * The default value of the '{@link #getNumber() <em>Number</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getLiteral()
+   * @see #getNumber()
    * @generated
    * @ordered
    */
-  protected static final String LITERAL_EDEFAULT = null;
+  protected static final String NUMBER_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getLiteral() <em>Literal</em>}' attribute.
+   * The cached value of the '{@link #getNumber() <em>Number</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getLiteral()
+   * @see #getNumber()
    * @generated
    * @ordered
    */
-  protected String literal = LITERAL_EDEFAULT;
+  protected String number = NUMBER_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getIdentifier() <em>Identifier</em>}' containment reference.
@@ -87,9 +87,9 @@ public class primaryImpl extends MinimalEObjectImpl.Container implements primary
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getLiteral()
+  public String getNumber()
   {
-    return literal;
+    return number;
   }
 
   /**
@@ -97,12 +97,12 @@ public class primaryImpl extends MinimalEObjectImpl.Container implements primary
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setLiteral(String newLiteral)
+  public void setNumber(String newNumber)
   {
-    String oldLiteral = literal;
-    literal = newLiteral;
+    String oldNumber = number;
+    number = newNumber;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.PRIMARY__LITERAL, oldLiteral, literal));
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.PRIMARY__NUMBER, oldNumber, number));
   }
 
   /**
@@ -179,8 +179,8 @@ public class primaryImpl extends MinimalEObjectImpl.Container implements primary
   {
     switch (featureID)
     {
-      case MdlPackage.PRIMARY__LITERAL:
-        return getLiteral();
+      case MdlPackage.PRIMARY__NUMBER:
+        return getNumber();
       case MdlPackage.PRIMARY__IDENTIFIER:
         return getIdentifier();
     }
@@ -197,8 +197,8 @@ public class primaryImpl extends MinimalEObjectImpl.Container implements primary
   {
     switch (featureID)
     {
-      case MdlPackage.PRIMARY__LITERAL:
-        setLiteral((String)newValue);
+      case MdlPackage.PRIMARY__NUMBER:
+        setNumber((String)newValue);
         return;
       case MdlPackage.PRIMARY__IDENTIFIER:
         setIdentifier((variable_name)newValue);
@@ -217,8 +217,8 @@ public class primaryImpl extends MinimalEObjectImpl.Container implements primary
   {
     switch (featureID)
     {
-      case MdlPackage.PRIMARY__LITERAL:
-        setLiteral(LITERAL_EDEFAULT);
+      case MdlPackage.PRIMARY__NUMBER:
+        setNumber(NUMBER_EDEFAULT);
         return;
       case MdlPackage.PRIMARY__IDENTIFIER:
         setIdentifier((variable_name)null);
@@ -237,8 +237,8 @@ public class primaryImpl extends MinimalEObjectImpl.Container implements primary
   {
     switch (featureID)
     {
-      case MdlPackage.PRIMARY__LITERAL:
-        return LITERAL_EDEFAULT == null ? literal != null : !LITERAL_EDEFAULT.equals(literal);
+      case MdlPackage.PRIMARY__NUMBER:
+        return NUMBER_EDEFAULT == null ? number != null : !NUMBER_EDEFAULT.equals(number);
       case MdlPackage.PRIMARY__IDENTIFIER:
         return identifier != null;
     }
@@ -256,8 +256,8 @@ public class primaryImpl extends MinimalEObjectImpl.Container implements primary
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (literal: ");
-    result.append(literal);
+    result.append(" (number: ");
+    result.append(number);
     result.append(')');
     return result.toString();
   }

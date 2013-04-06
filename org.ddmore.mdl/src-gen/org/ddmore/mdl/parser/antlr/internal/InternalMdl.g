@@ -4967,16 +4967,16 @@ ruleprimary returns [EObject current=null]
 ((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getPrimaryAccess().getLiteralNUMBERParserRuleCall_0_0()); 
+	        newCompositeNode(grammarAccess.getPrimaryAccess().getNumberNUMBERParserRuleCall_0_0()); 
 	    }
-		lv_literal_0_0=ruleNUMBER		{
+		lv_number_0_0=ruleNUMBER		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getPrimaryRule());
 	        }
        		set(
        			$current, 
-       			"literal",
-        		lv_literal_0_0, 
+       			"number",
+        		lv_number_0_0, 
         		"NUMBER");
 	        afterParserOrEnumRuleCall();
 	    }

@@ -373,7 +373,7 @@ unary_expression:
 ;
 
 primary: 
-	  literal = NUMBER
+	  number = NUMBER
 	| identifier = variable_name
 	;
 	

@@ -10078,13 +10078,13 @@ public class InternalMdlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Primary__Alternatives"
-    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2987:1: rule__Primary__Alternatives : ( ( ( rule__Primary__LiteralAssignment_0 ) ) | ( ( rule__Primary__IdentifierAssignment_1 ) ) );
+    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2987:1: rule__Primary__Alternatives : ( ( ( rule__Primary__NumberAssignment_0 ) ) | ( ( rule__Primary__IdentifierAssignment_1 ) ) );
     public final void rule__Primary__Alternatives() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2991:1: ( ( ( rule__Primary__LiteralAssignment_0 ) ) | ( ( rule__Primary__IdentifierAssignment_1 ) ) )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2991:1: ( ( ( rule__Primary__NumberAssignment_0 ) ) | ( ( rule__Primary__IdentifierAssignment_1 ) ) )
             int alt22=2;
             int LA22_0 = input.LA(1);
 
@@ -10103,19 +10103,19 @@ public class InternalMdlParser extends AbstractInternalContentAssistParser {
             }
             switch (alt22) {
                 case 1 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2992:1: ( ( rule__Primary__LiteralAssignment_0 ) )
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2992:1: ( ( rule__Primary__NumberAssignment_0 ) )
                     {
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2992:1: ( ( rule__Primary__LiteralAssignment_0 ) )
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2993:1: ( rule__Primary__LiteralAssignment_0 )
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2992:1: ( ( rule__Primary__NumberAssignment_0 ) )
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2993:1: ( rule__Primary__NumberAssignment_0 )
                     {
                     if ( state.backtracking==0 ) {
-                       before(grammarAccess.getPrimaryAccess().getLiteralAssignment_0()); 
+                       before(grammarAccess.getPrimaryAccess().getNumberAssignment_0()); 
                     }
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2994:1: ( rule__Primary__LiteralAssignment_0 )
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2994:2: rule__Primary__LiteralAssignment_0
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2994:1: ( rule__Primary__NumberAssignment_0 )
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:2994:2: rule__Primary__NumberAssignment_0
                     {
-                    pushFollow(FOLLOW_rule__Primary__LiteralAssignment_0_in_rule__Primary__Alternatives6531);
-                    rule__Primary__LiteralAssignment_0();
+                    pushFollow(FOLLOW_rule__Primary__NumberAssignment_0_in_rule__Primary__Alternatives6531);
+                    rule__Primary__NumberAssignment_0();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -10123,7 +10123,7 @@ public class InternalMdlParser extends AbstractInternalContentAssistParser {
                     }
 
                     if ( state.backtracking==0 ) {
-                       after(grammarAccess.getPrimaryAccess().getLiteralAssignment_0()); 
+                       after(grammarAccess.getPrimaryAccess().getNumberAssignment_0()); 
                     }
 
                     }
@@ -37084,9 +37084,9 @@ public class InternalMdlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__Unary_expression__PrimaryAssignment_3"
 
 
-    // $ANTLR start "rule__Primary__LiteralAssignment_0"
-    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:12652:1: rule__Primary__LiteralAssignment_0 : ( ruleNUMBER ) ;
-    public final void rule__Primary__LiteralAssignment_0() throws RecognitionException {
+    // $ANTLR start "rule__Primary__NumberAssignment_0"
+    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:12652:1: rule__Primary__NumberAssignment_0 : ( ruleNUMBER ) ;
+    public final void rule__Primary__NumberAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -37098,15 +37098,15 @@ public class InternalMdlParser extends AbstractInternalContentAssistParser {
             // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:12658:1: ruleNUMBER
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getPrimaryAccess().getLiteralNUMBERParserRuleCall_0_0()); 
+               before(grammarAccess.getPrimaryAccess().getNumberNUMBERParserRuleCall_0_0()); 
             }
-            pushFollow(FOLLOW_ruleNUMBER_in_rule__Primary__LiteralAssignment_025821);
+            pushFollow(FOLLOW_ruleNUMBER_in_rule__Primary__NumberAssignment_025821);
             ruleNUMBER();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getPrimaryAccess().getLiteralNUMBERParserRuleCall_0_0()); 
+               after(grammarAccess.getPrimaryAccess().getNumberNUMBERParserRuleCall_0_0()); 
             }
 
             }
@@ -37126,7 +37126,7 @@ public class InternalMdlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__Primary__LiteralAssignment_0"
+    // $ANTLR end "rule__Primary__NumberAssignment_0"
 
 
     // $ANTLR start "rule__Primary__IdentifierAssignment_1"
@@ -37783,7 +37783,7 @@ public class InternalMdlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__Unary_expression__Par_expressionAssignment_1_in_rule__Unary_expression__Alternatives6462 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Unary_expression__Function_callAssignment_2_in_rule__Unary_expression__Alternatives6480 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Unary_expression__PrimaryAssignment_3_in_rule__Unary_expression__Alternatives6498 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Primary__LiteralAssignment_0_in_rule__Primary__Alternatives6531 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Primary__NumberAssignment_0_in_rule__Primary__Alternatives6531 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Primary__IdentifierAssignment_1_in_rule__Primary__Alternatives6549 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_32_in_rule__Relational_op__Alternatives6583 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_33_in_rule__Relational_op__Alternatives6603 = new BitSet(new long[]{0x0000000000000002L});
@@ -38533,7 +38533,7 @@ public class InternalMdlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rulepar_expression_in_rule__Unary_expression__Par_expressionAssignment_125728 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulefunction_call_in_rule__Unary_expression__Function_callAssignment_225759 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleprimary_in_rule__Unary_expression__PrimaryAssignment_325790 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNUMBER_in_rule__Primary__LiteralAssignment_025821 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNUMBER_in_rule__Primary__NumberAssignment_025821 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulevariable_name_in_rule__Primary__IdentifierAssignment_125852 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_RULE_ID_in_rule__Variable_name__IdentifierAssignment_025883 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleselector_in_rule__Variable_name__SelectorAssignment_125914 = new BitSet(new long[]{0x0000000000000002L});

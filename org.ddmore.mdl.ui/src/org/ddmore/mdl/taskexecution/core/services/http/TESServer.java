@@ -108,7 +108,7 @@ public class TESServer {
     }
 
     private static List<NameValuePair> getExecuteParameters(final String requestId, final String execFile) {
-
+    	
         ExecutionRequestBuilder builder = new ExecutionRequestBuilder();
 
         builder.setRequestId(requestId);
@@ -116,15 +116,15 @@ public class TESServer {
         builder.setExecutionFile(execFile);
         builder.setUserName(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_UNAME));
         builder.setUserPassword(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD));
-
+		
         String executionMessage = null;
-
+        
         try {
             executionMessage = builder.getExecutionRequestMsg();
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-
+        
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
         nameValuePairs.add(new BasicNameValuePair("executionRequest", executionMessage));
         return nameValuePairs;

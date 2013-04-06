@@ -39,12 +39,20 @@
 	    commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM">
       </handler>
       <handler
+	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToPharmMLHandler"
+	    commandId="org.ddmore.mdl.ui.handler.ConvertToPharmML">
+      </handler>
+      <handler
 	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.RunWithNONMEMHandler"
 	    commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM">
       </handler>
       <handler
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToNONMEMHandler_PE"
             commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE">
+      </handler>
+      <handler
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToPharmMLHandler_PE"
+            commandId="org.ddmore.mdl.ui.handler.ConvertToPharmML_PE">
       </handler>
       <handler
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.RunWithNONMEMHandler_PE"
@@ -133,7 +141,15 @@
             name="Convert to NONMEM">
       </command>
       <command
+            id="org.ddmore.mdl.ui.handler.ConvertToPharmML"
+            name="Convert to PharmML">
+      </command>
+      <command
             id="org.ddmore.mdl.ui.handler.RunWithNONMEM"
+            name="Run with NONMEM">
+      </command>
+      <command
+            id="org.ddmore.mdl.ui.handler.RunWithNONMEM_PE"
             name="Run with NONMEM">
       </command>
       <command
@@ -141,8 +157,8 @@
             name="Convert to NONMEM (PE)">
       </command>
       <command
-            id="org.ddmore.mdl.ui.handler.RunWithNONMEM_PE"
-            name="Run with NONMEM">
+            id="org.ddmore.mdl.ui.handler.ConvertToPharmML_PE"
+            name="Convert to PharmML (PE)">
       </command>
     </extension>
     <extension point="org.eclipse.ui.menus">
@@ -227,7 +243,7 @@
       <participant
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
       </participant>
-   </extension>
+   </extension> 
    
    <extension
             point="org.eclipse.ui.preferencePages">
@@ -382,7 +398,6 @@
            category="org.ddmore.mdl.ui.wizard"
            class="org.ddmore.mdl.ui.wizard.FileNewWizard"
            finalPerspective="org.ddmore.mdl.ui.perspective.MDL"
-           icon="icons/sample.gif"
            id="org.ddmore.mdl.ui.wizard.FileNewWizard"
            name="MDL File"
            project="false">
@@ -391,7 +406,6 @@
            category="org.ddmore.mdl.ui.wizard"
            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.wizard.MdlNewProjectWizard"
            finalPerspective="org.ddmore.mdl.ui.perspective.MDL"
-           icon="icons/sample.gif"
            id="org.ddmore.mdl.ui.wizard.MdlNewProjectWizard"
            name="Plug-in MDL Project"
            project="true">
@@ -400,7 +414,6 @@
            category="org.ddmore.mdl.ui.wizard"
            class="org.ddmore.mdl.ui.wizard.SimpleMDLProject"
            finalPerspective="org.ddmore.mdl.ui.perspective.MDL"
-           icon="icons/sample.gif"
            id="org.ddmore.mdl.ui.wizard.SimpleMDLProject"
            name="MDL Project"
            project="true">
@@ -441,7 +454,6 @@
     <wizard
           category="org.ddmore.mdl.ui.wizard.ImportMDLCategory"
           class="org.ddmore.mdl.ui.wizard.FileImportWizard"
-          icon="icons/sample.gif"
           id="org.ddmore.mdl.ui.wizard.FileImportWizard"
           name="MDL File">
        <description>
@@ -451,8 +463,7 @@
     <wizard
           category="org.ddmore.mdl.ui.wizard.ImportMDLCategory"
           class="org.ddmore.mdl.ui.wizard.DataSetImportWizard"
-          icon="icons/sample.gif"
-          id="org.ddmore.mdl.ui.wizard.DataSetFileImportWizard"
+           id="org.ddmore.mdl.ui.wizard.DataSetFileImportWizard"
           name="Data File">
        <description>
           Import a file from the local file system into the workspace.
@@ -509,10 +520,36 @@
 	 	    		</iterate>
  	            </visibleWhen>
 	        </command>
-	</menuContribution>
-	<menuContribution locationURI="popup:#TextEditorContext?after=group.edit">
+		</menuContribution>
+		<menuContribution locationURI="popup:#TextEditorContext?after=group.edit">
 	        <command
 	            commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM"
+	            style="push">
+	            <visibleWhen
+	                      checkEnabled="false">
+	                   <reference
+	                         definitionId="org.ddmore.mdl.Mdl.Editor.opened">
+	                   </reference>
+	                </visibleWhen>
+	        </command>
+	    </menuContribution>
+	    <menuContribution
+          locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
+	        <command
+	            commandId="org.ddmore.mdl.ui.handler.ConvertToPharmML_PE" style="push">
+	            <visibleWhen checkEnabled="false">
+                	<iterate>
+				       <adapt type="org.eclipse.core.resources.IResource">
+		        			<test property="org.eclipse.core.resources.name"
+				              value="*.mdl"/>
+		    		   </adapt>
+	 	    		</iterate>
+ 	            </visibleWhen>
+	        </command>
+		</menuContribution>
+	    <menuContribution locationURI="popup:#TextEditorContext?after=group.edit">
+	        <command
+	            commandId="org.ddmore.mdl.ui.handler.ConvertToPharmML"
 	            style="push">
 	            <visibleWhen
 	                      checkEnabled="false">

@@ -10,13 +10,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.ImageData;
+//import org.eclipse.jface.resource.ImageDescriptor;
+//import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsoleDocumentPartitioner;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.TextConsole;
+//import org.eclipse.ui.console.ConsolePlugin;
+//import org.eclipse.ui.console.IConsoleDocumentPartitioner;
+//import org.eclipse.ui.console.IConsoleManager;
+//import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
 import org.eclipse.xtext.generator.IGenerator;
@@ -45,7 +45,7 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
                     public Boolean exec(XtextResource r) throws Exception {
 
                         if (generator instanceof MdlGenerator) {
-                            MdlGenerator mdlGenerator = (MdlGenerator) generator;
+                        	MdlGenerator mdlGenerator = (MdlGenerator) generator;
                             String dataFileName = mdlGenerator.getDataSource(r);
 
                             IProject project = file.getProject();

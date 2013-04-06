@@ -13735,11 +13735,11 @@ public class InternalMdlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleprimary"
-    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4963:1: ruleprimary returns [EObject current=null] : ( ( (lv_literal_0_0= ruleNUMBER ) ) | ( (lv_identifier_1_0= rulevariable_name ) ) ) ;
+    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4963:1: ruleprimary returns [EObject current=null] : ( ( (lv_number_0_0= ruleNUMBER ) ) | ( (lv_identifier_1_0= rulevariable_name ) ) ) ;
     public final EObject ruleprimary() throws RecognitionException {
         EObject current = null;
 
-        AntlrDatatypeRuleToken lv_literal_0_0 = null;
+        AntlrDatatypeRuleToken lv_number_0_0 = null;
 
         EObject lv_identifier_1_0 = null;
 
@@ -13747,10 +13747,10 @@ public class InternalMdlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4966:28: ( ( ( (lv_literal_0_0= ruleNUMBER ) ) | ( (lv_identifier_1_0= rulevariable_name ) ) ) )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4967:1: ( ( (lv_literal_0_0= ruleNUMBER ) ) | ( (lv_identifier_1_0= rulevariable_name ) ) )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4966:28: ( ( ( (lv_number_0_0= ruleNUMBER ) ) | ( (lv_identifier_1_0= rulevariable_name ) ) ) )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4967:1: ( ( (lv_number_0_0= ruleNUMBER ) ) | ( (lv_identifier_1_0= rulevariable_name ) ) )
             {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4967:1: ( ( (lv_literal_0_0= ruleNUMBER ) ) | ( (lv_identifier_1_0= rulevariable_name ) ) )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4967:1: ( ( (lv_number_0_0= ruleNUMBER ) ) | ( (lv_identifier_1_0= rulevariable_name ) ) )
             int alt46=2;
             int LA46_0 = input.LA(1);
 
@@ -13769,21 +13769,21 @@ public class InternalMdlParser extends AbstractInternalAntlrParser {
             }
             switch (alt46) {
                 case 1 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4967:2: ( (lv_literal_0_0= ruleNUMBER ) )
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4967:2: ( (lv_number_0_0= ruleNUMBER ) )
                     {
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4967:2: ( (lv_literal_0_0= ruleNUMBER ) )
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4968:1: (lv_literal_0_0= ruleNUMBER )
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4967:2: ( (lv_number_0_0= ruleNUMBER ) )
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4968:1: (lv_number_0_0= ruleNUMBER )
                     {
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4968:1: (lv_literal_0_0= ruleNUMBER )
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4969:3: lv_literal_0_0= ruleNUMBER
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4968:1: (lv_number_0_0= ruleNUMBER )
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:4969:3: lv_number_0_0= ruleNUMBER
                     {
                     if ( state.backtracking==0 ) {
                        
-                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getLiteralNUMBERParserRuleCall_0_0()); 
+                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getNumberNUMBERParserRuleCall_0_0()); 
                       	    
                     }
                     pushFollow(FOLLOW_ruleNUMBER_in_ruleprimary10332);
-                    lv_literal_0_0=ruleNUMBER();
+                    lv_number_0_0=ruleNUMBER();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -13794,8 +13794,8 @@ public class InternalMdlParser extends AbstractInternalAntlrParser {
                       	        }
                              		set(
                              			current, 
-                             			"literal",
-                              		lv_literal_0_0, 
+                             			"number",
+                              		lv_number_0_0, 
                               		"NUMBER");
                       	        afterParserOrEnumRuleCall();
                       	    

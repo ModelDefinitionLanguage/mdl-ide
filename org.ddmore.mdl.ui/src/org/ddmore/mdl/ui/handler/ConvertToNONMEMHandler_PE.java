@@ -62,10 +62,10 @@ public class ConvertToNONMEMHandler_PE extends AbstractHandler implements IHandl
 						.toString(), true);
 				ResourceSet rs = resourceSetProvider.get(project);
 				Resource r = rs.getResource(uri, true);
-				System.out.println("Generating NONMEM code for " + file.getName());
                 if (generator instanceof MdlGenerator){
+    				System.out.println("Generating NONMEM code for " + file.getName());
                 	MdlGenerator mdlGenerator = (MdlGenerator)generator;
-	            	mdlGenerator.doGenerate(r, fsa);
+	            	mdlGenerator.doGenerateNonmem(r, fsa);
                 }
 				return Boolean.TRUE;
 			}

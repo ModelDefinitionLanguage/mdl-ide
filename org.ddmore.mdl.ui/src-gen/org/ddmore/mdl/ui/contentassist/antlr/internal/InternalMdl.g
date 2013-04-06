@@ -2990,9 +2990,9 @@ rule__Primary__Alternatives
     }
 :
 (
-{ before(grammarAccess.getPrimaryAccess().getLiteralAssignment_0()); }
-(rule__Primary__LiteralAssignment_0)
-{ after(grammarAccess.getPrimaryAccess().getLiteralAssignment_0()); }
+{ before(grammarAccess.getPrimaryAccess().getNumberAssignment_0()); }
+(rule__Primary__NumberAssignment_0)
+{ after(grammarAccess.getPrimaryAccess().getNumberAssignment_0()); }
 )
 
     |(
@@ -12649,14 +12649,14 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__Primary__LiteralAssignment_0
+rule__Primary__NumberAssignment_0
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getPrimaryAccess().getLiteralNUMBERParserRuleCall_0_0()); }
-	ruleNUMBER{ after(grammarAccess.getPrimaryAccess().getLiteralNUMBERParserRuleCall_0_0()); }
+{ before(grammarAccess.getPrimaryAccess().getNumberNUMBERParserRuleCall_0_0()); }
+	ruleNUMBER{ after(grammarAccess.getPrimaryAccess().getNumberNUMBERParserRuleCall_0_0()); }
 )
 
 ;

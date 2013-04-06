@@ -1175,7 +1175,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.ddmore.org/mdl/Mdl#//primary"/>
       </type>
       <alternatives xsi:type="xtext:Alternatives">
-        <elements xsi:type="xtext:Assignment" feature="literal" operator="=">
+        <elements xsi:type="xtext:Assignment" feature="number" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.82"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="identifier" operator="=">

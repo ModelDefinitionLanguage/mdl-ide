@@ -2837,13 +2837,13 @@ public interface MdlPackage extends EPackage
   int PRIMARY = 70;
 
   /**
-   * The feature id for the '<em><b>Literal</b></em>' attribute.
+   * The feature id for the '<em><b>Number</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PRIMARY__LITERAL = 0;
+  int PRIMARY__NUMBER = 0;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' containment reference.
@@ -5400,15 +5400,15 @@ public interface MdlPackage extends EPackage
   EClass getprimary();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.primary#getLiteral <em>Literal</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.primary#getNumber <em>Number</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Literal</em>'.
-   * @see org.ddmore.mdl.mdl.primary#getLiteral()
+   * @return the meta object for the attribute '<em>Number</em>'.
+   * @see org.ddmore.mdl.mdl.primary#getNumber()
    * @see #getprimary()
    * @generated
    */
-  EAttribute getprimary_Literal();
+  EAttribute getprimary_Number();
 
   /**
    * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.primary#getIdentifier <em>Identifier</em>}'.
@@ -7488,12 +7488,12 @@ public interface MdlPackage extends EPackage
     EClass PRIMARY = eINSTANCE.getprimary();
 
     /**
-     * The meta object literal for the '<em><b>Literal</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Number</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute PRIMARY__LITERAL = eINSTANCE.getprimary_Literal();
+    EAttribute PRIMARY__NUMBER = eINSTANCE.getprimary_Number();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' containment reference feature.

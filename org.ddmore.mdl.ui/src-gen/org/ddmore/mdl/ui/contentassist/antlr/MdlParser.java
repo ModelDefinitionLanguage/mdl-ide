@@ -311,7 +311,7 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getUnary_expressionAccess().getPar_expressionAssignment_1(), "rule__Unary_expression__Par_expressionAssignment_1");
 					put(grammarAccess.getUnary_expressionAccess().getFunction_callAssignment_2(), "rule__Unary_expression__Function_callAssignment_2");
 					put(grammarAccess.getUnary_expressionAccess().getPrimaryAssignment_3(), "rule__Unary_expression__PrimaryAssignment_3");
-					put(grammarAccess.getPrimaryAccess().getLiteralAssignment_0(), "rule__Primary__LiteralAssignment_0");
+					put(grammarAccess.getPrimaryAccess().getNumberAssignment_0(), "rule__Primary__NumberAssignment_0");
 					put(grammarAccess.getPrimaryAccess().getIdentifierAssignment_1(), "rule__Primary__IdentifierAssignment_1");
 					put(grammarAccess.getVariable_nameAccess().getIdentifierAssignment_0(), "rule__Variable_name__IdentifierAssignment_0");
 					put(grammarAccess.getVariable_nameAccess().getSelectorAssignment_1(), "rule__Variable_name__SelectorAssignment_1");

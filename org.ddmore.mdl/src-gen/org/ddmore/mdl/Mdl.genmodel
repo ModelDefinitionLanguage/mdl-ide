@@ -308,7 +308,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//unary_expression/primary"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//primary">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//primary/literal"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//primary/number"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//primary/identifier"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//variable_name">

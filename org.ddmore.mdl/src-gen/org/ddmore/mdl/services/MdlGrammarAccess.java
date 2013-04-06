@@ -25,8 +25,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cObjectsMcl_objParserRuleCall_0 = (RuleCall)cObjectsAssignment.eContents().get(0);
 		
 		////An MDL specification may include any number of MDL objects
-		//
-		//mcl hidden(WS, ML_COMMENT, SL_COMMENT):
+		// mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 		//
 		//	objects+=mcl_obj*;
 		public ParserRule getRule() { return rule; }
@@ -53,8 +52,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cTel_objTel_objParserRuleCall_4_0 = (RuleCall)cTel_objAssignment_4.eContents().get(0);
 		
 		////Five MDL object types are supported
-		//
-		//mcl_obj:
+		// mcl_obj:
 		//
 		//	model_obj=model_obj | param_obj=param_obj | data_obj=data_obj | task_obj=task_obj | tel_obj=tel_obj;
 		public ParserRule getRule() { return rule; }
@@ -106,12 +104,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cENDTerminalRuleCall_5 = (RuleCall)cGroup.eContents().get(5);
 		
 		////////////////////////////////////////////////////////////
+		// //OBJECTS
 		//
-		////OBJECTS
 		//
 		////A model object consists of multiple model object blocks 
-		//
-		//model_obj:
+		// model_obj:
 		//
 		//	identifier=ID "=" "mdlobj" BEGIN blocks+=model_obj_block* END;
 		public ParserRule getRule() { return rule; }
@@ -157,8 +154,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cENDTerminalRuleCall_5 = (RuleCall)cGroup.eContents().get(5);
 		
 		////A parameter object consists of multiple parameter object blocks
-		//
-		//param_obj:
+		// param_obj:
 		//
 		//	identifier=ID "=" "parobj" BEGIN blocks+=param_obj_block* END;
 		public ParserRule getRule() { return rule; }
@@ -204,8 +200,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cENDTerminalRuleCall_5 = (RuleCall)cGroup.eContents().get(5);
 		
 		////A data object consists of multiple data object blocks
-		//
-		//data_obj:
+		// data_obj:
 		//
 		//	identifier=ID "=" "dataobj" BEGIN blocks+=data_obj_block* END;
 		public ParserRule getRule() { return rule; }
@@ -251,8 +246,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cENDTerminalRuleCall_5 = (RuleCall)cGroup.eContents().get(5);
 		
 		////A task object may include several task blocks
-		//
-		//task_obj:
+		// task_obj:
 		//
 		//	identifier=ID "=" "taskobj" BEGIN blocks+=task_obj_block* END;
 		public ParserRule getRule() { return rule; }
@@ -298,8 +292,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cENDTerminalRuleCall_5 = (RuleCall)cGroup.eContents().get(5);
 		
 		////TEL object syntactically consists of multiple function declarations
-		//
-		//tel_obj:
+		// tel_obj:
 		//
 		//	identifier=ID "=" "telobj" BEGIN blocks+=block_statement* END;
 		public ParserRule getRule() { return rule; }
@@ -360,13 +353,15 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		////////////////////////////////////////////////////////////
 		//
+		//
 		////A model object block is either a general block or a block with specific structure
+		//
 		//
 		////In particular, INDIVIDUAL VARIABLES and MODEL PREDICTION blocks may include 
 		//
-		////sub-blocks or structures that are not allowed in other blocks;
 		//
-		//model_obj_block:
+		////sub-blocks or structures that are not allowed in other blocks;
+		// model_obj_block:
 		//
 		//	individual_model_obj_block=individual_model_obj_block | model_prediction_obj_block=model_prediction_obj_block |
 		//
@@ -524,6 +519,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cBlockBlockParserRuleCall_1_0 = (RuleCall)cBlockAssignment_1.eContents().get(0);
 		
 		////A random variable definition is a special sub-block that starts with RANDOM VARIABLE DEFINITION keyword
+		//
 		//
 		//random_variable_definition_block:
 		//
@@ -787,8 +783,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cVariability_blockVariability_blockParserRuleCall_1_0 = (RuleCall)cVariability_blockAssignment_1.eContents().get(0);
 		
 		////Two types of parameter object blocks are supported, STRUCTURAL and VARIABILITY
-		//
-		//param_obj_block:
+		// param_obj_block:
 		//
 		//	structural_block=structural_block | variability_block=variability_block;
 		public ParserRule getRule() { return rule; }
@@ -876,8 +871,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFile_blockFile_blockParserRuleCall_1_0 = (RuleCall)cFile_blockAssignment_1.eContents().get(0);
 		
 		////Two types of data object blocks are supported, HEADER and FILE
-		//
-		//data_obj_block:
+		// data_obj_block:
 		//
 		//	header_block=header_block | file_block=file_block;
 		public ParserRule getRule() { return rule; }
@@ -968,9 +962,9 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		////A task block is either a function declaration or a sub-block, 
 		//
-		////two types of sub-blocks are allowed, PARAMETERS and DATA
 		//
-		//task_obj_block:
+		////two types of sub-blocks are allowed, PARAMETERS and DATA
+		// task_obj_block:
 		//
 		//	function_declaration=function_declaration | parameters_block=parameters_block | data_block=data_block;
 		public ParserRule getRule() { return rule; }
@@ -1065,8 +1059,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cENDTerminalRuleCall_3 = (RuleCall)cGroup.eContents().get(3);
 		
 		////A MODEL PREDICTION blocks consists of multiples statements
-		//
-		//model_block:
+		// model_block:
 		//
 		//	{model_block} BEGIN statements+=model_block_statement* END;
 		public ParserRule getRule() { return rule; }
@@ -1101,8 +1094,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cLibrary_blockLibrary_blockParserRuleCall_2_0 = (RuleCall)cLibrary_blockAssignment_2.eContents().get(0);
 		
 		////A MODEL PREDICTION  block statement is either a general statement, ODE or LIBRARY sub-block 
-		//
-		//model_block_statement:
+		// model_block_statement:
 		//
 		//	statement=block_statement | ode_block=ode_block | library_block=library_block;
 		public ParserRule getRule() { return rule; }
@@ -1138,8 +1130,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cBlockBlockParserRuleCall_1_0 = (RuleCall)cBlockAssignment_1.eContents().get(0);
 		
 		////LIBRARY sub-block
-		//
-		//library_block:
+		// library_block:
 		//
 		//	identifier="LIBRARY" block=block;
 		public ParserRule getRule() { return rule; }
@@ -1169,8 +1160,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cBlockBlockParserRuleCall_1_0 = (RuleCall)cBlockAssignment_1.eContents().get(0);
 		
 		////ODE (ORDINARY DIFFERENTIAL EQUATIONS) sub-block
-		//
-		//ode_block:
+		// ode_block:
 		//
 		//	identifier="ODE" block=block;
 		public ParserRule getRule() { return rule; }
@@ -1201,12 +1191,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cENDTerminalRuleCall_3 = (RuleCall)cGroup.eContents().get(3);
 		
 		///////////////////////////////////////////////////////////
+		// //Parameter object terms
 		//
-		////Parameter object terms
 		//
 		////////////////////////////////////////////////////////////
-		//
-		//variability_block_content:
+		// variability_block_content:
 		//
 		//	{variability_block_content} BEGIN blocks+=variability_block_statement* END;
 		public ParserRule getRule() { return rule; }
@@ -1364,12 +1353,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cENDTerminalRuleCall_3 = (RuleCall)cGroup.eContents().get(3);
 		
 		////////////////////////////////////////////////////////////
+		// //Data object terms
 		//
-		////Data object terms
 		//
 		////////////////////////////////////////////////////////////
-		//
-		//file_block_content:
+		// file_block_content:
 		//
 		//	{file_block_content} BEGIN blocks+=file_block_statement* END;
 		public ParserRule getRule() { return rule; }
@@ -1589,12 +1577,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFunction_bodyFunction_bodyParserRuleCall_6_0 = (RuleCall)cFunction_bodyAssignment_6.eContents().get(0);
 		
 		////////////////////////////////////////////////////////////
+		// //Function declaration and call
 		//
-		////Function declaration and call
 		//
 		////////////////////////////////////////////////////////////
-		//
-		//function_declaration:
+		// function_declaration:
 		//
 		//	identifier=ID "=" "function" "(" formal_arguments=formal_arguments ")" function_body=function_body;
 		public ParserRule getRule() { return rule; }
@@ -1803,12 +1790,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cENDTerminalRuleCall_3 = (RuleCall)cGroup.eContents().get(3);
 		
 		////////////////////////////////////////////////////////////
+		// //Common terms
 		//
-		////Common terms
 		//
 		////////////////////////////////////////////////////////////
-		//
-		//block:
+		// block:
 		//
 		//	{block} BEGIN statements+=block_statement* END;
 		public ParserRule getRule() { return rule; }
@@ -2190,8 +2176,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		////An ODE list
-		//
-		//ode_list:
+		// ode_list:
 		//
 		//	"ode" "(" arguments=arguments ")";
 		public ParserRule getRule() { return rule; }
@@ -2225,8 +2210,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		////A random list is identified by ~ symbol
-		//
-		//random_list:
+		// random_list:
 		//
 		//	"~" "(" arguments=arguments ")";
 		public ParserRule getRule() { return rule; }
@@ -2821,24 +2805,24 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	public class PrimaryElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "primary");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Assignment cLiteralAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
-		private final RuleCall cLiteralNUMBERParserRuleCall_0_0 = (RuleCall)cLiteralAssignment_0.eContents().get(0);
+		private final Assignment cNumberAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cNumberNUMBERParserRuleCall_0_0 = (RuleCall)cNumberAssignment_0.eContents().get(0);
 		private final Assignment cIdentifierAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cIdentifierVariable_nameParserRuleCall_1_0 = (RuleCall)cIdentifierAssignment_1.eContents().get(0);
 		
 		//primary:
 		//
-		//	literal=NUMBER | identifier=variable_name;
+		//	number=NUMBER | identifier=variable_name;
 		public ParserRule getRule() { return rule; }
 
-		//literal=NUMBER | identifier=variable_name
+		//number=NUMBER | identifier=variable_name
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//literal=NUMBER
-		public Assignment getLiteralAssignment_0() { return cLiteralAssignment_0; }
+		//number=NUMBER
+		public Assignment getNumberAssignment_0() { return cNumberAssignment_0; }
 
 		//NUMBER
-		public RuleCall getLiteralNUMBERParserRuleCall_0_0() { return cLiteralNUMBERParserRuleCall_0_0; }
+		public RuleCall getNumberNUMBERParserRuleCall_0_0() { return cNumberNUMBERParserRuleCall_0_0; }
 
 		//identifier=variable_name
 		public Assignment getIdentifierAssignment_1() { return cIdentifierAssignment_1; }
@@ -3245,8 +3229,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	////An MDL specification may include any number of MDL objects
-	//
-	//mcl hidden(WS, ML_COMMENT, SL_COMMENT):
+	// mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	//
 	//	objects+=mcl_obj*;
 	public MclElements getMclAccess() {
@@ -3258,8 +3241,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////Five MDL object types are supported
-	//
-	//mcl_obj:
+	// mcl_obj:
 	//
 	//	model_obj=model_obj | param_obj=param_obj | data_obj=data_obj | task_obj=task_obj | tel_obj=tel_obj;
 	public Mcl_objElements getMcl_objAccess() {
@@ -3271,12 +3253,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////////////////////////////////////////////////////////////
+	// //OBJECTS
 	//
-	////OBJECTS
 	//
 	////A model object consists of multiple model object blocks 
-	//
-	//model_obj:
+	// model_obj:
 	//
 	//	identifier=ID "=" "mdlobj" BEGIN blocks+=model_obj_block* END;
 	public Model_objElements getModel_objAccess() {
@@ -3288,8 +3269,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////A parameter object consists of multiple parameter object blocks
-	//
-	//param_obj:
+	// param_obj:
 	//
 	//	identifier=ID "=" "parobj" BEGIN blocks+=param_obj_block* END;
 	public Param_objElements getParam_objAccess() {
@@ -3301,8 +3281,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////A data object consists of multiple data object blocks
-	//
-	//data_obj:
+	// data_obj:
 	//
 	//	identifier=ID "=" "dataobj" BEGIN blocks+=data_obj_block* END;
 	public Data_objElements getData_objAccess() {
@@ -3314,8 +3293,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////A task object may include several task blocks
-	//
-	//task_obj:
+	// task_obj:
 	//
 	//	identifier=ID "=" "taskobj" BEGIN blocks+=task_obj_block* END;
 	public Task_objElements getTask_objAccess() {
@@ -3327,8 +3305,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////TEL object syntactically consists of multiple function declarations
-	//
-	//tel_obj:
+	// tel_obj:
 	//
 	//	identifier=ID "=" "telobj" BEGIN blocks+=block_statement* END;
 	public Tel_objElements getTel_objAccess() {
@@ -3341,13 +3318,15 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	////////////////////////////////////////////////////////////
 	//
+	//
 	////A model object block is either a general block or a block with specific structure
+	//
 	//
 	////In particular, INDIVIDUAL VARIABLES and MODEL PREDICTION blocks may include 
 	//
-	////sub-blocks or structures that are not allowed in other blocks;
 	//
-	//model_obj_block:
+	////sub-blocks or structures that are not allowed in other blocks;
+	// model_obj_block:
 	//
 	//	individual_model_obj_block=individual_model_obj_block | model_prediction_obj_block=model_prediction_obj_block |
 	//
@@ -3389,6 +3368,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////A random variable definition is a special sub-block that starts with RANDOM VARIABLE DEFINITION keyword
+	//
 	//
 	//random_variable_definition_block:
 	//
@@ -3490,8 +3470,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////Two types of parameter object blocks are supported, STRUCTURAL and VARIABILITY
-	//
-	//param_obj_block:
+	// param_obj_block:
 	//
 	//	structural_block=structural_block | variability_block=variability_block;
 	public Param_obj_blockElements getParam_obj_blockAccess() {
@@ -3525,8 +3504,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////Two types of data object blocks are supported, HEADER and FILE
-	//
-	//data_obj_block:
+	// data_obj_block:
 	//
 	//	header_block=header_block | file_block=file_block;
 	public Data_obj_blockElements getData_obj_blockAccess() {
@@ -3561,9 +3539,9 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	////A task block is either a function declaration or a sub-block, 
 	//
-	////two types of sub-blocks are allowed, PARAMETERS and DATA
 	//
-	//task_obj_block:
+	////two types of sub-blocks are allowed, PARAMETERS and DATA
+	// task_obj_block:
 	//
 	//	function_declaration=function_declaration | parameters_block=parameters_block | data_block=data_block;
 	public Task_obj_blockElements getTask_obj_blockAccess() {
@@ -3597,8 +3575,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////A MODEL PREDICTION blocks consists of multiples statements
-	//
-	//model_block:
+	// model_block:
 	//
 	//	{model_block} BEGIN statements+=model_block_statement* END;
 	public Model_blockElements getModel_blockAccess() {
@@ -3610,8 +3587,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////A MODEL PREDICTION  block statement is either a general statement, ODE or LIBRARY sub-block 
-	//
-	//model_block_statement:
+	// model_block_statement:
 	//
 	//	statement=block_statement | ode_block=ode_block | library_block=library_block;
 	public Model_block_statementElements getModel_block_statementAccess() {
@@ -3623,8 +3599,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////LIBRARY sub-block
-	//
-	//library_block:
+	// library_block:
 	//
 	//	identifier="LIBRARY" block=block;
 	public Library_blockElements getLibrary_blockAccess() {
@@ -3636,8 +3611,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////ODE (ORDINARY DIFFERENTIAL EQUATIONS) sub-block
-	//
-	//ode_block:
+	// ode_block:
 	//
 	//	identifier="ODE" block=block;
 	public Ode_blockElements getOde_blockAccess() {
@@ -3649,12 +3623,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	///////////////////////////////////////////////////////////
+	// //Parameter object terms
 	//
-	////Parameter object terms
 	//
 	////////////////////////////////////////////////////////////
-	//
-	//variability_block_content:
+	// variability_block_content:
 	//
 	//	{variability_block_content} BEGIN blocks+=variability_block_statement* END;
 	public Variability_block_contentElements getVariability_block_contentAccess() {
@@ -3710,12 +3683,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////////////////////////////////////////////////////////////
+	// //Data object terms
 	//
-	////Data object terms
 	//
 	////////////////////////////////////////////////////////////
-	//
-	//file_block_content:
+	// file_block_content:
 	//
 	//	{file_block_content} BEGIN blocks+=file_block_statement* END;
 	public File_block_contentElements getFile_block_contentAccess() {
@@ -3782,12 +3754,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////////////////////////////////////////////////////////////
+	// //Function declaration and call
 	//
-	////Function declaration and call
 	//
 	////////////////////////////////////////////////////////////
-	//
-	//function_declaration:
+	// function_declaration:
 	//
 	//	identifier=ID "=" "function" "(" formal_arguments=formal_arguments ")" function_body=function_body;
 	public Function_declarationElements getFunction_declarationAccess() {
@@ -3843,12 +3814,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////////////////////////////////////////////////////////////
+	// //Common terms
 	//
-	////Common terms
 	//
 	////////////////////////////////////////////////////////////
-	//
-	//block:
+	// block:
 	//
 	//	{block} BEGIN statements+=block_statement* END;
 	public BlockElements getBlockAccess() {
@@ -3905,7 +3875,10 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		return getTarget_languageAccess().getRule();
 	}
 
-	//terminal EXTERNAL_CODE:
+	////TARGET
+	// //MIXTURE 
+	// //PRIOR
+	// terminal EXTERNAL_CODE:
 	//
 	//	"***"->"***";
 	public TerminalRule getEXTERNAL_CODERule() {
@@ -3957,8 +3930,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////An ODE list
-	//
-	//ode_list:
+	// ode_list:
 	//
 	//	"ode" "(" arguments=arguments ")";
 	public Ode_listElements getOde_listAccess() {
@@ -3970,8 +3942,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	////A random list is identified by ~ symbol
-	//
-	//random_list:
+	// random_list:
 	//
 	//	"~" "(" arguments=arguments ")";
 	public Random_listElements getRandom_listAccess() {
@@ -4126,7 +4097,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//primary:
 	//
-	//	literal=NUMBER | identifier=variable_name;
+	//	number=NUMBER | identifier=variable_name;
 	public PrimaryElements getPrimaryAccess() {
 		return (pPrimary != null) ? pPrimary : (pPrimary = new PrimaryElements());
 	}

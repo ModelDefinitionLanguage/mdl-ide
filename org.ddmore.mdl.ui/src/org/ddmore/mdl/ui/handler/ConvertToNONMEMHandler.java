@@ -61,10 +61,10 @@ public class ConvertToNONMEMHandler extends AbstractHandler implements IHandler 
 
 							public Boolean exec(XtextResource source)
 									throws Exception {
-								System.out.println("Generating NONMEM code for " + file.getName());
 				                if (generator instanceof MdlGenerator){
-					            	 MdlGenerator mdlGenerator = (MdlGenerator)generator;
-					            	 mdlGenerator.doGenerate(source, fsa);
+									System.out.println("Generating NONMEM code for " + file.getName());
+ 				                	MdlGenerator mdlGenerator = (MdlGenerator)generator;
+					            	 mdlGenerator.doGenerateNonmem(source, fsa);
 					            	 //fsa.setPostProcessor(callBack);
 				                }
 								return Boolean.TRUE;

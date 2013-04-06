@@ -1217,7 +1217,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (literal=NUMBER | identifier=variable_name)
+	 *     (number=NUMBER | identifier=variable_name)
 	 */
 	protected void sequence_primary(EObject context, primary semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

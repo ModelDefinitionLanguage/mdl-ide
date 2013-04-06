@@ -5,13 +5,11 @@
  */
 package org.ddmore.mdl.generator
 
-import org.ddmore.mdl.mdl.arguments
 import org.ddmore.mdl.mdl.block
 import org.ddmore.mdl.mdl.block_statement
 import org.ddmore.mdl.mdl.data_obj
 import org.ddmore.mdl.mdl.file_block
 import org.ddmore.mdl.mdl.header_block
-import org.ddmore.mdl.mdl.list
 import org.ddmore.mdl.mdl.mcl
 import org.ddmore.mdl.mdl.mcl_obj
 import org.ddmore.mdl.mdl.model_obj
@@ -19,51 +17,17 @@ import org.ddmore.mdl.mdl.param_obj
 import org.ddmore.mdl.mdl.statement
 import org.ddmore.mdl.mdl.task_obj
 import org.ddmore.mdl.mdl.task_obj_block
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.xtext.generator.IFileSystemAccess
-import org.eclipse.xtext.generator.IGenerator
-import org.ddmore.mdl.mdl.random_list
-import org.ddmore.mdl.mdl.ode_list
 import org.ddmore.mdl.mdl.variability_block_statement
 import org.ddmore.mdl.mdl.model_block
 import org.ddmore.mdl.mdl.target_block
-import org.ddmore.mdl.mdl.argument
 
-class MdlGenerator extends MdlPrinting implements IGenerator{
 
-	//For every MDL (.mdl) file in the project create a corresponding control (.ctl) NM-TRAN  file
- 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
- 		for(m: resource.allContents.toIterable.filter(typeof(mcl))) {
-			fsa.generateFile(
-				resource.fileName + ".ctl", 	
-				m.compile)
-		}
-	}
-	
-	//Find reference to a data file 
-	def getDataSource(Resource resource){
-		for(m: resource.allContents.toIterable.filter(typeof(mcl))) {
-			for (obj: m.objects){
-				if (obj.data_obj != null){
-					for (b: obj.data_obj.blocks){
-						if (b.file_block != null){
-							for (s: b.file_block.block.blocks){
-								if (s.statement != null){
-									return s.statement.getDataSource;
-								}
-							}
-						} 
-					}
-				}
-			}
-		}		
-		return "";
-	}
-	
-	var task_obj task_object = null; //Store the reference to task object
+class Mdl2Nonmem extends MdlPrinting{
+
+var task_obj task_object = null; //Store the reference to task object
 	
 	//Print file name and analyse all MCL objects in the source file
-  	def compile(mcl m){
+  	def convertToNonmem(mcl m){
   		//Create a map of variables
   		for (o:m.objects){
   			prepareCollections(o);
@@ -77,22 +41,22 @@ class MdlGenerator extends MdlPrinting implements IGenerator{
 		;mdl2nt «version» beta, last modification «date», Natallia Kokash (natallia.kokash@gmail.com)  
 		
 		$PROB «m.fileNameUpperCase»
-  		«FOR o:m.objects»«o.compile»«ENDFOR»
+  		«FOR o:m.objects»«o.convertToNonmem»«ENDFOR»
 		'''
 	}
 	
-	//Compile MCL objects
-	def compile(mcl_obj o)'''
-	«IF o.data_obj != null»«o.data_obj.compile»«ENDIF»
-	«IF o.model_obj != null»«o.model_obj.compile»«ENDIF»
-	«IF o.param_obj != null»«o.param_obj.compile»«ENDIF»
-	«IF o.task_obj != null»«o.task_obj.compile»«ENDIF»
+	//convertToNonmem MCL objects
+	def convertToNonmem(mcl_obj o)'''
+	«IF o.data_obj != null»«o.data_obj.convertToNonmem»«ENDIF»
+	«IF o.model_obj != null»«o.model_obj.convertToNonmem»«ENDIF»
+	«IF o.param_obj != null»«o.param_obj.convertToNonmem»«ENDIF»
+	«IF o.task_obj != null»«o.task_obj.convertToNonmem»«ENDIF»
 	'''	
 		
 ////////////////////////////////////	
-//Compile MODEL OBJECT
+//convertToNonmem MODEL OBJECT
 ////////////////////////////////////
-	def compile(model_obj o){
+	def convertToNonmem(model_obj o){
 	val isLibraryDefined = o.isLibraryDefined;
 	val isPKDefined = o.isPKDefined;
 	val isErrorNonEmpty = o.isErrorNonEmpty;
@@ -307,10 +271,10 @@ class MdlGenerator extends MdlPrinting implements IGenerator{
 	'''
    
 ////////////////////////////////////
-//Compile PARAMETER OBJECT
+//convertToNonmem PARAMETER OBJECT
 /////////////////////////////////////	
 	//Process parameter object
-	def compile(param_obj obj)'''
+	def convertToNonmem(param_obj obj)'''
 	«obj.printTheta»
 	«obj.printSigma»
 	«obj.printOmega»
@@ -401,11 +365,11 @@ class MdlGenerator extends MdlPrinting implements IGenerator{
 	
 	
 ////////////////////////////////////	
-//Compile DATA OBJECT
+//convertToNonmem DATA OBJECT
 ////////////////////////////////////
 
 	//Process data object
-	def compile(data_obj o)'''
+	def convertToNonmem(data_obj o)'''
 	«FOR b:o.blocks»
 		«IF b.header_block != null»
 			«b.header_block.printInput»
@@ -434,9 +398,9 @@ class MdlGenerator extends MdlPrinting implements IGenerator{
 		«ENDIF»
 	«ENDFOR»
 	'''
-	//if (st.inline_block != null) st.inline_block.compile
-	//if (st.design_block != null) st.design_block.compile
-	//if (st.rsscript_block != null) st.rsscript_block.compile
+	//if (st.inline_block != null) st.inline_block.convertToNonmem
+	//if (st.design_block != null) st.design_block.convertToNonmem
+	//if (st.rsscript_block != null) st.rsscript_block.convertToNonmem
 	
 	//NONMEM: Extract source from variable data
 	def printDataSource(block_statement s){
@@ -450,23 +414,11 @@ class MdlGenerator extends MdlPrinting implements IGenerator{
 					}
 	}
 	
-	def getDataSource(block_statement s){
-		if (s.variable_declaration != null)
-			if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("data"))
-				if (s.variable_declaration.expression != null)
-					if (s.variable_declaration.expression.list != null){
-						val data = s.variable_declaration.expression.list.getVariableAttribute("source");
-						if (data != null)
-							return data.toString();
-					}
-		return "";
-	}
-
 /////////////////////////////////////////////////
-//Compile TASK OBJECT
+//convertToNonmem TASK OBJECT
 /////////////////////////////////////////////////
 
-	def compile(task_obj o)'''
+	def convertToNonmem(task_obj o)'''
 		«FOR b:o.blocks»
 			«b.printFunctions»
 		«ENDFOR»
@@ -558,57 +510,6 @@ class MdlGenerator extends MdlPrinting implements IGenerator{
 		}	
 	}
 	
-
-    /////////////////////////////////////////
-	//Helper functions
-	////////////////////////////////////////
-
-	//Get MDL file name
-	def fileName(Resource resource){
-		var fileName = resource.getURI().lastSegment
-		fileName.substring(0, fileName.lastIndexOf('.'))
-	}
-	
-	//Get MDL file name in upper-case
-	def fileNameUpperCase(mcl m){
-		m.eResource.fileName.toUpperCase()
-	}
-	
-	//Return value of a list attribute with a given name
-	def getVariableAttribute(list v, String attr_name){
-		if (v.arguments != null)
-			return v.arguments.selectAttribute(attr_name)
-		return null;
-	}	
-
-	//Return value of a random list attribute with a given name
-	def getVariableAttribute(random_list v, String attr_name){
-		if (v.arguments != null)
-			return v.arguments.selectAttribute(attr_name)
-		return null;
-	}	
-	
-	//Return value of a list attribute with a given name
-	def getVariableAttribute(ode_list v, String attr_name){
-		if (v.arguments != null)
-			return v.arguments.selectAttribute(attr_name)
-		return null;
-	}	
-	
-	//Return value of an attribute with a given name
-	def selectAttribute(arguments a, String attr_name){
-		for (arg: a.arguments)
-			if (arg.identifier.equalsIgnoreCase(attr_name))
-				return arg.expression.toStr
-	}	
-	
-	def isArgumentExpression(argument a){
-		if (a.expression.expression != null){
-			if (a.expression.expression.conditional_expression != null) return true;
-		}
-		return false;
-	}
-  
 	///////////////////////////////////////////////
 	//Prepares variable maps
 	///////////////////////////////////////////////
@@ -851,66 +752,6 @@ class MdlGenerator extends MdlPrinting implements IGenerator{
 			}
 	}
 		
-	//Return true if there are definitions in MODEL PREDICTION or OBSERVATION blocks,
-	//If there are some, an NM-TRAN $ERROR section will be printed
-	def isErrorNonEmpty(model_obj o){
-    	for (mob:o.blocks){
-	    	if (mob.model_prediction_obj_block != null){
-				for (s: mob.model_prediction_obj_block.block.statements){
-					if (s.statement != null) return true;
-				}
-	    	}
-	    	if (mob.observation_block != null){
-				for (s: mob.observation_block.block.statements){
-					if (s.statement != null) return true;
-				}
-	    	}
-		}
-    	return false;
-    } 
-	
-    //Check if there are definitions in ODE block
-    def isODEDefined(model_obj o){
-		for (mob: o.blocks){
-			if (mob.model_prediction_obj_block != null){
-				var b = mob.model_prediction_obj_block.block;
-		    	if (b != null){
-		    		for (s: b.statements){
-		    			if (s.ode_block != null) return true;
-		    		}
-		    	}
-		    }
-		}
-    	return false;
-    }
-
-	def isPKDefined(model_obj o){
-		for (mob: o.blocks){
-			if (mob.group_variables != null){
-				if (mob.group_variables.block != null){
-					return true;
-				}
-			}
-			if (mob.individual_model_obj_block != null){
-				if (mob.individual_model_obj_block.block != null){
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-    //Check if LIBRARY block is defined
-    def isLibraryDefined(model_obj o){
-    	for (mob: o.blocks){
-			if (mob.model_prediction_obj_block != null){
-				for (s: mob.model_prediction_obj_block.block.statements){
-				    if (s.library_block != null) return true;
-				}
-			}
-    	}
-    	return false;
-    }
 	
 	///////////////////////////////////////////////////////////////////////
 	//Overwritten converter functions
@@ -940,11 +781,7 @@ class MdlGenerator extends MdlPrinting implements IGenerator{
 		return id;	
 	}
 	
-//  NMTRAN function call
-//	override toStr(function_call call)'''
-//		«call.funct_name.convertID.toUpperCase» «FOR a: call.arg.arguments SEPARATOR " "»«a.expression.print»«ENDFOR»
-//	'''	
-	
+
 	//Override MDL operators with NM-TRAN operators
 	override convertOperator(String op){
 		if (op.equals("<")) return ".LT.";

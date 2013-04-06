@@ -46,7 +46,7 @@ public class RunWithNONMEMHandler_PE extends AbstractHandler implements IHandler
                 ResourceSet rs = resourceSetProvider.get(project);
                 Resource r = rs.getResource(uri, true);
                 if (generator instanceof MdlGenerator) {
-                    MdlGenerator mdlGenerator = (MdlGenerator) generator;
+                	MdlGenerator mdlGenerator = (MdlGenerator) generator;
                     String dataFileName = mdlGenerator.getDataSource(r);
 
                     IFile dataFile = project.getFile(file.getParent().getProjectRelativePath() + "/" + dataFileName);

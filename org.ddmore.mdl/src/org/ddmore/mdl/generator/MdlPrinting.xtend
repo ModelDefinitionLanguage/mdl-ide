@@ -29,8 +29,153 @@ import org.ddmore.mdl.mdl.ode_list
 import org.ddmore.mdl.mdl.power_expression
 import org.ddmore.mdl.mdl.verbatim_block
 import org.ddmore.mdl.mdl.target_block
+import org.eclipse.emf.ecore.resource.Resource
+import org.ddmore.mdl.mdl.mcl
+import org.ddmore.mdl.mdl.argument
+import org.ddmore.mdl.mdl.model_obj
 
 class MdlPrinting {
+
+	//Get MDL file name in upper-case
+	def fileNameUpperCase(mcl m){
+		m.eResource.fileName.toUpperCase()
+	}
+	
+	//Get MDL file name
+	def fileName(Resource resource){
+		var fileName = resource.getURI().lastSegment
+		fileName.substring(0, fileName.lastIndexOf('.'))
+	}
+	
+	//Find reference to a data file 
+	def getDataSource(Resource resource){
+		for(m: resource.allContents.toIterable.filter(typeof(mcl))) {
+			for (obj: m.objects){
+				if (obj.data_obj != null){
+					for (b: obj.data_obj.blocks){
+						if (b.file_block != null){
+							for (s: b.file_block.block.blocks){
+								if (s.statement != null){
+									return s.statement.getDataSource;
+								}
+							}
+						} 
+					}
+				}
+			}
+		}		
+		return "";
+	}
+	
+	def getDataSource(block_statement s){
+		if (s.variable_declaration != null)
+			if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("data"))
+				if (s.variable_declaration.expression != null)
+					if (s.variable_declaration.expression.list != null){
+						val data = s.variable_declaration.expression.list.getVariableAttribute("source");
+						if (data != null)
+							return data.toString();
+					}
+		return "";
+	}
+		
+	//Return value of a list attribute with a given name
+	def getVariableAttribute(list v, String attr_name){
+		if (v.arguments != null)
+			return v.arguments.selectAttribute(attr_name)
+		return null;
+	}	
+
+	//Return value of a random list attribute with a given name
+	def getVariableAttribute(random_list v, String attr_name){
+		if (v.arguments != null)
+			return v.arguments.selectAttribute(attr_name)
+		return null;
+	}	
+	
+	//Return value of a list attribute with a given name
+	def getVariableAttribute(ode_list v, String attr_name){
+		if (v.arguments != null)
+			return v.arguments.selectAttribute(attr_name)
+		return null;
+	}	
+	
+	//Return value of an attribute with a given name
+	def selectAttribute(arguments a, String attr_name){
+		for (arg: a.arguments)
+			if (arg.identifier.equalsIgnoreCase(attr_name))
+				return arg.expression.toStr
+	}	
+	
+	def isArgumentExpression(argument a){
+		if (a.expression.expression != null){
+			if (a.expression.expression.conditional_expression != null) return true;
+		}
+		return false;
+	}
+	
+	
+	//Return true if there are definitions in MODEL PREDICTION or OBSERVATION blocks,
+	def isErrorNonEmpty(model_obj o){
+    	for (mob:o.blocks){
+	    	if (mob.model_prediction_obj_block != null){
+				for (s: mob.model_prediction_obj_block.block.statements){
+					if (s.statement != null) return true;
+				}
+	    	}
+	    	if (mob.observation_block != null){
+				for (s: mob.observation_block.block.statements){
+					if (s.statement != null) return true;
+				}
+	    	}
+		}
+    	return false;
+    } 
+	
+    //Check if there are definitions in ODE block
+    def isODEDefined(model_obj o){
+		for (mob: o.blocks){
+			if (mob.model_prediction_obj_block != null){
+				var b = mob.model_prediction_obj_block.block;
+		    	if (b != null){
+		    		for (s: b.statements){
+		    			if (s.ode_block != null) return true;
+		    		}
+		    	}
+		    }
+		}
+    	return false;
+    }
+
+	def isPKDefined(model_obj o){
+		for (mob: o.blocks){
+			if (mob.group_variables != null){
+				if (mob.group_variables.block != null){
+					return true;
+				}
+			}
+			if (mob.individual_model_obj_block != null){
+				if (mob.individual_model_obj_block.block != null){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+    //Check if LIBRARY block is defined
+    def isLibraryDefined(model_obj o){
+    	for (mob: o.blocks){
+			if (mob.model_prediction_obj_block != null){
+				for (s: mob.model_prediction_obj_block.block.statements){
+				    if (s.library_block != null) return true;
+				}
+			}
+    	}
+    	return false;
+    }
+	
+	/////////////////////////////////////////////////////////////
 
     //Map variable identifiers, identity for MDL printing, to be rewritten in super classes 
 	def convertID(String id){
@@ -256,8 +401,8 @@ class MdlPrinting {
 	//Convert variables in expressions if needed!
 	def toStr(primary p){
 		var res = "";
-		if (p.literal != null){
-			res  = res + p.literal;
+		if (p.number != null){
+			res  = res + p.number;
 		}
 		if (p.identifier != null){
 			res = res + p.identifier.toStr.convertID; 

@@ -2982,7 +2982,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getprimary_Literal()
+  public EAttribute getprimary_Number()
   {
     return (EAttribute)primaryEClass.getEStructuralFeatures().get(0);
   }
@@ -3378,7 +3378,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     createEReference(unary_expressionEClass, UNARY_EXPRESSION__PRIMARY);
 
     primaryEClass = createEClass(PRIMARY);
-    createEAttribute(primaryEClass, PRIMARY__LITERAL);
+    createEAttribute(primaryEClass, PRIMARY__NUMBER);
     createEReference(primaryEClass, PRIMARY__IDENTIFIER);
 
     variable_nameEClass = createEClass(VARIABLE_NAME);
@@ -3721,7 +3721,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     initEReference(getunary_expression_Primary(), this.getprimary(), null, "primary", null, 0, 1, unary_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(primaryEClass, primary.class, "primary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getprimary_Literal(), ecorePackage.getEString(), "literal", null, 0, 1, primary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getprimary_Number(), ecorePackage.getEString(), "number", null, 0, 1, primary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getprimary_Identifier(), this.getvariable_name(), null, "identifier", null, 0, 1, primary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(variable_nameEClass, variable_name.class, "variable_name", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
