@@ -23,6 +23,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.mango.mif.domain.ExecutionRequestBuilder;
 import com.mango.mif.domain.ExecutionType;
+import com.mango.mif.utils.encrypt.EncrypterFactory;
 
 /**
  * @author jcarr
@@ -76,9 +77,17 @@ public class TESServer {
     private static List<NameValuePair> getPrepareParameters() {
 
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-        nameValuePairs.add(new BasicNameValuePair("userName", PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_UNAME)));
-        nameValuePairs.add(new BasicNameValuePair("encryptedPassword", PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD)));
+        nameValuePairs.add(new BasicNameValuePair("userName", getUsername()));
+        nameValuePairs.add(new BasicNameValuePair("encryptedPassword", getPassword()));
         return nameValuePairs;
+    }
+
+    private static String getUsername() {
+        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_UNAME);
+    }
+
+    private static String getPassword() {
+        return EncrypterFactory.getEncrypter().encrypt(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD));
     }
 
     public String exec(final String requestId, final String execFile) {
@@ -108,23 +117,23 @@ public class TESServer {
     }
 
     private static List<NameValuePair> getExecuteParameters(final String requestId, final String execFile) {
-    	
+
         ExecutionRequestBuilder builder = new ExecutionRequestBuilder();
 
         builder.setRequestId(requestId);
         builder.setExecutionType(ExecutionType.NMFE.toString());
         builder.setExecutionFile(execFile);
-        builder.setUserName(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_UNAME));
-        builder.setUserPassword(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD));
-		
+        builder.setUserName(getUsername());
+        builder.setUserPassword(getPassword());
+
         String executionMessage = null;
-        
+
         try {
             executionMessage = builder.getExecutionRequestMsg();
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-        
+
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
         nameValuePairs.add(new BasicNameValuePair("executionRequest", executionMessage));
         return nameValuePairs;
