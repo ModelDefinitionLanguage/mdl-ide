@@ -24,8 +24,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
  */
 public class PublishTaskInputJob extends Job {
 
-    private final transient IFile modelFiles;
-    private final transient IFile dataFiles;
+    private final transient IFile modelFile;
+    private final transient IFile dataFile;
 
     private transient String requestId;
     private transient String jobId;
@@ -35,8 +35,8 @@ public class PublishTaskInputJob extends Job {
      */
     public PublishTaskInputJob(final String name, final IFile model, final IFile data) {
         super(name);
-        this.modelFiles = model;
-        this.dataFiles = data;
+        this.modelFile = model;
+        this.dataFile = data;
     }
 
     /* (non-Javadoc)
@@ -49,10 +49,10 @@ public class PublishTaskInputJob extends Job {
         try {
 
             String symbolicName = MdlActivator.getInstance().getBundle().getSymbolicName();
-            if (modelFiles == null) {
+            if (modelFile == null) {
                 return new Status(IStatus.ERROR, symbolicName, "A model file must be supplied");
             }
-            if (dataFiles == null) {
+            if (dataFile == null) {
                 return new Status(IStatus.ERROR, symbolicName, "A data file must be supplied");
             }
 
@@ -68,20 +68,30 @@ public class PublishTaskInputJob extends Job {
             // move all the input files to the shared dir using the GUID
             try {
                 publishFileToSharedDir(
-                    modelFiles.getProject().getLocation().append("src-gen")
-                            .append(modelFiles.getName().substring(0, modelFiles.getName().length() - 3) + "ctl").toFile(), this.requestId);
-                publishFileToSharedDir(dataFiles.getLocation().toFile(), this.requestId);
+                    modelFile.getProject().getLocation().append("src-gen")
+                            .append(modelFile.getName().substring(0, modelFile.getName().length() - 3) + "ctl").toFile(), this.requestId);
+                publishFileToSharedDir(dataFile.getLocation().toFile(), this.requestId);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+            }
+
+            //FIXME            
+            if (modelFile.getName().endsWith(".R")) {
+                publishFileToSharedDir(modelFile.getLocation().toFile(), this.requestId);
             }
 
             if (monitor.isCanceled()) {
                 return Status.CANCEL_STATUS;
             }
 
-            // then exec the job
-            this.jobId = serverConn.exec(this.requestId, modelFiles.getName().substring(0, modelFiles.getName().length() - 3) + "ctl");
+            //FIXME    
+            if (modelFile.getName().endsWith(".R")) {
+                this.jobId = serverConn.exec(this.requestId, modelFile.getName());
+            } else {
+                // then exec the job
+                this.jobId = serverConn.exec(this.requestId, modelFile.getName().substring(0, modelFile.getName().length() - 3) + "ctl");
+            }
 
         } catch (Exception ex) {
             return new Status(IStatus.ERROR, this.getClass().getPackage().getName(), "Error while executing a command", ex);

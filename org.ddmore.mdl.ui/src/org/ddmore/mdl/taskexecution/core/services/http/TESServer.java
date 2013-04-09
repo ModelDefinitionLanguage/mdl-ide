@@ -115,7 +115,6 @@ public class TESServer {
         }
 
         return null;
-
     }
 
     static List<NameValuePair> getExecuteParameters(final String requestId, final String execFile) {
@@ -123,7 +122,12 @@ public class TESServer {
         ExecutionRequestBuilder builder = new ExecutionRequestBuilder();
 
         builder.setRequestId(requestId);
-        builder.setExecutionType(ExecutionType.NMFE.toString());
+        // FIXME
+        if (execFile.endsWith(".R")) {
+            builder.setExecutionType(ExecutionType.R_Script.toString());
+        } else {
+            builder.setExecutionType(ExecutionType.NMFE.toString());
+        }
         builder.setExecutionFile(execFile);
         builder.setUserName(getUsername());
         builder.setUserPassword(getPassword());
