@@ -34,7 +34,7 @@ public class TESServer {
 
     private static final String TEMPLATE_URL = "http://<host>:<port>/<service>";
 
-    private static final String JOBSUBMISSION_URL = "/jobSubmission";
+    private static final String JOBSUBMISSION_URL = "/jobsubmission";
     private static final String JOBSERVICE_URL = "/jobService";
 
     private final transient HttpClient client = new DefaultHttpClient();
