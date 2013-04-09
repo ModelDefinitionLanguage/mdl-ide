@@ -83,8 +83,6 @@ public class PublishTaskInputJob extends Job {
             // then exec the job
             this.jobId = serverConn.exec(this.requestId, modelFiles.getName().substring(0, modelFiles.getName().length() - 3) + "ctl");
 
-            Thread.sleep(1000);
-
         } catch (Exception ex) {
             return new Status(IStatus.ERROR, this.getClass().getPackage().getName(), "Error while executing a command", ex);
         }

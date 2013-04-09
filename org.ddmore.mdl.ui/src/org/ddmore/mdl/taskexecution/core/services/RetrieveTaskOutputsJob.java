@@ -43,9 +43,6 @@ public class RetrieveTaskOutputsJob extends Job {
         IStatus status = Status.OK_STATUS;
         try {
             copyFilesFromSharedLocation();
-
-            Thread.sleep(1000);
-
         } catch (Exception ex) {
             return new Status(IStatus.ERROR, this.getClass().getPackage().getName(), "Error while executing a command", ex);
         }

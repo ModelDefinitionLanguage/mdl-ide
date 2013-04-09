@@ -31,17 +31,21 @@ public class MonitorTaskProgressJob extends Job {
     @Override
     protected IStatus run(IProgressMonitor monitor) {
         monitor.subTask("Task Execution Service: Monitor");
-        IStatus status = Status.OK_STATUS;
+
         try {
             TESServer serverConn = new TESServer();
             do {
                 this.requestStatus = serverConn.getRequestStatus(jobId);
                 Thread.sleep(1500);
-            } while (TESRequestStatus.running.equals(this.requestStatus));
+            } while (!monitor.isCanceled() && TESRequestStatus.running.equals(this.requestStatus));
         } catch (Exception ex) {
             return new Status(IStatus.ERROR, this.getClass().getPackage().getName(), "Error while executing a command", ex);
         }
-        return status;
+
+        if (monitor.isCanceled()) {
+            return Status.CANCEL_STATUS;
+        }
+        return Status.OK_STATUS;
     }
 
     public TESRequestStatus getStatus() {
