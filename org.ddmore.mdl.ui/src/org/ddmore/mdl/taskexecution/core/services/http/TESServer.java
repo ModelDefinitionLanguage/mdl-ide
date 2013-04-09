@@ -23,6 +23,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.mango.mif.domain.ExecutionRequestBuilder;
 import com.mango.mif.domain.ExecutionType;
+import com.mango.mif.domain.JobStatus;
 import com.mango.mif.utils.encrypt.EncrypterFactory;
 
 /**
@@ -151,10 +152,20 @@ public class TESServer {
         try {
             HttpResponse response = client.execute(httpGet);
             String responseString = IOUtils.toString(response.getEntity().getContent());
-            if (responseString.equals("Done")) {
+
+            switch (JobStatus.valueOf(responseString)) {
+            case COMPLETED:
                 return TESRequestStatus.completed;
-            } else if (responseString.equals("Failed")) {
+            case CANCELLED:
+                // TODO a cancelled status
+            case FAILED:
                 return TESRequestStatus.failed;
+            case NEW:
+            case NOT_AVAILABLE:
+            case RUNNING:
+                return TESRequestStatus.running;
+            default:
+                System.out.println("Unexpected return status " + responseString);
             }
 
         } catch (ClientProtocolException e) {
@@ -165,7 +176,7 @@ public class TESServer {
             e.printStackTrace();
         }
 
-        return TESRequestStatus.running;
+        return TESRequestStatus.failed;
     }
 
 }
