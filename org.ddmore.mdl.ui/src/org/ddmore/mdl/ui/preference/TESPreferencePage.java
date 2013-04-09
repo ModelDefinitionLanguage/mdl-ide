@@ -38,6 +38,7 @@ public class TESPreferencePage extends FieldEditorPreferencePage implements IWor
     protected void createFieldEditors() {
         addField(new StringFieldEditor(MDLPreferenceConstants.TES_HOST, "TES &Host", getFieldEditorParent()));
         addField(new IntegerFieldEditor(MDLPreferenceConstants.TES_PORT, "TES &Port", getFieldEditorParent()));
+        addField(new StringFieldEditor(MDLPreferenceConstants.TES_SERVICE, "TES Service &Resource", getFieldEditorParent()));
 
         addField(new StringFieldEditor(MDLPreferenceConstants.TES_UNAME, "TES &Username", getFieldEditorParent()));
         addField(new StringFieldEditor(MDLPreferenceConstants.TES_PWORD, "TES &Password", getFieldEditorParent()));

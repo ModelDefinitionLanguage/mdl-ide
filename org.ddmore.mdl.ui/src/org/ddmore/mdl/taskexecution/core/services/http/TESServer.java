@@ -32,7 +32,7 @@ public class TESServer {
 
     private static final IPreferenceStore PREFERENCE_STORE = MdlActivator.getInstance().getPreferenceStore();
 
-    private static final String TEMPLATE_URL = "http://<host>:<port>/Test/REST";
+    private static final String TEMPLATE_URL = "http://<host>:<port>/<service>";
 
     private static final String JOBSUBMISSION_URL = "/jobSubmission";
     private static final String JOBSERVICE_URL = "/jobService";
@@ -68,9 +68,11 @@ public class TESServer {
         // TODO get once and put a listener
         final String host = PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_HOST);
         final int port = PREFERENCE_STORE.getInt(MDLPreferenceConstants.TES_PORT);
+        final String service = PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_SERVICE);
 
         String url = TEMPLATE_URL.replaceAll("<host>", host);
         url = url.replaceAll("<port>", String.valueOf(port));
+        url = url.replaceAll("<service>", service);
         return url;
     }
 

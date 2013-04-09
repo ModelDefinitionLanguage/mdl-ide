@@ -15,12 +15,13 @@ public class MDLPreferenceConstants {
     // TES
     public static final String TES_HOST = "tes.host";
     public static final String TES_PORT = "tes.port";
+    public static final String TES_SERVICE = "tes.service";
 
     public static final String TES_UNAME = "tes.username";
     public static final String TES_PWORD = "tes.password";
 
     // TODO PROXY
-    
+
     public static final String TES_SHARED_DIR = "tes.shared.dir";
     public static final String TES_SHARED_DIR_INPUT = "tes.shared.input.dir";
     public static final String TES_SHARED_DIR_OUTPUT = "tes.shared.output.dir";
