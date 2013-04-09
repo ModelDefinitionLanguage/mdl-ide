@@ -10,13 +10,13 @@ import javax.xml.bind.JAXBException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.log4j.Logger;
 import org.ddmore.mdl.ui.internal.MdlActivator;
 import org.ddmore.mdl.ui.preference.MDLPreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -38,6 +38,8 @@ public class TESServer {
     private static final String JOBSUBMISSION_URL = "/jobsubmission";
     private static final String JOBSERVICE_URL = "/jobService";
 
+    private static final Logger LOGGER = Logger.getLogger(TESServer.class);
+
     private final transient HttpClient client = new DefaultHttpClient();
 
     public String prepare() {
@@ -46,20 +48,17 @@ public class TESServer {
         HttpPost httpPost = new HttpPost(url);
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(getPrepareParameters()));
+
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("Problem building prepare post", e);
         }
 
         try {
             HttpResponse response = client.execute(httpPost);
             return IOUtils.toString(response.getEntity().getContent());
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("Problem sennding prepare post", e);
         }
 
         return null;
@@ -102,20 +101,17 @@ public class TESServer {
 
             httpPost.setHeader("accept", "*");
             httpPost.setEntity(entity);
+
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("Problem building exec post", e);
         }
 
         try {
             HttpResponse response = client.execute(httpPost);
             return IOUtils.toString(response.getEntity().getContent());
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("Problem sending exec post", e);
         }
 
         return null;
@@ -137,7 +133,7 @@ public class TESServer {
         try {
             executionMessage = builder.getExecutionRequestMsg();
         } catch (JAXBException e) {
-            e.printStackTrace();
+            LOGGER.error("Problem building execution message", e);
         }
 
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -165,15 +161,11 @@ public class TESServer {
             case RUNNING:
                 return TESRequestStatus.running;
             default:
-                System.out.println("Unexpected return status " + responseString);
+                LOGGER.error("Unexpected return status " + responseString);
             }
 
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("Problem getting response status", e);
         }
 
         return TESRequestStatus.failed;
