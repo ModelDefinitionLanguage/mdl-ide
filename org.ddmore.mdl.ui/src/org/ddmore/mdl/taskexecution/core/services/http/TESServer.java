@@ -97,7 +97,7 @@ public class TESServer {
 
         HttpPost httpPost = new HttpPost(url);
         try {
-            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(getExecuteParameters(requestId, execFile));
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(getExecuteParameters(requestId, execFile), "UTF-8");
 
             httpPost.setHeader("accept", "*");
             httpPost.setEntity(entity);
