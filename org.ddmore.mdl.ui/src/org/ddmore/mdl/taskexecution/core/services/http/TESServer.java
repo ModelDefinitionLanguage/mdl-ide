@@ -127,6 +127,7 @@ public class TESServer {
         builder.setExecutionFile(execFile);
         builder.setUserName(getUsername());
         builder.setUserPassword(getPassword());
+        builder.setSubmitAsUserMode(true);
 
         String executionMessage = null;
 
