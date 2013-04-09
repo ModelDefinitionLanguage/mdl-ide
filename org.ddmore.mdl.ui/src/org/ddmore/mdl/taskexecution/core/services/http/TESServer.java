@@ -97,7 +97,10 @@ public class TESServer {
 
         HttpPost httpPost = new HttpPost(url);
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(getExecuteParameters(requestId, execFile)));
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(getExecuteParameters(requestId, execFile));
+
+            httpPost.setHeader("accept", "*");
+            httpPost.setEntity(entity);
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -118,7 +121,7 @@ public class TESServer {
 
     }
 
-    private static List<NameValuePair> getExecuteParameters(final String requestId, final String execFile) {
+    static List<NameValuePair> getExecuteParameters(final String requestId, final String execFile) {
 
         ExecutionRequestBuilder builder = new ExecutionRequestBuilder();
 
