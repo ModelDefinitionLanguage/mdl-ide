@@ -9,6 +9,7 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -65,15 +66,17 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
                                         }
                                     }
                                 });
+                                job.setRule(new SerialSchedulingRule());
                                 job.schedule();
 
                                 // FIXME also run R (for demo)
-                                IFile rFile = project.getFile(file.getParent().getProjectRelativePath() + "/cow_demo.R");
+                                IFile rFile = project.getFile(file.getParent().getProjectRelativePath()
+                                    + "/Write Multiple Graphics to Report Folder.R");
                                 if (rFile.exists()) {
-                                    job.join();
                                     TESExecJob resultJob = new TESExecJob(
                                             "Running Job on Task Execution Service (" + rFile.getName() + ")", rFile, dataFile);
                                     resultJob.setSystem(true); // dont show it
+                                    resultJob.setRule(new SerialSchedulingRule());
                                     resultJob.schedule();
                                 }
 
@@ -92,6 +95,19 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
 
     public boolean isEnabled() {
         return true;
+    }
+
+    private class SerialSchedulingRule implements ISchedulingRule {
+
+        @Override
+        public boolean contains(ISchedulingRule rule) {
+            return (rule instanceof SerialSchedulingRule);
+        }
+
+        @Override
+        public boolean isConflicting(ISchedulingRule rule) {
+            return (rule instanceof SerialSchedulingRule);
+        }
     }
 
 }
