@@ -79,6 +79,7 @@ public class PublishTaskInputJob extends Job {
             //FIXME            
             if (modelFile.getName().endsWith(".R")) {
                 publishFileToSharedDir(modelFile.getLocation().toFile(), this.requestId);
+                publishFileToSharedDir(dataFile.getLocation().toFile(), this.requestId);
             }
 
             if (monitor.isCanceled()) {
