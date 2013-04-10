@@ -70,8 +70,7 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
                                 job.schedule();
 
                                 // FIXME also run R (for demo)
-                                IFile rFile = project.getFile(file.getParent().getProjectRelativePath()
-                                    + "/Write Multiple Graphics to Report Folder.R");
+                                IFile rFile = project.getFile(file.getParent().getProjectRelativePath() + "/reportGeneration.R");
                                 if (rFile.exists()) {
                                     TESExecJob resultJob = new TESExecJob(
                                             "Running Job on Task Execution Service (" + rFile.getName() + ")", rFile, dataFile);
