@@ -1,5 +1,8 @@
 package org.ddmore.mdl.ui.handler;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.ddmore.mdl.generator.MdlGenerator;
 import org.ddmore.mdl.taskexecution.core.services.TESExecJob;
 import org.eclipse.core.commands.AbstractHandler;
@@ -7,7 +10,10 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
@@ -72,8 +78,19 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
                                 // FIXME also run R (for demo)
                                 IFile rFile = project.getFile(file.getParent().getProjectRelativePath() + "/reportGeneration.R");
                                 if (rFile.exists()) {
+
+                                    IFolder outputFolder = project.getFolder("results/"
+                                        + (String) job.getProperty(new QualifiedName("eu.ddmore.mdl.ui", "outputFolderId")));
+                                    Set<IFile> dataFiles = new HashSet<IFile>();
+
+                                    for (IResource resource : outputFolder.members()) {
+                                        if (resource instanceof IFile) {
+                                            dataFiles.add((IFile) resource);
+                                        }
+                                    }
+
                                     TESExecJob resultJob = new TESExecJob(
-                                            "Running Job on Task Execution Service (" + rFile.getName() + ")", rFile, dataFile);
+                                            "Running Job on Task Execution Service (" + rFile.getName() + ")", rFile, dataFiles);
                                     resultJob.setSystem(true); // dont show it
                                     resultJob.setRule(new SerialSchedulingRule());
                                     resultJob.schedule();
