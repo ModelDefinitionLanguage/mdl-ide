@@ -3,10 +3,14 @@
  */
 package org.ddmore.mdl.taskexecution.core.services;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.ddmore.mdl.taskexecution.core.services.http.TESRequestStatus;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
@@ -23,12 +27,18 @@ import org.eclipse.ui.progress.IProgressConstants;
 public class TESExecJob extends Job {
 
     private final transient IFile modelFile;
-    private final transient IFile dataFile;
+    private final transient Set<IFile> dataFiles = new HashSet<IFile>();
 
     public TESExecJob(final String name, final IFile model, final IFile data) {
         super(name);
         this.modelFile = model;
-        this.dataFile = data;
+        this.dataFiles.add(data);
+    }
+
+    public TESExecJob(final String name, final IFile model, final Set<IFile> data) {
+        super(name);
+        this.modelFile = model;
+        this.dataFiles.addAll(data);
     }
 
     @Override
@@ -36,7 +46,7 @@ public class TESExecJob extends Job {
         monitor.beginTask("Task Execution Service: Job Executor", IProgressMonitor.UNKNOWN);
 
         try {
-            final PublishTaskInputJob job = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile, dataFile);
+            final PublishTaskInputJob job = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile, dataFiles);
             job.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
             job.setUser(true);
             job.addJobChangeListener(new JobChangeAdapter() {
@@ -60,6 +70,7 @@ public class TESExecJob extends Job {
             // display this task after it's finished
             setProperty(IProgressConstants.KEEP_PROPERTY, Boolean.TRUE);
             setProperty(IProgressConstants.ACTION_PROPERTY, getJobCompletedAction(job.getRequestId(), job.getJobId()));
+            setProperty(new QualifiedName("eu.ddmore.mdl.ui", "outputFolderId"), job.getRequestId());
 
         } catch (Exception ex) {
             monitor.done();

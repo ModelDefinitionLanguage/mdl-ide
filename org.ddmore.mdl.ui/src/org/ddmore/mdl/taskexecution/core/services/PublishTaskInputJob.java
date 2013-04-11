@@ -5,6 +5,8 @@ package org.ddmore.mdl.taskexecution.core.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.ddmore.mdl.taskexecution.core.services.http.TESServer;
@@ -25,7 +27,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 public class PublishTaskInputJob extends Job {
 
     private final transient IFile modelFile;
-    private final transient IFile dataFile;
+    private final transient Set<IFile> dataFiles = new HashSet<IFile>();
 
     private transient String requestId;
     private transient String jobId;
@@ -36,7 +38,13 @@ public class PublishTaskInputJob extends Job {
     public PublishTaskInputJob(final String name, final IFile model, final IFile data) {
         super(name);
         this.modelFile = model;
-        this.dataFile = data;
+        this.dataFiles.add(data);
+    }
+
+    public PublishTaskInputJob(final String name, final IFile model, final Set<IFile> data) {
+        super(name);
+        this.modelFile = model;
+        this.dataFiles.addAll(data);
     }
 
     /* (non-Javadoc)
@@ -52,7 +60,7 @@ public class PublishTaskInputJob extends Job {
             if (modelFile == null) {
                 return new Status(IStatus.ERROR, symbolicName, "A model file must be supplied");
             }
-            if (dataFile == null) {
+            if (dataFiles == null) {
                 return new Status(IStatus.ERROR, symbolicName, "A data file must be supplied");
             }
 
@@ -65,20 +73,17 @@ public class PublishTaskInputJob extends Job {
                 return Status.CANCEL_STATUS;
             }
 
-            // move all the input files to the shared dir using the GUID
-            try {
-                publishFileToSharedDir(
-                    modelFile.getProject().getLocation().append("src-gen")
-                            .append(modelFile.getName().substring(0, modelFile.getName().length() - 3) + "ctl").toFile(), this.requestId);
-                publishFileToSharedDir(dataFile.getLocation().toFile(), this.requestId);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
             //FIXME            
             if (modelFile.getName().endsWith(".R")) {
                 publishFileToSharedDir(modelFile.getLocation().toFile(), this.requestId);
+            } else {
+                // FIXME this should be accessible as the target file using the mdl as the input
+                publishFileToSharedDir(
+                    modelFile.getProject().getLocation().append("src-gen")
+                            .append(modelFile.getName().substring(0, modelFile.getName().length() - 3) + "ctl").toFile(), this.requestId);
+            }
+
+            for (IFile dataFile : dataFiles) {
                 publishFileToSharedDir(dataFile.getLocation().toFile(), this.requestId);
             }
 
@@ -90,7 +95,6 @@ public class PublishTaskInputJob extends Job {
             if (modelFile.getName().endsWith(".R")) {
                 this.jobId = serverConn.exec(this.requestId, modelFile.getName());
             } else {
-                // then exec the job
                 this.jobId = serverConn.exec(this.requestId, modelFile.getName().substring(0, modelFile.getName().length() - 3) + "ctl");
             }
 
