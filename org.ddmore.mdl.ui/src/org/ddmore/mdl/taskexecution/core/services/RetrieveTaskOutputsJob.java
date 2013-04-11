@@ -73,7 +73,7 @@ public class RetrieveTaskOutputsJob extends Job {
 
                 @Override
                 public boolean accept(File dir, String name) {
-                    return name.startsWith(modelFile.getName());
+                    return name.startsWith(modelFile.getName().substring(0, modelFile.getName().length() - 4));
                 }
             });
 
