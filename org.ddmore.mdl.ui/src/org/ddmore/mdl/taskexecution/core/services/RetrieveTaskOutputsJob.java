@@ -68,7 +68,7 @@ public class RetrieveTaskOutputsJob extends Job {
             // copy everything
             FileUtils.copyDirectory(inputDir, outputPath.toFile(), true);
         } else {
-            // only copy file with same prefix
+            // only copy files with same prefix
             File[] files = inputDir.listFiles(new FilenameFilter() {
 
                 @Override

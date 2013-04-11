@@ -12,7 +12,11 @@ import org.apache.commons.io.FileUtils;
 import org.ddmore.mdl.taskexecution.core.services.http.TESServer;
 import org.ddmore.mdl.ui.internal.MdlActivator;
 import org.ddmore.mdl.ui.preference.MDLPreferenceConstants;
+import org.eclipse.core.resources.FileInfoMatcherDescription;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceFilterDescription;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -76,6 +80,16 @@ public class PublishTaskInputJob extends Job {
             //FIXME            
             if (modelFile.getName().endsWith(".R")) {
                 publishFileToSharedDir(modelFile.getLocation().toFile(), this.requestId);
+                // also need the control file, as we dont know where it is get all the ones in src-gen
+                IFolder outputFolder = modelFile.getProject().getFolder("src-gen");
+                outputFolder.createFilter(IResourceFilterDescription.INCLUDE_ONLY, new FileInfoMatcherDescription(
+                        "org.eclipse.core.resources.regexFilterMatcher", "ctl"), IResource.BACKGROUND_REFRESH, null);
+                for (IResource resource : outputFolder.members()) {
+                    if (resource instanceof IFile) {
+                        publishFileToSharedDir(((IFile) resource).getLocation().toFile(), this.requestId);
+                    }
+                }
+
             } else {
                 // FIXME this should be accessible as the target file using the mdl as the input
                 publishFileToSharedDir(
