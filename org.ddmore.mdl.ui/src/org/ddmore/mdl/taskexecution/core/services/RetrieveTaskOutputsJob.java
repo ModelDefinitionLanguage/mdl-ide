@@ -4,6 +4,7 @@
 package org.ddmore.mdl.taskexecution.core.services;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
@@ -58,8 +59,28 @@ public class RetrieveTaskOutputsJob extends Job {
             throw new IllegalArgumentException("TES Shared Directory Path not set");
         }
 
-        IPath resultLocation = this.modelFile.getProject().getLocation().append("results").append(requestId);
-        FileUtils.copyDirectory(new File(new File(new File(targetDir), requestId), targetOutputPath), resultLocation.toFile(), true);
+        File inputDir = new File(new File(new File(targetDir), requestId), targetOutputPath);
+
+        IPath outputPath = this.modelFile.getProject().getLocation().append("results").append(requestId);
+
+        //FIXME
+        if (this.modelFile.getFileExtension().equals("R")) {
+            // copy everything
+            FileUtils.copyDirectory(inputDir, outputPath.toFile(), true);
+        } else {
+            // only copy file with same prefix
+            File[] files = inputDir.listFiles(new FilenameFilter() {
+
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.startsWith(modelFile.getName());
+                }
+            });
+
+            for (File file : files) {
+                FileUtils.copyFileToDirectory(file, outputPath.toFile(), true);
+            }
+        }
 
         // TODO this refresh is more expensive than it needs to be
         // also we should probably use the eclipse file manipulation (as long as it's performant) so that we don't have to handle this.
