@@ -13,9 +13,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -79,19 +81,9 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
                                 IFile rFile = project.getFile(file.getParent().getProjectRelativePath() + "/reportGeneration.R");
                                 if (rFile.exists()) {
 
-                                    IFolder outputFolder = project.getFolder("results/"
-                                        + (String) job.getProperty(new QualifiedName("eu.ddmore.mdl.ui", "outputFolderId")));
-                                    Set<IFile> dataFiles = new HashSet<IFile>();
-
-                                    for (IResource resource : outputFolder.members()) {
-                                        if (resource instanceof IFile) {
-                                            dataFiles.add((IFile) resource);
-                                        }
-                                    }
-
                                     TESExecJob resultJob = new TESExecJob(
-                                            "Running Job on Task Execution Service (" + rFile.getName() + ")", rFile, dataFiles);
-                                    resultJob.setSystem(true); // dont show it
+                                            "Running Job on Task Execution Service (" + rFile.getName() + ")", rFile, new ResultsFiles(
+                                                    project, job));
                                     resultJob.setRule(new SerialSchedulingRule());
                                     resultJob.schedule();
                                 }
@@ -123,6 +115,31 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
         @Override
         public boolean isConflicting(ISchedulingRule rule) {
             return (rule instanceof SerialSchedulingRule);
+        }
+    }
+
+    public class ResultsFiles {
+
+        private IProject project;
+        private Job job;
+
+        public ResultsFiles(IProject project, Job job) {
+            this.project = project;
+            this.job = job;
+        }
+
+        public Set<IFile> get() throws CoreException {
+            IFolder outputFolder = project.getFolder("results/"
+                + (String) job.getProperty(new QualifiedName("eu.ddmore.mdl.ui", "outputFolderId")));
+            Set<IFile> dataFiles = new HashSet<IFile>();
+
+            for (IResource resource : outputFolder.members()) {
+                if (resource instanceof IFile) {
+                    dataFiles.add((IFile) resource);
+                }
+            }
+
+            return dataFiles;
         }
     }
 

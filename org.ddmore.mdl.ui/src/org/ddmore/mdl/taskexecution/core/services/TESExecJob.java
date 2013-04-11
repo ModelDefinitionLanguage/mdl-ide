@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.ddmore.mdl.taskexecution.core.services.http.TESRequestStatus;
+import org.ddmore.mdl.ui.handler.RunWithNONMEMHandler.ResultsFiles;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -28,17 +29,29 @@ public class TESExecJob extends Job {
 
     private final transient IFile modelFile;
     private final transient Set<IFile> dataFiles = new HashSet<IFile>();
+    private final transient ResultsFiles results;
 
     public TESExecJob(final String name, final IFile model, final IFile data) {
         super(name);
         this.modelFile = model;
         this.dataFiles.add(data);
+        this.results = null;
     }
 
     public TESExecJob(final String name, final IFile model, final Set<IFile> data) {
         super(name);
         this.modelFile = model;
         this.dataFiles.addAll(data);
+        this.results = null;
+    }
+
+    /**
+     * FIXME this is a workaround to get the results once the previous job has finished
+     */
+    public TESExecJob(final String name, final IFile model, final ResultsFiles results) {
+        super(name);
+        this.modelFile = model;
+        this.results = results;
     }
 
     @Override
@@ -46,6 +59,11 @@ public class TESExecJob extends Job {
         monitor.beginTask("Task Execution Service: Job Executor", IProgressMonitor.UNKNOWN);
 
         try {
+            //FIXME            
+            if (results != null) {
+                this.dataFiles.addAll(this.results.get());
+            }
+
             final PublishTaskInputJob job = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile, dataFiles);
             job.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
             job.setUser(true);
