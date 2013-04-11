@@ -15,10 +15,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
@@ -64,16 +62,6 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
                                 TESExecJob job = new TESExecJob("Running Job on Task Execution Service (" + file.getName() + ")", file,
                                         dataFile);
                                 job.setUser(true);
-                                job.addJobChangeListener(new JobChangeAdapter() {
-
-                                    public void done(IJobChangeEvent event) {
-                                        if (event.getResult().isOK()) {
-                                            System.out.println("Job completed successfully");
-                                        } else {
-                                            System.out.println("Job did not complete successfully: " + event.getResult().getMessage());
-                                        }
-                                    }
-                                });
                                 job.setRule(new SerialSchedulingRule());
                                 job.schedule();
 

@@ -31,6 +31,10 @@ public class TESExecJob extends Job {
     private final transient Set<IFile> dataFiles = new HashSet<IFile>();
     private final transient ResultsFiles results;
 
+    private transient PublishTaskInputJob publishInputjob;
+    private transient MonitorTaskProgressJob monitorJob;
+    private transient Job resultsJob;
+
     public TESExecJob(final String name, final IFile model, final IFile data) {
         super(name);
         this.modelFile = model;
@@ -64,10 +68,10 @@ public class TESExecJob extends Job {
                 this.dataFiles.addAll(this.results.get());
             }
 
-            final PublishTaskInputJob job = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile, dataFiles);
-            job.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
-            job.setUser(true);
-            job.addJobChangeListener(new JobChangeAdapter() {
+            publishInputjob = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile, dataFiles);
+            publishInputjob.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
+            publishInputjob.setUser(true);
+            publishInputjob.addJobChangeListener(new JobChangeAdapter() {
 
                 @Override
                 public void done(IJobChangeEvent event) {
@@ -75,26 +79,31 @@ public class TESExecJob extends Job {
                     if (event.getResult().isOK()) {
 
                         // TODO not capturing the status
-                        scheduleMonitorJob(monitor, job.getRequestId(), job.getJobId());
+                        scheduleMonitorJob(monitor, publishInputjob.getRequestId(), publishInputjob.getJobId());
                     } else {
                         // something went wrong
                         // TODO log - monitor end
                     }
                 }
             });
-            job.schedule();
-            job.join();
+            publishInputjob.schedule();
+            publishInputjob.join();
 
             // display this task after it's finished
             setProperty(IProgressConstants.KEEP_PROPERTY, Boolean.TRUE);
-            setProperty(IProgressConstants.ACTION_PROPERTY, getJobCompletedAction(job.getRequestId(), job.getJobId()));
-            setProperty(new QualifiedName("eu.ddmore.mdl.ui", "outputFolderId"), job.getRequestId());
+            setProperty(IProgressConstants.ACTION_PROPERTY,
+                getJobCompletedAction(publishInputjob.getRequestId(), publishInputjob.getJobId()));
+            setProperty(new QualifiedName("eu.ddmore.mdl.ui", "outputFolderId"), publishInputjob.getRequestId());
 
         } catch (Exception ex) {
             monitor.done();
             return new Status(IStatus.ERROR, this.getClass().getPackage().getName(), "Error while executing a command", ex);
         }
+
         monitor.done();
+        if (TESRequestStatus.failed.equals(monitorJob.getStatus())) {
+            return new Status(IStatus.ERROR, this.getClass().getPackage().getName(), "Job Failed");
+        }
         return new Status(IStatus.OK, this.getClass().getPackage().getName(), "Job Completed Successfully");
     }
 
@@ -106,24 +115,21 @@ public class TESExecJob extends Job {
         IStatus status = Status.OK_STATUS;
 
         try {
-            final MonitorTaskProgressJob job = new MonitorTaskProgressJob("Monitoring Task Progress (" + jobId + ")", jobId);
-            job.setUser(true);
-            job.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
-            job.addJobChangeListener(new JobChangeAdapter() {
+            monitorJob = new MonitorTaskProgressJob("Monitoring Task Progress (" + jobId + ")", jobId);
+            monitorJob.setUser(true);
+            monitorJob.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
+            monitorJob.addJobChangeListener(new JobChangeAdapter() {
 
                 @Override
                 public void done(IJobChangeEvent event) {
                     super.done(event);
                     if (event.getResult().isOK()) {
 
-                        if (TESRequestStatus.completed.equals(job.getStatus())) {
+                        if (TESRequestStatus.completed.equals(monitorJob.getStatus())) {
                             // TODO not capturing the status
                             scheduleRetrieveJob(monitor, requestId);
-                        } else if (TESRequestStatus.running.equals(job.getStatus())) {
-                            // check again
-                            //scheduleMonitorJob(monitor, jobId);
-                        } else {
-                            // something went wrong
+                        } else if (TESRequestStatus.failed.equals(monitorJob.getStatus())) {
+                            // TODO handle
                         }
                     } else {
                         // something went wrong
@@ -131,8 +137,8 @@ public class TESExecJob extends Job {
                     }
                 }
             });
-            job.schedule();
-            job.join();
+            monitorJob.schedule();
+            monitorJob.join();
 
         } catch (Exception ex) {
             monitor.done();
@@ -149,12 +155,11 @@ public class TESExecJob extends Job {
         IStatus status = Status.OK_STATUS;
 
         try {
-            RetrieveTaskOutputsJob job = new RetrieveTaskOutputsJob("Retrieving Task Results (" + requestId + ")", requestId,
-                    this.modelFile);
-            job.setUser(true);
-            job.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
-            job.schedule();
-            job.join();
+            resultsJob = new RetrieveTaskOutputsJob("Retrieving Task Results (" + requestId + ")", requestId, this.modelFile);
+            resultsJob.setUser(true);
+            resultsJob.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
+            resultsJob.schedule();
+            resultsJob.join();
 
         } catch (Exception ex) {
             monitor.done();
