@@ -6,8 +6,8 @@ package org.ddmore.mdl.taskexecution.core.services;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.ddmore.mdl.controller.RunJobOnTES.ResultsFiles;
 import org.ddmore.mdl.taskexecution.core.services.http.TESRequestStatus;
-import org.ddmore.mdl.ui.handler.RunWithNONMEMHandler.ResultsFiles;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
