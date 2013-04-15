@@ -51,10 +51,12 @@ public class TESExecJob extends Job {
 
     /**
      * FIXME this is a workaround to get the results once the previous job has finished
+     * @param dataFile 
      */
-    public TESExecJob(final String name, final IFile model, final ResultsFiles results) {
+    public TESExecJob(final String name, final IFile model, final IFile data, final ResultsFiles results) {
         super(name);
         this.modelFile = model;
+        this.dataFiles.add(data);
         this.results = results;
     }
 
@@ -63,7 +65,7 @@ public class TESExecJob extends Job {
         monitor.beginTask("Task Execution Service: Job Executor", IProgressMonitor.UNKNOWN);
 
         try {
-            //FIXME            
+            //FIXME this needs to be called at point of execution as results are not known on construction.
             if (results != null) {
                 this.dataFiles.addAll(this.results.get());
             }

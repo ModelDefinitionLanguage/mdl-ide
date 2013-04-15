@@ -30,7 +30,7 @@ public class RunJobOnTES {
             IFile rFile = project.getFile(file.getParent().getProjectRelativePath() + "/reportGeneration.R");
             if (rFile.exists()) {
 
-                TESExecJob resultJob = new TESExecJob("Running Job on Task Execution Service (" + rFile.getName() + ")", rFile,
+                TESExecJob resultJob = new TESExecJob("Running Job on Task Execution Service (" + rFile.getName() + ")", rFile, dataFile,
                         new ResultsFiles(project, job));
                 resultJob.setRule(new SerialSchedulingRule());
                 resultJob.schedule();

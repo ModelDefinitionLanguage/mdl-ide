@@ -125,7 +125,7 @@ public class TESServer {
         // FIXME
         if (execFile.endsWith(".R")) {
             builder.setExecutionType(ExecutionType.R_Script.toString());
-            builder.setCommand("/usr/bin/Rscript");
+            builder.setCommand("/opt/R/dist/R-2.13.1/bin");
         } else {
             builder.setExecutionType(ExecutionType.NMFE.toString());
         }
@@ -176,5 +176,4 @@ public class TESServer {
 
         return TESRequestStatus.failed;
     }
-
 }
