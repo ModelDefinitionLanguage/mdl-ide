@@ -37,7 +37,9 @@ Import-Package: javax.xml.bind;version="2.2.0";resolution:=optional,
  org.apache.log4j;version="1.2.15",
  org.eclipse.ui.console
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.ddmore.mdl.ui.contentassist,
+Export-Package: org.ddmore.mdl.taskexecution.core.services,
+ org.ddmore.mdl.taskexecution.core.services.http,
+ org.ddmore.mdl.ui.contentassist,
  org.ddmore.mdl.ui.contentassist.antlr,
  org.ddmore.mdl.ui.internal
 Bundle-Activator: org.ddmore.mdl.ui.internal.MdlActivator

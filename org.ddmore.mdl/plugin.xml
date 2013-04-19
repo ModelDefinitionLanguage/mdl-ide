@@ -10,8 +10,4 @@
        genModel = "org/ddmore/mdl/Mdl.genmodel" /> 
 	
   </extension>
-
-
-
-
 </plugin>

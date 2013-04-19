@@ -874,337 +874,232 @@ public class MdlPrinting {
   
   public CharSequence print(final verbatim_block b) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      String _external_code = b.getExternal_code();
-      boolean _notEquals = (!Objects.equal(_external_code, null));
-      if (_notEquals) {
-        String _external_code_1 = b.getExternal_code();
-        String _external_code_2 = b.getExternal_code();
-        int _length = _external_code_2.length();
-        int _minus = (_length - 3);
-        String printedCode = _external_code_1.substring(3, _minus);
-        _builder.newLineIfNotEmpty();
-        _builder.append(printedCode, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      target_block _block = b.getBlock();
-      boolean _notEquals_1 = (!Objects.equal(_block, null));
-      if (_notEquals_1) {
-        target_block _block_1 = b.getBlock();
-        CharSequence _print = this.print(_block_1);
-        _builder.append(_print, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\uFFFDIF b.external_code != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDvar printedCode = b.external_code.substring(3, b.external_code.length - 3)\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDprintedCode\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF b.block != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDb.block.print\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print(final target_block b) {
     StringConcatenation _builder = new StringConcatenation();
-    String _external_code = b.getExternal_code();
-    String _external_code_1 = b.getExternal_code();
-    int _length = _external_code_1.length();
-    int _minus = (_length - 3);
-    String printedCode = _external_code.substring(3, _minus);
-    _builder.newLineIfNotEmpty();
-    _builder.append(printedCode, "");
-    _builder.newLineIfNotEmpty();
+    _builder.append("\uFFFDvar printedCode = b.external_code.substring(3, b.external_code.length - 3)\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDprintedCode\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print(final block b) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      EList<block_statement> _statements = b.getStatements();
-      for(final block_statement st : _statements) {
-        CharSequence _print = this.print(st);
-        _builder.append(_print, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\uFFFDFOR st: b.statements\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDst.print\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDFOR\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence printVariables(final block b, final String separator) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      EList<block_statement> _statements = b.getStatements();
-      boolean _hasElements = false;
-      for(final block_statement s : _statements) {
-        if (!_hasElements) {
-          _hasElements = true;
-        } else {
-          _builder.appendImmediate(separator, "");
-        }
-        {
-          variable_declaration _variable_declaration = s.getVariable_declaration();
-          boolean _notEquals = (!Objects.equal(_variable_declaration, null));
-          if (_notEquals) {
-            variable_declaration _variable_declaration_1 = s.getVariable_declaration();
-            CharSequence _print = this.print(_variable_declaration_1);
-            _builder.append(_print, "");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-      }
-    }
+    _builder.append("\uFFFDFOR s: b.statements SEPARATOR separator\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDIF s.variable_declaration != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("\uFFFDs.variable_declaration.print\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDFOR\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence printVariableNames(final block b, final String separator) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      EList<block_statement> _statements = b.getStatements();
-      boolean _hasElements = false;
-      for(final block_statement s : _statements) {
-        if (!_hasElements) {
-          _hasElements = true;
-        } else {
-          _builder.appendImmediate(separator, "");
-        }
-        {
-          variable_declaration _variable_declaration = s.getVariable_declaration();
-          boolean _notEquals = (!Objects.equal(_variable_declaration, null));
-          if (_notEquals) {
-            variable_declaration _variable_declaration_1 = s.getVariable_declaration();
-            variable_name _identifier = _variable_declaration_1.getIdentifier();
-            String _str = this.toStr(_identifier);
-            String _convertID = this.convertID(_str);
-            _builder.append(_convertID, "");
-          }
-        }
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\uFFFDFOR s: b.statements SEPARATOR separator\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDIF s.variable_declaration != null\uFFFD\uFFFDs.variable_declaration.identifier.toStr.convertID\uFFFD\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDFOR\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print(final block_statement st) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      variable_declaration _variable_declaration = st.getVariable_declaration();
-      boolean _notEquals = (!Objects.equal(_variable_declaration, null));
-      if (_notEquals) {
-        variable_declaration _variable_declaration_1 = st.getVariable_declaration();
-        CharSequence _print = this.print(_variable_declaration_1);
-        _builder.append(_print, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      function_call _function_call = st.getFunction_call();
-      boolean _notEquals_1 = (!Objects.equal(_function_call, null));
-      if (_notEquals_1) {
-        function_call _function_call_1 = st.getFunction_call();
-        CharSequence _print_1 = this.print(_function_call_1);
-        _builder.append(_print_1, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      statement _statement = st.getStatement();
-      boolean _notEquals_2 = (!Objects.equal(_statement, null));
-      if (_notEquals_2) {
-        statement _statement_1 = st.getStatement();
-        CharSequence _print_2 = this.print(_statement_1);
-        _builder.append(_print_2, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      verbatim_block _verbatim_block = st.getVerbatim_block();
-      boolean _notEquals_3 = (!Objects.equal(_verbatim_block, null));
-      if (_notEquals_3) {
-        verbatim_block _verbatim_block_1 = st.getVerbatim_block();
-        CharSequence _print_3 = this.print(_verbatim_block_1);
-        _builder.append(_print_3, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
+    _builder.append("\uFFFDIF st.variable_declaration != null\uFFFD\uFFFDst.variable_declaration.print\uFFFD\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF st.function_call != null\uFFFD\uFFFDst.function_call.print\uFFFD\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF st.statement != null\uFFFD\uFFFDst.statement.print\uFFFD\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF st.verbatim_block != null\uFFFD\uFFFDst.verbatim_block.print\uFFFD\uFFFDENDIF\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print(final function_call call) {
     StringConcatenation _builder = new StringConcatenation();
-    String _funct_name = call.getFunct_name();
-    _builder.append(_funct_name, "");
-    _builder.append("(");
-    arguments _arguments = call.getArguments();
-    CharSequence _print = this.print(_arguments);
-    _builder.append(_print, "");
-    _builder.append(")");
+    _builder.append("\uFFFDcall.funct_name\uFFFD(\uFFFDcall.arguments.print\uFFFD)");
     return _builder;
   }
   
   public CharSequence print(final statement s) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      block _block = s.getBlock();
-      boolean _notEquals = (!Objects.equal(_block, null));
-      if (_notEquals) {
-        block _block_1 = s.getBlock();
-        CharSequence _print = this.print(_block_1);
-        _builder.append(_print, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      par_expression _par_expression = s.getPar_expression();
-      boolean _notEquals_1 = (!Objects.equal(_par_expression, null));
-      if (_notEquals_1) {
-        _builder.append("if ");
-        par_expression _par_expression_1 = s.getPar_expression();
-        CharSequence _print_1 = this.print(_par_expression_1);
-        _builder.append(_print_1, "");
-        _builder.newLineIfNotEmpty();
-        _builder.append("\t");
-        block_statement _if_statement = s.getIf_statement();
-        CharSequence _print_2 = this.print(_if_statement);
-        _builder.append(_print_2, "	");
-        _builder.newLineIfNotEmpty();
-        {
-          block_statement _else_statement = s.getElse_statement();
-          boolean _notEquals_2 = (!Objects.equal(_else_statement, null));
-          if (_notEquals_2) {
-            _builder.append("else ");
-            _builder.newLine();
-            _builder.append("\t");
-            block_statement _else_statement_1 = s.getElse_statement();
-            CharSequence _print_3 = this.print(_else_statement_1);
-            _builder.append(_print_3, "	");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-      }
-    }
+    _builder.append("\uFFFDIF s.block != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDs.block.print\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF s.par_expression != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("if \uFFFDs.par_expression.print\uFFFD");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("\uFFFDs.if_statement.print\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDIF s.else_statement != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("else ");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("\uFFFDs.else_statement.print\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print(final variable_name name) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(name);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDname.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final variable_declaration v) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(v);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDv.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final any_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final random_list l) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(l);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDl.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final list l) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(l);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDl.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final ode_list l) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(l);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDl.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final conditional_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final conditional_or_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final conditional_and_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final relational_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final additive_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final multiplicative_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final power_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final unary_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final primary p) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(p);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDp.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final par_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(e);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDe.toStr\uFFFD");
     return _builder;
   }
   
   public CharSequence print(final arguments arg) {
     StringConcatenation _builder = new StringConcatenation();
-    String _str = this.toStr(arg);
-    _builder.append(_str, "");
+    _builder.append("\uFFFDarg.toStr\uFFFD");
     return _builder;
   }
 }
