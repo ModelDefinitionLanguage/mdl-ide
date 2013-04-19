@@ -117,7 +117,7 @@ public class TESServer {
         return null;
     }
 
-    static List<NameValuePair> getExecuteParameters(final String requestId, final String execFile) {
+    public static List<NameValuePair> getExecuteParameters(final String requestId, final String execFile) {
 
         ExecutionRequestBuilder builder = new ExecutionRequestBuilder();
 

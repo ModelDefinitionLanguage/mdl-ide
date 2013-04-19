@@ -6,11 +6,13 @@ import org.junit.Test;
  * @author mrogalski
  *
  */
+
 public class ExampleMockTest {
 
 	@Test
 	public void shouldPrintAHelloWorldMessageToTheConsole() {
 		System.out.println("Hello world, I just have been tested!");
+		
 	}
 
 }

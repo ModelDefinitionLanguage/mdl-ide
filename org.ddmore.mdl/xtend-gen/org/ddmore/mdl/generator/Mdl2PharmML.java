@@ -1,42 +1,26 @@
 package org.ddmore.mdl.generator;
 
-import com.google.common.base.Objects;
 import org.ddmore.mdl.generator.Mdl2Nonmem;
 import org.ddmore.mdl.mdl.any_expression;
 import org.ddmore.mdl.mdl.argument;
-import org.ddmore.mdl.mdl.arguments;
 import org.ddmore.mdl.mdl.block;
 import org.ddmore.mdl.mdl.block_statement;
-import org.ddmore.mdl.mdl.conditional_expression;
 import org.ddmore.mdl.mdl.data_obj;
-import org.ddmore.mdl.mdl.estimation_block;
 import org.ddmore.mdl.mdl.expression;
 import org.ddmore.mdl.mdl.formal_arguments;
 import org.ddmore.mdl.mdl.function_body;
 import org.ddmore.mdl.mdl.function_call;
 import org.ddmore.mdl.mdl.function_declaration;
-import org.ddmore.mdl.mdl.function_subblock;
-import org.ddmore.mdl.mdl.group_variables;
-import org.ddmore.mdl.mdl.individual_model_obj_block;
-import org.ddmore.mdl.mdl.list;
 import org.ddmore.mdl.mdl.mcl;
 import org.ddmore.mdl.mdl.mcl_obj;
 import org.ddmore.mdl.mdl.model_obj;
-import org.ddmore.mdl.mdl.model_obj_block;
-import org.ddmore.mdl.mdl.model_prediction_obj_block;
-import org.ddmore.mdl.mdl.observation_block;
-import org.ddmore.mdl.mdl.ode_list;
 import org.ddmore.mdl.mdl.param_obj;
 import org.ddmore.mdl.mdl.primary;
 import org.ddmore.mdl.mdl.random_list;
-import org.ddmore.mdl.mdl.random_variable_definition_block;
-import org.ddmore.mdl.mdl.simulation_block;
-import org.ddmore.mdl.mdl.statement;
 import org.ddmore.mdl.mdl.task_obj;
 import org.ddmore.mdl.mdl.variable_declaration;
 import org.ddmore.mdl.mdl.variable_name;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtend2.lib.StringConcatenation;
 
 @SuppressWarnings("all")
@@ -54,20 +38,15 @@ public class Mdl2PharmML extends Mdl2Nonmem {
       String _plus_2 = (_plus_1 + date);
       final String info = (_plus_2 + " Natallia Kokash (natallia.kokash@gmail.com)");
       StringConcatenation _builder = new StringConcatenation();
-      CharSequence _print_XS_Comment = this.print_XS_Comment(info);
-      _builder.append(_print_XS_Comment, "");
-      _builder.newLineIfNotEmpty();
+      _builder.append("\uFFFDinfo.print_XS_Comment\uFFFD");
+      _builder.newLine();
       _builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
       _builder.newLine();
       _builder.append("<PharmML ");
       _builder.newLine();
       _builder.append("\t");
-      _builder.append("name=\"");
-      Resource _eResource = m.eResource();
-      String _fileName = this.fileName(_eResource);
-      _builder.append(_fileName, "	");
-      _builder.append("\"");
-      _builder.newLineIfNotEmpty();
+      _builder.append("name=\"\uFFFDm.eResource.fileName\uFFFD\"");
+      _builder.newLine();
       _builder.append("\t");
       _builder.append("independentVar=\"t\" ");
       _builder.newLine();
@@ -75,14 +54,8 @@ public class Mdl2PharmML extends Mdl2Nonmem {
       _builder.append("writtenVersion=\"0.1\">");
       _builder.newLine();
       _builder.append("  \t\t\t");
-      {
-        EList<mcl_obj> _objects_1 = m.getObjects();
-        for(final mcl_obj o_1 : _objects_1) {
-          CharSequence _convertToPharmML = this.convertToPharmML(o_1);
-          _builder.append(_convertToPharmML, "  			");
-        }
-      }
-      _builder.newLineIfNotEmpty();
+      _builder.append("\uFFFDFOR o:m.objects\uFFFD\uFFFDo.convertToPharmML\uFFFD\uFFFDENDFOR\uFFFD");
+      _builder.newLine();
       _builder.append("</PharmML>");
       _builder.newLine();
       _xblockexpression = (_builder);
@@ -92,46 +65,14 @@ public class Mdl2PharmML extends Mdl2Nonmem {
   
   public CharSequence convertToPharmML(final mcl_obj o) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      model_obj _model_obj = o.getModel_obj();
-      boolean _notEquals = (!Objects.equal(_model_obj, null));
-      if (_notEquals) {
-        model_obj _model_obj_1 = o.getModel_obj();
-        CharSequence _convertToPharmML = this.convertToPharmML(_model_obj_1);
-        _builder.append(_convertToPharmML, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      data_obj _data_obj = o.getData_obj();
-      boolean _notEquals_1 = (!Objects.equal(_data_obj, null));
-      if (_notEquals_1) {
-        data_obj _data_obj_1 = o.getData_obj();
-        Object _convertToPharmML_1 = this.convertToPharmML(_data_obj_1);
-        _builder.append(_convertToPharmML_1, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      param_obj _param_obj = o.getParam_obj();
-      boolean _notEquals_2 = (!Objects.equal(_param_obj, null));
-      if (_notEquals_2) {
-        param_obj _param_obj_1 = o.getParam_obj();
-        Object _convertToPharmML_2 = this.convertToPharmML(_param_obj_1);
-        _builder.append(_convertToPharmML_2, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      task_obj _task_obj = o.getTask_obj();
-      boolean _notEquals_3 = (!Objects.equal(_task_obj, null));
-      if (_notEquals_3) {
-        task_obj _task_obj_1 = o.getTask_obj();
-        Object _convertToPharmML_3 = this.convertToPharmML(_task_obj_1);
-        _builder.append(_convertToPharmML_3, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
+    _builder.append("\uFFFDIF o.model_obj != null\uFFFD\uFFFDo.model_obj.convertToPharmML\uFFFD\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF o.data_obj != null\uFFFD\uFFFDo.data_obj.convertToPharmML\uFFFD\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF o.param_obj != null\uFFFD\uFFFDo.param_obj.convertToPharmML\uFFFD\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF o.task_obj != null\uFFFD\uFFFDo.task_obj.convertToPharmML\uFFFD\uFFFDENDIF\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
@@ -139,88 +80,72 @@ public class Mdl2PharmML extends Mdl2Nonmem {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<ModelDefinition>");
     _builder.newLine();
-    {
-      EList<model_obj_block> _blocks = o.getBlocks();
-      for(final model_obj_block b : _blocks) {
-        {
-          individual_model_obj_block _individual_model_obj_block = b.getIndividual_model_obj_block();
-          boolean _notEquals = (!Objects.equal(_individual_model_obj_block, null));
-          if (_notEquals) {
-            _builder.append("TODO: Process individual model block");
-            _builder.newLine();
-          }
-        }
-        {
-          model_prediction_obj_block _model_prediction_obj_block = b.getModel_prediction_obj_block();
-          boolean _notEquals_1 = (!Objects.equal(_model_prediction_obj_block, null));
-          if (_notEquals_1) {
-            _builder.append("TODO: Process model prediction block");
-            _builder.newLine();
-          }
-        }
-        {
-          random_variable_definition_block _random_variable_definition_block = b.getRandom_variable_definition_block();
-          boolean _notEquals_2 = (!Objects.equal(_random_variable_definition_block, null));
-          if (_notEquals_2) {
-            _builder.append("TODO: Process random variable definition block");
-            _builder.newLine();
-          }
-        }
-        _builder.newLine();
-        {
-          group_variables _group_variables = b.getGroup_variables();
-          boolean _notEquals_3 = (!Objects.equal(_group_variables, null));
-          if (_notEquals_3) {
-            _builder.append("TODO: Process group variables");
-            _builder.newLine();
-          }
-        }
-        {
-          observation_block _observation_block = b.getObservation_block();
-          boolean _notEquals_4 = (!Objects.equal(_observation_block, null));
-          if (_notEquals_4) {
-            _builder.append("TODO: Process observation block");
-            _builder.newLine();
-          }
-        }
-        {
-          estimation_block _estimation_block = b.getEstimation_block();
-          boolean _notEquals_5 = (!Objects.equal(_estimation_block, null));
-          if (_notEquals_5) {
-            {
-              estimation_block _estimation_block_1 = b.getEstimation_block();
-              block _block = _estimation_block_1.getBlock();
-              boolean _notEquals_6 = (!Objects.equal(_block, null));
-              if (_notEquals_6) {
-                estimation_block _estimation_block_2 = b.getEstimation_block();
-                block _block_1 = _estimation_block_2.getBlock();
-                CharSequence _print_msteps_EstimationStep = this.print_msteps_EstimationStep(_block_1);
-                _builder.append(_print_msteps_EstimationStep, "");
-                _builder.newLineIfNotEmpty();
-              }
-            }
-          }
-        }
-        {
-          simulation_block _simulation_block = b.getSimulation_block();
-          boolean _notEquals_7 = (!Objects.equal(_simulation_block, null));
-          if (_notEquals_7) {
-            {
-              simulation_block _simulation_block_1 = b.getSimulation_block();
-              block _block_2 = _simulation_block_1.getBlock();
-              boolean _notEquals_8 = (!Objects.equal(_block_2, null));
-              if (_notEquals_8) {
-                simulation_block _simulation_block_2 = b.getSimulation_block();
-                block _block_3 = _simulation_block_2.getBlock();
-                CharSequence _print_msteps_SimulationStep = this.print_msteps_SimulationStep(_block_3);
-                _builder.append(_print_msteps_SimulationStep, "");
-                _builder.newLineIfNotEmpty();
-              }
-            }
-          }
-        }
-      }
-    }
+    _builder.append("\uFFFDFOR b:o.blocks\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF b.individual_model_obj_block != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("TODO: Process individual model block");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF\tb.model_prediction_obj_block != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("TODO: Process model prediction block");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF\tb.random_variable_definition_block != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("TODO: Process random variable definition block");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("\uFFFDIF\tb.group_variables != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("TODO: Process group variables");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF\tb.observation_block != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("TODO: Process observation block");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF\tb.estimation_block != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDIF b.estimation_block.block != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("\uFFFDb.estimation_block.block.print_msteps_EstimationStep\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF\tb.simulation_block != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDIF b.simulation_block.block != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("\uFFFDb.simulation_block.block.print_msteps_SimulationStep\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDFOR\uFFFD");
+    _builder.newLine();
     _builder.append("</ModelDefinition>");
     _builder.newLine();
     return _builder;
@@ -263,58 +188,43 @@ public class Mdl2PharmML extends Mdl2Nonmem {
   
   public CharSequence print_XS_Comment(final String text) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<!--");
-    _builder.append(text, "");
-    _builder.append("-->");
-    _builder.newLineIfNotEmpty();
+    _builder.append("<!--\uFFFDtext\uFFFD-->");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print_ct_AnnotationType(final String text) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<Description>");
-    _builder.append(text, "");
-    _builder.append("</Description>");
-    _builder.newLineIfNotEmpty();
+    _builder.append("<Description>\uFFFDtext\uFFFD</Description>");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print_ct_VariableDefinitionType(final variable_declaration v) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<Variable ");
-    variable_name _identifier = v.getIdentifier();
-    CharSequence _print_ct_SymbId = this.print_ct_SymbId(_identifier);
-    _builder.append(_print_ct_SymbId, "");
-    _builder.append(">");
-    _builder.newLineIfNotEmpty();
+    _builder.append("<Variable \uFFFDv.identifier.print_ct_SymbId\uFFFD>");
+    _builder.newLine();
     _builder.append("\t");
-    variable_name _identifier_1 = v.getIdentifier();
-    String _str = this.toStr(_identifier_1);
-    CharSequence _print_ct_AnnotationType = this.print_ct_AnnotationType(_str);
-    _builder.append(_print_ct_AnnotationType, "	");
-    _builder.newLineIfNotEmpty();
-    {
-      any_expression _expression = v.getExpression();
-      boolean _notEquals = (!Objects.equal(_expression, null));
-      if (_notEquals) {
-        _builder.append("\t");
-        any_expression _expression_1 = v.getExpression();
-        CharSequence _print_ct_printRhsType = this.print_ct_printRhsType(_expression_1);
-        _builder.append(_print_ct_printRhsType, "	");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      random_list _random_list = v.getRandom_list();
-      boolean _notEquals_1 = (!Objects.equal(_random_list, null));
-      if (_notEquals_1) {
-        _builder.append("\t");
-        random_list _random_list_1 = v.getRandom_list();
-        CharSequence _print_uncert_DistributionType = this.print_uncert_DistributionType(_random_list_1);
-        _builder.append(_print_uncert_DistributionType, "	");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\uFFFDv.identifier.toStr.print_ct_AnnotationType\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDIF v.expression != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("\uFFFDv.expression.print_ct_printRhsType\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDENDIF\uFFFD\t");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDIF v.random_list != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("\uFFFDv.random_list.print_uncert_DistributionType\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDENDIF\uFFFD\t");
+    _builder.newLine();
     _builder.append("</Variable>");
     _builder.newLine();
     return _builder;
@@ -329,63 +239,50 @@ public class Mdl2PharmML extends Mdl2Nonmem {
   
   public CharSequence print_ct_printRhsType(final any_expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      expression _expression = e.getExpression();
-      boolean _notEquals = (!Objects.equal(_expression, null));
-      if (_notEquals) {
-        expression _expression_1 = e.getExpression();
-        CharSequence _print_ct_printRhsType = this.print_ct_printRhsType(_expression_1);
-        _builder.append(_print_ct_printRhsType, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      list _list = e.getList();
-      boolean _notEquals_1 = (!Objects.equal(_list, null));
-      if (_notEquals_1) {
-        _builder.append("TODO: print list");
-        _builder.newLine();
-      }
-    }
-    {
-      ode_list _ode_list = e.getOde_list();
-      boolean _notEquals_2 = (!Objects.equal(_ode_list, null));
-      if (_notEquals_2) {
-        _builder.append("TODO: print ode list");
-        _builder.newLine();
-      }
-    }
-    {
-      random_list _random_list = e.getRandom_list();
-      boolean _notEquals_3 = (!Objects.equal(_random_list, null));
-      if (_notEquals_3) {
-        random_list _random_list_1 = e.getRandom_list();
-        CharSequence _print_uncert_DistributionType = this.print_uncert_DistributionType(_random_list_1);
-        _builder.append(_print_uncert_DistributionType, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\uFFFDIF e.expression != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDe.expression.print_ct_printRhsType\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF e.list != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("TODO: print list");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD\t");
+    _builder.newLine();
+    _builder.append("\uFFFDIF e.ode_list != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("TODO: print ode list");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD\t");
+    _builder.newLine();
+    _builder.append("\uFFFDIF e.random_list != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDe.random_list.print_uncert_DistributionType\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD\t");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print_ct_printRhsType(final expression e) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      conditional_expression _conditional_expression = e.getConditional_expression();
-      boolean _notEquals = (!Objects.equal(_conditional_expression, null));
-      if (_notEquals) {
-      }
-    }
-    {
-      EList<String> _string_expression = e.getString_expression();
-      boolean _notEquals_1 = (!Objects.equal(_string_expression, null));
-      if (_notEquals_1) {
-        EList<String> _string_expression_1 = e.getString_expression();
-        CharSequence _print_MathStringType = this.print_MathStringType(_string_expression_1);
-        _builder.append(_print_MathStringType, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\uFFFDIF e.conditional_expression != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF e.string_expression != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDe.string_expression.print_MathStringType\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
@@ -398,75 +295,58 @@ public class Mdl2PharmML extends Mdl2Nonmem {
   
   public CharSequence printXML(final block_statement st) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      variable_declaration _variable_declaration = st.getVariable_declaration();
-      boolean _notEquals = (!Objects.equal(_variable_declaration, null));
-      if (_notEquals) {
-        variable_declaration _variable_declaration_1 = st.getVariable_declaration();
-        CharSequence _print_ct_VariableDefinitionType = this.print_ct_VariableDefinitionType(_variable_declaration_1);
-        _builder.append(_print_ct_VariableDefinitionType, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      function_call _function_call = st.getFunction_call();
-      boolean _notEquals_1 = (!Objects.equal(_function_call, null));
-      if (_notEquals_1) {
-        function_call _function_call_1 = st.getFunction_call();
-        CharSequence _print_Math_FunctionCallType = this.print_Math_FunctionCallType(_function_call_1);
-        _builder.append(_print_Math_FunctionCallType, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      statement _statement = st.getStatement();
-      boolean _notEquals_2 = (!Objects.equal(_statement, null));
-      if (_notEquals_2) {
-        _builder.append("TODO: parse MDL block");
-        _builder.newLine();
-      }
-    }
+    _builder.append("\uFFFDIF st.variable_declaration != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDst.variable_declaration.print_ct_VariableDefinitionType\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF st.function_call != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDst.function_call.print_Math_FunctionCallType\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDIF st.statement != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("TODO: parse MDL block");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print_Math_ScalarType(final primary p) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      String _number = p.getNumber();
-      boolean _notEquals = (!Objects.equal(_number, null));
-      if (_notEquals) {
-        _builder.append("<Scalar value = \"");
-        String _number_1 = p.getNumber();
-        _builder.append(_number_1, "");
-        _builder.append("\"/>");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\uFFFDIF p.number != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("<Scalar value = \"\uFFFDp.number\uFFFD\"/>");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD\t");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print_ct_SymbId(final primary p) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      variable_name _identifier = p.getIdentifier();
-      boolean _notEquals = (!Objects.equal(_identifier, null));
-      if (_notEquals) {
-        variable_name _identifier_1 = p.getIdentifier();
-        CharSequence _print_ct_SymbId = this.print_ct_SymbId(_identifier_1);
-        _builder.append(_print_ct_SymbId, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\uFFFDIF p.identifier != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDp.identifier.print_ct_SymbId\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence print_ct_SymbId(final variable_name name) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("symbId = \"");
-    String _str = this.toStr(name);
-    _builder.append(_str, "");
-    _builder.append("\"");
-    _builder.newLineIfNotEmpty();
+    _builder.append("symbId = \"\uFFFDname.toStr\uFFFD\"");
+    _builder.newLine();
     return _builder;
   }
   
@@ -477,42 +357,39 @@ public class Mdl2PharmML extends Mdl2Nonmem {
   
   public CharSequence printXML(final formal_arguments args) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      EList<String> _identifiers = args.getIdentifiers();
-      for(final String a : _identifiers) {
-      }
-    }
+    _builder.append("\uFFFDFOR a: args.identifiers\uFFFD");
+    _builder.newLine();
+    _builder.append("\uFFFDENDFOR\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
   public CharSequence printXML(final function_body body) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      EList<function_subblock> _blocks = body.getBlocks();
-      for(final function_subblock b : _blocks) {
-        {
-          block _estimate_defn = b.getEstimate_defn();
-          boolean _notEquals = (!Objects.equal(_estimate_defn, null));
-          if (_notEquals) {
-            block _estimate_defn_1 = b.getEstimate_defn();
-            CharSequence _print_msteps_SimulationStep = this.print_msteps_SimulationStep(_estimate_defn_1);
-            _builder.append(_print_msteps_SimulationStep, "");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        {
-          block _simulate_defn = b.getSimulate_defn();
-          boolean _notEquals_1 = (!Objects.equal(_simulate_defn, null));
-          if (_notEquals_1) {
-            block _simulate_defn_1 = b.getSimulate_defn();
-            CharSequence _print_msteps_EstimationStep = this.print_msteps_EstimationStep(_simulate_defn_1);
-            _builder.append(_print_msteps_EstimationStep, "");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        _builder.newLine();
-      }
-    }
+    _builder.append("\uFFFDFOR b: body.blocks\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDIF b.estimate_defn != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("\uFFFDb.estimate_defn.print_msteps_SimulationStep\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDIF b.simulate_defn != null\uFFFD");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("\uFFFDb.simulate_defn.print_msteps_EstimationStep\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDENDIF\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.newLine();
+    _builder.append("\uFFFDENDFOR\uFFFD");
+    _builder.newLine();
     return _builder;
   }
   
@@ -520,13 +397,13 @@ public class Mdl2PharmML extends Mdl2Nonmem {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<EstimationStep>");
     _builder.newLine();
-    {
-      EList<block_statement> _statements = b.getStatements();
-      for(final block_statement st : _statements) {
-        _builder.append("TODO: print estimation steps");
-        _builder.newLine();
-      }
-    }
+    _builder.append("\uFFFDFOR st: b.statements\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("TODO: print estimation steps");
+    _builder.newLine();
+    _builder.append("\uFFFDENDFOR\uFFFD");
+    _builder.newLine();
     _builder.append("</EstimationStep>");
     _builder.newLine();
     return _builder;
@@ -536,13 +413,13 @@ public class Mdl2PharmML extends Mdl2Nonmem {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<SimulationStep>");
     _builder.newLine();
-    {
-      EList<block_statement> _statements = b.getStatements();
-      for(final block_statement st : _statements) {
-        _builder.append("TODO: print simulation steps");
-        _builder.newLine();
-      }
-    }
+    _builder.append("\uFFFDFOR st: b.statements\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("TODO: print simulation steps");
+    _builder.newLine();
+    _builder.append("\uFFFDENDFOR\uFFFD");
+    _builder.newLine();
     _builder.append("</SimulationStep>");
     _builder.newLine();
     return _builder;
@@ -553,20 +430,17 @@ public class Mdl2PharmML extends Mdl2Nonmem {
     _builder.append("<FunctionCall>");
     _builder.newLine();
     _builder.append("\t");
-    String _funct_name = call.getFunct_name();
-    CharSequence _print_Math_VarType = this.print_Math_VarType(_funct_name);
-    _builder.append(_print_Math_VarType, "	");
-    _builder.newLineIfNotEmpty();
-    {
-      arguments _arguments = call.getArguments();
-      EList<argument> _arguments_1 = _arguments.getArguments();
-      for(final argument arg : _arguments_1) {
-        _builder.append("\t");
-        CharSequence _print_Math_FunctionArgumentType = this.print_Math_FunctionArgumentType(arg);
-        _builder.append(_print_Math_FunctionArgumentType, "	");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\uFFFDcall.funct_name.print_Math_VarType\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDFOR arg: call.arguments.arguments\uFFFD");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("\uFFFDarg.print_Math_FunctionArgumentType\uFFFD");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("\uFFFDENDFOR\uFFFD");
+    _builder.newLine();
     _builder.append("</FunctionCall>");
     _builder.newLine();
     return _builder;
@@ -574,11 +448,8 @@ public class Mdl2PharmML extends Mdl2Nonmem {
   
   public CharSequence print_Math_VarType(final String str) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<Var ");
-    CharSequence _print_Math_symbId = this.print_Math_symbId(str);
-    _builder.append(_print_Math_symbId, "");
-    _builder.append("/>");
-    _builder.newLineIfNotEmpty();
+    _builder.append("<Var \uFFFDstr.print_Math_symbId\uFFFD/>");
+    _builder.newLine();
     return _builder;
   }
   
@@ -586,17 +457,8 @@ public class Mdl2PharmML extends Mdl2Nonmem {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<FunctionArgument ");
     _builder.newLine();
-    {
-      String _identifier = arg.getIdentifier();
-      boolean _notEquals = (!Objects.equal(_identifier, null));
-      if (_notEquals) {
-        String _identifier_1 = arg.getIdentifier();
-        CharSequence _print_Math_symbId = this.print_Math_symbId(_identifier_1);
-        _builder.append(_print_Math_symbId, "");
-      }
-    }
-    _builder.append(">");
-    _builder.newLineIfNotEmpty();
+    _builder.append("\uFFFDIF arg.identifier != null\uFFFD\uFFFDarg.identifier.print_Math_symbId\uFFFD\uFFFDENDIF\uFFFD>");
+    _builder.newLine();
     _builder.append("</FunctionArgument>");
     _builder.newLine();
     return _builder;
@@ -604,10 +466,8 @@ public class Mdl2PharmML extends Mdl2Nonmem {
   
   public CharSequence print_Math_symbId(final String str) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("symbId = \"");
-    _builder.append(str, "");
-    _builder.append("\"");
-    _builder.newLineIfNotEmpty();
+    _builder.append("symbId = \"\uFFFDstr\uFFFD\"");
+    _builder.newLine();
     return _builder;
   }
 }
