@@ -14,40 +14,40 @@
 
 	<artifactId>eu.ddmore.mdleditor.product</artifactId>
 	<packaging>eclipse-repository</packaging>
-  
-  <build>
-    <plugins>
-	  <plugin>  
-	   <groupId>org.eclipse.tycho</groupId>  
-	   <artifactId>target-platform-configuration</artifactId>  
-	   <configuration>  
-	    <environments>  
-	     <environment>  
-	      <os>win32</os>  
-	      <ws>win32</ws>  
-	      <arch>x86</arch>  
-	     </environment>  
-	    </environments>  
-	   </configuration>  
-	  </plugin>  
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-p2-director-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>materialize-products</id>
-            <goals>
-              <goal>materialize-products</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>archive-products</id>
-              <goals>
-                <goal>archive-products</goal>
-              </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+					<environments>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-director-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>materialize-products</id>
+						<goals>
+							<goal>materialize-products</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>archive-products</id>
+						<goals>
+							<goal>archive-products</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

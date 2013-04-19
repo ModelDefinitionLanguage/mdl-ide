@@ -155,13 +155,6 @@
          unpack="false"/>
 
    <plugin
-         id="log4j"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.antlr.runtime"
          download-size="0"
          install-size="0"
@@ -429,13 +422,6 @@
 
    <plugin
          id="org.ops4j.pax.logging.pax-logging-service"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.slf4j.api"
          download-size="0"
          install-size="0"
          version="0.0.0"
