@@ -139,6 +139,25 @@
 							<environment> <os>linux</os> <ws>gtk</ws> <arch>x86</arch> </environment>  
 							<environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> </environment> -->
 					</environments>
+					<filters>
+					
+						<!-- We need to explicitly filter out valid versions -->
+						<filter>
+				            <type>eclipse-plugin</type>
+				            <id>org.eclipse.xtext.xbase.lib</id>
+				            <restrictTo>
+				               <versionRange>[2.3.1,2.4.1)</versionRange> 
+				            </restrictTo>
+				         </filter>
+					
+						<filter>
+				            <type>eclipse-plugin</type>
+				            <id>org.eclipse.xtend.lib</id>
+				            <restrictTo>
+				               <versionRange>[2.3.1,2.4.1)</versionRange> 
+				            </restrictTo>
+				         </filter>
+					</filters>
 				</configuration>
 			</plugin>
 

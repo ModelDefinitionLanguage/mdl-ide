@@ -448,120 +448,120 @@ class MdlPrinting {
     
     //Print verbatim block
 	def print(verbatim_block b)'''
-	«IF b.external_code != null»
-	«var printedCode = b.external_code.substring(3, b.external_code.length - 3)»
-	«printedCode»
-	«ENDIF»
-	«IF b.block != null»
-	«b.block.print»
-	«ENDIF»
+	Â«IF b.external_code != nullÂ»
+	Â«var printedCode = b.external_code.substring(3, b.external_code.length - 3)Â»
+	Â«printedCodeÂ»
+	Â«ENDIFÂ»
+	Â«IF b.block != nullÂ»
+	Â«b.block.printÂ»
+	Â«ENDIFÂ»
 	'''	
 	
 	//Print verbatim target specific code
 	def print(target_block b)'''
-	«var printedCode = b.external_code.substring(3, b.external_code.length - 3)»
-	«printedCode»
+	Â«var printedCode = b.external_code.substring(3, b.external_code.length - 3)Â»
+	Â«printedCodeÂ»
 	'''	
 	
 	//Print block
 	def print(block b)'''
-		«FOR st: b.statements»
-			«st.print»
-		«ENDFOR»
+		Â«FOR st: b.statementsÂ»
+			Â«st.printÂ»
+		Â«ENDFORÂ»
 	'''
 	
 	//Print block variables
 	def printVariables(block b, String separator)'''
-		«FOR s: b.statements SEPARATOR separator»
-			«IF s.variable_declaration != null»
-				«s.variable_declaration.print»
-			«ENDIF»
-		«ENDFOR»
+		Â«FOR s: b.statements SEPARATOR separatorÂ»
+			Â«IF s.variable_declaration != nullÂ»
+				Â«s.variable_declaration.printÂ»
+			Â«ENDIFÂ»
+		Â«ENDFORÂ»
 	'''	
 	
 	//Print variable names
 	def printVariableNames(block b, String separator)'''
-		«FOR s: b.statements SEPARATOR separator»
-			«IF s.variable_declaration != null»«s.variable_declaration.identifier.toStr.convertID»«ENDIF»
-		«ENDFOR»
+		Â«FOR s: b.statements SEPARATOR separatorÂ»
+			Â«IF s.variable_declaration != nullÂ»Â«s.variable_declaration.identifier.toStr.convertIDÂ»Â«ENDIFÂ»
+		Â«ENDFORÂ»
 	'''	
 	
 	//Get variable identifier from each declaration and each statement
 	def print(block_statement st)'''
-		«IF st.variable_declaration != null»«st.variable_declaration.print»«ENDIF»
-		«IF st.function_call != null»«st.function_call.print»«ENDIF»
-		«IF st.statement != null»«st.statement.print»«ENDIF»
-		«IF st.verbatim_block != null»«st.verbatim_block.print»«ENDIF»
+		Â«IF st.variable_declaration != nullÂ»Â«st.variable_declaration.printÂ»Â«ENDIFÂ»
+		Â«IF st.function_call != nullÂ»Â«st.function_call.printÂ»Â«ENDIFÂ»
+		Â«IF st.statement != nullÂ»Â«st.statement.printÂ»Â«ENDIFÂ»
+		Â«IF st.verbatim_block != nullÂ»Â«st.verbatim_block.printÂ»Â«ENDIFÂ»
 		'''
 
 	//Print function call
-	def print(function_call call)'''«call.funct_name»(«call.arguments.print»)'''
+	def print(function_call call)'''Â«call.funct_nameÂ»(Â«call.arguments.printÂ»)'''
 	
 	//Print MDL statement
 	def print(statement s)'''
-		«IF s.block != null»
-			«s.block.print»
-		«ENDIF»
-		«IF s.par_expression != null»
-			if «s.par_expression.print»
-				«s.if_statement.print»
-			«IF s.else_statement != null»
+		Â«IF s.block != nullÂ»
+			Â«s.block.printÂ»
+		Â«ENDIFÂ»
+		Â«IF s.par_expression != nullÂ»
+			if Â«s.par_expression.printÂ»
+				Â«s.if_statement.printÂ»
+			Â«IF s.else_statement != nullÂ»
 			else 
-				«s.else_statement.print»
-			«ENDIF»
-		«ENDIF»
+				Â«s.else_statement.printÂ»
+			Â«ENDIFÂ»
+		Â«ENDIFÂ»
 	'''
 	
 	//Print variable name
-	def print(variable_name name)'''«name.toStr»'''	
+	def print(variable_name name)'''Â«name.toStrÂ»'''	
 
     //Print variable declaration
-	def print(variable_declaration v)'''«v.toStr»'''
+	def print(variable_declaration v)'''Â«v.toStrÂ»'''
 
 	//Print any expression	
-	def print(any_expression e)'''«e.toStr»'''
+	def print(any_expression e)'''Â«e.toStrÂ»'''
 		
 	//Print random list
-	def print(random_list l)'''«l.toStr»'''
+	def print(random_list l)'''Â«l.toStrÂ»'''
 
 	//Print list
-	def print(list l)'''«l.toStr»'''
+	def print(list l)'''Â«l.toStrÂ»'''
 	
 	//print ODE list
-	def print(ode_list l)'''«l.toStr»'''
+	def print(ode_list l)'''Â«l.toStrÂ»'''
 
 	//print arithmetic expression
-	def print(expression e)'''«e.toStr»'''
+	def print(expression e)'''Â«e.toStrÂ»'''
 	
 	//print conditional (bool? statement1 : statement2) expression
-	def print(conditional_expression e)'''«e.toStr»'''
+	def print(conditional_expression e)'''Â«e.toStrÂ»'''
 
 	//Print OR expression
-	def print(conditional_or_expression e)'''«e.toStr»'''
+	def print(conditional_or_expression e)'''Â«e.toStrÂ»'''
 	
 	//Print AND expression
-	def print(conditional_and_expression e)'''«e.toStr»'''
+	def print(conditional_and_expression e)'''Â«e.toStrÂ»'''
 	
 	//Print relational expression (==, !=, <, > etc.)
-    def print(relational_expression e)'''«e.toStr»'''
+    def print(relational_expression e)'''Â«e.toStrÂ»'''
 	
 	//Print +, - expresion
-	def print(additive_expression e)'''«e.toStr»'''
+	def print(additive_expression e)'''Â«e.toStrÂ»'''
 	
 	//Print *, /, % expression
-	def print(multiplicative_expression e)'''«e.toStr»'''
+	def print(multiplicative_expression e)'''Â«e.toStrÂ»'''
 	
-	def print(power_expression e)'''«e.toStr»'''
+	def print(power_expression e)'''Â«e.toStrÂ»'''
 	
 	//Print a unary expression
-	def print(unary_expression e)'''«e.toStr»'''
+	def print(unary_expression e)'''Â«e.toStrÂ»'''
 
 	//Print a value or an identifier
-	def print(primary p)'''«p.toStr»'''
+	def print(primary p)'''Â«p.toStrÂ»'''
 	
 	//Print expression in parenthesis 
-	def print(par_expression e)'''«e.toStr»'''
+	def print(par_expression e)'''Â«e.toStrÂ»'''
 	
 	//Print list arguments without change
-	def print(arguments arg)'''«arg.toStr»'''
+	def print(arguments arg)'''Â«arg.toStrÂ»'''
 }

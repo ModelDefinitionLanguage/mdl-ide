@@ -38,19 +38,19 @@ var task_obj task_object = null; //Store the reference to task object
   		var version = "1.005";
   		var date = "14.03.2013"
 		'''
-		;mdl2nt «version» beta, last modification «date», Natallia Kokash (natallia.kokash@gmail.com)  
+		;mdl2nt Â«versionÂ» beta, last modification Â«dateÂ», Natallia Kokash (natallia.kokash@gmail.com)  
 		
-		$PROB «m.fileNameUpperCase»
-  		«FOR o:m.objects»«o.convertToNonmem»«ENDFOR»
+		$PROB Â«m.fileNameUpperCaseÂ»
+  		Â«FOR o:m.objectsÂ»Â«o.convertToNonmemÂ»Â«ENDFORÂ»
 		'''
 	}
 	
 	//convertToNonmem MCL objects
 	def convertToNonmem(mcl_obj o)'''
-	«IF o.data_obj != null»«o.data_obj.convertToNonmem»«ENDIF»
-	«IF o.model_obj != null»«o.model_obj.convertToNonmem»«ENDIF»
-	«IF o.param_obj != null»«o.param_obj.convertToNonmem»«ENDIF»
-	«IF o.task_obj != null»«o.task_obj.convertToNonmem»«ENDIF»
+	Â«IF o.data_obj != nullÂ»Â«o.data_obj.convertToNonmemÂ»Â«ENDIFÂ»
+	Â«IF o.model_obj != nullÂ»Â«o.model_obj.convertToNonmemÂ»Â«ENDIFÂ»
+	Â«IF o.param_obj != nullÂ»Â«o.param_obj.convertToNonmemÂ»Â«ENDIFÂ»
+	Â«IF o.task_obj != nullÂ»Â«o.task_obj.convertToNonmemÂ»Â«ENDIFÂ»
 	'''	
 		
 ////////////////////////////////////	
@@ -62,142 +62,142 @@ var task_obj task_object = null; //Store the reference to task object
 	val isErrorNonEmpty = o.isErrorNonEmpty;
 	val isODEDefined = o.isODEDefined; 
 	'''
-	«IF isODEDefined»
+	Â«IF isODEDefinedÂ»
 	
 	$MODEL
-		«o.printModel»
-	«ENDIF»
+		Â«o.printModelÂ»
+	Â«ENDIFÂ»
 	
-	«IF isLibraryDefined»
-	«IF isPKDefined»
+	Â«IF isLibraryDefinedÂ»
+	Â«IF isPKDefinedÂ»
 	
-	«o.printSUBR»
+	Â«o.printSUBRÂ»
 		
 	$PK 
-		«o.printPK»
-	«ENDIF»
-	«IF isErrorNonEmpty»		
+		Â«o.printPKÂ»
+	Â«ENDIFÂ»
+	Â«IF isErrorNonEmptyÂ»		
 
 	$ERROR
-		«o.printError»
+		Â«o.printErrorÂ»
 	
-	«ENDIF»
-	«ELSE» 
-	«IF isPKDefined || isErrorNonEmpty»		
+	Â«ENDIFÂ»
+	Â«ELSEÂ» 
+	Â«IF isPKDefined || isErrorNonEmptyÂ»		
 
 	$PRED
-		«o.printPK»
-		«o.printError»
-	«ENDIF»
-	«ENDIF»
-	«IF isODEDefined»
+		Â«o.printPKÂ»
+		Â«o.printErrorÂ»
+	Â«ENDIFÂ»
+	Â«ENDIFÂ»
+	Â«IF isODEDefinedÂ»
 	
 	$DES
-		«o.printDES»
-	«ENDIF»
+		Â«o.printDESÂ»
+	Â«ENDIFÂ»
 	
-	«o.printTable»
+	Â«o.printTableÂ»
 	'''
 	}
 	
 	//GROUP VARIABLES, INDIVIDUAL VARIABLES -> $PK
 	def printPK(model_obj o)'''
-	«FOR b:o.blocks»
-	«IF	b.group_variables != null»
-		«b.group_variables.block.print»
-	«ENDIF»
-	«IF b.individual_model_obj_block != null»
-		«var bb = b.individual_model_obj_block»
-		«FOR s: bb.block.statements SEPARATOR ' '»
-			«s.print»
-		«ENDFOR»
-	«ENDIF»
-	«ENDFOR»
+	Â«FOR b:o.blocksÂ»
+	Â«IF	b.group_variables != nullÂ»
+		Â«b.group_variables.block.printÂ»
+	Â«ENDIFÂ»
+	Â«IF b.individual_model_obj_block != nullÂ»
+		Â«var bb = b.individual_model_obj_blockÂ»
+		Â«FOR s: bb.block.statements SEPARATOR ' 'Â»
+			Â«s.printÂ»
+		Â«ENDFORÂ»
+	Â«ENDIFÂ»
+	Â«ENDFORÂ»
 	'''
 	
     //MODEL_PREDICTION, OBSERVATION -> $ERROR
 	def printError(model_obj o)'''
-		«FOR mob:o.blocks»
-			«IF mob.model_prediction_obj_block != null»
-				«FOR s: mob.model_prediction_obj_block.block.statements»
-					«IF s.statement != null»
-						«var x = s.statement.variable_declaration»
-						«IF x != null»«IF x.expression != null»«IF x.expression.expression != null»«x.print»«ENDIF»«ENDIF»«ENDIF»
-						«IF s.statement.statement != null»«s.statement.statement.print»«ENDIF»
-					«ENDIF»
-				«ENDFOR»
-			«ENDIF»
-			«IF mob.observation_block != null»
-				«mob.observation_block.block.print»
-			«ENDIF»
-		«ENDFOR»
+		Â«FOR mob:o.blocksÂ»
+			Â«IF mob.model_prediction_obj_block != nullÂ»
+				Â«FOR s: mob.model_prediction_obj_block.block.statementsÂ»
+					Â«IF s.statement != nullÂ»
+						Â«var x = s.statement.variable_declarationÂ»
+						Â«IF x != nullÂ»Â«IF x.expression != nullÂ»Â«IF x.expression.expression != nullÂ»Â«x.printÂ»Â«ENDIFÂ»Â«ENDIFÂ»Â«ENDIFÂ»
+						Â«IF s.statement.statement != nullÂ»Â«s.statement.statement.printÂ»Â«ENDIFÂ»
+					Â«ENDIFÂ»
+				Â«ENDFORÂ»
+			Â«ENDIFÂ»
+			Â«IF mob.observation_block != nullÂ»
+				Â«mob.observation_block.block.printÂ»
+			Â«ENDIFÂ»
+		Â«ENDFORÂ»
 	'''	
 
 	//Print $MODEL
 	def printModel(model_obj o)'''
-		«FOR b:o.blocks»
-			«IF b.model_prediction_obj_block != null»
-				«var bb = b.model_prediction_obj_block»
-				«FOR s: bb.block.statements»
-					«IF s.ode_block != null»
-						«FOR ss: s.ode_block.block.statements»
-							«var x = ss.variable_declaration»
-							«IF x != null»
-								«IF x.expression != null»
-									«IF x.expression.ode_list != null»
-										COMP(«x.identifier.toStr»)
-									«ENDIF»
-								«ENDIF»
-							«ENDIF»
-						«ENDFOR»
-					«ENDIF»
-				«ENDFOR»
-			«ENDIF»
-		«ENDFOR»
+		Â«FOR b:o.blocksÂ»
+			Â«IF b.model_prediction_obj_block != nullÂ»
+				Â«var bb = b.model_prediction_obj_blockÂ»
+				Â«FOR s: bb.block.statementsÂ»
+					Â«IF s.ode_block != nullÂ»
+						Â«FOR ss: s.ode_block.block.statementsÂ»
+							Â«var x = ss.variable_declarationÂ»
+							Â«IF x != nullÂ»
+								Â«IF x.expression != nullÂ»
+									Â«IF x.expression.ode_list != nullÂ»
+										COMP(Â«x.identifier.toStrÂ»)
+									Â«ENDIFÂ»
+								Â«ENDIFÂ»
+							Â«ENDIFÂ»
+						Â«ENDFORÂ»
+					Â«ENDIFÂ»
+				Â«ENDFORÂ»
+			Â«ENDIFÂ»
+		Â«ENDFORÂ»
 	'''
 
 	//Print $DES
 	def printDES(model_obj o)'''
-		«FOR b:o.blocks»
-			«IF b.model_prediction_obj_block != null»
-				«var bb = b.model_prediction_obj_block.block»
-				«FOR s: bb.statements»
-					«IF s.ode_block != null»
-						«FOR ss: s.ode_block.block.statements»
-							«var x = ss.variable_declaration»
-							«IF x != null»
-								«IF x.expression != null»
-									«IF x.expression.expression != null»
-										«x.print»
-									«ENDIF»
-									«IF x.expression.ode_list != null»
-										«var deriv = x.expression.ode_list.getVariableAttribute("deriv")»
-										«IF deriv != null»
-											«var id = x.identifier.toStr»
-											«IF dadt_vars.get(id) != null»
-												DADT(«dadt_vars.get(id)») = «deriv»
-											«ENDIF»	
-										«ENDIF»
-									«ENDIF»
-								«ENDIF»
-							«ENDIF»
-							«IF ss.statement != null»
-								«ss.statement.print»
-							«ENDIF»
-						«ENDFOR»
-					«ENDIF»
-				«ENDFOR»
-			«ENDIF»
-		«ENDFOR»
+		Â«FOR b:o.blocksÂ»
+			Â«IF b.model_prediction_obj_block != nullÂ»
+				Â«var bb = b.model_prediction_obj_block.blockÂ»
+				Â«FOR s: bb.statementsÂ»
+					Â«IF s.ode_block != nullÂ»
+						Â«FOR ss: s.ode_block.block.statementsÂ»
+							Â«var x = ss.variable_declarationÂ»
+							Â«IF x != nullÂ»
+								Â«IF x.expression != nullÂ»
+									Â«IF x.expression.expression != nullÂ»
+										Â«x.printÂ»
+									Â«ENDIFÂ»
+									Â«IF x.expression.ode_list != nullÂ»
+										Â«var deriv = x.expression.ode_list.getVariableAttribute("deriv")Â»
+										Â«IF deriv != nullÂ»
+											Â«var id = x.identifier.toStrÂ»
+											Â«IF dadt_vars.get(id) != nullÂ»
+												DADT(Â«dadt_vars.get(id)Â») = Â«derivÂ»
+											Â«ENDIFÂ»	
+										Â«ENDIFÂ»
+									Â«ENDIFÂ»
+								Â«ENDIFÂ»
+							Â«ENDIFÂ»
+							Â«IF ss.statement != nullÂ»
+								Â«ss.statement.printÂ»
+							Â«ENDIFÂ»
+						Â«ENDFORÂ»
+					Â«ENDIFÂ»
+				Â«ENDFORÂ»
+			Â«ENDIFÂ»
+		Â«ENDFORÂ»
 	'''    
     
 	//Print $SUBR
 	def printSUBR(model_obj o)'''
-	«FOR b:o.blocks»
-		«IF b.model_prediction_obj_block != null»
-			«b.model_prediction_obj_block.block.printSUBR»
-		«ENDIF»
-	«ENDFOR»
+	Â«FOR b:o.blocksÂ»
+		Â«IF b.model_prediction_obj_block != nullÂ»
+			Â«b.model_prediction_obj_block.block.printSUBRÂ»
+		Â«ENDIFÂ»
+	Â«ENDFORÂ»
     ''' 
     
     //Extract source file from VARIABLE DECLARATION
@@ -228,7 +228,7 @@ var task_obj task_object = null; //Store the reference to task object
 											} else 
 												tolStr = " TOL=" + tol.get(0);
 										}
-										return '''$SUBR «IF model != null»«library.toUpperCase()»«model»«ENDIF»«tolStr» «IF trans != null»TRANS«trans»«ENDIF»'''
+										return '''$SUBR Â«IF model != nullÂ»Â«library.toUpperCase()Â»Â«modelÂ»Â«ENDIFÂ»Â«tolStrÂ» Â«IF trans != nullÂ»TRANSÂ«transÂ»Â«ENDIFÂ»'''
 									}
 					}
 				}
@@ -259,15 +259,15 @@ var task_obj task_object = null; //Store the reference to task object
     
 	//Print $TABLE
 	def printTable(model_obj o)'''
-	«FOR b:o.blocks»
-		«IF b.output_variables_block != null»
-			«var bb = b.output_variables_block»
-			«IF bb.block.statements.size > 0»
-				$TABLE «FOR st: bb.block.statements SEPARATOR ' '»«IF st.variable_declaration != null»«st.variable_declaration.identifier.toStr.convertID»«ENDIF»«ENDFOR»
-				ONEHEADER NOPRINT «IF task_object != null»FILE=«task_object.identifier».fit«ENDIF» 
-			«ENDIF»
-		«ENDIF»	
-	«ENDFOR»
+	Â«FOR b:o.blocksÂ»
+		Â«IF b.output_variables_block != nullÂ»
+			Â«var bb = b.output_variables_blockÂ»
+			Â«IF bb.block.statements.size > 0Â»
+				$TABLE Â«FOR st: bb.block.statements SEPARATOR ' 'Â»Â«IF st.variable_declaration != nullÂ»Â«st.variable_declaration.identifier.toStr.convertIDÂ»Â«ENDIFÂ»Â«ENDFORÂ»
+				ONEHEADER NOPRINT Â«IF task_object != nullÂ»FILE=Â«task_object.identifierÂ».fitÂ«ENDIFÂ» 
+			Â«ENDIFÂ»
+		Â«ENDIFÂ»	
+	Â«ENDFORÂ»
 	'''
    
 ////////////////////////////////////
@@ -275,58 +275,58 @@ var task_obj task_object = null; //Store the reference to task object
 /////////////////////////////////////	
 	//Process parameter object
 	def convertToNonmem(param_obj obj)'''
-	«obj.printTheta»
-	«obj.printSigma»
-	«obj.printOmega»
+	Â«obj.printThetaÂ»
+	Â«obj.printSigmaÂ»
+	Â«obj.printOmegaÂ»
 	'''
 
 	def printTheta(param_obj obj)'''
-	«IF obj.isThetaNonEmpty»
+	Â«IF obj.isThetaNonEmptyÂ»
 	
 	$THETA
-		«FOR b:obj.blocks»			
-			«IF b.structural_block != null»
-				«FOR st: b.structural_block.block.statements»
-					«st.printTheta»
-				«ENDFOR»
-			«ENDIF»
-		«ENDFOR»
-	«ENDIF»
+		Â«FOR b:obj.blocksÂ»			
+			Â«IF b.structural_block != nullÂ»
+				Â«FOR st: b.structural_block.block.statementsÂ»
+					Â«st.printThetaÂ»
+				Â«ENDFORÂ»
+			Â«ENDIFÂ»
+		Â«ENDFORÂ»
+	Â«ENDIFÂ»
 	'''
 	
 	//VARIABILITY -> $OMEGA
 	def printOmega(param_obj obj)'''
-	«IF (obj.isVariabilityNonEmpty && !eta_vars.empty) || obj.isVariabilitySubBlocksNonEmpty»
+	Â«IF (obj.isVariabilityNonEmpty && !eta_vars.empty) || obj.isVariabilitySubBlocksNonEmptyÂ»
 	
 	$OMEGA
-		«FOR b:obj.blocks»			
-			«IF b.variability_block != null»
-				«FOR c: b.variability_block.block.blocks»
-					«IF c.block_statement != null»
-						«c.block_statement.printOmega»
-					«ENDIF»
-					«c.printVariabilitySubBlock»
-				«ENDFOR»
-			«ENDIF»
-		«ENDFOR»
-	«ENDIF»
+		Â«FOR b:obj.blocksÂ»			
+			Â«IF b.variability_block != nullÂ»
+				Â«FOR c: b.variability_block.block.blocksÂ»
+					Â«IF c.block_statement != nullÂ»
+						Â«c.block_statement.printOmegaÂ»
+					Â«ENDIFÂ»
+					Â«c.printVariabilitySubBlockÂ»
+				Â«ENDFORÂ»
+			Â«ENDIFÂ»
+		Â«ENDFORÂ»
+	Â«ENDIFÂ»
 	'''
 
 	//VARIABILITY.BLOCK -> $SIGMA
 	def printSigma(param_obj obj)'''
-	«IF obj.isVariabilityNonEmpty && !eps_vars.empty»
+	Â«IF obj.isVariabilityNonEmpty && !eps_vars.emptyÂ»
 	
 	$SIGMA
-		«FOR b:obj.blocks»			
-			«IF b.variability_block != null»
-				«FOR c: b.variability_block.block.blocks»
-					«IF c.block_statement != null»
-						«c.block_statement.printSigma»
-					«ENDIF»
-				«ENDFOR»
-			«ENDIF»
-		«ENDFOR»
-	«ENDIF»
+		Â«FOR b:obj.blocksÂ»			
+			Â«IF b.variability_block != nullÂ»
+				Â«FOR c: b.variability_block.block.blocksÂ»
+					Â«IF c.block_statement != nullÂ»
+						Â«c.block_statement.printSigmaÂ»
+					Â«ENDIFÂ»
+				Â«ENDFORÂ»
+			Â«ENDIFÂ»
+		Â«ENDFORÂ»
+	Â«ENDIFÂ»
 	'''
 	
 	def isThetaNonEmpty(param_obj obj){
@@ -370,33 +370,33 @@ var task_obj task_object = null; //Store the reference to task object
 
 	//Process data object
 	def convertToNonmem(data_obj o)'''
-	«FOR b:o.blocks»
-		«IF b.header_block != null»
-			«b.header_block.printInput»
-		«ENDIF»
-	«ENDFOR»	
-	«FOR b:o.blocks»
-		«IF b.file_block != null» 
-			«b.file_block.printData»
-		«ENDIF»
-	«ENDFOR»
-	«IF task_object != null»
-		«task_object.printIgnoreStatements»
-	«ENDIF»
+	Â«FOR b:o.blocksÂ»
+		Â«IF b.header_block != nullÂ»
+			Â«b.header_block.printInputÂ»
+		Â«ENDIFÂ»
+	Â«ENDFORÂ»	
+	Â«FOR b:o.blocksÂ»
+		Â«IF b.file_block != nullÂ» 
+			Â«b.file_block.printDataÂ»
+		Â«ENDIFÂ»
+	Â«ENDFORÂ»
+	Â«IF task_object != nullÂ»
+		Â«task_object.printIgnoreStatementsÂ»
+	Â«ENDIFÂ»
 	'''
 	
 	//HEADER -> $INPUT
 	//NONMEM INPUT line - copy all variable names from the MDL HEADER block
 	def printInput(header_block b)'''
-	$INPUT «FOR st: b.block.statements SEPARATOR ' '»«IF st.variable_declaration != null»«st.variable_declaration.identifier.print»«ENDIF»«ENDFOR»'''
+	$INPUT Â«FOR st: b.block.statements SEPARATOR ' 'Â»Â«IF st.variable_declaration != nullÂ»Â«st.variable_declaration.identifier.printÂ»Â«ENDIFÂ»Â«ENDFORÂ»'''
 	
 	//FILE sub-block -> $DATA
 	def printData(file_block b)'''
-	«FOR s: b.block.blocks»
-		«IF s.statement != null»
-			«s.statement.printDataSource»
-		«ENDIF»
-	«ENDFOR»
+	Â«FOR s: b.block.blocksÂ»
+		Â«IF s.statement != nullÂ»
+			Â«s.statement.printDataSourceÂ»
+		Â«ENDIFÂ»
+	Â«ENDFORÂ»
 	'''
 	//if (st.inline_block != null) st.inline_block.convertToNonmem
 	//if (st.design_block != null) st.design_block.convertToNonmem
@@ -410,7 +410,7 @@ var task_obj task_object = null; //Store the reference to task object
 					if (s.variable_declaration.expression.list != null){
 						val data = s.variable_declaration.expression.list.getVariableAttribute("source");
 						val ignore = s.variable_declaration.expression.list.getVariableAttribute("ignore");
-						return '''«IF data != null»$DATA «data»«ENDIF» «IF ignore != null»IGNORE=«ignore»«ENDIF»'''
+						return '''Â«IF data != nullÂ»$DATA Â«dataÂ»Â«ENDIFÂ» Â«IF ignore != nullÂ»IGNORE=Â«ignoreÂ»Â«ENDIFÂ»'''
 					}
 	}
 	
@@ -419,41 +419,41 @@ var task_obj task_object = null; //Store the reference to task object
 /////////////////////////////////////////////////
 
 	def convertToNonmem(task_obj o)'''
-		«FOR b:o.blocks»
-			«b.printFunctions»
-		«ENDFOR»
+		Â«FOR b:o.blocksÂ»
+			Â«b.printFunctionsÂ»
+		Â«ENDFORÂ»
 	'''
 	
 	def printFunctions(task_obj_block b)'''
-		«IF b.function_declaration != null»
-			«val body = b.function_declaration.function_body»
-			«IF body != null»
-				«FOR bb: body.blocks»
-					«IF bb.estimate_defn != null»
-						«bb.estimate_defn.printEstimate»
-					«ENDIF»
-					«IF bb.simulate_defn != null»
-						«bb.simulate_defn.printSimulate»
-					«ENDIF»
-				«ENDFOR»				
-			«ENDIF»
-		«ENDIF»
+		Â«IF b.function_declaration != nullÂ»
+			Â«val body = b.function_declaration.function_bodyÂ»
+			Â«IF body != nullÂ»
+				Â«FOR bb: body.blocksÂ»
+					Â«IF bb.estimate_defn != nullÂ»
+						Â«bb.estimate_defn.printEstimateÂ»
+					Â«ENDIFÂ»
+					Â«IF bb.simulate_defn != nullÂ»
+						Â«bb.simulate_defn.printSimulateÂ»
+					Â«ENDIFÂ»
+				Â«ENDFORÂ»				
+			Â«ENDIFÂ»
+		Â«ENDIFÂ»
 	'''
 	//PARAMETER block
 	//DATA block
 	
 	def printIgnoreStatements(task_obj obj)'''
-		«FOR b: obj.blocks»
-			«IF b.data_block !=  null»
-				«FOR s: b.data_block.block.statements»
-					«IF s.variable_declaration != null»
-						«IF s.variable_declaration.identifier.toStr.equalsIgnoreCase("ignore")»
-							«s.variable_declaration.print»
-						«ENDIF»	
-					«ENDIF»
-				«ENDFOR»
-			«ENDIF»
-		«ENDFOR»
+		Â«FOR b: obj.blocksÂ»
+			Â«IF b.data_block !=  nullÂ»
+				Â«FOR s: b.data_block.block.statementsÂ»
+					Â«IF s.variable_declaration != nullÂ»
+						Â«IF s.variable_declaration.identifier.toStr.equalsIgnoreCase("ignore")Â»
+							Â«s.variable_declaration.printÂ»
+						Â«ENDIFÂ»	
+					Â«ENDIFÂ»
+				Â«ENDFORÂ»
+			Â«ENDIFÂ»
+		Â«ENDFORÂ»
 	''' 
 	
 	//Print $SIM block
@@ -465,8 +465,8 @@ var task_obj task_object = null; //Store the reference to task object
 	//Print $EST block
 	def printEstimate(block b)'''
 	
-	$EST«FOR s: b.statements»«s.printEstimate»«ENDFOR» NOABORT
-	«FOR s: b.statements»«s.printEstimateCov»«ENDFOR»
+	$ESTÂ«FOR s: b.statementsÂ»Â«s.printEstimateÂ»Â«ENDFORÂ» NOABORT
+	Â«FOR s: b.statementsÂ»Â«s.printEstimateCovÂ»Â«ENDFORÂ»
 	'''
 	
 	//Print attributes of the $EST block 
@@ -475,7 +475,7 @@ var task_obj task_object = null; //Store the reference to task object
 			if (s.variable_declaration.expression != null){
 				if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("algo")){
 					if (s.variable_declaration.expression.expression != null)
-						''' METHOD=«s.variable_declaration.expression.expression.toStr»'''
+						''' METHOD=Â«s.variable_declaration.expression.expression.toStrÂ»'''
 					else
 						{
 							//print first attribute of the list
@@ -483,17 +483,17 @@ var task_obj task_object = null; //Store the reference to task object
 								var args = s.variable_declaration.expression.list.arguments;
 								if (args != null){
 									if (args.arguments.size > 0)
-										''' METHOD=«args.arguments.get(0).expression.toStr»'''
+										''' METHOD=Â«args.arguments.get(0).expression.toStrÂ»'''
 								}
 							}
 						}	
 				}
 				else
 					if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("max"))
-					''' MAX=«s.variable_declaration.expression.print»'''
+					''' MAX=Â«s.variable_declaration.expression.printÂ»'''
 				else
 					if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("sig"))
-					''' SIG=«s.variable_declaration.expression.print»'''
+					''' SIG=Â«s.variable_declaration.expression.printÂ»'''
 			}			
 		}
 	}
@@ -504,7 +504,7 @@ var task_obj task_object = null; //Store the reference to task object
 			if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("cov")){
 				if (s.variable_declaration.expression != null){
 					if (s.variable_declaration.expression.toStr.replaceAll("\\s","").equalsIgnoreCase(""))
-					'''$COV «s.variable_declaration.expression.print»'''
+					'''$COV Â«s.variable_declaration.expression.printÂ»'''
 				}
 			}
 		}	
@@ -680,7 +680,7 @@ var task_obj task_object = null; //Store the reference to task object
 				if (printFix) result = result + "\nFIX\n";
 			}
 		}		
-		return '''«result»'''; 
+		return '''Â«resultÂ»'''; 
 	}
 
 	//Print $SIGMA
@@ -699,7 +699,7 @@ var task_obj task_object = null; //Store the reference to task object
 								fixed.toString.equalsIgnoreCase("1"));						
 						}
 						if (value == null) return "";
-						'''«value»«IF printFix» FIX«ENDIF» ; «name»'''
+						'''Â«valueÂ»Â«IF printFixÂ» FIXÂ«ENDIFÂ» ; Â«nameÂ»'''
 					}
 				}
 			}
@@ -721,7 +721,7 @@ var task_obj task_object = null; //Store the reference to task object
 								|| fixed.toString.equalsIgnoreCase("1"));						
 						};
 						if (value == null) return "";
-						'''«value»«IF printFix» FIX«ENDIF» ; «name»'''
+						'''Â«valueÂ»Â«IF printFixÂ» FIXÂ«ENDIFÂ» ; Â«nameÂ»'''
 					}
 				}
 			}
@@ -744,10 +744,10 @@ var task_obj task_object = null; //Store the reference to task object
 							fixed.toString.equalsIgnoreCase("1"));						
 					}
 					if (value == null) return "";
-					if (lo == null && hi == null) return '''«value»«IF printFix» FIX«ENDIF» ; «name»'''
-					if (lo == null) return '''(-INF, «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
-					if (hi == null) return '''(«lo», «value», INF)«IF printFix» FIX«ENDIF» ; «name»'''
-					return '''(«lo», «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
+					if (lo == null && hi == null) return '''Â«valueÂ»Â«IF printFixÂ» FIXÂ«ENDIFÂ» ; Â«nameÂ»'''
+					if (lo == null) return '''(-INF, Â«valueÂ», Â«hiÂ»)Â«IF printFixÂ» FIXÂ«ENDIFÂ» ; Â«nameÂ»'''
+					if (hi == null) return '''(Â«loÂ», Â«valueÂ», INF)Â«IF printFixÂ» FIXÂ«ENDIFÂ» ; Â«nameÂ»'''
+					return '''(Â«loÂ», Â«valueÂ», Â«hiÂ»)Â«IF printFixÂ» FIXÂ«ENDIFÂ» ; Â«nameÂ»'''
 				}
 			}
 	}
@@ -797,25 +797,25 @@ var task_obj task_object = null; //Store the reference to task object
 	
 	//Print verbatim target specific code
 	override print(target_block b)'''
-	«IF b.identifier.equalsIgnoreCase("NMTRAN")»
-	«var printedCode = b.external_code.substring(3, b.external_code.length - 3)»
-	«printedCode»
-	«ENDIF»
+	Â«IF b.identifier.equalsIgnoreCase("NMTRAN")Â»
+	Â«var printedCode = b.external_code.substring(3, b.external_code.length - 3)Â»
+	Â«printedCodeÂ»
+	Â«ENDIFÂ»
 	'''	
 	
 	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
 	override print(statement s)'''
-		«IF s.block != null»
-			«s.block.print»
-		«ENDIF»
-		«IF s.par_expression != null»
-			IF «s.par_expression.print» THEN
-				«s.if_statement.print»
-			«IF s.else_statement != null»
+		Â«IF s.block != nullÂ»
+			Â«s.block.printÂ»
+		Â«ENDIFÂ»
+		Â«IF s.par_expression != nullÂ»
+			IF Â«s.par_expression.printÂ» THEN
+				Â«s.if_statement.printÂ»
+			Â«IF s.else_statement != nullÂ»
 			ELSE 
-				«s.else_statement.print»
-			«ENDIF»
+				Â«s.else_statement.printÂ»
+			Â«ENDIFÂ»
 			ENDIF
-		«ENDIF»
+		Â«ENDIFÂ»
 	'''
 }

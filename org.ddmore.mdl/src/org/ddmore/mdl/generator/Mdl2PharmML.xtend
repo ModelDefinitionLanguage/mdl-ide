@@ -32,55 +32,55 @@ class Mdl2PharmML extends Mdl2Nonmem{
   		var date = "06.04.2013"
 		val info = "mdl2pharmML " + version + " beta, last modification " + date + " Natallia Kokash (natallia.kokash@gmail.com)";  
 		'''
-		«info.print_XS_Comment»
+		Â«info.print_XS_CommentÂ»
 		<?xml version="1.0" encoding="UTF-8"?>
 		<PharmML 
-			name="«m.eResource.fileName»"
+			name="Â«m.eResource.fileNameÂ»"
 			independentVar="t" 
 			writtenVersion="0.1">
-  			«FOR o:m.objects»«o.convertToPharmML»«ENDFOR»
+  			Â«FOR o:m.objectsÂ»Â«o.convertToPharmMLÂ»Â«ENDFORÂ»
 		</PharmML>
 		'''
 	}
 	
 	//convertToPharmML MCL objects
 	def convertToPharmML(mcl_obj o)'''
-	«IF o.model_obj != null»«o.model_obj.convertToPharmML»«ENDIF»
-	«IF o.data_obj != null»«o.data_obj.convertToPharmML»«ENDIF»
-	«IF o.param_obj != null»«o.param_obj.convertToPharmML»«ENDIF»
-	«IF o.task_obj != null»«o.task_obj.convertToPharmML»«ENDIF»
+	Â«IF o.model_obj != nullÂ»Â«o.model_obj.convertToPharmMLÂ»Â«ENDIFÂ»
+	Â«IF o.data_obj != nullÂ»Â«o.data_obj.convertToPharmMLÂ»Â«ENDIFÂ»
+	Â«IF o.param_obj != nullÂ»Â«o.param_obj.convertToPharmMLÂ»Â«ENDIFÂ»
+	Â«IF o.task_obj != nullÂ»Â«o.task_obj.convertToPharmMLÂ»Â«ENDIFÂ»
 	'''
 	
 	def convertToPharmML(model_obj o)'''
 	<ModelDefinition>
-	«FOR b:o.blocks»
-	«IF b.individual_model_obj_block != null»
+	Â«FOR b:o.blocksÂ»
+	Â«IF b.individual_model_obj_block != nullÂ»
 		TODO: Process individual model block
-	«ENDIF»
-	«IF	b.model_prediction_obj_block != null»
+	Â«ENDIFÂ»
+	Â«IF	b.model_prediction_obj_block != nullÂ»
 		TODO: Process model prediction block
-	«ENDIF»
-	«IF	b.random_variable_definition_block != null»
+	Â«ENDIFÂ»
+	Â«IF	b.random_variable_definition_block != nullÂ»
 		TODO: Process random variable definition block
-	«ENDIF»
+	Â«ENDIFÂ»
 
-	«IF	b.group_variables != null»
+	Â«IF	b.group_variables != nullÂ»
 		TODO: Process group variables
-	«ENDIF»
-	«IF	b.observation_block != null»
+	Â«ENDIFÂ»
+	Â«IF	b.observation_block != nullÂ»
 		TODO: Process observation block
-	«ENDIF»
-	«IF	b.estimation_block != null»
-		«IF b.estimation_block.block != null»
-			«b.estimation_block.block.print_msteps_EstimationStep»
-		«ENDIF»
-	«ENDIF»
-	«IF	b.simulation_block != null»
-		«IF b.simulation_block.block != null»
-			«b.simulation_block.block.print_msteps_SimulationStep»
-		«ENDIF»
-	«ENDIF»
-	«ENDFOR»
+	Â«ENDIFÂ»
+	Â«IF	b.estimation_block != nullÂ»
+		Â«IF b.estimation_block.block != nullÂ»
+			Â«b.estimation_block.block.print_msteps_EstimationStepÂ»
+		Â«ENDIFÂ»
+	Â«ENDIFÂ»
+	Â«IF	b.simulation_block != nullÂ»
+		Â«IF b.simulation_block.block != nullÂ»
+			Â«b.simulation_block.block.print_msteps_SimulationStepÂ»
+		Â«ENDIFÂ»
+	Â«ENDIFÂ»
+	Â«ENDFORÂ»
 	</ModelDefinition>
 	'''
 
@@ -105,24 +105,24 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	
 	//***PharmML.ct_Annotation***//
 	def print_XS_Comment(String text)'''
-		<!--«text»-->
+		<!--Â«textÂ»-->
 	'''
 	
 	//***PharmML.ct_Annotation***//
 	def print_ct_AnnotationType(String text)'''
-		<Description>«text»</Description>
+		<Description>Â«textÂ»</Description>
 	'''
 
 	//***MDL.variable_declaration***//
 	def print_ct_VariableDefinitionType(variable_declaration v)'''
-		<Variable «v.identifier.print_ct_SymbId»>
-			«v.identifier.toStr.print_ct_AnnotationType»
-			«IF v.expression != null»
-				«v.expression.print_ct_printRhsType»
-			«ENDIF»	
-			«IF v.random_list != null»
-				«v.random_list.print_uncert_DistributionType»
-			«ENDIF»	
+		<Variable Â«v.identifier.print_ct_SymbIdÂ»>
+			Â«v.identifier.toStr.print_ct_AnnotationTypeÂ»
+			Â«IF v.expression != nullÂ»
+				Â«v.expression.print_ct_printRhsTypeÂ»
+			Â«ENDIFÂ»	
+			Â«IF v.random_list != nullÂ»
+				Â«v.random_list.print_uncert_DistributionTypeÂ»
+			Â«ENDIFÂ»	
 		</Variable>
 	'''
 	
@@ -131,25 +131,25 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	'''
 	
 	def print_ct_printRhsType(any_expression e)'''
-		«IF e.expression != null»
-			«e.expression.print_ct_printRhsType»
-		«ENDIF»
-		«IF e.list != null»
+		Â«IF e.expression != nullÂ»
+			Â«e.expression.print_ct_printRhsTypeÂ»
+		Â«ENDIFÂ»
+		Â«IF e.list != nullÂ»
 			TODO: print list
-		«ENDIF»	
-		«IF e.ode_list != null»
+		Â«ENDIFÂ»	
+		Â«IF e.ode_list != nullÂ»
 			TODO: print ode list
-		«ENDIF»	
-		«IF e.random_list != null»
-			«e.random_list.print_uncert_DistributionType»
-		«ENDIF»	
+		Â«ENDIFÂ»	
+		Â«IF e.random_list != nullÂ»
+			Â«e.random_list.print_uncert_DistributionTypeÂ»
+		Â«ENDIFÂ»	
 	'''
 	def print_ct_printRhsType(expression e)'''
-		«IF e.conditional_expression != null»
-		«ENDIF»
-		«IF e.string_expression != null»
-			«e.string_expression.print_MathStringType»
-		«ENDIF»
+		Â«IF e.conditional_expression != nullÂ»
+		Â«ENDIFÂ»
+		Â«IF e.string_expression != nullÂ»
+			Â«e.string_expression.print_MathStringTypeÂ»
+		Â«ENDIFÂ»
 	'''
 	
 	def print_MathStringType(EList<String> list)'''
@@ -159,33 +159,33 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	
 	//Get variable identifier from each declaration and each statement
 	def printXML(block_statement st)'''
-		«IF st.variable_declaration != null»
-			«st.variable_declaration.print_ct_VariableDefinitionType»
-		«ENDIF»
-		«IF st.function_call != null»
-			«st.function_call.print_Math_FunctionCallType»
-		«ENDIF»
-		«IF st.statement != null»
+		Â«IF st.variable_declaration != nullÂ»
+			Â«st.variable_declaration.print_ct_VariableDefinitionTypeÂ»
+		Â«ENDIFÂ»
+		Â«IF st.function_call != nullÂ»
+			Â«st.function_call.print_Math_FunctionCallTypeÂ»
+		Â«ENDIFÂ»
+		Â«IF st.statement != nullÂ»
 			TODO: parse MDL block
-		«ENDIF»
+		Â«ENDIFÂ»
 	'''
 	
 	//***MDL.primary***//
 	//MDL.primary.number
 	def print_Math_ScalarType(primary p)'''
-		«IF p.number != null»
-			<Scalar value = "«p.number»"/>
-		«ENDIF»	
+		Â«IF p.number != nullÂ»
+			<Scalar value = "Â«p.numberÂ»"/>
+		Â«ENDIFÂ»	
 	'''
 	//MDL.primary.variable_name
 	def print_ct_SymbId(primary p)'''
-		«IF p.identifier != null»
-			«p.identifier.print_ct_SymbId»
-		«ENDIF»
+		Â«IF p.identifier != nullÂ»
+			Â«p.identifier.print_ct_SymbIdÂ»
+		Â«ENDIFÂ»
 	'''	
 	//MDL.variable_name
 	def print_ct_SymbId(variable_name name)'''
-		symbId = "«name.toStr»"
+		symbId = "Â«name.toStrÂ»"
 	'''
 
 	//MDL.function_declaration
@@ -193,59 +193,59 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	'''
 	
 	def printXML(formal_arguments args)'''
-		«FOR a: args.identifiers»
-		«ENDFOR»
+		Â«FOR a: args.identifiersÂ»
+		Â«ENDFORÂ»
 	'''
 	
 	//function body: ESTIMATE or SIMULATE blocks
 	def printXML(function_body body)'''
-		«FOR b: body.blocks»
-			«IF b.estimate_defn != null»
-				«b.estimate_defn.print_msteps_SimulationStep»
-			«ENDIF»
-			«IF b.simulate_defn != null»
-				«b.simulate_defn.print_msteps_EstimationStep»
-			«ENDIF»
+		Â«FOR b: body.blocksÂ»
+			Â«IF b.estimate_defn != nullÂ»
+				Â«b.estimate_defn.print_msteps_SimulationStepÂ»
+			Â«ENDIFÂ»
+			Â«IF b.simulate_defn != nullÂ»
+				Â«b.simulate_defn.print_msteps_EstimationStepÂ»
+			Â«ENDIFÂ»
 			
-		«ENDFOR»
+		Â«ENDFORÂ»
 	'''
 	
 	def print_msteps_EstimationStep(block b)'''
 		<EstimationStep>
-		«FOR st: b.statements»
+		Â«FOR st: b.statementsÂ»
 			TODO: print estimation steps
-		«ENDFOR»
+		Â«ENDFORÂ»
 		</EstimationStep>
 	'''
 
 	def print_msteps_SimulationStep(block b)'''
 		<SimulationStep>
-		«FOR st: b.statements»
+		Â«FOR st: b.statementsÂ»
 			TODO: print simulation steps
-		«ENDFOR»
+		Â«ENDFORÂ»
 		</SimulationStep>
 	'''
 	
 	def print_Math_FunctionCallType(function_call call)'''
 		<FunctionCall>
-			«call.funct_name.print_Math_VarType»
-			«FOR arg: call.arguments.arguments»
-				«arg.print_Math_FunctionArgumentType»
-			«ENDFOR»
+			Â«call.funct_name.print_Math_VarTypeÂ»
+			Â«FOR arg: call.arguments.argumentsÂ»
+				Â«arg.print_Math_FunctionArgumentTypeÂ»
+			Â«ENDFORÂ»
 		</FunctionCall>
 	'''
 	
 	def print_Math_VarType(String str)'''
-		<Var «str.print_Math_symbId»/>
+		<Var Â«str.print_Math_symbIdÂ»/>
 	'''
 
 	def print_Math_FunctionArgumentType(argument arg)'''
 		<FunctionArgument 
-		«IF arg.identifier != null»«arg.identifier.print_Math_symbId»«ENDIF»>
+		Â«IF arg.identifier != nullÂ»Â«arg.identifier.print_Math_symbIdÂ»Â«ENDIFÂ»>
 		</FunctionArgument>
 	'''
 	
 	def print_Math_symbId(String str)'''
-		symbId = "«str»"
+		symbId = "Â«strÂ»"
 	'''
 }
