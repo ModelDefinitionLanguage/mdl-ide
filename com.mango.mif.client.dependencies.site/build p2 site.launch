@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.ui.externaltools.ProgramLaunchConfigurationType">
 <stringAttribute key="bad_container_name" value="\com.mango.mif.client.dependencies.site\build-p2-site"/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="C:\Program Files\Java\jdk1.7.0_13\jre\bin\java.exe"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="C:\Program Files\Java\jre7\bin\java.exe"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-jar ${eclipse_home}/plugins/org.eclipse.equinox.launcher_1.3.0.v20120522-1813.jar&#13;&#10;   -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher&#13;&#10;   -metadataRepository file:/${workspace_loc:/com.mango.mif.client.dependencies.site}/target/&#13;&#10;   -artifactRepository file:/${workspace_loc:/com.mango.mif.client.dependencies.site}/target/&#13;&#10;   -source ${workspace_loc:/com.mango.mif.client.dependencies.site}&#13;&#10;   -compress&#13;&#10;   -publishArtifacts"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${workspace_loc:/com.mango.mif.client.dependencies.site}"/>
 </launchConfiguration>
