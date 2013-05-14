@@ -78,13 +78,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.springsource.org.apache.kahadb"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.sun.xml.bind"
          download-size="0"
          install-size="0"
@@ -492,6 +485,13 @@
 
    <plugin
          id="org.vngx.vngx-jsch"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.activemq.kahadb"
          download-size="0"
          install-size="0"
          version="0.0.0"

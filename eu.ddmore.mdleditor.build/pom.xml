@@ -15,18 +15,25 @@
 
 		<module>../org.ddmore.mdl.sdk</module>
 		<module>../com.mango.mif.client.feature</module>
+		<!-- once the encryption key is changed this can be included : MIFDEV-35 -->
+<!-- 		<module>../com.mango.mif.client.site</module> -->
 		<module>../eu.ddmore.mdleditor.site</module>
 		<module>../eu.ddmore.mdleditor.product</module>
 	</modules>
 
 	<properties>
+        <mif.version>2.1.5-SNAPSHOT</mif.version>
 		<tycho.version>0.17.0</tycho.version>
 		<tycho.extras.version>0.17.0</tycho.extras.version>
 
 		<juno.repo.url>http://download.eclipse.org/releases/juno</juno.repo.url>
 		<xtext.repo.url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/</xtext.repo.url>
 		<tycho.repo.url>https://oss.sonatype.org/content/groups/public/</tycho.repo.url>
-		<mifclient.dependencies.repo.url>https://sourceforge.net/projects/ddmore/files/update/mif-client-dependencies/</mifclient.dependencies.repo.url>
+        <mifclient.dependencies.repo.url>https://sourceforge.net/projects/ddmore/files/update/mif-client-dependencies/</mifclient.dependencies.repo.url>
+
+        <!-- once the encryption key is changed this can be replaced using the maven artifact : MIFDEV-35 -->
+        <mifclient.repo.url>https://sourceforge.net/projects/ddmore/files/update/mif-client/</mifclient.repo.url>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jacoco.version>0.6.2.201302030002</jacoco.version>
 
@@ -46,6 +53,12 @@
 			<url>${mifclient.dependencies.repo.url}</url>
 			<layout>p2</layout>
 		</repository>
+
+        <repository>
+            <id>mifclient</id>
+            <url>${mifclient.repo.url}</url>
+            <layout>p2</layout>
+        </repository>
 
 		<repository>
 			<id>juno</id>
@@ -73,6 +86,15 @@
 		</pluginRepository>
 	</pluginRepositories>
 
+<!-- once the encryption key is changed this can be included : MIFDEV-35 -->
+<!--     <dependencies> -->
+<!--         <dependency> -->
+<!--             <groupId>com.mango</groupId> -->
+<!--             <artifactId>MIFClient</artifactId> -->
+<!--             <version>${mif.version}</version> -->
+<!--         </dependency> -->
+<!--     </dependencies> -->
+    
 	<build>
 		<plugins>
 
@@ -181,6 +203,9 @@
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>target-platform-configuration</artifactId>
 					<version>${tycho.version}</version>
+	                <configuration>
+	                    <pomDependencies>consider</pomDependencies>
+	                </configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>

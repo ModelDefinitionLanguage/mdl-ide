@@ -11,11 +11,11 @@
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.mango.mif.client.feature</artifactId>
-	<packaging>eclipse-feature</packaging>
+	<artifactId>com.mango.mif.client.site</artifactId>
+	<packaging>eclipse-repository</packaging>
 
-	<!-- once the encryption key is changed this can be moved to the parent 
-		pom : MIFDEV-35 -->
+    <!-- once the encryption key is changed this can be moved to the parent 
+        pom : MIFDEV-35 -->
 	<dependencies>
 		<dependency>
 			<groupId>com.mango</groupId>
