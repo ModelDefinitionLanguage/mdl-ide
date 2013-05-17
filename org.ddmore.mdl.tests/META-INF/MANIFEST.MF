@@ -6,22 +6,8 @@ Bundle-Version: 1.0.1.qualifier
 Bundle-SymbolicName: org.ddmore.mdl.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.ddmore.mdl,
- org.ddmore.mdl.ui,
- org.eclipse.core.runtime,
- org.eclipse.xtext.junit4;bundle-version="[2.4.0,2.4.1)",
- org.eclipse.ui.workbench;resolution:=optional,
- org.eclipse.xtend.lib;bundle-version="[2.4.0,2.4.1)",
- com.google.guava
-Import-Package: org.apache.log4j,
- org.hamcrest.core,
- org.junit;version="4.5.0",
- org.junit.runner;version="4.5.0",
- org.junit.runner.manipulation;version="4.5.0",
- org.junit.runner.notification;version="4.5.0",
- org.junit.runners;version="4.5.0",
- org.junit.runners.model;version="4.5.0",
- javax.xml.bind;version="2.2.0";resolution:=optional,
- org.apache.commons.io;version="2.0.1",
+ org.ddmore.mdl.ui
+Import-Package: org.apache.commons.io;version="2.0.1",
  org.apache.http;version="4.1.4",
  org.apache.http.client;version="4.1.2",
  org.apache.http.client.entity;version="4.1.2",
@@ -30,6 +16,15 @@ Import-Package: org.apache.log4j,
  org.apache.http.client.utils;version="4.1.2",
  org.apache.http.entity;version="4.1.4",
  org.apache.http.impl.client;version="4.1.2",
- org.apache.http.message;version="4.1.4"
+ org.apache.http.message;version="4.1.4",
+ org.apache.log4j,
+ org.eclipse.xtext.junit4,
+ org.hamcrest.core,
+ org.junit;version="4.5.0",
+ org.junit.runner;version="4.5.0",
+ org.junit.runner.manipulation;version="4.5.0",
+ org.junit.runner.notification;version="4.5.0",
+ org.junit.runners;version="4.5.0",
+ org.junit.runners.model;version="4.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.ddmore.mdl
