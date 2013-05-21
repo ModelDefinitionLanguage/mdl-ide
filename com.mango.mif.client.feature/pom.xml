@@ -15,7 +15,7 @@
 	<packaging>eclipse-feature</packaging>
 
 	<!-- once the encryption key is changed this can be moved to the parent 
-		pom : MIFDEV-35 -->
+		pom : MIFDEV-35 
 	<dependencies>
 		<dependency>
 			<groupId>com.mango</groupId>
@@ -23,5 +23,5 @@
 			<version>${mif.version}</version>
 		</dependency>
 	</dependencies>
-
+	-->
 </project> 

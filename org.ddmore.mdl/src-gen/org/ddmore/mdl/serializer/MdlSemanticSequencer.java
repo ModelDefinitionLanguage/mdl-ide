@@ -2,80 +2,106 @@ package org.ddmore.mdl.serializer;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import org.ddmore.mdl.mdl.AcceptList;
+import org.ddmore.mdl.mdl.AddList;
+import org.ddmore.mdl.mdl.AdditiveExpression;
+import org.ddmore.mdl.mdl.AndExpression;
+import org.ddmore.mdl.mdl.AnyExpression;
+import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.Arguments;
+import org.ddmore.mdl.mdl.Block;
+import org.ddmore.mdl.mdl.BlockBlock;
+import org.ddmore.mdl.mdl.BlockStatement;
+import org.ddmore.mdl.mdl.Categorical;
+import org.ddmore.mdl.mdl.ConditionalExpression;
+import org.ddmore.mdl.mdl.ConditionalStatement;
+import org.ddmore.mdl.mdl.Continuous;
+import org.ddmore.mdl.mdl.Covariate;
+import org.ddmore.mdl.mdl.DataBlock;
+import org.ddmore.mdl.mdl.DataBlockStatement;
+import org.ddmore.mdl.mdl.DataObject;
+import org.ddmore.mdl.mdl.DataObjectBlock;
+import org.ddmore.mdl.mdl.DesignBlock;
+import org.ddmore.mdl.mdl.DesignBlockStatement;
+import org.ddmore.mdl.mdl.DiagBlock;
+import org.ddmore.mdl.mdl.Distribution;
+import org.ddmore.mdl.mdl.DropList;
+import org.ddmore.mdl.mdl.EnumType;
+import org.ddmore.mdl.mdl.EstimateTask;
+import org.ddmore.mdl.mdl.EstimationBlock;
+import org.ddmore.mdl.mdl.ExecuteTask;
+import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.FileBlock;
+import org.ddmore.mdl.mdl.FileBlockStatement;
+import org.ddmore.mdl.mdl.FormalArguments;
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
+import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
+import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.GroupVariablesBlock;
+import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
+import org.ddmore.mdl.mdl.HeaderBlock;
+import org.ddmore.mdl.mdl.IgnoreList;
+import org.ddmore.mdl.mdl.IndividualVariablesBlock;
+import org.ddmore.mdl.mdl.InlineBlock;
+import org.ddmore.mdl.mdl.InputVariablesBlock;
+import org.ddmore.mdl.mdl.LevelType;
+import org.ddmore.mdl.mdl.LibraryBlock;
+import org.ddmore.mdl.mdl.Likelyhood;
+import org.ddmore.mdl.mdl.List;
+import org.ddmore.mdl.mdl.LogicalExpression;
+import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
-import org.ddmore.mdl.mdl.additive_expression;
-import org.ddmore.mdl.mdl.any_expression;
-import org.ddmore.mdl.mdl.argument;
-import org.ddmore.mdl.mdl.arguments;
-import org.ddmore.mdl.mdl.block;
-import org.ddmore.mdl.mdl.block_statement;
-import org.ddmore.mdl.mdl.block_subblock;
-import org.ddmore.mdl.mdl.conditional_and_expression;
-import org.ddmore.mdl.mdl.conditional_expression;
-import org.ddmore.mdl.mdl.conditional_or_expression;
-import org.ddmore.mdl.mdl.data_block;
-import org.ddmore.mdl.mdl.data_obj;
-import org.ddmore.mdl.mdl.data_obj_block;
-import org.ddmore.mdl.mdl.design_block;
-import org.ddmore.mdl.mdl.diag_subblock;
-import org.ddmore.mdl.mdl.estimation_block;
-import org.ddmore.mdl.mdl.expression;
-import org.ddmore.mdl.mdl.file_block;
-import org.ddmore.mdl.mdl.file_block_content;
-import org.ddmore.mdl.mdl.file_block_statement;
-import org.ddmore.mdl.mdl.formal_arguments;
-import org.ddmore.mdl.mdl.function_body;
-import org.ddmore.mdl.mdl.function_call;
-import org.ddmore.mdl.mdl.function_declaration;
-import org.ddmore.mdl.mdl.function_subblock;
-import org.ddmore.mdl.mdl.group_variables;
-import org.ddmore.mdl.mdl.header_block;
-import org.ddmore.mdl.mdl.individual_model_obj_block;
-import org.ddmore.mdl.mdl.inline_block;
-import org.ddmore.mdl.mdl.inline_block_content;
-import org.ddmore.mdl.mdl.input_variables_block;
-import org.ddmore.mdl.mdl.library_block;
-import org.ddmore.mdl.mdl.list;
-import org.ddmore.mdl.mdl.mcl;
-import org.ddmore.mdl.mdl.mcl_obj;
-import org.ddmore.mdl.mdl.model_block;
-import org.ddmore.mdl.mdl.model_block_statement;
-import org.ddmore.mdl.mdl.model_obj;
-import org.ddmore.mdl.mdl.model_obj_block;
-import org.ddmore.mdl.mdl.model_prediction_obj_block;
-import org.ddmore.mdl.mdl.multiplicative_expression;
-import org.ddmore.mdl.mdl.observation_block;
-import org.ddmore.mdl.mdl.ode_block;
-import org.ddmore.mdl.mdl.ode_list;
-import org.ddmore.mdl.mdl.output_variables_block;
-import org.ddmore.mdl.mdl.par_expression;
-import org.ddmore.mdl.mdl.param_obj;
-import org.ddmore.mdl.mdl.param_obj_block;
-import org.ddmore.mdl.mdl.parameters_block;
-import org.ddmore.mdl.mdl.power_expression;
-import org.ddmore.mdl.mdl.primary;
-import org.ddmore.mdl.mdl.random_list;
-import org.ddmore.mdl.mdl.random_variable_definition_block;
-import org.ddmore.mdl.mdl.relational_expression;
-import org.ddmore.mdl.mdl.rsscript_block;
-import org.ddmore.mdl.mdl.selector;
-import org.ddmore.mdl.mdl.simulation_block;
-import org.ddmore.mdl.mdl.statement;
-import org.ddmore.mdl.mdl.structural_block;
-import org.ddmore.mdl.mdl.structural_parameters_block;
-import org.ddmore.mdl.mdl.target_block;
-import org.ddmore.mdl.mdl.task_obj;
-import org.ddmore.mdl.mdl.task_obj_block;
-import org.ddmore.mdl.mdl.tel_obj;
-import org.ddmore.mdl.mdl.unary_expression;
-import org.ddmore.mdl.mdl.variability_block;
-import org.ddmore.mdl.mdl.variability_block_content;
-import org.ddmore.mdl.mdl.variability_block_statement;
-import org.ddmore.mdl.mdl.variability_parameters_block;
-import org.ddmore.mdl.mdl.variability_subblock;
-import org.ddmore.mdl.mdl.variable_declaration;
-import org.ddmore.mdl.mdl.variable_name;
-import org.ddmore.mdl.mdl.verbatim_block;
+import org.ddmore.mdl.mdl.Missing;
+import org.ddmore.mdl.mdl.MixtureBlock;
+import org.ddmore.mdl.mdl.ModelBlock;
+import org.ddmore.mdl.mdl.ModelBlockStatement;
+import org.ddmore.mdl.mdl.ModelObject;
+import org.ddmore.mdl.mdl.ModelObjectBlock;
+import org.ddmore.mdl.mdl.ModelPredictionBlock;
+import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
+import org.ddmore.mdl.mdl.MultiplicativeExpression;
+import org.ddmore.mdl.mdl.ObjectName;
+import org.ddmore.mdl.mdl.ObservationBlock;
+import org.ddmore.mdl.mdl.OdeBlock;
+import org.ddmore.mdl.mdl.OdeList;
+import org.ddmore.mdl.mdl.OrExpression;
+import org.ddmore.mdl.mdl.OutputVariablesBlock;
+import org.ddmore.mdl.mdl.ParExpression;
+import org.ddmore.mdl.mdl.ParameterBlock;
+import org.ddmore.mdl.mdl.ParameterDeclaration;
+import org.ddmore.mdl.mdl.ParameterObject;
+import org.ddmore.mdl.mdl.ParameterObjectBlock;
+import org.ddmore.mdl.mdl.PowerExpression;
+import org.ddmore.mdl.mdl.Primary;
+import org.ddmore.mdl.mdl.PriorParametersBlock;
+import org.ddmore.mdl.mdl.RScriptBlock;
+import org.ddmore.mdl.mdl.RScriptBlockStatement;
+import org.ddmore.mdl.mdl.RandomList;
+import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
+import org.ddmore.mdl.mdl.RemoveList;
+import org.ddmore.mdl.mdl.SameBlock;
+import org.ddmore.mdl.mdl.SimulateTask;
+import org.ddmore.mdl.mdl.SimulationBlock;
+import org.ddmore.mdl.mdl.StructuralBlock;
+import org.ddmore.mdl.mdl.StructuralParametersBlock;
+import org.ddmore.mdl.mdl.SymbolDeclaration;
+import org.ddmore.mdl.mdl.SymbolList;
+import org.ddmore.mdl.mdl.SymbolModification;
+import org.ddmore.mdl.mdl.TELObject;
+import org.ddmore.mdl.mdl.TargetBlock;
+import org.ddmore.mdl.mdl.TaskFunctionBlock;
+import org.ddmore.mdl.mdl.TaskFunctionBody;
+import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
+import org.ddmore.mdl.mdl.TaskObject;
+import org.ddmore.mdl.mdl.TaskObjectBlock;
+import org.ddmore.mdl.mdl.UnaryExpression;
+import org.ddmore.mdl.mdl.VariabilityBlock;
+import org.ddmore.mdl.mdl.VariabilityBlockStatement;
+import org.ddmore.mdl.mdl.VariabilityParametersBlock;
+import org.ddmore.mdl.mdl.VariableList;
+import org.ddmore.mdl.mdl.Vector;
+import org.ddmore.mdl.mdl.VerbatimBlock;
 import org.ddmore.mdl.services.MdlGrammarAccess;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.serializer.acceptor.ISemanticSequenceAcceptor;
@@ -97,441 +123,597 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	public void createSequence(EObject context, EObject semanticObject) {
 		if(semanticObject.eClass().getEPackage() == MdlPackage.eINSTANCE) switch(semanticObject.eClass().getClassifierID()) {
+			case MdlPackage.ACCEPT_LIST:
+				if(context == grammarAccess.getAcceptListRule()) {
+					sequence_AcceptList(context, (AcceptList) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.ADD_LIST:
+				if(context == grammarAccess.getAddListRule()) {
+					sequence_AddList(context, (AddList) semanticObject); 
+					return; 
+				}
+				else break;
 			case MdlPackage.ADDITIVE_EXPRESSION:
-				if(context == grammarAccess.getAdditive_expressionRule()) {
-					sequence_additive_expression(context, (additive_expression) semanticObject); 
+				if(context == grammarAccess.getAdditiveExpressionRule()) {
+					sequence_AdditiveExpression(context, (AdditiveExpression) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.AND_EXPRESSION:
+				if(context == grammarAccess.getAndExpressionRule()) {
+					sequence_AndExpression(context, (AndExpression) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.ANY_EXPRESSION:
-				if(context == grammarAccess.getAny_expressionRule()) {
-					sequence_any_expression(context, (any_expression) semanticObject); 
+				if(context == grammarAccess.getAnyExpressionRule()) {
+					sequence_AnyExpression(context, (AnyExpression) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.ARGUMENT:
 				if(context == grammarAccess.getArgumentRule()) {
-					sequence_argument(context, (argument) semanticObject); 
+					sequence_Argument(context, (Argument) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.ARGUMENTS:
 				if(context == grammarAccess.getArgumentsRule()) {
-					sequence_arguments(context, (arguments) semanticObject); 
+					sequence_Arguments(context, (Arguments) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.BLOCK:
 				if(context == grammarAccess.getBlockRule()) {
-					sequence_block(context, (block) semanticObject); 
+					sequence_Block(context, (Block) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.BLOCK_BLOCK:
+				if(context == grammarAccess.getBlockBlockRule()) {
+					sequence_BlockBlock(context, (BlockBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.BLOCK_STATEMENT:
-				if(context == grammarAccess.getBlock_statementRule()) {
-					sequence_block_statement(context, (block_statement) semanticObject); 
+				if(context == grammarAccess.getBlockStatementRule()) {
+					sequence_BlockStatement(context, (BlockStatement) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.BLOCK_SUBBLOCK:
-				if(context == grammarAccess.getBlock_subblockRule()) {
-					sequence_block_subblock(context, (block_subblock) semanticObject); 
-					return; 
-				}
-				else break;
-			case MdlPackage.CONDITIONAL_AND_EXPRESSION:
-				if(context == grammarAccess.getConditional_and_expressionRule()) {
-					sequence_conditional_and_expression(context, (conditional_and_expression) semanticObject); 
+			case MdlPackage.CATEGORICAL:
+				if(context == grammarAccess.getCategoricalRule()) {
+					sequence_Categorical(context, (Categorical) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.CONDITIONAL_EXPRESSION:
-				if(context == grammarAccess.getConditional_expressionRule()) {
-					sequence_conditional_expression(context, (conditional_expression) semanticObject); 
+				if(context == grammarAccess.getConditionalExpressionRule()) {
+					sequence_ConditionalExpression(context, (ConditionalExpression) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.CONDITIONAL_OR_EXPRESSION:
-				if(context == grammarAccess.getConditional_or_expressionRule()) {
-					sequence_conditional_or_expression(context, (conditional_or_expression) semanticObject); 
+			case MdlPackage.CONDITIONAL_STATEMENT:
+				if(context == grammarAccess.getConditionalStatementRule()) {
+					sequence_ConditionalStatement(context, (ConditionalStatement) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.CONTINUOUS:
+				if(context == grammarAccess.getContinuousRule()) {
+					sequence_Continuous(context, (Continuous) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.COVARIATE:
+				if(context == grammarAccess.getCovariateRule()) {
+					sequence_Covariate(context, (Covariate) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.DATA_BLOCK:
-				if(context == grammarAccess.getData_blockRule()) {
-					sequence_data_block(context, (data_block) semanticObject); 
+				if(context == grammarAccess.getDataBlockRule()) {
+					sequence_DataBlock(context, (DataBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.DATA_OBJ:
-				if(context == grammarAccess.getData_objRule()) {
-					sequence_data_obj(context, (data_obj) semanticObject); 
+			case MdlPackage.DATA_BLOCK_STATEMENT:
+				if(context == grammarAccess.getDataBlockStatementRule()) {
+					sequence_DataBlockStatement(context, (DataBlockStatement) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.DATA_OBJ_BLOCK:
-				if(context == grammarAccess.getData_obj_blockRule()) {
-					sequence_data_obj_block(context, (data_obj_block) semanticObject); 
+			case MdlPackage.DATA_OBJECT:
+				if(context == grammarAccess.getDataObjectRule()) {
+					sequence_DataObject(context, (DataObject) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.DATA_OBJECT_BLOCK:
+				if(context == grammarAccess.getDataObjectBlockRule()) {
+					sequence_DataObjectBlock(context, (DataObjectBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.DESIGN_BLOCK:
-				if(context == grammarAccess.getDesign_blockRule()) {
-					sequence_design_block(context, (design_block) semanticObject); 
+				if(context == grammarAccess.getDesignBlockRule()) {
+					sequence_DesignBlock(context, (DesignBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.DIAG_SUBBLOCK:
-				if(context == grammarAccess.getDiag_subblockRule()) {
-					sequence_diag_subblock(context, (diag_subblock) semanticObject); 
+			case MdlPackage.DESIGN_BLOCK_STATEMENT:
+				if(context == grammarAccess.getDesignBlockStatementRule()) {
+					sequence_DesignBlockStatement(context, (DesignBlockStatement) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.DIAG_BLOCK:
+				if(context == grammarAccess.getDiagBlockRule()) {
+					sequence_DiagBlock(context, (DiagBlock) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.DISTRIBUTION:
+				if(context == grammarAccess.getDistributionRule()) {
+					sequence_Distribution(context, (Distribution) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.DROP_LIST:
+				if(context == grammarAccess.getDropListRule()) {
+					sequence_DropList(context, (DropList) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.ENUM_TYPE:
+				if(context == grammarAccess.getEnumTypeRule()) {
+					sequence_EnumType(context, (EnumType) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.ESTIMATE_TASK:
+				if(context == grammarAccess.getEstimateTaskRule()) {
+					sequence_EstimateTask(context, (EstimateTask) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.ESTIMATION_BLOCK:
-				if(context == grammarAccess.getEstimation_blockRule()) {
-					sequence_estimation_block(context, (estimation_block) semanticObject); 
+				if(context == grammarAccess.getEstimationBlockRule()) {
+					sequence_EstimationBlock(context, (EstimationBlock) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.EXECUTE_TASK:
+				if(context == grammarAccess.getExecuteTaskRule()) {
+					sequence_ExecuteTask(context, (ExecuteTask) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.EXPRESSION:
 				if(context == grammarAccess.getExpressionRule()) {
-					sequence_expression(context, (expression) semanticObject); 
+					sequence_Expression(context, (Expression) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.FILE_BLOCK:
-				if(context == grammarAccess.getFile_blockRule()) {
-					sequence_file_block(context, (file_block) semanticObject); 
-					return; 
-				}
-				else break;
-			case MdlPackage.FILE_BLOCK_CONTENT:
-				if(context == grammarAccess.getFile_block_contentRule()) {
-					sequence_file_block_content(context, (file_block_content) semanticObject); 
+				if(context == grammarAccess.getFileBlockRule()) {
+					sequence_FileBlock(context, (FileBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.FILE_BLOCK_STATEMENT:
-				if(context == grammarAccess.getFile_block_statementRule()) {
-					sequence_file_block_statement(context, (file_block_statement) semanticObject); 
+				if(context == grammarAccess.getFileBlockStatementRule()) {
+					sequence_FileBlockStatement(context, (FileBlockStatement) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.FORMAL_ARGUMENTS:
-				if(context == grammarAccess.getFormal_argumentsRule()) {
-					sequence_formal_arguments(context, (formal_arguments) semanticObject); 
+				if(context == grammarAccess.getFormalArgumentsRule()) {
+					sequence_FormalArguments(context, (FormalArguments) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.FUNCTION_BODY:
-				if(context == grammarAccess.getFunction_bodyRule()) {
-					sequence_function_body(context, (function_body) semanticObject); 
+			case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME:
+				if(context == grammarAccess.getFullyQualifiedArgumentNameRule()) {
+					sequence_FullyQualifiedArgumentName(context, (FullyQualifiedArgumentName) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.FULLY_QUALIFIED_SYMBOL_NAME:
+				if(context == grammarAccess.getFullyQualifiedSymbolNameRule()) {
+					sequence_FullyQualifiedSymbolName(context, (FullyQualifiedSymbolName) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.FUNCTION_CALL:
-				if(context == grammarAccess.getFunction_callRule()) {
-					sequence_function_call(context, (function_call) semanticObject); 
+				if(context == grammarAccess.getFunctionCallRule()) {
+					sequence_FunctionCall(context, (FunctionCall) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.FUNCTION_DECLARATION:
-				if(context == grammarAccess.getFunction_declarationRule()) {
-					sequence_function_declaration(context, (function_declaration) semanticObject); 
+			case MdlPackage.GROUP_VARIABLES_BLOCK:
+				if(context == grammarAccess.getGroupVariablesBlockRule()) {
+					sequence_GroupVariablesBlock(context, (GroupVariablesBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.FUNCTION_SUBBLOCK:
-				if(context == grammarAccess.getFunction_subblockRule()) {
-					sequence_function_subblock(context, (function_subblock) semanticObject); 
-					return; 
-				}
-				else break;
-			case MdlPackage.GROUP_VARIABLES:
-				if(context == grammarAccess.getGroup_variablesRule()) {
-					sequence_group_variables(context, (group_variables) semanticObject); 
+			case MdlPackage.GROUP_VARIABLES_BLOCK_STATEMENT:
+				if(context == grammarAccess.getGroupVariablesBlockStatementRule()) {
+					sequence_GroupVariablesBlockStatement(context, (GroupVariablesBlockStatement) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.HEADER_BLOCK:
-				if(context == grammarAccess.getHeader_blockRule()) {
-					sequence_header_block(context, (header_block) semanticObject); 
+				if(context == grammarAccess.getHeaderBlockRule()) {
+					sequence_HeaderBlock(context, (HeaderBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.INDIVIDUAL_MODEL_OBJ_BLOCK:
-				if(context == grammarAccess.getIndividual_model_obj_blockRule()) {
-					sequence_individual_model_obj_block(context, (individual_model_obj_block) semanticObject); 
+			case MdlPackage.IGNORE_LIST:
+				if(context == grammarAccess.getIgnoreListRule()) {
+					sequence_IgnoreList(context, (IgnoreList) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.INDIVIDUAL_VARIABLES_BLOCK:
+				if(context == grammarAccess.getIndividualVariablesBlockRule()) {
+					sequence_IndividualVariablesBlock(context, (IndividualVariablesBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.INLINE_BLOCK:
-				if(context == grammarAccess.getInline_blockRule()) {
-					sequence_inline_block(context, (inline_block) semanticObject); 
-					return; 
-				}
-				else break;
-			case MdlPackage.INLINE_BLOCK_CONTENT:
-				if(context == grammarAccess.getInline_block_contentRule()) {
-					sequence_inline_block_content(context, (inline_block_content) semanticObject); 
+				if(context == grammarAccess.getInlineBlockRule()) {
+					sequence_InlineBlock(context, (InlineBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.INPUT_VARIABLES_BLOCK:
-				if(context == grammarAccess.getInput_variables_blockRule()) {
-					sequence_input_variables_block(context, (input_variables_block) semanticObject); 
+				if(context == grammarAccess.getInputVariablesBlockRule()) {
+					sequence_InputVariablesBlock(context, (InputVariablesBlock) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.LEVEL_TYPE:
+				if(context == grammarAccess.getLevelTypeRule()) {
+					sequence_LevelType(context, (LevelType) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.LIBRARY_BLOCK:
-				if(context == grammarAccess.getLibrary_blockRule()) {
-					sequence_library_block(context, (library_block) semanticObject); 
+				if(context == grammarAccess.getLibraryBlockRule()) {
+					sequence_LibraryBlock(context, (LibraryBlock) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.LIKELYHOOD:
+				if(context == grammarAccess.getLikelyhoodRule()) {
+					sequence_Likelyhood(context, (Likelyhood) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.LIST:
 				if(context == grammarAccess.getListRule()) {
-					sequence_list(context, (list) semanticObject); 
+					sequence_List(context, (List) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.LOGICAL_EXPRESSION:
+				if(context == grammarAccess.getLogicalExpressionRule()) {
+					sequence_LogicalExpression(context, (LogicalExpression) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.MCL:
 				if(context == grammarAccess.getMclRule()) {
-					sequence_mcl(context, (mcl) semanticObject); 
+					sequence_Mcl(context, (Mcl) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.MCL_OBJ:
-				if(context == grammarAccess.getMcl_objRule()) {
-					sequence_mcl_obj(context, (mcl_obj) semanticObject); 
+			case MdlPackage.MCL_OBJECT:
+				if(context == grammarAccess.getMclObjectRule()) {
+					sequence_MclObject(context, (MclObject) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.MISSING:
+				if(context == grammarAccess.getMissingRule()) {
+					sequence_Missing(context, (Missing) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.MIXTURE_BLOCK:
+				if(context == grammarAccess.getMixtureBlockRule()) {
+					sequence_MixtureBlock(context, (MixtureBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.MODEL_BLOCK:
-				if(context == grammarAccess.getModel_blockRule()) {
-					sequence_model_block(context, (model_block) semanticObject); 
+				if(context == grammarAccess.getModelBlockRule()) {
+					sequence_ModelBlock(context, (ModelBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.MODEL_BLOCK_STATEMENT:
-				if(context == grammarAccess.getModel_block_statementRule()) {
-					sequence_model_block_statement(context, (model_block_statement) semanticObject); 
+				if(context == grammarAccess.getModelBlockStatementRule()) {
+					sequence_ModelBlockStatement(context, (ModelBlockStatement) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.MODEL_OBJ:
-				if(context == grammarAccess.getModel_objRule()) {
-					sequence_model_obj(context, (model_obj) semanticObject); 
+			case MdlPackage.MODEL_OBJECT:
+				if(context == grammarAccess.getModelObjectRule()) {
+					sequence_ModelObject(context, (ModelObject) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.MODEL_OBJ_BLOCK:
-				if(context == grammarAccess.getModel_obj_blockRule()) {
-					sequence_model_obj_block(context, (model_obj_block) semanticObject); 
+			case MdlPackage.MODEL_OBJECT_BLOCK:
+				if(context == grammarAccess.getModelObjectBlockRule()) {
+					sequence_ModelObjectBlock(context, (ModelObjectBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.MODEL_PREDICTION_OBJ_BLOCK:
-				if(context == grammarAccess.getModel_prediction_obj_blockRule()) {
-					sequence_model_prediction_obj_block(context, (model_prediction_obj_block) semanticObject); 
+			case MdlPackage.MODEL_PREDICTION_BLOCK:
+				if(context == grammarAccess.getModelPredictionBlockRule()) {
+					sequence_ModelPredictionBlock(context, (ModelPredictionBlock) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.MODEL_PREDICTION_BLOCK_STATEMENT:
+				if(context == grammarAccess.getModelPredictionBlockStatementRule()) {
+					sequence_ModelPredictionBlockStatement(context, (ModelPredictionBlockStatement) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.MULTIPLICATIVE_EXPRESSION:
-				if(context == grammarAccess.getMultiplicative_expressionRule()) {
-					sequence_multiplicative_expression(context, (multiplicative_expression) semanticObject); 
+				if(context == grammarAccess.getMultiplicativeExpressionRule()) {
+					sequence_MultiplicativeExpression(context, (MultiplicativeExpression) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.OBJECT_NAME:
+				if(context == grammarAccess.getObjectNameRule()) {
+					sequence_ObjectName(context, (ObjectName) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.OBSERVATION_BLOCK:
-				if(context == grammarAccess.getObservation_blockRule()) {
-					sequence_observation_block(context, (observation_block) semanticObject); 
+				if(context == grammarAccess.getObservationBlockRule()) {
+					sequence_ObservationBlock(context, (ObservationBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.ODE_BLOCK:
-				if(context == grammarAccess.getOde_blockRule()) {
-					sequence_ode_block(context, (ode_block) semanticObject); 
+				if(context == grammarAccess.getOdeBlockRule()) {
+					sequence_OdeBlock(context, (OdeBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.ODE_LIST:
-				if(context == grammarAccess.getOde_listRule()) {
-					sequence_ode_list(context, (ode_list) semanticObject); 
+				if(context == grammarAccess.getOdeListRule()) {
+					sequence_OdeList(context, (OdeList) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.OR_EXPRESSION:
+				if(context == grammarAccess.getOrExpressionRule()) {
+					sequence_OrExpression(context, (OrExpression) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.OUTPUT_VARIABLES_BLOCK:
-				if(context == grammarAccess.getOutput_variables_blockRule()) {
-					sequence_output_variables_block(context, (output_variables_block) semanticObject); 
+				if(context == grammarAccess.getOutputVariablesBlockRule()) {
+					sequence_OutputVariablesBlock(context, (OutputVariablesBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.PAR_EXPRESSION:
-				if(context == grammarAccess.getPar_expressionRule()) {
-					sequence_par_expression(context, (par_expression) semanticObject); 
+				if(context == grammarAccess.getParExpressionRule()) {
+					sequence_ParExpression(context, (ParExpression) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.PARAM_OBJ:
-				if(context == grammarAccess.getParam_objRule()) {
-					sequence_param_obj(context, (param_obj) semanticObject); 
+			case MdlPackage.PARAMETER_BLOCK:
+				if(context == grammarAccess.getParameterBlockRule()) {
+					sequence_ParameterBlock(context, (ParameterBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.PARAM_OBJ_BLOCK:
-				if(context == grammarAccess.getParam_obj_blockRule()) {
-					sequence_param_obj_block(context, (param_obj_block) semanticObject); 
+			case MdlPackage.PARAMETER_DECLARATION:
+				if(context == grammarAccess.getParameterDeclarationRule()) {
+					sequence_ParameterDeclaration(context, (ParameterDeclaration) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.PARAMETERS_BLOCK:
-				if(context == grammarAccess.getParameters_blockRule()) {
-					sequence_parameters_block(context, (parameters_block) semanticObject); 
+			case MdlPackage.PARAMETER_OBJECT:
+				if(context == grammarAccess.getParameterObjectRule()) {
+					sequence_ParameterObject(context, (ParameterObject) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.PARAMETER_OBJECT_BLOCK:
+				if(context == grammarAccess.getParameterObjectBlockRule()) {
+					sequence_ParameterObjectBlock(context, (ParameterObjectBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.POWER_EXPRESSION:
-				if(context == grammarAccess.getPower_expressionRule()) {
-					sequence_power_expression(context, (power_expression) semanticObject); 
+				if(context == grammarAccess.getPowerExpressionRule()) {
+					sequence_PowerExpression(context, (PowerExpression) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.PRIMARY:
 				if(context == grammarAccess.getPrimaryRule()) {
-					sequence_primary(context, (primary) semanticObject); 
+					sequence_Primary(context, (Primary) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.PRIOR_PARAMETERS_BLOCK:
+				if(context == grammarAccess.getPriorParametersBlockRule()) {
+					sequence_PriorParametersBlock(context, (PriorParametersBlock) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.RSCRIPT_BLOCK:
+				if(context == grammarAccess.getRScriptBlockRule()) {
+					sequence_RScriptBlock(context, (RScriptBlock) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.RSCRIPT_BLOCK_STATEMENT:
+				if(context == grammarAccess.getRScriptBlockStatementRule()) {
+					sequence_RScriptBlockStatement(context, (RScriptBlockStatement) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.RANDOM_LIST:
-				if(context == grammarAccess.getRandom_listRule()) {
-					sequence_random_list(context, (random_list) semanticObject); 
+				if(context == grammarAccess.getRandomListRule()) {
+					sequence_RandomList(context, (RandomList) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.RANDOM_VARIABLE_DEFINITION_BLOCK:
-				if(context == grammarAccess.getRandom_variable_definition_blockRule()) {
-					sequence_random_variable_definition_block(context, (random_variable_definition_block) semanticObject); 
+				if(context == grammarAccess.getRandomVariableDefinitionBlockRule()) {
+					sequence_RandomVariableDefinitionBlock(context, (RandomVariableDefinitionBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.RELATIONAL_EXPRESSION:
-				if(context == grammarAccess.getRelational_expressionRule()) {
-					sequence_relational_expression(context, (relational_expression) semanticObject); 
+			case MdlPackage.REMOVE_LIST:
+				if(context == grammarAccess.getRemoveListRule()) {
+					sequence_RemoveList(context, (RemoveList) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.RSSCRIPT_BLOCK:
-				if(context == grammarAccess.getRsscript_blockRule()) {
-					sequence_rsscript_block(context, (rsscript_block) semanticObject); 
+			case MdlPackage.SAME_BLOCK:
+				if(context == grammarAccess.getSameBlockRule()) {
+					sequence_SameBlock(context, (SameBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.SELECTOR:
-				if(context == grammarAccess.getSelectorRule()) {
-					sequence_selector(context, (selector) semanticObject); 
+			case MdlPackage.SIMULATE_TASK:
+				if(context == grammarAccess.getSimulateTaskRule()) {
+					sequence_SimulateTask(context, (SimulateTask) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.SIMULATION_BLOCK:
-				if(context == grammarAccess.getSimulation_blockRule()) {
-					sequence_simulation_block(context, (simulation_block) semanticObject); 
-					return; 
-				}
-				else break;
-			case MdlPackage.STATEMENT:
-				if(context == grammarAccess.getStatementRule()) {
-					sequence_statement(context, (statement) semanticObject); 
+				if(context == grammarAccess.getSimulationBlockRule()) {
+					sequence_SimulationBlock(context, (SimulationBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.STRUCTURAL_BLOCK:
-				if(context == grammarAccess.getStructural_blockRule()) {
-					sequence_structural_block(context, (structural_block) semanticObject); 
+				if(context == grammarAccess.getStructuralBlockRule()) {
+					sequence_StructuralBlock(context, (StructuralBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.STRUCTURAL_PARAMETERS_BLOCK:
-				if(context == grammarAccess.getStructural_parameters_blockRule()) {
-					sequence_structural_parameters_block(context, (structural_parameters_block) semanticObject); 
+				if(context == grammarAccess.getStructuralParametersBlockRule()) {
+					sequence_StructuralParametersBlock(context, (StructuralParametersBlock) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.SYMBOL_DECLARATION:
+				if(context == grammarAccess.getSymbolDeclarationRule()) {
+					sequence_SymbolDeclaration(context, (SymbolDeclaration) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.SYMBOL_LIST:
+				if(context == grammarAccess.getSymbolListRule()) {
+					sequence_SymbolList(context, (SymbolList) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.SYMBOL_MODIFICATION:
+				if(context == grammarAccess.getSymbolModificationRule()) {
+					sequence_SymbolModification(context, (SymbolModification) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.TEL_OBJECT:
+				if(context == grammarAccess.getTELObjectRule()) {
+					sequence_TELObject(context, (TELObject) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.TARGET_BLOCK:
-				if(context == grammarAccess.getTarget_blockRule()) {
-					sequence_target_block(context, (target_block) semanticObject); 
+				if(context == grammarAccess.getTargetBlockRule()) {
+					sequence_TargetBlock(context, (TargetBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.TASK_OBJ:
-				if(context == grammarAccess.getTask_objRule()) {
-					sequence_task_obj(context, (task_obj) semanticObject); 
+			case MdlPackage.TASK_FUNCTION_BLOCK:
+				if(context == grammarAccess.getTaskFunctionBlockRule()) {
+					sequence_TaskFunctionBlock(context, (TaskFunctionBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.TASK_OBJ_BLOCK:
-				if(context == grammarAccess.getTask_obj_blockRule()) {
-					sequence_task_obj_block(context, (task_obj_block) semanticObject); 
+			case MdlPackage.TASK_FUNCTION_BODY:
+				if(context == grammarAccess.getTaskFunctionBodyRule()) {
+					sequence_TaskFunctionBody(context, (TaskFunctionBody) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.TEL_OBJ:
-				if(context == grammarAccess.getTel_objRule()) {
-					sequence_tel_obj(context, (tel_obj) semanticObject); 
+			case MdlPackage.TASK_FUNCTION_DECLARATION:
+				if(context == grammarAccess.getTaskFunctionDeclarationRule()) {
+					sequence_TaskFunctionDeclaration(context, (TaskFunctionDeclaration) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.TASK_OBJECT:
+				if(context == grammarAccess.getTaskObjectRule()) {
+					sequence_TaskObject(context, (TaskObject) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.TASK_OBJECT_BLOCK:
+				if(context == grammarAccess.getTaskObjectBlockRule()) {
+					sequence_TaskObjectBlock(context, (TaskObjectBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.UNARY_EXPRESSION:
-				if(context == grammarAccess.getUnary_expressionRule()) {
-					sequence_unary_expression(context, (unary_expression) semanticObject); 
+				if(context == grammarAccess.getUnaryExpressionRule()) {
+					sequence_UnaryExpression(context, (UnaryExpression) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.VARIABILITY_BLOCK:
-				if(context == grammarAccess.getVariability_blockRule()) {
-					sequence_variability_block(context, (variability_block) semanticObject); 
-					return; 
-				}
-				else break;
-			case MdlPackage.VARIABILITY_BLOCK_CONTENT:
-				if(context == grammarAccess.getVariability_block_contentRule()) {
-					sequence_variability_block_content(context, (variability_block_content) semanticObject); 
+				if(context == grammarAccess.getVariabilityBlockRule()) {
+					sequence_VariabilityBlock(context, (VariabilityBlock) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.VARIABILITY_BLOCK_STATEMENT:
-				if(context == grammarAccess.getVariability_block_statementRule()) {
-					sequence_variability_block_statement(context, (variability_block_statement) semanticObject); 
+				if(context == grammarAccess.getVariabilityBlockStatementRule()) {
+					sequence_VariabilityBlockStatement(context, (VariabilityBlockStatement) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.VARIABILITY_PARAMETERS_BLOCK:
-				if(context == grammarAccess.getVariability_parameters_blockRule()) {
-					sequence_variability_parameters_block(context, (variability_parameters_block) semanticObject); 
+				if(context == grammarAccess.getVariabilityParametersBlockRule()) {
+					sequence_VariabilityParametersBlock(context, (VariabilityParametersBlock) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.VARIABILITY_SUBBLOCK:
-				if(context == grammarAccess.getVariability_subblockRule()) {
-					sequence_variability_subblock(context, (variability_subblock) semanticObject); 
+			case MdlPackage.VARIABLE_LIST:
+				if(context == grammarAccess.getVariableListRule()) {
+					sequence_VariableList(context, (VariableList) semanticObject); 
 					return; 
 				}
 				else break;
-			case MdlPackage.VARIABLE_DECLARATION:
-				if(context == grammarAccess.getVariable_declarationRule()) {
-					sequence_variable_declaration(context, (variable_declaration) semanticObject); 
-					return; 
-				}
-				else break;
-			case MdlPackage.VARIABLE_NAME:
-				if(context == grammarAccess.getVariable_nameRule()) {
-					sequence_variable_name(context, (variable_name) semanticObject); 
+			case MdlPackage.VECTOR:
+				if(context == grammarAccess.getVectorRule()) {
+					sequence_Vector(context, (Vector) semanticObject); 
 					return; 
 				}
 				else break;
 			case MdlPackage.VERBATIM_BLOCK:
-				if(context == grammarAccess.getVerbatim_blockRule()) {
-					sequence_verbatim_block(context, (verbatim_block) semanticObject); 
+				if(context == grammarAccess.getVerbatimBlockRule()) {
+					sequence_VerbatimBlock(context, (VerbatimBlock) semanticObject); 
 					return; 
 				}
 				else break;
@@ -541,240 +723,338 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (multiplicative_expression+=multiplicative_expression (additive_op+=additive_op multiplicative_expression+=multiplicative_expression)*)
+	 *     (identifier='ACCEPT' expression=AndExpression)
 	 */
-	protected void sequence_additive_expression(EObject context, additive_expression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (expression=expression | list=list | ode_list=ode_list | random_list=random_list)
-	 */
-	protected void sequence_any_expression(EObject context, any_expression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     ((identifier=ID expression=any_expression) | expression=any_expression)
-	 */
-	protected void sequence_argument(EObject context, argument semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (arguments+=argument arguments+=argument*)
-	 */
-	protected void sequence_arguments(EObject context, arguments semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (statements+=block_statement*)
-	 */
-	protected void sequence_block(EObject context, block semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (variable_declaration=variable_declaration | function_call=function_call | statement=statement | verbatim_block=verbatim_block)
-	 */
-	protected void sequence_block_statement(EObject context, block_statement semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='block' block=variability_subblock)
-	 */
-	protected void sequence_block_subblock(EObject context, block_subblock semanticObject) {
+	protected void sequence_AcceptList(EObject context, AcceptList semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.BLOCK_SUBBLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.BLOCK_SUBBLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.BLOCK_SUBBLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.BLOCK_SUBBLOCK__BLOCK));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ACCEPT_LIST__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ACCEPT_LIST__IDENTIFIER));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ACCEPT_LIST__EXPRESSION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ACCEPT_LIST__EXPRESSION));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getBlock_subblockAccess().getIdentifierBlockKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getBlock_subblockAccess().getBlockVariability_subblockParserRuleCall_1_0(), semanticObject.getBlock());
+		feeder.accept(grammarAccess.getAcceptListAccess().getIdentifierACCEPTKeyword_0_0(), semanticObject.getIdentifier());
+		feeder.accept(grammarAccess.getAcceptListAccess().getExpressionAndExpressionParserRuleCall_4_0(), semanticObject.getExpression());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (relational_expression+=relational_expression (operator+=and_op relational_expression+=relational_expression)*)
+	 *     list=SymbolList
 	 */
-	protected void sequence_conditional_and_expression(EObject context, conditional_and_expression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (conditional_or_expression=conditional_or_expression (expression1=expression expression2=expression)?)
-	 */
-	protected void sequence_conditional_expression(EObject context, conditional_expression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (conditional_and_expression+=conditional_and_expression (operator+=or_op conditional_and_expression+=conditional_and_expression)*)
-	 */
-	protected void sequence_conditional_or_expression(EObject context, conditional_or_expression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='DATA' block=block)
-	 */
-	protected void sequence_data_block(EObject context, data_block semanticObject) {
+	protected void sequence_AddList(EObject context, AddList semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.DATA_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.DATA_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.DATA_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.DATA_BLOCK__BLOCK));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ADD_LIST__LIST) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ADD_LIST__LIST));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getData_blockAccess().getIdentifierDATAKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getData_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
+		feeder.accept(grammarAccess.getAddListAccess().getListSymbolListParserRuleCall_2_0(), semanticObject.getList());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (header_block=header_block | file_block=file_block)
+	 *     (
+	 *         (expression+=MultiplicativeExpression (operator+=AdditiveOperator expression+=MultiplicativeExpression)*) | 
+	 *         (string+=STRING (operator+=AdditiveOperator string+=STRING)*)
+	 *     )
 	 */
-	protected void sequence_data_obj_block(EObject context, data_obj_block semanticObject) {
+	protected void sequence_AdditiveExpression(EObject context, AdditiveExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier=ID blocks+=data_obj_block*)
+	 *     (expression+=LogicalExpression (operator+=LogicalAndOperator expression+=LogicalExpression)*)
 	 */
-	protected void sequence_data_obj(EObject context, data_obj semanticObject) {
+	protected void sequence_AndExpression(EObject context, AndExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='DESIGN' block=block)
+	 *     (expression=Expression | list=List | odeList=OdeList | type=EnumType)
 	 */
-	protected void sequence_design_block(EObject context, design_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.DESIGN_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.DESIGN_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.DESIGN_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.DESIGN_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getDesign_blockAccess().getIdentifierDESIGNKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getDesign_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='diag' block=variability_subblock)
-	 */
-	protected void sequence_diag_subblock(EObject context, diag_subblock semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.DIAG_SUBBLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.DIAG_SUBBLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.DIAG_SUBBLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.DIAG_SUBBLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getDiag_subblockAccess().getIdentifierDiagKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getDiag_subblockAccess().getBlockVariability_subblockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='ESTIMATION' block=block)
-	 */
-	protected void sequence_estimation_block(EObject context, estimation_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ESTIMATION_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ESTIMATION_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ESTIMATION_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ESTIMATION_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getEstimation_blockAccess().getIdentifierESTIMATIONKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getEstimation_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (conditional_expression=conditional_expression | (string_expression+=STRING string_expression+=STRING*))
-	 */
-	protected void sequence_expression(EObject context, expression semanticObject) {
+	protected void sequence_AnyExpression(EObject context, AnyExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (blocks+=file_block_statement*)
+	 *     ((identifier=ID expression=AnyExpression) | expression=AnyExpression)
 	 */
-	protected void sequence_file_block_content(EObject context, file_block_content semanticObject) {
+	protected void sequence_Argument(EObject context, Argument semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='FILE' block=file_block_content)
+	 *     (arguments+=Argument arguments+=Argument*)
 	 */
-	protected void sequence_file_block(EObject context, file_block semanticObject) {
+	protected void sequence_Arguments(EObject context, Arguments semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='block' arguments=Arguments parameters=Arguments?)
+	 */
+	protected void sequence_BlockBlock(EObject context, BlockBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (symbol=SymbolDeclaration | functionCall=FunctionCall | statement=ConditionalStatement | verbatimBlock=VerbatimBlock)
+	 */
+	protected void sequence_BlockStatement(EObject context, BlockStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (statements+=BlockStatement*)
+	 */
+	protected void sequence_Block(EObject context, Block semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='categorical' arguments=Arguments?)
+	 */
+	protected void sequence_Categorical(EObject context, Categorical semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (expression=OrExpression (expression1=Expression expression2=Expression)?)
+	 */
+	protected void sequence_ConditionalExpression(EObject context, ConditionalExpression semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (parExpression=ParExpression (ifStatement=BlockStatement | ifBlock=Block) (elseStatement=BlockStatement | elseBlock=Block)?)
+	 */
+	protected void sequence_ConditionalStatement(EObject context, ConditionalStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     identifier='continuous'
+	 */
+	protected void sequence_Continuous(EObject context, Continuous semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FILE_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FILE_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FILE_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FILE_BLOCK__BLOCK));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.CONTINUOUS__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.CONTINUOUS__IDENTIFIER));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getFile_blockAccess().getIdentifierFILEKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getFile_blockAccess().getBlockFile_block_contentParserRuleCall_1_0(), semanticObject.getBlock());
+		feeder.accept(grammarAccess.getContinuousAccess().getIdentifierContinuousKeyword_0(), semanticObject.getIdentifier());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (statement=block_statement | inline_block=inline_block | design_block=design_block | rsscript_block=rsscript_block)
+	 *     identifier='covariate'
 	 */
-	protected void sequence_file_block_statement(EObject context, file_block_statement semanticObject) {
+	protected void sequence_Covariate(EObject context, Covariate semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.COVARIATE__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.COVARIATE__IDENTIFIER));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getCovariateAccess().getIdentifierCovariateKeyword_0(), semanticObject.getIdentifier());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (ignoreList=IgnoreList | acceptList=AcceptList | dropList=DropList)
+	 */
+	protected void sequence_DataBlockStatement(EObject context, DataBlockStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='DATA' statements+=DataBlockStatement*)
+	 */
+	protected void sequence_DataBlock(EObject context, DataBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (headerBlock=HeaderBlock | fileBlock=FileBlock | verbatimBlock=VerbatimBlock)
+	 */
+	protected void sequence_DataObjectBlock(EObject context, DataObjectBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=ObjectName blocks+=DataObjectBlock*)
+	 */
+	protected void sequence_DataObject(EObject context, DataObject semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=FullyQualifiedSymbolName arguments=VariableList? expression=AnyExpression)
+	 */
+	protected void sequence_DesignBlockStatement(EObject context, DesignBlockStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='DESIGN' statements+=DesignBlockStatement*)
+	 */
+	protected void sequence_DesignBlock(EObject context, DesignBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='diag' arguments=Arguments parameters=Arguments?)
+	 */
+	protected void sequence_DiagBlock(EObject context, DiagBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     normal='Normal'
+	 */
+	protected void sequence_Distribution(EObject context, Distribution semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='DROP' list=SymbolList)
+	 */
+	protected void sequence_DropList(EObject context, DropList semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.DROP_LIST__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.DROP_LIST__IDENTIFIER));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.DROP_LIST__LIST) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.DROP_LIST__LIST));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getDropListAccess().getIdentifierDROPKeyword_0_0(), semanticObject.getIdentifier());
+		feeder.accept(grammarAccess.getDropListAccess().getListSymbolListParserRuleCall_2_0(), semanticObject.getList());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (
+	 *         categorical=Categorical | 
+	 *         continuous=Continuous | 
+	 *         covariate=Covariate | 
+	 *         distribution=Distribution | 
+	 *         level=LevelType | 
+	 *         likelyhood=Likelyhood | 
+	 *         missing=Missing
+	 *     )
+	 */
+	protected void sequence_EnumType(EObject context, EnumType semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='ESTIMATE' statements+=BlockStatement*)
+	 */
+	protected void sequence_EstimateTask(EObject context, EstimateTask semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='ESTIMATION' statements+=BlockStatement*)
+	 */
+	protected void sequence_EstimationBlock(EObject context, EstimationBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='EXECUTE' statements+=BlockStatement*)
+	 */
+	protected void sequence_ExecuteTask(EObject context, ExecuteTask semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     conditionalExpression=ConditionalExpression
+	 */
+	protected void sequence_Expression(EObject context, Expression semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.EXPRESSION__CONDITIONAL_EXPRESSION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.EXPRESSION__CONDITIONAL_EXPRESSION));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getExpressionAccess().getConditionalExpressionConditionalExpressionParserRuleCall_0(), semanticObject.getConditionalExpression());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (variable=SymbolDeclaration | inlineBlock=InlineBlock | designBlock=DesignBlock | rscriptBlock=RScriptBlock)
+	 */
+	protected void sequence_FileBlockStatement(EObject context, FileBlockStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='FILE' statements+=FileBlockStatement*)
+	 */
+	protected void sequence_FileBlock(EObject context, FileBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -783,198 +1063,160 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 * Constraint:
 	 *     (identifiers+=ID identifiers+=ID*)
 	 */
-	protected void sequence_formal_arguments(EObject context, formal_arguments semanticObject) {
+	protected void sequence_FormalArguments(EObject context, FormalArguments semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (blocks+=function_subblock*)
+	 *     (parent=FullyQualifiedSymbolName identifier+=ID+)
 	 */
-	protected void sequence_function_body(EObject context, function_body semanticObject) {
+	protected void sequence_FullyQualifiedArgumentName(EObject context, FullyQualifiedArgumentName semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (funct_name=ID arguments=arguments)
+	 *     (object=[ObjectName|ID]? identifier=ID)
 	 */
-	protected void sequence_function_call(EObject context, function_call semanticObject) {
+	protected void sequence_FullyQualifiedSymbolName(EObject context, FullyQualifiedSymbolName semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=FullyQualifiedSymbolName arguments=Arguments)
+	 */
+	protected void sequence_FunctionCall(EObject context, FunctionCall semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FUNCTION_CALL__FUNCT_NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FUNCTION_CALL__FUNCT_NAME));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER));
 			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getFunction_callAccess().getFunct_nameIDTerminalRuleCall_0_0(), semanticObject.getFunct_name());
-		feeder.accept(grammarAccess.getFunction_callAccess().getArgumentsArgumentsParserRuleCall_2_0(), semanticObject.getArguments());
+		feeder.accept(grammarAccess.getFunctionCallAccess().getIdentifierFullyQualifiedSymbolNameParserRuleCall_0_0(), semanticObject.getIdentifier());
+		feeder.accept(grammarAccess.getFunctionCallAccess().getArgumentsArgumentsParserRuleCall_2_0(), semanticObject.getArguments());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier=ID formal_arguments=formal_arguments function_body=function_body)
+	 *     (statement=BlockStatement | mixtureBlock=MixtureBlock)
 	 */
-	protected void sequence_function_declaration(EObject context, function_declaration semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FUNCTION_DECLARATION__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FUNCTION_DECLARATION__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FUNCTION_DECLARATION__FORMAL_ARGUMENTS) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FUNCTION_DECLARATION__FORMAL_ARGUMENTS));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FUNCTION_DECLARATION__FUNCTION_BODY) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FUNCTION_DECLARATION__FUNCTION_BODY));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getFunction_declarationAccess().getIdentifierIDTerminalRuleCall_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getFunction_declarationAccess().getFormal_argumentsFormal_argumentsParserRuleCall_4_0(), semanticObject.getFormal_arguments());
-		feeder.accept(grammarAccess.getFunction_declarationAccess().getFunction_bodyFunction_bodyParserRuleCall_6_0(), semanticObject.getFunction_body());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     ((identifier='ESTIMATE' estimate_defn=block) | (identifier='SIMULATE' simulate_defn=block))
-	 */
-	protected void sequence_function_subblock(EObject context, function_subblock semanticObject) {
+	protected void sequence_GroupVariablesBlockStatement(EObject context, GroupVariablesBlockStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='GROUP_VARIABLES' block=block)
+	 *     (identifier='GROUP_VARIABLES' statements+=GroupVariablesBlockStatement*)
 	 */
-	protected void sequence_group_variables(EObject context, group_variables semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.GROUP_VARIABLES__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.GROUP_VARIABLES__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.GROUP_VARIABLES__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.GROUP_VARIABLES__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getGroup_variablesAccess().getIdentifierGROUP_VARIABLESKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getGroup_variablesAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='HEADER' block=block)
-	 */
-	protected void sequence_header_block(EObject context, header_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.HEADER_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.HEADER_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.HEADER_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.HEADER_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getHeader_blockAccess().getIdentifierHEADERKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getHeader_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='INDIVIDUAL_VARIABLES' block=block)
-	 */
-	protected void sequence_individual_model_obj_block(EObject context, individual_model_obj_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.INDIVIDUAL_MODEL_OBJ_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.INDIVIDUAL_MODEL_OBJ_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.INDIVIDUAL_MODEL_OBJ_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.INDIVIDUAL_MODEL_OBJ_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getIndividual_model_obj_blockAccess().getIdentifierINDIVIDUAL_VARIABLESKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getIndividual_model_obj_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifiers+=ID* (values+=NUMBER | values+='.')*)
-	 */
-	protected void sequence_inline_block_content(EObject context, inline_block_content semanticObject) {
+	protected void sequence_GroupVariablesBlock(EObject context, GroupVariablesBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='INLINE' block=inline_block_content)
+	 *     (identifier='HEADER' variables+=SymbolModification*)
 	 */
-	protected void sequence_inline_block(EObject context, inline_block semanticObject) {
+	protected void sequence_HeaderBlock(EObject context, HeaderBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='IGNORE' expression=OrExpression)
+	 */
+	protected void sequence_IgnoreList(EObject context, IgnoreList semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.INLINE_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.INLINE_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.INLINE_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.INLINE_BLOCK__BLOCK));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.IGNORE_LIST__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.IGNORE_LIST__IDENTIFIER));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.IGNORE_LIST__EXPRESSION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.IGNORE_LIST__EXPRESSION));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getInline_blockAccess().getIdentifierINLINEKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getInline_blockAccess().getBlockInline_block_contentParserRuleCall_1_0(), semanticObject.getBlock());
+		feeder.accept(grammarAccess.getIgnoreListAccess().getIdentifierIGNOREKeyword_0_0(), semanticObject.getIdentifier());
+		feeder.accept(grammarAccess.getIgnoreListAccess().getExpressionOrExpressionParserRuleCall_4_0(), semanticObject.getExpression());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (indentifier='INPUT_VARIABLES' block=block)
+	 *     (identifier='INDIVIDUAL_VARIABLES' statements+=BlockStatement*)
 	 */
-	protected void sequence_input_variables_block(EObject context, input_variables_block semanticObject) {
+	protected void sequence_IndividualVariablesBlock(EObject context, IndividualVariablesBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='INLINE' variables+=FullyQualifiedSymbolName* (values+=NUMBER | values+='.')*)
+	 */
+	protected void sequence_InlineBlock(EObject context, InlineBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (indentifier='INPUT_VARIABLES' variables+=SymbolDeclaration*)
+	 */
+	protected void sequence_InputVariablesBlock(EObject context, InputVariablesBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (mdv='mdv' | id='id' | dv='dv' | idv='idv')
+	 */
+	protected void sequence_LevelType(EObject context, LevelType semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='LIBRARY' statements+=BlockStatement*)
+	 */
+	protected void sequence_LibraryBlock(EObject context, LibraryBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     identifier='LIKELIHOOD'
+	 */
+	protected void sequence_Likelyhood(EObject context, Likelyhood semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.INPUT_VARIABLES_BLOCK__INDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.INPUT_VARIABLES_BLOCK__INDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.INPUT_VARIABLES_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.INPUT_VARIABLES_BLOCK__BLOCK));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.LIKELYHOOD__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.LIKELYHOOD__IDENTIFIER));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getInput_variables_blockAccess().getIndentifierINPUT_VARIABLESKeyword_0_0(), semanticObject.getIndentifier());
-		feeder.accept(grammarAccess.getInput_variables_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
+		feeder.accept(grammarAccess.getLikelyhoodAccess().getIdentifierLIKELIHOODKeyword_0(), semanticObject.getIdentifier());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='LIBRARY' block=block)
+	 *     arguments=Arguments
 	 */
-	protected void sequence_library_block(EObject context, library_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.LIBRARY_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.LIBRARY_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.LIBRARY_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.LIBRARY_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getLibrary_blockAccess().getIdentifierLIBRARYKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getLibrary_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     arguments=arguments
-	 */
-	protected void sequence_list(EObject context, list semanticObject) {
+	protected void sequence_List(EObject context, List semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.LIST__ARGUMENTS) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.LIST__ARGUMENTS));
@@ -988,36 +1230,70 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     objects+=mcl_obj*
+	 *     (negation='!'? (boolean=BOOLEAN | (expression+=AdditiveExpression (operator+=LogicalOperator expression+=AdditiveExpression)*)))
 	 */
-	protected void sequence_mcl(EObject context, mcl semanticObject) {
+	protected void sequence_LogicalExpression(EObject context, LogicalExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (model_obj=model_obj | param_obj=param_obj | data_obj=data_obj | task_obj=task_obj | tel_obj=tel_obj)
+	 *     (modelObject=ModelObject | parameterObject=ParameterObject | dataObject=DataObject | taskObject=TaskObject | telObject=TELObject)
 	 */
-	protected void sequence_mcl_obj(EObject context, mcl_obj semanticObject) {
+	protected void sequence_MclObject(EObject context, MclObject semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (statements+=model_block_statement*)
+	 *     objects+=MclObject*
 	 */
-	protected void sequence_model_block(EObject context, model_block semanticObject) {
+	protected void sequence_Mcl(EObject context, Mcl semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (statement=block_statement | ode_block=ode_block | library_block=library_block)
+	 *     identifier='MISSING'
 	 */
-	protected void sequence_model_block_statement(EObject context, model_block_statement semanticObject) {
+	protected void sequence_Missing(EObject context, Missing semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.MISSING__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.MISSING__IDENTIFIER));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getMissingAccess().getIdentifierMISSINGKeyword_0(), semanticObject.getIdentifier());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='MIXTURE' statements+=BlockStatement*)
+	 */
+	protected void sequence_MixtureBlock(EObject context, MixtureBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (statement=BlockStatement | addList=AddList | removeList=RemoveList)
+	 */
+	protected void sequence_ModelBlockStatement(EObject context, ModelBlockStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='MODEL' statements+=ModelBlockStatement*)
+	 */
+	protected void sequence_ModelBlock(EObject context, ModelBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -1025,496 +1301,484 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	/**
 	 * Constraint:
 	 *     (
-	 *         individual_model_obj_block=individual_model_obj_block | 
-	 *         model_prediction_obj_block=model_prediction_obj_block | 
-	 *         random_variable_definition_block=random_variable_definition_block | 
-	 *         input_variables_block=input_variables_block | 
-	 *         structural_parameters_block=structural_parameters_block | 
-	 *         variability_parameters_block=variability_parameters_block | 
-	 *         output_variables_block=output_variables_block | 
-	 *         group_variables=group_variables | 
-	 *         observation_block=observation_block | 
-	 *         estimation_block=estimation_block | 
-	 *         simulation_block=simulation_block
+	 *         individualVariablesBlock=IndividualVariablesBlock | 
+	 *         modelPredictionBlock=ModelPredictionBlock | 
+	 *         randomVariableDefinitionBlock=RandomVariableDefinitionBlock | 
+	 *         inputVariablesBlock=InputVariablesBlock | 
+	 *         structuralParametersBlock=StructuralParametersBlock | 
+	 *         variabilityParametersBlock=VariabilityParametersBlock | 
+	 *         outputVariablesBlock=OutputVariablesBlock | 
+	 *         groupVariablesBlock=GroupVariablesBlock | 
+	 *         observationBlock=ObservationBlock | 
+	 *         estimationBlock=EstimationBlock | 
+	 *         simulationBlock=SimulationBlock | 
+	 *         verbatimBlock=VerbatimBlock
 	 *     )
 	 */
-	protected void sequence_model_obj_block(EObject context, model_obj_block semanticObject) {
+	protected void sequence_ModelObjectBlock(EObject context, ModelObjectBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier=ID blocks+=model_obj_block*)
+	 *     (identifier=ObjectName blocks+=ModelObjectBlock*)
 	 */
-	protected void sequence_model_obj(EObject context, model_obj semanticObject) {
+	protected void sequence_ModelObject(EObject context, ModelObject semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='MODEL_PREDICTION' block=model_block)
+	 *     (statement=BlockStatement | odeBlock=OdeBlock | libraryBlock=LibraryBlock)
 	 */
-	protected void sequence_model_prediction_obj_block(EObject context, model_prediction_obj_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.MODEL_PREDICTION_OBJ_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.MODEL_PREDICTION_OBJ_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.MODEL_PREDICTION_OBJ_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.MODEL_PREDICTION_OBJ_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getModel_prediction_obj_blockAccess().getIdentifierMODEL_PREDICTIONKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getModel_prediction_obj_blockAccess().getBlockModel_blockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (power_expression+=power_expression (multiplicative_op+=multiplicative_op power_expression+=power_expression)*)
-	 */
-	protected void sequence_multiplicative_expression(EObject context, multiplicative_expression semanticObject) {
+	protected void sequence_ModelPredictionBlockStatement(EObject context, ModelPredictionBlockStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='OBSERVATION' block=block)
+	 *     (identifier='MODEL_PREDICTION' statements+=ModelPredictionBlockStatement*)
 	 */
-	protected void sequence_observation_block(EObject context, observation_block semanticObject) {
+	protected void sequence_ModelPredictionBlock(EObject context, ModelPredictionBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (expression+=PowerExpression (operator+=MultiplicativeOperator expression+=PowerExpression)*)
+	 */
+	protected void sequence_MultiplicativeExpression(EObject context, MultiplicativeExpression semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     name=ID
+	 */
+	protected void sequence_ObjectName(EObject context, ObjectName semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.OBSERVATION_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.OBSERVATION_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.OBSERVATION_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.OBSERVATION_BLOCK__BLOCK));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.OBJECT_NAME__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.OBJECT_NAME__NAME));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getObservation_blockAccess().getIdentifierOBSERVATIONKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getObservation_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
+		feeder.accept(grammarAccess.getObjectNameAccess().getNameIDTerminalRuleCall_0(), semanticObject.getName());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='ODE' block=block)
+	 *     (identifier='OBSERVATION' statements+=BlockStatement*)
 	 */
-	protected void sequence_ode_block(EObject context, ode_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ODE_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ODE_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ODE_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ODE_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getOde_blockAccess().getIdentifierODEKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getOde_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
+	protected void sequence_ObservationBlock(EObject context, ObservationBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     arguments=arguments
+	 *     (identifier='ODE' statements+=BlockStatement*)
 	 */
-	protected void sequence_ode_list(EObject context, ode_list semanticObject) {
+	protected void sequence_OdeBlock(EObject context, OdeBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     arguments=Arguments
+	 */
+	protected void sequence_OdeList(EObject context, OdeList semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ODE_LIST__ARGUMENTS) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ODE_LIST__ARGUMENTS));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getOde_listAccess().getArgumentsArgumentsParserRuleCall_2_0(), semanticObject.getArguments());
+		feeder.accept(grammarAccess.getOdeListAccess().getArgumentsArgumentsParserRuleCall_2_0(), semanticObject.getArguments());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='OUTPUT_VARIABLES' block=block)
+	 *     (expression+=AndExpression (operator+=LogicalOrOperator expression+=AndExpression)*)
 	 */
-	protected void sequence_output_variables_block(EObject context, output_variables_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.OUTPUT_VARIABLES_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.OUTPUT_VARIABLES_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.OUTPUT_VARIABLES_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.OUTPUT_VARIABLES_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getOutput_variables_blockAccess().getIdentifierOUTPUT_VARIABLESKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getOutput_variables_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
+	protected void sequence_OrExpression(EObject context, OrExpression semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     expression=expression
+	 *     (identifier='OUTPUT_VARIABLES' variables+=FullyQualifiedSymbolName*)
 	 */
-	protected void sequence_par_expression(EObject context, par_expression semanticObject) {
+	protected void sequence_OutputVariablesBlock(EObject context, OutputVariablesBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     expression=Expression
+	 */
+	protected void sequence_ParExpression(EObject context, ParExpression semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.PAR_EXPRESSION__EXPRESSION) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.PAR_EXPRESSION__EXPRESSION));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getPar_expressionAccess().getExpressionExpressionParserRuleCall_1_0(), semanticObject.getExpression());
+		feeder.accept(grammarAccess.getParExpressionAccess().getExpressionExpressionParserRuleCall_1_0(), semanticObject.getExpression());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (structural_block=structural_block | variability_block=variability_block)
+	 *     (identifier='PARAMETER' parameters+=SymbolModification*)
 	 */
-	protected void sequence_param_obj_block(EObject context, param_obj_block semanticObject) {
+	protected void sequence_ParameterBlock(EObject context, ParameterBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier=ID blocks+=param_obj_block*)
+	 *     (identifier=ID list=List)
 	 */
-	protected void sequence_param_obj(EObject context, param_obj semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='PARAMETERS' block=block)
-	 */
-	protected void sequence_parameters_block(EObject context, parameters_block semanticObject) {
+	protected void sequence_ParameterDeclaration(EObject context, ParameterDeclaration semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.PARAMETERS_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.PARAMETERS_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.PARAMETERS_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.PARAMETERS_BLOCK__BLOCK));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.PARAMETER_DECLARATION__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.PARAMETER_DECLARATION__IDENTIFIER));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.PARAMETER_DECLARATION__LIST) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.PARAMETER_DECLARATION__LIST));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getParameters_blockAccess().getIdentifierPARAMETERSKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getParameters_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
+		feeder.accept(grammarAccess.getParameterDeclarationAccess().getIdentifierIDTerminalRuleCall_0_0(), semanticObject.getIdentifier());
+		feeder.accept(grammarAccess.getParameterDeclarationAccess().getListListParserRuleCall_1_1_0(), semanticObject.getList());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (unary_expression+=unary_expression (power_op+=power_op unary_expression+=unary_expression)*)
+	 *     (structuralBlock=StructuralBlock | variabilityBlock=VariabilityBlock | priorBlock=PriorParametersBlock | verbatimBlock=VerbatimBlock)
 	 */
-	protected void sequence_power_expression(EObject context, power_expression semanticObject) {
+	protected void sequence_ParameterObjectBlock(EObject context, ParameterObjectBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (number=NUMBER | identifier=variable_name)
+	 *     (identifier=ObjectName blocks+=ParameterObjectBlock*)
 	 */
-	protected void sequence_primary(EObject context, primary semanticObject) {
+	protected void sequence_ParameterObject(EObject context, ParameterObject semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     arguments=arguments
+	 *     (expression+=UnaryExpression (operator+=PowerOperator expression+=UnaryExpression)*)
 	 */
-	protected void sequence_random_list(EObject context, random_list semanticObject) {
+	protected void sequence_PowerExpression(EObject context, PowerExpression semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (functionCall=FunctionCall | number=NUMBER | symbol=FullyQualifiedSymbolName | attribute=FullyQualifiedArgumentName | vector=Vector)
+	 */
+	protected void sequence_Primary(EObject context, Primary semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='PRIOR_PARAMETERS' statements+=BlockStatement*)
+	 */
+	protected void sequence_PriorParametersBlock(EObject context, PriorParametersBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=ID (value=STRING | object=ObjectName))
+	 */
+	protected void sequence_RScriptBlockStatement(EObject context, RScriptBlockStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='RSCRIPT' variables+=RScriptBlockStatement*)
+	 */
+	protected void sequence_RScriptBlock(EObject context, RScriptBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     arguments=Arguments
+	 */
+	protected void sequence_RandomList(EObject context, RandomList semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.RANDOM_LIST__ARGUMENTS) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.RANDOM_LIST__ARGUMENTS));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getRandom_listAccess().getArgumentsArgumentsParserRuleCall_2_0(), semanticObject.getArguments());
+		feeder.accept(grammarAccess.getRandomListAccess().getArgumentsArgumentsParserRuleCall_2_0(), semanticObject.getArguments());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='RANDOM_VARIABLE_DEFINITION' block=block)
+	 *     (identifier='RANDOM_VARIABLE_DEFINITION' variables+=SymbolDeclaration*)
 	 */
-	protected void sequence_random_variable_definition_block(EObject context, random_variable_definition_block semanticObject) {
+	protected void sequence_RandomVariableDefinitionBlock(EObject context, RandomVariableDefinitionBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     list=SymbolList
+	 */
+	protected void sequence_RemoveList(EObject context, RemoveList semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.RANDOM_VARIABLE_DEFINITION_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.RANDOM_VARIABLE_DEFINITION_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.RANDOM_VARIABLE_DEFINITION_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.RANDOM_VARIABLE_DEFINITION_BLOCK__BLOCK));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.REMOVE_LIST__LIST) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.REMOVE_LIST__LIST));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getRandom_variable_definition_blockAccess().getIdentifierRANDOM_VARIABLE_DEFINITIONKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getRandom_variable_definition_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
+		feeder.accept(grammarAccess.getRemoveListAccess().getListSymbolListParserRuleCall_2_0(), semanticObject.getList());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (
-	 *         negation='!'? 
-	 *         (boolean=BOOLEAN | (additive_expression+=additive_expression (relational_op+=relational_op additive_expression+=additive_expression)*))
-	 *     )
+	 *     (identifier='same' arguments=Arguments parameters=Arguments?)
 	 */
-	protected void sequence_relational_expression(EObject context, relational_expression semanticObject) {
+	protected void sequence_SameBlock(EObject context, SameBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='RSSCRIPT' block=block)
+	 *     (identifier='SIMULATE' statements+=BlockStatement*)
 	 */
-	protected void sequence_rsscript_block(EObject context, rsscript_block semanticObject) {
+	protected void sequence_SimulateTask(EObject context, SimulateTask semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='SIMULATION' statements+=BlockStatement*)
+	 */
+	protected void sequence_SimulationBlock(EObject context, SimulationBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='STRUCTURAL' parameters+=ParameterDeclaration*)
+	 */
+	protected void sequence_StructuralBlock(EObject context, StructuralBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier='STRUCTURAL_PARAMETERS' parameters+=FullyQualifiedSymbolName*)
+	 */
+	protected void sequence_StructuralParametersBlock(EObject context, StructuralParametersBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     ((identifier=ID (expression=AnyExpression? | randomList=RandomList)) | (function=ID identifier=ID randomList=RandomList))
+	 */
+	protected void sequence_SymbolDeclaration(EObject context, SymbolDeclaration semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     symbols+=FullyQualifiedSymbolName+
+	 */
+	protected void sequence_SymbolList(EObject context, SymbolList semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=FullyQualifiedSymbolName list=List?)
+	 */
+	protected void sequence_SymbolModification(EObject context, SymbolModification semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=ObjectName statements+=BlockStatement*)
+	 */
+	protected void sequence_TELObject(EObject context, TELObject semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=TargetLanguage arguments=Arguments? externalCode=EXTERNAL_CODE)
+	 */
+	protected void sequence_TargetBlock(EObject context, TargetBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (estimateBlock=EstimateTask | simulateBlock=SimulateTask | executeBlock=ExecuteTask)
+	 */
+	protected void sequence_TaskFunctionBlock(EObject context, TaskFunctionBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (blocks+=TaskFunctionBlock*)
+	 */
+	protected void sequence_TaskFunctionBody(EObject context, TaskFunctionBody semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=ID formalArguments=FormalArguments functionBody=TaskFunctionBody)
+	 */
+	protected void sequence_TaskFunctionDeclaration(EObject context, TaskFunctionDeclaration semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.RSSCRIPT_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.RSSCRIPT_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.RSSCRIPT_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.RSSCRIPT_BLOCK__BLOCK));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__IDENTIFIER));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FORMAL_ARGUMENTS) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FORMAL_ARGUMENTS));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FUNCTION_BODY) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FUNCTION_BODY));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getRsscript_blockAccess().getIdentifierRSSCRIPTKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getRsscript_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
+		feeder.accept(grammarAccess.getTaskFunctionDeclarationAccess().getIdentifierIDTerminalRuleCall_0_0(), semanticObject.getIdentifier());
+		feeder.accept(grammarAccess.getTaskFunctionDeclarationAccess().getFormalArgumentsFormalArgumentsParserRuleCall_4_0(), semanticObject.getFormalArguments());
+		feeder.accept(grammarAccess.getTaskFunctionDeclarationAccess().getFunctionBodyTaskFunctionBodyParserRuleCall_6_0(), semanticObject.getFunctionBody());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (expression+=primary expression+=primary*)
+	 *     (functionDeclaration=TaskFunctionDeclaration | parameterBlock=ParameterBlock | dataBlock=DataBlock | modelBlock=ModelBlock | verbatimBlock=VerbatimBlock)
 	 */
-	protected void sequence_selector(EObject context, selector semanticObject) {
+	protected void sequence_TaskObjectBlock(EObject context, TaskObjectBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='SIMULATION' block=block)
+	 *     (identifier=ObjectName blocks+=TaskObjectBlock*)
 	 */
-	protected void sequence_simulation_block(EObject context, simulation_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.SIMULATION_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.SIMULATION_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.SIMULATION_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.SIMULATION_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getSimulation_blockAccess().getIdentifierSIMULATIONKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getSimulation_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (block=block | (par_expression=par_expression if_statement=block_statement else_statement=block_statement?))
-	 */
-	protected void sequence_statement(EObject context, statement semanticObject) {
+	protected void sequence_TaskObject(EObject context, TaskObject semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='STRUCTURAL' block=block)
+	 *     ((operator=UnaryOperator expression=UnaryExpression) | parExpression=ParExpression | primary=Primary)
 	 */
-	protected void sequence_structural_block(EObject context, structural_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.STRUCTURAL_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.STRUCTURAL_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.STRUCTURAL_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.STRUCTURAL_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getStructural_blockAccess().getIdentifierSTRUCTURALKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getStructural_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='STRUCTURAL_PARAMETERS' block=block)
-	 */
-	protected void sequence_structural_parameters_block(EObject context, structural_parameters_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.STRUCTURAL_PARAMETERS_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.STRUCTURAL_PARAMETERS_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.STRUCTURAL_PARAMETERS_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.STRUCTURAL_PARAMETERS_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getStructural_parameters_blockAccess().getIdentifierSTRUCTURAL_PARAMETERSKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getStructural_parameters_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier=target_language external_code=EXTERNAL_CODE)
-	 */
-	protected void sequence_target_block(EObject context, target_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.TARGET_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.TARGET_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.TARGET_BLOCK__EXTERNAL_CODE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.TARGET_BLOCK__EXTERNAL_CODE));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getTarget_blockAccess().getIdentifierTarget_languageParserRuleCall_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getTarget_blockAccess().getExternal_codeEXTERNAL_CODETerminalRuleCall_2_0(), semanticObject.getExternal_code());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (function_declaration=function_declaration | parameters_block=parameters_block | data_block=data_block)
-	 */
-	protected void sequence_task_obj_block(EObject context, task_obj_block semanticObject) {
+	protected void sequence_UnaryExpression(EObject context, UnaryExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier=ID blocks+=task_obj_block*)
+	 *     (parameter=ParameterDeclaration | blockBlock=BlockBlock | diagBlock=DiagBlock | sameBlock=SameBlock)
 	 */
-	protected void sequence_task_obj(EObject context, task_obj semanticObject) {
+	protected void sequence_VariabilityBlockStatement(EObject context, VariabilityBlockStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier=ID blocks+=block_statement*)
+	 *     (identifier='VARIABILITY' statements+=VariabilityBlockStatement*)
 	 */
-	protected void sequence_tel_obj(EObject context, tel_obj semanticObject) {
+	protected void sequence_VariabilityBlock(EObject context, VariabilityBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     ((operator=unary_op unary_expression=unary_expression) | par_expression=par_expression | function_call=function_call | primary=primary)
+	 *     (identifier='VARIABILITY_PARAMETERS' parameters+=FullyQualifiedSymbolName*)
 	 */
-	protected void sequence_unary_expression(EObject context, unary_expression semanticObject) {
+	protected void sequence_VariabilityParametersBlock(EObject context, VariabilityParametersBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (blocks+=variability_block_statement*)
+	 *     (identifiers+=FullyQualifiedSymbolName identifiers+=FullyQualifiedSymbolName*)
 	 */
-	protected void sequence_variability_block_content(EObject context, variability_block_content semanticObject) {
+	protected void sequence_VariableList(EObject context, VariableList semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (block_statement=block_statement | block_block=block_subblock | diag_block=diag_subblock)
+	 *     (identifier='c' values+=Expression values+=Expression*)
 	 */
-	protected void sequence_variability_block_statement(EObject context, variability_block_statement semanticObject) {
+	protected void sequence_Vector(EObject context, Vector semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (identifier='VARIABILITY' block=variability_block_content)
+	 *     (identifier='TARGET_CODE' (block=TargetBlock | externalCode=EXTERNAL_CODE))
 	 */
-	protected void sequence_variability_block(EObject context, variability_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.VARIABILITY_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.VARIABILITY_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.VARIABILITY_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.VARIABILITY_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getVariability_blockAccess().getIdentifierVARIABILITYKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getVariability_blockAccess().getBlockVariability_block_contentParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='VARIABILITY_PARAMETERS' block=block)
-	 */
-	protected void sequence_variability_parameters_block(EObject context, variability_parameters_block semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.VARIABILITY_PARAMETERS_BLOCK__IDENTIFIER) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.VARIABILITY_PARAMETERS_BLOCK__IDENTIFIER));
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.VARIABILITY_PARAMETERS_BLOCK__BLOCK) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.VARIABILITY_PARAMETERS_BLOCK__BLOCK));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getVariability_parameters_blockAccess().getIdentifierVARIABILITY_PARAMETERSKeyword_0_0(), semanticObject.getIdentifier());
-		feeder.accept(grammarAccess.getVariability_parameters_blockAccess().getBlockBlockParserRuleCall_1_0(), semanticObject.getBlock());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     arguments=arguments
-	 */
-	protected void sequence_variability_subblock(EObject context, variability_subblock semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.VARIABILITY_SUBBLOCK__ARGUMENTS) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.VARIABILITY_SUBBLOCK__ARGUMENTS));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getVariability_subblockAccess().getArgumentsArgumentsParserRuleCall_1_0(), semanticObject.getArguments());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier=variable_name (expression=any_expression | random_list=random_list)?)
-	 */
-	protected void sequence_variable_declaration(EObject context, variable_declaration semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier+=ID selector+=selector? (identifier+=ID selector+=selector?)*)
-	 */
-	protected void sequence_variable_name(EObject context, variable_name semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='VERBATIM' (block=target_block | external_code=EXTERNAL_CODE))
-	 */
-	protected void sequence_verbatim_block(EObject context, verbatim_block semanticObject) {
+	protected void sequence_VerbatimBlock(EObject context, VerbatimBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 }

@@ -25,7 +25,7 @@ public class MdlParser extends org.eclipse.xtext.parser.antlr.AbstractAntlrParse
 	
 	@Override 
 	protected String getDefaultRuleName() {
-		return "mcl";
+		return "Mcl";
 	}
 	
 	public MdlGrammarAccess getGrammarAccess() {

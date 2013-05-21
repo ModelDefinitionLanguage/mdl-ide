@@ -2,7 +2,7 @@ package org.ddmore.mdl.generator;
 
 import com.google.common.collect.Iterables;
 import org.ddmore.mdl.generator.Mdl2PharmML;
-import org.ddmore.mdl.mdl.mcl;
+import org.ddmore.mdl.mdl.Mcl;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -15,8 +15,8 @@ public class MdlGenerator extends Mdl2PharmML implements IGenerator {
   public void doGenerate(final Resource resource, final IFileSystemAccess fsa) {
     TreeIterator<EObject> _allContents = resource.getAllContents();
     Iterable<EObject> _iterable = IteratorExtensions.<EObject>toIterable(_allContents);
-    Iterable<mcl> _filter = Iterables.<mcl>filter(_iterable, mcl.class);
-    for (final mcl m : _filter) {
+    Iterable<Mcl> _filter = Iterables.<Mcl>filter(_iterable, Mcl.class);
+    for (final Mcl m : _filter) {
       {
         String _fileName = this.fileName(resource);
         String _plus = (_fileName + ".ctl");
@@ -33,8 +33,8 @@ public class MdlGenerator extends Mdl2PharmML implements IGenerator {
   public void doGenerateNonmem(final Resource resource, final IFileSystemAccess fsa) {
     TreeIterator<EObject> _allContents = resource.getAllContents();
     Iterable<EObject> _iterable = IteratorExtensions.<EObject>toIterable(_allContents);
-    Iterable<mcl> _filter = Iterables.<mcl>filter(_iterable, mcl.class);
-    for (final mcl m : _filter) {
+    Iterable<Mcl> _filter = Iterables.<Mcl>filter(_iterable, Mcl.class);
+    for (final Mcl m : _filter) {
       String _fileName = this.fileName(resource);
       String _plus = (_fileName + ".ctl");
       CharSequence _convertToNonmem = this.convertToNonmem(m);
@@ -45,8 +45,8 @@ public class MdlGenerator extends Mdl2PharmML implements IGenerator {
   public void doGeneratePharmML(final Resource resource, final IFileSystemAccess fsa) {
     TreeIterator<EObject> _allContents = resource.getAllContents();
     Iterable<EObject> _iterable = IteratorExtensions.<EObject>toIterable(_allContents);
-    Iterable<mcl> _filter = Iterables.<mcl>filter(_iterable, mcl.class);
-    for (final mcl m : _filter) {
+    Iterable<Mcl> _filter = Iterables.<Mcl>filter(_iterable, Mcl.class);
+    for (final Mcl m : _filter) {
       String _fileName = this.fileName(resource);
       String _plus = (_fileName + ".xml");
       CharSequence _convertToPharmML = this.convertToPharmML(m);

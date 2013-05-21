@@ -1,0 +1,51 @@
+/**
+ */
+package org.ddmore.mdl.mdl;
+
+import org.eclipse.emf.ecore.EObject;
+
+/**
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Remove List</b></em>'.
+ * <!-- end-user-doc -->
+ *
+ * <p>
+ * The following features are supported:
+ * <ul>
+ *   <li>{@link org.ddmore.mdl.mdl.RemoveList#getList <em>List</em>}</li>
+ * </ul>
+ * </p>
+ *
+ * @see org.ddmore.mdl.mdl.MdlPackage#getRemoveList()
+ * @model
+ * @generated
+ */
+public interface RemoveList extends EObject
+{
+  /**
+   * Returns the value of the '<em><b>List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>List</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>List</em>' containment reference.
+   * @see #setList(SymbolList)
+   * @see org.ddmore.mdl.mdl.MdlPackage#getRemoveList_List()
+   * @model containment="true"
+   * @generated
+   */
+  SymbolList getList();
+
+  /**
+   * Sets the value of the '{@link org.ddmore.mdl.mdl.RemoveList#getList <em>List</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>List</em>' containment reference.
+   * @see #getList()
+   * @generated
+   */
+  void setList(SymbolList value);
+
+} // RemoveList

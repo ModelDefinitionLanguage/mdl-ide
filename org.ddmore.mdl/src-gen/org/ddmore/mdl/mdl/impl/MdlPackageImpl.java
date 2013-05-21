@@ -2,81 +2,107 @@
  */
 package org.ddmore.mdl.mdl.impl;
 
+import org.ddmore.mdl.mdl.AcceptList;
+import org.ddmore.mdl.mdl.AddList;
+import org.ddmore.mdl.mdl.AdditiveExpression;
+import org.ddmore.mdl.mdl.AndExpression;
+import org.ddmore.mdl.mdl.AnyExpression;
+import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.Arguments;
+import org.ddmore.mdl.mdl.Block;
+import org.ddmore.mdl.mdl.BlockBlock;
+import org.ddmore.mdl.mdl.BlockStatement;
+import org.ddmore.mdl.mdl.Categorical;
+import org.ddmore.mdl.mdl.ConditionalExpression;
+import org.ddmore.mdl.mdl.ConditionalStatement;
+import org.ddmore.mdl.mdl.Continuous;
+import org.ddmore.mdl.mdl.Covariate;
+import org.ddmore.mdl.mdl.DataBlock;
+import org.ddmore.mdl.mdl.DataBlockStatement;
+import org.ddmore.mdl.mdl.DataObject;
+import org.ddmore.mdl.mdl.DataObjectBlock;
+import org.ddmore.mdl.mdl.DesignBlock;
+import org.ddmore.mdl.mdl.DesignBlockStatement;
+import org.ddmore.mdl.mdl.DiagBlock;
+import org.ddmore.mdl.mdl.Distribution;
+import org.ddmore.mdl.mdl.DropList;
+import org.ddmore.mdl.mdl.EnumType;
+import org.ddmore.mdl.mdl.EstimateTask;
+import org.ddmore.mdl.mdl.EstimationBlock;
+import org.ddmore.mdl.mdl.ExecuteTask;
+import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.FileBlock;
+import org.ddmore.mdl.mdl.FileBlockStatement;
+import org.ddmore.mdl.mdl.FormalArguments;
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
+import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
+import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.GroupVariablesBlock;
+import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
+import org.ddmore.mdl.mdl.HeaderBlock;
+import org.ddmore.mdl.mdl.IgnoreList;
+import org.ddmore.mdl.mdl.IndividualVariablesBlock;
+import org.ddmore.mdl.mdl.InlineBlock;
+import org.ddmore.mdl.mdl.InputVariablesBlock;
+import org.ddmore.mdl.mdl.LevelType;
+import org.ddmore.mdl.mdl.LibraryBlock;
+import org.ddmore.mdl.mdl.Likelyhood;
+import org.ddmore.mdl.mdl.List;
+import org.ddmore.mdl.mdl.LogicalExpression;
+import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlFactory;
 import org.ddmore.mdl.mdl.MdlPackage;
-import org.ddmore.mdl.mdl.additive_expression;
-import org.ddmore.mdl.mdl.any_expression;
-import org.ddmore.mdl.mdl.argument;
-import org.ddmore.mdl.mdl.arguments;
-import org.ddmore.mdl.mdl.block;
-import org.ddmore.mdl.mdl.block_statement;
-import org.ddmore.mdl.mdl.block_subblock;
-import org.ddmore.mdl.mdl.conditional_and_expression;
-import org.ddmore.mdl.mdl.conditional_expression;
-import org.ddmore.mdl.mdl.conditional_or_expression;
-import org.ddmore.mdl.mdl.data_block;
-import org.ddmore.mdl.mdl.data_obj;
-import org.ddmore.mdl.mdl.data_obj_block;
-import org.ddmore.mdl.mdl.design_block;
-import org.ddmore.mdl.mdl.diag_subblock;
-import org.ddmore.mdl.mdl.estimation_block;
-import org.ddmore.mdl.mdl.expression;
-import org.ddmore.mdl.mdl.file_block;
-import org.ddmore.mdl.mdl.file_block_content;
-import org.ddmore.mdl.mdl.file_block_statement;
-import org.ddmore.mdl.mdl.formal_arguments;
-import org.ddmore.mdl.mdl.function_body;
-import org.ddmore.mdl.mdl.function_call;
-import org.ddmore.mdl.mdl.function_declaration;
-import org.ddmore.mdl.mdl.function_subblock;
-import org.ddmore.mdl.mdl.group_variables;
-import org.ddmore.mdl.mdl.header_block;
-import org.ddmore.mdl.mdl.individual_model_obj_block;
-import org.ddmore.mdl.mdl.inline_block;
-import org.ddmore.mdl.mdl.inline_block_content;
-import org.ddmore.mdl.mdl.input_variables_block;
-import org.ddmore.mdl.mdl.library_block;
-import org.ddmore.mdl.mdl.list;
-import org.ddmore.mdl.mdl.mcl;
-import org.ddmore.mdl.mdl.mcl_obj;
-import org.ddmore.mdl.mdl.model_block;
-import org.ddmore.mdl.mdl.model_block_statement;
-import org.ddmore.mdl.mdl.model_obj;
-import org.ddmore.mdl.mdl.model_obj_block;
-import org.ddmore.mdl.mdl.model_prediction_obj_block;
-import org.ddmore.mdl.mdl.multiplicative_expression;
-import org.ddmore.mdl.mdl.observation_block;
-import org.ddmore.mdl.mdl.ode_block;
-import org.ddmore.mdl.mdl.ode_list;
-import org.ddmore.mdl.mdl.output_variables_block;
-import org.ddmore.mdl.mdl.par_expression;
-import org.ddmore.mdl.mdl.param_obj;
-import org.ddmore.mdl.mdl.param_obj_block;
-import org.ddmore.mdl.mdl.parameters_block;
-import org.ddmore.mdl.mdl.power_expression;
-import org.ddmore.mdl.mdl.primary;
-import org.ddmore.mdl.mdl.random_list;
-import org.ddmore.mdl.mdl.random_variable_definition_block;
-import org.ddmore.mdl.mdl.relational_expression;
-import org.ddmore.mdl.mdl.rsscript_block;
-import org.ddmore.mdl.mdl.selector;
-import org.ddmore.mdl.mdl.simulation_block;
-import org.ddmore.mdl.mdl.statement;
-import org.ddmore.mdl.mdl.structural_block;
-import org.ddmore.mdl.mdl.structural_parameters_block;
-import org.ddmore.mdl.mdl.target_block;
-import org.ddmore.mdl.mdl.task_obj;
-import org.ddmore.mdl.mdl.task_obj_block;
-import org.ddmore.mdl.mdl.tel_obj;
-import org.ddmore.mdl.mdl.unary_expression;
-import org.ddmore.mdl.mdl.variability_block;
-import org.ddmore.mdl.mdl.variability_block_content;
-import org.ddmore.mdl.mdl.variability_block_statement;
-import org.ddmore.mdl.mdl.variability_parameters_block;
-import org.ddmore.mdl.mdl.variability_subblock;
-import org.ddmore.mdl.mdl.variable_declaration;
-import org.ddmore.mdl.mdl.variable_name;
-import org.ddmore.mdl.mdl.verbatim_block;
+import org.ddmore.mdl.mdl.Missing;
+import org.ddmore.mdl.mdl.MixtureBlock;
+import org.ddmore.mdl.mdl.ModelBlock;
+import org.ddmore.mdl.mdl.ModelBlockStatement;
+import org.ddmore.mdl.mdl.ModelObject;
+import org.ddmore.mdl.mdl.ModelObjectBlock;
+import org.ddmore.mdl.mdl.ModelPredictionBlock;
+import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
+import org.ddmore.mdl.mdl.MultiplicativeExpression;
+import org.ddmore.mdl.mdl.ObjectName;
+import org.ddmore.mdl.mdl.ObservationBlock;
+import org.ddmore.mdl.mdl.OdeBlock;
+import org.ddmore.mdl.mdl.OdeList;
+import org.ddmore.mdl.mdl.OrExpression;
+import org.ddmore.mdl.mdl.OutputVariablesBlock;
+import org.ddmore.mdl.mdl.ParExpression;
+import org.ddmore.mdl.mdl.ParameterBlock;
+import org.ddmore.mdl.mdl.ParameterDeclaration;
+import org.ddmore.mdl.mdl.ParameterObject;
+import org.ddmore.mdl.mdl.ParameterObjectBlock;
+import org.ddmore.mdl.mdl.PowerExpression;
+import org.ddmore.mdl.mdl.Primary;
+import org.ddmore.mdl.mdl.PriorParametersBlock;
+import org.ddmore.mdl.mdl.RScriptBlock;
+import org.ddmore.mdl.mdl.RScriptBlockStatement;
+import org.ddmore.mdl.mdl.RandomList;
+import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
+import org.ddmore.mdl.mdl.RemoveList;
+import org.ddmore.mdl.mdl.SameBlock;
+import org.ddmore.mdl.mdl.SimulateTask;
+import org.ddmore.mdl.mdl.SimulationBlock;
+import org.ddmore.mdl.mdl.StructuralBlock;
+import org.ddmore.mdl.mdl.StructuralParametersBlock;
+import org.ddmore.mdl.mdl.SymbolDeclaration;
+import org.ddmore.mdl.mdl.SymbolList;
+import org.ddmore.mdl.mdl.SymbolModification;
+import org.ddmore.mdl.mdl.TELObject;
+import org.ddmore.mdl.mdl.TargetBlock;
+import org.ddmore.mdl.mdl.TaskFunctionBlock;
+import org.ddmore.mdl.mdl.TaskFunctionBody;
+import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
+import org.ddmore.mdl.mdl.TaskObject;
+import org.ddmore.mdl.mdl.TaskObjectBlock;
+import org.ddmore.mdl.mdl.UnaryExpression;
+import org.ddmore.mdl.mdl.VariabilityBlock;
+import org.ddmore.mdl.mdl.VariabilityBlockStatement;
+import org.ddmore.mdl.mdl.VariabilityParametersBlock;
+import org.ddmore.mdl.mdl.VariableList;
+import org.ddmore.mdl.mdl.Vector;
+import org.ddmore.mdl.mdl.VerbatimBlock;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -105,371 +131,532 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass mcl_objEClass = null;
+  private EClass mclObjectEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass model_objEClass = null;
+  private EClass modelObjectEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass param_objEClass = null;
+  private EClass parameterObjectEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass data_objEClass = null;
+  private EClass dataObjectEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass task_objEClass = null;
+  private EClass taskObjectEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass tel_objEClass = null;
+  private EClass telObjectEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass model_obj_blockEClass = null;
+  private EClass modelObjectBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass individual_model_obj_blockEClass = null;
+  private EClass individualVariablesBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass model_prediction_obj_blockEClass = null;
+  private EClass modelPredictionBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass random_variable_definition_blockEClass = null;
+  private EClass randomVariableDefinitionBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass input_variables_blockEClass = null;
+  private EClass inputVariablesBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass structural_parameters_blockEClass = null;
+  private EClass structuralParametersBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass variability_parameters_blockEClass = null;
+  private EClass variabilityParametersBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass output_variables_blockEClass = null;
+  private EClass outputVariablesBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass group_variablesEClass = null;
+  private EClass groupVariablesBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass observation_blockEClass = null;
+  private EClass observationBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass estimation_blockEClass = null;
+  private EClass estimationBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass simulation_blockEClass = null;
+  private EClass simulationBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass param_obj_blockEClass = null;
+  private EClass parameterObjectBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass structural_blockEClass = null;
+  private EClass structuralBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass variability_blockEClass = null;
+  private EClass variabilityBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass data_obj_blockEClass = null;
+  private EClass priorParametersBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass header_blockEClass = null;
+  private EClass dataObjectBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass file_blockEClass = null;
+  private EClass headerBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass task_obj_blockEClass = null;
+  private EClass fileBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass parameters_blockEClass = null;
+  private EClass taskObjectBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass data_blockEClass = null;
+  private EClass parameterBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass model_blockEClass = null;
+  private EClass dataBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass model_block_statementEClass = null;
+  private EClass dataBlockStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass library_blockEClass = null;
+  private EClass ignoreListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass ode_blockEClass = null;
+  private EClass acceptListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass variability_block_contentEClass = null;
+  private EClass dropListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass variability_block_statementEClass = null;
+  private EClass modelBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass block_subblockEClass = null;
+  private EClass modelBlockStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass diag_subblockEClass = null;
+  private EClass addListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass variability_subblockEClass = null;
+  private EClass removeListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass file_block_contentEClass = null;
+  private EClass symbolListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass file_block_statementEClass = null;
+  private EClass modelPredictionBlockStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass inline_blockEClass = null;
+  private EClass libraryBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass design_blockEClass = null;
+  private EClass odeBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass rsscript_blockEClass = null;
+  private EClass groupVariablesBlockStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass inline_block_contentEClass = null;
+  private EClass mixtureBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass function_declarationEClass = null;
+  private EClass variabilityBlockStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass function_bodyEClass = null;
+  private EClass blockBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass function_subblockEClass = null;
+  private EClass diagBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass formal_argumentsEClass = null;
+  private EClass sameBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass function_callEClass = null;
+  private EClass fileBlockStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass blockEClass = null;
+  private EClass inlineBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass block_statementEClass = null;
+  private EClass designBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass verbatim_blockEClass = null;
+  private EClass designBlockStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass target_blockEClass = null;
+  private EClass variableListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass variable_declarationEClass = null;
+  private EClass rScriptBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass any_expressionEClass = null;
+  private EClass rScriptBlockStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass taskFunctionDeclarationEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass taskFunctionBodyEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass taskFunctionBlockEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass estimateTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass simulateTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass executeTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass formalArgumentsEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass functionCallEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass blockStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass verbatimBlockEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass targetBlockEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass symbolModificationEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass parameterDeclarationEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass symbolDeclarationEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass enumTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass missingEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass likelyhoodEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass levelTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass categoricalEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass continuousEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass covariateEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass distributionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass anyExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -490,14 +677,14 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass ode_listEClass = null;
+  private EClass odeListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass random_listEClass = null;
+  private EClass randomListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -518,70 +705,77 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass statementEClass = null;
+  private EClass conditionalStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass par_expressionEClass = null;
+  private EClass blockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass conditional_expressionEClass = null;
+  private EClass parExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass conditional_or_expressionEClass = null;
+  private EClass conditionalExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass conditional_and_expressionEClass = null;
+  private EClass orExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass relational_expressionEClass = null;
+  private EClass andExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass additive_expressionEClass = null;
+  private EClass logicalExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass multiplicative_expressionEClass = null;
+  private EClass additiveExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass power_expressionEClass = null;
+  private EClass multiplicativeExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass unary_expressionEClass = null;
+  private EClass powerExpressionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass unaryExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -595,14 +789,28 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass variable_nameEClass = null;
+  private EClass vectorEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass selectorEClass = null;
+  private EClass fullyQualifiedSymbolNameEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass fullyQualifiedArgumentNameEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass objectNameEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -672,7 +880,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getmcl()
+  public EClass getMcl()
   {
     return mclEClass;
   }
@@ -682,7 +890,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmcl_Objects()
+  public EReference getMcl_Objects()
   {
     return (EReference)mclEClass.getEStructuralFeatures().get(0);
   }
@@ -692,9 +900,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getmcl_obj()
+  public EClass getMclObject()
   {
-    return mcl_objEClass;
+    return mclObjectEClass;
   }
 
   /**
@@ -702,9 +910,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmcl_obj_Model_obj()
+  public EReference getMclObject_ModelObject()
   {
-    return (EReference)mcl_objEClass.getEStructuralFeatures().get(0);
+    return (EReference)mclObjectEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -712,9 +920,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmcl_obj_Param_obj()
+  public EReference getMclObject_ParameterObject()
   {
-    return (EReference)mcl_objEClass.getEStructuralFeatures().get(1);
+    return (EReference)mclObjectEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -722,9 +930,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmcl_obj_Data_obj()
+  public EReference getMclObject_DataObject()
   {
-    return (EReference)mcl_objEClass.getEStructuralFeatures().get(2);
+    return (EReference)mclObjectEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -732,9 +940,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmcl_obj_Task_obj()
+  public EReference getMclObject_TaskObject()
   {
-    return (EReference)mcl_objEClass.getEStructuralFeatures().get(3);
+    return (EReference)mclObjectEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -742,9 +950,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmcl_obj_Tel_obj()
+  public EReference getMclObject_TelObject()
   {
-    return (EReference)mcl_objEClass.getEStructuralFeatures().get(4);
+    return (EReference)mclObjectEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -752,9 +960,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getmodel_obj()
+  public EClass getModelObject()
   {
-    return model_objEClass;
+    return modelObjectEClass;
   }
 
   /**
@@ -762,9 +970,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getmodel_obj_Identifier()
+  public EReference getModelObject_Identifier()
   {
-    return (EAttribute)model_objEClass.getEStructuralFeatures().get(0);
+    return (EReference)modelObjectEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -772,9 +980,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_Blocks()
+  public EReference getModelObject_Blocks()
   {
-    return (EReference)model_objEClass.getEStructuralFeatures().get(1);
+    return (EReference)modelObjectEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -782,9 +990,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getparam_obj()
+  public EClass getParameterObject()
   {
-    return param_objEClass;
+    return parameterObjectEClass;
   }
 
   /**
@@ -792,9 +1000,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getparam_obj_Identifier()
+  public EReference getParameterObject_Identifier()
   {
-    return (EAttribute)param_objEClass.getEStructuralFeatures().get(0);
+    return (EReference)parameterObjectEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -802,9 +1010,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getparam_obj_Blocks()
+  public EReference getParameterObject_Blocks()
   {
-    return (EReference)param_objEClass.getEStructuralFeatures().get(1);
+    return (EReference)parameterObjectEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -812,9 +1020,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getdata_obj()
+  public EClass getDataObject()
   {
-    return data_objEClass;
+    return dataObjectEClass;
   }
 
   /**
@@ -822,9 +1030,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getdata_obj_Identifier()
+  public EReference getDataObject_Identifier()
   {
-    return (EAttribute)data_objEClass.getEStructuralFeatures().get(0);
+    return (EReference)dataObjectEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -832,9 +1040,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getdata_obj_Blocks()
+  public EReference getDataObject_Blocks()
   {
-    return (EReference)data_objEClass.getEStructuralFeatures().get(1);
+    return (EReference)dataObjectEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -842,9 +1050,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass gettask_obj()
+  public EClass getTaskObject()
   {
-    return task_objEClass;
+    return taskObjectEClass;
   }
 
   /**
@@ -852,9 +1060,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute gettask_obj_Identifier()
+  public EReference getTaskObject_Identifier()
   {
-    return (EAttribute)task_objEClass.getEStructuralFeatures().get(0);
+    return (EReference)taskObjectEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -862,9 +1070,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference gettask_obj_Blocks()
+  public EReference getTaskObject_Blocks()
   {
-    return (EReference)task_objEClass.getEStructuralFeatures().get(1);
+    return (EReference)taskObjectEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -872,9 +1080,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass gettel_obj()
+  public EClass getTELObject()
   {
-    return tel_objEClass;
+    return telObjectEClass;
   }
 
   /**
@@ -882,9 +1090,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute gettel_obj_Identifier()
+  public EReference getTELObject_Identifier()
   {
-    return (EAttribute)tel_objEClass.getEStructuralFeatures().get(0);
+    return (EReference)telObjectEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -892,9 +1100,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference gettel_obj_Blocks()
+  public EReference getTELObject_Statements()
   {
-    return (EReference)tel_objEClass.getEStructuralFeatures().get(1);
+    return (EReference)telObjectEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -902,9 +1110,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getmodel_obj_block()
+  public EClass getModelObjectBlock()
   {
-    return model_obj_blockEClass;
+    return modelObjectBlockEClass;
   }
 
   /**
@@ -912,9 +1120,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Individual_model_obj_block()
+  public EReference getModelObjectBlock_IndividualVariablesBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(0);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -922,9 +1130,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Model_prediction_obj_block()
+  public EReference getModelObjectBlock_ModelPredictionBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -932,9 +1140,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Random_variable_definition_block()
+  public EReference getModelObjectBlock_RandomVariableDefinitionBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(2);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -942,9 +1150,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Input_variables_block()
+  public EReference getModelObjectBlock_InputVariablesBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(3);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -952,9 +1160,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Structural_parameters_block()
+  public EReference getModelObjectBlock_StructuralParametersBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(4);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -962,9 +1170,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Variability_parameters_block()
+  public EReference getModelObjectBlock_VariabilityParametersBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(5);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -972,9 +1180,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Output_variables_block()
+  public EReference getModelObjectBlock_OutputVariablesBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(6);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -982,9 +1190,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Group_variables()
+  public EReference getModelObjectBlock_GroupVariablesBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(7);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -992,9 +1200,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Observation_block()
+  public EReference getModelObjectBlock_ObservationBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(8);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -1002,9 +1210,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Estimation_block()
+  public EReference getModelObjectBlock_EstimationBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(9);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(9);
   }
 
   /**
@@ -1012,9 +1220,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_obj_block_Simulation_block()
+  public EReference getModelObjectBlock_SimulationBlock()
   {
-    return (EReference)model_obj_blockEClass.getEStructuralFeatures().get(10);
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(10);
   }
 
   /**
@@ -1022,9 +1230,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getindividual_model_obj_block()
+  public EReference getModelObjectBlock_VerbatimBlock()
   {
-    return individual_model_obj_blockEClass;
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(11);
   }
 
   /**
@@ -1032,9 +1240,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getindividual_model_obj_block_Identifier()
+  public EClass getIndividualVariablesBlock()
   {
-    return (EAttribute)individual_model_obj_blockEClass.getEStructuralFeatures().get(0);
+    return individualVariablesBlockEClass;
   }
 
   /**
@@ -1042,9 +1250,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getindividual_model_obj_block_Block()
+  public EAttribute getIndividualVariablesBlock_Identifier()
   {
-    return (EReference)individual_model_obj_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)individualVariablesBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1052,9 +1260,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getmodel_prediction_obj_block()
+  public EReference getIndividualVariablesBlock_Statements()
   {
-    return model_prediction_obj_blockEClass;
+    return (EReference)individualVariablesBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1062,9 +1270,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getmodel_prediction_obj_block_Identifier()
+  public EClass getModelPredictionBlock()
   {
-    return (EAttribute)model_prediction_obj_blockEClass.getEStructuralFeatures().get(0);
+    return modelPredictionBlockEClass;
   }
 
   /**
@@ -1072,9 +1280,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_prediction_obj_block_Block()
+  public EAttribute getModelPredictionBlock_Identifier()
   {
-    return (EReference)model_prediction_obj_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)modelPredictionBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1082,9 +1290,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getrandom_variable_definition_block()
+  public EReference getModelPredictionBlock_Statements()
   {
-    return random_variable_definition_blockEClass;
+    return (EReference)modelPredictionBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1092,9 +1300,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getrandom_variable_definition_block_Identifier()
+  public EClass getRandomVariableDefinitionBlock()
   {
-    return (EAttribute)random_variable_definition_blockEClass.getEStructuralFeatures().get(0);
+    return randomVariableDefinitionBlockEClass;
   }
 
   /**
@@ -1102,9 +1310,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getrandom_variable_definition_block_Block()
+  public EAttribute getRandomVariableDefinitionBlock_Identifier()
   {
-    return (EReference)random_variable_definition_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)randomVariableDefinitionBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1112,9 +1320,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getinput_variables_block()
+  public EReference getRandomVariableDefinitionBlock_Variables()
   {
-    return input_variables_blockEClass;
+    return (EReference)randomVariableDefinitionBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1122,9 +1330,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getinput_variables_block_Indentifier()
+  public EClass getInputVariablesBlock()
   {
-    return (EAttribute)input_variables_blockEClass.getEStructuralFeatures().get(0);
+    return inputVariablesBlockEClass;
   }
 
   /**
@@ -1132,9 +1340,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getinput_variables_block_Block()
+  public EAttribute getInputVariablesBlock_Indentifier()
   {
-    return (EReference)input_variables_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)inputVariablesBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1142,9 +1350,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getstructural_parameters_block()
+  public EReference getInputVariablesBlock_Variables()
   {
-    return structural_parameters_blockEClass;
+    return (EReference)inputVariablesBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1152,9 +1360,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getstructural_parameters_block_Identifier()
+  public EClass getStructuralParametersBlock()
   {
-    return (EAttribute)structural_parameters_blockEClass.getEStructuralFeatures().get(0);
+    return structuralParametersBlockEClass;
   }
 
   /**
@@ -1162,9 +1370,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getstructural_parameters_block_Block()
+  public EAttribute getStructuralParametersBlock_Identifier()
   {
-    return (EReference)structural_parameters_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)structuralParametersBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1172,9 +1380,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getvariability_parameters_block()
+  public EReference getStructuralParametersBlock_Parameters()
   {
-    return variability_parameters_blockEClass;
+    return (EReference)structuralParametersBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1182,9 +1390,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getvariability_parameters_block_Identifier()
+  public EClass getVariabilityParametersBlock()
   {
-    return (EAttribute)variability_parameters_blockEClass.getEStructuralFeatures().get(0);
+    return variabilityParametersBlockEClass;
   }
 
   /**
@@ -1192,9 +1400,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariability_parameters_block_Block()
+  public EAttribute getVariabilityParametersBlock_Identifier()
   {
-    return (EReference)variability_parameters_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)variabilityParametersBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1202,9 +1410,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getoutput_variables_block()
+  public EReference getVariabilityParametersBlock_Parameters()
   {
-    return output_variables_blockEClass;
+    return (EReference)variabilityParametersBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1212,9 +1420,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getoutput_variables_block_Identifier()
+  public EClass getOutputVariablesBlock()
   {
-    return (EAttribute)output_variables_blockEClass.getEStructuralFeatures().get(0);
+    return outputVariablesBlockEClass;
   }
 
   /**
@@ -1222,9 +1430,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getoutput_variables_block_Block()
+  public EAttribute getOutputVariablesBlock_Identifier()
   {
-    return (EReference)output_variables_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)outputVariablesBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1232,9 +1440,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getgroup_variables()
+  public EReference getOutputVariablesBlock_Variables()
   {
-    return group_variablesEClass;
+    return (EReference)outputVariablesBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1242,9 +1450,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getgroup_variables_Identifier()
+  public EClass getGroupVariablesBlock()
   {
-    return (EAttribute)group_variablesEClass.getEStructuralFeatures().get(0);
+    return groupVariablesBlockEClass;
   }
 
   /**
@@ -1252,9 +1460,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getgroup_variables_Block()
+  public EAttribute getGroupVariablesBlock_Identifier()
   {
-    return (EReference)group_variablesEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)groupVariablesBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1262,9 +1470,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getobservation_block()
+  public EReference getGroupVariablesBlock_Statements()
   {
-    return observation_blockEClass;
+    return (EReference)groupVariablesBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1272,9 +1480,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getobservation_block_Identifier()
+  public EClass getObservationBlock()
   {
-    return (EAttribute)observation_blockEClass.getEStructuralFeatures().get(0);
+    return observationBlockEClass;
   }
 
   /**
@@ -1282,9 +1490,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getobservation_block_Block()
+  public EAttribute getObservationBlock_Identifier()
   {
-    return (EReference)observation_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)observationBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1292,9 +1500,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getestimation_block()
+  public EReference getObservationBlock_Statements()
   {
-    return estimation_blockEClass;
+    return (EReference)observationBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1302,9 +1510,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getestimation_block_Identifier()
+  public EClass getEstimationBlock()
   {
-    return (EAttribute)estimation_blockEClass.getEStructuralFeatures().get(0);
+    return estimationBlockEClass;
   }
 
   /**
@@ -1312,9 +1520,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getestimation_block_Block()
+  public EAttribute getEstimationBlock_Identifier()
   {
-    return (EReference)estimation_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)estimationBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1322,9 +1530,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getsimulation_block()
+  public EReference getEstimationBlock_Statements()
   {
-    return simulation_blockEClass;
+    return (EReference)estimationBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1332,9 +1540,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getsimulation_block_Identifier()
+  public EClass getSimulationBlock()
   {
-    return (EAttribute)simulation_blockEClass.getEStructuralFeatures().get(0);
+    return simulationBlockEClass;
   }
 
   /**
@@ -1342,9 +1550,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getsimulation_block_Block()
+  public EAttribute getSimulationBlock_Identifier()
   {
-    return (EReference)simulation_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)simulationBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1352,9 +1560,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getparam_obj_block()
+  public EReference getSimulationBlock_Statements()
   {
-    return param_obj_blockEClass;
+    return (EReference)simulationBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1362,9 +1570,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getparam_obj_block_Structural_block()
+  public EClass getParameterObjectBlock()
   {
-    return (EReference)param_obj_blockEClass.getEStructuralFeatures().get(0);
+    return parameterObjectBlockEClass;
   }
 
   /**
@@ -1372,9 +1580,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getparam_obj_block_Variability_block()
+  public EReference getParameterObjectBlock_StructuralBlock()
   {
-    return (EReference)param_obj_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)parameterObjectBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1382,9 +1590,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getstructural_block()
+  public EReference getParameterObjectBlock_VariabilityBlock()
   {
-    return structural_blockEClass;
+    return (EReference)parameterObjectBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1392,9 +1600,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getstructural_block_Identifier()
+  public EReference getParameterObjectBlock_PriorBlock()
   {
-    return (EAttribute)structural_blockEClass.getEStructuralFeatures().get(0);
+    return (EReference)parameterObjectBlockEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1402,9 +1610,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getstructural_block_Block()
+  public EReference getParameterObjectBlock_VerbatimBlock()
   {
-    return (EReference)structural_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)parameterObjectBlockEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1412,9 +1620,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getvariability_block()
+  public EClass getStructuralBlock()
   {
-    return variability_blockEClass;
+    return structuralBlockEClass;
   }
 
   /**
@@ -1422,9 +1630,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getvariability_block_Identifier()
+  public EAttribute getStructuralBlock_Identifier()
   {
-    return (EAttribute)variability_blockEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)structuralBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1432,9 +1640,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariability_block_Block()
+  public EReference getStructuralBlock_Parameters()
   {
-    return (EReference)variability_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)structuralBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1442,9 +1650,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getdata_obj_block()
+  public EClass getVariabilityBlock()
   {
-    return data_obj_blockEClass;
+    return variabilityBlockEClass;
   }
 
   /**
@@ -1452,9 +1660,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getdata_obj_block_Header_block()
+  public EAttribute getVariabilityBlock_Identifier()
   {
-    return (EReference)data_obj_blockEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)variabilityBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1462,9 +1670,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getdata_obj_block_File_block()
+  public EReference getVariabilityBlock_Statements()
   {
-    return (EReference)data_obj_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)variabilityBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1472,9 +1680,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getheader_block()
+  public EClass getPriorParametersBlock()
   {
-    return header_blockEClass;
+    return priorParametersBlockEClass;
   }
 
   /**
@@ -1482,9 +1690,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getheader_block_Identifier()
+  public EAttribute getPriorParametersBlock_Identifier()
   {
-    return (EAttribute)header_blockEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)priorParametersBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1492,9 +1700,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getheader_block_Block()
+  public EReference getPriorParametersBlock_Statements()
   {
-    return (EReference)header_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)priorParametersBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1502,9 +1710,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getfile_block()
+  public EClass getDataObjectBlock()
   {
-    return file_blockEClass;
+    return dataObjectBlockEClass;
   }
 
   /**
@@ -1512,9 +1720,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getfile_block_Identifier()
+  public EReference getDataObjectBlock_HeaderBlock()
   {
-    return (EAttribute)file_blockEClass.getEStructuralFeatures().get(0);
+    return (EReference)dataObjectBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1522,9 +1730,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfile_block_Block()
+  public EReference getDataObjectBlock_FileBlock()
   {
-    return (EReference)file_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)dataObjectBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1532,9 +1740,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass gettask_obj_block()
+  public EReference getDataObjectBlock_VerbatimBlock()
   {
-    return task_obj_blockEClass;
+    return (EReference)dataObjectBlockEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1542,9 +1750,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference gettask_obj_block_Function_declaration()
+  public EClass getHeaderBlock()
   {
-    return (EReference)task_obj_blockEClass.getEStructuralFeatures().get(0);
+    return headerBlockEClass;
   }
 
   /**
@@ -1552,9 +1760,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference gettask_obj_block_Parameters_block()
+  public EAttribute getHeaderBlock_Identifier()
   {
-    return (EReference)task_obj_blockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)headerBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1562,9 +1770,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference gettask_obj_block_Data_block()
+  public EReference getHeaderBlock_Variables()
   {
-    return (EReference)task_obj_blockEClass.getEStructuralFeatures().get(2);
+    return (EReference)headerBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1572,9 +1780,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getparameters_block()
+  public EClass getFileBlock()
   {
-    return parameters_blockEClass;
+    return fileBlockEClass;
   }
 
   /**
@@ -1582,9 +1790,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getparameters_block_Identifier()
+  public EAttribute getFileBlock_Identifier()
   {
-    return (EAttribute)parameters_blockEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)fileBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1592,9 +1800,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getparameters_block_Block()
+  public EReference getFileBlock_Statements()
   {
-    return (EReference)parameters_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)fileBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1602,9 +1810,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getdata_block()
+  public EClass getTaskObjectBlock()
   {
-    return data_blockEClass;
+    return taskObjectBlockEClass;
   }
 
   /**
@@ -1612,9 +1820,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getdata_block_Identifier()
+  public EReference getTaskObjectBlock_FunctionDeclaration()
   {
-    return (EAttribute)data_blockEClass.getEStructuralFeatures().get(0);
+    return (EReference)taskObjectBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1622,9 +1830,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getdata_block_Block()
+  public EReference getTaskObjectBlock_ParameterBlock()
   {
-    return (EReference)data_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)taskObjectBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1632,9 +1840,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getmodel_block()
+  public EReference getTaskObjectBlock_DataBlock()
   {
-    return model_blockEClass;
+    return (EReference)taskObjectBlockEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1642,9 +1850,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_block_Statements()
+  public EReference getTaskObjectBlock_ModelBlock()
   {
-    return (EReference)model_blockEClass.getEStructuralFeatures().get(0);
+    return (EReference)taskObjectBlockEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1652,9 +1860,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getmodel_block_statement()
+  public EReference getTaskObjectBlock_VerbatimBlock()
   {
-    return model_block_statementEClass;
+    return (EReference)taskObjectBlockEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -1662,9 +1870,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_block_statement_Statement()
+  public EClass getParameterBlock()
   {
-    return (EReference)model_block_statementEClass.getEStructuralFeatures().get(0);
+    return parameterBlockEClass;
   }
 
   /**
@@ -1672,9 +1880,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_block_statement_Ode_block()
+  public EAttribute getParameterBlock_Identifier()
   {
-    return (EReference)model_block_statementEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)parameterBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1682,9 +1890,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmodel_block_statement_Library_block()
+  public EReference getParameterBlock_Parameters()
   {
-    return (EReference)model_block_statementEClass.getEStructuralFeatures().get(2);
+    return (EReference)parameterBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1692,9 +1900,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getlibrary_block()
+  public EClass getDataBlock()
   {
-    return library_blockEClass;
+    return dataBlockEClass;
   }
 
   /**
@@ -1702,9 +1910,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getlibrary_block_Identifier()
+  public EAttribute getDataBlock_Identifier()
   {
-    return (EAttribute)library_blockEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)dataBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1712,9 +1920,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getlibrary_block_Block()
+  public EReference getDataBlock_Statements()
   {
-    return (EReference)library_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)dataBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1722,9 +1930,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getode_block()
+  public EClass getDataBlockStatement()
   {
-    return ode_blockEClass;
+    return dataBlockStatementEClass;
   }
 
   /**
@@ -1732,9 +1940,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getode_block_Identifier()
+  public EReference getDataBlockStatement_IgnoreList()
   {
-    return (EAttribute)ode_blockEClass.getEStructuralFeatures().get(0);
+    return (EReference)dataBlockStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1742,9 +1950,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getode_block_Block()
+  public EReference getDataBlockStatement_AcceptList()
   {
-    return (EReference)ode_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)dataBlockStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1752,9 +1960,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getvariability_block_content()
+  public EReference getDataBlockStatement_DropList()
   {
-    return variability_block_contentEClass;
+    return (EReference)dataBlockStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1762,9 +1970,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariability_block_content_Blocks()
+  public EClass getIgnoreList()
   {
-    return (EReference)variability_block_contentEClass.getEStructuralFeatures().get(0);
+    return ignoreListEClass;
   }
 
   /**
@@ -1772,9 +1980,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getvariability_block_statement()
+  public EAttribute getIgnoreList_Identifier()
   {
-    return variability_block_statementEClass;
+    return (EAttribute)ignoreListEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1782,9 +1990,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariability_block_statement_Block_statement()
+  public EReference getIgnoreList_Expression()
   {
-    return (EReference)variability_block_statementEClass.getEStructuralFeatures().get(0);
+    return (EReference)ignoreListEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1792,9 +2000,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariability_block_statement_Block_block()
+  public EClass getAcceptList()
   {
-    return (EReference)variability_block_statementEClass.getEStructuralFeatures().get(1);
+    return acceptListEClass;
   }
 
   /**
@@ -1802,9 +2010,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariability_block_statement_Diag_block()
+  public EAttribute getAcceptList_Identifier()
   {
-    return (EReference)variability_block_statementEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)acceptListEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1812,9 +2020,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getblock_subblock()
+  public EReference getAcceptList_Expression()
   {
-    return block_subblockEClass;
+    return (EReference)acceptListEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1822,9 +2030,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getblock_subblock_Identifier()
+  public EClass getDropList()
   {
-    return (EAttribute)block_subblockEClass.getEStructuralFeatures().get(0);
+    return dropListEClass;
   }
 
   /**
@@ -1832,9 +2040,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getblock_subblock_Block()
+  public EAttribute getDropList_Identifier()
   {
-    return (EReference)block_subblockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)dropListEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1842,9 +2050,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getdiag_subblock()
+  public EReference getDropList_List()
   {
-    return diag_subblockEClass;
+    return (EReference)dropListEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1852,9 +2060,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getdiag_subblock_Identifier()
+  public EClass getModelBlock()
   {
-    return (EAttribute)diag_subblockEClass.getEStructuralFeatures().get(0);
+    return modelBlockEClass;
   }
 
   /**
@@ -1862,9 +2070,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getdiag_subblock_Block()
+  public EAttribute getModelBlock_Identifier()
   {
-    return (EReference)diag_subblockEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)modelBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1872,9 +2080,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getvariability_subblock()
+  public EReference getModelBlock_Statements()
   {
-    return variability_subblockEClass;
+    return (EReference)modelBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1882,9 +2090,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariability_subblock_Arguments()
+  public EClass getModelBlockStatement()
   {
-    return (EReference)variability_subblockEClass.getEStructuralFeatures().get(0);
+    return modelBlockStatementEClass;
   }
 
   /**
@@ -1892,9 +2100,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getfile_block_content()
+  public EReference getModelBlockStatement_Statement()
   {
-    return file_block_contentEClass;
+    return (EReference)modelBlockStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1902,9 +2110,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfile_block_content_Blocks()
+  public EReference getModelBlockStatement_AddList()
   {
-    return (EReference)file_block_contentEClass.getEStructuralFeatures().get(0);
+    return (EReference)modelBlockStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1912,9 +2120,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getfile_block_statement()
+  public EReference getModelBlockStatement_RemoveList()
   {
-    return file_block_statementEClass;
+    return (EReference)modelBlockStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1922,9 +2130,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfile_block_statement_Statement()
+  public EClass getAddList()
   {
-    return (EReference)file_block_statementEClass.getEStructuralFeatures().get(0);
+    return addListEClass;
   }
 
   /**
@@ -1932,9 +2140,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfile_block_statement_Inline_block()
+  public EReference getAddList_List()
   {
-    return (EReference)file_block_statementEClass.getEStructuralFeatures().get(1);
+    return (EReference)addListEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1942,9 +2150,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfile_block_statement_Design_block()
+  public EClass getRemoveList()
   {
-    return (EReference)file_block_statementEClass.getEStructuralFeatures().get(2);
+    return removeListEClass;
   }
 
   /**
@@ -1952,9 +2160,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfile_block_statement_Rsscript_block()
+  public EReference getRemoveList_List()
   {
-    return (EReference)file_block_statementEClass.getEStructuralFeatures().get(3);
+    return (EReference)removeListEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1962,9 +2170,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getinline_block()
+  public EClass getSymbolList()
   {
-    return inline_blockEClass;
+    return symbolListEClass;
   }
 
   /**
@@ -1972,9 +2180,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getinline_block_Identifier()
+  public EReference getSymbolList_Symbols()
   {
-    return (EAttribute)inline_blockEClass.getEStructuralFeatures().get(0);
+    return (EReference)symbolListEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1982,9 +2190,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getinline_block_Block()
+  public EClass getModelPredictionBlockStatement()
   {
-    return (EReference)inline_blockEClass.getEStructuralFeatures().get(1);
+    return modelPredictionBlockStatementEClass;
   }
 
   /**
@@ -1992,9 +2200,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getdesign_block()
+  public EReference getModelPredictionBlockStatement_Statement()
   {
-    return design_blockEClass;
+    return (EReference)modelPredictionBlockStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2002,9 +2210,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getdesign_block_Identifier()
+  public EReference getModelPredictionBlockStatement_OdeBlock()
   {
-    return (EAttribute)design_blockEClass.getEStructuralFeatures().get(0);
+    return (EReference)modelPredictionBlockStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2012,9 +2220,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getdesign_block_Block()
+  public EReference getModelPredictionBlockStatement_LibraryBlock()
   {
-    return (EReference)design_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)modelPredictionBlockStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2022,9 +2230,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getrsscript_block()
+  public EClass getLibraryBlock()
   {
-    return rsscript_blockEClass;
+    return libraryBlockEClass;
   }
 
   /**
@@ -2032,9 +2240,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getrsscript_block_Identifier()
+  public EAttribute getLibraryBlock_Identifier()
   {
-    return (EAttribute)rsscript_blockEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)libraryBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2042,9 +2250,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getrsscript_block_Block()
+  public EReference getLibraryBlock_Statements()
   {
-    return (EReference)rsscript_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)libraryBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2052,9 +2260,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getinline_block_content()
+  public EClass getOdeBlock()
   {
-    return inline_block_contentEClass;
+    return odeBlockEClass;
   }
 
   /**
@@ -2062,9 +2270,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getinline_block_content_Identifiers()
+  public EAttribute getOdeBlock_Identifier()
   {
-    return (EAttribute)inline_block_contentEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)odeBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2072,9 +2280,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getinline_block_content_Values()
+  public EReference getOdeBlock_Statements()
   {
-    return (EAttribute)inline_block_contentEClass.getEStructuralFeatures().get(1);
+    return (EReference)odeBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2082,9 +2290,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getfunction_declaration()
+  public EClass getGroupVariablesBlockStatement()
   {
-    return function_declarationEClass;
+    return groupVariablesBlockStatementEClass;
   }
 
   /**
@@ -2092,9 +2300,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getfunction_declaration_Identifier()
+  public EReference getGroupVariablesBlockStatement_Statement()
   {
-    return (EAttribute)function_declarationEClass.getEStructuralFeatures().get(0);
+    return (EReference)groupVariablesBlockStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2102,9 +2310,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfunction_declaration_Formal_arguments()
+  public EReference getGroupVariablesBlockStatement_MixtureBlock()
   {
-    return (EReference)function_declarationEClass.getEStructuralFeatures().get(1);
+    return (EReference)groupVariablesBlockStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2112,9 +2320,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfunction_declaration_Function_body()
+  public EClass getMixtureBlock()
   {
-    return (EReference)function_declarationEClass.getEStructuralFeatures().get(2);
+    return mixtureBlockEClass;
   }
 
   /**
@@ -2122,9 +2330,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getfunction_body()
+  public EAttribute getMixtureBlock_Identifier()
   {
-    return function_bodyEClass;
+    return (EAttribute)mixtureBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2132,9 +2340,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfunction_body_Blocks()
+  public EReference getMixtureBlock_Statements()
   {
-    return (EReference)function_bodyEClass.getEStructuralFeatures().get(0);
+    return (EReference)mixtureBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2142,9 +2350,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getfunction_subblock()
+  public EClass getVariabilityBlockStatement()
   {
-    return function_subblockEClass;
+    return variabilityBlockStatementEClass;
   }
 
   /**
@@ -2152,9 +2360,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getfunction_subblock_Identifier()
+  public EReference getVariabilityBlockStatement_Parameter()
   {
-    return (EAttribute)function_subblockEClass.getEStructuralFeatures().get(0);
+    return (EReference)variabilityBlockStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2162,9 +2370,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfunction_subblock_Estimate_defn()
+  public EReference getVariabilityBlockStatement_BlockBlock()
   {
-    return (EReference)function_subblockEClass.getEStructuralFeatures().get(1);
+    return (EReference)variabilityBlockStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2172,9 +2380,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfunction_subblock_Simulate_defn()
+  public EReference getVariabilityBlockStatement_DiagBlock()
   {
-    return (EReference)function_subblockEClass.getEStructuralFeatures().get(2);
+    return (EReference)variabilityBlockStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2182,9 +2390,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getformal_arguments()
+  public EReference getVariabilityBlockStatement_SameBlock()
   {
-    return formal_argumentsEClass;
+    return (EReference)variabilityBlockStatementEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -2192,9 +2400,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getformal_arguments_Identifiers()
+  public EClass getBlockBlock()
   {
-    return (EAttribute)formal_argumentsEClass.getEStructuralFeatures().get(0);
+    return blockBlockEClass;
   }
 
   /**
@@ -2202,9 +2410,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getfunction_call()
+  public EAttribute getBlockBlock_Identifier()
   {
-    return function_callEClass;
+    return (EAttribute)blockBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2212,9 +2420,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getfunction_call_Funct_name()
+  public EReference getBlockBlock_Arguments()
   {
-    return (EAttribute)function_callEClass.getEStructuralFeatures().get(0);
+    return (EReference)blockBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2222,9 +2430,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getfunction_call_Arguments()
+  public EReference getBlockBlock_Parameters()
   {
-    return (EReference)function_callEClass.getEStructuralFeatures().get(1);
+    return (EReference)blockBlockEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2232,9 +2440,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getblock()
+  public EClass getDiagBlock()
   {
-    return blockEClass;
+    return diagBlockEClass;
   }
 
   /**
@@ -2242,9 +2450,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getblock_Statements()
+  public EAttribute getDiagBlock_Identifier()
   {
-    return (EReference)blockEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)diagBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2252,9 +2460,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getblock_statement()
+  public EReference getDiagBlock_Arguments()
   {
-    return block_statementEClass;
+    return (EReference)diagBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2262,9 +2470,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getblock_statement_Variable_declaration()
+  public EReference getDiagBlock_Parameters()
   {
-    return (EReference)block_statementEClass.getEStructuralFeatures().get(0);
+    return (EReference)diagBlockEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2272,9 +2480,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getblock_statement_Function_call()
+  public EClass getSameBlock()
   {
-    return (EReference)block_statementEClass.getEStructuralFeatures().get(1);
+    return sameBlockEClass;
   }
 
   /**
@@ -2282,9 +2490,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getblock_statement_Statement()
+  public EAttribute getSameBlock_Identifier()
   {
-    return (EReference)block_statementEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)sameBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2292,9 +2500,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getblock_statement_Verbatim_block()
+  public EReference getSameBlock_Arguments()
   {
-    return (EReference)block_statementEClass.getEStructuralFeatures().get(3);
+    return (EReference)sameBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2302,9 +2510,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getverbatim_block()
+  public EReference getSameBlock_Parameters()
   {
-    return verbatim_blockEClass;
+    return (EReference)sameBlockEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2312,9 +2520,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getverbatim_block_Identifier()
+  public EClass getFileBlockStatement()
   {
-    return (EAttribute)verbatim_blockEClass.getEStructuralFeatures().get(0);
+    return fileBlockStatementEClass;
   }
 
   /**
@@ -2322,9 +2530,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getverbatim_block_Block()
+  public EReference getFileBlockStatement_Variable()
   {
-    return (EReference)verbatim_blockEClass.getEStructuralFeatures().get(1);
+    return (EReference)fileBlockStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2332,9 +2540,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getverbatim_block_External_code()
+  public EReference getFileBlockStatement_InlineBlock()
   {
-    return (EAttribute)verbatim_blockEClass.getEStructuralFeatures().get(2);
+    return (EReference)fileBlockStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2342,9 +2550,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass gettarget_block()
+  public EReference getFileBlockStatement_DesignBlock()
   {
-    return target_blockEClass;
+    return (EReference)fileBlockStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2352,9 +2560,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute gettarget_block_Identifier()
+  public EReference getFileBlockStatement_RscriptBlock()
   {
-    return (EAttribute)target_blockEClass.getEStructuralFeatures().get(0);
+    return (EReference)fileBlockStatementEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -2362,9 +2570,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute gettarget_block_External_code()
+  public EClass getInlineBlock()
   {
-    return (EAttribute)target_blockEClass.getEStructuralFeatures().get(1);
+    return inlineBlockEClass;
   }
 
   /**
@@ -2372,9 +2580,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getvariable_declaration()
+  public EAttribute getInlineBlock_Identifier()
   {
-    return variable_declarationEClass;
+    return (EAttribute)inlineBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2382,9 +2590,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariable_declaration_Identifier()
+  public EReference getInlineBlock_Variables()
   {
-    return (EReference)variable_declarationEClass.getEStructuralFeatures().get(0);
+    return (EReference)inlineBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2392,9 +2600,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariable_declaration_Expression()
+  public EAttribute getInlineBlock_Values()
   {
-    return (EReference)variable_declarationEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)inlineBlockEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2402,9 +2610,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariable_declaration_Random_list()
+  public EClass getDesignBlock()
   {
-    return (EReference)variable_declarationEClass.getEStructuralFeatures().get(2);
+    return designBlockEClass;
   }
 
   /**
@@ -2412,9 +2620,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getany_expression()
+  public EAttribute getDesignBlock_Identifier()
   {
-    return any_expressionEClass;
+    return (EAttribute)designBlockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2422,9 +2630,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getany_expression_Expression()
+  public EReference getDesignBlock_Statements()
   {
-    return (EReference)any_expressionEClass.getEStructuralFeatures().get(0);
+    return (EReference)designBlockEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2432,9 +2640,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getany_expression_List()
+  public EClass getDesignBlockStatement()
   {
-    return (EReference)any_expressionEClass.getEStructuralFeatures().get(1);
+    return designBlockStatementEClass;
   }
 
   /**
@@ -2442,9 +2650,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getany_expression_Ode_list()
+  public EReference getDesignBlockStatement_Identifier()
   {
-    return (EReference)any_expressionEClass.getEStructuralFeatures().get(2);
+    return (EReference)designBlockStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2452,9 +2660,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getany_expression_Random_list()
+  public EReference getDesignBlockStatement_Arguments()
   {
-    return (EReference)any_expressionEClass.getEStructuralFeatures().get(3);
+    return (EReference)designBlockStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2462,7 +2670,937 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getexpression()
+  public EReference getDesignBlockStatement_Expression()
+  {
+    return (EReference)designBlockStatementEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getVariableList()
+  {
+    return variableListEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getVariableList_Identifiers()
+  {
+    return (EReference)variableListEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getRScriptBlock()
+  {
+    return rScriptBlockEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRScriptBlock_Identifier()
+  {
+    return (EAttribute)rScriptBlockEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getRScriptBlock_Variables()
+  {
+    return (EReference)rScriptBlockEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getRScriptBlockStatement()
+  {
+    return rScriptBlockStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRScriptBlockStatement_Identifier()
+  {
+    return (EAttribute)rScriptBlockStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRScriptBlockStatement_Value()
+  {
+    return (EAttribute)rScriptBlockStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getRScriptBlockStatement_Object()
+  {
+    return (EReference)rScriptBlockStatementEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getTaskFunctionDeclaration()
+  {
+    return taskFunctionDeclarationEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTaskFunctionDeclaration_Identifier()
+  {
+    return (EAttribute)taskFunctionDeclarationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTaskFunctionDeclaration_FormalArguments()
+  {
+    return (EReference)taskFunctionDeclarationEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTaskFunctionDeclaration_FunctionBody()
+  {
+    return (EReference)taskFunctionDeclarationEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getTaskFunctionBody()
+  {
+    return taskFunctionBodyEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTaskFunctionBody_Blocks()
+  {
+    return (EReference)taskFunctionBodyEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getTaskFunctionBlock()
+  {
+    return taskFunctionBlockEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTaskFunctionBlock_EstimateBlock()
+  {
+    return (EReference)taskFunctionBlockEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTaskFunctionBlock_SimulateBlock()
+  {
+    return (EReference)taskFunctionBlockEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTaskFunctionBlock_ExecuteBlock()
+  {
+    return (EReference)taskFunctionBlockEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getEstimateTask()
+  {
+    return estimateTaskEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getEstimateTask_Identifier()
+  {
+    return (EAttribute)estimateTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEstimateTask_Statements()
+  {
+    return (EReference)estimateTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getSimulateTask()
+  {
+    return simulateTaskEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSimulateTask_Identifier()
+  {
+    return (EAttribute)simulateTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSimulateTask_Statements()
+  {
+    return (EReference)simulateTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getExecuteTask()
+  {
+    return executeTaskEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getExecuteTask_Identifier()
+  {
+    return (EAttribute)executeTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getExecuteTask_Statements()
+  {
+    return (EReference)executeTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFormalArguments()
+  {
+    return formalArgumentsEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFormalArguments_Identifiers()
+  {
+    return (EAttribute)formalArgumentsEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFunctionCall()
+  {
+    return functionCallEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFunctionCall_Identifier()
+  {
+    return (EReference)functionCallEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFunctionCall_Arguments()
+  {
+    return (EReference)functionCallEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getBlockStatement()
+  {
+    return blockStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getBlockStatement_Symbol()
+  {
+    return (EReference)blockStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getBlockStatement_FunctionCall()
+  {
+    return (EReference)blockStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getBlockStatement_Statement()
+  {
+    return (EReference)blockStatementEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getBlockStatement_VerbatimBlock()
+  {
+    return (EReference)blockStatementEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getVerbatimBlock()
+  {
+    return verbatimBlockEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getVerbatimBlock_Identifier()
+  {
+    return (EAttribute)verbatimBlockEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getVerbatimBlock_Block()
+  {
+    return (EReference)verbatimBlockEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getVerbatimBlock_ExternalCode()
+  {
+    return (EAttribute)verbatimBlockEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getTargetBlock()
+  {
+    return targetBlockEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTargetBlock_Identifier()
+  {
+    return (EAttribute)targetBlockEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTargetBlock_Arguments()
+  {
+    return (EReference)targetBlockEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTargetBlock_ExternalCode()
+  {
+    return (EAttribute)targetBlockEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getSymbolModification()
+  {
+    return symbolModificationEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSymbolModification_Identifier()
+  {
+    return (EReference)symbolModificationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSymbolModification_List()
+  {
+    return (EReference)symbolModificationEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getParameterDeclaration()
+  {
+    return parameterDeclarationEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getParameterDeclaration_Identifier()
+  {
+    return (EAttribute)parameterDeclarationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getParameterDeclaration_List()
+  {
+    return (EReference)parameterDeclarationEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getSymbolDeclaration()
+  {
+    return symbolDeclarationEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSymbolDeclaration_Identifier()
+  {
+    return (EAttribute)symbolDeclarationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSymbolDeclaration_Expression()
+  {
+    return (EReference)symbolDeclarationEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSymbolDeclaration_RandomList()
+  {
+    return (EReference)symbolDeclarationEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSymbolDeclaration_Function()
+  {
+    return (EAttribute)symbolDeclarationEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getEnumType()
+  {
+    return enumTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEnumType_Categorical()
+  {
+    return (EReference)enumTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEnumType_Continuous()
+  {
+    return (EReference)enumTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEnumType_Covariate()
+  {
+    return (EReference)enumTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEnumType_Distribution()
+  {
+    return (EReference)enumTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEnumType_Level()
+  {
+    return (EReference)enumTypeEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEnumType_Likelyhood()
+  {
+    return (EReference)enumTypeEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEnumType_Missing()
+  {
+    return (EReference)enumTypeEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getMissing()
+  {
+    return missingEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getMissing_Identifier()
+  {
+    return (EAttribute)missingEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getLikelyhood()
+  {
+    return likelyhoodEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getLikelyhood_Identifier()
+  {
+    return (EAttribute)likelyhoodEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getLevelType()
+  {
+    return levelTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getLevelType_Mdv()
+  {
+    return (EAttribute)levelTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getLevelType_Id()
+  {
+    return (EAttribute)levelTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getLevelType_Dv()
+  {
+    return (EAttribute)levelTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getLevelType_Idv()
+  {
+    return (EAttribute)levelTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getCategorical()
+  {
+    return categoricalEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getCategorical_Identifier()
+  {
+    return (EAttribute)categoricalEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getCategorical_Arguments()
+  {
+    return (EReference)categoricalEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getContinuous()
+  {
+    return continuousEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getContinuous_Identifier()
+  {
+    return (EAttribute)continuousEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getCovariate()
+  {
+    return covariateEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getCovariate_Identifier()
+  {
+    return (EAttribute)covariateEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getDistribution()
+  {
+    return distributionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDistribution_Normal()
+  {
+    return (EAttribute)distributionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDistribution_Binomial()
+  {
+    return (EAttribute)distributionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDistribution_Poisson()
+  {
+    return (EAttribute)distributionEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDistribution_Student_t()
+  {
+    return (EAttribute)distributionEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDistribution_Mvnormal()
+  {
+    return (EAttribute)distributionEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getAnyExpression()
+  {
+    return anyExpressionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getAnyExpression_Expression()
+  {
+    return (EReference)anyExpressionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getAnyExpression_List()
+  {
+    return (EReference)anyExpressionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getAnyExpression_OdeList()
+  {
+    return (EReference)anyExpressionEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getAnyExpression_Type()
+  {
+    return (EReference)anyExpressionEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getExpression()
   {
     return expressionEClass;
   }
@@ -2472,7 +3610,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getexpression_Conditional_expression()
+  public EReference getExpression_ConditionalExpression()
   {
     return (EReference)expressionEClass.getEStructuralFeatures().get(0);
   }
@@ -2482,17 +3620,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getexpression_String_expression()
-  {
-    return (EAttribute)expressionEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getlist()
+  public EClass getList()
   {
     return listEClass;
   }
@@ -2502,7 +3630,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getlist_Arguments()
+  public EReference getList_Arguments()
   {
     return (EReference)listEClass.getEStructuralFeatures().get(0);
   }
@@ -2512,9 +3640,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getode_list()
+  public EClass getOdeList()
   {
-    return ode_listEClass;
+    return odeListEClass;
   }
 
   /**
@@ -2522,9 +3650,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getode_list_Arguments()
+  public EReference getOdeList_Arguments()
   {
-    return (EReference)ode_listEClass.getEStructuralFeatures().get(0);
+    return (EReference)odeListEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2532,9 +3660,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getrandom_list()
+  public EClass getRandomList()
   {
-    return random_listEClass;
+    return randomListEClass;
   }
 
   /**
@@ -2542,9 +3670,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getrandom_list_Arguments()
+  public EReference getRandomList_Arguments()
   {
-    return (EReference)random_listEClass.getEStructuralFeatures().get(0);
+    return (EReference)randomListEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2552,7 +3680,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getarguments()
+  public EClass getArguments()
   {
     return argumentsEClass;
   }
@@ -2562,7 +3690,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getarguments_Arguments()
+  public EReference getArguments_Arguments()
   {
     return (EReference)argumentsEClass.getEStructuralFeatures().get(0);
   }
@@ -2572,7 +3700,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getargument()
+  public EClass getArgument()
   {
     return argumentEClass;
   }
@@ -2582,7 +3710,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getargument_Identifier()
+  public EAttribute getArgument_Identifier()
   {
     return (EAttribute)argumentEClass.getEStructuralFeatures().get(0);
   }
@@ -2592,7 +3720,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getargument_Expression()
+  public EReference getArgument_Expression()
   {
     return (EReference)argumentEClass.getEStructuralFeatures().get(1);
   }
@@ -2602,9 +3730,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getstatement()
+  public EClass getConditionalStatement()
   {
-    return statementEClass;
+    return conditionalStatementEClass;
   }
 
   /**
@@ -2612,9 +3740,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getstatement_Block()
+  public EReference getConditionalStatement_ParExpression()
   {
-    return (EReference)statementEClass.getEStructuralFeatures().get(0);
+    return (EReference)conditionalStatementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2622,9 +3750,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getstatement_Par_expression()
+  public EReference getConditionalStatement_IfStatement()
   {
-    return (EReference)statementEClass.getEStructuralFeatures().get(1);
+    return (EReference)conditionalStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2632,9 +3760,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getstatement_If_statement()
+  public EReference getConditionalStatement_IfBlock()
   {
-    return (EReference)statementEClass.getEStructuralFeatures().get(2);
+    return (EReference)conditionalStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2642,9 +3770,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getstatement_Else_statement()
+  public EReference getConditionalStatement_ElseStatement()
   {
-    return (EReference)statementEClass.getEStructuralFeatures().get(3);
+    return (EReference)conditionalStatementEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -2652,9 +3780,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getpar_expression()
+  public EReference getConditionalStatement_ElseBlock()
   {
-    return par_expressionEClass;
+    return (EReference)conditionalStatementEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -2662,9 +3790,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getpar_expression_Expression()
+  public EClass getBlock()
   {
-    return (EReference)par_expressionEClass.getEStructuralFeatures().get(0);
+    return blockEClass;
   }
 
   /**
@@ -2672,9 +3800,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getconditional_expression()
+  public EReference getBlock_Statements()
   {
-    return conditional_expressionEClass;
+    return (EReference)blockEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2682,9 +3810,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getconditional_expression_Conditional_or_expression()
+  public EClass getParExpression()
   {
-    return (EReference)conditional_expressionEClass.getEStructuralFeatures().get(0);
+    return parExpressionEClass;
   }
 
   /**
@@ -2692,9 +3820,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getconditional_expression_Expression1()
+  public EReference getParExpression_Expression()
   {
-    return (EReference)conditional_expressionEClass.getEStructuralFeatures().get(1);
+    return (EReference)parExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2702,9 +3830,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getconditional_expression_Expression2()
+  public EClass getConditionalExpression()
   {
-    return (EReference)conditional_expressionEClass.getEStructuralFeatures().get(2);
+    return conditionalExpressionEClass;
   }
 
   /**
@@ -2712,9 +3840,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getconditional_or_expression()
+  public EReference getConditionalExpression_Expression()
   {
-    return conditional_or_expressionEClass;
+    return (EReference)conditionalExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2722,9 +3850,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getconditional_or_expression_Conditional_and_expression()
+  public EReference getConditionalExpression_Expression1()
   {
-    return (EReference)conditional_or_expressionEClass.getEStructuralFeatures().get(0);
+    return (EReference)conditionalExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2732,9 +3860,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getconditional_or_expression_Operator()
+  public EReference getConditionalExpression_Expression2()
   {
-    return (EAttribute)conditional_or_expressionEClass.getEStructuralFeatures().get(1);
+    return (EReference)conditionalExpressionEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2742,9 +3870,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getconditional_and_expression()
+  public EClass getOrExpression()
   {
-    return conditional_and_expressionEClass;
+    return orExpressionEClass;
   }
 
   /**
@@ -2752,9 +3880,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getconditional_and_expression_Relational_expression()
+  public EReference getOrExpression_Expression()
   {
-    return (EReference)conditional_and_expressionEClass.getEStructuralFeatures().get(0);
+    return (EReference)orExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2762,9 +3890,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getconditional_and_expression_Operator()
+  public EAttribute getOrExpression_Operator()
   {
-    return (EAttribute)conditional_and_expressionEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)orExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2772,9 +3900,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getrelational_expression()
+  public EClass getAndExpression()
   {
-    return relational_expressionEClass;
+    return andExpressionEClass;
   }
 
   /**
@@ -2782,9 +3910,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getrelational_expression_Negation()
+  public EReference getAndExpression_Expression()
   {
-    return (EAttribute)relational_expressionEClass.getEStructuralFeatures().get(0);
+    return (EReference)andExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2792,9 +3920,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getrelational_expression_Boolean()
+  public EAttribute getAndExpression_Operator()
   {
-    return (EAttribute)relational_expressionEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)andExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2802,9 +3930,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getrelational_expression_Additive_expression()
+  public EClass getLogicalExpression()
   {
-    return (EReference)relational_expressionEClass.getEStructuralFeatures().get(2);
+    return logicalExpressionEClass;
   }
 
   /**
@@ -2812,9 +3940,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getrelational_expression_Relational_op()
+  public EAttribute getLogicalExpression_Negation()
   {
-    return (EAttribute)relational_expressionEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)logicalExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2822,9 +3950,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getadditive_expression()
+  public EAttribute getLogicalExpression_Boolean()
   {
-    return additive_expressionEClass;
+    return (EAttribute)logicalExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2832,9 +3960,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getadditive_expression_Multiplicative_expression()
+  public EReference getLogicalExpression_Expression()
   {
-    return (EReference)additive_expressionEClass.getEStructuralFeatures().get(0);
+    return (EReference)logicalExpressionEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2842,9 +3970,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getadditive_expression_Additive_op()
+  public EAttribute getLogicalExpression_Operator()
   {
-    return (EAttribute)additive_expressionEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)logicalExpressionEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -2852,9 +3980,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getmultiplicative_expression()
+  public EClass getAdditiveExpression()
   {
-    return multiplicative_expressionEClass;
+    return additiveExpressionEClass;
   }
 
   /**
@@ -2862,9 +3990,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getmultiplicative_expression_Power_expression()
+  public EReference getAdditiveExpression_Expression()
   {
-    return (EReference)multiplicative_expressionEClass.getEStructuralFeatures().get(0);
+    return (EReference)additiveExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2872,9 +4000,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getmultiplicative_expression_Multiplicative_op()
+  public EAttribute getAdditiveExpression_Operator()
   {
-    return (EAttribute)multiplicative_expressionEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)additiveExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2882,9 +4010,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getpower_expression()
+  public EAttribute getAdditiveExpression_String()
   {
-    return power_expressionEClass;
+    return (EAttribute)additiveExpressionEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2892,9 +4020,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getpower_expression_Unary_expression()
+  public EClass getMultiplicativeExpression()
   {
-    return (EReference)power_expressionEClass.getEStructuralFeatures().get(0);
+    return multiplicativeExpressionEClass;
   }
 
   /**
@@ -2902,9 +4030,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getpower_expression_Power_op()
+  public EReference getMultiplicativeExpression_Expression()
   {
-    return (EAttribute)power_expressionEClass.getEStructuralFeatures().get(1);
+    return (EReference)multiplicativeExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2912,9 +4040,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getunary_expression()
+  public EAttribute getMultiplicativeExpression_Operator()
   {
-    return unary_expressionEClass;
+    return (EAttribute)multiplicativeExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2922,9 +4050,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getunary_expression_Operator()
+  public EClass getPowerExpression()
   {
-    return (EAttribute)unary_expressionEClass.getEStructuralFeatures().get(0);
+    return powerExpressionEClass;
   }
 
   /**
@@ -2932,9 +4060,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getunary_expression_Unary_expression()
+  public EReference getPowerExpression_Expression()
   {
-    return (EReference)unary_expressionEClass.getEStructuralFeatures().get(1);
+    return (EReference)powerExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2942,9 +4070,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getunary_expression_Par_expression()
+  public EAttribute getPowerExpression_Operator()
   {
-    return (EReference)unary_expressionEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)powerExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2952,9 +4080,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getunary_expression_Function_call()
+  public EClass getUnaryExpression()
   {
-    return (EReference)unary_expressionEClass.getEStructuralFeatures().get(3);
+    return unaryExpressionEClass;
   }
 
   /**
@@ -2962,9 +4090,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getunary_expression_Primary()
+  public EAttribute getUnaryExpression_Operator()
   {
-    return (EReference)unary_expressionEClass.getEStructuralFeatures().get(4);
+    return (EAttribute)unaryExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2972,7 +4100,37 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getprimary()
+  public EReference getUnaryExpression_Expression()
+  {
+    return (EReference)unaryExpressionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getUnaryExpression_ParExpression()
+  {
+    return (EReference)unaryExpressionEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getUnaryExpression_Primary()
+  {
+    return (EReference)unaryExpressionEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getPrimary()
   {
     return primaryEClass;
   }
@@ -2982,9 +4140,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getprimary_Number()
+  public EReference getPrimary_FunctionCall()
   {
-    return (EAttribute)primaryEClass.getEStructuralFeatures().get(0);
+    return (EReference)primaryEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2992,9 +4150,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getprimary_Identifier()
+  public EAttribute getPrimary_Number()
   {
-    return (EReference)primaryEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)primaryEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -3002,9 +4160,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getvariable_name()
+  public EReference getPrimary_Symbol()
   {
-    return variable_nameEClass;
+    return (EReference)primaryEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -3012,9 +4170,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getvariable_name_Identifier()
+  public EReference getPrimary_Attribute()
   {
-    return (EAttribute)variable_nameEClass.getEStructuralFeatures().get(0);
+    return (EReference)primaryEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -3022,9 +4180,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getvariable_name_Selector()
+  public EReference getPrimary_Vector()
   {
-    return (EReference)variable_nameEClass.getEStructuralFeatures().get(1);
+    return (EReference)primaryEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -3032,9 +4190,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getselector()
+  public EClass getVector()
   {
-    return selectorEClass;
+    return vectorEClass;
   }
 
   /**
@@ -3042,9 +4200,99 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getselector_Expression()
+  public EAttribute getVector_Identifier()
   {
-    return (EReference)selectorEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)vectorEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getVector_Values()
+  {
+    return (EReference)vectorEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFullyQualifiedSymbolName()
+  {
+    return fullyQualifiedSymbolNameEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFullyQualifiedSymbolName_Object()
+  {
+    return (EReference)fullyQualifiedSymbolNameEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFullyQualifiedSymbolName_Identifier()
+  {
+    return (EAttribute)fullyQualifiedSymbolNameEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFullyQualifiedArgumentName()
+  {
+    return fullyQualifiedArgumentNameEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFullyQualifiedArgumentName_Parent()
+  {
+    return (EReference)fullyQualifiedArgumentNameEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFullyQualifiedArgumentName_Identifier()
+  {
+    return (EAttribute)fullyQualifiedArgumentNameEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getObjectName()
+  {
+    return objectNameEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getObjectName_Name()
+  {
+    return (EAttribute)objectNameEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -3080,248 +4328,363 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     mclEClass = createEClass(MCL);
     createEReference(mclEClass, MCL__OBJECTS);
 
-    mcl_objEClass = createEClass(MCL_OBJ);
-    createEReference(mcl_objEClass, MCL_OBJ__MODEL_OBJ);
-    createEReference(mcl_objEClass, MCL_OBJ__PARAM_OBJ);
-    createEReference(mcl_objEClass, MCL_OBJ__DATA_OBJ);
-    createEReference(mcl_objEClass, MCL_OBJ__TASK_OBJ);
-    createEReference(mcl_objEClass, MCL_OBJ__TEL_OBJ);
+    mclObjectEClass = createEClass(MCL_OBJECT);
+    createEReference(mclObjectEClass, MCL_OBJECT__MODEL_OBJECT);
+    createEReference(mclObjectEClass, MCL_OBJECT__PARAMETER_OBJECT);
+    createEReference(mclObjectEClass, MCL_OBJECT__DATA_OBJECT);
+    createEReference(mclObjectEClass, MCL_OBJECT__TASK_OBJECT);
+    createEReference(mclObjectEClass, MCL_OBJECT__TEL_OBJECT);
 
-    model_objEClass = createEClass(MODEL_OBJ);
-    createEAttribute(model_objEClass, MODEL_OBJ__IDENTIFIER);
-    createEReference(model_objEClass, MODEL_OBJ__BLOCKS);
+    modelObjectEClass = createEClass(MODEL_OBJECT);
+    createEReference(modelObjectEClass, MODEL_OBJECT__IDENTIFIER);
+    createEReference(modelObjectEClass, MODEL_OBJECT__BLOCKS);
 
-    param_objEClass = createEClass(PARAM_OBJ);
-    createEAttribute(param_objEClass, PARAM_OBJ__IDENTIFIER);
-    createEReference(param_objEClass, PARAM_OBJ__BLOCKS);
+    parameterObjectEClass = createEClass(PARAMETER_OBJECT);
+    createEReference(parameterObjectEClass, PARAMETER_OBJECT__IDENTIFIER);
+    createEReference(parameterObjectEClass, PARAMETER_OBJECT__BLOCKS);
 
-    data_objEClass = createEClass(DATA_OBJ);
-    createEAttribute(data_objEClass, DATA_OBJ__IDENTIFIER);
-    createEReference(data_objEClass, DATA_OBJ__BLOCKS);
+    dataObjectEClass = createEClass(DATA_OBJECT);
+    createEReference(dataObjectEClass, DATA_OBJECT__IDENTIFIER);
+    createEReference(dataObjectEClass, DATA_OBJECT__BLOCKS);
 
-    task_objEClass = createEClass(TASK_OBJ);
-    createEAttribute(task_objEClass, TASK_OBJ__IDENTIFIER);
-    createEReference(task_objEClass, TASK_OBJ__BLOCKS);
+    taskObjectEClass = createEClass(TASK_OBJECT);
+    createEReference(taskObjectEClass, TASK_OBJECT__IDENTIFIER);
+    createEReference(taskObjectEClass, TASK_OBJECT__BLOCKS);
 
-    tel_objEClass = createEClass(TEL_OBJ);
-    createEAttribute(tel_objEClass, TEL_OBJ__IDENTIFIER);
-    createEReference(tel_objEClass, TEL_OBJ__BLOCKS);
+    telObjectEClass = createEClass(TEL_OBJECT);
+    createEReference(telObjectEClass, TEL_OBJECT__IDENTIFIER);
+    createEReference(telObjectEClass, TEL_OBJECT__STATEMENTS);
 
-    model_obj_blockEClass = createEClass(MODEL_OBJ_BLOCK);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__INDIVIDUAL_MODEL_OBJ_BLOCK);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__MODEL_PREDICTION_OBJ_BLOCK);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__RANDOM_VARIABLE_DEFINITION_BLOCK);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__INPUT_VARIABLES_BLOCK);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__STRUCTURAL_PARAMETERS_BLOCK);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__VARIABILITY_PARAMETERS_BLOCK);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__OUTPUT_VARIABLES_BLOCK);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__GROUP_VARIABLES);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__OBSERVATION_BLOCK);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__ESTIMATION_BLOCK);
-    createEReference(model_obj_blockEClass, MODEL_OBJ_BLOCK__SIMULATION_BLOCK);
+    modelObjectBlockEClass = createEClass(MODEL_OBJECT_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__INDIVIDUAL_VARIABLES_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__MODEL_PREDICTION_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__RANDOM_VARIABLE_DEFINITION_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__INPUT_VARIABLES_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__STRUCTURAL_PARAMETERS_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__VARIABILITY_PARAMETERS_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__OUTPUT_VARIABLES_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__GROUP_VARIABLES_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__OBSERVATION_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__ESTIMATION_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__SIMULATION_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__VERBATIM_BLOCK);
 
-    individual_model_obj_blockEClass = createEClass(INDIVIDUAL_MODEL_OBJ_BLOCK);
-    createEAttribute(individual_model_obj_blockEClass, INDIVIDUAL_MODEL_OBJ_BLOCK__IDENTIFIER);
-    createEReference(individual_model_obj_blockEClass, INDIVIDUAL_MODEL_OBJ_BLOCK__BLOCK);
+    individualVariablesBlockEClass = createEClass(INDIVIDUAL_VARIABLES_BLOCK);
+    createEAttribute(individualVariablesBlockEClass, INDIVIDUAL_VARIABLES_BLOCK__IDENTIFIER);
+    createEReference(individualVariablesBlockEClass, INDIVIDUAL_VARIABLES_BLOCK__STATEMENTS);
 
-    model_prediction_obj_blockEClass = createEClass(MODEL_PREDICTION_OBJ_BLOCK);
-    createEAttribute(model_prediction_obj_blockEClass, MODEL_PREDICTION_OBJ_BLOCK__IDENTIFIER);
-    createEReference(model_prediction_obj_blockEClass, MODEL_PREDICTION_OBJ_BLOCK__BLOCK);
+    modelPredictionBlockEClass = createEClass(MODEL_PREDICTION_BLOCK);
+    createEAttribute(modelPredictionBlockEClass, MODEL_PREDICTION_BLOCK__IDENTIFIER);
+    createEReference(modelPredictionBlockEClass, MODEL_PREDICTION_BLOCK__STATEMENTS);
 
-    random_variable_definition_blockEClass = createEClass(RANDOM_VARIABLE_DEFINITION_BLOCK);
-    createEAttribute(random_variable_definition_blockEClass, RANDOM_VARIABLE_DEFINITION_BLOCK__IDENTIFIER);
-    createEReference(random_variable_definition_blockEClass, RANDOM_VARIABLE_DEFINITION_BLOCK__BLOCK);
+    randomVariableDefinitionBlockEClass = createEClass(RANDOM_VARIABLE_DEFINITION_BLOCK);
+    createEAttribute(randomVariableDefinitionBlockEClass, RANDOM_VARIABLE_DEFINITION_BLOCK__IDENTIFIER);
+    createEReference(randomVariableDefinitionBlockEClass, RANDOM_VARIABLE_DEFINITION_BLOCK__VARIABLES);
 
-    input_variables_blockEClass = createEClass(INPUT_VARIABLES_BLOCK);
-    createEAttribute(input_variables_blockEClass, INPUT_VARIABLES_BLOCK__INDENTIFIER);
-    createEReference(input_variables_blockEClass, INPUT_VARIABLES_BLOCK__BLOCK);
+    inputVariablesBlockEClass = createEClass(INPUT_VARIABLES_BLOCK);
+    createEAttribute(inputVariablesBlockEClass, INPUT_VARIABLES_BLOCK__INDENTIFIER);
+    createEReference(inputVariablesBlockEClass, INPUT_VARIABLES_BLOCK__VARIABLES);
 
-    structural_parameters_blockEClass = createEClass(STRUCTURAL_PARAMETERS_BLOCK);
-    createEAttribute(structural_parameters_blockEClass, STRUCTURAL_PARAMETERS_BLOCK__IDENTIFIER);
-    createEReference(structural_parameters_blockEClass, STRUCTURAL_PARAMETERS_BLOCK__BLOCK);
+    structuralParametersBlockEClass = createEClass(STRUCTURAL_PARAMETERS_BLOCK);
+    createEAttribute(structuralParametersBlockEClass, STRUCTURAL_PARAMETERS_BLOCK__IDENTIFIER);
+    createEReference(structuralParametersBlockEClass, STRUCTURAL_PARAMETERS_BLOCK__PARAMETERS);
 
-    variability_parameters_blockEClass = createEClass(VARIABILITY_PARAMETERS_BLOCK);
-    createEAttribute(variability_parameters_blockEClass, VARIABILITY_PARAMETERS_BLOCK__IDENTIFIER);
-    createEReference(variability_parameters_blockEClass, VARIABILITY_PARAMETERS_BLOCK__BLOCK);
+    variabilityParametersBlockEClass = createEClass(VARIABILITY_PARAMETERS_BLOCK);
+    createEAttribute(variabilityParametersBlockEClass, VARIABILITY_PARAMETERS_BLOCK__IDENTIFIER);
+    createEReference(variabilityParametersBlockEClass, VARIABILITY_PARAMETERS_BLOCK__PARAMETERS);
 
-    output_variables_blockEClass = createEClass(OUTPUT_VARIABLES_BLOCK);
-    createEAttribute(output_variables_blockEClass, OUTPUT_VARIABLES_BLOCK__IDENTIFIER);
-    createEReference(output_variables_blockEClass, OUTPUT_VARIABLES_BLOCK__BLOCK);
+    outputVariablesBlockEClass = createEClass(OUTPUT_VARIABLES_BLOCK);
+    createEAttribute(outputVariablesBlockEClass, OUTPUT_VARIABLES_BLOCK__IDENTIFIER);
+    createEReference(outputVariablesBlockEClass, OUTPUT_VARIABLES_BLOCK__VARIABLES);
 
-    group_variablesEClass = createEClass(GROUP_VARIABLES);
-    createEAttribute(group_variablesEClass, GROUP_VARIABLES__IDENTIFIER);
-    createEReference(group_variablesEClass, GROUP_VARIABLES__BLOCK);
+    groupVariablesBlockEClass = createEClass(GROUP_VARIABLES_BLOCK);
+    createEAttribute(groupVariablesBlockEClass, GROUP_VARIABLES_BLOCK__IDENTIFIER);
+    createEReference(groupVariablesBlockEClass, GROUP_VARIABLES_BLOCK__STATEMENTS);
 
-    observation_blockEClass = createEClass(OBSERVATION_BLOCK);
-    createEAttribute(observation_blockEClass, OBSERVATION_BLOCK__IDENTIFIER);
-    createEReference(observation_blockEClass, OBSERVATION_BLOCK__BLOCK);
+    observationBlockEClass = createEClass(OBSERVATION_BLOCK);
+    createEAttribute(observationBlockEClass, OBSERVATION_BLOCK__IDENTIFIER);
+    createEReference(observationBlockEClass, OBSERVATION_BLOCK__STATEMENTS);
 
-    estimation_blockEClass = createEClass(ESTIMATION_BLOCK);
-    createEAttribute(estimation_blockEClass, ESTIMATION_BLOCK__IDENTIFIER);
-    createEReference(estimation_blockEClass, ESTIMATION_BLOCK__BLOCK);
+    estimationBlockEClass = createEClass(ESTIMATION_BLOCK);
+    createEAttribute(estimationBlockEClass, ESTIMATION_BLOCK__IDENTIFIER);
+    createEReference(estimationBlockEClass, ESTIMATION_BLOCK__STATEMENTS);
 
-    simulation_blockEClass = createEClass(SIMULATION_BLOCK);
-    createEAttribute(simulation_blockEClass, SIMULATION_BLOCK__IDENTIFIER);
-    createEReference(simulation_blockEClass, SIMULATION_BLOCK__BLOCK);
+    simulationBlockEClass = createEClass(SIMULATION_BLOCK);
+    createEAttribute(simulationBlockEClass, SIMULATION_BLOCK__IDENTIFIER);
+    createEReference(simulationBlockEClass, SIMULATION_BLOCK__STATEMENTS);
 
-    param_obj_blockEClass = createEClass(PARAM_OBJ_BLOCK);
-    createEReference(param_obj_blockEClass, PARAM_OBJ_BLOCK__STRUCTURAL_BLOCK);
-    createEReference(param_obj_blockEClass, PARAM_OBJ_BLOCK__VARIABILITY_BLOCK);
+    parameterObjectBlockEClass = createEClass(PARAMETER_OBJECT_BLOCK);
+    createEReference(parameterObjectBlockEClass, PARAMETER_OBJECT_BLOCK__STRUCTURAL_BLOCK);
+    createEReference(parameterObjectBlockEClass, PARAMETER_OBJECT_BLOCK__VARIABILITY_BLOCK);
+    createEReference(parameterObjectBlockEClass, PARAMETER_OBJECT_BLOCK__PRIOR_BLOCK);
+    createEReference(parameterObjectBlockEClass, PARAMETER_OBJECT_BLOCK__VERBATIM_BLOCK);
 
-    structural_blockEClass = createEClass(STRUCTURAL_BLOCK);
-    createEAttribute(structural_blockEClass, STRUCTURAL_BLOCK__IDENTIFIER);
-    createEReference(structural_blockEClass, STRUCTURAL_BLOCK__BLOCK);
+    structuralBlockEClass = createEClass(STRUCTURAL_BLOCK);
+    createEAttribute(structuralBlockEClass, STRUCTURAL_BLOCK__IDENTIFIER);
+    createEReference(structuralBlockEClass, STRUCTURAL_BLOCK__PARAMETERS);
 
-    variability_blockEClass = createEClass(VARIABILITY_BLOCK);
-    createEAttribute(variability_blockEClass, VARIABILITY_BLOCK__IDENTIFIER);
-    createEReference(variability_blockEClass, VARIABILITY_BLOCK__BLOCK);
+    variabilityBlockEClass = createEClass(VARIABILITY_BLOCK);
+    createEAttribute(variabilityBlockEClass, VARIABILITY_BLOCK__IDENTIFIER);
+    createEReference(variabilityBlockEClass, VARIABILITY_BLOCK__STATEMENTS);
 
-    data_obj_blockEClass = createEClass(DATA_OBJ_BLOCK);
-    createEReference(data_obj_blockEClass, DATA_OBJ_BLOCK__HEADER_BLOCK);
-    createEReference(data_obj_blockEClass, DATA_OBJ_BLOCK__FILE_BLOCK);
+    priorParametersBlockEClass = createEClass(PRIOR_PARAMETERS_BLOCK);
+    createEAttribute(priorParametersBlockEClass, PRIOR_PARAMETERS_BLOCK__IDENTIFIER);
+    createEReference(priorParametersBlockEClass, PRIOR_PARAMETERS_BLOCK__STATEMENTS);
 
-    header_blockEClass = createEClass(HEADER_BLOCK);
-    createEAttribute(header_blockEClass, HEADER_BLOCK__IDENTIFIER);
-    createEReference(header_blockEClass, HEADER_BLOCK__BLOCK);
+    dataObjectBlockEClass = createEClass(DATA_OBJECT_BLOCK);
+    createEReference(dataObjectBlockEClass, DATA_OBJECT_BLOCK__HEADER_BLOCK);
+    createEReference(dataObjectBlockEClass, DATA_OBJECT_BLOCK__FILE_BLOCK);
+    createEReference(dataObjectBlockEClass, DATA_OBJECT_BLOCK__VERBATIM_BLOCK);
 
-    file_blockEClass = createEClass(FILE_BLOCK);
-    createEAttribute(file_blockEClass, FILE_BLOCK__IDENTIFIER);
-    createEReference(file_blockEClass, FILE_BLOCK__BLOCK);
+    headerBlockEClass = createEClass(HEADER_BLOCK);
+    createEAttribute(headerBlockEClass, HEADER_BLOCK__IDENTIFIER);
+    createEReference(headerBlockEClass, HEADER_BLOCK__VARIABLES);
 
-    task_obj_blockEClass = createEClass(TASK_OBJ_BLOCK);
-    createEReference(task_obj_blockEClass, TASK_OBJ_BLOCK__FUNCTION_DECLARATION);
-    createEReference(task_obj_blockEClass, TASK_OBJ_BLOCK__PARAMETERS_BLOCK);
-    createEReference(task_obj_blockEClass, TASK_OBJ_BLOCK__DATA_BLOCK);
+    fileBlockEClass = createEClass(FILE_BLOCK);
+    createEAttribute(fileBlockEClass, FILE_BLOCK__IDENTIFIER);
+    createEReference(fileBlockEClass, FILE_BLOCK__STATEMENTS);
 
-    parameters_blockEClass = createEClass(PARAMETERS_BLOCK);
-    createEAttribute(parameters_blockEClass, PARAMETERS_BLOCK__IDENTIFIER);
-    createEReference(parameters_blockEClass, PARAMETERS_BLOCK__BLOCK);
+    taskObjectBlockEClass = createEClass(TASK_OBJECT_BLOCK);
+    createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__FUNCTION_DECLARATION);
+    createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__PARAMETER_BLOCK);
+    createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__DATA_BLOCK);
+    createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__MODEL_BLOCK);
+    createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__VERBATIM_BLOCK);
 
-    data_blockEClass = createEClass(DATA_BLOCK);
-    createEAttribute(data_blockEClass, DATA_BLOCK__IDENTIFIER);
-    createEReference(data_blockEClass, DATA_BLOCK__BLOCK);
+    parameterBlockEClass = createEClass(PARAMETER_BLOCK);
+    createEAttribute(parameterBlockEClass, PARAMETER_BLOCK__IDENTIFIER);
+    createEReference(parameterBlockEClass, PARAMETER_BLOCK__PARAMETERS);
 
-    model_blockEClass = createEClass(MODEL_BLOCK);
-    createEReference(model_blockEClass, MODEL_BLOCK__STATEMENTS);
+    dataBlockEClass = createEClass(DATA_BLOCK);
+    createEAttribute(dataBlockEClass, DATA_BLOCK__IDENTIFIER);
+    createEReference(dataBlockEClass, DATA_BLOCK__STATEMENTS);
 
-    model_block_statementEClass = createEClass(MODEL_BLOCK_STATEMENT);
-    createEReference(model_block_statementEClass, MODEL_BLOCK_STATEMENT__STATEMENT);
-    createEReference(model_block_statementEClass, MODEL_BLOCK_STATEMENT__ODE_BLOCK);
-    createEReference(model_block_statementEClass, MODEL_BLOCK_STATEMENT__LIBRARY_BLOCK);
+    dataBlockStatementEClass = createEClass(DATA_BLOCK_STATEMENT);
+    createEReference(dataBlockStatementEClass, DATA_BLOCK_STATEMENT__IGNORE_LIST);
+    createEReference(dataBlockStatementEClass, DATA_BLOCK_STATEMENT__ACCEPT_LIST);
+    createEReference(dataBlockStatementEClass, DATA_BLOCK_STATEMENT__DROP_LIST);
 
-    library_blockEClass = createEClass(LIBRARY_BLOCK);
-    createEAttribute(library_blockEClass, LIBRARY_BLOCK__IDENTIFIER);
-    createEReference(library_blockEClass, LIBRARY_BLOCK__BLOCK);
+    ignoreListEClass = createEClass(IGNORE_LIST);
+    createEAttribute(ignoreListEClass, IGNORE_LIST__IDENTIFIER);
+    createEReference(ignoreListEClass, IGNORE_LIST__EXPRESSION);
 
-    ode_blockEClass = createEClass(ODE_BLOCK);
-    createEAttribute(ode_blockEClass, ODE_BLOCK__IDENTIFIER);
-    createEReference(ode_blockEClass, ODE_BLOCK__BLOCK);
+    acceptListEClass = createEClass(ACCEPT_LIST);
+    createEAttribute(acceptListEClass, ACCEPT_LIST__IDENTIFIER);
+    createEReference(acceptListEClass, ACCEPT_LIST__EXPRESSION);
 
-    variability_block_contentEClass = createEClass(VARIABILITY_BLOCK_CONTENT);
-    createEReference(variability_block_contentEClass, VARIABILITY_BLOCK_CONTENT__BLOCKS);
+    dropListEClass = createEClass(DROP_LIST);
+    createEAttribute(dropListEClass, DROP_LIST__IDENTIFIER);
+    createEReference(dropListEClass, DROP_LIST__LIST);
 
-    variability_block_statementEClass = createEClass(VARIABILITY_BLOCK_STATEMENT);
-    createEReference(variability_block_statementEClass, VARIABILITY_BLOCK_STATEMENT__BLOCK_STATEMENT);
-    createEReference(variability_block_statementEClass, VARIABILITY_BLOCK_STATEMENT__BLOCK_BLOCK);
-    createEReference(variability_block_statementEClass, VARIABILITY_BLOCK_STATEMENT__DIAG_BLOCK);
+    modelBlockEClass = createEClass(MODEL_BLOCK);
+    createEAttribute(modelBlockEClass, MODEL_BLOCK__IDENTIFIER);
+    createEReference(modelBlockEClass, MODEL_BLOCK__STATEMENTS);
 
-    block_subblockEClass = createEClass(BLOCK_SUBBLOCK);
-    createEAttribute(block_subblockEClass, BLOCK_SUBBLOCK__IDENTIFIER);
-    createEReference(block_subblockEClass, BLOCK_SUBBLOCK__BLOCK);
+    modelBlockStatementEClass = createEClass(MODEL_BLOCK_STATEMENT);
+    createEReference(modelBlockStatementEClass, MODEL_BLOCK_STATEMENT__STATEMENT);
+    createEReference(modelBlockStatementEClass, MODEL_BLOCK_STATEMENT__ADD_LIST);
+    createEReference(modelBlockStatementEClass, MODEL_BLOCK_STATEMENT__REMOVE_LIST);
 
-    diag_subblockEClass = createEClass(DIAG_SUBBLOCK);
-    createEAttribute(diag_subblockEClass, DIAG_SUBBLOCK__IDENTIFIER);
-    createEReference(diag_subblockEClass, DIAG_SUBBLOCK__BLOCK);
+    addListEClass = createEClass(ADD_LIST);
+    createEReference(addListEClass, ADD_LIST__LIST);
 
-    variability_subblockEClass = createEClass(VARIABILITY_SUBBLOCK);
-    createEReference(variability_subblockEClass, VARIABILITY_SUBBLOCK__ARGUMENTS);
+    removeListEClass = createEClass(REMOVE_LIST);
+    createEReference(removeListEClass, REMOVE_LIST__LIST);
 
-    file_block_contentEClass = createEClass(FILE_BLOCK_CONTENT);
-    createEReference(file_block_contentEClass, FILE_BLOCK_CONTENT__BLOCKS);
+    symbolListEClass = createEClass(SYMBOL_LIST);
+    createEReference(symbolListEClass, SYMBOL_LIST__SYMBOLS);
 
-    file_block_statementEClass = createEClass(FILE_BLOCK_STATEMENT);
-    createEReference(file_block_statementEClass, FILE_BLOCK_STATEMENT__STATEMENT);
-    createEReference(file_block_statementEClass, FILE_BLOCK_STATEMENT__INLINE_BLOCK);
-    createEReference(file_block_statementEClass, FILE_BLOCK_STATEMENT__DESIGN_BLOCK);
-    createEReference(file_block_statementEClass, FILE_BLOCK_STATEMENT__RSSCRIPT_BLOCK);
+    modelPredictionBlockStatementEClass = createEClass(MODEL_PREDICTION_BLOCK_STATEMENT);
+    createEReference(modelPredictionBlockStatementEClass, MODEL_PREDICTION_BLOCK_STATEMENT__STATEMENT);
+    createEReference(modelPredictionBlockStatementEClass, MODEL_PREDICTION_BLOCK_STATEMENT__ODE_BLOCK);
+    createEReference(modelPredictionBlockStatementEClass, MODEL_PREDICTION_BLOCK_STATEMENT__LIBRARY_BLOCK);
 
-    inline_blockEClass = createEClass(INLINE_BLOCK);
-    createEAttribute(inline_blockEClass, INLINE_BLOCK__IDENTIFIER);
-    createEReference(inline_blockEClass, INLINE_BLOCK__BLOCK);
+    libraryBlockEClass = createEClass(LIBRARY_BLOCK);
+    createEAttribute(libraryBlockEClass, LIBRARY_BLOCK__IDENTIFIER);
+    createEReference(libraryBlockEClass, LIBRARY_BLOCK__STATEMENTS);
 
-    design_blockEClass = createEClass(DESIGN_BLOCK);
-    createEAttribute(design_blockEClass, DESIGN_BLOCK__IDENTIFIER);
-    createEReference(design_blockEClass, DESIGN_BLOCK__BLOCK);
+    odeBlockEClass = createEClass(ODE_BLOCK);
+    createEAttribute(odeBlockEClass, ODE_BLOCK__IDENTIFIER);
+    createEReference(odeBlockEClass, ODE_BLOCK__STATEMENTS);
 
-    rsscript_blockEClass = createEClass(RSSCRIPT_BLOCK);
-    createEAttribute(rsscript_blockEClass, RSSCRIPT_BLOCK__IDENTIFIER);
-    createEReference(rsscript_blockEClass, RSSCRIPT_BLOCK__BLOCK);
+    groupVariablesBlockStatementEClass = createEClass(GROUP_VARIABLES_BLOCK_STATEMENT);
+    createEReference(groupVariablesBlockStatementEClass, GROUP_VARIABLES_BLOCK_STATEMENT__STATEMENT);
+    createEReference(groupVariablesBlockStatementEClass, GROUP_VARIABLES_BLOCK_STATEMENT__MIXTURE_BLOCK);
 
-    inline_block_contentEClass = createEClass(INLINE_BLOCK_CONTENT);
-    createEAttribute(inline_block_contentEClass, INLINE_BLOCK_CONTENT__IDENTIFIERS);
-    createEAttribute(inline_block_contentEClass, INLINE_BLOCK_CONTENT__VALUES);
+    mixtureBlockEClass = createEClass(MIXTURE_BLOCK);
+    createEAttribute(mixtureBlockEClass, MIXTURE_BLOCK__IDENTIFIER);
+    createEReference(mixtureBlockEClass, MIXTURE_BLOCK__STATEMENTS);
 
-    function_declarationEClass = createEClass(FUNCTION_DECLARATION);
-    createEAttribute(function_declarationEClass, FUNCTION_DECLARATION__IDENTIFIER);
-    createEReference(function_declarationEClass, FUNCTION_DECLARATION__FORMAL_ARGUMENTS);
-    createEReference(function_declarationEClass, FUNCTION_DECLARATION__FUNCTION_BODY);
+    variabilityBlockStatementEClass = createEClass(VARIABILITY_BLOCK_STATEMENT);
+    createEReference(variabilityBlockStatementEClass, VARIABILITY_BLOCK_STATEMENT__PARAMETER);
+    createEReference(variabilityBlockStatementEClass, VARIABILITY_BLOCK_STATEMENT__BLOCK_BLOCK);
+    createEReference(variabilityBlockStatementEClass, VARIABILITY_BLOCK_STATEMENT__DIAG_BLOCK);
+    createEReference(variabilityBlockStatementEClass, VARIABILITY_BLOCK_STATEMENT__SAME_BLOCK);
 
-    function_bodyEClass = createEClass(FUNCTION_BODY);
-    createEReference(function_bodyEClass, FUNCTION_BODY__BLOCKS);
+    blockBlockEClass = createEClass(BLOCK_BLOCK);
+    createEAttribute(blockBlockEClass, BLOCK_BLOCK__IDENTIFIER);
+    createEReference(blockBlockEClass, BLOCK_BLOCK__ARGUMENTS);
+    createEReference(blockBlockEClass, BLOCK_BLOCK__PARAMETERS);
 
-    function_subblockEClass = createEClass(FUNCTION_SUBBLOCK);
-    createEAttribute(function_subblockEClass, FUNCTION_SUBBLOCK__IDENTIFIER);
-    createEReference(function_subblockEClass, FUNCTION_SUBBLOCK__ESTIMATE_DEFN);
-    createEReference(function_subblockEClass, FUNCTION_SUBBLOCK__SIMULATE_DEFN);
+    diagBlockEClass = createEClass(DIAG_BLOCK);
+    createEAttribute(diagBlockEClass, DIAG_BLOCK__IDENTIFIER);
+    createEReference(diagBlockEClass, DIAG_BLOCK__ARGUMENTS);
+    createEReference(diagBlockEClass, DIAG_BLOCK__PARAMETERS);
 
-    formal_argumentsEClass = createEClass(FORMAL_ARGUMENTS);
-    createEAttribute(formal_argumentsEClass, FORMAL_ARGUMENTS__IDENTIFIERS);
+    sameBlockEClass = createEClass(SAME_BLOCK);
+    createEAttribute(sameBlockEClass, SAME_BLOCK__IDENTIFIER);
+    createEReference(sameBlockEClass, SAME_BLOCK__ARGUMENTS);
+    createEReference(sameBlockEClass, SAME_BLOCK__PARAMETERS);
 
-    function_callEClass = createEClass(FUNCTION_CALL);
-    createEAttribute(function_callEClass, FUNCTION_CALL__FUNCT_NAME);
-    createEReference(function_callEClass, FUNCTION_CALL__ARGUMENTS);
+    fileBlockStatementEClass = createEClass(FILE_BLOCK_STATEMENT);
+    createEReference(fileBlockStatementEClass, FILE_BLOCK_STATEMENT__VARIABLE);
+    createEReference(fileBlockStatementEClass, FILE_BLOCK_STATEMENT__INLINE_BLOCK);
+    createEReference(fileBlockStatementEClass, FILE_BLOCK_STATEMENT__DESIGN_BLOCK);
+    createEReference(fileBlockStatementEClass, FILE_BLOCK_STATEMENT__RSCRIPT_BLOCK);
 
-    blockEClass = createEClass(BLOCK);
-    createEReference(blockEClass, BLOCK__STATEMENTS);
+    inlineBlockEClass = createEClass(INLINE_BLOCK);
+    createEAttribute(inlineBlockEClass, INLINE_BLOCK__IDENTIFIER);
+    createEReference(inlineBlockEClass, INLINE_BLOCK__VARIABLES);
+    createEAttribute(inlineBlockEClass, INLINE_BLOCK__VALUES);
 
-    block_statementEClass = createEClass(BLOCK_STATEMENT);
-    createEReference(block_statementEClass, BLOCK_STATEMENT__VARIABLE_DECLARATION);
-    createEReference(block_statementEClass, BLOCK_STATEMENT__FUNCTION_CALL);
-    createEReference(block_statementEClass, BLOCK_STATEMENT__STATEMENT);
-    createEReference(block_statementEClass, BLOCK_STATEMENT__VERBATIM_BLOCK);
+    designBlockEClass = createEClass(DESIGN_BLOCK);
+    createEAttribute(designBlockEClass, DESIGN_BLOCK__IDENTIFIER);
+    createEReference(designBlockEClass, DESIGN_BLOCK__STATEMENTS);
 
-    verbatim_blockEClass = createEClass(VERBATIM_BLOCK);
-    createEAttribute(verbatim_blockEClass, VERBATIM_BLOCK__IDENTIFIER);
-    createEReference(verbatim_blockEClass, VERBATIM_BLOCK__BLOCK);
-    createEAttribute(verbatim_blockEClass, VERBATIM_BLOCK__EXTERNAL_CODE);
+    designBlockStatementEClass = createEClass(DESIGN_BLOCK_STATEMENT);
+    createEReference(designBlockStatementEClass, DESIGN_BLOCK_STATEMENT__IDENTIFIER);
+    createEReference(designBlockStatementEClass, DESIGN_BLOCK_STATEMENT__ARGUMENTS);
+    createEReference(designBlockStatementEClass, DESIGN_BLOCK_STATEMENT__EXPRESSION);
 
-    target_blockEClass = createEClass(TARGET_BLOCK);
-    createEAttribute(target_blockEClass, TARGET_BLOCK__IDENTIFIER);
-    createEAttribute(target_blockEClass, TARGET_BLOCK__EXTERNAL_CODE);
+    variableListEClass = createEClass(VARIABLE_LIST);
+    createEReference(variableListEClass, VARIABLE_LIST__IDENTIFIERS);
 
-    variable_declarationEClass = createEClass(VARIABLE_DECLARATION);
-    createEReference(variable_declarationEClass, VARIABLE_DECLARATION__IDENTIFIER);
-    createEReference(variable_declarationEClass, VARIABLE_DECLARATION__EXPRESSION);
-    createEReference(variable_declarationEClass, VARIABLE_DECLARATION__RANDOM_LIST);
+    rScriptBlockEClass = createEClass(RSCRIPT_BLOCK);
+    createEAttribute(rScriptBlockEClass, RSCRIPT_BLOCK__IDENTIFIER);
+    createEReference(rScriptBlockEClass, RSCRIPT_BLOCK__VARIABLES);
 
-    any_expressionEClass = createEClass(ANY_EXPRESSION);
-    createEReference(any_expressionEClass, ANY_EXPRESSION__EXPRESSION);
-    createEReference(any_expressionEClass, ANY_EXPRESSION__LIST);
-    createEReference(any_expressionEClass, ANY_EXPRESSION__ODE_LIST);
-    createEReference(any_expressionEClass, ANY_EXPRESSION__RANDOM_LIST);
+    rScriptBlockStatementEClass = createEClass(RSCRIPT_BLOCK_STATEMENT);
+    createEAttribute(rScriptBlockStatementEClass, RSCRIPT_BLOCK_STATEMENT__IDENTIFIER);
+    createEAttribute(rScriptBlockStatementEClass, RSCRIPT_BLOCK_STATEMENT__VALUE);
+    createEReference(rScriptBlockStatementEClass, RSCRIPT_BLOCK_STATEMENT__OBJECT);
+
+    taskFunctionDeclarationEClass = createEClass(TASK_FUNCTION_DECLARATION);
+    createEAttribute(taskFunctionDeclarationEClass, TASK_FUNCTION_DECLARATION__IDENTIFIER);
+    createEReference(taskFunctionDeclarationEClass, TASK_FUNCTION_DECLARATION__FORMAL_ARGUMENTS);
+    createEReference(taskFunctionDeclarationEClass, TASK_FUNCTION_DECLARATION__FUNCTION_BODY);
+
+    taskFunctionBodyEClass = createEClass(TASK_FUNCTION_BODY);
+    createEReference(taskFunctionBodyEClass, TASK_FUNCTION_BODY__BLOCKS);
+
+    taskFunctionBlockEClass = createEClass(TASK_FUNCTION_BLOCK);
+    createEReference(taskFunctionBlockEClass, TASK_FUNCTION_BLOCK__ESTIMATE_BLOCK);
+    createEReference(taskFunctionBlockEClass, TASK_FUNCTION_BLOCK__SIMULATE_BLOCK);
+    createEReference(taskFunctionBlockEClass, TASK_FUNCTION_BLOCK__EXECUTE_BLOCK);
+
+    estimateTaskEClass = createEClass(ESTIMATE_TASK);
+    createEAttribute(estimateTaskEClass, ESTIMATE_TASK__IDENTIFIER);
+    createEReference(estimateTaskEClass, ESTIMATE_TASK__STATEMENTS);
+
+    simulateTaskEClass = createEClass(SIMULATE_TASK);
+    createEAttribute(simulateTaskEClass, SIMULATE_TASK__IDENTIFIER);
+    createEReference(simulateTaskEClass, SIMULATE_TASK__STATEMENTS);
+
+    executeTaskEClass = createEClass(EXECUTE_TASK);
+    createEAttribute(executeTaskEClass, EXECUTE_TASK__IDENTIFIER);
+    createEReference(executeTaskEClass, EXECUTE_TASK__STATEMENTS);
+
+    formalArgumentsEClass = createEClass(FORMAL_ARGUMENTS);
+    createEAttribute(formalArgumentsEClass, FORMAL_ARGUMENTS__IDENTIFIERS);
+
+    functionCallEClass = createEClass(FUNCTION_CALL);
+    createEReference(functionCallEClass, FUNCTION_CALL__IDENTIFIER);
+    createEReference(functionCallEClass, FUNCTION_CALL__ARGUMENTS);
+
+    blockStatementEClass = createEClass(BLOCK_STATEMENT);
+    createEReference(blockStatementEClass, BLOCK_STATEMENT__SYMBOL);
+    createEReference(blockStatementEClass, BLOCK_STATEMENT__FUNCTION_CALL);
+    createEReference(blockStatementEClass, BLOCK_STATEMENT__STATEMENT);
+    createEReference(blockStatementEClass, BLOCK_STATEMENT__VERBATIM_BLOCK);
+
+    verbatimBlockEClass = createEClass(VERBATIM_BLOCK);
+    createEAttribute(verbatimBlockEClass, VERBATIM_BLOCK__IDENTIFIER);
+    createEReference(verbatimBlockEClass, VERBATIM_BLOCK__BLOCK);
+    createEAttribute(verbatimBlockEClass, VERBATIM_BLOCK__EXTERNAL_CODE);
+
+    targetBlockEClass = createEClass(TARGET_BLOCK);
+    createEAttribute(targetBlockEClass, TARGET_BLOCK__IDENTIFIER);
+    createEReference(targetBlockEClass, TARGET_BLOCK__ARGUMENTS);
+    createEAttribute(targetBlockEClass, TARGET_BLOCK__EXTERNAL_CODE);
+
+    symbolModificationEClass = createEClass(SYMBOL_MODIFICATION);
+    createEReference(symbolModificationEClass, SYMBOL_MODIFICATION__IDENTIFIER);
+    createEReference(symbolModificationEClass, SYMBOL_MODIFICATION__LIST);
+
+    parameterDeclarationEClass = createEClass(PARAMETER_DECLARATION);
+    createEAttribute(parameterDeclarationEClass, PARAMETER_DECLARATION__IDENTIFIER);
+    createEReference(parameterDeclarationEClass, PARAMETER_DECLARATION__LIST);
+
+    symbolDeclarationEClass = createEClass(SYMBOL_DECLARATION);
+    createEAttribute(symbolDeclarationEClass, SYMBOL_DECLARATION__IDENTIFIER);
+    createEReference(symbolDeclarationEClass, SYMBOL_DECLARATION__EXPRESSION);
+    createEReference(symbolDeclarationEClass, SYMBOL_DECLARATION__RANDOM_LIST);
+    createEAttribute(symbolDeclarationEClass, SYMBOL_DECLARATION__FUNCTION);
+
+    enumTypeEClass = createEClass(ENUM_TYPE);
+    createEReference(enumTypeEClass, ENUM_TYPE__CATEGORICAL);
+    createEReference(enumTypeEClass, ENUM_TYPE__CONTINUOUS);
+    createEReference(enumTypeEClass, ENUM_TYPE__COVARIATE);
+    createEReference(enumTypeEClass, ENUM_TYPE__DISTRIBUTION);
+    createEReference(enumTypeEClass, ENUM_TYPE__LEVEL);
+    createEReference(enumTypeEClass, ENUM_TYPE__LIKELYHOOD);
+    createEReference(enumTypeEClass, ENUM_TYPE__MISSING);
+
+    missingEClass = createEClass(MISSING);
+    createEAttribute(missingEClass, MISSING__IDENTIFIER);
+
+    likelyhoodEClass = createEClass(LIKELYHOOD);
+    createEAttribute(likelyhoodEClass, LIKELYHOOD__IDENTIFIER);
+
+    levelTypeEClass = createEClass(LEVEL_TYPE);
+    createEAttribute(levelTypeEClass, LEVEL_TYPE__MDV);
+    createEAttribute(levelTypeEClass, LEVEL_TYPE__ID);
+    createEAttribute(levelTypeEClass, LEVEL_TYPE__DV);
+    createEAttribute(levelTypeEClass, LEVEL_TYPE__IDV);
+
+    categoricalEClass = createEClass(CATEGORICAL);
+    createEAttribute(categoricalEClass, CATEGORICAL__IDENTIFIER);
+    createEReference(categoricalEClass, CATEGORICAL__ARGUMENTS);
+
+    continuousEClass = createEClass(CONTINUOUS);
+    createEAttribute(continuousEClass, CONTINUOUS__IDENTIFIER);
+
+    covariateEClass = createEClass(COVARIATE);
+    createEAttribute(covariateEClass, COVARIATE__IDENTIFIER);
+
+    distributionEClass = createEClass(DISTRIBUTION);
+    createEAttribute(distributionEClass, DISTRIBUTION__NORMAL);
+    createEAttribute(distributionEClass, DISTRIBUTION__BINOMIAL);
+    createEAttribute(distributionEClass, DISTRIBUTION__POISSON);
+    createEAttribute(distributionEClass, DISTRIBUTION__STUDENT_T);
+    createEAttribute(distributionEClass, DISTRIBUTION__MVNORMAL);
+
+    anyExpressionEClass = createEClass(ANY_EXPRESSION);
+    createEReference(anyExpressionEClass, ANY_EXPRESSION__EXPRESSION);
+    createEReference(anyExpressionEClass, ANY_EXPRESSION__LIST);
+    createEReference(anyExpressionEClass, ANY_EXPRESSION__ODE_LIST);
+    createEReference(anyExpressionEClass, ANY_EXPRESSION__TYPE);
 
     expressionEClass = createEClass(EXPRESSION);
     createEReference(expressionEClass, EXPRESSION__CONDITIONAL_EXPRESSION);
-    createEAttribute(expressionEClass, EXPRESSION__STRING_EXPRESSION);
 
     listEClass = createEClass(LIST);
     createEReference(listEClass, LIST__ARGUMENTS);
 
-    ode_listEClass = createEClass(ODE_LIST);
-    createEReference(ode_listEClass, ODE_LIST__ARGUMENTS);
+    odeListEClass = createEClass(ODE_LIST);
+    createEReference(odeListEClass, ODE_LIST__ARGUMENTS);
 
-    random_listEClass = createEClass(RANDOM_LIST);
-    createEReference(random_listEClass, RANDOM_LIST__ARGUMENTS);
+    randomListEClass = createEClass(RANDOM_LIST);
+    createEReference(randomListEClass, RANDOM_LIST__ARGUMENTS);
 
     argumentsEClass = createEClass(ARGUMENTS);
     createEReference(argumentsEClass, ARGUMENTS__ARGUMENTS);
@@ -3330,63 +4693,78 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     createEAttribute(argumentEClass, ARGUMENT__IDENTIFIER);
     createEReference(argumentEClass, ARGUMENT__EXPRESSION);
 
-    statementEClass = createEClass(STATEMENT);
-    createEReference(statementEClass, STATEMENT__BLOCK);
-    createEReference(statementEClass, STATEMENT__PAR_EXPRESSION);
-    createEReference(statementEClass, STATEMENT__IF_STATEMENT);
-    createEReference(statementEClass, STATEMENT__ELSE_STATEMENT);
+    conditionalStatementEClass = createEClass(CONDITIONAL_STATEMENT);
+    createEReference(conditionalStatementEClass, CONDITIONAL_STATEMENT__PAR_EXPRESSION);
+    createEReference(conditionalStatementEClass, CONDITIONAL_STATEMENT__IF_STATEMENT);
+    createEReference(conditionalStatementEClass, CONDITIONAL_STATEMENT__IF_BLOCK);
+    createEReference(conditionalStatementEClass, CONDITIONAL_STATEMENT__ELSE_STATEMENT);
+    createEReference(conditionalStatementEClass, CONDITIONAL_STATEMENT__ELSE_BLOCK);
 
-    par_expressionEClass = createEClass(PAR_EXPRESSION);
-    createEReference(par_expressionEClass, PAR_EXPRESSION__EXPRESSION);
+    blockEClass = createEClass(BLOCK);
+    createEReference(blockEClass, BLOCK__STATEMENTS);
 
-    conditional_expressionEClass = createEClass(CONDITIONAL_EXPRESSION);
-    createEReference(conditional_expressionEClass, CONDITIONAL_EXPRESSION__CONDITIONAL_OR_EXPRESSION);
-    createEReference(conditional_expressionEClass, CONDITIONAL_EXPRESSION__EXPRESSION1);
-    createEReference(conditional_expressionEClass, CONDITIONAL_EXPRESSION__EXPRESSION2);
+    parExpressionEClass = createEClass(PAR_EXPRESSION);
+    createEReference(parExpressionEClass, PAR_EXPRESSION__EXPRESSION);
 
-    conditional_or_expressionEClass = createEClass(CONDITIONAL_OR_EXPRESSION);
-    createEReference(conditional_or_expressionEClass, CONDITIONAL_OR_EXPRESSION__CONDITIONAL_AND_EXPRESSION);
-    createEAttribute(conditional_or_expressionEClass, CONDITIONAL_OR_EXPRESSION__OPERATOR);
+    conditionalExpressionEClass = createEClass(CONDITIONAL_EXPRESSION);
+    createEReference(conditionalExpressionEClass, CONDITIONAL_EXPRESSION__EXPRESSION);
+    createEReference(conditionalExpressionEClass, CONDITIONAL_EXPRESSION__EXPRESSION1);
+    createEReference(conditionalExpressionEClass, CONDITIONAL_EXPRESSION__EXPRESSION2);
 
-    conditional_and_expressionEClass = createEClass(CONDITIONAL_AND_EXPRESSION);
-    createEReference(conditional_and_expressionEClass, CONDITIONAL_AND_EXPRESSION__RELATIONAL_EXPRESSION);
-    createEAttribute(conditional_and_expressionEClass, CONDITIONAL_AND_EXPRESSION__OPERATOR);
+    orExpressionEClass = createEClass(OR_EXPRESSION);
+    createEReference(orExpressionEClass, OR_EXPRESSION__EXPRESSION);
+    createEAttribute(orExpressionEClass, OR_EXPRESSION__OPERATOR);
 
-    relational_expressionEClass = createEClass(RELATIONAL_EXPRESSION);
-    createEAttribute(relational_expressionEClass, RELATIONAL_EXPRESSION__NEGATION);
-    createEAttribute(relational_expressionEClass, RELATIONAL_EXPRESSION__BOOLEAN);
-    createEReference(relational_expressionEClass, RELATIONAL_EXPRESSION__ADDITIVE_EXPRESSION);
-    createEAttribute(relational_expressionEClass, RELATIONAL_EXPRESSION__RELATIONAL_OP);
+    andExpressionEClass = createEClass(AND_EXPRESSION);
+    createEReference(andExpressionEClass, AND_EXPRESSION__EXPRESSION);
+    createEAttribute(andExpressionEClass, AND_EXPRESSION__OPERATOR);
 
-    additive_expressionEClass = createEClass(ADDITIVE_EXPRESSION);
-    createEReference(additive_expressionEClass, ADDITIVE_EXPRESSION__MULTIPLICATIVE_EXPRESSION);
-    createEAttribute(additive_expressionEClass, ADDITIVE_EXPRESSION__ADDITIVE_OP);
+    logicalExpressionEClass = createEClass(LOGICAL_EXPRESSION);
+    createEAttribute(logicalExpressionEClass, LOGICAL_EXPRESSION__NEGATION);
+    createEAttribute(logicalExpressionEClass, LOGICAL_EXPRESSION__BOOLEAN);
+    createEReference(logicalExpressionEClass, LOGICAL_EXPRESSION__EXPRESSION);
+    createEAttribute(logicalExpressionEClass, LOGICAL_EXPRESSION__OPERATOR);
 
-    multiplicative_expressionEClass = createEClass(MULTIPLICATIVE_EXPRESSION);
-    createEReference(multiplicative_expressionEClass, MULTIPLICATIVE_EXPRESSION__POWER_EXPRESSION);
-    createEAttribute(multiplicative_expressionEClass, MULTIPLICATIVE_EXPRESSION__MULTIPLICATIVE_OP);
+    additiveExpressionEClass = createEClass(ADDITIVE_EXPRESSION);
+    createEReference(additiveExpressionEClass, ADDITIVE_EXPRESSION__EXPRESSION);
+    createEAttribute(additiveExpressionEClass, ADDITIVE_EXPRESSION__OPERATOR);
+    createEAttribute(additiveExpressionEClass, ADDITIVE_EXPRESSION__STRING);
 
-    power_expressionEClass = createEClass(POWER_EXPRESSION);
-    createEReference(power_expressionEClass, POWER_EXPRESSION__UNARY_EXPRESSION);
-    createEAttribute(power_expressionEClass, POWER_EXPRESSION__POWER_OP);
+    multiplicativeExpressionEClass = createEClass(MULTIPLICATIVE_EXPRESSION);
+    createEReference(multiplicativeExpressionEClass, MULTIPLICATIVE_EXPRESSION__EXPRESSION);
+    createEAttribute(multiplicativeExpressionEClass, MULTIPLICATIVE_EXPRESSION__OPERATOR);
 
-    unary_expressionEClass = createEClass(UNARY_EXPRESSION);
-    createEAttribute(unary_expressionEClass, UNARY_EXPRESSION__OPERATOR);
-    createEReference(unary_expressionEClass, UNARY_EXPRESSION__UNARY_EXPRESSION);
-    createEReference(unary_expressionEClass, UNARY_EXPRESSION__PAR_EXPRESSION);
-    createEReference(unary_expressionEClass, UNARY_EXPRESSION__FUNCTION_CALL);
-    createEReference(unary_expressionEClass, UNARY_EXPRESSION__PRIMARY);
+    powerExpressionEClass = createEClass(POWER_EXPRESSION);
+    createEReference(powerExpressionEClass, POWER_EXPRESSION__EXPRESSION);
+    createEAttribute(powerExpressionEClass, POWER_EXPRESSION__OPERATOR);
+
+    unaryExpressionEClass = createEClass(UNARY_EXPRESSION);
+    createEAttribute(unaryExpressionEClass, UNARY_EXPRESSION__OPERATOR);
+    createEReference(unaryExpressionEClass, UNARY_EXPRESSION__EXPRESSION);
+    createEReference(unaryExpressionEClass, UNARY_EXPRESSION__PAR_EXPRESSION);
+    createEReference(unaryExpressionEClass, UNARY_EXPRESSION__PRIMARY);
 
     primaryEClass = createEClass(PRIMARY);
+    createEReference(primaryEClass, PRIMARY__FUNCTION_CALL);
     createEAttribute(primaryEClass, PRIMARY__NUMBER);
-    createEReference(primaryEClass, PRIMARY__IDENTIFIER);
+    createEReference(primaryEClass, PRIMARY__SYMBOL);
+    createEReference(primaryEClass, PRIMARY__ATTRIBUTE);
+    createEReference(primaryEClass, PRIMARY__VECTOR);
 
-    variable_nameEClass = createEClass(VARIABLE_NAME);
-    createEAttribute(variable_nameEClass, VARIABLE_NAME__IDENTIFIER);
-    createEReference(variable_nameEClass, VARIABLE_NAME__SELECTOR);
+    vectorEClass = createEClass(VECTOR);
+    createEAttribute(vectorEClass, VECTOR__IDENTIFIER);
+    createEReference(vectorEClass, VECTOR__VALUES);
 
-    selectorEClass = createEClass(SELECTOR);
-    createEReference(selectorEClass, SELECTOR__EXPRESSION);
+    fullyQualifiedSymbolNameEClass = createEClass(FULLY_QUALIFIED_SYMBOL_NAME);
+    createEReference(fullyQualifiedSymbolNameEClass, FULLY_QUALIFIED_SYMBOL_NAME__OBJECT);
+    createEAttribute(fullyQualifiedSymbolNameEClass, FULLY_QUALIFIED_SYMBOL_NAME__IDENTIFIER);
+
+    fullyQualifiedArgumentNameEClass = createEClass(FULLY_QUALIFIED_ARGUMENT_NAME);
+    createEReference(fullyQualifiedArgumentNameEClass, FULLY_QUALIFIED_ARGUMENT_NAME__PARENT);
+    createEAttribute(fullyQualifiedArgumentNameEClass, FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER);
+
+    objectNameEClass = createEClass(OBJECT_NAME);
+    createEAttribute(objectNameEClass, OBJECT_NAME__NAME);
   }
 
   /**
@@ -3420,316 +4798,446 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     // Add supertypes to classes
 
     // Initialize classes and features; add operations and parameters
-    initEClass(mclEClass, mcl.class, "mcl", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getmcl_Objects(), this.getmcl_obj(), null, "objects", null, 0, -1, mcl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(mcl_objEClass, mcl_obj.class, "mcl_obj", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getmcl_obj_Model_obj(), this.getmodel_obj(), null, "model_obj", null, 0, 1, mcl_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmcl_obj_Param_obj(), this.getparam_obj(), null, "param_obj", null, 0, 1, mcl_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmcl_obj_Data_obj(), this.getdata_obj(), null, "data_obj", null, 0, 1, mcl_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmcl_obj_Task_obj(), this.gettask_obj(), null, "task_obj", null, 0, 1, mcl_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmcl_obj_Tel_obj(), this.gettel_obj(), null, "tel_obj", null, 0, 1, mcl_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(model_objEClass, model_obj.class, "model_obj", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getmodel_obj_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, model_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_Blocks(), this.getmodel_obj_block(), null, "blocks", null, 0, -1, model_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(param_objEClass, param_obj.class, "param_obj", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getparam_obj_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, param_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getparam_obj_Blocks(), this.getparam_obj_block(), null, "blocks", null, 0, -1, param_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(data_objEClass, data_obj.class, "data_obj", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getdata_obj_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, data_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getdata_obj_Blocks(), this.getdata_obj_block(), null, "blocks", null, 0, -1, data_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(task_objEClass, task_obj.class, "task_obj", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(gettask_obj_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, task_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(gettask_obj_Blocks(), this.gettask_obj_block(), null, "blocks", null, 0, -1, task_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(tel_objEClass, tel_obj.class, "tel_obj", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(gettel_obj_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, tel_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(gettel_obj_Blocks(), this.getblock_statement(), null, "blocks", null, 0, -1, tel_obj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(model_obj_blockEClass, model_obj_block.class, "model_obj_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getmodel_obj_block_Individual_model_obj_block(), this.getindividual_model_obj_block(), null, "individual_model_obj_block", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_block_Model_prediction_obj_block(), this.getmodel_prediction_obj_block(), null, "model_prediction_obj_block", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_block_Random_variable_definition_block(), this.getrandom_variable_definition_block(), null, "random_variable_definition_block", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_block_Input_variables_block(), this.getinput_variables_block(), null, "input_variables_block", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_block_Structural_parameters_block(), this.getstructural_parameters_block(), null, "structural_parameters_block", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_block_Variability_parameters_block(), this.getvariability_parameters_block(), null, "variability_parameters_block", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_block_Output_variables_block(), this.getoutput_variables_block(), null, "output_variables_block", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_block_Group_variables(), this.getgroup_variables(), null, "group_variables", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_block_Observation_block(), this.getobservation_block(), null, "observation_block", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_block_Estimation_block(), this.getestimation_block(), null, "estimation_block", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_obj_block_Simulation_block(), this.getsimulation_block(), null, "simulation_block", null, 0, 1, model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(individual_model_obj_blockEClass, individual_model_obj_block.class, "individual_model_obj_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getindividual_model_obj_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, individual_model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getindividual_model_obj_block_Block(), this.getblock(), null, "block", null, 0, 1, individual_model_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(model_prediction_obj_blockEClass, model_prediction_obj_block.class, "model_prediction_obj_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getmodel_prediction_obj_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, model_prediction_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_prediction_obj_block_Block(), this.getmodel_block(), null, "block", null, 0, 1, model_prediction_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(random_variable_definition_blockEClass, random_variable_definition_block.class, "random_variable_definition_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getrandom_variable_definition_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, random_variable_definition_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getrandom_variable_definition_block_Block(), this.getblock(), null, "block", null, 0, 1, random_variable_definition_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(input_variables_blockEClass, input_variables_block.class, "input_variables_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getinput_variables_block_Indentifier(), ecorePackage.getEString(), "indentifier", null, 0, 1, input_variables_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getinput_variables_block_Block(), this.getblock(), null, "block", null, 0, 1, input_variables_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(structural_parameters_blockEClass, structural_parameters_block.class, "structural_parameters_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getstructural_parameters_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, structural_parameters_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getstructural_parameters_block_Block(), this.getblock(), null, "block", null, 0, 1, structural_parameters_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(variability_parameters_blockEClass, variability_parameters_block.class, "variability_parameters_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getvariability_parameters_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, variability_parameters_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getvariability_parameters_block_Block(), this.getblock(), null, "block", null, 0, 1, variability_parameters_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(output_variables_blockEClass, output_variables_block.class, "output_variables_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getoutput_variables_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, output_variables_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getoutput_variables_block_Block(), this.getblock(), null, "block", null, 0, 1, output_variables_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(group_variablesEClass, group_variables.class, "group_variables", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getgroup_variables_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, group_variables.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getgroup_variables_Block(), this.getblock(), null, "block", null, 0, 1, group_variables.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(observation_blockEClass, observation_block.class, "observation_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getobservation_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, observation_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getobservation_block_Block(), this.getblock(), null, "block", null, 0, 1, observation_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(estimation_blockEClass, estimation_block.class, "estimation_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getestimation_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, estimation_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getestimation_block_Block(), this.getblock(), null, "block", null, 0, 1, estimation_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(simulation_blockEClass, simulation_block.class, "simulation_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getsimulation_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, simulation_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getsimulation_block_Block(), this.getblock(), null, "block", null, 0, 1, simulation_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(param_obj_blockEClass, param_obj_block.class, "param_obj_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getparam_obj_block_Structural_block(), this.getstructural_block(), null, "structural_block", null, 0, 1, param_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getparam_obj_block_Variability_block(), this.getvariability_block(), null, "variability_block", null, 0, 1, param_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(structural_blockEClass, structural_block.class, "structural_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getstructural_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, structural_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getstructural_block_Block(), this.getblock(), null, "block", null, 0, 1, structural_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(variability_blockEClass, variability_block.class, "variability_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getvariability_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, variability_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getvariability_block_Block(), this.getvariability_block_content(), null, "block", null, 0, 1, variability_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(data_obj_blockEClass, data_obj_block.class, "data_obj_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getdata_obj_block_Header_block(), this.getheader_block(), null, "header_block", null, 0, 1, data_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getdata_obj_block_File_block(), this.getfile_block(), null, "file_block", null, 0, 1, data_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(header_blockEClass, header_block.class, "header_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getheader_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, header_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getheader_block_Block(), this.getblock(), null, "block", null, 0, 1, header_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(file_blockEClass, file_block.class, "file_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getfile_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, file_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getfile_block_Block(), this.getfile_block_content(), null, "block", null, 0, 1, file_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(task_obj_blockEClass, task_obj_block.class, "task_obj_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(gettask_obj_block_Function_declaration(), this.getfunction_declaration(), null, "function_declaration", null, 0, 1, task_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(gettask_obj_block_Parameters_block(), this.getparameters_block(), null, "parameters_block", null, 0, 1, task_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(gettask_obj_block_Data_block(), this.getdata_block(), null, "data_block", null, 0, 1, task_obj_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(parameters_blockEClass, parameters_block.class, "parameters_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getparameters_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, parameters_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getparameters_block_Block(), this.getblock(), null, "block", null, 0, 1, parameters_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(data_blockEClass, data_block.class, "data_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getdata_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, data_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getdata_block_Block(), this.getblock(), null, "block", null, 0, 1, data_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(model_blockEClass, model_block.class, "model_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getmodel_block_Statements(), this.getmodel_block_statement(), null, "statements", null, 0, -1, model_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(model_block_statementEClass, model_block_statement.class, "model_block_statement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getmodel_block_statement_Statement(), this.getblock_statement(), null, "statement", null, 0, 1, model_block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_block_statement_Ode_block(), this.getode_block(), null, "ode_block", null, 0, 1, model_block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getmodel_block_statement_Library_block(), this.getlibrary_block(), null, "library_block", null, 0, 1, model_block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(library_blockEClass, library_block.class, "library_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getlibrary_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, library_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getlibrary_block_Block(), this.getblock(), null, "block", null, 0, 1, library_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(ode_blockEClass, ode_block.class, "ode_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getode_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, ode_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getode_block_Block(), this.getblock(), null, "block", null, 0, 1, ode_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(variability_block_contentEClass, variability_block_content.class, "variability_block_content", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getvariability_block_content_Blocks(), this.getvariability_block_statement(), null, "blocks", null, 0, -1, variability_block_content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(variability_block_statementEClass, variability_block_statement.class, "variability_block_statement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getvariability_block_statement_Block_statement(), this.getblock_statement(), null, "block_statement", null, 0, 1, variability_block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getvariability_block_statement_Block_block(), this.getblock_subblock(), null, "block_block", null, 0, 1, variability_block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getvariability_block_statement_Diag_block(), this.getdiag_subblock(), null, "diag_block", null, 0, 1, variability_block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(block_subblockEClass, block_subblock.class, "block_subblock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getblock_subblock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, block_subblock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getblock_subblock_Block(), this.getvariability_subblock(), null, "block", null, 0, 1, block_subblock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(diag_subblockEClass, diag_subblock.class, "diag_subblock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getdiag_subblock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, diag_subblock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getdiag_subblock_Block(), this.getvariability_subblock(), null, "block", null, 0, 1, diag_subblock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(variability_subblockEClass, variability_subblock.class, "variability_subblock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getvariability_subblock_Arguments(), this.getarguments(), null, "arguments", null, 0, 1, variability_subblock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(file_block_contentEClass, file_block_content.class, "file_block_content", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getfile_block_content_Blocks(), this.getfile_block_statement(), null, "blocks", null, 0, -1, file_block_content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(file_block_statementEClass, file_block_statement.class, "file_block_statement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getfile_block_statement_Statement(), this.getblock_statement(), null, "statement", null, 0, 1, file_block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getfile_block_statement_Inline_block(), this.getinline_block(), null, "inline_block", null, 0, 1, file_block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getfile_block_statement_Design_block(), this.getdesign_block(), null, "design_block", null, 0, 1, file_block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getfile_block_statement_Rsscript_block(), this.getrsscript_block(), null, "rsscript_block", null, 0, 1, file_block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(inline_blockEClass, inline_block.class, "inline_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getinline_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, inline_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getinline_block_Block(), this.getinline_block_content(), null, "block", null, 0, 1, inline_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(design_blockEClass, design_block.class, "design_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getdesign_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, design_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getdesign_block_Block(), this.getblock(), null, "block", null, 0, 1, design_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(rsscript_blockEClass, rsscript_block.class, "rsscript_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getrsscript_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, rsscript_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getrsscript_block_Block(), this.getblock(), null, "block", null, 0, 1, rsscript_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(inline_block_contentEClass, inline_block_content.class, "inline_block_content", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getinline_block_content_Identifiers(), ecorePackage.getEString(), "identifiers", null, 0, -1, inline_block_content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getinline_block_content_Values(), ecorePackage.getEString(), "values", null, 0, -1, inline_block_content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(function_declarationEClass, function_declaration.class, "function_declaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getfunction_declaration_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, function_declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getfunction_declaration_Formal_arguments(), this.getformal_arguments(), null, "formal_arguments", null, 0, 1, function_declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getfunction_declaration_Function_body(), this.getfunction_body(), null, "function_body", null, 0, 1, function_declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(function_bodyEClass, function_body.class, "function_body", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getfunction_body_Blocks(), this.getfunction_subblock(), null, "blocks", null, 0, -1, function_body.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(function_subblockEClass, function_subblock.class, "function_subblock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getfunction_subblock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, function_subblock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getfunction_subblock_Estimate_defn(), this.getblock(), null, "estimate_defn", null, 0, 1, function_subblock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getfunction_subblock_Simulate_defn(), this.getblock(), null, "simulate_defn", null, 0, 1, function_subblock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(formal_argumentsEClass, formal_arguments.class, "formal_arguments", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getformal_arguments_Identifiers(), ecorePackage.getEString(), "identifiers", null, 0, -1, formal_arguments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(function_callEClass, function_call.class, "function_call", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getfunction_call_Funct_name(), ecorePackage.getEString(), "funct_name", null, 0, 1, function_call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getfunction_call_Arguments(), this.getarguments(), null, "arguments", null, 0, 1, function_call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(blockEClass, block.class, "block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getblock_Statements(), this.getblock_statement(), null, "statements", null, 0, -1, block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(block_statementEClass, block_statement.class, "block_statement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getblock_statement_Variable_declaration(), this.getvariable_declaration(), null, "variable_declaration", null, 0, 1, block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getblock_statement_Function_call(), this.getfunction_call(), null, "function_call", null, 0, 1, block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getblock_statement_Statement(), this.getstatement(), null, "statement", null, 0, 1, block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getblock_statement_Verbatim_block(), this.getverbatim_block(), null, "verbatim_block", null, 0, 1, block_statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(verbatim_blockEClass, verbatim_block.class, "verbatim_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getverbatim_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, verbatim_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getverbatim_block_Block(), this.gettarget_block(), null, "block", null, 0, 1, verbatim_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getverbatim_block_External_code(), ecorePackage.getEString(), "external_code", null, 0, 1, verbatim_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(target_blockEClass, target_block.class, "target_block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(gettarget_block_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, target_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(gettarget_block_External_code(), ecorePackage.getEString(), "external_code", null, 0, 1, target_block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(variable_declarationEClass, variable_declaration.class, "variable_declaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getvariable_declaration_Identifier(), this.getvariable_name(), null, "identifier", null, 0, 1, variable_declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getvariable_declaration_Expression(), this.getany_expression(), null, "expression", null, 0, 1, variable_declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getvariable_declaration_Random_list(), this.getrandom_list(), null, "random_list", null, 0, 1, variable_declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(any_expressionEClass, any_expression.class, "any_expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getany_expression_Expression(), this.getexpression(), null, "expression", null, 0, 1, any_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getany_expression_List(), this.getlist(), null, "list", null, 0, 1, any_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getany_expression_Ode_list(), this.getode_list(), null, "ode_list", null, 0, 1, any_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getany_expression_Random_list(), this.getrandom_list(), null, "random_list", null, 0, 1, any_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(expressionEClass, expression.class, "expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getexpression_Conditional_expression(), this.getconditional_expression(), null, "conditional_expression", null, 0, 1, expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getexpression_String_expression(), ecorePackage.getEString(), "string_expression", null, 0, -1, expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(listEClass, list.class, "list", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getlist_Arguments(), this.getarguments(), null, "arguments", null, 0, 1, list.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(ode_listEClass, ode_list.class, "ode_list", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getode_list_Arguments(), this.getarguments(), null, "arguments", null, 0, 1, ode_list.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(random_listEClass, random_list.class, "random_list", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getrandom_list_Arguments(), this.getarguments(), null, "arguments", null, 0, 1, random_list.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(argumentsEClass, arguments.class, "arguments", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getarguments_Arguments(), this.getargument(), null, "arguments", null, 0, -1, arguments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(argumentEClass, argument.class, "argument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getargument_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getargument_Expression(), this.getany_expression(), null, "expression", null, 0, 1, argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(statementEClass, statement.class, "statement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getstatement_Block(), this.getblock(), null, "block", null, 0, 1, statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getstatement_Par_expression(), this.getpar_expression(), null, "par_expression", null, 0, 1, statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getstatement_If_statement(), this.getblock_statement(), null, "if_statement", null, 0, 1, statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getstatement_Else_statement(), this.getblock_statement(), null, "else_statement", null, 0, 1, statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(par_expressionEClass, par_expression.class, "par_expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getpar_expression_Expression(), this.getexpression(), null, "expression", null, 0, 1, par_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(conditional_expressionEClass, conditional_expression.class, "conditional_expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getconditional_expression_Conditional_or_expression(), this.getconditional_or_expression(), null, "conditional_or_expression", null, 0, 1, conditional_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getconditional_expression_Expression1(), this.getexpression(), null, "expression1", null, 0, 1, conditional_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getconditional_expression_Expression2(), this.getexpression(), null, "expression2", null, 0, 1, conditional_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(conditional_or_expressionEClass, conditional_or_expression.class, "conditional_or_expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getconditional_or_expression_Conditional_and_expression(), this.getconditional_and_expression(), null, "conditional_and_expression", null, 0, -1, conditional_or_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getconditional_or_expression_Operator(), ecorePackage.getEString(), "operator", null, 0, -1, conditional_or_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(conditional_and_expressionEClass, conditional_and_expression.class, "conditional_and_expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getconditional_and_expression_Relational_expression(), this.getrelational_expression(), null, "relational_expression", null, 0, -1, conditional_and_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getconditional_and_expression_Operator(), ecorePackage.getEString(), "operator", null, 0, -1, conditional_and_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(relational_expressionEClass, relational_expression.class, "relational_expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getrelational_expression_Negation(), ecorePackage.getEString(), "negation", null, 0, 1, relational_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getrelational_expression_Boolean(), ecorePackage.getEString(), "boolean", null, 0, 1, relational_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getrelational_expression_Additive_expression(), this.getadditive_expression(), null, "additive_expression", null, 0, -1, relational_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getrelational_expression_Relational_op(), ecorePackage.getEString(), "relational_op", null, 0, -1, relational_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(additive_expressionEClass, additive_expression.class, "additive_expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getadditive_expression_Multiplicative_expression(), this.getmultiplicative_expression(), null, "multiplicative_expression", null, 0, -1, additive_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getadditive_expression_Additive_op(), ecorePackage.getEString(), "additive_op", null, 0, -1, additive_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(multiplicative_expressionEClass, multiplicative_expression.class, "multiplicative_expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getmultiplicative_expression_Power_expression(), this.getpower_expression(), null, "power_expression", null, 0, -1, multiplicative_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getmultiplicative_expression_Multiplicative_op(), ecorePackage.getEString(), "multiplicative_op", null, 0, -1, multiplicative_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(power_expressionEClass, power_expression.class, "power_expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getpower_expression_Unary_expression(), this.getunary_expression(), null, "unary_expression", null, 0, -1, power_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getpower_expression_Power_op(), ecorePackage.getEString(), "power_op", null, 0, -1, power_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(unary_expressionEClass, unary_expression.class, "unary_expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getunary_expression_Operator(), ecorePackage.getEString(), "operator", null, 0, 1, unary_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getunary_expression_Unary_expression(), this.getunary_expression(), null, "unary_expression", null, 0, 1, unary_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getunary_expression_Par_expression(), this.getpar_expression(), null, "par_expression", null, 0, 1, unary_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getunary_expression_Function_call(), this.getfunction_call(), null, "function_call", null, 0, 1, unary_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getunary_expression_Primary(), this.getprimary(), null, "primary", null, 0, 1, unary_expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(primaryEClass, primary.class, "primary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getprimary_Number(), ecorePackage.getEString(), "number", null, 0, 1, primary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getprimary_Identifier(), this.getvariable_name(), null, "identifier", null, 0, 1, primary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(variable_nameEClass, variable_name.class, "variable_name", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getvariable_name_Identifier(), ecorePackage.getEString(), "identifier", null, 0, -1, variable_name.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getvariable_name_Selector(), this.getselector(), null, "selector", null, 0, -1, variable_name.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(selectorEClass, selector.class, "selector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getselector_Expression(), this.getprimary(), null, "expression", null, 0, -1, selector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(mclEClass, Mcl.class, "Mcl", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getMcl_Objects(), this.getMclObject(), null, "objects", null, 0, -1, Mcl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(mclObjectEClass, MclObject.class, "MclObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getMclObject_ModelObject(), this.getModelObject(), null, "modelObject", null, 0, 1, MclObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMclObject_ParameterObject(), this.getParameterObject(), null, "parameterObject", null, 0, 1, MclObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMclObject_DataObject(), this.getDataObject(), null, "dataObject", null, 0, 1, MclObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMclObject_TaskObject(), this.getTaskObject(), null, "taskObject", null, 0, 1, MclObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMclObject_TelObject(), this.getTELObject(), null, "telObject", null, 0, 1, MclObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(modelObjectEClass, ModelObject.class, "ModelObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getModelObject_Identifier(), this.getObjectName(), null, "identifier", null, 0, 1, ModelObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObject_Blocks(), this.getModelObjectBlock(), null, "blocks", null, 0, -1, ModelObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(parameterObjectEClass, ParameterObject.class, "ParameterObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getParameterObject_Identifier(), this.getObjectName(), null, "identifier", null, 0, 1, ParameterObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getParameterObject_Blocks(), this.getParameterObjectBlock(), null, "blocks", null, 0, -1, ParameterObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(dataObjectEClass, DataObject.class, "DataObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getDataObject_Identifier(), this.getObjectName(), null, "identifier", null, 0, 1, DataObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDataObject_Blocks(), this.getDataObjectBlock(), null, "blocks", null, 0, -1, DataObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(taskObjectEClass, TaskObject.class, "TaskObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getTaskObject_Identifier(), this.getObjectName(), null, "identifier", null, 0, 1, TaskObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskObject_Blocks(), this.getTaskObjectBlock(), null, "blocks", null, 0, -1, TaskObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(telObjectEClass, TELObject.class, "TELObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getTELObject_Identifier(), this.getObjectName(), null, "identifier", null, 0, 1, TELObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTELObject_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, TELObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(modelObjectBlockEClass, ModelObjectBlock.class, "ModelObjectBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getModelObjectBlock_IndividualVariablesBlock(), this.getIndividualVariablesBlock(), null, "individualVariablesBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_ModelPredictionBlock(), this.getModelPredictionBlock(), null, "modelPredictionBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_RandomVariableDefinitionBlock(), this.getRandomVariableDefinitionBlock(), null, "randomVariableDefinitionBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_InputVariablesBlock(), this.getInputVariablesBlock(), null, "inputVariablesBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_StructuralParametersBlock(), this.getStructuralParametersBlock(), null, "structuralParametersBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_VariabilityParametersBlock(), this.getVariabilityParametersBlock(), null, "variabilityParametersBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_OutputVariablesBlock(), this.getOutputVariablesBlock(), null, "outputVariablesBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_GroupVariablesBlock(), this.getGroupVariablesBlock(), null, "groupVariablesBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_ObservationBlock(), this.getObservationBlock(), null, "observationBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_EstimationBlock(), this.getEstimationBlock(), null, "estimationBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_SimulationBlock(), this.getSimulationBlock(), null, "simulationBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_VerbatimBlock(), this.getVerbatimBlock(), null, "verbatimBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(individualVariablesBlockEClass, IndividualVariablesBlock.class, "IndividualVariablesBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getIndividualVariablesBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, IndividualVariablesBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getIndividualVariablesBlock_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, IndividualVariablesBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(modelPredictionBlockEClass, ModelPredictionBlock.class, "ModelPredictionBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getModelPredictionBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, ModelPredictionBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelPredictionBlock_Statements(), this.getModelPredictionBlockStatement(), null, "statements", null, 0, -1, ModelPredictionBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(randomVariableDefinitionBlockEClass, RandomVariableDefinitionBlock.class, "RandomVariableDefinitionBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getRandomVariableDefinitionBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, RandomVariableDefinitionBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRandomVariableDefinitionBlock_Variables(), this.getSymbolDeclaration(), null, "variables", null, 0, -1, RandomVariableDefinitionBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(inputVariablesBlockEClass, InputVariablesBlock.class, "InputVariablesBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getInputVariablesBlock_Indentifier(), ecorePackage.getEString(), "indentifier", null, 0, 1, InputVariablesBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInputVariablesBlock_Variables(), this.getSymbolDeclaration(), null, "variables", null, 0, -1, InputVariablesBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(structuralParametersBlockEClass, StructuralParametersBlock.class, "StructuralParametersBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getStructuralParametersBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, StructuralParametersBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getStructuralParametersBlock_Parameters(), this.getFullyQualifiedSymbolName(), null, "parameters", null, 0, -1, StructuralParametersBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(variabilityParametersBlockEClass, VariabilityParametersBlock.class, "VariabilityParametersBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getVariabilityParametersBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, VariabilityParametersBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVariabilityParametersBlock_Parameters(), this.getFullyQualifiedSymbolName(), null, "parameters", null, 0, -1, VariabilityParametersBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(outputVariablesBlockEClass, OutputVariablesBlock.class, "OutputVariablesBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getOutputVariablesBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, OutputVariablesBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getOutputVariablesBlock_Variables(), this.getFullyQualifiedSymbolName(), null, "variables", null, 0, -1, OutputVariablesBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(groupVariablesBlockEClass, GroupVariablesBlock.class, "GroupVariablesBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getGroupVariablesBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, GroupVariablesBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getGroupVariablesBlock_Statements(), this.getGroupVariablesBlockStatement(), null, "statements", null, 0, -1, GroupVariablesBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(observationBlockEClass, ObservationBlock.class, "ObservationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getObservationBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, ObservationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getObservationBlock_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, ObservationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(estimationBlockEClass, EstimationBlock.class, "EstimationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getEstimationBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, EstimationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEstimationBlock_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, EstimationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(simulationBlockEClass, SimulationBlock.class, "SimulationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSimulationBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, SimulationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSimulationBlock_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, SimulationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(parameterObjectBlockEClass, ParameterObjectBlock.class, "ParameterObjectBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getParameterObjectBlock_StructuralBlock(), this.getStructuralBlock(), null, "structuralBlock", null, 0, 1, ParameterObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getParameterObjectBlock_VariabilityBlock(), this.getVariabilityBlock(), null, "variabilityBlock", null, 0, 1, ParameterObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getParameterObjectBlock_PriorBlock(), this.getPriorParametersBlock(), null, "priorBlock", null, 0, 1, ParameterObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getParameterObjectBlock_VerbatimBlock(), this.getVerbatimBlock(), null, "verbatimBlock", null, 0, 1, ParameterObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(structuralBlockEClass, StructuralBlock.class, "StructuralBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getStructuralBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, StructuralBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getStructuralBlock_Parameters(), this.getParameterDeclaration(), null, "parameters", null, 0, -1, StructuralBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(variabilityBlockEClass, VariabilityBlock.class, "VariabilityBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getVariabilityBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, VariabilityBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVariabilityBlock_Statements(), this.getVariabilityBlockStatement(), null, "statements", null, 0, -1, VariabilityBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(priorParametersBlockEClass, PriorParametersBlock.class, "PriorParametersBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getPriorParametersBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, PriorParametersBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPriorParametersBlock_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, PriorParametersBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(dataObjectBlockEClass, DataObjectBlock.class, "DataObjectBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getDataObjectBlock_HeaderBlock(), this.getHeaderBlock(), null, "headerBlock", null, 0, 1, DataObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDataObjectBlock_FileBlock(), this.getFileBlock(), null, "fileBlock", null, 0, 1, DataObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDataObjectBlock_VerbatimBlock(), this.getVerbatimBlock(), null, "verbatimBlock", null, 0, 1, DataObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(headerBlockEClass, HeaderBlock.class, "HeaderBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getHeaderBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, HeaderBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getHeaderBlock_Variables(), this.getSymbolModification(), null, "variables", null, 0, -1, HeaderBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(fileBlockEClass, FileBlock.class, "FileBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFileBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, FileBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFileBlock_Statements(), this.getFileBlockStatement(), null, "statements", null, 0, -1, FileBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(taskObjectBlockEClass, TaskObjectBlock.class, "TaskObjectBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getTaskObjectBlock_FunctionDeclaration(), this.getTaskFunctionDeclaration(), null, "functionDeclaration", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskObjectBlock_ParameterBlock(), this.getParameterBlock(), null, "parameterBlock", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskObjectBlock_DataBlock(), this.getDataBlock(), null, "dataBlock", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskObjectBlock_ModelBlock(), this.getModelBlock(), null, "modelBlock", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskObjectBlock_VerbatimBlock(), this.getVerbatimBlock(), null, "verbatimBlock", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(parameterBlockEClass, ParameterBlock.class, "ParameterBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getParameterBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, ParameterBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getParameterBlock_Parameters(), this.getSymbolModification(), null, "parameters", null, 0, -1, ParameterBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(dataBlockEClass, DataBlock.class, "DataBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDataBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, DataBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDataBlock_Statements(), this.getDataBlockStatement(), null, "statements", null, 0, -1, DataBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(dataBlockStatementEClass, DataBlockStatement.class, "DataBlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getDataBlockStatement_IgnoreList(), this.getIgnoreList(), null, "ignoreList", null, 0, 1, DataBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDataBlockStatement_AcceptList(), this.getAcceptList(), null, "acceptList", null, 0, 1, DataBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDataBlockStatement_DropList(), this.getDropList(), null, "dropList", null, 0, 1, DataBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(ignoreListEClass, IgnoreList.class, "IgnoreList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getIgnoreList_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, IgnoreList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getIgnoreList_Expression(), this.getOrExpression(), null, "expression", null, 0, 1, IgnoreList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(acceptListEClass, AcceptList.class, "AcceptList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getAcceptList_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, AcceptList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAcceptList_Expression(), this.getAndExpression(), null, "expression", null, 0, 1, AcceptList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(dropListEClass, DropList.class, "DropList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDropList_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, DropList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDropList_List(), this.getSymbolList(), null, "list", null, 0, 1, DropList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(modelBlockEClass, ModelBlock.class, "ModelBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getModelBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, ModelBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelBlock_Statements(), this.getModelBlockStatement(), null, "statements", null, 0, -1, ModelBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(modelBlockStatementEClass, ModelBlockStatement.class, "ModelBlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getModelBlockStatement_Statement(), this.getBlockStatement(), null, "statement", null, 0, 1, ModelBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelBlockStatement_AddList(), this.getAddList(), null, "addList", null, 0, 1, ModelBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelBlockStatement_RemoveList(), this.getRemoveList(), null, "removeList", null, 0, 1, ModelBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(addListEClass, AddList.class, "AddList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getAddList_List(), this.getSymbolList(), null, "list", null, 0, 1, AddList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(removeListEClass, RemoveList.class, "RemoveList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getRemoveList_List(), this.getSymbolList(), null, "list", null, 0, 1, RemoveList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(symbolListEClass, SymbolList.class, "SymbolList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSymbolList_Symbols(), this.getFullyQualifiedSymbolName(), null, "symbols", null, 0, -1, SymbolList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(modelPredictionBlockStatementEClass, ModelPredictionBlockStatement.class, "ModelPredictionBlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getModelPredictionBlockStatement_Statement(), this.getBlockStatement(), null, "statement", null, 0, 1, ModelPredictionBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelPredictionBlockStatement_OdeBlock(), this.getOdeBlock(), null, "odeBlock", null, 0, 1, ModelPredictionBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelPredictionBlockStatement_LibraryBlock(), this.getLibraryBlock(), null, "libraryBlock", null, 0, 1, ModelPredictionBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(libraryBlockEClass, LibraryBlock.class, "LibraryBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getLibraryBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, LibraryBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getLibraryBlock_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, LibraryBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(odeBlockEClass, OdeBlock.class, "OdeBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getOdeBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, OdeBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getOdeBlock_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, OdeBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(groupVariablesBlockStatementEClass, GroupVariablesBlockStatement.class, "GroupVariablesBlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getGroupVariablesBlockStatement_Statement(), this.getBlockStatement(), null, "statement", null, 0, 1, GroupVariablesBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getGroupVariablesBlockStatement_MixtureBlock(), this.getMixtureBlock(), null, "mixtureBlock", null, 0, 1, GroupVariablesBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(mixtureBlockEClass, MixtureBlock.class, "MixtureBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getMixtureBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, MixtureBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMixtureBlock_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, MixtureBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(variabilityBlockStatementEClass, VariabilityBlockStatement.class, "VariabilityBlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getVariabilityBlockStatement_Parameter(), this.getParameterDeclaration(), null, "parameter", null, 0, 1, VariabilityBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVariabilityBlockStatement_BlockBlock(), this.getBlockBlock(), null, "blockBlock", null, 0, 1, VariabilityBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVariabilityBlockStatement_DiagBlock(), this.getDiagBlock(), null, "diagBlock", null, 0, 1, VariabilityBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVariabilityBlockStatement_SameBlock(), this.getSameBlock(), null, "sameBlock", null, 0, 1, VariabilityBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(blockBlockEClass, BlockBlock.class, "BlockBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getBlockBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, BlockBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getBlockBlock_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, BlockBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getBlockBlock_Parameters(), this.getArguments(), null, "parameters", null, 0, 1, BlockBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(diagBlockEClass, DiagBlock.class, "DiagBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDiagBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, DiagBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDiagBlock_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, DiagBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDiagBlock_Parameters(), this.getArguments(), null, "parameters", null, 0, 1, DiagBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(sameBlockEClass, SameBlock.class, "SameBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSameBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, SameBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSameBlock_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, SameBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSameBlock_Parameters(), this.getArguments(), null, "parameters", null, 0, 1, SameBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(fileBlockStatementEClass, FileBlockStatement.class, "FileBlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getFileBlockStatement_Variable(), this.getSymbolDeclaration(), null, "variable", null, 0, 1, FileBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFileBlockStatement_InlineBlock(), this.getInlineBlock(), null, "inlineBlock", null, 0, 1, FileBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFileBlockStatement_DesignBlock(), this.getDesignBlock(), null, "designBlock", null, 0, 1, FileBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFileBlockStatement_RscriptBlock(), this.getRScriptBlock(), null, "rscriptBlock", null, 0, 1, FileBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(inlineBlockEClass, InlineBlock.class, "InlineBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getInlineBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, InlineBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInlineBlock_Variables(), this.getFullyQualifiedSymbolName(), null, "variables", null, 0, -1, InlineBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInlineBlock_Values(), ecorePackage.getEString(), "values", null, 0, -1, InlineBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(designBlockEClass, DesignBlock.class, "DesignBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDesignBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, DesignBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDesignBlock_Statements(), this.getDesignBlockStatement(), null, "statements", null, 0, -1, DesignBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(designBlockStatementEClass, DesignBlockStatement.class, "DesignBlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getDesignBlockStatement_Identifier(), this.getFullyQualifiedSymbolName(), null, "identifier", null, 0, 1, DesignBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDesignBlockStatement_Arguments(), this.getVariableList(), null, "arguments", null, 0, 1, DesignBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDesignBlockStatement_Expression(), this.getAnyExpression(), null, "expression", null, 0, 1, DesignBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(variableListEClass, VariableList.class, "VariableList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getVariableList_Identifiers(), this.getFullyQualifiedSymbolName(), null, "identifiers", null, 0, -1, VariableList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(rScriptBlockEClass, RScriptBlock.class, "RScriptBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getRScriptBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, RScriptBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRScriptBlock_Variables(), this.getRScriptBlockStatement(), null, "variables", null, 0, -1, RScriptBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(rScriptBlockStatementEClass, RScriptBlockStatement.class, "RScriptBlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getRScriptBlockStatement_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, RScriptBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRScriptBlockStatement_Value(), ecorePackage.getEString(), "value", null, 0, 1, RScriptBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRScriptBlockStatement_Object(), this.getObjectName(), null, "object", null, 0, 1, RScriptBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(taskFunctionDeclarationEClass, TaskFunctionDeclaration.class, "TaskFunctionDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getTaskFunctionDeclaration_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, TaskFunctionDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskFunctionDeclaration_FormalArguments(), this.getFormalArguments(), null, "formalArguments", null, 0, 1, TaskFunctionDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskFunctionDeclaration_FunctionBody(), this.getTaskFunctionBody(), null, "functionBody", null, 0, 1, TaskFunctionDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(taskFunctionBodyEClass, TaskFunctionBody.class, "TaskFunctionBody", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getTaskFunctionBody_Blocks(), this.getTaskFunctionBlock(), null, "blocks", null, 0, -1, TaskFunctionBody.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(taskFunctionBlockEClass, TaskFunctionBlock.class, "TaskFunctionBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getTaskFunctionBlock_EstimateBlock(), this.getEstimateTask(), null, "estimateBlock", null, 0, 1, TaskFunctionBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskFunctionBlock_SimulateBlock(), this.getSimulateTask(), null, "simulateBlock", null, 0, 1, TaskFunctionBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskFunctionBlock_ExecuteBlock(), this.getExecuteTask(), null, "executeBlock", null, 0, 1, TaskFunctionBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(estimateTaskEClass, EstimateTask.class, "EstimateTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getEstimateTask_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, EstimateTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEstimateTask_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, EstimateTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(simulateTaskEClass, SimulateTask.class, "SimulateTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSimulateTask_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, SimulateTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSimulateTask_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, SimulateTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(executeTaskEClass, ExecuteTask.class, "ExecuteTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getExecuteTask_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, ExecuteTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getExecuteTask_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, ExecuteTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(formalArgumentsEClass, FormalArguments.class, "FormalArguments", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFormalArguments_Identifiers(), ecorePackage.getEString(), "identifiers", null, 0, -1, FormalArguments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(functionCallEClass, FunctionCall.class, "FunctionCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getFunctionCall_Identifier(), this.getFullyQualifiedSymbolName(), null, "identifier", null, 0, 1, FunctionCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFunctionCall_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, FunctionCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(blockStatementEClass, BlockStatement.class, "BlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getBlockStatement_Symbol(), this.getSymbolDeclaration(), null, "symbol", null, 0, 1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getBlockStatement_FunctionCall(), this.getFunctionCall(), null, "functionCall", null, 0, 1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getBlockStatement_Statement(), this.getConditionalStatement(), null, "statement", null, 0, 1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getBlockStatement_VerbatimBlock(), this.getVerbatimBlock(), null, "verbatimBlock", null, 0, 1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(verbatimBlockEClass, VerbatimBlock.class, "VerbatimBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getVerbatimBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, VerbatimBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVerbatimBlock_Block(), this.getTargetBlock(), null, "block", null, 0, 1, VerbatimBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getVerbatimBlock_ExternalCode(), ecorePackage.getEString(), "externalCode", null, 0, 1, VerbatimBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(targetBlockEClass, TargetBlock.class, "TargetBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getTargetBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, TargetBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTargetBlock_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, TargetBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargetBlock_ExternalCode(), ecorePackage.getEString(), "externalCode", null, 0, 1, TargetBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(symbolModificationEClass, SymbolModification.class, "SymbolModification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSymbolModification_Identifier(), this.getFullyQualifiedSymbolName(), null, "identifier", null, 0, 1, SymbolModification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSymbolModification_List(), this.getList(), null, "list", null, 0, 1, SymbolModification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(parameterDeclarationEClass, ParameterDeclaration.class, "ParameterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getParameterDeclaration_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, ParameterDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getParameterDeclaration_List(), this.getList(), null, "list", null, 0, 1, ParameterDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(symbolDeclarationEClass, SymbolDeclaration.class, "SymbolDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSymbolDeclaration_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, SymbolDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSymbolDeclaration_Expression(), this.getAnyExpression(), null, "expression", null, 0, 1, SymbolDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSymbolDeclaration_RandomList(), this.getRandomList(), null, "randomList", null, 0, 1, SymbolDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSymbolDeclaration_Function(), ecorePackage.getEString(), "function", null, 0, 1, SymbolDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(enumTypeEClass, EnumType.class, "EnumType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getEnumType_Categorical(), this.getCategorical(), null, "categorical", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEnumType_Continuous(), this.getContinuous(), null, "continuous", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEnumType_Covariate(), this.getCovariate(), null, "covariate", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEnumType_Distribution(), this.getDistribution(), null, "distribution", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEnumType_Level(), this.getLevelType(), null, "level", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEnumType_Likelyhood(), this.getLikelyhood(), null, "likelyhood", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEnumType_Missing(), this.getMissing(), null, "missing", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(missingEClass, Missing.class, "Missing", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getMissing_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, Missing.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(likelyhoodEClass, Likelyhood.class, "Likelyhood", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getLikelyhood_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, Likelyhood.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(levelTypeEClass, LevelType.class, "LevelType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getLevelType_Mdv(), ecorePackage.getEString(), "mdv", null, 0, 1, LevelType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getLevelType_Id(), ecorePackage.getEString(), "id", null, 0, 1, LevelType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getLevelType_Dv(), ecorePackage.getEString(), "dv", null, 0, 1, LevelType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getLevelType_Idv(), ecorePackage.getEString(), "idv", null, 0, 1, LevelType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(categoricalEClass, Categorical.class, "Categorical", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getCategorical_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, Categorical.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCategorical_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, Categorical.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(continuousEClass, Continuous.class, "Continuous", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getContinuous_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, Continuous.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(covariateEClass, Covariate.class, "Covariate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getCovariate_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, Covariate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(distributionEClass, Distribution.class, "Distribution", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDistribution_Normal(), ecorePackage.getEString(), "normal", null, 0, 1, Distribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getDistribution_Binomial(), ecorePackage.getEString(), "binomial", null, 0, 1, Distribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getDistribution_Poisson(), ecorePackage.getEString(), "poisson", null, 0, 1, Distribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getDistribution_Student_t(), ecorePackage.getEString(), "student_t", null, 0, 1, Distribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getDistribution_Mvnormal(), ecorePackage.getEString(), "mvnormal", null, 0, 1, Distribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(anyExpressionEClass, AnyExpression.class, "AnyExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getAnyExpression_Expression(), this.getExpression(), null, "expression", null, 0, 1, AnyExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAnyExpression_List(), this.getList(), null, "list", null, 0, 1, AnyExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAnyExpression_OdeList(), this.getOdeList(), null, "odeList", null, 0, 1, AnyExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAnyExpression_Type(), this.getEnumType(), null, "type", null, 0, 1, AnyExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(expressionEClass, Expression.class, "Expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getExpression_ConditionalExpression(), this.getConditionalExpression(), null, "conditionalExpression", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(listEClass, List.class, "List", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getList_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, List.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(odeListEClass, OdeList.class, "OdeList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getOdeList_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, OdeList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(randomListEClass, RandomList.class, "RandomList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getRandomList_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, RandomList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(argumentsEClass, Arguments.class, "Arguments", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getArguments_Arguments(), this.getArgument(), null, "arguments", null, 0, -1, Arguments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(argumentEClass, Argument.class, "Argument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getArgument_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getArgument_Expression(), this.getAnyExpression(), null, "expression", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(conditionalStatementEClass, ConditionalStatement.class, "ConditionalStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getConditionalStatement_ParExpression(), this.getParExpression(), null, "parExpression", null, 0, 1, ConditionalStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConditionalStatement_IfStatement(), this.getBlockStatement(), null, "ifStatement", null, 0, 1, ConditionalStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConditionalStatement_IfBlock(), this.getBlock(), null, "ifBlock", null, 0, 1, ConditionalStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConditionalStatement_ElseStatement(), this.getBlockStatement(), null, "elseStatement", null, 0, 1, ConditionalStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConditionalStatement_ElseBlock(), this.getBlock(), null, "elseBlock", null, 0, 1, ConditionalStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(blockEClass, Block.class, "Block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getBlock_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(parExpressionEClass, ParExpression.class, "ParExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getParExpression_Expression(), this.getExpression(), null, "expression", null, 0, 1, ParExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(conditionalExpressionEClass, ConditionalExpression.class, "ConditionalExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getConditionalExpression_Expression(), this.getOrExpression(), null, "expression", null, 0, 1, ConditionalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConditionalExpression_Expression1(), this.getExpression(), null, "expression1", null, 0, 1, ConditionalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConditionalExpression_Expression2(), this.getExpression(), null, "expression2", null, 0, 1, ConditionalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(orExpressionEClass, OrExpression.class, "OrExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getOrExpression_Expression(), this.getAndExpression(), null, "expression", null, 0, -1, OrExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getOrExpression_Operator(), ecorePackage.getEString(), "operator", null, 0, -1, OrExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(andExpressionEClass, AndExpression.class, "AndExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getAndExpression_Expression(), this.getLogicalExpression(), null, "expression", null, 0, -1, AndExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAndExpression_Operator(), ecorePackage.getEString(), "operator", null, 0, -1, AndExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(logicalExpressionEClass, LogicalExpression.class, "LogicalExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getLogicalExpression_Negation(), ecorePackage.getEString(), "negation", null, 0, 1, LogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getLogicalExpression_Boolean(), ecorePackage.getEString(), "boolean", null, 0, 1, LogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getLogicalExpression_Expression(), this.getAdditiveExpression(), null, "expression", null, 0, -1, LogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getLogicalExpression_Operator(), ecorePackage.getEString(), "operator", null, 0, -1, LogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(additiveExpressionEClass, AdditiveExpression.class, "AdditiveExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getAdditiveExpression_Expression(), this.getMultiplicativeExpression(), null, "expression", null, 0, -1, AdditiveExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAdditiveExpression_Operator(), ecorePackage.getEString(), "operator", null, 0, -1, AdditiveExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAdditiveExpression_String(), ecorePackage.getEString(), "string", null, 0, -1, AdditiveExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(multiplicativeExpressionEClass, MultiplicativeExpression.class, "MultiplicativeExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getMultiplicativeExpression_Expression(), this.getPowerExpression(), null, "expression", null, 0, -1, MultiplicativeExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getMultiplicativeExpression_Operator(), ecorePackage.getEString(), "operator", null, 0, -1, MultiplicativeExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(powerExpressionEClass, PowerExpression.class, "PowerExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getPowerExpression_Expression(), this.getUnaryExpression(), null, "expression", null, 0, -1, PowerExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPowerExpression_Operator(), ecorePackage.getEString(), "operator", null, 0, -1, PowerExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(unaryExpressionEClass, UnaryExpression.class, "UnaryExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getUnaryExpression_Operator(), ecorePackage.getEString(), "operator", null, 0, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getUnaryExpression_Expression(), this.getUnaryExpression(), null, "expression", null, 0, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getUnaryExpression_ParExpression(), this.getParExpression(), null, "parExpression", null, 0, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getUnaryExpression_Primary(), this.getPrimary(), null, "primary", null, 0, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(primaryEClass, Primary.class, "Primary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getPrimary_FunctionCall(), this.getFunctionCall(), null, "functionCall", null, 0, 1, Primary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPrimary_Number(), ecorePackage.getEString(), "number", null, 0, 1, Primary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPrimary_Symbol(), this.getFullyQualifiedSymbolName(), null, "symbol", null, 0, 1, Primary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPrimary_Attribute(), this.getFullyQualifiedArgumentName(), null, "attribute", null, 0, 1, Primary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPrimary_Vector(), this.getVector(), null, "vector", null, 0, 1, Primary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(vectorEClass, Vector.class, "Vector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getVector_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, Vector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVector_Values(), this.getExpression(), null, "values", null, 0, -1, Vector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(fullyQualifiedSymbolNameEClass, FullyQualifiedSymbolName.class, "FullyQualifiedSymbolName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getFullyQualifiedSymbolName_Object(), this.getObjectName(), null, "object", null, 0, 1, FullyQualifiedSymbolName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFullyQualifiedSymbolName_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, FullyQualifiedSymbolName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(fullyQualifiedArgumentNameEClass, FullyQualifiedArgumentName.class, "FullyQualifiedArgumentName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getFullyQualifiedArgumentName_Parent(), this.getFullyQualifiedSymbolName(), null, "parent", null, 0, 1, FullyQualifiedArgumentName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFullyQualifiedArgumentName_Identifier(), ecorePackage.getEString(), "identifier", null, 0, -1, FullyQualifiedArgumentName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(objectNameEClass, ObjectName.class, "ObjectName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getObjectName_Name(), ecorePackage.getEString(), "name", null, 0, 1, ObjectName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

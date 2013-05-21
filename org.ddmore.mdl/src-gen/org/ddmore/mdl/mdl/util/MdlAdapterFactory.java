@@ -75,369 +75,499 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
     new MdlSwitch<Adapter>()
     {
       @Override
-      public Adapter casemcl(mcl object)
+      public Adapter caseMcl(Mcl object)
       {
-        return createmclAdapter();
+        return createMclAdapter();
       }
       @Override
-      public Adapter casemcl_obj(mcl_obj object)
+      public Adapter caseMclObject(MclObject object)
       {
-        return createmcl_objAdapter();
+        return createMclObjectAdapter();
       }
       @Override
-      public Adapter casemodel_obj(model_obj object)
+      public Adapter caseModelObject(ModelObject object)
       {
-        return createmodel_objAdapter();
+        return createModelObjectAdapter();
       }
       @Override
-      public Adapter caseparam_obj(param_obj object)
+      public Adapter caseParameterObject(ParameterObject object)
       {
-        return createparam_objAdapter();
+        return createParameterObjectAdapter();
       }
       @Override
-      public Adapter casedata_obj(data_obj object)
+      public Adapter caseDataObject(DataObject object)
       {
-        return createdata_objAdapter();
+        return createDataObjectAdapter();
       }
       @Override
-      public Adapter casetask_obj(task_obj object)
+      public Adapter caseTaskObject(TaskObject object)
       {
-        return createtask_objAdapter();
+        return createTaskObjectAdapter();
       }
       @Override
-      public Adapter casetel_obj(tel_obj object)
+      public Adapter caseTELObject(TELObject object)
       {
-        return createtel_objAdapter();
+        return createTELObjectAdapter();
       }
       @Override
-      public Adapter casemodel_obj_block(model_obj_block object)
+      public Adapter caseModelObjectBlock(ModelObjectBlock object)
       {
-        return createmodel_obj_blockAdapter();
+        return createModelObjectBlockAdapter();
       }
       @Override
-      public Adapter caseindividual_model_obj_block(individual_model_obj_block object)
+      public Adapter caseIndividualVariablesBlock(IndividualVariablesBlock object)
       {
-        return createindividual_model_obj_blockAdapter();
+        return createIndividualVariablesBlockAdapter();
       }
       @Override
-      public Adapter casemodel_prediction_obj_block(model_prediction_obj_block object)
+      public Adapter caseModelPredictionBlock(ModelPredictionBlock object)
       {
-        return createmodel_prediction_obj_blockAdapter();
+        return createModelPredictionBlockAdapter();
       }
       @Override
-      public Adapter caserandom_variable_definition_block(random_variable_definition_block object)
+      public Adapter caseRandomVariableDefinitionBlock(RandomVariableDefinitionBlock object)
       {
-        return createrandom_variable_definition_blockAdapter();
+        return createRandomVariableDefinitionBlockAdapter();
       }
       @Override
-      public Adapter caseinput_variables_block(input_variables_block object)
+      public Adapter caseInputVariablesBlock(InputVariablesBlock object)
       {
-        return createinput_variables_blockAdapter();
+        return createInputVariablesBlockAdapter();
       }
       @Override
-      public Adapter casestructural_parameters_block(structural_parameters_block object)
+      public Adapter caseStructuralParametersBlock(StructuralParametersBlock object)
       {
-        return createstructural_parameters_blockAdapter();
+        return createStructuralParametersBlockAdapter();
       }
       @Override
-      public Adapter casevariability_parameters_block(variability_parameters_block object)
+      public Adapter caseVariabilityParametersBlock(VariabilityParametersBlock object)
       {
-        return createvariability_parameters_blockAdapter();
+        return createVariabilityParametersBlockAdapter();
       }
       @Override
-      public Adapter caseoutput_variables_block(output_variables_block object)
+      public Adapter caseOutputVariablesBlock(OutputVariablesBlock object)
       {
-        return createoutput_variables_blockAdapter();
+        return createOutputVariablesBlockAdapter();
       }
       @Override
-      public Adapter casegroup_variables(group_variables object)
+      public Adapter caseGroupVariablesBlock(GroupVariablesBlock object)
       {
-        return creategroup_variablesAdapter();
+        return createGroupVariablesBlockAdapter();
       }
       @Override
-      public Adapter caseobservation_block(observation_block object)
+      public Adapter caseObservationBlock(ObservationBlock object)
       {
-        return createobservation_blockAdapter();
+        return createObservationBlockAdapter();
       }
       @Override
-      public Adapter caseestimation_block(estimation_block object)
+      public Adapter caseEstimationBlock(EstimationBlock object)
       {
-        return createestimation_blockAdapter();
+        return createEstimationBlockAdapter();
       }
       @Override
-      public Adapter casesimulation_block(simulation_block object)
+      public Adapter caseSimulationBlock(SimulationBlock object)
       {
-        return createsimulation_blockAdapter();
+        return createSimulationBlockAdapter();
       }
       @Override
-      public Adapter caseparam_obj_block(param_obj_block object)
+      public Adapter caseParameterObjectBlock(ParameterObjectBlock object)
       {
-        return createparam_obj_blockAdapter();
+        return createParameterObjectBlockAdapter();
       }
       @Override
-      public Adapter casestructural_block(structural_block object)
+      public Adapter caseStructuralBlock(StructuralBlock object)
       {
-        return createstructural_blockAdapter();
+        return createStructuralBlockAdapter();
       }
       @Override
-      public Adapter casevariability_block(variability_block object)
+      public Adapter caseVariabilityBlock(VariabilityBlock object)
       {
-        return createvariability_blockAdapter();
+        return createVariabilityBlockAdapter();
       }
       @Override
-      public Adapter casedata_obj_block(data_obj_block object)
+      public Adapter casePriorParametersBlock(PriorParametersBlock object)
       {
-        return createdata_obj_blockAdapter();
+        return createPriorParametersBlockAdapter();
       }
       @Override
-      public Adapter caseheader_block(header_block object)
+      public Adapter caseDataObjectBlock(DataObjectBlock object)
       {
-        return createheader_blockAdapter();
+        return createDataObjectBlockAdapter();
       }
       @Override
-      public Adapter casefile_block(file_block object)
+      public Adapter caseHeaderBlock(HeaderBlock object)
       {
-        return createfile_blockAdapter();
+        return createHeaderBlockAdapter();
       }
       @Override
-      public Adapter casetask_obj_block(task_obj_block object)
+      public Adapter caseFileBlock(FileBlock object)
       {
-        return createtask_obj_blockAdapter();
+        return createFileBlockAdapter();
       }
       @Override
-      public Adapter caseparameters_block(parameters_block object)
+      public Adapter caseTaskObjectBlock(TaskObjectBlock object)
       {
-        return createparameters_blockAdapter();
+        return createTaskObjectBlockAdapter();
       }
       @Override
-      public Adapter casedata_block(data_block object)
+      public Adapter caseParameterBlock(ParameterBlock object)
       {
-        return createdata_blockAdapter();
+        return createParameterBlockAdapter();
       }
       @Override
-      public Adapter casemodel_block(model_block object)
+      public Adapter caseDataBlock(DataBlock object)
       {
-        return createmodel_blockAdapter();
+        return createDataBlockAdapter();
       }
       @Override
-      public Adapter casemodel_block_statement(model_block_statement object)
+      public Adapter caseDataBlockStatement(DataBlockStatement object)
       {
-        return createmodel_block_statementAdapter();
+        return createDataBlockStatementAdapter();
       }
       @Override
-      public Adapter caselibrary_block(library_block object)
+      public Adapter caseIgnoreList(IgnoreList object)
       {
-        return createlibrary_blockAdapter();
+        return createIgnoreListAdapter();
       }
       @Override
-      public Adapter caseode_block(ode_block object)
+      public Adapter caseAcceptList(AcceptList object)
       {
-        return createode_blockAdapter();
+        return createAcceptListAdapter();
       }
       @Override
-      public Adapter casevariability_block_content(variability_block_content object)
+      public Adapter caseDropList(DropList object)
       {
-        return createvariability_block_contentAdapter();
+        return createDropListAdapter();
       }
       @Override
-      public Adapter casevariability_block_statement(variability_block_statement object)
+      public Adapter caseModelBlock(ModelBlock object)
       {
-        return createvariability_block_statementAdapter();
+        return createModelBlockAdapter();
       }
       @Override
-      public Adapter caseblock_subblock(block_subblock object)
+      public Adapter caseModelBlockStatement(ModelBlockStatement object)
       {
-        return createblock_subblockAdapter();
+        return createModelBlockStatementAdapter();
       }
       @Override
-      public Adapter casediag_subblock(diag_subblock object)
+      public Adapter caseAddList(AddList object)
       {
-        return creatediag_subblockAdapter();
+        return createAddListAdapter();
       }
       @Override
-      public Adapter casevariability_subblock(variability_subblock object)
+      public Adapter caseRemoveList(RemoveList object)
       {
-        return createvariability_subblockAdapter();
+        return createRemoveListAdapter();
       }
       @Override
-      public Adapter casefile_block_content(file_block_content object)
+      public Adapter caseSymbolList(SymbolList object)
       {
-        return createfile_block_contentAdapter();
+        return createSymbolListAdapter();
       }
       @Override
-      public Adapter casefile_block_statement(file_block_statement object)
+      public Adapter caseModelPredictionBlockStatement(ModelPredictionBlockStatement object)
       {
-        return createfile_block_statementAdapter();
+        return createModelPredictionBlockStatementAdapter();
       }
       @Override
-      public Adapter caseinline_block(inline_block object)
+      public Adapter caseLibraryBlock(LibraryBlock object)
       {
-        return createinline_blockAdapter();
+        return createLibraryBlockAdapter();
       }
       @Override
-      public Adapter casedesign_block(design_block object)
+      public Adapter caseOdeBlock(OdeBlock object)
       {
-        return createdesign_blockAdapter();
+        return createOdeBlockAdapter();
       }
       @Override
-      public Adapter casersscript_block(rsscript_block object)
+      public Adapter caseGroupVariablesBlockStatement(GroupVariablesBlockStatement object)
       {
-        return creatersscript_blockAdapter();
+        return createGroupVariablesBlockStatementAdapter();
       }
       @Override
-      public Adapter caseinline_block_content(inline_block_content object)
+      public Adapter caseMixtureBlock(MixtureBlock object)
       {
-        return createinline_block_contentAdapter();
+        return createMixtureBlockAdapter();
       }
       @Override
-      public Adapter casefunction_declaration(function_declaration object)
+      public Adapter caseVariabilityBlockStatement(VariabilityBlockStatement object)
       {
-        return createfunction_declarationAdapter();
+        return createVariabilityBlockStatementAdapter();
       }
       @Override
-      public Adapter casefunction_body(function_body object)
+      public Adapter caseBlockBlock(BlockBlock object)
       {
-        return createfunction_bodyAdapter();
+        return createBlockBlockAdapter();
       }
       @Override
-      public Adapter casefunction_subblock(function_subblock object)
+      public Adapter caseDiagBlock(DiagBlock object)
       {
-        return createfunction_subblockAdapter();
+        return createDiagBlockAdapter();
       }
       @Override
-      public Adapter caseformal_arguments(formal_arguments object)
+      public Adapter caseSameBlock(SameBlock object)
       {
-        return createformal_argumentsAdapter();
+        return createSameBlockAdapter();
       }
       @Override
-      public Adapter casefunction_call(function_call object)
+      public Adapter caseFileBlockStatement(FileBlockStatement object)
       {
-        return createfunction_callAdapter();
+        return createFileBlockStatementAdapter();
       }
       @Override
-      public Adapter caseblock(block object)
+      public Adapter caseInlineBlock(InlineBlock object)
       {
-        return createblockAdapter();
+        return createInlineBlockAdapter();
       }
       @Override
-      public Adapter caseblock_statement(block_statement object)
+      public Adapter caseDesignBlock(DesignBlock object)
       {
-        return createblock_statementAdapter();
+        return createDesignBlockAdapter();
       }
       @Override
-      public Adapter caseverbatim_block(verbatim_block object)
+      public Adapter caseDesignBlockStatement(DesignBlockStatement object)
       {
-        return createverbatim_blockAdapter();
+        return createDesignBlockStatementAdapter();
       }
       @Override
-      public Adapter casetarget_block(target_block object)
+      public Adapter caseVariableList(VariableList object)
       {
-        return createtarget_blockAdapter();
+        return createVariableListAdapter();
       }
       @Override
-      public Adapter casevariable_declaration(variable_declaration object)
+      public Adapter caseRScriptBlock(RScriptBlock object)
       {
-        return createvariable_declarationAdapter();
+        return createRScriptBlockAdapter();
       }
       @Override
-      public Adapter caseany_expression(any_expression object)
+      public Adapter caseRScriptBlockStatement(RScriptBlockStatement object)
       {
-        return createany_expressionAdapter();
+        return createRScriptBlockStatementAdapter();
       }
       @Override
-      public Adapter caseexpression(expression object)
+      public Adapter caseTaskFunctionDeclaration(TaskFunctionDeclaration object)
       {
-        return createexpressionAdapter();
+        return createTaskFunctionDeclarationAdapter();
       }
       @Override
-      public Adapter caselist(list object)
+      public Adapter caseTaskFunctionBody(TaskFunctionBody object)
       {
-        return createlistAdapter();
+        return createTaskFunctionBodyAdapter();
       }
       @Override
-      public Adapter caseode_list(ode_list object)
+      public Adapter caseTaskFunctionBlock(TaskFunctionBlock object)
       {
-        return createode_listAdapter();
+        return createTaskFunctionBlockAdapter();
       }
       @Override
-      public Adapter caserandom_list(random_list object)
+      public Adapter caseEstimateTask(EstimateTask object)
       {
-        return createrandom_listAdapter();
+        return createEstimateTaskAdapter();
       }
       @Override
-      public Adapter casearguments(arguments object)
+      public Adapter caseSimulateTask(SimulateTask object)
       {
-        return createargumentsAdapter();
+        return createSimulateTaskAdapter();
       }
       @Override
-      public Adapter caseargument(argument object)
+      public Adapter caseExecuteTask(ExecuteTask object)
       {
-        return createargumentAdapter();
+        return createExecuteTaskAdapter();
       }
       @Override
-      public Adapter casestatement(statement object)
+      public Adapter caseFormalArguments(FormalArguments object)
       {
-        return createstatementAdapter();
+        return createFormalArgumentsAdapter();
       }
       @Override
-      public Adapter casepar_expression(par_expression object)
+      public Adapter caseFunctionCall(FunctionCall object)
       {
-        return createpar_expressionAdapter();
+        return createFunctionCallAdapter();
       }
       @Override
-      public Adapter caseconditional_expression(conditional_expression object)
+      public Adapter caseBlockStatement(BlockStatement object)
       {
-        return createconditional_expressionAdapter();
+        return createBlockStatementAdapter();
       }
       @Override
-      public Adapter caseconditional_or_expression(conditional_or_expression object)
+      public Adapter caseVerbatimBlock(VerbatimBlock object)
       {
-        return createconditional_or_expressionAdapter();
+        return createVerbatimBlockAdapter();
       }
       @Override
-      public Adapter caseconditional_and_expression(conditional_and_expression object)
+      public Adapter caseTargetBlock(TargetBlock object)
       {
-        return createconditional_and_expressionAdapter();
+        return createTargetBlockAdapter();
       }
       @Override
-      public Adapter caserelational_expression(relational_expression object)
+      public Adapter caseSymbolModification(SymbolModification object)
       {
-        return createrelational_expressionAdapter();
+        return createSymbolModificationAdapter();
       }
       @Override
-      public Adapter caseadditive_expression(additive_expression object)
+      public Adapter caseParameterDeclaration(ParameterDeclaration object)
       {
-        return createadditive_expressionAdapter();
+        return createParameterDeclarationAdapter();
       }
       @Override
-      public Adapter casemultiplicative_expression(multiplicative_expression object)
+      public Adapter caseSymbolDeclaration(SymbolDeclaration object)
       {
-        return createmultiplicative_expressionAdapter();
+        return createSymbolDeclarationAdapter();
       }
       @Override
-      public Adapter casepower_expression(power_expression object)
+      public Adapter caseEnumType(EnumType object)
       {
-        return createpower_expressionAdapter();
+        return createEnumTypeAdapter();
       }
       @Override
-      public Adapter caseunary_expression(unary_expression object)
+      public Adapter caseMissing(Missing object)
       {
-        return createunary_expressionAdapter();
+        return createMissingAdapter();
       }
       @Override
-      public Adapter caseprimary(primary object)
+      public Adapter caseLikelyhood(Likelyhood object)
       {
-        return createprimaryAdapter();
+        return createLikelyhoodAdapter();
       }
       @Override
-      public Adapter casevariable_name(variable_name object)
+      public Adapter caseLevelType(LevelType object)
       {
-        return createvariable_nameAdapter();
+        return createLevelTypeAdapter();
       }
       @Override
-      public Adapter caseselector(selector object)
+      public Adapter caseCategorical(Categorical object)
       {
-        return createselectorAdapter();
+        return createCategoricalAdapter();
+      }
+      @Override
+      public Adapter caseContinuous(Continuous object)
+      {
+        return createContinuousAdapter();
+      }
+      @Override
+      public Adapter caseCovariate(Covariate object)
+      {
+        return createCovariateAdapter();
+      }
+      @Override
+      public Adapter caseDistribution(Distribution object)
+      {
+        return createDistributionAdapter();
+      }
+      @Override
+      public Adapter caseAnyExpression(AnyExpression object)
+      {
+        return createAnyExpressionAdapter();
+      }
+      @Override
+      public Adapter caseExpression(Expression object)
+      {
+        return createExpressionAdapter();
+      }
+      @Override
+      public Adapter caseList(List object)
+      {
+        return createListAdapter();
+      }
+      @Override
+      public Adapter caseOdeList(OdeList object)
+      {
+        return createOdeListAdapter();
+      }
+      @Override
+      public Adapter caseRandomList(RandomList object)
+      {
+        return createRandomListAdapter();
+      }
+      @Override
+      public Adapter caseArguments(Arguments object)
+      {
+        return createArgumentsAdapter();
+      }
+      @Override
+      public Adapter caseArgument(Argument object)
+      {
+        return createArgumentAdapter();
+      }
+      @Override
+      public Adapter caseConditionalStatement(ConditionalStatement object)
+      {
+        return createConditionalStatementAdapter();
+      }
+      @Override
+      public Adapter caseBlock(Block object)
+      {
+        return createBlockAdapter();
+      }
+      @Override
+      public Adapter caseParExpression(ParExpression object)
+      {
+        return createParExpressionAdapter();
+      }
+      @Override
+      public Adapter caseConditionalExpression(ConditionalExpression object)
+      {
+        return createConditionalExpressionAdapter();
+      }
+      @Override
+      public Adapter caseOrExpression(OrExpression object)
+      {
+        return createOrExpressionAdapter();
+      }
+      @Override
+      public Adapter caseAndExpression(AndExpression object)
+      {
+        return createAndExpressionAdapter();
+      }
+      @Override
+      public Adapter caseLogicalExpression(LogicalExpression object)
+      {
+        return createLogicalExpressionAdapter();
+      }
+      @Override
+      public Adapter caseAdditiveExpression(AdditiveExpression object)
+      {
+        return createAdditiveExpressionAdapter();
+      }
+      @Override
+      public Adapter caseMultiplicativeExpression(MultiplicativeExpression object)
+      {
+        return createMultiplicativeExpressionAdapter();
+      }
+      @Override
+      public Adapter casePowerExpression(PowerExpression object)
+      {
+        return createPowerExpressionAdapter();
+      }
+      @Override
+      public Adapter caseUnaryExpression(UnaryExpression object)
+      {
+        return createUnaryExpressionAdapter();
+      }
+      @Override
+      public Adapter casePrimary(Primary object)
+      {
+        return createPrimaryAdapter();
+      }
+      @Override
+      public Adapter caseVector(Vector object)
+      {
+        return createVectorAdapter();
+      }
+      @Override
+      public Adapter caseFullyQualifiedSymbolName(FullyQualifiedSymbolName object)
+      {
+        return createFullyQualifiedSymbolNameAdapter();
+      }
+      @Override
+      public Adapter caseFullyQualifiedArgumentName(FullyQualifiedArgumentName object)
+      {
+        return createFullyQualifiedArgumentNameAdapter();
+      }
+      @Override
+      public Adapter caseObjectName(ObjectName object)
+      {
+        return createObjectNameAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -462,1096 +592,1486 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
 
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.mcl <em>mcl</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Mcl <em>Mcl</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.mcl
+   * @see org.ddmore.mdl.mdl.Mcl
    * @generated
    */
-  public Adapter createmclAdapter()
+  public Adapter createMclAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.mcl_obj <em>mcl obj</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.MclObject <em>Mcl Object</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.mcl_obj
+   * @see org.ddmore.mdl.mdl.MclObject
    * @generated
    */
-  public Adapter createmcl_objAdapter()
+  public Adapter createMclObjectAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.model_obj <em>model obj</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ModelObject <em>Model Object</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.model_obj
+   * @see org.ddmore.mdl.mdl.ModelObject
    * @generated
    */
-  public Adapter createmodel_objAdapter()
+  public Adapter createModelObjectAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.param_obj <em>param obj</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ParameterObject <em>Parameter Object</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.param_obj
+   * @see org.ddmore.mdl.mdl.ParameterObject
    * @generated
    */
-  public Adapter createparam_objAdapter()
+  public Adapter createParameterObjectAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.data_obj <em>data obj</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.DataObject <em>Data Object</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.data_obj
+   * @see org.ddmore.mdl.mdl.DataObject
    * @generated
    */
-  public Adapter createdata_objAdapter()
+  public Adapter createDataObjectAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.task_obj <em>task obj</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.TaskObject <em>Task Object</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.task_obj
+   * @see org.ddmore.mdl.mdl.TaskObject
    * @generated
    */
-  public Adapter createtask_objAdapter()
+  public Adapter createTaskObjectAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.tel_obj <em>tel obj</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.TELObject <em>TEL Object</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.tel_obj
+   * @see org.ddmore.mdl.mdl.TELObject
    * @generated
    */
-  public Adapter createtel_objAdapter()
+  public Adapter createTELObjectAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.model_obj_block <em>model obj block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ModelObjectBlock <em>Model Object Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.model_obj_block
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock
    * @generated
    */
-  public Adapter createmodel_obj_blockAdapter()
+  public Adapter createModelObjectBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.individual_model_obj_block <em>individual model obj block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.IndividualVariablesBlock <em>Individual Variables Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.individual_model_obj_block
+   * @see org.ddmore.mdl.mdl.IndividualVariablesBlock
    * @generated
    */
-  public Adapter createindividual_model_obj_blockAdapter()
+  public Adapter createIndividualVariablesBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.model_prediction_obj_block <em>model prediction obj block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ModelPredictionBlock <em>Model Prediction Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.model_prediction_obj_block
+   * @see org.ddmore.mdl.mdl.ModelPredictionBlock
    * @generated
    */
-  public Adapter createmodel_prediction_obj_blockAdapter()
+  public Adapter createModelPredictionBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.random_variable_definition_block <em>random variable definition block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.RandomVariableDefinitionBlock <em>Random Variable Definition Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.random_variable_definition_block
+   * @see org.ddmore.mdl.mdl.RandomVariableDefinitionBlock
    * @generated
    */
-  public Adapter createrandom_variable_definition_blockAdapter()
+  public Adapter createRandomVariableDefinitionBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.input_variables_block <em>input variables block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.InputVariablesBlock <em>Input Variables Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.input_variables_block
+   * @see org.ddmore.mdl.mdl.InputVariablesBlock
    * @generated
    */
-  public Adapter createinput_variables_blockAdapter()
+  public Adapter createInputVariablesBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.structural_parameters_block <em>structural parameters block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.StructuralParametersBlock <em>Structural Parameters Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.structural_parameters_block
+   * @see org.ddmore.mdl.mdl.StructuralParametersBlock
    * @generated
    */
-  public Adapter createstructural_parameters_blockAdapter()
+  public Adapter createStructuralParametersBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.variability_parameters_block <em>variability parameters block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.VariabilityParametersBlock <em>Variability Parameters Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.variability_parameters_block
+   * @see org.ddmore.mdl.mdl.VariabilityParametersBlock
    * @generated
    */
-  public Adapter createvariability_parameters_blockAdapter()
+  public Adapter createVariabilityParametersBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.output_variables_block <em>output variables block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.OutputVariablesBlock <em>Output Variables Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.output_variables_block
+   * @see org.ddmore.mdl.mdl.OutputVariablesBlock
    * @generated
    */
-  public Adapter createoutput_variables_blockAdapter()
+  public Adapter createOutputVariablesBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.group_variables <em>group variables</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.GroupVariablesBlock <em>Group Variables Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.group_variables
+   * @see org.ddmore.mdl.mdl.GroupVariablesBlock
    * @generated
    */
-  public Adapter creategroup_variablesAdapter()
+  public Adapter createGroupVariablesBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.observation_block <em>observation block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ObservationBlock <em>Observation Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.observation_block
+   * @see org.ddmore.mdl.mdl.ObservationBlock
    * @generated
    */
-  public Adapter createobservation_blockAdapter()
+  public Adapter createObservationBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.estimation_block <em>estimation block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.EstimationBlock <em>Estimation Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.estimation_block
+   * @see org.ddmore.mdl.mdl.EstimationBlock
    * @generated
    */
-  public Adapter createestimation_blockAdapter()
+  public Adapter createEstimationBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.simulation_block <em>simulation block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.SimulationBlock <em>Simulation Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.simulation_block
+   * @see org.ddmore.mdl.mdl.SimulationBlock
    * @generated
    */
-  public Adapter createsimulation_blockAdapter()
+  public Adapter createSimulationBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.param_obj_block <em>param obj block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ParameterObjectBlock <em>Parameter Object Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.param_obj_block
+   * @see org.ddmore.mdl.mdl.ParameterObjectBlock
    * @generated
    */
-  public Adapter createparam_obj_blockAdapter()
+  public Adapter createParameterObjectBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.structural_block <em>structural block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.StructuralBlock <em>Structural Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.structural_block
+   * @see org.ddmore.mdl.mdl.StructuralBlock
    * @generated
    */
-  public Adapter createstructural_blockAdapter()
+  public Adapter createStructuralBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.variability_block <em>variability block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.VariabilityBlock <em>Variability Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.variability_block
+   * @see org.ddmore.mdl.mdl.VariabilityBlock
    * @generated
    */
-  public Adapter createvariability_blockAdapter()
+  public Adapter createVariabilityBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.data_obj_block <em>data obj block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.PriorParametersBlock <em>Prior Parameters Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.data_obj_block
+   * @see org.ddmore.mdl.mdl.PriorParametersBlock
    * @generated
    */
-  public Adapter createdata_obj_blockAdapter()
+  public Adapter createPriorParametersBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.header_block <em>header block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.DataObjectBlock <em>Data Object Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.header_block
+   * @see org.ddmore.mdl.mdl.DataObjectBlock
    * @generated
    */
-  public Adapter createheader_blockAdapter()
+  public Adapter createDataObjectBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.file_block <em>file block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.HeaderBlock <em>Header Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.file_block
+   * @see org.ddmore.mdl.mdl.HeaderBlock
    * @generated
    */
-  public Adapter createfile_blockAdapter()
+  public Adapter createHeaderBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.task_obj_block <em>task obj block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.FileBlock <em>File Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.task_obj_block
+   * @see org.ddmore.mdl.mdl.FileBlock
    * @generated
    */
-  public Adapter createtask_obj_blockAdapter()
+  public Adapter createFileBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.parameters_block <em>parameters block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.TaskObjectBlock <em>Task Object Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.parameters_block
+   * @see org.ddmore.mdl.mdl.TaskObjectBlock
    * @generated
    */
-  public Adapter createparameters_blockAdapter()
+  public Adapter createTaskObjectBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.data_block <em>data block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ParameterBlock <em>Parameter Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.data_block
+   * @see org.ddmore.mdl.mdl.ParameterBlock
    * @generated
    */
-  public Adapter createdata_blockAdapter()
+  public Adapter createParameterBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.model_block <em>model block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.DataBlock <em>Data Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.model_block
+   * @see org.ddmore.mdl.mdl.DataBlock
    * @generated
    */
-  public Adapter createmodel_blockAdapter()
+  public Adapter createDataBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.model_block_statement <em>model block statement</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.DataBlockStatement <em>Data Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.model_block_statement
+   * @see org.ddmore.mdl.mdl.DataBlockStatement
    * @generated
    */
-  public Adapter createmodel_block_statementAdapter()
+  public Adapter createDataBlockStatementAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.library_block <em>library block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.IgnoreList <em>Ignore List</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.library_block
+   * @see org.ddmore.mdl.mdl.IgnoreList
    * @generated
    */
-  public Adapter createlibrary_blockAdapter()
+  public Adapter createIgnoreListAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ode_block <em>ode block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.AcceptList <em>Accept List</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.ode_block
+   * @see org.ddmore.mdl.mdl.AcceptList
    * @generated
    */
-  public Adapter createode_blockAdapter()
+  public Adapter createAcceptListAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.variability_block_content <em>variability block content</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.DropList <em>Drop List</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.variability_block_content
+   * @see org.ddmore.mdl.mdl.DropList
    * @generated
    */
-  public Adapter createvariability_block_contentAdapter()
+  public Adapter createDropListAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.variability_block_statement <em>variability block statement</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ModelBlock <em>Model Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.variability_block_statement
+   * @see org.ddmore.mdl.mdl.ModelBlock
    * @generated
    */
-  public Adapter createvariability_block_statementAdapter()
+  public Adapter createModelBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.block_subblock <em>block subblock</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ModelBlockStatement <em>Model Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.block_subblock
+   * @see org.ddmore.mdl.mdl.ModelBlockStatement
    * @generated
    */
-  public Adapter createblock_subblockAdapter()
+  public Adapter createModelBlockStatementAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.diag_subblock <em>diag subblock</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.AddList <em>Add List</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.diag_subblock
+   * @see org.ddmore.mdl.mdl.AddList
    * @generated
    */
-  public Adapter creatediag_subblockAdapter()
+  public Adapter createAddListAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.variability_subblock <em>variability subblock</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.RemoveList <em>Remove List</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.variability_subblock
+   * @see org.ddmore.mdl.mdl.RemoveList
    * @generated
    */
-  public Adapter createvariability_subblockAdapter()
+  public Adapter createRemoveListAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.file_block_content <em>file block content</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.SymbolList <em>Symbol List</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.file_block_content
+   * @see org.ddmore.mdl.mdl.SymbolList
    * @generated
    */
-  public Adapter createfile_block_contentAdapter()
+  public Adapter createSymbolListAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.file_block_statement <em>file block statement</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ModelPredictionBlockStatement <em>Model Prediction Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.file_block_statement
+   * @see org.ddmore.mdl.mdl.ModelPredictionBlockStatement
    * @generated
    */
-  public Adapter createfile_block_statementAdapter()
+  public Adapter createModelPredictionBlockStatementAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.inline_block <em>inline block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.LibraryBlock <em>Library Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.inline_block
+   * @see org.ddmore.mdl.mdl.LibraryBlock
    * @generated
    */
-  public Adapter createinline_blockAdapter()
+  public Adapter createLibraryBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.design_block <em>design block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.OdeBlock <em>Ode Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.design_block
+   * @see org.ddmore.mdl.mdl.OdeBlock
    * @generated
    */
-  public Adapter createdesign_blockAdapter()
+  public Adapter createOdeBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.rsscript_block <em>rsscript block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.GroupVariablesBlockStatement <em>Group Variables Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.rsscript_block
+   * @see org.ddmore.mdl.mdl.GroupVariablesBlockStatement
    * @generated
    */
-  public Adapter creatersscript_blockAdapter()
+  public Adapter createGroupVariablesBlockStatementAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.inline_block_content <em>inline block content</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.MixtureBlock <em>Mixture Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.inline_block_content
+   * @see org.ddmore.mdl.mdl.MixtureBlock
    * @generated
    */
-  public Adapter createinline_block_contentAdapter()
+  public Adapter createMixtureBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.function_declaration <em>function declaration</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.VariabilityBlockStatement <em>Variability Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.function_declaration
+   * @see org.ddmore.mdl.mdl.VariabilityBlockStatement
    * @generated
    */
-  public Adapter createfunction_declarationAdapter()
+  public Adapter createVariabilityBlockStatementAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.function_body <em>function body</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.BlockBlock <em>Block Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.function_body
+   * @see org.ddmore.mdl.mdl.BlockBlock
    * @generated
    */
-  public Adapter createfunction_bodyAdapter()
+  public Adapter createBlockBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.function_subblock <em>function subblock</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.DiagBlock <em>Diag Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.function_subblock
+   * @see org.ddmore.mdl.mdl.DiagBlock
    * @generated
    */
-  public Adapter createfunction_subblockAdapter()
+  public Adapter createDiagBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.formal_arguments <em>formal arguments</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.SameBlock <em>Same Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.formal_arguments
+   * @see org.ddmore.mdl.mdl.SameBlock
    * @generated
    */
-  public Adapter createformal_argumentsAdapter()
+  public Adapter createSameBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.function_call <em>function call</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.FileBlockStatement <em>File Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.function_call
+   * @see org.ddmore.mdl.mdl.FileBlockStatement
    * @generated
    */
-  public Adapter createfunction_callAdapter()
+  public Adapter createFileBlockStatementAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.block <em>block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.InlineBlock <em>Inline Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.block
+   * @see org.ddmore.mdl.mdl.InlineBlock
    * @generated
    */
-  public Adapter createblockAdapter()
+  public Adapter createInlineBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.block_statement <em>block statement</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.DesignBlock <em>Design Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.block_statement
+   * @see org.ddmore.mdl.mdl.DesignBlock
    * @generated
    */
-  public Adapter createblock_statementAdapter()
+  public Adapter createDesignBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.verbatim_block <em>verbatim block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.DesignBlockStatement <em>Design Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.verbatim_block
+   * @see org.ddmore.mdl.mdl.DesignBlockStatement
    * @generated
    */
-  public Adapter createverbatim_blockAdapter()
+  public Adapter createDesignBlockStatementAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.target_block <em>target block</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.VariableList <em>Variable List</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.target_block
+   * @see org.ddmore.mdl.mdl.VariableList
    * @generated
    */
-  public Adapter createtarget_blockAdapter()
+  public Adapter createVariableListAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.variable_declaration <em>variable declaration</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.RScriptBlock <em>RScript Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.variable_declaration
+   * @see org.ddmore.mdl.mdl.RScriptBlock
    * @generated
    */
-  public Adapter createvariable_declarationAdapter()
+  public Adapter createRScriptBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.any_expression <em>any expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.RScriptBlockStatement <em>RScript Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.any_expression
+   * @see org.ddmore.mdl.mdl.RScriptBlockStatement
    * @generated
    */
-  public Adapter createany_expressionAdapter()
+  public Adapter createRScriptBlockStatementAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.expression <em>expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.TaskFunctionDeclaration <em>Task Function Declaration</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.expression
+   * @see org.ddmore.mdl.mdl.TaskFunctionDeclaration
    * @generated
    */
-  public Adapter createexpressionAdapter()
+  public Adapter createTaskFunctionDeclarationAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.list <em>list</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.TaskFunctionBody <em>Task Function Body</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.list
+   * @see org.ddmore.mdl.mdl.TaskFunctionBody
    * @generated
    */
-  public Adapter createlistAdapter()
+  public Adapter createTaskFunctionBodyAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ode_list <em>ode list</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.TaskFunctionBlock <em>Task Function Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.ode_list
+   * @see org.ddmore.mdl.mdl.TaskFunctionBlock
    * @generated
    */
-  public Adapter createode_listAdapter()
+  public Adapter createTaskFunctionBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.random_list <em>random list</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.EstimateTask <em>Estimate Task</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.random_list
+   * @see org.ddmore.mdl.mdl.EstimateTask
    * @generated
    */
-  public Adapter createrandom_listAdapter()
+  public Adapter createEstimateTaskAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.arguments <em>arguments</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.SimulateTask <em>Simulate Task</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.arguments
+   * @see org.ddmore.mdl.mdl.SimulateTask
    * @generated
    */
-  public Adapter createargumentsAdapter()
+  public Adapter createSimulateTaskAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.argument <em>argument</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ExecuteTask <em>Execute Task</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.argument
+   * @see org.ddmore.mdl.mdl.ExecuteTask
    * @generated
    */
-  public Adapter createargumentAdapter()
+  public Adapter createExecuteTaskAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.statement <em>statement</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.FormalArguments <em>Formal Arguments</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.statement
+   * @see org.ddmore.mdl.mdl.FormalArguments
    * @generated
    */
-  public Adapter createstatementAdapter()
+  public Adapter createFormalArgumentsAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.par_expression <em>par expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.FunctionCall <em>Function Call</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.par_expression
+   * @see org.ddmore.mdl.mdl.FunctionCall
    * @generated
    */
-  public Adapter createpar_expressionAdapter()
+  public Adapter createFunctionCallAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.conditional_expression <em>conditional expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.BlockStatement <em>Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.conditional_expression
+   * @see org.ddmore.mdl.mdl.BlockStatement
    * @generated
    */
-  public Adapter createconditional_expressionAdapter()
+  public Adapter createBlockStatementAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.conditional_or_expression <em>conditional or expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.VerbatimBlock <em>Verbatim Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.conditional_or_expression
+   * @see org.ddmore.mdl.mdl.VerbatimBlock
    * @generated
    */
-  public Adapter createconditional_or_expressionAdapter()
+  public Adapter createVerbatimBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.conditional_and_expression <em>conditional and expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.TargetBlock <em>Target Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.conditional_and_expression
+   * @see org.ddmore.mdl.mdl.TargetBlock
    * @generated
    */
-  public Adapter createconditional_and_expressionAdapter()
+  public Adapter createTargetBlockAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.relational_expression <em>relational expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.SymbolModification <em>Symbol Modification</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.relational_expression
+   * @see org.ddmore.mdl.mdl.SymbolModification
    * @generated
    */
-  public Adapter createrelational_expressionAdapter()
+  public Adapter createSymbolModificationAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.additive_expression <em>additive expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ParameterDeclaration <em>Parameter Declaration</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.additive_expression
+   * @see org.ddmore.mdl.mdl.ParameterDeclaration
    * @generated
    */
-  public Adapter createadditive_expressionAdapter()
+  public Adapter createParameterDeclarationAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.multiplicative_expression <em>multiplicative expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.SymbolDeclaration <em>Symbol Declaration</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.multiplicative_expression
+   * @see org.ddmore.mdl.mdl.SymbolDeclaration
    * @generated
    */
-  public Adapter createmultiplicative_expressionAdapter()
+  public Adapter createSymbolDeclarationAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.power_expression <em>power expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.EnumType <em>Enum Type</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.power_expression
+   * @see org.ddmore.mdl.mdl.EnumType
    * @generated
    */
-  public Adapter createpower_expressionAdapter()
+  public Adapter createEnumTypeAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.unary_expression <em>unary expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Missing <em>Missing</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.unary_expression
+   * @see org.ddmore.mdl.mdl.Missing
    * @generated
    */
-  public Adapter createunary_expressionAdapter()
+  public Adapter createMissingAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.primary <em>primary</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Likelyhood <em>Likelyhood</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.primary
+   * @see org.ddmore.mdl.mdl.Likelyhood
    * @generated
    */
-  public Adapter createprimaryAdapter()
+  public Adapter createLikelyhoodAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.variable_name <em>variable name</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.LevelType <em>Level Type</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.variable_name
+   * @see org.ddmore.mdl.mdl.LevelType
    * @generated
    */
-  public Adapter createvariable_nameAdapter()
+  public Adapter createLevelTypeAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.selector <em>selector</em>}'.
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Categorical <em>Categorical</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.selector
+   * @see org.ddmore.mdl.mdl.Categorical
    * @generated
    */
-  public Adapter createselectorAdapter()
+  public Adapter createCategoricalAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Continuous <em>Continuous</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.Continuous
+   * @generated
+   */
+  public Adapter createContinuousAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Covariate <em>Covariate</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.Covariate
+   * @generated
+   */
+  public Adapter createCovariateAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Distribution <em>Distribution</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.Distribution
+   * @generated
+   */
+  public Adapter createDistributionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.AnyExpression <em>Any Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.AnyExpression
+   * @generated
+   */
+  public Adapter createAnyExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Expression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.Expression
+   * @generated
+   */
+  public Adapter createExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.List <em>List</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.List
+   * @generated
+   */
+  public Adapter createListAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.OdeList <em>Ode List</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.OdeList
+   * @generated
+   */
+  public Adapter createOdeListAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.RandomList <em>Random List</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.RandomList
+   * @generated
+   */
+  public Adapter createRandomListAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Arguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.Arguments
+   * @generated
+   */
+  public Adapter createArgumentsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Argument <em>Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.Argument
+   * @generated
+   */
+  public Adapter createArgumentAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ConditionalStatement <em>Conditional Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.ConditionalStatement
+   * @generated
+   */
+  public Adapter createConditionalStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Block <em>Block</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.Block
+   * @generated
+   */
+  public Adapter createBlockAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ParExpression <em>Par Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.ParExpression
+   * @generated
+   */
+  public Adapter createParExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ConditionalExpression <em>Conditional Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.ConditionalExpression
+   * @generated
+   */
+  public Adapter createConditionalExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.OrExpression <em>Or Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.OrExpression
+   * @generated
+   */
+  public Adapter createOrExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.AndExpression <em>And Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.AndExpression
+   * @generated
+   */
+  public Adapter createAndExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.LogicalExpression <em>Logical Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.LogicalExpression
+   * @generated
+   */
+  public Adapter createLogicalExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.AdditiveExpression <em>Additive Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.AdditiveExpression
+   * @generated
+   */
+  public Adapter createAdditiveExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.MultiplicativeExpression <em>Multiplicative Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.MultiplicativeExpression
+   * @generated
+   */
+  public Adapter createMultiplicativeExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.PowerExpression <em>Power Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.PowerExpression
+   * @generated
+   */
+  public Adapter createPowerExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.UnaryExpression <em>Unary Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.UnaryExpression
+   * @generated
+   */
+  public Adapter createUnaryExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Primary <em>Primary</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.Primary
+   * @generated
+   */
+  public Adapter createPrimaryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Vector <em>Vector</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.Vector
+   * @generated
+   */
+  public Adapter createVectorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.FullyQualifiedSymbolName <em>Fully Qualified Symbol Name</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.FullyQualifiedSymbolName
+   * @generated
+   */
+  public Adapter createFullyQualifiedSymbolNameAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.FullyQualifiedArgumentName <em>Fully Qualified Argument Name</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.FullyQualifiedArgumentName
+   * @generated
+   */
+  public Adapter createFullyQualifiedArgumentNameAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ObjectName <em>Object Name</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.ObjectName
+   * @generated
+   */
+  public Adapter createObjectNameAdapter()
   {
     return null;
   }

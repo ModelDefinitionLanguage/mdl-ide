@@ -7,316 +7,446 @@
     editorPluginID="org.ddmore.mdl.editor" runtimeVersion="2.8">
   <genPackages prefix="Mdl" basePackage="org.ddmore.mdl" disposableProviderFactory="true"
       ecorePackage="Mdl.ecore#/">
-    <genClasses ecoreClass="Mdl.ecore#//mcl">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//mcl/objects"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//mcl_obj">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//mcl_obj/model_obj"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//mcl_obj/param_obj"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//mcl_obj/data_obj"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//mcl_obj/task_obj"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//mcl_obj/tel_obj"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//model_obj">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//model_obj/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj/blocks"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//param_obj">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//param_obj/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//param_obj/blocks"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//data_obj">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//data_obj/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//data_obj/blocks"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//task_obj">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//task_obj/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//task_obj/blocks"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//tel_obj">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//tel_obj/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//tel_obj/blocks"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//model_obj_block">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/individual_model_obj_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/model_prediction_obj_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/random_variable_definition_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/input_variables_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/structural_parameters_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/variability_parameters_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/output_variables_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/group_variables"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/observation_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/estimation_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_obj_block/simulation_block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//individual_model_obj_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//individual_model_obj_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//individual_model_obj_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//model_prediction_obj_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//model_prediction_obj_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_prediction_obj_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//random_variable_definition_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//random_variable_definition_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//random_variable_definition_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//input_variables_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//input_variables_block/indentifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//input_variables_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//structural_parameters_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//structural_parameters_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//structural_parameters_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//variability_parameters_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//variability_parameters_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variability_parameters_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//output_variables_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//output_variables_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//output_variables_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//group_variables">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//group_variables/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//group_variables/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//observation_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//observation_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//observation_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//estimation_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//estimation_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//estimation_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//simulation_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//simulation_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//simulation_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//param_obj_block">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//param_obj_block/structural_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//param_obj_block/variability_block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//structural_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//structural_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//structural_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//variability_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//variability_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variability_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//data_obj_block">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//data_obj_block/header_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//data_obj_block/file_block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//header_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//header_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//header_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//file_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//file_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//file_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//task_obj_block">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//task_obj_block/function_declaration"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//task_obj_block/parameters_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//task_obj_block/data_block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//parameters_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//parameters_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//parameters_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//data_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//data_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//data_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//model_block">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_block/statements"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//model_block_statement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_block_statement/statement"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_block_statement/ode_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//model_block_statement/library_block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//library_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//library_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//library_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//ode_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ode_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ode_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//variability_block_content">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variability_block_content/blocks"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//variability_block_statement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variability_block_statement/block_statement"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variability_block_statement/block_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variability_block_statement/diag_block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//block_subblock">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//block_subblock/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//block_subblock/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//diag_subblock">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//diag_subblock/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//diag_subblock/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//variability_subblock">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variability_subblock/arguments"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//file_block_content">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//file_block_content/blocks"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//file_block_statement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//file_block_statement/statement"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//file_block_statement/inline_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//file_block_statement/design_block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//file_block_statement/rsscript_block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//inline_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//inline_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//inline_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//design_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//design_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//design_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//rsscript_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//rsscript_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//rsscript_block/block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//inline_block_content">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//inline_block_content/identifiers"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//inline_block_content/values"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//function_declaration">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//function_declaration/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//function_declaration/formal_arguments"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//function_declaration/function_body"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//function_body">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//function_body/blocks"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//function_subblock">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//function_subblock/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//function_subblock/estimate_defn"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//function_subblock/simulate_defn"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//formal_arguments">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//formal_arguments/identifiers"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//function_call">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//function_call/funct_name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//function_call/arguments"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//block">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//block/statements"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//block_statement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//block_statement/variable_declaration"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//block_statement/function_call"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//block_statement/statement"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//block_statement/verbatim_block"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//verbatim_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//verbatim_block/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//verbatim_block/block"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//verbatim_block/external_code"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//target_block">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//target_block/identifier"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//target_block/external_code"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//variable_declaration">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variable_declaration/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variable_declaration/expression"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variable_declaration/random_list"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//any_expression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//any_expression/expression"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//any_expression/list"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//any_expression/ode_list"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//any_expression/random_list"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//expression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//expression/conditional_expression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//expression/string_expression"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//list">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//list/arguments"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//ode_list">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ode_list/arguments"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//random_list">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//random_list/arguments"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//arguments">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//arguments/arguments"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//argument">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//argument/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//argument/expression"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//statement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//statement/block"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//statement/par_expression"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//statement/if_statement"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//statement/else_statement"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//par_expression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//par_expression/expression"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//conditional_expression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//conditional_expression/conditional_or_expression"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//conditional_expression/expression1"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//conditional_expression/expression2"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//conditional_or_expression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//conditional_or_expression/conditional_and_expression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//conditional_or_expression/operator"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//conditional_and_expression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//conditional_and_expression/relational_expression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//conditional_and_expression/operator"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//relational_expression">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//relational_expression/negation"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//relational_expression/boolean"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//relational_expression/additive_expression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//relational_expression/relational_op"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//additive_expression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//additive_expression/multiplicative_expression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//additive_expression/additive_op"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//multiplicative_expression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//multiplicative_expression/power_expression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//multiplicative_expression/multiplicative_op"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//power_expression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//power_expression/unary_expression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//power_expression/power_op"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//unary_expression">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//unary_expression/operator"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//unary_expression/unary_expression"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//unary_expression/par_expression"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//unary_expression/function_call"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//unary_expression/primary"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//primary">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//primary/number"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//primary/identifier"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//variable_name">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//variable_name/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//variable_name/selector"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//selector">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//selector/expression"/>
+    <genClasses ecoreClass="Mdl.ecore#//Mcl">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Mcl/objects"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//MclObject">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//MclObject/modelObject"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//MclObject/parameterObject"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//MclObject/dataObject"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//MclObject/taskObject"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//MclObject/telObject"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ModelObject">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObject/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObject/blocks"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ParameterObject">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObject/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObject/blocks"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//DataObject">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataObject/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataObject/blocks"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//TaskObject">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObject/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObject/blocks"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//TELObject">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TELObject/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TELObject/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ModelObjectBlock">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/individualVariablesBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/modelPredictionBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/randomVariableDefinitionBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/inputVariablesBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/structuralParametersBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/variabilityParametersBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/outputVariablesBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/groupVariablesBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/observationBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/estimationBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/simulationBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/verbatimBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//IndividualVariablesBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//IndividualVariablesBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//IndividualVariablesBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ModelPredictionBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ModelPredictionBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelPredictionBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//RandomVariableDefinitionBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//RandomVariableDefinitionBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//RandomVariableDefinitionBlock/variables"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//InputVariablesBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//InputVariablesBlock/indentifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//InputVariablesBlock/variables"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//StructuralParametersBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//StructuralParametersBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//StructuralParametersBlock/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//VariabilityParametersBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//VariabilityParametersBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//VariabilityParametersBlock/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//OutputVariablesBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//OutputVariablesBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//OutputVariablesBlock/variables"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//GroupVariablesBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//GroupVariablesBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//GroupVariablesBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ObservationBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ObservationBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ObservationBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//EstimationBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//EstimationBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EstimationBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//SimulationBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//SimulationBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SimulationBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ParameterObjectBlock">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObjectBlock/structuralBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObjectBlock/variabilityBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObjectBlock/priorBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObjectBlock/verbatimBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//StructuralBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//StructuralBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//StructuralBlock/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//VariabilityBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//VariabilityBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//VariabilityBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//PriorParametersBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//PriorParametersBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//PriorParametersBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//DataObjectBlock">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataObjectBlock/headerBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataObjectBlock/fileBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataObjectBlock/verbatimBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//HeaderBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//HeaderBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//HeaderBlock/variables"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//FileBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//FileBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FileBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//TaskObjectBlock">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/functionDeclaration"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/parameterBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/dataBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/modelBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/verbatimBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ParameterBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ParameterBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterBlock/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//DataBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//DataBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//DataBlockStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataBlockStatement/ignoreList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataBlockStatement/acceptList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataBlockStatement/dropList"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//IgnoreList">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//IgnoreList/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//IgnoreList/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//AcceptList">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//AcceptList/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AcceptList/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//DropList">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//DropList/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DropList/list"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ModelBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ModelBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ModelBlockStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelBlockStatement/statement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelBlockStatement/addList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelBlockStatement/removeList"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//AddList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AddList/list"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//RemoveList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//RemoveList/list"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//SymbolList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SymbolList/symbols"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ModelPredictionBlockStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelPredictionBlockStatement/statement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelPredictionBlockStatement/odeBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelPredictionBlockStatement/libraryBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//LibraryBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LibraryBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//LibraryBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//OdeBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//OdeBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//OdeBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//GroupVariablesBlockStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//GroupVariablesBlockStatement/statement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//GroupVariablesBlockStatement/mixtureBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//MixtureBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//MixtureBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//MixtureBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//VariabilityBlockStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//VariabilityBlockStatement/parameter"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//VariabilityBlockStatement/blockBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//VariabilityBlockStatement/diagBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//VariabilityBlockStatement/sameBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//BlockBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//BlockBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockBlock/arguments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockBlock/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//DiagBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//DiagBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DiagBlock/arguments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DiagBlock/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//SameBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//SameBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SameBlock/arguments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SameBlock/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//FileBlockStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FileBlockStatement/variable"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FileBlockStatement/inlineBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FileBlockStatement/designBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FileBlockStatement/rscriptBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//InlineBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//InlineBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//InlineBlock/variables"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//InlineBlock/values"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//DesignBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//DesignBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DesignBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//DesignBlockStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DesignBlockStatement/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DesignBlockStatement/arguments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DesignBlockStatement/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//VariableList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//VariableList/identifiers"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//RScriptBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//RScriptBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//RScriptBlock/variables"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//RScriptBlockStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//RScriptBlockStatement/identifier"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//RScriptBlockStatement/value"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//RScriptBlockStatement/object"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//TaskFunctionDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//TaskFunctionDeclaration/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskFunctionDeclaration/formalArguments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskFunctionDeclaration/functionBody"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//TaskFunctionBody">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskFunctionBody/blocks"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//TaskFunctionBlock">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskFunctionBlock/estimateBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskFunctionBlock/simulateBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskFunctionBlock/executeBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//EstimateTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//EstimateTask/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EstimateTask/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//SimulateTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//SimulateTask/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SimulateTask/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ExecuteTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ExecuteTask/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ExecuteTask/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//FormalArguments">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//FormalArguments/identifiers"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//FunctionCall">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FunctionCall/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FunctionCall/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//BlockStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/symbol"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/functionCall"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/statement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/verbatimBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//VerbatimBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//VerbatimBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//VerbatimBlock/block"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//VerbatimBlock/externalCode"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//TargetBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//TargetBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TargetBlock/arguments"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//TargetBlock/externalCode"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//SymbolModification">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SymbolModification/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SymbolModification/list"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ParameterDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ParameterDeclaration/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterDeclaration/list"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//SymbolDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//SymbolDeclaration/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SymbolDeclaration/expression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SymbolDeclaration/randomList"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//SymbolDeclaration/function"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//EnumType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/categorical"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/continuous"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/covariate"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/distribution"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/level"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/likelyhood"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/missing"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Missing">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Missing/identifier"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Likelyhood">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Likelyhood/identifier"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//LevelType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LevelType/mdv"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LevelType/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LevelType/dv"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LevelType/idv"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Categorical">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Categorical/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Categorical/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Continuous">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Continuous/identifier"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Covariate">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Covariate/identifier"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Distribution">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/normal"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/binomial"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/poisson"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/student_t"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/mvnormal"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//AnyExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AnyExpression/expression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AnyExpression/list"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AnyExpression/odeList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AnyExpression/type"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Expression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Expression/conditionalExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//List">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//List/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//OdeList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//OdeList/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//RandomList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//RandomList/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Arguments">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Arguments/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Argument">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Argument/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Argument/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ConditionalStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ConditionalStatement/parExpression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ConditionalStatement/ifStatement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ConditionalStatement/ifBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ConditionalStatement/elseStatement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ConditionalStatement/elseBlock"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Block">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Block/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ParExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParExpression/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ConditionalExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ConditionalExpression/expression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ConditionalExpression/expression1"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ConditionalExpression/expression2"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//OrExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//OrExpression/expression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//OrExpression/operator"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//AndExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AndExpression/expression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//AndExpression/operator"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//LogicalExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LogicalExpression/negation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LogicalExpression/boolean"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//LogicalExpression/expression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LogicalExpression/operator"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//AdditiveExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AdditiveExpression/expression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//AdditiveExpression/operator"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//AdditiveExpression/string"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//MultiplicativeExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//MultiplicativeExpression/expression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//MultiplicativeExpression/operator"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//PowerExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//PowerExpression/expression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//PowerExpression/operator"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//UnaryExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//UnaryExpression/operator"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//UnaryExpression/expression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//UnaryExpression/parExpression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//UnaryExpression/primary"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Primary">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Primary/functionCall"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Primary/number"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Primary/symbol"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Primary/attribute"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Primary/vector"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Vector">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Vector/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Vector/values"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//FullyQualifiedSymbolName">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Mdl.ecore#//FullyQualifiedSymbolName/object"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//FullyQualifiedSymbolName/identifier"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//FullyQualifiedArgumentName">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FullyQualifiedArgumentName/parent"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//FullyQualifiedArgumentName/identifier"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ObjectName">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ObjectName/name"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
