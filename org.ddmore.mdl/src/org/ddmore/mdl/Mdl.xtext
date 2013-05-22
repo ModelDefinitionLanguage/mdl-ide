@@ -2,540 +2,411 @@ grammar org.ddmore.mdl.Mdl with org.eclipse.xtext.common.Terminals
 generate mdl "http://www.ddmore.org/mdl/Mdl"
 
 
-Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
-	objects+=MclObject*;
+//An MDL specification may include any number of MDL objects
+mcl hidden(WS, ML_COMMENT, SL_COMMENT):
+	objects += mcl_obj* 
+;
 
-MclObject:
-	modelObject=ModelObject | 
-	parameterObject=ParameterObject | 
-	dataObject=DataObject | 
-	taskObject=TaskObject |
-	telObject=TELObject;
-	
-ModelObject:
-	identifier=ObjectName '=' 'mdlobj' BEGIN blocks += ModelObjectBlock* END;
+//Five MDL object types are supported
+mcl_obj:
+	model_obj = model_obj | 
+	param_obj = param_obj | 
+	data_obj = data_obj | 
+	task_obj = task_obj | 
+	tel_obj = tel_obj
+;
 
-ParameterObject:
-	identifier=ObjectName '=' 'parobj' BEGIN blocks += ParameterObjectBlock* END;
-	
-DataObject:
-	identifier=ObjectName '=' 'dataobj' BEGIN blocks += DataObjectBlock* END;
-
-TaskObject:
-	identifier=ObjectName '=' 'taskobj' BEGIN blocks += TaskObjectBlock* END;
-	
-TELObject:
-	identifier=ObjectName '=' 'telobj' BEGIN statements += BlockStatement* END;
-	
 //////////////////////////////////////////////////////////
-//Model Object
+//OBJECTS
+//A model object consists of multiple model object blocks 
+model_obj:   
+	identifier = ID '=' 'mdlobj' BEGIN
+		blocks += model_obj_block*
+	END
+;
+
+
+//A parameter object consists of multiple parameter object blocks
+param_obj:
+	    identifier = ID '=' 'parobj' BEGIN 	
+		blocks += param_obj_block* 
+	END
+;
+
+//A data object consists of multiple data object blocks
+data_obj:
+	   identifier = ID '=' 'dataobj' BEGIN 
+	   blocks += data_obj_block*
+	END
+;
+
+//A task object may include several task blocks
+task_obj:
+	identifier = ID '=' 'taskobj' BEGIN 
+		blocks += task_obj_block* 
+	END
+;
+
+//TEL object syntactically consists of multiple function declarations
+tel_obj:
+	identifier = ID '=' 'telobj' BEGIN
+		 blocks += block_statement* 
+	END
+;
+
 //////////////////////////////////////////////////////////
 
-ModelObjectBlock: 
-	individualVariablesBlock = IndividualVariablesBlock | 
-	modelPredictionBlock = ModelPredictionBlock |
-	randomVariableDefinitionBlock = RandomVariableDefinitionBlock |
-	inputVariablesBlock = InputVariablesBlock |
-	structuralParametersBlock = StructuralParametersBlock |
-	variabilityParametersBlock = VariabilityParametersBlock |
-	outputVariablesBlock = OutputVariablesBlock |
-	groupVariablesBlock = GroupVariablesBlock | 
-	observationBlock = ObservationBlock |
-	estimationBlock = EstimationBlock |
-	simulationBlock = SimulationBlock |
-	verbatimBlock = VerbatimBlock
+//A model object block is either a general block or a block with specific structure
+//In particular, INDIVIDUAL VARIABLES and MODEL PREDICTION blocks may include 
+//sub-blocks or structures that are not allowed in other blocks;
+model_obj_block: 
+	individual_model_obj_block = individual_model_obj_block | 
+	model_prediction_obj_block = model_prediction_obj_block |
+	random_variable_definition_block = random_variable_definition_block |
+	input_variables_block = input_variables_block |
+	structural_parameters_block = structural_parameters_block |
+	variability_parameters_block = variability_parameters_block |
+	output_variables_block = output_variables_block |
+	group_variables = group_variables | 
+	observation_block = observation_block |
+	estimation_block = estimation_block |
+	simulation_block = simulation_block
 ;
 
-IndividualVariablesBlock:
-	identifier = 'INDIVIDUAL_VARIABLES' 
-	BEGIN statements += BlockStatement* END  //new Variable +
+individual_model_obj_block:
+	identifier = 'INDIVIDUAL_VARIABLES' block = block
 ;
 
-ModelPredictionBlock:
-	identifier = 'MODEL_PREDICTION' 
-	BEGIN statements += ModelPredictionBlockStatement* END
+model_prediction_obj_block:
+	identifier = 'MODEL_PREDICTION' block = model_block  
 ;
 
-RandomVariableDefinitionBlock:
-	identifier = 'RANDOM_VARIABLE_DEFINITION' 
-	BEGIN variables += SymbolDeclaration* END //new Variable +
+//A random variable definition is a special sub-block that starts with RANDOM VARIABLE DEFINITION keyword
+random_variable_definition_block:
+	identifier = 'RANDOM_VARIABLE_DEFINITION' block = block 
 ;
 
-InputVariablesBlock:
-  	indentifier = 'INPUT_VARIABLES' 
-  	BEGIN variables += SymbolDeclaration* END //new Variable +
+input_variables_block:
+  indentifier = 'INPUT_VARIABLES' block = block 
 ;
 
-StructuralParametersBlock:
-  identifier = 'STRUCTURAL_PARAMETERS' 
-  BEGIN parameters += FullyQualifiedSymbolName* END  //Ref to Parameter +
+structural_parameters_block:
+  identifier = 'STRUCTURAL_PARAMETERS' block = block
 ; 
 
-VariabilityParametersBlock:
-  identifier = 'VARIABILITY_PARAMETERS' 
-  BEGIN parameters += FullyQualifiedSymbolName* END //Ref to Parameter +
+variability_parameters_block:
+  identifier = 'VARIABILITY_PARAMETERS' block = block
 ;
 
-OutputVariablesBlock:
-	identifier = 'OUTPUT_VARIABLES' 
-	BEGIN variables += FullyQualifiedSymbolName* END //Ref to VariableName +
-; 
-
-GroupVariablesBlock:
-	identifier = 'GROUP_VARIABLES' 
-	BEGIN statements += GroupVariablesBlockStatement* END
+output_variables_block:
+	identifier = 'OUTPUT_VARIABLES' block = block
 ;
 
-ObservationBlock:
-	identifier = 'OBSERVATION'
-	BEGIN statements += BlockStatement* END  //new Variable +
+group_variables:
+	identifier = 'GROUP_VARIABLES' block = block
 ;
 
-EstimationBlock:
-	identifier = 'ESTIMATION' 
-	BEGIN statements += BlockStatement* END  //new Variable +
+observation_block:
+	identifier = 'OBSERVATION' block = block	
 ;
 
-SimulationBlock:
-	identifier = 'SIMULATION' 
-	BEGIN statements += BlockStatement* END  //new Variable +
+estimation_block:
+	identifier = 'ESTIMATION' block = block
 ;
 
-//////////////////////////////////////////////////////////
-//Parameter Object
-//////////////////////////////////////////////////////////
-
-ParameterObjectBlock:
-	structuralBlock = StructuralBlock |
-	variabilityBlock = VariabilityBlock |
-	priorBlock = PriorParametersBlock |
-	verbatimBlock = VerbatimBlock
+simulation_block:
+	identifier = 'SIMULATION' block = block
 ;
 
-StructuralBlock:
-	identifier='STRUCTURAL'   
-	BEGIN parameters += ParameterDeclaration* END //new Parameter +
+//Two types of parameter object blocks are supported, STRUCTURAL and VARIABILITY
+param_obj_block:
+	structural_block = structural_block |
+	variability_block = variability_block
 ;
 
-VariabilityBlock:
-	identifier='VARIABILITY' 
-	BEGIN statements += VariabilityBlockStatement* END
+structural_block:
+	identifier='STRUCTURAL' block = block 
 ;
 
-PriorParametersBlock:
-	identifier='PRIOR_PARAMETERS' 
-	BEGIN statements += BlockStatement* END  //new Parameter +
+variability_block:
+	identifier='VARIABILITY' block = variability_block_content
 ;
 
-DataObjectBlock:
-	headerBlock = HeaderBlock |
-	fileBlock = FileBlock |
-	verbatimBlock = VerbatimBlock;
+//Two types of data object blocks are supported, HEADER and FILE
+data_obj_block:
+	header_block = header_block|
+	file_block = file_block;
  
-HeaderBlock:
- 	identifier='HEADER' 
- 	BEGIN variables += SymbolModification* END  //ref to Variable
+ header_block:
+ 	identifier='HEADER' block = block 
  ;
  
- FileBlock:
-	identifier='FILE' 	
-	BEGIN statements += FileBlockStatement* END
+ file_block:
+	identifier='FILE' block = file_block_content 
  ;
  
-TaskObjectBlock: 
-	functionDeclaration = TaskFunctionDeclaration | 
-	parameterBlock = ParameterBlock |
-	dataBlock = DataBlock |
-	modelBlock = ModelBlock | 
-	verbatimBlock = VerbatimBlock	
-	;
+//A task block is either a function declaration or a sub-block, 
+//two types of sub-blocks are allowed, PARAMETERS and DATA
+task_obj_block: 
+	function_declaration = function_declaration | 
+	parameters_block = parameters_block |
+	data_block = data_block;
 
-ParameterBlock:
-	identifier = 'PARAMETER' 
-	BEGIN parameters += SymbolModification* END  //Ref to parameter
+parameters_block:
+	identifier = 'PARAMETERS' block = block 
 ;
 
-DataBlock:
-	identifier = 'DATA' 
-	BEGIN statements += DataBlockStatement* END
+data_block:
+	identifier = 'DATA' block = block 
 ;
 
-DataBlockStatement:
-	ignoreList = IgnoreList | acceptList = AcceptList | dropList = DropList
+//A MODEL PREDICTION blocks consists of multiples statements
+model_block: {model_block}
+	BEGIN statements += model_block_statement* 
+	END
 ;
 
-IgnoreList:
-	identifier = 'IGNORE' "=" 'if' '(' expression = OrExpression ')'
+//A MODEL PREDICTION  block statement is either a general statement, ODE or LIBRARY sub-block 
+model_block_statement: 
+	statement = block_statement | 
+	ode_block = ode_block | 
+	library_block = library_block
 ;
 
-AcceptList:
-	identifier = 'ACCEPT' "=" 'if' '(' expression = AndExpression ')'
-; 
-
-DropList:
-	identifier = 'DROP' "=" list = SymbolList
+//LIBRARY sub-block
+library_block: 
+	identifier = 'LIBRARY' block = block
 ;
 
-ModelBlock:
-	identifier = 'MODEL' 
-	BEGIN statements += ModelBlockStatement* END
+//ODE (ORDINARY DIFFERENTIAL EQUATIONS) sub-block
+ode_block:
+	identifier = 'ODE' block = block
 ;
 
-ModelBlockStatement:
-	statement = BlockStatement |
-	addList = AddList |
-	removeList = RemoveList
+/////////////////////////////////////////////////////////
+//Parameter object terms
+//////////////////////////////////////////////////////////
+
+variability_block_content: {variability_block_content}
+	BEGIN blocks += variability_block_statement*
+	END
 ;
 
-AddList:
-	'ADD' '=' list = SymbolList
+variability_block_statement:
+	block_statement = block_statement | 
+	block_block = block_subblock | 
+	diag_block = diag_subblock	
 ;
 
-RemoveList:
-	'REMOVE' '=' list = SymbolList
+block_subblock:
+	 identifier = 'block' block = variability_subblock
 ;
 
-SymbolList:
-	'list' '(' symbols += FullyQualifiedSymbolName+ ')'
+diag_subblock:	  
+	 identifier = 'diag' block = variability_subblock
 ;
 
-ModelPredictionBlockStatement: 
-	statement = BlockStatement | //new Variable
-	odeBlock = OdeBlock | 
-	libraryBlock = LibraryBlock
-;
-
-LibraryBlock: 
-	identifier = 'LIBRARY' 
-	BEGIN statements += BlockStatement* END //Properties
-;
-
-OdeBlock:
-	identifier = 'ODE' 
-	BEGIN statements += BlockStatement* END  //new Variable
-;
-
-GroupVariablesBlockStatement:
-	statement = BlockStatement |  //new Variable
-	mixtureBlock = MixtureBlock 
-;
-
-MixtureBlock:
-	identifier = 'MIXTURE' 
-	BEGIN statements += BlockStatement* END //new Variable
-;
-
-
-VariabilityBlockStatement:
-	parameter = ParameterDeclaration | 
-	blockBlock = BlockBlock | 
-	diagBlock = DiagBlock	|
-	sameBlock = SameBlock
-;
-
-//Rename to Matrix!
-BlockBlock:
-	 identifier = 'block' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Arguments END)?  //new Parameter
-;
-
-DiagBlock:	  
-	 identifier = 'diag' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Arguments END)?  //new Parameter
-;
-
-SameBlock:	  
-	 identifier = 'same' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Arguments END)?  //new Parameter
+variability_subblock: 
+	'(' arguments = arguments ')'
 ;
 
 //////////////////////////////////////////////////////////
-//Data Object
+//Data object terms
 //////////////////////////////////////////////////////////
 
-FileBlockStatement:
-	variable = SymbolDeclaration |  //new VariableName which can be only list
-	inlineBlock = InlineBlock | 
-	designBlock = DesignBlock | 
-	rscriptBlock = RScriptBlock 
+file_block_content: {file_block_content} 
+	BEGIN blocks += file_block_statement* END
+;
+file_block_statement:
+	statement = block_statement | 
+	inline_block = inline_block | 
+	design_block = design_block | 
+	rsscript_block = rsscript_block
 ;
 
-InlineBlock:
-	identifier = 'INLINE' 
-	BEGIN (variables += FullyQualifiedSymbolName)* (values += (NUMBER | '.'))* END //Ref to VaraibleName
-;
+inline_block:
+	identifier = 'INLINE' block = inline_block_content ;
 
-DesignBlock:
-	identifier = 'DESIGN' 
-	BEGIN statements += DesignBlockStatement* END
-;
-
-DesignBlockStatement:
-	identifier = FullyQualifiedSymbolName (arguments = VariableList)? '=' expression = AnyExpression  //Ref to VaraibleName
-;
-
-VariableList:
-	'[' identifiers += FullyQualifiedSymbolName (=> ',' identifiers += FullyQualifiedSymbolName)* ']' //Ref to VaraibleName
-;
+design_block:	 
+	identifier = 'DESIGN' block = block;
 	
-RScriptBlock:	
-	identifier = 'RSCRIPT' 
-	BEGIN variables += RScriptBlockStatement* END	  			
+rsscript_block:	
+	identifier = 'RSSCRIPT' block = block  			
 ;
 
-RScriptBlockStatement:
-	identifier = ID "=" (value = STRING | object = ObjectName) // new VariableName
-;
-
-TaskFunctionDeclaration:
-	identifier = ID "=" 'function'   //new FunctionName
-	'(' formalArguments = FormalArguments ')'
-	functionBody = TaskFunctionBody
-;
-
-TaskFunctionBody: {TaskFunctionBody}	
-	BEGIN	(blocks += TaskFunctionBlock)* END
-;
-
-TaskFunctionBlock:
-	estimateBlock = EstimateTask |
-	simulateBlock = SimulateTask |
-	executeBlock = ExecuteTask
-;
-
-EstimateTask: 
-	identifier = 'ESTIMATE' 
-	BEGIN statements += BlockStatement* END //Properties
-;
-
-SimulateTask:
-	identifier = 'SIMULATE' 
-	BEGIN statements += BlockStatement* END  //Properties
-;
-
-ExecuteTask:
-	identifier = "EXECUTE"
-	BEGIN statements += BlockStatement* END  //Properties
+inline_block_content: {inline_block_content}
+	BEGIN (identifiers += ID)* (values += (NUMBER | '.'))* END
 ;
 
 //////////////////////////////////////////////////////////
-//Common
+//Function declaration and call
 //////////////////////////////////////////////////////////
 
-FormalArguments:
+function_declaration:
+	identifier = ID "=" 'function' 
+	'(' formal_arguments = formal_arguments ')'
+	function_body = function_body
+;
+
+function_body: {function_body}	
+	BEGIN	(blocks += function_subblock)* END
+;
+function_subblock:
+	identifier = 'ESTIMATE' estimate_defn = block | 
+	identifier = 'SIMULATE' simulate_defn = block 
+;
+
+formal_arguments:
 	identifiers += ID (=> ',' identifiers += ID)*
 ;
 
-FunctionCall:
-	identifier = FullyQualifiedSymbolName '(' arguments = Arguments ')'
+function_call:
+	funct_name = ID '(' arguments = arguments ')'
 ;
 
-BlockStatement:
-	symbol = SymbolDeclaration | //VariableName or PropertyName
-	functionCall = FunctionCall |
-	statement = ConditionalStatement |
-	verbatimBlock = VerbatimBlock
+//////////////////////////////////////////////////////////
+//Common terms
+//////////////////////////////////////////////////////////
+
+block: {block} BEGIN statements += block_statement* END ;
+
+block_statement:
+	variable_declaration = variable_declaration | 
+	function_call = function_call |
+	statement = statement |
+	verbatim_block = verbatim_block
 ;
 
-VerbatimBlock: 
-	identifier = 'TARGET_CODE' BEGIN (block = TargetBlock | externalCode = EXTERNAL_CODE) END
+verbatim_block: 
+	identifier = 'VERBATIM' BEGIN (block = target_block | external_code = EXTERNAL_CODE) END
 ;
 
-TargetBlock:
-	identifier = TargetLanguage ('(' arguments = Arguments ')' )? BEGIN externalCode = EXTERNAL_CODE END
+target_block:
+	identifier = target_language BEGIN external_code = EXTERNAL_CODE END
 ;
 
-TargetLanguage:
-	'NMTRAN_CODE' | 'MLXTRAN_CODE' | 'PML_CODE' | 'BUGS_CODE' | 'R_CODE' | 'MATLAB_CODE' 	
+target_language:
+	'NMTRAN' | 'MLXTRAN' | 'PML' | 'BUGS' | 'RCODE' | 'MATLAB' 	
 ;
+
+//TARGET
+//MIXTURE 
+//PRIOR
 
 terminal EXTERNAL_CODE: 
 	'***' -> '***'
 ; 
 
-SymbolModification:
-	identifier = FullyQualifiedSymbolName ("=" list = List)?  //Ref to ParameterName
+variable_declaration:
+	identifier = variable_name ( 
+		"=" expression = any_expression | 
+		random_list = random_list
+	)?	
 ;
 
-ParameterDeclaration:
-	identifier = ID ("=" list = List) //new ParameterName
+any_expression:
+	expression = expression | list = list | ode_list = ode_list | random_list = random_list
 ;
 
-//new VariableName, new PropertyName
-SymbolDeclaration:
-	(identifier = ID (("=" expression = AnyExpression)? | randomList = RandomList)) | 
-	(function = ID '(' identifier = ID ')' randomList = RandomList)
-	//special function, new VariableName
-;
-
-EnumType:
-	categorical = Categorical | 
-	continuous = Continuous | 
-	covariate = Covariate |
-	distribution = Distribution |
-	level = LevelType |
-	likelyhood = Likelyhood |
-	missing = Missing
-;
-
-Missing:
-	identifier = 'MISSING'
-;
-
-Likelyhood:
-	identifier = 'LIKELIHOOD'	
-;
-
-LevelType:
-	mdv = 'mdv' | 
-	id = 'id' |
-	dv = 'dv' |
-	idv = 'idv' //Independent Variable
-;
-
-Categorical:
-	identifier = 'categorical' ('(' arguments = Arguments ')')?
-;
-
-Continuous:
-	identifier = 'continuous'
-;
-
-Covariate:
-	identifier = 'covariate'
-;
-
-Distribution: {Distribution}
-	normal = 'Normal' |
-	binomial = 'Binomial' |
-	poisson = 'Poisson' |
-	student_t = 'Student_T' |
-	mvnormal = 'MVNormal' 
-;
-
-AnyExpression:
-	expression = Expression | 
-	list = List | 
-	odeList = OdeList | 
-	type = EnumType
-;
-
-Expression:
-	conditionalExpression = ConditionalExpression 
+expression:
+	conditional_expression = conditional_expression | string_expression += STRING ('+' string_expression += STRING)*	
 ;	
 
-List:
-	'list' '(' arguments = Arguments ')'
+list:
+	'list' '(' arguments = arguments ')'
 ;
 
-OdeList:
-	 'ode' '(' arguments = Arguments ')' 
+//An ODE list
+ode_list:
+	 'ode' '(' arguments = arguments ')' 
 ;
 
-RandomList:
-	 '~' '(' arguments = Arguments ')'
+ //A random list is identified by ~ symbol
+random_list:
+	 '~' '(' arguments = arguments ')'
 ;
 
-Arguments: 
-	arguments += Argument (=> ',' arguments += Argument)*
+arguments: 
+	arguments += argument (=> ',' arguments += argument)*
 ;
 
-Argument:
-	identifier = ID "=" expression = AnyExpression |
-	expression = AnyExpression
+argument:
+	identifier = ID "=" expression = any_expression |
+	expression = any_expression
 ;
 
-ConditionalStatement:
-	'if' parExpression=ParExpression 
-		(ifStatement = BlockStatement | ifBlock = Block)
-	(=> 'else' 
-		(elseStatement = BlockStatement | elseBlock = Block)
-	)? 
+statement:
+	block = block
+	| 'if' par_expression=par_expression if_statement = block_statement (=> 'else' else_statement = block_statement)? 
 ;
 
-Block: {Block}
-	BEGIN statements += BlockStatement* END
-;
-
-ParExpression:
-	'(' expression = Expression')';
+par_expression:
+	'(' expression = expression')';
 	
-ConditionalExpression:
-	expression = OrExpression ('?' expression1 = Expression ':' expression2 = Expression)?;
+conditional_expression:
+	conditional_or_expression = conditional_or_expression ('?' expression1 = expression ':' expression2 = expression)?;
 
-OrExpression:
-	expression += AndExpression (operator += LogicalOrOperator expression += AndExpression)*;
+conditional_or_expression:
+	conditional_and_expression += conditional_and_expression (operator += or_op conditional_and_expression += conditional_and_expression)*;
 
-AndExpression:
-	expression += LogicalExpression (operator += LogicalAndOperator expression += LogicalExpression)*;	
+conditional_and_expression:
+	relational_expression += relational_expression (operator += and_op relational_expression += relational_expression)*;	
 
-LogicalExpression:
+relational_expression:
 	(negation = "!")? (boolean = BOOLEAN | 
-	expression += AdditiveExpression (operator += LogicalOperator expression += AdditiveExpression)*);
+	additive_expression += additive_expression (relational_op += relational_op additive_expression += additive_expression)*);
 
-AdditiveExpression:
-	expression += MultiplicativeExpression (operator += AdditiveOperator expression+=MultiplicativeExpression)* |
-	string += STRING (operator += AdditiveOperator string += STRING)*
+additive_expression:
+	multiplicative_expression += multiplicative_expression (additive_op += additive_op multiplicative_expression+=multiplicative_expression)*;
+
+multiplicative_expression:
+	power_expression += power_expression (multiplicative_op += multiplicative_op power_expression += power_expression)*;
+
+power_expression:
+	unary_expression += unary_expression (power_op += power_op unary_expression += unary_expression)*;
+
+unary_expression:
+	operator = unary_op unary_expression = unary_expression |  
+	par_expression = par_expression |
+	function_call = function_call |
+	primary = primary  
 ;
 
-MultiplicativeExpression:
-	expression += PowerExpression (operator += MultiplicativeOperator expression += PowerExpression)*;
-
-PowerExpression:
-	expression += UnaryExpression (operator += PowerOperator expression += UnaryExpression)*;
-
-UnaryExpression:
-	operator = UnaryOperator expression = UnaryExpression |  
-	parExpression = ParExpression |
-	primary = Primary
+primary: 
+	  number = NUMBER
+	| identifier = variable_name
 	;
-
-Primary:
-	functionCall = FunctionCall |
-	number = NUMBER |
-	symbol = FullyQualifiedSymbolName |
-	attribute = FullyQualifiedArgumentName |
-	vector = Vector
+	
+variable_name:
+	identifier += ID (selector += selector)? ('.' identifier += ID (selector += selector)?)* 
 ;
-
-Vector:
-	identifier = 'c' '(' values += Expression (=> ',' values += Expression)* ')'
-;	
-
-FullyQualifiedSymbolName:
-	(object = [ObjectName] '$')? identifier = ID //ref VariableName, ParameterName or FunctionName
-;
-
-FullyQualifiedArgumentName:
-	parent = FullyQualifiedSymbolName ('.' identifier += ID)+  //ref ArgumentName
-;
-
-ObjectName:
-	name = ID
-;
-
-LogicalAndOperator: '&&'
+	
+selector:
+	'[' expression += primary (=> ',' expression += primary)* ']';	
+		
+and_op: '&&'
 ;		
 
-LogicalOrOperator: '||'
+or_op:
+	'||'
 ;
 
-LogicalOperator:
+relational_op:
 	'<' | '>' | "<=" | ">=" | '==' | '!=';
 
-PowerOperator:
+power_op:
 	'^'
 ;
 
-MultiplicativeOperator:
+multiplicative_op:
 	'*' | '/' | '%'  
 ;	
 
-AdditiveOperator:
+additive_op:
 	'+' | '-'
 ;
 
-UnaryOperator:
+unary_op:
 	'+' | '-' 
 ;
 
@@ -578,8 +449,6 @@ terminal fragment EXPONENT
 	: ('e'|'E') ('+'|'-')?('0'..'9')+;
 
 terminal SL_COMMENT : ('#') !('\n'|'\r')* ('\r'? '\n')? ;
-
-terminal ML_COMMENT : '/#' -> '#/';
 
 terminal BEGIN: '{';
 
