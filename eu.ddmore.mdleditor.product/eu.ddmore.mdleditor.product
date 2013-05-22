@@ -23,7 +23,7 @@
       <feature id="org.eclipse.platform" version="4.2.1.v20130118-173121-9MF7GHYdG0B5kx4E_SkfZV-1mNjVATf67ZAb7"/>
       <feature id="org.eclipse.rcp" version="4.2.2.v20130129-152330-7IARAABrMQkGSvMgQnUlz-DQz00h"/>
       <feature id="org.eclipse.help" version="1.4.1.v20120912-144938-8R7xFOXFLWUl7PpNBh_HIGkb4"/>
-      <feature id="com.mango.mif.client.feature"/>
+      <feature id="com.mango.mif.client.mdleditor.feature"/>
    </features>
 
    <configurations>

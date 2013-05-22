@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.mango.mif.client.feature"
+      id="com.mango.mif.client.mdleditor.feature"
       label="MIF Client"
       version="1.0.1.qualifier"
       provider-name="Mango Solutions">
@@ -359,20 +359,6 @@
 
    <plugin
          id="org.apache.xml.resolver"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.ddmore.mdl.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.ddmore.mdl"
          download-size="0"
          install-size="0"
          version="0.0.0"

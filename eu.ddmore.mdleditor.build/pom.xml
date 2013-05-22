@@ -179,6 +179,14 @@
 				               <versionRange>[2.3.1,2.4.1)</versionRange> 
 				            </restrictTo>
 				         </filter>
+				         
+						<filter>
+				            <type>eclipse-plugin</type>
+				            <id>org.eclipse.jdt.core</id>
+				            <restrictTo>
+				               <versionRange>[3.5.0,3.8.3]</versionRange> 
+				            </restrictTo>
+				         </filter>
 					</filters>
 				</configuration>
 			</plugin>

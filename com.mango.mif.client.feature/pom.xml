@@ -10,8 +10,8 @@
 		<artifactId>eu.ddmore.parent</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
-
-	<artifactId>com.mango.mif.client.feature</artifactId>
+	
+	<artifactId>com.mango.mif.client.mdleditor.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
 
 	<!-- once the encryption key is changed this can be moved to the parent 
