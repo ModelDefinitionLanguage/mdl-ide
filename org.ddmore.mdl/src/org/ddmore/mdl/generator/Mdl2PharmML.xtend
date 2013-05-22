@@ -1,95 +1,53 @@
 package org.ddmore.mdl.generator
 
-import org.ddmore.mdl.mdl.primary
-import org.ddmore.mdl.mdl.expression
-import org.ddmore.mdl.mdl.function_declaration
-import org.ddmore.mdl.mdl.formal_arguments
-import org.ddmore.mdl.mdl.function_body
-import org.ddmore.mdl.mdl.block
-import org.ddmore.mdl.mdl.block_statement
-import org.ddmore.mdl.mdl.function_call
-import org.ddmore.mdl.mdl.variable_declaration
-import org.ddmore.mdl.mdl.variable_name
-import org.ddmore.mdl.mdl.any_expression
-import org.ddmore.mdl.mdl.random_list
-import org.ddmore.mdl.mdl.argument
+import org.ddmore.mdl.mdl.Primary
+import org.ddmore.mdl.mdl.Expression
+import org.ddmore.mdl.mdl.TaskFunctionDeclaration
+import org.ddmore.mdl.mdl.TaskFunctionBody
+import org.ddmore.mdl.mdl.FunctionCall
+import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.AnyExpression
+import org.ddmore.mdl.mdl.RandomList
+import org.ddmore.mdl.mdl.Argument
 import org.eclipse.emf.common.util.EList
-import org.ddmore.mdl.mdl.mcl
-import org.ddmore.mdl.mdl.mcl_obj
-import org.ddmore.mdl.mdl.task_obj
-import org.ddmore.mdl.mdl.param_obj
-import org.ddmore.mdl.mdl.model_obj
-import org.ddmore.mdl.mdl.data_obj
+import org.ddmore.mdl.mdl.Mcl
+import org.ddmore.mdl.mdl.MclObject
+import org.ddmore.mdl.mdl.ParameterObject
+import org.ddmore.mdl.mdl.ModelObject
+import org.ddmore.mdl.mdl.IndividualVariablesBlock
+import org.ddmore.mdl.mdl.GroupVariablesBlock
+import org.ddmore.mdl.mdl.TaskObject
+import org.ddmore.mdl.mdl.ParameterDeclaration
+import org.ddmore.mdl.mdl.InputVariablesBlock
+import org.ddmore.mdl.mdl.SimulateTask
+import org.ddmore.mdl.mdl.EstimateTask
+import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
+import org.ddmore.mdl.mdl.ModelObjectBlock
 
 class Mdl2PharmML extends Mdl2Nonmem{
 	
+	
+	
 	//Print file name and analyse all MCL objects in the source file
-  	def convertToPharmML(mcl m){
-  		//Create a map of variables
-  		for (o:m.objects){
-  		}
+  	def convertToPharmML(Mcl m){
   		var version = "1.001";
-  		var date = "06.04.2013"
+  		var date = "06.06.2013"
 		val info = "mdl2pharmML " + version + " beta, last modification " + date + " Natallia Kokash (natallia.kokash@gmail.com)";  
+		var printIndependent = m.isIndependentVariableDefined; 
 		'''
 		«info.print_XS_Comment»
 		<?xml version="1.0" encoding="UTF-8"?>
 		<PharmML 
+			«print_PharmML_NameSpaces»
 			name="«m.eResource.fileName»"
+			«IF printIndependent»
 			independentVar="t" 
+			«ENDIF»
 			writtenVersion="0.1">
-  			«FOR o:m.objects»«o.convertToPharmML»«ENDFOR»
+  			«FOR o:m.objects»«o.print_mdef_ModelDefinition»«ENDFOR»
 		</PharmML>
 		'''
 	}
-	
-	//convertToPharmML MCL objects
-	def convertToPharmML(mcl_obj o)'''
-	«IF o.model_obj != null»«o.model_obj.convertToPharmML»«ENDIF»
-	«IF o.data_obj != null»«o.data_obj.convertToPharmML»«ENDIF»
-	«IF o.param_obj != null»«o.param_obj.convertToPharmML»«ENDIF»
-	«IF o.task_obj != null»«o.task_obj.convertToPharmML»«ENDIF»
-	'''
-	
-	def convertToPharmML(model_obj o)'''
-	<ModelDefinition>
-	«FOR b:o.blocks»
-	«IF b.individual_model_obj_block != null»
-		TODO: Process individual model block
-	«ENDIF»
-	«IF	b.model_prediction_obj_block != null»
-		TODO: Process model prediction block
-	«ENDIF»
-	«IF	b.random_variable_definition_block != null»
-		TODO: Process random variable definition block
-	«ENDIF»
-
-	«IF	b.group_variables != null»
-		TODO: Process group variables
-	«ENDIF»
-	«IF	b.observation_block != null»
-		TODO: Process observation block
-	«ENDIF»
-	«IF	b.estimation_block != null»
-		«IF b.estimation_block.block != null»
-			«b.estimation_block.block.print_msteps_EstimationStep»
-		«ENDIF»
-	«ENDIF»
-	«IF	b.simulation_block != null»
-		«IF b.simulation_block.block != null»
-			«b.simulation_block.block.print_msteps_SimulationStep»
-		«ENDIF»
-	«ENDIF»
-	«ENDFOR»
-	</ModelDefinition>
-	'''
-
-	def convertToPharmML(data_obj obj) { }	
-
-	def convertToPharmML(param_obj obj) { }
-
-	def convertToPharmML(task_obj obj) { }
-
 	
 	def print_PharmML_NameSpaces()'''
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -103,6 +61,195 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	xmlns:uncert="http://www.pharmml.org/2013/03/Uncertainty"
 	'''
 	
+	//Returns true if there is one input variable with use=idv (individual)
+	def boolean isIndependentVariableDefined(Mcl m){
+		for (MclObject obj: m.objects){
+			if (obj.modelObject != null){
+				for (ModelObjectBlock block: obj.modelObject.blocks){
+					if (block.inputVariablesBlock != null){
+						for (SymbolDeclaration s: block.inputVariablesBlock.variables){
+							if (s.expression != null){
+								if (s.expression.list != null){
+									var use = s.expression.list.getAttribute("use");
+									if (use.equalsIgnoreCase("idv"))
+										return true;
+								}
+							}
+						}
+					}	
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	//convertToPharmML MCL objects (!!! add namespace to model definition)
+	def print_mdef_ModelDefinition(MclObject o)'''
+	<ModelDefinition>
+		«IF o.parameterObject != null»«o.parameterObject.print_mdef_ParameterModel»«ENDIF»
+		«IF o.modelObject != null»
+		«o.modelObject.print_mdef_StructuralModel»
+		«o.modelObject.print_mdef_ObservationModel»
+		«ENDIF»
+	</ModelDefinition>
+	'''
+
+	//////////////////////////////////////////////////////////
+	//PharmML types
+	//////////////////////////////////////////////////////////
+	
+	//mml:FunctionDefinition
+	def print_mml_FunctionDefinition(TaskFunctionDeclaration f)'''
+	'''
+
+	/////////////////////////////////////////////////////////
+	//Design PharmML types
+	/////////////////////////////////////////////////////////
+
+	def print_design_Individuals(IndividualVariablesBlock block)'''
+	<Individuals>
+	</Individuals>
+	'''
+	
+	def print_design_Group(GroupVariablesBlock variables)'''
+	<Group>
+	</Group>
+	'''
+
+	//////////////////////////////////////////////////////////
+	//Distrib PharmML types
+	//////////////////////////////////////////////////////////
+	
+	def print_uncert_DistributionType(RandomList list)'''
+	'''
+	
+	/////////////////////////////////////////////////////////
+	//mdef PharmML types
+	/////////////////////////////////////////////////////////
+	def print_mdef_VariabilityLevel()'''
+	<VariabilityLevel id="indiv"/>
+	'''	
+	
+	def print_mdef_CovariateModel()'''
+	<CovariateModel>
+	</CovariateModel>
+	'''	
+	
+	//K?
+	//omega_NAME
+	def print_mdef_ParameterModel(ParameterObject obj)'''
+	«FOR b:obj.blocks»			
+		«IF b.structuralBlock != null»
+		«val paramModel="p1"»
+		<ParameterModel id=«paramModel»>
+			«FOR st: b.structuralBlock.parameters»
+				«st.print_mdef_Parameter»
+			«ENDFOR»
+		</ParameterModel>
+		«ENDIF»
+	«ENDFOR»
+	''' 
+	
+	
+	def print_mdef_Parameter(ParameterDeclaration s){
+		var name = s.identifier;
+		'''<Parameter symbId = \"«name»\"/>'''
+	}	
+	
+	def print_mdef_StructuralModel(ModelObject obj)'''
+	«FOR b:obj.blocks»
+		«IF	b.structuralParametersBlock != null»		
+			<StructuralModel>
+			</StructuralModel>
+		«ENDIF»
+	«ENDFOR»	
+	'''
+	
+	def print_mdef_ObservationModel(ModelObject obj)'''
+	«FOR b:obj.blocks»
+		«IF	b.observationBlock != null»		
+			<ObservationModel>
+			</ObservationModel>
+		«ENDIF»
+	«ENDFOR»
+	'''	
+	
+	/////////////////////////////////////////////////////////
+	//mstep PharmML types
+	/////////////////////////////////////////////////////////
+	def print_msteps_ModelingSteps(MclObject o)'''
+	<ModellingSteps>
+		«IF o.modelObject != null»«o.modelObject.print_msteps_Variable»«ENDIF»
+		«IF o.taskObject != null»«o.taskObject.print_msteps_ModelingStepsContent»«ENDIF»
+	</ModellingSteps>
+	'''
+	
+	def print_msteps_Variable(ModelObject obj)'''
+	<Variable>
+		«obj.print_ct_DataSet»
+	</Variable>
+	'''
+
+	def print_ct_DataSet(ModelObject obj)'''
+	<DataSet>
+		«FOR b:obj.blocks»
+			«IF b.inputVariablesBlock != null»
+				«b.inputVariablesBlock.print_ct_Definition» 
+			«ENDIF»
+		«ENDFOR»
+	</DataSet>	
+	'''
+	
+	def print_ct_Definition(InputVariablesBlock block){
+		var input_vars = newHashMap  
+		var i = 1;
+		for (v: block.variables){
+			val id = v.identifier
+			if (input_vars.get(id) == null){
+				input_vars.put(id, i);
+				i = i + 1;
+			}
+		}
+		'''
+		<Definition>
+		</Definition>	
+		'''
+	}
+
+	def print_msteps_ModelingStepsContent(TaskObject obj)'''
+	«FOR b: obj.blocks»
+		«IF b.functionDeclaration != null»
+			«b.functionDeclaration.functionBody.print_msteps_ModelingStepsContent»
+		«ENDIF»
+	«ENDFOR»
+	'''
+	
+	def print_msteps_ModelingStepsContent(TaskFunctionBody body)'''
+		«FOR b: body.blocks»
+			«IF b.estimateBlock != null»
+				«b.estimateBlock.print_msteps_SimulationStep»
+			«ENDIF»
+			«IF b.simulateBlock != null»
+				«b.simulateBlock.print_msteps_EstimationStep»
+			«ENDIF»
+		«ENDFOR»
+	'''
+	def print_msteps_EstimationStep(SimulateTask task)'''
+	<SimulationStep>
+	</SimulationStep>
+	'''
+
+	def print_msteps_SimulationStep(EstimateTask task)'''
+	<EstimationStep>
+	</EstimationStep>
+	'''
+
+	//////////////////////////////////////////////////////////
+	//Common PharmML types
+	//////////////////////////////////////////////////////////
+	
 	//***PharmML.ct_Annotation***//
 	def print_XS_Comment(String text)'''
 		<!--«text»-->
@@ -110,142 +257,88 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	
 	//***PharmML.ct_Annotation***//
 	def print_ct_AnnotationType(String text)'''
-		<Description>«text»</Description>
+	<Description>«text»</Description>
 	'''
 
 	//***MDL.variable_declaration***//
-	def print_ct_VariableDefinitionType(variable_declaration v)'''
-		<Variable «v.identifier.print_ct_SymbId»>
-			«v.identifier.toStr.print_ct_AnnotationType»
-			«IF v.expression != null»
-				«v.expression.print_ct_printRhsType»
-			«ENDIF»	
-			«IF v.random_list != null»
-				«v.random_list.print_uncert_DistributionType»
-			«ENDIF»	
-		</Variable>
+	def print_ct_VariableDefinitionType(SymbolDeclaration v)'''
+	<Variable «v.identifier.print_ct_SymbId»>
+		«v.identifier.print_ct_AnnotationType»
+		«IF v.expression != null»
+			«v.expression.print_ct_printRhsType»
+		«ENDIF»	
+	</Variable>
 	'''
 	
-	def print_uncert_DistributionType(random_list list)'''
-		TODO: print random list (distribution)	
-	'''
-	
-	def print_ct_printRhsType(any_expression e)'''
+	def print_ct_printRhsType(AnyExpression e)'''
 		«IF e.expression != null»
 			«e.expression.print_ct_printRhsType»
 		«ENDIF»
 		«IF e.list != null»
-			TODO: print list
 		«ENDIF»	
-		«IF e.ode_list != null»
-			TODO: print ode list
-		«ENDIF»	
-		«IF e.random_list != null»
-			«e.random_list.print_uncert_DistributionType»
+		«IF e.odeList != null»
 		«ENDIF»	
 	'''
-	def print_ct_printRhsType(expression e)'''
-		«IF e.conditional_expression != null»
-		«ENDIF»
-		«IF e.string_expression != null»
-			«e.string_expression.print_MathStringType»
+	
+	def print_ct_printRhsType(Expression e)'''
+		«IF e.conditionalExpression != null»
 		«ENDIF»
 	'''
 	
-	def print_MathStringType(EList<String> list)'''
+	//MDL.primary.VariableName
+	def print_ct_SymbId(Primary p)'''
+		«IF p.symbol != null»
+			«p.symbol.print_ct_SymbId»
+		«ENDIF»
+	'''	
 	
+	//MDL.VariableName
+	def print_ct_SymbId(String name)'''
+	symbId = "«name»"
+	'''
+	
+	//MDL.VariableName
+	def print_ct_SymbId(FullyQualifiedSymbolName name)'''
+	symbId = "«name.toStr»"
 	'''
 
+	/////////////////////////////////////////////////////
+	//Math PharmML types
+	/////////////////////////////////////////////////////
 	
-	//Get variable identifier from each declaration and each statement
-	def printXML(block_statement st)'''
-		«IF st.variable_declaration != null»
-			«st.variable_declaration.print_ct_VariableDefinitionType»
-		«ENDIF»
-		«IF st.function_call != null»
-			«st.function_call.print_Math_FunctionCallType»
-		«ENDIF»
-		«IF st.statement != null»
-			TODO: parse MDL block
-		«ENDIF»
+	def print_MathStringType(EList<String> list)'''	
+	<String>
+	</String>	
 	'''
 	
 	//***MDL.primary***//
 	//MDL.primary.number
-	def print_Math_ScalarType(primary p)'''
-		«IF p.number != null»
-			<Scalar value = "«p.number»"/>
-		«ENDIF»	
+	def print_Math_ScalarType(Primary p)'''
+	«IF p.number != null»
+		<Scalar value = "«p.number»"/>
+	«ENDIF»	
 	'''
-	//MDL.primary.variable_name
-	def print_ct_SymbId(primary p)'''
-		«IF p.identifier != null»
-			«p.identifier.print_ct_SymbId»
-		«ENDIF»
-	'''	
-	//MDL.variable_name
-	def print_ct_SymbId(variable_name name)'''
-		symbId = "«name.toStr»"
+	
+	def print_Math_FunctionCallType(FunctionCall call)'''
+	<FunctionCall>
+		«call.identifier.print_Math_VarType»
+		«FOR arg: call.arguments.arguments»
+			«arg.print_Math_FunctionArgumentType»
+		«ENDFOR»
+	</FunctionCall>
 	'''
 
-	//MDL.function_declaration
-	def printXML(function_declaration f)'''
-	'''
-	
-	def printXML(formal_arguments args)'''
-		«FOR a: args.identifiers»
-		«ENDFOR»
-	'''
-	
-	//function body: ESTIMATE or SIMULATE blocks
-	def printXML(function_body body)'''
-		«FOR b: body.blocks»
-			«IF b.estimate_defn != null»
-				«b.estimate_defn.print_msteps_SimulationStep»
-			«ENDIF»
-			«IF b.simulate_defn != null»
-				«b.simulate_defn.print_msteps_EstimationStep»
-			«ENDIF»
-			
-		«ENDFOR»
-	'''
-	
-	def print_msteps_EstimationStep(block b)'''
-		<EstimationStep>
-		«FOR st: b.statements»
-			TODO: print estimation steps
-		«ENDFOR»
-		</EstimationStep>
+	def print_Math_VarType(FullyQualifiedSymbolName name)'''
+		<Var «name.identifier.print_Math_symbId»/>
 	'''
 
-	def print_msteps_SimulationStep(block b)'''
-		<SimulationStep>
-		«FOR st: b.statements»
-			TODO: print simulation steps
-		«ENDFOR»
-		</SimulationStep>
-	'''
-	
-	def print_Math_FunctionCallType(function_call call)'''
-		<FunctionCall>
-			«call.funct_name.print_Math_VarType»
-			«FOR arg: call.arguments.arguments»
-				«arg.print_Math_FunctionArgumentType»
-			«ENDFOR»
-		</FunctionCall>
-	'''
-	
-	def print_Math_VarType(String str)'''
-		<Var «str.print_Math_symbId»/>
-	'''
-
-	def print_Math_FunctionArgumentType(argument arg)'''
-		<FunctionArgument 
+	def print_Math_FunctionArgumentType(Argument arg)'''
+	<FunctionArgument 
 		«IF arg.identifier != null»«arg.identifier.print_Math_symbId»«ENDIF»>
-		</FunctionArgument>
+	</FunctionArgument>
 	'''
 	
 	def print_Math_symbId(String str)'''
-		symbId = "«str»"
+	symbId = "«str»"
 	'''
 }

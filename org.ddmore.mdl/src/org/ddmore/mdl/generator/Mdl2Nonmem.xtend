@@ -5,58 +5,184 @@
  */
 package org.ddmore.mdl.generator
 
-import org.ddmore.mdl.mdl.block
-import org.ddmore.mdl.mdl.block_statement
-import org.ddmore.mdl.mdl.data_obj
-import org.ddmore.mdl.mdl.file_block
-import org.ddmore.mdl.mdl.header_block
-import org.ddmore.mdl.mdl.mcl
-import org.ddmore.mdl.mdl.mcl_obj
-import org.ddmore.mdl.mdl.model_obj
-import org.ddmore.mdl.mdl.param_obj
-import org.ddmore.mdl.mdl.statement
-import org.ddmore.mdl.mdl.task_obj
-import org.ddmore.mdl.mdl.task_obj_block
-import org.ddmore.mdl.mdl.variability_block_statement
-import org.ddmore.mdl.mdl.model_block
-import org.ddmore.mdl.mdl.target_block
-
+import org.ddmore.mdl.mdl.DataObject
+import org.ddmore.mdl.mdl.FileBlock
+import org.ddmore.mdl.mdl.HeaderBlock
+import org.ddmore.mdl.mdl.Mcl
+import org.ddmore.mdl.mdl.MclObject
+import org.ddmore.mdl.mdl.ModelObject
+import org.ddmore.mdl.mdl.ParameterObject
+import org.ddmore.mdl.mdl.ConditionalStatement
+import org.ddmore.mdl.mdl.TaskObject
+import org.ddmore.mdl.mdl.TaskObjectBlock
+import org.ddmore.mdl.mdl.VariabilityBlockStatement
+import org.ddmore.mdl.mdl.TargetBlock
+import org.ddmore.mdl.mdl.ModelPredictionBlock
+import org.ddmore.mdl.mdl.ParameterDeclaration
+import org.ddmore.mdl.mdl.EstimateTask
+import org.ddmore.mdl.mdl.SimulateTask
+import org.ddmore.mdl.mdl.GroupVariablesBlock
+import org.ddmore.mdl.mdl.FileBlockStatement
+import org.eclipse.emf.ecore.resource.Resource
+import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.DataBlockStatement
 
 class Mdl2Nonmem extends MdlPrinting{
 
-var task_obj task_object = null; //Store the reference to task object
+var TaskObject taskObjectect = null; //Store the reference to task object
 	
 	//Print file name and analyse all MCL objects in the source file
-  	def convertToNonmem(mcl m){
+  	def convertToNonmem(Mcl m){
   		//Create a map of variables
   		for (o:m.objects){
   			prepareCollections(o);
-  			if (o.task_obj != null){
-  				task_object = o.task_obj;
+  			if (o.taskObject != null){
+  				taskObjectect = o.taskObject;
   			}
   		}
-  		var version = "1.005";
-  		var date = "14.03.2013"
+  		var version = "1.007";
+  		var date = "10.05.2013"
 		'''
 		;mdl2nt «version» beta, last modification «date», Natallia Kokash (natallia.kokash@gmail.com)  
-		
+			
 		$PROB «m.fileNameUpperCase»
   		«FOR o:m.objects»«o.convertToNonmem»«ENDFOR»
 		'''
+		//		«FOR v: eps_vars.entrySet SEPARATOR ' '»«v.key»«ENDFOR»
 	}
 	
 	//convertToNonmem MCL objects
-	def convertToNonmem(mcl_obj o)'''
-	«IF o.data_obj != null»«o.data_obj.convertToNonmem»«ENDIF»
-	«IF o.model_obj != null»«o.model_obj.convertToNonmem»«ENDIF»
-	«IF o.param_obj != null»«o.param_obj.convertToNonmem»«ENDIF»
-	«IF o.task_obj != null»«o.task_obj.convertToNonmem»«ENDIF»
-	'''	
+	def convertToNonmem(MclObject o)'''
+	«IF o.dataObject != null»«o.dataObject.convertToNonmem»«ENDIF»
+	«IF o.modelObject != null»«o.modelObject.convertToNonmem»«ENDIF»
+	«IF o.parameterObject != null»«o.parameterObject.convertToNonmem»«ENDIF»
+	«IF o.taskObject != null»«o.taskObject.convertToNonmem»«ENDIF»
+	'''			
 		
+ 	///////////////////////////////////////////////
+	//Prepares variable maps
+	///////////////////////////////////////////////
+	
+  	var eta_vars = newHashMap	//ETAs
+  	var eps_vars = newHashMap   //EPSs
+	var theta_vars = newHashMap //THETAs
+	var dadt_vars = newHashMap  //DADT	
+	
+	//Collect variables from the MDL file
+	def prepareCollections(MclObject o){
+  		if (o.modelObject != null){
+  			setRandomVariables(o.modelObject);
+  			setStructuralParameters(o.modelObject);
+  			setModelPredictionVariables(o.modelObject);
+  		} 
+	}
+	
+	//Assign indices to MODEL variables and expressions
+	def setModelPredictionVariables(ModelObject o) { 
+		dadt_vars.clear;
+		var i = 1;
+		for (b:o.blocks){
+			if (b.modelPredictionBlock != null){
+				for (s: b.modelPredictionBlock.statements){
+					if (s.odeBlock != null){
+						for (ss: s.odeBlock.statements){
+							var x = ss.symbol;
+							if (x != null){
+								if (x.expression != null){
+									if (x.expression.odeList != null){
+										var id = x.identifier;
+										if (dadt_vars.get(id) == null){
+											dadt_vars.put(id, i);
+											i = i + 1;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	
+	//Assign indices to variability parameters ($ETA, $ESP)
+	def setRandomVariables(ModelObject o){
+    	eta_vars.clear;
+    	eps_vars.clear;
+    	var i = 1; var j = 1; 
+		for (b: o.blocks){
+	  		if (b.randomVariableDefinitionBlock != null){
+				for (s: b.randomVariableDefinitionBlock.variables) {
+					if (s.randomList != null){	
+						var level = s.randomList.getAttribute("level");
+						val id = s.identifier;
+						if (level.equalsIgnoreCase("ID"))
+							if (eta_vars.get(id) == null){
+								eta_vars.put(id, i);
+								i = i + 1;
+							}
+						if (level.equalsIgnoreCase("DV"))
+							if (eps_vars.get(id) == null){
+								eps_vars.put(id, j);
+								j = j + 1;
+							}	
+						}
+	  			}
+	  		}
+  		}
+	}
+	
+	//Assign indices to THETAs
+	def setStructuralParameters(ModelObject o){
+		theta_vars.clear;
+    	var i = 1; 
+		for (b: o.blocks){
+	  		if (b.structuralParametersBlock != null){
+				for (id: b.structuralParametersBlock.parameters) {
+					if (theta_vars.get(id) == null){
+						theta_vars.put(id, i);
+						i = i + 1;
+					}
+				}
+	  		}	  				
+  		}
+	}
+	
+	//Find reference to a data file 
+	def getDataSource(Resource resource){
+		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {
+			for (obj: m.objects){
+				if (obj.dataObject != null){
+					for (b: obj.dataObject.blocks){
+						if (b.fileBlock != null){
+							for (s: b.fileBlock.statements){
+								s.getDataSource;
+							}
+						} 
+					}
+				}
+			}
+		}		
+		return "";
+	}
+	
+	def getDataSource(FileBlockStatement s){
+		if (s.variable != null){
+			if (s.variable.identifier.equalsIgnoreCase("data")){
+				if (s.variable.expression != null){
+					if (s.variable.expression.list != null)
+						return s.variable.expression.list.getAttribute("source");
+				}
+			}
+		}
+		return "";
+	}
+			
 ////////////////////////////////////	
 //convertToNonmem MODEL OBJECT
 ////////////////////////////////////
-	def convertToNonmem(model_obj o){
+	def convertToNonmem(ModelObject o){
 	val isLibraryDefined = o.isLibraryDefined;
 	val isPKDefined = o.isPKDefined;
 	val isErrorNonEmpty = o.isErrorNonEmpty;
@@ -101,51 +227,62 @@ var task_obj task_object = null; //Store the reference to task object
 	}
 	
 	//GROUP VARIABLES, INDIVIDUAL VARIABLES -> $PK
-	def printPK(model_obj o)'''
+	def printPK(ModelObject o)'''
 	«FOR b:o.blocks»
-	«IF	b.group_variables != null»
-		«b.group_variables.block.print»
+	«IF	b.groupVariablesBlock != null»
+		«b.groupVariablesBlock.print»
 	«ENDIF»
-	«IF b.individual_model_obj_block != null»
-		«var bb = b.individual_model_obj_block»
-		«FOR s: bb.block.statements SEPARATOR ' '»
+	«IF b.individualVariablesBlock != null»
+		«var bb = b.individualVariablesBlock»
+		«FOR s: bb.statements SEPARATOR ' '»
 			«s.print»
 		«ENDFOR»
 	«ENDIF»
 	«ENDFOR»
 	'''
+		 
+	def print(GroupVariablesBlock block)'''
+		«FOR st: block.statements»
+			«IF st.statement != null»
+				«st.statement.print»
+			«ENDIF»
+			«IF st.mixtureBlock != null»
+				«st.mixtureBlock.print»
+			«ENDIF»	
+		«ENDFOR»
+	'''	
 	
     //MODEL_PREDICTION, OBSERVATION -> $ERROR
-	def printError(model_obj o)'''
+	def printError(ModelObject o)'''
 		«FOR mob:o.blocks»
-			«IF mob.model_prediction_obj_block != null»
-				«FOR s: mob.model_prediction_obj_block.block.statements»
+			«IF mob.modelPredictionBlock != null»
+				«FOR s: mob.modelPredictionBlock.statements»
 					«IF s.statement != null»
-						«var x = s.statement.variable_declaration»
+						«var x = s.statement.symbol»
 						«IF x != null»«IF x.expression != null»«IF x.expression.expression != null»«x.print»«ENDIF»«ENDIF»«ENDIF»
 						«IF s.statement.statement != null»«s.statement.statement.print»«ENDIF»
 					«ENDIF»
 				«ENDFOR»
 			«ENDIF»
-			«IF mob.observation_block != null»
-				«mob.observation_block.block.print»
+			«IF mob.observationBlock != null»
+				«mob.observationBlock.print»
 			«ENDIF»
 		«ENDFOR»
 	'''	
 
 	//Print $MODEL
-	def printModel(model_obj o)'''
+	def printModel(ModelObject o)'''
 		«FOR b:o.blocks»
-			«IF b.model_prediction_obj_block != null»
-				«var bb = b.model_prediction_obj_block»
-				«FOR s: bb.block.statements»
-					«IF s.ode_block != null»
-						«FOR ss: s.ode_block.block.statements»
-							«var x = ss.variable_declaration»
+			«IF b.modelPredictionBlock != null»
+				«var bb = b.modelPredictionBlock»
+				«FOR s: bb.statements»
+					«IF s.odeBlock != null»
+						«FOR ss: s.odeBlock.statements»
+							«var x = ss.symbol»
 							«IF x != null»
 								«IF x.expression != null»
-									«IF x.expression.ode_list != null»
-										COMP(«x.identifier.toStr»)
+									«IF x.expression.odeList != null»
+										COMP(«x.identifier»)
 									«ENDIF»
 								«ENDIF»
 							«ENDIF»
@@ -157,23 +294,23 @@ var task_obj task_object = null; //Store the reference to task object
 	'''
 
 	//Print $DES
-	def printDES(model_obj o)'''
+	def printDES(ModelObject o)'''
 		«FOR b:o.blocks»
-			«IF b.model_prediction_obj_block != null»
-				«var bb = b.model_prediction_obj_block.block»
+			«IF b.modelPredictionBlock != null»
+				«var bb = b.modelPredictionBlock»
 				«FOR s: bb.statements»
-					«IF s.ode_block != null»
-						«FOR ss: s.ode_block.block.statements»
-							«var x = ss.variable_declaration»
+					«IF s.odeBlock != null»
+						«FOR ss: s.odeBlock.statements»
+							«var x = ss.symbol»
 							«IF x != null»
 								«IF x.expression != null»
 									«IF x.expression.expression != null»
 										«x.print»
 									«ENDIF»
-									«IF x.expression.ode_list != null»
-										«var deriv = x.expression.ode_list.getVariableAttribute("deriv")»
-										«IF deriv != null»
-											«var id = x.identifier.toStr»
+									«IF x.expression.odeList != null»
+										«var deriv = x.expression.odeList.getAttribute("deriv")»
+										«IF !deriv.equals("")»
+											«var id = x.identifier»
 											«IF dadt_vars.get(id) != null»
 												DADT(«dadt_vars.get(id)») = «deriv»
 											«ENDIF»	
@@ -192,31 +329,33 @@ var task_obj task_object = null; //Store the reference to task object
 	'''    
     
 	//Print $SUBR
-	def printSUBR(model_obj o)'''
+	def printSUBR(ModelObject o)'''
 	«FOR b:o.blocks»
-		«IF b.model_prediction_obj_block != null»
-			«b.model_prediction_obj_block.block.printSUBR»
+		«IF b.modelPredictionBlock != null»
+			«b.modelPredictionBlock.printSUBR»
 		«ENDIF»
 	«ENDFOR»
     ''' 
     
     //Extract source file from VARIABLE DECLARATION
     //NONMEM $SUBR section with attributes LIBRARY, MODEL, TRANS
-	def printSUBR(model_block b){
+	def printSUBR(ModelPredictionBlock b){
 		for (ss: b.statements){
-			if (ss.library_block != null){
-				if (ss.library_block.block != null){
-					for (s: ss.library_block.block.statements){
-						if (s.variable_declaration != null)
-							if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("amount"))
-								if (s.variable_declaration.expression != null)
-									if (s.variable_declaration.expression.list != null){
-										var library = s.variable_declaration.expression.list.getVariableAttribute("library").toString;
-										if (library.substring(0,2).equalsIgnoreCase("nm")){
-											library = library.substring(2);
-										}						
-										val model = s.variable_declaration.expression.list.getVariableAttribute("model").toString;
-										val trans = s.variable_declaration.expression.list.getVariableAttribute("trans");
+			if (ss.libraryBlock != null){
+					for (st: ss.libraryBlock.statements){
+						if (st.symbol != null){
+							val s = st.symbol;
+							if (s.identifier.equalsIgnoreCase("amount"))
+								if (s.expression != null)
+									if (s.expression.list != null){
+										var library = s.expression.list.getAttribute("library");
+										if (!library.equals("")){
+											if (library.substring(0,2).equalsIgnoreCase("nm")){
+												library = library.substring(2);
+											}	
+										}	
+										val model = s.expression.list.getAttribute("model");
+										val trans = s.expression.list.getAttribute("trans");
 										var tolStr = "";
 										var tol = b.getTOL();
 										if (tol.size > 0){
@@ -228,26 +367,26 @@ var task_obj task_object = null; //Store the reference to task object
 											} else 
 												tolStr = " TOL=" + tol.get(0);
 										}
-										return '''$SUBR «IF model != null»«library.toUpperCase()»«model»«ENDIF»«tolStr» «IF trans != null»TRANS«trans»«ENDIF»'''
+										return '''$SUBR «IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF»«tolStr» «IF !trans.equals("")»TRANS«trans»«ENDIF»'''
 									}
-					}
+						}
 				}
 			}
 		}
 	}
 	
 	//Get $TOL attribute
-	def getTOL(model_block b){
+	def getTOL(ModelPredictionBlock b){
 		var tol = newArrayList;
 		for (s: b.statements){
-			if (s.ode_block != null){
-				for (ss: s.ode_block.block.statements){
-					var x = ss.variable_declaration
+			if (s.odeBlock != null){
+				for (ss: s.odeBlock.statements){
+					var x = ss.symbol
 					if (x != null){
 						if (x.expression != null){
-							if (x.expression.ode_list != null){
-								var tolEl = x.expression.ode_list.getVariableAttribute("tolrel");
-								if (tolEl != null) tol.add(tolEl);
+							if (x.expression.odeList != null){
+								var tolEl = x.expression.odeList.getAttribute("tolrel");
+								if (!tolEl.equals("")) tol.add(tolEl);
 							}
 						}
 					}
@@ -258,13 +397,13 @@ var task_obj task_object = null; //Store the reference to task object
 	}	
     
 	//Print $TABLE
-	def printTable(model_obj o)'''
+	def printTable(ModelObject o)'''
 	«FOR b:o.blocks»
-		«IF b.output_variables_block != null»
-			«var bb = b.output_variables_block»
-			«IF bb.block.statements.size > 0»
-				$TABLE «FOR st: bb.block.statements SEPARATOR ' '»«IF st.variable_declaration != null»«st.variable_declaration.identifier.toStr.convertID»«ENDIF»«ENDFOR»
-				ONEHEADER NOPRINT «IF task_object != null»FILE=«task_object.identifier».fit«ENDIF» 
+		«IF b.outputVariablesBlock != null»
+			«var bb = b.outputVariablesBlock»
+			«IF bb.variables.size > 0»
+				$TABLE «FOR st: bb.variables SEPARATOR ' '»«st.toStr»«ENDFOR»
+				ONEHEADER NOPRINT «IF taskObjectect != null»FILE=«taskObjectect.identifier.name».fit«ENDIF» 
 			«ENDIF»
 		«ENDIF»	
 	«ENDFOR»
@@ -274,19 +413,19 @@ var task_obj task_object = null; //Store the reference to task object
 //convertToNonmem PARAMETER OBJECT
 /////////////////////////////////////	
 	//Process parameter object
-	def convertToNonmem(param_obj obj)'''
+	def convertToNonmem(ParameterObject obj)'''
 	«obj.printTheta»
 	«obj.printSigma»
 	«obj.printOmega»
 	'''
 
-	def printTheta(param_obj obj)'''
+	def printTheta(ParameterObject obj)'''
 	«IF obj.isThetaNonEmpty»
 	
 	$THETA
 		«FOR b:obj.blocks»			
-			«IF b.structural_block != null»
-				«FOR st: b.structural_block.block.statements»
+			«IF b.structuralBlock != null»
+				«FOR st: b.structuralBlock.parameters»
 					«st.printTheta»
 				«ENDFOR»
 			«ENDIF»
@@ -295,15 +434,15 @@ var task_obj task_object = null; //Store the reference to task object
 	'''
 	
 	//VARIABILITY -> $OMEGA
-	def printOmega(param_obj obj)'''
+	def printOmega(ParameterObject obj)'''
 	«IF (obj.isVariabilityNonEmpty && !eta_vars.empty) || obj.isVariabilitySubBlocksNonEmpty»
 	
 	$OMEGA
 		«FOR b:obj.blocks»			
-			«IF b.variability_block != null»
-				«FOR c: b.variability_block.block.blocks»
-					«IF c.block_statement != null»
-						«c.block_statement.printOmega»
+			«IF b.variabilityBlock != null»
+				«FOR c: b.variabilityBlock.statements»
+					«IF c.parameter != null»
+						«c.parameter.printOmega»
 					«ENDIF»
 					«c.printVariabilitySubBlock»
 				«ENDFOR»
@@ -313,15 +452,15 @@ var task_obj task_object = null; //Store the reference to task object
 	'''
 
 	//VARIABILITY.BLOCK -> $SIGMA
-	def printSigma(param_obj obj)'''
+	def printSigma(ParameterObject obj)'''
 	«IF obj.isVariabilityNonEmpty && !eps_vars.empty»
 	
 	$SIGMA
 		«FOR b:obj.blocks»			
-			«IF b.variability_block != null»
-				«FOR c: b.variability_block.block.blocks»
-					«IF c.block_statement != null»
-						«c.block_statement.printSigma»
+			«IF b.variabilityBlock != null»
+				«FOR c: b.variabilityBlock.statements»
+					«IF c.parameter != null»
+						«c.parameter.printSigma»
 					«ENDIF»
 				«ENDFOR»
 			«ENDIF»
@@ -329,33 +468,32 @@ var task_obj task_object = null; //Store the reference to task object
 	«ENDIF»
 	'''
 	
-	def isThetaNonEmpty(param_obj obj){
+	def isThetaNonEmpty(ParameterObject obj){
 		for (b:obj.blocks){
-			if (b.structural_block != null){
-				if (b.structural_block.block.statements.size > 0)
+			if (b.structuralBlock != null){
+				if (b.structuralBlock.parameters.size > 0)
 				 	return true;
 			}
 		}
 		return false;
 	}
 
-	def isVariabilityNonEmpty(param_obj obj){
+	def isVariabilityNonEmpty(ParameterObject obj){
 		for (b:obj.blocks){
-			if (b.variability_block != null){
-				for (bb: b.variability_block.block.blocks){
-					if (bb.block_statement != null)
-				 		return true;
+			if (b.variabilityBlock != null){
+				if (b.variabilityBlock.statements.size > 0){
+				 	return true;
 				}
 			}
 		}
 		return false;
 	}
 	
-	def isVariabilitySubBlocksNonEmpty(param_obj obj){
+	def isVariabilitySubBlocksNonEmpty(ParameterObject obj){
 		for (b:obj.blocks){
-			if (b.variability_block != null){
-				for (bb: b.variability_block.block.blocks){
-					if (bb.diag_block != null || bb.block_block != null)
+			if (b.variabilityBlock != null){
+				for (bb: b.variabilityBlock.statements){
+					if ((bb.diagBlock != null) || (bb.blockBlock != null))
 				 		return true;
 				}
 			}
@@ -369,387 +507,257 @@ var task_obj task_object = null; //Store the reference to task object
 ////////////////////////////////////
 
 	//Process data object
-	def convertToNonmem(data_obj o)'''
+	def convertToNonmem(DataObject o)'''
 	«FOR b:o.blocks»
-		«IF b.header_block != null»
-			«b.header_block.printInput»
+		«IF b.headerBlock != null»
+			«b.headerBlock.printInput»
 		«ENDIF»
 	«ENDFOR»	
 	«FOR b:o.blocks»
-		«IF b.file_block != null» 
-			«b.file_block.printData»
+		«IF b.fileBlock != null» 
+			«b.fileBlock.printData»
 		«ENDIF»
 	«ENDFOR»
-	«IF task_object != null»
-		«task_object.printIgnoreStatements»
+	«IF taskObjectect != null»
+		«taskObjectect.printIgnoreStatements»
 	«ENDIF»
 	'''
 	
 	//HEADER -> $INPUT
 	//NONMEM INPUT line - copy all variable names from the MDL HEADER block
-	def printInput(header_block b)'''
-	$INPUT «FOR st: b.block.statements SEPARATOR ' '»«IF st.variable_declaration != null»«st.variable_declaration.identifier.print»«ENDIF»«ENDFOR»'''
+	def printInput(HeaderBlock b)'''
+	$INPUT «FOR st: b.variables SEPARATOR ' '»«st.identifier.toStr»«ENDFOR»'''
 	
 	//FILE sub-block -> $DATA
-	def printData(file_block b)'''
-	«FOR s: b.block.blocks»
-		«IF s.statement != null»
-			«s.statement.printDataSource»
-		«ENDIF»
+	def printData(FileBlock b)'''
+	«FOR s: b.statements»
+		«s.printDataSource»
 	«ENDFOR»
 	'''
-	//if (st.inline_block != null) st.inline_block.convertToNonmem
-	//if (st.design_block != null) st.design_block.convertToNonmem
-	//if (st.rsscript_block != null) st.rsscript_block.convertToNonmem
+	//if (st.inlineBlock != null) st.inlineBlock.convertToNonmem
+	//if (st.designBlock != null) st.designBlock.convertToNonmem
+	//if (st.rscriptBlock != null) st.rscriptBlock.convertToNonmem
 	
 	//NONMEM: Extract source from variable data
-	def printDataSource(block_statement s){
-		if (s.variable_declaration != null)
-			if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("data"))
-				if (s.variable_declaration.expression != null)
-					if (s.variable_declaration.expression.list != null){
-						val data = s.variable_declaration.expression.list.getVariableAttribute("source");
-						val ignore = s.variable_declaration.expression.list.getVariableAttribute("ignore");
-						return '''«IF data != null»$DATA «data»«ENDIF» «IF ignore != null»IGNORE=«ignore»«ENDIF»'''
+	def printDataSource(FileBlockStatement s){
+		if (s.variable != null)
+			if (s.variable.identifier.equalsIgnoreCase("data")){
+				if (s.variable.expression != null){
+					if (s.variable.expression.list != null){
+						val data = s.variable.expression.list.getAttribute("source");
+						val ignore = s.variable.expression.list.getAttribute("ignore");
+						return '''«IF !data.equals("")»$DATA «data»«ENDIF» «IF !ignore.equals("")»IGNORE=«ignore»«ENDIF»'''
 					}
+				}
+			}
 	}
 	
 /////////////////////////////////////////////////
 //convertToNonmem TASK OBJECT
 /////////////////////////////////////////////////
 
-	def convertToNonmem(task_obj o)'''
+	def convertToNonmem(TaskObject o)'''
 		«FOR b:o.blocks»
 			«b.printFunctions»
 		«ENDFOR»
 	'''
 	
-	def printFunctions(task_obj_block b)'''
-		«IF b.function_declaration != null»
-			«val body = b.function_declaration.function_body»
+	def printFunctions(TaskObjectBlock b)'''
+		«IF b.functionDeclaration != null»
+			«val body = b.functionDeclaration.functionBody»
 			«IF body != null»
 				«FOR bb: body.blocks»
-					«IF bb.estimate_defn != null»
-						«bb.estimate_defn.printEstimate»
+					«IF bb.estimateBlock != null»
+						«bb.estimateBlock.printEstimate»
 					«ENDIF»
-					«IF bb.simulate_defn != null»
-						«bb.simulate_defn.printSimulate»
+					«IF bb.simulateBlock != null»
+						«bb.simulateBlock.printSimulate»
 					«ENDIF»
 				«ENDFOR»				
 			«ENDIF»
 		«ENDIF»
 	'''
 	//PARAMETER block
-	//DATA block
-	
-	def printIgnoreStatements(task_obj obj)'''
+	//DATA block	
+	def printIgnoreStatements(TaskObject obj)'''
 		«FOR b: obj.blocks»
-			«IF b.data_block !=  null»
-				«FOR s: b.data_block.block.statements»
-					«IF s.variable_declaration != null»
-						«IF s.variable_declaration.identifier.toStr.equalsIgnoreCase("ignore")»
-							«s.variable_declaration.print»
-						«ENDIF»	
-					«ENDIF»
+			«IF b.dataBlock !=  null»
+				«FOR DataBlockStatement block: b.dataBlock.statements»
+				«IF block.ignoreList != null»
+					«block.ignoreList.identifier» = («block.ignoreList.expression.toStr» )
+				«ENDIF»
 				«ENDFOR»
 			«ENDIF»
 		«ENDFOR»
 	''' 
 	
 	//Print $SIM block
-	def printSimulate(block b)'''
+	def printSimulate(SimulateTask b)'''
 	
-	$SIM ;Conversion for the simulation block has not been implemented in the converter
+	$SIM «FOR s: b.statements»«IF s.symbol != null»«s.symbol.printSimulate»«ENDIF»«ENDFOR» NOABORT
 	'''
 	
 	//Print $EST block
-	def printEstimate(block b)'''
+	def printEstimate(EstimateTask b)'''
 	
-	$EST«FOR s: b.statements»«s.printEstimate»«ENDFOR» NOABORT
-	«FOR s: b.statements»«s.printEstimateCov»«ENDFOR»
+	$EST«FOR s: b.statements»«IF s.symbol != null»«s.symbol.printEstimate»«ENDIF»«ENDFOR» NOABORT
+	«FOR s: b.statements»«IF s.symbol != null»«s.symbol.printEstimateCov»«ENDIF»«ENDFOR»
 	'''
 	
 	//Print attributes of the $EST block 
-	def printEstimate(block_statement s) { 
-		if (s.variable_declaration != null){
-			if (s.variable_declaration.expression != null){
-				if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("algo")){
-					if (s.variable_declaration.expression.expression != null)
-						''' METHOD=«s.variable_declaration.expression.expression.toStr»'''
-					else
-						{
-							//print first attribute of the list
-							if (s.variable_declaration.expression.list != null){
-								var args = s.variable_declaration.expression.list.arguments;
-								if (args != null){
-									if (args.arguments.size > 0)
-										''' METHOD=«args.arguments.get(0).expression.toStr»'''
-								}
-							}
-						}	
-				}
-				else
-					if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("max"))
-					''' MAX=«s.variable_declaration.expression.print»'''
-				else
-					if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("sig"))
-					''' SIG=«s.variable_declaration.expression.print»'''
-			}			
+	def printEstimate(SymbolDeclaration s) { 
+		if (s.identifier.equalsIgnoreCase("algo")){
+			if (s.expression.expression != null)
+				''' METHOD=«s.expression.expression.toStr»'''
+			else
+				{
+					//print first attribute of the list
+					if (s.expression.list != null){
+						var args = s.expression.list.arguments;
+						if (args != null){
+							if (args.arguments.size > 0)
+								''' METHOD=«args.arguments.get(0).expression.toStr»'''
+						}
+					}
+				}	
 		}
+		else
+			if (s.identifier.equalsIgnoreCase("max"))
+			''' MAX=«s.expression.print»'''
+		else
+			if (s.identifier.equalsIgnoreCase("sig"))
+			''' SIG=«s.expression.print»'''
+	}
+	
+	def printSimulate(SymbolDeclaration s) { 
+		'''#The MDL to NM-TRAN converter does not support yet simulation tasks'''
 	}
 	
 	//Print $COV block
-	def printEstimateCov(block_statement s) { 
-		if (s.variable_declaration != null){
-			if (s.variable_declaration.identifier.toStr.equalsIgnoreCase("cov")){
-				if (s.variable_declaration.expression != null){
-					if (s.variable_declaration.expression.toStr.replaceAll("\\s","").equalsIgnoreCase(""))
-					'''$COV «s.variable_declaration.expression.print»'''
-				}
-			}
-		}	
-	}
-	
-	///////////////////////////////////////////////
-	//Prepares variable maps
-	///////////////////////////////////////////////
-	
-  	var eta_vars = newHashMap	//ETAs
-  	var eps_vars = newHashMap   //EPSs
-	var theta_vars = newHashMap //THETAs
-	var dadt_vars = newHashMap  //DADT	
-	
-	//Collect NM-TRAN variables from the MDL file
-	def prepareCollections(mcl_obj o){
-  		if (o.model_obj != null){
-  			setRandomVariables(o.model_obj);
-  			setStructuralVariables(o.model_obj);
-  			setModelPredictionVariables(o.model_obj);
-  		} 
-	}
-	
-	//Assign indices to MODEL variables and expressions
-	def setModelPredictionVariables(model_obj o) { 
-		dadt_vars.clear;
-		var i = 1;
-		for (b:o.blocks){
-			if (b.model_prediction_obj_block != null){
-				for (s: b.model_prediction_obj_block.block.statements){
-					if (s.ode_block != null){
-						for (ss: s.ode_block.block.statements){
-							var x = ss.variable_declaration;
-							if (x != null){
-								if (x.expression != null){
-									if (x.expression.ode_list != null){
-										var id = x.identifier.toStr;
-										if (dadt_vars.get(id) == null){
-											dadt_vars.put(id, i);
-											i = i + 1;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+	def printEstimateCov(SymbolDeclaration s) { 
+		if (s.identifier.equalsIgnoreCase("cov")){
+			if (s.expression != null){
+				if (s.expression.toStr.replaceAll("\\s","").equalsIgnoreCase(""))
+				'''$COV «s.expression.print»'''
 			}
 		}
 	}
-
 	
-	//Assign indices to variability parameters ($ETA, $ESP)
-	def setRandomVariables(model_obj o){
-    	eta_vars.clear;
-    	eps_vars.clear;
-    	var i = 1; var j = 1; 
-		for (b: o.blocks){
-	  		if (b.random_variable_definition_block != null){
-	  			var block = b.random_variable_definition_block.block;
-	  			if (block != null){
-					for (s: block.statements) {
-						if (s.variable_declaration != null){
-							var level = "";
-							if (s.variable_declaration.random_list != null){
-								level = s.variable_declaration.random_list.getVariableAttribute("level").toString;
-							} else {							
-								if (s.variable_declaration.expression != null){
-									if (s.variable_declaration.expression.random_list != null){
-										level = s.variable_declaration.expression.random_list.getVariableAttribute("level").toString;
-									}
-									else { 
-										if (s.variable_declaration.expression.list != null)
-											level = s.variable_declaration.expression.list.getVariableAttribute("level").toString;
-									}
-								}
-							}
-							val id = s.variable_declaration.identifier.toStr;
-							if (level.equalsIgnoreCase("ID"))
-								if (eta_vars.get(id) == null){
-									eta_vars.put(id, i);
-									i = i + 1;
-								}
-							if (level.equalsIgnoreCase("DV"))
-								if (eps_vars.get(id) == null){
-									eps_vars.put(id, j);
-									j = j + 1;
-								}									
-						}
-					}
-	  			}
-	  		}
-  		}
-	}
-	
-	//Assign indices to THETAs
-	def setStructuralVariables(model_obj o){
-		theta_vars.clear;
-    	var i = 1; 
-		for (b: o.blocks){
-	  		if (b.structural_parameters_block != null){
-	  			var block = b.structural_parameters_block.block;
-	  			if (block != null){
-					for (st: block.statements) {
-						if (st.variable_declaration != null){
-							val id = st.variable_declaration.identifier.toStr;
-							if (theta_vars.get(id) == null){
-								theta_vars.put(id, i);
-								i = i + 1;
-							}
-						}
-					}
-	  			}
-	  		}	  				
-  		}
-	}	
-			
 	/////////////////////////////////////////////////////////////
 	//NM-TRAN specific printing
 	/////////////////////////////////////////////////////////////
 
 	//Print diag{} and block{} subblocks of VARIABILITY	
-	def printVariabilitySubBlock(variability_block_statement v)
+	def printVariabilitySubBlock(VariabilityBlockStatement v)
 	{
 		var result = "";
-		if (v.diag_block != null){
+		if (v.diagBlock != null){
 			var printFix = false;
 			var k = 0;
-			if (v.diag_block.block != null){
-				for (a: v.diag_block.block.arguments.arguments){
-					if (a.identifier != null){ 
-						if (a.isArgumentExpression) {
-							if (a.expression != null){
-								var  i = 0;
-								while (i < k){
-									result = result + "0 ";
-									i = i + 1;
-								}
-								k = k + 1;
-								result = result + a.expression.toStr + " ; " + a.identifier + "\n";
-							}
+			for (a: v.diagBlock.arguments.arguments){
+				if (a.identifier != null){ 
+					if (a.identifier.equalsIgnoreCase("fix")){ 
+						if (a.expression != null){
+							printFix = (a.expression.toStr.equalsIgnoreCase("yes") 
+							|| a.expression.toStr.equalsIgnoreCase("true") ||
+							a.expression.toStr.equalsIgnoreCase("1"));		
 						}
-						if (a.identifier.equalsIgnoreCase("fix")){ 
-							printFix = true;
-						}
-					
-					} else {
-						if (a.expression != null)
-							result = result + a.expression.toStr + " ";
-					}
+					}				
 				}
-				if (printFix) result = result + "\nFIX\n";
-			}
+			}	
+			if (v.diagBlock.parameters != null)		
+				for (p: v.diagBlock.parameters.arguments) {
+					if (p.expression != null){
+						var  i = 0;
+						while (i < k){
+							result = result + "0 ";
+							i = i + 1;
+						}
+						k = k + 1;
+						result = result + p.expression.toStr + " ";
+						if (p.identifier != null)
+							result = result + "; " + p.identifier + "\n";
+					}
+				}		
+			if (printFix) result = result + "FIX\n";
 		}
 		
-		if (v.block_block != null){
+		if (v.blockBlock != null){
 			var printFix = false;
-			if (v.block_block.block != null){
-				for (a: v.block_block.block.arguments.arguments){
-					if (a.identifier != null){ 
-						if (a.isArgumentExpression) {
-							if (a.expression != null){
-								result = result + a.expression.toStr + " ; " + a.identifier + "\n";
-							}
+			for (a: v.blockBlock.arguments.arguments){
+				if (a.identifier != null){ 
+					if (a.identifier.equalsIgnoreCase("fix")) 
+						if (a.expression != null){
+							printFix = (a.expression.toStr.equalsIgnoreCase("yes") 
+							|| a.expression.toStr.equalsIgnoreCase("true") ||
+							a.expression.toStr.equalsIgnoreCase("1"));		
 						}
-						if (a.identifier.equalsIgnoreCase("fix")) 
-							printFix = true;
-					} else {
-						if (a.expression != null)
-							result = result + a.expression.toStr + " ";
+				}
+			}
+			if (v.blockBlock.parameters != null)
+				for (p: v.blockBlock.parameters.arguments) {
+					if (p.expression != null){
+						result = result + p.expression.toStr + " ";
+						if (p.identifier != null)
+							result = result + "; " + p.identifier + "\n";
 					}
 				}
-				if (printFix) result = result + "\nFIX\n";
-			}
+			if (printFix) result = result + "FIX\n";
 		}		
 		return '''«result»'''; 
 	}
 
 	//Print $SIGMA
-	def printSigma(block_statement s){
-		if (s.variable_declaration != null)
-			if (s.variable_declaration.expression != null){		
-				if (s.variable_declaration.expression.list != null){
-					var name = s.variable_declaration.identifier.toStr;
-					//SIGMA <=> EPS?	
-					if (eps_vars.get("eps_" + name) != null){
-					val value = s.variable_declaration.expression.list.getVariableAttribute("value").toString;
-						val fixed = s.variable_declaration.expression.list.getVariableAttribute("fix");
-						var printFix = false;
-						if (fixed != null){
-							printFix = (fixed.toString.equalsIgnoreCase("yes") || fixed.toString.equalsIgnoreCase("true") ||
-								fixed.toString.equalsIgnoreCase("1"));						
-						}
-						if (value == null) return "";
-						'''«value»«IF printFix» FIX«ENDIF» ; «name»'''
-					}
+	def printSigma(ParameterDeclaration s){
+			if (s.list != null)
+			{
+				var name = s.identifier;
+				//SIGMA <=> EPS?	
+				if (eps_vars.get("eps_" + name) != null)
+			 	{
+					val value = s.list.getAttribute("value");
+					val fixed = s.list.getAttribute("fix");
+					var printFix = (fixed.equalsIgnoreCase("yes") || fixed.equalsIgnoreCase("true") ||
+							fixed.equalsIgnoreCase("1"));		
+					if (value.equals("")) return "";							
+					'''«value»«IF printFix» FIX«ENDIF» ; «name»'''
 				}
 			}
 	}
 	
 	//Print $OMEGA
-	def printOmega(block_statement s){
-		if (s.variable_declaration != null)
-			if (s.variable_declaration.expression != null){		
-				if (s.variable_declaration.expression.list != null){
-					var name = s.variable_declaration.identifier.toStr;
-					//OMEGA <=> ETA?	
-					if (eta_vars.get("eta_" + name) != null){
-						val value = s.variable_declaration.expression.list.getVariableAttribute("value").toString;
-						var fixed = s.variable_declaration.expression.list.getVariableAttribute("fix");
-						var printFix = false;
-						if (fixed != null){
-							printFix = (fixed.toString.equalsIgnoreCase("yes") || fixed.toString.equalsIgnoreCase("true") 
-								|| fixed.toString.equalsIgnoreCase("1"));						
-						};
-						if (value == null) return "";
-						'''«value»«IF printFix» FIX«ENDIF» ; «name»'''
-					}
-				}
+	def printOmega(ParameterDeclaration s){
+		if (s.list != null){		
+			var name = s.identifier;
+			//OMEGA <=> ETA?	
+			if (eta_vars.get("eta_" + name) != null){
+				val value = s.list.getAttribute("value");
+				var fixed = s.list.getAttribute("fix");
+				var printFix = (fixed.equalsIgnoreCase("yes") || fixed.equalsIgnoreCase("true") 
+						|| fixed.equalsIgnoreCase("1"));
+				if (value.equals("")) return "";								
+				'''«value»«IF printFix» FIX«ENDIF» ; «name»'''
 			}
+		}
 	}
 	
 	
 	//Find attributes in STRUCTURAL_VARIABLES and form an NM-TRAN statement
-	def printTheta(block_statement s){
-		if (s.variable_declaration != null)
-			if (s.variable_declaration.expression != null){		
-				if (s.variable_declaration.expression.list != null){
-					var name = s.variable_declaration.identifier.toStr;
-					val value = s.variable_declaration.expression.list.getVariableAttribute("value").toString;
-					val lo = s.variable_declaration.expression.list.getVariableAttribute("lo");
-					val hi = s.variable_declaration.expression.list.getVariableAttribute("hi");
-					val fixed = s.variable_declaration.expression.list.getVariableAttribute("fix");
-					var printFix = false;
-					if (fixed != null){
-						printFix = (fixed.toString.equalsIgnoreCase("yes") || fixed.toString.equalsIgnoreCase("true") ||
-							fixed.toString.equalsIgnoreCase("1"));						
-					}
-					if (value == null) return "";
-					if (lo == null && hi == null) return '''«value»«IF printFix» FIX«ENDIF» ; «name»'''
-					if (lo == null) return '''(-INF, «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
-					if (hi == null) return '''(«lo», «value», INF)«IF printFix» FIX«ENDIF» ; «name»'''
-					return '''(«lo», «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
-				}
-			}
+	def printTheta(ParameterDeclaration s){
+		if (s.list != null){		
+			var name = s.identifier;
+			val value = s.list.getAttribute("value");
+			val lo = s.list.getAttribute("lo");
+			val hi = s.list.getAttribute("hi");
+			val fixed = s.list.getAttribute("fix");
+			var printFix = (fixed.equalsIgnoreCase("yes") || fixed.equalsIgnoreCase("true") ||
+					fixed.equalsIgnoreCase("1"));						
+			if (value.equals("")) return "";
+			if (lo.equals("") && hi.equals("")) return '''«value»«IF printFix» FIX«ENDIF» ; «name»'''
+			if (lo.equals("")) return '''(-INF, «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
+			if (hi.equals("")) return '''(«lo», «value», INF)«IF printFix» FIX«ENDIF» ; «name»'''
+			return '''(«lo», «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
+		}
 	}
 		
 	
@@ -796,26 +804,33 @@ var task_obj task_object = null; //Store the reference to task object
 	}
 	
 	//Print verbatim target specific code
-	override print(target_block b)'''
+	override print(TargetBlock b)'''
 	«IF b.identifier.equalsIgnoreCase("NMTRAN")»
-	«var printedCode = b.external_code.substring(3, b.external_code.length - 3)»
+	«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
 	«printedCode»
 	«ENDIF»
 	'''	
 	
 	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
-	override print(statement s)'''
-		«IF s.block != null»
-			«s.block.print»
-		«ENDIF»
-		«IF s.par_expression != null»
-			IF «s.par_expression.print» THEN
-				«s.if_statement.print»
-			«IF s.else_statement != null»
+	override print(ConditionalStatement s)'''
+		«IF s.parExpression != null»
+			IF «s.parExpression.print» THEN
+				«IF s.ifStatement != null»
+					«s.ifStatement.print»
+				«ENDIF»
+				«IF s.ifBlock != null»
+					«s.ifBlock.print»
+				«ENDIF»
+			«IF s.elseStatement != null || s.elseBlock != null»
 			ELSE 
-				«s.else_statement.print»
+				«IF s.elseStatement != null»
+					«s.elseStatement.print»
+				«ENDIF»
+				«IF s.elseBlock != null»
+					«s.elseBlock.print»
+				«ENDIF»
 			«ENDIF»
-			ENDIF
 		«ENDIF»
 	'''
+
 }

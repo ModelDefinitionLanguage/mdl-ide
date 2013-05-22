@@ -64,79 +64,105 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
   {
     switch (eClass.getClassifierID())
     {
-      case MdlPackage.MCL: return createmcl();
-      case MdlPackage.MCL_OBJ: return createmcl_obj();
-      case MdlPackage.MODEL_OBJ: return createmodel_obj();
-      case MdlPackage.PARAM_OBJ: return createparam_obj();
-      case MdlPackage.DATA_OBJ: return createdata_obj();
-      case MdlPackage.TASK_OBJ: return createtask_obj();
-      case MdlPackage.TEL_OBJ: return createtel_obj();
-      case MdlPackage.MODEL_OBJ_BLOCK: return createmodel_obj_block();
-      case MdlPackage.INDIVIDUAL_MODEL_OBJ_BLOCK: return createindividual_model_obj_block();
-      case MdlPackage.MODEL_PREDICTION_OBJ_BLOCK: return createmodel_prediction_obj_block();
-      case MdlPackage.RANDOM_VARIABLE_DEFINITION_BLOCK: return createrandom_variable_definition_block();
-      case MdlPackage.INPUT_VARIABLES_BLOCK: return createinput_variables_block();
-      case MdlPackage.STRUCTURAL_PARAMETERS_BLOCK: return createstructural_parameters_block();
-      case MdlPackage.VARIABILITY_PARAMETERS_BLOCK: return createvariability_parameters_block();
-      case MdlPackage.OUTPUT_VARIABLES_BLOCK: return createoutput_variables_block();
-      case MdlPackage.GROUP_VARIABLES: return creategroup_variables();
-      case MdlPackage.OBSERVATION_BLOCK: return createobservation_block();
-      case MdlPackage.ESTIMATION_BLOCK: return createestimation_block();
-      case MdlPackage.SIMULATION_BLOCK: return createsimulation_block();
-      case MdlPackage.PARAM_OBJ_BLOCK: return createparam_obj_block();
-      case MdlPackage.STRUCTURAL_BLOCK: return createstructural_block();
-      case MdlPackage.VARIABILITY_BLOCK: return createvariability_block();
-      case MdlPackage.DATA_OBJ_BLOCK: return createdata_obj_block();
-      case MdlPackage.HEADER_BLOCK: return createheader_block();
-      case MdlPackage.FILE_BLOCK: return createfile_block();
-      case MdlPackage.TASK_OBJ_BLOCK: return createtask_obj_block();
-      case MdlPackage.PARAMETERS_BLOCK: return createparameters_block();
-      case MdlPackage.DATA_BLOCK: return createdata_block();
-      case MdlPackage.MODEL_BLOCK: return createmodel_block();
-      case MdlPackage.MODEL_BLOCK_STATEMENT: return createmodel_block_statement();
-      case MdlPackage.LIBRARY_BLOCK: return createlibrary_block();
-      case MdlPackage.ODE_BLOCK: return createode_block();
-      case MdlPackage.VARIABILITY_BLOCK_CONTENT: return createvariability_block_content();
-      case MdlPackage.VARIABILITY_BLOCK_STATEMENT: return createvariability_block_statement();
-      case MdlPackage.BLOCK_SUBBLOCK: return createblock_subblock();
-      case MdlPackage.DIAG_SUBBLOCK: return creatediag_subblock();
-      case MdlPackage.VARIABILITY_SUBBLOCK: return createvariability_subblock();
-      case MdlPackage.FILE_BLOCK_CONTENT: return createfile_block_content();
-      case MdlPackage.FILE_BLOCK_STATEMENT: return createfile_block_statement();
-      case MdlPackage.INLINE_BLOCK: return createinline_block();
-      case MdlPackage.DESIGN_BLOCK: return createdesign_block();
-      case MdlPackage.RSSCRIPT_BLOCK: return creatersscript_block();
-      case MdlPackage.INLINE_BLOCK_CONTENT: return createinline_block_content();
-      case MdlPackage.FUNCTION_DECLARATION: return createfunction_declaration();
-      case MdlPackage.FUNCTION_BODY: return createfunction_body();
-      case MdlPackage.FUNCTION_SUBBLOCK: return createfunction_subblock();
-      case MdlPackage.FORMAL_ARGUMENTS: return createformal_arguments();
-      case MdlPackage.FUNCTION_CALL: return createfunction_call();
-      case MdlPackage.BLOCK: return createblock();
-      case MdlPackage.BLOCK_STATEMENT: return createblock_statement();
-      case MdlPackage.VERBATIM_BLOCK: return createverbatim_block();
-      case MdlPackage.TARGET_BLOCK: return createtarget_block();
-      case MdlPackage.VARIABLE_DECLARATION: return createvariable_declaration();
-      case MdlPackage.ANY_EXPRESSION: return createany_expression();
-      case MdlPackage.EXPRESSION: return createexpression();
-      case MdlPackage.LIST: return createlist();
-      case MdlPackage.ODE_LIST: return createode_list();
-      case MdlPackage.RANDOM_LIST: return createrandom_list();
-      case MdlPackage.ARGUMENTS: return createarguments();
-      case MdlPackage.ARGUMENT: return createargument();
-      case MdlPackage.STATEMENT: return createstatement();
-      case MdlPackage.PAR_EXPRESSION: return createpar_expression();
-      case MdlPackage.CONDITIONAL_EXPRESSION: return createconditional_expression();
-      case MdlPackage.CONDITIONAL_OR_EXPRESSION: return createconditional_or_expression();
-      case MdlPackage.CONDITIONAL_AND_EXPRESSION: return createconditional_and_expression();
-      case MdlPackage.RELATIONAL_EXPRESSION: return createrelational_expression();
-      case MdlPackage.ADDITIVE_EXPRESSION: return createadditive_expression();
-      case MdlPackage.MULTIPLICATIVE_EXPRESSION: return createmultiplicative_expression();
-      case MdlPackage.POWER_EXPRESSION: return createpower_expression();
-      case MdlPackage.UNARY_EXPRESSION: return createunary_expression();
-      case MdlPackage.PRIMARY: return createprimary();
-      case MdlPackage.VARIABLE_NAME: return createvariable_name();
-      case MdlPackage.SELECTOR: return createselector();
+      case MdlPackage.MCL: return createMcl();
+      case MdlPackage.MCL_OBJECT: return createMclObject();
+      case MdlPackage.MODEL_OBJECT: return createModelObject();
+      case MdlPackage.PARAMETER_OBJECT: return createParameterObject();
+      case MdlPackage.DATA_OBJECT: return createDataObject();
+      case MdlPackage.TASK_OBJECT: return createTaskObject();
+      case MdlPackage.TEL_OBJECT: return createTELObject();
+      case MdlPackage.MODEL_OBJECT_BLOCK: return createModelObjectBlock();
+      case MdlPackage.INDIVIDUAL_VARIABLES_BLOCK: return createIndividualVariablesBlock();
+      case MdlPackage.MODEL_PREDICTION_BLOCK: return createModelPredictionBlock();
+      case MdlPackage.RANDOM_VARIABLE_DEFINITION_BLOCK: return createRandomVariableDefinitionBlock();
+      case MdlPackage.INPUT_VARIABLES_BLOCK: return createInputVariablesBlock();
+      case MdlPackage.STRUCTURAL_PARAMETERS_BLOCK: return createStructuralParametersBlock();
+      case MdlPackage.VARIABILITY_PARAMETERS_BLOCK: return createVariabilityParametersBlock();
+      case MdlPackage.OUTPUT_VARIABLES_BLOCK: return createOutputVariablesBlock();
+      case MdlPackage.GROUP_VARIABLES_BLOCK: return createGroupVariablesBlock();
+      case MdlPackage.OBSERVATION_BLOCK: return createObservationBlock();
+      case MdlPackage.ESTIMATION_BLOCK: return createEstimationBlock();
+      case MdlPackage.SIMULATION_BLOCK: return createSimulationBlock();
+      case MdlPackage.PARAMETER_OBJECT_BLOCK: return createParameterObjectBlock();
+      case MdlPackage.STRUCTURAL_BLOCK: return createStructuralBlock();
+      case MdlPackage.VARIABILITY_BLOCK: return createVariabilityBlock();
+      case MdlPackage.PRIOR_PARAMETERS_BLOCK: return createPriorParametersBlock();
+      case MdlPackage.DATA_OBJECT_BLOCK: return createDataObjectBlock();
+      case MdlPackage.HEADER_BLOCK: return createHeaderBlock();
+      case MdlPackage.FILE_BLOCK: return createFileBlock();
+      case MdlPackage.TASK_OBJECT_BLOCK: return createTaskObjectBlock();
+      case MdlPackage.PARAMETER_BLOCK: return createParameterBlock();
+      case MdlPackage.DATA_BLOCK: return createDataBlock();
+      case MdlPackage.DATA_BLOCK_STATEMENT: return createDataBlockStatement();
+      case MdlPackage.IGNORE_LIST: return createIgnoreList();
+      case MdlPackage.ACCEPT_LIST: return createAcceptList();
+      case MdlPackage.DROP_LIST: return createDropList();
+      case MdlPackage.MODEL_BLOCK: return createModelBlock();
+      case MdlPackage.MODEL_BLOCK_STATEMENT: return createModelBlockStatement();
+      case MdlPackage.ADD_LIST: return createAddList();
+      case MdlPackage.REMOVE_LIST: return createRemoveList();
+      case MdlPackage.SYMBOL_LIST: return createSymbolList();
+      case MdlPackage.MODEL_PREDICTION_BLOCK_STATEMENT: return createModelPredictionBlockStatement();
+      case MdlPackage.LIBRARY_BLOCK: return createLibraryBlock();
+      case MdlPackage.ODE_BLOCK: return createOdeBlock();
+      case MdlPackage.GROUP_VARIABLES_BLOCK_STATEMENT: return createGroupVariablesBlockStatement();
+      case MdlPackage.MIXTURE_BLOCK: return createMixtureBlock();
+      case MdlPackage.VARIABILITY_BLOCK_STATEMENT: return createVariabilityBlockStatement();
+      case MdlPackage.BLOCK_BLOCK: return createBlockBlock();
+      case MdlPackage.DIAG_BLOCK: return createDiagBlock();
+      case MdlPackage.SAME_BLOCK: return createSameBlock();
+      case MdlPackage.FILE_BLOCK_STATEMENT: return createFileBlockStatement();
+      case MdlPackage.INLINE_BLOCK: return createInlineBlock();
+      case MdlPackage.DESIGN_BLOCK: return createDesignBlock();
+      case MdlPackage.DESIGN_BLOCK_STATEMENT: return createDesignBlockStatement();
+      case MdlPackage.VARIABLE_LIST: return createVariableList();
+      case MdlPackage.RSCRIPT_BLOCK: return createRScriptBlock();
+      case MdlPackage.RSCRIPT_BLOCK_STATEMENT: return createRScriptBlockStatement();
+      case MdlPackage.TASK_FUNCTION_DECLARATION: return createTaskFunctionDeclaration();
+      case MdlPackage.TASK_FUNCTION_BODY: return createTaskFunctionBody();
+      case MdlPackage.TASK_FUNCTION_BLOCK: return createTaskFunctionBlock();
+      case MdlPackage.ESTIMATE_TASK: return createEstimateTask();
+      case MdlPackage.SIMULATE_TASK: return createSimulateTask();
+      case MdlPackage.EXECUTE_TASK: return createExecuteTask();
+      case MdlPackage.FORMAL_ARGUMENTS: return createFormalArguments();
+      case MdlPackage.FUNCTION_CALL: return createFunctionCall();
+      case MdlPackage.BLOCK_STATEMENT: return createBlockStatement();
+      case MdlPackage.VERBATIM_BLOCK: return createVerbatimBlock();
+      case MdlPackage.TARGET_BLOCK: return createTargetBlock();
+      case MdlPackage.SYMBOL_MODIFICATION: return createSymbolModification();
+      case MdlPackage.PARAMETER_DECLARATION: return createParameterDeclaration();
+      case MdlPackage.SYMBOL_DECLARATION: return createSymbolDeclaration();
+      case MdlPackage.ENUM_TYPE: return createEnumType();
+      case MdlPackage.MISSING: return createMissing();
+      case MdlPackage.LIKELYHOOD: return createLikelyhood();
+      case MdlPackage.LEVEL_TYPE: return createLevelType();
+      case MdlPackage.CATEGORICAL: return createCategorical();
+      case MdlPackage.CONTINUOUS: return createContinuous();
+      case MdlPackage.COVARIATE: return createCovariate();
+      case MdlPackage.DISTRIBUTION: return createDistribution();
+      case MdlPackage.ANY_EXPRESSION: return createAnyExpression();
+      case MdlPackage.EXPRESSION: return createExpression();
+      case MdlPackage.LIST: return createList();
+      case MdlPackage.ODE_LIST: return createOdeList();
+      case MdlPackage.RANDOM_LIST: return createRandomList();
+      case MdlPackage.ARGUMENTS: return createArguments();
+      case MdlPackage.ARGUMENT: return createArgument();
+      case MdlPackage.CONDITIONAL_STATEMENT: return createConditionalStatement();
+      case MdlPackage.BLOCK: return createBlock();
+      case MdlPackage.PAR_EXPRESSION: return createParExpression();
+      case MdlPackage.CONDITIONAL_EXPRESSION: return createConditionalExpression();
+      case MdlPackage.OR_EXPRESSION: return createOrExpression();
+      case MdlPackage.AND_EXPRESSION: return createAndExpression();
+      case MdlPackage.LOGICAL_EXPRESSION: return createLogicalExpression();
+      case MdlPackage.ADDITIVE_EXPRESSION: return createAdditiveExpression();
+      case MdlPackage.MULTIPLICATIVE_EXPRESSION: return createMultiplicativeExpression();
+      case MdlPackage.POWER_EXPRESSION: return createPowerExpression();
+      case MdlPackage.UNARY_EXPRESSION: return createUnaryExpression();
+      case MdlPackage.PRIMARY: return createPrimary();
+      case MdlPackage.VECTOR: return createVector();
+      case MdlPackage.FULLY_QUALIFIED_SYMBOL_NAME: return createFullyQualifiedSymbolName();
+      case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME: return createFullyQualifiedArgumentName();
+      case MdlPackage.OBJECT_NAME: return createObjectName();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -147,9 +173,9 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public mcl createmcl()
+  public Mcl createMcl()
   {
-    mclImpl mcl = new mclImpl();
+    MclImpl mcl = new MclImpl();
     return mcl;
   }
 
@@ -158,10 +184,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public mcl_obj createmcl_obj()
+  public MclObject createMclObject()
   {
-    mcl_objImpl mcl_obj = new mcl_objImpl();
-    return mcl_obj;
+    MclObjectImpl mclObject = new MclObjectImpl();
+    return mclObject;
   }
 
   /**
@@ -169,10 +195,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public model_obj createmodel_obj()
+  public ModelObject createModelObject()
   {
-    model_objImpl model_obj = new model_objImpl();
-    return model_obj;
+    ModelObjectImpl modelObject = new ModelObjectImpl();
+    return modelObject;
   }
 
   /**
@@ -180,10 +206,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public param_obj createparam_obj()
+  public ParameterObject createParameterObject()
   {
-    param_objImpl param_obj = new param_objImpl();
-    return param_obj;
+    ParameterObjectImpl parameterObject = new ParameterObjectImpl();
+    return parameterObject;
   }
 
   /**
@@ -191,10 +217,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public data_obj createdata_obj()
+  public DataObject createDataObject()
   {
-    data_objImpl data_obj = new data_objImpl();
-    return data_obj;
+    DataObjectImpl dataObject = new DataObjectImpl();
+    return dataObject;
   }
 
   /**
@@ -202,10 +228,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public task_obj createtask_obj()
+  public TaskObject createTaskObject()
   {
-    task_objImpl task_obj = new task_objImpl();
-    return task_obj;
+    TaskObjectImpl taskObject = new TaskObjectImpl();
+    return taskObject;
   }
 
   /**
@@ -213,10 +239,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public tel_obj createtel_obj()
+  public TELObject createTELObject()
   {
-    tel_objImpl tel_obj = new tel_objImpl();
-    return tel_obj;
+    TELObjectImpl telObject = new TELObjectImpl();
+    return telObject;
   }
 
   /**
@@ -224,10 +250,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public model_obj_block createmodel_obj_block()
+  public ModelObjectBlock createModelObjectBlock()
   {
-    model_obj_blockImpl model_obj_block = new model_obj_blockImpl();
-    return model_obj_block;
+    ModelObjectBlockImpl modelObjectBlock = new ModelObjectBlockImpl();
+    return modelObjectBlock;
   }
 
   /**
@@ -235,10 +261,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public individual_model_obj_block createindividual_model_obj_block()
+  public IndividualVariablesBlock createIndividualVariablesBlock()
   {
-    individual_model_obj_blockImpl individual_model_obj_block = new individual_model_obj_blockImpl();
-    return individual_model_obj_block;
+    IndividualVariablesBlockImpl individualVariablesBlock = new IndividualVariablesBlockImpl();
+    return individualVariablesBlock;
   }
 
   /**
@@ -246,10 +272,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public model_prediction_obj_block createmodel_prediction_obj_block()
+  public ModelPredictionBlock createModelPredictionBlock()
   {
-    model_prediction_obj_blockImpl model_prediction_obj_block = new model_prediction_obj_blockImpl();
-    return model_prediction_obj_block;
+    ModelPredictionBlockImpl modelPredictionBlock = new ModelPredictionBlockImpl();
+    return modelPredictionBlock;
   }
 
   /**
@@ -257,10 +283,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public random_variable_definition_block createrandom_variable_definition_block()
+  public RandomVariableDefinitionBlock createRandomVariableDefinitionBlock()
   {
-    random_variable_definition_blockImpl random_variable_definition_block = new random_variable_definition_blockImpl();
-    return random_variable_definition_block;
+    RandomVariableDefinitionBlockImpl randomVariableDefinitionBlock = new RandomVariableDefinitionBlockImpl();
+    return randomVariableDefinitionBlock;
   }
 
   /**
@@ -268,10 +294,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public input_variables_block createinput_variables_block()
+  public InputVariablesBlock createInputVariablesBlock()
   {
-    input_variables_blockImpl input_variables_block = new input_variables_blockImpl();
-    return input_variables_block;
+    InputVariablesBlockImpl inputVariablesBlock = new InputVariablesBlockImpl();
+    return inputVariablesBlock;
   }
 
   /**
@@ -279,10 +305,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public structural_parameters_block createstructural_parameters_block()
+  public StructuralParametersBlock createStructuralParametersBlock()
   {
-    structural_parameters_blockImpl structural_parameters_block = new structural_parameters_blockImpl();
-    return structural_parameters_block;
+    StructuralParametersBlockImpl structuralParametersBlock = new StructuralParametersBlockImpl();
+    return structuralParametersBlock;
   }
 
   /**
@@ -290,10 +316,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public variability_parameters_block createvariability_parameters_block()
+  public VariabilityParametersBlock createVariabilityParametersBlock()
   {
-    variability_parameters_blockImpl variability_parameters_block = new variability_parameters_blockImpl();
-    return variability_parameters_block;
+    VariabilityParametersBlockImpl variabilityParametersBlock = new VariabilityParametersBlockImpl();
+    return variabilityParametersBlock;
   }
 
   /**
@@ -301,10 +327,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public output_variables_block createoutput_variables_block()
+  public OutputVariablesBlock createOutputVariablesBlock()
   {
-    output_variables_blockImpl output_variables_block = new output_variables_blockImpl();
-    return output_variables_block;
+    OutputVariablesBlockImpl outputVariablesBlock = new OutputVariablesBlockImpl();
+    return outputVariablesBlock;
   }
 
   /**
@@ -312,10 +338,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public group_variables creategroup_variables()
+  public GroupVariablesBlock createGroupVariablesBlock()
   {
-    group_variablesImpl group_variables = new group_variablesImpl();
-    return group_variables;
+    GroupVariablesBlockImpl groupVariablesBlock = new GroupVariablesBlockImpl();
+    return groupVariablesBlock;
   }
 
   /**
@@ -323,10 +349,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public observation_block createobservation_block()
+  public ObservationBlock createObservationBlock()
   {
-    observation_blockImpl observation_block = new observation_blockImpl();
-    return observation_block;
+    ObservationBlockImpl observationBlock = new ObservationBlockImpl();
+    return observationBlock;
   }
 
   /**
@@ -334,10 +360,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public estimation_block createestimation_block()
+  public EstimationBlock createEstimationBlock()
   {
-    estimation_blockImpl estimation_block = new estimation_blockImpl();
-    return estimation_block;
+    EstimationBlockImpl estimationBlock = new EstimationBlockImpl();
+    return estimationBlock;
   }
 
   /**
@@ -345,10 +371,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public simulation_block createsimulation_block()
+  public SimulationBlock createSimulationBlock()
   {
-    simulation_blockImpl simulation_block = new simulation_blockImpl();
-    return simulation_block;
+    SimulationBlockImpl simulationBlock = new SimulationBlockImpl();
+    return simulationBlock;
   }
 
   /**
@@ -356,10 +382,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public param_obj_block createparam_obj_block()
+  public ParameterObjectBlock createParameterObjectBlock()
   {
-    param_obj_blockImpl param_obj_block = new param_obj_blockImpl();
-    return param_obj_block;
+    ParameterObjectBlockImpl parameterObjectBlock = new ParameterObjectBlockImpl();
+    return parameterObjectBlock;
   }
 
   /**
@@ -367,10 +393,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public structural_block createstructural_block()
+  public StructuralBlock createStructuralBlock()
   {
-    structural_blockImpl structural_block = new structural_blockImpl();
-    return structural_block;
+    StructuralBlockImpl structuralBlock = new StructuralBlockImpl();
+    return structuralBlock;
   }
 
   /**
@@ -378,10 +404,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public variability_block createvariability_block()
+  public VariabilityBlock createVariabilityBlock()
   {
-    variability_blockImpl variability_block = new variability_blockImpl();
-    return variability_block;
+    VariabilityBlockImpl variabilityBlock = new VariabilityBlockImpl();
+    return variabilityBlock;
   }
 
   /**
@@ -389,10 +415,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public data_obj_block createdata_obj_block()
+  public PriorParametersBlock createPriorParametersBlock()
   {
-    data_obj_blockImpl data_obj_block = new data_obj_blockImpl();
-    return data_obj_block;
+    PriorParametersBlockImpl priorParametersBlock = new PriorParametersBlockImpl();
+    return priorParametersBlock;
   }
 
   /**
@@ -400,10 +426,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public header_block createheader_block()
+  public DataObjectBlock createDataObjectBlock()
   {
-    header_blockImpl header_block = new header_blockImpl();
-    return header_block;
+    DataObjectBlockImpl dataObjectBlock = new DataObjectBlockImpl();
+    return dataObjectBlock;
   }
 
   /**
@@ -411,10 +437,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public file_block createfile_block()
+  public HeaderBlock createHeaderBlock()
   {
-    file_blockImpl file_block = new file_blockImpl();
-    return file_block;
+    HeaderBlockImpl headerBlock = new HeaderBlockImpl();
+    return headerBlock;
   }
 
   /**
@@ -422,10 +448,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public task_obj_block createtask_obj_block()
+  public FileBlock createFileBlock()
   {
-    task_obj_blockImpl task_obj_block = new task_obj_blockImpl();
-    return task_obj_block;
+    FileBlockImpl fileBlock = new FileBlockImpl();
+    return fileBlock;
   }
 
   /**
@@ -433,10 +459,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public parameters_block createparameters_block()
+  public TaskObjectBlock createTaskObjectBlock()
   {
-    parameters_blockImpl parameters_block = new parameters_blockImpl();
-    return parameters_block;
+    TaskObjectBlockImpl taskObjectBlock = new TaskObjectBlockImpl();
+    return taskObjectBlock;
   }
 
   /**
@@ -444,10 +470,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public data_block createdata_block()
+  public ParameterBlock createParameterBlock()
   {
-    data_blockImpl data_block = new data_blockImpl();
-    return data_block;
+    ParameterBlockImpl parameterBlock = new ParameterBlockImpl();
+    return parameterBlock;
   }
 
   /**
@@ -455,10 +481,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public model_block createmodel_block()
+  public DataBlock createDataBlock()
   {
-    model_blockImpl model_block = new model_blockImpl();
-    return model_block;
+    DataBlockImpl dataBlock = new DataBlockImpl();
+    return dataBlock;
   }
 
   /**
@@ -466,10 +492,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public model_block_statement createmodel_block_statement()
+  public DataBlockStatement createDataBlockStatement()
   {
-    model_block_statementImpl model_block_statement = new model_block_statementImpl();
-    return model_block_statement;
+    DataBlockStatementImpl dataBlockStatement = new DataBlockStatementImpl();
+    return dataBlockStatement;
   }
 
   /**
@@ -477,10 +503,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public library_block createlibrary_block()
+  public IgnoreList createIgnoreList()
   {
-    library_blockImpl library_block = new library_blockImpl();
-    return library_block;
+    IgnoreListImpl ignoreList = new IgnoreListImpl();
+    return ignoreList;
   }
 
   /**
@@ -488,10 +514,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public ode_block createode_block()
+  public AcceptList createAcceptList()
   {
-    ode_blockImpl ode_block = new ode_blockImpl();
-    return ode_block;
+    AcceptListImpl acceptList = new AcceptListImpl();
+    return acceptList;
   }
 
   /**
@@ -499,10 +525,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public variability_block_content createvariability_block_content()
+  public DropList createDropList()
   {
-    variability_block_contentImpl variability_block_content = new variability_block_contentImpl();
-    return variability_block_content;
+    DropListImpl dropList = new DropListImpl();
+    return dropList;
   }
 
   /**
@@ -510,10 +536,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public variability_block_statement createvariability_block_statement()
+  public ModelBlock createModelBlock()
   {
-    variability_block_statementImpl variability_block_statement = new variability_block_statementImpl();
-    return variability_block_statement;
+    ModelBlockImpl modelBlock = new ModelBlockImpl();
+    return modelBlock;
   }
 
   /**
@@ -521,10 +547,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public block_subblock createblock_subblock()
+  public ModelBlockStatement createModelBlockStatement()
   {
-    block_subblockImpl block_subblock = new block_subblockImpl();
-    return block_subblock;
+    ModelBlockStatementImpl modelBlockStatement = new ModelBlockStatementImpl();
+    return modelBlockStatement;
   }
 
   /**
@@ -532,10 +558,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public diag_subblock creatediag_subblock()
+  public AddList createAddList()
   {
-    diag_subblockImpl diag_subblock = new diag_subblockImpl();
-    return diag_subblock;
+    AddListImpl addList = new AddListImpl();
+    return addList;
   }
 
   /**
@@ -543,10 +569,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public variability_subblock createvariability_subblock()
+  public RemoveList createRemoveList()
   {
-    variability_subblockImpl variability_subblock = new variability_subblockImpl();
-    return variability_subblock;
+    RemoveListImpl removeList = new RemoveListImpl();
+    return removeList;
   }
 
   /**
@@ -554,10 +580,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public file_block_content createfile_block_content()
+  public SymbolList createSymbolList()
   {
-    file_block_contentImpl file_block_content = new file_block_contentImpl();
-    return file_block_content;
+    SymbolListImpl symbolList = new SymbolListImpl();
+    return symbolList;
   }
 
   /**
@@ -565,10 +591,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public file_block_statement createfile_block_statement()
+  public ModelPredictionBlockStatement createModelPredictionBlockStatement()
   {
-    file_block_statementImpl file_block_statement = new file_block_statementImpl();
-    return file_block_statement;
+    ModelPredictionBlockStatementImpl modelPredictionBlockStatement = new ModelPredictionBlockStatementImpl();
+    return modelPredictionBlockStatement;
   }
 
   /**
@@ -576,10 +602,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public inline_block createinline_block()
+  public LibraryBlock createLibraryBlock()
   {
-    inline_blockImpl inline_block = new inline_blockImpl();
-    return inline_block;
+    LibraryBlockImpl libraryBlock = new LibraryBlockImpl();
+    return libraryBlock;
   }
 
   /**
@@ -587,10 +613,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public design_block createdesign_block()
+  public OdeBlock createOdeBlock()
   {
-    design_blockImpl design_block = new design_blockImpl();
-    return design_block;
+    OdeBlockImpl odeBlock = new OdeBlockImpl();
+    return odeBlock;
   }
 
   /**
@@ -598,10 +624,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public rsscript_block creatersscript_block()
+  public GroupVariablesBlockStatement createGroupVariablesBlockStatement()
   {
-    rsscript_blockImpl rsscript_block = new rsscript_blockImpl();
-    return rsscript_block;
+    GroupVariablesBlockStatementImpl groupVariablesBlockStatement = new GroupVariablesBlockStatementImpl();
+    return groupVariablesBlockStatement;
   }
 
   /**
@@ -609,10 +635,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public inline_block_content createinline_block_content()
+  public MixtureBlock createMixtureBlock()
   {
-    inline_block_contentImpl inline_block_content = new inline_block_contentImpl();
-    return inline_block_content;
+    MixtureBlockImpl mixtureBlock = new MixtureBlockImpl();
+    return mixtureBlock;
   }
 
   /**
@@ -620,10 +646,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public function_declaration createfunction_declaration()
+  public VariabilityBlockStatement createVariabilityBlockStatement()
   {
-    function_declarationImpl function_declaration = new function_declarationImpl();
-    return function_declaration;
+    VariabilityBlockStatementImpl variabilityBlockStatement = new VariabilityBlockStatementImpl();
+    return variabilityBlockStatement;
   }
 
   /**
@@ -631,10 +657,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public function_body createfunction_body()
+  public BlockBlock createBlockBlock()
   {
-    function_bodyImpl function_body = new function_bodyImpl();
-    return function_body;
+    BlockBlockImpl blockBlock = new BlockBlockImpl();
+    return blockBlock;
   }
 
   /**
@@ -642,10 +668,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public function_subblock createfunction_subblock()
+  public DiagBlock createDiagBlock()
   {
-    function_subblockImpl function_subblock = new function_subblockImpl();
-    return function_subblock;
+    DiagBlockImpl diagBlock = new DiagBlockImpl();
+    return diagBlock;
   }
 
   /**
@@ -653,10 +679,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public formal_arguments createformal_arguments()
+  public SameBlock createSameBlock()
   {
-    formal_argumentsImpl formal_arguments = new formal_argumentsImpl();
-    return formal_arguments;
+    SameBlockImpl sameBlock = new SameBlockImpl();
+    return sameBlock;
   }
 
   /**
@@ -664,10 +690,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public function_call createfunction_call()
+  public FileBlockStatement createFileBlockStatement()
   {
-    function_callImpl function_call = new function_callImpl();
-    return function_call;
+    FileBlockStatementImpl fileBlockStatement = new FileBlockStatementImpl();
+    return fileBlockStatement;
   }
 
   /**
@@ -675,10 +701,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public block createblock()
+  public InlineBlock createInlineBlock()
   {
-    blockImpl block = new blockImpl();
-    return block;
+    InlineBlockImpl inlineBlock = new InlineBlockImpl();
+    return inlineBlock;
   }
 
   /**
@@ -686,10 +712,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public block_statement createblock_statement()
+  public DesignBlock createDesignBlock()
   {
-    block_statementImpl block_statement = new block_statementImpl();
-    return block_statement;
+    DesignBlockImpl designBlock = new DesignBlockImpl();
+    return designBlock;
   }
 
   /**
@@ -697,10 +723,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public verbatim_block createverbatim_block()
+  public DesignBlockStatement createDesignBlockStatement()
   {
-    verbatim_blockImpl verbatim_block = new verbatim_blockImpl();
-    return verbatim_block;
+    DesignBlockStatementImpl designBlockStatement = new DesignBlockStatementImpl();
+    return designBlockStatement;
   }
 
   /**
@@ -708,10 +734,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public target_block createtarget_block()
+  public VariableList createVariableList()
   {
-    target_blockImpl target_block = new target_blockImpl();
-    return target_block;
+    VariableListImpl variableList = new VariableListImpl();
+    return variableList;
   }
 
   /**
@@ -719,10 +745,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public variable_declaration createvariable_declaration()
+  public RScriptBlock createRScriptBlock()
   {
-    variable_declarationImpl variable_declaration = new variable_declarationImpl();
-    return variable_declaration;
+    RScriptBlockImpl rScriptBlock = new RScriptBlockImpl();
+    return rScriptBlock;
   }
 
   /**
@@ -730,10 +756,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public any_expression createany_expression()
+  public RScriptBlockStatement createRScriptBlockStatement()
   {
-    any_expressionImpl any_expression = new any_expressionImpl();
-    return any_expression;
+    RScriptBlockStatementImpl rScriptBlockStatement = new RScriptBlockStatementImpl();
+    return rScriptBlockStatement;
   }
 
   /**
@@ -741,9 +767,262 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public expression createexpression()
+  public TaskFunctionDeclaration createTaskFunctionDeclaration()
   {
-    expressionImpl expression = new expressionImpl();
+    TaskFunctionDeclarationImpl taskFunctionDeclaration = new TaskFunctionDeclarationImpl();
+    return taskFunctionDeclaration;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TaskFunctionBody createTaskFunctionBody()
+  {
+    TaskFunctionBodyImpl taskFunctionBody = new TaskFunctionBodyImpl();
+    return taskFunctionBody;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TaskFunctionBlock createTaskFunctionBlock()
+  {
+    TaskFunctionBlockImpl taskFunctionBlock = new TaskFunctionBlockImpl();
+    return taskFunctionBlock;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EstimateTask createEstimateTask()
+  {
+    EstimateTaskImpl estimateTask = new EstimateTaskImpl();
+    return estimateTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SimulateTask createSimulateTask()
+  {
+    SimulateTaskImpl simulateTask = new SimulateTaskImpl();
+    return simulateTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ExecuteTask createExecuteTask()
+  {
+    ExecuteTaskImpl executeTask = new ExecuteTaskImpl();
+    return executeTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FormalArguments createFormalArguments()
+  {
+    FormalArgumentsImpl formalArguments = new FormalArgumentsImpl();
+    return formalArguments;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FunctionCall createFunctionCall()
+  {
+    FunctionCallImpl functionCall = new FunctionCallImpl();
+    return functionCall;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public BlockStatement createBlockStatement()
+  {
+    BlockStatementImpl blockStatement = new BlockStatementImpl();
+    return blockStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public VerbatimBlock createVerbatimBlock()
+  {
+    VerbatimBlockImpl verbatimBlock = new VerbatimBlockImpl();
+    return verbatimBlock;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TargetBlock createTargetBlock()
+  {
+    TargetBlockImpl targetBlock = new TargetBlockImpl();
+    return targetBlock;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SymbolModification createSymbolModification()
+  {
+    SymbolModificationImpl symbolModification = new SymbolModificationImpl();
+    return symbolModification;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ParameterDeclaration createParameterDeclaration()
+  {
+    ParameterDeclarationImpl parameterDeclaration = new ParameterDeclarationImpl();
+    return parameterDeclaration;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SymbolDeclaration createSymbolDeclaration()
+  {
+    SymbolDeclarationImpl symbolDeclaration = new SymbolDeclarationImpl();
+    return symbolDeclaration;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EnumType createEnumType()
+  {
+    EnumTypeImpl enumType = new EnumTypeImpl();
+    return enumType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Missing createMissing()
+  {
+    MissingImpl missing = new MissingImpl();
+    return missing;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Likelyhood createLikelyhood()
+  {
+    LikelyhoodImpl likelyhood = new LikelyhoodImpl();
+    return likelyhood;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public LevelType createLevelType()
+  {
+    LevelTypeImpl levelType = new LevelTypeImpl();
+    return levelType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Categorical createCategorical()
+  {
+    CategoricalImpl categorical = new CategoricalImpl();
+    return categorical;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Continuous createContinuous()
+  {
+    ContinuousImpl continuous = new ContinuousImpl();
+    return continuous;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Covariate createCovariate()
+  {
+    CovariateImpl covariate = new CovariateImpl();
+    return covariate;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Distribution createDistribution()
+  {
+    DistributionImpl distribution = new DistributionImpl();
+    return distribution;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AnyExpression createAnyExpression()
+  {
+    AnyExpressionImpl anyExpression = new AnyExpressionImpl();
+    return anyExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Expression createExpression()
+  {
+    ExpressionImpl expression = new ExpressionImpl();
     return expression;
   }
 
@@ -752,9 +1031,9 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public list createlist()
+  public List createList()
   {
-    listImpl list = new listImpl();
+    ListImpl list = new ListImpl();
     return list;
   }
 
@@ -763,10 +1042,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public ode_list createode_list()
+  public OdeList createOdeList()
   {
-    ode_listImpl ode_list = new ode_listImpl();
-    return ode_list;
+    OdeListImpl odeList = new OdeListImpl();
+    return odeList;
   }
 
   /**
@@ -774,10 +1053,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public random_list createrandom_list()
+  public RandomList createRandomList()
   {
-    random_listImpl random_list = new random_listImpl();
-    return random_list;
+    RandomListImpl randomList = new RandomListImpl();
+    return randomList;
   }
 
   /**
@@ -785,9 +1064,9 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public arguments createarguments()
+  public Arguments createArguments()
   {
-    argumentsImpl arguments = new argumentsImpl();
+    ArgumentsImpl arguments = new ArgumentsImpl();
     return arguments;
   }
 
@@ -796,9 +1075,9 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public argument createargument()
+  public Argument createArgument()
   {
-    argumentImpl argument = new argumentImpl();
+    ArgumentImpl argument = new ArgumentImpl();
     return argument;
   }
 
@@ -807,10 +1086,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public statement createstatement()
+  public ConditionalStatement createConditionalStatement()
   {
-    statementImpl statement = new statementImpl();
-    return statement;
+    ConditionalStatementImpl conditionalStatement = new ConditionalStatementImpl();
+    return conditionalStatement;
   }
 
   /**
@@ -818,10 +1097,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public par_expression createpar_expression()
+  public Block createBlock()
   {
-    par_expressionImpl par_expression = new par_expressionImpl();
-    return par_expression;
+    BlockImpl block = new BlockImpl();
+    return block;
   }
 
   /**
@@ -829,10 +1108,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public conditional_expression createconditional_expression()
+  public ParExpression createParExpression()
   {
-    conditional_expressionImpl conditional_expression = new conditional_expressionImpl();
-    return conditional_expression;
+    ParExpressionImpl parExpression = new ParExpressionImpl();
+    return parExpression;
   }
 
   /**
@@ -840,10 +1119,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public conditional_or_expression createconditional_or_expression()
+  public ConditionalExpression createConditionalExpression()
   {
-    conditional_or_expressionImpl conditional_or_expression = new conditional_or_expressionImpl();
-    return conditional_or_expression;
+    ConditionalExpressionImpl conditionalExpression = new ConditionalExpressionImpl();
+    return conditionalExpression;
   }
 
   /**
@@ -851,10 +1130,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public conditional_and_expression createconditional_and_expression()
+  public OrExpression createOrExpression()
   {
-    conditional_and_expressionImpl conditional_and_expression = new conditional_and_expressionImpl();
-    return conditional_and_expression;
+    OrExpressionImpl orExpression = new OrExpressionImpl();
+    return orExpression;
   }
 
   /**
@@ -862,10 +1141,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public relational_expression createrelational_expression()
+  public AndExpression createAndExpression()
   {
-    relational_expressionImpl relational_expression = new relational_expressionImpl();
-    return relational_expression;
+    AndExpressionImpl andExpression = new AndExpressionImpl();
+    return andExpression;
   }
 
   /**
@@ -873,10 +1152,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public additive_expression createadditive_expression()
+  public LogicalExpression createLogicalExpression()
   {
-    additive_expressionImpl additive_expression = new additive_expressionImpl();
-    return additive_expression;
+    LogicalExpressionImpl logicalExpression = new LogicalExpressionImpl();
+    return logicalExpression;
   }
 
   /**
@@ -884,10 +1163,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public multiplicative_expression createmultiplicative_expression()
+  public AdditiveExpression createAdditiveExpression()
   {
-    multiplicative_expressionImpl multiplicative_expression = new multiplicative_expressionImpl();
-    return multiplicative_expression;
+    AdditiveExpressionImpl additiveExpression = new AdditiveExpressionImpl();
+    return additiveExpression;
   }
 
   /**
@@ -895,10 +1174,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public power_expression createpower_expression()
+  public MultiplicativeExpression createMultiplicativeExpression()
   {
-    power_expressionImpl power_expression = new power_expressionImpl();
-    return power_expression;
+    MultiplicativeExpressionImpl multiplicativeExpression = new MultiplicativeExpressionImpl();
+    return multiplicativeExpression;
   }
 
   /**
@@ -906,10 +1185,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public unary_expression createunary_expression()
+  public PowerExpression createPowerExpression()
   {
-    unary_expressionImpl unary_expression = new unary_expressionImpl();
-    return unary_expression;
+    PowerExpressionImpl powerExpression = new PowerExpressionImpl();
+    return powerExpression;
   }
 
   /**
@@ -917,9 +1196,20 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public primary createprimary()
+  public UnaryExpression createUnaryExpression()
   {
-    primaryImpl primary = new primaryImpl();
+    UnaryExpressionImpl unaryExpression = new UnaryExpressionImpl();
+    return unaryExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Primary createPrimary()
+  {
+    PrimaryImpl primary = new PrimaryImpl();
     return primary;
   }
 
@@ -928,10 +1218,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public variable_name createvariable_name()
+  public Vector createVector()
   {
-    variable_nameImpl variable_name = new variable_nameImpl();
-    return variable_name;
+    VectorImpl vector = new VectorImpl();
+    return vector;
   }
 
   /**
@@ -939,10 +1229,32 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public selector createselector()
+  public FullyQualifiedSymbolName createFullyQualifiedSymbolName()
   {
-    selectorImpl selector = new selectorImpl();
-    return selector;
+    FullyQualifiedSymbolNameImpl fullyQualifiedSymbolName = new FullyQualifiedSymbolNameImpl();
+    return fullyQualifiedSymbolName;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FullyQualifiedArgumentName createFullyQualifiedArgumentName()
+  {
+    FullyQualifiedArgumentNameImpl fullyQualifiedArgumentName = new FullyQualifiedArgumentNameImpl();
+    return fullyQualifiedArgumentName;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ObjectName createObjectName()
+  {
+    ObjectNameImpl objectName = new ObjectNameImpl();
+    return objectName;
   }
 
   /**

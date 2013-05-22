@@ -57,11 +57,11 @@ public interface MdlPackage extends EPackage
   MdlPackage eINSTANCE = org.ddmore.mdl.mdl.impl.MdlPackageImpl.init();
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.mclImpl <em>mcl</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.MclImpl <em>Mcl</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.mclImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmcl()
+   * @see org.ddmore.mdl.mdl.impl.MclImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMcl()
    * @generated
    */
   int MCL = 0;
@@ -76,7 +76,7 @@ public interface MdlPackage extends EPackage
   int MCL__OBJECTS = 0;
 
   /**
-   * The number of structural features of the '<em>mcl</em>' class.
+   * The number of structural features of the '<em>Mcl</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -85,87 +85,87 @@ public interface MdlPackage extends EPackage
   int MCL_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.mcl_objImpl <em>mcl obj</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.MclObjectImpl <em>Mcl Object</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.mcl_objImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmcl_obj()
+   * @see org.ddmore.mdl.mdl.impl.MclObjectImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMclObject()
    * @generated
    */
-  int MCL_OBJ = 1;
+  int MCL_OBJECT = 1;
 
   /**
-   * The feature id for the '<em><b>Model obj</b></em>' containment reference.
+   * The feature id for the '<em><b>Model Object</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MCL_OBJ__MODEL_OBJ = 0;
+  int MCL_OBJECT__MODEL_OBJECT = 0;
 
   /**
-   * The feature id for the '<em><b>Param obj</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameter Object</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MCL_OBJ__PARAM_OBJ = 1;
+  int MCL_OBJECT__PARAMETER_OBJECT = 1;
 
   /**
-   * The feature id for the '<em><b>Data obj</b></em>' containment reference.
+   * The feature id for the '<em><b>Data Object</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MCL_OBJ__DATA_OBJ = 2;
+  int MCL_OBJECT__DATA_OBJECT = 2;
 
   /**
-   * The feature id for the '<em><b>Task obj</b></em>' containment reference.
+   * The feature id for the '<em><b>Task Object</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MCL_OBJ__TASK_OBJ = 3;
+  int MCL_OBJECT__TASK_OBJECT = 3;
 
   /**
-   * The feature id for the '<em><b>Tel obj</b></em>' containment reference.
+   * The feature id for the '<em><b>Tel Object</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MCL_OBJ__TEL_OBJ = 4;
+  int MCL_OBJECT__TEL_OBJECT = 4;
 
   /**
-   * The number of structural features of the '<em>mcl obj</em>' class.
+   * The number of structural features of the '<em>Mcl Object</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MCL_OBJ_FEATURE_COUNT = 5;
+  int MCL_OBJECT_FEATURE_COUNT = 5;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.model_objImpl <em>model obj</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ModelObjectImpl <em>Model Object</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.model_objImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmodel_obj()
+   * @see org.ddmore.mdl.mdl.impl.ModelObjectImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelObject()
    * @generated
    */
-  int MODEL_OBJ = 2;
+  int MODEL_OBJECT = 2;
 
   /**
-   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * The feature id for the '<em><b>Identifier</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MODEL_OBJ__IDENTIFIER = 0;
+  int MODEL_OBJECT__IDENTIFIER = 0;
 
   /**
    * The feature id for the '<em><b>Blocks</b></em>' containment reference list.
@@ -174,35 +174,35 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MODEL_OBJ__BLOCKS = 1;
+  int MODEL_OBJECT__BLOCKS = 1;
 
   /**
-   * The number of structural features of the '<em>model obj</em>' class.
+   * The number of structural features of the '<em>Model Object</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MODEL_OBJ_FEATURE_COUNT = 2;
+  int MODEL_OBJECT_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.param_objImpl <em>param obj</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ParameterObjectImpl <em>Parameter Object</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.param_objImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getparam_obj()
+   * @see org.ddmore.mdl.mdl.impl.ParameterObjectImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParameterObject()
    * @generated
    */
-  int PARAM_OBJ = 3;
+  int PARAMETER_OBJECT = 3;
 
   /**
-   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * The feature id for the '<em><b>Identifier</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PARAM_OBJ__IDENTIFIER = 0;
+  int PARAMETER_OBJECT__IDENTIFIER = 0;
 
   /**
    * The feature id for the '<em><b>Blocks</b></em>' containment reference list.
@@ -211,35 +211,35 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PARAM_OBJ__BLOCKS = 1;
+  int PARAMETER_OBJECT__BLOCKS = 1;
 
   /**
-   * The number of structural features of the '<em>param obj</em>' class.
+   * The number of structural features of the '<em>Parameter Object</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PARAM_OBJ_FEATURE_COUNT = 2;
+  int PARAMETER_OBJECT_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.data_objImpl <em>data obj</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.DataObjectImpl <em>Data Object</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.data_objImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getdata_obj()
+   * @see org.ddmore.mdl.mdl.impl.DataObjectImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDataObject()
    * @generated
    */
-  int DATA_OBJ = 4;
+  int DATA_OBJECT = 4;
 
   /**
-   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * The feature id for the '<em><b>Identifier</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATA_OBJ__IDENTIFIER = 0;
+  int DATA_OBJECT__IDENTIFIER = 0;
 
   /**
    * The feature id for the '<em><b>Blocks</b></em>' containment reference list.
@@ -248,35 +248,35 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DATA_OBJ__BLOCKS = 1;
+  int DATA_OBJECT__BLOCKS = 1;
 
   /**
-   * The number of structural features of the '<em>data obj</em>' class.
+   * The number of structural features of the '<em>Data Object</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATA_OBJ_FEATURE_COUNT = 2;
+  int DATA_OBJECT_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.task_objImpl <em>task obj</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.TaskObjectImpl <em>Task Object</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.task_objImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#gettask_obj()
+   * @see org.ddmore.mdl.mdl.impl.TaskObjectImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskObject()
    * @generated
    */
-  int TASK_OBJ = 5;
+  int TASK_OBJECT = 5;
 
   /**
-   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * The feature id for the '<em><b>Identifier</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TASK_OBJ__IDENTIFIER = 0;
+  int TASK_OBJECT__IDENTIFIER = 0;
 
   /**
    * The feature id for the '<em><b>Blocks</b></em>' containment reference list.
@@ -285,26 +285,190 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TASK_OBJ__BLOCKS = 1;
+  int TASK_OBJECT__BLOCKS = 1;
 
   /**
-   * The number of structural features of the '<em>task obj</em>' class.
+   * The number of structural features of the '<em>Task Object</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TASK_OBJ_FEATURE_COUNT = 2;
+  int TASK_OBJECT_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.tel_objImpl <em>tel obj</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.TELObjectImpl <em>TEL Object</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.tel_objImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#gettel_obj()
+   * @see org.ddmore.mdl.mdl.impl.TELObjectImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTELObject()
    * @generated
    */
-  int TEL_OBJ = 6;
+  int TEL_OBJECT = 6;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEL_OBJECT__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEL_OBJECT__STATEMENTS = 1;
+
+  /**
+   * The number of structural features of the '<em>TEL Object</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEL_OBJECT_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ModelObjectBlockImpl <em>Model Object Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ModelObjectBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelObjectBlock()
+   * @generated
+   */
+  int MODEL_OBJECT_BLOCK = 7;
+
+  /**
+   * The feature id for the '<em><b>Individual Variables Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__INDIVIDUAL_VARIABLES_BLOCK = 0;
+
+  /**
+   * The feature id for the '<em><b>Model Prediction Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__MODEL_PREDICTION_BLOCK = 1;
+
+  /**
+   * The feature id for the '<em><b>Random Variable Definition Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__RANDOM_VARIABLE_DEFINITION_BLOCK = 2;
+
+  /**
+   * The feature id for the '<em><b>Input Variables Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__INPUT_VARIABLES_BLOCK = 3;
+
+  /**
+   * The feature id for the '<em><b>Structural Parameters Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__STRUCTURAL_PARAMETERS_BLOCK = 4;
+
+  /**
+   * The feature id for the '<em><b>Variability Parameters Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__VARIABILITY_PARAMETERS_BLOCK = 5;
+
+  /**
+   * The feature id for the '<em><b>Output Variables Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__OUTPUT_VARIABLES_BLOCK = 6;
+
+  /**
+   * The feature id for the '<em><b>Group Variables Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__GROUP_VARIABLES_BLOCK = 7;
+
+  /**
+   * The feature id for the '<em><b>Observation Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__OBSERVATION_BLOCK = 8;
+
+  /**
+   * The feature id for the '<em><b>Estimation Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__ESTIMATION_BLOCK = 9;
+
+  /**
+   * The feature id for the '<em><b>Simulation Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__SIMULATION_BLOCK = 10;
+
+  /**
+   * The feature id for the '<em><b>Verbatim Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__VERBATIM_BLOCK = 11;
+
+  /**
+   * The number of structural features of the '<em>Model Object Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK_FEATURE_COUNT = 12;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl <em>Individual Variables Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getIndividualVariablesBlock()
+   * @generated
+   */
+  int INDIVIDUAL_VARIABLES_BLOCK = 8;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -313,153 +477,35 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TEL_OBJ__IDENTIFIER = 0;
+  int INDIVIDUAL_VARIABLES_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Blocks</b></em>' containment reference list.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TEL_OBJ__BLOCKS = 1;
+  int INDIVIDUAL_VARIABLES_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>tel obj</em>' class.
+   * The number of structural features of the '<em>Individual Variables Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TEL_OBJ_FEATURE_COUNT = 2;
+  int INDIVIDUAL_VARIABLES_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.model_obj_blockImpl <em>model obj block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl <em>Model Prediction Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.model_obj_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmodel_obj_block()
+   * @see org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelPredictionBlock()
    * @generated
    */
-  int MODEL_OBJ_BLOCK = 7;
-
-  /**
-   * The feature id for the '<em><b>Individual model obj block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__INDIVIDUAL_MODEL_OBJ_BLOCK = 0;
-
-  /**
-   * The feature id for the '<em><b>Model prediction obj block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__MODEL_PREDICTION_OBJ_BLOCK = 1;
-
-  /**
-   * The feature id for the '<em><b>Random variable definition block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__RANDOM_VARIABLE_DEFINITION_BLOCK = 2;
-
-  /**
-   * The feature id for the '<em><b>Input variables block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__INPUT_VARIABLES_BLOCK = 3;
-
-  /**
-   * The feature id for the '<em><b>Structural parameters block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__STRUCTURAL_PARAMETERS_BLOCK = 4;
-
-  /**
-   * The feature id for the '<em><b>Variability parameters block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__VARIABILITY_PARAMETERS_BLOCK = 5;
-
-  /**
-   * The feature id for the '<em><b>Output variables block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__OUTPUT_VARIABLES_BLOCK = 6;
-
-  /**
-   * The feature id for the '<em><b>Group variables</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__GROUP_VARIABLES = 7;
-
-  /**
-   * The feature id for the '<em><b>Observation block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__OBSERVATION_BLOCK = 8;
-
-  /**
-   * The feature id for the '<em><b>Estimation block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__ESTIMATION_BLOCK = 9;
-
-  /**
-   * The feature id for the '<em><b>Simulation block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK__SIMULATION_BLOCK = 10;
-
-  /**
-   * The number of structural features of the '<em>model obj block</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_OBJ_BLOCK_FEATURE_COUNT = 11;
-
-  /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.individual_model_obj_blockImpl <em>individual model obj block</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.individual_model_obj_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getindividual_model_obj_block()
-   * @generated
-   */
-  int INDIVIDUAL_MODEL_OBJ_BLOCK = 8;
+  int MODEL_PREDICTION_BLOCK = 9;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -468,69 +514,32 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INDIVIDUAL_MODEL_OBJ_BLOCK__IDENTIFIER = 0;
+  int MODEL_PREDICTION_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INDIVIDUAL_MODEL_OBJ_BLOCK__BLOCK = 1;
+  int MODEL_PREDICTION_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>individual model obj block</em>' class.
+   * The number of structural features of the '<em>Model Prediction Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INDIVIDUAL_MODEL_OBJ_BLOCK_FEATURE_COUNT = 2;
+  int MODEL_PREDICTION_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.model_prediction_obj_blockImpl <em>model prediction obj block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl <em>Random Variable Definition Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.model_prediction_obj_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmodel_prediction_obj_block()
-   * @generated
-   */
-  int MODEL_PREDICTION_OBJ_BLOCK = 9;
-
-  /**
-   * The feature id for the '<em><b>Identifier</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_PREDICTION_OBJ_BLOCK__IDENTIFIER = 0;
-
-  /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_PREDICTION_OBJ_BLOCK__BLOCK = 1;
-
-  /**
-   * The number of structural features of the '<em>model prediction obj block</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MODEL_PREDICTION_OBJ_BLOCK_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.random_variable_definition_blockImpl <em>random variable definition block</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.random_variable_definition_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getrandom_variable_definition_block()
+   * @see org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRandomVariableDefinitionBlock()
    * @generated
    */
   int RANDOM_VARIABLE_DEFINITION_BLOCK = 10;
@@ -545,16 +554,16 @@ public interface MdlPackage extends EPackage
   int RANDOM_VARIABLE_DEFINITION_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Variables</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RANDOM_VARIABLE_DEFINITION_BLOCK__BLOCK = 1;
+  int RANDOM_VARIABLE_DEFINITION_BLOCK__VARIABLES = 1;
 
   /**
-   * The number of structural features of the '<em>random variable definition block</em>' class.
+   * The number of structural features of the '<em>Random Variable Definition Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -563,11 +572,11 @@ public interface MdlPackage extends EPackage
   int RANDOM_VARIABLE_DEFINITION_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.input_variables_blockImpl <em>input variables block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl <em>Input Variables Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.input_variables_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getinput_variables_block()
+   * @see org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getInputVariablesBlock()
    * @generated
    */
   int INPUT_VARIABLES_BLOCK = 11;
@@ -582,16 +591,16 @@ public interface MdlPackage extends EPackage
   int INPUT_VARIABLES_BLOCK__INDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Variables</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INPUT_VARIABLES_BLOCK__BLOCK = 1;
+  int INPUT_VARIABLES_BLOCK__VARIABLES = 1;
 
   /**
-   * The number of structural features of the '<em>input variables block</em>' class.
+   * The number of structural features of the '<em>Input Variables Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -600,11 +609,11 @@ public interface MdlPackage extends EPackage
   int INPUT_VARIABLES_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.structural_parameters_blockImpl <em>structural parameters block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl <em>Structural Parameters Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.structural_parameters_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getstructural_parameters_block()
+   * @see org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getStructuralParametersBlock()
    * @generated
    */
   int STRUCTURAL_PARAMETERS_BLOCK = 12;
@@ -619,16 +628,16 @@ public interface MdlPackage extends EPackage
   int STRUCTURAL_PARAMETERS_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STRUCTURAL_PARAMETERS_BLOCK__BLOCK = 1;
+  int STRUCTURAL_PARAMETERS_BLOCK__PARAMETERS = 1;
 
   /**
-   * The number of structural features of the '<em>structural parameters block</em>' class.
+   * The number of structural features of the '<em>Structural Parameters Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -637,11 +646,11 @@ public interface MdlPackage extends EPackage
   int STRUCTURAL_PARAMETERS_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.variability_parameters_blockImpl <em>variability parameters block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl <em>Variability Parameters Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.variability_parameters_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariability_parameters_block()
+   * @see org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVariabilityParametersBlock()
    * @generated
    */
   int VARIABILITY_PARAMETERS_BLOCK = 13;
@@ -656,16 +665,16 @@ public interface MdlPackage extends EPackage
   int VARIABILITY_PARAMETERS_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABILITY_PARAMETERS_BLOCK__BLOCK = 1;
+  int VARIABILITY_PARAMETERS_BLOCK__PARAMETERS = 1;
 
   /**
-   * The number of structural features of the '<em>variability parameters block</em>' class.
+   * The number of structural features of the '<em>Variability Parameters Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -674,11 +683,11 @@ public interface MdlPackage extends EPackage
   int VARIABILITY_PARAMETERS_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.output_variables_blockImpl <em>output variables block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl <em>Output Variables Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.output_variables_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getoutput_variables_block()
+   * @see org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOutputVariablesBlock()
    * @generated
    */
   int OUTPUT_VARIABLES_BLOCK = 14;
@@ -693,16 +702,16 @@ public interface MdlPackage extends EPackage
   int OUTPUT_VARIABLES_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Variables</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int OUTPUT_VARIABLES_BLOCK__BLOCK = 1;
+  int OUTPUT_VARIABLES_BLOCK__VARIABLES = 1;
 
   /**
-   * The number of structural features of the '<em>output variables block</em>' class.
+   * The number of structural features of the '<em>Output Variables Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -711,14 +720,14 @@ public interface MdlPackage extends EPackage
   int OUTPUT_VARIABLES_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.group_variablesImpl <em>group variables</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl <em>Group Variables Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.group_variablesImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getgroup_variables()
+   * @see org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getGroupVariablesBlock()
    * @generated
    */
-  int GROUP_VARIABLES = 15;
+  int GROUP_VARIABLES_BLOCK = 15;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -727,32 +736,32 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int GROUP_VARIABLES__IDENTIFIER = 0;
+  int GROUP_VARIABLES_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GROUP_VARIABLES__BLOCK = 1;
+  int GROUP_VARIABLES_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>group variables</em>' class.
+   * The number of structural features of the '<em>Group Variables Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GROUP_VARIABLES_FEATURE_COUNT = 2;
+  int GROUP_VARIABLES_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.observation_blockImpl <em>observation block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ObservationBlockImpl <em>Observation Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.observation_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getobservation_block()
+   * @see org.ddmore.mdl.mdl.impl.ObservationBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getObservationBlock()
    * @generated
    */
   int OBSERVATION_BLOCK = 16;
@@ -767,16 +776,16 @@ public interface MdlPackage extends EPackage
   int OBSERVATION_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int OBSERVATION_BLOCK__BLOCK = 1;
+  int OBSERVATION_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>observation block</em>' class.
+   * The number of structural features of the '<em>Observation Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -785,11 +794,11 @@ public interface MdlPackage extends EPackage
   int OBSERVATION_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.estimation_blockImpl <em>estimation block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.EstimationBlockImpl <em>Estimation Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.estimation_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getestimation_block()
+   * @see org.ddmore.mdl.mdl.impl.EstimationBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getEstimationBlock()
    * @generated
    */
   int ESTIMATION_BLOCK = 17;
@@ -804,16 +813,16 @@ public interface MdlPackage extends EPackage
   int ESTIMATION_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ESTIMATION_BLOCK__BLOCK = 1;
+  int ESTIMATION_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>estimation block</em>' class.
+   * The number of structural features of the '<em>Estimation Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -822,11 +831,11 @@ public interface MdlPackage extends EPackage
   int ESTIMATION_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.simulation_blockImpl <em>simulation block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.SimulationBlockImpl <em>Simulation Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.simulation_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getsimulation_block()
+   * @see org.ddmore.mdl.mdl.impl.SimulationBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSimulationBlock()
    * @generated
    */
   int SIMULATION_BLOCK = 18;
@@ -841,16 +850,16 @@ public interface MdlPackage extends EPackage
   int SIMULATION_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SIMULATION_BLOCK__BLOCK = 1;
+  int SIMULATION_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>simulation block</em>' class.
+   * The number of structural features of the '<em>Simulation Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -859,48 +868,66 @@ public interface MdlPackage extends EPackage
   int SIMULATION_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.param_obj_blockImpl <em>param obj block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ParameterObjectBlockImpl <em>Parameter Object Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.param_obj_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getparam_obj_block()
+   * @see org.ddmore.mdl.mdl.impl.ParameterObjectBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParameterObjectBlock()
    * @generated
    */
-  int PARAM_OBJ_BLOCK = 19;
+  int PARAMETER_OBJECT_BLOCK = 19;
 
   /**
-   * The feature id for the '<em><b>Structural block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PARAM_OBJ_BLOCK__STRUCTURAL_BLOCK = 0;
-
-  /**
-   * The feature id for the '<em><b>Variability block</b></em>' containment reference.
+   * The feature id for the '<em><b>Structural Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PARAM_OBJ_BLOCK__VARIABILITY_BLOCK = 1;
+  int PARAMETER_OBJECT_BLOCK__STRUCTURAL_BLOCK = 0;
 
   /**
-   * The number of structural features of the '<em>param obj block</em>' class.
+   * The feature id for the '<em><b>Variability Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PARAM_OBJ_BLOCK_FEATURE_COUNT = 2;
+  int PARAMETER_OBJECT_BLOCK__VARIABILITY_BLOCK = 1;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.structural_blockImpl <em>structural block</em>}' class.
+   * The feature id for the '<em><b>Prior Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.structural_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getstructural_block()
+   * @generated
+   * @ordered
+   */
+  int PARAMETER_OBJECT_BLOCK__PRIOR_BLOCK = 2;
+
+  /**
+   * The feature id for the '<em><b>Verbatim Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER_OBJECT_BLOCK__VERBATIM_BLOCK = 3;
+
+  /**
+   * The number of structural features of the '<em>Parameter Object Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER_OBJECT_BLOCK_FEATURE_COUNT = 4;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.StructuralBlockImpl <em>Structural Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.StructuralBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getStructuralBlock()
    * @generated
    */
   int STRUCTURAL_BLOCK = 20;
@@ -915,16 +942,16 @@ public interface MdlPackage extends EPackage
   int STRUCTURAL_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STRUCTURAL_BLOCK__BLOCK = 1;
+  int STRUCTURAL_BLOCK__PARAMETERS = 1;
 
   /**
-   * The number of structural features of the '<em>structural block</em>' class.
+   * The number of structural features of the '<em>Structural Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -933,11 +960,11 @@ public interface MdlPackage extends EPackage
   int STRUCTURAL_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.variability_blockImpl <em>variability block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.VariabilityBlockImpl <em>Variability Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.variability_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariability_block()
+   * @see org.ddmore.mdl.mdl.impl.VariabilityBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVariabilityBlock()
    * @generated
    */
   int VARIABILITY_BLOCK = 21;
@@ -952,16 +979,16 @@ public interface MdlPackage extends EPackage
   int VARIABILITY_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABILITY_BLOCK__BLOCK = 1;
+  int VARIABILITY_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>variability block</em>' class.
+   * The number of structural features of the '<em>Variability Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -970,51 +997,97 @@ public interface MdlPackage extends EPackage
   int VARIABILITY_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.data_obj_blockImpl <em>data obj block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.PriorParametersBlockImpl <em>Prior Parameters Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.data_obj_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getdata_obj_block()
+   * @see org.ddmore.mdl.mdl.impl.PriorParametersBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getPriorParametersBlock()
    * @generated
    */
-  int DATA_OBJ_BLOCK = 22;
+  int PRIOR_PARAMETERS_BLOCK = 22;
 
   /**
-   * The feature id for the '<em><b>Header block</b></em>' containment reference.
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATA_OBJ_BLOCK__HEADER_BLOCK = 0;
+  int PRIOR_PARAMETERS_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>File block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATA_OBJ_BLOCK__FILE_BLOCK = 1;
+  int PRIOR_PARAMETERS_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>data obj block</em>' class.
+   * The number of structural features of the '<em>Prior Parameters Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATA_OBJ_BLOCK_FEATURE_COUNT = 2;
+  int PRIOR_PARAMETERS_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.header_blockImpl <em>header block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.DataObjectBlockImpl <em>Data Object Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.header_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getheader_block()
+   * @see org.ddmore.mdl.mdl.impl.DataObjectBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDataObjectBlock()
    * @generated
    */
-  int HEADER_BLOCK = 23;
+  int DATA_OBJECT_BLOCK = 23;
+
+  /**
+   * The feature id for the '<em><b>Header Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATA_OBJECT_BLOCK__HEADER_BLOCK = 0;
+
+  /**
+   * The feature id for the '<em><b>File Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATA_OBJECT_BLOCK__FILE_BLOCK = 1;
+
+  /**
+   * The feature id for the '<em><b>Verbatim Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATA_OBJECT_BLOCK__VERBATIM_BLOCK = 2;
+
+  /**
+   * The number of structural features of the '<em>Data Object Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATA_OBJECT_BLOCK_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.HeaderBlockImpl <em>Header Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.HeaderBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getHeaderBlock()
+   * @generated
+   */
+  int HEADER_BLOCK = 24;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1026,16 +1099,16 @@ public interface MdlPackage extends EPackage
   int HEADER_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Variables</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int HEADER_BLOCK__BLOCK = 1;
+  int HEADER_BLOCK__VARIABLES = 1;
 
   /**
-   * The number of structural features of the '<em>header block</em>' class.
+   * The number of structural features of the '<em>Header Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1044,14 +1117,14 @@ public interface MdlPackage extends EPackage
   int HEADER_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.file_blockImpl <em>file block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.FileBlockImpl <em>File Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.file_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfile_block()
+   * @see org.ddmore.mdl.mdl.impl.FileBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFileBlock()
    * @generated
    */
-  int FILE_BLOCK = 24;
+  int FILE_BLOCK = 25;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1063,16 +1136,16 @@ public interface MdlPackage extends EPackage
   int FILE_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FILE_BLOCK__BLOCK = 1;
+  int FILE_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>file block</em>' class.
+   * The number of structural features of the '<em>File Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1081,60 +1154,78 @@ public interface MdlPackage extends EPackage
   int FILE_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.task_obj_blockImpl <em>task obj block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl <em>Task Object Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.task_obj_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#gettask_obj_block()
+   * @see org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskObjectBlock()
    * @generated
    */
-  int TASK_OBJ_BLOCK = 25;
+  int TASK_OBJECT_BLOCK = 26;
 
   /**
-   * The feature id for the '<em><b>Function declaration</b></em>' containment reference.
+   * The feature id for the '<em><b>Function Declaration</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TASK_OBJ_BLOCK__FUNCTION_DECLARATION = 0;
+  int TASK_OBJECT_BLOCK__FUNCTION_DECLARATION = 0;
 
   /**
-   * The feature id for the '<em><b>Parameters block</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameter Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TASK_OBJ_BLOCK__PARAMETERS_BLOCK = 1;
+  int TASK_OBJECT_BLOCK__PARAMETER_BLOCK = 1;
 
   /**
-   * The feature id for the '<em><b>Data block</b></em>' containment reference.
+   * The feature id for the '<em><b>Data Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TASK_OBJ_BLOCK__DATA_BLOCK = 2;
+  int TASK_OBJECT_BLOCK__DATA_BLOCK = 2;
 
   /**
-   * The number of structural features of the '<em>task obj block</em>' class.
+   * The feature id for the '<em><b>Model Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TASK_OBJ_BLOCK_FEATURE_COUNT = 3;
+  int TASK_OBJECT_BLOCK__MODEL_BLOCK = 3;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.parameters_blockImpl <em>parameters block</em>}' class.
+   * The feature id for the '<em><b>Verbatim Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.parameters_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getparameters_block()
+   * @generated
+   * @ordered
+   */
+  int TASK_OBJECT_BLOCK__VERBATIM_BLOCK = 4;
+
+  /**
+   * The number of structural features of the '<em>Task Object Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TASK_OBJECT_BLOCK_FEATURE_COUNT = 5;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ParameterBlockImpl <em>Parameter Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ParameterBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParameterBlock()
    * @generated
    */
-  int PARAMETERS_BLOCK = 26;
+  int PARAMETER_BLOCK = 27;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1143,35 +1234,35 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PARAMETERS_BLOCK__IDENTIFIER = 0;
+  int PARAMETER_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PARAMETERS_BLOCK__BLOCK = 1;
+  int PARAMETER_BLOCK__PARAMETERS = 1;
 
   /**
-   * The number of structural features of the '<em>parameters block</em>' class.
+   * The number of structural features of the '<em>Parameter Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PARAMETERS_BLOCK_FEATURE_COUNT = 2;
+  int PARAMETER_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.data_blockImpl <em>data block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.DataBlockImpl <em>Data Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.data_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getdata_block()
+   * @see org.ddmore.mdl.mdl.impl.DataBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDataBlock()
    * @generated
    */
-  int DATA_BLOCK = 27;
+  int DATA_BLOCK = 28;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1183,16 +1274,16 @@ public interface MdlPackage extends EPackage
   int DATA_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATA_BLOCK__BLOCK = 1;
+  int DATA_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>data block</em>' class.
+   * The number of structural features of the '<em>Data Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1201,14 +1292,180 @@ public interface MdlPackage extends EPackage
   int DATA_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.model_blockImpl <em>model block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.DataBlockStatementImpl <em>Data Block Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.model_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmodel_block()
+   * @see org.ddmore.mdl.mdl.impl.DataBlockStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDataBlockStatement()
    * @generated
    */
-  int MODEL_BLOCK = 28;
+  int DATA_BLOCK_STATEMENT = 29;
+
+  /**
+   * The feature id for the '<em><b>Ignore List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATA_BLOCK_STATEMENT__IGNORE_LIST = 0;
+
+  /**
+   * The feature id for the '<em><b>Accept List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATA_BLOCK_STATEMENT__ACCEPT_LIST = 1;
+
+  /**
+   * The feature id for the '<em><b>Drop List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATA_BLOCK_STATEMENT__DROP_LIST = 2;
+
+  /**
+   * The number of structural features of the '<em>Data Block Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATA_BLOCK_STATEMENT_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.IgnoreListImpl <em>Ignore List</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.IgnoreListImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getIgnoreList()
+   * @generated
+   */
+  int IGNORE_LIST = 30;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IGNORE_LIST__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Expression</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IGNORE_LIST__EXPRESSION = 1;
+
+  /**
+   * The number of structural features of the '<em>Ignore List</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IGNORE_LIST_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.AcceptListImpl <em>Accept List</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.AcceptListImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAcceptList()
+   * @generated
+   */
+  int ACCEPT_LIST = 31;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACCEPT_LIST__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Expression</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACCEPT_LIST__EXPRESSION = 1;
+
+  /**
+   * The number of structural features of the '<em>Accept List</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACCEPT_LIST_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.DropListImpl <em>Drop List</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.DropListImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDropList()
+   * @generated
+   */
+  int DROP_LIST = 32;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DROP_LIST__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DROP_LIST__LIST = 1;
+
+  /**
+   * The number of structural features of the '<em>Drop List</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DROP_LIST_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ModelBlockImpl <em>Model Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ModelBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelBlock()
+   * @generated
+   */
+  int MODEL_BLOCK = 33;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_BLOCK__IDENTIFIER = 0;
 
   /**
    * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -1217,26 +1474,26 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MODEL_BLOCK__STATEMENTS = 0;
+  int MODEL_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>model block</em>' class.
+   * The number of structural features of the '<em>Model Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MODEL_BLOCK_FEATURE_COUNT = 1;
+  int MODEL_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.model_block_statementImpl <em>model block statement</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ModelBlockStatementImpl <em>Model Block Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.model_block_statementImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmodel_block_statement()
+   * @see org.ddmore.mdl.mdl.impl.ModelBlockStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelBlockStatement()
    * @generated
    */
-  int MODEL_BLOCK_STATEMENT = 29;
+  int MODEL_BLOCK_STATEMENT = 34;
 
   /**
    * The feature id for the '<em><b>Statement</b></em>' containment reference.
@@ -1248,25 +1505,25 @@ public interface MdlPackage extends EPackage
   int MODEL_BLOCK_STATEMENT__STATEMENT = 0;
 
   /**
-   * The feature id for the '<em><b>Ode block</b></em>' containment reference.
+   * The feature id for the '<em><b>Add List</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MODEL_BLOCK_STATEMENT__ODE_BLOCK = 1;
+  int MODEL_BLOCK_STATEMENT__ADD_LIST = 1;
 
   /**
-   * The feature id for the '<em><b>Library block</b></em>' containment reference.
+   * The feature id for the '<em><b>Remove List</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MODEL_BLOCK_STATEMENT__LIBRARY_BLOCK = 2;
+  int MODEL_BLOCK_STATEMENT__REMOVE_LIST = 2;
 
   /**
-   * The number of structural features of the '<em>model block statement</em>' class.
+   * The number of structural features of the '<em>Model Block Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1275,14 +1532,144 @@ public interface MdlPackage extends EPackage
   int MODEL_BLOCK_STATEMENT_FEATURE_COUNT = 3;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.library_blockImpl <em>library block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.AddListImpl <em>Add List</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.library_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getlibrary_block()
+   * @see org.ddmore.mdl.mdl.impl.AddListImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAddList()
    * @generated
    */
-  int LIBRARY_BLOCK = 30;
+  int ADD_LIST = 35;
+
+  /**
+   * The feature id for the '<em><b>List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ADD_LIST__LIST = 0;
+
+  /**
+   * The number of structural features of the '<em>Add List</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ADD_LIST_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.RemoveListImpl <em>Remove List</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.RemoveListImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRemoveList()
+   * @generated
+   */
+  int REMOVE_LIST = 36;
+
+  /**
+   * The feature id for the '<em><b>List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REMOVE_LIST__LIST = 0;
+
+  /**
+   * The number of structural features of the '<em>Remove List</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REMOVE_LIST_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.SymbolListImpl <em>Symbol List</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.SymbolListImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSymbolList()
+   * @generated
+   */
+  int SYMBOL_LIST = 37;
+
+  /**
+   * The feature id for the '<em><b>Symbols</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SYMBOL_LIST__SYMBOLS = 0;
+
+  /**
+   * The number of structural features of the '<em>Symbol List</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SYMBOL_LIST_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ModelPredictionBlockStatementImpl <em>Model Prediction Block Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ModelPredictionBlockStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelPredictionBlockStatement()
+   * @generated
+   */
+  int MODEL_PREDICTION_BLOCK_STATEMENT = 38;
+
+  /**
+   * The feature id for the '<em><b>Statement</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_PREDICTION_BLOCK_STATEMENT__STATEMENT = 0;
+
+  /**
+   * The feature id for the '<em><b>Ode Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_PREDICTION_BLOCK_STATEMENT__ODE_BLOCK = 1;
+
+  /**
+   * The feature id for the '<em><b>Library Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_PREDICTION_BLOCK_STATEMENT__LIBRARY_BLOCK = 2;
+
+  /**
+   * The number of structural features of the '<em>Model Prediction Block Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_PREDICTION_BLOCK_STATEMENT_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.LibraryBlockImpl <em>Library Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.LibraryBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLibraryBlock()
+   * @generated
+   */
+  int LIBRARY_BLOCK = 39;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1294,16 +1681,16 @@ public interface MdlPackage extends EPackage
   int LIBRARY_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LIBRARY_BLOCK__BLOCK = 1;
+  int LIBRARY_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>library block</em>' class.
+   * The number of structural features of the '<em>Library Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1312,14 +1699,14 @@ public interface MdlPackage extends EPackage
   int LIBRARY_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ode_blockImpl <em>ode block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.OdeBlockImpl <em>Ode Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.ode_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getode_block()
+   * @see org.ddmore.mdl.mdl.impl.OdeBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOdeBlock()
    * @generated
    */
-  int ODE_BLOCK = 31;
+  int ODE_BLOCK = 40;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1331,16 +1718,16 @@ public interface MdlPackage extends EPackage
   int ODE_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ODE_BLOCK__BLOCK = 1;
+  int ODE_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>ode block</em>' class.
+   * The number of structural features of the '<em>Ode Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1349,218 +1736,14 @@ public interface MdlPackage extends EPackage
   int ODE_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.variability_block_contentImpl <em>variability block content</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.GroupVariablesBlockStatementImpl <em>Group Variables Block Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.variability_block_contentImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariability_block_content()
+   * @see org.ddmore.mdl.mdl.impl.GroupVariablesBlockStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getGroupVariablesBlockStatement()
    * @generated
    */
-  int VARIABILITY_BLOCK_CONTENT = 32;
-
-  /**
-   * The feature id for the '<em><b>Blocks</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VARIABILITY_BLOCK_CONTENT__BLOCKS = 0;
-
-  /**
-   * The number of structural features of the '<em>variability block content</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VARIABILITY_BLOCK_CONTENT_FEATURE_COUNT = 1;
-
-  /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.variability_block_statementImpl <em>variability block statement</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.variability_block_statementImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariability_block_statement()
-   * @generated
-   */
-  int VARIABILITY_BLOCK_STATEMENT = 33;
-
-  /**
-   * The feature id for the '<em><b>Block statement</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VARIABILITY_BLOCK_STATEMENT__BLOCK_STATEMENT = 0;
-
-  /**
-   * The feature id for the '<em><b>Block block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VARIABILITY_BLOCK_STATEMENT__BLOCK_BLOCK = 1;
-
-  /**
-   * The feature id for the '<em><b>Diag block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VARIABILITY_BLOCK_STATEMENT__DIAG_BLOCK = 2;
-
-  /**
-   * The number of structural features of the '<em>variability block statement</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VARIABILITY_BLOCK_STATEMENT_FEATURE_COUNT = 3;
-
-  /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.block_subblockImpl <em>block subblock</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.block_subblockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getblock_subblock()
-   * @generated
-   */
-  int BLOCK_SUBBLOCK = 34;
-
-  /**
-   * The feature id for the '<em><b>Identifier</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int BLOCK_SUBBLOCK__IDENTIFIER = 0;
-
-  /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int BLOCK_SUBBLOCK__BLOCK = 1;
-
-  /**
-   * The number of structural features of the '<em>block subblock</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int BLOCK_SUBBLOCK_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.diag_subblockImpl <em>diag subblock</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.diag_subblockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getdiag_subblock()
-   * @generated
-   */
-  int DIAG_SUBBLOCK = 35;
-
-  /**
-   * The feature id for the '<em><b>Identifier</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DIAG_SUBBLOCK__IDENTIFIER = 0;
-
-  /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DIAG_SUBBLOCK__BLOCK = 1;
-
-  /**
-   * The number of structural features of the '<em>diag subblock</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DIAG_SUBBLOCK_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.variability_subblockImpl <em>variability subblock</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.variability_subblockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariability_subblock()
-   * @generated
-   */
-  int VARIABILITY_SUBBLOCK = 36;
-
-  /**
-   * The feature id for the '<em><b>Arguments</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VARIABILITY_SUBBLOCK__ARGUMENTS = 0;
-
-  /**
-   * The number of structural features of the '<em>variability subblock</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VARIABILITY_SUBBLOCK_FEATURE_COUNT = 1;
-
-  /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.file_block_contentImpl <em>file block content</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.file_block_contentImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfile_block_content()
-   * @generated
-   */
-  int FILE_BLOCK_CONTENT = 37;
-
-  /**
-   * The feature id for the '<em><b>Blocks</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FILE_BLOCK_CONTENT__BLOCKS = 0;
-
-  /**
-   * The number of structural features of the '<em>file block content</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FILE_BLOCK_CONTENT_FEATURE_COUNT = 1;
-
-  /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.file_block_statementImpl <em>file block statement</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.file_block_statementImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfile_block_statement()
-   * @generated
-   */
-  int FILE_BLOCK_STATEMENT = 38;
+  int GROUP_VARIABLES_BLOCK_STATEMENT = 41;
 
   /**
    * The feature id for the '<em><b>Statement</b></em>' containment reference.
@@ -1569,10 +1752,277 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FILE_BLOCK_STATEMENT__STATEMENT = 0;
+  int GROUP_VARIABLES_BLOCK_STATEMENT__STATEMENT = 0;
 
   /**
-   * The feature id for the '<em><b>Inline block</b></em>' containment reference.
+   * The feature id for the '<em><b>Mixture Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GROUP_VARIABLES_BLOCK_STATEMENT__MIXTURE_BLOCK = 1;
+
+  /**
+   * The number of structural features of the '<em>Group Variables Block Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GROUP_VARIABLES_BLOCK_STATEMENT_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.MixtureBlockImpl <em>Mixture Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.MixtureBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMixtureBlock()
+   * @generated
+   */
+  int MIXTURE_BLOCK = 42;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MIXTURE_BLOCK__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MIXTURE_BLOCK__STATEMENTS = 1;
+
+  /**
+   * The number of structural features of the '<em>Mixture Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MIXTURE_BLOCK_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl <em>Variability Block Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVariabilityBlockStatement()
+   * @generated
+   */
+  int VARIABILITY_BLOCK_STATEMENT = 43;
+
+  /**
+   * The feature id for the '<em><b>Parameter</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABILITY_BLOCK_STATEMENT__PARAMETER = 0;
+
+  /**
+   * The feature id for the '<em><b>Block Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABILITY_BLOCK_STATEMENT__BLOCK_BLOCK = 1;
+
+  /**
+   * The feature id for the '<em><b>Diag Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABILITY_BLOCK_STATEMENT__DIAG_BLOCK = 2;
+
+  /**
+   * The feature id for the '<em><b>Same Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABILITY_BLOCK_STATEMENT__SAME_BLOCK = 3;
+
+  /**
+   * The number of structural features of the '<em>Variability Block Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABILITY_BLOCK_STATEMENT_FEATURE_COUNT = 4;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.BlockBlockImpl <em>Block Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.BlockBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getBlockBlock()
+   * @generated
+   */
+  int BLOCK_BLOCK = 44;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BLOCK_BLOCK__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Arguments</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BLOCK_BLOCK__ARGUMENTS = 1;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BLOCK_BLOCK__PARAMETERS = 2;
+
+  /**
+   * The number of structural features of the '<em>Block Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BLOCK_BLOCK_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.DiagBlockImpl <em>Diag Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.DiagBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDiagBlock()
+   * @generated
+   */
+  int DIAG_BLOCK = 45;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIAG_BLOCK__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Arguments</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIAG_BLOCK__ARGUMENTS = 1;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIAG_BLOCK__PARAMETERS = 2;
+
+  /**
+   * The number of structural features of the '<em>Diag Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIAG_BLOCK_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.SameBlockImpl <em>Same Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.SameBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSameBlock()
+   * @generated
+   */
+  int SAME_BLOCK = 46;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAME_BLOCK__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Arguments</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAME_BLOCK__ARGUMENTS = 1;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAME_BLOCK__PARAMETERS = 2;
+
+  /**
+   * The number of structural features of the '<em>Same Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SAME_BLOCK_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.FileBlockStatementImpl <em>File Block Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.FileBlockStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFileBlockStatement()
+   * @generated
+   */
+  int FILE_BLOCK_STATEMENT = 47;
+
+  /**
+   * The feature id for the '<em><b>Variable</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FILE_BLOCK_STATEMENT__VARIABLE = 0;
+
+  /**
+   * The feature id for the '<em><b>Inline Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1581,7 +2031,7 @@ public interface MdlPackage extends EPackage
   int FILE_BLOCK_STATEMENT__INLINE_BLOCK = 1;
 
   /**
-   * The feature id for the '<em><b>Design block</b></em>' containment reference.
+   * The feature id for the '<em><b>Design Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1590,16 +2040,16 @@ public interface MdlPackage extends EPackage
   int FILE_BLOCK_STATEMENT__DESIGN_BLOCK = 2;
 
   /**
-   * The feature id for the '<em><b>Rsscript block</b></em>' containment reference.
+   * The feature id for the '<em><b>Rscript Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FILE_BLOCK_STATEMENT__RSSCRIPT_BLOCK = 3;
+  int FILE_BLOCK_STATEMENT__RSCRIPT_BLOCK = 3;
 
   /**
-   * The number of structural features of the '<em>file block statement</em>' class.
+   * The number of structural features of the '<em>File Block Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1608,14 +2058,14 @@ public interface MdlPackage extends EPackage
   int FILE_BLOCK_STATEMENT_FEATURE_COUNT = 4;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.inline_blockImpl <em>inline block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.InlineBlockImpl <em>Inline Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.inline_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getinline_block()
+   * @see org.ddmore.mdl.mdl.impl.InlineBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getInlineBlock()
    * @generated
    */
-  int INLINE_BLOCK = 39;
+  int INLINE_BLOCK = 48;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1627,32 +2077,41 @@ public interface MdlPackage extends EPackage
   int INLINE_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Variables</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INLINE_BLOCK__BLOCK = 1;
+  int INLINE_BLOCK__VARIABLES = 1;
 
   /**
-   * The number of structural features of the '<em>inline block</em>' class.
+   * The feature id for the '<em><b>Values</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INLINE_BLOCK_FEATURE_COUNT = 2;
+  int INLINE_BLOCK__VALUES = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.design_blockImpl <em>design block</em>}' class.
+   * The number of structural features of the '<em>Inline Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.design_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getdesign_block()
+   * @generated
+   * @ordered
+   */
+  int INLINE_BLOCK_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.DesignBlockImpl <em>Design Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.DesignBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDesignBlock()
    * @generated
    */
-  int DESIGN_BLOCK = 40;
+  int DESIGN_BLOCK = 49;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1664,16 +2123,16 @@ public interface MdlPackage extends EPackage
   int DESIGN_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DESIGN_BLOCK__BLOCK = 1;
+  int DESIGN_BLOCK__STATEMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>design block</em>' class.
+   * The number of structural features of the '<em>Design Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1682,14 +2141,88 @@ public interface MdlPackage extends EPackage
   int DESIGN_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.rsscript_blockImpl <em>rsscript block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl <em>Design Block Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.rsscript_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getrsscript_block()
+   * @see org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDesignBlockStatement()
    * @generated
    */
-  int RSSCRIPT_BLOCK = 41;
+  int DESIGN_BLOCK_STATEMENT = 50;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DESIGN_BLOCK_STATEMENT__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Arguments</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DESIGN_BLOCK_STATEMENT__ARGUMENTS = 1;
+
+  /**
+   * The feature id for the '<em><b>Expression</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DESIGN_BLOCK_STATEMENT__EXPRESSION = 2;
+
+  /**
+   * The number of structural features of the '<em>Design Block Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DESIGN_BLOCK_STATEMENT_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.VariableListImpl <em>Variable List</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.VariableListImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVariableList()
+   * @generated
+   */
+  int VARIABLE_LIST = 51;
+
+  /**
+   * The feature id for the '<em><b>Identifiers</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABLE_LIST__IDENTIFIERS = 0;
+
+  /**
+   * The number of structural features of the '<em>Variable List</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABLE_LIST_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.RScriptBlockImpl <em>RScript Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.RScriptBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRScriptBlock()
+   * @generated
+   */
+  int RSCRIPT_BLOCK = 52;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1698,72 +2231,35 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int RSSCRIPT_BLOCK__IDENTIFIER = 0;
+  int RSCRIPT_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Variables</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RSSCRIPT_BLOCK__BLOCK = 1;
+  int RSCRIPT_BLOCK__VARIABLES = 1;
 
   /**
-   * The number of structural features of the '<em>rsscript block</em>' class.
+   * The number of structural features of the '<em>RScript Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RSSCRIPT_BLOCK_FEATURE_COUNT = 2;
+  int RSCRIPT_BLOCK_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.inline_block_contentImpl <em>inline block content</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.RScriptBlockStatementImpl <em>RScript Block Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.inline_block_contentImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getinline_block_content()
+   * @see org.ddmore.mdl.mdl.impl.RScriptBlockStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRScriptBlockStatement()
    * @generated
    */
-  int INLINE_BLOCK_CONTENT = 42;
-
-  /**
-   * The feature id for the '<em><b>Identifiers</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INLINE_BLOCK_CONTENT__IDENTIFIERS = 0;
-
-  /**
-   * The feature id for the '<em><b>Values</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INLINE_BLOCK_CONTENT__VALUES = 1;
-
-  /**
-   * The number of structural features of the '<em>inline block content</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INLINE_BLOCK_CONTENT_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.function_declarationImpl <em>function declaration</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.function_declarationImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfunction_declaration()
-   * @generated
-   */
-  int FUNCTION_DECLARATION = 43;
+  int RSCRIPT_BLOCK_STATEMENT = 53;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1772,44 +2268,90 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DECLARATION__IDENTIFIER = 0;
+  int RSCRIPT_BLOCK_STATEMENT__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Formal arguments</b></em>' containment reference.
+   * The feature id for the '<em><b>Value</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_DECLARATION__FORMAL_ARGUMENTS = 1;
+  int RSCRIPT_BLOCK_STATEMENT__VALUE = 1;
 
   /**
-   * The feature id for the '<em><b>Function body</b></em>' containment reference.
+   * The feature id for the '<em><b>Object</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_DECLARATION__FUNCTION_BODY = 2;
+  int RSCRIPT_BLOCK_STATEMENT__OBJECT = 2;
 
   /**
-   * The number of structural features of the '<em>function declaration</em>' class.
+   * The number of structural features of the '<em>RScript Block Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_DECLARATION_FEATURE_COUNT = 3;
+  int RSCRIPT_BLOCK_STATEMENT_FEATURE_COUNT = 3;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.function_bodyImpl <em>function body</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl <em>Task Function Declaration</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.function_bodyImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfunction_body()
+   * @see org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskFunctionDeclaration()
    * @generated
    */
-  int FUNCTION_BODY = 44;
+  int TASK_FUNCTION_DECLARATION = 54;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TASK_FUNCTION_DECLARATION__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Formal Arguments</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TASK_FUNCTION_DECLARATION__FORMAL_ARGUMENTS = 1;
+
+  /**
+   * The feature id for the '<em><b>Function Body</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TASK_FUNCTION_DECLARATION__FUNCTION_BODY = 2;
+
+  /**
+   * The number of structural features of the '<em>Task Function Declaration</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TASK_FUNCTION_DECLARATION_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.TaskFunctionBodyImpl <em>Task Function Body</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.TaskFunctionBodyImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskFunctionBody()
+   * @generated
+   */
+  int TASK_FUNCTION_BODY = 55;
 
   /**
    * The feature id for the '<em><b>Blocks</b></em>' containment reference list.
@@ -1818,26 +2360,72 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_BODY__BLOCKS = 0;
+  int TASK_FUNCTION_BODY__BLOCKS = 0;
 
   /**
-   * The number of structural features of the '<em>function body</em>' class.
+   * The number of structural features of the '<em>Task Function Body</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_BODY_FEATURE_COUNT = 1;
+  int TASK_FUNCTION_BODY_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.function_subblockImpl <em>function subblock</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.TaskFunctionBlockImpl <em>Task Function Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.function_subblockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfunction_subblock()
+   * @see org.ddmore.mdl.mdl.impl.TaskFunctionBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskFunctionBlock()
    * @generated
    */
-  int FUNCTION_SUBBLOCK = 45;
+  int TASK_FUNCTION_BLOCK = 56;
+
+  /**
+   * The feature id for the '<em><b>Estimate Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TASK_FUNCTION_BLOCK__ESTIMATE_BLOCK = 0;
+
+  /**
+   * The feature id for the '<em><b>Simulate Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TASK_FUNCTION_BLOCK__SIMULATE_BLOCK = 1;
+
+  /**
+   * The feature id for the '<em><b>Execute Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TASK_FUNCTION_BLOCK__EXECUTE_BLOCK = 2;
+
+  /**
+   * The number of structural features of the '<em>Task Function Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TASK_FUNCTION_BLOCK_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.EstimateTaskImpl <em>Estimate Task</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.EstimateTaskImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getEstimateTask()
+   * @generated
+   */
+  int ESTIMATE_TASK = 57;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1846,44 +2434,109 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_SUBBLOCK__IDENTIFIER = 0;
+  int ESTIMATE_TASK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>Estimate defn</b></em>' containment reference.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_SUBBLOCK__ESTIMATE_DEFN = 1;
+  int ESTIMATE_TASK__STATEMENTS = 1;
 
   /**
-   * The feature id for the '<em><b>Simulate defn</b></em>' containment reference.
+   * The number of structural features of the '<em>Estimate Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_SUBBLOCK__SIMULATE_DEFN = 2;
+  int ESTIMATE_TASK_FEATURE_COUNT = 2;
 
   /**
-   * The number of structural features of the '<em>function subblock</em>' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.SimulateTaskImpl <em>Simulate Task</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.SimulateTaskImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSimulateTask()
+   * @generated
+   */
+  int SIMULATE_TASK = 58;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_SUBBLOCK_FEATURE_COUNT = 3;
+  int SIMULATE_TASK__IDENTIFIER = 0;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.formal_argumentsImpl <em>formal arguments</em>}' class.
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.formal_argumentsImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getformal_arguments()
+   * @generated
+   * @ordered
+   */
+  int SIMULATE_TASK__STATEMENTS = 1;
+
+  /**
+   * The number of structural features of the '<em>Simulate Task</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SIMULATE_TASK_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ExecuteTaskImpl <em>Execute Task</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ExecuteTaskImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getExecuteTask()
    * @generated
    */
-  int FORMAL_ARGUMENTS = 46;
+  int EXECUTE_TASK = 59;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXECUTE_TASK__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXECUTE_TASK__STATEMENTS = 1;
+
+  /**
+   * The number of structural features of the '<em>Execute Task</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXECUTE_TASK_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.FormalArgumentsImpl <em>Formal Arguments</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.FormalArgumentsImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFormalArguments()
+   * @generated
+   */
+  int FORMAL_ARGUMENTS = 60;
 
   /**
    * The feature id for the '<em><b>Identifiers</b></em>' attribute list.
@@ -1895,7 +2548,7 @@ public interface MdlPackage extends EPackage
   int FORMAL_ARGUMENTS__IDENTIFIERS = 0;
 
   /**
-   * The number of structural features of the '<em>formal arguments</em>' class.
+   * The number of structural features of the '<em>Formal Arguments</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1904,23 +2557,23 @@ public interface MdlPackage extends EPackage
   int FORMAL_ARGUMENTS_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.function_callImpl <em>function call</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.FunctionCallImpl <em>Function Call</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.function_callImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfunction_call()
+   * @see org.ddmore.mdl.mdl.impl.FunctionCallImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFunctionCall()
    * @generated
    */
-  int FUNCTION_CALL = 47;
+  int FUNCTION_CALL = 61;
 
   /**
-   * The feature id for the '<em><b>Funct name</b></em>' attribute.
+   * The feature id for the '<em><b>Identifier</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_CALL__FUNCT_NAME = 0;
+  int FUNCTION_CALL__IDENTIFIER = 0;
 
   /**
    * The feature id for the '<em><b>Arguments</b></em>' containment reference.
@@ -1932,7 +2585,7 @@ public interface MdlPackage extends EPackage
   int FUNCTION_CALL__ARGUMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>function call</em>' class.
+   * The number of structural features of the '<em>Function Call</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1941,54 +2594,26 @@ public interface MdlPackage extends EPackage
   int FUNCTION_CALL_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.blockImpl <em>block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl <em>Block Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getblock()
+   * @see org.ddmore.mdl.mdl.impl.BlockStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getBlockStatement()
    * @generated
    */
-  int BLOCK = 48;
+  int BLOCK_STATEMENT = 62;
 
   /**
-   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int BLOCK__STATEMENTS = 0;
-
-  /**
-   * The number of structural features of the '<em>block</em>' class.
+   * The feature id for the '<em><b>Symbol</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int BLOCK_FEATURE_COUNT = 1;
+  int BLOCK_STATEMENT__SYMBOL = 0;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.block_statementImpl <em>block statement</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.block_statementImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getblock_statement()
-   * @generated
-   */
-  int BLOCK_STATEMENT = 49;
-
-  /**
-   * The feature id for the '<em><b>Variable declaration</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int BLOCK_STATEMENT__VARIABLE_DECLARATION = 0;
-
-  /**
-   * The feature id for the '<em><b>Function call</b></em>' containment reference.
+   * The feature id for the '<em><b>Function Call</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2006,7 +2631,7 @@ public interface MdlPackage extends EPackage
   int BLOCK_STATEMENT__STATEMENT = 2;
 
   /**
-   * The feature id for the '<em><b>Verbatim block</b></em>' containment reference.
+   * The feature id for the '<em><b>Verbatim Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2015,7 +2640,7 @@ public interface MdlPackage extends EPackage
   int BLOCK_STATEMENT__VERBATIM_BLOCK = 3;
 
   /**
-   * The number of structural features of the '<em>block statement</em>' class.
+   * The number of structural features of the '<em>Block Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2024,14 +2649,14 @@ public interface MdlPackage extends EPackage
   int BLOCK_STATEMENT_FEATURE_COUNT = 4;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.verbatim_blockImpl <em>verbatim block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.VerbatimBlockImpl <em>Verbatim Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.verbatim_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getverbatim_block()
+   * @see org.ddmore.mdl.mdl.impl.VerbatimBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVerbatimBlock()
    * @generated
    */
-  int VERBATIM_BLOCK = 50;
+  int VERBATIM_BLOCK = 63;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2052,7 +2677,7 @@ public interface MdlPackage extends EPackage
   int VERBATIM_BLOCK__BLOCK = 1;
 
   /**
-   * The feature id for the '<em><b>External code</b></em>' attribute.
+   * The feature id for the '<em><b>External Code</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2061,7 +2686,7 @@ public interface MdlPackage extends EPackage
   int VERBATIM_BLOCK__EXTERNAL_CODE = 2;
 
   /**
-   * The number of structural features of the '<em>verbatim block</em>' class.
+   * The number of structural features of the '<em>Verbatim Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2070,14 +2695,14 @@ public interface MdlPackage extends EPackage
   int VERBATIM_BLOCK_FEATURE_COUNT = 3;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.target_blockImpl <em>target block</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.TargetBlockImpl <em>Target Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.target_blockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#gettarget_block()
+   * @see org.ddmore.mdl.mdl.impl.TargetBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTargetBlock()
    * @generated
    */
-  int TARGET_BLOCK = 51;
+  int TARGET_BLOCK = 64;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2089,32 +2714,41 @@ public interface MdlPackage extends EPackage
   int TARGET_BLOCK__IDENTIFIER = 0;
 
   /**
-   * The feature id for the '<em><b>External code</b></em>' attribute.
+   * The feature id for the '<em><b>Arguments</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGET_BLOCK__EXTERNAL_CODE = 1;
+  int TARGET_BLOCK__ARGUMENTS = 1;
 
   /**
-   * The number of structural features of the '<em>target block</em>' class.
+   * The feature id for the '<em><b>External Code</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGET_BLOCK_FEATURE_COUNT = 2;
+  int TARGET_BLOCK__EXTERNAL_CODE = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.variable_declarationImpl <em>variable declaration</em>}' class.
+   * The number of structural features of the '<em>Target Block</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.variable_declarationImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariable_declaration()
+   * @generated
+   * @ordered
+   */
+  int TARGET_BLOCK_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.SymbolModificationImpl <em>Symbol Modification</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.SymbolModificationImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSymbolModification()
    * @generated
    */
-  int VARIABLE_DECLARATION = 52;
+  int SYMBOL_MODIFICATION = 65;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' containment reference.
@@ -2123,7 +2757,81 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_DECLARATION__IDENTIFIER = 0;
+  int SYMBOL_MODIFICATION__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SYMBOL_MODIFICATION__LIST = 1;
+
+  /**
+   * The number of structural features of the '<em>Symbol Modification</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SYMBOL_MODIFICATION_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ParameterDeclarationImpl <em>Parameter Declaration</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ParameterDeclarationImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParameterDeclaration()
+   * @generated
+   */
+  int PARAMETER_DECLARATION = 66;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER_DECLARATION__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER_DECLARATION__LIST = 1;
+
+  /**
+   * The number of structural features of the '<em>Parameter Declaration</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER_DECLARATION_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl <em>Symbol Declaration</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSymbolDeclaration()
+   * @generated
+   */
+  int SYMBOL_DECLARATION = 67;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SYMBOL_DECLARATION__IDENTIFIER = 0;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -2132,35 +2840,394 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_DECLARATION__EXPRESSION = 1;
+  int SYMBOL_DECLARATION__EXPRESSION = 1;
 
   /**
-   * The feature id for the '<em><b>Random list</b></em>' containment reference.
+   * The feature id for the '<em><b>Random List</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE_DECLARATION__RANDOM_LIST = 2;
+  int SYMBOL_DECLARATION__RANDOM_LIST = 2;
 
   /**
-   * The number of structural features of the '<em>variable declaration</em>' class.
+   * The feature id for the '<em><b>Function</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE_DECLARATION_FEATURE_COUNT = 3;
+  int SYMBOL_DECLARATION__FUNCTION = 3;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.any_expressionImpl <em>any expression</em>}' class.
+   * The number of structural features of the '<em>Symbol Declaration</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.any_expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getany_expression()
+   * @generated
+   * @ordered
+   */
+  int SYMBOL_DECLARATION_FEATURE_COUNT = 4;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.EnumTypeImpl <em>Enum Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.EnumTypeImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getEnumType()
    * @generated
    */
-  int ANY_EXPRESSION = 53;
+  int ENUM_TYPE = 68;
+
+  /**
+   * The feature id for the '<em><b>Categorical</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENUM_TYPE__CATEGORICAL = 0;
+
+  /**
+   * The feature id for the '<em><b>Continuous</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENUM_TYPE__CONTINUOUS = 1;
+
+  /**
+   * The feature id for the '<em><b>Covariate</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENUM_TYPE__COVARIATE = 2;
+
+  /**
+   * The feature id for the '<em><b>Distribution</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENUM_TYPE__DISTRIBUTION = 3;
+
+  /**
+   * The feature id for the '<em><b>Level</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENUM_TYPE__LEVEL = 4;
+
+  /**
+   * The feature id for the '<em><b>Likelyhood</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENUM_TYPE__LIKELYHOOD = 5;
+
+  /**
+   * The feature id for the '<em><b>Missing</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENUM_TYPE__MISSING = 6;
+
+  /**
+   * The number of structural features of the '<em>Enum Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENUM_TYPE_FEATURE_COUNT = 7;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.MissingImpl <em>Missing</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.MissingImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMissing()
+   * @generated
+   */
+  int MISSING = 69;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MISSING__IDENTIFIER = 0;
+
+  /**
+   * The number of structural features of the '<em>Missing</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MISSING_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.LikelyhoodImpl <em>Likelyhood</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.LikelyhoodImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLikelyhood()
+   * @generated
+   */
+  int LIKELYHOOD = 70;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LIKELYHOOD__IDENTIFIER = 0;
+
+  /**
+   * The number of structural features of the '<em>Likelyhood</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LIKELYHOOD_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.LevelTypeImpl <em>Level Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.LevelTypeImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLevelType()
+   * @generated
+   */
+  int LEVEL_TYPE = 71;
+
+  /**
+   * The feature id for the '<em><b>Mdv</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LEVEL_TYPE__MDV = 0;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LEVEL_TYPE__ID = 1;
+
+  /**
+   * The feature id for the '<em><b>Dv</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LEVEL_TYPE__DV = 2;
+
+  /**
+   * The feature id for the '<em><b>Idv</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LEVEL_TYPE__IDV = 3;
+
+  /**
+   * The number of structural features of the '<em>Level Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LEVEL_TYPE_FEATURE_COUNT = 4;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.CategoricalImpl <em>Categorical</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.CategoricalImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getCategorical()
+   * @generated
+   */
+  int CATEGORICAL = 72;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CATEGORICAL__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Arguments</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CATEGORICAL__ARGUMENTS = 1;
+
+  /**
+   * The number of structural features of the '<em>Categorical</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CATEGORICAL_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ContinuousImpl <em>Continuous</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ContinuousImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getContinuous()
+   * @generated
+   */
+  int CONTINUOUS = 73;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONTINUOUS__IDENTIFIER = 0;
+
+  /**
+   * The number of structural features of the '<em>Continuous</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONTINUOUS_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.CovariateImpl <em>Covariate</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.CovariateImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getCovariate()
+   * @generated
+   */
+  int COVARIATE = 74;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COVARIATE__IDENTIFIER = 0;
+
+  /**
+   * The number of structural features of the '<em>Covariate</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COVARIATE_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.DistributionImpl <em>Distribution</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.DistributionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDistribution()
+   * @generated
+   */
+  int DISTRIBUTION = 75;
+
+  /**
+   * The feature id for the '<em><b>Normal</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DISTRIBUTION__NORMAL = 0;
+
+  /**
+   * The feature id for the '<em><b>Binomial</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DISTRIBUTION__BINOMIAL = 1;
+
+  /**
+   * The feature id for the '<em><b>Poisson</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DISTRIBUTION__POISSON = 2;
+
+  /**
+   * The feature id for the '<em><b>Student t</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DISTRIBUTION__STUDENT_T = 3;
+
+  /**
+   * The feature id for the '<em><b>Mvnormal</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DISTRIBUTION__MVNORMAL = 4;
+
+  /**
+   * The number of structural features of the '<em>Distribution</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DISTRIBUTION_FEATURE_COUNT = 5;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.AnyExpressionImpl <em>Any Expression</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.AnyExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAnyExpression()
+   * @generated
+   */
+  int ANY_EXPRESSION = 76;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -2181,7 +3248,7 @@ public interface MdlPackage extends EPackage
   int ANY_EXPRESSION__LIST = 1;
 
   /**
-   * The feature id for the '<em><b>Ode list</b></em>' containment reference.
+   * The feature id for the '<em><b>Ode List</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2190,16 +3257,16 @@ public interface MdlPackage extends EPackage
   int ANY_EXPRESSION__ODE_LIST = 2;
 
   /**
-   * The feature id for the '<em><b>Random list</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ANY_EXPRESSION__RANDOM_LIST = 3;
+  int ANY_EXPRESSION__TYPE = 3;
 
   /**
-   * The number of structural features of the '<em>any expression</em>' class.
+   * The number of structural features of the '<em>Any Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2208,17 +3275,17 @@ public interface MdlPackage extends EPackage
   int ANY_EXPRESSION_FEATURE_COUNT = 4;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.expressionImpl <em>expression</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ExpressionImpl <em>Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getexpression()
+   * @see org.ddmore.mdl.mdl.impl.ExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getExpression()
    * @generated
    */
-  int EXPRESSION = 54;
+  int EXPRESSION = 77;
 
   /**
-   * The feature id for the '<em><b>Conditional expression</b></em>' containment reference.
+   * The feature id for the '<em><b>Conditional Expression</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2227,32 +3294,23 @@ public interface MdlPackage extends EPackage
   int EXPRESSION__CONDITIONAL_EXPRESSION = 0;
 
   /**
-   * The feature id for the '<em><b>String expression</b></em>' attribute list.
+   * The number of structural features of the '<em>Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION__STRING_EXPRESSION = 1;
+  int EXPRESSION_FEATURE_COUNT = 1;
 
   /**
-   * The number of structural features of the '<em>expression</em>' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ListImpl <em>List</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EXPRESSION_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.listImpl <em>list</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.listImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getlist()
+   * @see org.ddmore.mdl.mdl.impl.ListImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getList()
    * @generated
    */
-  int LIST = 55;
+  int LIST = 78;
 
   /**
    * The feature id for the '<em><b>Arguments</b></em>' containment reference.
@@ -2264,7 +3322,7 @@ public interface MdlPackage extends EPackage
   int LIST__ARGUMENTS = 0;
 
   /**
-   * The number of structural features of the '<em>list</em>' class.
+   * The number of structural features of the '<em>List</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2273,14 +3331,14 @@ public interface MdlPackage extends EPackage
   int LIST_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ode_listImpl <em>ode list</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.OdeListImpl <em>Ode List</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.ode_listImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getode_list()
+   * @see org.ddmore.mdl.mdl.impl.OdeListImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOdeList()
    * @generated
    */
-  int ODE_LIST = 56;
+  int ODE_LIST = 79;
 
   /**
    * The feature id for the '<em><b>Arguments</b></em>' containment reference.
@@ -2292,7 +3350,7 @@ public interface MdlPackage extends EPackage
   int ODE_LIST__ARGUMENTS = 0;
 
   /**
-   * The number of structural features of the '<em>ode list</em>' class.
+   * The number of structural features of the '<em>Ode List</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2301,14 +3359,14 @@ public interface MdlPackage extends EPackage
   int ODE_LIST_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.random_listImpl <em>random list</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.RandomListImpl <em>Random List</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.random_listImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getrandom_list()
+   * @see org.ddmore.mdl.mdl.impl.RandomListImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRandomList()
    * @generated
    */
-  int RANDOM_LIST = 57;
+  int RANDOM_LIST = 80;
 
   /**
    * The feature id for the '<em><b>Arguments</b></em>' containment reference.
@@ -2320,7 +3378,7 @@ public interface MdlPackage extends EPackage
   int RANDOM_LIST__ARGUMENTS = 0;
 
   /**
-   * The number of structural features of the '<em>random list</em>' class.
+   * The number of structural features of the '<em>Random List</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2329,14 +3387,14 @@ public interface MdlPackage extends EPackage
   int RANDOM_LIST_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.argumentsImpl <em>arguments</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ArgumentsImpl <em>Arguments</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.argumentsImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getarguments()
+   * @see org.ddmore.mdl.mdl.impl.ArgumentsImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getArguments()
    * @generated
    */
-  int ARGUMENTS = 58;
+  int ARGUMENTS = 81;
 
   /**
    * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
@@ -2348,7 +3406,7 @@ public interface MdlPackage extends EPackage
   int ARGUMENTS__ARGUMENTS = 0;
 
   /**
-   * The number of structural features of the '<em>arguments</em>' class.
+   * The number of structural features of the '<em>Arguments</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2357,14 +3415,14 @@ public interface MdlPackage extends EPackage
   int ARGUMENTS_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.argumentImpl <em>argument</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ArgumentImpl <em>Argument</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.argumentImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getargument()
+   * @see org.ddmore.mdl.mdl.impl.ArgumentImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getArgument()
    * @generated
    */
-  int ARGUMENT = 59;
+  int ARGUMENT = 82;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2385,7 +3443,7 @@ public interface MdlPackage extends EPackage
   int ARGUMENT__EXPRESSION = 1;
 
   /**
-   * The number of structural features of the '<em>argument</em>' class.
+   * The number of structural features of the '<em>Argument</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2394,69 +3452,106 @@ public interface MdlPackage extends EPackage
   int ARGUMENT_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.statementImpl <em>statement</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ConditionalStatementImpl <em>Conditional Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.statementImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getstatement()
+   * @see org.ddmore.mdl.mdl.impl.ConditionalStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getConditionalStatement()
    * @generated
    */
-  int STATEMENT = 60;
+  int CONDITIONAL_STATEMENT = 83;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Par Expression</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STATEMENT__BLOCK = 0;
+  int CONDITIONAL_STATEMENT__PAR_EXPRESSION = 0;
 
   /**
-   * The feature id for the '<em><b>Par expression</b></em>' containment reference.
+   * The feature id for the '<em><b>If Statement</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STATEMENT__PAR_EXPRESSION = 1;
+  int CONDITIONAL_STATEMENT__IF_STATEMENT = 1;
 
   /**
-   * The feature id for the '<em><b>If statement</b></em>' containment reference.
+   * The feature id for the '<em><b>If Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STATEMENT__IF_STATEMENT = 2;
+  int CONDITIONAL_STATEMENT__IF_BLOCK = 2;
 
   /**
-   * The feature id for the '<em><b>Else statement</b></em>' containment reference.
+   * The feature id for the '<em><b>Else Statement</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STATEMENT__ELSE_STATEMENT = 3;
+  int CONDITIONAL_STATEMENT__ELSE_STATEMENT = 3;
 
   /**
-   * The number of structural features of the '<em>statement</em>' class.
+   * The feature id for the '<em><b>Else Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STATEMENT_FEATURE_COUNT = 4;
+  int CONDITIONAL_STATEMENT__ELSE_BLOCK = 4;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.par_expressionImpl <em>par expression</em>}' class.
+   * The number of structural features of the '<em>Conditional Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.par_expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getpar_expression()
+   * @generated
+   * @ordered
+   */
+  int CONDITIONAL_STATEMENT_FEATURE_COUNT = 5;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.BlockImpl <em>Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.BlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getBlock()
    * @generated
    */
-  int PAR_EXPRESSION = 61;
+  int BLOCK = 84;
+
+  /**
+   * The feature id for the '<em><b>Statements</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BLOCK__STATEMENTS = 0;
+
+  /**
+   * The number of structural features of the '<em>Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BLOCK_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ParExpressionImpl <em>Par Expression</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ParExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParExpression()
+   * @generated
+   */
+  int PAR_EXPRESSION = 85;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -2468,7 +3563,7 @@ public interface MdlPackage extends EPackage
   int PAR_EXPRESSION__EXPRESSION = 0;
 
   /**
-   * The number of structural features of the '<em>par expression</em>' class.
+   * The number of structural features of the '<em>Par Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2477,23 +3572,23 @@ public interface MdlPackage extends EPackage
   int PAR_EXPRESSION_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.conditional_expressionImpl <em>conditional expression</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ConditionalExpressionImpl <em>Conditional Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.conditional_expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getconditional_expression()
+   * @see org.ddmore.mdl.mdl.impl.ConditionalExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getConditionalExpression()
    * @generated
    */
-  int CONDITIONAL_EXPRESSION = 62;
+  int CONDITIONAL_EXPRESSION = 86;
 
   /**
-   * The feature id for the '<em><b>Conditional or expression</b></em>' containment reference.
+   * The feature id for the '<em><b>Expression</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONDITIONAL_EXPRESSION__CONDITIONAL_OR_EXPRESSION = 0;
+  int CONDITIONAL_EXPRESSION__EXPRESSION = 0;
 
   /**
    * The feature id for the '<em><b>Expression1</b></em>' containment reference.
@@ -2514,7 +3609,7 @@ public interface MdlPackage extends EPackage
   int CONDITIONAL_EXPRESSION__EXPRESSION2 = 2;
 
   /**
-   * The number of structural features of the '<em>conditional expression</em>' class.
+   * The number of structural features of the '<em>Conditional Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2523,23 +3618,23 @@ public interface MdlPackage extends EPackage
   int CONDITIONAL_EXPRESSION_FEATURE_COUNT = 3;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.conditional_or_expressionImpl <em>conditional or expression</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.OrExpressionImpl <em>Or Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.conditional_or_expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getconditional_or_expression()
+   * @see org.ddmore.mdl.mdl.impl.OrExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOrExpression()
    * @generated
    */
-  int CONDITIONAL_OR_EXPRESSION = 63;
+  int OR_EXPRESSION = 87;
 
   /**
-   * The feature id for the '<em><b>Conditional and expression</b></em>' containment reference list.
+   * The feature id for the '<em><b>Expression</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONDITIONAL_OR_EXPRESSION__CONDITIONAL_AND_EXPRESSION = 0;
+  int OR_EXPRESSION__EXPRESSION = 0;
 
   /**
    * The feature id for the '<em><b>Operator</b></em>' attribute list.
@@ -2548,35 +3643,35 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONDITIONAL_OR_EXPRESSION__OPERATOR = 1;
+  int OR_EXPRESSION__OPERATOR = 1;
 
   /**
-   * The number of structural features of the '<em>conditional or expression</em>' class.
+   * The number of structural features of the '<em>Or Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONDITIONAL_OR_EXPRESSION_FEATURE_COUNT = 2;
+  int OR_EXPRESSION_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.conditional_and_expressionImpl <em>conditional and expression</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.AndExpressionImpl <em>And Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.conditional_and_expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getconditional_and_expression()
+   * @see org.ddmore.mdl.mdl.impl.AndExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAndExpression()
    * @generated
    */
-  int CONDITIONAL_AND_EXPRESSION = 64;
+  int AND_EXPRESSION = 88;
 
   /**
-   * The feature id for the '<em><b>Relational expression</b></em>' containment reference list.
+   * The feature id for the '<em><b>Expression</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONDITIONAL_AND_EXPRESSION__RELATIONAL_EXPRESSION = 0;
+  int AND_EXPRESSION__EXPRESSION = 0;
 
   /**
    * The feature id for the '<em><b>Operator</b></em>' attribute list.
@@ -2585,26 +3680,26 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONDITIONAL_AND_EXPRESSION__OPERATOR = 1;
+  int AND_EXPRESSION__OPERATOR = 1;
 
   /**
-   * The number of structural features of the '<em>conditional and expression</em>' class.
+   * The number of structural features of the '<em>And Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONDITIONAL_AND_EXPRESSION_FEATURE_COUNT = 2;
+  int AND_EXPRESSION_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.relational_expressionImpl <em>relational expression</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.LogicalExpressionImpl <em>Logical Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.relational_expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getrelational_expression()
+   * @see org.ddmore.mdl.mdl.impl.LogicalExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLogicalExpression()
    * @generated
    */
-  int RELATIONAL_EXPRESSION = 65;
+  int LOGICAL_EXPRESSION = 89;
 
   /**
    * The feature id for the '<em><b>Negation</b></em>' attribute.
@@ -2613,7 +3708,7 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int RELATIONAL_EXPRESSION__NEGATION = 0;
+  int LOGICAL_EXPRESSION__NEGATION = 0;
 
   /**
    * The feature id for the '<em><b>Boolean</b></em>' attribute.
@@ -2622,102 +3717,111 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int RELATIONAL_EXPRESSION__BOOLEAN = 1;
+  int LOGICAL_EXPRESSION__BOOLEAN = 1;
 
   /**
-   * The feature id for the '<em><b>Additive expression</b></em>' containment reference list.
+   * The feature id for the '<em><b>Expression</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RELATIONAL_EXPRESSION__ADDITIVE_EXPRESSION = 2;
+  int LOGICAL_EXPRESSION__EXPRESSION = 2;
 
   /**
-   * The feature id for the '<em><b>Relational op</b></em>' attribute list.
+   * The feature id for the '<em><b>Operator</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RELATIONAL_EXPRESSION__RELATIONAL_OP = 3;
+  int LOGICAL_EXPRESSION__OPERATOR = 3;
 
   /**
-   * The number of structural features of the '<em>relational expression</em>' class.
+   * The number of structural features of the '<em>Logical Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RELATIONAL_EXPRESSION_FEATURE_COUNT = 4;
+  int LOGICAL_EXPRESSION_FEATURE_COUNT = 4;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.additive_expressionImpl <em>additive expression</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.AdditiveExpressionImpl <em>Additive Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.additive_expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getadditive_expression()
+   * @see org.ddmore.mdl.mdl.impl.AdditiveExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAdditiveExpression()
    * @generated
    */
-  int ADDITIVE_EXPRESSION = 66;
+  int ADDITIVE_EXPRESSION = 90;
 
   /**
-   * The feature id for the '<em><b>Multiplicative expression</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ADDITIVE_EXPRESSION__MULTIPLICATIVE_EXPRESSION = 0;
-
-  /**
-   * The feature id for the '<em><b>Additive op</b></em>' attribute list.
+   * The feature id for the '<em><b>Expression</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ADDITIVE_EXPRESSION__ADDITIVE_OP = 1;
+  int ADDITIVE_EXPRESSION__EXPRESSION = 0;
 
   /**
-   * The number of structural features of the '<em>additive expression</em>' class.
+   * The feature id for the '<em><b>Operator</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ADDITIVE_EXPRESSION_FEATURE_COUNT = 2;
+  int ADDITIVE_EXPRESSION__OPERATOR = 1;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.multiplicative_expressionImpl <em>multiplicative expression</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.multiplicative_expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmultiplicative_expression()
-   * @generated
-   */
-  int MULTIPLICATIVE_EXPRESSION = 67;
-
-  /**
-   * The feature id for the '<em><b>Power expression</b></em>' containment reference list.
+   * The feature id for the '<em><b>String</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MULTIPLICATIVE_EXPRESSION__POWER_EXPRESSION = 0;
+  int ADDITIVE_EXPRESSION__STRING = 2;
 
   /**
-   * The feature id for the '<em><b>Multiplicative op</b></em>' attribute list.
+   * The number of structural features of the '<em>Additive Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MULTIPLICATIVE_EXPRESSION__MULTIPLICATIVE_OP = 1;
+  int ADDITIVE_EXPRESSION_FEATURE_COUNT = 3;
 
   /**
-   * The number of structural features of the '<em>multiplicative expression</em>' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.MultiplicativeExpressionImpl <em>Multiplicative Expression</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.MultiplicativeExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMultiplicativeExpression()
+   * @generated
+   */
+  int MULTIPLICATIVE_EXPRESSION = 91;
+
+  /**
+   * The feature id for the '<em><b>Expression</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MULTIPLICATIVE_EXPRESSION__EXPRESSION = 0;
+
+  /**
+   * The feature id for the '<em><b>Operator</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MULTIPLICATIVE_EXPRESSION__OPERATOR = 1;
+
+  /**
+   * The number of structural features of the '<em>Multiplicative Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2726,35 +3830,35 @@ public interface MdlPackage extends EPackage
   int MULTIPLICATIVE_EXPRESSION_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.power_expressionImpl <em>power expression</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.PowerExpressionImpl <em>Power Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.power_expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getpower_expression()
+   * @see org.ddmore.mdl.mdl.impl.PowerExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getPowerExpression()
    * @generated
    */
-  int POWER_EXPRESSION = 68;
+  int POWER_EXPRESSION = 92;
 
   /**
-   * The feature id for the '<em><b>Unary expression</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int POWER_EXPRESSION__UNARY_EXPRESSION = 0;
-
-  /**
-   * The feature id for the '<em><b>Power op</b></em>' attribute list.
+   * The feature id for the '<em><b>Expression</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int POWER_EXPRESSION__POWER_OP = 1;
+  int POWER_EXPRESSION__EXPRESSION = 0;
 
   /**
-   * The number of structural features of the '<em>power expression</em>' class.
+   * The feature id for the '<em><b>Operator</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int POWER_EXPRESSION__OPERATOR = 1;
+
+  /**
+   * The number of structural features of the '<em>Power Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2763,14 +3867,14 @@ public interface MdlPackage extends EPackage
   int POWER_EXPRESSION_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.unary_expressionImpl <em>unary expression</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.UnaryExpressionImpl <em>Unary Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.unary_expressionImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getunary_expression()
+   * @see org.ddmore.mdl.mdl.impl.UnaryExpressionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getUnaryExpression()
    * @generated
    */
-  int UNARY_EXPRESSION = 69;
+  int UNARY_EXPRESSION = 93;
 
   /**
    * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -2782,16 +3886,16 @@ public interface MdlPackage extends EPackage
   int UNARY_EXPRESSION__OPERATOR = 0;
 
   /**
-   * The feature id for the '<em><b>Unary expression</b></em>' containment reference.
+   * The feature id for the '<em><b>Expression</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int UNARY_EXPRESSION__UNARY_EXPRESSION = 1;
+  int UNARY_EXPRESSION__EXPRESSION = 1;
 
   /**
-   * The feature id for the '<em><b>Par expression</b></em>' containment reference.
+   * The feature id for the '<em><b>Par Expression</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2800,41 +3904,41 @@ public interface MdlPackage extends EPackage
   int UNARY_EXPRESSION__PAR_EXPRESSION = 2;
 
   /**
-   * The feature id for the '<em><b>Function call</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int UNARY_EXPRESSION__FUNCTION_CALL = 3;
-
-  /**
    * The feature id for the '<em><b>Primary</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int UNARY_EXPRESSION__PRIMARY = 4;
+  int UNARY_EXPRESSION__PRIMARY = 3;
 
   /**
-   * The number of structural features of the '<em>unary expression</em>' class.
+   * The number of structural features of the '<em>Unary Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int UNARY_EXPRESSION_FEATURE_COUNT = 5;
+  int UNARY_EXPRESSION_FEATURE_COUNT = 4;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.primaryImpl <em>primary</em>}' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.PrimaryImpl <em>Primary</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.primaryImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getprimary()
+   * @see org.ddmore.mdl.mdl.impl.PrimaryImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getPrimary()
    * @generated
    */
-  int PRIMARY = 70;
+  int PRIMARY = 94;
+
+  /**
+   * The feature id for the '<em><b>Function Call</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRIMARY__FUNCTION_CALL = 0;
 
   /**
    * The feature id for the '<em><b>Number</b></em>' attribute.
@@ -2843,35 +3947,136 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PRIMARY__NUMBER = 0;
+  int PRIMARY__NUMBER = 1;
 
   /**
-   * The feature id for the '<em><b>Identifier</b></em>' containment reference.
+   * The feature id for the '<em><b>Symbol</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PRIMARY__IDENTIFIER = 1;
+  int PRIMARY__SYMBOL = 2;
 
   /**
-   * The number of structural features of the '<em>primary</em>' class.
+   * The feature id for the '<em><b>Attribute</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PRIMARY_FEATURE_COUNT = 2;
+  int PRIMARY__ATTRIBUTE = 3;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.variable_nameImpl <em>variable name</em>}' class.
+   * The feature id for the '<em><b>Vector</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.variable_nameImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariable_name()
+   * @generated
+   * @ordered
+   */
+  int PRIMARY__VECTOR = 4;
+
+  /**
+   * The number of structural features of the '<em>Primary</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRIMARY_FEATURE_COUNT = 5;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.VectorImpl <em>Vector</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.VectorImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVector()
    * @generated
    */
-  int VARIABLE_NAME = 71;
+  int VECTOR = 95;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VECTOR__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Values</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VECTOR__VALUES = 1;
+
+  /**
+   * The number of structural features of the '<em>Vector</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VECTOR_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl <em>Fully Qualified Symbol Name</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFullyQualifiedSymbolName()
+   * @generated
+   */
+  int FULLY_QUALIFIED_SYMBOL_NAME = 96;
+
+  /**
+   * The feature id for the '<em><b>Object</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FULLY_QUALIFIED_SYMBOL_NAME__OBJECT = 0;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FULLY_QUALIFIED_SYMBOL_NAME__IDENTIFIER = 1;
+
+  /**
+   * The number of structural features of the '<em>Fully Qualified Symbol Name</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FULLY_QUALIFIED_SYMBOL_NAME_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl <em>Fully Qualified Argument Name</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFullyQualifiedArgumentName()
+   * @generated
+   */
+  int FULLY_QUALIFIED_ARGUMENT_NAME = 97;
+
+  /**
+   * The feature id for the '<em><b>Parent</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FULLY_QUALIFIED_ARGUMENT_NAME__PARENT = 0;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute list.
@@ -2880,2599 +4085,3708 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_NAME__IDENTIFIER = 0;
+  int FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER = 1;
 
   /**
-   * The feature id for the '<em><b>Selector</b></em>' containment reference list.
+   * The number of structural features of the '<em>Fully Qualified Argument Name</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE_NAME__SELECTOR = 1;
+  int FULLY_QUALIFIED_ARGUMENT_NAME_FEATURE_COUNT = 2;
 
   /**
-   * The number of structural features of the '<em>variable name</em>' class.
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ObjectNameImpl <em>Object Name</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ObjectNameImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getObjectName()
+   * @generated
+   */
+  int OBJECT_NAME = 98;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE_NAME_FEATURE_COUNT = 2;
+  int OBJECT_NAME__NAME = 0;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.selectorImpl <em>selector</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.selectorImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getselector()
-   * @generated
-   */
-  int SELECTOR = 72;
-
-  /**
-   * The feature id for the '<em><b>Expression</b></em>' containment reference list.
+   * The number of structural features of the '<em>Object Name</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SELECTOR__EXPRESSION = 0;
+  int OBJECT_NAME_FEATURE_COUNT = 1;
+
 
   /**
-   * The number of structural features of the '<em>selector</em>' class.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Mcl <em>Mcl</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SELECTOR_FEATURE_COUNT = 1;
-
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.mcl <em>mcl</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>mcl</em>'.
-   * @see org.ddmore.mdl.mdl.mcl
+   * @return the meta object for class '<em>Mcl</em>'.
+   * @see org.ddmore.mdl.mdl.Mcl
    * @generated
    */
-  EClass getmcl();
+  EClass getMcl();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.mcl#getObjects <em>Objects</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.Mcl#getObjects <em>Objects</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Objects</em>'.
-   * @see org.ddmore.mdl.mdl.mcl#getObjects()
-   * @see #getmcl()
+   * @see org.ddmore.mdl.mdl.Mcl#getObjects()
+   * @see #getMcl()
    * @generated
    */
-  EReference getmcl_Objects();
+  EReference getMcl_Objects();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.mcl_obj <em>mcl obj</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.MclObject <em>Mcl Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>mcl obj</em>'.
-   * @see org.ddmore.mdl.mdl.mcl_obj
+   * @return the meta object for class '<em>Mcl Object</em>'.
+   * @see org.ddmore.mdl.mdl.MclObject
    * @generated
    */
-  EClass getmcl_obj();
+  EClass getMclObject();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.mcl_obj#getModel_obj <em>Model obj</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.MclObject#getModelObject <em>Model Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Model obj</em>'.
-   * @see org.ddmore.mdl.mdl.mcl_obj#getModel_obj()
-   * @see #getmcl_obj()
+   * @return the meta object for the containment reference '<em>Model Object</em>'.
+   * @see org.ddmore.mdl.mdl.MclObject#getModelObject()
+   * @see #getMclObject()
    * @generated
    */
-  EReference getmcl_obj_Model_obj();
+  EReference getMclObject_ModelObject();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.mcl_obj#getParam_obj <em>Param obj</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.MclObject#getParameterObject <em>Parameter Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Param obj</em>'.
-   * @see org.ddmore.mdl.mdl.mcl_obj#getParam_obj()
-   * @see #getmcl_obj()
+   * @return the meta object for the containment reference '<em>Parameter Object</em>'.
+   * @see org.ddmore.mdl.mdl.MclObject#getParameterObject()
+   * @see #getMclObject()
    * @generated
    */
-  EReference getmcl_obj_Param_obj();
+  EReference getMclObject_ParameterObject();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.mcl_obj#getData_obj <em>Data obj</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.MclObject#getDataObject <em>Data Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Data obj</em>'.
-   * @see org.ddmore.mdl.mdl.mcl_obj#getData_obj()
-   * @see #getmcl_obj()
+   * @return the meta object for the containment reference '<em>Data Object</em>'.
+   * @see org.ddmore.mdl.mdl.MclObject#getDataObject()
+   * @see #getMclObject()
    * @generated
    */
-  EReference getmcl_obj_Data_obj();
+  EReference getMclObject_DataObject();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.mcl_obj#getTask_obj <em>Task obj</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.MclObject#getTaskObject <em>Task Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Task obj</em>'.
-   * @see org.ddmore.mdl.mdl.mcl_obj#getTask_obj()
-   * @see #getmcl_obj()
+   * @return the meta object for the containment reference '<em>Task Object</em>'.
+   * @see org.ddmore.mdl.mdl.MclObject#getTaskObject()
+   * @see #getMclObject()
    * @generated
    */
-  EReference getmcl_obj_Task_obj();
+  EReference getMclObject_TaskObject();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.mcl_obj#getTel_obj <em>Tel obj</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.MclObject#getTelObject <em>Tel Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Tel obj</em>'.
-   * @see org.ddmore.mdl.mdl.mcl_obj#getTel_obj()
-   * @see #getmcl_obj()
+   * @return the meta object for the containment reference '<em>Tel Object</em>'.
+   * @see org.ddmore.mdl.mdl.MclObject#getTelObject()
+   * @see #getMclObject()
    * @generated
    */
-  EReference getmcl_obj_Tel_obj();
+  EReference getMclObject_TelObject();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.model_obj <em>model obj</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ModelObject <em>Model Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>model obj</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj
+   * @return the meta object for class '<em>Model Object</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObject
    * @generated
    */
-  EClass getmodel_obj();
+  EClass getModelObject();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.model_obj#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObject#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj#getIdentifier()
-   * @see #getmodel_obj()
+   * @return the meta object for the containment reference '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObject#getIdentifier()
+   * @see #getModelObject()
    * @generated
    */
-  EAttribute getmodel_obj_Identifier();
+  EReference getModelObject_Identifier();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.model_obj#getBlocks <em>Blocks</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Blocks</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj#getBlocks()
-   * @see #getmodel_obj()
-   * @generated
-   */
-  EReference getmodel_obj_Blocks();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.param_obj <em>param obj</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>param obj</em>'.
-   * @see org.ddmore.mdl.mdl.param_obj
-   * @generated
-   */
-  EClass getparam_obj();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.param_obj#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.param_obj#getIdentifier()
-   * @see #getparam_obj()
-   * @generated
-   */
-  EAttribute getparam_obj_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.param_obj#getBlocks <em>Blocks</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.ModelObject#getBlocks <em>Blocks</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Blocks</em>'.
-   * @see org.ddmore.mdl.mdl.param_obj#getBlocks()
-   * @see #getparam_obj()
+   * @see org.ddmore.mdl.mdl.ModelObject#getBlocks()
+   * @see #getModelObject()
    * @generated
    */
-  EReference getparam_obj_Blocks();
+  EReference getModelObject_Blocks();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.data_obj <em>data obj</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ParameterObject <em>Parameter Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>data obj</em>'.
-   * @see org.ddmore.mdl.mdl.data_obj
+   * @return the meta object for class '<em>Parameter Object</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterObject
    * @generated
    */
-  EClass getdata_obj();
+  EClass getParameterObject();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.data_obj#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ParameterObject#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.data_obj#getIdentifier()
-   * @see #getdata_obj()
+   * @return the meta object for the containment reference '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterObject#getIdentifier()
+   * @see #getParameterObject()
    * @generated
    */
-  EAttribute getdata_obj_Identifier();
+  EReference getParameterObject_Identifier();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.data_obj#getBlocks <em>Blocks</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Blocks</em>'.
-   * @see org.ddmore.mdl.mdl.data_obj#getBlocks()
-   * @see #getdata_obj()
-   * @generated
-   */
-  EReference getdata_obj_Blocks();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.task_obj <em>task obj</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>task obj</em>'.
-   * @see org.ddmore.mdl.mdl.task_obj
-   * @generated
-   */
-  EClass gettask_obj();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.task_obj#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.task_obj#getIdentifier()
-   * @see #gettask_obj()
-   * @generated
-   */
-  EAttribute gettask_obj_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.task_obj#getBlocks <em>Blocks</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.ParameterObject#getBlocks <em>Blocks</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Blocks</em>'.
-   * @see org.ddmore.mdl.mdl.task_obj#getBlocks()
-   * @see #gettask_obj()
+   * @see org.ddmore.mdl.mdl.ParameterObject#getBlocks()
+   * @see #getParameterObject()
    * @generated
    */
-  EReference gettask_obj_Blocks();
+  EReference getParameterObject_Blocks();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.tel_obj <em>tel obj</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.DataObject <em>Data Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>tel obj</em>'.
-   * @see org.ddmore.mdl.mdl.tel_obj
+   * @return the meta object for class '<em>Data Object</em>'.
+   * @see org.ddmore.mdl.mdl.DataObject
    * @generated
    */
-  EClass gettel_obj();
+  EClass getDataObject();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.tel_obj#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DataObject#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.tel_obj#getIdentifier()
-   * @see #gettel_obj()
+   * @return the meta object for the containment reference '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.DataObject#getIdentifier()
+   * @see #getDataObject()
    * @generated
    */
-  EAttribute gettel_obj_Identifier();
+  EReference getDataObject_Identifier();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.tel_obj#getBlocks <em>Blocks</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.DataObject#getBlocks <em>Blocks</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Blocks</em>'.
-   * @see org.ddmore.mdl.mdl.tel_obj#getBlocks()
-   * @see #gettel_obj()
+   * @see org.ddmore.mdl.mdl.DataObject#getBlocks()
+   * @see #getDataObject()
    * @generated
    */
-  EReference gettel_obj_Blocks();
+  EReference getDataObject_Blocks();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.model_obj_block <em>model obj block</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.TaskObject <em>Task Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>model obj block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block
+   * @return the meta object for class '<em>Task Object</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObject
    * @generated
    */
-  EClass getmodel_obj_block();
+  EClass getTaskObject();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getIndividual_model_obj_block <em>Individual model obj block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskObject#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Individual model obj block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getIndividual_model_obj_block()
-   * @see #getmodel_obj_block()
+   * @return the meta object for the containment reference '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObject#getIdentifier()
+   * @see #getTaskObject()
    * @generated
    */
-  EReference getmodel_obj_block_Individual_model_obj_block();
+  EReference getTaskObject_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getModel_prediction_obj_block <em>Model prediction obj block</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.TaskObject#getBlocks <em>Blocks</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Model prediction obj block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getModel_prediction_obj_block()
-   * @see #getmodel_obj_block()
+   * @return the meta object for the containment reference list '<em>Blocks</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObject#getBlocks()
+   * @see #getTaskObject()
    * @generated
    */
-  EReference getmodel_obj_block_Model_prediction_obj_block();
+  EReference getTaskObject_Blocks();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getRandom_variable_definition_block <em>Random variable definition block</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.TELObject <em>TEL Object</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Random variable definition block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getRandom_variable_definition_block()
-   * @see #getmodel_obj_block()
+   * @return the meta object for class '<em>TEL Object</em>'.
+   * @see org.ddmore.mdl.mdl.TELObject
    * @generated
    */
-  EReference getmodel_obj_block_Random_variable_definition_block();
+  EClass getTELObject();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getInput_variables_block <em>Input variables block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TELObject#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Input variables block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getInput_variables_block()
-   * @see #getmodel_obj_block()
+   * @return the meta object for the containment reference '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.TELObject#getIdentifier()
+   * @see #getTELObject()
    * @generated
    */
-  EReference getmodel_obj_block_Input_variables_block();
+  EReference getTELObject_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getStructural_parameters_block <em>Structural parameters block</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.TELObject#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Structural parameters block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getStructural_parameters_block()
-   * @see #getmodel_obj_block()
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.TELObject#getStatements()
+   * @see #getTELObject()
    * @generated
    */
-  EReference getmodel_obj_block_Structural_parameters_block();
+  EReference getTELObject_Statements();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getVariability_parameters_block <em>Variability parameters block</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ModelObjectBlock <em>Model Object Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Variability parameters block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getVariability_parameters_block()
-   * @see #getmodel_obj_block()
+   * @return the meta object for class '<em>Model Object Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock
    * @generated
    */
-  EReference getmodel_obj_block_Variability_parameters_block();
+  EClass getModelObjectBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getOutput_variables_block <em>Output variables block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getIndividualVariablesBlock <em>Individual Variables Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Output variables block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getOutput_variables_block()
-   * @see #getmodel_obj_block()
+   * @return the meta object for the containment reference '<em>Individual Variables Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getIndividualVariablesBlock()
+   * @see #getModelObjectBlock()
    * @generated
    */
-  EReference getmodel_obj_block_Output_variables_block();
+  EReference getModelObjectBlock_IndividualVariablesBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getGroup_variables <em>Group variables</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getModelPredictionBlock <em>Model Prediction Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Group variables</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getGroup_variables()
-   * @see #getmodel_obj_block()
+   * @return the meta object for the containment reference '<em>Model Prediction Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getModelPredictionBlock()
+   * @see #getModelObjectBlock()
    * @generated
    */
-  EReference getmodel_obj_block_Group_variables();
+  EReference getModelObjectBlock_ModelPredictionBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getObservation_block <em>Observation block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getRandomVariableDefinitionBlock <em>Random Variable Definition Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Observation block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getObservation_block()
-   * @see #getmodel_obj_block()
+   * @return the meta object for the containment reference '<em>Random Variable Definition Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getRandomVariableDefinitionBlock()
+   * @see #getModelObjectBlock()
    * @generated
    */
-  EReference getmodel_obj_block_Observation_block();
+  EReference getModelObjectBlock_RandomVariableDefinitionBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getEstimation_block <em>Estimation block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getInputVariablesBlock <em>Input Variables Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Estimation block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getEstimation_block()
-   * @see #getmodel_obj_block()
+   * @return the meta object for the containment reference '<em>Input Variables Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getInputVariablesBlock()
+   * @see #getModelObjectBlock()
    * @generated
    */
-  EReference getmodel_obj_block_Estimation_block();
+  EReference getModelObjectBlock_InputVariablesBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_obj_block#getSimulation_block <em>Simulation block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getStructuralParametersBlock <em>Structural Parameters Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Simulation block</em>'.
-   * @see org.ddmore.mdl.mdl.model_obj_block#getSimulation_block()
-   * @see #getmodel_obj_block()
+   * @return the meta object for the containment reference '<em>Structural Parameters Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getStructuralParametersBlock()
+   * @see #getModelObjectBlock()
    * @generated
    */
-  EReference getmodel_obj_block_Simulation_block();
+  EReference getModelObjectBlock_StructuralParametersBlock();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.individual_model_obj_block <em>individual model obj block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getVariabilityParametersBlock <em>Variability Parameters Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>individual model obj block</em>'.
-   * @see org.ddmore.mdl.mdl.individual_model_obj_block
+   * @return the meta object for the containment reference '<em>Variability Parameters Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getVariabilityParametersBlock()
+   * @see #getModelObjectBlock()
    * @generated
    */
-  EClass getindividual_model_obj_block();
+  EReference getModelObjectBlock_VariabilityParametersBlock();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.individual_model_obj_block#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getOutputVariablesBlock <em>Output Variables Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Output Variables Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getOutputVariablesBlock()
+   * @see #getModelObjectBlock()
+   * @generated
+   */
+  EReference getModelObjectBlock_OutputVariablesBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getGroupVariablesBlock <em>Group Variables Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Group Variables Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getGroupVariablesBlock()
+   * @see #getModelObjectBlock()
+   * @generated
+   */
+  EReference getModelObjectBlock_GroupVariablesBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getObservationBlock <em>Observation Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Observation Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getObservationBlock()
+   * @see #getModelObjectBlock()
+   * @generated
+   */
+  EReference getModelObjectBlock_ObservationBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getEstimationBlock <em>Estimation Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Estimation Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getEstimationBlock()
+   * @see #getModelObjectBlock()
+   * @generated
+   */
+  EReference getModelObjectBlock_EstimationBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getSimulationBlock <em>Simulation Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Simulation Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getSimulationBlock()
+   * @see #getModelObjectBlock()
+   * @generated
+   */
+  EReference getModelObjectBlock_SimulationBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getVerbatimBlock <em>Verbatim Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Verbatim Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getVerbatimBlock()
+   * @see #getModelObjectBlock()
+   * @generated
+   */
+  EReference getModelObjectBlock_VerbatimBlock();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.IndividualVariablesBlock <em>Individual Variables Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Individual Variables Block</em>'.
+   * @see org.ddmore.mdl.mdl.IndividualVariablesBlock
+   * @generated
+   */
+  EClass getIndividualVariablesBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.IndividualVariablesBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.individual_model_obj_block#getIdentifier()
-   * @see #getindividual_model_obj_block()
+   * @see org.ddmore.mdl.mdl.IndividualVariablesBlock#getIdentifier()
+   * @see #getIndividualVariablesBlock()
    * @generated
    */
-  EAttribute getindividual_model_obj_block_Identifier();
+  EAttribute getIndividualVariablesBlock_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.individual_model_obj_block#getBlock <em>Block</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.IndividualVariablesBlock#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.individual_model_obj_block#getBlock()
-   * @see #getindividual_model_obj_block()
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.IndividualVariablesBlock#getStatements()
+   * @see #getIndividualVariablesBlock()
    * @generated
    */
-  EReference getindividual_model_obj_block_Block();
+  EReference getIndividualVariablesBlock_Statements();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.model_prediction_obj_block <em>model prediction obj block</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ModelPredictionBlock <em>Model Prediction Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>model prediction obj block</em>'.
-   * @see org.ddmore.mdl.mdl.model_prediction_obj_block
+   * @return the meta object for class '<em>Model Prediction Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelPredictionBlock
    * @generated
    */
-  EClass getmodel_prediction_obj_block();
+  EClass getModelPredictionBlock();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.model_prediction_obj_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.model_prediction_obj_block#getIdentifier()
-   * @see #getmodel_prediction_obj_block()
-   * @generated
-   */
-  EAttribute getmodel_prediction_obj_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_prediction_obj_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.model_prediction_obj_block#getBlock()
-   * @see #getmodel_prediction_obj_block()
-   * @generated
-   */
-  EReference getmodel_prediction_obj_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.random_variable_definition_block <em>random variable definition block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>random variable definition block</em>'.
-   * @see org.ddmore.mdl.mdl.random_variable_definition_block
-   * @generated
-   */
-  EClass getrandom_variable_definition_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.random_variable_definition_block#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.ModelPredictionBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.random_variable_definition_block#getIdentifier()
-   * @see #getrandom_variable_definition_block()
+   * @see org.ddmore.mdl.mdl.ModelPredictionBlock#getIdentifier()
+   * @see #getModelPredictionBlock()
    * @generated
    */
-  EAttribute getrandom_variable_definition_block_Identifier();
+  EAttribute getModelPredictionBlock_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.random_variable_definition_block#getBlock <em>Block</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.ModelPredictionBlock#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.random_variable_definition_block#getBlock()
-   * @see #getrandom_variable_definition_block()
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.ModelPredictionBlock#getStatements()
+   * @see #getModelPredictionBlock()
    * @generated
    */
-  EReference getrandom_variable_definition_block_Block();
+  EReference getModelPredictionBlock_Statements();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.input_variables_block <em>input variables block</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.RandomVariableDefinitionBlock <em>Random Variable Definition Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>input variables block</em>'.
-   * @see org.ddmore.mdl.mdl.input_variables_block
+   * @return the meta object for class '<em>Random Variable Definition Block</em>'.
+   * @see org.ddmore.mdl.mdl.RandomVariableDefinitionBlock
    * @generated
    */
-  EClass getinput_variables_block();
+  EClass getRandomVariableDefinitionBlock();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.input_variables_block#getIndentifier <em>Indentifier</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.RandomVariableDefinitionBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.RandomVariableDefinitionBlock#getIdentifier()
+   * @see #getRandomVariableDefinitionBlock()
+   * @generated
+   */
+  EAttribute getRandomVariableDefinitionBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.RandomVariableDefinitionBlock#getVariables <em>Variables</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Variables</em>'.
+   * @see org.ddmore.mdl.mdl.RandomVariableDefinitionBlock#getVariables()
+   * @see #getRandomVariableDefinitionBlock()
+   * @generated
+   */
+  EReference getRandomVariableDefinitionBlock_Variables();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.InputVariablesBlock <em>Input Variables Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Input Variables Block</em>'.
+   * @see org.ddmore.mdl.mdl.InputVariablesBlock
+   * @generated
+   */
+  EClass getInputVariablesBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.InputVariablesBlock#getIndentifier <em>Indentifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Indentifier</em>'.
-   * @see org.ddmore.mdl.mdl.input_variables_block#getIndentifier()
-   * @see #getinput_variables_block()
+   * @see org.ddmore.mdl.mdl.InputVariablesBlock#getIndentifier()
+   * @see #getInputVariablesBlock()
    * @generated
    */
-  EAttribute getinput_variables_block_Indentifier();
+  EAttribute getInputVariablesBlock_Indentifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.input_variables_block#getBlock <em>Block</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.InputVariablesBlock#getVariables <em>Variables</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.input_variables_block#getBlock()
-   * @see #getinput_variables_block()
+   * @return the meta object for the containment reference list '<em>Variables</em>'.
+   * @see org.ddmore.mdl.mdl.InputVariablesBlock#getVariables()
+   * @see #getInputVariablesBlock()
    * @generated
    */
-  EReference getinput_variables_block_Block();
+  EReference getInputVariablesBlock_Variables();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.structural_parameters_block <em>structural parameters block</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.StructuralParametersBlock <em>Structural Parameters Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>structural parameters block</em>'.
-   * @see org.ddmore.mdl.mdl.structural_parameters_block
+   * @return the meta object for class '<em>Structural Parameters Block</em>'.
+   * @see org.ddmore.mdl.mdl.StructuralParametersBlock
    * @generated
    */
-  EClass getstructural_parameters_block();
+  EClass getStructuralParametersBlock();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.structural_parameters_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.structural_parameters_block#getIdentifier()
-   * @see #getstructural_parameters_block()
-   * @generated
-   */
-  EAttribute getstructural_parameters_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.structural_parameters_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.structural_parameters_block#getBlock()
-   * @see #getstructural_parameters_block()
-   * @generated
-   */
-  EReference getstructural_parameters_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.variability_parameters_block <em>variability parameters block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>variability parameters block</em>'.
-   * @see org.ddmore.mdl.mdl.variability_parameters_block
-   * @generated
-   */
-  EClass getvariability_parameters_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.variability_parameters_block#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.StructuralParametersBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.variability_parameters_block#getIdentifier()
-   * @see #getvariability_parameters_block()
+   * @see org.ddmore.mdl.mdl.StructuralParametersBlock#getIdentifier()
+   * @see #getStructuralParametersBlock()
    * @generated
    */
-  EAttribute getvariability_parameters_block_Identifier();
+  EAttribute getStructuralParametersBlock_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.variability_parameters_block#getBlock <em>Block</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.StructuralParametersBlock#getParameters <em>Parameters</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.variability_parameters_block#getBlock()
-   * @see #getvariability_parameters_block()
+   * @return the meta object for the containment reference list '<em>Parameters</em>'.
+   * @see org.ddmore.mdl.mdl.StructuralParametersBlock#getParameters()
+   * @see #getStructuralParametersBlock()
    * @generated
    */
-  EReference getvariability_parameters_block_Block();
+  EReference getStructuralParametersBlock_Parameters();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.output_variables_block <em>output variables block</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.VariabilityParametersBlock <em>Variability Parameters Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>output variables block</em>'.
-   * @see org.ddmore.mdl.mdl.output_variables_block
+   * @return the meta object for class '<em>Variability Parameters Block</em>'.
+   * @see org.ddmore.mdl.mdl.VariabilityParametersBlock
    * @generated
    */
-  EClass getoutput_variables_block();
+  EClass getVariabilityParametersBlock();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.output_variables_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.output_variables_block#getIdentifier()
-   * @see #getoutput_variables_block()
-   * @generated
-   */
-  EAttribute getoutput_variables_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.output_variables_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.output_variables_block#getBlock()
-   * @see #getoutput_variables_block()
-   * @generated
-   */
-  EReference getoutput_variables_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.group_variables <em>group variables</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>group variables</em>'.
-   * @see org.ddmore.mdl.mdl.group_variables
-   * @generated
-   */
-  EClass getgroup_variables();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.group_variables#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.VariabilityParametersBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.group_variables#getIdentifier()
-   * @see #getgroup_variables()
+   * @see org.ddmore.mdl.mdl.VariabilityParametersBlock#getIdentifier()
+   * @see #getVariabilityParametersBlock()
    * @generated
    */
-  EAttribute getgroup_variables_Identifier();
+  EAttribute getVariabilityParametersBlock_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.group_variables#getBlock <em>Block</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.VariabilityParametersBlock#getParameters <em>Parameters</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.group_variables#getBlock()
-   * @see #getgroup_variables()
+   * @return the meta object for the containment reference list '<em>Parameters</em>'.
+   * @see org.ddmore.mdl.mdl.VariabilityParametersBlock#getParameters()
+   * @see #getVariabilityParametersBlock()
    * @generated
    */
-  EReference getgroup_variables_Block();
+  EReference getVariabilityParametersBlock_Parameters();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.observation_block <em>observation block</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.OutputVariablesBlock <em>Output Variables Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>observation block</em>'.
-   * @see org.ddmore.mdl.mdl.observation_block
+   * @return the meta object for class '<em>Output Variables Block</em>'.
+   * @see org.ddmore.mdl.mdl.OutputVariablesBlock
    * @generated
    */
-  EClass getobservation_block();
+  EClass getOutputVariablesBlock();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.observation_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.observation_block#getIdentifier()
-   * @see #getobservation_block()
-   * @generated
-   */
-  EAttribute getobservation_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.observation_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.observation_block#getBlock()
-   * @see #getobservation_block()
-   * @generated
-   */
-  EReference getobservation_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.estimation_block <em>estimation block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>estimation block</em>'.
-   * @see org.ddmore.mdl.mdl.estimation_block
-   * @generated
-   */
-  EClass getestimation_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.estimation_block#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.OutputVariablesBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.estimation_block#getIdentifier()
-   * @see #getestimation_block()
+   * @see org.ddmore.mdl.mdl.OutputVariablesBlock#getIdentifier()
+   * @see #getOutputVariablesBlock()
    * @generated
    */
-  EAttribute getestimation_block_Identifier();
+  EAttribute getOutputVariablesBlock_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.estimation_block#getBlock <em>Block</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.OutputVariablesBlock#getVariables <em>Variables</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.estimation_block#getBlock()
-   * @see #getestimation_block()
+   * @return the meta object for the containment reference list '<em>Variables</em>'.
+   * @see org.ddmore.mdl.mdl.OutputVariablesBlock#getVariables()
+   * @see #getOutputVariablesBlock()
    * @generated
    */
-  EReference getestimation_block_Block();
+  EReference getOutputVariablesBlock_Variables();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.simulation_block <em>simulation block</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.GroupVariablesBlock <em>Group Variables Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>simulation block</em>'.
-   * @see org.ddmore.mdl.mdl.simulation_block
+   * @return the meta object for class '<em>Group Variables Block</em>'.
+   * @see org.ddmore.mdl.mdl.GroupVariablesBlock
    * @generated
    */
-  EClass getsimulation_block();
+  EClass getGroupVariablesBlock();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.simulation_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.simulation_block#getIdentifier()
-   * @see #getsimulation_block()
-   * @generated
-   */
-  EAttribute getsimulation_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.simulation_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.simulation_block#getBlock()
-   * @see #getsimulation_block()
-   * @generated
-   */
-  EReference getsimulation_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.param_obj_block <em>param obj block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>param obj block</em>'.
-   * @see org.ddmore.mdl.mdl.param_obj_block
-   * @generated
-   */
-  EClass getparam_obj_block();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.param_obj_block#getStructural_block <em>Structural block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Structural block</em>'.
-   * @see org.ddmore.mdl.mdl.param_obj_block#getStructural_block()
-   * @see #getparam_obj_block()
-   * @generated
-   */
-  EReference getparam_obj_block_Structural_block();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.param_obj_block#getVariability_block <em>Variability block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Variability block</em>'.
-   * @see org.ddmore.mdl.mdl.param_obj_block#getVariability_block()
-   * @see #getparam_obj_block()
-   * @generated
-   */
-  EReference getparam_obj_block_Variability_block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.structural_block <em>structural block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>structural block</em>'.
-   * @see org.ddmore.mdl.mdl.structural_block
-   * @generated
-   */
-  EClass getstructural_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.structural_block#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.GroupVariablesBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.structural_block#getIdentifier()
-   * @see #getstructural_block()
+   * @see org.ddmore.mdl.mdl.GroupVariablesBlock#getIdentifier()
+   * @see #getGroupVariablesBlock()
    * @generated
    */
-  EAttribute getstructural_block_Identifier();
+  EAttribute getGroupVariablesBlock_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.structural_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.structural_block#getBlock()
-   * @see #getstructural_block()
-   * @generated
-   */
-  EReference getstructural_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.variability_block <em>variability block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>variability block</em>'.
-   * @see org.ddmore.mdl.mdl.variability_block
-   * @generated
-   */
-  EClass getvariability_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.variability_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.variability_block#getIdentifier()
-   * @see #getvariability_block()
-   * @generated
-   */
-  EAttribute getvariability_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.variability_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.variability_block#getBlock()
-   * @see #getvariability_block()
-   * @generated
-   */
-  EReference getvariability_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.data_obj_block <em>data obj block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>data obj block</em>'.
-   * @see org.ddmore.mdl.mdl.data_obj_block
-   * @generated
-   */
-  EClass getdata_obj_block();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.data_obj_block#getHeader_block <em>Header block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Header block</em>'.
-   * @see org.ddmore.mdl.mdl.data_obj_block#getHeader_block()
-   * @see #getdata_obj_block()
-   * @generated
-   */
-  EReference getdata_obj_block_Header_block();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.data_obj_block#getFile_block <em>File block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>File block</em>'.
-   * @see org.ddmore.mdl.mdl.data_obj_block#getFile_block()
-   * @see #getdata_obj_block()
-   * @generated
-   */
-  EReference getdata_obj_block_File_block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.header_block <em>header block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>header block</em>'.
-   * @see org.ddmore.mdl.mdl.header_block
-   * @generated
-   */
-  EClass getheader_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.header_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.header_block#getIdentifier()
-   * @see #getheader_block()
-   * @generated
-   */
-  EAttribute getheader_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.header_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.header_block#getBlock()
-   * @see #getheader_block()
-   * @generated
-   */
-  EReference getheader_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.file_block <em>file block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>file block</em>'.
-   * @see org.ddmore.mdl.mdl.file_block
-   * @generated
-   */
-  EClass getfile_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.file_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.file_block#getIdentifier()
-   * @see #getfile_block()
-   * @generated
-   */
-  EAttribute getfile_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.file_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.file_block#getBlock()
-   * @see #getfile_block()
-   * @generated
-   */
-  EReference getfile_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.task_obj_block <em>task obj block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>task obj block</em>'.
-   * @see org.ddmore.mdl.mdl.task_obj_block
-   * @generated
-   */
-  EClass gettask_obj_block();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.task_obj_block#getFunction_declaration <em>Function declaration</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Function declaration</em>'.
-   * @see org.ddmore.mdl.mdl.task_obj_block#getFunction_declaration()
-   * @see #gettask_obj_block()
-   * @generated
-   */
-  EReference gettask_obj_block_Function_declaration();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.task_obj_block#getParameters_block <em>Parameters block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Parameters block</em>'.
-   * @see org.ddmore.mdl.mdl.task_obj_block#getParameters_block()
-   * @see #gettask_obj_block()
-   * @generated
-   */
-  EReference gettask_obj_block_Parameters_block();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.task_obj_block#getData_block <em>Data block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Data block</em>'.
-   * @see org.ddmore.mdl.mdl.task_obj_block#getData_block()
-   * @see #gettask_obj_block()
-   * @generated
-   */
-  EReference gettask_obj_block_Data_block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.parameters_block <em>parameters block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>parameters block</em>'.
-   * @see org.ddmore.mdl.mdl.parameters_block
-   * @generated
-   */
-  EClass getparameters_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.parameters_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.parameters_block#getIdentifier()
-   * @see #getparameters_block()
-   * @generated
-   */
-  EAttribute getparameters_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.parameters_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.parameters_block#getBlock()
-   * @see #getparameters_block()
-   * @generated
-   */
-  EReference getparameters_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.data_block <em>data block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>data block</em>'.
-   * @see org.ddmore.mdl.mdl.data_block
-   * @generated
-   */
-  EClass getdata_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.data_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.data_block#getIdentifier()
-   * @see #getdata_block()
-   * @generated
-   */
-  EAttribute getdata_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.data_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.data_block#getBlock()
-   * @see #getdata_block()
-   * @generated
-   */
-  EReference getdata_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.model_block <em>model block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>model block</em>'.
-   * @see org.ddmore.mdl.mdl.model_block
-   * @generated
-   */
-  EClass getmodel_block();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.model_block#getStatements <em>Statements</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.GroupVariablesBlock#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Statements</em>'.
-   * @see org.ddmore.mdl.mdl.model_block#getStatements()
-   * @see #getmodel_block()
+   * @see org.ddmore.mdl.mdl.GroupVariablesBlock#getStatements()
+   * @see #getGroupVariablesBlock()
    * @generated
    */
-  EReference getmodel_block_Statements();
+  EReference getGroupVariablesBlock_Statements();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.model_block_statement <em>model block statement</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ObservationBlock <em>Observation Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>model block statement</em>'.
-   * @see org.ddmore.mdl.mdl.model_block_statement
+   * @return the meta object for class '<em>Observation Block</em>'.
+   * @see org.ddmore.mdl.mdl.ObservationBlock
    * @generated
    */
-  EClass getmodel_block_statement();
+  EClass getObservationBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_block_statement#getStatement <em>Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Statement</em>'.
-   * @see org.ddmore.mdl.mdl.model_block_statement#getStatement()
-   * @see #getmodel_block_statement()
-   * @generated
-   */
-  EReference getmodel_block_statement_Statement();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_block_statement#getOde_block <em>Ode block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Ode block</em>'.
-   * @see org.ddmore.mdl.mdl.model_block_statement#getOde_block()
-   * @see #getmodel_block_statement()
-   * @generated
-   */
-  EReference getmodel_block_statement_Ode_block();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.model_block_statement#getLibrary_block <em>Library block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Library block</em>'.
-   * @see org.ddmore.mdl.mdl.model_block_statement#getLibrary_block()
-   * @see #getmodel_block_statement()
-   * @generated
-   */
-  EReference getmodel_block_statement_Library_block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.library_block <em>library block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>library block</em>'.
-   * @see org.ddmore.mdl.mdl.library_block
-   * @generated
-   */
-  EClass getlibrary_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.library_block#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.ObservationBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.library_block#getIdentifier()
-   * @see #getlibrary_block()
+   * @see org.ddmore.mdl.mdl.ObservationBlock#getIdentifier()
+   * @see #getObservationBlock()
    * @generated
    */
-  EAttribute getlibrary_block_Identifier();
+  EAttribute getObservationBlock_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.library_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.library_block#getBlock()
-   * @see #getlibrary_block()
-   * @generated
-   */
-  EReference getlibrary_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ode_block <em>ode block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ode block</em>'.
-   * @see org.ddmore.mdl.mdl.ode_block
-   * @generated
-   */
-  EClass getode_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.ode_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.ode_block#getIdentifier()
-   * @see #getode_block()
-   * @generated
-   */
-  EAttribute getode_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ode_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.ode_block#getBlock()
-   * @see #getode_block()
-   * @generated
-   */
-  EReference getode_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.variability_block_content <em>variability block content</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>variability block content</em>'.
-   * @see org.ddmore.mdl.mdl.variability_block_content
-   * @generated
-   */
-  EClass getvariability_block_content();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.variability_block_content#getBlocks <em>Blocks</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Blocks</em>'.
-   * @see org.ddmore.mdl.mdl.variability_block_content#getBlocks()
-   * @see #getvariability_block_content()
-   * @generated
-   */
-  EReference getvariability_block_content_Blocks();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.variability_block_statement <em>variability block statement</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>variability block statement</em>'.
-   * @see org.ddmore.mdl.mdl.variability_block_statement
-   * @generated
-   */
-  EClass getvariability_block_statement();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.variability_block_statement#getBlock_statement <em>Block statement</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block statement</em>'.
-   * @see org.ddmore.mdl.mdl.variability_block_statement#getBlock_statement()
-   * @see #getvariability_block_statement()
-   * @generated
-   */
-  EReference getvariability_block_statement_Block_statement();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.variability_block_statement#getBlock_block <em>Block block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block block</em>'.
-   * @see org.ddmore.mdl.mdl.variability_block_statement#getBlock_block()
-   * @see #getvariability_block_statement()
-   * @generated
-   */
-  EReference getvariability_block_statement_Block_block();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.variability_block_statement#getDiag_block <em>Diag block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Diag block</em>'.
-   * @see org.ddmore.mdl.mdl.variability_block_statement#getDiag_block()
-   * @see #getvariability_block_statement()
-   * @generated
-   */
-  EReference getvariability_block_statement_Diag_block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.block_subblock <em>block subblock</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>block subblock</em>'.
-   * @see org.ddmore.mdl.mdl.block_subblock
-   * @generated
-   */
-  EClass getblock_subblock();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.block_subblock#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.block_subblock#getIdentifier()
-   * @see #getblock_subblock()
-   * @generated
-   */
-  EAttribute getblock_subblock_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.block_subblock#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.block_subblock#getBlock()
-   * @see #getblock_subblock()
-   * @generated
-   */
-  EReference getblock_subblock_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.diag_subblock <em>diag subblock</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>diag subblock</em>'.
-   * @see org.ddmore.mdl.mdl.diag_subblock
-   * @generated
-   */
-  EClass getdiag_subblock();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.diag_subblock#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.diag_subblock#getIdentifier()
-   * @see #getdiag_subblock()
-   * @generated
-   */
-  EAttribute getdiag_subblock_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.diag_subblock#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.diag_subblock#getBlock()
-   * @see #getdiag_subblock()
-   * @generated
-   */
-  EReference getdiag_subblock_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.variability_subblock <em>variability subblock</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>variability subblock</em>'.
-   * @see org.ddmore.mdl.mdl.variability_subblock
-   * @generated
-   */
-  EClass getvariability_subblock();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.variability_subblock#getArguments <em>Arguments</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Arguments</em>'.
-   * @see org.ddmore.mdl.mdl.variability_subblock#getArguments()
-   * @see #getvariability_subblock()
-   * @generated
-   */
-  EReference getvariability_subblock_Arguments();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.file_block_content <em>file block content</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>file block content</em>'.
-   * @see org.ddmore.mdl.mdl.file_block_content
-   * @generated
-   */
-  EClass getfile_block_content();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.file_block_content#getBlocks <em>Blocks</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Blocks</em>'.
-   * @see org.ddmore.mdl.mdl.file_block_content#getBlocks()
-   * @see #getfile_block_content()
-   * @generated
-   */
-  EReference getfile_block_content_Blocks();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.file_block_statement <em>file block statement</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>file block statement</em>'.
-   * @see org.ddmore.mdl.mdl.file_block_statement
-   * @generated
-   */
-  EClass getfile_block_statement();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.file_block_statement#getStatement <em>Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Statement</em>'.
-   * @see org.ddmore.mdl.mdl.file_block_statement#getStatement()
-   * @see #getfile_block_statement()
-   * @generated
-   */
-  EReference getfile_block_statement_Statement();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.file_block_statement#getInline_block <em>Inline block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Inline block</em>'.
-   * @see org.ddmore.mdl.mdl.file_block_statement#getInline_block()
-   * @see #getfile_block_statement()
-   * @generated
-   */
-  EReference getfile_block_statement_Inline_block();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.file_block_statement#getDesign_block <em>Design block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Design block</em>'.
-   * @see org.ddmore.mdl.mdl.file_block_statement#getDesign_block()
-   * @see #getfile_block_statement()
-   * @generated
-   */
-  EReference getfile_block_statement_Design_block();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.file_block_statement#getRsscript_block <em>Rsscript block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Rsscript block</em>'.
-   * @see org.ddmore.mdl.mdl.file_block_statement#getRsscript_block()
-   * @see #getfile_block_statement()
-   * @generated
-   */
-  EReference getfile_block_statement_Rsscript_block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.inline_block <em>inline block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>inline block</em>'.
-   * @see org.ddmore.mdl.mdl.inline_block
-   * @generated
-   */
-  EClass getinline_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.inline_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.inline_block#getIdentifier()
-   * @see #getinline_block()
-   * @generated
-   */
-  EAttribute getinline_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.inline_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.inline_block#getBlock()
-   * @see #getinline_block()
-   * @generated
-   */
-  EReference getinline_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.design_block <em>design block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>design block</em>'.
-   * @see org.ddmore.mdl.mdl.design_block
-   * @generated
-   */
-  EClass getdesign_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.design_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.design_block#getIdentifier()
-   * @see #getdesign_block()
-   * @generated
-   */
-  EAttribute getdesign_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.design_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.design_block#getBlock()
-   * @see #getdesign_block()
-   * @generated
-   */
-  EReference getdesign_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.rsscript_block <em>rsscript block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>rsscript block</em>'.
-   * @see org.ddmore.mdl.mdl.rsscript_block
-   * @generated
-   */
-  EClass getrsscript_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.rsscript_block#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.rsscript_block#getIdentifier()
-   * @see #getrsscript_block()
-   * @generated
-   */
-  EAttribute getrsscript_block_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.rsscript_block#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.rsscript_block#getBlock()
-   * @see #getrsscript_block()
-   * @generated
-   */
-  EReference getrsscript_block_Block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.inline_block_content <em>inline block content</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>inline block content</em>'.
-   * @see org.ddmore.mdl.mdl.inline_block_content
-   * @generated
-   */
-  EClass getinline_block_content();
-
-  /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.inline_block_content#getIdentifiers <em>Identifiers</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Identifiers</em>'.
-   * @see org.ddmore.mdl.mdl.inline_block_content#getIdentifiers()
-   * @see #getinline_block_content()
-   * @generated
-   */
-  EAttribute getinline_block_content_Identifiers();
-
-  /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.inline_block_content#getValues <em>Values</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Values</em>'.
-   * @see org.ddmore.mdl.mdl.inline_block_content#getValues()
-   * @see #getinline_block_content()
-   * @generated
-   */
-  EAttribute getinline_block_content_Values();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.function_declaration <em>function declaration</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>function declaration</em>'.
-   * @see org.ddmore.mdl.mdl.function_declaration
-   * @generated
-   */
-  EClass getfunction_declaration();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.function_declaration#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.function_declaration#getIdentifier()
-   * @see #getfunction_declaration()
-   * @generated
-   */
-  EAttribute getfunction_declaration_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.function_declaration#getFormal_arguments <em>Formal arguments</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Formal arguments</em>'.
-   * @see org.ddmore.mdl.mdl.function_declaration#getFormal_arguments()
-   * @see #getfunction_declaration()
-   * @generated
-   */
-  EReference getfunction_declaration_Formal_arguments();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.function_declaration#getFunction_body <em>Function body</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Function body</em>'.
-   * @see org.ddmore.mdl.mdl.function_declaration#getFunction_body()
-   * @see #getfunction_declaration()
-   * @generated
-   */
-  EReference getfunction_declaration_Function_body();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.function_body <em>function body</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>function body</em>'.
-   * @see org.ddmore.mdl.mdl.function_body
-   * @generated
-   */
-  EClass getfunction_body();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.function_body#getBlocks <em>Blocks</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Blocks</em>'.
-   * @see org.ddmore.mdl.mdl.function_body#getBlocks()
-   * @see #getfunction_body()
-   * @generated
-   */
-  EReference getfunction_body_Blocks();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.function_subblock <em>function subblock</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>function subblock</em>'.
-   * @see org.ddmore.mdl.mdl.function_subblock
-   * @generated
-   */
-  EClass getfunction_subblock();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.function_subblock#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.function_subblock#getIdentifier()
-   * @see #getfunction_subblock()
-   * @generated
-   */
-  EAttribute getfunction_subblock_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.function_subblock#getEstimate_defn <em>Estimate defn</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Estimate defn</em>'.
-   * @see org.ddmore.mdl.mdl.function_subblock#getEstimate_defn()
-   * @see #getfunction_subblock()
-   * @generated
-   */
-  EReference getfunction_subblock_Estimate_defn();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.function_subblock#getSimulate_defn <em>Simulate defn</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Simulate defn</em>'.
-   * @see org.ddmore.mdl.mdl.function_subblock#getSimulate_defn()
-   * @see #getfunction_subblock()
-   * @generated
-   */
-  EReference getfunction_subblock_Simulate_defn();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.formal_arguments <em>formal arguments</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>formal arguments</em>'.
-   * @see org.ddmore.mdl.mdl.formal_arguments
-   * @generated
-   */
-  EClass getformal_arguments();
-
-  /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.formal_arguments#getIdentifiers <em>Identifiers</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Identifiers</em>'.
-   * @see org.ddmore.mdl.mdl.formal_arguments#getIdentifiers()
-   * @see #getformal_arguments()
-   * @generated
-   */
-  EAttribute getformal_arguments_Identifiers();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.function_call <em>function call</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>function call</em>'.
-   * @see org.ddmore.mdl.mdl.function_call
-   * @generated
-   */
-  EClass getfunction_call();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.function_call#getFunct_name <em>Funct name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Funct name</em>'.
-   * @see org.ddmore.mdl.mdl.function_call#getFunct_name()
-   * @see #getfunction_call()
-   * @generated
-   */
-  EAttribute getfunction_call_Funct_name();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.function_call#getArguments <em>Arguments</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Arguments</em>'.
-   * @see org.ddmore.mdl.mdl.function_call#getArguments()
-   * @see #getfunction_call()
-   * @generated
-   */
-  EReference getfunction_call_Arguments();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.block <em>block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>block</em>'.
-   * @see org.ddmore.mdl.mdl.block
-   * @generated
-   */
-  EClass getblock();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.block#getStatements <em>Statements</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.ObservationBlock#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Statements</em>'.
-   * @see org.ddmore.mdl.mdl.block#getStatements()
-   * @see #getblock()
+   * @see org.ddmore.mdl.mdl.ObservationBlock#getStatements()
+   * @see #getObservationBlock()
    * @generated
    */
-  EReference getblock_Statements();
+  EReference getObservationBlock_Statements();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.block_statement <em>block statement</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.EstimationBlock <em>Estimation Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>block statement</em>'.
-   * @see org.ddmore.mdl.mdl.block_statement
+   * @return the meta object for class '<em>Estimation Block</em>'.
+   * @see org.ddmore.mdl.mdl.EstimationBlock
    * @generated
    */
-  EClass getblock_statement();
+  EClass getEstimationBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.block_statement#getVariable_declaration <em>Variable declaration</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Variable declaration</em>'.
-   * @see org.ddmore.mdl.mdl.block_statement#getVariable_declaration()
-   * @see #getblock_statement()
-   * @generated
-   */
-  EReference getblock_statement_Variable_declaration();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.block_statement#getFunction_call <em>Function call</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Function call</em>'.
-   * @see org.ddmore.mdl.mdl.block_statement#getFunction_call()
-   * @see #getblock_statement()
-   * @generated
-   */
-  EReference getblock_statement_Function_call();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.block_statement#getStatement <em>Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Statement</em>'.
-   * @see org.ddmore.mdl.mdl.block_statement#getStatement()
-   * @see #getblock_statement()
-   * @generated
-   */
-  EReference getblock_statement_Statement();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.block_statement#getVerbatim_block <em>Verbatim block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Verbatim block</em>'.
-   * @see org.ddmore.mdl.mdl.block_statement#getVerbatim_block()
-   * @see #getblock_statement()
-   * @generated
-   */
-  EReference getblock_statement_Verbatim_block();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.verbatim_block <em>verbatim block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>verbatim block</em>'.
-   * @see org.ddmore.mdl.mdl.verbatim_block
-   * @generated
-   */
-  EClass getverbatim_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.verbatim_block#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.EstimationBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.verbatim_block#getIdentifier()
-   * @see #getverbatim_block()
+   * @see org.ddmore.mdl.mdl.EstimationBlock#getIdentifier()
+   * @see #getEstimationBlock()
    * @generated
    */
-  EAttribute getverbatim_block_Identifier();
+  EAttribute getEstimationBlock_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.verbatim_block#getBlock <em>Block</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.EstimationBlock#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.verbatim_block#getBlock()
-   * @see #getverbatim_block()
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.EstimationBlock#getStatements()
+   * @see #getEstimationBlock()
    * @generated
    */
-  EReference getverbatim_block_Block();
+  EReference getEstimationBlock_Statements();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.verbatim_block#getExternal_code <em>External code</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.SimulationBlock <em>Simulation Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>External code</em>'.
-   * @see org.ddmore.mdl.mdl.verbatim_block#getExternal_code()
-   * @see #getverbatim_block()
+   * @return the meta object for class '<em>Simulation Block</em>'.
+   * @see org.ddmore.mdl.mdl.SimulationBlock
    * @generated
    */
-  EAttribute getverbatim_block_External_code();
+  EClass getSimulationBlock();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.target_block <em>target block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>target block</em>'.
-   * @see org.ddmore.mdl.mdl.target_block
-   * @generated
-   */
-  EClass gettarget_block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.target_block#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.SimulationBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.target_block#getIdentifier()
-   * @see #gettarget_block()
+   * @see org.ddmore.mdl.mdl.SimulationBlock#getIdentifier()
+   * @see #getSimulationBlock()
    * @generated
    */
-  EAttribute gettarget_block_Identifier();
+  EAttribute getSimulationBlock_Identifier();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.target_block#getExternal_code <em>External code</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.SimulationBlock#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>External code</em>'.
-   * @see org.ddmore.mdl.mdl.target_block#getExternal_code()
-   * @see #gettarget_block()
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.SimulationBlock#getStatements()
+   * @see #getSimulationBlock()
    * @generated
    */
-  EAttribute gettarget_block_External_code();
+  EReference getSimulationBlock_Statements();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.variable_declaration <em>variable declaration</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ParameterObjectBlock <em>Parameter Object Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>variable declaration</em>'.
-   * @see org.ddmore.mdl.mdl.variable_declaration
+   * @return the meta object for class '<em>Parameter Object Block</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterObjectBlock
    * @generated
    */
-  EClass getvariable_declaration();
+  EClass getParameterObjectBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.variable_declaration#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getStructuralBlock <em>Structural Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.variable_declaration#getIdentifier()
-   * @see #getvariable_declaration()
+   * @return the meta object for the containment reference '<em>Structural Block</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterObjectBlock#getStructuralBlock()
+   * @see #getParameterObjectBlock()
    * @generated
    */
-  EReference getvariable_declaration_Identifier();
+  EReference getParameterObjectBlock_StructuralBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.variable_declaration#getExpression <em>Expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getVariabilityBlock <em>Variability Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Variability Block</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterObjectBlock#getVariabilityBlock()
+   * @see #getParameterObjectBlock()
+   * @generated
+   */
+  EReference getParameterObjectBlock_VariabilityBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getPriorBlock <em>Prior Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Prior Block</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterObjectBlock#getPriorBlock()
+   * @see #getParameterObjectBlock()
+   * @generated
+   */
+  EReference getParameterObjectBlock_PriorBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getVerbatimBlock <em>Verbatim Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Verbatim Block</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterObjectBlock#getVerbatimBlock()
+   * @see #getParameterObjectBlock()
+   * @generated
+   */
+  EReference getParameterObjectBlock_VerbatimBlock();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.StructuralBlock <em>Structural Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Structural Block</em>'.
+   * @see org.ddmore.mdl.mdl.StructuralBlock
+   * @generated
+   */
+  EClass getStructuralBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.StructuralBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.StructuralBlock#getIdentifier()
+   * @see #getStructuralBlock()
+   * @generated
+   */
+  EAttribute getStructuralBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.StructuralBlock#getParameters <em>Parameters</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Parameters</em>'.
+   * @see org.ddmore.mdl.mdl.StructuralBlock#getParameters()
+   * @see #getStructuralBlock()
+   * @generated
+   */
+  EReference getStructuralBlock_Parameters();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.VariabilityBlock <em>Variability Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Variability Block</em>'.
+   * @see org.ddmore.mdl.mdl.VariabilityBlock
+   * @generated
+   */
+  EClass getVariabilityBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.VariabilityBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.VariabilityBlock#getIdentifier()
+   * @see #getVariabilityBlock()
+   * @generated
+   */
+  EAttribute getVariabilityBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.VariabilityBlock#getStatements <em>Statements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.VariabilityBlock#getStatements()
+   * @see #getVariabilityBlock()
+   * @generated
+   */
+  EReference getVariabilityBlock_Statements();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.PriorParametersBlock <em>Prior Parameters Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Prior Parameters Block</em>'.
+   * @see org.ddmore.mdl.mdl.PriorParametersBlock
+   * @generated
+   */
+  EClass getPriorParametersBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.PriorParametersBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.PriorParametersBlock#getIdentifier()
+   * @see #getPriorParametersBlock()
+   * @generated
+   */
+  EAttribute getPriorParametersBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.PriorParametersBlock#getStatements <em>Statements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.PriorParametersBlock#getStatements()
+   * @see #getPriorParametersBlock()
+   * @generated
+   */
+  EReference getPriorParametersBlock_Statements();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.DataObjectBlock <em>Data Object Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Data Object Block</em>'.
+   * @see org.ddmore.mdl.mdl.DataObjectBlock
+   * @generated
+   */
+  EClass getDataObjectBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DataObjectBlock#getHeaderBlock <em>Header Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Header Block</em>'.
+   * @see org.ddmore.mdl.mdl.DataObjectBlock#getHeaderBlock()
+   * @see #getDataObjectBlock()
+   * @generated
+   */
+  EReference getDataObjectBlock_HeaderBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DataObjectBlock#getFileBlock <em>File Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>File Block</em>'.
+   * @see org.ddmore.mdl.mdl.DataObjectBlock#getFileBlock()
+   * @see #getDataObjectBlock()
+   * @generated
+   */
+  EReference getDataObjectBlock_FileBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DataObjectBlock#getVerbatimBlock <em>Verbatim Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Verbatim Block</em>'.
+   * @see org.ddmore.mdl.mdl.DataObjectBlock#getVerbatimBlock()
+   * @see #getDataObjectBlock()
+   * @generated
+   */
+  EReference getDataObjectBlock_VerbatimBlock();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.HeaderBlock <em>Header Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Header Block</em>'.
+   * @see org.ddmore.mdl.mdl.HeaderBlock
+   * @generated
+   */
+  EClass getHeaderBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.HeaderBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.HeaderBlock#getIdentifier()
+   * @see #getHeaderBlock()
+   * @generated
+   */
+  EAttribute getHeaderBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.HeaderBlock#getVariables <em>Variables</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Variables</em>'.
+   * @see org.ddmore.mdl.mdl.HeaderBlock#getVariables()
+   * @see #getHeaderBlock()
+   * @generated
+   */
+  EReference getHeaderBlock_Variables();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.FileBlock <em>File Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>File Block</em>'.
+   * @see org.ddmore.mdl.mdl.FileBlock
+   * @generated
+   */
+  EClass getFileBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.FileBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.FileBlock#getIdentifier()
+   * @see #getFileBlock()
+   * @generated
+   */
+  EAttribute getFileBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.FileBlock#getStatements <em>Statements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.FileBlock#getStatements()
+   * @see #getFileBlock()
+   * @generated
+   */
+  EReference getFileBlock_Statements();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.TaskObjectBlock <em>Task Object Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Task Object Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObjectBlock
+   * @generated
+   */
+  EClass getTaskObjectBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskObjectBlock#getFunctionDeclaration <em>Function Declaration</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Function Declaration</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObjectBlock#getFunctionDeclaration()
+   * @see #getTaskObjectBlock()
+   * @generated
+   */
+  EReference getTaskObjectBlock_FunctionDeclaration();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskObjectBlock#getParameterBlock <em>Parameter Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Parameter Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObjectBlock#getParameterBlock()
+   * @see #getTaskObjectBlock()
+   * @generated
+   */
+  EReference getTaskObjectBlock_ParameterBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskObjectBlock#getDataBlock <em>Data Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Data Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObjectBlock#getDataBlock()
+   * @see #getTaskObjectBlock()
+   * @generated
+   */
+  EReference getTaskObjectBlock_DataBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskObjectBlock#getModelBlock <em>Model Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Model Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObjectBlock#getModelBlock()
+   * @see #getTaskObjectBlock()
+   * @generated
+   */
+  EReference getTaskObjectBlock_ModelBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskObjectBlock#getVerbatimBlock <em>Verbatim Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Verbatim Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObjectBlock#getVerbatimBlock()
+   * @see #getTaskObjectBlock()
+   * @generated
+   */
+  EReference getTaskObjectBlock_VerbatimBlock();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ParameterBlock <em>Parameter Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Parameter Block</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterBlock
+   * @generated
+   */
+  EClass getParameterBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.ParameterBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterBlock#getIdentifier()
+   * @see #getParameterBlock()
+   * @generated
+   */
+  EAttribute getParameterBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.ParameterBlock#getParameters <em>Parameters</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Parameters</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterBlock#getParameters()
+   * @see #getParameterBlock()
+   * @generated
+   */
+  EReference getParameterBlock_Parameters();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.DataBlock <em>Data Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Data Block</em>'.
+   * @see org.ddmore.mdl.mdl.DataBlock
+   * @generated
+   */
+  EClass getDataBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.DataBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.DataBlock#getIdentifier()
+   * @see #getDataBlock()
+   * @generated
+   */
+  EAttribute getDataBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.DataBlock#getStatements <em>Statements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.DataBlock#getStatements()
+   * @see #getDataBlock()
+   * @generated
+   */
+  EReference getDataBlock_Statements();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.DataBlockStatement <em>Data Block Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Data Block Statement</em>'.
+   * @see org.ddmore.mdl.mdl.DataBlockStatement
+   * @generated
+   */
+  EClass getDataBlockStatement();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DataBlockStatement#getIgnoreList <em>Ignore List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Ignore List</em>'.
+   * @see org.ddmore.mdl.mdl.DataBlockStatement#getIgnoreList()
+   * @see #getDataBlockStatement()
+   * @generated
+   */
+  EReference getDataBlockStatement_IgnoreList();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DataBlockStatement#getAcceptList <em>Accept List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Accept List</em>'.
+   * @see org.ddmore.mdl.mdl.DataBlockStatement#getAcceptList()
+   * @see #getDataBlockStatement()
+   * @generated
+   */
+  EReference getDataBlockStatement_AcceptList();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DataBlockStatement#getDropList <em>Drop List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Drop List</em>'.
+   * @see org.ddmore.mdl.mdl.DataBlockStatement#getDropList()
+   * @see #getDataBlockStatement()
+   * @generated
+   */
+  EReference getDataBlockStatement_DropList();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.IgnoreList <em>Ignore List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Ignore List</em>'.
+   * @see org.ddmore.mdl.mdl.IgnoreList
+   * @generated
+   */
+  EClass getIgnoreList();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.IgnoreList#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.IgnoreList#getIdentifier()
+   * @see #getIgnoreList()
+   * @generated
+   */
+  EAttribute getIgnoreList_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.IgnoreList#getExpression <em>Expression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Expression</em>'.
-   * @see org.ddmore.mdl.mdl.variable_declaration#getExpression()
-   * @see #getvariable_declaration()
+   * @see org.ddmore.mdl.mdl.IgnoreList#getExpression()
+   * @see #getIgnoreList()
    * @generated
    */
-  EReference getvariable_declaration_Expression();
+  EReference getIgnoreList_Expression();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.variable_declaration#getRandom_list <em>Random list</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.AcceptList <em>Accept List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Random list</em>'.
-   * @see org.ddmore.mdl.mdl.variable_declaration#getRandom_list()
-   * @see #getvariable_declaration()
+   * @return the meta object for class '<em>Accept List</em>'.
+   * @see org.ddmore.mdl.mdl.AcceptList
    * @generated
    */
-  EReference getvariable_declaration_Random_list();
+  EClass getAcceptList();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.any_expression <em>any expression</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.AcceptList#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>any expression</em>'.
-   * @see org.ddmore.mdl.mdl.any_expression
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.AcceptList#getIdentifier()
+   * @see #getAcceptList()
    * @generated
    */
-  EClass getany_expression();
+  EAttribute getAcceptList_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.any_expression#getExpression <em>Expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.AcceptList#getExpression <em>Expression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Expression</em>'.
-   * @see org.ddmore.mdl.mdl.any_expression#getExpression()
-   * @see #getany_expression()
+   * @see org.ddmore.mdl.mdl.AcceptList#getExpression()
+   * @see #getAcceptList()
    * @generated
    */
-  EReference getany_expression_Expression();
+  EReference getAcceptList_Expression();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.any_expression#getList <em>List</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.DropList <em>Drop List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Drop List</em>'.
+   * @see org.ddmore.mdl.mdl.DropList
+   * @generated
+   */
+  EClass getDropList();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.DropList#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.DropList#getIdentifier()
+   * @see #getDropList()
+   * @generated
+   */
+  EAttribute getDropList_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DropList#getList <em>List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>List</em>'.
-   * @see org.ddmore.mdl.mdl.any_expression#getList()
-   * @see #getany_expression()
+   * @see org.ddmore.mdl.mdl.DropList#getList()
+   * @see #getDropList()
    * @generated
    */
-  EReference getany_expression_List();
+  EReference getDropList_List();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.any_expression#getOde_list <em>Ode list</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ModelBlock <em>Model Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Ode list</em>'.
-   * @see org.ddmore.mdl.mdl.any_expression#getOde_list()
-   * @see #getany_expression()
+   * @return the meta object for class '<em>Model Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelBlock
    * @generated
    */
-  EReference getany_expression_Ode_list();
+  EClass getModelBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.any_expression#getRandom_list <em>Random list</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Random list</em>'.
-   * @see org.ddmore.mdl.mdl.any_expression#getRandom_list()
-   * @see #getany_expression()
-   * @generated
-   */
-  EReference getany_expression_Random_list();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.expression <em>expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>expression</em>'.
-   * @see org.ddmore.mdl.mdl.expression
-   * @generated
-   */
-  EClass getexpression();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.expression#getConditional_expression <em>Conditional expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Conditional expression</em>'.
-   * @see org.ddmore.mdl.mdl.expression#getConditional_expression()
-   * @see #getexpression()
-   * @generated
-   */
-  EReference getexpression_Conditional_expression();
-
-  /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.expression#getString_expression <em>String expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>String expression</em>'.
-   * @see org.ddmore.mdl.mdl.expression#getString_expression()
-   * @see #getexpression()
-   * @generated
-   */
-  EAttribute getexpression_String_expression();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.list <em>list</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>list</em>'.
-   * @see org.ddmore.mdl.mdl.list
-   * @generated
-   */
-  EClass getlist();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.list#getArguments <em>Arguments</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Arguments</em>'.
-   * @see org.ddmore.mdl.mdl.list#getArguments()
-   * @see #getlist()
-   * @generated
-   */
-  EReference getlist_Arguments();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ode_list <em>ode list</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ode list</em>'.
-   * @see org.ddmore.mdl.mdl.ode_list
-   * @generated
-   */
-  EClass getode_list();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ode_list#getArguments <em>Arguments</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Arguments</em>'.
-   * @see org.ddmore.mdl.mdl.ode_list#getArguments()
-   * @see #getode_list()
-   * @generated
-   */
-  EReference getode_list_Arguments();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.random_list <em>random list</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>random list</em>'.
-   * @see org.ddmore.mdl.mdl.random_list
-   * @generated
-   */
-  EClass getrandom_list();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.random_list#getArguments <em>Arguments</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Arguments</em>'.
-   * @see org.ddmore.mdl.mdl.random_list#getArguments()
-   * @see #getrandom_list()
-   * @generated
-   */
-  EReference getrandom_list_Arguments();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.arguments <em>arguments</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>arguments</em>'.
-   * @see org.ddmore.mdl.mdl.arguments
-   * @generated
-   */
-  EClass getarguments();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.arguments#getArguments <em>Arguments</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Arguments</em>'.
-   * @see org.ddmore.mdl.mdl.arguments#getArguments()
-   * @see #getarguments()
-   * @generated
-   */
-  EReference getarguments_Arguments();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.argument <em>argument</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>argument</em>'.
-   * @see org.ddmore.mdl.mdl.argument
-   * @generated
-   */
-  EClass getargument();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.argument#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.ModelBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.argument#getIdentifier()
-   * @see #getargument()
+   * @see org.ddmore.mdl.mdl.ModelBlock#getIdentifier()
+   * @see #getModelBlock()
    * @generated
    */
-  EAttribute getargument_Identifier();
+  EAttribute getModelBlock_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.argument#getExpression <em>Expression</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.ModelBlock#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Expression</em>'.
-   * @see org.ddmore.mdl.mdl.argument#getExpression()
-   * @see #getargument()
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.ModelBlock#getStatements()
+   * @see #getModelBlock()
    * @generated
    */
-  EReference getargument_Expression();
+  EReference getModelBlock_Statements();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.statement <em>statement</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ModelBlockStatement <em>Model Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>statement</em>'.
-   * @see org.ddmore.mdl.mdl.statement
+   * @return the meta object for class '<em>Model Block Statement</em>'.
+   * @see org.ddmore.mdl.mdl.ModelBlockStatement
    * @generated
    */
-  EClass getstatement();
+  EClass getModelBlockStatement();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.statement#getBlock <em>Block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelBlockStatement#getStatement <em>Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.statement#getBlock()
-   * @see #getstatement()
+   * @return the meta object for the containment reference '<em>Statement</em>'.
+   * @see org.ddmore.mdl.mdl.ModelBlockStatement#getStatement()
+   * @see #getModelBlockStatement()
    * @generated
    */
-  EReference getstatement_Block();
+  EReference getModelBlockStatement_Statement();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.statement#getPar_expression <em>Par expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelBlockStatement#getAddList <em>Add List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Par expression</em>'.
-   * @see org.ddmore.mdl.mdl.statement#getPar_expression()
-   * @see #getstatement()
+   * @return the meta object for the containment reference '<em>Add List</em>'.
+   * @see org.ddmore.mdl.mdl.ModelBlockStatement#getAddList()
+   * @see #getModelBlockStatement()
    * @generated
    */
-  EReference getstatement_Par_expression();
+  EReference getModelBlockStatement_AddList();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.statement#getIf_statement <em>If statement</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelBlockStatement#getRemoveList <em>Remove List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>If statement</em>'.
-   * @see org.ddmore.mdl.mdl.statement#getIf_statement()
-   * @see #getstatement()
+   * @return the meta object for the containment reference '<em>Remove List</em>'.
+   * @see org.ddmore.mdl.mdl.ModelBlockStatement#getRemoveList()
+   * @see #getModelBlockStatement()
    * @generated
    */
-  EReference getstatement_If_statement();
+  EReference getModelBlockStatement_RemoveList();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.statement#getElse_statement <em>Else statement</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.AddList <em>Add List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Else statement</em>'.
-   * @see org.ddmore.mdl.mdl.statement#getElse_statement()
-   * @see #getstatement()
+   * @return the meta object for class '<em>Add List</em>'.
+   * @see org.ddmore.mdl.mdl.AddList
    * @generated
    */
-  EReference getstatement_Else_statement();
+  EClass getAddList();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.par_expression <em>par expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.AddList#getList <em>List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>par expression</em>'.
-   * @see org.ddmore.mdl.mdl.par_expression
+   * @return the meta object for the containment reference '<em>List</em>'.
+   * @see org.ddmore.mdl.mdl.AddList#getList()
+   * @see #getAddList()
    * @generated
    */
-  EClass getpar_expression();
+  EReference getAddList_List();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.par_expression#getExpression <em>Expression</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.RemoveList <em>Remove List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Expression</em>'.
-   * @see org.ddmore.mdl.mdl.par_expression#getExpression()
-   * @see #getpar_expression()
+   * @return the meta object for class '<em>Remove List</em>'.
+   * @see org.ddmore.mdl.mdl.RemoveList
    * @generated
    */
-  EReference getpar_expression_Expression();
+  EClass getRemoveList();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.conditional_expression <em>conditional expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.RemoveList#getList <em>List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>conditional expression</em>'.
-   * @see org.ddmore.mdl.mdl.conditional_expression
+   * @return the meta object for the containment reference '<em>List</em>'.
+   * @see org.ddmore.mdl.mdl.RemoveList#getList()
+   * @see #getRemoveList()
    * @generated
    */
-  EClass getconditional_expression();
+  EReference getRemoveList_List();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.conditional_expression#getConditional_or_expression <em>Conditional or expression</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.SymbolList <em>Symbol List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Conditional or expression</em>'.
-   * @see org.ddmore.mdl.mdl.conditional_expression#getConditional_or_expression()
-   * @see #getconditional_expression()
+   * @return the meta object for class '<em>Symbol List</em>'.
+   * @see org.ddmore.mdl.mdl.SymbolList
    * @generated
    */
-  EReference getconditional_expression_Conditional_or_expression();
+  EClass getSymbolList();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.conditional_expression#getExpression1 <em>Expression1</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.SymbolList#getSymbols <em>Symbols</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Expression1</em>'.
-   * @see org.ddmore.mdl.mdl.conditional_expression#getExpression1()
-   * @see #getconditional_expression()
+   * @return the meta object for the containment reference list '<em>Symbols</em>'.
+   * @see org.ddmore.mdl.mdl.SymbolList#getSymbols()
+   * @see #getSymbolList()
    * @generated
    */
-  EReference getconditional_expression_Expression1();
+  EReference getSymbolList_Symbols();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.conditional_expression#getExpression2 <em>Expression2</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ModelPredictionBlockStatement <em>Model Prediction Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Expression2</em>'.
-   * @see org.ddmore.mdl.mdl.conditional_expression#getExpression2()
-   * @see #getconditional_expression()
+   * @return the meta object for class '<em>Model Prediction Block Statement</em>'.
+   * @see org.ddmore.mdl.mdl.ModelPredictionBlockStatement
    * @generated
    */
-  EReference getconditional_expression_Expression2();
+  EClass getModelPredictionBlockStatement();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.conditional_or_expression <em>conditional or expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelPredictionBlockStatement#getStatement <em>Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>conditional or expression</em>'.
-   * @see org.ddmore.mdl.mdl.conditional_or_expression
+   * @return the meta object for the containment reference '<em>Statement</em>'.
+   * @see org.ddmore.mdl.mdl.ModelPredictionBlockStatement#getStatement()
+   * @see #getModelPredictionBlockStatement()
    * @generated
    */
-  EClass getconditional_or_expression();
+  EReference getModelPredictionBlockStatement_Statement();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.conditional_or_expression#getConditional_and_expression <em>Conditional and expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelPredictionBlockStatement#getOdeBlock <em>Ode Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Conditional and expression</em>'.
-   * @see org.ddmore.mdl.mdl.conditional_or_expression#getConditional_and_expression()
-   * @see #getconditional_or_expression()
+   * @return the meta object for the containment reference '<em>Ode Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelPredictionBlockStatement#getOdeBlock()
+   * @see #getModelPredictionBlockStatement()
    * @generated
    */
-  EReference getconditional_or_expression_Conditional_and_expression();
+  EReference getModelPredictionBlockStatement_OdeBlock();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.conditional_or_expression#getOperator <em>Operator</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelPredictionBlockStatement#getLibraryBlock <em>Library Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Operator</em>'.
-   * @see org.ddmore.mdl.mdl.conditional_or_expression#getOperator()
-   * @see #getconditional_or_expression()
+   * @return the meta object for the containment reference '<em>Library Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelPredictionBlockStatement#getLibraryBlock()
+   * @see #getModelPredictionBlockStatement()
    * @generated
    */
-  EAttribute getconditional_or_expression_Operator();
+  EReference getModelPredictionBlockStatement_LibraryBlock();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.conditional_and_expression <em>conditional and expression</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.LibraryBlock <em>Library Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>conditional and expression</em>'.
-   * @see org.ddmore.mdl.mdl.conditional_and_expression
+   * @return the meta object for class '<em>Library Block</em>'.
+   * @see org.ddmore.mdl.mdl.LibraryBlock
    * @generated
    */
-  EClass getconditional_and_expression();
+  EClass getLibraryBlock();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.conditional_and_expression#getRelational_expression <em>Relational expression</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.LibraryBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Relational expression</em>'.
-   * @see org.ddmore.mdl.mdl.conditional_and_expression#getRelational_expression()
-   * @see #getconditional_and_expression()
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.LibraryBlock#getIdentifier()
+   * @see #getLibraryBlock()
    * @generated
    */
-  EReference getconditional_and_expression_Relational_expression();
+  EAttribute getLibraryBlock_Identifier();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.conditional_and_expression#getOperator <em>Operator</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.LibraryBlock#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Operator</em>'.
-   * @see org.ddmore.mdl.mdl.conditional_and_expression#getOperator()
-   * @see #getconditional_and_expression()
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.LibraryBlock#getStatements()
+   * @see #getLibraryBlock()
    * @generated
    */
-  EAttribute getconditional_and_expression_Operator();
+  EReference getLibraryBlock_Statements();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.relational_expression <em>relational expression</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.OdeBlock <em>Ode Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>relational expression</em>'.
-   * @see org.ddmore.mdl.mdl.relational_expression
+   * @return the meta object for class '<em>Ode Block</em>'.
+   * @see org.ddmore.mdl.mdl.OdeBlock
    * @generated
    */
-  EClass getrelational_expression();
+  EClass getOdeBlock();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.relational_expression#getNegation <em>Negation</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.OdeBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Negation</em>'.
-   * @see org.ddmore.mdl.mdl.relational_expression#getNegation()
-   * @see #getrelational_expression()
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.OdeBlock#getIdentifier()
+   * @see #getOdeBlock()
    * @generated
    */
-  EAttribute getrelational_expression_Negation();
+  EAttribute getOdeBlock_Identifier();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.relational_expression#getBoolean <em>Boolean</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.OdeBlock#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Boolean</em>'.
-   * @see org.ddmore.mdl.mdl.relational_expression#getBoolean()
-   * @see #getrelational_expression()
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.OdeBlock#getStatements()
+   * @see #getOdeBlock()
    * @generated
    */
-  EAttribute getrelational_expression_Boolean();
+  EReference getOdeBlock_Statements();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.relational_expression#getAdditive_expression <em>Additive expression</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.GroupVariablesBlockStatement <em>Group Variables Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Additive expression</em>'.
-   * @see org.ddmore.mdl.mdl.relational_expression#getAdditive_expression()
-   * @see #getrelational_expression()
+   * @return the meta object for class '<em>Group Variables Block Statement</em>'.
+   * @see org.ddmore.mdl.mdl.GroupVariablesBlockStatement
    * @generated
    */
-  EReference getrelational_expression_Additive_expression();
+  EClass getGroupVariablesBlockStatement();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.relational_expression#getRelational_op <em>Relational op</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.GroupVariablesBlockStatement#getStatement <em>Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Relational op</em>'.
-   * @see org.ddmore.mdl.mdl.relational_expression#getRelational_op()
-   * @see #getrelational_expression()
+   * @return the meta object for the containment reference '<em>Statement</em>'.
+   * @see org.ddmore.mdl.mdl.GroupVariablesBlockStatement#getStatement()
+   * @see #getGroupVariablesBlockStatement()
    * @generated
    */
-  EAttribute getrelational_expression_Relational_op();
+  EReference getGroupVariablesBlockStatement_Statement();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.additive_expression <em>additive expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.GroupVariablesBlockStatement#getMixtureBlock <em>Mixture Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>additive expression</em>'.
-   * @see org.ddmore.mdl.mdl.additive_expression
+   * @return the meta object for the containment reference '<em>Mixture Block</em>'.
+   * @see org.ddmore.mdl.mdl.GroupVariablesBlockStatement#getMixtureBlock()
+   * @see #getGroupVariablesBlockStatement()
    * @generated
    */
-  EClass getadditive_expression();
+  EReference getGroupVariablesBlockStatement_MixtureBlock();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.additive_expression#getMultiplicative_expression <em>Multiplicative expression</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.MixtureBlock <em>Mixture Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Multiplicative expression</em>'.
-   * @see org.ddmore.mdl.mdl.additive_expression#getMultiplicative_expression()
-   * @see #getadditive_expression()
+   * @return the meta object for class '<em>Mixture Block</em>'.
+   * @see org.ddmore.mdl.mdl.MixtureBlock
    * @generated
    */
-  EReference getadditive_expression_Multiplicative_expression();
+  EClass getMixtureBlock();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.additive_expression#getAdditive_op <em>Additive op</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.MixtureBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Additive op</em>'.
-   * @see org.ddmore.mdl.mdl.additive_expression#getAdditive_op()
-   * @see #getadditive_expression()
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.MixtureBlock#getIdentifier()
+   * @see #getMixtureBlock()
    * @generated
    */
-  EAttribute getadditive_expression_Additive_op();
+  EAttribute getMixtureBlock_Identifier();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.multiplicative_expression <em>multiplicative expression</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.MixtureBlock#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>multiplicative expression</em>'.
-   * @see org.ddmore.mdl.mdl.multiplicative_expression
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.MixtureBlock#getStatements()
+   * @see #getMixtureBlock()
    * @generated
    */
-  EClass getmultiplicative_expression();
+  EReference getMixtureBlock_Statements();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.multiplicative_expression#getPower_expression <em>Power expression</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.VariabilityBlockStatement <em>Variability Block Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Power expression</em>'.
-   * @see org.ddmore.mdl.mdl.multiplicative_expression#getPower_expression()
-   * @see #getmultiplicative_expression()
+   * @return the meta object for class '<em>Variability Block Statement</em>'.
+   * @see org.ddmore.mdl.mdl.VariabilityBlockStatement
    * @generated
    */
-  EReference getmultiplicative_expression_Power_expression();
+  EClass getVariabilityBlockStatement();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.multiplicative_expression#getMultiplicative_op <em>Multiplicative op</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.VariabilityBlockStatement#getParameter <em>Parameter</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Multiplicative op</em>'.
-   * @see org.ddmore.mdl.mdl.multiplicative_expression#getMultiplicative_op()
-   * @see #getmultiplicative_expression()
+   * @return the meta object for the containment reference '<em>Parameter</em>'.
+   * @see org.ddmore.mdl.mdl.VariabilityBlockStatement#getParameter()
+   * @see #getVariabilityBlockStatement()
    * @generated
    */
-  EAttribute getmultiplicative_expression_Multiplicative_op();
+  EReference getVariabilityBlockStatement_Parameter();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.power_expression <em>power expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.VariabilityBlockStatement#getBlockBlock <em>Block Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>power expression</em>'.
-   * @see org.ddmore.mdl.mdl.power_expression
+   * @return the meta object for the containment reference '<em>Block Block</em>'.
+   * @see org.ddmore.mdl.mdl.VariabilityBlockStatement#getBlockBlock()
+   * @see #getVariabilityBlockStatement()
    * @generated
    */
-  EClass getpower_expression();
+  EReference getVariabilityBlockStatement_BlockBlock();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.power_expression#getUnary_expression <em>Unary expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.VariabilityBlockStatement#getDiagBlock <em>Diag Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Unary expression</em>'.
-   * @see org.ddmore.mdl.mdl.power_expression#getUnary_expression()
-   * @see #getpower_expression()
+   * @return the meta object for the containment reference '<em>Diag Block</em>'.
+   * @see org.ddmore.mdl.mdl.VariabilityBlockStatement#getDiagBlock()
+   * @see #getVariabilityBlockStatement()
    * @generated
    */
-  EReference getpower_expression_Unary_expression();
+  EReference getVariabilityBlockStatement_DiagBlock();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.power_expression#getPower_op <em>Power op</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.VariabilityBlockStatement#getSameBlock <em>Same Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Power op</em>'.
-   * @see org.ddmore.mdl.mdl.power_expression#getPower_op()
-   * @see #getpower_expression()
+   * @return the meta object for the containment reference '<em>Same Block</em>'.
+   * @see org.ddmore.mdl.mdl.VariabilityBlockStatement#getSameBlock()
+   * @see #getVariabilityBlockStatement()
    * @generated
    */
-  EAttribute getpower_expression_Power_op();
+  EReference getVariabilityBlockStatement_SameBlock();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.unary_expression <em>unary expression</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.BlockBlock <em>Block Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>unary expression</em>'.
-   * @see org.ddmore.mdl.mdl.unary_expression
+   * @return the meta object for class '<em>Block Block</em>'.
+   * @see org.ddmore.mdl.mdl.BlockBlock
    * @generated
    */
-  EClass getunary_expression();
+  EClass getBlockBlock();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.unary_expression#getOperator <em>Operator</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.BlockBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Operator</em>'.
-   * @see org.ddmore.mdl.mdl.unary_expression#getOperator()
-   * @see #getunary_expression()
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.BlockBlock#getIdentifier()
+   * @see #getBlockBlock()
    * @generated
    */
-  EAttribute getunary_expression_Operator();
+  EAttribute getBlockBlock_Identifier();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.unary_expression#getUnary_expression <em>Unary expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.BlockBlock#getArguments <em>Arguments</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Unary expression</em>'.
-   * @see org.ddmore.mdl.mdl.unary_expression#getUnary_expression()
-   * @see #getunary_expression()
+   * @return the meta object for the containment reference '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.BlockBlock#getArguments()
+   * @see #getBlockBlock()
    * @generated
    */
-  EReference getunary_expression_Unary_expression();
+  EReference getBlockBlock_Arguments();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.unary_expression#getPar_expression <em>Par expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.BlockBlock#getParameters <em>Parameters</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Par expression</em>'.
-   * @see org.ddmore.mdl.mdl.unary_expression#getPar_expression()
-   * @see #getunary_expression()
+   * @return the meta object for the containment reference '<em>Parameters</em>'.
+   * @see org.ddmore.mdl.mdl.BlockBlock#getParameters()
+   * @see #getBlockBlock()
    * @generated
    */
-  EReference getunary_expression_Par_expression();
+  EReference getBlockBlock_Parameters();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.unary_expression#getFunction_call <em>Function call</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.DiagBlock <em>Diag Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Function call</em>'.
-   * @see org.ddmore.mdl.mdl.unary_expression#getFunction_call()
-   * @see #getunary_expression()
+   * @return the meta object for class '<em>Diag Block</em>'.
+   * @see org.ddmore.mdl.mdl.DiagBlock
    * @generated
    */
-  EReference getunary_expression_Function_call();
+  EClass getDiagBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.unary_expression#getPrimary <em>Primary</em>}'.
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.DiagBlock#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Primary</em>'.
-   * @see org.ddmore.mdl.mdl.unary_expression#getPrimary()
-   * @see #getunary_expression()
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.DiagBlock#getIdentifier()
+   * @see #getDiagBlock()
    * @generated
    */
-  EReference getunary_expression_Primary();
+  EAttribute getDiagBlock_Identifier();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.primary <em>primary</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DiagBlock#getArguments <em>Arguments</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>primary</em>'.
-   * @see org.ddmore.mdl.mdl.primary
+   * @return the meta object for the containment reference '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.DiagBlock#getArguments()
+   * @see #getDiagBlock()
    * @generated
    */
-  EClass getprimary();
+  EReference getDiagBlock_Arguments();
 
   /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.primary#getNumber <em>Number</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DiagBlock#getParameters <em>Parameters</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Number</em>'.
-   * @see org.ddmore.mdl.mdl.primary#getNumber()
-   * @see #getprimary()
+   * @return the meta object for the containment reference '<em>Parameters</em>'.
+   * @see org.ddmore.mdl.mdl.DiagBlock#getParameters()
+   * @see #getDiagBlock()
    * @generated
    */
-  EAttribute getprimary_Number();
+  EReference getDiagBlock_Parameters();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.primary#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.SameBlock <em>Same Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Same Block</em>'.
+   * @see org.ddmore.mdl.mdl.SameBlock
+   * @generated
+   */
+  EClass getSameBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.SameBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.SameBlock#getIdentifier()
+   * @see #getSameBlock()
+   * @generated
+   */
+  EAttribute getSameBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.SameBlock#getArguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.SameBlock#getArguments()
+   * @see #getSameBlock()
+   * @generated
+   */
+  EReference getSameBlock_Arguments();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.SameBlock#getParameters <em>Parameters</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Parameters</em>'.
+   * @see org.ddmore.mdl.mdl.SameBlock#getParameters()
+   * @see #getSameBlock()
+   * @generated
+   */
+  EReference getSameBlock_Parameters();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.FileBlockStatement <em>File Block Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>File Block Statement</em>'.
+   * @see org.ddmore.mdl.mdl.FileBlockStatement
+   * @generated
+   */
+  EClass getFileBlockStatement();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.FileBlockStatement#getVariable <em>Variable</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Variable</em>'.
+   * @see org.ddmore.mdl.mdl.FileBlockStatement#getVariable()
+   * @see #getFileBlockStatement()
+   * @generated
+   */
+  EReference getFileBlockStatement_Variable();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.FileBlockStatement#getInlineBlock <em>Inline Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Inline Block</em>'.
+   * @see org.ddmore.mdl.mdl.FileBlockStatement#getInlineBlock()
+   * @see #getFileBlockStatement()
+   * @generated
+   */
+  EReference getFileBlockStatement_InlineBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.FileBlockStatement#getDesignBlock <em>Design Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Design Block</em>'.
+   * @see org.ddmore.mdl.mdl.FileBlockStatement#getDesignBlock()
+   * @see #getFileBlockStatement()
+   * @generated
+   */
+  EReference getFileBlockStatement_DesignBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.FileBlockStatement#getRscriptBlock <em>Rscript Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Rscript Block</em>'.
+   * @see org.ddmore.mdl.mdl.FileBlockStatement#getRscriptBlock()
+   * @see #getFileBlockStatement()
+   * @generated
+   */
+  EReference getFileBlockStatement_RscriptBlock();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.InlineBlock <em>Inline Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Inline Block</em>'.
+   * @see org.ddmore.mdl.mdl.InlineBlock
+   * @generated
+   */
+  EClass getInlineBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.InlineBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.InlineBlock#getIdentifier()
+   * @see #getInlineBlock()
+   * @generated
+   */
+  EAttribute getInlineBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.InlineBlock#getVariables <em>Variables</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Variables</em>'.
+   * @see org.ddmore.mdl.mdl.InlineBlock#getVariables()
+   * @see #getInlineBlock()
+   * @generated
+   */
+  EReference getInlineBlock_Variables();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.InlineBlock#getValues <em>Values</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Values</em>'.
+   * @see org.ddmore.mdl.mdl.InlineBlock#getValues()
+   * @see #getInlineBlock()
+   * @generated
+   */
+  EAttribute getInlineBlock_Values();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.DesignBlock <em>Design Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Design Block</em>'.
+   * @see org.ddmore.mdl.mdl.DesignBlock
+   * @generated
+   */
+  EClass getDesignBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.DesignBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.DesignBlock#getIdentifier()
+   * @see #getDesignBlock()
+   * @generated
+   */
+  EAttribute getDesignBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.DesignBlock#getStatements <em>Statements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.DesignBlock#getStatements()
+   * @see #getDesignBlock()
+   * @generated
+   */
+  EReference getDesignBlock_Statements();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.DesignBlockStatement <em>Design Block Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Design Block Statement</em>'.
+   * @see org.ddmore.mdl.mdl.DesignBlockStatement
+   * @generated
+   */
+  EClass getDesignBlockStatement();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DesignBlockStatement#getIdentifier <em>Identifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.primary#getIdentifier()
-   * @see #getprimary()
+   * @see org.ddmore.mdl.mdl.DesignBlockStatement#getIdentifier()
+   * @see #getDesignBlockStatement()
    * @generated
    */
-  EReference getprimary_Identifier();
+  EReference getDesignBlockStatement_Identifier();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.variable_name <em>variable name</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DesignBlockStatement#getArguments <em>Arguments</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>variable name</em>'.
-   * @see org.ddmore.mdl.mdl.variable_name
+   * @return the meta object for the containment reference '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.DesignBlockStatement#getArguments()
+   * @see #getDesignBlockStatement()
    * @generated
    */
-  EClass getvariable_name();
+  EReference getDesignBlockStatement_Arguments();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.variable_name#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DesignBlockStatement#getExpression <em>Expression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.variable_name#getIdentifier()
-   * @see #getvariable_name()
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.DesignBlockStatement#getExpression()
+   * @see #getDesignBlockStatement()
    * @generated
    */
-  EAttribute getvariable_name_Identifier();
+  EReference getDesignBlockStatement_Expression();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.variable_name#getSelector <em>Selector</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.VariableList <em>Variable List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Selector</em>'.
-   * @see org.ddmore.mdl.mdl.variable_name#getSelector()
-   * @see #getvariable_name()
+   * @return the meta object for class '<em>Variable List</em>'.
+   * @see org.ddmore.mdl.mdl.VariableList
    * @generated
    */
-  EReference getvariable_name_Selector();
+  EClass getVariableList();
 
   /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.selector <em>selector</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.VariableList#getIdentifiers <em>Identifiers</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>selector</em>'.
-   * @see org.ddmore.mdl.mdl.selector
+   * @return the meta object for the containment reference list '<em>Identifiers</em>'.
+   * @see org.ddmore.mdl.mdl.VariableList#getIdentifiers()
+   * @see #getVariableList()
    * @generated
    */
-  EClass getselector();
+  EReference getVariableList_Identifiers();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.selector#getExpression <em>Expression</em>}'.
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.RScriptBlock <em>RScript Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>RScript Block</em>'.
+   * @see org.ddmore.mdl.mdl.RScriptBlock
+   * @generated
+   */
+  EClass getRScriptBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.RScriptBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.RScriptBlock#getIdentifier()
+   * @see #getRScriptBlock()
+   * @generated
+   */
+  EAttribute getRScriptBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.RScriptBlock#getVariables <em>Variables</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Variables</em>'.
+   * @see org.ddmore.mdl.mdl.RScriptBlock#getVariables()
+   * @see #getRScriptBlock()
+   * @generated
+   */
+  EReference getRScriptBlock_Variables();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.RScriptBlockStatement <em>RScript Block Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>RScript Block Statement</em>'.
+   * @see org.ddmore.mdl.mdl.RScriptBlockStatement
+   * @generated
+   */
+  EClass getRScriptBlockStatement();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.RScriptBlockStatement#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.RScriptBlockStatement#getIdentifier()
+   * @see #getRScriptBlockStatement()
+   * @generated
+   */
+  EAttribute getRScriptBlockStatement_Identifier();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.RScriptBlockStatement#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see org.ddmore.mdl.mdl.RScriptBlockStatement#getValue()
+   * @see #getRScriptBlockStatement()
+   * @generated
+   */
+  EAttribute getRScriptBlockStatement_Value();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.RScriptBlockStatement#getObject <em>Object</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Object</em>'.
+   * @see org.ddmore.mdl.mdl.RScriptBlockStatement#getObject()
+   * @see #getRScriptBlockStatement()
+   * @generated
+   */
+  EReference getRScriptBlockStatement_Object();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.TaskFunctionDeclaration <em>Task Function Declaration</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Task Function Declaration</em>'.
+   * @see org.ddmore.mdl.mdl.TaskFunctionDeclaration
+   * @generated
+   */
+  EClass getTaskFunctionDeclaration();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.TaskFunctionDeclaration#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.TaskFunctionDeclaration#getIdentifier()
+   * @see #getTaskFunctionDeclaration()
+   * @generated
+   */
+  EAttribute getTaskFunctionDeclaration_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskFunctionDeclaration#getFormalArguments <em>Formal Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Formal Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.TaskFunctionDeclaration#getFormalArguments()
+   * @see #getTaskFunctionDeclaration()
+   * @generated
+   */
+  EReference getTaskFunctionDeclaration_FormalArguments();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskFunctionDeclaration#getFunctionBody <em>Function Body</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Function Body</em>'.
+   * @see org.ddmore.mdl.mdl.TaskFunctionDeclaration#getFunctionBody()
+   * @see #getTaskFunctionDeclaration()
+   * @generated
+   */
+  EReference getTaskFunctionDeclaration_FunctionBody();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.TaskFunctionBody <em>Task Function Body</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Task Function Body</em>'.
+   * @see org.ddmore.mdl.mdl.TaskFunctionBody
+   * @generated
+   */
+  EClass getTaskFunctionBody();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.TaskFunctionBody#getBlocks <em>Blocks</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Blocks</em>'.
+   * @see org.ddmore.mdl.mdl.TaskFunctionBody#getBlocks()
+   * @see #getTaskFunctionBody()
+   * @generated
+   */
+  EReference getTaskFunctionBody_Blocks();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.TaskFunctionBlock <em>Task Function Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Task Function Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskFunctionBlock
+   * @generated
+   */
+  EClass getTaskFunctionBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskFunctionBlock#getEstimateBlock <em>Estimate Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Estimate Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskFunctionBlock#getEstimateBlock()
+   * @see #getTaskFunctionBlock()
+   * @generated
+   */
+  EReference getTaskFunctionBlock_EstimateBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskFunctionBlock#getSimulateBlock <em>Simulate Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Simulate Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskFunctionBlock#getSimulateBlock()
+   * @see #getTaskFunctionBlock()
+   * @generated
+   */
+  EReference getTaskFunctionBlock_SimulateBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskFunctionBlock#getExecuteBlock <em>Execute Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Execute Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskFunctionBlock#getExecuteBlock()
+   * @see #getTaskFunctionBlock()
+   * @generated
+   */
+  EReference getTaskFunctionBlock_ExecuteBlock();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.EstimateTask <em>Estimate Task</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Estimate Task</em>'.
+   * @see org.ddmore.mdl.mdl.EstimateTask
+   * @generated
+   */
+  EClass getEstimateTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.EstimateTask#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.EstimateTask#getIdentifier()
+   * @see #getEstimateTask()
+   * @generated
+   */
+  EAttribute getEstimateTask_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.EstimateTask#getStatements <em>Statements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.EstimateTask#getStatements()
+   * @see #getEstimateTask()
+   * @generated
+   */
+  EReference getEstimateTask_Statements();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.SimulateTask <em>Simulate Task</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Simulate Task</em>'.
+   * @see org.ddmore.mdl.mdl.SimulateTask
+   * @generated
+   */
+  EClass getSimulateTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.SimulateTask#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.SimulateTask#getIdentifier()
+   * @see #getSimulateTask()
+   * @generated
+   */
+  EAttribute getSimulateTask_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.SimulateTask#getStatements <em>Statements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.SimulateTask#getStatements()
+   * @see #getSimulateTask()
+   * @generated
+   */
+  EReference getSimulateTask_Statements();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ExecuteTask <em>Execute Task</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Execute Task</em>'.
+   * @see org.ddmore.mdl.mdl.ExecuteTask
+   * @generated
+   */
+  EClass getExecuteTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.ExecuteTask#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.ExecuteTask#getIdentifier()
+   * @see #getExecuteTask()
+   * @generated
+   */
+  EAttribute getExecuteTask_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.ExecuteTask#getStatements <em>Statements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.ExecuteTask#getStatements()
+   * @see #getExecuteTask()
+   * @generated
+   */
+  EReference getExecuteTask_Statements();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.FormalArguments <em>Formal Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Formal Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.FormalArguments
+   * @generated
+   */
+  EClass getFormalArguments();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.FormalArguments#getIdentifiers <em>Identifiers</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Identifiers</em>'.
+   * @see org.ddmore.mdl.mdl.FormalArguments#getIdentifiers()
+   * @see #getFormalArguments()
+   * @generated
+   */
+  EAttribute getFormalArguments_Identifiers();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.FunctionCall <em>Function Call</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Function Call</em>'.
+   * @see org.ddmore.mdl.mdl.FunctionCall
+   * @generated
+   */
+  EClass getFunctionCall();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.FunctionCall#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.FunctionCall#getIdentifier()
+   * @see #getFunctionCall()
+   * @generated
+   */
+  EReference getFunctionCall_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.FunctionCall#getArguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.FunctionCall#getArguments()
+   * @see #getFunctionCall()
+   * @generated
+   */
+  EReference getFunctionCall_Arguments();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.BlockStatement <em>Block Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Block Statement</em>'.
+   * @see org.ddmore.mdl.mdl.BlockStatement
+   * @generated
+   */
+  EClass getBlockStatement();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.BlockStatement#getSymbol <em>Symbol</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Symbol</em>'.
+   * @see org.ddmore.mdl.mdl.BlockStatement#getSymbol()
+   * @see #getBlockStatement()
+   * @generated
+   */
+  EReference getBlockStatement_Symbol();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.BlockStatement#getFunctionCall <em>Function Call</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Function Call</em>'.
+   * @see org.ddmore.mdl.mdl.BlockStatement#getFunctionCall()
+   * @see #getBlockStatement()
+   * @generated
+   */
+  EReference getBlockStatement_FunctionCall();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.BlockStatement#getStatement <em>Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Statement</em>'.
+   * @see org.ddmore.mdl.mdl.BlockStatement#getStatement()
+   * @see #getBlockStatement()
+   * @generated
+   */
+  EReference getBlockStatement_Statement();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.BlockStatement#getVerbatimBlock <em>Verbatim Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Verbatim Block</em>'.
+   * @see org.ddmore.mdl.mdl.BlockStatement#getVerbatimBlock()
+   * @see #getBlockStatement()
+   * @generated
+   */
+  EReference getBlockStatement_VerbatimBlock();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.VerbatimBlock <em>Verbatim Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Verbatim Block</em>'.
+   * @see org.ddmore.mdl.mdl.VerbatimBlock
+   * @generated
+   */
+  EClass getVerbatimBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.VerbatimBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.VerbatimBlock#getIdentifier()
+   * @see #getVerbatimBlock()
+   * @generated
+   */
+  EAttribute getVerbatimBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.VerbatimBlock#getBlock <em>Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Block</em>'.
+   * @see org.ddmore.mdl.mdl.VerbatimBlock#getBlock()
+   * @see #getVerbatimBlock()
+   * @generated
+   */
+  EReference getVerbatimBlock_Block();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.VerbatimBlock#getExternalCode <em>External Code</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>External Code</em>'.
+   * @see org.ddmore.mdl.mdl.VerbatimBlock#getExternalCode()
+   * @see #getVerbatimBlock()
+   * @generated
+   */
+  EAttribute getVerbatimBlock_ExternalCode();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.TargetBlock <em>Target Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Target Block</em>'.
+   * @see org.ddmore.mdl.mdl.TargetBlock
+   * @generated
+   */
+  EClass getTargetBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.TargetBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.TargetBlock#getIdentifier()
+   * @see #getTargetBlock()
+   * @generated
+   */
+  EAttribute getTargetBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TargetBlock#getArguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.TargetBlock#getArguments()
+   * @see #getTargetBlock()
+   * @generated
+   */
+  EReference getTargetBlock_Arguments();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.TargetBlock#getExternalCode <em>External Code</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>External Code</em>'.
+   * @see org.ddmore.mdl.mdl.TargetBlock#getExternalCode()
+   * @see #getTargetBlock()
+   * @generated
+   */
+  EAttribute getTargetBlock_ExternalCode();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.SymbolModification <em>Symbol Modification</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Symbol Modification</em>'.
+   * @see org.ddmore.mdl.mdl.SymbolModification
+   * @generated
+   */
+  EClass getSymbolModification();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.SymbolModification#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.SymbolModification#getIdentifier()
+   * @see #getSymbolModification()
+   * @generated
+   */
+  EReference getSymbolModification_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.SymbolModification#getList <em>List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>List</em>'.
+   * @see org.ddmore.mdl.mdl.SymbolModification#getList()
+   * @see #getSymbolModification()
+   * @generated
+   */
+  EReference getSymbolModification_List();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ParameterDeclaration <em>Parameter Declaration</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Parameter Declaration</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterDeclaration
+   * @generated
+   */
+  EClass getParameterDeclaration();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.ParameterDeclaration#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterDeclaration#getIdentifier()
+   * @see #getParameterDeclaration()
+   * @generated
+   */
+  EAttribute getParameterDeclaration_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ParameterDeclaration#getList <em>List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>List</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterDeclaration#getList()
+   * @see #getParameterDeclaration()
+   * @generated
+   */
+  EReference getParameterDeclaration_List();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.SymbolDeclaration <em>Symbol Declaration</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Symbol Declaration</em>'.
+   * @see org.ddmore.mdl.mdl.SymbolDeclaration
+   * @generated
+   */
+  EClass getSymbolDeclaration();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.SymbolDeclaration#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.SymbolDeclaration#getIdentifier()
+   * @see #getSymbolDeclaration()
+   * @generated
+   */
+  EAttribute getSymbolDeclaration_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.SymbolDeclaration#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.SymbolDeclaration#getExpression()
+   * @see #getSymbolDeclaration()
+   * @generated
+   */
+  EReference getSymbolDeclaration_Expression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.SymbolDeclaration#getRandomList <em>Random List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Random List</em>'.
+   * @see org.ddmore.mdl.mdl.SymbolDeclaration#getRandomList()
+   * @see #getSymbolDeclaration()
+   * @generated
+   */
+  EReference getSymbolDeclaration_RandomList();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.SymbolDeclaration#getFunction <em>Function</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Function</em>'.
+   * @see org.ddmore.mdl.mdl.SymbolDeclaration#getFunction()
+   * @see #getSymbolDeclaration()
+   * @generated
+   */
+  EAttribute getSymbolDeclaration_Function();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.EnumType <em>Enum Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Enum Type</em>'.
+   * @see org.ddmore.mdl.mdl.EnumType
+   * @generated
+   */
+  EClass getEnumType();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.EnumType#getCategorical <em>Categorical</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Categorical</em>'.
+   * @see org.ddmore.mdl.mdl.EnumType#getCategorical()
+   * @see #getEnumType()
+   * @generated
+   */
+  EReference getEnumType_Categorical();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.EnumType#getContinuous <em>Continuous</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Continuous</em>'.
+   * @see org.ddmore.mdl.mdl.EnumType#getContinuous()
+   * @see #getEnumType()
+   * @generated
+   */
+  EReference getEnumType_Continuous();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.EnumType#getCovariate <em>Covariate</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Covariate</em>'.
+   * @see org.ddmore.mdl.mdl.EnumType#getCovariate()
+   * @see #getEnumType()
+   * @generated
+   */
+  EReference getEnumType_Covariate();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.EnumType#getDistribution <em>Distribution</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Distribution</em>'.
+   * @see org.ddmore.mdl.mdl.EnumType#getDistribution()
+   * @see #getEnumType()
+   * @generated
+   */
+  EReference getEnumType_Distribution();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.EnumType#getLevel <em>Level</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Level</em>'.
+   * @see org.ddmore.mdl.mdl.EnumType#getLevel()
+   * @see #getEnumType()
+   * @generated
+   */
+  EReference getEnumType_Level();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.EnumType#getLikelyhood <em>Likelyhood</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Likelyhood</em>'.
+   * @see org.ddmore.mdl.mdl.EnumType#getLikelyhood()
+   * @see #getEnumType()
+   * @generated
+   */
+  EReference getEnumType_Likelyhood();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.EnumType#getMissing <em>Missing</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Missing</em>'.
+   * @see org.ddmore.mdl.mdl.EnumType#getMissing()
+   * @see #getEnumType()
+   * @generated
+   */
+  EReference getEnumType_Missing();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Missing <em>Missing</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Missing</em>'.
+   * @see org.ddmore.mdl.mdl.Missing
+   * @generated
+   */
+  EClass getMissing();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Missing#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.Missing#getIdentifier()
+   * @see #getMissing()
+   * @generated
+   */
+  EAttribute getMissing_Identifier();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Likelyhood <em>Likelyhood</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Likelyhood</em>'.
+   * @see org.ddmore.mdl.mdl.Likelyhood
+   * @generated
+   */
+  EClass getLikelyhood();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Likelyhood#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.Likelyhood#getIdentifier()
+   * @see #getLikelyhood()
+   * @generated
+   */
+  EAttribute getLikelyhood_Identifier();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.LevelType <em>Level Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Level Type</em>'.
+   * @see org.ddmore.mdl.mdl.LevelType
+   * @generated
+   */
+  EClass getLevelType();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.LevelType#getMdv <em>Mdv</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Mdv</em>'.
+   * @see org.ddmore.mdl.mdl.LevelType#getMdv()
+   * @see #getLevelType()
+   * @generated
+   */
+  EAttribute getLevelType_Mdv();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.LevelType#getId <em>Id</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Id</em>'.
+   * @see org.ddmore.mdl.mdl.LevelType#getId()
+   * @see #getLevelType()
+   * @generated
+   */
+  EAttribute getLevelType_Id();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.LevelType#getDv <em>Dv</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Dv</em>'.
+   * @see org.ddmore.mdl.mdl.LevelType#getDv()
+   * @see #getLevelType()
+   * @generated
+   */
+  EAttribute getLevelType_Dv();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.LevelType#getIdv <em>Idv</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Idv</em>'.
+   * @see org.ddmore.mdl.mdl.LevelType#getIdv()
+   * @see #getLevelType()
+   * @generated
+   */
+  EAttribute getLevelType_Idv();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Categorical <em>Categorical</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Categorical</em>'.
+   * @see org.ddmore.mdl.mdl.Categorical
+   * @generated
+   */
+  EClass getCategorical();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Categorical#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.Categorical#getIdentifier()
+   * @see #getCategorical()
+   * @generated
+   */
+  EAttribute getCategorical_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.Categorical#getArguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.Categorical#getArguments()
+   * @see #getCategorical()
+   * @generated
+   */
+  EReference getCategorical_Arguments();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Continuous <em>Continuous</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Continuous</em>'.
+   * @see org.ddmore.mdl.mdl.Continuous
+   * @generated
+   */
+  EClass getContinuous();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Continuous#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.Continuous#getIdentifier()
+   * @see #getContinuous()
+   * @generated
+   */
+  EAttribute getContinuous_Identifier();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Covariate <em>Covariate</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Covariate</em>'.
+   * @see org.ddmore.mdl.mdl.Covariate
+   * @generated
+   */
+  EClass getCovariate();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Covariate#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.Covariate#getIdentifier()
+   * @see #getCovariate()
+   * @generated
+   */
+  EAttribute getCovariate_Identifier();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Distribution <em>Distribution</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Distribution</em>'.
+   * @see org.ddmore.mdl.mdl.Distribution
+   * @generated
+   */
+  EClass getDistribution();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Distribution#getNormal <em>Normal</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Normal</em>'.
+   * @see org.ddmore.mdl.mdl.Distribution#getNormal()
+   * @see #getDistribution()
+   * @generated
+   */
+  EAttribute getDistribution_Normal();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Distribution#getBinomial <em>Binomial</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Binomial</em>'.
+   * @see org.ddmore.mdl.mdl.Distribution#getBinomial()
+   * @see #getDistribution()
+   * @generated
+   */
+  EAttribute getDistribution_Binomial();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Distribution#getPoisson <em>Poisson</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Poisson</em>'.
+   * @see org.ddmore.mdl.mdl.Distribution#getPoisson()
+   * @see #getDistribution()
+   * @generated
+   */
+  EAttribute getDistribution_Poisson();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Distribution#getStudent_t <em>Student t</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Student t</em>'.
+   * @see org.ddmore.mdl.mdl.Distribution#getStudent_t()
+   * @see #getDistribution()
+   * @generated
+   */
+  EAttribute getDistribution_Student_t();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Distribution#getMvnormal <em>Mvnormal</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Mvnormal</em>'.
+   * @see org.ddmore.mdl.mdl.Distribution#getMvnormal()
+   * @see #getDistribution()
+   * @generated
+   */
+  EAttribute getDistribution_Mvnormal();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.AnyExpression <em>Any Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Any Expression</em>'.
+   * @see org.ddmore.mdl.mdl.AnyExpression
+   * @generated
+   */
+  EClass getAnyExpression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.AnyExpression#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.AnyExpression#getExpression()
+   * @see #getAnyExpression()
+   * @generated
+   */
+  EReference getAnyExpression_Expression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.AnyExpression#getList <em>List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>List</em>'.
+   * @see org.ddmore.mdl.mdl.AnyExpression#getList()
+   * @see #getAnyExpression()
+   * @generated
+   */
+  EReference getAnyExpression_List();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.AnyExpression#getOdeList <em>Ode List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Ode List</em>'.
+   * @see org.ddmore.mdl.mdl.AnyExpression#getOdeList()
+   * @see #getAnyExpression()
+   * @generated
+   */
+  EReference getAnyExpression_OdeList();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.AnyExpression#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @see org.ddmore.mdl.mdl.AnyExpression#getType()
+   * @see #getAnyExpression()
+   * @generated
+   */
+  EReference getAnyExpression_Type();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Expression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.Expression
+   * @generated
+   */
+  EClass getExpression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.Expression#getConditionalExpression <em>Conditional Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Conditional Expression</em>'.
+   * @see org.ddmore.mdl.mdl.Expression#getConditionalExpression()
+   * @see #getExpression()
+   * @generated
+   */
+  EReference getExpression_ConditionalExpression();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.List <em>List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>List</em>'.
+   * @see org.ddmore.mdl.mdl.List
+   * @generated
+   */
+  EClass getList();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.List#getArguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.List#getArguments()
+   * @see #getList()
+   * @generated
+   */
+  EReference getList_Arguments();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.OdeList <em>Ode List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Ode List</em>'.
+   * @see org.ddmore.mdl.mdl.OdeList
+   * @generated
+   */
+  EClass getOdeList();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.OdeList#getArguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.OdeList#getArguments()
+   * @see #getOdeList()
+   * @generated
+   */
+  EReference getOdeList_Arguments();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.RandomList <em>Random List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Random List</em>'.
+   * @see org.ddmore.mdl.mdl.RandomList
+   * @generated
+   */
+  EClass getRandomList();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.RandomList#getArguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.RandomList#getArguments()
+   * @see #getRandomList()
+   * @generated
+   */
+  EReference getRandomList_Arguments();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Arguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.Arguments
+   * @generated
+   */
+  EClass getArguments();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.Arguments#getArguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.Arguments#getArguments()
+   * @see #getArguments()
+   * @generated
+   */
+  EReference getArguments_Arguments();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Argument <em>Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Argument</em>'.
+   * @see org.ddmore.mdl.mdl.Argument
+   * @generated
+   */
+  EClass getArgument();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Argument#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.Argument#getIdentifier()
+   * @see #getArgument()
+   * @generated
+   */
+  EAttribute getArgument_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.Argument#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.Argument#getExpression()
+   * @see #getArgument()
+   * @generated
+   */
+  EReference getArgument_Expression();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ConditionalStatement <em>Conditional Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Conditional Statement</em>'.
+   * @see org.ddmore.mdl.mdl.ConditionalStatement
+   * @generated
+   */
+  EClass getConditionalStatement();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ConditionalStatement#getParExpression <em>Par Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Par Expression</em>'.
+   * @see org.ddmore.mdl.mdl.ConditionalStatement#getParExpression()
+   * @see #getConditionalStatement()
+   * @generated
+   */
+  EReference getConditionalStatement_ParExpression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ConditionalStatement#getIfStatement <em>If Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>If Statement</em>'.
+   * @see org.ddmore.mdl.mdl.ConditionalStatement#getIfStatement()
+   * @see #getConditionalStatement()
+   * @generated
+   */
+  EReference getConditionalStatement_IfStatement();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ConditionalStatement#getIfBlock <em>If Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>If Block</em>'.
+   * @see org.ddmore.mdl.mdl.ConditionalStatement#getIfBlock()
+   * @see #getConditionalStatement()
+   * @generated
+   */
+  EReference getConditionalStatement_IfBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ConditionalStatement#getElseStatement <em>Else Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Else Statement</em>'.
+   * @see org.ddmore.mdl.mdl.ConditionalStatement#getElseStatement()
+   * @see #getConditionalStatement()
+   * @generated
+   */
+  EReference getConditionalStatement_ElseStatement();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ConditionalStatement#getElseBlock <em>Else Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Else Block</em>'.
+   * @see org.ddmore.mdl.mdl.ConditionalStatement#getElseBlock()
+   * @see #getConditionalStatement()
+   * @generated
+   */
+  EReference getConditionalStatement_ElseBlock();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Block <em>Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Block</em>'.
+   * @see org.ddmore.mdl.mdl.Block
+   * @generated
+   */
+  EClass getBlock();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.Block#getStatements <em>Statements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Statements</em>'.
+   * @see org.ddmore.mdl.mdl.Block#getStatements()
+   * @see #getBlock()
+   * @generated
+   */
+  EReference getBlock_Statements();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ParExpression <em>Par Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Par Expression</em>'.
+   * @see org.ddmore.mdl.mdl.ParExpression
+   * @generated
+   */
+  EClass getParExpression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ParExpression#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.ParExpression#getExpression()
+   * @see #getParExpression()
+   * @generated
+   */
+  EReference getParExpression_Expression();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ConditionalExpression <em>Conditional Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Conditional Expression</em>'.
+   * @see org.ddmore.mdl.mdl.ConditionalExpression
+   * @generated
+   */
+  EClass getConditionalExpression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ConditionalExpression#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.ConditionalExpression#getExpression()
+   * @see #getConditionalExpression()
+   * @generated
+   */
+  EReference getConditionalExpression_Expression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ConditionalExpression#getExpression1 <em>Expression1</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression1</em>'.
+   * @see org.ddmore.mdl.mdl.ConditionalExpression#getExpression1()
+   * @see #getConditionalExpression()
+   * @generated
+   */
+  EReference getConditionalExpression_Expression1();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ConditionalExpression#getExpression2 <em>Expression2</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression2</em>'.
+   * @see org.ddmore.mdl.mdl.ConditionalExpression#getExpression2()
+   * @see #getConditionalExpression()
+   * @generated
+   */
+  EReference getConditionalExpression_Expression2();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.OrExpression <em>Or Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Or Expression</em>'.
+   * @see org.ddmore.mdl.mdl.OrExpression
+   * @generated
+   */
+  EClass getOrExpression();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.OrExpression#getExpression <em>Expression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Expression</em>'.
-   * @see org.ddmore.mdl.mdl.selector#getExpression()
-   * @see #getselector()
+   * @see org.ddmore.mdl.mdl.OrExpression#getExpression()
+   * @see #getOrExpression()
    * @generated
    */
-  EReference getselector_Expression();
+  EReference getOrExpression_Expression();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.OrExpression#getOperator <em>Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Operator</em>'.
+   * @see org.ddmore.mdl.mdl.OrExpression#getOperator()
+   * @see #getOrExpression()
+   * @generated
+   */
+  EAttribute getOrExpression_Operator();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.AndExpression <em>And Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>And Expression</em>'.
+   * @see org.ddmore.mdl.mdl.AndExpression
+   * @generated
+   */
+  EClass getAndExpression();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.AndExpression#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.AndExpression#getExpression()
+   * @see #getAndExpression()
+   * @generated
+   */
+  EReference getAndExpression_Expression();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.AndExpression#getOperator <em>Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Operator</em>'.
+   * @see org.ddmore.mdl.mdl.AndExpression#getOperator()
+   * @see #getAndExpression()
+   * @generated
+   */
+  EAttribute getAndExpression_Operator();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.LogicalExpression <em>Logical Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Logical Expression</em>'.
+   * @see org.ddmore.mdl.mdl.LogicalExpression
+   * @generated
+   */
+  EClass getLogicalExpression();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.LogicalExpression#getNegation <em>Negation</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Negation</em>'.
+   * @see org.ddmore.mdl.mdl.LogicalExpression#getNegation()
+   * @see #getLogicalExpression()
+   * @generated
+   */
+  EAttribute getLogicalExpression_Negation();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.LogicalExpression#getBoolean <em>Boolean</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Boolean</em>'.
+   * @see org.ddmore.mdl.mdl.LogicalExpression#getBoolean()
+   * @see #getLogicalExpression()
+   * @generated
+   */
+  EAttribute getLogicalExpression_Boolean();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.LogicalExpression#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.LogicalExpression#getExpression()
+   * @see #getLogicalExpression()
+   * @generated
+   */
+  EReference getLogicalExpression_Expression();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.LogicalExpression#getOperator <em>Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Operator</em>'.
+   * @see org.ddmore.mdl.mdl.LogicalExpression#getOperator()
+   * @see #getLogicalExpression()
+   * @generated
+   */
+  EAttribute getLogicalExpression_Operator();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.AdditiveExpression <em>Additive Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Additive Expression</em>'.
+   * @see org.ddmore.mdl.mdl.AdditiveExpression
+   * @generated
+   */
+  EClass getAdditiveExpression();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.AdditiveExpression#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.AdditiveExpression#getExpression()
+   * @see #getAdditiveExpression()
+   * @generated
+   */
+  EReference getAdditiveExpression_Expression();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.AdditiveExpression#getOperator <em>Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Operator</em>'.
+   * @see org.ddmore.mdl.mdl.AdditiveExpression#getOperator()
+   * @see #getAdditiveExpression()
+   * @generated
+   */
+  EAttribute getAdditiveExpression_Operator();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.AdditiveExpression#getString <em>String</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>String</em>'.
+   * @see org.ddmore.mdl.mdl.AdditiveExpression#getString()
+   * @see #getAdditiveExpression()
+   * @generated
+   */
+  EAttribute getAdditiveExpression_String();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.MultiplicativeExpression <em>Multiplicative Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Multiplicative Expression</em>'.
+   * @see org.ddmore.mdl.mdl.MultiplicativeExpression
+   * @generated
+   */
+  EClass getMultiplicativeExpression();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.MultiplicativeExpression#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.MultiplicativeExpression#getExpression()
+   * @see #getMultiplicativeExpression()
+   * @generated
+   */
+  EReference getMultiplicativeExpression_Expression();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.MultiplicativeExpression#getOperator <em>Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Operator</em>'.
+   * @see org.ddmore.mdl.mdl.MultiplicativeExpression#getOperator()
+   * @see #getMultiplicativeExpression()
+   * @generated
+   */
+  EAttribute getMultiplicativeExpression_Operator();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.PowerExpression <em>Power Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Power Expression</em>'.
+   * @see org.ddmore.mdl.mdl.PowerExpression
+   * @generated
+   */
+  EClass getPowerExpression();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.PowerExpression#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.PowerExpression#getExpression()
+   * @see #getPowerExpression()
+   * @generated
+   */
+  EReference getPowerExpression_Expression();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.PowerExpression#getOperator <em>Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Operator</em>'.
+   * @see org.ddmore.mdl.mdl.PowerExpression#getOperator()
+   * @see #getPowerExpression()
+   * @generated
+   */
+  EAttribute getPowerExpression_Operator();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.UnaryExpression <em>Unary Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Unary Expression</em>'.
+   * @see org.ddmore.mdl.mdl.UnaryExpression
+   * @generated
+   */
+  EClass getUnaryExpression();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.UnaryExpression#getOperator <em>Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Operator</em>'.
+   * @see org.ddmore.mdl.mdl.UnaryExpression#getOperator()
+   * @see #getUnaryExpression()
+   * @generated
+   */
+  EAttribute getUnaryExpression_Operator();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.UnaryExpression#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.UnaryExpression#getExpression()
+   * @see #getUnaryExpression()
+   * @generated
+   */
+  EReference getUnaryExpression_Expression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.UnaryExpression#getParExpression <em>Par Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Par Expression</em>'.
+   * @see org.ddmore.mdl.mdl.UnaryExpression#getParExpression()
+   * @see #getUnaryExpression()
+   * @generated
+   */
+  EReference getUnaryExpression_ParExpression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.UnaryExpression#getPrimary <em>Primary</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Primary</em>'.
+   * @see org.ddmore.mdl.mdl.UnaryExpression#getPrimary()
+   * @see #getUnaryExpression()
+   * @generated
+   */
+  EReference getUnaryExpression_Primary();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Primary <em>Primary</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Primary</em>'.
+   * @see org.ddmore.mdl.mdl.Primary
+   * @generated
+   */
+  EClass getPrimary();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.Primary#getFunctionCall <em>Function Call</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Function Call</em>'.
+   * @see org.ddmore.mdl.mdl.Primary#getFunctionCall()
+   * @see #getPrimary()
+   * @generated
+   */
+  EReference getPrimary_FunctionCall();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Primary#getNumber <em>Number</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Number</em>'.
+   * @see org.ddmore.mdl.mdl.Primary#getNumber()
+   * @see #getPrimary()
+   * @generated
+   */
+  EAttribute getPrimary_Number();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.Primary#getSymbol <em>Symbol</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Symbol</em>'.
+   * @see org.ddmore.mdl.mdl.Primary#getSymbol()
+   * @see #getPrimary()
+   * @generated
+   */
+  EReference getPrimary_Symbol();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.Primary#getAttribute <em>Attribute</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Attribute</em>'.
+   * @see org.ddmore.mdl.mdl.Primary#getAttribute()
+   * @see #getPrimary()
+   * @generated
+   */
+  EReference getPrimary_Attribute();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.Primary#getVector <em>Vector</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Vector</em>'.
+   * @see org.ddmore.mdl.mdl.Primary#getVector()
+   * @see #getPrimary()
+   * @generated
+   */
+  EReference getPrimary_Vector();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Vector <em>Vector</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Vector</em>'.
+   * @see org.ddmore.mdl.mdl.Vector
+   * @generated
+   */
+  EClass getVector();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Vector#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.Vector#getIdentifier()
+   * @see #getVector()
+   * @generated
+   */
+  EAttribute getVector_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.Vector#getValues <em>Values</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Values</em>'.
+   * @see org.ddmore.mdl.mdl.Vector#getValues()
+   * @see #getVector()
+   * @generated
+   */
+  EReference getVector_Values();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.FullyQualifiedSymbolName <em>Fully Qualified Symbol Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Fully Qualified Symbol Name</em>'.
+   * @see org.ddmore.mdl.mdl.FullyQualifiedSymbolName
+   * @generated
+   */
+  EClass getFullyQualifiedSymbolName();
+
+  /**
+   * Returns the meta object for the reference '{@link org.ddmore.mdl.mdl.FullyQualifiedSymbolName#getObject <em>Object</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Object</em>'.
+   * @see org.ddmore.mdl.mdl.FullyQualifiedSymbolName#getObject()
+   * @see #getFullyQualifiedSymbolName()
+   * @generated
+   */
+  EReference getFullyQualifiedSymbolName_Object();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.FullyQualifiedSymbolName#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.FullyQualifiedSymbolName#getIdentifier()
+   * @see #getFullyQualifiedSymbolName()
+   * @generated
+   */
+  EAttribute getFullyQualifiedSymbolName_Identifier();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.FullyQualifiedArgumentName <em>Fully Qualified Argument Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Fully Qualified Argument Name</em>'.
+   * @see org.ddmore.mdl.mdl.FullyQualifiedArgumentName
+   * @generated
+   */
+  EClass getFullyQualifiedArgumentName();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getParent <em>Parent</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Parent</em>'.
+   * @see org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getParent()
+   * @see #getFullyQualifiedArgumentName()
+   * @generated
+   */
+  EReference getFullyQualifiedArgumentName_Parent();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getIdentifier()
+   * @see #getFullyQualifiedArgumentName()
+   * @generated
+   */
+  EAttribute getFullyQualifiedArgumentName_Identifier();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ObjectName <em>Object Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Object Name</em>'.
+   * @see org.ddmore.mdl.mdl.ObjectName
+   * @generated
+   */
+  EClass getObjectName();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.ObjectName#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.ddmore.mdl.mdl.ObjectName#getName()
+   * @see #getObjectName()
+   * @generated
+   */
+  EAttribute getObjectName_Name();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -5498,14 +7812,14 @@ public interface MdlPackage extends EPackage
   interface Literals
   {
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.mclImpl <em>mcl</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.MclImpl <em>Mcl</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.mclImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmcl()
+     * @see org.ddmore.mdl.mdl.impl.MclImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMcl()
      * @generated
      */
-    EClass MCL = eINSTANCE.getmcl();
+    EClass MCL = eINSTANCE.getMcl();
 
     /**
      * The meta object literal for the '<em><b>Objects</b></em>' containment reference list feature.
@@ -5513,101 +7827,75 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MCL__OBJECTS = eINSTANCE.getmcl_Objects();
+    EReference MCL__OBJECTS = eINSTANCE.getMcl_Objects();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.mcl_objImpl <em>mcl obj</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.MclObjectImpl <em>Mcl Object</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.mcl_objImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmcl_obj()
+     * @see org.ddmore.mdl.mdl.impl.MclObjectImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMclObject()
      * @generated
      */
-    EClass MCL_OBJ = eINSTANCE.getmcl_obj();
+    EClass MCL_OBJECT = eINSTANCE.getMclObject();
 
     /**
-     * The meta object literal for the '<em><b>Model obj</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MCL_OBJ__MODEL_OBJ = eINSTANCE.getmcl_obj_Model_obj();
-
-    /**
-     * The meta object literal for the '<em><b>Param obj</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Model Object</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MCL_OBJ__PARAM_OBJ = eINSTANCE.getmcl_obj_Param_obj();
+    EReference MCL_OBJECT__MODEL_OBJECT = eINSTANCE.getMclObject_ModelObject();
 
     /**
-     * The meta object literal for the '<em><b>Data obj</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Parameter Object</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MCL_OBJ__DATA_OBJ = eINSTANCE.getmcl_obj_Data_obj();
+    EReference MCL_OBJECT__PARAMETER_OBJECT = eINSTANCE.getMclObject_ParameterObject();
 
     /**
-     * The meta object literal for the '<em><b>Task obj</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Data Object</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MCL_OBJ__TASK_OBJ = eINSTANCE.getmcl_obj_Task_obj();
+    EReference MCL_OBJECT__DATA_OBJECT = eINSTANCE.getMclObject_DataObject();
 
     /**
-     * The meta object literal for the '<em><b>Tel obj</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Task Object</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MCL_OBJ__TEL_OBJ = eINSTANCE.getmcl_obj_Tel_obj();
+    EReference MCL_OBJECT__TASK_OBJECT = eINSTANCE.getMclObject_TaskObject();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.model_objImpl <em>model obj</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.model_objImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmodel_obj()
-     * @generated
-     */
-    EClass MODEL_OBJ = eINSTANCE.getmodel_obj();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Tel Object</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute MODEL_OBJ__IDENTIFIER = eINSTANCE.getmodel_obj_Identifier();
+    EReference MCL_OBJECT__TEL_OBJECT = eINSTANCE.getMclObject_TelObject();
 
     /**
-     * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ModelObjectImpl <em>Model Object</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ModelObjectImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelObject()
+     * @generated
+     */
+    EClass MODEL_OBJECT = eINSTANCE.getModelObject();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ__BLOCKS = eINSTANCE.getmodel_obj_Blocks();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.param_objImpl <em>param obj</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.param_objImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getparam_obj()
-     * @generated
-     */
-    EClass PARAM_OBJ = eINSTANCE.getparam_obj();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute PARAM_OBJ__IDENTIFIER = eINSTANCE.getparam_obj_Identifier();
+    EReference MODEL_OBJECT__IDENTIFIER = eINSTANCE.getModelObject_Identifier();
 
     /**
      * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
@@ -5615,51 +7903,25 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference PARAM_OBJ__BLOCKS = eINSTANCE.getparam_obj_Blocks();
+    EReference MODEL_OBJECT__BLOCKS = eINSTANCE.getModelObject_Blocks();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.data_objImpl <em>data obj</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ParameterObjectImpl <em>Parameter Object</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.data_objImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getdata_obj()
+     * @see org.ddmore.mdl.mdl.impl.ParameterObjectImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParameterObject()
      * @generated
      */
-    EClass DATA_OBJ = eINSTANCE.getdata_obj();
+    EClass PARAMETER_OBJECT = eINSTANCE.getParameterObject();
 
     /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DATA_OBJ__IDENTIFIER = eINSTANCE.getdata_obj_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Identifier</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference DATA_OBJ__BLOCKS = eINSTANCE.getdata_obj_Blocks();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.task_objImpl <em>task obj</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.task_objImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#gettask_obj()
-     * @generated
-     */
-    EClass TASK_OBJ = eINSTANCE.gettask_obj();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute TASK_OBJ__IDENTIFIER = eINSTANCE.gettask_obj_Identifier();
+    EReference PARAMETER_OBJECT__IDENTIFIER = eINSTANCE.getParameterObject_Identifier();
 
     /**
      * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
@@ -5667,25 +7929,25 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference TASK_OBJ__BLOCKS = eINSTANCE.gettask_obj_Blocks();
+    EReference PARAMETER_OBJECT__BLOCKS = eINSTANCE.getParameterObject_Blocks();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.tel_objImpl <em>tel obj</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.DataObjectImpl <em>Data Object</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.tel_objImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#gettel_obj()
+     * @see org.ddmore.mdl.mdl.impl.DataObjectImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDataObject()
      * @generated
      */
-    EClass TEL_OBJ = eINSTANCE.gettel_obj();
+    EClass DATA_OBJECT = eINSTANCE.getDataObject();
 
     /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Identifier</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute TEL_OBJ__IDENTIFIER = eINSTANCE.gettel_obj_Identifier();
+    EReference DATA_OBJECT__IDENTIFIER = eINSTANCE.getDataObject_Identifier();
 
     /**
      * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
@@ -5693,115 +7955,175 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference TEL_OBJ__BLOCKS = eINSTANCE.gettel_obj_Blocks();
+    EReference DATA_OBJECT__BLOCKS = eINSTANCE.getDataObject_Blocks();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.model_obj_blockImpl <em>model obj block</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.TaskObjectImpl <em>Task Object</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.model_obj_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmodel_obj_block()
+     * @see org.ddmore.mdl.mdl.impl.TaskObjectImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskObject()
      * @generated
      */
-    EClass MODEL_OBJ_BLOCK = eINSTANCE.getmodel_obj_block();
+    EClass TASK_OBJECT = eINSTANCE.getTaskObject();
 
     /**
-     * The meta object literal for the '<em><b>Individual model obj block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MODEL_OBJ_BLOCK__INDIVIDUAL_MODEL_OBJ_BLOCK = eINSTANCE.getmodel_obj_block_Individual_model_obj_block();
-
-    /**
-     * The meta object literal for the '<em><b>Model prediction obj block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Identifier</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ_BLOCK__MODEL_PREDICTION_OBJ_BLOCK = eINSTANCE.getmodel_obj_block_Model_prediction_obj_block();
+    EReference TASK_OBJECT__IDENTIFIER = eINSTANCE.getTaskObject_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Random variable definition block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ_BLOCK__RANDOM_VARIABLE_DEFINITION_BLOCK = eINSTANCE.getmodel_obj_block_Random_variable_definition_block();
+    EReference TASK_OBJECT__BLOCKS = eINSTANCE.getTaskObject_Blocks();
 
     /**
-     * The meta object literal for the '<em><b>Input variables block</b></em>' containment reference feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.TELObjectImpl <em>TEL Object</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.TELObjectImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTELObject()
+     * @generated
+     */
+    EClass TEL_OBJECT = eINSTANCE.getTELObject();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ_BLOCK__INPUT_VARIABLES_BLOCK = eINSTANCE.getmodel_obj_block_Input_variables_block();
+    EReference TEL_OBJECT__IDENTIFIER = eINSTANCE.getTELObject_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Structural parameters block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ_BLOCK__STRUCTURAL_PARAMETERS_BLOCK = eINSTANCE.getmodel_obj_block_Structural_parameters_block();
+    EReference TEL_OBJECT__STATEMENTS = eINSTANCE.getTELObject_Statements();
 
     /**
-     * The meta object literal for the '<em><b>Variability parameters block</b></em>' containment reference feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ModelObjectBlockImpl <em>Model Object Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ModelObjectBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelObjectBlock()
+     * @generated
+     */
+    EClass MODEL_OBJECT_BLOCK = eINSTANCE.getModelObjectBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Individual Variables Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ_BLOCK__VARIABILITY_PARAMETERS_BLOCK = eINSTANCE.getmodel_obj_block_Variability_parameters_block();
+    EReference MODEL_OBJECT_BLOCK__INDIVIDUAL_VARIABLES_BLOCK = eINSTANCE.getModelObjectBlock_IndividualVariablesBlock();
 
     /**
-     * The meta object literal for the '<em><b>Output variables block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Model Prediction Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ_BLOCK__OUTPUT_VARIABLES_BLOCK = eINSTANCE.getmodel_obj_block_Output_variables_block();
+    EReference MODEL_OBJECT_BLOCK__MODEL_PREDICTION_BLOCK = eINSTANCE.getModelObjectBlock_ModelPredictionBlock();
 
     /**
-     * The meta object literal for the '<em><b>Group variables</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Random Variable Definition Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ_BLOCK__GROUP_VARIABLES = eINSTANCE.getmodel_obj_block_Group_variables();
+    EReference MODEL_OBJECT_BLOCK__RANDOM_VARIABLE_DEFINITION_BLOCK = eINSTANCE.getModelObjectBlock_RandomVariableDefinitionBlock();
 
     /**
-     * The meta object literal for the '<em><b>Observation block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Input Variables Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ_BLOCK__OBSERVATION_BLOCK = eINSTANCE.getmodel_obj_block_Observation_block();
+    EReference MODEL_OBJECT_BLOCK__INPUT_VARIABLES_BLOCK = eINSTANCE.getModelObjectBlock_InputVariablesBlock();
 
     /**
-     * The meta object literal for the '<em><b>Estimation block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Structural Parameters Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ_BLOCK__ESTIMATION_BLOCK = eINSTANCE.getmodel_obj_block_Estimation_block();
+    EReference MODEL_OBJECT_BLOCK__STRUCTURAL_PARAMETERS_BLOCK = eINSTANCE.getModelObjectBlock_StructuralParametersBlock();
 
     /**
-     * The meta object literal for the '<em><b>Simulation block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Variability Parameters Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJ_BLOCK__SIMULATION_BLOCK = eINSTANCE.getmodel_obj_block_Simulation_block();
+    EReference MODEL_OBJECT_BLOCK__VARIABILITY_PARAMETERS_BLOCK = eINSTANCE.getModelObjectBlock_VariabilityParametersBlock();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.individual_model_obj_blockImpl <em>individual model obj block</em>}' class.
+     * The meta object literal for the '<em><b>Output Variables Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.individual_model_obj_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getindividual_model_obj_block()
      * @generated
      */
-    EClass INDIVIDUAL_MODEL_OBJ_BLOCK = eINSTANCE.getindividual_model_obj_block();
+    EReference MODEL_OBJECT_BLOCK__OUTPUT_VARIABLES_BLOCK = eINSTANCE.getModelObjectBlock_OutputVariablesBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Group Variables Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MODEL_OBJECT_BLOCK__GROUP_VARIABLES_BLOCK = eINSTANCE.getModelObjectBlock_GroupVariablesBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Observation Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MODEL_OBJECT_BLOCK__OBSERVATION_BLOCK = eINSTANCE.getModelObjectBlock_ObservationBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Estimation Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MODEL_OBJECT_BLOCK__ESTIMATION_BLOCK = eINSTANCE.getModelObjectBlock_EstimationBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Simulation Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MODEL_OBJECT_BLOCK__SIMULATION_BLOCK = eINSTANCE.getModelObjectBlock_SimulationBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Verbatim Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MODEL_OBJECT_BLOCK__VERBATIM_BLOCK = eINSTANCE.getModelObjectBlock_VerbatimBlock();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl <em>Individual Variables Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getIndividualVariablesBlock()
+     * @generated
+     */
+    EClass INDIVIDUAL_VARIABLES_BLOCK = eINSTANCE.getIndividualVariablesBlock();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
@@ -5809,51 +8131,25 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute INDIVIDUAL_MODEL_OBJ_BLOCK__IDENTIFIER = eINSTANCE.getindividual_model_obj_block_Identifier();
+    EAttribute INDIVIDUAL_VARIABLES_BLOCK__IDENTIFIER = eINSTANCE.getIndividualVariablesBlock_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference INDIVIDUAL_MODEL_OBJ_BLOCK__BLOCK = eINSTANCE.getindividual_model_obj_block_Block();
+    EReference INDIVIDUAL_VARIABLES_BLOCK__STATEMENTS = eINSTANCE.getIndividualVariablesBlock_Statements();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.model_prediction_obj_blockImpl <em>model prediction obj block</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl <em>Model Prediction Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.model_prediction_obj_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmodel_prediction_obj_block()
+     * @see org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelPredictionBlock()
      * @generated
      */
-    EClass MODEL_PREDICTION_OBJ_BLOCK = eINSTANCE.getmodel_prediction_obj_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MODEL_PREDICTION_OBJ_BLOCK__IDENTIFIER = eINSTANCE.getmodel_prediction_obj_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MODEL_PREDICTION_OBJ_BLOCK__BLOCK = eINSTANCE.getmodel_prediction_obj_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.random_variable_definition_blockImpl <em>random variable definition block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.random_variable_definition_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getrandom_variable_definition_block()
-     * @generated
-     */
-    EClass RANDOM_VARIABLE_DEFINITION_BLOCK = eINSTANCE.getrandom_variable_definition_block();
+    EClass MODEL_PREDICTION_BLOCK = eINSTANCE.getModelPredictionBlock();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
@@ -5861,25 +8157,51 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute RANDOM_VARIABLE_DEFINITION_BLOCK__IDENTIFIER = eINSTANCE.getrandom_variable_definition_block_Identifier();
+    EAttribute MODEL_PREDICTION_BLOCK__IDENTIFIER = eINSTANCE.getModelPredictionBlock_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference RANDOM_VARIABLE_DEFINITION_BLOCK__BLOCK = eINSTANCE.getrandom_variable_definition_block_Block();
+    EReference MODEL_PREDICTION_BLOCK__STATEMENTS = eINSTANCE.getModelPredictionBlock_Statements();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.input_variables_blockImpl <em>input variables block</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl <em>Random Variable Definition Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.input_variables_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getinput_variables_block()
+     * @see org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRandomVariableDefinitionBlock()
      * @generated
      */
-    EClass INPUT_VARIABLES_BLOCK = eINSTANCE.getinput_variables_block();
+    EClass RANDOM_VARIABLE_DEFINITION_BLOCK = eINSTANCE.getRandomVariableDefinitionBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute RANDOM_VARIABLE_DEFINITION_BLOCK__IDENTIFIER = eINSTANCE.getRandomVariableDefinitionBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Variables</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RANDOM_VARIABLE_DEFINITION_BLOCK__VARIABLES = eINSTANCE.getRandomVariableDefinitionBlock_Variables();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl <em>Input Variables Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getInputVariablesBlock()
+     * @generated
+     */
+    EClass INPUT_VARIABLES_BLOCK = eINSTANCE.getInputVariablesBlock();
 
     /**
      * The meta object literal for the '<em><b>Indentifier</b></em>' attribute feature.
@@ -5887,51 +8209,25 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute INPUT_VARIABLES_BLOCK__INDENTIFIER = eINSTANCE.getinput_variables_block_Indentifier();
+    EAttribute INPUT_VARIABLES_BLOCK__INDENTIFIER = eINSTANCE.getInputVariablesBlock_Indentifier();
 
     /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Variables</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference INPUT_VARIABLES_BLOCK__BLOCK = eINSTANCE.getinput_variables_block_Block();
+    EReference INPUT_VARIABLES_BLOCK__VARIABLES = eINSTANCE.getInputVariablesBlock_Variables();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.structural_parameters_blockImpl <em>structural parameters block</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl <em>Structural Parameters Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.structural_parameters_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getstructural_parameters_block()
+     * @see org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getStructuralParametersBlock()
      * @generated
      */
-    EClass STRUCTURAL_PARAMETERS_BLOCK = eINSTANCE.getstructural_parameters_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute STRUCTURAL_PARAMETERS_BLOCK__IDENTIFIER = eINSTANCE.getstructural_parameters_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference STRUCTURAL_PARAMETERS_BLOCK__BLOCK = eINSTANCE.getstructural_parameters_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.variability_parameters_blockImpl <em>variability parameters block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.variability_parameters_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariability_parameters_block()
-     * @generated
-     */
-    EClass VARIABILITY_PARAMETERS_BLOCK = eINSTANCE.getvariability_parameters_block();
+    EClass STRUCTURAL_PARAMETERS_BLOCK = eINSTANCE.getStructuralParametersBlock();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
@@ -5939,51 +8235,25 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute VARIABILITY_PARAMETERS_BLOCK__IDENTIFIER = eINSTANCE.getvariability_parameters_block_Identifier();
+    EAttribute STRUCTURAL_PARAMETERS_BLOCK__IDENTIFIER = eINSTANCE.getStructuralParametersBlock_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VARIABILITY_PARAMETERS_BLOCK__BLOCK = eINSTANCE.getvariability_parameters_block_Block();
+    EReference STRUCTURAL_PARAMETERS_BLOCK__PARAMETERS = eINSTANCE.getStructuralParametersBlock_Parameters();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.output_variables_blockImpl <em>output variables block</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl <em>Variability Parameters Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.output_variables_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getoutput_variables_block()
+     * @see org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVariabilityParametersBlock()
      * @generated
      */
-    EClass OUTPUT_VARIABLES_BLOCK = eINSTANCE.getoutput_variables_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute OUTPUT_VARIABLES_BLOCK__IDENTIFIER = eINSTANCE.getoutput_variables_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference OUTPUT_VARIABLES_BLOCK__BLOCK = eINSTANCE.getoutput_variables_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.group_variablesImpl <em>group variables</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.group_variablesImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getgroup_variables()
-     * @generated
-     */
-    EClass GROUP_VARIABLES = eINSTANCE.getgroup_variables();
+    EClass VARIABILITY_PARAMETERS_BLOCK = eINSTANCE.getVariabilityParametersBlock();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
@@ -5991,51 +8261,25 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute GROUP_VARIABLES__IDENTIFIER = eINSTANCE.getgroup_variables_Identifier();
+    EAttribute VARIABILITY_PARAMETERS_BLOCK__IDENTIFIER = eINSTANCE.getVariabilityParametersBlock_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference GROUP_VARIABLES__BLOCK = eINSTANCE.getgroup_variables_Block();
+    EReference VARIABILITY_PARAMETERS_BLOCK__PARAMETERS = eINSTANCE.getVariabilityParametersBlock_Parameters();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.observation_blockImpl <em>observation block</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl <em>Output Variables Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.observation_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getobservation_block()
+     * @see org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOutputVariablesBlock()
      * @generated
      */
-    EClass OBSERVATION_BLOCK = eINSTANCE.getobservation_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute OBSERVATION_BLOCK__IDENTIFIER = eINSTANCE.getobservation_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference OBSERVATION_BLOCK__BLOCK = eINSTANCE.getobservation_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.estimation_blockImpl <em>estimation block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.estimation_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getestimation_block()
-     * @generated
-     */
-    EClass ESTIMATION_BLOCK = eINSTANCE.getestimation_block();
+    EClass OUTPUT_VARIABLES_BLOCK = eINSTANCE.getOutputVariablesBlock();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
@@ -6043,77 +8287,25 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ESTIMATION_BLOCK__IDENTIFIER = eINSTANCE.getestimation_block_Identifier();
+    EAttribute OUTPUT_VARIABLES_BLOCK__IDENTIFIER = eINSTANCE.getOutputVariablesBlock_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Variables</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ESTIMATION_BLOCK__BLOCK = eINSTANCE.getestimation_block_Block();
+    EReference OUTPUT_VARIABLES_BLOCK__VARIABLES = eINSTANCE.getOutputVariablesBlock_Variables();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.simulation_blockImpl <em>simulation block</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl <em>Group Variables Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.simulation_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getsimulation_block()
+     * @see org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getGroupVariablesBlock()
      * @generated
      */
-    EClass SIMULATION_BLOCK = eINSTANCE.getsimulation_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute SIMULATION_BLOCK__IDENTIFIER = eINSTANCE.getsimulation_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference SIMULATION_BLOCK__BLOCK = eINSTANCE.getsimulation_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.param_obj_blockImpl <em>param obj block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.param_obj_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getparam_obj_block()
-     * @generated
-     */
-    EClass PARAM_OBJ_BLOCK = eINSTANCE.getparam_obj_block();
-
-    /**
-     * The meta object literal for the '<em><b>Structural block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference PARAM_OBJ_BLOCK__STRUCTURAL_BLOCK = eINSTANCE.getparam_obj_block_Structural_block();
-
-    /**
-     * The meta object literal for the '<em><b>Variability block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference PARAM_OBJ_BLOCK__VARIABILITY_BLOCK = eINSTANCE.getparam_obj_block_Variability_block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.structural_blockImpl <em>structural block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.structural_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getstructural_block()
-     * @generated
-     */
-    EClass STRUCTURAL_BLOCK = eINSTANCE.getstructural_block();
+    EClass GROUP_VARIABLES_BLOCK = eINSTANCE.getGroupVariablesBlock();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
@@ -6121,215 +8313,7 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute STRUCTURAL_BLOCK__IDENTIFIER = eINSTANCE.getstructural_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference STRUCTURAL_BLOCK__BLOCK = eINSTANCE.getstructural_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.variability_blockImpl <em>variability block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.variability_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariability_block()
-     * @generated
-     */
-    EClass VARIABILITY_BLOCK = eINSTANCE.getvariability_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute VARIABILITY_BLOCK__IDENTIFIER = eINSTANCE.getvariability_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference VARIABILITY_BLOCK__BLOCK = eINSTANCE.getvariability_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.data_obj_blockImpl <em>data obj block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.data_obj_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getdata_obj_block()
-     * @generated
-     */
-    EClass DATA_OBJ_BLOCK = eINSTANCE.getdata_obj_block();
-
-    /**
-     * The meta object literal for the '<em><b>Header block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference DATA_OBJ_BLOCK__HEADER_BLOCK = eINSTANCE.getdata_obj_block_Header_block();
-
-    /**
-     * The meta object literal for the '<em><b>File block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference DATA_OBJ_BLOCK__FILE_BLOCK = eINSTANCE.getdata_obj_block_File_block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.header_blockImpl <em>header block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.header_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getheader_block()
-     * @generated
-     */
-    EClass HEADER_BLOCK = eINSTANCE.getheader_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute HEADER_BLOCK__IDENTIFIER = eINSTANCE.getheader_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference HEADER_BLOCK__BLOCK = eINSTANCE.getheader_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.file_blockImpl <em>file block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.file_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfile_block()
-     * @generated
-     */
-    EClass FILE_BLOCK = eINSTANCE.getfile_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute FILE_BLOCK__IDENTIFIER = eINSTANCE.getfile_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FILE_BLOCK__BLOCK = eINSTANCE.getfile_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.task_obj_blockImpl <em>task obj block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.task_obj_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#gettask_obj_block()
-     * @generated
-     */
-    EClass TASK_OBJ_BLOCK = eINSTANCE.gettask_obj_block();
-
-    /**
-     * The meta object literal for the '<em><b>Function declaration</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference TASK_OBJ_BLOCK__FUNCTION_DECLARATION = eINSTANCE.gettask_obj_block_Function_declaration();
-
-    /**
-     * The meta object literal for the '<em><b>Parameters block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference TASK_OBJ_BLOCK__PARAMETERS_BLOCK = eINSTANCE.gettask_obj_block_Parameters_block();
-
-    /**
-     * The meta object literal for the '<em><b>Data block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference TASK_OBJ_BLOCK__DATA_BLOCK = eINSTANCE.gettask_obj_block_Data_block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.parameters_blockImpl <em>parameters block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.parameters_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getparameters_block()
-     * @generated
-     */
-    EClass PARAMETERS_BLOCK = eINSTANCE.getparameters_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute PARAMETERS_BLOCK__IDENTIFIER = eINSTANCE.getparameters_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference PARAMETERS_BLOCK__BLOCK = eINSTANCE.getparameters_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.data_blockImpl <em>data block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.data_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getdata_block()
-     * @generated
-     */
-    EClass DATA_BLOCK = eINSTANCE.getdata_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DATA_BLOCK__IDENTIFIER = eINSTANCE.getdata_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference DATA_BLOCK__BLOCK = eINSTANCE.getdata_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.model_blockImpl <em>model block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.model_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmodel_block()
-     * @generated
-     */
-    EClass MODEL_BLOCK = eINSTANCE.getmodel_block();
+    EAttribute GROUP_VARIABLES_BLOCK__IDENTIFIER = eINSTANCE.getGroupVariablesBlock_Identifier();
 
     /**
      * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
@@ -6337,51 +8321,17 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_BLOCK__STATEMENTS = eINSTANCE.getmodel_block_Statements();
+    EReference GROUP_VARIABLES_BLOCK__STATEMENTS = eINSTANCE.getGroupVariablesBlock_Statements();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.model_block_statementImpl <em>model block statement</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ObservationBlockImpl <em>Observation Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.model_block_statementImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmodel_block_statement()
+     * @see org.ddmore.mdl.mdl.impl.ObservationBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getObservationBlock()
      * @generated
      */
-    EClass MODEL_BLOCK_STATEMENT = eINSTANCE.getmodel_block_statement();
-
-    /**
-     * The meta object literal for the '<em><b>Statement</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MODEL_BLOCK_STATEMENT__STATEMENT = eINSTANCE.getmodel_block_statement_Statement();
-
-    /**
-     * The meta object literal for the '<em><b>Ode block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MODEL_BLOCK_STATEMENT__ODE_BLOCK = eINSTANCE.getmodel_block_statement_Ode_block();
-
-    /**
-     * The meta object literal for the '<em><b>Library block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MODEL_BLOCK_STATEMENT__LIBRARY_BLOCK = eINSTANCE.getmodel_block_statement_Library_block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.library_blockImpl <em>library block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.library_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getlibrary_block()
-     * @generated
-     */
-    EClass LIBRARY_BLOCK = eINSTANCE.getlibrary_block();
+    EClass OBSERVATION_BLOCK = eINSTANCE.getObservationBlock();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
@@ -6389,467 +8339,7 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute LIBRARY_BLOCK__IDENTIFIER = eINSTANCE.getlibrary_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference LIBRARY_BLOCK__BLOCK = eINSTANCE.getlibrary_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ode_blockImpl <em>ode block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.ode_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getode_block()
-     * @generated
-     */
-    EClass ODE_BLOCK = eINSTANCE.getode_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ODE_BLOCK__IDENTIFIER = eINSTANCE.getode_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ODE_BLOCK__BLOCK = eINSTANCE.getode_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.variability_block_contentImpl <em>variability block content</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.variability_block_contentImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariability_block_content()
-     * @generated
-     */
-    EClass VARIABILITY_BLOCK_CONTENT = eINSTANCE.getvariability_block_content();
-
-    /**
-     * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference VARIABILITY_BLOCK_CONTENT__BLOCKS = eINSTANCE.getvariability_block_content_Blocks();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.variability_block_statementImpl <em>variability block statement</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.variability_block_statementImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariability_block_statement()
-     * @generated
-     */
-    EClass VARIABILITY_BLOCK_STATEMENT = eINSTANCE.getvariability_block_statement();
-
-    /**
-     * The meta object literal for the '<em><b>Block statement</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference VARIABILITY_BLOCK_STATEMENT__BLOCK_STATEMENT = eINSTANCE.getvariability_block_statement_Block_statement();
-
-    /**
-     * The meta object literal for the '<em><b>Block block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference VARIABILITY_BLOCK_STATEMENT__BLOCK_BLOCK = eINSTANCE.getvariability_block_statement_Block_block();
-
-    /**
-     * The meta object literal for the '<em><b>Diag block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference VARIABILITY_BLOCK_STATEMENT__DIAG_BLOCK = eINSTANCE.getvariability_block_statement_Diag_block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.block_subblockImpl <em>block subblock</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.block_subblockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getblock_subblock()
-     * @generated
-     */
-    EClass BLOCK_SUBBLOCK = eINSTANCE.getblock_subblock();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute BLOCK_SUBBLOCK__IDENTIFIER = eINSTANCE.getblock_subblock_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference BLOCK_SUBBLOCK__BLOCK = eINSTANCE.getblock_subblock_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.diag_subblockImpl <em>diag subblock</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.diag_subblockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getdiag_subblock()
-     * @generated
-     */
-    EClass DIAG_SUBBLOCK = eINSTANCE.getdiag_subblock();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DIAG_SUBBLOCK__IDENTIFIER = eINSTANCE.getdiag_subblock_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference DIAG_SUBBLOCK__BLOCK = eINSTANCE.getdiag_subblock_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.variability_subblockImpl <em>variability subblock</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.variability_subblockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariability_subblock()
-     * @generated
-     */
-    EClass VARIABILITY_SUBBLOCK = eINSTANCE.getvariability_subblock();
-
-    /**
-     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference VARIABILITY_SUBBLOCK__ARGUMENTS = eINSTANCE.getvariability_subblock_Arguments();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.file_block_contentImpl <em>file block content</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.file_block_contentImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfile_block_content()
-     * @generated
-     */
-    EClass FILE_BLOCK_CONTENT = eINSTANCE.getfile_block_content();
-
-    /**
-     * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FILE_BLOCK_CONTENT__BLOCKS = eINSTANCE.getfile_block_content_Blocks();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.file_block_statementImpl <em>file block statement</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.file_block_statementImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfile_block_statement()
-     * @generated
-     */
-    EClass FILE_BLOCK_STATEMENT = eINSTANCE.getfile_block_statement();
-
-    /**
-     * The meta object literal for the '<em><b>Statement</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FILE_BLOCK_STATEMENT__STATEMENT = eINSTANCE.getfile_block_statement_Statement();
-
-    /**
-     * The meta object literal for the '<em><b>Inline block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FILE_BLOCK_STATEMENT__INLINE_BLOCK = eINSTANCE.getfile_block_statement_Inline_block();
-
-    /**
-     * The meta object literal for the '<em><b>Design block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FILE_BLOCK_STATEMENT__DESIGN_BLOCK = eINSTANCE.getfile_block_statement_Design_block();
-
-    /**
-     * The meta object literal for the '<em><b>Rsscript block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FILE_BLOCK_STATEMENT__RSSCRIPT_BLOCK = eINSTANCE.getfile_block_statement_Rsscript_block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.inline_blockImpl <em>inline block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.inline_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getinline_block()
-     * @generated
-     */
-    EClass INLINE_BLOCK = eINSTANCE.getinline_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute INLINE_BLOCK__IDENTIFIER = eINSTANCE.getinline_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference INLINE_BLOCK__BLOCK = eINSTANCE.getinline_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.design_blockImpl <em>design block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.design_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getdesign_block()
-     * @generated
-     */
-    EClass DESIGN_BLOCK = eINSTANCE.getdesign_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DESIGN_BLOCK__IDENTIFIER = eINSTANCE.getdesign_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference DESIGN_BLOCK__BLOCK = eINSTANCE.getdesign_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.rsscript_blockImpl <em>rsscript block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.rsscript_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getrsscript_block()
-     * @generated
-     */
-    EClass RSSCRIPT_BLOCK = eINSTANCE.getrsscript_block();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute RSSCRIPT_BLOCK__IDENTIFIER = eINSTANCE.getrsscript_block_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference RSSCRIPT_BLOCK__BLOCK = eINSTANCE.getrsscript_block_Block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.inline_block_contentImpl <em>inline block content</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.inline_block_contentImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getinline_block_content()
-     * @generated
-     */
-    EClass INLINE_BLOCK_CONTENT = eINSTANCE.getinline_block_content();
-
-    /**
-     * The meta object literal for the '<em><b>Identifiers</b></em>' attribute list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute INLINE_BLOCK_CONTENT__IDENTIFIERS = eINSTANCE.getinline_block_content_Identifiers();
-
-    /**
-     * The meta object literal for the '<em><b>Values</b></em>' attribute list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute INLINE_BLOCK_CONTENT__VALUES = eINSTANCE.getinline_block_content_Values();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.function_declarationImpl <em>function declaration</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.function_declarationImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfunction_declaration()
-     * @generated
-     */
-    EClass FUNCTION_DECLARATION = eINSTANCE.getfunction_declaration();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute FUNCTION_DECLARATION__IDENTIFIER = eINSTANCE.getfunction_declaration_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Formal arguments</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FUNCTION_DECLARATION__FORMAL_ARGUMENTS = eINSTANCE.getfunction_declaration_Formal_arguments();
-
-    /**
-     * The meta object literal for the '<em><b>Function body</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FUNCTION_DECLARATION__FUNCTION_BODY = eINSTANCE.getfunction_declaration_Function_body();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.function_bodyImpl <em>function body</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.function_bodyImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfunction_body()
-     * @generated
-     */
-    EClass FUNCTION_BODY = eINSTANCE.getfunction_body();
-
-    /**
-     * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FUNCTION_BODY__BLOCKS = eINSTANCE.getfunction_body_Blocks();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.function_subblockImpl <em>function subblock</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.function_subblockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfunction_subblock()
-     * @generated
-     */
-    EClass FUNCTION_SUBBLOCK = eINSTANCE.getfunction_subblock();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute FUNCTION_SUBBLOCK__IDENTIFIER = eINSTANCE.getfunction_subblock_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Estimate defn</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FUNCTION_SUBBLOCK__ESTIMATE_DEFN = eINSTANCE.getfunction_subblock_Estimate_defn();
-
-    /**
-     * The meta object literal for the '<em><b>Simulate defn</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FUNCTION_SUBBLOCK__SIMULATE_DEFN = eINSTANCE.getfunction_subblock_Simulate_defn();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.formal_argumentsImpl <em>formal arguments</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.formal_argumentsImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getformal_arguments()
-     * @generated
-     */
-    EClass FORMAL_ARGUMENTS = eINSTANCE.getformal_arguments();
-
-    /**
-     * The meta object literal for the '<em><b>Identifiers</b></em>' attribute list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute FORMAL_ARGUMENTS__IDENTIFIERS = eINSTANCE.getformal_arguments_Identifiers();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.function_callImpl <em>function call</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.function_callImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getfunction_call()
-     * @generated
-     */
-    EClass FUNCTION_CALL = eINSTANCE.getfunction_call();
-
-    /**
-     * The meta object literal for the '<em><b>Funct name</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute FUNCTION_CALL__FUNCT_NAME = eINSTANCE.getfunction_call_Funct_name();
-
-    /**
-     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FUNCTION_CALL__ARGUMENTS = eINSTANCE.getfunction_call_Arguments();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.blockImpl <em>block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getblock()
-     * @generated
-     */
-    EClass BLOCK = eINSTANCE.getblock();
+    EAttribute OBSERVATION_BLOCK__IDENTIFIER = eINSTANCE.getObservationBlock_Identifier();
 
     /**
      * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
@@ -6857,59 +8347,17 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference BLOCK__STATEMENTS = eINSTANCE.getblock_Statements();
+    EReference OBSERVATION_BLOCK__STATEMENTS = eINSTANCE.getObservationBlock_Statements();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.block_statementImpl <em>block statement</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.EstimationBlockImpl <em>Estimation Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.block_statementImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getblock_statement()
+     * @see org.ddmore.mdl.mdl.impl.EstimationBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getEstimationBlock()
      * @generated
      */
-    EClass BLOCK_STATEMENT = eINSTANCE.getblock_statement();
-
-    /**
-     * The meta object literal for the '<em><b>Variable declaration</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference BLOCK_STATEMENT__VARIABLE_DECLARATION = eINSTANCE.getblock_statement_Variable_declaration();
-
-    /**
-     * The meta object literal for the '<em><b>Function call</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference BLOCK_STATEMENT__FUNCTION_CALL = eINSTANCE.getblock_statement_Function_call();
-
-    /**
-     * The meta object literal for the '<em><b>Statement</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference BLOCK_STATEMENT__STATEMENT = eINSTANCE.getblock_statement_Statement();
-
-    /**
-     * The meta object literal for the '<em><b>Verbatim block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference BLOCK_STATEMENT__VERBATIM_BLOCK = eINSTANCE.getblock_statement_Verbatim_block();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.verbatim_blockImpl <em>verbatim block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.verbatim_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getverbatim_block()
-     * @generated
-     */
-    EClass VERBATIM_BLOCK = eINSTANCE.getverbatim_block();
+    EClass ESTIMATION_BLOCK = eINSTANCE.getEstimationBlock();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
@@ -6917,33 +8365,25 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute VERBATIM_BLOCK__IDENTIFIER = eINSTANCE.getverbatim_block_Identifier();
+    EAttribute ESTIMATION_BLOCK__IDENTIFIER = eINSTANCE.getEstimationBlock_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VERBATIM_BLOCK__BLOCK = eINSTANCE.getverbatim_block_Block();
+    EReference ESTIMATION_BLOCK__STATEMENTS = eINSTANCE.getEstimationBlock_Statements();
 
     /**
-     * The meta object literal for the '<em><b>External code</b></em>' attribute feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.SimulationBlockImpl <em>Simulation Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.SimulationBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSimulationBlock()
      * @generated
      */
-    EAttribute VERBATIM_BLOCK__EXTERNAL_CODE = eINSTANCE.getverbatim_block_External_code();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.target_blockImpl <em>target block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.target_blockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#gettarget_block()
-     * @generated
-     */
-    EClass TARGET_BLOCK = eINSTANCE.gettarget_block();
+    EClass SIMULATION_BLOCK = eINSTANCE.getSimulationBlock();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
@@ -6951,33 +8391,375 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute TARGET_BLOCK__IDENTIFIER = eINSTANCE.gettarget_block_Identifier();
+    EAttribute SIMULATION_BLOCK__IDENTIFIER = eINSTANCE.getSimulationBlock_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>External code</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute TARGET_BLOCK__EXTERNAL_CODE = eINSTANCE.gettarget_block_External_code();
+    EReference SIMULATION_BLOCK__STATEMENTS = eINSTANCE.getSimulationBlock_Statements();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.variable_declarationImpl <em>variable declaration</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ParameterObjectBlockImpl <em>Parameter Object Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.variable_declarationImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariable_declaration()
+     * @see org.ddmore.mdl.mdl.impl.ParameterObjectBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParameterObjectBlock()
      * @generated
      */
-    EClass VARIABLE_DECLARATION = eINSTANCE.getvariable_declaration();
+    EClass PARAMETER_OBJECT_BLOCK = eINSTANCE.getParameterObjectBlock();
 
     /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Structural Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VARIABLE_DECLARATION__IDENTIFIER = eINSTANCE.getvariable_declaration_Identifier();
+    EReference PARAMETER_OBJECT_BLOCK__STRUCTURAL_BLOCK = eINSTANCE.getParameterObjectBlock_StructuralBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Variability Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PARAMETER_OBJECT_BLOCK__VARIABILITY_BLOCK = eINSTANCE.getParameterObjectBlock_VariabilityBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Prior Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PARAMETER_OBJECT_BLOCK__PRIOR_BLOCK = eINSTANCE.getParameterObjectBlock_PriorBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Verbatim Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PARAMETER_OBJECT_BLOCK__VERBATIM_BLOCK = eINSTANCE.getParameterObjectBlock_VerbatimBlock();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.StructuralBlockImpl <em>Structural Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.StructuralBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getStructuralBlock()
+     * @generated
+     */
+    EClass STRUCTURAL_BLOCK = eINSTANCE.getStructuralBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute STRUCTURAL_BLOCK__IDENTIFIER = eINSTANCE.getStructuralBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STRUCTURAL_BLOCK__PARAMETERS = eINSTANCE.getStructuralBlock_Parameters();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.VariabilityBlockImpl <em>Variability Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.VariabilityBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVariabilityBlock()
+     * @generated
+     */
+    EClass VARIABILITY_BLOCK = eINSTANCE.getVariabilityBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VARIABILITY_BLOCK__IDENTIFIER = eINSTANCE.getVariabilityBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference VARIABILITY_BLOCK__STATEMENTS = eINSTANCE.getVariabilityBlock_Statements();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.PriorParametersBlockImpl <em>Prior Parameters Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.PriorParametersBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getPriorParametersBlock()
+     * @generated
+     */
+    EClass PRIOR_PARAMETERS_BLOCK = eINSTANCE.getPriorParametersBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PRIOR_PARAMETERS_BLOCK__IDENTIFIER = eINSTANCE.getPriorParametersBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PRIOR_PARAMETERS_BLOCK__STATEMENTS = eINSTANCE.getPriorParametersBlock_Statements();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.DataObjectBlockImpl <em>Data Object Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.DataObjectBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDataObjectBlock()
+     * @generated
+     */
+    EClass DATA_OBJECT_BLOCK = eINSTANCE.getDataObjectBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Header Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DATA_OBJECT_BLOCK__HEADER_BLOCK = eINSTANCE.getDataObjectBlock_HeaderBlock();
+
+    /**
+     * The meta object literal for the '<em><b>File Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DATA_OBJECT_BLOCK__FILE_BLOCK = eINSTANCE.getDataObjectBlock_FileBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Verbatim Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DATA_OBJECT_BLOCK__VERBATIM_BLOCK = eINSTANCE.getDataObjectBlock_VerbatimBlock();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.HeaderBlockImpl <em>Header Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.HeaderBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getHeaderBlock()
+     * @generated
+     */
+    EClass HEADER_BLOCK = eINSTANCE.getHeaderBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute HEADER_BLOCK__IDENTIFIER = eINSTANCE.getHeaderBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Variables</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference HEADER_BLOCK__VARIABLES = eINSTANCE.getHeaderBlock_Variables();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.FileBlockImpl <em>File Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.FileBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFileBlock()
+     * @generated
+     */
+    EClass FILE_BLOCK = eINSTANCE.getFileBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FILE_BLOCK__IDENTIFIER = eINSTANCE.getFileBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FILE_BLOCK__STATEMENTS = eINSTANCE.getFileBlock_Statements();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl <em>Task Object Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskObjectBlock()
+     * @generated
+     */
+    EClass TASK_OBJECT_BLOCK = eINSTANCE.getTaskObjectBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Function Declaration</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_OBJECT_BLOCK__FUNCTION_DECLARATION = eINSTANCE.getTaskObjectBlock_FunctionDeclaration();
+
+    /**
+     * The meta object literal for the '<em><b>Parameter Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_OBJECT_BLOCK__PARAMETER_BLOCK = eINSTANCE.getTaskObjectBlock_ParameterBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Data Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_OBJECT_BLOCK__DATA_BLOCK = eINSTANCE.getTaskObjectBlock_DataBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Model Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_OBJECT_BLOCK__MODEL_BLOCK = eINSTANCE.getTaskObjectBlock_ModelBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Verbatim Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_OBJECT_BLOCK__VERBATIM_BLOCK = eINSTANCE.getTaskObjectBlock_VerbatimBlock();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ParameterBlockImpl <em>Parameter Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ParameterBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParameterBlock()
+     * @generated
+     */
+    EClass PARAMETER_BLOCK = eINSTANCE.getParameterBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PARAMETER_BLOCK__IDENTIFIER = eINSTANCE.getParameterBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PARAMETER_BLOCK__PARAMETERS = eINSTANCE.getParameterBlock_Parameters();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.DataBlockImpl <em>Data Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.DataBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDataBlock()
+     * @generated
+     */
+    EClass DATA_BLOCK = eINSTANCE.getDataBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DATA_BLOCK__IDENTIFIER = eINSTANCE.getDataBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DATA_BLOCK__STATEMENTS = eINSTANCE.getDataBlock_Statements();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.DataBlockStatementImpl <em>Data Block Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.DataBlockStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDataBlockStatement()
+     * @generated
+     */
+    EClass DATA_BLOCK_STATEMENT = eINSTANCE.getDataBlockStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Ignore List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DATA_BLOCK_STATEMENT__IGNORE_LIST = eINSTANCE.getDataBlockStatement_IgnoreList();
+
+    /**
+     * The meta object literal for the '<em><b>Accept List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DATA_BLOCK_STATEMENT__ACCEPT_LIST = eINSTANCE.getDataBlockStatement_AcceptList();
+
+    /**
+     * The meta object literal for the '<em><b>Drop List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DATA_BLOCK_STATEMENT__DROP_LIST = eINSTANCE.getDataBlockStatement_DropList();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.IgnoreListImpl <em>Ignore List</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.IgnoreListImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getIgnoreList()
+     * @generated
+     */
+    EClass IGNORE_LIST = eINSTANCE.getIgnoreList();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute IGNORE_LIST__IDENTIFIER = eINSTANCE.getIgnoreList_Identifier();
 
     /**
      * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
@@ -6985,25 +8767,25 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VARIABLE_DECLARATION__EXPRESSION = eINSTANCE.getvariable_declaration_Expression();
+    EReference IGNORE_LIST__EXPRESSION = eINSTANCE.getIgnoreList_Expression();
 
     /**
-     * The meta object literal for the '<em><b>Random list</b></em>' containment reference feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.AcceptListImpl <em>Accept List</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.AcceptListImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAcceptList()
+     * @generated
+     */
+    EClass ACCEPT_LIST = eINSTANCE.getAcceptList();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VARIABLE_DECLARATION__RANDOM_LIST = eINSTANCE.getvariable_declaration_Random_list();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.any_expressionImpl <em>any expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.any_expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getany_expression()
-     * @generated
-     */
-    EClass ANY_EXPRESSION = eINSTANCE.getany_expression();
+    EAttribute ACCEPT_LIST__IDENTIFIER = eINSTANCE.getAcceptList_Identifier();
 
     /**
      * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
@@ -7011,7 +8793,25 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ANY_EXPRESSION__EXPRESSION = eINSTANCE.getany_expression_Expression();
+    EReference ACCEPT_LIST__EXPRESSION = eINSTANCE.getAcceptList_Expression();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.DropListImpl <em>Drop List</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.DropListImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDropList()
+     * @generated
+     */
+    EClass DROP_LIST = eINSTANCE.getDropList();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DROP_LIST__IDENTIFIER = eINSTANCE.getDropList_Identifier();
 
     /**
      * The meta object literal for the '<em><b>List</b></em>' containment reference feature.
@@ -7019,131 +8819,17 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ANY_EXPRESSION__LIST = eINSTANCE.getany_expression_List();
+    EReference DROP_LIST__LIST = eINSTANCE.getDropList_List();
 
     /**
-     * The meta object literal for the '<em><b>Ode list</b></em>' containment reference feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ModelBlockImpl <em>Model Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ModelBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelBlock()
      * @generated
      */
-    EReference ANY_EXPRESSION__ODE_LIST = eINSTANCE.getany_expression_Ode_list();
-
-    /**
-     * The meta object literal for the '<em><b>Random list</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ANY_EXPRESSION__RANDOM_LIST = eINSTANCE.getany_expression_Random_list();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.expressionImpl <em>expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getexpression()
-     * @generated
-     */
-    EClass EXPRESSION = eINSTANCE.getexpression();
-
-    /**
-     * The meta object literal for the '<em><b>Conditional expression</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EXPRESSION__CONDITIONAL_EXPRESSION = eINSTANCE.getexpression_Conditional_expression();
-
-    /**
-     * The meta object literal for the '<em><b>String expression</b></em>' attribute list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute EXPRESSION__STRING_EXPRESSION = eINSTANCE.getexpression_String_expression();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.listImpl <em>list</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.listImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getlist()
-     * @generated
-     */
-    EClass LIST = eINSTANCE.getlist();
-
-    /**
-     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference LIST__ARGUMENTS = eINSTANCE.getlist_Arguments();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ode_listImpl <em>ode list</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.ode_listImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getode_list()
-     * @generated
-     */
-    EClass ODE_LIST = eINSTANCE.getode_list();
-
-    /**
-     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ODE_LIST__ARGUMENTS = eINSTANCE.getode_list_Arguments();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.random_listImpl <em>random list</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.random_listImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getrandom_list()
-     * @generated
-     */
-    EClass RANDOM_LIST = eINSTANCE.getrandom_list();
-
-    /**
-     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference RANDOM_LIST__ARGUMENTS = eINSTANCE.getrandom_list_Arguments();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.argumentsImpl <em>arguments</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.argumentsImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getarguments()
-     * @generated
-     */
-    EClass ARGUMENTS = eINSTANCE.getarguments();
-
-    /**
-     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ARGUMENTS__ARGUMENTS = eINSTANCE.getarguments_Arguments();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.argumentImpl <em>argument</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.argumentImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getargument()
-     * @generated
-     */
-    EClass ARGUMENT = eINSTANCE.getargument();
+    EClass MODEL_BLOCK = eINSTANCE.getModelBlock();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
@@ -7151,349 +8837,497 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ARGUMENT__IDENTIFIER = eINSTANCE.getargument_Identifier();
+    EAttribute MODEL_BLOCK__IDENTIFIER = eINSTANCE.getModelBlock_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ARGUMENT__EXPRESSION = eINSTANCE.getargument_Expression();
+    EReference MODEL_BLOCK__STATEMENTS = eINSTANCE.getModelBlock_Statements();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.statementImpl <em>statement</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ModelBlockStatementImpl <em>Model Block Statement</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.statementImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getstatement()
+     * @see org.ddmore.mdl.mdl.impl.ModelBlockStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelBlockStatement()
      * @generated
      */
-    EClass STATEMENT = eINSTANCE.getstatement();
+    EClass MODEL_BLOCK_STATEMENT = eINSTANCE.getModelBlockStatement();
 
     /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference STATEMENT__BLOCK = eINSTANCE.getstatement_Block();
-
-    /**
-     * The meta object literal for the '<em><b>Par expression</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Statement</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference STATEMENT__PAR_EXPRESSION = eINSTANCE.getstatement_Par_expression();
+    EReference MODEL_BLOCK_STATEMENT__STATEMENT = eINSTANCE.getModelBlockStatement_Statement();
 
     /**
-     * The meta object literal for the '<em><b>If statement</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Add List</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference STATEMENT__IF_STATEMENT = eINSTANCE.getstatement_If_statement();
+    EReference MODEL_BLOCK_STATEMENT__ADD_LIST = eINSTANCE.getModelBlockStatement_AddList();
 
     /**
-     * The meta object literal for the '<em><b>Else statement</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Remove List</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference STATEMENT__ELSE_STATEMENT = eINSTANCE.getstatement_Else_statement();
+    EReference MODEL_BLOCK_STATEMENT__REMOVE_LIST = eINSTANCE.getModelBlockStatement_RemoveList();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.par_expressionImpl <em>par expression</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.AddListImpl <em>Add List</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.par_expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getpar_expression()
+     * @see org.ddmore.mdl.mdl.impl.AddListImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAddList()
      * @generated
      */
-    EClass PAR_EXPRESSION = eINSTANCE.getpar_expression();
+    EClass ADD_LIST = eINSTANCE.getAddList();
 
     /**
-     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference PAR_EXPRESSION__EXPRESSION = eINSTANCE.getpar_expression_Expression();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.conditional_expressionImpl <em>conditional expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.conditional_expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getconditional_expression()
-     * @generated
-     */
-    EClass CONDITIONAL_EXPRESSION = eINSTANCE.getconditional_expression();
-
-    /**
-     * The meta object literal for the '<em><b>Conditional or expression</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>List</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CONDITIONAL_EXPRESSION__CONDITIONAL_OR_EXPRESSION = eINSTANCE.getconditional_expression_Conditional_or_expression();
+    EReference ADD_LIST__LIST = eINSTANCE.getAddList_List();
 
     /**
-     * The meta object literal for the '<em><b>Expression1</b></em>' containment reference feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.RemoveListImpl <em>Remove List</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.RemoveListImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRemoveList()
+     * @generated
+     */
+    EClass REMOVE_LIST = eINSTANCE.getRemoveList();
+
+    /**
+     * The meta object literal for the '<em><b>List</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CONDITIONAL_EXPRESSION__EXPRESSION1 = eINSTANCE.getconditional_expression_Expression1();
+    EReference REMOVE_LIST__LIST = eINSTANCE.getRemoveList_List();
 
     /**
-     * The meta object literal for the '<em><b>Expression2</b></em>' containment reference feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.SymbolListImpl <em>Symbol List</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.SymbolListImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSymbolList()
+     * @generated
+     */
+    EClass SYMBOL_LIST = eINSTANCE.getSymbolList();
+
+    /**
+     * The meta object literal for the '<em><b>Symbols</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CONDITIONAL_EXPRESSION__EXPRESSION2 = eINSTANCE.getconditional_expression_Expression2();
+    EReference SYMBOL_LIST__SYMBOLS = eINSTANCE.getSymbolList_Symbols();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.conditional_or_expressionImpl <em>conditional or expression</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ModelPredictionBlockStatementImpl <em>Model Prediction Block Statement</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.conditional_or_expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getconditional_or_expression()
+     * @see org.ddmore.mdl.mdl.impl.ModelPredictionBlockStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getModelPredictionBlockStatement()
      * @generated
      */
-    EClass CONDITIONAL_OR_EXPRESSION = eINSTANCE.getconditional_or_expression();
+    EClass MODEL_PREDICTION_BLOCK_STATEMENT = eINSTANCE.getModelPredictionBlockStatement();
 
     /**
-     * The meta object literal for the '<em><b>Conditional and expression</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference CONDITIONAL_OR_EXPRESSION__CONDITIONAL_AND_EXPRESSION = eINSTANCE.getconditional_or_expression_Conditional_and_expression();
-
-    /**
-     * The meta object literal for the '<em><b>Operator</b></em>' attribute list feature.
+     * The meta object literal for the '<em><b>Statement</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute CONDITIONAL_OR_EXPRESSION__OPERATOR = eINSTANCE.getconditional_or_expression_Operator();
+    EReference MODEL_PREDICTION_BLOCK_STATEMENT__STATEMENT = eINSTANCE.getModelPredictionBlockStatement_Statement();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.conditional_and_expressionImpl <em>conditional and expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.conditional_and_expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getconditional_and_expression()
-     * @generated
-     */
-    EClass CONDITIONAL_AND_EXPRESSION = eINSTANCE.getconditional_and_expression();
-
-    /**
-     * The meta object literal for the '<em><b>Relational expression</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Ode Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CONDITIONAL_AND_EXPRESSION__RELATIONAL_EXPRESSION = eINSTANCE.getconditional_and_expression_Relational_expression();
+    EReference MODEL_PREDICTION_BLOCK_STATEMENT__ODE_BLOCK = eINSTANCE.getModelPredictionBlockStatement_OdeBlock();
 
     /**
-     * The meta object literal for the '<em><b>Operator</b></em>' attribute list feature.
+     * The meta object literal for the '<em><b>Library Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute CONDITIONAL_AND_EXPRESSION__OPERATOR = eINSTANCE.getconditional_and_expression_Operator();
+    EReference MODEL_PREDICTION_BLOCK_STATEMENT__LIBRARY_BLOCK = eINSTANCE.getModelPredictionBlockStatement_LibraryBlock();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.relational_expressionImpl <em>relational expression</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.LibraryBlockImpl <em>Library Block</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.relational_expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getrelational_expression()
+     * @see org.ddmore.mdl.mdl.impl.LibraryBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLibraryBlock()
      * @generated
      */
-    EClass RELATIONAL_EXPRESSION = eINSTANCE.getrelational_expression();
+    EClass LIBRARY_BLOCK = eINSTANCE.getLibraryBlock();
 
     /**
-     * The meta object literal for the '<em><b>Negation</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute RELATIONAL_EXPRESSION__NEGATION = eINSTANCE.getrelational_expression_Negation();
-
-    /**
-     * The meta object literal for the '<em><b>Boolean</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute RELATIONAL_EXPRESSION__BOOLEAN = eINSTANCE.getrelational_expression_Boolean();
+    EAttribute LIBRARY_BLOCK__IDENTIFIER = eINSTANCE.getLibraryBlock_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Additive expression</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference RELATIONAL_EXPRESSION__ADDITIVE_EXPRESSION = eINSTANCE.getrelational_expression_Additive_expression();
+    EReference LIBRARY_BLOCK__STATEMENTS = eINSTANCE.getLibraryBlock_Statements();
 
     /**
-     * The meta object literal for the '<em><b>Relational op</b></em>' attribute list feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.OdeBlockImpl <em>Ode Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.OdeBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOdeBlock()
+     * @generated
+     */
+    EClass ODE_BLOCK = eINSTANCE.getOdeBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute RELATIONAL_EXPRESSION__RELATIONAL_OP = eINSTANCE.getrelational_expression_Relational_op();
+    EAttribute ODE_BLOCK__IDENTIFIER = eINSTANCE.getOdeBlock_Identifier();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.additive_expressionImpl <em>additive expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.additive_expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getadditive_expression()
-     * @generated
-     */
-    EClass ADDITIVE_EXPRESSION = eINSTANCE.getadditive_expression();
-
-    /**
-     * The meta object literal for the '<em><b>Multiplicative expression</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ADDITIVE_EXPRESSION__MULTIPLICATIVE_EXPRESSION = eINSTANCE.getadditive_expression_Multiplicative_expression();
+    EReference ODE_BLOCK__STATEMENTS = eINSTANCE.getOdeBlock_Statements();
 
     /**
-     * The meta object literal for the '<em><b>Additive op</b></em>' attribute list feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.GroupVariablesBlockStatementImpl <em>Group Variables Block Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.GroupVariablesBlockStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getGroupVariablesBlockStatement()
+     * @generated
+     */
+    EClass GROUP_VARIABLES_BLOCK_STATEMENT = eINSTANCE.getGroupVariablesBlockStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Statement</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ADDITIVE_EXPRESSION__ADDITIVE_OP = eINSTANCE.getadditive_expression_Additive_op();
+    EReference GROUP_VARIABLES_BLOCK_STATEMENT__STATEMENT = eINSTANCE.getGroupVariablesBlockStatement_Statement();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.multiplicative_expressionImpl <em>multiplicative expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.multiplicative_expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getmultiplicative_expression()
-     * @generated
-     */
-    EClass MULTIPLICATIVE_EXPRESSION = eINSTANCE.getmultiplicative_expression();
-
-    /**
-     * The meta object literal for the '<em><b>Power expression</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Mixture Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MULTIPLICATIVE_EXPRESSION__POWER_EXPRESSION = eINSTANCE.getmultiplicative_expression_Power_expression();
+    EReference GROUP_VARIABLES_BLOCK_STATEMENT__MIXTURE_BLOCK = eINSTANCE.getGroupVariablesBlockStatement_MixtureBlock();
 
     /**
-     * The meta object literal for the '<em><b>Multiplicative op</b></em>' attribute list feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.MixtureBlockImpl <em>Mixture Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.MixtureBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMixtureBlock()
+     * @generated
+     */
+    EClass MIXTURE_BLOCK = eINSTANCE.getMixtureBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute MULTIPLICATIVE_EXPRESSION__MULTIPLICATIVE_OP = eINSTANCE.getmultiplicative_expression_Multiplicative_op();
+    EAttribute MIXTURE_BLOCK__IDENTIFIER = eINSTANCE.getMixtureBlock_Identifier();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.power_expressionImpl <em>power expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.power_expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getpower_expression()
-     * @generated
-     */
-    EClass POWER_EXPRESSION = eINSTANCE.getpower_expression();
-
-    /**
-     * The meta object literal for the '<em><b>Unary expression</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference POWER_EXPRESSION__UNARY_EXPRESSION = eINSTANCE.getpower_expression_Unary_expression();
+    EReference MIXTURE_BLOCK__STATEMENTS = eINSTANCE.getMixtureBlock_Statements();
 
     /**
-     * The meta object literal for the '<em><b>Power op</b></em>' attribute list feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl <em>Variability Block Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVariabilityBlockStatement()
+     * @generated
+     */
+    EClass VARIABILITY_BLOCK_STATEMENT = eINSTANCE.getVariabilityBlockStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Parameter</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute POWER_EXPRESSION__POWER_OP = eINSTANCE.getpower_expression_Power_op();
+    EReference VARIABILITY_BLOCK_STATEMENT__PARAMETER = eINSTANCE.getVariabilityBlockStatement_Parameter();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.unary_expressionImpl <em>unary expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.unary_expressionImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getunary_expression()
-     * @generated
-     */
-    EClass UNARY_EXPRESSION = eINSTANCE.getunary_expression();
-
-    /**
-     * The meta object literal for the '<em><b>Operator</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Block Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute UNARY_EXPRESSION__OPERATOR = eINSTANCE.getunary_expression_Operator();
+    EReference VARIABILITY_BLOCK_STATEMENT__BLOCK_BLOCK = eINSTANCE.getVariabilityBlockStatement_BlockBlock();
 
     /**
-     * The meta object literal for the '<em><b>Unary expression</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Diag Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference UNARY_EXPRESSION__UNARY_EXPRESSION = eINSTANCE.getunary_expression_Unary_expression();
+    EReference VARIABILITY_BLOCK_STATEMENT__DIAG_BLOCK = eINSTANCE.getVariabilityBlockStatement_DiagBlock();
 
     /**
-     * The meta object literal for the '<em><b>Par expression</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Same Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference UNARY_EXPRESSION__PAR_EXPRESSION = eINSTANCE.getunary_expression_Par_expression();
+    EReference VARIABILITY_BLOCK_STATEMENT__SAME_BLOCK = eINSTANCE.getVariabilityBlockStatement_SameBlock();
 
     /**
-     * The meta object literal for the '<em><b>Function call</b></em>' containment reference feature.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.BlockBlockImpl <em>Block Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.BlockBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getBlockBlock()
+     * @generated
+     */
+    EClass BLOCK_BLOCK = eINSTANCE.getBlockBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference UNARY_EXPRESSION__FUNCTION_CALL = eINSTANCE.getunary_expression_Function_call();
+    EAttribute BLOCK_BLOCK__IDENTIFIER = eINSTANCE.getBlockBlock_Identifier();
 
     /**
-     * The meta object literal for the '<em><b>Primary</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference UNARY_EXPRESSION__PRIMARY = eINSTANCE.getunary_expression_Primary();
+    EReference BLOCK_BLOCK__ARGUMENTS = eINSTANCE.getBlockBlock_Arguments();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.primaryImpl <em>primary</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.primaryImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getprimary()
-     * @generated
-     */
-    EClass PRIMARY = eINSTANCE.getprimary();
-
-    /**
-     * The meta object literal for the '<em><b>Number</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Parameters</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute PRIMARY__NUMBER = eINSTANCE.getprimary_Number();
+    EReference BLOCK_BLOCK__PARAMETERS = eINSTANCE.getBlockBlock_Parameters();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.DiagBlockImpl <em>Diag Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.DiagBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDiagBlock()
+     * @generated
+     */
+    EClass DIAG_BLOCK = eINSTANCE.getDiagBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DIAG_BLOCK__IDENTIFIER = eINSTANCE.getDiagBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DIAG_BLOCK__ARGUMENTS = eINSTANCE.getDiagBlock_Arguments();
+
+    /**
+     * The meta object literal for the '<em><b>Parameters</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DIAG_BLOCK__PARAMETERS = eINSTANCE.getDiagBlock_Parameters();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.SameBlockImpl <em>Same Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.SameBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSameBlock()
+     * @generated
+     */
+    EClass SAME_BLOCK = eINSTANCE.getSameBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SAME_BLOCK__IDENTIFIER = eINSTANCE.getSameBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SAME_BLOCK__ARGUMENTS = eINSTANCE.getSameBlock_Arguments();
+
+    /**
+     * The meta object literal for the '<em><b>Parameters</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SAME_BLOCK__PARAMETERS = eINSTANCE.getSameBlock_Parameters();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.FileBlockStatementImpl <em>File Block Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.FileBlockStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFileBlockStatement()
+     * @generated
+     */
+    EClass FILE_BLOCK_STATEMENT = eINSTANCE.getFileBlockStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Variable</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FILE_BLOCK_STATEMENT__VARIABLE = eINSTANCE.getFileBlockStatement_Variable();
+
+    /**
+     * The meta object literal for the '<em><b>Inline Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FILE_BLOCK_STATEMENT__INLINE_BLOCK = eINSTANCE.getFileBlockStatement_InlineBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Design Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FILE_BLOCK_STATEMENT__DESIGN_BLOCK = eINSTANCE.getFileBlockStatement_DesignBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Rscript Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FILE_BLOCK_STATEMENT__RSCRIPT_BLOCK = eINSTANCE.getFileBlockStatement_RscriptBlock();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.InlineBlockImpl <em>Inline Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.InlineBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getInlineBlock()
+     * @generated
+     */
+    EClass INLINE_BLOCK = eINSTANCE.getInlineBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INLINE_BLOCK__IDENTIFIER = eINSTANCE.getInlineBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Variables</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INLINE_BLOCK__VARIABLES = eINSTANCE.getInlineBlock_Variables();
+
+    /**
+     * The meta object literal for the '<em><b>Values</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INLINE_BLOCK__VALUES = eINSTANCE.getInlineBlock_Values();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.DesignBlockImpl <em>Design Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.DesignBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDesignBlock()
+     * @generated
+     */
+    EClass DESIGN_BLOCK = eINSTANCE.getDesignBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DESIGN_BLOCK__IDENTIFIER = eINSTANCE.getDesignBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DESIGN_BLOCK__STATEMENTS = eINSTANCE.getDesignBlock_Statements();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl <em>Design Block Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDesignBlockStatement()
+     * @generated
+     */
+    EClass DESIGN_BLOCK_STATEMENT = eINSTANCE.getDesignBlockStatement();
 
     /**
      * The meta object literal for the '<em><b>Identifier</b></em>' containment reference feature.
@@ -7501,43 +9335,1057 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference PRIMARY__IDENTIFIER = eINSTANCE.getprimary_Identifier();
+    EReference DESIGN_BLOCK_STATEMENT__IDENTIFIER = eINSTANCE.getDesignBlockStatement_Identifier();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.variable_nameImpl <em>variable name</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.variable_nameImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getvariable_name()
-     * @generated
-     */
-    EClass VARIABLE_NAME = eINSTANCE.getvariable_name();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute list feature.
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute VARIABLE_NAME__IDENTIFIER = eINSTANCE.getvariable_name_Identifier();
+    EReference DESIGN_BLOCK_STATEMENT__ARGUMENTS = eINSTANCE.getDesignBlockStatement_Arguments();
 
     /**
-     * The meta object literal for the '<em><b>Selector</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VARIABLE_NAME__SELECTOR = eINSTANCE.getvariable_name_Selector();
+    EReference DESIGN_BLOCK_STATEMENT__EXPRESSION = eINSTANCE.getDesignBlockStatement_Expression();
 
     /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.selectorImpl <em>selector</em>}' class.
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.VariableListImpl <em>Variable List</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.selectorImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getselector()
+     * @see org.ddmore.mdl.mdl.impl.VariableListImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVariableList()
      * @generated
      */
-    EClass SELECTOR = eINSTANCE.getselector();
+    EClass VARIABLE_LIST = eINSTANCE.getVariableList();
+
+    /**
+     * The meta object literal for the '<em><b>Identifiers</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference VARIABLE_LIST__IDENTIFIERS = eINSTANCE.getVariableList_Identifiers();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.RScriptBlockImpl <em>RScript Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.RScriptBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRScriptBlock()
+     * @generated
+     */
+    EClass RSCRIPT_BLOCK = eINSTANCE.getRScriptBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute RSCRIPT_BLOCK__IDENTIFIER = eINSTANCE.getRScriptBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Variables</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RSCRIPT_BLOCK__VARIABLES = eINSTANCE.getRScriptBlock_Variables();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.RScriptBlockStatementImpl <em>RScript Block Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.RScriptBlockStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRScriptBlockStatement()
+     * @generated
+     */
+    EClass RSCRIPT_BLOCK_STATEMENT = eINSTANCE.getRScriptBlockStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute RSCRIPT_BLOCK_STATEMENT__IDENTIFIER = eINSTANCE.getRScriptBlockStatement_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute RSCRIPT_BLOCK_STATEMENT__VALUE = eINSTANCE.getRScriptBlockStatement_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Object</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RSCRIPT_BLOCK_STATEMENT__OBJECT = eINSTANCE.getRScriptBlockStatement_Object();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl <em>Task Function Declaration</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskFunctionDeclaration()
+     * @generated
+     */
+    EClass TASK_FUNCTION_DECLARATION = eINSTANCE.getTaskFunctionDeclaration();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TASK_FUNCTION_DECLARATION__IDENTIFIER = eINSTANCE.getTaskFunctionDeclaration_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Formal Arguments</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_FUNCTION_DECLARATION__FORMAL_ARGUMENTS = eINSTANCE.getTaskFunctionDeclaration_FormalArguments();
+
+    /**
+     * The meta object literal for the '<em><b>Function Body</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_FUNCTION_DECLARATION__FUNCTION_BODY = eINSTANCE.getTaskFunctionDeclaration_FunctionBody();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.TaskFunctionBodyImpl <em>Task Function Body</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.TaskFunctionBodyImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskFunctionBody()
+     * @generated
+     */
+    EClass TASK_FUNCTION_BODY = eINSTANCE.getTaskFunctionBody();
+
+    /**
+     * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_FUNCTION_BODY__BLOCKS = eINSTANCE.getTaskFunctionBody_Blocks();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.TaskFunctionBlockImpl <em>Task Function Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.TaskFunctionBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskFunctionBlock()
+     * @generated
+     */
+    EClass TASK_FUNCTION_BLOCK = eINSTANCE.getTaskFunctionBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Estimate Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_FUNCTION_BLOCK__ESTIMATE_BLOCK = eINSTANCE.getTaskFunctionBlock_EstimateBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Simulate Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_FUNCTION_BLOCK__SIMULATE_BLOCK = eINSTANCE.getTaskFunctionBlock_SimulateBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Execute Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_FUNCTION_BLOCK__EXECUTE_BLOCK = eINSTANCE.getTaskFunctionBlock_ExecuteBlock();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.EstimateTaskImpl <em>Estimate Task</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.EstimateTaskImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getEstimateTask()
+     * @generated
+     */
+    EClass ESTIMATE_TASK = eINSTANCE.getEstimateTask();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ESTIMATE_TASK__IDENTIFIER = eINSTANCE.getEstimateTask_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ESTIMATE_TASK__STATEMENTS = eINSTANCE.getEstimateTask_Statements();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.SimulateTaskImpl <em>Simulate Task</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.SimulateTaskImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSimulateTask()
+     * @generated
+     */
+    EClass SIMULATE_TASK = eINSTANCE.getSimulateTask();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SIMULATE_TASK__IDENTIFIER = eINSTANCE.getSimulateTask_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SIMULATE_TASK__STATEMENTS = eINSTANCE.getSimulateTask_Statements();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ExecuteTaskImpl <em>Execute Task</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ExecuteTaskImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getExecuteTask()
+     * @generated
+     */
+    EClass EXECUTE_TASK = eINSTANCE.getExecuteTask();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute EXECUTE_TASK__IDENTIFIER = eINSTANCE.getExecuteTask_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EXECUTE_TASK__STATEMENTS = eINSTANCE.getExecuteTask_Statements();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.FormalArgumentsImpl <em>Formal Arguments</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.FormalArgumentsImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFormalArguments()
+     * @generated
+     */
+    EClass FORMAL_ARGUMENTS = eINSTANCE.getFormalArguments();
+
+    /**
+     * The meta object literal for the '<em><b>Identifiers</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FORMAL_ARGUMENTS__IDENTIFIERS = eINSTANCE.getFormalArguments_Identifiers();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.FunctionCallImpl <em>Function Call</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.FunctionCallImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFunctionCall()
+     * @generated
+     */
+    EClass FUNCTION_CALL = eINSTANCE.getFunctionCall();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FUNCTION_CALL__IDENTIFIER = eINSTANCE.getFunctionCall_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FUNCTION_CALL__ARGUMENTS = eINSTANCE.getFunctionCall_Arguments();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl <em>Block Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.BlockStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getBlockStatement()
+     * @generated
+     */
+    EClass BLOCK_STATEMENT = eINSTANCE.getBlockStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Symbol</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference BLOCK_STATEMENT__SYMBOL = eINSTANCE.getBlockStatement_Symbol();
+
+    /**
+     * The meta object literal for the '<em><b>Function Call</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference BLOCK_STATEMENT__FUNCTION_CALL = eINSTANCE.getBlockStatement_FunctionCall();
+
+    /**
+     * The meta object literal for the '<em><b>Statement</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference BLOCK_STATEMENT__STATEMENT = eINSTANCE.getBlockStatement_Statement();
+
+    /**
+     * The meta object literal for the '<em><b>Verbatim Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference BLOCK_STATEMENT__VERBATIM_BLOCK = eINSTANCE.getBlockStatement_VerbatimBlock();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.VerbatimBlockImpl <em>Verbatim Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.VerbatimBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVerbatimBlock()
+     * @generated
+     */
+    EClass VERBATIM_BLOCK = eINSTANCE.getVerbatimBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VERBATIM_BLOCK__IDENTIFIER = eINSTANCE.getVerbatimBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference VERBATIM_BLOCK__BLOCK = eINSTANCE.getVerbatimBlock_Block();
+
+    /**
+     * The meta object literal for the '<em><b>External Code</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VERBATIM_BLOCK__EXTERNAL_CODE = eINSTANCE.getVerbatimBlock_ExternalCode();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.TargetBlockImpl <em>Target Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.TargetBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTargetBlock()
+     * @generated
+     */
+    EClass TARGET_BLOCK = eINSTANCE.getTargetBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGET_BLOCK__IDENTIFIER = eINSTANCE.getTargetBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TARGET_BLOCK__ARGUMENTS = eINSTANCE.getTargetBlock_Arguments();
+
+    /**
+     * The meta object literal for the '<em><b>External Code</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGET_BLOCK__EXTERNAL_CODE = eINSTANCE.getTargetBlock_ExternalCode();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.SymbolModificationImpl <em>Symbol Modification</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.SymbolModificationImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSymbolModification()
+     * @generated
+     */
+    EClass SYMBOL_MODIFICATION = eINSTANCE.getSymbolModification();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SYMBOL_MODIFICATION__IDENTIFIER = eINSTANCE.getSymbolModification_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SYMBOL_MODIFICATION__LIST = eINSTANCE.getSymbolModification_List();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ParameterDeclarationImpl <em>Parameter Declaration</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ParameterDeclarationImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParameterDeclaration()
+     * @generated
+     */
+    EClass PARAMETER_DECLARATION = eINSTANCE.getParameterDeclaration();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PARAMETER_DECLARATION__IDENTIFIER = eINSTANCE.getParameterDeclaration_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PARAMETER_DECLARATION__LIST = eINSTANCE.getParameterDeclaration_List();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl <em>Symbol Declaration</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSymbolDeclaration()
+     * @generated
+     */
+    EClass SYMBOL_DECLARATION = eINSTANCE.getSymbolDeclaration();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SYMBOL_DECLARATION__IDENTIFIER = eINSTANCE.getSymbolDeclaration_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SYMBOL_DECLARATION__EXPRESSION = eINSTANCE.getSymbolDeclaration_Expression();
+
+    /**
+     * The meta object literal for the '<em><b>Random List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SYMBOL_DECLARATION__RANDOM_LIST = eINSTANCE.getSymbolDeclaration_RandomList();
+
+    /**
+     * The meta object literal for the '<em><b>Function</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SYMBOL_DECLARATION__FUNCTION = eINSTANCE.getSymbolDeclaration_Function();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.EnumTypeImpl <em>Enum Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.EnumTypeImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getEnumType()
+     * @generated
+     */
+    EClass ENUM_TYPE = eINSTANCE.getEnumType();
+
+    /**
+     * The meta object literal for the '<em><b>Categorical</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ENUM_TYPE__CATEGORICAL = eINSTANCE.getEnumType_Categorical();
+
+    /**
+     * The meta object literal for the '<em><b>Continuous</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ENUM_TYPE__CONTINUOUS = eINSTANCE.getEnumType_Continuous();
+
+    /**
+     * The meta object literal for the '<em><b>Covariate</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ENUM_TYPE__COVARIATE = eINSTANCE.getEnumType_Covariate();
+
+    /**
+     * The meta object literal for the '<em><b>Distribution</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ENUM_TYPE__DISTRIBUTION = eINSTANCE.getEnumType_Distribution();
+
+    /**
+     * The meta object literal for the '<em><b>Level</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ENUM_TYPE__LEVEL = eINSTANCE.getEnumType_Level();
+
+    /**
+     * The meta object literal for the '<em><b>Likelyhood</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ENUM_TYPE__LIKELYHOOD = eINSTANCE.getEnumType_Likelyhood();
+
+    /**
+     * The meta object literal for the '<em><b>Missing</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ENUM_TYPE__MISSING = eINSTANCE.getEnumType_Missing();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.MissingImpl <em>Missing</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.MissingImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMissing()
+     * @generated
+     */
+    EClass MISSING = eINSTANCE.getMissing();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MISSING__IDENTIFIER = eINSTANCE.getMissing_Identifier();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.LikelyhoodImpl <em>Likelyhood</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.LikelyhoodImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLikelyhood()
+     * @generated
+     */
+    EClass LIKELYHOOD = eINSTANCE.getLikelyhood();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LIKELYHOOD__IDENTIFIER = eINSTANCE.getLikelyhood_Identifier();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.LevelTypeImpl <em>Level Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.LevelTypeImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLevelType()
+     * @generated
+     */
+    EClass LEVEL_TYPE = eINSTANCE.getLevelType();
+
+    /**
+     * The meta object literal for the '<em><b>Mdv</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LEVEL_TYPE__MDV = eINSTANCE.getLevelType_Mdv();
+
+    /**
+     * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LEVEL_TYPE__ID = eINSTANCE.getLevelType_Id();
+
+    /**
+     * The meta object literal for the '<em><b>Dv</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LEVEL_TYPE__DV = eINSTANCE.getLevelType_Dv();
+
+    /**
+     * The meta object literal for the '<em><b>Idv</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LEVEL_TYPE__IDV = eINSTANCE.getLevelType_Idv();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.CategoricalImpl <em>Categorical</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.CategoricalImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getCategorical()
+     * @generated
+     */
+    EClass CATEGORICAL = eINSTANCE.getCategorical();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CATEGORICAL__IDENTIFIER = eINSTANCE.getCategorical_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CATEGORICAL__ARGUMENTS = eINSTANCE.getCategorical_Arguments();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ContinuousImpl <em>Continuous</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ContinuousImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getContinuous()
+     * @generated
+     */
+    EClass CONTINUOUS = eINSTANCE.getContinuous();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONTINUOUS__IDENTIFIER = eINSTANCE.getContinuous_Identifier();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.CovariateImpl <em>Covariate</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.CovariateImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getCovariate()
+     * @generated
+     */
+    EClass COVARIATE = eINSTANCE.getCovariate();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COVARIATE__IDENTIFIER = eINSTANCE.getCovariate_Identifier();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.DistributionImpl <em>Distribution</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.DistributionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDistribution()
+     * @generated
+     */
+    EClass DISTRIBUTION = eINSTANCE.getDistribution();
+
+    /**
+     * The meta object literal for the '<em><b>Normal</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DISTRIBUTION__NORMAL = eINSTANCE.getDistribution_Normal();
+
+    /**
+     * The meta object literal for the '<em><b>Binomial</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DISTRIBUTION__BINOMIAL = eINSTANCE.getDistribution_Binomial();
+
+    /**
+     * The meta object literal for the '<em><b>Poisson</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DISTRIBUTION__POISSON = eINSTANCE.getDistribution_Poisson();
+
+    /**
+     * The meta object literal for the '<em><b>Student t</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DISTRIBUTION__STUDENT_T = eINSTANCE.getDistribution_Student_t();
+
+    /**
+     * The meta object literal for the '<em><b>Mvnormal</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DISTRIBUTION__MVNORMAL = eINSTANCE.getDistribution_Mvnormal();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.AnyExpressionImpl <em>Any Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.AnyExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAnyExpression()
+     * @generated
+     */
+    EClass ANY_EXPRESSION = eINSTANCE.getAnyExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ANY_EXPRESSION__EXPRESSION = eINSTANCE.getAnyExpression_Expression();
+
+    /**
+     * The meta object literal for the '<em><b>List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ANY_EXPRESSION__LIST = eINSTANCE.getAnyExpression_List();
+
+    /**
+     * The meta object literal for the '<em><b>Ode List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ANY_EXPRESSION__ODE_LIST = eINSTANCE.getAnyExpression_OdeList();
+
+    /**
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ANY_EXPRESSION__TYPE = eINSTANCE.getAnyExpression_Type();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ExpressionImpl <em>Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getExpression()
+     * @generated
+     */
+    EClass EXPRESSION = eINSTANCE.getExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Conditional Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EXPRESSION__CONDITIONAL_EXPRESSION = eINSTANCE.getExpression_ConditionalExpression();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ListImpl <em>List</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ListImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getList()
+     * @generated
+     */
+    EClass LIST = eINSTANCE.getList();
+
+    /**
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference LIST__ARGUMENTS = eINSTANCE.getList_Arguments();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.OdeListImpl <em>Ode List</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.OdeListImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOdeList()
+     * @generated
+     */
+    EClass ODE_LIST = eINSTANCE.getOdeList();
+
+    /**
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ODE_LIST__ARGUMENTS = eINSTANCE.getOdeList_Arguments();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.RandomListImpl <em>Random List</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.RandomListImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRandomList()
+     * @generated
+     */
+    EClass RANDOM_LIST = eINSTANCE.getRandomList();
+
+    /**
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RANDOM_LIST__ARGUMENTS = eINSTANCE.getRandomList_Arguments();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ArgumentsImpl <em>Arguments</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ArgumentsImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getArguments()
+     * @generated
+     */
+    EClass ARGUMENTS = eINSTANCE.getArguments();
+
+    /**
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ARGUMENTS__ARGUMENTS = eINSTANCE.getArguments_Arguments();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ArgumentImpl <em>Argument</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ArgumentImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getArgument()
+     * @generated
+     */
+    EClass ARGUMENT = eINSTANCE.getArgument();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ARGUMENT__IDENTIFIER = eINSTANCE.getArgument_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ARGUMENT__EXPRESSION = eINSTANCE.getArgument_Expression();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ConditionalStatementImpl <em>Conditional Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ConditionalStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getConditionalStatement()
+     * @generated
+     */
+    EClass CONDITIONAL_STATEMENT = eINSTANCE.getConditionalStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Par Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITIONAL_STATEMENT__PAR_EXPRESSION = eINSTANCE.getConditionalStatement_ParExpression();
+
+    /**
+     * The meta object literal for the '<em><b>If Statement</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITIONAL_STATEMENT__IF_STATEMENT = eINSTANCE.getConditionalStatement_IfStatement();
+
+    /**
+     * The meta object literal for the '<em><b>If Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITIONAL_STATEMENT__IF_BLOCK = eINSTANCE.getConditionalStatement_IfBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Else Statement</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITIONAL_STATEMENT__ELSE_STATEMENT = eINSTANCE.getConditionalStatement_ElseStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Else Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITIONAL_STATEMENT__ELSE_BLOCK = eINSTANCE.getConditionalStatement_ElseBlock();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.BlockImpl <em>Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.BlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getBlock()
+     * @generated
+     */
+    EClass BLOCK = eINSTANCE.getBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference BLOCK__STATEMENTS = eINSTANCE.getBlock_Statements();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ParExpressionImpl <em>Par Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ParExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParExpression()
+     * @generated
+     */
+    EClass PAR_EXPRESSION = eINSTANCE.getParExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PAR_EXPRESSION__EXPRESSION = eINSTANCE.getParExpression_Expression();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ConditionalExpressionImpl <em>Conditional Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ConditionalExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getConditionalExpression()
+     * @generated
+     */
+    EClass CONDITIONAL_EXPRESSION = eINSTANCE.getConditionalExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITIONAL_EXPRESSION__EXPRESSION = eINSTANCE.getConditionalExpression_Expression();
+
+    /**
+     * The meta object literal for the '<em><b>Expression1</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITIONAL_EXPRESSION__EXPRESSION1 = eINSTANCE.getConditionalExpression_Expression1();
+
+    /**
+     * The meta object literal for the '<em><b>Expression2</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITIONAL_EXPRESSION__EXPRESSION2 = eINSTANCE.getConditionalExpression_Expression2();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.OrExpressionImpl <em>Or Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.OrExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOrExpression()
+     * @generated
+     */
+    EClass OR_EXPRESSION = eINSTANCE.getOrExpression();
 
     /**
      * The meta object literal for the '<em><b>Expression</b></em>' containment reference list feature.
@@ -7545,7 +10393,357 @@ public interface MdlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference SELECTOR__EXPRESSION = eINSTANCE.getselector_Expression();
+    EReference OR_EXPRESSION__EXPRESSION = eINSTANCE.getOrExpression_Expression();
+
+    /**
+     * The meta object literal for the '<em><b>Operator</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute OR_EXPRESSION__OPERATOR = eINSTANCE.getOrExpression_Operator();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.AndExpressionImpl <em>And Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.AndExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAndExpression()
+     * @generated
+     */
+    EClass AND_EXPRESSION = eINSTANCE.getAndExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference AND_EXPRESSION__EXPRESSION = eINSTANCE.getAndExpression_Expression();
+
+    /**
+     * The meta object literal for the '<em><b>Operator</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute AND_EXPRESSION__OPERATOR = eINSTANCE.getAndExpression_Operator();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.LogicalExpressionImpl <em>Logical Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.LogicalExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLogicalExpression()
+     * @generated
+     */
+    EClass LOGICAL_EXPRESSION = eINSTANCE.getLogicalExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Negation</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LOGICAL_EXPRESSION__NEGATION = eINSTANCE.getLogicalExpression_Negation();
+
+    /**
+     * The meta object literal for the '<em><b>Boolean</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LOGICAL_EXPRESSION__BOOLEAN = eINSTANCE.getLogicalExpression_Boolean();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference LOGICAL_EXPRESSION__EXPRESSION = eINSTANCE.getLogicalExpression_Expression();
+
+    /**
+     * The meta object literal for the '<em><b>Operator</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LOGICAL_EXPRESSION__OPERATOR = eINSTANCE.getLogicalExpression_Operator();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.AdditiveExpressionImpl <em>Additive Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.AdditiveExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAdditiveExpression()
+     * @generated
+     */
+    EClass ADDITIVE_EXPRESSION = eINSTANCE.getAdditiveExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ADDITIVE_EXPRESSION__EXPRESSION = eINSTANCE.getAdditiveExpression_Expression();
+
+    /**
+     * The meta object literal for the '<em><b>Operator</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ADDITIVE_EXPRESSION__OPERATOR = eINSTANCE.getAdditiveExpression_Operator();
+
+    /**
+     * The meta object literal for the '<em><b>String</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ADDITIVE_EXPRESSION__STRING = eINSTANCE.getAdditiveExpression_String();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.MultiplicativeExpressionImpl <em>Multiplicative Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.MultiplicativeExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMultiplicativeExpression()
+     * @generated
+     */
+    EClass MULTIPLICATIVE_EXPRESSION = eINSTANCE.getMultiplicativeExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MULTIPLICATIVE_EXPRESSION__EXPRESSION = eINSTANCE.getMultiplicativeExpression_Expression();
+
+    /**
+     * The meta object literal for the '<em><b>Operator</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MULTIPLICATIVE_EXPRESSION__OPERATOR = eINSTANCE.getMultiplicativeExpression_Operator();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.PowerExpressionImpl <em>Power Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.PowerExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getPowerExpression()
+     * @generated
+     */
+    EClass POWER_EXPRESSION = eINSTANCE.getPowerExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference POWER_EXPRESSION__EXPRESSION = eINSTANCE.getPowerExpression_Expression();
+
+    /**
+     * The meta object literal for the '<em><b>Operator</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute POWER_EXPRESSION__OPERATOR = eINSTANCE.getPowerExpression_Operator();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.UnaryExpressionImpl <em>Unary Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.UnaryExpressionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getUnaryExpression()
+     * @generated
+     */
+    EClass UNARY_EXPRESSION = eINSTANCE.getUnaryExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Operator</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute UNARY_EXPRESSION__OPERATOR = eINSTANCE.getUnaryExpression_Operator();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference UNARY_EXPRESSION__EXPRESSION = eINSTANCE.getUnaryExpression_Expression();
+
+    /**
+     * The meta object literal for the '<em><b>Par Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference UNARY_EXPRESSION__PAR_EXPRESSION = eINSTANCE.getUnaryExpression_ParExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Primary</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference UNARY_EXPRESSION__PRIMARY = eINSTANCE.getUnaryExpression_Primary();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.PrimaryImpl <em>Primary</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.PrimaryImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getPrimary()
+     * @generated
+     */
+    EClass PRIMARY = eINSTANCE.getPrimary();
+
+    /**
+     * The meta object literal for the '<em><b>Function Call</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PRIMARY__FUNCTION_CALL = eINSTANCE.getPrimary_FunctionCall();
+
+    /**
+     * The meta object literal for the '<em><b>Number</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PRIMARY__NUMBER = eINSTANCE.getPrimary_Number();
+
+    /**
+     * The meta object literal for the '<em><b>Symbol</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PRIMARY__SYMBOL = eINSTANCE.getPrimary_Symbol();
+
+    /**
+     * The meta object literal for the '<em><b>Attribute</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PRIMARY__ATTRIBUTE = eINSTANCE.getPrimary_Attribute();
+
+    /**
+     * The meta object literal for the '<em><b>Vector</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PRIMARY__VECTOR = eINSTANCE.getPrimary_Vector();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.VectorImpl <em>Vector</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.VectorImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVector()
+     * @generated
+     */
+    EClass VECTOR = eINSTANCE.getVector();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VECTOR__IDENTIFIER = eINSTANCE.getVector_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Values</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference VECTOR__VALUES = eINSTANCE.getVector_Values();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl <em>Fully Qualified Symbol Name</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFullyQualifiedSymbolName()
+     * @generated
+     */
+    EClass FULLY_QUALIFIED_SYMBOL_NAME = eINSTANCE.getFullyQualifiedSymbolName();
+
+    /**
+     * The meta object literal for the '<em><b>Object</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FULLY_QUALIFIED_SYMBOL_NAME__OBJECT = eINSTANCE.getFullyQualifiedSymbolName_Object();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FULLY_QUALIFIED_SYMBOL_NAME__IDENTIFIER = eINSTANCE.getFullyQualifiedSymbolName_Identifier();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl <em>Fully Qualified Argument Name</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFullyQualifiedArgumentName()
+     * @generated
+     */
+    EClass FULLY_QUALIFIED_ARGUMENT_NAME = eINSTANCE.getFullyQualifiedArgumentName();
+
+    /**
+     * The meta object literal for the '<em><b>Parent</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FULLY_QUALIFIED_ARGUMENT_NAME__PARENT = eINSTANCE.getFullyQualifiedArgumentName_Parent();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER = eINSTANCE.getFullyQualifiedArgumentName_Identifier();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ObjectNameImpl <em>Object Name</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ObjectNameImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getObjectName()
+     * @generated
+     */
+    EClass OBJECT_NAME = eINSTANCE.getObjectName();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute OBJECT_NAME__NAME = eINSTANCE.getObjectName_Name();
 
   }
 

@@ -94,6 +94,11 @@ public abstract class AbstractMdlRuntimeModule extends DefaultRuntimeModule {
 		return org.ddmore.mdl.validation.MdlJavaValidator.class;
 	}
 
+	// contributed by org.eclipse.xtext.generator.exporting.SimpleNamesFragment
+	public Class<? extends org.eclipse.xtext.naming.IQualifiedNameProvider> bindIQualifiedNameProvider() {
+		return org.eclipse.xtext.naming.SimpleNameProvider.class;
+	}
+
 	// contributed by org.eclipse.xtext.generator.scoping.AbstractScopingFragment
 	public Class<? extends org.eclipse.xtext.scoping.IScopeProvider> bindIScopeProvider() {
 		return org.ddmore.mdl.scoping.MdlScopeProvider.class;
@@ -107,11 +112,6 @@ public abstract class AbstractMdlRuntimeModule extends DefaultRuntimeModule {
 	// contributed by org.eclipse.xtext.generator.scoping.AbstractScopingFragment
 	public void configureIgnoreCaseLinking(com.google.inject.Binder binder) {
 		binder.bindConstant().annotatedWith(org.eclipse.xtext.scoping.IgnoreCaseLinking.class).to(false);
-	}
-
-	// contributed by org.eclipse.xtext.generator.exporting.QualifiedNamesFragment
-	public Class<? extends org.eclipse.xtext.naming.IQualifiedNameProvider> bindIQualifiedNameProvider() {
-		return org.eclipse.xtext.naming.DefaultDeclarativeQualifiedNameProvider.class;
 	}
 
 	// contributed by org.eclipse.xtext.generator.builder.BuilderIntegrationFragment

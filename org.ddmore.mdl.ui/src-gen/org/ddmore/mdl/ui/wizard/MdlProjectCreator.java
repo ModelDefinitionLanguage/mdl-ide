@@ -11,12 +11,11 @@ import org.eclipse.xpand2.XpandExecutionContextImpl;
 import org.eclipse.xpand2.XpandFacade;
 import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xpand2.output.OutputImpl;
-import org.eclipse.xtext.ui.wizard.AbstractPluginProjectCreator;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-public class MdlProjectCreator extends AbstractPluginProjectCreator {
+public class MdlProjectCreator extends org.eclipse.xtext.ui.wizard.AbstractPluginProjectCreator {
 
 	protected static final String DSL_GENERATOR_PROJECT_NAME = "org.ddmore.mdl";
 
@@ -50,7 +49,7 @@ public class MdlProjectCreator extends AbstractPluginProjectCreator {
 		output.addOutlet(new Outlet(false, getEncoding(), null, true, project.getLocation().makeAbsolute().toOSString()));
 
 		XpandExecutionContextImpl execCtx = new XpandExecutionContextImpl(output, null);
-		execCtx.getResourceManager().setFileEncoding("Cp1252");
+		execCtx.getResourceManager().setFileEncoding("UTF-8");
 		execCtx.registerMetaModel(new JavaBeansMetaModel());
 
 		XpandFacade facade = XpandFacade.create(execCtx);

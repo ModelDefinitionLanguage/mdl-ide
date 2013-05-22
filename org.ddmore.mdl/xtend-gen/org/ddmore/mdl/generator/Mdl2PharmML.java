@@ -1,58 +1,57 @@
 package org.ddmore.mdl.generator;
 
 import com.google.common.base.Objects;
+import java.util.HashMap;
 import org.ddmore.mdl.generator.Mdl2Nonmem;
-import org.ddmore.mdl.mdl.any_expression;
-import org.ddmore.mdl.mdl.argument;
-import org.ddmore.mdl.mdl.arguments;
-import org.ddmore.mdl.mdl.block;
-import org.ddmore.mdl.mdl.block_statement;
-import org.ddmore.mdl.mdl.conditional_expression;
-import org.ddmore.mdl.mdl.data_obj;
-import org.ddmore.mdl.mdl.estimation_block;
-import org.ddmore.mdl.mdl.expression;
-import org.ddmore.mdl.mdl.formal_arguments;
-import org.ddmore.mdl.mdl.function_body;
-import org.ddmore.mdl.mdl.function_call;
-import org.ddmore.mdl.mdl.function_declaration;
-import org.ddmore.mdl.mdl.function_subblock;
-import org.ddmore.mdl.mdl.group_variables;
-import org.ddmore.mdl.mdl.individual_model_obj_block;
-import org.ddmore.mdl.mdl.list;
-import org.ddmore.mdl.mdl.mcl;
-import org.ddmore.mdl.mdl.mcl_obj;
-import org.ddmore.mdl.mdl.model_obj;
-import org.ddmore.mdl.mdl.model_obj_block;
-import org.ddmore.mdl.mdl.model_prediction_obj_block;
-import org.ddmore.mdl.mdl.observation_block;
-import org.ddmore.mdl.mdl.ode_list;
-import org.ddmore.mdl.mdl.param_obj;
-import org.ddmore.mdl.mdl.primary;
-import org.ddmore.mdl.mdl.random_list;
-import org.ddmore.mdl.mdl.random_variable_definition_block;
-import org.ddmore.mdl.mdl.simulation_block;
-import org.ddmore.mdl.mdl.statement;
-import org.ddmore.mdl.mdl.task_obj;
-import org.ddmore.mdl.mdl.variable_declaration;
-import org.ddmore.mdl.mdl.variable_name;
+import org.ddmore.mdl.mdl.AnyExpression;
+import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.Arguments;
+import org.ddmore.mdl.mdl.ConditionalExpression;
+import org.ddmore.mdl.mdl.EstimateTask;
+import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
+import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.GroupVariablesBlock;
+import org.ddmore.mdl.mdl.IndividualVariablesBlock;
+import org.ddmore.mdl.mdl.InputVariablesBlock;
+import org.ddmore.mdl.mdl.List;
+import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.mdl.MclObject;
+import org.ddmore.mdl.mdl.ModelObject;
+import org.ddmore.mdl.mdl.ModelObjectBlock;
+import org.ddmore.mdl.mdl.ObservationBlock;
+import org.ddmore.mdl.mdl.OdeList;
+import org.ddmore.mdl.mdl.ParameterDeclaration;
+import org.ddmore.mdl.mdl.ParameterObject;
+import org.ddmore.mdl.mdl.ParameterObjectBlock;
+import org.ddmore.mdl.mdl.Primary;
+import org.ddmore.mdl.mdl.RandomList;
+import org.ddmore.mdl.mdl.SimulateTask;
+import org.ddmore.mdl.mdl.StructuralBlock;
+import org.ddmore.mdl.mdl.StructuralParametersBlock;
+import org.ddmore.mdl.mdl.SymbolDeclaration;
+import org.ddmore.mdl.mdl.TaskFunctionBlock;
+import org.ddmore.mdl.mdl.TaskFunctionBody;
+import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
+import org.ddmore.mdl.mdl.TaskObject;
+import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
 public class Mdl2PharmML extends Mdl2Nonmem {
-  public CharSequence convertToPharmML(final mcl m) {
+  public CharSequence convertToPharmML(final Mcl m) {
     CharSequence _xblockexpression = null;
     {
-      EList<mcl_obj> _objects = m.getObjects();
-      for (final mcl_obj o : _objects) {
-      }
       String version = "1.001";
-      String date = "06.04.2013";
+      String date = "06.06.2013";
       String _plus = ("mdl2pharmML " + version);
       String _plus_1 = (_plus + " beta, last modification ");
       String _plus_2 = (_plus_1 + date);
       final String info = (_plus_2 + " Natallia Kokash (natallia.kokash@gmail.com)");
+      boolean printIndependent = this.isIndependentVariableDefined(m);
       StringConcatenation _builder = new StringConcatenation();
       CharSequence _print_XS_Comment = this.print_XS_Comment(info);
       _builder.append(_print_XS_Comment, "");
@@ -62,24 +61,32 @@ public class Mdl2PharmML extends Mdl2Nonmem {
       _builder.append("<PharmML ");
       _builder.newLine();
       _builder.append("\t");
+      CharSequence _print_PharmML_NameSpaces = this.print_PharmML_NameSpaces();
+      _builder.append(_print_PharmML_NameSpaces, "	");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
       _builder.append("name=\"");
       Resource _eResource = m.eResource();
       String _fileName = this.fileName(_eResource);
       _builder.append(_fileName, "	");
       _builder.append("\"");
       _builder.newLineIfNotEmpty();
-      _builder.append("\t");
-      _builder.append("independentVar=\"t\" ");
-      _builder.newLine();
+      {
+        if (printIndependent) {
+          _builder.append("\t");
+          _builder.append("independentVar=\"t\" ");
+          _builder.newLine();
+        }
+      }
       _builder.append("\t");
       _builder.append("writtenVersion=\"0.1\">");
       _builder.newLine();
       _builder.append("  \t\t\t");
       {
-        EList<mcl_obj> _objects_1 = m.getObjects();
-        for(final mcl_obj o_1 : _objects_1) {
-          CharSequence _convertToPharmML = this.convertToPharmML(o_1);
-          _builder.append(_convertToPharmML, "  			");
+        EList<MclObject> _objects = m.getObjects();
+        for(final MclObject o : _objects) {
+          CharSequence _print_mdef_ModelDefinition = this.print_mdef_ModelDefinition(o);
+          _builder.append(_print_mdef_ModelDefinition, "  			");
         }
       }
       _builder.newLineIfNotEmpty();
@@ -88,154 +95,6 @@ public class Mdl2PharmML extends Mdl2Nonmem {
       _xblockexpression = (_builder);
     }
     return _xblockexpression;
-  }
-  
-  public CharSequence convertToPharmML(final mcl_obj o) {
-    StringConcatenation _builder = new StringConcatenation();
-    {
-      model_obj _model_obj = o.getModel_obj();
-      boolean _notEquals = (!Objects.equal(_model_obj, null));
-      if (_notEquals) {
-        model_obj _model_obj_1 = o.getModel_obj();
-        CharSequence _convertToPharmML = this.convertToPharmML(_model_obj_1);
-        _builder.append(_convertToPharmML, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      data_obj _data_obj = o.getData_obj();
-      boolean _notEquals_1 = (!Objects.equal(_data_obj, null));
-      if (_notEquals_1) {
-        data_obj _data_obj_1 = o.getData_obj();
-        Object _convertToPharmML_1 = this.convertToPharmML(_data_obj_1);
-        _builder.append(_convertToPharmML_1, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      param_obj _param_obj = o.getParam_obj();
-      boolean _notEquals_2 = (!Objects.equal(_param_obj, null));
-      if (_notEquals_2) {
-        param_obj _param_obj_1 = o.getParam_obj();
-        Object _convertToPharmML_2 = this.convertToPharmML(_param_obj_1);
-        _builder.append(_convertToPharmML_2, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      task_obj _task_obj = o.getTask_obj();
-      boolean _notEquals_3 = (!Objects.equal(_task_obj, null));
-      if (_notEquals_3) {
-        task_obj _task_obj_1 = o.getTask_obj();
-        Object _convertToPharmML_3 = this.convertToPharmML(_task_obj_1);
-        _builder.append(_convertToPharmML_3, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    return _builder;
-  }
-  
-  public CharSequence convertToPharmML(final model_obj o) {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<ModelDefinition>");
-    _builder.newLine();
-    {
-      EList<model_obj_block> _blocks = o.getBlocks();
-      for(final model_obj_block b : _blocks) {
-        {
-          individual_model_obj_block _individual_model_obj_block = b.getIndividual_model_obj_block();
-          boolean _notEquals = (!Objects.equal(_individual_model_obj_block, null));
-          if (_notEquals) {
-            _builder.append("TODO: Process individual model block");
-            _builder.newLine();
-          }
-        }
-        {
-          model_prediction_obj_block _model_prediction_obj_block = b.getModel_prediction_obj_block();
-          boolean _notEquals_1 = (!Objects.equal(_model_prediction_obj_block, null));
-          if (_notEquals_1) {
-            _builder.append("TODO: Process model prediction block");
-            _builder.newLine();
-          }
-        }
-        {
-          random_variable_definition_block _random_variable_definition_block = b.getRandom_variable_definition_block();
-          boolean _notEquals_2 = (!Objects.equal(_random_variable_definition_block, null));
-          if (_notEquals_2) {
-            _builder.append("TODO: Process random variable definition block");
-            _builder.newLine();
-          }
-        }
-        _builder.newLine();
-        {
-          group_variables _group_variables = b.getGroup_variables();
-          boolean _notEquals_3 = (!Objects.equal(_group_variables, null));
-          if (_notEquals_3) {
-            _builder.append("TODO: Process group variables");
-            _builder.newLine();
-          }
-        }
-        {
-          observation_block _observation_block = b.getObservation_block();
-          boolean _notEquals_4 = (!Objects.equal(_observation_block, null));
-          if (_notEquals_4) {
-            _builder.append("TODO: Process observation block");
-            _builder.newLine();
-          }
-        }
-        {
-          estimation_block _estimation_block = b.getEstimation_block();
-          boolean _notEquals_5 = (!Objects.equal(_estimation_block, null));
-          if (_notEquals_5) {
-            {
-              estimation_block _estimation_block_1 = b.getEstimation_block();
-              block _block = _estimation_block_1.getBlock();
-              boolean _notEquals_6 = (!Objects.equal(_block, null));
-              if (_notEquals_6) {
-                estimation_block _estimation_block_2 = b.getEstimation_block();
-                block _block_1 = _estimation_block_2.getBlock();
-                CharSequence _print_msteps_EstimationStep = this.print_msteps_EstimationStep(_block_1);
-                _builder.append(_print_msteps_EstimationStep, "");
-                _builder.newLineIfNotEmpty();
-              }
-            }
-          }
-        }
-        {
-          simulation_block _simulation_block = b.getSimulation_block();
-          boolean _notEquals_7 = (!Objects.equal(_simulation_block, null));
-          if (_notEquals_7) {
-            {
-              simulation_block _simulation_block_1 = b.getSimulation_block();
-              block _block_2 = _simulation_block_1.getBlock();
-              boolean _notEquals_8 = (!Objects.equal(_block_2, null));
-              if (_notEquals_8) {
-                simulation_block _simulation_block_2 = b.getSimulation_block();
-                block _block_3 = _simulation_block_2.getBlock();
-                CharSequence _print_msteps_SimulationStep = this.print_msteps_SimulationStep(_block_3);
-                _builder.append(_print_msteps_SimulationStep, "");
-                _builder.newLineIfNotEmpty();
-              }
-            }
-          }
-        }
-      }
-    }
-    _builder.append("</ModelDefinition>");
-    _builder.newLine();
-    return _builder;
-  }
-  
-  public Object convertToPharmML(final data_obj obj) {
-    return null;
-  }
-  
-  public Object convertToPharmML(final param_obj obj) {
-    return null;
-  }
-  
-  public Object convertToPharmML(final task_obj obj) {
-    return null;
   }
   
   public CharSequence print_PharmML_NameSpaces() {
@@ -261,6 +120,379 @@ public class Mdl2PharmML extends Mdl2Nonmem {
     return _builder;
   }
   
+  public boolean isIndependentVariableDefined(final Mcl m) {
+    EList<MclObject> _objects = m.getObjects();
+    for (final MclObject obj : _objects) {
+      ModelObject _modelObject = obj.getModelObject();
+      boolean _notEquals = (!Objects.equal(_modelObject, null));
+      if (_notEquals) {
+        ModelObject _modelObject_1 = obj.getModelObject();
+        EList<ModelObjectBlock> _blocks = _modelObject_1.getBlocks();
+        for (final ModelObjectBlock block : _blocks) {
+          InputVariablesBlock _inputVariablesBlock = block.getInputVariablesBlock();
+          boolean _notEquals_1 = (!Objects.equal(_inputVariablesBlock, null));
+          if (_notEquals_1) {
+            InputVariablesBlock _inputVariablesBlock_1 = block.getInputVariablesBlock();
+            EList<SymbolDeclaration> _variables = _inputVariablesBlock_1.getVariables();
+            for (final SymbolDeclaration s : _variables) {
+              AnyExpression _expression = s.getExpression();
+              boolean _notEquals_2 = (!Objects.equal(_expression, null));
+              if (_notEquals_2) {
+                AnyExpression _expression_1 = s.getExpression();
+                List _list = _expression_1.getList();
+                boolean _notEquals_3 = (!Objects.equal(_list, null));
+                if (_notEquals_3) {
+                  AnyExpression _expression_2 = s.getExpression();
+                  List _list_1 = _expression_2.getList();
+                  String use = this.getAttribute(_list_1, "use");
+                  boolean _equalsIgnoreCase = use.equalsIgnoreCase("idv");
+                  if (_equalsIgnoreCase) {
+                    return true;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+  
+  public CharSequence print_mdef_ModelDefinition(final MclObject o) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<ModelDefinition>");
+    _builder.newLine();
+    _builder.append("\t");
+    {
+      ParameterObject _parameterObject = o.getParameterObject();
+      boolean _notEquals = (!Objects.equal(_parameterObject, null));
+      if (_notEquals) {
+        ParameterObject _parameterObject_1 = o.getParameterObject();
+        CharSequence _print_mdef_ParameterModel = this.print_mdef_ParameterModel(_parameterObject_1);
+        _builder.append(_print_mdef_ParameterModel, "	");
+      }
+    }
+    _builder.newLineIfNotEmpty();
+    {
+      ModelObject _modelObject = o.getModelObject();
+      boolean _notEquals_1 = (!Objects.equal(_modelObject, null));
+      if (_notEquals_1) {
+        _builder.append("\t");
+        ModelObject _modelObject_1 = o.getModelObject();
+        CharSequence _print_mdef_StructuralModel = this.print_mdef_StructuralModel(_modelObject_1);
+        _builder.append(_print_mdef_StructuralModel, "	");
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t");
+        ModelObject _modelObject_2 = o.getModelObject();
+        CharSequence _print_mdef_ObservationModel = this.print_mdef_ObservationModel(_modelObject_2);
+        _builder.append(_print_mdef_ObservationModel, "	");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    _builder.append("</ModelDefinition>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence print_mml_FunctionDefinition(final TaskFunctionDeclaration f) {
+    StringConcatenation _builder = new StringConcatenation();
+    return _builder;
+  }
+  
+  public CharSequence print_design_Individuals(final IndividualVariablesBlock block) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<Individuals>");
+    _builder.newLine();
+    _builder.append("</Individuals>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence print_design_Group(final GroupVariablesBlock variables) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<Group>");
+    _builder.newLine();
+    _builder.append("</Group>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence print_uncert_DistributionType(final RandomList list) {
+    StringConcatenation _builder = new StringConcatenation();
+    return _builder;
+  }
+  
+  public CharSequence print_mdef_VariabilityLevel() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<VariabilityLevel id=\"indiv\"/>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence print_mdef_CovariateModel() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<CovariateModel>");
+    _builder.newLine();
+    _builder.append("</CovariateModel>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence print_mdef_ParameterModel(final ParameterObject obj) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      EList<ParameterObjectBlock> _blocks = obj.getBlocks();
+      for(final ParameterObjectBlock b : _blocks) {
+        {
+          StructuralBlock _structuralBlock = b.getStructuralBlock();
+          boolean _notEquals = (!Objects.equal(_structuralBlock, null));
+          if (_notEquals) {
+            final String paramModel = "p1";
+            _builder.newLineIfNotEmpty();
+            _builder.append("<ParameterModel id=");
+            _builder.append(paramModel, "");
+            _builder.append(">");
+            _builder.newLineIfNotEmpty();
+            {
+              StructuralBlock _structuralBlock_1 = b.getStructuralBlock();
+              EList<ParameterDeclaration> _parameters = _structuralBlock_1.getParameters();
+              for(final ParameterDeclaration st : _parameters) {
+                _builder.append("\t");
+                CharSequence _print_mdef_Parameter = this.print_mdef_Parameter(st);
+                _builder.append(_print_mdef_Parameter, "	");
+                _builder.newLineIfNotEmpty();
+              }
+            }
+            _builder.append("</ParameterModel>");
+            _builder.newLine();
+          }
+        }
+      }
+    }
+    return _builder;
+  }
+  
+  public CharSequence print_mdef_Parameter(final ParameterDeclaration s) {
+    CharSequence _xblockexpression = null;
+    {
+      String name = s.getIdentifier();
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("<Parameter symbId = \\\"");
+      _builder.append(name, "");
+      _builder.append("\\\"/>");
+      _xblockexpression = (_builder);
+    }
+    return _xblockexpression;
+  }
+  
+  public CharSequence print_mdef_StructuralModel(final ModelObject obj) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      EList<ModelObjectBlock> _blocks = obj.getBlocks();
+      for(final ModelObjectBlock b : _blocks) {
+        {
+          StructuralParametersBlock _structuralParametersBlock = b.getStructuralParametersBlock();
+          boolean _notEquals = (!Objects.equal(_structuralParametersBlock, null));
+          if (_notEquals) {
+            _builder.append("<StructuralModel>");
+            _builder.newLine();
+            _builder.append("</StructuralModel>");
+            _builder.newLine();
+          }
+        }
+      }
+    }
+    return _builder;
+  }
+  
+  public CharSequence print_mdef_ObservationModel(final ModelObject obj) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      EList<ModelObjectBlock> _blocks = obj.getBlocks();
+      for(final ModelObjectBlock b : _blocks) {
+        {
+          ObservationBlock _observationBlock = b.getObservationBlock();
+          boolean _notEquals = (!Objects.equal(_observationBlock, null));
+          if (_notEquals) {
+            _builder.append("<ObservationModel>");
+            _builder.newLine();
+            _builder.append("</ObservationModel>");
+            _builder.newLine();
+          }
+        }
+      }
+    }
+    return _builder;
+  }
+  
+  public CharSequence print_msteps_ModelingSteps(final MclObject o) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<ModellingSteps>");
+    _builder.newLine();
+    _builder.append("\t");
+    {
+      ModelObject _modelObject = o.getModelObject();
+      boolean _notEquals = (!Objects.equal(_modelObject, null));
+      if (_notEquals) {
+        ModelObject _modelObject_1 = o.getModelObject();
+        CharSequence _print_msteps_Variable = this.print_msteps_Variable(_modelObject_1);
+        _builder.append(_print_msteps_Variable, "	");
+      }
+    }
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t");
+    {
+      TaskObject _taskObject = o.getTaskObject();
+      boolean _notEquals_1 = (!Objects.equal(_taskObject, null));
+      if (_notEquals_1) {
+        TaskObject _taskObject_1 = o.getTaskObject();
+        CharSequence _print_msteps_ModelingStepsContent = this.print_msteps_ModelingStepsContent(_taskObject_1);
+        _builder.append(_print_msteps_ModelingStepsContent, "	");
+      }
+    }
+    _builder.newLineIfNotEmpty();
+    _builder.append("</ModellingSteps>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence print_msteps_Variable(final ModelObject obj) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<Variable>");
+    _builder.newLine();
+    _builder.append("\t");
+    CharSequence _print_ct_DataSet = this.print_ct_DataSet(obj);
+    _builder.append(_print_ct_DataSet, "	");
+    _builder.newLineIfNotEmpty();
+    _builder.append("</Variable>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence print_ct_DataSet(final ModelObject obj) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<DataSet>");
+    _builder.newLine();
+    {
+      EList<ModelObjectBlock> _blocks = obj.getBlocks();
+      for(final ModelObjectBlock b : _blocks) {
+        {
+          InputVariablesBlock _inputVariablesBlock = b.getInputVariablesBlock();
+          boolean _notEquals = (!Objects.equal(_inputVariablesBlock, null));
+          if (_notEquals) {
+            _builder.append("\t");
+            InputVariablesBlock _inputVariablesBlock_1 = b.getInputVariablesBlock();
+            CharSequence _print_ct_Definition = this.print_ct_Definition(_inputVariablesBlock_1);
+            _builder.append(_print_ct_Definition, "	");
+            _builder.append(" ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    _builder.append("</DataSet>\t");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence print_ct_Definition(final InputVariablesBlock block) {
+    CharSequence _xblockexpression = null;
+    {
+      HashMap<Object,Object> input_vars = CollectionLiterals.<Object, Object>newHashMap();
+      int i = 1;
+      EList<SymbolDeclaration> _variables = block.getVariables();
+      for (final SymbolDeclaration v : _variables) {
+        {
+          final String id = v.getIdentifier();
+          Object _get = input_vars.get(id);
+          boolean _equals = Objects.equal(_get, null);
+          if (_equals) {
+            input_vars.put(id, Integer.valueOf(i));
+            int _plus = (i + 1);
+            i = _plus;
+          }
+        }
+      }
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("<Definition>");
+      _builder.newLine();
+      _builder.append("</Definition>\t");
+      _builder.newLine();
+      _xblockexpression = (_builder);
+    }
+    return _xblockexpression;
+  }
+  
+  public CharSequence print_msteps_ModelingStepsContent(final TaskObject obj) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      EList<TaskObjectBlock> _blocks = obj.getBlocks();
+      for(final TaskObjectBlock b : _blocks) {
+        {
+          TaskFunctionDeclaration _functionDeclaration = b.getFunctionDeclaration();
+          boolean _notEquals = (!Objects.equal(_functionDeclaration, null));
+          if (_notEquals) {
+            TaskFunctionDeclaration _functionDeclaration_1 = b.getFunctionDeclaration();
+            TaskFunctionBody _functionBody = _functionDeclaration_1.getFunctionBody();
+            CharSequence _print_msteps_ModelingStepsContent = this.print_msteps_ModelingStepsContent(_functionBody);
+            _builder.append(_print_msteps_ModelingStepsContent, "");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    return _builder;
+  }
+  
+  public CharSequence print_msteps_ModelingStepsContent(final TaskFunctionBody body) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      EList<TaskFunctionBlock> _blocks = body.getBlocks();
+      for(final TaskFunctionBlock b : _blocks) {
+        {
+          EstimateTask _estimateBlock = b.getEstimateBlock();
+          boolean _notEquals = (!Objects.equal(_estimateBlock, null));
+          if (_notEquals) {
+            EstimateTask _estimateBlock_1 = b.getEstimateBlock();
+            CharSequence _print_msteps_SimulationStep = this.print_msteps_SimulationStep(_estimateBlock_1);
+            _builder.append(_print_msteps_SimulationStep, "");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        {
+          SimulateTask _simulateBlock = b.getSimulateBlock();
+          boolean _notEquals_1 = (!Objects.equal(_simulateBlock, null));
+          if (_notEquals_1) {
+            SimulateTask _simulateBlock_1 = b.getSimulateBlock();
+            CharSequence _print_msteps_EstimationStep = this.print_msteps_EstimationStep(_simulateBlock_1);
+            _builder.append(_print_msteps_EstimationStep, "");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    return _builder;
+  }
+  
+  public CharSequence print_msteps_EstimationStep(final SimulateTask task) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<SimulationStep>");
+    _builder.newLine();
+    _builder.append("</SimulationStep>");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence print_msteps_SimulationStep(final EstimateTask task) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("<EstimationStep>");
+    _builder.newLine();
+    _builder.append("</EstimationStep>");
+    _builder.newLine();
+    return _builder;
+  }
+  
   public CharSequence print_XS_Comment(final String text) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<!--");
@@ -279,39 +511,27 @@ public class Mdl2PharmML extends Mdl2Nonmem {
     return _builder;
   }
   
-  public CharSequence print_ct_VariableDefinitionType(final variable_declaration v) {
+  public CharSequence print_ct_VariableDefinitionType(final SymbolDeclaration v) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<Variable ");
-    variable_name _identifier = v.getIdentifier();
+    String _identifier = v.getIdentifier();
     CharSequence _print_ct_SymbId = this.print_ct_SymbId(_identifier);
     _builder.append(_print_ct_SymbId, "");
     _builder.append(">");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
-    variable_name _identifier_1 = v.getIdentifier();
-    String _str = this.toStr(_identifier_1);
-    CharSequence _print_ct_AnnotationType = this.print_ct_AnnotationType(_str);
+    String _identifier_1 = v.getIdentifier();
+    CharSequence _print_ct_AnnotationType = this.print_ct_AnnotationType(_identifier_1);
     _builder.append(_print_ct_AnnotationType, "	");
     _builder.newLineIfNotEmpty();
     {
-      any_expression _expression = v.getExpression();
+      AnyExpression _expression = v.getExpression();
       boolean _notEquals = (!Objects.equal(_expression, null));
       if (_notEquals) {
         _builder.append("\t");
-        any_expression _expression_1 = v.getExpression();
+        AnyExpression _expression_1 = v.getExpression();
         CharSequence _print_ct_printRhsType = this.print_ct_printRhsType(_expression_1);
         _builder.append(_print_ct_printRhsType, "	");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      random_list _random_list = v.getRandom_list();
-      boolean _notEquals_1 = (!Objects.equal(_random_list, null));
-      if (_notEquals_1) {
-        _builder.append("\t");
-        random_list _random_list_1 = v.getRandom_list();
-        CharSequence _print_uncert_DistributionType = this.print_uncert_DistributionType(_random_list_1);
-        _builder.append(_print_uncert_DistributionType, "	");
         _builder.newLineIfNotEmpty();
       }
     }
@@ -320,116 +540,88 @@ public class Mdl2PharmML extends Mdl2Nonmem {
     return _builder;
   }
   
-  public CharSequence print_uncert_DistributionType(final random_list list) {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("TODO: print random list (distribution)\t");
-    _builder.newLine();
-    return _builder;
-  }
-  
-  public CharSequence print_ct_printRhsType(final any_expression e) {
+  public CharSequence print_ct_printRhsType(final AnyExpression e) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      expression _expression = e.getExpression();
+      Expression _expression = e.getExpression();
       boolean _notEquals = (!Objects.equal(_expression, null));
       if (_notEquals) {
-        expression _expression_1 = e.getExpression();
+        Expression _expression_1 = e.getExpression();
         CharSequence _print_ct_printRhsType = this.print_ct_printRhsType(_expression_1);
         _builder.append(_print_ct_printRhsType, "");
         _builder.newLineIfNotEmpty();
       }
     }
     {
-      list _list = e.getList();
+      List _list = e.getList();
       boolean _notEquals_1 = (!Objects.equal(_list, null));
       if (_notEquals_1) {
-        _builder.append("TODO: print list");
-        _builder.newLine();
       }
     }
     {
-      ode_list _ode_list = e.getOde_list();
-      boolean _notEquals_2 = (!Objects.equal(_ode_list, null));
+      OdeList _odeList = e.getOdeList();
+      boolean _notEquals_2 = (!Objects.equal(_odeList, null));
       if (_notEquals_2) {
-        _builder.append("TODO: print ode list");
-        _builder.newLine();
       }
     }
+    return _builder;
+  }
+  
+  public CharSequence print_ct_printRhsType(final Expression e) {
+    StringConcatenation _builder = new StringConcatenation();
     {
-      random_list _random_list = e.getRandom_list();
-      boolean _notEquals_3 = (!Objects.equal(_random_list, null));
-      if (_notEquals_3) {
-        random_list _random_list_1 = e.getRandom_list();
-        CharSequence _print_uncert_DistributionType = this.print_uncert_DistributionType(_random_list_1);
-        _builder.append(_print_uncert_DistributionType, "");
+      ConditionalExpression _conditionalExpression = e.getConditionalExpression();
+      boolean _notEquals = (!Objects.equal(_conditionalExpression, null));
+      if (_notEquals) {
+      }
+    }
+    return _builder;
+  }
+  
+  public CharSequence print_ct_SymbId(final Primary p) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      FullyQualifiedSymbolName _symbol = p.getSymbol();
+      boolean _notEquals = (!Objects.equal(_symbol, null));
+      if (_notEquals) {
+        FullyQualifiedSymbolName _symbol_1 = p.getSymbol();
+        CharSequence _print_ct_SymbId = this.print_ct_SymbId(_symbol_1);
+        _builder.append(_print_ct_SymbId, "");
         _builder.newLineIfNotEmpty();
       }
     }
     return _builder;
   }
   
-  public CharSequence print_ct_printRhsType(final expression e) {
+  public CharSequence print_ct_SymbId(final String name) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      conditional_expression _conditional_expression = e.getConditional_expression();
-      boolean _notEquals = (!Objects.equal(_conditional_expression, null));
-      if (_notEquals) {
-      }
-    }
-    {
-      EList<String> _string_expression = e.getString_expression();
-      boolean _notEquals_1 = (!Objects.equal(_string_expression, null));
-      if (_notEquals_1) {
-        EList<String> _string_expression_1 = e.getString_expression();
-        CharSequence _print_MathStringType = this.print_MathStringType(_string_expression_1);
-        _builder.append(_print_MathStringType, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("symbId = \"");
+    _builder.append(name, "");
+    _builder.append("\"");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  public CharSequence print_ct_SymbId(final FullyQualifiedSymbolName name) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("symbId = \"");
+    String _str = this.toStr(name);
+    _builder.append(_str, "");
+    _builder.append("\"");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
   public CharSequence print_MathStringType(final EList<String> list) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("\t");
+    _builder.append("<String>");
+    _builder.newLine();
+    _builder.append("</String>\t");
     _builder.newLine();
     return _builder;
   }
   
-  public CharSequence printXML(final block_statement st) {
-    StringConcatenation _builder = new StringConcatenation();
-    {
-      variable_declaration _variable_declaration = st.getVariable_declaration();
-      boolean _notEquals = (!Objects.equal(_variable_declaration, null));
-      if (_notEquals) {
-        variable_declaration _variable_declaration_1 = st.getVariable_declaration();
-        CharSequence _print_ct_VariableDefinitionType = this.print_ct_VariableDefinitionType(_variable_declaration_1);
-        _builder.append(_print_ct_VariableDefinitionType, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      function_call _function_call = st.getFunction_call();
-      boolean _notEquals_1 = (!Objects.equal(_function_call, null));
-      if (_notEquals_1) {
-        function_call _function_call_1 = st.getFunction_call();
-        CharSequence _print_Math_FunctionCallType = this.print_Math_FunctionCallType(_function_call_1);
-        _builder.append(_print_Math_FunctionCallType, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      statement _statement = st.getStatement();
-      boolean _notEquals_2 = (!Objects.equal(_statement, null));
-      if (_notEquals_2) {
-        _builder.append("TODO: parse MDL block");
-        _builder.newLine();
-      }
-    }
-    return _builder;
-  }
-  
-  public CharSequence print_Math_ScalarType(final primary p) {
+  public CharSequence print_Math_ScalarType(final Primary p) {
     StringConcatenation _builder = new StringConcatenation();
     {
       String _number = p.getNumber();
@@ -445,122 +637,19 @@ public class Mdl2PharmML extends Mdl2Nonmem {
     return _builder;
   }
   
-  public CharSequence print_ct_SymbId(final primary p) {
-    StringConcatenation _builder = new StringConcatenation();
-    {
-      variable_name _identifier = p.getIdentifier();
-      boolean _notEquals = (!Objects.equal(_identifier, null));
-      if (_notEquals) {
-        variable_name _identifier_1 = p.getIdentifier();
-        CharSequence _print_ct_SymbId = this.print_ct_SymbId(_identifier_1);
-        _builder.append(_print_ct_SymbId, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    return _builder;
-  }
-  
-  public CharSequence print_ct_SymbId(final variable_name name) {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("symbId = \"");
-    String _str = this.toStr(name);
-    _builder.append(_str, "");
-    _builder.append("\"");
-    _builder.newLineIfNotEmpty();
-    return _builder;
-  }
-  
-  public CharSequence printXML(final function_declaration f) {
-    StringConcatenation _builder = new StringConcatenation();
-    return _builder;
-  }
-  
-  public CharSequence printXML(final formal_arguments args) {
-    StringConcatenation _builder = new StringConcatenation();
-    {
-      EList<String> _identifiers = args.getIdentifiers();
-      for(final String a : _identifiers) {
-      }
-    }
-    return _builder;
-  }
-  
-  public CharSequence printXML(final function_body body) {
-    StringConcatenation _builder = new StringConcatenation();
-    {
-      EList<function_subblock> _blocks = body.getBlocks();
-      for(final function_subblock b : _blocks) {
-        {
-          block _estimate_defn = b.getEstimate_defn();
-          boolean _notEquals = (!Objects.equal(_estimate_defn, null));
-          if (_notEquals) {
-            block _estimate_defn_1 = b.getEstimate_defn();
-            CharSequence _print_msteps_SimulationStep = this.print_msteps_SimulationStep(_estimate_defn_1);
-            _builder.append(_print_msteps_SimulationStep, "");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        {
-          block _simulate_defn = b.getSimulate_defn();
-          boolean _notEquals_1 = (!Objects.equal(_simulate_defn, null));
-          if (_notEquals_1) {
-            block _simulate_defn_1 = b.getSimulate_defn();
-            CharSequence _print_msteps_EstimationStep = this.print_msteps_EstimationStep(_simulate_defn_1);
-            _builder.append(_print_msteps_EstimationStep, "");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        _builder.newLine();
-      }
-    }
-    return _builder;
-  }
-  
-  public CharSequence print_msteps_EstimationStep(final block b) {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<EstimationStep>");
-    _builder.newLine();
-    {
-      EList<block_statement> _statements = b.getStatements();
-      for(final block_statement st : _statements) {
-        _builder.append("TODO: print estimation steps");
-        _builder.newLine();
-      }
-    }
-    _builder.append("</EstimationStep>");
-    _builder.newLine();
-    return _builder;
-  }
-  
-  public CharSequence print_msteps_SimulationStep(final block b) {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<SimulationStep>");
-    _builder.newLine();
-    {
-      EList<block_statement> _statements = b.getStatements();
-      for(final block_statement st : _statements) {
-        _builder.append("TODO: print simulation steps");
-        _builder.newLine();
-      }
-    }
-    _builder.append("</SimulationStep>");
-    _builder.newLine();
-    return _builder;
-  }
-  
-  public CharSequence print_Math_FunctionCallType(final function_call call) {
+  public CharSequence print_Math_FunctionCallType(final FunctionCall call) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<FunctionCall>");
     _builder.newLine();
     _builder.append("\t");
-    String _funct_name = call.getFunct_name();
-    CharSequence _print_Math_VarType = this.print_Math_VarType(_funct_name);
+    FullyQualifiedSymbolName _identifier = call.getIdentifier();
+    CharSequence _print_Math_VarType = this.print_Math_VarType(_identifier);
     _builder.append(_print_Math_VarType, "	");
     _builder.newLineIfNotEmpty();
     {
-      arguments _arguments = call.getArguments();
-      EList<argument> _arguments_1 = _arguments.getArguments();
-      for(final argument arg : _arguments_1) {
+      Arguments _arguments = call.getArguments();
+      EList<Argument> _arguments_1 = _arguments.getArguments();
+      for(final Argument arg : _arguments_1) {
         _builder.append("\t");
         CharSequence _print_Math_FunctionArgumentType = this.print_Math_FunctionArgumentType(arg);
         _builder.append(_print_Math_FunctionArgumentType, "	");
@@ -572,27 +661,29 @@ public class Mdl2PharmML extends Mdl2Nonmem {
     return _builder;
   }
   
-  public CharSequence print_Math_VarType(final String str) {
+  public CharSequence print_Math_VarType(final FullyQualifiedSymbolName name) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<Var ");
-    CharSequence _print_Math_symbId = this.print_Math_symbId(str);
+    String _identifier = name.getIdentifier();
+    CharSequence _print_Math_symbId = this.print_Math_symbId(_identifier);
     _builder.append(_print_Math_symbId, "");
     _builder.append("/>");
     _builder.newLineIfNotEmpty();
     return _builder;
   }
   
-  public CharSequence print_Math_FunctionArgumentType(final argument arg) {
+  public CharSequence print_Math_FunctionArgumentType(final Argument arg) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<FunctionArgument ");
     _builder.newLine();
+    _builder.append("\t");
     {
       String _identifier = arg.getIdentifier();
       boolean _notEquals = (!Objects.equal(_identifier, null));
       if (_notEquals) {
         String _identifier_1 = arg.getIdentifier();
         CharSequence _print_Math_symbId = this.print_Math_symbId(_identifier_1);
-        _builder.append(_print_Math_symbId, "");
+        _builder.append(_print_Math_symbId, "	");
       }
     }
     _builder.append(">");

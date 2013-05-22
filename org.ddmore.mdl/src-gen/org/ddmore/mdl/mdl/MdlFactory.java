@@ -23,661 +23,895 @@ public interface MdlFactory extends EFactory
   MdlFactory eINSTANCE = org.ddmore.mdl.mdl.impl.MdlFactoryImpl.init();
 
   /**
-   * Returns a new object of class '<em>mcl</em>'.
+   * Returns a new object of class '<em>Mcl</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>mcl</em>'.
+   * @return a new object of class '<em>Mcl</em>'.
    * @generated
    */
-  mcl createmcl();
+  Mcl createMcl();
 
   /**
-   * Returns a new object of class '<em>mcl obj</em>'.
+   * Returns a new object of class '<em>Mcl Object</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>mcl obj</em>'.
+   * @return a new object of class '<em>Mcl Object</em>'.
    * @generated
    */
-  mcl_obj createmcl_obj();
+  MclObject createMclObject();
 
   /**
-   * Returns a new object of class '<em>model obj</em>'.
+   * Returns a new object of class '<em>Model Object</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>model obj</em>'.
+   * @return a new object of class '<em>Model Object</em>'.
    * @generated
    */
-  model_obj createmodel_obj();
+  ModelObject createModelObject();
 
   /**
-   * Returns a new object of class '<em>param obj</em>'.
+   * Returns a new object of class '<em>Parameter Object</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>param obj</em>'.
+   * @return a new object of class '<em>Parameter Object</em>'.
    * @generated
    */
-  param_obj createparam_obj();
+  ParameterObject createParameterObject();
 
   /**
-   * Returns a new object of class '<em>data obj</em>'.
+   * Returns a new object of class '<em>Data Object</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>data obj</em>'.
+   * @return a new object of class '<em>Data Object</em>'.
    * @generated
    */
-  data_obj createdata_obj();
+  DataObject createDataObject();
 
   /**
-   * Returns a new object of class '<em>task obj</em>'.
+   * Returns a new object of class '<em>Task Object</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>task obj</em>'.
+   * @return a new object of class '<em>Task Object</em>'.
    * @generated
    */
-  task_obj createtask_obj();
+  TaskObject createTaskObject();
 
   /**
-   * Returns a new object of class '<em>tel obj</em>'.
+   * Returns a new object of class '<em>TEL Object</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>tel obj</em>'.
+   * @return a new object of class '<em>TEL Object</em>'.
    * @generated
    */
-  tel_obj createtel_obj();
+  TELObject createTELObject();
 
   /**
-   * Returns a new object of class '<em>model obj block</em>'.
+   * Returns a new object of class '<em>Model Object Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>model obj block</em>'.
+   * @return a new object of class '<em>Model Object Block</em>'.
    * @generated
    */
-  model_obj_block createmodel_obj_block();
+  ModelObjectBlock createModelObjectBlock();
 
   /**
-   * Returns a new object of class '<em>individual model obj block</em>'.
+   * Returns a new object of class '<em>Individual Variables Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>individual model obj block</em>'.
+   * @return a new object of class '<em>Individual Variables Block</em>'.
    * @generated
    */
-  individual_model_obj_block createindividual_model_obj_block();
+  IndividualVariablesBlock createIndividualVariablesBlock();
 
   /**
-   * Returns a new object of class '<em>model prediction obj block</em>'.
+   * Returns a new object of class '<em>Model Prediction Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>model prediction obj block</em>'.
+   * @return a new object of class '<em>Model Prediction Block</em>'.
    * @generated
    */
-  model_prediction_obj_block createmodel_prediction_obj_block();
+  ModelPredictionBlock createModelPredictionBlock();
 
   /**
-   * Returns a new object of class '<em>random variable definition block</em>'.
+   * Returns a new object of class '<em>Random Variable Definition Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>random variable definition block</em>'.
+   * @return a new object of class '<em>Random Variable Definition Block</em>'.
    * @generated
    */
-  random_variable_definition_block createrandom_variable_definition_block();
+  RandomVariableDefinitionBlock createRandomVariableDefinitionBlock();
 
   /**
-   * Returns a new object of class '<em>input variables block</em>'.
+   * Returns a new object of class '<em>Input Variables Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>input variables block</em>'.
+   * @return a new object of class '<em>Input Variables Block</em>'.
    * @generated
    */
-  input_variables_block createinput_variables_block();
+  InputVariablesBlock createInputVariablesBlock();
 
   /**
-   * Returns a new object of class '<em>structural parameters block</em>'.
+   * Returns a new object of class '<em>Structural Parameters Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>structural parameters block</em>'.
+   * @return a new object of class '<em>Structural Parameters Block</em>'.
    * @generated
    */
-  structural_parameters_block createstructural_parameters_block();
+  StructuralParametersBlock createStructuralParametersBlock();
 
   /**
-   * Returns a new object of class '<em>variability parameters block</em>'.
+   * Returns a new object of class '<em>Variability Parameters Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>variability parameters block</em>'.
+   * @return a new object of class '<em>Variability Parameters Block</em>'.
    * @generated
    */
-  variability_parameters_block createvariability_parameters_block();
+  VariabilityParametersBlock createVariabilityParametersBlock();
 
   /**
-   * Returns a new object of class '<em>output variables block</em>'.
+   * Returns a new object of class '<em>Output Variables Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>output variables block</em>'.
+   * @return a new object of class '<em>Output Variables Block</em>'.
    * @generated
    */
-  output_variables_block createoutput_variables_block();
+  OutputVariablesBlock createOutputVariablesBlock();
 
   /**
-   * Returns a new object of class '<em>group variables</em>'.
+   * Returns a new object of class '<em>Group Variables Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>group variables</em>'.
+   * @return a new object of class '<em>Group Variables Block</em>'.
    * @generated
    */
-  group_variables creategroup_variables();
+  GroupVariablesBlock createGroupVariablesBlock();
 
   /**
-   * Returns a new object of class '<em>observation block</em>'.
+   * Returns a new object of class '<em>Observation Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>observation block</em>'.
+   * @return a new object of class '<em>Observation Block</em>'.
    * @generated
    */
-  observation_block createobservation_block();
+  ObservationBlock createObservationBlock();
 
   /**
-   * Returns a new object of class '<em>estimation block</em>'.
+   * Returns a new object of class '<em>Estimation Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>estimation block</em>'.
+   * @return a new object of class '<em>Estimation Block</em>'.
    * @generated
    */
-  estimation_block createestimation_block();
+  EstimationBlock createEstimationBlock();
 
   /**
-   * Returns a new object of class '<em>simulation block</em>'.
+   * Returns a new object of class '<em>Simulation Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>simulation block</em>'.
+   * @return a new object of class '<em>Simulation Block</em>'.
    * @generated
    */
-  simulation_block createsimulation_block();
+  SimulationBlock createSimulationBlock();
 
   /**
-   * Returns a new object of class '<em>param obj block</em>'.
+   * Returns a new object of class '<em>Parameter Object Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>param obj block</em>'.
+   * @return a new object of class '<em>Parameter Object Block</em>'.
    * @generated
    */
-  param_obj_block createparam_obj_block();
+  ParameterObjectBlock createParameterObjectBlock();
 
   /**
-   * Returns a new object of class '<em>structural block</em>'.
+   * Returns a new object of class '<em>Structural Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>structural block</em>'.
+   * @return a new object of class '<em>Structural Block</em>'.
    * @generated
    */
-  structural_block createstructural_block();
+  StructuralBlock createStructuralBlock();
 
   /**
-   * Returns a new object of class '<em>variability block</em>'.
+   * Returns a new object of class '<em>Variability Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>variability block</em>'.
+   * @return a new object of class '<em>Variability Block</em>'.
    * @generated
    */
-  variability_block createvariability_block();
+  VariabilityBlock createVariabilityBlock();
 
   /**
-   * Returns a new object of class '<em>data obj block</em>'.
+   * Returns a new object of class '<em>Prior Parameters Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>data obj block</em>'.
+   * @return a new object of class '<em>Prior Parameters Block</em>'.
    * @generated
    */
-  data_obj_block createdata_obj_block();
+  PriorParametersBlock createPriorParametersBlock();
 
   /**
-   * Returns a new object of class '<em>header block</em>'.
+   * Returns a new object of class '<em>Data Object Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>header block</em>'.
+   * @return a new object of class '<em>Data Object Block</em>'.
    * @generated
    */
-  header_block createheader_block();
+  DataObjectBlock createDataObjectBlock();
 
   /**
-   * Returns a new object of class '<em>file block</em>'.
+   * Returns a new object of class '<em>Header Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>file block</em>'.
+   * @return a new object of class '<em>Header Block</em>'.
    * @generated
    */
-  file_block createfile_block();
+  HeaderBlock createHeaderBlock();
 
   /**
-   * Returns a new object of class '<em>task obj block</em>'.
+   * Returns a new object of class '<em>File Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>task obj block</em>'.
+   * @return a new object of class '<em>File Block</em>'.
    * @generated
    */
-  task_obj_block createtask_obj_block();
+  FileBlock createFileBlock();
 
   /**
-   * Returns a new object of class '<em>parameters block</em>'.
+   * Returns a new object of class '<em>Task Object Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>parameters block</em>'.
+   * @return a new object of class '<em>Task Object Block</em>'.
    * @generated
    */
-  parameters_block createparameters_block();
+  TaskObjectBlock createTaskObjectBlock();
 
   /**
-   * Returns a new object of class '<em>data block</em>'.
+   * Returns a new object of class '<em>Parameter Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>data block</em>'.
+   * @return a new object of class '<em>Parameter Block</em>'.
    * @generated
    */
-  data_block createdata_block();
+  ParameterBlock createParameterBlock();
 
   /**
-   * Returns a new object of class '<em>model block</em>'.
+   * Returns a new object of class '<em>Data Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>model block</em>'.
+   * @return a new object of class '<em>Data Block</em>'.
    * @generated
    */
-  model_block createmodel_block();
+  DataBlock createDataBlock();
 
   /**
-   * Returns a new object of class '<em>model block statement</em>'.
+   * Returns a new object of class '<em>Data Block Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>model block statement</em>'.
+   * @return a new object of class '<em>Data Block Statement</em>'.
    * @generated
    */
-  model_block_statement createmodel_block_statement();
+  DataBlockStatement createDataBlockStatement();
 
   /**
-   * Returns a new object of class '<em>library block</em>'.
+   * Returns a new object of class '<em>Ignore List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>library block</em>'.
+   * @return a new object of class '<em>Ignore List</em>'.
    * @generated
    */
-  library_block createlibrary_block();
+  IgnoreList createIgnoreList();
 
   /**
-   * Returns a new object of class '<em>ode block</em>'.
+   * Returns a new object of class '<em>Accept List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ode block</em>'.
+   * @return a new object of class '<em>Accept List</em>'.
    * @generated
    */
-  ode_block createode_block();
+  AcceptList createAcceptList();
 
   /**
-   * Returns a new object of class '<em>variability block content</em>'.
+   * Returns a new object of class '<em>Drop List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>variability block content</em>'.
+   * @return a new object of class '<em>Drop List</em>'.
    * @generated
    */
-  variability_block_content createvariability_block_content();
+  DropList createDropList();
 
   /**
-   * Returns a new object of class '<em>variability block statement</em>'.
+   * Returns a new object of class '<em>Model Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>variability block statement</em>'.
+   * @return a new object of class '<em>Model Block</em>'.
    * @generated
    */
-  variability_block_statement createvariability_block_statement();
+  ModelBlock createModelBlock();
 
   /**
-   * Returns a new object of class '<em>block subblock</em>'.
+   * Returns a new object of class '<em>Model Block Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>block subblock</em>'.
+   * @return a new object of class '<em>Model Block Statement</em>'.
    * @generated
    */
-  block_subblock createblock_subblock();
+  ModelBlockStatement createModelBlockStatement();
 
   /**
-   * Returns a new object of class '<em>diag subblock</em>'.
+   * Returns a new object of class '<em>Add List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>diag subblock</em>'.
+   * @return a new object of class '<em>Add List</em>'.
    * @generated
    */
-  diag_subblock creatediag_subblock();
+  AddList createAddList();
 
   /**
-   * Returns a new object of class '<em>variability subblock</em>'.
+   * Returns a new object of class '<em>Remove List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>variability subblock</em>'.
+   * @return a new object of class '<em>Remove List</em>'.
    * @generated
    */
-  variability_subblock createvariability_subblock();
+  RemoveList createRemoveList();
 
   /**
-   * Returns a new object of class '<em>file block content</em>'.
+   * Returns a new object of class '<em>Symbol List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>file block content</em>'.
+   * @return a new object of class '<em>Symbol List</em>'.
    * @generated
    */
-  file_block_content createfile_block_content();
+  SymbolList createSymbolList();
 
   /**
-   * Returns a new object of class '<em>file block statement</em>'.
+   * Returns a new object of class '<em>Model Prediction Block Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>file block statement</em>'.
+   * @return a new object of class '<em>Model Prediction Block Statement</em>'.
    * @generated
    */
-  file_block_statement createfile_block_statement();
+  ModelPredictionBlockStatement createModelPredictionBlockStatement();
 
   /**
-   * Returns a new object of class '<em>inline block</em>'.
+   * Returns a new object of class '<em>Library Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>inline block</em>'.
+   * @return a new object of class '<em>Library Block</em>'.
    * @generated
    */
-  inline_block createinline_block();
+  LibraryBlock createLibraryBlock();
 
   /**
-   * Returns a new object of class '<em>design block</em>'.
+   * Returns a new object of class '<em>Ode Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>design block</em>'.
+   * @return a new object of class '<em>Ode Block</em>'.
    * @generated
    */
-  design_block createdesign_block();
+  OdeBlock createOdeBlock();
 
   /**
-   * Returns a new object of class '<em>rsscript block</em>'.
+   * Returns a new object of class '<em>Group Variables Block Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>rsscript block</em>'.
+   * @return a new object of class '<em>Group Variables Block Statement</em>'.
    * @generated
    */
-  rsscript_block creatersscript_block();
+  GroupVariablesBlockStatement createGroupVariablesBlockStatement();
 
   /**
-   * Returns a new object of class '<em>inline block content</em>'.
+   * Returns a new object of class '<em>Mixture Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>inline block content</em>'.
+   * @return a new object of class '<em>Mixture Block</em>'.
    * @generated
    */
-  inline_block_content createinline_block_content();
+  MixtureBlock createMixtureBlock();
 
   /**
-   * Returns a new object of class '<em>function declaration</em>'.
+   * Returns a new object of class '<em>Variability Block Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>function declaration</em>'.
+   * @return a new object of class '<em>Variability Block Statement</em>'.
    * @generated
    */
-  function_declaration createfunction_declaration();
+  VariabilityBlockStatement createVariabilityBlockStatement();
 
   /**
-   * Returns a new object of class '<em>function body</em>'.
+   * Returns a new object of class '<em>Block Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>function body</em>'.
+   * @return a new object of class '<em>Block Block</em>'.
    * @generated
    */
-  function_body createfunction_body();
+  BlockBlock createBlockBlock();
 
   /**
-   * Returns a new object of class '<em>function subblock</em>'.
+   * Returns a new object of class '<em>Diag Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>function subblock</em>'.
+   * @return a new object of class '<em>Diag Block</em>'.
    * @generated
    */
-  function_subblock createfunction_subblock();
+  DiagBlock createDiagBlock();
 
   /**
-   * Returns a new object of class '<em>formal arguments</em>'.
+   * Returns a new object of class '<em>Same Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>formal arguments</em>'.
+   * @return a new object of class '<em>Same Block</em>'.
    * @generated
    */
-  formal_arguments createformal_arguments();
+  SameBlock createSameBlock();
 
   /**
-   * Returns a new object of class '<em>function call</em>'.
+   * Returns a new object of class '<em>File Block Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>function call</em>'.
+   * @return a new object of class '<em>File Block Statement</em>'.
    * @generated
    */
-  function_call createfunction_call();
+  FileBlockStatement createFileBlockStatement();
 
   /**
-   * Returns a new object of class '<em>block</em>'.
+   * Returns a new object of class '<em>Inline Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>block</em>'.
+   * @return a new object of class '<em>Inline Block</em>'.
    * @generated
    */
-  block createblock();
+  InlineBlock createInlineBlock();
 
   /**
-   * Returns a new object of class '<em>block statement</em>'.
+   * Returns a new object of class '<em>Design Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>block statement</em>'.
+   * @return a new object of class '<em>Design Block</em>'.
    * @generated
    */
-  block_statement createblock_statement();
+  DesignBlock createDesignBlock();
 
   /**
-   * Returns a new object of class '<em>verbatim block</em>'.
+   * Returns a new object of class '<em>Design Block Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>verbatim block</em>'.
+   * @return a new object of class '<em>Design Block Statement</em>'.
    * @generated
    */
-  verbatim_block createverbatim_block();
+  DesignBlockStatement createDesignBlockStatement();
 
   /**
-   * Returns a new object of class '<em>target block</em>'.
+   * Returns a new object of class '<em>Variable List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>target block</em>'.
+   * @return a new object of class '<em>Variable List</em>'.
    * @generated
    */
-  target_block createtarget_block();
+  VariableList createVariableList();
 
   /**
-   * Returns a new object of class '<em>variable declaration</em>'.
+   * Returns a new object of class '<em>RScript Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>variable declaration</em>'.
+   * @return a new object of class '<em>RScript Block</em>'.
    * @generated
    */
-  variable_declaration createvariable_declaration();
+  RScriptBlock createRScriptBlock();
 
   /**
-   * Returns a new object of class '<em>any expression</em>'.
+   * Returns a new object of class '<em>RScript Block Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>any expression</em>'.
+   * @return a new object of class '<em>RScript Block Statement</em>'.
    * @generated
    */
-  any_expression createany_expression();
+  RScriptBlockStatement createRScriptBlockStatement();
 
   /**
-   * Returns a new object of class '<em>expression</em>'.
+   * Returns a new object of class '<em>Task Function Declaration</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>expression</em>'.
+   * @return a new object of class '<em>Task Function Declaration</em>'.
    * @generated
    */
-  expression createexpression();
+  TaskFunctionDeclaration createTaskFunctionDeclaration();
 
   /**
-   * Returns a new object of class '<em>list</em>'.
+   * Returns a new object of class '<em>Task Function Body</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>list</em>'.
+   * @return a new object of class '<em>Task Function Body</em>'.
    * @generated
    */
-  list createlist();
+  TaskFunctionBody createTaskFunctionBody();
 
   /**
-   * Returns a new object of class '<em>ode list</em>'.
+   * Returns a new object of class '<em>Task Function Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ode list</em>'.
+   * @return a new object of class '<em>Task Function Block</em>'.
    * @generated
    */
-  ode_list createode_list();
+  TaskFunctionBlock createTaskFunctionBlock();
 
   /**
-   * Returns a new object of class '<em>random list</em>'.
+   * Returns a new object of class '<em>Estimate Task</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>random list</em>'.
+   * @return a new object of class '<em>Estimate Task</em>'.
    * @generated
    */
-  random_list createrandom_list();
+  EstimateTask createEstimateTask();
 
   /**
-   * Returns a new object of class '<em>arguments</em>'.
+   * Returns a new object of class '<em>Simulate Task</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>arguments</em>'.
+   * @return a new object of class '<em>Simulate Task</em>'.
    * @generated
    */
-  arguments createarguments();
+  SimulateTask createSimulateTask();
 
   /**
-   * Returns a new object of class '<em>argument</em>'.
+   * Returns a new object of class '<em>Execute Task</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>argument</em>'.
+   * @return a new object of class '<em>Execute Task</em>'.
    * @generated
    */
-  argument createargument();
+  ExecuteTask createExecuteTask();
 
   /**
-   * Returns a new object of class '<em>statement</em>'.
+   * Returns a new object of class '<em>Formal Arguments</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>statement</em>'.
+   * @return a new object of class '<em>Formal Arguments</em>'.
    * @generated
    */
-  statement createstatement();
+  FormalArguments createFormalArguments();
 
   /**
-   * Returns a new object of class '<em>par expression</em>'.
+   * Returns a new object of class '<em>Function Call</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>par expression</em>'.
+   * @return a new object of class '<em>Function Call</em>'.
    * @generated
    */
-  par_expression createpar_expression();
+  FunctionCall createFunctionCall();
 
   /**
-   * Returns a new object of class '<em>conditional expression</em>'.
+   * Returns a new object of class '<em>Block Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>conditional expression</em>'.
+   * @return a new object of class '<em>Block Statement</em>'.
    * @generated
    */
-  conditional_expression createconditional_expression();
+  BlockStatement createBlockStatement();
 
   /**
-   * Returns a new object of class '<em>conditional or expression</em>'.
+   * Returns a new object of class '<em>Verbatim Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>conditional or expression</em>'.
+   * @return a new object of class '<em>Verbatim Block</em>'.
    * @generated
    */
-  conditional_or_expression createconditional_or_expression();
+  VerbatimBlock createVerbatimBlock();
 
   /**
-   * Returns a new object of class '<em>conditional and expression</em>'.
+   * Returns a new object of class '<em>Target Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>conditional and expression</em>'.
+   * @return a new object of class '<em>Target Block</em>'.
    * @generated
    */
-  conditional_and_expression createconditional_and_expression();
+  TargetBlock createTargetBlock();
 
   /**
-   * Returns a new object of class '<em>relational expression</em>'.
+   * Returns a new object of class '<em>Symbol Modification</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>relational expression</em>'.
+   * @return a new object of class '<em>Symbol Modification</em>'.
    * @generated
    */
-  relational_expression createrelational_expression();
+  SymbolModification createSymbolModification();
 
   /**
-   * Returns a new object of class '<em>additive expression</em>'.
+   * Returns a new object of class '<em>Parameter Declaration</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>additive expression</em>'.
+   * @return a new object of class '<em>Parameter Declaration</em>'.
    * @generated
    */
-  additive_expression createadditive_expression();
+  ParameterDeclaration createParameterDeclaration();
 
   /**
-   * Returns a new object of class '<em>multiplicative expression</em>'.
+   * Returns a new object of class '<em>Symbol Declaration</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>multiplicative expression</em>'.
+   * @return a new object of class '<em>Symbol Declaration</em>'.
    * @generated
    */
-  multiplicative_expression createmultiplicative_expression();
+  SymbolDeclaration createSymbolDeclaration();
 
   /**
-   * Returns a new object of class '<em>power expression</em>'.
+   * Returns a new object of class '<em>Enum Type</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>power expression</em>'.
+   * @return a new object of class '<em>Enum Type</em>'.
    * @generated
    */
-  power_expression createpower_expression();
+  EnumType createEnumType();
 
   /**
-   * Returns a new object of class '<em>unary expression</em>'.
+   * Returns a new object of class '<em>Missing</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>unary expression</em>'.
+   * @return a new object of class '<em>Missing</em>'.
    * @generated
    */
-  unary_expression createunary_expression();
+  Missing createMissing();
 
   /**
-   * Returns a new object of class '<em>primary</em>'.
+   * Returns a new object of class '<em>Likelyhood</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>primary</em>'.
+   * @return a new object of class '<em>Likelyhood</em>'.
    * @generated
    */
-  primary createprimary();
+  Likelyhood createLikelyhood();
 
   /**
-   * Returns a new object of class '<em>variable name</em>'.
+   * Returns a new object of class '<em>Level Type</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>variable name</em>'.
+   * @return a new object of class '<em>Level Type</em>'.
    * @generated
    */
-  variable_name createvariable_name();
+  LevelType createLevelType();
 
   /**
-   * Returns a new object of class '<em>selector</em>'.
+   * Returns a new object of class '<em>Categorical</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>selector</em>'.
+   * @return a new object of class '<em>Categorical</em>'.
    * @generated
    */
-  selector createselector();
+  Categorical createCategorical();
+
+  /**
+   * Returns a new object of class '<em>Continuous</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Continuous</em>'.
+   * @generated
+   */
+  Continuous createContinuous();
+
+  /**
+   * Returns a new object of class '<em>Covariate</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Covariate</em>'.
+   * @generated
+   */
+  Covariate createCovariate();
+
+  /**
+   * Returns a new object of class '<em>Distribution</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Distribution</em>'.
+   * @generated
+   */
+  Distribution createDistribution();
+
+  /**
+   * Returns a new object of class '<em>Any Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Any Expression</em>'.
+   * @generated
+   */
+  AnyExpression createAnyExpression();
+
+  /**
+   * Returns a new object of class '<em>Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Expression</em>'.
+   * @generated
+   */
+  Expression createExpression();
+
+  /**
+   * Returns a new object of class '<em>List</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>List</em>'.
+   * @generated
+   */
+  List createList();
+
+  /**
+   * Returns a new object of class '<em>Ode List</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Ode List</em>'.
+   * @generated
+   */
+  OdeList createOdeList();
+
+  /**
+   * Returns a new object of class '<em>Random List</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Random List</em>'.
+   * @generated
+   */
+  RandomList createRandomList();
+
+  /**
+   * Returns a new object of class '<em>Arguments</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Arguments</em>'.
+   * @generated
+   */
+  Arguments createArguments();
+
+  /**
+   * Returns a new object of class '<em>Argument</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Argument</em>'.
+   * @generated
+   */
+  Argument createArgument();
+
+  /**
+   * Returns a new object of class '<em>Conditional Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Conditional Statement</em>'.
+   * @generated
+   */
+  ConditionalStatement createConditionalStatement();
+
+  /**
+   * Returns a new object of class '<em>Block</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Block</em>'.
+   * @generated
+   */
+  Block createBlock();
+
+  /**
+   * Returns a new object of class '<em>Par Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Par Expression</em>'.
+   * @generated
+   */
+  ParExpression createParExpression();
+
+  /**
+   * Returns a new object of class '<em>Conditional Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Conditional Expression</em>'.
+   * @generated
+   */
+  ConditionalExpression createConditionalExpression();
+
+  /**
+   * Returns a new object of class '<em>Or Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Or Expression</em>'.
+   * @generated
+   */
+  OrExpression createOrExpression();
+
+  /**
+   * Returns a new object of class '<em>And Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>And Expression</em>'.
+   * @generated
+   */
+  AndExpression createAndExpression();
+
+  /**
+   * Returns a new object of class '<em>Logical Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Logical Expression</em>'.
+   * @generated
+   */
+  LogicalExpression createLogicalExpression();
+
+  /**
+   * Returns a new object of class '<em>Additive Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Additive Expression</em>'.
+   * @generated
+   */
+  AdditiveExpression createAdditiveExpression();
+
+  /**
+   * Returns a new object of class '<em>Multiplicative Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Multiplicative Expression</em>'.
+   * @generated
+   */
+  MultiplicativeExpression createMultiplicativeExpression();
+
+  /**
+   * Returns a new object of class '<em>Power Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Power Expression</em>'.
+   * @generated
+   */
+  PowerExpression createPowerExpression();
+
+  /**
+   * Returns a new object of class '<em>Unary Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Unary Expression</em>'.
+   * @generated
+   */
+  UnaryExpression createUnaryExpression();
+
+  /**
+   * Returns a new object of class '<em>Primary</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Primary</em>'.
+   * @generated
+   */
+  Primary createPrimary();
+
+  /**
+   * Returns a new object of class '<em>Vector</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Vector</em>'.
+   * @generated
+   */
+  Vector createVector();
+
+  /**
+   * Returns a new object of class '<em>Fully Qualified Symbol Name</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Fully Qualified Symbol Name</em>'.
+   * @generated
+   */
+  FullyQualifiedSymbolName createFullyQualifiedSymbolName();
+
+  /**
+   * Returns a new object of class '<em>Fully Qualified Argument Name</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Fully Qualified Argument Name</em>'.
+   * @generated
+   */
+  FullyQualifiedArgumentName createFullyQualifiedArgumentName();
+
+  /**
+   * Returns a new object of class '<em>Object Name</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Object Name</em>'.
+   * @generated
+   */
+  ObjectName createObjectName();
 
   /**
    * Returns the package supported by this factory.
