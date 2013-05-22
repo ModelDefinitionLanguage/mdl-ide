@@ -1,7 +1,6 @@
 grammar org.ddmore.mdl.Mdl with org.eclipse.xtext.common.Terminals
 generate mdl "http://www.ddmore.org/mdl/Mdl"
 
-
 Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
@@ -15,7 +14,7 @@ MclObject:
 ModelObject:
 	identifier=ObjectName '=' 'mdlobj' BEGIN blocks += ModelObjectBlock* END;
 
-ParameterObject:
+ParameterObject: 
 	identifier=ObjectName '=' 'parobj' BEGIN blocks += ParameterObjectBlock* END;
 	
 DataObject:
