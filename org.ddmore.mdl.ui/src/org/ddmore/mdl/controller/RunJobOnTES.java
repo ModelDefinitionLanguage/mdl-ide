@@ -3,6 +3,7 @@ package org.ddmore.mdl.controller;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.ddmore.mdl.taskexecution.core.services.TESExecJob;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -14,6 +15,8 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 
 public class RunJobOnTES {
+
+    private static final Logger LOGGER = Logger.getLogger(RunJobOnTES.class);
 
     public void run(final IFile file, final String dataFileName) {
 
@@ -35,6 +38,9 @@ public class RunJobOnTES {
                 resultJob.setRule(new SerialSchedulingRule());
                 resultJob.schedule();
             }
+        } else {
+            LOGGER.error("Job can not be run as missing a file [model file exists: " + file.exists() + "] [data file exists: "
+                + dataFile.exists() + "]");
         }
     }
 
