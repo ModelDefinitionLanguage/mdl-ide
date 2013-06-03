@@ -52,7 +52,6 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getRScriptBlockStatementAccess().getAlternatives_2(), "rule__RScriptBlockStatement__Alternatives_2");
 					put(grammarAccess.getTaskFunctionBlockAccess().getAlternatives(), "rule__TaskFunctionBlock__Alternatives");
 					put(grammarAccess.getBlockStatementAccess().getAlternatives(), "rule__BlockStatement__Alternatives");
-					put(grammarAccess.getVerbatimBlockAccess().getAlternatives_2(), "rule__VerbatimBlock__Alternatives_2");
 					put(grammarAccess.getTargetLanguageAccess().getAlternatives(), "rule__TargetLanguage__Alternatives");
 					put(grammarAccess.getSymbolDeclarationAccess().getAlternatives(), "rule__SymbolDeclaration__Alternatives");
 					put(grammarAccess.getSymbolDeclarationAccess().getAlternatives_0_1(), "rule__SymbolDeclaration__Alternatives_0_1");
@@ -67,6 +66,7 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getAdditiveExpressionAccess().getAlternatives(), "rule__AdditiveExpression__Alternatives");
 					put(grammarAccess.getUnaryExpressionAccess().getAlternatives(), "rule__UnaryExpression__Alternatives");
 					put(grammarAccess.getPrimaryAccess().getAlternatives(), "rule__Primary__Alternatives");
+					put(grammarAccess.getSelectorAccess().getAlternatives(), "rule__Selector__Alternatives");
 					put(grammarAccess.getLogicalOperatorAccess().getAlternatives(), "rule__LogicalOperator__Alternatives");
 					put(grammarAccess.getMultiplicativeOperatorAccess().getAlternatives(), "rule__MultiplicativeOperator__Alternatives");
 					put(grammarAccess.getAdditiveOperatorAccess().getAlternatives(), "rule__AdditiveOperator__Alternatives");
@@ -102,7 +102,9 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getAddListAccess().getGroup(), "rule__AddList__Group__0");
 					put(grammarAccess.getRemoveListAccess().getGroup(), "rule__RemoveList__Group__0");
 					put(grammarAccess.getSymbolListAccess().getGroup(), "rule__SymbolList__Group__0");
+					put(grammarAccess.getSymbolListAccess().getGroup_3(), "rule__SymbolList__Group_3__0");
 					put(grammarAccess.getLibraryBlockAccess().getGroup(), "rule__LibraryBlock__Group__0");
+					put(grammarAccess.getFunctionCallStatementAccess().getGroup(), "rule__FunctionCallStatement__Group__0");
 					put(grammarAccess.getOdeBlockAccess().getGroup(), "rule__OdeBlock__Group__0");
 					put(grammarAccess.getMixtureBlockAccess().getGroup(), "rule__MixtureBlock__Group__0");
 					put(grammarAccess.getBlockBlockAccess().getGroup(), "rule__BlockBlock__Group__0");
@@ -126,9 +128,11 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFormalArgumentsAccess().getGroup(), "rule__FormalArguments__Group__0");
 					put(grammarAccess.getFormalArgumentsAccess().getGroup_1(), "rule__FormalArguments__Group_1__0");
 					put(grammarAccess.getFunctionCallAccess().getGroup(), "rule__FunctionCall__Group__0");
-					put(grammarAccess.getVerbatimBlockAccess().getGroup(), "rule__VerbatimBlock__Group__0");
 					put(grammarAccess.getTargetBlockAccess().getGroup(), "rule__TargetBlock__Group__0");
 					put(grammarAccess.getTargetBlockAccess().getGroup_1(), "rule__TargetBlock__Group_1__0");
+					put(grammarAccess.getImportBlockAccess().getGroup(), "rule__ImportBlock__Group__0");
+					put(grammarAccess.getImportedFunctionAccess().getGroup(), "rule__ImportedFunction__Group__0");
+					put(grammarAccess.getImportedFunctionAccess().getGroup_1(), "rule__ImportedFunction__Group_1__0");
 					put(grammarAccess.getSymbolModificationAccess().getGroup(), "rule__SymbolModification__Group__0");
 					put(grammarAccess.getSymbolModificationAccess().getGroup_1(), "rule__SymbolModification__Group_1__0");
 					put(grammarAccess.getParameterDeclarationAccess().getGroup(), "rule__ParameterDeclaration__Group__0");
@@ -138,7 +142,6 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getSymbolDeclarationAccess().getGroup_1(), "rule__SymbolDeclaration__Group_1__0");
 					put(grammarAccess.getCategoricalAccess().getGroup(), "rule__Categorical__Group__0");
 					put(grammarAccess.getCategoricalAccess().getGroup_1(), "rule__Categorical__Group_1__0");
-					put(grammarAccess.getDistributionAccess().getGroup_0(), "rule__Distribution__Group_0__0");
 					put(grammarAccess.getListAccess().getGroup(), "rule__List__Group__0");
 					put(grammarAccess.getOdeListAccess().getGroup(), "rule__OdeList__Group__0");
 					put(grammarAccess.getRandomListAccess().getGroup(), "rule__RandomList__Group__0");
@@ -172,7 +175,8 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFullyQualifiedSymbolNameAccess().getGroup(), "rule__FullyQualifiedSymbolName__Group__0");
 					put(grammarAccess.getFullyQualifiedSymbolNameAccess().getGroup_0(), "rule__FullyQualifiedSymbolName__Group_0__0");
 					put(grammarAccess.getFullyQualifiedArgumentNameAccess().getGroup(), "rule__FullyQualifiedArgumentName__Group__0");
-					put(grammarAccess.getFullyQualifiedArgumentNameAccess().getGroup_1(), "rule__FullyQualifiedArgumentName__Group_1__0");
+					put(grammarAccess.getSelectorAccess().getGroup_0(), "rule__Selector__Group_0__0");
+					put(grammarAccess.getSelectorAccess().getGroup_1(), "rule__Selector__Group_1__0");
 					put(grammarAccess.getMclAccess().getObjectsAssignment(), "rule__Mcl__ObjectsAssignment");
 					put(grammarAccess.getMclObjectAccess().getModelObjectAssignment_0(), "rule__MclObject__ModelObjectAssignment_0");
 					put(grammarAccess.getMclObjectAccess().getParameterObjectAssignment_1(), "rule__MclObject__ParameterObjectAssignment_1");
@@ -200,7 +204,8 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getModelObjectBlockAccess().getObservationBlockAssignment_8(), "rule__ModelObjectBlock__ObservationBlockAssignment_8");
 					put(grammarAccess.getModelObjectBlockAccess().getEstimationBlockAssignment_9(), "rule__ModelObjectBlock__EstimationBlockAssignment_9");
 					put(grammarAccess.getModelObjectBlockAccess().getSimulationBlockAssignment_10(), "rule__ModelObjectBlock__SimulationBlockAssignment_10");
-					put(grammarAccess.getModelObjectBlockAccess().getVerbatimBlockAssignment_11(), "rule__ModelObjectBlock__VerbatimBlockAssignment_11");
+					put(grammarAccess.getModelObjectBlockAccess().getTargetBlockAssignment_11(), "rule__ModelObjectBlock__TargetBlockAssignment_11");
+					put(grammarAccess.getModelObjectBlockAccess().getImportBlockAssignment_12(), "rule__ModelObjectBlock__ImportBlockAssignment_12");
 					put(grammarAccess.getIndividualVariablesBlockAccess().getIdentifierAssignment_0(), "rule__IndividualVariablesBlock__IdentifierAssignment_0");
 					put(grammarAccess.getIndividualVariablesBlockAccess().getStatementsAssignment_2(), "rule__IndividualVariablesBlock__StatementsAssignment_2");
 					put(grammarAccess.getModelPredictionBlockAccess().getIdentifierAssignment_0(), "rule__ModelPredictionBlock__IdentifierAssignment_0");
@@ -226,7 +231,8 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getParameterObjectBlockAccess().getStructuralBlockAssignment_0(), "rule__ParameterObjectBlock__StructuralBlockAssignment_0");
 					put(grammarAccess.getParameterObjectBlockAccess().getVariabilityBlockAssignment_1(), "rule__ParameterObjectBlock__VariabilityBlockAssignment_1");
 					put(grammarAccess.getParameterObjectBlockAccess().getPriorBlockAssignment_2(), "rule__ParameterObjectBlock__PriorBlockAssignment_2");
-					put(grammarAccess.getParameterObjectBlockAccess().getVerbatimBlockAssignment_3(), "rule__ParameterObjectBlock__VerbatimBlockAssignment_3");
+					put(grammarAccess.getParameterObjectBlockAccess().getTargetBlockAssignment_3(), "rule__ParameterObjectBlock__TargetBlockAssignment_3");
+					put(grammarAccess.getParameterObjectBlockAccess().getImportBlockAssignment_4(), "rule__ParameterObjectBlock__ImportBlockAssignment_4");
 					put(grammarAccess.getStructuralBlockAccess().getIdentifierAssignment_0(), "rule__StructuralBlock__IdentifierAssignment_0");
 					put(grammarAccess.getStructuralBlockAccess().getParametersAssignment_2(), "rule__StructuralBlock__ParametersAssignment_2");
 					put(grammarAccess.getVariabilityBlockAccess().getIdentifierAssignment_0(), "rule__VariabilityBlock__IdentifierAssignment_0");
@@ -235,7 +241,8 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getPriorParametersBlockAccess().getStatementsAssignment_2(), "rule__PriorParametersBlock__StatementsAssignment_2");
 					put(grammarAccess.getDataObjectBlockAccess().getHeaderBlockAssignment_0(), "rule__DataObjectBlock__HeaderBlockAssignment_0");
 					put(grammarAccess.getDataObjectBlockAccess().getFileBlockAssignment_1(), "rule__DataObjectBlock__FileBlockAssignment_1");
-					put(grammarAccess.getDataObjectBlockAccess().getVerbatimBlockAssignment_2(), "rule__DataObjectBlock__VerbatimBlockAssignment_2");
+					put(grammarAccess.getDataObjectBlockAccess().getTargetBlockAssignment_2(), "rule__DataObjectBlock__TargetBlockAssignment_2");
+					put(grammarAccess.getDataObjectBlockAccess().getImportBlockAssignment_3(), "rule__DataObjectBlock__ImportBlockAssignment_3");
 					put(grammarAccess.getHeaderBlockAccess().getIdentifierAssignment_0(), "rule__HeaderBlock__IdentifierAssignment_0");
 					put(grammarAccess.getHeaderBlockAccess().getVariablesAssignment_2(), "rule__HeaderBlock__VariablesAssignment_2");
 					put(grammarAccess.getFileBlockAccess().getIdentifierAssignment_0(), "rule__FileBlock__IdentifierAssignment_0");
@@ -244,7 +251,8 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTaskObjectBlockAccess().getParameterBlockAssignment_1(), "rule__TaskObjectBlock__ParameterBlockAssignment_1");
 					put(grammarAccess.getTaskObjectBlockAccess().getDataBlockAssignment_2(), "rule__TaskObjectBlock__DataBlockAssignment_2");
 					put(grammarAccess.getTaskObjectBlockAccess().getModelBlockAssignment_3(), "rule__TaskObjectBlock__ModelBlockAssignment_3");
-					put(grammarAccess.getTaskObjectBlockAccess().getVerbatimBlockAssignment_4(), "rule__TaskObjectBlock__VerbatimBlockAssignment_4");
+					put(grammarAccess.getTaskObjectBlockAccess().getTargetBlockAssignment_4(), "rule__TaskObjectBlock__TargetBlockAssignment_4");
+					put(grammarAccess.getTaskObjectBlockAccess().getImportBlockAssignment_5(), "rule__TaskObjectBlock__ImportBlockAssignment_5");
 					put(grammarAccess.getParameterBlockAccess().getIdentifierAssignment_0(), "rule__ParameterBlock__IdentifierAssignment_0");
 					put(grammarAccess.getParameterBlockAccess().getParametersAssignment_2(), "rule__ParameterBlock__ParametersAssignment_2");
 					put(grammarAccess.getDataBlockAccess().getIdentifierAssignment_0(), "rule__DataBlock__IdentifierAssignment_0");
@@ -266,11 +274,14 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getAddListAccess().getListAssignment_2(), "rule__AddList__ListAssignment_2");
 					put(grammarAccess.getRemoveListAccess().getListAssignment_2(), "rule__RemoveList__ListAssignment_2");
 					put(grammarAccess.getSymbolListAccess().getSymbolsAssignment_2(), "rule__SymbolList__SymbolsAssignment_2");
+					put(grammarAccess.getSymbolListAccess().getSymbolsAssignment_3_1(), "rule__SymbolList__SymbolsAssignment_3_1");
 					put(grammarAccess.getModelPredictionBlockStatementAccess().getStatementAssignment_0(), "rule__ModelPredictionBlockStatement__StatementAssignment_0");
 					put(grammarAccess.getModelPredictionBlockStatementAccess().getOdeBlockAssignment_1(), "rule__ModelPredictionBlockStatement__OdeBlockAssignment_1");
 					put(grammarAccess.getModelPredictionBlockStatementAccess().getLibraryBlockAssignment_2(), "rule__ModelPredictionBlockStatement__LibraryBlockAssignment_2");
 					put(grammarAccess.getLibraryBlockAccess().getIdentifierAssignment_0(), "rule__LibraryBlock__IdentifierAssignment_0");
 					put(grammarAccess.getLibraryBlockAccess().getStatementsAssignment_2(), "rule__LibraryBlock__StatementsAssignment_2");
+					put(grammarAccess.getFunctionCallStatementAccess().getIdentifierAssignment_0(), "rule__FunctionCallStatement__IdentifierAssignment_0");
+					put(grammarAccess.getFunctionCallStatementAccess().getExpressionAssignment_2(), "rule__FunctionCallStatement__ExpressionAssignment_2");
 					put(grammarAccess.getOdeBlockAccess().getIdentifierAssignment_0(), "rule__OdeBlock__IdentifierAssignment_0");
 					put(grammarAccess.getOdeBlockAccess().getStatementsAssignment_2(), "rule__OdeBlock__StatementsAssignment_2");
 					put(grammarAccess.getGroupVariablesBlockStatementAccess().getStatementAssignment_0(), "rule__GroupVariablesBlockStatement__StatementAssignment_0");
@@ -322,20 +333,22 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getSimulateTaskAccess().getStatementsAssignment_2(), "rule__SimulateTask__StatementsAssignment_2");
 					put(grammarAccess.getExecuteTaskAccess().getIdentifierAssignment_0(), "rule__ExecuteTask__IdentifierAssignment_0");
 					put(grammarAccess.getExecuteTaskAccess().getStatementsAssignment_2(), "rule__ExecuteTask__StatementsAssignment_2");
-					put(grammarAccess.getFormalArgumentsAccess().getIdentifiersAssignment_0(), "rule__FormalArguments__IdentifiersAssignment_0");
-					put(grammarAccess.getFormalArgumentsAccess().getIdentifiersAssignment_1_1(), "rule__FormalArguments__IdentifiersAssignment_1_1");
+					put(grammarAccess.getFormalArgumentsAccess().getArgumentsAssignment_0(), "rule__FormalArguments__ArgumentsAssignment_0");
+					put(grammarAccess.getFormalArgumentsAccess().getArgumentsAssignment_1_1(), "rule__FormalArguments__ArgumentsAssignment_1_1");
+					put(grammarAccess.getFormalArgumentAccess().getIdentifierAssignment(), "rule__FormalArgument__IdentifierAssignment");
 					put(grammarAccess.getFunctionCallAccess().getIdentifierAssignment_0(), "rule__FunctionCall__IdentifierAssignment_0");
 					put(grammarAccess.getFunctionCallAccess().getArgumentsAssignment_2(), "rule__FunctionCall__ArgumentsAssignment_2");
 					put(grammarAccess.getBlockStatementAccess().getSymbolAssignment_0(), "rule__BlockStatement__SymbolAssignment_0");
 					put(grammarAccess.getBlockStatementAccess().getFunctionCallAssignment_1(), "rule__BlockStatement__FunctionCallAssignment_1");
 					put(grammarAccess.getBlockStatementAccess().getStatementAssignment_2(), "rule__BlockStatement__StatementAssignment_2");
-					put(grammarAccess.getBlockStatementAccess().getVerbatimBlockAssignment_3(), "rule__BlockStatement__VerbatimBlockAssignment_3");
-					put(grammarAccess.getVerbatimBlockAccess().getIdentifierAssignment_0(), "rule__VerbatimBlock__IdentifierAssignment_0");
-					put(grammarAccess.getVerbatimBlockAccess().getBlockAssignment_2_0(), "rule__VerbatimBlock__BlockAssignment_2_0");
-					put(grammarAccess.getVerbatimBlockAccess().getExternalCodeAssignment_2_1(), "rule__VerbatimBlock__ExternalCodeAssignment_2_1");
+					put(grammarAccess.getBlockStatementAccess().getTargetBlockAssignment_3(), "rule__BlockStatement__TargetBlockAssignment_3");
 					put(grammarAccess.getTargetBlockAccess().getIdentifierAssignment_0(), "rule__TargetBlock__IdentifierAssignment_0");
 					put(grammarAccess.getTargetBlockAccess().getArgumentsAssignment_1_1(), "rule__TargetBlock__ArgumentsAssignment_1_1");
 					put(grammarAccess.getTargetBlockAccess().getExternalCodeAssignment_3(), "rule__TargetBlock__ExternalCodeAssignment_3");
+					put(grammarAccess.getImportBlockAccess().getIdentifierAssignment_0(), "rule__ImportBlock__IdentifierAssignment_0");
+					put(grammarAccess.getImportBlockAccess().getFunctionsAssignment_2(), "rule__ImportBlock__FunctionsAssignment_2");
+					put(grammarAccess.getImportedFunctionAccess().getIdentifierAssignment_0(), "rule__ImportedFunction__IdentifierAssignment_0");
+					put(grammarAccess.getImportedFunctionAccess().getListAssignment_1_1(), "rule__ImportedFunction__ListAssignment_1_1");
 					put(grammarAccess.getSymbolModificationAccess().getIdentifierAssignment_0(), "rule__SymbolModification__IdentifierAssignment_0");
 					put(grammarAccess.getSymbolModificationAccess().getListAssignment_1_1(), "rule__SymbolModification__ListAssignment_1_1");
 					put(grammarAccess.getParameterDeclarationAccess().getIdentifierAssignment_0(), "rule__ParameterDeclaration__IdentifierAssignment_0");
@@ -353,6 +366,7 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getEnumTypeAccess().getLevelAssignment_4(), "rule__EnumType__LevelAssignment_4");
 					put(grammarAccess.getEnumTypeAccess().getLikelyhoodAssignment_5(), "rule__EnumType__LikelyhoodAssignment_5");
 					put(grammarAccess.getEnumTypeAccess().getMissingAssignment_6(), "rule__EnumType__MissingAssignment_6");
+					put(grammarAccess.getEnumTypeAccess().getTargetAssignment_7(), "rule__EnumType__TargetAssignment_7");
 					put(grammarAccess.getMissingAccess().getIdentifierAssignment(), "rule__Missing__IdentifierAssignment");
 					put(grammarAccess.getLikelyhoodAccess().getIdentifierAssignment(), "rule__Likelyhood__IdentifierAssignment");
 					put(grammarAccess.getLevelTypeAccess().getMdvAssignment_0(), "rule__LevelType__MdvAssignment_0");
@@ -363,7 +377,7 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getCategoricalAccess().getArgumentsAssignment_1_1(), "rule__Categorical__ArgumentsAssignment_1_1");
 					put(grammarAccess.getContinuousAccess().getIdentifierAssignment(), "rule__Continuous__IdentifierAssignment");
 					put(grammarAccess.getCovariateAccess().getIdentifierAssignment(), "rule__Covariate__IdentifierAssignment");
-					put(grammarAccess.getDistributionAccess().getNormalAssignment_0_1(), "rule__Distribution__NormalAssignment_0_1");
+					put(grammarAccess.getDistributionAccess().getNormalAssignment_0(), "rule__Distribution__NormalAssignment_0");
 					put(grammarAccess.getDistributionAccess().getBinomialAssignment_1(), "rule__Distribution__BinomialAssignment_1");
 					put(grammarAccess.getDistributionAccess().getPoissonAssignment_2(), "rule__Distribution__PoissonAssignment_2");
 					put(grammarAccess.getDistributionAccess().getStudent_tAssignment_3(), "rule__Distribution__Student_tAssignment_3");
@@ -429,7 +443,9 @@ public class MdlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFullyQualifiedSymbolNameAccess().getObjectAssignment_0_0(), "rule__FullyQualifiedSymbolName__ObjectAssignment_0_0");
 					put(grammarAccess.getFullyQualifiedSymbolNameAccess().getIdentifierAssignment_1(), "rule__FullyQualifiedSymbolName__IdentifierAssignment_1");
 					put(grammarAccess.getFullyQualifiedArgumentNameAccess().getParentAssignment_0(), "rule__FullyQualifiedArgumentName__ParentAssignment_0");
-					put(grammarAccess.getFullyQualifiedArgumentNameAccess().getIdentifierAssignment_1_1(), "rule__FullyQualifiedArgumentName__IdentifierAssignment_1_1");
+					put(grammarAccess.getFullyQualifiedArgumentNameAccess().getSelectorsAssignment_1(), "rule__FullyQualifiedArgumentName__SelectorsAssignment_1");
+					put(grammarAccess.getSelectorAccess().getIdentifierAssignment_0_1(), "rule__Selector__IdentifierAssignment_0_1");
+					put(grammarAccess.getSelectorAccess().getSelectorAssignment_1_1(), "rule__Selector__SelectorAssignment_1_1");
 					put(grammarAccess.getObjectNameAccess().getNameAssignment(), "rule__ObjectName__NameAssignment");
 				}
 			};

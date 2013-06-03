@@ -2,41 +2,31 @@
  */
 package org.ddmore.mdl.mdl.impl;
 
-import java.util.Collection;
-
-import org.ddmore.mdl.mdl.FunctionCallStatement;
-import org.ddmore.mdl.mdl.LibraryBlock;
 import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.Selector;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Library Block</b></em>'.
+ * An implementation of the model object '<em><b>Selector</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.ddmore.mdl.mdl.impl.LibraryBlockImpl#getIdentifier <em>Identifier</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.LibraryBlockImpl#getStatements <em>Statements</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.SelectorImpl#getIdentifier <em>Identifier</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.SelectorImpl#getSelector <em>Selector</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements LibraryBlock
+public class SelectorImpl extends MinimalEObjectImpl.Container implements Selector
 {
   /**
    * The default value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
@@ -59,21 +49,31 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   protected String identifier = IDENTIFIER_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference list.
+   * The default value of the '{@link #getSelector() <em>Selector</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getStatements()
+   * @see #getSelector()
    * @generated
    * @ordered
    */
-  protected EList<FunctionCallStatement> statements;
+  protected static final String SELECTOR_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getSelector() <em>Selector</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSelector()
+   * @generated
+   * @ordered
+   */
+  protected String selector = SELECTOR_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected LibraryBlockImpl()
+  protected SelectorImpl()
   {
     super();
   }
@@ -86,7 +86,7 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   @Override
   protected EClass eStaticClass()
   {
-    return MdlPackage.Literals.LIBRARY_BLOCK;
+    return MdlPackage.Literals.SELECTOR;
   }
 
   /**
@@ -109,7 +109,7 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
     String oldIdentifier = identifier;
     identifier = newIdentifier;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.LIBRARY_BLOCK__IDENTIFIER, oldIdentifier, identifier));
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.SELECTOR__IDENTIFIER, oldIdentifier, identifier));
   }
 
   /**
@@ -117,13 +117,9 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<FunctionCallStatement> getStatements()
+  public String getSelector()
   {
-    if (statements == null)
-    {
-      statements = new EObjectContainmentEList<FunctionCallStatement>(FunctionCallStatement.class, this, MdlPackage.LIBRARY_BLOCK__STATEMENTS);
-    }
-    return statements;
+    return selector;
   }
 
   /**
@@ -131,15 +127,12 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  public void setSelector(String newSelector)
   {
-    switch (featureID)
-    {
-      case MdlPackage.LIBRARY_BLOCK__STATEMENTS:
-        return ((InternalEList<?>)getStatements()).basicRemove(otherEnd, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
+    String oldSelector = selector;
+    selector = newSelector;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.SELECTOR__SELECTOR, oldSelector, selector));
   }
 
   /**
@@ -152,10 +145,10 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   {
     switch (featureID)
     {
-      case MdlPackage.LIBRARY_BLOCK__IDENTIFIER:
+      case MdlPackage.SELECTOR__IDENTIFIER:
         return getIdentifier();
-      case MdlPackage.LIBRARY_BLOCK__STATEMENTS:
-        return getStatements();
+      case MdlPackage.SELECTOR__SELECTOR:
+        return getSelector();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -165,18 +158,16 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
     switch (featureID)
     {
-      case MdlPackage.LIBRARY_BLOCK__IDENTIFIER:
+      case MdlPackage.SELECTOR__IDENTIFIER:
         setIdentifier((String)newValue);
         return;
-      case MdlPackage.LIBRARY_BLOCK__STATEMENTS:
-        getStatements().clear();
-        getStatements().addAll((Collection<? extends FunctionCallStatement>)newValue);
+      case MdlPackage.SELECTOR__SELECTOR:
+        setSelector((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -192,11 +183,11 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   {
     switch (featureID)
     {
-      case MdlPackage.LIBRARY_BLOCK__IDENTIFIER:
+      case MdlPackage.SELECTOR__IDENTIFIER:
         setIdentifier(IDENTIFIER_EDEFAULT);
         return;
-      case MdlPackage.LIBRARY_BLOCK__STATEMENTS:
-        getStatements().clear();
+      case MdlPackage.SELECTOR__SELECTOR:
+        setSelector(SELECTOR_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -212,10 +203,10 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   {
     switch (featureID)
     {
-      case MdlPackage.LIBRARY_BLOCK__IDENTIFIER:
+      case MdlPackage.SELECTOR__IDENTIFIER:
         return IDENTIFIER_EDEFAULT == null ? identifier != null : !IDENTIFIER_EDEFAULT.equals(identifier);
-      case MdlPackage.LIBRARY_BLOCK__STATEMENTS:
-        return statements != null && !statements.isEmpty();
+      case MdlPackage.SELECTOR__SELECTOR:
+        return SELECTOR_EDEFAULT == null ? selector != null : !SELECTOR_EDEFAULT.equals(selector);
     }
     return super.eIsSet(featureID);
   }
@@ -233,8 +224,10 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (identifier: ");
     result.append(identifier);
+    result.append(", selector: ");
+    result.append(selector);
     result.append(')');
     return result.toString();
   }
 
-} //LibraryBlockImpl
+} //SelectorImpl

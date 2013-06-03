@@ -33,14 +33,18 @@ import org.ddmore.mdl.mdl.ExecuteTask;
 import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.FileBlock;
 import org.ddmore.mdl.mdl.FileBlockStatement;
+import org.ddmore.mdl.mdl.FormalArgument;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.GroupVariablesBlock;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.HeaderBlock;
 import org.ddmore.mdl.mdl.IgnoreList;
+import org.ddmore.mdl.mdl.ImportBlock;
+import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InlineBlock;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
@@ -82,6 +86,7 @@ import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
 import org.ddmore.mdl.mdl.RemoveList;
 import org.ddmore.mdl.mdl.SameBlock;
+import org.ddmore.mdl.mdl.Selector;
 import org.ddmore.mdl.mdl.SimulateTask;
 import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
@@ -102,7 +107,6 @@ import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.Vector;
-import org.ddmore.mdl.mdl.VerbatimBlock;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -404,6 +408,13 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass functionCallStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass odeBlockEClass = null;
 
   /**
@@ -551,6 +562,13 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass formalArgumentEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass functionCallEClass = null;
 
   /**
@@ -565,14 +583,21 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass verbatimBlockEClass = null;
+  private EClass targetBlockEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass targetBlockEClass = null;
+  private EClass importBlockEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass importedFunctionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -804,6 +829,13 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * @generated
    */
   private EClass fullyQualifiedArgumentNameEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass selectorEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1230,9 +1262,19 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getModelObjectBlock_VerbatimBlock()
+  public EReference getModelObjectBlock_TargetBlock()
   {
     return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(11);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getModelObjectBlock_ImportBlock()
+  {
+    return (EReference)modelObjectBlockEClass.getEStructuralFeatures().get(12);
   }
 
   /**
@@ -1610,9 +1652,19 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getParameterObjectBlock_VerbatimBlock()
+  public EReference getParameterObjectBlock_TargetBlock()
   {
     return (EReference)parameterObjectBlockEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getParameterObjectBlock_ImportBlock()
+  {
+    return (EReference)parameterObjectBlockEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -1740,9 +1792,19 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getDataObjectBlock_VerbatimBlock()
+  public EReference getDataObjectBlock_TargetBlock()
   {
     return (EReference)dataObjectBlockEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getDataObjectBlock_ImportBlock()
+  {
+    return (EReference)dataObjectBlockEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1860,9 +1922,19 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getTaskObjectBlock_VerbatimBlock()
+  public EReference getTaskObjectBlock_TargetBlock()
   {
     return (EReference)taskObjectBlockEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTaskObjectBlock_ImportBlock()
+  {
+    return (EReference)taskObjectBlockEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -2253,6 +2325,36 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
   public EReference getLibraryBlock_Statements()
   {
     return (EReference)libraryBlockEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFunctionCallStatement()
+  {
+    return functionCallStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFunctionCallStatement_Identifier()
+  {
+    return (EAttribute)functionCallStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFunctionCallStatement_Expression()
+  {
+    return (EReference)functionCallStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2970,9 +3072,29 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getFormalArguments_Identifiers()
+  public EReference getFormalArguments_Arguments()
   {
-    return (EAttribute)formalArgumentsEClass.getEStructuralFeatures().get(0);
+    return (EReference)formalArgumentsEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFormalArgument()
+  {
+    return formalArgumentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFormalArgument_Identifier()
+  {
+    return (EAttribute)formalArgumentEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -3050,49 +3172,9 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getBlockStatement_VerbatimBlock()
+  public EReference getBlockStatement_TargetBlock()
   {
     return (EReference)blockStatementEClass.getEStructuralFeatures().get(3);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getVerbatimBlock()
-  {
-    return verbatimBlockEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getVerbatimBlock_Identifier()
-  {
-    return (EAttribute)verbatimBlockEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getVerbatimBlock_Block()
-  {
-    return (EReference)verbatimBlockEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getVerbatimBlock_ExternalCode()
-  {
-    return (EAttribute)verbatimBlockEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -3133,6 +3215,66 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
   public EAttribute getTargetBlock_ExternalCode()
   {
     return (EAttribute)targetBlockEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getImportBlock()
+  {
+    return importBlockEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getImportBlock_Identifier()
+  {
+    return (EAttribute)importBlockEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getImportBlock_Functions()
+  {
+    return (EReference)importBlockEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getImportedFunction()
+  {
+    return importedFunctionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getImportedFunction_Identifier()
+  {
+    return (EAttribute)importedFunctionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getImportedFunction_List()
+  {
+    return (EReference)importedFunctionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -3323,6 +3465,16 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
   public EReference getEnumType_Missing()
   {
     return (EReference)enumTypeEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getEnumType_Target()
+  {
+    return (EAttribute)enumTypeEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -4270,9 +4422,39 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getFullyQualifiedArgumentName_Identifier()
+  public EReference getFullyQualifiedArgumentName_Selectors()
   {
-    return (EAttribute)fullyQualifiedArgumentNameEClass.getEStructuralFeatures().get(1);
+    return (EReference)fullyQualifiedArgumentNameEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getSelector()
+  {
+    return selectorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSelector_Identifier()
+  {
+    return (EAttribute)selectorEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSelector_Selector()
+  {
+    return (EAttribute)selectorEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -4367,7 +4549,8 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__OBSERVATION_BLOCK);
     createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__ESTIMATION_BLOCK);
     createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__SIMULATION_BLOCK);
-    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__VERBATIM_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__TARGET_BLOCK);
+    createEReference(modelObjectBlockEClass, MODEL_OBJECT_BLOCK__IMPORT_BLOCK);
 
     individualVariablesBlockEClass = createEClass(INDIVIDUAL_VARIABLES_BLOCK);
     createEAttribute(individualVariablesBlockEClass, INDIVIDUAL_VARIABLES_BLOCK__IDENTIFIER);
@@ -4417,7 +4600,8 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     createEReference(parameterObjectBlockEClass, PARAMETER_OBJECT_BLOCK__STRUCTURAL_BLOCK);
     createEReference(parameterObjectBlockEClass, PARAMETER_OBJECT_BLOCK__VARIABILITY_BLOCK);
     createEReference(parameterObjectBlockEClass, PARAMETER_OBJECT_BLOCK__PRIOR_BLOCK);
-    createEReference(parameterObjectBlockEClass, PARAMETER_OBJECT_BLOCK__VERBATIM_BLOCK);
+    createEReference(parameterObjectBlockEClass, PARAMETER_OBJECT_BLOCK__TARGET_BLOCK);
+    createEReference(parameterObjectBlockEClass, PARAMETER_OBJECT_BLOCK__IMPORT_BLOCK);
 
     structuralBlockEClass = createEClass(STRUCTURAL_BLOCK);
     createEAttribute(structuralBlockEClass, STRUCTURAL_BLOCK__IDENTIFIER);
@@ -4434,7 +4618,8 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     dataObjectBlockEClass = createEClass(DATA_OBJECT_BLOCK);
     createEReference(dataObjectBlockEClass, DATA_OBJECT_BLOCK__HEADER_BLOCK);
     createEReference(dataObjectBlockEClass, DATA_OBJECT_BLOCK__FILE_BLOCK);
-    createEReference(dataObjectBlockEClass, DATA_OBJECT_BLOCK__VERBATIM_BLOCK);
+    createEReference(dataObjectBlockEClass, DATA_OBJECT_BLOCK__TARGET_BLOCK);
+    createEReference(dataObjectBlockEClass, DATA_OBJECT_BLOCK__IMPORT_BLOCK);
 
     headerBlockEClass = createEClass(HEADER_BLOCK);
     createEAttribute(headerBlockEClass, HEADER_BLOCK__IDENTIFIER);
@@ -4449,7 +4634,8 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__PARAMETER_BLOCK);
     createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__DATA_BLOCK);
     createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__MODEL_BLOCK);
-    createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__VERBATIM_BLOCK);
+    createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__TARGET_BLOCK);
+    createEReference(taskObjectBlockEClass, TASK_OBJECT_BLOCK__IMPORT_BLOCK);
 
     parameterBlockEClass = createEClass(PARAMETER_BLOCK);
     createEAttribute(parameterBlockEClass, PARAMETER_BLOCK__IDENTIFIER);
@@ -4502,6 +4688,10 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     libraryBlockEClass = createEClass(LIBRARY_BLOCK);
     createEAttribute(libraryBlockEClass, LIBRARY_BLOCK__IDENTIFIER);
     createEReference(libraryBlockEClass, LIBRARY_BLOCK__STATEMENTS);
+
+    functionCallStatementEClass = createEClass(FUNCTION_CALL_STATEMENT);
+    createEAttribute(functionCallStatementEClass, FUNCTION_CALL_STATEMENT__IDENTIFIER);
+    createEReference(functionCallStatementEClass, FUNCTION_CALL_STATEMENT__EXPRESSION);
 
     odeBlockEClass = createEClass(ODE_BLOCK);
     createEAttribute(odeBlockEClass, ODE_BLOCK__IDENTIFIER);
@@ -4594,7 +4784,10 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     createEReference(executeTaskEClass, EXECUTE_TASK__STATEMENTS);
 
     formalArgumentsEClass = createEClass(FORMAL_ARGUMENTS);
-    createEAttribute(formalArgumentsEClass, FORMAL_ARGUMENTS__IDENTIFIERS);
+    createEReference(formalArgumentsEClass, FORMAL_ARGUMENTS__ARGUMENTS);
+
+    formalArgumentEClass = createEClass(FORMAL_ARGUMENT);
+    createEAttribute(formalArgumentEClass, FORMAL_ARGUMENT__IDENTIFIER);
 
     functionCallEClass = createEClass(FUNCTION_CALL);
     createEReference(functionCallEClass, FUNCTION_CALL__IDENTIFIER);
@@ -4604,17 +4797,20 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     createEReference(blockStatementEClass, BLOCK_STATEMENT__SYMBOL);
     createEReference(blockStatementEClass, BLOCK_STATEMENT__FUNCTION_CALL);
     createEReference(blockStatementEClass, BLOCK_STATEMENT__STATEMENT);
-    createEReference(blockStatementEClass, BLOCK_STATEMENT__VERBATIM_BLOCK);
-
-    verbatimBlockEClass = createEClass(VERBATIM_BLOCK);
-    createEAttribute(verbatimBlockEClass, VERBATIM_BLOCK__IDENTIFIER);
-    createEReference(verbatimBlockEClass, VERBATIM_BLOCK__BLOCK);
-    createEAttribute(verbatimBlockEClass, VERBATIM_BLOCK__EXTERNAL_CODE);
+    createEReference(blockStatementEClass, BLOCK_STATEMENT__TARGET_BLOCK);
 
     targetBlockEClass = createEClass(TARGET_BLOCK);
     createEAttribute(targetBlockEClass, TARGET_BLOCK__IDENTIFIER);
     createEReference(targetBlockEClass, TARGET_BLOCK__ARGUMENTS);
     createEAttribute(targetBlockEClass, TARGET_BLOCK__EXTERNAL_CODE);
+
+    importBlockEClass = createEClass(IMPORT_BLOCK);
+    createEAttribute(importBlockEClass, IMPORT_BLOCK__IDENTIFIER);
+    createEReference(importBlockEClass, IMPORT_BLOCK__FUNCTIONS);
+
+    importedFunctionEClass = createEClass(IMPORTED_FUNCTION);
+    createEAttribute(importedFunctionEClass, IMPORTED_FUNCTION__IDENTIFIER);
+    createEReference(importedFunctionEClass, IMPORTED_FUNCTION__LIST);
 
     symbolModificationEClass = createEClass(SYMBOL_MODIFICATION);
     createEReference(symbolModificationEClass, SYMBOL_MODIFICATION__IDENTIFIER);
@@ -4638,6 +4834,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     createEReference(enumTypeEClass, ENUM_TYPE__LEVEL);
     createEReference(enumTypeEClass, ENUM_TYPE__LIKELYHOOD);
     createEReference(enumTypeEClass, ENUM_TYPE__MISSING);
+    createEAttribute(enumTypeEClass, ENUM_TYPE__TARGET);
 
     missingEClass = createEClass(MISSING);
     createEAttribute(missingEClass, MISSING__IDENTIFIER);
@@ -4761,7 +4958,11 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
 
     fullyQualifiedArgumentNameEClass = createEClass(FULLY_QUALIFIED_ARGUMENT_NAME);
     createEReference(fullyQualifiedArgumentNameEClass, FULLY_QUALIFIED_ARGUMENT_NAME__PARENT);
-    createEAttribute(fullyQualifiedArgumentNameEClass, FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER);
+    createEReference(fullyQualifiedArgumentNameEClass, FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS);
+
+    selectorEClass = createEClass(SELECTOR);
+    createEAttribute(selectorEClass, SELECTOR__IDENTIFIER);
+    createEAttribute(selectorEClass, SELECTOR__SELECTOR);
 
     objectNameEClass = createEClass(OBJECT_NAME);
     createEAttribute(objectNameEClass, OBJECT_NAME__NAME);
@@ -4840,7 +5041,8 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     initEReference(getModelObjectBlock_ObservationBlock(), this.getObservationBlock(), null, "observationBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getModelObjectBlock_EstimationBlock(), this.getEstimationBlock(), null, "estimationBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getModelObjectBlock_SimulationBlock(), this.getSimulationBlock(), null, "simulationBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getModelObjectBlock_VerbatimBlock(), this.getVerbatimBlock(), null, "verbatimBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_TargetBlock(), this.getTargetBlock(), null, "targetBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModelObjectBlock_ImportBlock(), this.getImportBlock(), null, "importBlock", null, 0, 1, ModelObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(individualVariablesBlockEClass, IndividualVariablesBlock.class, "IndividualVariablesBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getIndividualVariablesBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, IndividualVariablesBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4890,7 +5092,8 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     initEReference(getParameterObjectBlock_StructuralBlock(), this.getStructuralBlock(), null, "structuralBlock", null, 0, 1, ParameterObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getParameterObjectBlock_VariabilityBlock(), this.getVariabilityBlock(), null, "variabilityBlock", null, 0, 1, ParameterObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getParameterObjectBlock_PriorBlock(), this.getPriorParametersBlock(), null, "priorBlock", null, 0, 1, ParameterObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getParameterObjectBlock_VerbatimBlock(), this.getVerbatimBlock(), null, "verbatimBlock", null, 0, 1, ParameterObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getParameterObjectBlock_TargetBlock(), this.getTargetBlock(), null, "targetBlock", null, 0, 1, ParameterObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getParameterObjectBlock_ImportBlock(), this.getImportBlock(), null, "importBlock", null, 0, 1, ParameterObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(structuralBlockEClass, StructuralBlock.class, "StructuralBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getStructuralBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, StructuralBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4907,7 +5110,8 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     initEClass(dataObjectBlockEClass, DataObjectBlock.class, "DataObjectBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getDataObjectBlock_HeaderBlock(), this.getHeaderBlock(), null, "headerBlock", null, 0, 1, DataObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDataObjectBlock_FileBlock(), this.getFileBlock(), null, "fileBlock", null, 0, 1, DataObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getDataObjectBlock_VerbatimBlock(), this.getVerbatimBlock(), null, "verbatimBlock", null, 0, 1, DataObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDataObjectBlock_TargetBlock(), this.getTargetBlock(), null, "targetBlock", null, 0, 1, DataObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDataObjectBlock_ImportBlock(), this.getImportBlock(), null, "importBlock", null, 0, 1, DataObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(headerBlockEClass, HeaderBlock.class, "HeaderBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getHeaderBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, HeaderBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4922,7 +5126,8 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     initEReference(getTaskObjectBlock_ParameterBlock(), this.getParameterBlock(), null, "parameterBlock", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTaskObjectBlock_DataBlock(), this.getDataBlock(), null, "dataBlock", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTaskObjectBlock_ModelBlock(), this.getModelBlock(), null, "modelBlock", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTaskObjectBlock_VerbatimBlock(), this.getVerbatimBlock(), null, "verbatimBlock", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskObjectBlock_TargetBlock(), this.getTargetBlock(), null, "targetBlock", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTaskObjectBlock_ImportBlock(), this.getImportBlock(), null, "importBlock", null, 0, 1, TaskObjectBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(parameterBlockEClass, ParameterBlock.class, "ParameterBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getParameterBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, ParameterBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4974,7 +5179,11 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
 
     initEClass(libraryBlockEClass, LibraryBlock.class, "LibraryBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getLibraryBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, LibraryBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getLibraryBlock_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, LibraryBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getLibraryBlock_Statements(), this.getFunctionCallStatement(), null, "statements", null, 0, -1, LibraryBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(functionCallStatementEClass, FunctionCallStatement.class, "FunctionCallStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFunctionCallStatement_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, FunctionCallStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFunctionCallStatement_Expression(), this.getFunctionCall(), null, "expression", null, 0, 1, FunctionCallStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(odeBlockEClass, OdeBlock.class, "OdeBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getOdeBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, OdeBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5007,7 +5216,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     initEClass(sameBlockEClass, SameBlock.class, "SameBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getSameBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, SameBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSameBlock_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, SameBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSameBlock_Parameters(), this.getArguments(), null, "parameters", null, 0, 1, SameBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSameBlock_Parameters(), this.getFormalArguments(), null, "parameters", null, 0, 1, SameBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(fileBlockStatementEClass, FileBlockStatement.class, "FileBlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFileBlockStatement_Variable(), this.getSymbolDeclaration(), null, "variable", null, 0, 1, FileBlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5067,7 +5276,10 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     initEReference(getExecuteTask_Statements(), this.getBlockStatement(), null, "statements", null, 0, -1, ExecuteTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(formalArgumentsEClass, FormalArguments.class, "FormalArguments", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getFormalArguments_Identifiers(), ecorePackage.getEString(), "identifiers", null, 0, -1, FormalArguments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFormalArguments_Arguments(), this.getFormalArgument(), null, "arguments", null, 0, -1, FormalArguments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(formalArgumentEClass, FormalArgument.class, "FormalArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFormalArgument_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, FormalArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(functionCallEClass, FunctionCall.class, "FunctionCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFunctionCall_Identifier(), this.getFullyQualifiedSymbolName(), null, "identifier", null, 0, 1, FunctionCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5077,17 +5289,20 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     initEReference(getBlockStatement_Symbol(), this.getSymbolDeclaration(), null, "symbol", null, 0, 1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getBlockStatement_FunctionCall(), this.getFunctionCall(), null, "functionCall", null, 0, 1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getBlockStatement_Statement(), this.getConditionalStatement(), null, "statement", null, 0, 1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getBlockStatement_VerbatimBlock(), this.getVerbatimBlock(), null, "verbatimBlock", null, 0, 1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(verbatimBlockEClass, VerbatimBlock.class, "VerbatimBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getVerbatimBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, VerbatimBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVerbatimBlock_Block(), this.getTargetBlock(), null, "block", null, 0, 1, VerbatimBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVerbatimBlock_ExternalCode(), ecorePackage.getEString(), "externalCode", null, 0, 1, VerbatimBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getBlockStatement_TargetBlock(), this.getTargetBlock(), null, "targetBlock", null, 0, 1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(targetBlockEClass, TargetBlock.class, "TargetBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getTargetBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, TargetBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTargetBlock_Arguments(), this.getArguments(), null, "arguments", null, 0, 1, TargetBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTargetBlock_ExternalCode(), ecorePackage.getEString(), "externalCode", null, 0, 1, TargetBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(importBlockEClass, ImportBlock.class, "ImportBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getImportBlock_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, ImportBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getImportBlock_Functions(), this.getImportedFunction(), null, "functions", null, 0, -1, ImportBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(importedFunctionEClass, ImportedFunction.class, "ImportedFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getImportedFunction_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, ImportedFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getImportedFunction_List(), this.getList(), null, "list", null, 0, 1, ImportedFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(symbolModificationEClass, SymbolModification.class, "SymbolModification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSymbolModification_Identifier(), this.getFullyQualifiedSymbolName(), null, "identifier", null, 0, 1, SymbolModification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5111,6 +5326,7 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
     initEReference(getEnumType_Level(), this.getLevelType(), null, "level", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getEnumType_Likelyhood(), this.getLikelyhood(), null, "likelyhood", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getEnumType_Missing(), this.getMissing(), null, "missing", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEnumType_Target(), ecorePackage.getEString(), "target", null, 0, 1, EnumType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(missingEClass, Missing.class, "Missing", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getMissing_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, Missing.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5234,7 +5450,11 @@ public class MdlPackageImpl extends EPackageImpl implements MdlPackage
 
     initEClass(fullyQualifiedArgumentNameEClass, FullyQualifiedArgumentName.class, "FullyQualifiedArgumentName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFullyQualifiedArgumentName_Parent(), this.getFullyQualifiedSymbolName(), null, "parent", null, 0, 1, FullyQualifiedArgumentName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFullyQualifiedArgumentName_Identifier(), ecorePackage.getEString(), "identifier", null, 0, -1, FullyQualifiedArgumentName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFullyQualifiedArgumentName_Selectors(), this.getSelector(), null, "selectors", null, 0, -1, FullyQualifiedArgumentName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(selectorEClass, Selector.class, "Selector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSelector_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, Selector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSelector_Selector(), ecorePackage.getEString(), "selector", null, 0, 1, Selector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(objectNameEClass, ObjectName.class, "ObjectName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getObjectName_Name(), ecorePackage.getEString(), "name", null, 0, 1, ObjectName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

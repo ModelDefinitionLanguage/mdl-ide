@@ -7,7 +7,7 @@ import org.ddmore.mdl.mdl.ConditionalStatement;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.VerbatimBlock;
+import org.ddmore.mdl.mdl.TargetBlock;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -28,7 +28,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl#getSymbol <em>Symbol</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl#getFunctionCall <em>Function Call</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl#getStatement <em>Statement</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl#getVerbatimBlock <em>Verbatim Block</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl#getTargetBlock <em>Target Block</em>}</li>
  * </ul>
  * </p>
  *
@@ -67,14 +67,14 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
   protected ConditionalStatement statement;
 
   /**
-   * The cached value of the '{@link #getVerbatimBlock() <em>Verbatim Block</em>}' containment reference.
+   * The cached value of the '{@link #getTargetBlock() <em>Target Block</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getVerbatimBlock()
+   * @see #getTargetBlock()
    * @generated
    * @ordered
    */
-  protected VerbatimBlock verbatimBlock;
+  protected TargetBlock targetBlock;
 
   /**
    * <!-- begin-user-doc -->
@@ -246,9 +246,9 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public VerbatimBlock getVerbatimBlock()
+  public TargetBlock getTargetBlock()
   {
-    return verbatimBlock;
+    return targetBlock;
   }
 
   /**
@@ -256,13 +256,13 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetVerbatimBlock(VerbatimBlock newVerbatimBlock, NotificationChain msgs)
+  public NotificationChain basicSetTargetBlock(TargetBlock newTargetBlock, NotificationChain msgs)
   {
-    VerbatimBlock oldVerbatimBlock = verbatimBlock;
-    verbatimBlock = newVerbatimBlock;
+    TargetBlock oldTargetBlock = targetBlock;
+    targetBlock = newTargetBlock;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdlPackage.BLOCK_STATEMENT__VERBATIM_BLOCK, oldVerbatimBlock, newVerbatimBlock);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK, oldTargetBlock, newTargetBlock);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -273,20 +273,20 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setVerbatimBlock(VerbatimBlock newVerbatimBlock)
+  public void setTargetBlock(TargetBlock newTargetBlock)
   {
-    if (newVerbatimBlock != verbatimBlock)
+    if (newTargetBlock != targetBlock)
     {
       NotificationChain msgs = null;
-      if (verbatimBlock != null)
-        msgs = ((InternalEObject)verbatimBlock).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdlPackage.BLOCK_STATEMENT__VERBATIM_BLOCK, null, msgs);
-      if (newVerbatimBlock != null)
-        msgs = ((InternalEObject)newVerbatimBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdlPackage.BLOCK_STATEMENT__VERBATIM_BLOCK, null, msgs);
-      msgs = basicSetVerbatimBlock(newVerbatimBlock, msgs);
+      if (targetBlock != null)
+        msgs = ((InternalEObject)targetBlock).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK, null, msgs);
+      if (newTargetBlock != null)
+        msgs = ((InternalEObject)newTargetBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK, null, msgs);
+      msgs = basicSetTargetBlock(newTargetBlock, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.BLOCK_STATEMENT__VERBATIM_BLOCK, newVerbatimBlock, newVerbatimBlock));
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK, newTargetBlock, newTargetBlock));
   }
 
   /**
@@ -305,8 +305,8 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
         return basicSetFunctionCall(null, msgs);
       case MdlPackage.BLOCK_STATEMENT__STATEMENT:
         return basicSetStatement(null, msgs);
-      case MdlPackage.BLOCK_STATEMENT__VERBATIM_BLOCK:
-        return basicSetVerbatimBlock(null, msgs);
+      case MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK:
+        return basicSetTargetBlock(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -327,8 +327,8 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
         return getFunctionCall();
       case MdlPackage.BLOCK_STATEMENT__STATEMENT:
         return getStatement();
-      case MdlPackage.BLOCK_STATEMENT__VERBATIM_BLOCK:
-        return getVerbatimBlock();
+      case MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK:
+        return getTargetBlock();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -352,8 +352,8 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
       case MdlPackage.BLOCK_STATEMENT__STATEMENT:
         setStatement((ConditionalStatement)newValue);
         return;
-      case MdlPackage.BLOCK_STATEMENT__VERBATIM_BLOCK:
-        setVerbatimBlock((VerbatimBlock)newValue);
+      case MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK:
+        setTargetBlock((TargetBlock)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -378,8 +378,8 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
       case MdlPackage.BLOCK_STATEMENT__STATEMENT:
         setStatement((ConditionalStatement)null);
         return;
-      case MdlPackage.BLOCK_STATEMENT__VERBATIM_BLOCK:
-        setVerbatimBlock((VerbatimBlock)null);
+      case MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK:
+        setTargetBlock((TargetBlock)null);
         return;
     }
     super.eUnset(featureID);
@@ -401,8 +401,8 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
         return functionCall != null;
       case MdlPackage.BLOCK_STATEMENT__STATEMENT:
         return statement != null;
-      case MdlPackage.BLOCK_STATEMENT__VERBATIM_BLOCK:
-        return verbatimBlock != null;
+      case MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK:
+        return targetBlock != null;
     }
     return super.eIsSet(featureID);
   }

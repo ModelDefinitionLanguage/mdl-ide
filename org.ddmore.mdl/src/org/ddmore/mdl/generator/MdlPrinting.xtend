@@ -29,7 +29,6 @@ import org.ddmore.mdl.mdl.UnaryExpression
 import org.ddmore.mdl.mdl.ParExpression
 import org.ddmore.mdl.mdl.Arguments
 import org.eclipse.emf.ecore.resource.Resource
-import org.ddmore.mdl.mdl.VerbatimBlock
 import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.Vector
@@ -39,19 +38,110 @@ import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
 import org.ddmore.mdl.mdl.Distribution
 import org.ddmore.mdl.mdl.LevelType
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
+import org.ddmore.mdl.mdl.Selector
+import java.util.HashMap
+import org.ddmore.mdl.mdl.ModelObjectBlock
+import org.ddmore.mdl.mdl.ParameterObjectBlock
+import org.ddmore.mdl.mdl.ImportBlock
+import org.ddmore.mdl.mdl.DataObjectBlock
+import org.ddmore.mdl.mdl.TaskObjectBlock
+import java.util.ArrayList
 
 class MdlPrinting {
+
+	protected var externalFunctions = new HashMap<String, HashMap<String, String>>() //list of external functions 
+	protected var externalCode = new HashMap<String, ArrayList<String>>() //external code per target language section,
+	//change to process location : first, etc.
+	
+	//Find NM-TRAN functions
+	def prepareExternals(Mcl mcl) {
+		externalFunctions.clear;	
+		externalCode.clear;	
+		for (o:mcl.objects){
+  			if (o.modelObject != null){
+  				for (ModelObjectBlock block: o.modelObject.blocks){
+  					if (block.importBlock != null)
+  						block.importBlock.prepareExternalFunctions(o.modelObject.identifier.name);
+  					if (block.targetBlock != null)
+  						block.targetBlock.prepareExternalCode;
+  				}
+  			}
+  			if (o.parameterObject != null){
+  				for (ParameterObjectBlock block: o.parameterObject.blocks){
+  					if (block.importBlock != null)
+  						block.importBlock.prepareExternalFunctions(o.parameterObject.identifier.name);
+  					if (block.targetBlock != null)
+  						block.targetBlock.prepareExternalCode;
+  					}
+  			}
+   			if (o.dataObject != null){
+  				for (DataObjectBlock block: o.dataObject.blocks){
+  					if (block.importBlock != null)
+  						block.importBlock.prepareExternalFunctions(o.dataObject.identifier.name);
+  					if (block.targetBlock != null)
+  						block.targetBlock.prepareExternalCode;
+  				}
+  			}
+  			if (o.taskObject != null){
+  				for (TaskObjectBlock block: o.taskObject.blocks){
+  					if (block.importBlock != null)
+  						block.importBlock.prepareExternalFunctions(o.taskObject.identifier.name);
+  					if (block.targetBlock != null)
+  						block.targetBlock.prepareExternalCode;
+  				}
+  			}
+  		}
+	}
+
+	def void prepareExternalCode(TargetBlock block) { }	
+	def void prepareExternalFunctions(ImportBlock block, String string) { }
+	
+	//Print a list of external code snippets
+	def getExternalCode(String sectionName){
+		var res = "";
+		var snippets = externalCode.get(sectionName);
+		if (snippets != null){
+			for (x: snippets){
+				res = res + "\n" + x;
+			}
+		}
+		return res;
+	}
+	
+	//Return attributes of an external function	from the collection
+	def getExternalFunctionAttributes(FullyQualifiedSymbolName ref) { 
+		if (ref.object != null)				
+			return externalFunctions.get(ref.object.name + "$" + ref.identifier)
+		else {
+			//match the short name
+			for (pair: externalFunctions.entrySet){
+				val str = pair.key as String;
+				if (str != null){
+					val functID = str.substring(str.indexOf("$"));
+					if (functID.equals(ref.identifier)) return pair.value; 
+				}
+			}
+		}	
+	}
 
 	//Get MDL file name in upper-case
 	def fileNameUpperCase(Mcl m){
 		m.eResource.fileName.toUpperCase()
-	}
-	
+	}	
 	
 	//Get MDL file name
 	def fileName(Resource resource){
 		var fileName = resource.getURI().lastSegment
 		fileName.substring(0, fileName.lastIndexOf('.'))
+	}
+	
+	def isTrue(AnyExpression expr){
+		return expr.toStr.isTrue;
+	}
+	
+	def isTrue(String expr){
+		return (expr.equals("yes") || expr.equals("true") || expr.equals("1"));
 	}
 	
 		
@@ -215,7 +305,7 @@ class MdlPrinting {
 		return res;
 	}
 	
-	def String toStr(EnumType type) { 
+	def String toStr(EnumType type) {
 		if (type.categorical != null){
 			var res = "";
 			if (type.categorical.arguments != null){
@@ -240,6 +330,9 @@ class MdlPrinting {
 		} 
 		if (type.missing != null){
 			return type.missing.identifier
+		} 
+		if (type.target != null){
+			return type.target 
 		} 
 	}
 	
@@ -359,13 +452,14 @@ class MdlPrinting {
 			}
 		}
 		if (e.string != null){		
-			var iterator = e.expression.iterator();
-			var operatorIterator  = e.operator.iterator();
+			var iterator = e.string.iterator();
+			//var operatorIterator  = e.operator.iterator();
 			if (iterator.hasNext ) {
-				res = iterator.next.toStr;
+				res = iterator.next;
 			}
-			while (iterator.hasNext && operatorIterator.hasNext){
-				res  = res + operatorIterator.next.convertOperator + iterator.next.toStr;
+			while (iterator.hasNext){ // && operatorIterator.hasNext){
+				//res  = res + operatorIterator.next.convertOperator + iterator.next;
+				res  = res + iterator.next; //concatenation
 			}
 		}
 		return res;
@@ -422,20 +516,36 @@ class MdlPrinting {
 	//toStr a value or an identifier
 	//Convert variables in expressions if needed!
 	def toStr(Primary p){
-		var res = "";
 		if (p.number != null){
-			res  = res + p.number;
+			return  p.number;
 		}
 		if (p.symbol != null){
-			res = res + p.symbol.toStr.convertID; 
+			return p.symbol.toStr; 
 		}
 		if (p.functionCall != null) {
-			res = res + p.functionCall.toStr
+			return p.functionCall.toStr
 		}
 		if (p.vector != null) {
-			res = res + p.vector.toStr
+			return p.vector.toStr
+		}
+		if (p.attribute != null) {
+			return p.attribute.toStr
+		}
+	}
+	
+	def String toStr(FullyQualifiedArgumentName name) { 
+		var res = name.parent.toStr;
+		for (s: name.selectors){
+			res = res + s.toStr
 		}
 		return res;
+	}
+	
+	def String toStr(Selector s) { 
+		if (s.identifier != null)
+			return "." + s.identifier;
+		if (s.selector != null)
+			return "[" + s.selector + "]";
 	}
 	
 	def String toStr(Vector v) { 
@@ -482,26 +592,20 @@ class MdlPrinting {
 		return res;
 	}	
 	
+	def externalCodeToStr(TargetBlock b){
+		return b.externalCode.substring(3, b.externalCode.length - 3)
+	}
 
 	//////////////////////////////////////////////////////////////////////////
 	//Printing
     //////////////////////////////////////////////////////////////////////////
     
     //Print verbatim block
-	def print(VerbatimBlock b)'''
+	def print(TargetBlock b)'''
 	«IF b.externalCode != null»
 	«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
 	«printedCode»
 	«ENDIF»
-	«IF b.block != null»
-	«b.block.print»
-	«ENDIF»
-	'''	
-	
-	//Print verbatim target specific code
-	def print(TargetBlock b)'''
-	«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
-	«printedCode»
 	'''	
 	
 	//Print block
@@ -546,7 +650,7 @@ class MdlPrinting {
 		«IF st.symbol != null»«st.symbol.print»«ENDIF»
 		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
 		«IF st.statement != null»«st.statement.print»«ENDIF»
-		«IF st.verbatimBlock != null»«st.verbatimBlock.print»«ENDIF»
+		«IF st.targetBlock != null»«st.targetBlock.print»«ENDIF»
 		'''
 
 	//Print function call

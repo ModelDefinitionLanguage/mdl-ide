@@ -15,7 +15,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getStructuralBlock <em>Structural Block</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getVariabilityBlock <em>Variability Block</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getPriorBlock <em>Prior Block</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getVerbatimBlock <em>Verbatim Block</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getTargetBlock <em>Target Block</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getImportBlock <em>Import Block</em>}</li>
  * </ul>
  * </p>
  *
@@ -104,29 +105,55 @@ public interface ParameterObjectBlock extends EObject
   void setPriorBlock(PriorParametersBlock value);
 
   /**
-   * Returns the value of the '<em><b>Verbatim Block</b></em>' containment reference.
+   * Returns the value of the '<em><b>Target Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Verbatim Block</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Target Block</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Verbatim Block</em>' containment reference.
-   * @see #setVerbatimBlock(VerbatimBlock)
-   * @see org.ddmore.mdl.mdl.MdlPackage#getParameterObjectBlock_VerbatimBlock()
+   * @return the value of the '<em>Target Block</em>' containment reference.
+   * @see #setTargetBlock(TargetBlock)
+   * @see org.ddmore.mdl.mdl.MdlPackage#getParameterObjectBlock_TargetBlock()
    * @model containment="true"
    * @generated
    */
-  VerbatimBlock getVerbatimBlock();
+  TargetBlock getTargetBlock();
 
   /**
-   * Sets the value of the '{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getVerbatimBlock <em>Verbatim Block</em>}' containment reference.
+   * Sets the value of the '{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getTargetBlock <em>Target Block</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Verbatim Block</em>' containment reference.
-   * @see #getVerbatimBlock()
+   * @param value the new value of the '<em>Target Block</em>' containment reference.
+   * @see #getTargetBlock()
    * @generated
    */
-  void setVerbatimBlock(VerbatimBlock value);
+  void setTargetBlock(TargetBlock value);
+
+  /**
+   * Returns the value of the '<em><b>Import Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Import Block</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Import Block</em>' containment reference.
+   * @see #setImportBlock(ImportBlock)
+   * @see org.ddmore.mdl.mdl.MdlPackage#getParameterObjectBlock_ImportBlock()
+   * @model containment="true"
+   * @generated
+   */
+  ImportBlock getImportBlock();
+
+  /**
+   * Sets the value of the '{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getImportBlock <em>Import Block</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Import Block</em>' containment reference.
+   * @see #getImportBlock()
+   * @generated
+   */
+  void setImportBlock(ImportBlock value);
 
 } // ParameterObjectBlock

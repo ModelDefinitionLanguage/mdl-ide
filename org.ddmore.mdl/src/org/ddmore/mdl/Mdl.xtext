@@ -1,6 +1,7 @@
 grammar org.ddmore.mdl.Mdl with org.eclipse.xtext.common.Terminals
 generate mdl "http://www.ddmore.org/mdl/Mdl"
 
+
 Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
@@ -13,8 +14,7 @@ MclObject:
 	
 ModelObject:
 	identifier=ObjectName '=' 'mdlobj' BEGIN blocks += ModelObjectBlock* END;
-
-ParameterObject: 
+ParameterObject:
 	identifier=ObjectName '=' 'parobj' BEGIN blocks += ParameterObjectBlock* END;
 	
 DataObject:
@@ -42,7 +42,8 @@ ModelObjectBlock:
 	observationBlock = ObservationBlock |
 	estimationBlock = EstimationBlock |
 	simulationBlock = SimulationBlock |
-	verbatimBlock = VerbatimBlock
+	targetBlock = TargetBlock |
+	importBlock = ImportBlock
 ;
 
 IndividualVariablesBlock:
@@ -108,7 +109,8 @@ ParameterObjectBlock:
 	structuralBlock = StructuralBlock |
 	variabilityBlock = VariabilityBlock |
 	priorBlock = PriorParametersBlock |
-	verbatimBlock = VerbatimBlock
+	targetBlock = TargetBlock |
+	importBlock = ImportBlock
 ;
 
 StructuralBlock:
@@ -126,10 +128,15 @@ PriorParametersBlock:
 	BEGIN statements += BlockStatement* END  //new Parameter +
 ;
 
+//////////////////////////////////////////////////////////
+//Data Object
+//////////////////////////////////////////////////////////
+
 DataObjectBlock:
 	headerBlock = HeaderBlock |
 	fileBlock = FileBlock |
-	verbatimBlock = VerbatimBlock;
+	targetBlock = TargetBlock | 
+	importBlock = ImportBlock;
  
 HeaderBlock:
  	identifier='HEADER' 
@@ -141,12 +148,17 @@ HeaderBlock:
 	BEGIN statements += FileBlockStatement* END
  ;
  
+//////////////////////////////////////////////////////////
+//Task Object
+//////////////////////////////////////////////////////////
+ 
 TaskObjectBlock: 
 	functionDeclaration = TaskFunctionDeclaration | 
 	parameterBlock = ParameterBlock |
 	dataBlock = DataBlock |
 	modelBlock = ModelBlock | 
-	verbatimBlock = VerbatimBlock	
+	targetBlock = TargetBlock |
+	importBlock = ImportBlock	
 	;
 
 ParameterBlock:
@@ -195,7 +207,7 @@ RemoveList:
 ;
 
 SymbolList:
-	'list' '(' symbols += FullyQualifiedSymbolName+ ')'
+	'list' '(' symbols += FullyQualifiedSymbolName (=> ',' symbols += FullyQualifiedSymbolName+ ')')
 ;
 
 ModelPredictionBlockStatement: 
@@ -206,7 +218,11 @@ ModelPredictionBlockStatement:
 
 LibraryBlock: 
 	identifier = 'LIBRARY' 
-	BEGIN statements += BlockStatement* END //Properties
+	BEGIN statements += FunctionCallStatement * END //Properties: format restricted to a "variable = function call"
+;
+
+FunctionCallStatement:
+	identifier = ID "=" expression = FunctionCall
 ;
 
 OdeBlock:
@@ -245,7 +261,7 @@ DiagBlock:
 
 SameBlock:	  
 	 identifier = 'same' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Arguments END)?  //new Parameter
+	 (BEGIN parameters = FormalArguments END)?  //new Parameter
 ;
 
 //////////////////////////////////////////////////////////
@@ -322,7 +338,11 @@ ExecuteTask:
 //////////////////////////////////////////////////////////
 
 FormalArguments:
-	identifiers += ID (=> ',' identifiers += ID)*
+	arguments += FormalArgument (=> ',' arguments += FormalArgument)*
+;
+
+FormalArgument:
+	identifier = ID
 ;
 
 FunctionCall:
@@ -333,15 +353,11 @@ BlockStatement:
 	symbol = SymbolDeclaration | //VariableName or PropertyName
 	functionCall = FunctionCall |
 	statement = ConditionalStatement |
-	verbatimBlock = VerbatimBlock
+	targetBlock = TargetBlock
 ;
 
-VerbatimBlock: 
-	identifier = 'TARGET_CODE' BEGIN (block = TargetBlock | externalCode = EXTERNAL_CODE) END
-;
-
-TargetBlock:
-	identifier = TargetLanguage ('(' arguments = Arguments ')' )? BEGIN externalCode = EXTERNAL_CODE END
+TargetBlock: 
+	identifier = 'TARGET_CODE' ('(' arguments = Arguments ')' )? BEGIN  externalCode = EXTERNAL_CODE END
 ;
 
 TargetLanguage:
@@ -351,6 +367,16 @@ TargetLanguage:
 terminal EXTERNAL_CODE: 
 	'***' -> '***'
 ; 
+
+ImportBlock:
+	identifier = 'IMPORT' BEGIN 
+		functions += ImportedFunction
+	END //rename to functions
+;
+
+ImportedFunction:
+	identifier = ID ("=" list = List) 
+;
 
 SymbolModification:
 	identifier = FullyQualifiedSymbolName ("=" list = List)?  //Ref to ParameterName
@@ -374,7 +400,8 @@ EnumType:
 	distribution = Distribution |
 	level = LevelType |
 	likelyhood = Likelyhood |
-	missing = Missing
+	missing = Missing |
+	target = TargetLanguage
 ;
 
 Missing:
@@ -404,7 +431,7 @@ Covariate:
 	identifier = 'covariate'
 ;
 
-Distribution: {Distribution}
+Distribution: 
 	normal = 'Normal' |
 	binomial = 'Binomial' |
 	poisson = 'Poisson' |
@@ -506,7 +533,11 @@ FullyQualifiedSymbolName:
 ;
 
 FullyQualifiedArgumentName:
-	parent = FullyQualifiedSymbolName ('.' identifier += ID)+  //ref ArgumentName
+	parent = FullyQualifiedSymbolName selectors += Selector+  //ref ArgumentName
+;
+
+Selector:
+	('.' identifier = ID ) | ('[' selector = NUMBER ']')
 ;
 
 ObjectName:
@@ -574,7 +605,7 @@ terminal FLOAT
     ;
 
 terminal fragment EXPONENT
-	: ('e'|'E') ('+'|'-')?('0'..'9')+;
+	: ('e'|'E'|'d'|'D') ('+'|'-')?('0'..'9')+;
 
 terminal SL_COMMENT : ('#') !('\n'|'\r')* ('\r'? '\n')? ;
 
@@ -583,6 +614,3 @@ terminal ML_COMMENT : '/#' -> '#/';
 terminal BEGIN: '{';
 
 terminal END: '}' ;
-
-
-

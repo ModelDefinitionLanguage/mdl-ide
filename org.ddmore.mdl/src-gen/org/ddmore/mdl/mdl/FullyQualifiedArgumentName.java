@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getParent <em>Parent</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getIdentifier <em>Identifier</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getSelectors <em>Selectors</em>}</li>
  * </ul>
  * </p>
  *
@@ -52,19 +52,19 @@ public interface FullyQualifiedArgumentName extends EObject
   void setParent(FullyQualifiedSymbolName value);
 
   /**
-   * Returns the value of the '<em><b>Identifier</b></em>' attribute list.
-   * The list contents are of type {@link java.lang.String}.
+   * Returns the value of the '<em><b>Selectors</b></em>' containment reference list.
+   * The list contents are of type {@link org.ddmore.mdl.mdl.Selector}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Identifier</em>' attribute list isn't clear,
+   * If the meaning of the '<em>Selectors</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Identifier</em>' attribute list.
-   * @see org.ddmore.mdl.mdl.MdlPackage#getFullyQualifiedArgumentName_Identifier()
-   * @model unique="false"
+   * @return the value of the '<em>Selectors</em>' containment reference list.
+   * @see org.ddmore.mdl.mdl.MdlPackage#getFullyQualifiedArgumentName_Selectors()
+   * @model containment="true"
    * @generated
    */
-  EList<String> getIdentifier();
+  EList<Selector> getSelectors();
 
 } // FullyQualifiedArgumentName

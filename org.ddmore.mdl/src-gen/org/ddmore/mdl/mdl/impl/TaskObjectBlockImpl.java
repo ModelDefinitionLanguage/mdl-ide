@@ -3,12 +3,13 @@
 package org.ddmore.mdl.mdl.impl;
 
 import org.ddmore.mdl.mdl.DataBlock;
+import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.ModelBlock;
 import org.ddmore.mdl.mdl.ParameterBlock;
+import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
-import org.ddmore.mdl.mdl.VerbatimBlock;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -30,7 +31,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl#getParameterBlock <em>Parameter Block</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl#getDataBlock <em>Data Block</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl#getModelBlock <em>Model Block</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl#getVerbatimBlock <em>Verbatim Block</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl#getTargetBlock <em>Target Block</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl#getImportBlock <em>Import Block</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,14 +81,24 @@ public class TaskObjectBlockImpl extends MinimalEObjectImpl.Container implements
   protected ModelBlock modelBlock;
 
   /**
-   * The cached value of the '{@link #getVerbatimBlock() <em>Verbatim Block</em>}' containment reference.
+   * The cached value of the '{@link #getTargetBlock() <em>Target Block</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getVerbatimBlock()
+   * @see #getTargetBlock()
    * @generated
    * @ordered
    */
-  protected VerbatimBlock verbatimBlock;
+  protected TargetBlock targetBlock;
+
+  /**
+   * The cached value of the '{@link #getImportBlock() <em>Import Block</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getImportBlock()
+   * @generated
+   * @ordered
+   */
+  protected ImportBlock importBlock;
 
   /**
    * <!-- begin-user-doc -->
@@ -306,9 +318,9 @@ public class TaskObjectBlockImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public VerbatimBlock getVerbatimBlock()
+  public TargetBlock getTargetBlock()
   {
-    return verbatimBlock;
+    return targetBlock;
   }
 
   /**
@@ -316,13 +328,13 @@ public class TaskObjectBlockImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetVerbatimBlock(VerbatimBlock newVerbatimBlock, NotificationChain msgs)
+  public NotificationChain basicSetTargetBlock(TargetBlock newTargetBlock, NotificationChain msgs)
   {
-    VerbatimBlock oldVerbatimBlock = verbatimBlock;
-    verbatimBlock = newVerbatimBlock;
+    TargetBlock oldTargetBlock = targetBlock;
+    targetBlock = newTargetBlock;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdlPackage.TASK_OBJECT_BLOCK__VERBATIM_BLOCK, oldVerbatimBlock, newVerbatimBlock);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdlPackage.TASK_OBJECT_BLOCK__TARGET_BLOCK, oldTargetBlock, newTargetBlock);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -333,20 +345,68 @@ public class TaskObjectBlockImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setVerbatimBlock(VerbatimBlock newVerbatimBlock)
+  public void setTargetBlock(TargetBlock newTargetBlock)
   {
-    if (newVerbatimBlock != verbatimBlock)
+    if (newTargetBlock != targetBlock)
     {
       NotificationChain msgs = null;
-      if (verbatimBlock != null)
-        msgs = ((InternalEObject)verbatimBlock).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdlPackage.TASK_OBJECT_BLOCK__VERBATIM_BLOCK, null, msgs);
-      if (newVerbatimBlock != null)
-        msgs = ((InternalEObject)newVerbatimBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdlPackage.TASK_OBJECT_BLOCK__VERBATIM_BLOCK, null, msgs);
-      msgs = basicSetVerbatimBlock(newVerbatimBlock, msgs);
+      if (targetBlock != null)
+        msgs = ((InternalEObject)targetBlock).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdlPackage.TASK_OBJECT_BLOCK__TARGET_BLOCK, null, msgs);
+      if (newTargetBlock != null)
+        msgs = ((InternalEObject)newTargetBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdlPackage.TASK_OBJECT_BLOCK__TARGET_BLOCK, null, msgs);
+      msgs = basicSetTargetBlock(newTargetBlock, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.TASK_OBJECT_BLOCK__VERBATIM_BLOCK, newVerbatimBlock, newVerbatimBlock));
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.TASK_OBJECT_BLOCK__TARGET_BLOCK, newTargetBlock, newTargetBlock));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ImportBlock getImportBlock()
+  {
+    return importBlock;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetImportBlock(ImportBlock newImportBlock, NotificationChain msgs)
+  {
+    ImportBlock oldImportBlock = importBlock;
+    importBlock = newImportBlock;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdlPackage.TASK_OBJECT_BLOCK__IMPORT_BLOCK, oldImportBlock, newImportBlock);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setImportBlock(ImportBlock newImportBlock)
+  {
+    if (newImportBlock != importBlock)
+    {
+      NotificationChain msgs = null;
+      if (importBlock != null)
+        msgs = ((InternalEObject)importBlock).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdlPackage.TASK_OBJECT_BLOCK__IMPORT_BLOCK, null, msgs);
+      if (newImportBlock != null)
+        msgs = ((InternalEObject)newImportBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdlPackage.TASK_OBJECT_BLOCK__IMPORT_BLOCK, null, msgs);
+      msgs = basicSetImportBlock(newImportBlock, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.TASK_OBJECT_BLOCK__IMPORT_BLOCK, newImportBlock, newImportBlock));
   }
 
   /**
@@ -367,8 +427,10 @@ public class TaskObjectBlockImpl extends MinimalEObjectImpl.Container implements
         return basicSetDataBlock(null, msgs);
       case MdlPackage.TASK_OBJECT_BLOCK__MODEL_BLOCK:
         return basicSetModelBlock(null, msgs);
-      case MdlPackage.TASK_OBJECT_BLOCK__VERBATIM_BLOCK:
-        return basicSetVerbatimBlock(null, msgs);
+      case MdlPackage.TASK_OBJECT_BLOCK__TARGET_BLOCK:
+        return basicSetTargetBlock(null, msgs);
+      case MdlPackage.TASK_OBJECT_BLOCK__IMPORT_BLOCK:
+        return basicSetImportBlock(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -391,8 +453,10 @@ public class TaskObjectBlockImpl extends MinimalEObjectImpl.Container implements
         return getDataBlock();
       case MdlPackage.TASK_OBJECT_BLOCK__MODEL_BLOCK:
         return getModelBlock();
-      case MdlPackage.TASK_OBJECT_BLOCK__VERBATIM_BLOCK:
-        return getVerbatimBlock();
+      case MdlPackage.TASK_OBJECT_BLOCK__TARGET_BLOCK:
+        return getTargetBlock();
+      case MdlPackage.TASK_OBJECT_BLOCK__IMPORT_BLOCK:
+        return getImportBlock();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -419,8 +483,11 @@ public class TaskObjectBlockImpl extends MinimalEObjectImpl.Container implements
       case MdlPackage.TASK_OBJECT_BLOCK__MODEL_BLOCK:
         setModelBlock((ModelBlock)newValue);
         return;
-      case MdlPackage.TASK_OBJECT_BLOCK__VERBATIM_BLOCK:
-        setVerbatimBlock((VerbatimBlock)newValue);
+      case MdlPackage.TASK_OBJECT_BLOCK__TARGET_BLOCK:
+        setTargetBlock((TargetBlock)newValue);
+        return;
+      case MdlPackage.TASK_OBJECT_BLOCK__IMPORT_BLOCK:
+        setImportBlock((ImportBlock)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -448,8 +515,11 @@ public class TaskObjectBlockImpl extends MinimalEObjectImpl.Container implements
       case MdlPackage.TASK_OBJECT_BLOCK__MODEL_BLOCK:
         setModelBlock((ModelBlock)null);
         return;
-      case MdlPackage.TASK_OBJECT_BLOCK__VERBATIM_BLOCK:
-        setVerbatimBlock((VerbatimBlock)null);
+      case MdlPackage.TASK_OBJECT_BLOCK__TARGET_BLOCK:
+        setTargetBlock((TargetBlock)null);
+        return;
+      case MdlPackage.TASK_OBJECT_BLOCK__IMPORT_BLOCK:
+        setImportBlock((ImportBlock)null);
         return;
     }
     super.eUnset(featureID);
@@ -473,8 +543,10 @@ public class TaskObjectBlockImpl extends MinimalEObjectImpl.Container implements
         return dataBlock != null;
       case MdlPackage.TASK_OBJECT_BLOCK__MODEL_BLOCK:
         return modelBlock != null;
-      case MdlPackage.TASK_OBJECT_BLOCK__VERBATIM_BLOCK:
-        return verbatimBlock != null;
+      case MdlPackage.TASK_OBJECT_BLOCK__TARGET_BLOCK:
+        return targetBlock != null;
+      case MdlPackage.TASK_OBJECT_BLOCK__IMPORT_BLOCK:
+        return importBlock != null;
     }
     return super.eIsSet(featureID);
   }

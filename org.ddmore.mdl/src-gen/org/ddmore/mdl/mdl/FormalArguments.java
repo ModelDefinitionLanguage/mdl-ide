@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.ddmore.mdl.mdl.FormalArguments#getIdentifiers <em>Identifiers</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.FormalArguments#getArguments <em>Arguments</em>}</li>
  * </ul>
  * </p>
  *
@@ -25,19 +25,19 @@ import org.eclipse.emf.ecore.EObject;
 public interface FormalArguments extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Identifiers</b></em>' attribute list.
-   * The list contents are of type {@link java.lang.String}.
+   * Returns the value of the '<em><b>Arguments</b></em>' containment reference list.
+   * The list contents are of type {@link org.ddmore.mdl.mdl.FormalArgument}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Identifiers</em>' attribute list isn't clear,
+   * If the meaning of the '<em>Arguments</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Identifiers</em>' attribute list.
-   * @see org.ddmore.mdl.mdl.MdlPackage#getFormalArguments_Identifiers()
-   * @model unique="false"
+   * @return the value of the '<em>Arguments</em>' containment reference list.
+   * @see org.ddmore.mdl.mdl.MdlPackage#getFormalArguments_Arguments()
+   * @model containment="true"
    * @generated
    */
-  EList<String> getIdentifiers();
+  EList<FormalArgument> getArguments();
 
 } // FormalArguments

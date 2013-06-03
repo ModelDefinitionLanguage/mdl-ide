@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.ddmore.mdl.mdl.EnumType#getLevel <em>Level</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.EnumType#getLikelyhood <em>Likelyhood</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.EnumType#getMissing <em>Missing</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.EnumType#getTarget <em>Target</em>}</li>
  * </ul>
  * </p>
  *
@@ -209,5 +210,31 @@ public interface EnumType extends EObject
    * @generated
    */
   void setMissing(Missing value);
+
+  /**
+   * Returns the value of the '<em><b>Target</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Target</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Target</em>' attribute.
+   * @see #setTarget(String)
+   * @see org.ddmore.mdl.mdl.MdlPackage#getEnumType_Target()
+   * @model
+   * @generated
+   */
+  String getTarget();
+
+  /**
+   * Sets the value of the '{@link org.ddmore.mdl.mdl.EnumType#getTarget <em>Target</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Target</em>' attribute.
+   * @see #getTarget()
+   * @generated
+   */
+  void setTarget(String value);
 
 } // EnumType

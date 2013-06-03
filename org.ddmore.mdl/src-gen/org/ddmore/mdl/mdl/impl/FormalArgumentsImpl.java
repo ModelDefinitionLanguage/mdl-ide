@@ -4,16 +4,21 @@ package org.ddmore.mdl.mdl.impl;
 
 import java.util.Collection;
 
+import org.ddmore.mdl.mdl.FormalArgument;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.MdlPackage;
+
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EDataTypeEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,7 +27,7 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.ddmore.mdl.mdl.impl.FormalArgumentsImpl#getIdentifiers <em>Identifiers</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.FormalArgumentsImpl#getArguments <em>Arguments</em>}</li>
  * </ul>
  * </p>
  *
@@ -31,14 +36,14 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
 public class FormalArgumentsImpl extends MinimalEObjectImpl.Container implements FormalArguments
 {
   /**
-   * The cached value of the '{@link #getIdentifiers() <em>Identifiers</em>}' attribute list.
+   * The cached value of the '{@link #getArguments() <em>Arguments</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getIdentifiers()
+   * @see #getArguments()
    * @generated
    * @ordered
    */
-  protected EList<String> identifiers;
+  protected EList<FormalArgument> arguments;
 
   /**
    * <!-- begin-user-doc -->
@@ -66,13 +71,29 @@ public class FormalArgumentsImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<String> getIdentifiers()
+  public EList<FormalArgument> getArguments()
   {
-    if (identifiers == null)
+    if (arguments == null)
     {
-      identifiers = new EDataTypeEList<String>(String.class, this, MdlPackage.FORMAL_ARGUMENTS__IDENTIFIERS);
+      arguments = new EObjectContainmentEList<FormalArgument>(FormalArgument.class, this, MdlPackage.FORMAL_ARGUMENTS__ARGUMENTS);
     }
-    return identifiers;
+    return arguments;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case MdlPackage.FORMAL_ARGUMENTS__ARGUMENTS:
+        return ((InternalEList<?>)getArguments()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -85,8 +106,8 @@ public class FormalArgumentsImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
-      case MdlPackage.FORMAL_ARGUMENTS__IDENTIFIERS:
-        return getIdentifiers();
+      case MdlPackage.FORMAL_ARGUMENTS__ARGUMENTS:
+        return getArguments();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -102,9 +123,9 @@ public class FormalArgumentsImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
-      case MdlPackage.FORMAL_ARGUMENTS__IDENTIFIERS:
-        getIdentifiers().clear();
-        getIdentifiers().addAll((Collection<? extends String>)newValue);
+      case MdlPackage.FORMAL_ARGUMENTS__ARGUMENTS:
+        getArguments().clear();
+        getArguments().addAll((Collection<? extends FormalArgument>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -120,8 +141,8 @@ public class FormalArgumentsImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
-      case MdlPackage.FORMAL_ARGUMENTS__IDENTIFIERS:
-        getIdentifiers().clear();
+      case MdlPackage.FORMAL_ARGUMENTS__ARGUMENTS:
+        getArguments().clear();
         return;
     }
     super.eUnset(featureID);
@@ -137,27 +158,10 @@ public class FormalArgumentsImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
-      case MdlPackage.FORMAL_ARGUMENTS__IDENTIFIERS:
-        return identifiers != null && !identifiers.isEmpty();
+      case MdlPackage.FORMAL_ARGUMENTS__ARGUMENTS:
+        return arguments != null && !arguments.isEmpty();
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (identifiers: ");
-    result.append(identifiers);
-    result.append(')');
-    return result.toString();
   }
 
 } //FormalArgumentsImpl

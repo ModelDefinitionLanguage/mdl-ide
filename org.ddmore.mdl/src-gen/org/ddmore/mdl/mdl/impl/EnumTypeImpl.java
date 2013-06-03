@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link org.ddmore.mdl.mdl.impl.EnumTypeImpl#getLevel <em>Level</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.impl.EnumTypeImpl#getLikelyhood <em>Likelyhood</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.impl.EnumTypeImpl#getMissing <em>Missing</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.EnumTypeImpl#getTarget <em>Target</em>}</li>
  * </ul>
  * </p>
  *
@@ -111,6 +112,26 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
    * @ordered
    */
   protected Missing missing;
+
+  /**
+   * The default value of the '{@link #getTarget() <em>Target</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTarget()
+   * @generated
+   * @ordered
+   */
+  protected static final String TARGET_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getTarget() <em>Target</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTarget()
+   * @generated
+   * @ordered
+   */
+  protected String target = TARGET_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -474,6 +495,29 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getTarget()
+  {
+    return target;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setTarget(String newTarget)
+  {
+    String oldTarget = target;
+    target = newTarget;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.ENUM_TYPE__TARGET, oldTarget, target));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -521,6 +565,8 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
         return getLikelyhood();
       case MdlPackage.ENUM_TYPE__MISSING:
         return getMissing();
+      case MdlPackage.ENUM_TYPE__TARGET:
+        return getTarget();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -555,6 +601,9 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
         return;
       case MdlPackage.ENUM_TYPE__MISSING:
         setMissing((Missing)newValue);
+        return;
+      case MdlPackage.ENUM_TYPE__TARGET:
+        setTarget((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -591,6 +640,9 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
       case MdlPackage.ENUM_TYPE__MISSING:
         setMissing((Missing)null);
         return;
+      case MdlPackage.ENUM_TYPE__TARGET:
+        setTarget(TARGET_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -619,8 +671,27 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
         return likelyhood != null;
       case MdlPackage.ENUM_TYPE__MISSING:
         return missing != null;
+      case MdlPackage.ENUM_TYPE__TARGET:
+        return TARGET_EDEFAULT == null ? target != null : !TARGET_EDEFAULT.equals(target);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (target: ");
+    result.append(target);
+    result.append(')');
+    return result.toString();
   }
 
 } //EnumTypeImpl

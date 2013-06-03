@@ -70,7 +70,9 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simulationBlock" eType="#//SimulationBlock"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="verbatimBlock" eType="#//VerbatimBlock"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetBlock" eType="#//TargetBlock"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importBlock" eType="#//ImportBlock"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IndividualVariablesBlock">
@@ -135,7 +137,9 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="priorBlock" eType="#//PriorParametersBlock"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="verbatimBlock" eType="#//VerbatimBlock"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetBlock" eType="#//TargetBlock"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importBlock" eType="#//ImportBlock"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StructuralBlock">
@@ -158,7 +162,9 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fileBlock" eType="#//FileBlock"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="verbatimBlock" eType="#//VerbatimBlock"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetBlock" eType="#//TargetBlock"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importBlock" eType="#//ImportBlock"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="HeaderBlock">
@@ -180,7 +186,9 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modelBlock" eType="#//ModelBlock"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="verbatimBlock" eType="#//VerbatimBlock"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetBlock" eType="#//TargetBlock"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importBlock" eType="#//ImportBlock"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ParameterBlock">
@@ -252,7 +260,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="LibraryBlock">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
-        eType="#//BlockStatement" containment="true"/>
+        eType="#//FunctionCallStatement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionCallStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//FunctionCall"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OdeBlock">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -298,7 +311,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" eType="#//Arguments"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" eType="#//Arguments"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" eType="#//FormalArguments"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FileBlockStatement">
@@ -381,8 +394,11 @@
         eType="#//BlockStatement" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FormalArguments">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifiers" unique="false"
-        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//FormalArgument" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormalArgument">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FunctionCall">
     <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//FullyQualifiedSymbolName"
@@ -397,20 +413,23 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//ConditionalStatement"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="verbatimBlock" eType="#//VerbatimBlock"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetBlock" eType="#//TargetBlock"
         containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VerbatimBlock">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//TargetBlock"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="externalCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TargetBlock">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" eType="#//Arguments"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="externalCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImportBlock">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functions" upperBound="-1"
+        eType="#//ImportedFunction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImportedFunction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="list" eType="#//List" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SymbolModification">
     <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//FullyQualifiedSymbolName"
@@ -444,6 +463,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="missing" eType="#//Missing"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="target" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Missing">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -609,8 +629,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="FullyQualifiedArgumentName">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//FullyQualifiedSymbolName"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" unique="false"
-        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selectors" upperBound="-1"
+        eType="#//Selector" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Selector">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="selector" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ObjectName">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.Selector;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -19,7 +20,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EDataTypeEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +31,7 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl#getParent <em>Parent</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl#getIdentifier <em>Identifier</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl#getSelectors <em>Selectors</em>}</li>
  * </ul>
  * </p>
  *
@@ -48,14 +50,14 @@ public class FullyQualifiedArgumentNameImpl extends MinimalEObjectImpl.Container
   protected FullyQualifiedSymbolName parent;
 
   /**
-   * The cached value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute list.
+   * The cached value of the '{@link #getSelectors() <em>Selectors</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getIdentifier()
+   * @see #getSelectors()
    * @generated
    * @ordered
    */
-  protected EList<String> identifier;
+  protected EList<Selector> selectors;
 
   /**
    * <!-- begin-user-doc -->
@@ -131,13 +133,13 @@ public class FullyQualifiedArgumentNameImpl extends MinimalEObjectImpl.Container
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<String> getIdentifier()
+  public EList<Selector> getSelectors()
   {
-    if (identifier == null)
+    if (selectors == null)
     {
-      identifier = new EDataTypeEList<String>(String.class, this, MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER);
+      selectors = new EObjectContainmentEList<Selector>(Selector.class, this, MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS);
     }
-    return identifier;
+    return selectors;
   }
 
   /**
@@ -152,6 +154,8 @@ public class FullyQualifiedArgumentNameImpl extends MinimalEObjectImpl.Container
     {
       case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__PARENT:
         return basicSetParent(null, msgs);
+      case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS:
+        return ((InternalEList<?>)getSelectors()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -168,8 +172,8 @@ public class FullyQualifiedArgumentNameImpl extends MinimalEObjectImpl.Container
     {
       case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__PARENT:
         return getParent();
-      case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER:
-        return getIdentifier();
+      case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS:
+        return getSelectors();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -188,9 +192,9 @@ public class FullyQualifiedArgumentNameImpl extends MinimalEObjectImpl.Container
       case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__PARENT:
         setParent((FullyQualifiedSymbolName)newValue);
         return;
-      case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER:
-        getIdentifier().clear();
-        getIdentifier().addAll((Collection<? extends String>)newValue);
+      case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS:
+        getSelectors().clear();
+        getSelectors().addAll((Collection<? extends Selector>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -209,8 +213,8 @@ public class FullyQualifiedArgumentNameImpl extends MinimalEObjectImpl.Container
       case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__PARENT:
         setParent((FullyQualifiedSymbolName)null);
         return;
-      case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER:
-        getIdentifier().clear();
+      case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS:
+        getSelectors().clear();
         return;
     }
     super.eUnset(featureID);
@@ -228,27 +232,10 @@ public class FullyQualifiedArgumentNameImpl extends MinimalEObjectImpl.Container
     {
       case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__PARENT:
         return parent != null;
-      case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER:
-        return identifier != null && !identifier.isEmpty();
+      case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS:
+        return selectors != null && !selectors.isEmpty();
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (identifier: ");
-    result.append(identifier);
-    result.append(')');
-    return result.toString();
   }
 
 } //FullyQualifiedArgumentNameImpl

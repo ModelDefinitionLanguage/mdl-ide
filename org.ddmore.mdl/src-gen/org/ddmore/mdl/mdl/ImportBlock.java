@@ -8,22 +8,22 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Library Block</b></em>'.
+ * A representation of the model object '<em><b>Import Block</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.ddmore.mdl.mdl.LibraryBlock#getIdentifier <em>Identifier</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.LibraryBlock#getStatements <em>Statements</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.ImportBlock#getIdentifier <em>Identifier</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.ImportBlock#getFunctions <em>Functions</em>}</li>
  * </ul>
  * </p>
  *
- * @see org.ddmore.mdl.mdl.MdlPackage#getLibraryBlock()
+ * @see org.ddmore.mdl.mdl.MdlPackage#getImportBlock()
  * @model
  * @generated
  */
-public interface LibraryBlock extends EObject
+public interface ImportBlock extends EObject
 {
   /**
    * Returns the value of the '<em><b>Identifier</b></em>' attribute.
@@ -35,14 +35,14 @@ public interface LibraryBlock extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Identifier</em>' attribute.
    * @see #setIdentifier(String)
-   * @see org.ddmore.mdl.mdl.MdlPackage#getLibraryBlock_Identifier()
+   * @see org.ddmore.mdl.mdl.MdlPackage#getImportBlock_Identifier()
    * @model
    * @generated
    */
   String getIdentifier();
 
   /**
-   * Sets the value of the '{@link org.ddmore.mdl.mdl.LibraryBlock#getIdentifier <em>Identifier</em>}' attribute.
+   * Sets the value of the '{@link org.ddmore.mdl.mdl.ImportBlock#getIdentifier <em>Identifier</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Identifier</em>' attribute.
@@ -52,19 +52,19 @@ public interface LibraryBlock extends EObject
   void setIdentifier(String value);
 
   /**
-   * Returns the value of the '<em><b>Statements</b></em>' containment reference list.
-   * The list contents are of type {@link org.ddmore.mdl.mdl.FunctionCallStatement}.
+   * Returns the value of the '<em><b>Functions</b></em>' containment reference list.
+   * The list contents are of type {@link org.ddmore.mdl.mdl.ImportedFunction}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Statements</em>' containment reference list isn't clear,
+   * If the meaning of the '<em>Functions</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Statements</em>' containment reference list.
-   * @see org.ddmore.mdl.mdl.MdlPackage#getLibraryBlock_Statements()
+   * @return the value of the '<em>Functions</em>' containment reference list.
+   * @see org.ddmore.mdl.mdl.MdlPackage#getImportBlock_Functions()
    * @model containment="true"
    * @generated
    */
-  EList<FunctionCallStatement> getStatements();
+  EList<ImportedFunction> getFunctions();
 
-} // LibraryBlock
+} // ImportBlock

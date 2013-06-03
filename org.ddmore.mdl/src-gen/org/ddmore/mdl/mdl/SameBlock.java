@@ -85,12 +85,12 @@ public interface SameBlock extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Parameters</em>' containment reference.
-   * @see #setParameters(Arguments)
+   * @see #setParameters(FormalArguments)
    * @see org.ddmore.mdl.mdl.MdlPackage#getSameBlock_Parameters()
    * @model containment="true"
    * @generated
    */
-  Arguments getParameters();
+  FormalArguments getParameters();
 
   /**
    * Sets the value of the '{@link org.ddmore.mdl.mdl.SameBlock#getParameters <em>Parameters</em>}' containment reference.
@@ -100,6 +100,6 @@ public interface SameBlock extends EObject
    * @see #getParameters()
    * @generated
    */
-  void setParameters(Arguments value);
+  void setParameters(FormalArguments value);
 
 } // SameBlock

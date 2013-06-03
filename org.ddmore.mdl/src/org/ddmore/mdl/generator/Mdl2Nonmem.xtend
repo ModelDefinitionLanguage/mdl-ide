@@ -26,47 +26,105 @@ import org.ddmore.mdl.mdl.FileBlockStatement
 import org.eclipse.emf.ecore.resource.Resource
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.DataBlockStatement
+import org.ddmore.mdl.mdl.ImportBlock
+import org.ddmore.mdl.mdl.ImportedFunction
+import org.ddmore.mdl.mdl.Argument
+import java.util.HashMap
+import java.util.ArrayList
 
-class Mdl2Nonmem extends MdlPrinting{
+class Mdl2Nonmem extends MdlPrinting{		
 
-var TaskObject taskObjectect = null; //Store the reference to task object
+	var tol = ""; //Find the value of tol
+	var file = ""; //Find the file name
+	
+	var eta_vars = newHashMap	//ETAs
+  	var eps_vars = newHashMap   //EPSs
+	var theta_vars = newHashMap //THETAs
+	var dadt_vars = newHashMap  //DADT	
+	var init_vars = newHashMap  //A	
+	
 	
 	//Print file name and analyse all MCL objects in the source file
   	def convertToNonmem(Mcl m){
+  		//Prepare external functions  		
+  		
   		//Create a map of variables
+  		init_vars.clear;
+		dadt_vars.clear;
+		theta_vars.clear;
+		eta_vars.clear;
+    	eps_vars.clear;  
   		for (o:m.objects){
   			prepareCollections(o);
   			if (o.taskObject != null){
-  				taskObjectect = o.taskObject;
+  				tol = o.taskObject.getTOL;
+  				file = o.taskObject.identifier.name + ".fit";
   			}
   		}
-  		var version = "1.007";
-  		var date = "10.05.2013"
+  		
+  		m.prepareExternals;
+		
+  		var version = "1.008";
+  		var date = "02.06.2013"
 		'''
 		;mdl2nt «version» beta, last modification «date», Natallia Kokash (natallia.kokash@gmail.com)  
 			
 		$PROB «m.fileNameUpperCase»
-  		«FOR o:m.objects»«o.convertToNonmem»«ENDFOR»
+		«getExternalCode("$PROBLEM")»
+		«getExternalCode("$PROB")»
+  		«FOR o:m.objects»
+	  		«IF o.dataObject != null»«o.dataObject.printINPUT_DATA»«ENDIF»
+  		«ENDFOR»
+  		«FOR o:m.objects»
+  			«IF o.taskObject != null» «o.taskObject.printIgnoreStatements»«ENDIF»
+  		«ENDFOR»
+  		«FOR o:m.objects»
+	  		«IF o.modelObject != null»«o.modelObject.printSUBR_MODEL_PK_ERROR_PRES_DES»«ENDIF»
+  		«ENDFOR»
+  		«FOR o:m.objects»
+			«IF o.parameterObject != null»«o.parameterObject.printTHETA_OMEGA_SIGMA»«ENDIF»
+  		«ENDFOR»
+  		«FOR o:m.objects»
+			«IF o.taskObject != null»«o.taskObject.printFunctions»«ENDIF»
+  		«ENDFOR»
 		'''
-		//		«FOR v: eps_vars.entrySet SEPARATOR ' '»«v.key»«ENDFOR»
 	}
 	
-	//convertToNonmem MCL objects
-	def convertToNonmem(MclObject o)'''
-	«IF o.dataObject != null»«o.dataObject.convertToNonmem»«ENDIF»
-	«IF o.modelObject != null»«o.modelObject.convertToNonmem»«ENDIF»
-	«IF o.parameterObject != null»«o.parameterObject.convertToNonmem»«ENDIF»
-	«IF o.taskObject != null»«o.taskObject.convertToNonmem»«ENDIF»
-	'''			
-		
+	 override void prepareExternalFunctions(ImportBlock b, String objName){
+		for (ImportedFunction f: b.functions){
+			var args = new HashMap<String, String>();
+			var target = f.list.getAttribute("target");
+		 	if (target != null){ 
+				if (target.equalsIgnoreCase("NMTRAN_CODE")) {
+					for (Argument arg: f.list.arguments.arguments){
+						if (arg.identifier != null)
+							args.put(arg.identifier, arg.expression.toStr)
+					}
+					externalFunctions.put(objName + "$" + f.identifier, args);
+				}
+			}
+		}
+	}	
+	
+	 override void prepareExternalCode(TargetBlock b){
+		val target = b.arguments.selectAttribute("target");
+		if (target != null){ 
+			if (target.equalsIgnoreCase("NMTRAN_CODE")) {
+				val location = b.arguments.selectAttribute("location");
+				var codeSnippets = externalCode.get(location);
+				if (codeSnippets == null) codeSnippets = new ArrayList<String>();
+				codeSnippets.add(b.externalCodeToStr);
+				externalCode.put(location, codeSnippets);
+			}
+		}
+	}	
+	
+	//Sections with external code in examples: $ERROR, $PROBLEM, $ABBREVIATED, $ESTIMATION, $SIMULATION
+	
+
  	///////////////////////////////////////////////
 	//Prepares variable maps
 	///////////////////////////////////////////////
-	
-  	var eta_vars = newHashMap	//ETAs
-  	var eps_vars = newHashMap   //EPSs
-	var theta_vars = newHashMap //THETAs
-	var dadt_vars = newHashMap  //DADT	
 	
 	//Collect variables from the MDL file
 	def prepareCollections(MclObject o){
@@ -74,12 +132,33 @@ var TaskObject taskObjectect = null; //Store the reference to task object
   			setRandomVariables(o.modelObject);
   			setStructuralParameters(o.modelObject);
   			setModelPredictionVariables(o.modelObject);
+  			setInitialConditions(o.modelObject);
   		} 
+	}
+	
+	def setInitialConditions(ModelObject o){
+		var i = 1;
+		for (b:o.blocks){
+			if (b.modelPredictionBlock != null)
+				for (s: b.modelPredictionBlock.statements){
+					if (s.odeBlock != null)
+						for (ss: s.odeBlock.statements){
+							if (ss.symbol != null)
+								if (ss.symbol.expression != null)
+									if (ss.symbol.expression.odeList != null){
+										val initCond = ss.symbol.expression.odeList.getAttribute("init");
+										if (!initCond.equals("")){
+											init_vars.put(i, initCond);
+										} else init_vars.put(i, "0");
+										i = i + 1;
+									}
+						}
+				}
+		}
 	}
 	
 	//Assign indices to MODEL variables and expressions
 	def setModelPredictionVariables(ModelObject o) { 
-		dadt_vars.clear;
 		var i = 1;
 		for (b:o.blocks){
 			if (b.modelPredictionBlock != null){
@@ -108,8 +187,6 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 	
 	//Assign indices to variability parameters ($ETA, $ESP)
 	def setRandomVariables(ModelObject o){
-    	eta_vars.clear;
-    	eps_vars.clear;
     	var i = 1; var j = 1; 
 		for (b: o.blocks){
 	  		if (b.randomVariableDefinitionBlock != null){
@@ -117,12 +194,12 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 					if (s.randomList != null){	
 						var level = s.randomList.getAttribute("level");
 						val id = s.identifier;
-						if (level.equalsIgnoreCase("ID"))
+						if (level.equals("ID"))
 							if (eta_vars.get(id) == null){
 								eta_vars.put(id, i);
 								i = i + 1;
 							}
-						if (level.equalsIgnoreCase("DV"))
+						if (level.equals("DV"))
 							if (eps_vars.get(id) == null){
 								eps_vars.put(id, j);
 								j = j + 1;
@@ -135,7 +212,6 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 	
 	//Assign indices to THETAs
 	def setStructuralParameters(ModelObject o){
-		theta_vars.clear;
     	var i = 1; 
 		for (b: o.blocks){
 	  		if (b.structuralParametersBlock != null){
@@ -169,7 +245,7 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 	
 	def getDataSource(FileBlockStatement s){
 		if (s.variable != null){
-			if (s.variable.identifier.equalsIgnoreCase("data")){
+			if (s.variable.identifier.equals("data")){
 				if (s.variable.expression != null){
 					if (s.variable.expression.list != null)
 						return s.variable.expression.list.getAttribute("source");
@@ -178,48 +254,75 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 		}
 		return "";
 	}
-			
+	
+	//Get $TOL attribute
+	def getTOL(TaskObject obj){
+		for (TaskObjectBlock b: obj.blocks){
+			if (b.modelBlock != null){
+				for (ss: b.modelBlock.statements){
+					var x = ss.statement.symbol;
+					if (x != null){
+						if (x.identifier.equals("tolrel")){
+							if (x.expression != null)
+								return x.expression.toStr;
+						}
+					}
+				}
+			}
+		}
+	}	
+	
 ////////////////////////////////////	
 //convertToNonmem MODEL OBJECT
 ////////////////////////////////////
-	def convertToNonmem(ModelObject o){
+	def printSUBR_MODEL_PK_ERROR_PRES_DES(ModelObject o){
 	val isLibraryDefined = o.isLibraryDefined;
 	val isPKDefined = o.isPKDefined;
 	val isErrorNonEmpty = o.isErrorNonEmpty;
 	val isODEDefined = o.isODEDefined; 
 	'''
-	«IF isODEDefined»
-	
-	$MODEL
-		«o.printModel»
-	«ENDIF»
-	
 	«IF isLibraryDefined»
 	«IF isPKDefined»
 	
 	«o.printSUBR»
+	«getExternalCode("$SUBR")»
+	«ENDIF»
+	«ENDIF»
+	«IF isODEDefined»
+	
+	$MODEL
+		«o.printModel»
+		«getExternalCode("$MODEL")»
+	«ENDIF»
+	
+	«IF isLibraryDefined»
+	«IF isPKDefined»
 		
 	$PK 
 		«o.printPK»
+		«getExternalCode("$PK")»
 	«ENDIF»
 	«IF isErrorNonEmpty»		
 
 	$ERROR
 		«o.printError»
-	
+		«getExternalCode("$ERROR")»
 	«ENDIF»
 	«ELSE» 
 	«IF isPKDefined || isErrorNonEmpty»		
 
 	$PRED
 		«o.printPK»
+		«getExternalCode("$PRED")»
 		«o.printError»
+		«getExternalCode("$ERROR")»
 	«ENDIF»
 	«ENDIF»
 	«IF isODEDefined»
 	
 	$DES
 		«o.printDES»
+		«getExternalCode("$DES")»
 	«ENDIF»
 	
 	«o.printTable»
@@ -238,9 +341,16 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			«s.print»
 		«ENDFOR»
 	«ENDIF»
+	«IF b.modelPredictionBlock != null»
+
+		;initial conditions
+		«FOR e: init_vars.entrySet»
+			A_0(«e.key») = «e.value»
+		«ENDFOR»
+	«ENDIF»
 	«ENDFOR»
 	'''
-		 
+			 
 	def print(GroupVariablesBlock block)'''
 		«FOR st: block.statements»
 			«IF st.statement != null»
@@ -343,59 +453,21 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 		for (ss: b.statements){
 			if (ss.libraryBlock != null){
 					for (st: ss.libraryBlock.statements){
-						if (st.symbol != null){
-							val s = st.symbol;
-							if (s.identifier.equalsIgnoreCase("amount"))
-								if (s.expression != null)
-									if (s.expression.list != null){
-										var library = s.expression.list.getAttribute("library");
-										if (!library.equals("")){
-											if (library.substring(0,2).equalsIgnoreCase("nm")){
-												library = library.substring(2);
-											}	
-										}	
-										val model = s.expression.list.getAttribute("model");
-										val trans = s.expression.list.getAttribute("trans");
-										var tolStr = "";
-										var tol = b.getTOL();
-										if (tol.size > 0){
-											if (model.equalsIgnoreCase("9") && library.equalsIgnoreCase("advan")){
-												tolStr = "\n$TOL"
-												for (tolEl: tol){
-													tolStr = tolStr + " NRD(" + tolEl + ")" ;
-												}
-											} else 
-												tolStr = " TOL=" + tol.get(0);
-										}
-										return '''$SUBR «IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF»«tolStr» «IF !trans.equals("")»TRANS«trans»«ENDIF»'''
-									}
-						}
-				}
-			}
-		}
-	}
-	
-	//Get $TOL attribute
-	def getTOL(ModelPredictionBlock b){
-		var tol = newArrayList;
-		for (s: b.statements){
-			if (s.odeBlock != null){
-				for (ss: s.odeBlock.statements){
-					var x = ss.symbol
-					if (x != null){
-						if (x.expression != null){
-							if (x.expression.odeList != null){
-								var tolEl = x.expression.odeList.getAttribute("tolrel");
-								if (!tolEl.equals("")) tol.add(tolEl);
+							var libraryRef = st.expression.identifier;
+							var attributes = libraryRef.getExternalFunctionAttributes();
+							var library = libraryRef.identifier;
+							if (attributes != null){
+								var name = attributes.get("name");
+								if (name != null) library = name;
 							}
-						}
+							val model = st.expression.arguments.selectAttribute("model");
+							val trans = st.expression.arguments.selectAttribute("trans");
+							return '''$SUBR «IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF» TOL = «tol» «IF !trans.equals("")»TRANS«trans»«ENDIF»'''
 					}
 				}
 			}
 		}
-		return tol;
-	}	
-    
+		
 	//Print $TABLE
 	def printTable(ModelObject o)'''
 	«FOR b:o.blocks»
@@ -403,7 +475,8 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			«var bb = b.outputVariablesBlock»
 			«IF bb.variables.size > 0»
 				$TABLE «FOR st: bb.variables SEPARATOR ' '»«st.toStr»«ENDFOR»
-				ONEHEADER NOPRINT «IF taskObjectect != null»FILE=«taskObjectect.identifier.name».fit«ENDIF» 
+				ONEHEADER NOPRINT «IF !file.equals("")»FILE=«file»«ENDIF» 
+				«getExternalCode("$TABLE")»
 			«ENDIF»
 		«ENDIF»	
 	«ENDFOR»
@@ -413,7 +486,7 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 //convertToNonmem PARAMETER OBJECT
 /////////////////////////////////////	
 	//Process parameter object
-	def convertToNonmem(ParameterObject obj)'''
+	def printTHETA_OMEGA_SIGMA(ParameterObject obj)'''
 	«obj.printTheta»
 	«obj.printSigma»
 	«obj.printOmega»
@@ -431,6 +504,7 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			«ENDIF»
 		«ENDFOR»
 	«ENDIF»
+	«getExternalCode("$THETA")»
 	'''
 	
 	//VARIABILITY -> $OMEGA
@@ -449,6 +523,7 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			«ENDIF»
 		«ENDFOR»
 	«ENDIF»
+	«externalCode.get("$OMEGA")»
 	'''
 
 	//VARIABILITY.BLOCK -> $SIGMA
@@ -466,6 +541,7 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			«ENDIF»
 		«ENDFOR»
 	«ENDIF»
+	«getExternalCode("$SIGMA")»
 	'''
 	
 	def isThetaNonEmpty(ParameterObject obj){
@@ -507,7 +583,7 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 ////////////////////////////////////
 
 	//Process data object
-	def convertToNonmem(DataObject o)'''
+	def printINPUT_DATA(DataObject o)'''
 	«FOR b:o.blocks»
 		«IF b.headerBlock != null»
 			«b.headerBlock.printInput»
@@ -518,21 +594,21 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			«b.fileBlock.printData»
 		«ENDIF»
 	«ENDFOR»
-	«IF taskObjectect != null»
-		«taskObjectect.printIgnoreStatements»
-	«ENDIF»
 	'''
 	
 	//HEADER -> $INPUT
 	//NONMEM INPUT line - copy all variable names from the MDL HEADER block
 	def printInput(HeaderBlock b)'''
-	$INPUT «FOR st: b.variables SEPARATOR ' '»«st.identifier.toStr»«ENDFOR»'''
-	
+	$INPUT «FOR st: b.variables SEPARATOR ' '»«st.identifier.toStr»«ENDFOR»
+	«getExternalCode("$INPUT")»
+	'''
+
 	//FILE sub-block -> $DATA
 	def printData(FileBlock b)'''
 	«FOR s: b.statements»
 		«s.printDataSource»
 	«ENDFOR»
+	«getExternalCode("$DATA")»
 	'''
 	//if (st.inlineBlock != null) st.inlineBlock.convertToNonmem
 	//if (st.designBlock != null) st.designBlock.convertToNonmem
@@ -541,11 +617,11 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 	//NONMEM: Extract source from variable data
 	def printDataSource(FileBlockStatement s){
 		if (s.variable != null)
-			if (s.variable.identifier.equalsIgnoreCase("data")){
+			if (s.variable.identifier.equals("data")){
 				if (s.variable.expression != null){
 					if (s.variable.expression.list != null){
-						val data = s.variable.expression.list.getAttribute("source");
-						val ignore = s.variable.expression.list.getAttribute("ignore");
+						var data = s.variable.expression.list.getAttribute("source");
+						var ignore = s.variable.expression.list.getAttribute("ignore");
 						return '''«IF !data.equals("")»$DATA «data»«ENDIF» «IF !ignore.equals("")»IGNORE=«ignore»«ENDIF»'''
 					}
 				}
@@ -556,7 +632,7 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 //convertToNonmem TASK OBJECT
 /////////////////////////////////////////////////
 
-	def convertToNonmem(TaskObject o)'''
+	def printFunctions(TaskObject o)'''
 		«FOR b:o.blocks»
 			«b.printFunctions»
 		«ENDFOR»
@@ -577,7 +653,7 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			«ENDIF»
 		«ENDIF»
 	'''
-	//PARAMETER block
+	//PARAMETER block 
 	//DATA block	
 	def printIgnoreStatements(TaskObject obj)'''
 		«FOR b: obj.blocks»
@@ -595,18 +671,23 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 	def printSimulate(SimulateTask b)'''
 	
 	$SIM «FOR s: b.statements»«IF s.symbol != null»«s.symbol.printSimulate»«ENDIF»«ENDFOR» NOABORT
+	«getExternalCode("$SIM")»
+	«getExternalCode("$SIMULATION")»
 	'''
 	
 	//Print $EST block
 	def printEstimate(EstimateTask b)'''
 	
 	$EST«FOR s: b.statements»«IF s.symbol != null»«s.symbol.printEstimate»«ENDIF»«ENDFOR» NOABORT
+	«getExternalCode("$EST")»
+	«getExternalCode("$ESTIMATION")»
 	«FOR s: b.statements»«IF s.symbol != null»«s.symbol.printEstimateCov»«ENDIF»«ENDFOR»
+	«getExternalCode("$COV")»		
 	'''
 	
 	//Print attributes of the $EST block 
 	def printEstimate(SymbolDeclaration s) { 
-		if (s.identifier.equalsIgnoreCase("algo")){
+		if (s.identifier.equals("algo")){
 			if (s.expression.expression != null)
 				''' METHOD=«s.expression.expression.toStr»'''
 			else
@@ -622,10 +703,10 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 				}	
 		}
 		else
-			if (s.identifier.equalsIgnoreCase("max"))
+			if (s.identifier.equals("max"))
 			''' MAX=«s.expression.print»'''
 		else
-			if (s.identifier.equalsIgnoreCase("sig"))
+			if (s.identifier.equals("sig"))
 			''' SIG=«s.expression.print»'''
 	}
 	
@@ -635,9 +716,9 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 	
 	//Print $COV block
 	def printEstimateCov(SymbolDeclaration s) { 
-		if (s.identifier.equalsIgnoreCase("cov")){
+		if (s.identifier.equals("cov")){
 			if (s.expression != null){
-				if (s.expression.toStr.replaceAll("\\s","").equalsIgnoreCase(""))
+				if (s.expression.toStr.replaceAll("\\s","").equals(""))
 				'''$COV «s.expression.print»'''
 			}
 		}
@@ -656,11 +737,9 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			var k = 0;
 			for (a: v.diagBlock.arguments.arguments){
 				if (a.identifier != null){ 
-					if (a.identifier.equalsIgnoreCase("fix")){ 
+					if (a.identifier.equals("fix")){ 
 						if (a.expression != null){
-							printFix = (a.expression.toStr.equalsIgnoreCase("yes") 
-							|| a.expression.toStr.equalsIgnoreCase("true") ||
-							a.expression.toStr.equalsIgnoreCase("1"));		
+							printFix = a.expression.isTrue	
 						}
 					}				
 				}
@@ -686,11 +765,9 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			var printFix = false;
 			for (a: v.blockBlock.arguments.arguments){
 				if (a.identifier != null){ 
-					if (a.identifier.equalsIgnoreCase("fix")) 
+					if (a.identifier.equals("fix")) 
 						if (a.expression != null){
-							printFix = (a.expression.toStr.equalsIgnoreCase("yes") 
-							|| a.expression.toStr.equalsIgnoreCase("true") ||
-							a.expression.toStr.equalsIgnoreCase("1"));		
+							printFix = a.expression.isTrue		
 						}
 				}
 			}
@@ -716,9 +793,7 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 				if (eps_vars.get("eps_" + name) != null)
 			 	{
 					val value = s.list.getAttribute("value");
-					val fixed = s.list.getAttribute("fix");
-					var printFix = (fixed.equalsIgnoreCase("yes") || fixed.equalsIgnoreCase("true") ||
-							fixed.equalsIgnoreCase("1"));		
+					val printFix = s.list.getAttribute("fix").isTrue;
 					if (value.equals("")) return "";							
 					'''«value»«IF printFix» FIX«ENDIF» ; «name»'''
 				}
@@ -732,16 +807,14 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			//OMEGA <=> ETA?	
 			if (eta_vars.get("eta_" + name) != null){
 				val value = s.list.getAttribute("value");
-				var fixed = s.list.getAttribute("fix");
-				var printFix = (fixed.equalsIgnoreCase("yes") || fixed.equalsIgnoreCase("true") 
-						|| fixed.equalsIgnoreCase("1"));
+				var printFix = s.list.getAttribute("fix").isTrue;
 				if (value.equals("")) return "";								
 				'''«value»«IF printFix» FIX«ENDIF» ; «name»'''
 			}
 		}
 	}
 	
-	
+
 	//Find attributes in STRUCTURAL_VARIABLES and form an NM-TRAN statement
 	def printTheta(ParameterDeclaration s){
 		if (s.list != null){		
@@ -749,9 +822,7 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			val value = s.list.getAttribute("value");
 			val lo = s.list.getAttribute("lo");
 			val hi = s.list.getAttribute("hi");
-			val fixed = s.list.getAttribute("fix");
-			var printFix = (fixed.equalsIgnoreCase("yes") || fixed.equalsIgnoreCase("true") ||
-					fixed.equalsIgnoreCase("1"));						
+			val printFix = s.list.getAttribute("fix").isTrue;
 			if (value.equals("")) return "";
 			if (lo.equals("") && hi.equals("")) return '''«value»«IF printFix» FIX«ENDIF» ; «name»'''
 			if (lo.equals("")) return '''(-INF, «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
@@ -803,14 +874,12 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 		return op;	
 	}
 	
-	//Print verbatim target specific code
 	override print(TargetBlock b)'''
 	«IF b.identifier.equalsIgnoreCase("NMTRAN")»
 	«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
 	«printedCode»
-	«ENDIF»
-	'''	
-	
+	«ENDIF»'''
+		
 	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
 	override print(ConditionalStatement s)'''
 		«IF s.parExpression != null»
@@ -832,5 +901,4 @@ var TaskObject taskObjectect = null; //Store the reference to task object
 			«ENDIF»
 		«ENDIF»
 	'''
-
 }

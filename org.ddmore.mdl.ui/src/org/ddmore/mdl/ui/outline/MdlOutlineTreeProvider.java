@@ -3,12 +3,161 @@
 */
 package org.ddmore.mdl.ui.outline;
 
+import org.ddmore.mdl.mdl.BlockStatement;
+import org.ddmore.mdl.mdl.DataObject;
+import org.ddmore.mdl.mdl.DataObjectBlock;
+import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.mdl.MclObject;
+import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.ModelObject;
+import org.ddmore.mdl.mdl.ModelObjectBlock;
+import org.ddmore.mdl.mdl.ObjectName;
+import org.ddmore.mdl.mdl.ParameterObject;
+import org.ddmore.mdl.mdl.ParameterObjectBlock;
+import org.ddmore.mdl.mdl.TELObject;
+import org.ddmore.mdl.mdl.TaskObject;
+import org.ddmore.mdl.mdl.TaskObjectBlock;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.xtext.ui.IImageHelper;
+import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider;
+
+import com.google.inject.Inject;
 
 /**
  * customization of the default outline structure
  * 
  */
 public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
+
+	@Inject
+	private IImageHelper imageHelper;
+	 	protected Image _image(Mcl e) {
+	        return imageHelper.getImage("mdl.png");
+	    }
+		protected Image _image(ModelObject e) {
+	        return imageHelper.getImage("model.png");
+	    }
+	    protected Image _image(ParameterObject d) {
+	        return imageHelper.getImage("parameter.png");
+	    }
+	    protected Image _image(DataObject p) {
+	        return imageHelper.getImage("data.png");
+	    }
+	    protected Image _image(TaskObject f) {
+	        return imageHelper.getImage("task.png");
+	    }
+	    protected Image _image(TELObject f) {
+	        return imageHelper.getImage("tel.png");
+	    }
 	
+	protected void _createChildren(IOutlineNode parentNode, Mcl mcl) {
+		for (EObject element : mcl.eContents()) {
+			for (EObject obj: element.eContents()){
+        		createNode(parentNode, obj);
+			}
+        }
+    }
+	
+	protected void _createNode(IOutlineNode parentNode, Mcl obj) {
+		createEStructuralFeatureNode(parentNode,
+				obj,
+				MdlPackage.Literals.MCL__OBJECTS,
+				_image(obj),
+				obj.eContainingFeature().getName(),
+				false);
+	}
+	
+	
+	protected void _createNode(IOutlineNode parentNode, MclObject obj) {
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////
+	//Print all object children
+    /////////////////////////////////////////////////////////////////////////////
+	
+	protected void  _createNode(IOutlineNode parentNode, ModelObject obj) {
+		createEStructuralFeatureNode(parentNode,
+				obj,
+				MdlPackage.Literals.MODEL_OBJECT__BLOCKS,
+				_image(obj),
+				obj.getIdentifier().getName(),
+			false);
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, ParameterObject obj) {
+		createEStructuralFeatureNode(parentNode,
+				obj,
+				MdlPackage.Literals.PARAMETER_OBJECT__BLOCKS,
+				_image(obj),
+				obj.getIdentifier().getName(),
+				false);
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, TaskObject obj) {
+		createEStructuralFeatureNode(parentNode,
+				obj,
+				MdlPackage.Literals.TASK_OBJECT__BLOCKS,
+				_image(obj),
+				obj.getIdentifier().getName(),
+				false);
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, DataObject obj) {
+		createEStructuralFeatureNode(parentNode,
+				obj,
+				MdlPackage.Literals.DATA_OBJECT__BLOCKS,
+				_image(obj),
+				obj.getIdentifier().getName(),
+				false);
+	}
+	
+	
+	protected void  _createNode(IOutlineNode parentNode, TELObject obj) {
+		createEStructuralFeatureNode(parentNode,
+				obj,
+				MdlPackage.Literals.TEL_OBJECT__STATEMENTS,
+				_image(obj),
+				obj.getIdentifier().getName(),
+				false);
+	}
+		
+	protected void  _createNode(IOutlineNode parentNode, ObjectName name){
+	}
+				
+	/////////////////////////////////////////////////////////////////////////////
+	//Print object blocks
+    /////////////////////////////////////////////////////////////////////////////
+
+	protected void  _createNode(IOutlineNode parentNode, ModelObjectBlock block){
+		for (EObject obj: block.eContents())
+			createNode(parentNode, obj);
+	}
+		
+	
+	protected void  _createNode(IOutlineNode parentNode, TaskObjectBlock block) {
+		for (EObject obj: block.eContents()){
+			createNode(parentNode, obj);
+		}
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, ParameterObjectBlock block) {
+		for (EObject obj: block.eContents()){
+			createNode(parentNode, obj);
+		}
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, DataObjectBlock block) {
+		for (EObject obj: block.eContents()){
+			createNode(parentNode, obj);
+		}
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, BlockStatement st) {
+		for (EObject obj: st.eContents()){
+			createNode(parentNode, obj);
+		}
+	}
 }
+

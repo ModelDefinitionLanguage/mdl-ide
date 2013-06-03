@@ -33,14 +33,18 @@ import org.ddmore.mdl.mdl.ExecuteTask;
 import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.FileBlock;
 import org.ddmore.mdl.mdl.FileBlockStatement;
+import org.ddmore.mdl.mdl.FormalArgument;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.GroupVariablesBlock;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.HeaderBlock;
 import org.ddmore.mdl.mdl.IgnoreList;
+import org.ddmore.mdl.mdl.ImportBlock;
+import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InlineBlock;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
@@ -81,6 +85,7 @@ import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
 import org.ddmore.mdl.mdl.RemoveList;
 import org.ddmore.mdl.mdl.SameBlock;
+import org.ddmore.mdl.mdl.Selector;
 import org.ddmore.mdl.mdl.SimulateTask;
 import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
@@ -101,7 +106,6 @@ import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.Vector;
-import org.ddmore.mdl.mdl.VerbatimBlock;
 import org.ddmore.mdl.services.MdlGrammarAccess;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.serializer.acceptor.ISemanticSequenceAcceptor;
@@ -309,6 +313,12 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					return; 
 				}
 				else break;
+			case MdlPackage.FORMAL_ARGUMENT:
+				if(context == grammarAccess.getFormalArgumentRule()) {
+					sequence_FormalArgument(context, (FormalArgument) semanticObject); 
+					return; 
+				}
+				else break;
 			case MdlPackage.FORMAL_ARGUMENTS:
 				if(context == grammarAccess.getFormalArgumentsRule()) {
 					sequence_FormalArguments(context, (FormalArguments) semanticObject); 
@@ -333,6 +343,12 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					return; 
 				}
 				else break;
+			case MdlPackage.FUNCTION_CALL_STATEMENT:
+				if(context == grammarAccess.getFunctionCallStatementRule()) {
+					sequence_FunctionCallStatement(context, (FunctionCallStatement) semanticObject); 
+					return; 
+				}
+				else break;
 			case MdlPackage.GROUP_VARIABLES_BLOCK:
 				if(context == grammarAccess.getGroupVariablesBlockRule()) {
 					sequence_GroupVariablesBlock(context, (GroupVariablesBlock) semanticObject); 
@@ -354,6 +370,18 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 			case MdlPackage.IGNORE_LIST:
 				if(context == grammarAccess.getIgnoreListRule()) {
 					sequence_IgnoreList(context, (IgnoreList) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.IMPORT_BLOCK:
+				if(context == grammarAccess.getImportBlockRule()) {
+					sequence_ImportBlock(context, (ImportBlock) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.IMPORTED_FUNCTION:
+				if(context == grammarAccess.getImportedFunctionRule()) {
+					sequence_ImportedFunction(context, (ImportedFunction) semanticObject); 
 					return; 
 				}
 				else break;
@@ -591,6 +619,12 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					return; 
 				}
 				else break;
+			case MdlPackage.SELECTOR:
+				if(context == grammarAccess.getSelectorRule()) {
+					sequence_Selector(context, (Selector) semanticObject); 
+					return; 
+				}
+				else break;
 			case MdlPackage.SIMULATE_TASK:
 				if(context == grammarAccess.getSimulateTaskRule()) {
 					sequence_SimulateTask(context, (SimulateTask) semanticObject); 
@@ -711,12 +745,6 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					return; 
 				}
 				else break;
-			case MdlPackage.VERBATIM_BLOCK:
-				if(context == grammarAccess.getVerbatimBlockRule()) {
-					sequence_VerbatimBlock(context, (VerbatimBlock) semanticObject); 
-					return; 
-				}
-				else break;
 			}
 		if (errorAcceptor != null) errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
 	}
@@ -806,7 +834,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (identifier='block' arguments=Arguments parameters=Arguments?)
+	 *     (identifier='matrix' arguments=Arguments parameters=Arguments?)
 	 */
 	protected void sequence_BlockBlock(EObject context, BlockBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -815,7 +843,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (symbol=SymbolDeclaration | functionCall=FunctionCall | statement=ConditionalStatement | verbatimBlock=VerbatimBlock)
+	 *     (symbol=SymbolDeclaration | functionCall=FunctionCall | statement=ConditionalStatement | targetBlock=TargetBlock)
 	 */
 	protected void sequence_BlockStatement(EObject context, BlockStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -910,7 +938,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (headerBlock=HeaderBlock | fileBlock=FileBlock | verbatimBlock=VerbatimBlock)
+	 *     (headerBlock=HeaderBlock | fileBlock=FileBlock | targetBlock=TargetBlock | importBlock=ImportBlock)
 	 */
 	protected void sequence_DataObjectBlock(EObject context, DataObjectBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -955,7 +983,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     normal='Normal'
+	 *     (normal='Normal' | binomial='Binomial' | poisson='Poisson' | student_t='Student_T' | mvnormal='MVNormal')
 	 */
 	protected void sequence_Distribution(EObject context, Distribution semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -990,7 +1018,8 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *         distribution=Distribution | 
 	 *         level=LevelType | 
 	 *         likelyhood=Likelyhood | 
-	 *         missing=Missing
+	 *         missing=Missing | 
+	 *         target=TargetLanguage
 	 *     )
 	 */
 	protected void sequence_EnumType(EObject context, EnumType semanticObject) {
@@ -1061,7 +1090,23 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (identifiers+=ID identifiers+=ID*)
+	 *     identifier=ID
+	 */
+	protected void sequence_FormalArgument(EObject context, FormalArgument semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FORMAL_ARGUMENT__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FORMAL_ARGUMENT__IDENTIFIER));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getFormalArgumentAccess().getIdentifierIDTerminalRuleCall_0(), semanticObject.getIdentifier());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (arguments+=FormalArgument arguments+=FormalArgument*)
 	 */
 	protected void sequence_FormalArguments(EObject context, FormalArguments semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1070,7 +1115,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (parent=FullyQualifiedSymbolName identifier+=ID+)
+	 *     (parent=FullyQualifiedSymbolName selectors+=Selector+)
 	 */
 	protected void sequence_FullyQualifiedArgumentName(EObject context, FullyQualifiedArgumentName semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1083,6 +1128,25 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 */
 	protected void sequence_FullyQualifiedSymbolName(EObject context, FullyQualifiedSymbolName semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=ID expression=FunctionCall)
+	 */
+	protected void sequence_FunctionCallStatement(EObject context, FunctionCallStatement semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FUNCTION_CALL_STATEMENT__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FUNCTION_CALL_STATEMENT__IDENTIFIER));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.FUNCTION_CALL_STATEMENT__EXPRESSION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.FUNCTION_CALL_STATEMENT__EXPRESSION));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getFunctionCallStatementAccess().getIdentifierIDTerminalRuleCall_0_0(), semanticObject.getIdentifier());
+		feeder.accept(grammarAccess.getFunctionCallStatementAccess().getExpressionFunctionCallParserRuleCall_2_0(), semanticObject.getExpression());
+		feeder.finish();
 	}
 	
 	
@@ -1153,6 +1217,34 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
+	 *     (identifier='IMPORT' functions+=ImportedFunction)
+	 */
+	protected void sequence_ImportBlock(EObject context, ImportBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=ID list=List)
+	 */
+	protected void sequence_ImportedFunction(EObject context, ImportedFunction semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.IMPORTED_FUNCTION__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.IMPORTED_FUNCTION__IDENTIFIER));
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.IMPORTED_FUNCTION__LIST) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.IMPORTED_FUNCTION__LIST));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getImportedFunctionAccess().getIdentifierIDTerminalRuleCall_0_0(), semanticObject.getIdentifier());
+		feeder.accept(grammarAccess.getImportedFunctionAccess().getListListParserRuleCall_1_1_0(), semanticObject.getList());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
 	 *     (identifier='INDIVIDUAL_VARIABLES' statements+=BlockStatement*)
 	 */
 	protected void sequence_IndividualVariablesBlock(EObject context, IndividualVariablesBlock semanticObject) {
@@ -1189,7 +1281,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (identifier='LIBRARY' statements+=BlockStatement*)
+	 *     (identifier='LIBRARY' statements+=FunctionCallStatement*)
 	 */
 	protected void sequence_LibraryBlock(EObject context, LibraryBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1312,7 +1404,8 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *         observationBlock=ObservationBlock | 
 	 *         estimationBlock=EstimationBlock | 
 	 *         simulationBlock=SimulationBlock | 
-	 *         verbatimBlock=VerbatimBlock
+	 *         targetBlock=TargetBlock | 
+	 *         importBlock=ImportBlock
 	 *     )
 	 */
 	protected void sequence_ModelObjectBlock(EObject context, ModelObjectBlock semanticObject) {
@@ -1470,7 +1563,13 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (structuralBlock=StructuralBlock | variabilityBlock=VariabilityBlock | priorBlock=PriorParametersBlock | verbatimBlock=VerbatimBlock)
+	 *     (
+	 *         structuralBlock=StructuralBlock | 
+	 *         variabilityBlock=VariabilityBlock | 
+	 *         priorBlock=PriorParametersBlock | 
+	 *         targetBlock=TargetBlock | 
+	 *         importBlock=ImportBlock
+	 *     )
 	 */
 	protected void sequence_ParameterObjectBlock(EObject context, ParameterObjectBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1574,9 +1673,18 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (identifier='same' arguments=Arguments parameters=Arguments?)
+	 *     (identifier='same' arguments=Arguments parameters=FormalArguments?)
 	 */
 	protected void sequence_SameBlock(EObject context, SameBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (identifier=ID | selector=NUMBER)
+	 */
+	protected void sequence_Selector(EObject context, Selector semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -1628,7 +1736,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     symbols+=FullyQualifiedSymbolName+
+	 *     (symbols+=FullyQualifiedSymbolName symbols+=FullyQualifiedSymbolName+)
 	 */
 	protected void sequence_SymbolList(EObject context, SymbolList semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1655,7 +1763,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (identifier=TargetLanguage arguments=Arguments? externalCode=EXTERNAL_CODE)
+	 *     (identifier='TARGET_CODE' arguments=Arguments? externalCode=EXTERNAL_CODE)
 	 */
 	protected void sequence_TargetBlock(EObject context, TargetBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1704,7 +1812,14 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (functionDeclaration=TaskFunctionDeclaration | parameterBlock=ParameterBlock | dataBlock=DataBlock | modelBlock=ModelBlock | verbatimBlock=VerbatimBlock)
+	 *     (
+	 *         functionDeclaration=TaskFunctionDeclaration | 
+	 *         parameterBlock=ParameterBlock | 
+	 *         dataBlock=DataBlock | 
+	 *         modelBlock=ModelBlock | 
+	 *         targetBlock=TargetBlock | 
+	 *         importBlock=ImportBlock
+	 *     )
 	 */
 	protected void sequence_TaskObjectBlock(EObject context, TaskObjectBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1770,15 +1885,6 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     (identifier='c' values+=Expression values+=Expression*)
 	 */
 	protected void sequence_Vector(EObject context, Vector semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (identifier='TARGET_CODE' (block=TargetBlock | externalCode=EXTERNAL_CODE))
-	 */
-	protected void sequence_VerbatimBlock(EObject context, VerbatimBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 }

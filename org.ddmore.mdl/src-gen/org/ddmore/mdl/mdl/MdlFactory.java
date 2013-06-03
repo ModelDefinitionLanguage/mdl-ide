@@ -383,6 +383,15 @@ public interface MdlFactory extends EFactory
   LibraryBlock createLibraryBlock();
 
   /**
+   * Returns a new object of class '<em>Function Call Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Function Call Statement</em>'.
+   * @generated
+   */
+  FunctionCallStatement createFunctionCallStatement();
+
+  /**
    * Returns a new object of class '<em>Ode Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -572,6 +581,15 @@ public interface MdlFactory extends EFactory
   FormalArguments createFormalArguments();
 
   /**
+   * Returns a new object of class '<em>Formal Argument</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Formal Argument</em>'.
+   * @generated
+   */
+  FormalArgument createFormalArgument();
+
+  /**
    * Returns a new object of class '<em>Function Call</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -590,15 +608,6 @@ public interface MdlFactory extends EFactory
   BlockStatement createBlockStatement();
 
   /**
-   * Returns a new object of class '<em>Verbatim Block</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Verbatim Block</em>'.
-   * @generated
-   */
-  VerbatimBlock createVerbatimBlock();
-
-  /**
    * Returns a new object of class '<em>Target Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -606,6 +615,24 @@ public interface MdlFactory extends EFactory
    * @generated
    */
   TargetBlock createTargetBlock();
+
+  /**
+   * Returns a new object of class '<em>Import Block</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Import Block</em>'.
+   * @generated
+   */
+  ImportBlock createImportBlock();
+
+  /**
+   * Returns a new object of class '<em>Imported Function</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Imported Function</em>'.
+   * @generated
+   */
+  ImportedFunction createImportedFunction();
 
   /**
    * Returns a new object of class '<em>Symbol Modification</em>'.
@@ -903,6 +930,15 @@ public interface MdlFactory extends EFactory
    * @generated
    */
   FullyQualifiedArgumentName createFullyQualifiedArgumentName();
+
+  /**
+   * Returns a new object of class '<em>Selector</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Selector</em>'.
+   * @generated
+   */
+  Selector createSelector();
 
   /**
    * Returns a new object of class '<em>Object Name</em>'.

@@ -49,7 +49,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/observationBlock"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/estimationBlock"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/simulationBlock"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/verbatimBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/targetBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelObjectBlock/importBlock"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//IndividualVariablesBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//IndividualVariablesBlock/identifier"/>
@@ -99,7 +100,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObjectBlock/structuralBlock"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObjectBlock/variabilityBlock"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObjectBlock/priorBlock"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObjectBlock/verbatimBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObjectBlock/targetBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ParameterObjectBlock/importBlock"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//StructuralBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//StructuralBlock/identifier"/>
@@ -116,7 +118,8 @@
     <genClasses ecoreClass="Mdl.ecore#//DataObjectBlock">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataObjectBlock/headerBlock"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataObjectBlock/fileBlock"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataObjectBlock/verbatimBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataObjectBlock/targetBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DataObjectBlock/importBlock"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//HeaderBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//HeaderBlock/identifier"/>
@@ -131,7 +134,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/parameterBlock"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/dataBlock"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/modelBlock"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/verbatimBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/targetBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskObjectBlock/importBlock"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//ParameterBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ParameterBlock/identifier"/>
@@ -184,6 +188,10 @@
     <genClasses ecoreClass="Mdl.ecore#//LibraryBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LibraryBlock/identifier"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//LibraryBlock/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//FunctionCallStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//FunctionCallStatement/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FunctionCallStatement/expression"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//OdeBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//OdeBlock/identifier"/>
@@ -276,7 +284,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ExecuteTask/statements"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//FormalArguments">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//FormalArguments/identifiers"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FormalArguments/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//FormalArgument">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//FormalArgument/identifier"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//FunctionCall">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FunctionCall/identifier"/>
@@ -286,17 +297,20 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/symbol"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/functionCall"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/statement"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/verbatimBlock"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//VerbatimBlock">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//VerbatimBlock/identifier"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//VerbatimBlock/block"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//VerbatimBlock/externalCode"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/targetBlock"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//TargetBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//TargetBlock/identifier"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TargetBlock/arguments"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//TargetBlock/externalCode"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ImportBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ImportBlock/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ImportBlock/functions"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//ImportedFunction">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ImportedFunction/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ImportedFunction/list"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//SymbolModification">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SymbolModification/identifier"/>
@@ -320,6 +334,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/level"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/likelyhood"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/missing"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//EnumType/target"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//Missing">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Missing/identifier"/>
@@ -443,7 +458,11 @@
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//FullyQualifiedArgumentName">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FullyQualifiedArgumentName/parent"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//FullyQualifiedArgumentName/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FullyQualifiedArgumentName/selectors"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//Selector">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Selector/identifier"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Selector/selector"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//ObjectName">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ObjectName/name"/>

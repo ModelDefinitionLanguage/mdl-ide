@@ -3,6 +3,7 @@
 package org.ddmore.mdl.mdl.impl;
 
 import org.ddmore.mdl.mdl.Arguments;
+import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.SameBlock;
 
@@ -70,7 +71,7 @@ public class SameBlockImpl extends MinimalEObjectImpl.Container implements SameB
    * @generated
    * @ordered
    */
-  protected Arguments parameters;
+  protected FormalArguments parameters;
 
   /**
    * <!-- begin-user-doc -->
@@ -169,7 +170,7 @@ public class SameBlockImpl extends MinimalEObjectImpl.Container implements SameB
    * <!-- end-user-doc -->
    * @generated
    */
-  public Arguments getParameters()
+  public FormalArguments getParameters()
   {
     return parameters;
   }
@@ -179,9 +180,9 @@ public class SameBlockImpl extends MinimalEObjectImpl.Container implements SameB
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetParameters(Arguments newParameters, NotificationChain msgs)
+  public NotificationChain basicSetParameters(FormalArguments newParameters, NotificationChain msgs)
   {
-    Arguments oldParameters = parameters;
+    FormalArguments oldParameters = parameters;
     parameters = newParameters;
     if (eNotificationRequired())
     {
@@ -196,7 +197,7 @@ public class SameBlockImpl extends MinimalEObjectImpl.Container implements SameB
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setParameters(Arguments newParameters)
+  public void setParameters(FormalArguments newParameters)
   {
     if (newParameters != parameters)
     {
@@ -267,7 +268,7 @@ public class SameBlockImpl extends MinimalEObjectImpl.Container implements SameB
         setArguments((Arguments)newValue);
         return;
       case MdlPackage.SAME_BLOCK__PARAMETERS:
-        setParameters((Arguments)newValue);
+        setParameters((FormalArguments)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -290,7 +291,7 @@ public class SameBlockImpl extends MinimalEObjectImpl.Container implements SameB
         setArguments((Arguments)null);
         return;
       case MdlPackage.SAME_BLOCK__PARAMETERS:
-        setParameters((Arguments)null);
+        setParameters((FormalArguments)null);
         return;
     }
     super.eUnset(featureID);

@@ -72,6 +72,7 @@ public class InternalMdlLexer extends Lexer {
     public static final int RULE_OCTAL_ESCAPE=14;
     public static final int RULE_ESCAPE_SEQUENCE=12;
     public static final int RULE_BEGIN=6;
+    public static final int T__116=116;
     public static final int T__114=114;
     public static final int T__115=115;
     public static final int T__61=61;
@@ -825,10 +826,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__55;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:44:7: ( '[' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:44:9: '['
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:44:7: ( ',' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:44:9: ','
             {
-            match('['); 
+            match(','); 
 
             }
 
@@ -845,10 +846,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__56;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:45:7: ( ']' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:45:9: ']'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:45:7: ( '[' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:45:9: '['
             {
-            match(']'); 
+            match('['); 
 
             }
 
@@ -865,10 +866,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__57;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:46:7: ( ',' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:46:9: ','
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:46:7: ( ']' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:46:9: ']'
             {
-            match(','); 
+            match(']'); 
 
             }
 
@@ -1553,10 +1554,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__90;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:79:7: ( 'block' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:79:9: 'block'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:79:7: ( 'matrix' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:79:9: 'matrix'
             {
-            match("block"); 
+            match("matrix"); 
 
 
             }
@@ -1763,10 +1764,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__100;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:89:8: ( 'MISSING' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:89:10: 'MISSING'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:89:8: ( 'IMPORT' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:89:10: 'IMPORT'
             {
-            match("MISSING"); 
+            match("IMPORT"); 
 
 
             }
@@ -1784,10 +1785,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__101;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:90:8: ( 'LIKELIHOOD' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:90:10: 'LIKELIHOOD'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:90:8: ( 'MISSING' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:90:10: 'MISSING'
             {
-            match("LIKELIHOOD"); 
+            match("MISSING"); 
 
 
             }
@@ -1805,10 +1806,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__102;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:91:8: ( 'mdv' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:91:10: 'mdv'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:91:8: ( 'LIKELIHOOD' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:91:10: 'LIKELIHOOD'
             {
-            match("mdv"); 
+            match("LIKELIHOOD"); 
 
 
             }
@@ -1826,10 +1827,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__103;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:92:8: ( 'id' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:92:10: 'id'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:92:8: ( 'mdv' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:92:10: 'mdv'
             {
-            match("id"); 
+            match("mdv"); 
 
 
             }
@@ -1847,10 +1848,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__104;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:93:8: ( 'dv' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:93:10: 'dv'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:93:8: ( 'id' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:93:10: 'id'
             {
-            match("dv"); 
+            match("id"); 
 
 
             }
@@ -1868,10 +1869,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__105;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:94:8: ( 'idv' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:94:10: 'idv'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:94:8: ( 'dv' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:94:10: 'dv'
             {
-            match("idv"); 
+            match("dv"); 
 
 
             }
@@ -1889,10 +1890,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__106;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:95:8: ( 'categorical' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:95:10: 'categorical'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:95:8: ( 'idv' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:95:10: 'idv'
             {
-            match("categorical"); 
+            match("idv"); 
 
 
             }
@@ -1910,10 +1911,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__107;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:96:8: ( 'continuous' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:96:10: 'continuous'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:96:8: ( 'categorical' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:96:10: 'categorical'
             {
-            match("continuous"); 
+            match("categorical"); 
 
 
             }
@@ -1931,10 +1932,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__108;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:97:8: ( 'covariate' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:97:10: 'covariate'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:97:8: ( 'continuous' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:97:10: 'continuous'
             {
-            match("covariate"); 
+            match("continuous"); 
 
 
             }
@@ -1952,10 +1953,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__109;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:98:8: ( 'Normal' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:98:10: 'Normal'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:98:8: ( 'covariate' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:98:10: 'covariate'
             {
-            match("Normal"); 
+            match("covariate"); 
 
 
             }
@@ -1973,10 +1974,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__110;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:99:8: ( 'Binomial' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:99:10: 'Binomial'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:99:8: ( 'Normal' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:99:10: 'Normal'
             {
-            match("Binomial"); 
+            match("Normal"); 
 
 
             }
@@ -1994,10 +1995,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__111;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:100:8: ( 'Poisson' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:100:10: 'Poisson'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:100:8: ( 'Binomial' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:100:10: 'Binomial'
             {
-            match("Poisson"); 
+            match("Binomial"); 
 
 
             }
@@ -2015,10 +2016,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__112;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:101:8: ( 'Student_T' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:101:10: 'Student_T'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:101:8: ( 'Poisson' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:101:10: 'Poisson'
             {
-            match("Student_T"); 
+            match("Poisson"); 
 
 
             }
@@ -2036,10 +2037,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__113;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:102:8: ( 'MVNormal' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:102:10: 'MVNormal'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:102:8: ( 'Student_T' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:102:10: 'Student_T'
             {
-            match("MVNormal"); 
+            match("Student_T"); 
 
 
             }
@@ -2057,10 +2058,11 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__114;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:103:8: ( '!' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:103:10: '!'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:103:8: ( 'MVNormal' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:103:10: 'MVNormal'
             {
-            match('!'); 
+            match("MVNormal"); 
+
 
             }
 
@@ -2077,10 +2079,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__115;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:104:8: ( 'c' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:104:10: 'c'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:104:8: ( '!' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:104:10: '!'
             {
-            match('c'); 
+            match('!'); 
 
             }
 
@@ -2092,17 +2094,37 @@ public class InternalMdlLexer extends Lexer {
     }
     // $ANTLR end "T__115"
 
+    // $ANTLR start "T__116"
+    public final void mT__116() throws RecognitionException {
+        try {
+            int _type = T__116;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:105:8: ( 'c' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:105:10: 'c'
+            {
+            match('c'); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "T__116"
+
     // $ANTLR start "RULE_EXTERNAL_CODE"
     public final void mRULE_EXTERNAL_CODE() throws RecognitionException {
         try {
             int _type = RULE_EXTERNAL_CODE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19284:20: ( '***' ( options {greedy=false; } : . )* '***' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19284:22: '***' ( options {greedy=false; } : . )* '***'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19959:20: ( '***' ( options {greedy=false; } : . )* '***' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19959:22: '***' ( options {greedy=false; } : . )* '***'
             {
             match("***"); 
 
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19284:28: ( options {greedy=false; } : . )*
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19959:28: ( options {greedy=false; } : . )*
             loop1:
             do {
                 int alt1=2;
@@ -2136,7 +2158,7 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19284:56: .
+            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19959:56: .
             	    {
             	    matchAny(); 
 
@@ -2166,11 +2188,11 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19286:13: ( '\"' ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )* '\"' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19286:15: '\"' ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19961:13: ( '\"' ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )* '\"' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19961:15: '\"' ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
             {
             match('\"'); 
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19286:19: ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )*
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19961:19: ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )*
             loop2:
             do {
                 int alt2=3;
@@ -2186,14 +2208,14 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt2) {
             	case 1 :
-            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19286:20: RULE_ESCAPE_SEQUENCE
+            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19961:20: RULE_ESCAPE_SEQUENCE
             	    {
             	    mRULE_ESCAPE_SEQUENCE(); 
 
             	    }
             	    break;
             	case 2 :
-            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19286:41: ~ ( ( '\\\\' | '\"' ) )
+            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19961:41: ~ ( ( '\\\\' | '\"' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -2228,10 +2250,10 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR start "RULE_ESCAPE_SEQUENCE"
     public final void mRULE_ESCAPE_SEQUENCE() throws RecognitionException {
         try {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19288:31: ( ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE ) )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19288:33: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19963:31: ( ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE ) )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19963:33: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE )
             {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19288:33: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19963:33: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE )
             int alt3=3;
             int LA3_0 = input.LA(1);
 
@@ -2282,7 +2304,7 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt3) {
                 case 1 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19288:34: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' )
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19963:34: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' )
                     {
                     match('\\'); 
                     if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||input.LA(1)=='t' ) {
@@ -2298,14 +2320,14 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19288:75: RULE_UNICODE_ESCAPE
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19963:75: RULE_UNICODE_ESCAPE
                     {
                     mRULE_UNICODE_ESCAPE(); 
 
                     }
                     break;
                 case 3 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19288:95: RULE_OCTAL_ESCAPE
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19963:95: RULE_OCTAL_ESCAPE
                     {
                     mRULE_OCTAL_ESCAPE(); 
 
@@ -2326,10 +2348,10 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR start "RULE_OCTAL_ESCAPE"
     public final void mRULE_OCTAL_ESCAPE() throws RecognitionException {
         try {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19290:28: ( ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' ) )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19290:30: ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19965:28: ( ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' ) )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19965:30: ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' )
             {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19290:30: ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19965:30: ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' )
             int alt4=3;
             int LA4_0 = input.LA(1);
 
@@ -2375,7 +2397,7 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt4) {
                 case 1 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19290:31: '\\\\' '0' .. '3' '0' .. '7' '0' .. '7'
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19965:31: '\\\\' '0' .. '3' '0' .. '7' '0' .. '7'
                     {
                     match('\\'); 
                     matchRange('0','3'); 
@@ -2385,7 +2407,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19290:63: '\\\\' '0' .. '7' '0' .. '7'
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19965:63: '\\\\' '0' .. '7' '0' .. '7'
                     {
                     match('\\'); 
                     matchRange('0','7'); 
@@ -2394,7 +2416,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19290:86: '\\\\' '0' .. '7'
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19965:86: '\\\\' '0' .. '7'
                     {
                     match('\\'); 
                     matchRange('0','7'); 
@@ -2416,8 +2438,8 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR start "RULE_UNICODE_ESCAPE"
     public final void mRULE_UNICODE_ESCAPE() throws RecognitionException {
         try {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19292:30: ( '\\\\' 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19292:32: '\\\\' 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19967:30: ( '\\\\' 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19967:32: '\\\\' 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT
             {
             match('\\'); 
             match('u'); 
@@ -2437,8 +2459,8 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR start "RULE_HEXDIGIT"
     public final void mRULE_HEXDIGIT() throws RecognitionException {
         try {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19294:24: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19294:26: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19969:24: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19969:26: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
             {
             if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='F')||(input.LA(1)>='a' && input.LA(1)<='f') ) {
                 input.consume();
@@ -2463,10 +2485,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_BOOLEAN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19296:14: ( ( 'true' | 'false' ) )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19296:16: ( 'true' | 'false' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19971:14: ( ( 'true' | 'false' ) )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19971:16: ( 'true' | 'false' )
             {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19296:16: ( 'true' | 'false' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19971:16: ( 'true' | 'false' )
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -2484,7 +2506,7 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt5) {
                 case 1 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19296:17: 'true'
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19971:17: 'true'
                     {
                     match("true"); 
 
@@ -2492,7 +2514,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19296:24: 'false'
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19971:24: 'false'
                     {
                     match("false"); 
 
@@ -2518,10 +2540,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_INTEGER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19298:14: ( ( '0' | '1' .. '9' ( '0' .. '9' )* ) )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19298:16: ( '0' | '1' .. '9' ( '0' .. '9' )* )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19973:14: ( ( '0' | '1' .. '9' ( '0' .. '9' )* ) )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19973:16: ( '0' | '1' .. '9' ( '0' .. '9' )* )
             {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19298:16: ( '0' | '1' .. '9' ( '0' .. '9' )* )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19973:16: ( '0' | '1' .. '9' ( '0' .. '9' )* )
             int alt7=2;
             int LA7_0 = input.LA(1);
 
@@ -2539,17 +2561,17 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt7) {
                 case 1 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19298:17: '0'
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19973:17: '0'
                     {
                     match('0'); 
 
                     }
                     break;
                 case 2 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19298:21: '1' .. '9' ( '0' .. '9' )*
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19973:21: '1' .. '9' ( '0' .. '9' )*
                     {
                     matchRange('1','9'); 
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19298:30: ( '0' .. '9' )*
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19973:30: ( '0' .. '9' )*
                     loop6:
                     do {
                         int alt6=2;
@@ -2562,7 +2584,7 @@ public class InternalMdlLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19298:31: '0' .. '9'
+                    	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19973:31: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2596,17 +2618,17 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_FLOAT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:12: ( ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' ) )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:12: ( ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' ) )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )
             {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )
             int alt14=4;
             alt14 = dfa14.predict(input);
             switch (alt14) {
                 case 1 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:15: ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:15: ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
                     {
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:15: ( '0' .. '9' )+
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:15: ( '0' .. '9' )+
                     int cnt8=0;
                     loop8:
                     do {
@@ -2620,7 +2642,7 @@ public class InternalMdlLexer extends Lexer {
 
                         switch (alt8) {
                     	case 1 :
-                    	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:16: '0' .. '9'
+                    	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:16: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2637,7 +2659,7 @@ public class InternalMdlLexer extends Lexer {
                     } while (true);
 
                     match('.'); 
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:31: ( '0' .. '9' )*
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:31: ( '0' .. '9' )*
                     loop9:
                     do {
                         int alt9=2;
@@ -2650,7 +2672,7 @@ public class InternalMdlLexer extends Lexer {
 
                         switch (alt9) {
                     	case 1 :
-                    	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:32: '0' .. '9'
+                    	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:32: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2662,16 +2684,16 @@ public class InternalMdlLexer extends Lexer {
                         }
                     } while (true);
 
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:43: ( RULE_EXPONENT )?
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:43: ( RULE_EXPONENT )?
                     int alt10=2;
                     int LA10_0 = input.LA(1);
 
-                    if ( (LA10_0=='E'||LA10_0=='e') ) {
+                    if ( ((LA10_0>='D' && LA10_0<='E')||(LA10_0>='d' && LA10_0<='e')) ) {
                         alt10=1;
                     }
                     switch (alt10) {
                         case 1 :
-                            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:43: RULE_EXPONENT
+                            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:43: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -2684,10 +2706,10 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:58: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:58: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
                     {
                     match('.'); 
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:62: ( '0' .. '9' )+
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:62: ( '0' .. '9' )+
                     int cnt11=0;
                     loop11:
                     do {
@@ -2701,7 +2723,7 @@ public class InternalMdlLexer extends Lexer {
 
                         switch (alt11) {
                     	case 1 :
-                    	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:63: '0' .. '9'
+                    	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:63: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2717,16 +2739,16 @@ public class InternalMdlLexer extends Lexer {
                         cnt11++;
                     } while (true);
 
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:74: ( RULE_EXPONENT )?
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:74: ( RULE_EXPONENT )?
                     int alt12=2;
                     int LA12_0 = input.LA(1);
 
-                    if ( (LA12_0=='E'||LA12_0=='e') ) {
+                    if ( ((LA12_0>='D' && LA12_0<='E')||(LA12_0>='d' && LA12_0<='e')) ) {
                         alt12=1;
                     }
                     switch (alt12) {
                         case 1 :
-                            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:74: RULE_EXPONENT
+                            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:74: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -2739,9 +2761,9 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:89: ( '0' .. '9' )+ RULE_EXPONENT
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:89: ( '0' .. '9' )+ RULE_EXPONENT
                     {
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:89: ( '0' .. '9' )+
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:89: ( '0' .. '9' )+
                     int cnt13=0;
                     loop13:
                     do {
@@ -2755,7 +2777,7 @@ public class InternalMdlLexer extends Lexer {
 
                         switch (alt13) {
                     	case 1 :
-                    	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:90: '0' .. '9'
+                    	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:90: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2776,7 +2798,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 4 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19300:115: '0' .. '9'
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19975:115: '0' .. '9'
                     {
                     matchRange('0','9'); 
 
@@ -2799,10 +2821,10 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR start "RULE_EXPONENT"
     public final void mRULE_EXPONENT() throws RecognitionException {
         try {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19302:24: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19302:26: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19977:24: ( ( 'e' | 'E' | 'd' | 'D' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19977:26: ( 'e' | 'E' | 'd' | 'D' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
-            if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
+            if ( (input.LA(1)>='D' && input.LA(1)<='E')||(input.LA(1)>='d' && input.LA(1)<='e') ) {
                 input.consume();
 
             }
@@ -2811,7 +2833,7 @@ public class InternalMdlLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19302:36: ( '+' | '-' )?
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19977:44: ( '+' | '-' )?
             int alt15=2;
             int LA15_0 = input.LA(1);
 
@@ -2837,7 +2859,7 @@ public class InternalMdlLexer extends Lexer {
 
             }
 
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19302:47: ( '0' .. '9' )+
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19977:55: ( '0' .. '9' )+
             int cnt16=0;
             loop16:
             do {
@@ -2851,7 +2873,7 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt16) {
             	case 1 :
-            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19302:48: '0' .. '9'
+            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19977:56: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -2881,11 +2903,11 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19304:17: ( '#' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19304:19: '#' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19979:17: ( '#' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19979:19: '#' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
             match('#'); 
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19304:23: (~ ( ( '\\n' | '\\r' ) ) )*
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19979:23: (~ ( ( '\\n' | '\\r' ) ) )*
             loop17:
             do {
                 int alt17=2;
@@ -2898,7 +2920,7 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt17) {
             	case 1 :
-            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19304:23: ~ ( ( '\\n' | '\\r' ) )
+            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19979:23: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -2918,7 +2940,7 @@ public class InternalMdlLexer extends Lexer {
                 }
             } while (true);
 
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19304:39: ( ( '\\r' )? '\\n' )?
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19979:39: ( ( '\\r' )? '\\n' )?
             int alt19=2;
             int LA19_0 = input.LA(1);
 
@@ -2927,9 +2949,9 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt19) {
                 case 1 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19304:40: ( '\\r' )? '\\n'
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19979:40: ( '\\r' )? '\\n'
                     {
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19304:40: ( '\\r' )?
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19979:40: ( '\\r' )?
                     int alt18=2;
                     int LA18_0 = input.LA(1);
 
@@ -2938,7 +2960,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     switch (alt18) {
                         case 1 :
-                            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19304:40: '\\r'
+                            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19979:40: '\\r'
                             {
                             match('\r'); 
 
@@ -2970,12 +2992,12 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19306:17: ( '/#' ( options {greedy=false; } : . )* '#/' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19306:19: '/#' ( options {greedy=false; } : . )* '#/'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19981:17: ( '/#' ( options {greedy=false; } : . )* '#/' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19981:19: '/#' ( options {greedy=false; } : . )* '#/'
             {
             match("/#"); 
 
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19306:24: ( options {greedy=false; } : . )*
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19981:24: ( options {greedy=false; } : . )*
             loop20:
             do {
                 int alt20=2;
@@ -3000,7 +3022,7 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt20) {
             	case 1 :
-            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19306:52: .
+            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19981:52: .
             	    {
             	    matchAny(); 
 
@@ -3030,8 +3052,8 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_BEGIN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19308:12: ( '{' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19308:14: '{'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19983:12: ( '{' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19983:14: '{'
             {
             match('{'); 
 
@@ -3050,8 +3072,8 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_END;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19310:10: ( '}' )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19310:12: '}'
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19985:10: ( '}' )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19985:12: '}'
             {
             match('}'); 
 
@@ -3070,10 +3092,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19312:9: ( ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19312:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19987:9: ( ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19987:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19312:11: ( '^' )?
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19987:11: ( '^' )?
             int alt21=2;
             int LA21_0 = input.LA(1);
 
@@ -3082,7 +3104,7 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt21) {
                 case 1 :
-                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19312:11: '^'
+                    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19987:11: '^'
                     {
                     match('^'); 
 
@@ -3100,7 +3122,7 @@ public class InternalMdlLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19312:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19987:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop22:
             do {
                 int alt22=2;
@@ -3149,10 +3171,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19314:10: ( ( '0' .. '9' )+ )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19314:12: ( '0' .. '9' )+
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19989:10: ( ( '0' .. '9' )+ )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19989:12: ( '0' .. '9' )+
             {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19314:12: ( '0' .. '9' )+
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19989:12: ( '0' .. '9' )+
             int cnt23=0;
             loop23:
             do {
@@ -3166,7 +3188,7 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt23) {
             	case 1 :
-            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19314:13: '0' .. '9'
+            	    // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19989:13: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -3198,10 +3220,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19316:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19316:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19991:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19991:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19316:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19991:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             int cnt24=0;
             loop24:
             do {
@@ -3255,8 +3277,8 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19318:16: ( . )
-            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19318:18: .
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19993:16: ( . )
+            // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:19993:18: .
             {
             matchAny(); 
 
@@ -3271,8 +3293,8 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR end "RULE_ANY_OTHER"
 
     public void mTokens() throws RecognitionException {
-        // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:8: ( T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | T__99 | T__100 | T__101 | T__102 | T__103 | T__104 | T__105 | T__106 | T__107 | T__108 | T__109 | T__110 | T__111 | T__112 | T__113 | T__114 | T__115 | RULE_EXTERNAL_CODE | RULE_STRING | RULE_BOOLEAN | RULE_INTEGER | RULE_FLOAT | RULE_SL_COMMENT | RULE_ML_COMMENT | RULE_BEGIN | RULE_END | RULE_ID | RULE_INT | RULE_WS | RULE_ANY_OTHER )
-        int alt25=107;
+        // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:8: ( T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | T__99 | T__100 | T__101 | T__102 | T__103 | T__104 | T__105 | T__106 | T__107 | T__108 | T__109 | T__110 | T__111 | T__112 | T__113 | T__114 | T__115 | T__116 | RULE_EXTERNAL_CODE | RULE_STRING | RULE_BOOLEAN | RULE_INTEGER | RULE_FLOAT | RULE_SL_COMMENT | RULE_ML_COMMENT | RULE_BEGIN | RULE_END | RULE_ID | RULE_INT | RULE_WS | RULE_ANY_OTHER )
+        int alt25=108;
         alt25 = dfa25.predict(input);
         switch (alt25) {
             case 1 :
@@ -3934,91 +3956,98 @@ public class InternalMdlLexer extends Lexer {
                 }
                 break;
             case 95 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:590: RULE_EXTERNAL_CODE
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:590: T__116
+                {
+                mT__116(); 
+
+                }
+                break;
+            case 96 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:597: RULE_EXTERNAL_CODE
                 {
                 mRULE_EXTERNAL_CODE(); 
 
                 }
                 break;
-            case 96 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:609: RULE_STRING
+            case 97 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:616: RULE_STRING
                 {
                 mRULE_STRING(); 
 
                 }
                 break;
-            case 97 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:621: RULE_BOOLEAN
+            case 98 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:628: RULE_BOOLEAN
                 {
                 mRULE_BOOLEAN(); 
 
                 }
                 break;
-            case 98 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:634: RULE_INTEGER
+            case 99 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:641: RULE_INTEGER
                 {
                 mRULE_INTEGER(); 
 
                 }
                 break;
-            case 99 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:647: RULE_FLOAT
+            case 100 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:654: RULE_FLOAT
                 {
                 mRULE_FLOAT(); 
 
                 }
                 break;
-            case 100 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:658: RULE_SL_COMMENT
+            case 101 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:665: RULE_SL_COMMENT
                 {
                 mRULE_SL_COMMENT(); 
 
                 }
                 break;
-            case 101 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:674: RULE_ML_COMMENT
+            case 102 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:681: RULE_ML_COMMENT
                 {
                 mRULE_ML_COMMENT(); 
 
                 }
                 break;
-            case 102 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:690: RULE_BEGIN
+            case 103 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:697: RULE_BEGIN
                 {
                 mRULE_BEGIN(); 
 
                 }
                 break;
-            case 103 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:701: RULE_END
+            case 104 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:708: RULE_END
                 {
                 mRULE_END(); 
 
                 }
                 break;
-            case 104 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:710: RULE_ID
+            case 105 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:717: RULE_ID
                 {
                 mRULE_ID(); 
 
                 }
                 break;
-            case 105 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:718: RULE_INT
+            case 106 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:725: RULE_INT
                 {
                 mRULE_INT(); 
 
                 }
                 break;
-            case 106 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:727: RULE_WS
+            case 107 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:734: RULE_WS
                 {
                 mRULE_WS(); 
 
                 }
                 break;
-            case 107 :
-                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:735: RULE_ANY_OTHER
+            case 108 :
+                // ../org.ddmore.mdl.ui/src-gen/org/ddmore/mdl/ui/contentassist/antlr/internal/InternalMdl.g:1:742: RULE_ANY_OTHER
                 {
                 mRULE_ANY_OTHER(); 
 
@@ -4033,7 +4062,7 @@ public class InternalMdlLexer extends Lexer {
     protected DFA14 dfa14 = new DFA14(this);
     protected DFA25 dfa25 = new DFA25(this);
     static final String DFA14_eotS =
-        "\1\uffff\1\6\5\uffff";
+        "\1\uffff\1\5\5\uffff";
     static final String DFA14_eofS =
         "\7\uffff";
     static final String DFA14_minS =
@@ -4041,15 +4070,15 @@ public class InternalMdlLexer extends Lexer {
     static final String DFA14_maxS =
         "\1\71\1\145\2\uffff\1\145\2\uffff";
     static final String DFA14_acceptS =
-        "\2\uffff\1\2\1\3\1\uffff\1\1\1\4";
+        "\2\uffff\1\2\1\1\1\uffff\1\4\1\3";
     static final String DFA14_specialS =
         "\7\uffff}>";
     static final String[] DFA14_transitionS = {
             "\1\2\1\uffff\12\1",
-            "\1\5\1\uffff\12\4\13\uffff\1\3\37\uffff\1\3",
+            "\1\3\1\uffff\12\4\12\uffff\2\6\36\uffff\2\6",
             "",
             "",
-            "\1\5\1\uffff\12\4\13\uffff\1\3\37\uffff\1\3",
+            "\1\3\1\uffff\12\4\12\uffff\2\6\36\uffff\2\6",
             "",
             ""
     };
@@ -4084,124 +4113,123 @@ public class InternalMdlLexer extends Lexer {
             this.transition = DFA14_transition;
         }
         public String getDescription() {
-            return "19300:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )";
+            return "19975:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )";
         }
     }
     static final String DFA25_eotS =
-        "\1\uffff\2\74\1\77\1\101\5\100\1\125\1\127\1\131\1\133\1\135\1"+
-        "\137\3\uffff\5\100\2\uffff\2\100\3\uffff\2\100\1\uffff\1\100\3\uffff"+
-        "\15\100\1\u0094\1\74\2\u0096\14\uffff\21\100\17\uffff\4\100\1\u00b4"+
-        "\3\100\1\u00b8\1\u00ba\2\uffff\3\100\3\uffff\3\100\1\uffff\1\100"+
-        "\3\uffff\27\100\3\uffff\1\u00dd\1\u0096\4\uffff\23\100\1\u00f1\3"+
-        "\100\1\uffff\3\100\1\uffff\1\u00f8\1\uffff\1\u00f9\4\100\1\u00fe"+
-        "\13\100\1\u010a\20\100\1\uffff\23\100\1\uffff\2\100\1\u0130\2\100"+
-        "\1\u0133\2\uffff\1\100\1\u0135\2\100\1\uffff\1\u0138\12\100\1\uffff"+
-        "\4\100\1\u0147\1\u0148\1\u0149\4\100\1\u014e\10\100\1\u0158\20\100"+
-        "\1\uffff\2\100\1\uffff\1\100\1\uffff\1\100\1\u0133\1\uffff\16\100"+
-        "\3\uffff\3\100\1\u017e\1\uffff\5\100\1\u0184\3\100\1\uffff\11\100"+
-        "\1\u0191\1\u0192\2\100\1\u0195\1\u0196\2\100\1\u0199\1\u019a\3\100"+
-        "\1\u019e\1\u019f\11\100\1\u01a9\1\u01aa\2\100\1\uffff\5\100\1\uffff"+
-        "\3\100\1\u01b5\1\u01b6\4\100\1\u01bb\2\100\2\uffff\1\100\1\u01bf"+
-        "\2\uffff\1\u01c0\1\u01c1\2\uffff\3\100\2\uffff\10\100\1\u01cf\2"+
-        "\uffff\1\u01d0\11\100\2\uffff\1\u01da\1\u01db\2\100\1\uffff\1\100"+
-        "\1\u01df\1\100\3\uffff\1\u01e1\4\100\1\u01e6\6\100\1\u01ed\2\uffff"+
-        "\11\100\2\uffff\1\100\1\u01f8\1\u01f9\1\uffff\1\100\1\uffff\4\100"+
-        "\1\uffff\1\u01ff\5\100\1\uffff\4\100\1\u0209\5\100\2\uffff\3\100"+
-        "\1\u0213\1\u0214\1\uffff\4\100\1\u0219\1\u021a\2\100\1\u021d\1\uffff"+
-        "\1\u021e\1\100\1\u0220\6\100\2\uffff\1\u0228\1\100\1\u022a\1\100"+
-        "\2\uffff\1\u022c\1\u022d\2\uffff\1\u022e\1\uffff\7\100\1\uffff\1"+
-        "\100\1\uffff\1\100\3\uffff\26\100\1\u024e\3\100\1\u0252\1\u0253"+
-        "\1\u0254\2\100\1\uffff\2\100\1\u0259\3\uffff\4\100\1\uffff\11\100"+
-        "\1\u0267\3\100\1\uffff\1\u026b\2\100\1\uffff\1\u026e\1\100\1\uffff"+
-        "\2\100\1\u0272\1\uffff";
+        "\1\uffff\2\73\1\77\1\101\5\76\1\124\1\126\1\130\1\132\1\134\1\136"+
+        "\3\uffff\5\76\2\uffff\2\76\3\uffff\2\76\1\uffff\1\76\3\uffff\14"+
+        "\76\1\u0094\1\73\2\u0096\14\uffff\21\76\17\uffff\5\76\1\u00b5\3"+
+        "\76\1\u00b9\1\u00bb\2\uffff\3\76\3\uffff\3\76\1\uffff\1\76\3\uffff"+
+        "\27\76\3\uffff\1\u00de\1\u0096\4\uffff\23\76\1\u00f2\4\76\1\uffff"+
+        "\3\76\1\uffff\1\u00fa\1\uffff\1\u00fb\4\76\1\u0100\14\76\1\u010d"+
+        "\17\76\1\uffff\23\76\1\uffff\3\76\1\u0133\2\76\1\u0136\2\uffff\1"+
+        "\76\1\u0138\2\76\1\uffff\1\u013b\13\76\1\uffff\4\76\1\u014b\1\u014c"+
+        "\1\u014d\3\76\1\u0151\10\76\1\u015b\21\76\1\uffff\2\76\1\uffff\1"+
+        "\76\1\uffff\1\76\1\u0136\1\uffff\17\76\3\uffff\3\76\1\uffff\5\76"+
+        "\1\u0188\3\76\1\uffff\11\76\1\u0195\1\u0196\2\76\1\u0199\1\u019a"+
+        "\1\u019b\2\76\1\u019e\1\u019f\3\76\1\u01a3\1\u01a4\1\u01a5\11\76"+
+        "\1\u01af\1\u01b0\7\76\1\uffff\3\76\1\u01bb\1\u01bc\4\76\1\u01c1"+
+        "\2\76\2\uffff\1\76\1\u01c5\3\uffff\1\u01c6\1\u01c7\2\uffff\3\76"+
+        "\3\uffff\10\76\1\u01d5\2\uffff\1\u01d6\11\76\2\uffff\1\u01e0\1\u01e1"+
+        "\2\76\1\uffff\1\76\1\u01e5\1\76\3\uffff\1\u01e7\4\76\1\u01ec\6\76"+
+        "\1\u01f3\2\uffff\11\76\2\uffff\1\76\1\u01fe\1\u01ff\1\uffff\1\76"+
+        "\1\uffff\4\76\1\uffff\1\u0205\5\76\1\uffff\4\76\1\u020f\5\76\2\uffff"+
+        "\3\76\1\u0219\1\u021a\1\uffff\4\76\1\u021f\1\u0220\2\76\1\u0223"+
+        "\1\uffff\1\u0224\1\76\1\u0226\6\76\2\uffff\1\u022e\1\76\1\u0230"+
+        "\1\76\2\uffff\1\u0232\1\u0233\2\uffff\1\u0234\1\uffff\7\76\1\uffff"+
+        "\1\76\1\uffff\1\76\3\uffff\26\76\1\u0254\3\76\1\u0258\1\u0259\1"+
+        "\u025a\2\76\1\uffff\2\76\1\u025f\3\uffff\4\76\1\uffff\11\76\1\u026d"+
+        "\3\76\1\uffff\1\u0271\2\76\1\uffff\1\u0274\1\76\1\uffff\2\76\1\u0278"+
+        "\1\uffff";
     static final String DFA25_eofS =
-        "\u0273\uffff";
+        "\u0279\uffff";
     static final String DFA25_minS =
         "\1\0\1\46\1\174\1\101\1\60\1\115\2\101\1\125\1\101\4\75\1\52\1"+
-        "\43\3\uffff\1\144\3\141\1\144\2\uffff\1\103\1\151\3\uffff\1\141"+
-        "\1\144\1\uffff\1\154\3\uffff\1\107\1\111\1\101\1\102\1\122\1\123"+
-        "\1\105\1\111\1\101\1\111\1\154\1\141\1\101\1\60\1\0\2\56\14\uffff"+
-        "\1\124\1\162\1\130\1\124\1\104\1\123\1\116\1\114\1\111\1\122\1\151"+
-        "\1\107\1\156\1\103\1\115\1\116\1\103\17\uffff\1\154\1\162\1\164"+
-        "\1\141\1\60\1\163\1\154\1\165\2\60\2\uffff\1\104\1\103\1\163\3\uffff"+
-        "\1\156\1\154\1\145\1\uffff\1\163\3\uffff\1\104\1\116\1\122\1\115"+
-        "\1\165\1\122\1\124\1\123\1\105\1\117\1\124\1\105\1\101\1\114\1\124"+
-        "\1\117\1\123\1\102\1\157\1\155\1\122\1\164\1\156\3\uffff\2\56\4"+
+        "\43\3\uffff\4\141\1\144\2\uffff\1\103\1\151\3\uffff\1\141\1\144"+
+        "\1\uffff\1\154\3\uffff\1\107\1\111\1\101\1\102\1\122\1\123\1\105"+
+        "\1\111\1\101\1\111\1\141\1\101\1\60\1\0\2\56\14\uffff\1\124\1\162"+
+        "\1\130\1\124\1\104\1\123\1\116\1\114\1\111\1\122\1\151\1\107\1\156"+
+        "\1\103\1\115\1\116\1\103\17\uffff\1\154\1\164\1\162\1\164\1\141"+
+        "\1\60\1\163\1\154\1\165\2\60\2\uffff\1\104\1\103\1\163\3\uffff\1"+
+        "\156\1\154\1\145\1\uffff\1\163\3\uffff\1\104\1\116\1\120\1\122\1"+
+        "\115\1\165\1\122\1\124\1\123\1\105\1\117\1\124\1\105\1\101\1\114"+
+        "\1\124\1\117\1\123\1\102\1\155\1\122\1\164\1\156\3\uffff\2\56\4"+
         "\uffff\1\122\1\155\1\124\1\114\1\105\1\124\1\123\1\157\1\137\1\117"+
-        "\1\101\1\163\1\123\1\157\2\117\1\104\1\122\1\157\1\60\1\157\1\141"+
-        "\1\147\1\uffff\1\153\1\157\1\145\1\uffff\1\60\1\uffff\1\60\1\105"+
-        "\1\164\1\143\1\163\1\60\1\145\1\111\1\125\1\111\1\117\2\125\1\144"+
-        "\1\111\1\120\1\105\1\60\1\125\1\111\1\103\1\104\1\105\1\101\1\120"+
-        "\1\111\1\122\1\105\1\143\1\145\1\107\1\145\1\164\1\141\1\uffff\1"+
+        "\1\101\1\163\1\123\1\157\2\117\1\104\1\122\1\157\1\60\1\162\1\157"+
+        "\1\141\1\147\1\uffff\1\153\1\157\1\145\1\uffff\1\60\1\uffff\1\60"+
+        "\1\105\1\164\1\143\1\163\1\60\1\145\1\111\1\125\1\111\2\117\2\125"+
+        "\1\144\1\111\1\120\1\105\1\60\1\125\1\111\1\103\1\104\1\105\1\101"+
+        "\1\120\1\111\1\122\1\105\1\145\1\107\1\145\1\164\1\141\1\uffff\1"+
         "\101\1\141\1\122\1\101\1\114\1\125\1\111\1\162\1\103\1\122\1\115"+
-        "\1\163\1\137\1\155\1\104\1\126\1\117\1\111\1\142\1\uffff\1\142\1"+
-        "\157\1\60\1\157\1\142\1\60\2\uffff\1\120\1\60\1\164\1\145\1\uffff"+
-        "\1\60\1\126\1\124\1\116\1\122\1\103\1\114\1\145\1\101\1\125\1\122"+
-        "\1\uffff\1\120\1\115\1\125\1\105\3\60\1\107\1\101\1\114\1\153\1"+
-        "\60\1\105\1\147\1\151\1\162\1\116\1\154\1\101\1\102\1\60\1\122\1"+
-        "\116\1\155\1\117\1\137\1\105\1\157\1\103\1\151\2\105\1\115\1\120"+
-        "\2\152\1\142\1\uffff\1\142\1\152\1\uffff\1\124\1\uffff\1\151\1\60"+
-        "\1\uffff\1\111\1\137\2\105\1\124\1\101\1\156\1\102\1\124\1\126\1"+
-        "\137\1\101\1\124\1\122\3\uffff\1\116\1\122\1\111\1\60\1\uffff\1"+
-        "\124\1\157\1\156\1\151\1\137\1\60\1\116\1\137\1\120\1\uffff\1\105"+
-        "\1\107\1\141\1\104\1\120\1\124\1\156\1\117\1\141\2\60\1\137\1\124"+
-        "\2\60\2\152\2\60\1\157\1\104\1\126\2\60\1\125\1\124\1\164\1\111"+
-        "\1\137\1\101\1\126\1\124\1\105\2\60\1\131\1\110\1\uffff\1\137\1"+
-        "\162\1\165\1\141\1\103\1\uffff\1\137\1\103\1\122\2\60\1\154\1\105"+
-        "\1\101\1\105\1\60\1\104\1\154\2\uffff\1\126\1\60\2\uffff\2\60\2"+
-        "\uffff\1\156\1\125\1\101\2\uffff\1\122\1\105\1\137\1\114\1\126\1"+
-        "\124\1\101\1\105\1\60\2\uffff\1\60\1\117\1\103\1\151\1\157\1\164"+
-        "\1\117\1\103\1\117\1\105\2\uffff\2\60\2\122\1\uffff\1\105\1\60\1"+
-        "\101\3\uffff\1\60\1\101\1\122\1\101\1\117\1\60\1\124\1\111\1\101"+
-        "\1\111\1\122\1\117\1\60\2\uffff\2\117\1\143\1\165\1\145\1\104\1"+
-        "\117\2\104\2\uffff\1\101\2\60\1\uffff\1\122\1\uffff\1\114\1\111"+
-        "\1\114\1\116\1\uffff\1\60\1\124\1\122\1\117\1\111\1\116\1\uffff"+
-        "\2\104\1\141\1\163\1\60\1\105\1\104\1\105\1\111\1\115\2\uffff\1"+
-        "\111\1\137\1\101\2\60\1\uffff\1\131\1\111\1\116\1\101\2\60\1\105"+
-        "\1\154\1\60\1\uffff\1\60\1\105\1\60\1\103\1\105\1\101\1\126\1\102"+
-        "\1\120\2\uffff\1\60\1\101\1\60\1\102\2\uffff\2\60\2\uffff\1\60\1"+
-        "\uffff\2\124\1\102\1\101\1\114\1\101\1\120\1\uffff\1\102\1\uffff"+
-        "\1\114\3\uffff\1\111\1\105\1\114\1\122\1\105\1\122\1\101\1\114\1"+
-        "\105\1\117\1\122\1\105\1\111\1\123\1\101\1\122\1\105\1\123\1\116"+
-        "\1\123\1\137\1\101\1\60\1\115\1\101\1\123\3\60\1\104\1\102\1\uffff"+
-        "\1\105\1\115\1\60\3\uffff\1\105\1\114\1\124\1\105\1\uffff\1\106"+
-        "\2\105\1\124\1\111\1\123\1\122\1\105\1\116\1\60\1\123\1\122\1\111"+
-        "\1\uffff\1\60\1\123\1\124\1\uffff\1\60\1\111\1\uffff\1\117\1\116"+
-        "\1\60\1\uffff";
+        "\1\163\1\137\1\155\1\104\1\126\1\117\1\111\1\142\1\uffff\1\151\1"+
+        "\142\1\157\1\60\1\157\1\142\1\60\2\uffff\1\120\1\60\1\164\1\145"+
+        "\1\uffff\1\60\1\126\1\124\1\116\2\122\1\103\1\114\1\145\1\101\1"+
+        "\125\1\122\1\uffff\1\120\1\115\1\125\1\105\3\60\1\107\1\101\1\114"+
+        "\1\60\1\105\1\147\1\151\1\162\1\116\1\154\1\101\1\102\1\60\1\122"+
+        "\1\116\1\155\1\117\1\137\1\105\1\157\1\103\1\151\2\105\1\115\1\120"+
+        "\1\152\1\170\1\152\1\142\1\uffff\1\142\1\152\1\uffff\1\124\1\uffff"+
+        "\1\151\1\60\1\uffff\1\111\1\137\2\105\2\124\1\101\1\156\1\102\1"+
+        "\124\1\126\1\137\1\101\1\124\1\122\3\uffff\1\116\1\122\1\111\1\uffff"+
+        "\1\124\1\157\1\156\1\151\1\137\1\60\1\116\1\137\1\120\1\uffff\1"+
+        "\105\1\107\1\141\1\104\1\120\1\124\1\156\1\117\1\141\2\60\1\137"+
+        "\1\124\3\60\2\152\2\60\1\157\1\104\1\126\3\60\1\125\1\124\1\164"+
+        "\1\111\1\137\1\101\1\126\1\124\1\105\2\60\1\131\1\110\1\137\1\162"+
+        "\1\165\1\141\1\103\1\uffff\1\137\1\103\1\122\2\60\1\154\1\105\1"+
+        "\101\1\105\1\60\1\104\1\154\2\uffff\1\126\1\60\3\uffff\2\60\2\uffff"+
+        "\1\156\1\125\1\101\3\uffff\1\122\1\105\1\137\1\114\1\126\1\124\1"+
+        "\101\1\105\1\60\2\uffff\1\60\1\117\1\103\1\151\1\157\1\164\1\117"+
+        "\1\103\1\117\1\105\2\uffff\2\60\2\122\1\uffff\1\105\1\60\1\101\3"+
+        "\uffff\1\60\1\101\1\122\1\101\1\117\1\60\1\124\1\111\1\101\1\111"+
+        "\1\122\1\117\1\60\2\uffff\2\117\1\143\1\165\1\145\1\104\1\117\2"+
+        "\104\2\uffff\1\101\2\60\1\uffff\1\122\1\uffff\1\114\1\111\1\114"+
+        "\1\116\1\uffff\1\60\1\124\1\122\1\117\1\111\1\116\1\uffff\2\104"+
+        "\1\141\1\163\1\60\1\105\1\104\1\105\1\111\1\115\2\uffff\1\111\1"+
+        "\137\1\101\2\60\1\uffff\1\131\1\111\1\116\1\101\2\60\1\105\1\154"+
+        "\1\60\1\uffff\1\60\1\105\1\60\1\103\1\105\1\101\1\126\1\102\1\120"+
+        "\2\uffff\1\60\1\101\1\60\1\102\2\uffff\2\60\2\uffff\1\60\1\uffff"+
+        "\2\124\1\102\1\101\1\114\1\101\1\120\1\uffff\1\102\1\uffff\1\114"+
+        "\3\uffff\1\111\1\105\1\114\1\122\1\105\1\122\1\101\1\114\1\105\1"+
+        "\117\1\122\1\105\1\111\1\123\1\101\1\122\1\105\1\123\1\116\1\123"+
+        "\1\137\1\101\1\60\1\115\1\101\1\123\3\60\1\104\1\102\1\uffff\1\105"+
+        "\1\115\1\60\3\uffff\1\105\1\114\1\124\1\105\1\uffff\1\106\2\105"+
+        "\1\124\1\111\1\123\1\122\1\105\1\116\1\60\1\123\1\122\1\111\1\uffff"+
+        "\1\60\1\123\1\124\1\uffff\1\60\1\111\1\uffff\1\117\1\116\1\60\1"+
+        "\uffff";
     static final String DFA25_maxS =
         "\1\uffff\1\46\1\174\1\172\1\71\1\157\1\126\1\157\1\151\1\137\4"+
         "\75\1\52\1\43\3\uffff\1\144\1\141\1\166\1\162\1\146\2\uffff\1\104"+
         "\1\151\3\uffff\1\165\1\144\1\uffff\1\154\3\uffff\1\116\1\164\1\101"+
-        "\1\125\1\122\1\130\1\105\1\111\1\122\1\111\1\154\1\141\1\101\1\172"+
-        "\1\uffff\2\145\14\uffff\1\124\1\162\1\130\1\124\1\104\1\130\1\116"+
-        "\1\114\1\111\1\122\1\151\1\107\1\156\1\103\1\115\1\116\1\103\17"+
-        "\uffff\1\166\1\162\1\164\1\141\1\172\1\163\1\154\1\165\2\172\2\uffff"+
+        "\1\125\1\122\1\130\1\105\1\111\1\122\1\111\1\141\1\101\1\172\1\uffff"+
+        "\2\145\14\uffff\1\124\1\162\1\130\1\124\1\104\1\130\1\116\1\114"+
+        "\1\111\1\122\1\151\1\107\1\156\1\103\1\115\1\116\1\103\17\uffff"+
+        "\1\166\1\164\1\162\1\164\1\141\1\172\1\163\1\154\1\165\2\172\2\uffff"+
         "\1\104\1\103\1\163\3\uffff\1\156\1\154\1\145\1\uffff\1\163\3\uffff"+
-        "\1\120\1\116\1\122\1\115\1\165\1\122\1\124\1\123\1\105\1\117\1\124"+
-        "\1\105\1\101\1\114\1\124\1\117\1\123\1\113\1\157\1\155\1\122\1\164"+
+        "\1\120\1\116\1\120\1\122\1\115\1\165\1\122\1\124\1\123\1\105\1\117"+
+        "\1\124\1\105\1\101\1\114\1\124\1\117\1\123\1\113\1\155\1\122\1\164"+
         "\1\166\3\uffff\2\145\4\uffff\1\122\1\155\1\124\1\114\1\105\1\124"+
         "\1\123\1\157\1\137\1\117\1\101\1\163\1\123\1\157\2\117\1\104\1\122"+
-        "\1\157\1\172\1\157\1\141\1\147\1\uffff\1\153\1\157\1\145\1\uffff"+
-        "\1\172\1\uffff\1\172\1\105\1\164\1\143\1\163\1\172\1\145\1\111\1"+
-        "\125\1\111\1\117\2\125\1\144\1\111\1\120\1\105\1\172\1\125\1\111"+
-        "\1\103\1\104\1\105\1\101\1\120\1\111\1\122\1\105\1\143\1\145\1\107"+
+        "\1\157\1\172\1\162\1\157\1\141\1\147\1\uffff\1\153\1\157\1\145\1"+
+        "\uffff\1\172\1\uffff\1\172\1\105\1\164\1\143\1\163\1\172\1\145\1"+
+        "\111\1\125\1\111\2\117\2\125\1\144\1\111\1\120\1\105\1\172\1\125"+
+        "\1\111\1\103\1\104\1\105\1\101\1\120\1\111\1\122\1\105\1\145\1\107"+
         "\1\145\1\164\1\141\1\uffff\1\101\1\141\1\122\1\101\1\114\1\125\1"+
         "\111\1\162\1\103\1\122\1\115\1\163\1\137\1\155\1\104\1\126\1\117"+
-        "\1\111\1\142\1\uffff\1\142\1\157\1\172\1\157\1\142\1\172\2\uffff"+
-        "\1\120\1\172\1\164\1\145\1\uffff\1\172\1\126\1\124\1\116\1\122\1"+
-        "\103\1\114\1\145\1\101\1\125\1\122\1\uffff\1\120\1\115\1\125\1\105"+
-        "\3\172\1\107\1\101\1\114\1\153\1\172\1\105\1\147\1\151\1\162\1\116"+
+        "\1\111\1\142\1\uffff\1\151\1\142\1\157\1\172\1\157\1\142\1\172\2"+
+        "\uffff\1\120\1\172\1\164\1\145\1\uffff\1\172\1\126\1\124\1\116\2"+
+        "\122\1\103\1\114\1\145\1\101\1\125\1\122\1\uffff\1\120\1\115\1\125"+
+        "\1\105\3\172\1\107\1\101\1\114\1\172\1\105\1\147\1\151\1\162\1\116"+
         "\1\154\1\101\1\102\1\172\1\122\1\116\1\155\1\117\1\137\1\105\1\157"+
-        "\1\103\1\151\2\105\1\115\1\120\2\152\1\142\1\uffff\1\142\1\152\1"+
-        "\uffff\1\124\1\uffff\1\151\1\172\1\uffff\1\111\1\137\2\105\1\124"+
-        "\1\101\1\156\1\102\1\124\1\126\1\137\1\101\1\124\1\122\3\uffff\1"+
-        "\116\1\122\1\111\1\172\1\uffff\1\124\1\157\1\156\1\151\1\137\1\172"+
-        "\1\116\1\137\1\120\1\uffff\1\105\1\107\1\141\1\104\1\120\1\124\1"+
-        "\156\1\117\1\141\2\172\1\137\1\124\2\172\2\152\2\172\1\157\1\104"+
-        "\1\126\2\172\1\125\1\124\1\164\1\111\1\137\1\101\1\126\1\124\1\105"+
-        "\2\172\1\131\1\110\1\uffff\1\137\1\162\1\165\1\141\1\103\1\uffff"+
-        "\1\137\1\103\1\122\2\172\1\154\1\105\1\101\1\105\1\172\1\104\1\154"+
-        "\2\uffff\1\126\1\172\2\uffff\2\172\2\uffff\1\156\1\125\1\101\2\uffff"+
+        "\1\103\1\151\2\105\1\115\1\120\1\152\1\170\1\152\1\142\1\uffff\1"+
+        "\142\1\152\1\uffff\1\124\1\uffff\1\151\1\172\1\uffff\1\111\1\137"+
+        "\2\105\2\124\1\101\1\156\1\102\1\124\1\126\1\137\1\101\1\124\1\122"+
+        "\3\uffff\1\116\1\122\1\111\1\uffff\1\124\1\157\1\156\1\151\1\137"+
+        "\1\172\1\116\1\137\1\120\1\uffff\1\105\1\107\1\141\1\104\1\120\1"+
+        "\124\1\156\1\117\1\141\2\172\1\137\1\124\3\172\2\152\2\172\1\157"+
+        "\1\104\1\126\3\172\1\125\1\124\1\164\1\111\1\137\1\101\1\126\1\124"+
+        "\1\105\2\172\1\131\1\110\1\137\1\162\1\165\1\141\1\103\1\uffff\1"+
+        "\137\1\103\1\122\2\172\1\154\1\105\1\101\1\105\1\172\1\104\1\154"+
+        "\2\uffff\1\126\1\172\3\uffff\2\172\2\uffff\1\156\1\125\1\101\3\uffff"+
         "\1\122\1\111\1\137\1\114\1\126\1\124\1\101\1\111\1\172\2\uffff\1"+
         "\172\1\117\1\103\1\151\1\157\1\164\1\117\1\103\1\117\1\105\2\uffff"+
         "\2\172\2\122\1\uffff\1\105\1\172\1\101\3\uffff\1\172\1\101\1\122"+
@@ -4222,54 +4250,54 @@ public class InternalMdlLexer extends Lexer {
         "\1\uffff\1\172\1\111\1\uffff\1\117\1\116\1\172\1\uffff";
     static final String DFA25_acceptS =
         "\20\uffff\1\23\1\24\1\25\5\uffff\1\35\1\36\2\uffff\1\42\1\43\1"+
-        "\44\2\uffff\1\47\1\uffff\1\51\1\52\1\53\21\uffff\1\144\1\146\1\147"+
-        "\1\150\1\152\1\153\1\1\1\2\1\3\1\150\1\4\1\143\21\uffff\1\15\1\13"+
-        "\1\16\1\14\1\17\1\26\1\20\1\135\1\137\1\21\1\145\1\22\1\23\1\24"+
-        "\1\25\12\uffff\1\35\1\36\3\uffff\1\42\1\43\1\44\3\uffff\1\47\1\uffff"+
-        "\1\51\1\52\1\53\27\uffff\1\136\1\140\1\142\2\uffff\1\144\1\146\1"+
-        "\147\1\152\27\uffff\1\123\3\uffff\1\34\1\uffff\1\122\42\uffff\1"+
-        "\151\23\uffff\1\121\6\uffff\1\124\1\37\4\uffff\1\46\13\uffff\1\103"+
-        "\45\uffff\1\106\2\uffff\1\141\1\uffff\1\41\2\uffff\1\50\16\uffff"+
-        "\1\73\1\75\1\100\4\uffff\1\107\11\uffff\1\101\45\uffff\1\105\5\uffff"+
-        "\1\130\14\uffff\1\11\1\40\2\uffff\1\27\1\30\2\uffff\1\33\1\77\3"+
-        "\uffff\1\110\1\76\11\uffff\1\72\1\111\12\uffff\1\104\1\117\4\uffff"+
-        "\1\132\3\uffff\1\112\1\31\1\32\15\uffff\1\115\1\102\11\uffff\1\134"+
-        "\1\7\3\uffff\1\131\1\uffff\1\45\4\uffff\1\114\6\uffff\1\113\12\uffff"+
-        "\1\74\1\10\5\uffff\1\133\11\uffff\1\127\11\uffff\1\67\1\66\4\uffff"+
-        "\1\65\1\120\2\uffff\1\126\1\5\1\uffff\1\12\7\uffff\1\70\1\uffff"+
-        "\1\64\1\uffff\1\116\1\125\1\6\37\uffff\1\57\3\uffff\1\63\1\55\1"+
+        "\44\2\uffff\1\47\1\uffff\1\51\1\52\1\53\20\uffff\1\145\1\147\1\150"+
+        "\1\151\1\153\1\154\1\1\1\2\1\151\1\3\1\144\1\4\21\uffff\1\15\1\13"+
+        "\1\16\1\14\1\17\1\26\1\20\1\136\1\140\1\21\1\146\1\22\1\23\1\24"+
+        "\1\25\13\uffff\1\35\1\36\3\uffff\1\42\1\43\1\44\3\uffff\1\47\1\uffff"+
+        "\1\51\1\52\1\53\27\uffff\1\137\1\141\1\143\2\uffff\1\145\1\147\1"+
+        "\150\1\153\30\uffff\1\124\3\uffff\1\34\1\uffff\1\123\42\uffff\1"+
+        "\152\23\uffff\1\122\7\uffff\1\125\1\37\4\uffff\1\46\14\uffff\1\103"+
+        "\45\uffff\1\106\2\uffff\1\142\1\uffff\1\41\2\uffff\1\50\17\uffff"+
+        "\1\73\1\75\1\100\3\uffff\1\107\11\uffff\1\101\54\uffff\1\131\14"+
+        "\uffff\1\11\1\40\2\uffff\1\27\1\105\1\30\2\uffff\1\33\1\77\3\uffff"+
+        "\1\110\1\76\1\117\11\uffff\1\72\1\111\12\uffff\1\104\1\120\4\uffff"+
+        "\1\133\3\uffff\1\112\1\31\1\32\15\uffff\1\115\1\102\11\uffff\1\135"+
+        "\1\7\3\uffff\1\132\1\uffff\1\45\4\uffff\1\114\6\uffff\1\113\12\uffff"+
+        "\1\74\1\10\5\uffff\1\134\11\uffff\1\130\11\uffff\1\67\1\66\4\uffff"+
+        "\1\65\1\121\2\uffff\1\127\1\5\1\uffff\1\12\7\uffff\1\70\1\uffff"+
+        "\1\64\1\uffff\1\116\1\126\1\6\37\uffff\1\57\3\uffff\1\63\1\55\1"+
         "\71\4\uffff\1\62\15\uffff\1\54\3\uffff\1\60\2\uffff\1\61\3\uffff"+
         "\1\56";
     static final String DFA25_specialS =
-        "\1\0\63\uffff\1\1\u023e\uffff}>";
+        "\1\1\62\uffff\1\0\u0245\uffff}>";
     static final String[] DFA25_transitionS = {
-            "\11\74\2\73\2\74\1\73\22\74\1\73\1\15\1\64\1\67\1\45\1\20\1"+
-            "\1\1\74\1\30\1\31\1\16\1\21\1\36\1\22\1\4\1\17\1\65\11\66\1"+
-            "\44\1\74\1\12\1\14\1\13\1\43\1\74\1\32\1\10\1\72\1\56\1\53\1"+
-            "\55\1\52\1\54\1\46\2\72\1\57\1\6\1\5\1\51\1\7\1\72\1\11\1\47"+
-            "\1\62\1\72\1\50\4\72\1\34\1\74\1\35\1\3\1\72\1\74\1\72\1\60"+
-            "\1\63\1\25\1\42\1\37\2\72\1\27\2\72\1\33\1\23\1\72\1\40\1\24"+
-            "\2\72\1\61\1\26\6\72\1\70\1\2\1\71\1\41\uff81\74",
+            "\11\73\2\72\2\73\1\72\22\73\1\72\1\15\1\63\1\66\1\45\1\20\1"+
+            "\1\1\73\1\30\1\31\1\16\1\21\1\34\1\22\1\4\1\17\1\64\11\65\1"+
+            "\44\1\73\1\12\1\14\1\13\1\43\1\73\1\32\1\10\1\71\1\56\1\53\1"+
+            "\55\1\52\1\54\1\46\2\71\1\57\1\6\1\5\1\51\1\7\1\71\1\11\1\47"+
+            "\1\61\1\71\1\50\4\71\1\35\1\73\1\36\1\3\1\71\1\73\2\71\1\62"+
+            "\1\25\1\42\1\37\2\71\1\27\2\71\1\33\1\23\1\71\1\40\1\24\2\71"+
+            "\1\60\1\26\6\71\1\67\1\2\1\70\1\41\uff81\73",
+            "\1\74",
             "\1\75",
-            "\1\76",
-            "\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\102",
-            "\1\103\41\uffff\1\104",
-            "\1\106\7\uffff\1\110\2\uffff\1\105\2\uffff\1\107\6\uffff\1"+
-            "\111",
-            "\1\114\13\uffff\1\112\4\uffff\1\113\34\uffff\1\115",
-            "\1\116\23\uffff\1\117",
-            "\1\122\3\uffff\1\121\15\uffff\1\123\13\uffff\1\120",
-            "\1\124",
-            "\1\126",
-            "\1\130",
-            "\1\132",
-            "\1\134",
-            "\1\136",
+            "\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\100",
+            "\1\102\41\uffff\1\103",
+            "\1\105\7\uffff\1\107\2\uffff\1\104\2\uffff\1\106\6\uffff\1"+
+            "\110",
+            "\1\113\13\uffff\1\111\4\uffff\1\112\34\uffff\1\114",
+            "\1\115\23\uffff\1\116",
+            "\1\121\3\uffff\1\120\15\uffff\1\122\13\uffff\1\117",
+            "\1\123",
+            "\1\125",
+            "\1\127",
+            "\1\131",
+            "\1\133",
+            "\1\135",
             "",
             "",
             "",
-            "\1\143",
+            "\1\143\2\uffff\1\142",
             "\1\144",
             "\1\145\7\uffff\1\146\14\uffff\1\147",
             "\1\150\3\uffff\1\151\14\uffff\1\152",
@@ -4288,24 +4316,23 @@ public class InternalMdlLexer extends Lexer {
             "",
             "",
             "",
-            "\1\176\6\uffff\1\175",
-            "\1\u0080\12\uffff\1\177\37\uffff\1\u0081",
-            "\1\u0082",
-            "\1\u0084\1\uffff\1\u0085\20\uffff\1\u0083",
-            "\1\u0086",
-            "\1\u0087\4\uffff\1\u0088",
-            "\1\u0089",
+            "\1\176\5\uffff\1\177\1\175",
+            "\1\u0081\12\uffff\1\u0080\37\uffff\1\u0082",
+            "\1\u0083",
+            "\1\u0085\1\uffff\1\u0086\20\uffff\1\u0084",
+            "\1\u0087",
+            "\1\u0088\4\uffff\1\u0089",
             "\1\u008a",
-            "\1\u008b\3\uffff\1\u008d\14\uffff\1\u008c",
-            "\1\u008e",
+            "\1\u008b",
+            "\1\u008c\3\uffff\1\u008e\14\uffff\1\u008d",
             "\1\u008f",
             "\1\u0090",
             "\1\u0091",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\1\u0092\15\100"+
-            "\1\u0093\13\100",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\1\u0092\15\76\1"+
+            "\u0093\13\76",
             "\0\u0095",
-            "\1\102\1\uffff\12\u0097\13\uffff\1\102\37\uffff\1\102",
-            "\1\102\1\uffff\12\u0098\13\uffff\1\102\37\uffff\1\102",
+            "\1\100\1\uffff\12\u0097\12\uffff\2\100\36\uffff\2\100",
+            "\1\100\1\uffff\12\u0098\12\uffff\2\100\36\uffff\2\100",
             "",
             "",
             "",
@@ -4354,31 +4381,31 @@ public class InternalMdlLexer extends Lexer {
             "\1\u00b1",
             "\1\u00b2",
             "\1\u00b3",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\1\u00b5",
+            "\1\u00b4",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u00b6",
             "\1\u00b7",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\25\100\1\u00b9"+
-            "\4\100",
+            "\1\u00b8",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\25\76\1\u00ba\4"+
+            "\76",
             "",
             "",
-            "\1\u00bb",
             "\1\u00bc",
             "\1\u00bd",
-            "",
-            "",
-            "",
             "\1\u00be",
+            "",
+            "",
+            "",
             "\1\u00bf",
             "\1\u00c0",
-            "",
             "\1\u00c1",
             "",
+            "\1\u00c2",
             "",
             "",
-            "\1\u00c2\7\uffff\1\u00c4\3\uffff\1\u00c3",
-            "\1\u00c5",
+            "",
+            "\1\u00c3\7\uffff\1\u00c5\3\uffff\1\u00c4",
             "\1\u00c6",
             "\1\u00c7",
             "\1\u00c8",
@@ -4394,22 +4421,22 @@ public class InternalMdlLexer extends Lexer {
             "\1\u00d2",
             "\1\u00d3",
             "\1\u00d4",
-            "\1\u00d5\10\uffff\1\u00d6",
-            "\1\u00d7",
-            "\1\u00d8",
+            "\1\u00d5",
+            "\1\u00d6",
+            "\1\u00d7\10\uffff\1\u00d8",
             "\1\u00d9",
             "\1\u00da",
-            "\1\u00db\7\uffff\1\u00dc",
+            "\1\u00db",
+            "\1\u00dc\7\uffff\1\u00dd",
             "",
             "",
             "",
-            "\1\102\1\uffff\12\u0097\13\uffff\1\102\37\uffff\1\102",
-            "\1\102\1\uffff\12\u0098\13\uffff\1\102\37\uffff\1\102",
+            "\1\100\1\uffff\12\u0097\12\uffff\2\100\36\uffff\2\100",
+            "\1\100\1\uffff\12\u0098\12\uffff\2\100\36\uffff\2\100",
             "",
             "",
             "",
             "",
-            "\1\u00de",
             "\1\u00df",
             "\1\u00e0",
             "\1\u00e1",
@@ -4428,25 +4455,25 @@ public class InternalMdlLexer extends Lexer {
             "\1\u00ee",
             "\1\u00ef",
             "\1\u00f0",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\1\u00f2",
+            "\1\u00f1",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u00f3",
             "\1\u00f4",
-            "",
             "\1\u00f5",
             "\1\u00f6",
+            "",
             "\1\u00f7",
+            "\1\u00f8",
+            "\1\u00f9",
             "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\1\u00fa",
-            "\1\u00fb",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u00fc",
             "\1\u00fd",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u00fe",
             "\1\u00ff",
-            "\1\u0100",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0101",
             "\1\u0102",
             "\1\u0103",
@@ -4456,10 +4483,10 @@ public class InternalMdlLexer extends Lexer {
             "\1\u0107",
             "\1\u0108",
             "\1\u0109",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u010a",
             "\1\u010b",
             "\1\u010c",
-            "\1\u010d",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u010e",
             "\1\u010f",
             "\1\u0110",
@@ -4473,9 +4500,9 @@ public class InternalMdlLexer extends Lexer {
             "\1\u0118",
             "\1\u0119",
             "\1\u011a",
-            "",
             "\1\u011b",
             "\1\u011c",
+            "",
             "\1\u011d",
             "\1\u011e",
             "\1\u011f",
@@ -4493,24 +4520,24 @@ public class InternalMdlLexer extends Lexer {
             "\1\u012b",
             "\1\u012c",
             "\1\u012d",
-            "",
             "\1\u012e",
             "\1\u012f",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "",
+            "\1\u0130",
             "\1\u0131",
             "\1\u0132",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
-            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0134",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\1\u0136",
-            "\1\u0137",
+            "\1\u0135",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "",
+            "\1\u0137",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0139",
             "\1\u013a",
-            "\1\u013b",
+            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u013c",
             "\1\u013d",
             "\1\u013e",
@@ -4518,31 +4545,31 @@ public class InternalMdlLexer extends Lexer {
             "\1\u0140",
             "\1\u0141",
             "\1\u0142",
-            "",
             "\1\u0143",
             "\1\u0144",
             "\1\u0145",
             "\1\u0146",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "",
+            "\1\u0147",
+            "\1\u0148",
+            "\1\u0149",
             "\1\u014a",
-            "\1\u014b",
-            "\1\u014c",
-            "\1\u014d",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\1\u014e",
             "\1\u014f",
             "\1\u0150",
-            "\1\u0151",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0152",
             "\1\u0153",
             "\1\u0154",
             "\1\u0155",
             "\1\u0156",
-            "\12\100\7\uffff\32\100\4\uffff\1\u0157\1\uffff\32\100",
+            "\1\u0157",
+            "\1\u0158",
             "\1\u0159",
-            "\1\u015a",
-            "\1\u015b",
+            "\12\76\7\uffff\32\76\4\uffff\1\u015a\1\uffff\32\76",
             "\1\u015c",
             "\1\u015d",
             "\1\u015e",
@@ -4556,19 +4583,19 @@ public class InternalMdlLexer extends Lexer {
             "\1\u0166",
             "\1\u0167",
             "\1\u0168",
-            "",
             "\1\u0169",
             "\1\u016a",
-            "",
             "\1\u016b",
-            "",
             "\1\u016c",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
             "",
             "\1\u016d",
             "\1\u016e",
+            "",
             "\1\u016f",
+            "",
             "\1\u0170",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "",
             "\1\u0171",
             "\1\u0172",
             "\1\u0173",
@@ -4579,244 +4606,245 @@ public class InternalMdlLexer extends Lexer {
             "\1\u0178",
             "\1\u0179",
             "\1\u017a",
-            "",
-            "",
-            "",
             "\1\u017b",
             "\1\u017c",
             "\1\u017d",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
+            "\1\u017e",
             "\1\u017f",
+            "",
+            "",
+            "",
             "\1\u0180",
             "\1\u0181",
             "\1\u0182",
+            "",
             "\1\u0183",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u0184",
             "\1\u0185",
             "\1\u0186",
             "\1\u0187",
-            "",
-            "\1\u0188",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0189",
             "\1\u018a",
             "\1\u018b",
+            "",
             "\1\u018c",
             "\1\u018d",
             "\1\u018e",
             "\1\u018f",
             "\1\u0190",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u0191",
+            "\1\u0192",
             "\1\u0193",
             "\1\u0194",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0197",
             "\1\u0198",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\1\u019b",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u019c",
             "\1\u019d",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u01a0",
             "\1\u01a1",
             "\1\u01a2",
-            "\1\u01a3",
-            "\1\u01a4",
-            "\1\u01a5",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u01a6",
             "\1\u01a7",
             "\1\u01a8",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u01a9",
+            "\1\u01aa",
             "\1\u01ab",
             "\1\u01ac",
-            "",
             "\1\u01ad",
             "\1\u01ae",
-            "\1\u01af",
-            "\1\u01b0",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u01b1",
-            "",
             "\1\u01b2",
             "\1\u01b3",
             "\1\u01b4",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u01b5",
+            "\1\u01b6",
             "\1\u01b7",
+            "",
             "\1\u01b8",
             "\1\u01b9",
             "\1\u01ba",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\1\u01bc",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u01bd",
-            "",
-            "",
             "\1\u01be",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
-            "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
-            "",
+            "\1\u01bf",
+            "\1\u01c0",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u01c2",
             "\1\u01c3",
+            "",
+            "",
             "\1\u01c4",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "",
             "",
-            "\1\u01c5",
-            "\1\u01c7\3\uffff\1\u01c6",
+            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "",
+            "",
             "\1\u01c8",
             "\1\u01c9",
             "\1\u01ca",
+            "",
+            "",
+            "",
             "\1\u01cb",
-            "\1\u01cc",
-            "\1\u01ce\3\uffff\1\u01cd",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
-            "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u01cd\3\uffff\1\u01cc",
+            "\1\u01ce",
+            "\1\u01cf",
+            "\1\u01d0",
             "\1\u01d1",
             "\1\u01d2",
-            "\1\u01d3",
-            "\1\u01d4",
-            "\1\u01d5",
-            "\1\u01d6",
+            "\1\u01d4\3\uffff\1\u01d3",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "",
+            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u01d7",
             "\1\u01d8",
             "\1\u01d9",
-            "",
-            "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u01da",
+            "\1\u01db",
             "\1\u01dc",
             "\1\u01dd",
-            "",
             "\1\u01de",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\1\u01e0",
+            "\1\u01df",
             "",
             "",
-            "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u01e2",
             "\1\u01e3",
+            "",
             "\1\u01e4",
-            "\1\u01e5",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\1\u01e7",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\1\u01e6",
+            "",
+            "",
+            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u01e8",
             "\1\u01e9",
             "\1\u01ea",
             "\1\u01eb",
-            "\1\u01ec",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
-            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\1\u01ed",
             "\1\u01ee",
             "\1\u01ef",
             "\1\u01f0",
             "\1\u01f1",
             "\1\u01f2",
-            "\1\u01f3",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "",
+            "",
             "\1\u01f4",
             "\1\u01f5",
             "\1\u01f6",
-            "",
-            "",
             "\1\u01f7",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
+            "\1\u01f8",
+            "\1\u01f9",
             "\1\u01fa",
-            "",
             "\1\u01fb",
             "\1\u01fc",
-            "\1\u01fd",
-            "\1\u01fe",
             "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "",
+            "\1\u01fd",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "",
             "\1\u0200",
+            "",
             "\1\u0201",
             "\1\u0202",
             "\1\u0203",
             "\1\u0204",
             "",
-            "\1\u0205",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0206",
             "\1\u0207",
             "\1\u0208",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u0209",
             "\1\u020a",
+            "",
             "\1\u020b",
             "\1\u020c",
             "\1\u020d",
             "\1\u020e",
-            "",
-            "",
-            "\1\u020f",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0210",
             "\1\u0211",
-            "\12\100\7\uffff\32\100\4\uffff\1\u0212\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u0212",
+            "\1\u0213",
+            "\1\u0214",
+            "",
             "",
             "\1\u0215",
             "\1\u0216",
             "\1\u0217",
-            "\1\u0218",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\12\76\7\uffff\32\76\4\uffff\1\u0218\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "",
             "\1\u021b",
             "\1\u021c",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\1\u021f",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u021d",
+            "\1\u021e",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0221",
             "\1\u0222",
-            "\1\u0223",
-            "\1\u0224",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0225",
-            "\1\u0226",
-            "",
-            "",
-            "\12\100\7\uffff\32\100\4\uffff\1\u0227\1\uffff\32\100",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\1\u0227",
+            "\1\u0228",
             "\1\u0229",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u022a",
             "\1\u022b",
+            "\1\u022c",
             "",
             "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
-            "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\u022d\1\uffff\32\76",
             "\1\u022f",
-            "\1\u0230",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0231",
-            "\1\u0232",
-            "\1\u0233",
-            "\1\u0234",
+            "",
+            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "",
+            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "",
             "\1\u0235",
-            "",
             "\1\u0236",
-            "",
             "\1\u0237",
-            "",
-            "",
-            "",
             "\1\u0238",
             "\1\u0239",
             "\1\u023a",
             "\1\u023b",
+            "",
             "\1\u023c",
+            "",
             "\1\u023d",
+            "",
+            "",
+            "",
             "\1\u023e",
             "\1\u023f",
             "\1\u0240",
@@ -4833,51 +4861,57 @@ public class InternalMdlLexer extends Lexer {
             "\1\u024b",
             "\1\u024c",
             "\1\u024d",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u024e",
             "\1\u024f",
             "\1\u0250",
             "\1\u0251",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u0252",
+            "\1\u0253",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u0255",
             "\1\u0256",
-            "",
             "\1\u0257",
-            "\1\u0258",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
-            "",
-            "",
-            "",
-            "\1\u025a",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             "\1\u025b",
             "\1\u025c",
-            "\1\u025d",
             "",
+            "\1\u025d",
             "\1\u025e",
-            "\1\u025f",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "",
+            "",
+            "",
             "\1\u0260",
             "\1\u0261",
             "\1\u0262",
             "\1\u0263",
+            "",
             "\1\u0264",
             "\1\u0265",
             "\1\u0266",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u0267",
             "\1\u0268",
             "\1\u0269",
             "\1\u026a",
-            "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\1\u026b",
             "\1\u026c",
-            "\1\u026d",
-            "",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\1\u026e",
             "\1\u026f",
-            "",
             "\1\u0270",
-            "\1\u0271",
-            "\12\100\7\uffff\32\100\4\uffff\1\100\1\uffff\32\100",
+            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\1\u0272",
+            "\1\u0273",
+            "",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
+            "\1\u0275",
+            "",
+            "\1\u0276",
+            "\1\u0277",
+            "\12\76\7\uffff\32\76\4\uffff\1\76\1\uffff\32\76",
             ""
     };
 
@@ -4911,13 +4945,23 @@ public class InternalMdlLexer extends Lexer {
             this.transition = DFA25_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | T__99 | T__100 | T__101 | T__102 | T__103 | T__104 | T__105 | T__106 | T__107 | T__108 | T__109 | T__110 | T__111 | T__112 | T__113 | T__114 | T__115 | RULE_EXTERNAL_CODE | RULE_STRING | RULE_BOOLEAN | RULE_INTEGER | RULE_FLOAT | RULE_SL_COMMENT | RULE_ML_COMMENT | RULE_BEGIN | RULE_END | RULE_ID | RULE_INT | RULE_WS | RULE_ANY_OTHER );";
+            return "1:1: Tokens : ( T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | T__99 | T__100 | T__101 | T__102 | T__103 | T__104 | T__105 | T__106 | T__107 | T__108 | T__109 | T__110 | T__111 | T__112 | T__113 | T__114 | T__115 | T__116 | RULE_EXTERNAL_CODE | RULE_STRING | RULE_BOOLEAN | RULE_INTEGER | RULE_FLOAT | RULE_SL_COMMENT | RULE_ML_COMMENT | RULE_BEGIN | RULE_END | RULE_ID | RULE_INT | RULE_WS | RULE_ANY_OTHER );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
         	int _s = s;
             switch ( s ) {
                     case 0 : 
+                        int LA25_51 = input.LA(1);
+
+                        s = -1;
+                        if ( ((LA25_51>='\u0000' && LA25_51<='\uFFFF')) ) {s = 149;}
+
+                        else s = 59;
+
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
                         int LA25_0 = input.LA(1);
 
                         s = -1;
@@ -4975,11 +5019,11 @@ public class InternalMdlLexer extends Lexer {
 
                         else if ( (LA25_0=='l') ) {s = 27;}
 
-                        else if ( (LA25_0=='[') ) {s = 28;}
+                        else if ( (LA25_0==',') ) {s = 28;}
 
-                        else if ( (LA25_0==']') ) {s = 29;}
+                        else if ( (LA25_0=='[') ) {s = 29;}
 
-                        else if ( (LA25_0==',') ) {s = 30;}
+                        else if ( (LA25_0==']') ) {s = 30;}
 
                         else if ( (LA25_0=='f') ) {s = 31;}
 
@@ -5015,41 +5059,29 @@ public class InternalMdlLexer extends Lexer {
 
                         else if ( (LA25_0=='L') ) {s = 47;}
 
-                        else if ( (LA25_0=='b') ) {s = 48;}
+                        else if ( (LA25_0=='s') ) {s = 48;}
 
-                        else if ( (LA25_0=='s') ) {s = 49;}
+                        else if ( (LA25_0=='T') ) {s = 49;}
 
-                        else if ( (LA25_0=='T') ) {s = 50;}
+                        else if ( (LA25_0=='c') ) {s = 50;}
 
-                        else if ( (LA25_0=='c') ) {s = 51;}
+                        else if ( (LA25_0=='\"') ) {s = 51;}
 
-                        else if ( (LA25_0=='\"') ) {s = 52;}
+                        else if ( (LA25_0=='0') ) {s = 52;}
 
-                        else if ( (LA25_0=='0') ) {s = 53;}
+                        else if ( ((LA25_0>='1' && LA25_0<='9')) ) {s = 53;}
 
-                        else if ( ((LA25_0>='1' && LA25_0<='9')) ) {s = 54;}
+                        else if ( (LA25_0=='#') ) {s = 54;}
 
-                        else if ( (LA25_0=='#') ) {s = 55;}
+                        else if ( (LA25_0=='{') ) {s = 55;}
 
-                        else if ( (LA25_0=='{') ) {s = 56;}
+                        else if ( (LA25_0=='}') ) {s = 56;}
 
-                        else if ( (LA25_0=='}') ) {s = 57;}
+                        else if ( (LA25_0=='C'||(LA25_0>='J' && LA25_0<='K')||LA25_0=='Q'||LA25_0=='U'||(LA25_0>='W' && LA25_0<='Z')||LA25_0=='_'||(LA25_0>='a' && LA25_0<='b')||(LA25_0>='g' && LA25_0<='h')||(LA25_0>='j' && LA25_0<='k')||LA25_0=='n'||(LA25_0>='q' && LA25_0<='r')||(LA25_0>='u' && LA25_0<='z')) ) {s = 57;}
 
-                        else if ( (LA25_0=='C'||(LA25_0>='J' && LA25_0<='K')||LA25_0=='Q'||LA25_0=='U'||(LA25_0>='W' && LA25_0<='Z')||LA25_0=='_'||LA25_0=='a'||(LA25_0>='g' && LA25_0<='h')||(LA25_0>='j' && LA25_0<='k')||LA25_0=='n'||(LA25_0>='q' && LA25_0<='r')||(LA25_0>='u' && LA25_0<='z')) ) {s = 58;}
+                        else if ( ((LA25_0>='\t' && LA25_0<='\n')||LA25_0=='\r'||LA25_0==' ') ) {s = 58;}
 
-                        else if ( ((LA25_0>='\t' && LA25_0<='\n')||LA25_0=='\r'||LA25_0==' ') ) {s = 59;}
-
-                        else if ( ((LA25_0>='\u0000' && LA25_0<='\b')||(LA25_0>='\u000B' && LA25_0<='\f')||(LA25_0>='\u000E' && LA25_0<='\u001F')||LA25_0=='\''||LA25_0==';'||LA25_0=='@'||LA25_0=='\\'||LA25_0=='`'||(LA25_0>='\u007F' && LA25_0<='\uFFFF')) ) {s = 60;}
-
-                        if ( s>=0 ) return s;
-                        break;
-                    case 1 : 
-                        int LA25_52 = input.LA(1);
-
-                        s = -1;
-                        if ( ((LA25_52>='\u0000' && LA25_52<='\uFFFF')) ) {s = 149;}
-
-                        else s = 60;
+                        else if ( ((LA25_0>='\u0000' && LA25_0<='\b')||(LA25_0>='\u000B' && LA25_0<='\f')||(LA25_0>='\u000E' && LA25_0<='\u001F')||LA25_0=='\''||LA25_0==';'||LA25_0=='@'||LA25_0=='\\'||LA25_0=='`'||(LA25_0>='\u007F' && LA25_0<='\uFFFF')) ) {s = 59;}
 
                         if ( s>=0 ) return s;
                         break;

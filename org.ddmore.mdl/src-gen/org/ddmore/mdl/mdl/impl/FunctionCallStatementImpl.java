@@ -2,9 +2,9 @@
  */
 package org.ddmore.mdl.mdl.impl;
 
+import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.MdlPackage;
-import org.ddmore.mdl.mdl.TargetBlock;
-import org.ddmore.mdl.mdl.VerbatimBlock;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -17,20 +17,19 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Verbatim Block</b></em>'.
+ * An implementation of the model object '<em><b>Function Call Statement</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.ddmore.mdl.mdl.impl.VerbatimBlockImpl#getIdentifier <em>Identifier</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.VerbatimBlockImpl#getBlock <em>Block</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.VerbatimBlockImpl#getExternalCode <em>External Code</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl#getIdentifier <em>Identifier</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl#getExpression <em>Expression</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements VerbatimBlock
+public class FunctionCallStatementImpl extends MinimalEObjectImpl.Container implements FunctionCallStatement
 {
   /**
    * The default value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
@@ -53,41 +52,21 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
   protected String identifier = IDENTIFIER_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getBlock() <em>Block</em>}' containment reference.
+   * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getBlock()
+   * @see #getExpression()
    * @generated
    * @ordered
    */
-  protected TargetBlock block;
-
-  /**
-   * The default value of the '{@link #getExternalCode() <em>External Code</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getExternalCode()
-   * @generated
-   * @ordered
-   */
-  protected static final String EXTERNAL_CODE_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getExternalCode() <em>External Code</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getExternalCode()
-   * @generated
-   * @ordered
-   */
-  protected String externalCode = EXTERNAL_CODE_EDEFAULT;
+  protected FunctionCall expression;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected VerbatimBlockImpl()
+  protected FunctionCallStatementImpl()
   {
     super();
   }
@@ -100,7 +79,7 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
   @Override
   protected EClass eStaticClass()
   {
-    return MdlPackage.Literals.VERBATIM_BLOCK;
+    return MdlPackage.Literals.FUNCTION_CALL_STATEMENT;
   }
 
   /**
@@ -123,7 +102,7 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
     String oldIdentifier = identifier;
     identifier = newIdentifier;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.VERBATIM_BLOCK__IDENTIFIER, oldIdentifier, identifier));
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.FUNCTION_CALL_STATEMENT__IDENTIFIER, oldIdentifier, identifier));
   }
 
   /**
@@ -131,9 +110,9 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
    * <!-- end-user-doc -->
    * @generated
    */
-  public TargetBlock getBlock()
+  public FunctionCall getExpression()
   {
-    return block;
+    return expression;
   }
 
   /**
@@ -141,13 +120,13 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetBlock(TargetBlock newBlock, NotificationChain msgs)
+  public NotificationChain basicSetExpression(FunctionCall newExpression, NotificationChain msgs)
   {
-    TargetBlock oldBlock = block;
-    block = newBlock;
+    FunctionCall oldExpression = expression;
+    expression = newExpression;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdlPackage.VERBATIM_BLOCK__BLOCK, oldBlock, newBlock);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdlPackage.FUNCTION_CALL_STATEMENT__EXPRESSION, oldExpression, newExpression);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -158,43 +137,20 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setBlock(TargetBlock newBlock)
+  public void setExpression(FunctionCall newExpression)
   {
-    if (newBlock != block)
+    if (newExpression != expression)
     {
       NotificationChain msgs = null;
-      if (block != null)
-        msgs = ((InternalEObject)block).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdlPackage.VERBATIM_BLOCK__BLOCK, null, msgs);
-      if (newBlock != null)
-        msgs = ((InternalEObject)newBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdlPackage.VERBATIM_BLOCK__BLOCK, null, msgs);
-      msgs = basicSetBlock(newBlock, msgs);
+      if (expression != null)
+        msgs = ((InternalEObject)expression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdlPackage.FUNCTION_CALL_STATEMENT__EXPRESSION, null, msgs);
+      if (newExpression != null)
+        msgs = ((InternalEObject)newExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdlPackage.FUNCTION_CALL_STATEMENT__EXPRESSION, null, msgs);
+      msgs = basicSetExpression(newExpression, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.VERBATIM_BLOCK__BLOCK, newBlock, newBlock));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getExternalCode()
-  {
-    return externalCode;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setExternalCode(String newExternalCode)
-  {
-    String oldExternalCode = externalCode;
-    externalCode = newExternalCode;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.VERBATIM_BLOCK__EXTERNAL_CODE, oldExternalCode, externalCode));
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.FUNCTION_CALL_STATEMENT__EXPRESSION, newExpression, newExpression));
   }
 
   /**
@@ -207,8 +163,8 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
   {
     switch (featureID)
     {
-      case MdlPackage.VERBATIM_BLOCK__BLOCK:
-        return basicSetBlock(null, msgs);
+      case MdlPackage.FUNCTION_CALL_STATEMENT__EXPRESSION:
+        return basicSetExpression(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -223,12 +179,10 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
   {
     switch (featureID)
     {
-      case MdlPackage.VERBATIM_BLOCK__IDENTIFIER:
+      case MdlPackage.FUNCTION_CALL_STATEMENT__IDENTIFIER:
         return getIdentifier();
-      case MdlPackage.VERBATIM_BLOCK__BLOCK:
-        return getBlock();
-      case MdlPackage.VERBATIM_BLOCK__EXTERNAL_CODE:
-        return getExternalCode();
+      case MdlPackage.FUNCTION_CALL_STATEMENT__EXPRESSION:
+        return getExpression();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -243,14 +197,11 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
   {
     switch (featureID)
     {
-      case MdlPackage.VERBATIM_BLOCK__IDENTIFIER:
+      case MdlPackage.FUNCTION_CALL_STATEMENT__IDENTIFIER:
         setIdentifier((String)newValue);
         return;
-      case MdlPackage.VERBATIM_BLOCK__BLOCK:
-        setBlock((TargetBlock)newValue);
-        return;
-      case MdlPackage.VERBATIM_BLOCK__EXTERNAL_CODE:
-        setExternalCode((String)newValue);
+      case MdlPackage.FUNCTION_CALL_STATEMENT__EXPRESSION:
+        setExpression((FunctionCall)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -266,14 +217,11 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
   {
     switch (featureID)
     {
-      case MdlPackage.VERBATIM_BLOCK__IDENTIFIER:
+      case MdlPackage.FUNCTION_CALL_STATEMENT__IDENTIFIER:
         setIdentifier(IDENTIFIER_EDEFAULT);
         return;
-      case MdlPackage.VERBATIM_BLOCK__BLOCK:
-        setBlock((TargetBlock)null);
-        return;
-      case MdlPackage.VERBATIM_BLOCK__EXTERNAL_CODE:
-        setExternalCode(EXTERNAL_CODE_EDEFAULT);
+      case MdlPackage.FUNCTION_CALL_STATEMENT__EXPRESSION:
+        setExpression((FunctionCall)null);
         return;
     }
     super.eUnset(featureID);
@@ -289,12 +237,10 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
   {
     switch (featureID)
     {
-      case MdlPackage.VERBATIM_BLOCK__IDENTIFIER:
+      case MdlPackage.FUNCTION_CALL_STATEMENT__IDENTIFIER:
         return IDENTIFIER_EDEFAULT == null ? identifier != null : !IDENTIFIER_EDEFAULT.equals(identifier);
-      case MdlPackage.VERBATIM_BLOCK__BLOCK:
-        return block != null;
-      case MdlPackage.VERBATIM_BLOCK__EXTERNAL_CODE:
-        return EXTERNAL_CODE_EDEFAULT == null ? externalCode != null : !EXTERNAL_CODE_EDEFAULT.equals(externalCode);
+      case MdlPackage.FUNCTION_CALL_STATEMENT__EXPRESSION:
+        return expression != null;
     }
     return super.eIsSet(featureID);
   }
@@ -312,10 +258,8 @@ public class VerbatimBlockImpl extends MinimalEObjectImpl.Container implements V
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (identifier: ");
     result.append(identifier);
-    result.append(", externalCode: ");
-    result.append(externalCode);
     result.append(')');
     return result.toString();
   }
 
-} //VerbatimBlockImpl
+} //FunctionCallStatementImpl

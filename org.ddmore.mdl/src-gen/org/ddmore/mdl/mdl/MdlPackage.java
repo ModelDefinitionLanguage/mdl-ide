@@ -443,13 +443,22 @@ public interface MdlPackage extends EPackage
   int MODEL_OBJECT_BLOCK__SIMULATION_BLOCK = 10;
 
   /**
-   * The feature id for the '<em><b>Verbatim Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Target Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MODEL_OBJECT_BLOCK__VERBATIM_BLOCK = 11;
+  int MODEL_OBJECT_BLOCK__TARGET_BLOCK = 11;
+
+  /**
+   * The feature id for the '<em><b>Import Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL_OBJECT_BLOCK__IMPORT_BLOCK = 12;
 
   /**
    * The number of structural features of the '<em>Model Object Block</em>' class.
@@ -458,7 +467,7 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MODEL_OBJECT_BLOCK_FEATURE_COUNT = 12;
+  int MODEL_OBJECT_BLOCK_FEATURE_COUNT = 13;
 
   /**
    * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl <em>Individual Variables Block</em>}' class.
@@ -905,13 +914,22 @@ public interface MdlPackage extends EPackage
   int PARAMETER_OBJECT_BLOCK__PRIOR_BLOCK = 2;
 
   /**
-   * The feature id for the '<em><b>Verbatim Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Target Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PARAMETER_OBJECT_BLOCK__VERBATIM_BLOCK = 3;
+  int PARAMETER_OBJECT_BLOCK__TARGET_BLOCK = 3;
+
+  /**
+   * The feature id for the '<em><b>Import Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER_OBJECT_BLOCK__IMPORT_BLOCK = 4;
 
   /**
    * The number of structural features of the '<em>Parameter Object Block</em>' class.
@@ -920,7 +938,7 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PARAMETER_OBJECT_BLOCK_FEATURE_COUNT = 4;
+  int PARAMETER_OBJECT_BLOCK_FEATURE_COUNT = 5;
 
   /**
    * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.StructuralBlockImpl <em>Structural Block</em>}' class.
@@ -1062,13 +1080,22 @@ public interface MdlPackage extends EPackage
   int DATA_OBJECT_BLOCK__FILE_BLOCK = 1;
 
   /**
-   * The feature id for the '<em><b>Verbatim Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Target Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATA_OBJECT_BLOCK__VERBATIM_BLOCK = 2;
+  int DATA_OBJECT_BLOCK__TARGET_BLOCK = 2;
+
+  /**
+   * The feature id for the '<em><b>Import Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATA_OBJECT_BLOCK__IMPORT_BLOCK = 3;
 
   /**
    * The number of structural features of the '<em>Data Object Block</em>' class.
@@ -1077,7 +1104,7 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DATA_OBJECT_BLOCK_FEATURE_COUNT = 3;
+  int DATA_OBJECT_BLOCK_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.HeaderBlockImpl <em>Header Block</em>}' class.
@@ -1200,13 +1227,22 @@ public interface MdlPackage extends EPackage
   int TASK_OBJECT_BLOCK__MODEL_BLOCK = 3;
 
   /**
-   * The feature id for the '<em><b>Verbatim Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Target Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TASK_OBJECT_BLOCK__VERBATIM_BLOCK = 4;
+  int TASK_OBJECT_BLOCK__TARGET_BLOCK = 4;
+
+  /**
+   * The feature id for the '<em><b>Import Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TASK_OBJECT_BLOCK__IMPORT_BLOCK = 5;
 
   /**
    * The number of structural features of the '<em>Task Object Block</em>' class.
@@ -1215,7 +1251,7 @@ public interface MdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TASK_OBJECT_BLOCK_FEATURE_COUNT = 5;
+  int TASK_OBJECT_BLOCK_FEATURE_COUNT = 6;
 
   /**
    * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ParameterBlockImpl <em>Parameter Block</em>}' class.
@@ -1699,6 +1735,43 @@ public interface MdlPackage extends EPackage
   int LIBRARY_BLOCK_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl <em>Function Call Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFunctionCallStatement()
+   * @generated
+   */
+  int FUNCTION_CALL_STATEMENT = 40;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION_CALL_STATEMENT__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Expression</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION_CALL_STATEMENT__EXPRESSION = 1;
+
+  /**
+   * The number of structural features of the '<em>Function Call Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION_CALL_STATEMENT_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.OdeBlockImpl <em>Ode Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1706,7 +1779,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOdeBlock()
    * @generated
    */
-  int ODE_BLOCK = 40;
+  int ODE_BLOCK = 41;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1743,7 +1816,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getGroupVariablesBlockStatement()
    * @generated
    */
-  int GROUP_VARIABLES_BLOCK_STATEMENT = 41;
+  int GROUP_VARIABLES_BLOCK_STATEMENT = 42;
 
   /**
    * The feature id for the '<em><b>Statement</b></em>' containment reference.
@@ -1780,7 +1853,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMixtureBlock()
    * @generated
    */
-  int MIXTURE_BLOCK = 42;
+  int MIXTURE_BLOCK = 43;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1817,7 +1890,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVariabilityBlockStatement()
    * @generated
    */
-  int VARIABILITY_BLOCK_STATEMENT = 43;
+  int VARIABILITY_BLOCK_STATEMENT = 44;
 
   /**
    * The feature id for the '<em><b>Parameter</b></em>' containment reference.
@@ -1872,7 +1945,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getBlockBlock()
    * @generated
    */
-  int BLOCK_BLOCK = 44;
+  int BLOCK_BLOCK = 45;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1918,7 +1991,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDiagBlock()
    * @generated
    */
-  int DIAG_BLOCK = 45;
+  int DIAG_BLOCK = 46;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -1964,7 +2037,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSameBlock()
    * @generated
    */
-  int SAME_BLOCK = 46;
+  int SAME_BLOCK = 47;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2010,7 +2083,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFileBlockStatement()
    * @generated
    */
-  int FILE_BLOCK_STATEMENT = 47;
+  int FILE_BLOCK_STATEMENT = 48;
 
   /**
    * The feature id for the '<em><b>Variable</b></em>' containment reference.
@@ -2065,7 +2138,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getInlineBlock()
    * @generated
    */
-  int INLINE_BLOCK = 48;
+  int INLINE_BLOCK = 49;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2111,7 +2184,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDesignBlock()
    * @generated
    */
-  int DESIGN_BLOCK = 49;
+  int DESIGN_BLOCK = 50;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2148,7 +2221,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDesignBlockStatement()
    * @generated
    */
-  int DESIGN_BLOCK_STATEMENT = 50;
+  int DESIGN_BLOCK_STATEMENT = 51;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' containment reference.
@@ -2194,7 +2267,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVariableList()
    * @generated
    */
-  int VARIABLE_LIST = 51;
+  int VARIABLE_LIST = 52;
 
   /**
    * The feature id for the '<em><b>Identifiers</b></em>' containment reference list.
@@ -2222,7 +2295,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRScriptBlock()
    * @generated
    */
-  int RSCRIPT_BLOCK = 52;
+  int RSCRIPT_BLOCK = 53;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2259,7 +2332,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRScriptBlockStatement()
    * @generated
    */
-  int RSCRIPT_BLOCK_STATEMENT = 53;
+  int RSCRIPT_BLOCK_STATEMENT = 54;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2305,7 +2378,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskFunctionDeclaration()
    * @generated
    */
-  int TASK_FUNCTION_DECLARATION = 54;
+  int TASK_FUNCTION_DECLARATION = 55;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2351,7 +2424,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskFunctionBody()
    * @generated
    */
-  int TASK_FUNCTION_BODY = 55;
+  int TASK_FUNCTION_BODY = 56;
 
   /**
    * The feature id for the '<em><b>Blocks</b></em>' containment reference list.
@@ -2379,7 +2452,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTaskFunctionBlock()
    * @generated
    */
-  int TASK_FUNCTION_BLOCK = 56;
+  int TASK_FUNCTION_BLOCK = 57;
 
   /**
    * The feature id for the '<em><b>Estimate Block</b></em>' containment reference.
@@ -2425,7 +2498,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getEstimateTask()
    * @generated
    */
-  int ESTIMATE_TASK = 57;
+  int ESTIMATE_TASK = 58;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2462,7 +2535,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSimulateTask()
    * @generated
    */
-  int SIMULATE_TASK = 58;
+  int SIMULATE_TASK = 59;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2499,7 +2572,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getExecuteTask()
    * @generated
    */
-  int EXECUTE_TASK = 59;
+  int EXECUTE_TASK = 60;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2536,16 +2609,16 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFormalArguments()
    * @generated
    */
-  int FORMAL_ARGUMENTS = 60;
+  int FORMAL_ARGUMENTS = 61;
 
   /**
-   * The feature id for the '<em><b>Identifiers</b></em>' attribute list.
+   * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FORMAL_ARGUMENTS__IDENTIFIERS = 0;
+  int FORMAL_ARGUMENTS__ARGUMENTS = 0;
 
   /**
    * The number of structural features of the '<em>Formal Arguments</em>' class.
@@ -2557,6 +2630,34 @@ public interface MdlPackage extends EPackage
   int FORMAL_ARGUMENTS_FEATURE_COUNT = 1;
 
   /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.FormalArgumentImpl <em>Formal Argument</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.FormalArgumentImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFormalArgument()
+   * @generated
+   */
+  int FORMAL_ARGUMENT = 62;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FORMAL_ARGUMENT__IDENTIFIER = 0;
+
+  /**
+   * The number of structural features of the '<em>Formal Argument</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FORMAL_ARGUMENT_FEATURE_COUNT = 1;
+
+  /**
    * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.FunctionCallImpl <em>Function Call</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2564,7 +2665,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFunctionCall()
    * @generated
    */
-  int FUNCTION_CALL = 61;
+  int FUNCTION_CALL = 63;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' containment reference.
@@ -2601,7 +2702,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getBlockStatement()
    * @generated
    */
-  int BLOCK_STATEMENT = 62;
+  int BLOCK_STATEMENT = 64;
 
   /**
    * The feature id for the '<em><b>Symbol</b></em>' containment reference.
@@ -2631,13 +2732,13 @@ public interface MdlPackage extends EPackage
   int BLOCK_STATEMENT__STATEMENT = 2;
 
   /**
-   * The feature id for the '<em><b>Verbatim Block</b></em>' containment reference.
+   * The feature id for the '<em><b>Target Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int BLOCK_STATEMENT__VERBATIM_BLOCK = 3;
+  int BLOCK_STATEMENT__TARGET_BLOCK = 3;
 
   /**
    * The number of structural features of the '<em>Block Statement</em>' class.
@@ -2649,52 +2750,6 @@ public interface MdlPackage extends EPackage
   int BLOCK_STATEMENT_FEATURE_COUNT = 4;
 
   /**
-   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.VerbatimBlockImpl <em>Verbatim Block</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.ddmore.mdl.mdl.impl.VerbatimBlockImpl
-   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVerbatimBlock()
-   * @generated
-   */
-  int VERBATIM_BLOCK = 63;
-
-  /**
-   * The feature id for the '<em><b>Identifier</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VERBATIM_BLOCK__IDENTIFIER = 0;
-
-  /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VERBATIM_BLOCK__BLOCK = 1;
-
-  /**
-   * The feature id for the '<em><b>External Code</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VERBATIM_BLOCK__EXTERNAL_CODE = 2;
-
-  /**
-   * The number of structural features of the '<em>Verbatim Block</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VERBATIM_BLOCK_FEATURE_COUNT = 3;
-
-  /**
    * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.TargetBlockImpl <em>Target Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2702,7 +2757,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getTargetBlock()
    * @generated
    */
-  int TARGET_BLOCK = 64;
+  int TARGET_BLOCK = 65;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2741,6 +2796,80 @@ public interface MdlPackage extends EPackage
   int TARGET_BLOCK_FEATURE_COUNT = 3;
 
   /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ImportBlockImpl <em>Import Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ImportBlockImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getImportBlock()
+   * @generated
+   */
+  int IMPORT_BLOCK = 66;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORT_BLOCK__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Functions</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORT_BLOCK__FUNCTIONS = 1;
+
+  /**
+   * The number of structural features of the '<em>Import Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORT_BLOCK_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ImportedFunctionImpl <em>Imported Function</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.ImportedFunctionImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getImportedFunction()
+   * @generated
+   */
+  int IMPORTED_FUNCTION = 67;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORTED_FUNCTION__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>List</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORTED_FUNCTION__LIST = 1;
+
+  /**
+   * The number of structural features of the '<em>Imported Function</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORTED_FUNCTION_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.SymbolModificationImpl <em>Symbol Modification</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2748,7 +2877,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSymbolModification()
    * @generated
    */
-  int SYMBOL_MODIFICATION = 65;
+  int SYMBOL_MODIFICATION = 68;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' containment reference.
@@ -2785,7 +2914,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParameterDeclaration()
    * @generated
    */
-  int PARAMETER_DECLARATION = 66;
+  int PARAMETER_DECLARATION = 69;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2822,7 +2951,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSymbolDeclaration()
    * @generated
    */
-  int SYMBOL_DECLARATION = 67;
+  int SYMBOL_DECLARATION = 70;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2877,7 +3006,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getEnumType()
    * @generated
    */
-  int ENUM_TYPE = 68;
+  int ENUM_TYPE = 71;
 
   /**
    * The feature id for the '<em><b>Categorical</b></em>' containment reference.
@@ -2943,13 +3072,22 @@ public interface MdlPackage extends EPackage
   int ENUM_TYPE__MISSING = 6;
 
   /**
+   * The feature id for the '<em><b>Target</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENUM_TYPE__TARGET = 7;
+
+  /**
    * The number of structural features of the '<em>Enum Type</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ENUM_TYPE_FEATURE_COUNT = 7;
+  int ENUM_TYPE_FEATURE_COUNT = 8;
 
   /**
    * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.MissingImpl <em>Missing</em>}' class.
@@ -2959,7 +3097,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMissing()
    * @generated
    */
-  int MISSING = 69;
+  int MISSING = 72;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -2987,7 +3125,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLikelyhood()
    * @generated
    */
-  int LIKELYHOOD = 70;
+  int LIKELYHOOD = 73;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -3015,7 +3153,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLevelType()
    * @generated
    */
-  int LEVEL_TYPE = 71;
+  int LEVEL_TYPE = 74;
 
   /**
    * The feature id for the '<em><b>Mdv</b></em>' attribute.
@@ -3070,7 +3208,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getCategorical()
    * @generated
    */
-  int CATEGORICAL = 72;
+  int CATEGORICAL = 75;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -3107,7 +3245,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getContinuous()
    * @generated
    */
-  int CONTINUOUS = 73;
+  int CONTINUOUS = 76;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -3135,7 +3273,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getCovariate()
    * @generated
    */
-  int COVARIATE = 74;
+  int COVARIATE = 77;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -3163,7 +3301,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getDistribution()
    * @generated
    */
-  int DISTRIBUTION = 75;
+  int DISTRIBUTION = 78;
 
   /**
    * The feature id for the '<em><b>Normal</b></em>' attribute.
@@ -3227,7 +3365,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAnyExpression()
    * @generated
    */
-  int ANY_EXPRESSION = 76;
+  int ANY_EXPRESSION = 79;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -3282,7 +3420,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getExpression()
    * @generated
    */
-  int EXPRESSION = 77;
+  int EXPRESSION = 80;
 
   /**
    * The feature id for the '<em><b>Conditional Expression</b></em>' containment reference.
@@ -3310,7 +3448,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getList()
    * @generated
    */
-  int LIST = 78;
+  int LIST = 81;
 
   /**
    * The feature id for the '<em><b>Arguments</b></em>' containment reference.
@@ -3338,7 +3476,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOdeList()
    * @generated
    */
-  int ODE_LIST = 79;
+  int ODE_LIST = 82;
 
   /**
    * The feature id for the '<em><b>Arguments</b></em>' containment reference.
@@ -3366,7 +3504,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getRandomList()
    * @generated
    */
-  int RANDOM_LIST = 80;
+  int RANDOM_LIST = 83;
 
   /**
    * The feature id for the '<em><b>Arguments</b></em>' containment reference.
@@ -3394,7 +3532,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getArguments()
    * @generated
    */
-  int ARGUMENTS = 81;
+  int ARGUMENTS = 84;
 
   /**
    * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
@@ -3422,7 +3560,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getArgument()
    * @generated
    */
-  int ARGUMENT = 82;
+  int ARGUMENT = 85;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -3459,7 +3597,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getConditionalStatement()
    * @generated
    */
-  int CONDITIONAL_STATEMENT = 83;
+  int CONDITIONAL_STATEMENT = 86;
 
   /**
    * The feature id for the '<em><b>Par Expression</b></em>' containment reference.
@@ -3523,7 +3661,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getBlock()
    * @generated
    */
-  int BLOCK = 84;
+  int BLOCK = 87;
 
   /**
    * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -3551,7 +3689,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getParExpression()
    * @generated
    */
-  int PAR_EXPRESSION = 85;
+  int PAR_EXPRESSION = 88;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -3579,7 +3717,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getConditionalExpression()
    * @generated
    */
-  int CONDITIONAL_EXPRESSION = 86;
+  int CONDITIONAL_EXPRESSION = 89;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -3625,7 +3763,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getOrExpression()
    * @generated
    */
-  int OR_EXPRESSION = 87;
+  int OR_EXPRESSION = 90;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference list.
@@ -3662,7 +3800,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAndExpression()
    * @generated
    */
-  int AND_EXPRESSION = 88;
+  int AND_EXPRESSION = 91;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference list.
@@ -3699,7 +3837,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getLogicalExpression()
    * @generated
    */
-  int LOGICAL_EXPRESSION = 89;
+  int LOGICAL_EXPRESSION = 92;
 
   /**
    * The feature id for the '<em><b>Negation</b></em>' attribute.
@@ -3754,7 +3892,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getAdditiveExpression()
    * @generated
    */
-  int ADDITIVE_EXPRESSION = 90;
+  int ADDITIVE_EXPRESSION = 93;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference list.
@@ -3800,7 +3938,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getMultiplicativeExpression()
    * @generated
    */
-  int MULTIPLICATIVE_EXPRESSION = 91;
+  int MULTIPLICATIVE_EXPRESSION = 94;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference list.
@@ -3837,7 +3975,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getPowerExpression()
    * @generated
    */
-  int POWER_EXPRESSION = 92;
+  int POWER_EXPRESSION = 95;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference list.
@@ -3874,7 +4012,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getUnaryExpression()
    * @generated
    */
-  int UNARY_EXPRESSION = 93;
+  int UNARY_EXPRESSION = 96;
 
   /**
    * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -3929,7 +4067,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getPrimary()
    * @generated
    */
-  int PRIMARY = 94;
+  int PRIMARY = 97;
 
   /**
    * The feature id for the '<em><b>Function Call</b></em>' containment reference.
@@ -3993,7 +4131,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVector()
    * @generated
    */
-  int VECTOR = 95;
+  int VECTOR = 98;
 
   /**
    * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -4030,7 +4168,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFullyQualifiedSymbolName()
    * @generated
    */
-  int FULLY_QUALIFIED_SYMBOL_NAME = 96;
+  int FULLY_QUALIFIED_SYMBOL_NAME = 99;
 
   /**
    * The feature id for the '<em><b>Object</b></em>' reference.
@@ -4067,7 +4205,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFullyQualifiedArgumentName()
    * @generated
    */
-  int FULLY_QUALIFIED_ARGUMENT_NAME = 97;
+  int FULLY_QUALIFIED_ARGUMENT_NAME = 100;
 
   /**
    * The feature id for the '<em><b>Parent</b></em>' containment reference.
@@ -4079,13 +4217,13 @@ public interface MdlPackage extends EPackage
   int FULLY_QUALIFIED_ARGUMENT_NAME__PARENT = 0;
 
   /**
-   * The feature id for the '<em><b>Identifier</b></em>' attribute list.
+   * The feature id for the '<em><b>Selectors</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER = 1;
+  int FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS = 1;
 
   /**
    * The number of structural features of the '<em>Fully Qualified Argument Name</em>' class.
@@ -4097,6 +4235,43 @@ public interface MdlPackage extends EPackage
   int FULLY_QUALIFIED_ARGUMENT_NAME_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.SelectorImpl <em>Selector</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.ddmore.mdl.mdl.impl.SelectorImpl
+   * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSelector()
+   * @generated
+   */
+  int SELECTOR = 101;
+
+  /**
+   * The feature id for the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SELECTOR__IDENTIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Selector</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SELECTOR__SELECTOR = 1;
+
+  /**
+   * The number of structural features of the '<em>Selector</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SELECTOR_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link org.ddmore.mdl.mdl.impl.ObjectNameImpl <em>Object Name</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4104,7 +4279,7 @@ public interface MdlPackage extends EPackage
    * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getObjectName()
    * @generated
    */
-  int OBJECT_NAME = 98;
+  int OBJECT_NAME = 102;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4503,15 +4678,26 @@ public interface MdlPackage extends EPackage
   EReference getModelObjectBlock_SimulationBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getVerbatimBlock <em>Verbatim Block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getTargetBlock <em>Target Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Verbatim Block</em>'.
-   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getVerbatimBlock()
+   * @return the meta object for the containment reference '<em>Target Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getTargetBlock()
    * @see #getModelObjectBlock()
    * @generated
    */
-  EReference getModelObjectBlock_VerbatimBlock();
+  EReference getModelObjectBlock_TargetBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ModelObjectBlock#getImportBlock <em>Import Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Import Block</em>'.
+   * @see org.ddmore.mdl.mdl.ModelObjectBlock#getImportBlock()
+   * @see #getModelObjectBlock()
+   * @generated
+   */
+  EReference getModelObjectBlock_ImportBlock();
 
   /**
    * Returns the meta object for class '{@link org.ddmore.mdl.mdl.IndividualVariablesBlock <em>Individual Variables Block</em>}'.
@@ -4909,15 +5095,26 @@ public interface MdlPackage extends EPackage
   EReference getParameterObjectBlock_PriorBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getVerbatimBlock <em>Verbatim Block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getTargetBlock <em>Target Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Verbatim Block</em>'.
-   * @see org.ddmore.mdl.mdl.ParameterObjectBlock#getVerbatimBlock()
+   * @return the meta object for the containment reference '<em>Target Block</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterObjectBlock#getTargetBlock()
    * @see #getParameterObjectBlock()
    * @generated
    */
-  EReference getParameterObjectBlock_VerbatimBlock();
+  EReference getParameterObjectBlock_TargetBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ParameterObjectBlock#getImportBlock <em>Import Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Import Block</em>'.
+   * @see org.ddmore.mdl.mdl.ParameterObjectBlock#getImportBlock()
+   * @see #getParameterObjectBlock()
+   * @generated
+   */
+  EReference getParameterObjectBlock_ImportBlock();
 
   /**
    * Returns the meta object for class '{@link org.ddmore.mdl.mdl.StructuralBlock <em>Structural Block</em>}'.
@@ -5048,15 +5245,26 @@ public interface MdlPackage extends EPackage
   EReference getDataObjectBlock_FileBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DataObjectBlock#getVerbatimBlock <em>Verbatim Block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DataObjectBlock#getTargetBlock <em>Target Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Verbatim Block</em>'.
-   * @see org.ddmore.mdl.mdl.DataObjectBlock#getVerbatimBlock()
+   * @return the meta object for the containment reference '<em>Target Block</em>'.
+   * @see org.ddmore.mdl.mdl.DataObjectBlock#getTargetBlock()
    * @see #getDataObjectBlock()
    * @generated
    */
-  EReference getDataObjectBlock_VerbatimBlock();
+  EReference getDataObjectBlock_TargetBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.DataObjectBlock#getImportBlock <em>Import Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Import Block</em>'.
+   * @see org.ddmore.mdl.mdl.DataObjectBlock#getImportBlock()
+   * @see #getDataObjectBlock()
+   * @generated
+   */
+  EReference getDataObjectBlock_ImportBlock();
 
   /**
    * Returns the meta object for class '{@link org.ddmore.mdl.mdl.HeaderBlock <em>Header Block</em>}'.
@@ -5177,15 +5385,26 @@ public interface MdlPackage extends EPackage
   EReference getTaskObjectBlock_ModelBlock();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskObjectBlock#getVerbatimBlock <em>Verbatim Block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskObjectBlock#getTargetBlock <em>Target Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Verbatim Block</em>'.
-   * @see org.ddmore.mdl.mdl.TaskObjectBlock#getVerbatimBlock()
+   * @return the meta object for the containment reference '<em>Target Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObjectBlock#getTargetBlock()
    * @see #getTaskObjectBlock()
    * @generated
    */
-  EReference getTaskObjectBlock_VerbatimBlock();
+  EReference getTaskObjectBlock_TargetBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.TaskObjectBlock#getImportBlock <em>Import Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Import Block</em>'.
+   * @see org.ddmore.mdl.mdl.TaskObjectBlock#getImportBlock()
+   * @see #getTaskObjectBlock()
+   * @generated
+   */
+  EReference getTaskObjectBlock_ImportBlock();
 
   /**
    * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ParameterBlock <em>Parameter Block</em>}'.
@@ -5602,6 +5821,38 @@ public interface MdlPackage extends EPackage
    * @generated
    */
   EReference getLibraryBlock_Statements();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.FunctionCallStatement <em>Function Call Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Function Call Statement</em>'.
+   * @see org.ddmore.mdl.mdl.FunctionCallStatement
+   * @generated
+   */
+  EClass getFunctionCallStatement();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.FunctionCallStatement#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.FunctionCallStatement#getIdentifier()
+   * @see #getFunctionCallStatement()
+   * @generated
+   */
+  EAttribute getFunctionCallStatement_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.FunctionCallStatement#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.ddmore.mdl.mdl.FunctionCallStatement#getExpression()
+   * @see #getFunctionCallStatement()
+   * @generated
+   */
+  EReference getFunctionCallStatement_Expression();
 
   /**
    * Returns the meta object for class '{@link org.ddmore.mdl.mdl.OdeBlock <em>Ode Block</em>}'.
@@ -6364,15 +6615,36 @@ public interface MdlPackage extends EPackage
   EClass getFormalArguments();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.FormalArguments#getIdentifiers <em>Identifiers</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.FormalArguments#getArguments <em>Arguments</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Identifiers</em>'.
-   * @see org.ddmore.mdl.mdl.FormalArguments#getIdentifiers()
+   * @return the meta object for the containment reference list '<em>Arguments</em>'.
+   * @see org.ddmore.mdl.mdl.FormalArguments#getArguments()
    * @see #getFormalArguments()
    * @generated
    */
-  EAttribute getFormalArguments_Identifiers();
+  EReference getFormalArguments_Arguments();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.FormalArgument <em>Formal Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Formal Argument</em>'.
+   * @see org.ddmore.mdl.mdl.FormalArgument
+   * @generated
+   */
+  EClass getFormalArgument();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.FormalArgument#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.FormalArgument#getIdentifier()
+   * @see #getFormalArgument()
+   * @generated
+   */
+  EAttribute getFormalArgument_Identifier();
 
   /**
    * Returns the meta object for class '{@link org.ddmore.mdl.mdl.FunctionCall <em>Function Call</em>}'.
@@ -6450,58 +6722,15 @@ public interface MdlPackage extends EPackage
   EReference getBlockStatement_Statement();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.BlockStatement#getVerbatimBlock <em>Verbatim Block</em>}'.
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.BlockStatement#getTargetBlock <em>Target Block</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Verbatim Block</em>'.
-   * @see org.ddmore.mdl.mdl.BlockStatement#getVerbatimBlock()
+   * @return the meta object for the containment reference '<em>Target Block</em>'.
+   * @see org.ddmore.mdl.mdl.BlockStatement#getTargetBlock()
    * @see #getBlockStatement()
    * @generated
    */
-  EReference getBlockStatement_VerbatimBlock();
-
-  /**
-   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.VerbatimBlock <em>Verbatim Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Verbatim Block</em>'.
-   * @see org.ddmore.mdl.mdl.VerbatimBlock
-   * @generated
-   */
-  EClass getVerbatimBlock();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.VerbatimBlock#getIdentifier <em>Identifier</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.VerbatimBlock#getIdentifier()
-   * @see #getVerbatimBlock()
-   * @generated
-   */
-  EAttribute getVerbatimBlock_Identifier();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.VerbatimBlock#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see org.ddmore.mdl.mdl.VerbatimBlock#getBlock()
-   * @see #getVerbatimBlock()
-   * @generated
-   */
-  EReference getVerbatimBlock_Block();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.VerbatimBlock#getExternalCode <em>External Code</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>External Code</em>'.
-   * @see org.ddmore.mdl.mdl.VerbatimBlock#getExternalCode()
-   * @see #getVerbatimBlock()
-   * @generated
-   */
-  EAttribute getVerbatimBlock_ExternalCode();
+  EReference getBlockStatement_TargetBlock();
 
   /**
    * Returns the meta object for class '{@link org.ddmore.mdl.mdl.TargetBlock <em>Target Block</em>}'.
@@ -6545,6 +6774,70 @@ public interface MdlPackage extends EPackage
    * @generated
    */
   EAttribute getTargetBlock_ExternalCode();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ImportBlock <em>Import Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Import Block</em>'.
+   * @see org.ddmore.mdl.mdl.ImportBlock
+   * @generated
+   */
+  EClass getImportBlock();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.ImportBlock#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.ImportBlock#getIdentifier()
+   * @see #getImportBlock()
+   * @generated
+   */
+  EAttribute getImportBlock_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.ImportBlock#getFunctions <em>Functions</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Functions</em>'.
+   * @see org.ddmore.mdl.mdl.ImportBlock#getFunctions()
+   * @see #getImportBlock()
+   * @generated
+   */
+  EReference getImportBlock_Functions();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ImportedFunction <em>Imported Function</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Imported Function</em>'.
+   * @see org.ddmore.mdl.mdl.ImportedFunction
+   * @generated
+   */
+  EClass getImportedFunction();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.ImportedFunction#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.ImportedFunction#getIdentifier()
+   * @see #getImportedFunction()
+   * @generated
+   */
+  EAttribute getImportedFunction_Identifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.ddmore.mdl.mdl.ImportedFunction#getList <em>List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>List</em>'.
+   * @see org.ddmore.mdl.mdl.ImportedFunction#getList()
+   * @see #getImportedFunction()
+   * @generated
+   */
+  EReference getImportedFunction_List();
 
   /**
    * Returns the meta object for class '{@link org.ddmore.mdl.mdl.SymbolModification <em>Symbol Modification</em>}'.
@@ -6750,6 +7043,17 @@ public interface MdlPackage extends EPackage
    * @generated
    */
   EReference getEnumType_Missing();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.EnumType#getTarget <em>Target</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Target</em>'.
+   * @see org.ddmore.mdl.mdl.EnumType#getTarget()
+   * @see #getEnumType()
+   * @generated
+   */
+  EAttribute getEnumType_Target();
 
   /**
    * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Missing <em>Missing</em>}'.
@@ -7757,15 +8061,47 @@ public interface MdlPackage extends EPackage
   EReference getFullyQualifiedArgumentName_Parent();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getIdentifier <em>Identifier</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getSelectors <em>Selectors</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Identifier</em>'.
-   * @see org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getIdentifier()
+   * @return the meta object for the containment reference list '<em>Selectors</em>'.
+   * @see org.ddmore.mdl.mdl.FullyQualifiedArgumentName#getSelectors()
    * @see #getFullyQualifiedArgumentName()
    * @generated
    */
-  EAttribute getFullyQualifiedArgumentName_Identifier();
+  EReference getFullyQualifiedArgumentName_Selectors();
+
+  /**
+   * Returns the meta object for class '{@link org.ddmore.mdl.mdl.Selector <em>Selector</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Selector</em>'.
+   * @see org.ddmore.mdl.mdl.Selector
+   * @generated
+   */
+  EClass getSelector();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Selector#getIdentifier <em>Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Identifier</em>'.
+   * @see org.ddmore.mdl.mdl.Selector#getIdentifier()
+   * @see #getSelector()
+   * @generated
+   */
+  EAttribute getSelector_Identifier();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.ddmore.mdl.mdl.Selector#getSelector <em>Selector</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Selector</em>'.
+   * @see org.ddmore.mdl.mdl.Selector#getSelector()
+   * @see #getSelector()
+   * @generated
+   */
+  EAttribute getSelector_Selector();
 
   /**
    * Returns the meta object for class '{@link org.ddmore.mdl.mdl.ObjectName <em>Object Name</em>}'.
@@ -8108,12 +8444,20 @@ public interface MdlPackage extends EPackage
     EReference MODEL_OBJECT_BLOCK__SIMULATION_BLOCK = eINSTANCE.getModelObjectBlock_SimulationBlock();
 
     /**
-     * The meta object literal for the '<em><b>Verbatim Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Target Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MODEL_OBJECT_BLOCK__VERBATIM_BLOCK = eINSTANCE.getModelObjectBlock_VerbatimBlock();
+    EReference MODEL_OBJECT_BLOCK__TARGET_BLOCK = eINSTANCE.getModelObjectBlock_TargetBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Import Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MODEL_OBJECT_BLOCK__IMPORT_BLOCK = eINSTANCE.getModelObjectBlock_ImportBlock();
 
     /**
      * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl <em>Individual Variables Block</em>}' class.
@@ -8436,12 +8780,20 @@ public interface MdlPackage extends EPackage
     EReference PARAMETER_OBJECT_BLOCK__PRIOR_BLOCK = eINSTANCE.getParameterObjectBlock_PriorBlock();
 
     /**
-     * The meta object literal for the '<em><b>Verbatim Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Target Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference PARAMETER_OBJECT_BLOCK__VERBATIM_BLOCK = eINSTANCE.getParameterObjectBlock_VerbatimBlock();
+    EReference PARAMETER_OBJECT_BLOCK__TARGET_BLOCK = eINSTANCE.getParameterObjectBlock_TargetBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Import Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PARAMETER_OBJECT_BLOCK__IMPORT_BLOCK = eINSTANCE.getParameterObjectBlock_ImportBlock();
 
     /**
      * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.StructuralBlockImpl <em>Structural Block</em>}' class.
@@ -8548,12 +8900,20 @@ public interface MdlPackage extends EPackage
     EReference DATA_OBJECT_BLOCK__FILE_BLOCK = eINSTANCE.getDataObjectBlock_FileBlock();
 
     /**
-     * The meta object literal for the '<em><b>Verbatim Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Target Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference DATA_OBJECT_BLOCK__VERBATIM_BLOCK = eINSTANCE.getDataObjectBlock_VerbatimBlock();
+    EReference DATA_OBJECT_BLOCK__TARGET_BLOCK = eINSTANCE.getDataObjectBlock_TargetBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Import Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DATA_OBJECT_BLOCK__IMPORT_BLOCK = eINSTANCE.getDataObjectBlock_ImportBlock();
 
     /**
      * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.HeaderBlockImpl <em>Header Block</em>}' class.
@@ -8650,12 +9010,20 @@ public interface MdlPackage extends EPackage
     EReference TASK_OBJECT_BLOCK__MODEL_BLOCK = eINSTANCE.getTaskObjectBlock_ModelBlock();
 
     /**
-     * The meta object literal for the '<em><b>Verbatim Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Target Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference TASK_OBJECT_BLOCK__VERBATIM_BLOCK = eINSTANCE.getTaskObjectBlock_VerbatimBlock();
+    EReference TASK_OBJECT_BLOCK__TARGET_BLOCK = eINSTANCE.getTaskObjectBlock_TargetBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Import Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TASK_OBJECT_BLOCK__IMPORT_BLOCK = eINSTANCE.getTaskObjectBlock_ImportBlock();
 
     /**
      * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ParameterBlockImpl <em>Parameter Block</em>}' class.
@@ -8994,6 +9362,32 @@ public interface MdlPackage extends EPackage
      * @generated
      */
     EReference LIBRARY_BLOCK__STATEMENTS = eINSTANCE.getLibraryBlock_Statements();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl <em>Function Call Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFunctionCallStatement()
+     * @generated
+     */
+    EClass FUNCTION_CALL_STATEMENT = eINSTANCE.getFunctionCallStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FUNCTION_CALL_STATEMENT__IDENTIFIER = eINSTANCE.getFunctionCallStatement_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FUNCTION_CALL_STATEMENT__EXPRESSION = eINSTANCE.getFunctionCallStatement_Expression();
 
     /**
      * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.OdeBlockImpl <em>Ode Block</em>}' class.
@@ -9606,12 +10000,30 @@ public interface MdlPackage extends EPackage
     EClass FORMAL_ARGUMENTS = eINSTANCE.getFormalArguments();
 
     /**
-     * The meta object literal for the '<em><b>Identifiers</b></em>' attribute list feature.
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute FORMAL_ARGUMENTS__IDENTIFIERS = eINSTANCE.getFormalArguments_Identifiers();
+    EReference FORMAL_ARGUMENTS__ARGUMENTS = eINSTANCE.getFormalArguments_Arguments();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.FormalArgumentImpl <em>Formal Argument</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.FormalArgumentImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getFormalArgument()
+     * @generated
+     */
+    EClass FORMAL_ARGUMENT = eINSTANCE.getFormalArgument();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FORMAL_ARGUMENT__IDENTIFIER = eINSTANCE.getFormalArgument_Identifier();
 
     /**
      * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.FunctionCallImpl <em>Function Call</em>}' class.
@@ -9674,46 +10086,12 @@ public interface MdlPackage extends EPackage
     EReference BLOCK_STATEMENT__STATEMENT = eINSTANCE.getBlockStatement_Statement();
 
     /**
-     * The meta object literal for the '<em><b>Verbatim Block</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Target Block</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference BLOCK_STATEMENT__VERBATIM_BLOCK = eINSTANCE.getBlockStatement_VerbatimBlock();
-
-    /**
-     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.VerbatimBlockImpl <em>Verbatim Block</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.ddmore.mdl.mdl.impl.VerbatimBlockImpl
-     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getVerbatimBlock()
-     * @generated
-     */
-    EClass VERBATIM_BLOCK = eINSTANCE.getVerbatimBlock();
-
-    /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute VERBATIM_BLOCK__IDENTIFIER = eINSTANCE.getVerbatimBlock_Identifier();
-
-    /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference VERBATIM_BLOCK__BLOCK = eINSTANCE.getVerbatimBlock_Block();
-
-    /**
-     * The meta object literal for the '<em><b>External Code</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute VERBATIM_BLOCK__EXTERNAL_CODE = eINSTANCE.getVerbatimBlock_ExternalCode();
+    EReference BLOCK_STATEMENT__TARGET_BLOCK = eINSTANCE.getBlockStatement_TargetBlock();
 
     /**
      * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.TargetBlockImpl <em>Target Block</em>}' class.
@@ -9748,6 +10126,58 @@ public interface MdlPackage extends EPackage
      * @generated
      */
     EAttribute TARGET_BLOCK__EXTERNAL_CODE = eINSTANCE.getTargetBlock_ExternalCode();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ImportBlockImpl <em>Import Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ImportBlockImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getImportBlock()
+     * @generated
+     */
+    EClass IMPORT_BLOCK = eINSTANCE.getImportBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute IMPORT_BLOCK__IDENTIFIER = eINSTANCE.getImportBlock_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Functions</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference IMPORT_BLOCK__FUNCTIONS = eINSTANCE.getImportBlock_Functions();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ImportedFunctionImpl <em>Imported Function</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.ImportedFunctionImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getImportedFunction()
+     * @generated
+     */
+    EClass IMPORTED_FUNCTION = eINSTANCE.getImportedFunction();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute IMPORTED_FUNCTION__IDENTIFIER = eINSTANCE.getImportedFunction_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>List</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference IMPORTED_FUNCTION__LIST = eINSTANCE.getImportedFunction_List();
 
     /**
      * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.SymbolModificationImpl <em>Symbol Modification</em>}' class.
@@ -9908,6 +10338,14 @@ public interface MdlPackage extends EPackage
      * @generated
      */
     EReference ENUM_TYPE__MISSING = eINSTANCE.getEnumType_Missing();
+
+    /**
+     * The meta object literal for the '<em><b>Target</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ENUM_TYPE__TARGET = eINSTANCE.getEnumType_Target();
 
     /**
      * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.MissingImpl <em>Missing</em>}' class.
@@ -10720,12 +11158,38 @@ public interface MdlPackage extends EPackage
     EReference FULLY_QUALIFIED_ARGUMENT_NAME__PARENT = eINSTANCE.getFullyQualifiedArgumentName_Parent();
 
     /**
-     * The meta object literal for the '<em><b>Identifier</b></em>' attribute list feature.
+     * The meta object literal for the '<em><b>Selectors</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute FULLY_QUALIFIED_ARGUMENT_NAME__IDENTIFIER = eINSTANCE.getFullyQualifiedArgumentName_Identifier();
+    EReference FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS = eINSTANCE.getFullyQualifiedArgumentName_Selectors();
+
+    /**
+     * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.SelectorImpl <em>Selector</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.ddmore.mdl.mdl.impl.SelectorImpl
+     * @see org.ddmore.mdl.mdl.impl.MdlPackageImpl#getSelector()
+     * @generated
+     */
+    EClass SELECTOR = eINSTANCE.getSelector();
+
+    /**
+     * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SELECTOR__IDENTIFIER = eINSTANCE.getSelector_Identifier();
+
+    /**
+     * The meta object literal for the '<em><b>Selector</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SELECTOR__SELECTOR = eINSTANCE.getSelector_Selector();
 
     /**
      * The meta object literal for the '{@link org.ddmore.mdl.mdl.impl.ObjectNameImpl <em>Object Name</em>}' class.

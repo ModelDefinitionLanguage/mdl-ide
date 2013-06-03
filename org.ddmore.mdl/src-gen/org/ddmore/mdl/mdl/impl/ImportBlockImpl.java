@@ -4,8 +4,8 @@ package org.ddmore.mdl.mdl.impl;
 
 import java.util.Collection;
 
-import org.ddmore.mdl.mdl.FunctionCallStatement;
-import org.ddmore.mdl.mdl.LibraryBlock;
+import org.ddmore.mdl.mdl.ImportBlock;
+import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.MdlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -24,19 +24,19 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Library Block</b></em>'.
+ * An implementation of the model object '<em><b>Import Block</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.ddmore.mdl.mdl.impl.LibraryBlockImpl#getIdentifier <em>Identifier</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.LibraryBlockImpl#getStatements <em>Statements</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.ImportBlockImpl#getIdentifier <em>Identifier</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.ImportBlockImpl#getFunctions <em>Functions</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements LibraryBlock
+public class ImportBlockImpl extends MinimalEObjectImpl.Container implements ImportBlock
 {
   /**
    * The default value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
@@ -59,21 +59,21 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   protected String identifier = IDENTIFIER_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference list.
+   * The cached value of the '{@link #getFunctions() <em>Functions</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getStatements()
+   * @see #getFunctions()
    * @generated
    * @ordered
    */
-  protected EList<FunctionCallStatement> statements;
+  protected EList<ImportedFunction> functions;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected LibraryBlockImpl()
+  protected ImportBlockImpl()
   {
     super();
   }
@@ -86,7 +86,7 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   @Override
   protected EClass eStaticClass()
   {
-    return MdlPackage.Literals.LIBRARY_BLOCK;
+    return MdlPackage.Literals.IMPORT_BLOCK;
   }
 
   /**
@@ -109,7 +109,7 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
     String oldIdentifier = identifier;
     identifier = newIdentifier;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.LIBRARY_BLOCK__IDENTIFIER, oldIdentifier, identifier));
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.IMPORT_BLOCK__IDENTIFIER, oldIdentifier, identifier));
   }
 
   /**
@@ -117,13 +117,13 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<FunctionCallStatement> getStatements()
+  public EList<ImportedFunction> getFunctions()
   {
-    if (statements == null)
+    if (functions == null)
     {
-      statements = new EObjectContainmentEList<FunctionCallStatement>(FunctionCallStatement.class, this, MdlPackage.LIBRARY_BLOCK__STATEMENTS);
+      functions = new EObjectContainmentEList<ImportedFunction>(ImportedFunction.class, this, MdlPackage.IMPORT_BLOCK__FUNCTIONS);
     }
-    return statements;
+    return functions;
   }
 
   /**
@@ -136,8 +136,8 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   {
     switch (featureID)
     {
-      case MdlPackage.LIBRARY_BLOCK__STATEMENTS:
-        return ((InternalEList<?>)getStatements()).basicRemove(otherEnd, msgs);
+      case MdlPackage.IMPORT_BLOCK__FUNCTIONS:
+        return ((InternalEList<?>)getFunctions()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -152,10 +152,10 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   {
     switch (featureID)
     {
-      case MdlPackage.LIBRARY_BLOCK__IDENTIFIER:
+      case MdlPackage.IMPORT_BLOCK__IDENTIFIER:
         return getIdentifier();
-      case MdlPackage.LIBRARY_BLOCK__STATEMENTS:
-        return getStatements();
+      case MdlPackage.IMPORT_BLOCK__FUNCTIONS:
+        return getFunctions();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -171,12 +171,12 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   {
     switch (featureID)
     {
-      case MdlPackage.LIBRARY_BLOCK__IDENTIFIER:
+      case MdlPackage.IMPORT_BLOCK__IDENTIFIER:
         setIdentifier((String)newValue);
         return;
-      case MdlPackage.LIBRARY_BLOCK__STATEMENTS:
-        getStatements().clear();
-        getStatements().addAll((Collection<? extends FunctionCallStatement>)newValue);
+      case MdlPackage.IMPORT_BLOCK__FUNCTIONS:
+        getFunctions().clear();
+        getFunctions().addAll((Collection<? extends ImportedFunction>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -192,11 +192,11 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   {
     switch (featureID)
     {
-      case MdlPackage.LIBRARY_BLOCK__IDENTIFIER:
+      case MdlPackage.IMPORT_BLOCK__IDENTIFIER:
         setIdentifier(IDENTIFIER_EDEFAULT);
         return;
-      case MdlPackage.LIBRARY_BLOCK__STATEMENTS:
-        getStatements().clear();
+      case MdlPackage.IMPORT_BLOCK__FUNCTIONS:
+        getFunctions().clear();
         return;
     }
     super.eUnset(featureID);
@@ -212,10 +212,10 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
   {
     switch (featureID)
     {
-      case MdlPackage.LIBRARY_BLOCK__IDENTIFIER:
+      case MdlPackage.IMPORT_BLOCK__IDENTIFIER:
         return IDENTIFIER_EDEFAULT == null ? identifier != null : !IDENTIFIER_EDEFAULT.equals(identifier);
-      case MdlPackage.LIBRARY_BLOCK__STATEMENTS:
-        return statements != null && !statements.isEmpty();
+      case MdlPackage.IMPORT_BLOCK__FUNCTIONS:
+        return functions != null && !functions.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -237,4 +237,4 @@ public class LibraryBlockImpl extends MinimalEObjectImpl.Container implements Li
     return result.toString();
   }
 
-} //LibraryBlockImpl
+} //ImportBlockImpl

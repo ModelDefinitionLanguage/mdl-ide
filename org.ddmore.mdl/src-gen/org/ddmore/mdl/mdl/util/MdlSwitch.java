@@ -352,6 +352,13 @@ public class MdlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case MdlPackage.FUNCTION_CALL_STATEMENT:
+      {
+        FunctionCallStatement functionCallStatement = (FunctionCallStatement)theEObject;
+        T result = caseFunctionCallStatement(functionCallStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case MdlPackage.ODE_BLOCK:
       {
         OdeBlock odeBlock = (OdeBlock)theEObject;
@@ -499,6 +506,13 @@ public class MdlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case MdlPackage.FORMAL_ARGUMENT:
+      {
+        FormalArgument formalArgument = (FormalArgument)theEObject;
+        T result = caseFormalArgument(formalArgument);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case MdlPackage.FUNCTION_CALL:
       {
         FunctionCall functionCall = (FunctionCall)theEObject;
@@ -513,17 +527,24 @@ public class MdlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MdlPackage.VERBATIM_BLOCK:
-      {
-        VerbatimBlock verbatimBlock = (VerbatimBlock)theEObject;
-        T result = caseVerbatimBlock(verbatimBlock);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case MdlPackage.TARGET_BLOCK:
       {
         TargetBlock targetBlock = (TargetBlock)theEObject;
         T result = caseTargetBlock(targetBlock);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MdlPackage.IMPORT_BLOCK:
+      {
+        ImportBlock importBlock = (ImportBlock)theEObject;
+        T result = caseImportBlock(importBlock);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MdlPackage.IMPORTED_FUNCTION:
+      {
+        ImportedFunction importedFunction = (ImportedFunction)theEObject;
+        T result = caseImportedFunction(importedFunction);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -755,6 +776,13 @@ public class MdlSwitch<T> extends Switch<T>
       {
         FullyQualifiedArgumentName fullyQualifiedArgumentName = (FullyQualifiedArgumentName)theEObject;
         T result = caseFullyQualifiedArgumentName(fullyQualifiedArgumentName);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MdlPackage.SELECTOR:
+      {
+        Selector selector = (Selector)theEObject;
+        T result = caseSelector(selector);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -1410,6 +1438,22 @@ public class MdlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Function Call Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Function Call Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFunctionCallStatement(FunctionCallStatement object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Ode Block</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1746,6 +1790,22 @@ public class MdlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Formal Argument</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Formal Argument</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFormalArgument(FormalArgument object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Function Call</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1778,22 +1838,6 @@ public class MdlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Verbatim Block</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Verbatim Block</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseVerbatimBlock(VerbatimBlock object)
-  {
-    return null;
-  }
-
-  /**
    * Returns the result of interpreting the object as an instance of '<em>Target Block</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1805,6 +1849,38 @@ public class MdlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTargetBlock(TargetBlock object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Import Block</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Import Block</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseImportBlock(ImportBlock object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Imported Function</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Imported Function</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseImportedFunction(ImportedFunction object)
   {
     return null;
   }
@@ -2333,6 +2409,22 @@ public class MdlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFullyQualifiedArgumentName(FullyQualifiedArgumentName object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Selector</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Selector</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSelector(Selector object)
   {
     return null;
   }

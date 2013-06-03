@@ -1,7 +1,11 @@
 package org.ddmore.mdl.generator;
 
 import com.google.common.base.Objects;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.ddmore.mdl.mdl.AdditiveExpression;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
@@ -14,12 +18,16 @@ import org.ddmore.mdl.mdl.ConditionalExpression;
 import org.ddmore.mdl.mdl.ConditionalStatement;
 import org.ddmore.mdl.mdl.Continuous;
 import org.ddmore.mdl.mdl.Covariate;
+import org.ddmore.mdl.mdl.DataObject;
+import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.Distribution;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.GroupVariablesBlock;
+import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.LevelType;
 import org.ddmore.mdl.mdl.LibraryBlock;
@@ -27,6 +35,7 @@ import org.ddmore.mdl.mdl.Likelyhood;
 import org.ddmore.mdl.mdl.List;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.Missing;
 import org.ddmore.mdl.mdl.MixtureBlock;
 import org.ddmore.mdl.mdl.ModelObject;
@@ -40,22 +49,203 @@ import org.ddmore.mdl.mdl.OdeBlock;
 import org.ddmore.mdl.mdl.OdeList;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.ParExpression;
+import org.ddmore.mdl.mdl.ParameterObject;
+import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.RandomList;
+import org.ddmore.mdl.mdl.Selector;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolModification;
 import org.ddmore.mdl.mdl.TargetBlock;
+import org.ddmore.mdl.mdl.TaskObject;
+import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.Vector;
-import org.ddmore.mdl.mdl.VerbatimBlock;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.Functions.Function0;
 
 @SuppressWarnings("all")
 public class MdlPrinting {
+  protected HashMap<String,HashMap<String,String>> externalFunctions = new Function0<HashMap<String,HashMap<String,String>>>() {
+    public HashMap<String,HashMap<String,String>> apply() {
+      HashMap<String,HashMap<String,String>> _hashMap = new HashMap<String,HashMap<String,String>>();
+      return _hashMap;
+    }
+  }.apply();
+  
+  protected HashMap<String,ArrayList<String>> externalCode = new Function0<HashMap<String,ArrayList<String>>>() {
+    public HashMap<String,ArrayList<String>> apply() {
+      HashMap<String,ArrayList<String>> _hashMap = new HashMap<String,ArrayList<String>>();
+      return _hashMap;
+    }
+  }.apply();
+  
+  public void prepareExternals(final Mcl mcl) {
+    this.externalFunctions.clear();
+    this.externalCode.clear();
+    EList<MclObject> _objects = mcl.getObjects();
+    for (final MclObject o : _objects) {
+      {
+        ModelObject _modelObject = o.getModelObject();
+        boolean _notEquals = (!Objects.equal(_modelObject, null));
+        if (_notEquals) {
+          ModelObject _modelObject_1 = o.getModelObject();
+          EList<ModelObjectBlock> _blocks = _modelObject_1.getBlocks();
+          for (final ModelObjectBlock block : _blocks) {
+            {
+              ImportBlock _importBlock = block.getImportBlock();
+              boolean _notEquals_1 = (!Objects.equal(_importBlock, null));
+              if (_notEquals_1) {
+                ImportBlock _importBlock_1 = block.getImportBlock();
+                ModelObject _modelObject_2 = o.getModelObject();
+                ObjectName _identifier = _modelObject_2.getIdentifier();
+                String _name = _identifier.getName();
+                this.prepareExternalFunctions(_importBlock_1, _name);
+              }
+              TargetBlock _targetBlock = block.getTargetBlock();
+              boolean _notEquals_2 = (!Objects.equal(_targetBlock, null));
+              if (_notEquals_2) {
+                TargetBlock _targetBlock_1 = block.getTargetBlock();
+                this.prepareExternalCode(_targetBlock_1);
+              }
+            }
+          }
+        }
+        ParameterObject _parameterObject = o.getParameterObject();
+        boolean _notEquals_1 = (!Objects.equal(_parameterObject, null));
+        if (_notEquals_1) {
+          ParameterObject _parameterObject_1 = o.getParameterObject();
+          EList<ParameterObjectBlock> _blocks_1 = _parameterObject_1.getBlocks();
+          for (final ParameterObjectBlock block_1 : _blocks_1) {
+            {
+              ImportBlock _importBlock = block_1.getImportBlock();
+              boolean _notEquals_2 = (!Objects.equal(_importBlock, null));
+              if (_notEquals_2) {
+                ImportBlock _importBlock_1 = block_1.getImportBlock();
+                ParameterObject _parameterObject_2 = o.getParameterObject();
+                ObjectName _identifier = _parameterObject_2.getIdentifier();
+                String _name = _identifier.getName();
+                this.prepareExternalFunctions(_importBlock_1, _name);
+              }
+              TargetBlock _targetBlock = block_1.getTargetBlock();
+              boolean _notEquals_3 = (!Objects.equal(_targetBlock, null));
+              if (_notEquals_3) {
+                TargetBlock _targetBlock_1 = block_1.getTargetBlock();
+                this.prepareExternalCode(_targetBlock_1);
+              }
+            }
+          }
+        }
+        DataObject _dataObject = o.getDataObject();
+        boolean _notEquals_2 = (!Objects.equal(_dataObject, null));
+        if (_notEquals_2) {
+          DataObject _dataObject_1 = o.getDataObject();
+          EList<DataObjectBlock> _blocks_2 = _dataObject_1.getBlocks();
+          for (final DataObjectBlock block_2 : _blocks_2) {
+            {
+              ImportBlock _importBlock = block_2.getImportBlock();
+              boolean _notEquals_3 = (!Objects.equal(_importBlock, null));
+              if (_notEquals_3) {
+                ImportBlock _importBlock_1 = block_2.getImportBlock();
+                DataObject _dataObject_2 = o.getDataObject();
+                ObjectName _identifier = _dataObject_2.getIdentifier();
+                String _name = _identifier.getName();
+                this.prepareExternalFunctions(_importBlock_1, _name);
+              }
+              TargetBlock _targetBlock = block_2.getTargetBlock();
+              boolean _notEquals_4 = (!Objects.equal(_targetBlock, null));
+              if (_notEquals_4) {
+                TargetBlock _targetBlock_1 = block_2.getTargetBlock();
+                this.prepareExternalCode(_targetBlock_1);
+              }
+            }
+          }
+        }
+        TaskObject _taskObject = o.getTaskObject();
+        boolean _notEquals_3 = (!Objects.equal(_taskObject, null));
+        if (_notEquals_3) {
+          TaskObject _taskObject_1 = o.getTaskObject();
+          EList<TaskObjectBlock> _blocks_3 = _taskObject_1.getBlocks();
+          for (final TaskObjectBlock block_3 : _blocks_3) {
+            {
+              ImportBlock _importBlock = block_3.getImportBlock();
+              boolean _notEquals_4 = (!Objects.equal(_importBlock, null));
+              if (_notEquals_4) {
+                ImportBlock _importBlock_1 = block_3.getImportBlock();
+                TaskObject _taskObject_2 = o.getTaskObject();
+                ObjectName _identifier = _taskObject_2.getIdentifier();
+                String _name = _identifier.getName();
+                this.prepareExternalFunctions(_importBlock_1, _name);
+              }
+              TargetBlock _targetBlock = block_3.getTargetBlock();
+              boolean _notEquals_5 = (!Objects.equal(_targetBlock, null));
+              if (_notEquals_5) {
+                TargetBlock _targetBlock_1 = block_3.getTargetBlock();
+                this.prepareExternalCode(_targetBlock_1);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  public void prepareExternalCode(final TargetBlock block) {
+  }
+  
+  public void prepareExternalFunctions(final ImportBlock block, final String string) {
+  }
+  
+  public String getExternalCode(final String sectionName) {
+    String res = "";
+    ArrayList<String> snippets = this.externalCode.get(sectionName);
+    boolean _notEquals = (!Objects.equal(snippets, null));
+    if (_notEquals) {
+      for (final String x : snippets) {
+        String _plus = (res + "\n");
+        String _plus_1 = (_plus + x);
+        res = _plus_1;
+      }
+    }
+    return res;
+  }
+  
+  public HashMap<String,String> getExternalFunctionAttributes(final FullyQualifiedSymbolName ref) {
+    ObjectName _object = ref.getObject();
+    boolean _notEquals = (!Objects.equal(_object, null));
+    if (_notEquals) {
+      ObjectName _object_1 = ref.getObject();
+      String _name = _object_1.getName();
+      String _plus = (_name + "$");
+      String _identifier = ref.getIdentifier();
+      String _plus_1 = (_plus + _identifier);
+      return this.externalFunctions.get(_plus_1);
+    } else {
+      Set<Entry<String,HashMap<String,String>>> _entrySet = this.externalFunctions.entrySet();
+      for (final Entry<String,HashMap<String,String>> pair : _entrySet) {
+        {
+          String _key = pair.getKey();
+          final String str = ((String) _key);
+          boolean _notEquals_1 = (!Objects.equal(str, null));
+          if (_notEquals_1) {
+            int _indexOf = str.indexOf("$");
+            final String functID = str.substring(_indexOf);
+            String _identifier_1 = ref.getIdentifier();
+            boolean _equals = functID.equals(_identifier_1);
+            if (_equals) {
+              return pair.getValue();
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+  
   public String fileNameUpperCase(final Mcl m) {
     Resource _eResource = m.eResource();
     String _fileName = this.fileName(_eResource);
@@ -73,6 +263,30 @@ public class MdlPrinting {
       _xblockexpression = (_substring);
     }
     return _xblockexpression;
+  }
+  
+  public boolean isTrue(final AnyExpression expr) {
+    String _str = this.toStr(expr);
+    return this.isTrue(_str);
+  }
+  
+  public boolean isTrue(final String expr) {
+    boolean _or = false;
+    boolean _or_1 = false;
+    boolean _equals = expr.equals("yes");
+    if (_equals) {
+      _or_1 = true;
+    } else {
+      boolean _equals_1 = expr.equals("true");
+      _or_1 = (_equals || _equals_1);
+    }
+    if (_or_1) {
+      _or = true;
+    } else {
+      boolean _equals_2 = expr.equals("1");
+      _or = (_or_1 || _equals_2);
+    }
+    return _or;
   }
   
   public String getAttribute(final List v, final String attrName) {
@@ -404,6 +618,11 @@ public class MdlPrinting {
       Missing _missing_1 = type.getMissing();
       return _missing_1.getIdentifier();
     }
+    String _target = type.getTarget();
+    boolean _notEquals_8 = (!Objects.equal(_target, null));
+    if (_notEquals_8) {
+      return type.getTarget();
+    }
     return null;
   }
   
@@ -710,42 +929,21 @@ public class MdlPrinting {
     EList<String> _string = e.getString();
     boolean _notEquals_1 = (!Objects.equal(_string, null));
     if (_notEquals_1) {
-      EList<MultiplicativeExpression> _expression_2 = e.getExpression();
-      Iterator<MultiplicativeExpression> iterator_1 = _expression_2.iterator();
-      EList<String> _operator_1 = e.getOperator();
-      Iterator<String> operatorIterator_1 = _operator_1.iterator();
+      EList<String> _string_1 = e.getString();
+      Iterator<String> iterator_1 = _string_1.iterator();
       boolean _hasNext_3 = iterator_1.hasNext();
       if (_hasNext_3) {
-        MultiplicativeExpression _next_1 = iterator_1.next();
-        String _str_1 = this.toStr(_next_1);
-        res = _str_1;
+        String _next_1 = iterator_1.next();
+        res = _next_1;
       }
-      boolean _and_1 = false;
       boolean _hasNext_4 = iterator_1.hasNext();
-      if (!_hasNext_4) {
-        _and_1 = false;
-      } else {
-        boolean _hasNext_5 = operatorIterator_1.hasNext();
-        _and_1 = (_hasNext_4 && _hasNext_5);
-      }
-      boolean _while_1 = _and_1;
+      boolean _while_1 = _hasNext_4;
       while (_while_1) {
-        String _next_2 = operatorIterator_1.next();
-        String _convertOperator = this.convertOperator(_next_2);
-        String _plus = (res + _convertOperator);
-        MultiplicativeExpression _next_3 = iterator_1.next();
-        String _str_2 = this.toStr(_next_3);
-        String _plus_1 = (_plus + _str_2);
-        res = _plus_1;
-        boolean _and_2 = false;
-        boolean _hasNext_6 = iterator_1.hasNext();
-        if (!_hasNext_6) {
-          _and_2 = false;
-        } else {
-          boolean _hasNext_7 = operatorIterator_1.hasNext();
-          _and_2 = (_hasNext_6 && _hasNext_7);
-        }
-        _while_1 = _and_2;
+        String _next_2 = iterator_1.next();
+        String _plus = (res + _next_2);
+        res = _plus;
+        boolean _hasNext_5 = iterator_1.hasNext();
+        _while_1 = _hasNext_5;
       }
     }
     return res;
@@ -850,40 +1048,65 @@ public class MdlPrinting {
   }
   
   public String toStr(final Primary p) {
-    String res = "";
     String _number = p.getNumber();
     boolean _notEquals = (!Objects.equal(_number, null));
     if (_notEquals) {
-      String _number_1 = p.getNumber();
-      String _plus = (res + _number_1);
-      res = _plus;
+      return p.getNumber();
     }
     FullyQualifiedSymbolName _symbol = p.getSymbol();
     boolean _notEquals_1 = (!Objects.equal(_symbol, null));
     if (_notEquals_1) {
       FullyQualifiedSymbolName _symbol_1 = p.getSymbol();
-      String _str = this.toStr(_symbol_1);
-      String _convertID = this.convertID(_str);
-      String _plus_1 = (res + _convertID);
-      res = _plus_1;
+      return this.toStr(_symbol_1);
     }
     FunctionCall _functionCall = p.getFunctionCall();
     boolean _notEquals_2 = (!Objects.equal(_functionCall, null));
     if (_notEquals_2) {
       FunctionCall _functionCall_1 = p.getFunctionCall();
-      String _str_1 = this.toStr(_functionCall_1);
-      String _plus_2 = (res + _str_1);
-      res = _plus_2;
+      return this.toStr(_functionCall_1);
     }
     Vector _vector = p.getVector();
     boolean _notEquals_3 = (!Objects.equal(_vector, null));
     if (_notEquals_3) {
       Vector _vector_1 = p.getVector();
-      String _str_2 = this.toStr(_vector_1);
-      String _plus_3 = (res + _str_2);
-      res = _plus_3;
+      return this.toStr(_vector_1);
+    }
+    FullyQualifiedArgumentName _attribute = p.getAttribute();
+    boolean _notEquals_4 = (!Objects.equal(_attribute, null));
+    if (_notEquals_4) {
+      FullyQualifiedArgumentName _attribute_1 = p.getAttribute();
+      return this.toStr(_attribute_1);
+    }
+    return null;
+  }
+  
+  public String toStr(final FullyQualifiedArgumentName name) {
+    FullyQualifiedSymbolName _parent = name.getParent();
+    String res = this.toStr(_parent);
+    EList<Selector> _selectors = name.getSelectors();
+    for (final Selector s : _selectors) {
+      String _str = this.toStr(s);
+      String _plus = (res + _str);
+      res = _plus;
     }
     return res;
+  }
+  
+  public String toStr(final Selector s) {
+    String _identifier = s.getIdentifier();
+    boolean _notEquals = (!Objects.equal(_identifier, null));
+    if (_notEquals) {
+      String _identifier_1 = s.getIdentifier();
+      return ("." + _identifier_1);
+    }
+    String _selector = s.getSelector();
+    boolean _notEquals_1 = (!Objects.equal(_selector, null));
+    if (_notEquals_1) {
+      String _selector_1 = s.getSelector();
+      String _plus = ("[" + _selector_1);
+      return (_plus + "]");
+    }
+    return null;
   }
   
   public String toStr(final Vector v) {
@@ -976,7 +1199,15 @@ public class MdlPrinting {
     return res;
   }
   
-  public CharSequence print(final VerbatimBlock b) {
+  public String externalCodeToStr(final TargetBlock b) {
+    String _externalCode = b.getExternalCode();
+    String _externalCode_1 = b.getExternalCode();
+    int _length = _externalCode_1.length();
+    int _minus = (_length - 3);
+    return _externalCode.substring(3, _minus);
+  }
+  
+  public CharSequence print(final TargetBlock b) {
     StringConcatenation _builder = new StringConcatenation();
     {
       String _externalCode = b.getExternalCode();
@@ -992,29 +1223,6 @@ public class MdlPrinting {
         _builder.newLineIfNotEmpty();
       }
     }
-    {
-      TargetBlock _block = b.getBlock();
-      boolean _notEquals_1 = (!Objects.equal(_block, null));
-      if (_notEquals_1) {
-        TargetBlock _block_1 = b.getBlock();
-        CharSequence _print = this.print(_block_1);
-        _builder.append(_print, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    return _builder;
-  }
-  
-  public CharSequence print(final TargetBlock b) {
-    StringConcatenation _builder = new StringConcatenation();
-    String _externalCode = b.getExternalCode();
-    String _externalCode_1 = b.getExternalCode();
-    int _length = _externalCode_1.length();
-    int _minus = (_length - 3);
-    String printedCode = _externalCode.substring(3, _minus);
-    _builder.newLineIfNotEmpty();
-    _builder.append(printedCode, "");
-    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -1143,11 +1351,11 @@ public class MdlPrinting {
     }
     _builder.newLineIfNotEmpty();
     {
-      VerbatimBlock _verbatimBlock = st.getVerbatimBlock();
-      boolean _notEquals_3 = (!Objects.equal(_verbatimBlock, null));
+      TargetBlock _targetBlock = st.getTargetBlock();
+      boolean _notEquals_3 = (!Objects.equal(_targetBlock, null));
       if (_notEquals_3) {
-        VerbatimBlock _verbatimBlock_1 = st.getVerbatimBlock();
-        CharSequence _print_3 = this.print(_verbatimBlock_1);
+        TargetBlock _targetBlock_1 = st.getTargetBlock();
+        CharSequence _print_3 = this.print(_targetBlock_1);
         _builder.append(_print_3, "");
       }
     }

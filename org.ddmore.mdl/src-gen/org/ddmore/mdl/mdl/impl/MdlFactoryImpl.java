@@ -104,6 +104,7 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
       case MdlPackage.SYMBOL_LIST: return createSymbolList();
       case MdlPackage.MODEL_PREDICTION_BLOCK_STATEMENT: return createModelPredictionBlockStatement();
       case MdlPackage.LIBRARY_BLOCK: return createLibraryBlock();
+      case MdlPackage.FUNCTION_CALL_STATEMENT: return createFunctionCallStatement();
       case MdlPackage.ODE_BLOCK: return createOdeBlock();
       case MdlPackage.GROUP_VARIABLES_BLOCK_STATEMENT: return createGroupVariablesBlockStatement();
       case MdlPackage.MIXTURE_BLOCK: return createMixtureBlock();
@@ -125,10 +126,12 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
       case MdlPackage.SIMULATE_TASK: return createSimulateTask();
       case MdlPackage.EXECUTE_TASK: return createExecuteTask();
       case MdlPackage.FORMAL_ARGUMENTS: return createFormalArguments();
+      case MdlPackage.FORMAL_ARGUMENT: return createFormalArgument();
       case MdlPackage.FUNCTION_CALL: return createFunctionCall();
       case MdlPackage.BLOCK_STATEMENT: return createBlockStatement();
-      case MdlPackage.VERBATIM_BLOCK: return createVerbatimBlock();
       case MdlPackage.TARGET_BLOCK: return createTargetBlock();
+      case MdlPackage.IMPORT_BLOCK: return createImportBlock();
+      case MdlPackage.IMPORTED_FUNCTION: return createImportedFunction();
       case MdlPackage.SYMBOL_MODIFICATION: return createSymbolModification();
       case MdlPackage.PARAMETER_DECLARATION: return createParameterDeclaration();
       case MdlPackage.SYMBOL_DECLARATION: return createSymbolDeclaration();
@@ -162,6 +165,7 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
       case MdlPackage.VECTOR: return createVector();
       case MdlPackage.FULLY_QUALIFIED_SYMBOL_NAME: return createFullyQualifiedSymbolName();
       case MdlPackage.FULLY_QUALIFIED_ARGUMENT_NAME: return createFullyQualifiedArgumentName();
+      case MdlPackage.SELECTOR: return createSelector();
       case MdlPackage.OBJECT_NAME: return createObjectName();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -613,6 +617,17 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public FunctionCallStatement createFunctionCallStatement()
+  {
+    FunctionCallStatementImpl functionCallStatement = new FunctionCallStatementImpl();
+    return functionCallStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public OdeBlock createOdeBlock()
   {
     OdeBlockImpl odeBlock = new OdeBlockImpl();
@@ -844,6 +859,17 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public FormalArgument createFormalArgument()
+  {
+    FormalArgumentImpl formalArgument = new FormalArgumentImpl();
+    return formalArgument;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public FunctionCall createFunctionCall()
   {
     FunctionCallImpl functionCall = new FunctionCallImpl();
@@ -866,10 +892,10 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public VerbatimBlock createVerbatimBlock()
+  public TargetBlock createTargetBlock()
   {
-    VerbatimBlockImpl verbatimBlock = new VerbatimBlockImpl();
-    return verbatimBlock;
+    TargetBlockImpl targetBlock = new TargetBlockImpl();
+    return targetBlock;
   }
 
   /**
@@ -877,10 +903,21 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public TargetBlock createTargetBlock()
+  public ImportBlock createImportBlock()
   {
-    TargetBlockImpl targetBlock = new TargetBlockImpl();
-    return targetBlock;
+    ImportBlockImpl importBlock = new ImportBlockImpl();
+    return importBlock;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ImportedFunction createImportedFunction()
+  {
+    ImportedFunctionImpl importedFunction = new ImportedFunctionImpl();
+    return importedFunction;
   }
 
   /**
@@ -1244,6 +1281,17 @@ public class MdlFactoryImpl extends EFactoryImpl implements MdlFactory
   {
     FullyQualifiedArgumentNameImpl fullyQualifiedArgumentName = new FullyQualifiedArgumentNameImpl();
     return fullyQualifiedArgumentName;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Selector createSelector()
+  {
+    SelectorImpl selector = new SelectorImpl();
+    return selector;
   }
 
   /**

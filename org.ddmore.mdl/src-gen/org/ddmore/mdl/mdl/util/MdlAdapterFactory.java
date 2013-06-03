@@ -275,6 +275,11 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
         return createLibraryBlockAdapter();
       }
       @Override
+      public Adapter caseFunctionCallStatement(FunctionCallStatement object)
+      {
+        return createFunctionCallStatementAdapter();
+      }
+      @Override
       public Adapter caseOdeBlock(OdeBlock object)
       {
         return createOdeBlockAdapter();
@@ -380,6 +385,11 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
         return createFormalArgumentsAdapter();
       }
       @Override
+      public Adapter caseFormalArgument(FormalArgument object)
+      {
+        return createFormalArgumentAdapter();
+      }
+      @Override
       public Adapter caseFunctionCall(FunctionCall object)
       {
         return createFunctionCallAdapter();
@@ -390,14 +400,19 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
         return createBlockStatementAdapter();
       }
       @Override
-      public Adapter caseVerbatimBlock(VerbatimBlock object)
-      {
-        return createVerbatimBlockAdapter();
-      }
-      @Override
       public Adapter caseTargetBlock(TargetBlock object)
       {
         return createTargetBlockAdapter();
+      }
+      @Override
+      public Adapter caseImportBlock(ImportBlock object)
+      {
+        return createImportBlockAdapter();
+      }
+      @Override
+      public Adapter caseImportedFunction(ImportedFunction object)
+      {
+        return createImportedFunctionAdapter();
       }
       @Override
       public Adapter caseSymbolModification(SymbolModification object)
@@ -563,6 +578,11 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseFullyQualifiedArgumentName(FullyQualifiedArgumentName object)
       {
         return createFullyQualifiedArgumentNameAdapter();
+      }
+      @Override
+      public Adapter caseSelector(Selector object)
+      {
+        return createSelectorAdapter();
       }
       @Override
       public Adapter caseObjectName(ObjectName object)
@@ -1192,6 +1212,21 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.FunctionCallStatement <em>Function Call Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.FunctionCallStatement
+   * @generated
+   */
+  public Adapter createFunctionCallStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.OdeBlock <em>Ode Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -1507,6 +1542,21 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.FormalArgument <em>Formal Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.FormalArgument
+   * @generated
+   */
+  public Adapter createFormalArgumentAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.FunctionCall <em>Function Call</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -1537,21 +1587,6 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.VerbatimBlock <em>Verbatim Block</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.VerbatimBlock
-   * @generated
-   */
-  public Adapter createVerbatimBlockAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.TargetBlock <em>Target Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -1562,6 +1597,36 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTargetBlockAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ImportBlock <em>Import Block</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.ImportBlock
+   * @generated
+   */
+  public Adapter createImportBlockAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ImportedFunction <em>Imported Function</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.ImportedFunction
+   * @generated
+   */
+  public Adapter createImportedFunctionAdapter()
   {
     return null;
   }
@@ -2057,6 +2122,21 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFullyQualifiedArgumentNameAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.Selector <em>Selector</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.Selector
+   * @generated
+   */
+  public Adapter createSelectorAdapter()
   {
     return null;
   }

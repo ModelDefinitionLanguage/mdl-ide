@@ -4,6 +4,8 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.ddmore.mdl.generator.MdlPrinting;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.Argument;
@@ -22,16 +24,22 @@ import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.FileBlock;
 import org.ddmore.mdl.mdl.FileBlockStatement;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
+import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.GroupVariablesBlock;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.HeaderBlock;
 import org.ddmore.mdl.mdl.IgnoreList;
+import org.ddmore.mdl.mdl.ImportBlock;
+import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
 import org.ddmore.mdl.mdl.List;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MixtureBlock;
+import org.ddmore.mdl.mdl.ModelBlock;
+import org.ddmore.mdl.mdl.ModelBlockStatement;
 import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
 import org.ddmore.mdl.mdl.ModelPredictionBlock;
@@ -72,96 +80,9 @@ import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 
 @SuppressWarnings("all")
 public class Mdl2Nonmem extends MdlPrinting {
-  private TaskObject taskObjectect = null;
+  private String tol = "";
   
-  public CharSequence convertToNonmem(final Mcl m) {
-    CharSequence _xblockexpression = null;
-    {
-      EList<MclObject> _objects = m.getObjects();
-      for (final MclObject o : _objects) {
-        {
-          this.prepareCollections(o);
-          TaskObject _taskObject = o.getTaskObject();
-          boolean _notEquals = (!Objects.equal(_taskObject, null));
-          if (_notEquals) {
-            TaskObject _taskObject_1 = o.getTaskObject();
-            this.taskObjectect = _taskObject_1;
-          }
-        }
-      }
-      String version = "1.007";
-      String date = "10.05.2013";
-      StringConcatenation _builder = new StringConcatenation();
-      _builder.append(";mdl2nt ");
-      _builder.append(version, "");
-      _builder.append(" beta, last modification ");
-      _builder.append(date, "");
-      _builder.append(", Natallia Kokash (natallia.kokash@gmail.com)  ");
-      _builder.newLineIfNotEmpty();
-      _builder.append("\t");
-      _builder.newLine();
-      _builder.append("$PROB ");
-      String _fileNameUpperCase = this.fileNameUpperCase(m);
-      _builder.append(_fileNameUpperCase, "");
-      _builder.newLineIfNotEmpty();
-      _builder.append("  \t\t");
-      {
-        EList<MclObject> _objects_1 = m.getObjects();
-        for(final MclObject o_1 : _objects_1) {
-          CharSequence _convertToNonmem = this.convertToNonmem(o_1);
-          _builder.append(_convertToNonmem, "  		");
-        }
-      }
-      _builder.newLineIfNotEmpty();
-      _xblockexpression = (_builder);
-    }
-    return _xblockexpression;
-  }
-  
-  public CharSequence convertToNonmem(final MclObject o) {
-    StringConcatenation _builder = new StringConcatenation();
-    {
-      DataObject _dataObject = o.getDataObject();
-      boolean _notEquals = (!Objects.equal(_dataObject, null));
-      if (_notEquals) {
-        DataObject _dataObject_1 = o.getDataObject();
-        CharSequence _convertToNonmem = this.convertToNonmem(_dataObject_1);
-        _builder.append(_convertToNonmem, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      ModelObject _modelObject = o.getModelObject();
-      boolean _notEquals_1 = (!Objects.equal(_modelObject, null));
-      if (_notEquals_1) {
-        ModelObject _modelObject_1 = o.getModelObject();
-        CharSequence _convertToNonmem_1 = this.convertToNonmem(_modelObject_1);
-        _builder.append(_convertToNonmem_1, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      ParameterObject _parameterObject = o.getParameterObject();
-      boolean _notEquals_2 = (!Objects.equal(_parameterObject, null));
-      if (_notEquals_2) {
-        ParameterObject _parameterObject_1 = o.getParameterObject();
-        CharSequence _convertToNonmem_2 = this.convertToNonmem(_parameterObject_1);
-        _builder.append(_convertToNonmem_2, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      TaskObject _taskObject = o.getTaskObject();
-      boolean _notEquals_3 = (!Objects.equal(_taskObject, null));
-      if (_notEquals_3) {
-        TaskObject _taskObject_1 = o.getTaskObject();
-        CharSequence _convertToNonmem_3 = this.convertToNonmem(_taskObject_1);
-        _builder.append(_convertToNonmem_3, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    return _builder;
-  }
+  private String file = "";
   
   private HashMap<Object,Object> eta_vars = new Function0<HashMap<Object,Object>>() {
     public HashMap<Object,Object> apply() {
@@ -191,6 +112,200 @@ public class Mdl2Nonmem extends MdlPrinting {
     }
   }.apply();
   
+  private HashMap<Object,Object> init_vars = new Function0<HashMap<Object,Object>>() {
+    public HashMap<Object,Object> apply() {
+      HashMap<Object,Object> _newHashMap = CollectionLiterals.<Object, Object>newHashMap();
+      return _newHashMap;
+    }
+  }.apply();
+  
+  public CharSequence convertToNonmem(final Mcl m) {
+    CharSequence _xblockexpression = null;
+    {
+      this.init_vars.clear();
+      this.dadt_vars.clear();
+      this.theta_vars.clear();
+      this.eta_vars.clear();
+      this.eps_vars.clear();
+      EList<MclObject> _objects = m.getObjects();
+      for (final MclObject o : _objects) {
+        {
+          this.prepareCollections(o);
+          TaskObject _taskObject = o.getTaskObject();
+          boolean _notEquals = (!Objects.equal(_taskObject, null));
+          if (_notEquals) {
+            TaskObject _taskObject_1 = o.getTaskObject();
+            String _tOL = this.getTOL(_taskObject_1);
+            this.tol = _tOL;
+            TaskObject _taskObject_2 = o.getTaskObject();
+            ObjectName _identifier = _taskObject_2.getIdentifier();
+            String _name = _identifier.getName();
+            String _plus = (_name + ".fit");
+            this.file = _plus;
+          }
+        }
+      }
+      this.prepareExternals(m);
+      String version = "1.008";
+      String date = "02.06.2013";
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append(";mdl2nt ");
+      _builder.append(version, "");
+      _builder.append(" beta, last modification ");
+      _builder.append(date, "");
+      _builder.append(", Natallia Kokash (natallia.kokash@gmail.com)  ");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.newLine();
+      _builder.append("$PROB ");
+      String _fileNameUpperCase = this.fileNameUpperCase(m);
+      _builder.append(_fileNameUpperCase, "");
+      _builder.newLineIfNotEmpty();
+      String _externalCode = this.getExternalCode("$PROBLEM");
+      _builder.append(_externalCode, "");
+      _builder.newLineIfNotEmpty();
+      String _externalCode_1 = this.getExternalCode("$PROB");
+      _builder.append(_externalCode_1, "");
+      _builder.newLineIfNotEmpty();
+      {
+        EList<MclObject> _objects_1 = m.getObjects();
+        for(final MclObject o_1 : _objects_1) {
+          {
+            DataObject _dataObject = o_1.getDataObject();
+            boolean _notEquals = (!Objects.equal(_dataObject, null));
+            if (_notEquals) {
+              DataObject _dataObject_1 = o_1.getDataObject();
+              CharSequence _printINPUT_DATA = this.printINPUT_DATA(_dataObject_1);
+              _builder.append(_printINPUT_DATA, "");
+            }
+          }
+          _builder.newLineIfNotEmpty();
+        }
+      }
+      {
+        EList<MclObject> _objects_2 = m.getObjects();
+        for(final MclObject o_2 : _objects_2) {
+          _builder.append("  \t\t");
+          {
+            TaskObject _taskObject = o_2.getTaskObject();
+            boolean _notEquals_1 = (!Objects.equal(_taskObject, null));
+            if (_notEquals_1) {
+              _builder.append(" ");
+              TaskObject _taskObject_1 = o_2.getTaskObject();
+              CharSequence _printIgnoreStatements = this.printIgnoreStatements(_taskObject_1);
+              _builder.append(_printIgnoreStatements, "  		");
+            }
+          }
+          _builder.newLineIfNotEmpty();
+        }
+      }
+      {
+        EList<MclObject> _objects_3 = m.getObjects();
+        for(final MclObject o_3 : _objects_3) {
+          {
+            ModelObject _modelObject = o_3.getModelObject();
+            boolean _notEquals_2 = (!Objects.equal(_modelObject, null));
+            if (_notEquals_2) {
+              ModelObject _modelObject_1 = o_3.getModelObject();
+              CharSequence _printSUBR_MODEL_PK_ERROR_PRES_DES = this.printSUBR_MODEL_PK_ERROR_PRES_DES(_modelObject_1);
+              _builder.append(_printSUBR_MODEL_PK_ERROR_PRES_DES, "");
+            }
+          }
+          _builder.newLineIfNotEmpty();
+        }
+      }
+      {
+        EList<MclObject> _objects_4 = m.getObjects();
+        for(final MclObject o_4 : _objects_4) {
+          {
+            ParameterObject _parameterObject = o_4.getParameterObject();
+            boolean _notEquals_3 = (!Objects.equal(_parameterObject, null));
+            if (_notEquals_3) {
+              ParameterObject _parameterObject_1 = o_4.getParameterObject();
+              CharSequence _printTHETA_OMEGA_SIGMA = this.printTHETA_OMEGA_SIGMA(_parameterObject_1);
+              _builder.append(_printTHETA_OMEGA_SIGMA, "");
+            }
+          }
+          _builder.newLineIfNotEmpty();
+        }
+      }
+      {
+        EList<MclObject> _objects_5 = m.getObjects();
+        for(final MclObject o_5 : _objects_5) {
+          {
+            TaskObject _taskObject_2 = o_5.getTaskObject();
+            boolean _notEquals_4 = (!Objects.equal(_taskObject_2, null));
+            if (_notEquals_4) {
+              TaskObject _taskObject_3 = o_5.getTaskObject();
+              CharSequence _printFunctions = this.printFunctions(_taskObject_3);
+              _builder.append(_printFunctions, "");
+            }
+          }
+          _builder.newLineIfNotEmpty();
+        }
+      }
+      _xblockexpression = (_builder);
+    }
+    return _xblockexpression;
+  }
+  
+  public void prepareExternalFunctions(final ImportBlock b, final String objName) {
+    EList<ImportedFunction> _functions = b.getFunctions();
+    for (final ImportedFunction f : _functions) {
+      {
+        HashMap<String,String> _hashMap = new HashMap<String,String>();
+        HashMap<String,String> args = _hashMap;
+        List _list = f.getList();
+        String target = this.getAttribute(_list, "target");
+        boolean _notEquals = (!Objects.equal(target, null));
+        if (_notEquals) {
+          boolean _equalsIgnoreCase = target.equalsIgnoreCase("NMTRAN_CODE");
+          if (_equalsIgnoreCase) {
+            List _list_1 = f.getList();
+            Arguments _arguments = _list_1.getArguments();
+            EList<Argument> _arguments_1 = _arguments.getArguments();
+            for (final Argument arg : _arguments_1) {
+              String _identifier = arg.getIdentifier();
+              boolean _notEquals_1 = (!Objects.equal(_identifier, null));
+              if (_notEquals_1) {
+                String _identifier_1 = arg.getIdentifier();
+                AnyExpression _expression = arg.getExpression();
+                String _str = this.toStr(_expression);
+                args.put(_identifier_1, _str);
+              }
+            }
+            String _plus = (objName + "$");
+            String _identifier_2 = f.getIdentifier();
+            String _plus_1 = (_plus + _identifier_2);
+            this.externalFunctions.put(_plus_1, args);
+          }
+        }
+      }
+    }
+  }
+  
+  public void prepareExternalCode(final TargetBlock b) {
+    Arguments _arguments = b.getArguments();
+    final String target = this.selectAttribute(_arguments, "target");
+    boolean _notEquals = (!Objects.equal(target, null));
+    if (_notEquals) {
+      boolean _equalsIgnoreCase = target.equalsIgnoreCase("NMTRAN_CODE");
+      if (_equalsIgnoreCase) {
+        Arguments _arguments_1 = b.getArguments();
+        final String location = this.selectAttribute(_arguments_1, "location");
+        ArrayList<String> codeSnippets = this.externalCode.get(location);
+        boolean _equals = Objects.equal(codeSnippets, null);
+        if (_equals) {
+          ArrayList<String> _arrayList = new ArrayList<String>();
+          codeSnippets = _arrayList;
+        }
+        String _externalCodeToStr = this.externalCodeToStr(b);
+        codeSnippets.add(_externalCodeToStr);
+        this.externalCode.put(location, codeSnippets);
+      }
+    }
+  }
+  
   public void prepareCollections(final MclObject o) {
     ModelObject _modelObject = o.getModelObject();
     boolean _notEquals = (!Objects.equal(_modelObject, null));
@@ -201,11 +316,63 @@ public class Mdl2Nonmem extends MdlPrinting {
       this.setStructuralParameters(_modelObject_2);
       ModelObject _modelObject_3 = o.getModelObject();
       this.setModelPredictionVariables(_modelObject_3);
+      ModelObject _modelObject_4 = o.getModelObject();
+      this.setInitialConditions(_modelObject_4);
+    }
+  }
+  
+  public void setInitialConditions(final ModelObject o) {
+    int i = 1;
+    EList<ModelObjectBlock> _blocks = o.getBlocks();
+    for (final ModelObjectBlock b : _blocks) {
+      ModelPredictionBlock _modelPredictionBlock = b.getModelPredictionBlock();
+      boolean _notEquals = (!Objects.equal(_modelPredictionBlock, null));
+      if (_notEquals) {
+        ModelPredictionBlock _modelPredictionBlock_1 = b.getModelPredictionBlock();
+        EList<ModelPredictionBlockStatement> _statements = _modelPredictionBlock_1.getStatements();
+        for (final ModelPredictionBlockStatement s : _statements) {
+          OdeBlock _odeBlock = s.getOdeBlock();
+          boolean _notEquals_1 = (!Objects.equal(_odeBlock, null));
+          if (_notEquals_1) {
+            OdeBlock _odeBlock_1 = s.getOdeBlock();
+            EList<BlockStatement> _statements_1 = _odeBlock_1.getStatements();
+            for (final BlockStatement ss : _statements_1) {
+              SymbolDeclaration _symbol = ss.getSymbol();
+              boolean _notEquals_2 = (!Objects.equal(_symbol, null));
+              if (_notEquals_2) {
+                SymbolDeclaration _symbol_1 = ss.getSymbol();
+                AnyExpression _expression = _symbol_1.getExpression();
+                boolean _notEquals_3 = (!Objects.equal(_expression, null));
+                if (_notEquals_3) {
+                  SymbolDeclaration _symbol_2 = ss.getSymbol();
+                  AnyExpression _expression_1 = _symbol_2.getExpression();
+                  OdeList _odeList = _expression_1.getOdeList();
+                  boolean _notEquals_4 = (!Objects.equal(_odeList, null));
+                  if (_notEquals_4) {
+                    SymbolDeclaration _symbol_3 = ss.getSymbol();
+                    AnyExpression _expression_2 = _symbol_3.getExpression();
+                    OdeList _odeList_1 = _expression_2.getOdeList();
+                    final String initCond = this.getAttribute(_odeList_1, "init");
+                    boolean _equals = initCond.equals("");
+                    boolean _not = (!_equals);
+                    if (_not) {
+                      this.init_vars.put(Integer.valueOf(i), initCond);
+                    } else {
+                      this.init_vars.put(Integer.valueOf(i), "0");
+                    }
+                    int _plus = (i + 1);
+                    i = _plus;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
   
   public void setModelPredictionVariables(final ModelObject o) {
-    this.dadt_vars.clear();
     int i = 1;
     EList<ModelObjectBlock> _blocks = o.getBlocks();
     for (final ModelObjectBlock b : _blocks) {
@@ -252,8 +419,6 @@ public class Mdl2Nonmem extends MdlPrinting {
   }
   
   public void setRandomVariables(final ModelObject o) {
-    this.eta_vars.clear();
-    this.eps_vars.clear();
     int i = 1;
     int j = 1;
     EList<ModelObjectBlock> _blocks = o.getBlocks();
@@ -270,21 +435,21 @@ public class Mdl2Nonmem extends MdlPrinting {
             RandomList _randomList_1 = s.getRandomList();
             String level = this.getAttribute(_randomList_1, "level");
             final String id = s.getIdentifier();
-            boolean _equalsIgnoreCase = level.equalsIgnoreCase("ID");
-            if (_equalsIgnoreCase) {
+            boolean _equals = level.equals("ID");
+            if (_equals) {
               Object _get = this.eta_vars.get(id);
-              boolean _equals = Objects.equal(_get, null);
-              if (_equals) {
+              boolean _equals_1 = Objects.equal(_get, null);
+              if (_equals_1) {
                 this.eta_vars.put(id, Integer.valueOf(i));
                 int _plus = (i + 1);
                 i = _plus;
               }
             }
-            boolean _equalsIgnoreCase_1 = level.equalsIgnoreCase("DV");
-            if (_equalsIgnoreCase_1) {
+            boolean _equals_2 = level.equals("DV");
+            if (_equals_2) {
               Object _get_1 = this.eps_vars.get(id);
-              boolean _equals_1 = Objects.equal(_get_1, null);
-              if (_equals_1) {
+              boolean _equals_3 = Objects.equal(_get_1, null);
+              if (_equals_3) {
                 this.eps_vars.put(id, Integer.valueOf(j));
                 int _plus_1 = (j + 1);
                 j = _plus_1;
@@ -297,7 +462,6 @@ public class Mdl2Nonmem extends MdlPrinting {
   }
   
   public void setStructuralParameters(final ModelObject o) {
-    this.theta_vars.clear();
     int i = 1;
     EList<ModelObjectBlock> _blocks = o.getBlocks();
     for (final ModelObjectBlock b : _blocks) {
@@ -354,8 +518,8 @@ public class Mdl2Nonmem extends MdlPrinting {
     if (_notEquals) {
       SymbolDeclaration _variable_1 = s.getVariable();
       String _identifier = _variable_1.getIdentifier();
-      boolean _equalsIgnoreCase = _identifier.equalsIgnoreCase("data");
-      if (_equalsIgnoreCase) {
+      boolean _equals = _identifier.equals("data");
+      if (_equals) {
         SymbolDeclaration _variable_2 = s.getVariable();
         AnyExpression _expression = _variable_2.getExpression();
         boolean _notEquals_1 = (!Objects.equal(_expression, null));
@@ -376,7 +540,39 @@ public class Mdl2Nonmem extends MdlPrinting {
     return "";
   }
   
-  public CharSequence convertToNonmem(final ModelObject o) {
+  public String getTOL(final TaskObject obj) {
+    EList<TaskObjectBlock> _blocks = obj.getBlocks();
+    for (final TaskObjectBlock b : _blocks) {
+      ModelBlock _modelBlock = b.getModelBlock();
+      boolean _notEquals = (!Objects.equal(_modelBlock, null));
+      if (_notEquals) {
+        ModelBlock _modelBlock_1 = b.getModelBlock();
+        EList<ModelBlockStatement> _statements = _modelBlock_1.getStatements();
+        for (final ModelBlockStatement ss : _statements) {
+          {
+            BlockStatement _statement = ss.getStatement();
+            SymbolDeclaration x = _statement.getSymbol();
+            boolean _notEquals_1 = (!Objects.equal(x, null));
+            if (_notEquals_1) {
+              String _identifier = x.getIdentifier();
+              boolean _equals = _identifier.equals("tolrel");
+              if (_equals) {
+                AnyExpression _expression = x.getExpression();
+                boolean _notEquals_2 = (!Objects.equal(_expression, null));
+                if (_notEquals_2) {
+                  AnyExpression _expression_1 = x.getExpression();
+                  return this.toStr(_expression_1);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+  
+  public CharSequence printSUBR_MODEL_PK_ERROR_PRES_DES(final ModelObject o) {
     CharSequence _xblockexpression = null;
     {
       final boolean isLibraryDefined = this.isLibraryDefined(o);
@@ -384,6 +580,21 @@ public class Mdl2Nonmem extends MdlPrinting {
       final boolean isErrorNonEmpty = this.isErrorNonEmpty(o);
       final boolean isODEDefined = this.isODEDefined(o);
       StringConcatenation _builder = new StringConcatenation();
+      {
+        if (isLibraryDefined) {
+          {
+            if (isPKDefined) {
+              _builder.newLine();
+              CharSequence _printSUBR = this.printSUBR(o);
+              _builder.append(_printSUBR, "");
+              _builder.newLineIfNotEmpty();
+              String _externalCode = this.getExternalCode("$SUBR");
+              _builder.append(_externalCode, "");
+              _builder.newLineIfNotEmpty();
+            }
+          }
+        }
+      }
       {
         if (isODEDefined) {
           _builder.newLine();
@@ -393,6 +604,10 @@ public class Mdl2Nonmem extends MdlPrinting {
           CharSequence _printModel = this.printModel(o);
           _builder.append(_printModel, "	");
           _builder.newLineIfNotEmpty();
+          _builder.append("\t");
+          String _externalCode_1 = this.getExternalCode("$MODEL");
+          _builder.append(_externalCode_1, "	");
+          _builder.newLineIfNotEmpty();
         }
       }
       _builder.newLine();
@@ -400,10 +615,6 @@ public class Mdl2Nonmem extends MdlPrinting {
         if (isLibraryDefined) {
           {
             if (isPKDefined) {
-              _builder.newLine();
-              CharSequence _printSUBR = this.printSUBR(o);
-              _builder.append(_printSUBR, "");
-              _builder.newLineIfNotEmpty();
               _builder.append("\t");
               _builder.newLine();
               _builder.append("$PK ");
@@ -411,6 +622,10 @@ public class Mdl2Nonmem extends MdlPrinting {
               _builder.append("\t");
               CharSequence _printPK = this.printPK(o);
               _builder.append(_printPK, "	");
+              _builder.newLineIfNotEmpty();
+              _builder.append("\t");
+              String _externalCode_2 = this.getExternalCode("$PK");
+              _builder.append(_externalCode_2, "	");
               _builder.newLineIfNotEmpty();
             }
           }
@@ -423,7 +638,10 @@ public class Mdl2Nonmem extends MdlPrinting {
               CharSequence _printError = this.printError(o);
               _builder.append(_printError, "	");
               _builder.newLineIfNotEmpty();
-              _builder.newLine();
+              _builder.append("\t");
+              String _externalCode_3 = this.getExternalCode("$ERROR");
+              _builder.append(_externalCode_3, "	");
+              _builder.newLineIfNotEmpty();
             }
           }
         } else {
@@ -443,8 +661,16 @@ public class Mdl2Nonmem extends MdlPrinting {
               _builder.append(_printPK_1, "	");
               _builder.newLineIfNotEmpty();
               _builder.append("\t");
+              String _externalCode_4 = this.getExternalCode("$PRED");
+              _builder.append(_externalCode_4, "	");
+              _builder.newLineIfNotEmpty();
+              _builder.append("\t");
               CharSequence _printError_1 = this.printError(o);
               _builder.append(_printError_1, "	");
+              _builder.newLineIfNotEmpty();
+              _builder.append("\t");
+              String _externalCode_5 = this.getExternalCode("$ERROR");
+              _builder.append(_externalCode_5, "	");
               _builder.newLineIfNotEmpty();
             }
           }
@@ -458,6 +684,10 @@ public class Mdl2Nonmem extends MdlPrinting {
           _builder.append("\t");
           CharSequence _printDES = this.printDES(o);
           _builder.append(_printDES, "	");
+          _builder.newLineIfNotEmpty();
+          _builder.append("\t");
+          String _externalCode_6 = this.getExternalCode("$DES");
+          _builder.append(_externalCode_6, "	");
           _builder.newLineIfNotEmpty();
         }
       }
@@ -502,6 +732,27 @@ public class Mdl2Nonmem extends MdlPrinting {
                 }
                 CharSequence _print_1 = this.print(s);
                 _builder.append(_print_1, "");
+                _builder.newLineIfNotEmpty();
+              }
+            }
+          }
+        }
+        {
+          ModelPredictionBlock _modelPredictionBlock = b.getModelPredictionBlock();
+          boolean _notEquals_2 = (!Objects.equal(_modelPredictionBlock, null));
+          if (_notEquals_2) {
+            _builder.newLine();
+            _builder.append(";initial conditions");
+            _builder.newLine();
+            {
+              Set<Entry<Object,Object>> _entrySet = this.init_vars.entrySet();
+              for(final Entry<Object,Object> e : _entrySet) {
+                _builder.append("A_0(");
+                Object _key = e.getKey();
+                _builder.append(_key, "");
+                _builder.append(") = ");
+                Object _value = e.getValue();
+                _builder.append(_value, "");
                 _builder.newLineIfNotEmpty();
               }
             }
@@ -802,137 +1053,55 @@ public class Mdl2Nonmem extends MdlPrinting {
       boolean _notEquals = (!Objects.equal(_libraryBlock, null));
       if (_notEquals) {
         LibraryBlock _libraryBlock_1 = ss.getLibraryBlock();
-        EList<BlockStatement> _statements_1 = _libraryBlock_1.getStatements();
-        for (final BlockStatement st : _statements_1) {
-          SymbolDeclaration _symbol = st.getSymbol();
-          boolean _notEquals_1 = (!Objects.equal(_symbol, null));
-          if (_notEquals_1) {
-            final SymbolDeclaration s = st.getSymbol();
-            String _identifier = s.getIdentifier();
-            boolean _equalsIgnoreCase = _identifier.equalsIgnoreCase("amount");
-            if (_equalsIgnoreCase) {
-              AnyExpression _expression = s.getExpression();
-              boolean _notEquals_2 = (!Objects.equal(_expression, null));
+        EList<FunctionCallStatement> _statements_1 = _libraryBlock_1.getStatements();
+        for (final FunctionCallStatement st : _statements_1) {
+          {
+            FunctionCall _expression = st.getExpression();
+            FullyQualifiedSymbolName libraryRef = _expression.getIdentifier();
+            HashMap<String,String> attributes = this.getExternalFunctionAttributes(libraryRef);
+            String library = libraryRef.getIdentifier();
+            boolean _notEquals_1 = (!Objects.equal(attributes, null));
+            if (_notEquals_1) {
+              String name = attributes.get("name");
+              boolean _notEquals_2 = (!Objects.equal(name, null));
               if (_notEquals_2) {
-                AnyExpression _expression_1 = s.getExpression();
-                List _list = _expression_1.getList();
-                boolean _notEquals_3 = (!Objects.equal(_list, null));
-                if (_notEquals_3) {
-                  AnyExpression _expression_2 = s.getExpression();
-                  List _list_1 = _expression_2.getList();
-                  String library = this.getAttribute(_list_1, "library");
-                  boolean _equals = library.equals("");
-                  boolean _not = (!_equals);
-                  if (_not) {
-                    String _substring = library.substring(0, 2);
-                    boolean _equalsIgnoreCase_1 = _substring.equalsIgnoreCase("nm");
-                    if (_equalsIgnoreCase_1) {
-                      String _substring_1 = library.substring(2);
-                      library = _substring_1;
-                    }
-                  }
-                  AnyExpression _expression_3 = s.getExpression();
-                  List _list_2 = _expression_3.getList();
-                  final String model = this.getAttribute(_list_2, "model");
-                  AnyExpression _expression_4 = s.getExpression();
-                  List _list_3 = _expression_4.getList();
-                  final String trans = this.getAttribute(_list_3, "trans");
-                  String tolStr = "";
-                  ArrayList<Object> tol = this.getTOL(b);
-                  int _size = tol.size();
-                  boolean _greaterThan = (_size > 0);
-                  if (_greaterThan) {
-                    boolean _and = false;
-                    boolean _equalsIgnoreCase_2 = model.equalsIgnoreCase("9");
-                    if (!_equalsIgnoreCase_2) {
-                      _and = false;
-                    } else {
-                      boolean _equalsIgnoreCase_3 = library.equalsIgnoreCase("advan");
-                      _and = (_equalsIgnoreCase_2 && _equalsIgnoreCase_3);
-                    }
-                    if (_and) {
-                      tolStr = "\n$TOL";
-                      for (final Object tolEl : tol) {
-                        String _plus = (tolStr + " NRD(");
-                        String _plus_1 = (_plus + tolEl);
-                        String _plus_2 = (_plus_1 + ")");
-                        tolStr = _plus_2;
-                      }
-                    } else {
-                      Object _get = tol.get(0);
-                      String _plus_3 = (" TOL=" + _get);
-                      tolStr = _plus_3;
-                    }
-                  }
-                  StringConcatenation _builder = new StringConcatenation();
-                  _builder.append("$SUBR ");
-                  {
-                    boolean _equals_1 = model.equals("");
-                    boolean _not_1 = (!_equals_1);
-                    if (_not_1) {
-                      String _upperCase = library.toUpperCase();
-                      _builder.append(_upperCase, "");
-                      _builder.append(model, "");
-                    }
-                  }
-                  _builder.append(tolStr, "");
-                  _builder.append(" ");
-                  {
-                    boolean _equals_2 = trans.equals("");
-                    boolean _not_2 = (!_equals_2);
-                    if (_not_2) {
-                      _builder.append("TRANS");
-                      _builder.append(trans, "");
-                    }
-                  }
-                  return _builder;
-                }
+                library = name;
               }
             }
+            FunctionCall _expression_1 = st.getExpression();
+            Arguments _arguments = _expression_1.getArguments();
+            final String model = this.selectAttribute(_arguments, "model");
+            FunctionCall _expression_2 = st.getExpression();
+            Arguments _arguments_1 = _expression_2.getArguments();
+            final String trans = this.selectAttribute(_arguments_1, "trans");
+            StringConcatenation _builder = new StringConcatenation();
+            _builder.append("$SUBR ");
+            {
+              boolean _equals = model.equals("");
+              boolean _not = (!_equals);
+              if (_not) {
+                String _upperCase = library.toUpperCase();
+                _builder.append(_upperCase, "");
+                _builder.append(model, "");
+              }
+            }
+            _builder.append(" TOL = ");
+            _builder.append(this.tol, "");
+            _builder.append(" ");
+            {
+              boolean _equals_1 = trans.equals("");
+              boolean _not_1 = (!_equals_1);
+              if (_not_1) {
+                _builder.append("TRANS");
+                _builder.append(trans, "");
+              }
+            }
+            return _builder;
           }
         }
       }
     }
     return null;
-  }
-  
-  public ArrayList<Object> getTOL(final ModelPredictionBlock b) {
-    ArrayList<Object> tol = CollectionLiterals.<Object>newArrayList();
-    EList<ModelPredictionBlockStatement> _statements = b.getStatements();
-    for (final ModelPredictionBlockStatement s : _statements) {
-      OdeBlock _odeBlock = s.getOdeBlock();
-      boolean _notEquals = (!Objects.equal(_odeBlock, null));
-      if (_notEquals) {
-        OdeBlock _odeBlock_1 = s.getOdeBlock();
-        EList<BlockStatement> _statements_1 = _odeBlock_1.getStatements();
-        for (final BlockStatement ss : _statements_1) {
-          {
-            SymbolDeclaration x = ss.getSymbol();
-            boolean _notEquals_1 = (!Objects.equal(x, null));
-            if (_notEquals_1) {
-              AnyExpression _expression = x.getExpression();
-              boolean _notEquals_2 = (!Objects.equal(_expression, null));
-              if (_notEquals_2) {
-                AnyExpression _expression_1 = x.getExpression();
-                OdeList _odeList = _expression_1.getOdeList();
-                boolean _notEquals_3 = (!Objects.equal(_odeList, null));
-                if (_notEquals_3) {
-                  AnyExpression _expression_2 = x.getExpression();
-                  OdeList _odeList_1 = _expression_2.getOdeList();
-                  String tolEl = this.getAttribute(_odeList_1, "tolrel");
-                  boolean _equals = tolEl.equals("");
-                  boolean _not = (!_equals);
-                  if (_not) {
-                    tol.add(tolEl);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    return tol;
   }
   
   public CharSequence printTable(final ModelObject o) {
@@ -968,16 +1137,17 @@ public class Mdl2Nonmem extends MdlPrinting {
                 _builder.newLineIfNotEmpty();
                 _builder.append("ONEHEADER NOPRINT ");
                 {
-                  boolean _notEquals_1 = (!Objects.equal(this.taskObjectect, null));
-                  if (_notEquals_1) {
+                  boolean _equals = this.file.equals("");
+                  boolean _not = (!_equals);
+                  if (_not) {
                     _builder.append("FILE=");
-                    ObjectName _identifier = this.taskObjectect.getIdentifier();
-                    String _name = _identifier.getName();
-                    _builder.append(_name, "");
-                    _builder.append(".fit");
+                    _builder.append(this.file, "");
                   }
                 }
                 _builder.append(" ");
+                _builder.newLineIfNotEmpty();
+                String _externalCode = this.getExternalCode("$TABLE");
+                _builder.append(_externalCode, "");
                 _builder.newLineIfNotEmpty();
               }
             }
@@ -988,7 +1158,7 @@ public class Mdl2Nonmem extends MdlPrinting {
     return _builder;
   }
   
-  public CharSequence convertToNonmem(final ParameterObject obj) {
+  public CharSequence printTHETA_OMEGA_SIGMA(final ParameterObject obj) {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _printTheta = this.printTheta(obj);
     _builder.append(_printTheta, "");
@@ -1033,6 +1203,9 @@ public class Mdl2Nonmem extends MdlPrinting {
         }
       }
     }
+    String _externalCode = this.getExternalCode("$THETA");
+    _builder.append(_externalCode, "");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -1093,6 +1266,9 @@ public class Mdl2Nonmem extends MdlPrinting {
         }
       }
     }
+    ArrayList<String> _get = this.externalCode.get("$OMEGA");
+    _builder.append(_get, "");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -1142,6 +1318,9 @@ public class Mdl2Nonmem extends MdlPrinting {
         }
       }
     }
+    String _externalCode = this.getExternalCode("$SIGMA");
+    _builder.append(_externalCode, "");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -1209,7 +1388,7 @@ public class Mdl2Nonmem extends MdlPrinting {
     return false;
   }
   
-  public CharSequence convertToNonmem(final DataObject o) {
+  public CharSequence printINPUT_DATA(final DataObject o) {
     StringConcatenation _builder = new StringConcatenation();
     {
       EList<DataObjectBlock> _blocks = o.getBlocks();
@@ -1241,14 +1420,6 @@ public class Mdl2Nonmem extends MdlPrinting {
         }
       }
     }
-    {
-      boolean _notEquals_2 = (!Objects.equal(this.taskObjectect, null));
-      if (_notEquals_2) {
-        CharSequence _printIgnoreStatements = this.printIgnoreStatements(this.taskObjectect);
-        _builder.append(_printIgnoreStatements, "");
-        _builder.newLineIfNotEmpty();
-      }
-    }
     return _builder;
   }
   
@@ -1269,6 +1440,10 @@ public class Mdl2Nonmem extends MdlPrinting {
         _builder.append(_str, "");
       }
     }
+    _builder.newLineIfNotEmpty();
+    String _externalCode = this.getExternalCode("$INPUT");
+    _builder.append(_externalCode, "");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -1282,6 +1457,9 @@ public class Mdl2Nonmem extends MdlPrinting {
         _builder.newLineIfNotEmpty();
       }
     }
+    String _externalCode = this.getExternalCode("$DATA");
+    _builder.append(_externalCode, "");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -1291,8 +1469,8 @@ public class Mdl2Nonmem extends MdlPrinting {
     if (_notEquals) {
       SymbolDeclaration _variable_1 = s.getVariable();
       String _identifier = _variable_1.getIdentifier();
-      boolean _equalsIgnoreCase = _identifier.equalsIgnoreCase("data");
-      if (_equalsIgnoreCase) {
+      boolean _equals = _identifier.equals("data");
+      if (_equals) {
         SymbolDeclaration _variable_2 = s.getVariable();
         AnyExpression _expression = _variable_2.getExpression();
         boolean _notEquals_1 = (!Objects.equal(_expression, null));
@@ -1305,15 +1483,15 @@ public class Mdl2Nonmem extends MdlPrinting {
             SymbolDeclaration _variable_4 = s.getVariable();
             AnyExpression _expression_2 = _variable_4.getExpression();
             List _list_1 = _expression_2.getList();
-            final String data = this.getAttribute(_list_1, "source");
+            String data = this.getAttribute(_list_1, "source");
             SymbolDeclaration _variable_5 = s.getVariable();
             AnyExpression _expression_3 = _variable_5.getExpression();
             List _list_2 = _expression_3.getList();
-            final String ignore = this.getAttribute(_list_2, "ignore");
+            String ignore = this.getAttribute(_list_2, "ignore");
             StringConcatenation _builder = new StringConcatenation();
             {
-              boolean _equals = data.equals("");
-              boolean _not = (!_equals);
+              boolean _equals_1 = data.equals("");
+              boolean _not = (!_equals_1);
               if (_not) {
                 _builder.append("$DATA ");
                 _builder.append(data, "");
@@ -1321,8 +1499,8 @@ public class Mdl2Nonmem extends MdlPrinting {
             }
             _builder.append(" ");
             {
-              boolean _equals_1 = ignore.equals("");
-              boolean _not_1 = (!_equals_1);
+              boolean _equals_2 = ignore.equals("");
+              boolean _not_1 = (!_equals_2);
               if (_not_1) {
                 _builder.append("IGNORE=");
                 _builder.append(ignore, "");
@@ -1336,7 +1514,7 @@ public class Mdl2Nonmem extends MdlPrinting {
     return null;
   }
   
-  public CharSequence convertToNonmem(final TaskObject o) {
+  public CharSequence printFunctions(final TaskObject o) {
     StringConcatenation _builder = new StringConcatenation();
     {
       EList<TaskObjectBlock> _blocks = o.getBlocks();
@@ -1451,6 +1629,12 @@ public class Mdl2Nonmem extends MdlPrinting {
     }
     _builder.append(" NOABORT");
     _builder.newLineIfNotEmpty();
+    String _externalCode = this.getExternalCode("$SIM");
+    _builder.append(_externalCode, "");
+    _builder.newLineIfNotEmpty();
+    String _externalCode_1 = this.getExternalCode("$SIMULATION");
+    _builder.append(_externalCode_1, "");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -1474,6 +1658,12 @@ public class Mdl2Nonmem extends MdlPrinting {
     }
     _builder.append(" NOABORT");
     _builder.newLineIfNotEmpty();
+    String _externalCode = this.getExternalCode("$EST");
+    _builder.append(_externalCode, "");
+    _builder.newLineIfNotEmpty();
+    String _externalCode_1 = this.getExternalCode("$ESTIMATION");
+    _builder.append(_externalCode_1, "");
+    _builder.newLineIfNotEmpty();
     {
       EList<BlockStatement> _statements_1 = b.getStatements();
       for(final BlockStatement s_1 : _statements_1) {
@@ -1489,14 +1679,18 @@ public class Mdl2Nonmem extends MdlPrinting {
       }
     }
     _builder.newLineIfNotEmpty();
+    String _externalCode_2 = this.getExternalCode("$COV");
+    _builder.append(_externalCode_2, "");
+    _builder.append("\t\t");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
   public CharSequence printEstimate(final SymbolDeclaration s) {
     CharSequence _xifexpression = null;
     String _identifier = s.getIdentifier();
-    boolean _equalsIgnoreCase = _identifier.equalsIgnoreCase("algo");
-    if (_equalsIgnoreCase) {
+    boolean _equals = _identifier.equals("algo");
+    if (_equals) {
       CharSequence _xifexpression_1 = null;
       AnyExpression _expression = s.getExpression();
       Expression _expression_1 = _expression.getExpression();
@@ -1551,8 +1745,8 @@ public class Mdl2Nonmem extends MdlPrinting {
     } else {
       CharSequence _xifexpression_3 = null;
       String _identifier_1 = s.getIdentifier();
-      boolean _equalsIgnoreCase_1 = _identifier_1.equalsIgnoreCase("max");
-      if (_equalsIgnoreCase_1) {
+      boolean _equals_1 = _identifier_1.equals("max");
+      if (_equals_1) {
         StringConcatenation _builder_1 = new StringConcatenation();
         _builder_1.append(" ");
         _builder_1.append("MAX=");
@@ -1563,8 +1757,8 @@ public class Mdl2Nonmem extends MdlPrinting {
       } else {
         CharSequence _xifexpression_4 = null;
         String _identifier_2 = s.getIdentifier();
-        boolean _equalsIgnoreCase_2 = _identifier_2.equalsIgnoreCase("sig");
-        if (_equalsIgnoreCase_2) {
+        boolean _equals_2 = _identifier_2.equals("sig");
+        if (_equals_2) {
           StringConcatenation _builder_2 = new StringConcatenation();
           _builder_2.append(" ");
           _builder_2.append("SIG=");
@@ -1589,8 +1783,8 @@ public class Mdl2Nonmem extends MdlPrinting {
   public CharSequence printEstimateCov(final SymbolDeclaration s) {
     CharSequence _xifexpression = null;
     String _identifier = s.getIdentifier();
-    boolean _equalsIgnoreCase = _identifier.equalsIgnoreCase("cov");
-    if (_equalsIgnoreCase) {
+    boolean _equals = _identifier.equals("cov");
+    if (_equals) {
       CharSequence _xifexpression_1 = null;
       AnyExpression _expression = s.getExpression();
       boolean _notEquals = (!Objects.equal(_expression, null));
@@ -1599,8 +1793,8 @@ public class Mdl2Nonmem extends MdlPrinting {
         AnyExpression _expression_1 = s.getExpression();
         String _str = this.toStr(_expression_1);
         String _replaceAll = _str.replaceAll("\\s", "");
-        boolean _equalsIgnoreCase_1 = _replaceAll.equalsIgnoreCase("");
-        if (_equalsIgnoreCase_1) {
+        boolean _equals_1 = _replaceAll.equals("");
+        if (_equals_1) {
           StringConcatenation _builder = new StringConcatenation();
           _builder.append("$COV ");
           AnyExpression _expression_2 = s.getExpression();
@@ -1630,33 +1824,14 @@ public class Mdl2Nonmem extends MdlPrinting {
         boolean _notEquals_1 = (!Objects.equal(_identifier, null));
         if (_notEquals_1) {
           String _identifier_1 = a.getIdentifier();
-          boolean _equalsIgnoreCase = _identifier_1.equalsIgnoreCase("fix");
-          if (_equalsIgnoreCase) {
+          boolean _equals = _identifier_1.equals("fix");
+          if (_equals) {
             AnyExpression _expression = a.getExpression();
             boolean _notEquals_2 = (!Objects.equal(_expression, null));
             if (_notEquals_2) {
-              boolean _or = false;
-              boolean _or_1 = false;
               AnyExpression _expression_1 = a.getExpression();
-              String _str = this.toStr(_expression_1);
-              boolean _equalsIgnoreCase_1 = _str.equalsIgnoreCase("yes");
-              if (_equalsIgnoreCase_1) {
-                _or_1 = true;
-              } else {
-                AnyExpression _expression_2 = a.getExpression();
-                String _str_1 = this.toStr(_expression_2);
-                boolean _equalsIgnoreCase_2 = _str_1.equalsIgnoreCase("true");
-                _or_1 = (_equalsIgnoreCase_1 || _equalsIgnoreCase_2);
-              }
-              if (_or_1) {
-                _or = true;
-              } else {
-                AnyExpression _expression_3 = a.getExpression();
-                String _str_2 = this.toStr(_expression_3);
-                boolean _equalsIgnoreCase_3 = _str_2.equalsIgnoreCase("1");
-                _or = (_or_1 || _equalsIgnoreCase_3);
-              }
-              printFix = _or;
+              boolean _isTrue = this.isTrue(_expression_1);
+              printFix = _isTrue;
             }
           }
         }
@@ -1669,8 +1844,8 @@ public class Mdl2Nonmem extends MdlPrinting {
         Arguments _parameters_1 = _diagBlock_3.getParameters();
         EList<Argument> _arguments_2 = _parameters_1.getArguments();
         for (final Argument p : _arguments_2) {
-          AnyExpression _expression_4 = p.getExpression();
-          boolean _notEquals_4 = (!Objects.equal(_expression_4, null));
+          AnyExpression _expression_2 = p.getExpression();
+          boolean _notEquals_4 = (!Objects.equal(_expression_2, null));
           if (_notEquals_4) {
             int i = 0;
             boolean _lessThan = (i < k);
@@ -1687,9 +1862,9 @@ public class Mdl2Nonmem extends MdlPrinting {
             }
             int _plus = (k + 1);
             k = _plus;
-            AnyExpression _expression_5 = p.getExpression();
-            String _str_3 = this.toStr(_expression_5);
-            String _plus_1 = (result + _str_3);
+            AnyExpression _expression_3 = p.getExpression();
+            String _str = this.toStr(_expression_3);
+            String _plus_1 = (result + _str);
             String _plus_2 = (_plus_1 + " ");
             result = _plus_2;
             String _identifier_2 = p.getIdentifier();
@@ -1721,33 +1896,14 @@ public class Mdl2Nonmem extends MdlPrinting {
         boolean _notEquals_7 = (!Objects.equal(_identifier_4, null));
         if (_notEquals_7) {
           String _identifier_5 = a_1.getIdentifier();
-          boolean _equalsIgnoreCase_4 = _identifier_5.equalsIgnoreCase("fix");
-          if (_equalsIgnoreCase_4) {
-            AnyExpression _expression_6 = a_1.getExpression();
-            boolean _notEquals_8 = (!Objects.equal(_expression_6, null));
+          boolean _equals_1 = _identifier_5.equals("fix");
+          if (_equals_1) {
+            AnyExpression _expression_4 = a_1.getExpression();
+            boolean _notEquals_8 = (!Objects.equal(_expression_4, null));
             if (_notEquals_8) {
-              boolean _or_2 = false;
-              boolean _or_3 = false;
-              AnyExpression _expression_7 = a_1.getExpression();
-              String _str_4 = this.toStr(_expression_7);
-              boolean _equalsIgnoreCase_5 = _str_4.equalsIgnoreCase("yes");
-              if (_equalsIgnoreCase_5) {
-                _or_3 = true;
-              } else {
-                AnyExpression _expression_8 = a_1.getExpression();
-                String _str_5 = this.toStr(_expression_8);
-                boolean _equalsIgnoreCase_6 = _str_5.equalsIgnoreCase("true");
-                _or_3 = (_equalsIgnoreCase_5 || _equalsIgnoreCase_6);
-              }
-              if (_or_3) {
-                _or_2 = true;
-              } else {
-                AnyExpression _expression_9 = a_1.getExpression();
-                String _str_6 = this.toStr(_expression_9);
-                boolean _equalsIgnoreCase_7 = _str_6.equalsIgnoreCase("1");
-                _or_2 = (_or_3 || _equalsIgnoreCase_7);
-              }
-              printFix_1 = _or_2;
+              AnyExpression _expression_5 = a_1.getExpression();
+              boolean _isTrue_1 = this.isTrue(_expression_5);
+              printFix_1 = _isTrue_1;
             }
           }
         }
@@ -1760,12 +1916,12 @@ public class Mdl2Nonmem extends MdlPrinting {
         Arguments _parameters_3 = _blockBlock_3.getParameters();
         EList<Argument> _arguments_5 = _parameters_3.getArguments();
         for (final Argument p_1 : _arguments_5) {
-          AnyExpression _expression_10 = p_1.getExpression();
-          boolean _notEquals_10 = (!Objects.equal(_expression_10, null));
+          AnyExpression _expression_6 = p_1.getExpression();
+          boolean _notEquals_10 = (!Objects.equal(_expression_6, null));
           if (_notEquals_10) {
-            AnyExpression _expression_11 = p_1.getExpression();
-            String _str_7 = this.toStr(_expression_11);
-            String _plus_7 = (result + _str_7);
+            AnyExpression _expression_7 = p_1.getExpression();
+            String _str_1 = this.toStr(_expression_7);
+            String _plus_7 = (result + _str_1);
             String _plus_8 = (_plus_7 + " ");
             result = _plus_8;
             String _identifier_6 = p_1.getIdentifier();
@@ -1808,23 +1964,8 @@ public class Mdl2Nonmem extends MdlPrinting {
             List _list_1 = s.getList();
             final String value = this.getAttribute(_list_1, "value");
             List _list_2 = s.getList();
-            final String fixed = this.getAttribute(_list_2, "fix");
-            boolean _or = false;
-            boolean _or_1 = false;
-            boolean _equalsIgnoreCase = fixed.equalsIgnoreCase("yes");
-            if (_equalsIgnoreCase) {
-              _or_1 = true;
-            } else {
-              boolean _equalsIgnoreCase_1 = fixed.equalsIgnoreCase("true");
-              _or_1 = (_equalsIgnoreCase || _equalsIgnoreCase_1);
-            }
-            if (_or_1) {
-              _or = true;
-            } else {
-              boolean _equalsIgnoreCase_2 = fixed.equalsIgnoreCase("1");
-              _or = (_or_1 || _equalsIgnoreCase_2);
-            }
-            boolean printFix = _or;
+            String _attribute = this.getAttribute(_list_2, "fix");
+            final boolean printFix = this.isTrue(_attribute);
             boolean _equals = value.equals("");
             if (_equals) {
               return "";
@@ -1867,23 +2008,8 @@ public class Mdl2Nonmem extends MdlPrinting {
             List _list_1 = s.getList();
             final String value = this.getAttribute(_list_1, "value");
             List _list_2 = s.getList();
-            String fixed = this.getAttribute(_list_2, "fix");
-            boolean _or = false;
-            boolean _or_1 = false;
-            boolean _equalsIgnoreCase = fixed.equalsIgnoreCase("yes");
-            if (_equalsIgnoreCase) {
-              _or_1 = true;
-            } else {
-              boolean _equalsIgnoreCase_1 = fixed.equalsIgnoreCase("true");
-              _or_1 = (_equalsIgnoreCase || _equalsIgnoreCase_1);
-            }
-            if (_or_1) {
-              _or = true;
-            } else {
-              boolean _equalsIgnoreCase_2 = fixed.equalsIgnoreCase("1");
-              _or = (_or_1 || _equalsIgnoreCase_2);
-            }
-            boolean printFix = _or;
+            String _attribute = this.getAttribute(_list_2, "fix");
+            boolean printFix = this.isTrue(_attribute);
             boolean _equals = value.equals("");
             if (_equals) {
               return "";
@@ -1920,23 +2046,8 @@ public class Mdl2Nonmem extends MdlPrinting {
       List _list_3 = s.getList();
       final String hi = this.getAttribute(_list_3, "hi");
       List _list_4 = s.getList();
-      final String fixed = this.getAttribute(_list_4, "fix");
-      boolean _or = false;
-      boolean _or_1 = false;
-      boolean _equalsIgnoreCase = fixed.equalsIgnoreCase("yes");
-      if (_equalsIgnoreCase) {
-        _or_1 = true;
-      } else {
-        boolean _equalsIgnoreCase_1 = fixed.equalsIgnoreCase("true");
-        _or_1 = (_equalsIgnoreCase || _equalsIgnoreCase_1);
-      }
-      if (_or_1) {
-        _or = true;
-      } else {
-        boolean _equalsIgnoreCase_2 = fixed.equalsIgnoreCase("1");
-        _or = (_or_1 || _equalsIgnoreCase_2);
-      }
-      boolean printFix = _or;
+      String _attribute = this.getAttribute(_list_4, "fix");
+      final boolean printFix = this.isTrue(_attribute);
       boolean _equals = value.equals("");
       if (_equals) {
         return "";

@@ -4,24 +4,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.FileBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.HeaderBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
+import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
-
-import com.google.common.collect.ImmutableMap;
- 
 
 public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
@@ -37,16 +34,32 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
 	//private enum VAL_RES {OK, ERROR, WARNING}
 	
+	//Parameter object
 	final static List<String> attr_structural = Arrays.asList("value", "lo", "hi", "fix", "units", "transform");
 	final static List<String> attr_req_structural = Arrays.asList("value");
 
 	final static List<String> attr_variability = Arrays.asList("value", "type", "fix", "units", "transform");
 	final static List<String> attr_req_variability = Arrays.asList("value");
-	
+
 	final static List<String> attr_variability_subblock = Arrays.asList("name", "type", "fix");
 	final static List<String> attr_req_variability_subblock = Arrays.asList("name");
+
+	//Model object
+	final static List<String> attr_inputVariables = Arrays.asList("value", "use", "units", "type", "level");
 	
-	final static List<String> attr_header = Arrays.asList("type", "units", "recode", "boundaries");
+	final static List<String> attr_random = Arrays.asList("type", "mean", "variance", "level");
+	final static List<String> attr_req_random = Arrays.asList("type", "mean", "variance");
+	
+	final static List<String> attr_library = Arrays.asList("model", "ncmt", "param", "input",
+			"distribution", "elimination", "parameterization", "trans");
+	final static List<String> attr_req_library = Arrays.asList("model");
+	
+	final static List<String> attr_ode = Arrays.asList("deriv", "init", "x0", "wrt");
+	final static List<String> attr_req_ode = Arrays.asList("deriv", "init", "wrt");
+	
+	
+	//Data object
+	final static List<String> attr_header = Arrays.asList("type", "units", "recode", "boundaries", "missing");
 	final static List<String> attr_req_header = Arrays.asList("type");
 
 	final static List<String> attr_file = Arrays.asList("source", "ignore", "inputformat");
@@ -55,16 +68,21 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	final static List<String> attr_design = Arrays.asList("source", "units", "interp", "idv");
 	final static List<String> attr_req_design = Arrays.asList("source");
 	
-	final static List<String> attr_inputVariables = Arrays.asList("value", "use", "units", "type", "level");
+	//All blocks
+	final static List<String> attr_import = Arrays.asList("target", "name", "ncmt", "trans", "param");
+	final static List<String> attr_req_import = Arrays.asList("target", "param");
+
+	final static List<String> attr_target = Arrays.asList("target", "location", "first", "before", "after");
+	final static List<String> attr_req_target = Arrays.asList("target");
+
+	//final static List<String> attr_funcDecl = Arrays.asList("algo", "sig", "max");
+	//final static List<String> attr_req_funcDecl = Arrays.asList("");
 	
-	final static List<String> attr_random = Arrays.asList("type", "mean", "variance", "level");
-	final static List<String> attr_req_random = Arrays.asList("type", "mean", "variance");
-	
-	static final Map<String, String> defaultAttributeValues = ImmutableMap.of(
-	        "fix", "false",
-			"type", "SD",
-			"inputformat", "NONMEM"
-	);
+	//static final Map<String, String> defaultAttributeValues = ImmutableMap.of(
+	//        "fix", "false",
+	//		"type", "SD",
+	//		"inputformat", "NONMEM"
+	//);
 	
 	//List of recognized mathematical functions
 	final static List<String> standardFunctions = Arrays.asList(
@@ -84,7 +102,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		);
 	
 	//1=observation, level 2=subject, level 3=study, level 4=country 
-		
+
+	//List of declared function names per object
+	static HashMap<String, ArrayList<String>> externalFunctions = new HashMap<String, ArrayList<String>>();
+
 	//List of declared function names per object
 	static HashMap<String, ArrayList<String>> declaredFunctions = new HashMap<String, ArrayList<String>>();
 
@@ -131,14 +152,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	}
 	
 	//Add a symbol to a list of known symbols
-	private void addSymbol(ArrayList<String> list, EList<SymbolDeclaration> defns){
-		if (defns != null)
-			for (SymbolDeclaration s: defns){
-				list.add(s.getIdentifier());
-			}
-	}
-	
-	//Add a symbol to a list of known symbols
 	private void addSymbol(ArrayList<String> list, BlockStatement st){
 		if (st != null){
 			if (st.getSymbol() != null){
@@ -150,9 +163,67 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//Add a symbol to a list of known symbols
 	private void addSymbol(ArrayList<String> list, Arguments args){
 		if (args != null){
-			for (Argument arg: args.getArguments()){
-				if (arg.getIdentifier() != null)
-					list.add(arg.getIdentifier());
+			if (args.getArguments() != null){	
+				for (Argument arg: args.getArguments()){
+					if (arg.getIdentifier() != null)
+						list.add(arg.getIdentifier());
+				}
+			}
+		}
+	}
+	
+	private void addSymbol(ArrayList<String> list, FormalArguments args){
+		if (args != null){
+			for (FormalArgument id: args.getArguments()){
+				list.add(id.getIdentifier());
+			}
+		}
+	}
+	
+	private void addSymbol(ArrayList<String> list, ImportBlock block){
+		if (block != null){
+			for (ImportedFunction id: block.getFunctions()){
+				list.add(id.getIdentifier());
+			}
+		}
+	}
+	
+	//Update the list of recognised external functions
+	@Check
+	public void updateExternalFunctionList(Mcl mcl){
+		externalFunctions.clear();
+		for (MclObject obj: mcl.getObjects()){
+			if (obj.getModelObject() != null){
+				ModelObject modelObj = obj.getModelObject();
+				ArrayList<String> funcList =  new ArrayList<String>();
+				for (ModelObjectBlock block : modelObj.getBlocks()){
+					addSymbol(funcList, block.getImportBlock());
+				}
+				externalFunctions.put(modelObj.getIdentifier().getName(), funcList);
+			}
+			if (obj.getParameterObject() != null){
+				ParameterObject paramObj = obj.getParameterObject();
+				ArrayList<String> funcList =  new ArrayList<String>();
+				for (ParameterObjectBlock block : paramObj.getBlocks()){
+					addSymbol(funcList, block.getImportBlock());
+				}
+				externalFunctions.put(paramObj.getIdentifier().getName(), funcList);
+			}
+			if (obj.getDataObject() != null){
+				DataObject dataObj = obj.getDataObject();
+				ArrayList<String> funcList =  new ArrayList<String>();
+				for (DataObjectBlock block : dataObj.getBlocks()){
+					addSymbol(funcList, block.getImportBlock());
+				}
+				externalFunctions.put(dataObj.getIdentifier().getName(), funcList);
+			}
+			if (obj.getTaskObject() != null){
+				TaskObject taskObj = obj.getTaskObject();
+				ArrayList<String> funcList =  new ArrayList<String>();
+				for (TaskObjectBlock block : taskObj.getBlocks()){
+					addSymbol(funcList, block.getImportBlock());
+				}
+				externalFunctions.put(taskObj.getIdentifier().getName(), funcList);
 			}
 		}
 	}
@@ -185,11 +256,15 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				for (ModelObjectBlock block: obj.getModelObject().getBlocks()){
 					//RANDOM_VARIABLE_DEFINITION
 					if (block.getRandomVariableDefinitionBlock() != null){
-						addSymbol(varList, block.getRandomVariableDefinitionBlock().getVariables());
+						for (SymbolDeclaration s: block.getRandomVariableDefinitionBlock().getVariables()){
+							varList.add(s.getIdentifier());
+						}
 					}
 					//INPUT_VARIABLES
 					if (block.getInputVariablesBlock() != null){
-						addSymbol(varList, block.getInputVariablesBlock().getVariables());
+						for (SymbolDeclaration s: block.getInputVariablesBlock().getVariables()){
+							varList.add(s.getIdentifier());
+						}
 					}
 					//GROUP_VARIABLES, MIXTURE
 					if (block.getGroupVariablesBlock() != null){
@@ -218,8 +293,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 								}
 							}
 							if (s.getLibraryBlock() != null){
-								for (BlockStatement st: s.getLibraryBlock().getStatements()){
-									addSymbol(varList, st);
+								for (FunctionCallStatement st: s.getLibraryBlock().getStatements()){
+									varList.add(st.getIdentifier());
 								}
 							}
 						}
@@ -271,8 +346,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public void updateDeclaredParameterList(Mcl mcl){
 		declaredParameters.clear();
 		for (MclObject obj: mcl.getObjects()){
-			ArrayList<String> paramList = new ArrayList<String>();
 			if (obj.getParameterObject() != null){
+				ArrayList<String> paramList = new ArrayList<String>();
 				for (ParameterObjectBlock block: obj.getParameterObject().getBlocks()){
 					//STRUCTURAL
 					if (block.getStructuralBlock() != null){
@@ -317,6 +392,18 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		if (isSymbolDeclaredMoreThanOnce(declaredFunctions, func.getIdentifier())){
 			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__IDENTIFIER);
 		}
+	}
+	
+	//Check whether the function with such a name is already defined
+	@Check
+	public void checkExportFunctionDeclaration(ImportedFunction func){
+		if (isSymbolDeclaredMoreThanOnce(externalFunctions, func.getIdentifier())){
+			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__IDENTIFIER);
+		}
+		if (isSymbolDeclared(declaredFunctions, func.getIdentifier(), null)){
+			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__IDENTIFIER);
+		}
+		//Check that it is not standard and was not defined in Task objects
 	}	
 	
 	//Check whether the symbol with such a name is already defined
@@ -355,7 +442,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
 		if (!standardFunctions.contains(call.getIdentifier().getIdentifier()) && 
-				!(isSymbolDeclared(declaredFunctions, call.getIdentifier().getIdentifier(), call.getIdentifier().getObject()))){
+				!(isSymbolDeclared(declaredFunctions, call.getIdentifier().getIdentifier(), call.getIdentifier().getObject()))
+				&& !(isSymbolDeclared(externalFunctions, call.getIdentifier().getIdentifier(), call.getIdentifier().getObject()))){
 			warning(MSG_FUNCTION_UNKNOWN, MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER);
 		}
 	}
@@ -378,11 +466,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		}
 	}
 	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Check attributes of parameters in blocks
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	@Check
 	public void checkParameterAttributes(ParameterDeclaration p){
 		EObject container = p.eContainer();
-		//STRUCTURAL
+		//ParameterObject -> STRUCTURAL
 		if (container instanceof StructuralBlockImpl){
 			if (p.getList() != null){
 				for (Argument arg: p.getList().getArguments().getArguments()){
@@ -397,7 +488,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				}
 			}
 		}
-		//VARIABILITY
+		//ParameterObject -> VARIABILITY
 		if (container instanceof VariabilityBlockStatementImpl){
 			if (p.getList() != null){
 				for (Argument arg: p.getList().getArguments().getArguments()){
@@ -415,8 +506,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	
 	//Check attributes of parameters in sub-blocks
 	@Check
-	public void checkParameterAttributes(BlockBlock block){
-		//VARIABILITY subblocks: block
+	public void checkVariabilityAttributes(BlockBlock block){
+		//ParameterObject -> VARIABILITY subblocks: matrix
 		if (block.getArguments() != null){
 			for (Argument arg: block.getArguments().getArguments()){
 				if (arg.getIdentifier() != null)
@@ -432,8 +523,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	
 	//Check attributes of parameters in sub-blocks
 	@Check
-	public void checkParameterAttributes(DiagBlock block){
-		//VARIABILITY subblocks: diag
+	public void checkVariabilityAttributes(DiagBlock block){
+		//ParameterObject -> VARIABILITY subblocks: diag
 		if (block.getArguments() != null){
 			for (Argument arg: block.getArguments().getArguments()){
 				if (arg.getIdentifier() != null)
@@ -449,8 +540,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	
 	//Check attributes of parameters in sub-blocks
 	@Check
-	public void checkParameterAttributes(SameBlock block){
-		//VARIABILITY subblocks: same
+	public void checkVariabilityAttributes(SameBlock block){
+		//ParameterObject -> VARIABILITY subblocks: same
 		if (block.getArguments() != null){
 			for (Argument arg: block.getArguments().getArguments()){
 				if (arg.getIdentifier() != null)
@@ -462,9 +553,9 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	
 	//Check attributes of parameters in blocks
 	@Check
-	public void checkParameterAttributes(SymbolModification p){
+	public void checkVariableAttributes(SymbolModification p){
 		EObject container = p.eContainer();
-		//HEADER
+		//DataObject -> HEADER
 		if (container instanceof HeaderBlockImpl){
 			if (p.getList() != null){	
 				for (Argument arg: p.getList().getArguments().getArguments()){
@@ -482,9 +573,9 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	
 	//Check attributes of variables in blocks
 	@Check
-	public void checkParameterAttributes(SymbolDeclaration p){
+	public void checkVariableAttributes(SymbolDeclaration p){
 		EObject container = p.eContainer();
-		//FILE
+		//DataObject -> FILE
 		if (container instanceof FileBlockStatementImpl){
 			if (p.getExpression() != null){	
 				if (p.getExpression().getList() != null){
@@ -500,7 +591,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				}
 			}
 		}
-		//INPUT_VARIABLES
+		//ModelObject -> INPUT_VARIABLES
 		if (container instanceof InputVariablesBlockImpl){
 			if (p.getExpression() != null){	
 				if (p.getExpression().getList() != null){
@@ -512,7 +603,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				}
 			}
 		}
-		//RANDOM_VARIABLE_DEFINITION
+		//ModelObject -> RANDOM_VARIABLE_DEFINITION
 		if (container instanceof RandomVariableDefinitionBlockImpl){
 			if (p.getExpression() != null){	
 				if (p.getExpression().getList() != null){
@@ -530,9 +621,54 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		}
 	}
 	
+	//Check attributes of variables in blocks
 	@Check
-	public void checkParameterAttributes(DesignBlockStatement p){
-		//DESIGN
+	public void checkVariableAttributes(BlockStatement st){
+		EObject container = st.eContainer();
+		//ModelObject -> MODEL_PREDUCTION -> LIBRARY
+		if (container instanceof LibraryBlockImpl){
+			if (st.getSymbol() != null){	
+				if (st.getSymbol().getExpression() != null){
+					if (st.getSymbol().getExpression().getList() != null){
+						for (Argument arg: st.getSymbol().getExpression().getList().getArguments().getArguments()){
+							if (arg.getIdentifier() != null)
+								if (!attr_library.contains(arg.getIdentifier()))
+									warning(MSG_ATTRIBUTE_UNKNOWN + ": " + arg.getIdentifier(), MdlPackage.Literals.BLOCK_STATEMENT__SYMBOL);
+						}
+						for (String attrName: attr_req_library){
+							if (!containsAttribute(st.getSymbol().getExpression().getList().getArguments(), attrName))
+								warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, MdlPackage.Literals.BLOCK_STATEMENT__SYMBOL);
+						}
+
+					}
+				}
+			}
+		}
+		//ModelObject -> MODEL_PREDICTION -> ODE
+				if (container instanceof OdeBlockImpl){
+					if (st.getSymbol() != null){	
+						if (st.getSymbol().getExpression() != null){
+							if (st.getSymbol().getExpression().getList() != null){
+								for (Argument arg: st.getSymbol().getExpression().getOdeList().getArguments().getArguments()){
+									if (arg.getIdentifier() != null)
+										if (!attr_ode.contains(arg.getIdentifier()))
+											warning(MSG_ATTRIBUTE_UNKNOWN + ": " + arg.getIdentifier(), MdlPackage.Literals.BLOCK_STATEMENT__SYMBOL);
+								}
+								for (String attrName: attr_req_ode){
+									if (!containsAttribute(st.getSymbol().getExpression().getOdeList().getArguments(), attrName))
+										warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, MdlPackage.Literals.BLOCK_STATEMENT__SYMBOL);
+								}
+
+							}
+						}
+					}
+				}
+	}
+	
+	//DataObject -> DESIGN
+	@Check
+	public void checkVariableAttributes(DesignBlockStatement p){
+		//DataObject -> DESIGN
 		if (p.getExpression() != null){	
 			if (p.getExpression().getList() != null){
 				for (Argument arg: p.getExpression().getList().getArguments().getArguments()){
@@ -545,6 +681,57 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 						warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, MdlPackage.Literals.DESIGN_BLOCK_STATEMENT__EXPRESSION);
 				}
 			}
+		}
+	}
+	
+	//Any object -> IMPORT
+	@Check
+	public void checkArguments(ImportedFunction f){
+		if (f.getList() != null){
+			for (Argument arg: f.getList().getArguments().getArguments()){
+				if (arg.getIdentifier() != null)
+					if (!attr_import.contains(arg.getIdentifier()))
+						warning(MSG_ATTRIBUTE_UNKNOWN + ": " + arg.getIdentifier(), MdlPackage.Literals.IMPORTED_FUNCTION__LIST);
+			}
+			for (String attrName: attr_req_import){
+				if (!containsAttribute(f.getList().getArguments(), attrName))
+					warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, MdlPackage.Literals.IMPORTED_FUNCTION__LIST);
+			}
+		}
+	}
+	
+	@Check
+	public void checkArguments(TargetBlock b){
+		for (Argument arg: b.getArguments().getArguments()){
+			if (arg.getIdentifier() != null)
+				if (!attr_target.contains(arg.getIdentifier()))
+					warning(MSG_ATTRIBUTE_UNKNOWN + ": " + arg.getIdentifier(), MdlPackage.Literals.TARGET_BLOCK__ARGUMENTS);
+		}
+		for (String attrName: attr_req_target){
+			if (!containsAttribute(b.getArguments(), attrName))
+				warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, MdlPackage.Literals.TARGET_BLOCK__ARGUMENTS);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Some symbols (variables, parameters) need to be declared
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//DataObject -> FILE
+	@Check
+	public void checkSymbolDeclaration(FileBlock b){
+		//Check that variable "data" is defined 
+		Boolean isDataDefined = false;
+		for (FileBlockStatement st: b.getStatements()){
+			if (st.getVariable() != null){	
+				if (st.getVariable().getIdentifier().equalsIgnoreCase("data")) {
+					isDataDefined  = true;
+					break;
+				}
+			}
+		}
+		if (!isDataDefined){
+				warning("FILE block does not contain variable \"data\"!", MdlPackage.Literals.FILE_BLOCK__STATEMENTS);
 		}
 	}
 }
