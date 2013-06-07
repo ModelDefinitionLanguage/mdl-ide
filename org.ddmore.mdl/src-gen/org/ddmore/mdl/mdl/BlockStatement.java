@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.ddmore.mdl.mdl.BlockStatement#getSymbol <em>Symbol</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.BlockStatement#getFunctionCall <em>Function Call</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.BlockStatement#getStatement <em>Statement</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.BlockStatement#getTargetBlock <em>Target Block</em>}</li>
  * </ul>
  * </p>
  *
@@ -102,31 +101,5 @@ public interface BlockStatement extends EObject
    * @generated
    */
   void setStatement(ConditionalStatement value);
-
-  /**
-   * Returns the value of the '<em><b>Target Block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Target Block</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Target Block</em>' containment reference.
-   * @see #setTargetBlock(TargetBlock)
-   * @see org.ddmore.mdl.mdl.MdlPackage#getBlockStatement_TargetBlock()
-   * @model containment="true"
-   * @generated
-   */
-  TargetBlock getTargetBlock();
-
-  /**
-   * Sets the value of the '{@link org.ddmore.mdl.mdl.BlockStatement#getTargetBlock <em>Target Block</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Target Block</em>' containment reference.
-   * @see #getTargetBlock()
-   * @generated
-   */
-  void setTargetBlock(TargetBlock value);
 
 } // BlockStatement

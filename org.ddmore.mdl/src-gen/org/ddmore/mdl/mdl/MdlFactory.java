@@ -320,24 +320,6 @@ public interface MdlFactory extends EFactory
   DropList createDropList();
 
   /**
-   * Returns a new object of class '<em>Model Block</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Model Block</em>'.
-   * @generated
-   */
-  ModelBlock createModelBlock();
-
-  /**
-   * Returns a new object of class '<em>Model Block Statement</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Model Block Statement</em>'.
-   * @generated
-   */
-  ModelBlockStatement createModelBlockStatement();
-
-  /**
    * Returns a new object of class '<em>Add List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -354,6 +336,24 @@ public interface MdlFactory extends EFactory
    * @generated
    */
   RemoveList createRemoveList();
+
+  /**
+   * Returns a new object of class '<em>Model Block</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Model Block</em>'.
+   * @generated
+   */
+  ModelBlock createModelBlock();
+
+  /**
+   * Returns a new object of class '<em>Model Block Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Model Block Statement</em>'.
+   * @generated
+   */
+  ModelBlockStatement createModelBlockStatement();
 
   /**
    * Returns a new object of class '<em>Symbol List</em>'.
@@ -572,6 +572,15 @@ public interface MdlFactory extends EFactory
   ExecuteTask createExecuteTask();
 
   /**
+   * Returns a new object of class '<em>Task Function Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Task Function Statement</em>'.
+   * @generated
+   */
+  TaskFunctionStatement createTaskFunctionStatement();
+
+  /**
    * Returns a new object of class '<em>Formal Arguments</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -615,6 +624,15 @@ public interface MdlFactory extends EFactory
    * @generated
    */
   TargetBlock createTargetBlock();
+
+  /**
+   * Returns a new object of class '<em>Target Language</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Target Language</em>'.
+   * @generated
+   */
+  TargetLanguage createTargetLanguage();
 
   /**
    * Returns a new object of class '<em>Import Block</em>'.

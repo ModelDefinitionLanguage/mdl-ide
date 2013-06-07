@@ -19,10 +19,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.ddmore.mdl.mdl.impl.LevelTypeImpl#getMdv <em>Mdv</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.LevelTypeImpl#getId <em>Id</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.LevelTypeImpl#getDv <em>Dv</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.LevelTypeImpl#getIdv <em>Idv</em>}</li>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.LevelTypeImpl#getIdentifier <em>Identifier</em>}</li>
  * </ul>
  * </p>
  *
@@ -31,84 +28,24 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 public class LevelTypeImpl extends MinimalEObjectImpl.Container implements LevelType
 {
   /**
-   * The default value of the '{@link #getMdv() <em>Mdv</em>}' attribute.
+   * The default value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getMdv()
+   * @see #getIdentifier()
    * @generated
    * @ordered
    */
-  protected static final String MDV_EDEFAULT = null;
+  protected static final String IDENTIFIER_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getMdv() <em>Mdv</em>}' attribute.
+   * The cached value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getMdv()
+   * @see #getIdentifier()
    * @generated
    * @ordered
    */
-  protected String mdv = MDV_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getId() <em>Id</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getId()
-   * @generated
-   * @ordered
-   */
-  protected static final String ID_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getId()
-   * @generated
-   * @ordered
-   */
-  protected String id = ID_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getDv() <em>Dv</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getDv()
-   * @generated
-   * @ordered
-   */
-  protected static final String DV_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getDv() <em>Dv</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getDv()
-   * @generated
-   * @ordered
-   */
-  protected String dv = DV_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getIdv() <em>Idv</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getIdv()
-   * @generated
-   * @ordered
-   */
-  protected static final String IDV_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getIdv() <em>Idv</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getIdv()
-   * @generated
-   * @ordered
-   */
-  protected String idv = IDV_EDEFAULT;
+  protected String identifier = IDENTIFIER_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -136,9 +73,9 @@ public class LevelTypeImpl extends MinimalEObjectImpl.Container implements Level
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getMdv()
+  public String getIdentifier()
   {
-    return mdv;
+    return identifier;
   }
 
   /**
@@ -146,81 +83,12 @@ public class LevelTypeImpl extends MinimalEObjectImpl.Container implements Level
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setMdv(String newMdv)
+  public void setIdentifier(String newIdentifier)
   {
-    String oldMdv = mdv;
-    mdv = newMdv;
+    String oldIdentifier = identifier;
+    identifier = newIdentifier;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.LEVEL_TYPE__MDV, oldMdv, mdv));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getId()
-  {
-    return id;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setId(String newId)
-  {
-    String oldId = id;
-    id = newId;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.LEVEL_TYPE__ID, oldId, id));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getDv()
-  {
-    return dv;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setDv(String newDv)
-  {
-    String oldDv = dv;
-    dv = newDv;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.LEVEL_TYPE__DV, oldDv, dv));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getIdv()
-  {
-    return idv;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setIdv(String newIdv)
-  {
-    String oldIdv = idv;
-    idv = newIdv;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.LEVEL_TYPE__IDV, oldIdv, idv));
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.LEVEL_TYPE__IDENTIFIER, oldIdentifier, identifier));
   }
 
   /**
@@ -233,14 +101,8 @@ public class LevelTypeImpl extends MinimalEObjectImpl.Container implements Level
   {
     switch (featureID)
     {
-      case MdlPackage.LEVEL_TYPE__MDV:
-        return getMdv();
-      case MdlPackage.LEVEL_TYPE__ID:
-        return getId();
-      case MdlPackage.LEVEL_TYPE__DV:
-        return getDv();
-      case MdlPackage.LEVEL_TYPE__IDV:
-        return getIdv();
+      case MdlPackage.LEVEL_TYPE__IDENTIFIER:
+        return getIdentifier();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -255,17 +117,8 @@ public class LevelTypeImpl extends MinimalEObjectImpl.Container implements Level
   {
     switch (featureID)
     {
-      case MdlPackage.LEVEL_TYPE__MDV:
-        setMdv((String)newValue);
-        return;
-      case MdlPackage.LEVEL_TYPE__ID:
-        setId((String)newValue);
-        return;
-      case MdlPackage.LEVEL_TYPE__DV:
-        setDv((String)newValue);
-        return;
-      case MdlPackage.LEVEL_TYPE__IDV:
-        setIdv((String)newValue);
+      case MdlPackage.LEVEL_TYPE__IDENTIFIER:
+        setIdentifier((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -281,17 +134,8 @@ public class LevelTypeImpl extends MinimalEObjectImpl.Container implements Level
   {
     switch (featureID)
     {
-      case MdlPackage.LEVEL_TYPE__MDV:
-        setMdv(MDV_EDEFAULT);
-        return;
-      case MdlPackage.LEVEL_TYPE__ID:
-        setId(ID_EDEFAULT);
-        return;
-      case MdlPackage.LEVEL_TYPE__DV:
-        setDv(DV_EDEFAULT);
-        return;
-      case MdlPackage.LEVEL_TYPE__IDV:
-        setIdv(IDV_EDEFAULT);
+      case MdlPackage.LEVEL_TYPE__IDENTIFIER:
+        setIdentifier(IDENTIFIER_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -307,14 +151,8 @@ public class LevelTypeImpl extends MinimalEObjectImpl.Container implements Level
   {
     switch (featureID)
     {
-      case MdlPackage.LEVEL_TYPE__MDV:
-        return MDV_EDEFAULT == null ? mdv != null : !MDV_EDEFAULT.equals(mdv);
-      case MdlPackage.LEVEL_TYPE__ID:
-        return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
-      case MdlPackage.LEVEL_TYPE__DV:
-        return DV_EDEFAULT == null ? dv != null : !DV_EDEFAULT.equals(dv);
-      case MdlPackage.LEVEL_TYPE__IDV:
-        return IDV_EDEFAULT == null ? idv != null : !IDV_EDEFAULT.equals(idv);
+      case MdlPackage.LEVEL_TYPE__IDENTIFIER:
+        return IDENTIFIER_EDEFAULT == null ? identifier != null : !IDENTIFIER_EDEFAULT.equals(identifier);
     }
     return super.eIsSet(featureID);
   }
@@ -330,14 +168,8 @@ public class LevelTypeImpl extends MinimalEObjectImpl.Container implements Level
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (mdv: ");
-    result.append(mdv);
-    result.append(", id: ");
-    result.append(id);
-    result.append(", dv: ");
-    result.append(dv);
-    result.append(", idv: ");
-    result.append(idv);
+    result.append(" (identifier: ");
+    result.append(identifier);
     result.append(')');
     return result.toString();
   }

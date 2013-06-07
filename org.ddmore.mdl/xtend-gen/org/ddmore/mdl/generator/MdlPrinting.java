@@ -22,6 +22,8 @@ import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.Distribution;
 import org.ddmore.mdl.mdl.EnumType;
+import org.ddmore.mdl.mdl.EstimateTask;
+import org.ddmore.mdl.mdl.ExecuteTask;
 import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
@@ -55,9 +57,15 @@ import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.Selector;
+import org.ddmore.mdl.mdl.SimulateTask;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolModification;
 import org.ddmore.mdl.mdl.TargetBlock;
+import org.ddmore.mdl.mdl.TargetLanguage;
+import org.ddmore.mdl.mdl.TaskFunctionBlock;
+import org.ddmore.mdl.mdl.TaskFunctionBody;
+import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
+import org.ddmore.mdl.mdl.TaskFunctionStatement;
 import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.UnaryExpression;
@@ -186,6 +194,59 @@ public class MdlPrinting {
               if (_notEquals_5) {
                 TargetBlock _targetBlock_1 = block_3.getTargetBlock();
                 this.prepareExternalCode(_targetBlock_1);
+              }
+              TaskFunctionDeclaration _functionDeclaration = block_3.getFunctionDeclaration();
+              boolean _notEquals_6 = (!Objects.equal(_functionDeclaration, null));
+              if (_notEquals_6) {
+                TaskFunctionDeclaration _functionDeclaration_1 = block_3.getFunctionDeclaration();
+                TaskFunctionBody _functionBody = _functionDeclaration_1.getFunctionBody();
+                EList<TaskFunctionBlock> _blocks_4 = _functionBody.getBlocks();
+                for (final TaskFunctionBlock b : _blocks_4) {
+                  {
+                    EstimateTask _estimateBlock = b.getEstimateBlock();
+                    boolean _notEquals_7 = (!Objects.equal(_estimateBlock, null));
+                    if (_notEquals_7) {
+                      EstimateTask _estimateBlock_1 = b.getEstimateBlock();
+                      EList<TaskFunctionStatement> _statements = _estimateBlock_1.getStatements();
+                      for (final TaskFunctionStatement bb : _statements) {
+                        TargetBlock _targetBlock_2 = bb.getTargetBlock();
+                        boolean _notEquals_8 = (!Objects.equal(_targetBlock_2, null));
+                        if (_notEquals_8) {
+                          TargetBlock _targetBlock_3 = bb.getTargetBlock();
+                          this.prepareExternalCode(_targetBlock_3);
+                        }
+                      }
+                    }
+                    SimulateTask _simulateBlock = b.getSimulateBlock();
+                    boolean _notEquals_9 = (!Objects.equal(_simulateBlock, null));
+                    if (_notEquals_9) {
+                      SimulateTask _simulateBlock_1 = b.getSimulateBlock();
+                      EList<TaskFunctionStatement> _statements_1 = _simulateBlock_1.getStatements();
+                      for (final TaskFunctionStatement bb_1 : _statements_1) {
+                        TargetBlock _targetBlock_4 = bb_1.getTargetBlock();
+                        boolean _notEquals_10 = (!Objects.equal(_targetBlock_4, null));
+                        if (_notEquals_10) {
+                          TargetBlock _targetBlock_5 = bb_1.getTargetBlock();
+                          this.prepareExternalCode(_targetBlock_5);
+                        }
+                      }
+                    }
+                    ExecuteTask _executeBlock = b.getExecuteBlock();
+                    boolean _notEquals_11 = (!Objects.equal(_executeBlock, null));
+                    if (_notEquals_11) {
+                      ExecuteTask _executeBlock_1 = b.getExecuteBlock();
+                      EList<TaskFunctionStatement> _statements_2 = _executeBlock_1.getStatements();
+                      for (final TaskFunctionStatement bb_2 : _statements_2) {
+                        TargetBlock _targetBlock_6 = bb_2.getTargetBlock();
+                        boolean _notEquals_12 = (!Objects.equal(_targetBlock_6, null));
+                        if (_notEquals_12) {
+                          TargetBlock _targetBlock_7 = bb_2.getTargetBlock();
+                          this.prepareExternalCode(_targetBlock_7);
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -450,7 +511,8 @@ public class MdlPrinting {
     boolean _notEquals = (!Objects.equal(_object, null));
     if (_notEquals) {
       ObjectName _object_1 = name.getObject();
-      String _plus = (_object_1 + "$");
+      String _name = _object_1.getName();
+      String _plus = (_name + "$");
       res = _plus;
     }
     String _identifier = name.getIdentifier();
@@ -618,65 +680,21 @@ public class MdlPrinting {
       Missing _missing_1 = type.getMissing();
       return _missing_1.getIdentifier();
     }
-    String _target = type.getTarget();
+    TargetLanguage _target = type.getTarget();
     boolean _notEquals_8 = (!Objects.equal(_target, null));
     if (_notEquals_8) {
-      return type.getTarget();
+      TargetLanguage _target_1 = type.getTarget();
+      return _target_1.getIdentifier();
     }
     return null;
   }
   
   public String toStr(final Distribution d) {
-    String _normal = d.getNormal();
-    boolean _notEquals = (!Objects.equal(_normal, null));
-    if (_notEquals) {
-      return d.getNormal();
-    }
-    String _binomial = d.getBinomial();
-    boolean _notEquals_1 = (!Objects.equal(_binomial, null));
-    if (_notEquals_1) {
-      return d.getBinomial();
-    }
-    String _poisson = d.getPoisson();
-    boolean _notEquals_2 = (!Objects.equal(_poisson, null));
-    if (_notEquals_2) {
-      return d.getPoisson();
-    }
-    String _student_t = d.getStudent_t();
-    boolean _notEquals_3 = (!Objects.equal(_student_t, null));
-    if (_notEquals_3) {
-      return d.getStudent_t();
-    }
-    String _mvnormal = d.getMvnormal();
-    boolean _notEquals_4 = (!Objects.equal(_mvnormal, null));
-    if (_notEquals_4) {
-      return d.getMvnormal();
-    }
-    return null;
+    return d.getIdentifier();
   }
   
   public String toStr(final LevelType l) {
-    String _mdv = l.getMdv();
-    boolean _notEquals = (!Objects.equal(_mdv, null));
-    if (_notEquals) {
-      return l.getMdv();
-    }
-    String _id = l.getId();
-    boolean _notEquals_1 = (!Objects.equal(_id, null));
-    if (_notEquals_1) {
-      return l.getId();
-    }
-    String _dv = l.getDv();
-    boolean _notEquals_2 = (!Objects.equal(_dv, null));
-    if (_notEquals_2) {
-      return l.getDv();
-    }
-    String _idv = l.getIdv();
-    boolean _notEquals_3 = (!Objects.equal(_idv, null));
-    if (_notEquals_3) {
-      return l.getIdv();
-    }
-    return null;
+    return l.getIdentifier();
   }
   
   public String toStr(final RandomList l) {
@@ -1347,16 +1365,6 @@ public class MdlPrinting {
         ConditionalStatement _statement_1 = st.getStatement();
         CharSequence _print_2 = this.print(_statement_1);
         _builder.append(_print_2, "");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    {
-      TargetBlock _targetBlock = st.getTargetBlock();
-      boolean _notEquals_3 = (!Objects.equal(_targetBlock, null));
-      if (_notEquals_3) {
-        TargetBlock _targetBlock_1 = st.getTargetBlock();
-        CharSequence _print_3 = this.print(_targetBlock_1);
-        _builder.append(_print_3, "");
       }
     }
     _builder.newLineIfNotEmpty();

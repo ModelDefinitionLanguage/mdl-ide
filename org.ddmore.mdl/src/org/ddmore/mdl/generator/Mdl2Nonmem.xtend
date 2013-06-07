@@ -670,7 +670,8 @@ class Mdl2Nonmem extends MdlPrinting{
 	//Print $SIM block
 	def printSimulate(SimulateTask b)'''
 	
-	$SIM «FOR s: b.statements»«IF s.symbol != null»«s.symbol.printSimulate»«ENDIF»«ENDFOR» NOABORT
+	$SIM «FOR s: b.statements»
+	«IF s.statement != null»«IF s.statement.symbol != null»«s.statement.symbol.printSimulate»«ENDIF»«ENDIF»«ENDFOR» NOABORT
 	«getExternalCode("$SIM")»
 	«getExternalCode("$SIMULATION")»
 	'''
@@ -678,10 +679,10 @@ class Mdl2Nonmem extends MdlPrinting{
 	//Print $EST block
 	def printEstimate(EstimateTask b)'''
 	
-	$EST«FOR s: b.statements»«IF s.symbol != null»«s.symbol.printEstimate»«ENDIF»«ENDFOR» NOABORT
+	$EST«FOR s: b.statements»«IF s.statement != null»«IF s.statement.symbol != null»«s.statement.symbol.printEstimate»«ENDIF»«ENDIF»«ENDFOR» NOABORT
 	«getExternalCode("$EST")»
 	«getExternalCode("$ESTIMATION")»
-	«FOR s: b.statements»«IF s.symbol != null»«s.symbol.printEstimateCov»«ENDIF»«ENDFOR»
+	«FOR s: b.statements»»«IF s.statement != null»«IF s.statement.symbol != null»«s.statement.symbol.printEstimateCov»«ENDIF»«ENDIF»«ENDFOR»
 	«getExternalCode("$COV")»		
 	'''
 	

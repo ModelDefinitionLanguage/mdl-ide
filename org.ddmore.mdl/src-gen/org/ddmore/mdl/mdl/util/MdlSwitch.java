@@ -303,20 +303,6 @@ public class MdlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MdlPackage.MODEL_BLOCK:
-      {
-        ModelBlock modelBlock = (ModelBlock)theEObject;
-        T result = caseModelBlock(modelBlock);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case MdlPackage.MODEL_BLOCK_STATEMENT:
-      {
-        ModelBlockStatement modelBlockStatement = (ModelBlockStatement)theEObject;
-        T result = caseModelBlockStatement(modelBlockStatement);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case MdlPackage.ADD_LIST:
       {
         AddList addList = (AddList)theEObject;
@@ -328,6 +314,20 @@ public class MdlSwitch<T> extends Switch<T>
       {
         RemoveList removeList = (RemoveList)theEObject;
         T result = caseRemoveList(removeList);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MdlPackage.MODEL_BLOCK:
+      {
+        ModelBlock modelBlock = (ModelBlock)theEObject;
+        T result = caseModelBlock(modelBlock);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MdlPackage.MODEL_BLOCK_STATEMENT:
+      {
+        ModelBlockStatement modelBlockStatement = (ModelBlockStatement)theEObject;
+        T result = caseModelBlockStatement(modelBlockStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -499,6 +499,13 @@ public class MdlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case MdlPackage.TASK_FUNCTION_STATEMENT:
+      {
+        TaskFunctionStatement taskFunctionStatement = (TaskFunctionStatement)theEObject;
+        T result = caseTaskFunctionStatement(taskFunctionStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case MdlPackage.FORMAL_ARGUMENTS:
       {
         FormalArguments formalArguments = (FormalArguments)theEObject;
@@ -531,6 +538,13 @@ public class MdlSwitch<T> extends Switch<T>
       {
         TargetBlock targetBlock = (TargetBlock)theEObject;
         T result = caseTargetBlock(targetBlock);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MdlPackage.TARGET_LANGUAGE:
+      {
+        TargetLanguage targetLanguage = (TargetLanguage)theEObject;
+        T result = caseTargetLanguage(targetLanguage);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -1326,38 +1340,6 @@ public class MdlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Model Block</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Model Block</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseModelBlock(ModelBlock object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Model Block Statement</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Model Block Statement</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseModelBlockStatement(ModelBlockStatement object)
-  {
-    return null;
-  }
-
-  /**
    * Returns the result of interpreting the object as an instance of '<em>Add List</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1385,6 +1367,38 @@ public class MdlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseRemoveList(RemoveList object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Model Block</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Model Block</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseModelBlock(ModelBlock object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Model Block Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Model Block Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseModelBlockStatement(ModelBlockStatement object)
   {
     return null;
   }
@@ -1774,6 +1788,22 @@ public class MdlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Task Function Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Task Function Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseTaskFunctionStatement(TaskFunctionStatement object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Formal Arguments</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1849,6 +1879,22 @@ public class MdlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTargetBlock(TargetBlock object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Target Language</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Target Language</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseTargetLanguage(TargetLanguage object)
   {
     return null;
   }

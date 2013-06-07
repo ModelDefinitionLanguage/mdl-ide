@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link org.ddmore.mdl.mdl.RandomList#getIdentifier <em>Identifier</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.RandomList#getArguments <em>Arguments</em>}</li>
  * </ul>
  * </p>
@@ -22,6 +23,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface RandomList extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Identifier</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Identifier</em>' attribute.
+   * @see #setIdentifier(String)
+   * @see org.ddmore.mdl.mdl.MdlPackage#getRandomList_Identifier()
+   * @model
+   * @generated
+   */
+  String getIdentifier();
+
+  /**
+   * Sets the value of the '{@link org.ddmore.mdl.mdl.RandomList#getIdentifier <em>Identifier</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Identifier</em>' attribute.
+   * @see #getIdentifier()
+   * @generated
+   */
+  void setIdentifier(String value);
+
   /**
    * Returns the value of the '<em><b>Arguments</b></em>' containment reference.
    * <!-- begin-user-doc -->

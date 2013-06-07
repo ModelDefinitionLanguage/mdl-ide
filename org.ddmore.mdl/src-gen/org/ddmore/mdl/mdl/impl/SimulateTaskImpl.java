@@ -4,9 +4,9 @@ package org.ddmore.mdl.mdl.impl;
 
 import java.util.Collection;
 
-import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.SimulateTask;
+import org.ddmore.mdl.mdl.TaskFunctionStatement;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -66,7 +66,7 @@ public class SimulateTaskImpl extends MinimalEObjectImpl.Container implements Si
    * @generated
    * @ordered
    */
-  protected EList<BlockStatement> statements;
+  protected EList<TaskFunctionStatement> statements;
 
   /**
    * <!-- begin-user-doc -->
@@ -117,11 +117,11 @@ public class SimulateTaskImpl extends MinimalEObjectImpl.Container implements Si
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<BlockStatement> getStatements()
+  public EList<TaskFunctionStatement> getStatements()
   {
     if (statements == null)
     {
-      statements = new EObjectContainmentEList<BlockStatement>(BlockStatement.class, this, MdlPackage.SIMULATE_TASK__STATEMENTS);
+      statements = new EObjectContainmentEList<TaskFunctionStatement>(TaskFunctionStatement.class, this, MdlPackage.SIMULATE_TASK__STATEMENTS);
     }
     return statements;
   }
@@ -176,7 +176,7 @@ public class SimulateTaskImpl extends MinimalEObjectImpl.Container implements Si
         return;
       case MdlPackage.SIMULATE_TASK__STATEMENTS:
         getStatements().clear();
-        getStatements().addAll((Collection<? extends BlockStatement>)newValue);
+        getStatements().addAll((Collection<? extends TaskFunctionStatement>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

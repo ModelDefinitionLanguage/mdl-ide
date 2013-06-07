@@ -212,29 +212,29 @@ public interface EnumType extends EObject
   void setMissing(Missing value);
 
   /**
-   * Returns the value of the '<em><b>Target</b></em>' attribute.
+   * Returns the value of the '<em><b>Target</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Target</em>' attribute isn't clear,
+   * If the meaning of the '<em>Target</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Target</em>' attribute.
-   * @see #setTarget(String)
+   * @return the value of the '<em>Target</em>' containment reference.
+   * @see #setTarget(TargetLanguage)
    * @see org.ddmore.mdl.mdl.MdlPackage#getEnumType_Target()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getTarget();
+  TargetLanguage getTarget();
 
   /**
-   * Sets the value of the '{@link org.ddmore.mdl.mdl.EnumType#getTarget <em>Target</em>}' attribute.
+   * Sets the value of the '{@link org.ddmore.mdl.mdl.EnumType#getTarget <em>Target</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Target</em>' attribute.
+   * @param value the new value of the '<em>Target</em>' containment reference.
    * @see #getTarget()
    * @generated
    */
-  void setTarget(String value);
+  void setTarget(TargetLanguage value);
 
 } // EnumType

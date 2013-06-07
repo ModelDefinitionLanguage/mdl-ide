@@ -95,9 +95,11 @@ import org.ddmore.mdl.mdl.SymbolList;
 import org.ddmore.mdl.mdl.SymbolModification;
 import org.ddmore.mdl.mdl.TELObject;
 import org.ddmore.mdl.mdl.TargetBlock;
+import org.ddmore.mdl.mdl.TargetLanguage;
 import org.ddmore.mdl.mdl.TaskFunctionBlock;
 import org.ddmore.mdl.mdl.TaskFunctionBody;
 import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
+import org.ddmore.mdl.mdl.TaskFunctionStatement;
 import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.UnaryExpression;
@@ -679,6 +681,12 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 					return; 
 				}
 				else break;
+			case MdlPackage.TARGET_LANGUAGE:
+				if(context == grammarAccess.getTargetLanguageRule()) {
+					sequence_TargetLanguage(context, (TargetLanguage) semanticObject); 
+					return; 
+				}
+				else break;
 			case MdlPackage.TASK_FUNCTION_BLOCK:
 				if(context == grammarAccess.getTaskFunctionBlockRule()) {
 					sequence_TaskFunctionBlock(context, (TaskFunctionBlock) semanticObject); 
@@ -694,6 +702,12 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 			case MdlPackage.TASK_FUNCTION_DECLARATION:
 				if(context == grammarAccess.getTaskFunctionDeclarationRule()) {
 					sequence_TaskFunctionDeclaration(context, (TaskFunctionDeclaration) semanticObject); 
+					return; 
+				}
+				else break;
+			case MdlPackage.TASK_FUNCTION_STATEMENT:
+				if(context == grammarAccess.getTaskFunctionStatementRule()) {
+					sequence_TaskFunctionStatement(context, (TaskFunctionStatement) semanticObject); 
 					return; 
 				}
 				else break;
@@ -770,15 +784,18 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     list=SymbolList
+	 *     (identifier='ADD' list=SymbolList)
 	 */
 	protected void sequence_AddList(EObject context, AddList semanticObject) {
 		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ADD_LIST__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ADD_LIST__IDENTIFIER));
 			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ADD_LIST__LIST) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ADD_LIST__LIST));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getAddListAccess().getIdentifierADDKeyword_0_0(), semanticObject.getIdentifier());
 		feeder.accept(grammarAccess.getAddListAccess().getListSymbolListParserRuleCall_2_0(), semanticObject.getList());
 		feeder.finish();
 	}
@@ -843,7 +860,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (symbol=SymbolDeclaration | functionCall=FunctionCall | statement=ConditionalStatement | targetBlock=TargetBlock)
+	 *     (symbol=SymbolDeclaration | functionCall=FunctionCall | statement=ConditionalStatement)
 	 */
 	protected void sequence_BlockStatement(EObject context, BlockStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -983,7 +1000,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (normal='Normal' | binomial='Binomial' | poisson='Poisson' | student_t='Student_T' | mvnormal='MVNormal')
+	 *     (identifier='Normal' | identifier='Binomial' | identifier='Poisson' | identifier='Student_T' | identifier='MVNormal')
 	 */
 	protected void sequence_Distribution(EObject context, Distribution semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1029,7 +1046,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (identifier='ESTIMATE' statements+=BlockStatement*)
+	 *     (identifier='ESTIMATE' statements+=TaskFunctionStatement*)
 	 */
 	protected void sequence_EstimateTask(EObject context, EstimateTask semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1047,7 +1064,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (identifier='EXECUTE' statements+=BlockStatement*)
+	 *     (identifier='EXECUTE' statements+=TaskFunctionStatement*)
 	 */
 	protected void sequence_ExecuteTask(EObject context, ExecuteTask semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1272,7 +1289,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (mdv='mdv' | id='id' | dv='dv' | idv='idv')
+	 *     (identifier='mdv' | identifier='id' | identifier='dv' | identifier='idv')
 	 */
 	protected void sequence_LevelType(EObject context, LevelType semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1306,15 +1323,18 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     arguments=Arguments
+	 *     (identifier='list' arguments=Arguments)
 	 */
 	protected void sequence_List(EObject context, List semanticObject) {
 		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.LIST__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.LIST__IDENTIFIER));
 			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.LIST__ARGUMENTS) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.LIST__ARGUMENTS));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getListAccess().getIdentifierListKeyword_0_0(), semanticObject.getIdentifier());
 		feeder.accept(grammarAccess.getListAccess().getArgumentsArgumentsParserRuleCall_2_0(), semanticObject.getArguments());
 		feeder.finish();
 	}
@@ -1485,15 +1505,18 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     arguments=Arguments
+	 *     (identifier='ode' arguments=Arguments)
 	 */
 	protected void sequence_OdeList(EObject context, OdeList semanticObject) {
 		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ODE_LIST__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ODE_LIST__IDENTIFIER));
 			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.ODE_LIST__ARGUMENTS) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.ODE_LIST__ARGUMENTS));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getOdeListAccess().getIdentifierOdeKeyword_0_0(), semanticObject.getIdentifier());
 		feeder.accept(grammarAccess.getOdeListAccess().getArgumentsArgumentsParserRuleCall_2_0(), semanticObject.getArguments());
 		feeder.finish();
 	}
@@ -1632,15 +1655,18 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     arguments=Arguments
+	 *     (identifier='~' arguments=Arguments)
 	 */
 	protected void sequence_RandomList(EObject context, RandomList semanticObject) {
 		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.RANDOM_LIST__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.RANDOM_LIST__IDENTIFIER));
 			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.RANDOM_LIST__ARGUMENTS) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.RANDOM_LIST__ARGUMENTS));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getRandomListAccess().getIdentifierTildeKeyword_0_0(), semanticObject.getIdentifier());
 		feeder.accept(grammarAccess.getRandomListAccess().getArgumentsArgumentsParserRuleCall_2_0(), semanticObject.getArguments());
 		feeder.finish();
 	}
@@ -1657,15 +1683,18 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     list=SymbolList
+	 *     (identifier='REMOVE' list=SymbolList)
 	 */
 	protected void sequence_RemoveList(EObject context, RemoveList semanticObject) {
 		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.REMOVE_LIST__IDENTIFIER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.REMOVE_LIST__IDENTIFIER));
 			if(transientValues.isValueTransient(semanticObject, MdlPackage.Literals.REMOVE_LIST__LIST) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MdlPackage.Literals.REMOVE_LIST__LIST));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getRemoveListAccess().getIdentifierREMOVEKeyword_0_0(), semanticObject.getIdentifier());
 		feeder.accept(grammarAccess.getRemoveListAccess().getListSymbolListParserRuleCall_2_0(), semanticObject.getList());
 		feeder.finish();
 	}
@@ -1691,7 +1720,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (identifier='SIMULATE' statements+=BlockStatement*)
+	 *     (identifier='SIMULATE' statements+=TaskFunctionStatement*)
 	 */
 	protected void sequence_SimulateTask(EObject context, SimulateTask semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1736,7 +1765,7 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (symbols+=FullyQualifiedSymbolName symbols+=FullyQualifiedSymbolName+)
+	 *     (identifier='list' symbols+=FullyQualifiedSymbolName symbols+=FullyQualifiedSymbolName*)
 	 */
 	protected void sequence_SymbolList(EObject context, SymbolList semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1766,6 +1795,22 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     (identifier='TARGET_CODE' arguments=Arguments? externalCode=EXTERNAL_CODE)
 	 */
 	protected void sequence_TargetBlock(EObject context, TargetBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (
+	 *         identifier='NMTRAN_CODE' | 
+	 *         identifier='MLXTRAN_CODE' | 
+	 *         identifier='PML_CODE' | 
+	 *         identifier='BUGS_CODE' | 
+	 *         identifier='R_CODE' | 
+	 *         identifier='MATLAB_CODE'
+	 *     )
+	 */
+	protected void sequence_TargetLanguage(EObject context, TargetLanguage semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -1807,6 +1852,15 @@ public class MdlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 		feeder.accept(grammarAccess.getTaskFunctionDeclarationAccess().getFormalArgumentsFormalArgumentsParserRuleCall_4_0(), semanticObject.getFormalArguments());
 		feeder.accept(grammarAccess.getTaskFunctionDeclarationAccess().getFunctionBodyTaskFunctionBodyParserRuleCall_6_0(), semanticObject.getFunctionBody());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (statement=BlockStatement | targetBlock=TargetBlock)
+	 */
+	protected void sequence_TaskFunctionStatement(EObject context, TaskFunctionStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

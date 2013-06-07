@@ -11,6 +11,7 @@ import org.ddmore.mdl.mdl.LevelType;
 import org.ddmore.mdl.mdl.Likelyhood;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.Missing;
+import org.ddmore.mdl.mdl.TargetLanguage;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -114,24 +115,14 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
   protected Missing missing;
 
   /**
-   * The default value of the '{@link #getTarget() <em>Target</em>}' attribute.
+   * The cached value of the '{@link #getTarget() <em>Target</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getTarget()
    * @generated
    * @ordered
    */
-  protected static final String TARGET_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getTarget() <em>Target</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getTarget()
-   * @generated
-   * @ordered
-   */
-  protected String target = TARGET_EDEFAULT;
+  protected TargetLanguage target;
 
   /**
    * <!-- begin-user-doc -->
@@ -495,7 +486,7 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getTarget()
+  public TargetLanguage getTarget()
   {
     return target;
   }
@@ -505,12 +496,37 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setTarget(String newTarget)
+  public NotificationChain basicSetTarget(TargetLanguage newTarget, NotificationChain msgs)
   {
-    String oldTarget = target;
+    TargetLanguage oldTarget = target;
     target = newTarget;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.ENUM_TYPE__TARGET, oldTarget, target));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdlPackage.ENUM_TYPE__TARGET, oldTarget, newTarget);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setTarget(TargetLanguage newTarget)
+  {
+    if (newTarget != target)
+    {
+      NotificationChain msgs = null;
+      if (target != null)
+        msgs = ((InternalEObject)target).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdlPackage.ENUM_TYPE__TARGET, null, msgs);
+      if (newTarget != null)
+        msgs = ((InternalEObject)newTarget).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdlPackage.ENUM_TYPE__TARGET, null, msgs);
+      msgs = basicSetTarget(newTarget, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.ENUM_TYPE__TARGET, newTarget, newTarget));
   }
 
   /**
@@ -537,6 +553,8 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
         return basicSetLikelyhood(null, msgs);
       case MdlPackage.ENUM_TYPE__MISSING:
         return basicSetMissing(null, msgs);
+      case MdlPackage.ENUM_TYPE__TARGET:
+        return basicSetTarget(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -603,7 +621,7 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
         setMissing((Missing)newValue);
         return;
       case MdlPackage.ENUM_TYPE__TARGET:
-        setTarget((String)newValue);
+        setTarget((TargetLanguage)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -641,7 +659,7 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
         setMissing((Missing)null);
         return;
       case MdlPackage.ENUM_TYPE__TARGET:
-        setTarget(TARGET_EDEFAULT);
+        setTarget((TargetLanguage)null);
         return;
     }
     super.eUnset(featureID);
@@ -672,26 +690,9 @@ public class EnumTypeImpl extends MinimalEObjectImpl.Container implements EnumTy
       case MdlPackage.ENUM_TYPE__MISSING:
         return missing != null;
       case MdlPackage.ENUM_TYPE__TARGET:
-        return TARGET_EDEFAULT == null ? target != null : !TARGET_EDEFAULT.equals(target);
+        return target != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (target: ");
-    result.append(target);
-    result.append(')');
-    return result.toString();
   }
 
 } //EnumTypeImpl

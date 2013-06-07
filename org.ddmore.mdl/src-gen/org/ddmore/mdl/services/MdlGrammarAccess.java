@@ -1170,12 +1170,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//HeaderBlock:
 		//
-		//	identifier="HEADER" BEGIN variables+=SymbolModification* //ref to Variable
+		//	identifier="HEADER" BEGIN variables+=SymbolModification* //ref to Variable +
 		//
 		//	END;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="HEADER" BEGIN variables+=SymbolModification* //ref to Variable
+		//identifier="HEADER" BEGIN variables+=SymbolModification* //ref to Variable +
 		//
 		//END
 		public Group getGroup() { return cGroup; }
@@ -1195,7 +1195,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//SymbolModification
 		public RuleCall getVariablesSymbolModificationParserRuleCall_2_0() { return cVariablesSymbolModificationParserRuleCall_2_0; }
 
-		////ref to Variable
+		////ref to Variable +
 		//
 		//END
 		public RuleCall getENDTerminalRuleCall_3() { return cENDTerminalRuleCall_3; }
@@ -1321,12 +1321,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//ParameterBlock:
 		//
-		//	identifier="PARAMETER" BEGIN parameters+=SymbolModification* //Ref to parameter
+		//	identifier="PARAMETER" BEGIN parameters+=SymbolModification* //Ref to parameter +
 		//
 		//	END;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="PARAMETER" BEGIN parameters+=SymbolModification* //Ref to parameter
+		//identifier="PARAMETER" BEGIN parameters+=SymbolModification* //Ref to parameter +
 		//
 		//END
 		public Group getGroup() { return cGroup; }
@@ -1346,7 +1346,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//SymbolModification
 		public RuleCall getParametersSymbolModificationParserRuleCall_2_0() { return cParametersSymbolModificationParserRuleCall_2_0; }
 
-		////Ref to parameter
+		////Ref to parameter +
 		//
 		//END
 		public RuleCall getENDTerminalRuleCall_3() { return cENDTerminalRuleCall_3; }
@@ -1549,6 +1549,72 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getListSymbolListParserRuleCall_2_0() { return cListSymbolListParserRuleCall_2_0; }
 	}
 
+	public class AddListElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "AddList");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cIdentifierAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cIdentifierADDKeyword_0_0 = (Keyword)cIdentifierAssignment_0.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cListAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cListSymbolListParserRuleCall_2_0 = (RuleCall)cListAssignment_2.eContents().get(0);
+		
+		//AddList:
+		//
+		//	identifier="ADD" "=" list=SymbolList;
+		public ParserRule getRule() { return rule; }
+
+		//identifier="ADD" "=" list=SymbolList
+		public Group getGroup() { return cGroup; }
+
+		//identifier="ADD"
+		public Assignment getIdentifierAssignment_0() { return cIdentifierAssignment_0; }
+
+		//"ADD"
+		public Keyword getIdentifierADDKeyword_0_0() { return cIdentifierADDKeyword_0_0; }
+
+		//"="
+		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
+
+		//list=SymbolList
+		public Assignment getListAssignment_2() { return cListAssignment_2; }
+
+		//SymbolList
+		public RuleCall getListSymbolListParserRuleCall_2_0() { return cListSymbolListParserRuleCall_2_0; }
+	}
+
+	public class RemoveListElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "RemoveList");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cIdentifierAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cIdentifierREMOVEKeyword_0_0 = (Keyword)cIdentifierAssignment_0.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cListAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cListSymbolListParserRuleCall_2_0 = (RuleCall)cListAssignment_2.eContents().get(0);
+		
+		//RemoveList:
+		//
+		//	identifier="REMOVE" "=" list=SymbolList;
+		public ParserRule getRule() { return rule; }
+
+		//identifier="REMOVE" "=" list=SymbolList
+		public Group getGroup() { return cGroup; }
+
+		//identifier="REMOVE"
+		public Assignment getIdentifierAssignment_0() { return cIdentifierAssignment_0; }
+
+		//"REMOVE"
+		public Keyword getIdentifierREMOVEKeyword_0_0() { return cIdentifierREMOVEKeyword_0_0; }
+
+		//"="
+		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
+
+		//list=SymbolList
+		public Assignment getListAssignment_2() { return cListAssignment_2; }
+
+		//SymbolList
+		public RuleCall getListSymbolListParserRuleCall_2_0() { return cListSymbolListParserRuleCall_2_0; }
+	}
+
 	public class ModelBlockElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ModelBlock");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -1623,68 +1689,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getRemoveListRemoveListParserRuleCall_2_0() { return cRemoveListRemoveListParserRuleCall_2_0; }
 	}
 
-	public class AddListElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "AddList");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cADDKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Keyword cEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cListAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cListSymbolListParserRuleCall_2_0 = (RuleCall)cListAssignment_2.eContents().get(0);
-		
-		//AddList:
-		//
-		//	"ADD" "=" list=SymbolList;
-		public ParserRule getRule() { return rule; }
-
-		//"ADD" "=" list=SymbolList
-		public Group getGroup() { return cGroup; }
-
-		//"ADD"
-		public Keyword getADDKeyword_0() { return cADDKeyword_0; }
-
-		//"="
-		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
-
-		//list=SymbolList
-		public Assignment getListAssignment_2() { return cListAssignment_2; }
-
-		//SymbolList
-		public RuleCall getListSymbolListParserRuleCall_2_0() { return cListSymbolListParserRuleCall_2_0; }
-	}
-
-	public class RemoveListElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "RemoveList");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cREMOVEKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Keyword cEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cListAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cListSymbolListParserRuleCall_2_0 = (RuleCall)cListAssignment_2.eContents().get(0);
-		
-		//RemoveList:
-		//
-		//	"REMOVE" "=" list=SymbolList;
-		public ParserRule getRule() { return rule; }
-
-		//"REMOVE" "=" list=SymbolList
-		public Group getGroup() { return cGroup; }
-
-		//"REMOVE"
-		public Keyword getREMOVEKeyword_0() { return cREMOVEKeyword_0; }
-
-		//"="
-		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
-
-		//list=SymbolList
-		public Assignment getListAssignment_2() { return cListAssignment_2; }
-
-		//SymbolList
-		public RuleCall getListSymbolListParserRuleCall_2_0() { return cListSymbolListParserRuleCall_2_0; }
-	}
-
 	public class SymbolListElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "SymbolList");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cListKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cIdentifierAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cIdentifierListKeyword_0_0 = (Keyword)cIdentifierAssignment_0.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cSymbolsAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cSymbolsFullyQualifiedSymbolNameParserRuleCall_2_0 = (RuleCall)cSymbolsAssignment_2.eContents().get(0);
@@ -1692,18 +1701,21 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cCommaKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
 		private final Assignment cSymbolsAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
 		private final RuleCall cSymbolsFullyQualifiedSymbolNameParserRuleCall_3_1_0 = (RuleCall)cSymbolsAssignment_3_1.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//SymbolList:
 		//
-		//	"list" "(" symbols+=FullyQualifiedSymbolName ("," symbols+=FullyQualifiedSymbolName+ ")");
+		//	identifier="list" "(" symbols+=FullyQualifiedSymbolName ("," symbols+=FullyQualifiedSymbolName)* ")";
 		public ParserRule getRule() { return rule; }
 
-		//"list" "(" symbols+=FullyQualifiedSymbolName ("," symbols+=FullyQualifiedSymbolName+ ")")
+		//identifier="list" "(" symbols+=FullyQualifiedSymbolName ("," symbols+=FullyQualifiedSymbolName)* ")"
 		public Group getGroup() { return cGroup; }
 
+		//identifier="list"
+		public Assignment getIdentifierAssignment_0() { return cIdentifierAssignment_0; }
+
 		//"list"
-		public Keyword getListKeyword_0() { return cListKeyword_0; }
+		public Keyword getIdentifierListKeyword_0_0() { return cIdentifierListKeyword_0_0; }
 
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
@@ -1714,20 +1726,20 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//FullyQualifiedSymbolName
 		public RuleCall getSymbolsFullyQualifiedSymbolNameParserRuleCall_2_0() { return cSymbolsFullyQualifiedSymbolNameParserRuleCall_2_0; }
 
-		//=> "," symbols+=FullyQualifiedSymbolName+ ")"
+		//(=> "," symbols+=FullyQualifiedSymbolName)*
 		public Group getGroup_3() { return cGroup_3; }
 
 		//=> ","
 		public Keyword getCommaKeyword_3_0() { return cCommaKeyword_3_0; }
 
-		//symbols+=FullyQualifiedSymbolName+
+		//symbols+=FullyQualifiedSymbolName
 		public Assignment getSymbolsAssignment_3_1() { return cSymbolsAssignment_3_1; }
 
 		//FullyQualifiedSymbolName
 		public RuleCall getSymbolsFullyQualifiedSymbolNameParserRuleCall_3_1_0() { return cSymbolsFullyQualifiedSymbolNameParserRuleCall_3_1_0; }
 
 		//")"
-		public Keyword getRightParenthesisKeyword_3_2() { return cRightParenthesisKeyword_3_2; }
+		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
 	}
 
 	public class ModelPredictionBlockStatementElements extends AbstractParserRuleElementFinder {
@@ -1742,12 +1754,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//ModelPredictionBlockStatement:
 		//
-		//	statement=BlockStatement //new Variable
+		//	statement=BlockStatement //new Variable +
 		//
 		//	| odeBlock=OdeBlock | libraryBlock=LibraryBlock;
 		public ParserRule getRule() { return rule; }
 
-		//statement=BlockStatement //new Variable
+		//statement=BlockStatement //new Variable +
 		//
 		//| odeBlock=OdeBlock | libraryBlock=LibraryBlock
 		public Alternatives getAlternatives() { return cAlternatives; }
@@ -1859,12 +1871,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//OdeBlock:
 		//
-		//	identifier="ODE" BEGIN statements+=BlockStatement* //new Variable
+		//	identifier="ODE" BEGIN statements+=BlockStatement* //new Variable + 
 		//
 		//	END;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="ODE" BEGIN statements+=BlockStatement* //new Variable
+		//identifier="ODE" BEGIN statements+=BlockStatement* //new Variable + 
 		//
 		//END
 		public Group getGroup() { return cGroup; }
@@ -1884,7 +1896,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//BlockStatement
 		public RuleCall getStatementsBlockStatementParserRuleCall_2_0() { return cStatementsBlockStatementParserRuleCall_2_0; }
 
-		////new Variable
+		////new Variable + 
 		//
 		//END
 		public RuleCall getENDTerminalRuleCall_3() { return cENDTerminalRuleCall_3; }
@@ -1900,12 +1912,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//GroupVariablesBlockStatement:
 		//
-		//	statement=BlockStatement //new Variable
+		//	statement=BlockStatement //new Variable + 
 		//
 		//	| mixtureBlock=MixtureBlock;
 		public ParserRule getRule() { return rule; }
 
-		//statement=BlockStatement //new Variable
+		//statement=BlockStatement //new Variable + 
 		//
 		//| mixtureBlock=MixtureBlock
 		public Alternatives getAlternatives() { return cAlternatives; }
@@ -1935,12 +1947,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//MixtureBlock:
 		//
-		//	identifier="MIXTURE" BEGIN statements+=BlockStatement* //new Variable
+		//	identifier="MIXTURE" BEGIN statements+=BlockStatement* //new Variable +
 		//
 		//	END;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="MIXTURE" BEGIN statements+=BlockStatement* //new Variable
+		//identifier="MIXTURE" BEGIN statements+=BlockStatement* //new Variable +
 		//
 		//END
 		public Group getGroup() { return cGroup; }
@@ -1960,7 +1972,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//BlockStatement
 		public RuleCall getStatementsBlockStatementParserRuleCall_2_0() { return cStatementsBlockStatementParserRuleCall_2_0; }
 
-		////new Variable
+		////new Variable +
 		//
 		//END
 		public RuleCall getENDTerminalRuleCall_3() { return cENDTerminalRuleCall_3; }
@@ -2030,12 +2042,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//
 		//BlockBlock:
 		//
-		//	identifier="matrix" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter
+		//	identifier="matrix" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter +
 		//
 		//;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="matrix" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter
+		//identifier="matrix" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter +
 		public Group getGroup() { return cGroup; }
 
 		//identifier="matrix"
@@ -2089,12 +2101,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//DiagBlock:
 		//
-		//	identifier="diag" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter
+		//	identifier="diag" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter +
 		//
 		//;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="diag" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter
+		//identifier="diag" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter +
 		public Group getGroup() { return cGroup; }
 
 		//identifier="diag"
@@ -2148,12 +2160,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//SameBlock:
 		//
-		//	identifier="same" "(" arguments=Arguments ")" (BEGIN parameters=FormalArguments END)? //new Parameter
+		//	identifier="same" "(" arguments=Arguments ")" (BEGIN parameters=FormalArguments END)? //new Parameter +
 		//
 		//;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="same" "(" arguments=Arguments ")" (BEGIN parameters=FormalArguments END)? //new Parameter
+		//identifier="same" "(" arguments=Arguments ")" (BEGIN parameters=FormalArguments END)? //new Parameter +
 		public Group getGroup() { return cGroup; }
 
 		//identifier="same"
@@ -2210,12 +2222,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//
 		//FileBlockStatement:
 		//
-		//	variable=SymbolDeclaration //new VariableName which can be only list
+		//	variable=SymbolDeclaration //new VariableName which can be only list +
 		//
 		//	| inlineBlock=InlineBlock | designBlock=DesignBlock | rscriptBlock=RScriptBlock;
 		public ParserRule getRule() { return rule; }
 
-		//variable=SymbolDeclaration //new VariableName which can be only list
+		//variable=SymbolDeclaration //new VariableName which can be only list +
 		//
 		//| inlineBlock=InlineBlock | designBlock=DesignBlock | rscriptBlock=RScriptBlock
 		public Alternatives getAlternatives() { return cAlternatives; }
@@ -2261,12 +2273,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//InlineBlock:
 		//
-		//	identifier="INLINE" BEGIN variables+=FullyQualifiedSymbolName* values+=(NUMBER | ".")* //Ref to VaraibleName
+		//	identifier="INLINE" BEGIN variables+=FullyQualifiedSymbolName* values+=(NUMBER | ".")* //Ref to VaraibleName + 
 		//
 		//	END;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="INLINE" BEGIN variables+=FullyQualifiedSymbolName* values+=(NUMBER | ".")* //Ref to VaraibleName
+		//identifier="INLINE" BEGIN variables+=FullyQualifiedSymbolName* values+=(NUMBER | ".")* //Ref to VaraibleName + 
 		//
 		//END
 		public Group getGroup() { return cGroup; }
@@ -2298,7 +2310,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//"."
 		public Keyword getValuesFullStopKeyword_3_0_1() { return cValuesFullStopKeyword_3_0_1; }
 
-		////Ref to VaraibleName
+		////Ref to VaraibleName + 
 		//
 		//END
 		public RuleCall getENDTerminalRuleCall_4() { return cENDTerminalRuleCall_4; }
@@ -2354,12 +2366,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//DesignBlockStatement:
 		//
-		//	identifier=FullyQualifiedSymbolName arguments=VariableList? "=" expression= //Ref to VaraibleName
+		//	identifier=FullyQualifiedSymbolName arguments=VariableList? "=" expression= //Ref to VariableName +
 		//
 		//	AnyExpression;
 		public ParserRule getRule() { return rule; }
 
-		//identifier=FullyQualifiedSymbolName arguments=VariableList? "=" expression= //Ref to VaraibleName
+		//identifier=FullyQualifiedSymbolName arguments=VariableList? "=" expression= //Ref to VariableName +
 		//
 		//AnyExpression
 		public Group getGroup() { return cGroup; }
@@ -2379,12 +2391,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//"="
 		public Keyword getEqualsSignKeyword_2() { return cEqualsSignKeyword_2; }
 
-		//expression= //Ref to VaraibleName
+		//expression= //Ref to VariableName +
 		//
 		//AnyExpression
 		public Assignment getExpressionAssignment_3() { return cExpressionAssignment_3; }
 
-		////Ref to VaraibleName
+		////Ref to VariableName +
 		//
 		//AnyExpression
 		public RuleCall getExpressionAnyExpressionParserRuleCall_3_0() { return cExpressionAnyExpressionParserRuleCall_3_0; }
@@ -2404,12 +2416,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//VariableList:
 		//
-		//	"[" identifiers+=FullyQualifiedSymbolName ("," identifiers+=FullyQualifiedSymbolName)* //Ref to VaraibleName
+		//	"[" identifiers+=FullyQualifiedSymbolName ("," identifiers+=FullyQualifiedSymbolName)* //Ref to VaraibleName +
 		//
 		//	"]";
 		public ParserRule getRule() { return rule; }
 
-		//"[" identifiers+=FullyQualifiedSymbolName ("," identifiers+=FullyQualifiedSymbolName)* //Ref to VaraibleName
+		//"[" identifiers+=FullyQualifiedSymbolName ("," identifiers+=FullyQualifiedSymbolName)* //Ref to VaraibleName +
 		//
 		//"]"
 		public Group getGroup() { return cGroup; }
@@ -2435,7 +2447,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//FullyQualifiedSymbolName
 		public RuleCall getIdentifiersFullyQualifiedSymbolNameParserRuleCall_2_1_0() { return cIdentifiersFullyQualifiedSymbolNameParserRuleCall_2_1_0; }
 
-		////Ref to VaraibleName
+		////Ref to VaraibleName +
 		//
 		//"]"
 		public Keyword getRightSquareBracketKeyword_3() { return cRightSquareBracketKeyword_3; }
@@ -2492,12 +2504,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//RScriptBlockStatement:
 		//
-		//	identifier=ID "=" (value=STRING // new VariableName
+		//	identifier=ID "=" (value=STRING // new VariableName +
 		//
 		//	| object=ObjectName);
 		public ParserRule getRule() { return rule; }
 
-		//identifier=ID "=" (value=STRING // new VariableName
+		//identifier=ID "=" (value=STRING // new VariableName +
 		//
 		//| object=ObjectName)
 		public Group getGroup() { return cGroup; }
@@ -2511,7 +2523,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//"="
 		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
 
-		//value=STRING // new VariableName
+		//value=STRING // new VariableName +
 		//
 		//| object=ObjectName
 		public Alternatives getAlternatives_2() { return cAlternatives_2; }
@@ -2545,12 +2557,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//TaskFunctionDeclaration:
 		//
-		//	identifier=ID "=" //new FunctionName
+		//	identifier=ID "=" //new FunctionName +
 		//
 		//	"function" "(" formalArguments=FormalArguments ")" functionBody=TaskFunctionBody;
 		public ParserRule getRule() { return rule; }
 
-		//identifier=ID "=" //new FunctionName
+		//identifier=ID "=" //new FunctionName +
 		//
 		//"function" "(" formalArguments=FormalArguments ")" functionBody=TaskFunctionBody
 		public Group getGroup() { return cGroup; }
@@ -2564,7 +2576,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//"="
 		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
 
-		////new FunctionName
+		////new FunctionName +
 		//
 		//"function"
 		public Keyword getFunctionKeyword_2() { return cFunctionKeyword_2; }
@@ -2665,17 +2677,17 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cIdentifierESTIMATEKeyword_0_0 = (Keyword)cIdentifierAssignment_0.eContents().get(0);
 		private final RuleCall cBEGINTerminalRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
 		private final Assignment cStatementsAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cStatementsBlockStatementParserRuleCall_2_0 = (RuleCall)cStatementsAssignment_2.eContents().get(0);
+		private final RuleCall cStatementsTaskFunctionStatementParserRuleCall_2_0 = (RuleCall)cStatementsAssignment_2.eContents().get(0);
 		private final RuleCall cENDTerminalRuleCall_3 = (RuleCall)cGroup.eContents().get(3);
 		
 		//EstimateTask:
 		//
-		//	identifier="ESTIMATE" BEGIN statements+=BlockStatement* //Properties
+		//	identifier="ESTIMATE" BEGIN statements+=TaskFunctionStatement* //Properties
 		//
 		//	END;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="ESTIMATE" BEGIN statements+=BlockStatement* //Properties
+		//identifier="ESTIMATE" BEGIN statements+=TaskFunctionStatement* //Properties
 		//
 		//END
 		public Group getGroup() { return cGroup; }
@@ -2689,11 +2701,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//BEGIN
 		public RuleCall getBEGINTerminalRuleCall_1() { return cBEGINTerminalRuleCall_1; }
 
-		//statements+=BlockStatement*
+		//statements+=TaskFunctionStatement*
 		public Assignment getStatementsAssignment_2() { return cStatementsAssignment_2; }
 
-		//BlockStatement
-		public RuleCall getStatementsBlockStatementParserRuleCall_2_0() { return cStatementsBlockStatementParserRuleCall_2_0; }
+		//TaskFunctionStatement
+		public RuleCall getStatementsTaskFunctionStatementParserRuleCall_2_0() { return cStatementsTaskFunctionStatementParserRuleCall_2_0; }
 
 		////Properties
 		//
@@ -2708,17 +2720,17 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cIdentifierSIMULATEKeyword_0_0 = (Keyword)cIdentifierAssignment_0.eContents().get(0);
 		private final RuleCall cBEGINTerminalRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
 		private final Assignment cStatementsAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cStatementsBlockStatementParserRuleCall_2_0 = (RuleCall)cStatementsAssignment_2.eContents().get(0);
+		private final RuleCall cStatementsTaskFunctionStatementParserRuleCall_2_0 = (RuleCall)cStatementsAssignment_2.eContents().get(0);
 		private final RuleCall cENDTerminalRuleCall_3 = (RuleCall)cGroup.eContents().get(3);
 		
 		//SimulateTask:
 		//
-		//	identifier="SIMULATE" BEGIN statements+=BlockStatement* //Properties
+		//	identifier="SIMULATE" BEGIN statements+=TaskFunctionStatement* //Properties
 		//
 		//	END;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="SIMULATE" BEGIN statements+=BlockStatement* //Properties
+		//identifier="SIMULATE" BEGIN statements+=TaskFunctionStatement* //Properties
 		//
 		//END
 		public Group getGroup() { return cGroup; }
@@ -2732,11 +2744,11 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//BEGIN
 		public RuleCall getBEGINTerminalRuleCall_1() { return cBEGINTerminalRuleCall_1; }
 
-		//statements+=BlockStatement*
+		//statements+=TaskFunctionStatement*
 		public Assignment getStatementsAssignment_2() { return cStatementsAssignment_2; }
 
-		//BlockStatement
-		public RuleCall getStatementsBlockStatementParserRuleCall_2_0() { return cStatementsBlockStatementParserRuleCall_2_0; }
+		//TaskFunctionStatement
+		public RuleCall getStatementsTaskFunctionStatementParserRuleCall_2_0() { return cStatementsTaskFunctionStatementParserRuleCall_2_0; }
 
 		////Properties
 		//
@@ -2751,17 +2763,17 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cIdentifierEXECUTEKeyword_0_0 = (Keyword)cIdentifierAssignment_0.eContents().get(0);
 		private final RuleCall cBEGINTerminalRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
 		private final Assignment cStatementsAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cStatementsBlockStatementParserRuleCall_2_0 = (RuleCall)cStatementsAssignment_2.eContents().get(0);
+		private final RuleCall cStatementsTaskFunctionStatementParserRuleCall_2_0 = (RuleCall)cStatementsAssignment_2.eContents().get(0);
 		private final RuleCall cENDTerminalRuleCall_3 = (RuleCall)cGroup.eContents().get(3);
 		
 		//ExecuteTask:
 		//
-		//	identifier="EXECUTE" BEGIN statements+=BlockStatement* //Properties
+		//	identifier="EXECUTE" BEGIN statements+=TaskFunctionStatement* //Properties
 		//
 		//	END;
 		public ParserRule getRule() { return rule; }
 
-		//identifier="EXECUTE" BEGIN statements+=BlockStatement* //Properties
+		//identifier="EXECUTE" BEGIN statements+=TaskFunctionStatement* //Properties
 		//
 		//END
 		public Group getGroup() { return cGroup; }
@@ -2775,16 +2787,45 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//BEGIN
 		public RuleCall getBEGINTerminalRuleCall_1() { return cBEGINTerminalRuleCall_1; }
 
-		//statements+=BlockStatement*
+		//statements+=TaskFunctionStatement*
 		public Assignment getStatementsAssignment_2() { return cStatementsAssignment_2; }
 
-		//BlockStatement
-		public RuleCall getStatementsBlockStatementParserRuleCall_2_0() { return cStatementsBlockStatementParserRuleCall_2_0; }
+		//TaskFunctionStatement
+		public RuleCall getStatementsTaskFunctionStatementParserRuleCall_2_0() { return cStatementsTaskFunctionStatementParserRuleCall_2_0; }
 
 		////Properties
 		//
 		//END
 		public RuleCall getENDTerminalRuleCall_3() { return cENDTerminalRuleCall_3; }
+	}
+
+	public class TaskFunctionStatementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "TaskFunctionStatement");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cStatementAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cStatementBlockStatementParserRuleCall_0_0 = (RuleCall)cStatementAssignment_0.eContents().get(0);
+		private final Assignment cTargetBlockAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cTargetBlockTargetBlockParserRuleCall_1_0 = (RuleCall)cTargetBlockAssignment_1.eContents().get(0);
+		
+		//TaskFunctionStatement:
+		//
+		//	statement=BlockStatement | targetBlock=TargetBlock;
+		public ParserRule getRule() { return rule; }
+
+		//statement=BlockStatement | targetBlock=TargetBlock
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//statement=BlockStatement
+		public Assignment getStatementAssignment_0() { return cStatementAssignment_0; }
+
+		//BlockStatement
+		public RuleCall getStatementBlockStatementParserRuleCall_0_0() { return cStatementBlockStatementParserRuleCall_0_0; }
+
+		//targetBlock=TargetBlock
+		public Assignment getTargetBlockAssignment_1() { return cTargetBlockAssignment_1; }
+
+		//TargetBlock
+		public RuleCall getTargetBlockTargetBlockParserRuleCall_1_0() { return cTargetBlockTargetBlockParserRuleCall_1_0; }
 	}
 
 	public class FormalArgumentsElements extends AbstractParserRuleElementFinder {
@@ -2893,19 +2934,17 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFunctionCallFunctionCallParserRuleCall_1_0 = (RuleCall)cFunctionCallAssignment_1.eContents().get(0);
 		private final Assignment cStatementAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
 		private final RuleCall cStatementConditionalStatementParserRuleCall_2_0 = (RuleCall)cStatementAssignment_2.eContents().get(0);
-		private final Assignment cTargetBlockAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
-		private final RuleCall cTargetBlockTargetBlockParserRuleCall_3_0 = (RuleCall)cTargetBlockAssignment_3.eContents().get(0);
 		
 		//BlockStatement:
 		//
 		//	symbol=SymbolDeclaration //VariableName or PropertyName
 		//
-		//	| functionCall=FunctionCall | statement=ConditionalStatement | targetBlock=TargetBlock;
+		//	| functionCall=FunctionCall | statement=ConditionalStatement;
 		public ParserRule getRule() { return rule; }
 
 		//symbol=SymbolDeclaration //VariableName or PropertyName
 		//
-		//| functionCall=FunctionCall | statement=ConditionalStatement | targetBlock=TargetBlock
+		//| functionCall=FunctionCall | statement=ConditionalStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//symbol=SymbolDeclaration
@@ -2925,12 +2964,6 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//ConditionalStatement
 		public RuleCall getStatementConditionalStatementParserRuleCall_2_0() { return cStatementConditionalStatementParserRuleCall_2_0; }
-
-		//targetBlock=TargetBlock
-		public Assignment getTargetBlockAssignment_3() { return cTargetBlockAssignment_3; }
-
-		//TargetBlock
-		public RuleCall getTargetBlockTargetBlockParserRuleCall_3_0() { return cTargetBlockTargetBlockParserRuleCall_3_0; }
 	}
 
 	public class TargetBlockElements extends AbstractParserRuleElementFinder {
@@ -2992,39 +3025,43 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	public class TargetLanguageElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "TargetLanguage");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Keyword cNMTRAN_CODEKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
-		private final Keyword cMLXTRAN_CODEKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
-		private final Keyword cPML_CODEKeyword_2 = (Keyword)cAlternatives.eContents().get(2);
-		private final Keyword cBUGS_CODEKeyword_3 = (Keyword)cAlternatives.eContents().get(3);
-		private final Keyword cR_CODEKeyword_4 = (Keyword)cAlternatives.eContents().get(4);
-		private final Keyword cMATLAB_CODEKeyword_5 = (Keyword)cAlternatives.eContents().get(5);
+		private final Assignment cIdentifierAssignment = (Assignment)rule.eContents().get(1);
+		private final Alternatives cIdentifierAlternatives_0 = (Alternatives)cIdentifierAssignment.eContents().get(0);
+		private final Keyword cIdentifierNMTRAN_CODEKeyword_0_0 = (Keyword)cIdentifierAlternatives_0.eContents().get(0);
+		private final Keyword cIdentifierMLXTRAN_CODEKeyword_0_1 = (Keyword)cIdentifierAlternatives_0.eContents().get(1);
+		private final Keyword cIdentifierPML_CODEKeyword_0_2 = (Keyword)cIdentifierAlternatives_0.eContents().get(2);
+		private final Keyword cIdentifierBUGS_CODEKeyword_0_3 = (Keyword)cIdentifierAlternatives_0.eContents().get(3);
+		private final Keyword cIdentifierR_CODEKeyword_0_4 = (Keyword)cIdentifierAlternatives_0.eContents().get(4);
+		private final Keyword cIdentifierMATLAB_CODEKeyword_0_5 = (Keyword)cIdentifierAlternatives_0.eContents().get(5);
 		
 		//TargetLanguage:
 		//
-		//	"NMTRAN_CODE" | "MLXTRAN_CODE" | "PML_CODE" | "BUGS_CODE" | "R_CODE" | "MATLAB_CODE";
+		//	identifier=("NMTRAN_CODE" | "MLXTRAN_CODE" | "PML_CODE" | "BUGS_CODE" | "R_CODE" | "MATLAB_CODE");
 		public ParserRule getRule() { return rule; }
 
+		//identifier=("NMTRAN_CODE" | "MLXTRAN_CODE" | "PML_CODE" | "BUGS_CODE" | "R_CODE" | "MATLAB_CODE")
+		public Assignment getIdentifierAssignment() { return cIdentifierAssignment; }
+
 		//"NMTRAN_CODE" | "MLXTRAN_CODE" | "PML_CODE" | "BUGS_CODE" | "R_CODE" | "MATLAB_CODE"
-		public Alternatives getAlternatives() { return cAlternatives; }
+		public Alternatives getIdentifierAlternatives_0() { return cIdentifierAlternatives_0; }
 
 		//"NMTRAN_CODE"
-		public Keyword getNMTRAN_CODEKeyword_0() { return cNMTRAN_CODEKeyword_0; }
+		public Keyword getIdentifierNMTRAN_CODEKeyword_0_0() { return cIdentifierNMTRAN_CODEKeyword_0_0; }
 
 		//"MLXTRAN_CODE"
-		public Keyword getMLXTRAN_CODEKeyword_1() { return cMLXTRAN_CODEKeyword_1; }
+		public Keyword getIdentifierMLXTRAN_CODEKeyword_0_1() { return cIdentifierMLXTRAN_CODEKeyword_0_1; }
 
 		//"PML_CODE"
-		public Keyword getPML_CODEKeyword_2() { return cPML_CODEKeyword_2; }
+		public Keyword getIdentifierPML_CODEKeyword_0_2() { return cIdentifierPML_CODEKeyword_0_2; }
 
 		//"BUGS_CODE"
-		public Keyword getBUGS_CODEKeyword_3() { return cBUGS_CODEKeyword_3; }
+		public Keyword getIdentifierBUGS_CODEKeyword_0_3() { return cIdentifierBUGS_CODEKeyword_0_3; }
 
 		//"R_CODE"
-		public Keyword getR_CODEKeyword_4() { return cR_CODEKeyword_4; }
+		public Keyword getIdentifierR_CODEKeyword_0_4() { return cIdentifierR_CODEKeyword_0_4; }
 
 		//"MATLAB_CODE"
-		public Keyword getMATLAB_CODEKeyword_5() { return cMATLAB_CODEKeyword_5; }
+		public Keyword getIdentifierMATLAB_CODEKeyword_0_5() { return cIdentifierMATLAB_CODEKeyword_0_5; }
 	}
 
 	public class ImportBlockElements extends AbstractParserRuleElementFinder {
@@ -3119,12 +3156,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//SymbolModification:
 		//
-		//	identifier=FullyQualifiedSymbolName ("=" list=List)? //Ref to ParameterName
+		//	identifier=FullyQualifiedSymbolName ("=" list=List)? //Ref to ParameterName or VaraibleName +
 		//
 		//;
 		public ParserRule getRule() { return rule; }
 
-		//identifier=FullyQualifiedSymbolName ("=" list=List)? //Ref to ParameterName
+		//identifier=FullyQualifiedSymbolName ("=" list=List)? //Ref to ParameterName or VaraibleName +
 		public Group getGroup() { return cGroup; }
 
 		//identifier=FullyQualifiedSymbolName
@@ -3399,55 +3436,41 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	public class LevelTypeElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "LevelType");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Assignment cMdvAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
-		private final Keyword cMdvMdvKeyword_0_0 = (Keyword)cMdvAssignment_0.eContents().get(0);
-		private final Assignment cIdAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
-		private final Keyword cIdIdKeyword_1_0 = (Keyword)cIdAssignment_1.eContents().get(0);
-		private final Assignment cDvAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
-		private final Keyword cDvDvKeyword_2_0 = (Keyword)cDvAssignment_2.eContents().get(0);
-		private final Assignment cIdvAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
-		private final Keyword cIdvIdvKeyword_3_0 = (Keyword)cIdvAssignment_3.eContents().get(0);
+		private final Assignment cIdentifierAssignment = (Assignment)rule.eContents().get(1);
+		private final Alternatives cIdentifierAlternatives_0 = (Alternatives)cIdentifierAssignment.eContents().get(0);
+		private final Keyword cIdentifierMdvKeyword_0_0 = (Keyword)cIdentifierAlternatives_0.eContents().get(0);
+		private final Keyword cIdentifierIdKeyword_0_1 = (Keyword)cIdentifierAlternatives_0.eContents().get(1);
+		private final Keyword cIdentifierDvKeyword_0_2 = (Keyword)cIdentifierAlternatives_0.eContents().get(2);
+		private final Keyword cIdentifierIdvKeyword_0_3 = (Keyword)cIdentifierAlternatives_0.eContents().get(3);
 		
 		//LevelType:
 		//
-		//	mdv="mdv" | id="id" | dv="dv" | idv= //Independent Variable
+		//	identifier=("mdv" //Independent Variable
 		//
-		//	"idv";
+		//	| "id" | "dv" | "idv");
 		public ParserRule getRule() { return rule; }
 
-		//mdv="mdv" | id="id" | dv="dv" | idv= //Independent Variable
+		//identifier=("mdv" //Independent Variable
 		//
-		//"idv"
-		public Alternatives getAlternatives() { return cAlternatives; }
+		//| "id" | "dv" | "idv")
+		public Assignment getIdentifierAssignment() { return cIdentifierAssignment; }
 
-		//mdv="mdv"
-		public Assignment getMdvAssignment_0() { return cMdvAssignment_0; }
+		//"mdv" //Independent Variable
+		//
+		//| "id" | "dv" | "idv"
+		public Alternatives getIdentifierAlternatives_0() { return cIdentifierAlternatives_0; }
 
 		//"mdv"
-		public Keyword getMdvMdvKeyword_0_0() { return cMdvMdvKeyword_0_0; }
-
-		//id="id"
-		public Assignment getIdAssignment_1() { return cIdAssignment_1; }
+		public Keyword getIdentifierMdvKeyword_0_0() { return cIdentifierMdvKeyword_0_0; }
 
 		//"id"
-		public Keyword getIdIdKeyword_1_0() { return cIdIdKeyword_1_0; }
-
-		//dv="dv"
-		public Assignment getDvAssignment_2() { return cDvAssignment_2; }
+		public Keyword getIdentifierIdKeyword_0_1() { return cIdentifierIdKeyword_0_1; }
 
 		//"dv"
-		public Keyword getDvDvKeyword_2_0() { return cDvDvKeyword_2_0; }
+		public Keyword getIdentifierDvKeyword_0_2() { return cIdentifierDvKeyword_0_2; }
 
-		//idv= //Independent Variable
-		//
 		//"idv"
-		public Assignment getIdvAssignment_3() { return cIdvAssignment_3; }
-
-		////Independent Variable
-		//
-		//"idv"
-		public Keyword getIdvIdvKeyword_3_0() { return cIdvIdvKeyword_3_0; }
+		public Keyword getIdentifierIdvKeyword_0_3() { return cIdentifierIdvKeyword_0_3; }
 	}
 
 	public class CategoricalElements extends AbstractParserRuleElementFinder {
@@ -3527,55 +3550,39 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	public class DistributionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Distribution");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Assignment cNormalAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
-		private final Keyword cNormalNormalKeyword_0_0 = (Keyword)cNormalAssignment_0.eContents().get(0);
-		private final Assignment cBinomialAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
-		private final Keyword cBinomialBinomialKeyword_1_0 = (Keyword)cBinomialAssignment_1.eContents().get(0);
-		private final Assignment cPoissonAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
-		private final Keyword cPoissonPoissonKeyword_2_0 = (Keyword)cPoissonAssignment_2.eContents().get(0);
-		private final Assignment cStudent_tAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
-		private final Keyword cStudent_tStudent_TKeyword_3_0 = (Keyword)cStudent_tAssignment_3.eContents().get(0);
-		private final Assignment cMvnormalAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
-		private final Keyword cMvnormalMVNormalKeyword_4_0 = (Keyword)cMvnormalAssignment_4.eContents().get(0);
+		private final Assignment cIdentifierAssignment = (Assignment)rule.eContents().get(1);
+		private final Alternatives cIdentifierAlternatives_0 = (Alternatives)cIdentifierAssignment.eContents().get(0);
+		private final Keyword cIdentifierNormalKeyword_0_0 = (Keyword)cIdentifierAlternatives_0.eContents().get(0);
+		private final Keyword cIdentifierBinomialKeyword_0_1 = (Keyword)cIdentifierAlternatives_0.eContents().get(1);
+		private final Keyword cIdentifierPoissonKeyword_0_2 = (Keyword)cIdentifierAlternatives_0.eContents().get(2);
+		private final Keyword cIdentifierStudent_TKeyword_0_3 = (Keyword)cIdentifierAlternatives_0.eContents().get(3);
+		private final Keyword cIdentifierMVNormalKeyword_0_4 = (Keyword)cIdentifierAlternatives_0.eContents().get(4);
 		
 		//Distribution:
 		//
-		//	normal="Normal" | binomial="Binomial" | poisson="Poisson" | student_t="Student_T" | mvnormal="MVNormal";
+		//	identifier=("Normal" | "Binomial" | "Poisson" | "Student_T" | "MVNormal");
 		public ParserRule getRule() { return rule; }
 
-		//normal="Normal" | binomial="Binomial" | poisson="Poisson" | student_t="Student_T" | mvnormal="MVNormal"
-		public Alternatives getAlternatives() { return cAlternatives; }
+		//identifier=("Normal" | "Binomial" | "Poisson" | "Student_T" | "MVNormal")
+		public Assignment getIdentifierAssignment() { return cIdentifierAssignment; }
 
-		//normal="Normal"
-		public Assignment getNormalAssignment_0() { return cNormalAssignment_0; }
+		//"Normal" | "Binomial" | "Poisson" | "Student_T" | "MVNormal"
+		public Alternatives getIdentifierAlternatives_0() { return cIdentifierAlternatives_0; }
 
 		//"Normal"
-		public Keyword getNormalNormalKeyword_0_0() { return cNormalNormalKeyword_0_0; }
-
-		//binomial="Binomial"
-		public Assignment getBinomialAssignment_1() { return cBinomialAssignment_1; }
+		public Keyword getIdentifierNormalKeyword_0_0() { return cIdentifierNormalKeyword_0_0; }
 
 		//"Binomial"
-		public Keyword getBinomialBinomialKeyword_1_0() { return cBinomialBinomialKeyword_1_0; }
-
-		//poisson="Poisson"
-		public Assignment getPoissonAssignment_2() { return cPoissonAssignment_2; }
+		public Keyword getIdentifierBinomialKeyword_0_1() { return cIdentifierBinomialKeyword_0_1; }
 
 		//"Poisson"
-		public Keyword getPoissonPoissonKeyword_2_0() { return cPoissonPoissonKeyword_2_0; }
-
-		//student_t="Student_T"
-		public Assignment getStudent_tAssignment_3() { return cStudent_tAssignment_3; }
+		public Keyword getIdentifierPoissonKeyword_0_2() { return cIdentifierPoissonKeyword_0_2; }
 
 		//"Student_T"
-		public Keyword getStudent_tStudent_TKeyword_3_0() { return cStudent_tStudent_TKeyword_3_0; }
-
-		//mvnormal="MVNormal"
-		public Assignment getMvnormalAssignment_4() { return cMvnormalAssignment_4; }
+		public Keyword getIdentifierStudent_TKeyword_0_3() { return cIdentifierStudent_TKeyword_0_3; }
 
 		//"MVNormal"
-		public Keyword getMvnormalMVNormalKeyword_4_0() { return cMvnormalMVNormalKeyword_4_0; }
+		public Keyword getIdentifierMVNormalKeyword_0_4() { return cIdentifierMVNormalKeyword_0_4; }
 	}
 
 	public class AnyExpressionElements extends AbstractParserRuleElementFinder {
@@ -3643,7 +3650,8 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	public class ListElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "List");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cListKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cIdentifierAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cIdentifierListKeyword_0_0 = (Keyword)cIdentifierAssignment_0.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cArgumentsAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cArgumentsArgumentsParserRuleCall_2_0 = (RuleCall)cArgumentsAssignment_2.eContents().get(0);
@@ -3651,14 +3659,17 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//List:
 		//
-		//	"list" "(" arguments=Arguments ")";
+		//	identifier="list" "(" arguments=Arguments ")";
 		public ParserRule getRule() { return rule; }
 
-		//"list" "(" arguments=Arguments ")"
+		//identifier="list" "(" arguments=Arguments ")"
 		public Group getGroup() { return cGroup; }
 
+		//identifier="list"
+		public Assignment getIdentifierAssignment_0() { return cIdentifierAssignment_0; }
+
 		//"list"
-		public Keyword getListKeyword_0() { return cListKeyword_0; }
+		public Keyword getIdentifierListKeyword_0_0() { return cIdentifierListKeyword_0_0; }
 
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
@@ -3676,7 +3687,8 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	public class OdeListElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OdeList");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cOdeKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cIdentifierAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cIdentifierOdeKeyword_0_0 = (Keyword)cIdentifierAssignment_0.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cArgumentsAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cArgumentsArgumentsParserRuleCall_2_0 = (RuleCall)cArgumentsAssignment_2.eContents().get(0);
@@ -3684,14 +3696,17 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//OdeList:
 		//
-		//	"ode" "(" arguments=Arguments ")";
+		//	identifier="ode" "(" arguments=Arguments ")";
 		public ParserRule getRule() { return rule; }
 
-		//"ode" "(" arguments=Arguments ")"
+		//identifier="ode" "(" arguments=Arguments ")"
 		public Group getGroup() { return cGroup; }
 
+		//identifier="ode"
+		public Assignment getIdentifierAssignment_0() { return cIdentifierAssignment_0; }
+
 		//"ode"
-		public Keyword getOdeKeyword_0() { return cOdeKeyword_0; }
+		public Keyword getIdentifierOdeKeyword_0_0() { return cIdentifierOdeKeyword_0_0; }
 
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
@@ -3709,7 +3724,8 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	public class RandomListElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "RandomList");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cTildeKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cIdentifierAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cIdentifierTildeKeyword_0_0 = (Keyword)cIdentifierAssignment_0.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cArgumentsAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cArgumentsArgumentsParserRuleCall_2_0 = (RuleCall)cArgumentsAssignment_2.eContents().get(0);
@@ -3717,14 +3733,17 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//RandomList:
 		//
-		//	"~" "(" arguments=Arguments ")";
+		//	identifier="~" "(" arguments=Arguments ")";
 		public ParserRule getRule() { return rule; }
 
-		//"~" "(" arguments=Arguments ")"
+		//identifier="~" "(" arguments=Arguments ")"
 		public Group getGroup() { return cGroup; }
 
+		//identifier="~"
+		public Assignment getIdentifierAssignment_0() { return cIdentifierAssignment_0; }
+
 		//"~"
-		public Keyword getTildeKeyword_0() { return cTildeKeyword_0; }
+		public Keyword getIdentifierTildeKeyword_0_0() { return cIdentifierTildeKeyword_0_0; }
 
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
@@ -4495,12 +4514,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//FullyQualifiedSymbolName:
 		//
-		//	(object=[ObjectName] "$")? identifier= //ref VariableName, ParameterName or FunctionName
+		//	(object=[ObjectName] "$")? identifier= //ref VariableName, ParameterName or FunctionName - (checked in upper-level blocks)
 		//
 		//	ID;
 		public ParserRule getRule() { return rule; }
 
-		//(object=[ObjectName] "$")? identifier= //ref VariableName, ParameterName or FunctionName
+		//(object=[ObjectName] "$")? identifier= //ref VariableName, ParameterName or FunctionName - (checked in upper-level blocks)
 		//
 		//ID
 		public Group getGroup() { return cGroup; }
@@ -4520,12 +4539,12 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		//"$"
 		public Keyword getDollarSignKeyword_0_1() { return cDollarSignKeyword_0_1; }
 
-		//identifier= //ref VariableName, ParameterName or FunctionName
+		//identifier= //ref VariableName, ParameterName or FunctionName - (checked in upper-level blocks)
 		//
 		//ID
 		public Assignment getIdentifierAssignment_1() { return cIdentifierAssignment_1; }
 
-		////ref VariableName, ParameterName or FunctionName
+		////ref VariableName, ParameterName or FunctionName - (checked in upper-level blocks)
 		//
 		//ID
 		public RuleCall getIdentifierIDTerminalRuleCall_1_0() { return cIdentifierIDTerminalRuleCall_1_0; }
@@ -4830,10 +4849,10 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	private IgnoreListElements pIgnoreList;
 	private AcceptListElements pAcceptList;
 	private DropListElements pDropList;
-	private ModelBlockElements pModelBlock;
-	private ModelBlockStatementElements pModelBlockStatement;
 	private AddListElements pAddList;
 	private RemoveListElements pRemoveList;
+	private ModelBlockElements pModelBlock;
+	private ModelBlockStatementElements pModelBlockStatement;
 	private SymbolListElements pSymbolList;
 	private ModelPredictionBlockStatementElements pModelPredictionBlockStatement;
 	private LibraryBlockElements pLibraryBlock;
@@ -4858,6 +4877,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	private EstimateTaskElements pEstimateTask;
 	private SimulateTaskElements pSimulateTask;
 	private ExecuteTaskElements pExecuteTask;
+	private TaskFunctionStatementElements pTaskFunctionStatement;
 	private FormalArgumentsElements pFormalArguments;
 	private FormalArgumentElements pFormalArgument;
 	private FunctionCallElements pFunctionCall;
@@ -5282,7 +5302,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//HeaderBlock:
 	//
-	//	identifier="HEADER" BEGIN variables+=SymbolModification* //ref to Variable
+	//	identifier="HEADER" BEGIN variables+=SymbolModification* //ref to Variable +
 	//
 	//	END;
 	public HeaderBlockElements getHeaderBlockAccess() {
@@ -5325,7 +5345,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//ParameterBlock:
 	//
-	//	identifier="PARAMETER" BEGIN parameters+=SymbolModification* //Ref to parameter
+	//	identifier="PARAMETER" BEGIN parameters+=SymbolModification* //Ref to parameter +
 	//
 	//	END;
 	public ParameterBlockElements getParameterBlockAccess() {
@@ -5391,6 +5411,28 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		return getDropListAccess().getRule();
 	}
 
+	//AddList:
+	//
+	//	identifier="ADD" "=" list=SymbolList;
+	public AddListElements getAddListAccess() {
+		return (pAddList != null) ? pAddList : (pAddList = new AddListElements());
+	}
+	
+	public ParserRule getAddListRule() {
+		return getAddListAccess().getRule();
+	}
+
+	//RemoveList:
+	//
+	//	identifier="REMOVE" "=" list=SymbolList;
+	public RemoveListElements getRemoveListAccess() {
+		return (pRemoveList != null) ? pRemoveList : (pRemoveList = new RemoveListElements());
+	}
+	
+	public ParserRule getRemoveListRule() {
+		return getRemoveListAccess().getRule();
+	}
+
 	//ModelBlock:
 	//
 	//	identifier="MODEL" BEGIN statements+=ModelBlockStatement* END;
@@ -5413,31 +5455,9 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 		return getModelBlockStatementAccess().getRule();
 	}
 
-	//AddList:
-	//
-	//	"ADD" "=" list=SymbolList;
-	public AddListElements getAddListAccess() {
-		return (pAddList != null) ? pAddList : (pAddList = new AddListElements());
-	}
-	
-	public ParserRule getAddListRule() {
-		return getAddListAccess().getRule();
-	}
-
-	//RemoveList:
-	//
-	//	"REMOVE" "=" list=SymbolList;
-	public RemoveListElements getRemoveListAccess() {
-		return (pRemoveList != null) ? pRemoveList : (pRemoveList = new RemoveListElements());
-	}
-	
-	public ParserRule getRemoveListRule() {
-		return getRemoveListAccess().getRule();
-	}
-
 	//SymbolList:
 	//
-	//	"list" "(" symbols+=FullyQualifiedSymbolName ("," symbols+=FullyQualifiedSymbolName+ ")");
+	//	identifier="list" "(" symbols+=FullyQualifiedSymbolName ("," symbols+=FullyQualifiedSymbolName)* ")";
 	public SymbolListElements getSymbolListAccess() {
 		return (pSymbolList != null) ? pSymbolList : (pSymbolList = new SymbolListElements());
 	}
@@ -5448,7 +5468,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//ModelPredictionBlockStatement:
 	//
-	//	statement=BlockStatement //new Variable
+	//	statement=BlockStatement //new Variable +
 	//
 	//	| odeBlock=OdeBlock | libraryBlock=LibraryBlock;
 	public ModelPredictionBlockStatementElements getModelPredictionBlockStatementAccess() {
@@ -5485,7 +5505,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//OdeBlock:
 	//
-	//	identifier="ODE" BEGIN statements+=BlockStatement* //new Variable
+	//	identifier="ODE" BEGIN statements+=BlockStatement* //new Variable + 
 	//
 	//	END;
 	public OdeBlockElements getOdeBlockAccess() {
@@ -5498,7 +5518,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//GroupVariablesBlockStatement:
 	//
-	//	statement=BlockStatement //new Variable
+	//	statement=BlockStatement //new Variable + 
 	//
 	//	| mixtureBlock=MixtureBlock;
 	public GroupVariablesBlockStatementElements getGroupVariablesBlockStatementAccess() {
@@ -5511,7 +5531,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//MixtureBlock:
 	//
-	//	identifier="MIXTURE" BEGIN statements+=BlockStatement* //new Variable
+	//	identifier="MIXTURE" BEGIN statements+=BlockStatement* //new Variable +
 	//
 	//	END;
 	public MixtureBlockElements getMixtureBlockAccess() {
@@ -5537,7 +5557,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	//
 	//BlockBlock:
 	//
-	//	identifier="matrix" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter
+	//	identifier="matrix" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter +
 	//
 	//;
 	public BlockBlockElements getBlockBlockAccess() {
@@ -5550,7 +5570,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//DiagBlock:
 	//
-	//	identifier="diag" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter
+	//	identifier="diag" "(" arguments=Arguments ")" (BEGIN parameters=Arguments END)? //new Parameter +
 	//
 	//;
 	public DiagBlockElements getDiagBlockAccess() {
@@ -5563,7 +5583,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//SameBlock:
 	//
-	//	identifier="same" "(" arguments=Arguments ")" (BEGIN parameters=FormalArguments END)? //new Parameter
+	//	identifier="same" "(" arguments=Arguments ")" (BEGIN parameters=FormalArguments END)? //new Parameter +
 	//
 	//;
 	public SameBlockElements getSameBlockAccess() {
@@ -5582,7 +5602,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	//
 	//FileBlockStatement:
 	//
-	//	variable=SymbolDeclaration //new VariableName which can be only list
+	//	variable=SymbolDeclaration //new VariableName which can be only list +
 	//
 	//	| inlineBlock=InlineBlock | designBlock=DesignBlock | rscriptBlock=RScriptBlock;
 	public FileBlockStatementElements getFileBlockStatementAccess() {
@@ -5595,7 +5615,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//InlineBlock:
 	//
-	//	identifier="INLINE" BEGIN variables+=FullyQualifiedSymbolName* values+=(NUMBER | ".")* //Ref to VaraibleName
+	//	identifier="INLINE" BEGIN variables+=FullyQualifiedSymbolName* values+=(NUMBER | ".")* //Ref to VaraibleName + 
 	//
 	//	END;
 	public InlineBlockElements getInlineBlockAccess() {
@@ -5619,7 +5639,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//DesignBlockStatement:
 	//
-	//	identifier=FullyQualifiedSymbolName arguments=VariableList? "=" expression= //Ref to VaraibleName
+	//	identifier=FullyQualifiedSymbolName arguments=VariableList? "=" expression= //Ref to VariableName +
 	//
 	//	AnyExpression;
 	public DesignBlockStatementElements getDesignBlockStatementAccess() {
@@ -5632,7 +5652,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//VariableList:
 	//
-	//	"[" identifiers+=FullyQualifiedSymbolName ("," identifiers+=FullyQualifiedSymbolName)* //Ref to VaraibleName
+	//	"[" identifiers+=FullyQualifiedSymbolName ("," identifiers+=FullyQualifiedSymbolName)* //Ref to VaraibleName +
 	//
 	//	"]";
 	public VariableListElements getVariableListAccess() {
@@ -5656,7 +5676,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//RScriptBlockStatement:
 	//
-	//	identifier=ID "=" (value=STRING // new VariableName
+	//	identifier=ID "=" (value=STRING // new VariableName +
 	//
 	//	| object=ObjectName);
 	public RScriptBlockStatementElements getRScriptBlockStatementAccess() {
@@ -5669,7 +5689,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//TaskFunctionDeclaration:
 	//
-	//	identifier=ID "=" //new FunctionName
+	//	identifier=ID "=" //new FunctionName +
 	//
 	//	"function" "(" formalArguments=FormalArguments ")" functionBody=TaskFunctionBody;
 	public TaskFunctionDeclarationElements getTaskFunctionDeclarationAccess() {
@@ -5704,7 +5724,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//EstimateTask:
 	//
-	//	identifier="ESTIMATE" BEGIN statements+=BlockStatement* //Properties
+	//	identifier="ESTIMATE" BEGIN statements+=TaskFunctionStatement* //Properties
 	//
 	//	END;
 	public EstimateTaskElements getEstimateTaskAccess() {
@@ -5717,7 +5737,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//SimulateTask:
 	//
-	//	identifier="SIMULATE" BEGIN statements+=BlockStatement* //Properties
+	//	identifier="SIMULATE" BEGIN statements+=TaskFunctionStatement* //Properties
 	//
 	//	END;
 	public SimulateTaskElements getSimulateTaskAccess() {
@@ -5730,7 +5750,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//ExecuteTask:
 	//
-	//	identifier="EXECUTE" BEGIN statements+=BlockStatement* //Properties
+	//	identifier="EXECUTE" BEGIN statements+=TaskFunctionStatement* //Properties
 	//
 	//	END;
 	public ExecuteTaskElements getExecuteTaskAccess() {
@@ -5739,6 +5759,17 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getExecuteTaskRule() {
 		return getExecuteTaskAccess().getRule();
+	}
+
+	//TaskFunctionStatement:
+	//
+	//	statement=BlockStatement | targetBlock=TargetBlock;
+	public TaskFunctionStatementElements getTaskFunctionStatementAccess() {
+		return (pTaskFunctionStatement != null) ? pTaskFunctionStatement : (pTaskFunctionStatement = new TaskFunctionStatementElements());
+	}
+	
+	public ParserRule getTaskFunctionStatementRule() {
+		return getTaskFunctionStatementAccess().getRule();
 	}
 
 	////////////////////////////////////////////////////////////
@@ -5784,7 +5815,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 	//
 	//	symbol=SymbolDeclaration //VariableName or PropertyName
 	//
-	//	| functionCall=FunctionCall | statement=ConditionalStatement | targetBlock=TargetBlock;
+	//	| functionCall=FunctionCall | statement=ConditionalStatement;
 	public BlockStatementElements getBlockStatementAccess() {
 		return (pBlockStatement != null) ? pBlockStatement : (pBlockStatement = new BlockStatementElements());
 	}
@@ -5806,7 +5837,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//TargetLanguage:
 	//
-	//	"NMTRAN_CODE" | "MLXTRAN_CODE" | "PML_CODE" | "BUGS_CODE" | "R_CODE" | "MATLAB_CODE";
+	//	identifier=("NMTRAN_CODE" | "MLXTRAN_CODE" | "PML_CODE" | "BUGS_CODE" | "R_CODE" | "MATLAB_CODE");
 	public TargetLanguageElements getTargetLanguageAccess() {
 		return (pTargetLanguage != null) ? pTargetLanguage : (pTargetLanguage = new TargetLanguageElements());
 	}
@@ -5848,7 +5879,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//SymbolModification:
 	//
-	//	identifier=FullyQualifiedSymbolName ("=" list=List)? //Ref to ParameterName
+	//	identifier=FullyQualifiedSymbolName ("=" list=List)? //Ref to ParameterName or VaraibleName +
 	//
 	//;
 	public SymbolModificationElements getSymbolModificationAccess() {
@@ -5926,9 +5957,9 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//LevelType:
 	//
-	//	mdv="mdv" | id="id" | dv="dv" | idv= //Independent Variable
+	//	identifier=("mdv" //Independent Variable
 	//
-	//	"idv";
+	//	| "id" | "dv" | "idv");
 	public LevelTypeElements getLevelTypeAccess() {
 		return (pLevelType != null) ? pLevelType : (pLevelType = new LevelTypeElements());
 	}
@@ -5972,7 +6003,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Distribution:
 	//
-	//	normal="Normal" | binomial="Binomial" | poisson="Poisson" | student_t="Student_T" | mvnormal="MVNormal";
+	//	identifier=("Normal" | "Binomial" | "Poisson" | "Student_T" | "MVNormal");
 	public DistributionElements getDistributionAccess() {
 		return (pDistribution != null) ? pDistribution : (pDistribution = new DistributionElements());
 	}
@@ -6005,7 +6036,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//List:
 	//
-	//	"list" "(" arguments=Arguments ")";
+	//	identifier="list" "(" arguments=Arguments ")";
 	public ListElements getListAccess() {
 		return (pList != null) ? pList : (pList = new ListElements());
 	}
@@ -6016,7 +6047,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//OdeList:
 	//
-	//	"ode" "(" arguments=Arguments ")";
+	//	identifier="ode" "(" arguments=Arguments ")";
 	public OdeListElements getOdeListAccess() {
 		return (pOdeList != null) ? pOdeList : (pOdeList = new OdeListElements());
 	}
@@ -6027,7 +6058,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//RandomList:
 	//
-	//	"~" "(" arguments=Arguments ")";
+	//	identifier="~" "(" arguments=Arguments ")";
 	public RandomListElements getRandomListAccess() {
 		return (pRandomList != null) ? pRandomList : (pRandomList = new RandomListElements());
 	}
@@ -6211,7 +6242,7 @@ public class MdlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//FullyQualifiedSymbolName:
 	//
-	//	(object=[ObjectName] "$")? identifier= //ref VariableName, ParameterName or FunctionName
+	//	(object=[ObjectName] "$")? identifier= //ref VariableName, ParameterName or FunctionName - (checked in upper-level blocks)
 	//
 	//	ID;
 	public FullyQualifiedSymbolNameElements getFullyQualifiedSymbolNameAccess() {

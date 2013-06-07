@@ -65,6 +65,7 @@ import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.TaskFunctionBlock;
 import org.ddmore.mdl.mdl.TaskFunctionBody;
 import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
+import org.ddmore.mdl.mdl.TaskFunctionStatement;
 import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.VariabilityBlock;
@@ -1614,15 +1615,24 @@ public class Mdl2Nonmem extends MdlPrinting {
     _builder.newLine();
     _builder.append("$SIM ");
     {
-      EList<BlockStatement> _statements = b.getStatements();
-      for(final BlockStatement s : _statements) {
+      EList<TaskFunctionStatement> _statements = b.getStatements();
+      for(final TaskFunctionStatement s : _statements) {
+        _builder.newLineIfNotEmpty();
         {
-          SymbolDeclaration _symbol = s.getSymbol();
-          boolean _notEquals = (!Objects.equal(_symbol, null));
+          BlockStatement _statement = s.getStatement();
+          boolean _notEquals = (!Objects.equal(_statement, null));
           if (_notEquals) {
-            SymbolDeclaration _symbol_1 = s.getSymbol();
-            CharSequence _printSimulate = this.printSimulate(_symbol_1);
-            _builder.append(_printSimulate, "");
+            {
+              BlockStatement _statement_1 = s.getStatement();
+              SymbolDeclaration _symbol = _statement_1.getSymbol();
+              boolean _notEquals_1 = (!Objects.equal(_symbol, null));
+              if (_notEquals_1) {
+                BlockStatement _statement_2 = s.getStatement();
+                SymbolDeclaration _symbol_1 = _statement_2.getSymbol();
+                CharSequence _printSimulate = this.printSimulate(_symbol_1);
+                _builder.append(_printSimulate, "");
+              }
+            }
           }
         }
       }
@@ -1643,15 +1653,23 @@ public class Mdl2Nonmem extends MdlPrinting {
     _builder.newLine();
     _builder.append("$EST");
     {
-      EList<BlockStatement> _statements = b.getStatements();
-      for(final BlockStatement s : _statements) {
+      EList<TaskFunctionStatement> _statements = b.getStatements();
+      for(final TaskFunctionStatement s : _statements) {
         {
-          SymbolDeclaration _symbol = s.getSymbol();
-          boolean _notEquals = (!Objects.equal(_symbol, null));
+          BlockStatement _statement = s.getStatement();
+          boolean _notEquals = (!Objects.equal(_statement, null));
           if (_notEquals) {
-            SymbolDeclaration _symbol_1 = s.getSymbol();
-            CharSequence _printEstimate = this.printEstimate(_symbol_1);
-            _builder.append(_printEstimate, "");
+            {
+              BlockStatement _statement_1 = s.getStatement();
+              SymbolDeclaration _symbol = _statement_1.getSymbol();
+              boolean _notEquals_1 = (!Objects.equal(_symbol, null));
+              if (_notEquals_1) {
+                BlockStatement _statement_2 = s.getStatement();
+                SymbolDeclaration _symbol_1 = _statement_2.getSymbol();
+                CharSequence _printEstimate = this.printEstimate(_symbol_1);
+                _builder.append(_printEstimate, "");
+              }
+            }
           }
         }
       }
@@ -1665,15 +1683,24 @@ public class Mdl2Nonmem extends MdlPrinting {
     _builder.append(_externalCode_1, "");
     _builder.newLineIfNotEmpty();
     {
-      EList<BlockStatement> _statements_1 = b.getStatements();
-      for(final BlockStatement s_1 : _statements_1) {
+      EList<TaskFunctionStatement> _statements_1 = b.getStatements();
+      for(final TaskFunctionStatement s_1 : _statements_1) {
+        _builder.append("\u00BB");
         {
-          SymbolDeclaration _symbol_2 = s_1.getSymbol();
-          boolean _notEquals_1 = (!Objects.equal(_symbol_2, null));
-          if (_notEquals_1) {
-            SymbolDeclaration _symbol_3 = s_1.getSymbol();
-            CharSequence _printEstimateCov = this.printEstimateCov(_symbol_3);
-            _builder.append(_printEstimateCov, "");
+          BlockStatement _statement_3 = s_1.getStatement();
+          boolean _notEquals_2 = (!Objects.equal(_statement_3, null));
+          if (_notEquals_2) {
+            {
+              BlockStatement _statement_4 = s_1.getStatement();
+              SymbolDeclaration _symbol_2 = _statement_4.getSymbol();
+              boolean _notEquals_3 = (!Objects.equal(_symbol_2, null));
+              if (_notEquals_3) {
+                BlockStatement _statement_5 = s_1.getStatement();
+                SymbolDeclaration _symbol_3 = _statement_5.getSymbol();
+                CharSequence _printEstimateCov = this.printEstimateCov(_symbol_3);
+                _builder.append(_printEstimateCov, "");
+              }
+            }
           }
         }
       }

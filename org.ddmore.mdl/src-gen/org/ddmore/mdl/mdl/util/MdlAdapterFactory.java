@@ -240,16 +240,6 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
         return createDropListAdapter();
       }
       @Override
-      public Adapter caseModelBlock(ModelBlock object)
-      {
-        return createModelBlockAdapter();
-      }
-      @Override
-      public Adapter caseModelBlockStatement(ModelBlockStatement object)
-      {
-        return createModelBlockStatementAdapter();
-      }
-      @Override
       public Adapter caseAddList(AddList object)
       {
         return createAddListAdapter();
@@ -258,6 +248,16 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseRemoveList(RemoveList object)
       {
         return createRemoveListAdapter();
+      }
+      @Override
+      public Adapter caseModelBlock(ModelBlock object)
+      {
+        return createModelBlockAdapter();
+      }
+      @Override
+      public Adapter caseModelBlockStatement(ModelBlockStatement object)
+      {
+        return createModelBlockStatementAdapter();
       }
       @Override
       public Adapter caseSymbolList(SymbolList object)
@@ -380,6 +380,11 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
         return createExecuteTaskAdapter();
       }
       @Override
+      public Adapter caseTaskFunctionStatement(TaskFunctionStatement object)
+      {
+        return createTaskFunctionStatementAdapter();
+      }
+      @Override
       public Adapter caseFormalArguments(FormalArguments object)
       {
         return createFormalArgumentsAdapter();
@@ -403,6 +408,11 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseTargetBlock(TargetBlock object)
       {
         return createTargetBlockAdapter();
+      }
+      @Override
+      public Adapter caseTargetLanguage(TargetLanguage object)
+      {
+        return createTargetLanguageAdapter();
       }
       @Override
       public Adapter caseImportBlock(ImportBlock object)
@@ -1107,36 +1117,6 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ModelBlock <em>Model Block</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.ModelBlock
-   * @generated
-   */
-  public Adapter createModelBlockAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ModelBlockStatement <em>Model Block Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.ddmore.mdl.mdl.ModelBlockStatement
-   * @generated
-   */
-  public Adapter createModelBlockStatementAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.AddList <em>Add List</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -1162,6 +1142,36 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createRemoveListAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ModelBlock <em>Model Block</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.ModelBlock
+   * @generated
+   */
+  public Adapter createModelBlockAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.ModelBlockStatement <em>Model Block Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.ModelBlockStatement
+   * @generated
+   */
+  public Adapter createModelBlockStatementAdapter()
   {
     return null;
   }
@@ -1527,6 +1537,21 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.TaskFunctionStatement <em>Task Function Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.TaskFunctionStatement
+   * @generated
+   */
+  public Adapter createTaskFunctionStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.FormalArguments <em>Formal Arguments</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -1597,6 +1622,21 @@ public class MdlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTargetBlockAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.ddmore.mdl.mdl.TargetLanguage <em>Target Language</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.ddmore.mdl.mdl.TargetLanguage
+   * @generated
+   */
+  public Adapter createTargetLanguageAdapter()
   {
     return null;
   }

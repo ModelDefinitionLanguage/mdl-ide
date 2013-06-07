@@ -140,7 +140,7 @@ DataObjectBlock:
  
 HeaderBlock:
  	identifier='HEADER' 
- 	BEGIN variables += SymbolModification* END  //ref to Variable
+ 	BEGIN variables += SymbolModification* END  //ref to Variable +
  ;
  
  FileBlock:
@@ -163,7 +163,7 @@ TaskObjectBlock:
 
 ParameterBlock:
 	identifier = 'PARAMETER' 
-	BEGIN parameters += SymbolModification* END  //Ref to parameter
+	BEGIN parameters += SymbolModification* END  //Ref to parameter +
 ;
 
 DataBlock:
@@ -187,6 +187,14 @@ DropList:
 	identifier = 'DROP' "=" list = SymbolList
 ;
 
+AddList:
+	identifier = 'ADD' '=' list = SymbolList
+;
+
+RemoveList:
+	identifier = 'REMOVE' '=' list = SymbolList
+;
+
 ModelBlock:
 	identifier = 'MODEL' 
 	BEGIN statements += ModelBlockStatement* END
@@ -198,27 +206,19 @@ ModelBlockStatement:
 	removeList = RemoveList
 ;
 
-AddList:
-	'ADD' '=' list = SymbolList
-;
-
-RemoveList:
-	'REMOVE' '=' list = SymbolList
-;
-
 SymbolList:
-	'list' '(' symbols += FullyQualifiedSymbolName (=> ',' symbols += FullyQualifiedSymbolName+ ')')
+	identifier = 'list' '(' symbols += FullyQualifiedSymbolName (=> ',' symbols += FullyQualifiedSymbolName)* ')'
 ;
 
 ModelPredictionBlockStatement: 
-	statement = BlockStatement | //new Variable
+	statement = BlockStatement | //new Variable +
 	odeBlock = OdeBlock | 
 	libraryBlock = LibraryBlock
 ;
 
 LibraryBlock: 
 	identifier = 'LIBRARY' 
-	BEGIN statements += FunctionCallStatement * END //Properties: format restricted to a "variable = function call"
+	BEGIN statements += FunctionCallStatement* END //Properties: format restricted to a "variable = function call"
 ;
 
 FunctionCallStatement:
@@ -227,17 +227,17 @@ FunctionCallStatement:
 
 OdeBlock:
 	identifier = 'ODE' 
-	BEGIN statements += BlockStatement* END  //new Variable
+	BEGIN statements += BlockStatement* END  //new Variable + 
 ;
 
 GroupVariablesBlockStatement:
-	statement = BlockStatement |  //new Variable
+	statement = BlockStatement |  //new Variable + 
 	mixtureBlock = MixtureBlock 
 ;
 
 MixtureBlock:
 	identifier = 'MIXTURE' 
-	BEGIN statements += BlockStatement* END //new Variable
+	BEGIN statements += BlockStatement* END //new Variable +
 ;
 
 
@@ -251,17 +251,17 @@ VariabilityBlockStatement:
 //Renamed to Matrix!
 BlockBlock:
 	 identifier = 'matrix' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Arguments END)?  //new Parameter
+	 (BEGIN parameters = Arguments END)?  //new Parameter +
 ;
 
 DiagBlock:	  
 	 identifier = 'diag' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Arguments END)?  //new Parameter
+	 (BEGIN parameters = Arguments END)?  //new Parameter +
 ;
 
 SameBlock:	  
 	 identifier = 'same' '(' arguments = Arguments ')'
-	 (BEGIN parameters = FormalArguments END)?  //new Parameter
+	 (BEGIN parameters = FormalArguments END)?  //new Parameter +
 ;
 
 //////////////////////////////////////////////////////////
@@ -269,7 +269,7 @@ SameBlock:
 //////////////////////////////////////////////////////////
 
 FileBlockStatement:
-	variable = SymbolDeclaration |  //new VariableName which can be only list
+	variable = SymbolDeclaration |  //new VariableName which can be only list +
 	inlineBlock = InlineBlock | 
 	designBlock = DesignBlock | 
 	rscriptBlock = RScriptBlock 
@@ -277,7 +277,7 @@ FileBlockStatement:
 
 InlineBlock:
 	identifier = 'INLINE' 
-	BEGIN (variables += FullyQualifiedSymbolName)* (values += (NUMBER | '.'))* END //Ref to VaraibleName
+	BEGIN (variables += FullyQualifiedSymbolName)* (values += (NUMBER | '.'))* END //Ref to VaraibleName + 
 ;
 
 DesignBlock:
@@ -286,11 +286,11 @@ DesignBlock:
 ;
 
 DesignBlockStatement:
-	identifier = FullyQualifiedSymbolName (arguments = VariableList)? '=' expression = AnyExpression  //Ref to VaraibleName
+	identifier = FullyQualifiedSymbolName (arguments = VariableList)? '=' expression = AnyExpression  //Ref to VariableName +
 ;
 
 VariableList:
-	'[' identifiers += FullyQualifiedSymbolName (=> ',' identifiers += FullyQualifiedSymbolName)* ']' //Ref to VaraibleName
+	'[' identifiers += FullyQualifiedSymbolName (=> ',' identifiers += FullyQualifiedSymbolName)* ']' //Ref to VaraibleName +
 ;
 	
 RScriptBlock:	
@@ -299,17 +299,17 @@ RScriptBlock:
 ;
 
 RScriptBlockStatement:
-	identifier = ID "=" (value = STRING | object = ObjectName) // new VariableName
+	identifier = ID "=" (value = STRING | object = ObjectName) // new VariableName +
 ;
 
 TaskFunctionDeclaration:
-	identifier = ID "=" 'function'   //new FunctionName
+	identifier = ID "=" 'function'   //new FunctionName +
 	'(' formalArguments = FormalArguments ')'
 	functionBody = TaskFunctionBody
 ;
 
 TaskFunctionBody: {TaskFunctionBody}	
-	BEGIN	(blocks += TaskFunctionBlock)* END
+	BEGIN (blocks += TaskFunctionBlock)* END
 ;
 
 TaskFunctionBlock:
@@ -320,17 +320,22 @@ TaskFunctionBlock:
 
 EstimateTask: 
 	identifier = 'ESTIMATE' 
-	BEGIN statements += BlockStatement* END //Properties
+	BEGIN statements += TaskFunctionStatement* END //Properties
 ;
 
 SimulateTask:
 	identifier = 'SIMULATE' 
-	BEGIN statements += BlockStatement* END  //Properties
+	BEGIN statements += TaskFunctionStatement* END  //Properties
 ;
 
 ExecuteTask:
 	identifier = "EXECUTE"
-	BEGIN statements += BlockStatement* END  //Properties
+	BEGIN statements += TaskFunctionStatement* END  //Properties
+;
+
+TaskFunctionStatement:
+	statement = BlockStatement |
+	targetBlock = TargetBlock
 ;
 
 //////////////////////////////////////////////////////////
@@ -352,8 +357,7 @@ FunctionCall:
 BlockStatement:
 	symbol = SymbolDeclaration | //VariableName or PropertyName
 	functionCall = FunctionCall |
-	statement = ConditionalStatement |
-	targetBlock = TargetBlock
+	statement = ConditionalStatement 
 ;
 
 TargetBlock: 
@@ -361,7 +365,12 @@ TargetBlock:
 ;
 
 TargetLanguage:
-	'NMTRAN_CODE' | 'MLXTRAN_CODE' | 'PML_CODE' | 'BUGS_CODE' | 'R_CODE' | 'MATLAB_CODE' 	
+	identifier = ('NMTRAN_CODE' | 
+	'MLXTRAN_CODE' | 
+	'PML_CODE' | 
+	'BUGS_CODE' | 
+	'R_CODE' | 
+	'MATLAB_CODE') 	
 ;
 
 terminal EXTERNAL_CODE: 
@@ -379,7 +388,7 @@ ImportedFunction:
 ;
 
 SymbolModification:
-	identifier = FullyQualifiedSymbolName ("=" list = List)?  //Ref to ParameterName
+	identifier = FullyQualifiedSymbolName ("=" list = List)?  //Ref to ParameterName or VaraibleName +
 ;
 
 ParameterDeclaration:
@@ -413,10 +422,7 @@ Likelyhood:
 ;
 
 LevelType:
-	mdv = 'mdv' | 
-	id = 'id' |
-	dv = 'dv' |
-	idv = 'idv' //Independent Variable
+	identifier = ('mdv' | 'id' | 'dv' | 'idv') //Independent Variable
 ;
 
 Categorical:
@@ -432,11 +438,11 @@ Covariate:
 ;
 
 Distribution: 
-	normal = 'Normal' |
-	binomial = 'Binomial' |
-	poisson = 'Poisson' |
-	student_t = 'Student_T' |
-	mvnormal = 'MVNormal' 
+	identifier = ('Normal' |
+	'Binomial' |
+	'Poisson' |
+	'Student_T' |
+	'MVNormal') 
 ;
 
 AnyExpression:
@@ -451,15 +457,15 @@ Expression:
 ;	
 
 List:
-	'list' '(' arguments = Arguments ')'
+	identifier = 'list' '(' arguments = Arguments ')'
 ;
 
 OdeList:
-	 'ode' '(' arguments = Arguments ')' 
+	 identifier = 'ode' '(' arguments = Arguments ')' 
 ;
 
 RandomList:
-	 '~' '(' arguments = Arguments ')'
+	identifier = '~' '(' arguments = Arguments ')'
 ;
 
 Arguments: 
@@ -529,7 +535,7 @@ Vector:
 ;	
 
 FullyQualifiedSymbolName:
-	(object = [ObjectName] '$')? identifier = ID //ref VariableName, ParameterName or FunctionName
+	(object = [ObjectName] '$')? identifier = ID //ref VariableName, ParameterName or FunctionName - (checked in upper-level blocks)
 ;
 
 FullyQualifiedArgumentName:
@@ -614,3 +620,6 @@ terminal ML_COMMENT : '/#' -> '#/';
 terminal BEGIN: '{';
 
 terminal END: '}' ;
+
+
+

@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.ddmore.mdl.mdl.impl.ListImpl#getIdentifier <em>Identifier</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.impl.ListImpl#getArguments <em>Arguments</em>}</li>
  * </ul>
  * </p>
@@ -30,6 +31,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class ListImpl extends MinimalEObjectImpl.Container implements List
 {
+  /**
+   * The default value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getIdentifier()
+   * @generated
+   * @ordered
+   */
+  protected static final String IDENTIFIER_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getIdentifier()
+   * @generated
+   * @ordered
+   */
+  protected String identifier = IDENTIFIER_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getArguments() <em>Arguments</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -59,6 +80,29 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List
   protected EClass eStaticClass()
   {
     return MdlPackage.Literals.LIST;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getIdentifier()
+  {
+    return identifier;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setIdentifier(String newIdentifier)
+  {
+    String oldIdentifier = identifier;
+    identifier = newIdentifier;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.LIST__IDENTIFIER, oldIdentifier, identifier));
   }
 
   /**
@@ -135,6 +179,8 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List
   {
     switch (featureID)
     {
+      case MdlPackage.LIST__IDENTIFIER:
+        return getIdentifier();
       case MdlPackage.LIST__ARGUMENTS:
         return getArguments();
     }
@@ -151,6 +197,9 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List
   {
     switch (featureID)
     {
+      case MdlPackage.LIST__IDENTIFIER:
+        setIdentifier((String)newValue);
+        return;
       case MdlPackage.LIST__ARGUMENTS:
         setArguments((Arguments)newValue);
         return;
@@ -168,6 +217,9 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List
   {
     switch (featureID)
     {
+      case MdlPackage.LIST__IDENTIFIER:
+        setIdentifier(IDENTIFIER_EDEFAULT);
+        return;
       case MdlPackage.LIST__ARGUMENTS:
         setArguments((Arguments)null);
         return;
@@ -185,10 +237,29 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List
   {
     switch (featureID)
     {
+      case MdlPackage.LIST__IDENTIFIER:
+        return IDENTIFIER_EDEFAULT == null ? identifier != null : !IDENTIFIER_EDEFAULT.equals(identifier);
       case MdlPackage.LIST__ARGUMENTS:
         return arguments != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (identifier: ");
+    result.append(identifier);
+    result.append(')');
+    return result.toString();
   }
 
 } //ListImpl

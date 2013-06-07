@@ -162,6 +162,14 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//DropList/identifier"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//DropList/list"/>
     </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//AddList">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//AddList/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AddList/list"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//RemoveList">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//RemoveList/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//RemoveList/list"/>
+    </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//ModelBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ModelBlock/identifier"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelBlock/statements"/>
@@ -171,13 +179,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelBlockStatement/addList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ModelBlockStatement/removeList"/>
     </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//AddList">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AddList/list"/>
-    </genClasses>
-    <genClasses ecoreClass="Mdl.ecore#//RemoveList">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//RemoveList/list"/>
-    </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//SymbolList">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//SymbolList/identifier"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//SymbolList/symbols"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//ModelPredictionBlockStatement">
@@ -283,6 +286,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ExecuteTask/identifier"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//ExecuteTask/statements"/>
     </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//TaskFunctionStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskFunctionStatement/statement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TaskFunctionStatement/targetBlock"/>
+    </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//FormalArguments">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//FormalArguments/arguments"/>
     </genClasses>
@@ -297,12 +304,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/symbol"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/functionCall"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/statement"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//BlockStatement/targetBlock"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//TargetBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//TargetBlock/identifier"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//TargetBlock/arguments"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//TargetBlock/externalCode"/>
+    </genClasses>
+    <genClasses ecoreClass="Mdl.ecore#//TargetLanguage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//TargetLanguage/identifier"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//ImportBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//ImportBlock/identifier"/>
@@ -334,7 +343,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/level"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/likelyhood"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/missing"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//EnumType/target"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//EnumType/target"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//Missing">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Missing/identifier"/>
@@ -343,10 +352,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Likelyhood/identifier"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//LevelType">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LevelType/mdv"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LevelType/id"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LevelType/dv"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LevelType/idv"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//LevelType/identifier"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//Categorical">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Categorical/identifier"/>
@@ -359,11 +365,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Covariate/identifier"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//Distribution">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/normal"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/binomial"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/poisson"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/student_t"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/mvnormal"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//Distribution/identifier"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//AnyExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//AnyExpression/expression"/>
@@ -375,12 +377,15 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//Expression/conditionalExpression"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//List">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//List/identifier"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//List/arguments"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//OdeList">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//OdeList/identifier"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//OdeList/arguments"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//RandomList">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mdl.ecore#//RandomList/identifier"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mdl.ecore#//RandomList/arguments"/>
     </genClasses>
     <genClasses ecoreClass="Mdl.ecore#//Arguments">

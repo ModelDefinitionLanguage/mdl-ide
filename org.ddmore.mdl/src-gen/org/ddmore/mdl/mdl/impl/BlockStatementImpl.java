@@ -7,7 +7,6 @@ import org.ddmore.mdl.mdl.ConditionalStatement;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.TargetBlock;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -28,7 +27,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl#getSymbol <em>Symbol</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl#getFunctionCall <em>Function Call</em>}</li>
  *   <li>{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl#getStatement <em>Statement</em>}</li>
- *   <li>{@link org.ddmore.mdl.mdl.impl.BlockStatementImpl#getTargetBlock <em>Target Block</em>}</li>
  * </ul>
  * </p>
  *
@@ -65,16 +63,6 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
    * @ordered
    */
   protected ConditionalStatement statement;
-
-  /**
-   * The cached value of the '{@link #getTargetBlock() <em>Target Block</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getTargetBlock()
-   * @generated
-   * @ordered
-   */
-  protected TargetBlock targetBlock;
 
   /**
    * <!-- begin-user-doc -->
@@ -246,54 +234,6 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public TargetBlock getTargetBlock()
-  {
-    return targetBlock;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetTargetBlock(TargetBlock newTargetBlock, NotificationChain msgs)
-  {
-    TargetBlock oldTargetBlock = targetBlock;
-    targetBlock = newTargetBlock;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK, oldTargetBlock, newTargetBlock);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setTargetBlock(TargetBlock newTargetBlock)
-  {
-    if (newTargetBlock != targetBlock)
-    {
-      NotificationChain msgs = null;
-      if (targetBlock != null)
-        msgs = ((InternalEObject)targetBlock).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK, null, msgs);
-      if (newTargetBlock != null)
-        msgs = ((InternalEObject)newTargetBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK, null, msgs);
-      msgs = basicSetTargetBlock(newTargetBlock, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK, newTargetBlock, newTargetBlock));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -305,8 +245,6 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
         return basicSetFunctionCall(null, msgs);
       case MdlPackage.BLOCK_STATEMENT__STATEMENT:
         return basicSetStatement(null, msgs);
-      case MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK:
-        return basicSetTargetBlock(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -327,8 +265,6 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
         return getFunctionCall();
       case MdlPackage.BLOCK_STATEMENT__STATEMENT:
         return getStatement();
-      case MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK:
-        return getTargetBlock();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -351,9 +287,6 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
         return;
       case MdlPackage.BLOCK_STATEMENT__STATEMENT:
         setStatement((ConditionalStatement)newValue);
-        return;
-      case MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK:
-        setTargetBlock((TargetBlock)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -378,9 +311,6 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
       case MdlPackage.BLOCK_STATEMENT__STATEMENT:
         setStatement((ConditionalStatement)null);
         return;
-      case MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK:
-        setTargetBlock((TargetBlock)null);
-        return;
     }
     super.eUnset(featureID);
   }
@@ -401,8 +331,6 @@ public class BlockStatementImpl extends MinimalEObjectImpl.Container implements 
         return functionCall != null;
       case MdlPackage.BLOCK_STATEMENT__STATEMENT:
         return statement != null;
-      case MdlPackage.BLOCK_STATEMENT__TARGET_BLOCK:
-        return targetBlock != null;
     }
     return super.eIsSet(featureID);
   }

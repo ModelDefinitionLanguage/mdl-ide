@@ -772,10 +772,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__52;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:41:7: ( 'MODEL' )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:41:9: 'MODEL'
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:41:7: ( 'ADD' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:41:9: 'ADD'
             {
-            match("MODEL"); 
+            match("ADD"); 
 
 
             }
@@ -793,10 +793,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__53;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:42:7: ( 'ADD' )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:42:9: 'ADD'
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:42:7: ( 'REMOVE' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:42:9: 'REMOVE'
             {
-            match("ADD"); 
+            match("REMOVE"); 
 
 
             }
@@ -814,10 +814,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = T__54;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:43:7: ( 'REMOVE' )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:43:9: 'REMOVE'
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:43:7: ( 'MODEL' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:43:9: 'MODEL'
             {
-            match("REMOVE"); 
+            match("MODEL"); 
 
 
             }
@@ -2119,12 +2119,12 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_EXTERNAL_CODE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8039:20: ( '***' ( options {greedy=false; } : . )* '***' )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8039:22: '***' ( options {greedy=false; } : . )* '***'
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8159:20: ( '***' ( options {greedy=false; } : . )* '***' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8159:22: '***' ( options {greedy=false; } : . )* '***'
             {
             match("***"); 
 
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8039:28: ( options {greedy=false; } : . )*
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8159:28: ( options {greedy=false; } : . )*
             loop1:
             do {
                 int alt1=2;
@@ -2158,7 +2158,7 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8039:56: .
+            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8159:56: .
             	    {
             	    matchAny(); 
 
@@ -2188,11 +2188,11 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8041:13: ( '\"' ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )* '\"' )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8041:15: '\"' ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8161:13: ( '\"' ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )* '\"' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8161:15: '\"' ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
             {
             match('\"'); 
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8041:19: ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )*
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8161:19: ( RULE_ESCAPE_SEQUENCE | ~ ( ( '\\\\' | '\"' ) ) )*
             loop2:
             do {
                 int alt2=3;
@@ -2208,14 +2208,14 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt2) {
             	case 1 :
-            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8041:20: RULE_ESCAPE_SEQUENCE
+            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8161:20: RULE_ESCAPE_SEQUENCE
             	    {
             	    mRULE_ESCAPE_SEQUENCE(); 
 
             	    }
             	    break;
             	case 2 :
-            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8041:41: ~ ( ( '\\\\' | '\"' ) )
+            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8161:41: ~ ( ( '\\\\' | '\"' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -2250,10 +2250,10 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR start "RULE_ESCAPE_SEQUENCE"
     public final void mRULE_ESCAPE_SEQUENCE() throws RecognitionException {
         try {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8043:31: ( ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE ) )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8043:33: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8163:31: ( ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE ) )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8163:33: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE )
             {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8043:33: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8163:33: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | RULE_UNICODE_ESCAPE | RULE_OCTAL_ESCAPE )
             int alt3=3;
             int LA3_0 = input.LA(1);
 
@@ -2304,7 +2304,7 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt3) {
                 case 1 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8043:34: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' )
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8163:34: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' )
                     {
                     match('\\'); 
                     if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||input.LA(1)=='t' ) {
@@ -2320,14 +2320,14 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8043:75: RULE_UNICODE_ESCAPE
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8163:75: RULE_UNICODE_ESCAPE
                     {
                     mRULE_UNICODE_ESCAPE(); 
 
                     }
                     break;
                 case 3 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8043:95: RULE_OCTAL_ESCAPE
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8163:95: RULE_OCTAL_ESCAPE
                     {
                     mRULE_OCTAL_ESCAPE(); 
 
@@ -2348,10 +2348,10 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR start "RULE_OCTAL_ESCAPE"
     public final void mRULE_OCTAL_ESCAPE() throws RecognitionException {
         try {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8045:28: ( ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' ) )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8045:30: ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8165:28: ( ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' ) )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8165:30: ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' )
             {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8045:30: ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8165:30: ( '\\\\' '0' .. '3' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' '0' .. '7' | '\\\\' '0' .. '7' )
             int alt4=3;
             int LA4_0 = input.LA(1);
 
@@ -2397,7 +2397,7 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt4) {
                 case 1 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8045:31: '\\\\' '0' .. '3' '0' .. '7' '0' .. '7'
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8165:31: '\\\\' '0' .. '3' '0' .. '7' '0' .. '7'
                     {
                     match('\\'); 
                     matchRange('0','3'); 
@@ -2407,7 +2407,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8045:63: '\\\\' '0' .. '7' '0' .. '7'
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8165:63: '\\\\' '0' .. '7' '0' .. '7'
                     {
                     match('\\'); 
                     matchRange('0','7'); 
@@ -2416,7 +2416,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8045:86: '\\\\' '0' .. '7'
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8165:86: '\\\\' '0' .. '7'
                     {
                     match('\\'); 
                     matchRange('0','7'); 
@@ -2438,8 +2438,8 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR start "RULE_UNICODE_ESCAPE"
     public final void mRULE_UNICODE_ESCAPE() throws RecognitionException {
         try {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8047:30: ( '\\\\' 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8047:32: '\\\\' 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8167:30: ( '\\\\' 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8167:32: '\\\\' 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT
             {
             match('\\'); 
             match('u'); 
@@ -2459,8 +2459,8 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR start "RULE_HEXDIGIT"
     public final void mRULE_HEXDIGIT() throws RecognitionException {
         try {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8049:24: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8049:26: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8169:24: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8169:26: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
             {
             if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='F')||(input.LA(1)>='a' && input.LA(1)<='f') ) {
                 input.consume();
@@ -2485,10 +2485,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_BOOLEAN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8051:14: ( ( 'true' | 'false' ) )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8051:16: ( 'true' | 'false' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8171:14: ( ( 'true' | 'false' ) )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8171:16: ( 'true' | 'false' )
             {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8051:16: ( 'true' | 'false' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8171:16: ( 'true' | 'false' )
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -2506,7 +2506,7 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt5) {
                 case 1 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8051:17: 'true'
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8171:17: 'true'
                     {
                     match("true"); 
 
@@ -2514,7 +2514,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8051:24: 'false'
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8171:24: 'false'
                     {
                     match("false"); 
 
@@ -2540,10 +2540,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_INTEGER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8053:14: ( ( '0' | '1' .. '9' ( '0' .. '9' )* ) )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8053:16: ( '0' | '1' .. '9' ( '0' .. '9' )* )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8173:14: ( ( '0' | '1' .. '9' ( '0' .. '9' )* ) )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8173:16: ( '0' | '1' .. '9' ( '0' .. '9' )* )
             {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8053:16: ( '0' | '1' .. '9' ( '0' .. '9' )* )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8173:16: ( '0' | '1' .. '9' ( '0' .. '9' )* )
             int alt7=2;
             int LA7_0 = input.LA(1);
 
@@ -2561,17 +2561,17 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt7) {
                 case 1 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8053:17: '0'
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8173:17: '0'
                     {
                     match('0'); 
 
                     }
                     break;
                 case 2 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8053:21: '1' .. '9' ( '0' .. '9' )*
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8173:21: '1' .. '9' ( '0' .. '9' )*
                     {
                     matchRange('1','9'); 
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8053:30: ( '0' .. '9' )*
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8173:30: ( '0' .. '9' )*
                     loop6:
                     do {
                         int alt6=2;
@@ -2584,7 +2584,7 @@ public class InternalMdlLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8053:31: '0' .. '9'
+                    	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8173:31: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2618,17 +2618,17 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_FLOAT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:12: ( ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' ) )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:12: ( ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' ) )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )
             {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )
             int alt14=4;
             alt14 = dfa14.predict(input);
             switch (alt14) {
                 case 1 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:15: ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:15: ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
                     {
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:15: ( '0' .. '9' )+
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:15: ( '0' .. '9' )+
                     int cnt8=0;
                     loop8:
                     do {
@@ -2642,7 +2642,7 @@ public class InternalMdlLexer extends Lexer {
 
                         switch (alt8) {
                     	case 1 :
-                    	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:16: '0' .. '9'
+                    	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:16: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2659,7 +2659,7 @@ public class InternalMdlLexer extends Lexer {
                     } while (true);
 
                     match('.'); 
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:31: ( '0' .. '9' )*
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:31: ( '0' .. '9' )*
                     loop9:
                     do {
                         int alt9=2;
@@ -2672,7 +2672,7 @@ public class InternalMdlLexer extends Lexer {
 
                         switch (alt9) {
                     	case 1 :
-                    	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:32: '0' .. '9'
+                    	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:32: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2684,7 +2684,7 @@ public class InternalMdlLexer extends Lexer {
                         }
                     } while (true);
 
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:43: ( RULE_EXPONENT )?
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:43: ( RULE_EXPONENT )?
                     int alt10=2;
                     int LA10_0 = input.LA(1);
 
@@ -2693,7 +2693,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     switch (alt10) {
                         case 1 :
-                            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:43: RULE_EXPONENT
+                            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:43: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -2706,10 +2706,10 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:58: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:58: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
                     {
                     match('.'); 
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:62: ( '0' .. '9' )+
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:62: ( '0' .. '9' )+
                     int cnt11=0;
                     loop11:
                     do {
@@ -2723,7 +2723,7 @@ public class InternalMdlLexer extends Lexer {
 
                         switch (alt11) {
                     	case 1 :
-                    	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:63: '0' .. '9'
+                    	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:63: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2739,7 +2739,7 @@ public class InternalMdlLexer extends Lexer {
                         cnt11++;
                     } while (true);
 
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:74: ( RULE_EXPONENT )?
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:74: ( RULE_EXPONENT )?
                     int alt12=2;
                     int LA12_0 = input.LA(1);
 
@@ -2748,7 +2748,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     switch (alt12) {
                         case 1 :
-                            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:74: RULE_EXPONENT
+                            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:74: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -2761,9 +2761,9 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:89: ( '0' .. '9' )+ RULE_EXPONENT
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:89: ( '0' .. '9' )+ RULE_EXPONENT
                     {
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:89: ( '0' .. '9' )+
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:89: ( '0' .. '9' )+
                     int cnt13=0;
                     loop13:
                     do {
@@ -2777,7 +2777,7 @@ public class InternalMdlLexer extends Lexer {
 
                         switch (alt13) {
                     	case 1 :
-                    	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:90: '0' .. '9'
+                    	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:90: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -2798,7 +2798,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     break;
                 case 4 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8055:115: '0' .. '9'
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8175:115: '0' .. '9'
                     {
                     matchRange('0','9'); 
 
@@ -2821,8 +2821,8 @@ public class InternalMdlLexer extends Lexer {
     // $ANTLR start "RULE_EXPONENT"
     public final void mRULE_EXPONENT() throws RecognitionException {
         try {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8057:24: ( ( 'e' | 'E' | 'd' | 'D' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8057:26: ( 'e' | 'E' | 'd' | 'D' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8177:24: ( ( 'e' | 'E' | 'd' | 'D' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8177:26: ( 'e' | 'E' | 'd' | 'D' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
             if ( (input.LA(1)>='D' && input.LA(1)<='E')||(input.LA(1)>='d' && input.LA(1)<='e') ) {
                 input.consume();
@@ -2833,7 +2833,7 @@ public class InternalMdlLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8057:44: ( '+' | '-' )?
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8177:44: ( '+' | '-' )?
             int alt15=2;
             int LA15_0 = input.LA(1);
 
@@ -2859,7 +2859,7 @@ public class InternalMdlLexer extends Lexer {
 
             }
 
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8057:55: ( '0' .. '9' )+
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8177:55: ( '0' .. '9' )+
             int cnt16=0;
             loop16:
             do {
@@ -2873,7 +2873,7 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt16) {
             	case 1 :
-            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8057:56: '0' .. '9'
+            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8177:56: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -2903,11 +2903,11 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8059:17: ( '#' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8059:19: '#' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8179:17: ( '#' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8179:19: '#' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
             match('#'); 
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8059:23: (~ ( ( '\\n' | '\\r' ) ) )*
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8179:23: (~ ( ( '\\n' | '\\r' ) ) )*
             loop17:
             do {
                 int alt17=2;
@@ -2920,7 +2920,7 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt17) {
             	case 1 :
-            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8059:23: ~ ( ( '\\n' | '\\r' ) )
+            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8179:23: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -2940,7 +2940,7 @@ public class InternalMdlLexer extends Lexer {
                 }
             } while (true);
 
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8059:39: ( ( '\\r' )? '\\n' )?
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8179:39: ( ( '\\r' )? '\\n' )?
             int alt19=2;
             int LA19_0 = input.LA(1);
 
@@ -2949,9 +2949,9 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt19) {
                 case 1 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8059:40: ( '\\r' )? '\\n'
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8179:40: ( '\\r' )? '\\n'
                     {
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8059:40: ( '\\r' )?
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8179:40: ( '\\r' )?
                     int alt18=2;
                     int LA18_0 = input.LA(1);
 
@@ -2960,7 +2960,7 @@ public class InternalMdlLexer extends Lexer {
                     }
                     switch (alt18) {
                         case 1 :
-                            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8059:40: '\\r'
+                            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8179:40: '\\r'
                             {
                             match('\r'); 
 
@@ -2992,12 +2992,12 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8061:17: ( '/#' ( options {greedy=false; } : . )* '#/' )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8061:19: '/#' ( options {greedy=false; } : . )* '#/'
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8181:17: ( '/#' ( options {greedy=false; } : . )* '#/' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8181:19: '/#' ( options {greedy=false; } : . )* '#/'
             {
             match("/#"); 
 
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8061:24: ( options {greedy=false; } : . )*
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8181:24: ( options {greedy=false; } : . )*
             loop20:
             do {
                 int alt20=2;
@@ -3022,7 +3022,7 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt20) {
             	case 1 :
-            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8061:52: .
+            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8181:52: .
             	    {
             	    matchAny(); 
 
@@ -3052,8 +3052,8 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_BEGIN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8063:12: ( '{' )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8063:14: '{'
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8183:12: ( '{' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8183:14: '{'
             {
             match('{'); 
 
@@ -3072,8 +3072,8 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_END;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8065:10: ( '}' )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8065:12: '}'
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8185:10: ( '}' )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8185:12: '}'
             {
             match('}'); 
 
@@ -3092,10 +3092,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8067:9: ( ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8067:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8187:9: ( ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8187:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8067:11: ( '^' )?
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8187:11: ( '^' )?
             int alt21=2;
             int LA21_0 = input.LA(1);
 
@@ -3104,7 +3104,7 @@ public class InternalMdlLexer extends Lexer {
             }
             switch (alt21) {
                 case 1 :
-                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8067:11: '^'
+                    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8187:11: '^'
                     {
                     match('^'); 
 
@@ -3122,7 +3122,7 @@ public class InternalMdlLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8067:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8187:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop22:
             do {
                 int alt22=2;
@@ -3171,10 +3171,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8069:10: ( ( '0' .. '9' )+ )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8069:12: ( '0' .. '9' )+
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8189:10: ( ( '0' .. '9' )+ )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8189:12: ( '0' .. '9' )+
             {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8069:12: ( '0' .. '9' )+
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8189:12: ( '0' .. '9' )+
             int cnt23=0;
             loop23:
             do {
@@ -3188,7 +3188,7 @@ public class InternalMdlLexer extends Lexer {
 
                 switch (alt23) {
             	case 1 :
-            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8069:13: '0' .. '9'
+            	    // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8189:13: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -3220,10 +3220,10 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8071:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8071:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8191:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8191:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8071:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8191:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             int cnt24=0;
             loop24:
             do {
@@ -3277,8 +3277,8 @@ public class InternalMdlLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8073:16: ( . )
-            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8073:18: .
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8193:16: ( . )
+            // ../org.ddmore.mdl/src-gen/org/ddmore/mdl/parser/antlr/internal/InternalMdl.g:8193:18: .
             {
             matchAny(); 
 
@@ -4113,7 +4113,7 @@ public class InternalMdlLexer extends Lexer {
             this.transition = DFA14_transition;
         }
         public String getDescription() {
-            return "8055:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )";
+            return "8175:14: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( RULE_EXPONENT )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT | '0' .. '9' )";
         }
     }
     static final String DFA25_eotS =
@@ -4264,10 +4264,10 @@ public class InternalMdlLexer extends Lexer {
         "\1\123\1\126\1\124\1\127\1\125\1\132\1\140\1\133\1\146\1\134\1\135"+
         "\1\136\1\137\1\141\1\143\2\uffff\1\145\1\147\1\150\1\153\6\uffff"+
         "\1\100\45\uffff\1\32\1\uffff\1\77\22\uffff\1\152\1\uffff\1\76\34"+
-        "\uffff\1\45\14\uffff\1\101\1\uffff\1\40\16\uffff\1\112\5\uffff\1"+
+        "\uffff\1\45\14\uffff\1\101\1\uffff\1\37\16\uffff\1\112\5\uffff\1"+
         "\50\2\uffff\1\142\35\uffff\1\26\1\30\1\36\2\uffff\1\42\2\uffff\1"+
-        "\51\12\uffff\1\114\14\uffff\1\37\44\uffff\1\2\1\47\1\3\2\uffff\1"+
-        "\6\2\uffff\1\52\1\31\1\73\7\uffff\1\41\1\uffff\1\71\15\uffff\1\25"+
+        "\51\12\uffff\1\114\14\uffff\1\41\44\uffff\1\2\1\47\1\3\2\uffff\1"+
+        "\6\2\uffff\1\52\1\31\1\73\7\uffff\1\40\1\uffff\1\71\15\uffff\1\25"+
         "\1\54\1\35\5\uffff\1\105\5\uffff\1\4\1\5\3\uffff\1\46\1\74\4\uffff"+
         "\1\57\12\uffff\1\63\3\uffff\1\107\1\44\16\uffff\1\111\3\uffff\1"+
         "\62\6\uffff\1\61\2\uffff\1\67\1\uffff\1\60\3\uffff\1\106\13\uffff"+

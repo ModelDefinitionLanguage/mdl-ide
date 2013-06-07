@@ -47,6 +47,8 @@ import org.ddmore.mdl.mdl.ImportBlock
 import org.ddmore.mdl.mdl.DataObjectBlock
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import java.util.ArrayList
+import org.ddmore.mdl.mdl.TaskFunctionBlock
+import org.ddmore.mdl.mdl.TaskFunctionStatement
 
 class MdlPrinting {
 
@@ -65,6 +67,58 @@ class MdlPrinting {
   						block.importBlock.prepareExternalFunctions(o.modelObject.identifier.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
+  				/* 	if (block.individualVariablesBlock != null){
+						for (BlockStatement b: block.individualVariablesBlock.statements){
+  							if (b.targetBlock != null)
+  								b.targetBlock.prepareExternalCode;
+  						}  		
+  					}	
+  					if (block.observationBlock != null){
+						for (BlockStatement b: block.observationBlock.statements){
+  							if (b.targetBlock != null)
+  								b.targetBlock.prepareExternalCode;
+  						}  		
+  					}		
+  					if (block.estimationBlock != null){
+						for (BlockStatement b: block.estimationBlock.statements){
+  							if (b.targetBlock != null)
+  								b.targetBlock.prepareExternalCode;
+  						}  		
+  					}  	
+  					if (block.simulationBlock != null){
+						for (BlockStatement b: block.simulationBlock.statements){
+  							if (b.targetBlock != null)
+  								b.targetBlock.prepareExternalCode;
+  						}  		
+  					}  			
+  					if (block.modelPredictionBlock != null){
+						for (ModelPredictionBlockStatement b: block.modelPredictionBlock.statements){
+  							if (b.statement != null){
+	  							if (b.statement.targetBlock != null)
+  									b.statement.targetBlock.prepareExternalCode;
+  							}
+  							if (b.odeBlock != null){
+  								for (BlockStatement bb: b.odeBlock.statements){
+		  							if (bb.targetBlock != null)
+		  								bb.targetBlock.prepareExternalCode;
+		  						}  
+  							}
+  						}  		
+  					}  	
+  					if (block.groupVariablesBlock != null){
+						for (GroupVariablesBlockStatement b: block.groupVariablesBlock.statements){
+  							if (b.statement != null){
+	  							if (b.statement.targetBlock != null)
+  									b.statement.targetBlock.prepareExternalCode;
+  							}
+  							if (b.mixtureBlock != null){
+  								for (BlockStatement bb: b.mixtureBlock.statements){
+		  							if (bb.targetBlock != null)
+		  								bb.targetBlock.prepareExternalCode;
+		  						}  
+  							}
+  						}  		
+  					} */ 										
   				}
   			}
   			if (o.parameterObject != null){
@@ -73,8 +127,14 @@ class MdlPrinting {
   						block.importBlock.prepareExternalFunctions(o.parameterObject.identifier.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
-  					}
-  			}
+  				/* 	if (block.priorBlock != null){
+						for (BlockStatement b: block.priorBlock.statements){
+  							if (b.targetBlock != null)
+  								b.targetBlock.prepareExternalCode;
+  						}  		
+  					}  	*/
+  				}
+  	  		}
    			if (o.dataObject != null){
   				for (DataObjectBlock block: o.dataObject.blocks){
   					if (block.importBlock != null)
@@ -89,11 +149,39 @@ class MdlPrinting {
   						block.importBlock.prepareExternalFunctions(o.taskObject.identifier.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
+  					if (block.functionDeclaration != null){
+  						for (TaskFunctionBlock b: block.functionDeclaration.functionBody.blocks){
+  							if (b.estimateBlock != null){
+  								for (TaskFunctionStatement bb: b.estimateBlock.statements){
+  									if (bb.targetBlock != null)
+  										bb.targetBlock.prepareExternalCode;
+  								}
+  							}
+  							if (b.simulateBlock != null){
+  								for (TaskFunctionStatement bb: b.simulateBlock.statements){
+  									if (bb.targetBlock != null)
+  										bb.targetBlock.prepareExternalCode;
+  								}
+  							}
+  							if (b.executeBlock != null){
+  								for (TaskFunctionStatement bb: b.executeBlock.statements){
+  									if (bb.targetBlock != null)
+  										bb.targetBlock.prepareExternalCode;
+  								}
+  							}  							
+  						}	
+  					}		
   				}
   			}
+  			/*if (o.telObject != null){
+  				for (BlockStatement block: o.telObject.statements){
+  					if (block.targetBlock != null)
+  						block.targetBlock.prepareExternalCode;
+  				}
+  			}*/
   		}
 	}
-
+	
 	def void prepareExternalCode(TargetBlock block) { }	
 	def void prepareExternalFunctions(ImportBlock block, String string) { }
 	
@@ -249,7 +337,7 @@ class MdlPrinting {
 	def toStr(FullyQualifiedSymbolName name){
 		var res = ""; 
 		if (name.object != null){
-			res  = name.object + "$" ;
+			res  = name.object.name + "$" ;
 		}
 		res = res + name.identifier.convertID;
 		return res;
@@ -332,25 +420,17 @@ class MdlPrinting {
 			return type.missing.identifier
 		} 
 		if (type.target != null){
-			return type.target 
+			return type.target.identifier 
 		} 
 	}
 	
 	def String toStr(Distribution d) { 
-		if (d.normal != null) return d.normal;
-		if (d.binomial != null) return d.binomial;
-		if (d.poisson != null) return d.poisson;
-		if (d.student_t != null) return d.student_t;
-		if (d.mvnormal != null) return d.mvnormal;
+		return d.identifier
 	}
 
 	def String toStr(LevelType l) { 
-		if (l.mdv != null) return l.mdv;
-		if (l.id != null) return l.id;
-		if (l.dv != null) return l.dv;
-		if (l.idv != null) return l.idv;
+		return l.identifier
 	}
-
 	
 	//toSTr random list	
 	def toStr(RandomList l){
@@ -650,8 +730,8 @@ class MdlPrinting {
 		«IF st.symbol != null»«st.symbol.print»«ENDIF»
 		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
 		«IF st.statement != null»«st.statement.print»«ENDIF»
-		«IF st.targetBlock != null»«st.targetBlock.print»«ENDIF»
 		'''
+		//«IF st.targetBlock != null»«st.targetBlock.print»«ENDIF»
 
 	//Print function call
 	def print(FunctionCall call)'''«call.identifier.toStr»(«call.arguments.print»)'''
