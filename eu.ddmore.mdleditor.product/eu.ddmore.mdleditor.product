@@ -24,7 +24,7 @@
       <feature id="org.eclipse.rcp" version="4.2.2.v20130129-152330-7IARAABrMQkGSvMgQnUlz-DQz00h"/>
       <feature id="org.eclipse.help" version="1.4.1.v20120912-144938-8R7xFOXFLWUl7PpNBh_HIGkb4"/>
       <feature id="com.mango.mif.client.feature" version="1.0.1.v20130419-1339"/>
-      <feature id="com.mango.mifclient.dependencies.feature" version="1.0.0.201306101147"/>
+      <feature id="com.mango.mifclient.dependencies.feature" version="1.0.0.201306101521"/>
    </features>
 
    <configurations>

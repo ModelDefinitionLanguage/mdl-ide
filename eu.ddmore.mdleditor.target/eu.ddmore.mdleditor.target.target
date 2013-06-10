@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="95">
+<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="96">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="com.mango.mif.client.feature.feature.group" version="1.0.1.v20130419-1339"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mif-client"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
 <unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.4.0.v201303191501"/>
 <unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="2.4.0.v201303191413"/>
@@ -68,7 +64,11 @@
 <repository location="http://download.eclipse.org/releases/juno"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201306101147"/>
+<unit id="com.mango.mif.client.feature.feature.group" version="1.0.1.v20130419-1339"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mif-client"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201306101521"/>
 <repository location="http://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/"/>
 </location>
 </locations>
