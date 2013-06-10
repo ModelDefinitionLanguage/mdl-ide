@@ -8,15 +8,16 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
+		<module>../eu.ddmore.mdleditor.target</module>
 		<module>../org.ddmore.mdl</module>
 		<module>../org.ddmore.mdl.ui</module>
 		<module>../eu.ddmore.mdleditor.application</module>
 		<module>../org.ddmore.mdl.tests</module>
 
 		<module>../org.ddmore.mdl.sdk</module>
+		<!-- once the encryption key is changed this can be included : MIFDEV-35 
 		<module>../com.mango.mif.client.feature</module>
-		<!-- once the encryption key is changed this can be included : MIFDEV-35 -->
-<!-- 		<module>../com.mango.mif.client.site</module> -->
+ 		<module>../com.mango.mif.client.site</module> -->
 		<module>../eu.ddmore.mdleditor.site</module>
 		<module>../eu.ddmore.mdleditor.product</module>
 	</modules>
@@ -26,10 +27,7 @@
 		<tycho.version>0.17.0</tycho.version>
 		<tycho.extras.version>0.17.0</tycho.extras.version>
 
-		<juno.repo.url>http://download.eclipse.org/releases/juno</juno.repo.url>
-		<xtext.repo.url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/</xtext.repo.url>
 		<tycho.repo.url>https://oss.sonatype.org/content/groups/public/</tycho.repo.url>
-        <mifclient.dependencies.repo.url>https://sourceforge.net/projects/ddmore/files/update/mif-client-dependencies/</mifclient.dependencies.repo.url>
 
         <!-- once the encryption key is changed this can be replaced using the maven artifact : MIFDEV-35 -->
         <mifclient.repo.url>https://sourceforge.net/projects/ddmore/files/update/mif-client/</mifclient.repo.url>
@@ -45,33 +43,6 @@
 		<sonar.skippedModules>*.tests</sonar.skippedModules>
 		<sonar.skipDesign>true</sonar.skipDesign>
 	</properties>
-
-
-	<repositories>
-		<repository>
-			<id>mifclient.dependencies</id>
-			<url>${mifclient.dependencies.repo.url}</url>
-			<layout>p2</layout>
-		</repository>
-
-        <repository>
-            <id>mifclient</id>
-            <url>${mifclient.repo.url}</url>
-            <layout>p2</layout>
-        </repository>
-
-		<repository>
-			<id>juno</id>
-			<url>${juno.repo.url}</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>xtext</id>
-			<url>${xtext.repo.url}</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
 
 	<pluginRepositories>
 		<pluginRepository>
@@ -143,7 +114,20 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
 				<configuration>
+				
+		<!-- once the encryption key is changed this can be included : MIFDEV-35 -->
+<!--	                <configuration>
+	                    <pomDependencies>consider</pomDependencies>
+	                </configuration>-->
+				      <target>
+				         <artifact>
+				            <groupId>eu.ddmore</groupId>
+				            <artifactId>eu.ddmore.mdleditor.target</artifactId>
+				            <version>${project.version}</version>
+				         </artifact>
+				      </target>
 					<environments>
 						<environment>
 							<os>win32</os>
@@ -161,33 +145,6 @@
 							<environment> <os>linux</os> <ws>gtk</ws> <arch>x86</arch> </environment>  
 							<environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> </environment> -->
 					</environments>
-					<filters>
-					
-						<!-- We need to explicitly filter out valid versions -->
-						<filter>
-				            <type>eclipse-plugin</type>
-				            <id>org.eclipse.xtext.xbase.lib</id>
-				            <restrictTo>
-				               <versionRange>[2.3.1,2.4.1)</versionRange> 
-				            </restrictTo>
-				         </filter>
-					
-						<filter>
-				            <type>eclipse-plugin</type>
-				            <id>org.eclipse.xtend.lib</id>
-				            <restrictTo>
-				               <versionRange>[2.3.1,2.4.1)</versionRange> 
-				            </restrictTo>
-				         </filter>
-				         
-						<filter>
-				            <type>eclipse-plugin</type>
-				            <id>org.eclipse.jdt.core</id>
-				            <restrictTo>
-				               <versionRange>[3.5.0,3.8.3]</versionRange> 
-				            </restrictTo>
-				         </filter>
-					</filters>
 				</configuration>
 			</plugin>
 
@@ -207,15 +164,6 @@
 
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>target-platform-configuration</artifactId>
-					<version>${tycho.version}</version>
-		<!-- once the encryption key is changed this can be included : MIFDEV-35 -->
-<!--	                <configuration>
-	                    <pomDependencies>consider</pomDependencies>
-	                </configuration>-->
-				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-compiler-plugin</artifactId>
