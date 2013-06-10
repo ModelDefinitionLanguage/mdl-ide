@@ -64,12 +64,12 @@
 <repository location="http://download.eclipse.org/releases/juno"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="com.mango.mif.client.feature.feature.group" version="1.0.1.v20130419-1339"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mif-client"/>
+<unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201306101521"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201306101521"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/"/>
+<unit id="com.mango.mif.client.feature.feature.group" version="1.0.1.v20130419-1339"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mif-client"/>
 </location>
 </locations>
 </target>
