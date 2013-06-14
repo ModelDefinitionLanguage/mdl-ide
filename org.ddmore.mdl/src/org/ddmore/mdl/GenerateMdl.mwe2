@@ -4,7 +4,7 @@ import org.eclipse.emf.mwe.utils.*
 import org.eclipse.xtext.generator.*
 import org.eclipse.xtext.ui.generator.*
 
-var grammarURI = "classpath:/org/ddmore/mdl/Mdl.xtext"
+var grammarURI = "classpath:/Mdl.xtext"
 var file.extensions = "mdl"
 var projectName = "org.ddmore.mdl"
 var runtimeProject = "../${projectName}"
@@ -14,7 +14,7 @@ Workflow {
             scanClassPath = true
             platformUri = "${runtimeProject}/.."
             // The following two lines can be removed, if Xbase is not used.
-            registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"
+            //registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"
             registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
         }
     
@@ -32,6 +32,7 @@ Workflow {
             pathTestProject = "${runtimeProject}.tests"
             projectNameRt = projectName
             projectNameUi = "${projectName}.ui"
+            mergeManifest = false
             language = {
                 uri = grammarURI
                 fileExtensions = file.extensions
