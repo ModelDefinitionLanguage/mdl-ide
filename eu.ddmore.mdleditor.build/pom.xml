@@ -29,7 +29,7 @@
         <mifclient.repo.url>https://sourceforge.net/projects/ddmore/files/update/mif-client/</mifclient.repo.url>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jacoco.version>0.6.2.201302030002</jacoco.version>
+		<jacoco.version>0.6.0.201210061924</jacoco.version>
 		<mvn.clean.plugin.version>2.4.1</mvn.clean.plugin.version>
         
         <!-- Tycho -->
