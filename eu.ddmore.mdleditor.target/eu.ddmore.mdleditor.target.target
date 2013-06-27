@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="96">
+<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="99">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.4.0.v201303191501"/>
-<unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="2.4.0.v201303191413"/>
-<unit id="org.eclipse.emf.mwe.core.feature.group" version="1.3.0.v201303191413"/>
-<unit id="org.eclipse.emf.mwe.sdk.feature.group" version="1.3.0.v201303191413"/>
+<unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.4.0.v201306110940"/>
+<unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="2.4.0.v201306110341"/>
+<unit id="org.eclipse.emf.mwe.core.feature.group" version="1.3.0.v201306110341"/>
+<unit id="org.eclipse.emf.mwe.sdk.feature.group" version="1.3.0.v201306110341"/>
 <unit id="org.eclipse.xtext.xbase.feature.group" version="2.4.0.v201303201134"/>
 <unit id="org.eclipse.xtext.xbase.lib.feature.group" version="2.4.0.v201303201134"/>
 <unit id="org.eclipse.xtext.gwt.feature.group" version="2.4.0.v201303201134"/>
