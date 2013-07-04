@@ -233,7 +233,7 @@ class Mdl2Nonmem extends MdlPrinting{
 					for (b: obj.dataObject.blocks){
 						if (b.fileBlock != null){
 							for (s: b.fileBlock.statements){
-								s.getDataSource;
+								return s.getDataSource;
 							}
 						} 
 					}
