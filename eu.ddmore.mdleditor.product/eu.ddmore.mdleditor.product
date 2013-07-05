@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="MDL Editor" uid="eu.ddmore.mdleditor" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="1.0.1.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="MDL Editor" uid="eu.ddmore.mdleditor" id="eu.ddmore.mdleditor.application.product" application="org.eclipse.ui.ide.workbench" version="1.0.1.qualifier" useFeatures="true" includeLaunchers="true">
 
    <configIni use="default">
    </configIni>
@@ -31,6 +31,8 @@
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
+      <property name="log4j.configuration" value="platform:/base/log4j.properties" />
+      <property name="mif.encryption.key" value="MIF-encryption-key-ddmore.key" />
    </configurations>
 
 </product>

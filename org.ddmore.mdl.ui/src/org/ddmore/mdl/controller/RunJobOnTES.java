@@ -23,6 +23,8 @@ public class RunJobOnTES {
         IProject project = file.getProject();
         IFile dataFile = project.getFile(file.getParent().getProjectRelativePath() + "/" + dataFileName);
 
+        LOGGER.debug("Executing a job with the following inputs: " + file.getProjectRelativePath() + " and "
+            + dataFile.getProjectRelativePath() + "]");
         if (file.exists() && dataFile.exists()) {
             TESExecJob job = new TESExecJob("Running Job on Task Execution Service (" + file.getName() + ")", file, dataFile);
             job.setUser(true);

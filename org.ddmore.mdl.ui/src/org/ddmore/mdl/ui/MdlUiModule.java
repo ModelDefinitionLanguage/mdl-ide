@@ -3,13 +3,37 @@
  */
 package org.ddmore.mdl.ui;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.apache.log4j.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 /**
  * Use this class to register components to be used within the IDE.
  */
 public class MdlUiModule extends org.ddmore.mdl.ui.AbstractMdlUiModule {
+
+    private static final Logger LOG = Logger.getLogger(MdlUiModule.class);
+
+	private static final String MIF_ENCRYPTION_KEY = "mif.encryption.key";
+	
 	public MdlUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
+		init();
+	}
+	
+	public void init() {
+		if(System.getProperty(MIF_ENCRYPTION_KEY)!=null) {
+			try {
+				URL url = new URL(System.getProperty(MIF_ENCRYPTION_KEY));
+				LOG.warn(String.format("%s property was set to %s", MIF_ENCRYPTION_KEY, url));
+				System.setProperty(MIF_ENCRYPTION_KEY,url.toExternalForm());
+			} catch (MalformedURLException e) {
+				LOG.error(e);
+			} 
+		} else {
+			LOG.warn(String.format("%s property was not set ",MIF_ENCRYPTION_KEY));
+		}
 	}
 }

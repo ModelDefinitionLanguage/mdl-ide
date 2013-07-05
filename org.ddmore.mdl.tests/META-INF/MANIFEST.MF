@@ -9,6 +9,7 @@ Require-Bundle: org.ddmore.mdl,
  org.ddmore.mdl.ui,
  org.eclipse.core.runtime,
  org.eclipse.xtext.junit4,
+ org.junit4,
  org.eclipse.ui.workbench;resolution:=optional
 Import-Package: org.apache.commons.io;version="2.0.1",
  org.apache.http;version="4.1.4",
