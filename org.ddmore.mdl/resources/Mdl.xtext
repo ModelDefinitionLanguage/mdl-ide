@@ -6,25 +6,27 @@ Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
 MclObject:
-	modelObject=ModelObject | 
+	identifier=ObjectName '=' 
+	(modelObject=ModelObject | 
 	parameterObject=ParameterObject | 
 	dataObject=DataObject | 
 	taskObject=TaskObject |
-	telObject=TELObject;
+	telObject=TELObject);
 	
-ModelObject:
-	identifier=ObjectName '=' 'mdlobj' BEGIN blocks += ModelObjectBlock* END;
+ModelObject: 
+	identifier = 'mdlobj' BEGIN blocks += ModelObjectBlock* END;
+
 ParameterObject:
-	identifier=ObjectName '=' 'parobj' BEGIN blocks += ParameterObjectBlock* END;
+	identifier = 'parobj' BEGIN blocks += ParameterObjectBlock* END;
 	
 DataObject:
-	identifier=ObjectName '=' 'dataobj' BEGIN blocks += DataObjectBlock* END;
+	identifier = 'dataobj' BEGIN blocks += DataObjectBlock* END;
 
 TaskObject:
-	identifier=ObjectName '=' 'taskobj' BEGIN blocks += TaskObjectBlock* END;
+	identifier = 'taskobj' BEGIN blocks += TaskObjectBlock* END;
 	
 TELObject:
-	identifier=ObjectName '=' 'telobj' BEGIN statements += BlockStatement* END;
+	identifier = 'telobj' BEGIN statements += BlockStatement* END;
 	
 //////////////////////////////////////////////////////////
 //Model Object
@@ -206,8 +208,9 @@ ModelBlockStatement:
 	removeList = RemoveList
 ;
 
-SymbolList:
+SymbolList: 
 	identifier = 'list' '(' symbols += FullyQualifiedSymbolName (=> ',' symbols += FullyQualifiedSymbolName)* ')'
+	//Ref to VariableName +
 ;
 
 ModelPredictionBlockStatement: 
@@ -277,7 +280,7 @@ FileBlockStatement:
 
 InlineBlock:
 	identifier = 'INLINE' 
-	BEGIN (variables += FullyQualifiedSymbolName)* (values += (NUMBER | '.'))* END //Ref to VaraibleName + 
+	BEGIN (variables += FullyQualifiedSymbolName)* (values += (NUMBER | '.'))* END //Ref to VariableName + 
 ;
 
 DesignBlock:
@@ -320,22 +323,17 @@ TaskFunctionBlock:
 
 EstimateTask: 
 	identifier = 'ESTIMATE' 
-	BEGIN statements += TaskFunctionStatement* END //Properties
+	BEGIN statements += BlockStatement* END //Properties
 ;
 
 SimulateTask:
 	identifier = 'SIMULATE' 
-	BEGIN statements += TaskFunctionStatement* END  //Properties
+	BEGIN statements += BlockStatement* END  //Properties
 ;
 
 ExecuteTask:
 	identifier = "EXECUTE"
-	BEGIN statements += TaskFunctionStatement* END  //Properties
-;
-
-TaskFunctionStatement:
-	statement = BlockStatement |
-	targetBlock = TargetBlock
+	BEGIN statements += BlockStatement* END  //Properties
 ;
 
 //////////////////////////////////////////////////////////
@@ -351,13 +349,15 @@ FormalArgument:
 ;
 
 FunctionCall:
-	identifier = FullyQualifiedSymbolName '(' arguments = Arguments ')'
+	identifier = FullyQualifiedSymbolName '(' arguments = Arguments ')' 
+	//Ref to ImportedFunction, TaskFunctionDeclaration or standard +
 ;
 
 BlockStatement:
-	symbol = SymbolDeclaration | //VariableName or PropertyName
+	symbol = SymbolDeclaration | //Variable, Parameter? or Property
 	functionCall = FunctionCall |
-	statement = ConditionalStatement 
+	statement = ConditionalStatement |
+	targetBlock = TargetBlock
 ;
 
 TargetBlock: 
@@ -379,7 +379,7 @@ terminal EXTERNAL_CODE:
 
 ImportBlock:
 	identifier = 'IMPORT' BEGIN 
-		functions += ImportedFunction
+		functions += ImportedFunction*
 	END //rename to functions
 ;
 
@@ -388,14 +388,15 @@ ImportedFunction:
 ;
 
 SymbolModification:
-	identifier = FullyQualifiedSymbolName ("=" list = List)?  //Ref to ParameterName or VaraibleName +
+	identifier = FullyQualifiedSymbolName ("=" list = List)?  
+	//Ref to ParameterName or VariableName (depending on the container) +
 ;
 
 ParameterDeclaration:
 	identifier = ID ("=" list = List) //new ParameterName
 ;
 
-//new VariableName, new PropertyName
+//new VariableName, new PropertyName, new ParameterName? (PRIOR_PARAMETERS)
 SymbolDeclaration:
 	(identifier = ID (("=" expression = AnyExpression)? | randomList = RandomList)) | 
 	(function = ID '(' identifier = ID ')' randomList = RandomList)
@@ -407,7 +408,7 @@ EnumType:
 	continuous = Continuous | 
 	covariate = Covariate |
 	distribution = Distribution |
-	level = LevelType |
+	use = UseType |       
 	likelyhood = Likelyhood |
 	missing = Missing |
 	target = TargetLanguage
@@ -421,8 +422,8 @@ Likelyhood:
 	identifier = 'LIKELIHOOD'	
 ;
 
-LevelType:
-	identifier = ('mdv' | 'id' | 'dv' | 'idv') //Independent Variable
+UseType:
+	identifier = ('mdv' | 'id' | 'dv' | 'idv' | 'dvid' | 'amt') 
 ;
 
 Categorical:
@@ -525,7 +526,7 @@ UnaryExpression:
 Primary:
 	functionCall = FunctionCall |
 	number = NUMBER |
-	symbol = FullyQualifiedSymbolName |
+	symbol = FullyQualifiedSymbolName | //Ref to VariableName +, ParameterName +, ObjectName or formal argument 
 	attribute = FullyQualifiedArgumentName |
 	vector = Vector
 ;
@@ -534,16 +535,16 @@ Vector:
 	identifier = 'c' '(' values += Expression (=> ',' values += Expression)* ')'
 ;	
 
-FullyQualifiedSymbolName:
-	(object = [ObjectName] '$')? identifier = ID //ref VariableName, ParameterName or FunctionName - (checked in upper-level blocks)
+FullyQualifiedSymbolName: 	//ref VariableName, ParameterName or FunctionName (depending on the container)
+	(object = [ObjectName] '$')? identifier = ID 
 ;
 
 FullyQualifiedArgumentName:
-	parent = FullyQualifiedSymbolName selectors += Selector+  //ref ArgumentName
+	parent = FullyQualifiedSymbolName selectors += Selector+  //ref VariableName or ParameterName +
 ;
 
 Selector:
-	('.' identifier = ID ) | ('[' selector = NUMBER ']')
+	('.' identifier = FormalArgument ) | ('[' selector = INTEGER ']')
 ;
 
 ObjectName:

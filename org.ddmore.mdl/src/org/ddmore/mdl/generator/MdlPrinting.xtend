@@ -37,7 +37,7 @@ import org.ddmore.mdl.mdl.MixtureBlock
 import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
 import org.ddmore.mdl.mdl.Distribution
-import org.ddmore.mdl.mdl.LevelType
+import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Selector
 import java.util.HashMap
@@ -47,8 +47,7 @@ import org.ddmore.mdl.mdl.ImportBlock
 import org.ddmore.mdl.mdl.DataObjectBlock
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import java.util.ArrayList
-import org.ddmore.mdl.mdl.TaskFunctionBlock
-import org.ddmore.mdl.mdl.TaskFunctionStatement
+import org.eclipse.emf.common.util.EList
 
 class MdlPrinting {
 
@@ -64,81 +63,23 @@ class MdlPrinting {
   			if (o.modelObject != null){
   				for (ModelObjectBlock block: o.modelObject.blocks){
   					if (block.importBlock != null)
-  						block.importBlock.prepareExternalFunctions(o.modelObject.identifier.name);
+  						block.importBlock.prepareExternalFunctions(o.identifier.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
-  				/* 	if (block.individualVariablesBlock != null){
-						for (BlockStatement b: block.individualVariablesBlock.statements){
-  							if (b.targetBlock != null)
-  								b.targetBlock.prepareExternalCode;
-  						}  		
-  					}	
-  					if (block.observationBlock != null){
-						for (BlockStatement b: block.observationBlock.statements){
-  							if (b.targetBlock != null)
-  								b.targetBlock.prepareExternalCode;
-  						}  		
-  					}		
-  					if (block.estimationBlock != null){
-						for (BlockStatement b: block.estimationBlock.statements){
-  							if (b.targetBlock != null)
-  								b.targetBlock.prepareExternalCode;
-  						}  		
-  					}  	
-  					if (block.simulationBlock != null){
-						for (BlockStatement b: block.simulationBlock.statements){
-  							if (b.targetBlock != null)
-  								b.targetBlock.prepareExternalCode;
-  						}  		
-  					}  			
-  					if (block.modelPredictionBlock != null){
-						for (ModelPredictionBlockStatement b: block.modelPredictionBlock.statements){
-  							if (b.statement != null){
-	  							if (b.statement.targetBlock != null)
-  									b.statement.targetBlock.prepareExternalCode;
-  							}
-  							if (b.odeBlock != null){
-  								for (BlockStatement bb: b.odeBlock.statements){
-		  							if (bb.targetBlock != null)
-		  								bb.targetBlock.prepareExternalCode;
-		  						}  
-  							}
-  						}  		
-  					}  	
-  					if (block.groupVariablesBlock != null){
-						for (GroupVariablesBlockStatement b: block.groupVariablesBlock.statements){
-  							if (b.statement != null){
-	  							if (b.statement.targetBlock != null)
-  									b.statement.targetBlock.prepareExternalCode;
-  							}
-  							if (b.mixtureBlock != null){
-  								for (BlockStatement bb: b.mixtureBlock.statements){
-		  							if (bb.targetBlock != null)
-		  								bb.targetBlock.prepareExternalCode;
-		  						}  
-  							}
-  						}  		
-  					} */ 										
   				}
   			}
   			if (o.parameterObject != null){
   				for (ParameterObjectBlock block: o.parameterObject.blocks){
   					if (block.importBlock != null)
-  						block.importBlock.prepareExternalFunctions(o.parameterObject.identifier.name);
+  						block.importBlock.prepareExternalFunctions(o.identifier.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
-  				/* 	if (block.priorBlock != null){
-						for (BlockStatement b: block.priorBlock.statements){
-  							if (b.targetBlock != null)
-  								b.targetBlock.prepareExternalCode;
-  						}  		
-  					}  	*/
   				}
   	  		}
    			if (o.dataObject != null){
   				for (DataObjectBlock block: o.dataObject.blocks){
   					if (block.importBlock != null)
-  						block.importBlock.prepareExternalFunctions(o.dataObject.identifier.name);
+  						block.importBlock.prepareExternalFunctions(o.identifier.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
   				}
@@ -146,39 +87,17 @@ class MdlPrinting {
   			if (o.taskObject != null){
   				for (TaskObjectBlock block: o.taskObject.blocks){
   					if (block.importBlock != null)
-  						block.importBlock.prepareExternalFunctions(o.taskObject.identifier.name);
+  						block.importBlock.prepareExternalFunctions(o.identifier.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
-  					if (block.functionDeclaration != null){
-  						for (TaskFunctionBlock b: block.functionDeclaration.functionBody.blocks){
-  							if (b.estimateBlock != null){
-  								for (TaskFunctionStatement bb: b.estimateBlock.statements){
-  									if (bb.targetBlock != null)
-  										bb.targetBlock.prepareExternalCode;
-  								}
-  							}
-  							if (b.simulateBlock != null){
-  								for (TaskFunctionStatement bb: b.simulateBlock.statements){
-  									if (bb.targetBlock != null)
-  										bb.targetBlock.prepareExternalCode;
-  								}
-  							}
-  							if (b.executeBlock != null){
-  								for (TaskFunctionStatement bb: b.executeBlock.statements){
-  									if (bb.targetBlock != null)
-  										bb.targetBlock.prepareExternalCode;
-  								}
-  							}  							
-  						}	
-  					}		
   				}
   			}
-  			/*if (o.telObject != null){
+  			if (o.telObject != null){
   				for (BlockStatement block: o.telObject.statements){
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
   				}
-  			}*/
+  			}
   		}
 	}
 	
@@ -257,7 +176,7 @@ class MdlPrinting {
 	//Return value of an attribute with a given name
 	def selectAttribute(Arguments a, String attrName){
 		for (arg: a.arguments)
-			if (arg.identifier.equalsIgnoreCase(attrName))
+			if (arg.identifier.equals(attrName))
 				return arg.expression.toStr
 		return "";
 	}	
@@ -319,8 +238,20 @@ class MdlPrinting {
     	}
     	return false;
     }
-    			
     
+    //Check whether there is a target block in a list of block statements			
+    def Boolean isTargetDefined(String targetName, EList<BlockStatement> list){
+		for (s: list){
+			if (s.targetBlock != null){
+				val target = s.targetBlock.arguments.selectAttribute("target");
+		 		if (target != null) 
+					if (target.equals(targetName)) {
+						return true;
+					}
+			}
+		}
+		return false;
+	}
 	
 	/////////////////////////////////////////////////////////////
 
@@ -410,8 +341,8 @@ class MdlPrinting {
 		if (type.distribution != null){
 			return type.distribution.toStr
 		} 
-		if (type.level != null){
-			return type.level.toStr
+		if (type.use != null){
+			return type.use.toStr
 		} 
 		if (type.likelyhood != null){
 			return type.likelyhood.identifier	
@@ -428,7 +359,7 @@ class MdlPrinting {
 		return d.identifier
 	}
 
-	def String toStr(LevelType l) { 
+	def String toStr(UseType l) { 
 		return l.identifier
 	}
 	
@@ -695,12 +626,26 @@ class MdlPrinting {
 		«ENDFOR»
 	'''
 	
+	//Print block
+	def printExcludingLists(Block b)'''
+		«FOR st: b.statements»
+			«st.printExcludingLists»
+		«ENDFOR»
+	'''	
+	
 	//Print block variables
 	def printSymbols(Block b, String separator)'''
 		«FOR s: b.statements SEPARATOR separator»
 			«IF s.symbol != null»
 				«s.symbol.print»
 			«ENDIF»
+		«ENDFOR»
+	'''	
+
+	//Print block
+	def printExcludingLists(ObservationBlock b)'''
+		«FOR s: b.statements»
+			«s.printExcludingLists»
 		«ENDFOR»
 	'''	
 	
@@ -717,6 +662,13 @@ class MdlPrinting {
 			«s.print»
 		«ENDFOR»
 	'''	
+
+	//Print block
+	def printExcludingLists(MixtureBlock b)'''
+		«FOR s: b.statements»
+			«s.printExcludingLists»
+		«ENDFOR»
+	'''	
 		
 	//Print variableDeclaration names
 	def printSymbolDeclarationNames(Block b, String separator)'''
@@ -730,9 +682,20 @@ class MdlPrinting {
 		«IF st.symbol != null»«st.symbol.print»«ENDIF»
 		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
 		«IF st.statement != null»«st.statement.print»«ENDIF»
+		«IF st.targetBlock != null»«st.targetBlock.print»«ENDIF»
 		'''
-		//«IF st.targetBlock != null»«st.targetBlock.print»«ENDIF»
 
+	//Get variableDeclaration identifier from each declaration and each statement
+	def printExcludingLists(BlockStatement st)'''
+		«IF st.symbol != null»«st.symbol.printExcludingLists»«ENDIF»
+		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
+		«IF st.statement != null»«st.statement.print»«ENDIF»
+		«IF st.targetBlock != null»«st.targetBlock.print»«ENDIF»
+		'''
+		
+	//Print variableDeclaration declaration
+	def printExcludingLists(SymbolDeclaration v)'''«IF v.expression != null»«IF v.expression.expression != null»«v.print»«ENDIF»«ENDIF»'''
+	
 	//Print function call
 	def print(FunctionCall call)'''«call.identifier.toStr»(«call.arguments.print»)'''
 	

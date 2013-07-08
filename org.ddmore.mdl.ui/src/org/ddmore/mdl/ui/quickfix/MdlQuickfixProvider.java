@@ -4,6 +4,7 @@ package org.ddmore.mdl.ui.quickfix;
 import java.awt.image.renderable.ParameterBlock;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.ddmore.mdl.mdl.AdditiveExpression;
@@ -23,13 +24,14 @@ import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
+import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.GroupVariablesBlock;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.HeaderBlock;
+import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InlineBlock;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
-import org.ddmore.mdl.mdl.LevelType;
 import org.ddmore.mdl.mdl.Likelyhood;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.Mcl;
@@ -61,6 +63,7 @@ import org.ddmore.mdl.mdl.SymbolList;
 import org.ddmore.mdl.mdl.SymbolModification;
 import org.ddmore.mdl.mdl.TargetLanguage;
 import org.ddmore.mdl.mdl.UnaryExpression;
+import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
@@ -68,6 +71,7 @@ import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.HeaderBlockImpl;
+import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.InlineBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
@@ -78,6 +82,7 @@ import org.ddmore.mdl.mdl.impl.SymbolModificationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.ddmore.mdl.validation.MdlJavaValidator;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.ui.editor.model.edit.IModificationContext;
@@ -94,7 +99,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
     //Fix attributes
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 	@Fix(MdlJavaValidator.MSG_ATTRIBUTE_UNKNOWN)
-	public void addAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
+	public void removeAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String attribute = issue.getData()[0];
 		String description = "Remove attribute '" + attribute + "'";
 		acceptor.accept(issue, description, description, "remove.png",new ISemanticModification() {
@@ -107,17 +112,14 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	}
 	
 	@Fix(MdlJavaValidator.MSG_ATTRIBUTE_MISSING)
-	public void removeAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
+	public void addAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String attrName = issue.getData()[0];
 		String description = "Insert attribute '" + attrName +"'";
 		acceptor.accept(issue, description, description, "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				Argument newArg = MdlFactory.eINSTANCE.createArgument();
-				newArg.setIdentifier(attrName);			
 				String value  = defaultAttributeValues.get(attrName);
 				if (value == null) value = "";
-				AnyExpression expr = createAttributeExpression(attrName, value);
-				newArg.setExpression(expr);
+				Argument newArg = createArgument(attrName, value);
 				Arguments args = (Arguments)element;
 				args.getArguments().add(0, newArg);
 			} 
@@ -153,7 +155,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
     final static List<String> categorical_values = Arrays.asList("categorical");
     final static List<String> covariate_values = Arrays.asList("covariate");
     final static List<String> distribution_values = Arrays.asList("Normal", "Binomial", "Poisson", "Student_T", "MVNormal");
-    final static List<String> level_values = Arrays.asList("mdv", "id", "dv", "idv");
+    final static List<String> use_values = Arrays.asList("mdv", "id", "dv", "idv", "dvid", "amt");
     final static List<String> likelyhood_values = Arrays.asList("likelyhood");
     final static List<String> missing_values = Arrays.asList("missing");
     
@@ -180,8 +182,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			return createCovariateExpression(value);
 		if (distribution_values.contains(value))
 			return createDistributionExpression(value);
-		if (level_values.contains(value))
-			return createLevelExpression(value);
+		if (use_values.contains(value))
+			return createUseExpression(value);
 		if (likelyhood_values.contains(value))
 			return createLikelyhoodExpression(value);
 		if (missing_values.contains(value))
@@ -210,11 +212,11 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return expr;
 	}
 	
-	private AnyExpression createLevelExpression(String value) {
-		LevelType tl = MdlFactory.eINSTANCE.createLevelType();
+	private AnyExpression createUseExpression(String value) {
+		UseType tl = MdlFactory.eINSTANCE.createUseType();
 		tl.setIdentifier(value);
 		EnumType t = MdlFactory.eINSTANCE.createEnumType();
-		t.setLevel(tl);
+		t.setUse(tl);
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		expr.setType(t);
 		return expr;
@@ -370,14 +372,28 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		list.setIdentifier("list");
 		Arguments args = MdlFactory.eINSTANCE.createArguments();				
 		for (int i = 0; i< attrNames.length; i++){
-			Argument attr = MdlFactory.eINSTANCE.createArgument();
-			attr.setIdentifier(attrNames[i]);
-			AnyExpression attrExpr = createAttributeExpression(attrNames[i], attrValues[i]);
-			attr.setExpression(attrExpr);
+			Argument attr = createArgument(attrNames[i], attrValues[i]);
 			args.getArguments().add(attr);
 		}
 		list.setArguments(args);
 		return list;
+	}
+	
+	Argument createArgument(String attrName, String attrValue){
+		Argument attr = MdlFactory.eINSTANCE.createArgument();
+		if (attrName != null)
+			attr.setIdentifier(attrName);
+		AnyExpression attrExpr = createAttributeExpression(attrName, attrValue);
+		attr.setExpression(attrExpr);
+		return attr;
+	}
+	
+	Argument createArgumentWithExpression(String attrName, AnyExpression attrExpr){
+		Argument attr = MdlFactory.eINSTANCE.createArgument();
+		if (attrName != null)
+			attr.setIdentifier(attrName);
+		attr.setExpression(attrExpr);
+		return attr;
 	}
 	
 	RandomList createRandomList(String[] attrNames, String[] attrValues){
@@ -385,10 +401,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		list.setIdentifier("~");
 		Arguments args = MdlFactory.eINSTANCE.createArguments();				
 		for (int i = 0; i< attrNames.length; i++){
-			Argument attr = MdlFactory.eINSTANCE.createArgument();
-			attr.setIdentifier(attrNames[i]);
-			AnyExpression attrExpr = createAttributeExpression(attrNames[i], attrValues[i]);
-			attr.setExpression(attrExpr);
+			Argument attr = createArgument(attrNames[i], attrValues[i]);
 			args.getArguments().add(attr);
 		}
 		list.setArguments(args);
@@ -884,4 +897,64 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	//PRIOR_PARAMETERS
 	//block, diag, same
+	
+	//Insert imported function to IMPORT block
+	@Fix(MdlJavaValidator.MSG_FUNCTION_UNKNOWN)
+	public void addImportedFunction(final Issue issue, IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, "Declare function in IMPORT block", 
+				"Declare function in IMPORT block", "add.png", new ISemanticModification() {
+			public void apply(EObject element, IModificationContext context) {
+				Resource resource = element.eResource();
+				TreeIterator<EObject> iterator = resource.getAllContents();
+			    while (iterator.hasNext()){
+			    	EObject obj = iterator.next();
+			    	if (obj instanceof ImportBlockImpl){
+			    		ImportedFunction importedFunct = MdlFactory.eINSTANCE.createImportedFunction();
+			    		FunctionCall funcCall = (FunctionCall)element;
+			    		String funcName = funcCall.getIdentifier().getIdentifier(); 
+			    		importedFunct.setIdentifier(funcName);
+
+						//Create a list of parameters
+			    		Iterator<Argument> argIterator = funcCall.getArguments().getArguments().iterator();
+			    		org.ddmore.mdl.mdl.List paramList = MdlFactory.eINSTANCE.createList();	
+						paramList.setIdentifier("list");
+						Arguments paramListArgs = MdlFactory.eINSTANCE.createArguments();		
+						AnyExpression paramExpr = MdlFactory.eINSTANCE.createAnyExpression();		
+					    int k = 1;
+						while(argIterator.hasNext()){
+					    	Argument x = argIterator.next(); 	
+					    	Argument attr = null;
+					    	if (x.getIdentifier() != null){
+					    		attr = createArgument(null, x.getIdentifier());
+					    	} else {
+					    		attr = createArgument(null, "unnamedParam" + k++);
+					    	}
+				    		paramListArgs.getArguments().add(attr);
+					    }
+						paramList.setArguments(paramListArgs);
+						paramExpr.setList(paramList);
+					
+						String[] attrNames = {"target", "name", "param"};
+			    		AnyExpression[] attrValues = {createTargetLanguageExpression("NMTRAN_CODE"), createStringExpression(funcName),
+			    				paramExpr};
+
+			    		org.ddmore.mdl.mdl.List list = MdlFactory.eINSTANCE.createList();		
+			    		list.setIdentifier("list");
+
+			    		Arguments args = MdlFactory.eINSTANCE.createArguments();				
+			    		for (int i = 0; i < attrNames.length; i++){
+			    			Argument attr = createArgumentWithExpression(attrNames[i], attrValues[i]);
+			    			args.getArguments().add(attr);
+			    		}
+			    		list.setArguments(args);
+			    		importedFunct.setList(list);	
+			    		((ImportBlockImpl) obj).getFunctions().add(importedFunct);
+			    		return;
+			    	}
+			    }
+			}
+			//No import block exists, create one in the nearest object
+			//...
+		});
+	}
 }

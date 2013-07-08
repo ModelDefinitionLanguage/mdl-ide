@@ -3,8 +3,13 @@
  */
 package org.ddmore.mdl.formatting;
 
+import org.ddmore.mdl.services.MdlGrammarAccess;
+import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.formatting.impl.AbstractDeclarativeFormatter;
 import org.eclipse.xtext.formatting.impl.FormattingConfig;
+import org.eclipse.xtext.util.Pair;
+
+import com.google.inject.Inject;
 
 /**
  * This class contains custom formatting description.
@@ -16,12 +21,113 @@ import org.eclipse.xtext.formatting.impl.FormattingConfig;
  */
 public class MdlFormatter extends AbstractDeclarativeFormatter {
 	
+	@Inject
+	private MdlGrammarAccess f = (MdlGrammarAccess) getGrammarAccess();
+	
 	@Override
 	protected void configureFormatting(FormattingConfig c) {
-// It's usually a good idea to activate the following three statements.
-// They will add and preserve newlines around comments
-//		c.setLinewrap(0, 1, 2).before(getGrammarAccess().getSL_COMMENTRule());
-//		c.setLinewrap(0, 1, 2).before(getGrammarAccess().getML_COMMENTRule());
-//		c.setLinewrap(0, 1, 1).after(getGrammarAccess().getML_COMMENTRule());
+	// It's usually a good idea to activate the following three statements.
+	// They will add and preserve newlines around comments
+
+		c.setAutoLinewrap(120);
+		//c.setLinewrap(1).before(f.getSL_COMMENTRule());
+		//c.setLinewrap(1).before(f.getML_COMMENTRule());
+		//c.setLinewrap(1).after(f.getML_COMMENTRule());
+	
+		for (Pair<Keyword, Keyword> pair: f.findKeywordPairs("(", ")")) {
+			c.setNoSpace().after(pair.getFirst());
+			c.setNoSpace().before(pair.getSecond());
+		}		
+		
+		for (Keyword comma : f.findKeywords(",")) {
+			c.setNoSpace().before(comma);
+		}
+		
+		for (Keyword openBracket : f.findKeywords("(")) {
+			c.setNoSpace().before(openBracket);
+		}
+
+		c.setLinewrap(2).after(f.getMclObjectRule());
+		
+		//c.setLinewrap(1).before(f.getENDRule());
+		c.setIndentationIncrement().after(f.getBEGINRule());
+		c.setIndentationDecrement().before(f.getENDRule());
+		
+		c.setLinewrap(2).before(f.getIndividualVariablesBlockRule());
+		c.setLinewrap(2).before(f.getModelPredictionBlockRule());
+		c.setLinewrap(2).before(f.getRandomVariableDefinitionBlockRule());
+		c.setLinewrap(2).before(f.getInputVariablesBlockRule());
+		c.setLinewrap(2).before(f.getStructuralParametersBlockRule());
+		c.setLinewrap(2).before(f.getVariabilityParametersBlockRule());
+		c.setLinewrap(2).before(f.getOutputVariablesBlockRule());
+		c.setLinewrap(2).before(f.getGroupVariablesBlockRule());
+		c.setLinewrap(2).before(f.getObservationBlockRule());
+		c.setLinewrap(2).before(f.getEstimationBlockRule());
+		c.setLinewrap(2).before(f.getSimulationBlockRule());
+
+		c.setLinewrap(2).before(f.getStructuralBlockRule());
+		c.setLinewrap(2).before(f.getVariabilityBlockRule());
+		c.setLinewrap(2).before(f.getPriorParametersBlockRule());
+
+		c.setLinewrap(2).before(f.getHeaderBlockRule());
+		c.setLinewrap(2).before(f.getFileBlockRule());
+		
+		c.setLinewrap(2).before(f.getTaskFunctionDeclarationRule());
+		c.setLinewrap(2).before(f.getParameterBlockRule());
+		c.setLinewrap(2).before(f.getDataBlockRule());
+		c.setLinewrap(2).before(f.getModelBlockRule());
+	
+		c.setLinewrap(1).before(f.getTargetBlockRule());
+		c.setIndentation(f.getTargetBlockAccess().getBEGINTerminalRuleCall_2(), f.getTargetBlockAccess().getENDTerminalRuleCall_4());
+
+		c.setLinewrap(2).before(f.getImportBlockRule());		
+				
+		c.setLinewrap(1).before(f.getSymbolDeclarationRule());
+		c.setLinewrap(1).before(f.getParameterDeclarationRule());
+		c.setLinewrap(1).before(f.getSymbolModificationRule());
+		c.setLinewrap(1).before(f.getDesignBlockStatementRule());
+		c.setLinewrap(1).before(f.getConditionalStatementRule());
+		c.setLinewrap(1).before(f.getBlockStatementRule());
+		
+		//If statement
+		c.setLinewrap(1).after(f.getConditionalStatementAccess().getParExpressionAssignment_1());
+		c.setIndentationIncrement().before(f.getConditionalStatementAccess().getIfStatementAssignment_2_0());
+		c.setIndentationDecrement().after(f.getConditionalStatementAccess().getIfStatementAssignment_2_0());
+		c.setIndentationIncrement().before(f.getConditionalStatementAccess().getElseStatementAssignment_3_1_0());
+		c.setIndentationDecrement().after(f.getConditionalStatementAccess().getElseStatementAssignment_3_1_0());
+		
+		c.setLinewrap(1).before(f.getModelPredictionBlockStatementRule());
+		c.setLinewrap(1).before(f.getIgnoreListRule());
+		c.setLinewrap(1).before(f.getAcceptListRule());
+		c.setLinewrap(1).before(f.getDropListRule());
+		
+		c.setLinewrap(1).before(f.getStructuralParametersBlockAccess().getParametersAssignment_2());
+		c.setLinewrap(1).before(f.getVariabilityParametersBlockAccess().getParametersAssignment_2());
+		c.setLinewrap(1).before(f.getOutputVariablesBlockAccess().getVariablesAssignment_2());
+		
+		c.setLinewrap(1).before(f.getGroupVariablesBlockStatementRule());
+		c.setLinewrap(1).before(f.getVariabilityBlockStatementRule());
+		c.setLinewrap(1).before(f.getFileBlockStatementRule());
+		c.setLinewrap(1).before(f.getDataBlockStatementRule());
+		c.setLinewrap(1).before(f.getModelBlockStatementRule());
+		c.setLinewrap(1).before(f.getFunctionCallStatementRule());
+		c.setLinewrap(1).before(f.getImportedFunctionRule());
+		c.setLinewrap(1).before(f.getLibraryBlockRule());
+		c.setLinewrap(1).before(f.getOdeBlockRule());
+
+		c.setLinewrap(1).before(f.getInlineBlockAccess().getVariablesAssignment_2());
+		c.setLinewrap(1).before(f.getInlineBlockAccess().getValuesAssignment_3());
+		c.setLinewrap(1).before(f.getRScriptBlockStatementRule());
+		
+		c.setLinewrap(1).before(f.getTaskFunctionDeclarationRule());
+		c.setLinewrap(1).before(f.getTaskFunctionDeclarationAccess().getFunctionBodyAssignment_6());
+		c.setLinewrap(1).before(f.getTaskFunctionDeclarationAccess().getFunctionBodyAssignment_6());
+		
+		c.setLinewrap(1).before(f.getTaskFunctionBlockRule());
+			
+		c.setLinewrap(1).before(f.getBlockBlockAccess().getParametersAssignment_4_1());
+		c.setLinewrap(1).before(f.getDiagBlockAccess().getParametersAssignment_4_1());
+		c.setLinewrap(1).before(f.getSameBlockAccess().getParametersAssignment_4_1());
+
 	}
 }
