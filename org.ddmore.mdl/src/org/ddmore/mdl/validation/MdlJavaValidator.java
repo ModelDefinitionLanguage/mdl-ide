@@ -244,7 +244,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	}
 	
 	private void addSymbol(ArrayList<String> list, ArrayList<BlockStatement> ifBlocks, ArrayList<BlockStatement> elseBlocks){
-		//Add symbols defined in both braches of nested conditional statements 
+		//Add symbols defined in both branches of nested conditional statements 
 		ArrayList<String> ifSymbols = new ArrayList<String>();
 		ArrayList<String> elseSymbols = new ArrayList<String>();
 		for (BlockStatement b: ifBlocks){
