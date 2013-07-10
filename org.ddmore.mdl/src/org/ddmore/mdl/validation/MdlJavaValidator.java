@@ -193,9 +193,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//List of declared parameters per object
 	static HashMap<String, ArrayList<String>> declaredParameters = new HashMap<String, ArrayList<String>>();
 
-	//List of partially declared variables (if then else)
-	//static HashMap<String, ArrayList<String>> partiallyDeclaredVariables = new HashMap<String, ArrayList<String>>();
-
 	//Checks whether the symbol is declared
 	private boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, String id, ObjectName objName){
 		if (objName != null)
@@ -235,7 +232,46 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			if (st.getSymbol() != null){
 				list.add(st.getSymbol().getIdentifier());
 			}
+			//conditional declarations
+			if (st.getStatement() != null){
+				ConditionalStatement e = st.getStatement();
+				ArrayList<BlockStatement> ifBlocks = new ArrayList<BlockStatement>();
+				ArrayList<BlockStatement> elseBlocks = new ArrayList<BlockStatement>();
+				if (e.getIfStatement() != null)
+					ifBlocks.add(e.getIfStatement());	
+				if (e.getIfBlock() != null) {
+					for (BlockStatement b: e.getIfBlock().getStatements())
+						ifBlocks.add(b);
+				}
+				if (e.getElseStatement() != null)
+					elseBlocks.add(e.getElseStatement());
+				if (e.getElseBlock() !=null){
+					for (BlockStatement b: e.getElseBlock().getStatements())
+						elseBlocks.add(b);
+				}
+				addSymbol(list, ifBlocks, elseBlocks);
+			}
 		}
+	}
+	
+	private void addSymbol(ArrayList<String> list, ArrayList<BlockStatement> ifBlocks, ArrayList<BlockStatement> elseBlocks){
+		for (BlockStatement b: ifBlocks){
+			if (b.getSymbol() != null){
+				String symbolName = b.getSymbol().getIdentifier();
+				if (isSymbolDefined(elseBlocks, symbolName)) {
+					list.add(symbolName);
+				}				
+			}
+		}
+	}
+	
+	private boolean isSymbolDefined(ArrayList<BlockStatement> blocks, String name){
+		for (BlockStatement b: blocks){
+			if (b.getSymbol() != null){
+				if (b.getSymbol().getIdentifier().equals(name)) return true;				
+			}
+		}
+		return false;
 	}
 	
 	//Add a symbol to a list of known symbols
@@ -429,6 +465,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			}
 		}
 	}
+	
 	
 	//Update the list of recognised parameters
 	@Check
