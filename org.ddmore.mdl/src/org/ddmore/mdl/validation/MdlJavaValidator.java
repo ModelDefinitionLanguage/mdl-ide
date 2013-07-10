@@ -193,9 +193,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//List of declared parameters per object
 	static HashMap<String, ArrayList<String>> declaredParameters = new HashMap<String, ArrayList<String>>();
 
-	//List of partially declared variables (if then else)
-	//static HashMap<String, ArrayList<String>> partiallyDeclaredVariables = new HashMap<String, ArrayList<String>>();
-
 	//Checks whether the symbol is declared
 	private boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, String id, ObjectName objName){
 		if (objName != null)
@@ -235,7 +232,75 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			if (st.getSymbol() != null){
 				list.add(st.getSymbol().getIdentifier());
 			}
+			//conditional declarations
+			if (st.getStatement() != null){
+				ConditionalStatement e = st.getStatement();
+				ArrayList<BlockStatement> ifBlocks = new ArrayList<BlockStatement>();
+				ArrayList<BlockStatement> elseBlocks = new ArrayList<BlockStatement>();
+				prepareConditionalBlocks(e, ifBlocks, elseBlocks);
+				addSymbol(list, ifBlocks, elseBlocks);
+			}
 		}
+	}
+	
+	private void addSymbol(ArrayList<String> list, ArrayList<BlockStatement> ifBlocks, ArrayList<BlockStatement> elseBlocks){
+		//Add symbols defined in both braches of nested conditional statements 
+		ArrayList<String> ifSymbols = new ArrayList<String>();
+		ArrayList<String> elseSymbols = new ArrayList<String>();
+		for (BlockStatement b: ifBlocks){
+			if (b.getStatement() != null){
+				ConditionalStatement e = b.getStatement();
+				ArrayList<BlockStatement> ifBlocks1 = new ArrayList<BlockStatement>();
+				ArrayList<BlockStatement> elseBlocks1 = new ArrayList<BlockStatement>();
+				prepareConditionalBlocks(e, ifBlocks1, elseBlocks1);
+				addSymbol(ifSymbols, ifBlocks1, elseBlocks1);
+			}
+		}
+		for (BlockStatement b: elseBlocks){
+			if (b.getStatement() != null){
+				ConditionalStatement e = b.getStatement();
+				ArrayList<BlockStatement> ifBlocks1 = new ArrayList<BlockStatement>();
+				ArrayList<BlockStatement> elseBlocks1 = new ArrayList<BlockStatement>();
+				prepareConditionalBlocks(e, ifBlocks1, elseBlocks1);
+				addSymbol(elseSymbols, ifBlocks1, elseBlocks1);
+			}
+		}
+		for (String s: ifSymbols){
+			if (isSymbolDefined(elseBlocks, s) || elseSymbols.contains(s)) list.add(s);
+		}
+		//BlockStatement is an unconditional symbol declaration
+		for (BlockStatement b: ifBlocks){
+			if (b.getSymbol() != null){
+				String s = b.getSymbol().getIdentifier();
+				if (isSymbolDefined(elseBlocks, s) || elseSymbols.contains(s)) {
+					list.add(s);
+				}				
+			}
+		}
+	}
+	
+	private void prepareConditionalBlocks(ConditionalStatement e, ArrayList<BlockStatement> ifBlocks, ArrayList<BlockStatement> elseBlocks){
+		if (e.getIfStatement() != null)
+			ifBlocks.add(e.getIfStatement());	
+		if (e.getIfBlock() != null) {
+			for (BlockStatement b: e.getIfBlock().getStatements())
+				ifBlocks.add(b);
+		}
+		if (e.getElseStatement() != null)
+			elseBlocks.add(e.getElseStatement());
+		if (e.getElseBlock() !=null){
+			for (BlockStatement b: e.getElseBlock().getStatements())
+				elseBlocks.add(b);
+		}
+	}
+	
+	private boolean isSymbolDefined(ArrayList<BlockStatement> blocks, String name){
+		for (BlockStatement b: blocks){
+			if (b.getSymbol() != null){
+				if (b.getSymbol().getIdentifier().equals(name)) return true;				
+			}
+		}
+		return false;
 	}
 	
 	//Add a symbol to a list of known symbols
@@ -429,6 +494,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			}
 		}
 	}
+	
 	
 	//Update the list of recognised parameters
 	@Check
