@@ -39,6 +39,8 @@ public class RunJobOnTES {
                         new ResultsFiles(project, job));
                 resultJob.setRule(new SerialSchedulingRule());
                 resultJob.schedule();
+            } else {
+                LOGGER.error("Job can not be run as R script (reportGeneration.R) is missing");
             }
         } else {
             LOGGER.error("Job can not be run as missing a file [model file exists: " + file.exists() + "] [data file exists: "
