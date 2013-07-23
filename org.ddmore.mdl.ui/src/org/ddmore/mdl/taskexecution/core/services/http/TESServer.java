@@ -126,6 +126,7 @@ public class TESServer {
         if (execFile.endsWith(".R")) {
             builder.setExecutionType(ExecutionType.R_Script.toString());
             builder.setCommand("/opt/mango/R/2.13.1/bin/Rscript");
+            builder.setGridHostPreamble("export R_LIBS_USER=/opt/mango/Rpackages/ddmore");
         } else {
             builder.setExecutionType(ExecutionType.NMFE.toString());
         }
