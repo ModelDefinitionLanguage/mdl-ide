@@ -35,6 +35,12 @@ public class TESExecJob extends Job {
     private transient MonitorTaskProgressJob monitorJob;
     private transient Job resultsJob;
 
+    public TESExecJob(final String name, final IFile model) {
+        super(name);
+        this.modelFile = model;
+        this.results = null;
+    }
+
     public TESExecJob(final String name, final IFile model, final IFile data) {
         super(name);
         this.modelFile = model;
@@ -70,7 +76,12 @@ public class TESExecJob extends Job {
                 this.dataFiles.addAll(this.results.get());
             }
 
-            publishInputjob = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile, dataFiles);
+            if (dataFiles.isEmpty()) {
+            	publishInputjob = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile);
+            } else {
+            	publishInputjob = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile, dataFiles);
+            }
+
             publishInputjob.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
             publishInputjob.setUser(true);
             publishInputjob.addJobChangeListener(new JobChangeAdapter() {

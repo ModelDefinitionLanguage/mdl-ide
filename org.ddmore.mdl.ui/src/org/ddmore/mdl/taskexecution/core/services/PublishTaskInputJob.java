@@ -36,6 +36,11 @@ public class PublishTaskInputJob extends Job {
     private transient String requestId;
     private transient String jobId;
 
+    public PublishTaskInputJob(final String name, final IFile model) {
+        super(name);
+        this.modelFile = model;
+    }
+
     /**
      * @param name the name of the job
      */

@@ -23,29 +23,42 @@ public class RunJobOnTES {
         IProject project = file.getProject();
         IFile dataFile = project.getFile(file.getParent().getProjectRelativePath() + "/" + dataFileName);
 
-        LOGGER.debug("Executing a job with the following inputs: " + file.getProjectRelativePath() + " and "
-            + dataFile.getProjectRelativePath() + "]");
-        if (file.exists() && dataFile.exists()) {
-            TESExecJob job = new TESExecJob("Running Job on Task Execution Service (" + file.getName() + ")", file, dataFile);
-            job.setUser(true);
-            job.setRule(new SerialSchedulingRule());
-            job.schedule();
+        LOGGER.debug("Executing a job with the following inputs: " + file.getProjectRelativePath() + " and " + dataFile.getProjectRelativePath() + "]");
 
-            // FIXME also run R (for demo)
-            IFile rFile = project.getFile(file.getParent().getProjectRelativePath() + "/reportGeneration.R");
-            if (rFile.exists()) {
+        if (file.exists()) {
 
-                TESExecJob resultJob = new TESExecJob("Running Job on Task Execution Service (" + rFile.getName() + ")", rFile, dataFile,
-                        new ResultsFiles(project, job));
-                resultJob.setRule(new SerialSchedulingRule());
-                resultJob.schedule();
-            } else {
-                LOGGER.error("Job can not be run as R script (reportGeneration.R) is missing");
-            }
+        	TESExecJob job = null;
+
+        	if (!dataFileName.isEmpty() && !dataFile.exists()) {
+        		LOGGER.error("Job can not be run as data file [" + dataFileName + "] missing [model file exists: " + file.exists() +
+            			"] [data file exists: " + dataFile.exists() + "]");
+        		return;
+        	}
+
+        	if (dataFileName.isEmpty()) {
+        		job = new TESExecJob("Running Job (without data file) on Task Execution Service (" + file.getName() + ")", file);
+        	} else {
+        		job = new TESExecJob("Running Job (with data file) on Task Execution Service (" + file.getName() + ")", file, dataFile);
+        	}
+
+       		job.setUser(true);
+       		job.setRule(new SerialSchedulingRule());
+       		job.schedule();
+
+       		// FIXME also run R (for demo)
+       		IFile rFile = project.getFile(file.getParent().getProjectRelativePath() + "/reportGeneration.R");
+
+       		if (rFile.exists()) {
+       			TESExecJob resultJob = new TESExecJob("Running Job on Task Execution Service (" + rFile.getName() + ")",
+        				rFile, dataFile, new ResultsFiles(project, job));
+       			resultJob.setRule(new SerialSchedulingRule());
+       			resultJob.schedule();
+       		} else {
+       			LOGGER.error("Job can not be run as R script (reportGeneration.R) is missing");
+       		}
         } else {
-            LOGGER.error("Job can not be run as missing a file [model file exists: " + file.exists() + "] [data file exists: "
-                + dataFile.exists() + "]");
-        }
+        		LOGGER.error("Job can not be run as model file [" + file + "] missing [model file exists: " + file.exists() + "]");
+       	}
     }
 
     private class SerialSchedulingRule implements ISchedulingRule {
