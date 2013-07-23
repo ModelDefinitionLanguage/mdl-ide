@@ -210,8 +210,8 @@ class Mdl2Nonmem extends MdlPrinting{
 		for (b: o.blocks){
 	  		if (b.structuralParametersBlock != null){
 				for (id: b.structuralParametersBlock.parameters) {
-					if (theta_vars.get(id) == null){
-						theta_vars.put(id, i);
+					if (theta_vars.get(id.toStr) == null){
+						theta_vars.put(id.toStr, i);
 						i = i + 1;
 					}
 				}
@@ -363,10 +363,13 @@ class Mdl2Nonmem extends MdlPrinting{
 		«ENDIF»
 		«IF b.modelPredictionBlock != null»
 
-			;initial conditions
-			«FOR e: init_vars.entrySet»
-				A_0(«e.key») = «e.value»
-			«ENDFOR»
+			«IF init_vars.entrySet.size > 0»
+				;initial conditions
+			
+				«FOR e: init_vars.entrySet»
+					A_0(«e.key») = «e.value»
+				«ENDFOR»
+			«ENDIF»
 		«ENDIF»
 		«ENDFOR»
 		'''
@@ -483,7 +486,7 @@ class Mdl2Nonmem extends MdlPrinting{
 					val model = st.expression.arguments.selectAttribute("model");
 					val trans = st.expression.arguments.selectAttribute("trans");
 					val tol = b.eResource.getTOL;
-					return '''$SUBR «IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF» TOL = «tol» «IF !trans.equals("")»TRANS«trans»«ENDIF»'''
+					return '''$SUBR «IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF» «IF !trans.equals("")»TRANS«trans»«ENDIF» «IF !tol.equals("")»TOL = «tol»«ENDIF»'''
 				}
 			}
 		}
@@ -497,7 +500,7 @@ class Mdl2Nonmem extends MdlPrinting{
 			«IF bb.variables.size > 0»
 				$TABLE «FOR st: bb.variables SEPARATOR ' '»«st.toStr»«ENDFOR»
 				«val file = o.eResource.getTaskObjectName»
-				ONEHEADER NOPRINT «IF !file.equals("")»FILE=«file»".fit"«ENDIF» 
+				ONEHEADER NOPRINT «IF !file.equals("")»FILE=«file».fit«ENDIF» 
 				«getExternalCode("$TABLE")»
 			«ENDIF»
 		«ENDIF»	
@@ -691,7 +694,7 @@ class Mdl2Nonmem extends MdlPrinting{
 			«IF b.dataBlock !=  null»
 				«FOR DataBlockStatement block: b.dataBlock.statements»
 				«IF block.ignoreList != null»
-					«block.ignoreList.identifier» = («block.ignoreList.expression.toStr» )
+					«block.ignoreList.identifier» («block.ignoreList.expression.toStr»)
 				«ENDIF»
 				«ENDFOR»
 			«ENDIF»
