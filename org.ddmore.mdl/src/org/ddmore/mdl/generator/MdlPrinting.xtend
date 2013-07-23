@@ -125,7 +125,7 @@ class MdlPrinting {
 			for (pair: externalFunctions.entrySet){
 				val str = pair.key as String;
 				if (str != null){
-					val functID = str.substring(str.indexOf("$"));
+					val functID = str.substring(str.indexOf("$") + 1);
 					if (functID.equals(ref.identifier)) return pair.value; 
 				}
 			}
@@ -554,7 +554,7 @@ class MdlPrinting {
 	
 	def String toStr(Selector s) { 
 		if (s.identifier != null)
-			return "." + s.identifier;
+			return "." + s.identifier.identifier;
 		if (s.selector != null)
 			return "[" + s.selector + "]";
 	}
