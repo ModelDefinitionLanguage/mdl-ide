@@ -957,6 +957,7 @@ class Mdl2Nonmem extends MdlPrinting{
 					«s.elseBlock.printExcludingLists»
 				«ENDIF»
 			«ENDIF»
+			ENDIF
 		«ENDIF»
 	'''
 }
