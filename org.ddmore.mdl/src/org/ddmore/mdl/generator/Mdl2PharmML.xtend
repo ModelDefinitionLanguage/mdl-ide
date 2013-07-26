@@ -26,7 +26,15 @@ import org.ddmore.mdl.mdl.ModelObjectBlock
 
 class Mdl2PharmML extends Mdl2Nonmem{
 	
-	
+	val	xsi="http://www.w3.org/2001/XMLSchema-instance"; 
+	val xsi_schemaLocation="http://www.pharmml.org/2013/03/PharmML http://www.pharmml.org/2013/03/PharmML";
+	val xmlns_pharmML="http://www.pharmml.org/2013/03/PharmML";
+	val xmlns_math="http://www.pharmml.org/2013/03/Maths";
+	val xmlns_ct="http://www.pharmml.org/2013/03/CommonTypes";
+	val xmlns_mdef="http://www.pharmml.org/2013/03/ModelDefinition";
+	val xmlns_mstep="http://www.pharmml.org/2013/03/ModellingSteps";
+	val xmlns_design="http://www.pharmml.org/2013/03/TrialDesign";
+	val xmlns_uncert="http://www.pharmml.org/2013/03/Uncertainty";
 	
 	//Print file name and analyse all MCL objects in the source file
   	def convertToPharmML(Mcl m){
@@ -40,29 +48,30 @@ class Mdl2PharmML extends Mdl2Nonmem{
 		<PharmML 
 			«print_PharmML_NameSpaces»
 			name="«m.eResource.fileName»"
-			«IF printIndependent»
-			independentVar="t" 
-			«ENDIF»
+			«IF printIndependent»independentVar="t"«ENDIF»
 			writtenVersion="0.1">
   			«FOR o:m.objects»«o.print_mdef_ModelDefinition»«ENDFOR»
 		</PharmML>
 		'''
 	}
 	
-	def print_PharmML_NameSpaces()'''
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns="http://www.pharmml.org/2013/03/PharmML"
-	xsi:schemaLocation="http://www.pharmml.org/2013/03/PharmML http://www.pharmml.org/2013/03/PharmML"
-	xmlns:math="http://www.pharmml.org/2013/03/Maths"
-	xmlns:ct="http://www.pharmml.org/2013/03/CommonTypes"
-	xmlns:mdef="http://www.pharmml.org/2013/03/ModelDefinition"
-	xmlns:mstep="http://www.pharmml.org/2013/03/ModellingSteps"
-	xmlns:design="http://www.pharmml.org/2013/03/TrialDesign"
-	xmlns:uncert="http://www.pharmml.org/2013/03/Uncertainty"
-	'''
+	//Print PharmML namespaces
+	def print_PharmML_NameSpaces()
+		'''
+		xmlns:xsi="«xsi»" 
+		xmlns="«xmlns_pharmML»"
+		xsi:schemaLocation="«xsi_schemaLocation»"
+		xmlns:math="«xmlns_math»"
+		xmlns:ct="«xmlns_ct»"
+		xmlns:mdef="«xmlns_mdef»"
+		xmlns:mstep="«xmlns_mstep»"
+		xmlns:design="«xmlns_design»"
+		xmlns:uncert="«xmlns_uncert»"
+		'''
 	
-	//Returns true if there is one input variable with use=idv (individual)
-	def boolean isIndependentVariableDefined(Mcl m){
+
+	//Print mapping for the input variables with use=idv (individual)
+	def printIndependentVariables(Mcl m){
 		for (MclObject obj: m.objects){
 			if (obj.modelObject != null){
 				for (ModelObjectBlock block: obj.modelObject.blocks){
@@ -71,8 +80,14 @@ class Mdl2PharmML extends Mdl2Nonmem{
 							if (s.expression != null){
 								if (s.expression.list != null){
 									var use = s.expression.list.getAttribute("use");
-									if (use.equalsIgnoreCase("idv"))
-										return true;
+									if (use.equalsIgnoreCase("idv")){
+										val varName = s.identifier;
+										return '''
+										<Mapping columnName="«varName»">
+											<Var xmlns="«xmlns_math»" symbId="t"/>
+										</Mapping>
+                						'''
+                					}
 								}
 							}
 						}
@@ -80,14 +95,12 @@ class Mdl2PharmML extends Mdl2Nonmem{
 				}
 			}
 		}
-		return false;
-	}
-	
-	
-	
+	}	
+
+
 	//convertToPharmML MCL objects (!!! add namespace to model definition)
 	def print_mdef_ModelDefinition(MclObject o)'''
-	<ModelDefinition>
+	<ModelDefinition xmlns="«xmlns_mdef»">
 		«IF o.parameterObject != null»«o.parameterObject.print_mdef_ParameterModel»«ENDIF»
 		«IF o.modelObject != null»
 		«o.modelObject.print_mdef_StructuralModel»
@@ -95,7 +108,7 @@ class Mdl2PharmML extends Mdl2Nonmem{
 		«ENDIF»
 	</ModelDefinition>
 	'''
-
+	
 	//////////////////////////////////////////////////////////
 	//PharmML types
 	//////////////////////////////////////////////////////////
@@ -341,4 +354,30 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	def print_Math_symbId(String str)'''
 	symbId = "«str»"
 	'''
+	
+	//////////////////////////////////////////////////////////
+	//Helper functions
+	//////////////////////////////////////////////////////////
+	//Return true if an input variable with use=idv (individual) is edfined
+	def isIndependentVariableDefined(Mcl m){
+		for (MclObject obj: m.objects){
+			if (obj.modelObject != null){
+				for (ModelObjectBlock block: obj.modelObject.blocks){
+					if (block.inputVariablesBlock != null){
+						for (SymbolDeclaration s: block.inputVariablesBlock.variables){
+							if (s.expression != null){
+								if (s.expression.list != null){
+									var use = s.expression.list.getAttribute("use");
+									if (use.equalsIgnoreCase("idv")){
+										return true;
+                					}
+								}
+							}
+						}
+					}	
+				}
+			}
+		}
+		return false;
+	}	
 }

@@ -703,12 +703,19 @@ class Mdl2Nonmem extends MdlPrinting{
 	
 	//Processing SIMULATE block for $SIM 
 	def printSimulate(SimulateTask b){
+		var isTargetDefined = TARGET.isTargetDefined(b.statements);
 		'''
-		
-		$SIM «FOR s: b.statements»
+		«IF !isTargetDefined»
+		$SIM 
+		«FOR s: b.statements»
 		«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
+		«ENDFOR»
+			NOABORT
+		«ELSE»
+		«FOR s: b.statements»
 		«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
-		«ENDFOR» NOABORT
+		«ENDFOR»
+		«ENDIF» 
 		«getExternalCode("$SIM")»
 		«getExternalCode("$SIMULATION")»
 		'''
@@ -719,10 +726,17 @@ class Mdl2Nonmem extends MdlPrinting{
 		var isTargetDefined = TARGET.isTargetDefined(b.statements);
 		'''
 		
-		$EST«FOR s: b.statements»
-		«IF !isTargetDefined»«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»«ENDIF»
+		«IF !isTargetDefined»
+		$EST 
+		«FOR s: b.statements»
+		«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
+		«ENDFOR»
+			NOABORT
+		«ELSE»
+		«FOR s: b.statements»
 		«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
-		«ENDFOR» NOABORT
+		«ENDFOR»
+		«ENDIF» 
 		«getExternalCode("$EST")»
 		«getExternalCode("$ESTIMATION")»
 		«FOR s: b.statements»«IF s.symbol != null»«s.symbol.printCovariance»«ENDIF»«ENDFOR»
@@ -930,12 +944,14 @@ class Mdl2Nonmem extends MdlPrinting{
 	}
 	
 	override print(TargetBlock b){
+		var target = "";
+		if (b.arguments != null) target = b.arguments.selectAttribute("target");
+		if (target.equals(TARGET)) {
 		'''
-		«IF b.identifier.equals(TARGET)»
 		«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
 		«printedCode»
-		«ENDIF»
 		'''
+		}
 	}
 		
 	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
