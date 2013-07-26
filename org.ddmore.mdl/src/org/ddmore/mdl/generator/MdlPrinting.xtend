@@ -48,17 +48,20 @@ import org.ddmore.mdl.mdl.DataObjectBlock
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import java.util.ArrayList
 import org.eclipse.emf.common.util.EList
+import org.ddmore.mdl.mdl.ParameterObject
+import org.ddmore.mdl.mdl.EstimateTask
 
 class MdlPrinting {
 
 	protected var externalFunctions = new HashMap<String, HashMap<String, String>>() //list of external functions 
-	protected var externalCode = new HashMap<String, ArrayList<String>>() //external code per target language section,
-	//change to process location : first, etc.
+	protected var externalCodeStart = new HashMap<String, ArrayList<String>>() //external code per target language section,
+	protected var externalCodeEnd = new HashMap<String, ArrayList<String>>() //external code per target language section,
 	
 	//Find NM-TRAN functions
 	def prepareExternals(Mcl mcl) {
 		externalFunctions.clear;	
-		externalCode.clear;	
+		externalCodeStart.clear;	
+		externalCodeEnd.clear;	
 		for (o:mcl.objects){
   			if (o.modelObject != null){
   				for (ModelObjectBlock block: o.modelObject.blocks){
@@ -104,10 +107,22 @@ class MdlPrinting {
 	def void prepareExternalCode(TargetBlock block) { }	
 	def void prepareExternalFunctions(ImportBlock block, String string) { }
 	
-	//Print a list of external code snippets
-	def getExternalCode(String sectionName){
-		var res = "";
-		var snippets = externalCode.get(sectionName);
+	//Print a list of external code snippets: beginning of section
+	def getExternalCodeStart(String sectionName){
+		var res = "";		
+		val snippets = externalCodeStart.get(sectionName) 
+		if (snippets != null){
+			for (x: snippets){
+				res = res + "\n" + x;
+			}
+		}
+		return res;
+	}
+	
+	//Print a list of external code snippets: end of section
+	def getExternalCodeEnd(String sectionName){
+		var res = "";		
+		val snippets = externalCodeEnd.get(sectionName) 
 		if (snippets != null){
 			for (x: snippets){
 				res = res + "\n" + x;
@@ -181,8 +196,48 @@ class MdlPrinting {
 		return "";
 	}	
 	
+	///////////////////////////////////////////////////////////////////////////////
+	//Check whether MDL blocks are defined and non empty
+	///////////////////////////////////////////////////////////////////////////////
+	
+	//Check that STRUCTURAL is not empty
+	def isStructuralDefined(ParameterObject obj){
+		for (b:obj.blocks){
+			if (b.structuralBlock != null){
+				if (b.structuralBlock.parameters.size > 0)
+				 	return true;
+			}
+		}
+		return false;
+	}
+
+	//Check that VARIABILITY block or its subblocks are not empty
+	def isVariabilityDefined(ParameterObject obj){
+		for (b:obj.blocks){
+			if (b.variabilityBlock != null){
+				if (b.variabilityBlock.statements.size > 0){
+				 	return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	//Check that VARIABILITY subblocks are not empty
+	def isVariabilitySubBlocksDefined(ParameterObject obj){
+		for (b:obj.blocks){
+			if (b.variabilityBlock != null){
+				for (bb: b.variabilityBlock.statements){
+					if ((bb.diagBlock != null) || (bb.blockBlock != null) || (bb.sameBlock != null))
+				 		return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	//Return true if there are definitions in MODEL PREDICTION or OBSERVATION blocks,
-	def isErrorNonEmpty(ModelObject o){
+	def isErrorDefined(ModelObject o){
     	for (mob:o.blocks){
 	    	if (mob.modelPredictionBlock != null){
 				for (s: mob.modelPredictionBlock.statements){
@@ -211,7 +266,8 @@ class MdlPrinting {
     	return false;
     }
 
-	def isPKDefined(ModelObject o){
+	//Check if GROUP or INDIVIDUAL variables are defined
+	def isGroupOrIndividualDefined(ModelObject o){
 		for (mob: o.blocks){
 			if (mob.groupVariablesBlock != null){
 				if (mob.groupVariablesBlock != null){
@@ -239,8 +295,33 @@ class MdlPrinting {
     	return false;
     }
     
+    //Check if OUTPUT_VARIABLES block is defined and has content
+	def isOutputVariablesDefined(ModelObject o){
+		for (b: o.blocks){
+			if ( b.outputVariablesBlock != null){
+				if ( b.outputVariablesBlock.variables.size > 0) return true;
+			}
+		}
+		return false;
+	}
+	
+	//Check if attribute cov is define in ESTIMATE block
+	def isCovarianceDefined(EstimateTask b){
+		for (s: b.statements)
+			if (s.symbol != null){
+				if (s.symbol.identifier.equals("cov"))
+					if (s.symbol.expression != null) return true;
+			}
+		return false;		
+	}
+	
+	
+	def isTargetDefined(String sectionName){
+		return externalCodeStart.containsKey(sectionName) || externalCodeEnd.containsKey(sectionName);
+	}
+    
     //Check whether there is a target block in a list of block statements			
-    def Boolean isTargetDefined(String targetName, EList<BlockStatement> list){
+    def Boolean isInlineTargetDefined(String targetName, EList<BlockStatement> list){
 		for (s: list){
 			if (s.targetBlock != null){
 				val target = s.targetBlock.arguments.selectAttribute("target");

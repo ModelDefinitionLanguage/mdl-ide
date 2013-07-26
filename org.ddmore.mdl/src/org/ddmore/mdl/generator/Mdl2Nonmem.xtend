@@ -50,20 +50,24 @@ class Mdl2Nonmem extends MdlPrinting{
   		//Create a map of variables
   		m.prepareCollections;
 
-  		var version = "1.008";
-  		var date = "02.06.2013"
+  		var version = "1.01";
+  		var date = "26.07.2013"
 		'''
 		;mdl2nt «version» beta, last modification «date», Natallia Kokash (natallia.kokash@gmail.com)  
 			
-		$PROB «m.fileNameUpperCase»
-		«getExternalCode("$PROBLEM")»
-		«getExternalCode("$PROB")»
+		$PROB 
+			«getExternalCodeStart("$PROBLEM")»
+			«getExternalCodeStart("$PROB")»		
+			«m.fileNameUpperCase»
+			«getExternalCodeEnd("$PROBLEM")»
+			«getExternalCodeEnd("$PROB")»
   		«FOR o:m.objects»
 	  		«IF o.dataObject != null»«o.dataObject.printINPUT_DATA»«ENDIF»
   		«ENDFOR»
   		«FOR o:m.objects»
   			«IF o.taskObject != null» «o.taskObject.printIGNORE»«ENDIF»
   		«ENDFOR»
+  		«printABBREVIATED»
   		«FOR o:m.objects»
 	  		«IF o.modelObject != null»«o.modelObject.printSUBR_MODEL_PK_ERROR_PRES_DES»«ENDIF»
   		«ENDFOR»
@@ -75,6 +79,7 @@ class Mdl2Nonmem extends MdlPrinting{
   		«ENDFOR»
 		'''
 	}
+	
 	
 	 //Prepare a list of external function declarations to define their NMTRAN names 
 	 override void prepareExternalFunctions(ImportBlock b, String objName){
@@ -99,10 +104,18 @@ class Mdl2Nonmem extends MdlPrinting{
 		if (target != null){ 
 			if (target.equals(TARGET)) {
 				val location = b.arguments.selectAttribute("location");
-				var codeSnippets = externalCode.get(location);
-				if (codeSnippets == null) codeSnippets = new ArrayList<String>();
-				codeSnippets.add(b.externalCodeToStr);
-				externalCode.put(location, codeSnippets);
+				val isFirst = b.arguments.selectAttribute("first");
+				if (isFirst.isTrue){
+					var codeSnippets = externalCodeStart.get(location);
+					if (codeSnippets == null) codeSnippets = new ArrayList<String>();
+					codeSnippets.add(b.externalCodeToStr);
+					externalCodeStart.put(location, codeSnippets);
+				} else {
+					var codeSnippets = externalCodeEnd.get(location);
+					if (codeSnippets == null) codeSnippets = new ArrayList<String>();
+					codeSnippets.add(b.externalCodeToStr);
+					externalCodeEnd.put(location, codeSnippets);
+				} 
 			}
 		}
 	}	
@@ -297,83 +310,85 @@ class Mdl2Nonmem extends MdlPrinting{
 ////////////////////////////////////
 	def printSUBR_MODEL_PK_ERROR_PRES_DES(ModelObject o){
 		val isLibraryDefined = o.isLibraryDefined;
-		val isPKDefined = o.isPKDefined;
-		val isErrorNonEmpty = o.isErrorNonEmpty;
+		val isPKDefined = o. isGroupOrIndividualDefined;
+		val isErrorDefined = o.isErrorDefined;
 		val isODEDefined = o.isODEDefined; 
 		'''
 		«IF isLibraryDefined»
-		«IF isPKDefined»
+		«IF isPKDefined || "$SUBR".isTargetDefined || "$SUBROUTINE".isTargetDefined»
 		
 		«o.printSUBR»
-		«getExternalCode("$SUBR")»
 		«ENDIF»
 		«ENDIF»
-		«IF isODEDefined»
+		«IF isODEDefined || "$MODEL".isTargetDefined»
 		
-		$MODEL
-			«o.printModel»
-			«getExternalCode("$MODEL")»
+		«o.printModel»
 		«ENDIF»
 		
 		«IF isLibraryDefined»
-		«IF isPKDefined»
-			
-		$PK 
-			«o.printPK»
-			«getExternalCode("$PK")»
-		«ENDIF»
-		«IF isErrorNonEmpty»		
+		«IF isPKDefined || "$PK".isTargetDefined»
 
-		$ERROR
-			«o.printError»
-			«getExternalCode("$ERROR")»
+		«o.printPK»
+		«ENDIF»
+		«IF isErrorDefined || "$ERROR".isTargetDefined»	
+		
+		«o.printError»
 		«ENDIF»
 		«ELSE» 
-		«IF isPKDefined || isErrorNonEmpty»		
+		«IF isPKDefined || isErrorDefined || "$PRED".isTargetDefined»		
 
 		$PRED
-			«o.printPK»
-			«getExternalCode("$PRED")»
-			«o.printError»
-			«getExternalCode("$ERROR")»
+			«getExternalCodeStart("$PRED")»
+			«o.printPKContent»
+			«o.printErrorContent»
+			«getExternalCodeEnd("$PRED")»
 		«ENDIF»
 		«ENDIF»
-		«IF isODEDefined»
+		«IF isODEDefined || "$DES".isTargetDefined»
 		
-		$DES
-			«o.printDES»
-			«getExternalCode("$DES")»
+		«o.printDES»
 		«ENDIF»
+		«IF o.isOutputVariablesDefined || "$TABLE".isTargetDefined»
 		
 		«o.printTable»
+		«ENDIF»
 		'''
 	}
 	
-	//Processing GROUP_VARIABLES, INDIVIDUAL_VARIABLES, MODEL_PREDICTION (init conditions) for $PK
-	def printPK(ModelObject o){
-		'''
-		«FOR b:o.blocks»
-		«IF	b.groupVariablesBlock != null»
-			«b.groupVariablesBlock.printExcludingLists»
-		«ENDIF»
-		«IF b.individualVariablesBlock != null»
-			«FOR s: b.individualVariablesBlock.statements SEPARATOR ' '»
-				«s.printExcludingLists»
-			«ENDFOR»
-		«ENDIF»
-		«IF b.modelPredictionBlock != null»
 
-			«IF init_vars.entrySet.size > 0»
-				;initial conditions
-			
-				«FOR e: init_vars.entrySet»
-					A_0(«e.key») = «e.value»
+	//Processing GROUP_VARIABLES, INDIVIDUAL_VARIABLES, MODEL_PREDICTION (init conditions) for $PK
+	def printPK(ModelObject o)
+		'''
+		$PK
+			«getExternalCodeStart("$PK")»
+			«o.printPKContent»
+			«getExternalCodeEnd("$PK")»
+		'''
+	
+	//Processing GROUP_VARIABLES, INDIVIDUAL_VARIABLES, MODEL_PREDICTION (init conditions) for $PK
+	def printPKContent(ModelObject o)
+		'''
+			«FOR b:o.blocks»
+			«IF	b.groupVariablesBlock != null»
+				«b.groupVariablesBlock.printExcludingLists»
+			«ENDIF»
+			«IF b.individualVariablesBlock != null»
+				«FOR s: b.individualVariablesBlock.statements SEPARATOR ' '»
+					«s.printExcludingLists»
 				«ENDFOR»
 			«ENDIF»
-		«ENDIF»
-		«ENDFOR»
+			«IF b.modelPredictionBlock != null»
+			
+				«IF init_vars.entrySet.size > 0»
+					;initial conditions
+				
+					«FOR e: init_vars.entrySet»
+						A_0(«e.key») = «e.value»
+					«ENDFOR»
+				«ENDIF»
+			«ENDIF»
+			«ENDFOR»
 		'''
-	}
 	
 	//Processing GROUP_VARIABLES, MIXTURE for $PK	 
 	def printExcludingLists(GroupVariablesBlock block)'''
@@ -389,6 +404,14 @@ class Mdl2Nonmem extends MdlPrinting{
 	
 	//Processing MODEL_PREDICTION, OBSERVATION for $ERROR
 	def printError(ModelObject o)'''
+	$ERROR
+		«getExternalCodeStart("$ERROR")»
+		«o.printErrorContent»
+		«getExternalCodeEnd("$ERROR")»
+	'''	
+	
+	//Processing MODEL_PREDICTION, OBSERVATION for $ERROR
+	def printErrorContent(ModelObject o)'''
 		«FOR mob:o.blocks»
 			«IF mob.modelPredictionBlock != null»
 				«FOR s: mob.modelPredictionBlock.statements»
@@ -405,6 +428,8 @@ class Mdl2Nonmem extends MdlPrinting{
 
 	//Processing MODEL_PREDICTION for $MODEL
 	def printModel(ModelObject o)'''
+	$MODEL
+		«getExternalCodeStart("$MODEL")»
 		«FOR b:o.blocks»
 			«IF b.modelPredictionBlock != null»
 				«var bb = b.modelPredictionBlock»
@@ -424,10 +449,13 @@ class Mdl2Nonmem extends MdlPrinting{
 				«ENDFOR»
 			«ENDIF»
 		«ENDFOR»
+		«getExternalCodeEnd("$MODEL")»
 	'''
 
 	//Processing MODEL_PREDICTION for $DES
 	def printDES(ModelObject o)'''
+	$DES
+		«getExternalCodeStart("$DES")»
 		«FOR b:o.blocks»
 			«IF b.modelPredictionBlock != null»
 				«var bb = b.modelPredictionBlock»
@@ -458,16 +486,22 @@ class Mdl2Nonmem extends MdlPrinting{
 					«ENDIF»
 				«ENDFOR»
 			«ENDIF»
+			«getExternalCodeEnd("$DES")»
 		«ENDFOR»
 	'''    
     
 	//Processing MODEL_PREDICTION for $SUBR
 	def printSUBR(ModelObject o)'''
-	«FOR b:o.blocks»
-		«IF b.modelPredictionBlock != null»
-			«b.modelPredictionBlock.printSUBR»
-		«ENDIF»
-	«ENDFOR»
+	$SUBR
+		«getExternalCodeStart("$SUBR")»
+		«getExternalCodeStart("$SUBROUTINE")»
+		«FOR b:o.blocks»
+			«IF b.modelPredictionBlock != null»
+				«b.modelPredictionBlock.printSUBR»
+			«ENDIF»
+		«getExternalCodeEnd("$SUBR")»
+		«getExternalCodeEnd("$SUBROUTINE")»
+		«ENDFOR»
     ''' 
     
     //Processing MODEL_PREDICTION for $SUBR
@@ -486,7 +520,7 @@ class Mdl2Nonmem extends MdlPrinting{
 					val model = st.expression.arguments.selectAttribute("model");
 					val trans = st.expression.arguments.selectAttribute("trans");
 					val tol = b.eResource.getTOL;
-					return '''$SUBR «IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF» «IF !trans.equals("")»TRANS«trans»«ENDIF» «IF !tol.equals("")»TOL = «tol»«ENDIF»'''
+					return '''«IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF» «IF !trans.equals("")»TRANS«trans»«ENDIF» «IF !tol.equals("")»TOL = «tol»«ENDIF»'''
 				}
 			}
 		}
@@ -494,19 +528,22 @@ class Mdl2Nonmem extends MdlPrinting{
 		
 	//Processing OUTPUT_VARIABLES for $TABLE
 	def printTable(ModelObject o)'''
-	«FOR b:o.blocks»
-		«IF b.outputVariablesBlock != null»
-			«var bb = b.outputVariablesBlock»
-			«IF bb.variables.size > 0»
-				$TABLE «FOR st: bb.variables SEPARATOR ' '»«st.toStr»«ENDFOR»
-				«val file = o.eResource.getTaskObjectName»
-				ONEHEADER NOPRINT «IF !file.equals("")»FILE=«file».fit«ENDIF» 
-				«getExternalCode("$TABLE")»
-			«ENDIF»
-		«ENDIF»	
-	«ENDFOR»
+	$TABLE 
+		«getExternalCodeStart("$TABLE")»
+		«FOR b:o.blocks»
+			«IF b.outputVariablesBlock != null»
+				«var bb = b.outputVariablesBlock»
+				«IF bb.variables.size > 0»
+					«FOR st: bb.variables SEPARATOR ' '»«st.toStr»«ENDFOR»
+					«val file = o.eResource.getTaskObjectName»
+					ONEHEADER NOPRINT «IF !file.equals("")»FILE=«file».fit«ENDIF» 
+				«ENDIF»
+			«ENDIF»	
+		«ENDFOR»
+		«getExternalCodeEnd("$TABLE")»
 	'''
-   
+	
+ 
 ////////////////////////////////////
 //convertToNonmem PARAMETER OBJECT
 /////////////////////////////////////	
@@ -519,9 +556,10 @@ class Mdl2Nonmem extends MdlPrinting{
 
 	//Processing STRUCTURAL for $THETA
 	def printTheta(ParameterObject obj)'''
-	«IF obj.isThetaNonEmpty»
+	«IF obj.isStructuralDefined || "$THETA".isTargetDefined»
 	
 	$THETA
+		«getExternalCodeStart("$THETA")»
 		«FOR b:obj.blocks»			
 			«IF b.structuralBlock != null»
 				«FOR st: b.structuralBlock.parameters»
@@ -529,15 +567,17 @@ class Mdl2Nonmem extends MdlPrinting{
 				«ENDFOR»
 			«ENDIF»
 		«ENDFOR»
+		«getExternalCodeEnd("$THETA")»
 	«ENDIF»
-	«getExternalCode("$THETA")»
 	'''
 	
 	//Processing VARIABILITY for $OMEGA
 	def printOmega(ParameterObject obj)'''
-	«IF (obj.isVariabilityNonEmpty && !eta_vars.empty) || obj.isVariabilitySubBlocksNonEmpty»
+	«IF (obj.isVariabilityDefined && !eta_vars.empty) || obj.isVariabilitySubBlocksDefined ||
+		"$OMEGA".isTargetDefined»
 	
 	$OMEGA
+		«externalCodeStart.get("$OMEGA")»
 		«FOR b:obj.blocks»			
 			«IF b.variabilityBlock != null»
 				«FOR c: b.variabilityBlock.statements»
@@ -548,15 +588,16 @@ class Mdl2Nonmem extends MdlPrinting{
 				«ENDFOR»
 			«ENDIF»
 		«ENDFOR»
+		«externalCodeEnd.get("$OMEGA")»
 	«ENDIF»
-	«externalCode.get("$OMEGA")»
 	'''
 
 	//Processing VARIABILITY for $SIGMA
 	def printSigma(ParameterObject obj)'''
-	«IF obj.isVariabilityNonEmpty && !eps_vars.empty»
+	«IF (obj.isVariabilityDefined && !eps_vars.empty) || "$SIGMA".isTargetDefined»
 	
 	$SIGMA
+		«getExternalCodeStart("$SIGMA")»
 		«FOR b:obj.blocks»			
 			«IF b.variabilityBlock != null»
 				«FOR c: b.variabilityBlock.statements»
@@ -566,45 +607,11 @@ class Mdl2Nonmem extends MdlPrinting{
 				«ENDFOR»
 			«ENDIF»
 		«ENDFOR»
+		«getExternalCodeEnd("$SIGMA")»
 	«ENDIF»
-	«getExternalCode("$SIGMA")»
 	'''
 	
-	//We print $THETA only if STRUCTURAL is not empty
-	def isThetaNonEmpty(ParameterObject obj){
-		for (b:obj.blocks){
-			if (b.structuralBlock != null){
-				if (b.structuralBlock.parameters.size > 0)
-				 	return true;
-			}
-		}
-		return false;
-	}
 
-	//We print $OMEGA if VARIABILITY block or its subblocks are not empty
-	def isVariabilityNonEmpty(ParameterObject obj){
-		for (b:obj.blocks){
-			if (b.variabilityBlock != null){
-				if (b.variabilityBlock.statements.size > 0){
-				 	return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	//We print $OMEGA if VARIABILITY block or its subblocks are not empty
-	def isVariabilitySubBlocksNonEmpty(ParameterObject obj){
-		for (b:obj.blocks){
-			if (b.variabilityBlock != null){
-				for (bb: b.variabilityBlock.statements){
-					if ((bb.diagBlock != null) || (bb.blockBlock != null) || (bb.sameBlock != null))
-				 		return true;
-				}
-			}
-		}
-		return false;
-	}
 	
 	
 ////////////////////////////////////	
@@ -612,7 +619,7 @@ class Mdl2Nonmem extends MdlPrinting{
 ////////////////////////////////////
 
 	//Processing data object for $INPUT, $DATA
-	def printINPUT_DATA(DataObject o){
+	def printINPUT_DATA(DataObject o)
 		'''
 		«FOR b:o.blocks»
 			«IF b.headerBlock != null»
@@ -625,23 +632,26 @@ class Mdl2Nonmem extends MdlPrinting{
 			«ENDIF»
 		«ENDFOR»
 		'''
-	}
+	
 
 	//Processing HEADER block for $INPUT
-	def printInput(HeaderBlock b){
+	def printInput(HeaderBlock b)
 		'''
-		$INPUT «FOR st: b.variables SEPARATOR ' '»«st.identifier.toStr»«ENDFOR»
-		«getExternalCode("$INPUT")»
+		$INPUT 
+			«getExternalCodeStart("$INPUT")»
+			«FOR st: b.variables SEPARATOR ' '»«st.identifier.toStr»«ENDFOR»
+			«getExternalCodeEnd("$INPUT")»
 		'''
-	}
+	
 	
 	//Processing FILE block for $DATA
 	def printData(FileBlock b){
 		'''
+		«getExternalCodeStart("$DATA")»
 		«FOR s: b.statements»
 			«s.printData»
 		«ENDFOR»
-		«getExternalCode("$DATA")»
+		«getExternalCodeEnd("$DATA")»
 		'''
 	}
 	//if (st.inlineBlock != null) st.inlineBlock.convertToNonmem
@@ -700,51 +710,68 @@ class Mdl2Nonmem extends MdlPrinting{
 			«ENDIF»
 		«ENDFOR»
 	''' 
-	
+		//Print $ABBREVIATED record if it is defined in target blocks
+	def printABBREVIATED(){
+	if ("$ABB".isTargetDefined || "$ABBREVIATED".isTargetDefined)	
+	'''
+	$ABB
+		«getExternalCodeStart("$ABB")»
+		«getExternalCodeStart("$ABBREVIATED")»	
+		«getExternalCodeEnd("$ABB")»
+		«getExternalCodeEnd("$ABBREVIATED")»	
+	 '''
+	}
 	//Processing SIMULATE block for $SIM 
 	def printSimulate(SimulateTask b){
-		var isTargetDefined = TARGET.isTargetDefined(b.statements);
-		'''
-		«IF !isTargetDefined»
-		$SIM 
-		«FOR s: b.statements»
-		«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
-		«ENDFOR»
+	var isInlineTargetDefined = TARGET.isInlineTargetDefined(b.statements);
+	'''
+	
+	«IF !isInlineTargetDefined»
+	$SIM 
+	«ENDIF»
+		«getExternalCodeStart("$SIM")»
+		«getExternalCodeStart("$SIMULATION")»
+		«IF !isInlineTargetDefined»
+			«FOR s: b.statements»
+			«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
+			«ENDFOR»
 			NOABORT
 		«ELSE»
-		«FOR s: b.statements»
-		«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
-		«ENDFOR»
+			«FOR s: b.statements»
+			«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
+			«ENDFOR»
 		«ENDIF» 
-		«getExternalCode("$SIM")»
-		«getExternalCode("$SIMULATION")»
-		'''
+		«getExternalCodeEnd("$SIM")»
+		«getExternalCodeEnd("$SIMULATION")»	
+	'''
 	}
 	
 	//Processing ESTIMATE block for $EST
 	def printEstimate(EstimateTask b){
-		var isTargetDefined = TARGET.isTargetDefined(b.statements);
-		'''
-		
-		«IF !isTargetDefined»
-		$EST 
-		«FOR s: b.statements»
-		«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
-		«ENDFOR»
-			NOABORT
+	var isInlineTargetDefined = TARGET.isInlineTargetDefined(b.statements);
+	'''
+	«IF !isInlineTargetDefined»
+	$EST 
+	«ENDIF»
+		«getExternalCodeStart("$EST")»
+		«getExternalCodeStart("$ESTIMATION")»
+		«IF !isInlineTargetDefined»
+			«FOR s: b.statements»
+			«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
+			«ENDFOR»
+			NOABORT 
+			«b.printCovariance»
 		«ELSE»
-		«FOR s: b.statements»
-		«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
-		«ENDFOR»
-		«ENDIF» 
-		«getExternalCode("$EST")»
-		«getExternalCode("$ESTIMATION")»
-		«FOR s: b.statements»«IF s.symbol != null»«s.symbol.printCovariance»«ENDIF»«ENDFOR»
-		«getExternalCode("$COV")»
-		«getExternalCode("$COVARIANCE")»
-		'''
+			«FOR s: b.statements»
+			«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
+			«ENDFOR»
+		«ENDIF»
+		«getExternalCodeEnd("$EST")»
+		«getExternalCodeEnd("$ESTIMATION")»
+	'''
 	}
 	
+
 	//Print attributes for default $EST record
 	def printDefaultEstimate(SymbolDeclaration s) { 
 		if (s.identifier.equals("algo")){
@@ -775,15 +802,29 @@ class Mdl2Nonmem extends MdlPrinting{
 		'''
 	}
 	
+	//Print $COV 
+	def printCovariance(EstimateTask b)
+		'''
+		«IF b.isCovarianceDefined || "$COV".isTargetDefined || "$COVARIANCE".isTargetDefined»
+		$COV 
+			«getExternalCodeStart("$COV")»
+			«getExternalCodeStart("$COVARIANCE")»
+			«FOR s: b.statements»«IF s.symbol != null»«s.symbol.printCovariance»«ENDIF»«ENDFOR»
+			«getExternalCodeEnd("$COV")»
+			«getExternalCodeEnd("$COVARIANCE")»
+		«ENDIF»
+		'''	
+	
 	//Print "cov" attribute for $COVARIATE record 
 	def printCovariance(SymbolDeclaration s) { 
 		if (s.identifier.equals("cov")){
 			if (s.expression != null){
 				if (s.expression.toStr.replaceAll("\\s","").equals(""))
-				'''$COV «s.expression.print»'''
+				'''«s.expression.print»'''
 			}
 		}
 	}
+
 	
 	def printExecute(ExecuteTask b) { 
 		'''
