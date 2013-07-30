@@ -100,7 +100,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	final static List<String> attr_import = Arrays.asList("target", "name", "ncmt", "trans", "param");
 	final static List<String> attr_req_import = Arrays.asList("target", "param");
 
-	final static List<String> attr_target = Arrays.asList("target", "location", "first", "before", "after");
+	final static List<String> attr_target = Arrays.asList("target", "location", "first");// "before", "after");
 	final static List<String> attr_req_target = Arrays.asList("target");
 
 	List<String> getAllAttributes(EObject obj){

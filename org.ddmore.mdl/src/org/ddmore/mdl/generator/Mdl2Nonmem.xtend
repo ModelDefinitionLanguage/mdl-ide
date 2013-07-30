@@ -20,7 +20,6 @@ import org.ddmore.mdl.mdl.ModelPredictionBlock
 import org.ddmore.mdl.mdl.ParameterDeclaration
 import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.SimulateTask
-import org.ddmore.mdl.mdl.GroupVariablesBlock
 import org.ddmore.mdl.mdl.FileBlockStatement
 import org.eclipse.emf.ecore.resource.Resource
 import org.ddmore.mdl.mdl.SymbolDeclaration
@@ -54,7 +53,13 @@ class Mdl2Nonmem extends MdlPrinting{
   		var date = "26.07.2013"
 		'''
 		;mdl2nt «version» beta, last modification «date», Natallia Kokash (natallia.kokash@gmail.com)  
+		
+		«IF "$SIZES".isTargetDefined»
+		$SIZES		
+			«getExternalCodeStart("$SIZES")»
+			«getExternalCodeEnd("$SIZES")»
 			
+		«ENDIF»	
 		$PROB 
 			«getExternalCodeStart("$PROBLEM")»
 			«getExternalCodeStart("$PROB")»		
@@ -70,6 +75,9 @@ class Mdl2Nonmem extends MdlPrinting{
   		«printABBREVIATED»
   		«FOR o:m.objects»
 	  		«IF o.modelObject != null»«o.modelObject.printSUBR_MODEL_PK_ERROR_PRES_DES»«ENDIF»
+  		«ENDFOR»
+  		«FOR o:m.objects»
+			«IF o.parameterObject != null»«o.parameterObject.printPRIOR»«ENDIF»
   		«ENDFOR»
   		«FOR o:m.objects»
 			«IF o.parameterObject != null»«o.parameterObject.printTHETA_OMEGA_SIGMA»«ENDIF»
@@ -330,6 +338,10 @@ class Mdl2Nonmem extends MdlPrinting{
 
 		«o.printPK»
 		«ENDIF»
+		«IF o.isMixDefined || "$MIX".isTargetDefined || "$MIXTURE".isTargetDefined»
+
+		«o.printMIX»
+		«ENDIF»
 		«IF isErrorDefined || "$ERROR".isTargetDefined»	
 		
 		«o.printError»
@@ -340,9 +352,16 @@ class Mdl2Nonmem extends MdlPrinting{
 		$PRED
 			«getExternalCodeStart("$PRED")»
 			«o.printPKContent»
+			«o.printMIXContent»
 			«o.printErrorContent»
 			«getExternalCodeEnd("$PRED")»
 		«ENDIF»
+		«ENDIF»
+		«IF "$AES".isTargetDefined»
+		
+		$AES
+			«getExternalCodeStart("$AES")»
+			«getExternalCodeEnd("$AES")»
 		«ENDIF»
 		«IF isODEDefined || "$DES".isTargetDefined»
 		
@@ -353,8 +372,7 @@ class Mdl2Nonmem extends MdlPrinting{
 		«o.printTable»
 		«ENDIF»
 		'''
-	}
-	
+	}	
 
 	//Processing GROUP_VARIABLES, INDIVIDUAL_VARIABLES, MODEL_PREDICTION (init conditions) for $PK
 	def printPK(ModelObject o)
@@ -370,7 +388,11 @@ class Mdl2Nonmem extends MdlPrinting{
 		'''
 			«FOR b:o.blocks»
 			«IF	b.groupVariablesBlock != null»
-				«b.groupVariablesBlock.printExcludingLists»
+				«FOR st: b.groupVariablesBlock.statements»
+					«IF st.statement != null»
+						«st.statement.printExcludingLists»
+					«ENDIF»
+				«ENDFOR»
 			«ENDIF»
 			«IF b.individualVariablesBlock != null»
 				«FOR s: b.individualVariablesBlock.statements SEPARATOR ' '»
@@ -390,18 +412,30 @@ class Mdl2Nonmem extends MdlPrinting{
 			«ENDFOR»
 		'''
 	
-	//Processing GROUP_VARIABLES, MIXTURE for $PK	 
-	def printExcludingLists(GroupVariablesBlock block)'''
-		«FOR st: block.statements»
-			«IF st.statement != null»
-				«st.statement.printExcludingLists»
-			«ENDIF»
-			«IF st.mixtureBlock != null»
-				«st.mixtureBlock.printExcludingLists»
-			«ENDIF»	
+	//Copy expressions from MIXTURE block to $MIX 
+	def printMIX(ModelObject o)
+		'''
+		$MIX
+			«getExternalCodeStart("$MIX")»
+			«getExternalCodeStart("$MIXTURE")»
+			«o.printMIXContent»
+			«getExternalCodeEnd("$MIX")»
+			«getExternalCodeEnd("$MIXTURE")»
+
+		'''
+	def printMIXContent(ModelObject o)
+		'''
+		«FOR b:o.blocks»
+		«IF	b.groupVariablesBlock != null»
+			«FOR st: b.groupVariablesBlock.statements»
+				«IF st.mixtureBlock != null»
+					«st.mixtureBlock.printExcludingLists»
+				«ENDIF»
+			«ENDFOR»
+		«ENDIF»
 		«ENDFOR»
-	'''	
-	
+		'''
+		
 	//Processing MODEL_PREDICTION, OBSERVATION for $ERROR
 	def printError(ModelObject o)'''
 	$ERROR
@@ -547,7 +581,24 @@ class Mdl2Nonmem extends MdlPrinting{
 ////////////////////////////////////
 //convertToNonmem PARAMETER OBJECT
 /////////////////////////////////////	
-	//Process parameter object 
+	//Copy statements from PRIOR block to $PRIOR
+	def printPRIOR(ParameterObject obj)'''
+	«IF obj.isPriorDefined || "$PRIOR".isTargetDefined»
+		
+	$PRIOR
+		«getExternalCodeStart("$PRIOR")»
+		«FOR b:obj.blocks»			
+			«IF b.priorBlock != null»
+				«FOR st: b.priorBlock.statements»
+					«st.printExcludingLists»
+				«ENDFOR»
+			«ENDIF»
+		«ENDFOR»
+		«getExternalCodeEnd("$PRIOR")»
+	«ENDIF»	
+	'''
+		
+	//$THETA, $OMEGA, $SIGMA	
 	def printTHETA_OMEGA_SIGMA(ParameterObject obj)'''
 	«obj.printTheta»
 	«obj.printSigma»
@@ -568,6 +619,18 @@ class Mdl2Nonmem extends MdlPrinting{
 			«ENDIF»
 		«ENDFOR»
 		«getExternalCodeEnd("$THETA")»
+	«ENDIF»
+	«IF "$THETAI".isTargetDefined»
+	
+	$THETAI	
+		«externalCodeStart.get("$THETAI")»
+		«externalCodeEnd.get("$THETAI")»
+	«ENDIF»
+	«IF "$THETAR".isTargetDefined»
+	
+	$THETAR	
+		«externalCodeStart.get("$THETAR")»
+		«externalCodeEnd.get("$THETAR")»
 	«ENDIF»
 	'''
 	

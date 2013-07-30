@@ -200,6 +200,16 @@ class MdlPrinting {
 	//Check whether MDL blocks are defined and non empty
 	///////////////////////////////////////////////////////////////////////////////
 	
+	def isPriorDefined(ParameterObject obj){
+		for (b:obj.blocks){
+			if (b.priorBlock != null){
+				if (b.priorBlock.statements.size > 0)
+				 	return true;
+			}
+		}
+		return false;
+	}
+	
 	//Check that STRUCTURAL is not empty
 	def isStructuralDefined(ParameterObject obj){
 		for (b:obj.blocks){
@@ -271,12 +281,30 @@ class MdlPrinting {
 		for (mob: o.blocks){
 			if (mob.groupVariablesBlock != null){
 				if (mob.groupVariablesBlock != null){
-					return true;
+					for (st: mob.groupVariablesBlock.statements)
+						if (st.statement != null)
+							return true;
 				}
 			}
 			if (mob.individualVariablesBlock != null){
 				if (mob.individualVariablesBlock.statements.size > 0){
 					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	//Check if MIXTURE block is defined 
+	def isMixDefined(ModelObject o){
+		for (mob: o.blocks){
+			if (mob.groupVariablesBlock != null){
+				if (mob.groupVariablesBlock != null){
+					for (st: mob.groupVariablesBlock.statements){
+						if (st.mixtureBlock != null){
+							return true;
+						}
+					}
 				}
 			}
 		}
