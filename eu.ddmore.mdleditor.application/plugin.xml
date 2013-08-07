@@ -17,7 +17,7 @@
          </property>
          <property
                name="appName"
-               value="product">
+               value="MDL IDE">
          </property>
       </product>
    </extension>

@@ -3,6 +3,12 @@
 
 <product name="MDL Editor" uid="eu.ddmore.mdleditor" id="eu.ddmore.mdleditor.application.product" application="org.eclipse.ui.ide.workbench" version="1.0.1.qualifier" useFeatures="true" includeLaunchers="true">
 
+   <aboutInfo>
+      <text>
+         DDMoRe MDL Editor
+      </text>
+   </aboutInfo>
+
    <configIni use="default">
    </configIni>
 
@@ -12,6 +18,18 @@
    </launcherArgs>
 
    <windowImages/>
+
+
+   <launcher>
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+
+   <vm>
+   </vm>
 
    <plugins>
    </plugins>

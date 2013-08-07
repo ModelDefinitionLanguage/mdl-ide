@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.ddmore.mdl
-Bundle-Vendor: My Company
+Bundle-Vendor: DDMoRe Consortium
 Bundle-Version: 1.0.1.qualifier
 Bundle-SymbolicName: org.ddmore.mdl; singleton:=true
 Bundle-ActivationPolicy: lazy
