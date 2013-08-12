@@ -5,7 +5,9 @@
 
    <aboutInfo>
       <text>
-         DDMoRe MDL Editor
+         DDMoRe MDL IDE
+
+Version: 1.2 (alpha)
       </text>
    </aboutInfo>
 
@@ -18,7 +20,6 @@
    </launcherArgs>
 
    <windowImages/>
-
 
    <launcher>
       <solaris/>

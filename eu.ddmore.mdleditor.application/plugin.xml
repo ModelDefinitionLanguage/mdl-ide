@@ -5,8 +5,9 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            name="product"
-            application="org.eclipse.e4.ui.workbench.swt.E4Application">
+            application="org.eclipse.e4.ui.workbench.swt.E4Application"
+            description="Integrated Development Environment for MDL modellers"
+            name="MDL IDE">
          <property
                name="clearPersistedState"
                value="true">
@@ -18,6 +19,14 @@
          <property
                name="appName"
                value="MDL IDE">
+         </property>
+         <property
+               name="cssTheme"
+               value="org.eclipse.e4.ui.css.theme.e4_default">
+         </property>
+         <property
+               name="applicationCSSResources"
+               value="platform:/plugin/org.eclipse.platform/images/">
          </property>
       </product>
    </extension>
