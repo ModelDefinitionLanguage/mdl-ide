@@ -18,7 +18,7 @@
    </license>
 
    <url>
-      <update label="DDMoRe Tools" url="https://sourceforge.net/projects/ddmore/files/update/ddmore-tools/"/>
+      <update label="MIF Client Dependencies Update Site" url="https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies"/>
    </url>
 
    <plugin

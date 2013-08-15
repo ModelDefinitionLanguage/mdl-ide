@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="107">
+<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="109">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.4.0.v201306110940"/>
@@ -30,10 +30,6 @@
 <repository location="http://download.eclipse.org/releases/juno"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mango.mif.client.feature.feature.group" version="1.0.1.v20130419-1339"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mif-client"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.xpand.feature.group" version="1.3.0.v201302260541"/>
 <unit id="org.eclipse.xpand.doc.feature.group" version="1.2.2.v201302260541"/>
 <unit id="org.eclipse.xtend.middleend.xpand.feature.group" version="1.3.0.v201302260541"/>
@@ -61,8 +57,12 @@
 <repository location="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201308141425"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies"/>
+<unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201308151727"/>
+<repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mango.mif.client.feature.feature.group" version="1.0.1.v20130419-1339"/>
+<repository location="https://sourceforge.net/projects/ddmore/files/update/mif-client/"/>
 </location>
 </locations>
 </target>
