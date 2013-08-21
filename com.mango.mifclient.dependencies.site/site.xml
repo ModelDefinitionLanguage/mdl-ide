@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.mango.mifclient.dependencies.feature_1.0.0.201308151727.jar" id="com.mango.mifclient.dependencies.feature" version="1.0.0.201308151727">
+   <feature url="features/com.mango.mifclient.dependencies.feature_1.0.0.201308211556.jar" id="com.mango.mifclient.dependencies.feature" version="1.0.0.201308211556">
       <category name="MIF Client Dependencies"/>
    </feature>
    <category-def name="MIF Client Dependencies" label="MIF Client Dependencies"/>
