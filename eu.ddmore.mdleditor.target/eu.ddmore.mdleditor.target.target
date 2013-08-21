@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="109">
+<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="110">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.4.0.v201306110940"/>
@@ -61,7 +61,7 @@
 <repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mango.mif.client.feature.feature.group" version="1.0.1.v20130419-1339"/>
+<unit id="com.mango.mif.client.feature.feature.group" version="1.0.1.201308201636"/>
 <repository location="https://sourceforge.net/projects/ddmore/files/update/mif-client/"/>
 </location>
 </locations>
