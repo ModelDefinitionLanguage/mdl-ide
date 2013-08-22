@@ -508,7 +508,7 @@ LogicalExpression:
 
 AdditiveExpression:
 	expression += MultiplicativeExpression (operator += AdditiveOperator expression+=MultiplicativeExpression)* |
-	string += STRING (operator += AdditiveOperator string += STRING)*
+	string += STRING (operator += '+' string += STRING)*
 ;
 
 MultiplicativeExpression:
@@ -621,6 +621,8 @@ terminal ML_COMMENT : '/#' -> '#/';
 terminal BEGIN: '{';
 
 terminal END: '}' ;
+
+terminal ID: ('a'..'z'|'A'..'Z'|'_')('a'..'z'|'A'..'Z'|'_'| '0'..'9')*;
 
 
 
