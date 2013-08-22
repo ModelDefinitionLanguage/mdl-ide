@@ -16,10 +16,10 @@
 
 		<module>../org.ddmore.mdl.sdk</module>
 		<!--  once the encryption key is changed this can be included : MIFDEV-35 
-		<module>../com.mango.mif.client.feature</module>
- 		<module>../com.mango.mif.client.site</module> -->
+		<module>../com.mango.mif.client.feature</module> 
+ 		<module>../com.mango.mif.client.site</module>-->
+ 		
 		<module>../eu.ddmore.mdleditor.site</module>
-		<module>../eu.ddmore.mdleditor.product</module>
 	</modules>
 
 	<properties>
