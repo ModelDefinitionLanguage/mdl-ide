@@ -65,7 +65,7 @@ public class ConvertToNONMEMHandler_PE extends AbstractHandler implements IHandl
                 if (generator instanceof MdlGenerator){
     				System.out.println("Generating NONMEM code for " + file.getName());
                 	MdlGenerator mdlGenerator = (MdlGenerator)generator;
-	            	mdlGenerator.doGenerateNonmem(r, fsa);
+	            	mdlGenerator.doGenerateNMTRAN(r, fsa);
                 }
 				return Boolean.TRUE;
 			}

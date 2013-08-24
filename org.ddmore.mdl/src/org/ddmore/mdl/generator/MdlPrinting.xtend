@@ -50,6 +50,7 @@ import java.util.ArrayList
 import org.eclipse.emf.common.util.EList
 import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.EstimateTask
+import org.ddmore.mdl.mdl.DataObject
 
 class MdlPrinting {
 
@@ -199,7 +200,18 @@ class MdlPrinting {
 	///////////////////////////////////////////////////////////////////////////////
 	//Check whether MDL blocks are defined and non empty
 	///////////////////////////////////////////////////////////////////////////////
-	
+	//Check that VARIABILITY block or its subblocks are not empty
+	def isHeaderDefined(DataObject obj){
+		for (b:obj.blocks){
+			if (b.headerBlock != null){
+				if (b.headerBlock.variables.size > 0){
+				 	return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	def isPriorDefined(ParameterObject obj){
 		for (b:obj.blocks){
 			if (b.priorBlock != null){

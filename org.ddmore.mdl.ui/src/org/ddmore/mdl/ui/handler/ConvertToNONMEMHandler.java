@@ -64,7 +64,7 @@ public class ConvertToNONMEMHandler extends AbstractHandler implements IHandler 
 				                if (generator instanceof MdlGenerator){
 									System.out.println("Generating NONMEM code for " + file.getName());
  				                	MdlGenerator mdlGenerator = (MdlGenerator)generator;
-					            	 mdlGenerator.doGenerateNonmem(source, fsa);
+					            	 mdlGenerator.doGenerateNMTRAN(source, fsa);
 					            	 //fsa.setPostProcessor(callBack);
 				                }
 								return Boolean.TRUE;

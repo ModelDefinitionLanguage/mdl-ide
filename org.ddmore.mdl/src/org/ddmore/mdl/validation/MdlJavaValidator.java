@@ -58,8 +58,9 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_VARIABLE_UNKNOWN = "Variable not declared or conditionally declared";
 	public final static String MSG_ATTRIBUTE_UNKNOWN = "Unknown attribute";
 	public final static String MSG_ATTRIBUTE_MISSING = "Required attribute is missing";
-	
+
 	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF = "Unresolved reference to a list attribute";
+	public final static String MSG_UNRESOLVED_SAME_BLOCK_NAME = "No corresponding matrix or diag block found";
 
 	//private enum VAL_RES {OK, ERROR, WARNING}
 	
@@ -71,7 +72,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	final static List<String> attr_req_variability = Arrays.asList("value");
 
 	final static List<String> attr_variability_subblock = Arrays.asList("name", "type", "fix");
-	final static List<String> attr_req_variability_subblock = Arrays.asList("name");
+	final static List<String> attr_req_variability_subblock = Arrays.asList("name"); //for "same" block
 
 	//Model object
 	final static List<String> attr_inputVariables = Arrays.asList("value", "use", "units", "type", "level");
@@ -100,7 +101,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	final static List<String> attr_import = Arrays.asList("target", "name", "ncmt", "trans", "param");
 	final static List<String> attr_req_import = Arrays.asList("target", "param");
 
-	final static List<String> attr_target = Arrays.asList("target", "location", "first");// "before", "after");
+	final static List<String> attr_target = Arrays.asList("target", "location", "first", "before", "after");
 	final static List<String> attr_req_target = Arrays.asList("target");
 
 	List<String> getAllAttributes(EObject obj){
@@ -137,7 +138,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			return attr_req_structural;
 		if (obj instanceof VariabilityBlockStatementImpl)
 			return attr_req_variability;
-		if (obj instanceof BlockBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl)
+		if (obj instanceof SameBlockImpl)
 			return attr_req_variability_subblock;
 		if (obj instanceof RandomVariableDefinitionBlockImpl)
 			return attr_req_random;
@@ -193,6 +194,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//List of declared parameters per object
 	static HashMap<String, ArrayList<String>> declaredParameters = new HashMap<String, ArrayList<String>>();
 
+	//List of declared variability subblocks diag and matrix (to match with same blocks)
+	static HashSet<String> variabilitySubblockNames = new HashSet<String>();
+	
+	
 	//Checks whether the symbol is declared
 	private boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, String id, ObjectName objName){
 		if (objName != null)
@@ -510,7 +515,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 							paramList.add(s.getIdentifier());
 						}
 					}
-					//VARIABILITY, block, diag, same
+					//VARIABILITY, matrix, diag, same
 					if (block.getVariabilityBlock() != null){
 						for (VariabilityBlockStatement s: block.getVariabilityBlock().getStatements()){
 							if (s.getParameter() != null){
@@ -540,6 +545,67 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			}
 		}
 	}
+	
+	//Update the list of declared variability subblock names
+	@Check
+	public void updateVariabilitySubblockNames(Mcl mcl){
+		variabilitySubblockNames.clear();
+		for (MclObject obj: mcl.getObjects()){
+			if (obj.getParameterObject() != null){
+				for (ParameterObjectBlock block: obj.getParameterObject().getBlocks()){
+					//VARIABILITY sub-blocks matrix & diag
+					if (block.getVariabilityBlock() != null){
+						for (VariabilityBlockStatement s: block.getVariabilityBlock().getStatements()){
+							if (s.getBlockBlock() != null){
+								String name = getAttributeValue(s.getBlockBlock().getArguments(),"name");
+								if (name.length() > 0)
+									variabilitySubblockNames.add(name);
+							}
+							if (s.getDiagBlock() != null){
+								String name = getAttributeValue(s.getDiagBlock().getArguments(),"name");
+								if (name.length() > 0)
+									variabilitySubblockNames.add(name);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	//Match the name of the same block with the name of a matrix or a diag block
+	@Check
+	public void validateSameSubblockName(SameBlock b){
+		String name = getAttributeValue(b.getArguments(),"name");
+		if (name.length() > 0)
+			if (!variabilitySubblockNames.contains(name))
+				warning(MSG_UNRESOLVED_SAME_BLOCK_NAME, 
+						MdlPackage.Literals.SAME_BLOCK__IDENTIFIER,
+						MSG_UNRESOLVED_SAME_BLOCK_NAME, b.getIdentifier());
+	}
+	
+	//Evaluate STRING expression
+	private String getAttributeValue(Arguments a, String attrName){
+		String res = "";
+		for (Argument arg: a.getArguments()){
+			if (arg.getIdentifier().equals(attrName))
+				if (arg.getExpression() != null){
+					if (arg.getExpression().getExpression() != null){
+						if (arg.getExpression().getExpression().getConditionalExpression() != null){
+							OrExpression orExpr = arg.getExpression().getExpression().getConditionalExpression().getExpression();
+							AndExpression andExpr = orExpr.getExpression().get(0);
+							LogicalExpression logicalExpr = andExpr.getExpression().get(0);	
+							if (logicalExpr.getExpression() != null){	
+								AdditiveExpression addExpr = logicalExpr.getExpression().get(0);
+								if (addExpr.getString() != null)
+									for (String str: addExpr.getString()) res += str;
+							}
+						}
+					}
+				}
+		}
+		return res;
+	}	
 
 	//Check whether the function with such a name is already defined
 	@Check
@@ -792,7 +858,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		if (container instanceof BlockStatementImpl)
 			container = container.eContainer();
 		
-		//Exlude content of Diag and Matrix check from attribute checks
+		//Exclude content of Diag and Matrix check from attribute checks
 		if (container instanceof BlockBlockImpl){
 			BlockBlockImpl block = (BlockBlockImpl)container;
 			if (block.getParameters().equals(args)) return;
@@ -839,7 +905,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		if (container instanceof BlockStatementImpl)
 			container = container.eContainer();
 		
-		//Exlude content of Diag and Matrix check from attribute checks
+		//Exclude content of Diag and Matrix check from attribute checks
 		if (container instanceof BlockBlockImpl){
 			BlockBlockImpl block = (BlockBlockImpl)container;
 			if (block.getParameters().equals(args)) return;
@@ -893,5 +959,5 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		if (!isDataDefined){
 				warning("FILE block does not contain variable \"data\"!", MdlPackage.Literals.FILE_BLOCK__STATEMENTS);
 		}
-	}
+	}	
 }

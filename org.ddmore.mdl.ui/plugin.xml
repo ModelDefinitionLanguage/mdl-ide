@@ -402,14 +402,14 @@
            name="MDL File"
            project="false">
      </wizard>
-     <wizard
+     <!--<wizard
            category="org.ddmore.mdl.ui.wizard"
            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.wizard.MdlNewProjectWizard"
            finalPerspective="org.ddmore.mdl.ui.perspective.MDL"
            id="org.ddmore.mdl.ui.wizard.MdlNewProjectWizard"
            name="Plug-in MDL Project"
            project="true">
-     </wizard>
+     </wizard>-->
      <wizard
            category="org.ddmore.mdl.ui.wizard"
            class="org.ddmore.mdl.ui.wizard.SimpleMDLProject"

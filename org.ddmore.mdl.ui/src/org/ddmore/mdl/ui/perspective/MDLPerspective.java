@@ -62,13 +62,16 @@ public class MDLPerspective implements IPerspectiveFactory {
         layout.setEditorAreaVisible(true);
         layout.setFixed(false);
 
-        IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, .26f, editorArea);
+        IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, .20f, editorArea);
         left.addView(IPageLayout.ID_PROJECT_EXPLORER);
 
-        IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, .5f, editorArea);
+        IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, .75f, editorArea);
         bottom.addView(IPageLayout.ID_PROGRESS_VIEW);
         bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
         bottom.addView(IConsoleConstants.ID_CONSOLE_VIEW);
+        
+        IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, .65f, editorArea);
+        right.addView(IPageLayout.ID_OUTLINE);
         
         IWorkbench wb = PlatformUI.getWorkbench();
         IWorkbenchWindow win = wb.getActiveWorkbenchWindow();

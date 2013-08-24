@@ -168,7 +168,7 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	
 	def print_mdef_Parameter(ParameterDeclaration s){
 		var name = s.identifier;
-		'''<Parameter symbId = \"«name»\"/>'''
+		'''<Parameter symbId = "«name»"/>'''
 	}	
 	
 	def print_mdef_StructuralModel(ModelObject obj)'''
