@@ -31,6 +31,8 @@ import org.ddmore.mdl.mdl.ExecuteTask
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.BlockBlock
+import org.ddmore.mdl.mdl.OrExpression
+import org.ddmore.mdl.mdl.AndExpression
 
 class Mdl2Nonmem extends MdlPrinting{		
 	
@@ -627,9 +629,10 @@ class Mdl2Nonmem extends MdlPrinting{
 	def printDATA(DataObject o)'''
 	«FOR b:o.blocks»
 		«IF b.fileBlock != null» 
-			«IF !b.fileBlock.getData.equals("")»
+			«var data = b.fileBlock.getData»
+			«IF !data.equals("")»
 			
-			$DATA
+			$DATA «data»
 			«ENDIF»
 			«getExternalCodeStart("$DATA")»
 				«FOR s: b.fileBlock.statements»
@@ -704,7 +707,7 @@ class Mdl2Nonmem extends MdlPrinting{
 		«IF b.dataBlock !=  null»
 			«FOR DataBlockStatement block: b.dataBlock.statements»
 			«IF block.ignoreList != null»
-				«block.ignoreList.identifier» («block.ignoreList.expression.toStr»)
+				«block.ignoreList.identifier» («block.ignoreList.expression.toCommaSeparatedStr»)
 			«ENDIF»
 			«ENDFOR»
 		«ENDIF»
@@ -848,14 +851,12 @@ class Mdl2Nonmem extends MdlPrinting{
 		if (dadt_vars.get(id) != null){
 			return "A(" + dadt_vars.get(id) + ")"; 
 		}
-		if (id.equalsIgnoreCase("exp"))
-			return "EXP";
 		if (id.equalsIgnoreCase("ln"))
 			return "LOG";
-		return id;	
+		return id.toUpperCase();	
 	}
 	
-
+	
 	//Override MDL operators with NM-TRAN operators
 	override convertOperator(String op){
 		if (op.equals("<")) return ".LT.";
@@ -867,6 +868,27 @@ class Mdl2Nonmem extends MdlPrinting{
 		if (op.equals("||")) return ".OR.";
 		if (op.equals("&&")) return ".AND.";
 		return op;	
+	}
+	
+	//This is needed because of a bug in NONMEM x||y -> x, y for IGNORE statement
+	//toStr OR expression
+	def toCommaSeparatedStr(OrExpression e){
+		var res = "";
+		var iterator = e.expression.iterator();
+		if (iterator.hasNext ) res = iterator.next.toStr;
+		while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr;	
+		return res;
+	}
+	
+	//This is needed because of a bug in NONMEM x&&y -> x, y for ACCEPT statement
+	//toStr AND expression
+	def toCommaSeparatedStr(AndExpression e){
+		var res = "";
+		var iterator = e.expression.iterator();
+		if (iterator.hasNext ) res = iterator.next.toStr;
+		while (iterator.hasNext)
+			res  = res + ', ' + iterator.next.toStr;
+		return res;	
 	}
 	
 	override print(TargetBlock b){

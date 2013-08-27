@@ -385,7 +385,7 @@ class MdlPrinting {
 	def convertOperator(String op){
 		return op;
 	}
-	
+
 	def toStr(FullyQualifiedSymbolName name){
 		var res = ""; 
 		if (name.object != null){
