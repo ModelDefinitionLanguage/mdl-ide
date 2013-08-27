@@ -33,6 +33,7 @@ import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.BlockBlock
 import org.ddmore.mdl.mdl.OrExpression
 import org.ddmore.mdl.mdl.AndExpression
+import org.ddmore.mdl.mdl.SameBlock
 
 class Mdl2Nonmem extends MdlPrinting{		
 	
@@ -44,6 +45,9 @@ class Mdl2Nonmem extends MdlPrinting{
 	var dadt_vars = newHashMap  //DADT	
 	var init_vars = newHashMap  //A		
 	
+	//These maps are used to print same blocks (NM-TRAN SAME opetion in $OMEGA and $SIGMA)
+	var namedOmegaBlocks = new HashMap<String, Integer>() //Collection of names of $OMEGA records with dimensions
+	var namedSigmaBlocks = new HashMap<String, Integer>() //Collection of names of $SIGMA records with dimensions
 	
 	//Print file name and analyse MCL objects in the source file
   	def convertToNMTRAN(Mcl m){
@@ -389,7 +393,7 @@ class Mdl2Nonmem extends MdlPrinting{
  
 ////////////////////////////////////
 //convertToNonmem PARAMETER OBJECT
-/////////////////////////////////////	
+/////////////////////////////////////		
 	def convertToNMTRAN(ParameterObject o)'''
 	«o.printPRIOR»
 	«o.printTHETA»
@@ -448,11 +452,18 @@ class Mdl2Nonmem extends MdlPrinting{
 		«IF b.variabilityBlock != null»
 			«FOR c: b.variabilityBlock.statements»
 				«IF c.parameter != null»
-					«c.parameter.printOmega»
+					«c.parameter.printOMEGA»
 				«ENDIF»
 			«ENDFOR»
 			«FOR c: b.variabilityBlock.statements»
 				«c.printVariabilitySubblock("$OMEGA")»
+			«ENDFOR»
+		«ENDIF»
+	«ENDFOR»
+	«FOR b:obj.blocks»			
+		«IF b.variabilityBlock != null»
+			«FOR c: b.variabilityBlock.statements»
+				«IF c.sameBlock != null»«c.sameBlock.printSame("$OMEGA")»«ENDIF»
 			«ENDFOR»
 		«ENDIF»
 	«ENDFOR»
@@ -466,16 +477,45 @@ class Mdl2Nonmem extends MdlPrinting{
 		«IF b.variabilityBlock != null»
 			«FOR c: b.variabilityBlock.statements»
 				«IF c.parameter != null»
-					«c.parameter.printSigma»
+					«c.parameter.printSIGMA»
 				«ENDIF»
 			«ENDFOR»
 			«FOR c: b.variabilityBlock.statements»
 				«c.printVariabilitySubblock("$SIGMA")»
 			«ENDFOR»
 		«ENDIF»
+	«ENDFOR»	
+	«FOR b:obj.blocks»			
+		«IF b.variabilityBlock != null»
+			«FOR c: b.variabilityBlock.statements»
+				«IF c.sameBlock != null»«c.sameBlock.printSame("$SIGMA")»«ENDIF»
+			«ENDFOR»
+		«ENDIF»
 	«ENDFOR»
 	«getExternalCodeEnd("$SIGMA")»
 	'''
+	
+	def printSame(SameBlock b, String section) { 
+		var name = b.arguments.selectAttribute("name");
+		if (name.equals("")) return '''''';
+		val isOmega = section.equals("$OMEGA") && (namedOmegaBlocks.get(name) != null);
+		val isSigma = section.equals("$SIGMA") && (namedSigmaBlocks.get(name) != null);
+		if (isOmega || isSigma)	{			
+			var k = 0;
+			if (isOmega) k = namedOmegaBlocks.get(name);
+			if (isSigma) k = namedSigmaBlocks.get(name);
+			'''
+			
+			«section» «IF k > 0»BLOCK («k») SAME«ENDIF»
+				«IF b.parameters != null»
+					«FOR p: b.parameters.arguments»
+						; «p.identifier»
+					«ENDFOR»
+				«ENDIF»
+			'''
+		}
+	}
+
 	
 	//Print variability subblocks for $SIGMA and $OMEGA
 	def printVariabilitySubblock(VariabilityBlockStatement c, String section)'''
@@ -489,6 +529,7 @@ class Mdl2Nonmem extends MdlPrinting{
 		var result = "";
 		var printFix = false;
 		var k = 0; 
+		var name = b.arguments.selectAttribute("name");
 		for (a: b.arguments.arguments){
 			if (a.identifier != null){ 
 				if (a.identifier.equals("fix")){ 
@@ -509,12 +550,14 @@ class Mdl2Nonmem extends MdlPrinting{
 					}
 					k = k + 1;
 					if (p.identifier != null){
-						if ((section.equals("$OMEGA") && eta_vars.get("eta_" + p.identifier) != null) ||
-						(section.equals("$SIGMA") && eps_vars.get("eps_" + p.identifier) != null))
-						{
+						val isOmega = section.equals("$OMEGA") && (eta_vars.get("eta_" + p.identifier) != null);
+						val isSigma = section.equals("$SIGMA") && (eps_vars.get("eps_" + p.identifier) != null);
+						if (isOmega || isSigma)	{
 							result = result + tmpRes + p.expression.toStr + " ";
 							result = result + "; " + p.identifier + "\n";
 						}
+						if (isOmega && !name.equals("")) namedOmegaBlocks.put(name, 0);
+						if (isSigma && !name.equals("")) namedSigmaBlocks.put(name, 0);	
 					} 
 					else
 						if (!result.equals("")) result = result + p.expression.toStr + " ";
@@ -522,6 +565,11 @@ class Mdl2Nonmem extends MdlPrinting{
 			}		
 		if (printFix && !result.equals("")) result = result + "FIX\n";
 		if (result.equals("")) return '''''';
+		
+		//update dimension for the same block if any
+		if (namedOmegaBlocks.get(name) != null) namedOmegaBlocks.put(name, k);
+		if (namedSigmaBlocks.get(name) != null) namedSigmaBlocks.put(name, k);
+		
 		return 
 		'''
 		
@@ -536,6 +584,7 @@ class Mdl2Nonmem extends MdlPrinting{
 		var result = "";
 		var k = 0;
 		var printFix = false;
+		var name = b.arguments.selectAttribute("name");
 		for (a: b.arguments.arguments){
 			if (a.identifier != null){ 
 				if (a.identifier.equals("fix")) 
@@ -548,12 +597,15 @@ class Mdl2Nonmem extends MdlPrinting{
 			for (p: b.parameters.arguments) {
 				if (p.expression != null){
 					if (p.identifier != null){
-						if ((section.equals("$OMEGA") && eta_vars.get("eta_" + p.identifier) != null) ||
-						(section.equals("$SIGMA") && eps_vars.get("eps_" + p.identifier) != null)){
+						val isOmega = section.equals("$OMEGA") && (eta_vars.get("eta_" + p.identifier) != null);
+						val isSigma = section.equals("$SIGMA") && (eps_vars.get("eps_" + p.identifier) != null);
+						if (isOmega || isSigma)	{
 							result = result + p.expression.toStr + " ";
 							result = result + "; " + p.identifier + "\n";
 							k = k + 1;
 						}
+						if (isOmega && !name.equals("")) namedOmegaBlocks.put(name, 0);
+						if (isSigma && !name.equals("")) namedSigmaBlocks.put(name, 0);		
 					} 
 					else
 						if (!result.equals("")) result = result + p.expression.toStr + " ";
@@ -561,6 +613,11 @@ class Mdl2Nonmem extends MdlPrinting{
 			}
 		if (printFix && !result.equals("")) result = result + "FIX\n";
 		if (result.equals("")) return '''''';
+				
+		//update dimension for the same block if any
+		if (namedOmegaBlocks.get(name) != null) namedOmegaBlocks.put(name, k);
+		if (namedSigmaBlocks.get(name) != null) namedSigmaBlocks.put(name, k);
+
 		return 
 		'''
 		
@@ -571,7 +628,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	
 
 	//Print $SIGMA
-	def printSigma(ParameterDeclaration s){
+	def printSIGMA(ParameterDeclaration s){
 		if (s.list != null)	{
 			var name = s.identifier;
 			//SIGMA <=> EPS?	
@@ -590,7 +647,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	}
 	
 	//Print $OMEGA
-	def printOmega(ParameterDeclaration s){
+	def printOMEGA(ParameterDeclaration s){
 		if (s.list != null){		
 			var name = s.identifier;
 			//OMEGA <=> ETA?	
@@ -941,14 +998,19 @@ class Mdl2Nonmem extends MdlPrinting{
 	///////////////////////////////////////////////
 	//Prepares variable maps
 	///////////////////////////////////////////////
-	
-	//Collect variables from the MDL file
-	def prepareCollections(Mcl m){
+	def clearCollections(){
 		init_vars.clear;
 		dadt_vars.clear;
 		theta_vars.clear;
 		eta_vars.clear;
     	eps_vars.clear; 
+    	namedOmegaBlocks.clear;
+    	namedSigmaBlocks.clear;	
+	}
+	
+	//Collect variables from the MDL file
+	def prepareCollections(Mcl m){
+    	clearCollections();
     	for (o:m.objects){
 	  		if (o.modelObject != null){
 	  			setRandomVariables(o.modelObject);

@@ -14,8 +14,8 @@ class MdlGenerator extends Mdl2PharmML implements IGenerator{
  		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {
 			fsa.generateFile(
 				resource.fileName + ".ctl", m.convertToNMTRAN)
-			fsa.generateFile(
-				resource.fileName + ".xml", m.convertToPharmML)	
+			//fsa.generateFile(
+			//	resource.fileName + ".xml", m.convertToPharmML)	
 		}
 	}
 	
