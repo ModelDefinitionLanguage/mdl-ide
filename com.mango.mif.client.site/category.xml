@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.mango.mif.client.feature_1.0.1.201308231705.jar" id="com.mango.mif.client.feature" version="1.0.1.201308231705">
+   <feature url="features/com.mango.mif.client.feature_1.0.1.qualifier.jar" id="com.mango.mif.client.feature" version="1.0.1.qualifier">
       <category name="MIF Client"/>
    </feature>
    <category-def name="MIF Client" label="MIF Client"/>

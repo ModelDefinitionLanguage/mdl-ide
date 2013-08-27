@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="mifclient-dependencies" sequenceNumber="19">
+<?pde version="3.8"?><target name="com.mango.mifclient.dependencies.site.target" sequenceNumber="19">
 <locations>
 <location path="${project_loc:eu.ddmore.mdleditor.target}/plugins" type="Directory"/>
 <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
