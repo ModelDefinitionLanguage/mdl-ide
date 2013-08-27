@@ -118,7 +118,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		if (obj instanceof LibraryBlockImpl)
 			return attr_library;
 		if (obj instanceof OdeBlockImpl)
-			return attr_ode; 
+			return  attr_ode; 
 		if (obj instanceof HeaderBlockImpl)
 			return attr_header; 
 		if (obj instanceof FileBlockStatementImpl)
@@ -129,8 +129,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			return attr_import;
 		if (obj instanceof TargetBlockImpl)
 			return attr_target;
-		List<String> other = Arrays.asList();
-		return other;
+		return null;
 	}
 	
 	List<String> getRequiredAttributes(EObject obj){
@@ -868,23 +867,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			if (block.getParameters().equals(args)) return;
 		}		
 
-		if (container instanceof StructuralBlockImpl ||
-			container instanceof VariabilityBlockStatementImpl ||
-			container instanceof HeaderBlockImpl ||
-			container instanceof FileBlockStatementImpl ||
-			container instanceof RandomVariableDefinitionBlockImpl ||
-			container instanceof LibraryBlockImpl ||
-			container instanceof OdeBlockImpl ||
-			container instanceof DesignBlockStatement ||
-			container instanceof BlockBlockImpl || 
-			container instanceof DiagBlockImpl ||
-			container instanceof SameBlockImpl ||
-			container instanceof TargetBlockImpl ||
-			container instanceof ImportedFunctionImpl){
-			for (String attrName: getRequiredAttributes(container)){
-				if (!containsAttribute(args, attrName)) warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, 
-					MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, attrName);
-			}
+		//getRequiredAttributes contains lists of required attributes for each container
+		for (String attrName: getRequiredAttributes(container)){
+			if (!containsAttribute(args, attrName)) warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, 
+				MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, attrName);
 		}
 	}
 	
@@ -892,7 +878,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public void checkAllArguments(Argument argument){
 		EObject argContainer = argument.eContainer();	
 		if (!(argContainer instanceof ArgumentsImpl)) return;
-		Arguments args = (Arguments)argContainer;
 		EObject container = argContainer.eContainer();
 		if (container instanceof ListImpl || container instanceof OdeListImpl || container instanceof RandomListImpl)
 			container = container.eContainer();
@@ -905,6 +890,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		if (container instanceof BlockStatementImpl)
 			container = container.eContainer();
 		
+		Arguments args = (Arguments)argContainer;
 		//Exclude content of Diag and Matrix check from attribute checks
 		if (container instanceof BlockBlockImpl){
 			BlockBlockImpl block = (BlockBlockImpl)container;
@@ -914,29 +900,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			DiagBlockImpl block = (DiagBlockImpl)container;
 			if (block.getParameters().equals(args)) return;
 		}			
-		
-		if (container instanceof StructuralBlockImpl ||
-			container instanceof VariabilityBlockStatementImpl ||
-			container instanceof HeaderBlockImpl ||
-			container instanceof FileBlockStatementImpl ||
-			container instanceof RandomVariableDefinitionBlockImpl ||
-			container instanceof LibraryBlockImpl ||
-			container instanceof OdeBlockImpl ||
-			container instanceof DesignBlockStatement ||
-			container instanceof BlockBlockImpl || 
-			container instanceof DiagBlockImpl ||
-			container instanceof SameBlockImpl ||
-			container instanceof TargetBlockImpl ||
-			container instanceof ImportedFunctionImpl){
-			for (Argument arg: args.getArguments()){
-				if (arg.getIdentifier() != null)
-					if (!getAllAttributes(container).contains(arg.getIdentifier()))
-						warning(MSG_ATTRIBUTE_UNKNOWN + ": " + arg.getIdentifier(), 
-						MdlPackage.Literals.ARGUMENT__IDENTIFIER,
-						MSG_ATTRIBUTE_UNKNOWN, arg.getIdentifier());
-
-			}
-		}
+			
+		List<String> knownAttributes = getAllAttributes(container);
+		if (knownAttributes != null)
+			if (!knownAttributes.contains(argument.getIdentifier()))
+				warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getIdentifier(), 
+				MdlPackage.Literals.ARGUMENT__IDENTIFIER,
+				MSG_ATTRIBUTE_UNKNOWN, argument.getIdentifier());
+			
 	}
 		
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
