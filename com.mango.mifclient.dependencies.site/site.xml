@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.mango.mifclient.dependencies.feature_1.0.0.201308231653.jar" id="com.mango.mifclient.dependencies.feature" version="1.0.0.201308231653">
-      <category name="MIF Client Dependencies"/>
+   <feature url="features/com.mango.mifclient.dependencies.feature_1.0.0.201308271149.jar" id="com.mango.mifclient.dependencies.feature" version="1.0.0.201308271149">
+      <category name="MIFClientDependencies"/>
    </feature>
-   <category-def name="MIF Client Dependencies" label="MIF Client Dependencies"/>
+   <category-def name="MIFClientDependencies" label="MIF Client Dependencies"/>
 </site>

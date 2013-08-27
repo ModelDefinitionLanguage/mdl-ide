@@ -61,7 +61,7 @@
 <repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201308231653"/>
+<unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201308271149"/>
 <repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/"/>
 </location>
 </locations>
