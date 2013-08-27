@@ -1,7 +1,7 @@
 This is an update site definition containing the MIF Client bundle dependencies.
 
 In order to build the site:
-1. Open eu.ddmore.mdleditor.target/mifclient-dependencies.target in your Eclipse IDE
+1. Open eu.ddmore.mdleditor.target/com.mango.mifclient.dependencies.site.target in your Eclipse IDE
 2. Click on 'Set as Target Platform'
 3. Remove 'features', 'plugins'. artifacts.jar and content.jar from  com.mango.mifclient.dependencies.site project
 4. Open com.mango.mifclient.dependencies.site/site.xml and click 'Build All'

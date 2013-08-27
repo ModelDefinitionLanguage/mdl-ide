@@ -24,7 +24,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import com.mango.mif.domain.ExecutionRequestBuilder;
 import com.mango.mif.domain.ExecutionType;
 import com.mango.mif.domain.JobStatus;
-import com.mango.mif.utils.encrypt.EncrypterFactory;
+import com.mango.mif.utils.encrypt.DesEncrypter;
+import com.mango.mif.utils.encrypt.EncryptionException;
 
 /**
  * @author jcarr
@@ -40,7 +41,11 @@ public class TESServer {
 
     private static final Logger LOGGER = Logger.getLogger(TESServer.class);
 
-    private final transient HttpClient client = new DefaultHttpClient();
+	private static final String MIF_ENCRYPTION_KEY_PROP = "mif.encryption.key";
+
+	private static DesEncrypter desEncrypter;
+	
+	private final transient HttpClient client = new DefaultHttpClient();
 
     public String prepare() {
         final String url = getBaseURL() + JOBSUBMISSION_URL + "/prepare";
@@ -89,10 +94,25 @@ public class TESServer {
     }
 
     private static String getPassword() {
-        return EncrypterFactory.getEncrypter().encrypt(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD));
+        try {
+			return getDesEncrypter().encrypt(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD));
+		} catch (EncryptionException e) {
+			throw new IllegalStateException(e);
+		}
     }
 
-    public String exec(final String requestId, final String execFile) {
+    private static synchronized DesEncrypter getDesEncrypter() throws EncryptionException {
+    	if(desEncrypter!=null) {
+    		return desEncrypter;
+    	}
+    	if(System.getProperties().containsKey(MIF_ENCRYPTION_KEY_PROP)) {
+    		return new DesEncrypter(System.getProperty(MIF_ENCRYPTION_KEY_PROP));
+    	} else {
+    		return new DesEncrypter();
+    	}
+	}
+
+	public String exec(final String requestId, final String execFile) {
         final String url = getBaseURL() + JOBSUBMISSION_URL + "/execute";
 
         HttpPost httpPost = new HttpPost(url);
