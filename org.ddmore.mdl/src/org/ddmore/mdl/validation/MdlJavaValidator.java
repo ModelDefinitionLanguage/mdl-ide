@@ -16,6 +16,8 @@ import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.FileBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl;
+import org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl;
+import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
 import org.ddmore.mdl.mdl.impl.HeaderBlockImpl;
 import org.ddmore.mdl.mdl.impl.ImportedFunctionImpl;
 import org.ddmore.mdl.mdl.impl.InlineBlockImpl;
@@ -60,6 +62,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_ATTRIBUTE_MISSING = "Required attribute is missing";
 
 	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF = "Unresolved reference to a list attribute";
+	public final static String MSG_UNRESOLVED_FUNC_ARGUMENT_REF = "Unresolved reference to a function output parameter";
 	public final static String MSG_UNRESOLVED_SAME_BLOCK_NAME = "No corresponding matrix or diag block found";
 
 	//private enum VAL_RES {OK, ERROR, WARNING}
@@ -220,7 +223,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		return false;
 	}
 	
-	//Check whether the list of attributes contains a give attribute
+	//Check whether the list of attributes contains a given attribute
 	private Boolean containsAttribute(Arguments args, String attrName){
 		for (Argument arg: args.getArguments()){
 			if (arg.getIdentifier() != null){
@@ -786,6 +789,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
 	@Check
 	public void checkReference(FullyQualifiedArgumentName ref) {
+		//The reference is to the symbol with assigned expression which is a function call
+		//We check that attributes refer to function arguments
+		if (checkReferenceToFuctionOutput(ref)) return;
+
 		String varName = ref.getParent().getIdentifier();
 		Resource resource = ref.eResource();
 		LinkedList<Argument> args = new LinkedList<Argument>();			
@@ -838,6 +845,70 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    }
 	}
 
+	//Validate a fully qualified argument whose parent refers to a variable declared as a function 
+	//It is assumed that attribute selectors will refer to symbols in attribute "param" of a function call 
+	public boolean checkReferenceToFuctionOutput(FullyQualifiedArgumentName ref) {
+		String varName = ref.getParent().getIdentifier();		
+		//N.K. - exclude/validate standard functions???		
+		Resource resource = ref.eResource();
+		TreeIterator<EObject> iterator = resource.getAllContents();
+		ArrayList<String> params = new ArrayList<String>();
+	    while (iterator.hasNext()){
+	    	EObject obj = iterator.next();
+	    	if (obj instanceof FunctionCallStatementImpl){
+	    		FunctionCallStatement s = (FunctionCallStatement) obj;
+	    		if (s.getIdentifier().equals(varName)) {	    			
+	    			//Compare reference with references in FunctionCall param attribute
+	    			//Does not guarantee the correctness as references may occur in expressions
+	    			FunctionCall funcCall = s.getExpression();
+	       			for (Argument x: funcCall.getArguments().getArguments()){
+	       				if (x.getIdentifier().equals("param")){
+	       					if (x.getExpression().getList() != null){
+	       						for (Argument paramArg: x.getExpression().getList().getArguments().getArguments()){
+	       							TreeIterator<EObject> paramIterator = paramArg.getExpression().eAllContents();
+	       							while (paramIterator.hasNext()){
+	       						    	EObject paramObj = paramIterator.next();
+	       						    	if (paramObj instanceof FullyQualifiedSymbolNameImpl){
+	       						    		FullyQualifiedSymbolName foundParam = (FullyQualifiedSymbolName) paramObj;
+	       						    		params.add(foundParam.getIdentifier());
+	       						    	}
+	       							}
+	       						}
+	       					}
+	       				}
+	       			}
+	       			FormalArgument paramRef = ref.getSelectors().get(0).getIdentifier();
+	       			if (paramRef != null){
+	       				if (!params.contains(paramRef.getIdentifier())){
+	       					warning(MSG_UNRESOLVED_FUNC_ARGUMENT_REF + ": " + 
+	       							paramRef.getIdentifier() + " is not in the reference set " + printList(params), 
+	       							MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
+	       							MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getIdentifier());
+	       				}
+	       			} else {
+	       				String selector = ref.getSelectors().get(0).getSelector();
+	       				int index = Integer.parseInt(selector);
+	       				if (index < 1 || index > params.size()){
+	       					warning(MSG_UNRESOLVED_FUNC_ARGUMENT_REF + ": " + 
+	       							"wrong index [" + index + "]. " + 
+	       							"Reference set " + printList(params) + " contains " + params.size() + " items.", 
+	       							MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
+	       							MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getIdentifier());
+	       				}	       					
+	       			}
+	       			return true; //skip list attribute check
+	    		}
+	    	}
+	    }
+	    return false;
+	}
+	
+	//For testing
+	private String printList(ArrayList<String> list){
+		String res = "{ ";
+		for (String str: list) res += str + "; ";
+		return res + "}";
+	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Check attributes of parameters in blocks
