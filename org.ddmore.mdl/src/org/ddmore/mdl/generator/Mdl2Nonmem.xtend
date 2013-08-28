@@ -933,6 +933,7 @@ class Mdl2Nonmem extends MdlPrinting{
 		if (op.equals("<=")) return ".LE.";
 		if (op.equals(">=")) return ".GE.";
 		if (op.equals("==")) return ".EQ.";
+		if (op.equals("!=")) return ".NE.";		
 		if (op.equals("^")) return "**";
 		if (op.equals("||")) return ".OR.";
 		if (op.equals("&&")) return ".AND.";
