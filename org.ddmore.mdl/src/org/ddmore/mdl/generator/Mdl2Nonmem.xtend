@@ -12,7 +12,6 @@ import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.TaskObjectBlock
-import org.ddmore.mdl.mdl.VariabilityBlockStatement
 import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.ModelPredictionBlock
 import org.ddmore.mdl.mdl.ParameterDeclaration
@@ -30,10 +29,12 @@ import java.util.ArrayList
 import org.ddmore.mdl.mdl.ExecuteTask
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.DiagBlock
-import org.ddmore.mdl.mdl.BlockBlock
+import org.ddmore.mdl.mdl.MatrixBlock
 import org.ddmore.mdl.mdl.OrExpression
 import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.mdl.SameBlock
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
+import org.ddmore.mdl.mdl.Selector
 
 class Mdl2Nonmem extends MdlPrinting{		
 	
@@ -81,6 +82,9 @@ class Mdl2Nonmem extends MdlPrinting{
 		«FOR o:m.objects»
 			«IF o.taskObject != null»«o.taskObject.convertToNMTRAN»«ENDIF»
 		«ENDFOR»
+		«FOR o:m.objects»
+			«IF o.modelObject != null»«o.modelObject.printTABLE»«ENDIF»
+	  	«ENDFOR»
 		'''
 	}
 	
@@ -153,7 +157,6 @@ class Mdl2Nonmem extends MdlPrinting{
 			«o.printPRED(isPKDefined, isErrorDefined)»
 		«ENDIF»
 		«o.printDES(isODEDefined)»
-		«o.printTABLE»
 		'''
 	}
 	
@@ -164,9 +167,9 @@ class Mdl2Nonmem extends MdlPrinting{
 	$PRED
 	«ENDIF»
 	«getExternalCodeStart("$PRED")»
-		«o.printPKContent»
-		«o.printMIXContent»
-		«o.printErrorContent»
+	«o.printPKContent»
+	«o.printMIXContent»
+	«o.printErrorContent»
 	«getExternalCodeEnd("$PRED")»
 	'''
 
@@ -177,13 +180,13 @@ class Mdl2Nonmem extends MdlPrinting{
 	$PK
 	«ENDIF»
 	«getExternalCodeStart("$PK")»
-		«o.printPKContent»
+	«o.printPKContent»
 	«getExternalCodeEnd("$PK")»
 	'''
 	
 	//Processing GROUP_VARIABLES, INDIVIDUAL_VARIABLES, MODEL_PREDICTION (init conditions) for $PK
 	def printPKContent(ModelObject o)'''
-		«FOR b:o.blocks»
+	«FOR b:o.blocks»
 		«IF	b.groupVariablesBlock != null»
 			«FOR st: b.groupVariablesBlock.statements»
 				«IF st.statement != null»
@@ -216,7 +219,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	«ENDIF»
 	«getExternalCodeStart("$MIX")»
 	«getExternalCodeStart("$MIXTURE")»
-		«o.printMIXContent»
+	«o.printMIXContent»
 	«getExternalCodeEnd("$MIX")»
 	«getExternalCodeEnd("$MIXTURE")»
 	'''
@@ -240,7 +243,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	$ERROR
 	«ENDIF»
 	«getExternalCodeStart("$ERROR")»
-		«o.printErrorContent»
+	«o.printErrorContent»
 	«getExternalCodeEnd("$ERROR")»
 	'''	
 	
@@ -267,25 +270,25 @@ class Mdl2Nonmem extends MdlPrinting{
 	$MODEL
 	«ENDIF»
 	«getExternalCodeStart("$MODEL")»
-		«FOR b:o.blocks»
-			«IF b.modelPredictionBlock != null»
-				«var bb = b.modelPredictionBlock»
-				«FOR s: bb.statements»
-					«IF s.odeBlock != null»
-						«FOR ss: s.odeBlock.statements»
-							«var x = ss.symbol»
-							«IF x != null»
-								«IF x.expression != null»
-									«IF x.expression.odeList != null»
-										COMP(«x.identifier»)
-									«ENDIF»
+	«FOR b:o.blocks»
+		«IF b.modelPredictionBlock != null»
+			«var bb = b.modelPredictionBlock»
+			«FOR s: bb.statements»
+				«IF s.odeBlock != null»
+					«FOR ss: s.odeBlock.statements»
+						«var x = ss.symbol»
+						«IF x != null»
+							«IF x.expression != null»
+								«IF x.expression.odeList != null»
+									COMP(«x.identifier»)
 								«ENDIF»
 							«ENDIF»
-						«ENDFOR»
-					«ENDIF»
-				«ENDFOR»
-			«ENDIF»
-		«ENDFOR»
+						«ENDIF»
+					«ENDFOR»
+				«ENDIF»
+			«ENDFOR»
+		«ENDIF»
+	«ENDFOR»
 	«getExternalCodeEnd("$MODEL")»
 	'''
 
@@ -296,37 +299,37 @@ class Mdl2Nonmem extends MdlPrinting{
 	$DES
 	«ENDIF»
 	«getExternalCodeStart("$DES")»
-		«FOR b:o.blocks»
-			«IF b.modelPredictionBlock != null»
-				«var bb = b.modelPredictionBlock»
-				«FOR s: bb.statements»
-					«IF s.odeBlock != null»
-						«FOR ss: s.odeBlock.statements»
-							«var x = ss.symbol»
-							«IF x != null»
-								«IF x.expression != null»
-									«IF x.expression.expression != null»
-										«x.print»
-									«ENDIF»
-									«IF x.expression.odeList != null»
-										«var deriv = x.expression.odeList.getAttribute("deriv")»
-										«IF !deriv.equals("")»
-											«var id = x.identifier»
-											«IF dadt_vars.get(id) != null»
-												DADT(«dadt_vars.get(id)») = «deriv»
-											«ENDIF»	
-										«ENDIF»
+	«FOR b:o.blocks»
+		«IF b.modelPredictionBlock != null»
+			«var bb = b.modelPredictionBlock»
+			«FOR s: bb.statements»
+				«IF s.odeBlock != null»
+					«FOR ss: s.odeBlock.statements»
+						«var x = ss.symbol»
+						«IF x != null»
+							«IF x.expression != null»
+								«IF x.expression.expression != null»
+									«x.print»
+								«ENDIF»
+								«IF x.expression.odeList != null»
+									«var deriv = x.expression.odeList.getAttribute("deriv")»
+									«IF !deriv.equals("")»
+										«var id = x.identifier»
+										«IF dadt_vars.get(id) != null»
+											DADT(«dadt_vars.get(id)») = «deriv»
+										«ENDIF»	
 									«ENDIF»
 								«ENDIF»
 							«ENDIF»
-							«IF ss.statement != null»
-								«ss.statement.print»
-							«ENDIF»
-						«ENDFOR»
-					«ENDIF»
-				«ENDFOR»
-			«ENDIF»
-		«ENDFOR»
+						«ENDIF»
+						«IF ss.statement != null»
+							«ss.statement.print»
+						«ENDIF»
+					«ENDFOR»
+				«ENDIF»
+			«ENDFOR»
+		«ENDIF»
+	«ENDFOR»
 	«getExternalCodeEnd("$DES")»
 	'''    
     
@@ -338,11 +341,11 @@ class Mdl2Nonmem extends MdlPrinting{
 	«ENDIF»
 	«getExternalCodeStart("$SUBR")»
 	«getExternalCodeStart("$SUBROUTINE")»
-		«FOR b:o.blocks»
-			«IF b.modelPredictionBlock != null»
-				«b.modelPredictionBlock.printSUBR»
-			«ENDIF»
-		«ENDFOR»
+	«FOR b:o.blocks»
+		«IF b.modelPredictionBlock != null»
+			«b.modelPredictionBlock.printSUBR»
+		«ENDIF»
+	«ENDFOR»
 	«getExternalCodeEnd("$SUBR")»
 	«getExternalCodeEnd("$SUBROUTINE")»
     ''' 
@@ -374,19 +377,18 @@ class Mdl2Nonmem extends MdlPrinting{
 	«IF o.isOutputVariablesDefined»
 
 	$TABLE 
-	«ENDIF»
-	
+	«ENDIF»	
 	«getExternalCodeStart("$TABLE")»
-		«FOR b:o.blocks»
-			«IF b.outputVariablesBlock != null»
-				«var bb = b.outputVariablesBlock»
-				«IF bb.variables.size > 0»
-					«FOR st: bb.variables SEPARATOR ' '»«st.toStr»«ENDFOR»
-					«val file = o.eResource.getTaskObjectName»
-					ONEHEADER NOPRINT «IF !file.equals("")»FILE=«file».fit«ENDIF» 
-				«ENDIF»
-			«ENDIF»	
-		«ENDFOR»
+	«FOR b:o.blocks»
+		«IF b.outputVariablesBlock != null»
+			«var bb = b.outputVariablesBlock»
+			«IF bb.variables.size > 0»
+				«FOR st: bb.variables SEPARATOR ' '»«st.toStr»«ENDFOR»
+				«val file = o.eResource.getTaskObjectName»
+				ONEHEADER NOPRINT «IF !file.equals("")»FILE=«file».fit«ENDIF» 
+			«ENDIF»
+		«ENDIF»	
+	«ENDFOR»
 	«getExternalCodeEnd("$TABLE")»
 	'''
 	
@@ -394,12 +396,15 @@ class Mdl2Nonmem extends MdlPrinting{
 ////////////////////////////////////
 //convertToNonmem PARAMETER OBJECT
 /////////////////////////////////////		
-	def convertToNMTRAN(ParameterObject o)'''
-	«o.printPRIOR»
-	«o.printTHETA»
-	«o.printSIGMA»
-	«o.printOMEGA»
+	def convertToNMTRAN(ParameterObject obj){
+	obj.collectDimensionsForSame;	
 	'''
+	«obj.printPRIOR»
+	«obj.printTHETA»
+	«obj.printOMEGA»
+	«obj.printSIGMA»
+	'''
+	}
 
 	//Copy statements from PRIOR block to $PRIOR
 	def printPRIOR(ParameterObject obj)'''
@@ -408,13 +413,13 @@ class Mdl2Nonmem extends MdlPrinting{
 	$PRIOR
 	«ENDIF»	
 	«getExternalCodeStart("$PRIOR")»
-		«FOR b:obj.blocks»			
-			«IF b.priorBlock != null»
-				«FOR st: b.priorBlock.statements»
-					«st.printExcludingLists»
-				«ENDFOR»
-			«ENDIF»
-		«ENDFOR»
+	«FOR b:obj.blocks»			
+		«IF b.priorBlock != null»
+			«FOR st: b.priorBlock.statements»
+				«st.printExcludingLists»
+			«ENDFOR»
+		«ENDIF»
+	«ENDFOR»
 	«getExternalCodeEnd("$PRIOR")»
 	'''
 		
@@ -425,13 +430,13 @@ class Mdl2Nonmem extends MdlPrinting{
 	$THETA
 	«ENDIF»
 	«getExternalCodeStart("$THETA")»
-		«FOR b:obj.blocks»			
+	«FOR b:obj.blocks»			
 		«IF b.structuralBlock != null»
 			«FOR st: b.structuralBlock.parameters»
-			«st.printTheta»
+				«st.printTheta»
 			«ENDFOR»
 		«ENDIF»
-		«ENDFOR»
+	«ENDFOR»
 	«getExternalCodeEnd("$THETA")»
 	«IF "$THETAI".isTargetDefined»
 	
@@ -448,53 +453,54 @@ class Mdl2Nonmem extends MdlPrinting{
 	//Processing VARIABILITY for $OMEGA
 	def printOMEGA(ParameterObject obj)'''
 	«externalCodeStart.get("$OMEGA")»
-	«FOR b:obj.blocks»			
-		«IF b.variabilityBlock != null»
-			«FOR c: b.variabilityBlock.statements»
-				«IF c.parameter != null»
-					«c.parameter.printOMEGA»
-				«ENDIF»
-			«ENDFOR»
-			«FOR c: b.variabilityBlock.statements»
-				«c.printVariabilitySubblock("$OMEGA")»
-			«ENDFOR»
-		«ENDIF»
-	«ENDFOR»
-	«FOR b:obj.blocks»			
-		«IF b.variabilityBlock != null»
-			«FOR c: b.variabilityBlock.statements»
-				«IF c.sameBlock != null»«c.sameBlock.printSame("$OMEGA")»«ENDIF»
-			«ENDFOR»
-		«ENDIF»
-	«ENDFOR»
+	«obj.printVariabilityBlock("$OMEGA")»
 	«externalCodeEnd.get("$OMEGA")»
 	'''
-
+	
 	//Processing VARIABILITY for $SIGMA
 	def printSIGMA(ParameterObject obj)'''
 	«getExternalCodeStart("$SIGMA")»
-	«FOR b:obj.blocks»			
-		«IF b.variabilityBlock != null»
-			«FOR c: b.variabilityBlock.statements»
-				«IF c.parameter != null»
-					«c.parameter.printSIGMA»
-				«ENDIF»
-			«ENDFOR»
-			«FOR c: b.variabilityBlock.statements»
-				«c.printVariabilitySubblock("$SIGMA")»
-			«ENDFOR»
-		«ENDIF»
-	«ENDFOR»	
-	«FOR b:obj.blocks»			
-		«IF b.variabilityBlock != null»
-			«FOR c: b.variabilityBlock.statements»
-				«IF c.sameBlock != null»«c.sameBlock.printSame("$SIGMA")»«ENDIF»
-			«ENDFOR»
-		«ENDIF»
-	«ENDFOR»
+	«obj.printVariabilityBlock("$SIGMA")»
 	«getExternalCodeEnd("$SIGMA")»
 	'''
 	
+	//Return VARIABILITY block statements for $SIGMA or $OMEGA
+	def printVariabilityBlock(ParameterObject obj, String section){
+		var res = "";
+		for (b:obj.blocks){
+			if (b.variabilityBlock != null){
+				var printSectionName = true;
+				for (c: b.variabilityBlock.statements){
+					if (c.parameter != null){
+						var tmp = c.parameter.printVariabilityParameter(section);
+						if (!tmp.equals("")){
+							if (printSectionName){
+								res = res + "\n" + section + "\n";
+								printSectionName = false;
+							}
+							res = res + tmp;
+						}
+					}
+					if (c.diagBlock != null){
+						res  = res + c.diagBlock.printDiag(section);
+						printSectionName = true;
+					}
+					if (c.matrixBlock != null){
+						res  = res + c.matrixBlock.printMatrix(section);
+						printSectionName = true;
+					}
+					if (c.sameBlock != null){
+						res  = res + c.sameBlock.printSame(section);
+						printSectionName = true;
+					}
+				}
+			}
+		}
+		return res;
+	}
+	
+	//$OMEGA BLOCK(dim) SAME ; varName
+	//$SIGMA BLOCK(dim) SAME ; varName
 	def printSame(SameBlock b, String section) { 
 		var name = b.arguments.selectAttribute("name");
 		if (name.equals("")) return '''''';
@@ -504,32 +510,84 @@ class Mdl2Nonmem extends MdlPrinting{
 			var k = 0;
 			if (isOmega) k = namedOmegaBlocks.get(name);
 			if (isSigma) k = namedSigmaBlocks.get(name);
+			return 
 			'''
 			
 			«section» «IF k > 0»BLOCK («k») SAME«ENDIF»
-				«IF b.parameters != null»
-					«FOR p: b.parameters.arguments»
-						; «p.identifier»
-					«ENDFOR»
-				«ENDIF»
+			«IF b.parameters != null»
+				«FOR p: b.parameters.arguments»
+					; «p.identifier»
+				«ENDFOR»
+			«ENDIF»
 			'''
 		}
+		return "";
+	}	
+	
+	//Create maps with dimensions for same blocks
+	def collectDimensionsForSame(ParameterObject obj){
+		for (b:obj.blocks){
+			if (b.variabilityBlock != null){
+				for (c: b.variabilityBlock.statements){
+					if (c.diagBlock != null)
+						c.diagBlock.collectDimensionsForSame;
+					if (c.matrixBlock != null)
+						c.matrixBlock.collectDimensionsForSame;
+				}
+			}
+		}
+	}
+	
+	//Create maps with dimensions for same blocks corresponding to diag(...){...}
+	def collectDimensionsForSame(DiagBlock b)
+	{
+		var k = 0; 
+		var name = b.arguments.selectAttribute("name");
+		var isOmega = false;
+		var isSigma = false;
+		if (name != null){
+			if (b.parameters != null)		
+				for (p: b.parameters.arguments) {
+					if (p.expression != null){
+						k = k + 1;
+						if (p.identifier != null){
+							if (eta_vars.get("eta_" + p.identifier) != null) isOmega = true;
+							if (eta_vars.get("eps_" + p.identifier) != null) isSigma = true;
+						} 
+					}
+				}		
+			if (isOmega) namedOmegaBlocks.put(name, k);
+			if (isSigma) namedSigmaBlocks.put(name, k);
+		}
+	}
+	
+	//Create maps with dimensions for same blocks corresponding to matrix(...){...}
+	def collectDimensionsForSame(MatrixBlock b)
+	{
+		var k = 0;
+		var name = b.arguments.selectAttribute("name");
+		var isOmega = false;
+		var isSigma = false;
+		if (b.parameters != null)
+			for (p: b.parameters.arguments) {
+				if (p.expression != null){
+					if (p.identifier != null){
+						if (eta_vars.get("eta_" + p.identifier) != null) isOmega = true;
+						if (eta_vars.get("eps_" + p.identifier) != null) isSigma = true;
+						k = k + 1;
+					}
+				}
+			}
+		if (isOmega) namedOmegaBlocks.put(name, k);
+		if (isSigma) namedSigmaBlocks.put(name, k);
 	}
 
-	
-	//Print variability subblocks for $SIGMA and $OMEGA
-	def printVariabilitySubblock(VariabilityBlockStatement c, String section)'''
-	«IF c.diagBlock != null»«c.diagBlock.printDiag(section)»«ENDIF»
-	«IF c.blockBlock != null»«c.blockBlock.printMatrix(section)»«ENDIF»
-	'''
-	
 	//Print diag(...){...} subblock of VARIABILITY
 	def printDiag(DiagBlock b, String section)
 	{
 		var result = "";
 		var printFix = false;
 		var k = 0; 
-		var name = b.arguments.selectAttribute("name");
 		for (a: b.arguments.arguments){
 			if (a.identifier != null){ 
 				if (a.identifier.equals("fix")){ 
@@ -556,35 +614,27 @@ class Mdl2Nonmem extends MdlPrinting{
 							result = result + tmpRes + p.expression.toStr + " ";
 							result = result + "; " + p.identifier + "\n";
 						}
-						if (isOmega && !name.equals("")) namedOmegaBlocks.put(name, 0);
-						if (isSigma && !name.equals("")) namedSigmaBlocks.put(name, 0);	
 					} 
 					else
 						if (!result.equals("")) result = result + p.expression.toStr + " ";
 				}
 			}		
 		if (printFix && !result.equals("")) result = result + "FIX\n";
-		if (result.equals("")) return '''''';
-		
-		//update dimension for the same block if any
-		if (namedOmegaBlocks.get(name) != null) namedOmegaBlocks.put(name, k);
-		if (namedSigmaBlocks.get(name) != null) namedSigmaBlocks.put(name, k);
-		
-		return 
+		if (result.equals("")) return "";		
+		return
 		'''
 		
 		«section» «IF k > 0»BLOCK («k») «ENDIF»
-			«result»
+		«result»
 		'''
 	}
 	
 	//Print matrix(...){...} subblock of VARIABILITY
-	def printMatrix(BlockBlock b, String section)
+	def printMatrix(MatrixBlock b, String section)
 	{
 		var result = "";
-		var k = 0;
 		var printFix = false;
-		var name = b.arguments.selectAttribute("name");
+		var k = 0; 
 		for (a: b.arguments.arguments){
 			if (a.identifier != null){ 
 				if (a.identifier.equals("fix")) 
@@ -604,65 +654,40 @@ class Mdl2Nonmem extends MdlPrinting{
 							result = result + "; " + p.identifier + "\n";
 							k = k + 1;
 						}
-						if (isOmega && !name.equals("")) namedOmegaBlocks.put(name, 0);
-						if (isSigma && !name.equals("")) namedSigmaBlocks.put(name, 0);		
 					} 
 					else
 						if (!result.equals("")) result = result + p.expression.toStr + " ";
 				}
 			}
 		if (printFix && !result.equals("")) result = result + "FIX\n";
-		if (result.equals("")) return '''''';
-				
-		//update dimension for the same block if any
-		if (namedOmegaBlocks.get(name) != null) namedOmegaBlocks.put(name, k);
-		if (namedSigmaBlocks.get(name) != null) namedSigmaBlocks.put(name, k);
-
+		if (result.equals("")) return "";
 		return 
 		'''
 		
 		«section» «IF k > 0»BLOCK («k») «ENDIF»
-			«result»
+		«result»
 		'''; 
 	}
 	
 
-	//Print $SIGMA
-	def printSIGMA(ParameterDeclaration s){
-		if (s.list != null)	{
-			var name = s.identifier;
-			//SIGMA <=> EPS?	
-			if (eps_vars.get("eps_" + name) != null)
-			{
-				val value = s.list.getAttribute("value");
-				val printFix = s.list.getAttribute("fix").isTrue;
-				if (value.equals("")) return "";							
-				'''
-				
-				$SIGMA	
-					«value»«IF printFix» FIX«ENDIF» ; «name»
-				'''
-			}
+	//Print VARIABILITY parameter in $SIGMA or $OMEGA
+	def printVariabilityParameter(ParameterDeclaration s, String section){
+		var name = s.identifier;
+		//SIGMA <=> EPS, OMEGA <=> ETA	
+		var isOmega = (section.equals("$OMEGA") && eta_vars.get("eta_" + name) != null);
+		var isSigma = (section.equals("$SIGMA") && eps_vars.get("eps_" + name) != null);
+		if (isOmega || isSigma)
+		{
+			val value = s.list.getAttribute("value");
+			val printFix = s.list.getAttribute("fix").isTrue;
+			return							
+			'''
+			«IF !value.equals("")»«value»«IF printFix» FIX«ENDIF»«ENDIF» ; «name»
+			'''
 		}
+		return "";
 	}
 	
-	//Print $OMEGA
-	def printOMEGA(ParameterDeclaration s){
-		if (s.list != null){		
-			var name = s.identifier;
-			//OMEGA <=> ETA?	
-			if (eta_vars.get("eta_" + name) != null){
-				val value = s.list.getAttribute("value");
-				var printFix = s.list.getAttribute("fix").isTrue;
-				if (value.equals("")) return "";								
-				'''
-				
-				$OMEGA
-					«value»«IF printFix» FIX«ENDIF» ; «name»
-				'''
-			}
-		}
-	}
 	
 	//Find attributes in STRUCTURAL_VARIABLES and form an NMTRAN statement
 	def printTheta(ParameterDeclaration s){
@@ -695,11 +720,11 @@ class Mdl2Nonmem extends MdlPrinting{
 	$INPUT
 	«ENDIF»
 	«getExternalCodeStart("$INPUT")»
-		«FOR b:o.blocks»
-			«IF b.headerBlock != null»
-				«FOR st: b.headerBlock.variables SEPARATOR ' '»«st.identifier.toStr»«ENDFOR»
-			«ENDIF»
-		«ENDFOR»
+	«FOR b:o.blocks»
+		«IF b.headerBlock != null»
+			«FOR st: b.headerBlock.variables SEPARATOR ' '»«st.identifier.toStr»«ENDFOR»
+		«ENDIF»
+	«ENDFOR»
 	«getExternalCodeEnd("$INPUT")»
 	'''
 	
@@ -713,9 +738,9 @@ class Mdl2Nonmem extends MdlPrinting{
 			$DATA «data»
 			«ENDIF»
 			«getExternalCodeStart("$DATA")»
-				«FOR s: b.fileBlock.statements»
-					«s.printIGNORE»
-				«ENDFOR»
+			«FOR s: b.fileBlock.statements»
+				«s.printIGNORE»
+			«ENDFOR»
 			«getExternalCodeEnd("$DATA")»
 		«ENDIF»
 	«ENDFOR»
@@ -784,9 +809,9 @@ class Mdl2Nonmem extends MdlPrinting{
 	«FOR b: o.blocks»
 		«IF b.dataBlock !=  null»
 			«FOR DataBlockStatement block: b.dataBlock.statements»
-			«IF block.ignoreList != null»
-				«block.ignoreList.identifier» («block.ignoreList.expression.toCommaSeparatedStr»)
-			«ENDIF»
+				«IF block.ignoreList != null»
+					«block.ignoreList.identifier» («block.ignoreList.expression.toCommaSeparatedStr»)
+				«ENDIF»
 			«ENDFOR»
 		«ENDIF»
 	«ENDFOR»
@@ -803,12 +828,12 @@ class Mdl2Nonmem extends MdlPrinting{
 	«getExternalCodeStart("$SIMULATION")»
 	«IF !isInlineTargetDefined»
 		«FOR s: b.statements»
-		«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
+			«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
 		«ENDFOR»
 		NOABORT
 	«ELSE»
 		«FOR s: b.statements»
-		«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
+			«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
 		«ENDFOR»
 	«ENDIF» 
 	«getExternalCodeEnd("$SIM")»
@@ -826,13 +851,13 @@ class Mdl2Nonmem extends MdlPrinting{
 	«getExternalCodeStart("$ESTIMATION")»
 	«IF !isInlineTargetDefined»
 		«FOR s: b.statements»
-		«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
+			«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
 		«ENDFOR»
 		NOABORT 
 		«b.printCovariance»
 	«ELSE»
 		«FOR s: b.statements»
-		«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
+			«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
 		«ENDFOR»
 	«ENDIF»
 	«getExternalCodeEnd("$EST")»
@@ -1223,4 +1248,21 @@ class Mdl2Nonmem extends MdlPrinting{
 		}
 	}	
 	
+	//Rerences to attributes: skip variable name and replace selectors, e.g,  amount.A[2] -> A(2)
+	override String toStr(FullyQualifiedArgumentName name) { 
+		//var res = name.parent.toStr;
+		var res = "";
+		for (s: name.selectors){
+			res = res + s.toStr
+		}
+		return res;
+	}
+	
+	//Selectors [] -> (), e.g., A[2] -> A(2)
+	override String toStr(Selector s) { 
+		if (s.identifier != null)
+			return s.identifier.identifier;
+		if (s.selector != null)
+			return "(" + s.selector + ")";
+	}		
 }

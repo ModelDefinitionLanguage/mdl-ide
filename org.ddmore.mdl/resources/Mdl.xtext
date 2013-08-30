@@ -246,13 +246,13 @@ MixtureBlock:
 
 VariabilityBlockStatement:
 	parameter = ParameterDeclaration | 
-	blockBlock = BlockBlock | 
+	matrixBlock = MatrixBlock | 
 	diagBlock = DiagBlock	|
 	sameBlock = SameBlock
 ;
 
 //Renamed to Matrix!
-BlockBlock:
+MatrixBlock:
 	 identifier = 'matrix' '(' arguments = Arguments ')'
 	 (BEGIN parameters = Arguments END)?  //new Parameter +
 ;
@@ -410,13 +410,13 @@ EnumType:
 	distribution = Distribution |
 	use = UseType |       
 	likelyhood = Likelyhood |
-	missing = Missing |
+	//missing = Missing |
 	target = TargetLanguage
 ;
 
-Missing:
-	identifier = 'MISSING'
-;
+//Missing:
+//	identifier = 'MISSING'
+//;
 
 Likelyhood:
 	identifier = 'LIKELIHOOD'	
@@ -427,7 +427,7 @@ UseType:
 ;
 
 Categorical:
-	identifier = 'categorical' ('(' arguments = Arguments ')')?
+	identifier = 'categorical' ('(' arguments = FormalArguments ')')?
 ;
 
 Continuous:

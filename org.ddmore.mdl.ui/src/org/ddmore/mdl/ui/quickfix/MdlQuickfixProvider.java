@@ -37,7 +37,7 @@ import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlFactory;
-import org.ddmore.mdl.mdl.Missing;
+//import org.ddmore.mdl.mdl.Missing;
 import org.ddmore.mdl.mdl.MixtureBlock;
 import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
@@ -156,8 +156,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
     final static List<String> covariate_values = Arrays.asList("covariate");
     final static List<String> distribution_values = Arrays.asList("Normal", "Binomial", "Poisson", "Student_T", "MVNormal");
     final static List<String> use_values = Arrays.asList("mdv", "id", "dv", "idv", "dvid", "amt");
-    final static List<String> likelyhood_values = Arrays.asList("likelyhood");
-    final static List<String> missing_values = Arrays.asList("missing");
+    final static List<String> likelihood_values = Arrays.asList("likelihood");
+    //final static List<String> missing_values = Arrays.asList("missing");
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Automatically create EObjects
@@ -184,10 +184,10 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			return createDistributionExpression(value);
 		if (use_values.contains(value))
 			return createUseExpression(value);
-		if (likelyhood_values.contains(value))
+		if (likelihood_values.contains(value))
 			return createLikelyhoodExpression(value);
-		if (missing_values.contains(value))
-			return createMissingExpression(value);
+		//if (missing_values.contains(value))
+		//	return createMissingExpression(value);
 			//all others are strings
 		return createStringExpression(value);
 	}
@@ -222,7 +222,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return expr;
 	}
 	
-	private AnyExpression createMissingExpression(String value) {
+	/*private AnyExpression createMissingExpression(String value) {
 		Missing tl = MdlFactory.eINSTANCE.createMissing();
 		tl.setIdentifier(value);
 		EnumType t = MdlFactory.eINSTANCE.createEnumType();
@@ -230,7 +230,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		expr.setType(t);
 		return expr;
-	}
+	}*/
 	
 	private AnyExpression createCovariateExpression(String value) {
 		Covariate tl = MdlFactory.eINSTANCE.createCovariate();

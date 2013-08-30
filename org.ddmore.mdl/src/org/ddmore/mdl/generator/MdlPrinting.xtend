@@ -51,6 +51,7 @@ import org.eclipse.emf.common.util.EList
 import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.DataObject
+import org.ddmore.mdl.mdl.FormalArguments
 
 class MdlPrinting {
 
@@ -250,7 +251,7 @@ class MdlPrinting {
 		for (b:obj.blocks){
 			if (b.variabilityBlock != null){
 				for (bb: b.variabilityBlock.statements){
-					if ((bb.diagBlock != null) || (bb.blockBlock != null) || (bb.sameBlock != null))
+					if ((bb.diagBlock != null) || (bb.matrixBlock != null) || (bb.sameBlock != null))
 				 		return true;
 				}
 			}
@@ -468,13 +469,14 @@ class MdlPrinting {
 		if (type.likelyhood != null){
 			return type.likelyhood.identifier	
 		} 
-		if (type.missing != null){
-			return type.missing.identifier
-		} 
+		//if (type.missing != null){
+		//	return type.missing.identifier
+		//} 
 		if (type.target != null){
 			return type.target.identifier 
 		} 
 	}
+	
 	
 	def String toStr(Distribution d) { 
 		return d.identifier
@@ -723,6 +725,26 @@ class MdlPrinting {
 		}
 		return res;
 	}	
+	
+	def String toStr(FormalArguments arg) { 
+		var res  = "";
+		var iterator = arg.arguments.iterator();
+		if (iterator.hasNext ) {
+			var a = iterator.next; 
+			if (a.identifier != null){
+				res  = res + a.identifier;
+			}
+		}
+		while (iterator.hasNext){
+			res  = res + ', ';
+			var a = iterator.next; 
+			if (a.identifier != null){
+				res  = res + a.identifier;
+			}
+		}
+		return res;
+	}
+	
 	
 	def externalCodeToStr(TargetBlock b){
 		return b.externalCode.substring(3, b.externalCode.length - 3)

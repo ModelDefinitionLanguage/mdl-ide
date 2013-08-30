@@ -10,7 +10,7 @@ import java.util.List;
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.AnyExpressionImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
-import org.ddmore.mdl.mdl.impl.BlockBlockImpl;
+import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.BlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
@@ -91,7 +91,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	final static List<String> attr_req_ode = Arrays.asList("deriv", "init", "wrt");	
 	
 	//Data object
-	final static List<String> attr_header = Arrays.asList("type", "units", "recode", "boundaries", "missing");
+	final static List<String> attr_header = Arrays.asList("type", "define", "units", "recode", "boundaries", "missing");
 	final static List<String> attr_req_header = Arrays.asList("type");
 
 	final static List<String> attr_file = Arrays.asList("source", "ignore", "inputformat");
@@ -112,7 +112,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			return attr_structural;
 		if (obj instanceof VariabilityBlockStatementImpl)
 			return attr_variability;
-		if (obj instanceof BlockBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl)
+		if (obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl)
 			return attr_variability_subblock;
 		if (obj instanceof InputVariablesBlockImpl)
 			return attr_inputVariables;
@@ -523,8 +523,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 							if (s.getParameter() != null){
 								paramList.add(s.getParameter().getIdentifier());
 							}
-							if (s.getBlockBlock() != null){
-								addSymbol(paramList, s.getBlockBlock().getParameters());
+							if (s.getMatrixBlock() != null){
+								addSymbol(paramList, s.getMatrixBlock().getParameters());
 							}
 							if (s.getDiagBlock() != null){
 								addSymbol(paramList, s.getDiagBlock().getParameters());
@@ -558,8 +558,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					//VARIABILITY sub-blocks matrix & diag
 					if (block.getVariabilityBlock() != null){
 						for (VariabilityBlockStatement s: block.getVariabilityBlock().getStatements()){
-							if (s.getBlockBlock() != null){
-								String name = getAttributeValue(s.getBlockBlock().getArguments(),"name");
+							if (s.getMatrixBlock() != null){
+								String name = getAttributeValue(s.getMatrixBlock().getArguments(),"name");
 								if (name.length() > 0)
 									variabilitySubblockNames.add(name);
 							}
@@ -929,8 +929,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			container = container.eContainer();
 		
 		//Exclude content of Diag and Matrix check from attribute checks
-		if (container instanceof BlockBlockImpl){
-			BlockBlockImpl block = (BlockBlockImpl)container;
+		if (container instanceof MatrixBlockImpl){
+			MatrixBlockImpl block = (MatrixBlockImpl)container;
 			if (block.getParameters().equals(args)) return;
 		} 
 		if(container instanceof DiagBlockImpl){
@@ -963,8 +963,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		
 		Arguments args = (Arguments)argContainer;
 		//Exclude content of Diag and Matrix check from attribute checks
-		if (container instanceof BlockBlockImpl){
-			BlockBlockImpl block = (BlockBlockImpl)container;
+		if (container instanceof MatrixBlockImpl){
+			MatrixBlockImpl block = (MatrixBlockImpl)container;
 			if (block.getParameters().equals(args)) return;
 		} 
 		if(container instanceof DiagBlockImpl){
