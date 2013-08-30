@@ -4,10 +4,11 @@
    <extension
          id="product"
          point="org.eclipse.core.runtime.products">
-      <product
-            application="org.eclipse.e4.ui.workbench.swt.E4Application"
-            description="Integrated Development Environment for MDL modellers"
-            name="MDL IDE">
+      <product name="%productName" application="org.eclipse.ui.ide.workbench">
+         <property
+               name="appName"
+               value="%productName">
+         </property>
          <property
                name="clearPersistedState"
                value="true">
@@ -17,10 +18,6 @@
                value="platform:/plugin/eu.ddmore.mdleditor.application/css/default.css">
          </property>
          <property
-               name="appName"
-               value="MDL IDE">
-         </property>
-         <property
                name="cssTheme"
                value="org.eclipse.e4.ui.css.theme.e4_default">
          </property>
@@ -28,7 +25,11 @@
                name="applicationCSSResources"
                value="platform:/plugin/org.eclipse.platform/images/">
          </property>
+         <property
+             name="aboutText"
+             value="%aboutText">
+         </property> 
       </product>
    </extension>
-
+   
 </plugin>

@@ -13,4 +13,54 @@
 
 	<artifactId>eu.ddmore.mdleditor.application</artifactId>
 	<packaging>eclipse-plugin</packaging>
+    <profiles>
+     <profile>
+      <id>update-branding</id>
+      <build>
+        <plugins>
+                  <plugin>
+                    <!-- Walkaround for replacing tokens in about.mappings file so build number is included in the 
+                        products 'about dialog' See https://bugs.eclipse.org/bugs/show_bug.cgi?id=362252 -->
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <executions>
+                      <execution>
+                        <id>update-branding-process-resources</id>
+                        <phase>process-resources</phase>
+                       <configuration>
+                          <tasks>
+                            <copy file="about.mappings" tofile="about.mappings.orig"/>
+                            <replace file="about.mappings" 
+                                     token="@version@" value="${project.version}" />
+                            <replace file="about.mappings" 
+                                     token="@buildNo@" value="${BUILD_NUMBER}" />
+                            <replace file="about.mappings" 
+                                     token="@buildId@" value="${BUILD_ID}" />
+                            <replace file="about.mappings" 
+                                     token="@branch@" value="${GIT_BRANCH}" />
+                            <replace file="about.mappings" 
+                                     token="@revision@" value="${GIT_COMMIT}" />
+                          </tasks>
+                        </configuration>
+                        <goals>
+                          <goal>run</goal>
+                        </goals>
+                      </execution>
+                      <execution>
+                        <id>update-branding-package</id>
+                        <phase>package</phase>
+                       <configuration>
+                          <tasks>
+                            <move file="about.mappings.orig" tofile="about.mappings" overwrite="true"/>
+                          </tasks>
+                        </configuration>
+                        <goals>
+                          <goal>run</goal>
+                        </goals>
+                      </execution>
+                  </executions>
+                  </plugin>
+        </plugins>
+      </build>
+    </profile>
+    </profiles>
 </project>
