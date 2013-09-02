@@ -4,10 +4,11 @@
    <extension
          id="product"
          point="org.eclipse.core.runtime.products">
-      <product name="%productName" application="org.eclipse.ui.ide.workbench">
+         <!-- See https://bugs.eclipse.org/bugs/show_bug.cgi?id=312819 for why the product.name is not externalized -->
+      <product name="DDMoRe MDL Editor" application="org.eclipse.ui.ide.workbench" description="%aboutText">
          <property
                name="appName"
-               value="%productName">
+               value="DDMoRe MDL Editor">
          </property>
          <property
                name="clearPersistedState"

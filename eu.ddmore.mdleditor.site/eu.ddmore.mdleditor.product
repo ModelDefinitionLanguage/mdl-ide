@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="%productName" uid="eu.ddmore.mdleditor" id="eu.ddmore.mdleditor.application.product" application="org.eclipse.ui.ide.workbench" version="1.0.1.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="DDMoRe MDL Editor" uid="eu.ddmore.mdleditor" id="eu.ddmore.mdleditor.application.product" application="org.eclipse.ui.ide.workbench" version="1.0.1.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <text>
@@ -19,7 +19,6 @@
 
    <windowImages/>
 
-
    <launcher>
       <solaris/>
       <win useIco="false">
@@ -27,10 +26,8 @@
       </win>
    </launcher>
 
-
    <vm>
    </vm>
-
 
    <plugins>
    </plugins>
