@@ -254,11 +254,8 @@
 						</dependency>
 					</dependencies>
 					<configuration>
-						<strictBinIncludes>false</strictBinIncludes>
 						<format>'v'yyyyMMdd-HHmm</format>
 						<timestampProvider>jgit</timestampProvider>
-						<jgit.ignore>
-						</jgit.ignore>
 					</configuration>
 				</plugin>
 				<plugin>
