@@ -244,16 +244,8 @@
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-packaging-plugin</artifactId>
 					<version>${tycho.version}</version>
-					<dependencies>
-						<dependency>
-							<groupId>org.eclipse.tycho.extras</groupId>
-							<artifactId>tycho-buildtimestamp-jgit</artifactId>
-							<version>${tycho.extras.version}</version>
-						</dependency>
-					</dependencies>
 					<configuration>
 						<format>'v'yyyyMMdd-HHmm</format>
-						<timestampProvider>jgit</timestampProvider>
 					</configuration>
 				</plugin>
 				<plugin>
