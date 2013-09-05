@@ -373,7 +373,7 @@ TargetLanguage:
 	'MATLAB_CODE') 	
 ;
 
-terminal EXTERNAL_CODE: 
+terminal EXTERNAL_CODE:
 	'***' -> '***'
 ; 
 

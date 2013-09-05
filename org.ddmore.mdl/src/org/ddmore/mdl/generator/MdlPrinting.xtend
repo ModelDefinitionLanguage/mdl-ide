@@ -33,7 +33,6 @@ import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.SymbolModification
-import org.ddmore.mdl.mdl.MixtureBlock
 import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
 import org.ddmore.mdl.mdl.Distribution
@@ -52,6 +51,8 @@ import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.FormalArguments
+import org.ddmore.mdl.mdl.SimulationBlock
+import org.ddmore.mdl.mdl.EstimationBlock
 
 class MdlPrinting {
 
@@ -268,10 +269,20 @@ class MdlPrinting {
 				}
 	    	}
 	    	if (mob.observationBlock != null){
-				for (s: mob.observationBlock.statements){
-					if (s.statement != null) return true;
+				if (mob.observationBlock.statements.size > 0){
+					return true;
 				}
 	    	}
+	    	if (mob.simulationBlock != null){
+				if (mob.simulationBlock.statements.size > 0){
+					return true;
+				}
+	    	}
+	    	if (mob.estimationBlock != null){
+				if (mob.estimationBlock.statements.size > 0){
+					return true;
+				}
+	    	}	    	
 		}
     	return false;
     } 
@@ -336,6 +347,24 @@ class MdlPrinting {
     	return false;
     }
     
+    //Check if LIBRARY block is defined
+    def numberOfCompartments(ModelObject o){
+    	for (mob: o.blocks){
+			if (mob.modelPredictionBlock != null){
+				for (s: mob.modelPredictionBlock.statements){
+				    if (s.libraryBlock != null) {
+				    	for (ss: s.libraryBlock.statements){
+				    		var nmct = ss.expression.arguments.selectAttribute("ncmt");
+				    		if (!nmct.equals("")) return Integer::parseInt(nmct);
+				    	}
+				    }
+				}
+			}
+    	}
+    	return 0;
+    }
+    
+    
     //Check if OUTPUT_VARIABLES block is defined and has content
 	def isOutputVariablesDefined(ModelObject o){
 		for (b: o.blocks){
@@ -362,7 +391,7 @@ class MdlPrinting {
 	}
     
     //Check whether there is a target block in a list of block statements			
-    def Boolean isInlineTargetDefined(String targetName, EList<BlockStatement> list){
+    def isInlineTargetDefined(String targetName, EList<BlockStatement> list){
 		for (s: list){
 			if (s.targetBlock != null){
 				val target = s.targetBlock.arguments.selectAttribute("target");
@@ -400,7 +429,7 @@ class MdlPrinting {
 	def toStr(SymbolDeclaration v){
 		var res = "";
 		if (v.function != null){
-			res = res + v.function + '(' 
+			res = res + v.function.convertID + '(' 
 		}
 		if (v.identifier != null) {
 			res = res + v.identifier.convertID;
@@ -408,12 +437,15 @@ class MdlPrinting {
 		if (v.function != null){
 			res = res + ')' 
 		}
+		var expr = ""; //First make sure that expression is not empty, than print "=" 
 		if (v.expression != null){
-			res = res + " = " + v.expression.toStr;
+			expr = v.expression.toStr;
 		}
 		if (v.randomList != null){
-			res = res + " = " + v.randomList.toStr;
+			expr = v.randomList.toStr;
 		}
+		if (!expr.trim().equals(""))
+			res = res + " = " + expr;
 		return res;
 	}
 	
@@ -752,13 +784,13 @@ class MdlPrinting {
 
 	//////////////////////////////////////////////////////////////////////////
 	//Printing
-    //////////////////////////////////////////////////////////////////////////
-    
+    //////////////////////////////////////////////////////////////////////////	
+	 
     //Print verbatim block
 	def print(TargetBlock b)'''
 	«IF b.externalCode != null»
-	«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
-	«printedCode»
+		«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
+		«printedCode»
 	«ENDIF»
 	'''	
 	
@@ -770,56 +802,26 @@ class MdlPrinting {
 	'''
 	
 	//Print block
-	def printExcludingLists(Block b)'''
-		«FOR st: b.statements»
-			«st.printExcludingLists»
-		«ENDFOR»
-	'''	
-	
-	//Print block variables
-	def printSymbols(Block b, String separator)'''
-		«FOR s: b.statements SEPARATOR separator»
-			«IF s.symbol != null»
-				«s.symbol.print»
-			«ENDIF»
-		«ENDFOR»
-	'''	
-
-	//Print block
-	def printExcludingLists(ObservationBlock b)'''
-		«FOR s: b.statements»
-			«s.printExcludingLists»
-		«ENDFOR»
-	'''	
-	
-	//Print block
 	def print(ObservationBlock b)'''
 		«FOR s: b.statements»
 			«s.print»
 		«ENDFOR»
-	'''	
+	'''		
 	
 	//Print block
-	def print(MixtureBlock b)'''
+	def print(SimulationBlock b)'''
 		«FOR s: b.statements»
 			«s.print»
 		«ENDFOR»
 	'''	
 
 	//Print block
-	def printExcludingLists(MixtureBlock b)'''
+	def print(EstimationBlock b)'''
 		«FOR s: b.statements»
-			«s.printExcludingLists»
+			«s.print»
 		«ENDFOR»
 	'''	
 		
-	//Print variableDeclaration names
-	def printSymbolDeclarationNames(Block b, String separator)'''
-		«FOR s: b.statements SEPARATOR separator»
-			«IF s.symbol != null»«s.symbol.identifier.convertID»«ENDIF»
-		«ENDFOR»
-	'''	
-	
 	//Get variableDeclaration identifier from each declaration and each statement
 	def print(BlockStatement st)'''
 		«IF st.symbol != null»«st.symbol.print»«ENDIF»
@@ -828,20 +830,6 @@ class MdlPrinting {
 		«IF st.targetBlock != null»«st.targetBlock.print»«ENDIF»
 		'''
 
-	//Get variableDeclaration identifier from each declaration and each statement
-	def printExcludingLists(BlockStatement st)'''
-		«IF st.symbol != null»«st.symbol.printExcludingLists»«ENDIF»
-		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
-		«IF st.statement != null»«st.statement.print»«ENDIF»
-		«IF st.targetBlock != null»«st.targetBlock.print»«ENDIF»
-		'''
-		
-	//Print variableDeclaration declaration
-	def printExcludingLists(SymbolDeclaration v)'''«IF v.expression != null»«IF v.expression.expression != null»«v.print»«ENDIF»«ENDIF»'''
-	
-	//Print function call
-	def print(FunctionCall call)'''«call.identifier.toStr»(«call.arguments.print»)'''
-	
 	//Print MDL statement
 	def print(ConditionalStatement s)'''
 		«IF s.parExpression != null»
@@ -863,6 +851,9 @@ class MdlPrinting {
 			«ENDIF»
 		«ENDIF»
 	'''
+	
+	//Print function call
+	def print(FunctionCall call)'''«call.toStr»'''
 		
     //Print variableDeclaration declaration
 	def print(SymbolDeclaration v)'''«v.toStr»'''
@@ -916,5 +907,4 @@ class MdlPrinting {
 	
 	//Print list arguments without change
 	def print(Arguments arg)'''«arg.toStr»'''
-
 }

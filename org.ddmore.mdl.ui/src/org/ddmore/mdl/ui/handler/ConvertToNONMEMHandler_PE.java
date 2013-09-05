@@ -26,17 +26,17 @@ import com.google.inject.Provider;
 
 public class ConvertToNONMEMHandler_PE extends AbstractHandler implements IHandler {
 
-	@Inject
-	private IGenerator generator;
+    @Inject
+    private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
+
+    @Inject
+    private IGenerator generator;
+
+    @Inject
+    IResourceSetProvider resourceSetProvider;
 
 	@Inject
-	private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
-	
-	@Inject
 	IResourceDescriptions resourceDescriptions;
-	
-	@Inject
-	IResourceSetProvider resourceSetProvider;
 	
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);

@@ -55,9 +55,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_PARAMETER_DEFINED = "A parameter with such name already exists";
 	public final static String MSG_FUNCTION_DEFINED = "A function with such name is already defined";
 	public final static String MSG_FUNCTION_UNKNOWN = "Unknown function";
-	public final static String MSG_SYMBOL_UNKNOWN = "Unresolved reference: parameter, variable, object or formal argument not declared or conditionally declared";
-	public final static String MSG_PARAMETER_UNKNOWN = "Parameter not declared or conditionally declared";
-	public final static String MSG_VARIABLE_UNKNOWN = "Variable not declared or conditionally declared";
+	//public final static String MSG_SYMBOL_UNKNOWN = "Unresolved reference: parameter, variable, object or formal argument not declared or conditionally declared";
+	//public final static String MSG_PARAMETER_UNKNOWN = "Parameter not declared or conditionally declared";
+	//public final static String MSG_VARIABLE_UNKNOWN = "Variable not declared or conditionally declared";
+	
+	public final static String MSG_SYMBOL_UNKNOWN = "Unresolved reference: parameter, variable, object or formal argument not declared";
+	public final static String MSG_PARAMETER_UNKNOWN = "Parameter not declared";
+	public final static String MSG_VARIABLE_UNKNOWN = "Variable not declared";
+		
 	public final static String MSG_ATTRIBUTE_UNKNOWN = "Unknown attribute";
 	public final static String MSG_ATTRIBUTE_MISSING = "Required attribute is missing";
 
@@ -88,7 +93,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	final static List<String> attr_req_library = Arrays.asList("model");
 	
 	final static List<String> attr_ode = Arrays.asList("deriv", "init", "x0", "wrt");
-	final static List<String> attr_req_ode = Arrays.asList("deriv", "init", "wrt");	
+	final static List<String> attr_req_ode = Arrays.asList("deriv");	
 	
 	//Data object
 	final static List<String> attr_header = Arrays.asList("type", "define", "units", "recode", "boundaries", "missing");
@@ -242,15 +247,46 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			//conditional declarations
 			if (st.getStatement() != null){
 				ConditionalStatement e = st.getStatement();
-				ArrayList<BlockStatement> ifBlocks = new ArrayList<BlockStatement>();
-				ArrayList<BlockStatement> elseBlocks = new ArrayList<BlockStatement>();
-				prepareConditionalBlocks(e, ifBlocks, elseBlocks);
-				addSymbol(list, ifBlocks, elseBlocks);
+				addSymbol(list, e);
+				//THE FOLLOWING CODE IS TO ACTIVATE STRONG VARIDATION OF CONDITIONALLY DECLARED VARIABLES or PARAMETERS
+				//ArrayList<BlockStatement> ifBlocks = new ArrayList<BlockStatement>();
+				//ArrayList<BlockStatement> elseBlocks = new ArrayList<BlockStatement>();
+				//prepareConditionalBlocks(e, ifBlocks, elseBlocks);
+				//addSymbol(list, ifBlocks, elseBlocks);
 			}
 		}
 	}
 	
-	private void addSymbol(ArrayList<String> list, ArrayList<BlockStatement> ifBlocks, ArrayList<BlockStatement> elseBlocks){
+	//The same as previous, but does not add repeated conditionally developed variables to avoid double declaration warning 
+	private void addSymbolNoRepeat(ArrayList<String> list, BlockStatement st){
+		if (st != null){
+			if (st.getSymbol() != null)
+				if (!list.contains(st.getSymbol().getIdentifier())) list.add(st.getSymbol().getIdentifier());
+			if (st.getStatement() != null)
+				addSymbol(list, st.getStatement());
+		}
+	}
+	
+	//Weak validation of conditionally declared references - a variable is declared if it is declared in some branch 
+	private void addSymbol(ArrayList<String> list, ConditionalStatement e){
+		if (e.getIfStatement() != null){
+			addSymbolNoRepeat(list, e.getIfStatement());
+		}
+		if (e.getElseStatement() != null){
+			addSymbolNoRepeat(list, e.getElseStatement());
+		}		
+		if (e.getIfBlock() != null) {
+			for (BlockStatement b: e.getIfBlock().getStatements()){
+				addSymbolNoRepeat(list, b);
+			}
+		}
+		if (e.getElseBlock() !=null){
+			for (BlockStatement b: e.getElseBlock().getStatements())
+				addSymbolNoRepeat(list, b);
+		}
+	}
+	
+	/*private void addSymbol(ArrayList<String> list, ArrayList<BlockStatement> ifBlocks, ArrayList<BlockStatement> elseBlocks){
 		//Add symbols defined in both branches of nested conditional statements 
 		ArrayList<String> ifSymbols = new ArrayList<String>();
 		ArrayList<String> elseSymbols = new ArrayList<String>();
@@ -284,9 +320,9 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				}				
 			}
 		}
-	}
+	}*/
 	
-	private void prepareConditionalBlocks(ConditionalStatement e, ArrayList<BlockStatement> ifBlocks, ArrayList<BlockStatement> elseBlocks){
+	/*private void prepareConditionalBlocks(ConditionalStatement e, ArrayList<BlockStatement> ifBlocks, ArrayList<BlockStatement> elseBlocks){
 		if (e.getIfStatement() != null)
 			ifBlocks.add(e.getIfStatement());	
 		if (e.getIfBlock() != null) {
@@ -299,16 +335,16 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			for (BlockStatement b: e.getElseBlock().getStatements())
 				elseBlocks.add(b);
 		}
-	}
+	}*/
 	
-	private boolean isSymbolDefined(ArrayList<BlockStatement> blocks, String name){
+	/*private boolean isSymbolDefined(ArrayList<BlockStatement> blocks, String name){
 		for (BlockStatement b: blocks){
 			if (b.getSymbol() != null){
 				if (b.getSymbol().getIdentifier().equals(name)) return true;				
 			}
 		}
 		return false;
-	}
+	}*/
 	
 	//Add a symbol to a list of known symbols
 	private void addSymbol(ArrayList<String> list, Arguments args){

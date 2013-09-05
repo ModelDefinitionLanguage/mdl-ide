@@ -35,6 +35,12 @@ import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.mdl.SameBlock
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Selector
+import org.ddmore.mdl.mdl.FunctionCall
+import org.ddmore.mdl.mdl.Arguments
+import org.ddmore.mdl.mdl.MixtureBlock
+import org.ddmore.mdl.mdl.List
+import org.ddmore.mdl.mdl.LogicalExpression
+import org.ddmore.mdl.mdl.BlockStatement
 
 class Mdl2Nonmem extends MdlPrinting{		
 	
@@ -148,6 +154,7 @@ class Mdl2Nonmem extends MdlPrinting{
 			«o.printSUBR(isPKDefined)»
 		«ENDIF»
 		«o.printMODEL(isODEDefined)»
+		«o.generateMODEL»
 		«IF isLibraryDefined»
 
 			«o.printPK(isPKDefined)»
@@ -190,13 +197,13 @@ class Mdl2Nonmem extends MdlPrinting{
 		«IF	b.groupVariablesBlock != null»
 			«FOR st: b.groupVariablesBlock.statements»
 				«IF st.statement != null»
-					«st.statement.printExcludingLists»
+					«st.statement.print»
 				«ENDIF»
 			«ENDFOR»
 		«ENDIF»
 		«IF b.individualVariablesBlock != null»
 			«FOR s: b.individualVariablesBlock.statements SEPARATOR ' '»
-				«s.printExcludingLists»
+				«s.print»
 			«ENDFOR»
 		«ENDIF»
 		«IF b.modelPredictionBlock != null»		
@@ -226,16 +233,42 @@ class Mdl2Nonmem extends MdlPrinting{
 
 	def printMIXContent(ModelObject o)'''
 	«FOR b:o.blocks»
-	«IF	b.groupVariablesBlock != null»
-		«FOR st: b.groupVariablesBlock.statements»
-			«IF st.mixtureBlock != null»
-				«st.mixtureBlock.printExcludingLists»
-			«ENDIF»
-		«ENDFOR»
-	«ENDIF»
+		«IF	b.groupVariablesBlock != null»
+			«FOR st: b.groupVariablesBlock.statements»
+				«IF st.mixtureBlock != null»
+					«st.mixtureBlock.print»
+				«ENDIF»
+			«ENDFOR»
+		«ENDIF»
 	«ENDFOR»
 	'''
-		
+	
+	//Print block
+	def print(MixtureBlock b){
+		var nspop = 0;
+		for (BlockStatement st: b.statements){
+			if (st.symbol != null){
+				if (st.symbol.expression.list != null){
+					nspop = st.symbol.expression.list.arguments.arguments.size;
+				}
+			}
+		}		
+		var res = "";
+		if (nspop > 0){
+			res  = "NSPOP = " + nspop + "\n";
+			var i = 1;
+			for (BlockStatement st: b.statements){
+				if (st.symbol != null){
+					if (st.symbol.expression.expression != null){
+						res = res + "P(" + i + ") = " + st.symbol.expression.expression.toStr + "\n";
+						i = i + 1;
+					}
+				}
+			}		
+		}
+		'''«res»'''
+	}
+	
 	//Print NM-TRAN record $ERROR
 	def printERROR(ModelObject o, Boolean isErrorDefined)'''
 	«IF isErrorDefined»	
@@ -253,15 +286,35 @@ class Mdl2Nonmem extends MdlPrinting{
 			«IF mob.modelPredictionBlock != null»
 				«FOR s: mob.modelPredictionBlock.statements»
 					«IF s.statement != null»
-						«s.statement.printExcludingLists»
+						«s.statement.print»
 					«ENDIF»
 				«ENDFOR»
 			«ENDIF»
 			«IF mob.observationBlock != null»
-				«mob.observationBlock.printExcludingLists»
+				«mob.observationBlock.print»
 			«ENDIF»
+			«IF mob.simulationBlock != null»
+				«mob.simulationBlock.print»
+			«ENDIF»
+			«IF mob.estimationBlock != null»
+				«mob.estimationBlock.print»
+			«ENDIF»			
 		«ENDFOR»
-	'''	
+	'''
+	
+	//If there is a definition with ncmt=N, define N compartment names
+	def generateMODEL(ModelObject o){
+		var res = "";
+		var nmct =  o.numberOfCompartments;		
+		//return '''Testing: «nmct»''';		
+		if (nmct > 0) {
+			res = res + "\n$MODEL\n";
+			for (i : 1 ..nmct) {
+ 			   res = res + "COMP (comp" + i + ")\n"
+			}
+		}
+		'''«res»'''
+	}
 
 	//Processing MODEL_PREDICTION for $MODEL
 	def printMODEL(ModelObject o, Boolean isODEDefined)'''
@@ -416,7 +469,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	«FOR b:obj.blocks»			
 		«IF b.priorBlock != null»
 			«FOR st: b.priorBlock.statements»
-				«st.printExcludingLists»
+				«st.print»
 			«ENDFOR»
 		«ENDIF»
 	«ENDFOR»
@@ -922,105 +975,8 @@ class Mdl2Nonmem extends MdlPrinting{
 	«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
 	«ENDFOR»
 	'''
-	
-	
-	///////////////////////////////////////////////////////////////////////
-	//Overwritten converter functions
-	///////////////////////////////////////////////////////////////////////
-	
-	//Convert variable names to NM-TRAN versions
-	override convertID(String id){
-		if (id.indexOf('_') > 0){			
+		
 
-			if (eta_vars.get(id) != null){
-				return "ETA(" + eta_vars.get(id) + ")";
-			}
-			if (eps_vars.get(id) != null){
-				return "EPS(" + eps_vars.get(id) + ")";
-			}
-			if (theta_vars.get(id) != null){
-				return "THETA(" + theta_vars.get(id) + ")"; 
-			}
-		}
-		if (dadt_vars.get(id) != null){
-			return "A(" + dadt_vars.get(id) + ")"; 
-		}
-		if (id.equalsIgnoreCase("ln"))
-			return "LOG";
-		return id.toUpperCase();	
-	}
-	
-	
-	//Override MDL operators with NM-TRAN operators
-	override convertOperator(String op){
-		if (op.equals("<")) return ".LT.";
-		if (op.equals(">")) return ".GT.";
-		if (op.equals("<=")) return ".LE.";
-		if (op.equals(">=")) return ".GE.";
-		if (op.equals("==")) return ".EQ.";
-		if (op.equals("!=")) return ".NE.";		
-		if (op.equals("^")) return "**";
-		if (op.equals("||")) return ".OR.";
-		if (op.equals("&&")) return ".AND.";
-		return op;	
-	}
-	
-	//This is needed because of a bug in NONMEM x||y -> x, y for IGNORE statement
-	//toStr OR expression
-	def toCommaSeparatedStr(OrExpression e){
-		var res = "";
-		var iterator = e.expression.iterator();
-		if (iterator.hasNext ) res = iterator.next.toStr;
-		while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr;	
-		return res;
-	}
-	
-	//This is needed because of a bug in NONMEM x&&y -> x, y for ACCEPT statement
-	//toStr AND expression
-	def toCommaSeparatedStr(AndExpression e){
-		var res = "";
-		var iterator = e.expression.iterator();
-		if (iterator.hasNext ) res = iterator.next.toStr;
-		while (iterator.hasNext)
-			res  = res + ', ' + iterator.next.toStr;
-		return res;	
-	}
-	
-	override print(TargetBlock b){
-		var target = "";
-		if (b.arguments != null) target = b.arguments.selectAttribute("target");
-		if (target.equals(TARGET)) {
-		'''
-		«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
-		«printedCode»
-		'''
-		}
-	}
-		
-	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
-	override print(ConditionalStatement s)'''
-	«IF s.parExpression != null»
-		IF «s.parExpression.print» THEN
-			«IF s.ifStatement != null»
-				«s.ifStatement.printExcludingLists»
-			«ENDIF»
-			«IF s.ifBlock != null»
-				«s.ifBlock.printExcludingLists»
-			«ENDIF»
-		«IF s.elseStatement != null || s.elseBlock != null»
-		ELSE 
-			«IF s.elseStatement != null»
-				«s.elseStatement.printExcludingLists»
-			«ENDIF»
-			«IF s.elseBlock != null»
-				«s.elseBlock.printExcludingLists»
-			«ENDIF»
-		«ENDIF»
-		ENDIF
-	«ENDIF»
-	'''
-		
-	
 	///////////////////////////////////////////////
 	//Prepares variable maps
 	///////////////////////////////////////////////
@@ -1209,6 +1165,150 @@ class Mdl2Nonmem extends MdlPrinting{
 		return "";
 	}	
 	
+		///////////////////////////////////////////////////////////////////////
+	//Overwritten converter functions
+	///////////////////////////////////////////////////////////////////////
+	
+	//Convert variable names to NM-TRAN versions
+	override convertID(String id){
+		if (id.indexOf('_') > 0){			
+
+			if (eta_vars.get(id) != null){
+				return "ETA(" + eta_vars.get(id) + ")";
+			}
+			if (eps_vars.get(id) != null){
+				return "EPS(" + eps_vars.get(id) + ")";
+			}
+			if (theta_vars.get(id) != null){
+				return "THETA(" + theta_vars.get(id) + ")"; 
+			}
+		}
+		if (dadt_vars.get(id) != null){
+			return "A(" + dadt_vars.get(id) + ")"; 
+		}
+		if (id.equalsIgnoreCase("ln"))
+			return "LOG";
+		return id.toUpperCase();	
+	}	
+	
+	//Override MDL operators with NM-TRAN operators
+	override convertOperator(String op){
+		if (op.equals("<")) return ".LT.";
+		if (op.equals(">")) return ".GT.";
+		if (op.equals("<=")) return ".LE.";
+		if (op.equals(">=")) return ".GE.";
+		if (op.equals("==")) return ".EQ.";
+		if (op.equals("!=")) return ".NE.";		
+		if (op.equals("^")) return "**";
+		if (op.equals("||")) return ".OR.";
+		if (op.equals("&&")) return ".AND.";
+		return op;	
+	}
+	
+	//This is needed because of a bug in NONMEM x||y -> x, y for IGNORE statement
+	//toStr OR expression
+	def toCommaSeparatedStr(OrExpression e){
+		var res = "";
+		var iterator = e.expression.iterator();
+		if (iterator.hasNext ) res = iterator.next.toStr;
+		while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr;	
+		return res;
+	}
+	
+	//This is needed because of a bug in NONMEM x&&y -> x, y for ACCEPT statement
+	//toStr AND expression
+	def toCommaSeparatedStr(AndExpression e){
+		var res = "";
+		var iterator = e.expression.iterator();
+		if (iterator.hasNext ) res = iterator.next.toStr;
+		while (iterator.hasNext)
+			res  = res + ', ' + iterator.next.toStr;
+		return res;	
+	}
+	
+	override print(TargetBlock b){
+		var target = "";
+		if (b.arguments != null) target = b.arguments.selectAttribute("target");
+		if (target.equals(TARGET)) {
+		'''
+		«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
+		«printedCode»
+		'''
+		}
+	}
+		
+	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
+	override print(ConditionalStatement s)'''
+	«IF s.parExpression != null»
+		IF «s.parExpression.print» THEN
+			«IF s.ifStatement != null»
+				«s.ifStatement.print»
+			«ENDIF»
+			«IF s.ifBlock != null»
+				«s.ifBlock.print»
+			«ENDIF»
+		«IF s.elseStatement != null || s.elseBlock != null»
+		ELSE 
+			«IF s.elseStatement != null»
+				«s.elseStatement.print»
+			«ENDIF»
+			«IF s.elseBlock != null»
+				«s.elseBlock.print»
+			«ENDIF»
+		«ENDIF»
+		ENDIF
+	«ENDIF»
+	'''
+	
+	//toStr relational expression (==, !=, <, > etc.)
+	//Here we skip boolean values!
+	override toStr(LogicalExpression e){
+		if (e.boolean != null) 	return "";
+		return super.toStr(e);
+	}	
+			
+	
+	//Print variableDeclaration substituting ID with "Y" if it is a list with LIKELIHOOD or continuous type
+	override toStr(SymbolDeclaration v){
+		if (v.expression != null){
+			if (v.expression.list != null){
+				var type = v.expression.list.arguments.selectAttribute("type");
+				var res = "";
+				if (type.equals("continuous")){
+					res = "F_FLAG = 0\n" 
+				}	
+				if (type.equals("LIKELIHOOD")){
+					res = "F_FLAG = 1\n"	
+				}		
+				//substitute variable name with Y
+				var listExpr  = v.expression.list.toStr;
+				if (!listExpr.equals("") && !res.equals("")){
+					if (v.function != null){
+						return res + v.function.convertID + "(Y) = " + listExpr + "\n"; 
+					}
+					return res + "Y = " + listExpr + "\n"; 	
+				}
+			}
+		}
+		return super.toStr(v);
+	}
+	
+
+	//toStr list
+	//Instead of list(...) we print an expression from a certain attribute (depends on the type)
+	override toStr(List l){		
+		var type = l.arguments.selectAttribute("type");
+		if (type.equals("LIKELIHOOD")){
+			var expr = l.arguments.selectAttribute("likelihood");
+			if (!expr.equals("")) return expr;
+		}
+		if (type.equals("continuous")){
+			var expr = l.arguments.selectAttribute("ruv");
+			if (!expr.equals("")) return expr;
+		}			
+		return "";
+	}	
+	
 	//Prepare a list of external function declarations to define their NMTRAN names 
 	 override void prepareExternalFunctions(ImportBlock b, String objName){
 		for (ImportedFunction f: b.functions){
@@ -1248,9 +1348,8 @@ class Mdl2Nonmem extends MdlPrinting{
 		}
 	}	
 	
-	//Rerences to attributes: skip variable name and replace selectors, e.g,  amount.A[2] -> A(2)
+	//References to attributes: skip variable name and replace selectors, e.g,  amount.A[2] -> A(2)
 	override String toStr(FullyQualifiedArgumentName name) { 
-		//var res = name.parent.toStr;
 		var res = "";
 		for (s: name.selectors){
 			res = res + s.toStr
@@ -1264,5 +1363,23 @@ class Mdl2Nonmem extends MdlPrinting{
 			return s.identifier.identifier;
 		if (s.selector != null)
 			return "(" + s.selector + ")";
-	}		
+	}	
+	
+	//toStr function call
+	override toStr(FunctionCall call){
+		if (call.identifier.toStr.trim.equalsIgnoreCase("errorexit"))
+			return "EXIT" + call.arguments.toStrWithoutCommas;
+		return super.toStr(call);	
+	}
+	
+	//toStr list arguments without change
+	def toStrWithoutCommas(Arguments arg){
+		var res  = "";
+		var iterator = arg.arguments.iterator();
+		while (iterator.hasNext){
+			var a = iterator.next; 
+			res = res + " " + a.expression.toStr;
+		}
+		return res;
+	}			
 }
