@@ -5,16 +5,23 @@
       version="1.0.0.qualifier"
       provider-name="Mango Business Solutions">
 
-   <description url="http://www.example.com/description">
+   <description url="http://www.mango-solutions.com/">
       Dependencies required for MIF Client bundle.
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright>
+      Copyright (C) 2013, Mango Business Solutions. All rights reserved.
+
+
+This feature is a composite of open source libraries needed for
+the MIF Client.
+For copyright information please refer to the individual plugins
+contained in the feature.
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="">
+      This feature is a composite of open source libraries needed for the MIF Client.
+For licensing information please refer to the licensing terms of the individual plugins contained in the feature.
    </license>
 
    <url>
