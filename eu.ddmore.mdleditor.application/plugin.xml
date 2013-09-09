@@ -5,10 +5,10 @@
          id="product"
          point="org.eclipse.core.runtime.products">
          <!-- See https://bugs.eclipse.org/bugs/show_bug.cgi?id=312819 for why the product.name is not externalized -->
-      <product name="DDMoRe MDL Editor" application="org.eclipse.ui.ide.workbench" description="%aboutText">
+      <product name="DDMoRe MDL IDE 1.0 (alpha)" application="org.eclipse.ui.ide.workbench" description="%aboutText">
          <property
                name="appName"
-               value="DDMoRe MDL Editor">
+               value="DDMoRe MDL IDE 1.0 (alpha)">
          </property>
          <property
                name="clearPersistedState"
@@ -29,6 +29,10 @@
          <property
              name="aboutText"
              value="%aboutText">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/about_image.png">
          </property> 
       </product>
    </extension>
