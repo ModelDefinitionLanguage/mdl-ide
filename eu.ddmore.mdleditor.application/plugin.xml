@@ -11,10 +11,6 @@
                value="DDMoRe MDL IDE 1.0 (alpha)">
          </property>
          <property
-               name="clearPersistedState"
-               value="true">
-         </property>
-         <property
                name="applicationCSS"
                value="platform:/plugin/eu.ddmore.mdleditor.application/css/default.css">
          </property>
