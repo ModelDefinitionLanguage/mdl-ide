@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.ddmore.mdl.sdk"
-      label="Mdl SDK Feature "
+      label="MDL SDK Feature"
       version="1.0.1.qualifier"
       provider-name="DDMoRe Consortium">
 
    <url>
-      <update label="DDMoRe Tools" url="https://sourceforge.net/projects/ddmore/files/update/ddmore-tools/"/>
+      <update label="DDMoRe Tools" url="http://sourceforge.net/projects/ddmore/files/update/ddmore-tools/ci/p2/"/>
    </url>
 
    <plugin
