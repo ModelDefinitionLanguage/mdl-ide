@@ -10,19 +10,19 @@
    </description>
 
    <copyright>
-Copyright (C) 2013, Mango Business Solutions. All rights reserved.
+      Copyright (C) 2013, Mango Business Solutions. All rights reserved.
 This feature is a composite of open source libraries needed for the MIF Client.
 For copyright and licencing information on these libraries please refer to the individual plugins contained in the feature.
    </copyright>
 
    <license>
-Copyright (C) 2013, Mango Business Solutions. All rights reserved.
+      Copyright (C) 2013, Mango Business Solutions. All rights reserved.
 This feature is a composite of open source libraries needed for the MIF Client.
 For copyright and licencing information on these libraries please refer to the individual plugins contained in the feature.
    </license>
 
    <url>
-      <update label="MIF Client Dependencies Update Site" url="https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies"/>
+      <update label="MIF Client Dependencies" url="http://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/1.0/ci"/>
    </url>
 
    <plugin

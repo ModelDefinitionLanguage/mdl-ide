@@ -4,6 +4,7 @@ In order to build the site:
 1. Open eu.ddmore.mdleditor.target/com.mango.mifclient.dependencies.site.target in your Eclipse IDE
 2. Click on 'Set as Target Platform'
 3. Remove 'features', 'plugins'. artifacts.jar and content.jar from  com.mango.mifclient.dependencies.site project
-4. Open com.mango.mifclient.dependencies.site/site.xml and click 'Build All'
+4. Open com.mango.mifclient.dependencies.site/site.xml 
+5. Remove and add com.mango.mifclient.dependencies feature and click 'Build All'
 5. Upload the features, plugins, artifacts.jar and content.jar to SourceForge 'https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/'
 6. Update the features, plugins, artifacts.jar and content.jar in the source repository.  Although this is not strictly necessary, it gives us traceability around any changes
