@@ -59,6 +59,25 @@ import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariableList;
+import org.ddmore.mdl.mdl.impl.CategoricalImpl;
+import org.ddmore.mdl.mdl.impl.ContinuousImpl;
+import org.ddmore.mdl.mdl.impl.CovariateImpl;
+import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
+import org.ddmore.mdl.mdl.impl.FormalArgumentImpl;
+import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.HeaderBlockImpl;
+import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl;
+import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
+import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
+import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
+import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl;
+import org.ddmore.mdl.mdl.impl.UseTypeImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtext.ui.IImageHelper;
@@ -182,6 +201,79 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	        return imageHelper.getImage(getPath(MIXTURE));
 	    }
 
+	    protected Image _image(StructuralBlockImpl e) {
+	        return imageHelper.getImage(getPath(STRUCTURAL_BLOCK));
+	    }
+
+	    protected Image _image(VariabilityBlockImpl e) {
+	        return imageHelper.getImage(getPath(VARIABILITY_BLOCK));
+	    }
+
+	    protected Image _image(InputVariablesBlockImpl e) {
+	        return imageHelper.getImage(getPath(INPUT_VARIABLES_BLOCK));
+	    }
+
+	    protected Image _image(StructuralParametersBlockImpl e) {
+	        return imageHelper.getImage(getPath(STRUCTURAL_PARAMETERS_BLOCK));
+	    }
+
+	    protected Image _image(VariabilityParametersBlockImpl e) {
+	        return imageHelper.getImage(getPath(VARIABILITY_PARAMETERS_BLOCK));
+	    }
+
+	    protected Image _image(ModelPredictionBlockImpl e) {
+	        return imageHelper.getImage(getPath(MODEL_PREDICTION_BLOCK));
+	    }
+
+	    protected Image _image(ObservationBlockImpl e) {
+	        return imageHelper.getImage(getPath(OBSERVATIONS_BLOCK));
+	    }
+
+	    protected Image _image(OutputVariablesBlockImpl e) {
+	        return imageHelper.getImage(getPath(OUTPUT_VARIABLES_BLOCK));
+	    }
+
+	    protected Image _image(ContinuousImpl e) {
+	        return imageHelper.getImage(getPath(CONTINUOUS));
+	    }
+
+	    protected Image _image(UseTypeImpl e) {
+	        return imageHelper.getImage(getPath(USE_TYPE));
+	    }
+
+	    protected Image _image(CategoricalImpl e) {
+	        return imageHelper.getImage(getPath(CATEGORICAL));
+	    }
+
+	    protected Image _image(CovariateImpl e) {
+	        return imageHelper.getImage(getPath(COVARIATE));
+	    }
+
+	    protected Image _image(TaskFunctionDeclarationImpl e) {
+	        return imageHelper.getImage(getPath(TASK_FUNCTION_DECLARATION));
+	    }
+
+	    protected Image _image(FormalArgumentImpl e) {
+	        return imageHelper.getImage(getPath(FORMAL_ARGUMENT));
+	    }
+
+	    protected Image _image(EstimateTaskImpl e) {
+	        return imageHelper.getImage(getPath(ESTIMATE_TASK));
+	    }
+
+	    protected Image _image(GroupVariablesBlockImpl e) {
+	        return imageHelper.getImage(getPath(GROUP_VARIABLES_BLOCK));
+	    }
+	    protected Image _image(RandomVariableDefinitionBlockImpl e) {
+	        return imageHelper.getImage(getPath(RANDOM_VARIABLES_BLOCK));
+	    }
+	    protected Image _image(IndividualVariablesBlockImpl e) {
+	        return imageHelper.getImage(getPath(INDIVIDUAL_VARIABLES_BLOCK));
+	    }
+	    protected Image _image(HeaderBlockImpl e) {
+	        return imageHelper.getImage(getPath(HEADER_BLOCK));
+	    }
+	    
 	    protected Image getLogImage(){
 	    	return imageHelper.getImage(getPath(LOG));
 	    }
@@ -193,7 +285,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	    protected Image getFalseImage() {
 	        return imageHelper.getImage(getPath(FALSE));
 	    }
-	    
 	    
 	static MdlPrinting printer = new MdlPrinting();
 	

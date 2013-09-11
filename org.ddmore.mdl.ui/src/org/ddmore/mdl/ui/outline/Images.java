@@ -42,6 +42,28 @@ public class Images {
 	public static final String DROP ="104-remove.png";
 	public static final String IMPORT ="193-import.png";
 	
+	public static final String STRUCTURAL_BLOCK = LIST;
+	public static final String VARIABILITY_BLOCK = LIST;
+	public static final String INPUT_VARIABLES_BLOCK = LIST;
+	public static final String STRUCTURAL_PARAMETERS_BLOCK = LIST;
+	public static final String VARIABILITY_PARAMETERS_BLOCK = LIST;
+	public static final String MODEL_PREDICTION_BLOCK = LIST;
+	public static final String OBSERVATIONS_BLOCK = LIST;
+	public static final String OUTPUT_VARIABLES_BLOCK = LIST;
+	
+	public static final String CONTINUOUS ="072-variability.png";
+	public static final String CATEGORICAL = CONTINUOUS;
+	public static final String USE_TYPE = LIST;
+	public static final String COVARIATE = ATTRIBUTE;
+	public static final String TASK_FUNCTION_DECLARATION = TASK;
+	public static final String FORMAL_ARGUMENT = ATTRIBUTE;
+	public static final String ESTIMATE_TASK = TASK;
+
+	public static final String GROUP_VARIABLES_BLOCK = LIST;
+	public static final String RANDOM_VARIABLES_BLOCK = LIST;
+	public static final String INDIVIDUAL_VARIABLES_BLOCK = LIST;
+	public static final String HEADER_BLOCK = LIST;
+
 	public static final String getPath(String path) {
 		return ICONS_PATH + path;
 	}
