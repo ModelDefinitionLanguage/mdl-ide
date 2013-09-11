@@ -5,6 +5,13 @@
       version="1.0.1.qualifier"
       provider-name="DDMoRe Consortium">
 
+   <description>
+      MDL IDE plugins.
+      
+      Some icons by Yusuke Kamiyamane. Licensed under a Creative Commons Attribution 3.0 License.
+http://p.yusukekamiyamane.com/
+   </description>
+
    <url>
       <update label="DDMoRe Tools" url="http://sourceforge.net/projects/ddmore/files/update/ddmore-tools/ci/p2/"/>
    </url>

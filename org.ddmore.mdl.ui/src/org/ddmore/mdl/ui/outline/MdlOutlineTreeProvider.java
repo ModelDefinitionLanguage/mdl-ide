@@ -3,6 +3,8 @@
 */
 package org.ddmore.mdl.ui.outline;
 
+import static org.ddmore.mdl.ui.outline.Images.*;
+
 import org.ddmore.mdl.generator.MdlPrinting;
 import org.ddmore.mdl.mdl.AcceptList;
 import org.ddmore.mdl.mdl.AddList;
@@ -63,7 +65,6 @@ import org.eclipse.xtext.ui.IImageHelper;
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider;
 
-
 import com.google.inject.Inject;
 
 /**
@@ -71,126 +72,126 @@ import com.google.inject.Inject;
  * 
  */
 public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
-	
 	@Inject
 	private IImageHelper imageHelper;
+	
 	 	protected Image _image(Mcl e) {
-	        return imageHelper.getImage("mdl.png");
+	        return imageHelper.getImage(getPath(MDL));
 	    }
 		protected Image _image(ModelObject e) {
-	        return imageHelper.getImage("model.png");
+	        return imageHelper.getImage(getPath(MODEL));
 	    }
 	    protected Image _image(ParameterObject d) {
-	        return imageHelper.getImage("parameter.png");
+	        return imageHelper.getImage(getPath(PARAMETER));
 	    }
 	    protected Image _image(DataObject p) {
-	        return imageHelper.getImage("data.png");
+	        return imageHelper.getImage(getPath(DATA));
 	    }
 	    protected Image _image(TaskObject f) {
-	        return imageHelper.getImage("task.png");
+	        return imageHelper.getImage(getPath(TASK));
 	    }
 	    protected Image _image(TELObject f) {
-	        return imageHelper.getImage("tel.png");
+	        return imageHelper.getImage(getPath(TEL));
 	    }
 	    
 	    protected Image _image(ConditionalStatement f) {
-	        return imageHelper.getImage("question.png");
+	        return imageHelper.getImage(getPath(CONDITION));
 	    }
 	    
 	    protected Image _image(FullyQualifiedSymbolName f) {
-	        return imageHelper.getImage("reference.gif");
+	        return imageHelper.getImage(getPath(REFERENCE));
 	    }
 	    
 	    protected Image _image(ParameterDeclaration f) {
-	        return imageHelper.getImage("lambda.png");
+	        return imageHelper.getImage(getPath(PARAMETER_DECLARATION));
 	    }
 	    
 	    protected Image _image(TargetBlock f) {
-	        return imageHelper.getImage("target.png");
+	        return imageHelper.getImage(getPath(TARGET));
 	    }
 
 	    protected Image _image(ImportedFunction f) {
-	        return imageHelper.getImage("import.png");
+	        return imageHelper.getImage(getPath(IMPORT));
 	    }
 
 	    protected Image _image(SymbolDeclaration f) {
-	        return imageHelper.getImage("variable.png");
+	        return imageHelper.getImage(getPath(SYMBOL_DECLARATION));
 	    }
 	    
 	    protected Image _image(RandomList r) {
-	        return imageHelper.getImage("random.png");
+	        return imageHelper.getImage(getPath(RANDOM));
 	    }
 	    	    
 	    protected Image _image(List r) {
-	        return imageHelper.getImage("list.png");
+	        return imageHelper.getImage(getPath(LIST));
 	    }
 
 	    protected Image _image(AddList r) {
-	        return imageHelper.getImage("add.png");
+	        return imageHelper.getImage(getPath(ADD));
 	    }
 	    
 	    protected Image _image(IgnoreList r) {
-	        return imageHelper.getImage("ignore.png");
+	        return imageHelper.getImage(getPath(IGNORE));
 	    }
 	    
 	    protected Image _image(AcceptList r) {
-	        return imageHelper.getImage("accept.png");
+	        return imageHelper.getImage(getPath(ACCEPT));
 	    }	    
 
 	    protected Image _image(RemoveList r) {
-	        return imageHelper.getImage("remove.png");
+	        return imageHelper.getImage(getPath(REMOVE));
 	    }
 
 	    protected Image _image(DropList r) {
-	        return imageHelper.getImage("drop.png");
+	        return imageHelper.getImage(getPath(DROP));
 	    }
 
 	    protected Image _image(FunctionCall r) {
-	        return imageHelper.getImage("funct.png");
+	        return imageHelper.getImage(getPath(FUNCTION));
 	    }
 	    
 	    protected Image _image(OdeList r) {
-	        return imageHelper.getImage("ode.png");
+	        return imageHelper.getImage(getPath(ODE));
 	    }
 	    	    
 	    protected Image _image(Argument f) {
-	        return imageHelper.getImage("attribute.png");
+	        return imageHelper.getImage(getPath(ATTRIBUTE));
 	    }	    
 	    
 	    protected Image _image(SymbolModification f) {
-	        return imageHelper.getImage("eraser.png");
+	        return imageHelper.getImage(getPath(SYMBOL_MODIFICATION));
 	    }
 	    
 	    protected Image _image(ConditionalExpression e) {
-	        return imageHelper.getImage("expression.png");
+	        return imageHelper.getImage(getPath(EXPRESSION_CONDITION));
 	    }
 	    
 	    protected Image _image(ParExpression e) {
-	        return imageHelper.getImage("expression.png");
+	        return imageHelper.getImage(getPath(EXPRESSION));
 	    }
 	    
 	    protected Image _image(OrExpression e) {
-	        return imageHelper.getImage("or.png");
+	        return imageHelper.getImage(getPath(EXPRESSION_OR));
 	    }
 
 	    protected Image _image(AndExpression e) {
-	        return imageHelper.getImage("and.png");
+	        return imageHelper.getImage(getPath(EXPRESSION_AND));
 	    }
 	    
 	    protected Image _image(MixtureBlock e) {
-	        return imageHelper.getImage("mixture.png");
+	        return imageHelper.getImage(getPath(MIXTURE));
 	    }
 
 	    protected Image getLogImage(){
-	    	return imageHelper.getImage("log.png");
+	    	return imageHelper.getImage(getPath(LOG));
 	    }
 	    
 	    protected Image getTrueImage() {
-	        return imageHelper.getImage("ok.png");
+	        return imageHelper.getImage(getPath(TRUE));
 	    }
 	    
 	    protected Image getFalseImage() {
-	        return imageHelper.getImage("no.png");
+	        return imageHelper.getImage(getPath(FALSE));
 	    }
 	    
 	    
