@@ -62,6 +62,7 @@ import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.impl.CategoricalImpl;
 import org.ddmore.mdl.mdl.impl.ContinuousImpl;
 import org.ddmore.mdl.mdl.impl.CovariateImpl;
+import org.ddmore.mdl.mdl.impl.DataBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.FormalArgumentImpl;
 import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
@@ -272,6 +273,9 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	    }
 	    protected Image _image(HeaderBlockImpl e) {
 	        return imageHelper.getImage(getPath(HEADER_BLOCK));
+	    }
+	    protected Image _image(DataBlockImpl e) {
+	        return imageHelper.getImage(getPath(DATA_BLOCK));
 	    }
 	    
 	    protected Image getLogImage(){

@@ -63,6 +63,7 @@ public class Images {
 	public static final String RANDOM_VARIABLES_BLOCK = LIST;
 	public static final String INDIVIDUAL_VARIABLES_BLOCK = LIST;
 	public static final String HEADER_BLOCK = LIST;
+	public static final String DATA_BLOCK = LIST;
 
 	public static final String getPath(String path) {
 		return ICONS_PATH + path;

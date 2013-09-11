@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.ddmore.mdl.sdk"
-      label="MDL SDK Feature"
+      label="%label"
       version="1.0.1.qualifier"
-      provider-name="DDMoRe Consortium">
+      provider-name="%provider">
 
-   <description>
-      MDL IDE plugins.
-      
-      Some icons by Yusuke Kamiyamane. Licensed under a Creative Commons Attribution 3.0 License.
-http://p.yusukekamiyamane.com/
+   <description>%description
    </description>
 
    <url>
-      <update label="DDMoRe Tools" url="http://sourceforge.net/projects/ddmore/files/update/ddmore-tools/ci/p2/"/>
+      <update label="%updateLabel" url="%updateUrl"/>
    </url>
 
    <plugin
