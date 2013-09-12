@@ -79,7 +79,7 @@ class Mdl2PharmML extends Mdl2Nonmem{
 						for (SymbolDeclaration s: block.inputVariablesBlock.variables){
 							if (s.expression != null){
 								if (s.expression.list != null){
-									var use = s.expression.list.getAttribute("use");
+									var use = s.expression.list.arguments.getAttribute("use");
 									if (use.equalsIgnoreCase("idv")){
 										val varName = s.identifier;
 										return '''
@@ -367,7 +367,7 @@ class Mdl2PharmML extends Mdl2Nonmem{
 						for (SymbolDeclaration s: block.inputVariablesBlock.variables){
 							if (s.expression != null){
 								if (s.expression.list != null){
-									var use = s.expression.list.getAttribute("use");
+									var use = s.expression.list.arguments.getAttribute("use");
 									if (use.equalsIgnoreCase("idv")){
 										return true;
                 					}
