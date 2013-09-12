@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="MIF Client Dependencies" url="http://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/1.0/ci/">
+   <description name="MIF Client Dependencies" url="http://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/1.0/release/">
       Hosts MIF Client Dependencies Feature
    </description>
-   <feature url="features/com.mango.mifclient.dependencies.feature_1.0.0.201309111214.jar" id="com.mango.mifclient.dependencies.feature" version="1.0.0.201309111214">
+   <feature url="features/com.mango.mifclient.dependencies.feature_1.0.0.201309121821.jar" id="com.mango.mifclient.dependencies.feature" version="1.0.0.201309121821">
       <category name="MIFClientDependencies"/>
    </feature>
    <category-def name="MIFClientDependencies" label="MIF Client Dependencies"/>
