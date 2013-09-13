@@ -20,6 +20,7 @@ import org.ddmore.mdl.mdl.ExecuteTask
 import org.ddmore.mdl.mdl.FileBlock
 import org.ddmore.mdl.mdl.FileBlockStatement
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
+import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.FunctionCall
 import org.ddmore.mdl.mdl.ImportBlock
 import org.ddmore.mdl.mdl.ImportedFunction
@@ -41,6 +42,7 @@ import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import org.eclipse.emf.ecore.resource.Resource
+import org.ddmore.mdl.mdl.MclObject
 
 class Mdl2Nonmem extends MdlPrinting{		
 	
@@ -66,16 +68,26 @@ class Mdl2Nonmem extends MdlPrinting{
 
   		var version = "1.02";
   		var date = "24.08.2013"
+  		
+  		var java.util.List<DataObject> dataObjects = new ArrayList<DataObject>
+  		var java.util.List<TaskObject> taskObjects = new ArrayList<TaskObject>
+  		
+        for (o:m.objects) {
+            if (o.dataObject != null)
+                dataObjects.add(o.dataObject);
+            if (o.taskObject != null)
+                taskObjects.add(o.taskObject);
+        }
 	
 		'''
 		;mdl2nt «version» beta, last modification «date», Natallia Kokash (natallia.kokash@gmail.com)  
 		«m.printSIZES»
 		«m.printPROB»
-		«FOR o:m.objects»
-			«IF o.dataObject != null»«o.dataObject.convertToNMTRAN»«ENDIF»
+		«FOR d:dataObjects»
+			«convertToNMTRAN(d, taskObjects)»
 	  	«ENDFOR»
-		«FOR o:m.objects»
-			«IF o.taskObject != null»«o.taskObject.printIGNORE»«ENDIF»
+		«FOR t:taskObjects»
+			«t.printIGNORE»
 	  	«ENDFOR»
 		«m.printABBREVIATED»
 		«FOR o:m.objects»
@@ -761,25 +773,43 @@ class Mdl2Nonmem extends MdlPrinting{
 ////////////////////////////////////	
 //convertToNonmem DATA OBJECT
 ////////////////////////////////////
-	def convertToNMTRAN(DataObject o)'''
-	«o.printINPUT»
-	«o.printDATA»
+	def convertToNMTRAN(DataObject d, java.util.List<TaskObject> t)'''
+	«printINPUT(d,t)»
+	«d.printDATA»
 	'''
 
 	//Print NM-TRAN record $INPUT
-	def printINPUT(DataObject o)'''
-	«IF o.isHeaderDefined»
+	def printINPUT(DataObject d, java.util.List<TaskObject> t)'''
+	«IF d.isHeaderDefined»
 		
 	$INPUT
 	«ENDIF»
 	«getExternalCodeStart("$INPUT")»
-	«FOR b:o.blocks»
-		«IF b.headerBlock != null»
-			«FOR st: b.headerBlock.variables SEPARATOR ' '»«st.identifier.toStr»«ENDFOR»
-		«ENDIF»
+	«FOR b:d.blocks»
+	    «IF b.headerBlock != null»
+			«FOR st: b.headerBlock.variables SEPARATOR ' '»«IF isDrop(st.identifier, t)»«st.identifier.toStr»=DROP«ELSE»«st.identifier.toStr»«ENDIF»«ENDFOR»
+        «ENDIF»
 	«ENDFOR»
 	«getExternalCodeEnd("$INPUT")»
 	'''
+	
+    def isDrop(FullyQualifiedSymbolName id, java.util.List<TaskObject> t) {
+        for (TaskObject tObj :t) {
+            for (b: tObj.blocks) {
+                if (b.dataBlock !=  null) {
+                    for (DataBlockStatement block: b.dataBlock.statements) {
+                        if (block.dropList != null) {
+                            for (FullyQualifiedSymbolName symbol : block.dropList.list.symbols) {
+                                if (id.identifier.equals(symbol.identifier))
+                                    return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 	
 	//Print NM-TRAN record $DATA
 	def printDATA(DataObject o)'''

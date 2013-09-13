@@ -194,7 +194,9 @@ class MdlPrinting {
 	//Return value of an attribute with a given name
 	def selectAttribute(Arguments a, String attrName){
 		for (arg: a.arguments)
-			if (arg.identifier.equals(attrName))
+			if (arg.identifier != null &&
+			    arg.identifier.equals(attrName)
+			)
 				return arg.expression.toStr
 		return "";
 	}	
