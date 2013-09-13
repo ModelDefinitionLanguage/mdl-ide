@@ -161,38 +161,32 @@ class MdlPrinting {
 		fileName.substring(0, fileName.lastIndexOf('.'))
 	}
 	
-	def isTrue(AnyExpression expr){
-		return expr.toStr.isTrue;
+	def isTrue(AnyExpression e){
+		if (e.expression != null){
+			if (e.expression.conditionalExpression != null){
+				val orExpr = e.expression.conditionalExpression.expression;
+				val andExpr = orExpr.expression.get(0);
+				val logicalExpr = andExpr.expression.get(0);	
+				if (logicalExpr.boolean != null){	
+					if ((logicalExpr.negation == null) && logicalExpr.boolean.equals("true")) return true;
+					if ((logicalExpr.negation != null) && logicalExpr.boolean.equals("false")) return true;
+				}
+			}
+		}
+		return (e.toStr.equalsIgnoreCase("yes") || e.toStr.equalsIgnoreCase("true") || e.toStr.equals("1"));
 	}
 	
-	def isTrue(String expr){
-		return (expr.equals("yes") || expr.equals("true") || expr.equals("1"));
+	
+	def isAttributeTrue(Arguments a, String attrName){
+		for (arg: a.arguments)
+			if (arg.identifier.equals(attrName)){
+				return arg.expression.isTrue;
+			}
+		return false;
 	}
-	
-		
-	//Return value of a list attribute with a given name
-	def getAttribute(List v, String attrName){
-		if (v.arguments != null)
-			return v.arguments.selectAttribute(attrName)
-		return "";
-	}	
-
-	//Return value of a random list attribute with a given name
-	def getAttribute(RandomList v, String attrName){
-		if (v.arguments != null)
-			return v.arguments.selectAttribute(attrName)
-		return "";
-	}	
-	
-	//Return value of a list attribute with a given name
-	def getAttribute(OdeList v, String attrName){
-		if (v.arguments != null)
-			return v.arguments.selectAttribute(attrName)
-		return "";
-	}	
 	
 	//Return value of an attribute with a given name
-	def selectAttribute(Arguments a, String attrName){
+	def getAttribute(Arguments a, String attrName){
 		for (arg: a.arguments)
 			if (arg.identifier != null &&
 			    arg.identifier.equals(attrName)
@@ -356,7 +350,7 @@ class MdlPrinting {
 				for (s: mob.modelPredictionBlock.statements){
 				    if (s.libraryBlock != null) {
 				    	for (ss: s.libraryBlock.statements){
-				    		var nmct = ss.expression.arguments.selectAttribute("ncmt");
+				    		var nmct = ss.expression.arguments.getAttribute("ncmt");
 				    		if (!nmct.equals("")) return Integer::parseInt(nmct);
 				    	}
 				    }
@@ -396,7 +390,7 @@ class MdlPrinting {
     def isInlineTargetDefined(String targetName, EList<BlockStatement> list){
 		for (s: list){
 			if (s.targetBlock != null){
-				val target = s.targetBlock.arguments.selectAttribute("target");
+				val target = s.targetBlock.arguments.getAttribute("target");
 		 		if (target != null) 
 					if (target.equals(targetName)) {
 						return true;

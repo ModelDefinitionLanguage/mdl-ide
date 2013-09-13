@@ -420,6 +420,7 @@ EnumType:
 
 Likelyhood:
 	identifier = 'LIKELIHOOD'	
+	//identifier = 'likelihood'	
 ;
 
 UseType:

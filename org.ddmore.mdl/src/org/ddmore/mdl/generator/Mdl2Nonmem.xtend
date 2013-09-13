@@ -5,43 +5,45 @@
  */
 package org.ddmore.mdl.generator
 
-import java.util.ArrayList
-import java.util.HashMap
-import org.ddmore.mdl.mdl.AndExpression
-import org.ddmore.mdl.mdl.Argument
-import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.mdl.BlockStatement
-import org.ddmore.mdl.mdl.ConditionalStatement
-import org.ddmore.mdl.mdl.DataBlockStatement
-import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.mdl.DiagBlock
-import org.ddmore.mdl.mdl.EstimateTask
-import org.ddmore.mdl.mdl.ExecuteTask
 import org.ddmore.mdl.mdl.FileBlock
+import org.ddmore.mdl.mdl.Mcl
+import org.ddmore.mdl.mdl.ModelObject
+import org.ddmore.mdl.mdl.ParameterObject
+import org.ddmore.mdl.mdl.ConditionalStatement
+import org.ddmore.mdl.mdl.TaskObject
+import org.ddmore.mdl.mdl.TaskObjectBlock
+import org.ddmore.mdl.mdl.TargetBlock
+import org.ddmore.mdl.mdl.ModelPredictionBlock
+import org.ddmore.mdl.mdl.ParameterDeclaration
+import org.ddmore.mdl.mdl.EstimateTask
+import org.ddmore.mdl.mdl.SimulateTask
 import org.ddmore.mdl.mdl.FileBlockStatement
+import org.eclipse.emf.ecore.resource.Resource
+import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.DataBlockStatement
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.FunctionCall
 import org.ddmore.mdl.mdl.ImportBlock
 import org.ddmore.mdl.mdl.ImportedFunction
+import org.ddmore.mdl.mdl.Argument
+import java.util.HashMap
+import java.util.ArrayList
+import org.ddmore.mdl.mdl.ExecuteTask
+import org.ddmore.mdl.mdl.DataObject
+import org.ddmore.mdl.mdl.DiagBlock
+import org.ddmore.mdl.mdl.MatrixBlock
+import org.ddmore.mdl.mdl.OrExpression
+import org.ddmore.mdl.mdl.AndExpression
+import org.ddmore.mdl.mdl.SameBlock
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
+import org.ddmore.mdl.mdl.Selector
+import org.ddmore.mdl.mdl.FunctionCall
+import org.ddmore.mdl.mdl.Arguments
+import org.ddmore.mdl.mdl.MixtureBlock
 import org.ddmore.mdl.mdl.List
 import org.ddmore.mdl.mdl.LogicalExpression
-import org.ddmore.mdl.mdl.MatrixBlock
-import org.ddmore.mdl.mdl.Mcl
-import org.ddmore.mdl.mdl.MixtureBlock
-import org.ddmore.mdl.mdl.ModelObject
-import org.ddmore.mdl.mdl.ModelPredictionBlock
-import org.ddmore.mdl.mdl.OrExpression
-import org.ddmore.mdl.mdl.ParameterDeclaration
-import org.ddmore.mdl.mdl.ParameterObject
-import org.ddmore.mdl.mdl.SameBlock
-import org.ddmore.mdl.mdl.Selector
-import org.ddmore.mdl.mdl.SimulateTask
-import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.TargetBlock
-import org.ddmore.mdl.mdl.TaskObject
-import org.ddmore.mdl.mdl.TaskObjectBlock
-import org.eclipse.emf.ecore.resource.Resource
+import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.MclObject
 
 class Mdl2Nonmem extends MdlPrinting{		
@@ -377,7 +379,7 @@ class Mdl2Nonmem extends MdlPrinting{
 									«x.print»
 								«ENDIF»
 								«IF x.expression.odeList != null»
-									«var deriv = x.expression.odeList.getAttribute("deriv")»
+									«var deriv = x.expression.odeList.arguments.getAttribute("deriv")»
 									«IF !deriv.equals("")»
 										«var id = x.identifier»
 										«IF dadt_vars.get(id) != null»
@@ -428,8 +430,8 @@ class Mdl2Nonmem extends MdlPrinting{
 						var name = attributes.get("name");
 						if (name != null) library = name;
 					}
-					val model = st.expression.arguments.selectAttribute("model");
-					val trans = st.expression.arguments.selectAttribute("trans");
+					val model = st.expression.arguments.getAttribute("model");
+					val trans = st.expression.arguments.getAttribute("trans");
 					val tol = b.eResource.getTOL;
 					return '''«IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF» «IF !trans.equals("")»TRANS«trans»«ENDIF» «IF !tol.equals("")»TOL = «tol»«ENDIF»'''
 				}
@@ -567,7 +569,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	//$OMEGA BLOCK(dim) SAME ; varName
 	//$SIGMA BLOCK(dim) SAME ; varName
 	def printSame(SameBlock b, String section) { 
-		var name = b.arguments.selectAttribute("name");
+		var name = b.arguments.getAttribute("name");
 		if (name.equals("")) return '''''';
 		val isOmega = section.equals("$OMEGA") && (namedOmegaBlocks.get(name) != null);
 		val isSigma = section.equals("$SIGMA") && (namedSigmaBlocks.get(name) != null);
@@ -607,7 +609,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	def collectDimensionsForSame(DiagBlock b)
 	{
 		var k = 0; 
-		var name = b.arguments.selectAttribute("name");
+		var name = b.arguments.getAttribute("name");
 		var isOmega = false;
 		var isSigma = false;
 		if (name != null){
@@ -630,7 +632,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	def collectDimensionsForSame(MatrixBlock b)
 	{
 		var k = 0;
-		var name = b.arguments.selectAttribute("name");
+		var name = b.arguments.getAttribute("name");
 		var isOmega = false;
 		var isSigma = false;
 		if (b.parameters != null)
@@ -743,8 +745,8 @@ class Mdl2Nonmem extends MdlPrinting{
 		var isSigma = (section.equals("$SIGMA") && eps_vars.get("eps_" + name) != null);
 		if (isOmega || isSigma)
 		{
-			val value = s.list.getAttribute("value");
-			val printFix = s.list.getAttribute("fix").isTrue;
+			val value = s.list.arguments.getAttribute("value");
+			val printFix = s.list.arguments.isAttributeTrue("fix");
 			return							
 			'''
 			«IF !value.equals("")»«value»«IF printFix» FIX«ENDIF»«ENDIF» ; «name»
@@ -758,10 +760,10 @@ class Mdl2Nonmem extends MdlPrinting{
 	def printTheta(ParameterDeclaration s){
 		if (s.list != null){		
 			var name = s.identifier;
-			val value = s.list.getAttribute("value");
-			val lo = s.list.getAttribute("lo");
-			val hi = s.list.getAttribute("hi");
-			val printFix = s.list.getAttribute("fix").isTrue;
+			val value = s.list.arguments.getAttribute("value");
+			val lo = s.list.arguments.getAttribute("lo");
+			val hi = s.list.arguments.getAttribute("hi");
+			val printFix = s.list.arguments.isAttributeTrue("fix");
 			if (value.equals("")) return "";
 			if (lo.equals("") && hi.equals("")) return '''«value»«IF printFix» FIX«ENDIF» ; «name»'''
 			if (lo.equals("")) return '''(-INF, «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
@@ -839,7 +841,7 @@ class Mdl2Nonmem extends MdlPrinting{
 			if (s.variable.identifier.equals("data")){
 				if (s.variable.expression != null){
 					if (s.variable.expression.list != null){
-						var ignore = s.variable.expression.list.getAttribute("ignore");
+						var ignore = s.variable.expression.list.arguments.getAttribute("ignore");
 						return '''«IF !ignore.equals("")»IGNORE=«ignore»«ENDIF»'''
 					}
 				}
@@ -852,7 +854,7 @@ class Mdl2Nonmem extends MdlPrinting{
 			if (s.variable.identifier.equals("data")){
 				if (s.variable.expression != null){
 					if (s.variable.expression.list != null){
-						var data = s.variable.expression.list.getAttribute("source");
+						var data = s.variable.expression.list.arguments.getAttribute("source");
 						return data;
 					}
 				}
@@ -1044,7 +1046,7 @@ class Mdl2Nonmem extends MdlPrinting{
 							if (ss.symbol != null)
 								if (ss.symbol.expression != null)
 									if (ss.symbol.expression.odeList != null){
-										val initCond = ss.symbol.expression.odeList.getAttribute("init");
+										val initCond = ss.symbol.expression.odeList.arguments.getAttribute("init");
 										if (!initCond.equals("")){
 											init_vars.put(i, initCond);
 										} else init_vars.put(i, "0");
@@ -1089,7 +1091,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	  		if (b.randomVariableDefinitionBlock != null){
 				for (s: b.randomVariableDefinitionBlock.variables) {
 					if (s.randomList != null){	
-						var level = s.randomList.getAttribute("level");
+						var level = s.randomList.arguments.getAttribute("level");
 						val id = s.identifier;
 						if (level.equals("ID"))
 							if (eta_vars.get(id) == null){
@@ -1146,7 +1148,7 @@ class Mdl2Nonmem extends MdlPrinting{
 			if (s.variable.identifier.equals("data")){
 				if (s.variable.expression != null){
 					if (s.variable.expression.list != null)
-						return s.variable.expression.list.getAttribute("source");
+						return s.variable.expression.list.arguments.getAttribute("source");
 				}
 			}
 		}
@@ -1258,7 +1260,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	
 	override print(TargetBlock b){
 		var target = "";
-		if (b.arguments != null) target = b.arguments.selectAttribute("target");
+		if (b.arguments != null) target = b.arguments.getAttribute("target");
 		if (target.equals(TARGET)) {
 		'''
 		«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
@@ -1292,28 +1294,9 @@ class Mdl2Nonmem extends MdlPrinting{
 	
 	//toStr relational expression (==, !=, <, > etc.)
 	//Here we skip boolean values!
-	// ... unless the attribute is 'fix' which we treat as a special case
 	override toStr(LogicalExpression e){
-
-		if (e.boolean == null) {
-			return super.toStr(e);
-		}
-
-		var container = e.eContainer
-
-		while (null != container && !(container instanceof Argument)) {
-			container = container.eContainer
-		}
-
-		if (container instanceof Argument) {
-			var argument = container as Argument
-
-			if (argument.identifier.equalsIgnoreCase("fix")) {
-				return super.toStr(e);
-			}
-		}
-		
-		return ""
+		if (e.boolean != null) 	return "";
+		return super.toStr(e);
 	}	
 			
 	
@@ -1321,7 +1304,7 @@ class Mdl2Nonmem extends MdlPrinting{
 	override toStr(SymbolDeclaration v){
 		if (v.expression != null){
 			if (v.expression.list != null){
-				var type = v.expression.list.arguments.selectAttribute("type");
+				var type = v.expression.list.arguments.getAttribute("type");
 				var res = "";
 				if (type.equals("continuous")){
 					res = "F_FLAG = 0\n" 
@@ -1346,25 +1329,23 @@ class Mdl2Nonmem extends MdlPrinting{
 	//toStr list
 	//Instead of list(...) we print an expression from a certain attribute (depends on the type)
 	override toStr(List l){		
-		var type = l.arguments.selectAttribute("type");
-		var res = ""
-
+		var type = l.arguments.getAttribute("type");
+		var res = "";
 		if (type.equals("LIKELIHOOD")){
-			res = l.arguments.selectAttribute("likelihood");
+			res = l.arguments.getAttribute("likelihood");
 		} else if (type.equals("continuous")){
-			var ruv = l.arguments.selectAttribute("ruv");
-			var prediction = l.arguments.selectAttribute("prediction")
+			var ruv = l.arguments.getAttribute("ruv");
+			var prediction = l.arguments.getAttribute("prediction")
 			res = prediction + ruv
-		}
-
-		return res
+		}			
+		return res;
 	}
 
 	//Prepare a list of external function declarations to define their NMTRAN names 
 	 override void prepareExternalFunctions(ImportBlock b, String objName){
 		for (ImportedFunction f: b.functions){
 			var args = new HashMap<String, String>();
-			var target = f.list.getAttribute("target");
+			var target = f.list.arguments.getAttribute("target");
 		 	if (target != null){ 
 				if (target.equals(TARGET)) {
 					for (Argument arg: f.list.arguments.arguments){
@@ -1379,12 +1360,11 @@ class Mdl2Nonmem extends MdlPrinting{
 	
 	 //Prepare a map of section with corresponding target blocks
 	 override void prepareExternalCode(TargetBlock b){
-		val target = b.arguments.selectAttribute("target");
+		val target = b.arguments.getAttribute("target");
 		if (target != null){ 
 			if (target.equals(TARGET)) {
-				val location = b.arguments.selectAttribute("location");
-				val isFirst = b.arguments.selectAttribute("first");
-				if (isFirst.isTrue){
+				val location = b.arguments.getAttribute("location");
+				if (b.arguments.isAttributeTrue("first")){
 					var codeSnippets = externalCodeStart.get(location);
 					if (codeSnippets == null) codeSnippets = new ArrayList<String>();
 					codeSnippets.add(b.externalCodeToStr);
