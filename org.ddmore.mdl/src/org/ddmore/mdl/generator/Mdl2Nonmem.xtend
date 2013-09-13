@@ -1317,17 +1317,17 @@ class Mdl2Nonmem extends MdlPrinting{
 	//Instead of list(...) we print an expression from a certain attribute (depends on the type)
 	override toStr(List l){		
 		var type = l.arguments.getAttribute("type");
+		var res = "";
 		if (type.equals("LIKELIHOOD")){
-			var expr = l.arguments.getAttribute("likelihood");
-			if (!expr.equals("")) return expr;
-		}
-		if (type.equals("continuous")){
-			var expr = l.arguments.getAttribute("ruv");
-			if (!expr.equals("")) return expr;
+			res = l.arguments.getAttribute("likelihood");
+		} else if (type.equals("continuous")){
+			var ruv = l.arguments.getAttribute("ruv");
+			var prediction = l.arguments.getAttribute("prediction")
+			res = prediction + ruv
 		}			
-		return "";
-	}	
-	
+		return res;
+	}
+
 	//Prepare a list of external function declarations to define their NMTRAN names 
 	 override void prepareExternalFunctions(ImportBlock b, String objName){
 		for (ImportedFunction f: b.functions){
