@@ -5,42 +5,42 @@
  */
 package org.ddmore.mdl.generator
 
-import java.util.ArrayList
-import java.util.HashMap
-import org.ddmore.mdl.mdl.AndExpression
-import org.ddmore.mdl.mdl.Argument
-import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.mdl.BlockStatement
-import org.ddmore.mdl.mdl.ConditionalStatement
-import org.ddmore.mdl.mdl.DataBlockStatement
-import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.mdl.DiagBlock
-import org.ddmore.mdl.mdl.EstimateTask
-import org.ddmore.mdl.mdl.ExecuteTask
 import org.ddmore.mdl.mdl.FileBlock
-import org.ddmore.mdl.mdl.FileBlockStatement
-import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
-import org.ddmore.mdl.mdl.FunctionCall
-import org.ddmore.mdl.mdl.ImportBlock
-import org.ddmore.mdl.mdl.ImportedFunction
-import org.ddmore.mdl.mdl.List
-import org.ddmore.mdl.mdl.LogicalExpression
-import org.ddmore.mdl.mdl.MatrixBlock
 import org.ddmore.mdl.mdl.Mcl
-import org.ddmore.mdl.mdl.MixtureBlock
 import org.ddmore.mdl.mdl.ModelObject
-import org.ddmore.mdl.mdl.ModelPredictionBlock
-import org.ddmore.mdl.mdl.OrExpression
-import org.ddmore.mdl.mdl.ParameterDeclaration
 import org.ddmore.mdl.mdl.ParameterObject
-import org.ddmore.mdl.mdl.SameBlock
-import org.ddmore.mdl.mdl.Selector
-import org.ddmore.mdl.mdl.SimulateTask
-import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.TargetBlock
+import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.TaskObjectBlock
+import org.ddmore.mdl.mdl.TargetBlock
+import org.ddmore.mdl.mdl.ModelPredictionBlock
+import org.ddmore.mdl.mdl.ParameterDeclaration
+import org.ddmore.mdl.mdl.EstimateTask
+import org.ddmore.mdl.mdl.SimulateTask
+import org.ddmore.mdl.mdl.FileBlockStatement
 import org.eclipse.emf.ecore.resource.Resource
+import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.DataBlockStatement
+import org.ddmore.mdl.mdl.ImportBlock
+import org.ddmore.mdl.mdl.ImportedFunction
+import org.ddmore.mdl.mdl.Argument
+import java.util.HashMap
+import java.util.ArrayList
+import org.ddmore.mdl.mdl.ExecuteTask
+import org.ddmore.mdl.mdl.DataObject
+import org.ddmore.mdl.mdl.DiagBlock
+import org.ddmore.mdl.mdl.MatrixBlock
+import org.ddmore.mdl.mdl.OrExpression
+import org.ddmore.mdl.mdl.AndExpression
+import org.ddmore.mdl.mdl.SameBlock
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
+import org.ddmore.mdl.mdl.Selector
+import org.ddmore.mdl.mdl.FunctionCall
+import org.ddmore.mdl.mdl.Arguments
+import org.ddmore.mdl.mdl.MixtureBlock
+import org.ddmore.mdl.mdl.List
+import org.ddmore.mdl.mdl.LogicalExpression
+import org.ddmore.mdl.mdl.BlockStatement
 
 class Mdl2Nonmem extends MdlPrinting{		
 	
@@ -1262,28 +1262,9 @@ class Mdl2Nonmem extends MdlPrinting{
 	
 	//toStr relational expression (==, !=, <, > etc.)
 	//Here we skip boolean values!
-	// ... unless the attribute is 'fix' which we treat as a special case
 	override toStr(LogicalExpression e){
-
-		if (e.boolean == null) {
-			return super.toStr(e);
-		}
-
-		var container = e.eContainer
-
-		while (null != container && !(container instanceof Argument)) {
-			container = container.eContainer
-		}
-
-		if (container instanceof Argument) {
-			var argument = container as Argument
-
-			if (argument.identifier.equalsIgnoreCase("fix")) {
-				return super.toStr(e);
-			}
-		}
-		
-		return ""
+		if (e.boolean != null) 	return "";
+		return super.toStr(e);
 	}	
 			
 	
