@@ -616,7 +616,7 @@ class Mdl2Nonmem extends MdlPrinting{
 						k = k + 1;
 						if (p.identifier != null){
 							if (eta_vars.get("eta_" + p.identifier) != null) isOmega = true;
-							if (eta_vars.get("eps_" + p.identifier) != null) isSigma = true;
+							if (eps_vars.get("eps_" + p.identifier) != null) isSigma = true;
 						} 
 					}
 				}		
@@ -637,7 +637,7 @@ class Mdl2Nonmem extends MdlPrinting{
 				if (p.expression != null){
 					if (p.identifier != null){
 						if (eta_vars.get("eta_" + p.identifier) != null) isOmega = true;
-						if (eta_vars.get("eps_" + p.identifier) != null) isSigma = true;
+						if (eps_vars.get("eps_" + p.identifier) != null) isSigma = true;
 						k = k + 1;
 					}
 				}
