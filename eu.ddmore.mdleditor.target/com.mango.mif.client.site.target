@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="com.mango.mif.client.site.target" sequenceNumber="118">
+<?pde version="3.8"?><target name="com.mango.mif.client.site.target" sequenceNumber="119">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.wst.common.fproj.feature.group" version="3.4.0.v201202292300-377F8N8s735555393B7B"/>
@@ -18,8 +18,8 @@
 </location>
 <location path="${project_loc:eu.ddmore.mdleditor.target}/mango-plugins" type="Directory"/>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201308271149"/>
-<repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies"/>
+<unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201309111214"/>
+<repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/1.0/ci"/>
 </location>
 </locations>
 </target>
