@@ -29,6 +29,17 @@
    <vm>
    </vm>
 
+   <license>
+        <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+        <text>
+   GNU Lesser General Public License version 2.1
+
+This program and the accompanying materials is licensed under the terms of the GNU Lesser General Public License version 2.1 as published by the Free Software Foundation.
+
+http://www.gnu.org/licenses/lgpl-2.1.html
+         </text>
+   </license>
+
    <plugins>
    </plugins>
 

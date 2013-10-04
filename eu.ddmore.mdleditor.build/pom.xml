@@ -21,10 +21,10 @@
 	</modules>
 
 	<properties>
-        <mif.version>2.1.5-SNAPSHOT</mif.version>
+        <mif.version>2.1.6-SNAPSHOT</mif.version>
         
         <!-- once the encryption key is changed this can be replaced using the maven artifact : MIFDEV-35 -->
-        <mifclient.repo.url>https://sourceforge.net/projects/ddmore/files/update/mif-client/</mifclient.repo.url>
+        <mifclient.repo.url>https://sourceforge.net/projects/ddmore/files/update/mifclient/2.1/ci/</mifclient.repo.url>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jacoco.version>0.6.0.201210061924</jacoco.version>

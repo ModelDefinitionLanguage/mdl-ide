@@ -5,6 +5,7 @@ In order to build the site:
 2. Put newest MIFClient.jar to eu.ddmore.mdleditor.target/mango-plugins
 3. Click on 'Set as Target Platform'
 4. For release builds only: Remove 'features', 'plugins'. artifacts.jar and content.jar from  com.mango.mif.client.site project
-5. Open com.mango.mif.client.site/site.xml and click 'Build All'
-6. Upload the features, plugins, artifacts.jar and content.jar to SourceForge 'https://sourceforge.net/projects/ddmore/files/update/mifclient/'
-7. Update the features, plugins, artifacts.jar and content.jar in the source repository.  Although this is not strictly necessary, it gives us traceability around any changes
+5. Update the category.xml with the new feature
+6. Open com.mango.mif.client.site/site.xml and click 'Build All'
+7. Upload the features, plugins, artifacts.jar and content.jar to SourceForge 'https://sourceforge.net/projects/ddmore/files/update/mifclient/'
+8. Update the features, plugins, artifacts.jar and content.jar in the source repository.  Although this is not strictly necessary, it gives us traceability around any changes

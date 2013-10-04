@@ -41,11 +41,11 @@ public class TESServer {
 
     private static final Logger LOGGER = Logger.getLogger(TESServer.class);
 
-	private static final String MIF_ENCRYPTION_KEY_PROP = "mif.encryption.key";
+    private static final String MIF_ENCRYPTION_KEY_PROP = "mif.encryption.key";
 
-	private static DesEncrypter desEncrypter;
-	
-	private final transient HttpClient client = new DefaultHttpClient();
+    private static DesEncrypter desEncrypter;
+
+    private final transient HttpClient client = new DefaultHttpClient();
 
     public String prepare() {
         final String url = getBaseURL() + JOBSUBMISSION_URL + "/prepare";
@@ -95,24 +95,24 @@ public class TESServer {
 
     private static String getPassword() {
         try {
-			return getDesEncrypter().encrypt(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD));
-		} catch (EncryptionException e) {
-			throw new IllegalStateException(e);
-		}
+            return getDesEncrypter().encrypt(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD));
+        } catch (EncryptionException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private static synchronized DesEncrypter getDesEncrypter() throws EncryptionException {
-    	if(desEncrypter!=null) {
-    		return desEncrypter;
-    	}
-    	if(System.getProperties().containsKey(MIF_ENCRYPTION_KEY_PROP)) {
-    		return new DesEncrypter(System.getProperty(MIF_ENCRYPTION_KEY_PROP));
-    	} else {
-    		return new DesEncrypter();
-    	}
-	}
+        if (desEncrypter != null) {
+            return desEncrypter;
+        }
+        if (System.getProperties().containsKey(MIF_ENCRYPTION_KEY_PROP)) {
+            return new DesEncrypter(System.getProperty(MIF_ENCRYPTION_KEY_PROP));
+        } else {
+            return new DesEncrypter();
+        }
+    }
 
-	public String exec(final String requestId, final String execFile) {
+    public String exec(final String requestId, final String execFile) {
         final String url = getBaseURL() + JOBSUBMISSION_URL + "/execute";
 
         HttpPost httpPost = new HttpPost(url);
@@ -185,7 +185,9 @@ public class TESServer {
                 return TESRequestStatus.failed;
             case NEW:
             case NOT_AVAILABLE:
-            case RUNNING:
+            case PROCESSING:
+            case PROCESSING_FINISHED:
+            case SCHEDULED:
                 return TESRequestStatus.running;
             default:
                 LOGGER.error("Unexpected return status " + responseString);
