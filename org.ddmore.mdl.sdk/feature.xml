@@ -88,7 +88,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </license>
 
    <url>
-      <update label="%updateLabel"/>
+      <update label="%updateLabel" url=""/>
    </url>
 
    <plugin

@@ -19,7 +19,7 @@
 
    <windowImages/>
 
-   <launcher>
+   <launcher name="ddmoreMDL">
       <solaris/>
       <win useIco="false">
          <bmp/>

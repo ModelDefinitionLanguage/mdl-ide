@@ -52,21 +52,30 @@ public class RetrieveTaskOutputsJob extends Job {
 
     private void copyFilesFromSharedLocation() throws IOException {
         IPreferenceStore preferenceStore = MdlActivator.getInstance().getPreferenceStore();
-        final String targetDir = preferenceStore.getString(MDLPreferenceConstants.TES_SHARED_DIR);
-        final String targetOutputPath = preferenceStore.getString(MDLPreferenceConstants.TES_SHARED_DIR_OUTPUT);
+        final String targetDir = preferenceStore.getString(MDLPreferenceConstants.TES_CLIENT_SHARED_DIR);
 
         if (targetDir == null || targetDir.isEmpty()) {
             throw new IllegalArgumentException("TES Shared Directory Path not set");
         }
 
-        File inputDir = new File(new File(new File(targetDir), requestId), targetOutputPath);
+        File inputDir = new File(new File(targetDir), requestId);
 
         IPath outputPath = this.modelFile.getProject().getLocation().append("results").append(requestId);
 
         //FIXME
         if (this.modelFile.getFileExtension().equals("R")) {
-            // copy everything
-            FileUtils.copyDirectory(inputDir, outputPath.toFile(), true);
+            // only copy PNGs
+            File[] files = inputDir.listFiles(new FilenameFilter() {
+
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.endsWith("png");
+                }
+            });
+
+            for (File file : files) {
+                FileUtils.copyFileToDirectory(file, outputPath.toFile(), true);
+            }
         } else {
             // only copy files with same prefix
             File[] files = inputDir.listFiles(new FilenameFilter() {

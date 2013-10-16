@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.ddmore.mdl.taskexecution.core.services.http.TESServer;
@@ -76,7 +77,7 @@ public class PublishTaskInputJob extends Job {
             TESServer serverConn = new TESServer();
 
             // get the UID for this run 
-            this.requestId = serverConn.prepare();
+            this.requestId = UUID.randomUUID().toString();
 
             if (monitor.isCanceled()) {
                 return Status.CANCEL_STATUS;
@@ -133,14 +134,13 @@ public class PublishTaskInputJob extends Job {
 
     private void publishFileToSharedDir(final File file, final String UID) throws IOException {
         IPreferenceStore preferenceStore = MdlActivator.getInstance().getPreferenceStore();
-        final String targetDir = preferenceStore.getString(MDLPreferenceConstants.TES_SHARED_DIR);
-        final String targetInputPath = preferenceStore.getString(MDLPreferenceConstants.TES_SHARED_DIR_INPUT);
+        final String targetDir = preferenceStore.getString(MDLPreferenceConstants.TES_CLIENT_SHARED_DIR);
 
         if (targetDir == null || targetDir.isEmpty()) {
             throw new IllegalArgumentException("TES Shared Directory Path not set");
         }
 
-        FileUtils.copyFileToDirectory(file, new File(new File(new File(targetDir), UID), targetInputPath), true);
+        FileUtils.copyFileToDirectory(file, new File(new File(targetDir), UID), true);
     }
 
 }

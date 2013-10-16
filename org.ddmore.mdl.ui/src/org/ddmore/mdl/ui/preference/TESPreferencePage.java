@@ -41,10 +41,11 @@ public class TESPreferencePage extends FieldEditorPreferencePage implements IWor
         addField(new StringFieldEditor(MDLPreferenceConstants.TES_SERVICE, "TES Service &Resource", getFieldEditorParent()));
 
         addField(new StringFieldEditor(MDLPreferenceConstants.TES_UNAME, "TES &Username", getFieldEditorParent()));
-        addField(new StringFieldEditor(MDLPreferenceConstants.TES_PWORD, "TES &Password", getFieldEditorParent()));
+        addField(new StringFieldEditor(MDLPreferenceConstants.TES_PWORD, "TES Pass&word", getFieldEditorParent()));
 
-        addField(new DirectoryFieldEditor(MDLPreferenceConstants.TES_SHARED_DIR, "TES &Shared Base Path", getFieldEditorParent()));
-        addField(new StringFieldEditor(MDLPreferenceConstants.TES_SHARED_DIR_INPUT, "TES Shared &Input Folder", getFieldEditorParent()));
-        addField(new StringFieldEditor(MDLPreferenceConstants.TES_SHARED_DIR_OUTPUT, "TES Shared &Output Folder", getFieldEditorParent()));
+        addField(new DirectoryFieldEditor(MDLPreferenceConstants.TES_CLIENT_SHARED_DIR, "TES Client Shared Location",
+                getFieldEditorParent()));
+        addField(new StringFieldEditor(MDLPreferenceConstants.TES_SHARED_DIR, "TES Shared Location", getFieldEditorParent()));
+        addField(new StringFieldEditor(MDLPreferenceConstants.TES_TOOL_SHARED_DIR, "TES Tool Shared Location", getFieldEditorParent()));
     }
 }

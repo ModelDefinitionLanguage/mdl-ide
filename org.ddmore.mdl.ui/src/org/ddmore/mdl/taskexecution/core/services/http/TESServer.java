@@ -3,7 +3,9 @@ package org.ddmore.mdl.taskexecution.core.services.http;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
@@ -46,71 +48,6 @@ public class TESServer {
     private static DesEncrypter desEncrypter;
 
     private final transient HttpClient client = new DefaultHttpClient();
-
-    public String prepare() {
-        final String url = getBaseURL() + JOBSUBMISSION_URL + "/prepare";
-
-        HttpPost httpPost = new HttpPost(url);
-        try {
-            httpPost.setEntity(new UrlEncodedFormEntity(getPrepareParameters()));
-
-        } catch (UnsupportedEncodingException e) {
-            LOGGER.error("Problem building prepare post", e);
-        }
-
-        try {
-            HttpResponse response = client.execute(httpPost);
-            return IOUtils.toString(response.getEntity().getContent());
-
-        } catch (IOException e) {
-            LOGGER.error("Problem sennding prepare post", e);
-        }
-
-        return null;
-    }
-
-    private String getBaseURL() {
-        // TODO get once and put a listener
-        final String host = PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_HOST);
-        final int port = PREFERENCE_STORE.getInt(MDLPreferenceConstants.TES_PORT);
-        final String service = PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_SERVICE);
-
-        String url = TEMPLATE_URL.replaceAll("<host>", host);
-        url = url.replaceAll("<port>", String.valueOf(port));
-        url = url.replaceAll("<service>", service);
-        return url;
-    }
-
-    private static List<NameValuePair> getPrepareParameters() {
-
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-        nameValuePairs.add(new BasicNameValuePair("userName", getUsername()));
-        nameValuePairs.add(new BasicNameValuePair("encryptedPassword", getPassword()));
-        return nameValuePairs;
-    }
-
-    private static String getUsername() {
-        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_UNAME);
-    }
-
-    private static String getPassword() {
-        try {
-            return getDesEncrypter().encrypt(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD));
-        } catch (EncryptionException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    private static synchronized DesEncrypter getDesEncrypter() throws EncryptionException {
-        if (desEncrypter != null) {
-            return desEncrypter;
-        }
-        if (System.getProperties().containsKey(MIF_ENCRYPTION_KEY_PROP)) {
-            return new DesEncrypter(System.getProperty(MIF_ENCRYPTION_KEY_PROP));
-        } else {
-            return new DesEncrypter();
-        }
-    }
 
     public String exec(final String requestId, final String execFile) {
         final String url = getBaseURL() + JOBSUBMISSION_URL + "/execute";
@@ -155,6 +92,11 @@ public class TESServer {
         builder.setUserPassword(getPassword());
         builder.setSubmitAsUserMode(true);
 
+        Map<String, String> attributes = new HashMap<String, String>(1);
+        attributes.put("EXECUTION_HOST_FILESHARE", getSharedDir());
+        attributes.put("EXECUTION_HOST_FILESHARE_REMOTE", getToolSharedDir());
+        builder.setRequestAttributes(attributes);
+
         String executionMessage = null;
 
         try {
@@ -198,5 +140,50 @@ public class TESServer {
         }
 
         return TESRequestStatus.failed;
+    }
+
+    private String getBaseURL() {
+        // TODO get once and put a listener
+        final String host = PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_HOST);
+        final int port = PREFERENCE_STORE.getInt(MDLPreferenceConstants.TES_PORT);
+        final String service = PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_SERVICE);
+
+        String url = TEMPLATE_URL.replaceAll("<host>", host);
+        url = url.replaceAll("<port>", String.valueOf(port));
+        url = url.replaceAll("<service>", service);
+        return url;
+    }
+
+    private static String getUsername() {
+        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_UNAME);
+    }
+
+    private static String getSharedDir() {
+        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_SHARED_DIR);
+    }
+
+    private static String getToolSharedDir() {
+        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_TOOL_SHARED_DIR);
+    }
+
+    private static String getPassword() {
+        try {
+            return getDesEncrypter().encrypt(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD));
+        } catch (EncryptionException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private static synchronized DesEncrypter getDesEncrypter() throws EncryptionException {
+        if (desEncrypter != null) {
+            return desEncrypter;
+        }
+        if (System.getProperties().containsKey(MIF_ENCRYPTION_KEY_PROP)) {
+
+            // FIXME we're making an assumption that the key path is always relative to the CWD, needs documentation.
+            return new DesEncrypter("file:/" + System.getProperty("user.dir") + "/" + System.getProperty(MIF_ENCRYPTION_KEY_PROP));
+        } else {
+            return new DesEncrypter();
+        }
     }
 }

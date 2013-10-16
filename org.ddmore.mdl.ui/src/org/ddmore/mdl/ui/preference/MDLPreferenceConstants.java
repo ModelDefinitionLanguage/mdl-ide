@@ -22,9 +22,9 @@ public class MDLPreferenceConstants {
 
     // TODO PROXY
 
+    public static final String TES_CLIENT_SHARED_DIR = "tes.client.shared.dir";
     public static final String TES_SHARED_DIR = "tes.shared.dir";
-    public static final String TES_SHARED_DIR_INPUT = "tes.shared.input.dir";
-    public static final String TES_SHARED_DIR_OUTPUT = "tes.shared.output.dir";
+    public static final String TES_TOOL_SHARED_DIR = "tes.tool.shared.dir";
 
     // Default values.
     public static HashMap<String, Object> DEFAULTS;
