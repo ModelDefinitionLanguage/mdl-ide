@@ -92,7 +92,7 @@ public class TESServer {
         builder.setUserPassword(getPassword());
         builder.setSubmitAsUserMode(true);
 
-        Map<String, String> attributes = new HashMap<String, String>(1);
+        Map<String, String> attributes = new HashMap<String, String>(2);
         attributes.put("EXECUTION_HOST_FILESHARE", getSharedDir());
         attributes.put("EXECUTION_HOST_FILESHARE_REMOTE", getToolSharedDir());
         builder.setRequestAttributes(attributes);
@@ -179,11 +179,10 @@ public class TESServer {
             return desEncrypter;
         }
         if (System.getProperties().containsKey(MIF_ENCRYPTION_KEY_PROP)) {
-
-            // FIXME we're making an assumption that the key path is always relative to the CWD, needs documentation.
-            return new DesEncrypter("file:/" + System.getProperty("user.dir") + "/" + System.getProperty(MIF_ENCRYPTION_KEY_PROP));
+            desEncrypter = new DesEncrypter(System.getProperty(MIF_ENCRYPTION_KEY_PROP));
         } else {
-            return new DesEncrypter();
+            desEncrypter = new DesEncrypter();
         }
+        return desEncrypter;
     }
 }

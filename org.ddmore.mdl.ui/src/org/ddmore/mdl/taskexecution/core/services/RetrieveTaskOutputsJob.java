@@ -4,16 +4,19 @@
 package org.ddmore.mdl.taskexecution.core.services;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.ddmore.mdl.ui.internal.MdlActivator;
 import org.ddmore.mdl.ui.preference.MDLPreferenceConstants;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -25,6 +28,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
  * @author jcarr
  */
 public class RetrieveTaskOutputsJob extends Job {
+
+    private static final IPreferenceStore PREFERENCE_STORE = MdlActivator.getInstance().getPreferenceStore();
 
     private final transient String requestId;
     private final transient IFile modelFile;
@@ -60,34 +65,22 @@ public class RetrieveTaskOutputsJob extends Job {
 
         File inputDir = new File(new File(targetDir), requestId);
 
-        IPath outputPath = this.modelFile.getProject().getLocation().append("results").append(requestId);
+        List<String> resultFilePaths = new ArrayList<String>();
+        // get the list of files from the MIF list file
+        InputStream mifList = new File(new File(inputDir, ".MIF"), "MIF.list").toURI().toURL().openStream();
+        resultFilePaths = IOUtils.readLines(mifList);
 
-        //FIXME
-        if (this.modelFile.getFileExtension().equals("R")) {
-            // only copy PNGs
-            File[] files = inputDir.listFiles(new FilenameFilter() {
+        File outputPath = this.modelFile.getProject().getLocation().append("results").append(requestId).toFile();
 
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.endsWith("png");
-                }
-            });
-
-            for (File file : files) {
-                FileUtils.copyFileToDirectory(file, outputPath.toFile(), true);
-            }
-        } else {
-            // only copy files with same prefix
-            File[] files = inputDir.listFiles(new FilenameFilter() {
-
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.startsWith(modelFile.getName().substring(0, modelFile.getName().length() - 4));
-                }
-            });
-
-            for (File file : files) {
-                FileUtils.copyFileToDirectory(file, outputPath.toFile(), true);
+        for (String resultFilePath : resultFilePaths) {
+            File resultFile = new File(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_CLIENT_SHARED_DIR).concat(File.separator)
+                    .concat(requestId).concat(File.separator).concat(resultFilePath));
+            if (resultFile.exists()) {
+                Logger.getLogger(RetrieveTaskOutputsJob.class).debug(String.format("Retrieving File %s", resultFile));
+                FileUtils.copyFileToDirectory(resultFile, outputPath, true);
+            } else {
+                Logger.getLogger(RetrieveTaskOutputsJob.class)
+                        .debug(String.format("Retrieving File %s failed as didn't exist", resultFile));
             }
         }
 
