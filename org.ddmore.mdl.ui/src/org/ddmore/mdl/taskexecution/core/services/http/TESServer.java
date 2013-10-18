@@ -26,8 +26,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import com.mango.mif.domain.ExecutionRequestBuilder;
 import com.mango.mif.domain.ExecutionType;
 import com.mango.mif.domain.JobStatus;
-import com.mango.mif.utils.encrypt.DesEncrypter;
-import com.mango.mif.utils.encrypt.EncryptionException;
 
 /**
  * @author jcarr
@@ -42,10 +40,6 @@ public class TESServer {
     private static final String JOBSERVICE_URL = "/jobService";
 
     private static final Logger LOGGER = Logger.getLogger(TESServer.class);
-
-    private static final String MIF_ENCRYPTION_KEY_PROP = "mif.encryption.key";
-
-    private static DesEncrypter desEncrypter;
 
     private final transient HttpClient client = new DefaultHttpClient();
 
@@ -167,22 +161,7 @@ public class TESServer {
     }
 
     private static String getPassword() {
-        try {
-            return getDesEncrypter().encrypt(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD));
-        } catch (EncryptionException e) {
-            throw new IllegalStateException(e);
-        }
+        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD);
     }
 
-    private static synchronized DesEncrypter getDesEncrypter() throws EncryptionException {
-        if (desEncrypter != null) {
-            return desEncrypter;
-        }
-        if (System.getProperties().containsKey(MIF_ENCRYPTION_KEY_PROP)) {
-            desEncrypter = new DesEncrypter(System.getProperty(MIF_ENCRYPTION_KEY_PROP));
-        } else {
-            desEncrypter = new DesEncrypter();
-        }
-        return desEncrypter;
-    }
 }
