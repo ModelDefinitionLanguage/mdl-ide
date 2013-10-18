@@ -598,6 +598,13 @@
          </separator>
 	    </menuContribution>
  </extension>
+ <extension
+       point="org.eclipse.core.runtime.preferences">
+       <scope name="TESPreferencePage" class="org.ddmore.mdl.ui.preference.TESPreferencePage"/>
+      <initializer
+            class="org.ddmore.mdl.ui.preference.PreferenceInitializer">
+      </initializer>
+ </extension>
  <!--N.K. -->     
  
 </plugin>

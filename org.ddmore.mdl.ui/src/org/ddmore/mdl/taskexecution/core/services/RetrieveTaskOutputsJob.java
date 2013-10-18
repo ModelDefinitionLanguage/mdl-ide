@@ -4,12 +4,14 @@
 package org.ddmore.mdl.taskexecution.core.services;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.ddmore.mdl.ui.internal.MdlActivator;
@@ -30,6 +32,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 public class RetrieveTaskOutputsJob extends Job {
 
     private static final IPreferenceStore PREFERENCE_STORE = MdlActivator.getInstance().getPreferenceStore();
+    private static final Logger LOG = Logger.getLogger(RetrieveTaskOutputsJob.class);
 
     private final transient String requestId;
     private final transient IFile modelFile;
@@ -65,24 +68,28 @@ public class RetrieveTaskOutputsJob extends Job {
 
         File inputDir = new File(new File(targetDir), requestId);
 
-        List<String> resultFilePaths = new ArrayList<String>();
+        final List<String> resultFilePaths = new ArrayList<String>();
         // get the list of files from the MIF list file
         InputStream mifList = new File(new File(inputDir, ".MIF"), "MIF.list").toURI().toURL().openStream();
-        resultFilePaths = IOUtils.readLines(mifList);
+        resultFilePaths.addAll(IOUtils.readLines(mifList));
 
         File outputPath = this.modelFile.getProject().getLocation().append("results").append(requestId).toFile();
 
-        for (String resultFilePath : resultFilePaths) {
-            File resultFile = new File(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_CLIENT_SHARED_DIR).concat(File.separator)
-                    .concat(requestId).concat(File.separator).concat(resultFilePath));
-            if (resultFile.exists()) {
-                Logger.getLogger(RetrieveTaskOutputsJob.class).debug(String.format("Retrieving File %s", resultFile));
-                FileUtils.copyFileToDirectory(resultFile, outputPath, true);
-            } else {
-                Logger.getLogger(RetrieveTaskOutputsJob.class)
-                        .debug(String.format("Retrieving File %s failed as didn't exist", resultFile));
+        FileUtils.copyDirectory(new File(PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_CLIENT_SHARED_DIR).concat(File.separator)
+                .concat(requestId)), outputPath, new FileFilter() {
+
+            @Override
+            public boolean accept(File pathname) {
+                for (String resultFile : resultFilePaths) {
+                    if (pathname.getPath().endsWith(FilenameUtils.normalize(resultFile))) {
+                        LOG.debug(String.format("Retrieving File %s", pathname));
+                        return true;
+                    }
+                }
+                LOG.debug(String.format("Ignoring File %s", pathname));
+                return false;
             }
-        }
+        });
 
         // TODO this refresh is more expensive than it needs to be
         // also we should probably use the eclipse file manipulation (as long as it's performant) so that we don't have to handle this.
@@ -93,5 +100,4 @@ public class RetrieveTaskOutputsJob extends Job {
             e.printStackTrace();
         }
     }
-
 }
