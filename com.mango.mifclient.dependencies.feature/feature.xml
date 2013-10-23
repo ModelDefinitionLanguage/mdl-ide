@@ -16,9 +16,7 @@ For copyright and licencing information on these libraries please refer to the i
    </copyright>
 
    <license>
-      Copyright (C) 2013, Mango Business Solutions. All rights reserved.
-This feature is a composite of open source libraries needed for the MIF Client.
-For copyright and licencing information on these libraries please refer to the individual plugins contained in the feature.
+      For licencing information on these libraries please refer to the individual plugins contained in the feature.
    </license>
 
    <url>
@@ -433,6 +431,13 @@ For copyright and licencing information on these libraries please refer to the i
 
    <plugin
          id="org.apache.commons.lang"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.ops4j.pax.configmanager"
          download-size="0"
          install-size="0"
          version="0.0.0"
