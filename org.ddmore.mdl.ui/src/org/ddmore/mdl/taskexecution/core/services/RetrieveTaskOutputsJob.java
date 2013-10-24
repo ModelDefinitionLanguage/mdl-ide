@@ -80,6 +80,10 @@ public class RetrieveTaskOutputsJob extends Job {
 
             @Override
             public boolean accept(File pathname) {
+                if (pathname.isDirectory()) {
+                    LOG.debug(String.format("Getting Directory %s", pathname));
+                    return true;
+                }
                 for (String resultFile : resultFilePaths) {
                     if (pathname.getPath().endsWith(FilenameUtils.normalize(resultFile))) {
                         LOG.debug(String.format("Retrieving File %s", pathname));

@@ -6,6 +6,7 @@ package org.ddmore.mdl.taskexecution.core.services;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.ddmore.mdl.controller.RunJobOnTES.ResultsFiles;
 import org.ddmore.mdl.taskexecution.core.services.http.TESRequestStatus;
 import org.eclipse.core.resources.IFile;
@@ -26,6 +27,8 @@ import org.eclipse.ui.progress.IProgressConstants;
  * @author jcarr
  */
 public class TESExecJob extends Job {
+
+    private static final Logger LOG = Logger.getLogger(TESExecJob.class);
 
     private final transient IFile modelFile;
     private final transient Set<IFile> dataFiles = new HashSet<IFile>();
@@ -77,9 +80,9 @@ public class TESExecJob extends Job {
             }
 
             if (dataFiles.isEmpty()) {
-            	publishInputjob = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile);
+                publishInputjob = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile);
             } else {
-            	publishInputjob = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile, dataFiles);
+                publishInputjob = new PublishTaskInputJob("Publishing Task " + modelFile.getName(), modelFile, dataFiles);
             }
 
             publishInputjob.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
@@ -137,16 +140,10 @@ public class TESExecJob extends Job {
                 public void done(IJobChangeEvent event) {
                     super.done(event);
                     if (event.getResult().isOK()) {
-
-                        if (TESRequestStatus.completed.equals(monitorJob.getStatus())) {
-                            // TODO not capturing the status
-                            scheduleRetrieveJob(monitor, requestId);
-                        } else if (TESRequestStatus.failed.equals(monitorJob.getStatus())) {
-                            // TODO handle
-                        }
+                        LOG.debug(String.format("Job status %s, retriving results", monitorJob.getStatus()));
+                        scheduleRetrieveJob(monitor, requestId);
                     } else {
-                        // something went wrong
-                        // TODO log - monitor end
+                        LOG.error("Monitor task failed: %s", event.getResult().getMessage());
                     }
                 }
             });
