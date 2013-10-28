@@ -67,5 +67,6 @@ Export-Package: org.ddmore.mdl.taskexecution.core.services,
  org.ddmore.mdl.ui.contentassist,
  org.ddmore.mdl.ui.contentassist.antlr,
  org.ddmore.mdl.ui.internal,
+ org.ddmore.mdl.ui.preference;x-friends:="org.ddmore.mdl.tests",
  org.ddmore.mdl.ui.quickfix
 Bundle-Activator: org.ddmore.mdl.ui.internal.MdlActivator

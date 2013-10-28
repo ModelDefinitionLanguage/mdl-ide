@@ -23,6 +23,7 @@ import org.ddmore.mdl.ui.internal.MdlActivator;
 import org.ddmore.mdl.ui.preference.MDLPreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 
+import com.mango.mif.client.domain.ExecutionRequestAttributeName;
 import com.mango.mif.domain.ExecutionRequestBuilder;
 import com.mango.mif.domain.ExecutionType;
 import com.mango.mif.domain.JobStatus;
@@ -87,8 +88,9 @@ public class TESServer {
         builder.setSubmitAsUserMode(true);
 
         Map<String, String> attributes = new HashMap<String, String>(2);
-        attributes.put("EXECUTION_HOST_FILESHARE", getSharedDir());
-        attributes.put("EXECUTION_HOST_FILESHARE_REMOTE", getToolSharedDir());
+
+        attributes.put(ExecutionRequestAttributeName.EXECUTION_HOST_FILESHARE.getName(), getSharedDir());
+        attributes.put(ExecutionRequestAttributeName.EXECUTION_HOST_FILESHARE_REMOTE.getName(), getToolSharedDir());
         builder.setRequestAttributes(attributes);
 
         String executionMessage = null;

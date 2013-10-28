@@ -2,7 +2,7 @@
 <feature
       id="com.mango.mif.client.feature"
       label="MIF Client"
-      version="2.1.16.qualifier"
+      version="2.1.19.qualifier"
       provider-name="Mango Business Solutions">
 
    <description url="http://www.mango-solutions.com/">

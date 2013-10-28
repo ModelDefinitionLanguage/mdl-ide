@@ -31,7 +31,7 @@
 <repository location="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mango.mif.client.feature.feature.group" version="2.1.16.201310041608"/>
+<unit id="com.mango.mif.client.feature.feature.group" version="2.1.19.201310281049"/>
 <repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient/2.1/ci/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">

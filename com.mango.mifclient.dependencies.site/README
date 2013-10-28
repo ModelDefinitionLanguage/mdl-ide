@@ -6,8 +6,11 @@ In order to build the site:
 3. Remove 'features', 'plugins'. artifacts.jar and content.jar from  com.mango.mifclient.dependencies.site project
 4. Open com.mango.mifclient.dependencies.site/site.xml 
 5. Remove and add com.mango.mifclient.dependencies feature and click 'Build All'
-5. Upload the features, plugins, artifacts.jar and content.jar to SourceForge 'https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/'
-6. Update the features, plugins, artifacts.jar and content.jar in the source repository.  Although this is not strictly necessary, it gives us traceability around any changes
-7. Open eu.ddmore.mdleditor.target/eu.ddmore.mdleditor.target.target
-8. Select the 'https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/' p2 site and press refresh
-9. Once the target has been resolved save the changes  
+6. Upload the features, plugins, artifacts.jar and content.jar to SourceForge 'https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/'
+7. Update the features, plugins, artifacts.jar and content.jar in the source repository.  Although this is not strictly necessary, it gives us traceability around any changes
+8. Open eu.ddmore.mdleditor.target/com.mango.mif.client.site.target
+9. Select the 'https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/' p2 site and press Update
+10. Once the target has been resolved save the changes
+11. Open eu.ddmore.mdleditor.target/eu.ddmore.mdleditor.target.target
+12. Select the 'https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/' p2 site and press Update
+13. Once the target has been resolved save the changes

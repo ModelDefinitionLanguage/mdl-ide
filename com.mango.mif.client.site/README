@@ -9,3 +9,6 @@ In order to build the site:
 6. Open com.mango.mif.client.site/site.xml and click 'Build All'
 7. Upload the features, plugins, artifacts.jar and content.jar to SourceForge 'https://sourceforge.net/projects/ddmore/files/update/mifclient/'
 8. Update the features, plugins, artifacts.jar and content.jar in the source repository.  Although this is not strictly necessary, it gives us traceability around any changes
+9. Open eu.ddmore.mdleditor.target/eu.ddmore.mdleditor.target.target
+10. Select the 'https://sourceforge.net/projects/ddmore/files/update/mifclient/' p2 site and press Update
+11. Once the target has been resolved save the changes
