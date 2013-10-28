@@ -97,8 +97,7 @@ public class TESExecJob extends Job {
                         // TODO not capturing the status
                         scheduleMonitorJob(monitor, publishInputjob.getRequestId(), publishInputjob.getJobId());
                     } else {
-                        // something went wrong
-                        // TODO log - monitor end
+                        LOG.error("Publish task failed: %s", event.getResult().getMessage());
                     }
                 }
             });
@@ -140,7 +139,7 @@ public class TESExecJob extends Job {
                 public void done(IJobChangeEvent event) {
                     super.done(event);
                     if (event.getResult().isOK()) {
-                        LOG.debug(String.format("Job status %s, retriving results", monitorJob.getStatus()));
+                        LOG.debug(String.format("Job status %s, retrieving results", monitorJob.getStatus()));
                         scheduleRetrieveJob(monitor, requestId);
                     } else {
                         LOG.error("Monitor task failed: %s", event.getResult().getMessage());

@@ -129,7 +129,7 @@ public class PublishTaskInputJob extends Job {
             throw new IllegalArgumentException("TES Shared Directory Path not set");
         }
 
-        LOG.debug(String.format("Copying %s to %s/%S", file.getName(), targetDir, UID));
+        LOG.debug(String.format("Copying %s to %s/%s", file.getName(), targetDir, UID));
         FileUtils.copyFileToDirectory(file, new File(new File(targetDir), UID), true);
     }
 

@@ -70,7 +70,7 @@ public class RetrieveTaskOutputsJob extends Job {
 
         final List<String> resultFilePaths = new ArrayList<String>();
         // get the list of files from the MIF list file
-        InputStream mifList = new File(new File(inputDir, ".MIF"), "MIF.list").toURI().toURL().openStream();
+        InputStream mifList = new File(inputDir + File.separator + ".MIF", "MIF.list").toURI().toURL().openStream();
         resultFilePaths.addAll(IOUtils.readLines(mifList));
 
         File outputPath = this.modelFile.getProject().getLocation().append("results").append(requestId).toFile();
@@ -100,8 +100,7 @@ public class RetrieveTaskOutputsJob extends Job {
         try {
             this.modelFile.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
         } catch (CoreException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.warn("Couldn't refresh workspace after results retrieval", e);
         }
     }
 }
