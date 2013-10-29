@@ -77,10 +77,22 @@ public class TESServer {
         // FIXME
         if (execFile.endsWith(".R")) {
             builder.setExecutionType(ExecutionType.R_Script.toString());
-            builder.setCommand("/opt/mango/R/2.13.1/bin/Rscript");
-            builder.setGridHostPreamble("export R_LIBS_USER=/opt/mango/Rpackages/ddmore");
+            String rExe = getRExe();
+            if (rExe != null && !rExe.isEmpty()) {
+                builder.setCommand(rExe);
+            }
+
+            // FIXME we're limiting the preamble to a path for the user libs 
+            String rPreamble = getRPreamble();
+            if (rPreamble != null && !rPreamble.isEmpty()) {
+                builder.setGridHostPreamble("export R_LIBS_USER=" + rPreamble);
+            }
         } else {
             builder.setExecutionType(ExecutionType.NMFE.toString());
+            String nonmemExe = getNONMEMExe();
+            if (nonmemExe != null && !nonmemExe.isEmpty()) {
+                builder.setCommand(nonmemExe);
+            }
         }
         builder.setExecutionFile(execFile);
         builder.setUserName(getUsername());
@@ -154,6 +166,10 @@ public class TESServer {
         return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_UNAME);
     }
 
+    private static String getPassword() {
+        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD);
+    }
+
     private static String getSharedDir() {
         return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_SHARED_DIR);
     }
@@ -162,8 +178,15 @@ public class TESServer {
         return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_TOOL_SHARED_DIR);
     }
 
-    private static String getPassword() {
-        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_PWORD);
+    private static String getNONMEMExe() {
+        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_NONMEM_EXECUTABLE);
     }
 
+    private static String getRExe() {
+        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_R_EXECUTABLE);
+    }
+
+    private static String getRPreamble() {
+        return PREFERENCE_STORE.getString(MDLPreferenceConstants.TES_R_PREAMBLE);
+    }
 }

@@ -26,6 +26,10 @@ public class MDLPreferenceConstants {
     public static final String TES_SHARED_DIR = "tes.shared.dir";
     public static final String TES_TOOL_SHARED_DIR = "tes.tool.shared.dir";
 
+    public static final String TES_NONMEM_EXECUTABLE = "tes.nonmem.exe";
+    public static final String TES_R_EXECUTABLE = "tes.r.exe";
+    public static final String TES_R_PREAMBLE = "tes.r.preamble";
+
     // Default values.
     public static HashMap<String, Object> DEFAULTS;
 

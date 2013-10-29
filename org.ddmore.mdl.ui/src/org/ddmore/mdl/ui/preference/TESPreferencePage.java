@@ -24,7 +24,7 @@ import com.mango.mif.utils.encrypt.EncryptionException;
 public class TESPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
     private StringFieldEditor passwordField;
-    
+
     public TESPreferencePage() {
         super(GRID);
         setPreferenceStore(MdlActivator.getInstance().getPreferenceStore());
@@ -46,8 +46,13 @@ public class TESPreferencePage extends FieldEditorPreferencePage implements IWor
 
         addField(new DirectoryFieldEditor(MDLPreferenceConstants.TES_CLIENT_SHARED_DIR, "TES Client Shared Location",
                 getFieldEditorParent()));
+
         addField(new StringFieldEditor(MDLPreferenceConstants.TES_SHARED_DIR, "TES Shared Location", getFieldEditorParent()));
         addField(new StringFieldEditor(MDLPreferenceConstants.TES_TOOL_SHARED_DIR, "TES Tool Shared Location", getFieldEditorParent()));
+        addField(new StringFieldEditor(MDLPreferenceConstants.TES_NONMEM_EXECUTABLE, "NONMEM Executable Location", getFieldEditorParent()));
+
+        addField(new StringFieldEditor(MDLPreferenceConstants.TES_R_EXECUTABLE, "R Executable Location", getFieldEditorParent()));
+        addField(new StringFieldEditor(MDLPreferenceConstants.TES_R_PREAMBLE, "R User Library Location", getFieldEditorParent()));
     }
 
     private FieldEditor createPasswordInputField(Composite parent) {
@@ -56,11 +61,11 @@ public class TESPreferencePage extends FieldEditorPreferencePage implements IWor
         passwordField.getTextControl(parent).setEchoChar('*');
         return passwordField;
     }
-    
+
     @Override
     public boolean performOk() {
         String oldPasswd = this.getPreferenceStore().getString(MDLPreferenceConstants.TES_PWORD);
-        if(!passwordField.getStringValue().equals(oldPasswd)) {
+        if (!passwordField.getStringValue().equals(oldPasswd)) {
             try {
                 passwordField.setStringValue(getDesEncrypter().encrypt(passwordField.getStringValue()));
             } catch (EncryptionException e) {
@@ -70,12 +75,11 @@ public class TESPreferencePage extends FieldEditorPreferencePage implements IWor
         }
         return super.performOk();
     }
-    
-
 
     private static final String MIF_ENCRYPTION_KEY_PROP = "mif.encryption.key";
 
     private static DesEncrypter desEncrypter;
+
     public static synchronized DesEncrypter getDesEncrypter() throws EncryptionException {
         if (desEncrypter != null) {
             return desEncrypter;

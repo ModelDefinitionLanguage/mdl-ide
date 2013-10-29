@@ -26,7 +26,7 @@ public class MdlUiModule extends org.ddmore.mdl.ui.AbstractMdlUiModule {
     public void init() {
         if (System.getProperty(MIF_ENCRYPTION_KEY) != null) {
             try {
-                // XXX expecting MIF_ENCRYPTION_KEY to contain the path relative to the CWD
+                // FIXME expecting MIF_ENCRYPTION_KEY to contain the path relative to the CWD
                 URL url = new URL("file:/" + System.getProperty("user.dir") + "/" + System.getProperty(MIF_ENCRYPTION_KEY));
                 LOG.debug(String.format("%s property was set to %s", MIF_ENCRYPTION_KEY, url));
                 System.setProperty(MIF_ENCRYPTION_KEY, url.toExternalForm());

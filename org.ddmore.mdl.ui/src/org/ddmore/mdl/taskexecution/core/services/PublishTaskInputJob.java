@@ -130,7 +130,7 @@ public class PublishTaskInputJob extends Job {
         }
 
         LOG.debug(String.format("Copying %s to %s/%s", file.getName(), targetDir, UID));
-        FileUtils.copyFileToDirectory(file, new File(new File(targetDir), UID), true);
+        FileUtils.copyFileToDirectory(file, new File(targetDir, UID), true);
     }
 
 }
