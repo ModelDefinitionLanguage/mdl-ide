@@ -27,7 +27,8 @@ Require-Bundle: org.ddmore.mdl;visibility:=reexport,
  org.eclipse.xtext.ecore;bundle-version="[2.4.0,2.4.1)",
  org.eclipse.xtext.smap;bundle-version="[2.4.0,2.4.1)",
  org.eclipse.xtext.ui.codetemplates.ui;bundle-version="[2.4.0,2.4.1)",
- org.eclipse.xtext.ui.codetemplates;bundle-version="[2.4.0,2.4.1)"
+ org.eclipse.xtext.ui.codetemplates;bundle-version="[2.4.0,2.4.1)",
+ org.ops4j.pax.logging.pax-logging-api;bundle-version="1.7.0"
 Import-Package: com.mango.mif.client.api;version="2.1.5.SNAPSHOT",
  com.mango.mif.client.api.rest;version="2.1.5.SNAPSHOT",
  com.mango.mif.client.cli;version="2.1.5.SNAPSHOT",
@@ -59,7 +60,6 @@ Import-Package: com.mango.mif.client.api;version="2.1.5.SNAPSHOT",
  org.apache.http.entity;version="4.1.4",
  org.apache.http.impl.client;version="4.1.2",
  org.apache.http.message;version="4.1.4",
- org.apache.log4j;version="1.2.15",
  org.eclipse.ui.console
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.ddmore.mdl.taskexecution.core.services,
