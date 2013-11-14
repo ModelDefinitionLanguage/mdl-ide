@@ -18,8 +18,8 @@ Require-Bundle: org.eclipse.xtext;bundle-version="[2.4.0,2.4.1)";visibility:=ree
  org.antlr.runtime;bundle-version="3.2.0",
  org.eclipse.xtext.common.types;bundle-version="[2.4.0,2.4.1)",
  org.eclipse.xtend.lib.gwt;bundle-version="2.4.0",
- org.eclipse.xtext.xbase.lib.gwt
-Import-Package: org.apache.log4j
+ org.eclipse.xtext.xbase.lib.gwt,
+ org.ops4j.pax.logging.pax-logging-api;bundle-version="1.7.0"
 Export-Package: org.ddmore.mdl,
  org.ddmore.mdl.services,
  org.ddmore.mdl.mdl,

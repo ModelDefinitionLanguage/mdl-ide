@@ -1094,12 +1094,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				}
 				if (lexem == MULT_OP){
 					if (stack.isEmpty()) return next;
-					if (stack.peek() != ID) return next;					
+					if (stack.peek() != ID) return next;
+					if (i == tokens.length - 1) return next; //can't be the last character
 					stack.push(MULT_OP);
 				}
 				if (lexem == POWER_OP){
 					if (stack.isEmpty()) return next;
 					if (stack.peek() != ID) return next;					
+					if (i == tokens.length - 1) return next; //can't be the last character
 					stack.push(POWER_OP);
 				}
 				if (lexem == NUMBER){
