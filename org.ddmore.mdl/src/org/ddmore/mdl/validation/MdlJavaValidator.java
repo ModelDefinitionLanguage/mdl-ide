@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.AnyExpressionImpl;
@@ -70,7 +71,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_UNRESOLVED_FUNC_ARGUMENT_REF = "Unresolved reference to a function output parameter";
 	public final static String MSG_UNRESOLVED_SAME_BLOCK_NAME = "No corresponding matrix or diag block found";
 
-	//private enum VAL_RES {OK, ERROR, WARNING}
+	public final static String MSG_UNIT_UNKNOWN = "Failed to parse the unit value";	
 	
 	//Parameter object
 	final static List<String> attr_structural = Arrays.asList("value", "lo", "hi", "fix", "units", "transform");
@@ -111,6 +112,9 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
 	final static List<String> attr_target = Arrays.asList("target", "location", "first", "before", "after");
 	final static List<String> attr_req_target = Arrays.asList("target");
+	
+	
+	final static List<String> units = Arrays.asList("L", "l", "m", "y", "h", "s", "kg", "g", "mg");
 
 	List<String> getAllAttributes(EObject obj){
 		if (obj instanceof StructuralBlockImpl)
@@ -237,7 +241,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		}
 		return false;
 	}
-	
+
 	//Add a symbol to a list of known symbols
 	private void addSymbol(ArrayList<String> list, BlockStatement st){
 		if (st != null){
@@ -624,26 +628,32 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	
 	//Evaluate STRING expression
 	private String getAttributeValue(Arguments a, String attrName){
-		String res = "";
 		for (Argument arg: a.getArguments()){
 			if (arg.getIdentifier().equals(attrName))
-				if (arg.getExpression() != null){
-					if (arg.getExpression().getExpression() != null){
-						if (arg.getExpression().getExpression().getConditionalExpression() != null){
-							OrExpression orExpr = arg.getExpression().getExpression().getConditionalExpression().getExpression();
-							AndExpression andExpr = orExpr.getExpression().get(0);
-							LogicalExpression logicalExpr = andExpr.getExpression().get(0);	
-							if (logicalExpr.getExpression() != null){	
-								AdditiveExpression addExpr = logicalExpr.getExpression().get(0);
-								if (addExpr.getString() != null)
-									for (String str: addExpr.getString()) res += str;
-							}
-						}
+				return getAttributeValue(arg);
+		}
+		return "";
+	}	
+	
+	//Evaluate STRING expression
+	private String getAttributeValue(Argument arg){
+		String res = "";	
+		if (arg.getExpression() != null){
+			if (arg.getExpression().getExpression() != null){
+				if (arg.getExpression().getExpression().getConditionalExpression() != null){
+					OrExpression orExpr = arg.getExpression().getExpression().getConditionalExpression().getExpression();
+					AndExpression andExpr = orExpr.getExpression().get(0);
+					LogicalExpression logicalExpr = andExpr.getExpression().get(0);	
+					if (logicalExpr.getExpression() != null){	
+						AdditiveExpression addExpr = logicalExpr.getExpression().get(0);
+						if (addExpr.getString() != null)
+							for (String str: addExpr.getString()) res += str;
 					}
 				}
-		}
+			}
+		}	
 		return res;
-	}	
+	}
 
 	//Check whether the function with such a name is already defined
 	@Check
@@ -1013,8 +1023,96 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			if (!knownAttributes.contains(argument.getIdentifier()))
 				warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getIdentifier(), 
 				MdlPackage.Literals.ARGUMENT__IDENTIFIER,
-				MSG_ATTRIBUTE_UNKNOWN, argument.getIdentifier());
-			
+				MSG_ATTRIBUTE_UNKNOWN, argument.getIdentifier());			
+	}
+	
+	//Check whether the attribute "units" defines a correct unit measurement
+	@Check
+	public void checkUnitValue(Argument arg){
+		if (arg.getIdentifier() != null){
+			if (arg.getIdentifier().equals("units")){
+				String unitValue = getAttributeValue(arg);
+				if (unitValue.length() > 0){
+					unitValue = unitValue.replaceAll("\\s+","");
+					String wrongToken = parseUnitExpression(unitValue);
+					if (wrongToken != null){
+						warning(MSG_UNIT_UNKNOWN + ": " + wrongToken, 
+						MdlPackage.Literals.ARGUMENT__IDENTIFIER,
+						MSG_UNIT_UNKNOWN, arg.getIdentifier());
+					}
+				}
+			}
+		}
+	}
+	
+	final int ID = 1;
+	final int NUMBER = 2;
+	final int OPEN_BRACKET = 3;
+	final int CLOSE_BRACKET = 4;
+	final int MULT_OP = 5;
+	final int POWER_OP = 6;
+	
+	//Check the unit measurement format
+	//Returns an incorrect token or null otherwise
+	private String parseUnitExpression(String str){
+		String[] tokens = str.split("(?<=[*/^\\(\\)])|(?=[*/^\\(\\)])");
+		//TEST: return Arrays.toString(tokens);
+		Stack<Integer> stack = new Stack<Integer>(); 
+		for (int i = 0; i < tokens.length; i++){
+			String next = tokens[i];
+			if (next.length() > 0){
+				int lexem = -1;
+				if (units.contains(next)) lexem = ID; //ID
+				if (next.equals("(")) lexem = OPEN_BRACKET;
+				if (next.equals(")")) lexem = CLOSE_BRACKET; 
+				if (next.equals("*") || next.equals("/")) lexem = MULT_OP; 
+				if (next.equals("^")) lexem = POWER_OP; 	
+				if (next.matches("(-?[1-9][0-9]*)")) lexem = NUMBER;
+				
+				if (lexem < 0) return next; //unrecognized symbol
+				
+				if (lexem == ID){
+					if (!stack.isEmpty()){
+						if ((stack.peek() != MULT_OP) && (stack.peek() != OPEN_BRACKET)) return next;
+					}
+					stack.push(ID);
+				}
+				if (lexem == OPEN_BRACKET){
+					if (!stack.isEmpty()) 
+						if ((stack.peek() != MULT_OP) && (stack.peek() != OPEN_BRACKET)) return next;					
+					stack.push(OPEN_BRACKET);
+				}
+				if (lexem == CLOSE_BRACKET){
+					if (stack.isEmpty()) return next;
+					if ((stack.peek() != ID) && (stack.peek() != OPEN_BRACKET)) return next;	
+					while (stack.peek() != OPEN_BRACKET) {
+						stack.pop();
+						if (stack.isEmpty()) return next;
+					}
+					stack.pop();
+					stack.push(ID);
+				}
+				if (lexem == MULT_OP){
+					if (stack.isEmpty()) return next;
+					if (stack.peek() != ID) return next;					
+					stack.push(MULT_OP);
+				}
+				if (lexem == POWER_OP){
+					if (stack.isEmpty()) return next;
+					if (stack.peek() != ID) return next;					
+					stack.push(POWER_OP);
+				}
+				if (lexem == NUMBER){
+					if (stack.isEmpty()) return next;
+					if (stack.peek() != POWER_OP) return next;					
+					stack.pop();
+				}
+			}
+		}
+		while (!stack.isEmpty()){
+			if (stack.pop() == OPEN_BRACKET) return "(";
+		}
+		return null;
 	}
 		
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
