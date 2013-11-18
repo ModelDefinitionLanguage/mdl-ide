@@ -47,16 +47,6 @@ class Mdl2Nonmem extends MdlPrinting{
 	
 	val TARGET = "NMTRAN_CODE";
 
-	var eta_vars = newHashMap	//ETAs
-  	var eps_vars = newHashMap   //EPSs
-	var theta_vars = newHashMap //THETAs
-	var dadt_vars = newHashMap  //DADT	
-	var init_vars = newHashMap  //A		
-	
-	//These maps are used to print same blocks (NM-TRAN SAME opetion in $OMEGA and $SIGMA)
-	var namedOmegaBlocks = new HashMap<String, Integer>() //Collection of names of $OMEGA records with dimensions
-	var namedSigmaBlocks = new HashMap<String, Integer>() //Collection of names of $SIGMA records with dimensions
-	
 	//Print file name and analyse MCL objects in the source file
   	def convertToNMTRAN(Mcl m){
   		//Prepare external functions  		
@@ -1005,122 +995,6 @@ class Mdl2Nonmem extends MdlPrinting{
 	«ENDFOR»
 	'''
 		
-
-	///////////////////////////////////////////////
-	//Prepares variable maps
-	///////////////////////////////////////////////
-	def clearCollections(){
-		init_vars.clear;
-		dadt_vars.clear;
-		theta_vars.clear;
-		eta_vars.clear;
-    	eps_vars.clear; 
-    	namedOmegaBlocks.clear;
-    	namedSigmaBlocks.clear;	
-	}
-	
-	//Collect variables from the MDL file
-	def prepareCollections(Mcl m){
-    	clearCollections();
-    	for (o:m.objects){
-	  		if (o.modelObject != null){
-	  			setRandomVariables(o.modelObject);
-	  			setStructuralParameters(o.modelObject);
-	  			setModelPredictionVariables(o.modelObject);
-	  			setInitialConditions(o.modelObject);
-	  		} 
-  		}
-	}
-	
-	//Collect initial conditions from ODE list, init attribute
-	def setInitialConditions(ModelObject o){
-		var i = 1;
-		for (b:o.blocks){
-			if (b.modelPredictionBlock != null)
-				for (s: b.modelPredictionBlock.statements){
-					if (s.odeBlock != null)
-						for (ss: s.odeBlock.statements){
-							if (ss.symbol != null)
-								if (ss.symbol.expression != null)
-									if (ss.symbol.expression.odeList != null){
-										val initCond = ss.symbol.expression.odeList.arguments.getAttribute("init");
-										if (!initCond.equals("")){
-											init_vars.put(i, initCond);
-										} else init_vars.put(i, "0");
-										i = i + 1;
-									}
-						}
-				}
-		}
-	}
-	
-	//Assign indices to MODEL variables and expressions
-	def setModelPredictionVariables(ModelObject o) { 
-		var i = 1;
-		for (b:o.blocks){
-			if (b.modelPredictionBlock != null){
-				for (s: b.modelPredictionBlock.statements){
-					if (s.odeBlock != null){
-						for (ss: s.odeBlock.statements){
-							var x = ss.symbol;
-							if (x != null){
-								if (x.expression != null){
-									if (x.expression.odeList != null){
-										var id = x.identifier;
-										if (dadt_vars.get(id) == null){
-											dadt_vars.put(id, i);
-											i = i + 1;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	//Assign indices to variability parameters ($ETA, $ESP)
-	def setRandomVariables(ModelObject o){
-    	var i = 1; var j = 1; 
-		for (b: o.blocks){
-	  		if (b.randomVariableDefinitionBlock != null){
-				for (s: b.randomVariableDefinitionBlock.variables) {
-					if (s.randomList != null){	
-						var level = s.randomList.arguments.getAttribute("level");
-						val id = s.identifier;
-						if (level.equals("ID"))
-							if (eta_vars.get(id) == null){
-								eta_vars.put(id, i);
-								i = i + 1;
-							}
-						if (level.equals("DV"))
-							if (eps_vars.get(id) == null){
-								eps_vars.put(id, j);
-								j = j + 1;
-							}	
-						}
-	  			}
-	  		}
-  		}
-	}
-	
-	//Assign indices to THETAs
-	def setStructuralParameters(ModelObject o){
-    	var i = 1; 
-		for (b: o.blocks){
-	  		if (b.structuralParametersBlock != null){
-				for (id: b.structuralParametersBlock.parameters) {
-					if (theta_vars.get(id.toStr) == null){
-						theta_vars.put(id.toStr, i);
-						i = i + 1;
-					}
-				}
-	  		}	  				
-  		}
-	}
-	
 	//Find reference to a data file 
 	def getDataSource(Resource resource){
 		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {
