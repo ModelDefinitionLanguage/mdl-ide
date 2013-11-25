@@ -559,7 +559,12 @@ LogicalOrOperator: '||'
 ;
 
 LogicalOperator:
-	'<' | '>' | "<=" | ">=" | '==' | '!=';
+	'<' | 
+	'>' | 
+	"<=" | 
+	">=" | 
+	'==' | 
+	'!=';
 
 PowerOperator:
 	'^'

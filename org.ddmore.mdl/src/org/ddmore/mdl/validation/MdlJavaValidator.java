@@ -89,7 +89,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	final static List<String> attr_random = Arrays.asList("type", "mean", "variance", "level");
 	final static List<String> attr_req_random = Arrays.asList("type", "mean", "variance");
 	
-	final static List<String> attr_library = Arrays.asList("model", "ncmt", "param", "input",
+	final static List<String> attr_library = Arrays.asList("model", "ncmt", "param", "input", "output",
 			"distribution", "elimination", "parameterization", "trans");
 	final static List<String> attr_req_library = Arrays.asList("model");
 	
@@ -107,7 +107,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	final static List<String> attr_req_design = Arrays.asList("source");
 	
 	//All blocks
-	final static List<String> attr_import = Arrays.asList("target", "name", "ncmt", "trans", "param");
+	final static List<String> attr_import = Arrays.asList("target", "name", "ncmt", "trans", "param", "input", "output");
 	final static List<String> attr_req_import = Arrays.asList("target", "param");
 
 	final static List<String> attr_target = Arrays.asList("target", "location", "first", "before", "after");
@@ -539,6 +539,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				}
 				declaredVariables.put(obj.getIdentifier().getName(), varList);
 			}
+			//TODO: add variables from LIBRARY and IMPORT blocks, attribute "output"
 		}
 	}
 	

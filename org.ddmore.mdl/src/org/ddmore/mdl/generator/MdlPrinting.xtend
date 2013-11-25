@@ -322,6 +322,16 @@ class MdlPrinting {
 		return "";
 	}	
 	
+	//Return value of an attribute with a given name
+	def getAttributeExpression(Arguments a, String attrName){
+		for (arg: a.arguments)
+			if (arg.identifier != null &&
+			    arg.identifier.equals(attrName)
+			)
+				return arg.expression
+		return null;
+	}	
+	
 	///////////////////////////////////////////////////////////////////////////////
 	//Check whether MDL blocks are defined and non empty
 	///////////////////////////////////////////////////////////////////////////////
@@ -553,7 +563,7 @@ class MdlPrinting {
 	def convertOperator(String op){
 		return op;
 	}
-
+	
 	def toStr(FullyQualifiedSymbolName name){
 		var res = ""; 
 		if (name.object != null){
@@ -739,7 +749,8 @@ class MdlPrinting {
 			res  = res + operatorIterator.next.convertOperator + iterator.next.toStr;
 		}
 		return res;
-	}	
+	}
+	
 
 	//toStr +, - expresion
 	def toStr(AdditiveExpression e){
