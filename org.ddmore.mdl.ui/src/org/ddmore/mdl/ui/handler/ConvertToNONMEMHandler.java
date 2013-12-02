@@ -1,6 +1,6 @@
 package org.ddmore.mdl.ui.handler;
 
-import org.ddmore.mdl.generator.MdlGenerator;
+import org.ddmore.mdl.generator.Mdl2Nonmem;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -13,7 +13,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
-import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
@@ -27,7 +26,7 @@ import com.google.inject.Provider;
 public class ConvertToNONMEMHandler extends AbstractHandler implements IHandler {
 	
 	@Inject
-	private IGenerator generator;
+	private Mdl2Nonmem generator;
 
 	@Inject
 	private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
@@ -61,11 +60,10 @@ public class ConvertToNONMEMHandler extends AbstractHandler implements IHandler 
 
 							public Boolean exec(XtextResource source)
 									throws Exception {
-				                if (generator instanceof MdlGenerator){
+				                if (generator != null){
 									System.out.println("Generating NONMEM code for " + file.getName());
- 				                	MdlGenerator mdlGenerator = (MdlGenerator)generator;
-					            	 mdlGenerator.doGenerateNMTRAN(source, fsa);
-					            	 //fsa.setPostProcessor(callBack);
+					            	generator.doGenerate(source, fsa);
+					            	//fsa.setPostProcessor(callBack);
 				                }
 								return Boolean.TRUE;
 							}

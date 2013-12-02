@@ -1,5 +1,5 @@
 package org.ddmore.mdl.ui.handler;
-import org.ddmore.mdl.generator.MdlGenerator;
+import org.ddmore.mdl.generator.Mdl2Nonmem;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -16,7 +16,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
-import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 
@@ -30,7 +29,7 @@ public class ConvertToNONMEMHandler_PE extends AbstractHandler implements IHandl
     private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
 
     @Inject
-    private IGenerator generator;
+    private Mdl2Nonmem generator;
 
     @Inject
     IResourceSetProvider resourceSetProvider;
@@ -62,10 +61,9 @@ public class ConvertToNONMEMHandler_PE extends AbstractHandler implements IHandl
 						.toString(), true);
 				ResourceSet rs = resourceSetProvider.get(project);
 				Resource r = rs.getResource(uri, true);
-                if (generator instanceof MdlGenerator){
+                if (generator != null){
     				System.out.println("Generating NONMEM code for " + file.getName());
-                	MdlGenerator mdlGenerator = (MdlGenerator)generator;
-	            	mdlGenerator.doGenerateNMTRAN(r, fsa);
+	            	generator.doGenerate(r, fsa);
                 }
 				return Boolean.TRUE;
 			}

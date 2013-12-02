@@ -1,7 +1,7 @@
 package org.ddmore.mdl.ui.handler;
 
 import org.ddmore.mdl.controller.RunJobOnTES;
-import org.ddmore.mdl.generator.MdlGenerator;
+import org.ddmore.mdl.generator.Mdl2Nonmem;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -15,7 +15,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
-import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 
 import com.google.inject.Inject;
@@ -27,7 +26,7 @@ public class RunWithNONMEMHandler_PE extends AbstractHandler implements IHandler
     private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
 
     @Inject
-    private IGenerator generator;
+    private Mdl2Nonmem generator;
 
     @Inject
     IResourceSetProvider resourceSetProvider;
@@ -48,9 +47,8 @@ public class RunWithNONMEMHandler_PE extends AbstractHandler implements IHandler
                 ResourceSet rs = resourceSetProvider.get(project);
                 Resource r = rs.getResource(uri, true);
 
-                if (generator instanceof MdlGenerator) {
-                    MdlGenerator mdlGenerator = (MdlGenerator) generator;
-                    String dataFileName = mdlGenerator.getDataSource(r);
+                if (generator != null) {
+                	String dataFileName = generator.getDataSource(r);
                     new RunJobOnTES().run(file, dataFileName);
                 }
 

@@ -42,8 +42,23 @@ import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.xtext.generator.IGenerator
+import org.eclipse.xtext.generator.IFileSystemAccess
 
-class Mdl2Nonmem extends MdlPrinting{		
+class Mdl2Nonmem extends MdlPrinting implements IGenerator{
+
+ 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
+ 		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {
+			try{
+				fsa.generateFile(
+					resource.fileName + ".ctl", m.convertToNMTRAN)
+			}
+			catch(Exception e){
+				//process exception!
+				//Does not work for EclipseResourceFileSystemAccess2 - fix!
+			}
+		}
+	}
 	
 	val TARGET = "NMTRAN_CODE";
 
@@ -995,37 +1010,6 @@ class Mdl2Nonmem extends MdlPrinting{
 	«ENDFOR»
 	'''
 		
-	//Find reference to a data file 
-	def getDataSource(Resource resource){
-		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {
-			for (obj: m.objects){
-				if (obj.dataObject != null){
-					for (b: obj.dataObject.blocks){
-						if (b.fileBlock != null){
-							for (s: b.fileBlock.statements){
-								val dataSource = s.getDataSource;
-								if (dataSource.length > 0) return dataSource;
-							}
-						} 
-					}
-				}
-			}
-		}		
-		return "";
-	}
-	
-	def getDataSource(FileBlockStatement s){
-		if (s.variable != null){
-			if (s.variable.identifier.equals("data")){
-				if (s.variable.expression != null){
-					if (s.variable.expression.list != null)
-						return s.variable.expression.list.arguments.getAttribute("source");
-				}
-			}
-		}
-		return "";
-	}
-	
 	//Get task object name 
 	def getTaskObjectName(Resource resource){
 		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {

@@ -8,7 +8,6 @@ import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.FunctionCall
-import org.ddmore.mdl.mdl.InputVariablesBlock
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.MclObject
 import org.ddmore.mdl.mdl.ModelObject
@@ -27,9 +26,9 @@ import org.ddmore.mdl.mdl.MultiplicativeExpression
 import org.ddmore.mdl.mdl.PowerExpression
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Vector
+import org.ddmore.mdl.mdl.List
 
-
-class Mdl2PharmML extends Mdl2Nonmem{
+class Mdl2PharmML extends MdlPrinting{
 	
 	val	xsi="http://www.w3.org/2001/XMLSchema-instance"; 
 	val xsi_schemaLocation="http://www.pharmml.org/2013/03/PharmML http://www.pharmml.org/2013/03/PharmML";
@@ -92,6 +91,7 @@ class Mdl2PharmML extends Mdl2Nonmem{
 		«print_mdef_StructuralModel»
 		«print_mdef_CovariateModel»
 		«print_mdef_ObservationModel»
+		«print_msteps_ModellingSteps»
 	</ModelDefinition>
 	'''
 	/////////////////////
@@ -107,12 +107,12 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	def print_mdef_VariabilityModel()'''
 	<VariabilityModel blkId="model" type="model">
 		<Level symbId="indiv">
-			<ct:Name>Individual  Variability</ct:Name>
+			<ct:Name>Individual Variability</ct:Name>
 		</Level>
 	</VariabilityModel>
 	<VariabilityModel blkId="obsErr" type="error">
 		<Level  symbId="residual">
-			<ct:Name>Residual  Error</ct:Name>
+			<ct:Name>Residual Error</ct:Name>
 		</Level>
 	</VariabilityModel>
 	'''	
@@ -169,7 +169,7 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	
 	//+ STRUCTURAL_PARAMETER -> <StructuralModel>
 	def print_mdef_StructuralModel(){
-		var structuralModel = "";
+		var parameters = "";
 		var i = 1;
 		var blockName = "p" + i;
 		for(s: theta_vars.keySet) {
@@ -180,18 +180,11 @@ class Mdl2PharmML extends Mdl2Nonmem{
 				if (_index > 0) {
 					varName = paramName.substring(_index + 1);
 					val idv = varName.findIndividualVariable;
-					if (idv != null) structuralModel = structuralModel + varName.print_mdef_StructuralParameter(blockName);
+					if (idv != null) parameters = parameters + varName.print_mdef_Parameter(blockName);
 				}			
 			}
 			i = i + 1;
 		}
-		'''
-		«structuralModel.print_mdef_StructuralModel»
-		'''
-	}
-	
-	//ODE -> <StructuralModel>
-	def print_mdef_StructuralModel(String parameters){
 		var variables = "";
 		var initial = "";
 		for (o: mcl.objects){
@@ -219,8 +212,7 @@ class Mdl2PharmML extends Mdl2Nonmem{
 				«IF (variables.length > 0)»«variables»«ENDIF»
 				«IF (initial.length > 0)»«initial»«ENDIF»
 			</StructuralModel>
-		«ENDIF»
-		'''
+		«ENDIF»'''
 	}
 	
 	/////////////////////////
@@ -295,45 +287,56 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	//Note: here we print an expression in Random Effect, in the example its value is used (attribute value)
 	def print_mdef_ObservationModel(SymbolDeclaration s)
 		'''
-		<Parameter symbId="pop_«s.identifier»"/>
+		<SimpleParameter symbId="pop_«s.identifier»"/>
 		<Continuous>
 			«IF s.expression != null»
 				«IF s.expression.expression != null»
-					«s.expression.expression.print_Math_RandomEffects»
+					«s.expression.expression.print_Math_Contituous»
 				«ENDIF»
 			«ENDIF»
 		</Continuous>	
 		'''
 	
 		//+ New version of PharmML - changed
-		def print_Math_RandomEffects(Expression expr)'''
-			«val randomVars = expr.findRandomVariable»
+		def print_Math_Contituous(Expression expr)'''
+			«var classifiedVars = expr.classifyReferences»
+			«var simpleVars = classifiedVars.filter[k, v | v.equals("other")]»
+			«IF simpleVars.size > 0»
+				«FOR s: simpleVars.keySet»
+					«val ref = s as String»
+					<SimpleParameter symbId="«ref»"/>
+				«ENDFOR»
+			«ENDIF»	
+			«var errorVars = classifiedVars.filter[k, v | v.equals("theta")]»
+			«IF errorVars.size > 0»
+				«FOR s: errorVars.keySet»
+					«val ref = s as String»
+					«ref.print_mdef_ErrorModel»
+				«ENDFOR»
+			«ENDIF»			
+			«var randomVars = classifiedVars.filter[k, v | v.equals("eps")]»
 			«IF randomVars.size > 0»
 				<RandomEffects>
 					«FOR s: randomVars.keySet»
-						«val paramName = s as String»
-						«paramName.print_Math_RandomEffect»
+						«val ref = s as String»
+						<ct:SymbRef symbIdRef="«ref»"/>
+						«ref.print_uncert_Distribution»
 					«ENDFOR»
 				</RandomEffects>
 			«ENDIF»
 		'''
 		
-		def print_Math_RandomEffect(String paramName)'''
-			<ct:SymbRef symbIdRef="«paramName»"/>
-			«paramName.print_uncert_Distribution»
-		'''
-	
 	/////////////////////
 	//Error Model
 	/////////////////////	
-	def print_mdef_ErrorModel(String varName)'''
+	def print_mdef_ErrorModel(String ref)'''
     <ErrorModel>
     	<ct:Assign>
             <Equation xmlns="«xmlns_math»">
                 <FunctionCall>
                     <ct:SymbRef symbIdRef="constantErrorModel"/>
-                    <FunctionArgument symbId="«varName»">
-                        <ct:SymbRef symbIdRef="«varName»"/>
+                    <FunctionArgument symbId="«ref»">
+                        <ct:SymbRef symbIdRef="«ref»"/>
                     </FunctionArgument>
                 </FunctionCall>
             </Equation>
@@ -358,25 +361,46 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	'''
 	
 	//+ Finds definition of a variable with a given name
-	def findIndividualVariable(String varName){
+	def findIndividualVariable(FullyQualifiedSymbolName ref){
 		//find paramName in INDIVIDUAL_VARIABLES
 		for (MclObject o: mcl.objects){
 			if (o.modelObject != null){
-				for (ModelObjectBlock b: o.modelObject.blocks){
-					if(b.individualVariablesBlock != null){
-						for (BlockStatement st: b.individualVariablesBlock.statements){
-							if (st.symbol != null){
-								var name = st.symbol.identifier;
-								if (name.equalsIgnoreCase(varName)){
-									return st.symbol;
+				if ((ref.object == null) || o.identifier.name.equalsIgnoreCase(ref.object.name))
+					for (ModelObjectBlock b: o.modelObject.blocks){
+						if(b.individualVariablesBlock != null){
+							for (BlockStatement st: b.individualVariablesBlock.statements){
+								if (st.symbol != null){
+									var name = st.symbol.identifier;
+									if (name.equalsIgnoreCase(ref.identifier)){
+										return st.symbol;
+									}
 								}
 							}
 						}
 					}
-				}
 			}
 		}
 		return null;
+	}
+	
+	//+ Finds definition of a variable with a given full name
+	def findIndividualVariable(String fullName){
+		return fullName.toFullyQualifiedSymbolName.findIndividualVariable;
+	}
+	
+	def toFullyQualifiedSymbolName(String fullName){
+		var ref = MdlFactory::eINSTANCE.createFullyQualifiedSymbolName;
+		val _index = fullName.indexOf('$');
+		var varName = fullName;
+		if (_index > 0) {
+			varName = fullName.substring(_index + 1);
+			val objName = fullName.substring(0, _index);
+			val object = MdlFactory::eINSTANCE.createObjectName; 
+			object.setName(objName);
+			ref.setObject(object);
+		}
+		ref.setIdentifier(varName);		
+		return ref;
 	}
 	
 	//+ Find a transformation operator
@@ -393,15 +417,15 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	}
 	
 	//+ returns distribution for the first declaration with a given variance
-	def defineDistribution(String name){
+	def defineDistribution(String ref){
 		//find paramName in RANDOM_VARIABLES_DEFINITION
 		for (MclObject o: mcl.objects){
 			if (o.modelObject != null){
-				for (ModelObjectBlock b: o.modelObject.blocks){
+				for (b: o.modelObject.blocks){
 					if(b.randomVariableDefinitionBlock != null){
 						for (SymbolDeclaration s: b.randomVariableDefinitionBlock.variables){
 							var variance = s.randomList.arguments.getAttribute("variance");
-							if (variance.equalsIgnoreCase(name)){
+							if (variance.equalsIgnoreCase(ref)){
 								return s.randomList.arguments;
 							}
 						}
@@ -412,13 +436,7 @@ class Mdl2PharmML extends Mdl2Nonmem{
 		return null;
 	}
 	
-	//find a random variable in the expression	
-	def findRandomVariable(Expression expr) { 
-		var classifiedVars = expr.classifyReferences;
-		var randomVars = classifiedVars.filter[k, v | v.equals("eps")];
-		return randomVars;
-	}
-	
+	//+ For each reference, define its purpose
 	def classifyReferences(Expression expr){
 		var classifiedVars = newHashMap;
 		var iterator = expr.eAllContents();
@@ -426,14 +444,21 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	    	var obj = iterator.next();
 	    	if (obj instanceof FullyQualifiedSymbolName){
 	    		var ref = obj as FullyQualifiedSymbolName;
-	    		var varName = ref.identifier;
-	    		if (classifiedVars.get(varName) == null){
-		    		if (theta_vars.get(varName) != null)
-			    		classifiedVars.put(varName, "theta");
-			    	if (eps_vars.get(varName) != null)
-			    		classifiedVars.put(varName, "eps");
-			    	if (eta_vars.get(varName) != null)
-			    		classifiedVars.put(varName, "eta");	
+	    		if (classifiedVars.get(ref.toStr) == null){
+		    		if (theta_vars.get(ref.toStr) != null)
+			    		classifiedVars.put(ref.toStr, "theta")
+			    	else 
+			    	{	
+			    		if (eps_vars.get(ref.toStr) != null)
+			    			classifiedVars.put(ref.toStr, "eps")
+			    		else 
+			    		{	
+			    			if (eta_vars.get(ref.toStr) != null)
+			    				classifiedVars.put(ref.toStr, "eta")
+			    			else 
+			    				classifiedVars.put(ref.toStr, "other")
+			    		}
+			    	}
 	    		}
 	    	}
 	    }
@@ -445,7 +470,7 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	/////////////////////////////////////
 
 	//+
-	def print_mdef_StructuralParameter(String varName, String blockName)'''
+	def print_mdef_Parameter(String varName, String blockName)'''
 		<Parameter symbId = "«varName»">;
 			<Var block="«blockName»" xmlns="«xmlns_math»" symbId="«varName»"/>
 		</Parameter>
@@ -700,8 +725,8 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	}
 	
 	//+ TODO: modify to print correctly any distribution
-	def print_uncert_Distribution(String paramName)'''
-		«var args = paramName.defineDistribution»
+	def print_uncert_Distribution(String ref)'''
+		«var args = ref.defineDistribution»
 		«IF args != null»
 			«var distrType = args.getAttribute("type")»
 			«var mean = args.getAttributeExpression("mean")»
@@ -720,135 +745,60 @@ class Mdl2PharmML extends Mdl2Nonmem{
 			«ENDIF»
 		«ENDIF»
 	'''		
-
-	//////////////////////////////////////////////////////////
-	//Common PharmML types
-	//////////////////////////////////////////////////////////
-	
-	//+ PharmML.ct_Annotation
-	def print_XS_Comment(String text)'''
-		<!--«text»-->
+	/////////////////////////////////
+	//Modeling Steps
+	/////////////////////////////////
+	def print_msteps_ModellingSteps()
 	'''
-	
-	//+ PharmML.ct_Annotation
-	def print_ct_AnnotationType(String text)'''
-	<Description>«text»</Description>
-	'''
-
-	//+ MDL.variable_declaration
-	def print_ct_VariableDefinitionType(SymbolDeclaration v)'''
-	<Variable symbId = "«v.identifier»"«IF v.expression.odeList != null» symbolType="derivative" independentVar="t"«ENDIF»>
-		«v.identifier.print_ct_AnnotationType»
-		«v.expression.print_Math_Expr»
-	</Variable>
-	'''
-	
-	//+
-	def print_Math_Expr(AnyExpression e)'''
-		«IF e.expression != null»
-			«e.expression.print_Math_Equation»
-		«ENDIF»
-		«IF e.list != null»
-			«e.print_list»
-		«ENDIF»	
-		«IF e.odeList != null»
-			«e.print_odeList»
-		«ENDIF»	
-		«IF e.type != null»
-			«e.print_type»
-		«ENDIF»
-	'''
-
-	//+
-	def print_odeList(AnyExpression e) '''
-		«var deriv = e.odeList.arguments.getAttributeExpression("deriv")»
-		«IF deriv != null»«deriv.print_Math_Expr»«ENDIF»
-	'''
-	
-	//+
-	def print_type(AnyExpression e) ''''''
-	
-	//+ Translate depending on list attributes
-	def	print_list(AnyExpression e) ''''''
-	
-	//+
-	def print_Math_FunctionCall(FunctionCall call)'''
-		<math:FunctionCall>
-			«call.identifier.print_ct_SymbolRef»
-			«FOR arg: call.arguments.arguments»
-				«arg.print_Math_FunctionArgument»
-			«ENDFOR»
-		</math:FunctionCall>
-	'''
-	
-	//+
-	def print_Math_FunctionArgument(Argument arg)'''
-	<FunctionArgument «IF arg.identifier != null»symbId="«arg.identifier»"«ENDIF»>
-		«arg.expression.print_Math_Expr»
-	</FunctionArgument>
-	'''
-	
-		
-	//- Print mapping for the input variables with use=idv (individual)
-	def print_Math_Mapping(Mcl m){
-		for (MclObject obj: m.objects){
-			if (obj.modelObject != null){
-				for (ModelObjectBlock block: obj.modelObject.blocks){
-					if (block.inputVariablesBlock != null){
-						for (SymbolDeclaration s: block.inputVariablesBlock.variables){
-							if (s.expression != null){
-								if (s.expression.list != null){
-									var use = s.expression.list.arguments.getAttribute("use");
-									if (use.equalsIgnoreCase("idv")){
-										val varName = s.identifier;
-										return '''
-										<Mapping columnName="«varName»">
-											<Var xmlns="«xmlns_math»" symbId="t"/>
-										</Mapping>
-                						'''
-                					}
-								}
-							}
-						}
-					}	
-				}
-			}
-		}
-	}	
-	
-		
-	//-
-	def print_msteps_ModelingSteps(MclObject o)'''
 	<ModellingSteps>
-		«IF o.modelObject != null»«o.modelObject.print_msteps_Variable»«ENDIF»
-		«IF o.taskObject != null»«o.taskObject.print_msteps_ModelingStepsContent»«ENDIF»
+		«FOR o: mcl.objects»
+			«IF o.modelObject != null»«o.modelObject.print_ct_DataSet»«ENDIF»
+			«IF o.taskObject != null»«o.taskObject.print_msteps_ModelingStepsContent»«ENDIF»
+		«ENDFOR»
 	</ModellingSteps>
 	'''
 	
-	//-
-	def print_msteps_Variable(ModelObject obj)'''
-	<Variable>
-		«obj.print_ct_DataSet»
-	</Variable>
-	'''
-
-	//-
-	def print_ct_DataSet(ModelObject obj)'''
-	<DataSet>
-		«FOR b:obj.blocks»
-			«IF b.inputVariablesBlock != null»
-				«b.inputVariablesBlock.print_ct_Definition» 
-			«ENDIF»
-		«ENDFOR»
-	</DataSet>	
-	'''
-	
-	//-
-	def print_ct_Definition(InputVariablesBlock block){
+	//+ Print data set
+	def print_ct_DataSet(ModelObject obj){
+		var definition = '''''';
+		for (b: obj.blocks){
+			if (b.inputVariablesBlock != null){
+				if (b.inputVariablesBlock.variables != null){
+					var i = 1;
+					for (s: b.inputVariablesBlock.variables){
+						var valueType = s.getVarType;
+						definition = definition + 
+						'''
+							<ds:Column columnId="«s.identifier»" valueType="«valueType»" columnNum="«i»"/>
+						''';
+						i = i + 1;
+					} 
+				}
+			}
+		}
+		var table = '''''';	
+		var dataFilePath = mcl.getDataSource;
+		if (dataFilePath.length > 0){
+			//read file, print table
+		}
+		
 		'''
-		<Definition></Definition>	
+		<DataSet>
+			<ds:Definition>
+				«definition»
+			</ds:Definition>
+			<ds:Table>	
+				«table»
+			</ds:Table>
+		</DataSet>	
 		'''
 	}
+	
+	
+	//type: int, string, etc.
+	def print_ct_Value(String value, String type)'''
+		<ct:«type»>«value»</ct:«type»>
+	'''
 
 	//-
 	def print_msteps_ModelingStepsContent(TaskObject obj)'''
@@ -890,12 +840,130 @@ class Mdl2PharmML extends Mdl2Nonmem{
 	</ObjectiveDataSet>
 	'''
 	
+	///////////////////////////
+	//Mathematical expressions
+	///////////////////////////
+	
+	//+ PharmML.ct_Annotation
+	def print_XS_Comment(String text)'''
+		<!--«text»-->
+	'''
+	
+	//+ PharmML.ct_Annotation
+	def print_ct_AnnotationType(String text)'''
+	<Description>«text»</Description>
+	'''
+
+	//+ MDL.variable_declaration
+	def print_ct_VariableDefinitionType(SymbolDeclaration v)'''
+	<Variable symbId = "«v.identifier»"«IF v.expression.odeList != null» symbolType="derivative" independentVar="t"«ENDIF»>
+		«v.identifier.print_ct_AnnotationType»
+		«v.expression.print_Math_Expr»
+	</Variable>
+	'''
+	
+	//+
+	def print_Math_Expr(AnyExpression e)'''
+		«IF e.expression != null»
+			«e.expression.print_Math_Equation»
+		«ENDIF»
+		«IF e.list != null»
+			«e.print_list»
+		«ENDIF»	
+		«IF e.odeList != null»
+			«e.print_odeList»
+		«ENDIF»	
+	'''
+
+	//+
+	def print_odeList(AnyExpression e) '''
+		«var deriv = e.odeList.arguments.getAttributeExpression("deriv")»
+		«IF deriv != null»«deriv.print_Math_Expr»«ENDIF»
+	'''
+	
+	def print_Categorical(List categories)'''
+		<Categorical>
+		«FOR c: categories.arguments.arguments»
+			<Category>
+				«c.identifier»
+			</Category>
+		«ENDFOR»
+		</Categorical>
+	'''
+		
+	//+ Translate depending on list attributes
+	def	print_list(AnyExpression e){
+		if (e.list != null){
+			val args  = e.list.arguments;
+			val type = args.getAttribute("type");
+			val define =  args.getAttributeExpression("define");
+			if (type.equals("categorical") && (define.list != null)){
+				define.list.print_Categorical;
+			}
+		}		
+	} 
+	
+	//+
+	def print_Math_FunctionCall(FunctionCall call)'''
+		<math:FunctionCall>
+			«call.identifier.print_ct_SymbolRef»
+			«FOR arg: call.arguments.arguments»
+				«arg.print_Math_FunctionArgument»
+			«ENDFOR»
+		</math:FunctionCall>
+	'''
+	
+	//+
+	def print_Math_FunctionArgument(Argument arg)'''
+	<FunctionArgument «IF arg.identifier != null»symbId="«arg.identifier»"«ENDIF»>
+		«arg.expression.print_Math_Expr»
+	</FunctionArgument>
+	'''
+			
+	//- Print mapping for the input variables with use=idv (individual)
+	def print_Math_Mapping(Mcl m){
+		for (MclObject obj: m.objects){
+			if (obj.modelObject != null){
+				for (ModelObjectBlock block: obj.modelObject.blocks){
+					if (block.inputVariablesBlock != null){
+						for (SymbolDeclaration s: block.inputVariablesBlock.variables){
+							if (s.expression != null){
+								if (s.expression.list != null){
+									var use = s.expression.list.arguments.getAttribute("use");
+									if (use.equalsIgnoreCase("idv")){
+										val varName = s.identifier;
+										return '''
+										<Mapping columnName="«varName»">
+											<Var xmlns="«xmlns_math»" symbId="t"/>
+										</Mapping>
+                						'''
+                					}
+								}
+							}
+						}
+					}	
+				}
+			}
+		}
+	}	
+	
+	
 	
 	//////////////////////////////////////////////////////////////////////
 	//Helper functions
 	//////////////////////////////////////////////////////////////////////
+	
+	//When typing is supported, rewrite this
+	def getVarType(FullyQualifiedSymbolName ref){
+		return "int";
+	}
+	
+	//When typing is supported, rewrite this
+	def getVarType(SymbolDeclaration s){
+		return "int";
+	}
 
-//+ Negation of the expression
+	//+ Negation of the expression
 	def dualExpression(OrExpression expr){
 		var dualAnd = MdlFactory::eINSTANCE.createAndExpression;
 		var iterator = expr.expression.iterator();

@@ -53,6 +53,7 @@ import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.FormalArguments
 import org.ddmore.mdl.mdl.SimulationBlock
 import org.ddmore.mdl.mdl.EstimationBlock
+import org.ddmore.mdl.mdl.FileBlockStatement
 
 class MdlPrinting {
 
@@ -331,6 +332,45 @@ class MdlPrinting {
 				return arg.expression
 		return null;
 	}	
+	
+	//Find reference to a data file 
+	def getDataSource(Mcl m){
+		for (obj: m.objects){
+			if (obj.dataObject != null){
+				for (b: obj.dataObject.blocks){
+					if (b.fileBlock != null){
+						for (s: b.fileBlock.statements){
+							val dataSource = s.getDataSource;
+							if (dataSource.length > 0) return dataSource;
+						}
+					} 
+				}
+			}
+		}
+		return "";
+	}
+	
+	//Find reference to a data file 
+	def getDataSource(Resource resource){
+		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {
+			var source = m.getDataSource;
+			if (source.length > 0) return source;
+		}		
+		return "";
+	}
+	
+	def getDataSource(FileBlockStatement s){
+		if (s.variable != null){
+			if (s.variable.identifier.equals("data")){
+				if (s.variable.expression != null){
+					if (s.variable.expression.list != null)
+						return s.variable.expression.list.arguments.getAttribute("source");
+				}
+			}
+		}
+		return "";
+	}
+	
 	
 	///////////////////////////////////////////////////////////////////////////////
 	//Check whether MDL blocks are defined and non empty

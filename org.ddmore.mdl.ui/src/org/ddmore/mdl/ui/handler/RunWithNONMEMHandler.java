@@ -1,7 +1,7 @@
 package org.ddmore.mdl.ui.handler;
 
 import org.ddmore.mdl.controller.RunJobOnTES;
-import org.ddmore.mdl.generator.MdlGenerator;
+import org.ddmore.mdl.generator.Mdl2Nonmem;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -10,7 +10,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
-import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
@@ -30,7 +29,7 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
     private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
 
     @Inject
-    private IGenerator generator;
+    private Mdl2Nonmem generator;
 
     public Object execute(ExecutionEvent event) throws ExecutionException {
         IEditorPart activeEditor = HandlerUtil.getActiveEditor(event);
@@ -41,9 +40,8 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
 
                     public Boolean exec(XtextResource r) throws Exception {
 
-                        if (generator instanceof MdlGenerator) {
-                            MdlGenerator mdlGenerator = (MdlGenerator) generator;
-                            String dataFileName = mdlGenerator.getDataSource(r);
+                        if (generator != null) {
+                            String dataFileName = generator.getDataSource(r);
                             new RunJobOnTES().run(file, dataFileName);
                         }
 
