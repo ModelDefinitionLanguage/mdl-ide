@@ -7,6 +7,7 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
@@ -15,7 +16,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
+import org.eclipse.xtext.generator.JavaIoFileSystemAccess;
 import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 
@@ -26,7 +27,7 @@ import com.google.inject.Provider;
 public class ConvertToNONMEMHandler_PE extends AbstractHandler implements IHandler {
 
     @Inject
-    private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
+    private Provider<JavaIoFileSystemAccess> fileAccessProvider;
 
     @Inject
     private Mdl2Nonmem generator;
@@ -54,9 +55,8 @@ public class ConvertToNONMEMHandler_PE extends AbstractHandler implements IHandl
 						return Boolean.FALSE;
 					}
 				}
-				EclipseResourceFileSystemAccess2 fsa = fileAccessProvider.get();
-				fsa.setProject(project);
-				fsa.setOutputPath(srcGenFolder.getFullPath().toString());
+				JavaIoFileSystemAccess fsa = fileAccessProvider.get();
+				fsa.setOutputPath(srcGenFolder.getRawLocation().toString());
 				URI uri = URI.createPlatformResourceURI(file.getFullPath()
 						.toString(), true);
 				ResourceSet rs = resourceSetProvider.get(project);
@@ -64,6 +64,11 @@ public class ConvertToNONMEMHandler_PE extends AbstractHandler implements IHandl
                 if (generator != null){
     				System.out.println("Generating NONMEM code for " + file.getName());
 	            	generator.doGenerate(r, fsa);
+	            	try {
+						srcGenFolder.refreshLocal(IResource.DEPTH_ONE, null);
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
                 }
 				return Boolean.TRUE;
 			}

@@ -8,11 +8,12 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
+import org.eclipse.xtext.generator.JavaIoFileSystemAccess;
 import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
@@ -29,7 +30,7 @@ public class ConvertToNONMEMHandler extends AbstractHandler implements IHandler 
 	private Mdl2Nonmem generator;
 
 	@Inject
-	private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
+	private Provider<JavaIoFileSystemAccess > fileAccessProvider;
 	
 	@Inject
 	IResourceDescriptions resourceDescriptions;
@@ -42,7 +43,7 @@ public class ConvertToNONMEMHandler extends AbstractHandler implements IHandler 
 		final IFile file = (IFile) activeEditor.getEditorInput().getAdapter(IFile.class);
 		if (file != null) {
 			IProject project = file.getProject();
-			IFolder srcGenFolder = project.getFolder("src-gen");
+			final IFolder srcGenFolder = project.getFolder("src-gen");
 			if (!srcGenFolder.exists()) {
 				try {
 					srcGenFolder.create(true, true, new NullProgressMonitor());
@@ -50,10 +51,10 @@ public class ConvertToNONMEMHandler extends AbstractHandler implements IHandler 
 					return null;
 				}
 			}
-			final EclipseResourceFileSystemAccess2 fsa = fileAccessProvider.get();
-			fsa.setProject(project);
-			fsa.setOutputPath(srcGenFolder.getFullPath().toString());
-
+							
+			final JavaIoFileSystemAccess fsa = fileAccessProvider.get();			
+			fsa.setOutputPath(srcGenFolder.getRawLocation().toString());
+				
 			if (activeEditor instanceof XtextEditor) {
 				((XtextEditor) activeEditor).getDocument().readOnly(
 						new IUnitOfWork<Boolean, XtextResource>() {
@@ -63,7 +64,11 @@ public class ConvertToNONMEMHandler extends AbstractHandler implements IHandler 
 				                if (generator != null){
 									System.out.println("Generating NONMEM code for " + file.getName());
 					            	generator.doGenerate(source, fsa);
-					            	//fsa.setPostProcessor(callBack);
+					            	try {
+										srcGenFolder.refreshLocal(IResource.DEPTH_ONE, null);
+									} catch (CoreException e) {
+										e.printStackTrace();
+									}
 				                }
 								return Boolean.TRUE;
 							}

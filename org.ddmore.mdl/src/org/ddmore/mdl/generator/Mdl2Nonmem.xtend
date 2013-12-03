@@ -49,14 +49,15 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 
  	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
  		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {
-			try{
+			//try{
+				
 				fsa.generateFile(
 					resource.fileName + ".ctl", m.convertToNMTRAN)
-			}
-			catch(Exception e){
+			//}
+			//catch(Exception e){
 				//process exception!
 				//Does not work for EclipseResourceFileSystemAccess2 - fix!
-			}
+			//}
 		}
 	}
 	
