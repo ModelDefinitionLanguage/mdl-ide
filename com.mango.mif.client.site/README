@@ -2,14 +2,18 @@ This is an update site definition containing the MIF Client bundle.
 
 In order to manually build the site:
 1. Open eu.ddmore.mdleditor.target/com.mango.mif.client.site.target in your Eclipse IDE
-2. Put newest MIFClient.jar to eu.ddmore.mdleditor.target/mango-plugins
+2. Put newest MIFClient.jar to eu.ddmore.mdleditor.target/mango-plugins (remove any already existing MIFClient jars)
 3. Click on 'Set as Target Platform'
-4. For release builds only: Remove 'features', 'plugins'. artifacts.jar and content.jar from  com.mango.mif.client.site project
-5. Update the category.xml with the new feature
-6. Open com.mango.mif.client.site/site.xml and click 'Build All'
-7. Upload the features, plugins, artifacts.jar and content.jar to SourceForge 'https://sourceforge.net/projects/ddmore/files/update/mifclient/latest/ci'
-8. Update the features, plugins, artifacts.jar and content.jar in the source repository.  Although this is not strictly necessary, it gives us traceability around any changes
-9. Open eu.ddmore.mdleditor.target/eu.ddmore.mdleditor.target.target
-10. Select the 'https://sourceforge.net/projects/ddmore/files/update/mifclient/latest/ci' p2 site and press Update
-11. Once the target has been resolved save the changes
-12. Commit the changes to the source repository
+4. For release builds only: Remove 'features', 'plugins'. artifacts.jar and content.jar from com.mango.mif.client.site project
+5. Open com.mango.mif.client.feature/feature.xml and in 'Overview' tab update the version number so it has the major.minor.micro numbers the same as MIFClient.jar version.
+Example:
+for MIFClient.jar version 2.1.19.ddmore-cdth the feature version should be '2.1.19.qualifier' (i.e. without 'ddmore-cdth' qualifier)
+(if you are not sure of the version number if MIFClient.jar open eu.ddmore.mdleditor.target/com.mango.mif.client.site.target go to 'Content' tab and find 'com.mango.mif.client' on the list of bundles)
+6. Update the category.xml so it includes a new version of the com.mango.mif.client.feature feature (you will need to remove the existing entry of the feature, re-add it and then drug and  drop the feature on the category)
+7. Open com.mango.mif.client.site/site.xml and click 'Build All'
+8. Upload the features, plugins, artifacts.jar and content.jar to SourceForge 'https://sourceforge.net/projects/ddmore/files/update/mifclient/2.1.19/release/'
+9. Commit the features, plugins, artifacts.jar, content.jar, site.xml and mango-plugin/MIFClient-ext_<version>.jar (added in step 2) in the source repository. Although this is not strictly necessary, it gives us traceability around any changes
+10. Open eu.ddmore.mdleditor.target/eu.ddmore.mdleditor.target.target
+11. Select the 'https://sourceforge.net/projects/ddmore/files/update/mifclient/2.1.19/release/' p2 site and press Update
+12. Once the target has been resolved save the changes
+13. Commit the changes to the source repository
