@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="129">
+<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="133">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.wst.common.fproj.feature.group" version="3.4.0.v201202292300-377F8N8s735555393B7B"/>
@@ -57,11 +57,11 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mango.mifclient.dependencies.feature.feature.group" version="1.0.0.201310231723"/>
-<repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/latest/stable"/>
+<repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient-dependencies/1.0/release/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mango.mif.client.feature.feature.group" version="2.1.19.201310281049"/>
-<repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient/latest/ci/"/>
+<unit id="com.mango.mif.client.feature.feature.group" version="2.1.19.201312032045"/>
+<repository location="https://sourceforge.net/projects/ddmore/files/update/mifclient/2.1.19/release"/>
 </location>
 </locations>
 <includeBundles>
