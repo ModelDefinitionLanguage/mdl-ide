@@ -3,7 +3,7 @@
    <description name="MIF Client" url="http://sourceforge.net/projects/ddmore/files/update/mifclient/2.1/ci/">
       MIF Client library
    </description>
-   <feature url="features/com.mango.mif.client.feature_2.1.19.201312032045.jar" id="com.mango.mif.client.feature" version="2.1.19.201312032045">
+   <feature url="features/com.mango.mif.client.feature_2.1.19.201312041254.jar" id="com.mango.mif.client.feature" version="2.1.19.201312041254">
       <category name="MIF Client"/>
    </feature>
    <category-def name="MIF Client" label="MIF Client"/>
