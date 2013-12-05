@@ -75,7 +75,7 @@ class MdlPrinting {
 	///////////////////////////////////////////////
 	//Prepares variable maps
 	///////////////////////////////////////////////
-	def clearCollections(){
+	def protected clearCollections(){
 		init_vars.clear;
 		dadt_vars.clear;
 		theta_vars.clear;
@@ -86,7 +86,7 @@ class MdlPrinting {
 	}
 	
 	//Collect variables from the MDL file
-	def prepareCollections(Mcl m){
+	def protected prepareCollections(Mcl m){
     	clearCollections();
     	for (o:m.objects){
 	  		if (o.modelObject != null){
@@ -99,7 +99,7 @@ class MdlPrinting {
 	}
 	
 	//Collect initial conditions from ODE list, init attribute
-	def setInitialConditions(ModelObject o){
+	def protected setInitialConditions(ModelObject o){
 		var i = 1;
 		for (b:o.blocks){
 			if (b.modelPredictionBlock != null)
@@ -121,7 +121,7 @@ class MdlPrinting {
 	}
 	
 	//Assign indices to MODEL variables and expressions
-	def setModelPredictionVariables(ModelObject o) { 
+	def protected setModelPredictionVariables(ModelObject o) { 
 		var i = 1;
 		for (b:o.blocks){
 			if (b.modelPredictionBlock != null){
@@ -149,7 +149,7 @@ class MdlPrinting {
 
 	
 	//Assign indices to THETAs
-	def setStructuralParameters(ModelObject o){
+	def protected setStructuralParameters(ModelObject o){
     	var i = 1; 
 		for (b: o.blocks){
 	  		if (b.structuralParametersBlock != null){
@@ -164,7 +164,7 @@ class MdlPrinting {
 	}
 	
 	//Assign indices to variability parameters ($ETA, $ESP)
-	def setRandomVariables(ModelObject o){
+	def protected setRandomVariables(ModelObject o){
     	var i = 1; var j = 1; 
 		for (b: o.blocks){
 	  		if (b.randomVariableDefinitionBlock != null){
@@ -189,7 +189,7 @@ class MdlPrinting {
 	}
 	
 	//Find NM-TRAN functions
-	def prepareExternals(Mcl mcl) {
+	def protected prepareExternals(Mcl mcl) {
 		externalFunctions.clear;	
 		externalCodeStart.clear;	
 		externalCodeEnd.clear;	
@@ -235,11 +235,11 @@ class MdlPrinting {
   		}
 	}
 	
-	def void prepareExternalCode(TargetBlock block) { }	
-	def void prepareExternalFunctions(ImportBlock block, String string) { }
+	def protected void prepareExternalCode(TargetBlock block) { }	
+	def protected void prepareExternalFunctions(ImportBlock block, String string) { }
 	
 	//Print a list of external code snippets: beginning of section
-	def getExternalCodeStart(String sectionName){
+	def protected getExternalCodeStart(String sectionName){
 		var res = "";		
 		val snippets = externalCodeStart.get(sectionName) 
 		if (snippets != null){
@@ -251,7 +251,7 @@ class MdlPrinting {
 	}
 	
 	//Print a list of external code snippets: end of section
-	def getExternalCodeEnd(String sectionName){
+	def protected getExternalCodeEnd(String sectionName){
 		var res = "";		
 		val snippets = externalCodeEnd.get(sectionName) 
 		if (snippets != null){
@@ -263,7 +263,7 @@ class MdlPrinting {
 	}
 	
 	//Return attributes of an external function	from the collection
-	def getExternalFunctionAttributes(FullyQualifiedSymbolName ref) { 
+	def protected getExternalFunctionAttributes(FullyQualifiedSymbolName ref) { 
 		if (ref.object != null)				
 			return externalFunctions.get(ref.object.name + "$" + ref.identifier)
 		else {
@@ -536,14 +536,21 @@ class MdlPrinting {
     }
     
     //Check if LIBRARY block is defined
-    def numberOfCompartments(ModelObject o){
+    def getNumberOfCompartments(ModelObject o){
     	for (mob: o.blocks){
 			if (mob.modelPredictionBlock != null){
 				for (s: mob.modelPredictionBlock.statements){
 				    if (s.libraryBlock != null) {
 				    	for (ss: s.libraryBlock.statements){
 				    		var nmct = ss.expression.arguments.getAttribute("ncmt");
-				    		if (!nmct.equals("")) return Integer::parseInt(nmct);
+				    		if (!nmct.equals("")) {
+				    			try{
+						    		return Integer::parseInt(nmct);
+				    			}
+				    			catch(NumberFormatException e){
+				    				return 0;		
+				    			}
+				    		}
 				    	}
 				    }
 				}
@@ -613,7 +620,6 @@ class MdlPrinting {
 		return res;
 	}
 	
-    //toStr symbolDeclaration declaration
 	def toStr(SymbolDeclaration v){
 		var res = "";
 		if (v.function != null){
@@ -648,7 +654,6 @@ class MdlPrinting {
 		return res;
 	}	
 	 
-	//toStr any MDL expression
 	def toStr(AnyExpression e){
 		var res = "";
 		if (e.expression != null){
@@ -666,7 +671,7 @@ class MdlPrinting {
 		return res;
 	}
 	
-	def String toStr(EnumType type) {
+	def toStr(EnumType type) {
 		if (type.categorical != null){
 			var res = "";
 			if (type.categorical.arguments != null){
@@ -706,7 +711,6 @@ class MdlPrinting {
 		return l.identifier
 	}
 	
-	//toSTr random list	
 	def toStr(RandomList l){
 		if (l.arguments != null){
 			return "~" + "(" + l.arguments.toStr + ")";
@@ -714,7 +718,6 @@ class MdlPrinting {
 		return "";
 	}
 
-	//toStr list
 	def toStr(List l){
 		if (l.arguments != null){
 			return "list" + "(" + l.arguments.toStr + ")";
@@ -722,19 +725,16 @@ class MdlPrinting {
 		return "";
 	}
 	
-	//toStr ODE list
 	def toStr(OdeList l){
 		if (l.arguments != null){ 
 			return "ode" + "(" + l.arguments.toStr + ")"
 		}
 	}
 	
-	//toStr arithmetic expression
 	def toStr(Expression e){
 		return e.conditionalExpression.toStr
 	}
 	
-	//toStr conditional expression
 	def toStr(ConditionalExpression e){ 
 		var res = e.expression.toStr;
 		if (e.expression1 != null){
@@ -743,7 +743,6 @@ class MdlPrinting {
 		return res;
 	}
 
-    //toStr OR expression
 	def toStr(OrExpression e){
 		var res = "";
 		var iterator = e.expression.iterator();
@@ -757,7 +756,6 @@ class MdlPrinting {
 		return res;
 	}
 	
-	//toStr AND expression
 	def toStr(AndExpression e){
 		var res = "";
 		var iterator = e.expression.iterator();
@@ -771,7 +769,7 @@ class MdlPrinting {
 		return res;	
 	}
 	
-	//toStr relational expression (==, !=, <, > etc.)
+	//(==, !=, <, > etc.)
 	def toStr(LogicalExpression e){
 		var res = "";
 		if (e.negation != null){
@@ -791,8 +789,6 @@ class MdlPrinting {
 		return res;
 	}
 	
-
-	//toStr +, - expresion
 	def toStr(AdditiveExpression e){
 		var res  = "";
 		if (e.expression != null)
@@ -820,7 +816,6 @@ class MdlPrinting {
 		return res;
 	}
 	
-	//toStr *, /, % expression
 	def toStr(MultiplicativeExpression e){
 		var res = "";
 		var iterator = e.expression.iterator();
@@ -834,7 +829,6 @@ class MdlPrinting {
 		return res;
 	}
 	
-	//Print power (a^b^c^...) expression
 	def String toStr(PowerExpression e) { 
 		var res = "";
 		var iterator = e.expression.iterator();
@@ -848,7 +842,6 @@ class MdlPrinting {
 		return res;
 	}
 	
-	//toStr a unary expression
 	def toStr(UnaryExpression e){
 		var res = "";
 		if (e.expression != null){
@@ -863,13 +856,10 @@ class MdlPrinting {
 		return res;
 	}	
 	
-	//toStr function call
 	def toStr(FunctionCall call){
 		return call.identifier.toStr + "(" + call.arguments.toStr + ")";
 	}
 	
-	//toStr a value or an identifier
-	//Convert variables in expressions if needed!
 	def toStr(Primary p){
 		if (p.number != null){
 			return  p.number;
@@ -888,7 +878,7 @@ class MdlPrinting {
 		}
 	}
 	
-	def String toStr(FullyQualifiedArgumentName name) { 
+	def toStr(FullyQualifiedArgumentName name) { 
 		var res = name.parent.toStr;
 		for (s: name.selectors){
 			res = res + s.toStr
@@ -896,14 +886,14 @@ class MdlPrinting {
 		return res;
 	}
 	
-	def String toStr(Selector s) { 
+	def toStr(Selector s) { 
 		if (s.identifier != null)
 			return "." + s.identifier.identifier;
 		if (s.selector != null)
 			return "[" + s.selector + "]";
 	}
 	
-	def String toStr(Vector v) { 
+	def toStr(Vector v) { 
 		var res  = v.identifier + '(';
 		var iterator = v.values.iterator();
 		if (iterator.hasNext) {
@@ -916,12 +906,10 @@ class MdlPrinting {
 		return res + ')';
 	}
 	
-	//toStr expression in parenthesis 
 	def toStr(ParExpression e){
 		return "(" + e.expression.toStr + ")";
 	}
 	
-	//toStr list arguments without change
 	def toStr(Arguments arg){
 		var res  = "";
 		var iterator = arg.arguments.iterator();
@@ -947,7 +935,7 @@ class MdlPrinting {
 		return res;
 	}	
 	
-	def String toStr(FormalArguments arg) { 
+	def toStr(FormalArguments arg) { 
 		var res  = "";
 		var iterator = arg.arguments.iterator();
 		if (iterator.hasNext ) {
@@ -967,7 +955,7 @@ class MdlPrinting {
 	}
 	
 	
-	def externalCodeToStr(TargetBlock b){
+	def toStr(TargetBlock b){
 		return b.externalCode.substring(3, b.externalCode.length - 3)
 	}
 
@@ -975,7 +963,6 @@ class MdlPrinting {
 	//Printing
     //////////////////////////////////////////////////////////////////////////	
 	 
-    //Print verbatim block
 	def print(TargetBlock b)'''
 	«IF b.externalCode != null»
 		«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
@@ -983,35 +970,30 @@ class MdlPrinting {
 	«ENDIF»
 	'''	
 	
-	//Print block
 	def print(Block b)'''
 		«FOR st: b.statements»
 			«st.print»
 		«ENDFOR»
 	'''
 	
-	//Print block
 	def print(ObservationBlock b)'''
 		«FOR s: b.statements»
 			«s.print»
 		«ENDFOR»
 	'''		
 	
-	//Print block
 	def print(SimulationBlock b)'''
 		«FOR s: b.statements»
 			«s.print»
 		«ENDFOR»
 	'''	
 
-	//Print block
 	def print(EstimationBlock b)'''
 		«FOR s: b.statements»
 			«s.print»
 		«ENDFOR»
 	'''	
 		
-	//Get variableDeclaration identifier from each declaration and each statement
 	def print(BlockStatement st)'''
 		«IF st.symbol != null»«st.symbol.print»«ENDIF»
 		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
@@ -1019,7 +1001,6 @@ class MdlPrinting {
 		«IF st.targetBlock != null»«st.targetBlock.print»«ENDIF»
 		'''
 
-	//Print MDL statement
 	def print(ConditionalStatement s)'''
 		«IF s.parExpression != null»
 			if «s.parExpression.print»
@@ -1041,59 +1022,41 @@ class MdlPrinting {
 		«ENDIF»
 	'''
 	
-	//Print function call
 	def print(FunctionCall call)'''«call.toStr»'''
 		
-    //Print variableDeclaration declaration
-	def print(SymbolDeclaration v)'''«v.toStr»'''
+    def print(SymbolDeclaration v)'''«v.toStr»'''
 
-    //Print variableModification 
-	def print(SymbolModification v)'''«v.toStr»'''
+    def print(SymbolModification v)'''«v.toStr»'''
 
-	//Print any expression	
 	def print(AnyExpression e)'''«e.toStr»'''
 		
-	//Print random list
 	def print(RandomList l)'''«l.toStr»'''
 
-	//Print list
 	def print(List l)'''«l.toStr»'''
 	
-	//print ODE list
 	def print(OdeList l)'''«l.toStr»'''
 
-	//print arithmetic expression
 	def print(Expression e)'''«e.toStr»'''
 	
-	//print conditional (bool? statement1 : statement2) expression
 	def print(ConditionalExpression e)'''«e.toStr»'''
 
-	//Print OR expression
 	def print(OrExpression e)'''«e.toStr»'''
 	
-	//Print AND expression
 	def print(AndExpression e)'''«e.toStr»'''
 	
-	//Print relational expression (==, !=, <, > etc.)
-    def print(LogicalExpression e)'''«e.toStr»'''
+	def print(LogicalExpression e)'''«e.toStr»'''
 	
-	//Print +, - expresion
 	def print(AdditiveExpression e)'''«e.toStr»'''
 	
-	//Print *, /, % expression
 	def print(MultiplicativeExpression e)'''«e.toStr»'''
 	
 	def print(PowerExpression e)'''«e.toStr»'''
 	
-	//Print a unary expression
 	def print(UnaryExpression e)'''«e.toStr»'''
 
-	//Print a value or an identifier
 	def print(Primary p)'''«p.toStr»'''
 	
-	//Print expression in parenthesis 
 	def print(ParExpression e)'''«e.toStr»'''
 	
-	//Print list arguments without change
 	def print(Arguments arg)'''«arg.toStr»'''
 }

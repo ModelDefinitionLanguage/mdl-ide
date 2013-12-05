@@ -4,7 +4,6 @@ import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.Argument
 import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.ConditionalExpression
-import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.FunctionCall
@@ -13,10 +12,7 @@ import org.ddmore.mdl.mdl.MclObject
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ModelObjectBlock
 import org.ddmore.mdl.mdl.OrExpression
-import org.ddmore.mdl.mdl.SimulateTask
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.TaskFunctionBody
-import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.UnaryExpression
 import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.mdl.MdlFactory
@@ -27,6 +23,11 @@ import org.ddmore.mdl.mdl.PowerExpression
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.List
+import java.io.FileReader
+import java.io.BufferedReader
+import java.util.ArrayList
+import java.io.FileNotFoundException
+import java.io.File
 
 class Mdl2PharmML extends MdlPrinting{
 	
@@ -39,6 +40,9 @@ class Mdl2PharmML extends MdlPrinting{
 	val xmlns_mstep="http://www.pharmml.org/2013/03/ModellingSteps";
 	val xmlns_design="http://www.pharmml.org/2013/03/TrialDesign";
 	val xmlns_uncert="http://www.pharmml.org/2013/03/Uncertainty";
+	
+	val TYPE_INT = "int";
+	//val TYPE_REAL = "real";
 	
 	val writtenVersion = "0.1";
 	var Mcl mcl = null;
@@ -132,7 +136,7 @@ class Mdl2PharmML extends MdlPrinting{
 				var varName = paramName;
 				var operator = "";
 				val _index = paramName.indexOf('_');
-				if (_index > 0) {
+				if (_index > -1) {
 					varName = paramName.substring(_index + 1);
 					var idv = varName.findIndividualVariable;
 					if (idv != null) operator = idv.defineTransformationOperator;
@@ -177,7 +181,7 @@ class Mdl2PharmML extends MdlPrinting{
 			if (paramName != null){
 				var varName = paramName;
 				var _index = paramName.indexOf('_');
-				if (_index > 0) {
+				if (_index > -1) {
 					varName = paramName.substring(_index + 1);
 					val idv = varName.findIndividualVariable;
 					if (idv != null) parameters = parameters + varName.print_mdef_Parameter(blockName);
@@ -677,7 +681,7 @@ class Mdl2PharmML extends MdlPrinting{
 						«expr.primary.functionCall.print_Math_FunctionCall»
 					«ENDIF»
 					«IF expr.primary.number != null»
-						«expr.primary.number.print_ct_Number»
+						«expr.primary.number.print_ct_Value»
 					«ENDIF»
 					«IF expr.primary.symbol !=null»
 						«expr.primary.symbol.print_ct_SymbolRef»
@@ -715,14 +719,28 @@ class Mdl2PharmML extends MdlPrinting{
 	'''
 	
 	//+
-	def print_ct_Number(String number){
-		if ((number.indexOf('.') > 0) || (number.indexOf(",") > 0)){
-			//real
-			return '''<ct:Real>«number»</ct:Real>'''
-		} else {//int
-			return '''<ct:Int>«number»</ct:Int>'''
+	def print_ct_Value(String value){
+		try{        			
+        	if (value.indexOf(".") > -1){
+        			Double::parseDouble(value);
+					return '''<ct:Double>«value»</ct:Double>''';
+        		} else {
+	       			Integer::parseInt(value);
+    	   			return '''<ct:Int>«value»</ct:Int>''';	
+        		}
+        }
+		catch (NumberFormatException e) {
+			return '''<ct:String>«value»</ct:String>''';
 		}
 	}
+	
+	
+	
+	//type: int, string, etc.
+	def print_ct_Value(String value, String type)'''
+		<ct:«type»>«value»</ct:«type»>
+	'''
+	
 	
 	//+ TODO: modify to print correctly any distribution
 	def print_uncert_Distribution(String ref)'''
@@ -753,92 +771,165 @@ class Mdl2PharmML extends MdlPrinting{
 	<ModellingSteps>
 		«FOR o: mcl.objects»
 			«IF o.modelObject != null»«o.modelObject.print_ct_DataSet»«ENDIF»
-			«IF o.taskObject != null»«o.taskObject.print_msteps_ModelingStepsContent»«ENDIF»
 		«ENDFOR»
+		«print_msteps_EstimationStep»
+		«print_msteps_SimulationStep»
+		«print_msteps_StepDependencies»
+		«print_msteps_ObjectiveDataSet»
 	</ModellingSteps>
 	'''
 	
 	//+ Print data set
 	def print_ct_DataSet(ModelObject obj){
-		var definition = '''''';
+		var names = new ArrayList<String>();
+		var types = new ArrayList<String>();
 		for (b: obj.blocks){
 			if (b.inputVariablesBlock != null){
 				if (b.inputVariablesBlock.variables != null){
-					var i = 1;
 					for (s: b.inputVariablesBlock.variables){
-						var valueType = s.getVarType;
-						definition = definition + 
-						'''
-							<ds:Column columnId="«s.identifier»" valueType="«valueType»" columnNum="«i»"/>
-						''';
-						i = i + 1;
+						//var valueType = s.getVarType;
+						names.add(s.identifier);
+						//types.add(valueType);
+						types.add(TYPE_INT);
 					} 
 				}
 			}
 		}
-		var table = '''''';	
-		var dataFilePath = mcl.getDataSource;
-		if (dataFilePath.length > 0){
-			//read file, print table
+		var fileName = mcl.getDataSource;
+		if (fileName.length > 0){
+			fileName.print_ds_DataSet(names, types);
 		}
-		
+	}
+	
+	//+ Read data from the source file
+	// May need to skip first line (repeated column names) 
+	// TODO: Do we need to check actual types against types deduced from MDL???
+	def print_ds_DataSet(String fileName, ArrayList<String> names, ArrayList<String> types){
+		var table = '''''';	
+		var BufferedReader fileReader = null;
+		try{
+			//First try the path as it is
+			fileReader = new BufferedReader(new FileReader(fileName));
+		}
+		catch(FileNotFoundException e){
+			//If not found, try to look in the folder "data"
+			var modelPath = mcl.eResource.getURI.toPlatformString(true);
+			var file = new File(modelPath);
+			var dataPath = file.getParent + "\\data\\" + fileName;
+			try{
+				fileReader = new BufferedReader(new FileReader(dataPath));
+			}
+			catch(FileNotFoundException e1){
+				//If file is not ready to read, print a link (old PharmML format)
+				val dotIndex = fileName.indexOf('.');
+				var fileExtension = "";
+				if (dotIndex > 0) fileExtension = fileName.substring(dotIndex + 1);		
+				table =  
+				'''				
+					<Description>Source file not found («dataPath»)!</Description>
+					<ExternalSource url="file=///«fileName»" format="«fileExtension»"/>	
+				''';
+			}
+		}
+		var definition = '''''';
+		for (i: 0..names.size-1){
+			definition = definition + 
+				'''
+					<ds:Column columnId="«names.get(i)»" valueType="«types.get(i)»" columnNum="«i»"/>
+				''';
+		}
+		if (fileReader != null){
+			if (fileReader.ready()){ 
+				var line = "";
+				while ((line = fileReader.readLine()) != null) {
+		        	val atoms = line.split("\\s{1,}|,|;").iterator;
+		        	var row = "";
+		        	for (i : 0..atoms.size - 1){
+						row = row + atoms.next.print_ct_Value;
+		        	}
+		        	table = table +  
+		        	'''
+		        	<Row>
+		        		«row»
+		        	</Row>
+			        ''';
+		        }
+		    	fileReader.close();			
+			}			
+		}
 		'''
 		<DataSet>
+			«IF definition.length > 0»
 			<ds:Definition>
 				«definition»
 			</ds:Definition>
+			«ENDIF»
+			«IF table.length > 0»
 			<ds:Table>	
 				«table»
 			</ds:Table>
+			«ENDIF»
 		</DataSet>	
 		'''
 	}
 	
-	
-	//type: int, string, etc.
-	def print_ct_Value(String value, String type)'''
-		<ct:«type»>«value»</ct:«type»>
-	'''
-
-	//-
-	def print_msteps_ModelingStepsContent(TaskObject obj)'''
-	«FOR b: obj.blocks»
-		«IF b.functionDeclaration != null»
-			«b.functionDeclaration.functionBody.print_msteps_ModelingStepsContent»
-		«ENDIF»
-	«ENDFOR»
-	'''
-	
-	//-
-	def print_msteps_ModelingStepsContent(TaskFunctionBody body)'''
-		«FOR b: body.blocks»
-			«IF b.estimateBlock != null»
-				«b.estimateBlock.print_msteps_SimulationStep»
-			«ENDIF»
-			«IF b.simulateBlock != null»
-				«b.simulateBlock.print_msteps_EstimationStep»
-			«ENDIF»
-		«ENDFOR»
-	'''
-	
-	//-
-	def print_msteps_EstimationStep(SimulateTask task)'''
-	<SimulationStep>
+	//+
+	def print_msteps_EstimationStep()'''
+	<SimulationStep>		
+		<Description>MDL source?</Description>
+		«print_InitialValues»	
 	</SimulationStep>
 	'''
 	
-	//-
-	def print_msteps_SimulationStep(EstimateTask task)'''
+	//+
+	def print_msteps_SimulationStep()'''
 	<EstimationStep>
+		<Description>MDL source?</Description>
+		«print_InitialValues»
 	</EstimationStep>
 	'''
 	
-	//-
-	def print_msteps_ObjectiveDataSet(MclObject o, String content)'''
+	def print_InitialValues() { }
+	
+	//+
+	def print_msteps_StepDependencies()'''
+	<StepDependencies>
+		<Description>MDL source?</Description>
+	</StepDependencies>
+	'''
+	
+	//+
+	def print_msteps_ObjectiveDataSet()'''
 	<ObjectiveDataSet dataSetRef="">
-		«content»
 	</ObjectiveDataSet>
 	'''
+	
+	//- Print mapping for the input variables with use=idv (individual)
+	def print_Math_Mapping(){
+		for (MclObject obj: mcl.objects){
+			if (obj.modelObject != null){
+				for (ModelObjectBlock block: obj.modelObject.blocks){
+					if (block.inputVariablesBlock != null){
+						for (SymbolDeclaration s: block.inputVariablesBlock.variables){
+							if (s.expression != null){
+								if (s.expression.list != null){
+									var use = s.expression.list.arguments.getAttribute("use");
+									if (use.equalsIgnoreCase("idv")){
+										val varName = s.identifier;
+										return '''
+										<Mapping columnName="«varName»">
+											<Var xmlns="«xmlns_math»" symbId="t"/>
+										</Mapping>
+                						'''
+                					}
+								}
+							}
+						}
+					}	
+				}
+			}
+		}
+	}	
 	
 	///////////////////////////
 	//Mathematical expressions
@@ -919,34 +1010,6 @@ class Mdl2PharmML extends MdlPrinting{
 		«arg.expression.print_Math_Expr»
 	</FunctionArgument>
 	'''
-			
-	//- Print mapping for the input variables with use=idv (individual)
-	def print_Math_Mapping(Mcl m){
-		for (MclObject obj: m.objects){
-			if (obj.modelObject != null){
-				for (ModelObjectBlock block: obj.modelObject.blocks){
-					if (block.inputVariablesBlock != null){
-						for (SymbolDeclaration s: block.inputVariablesBlock.variables){
-							if (s.expression != null){
-								if (s.expression.list != null){
-									var use = s.expression.list.arguments.getAttribute("use");
-									if (use.equalsIgnoreCase("idv")){
-										val varName = s.identifier;
-										return '''
-										<Mapping columnName="«varName»">
-											<Var xmlns="«xmlns_math»" symbId="t"/>
-										</Mapping>
-                						'''
-                					}
-								}
-							}
-						}
-					}	
-				}
-			}
-		}
-	}	
-	
 	
 	
 	//////////////////////////////////////////////////////////////////////
@@ -955,12 +1018,12 @@ class Mdl2PharmML extends MdlPrinting{
 	
 	//When typing is supported, rewrite this
 	def getVarType(FullyQualifiedSymbolName ref){
-		return "int";
+		return TYPE_INT;
 	}
 	
 	//When typing is supported, rewrite this
 	def getVarType(SymbolDeclaration s){
-		return "int";
+		return TYPE_INT;
 	}
 
 	//+ Negation of the expression

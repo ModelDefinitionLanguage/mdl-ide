@@ -49,15 +49,8 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 
  	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
  		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {
-			//try{
-				
 				fsa.generateFile(
 					resource.fileName + ".ctl", m.convertToNMTRAN)
-			//}
-			//catch(Exception e){
-				//process exception!
-				//Does not work for EclipseResourceFileSystemAccess2 - fix!
-			//}
 		}
 	}
 	
@@ -878,13 +871,13 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 		«IF body != null»
 			«FOR bb: body.blocks»
 			«IF bb.estimateBlock != null»
-				«bb.estimateBlock.printEstimate»
+				«bb.estimateBlock.print»
 			«ENDIF»
 			«IF bb.simulateBlock != null»
-				«bb.simulateBlock.printSimulate»
+				«bb.simulateBlock.print»
 			«ENDIF»
 			«IF bb.executeBlock != null»
-				«bb.executeBlock.printExecute»
+				«bb.executeBlock.print»
 			«ENDIF»
 			«ENDFOR»
 		«ENDIF»
@@ -906,50 +899,50 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 	''' 
 	
 	//Processing SIMULATE block for $SIM 
-	def printSimulate(SimulateTask b)'''
-	«var isInlineTargetDefined = TARGET.isInlineTargetDefined(b.statements)»
-	«IF !isInlineTargetDefined»
-	
-	$SIM 
-	«ENDIF»
-	«getExternalCodeStart("$SIM")»
-	«getExternalCodeStart("$SIMULATION")»
-	«IF !isInlineTargetDefined»
-		«FOR s: b.statements»
-			«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
-		«ENDFOR»
-		NOABORT
-	«ELSE»
-		«FOR s: b.statements»
-			«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
-		«ENDFOR»
-	«ENDIF» 
-	«getExternalCodeEnd("$SIM")»
-	«getExternalCodeEnd("$SIMULATION")»	
+	def print(SimulateTask b)'''
+		«var isInlineTargetDefined = TARGET.isInlineTargetDefined(b.statements)»
+		«IF !isInlineTargetDefined»
+		
+		$SIM 
+		«ENDIF»
+		«getExternalCodeStart("$SIM")»
+		«getExternalCodeStart("$SIMULATION")»
+		«IF !isInlineTargetDefined»
+			«FOR s: b.statements»
+				«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
+			«ENDFOR»
+			NOABORT
+		«ELSE»
+			«FOR s: b.statements»
+				«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
+			«ENDFOR»
+		«ENDIF» 
+		«getExternalCodeEnd("$SIM")»
+		«getExternalCodeEnd("$SIMULATION")»	
 	'''
 	
 	//Processing ESTIMATE block for $EST
-	def printEstimate(EstimateTask b)'''
-	«var isInlineTargetDefined = TARGET.isInlineTargetDefined(b.statements)»
-	«IF !isInlineTargetDefined»
-	
-	$EST 
-	«ENDIF»
-	«getExternalCodeStart("$EST")»
-	«getExternalCodeStart("$ESTIMATION")»
-	«IF !isInlineTargetDefined»
-		«FOR s: b.statements»
-			«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
-		«ENDFOR»
-		NOABORT 
-		«b.printCovariance»
-	«ELSE»
-		«FOR s: b.statements»
-			«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
-		«ENDFOR»
-	«ENDIF»
-	«getExternalCodeEnd("$EST")»
-	«getExternalCodeEnd("$ESTIMATION")»
+	def print(EstimateTask b)'''
+		«var isInlineTargetDefined = TARGET.isInlineTargetDefined(b.statements)»
+		«IF !isInlineTargetDefined»
+		
+		$EST 
+		«ENDIF»
+		«getExternalCodeStart("$EST")»
+		«getExternalCodeStart("$ESTIMATION")»
+		«IF !isInlineTargetDefined»
+			«FOR s: b.statements»
+				«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
+			«ENDFOR»
+			NOABORT 
+			«b.printCovariance»
+		«ELSE»
+			«FOR s: b.statements»
+				«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
+			«ENDFOR»
+		«ENDIF»
+		«getExternalCodeEnd("$EST")»
+		«getExternalCodeEnd("$ESTIMATION")»
 	'''
 	
 	//Print attributes for default $EST record
@@ -1004,10 +997,10 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 	}
 
 	
-	def printExecute(ExecuteTask b)'''
+	def print(ExecuteTask b)'''
 	
 	«FOR s: b.statements»
-	«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
+		«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
 	«ENDFOR»
 	'''
 		
@@ -1022,7 +1015,7 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 		return "";
 	}
 	
-	//Find reference to a data file 
+	//Get $TOL attribute
 	def getTOL(Resource resource){
 		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {
 			for (obj: m.objects){
@@ -1053,8 +1046,8 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 		return "";
 	}	
 	
-		///////////////////////////////////////////////////////////////////////
-	//Overwritten converter functions
+	///////////////////////////////////////////////////////////////////////
+	//Overridden converter functions
 	///////////////////////////////////////////////////////////////////////
 	
 	//Convert variable names to NM-TRAN versions
@@ -1148,13 +1141,11 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 	«ENDIF»
 	'''
 	
-	//toStr relational expression (==, !=, <, > etc.)
-	//Here we skip boolean values!
+	//(==, !=, <, > etc.) - here we skip boolean values!
 	override toStr(LogicalExpression e){
 		if (e.boolean != null) 	return "";
 		return super.toStr(e);
-	}	
-			
+	}				
 	
 	//Print variableDeclaration substituting ID with "Y" if it is a list with LIKELIHOOD or continuous type
 	override toStr(SymbolDeclaration v){
@@ -1179,10 +1170,8 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 			}
 		}
 		return super.toStr(v);
-	}
-	
+	}	
 
-	//toStr list
 	//Instead of list(...) we print an expression from a certain attribute (depends on the type)
 	override toStr(List l){		
 		var type = l.arguments.getAttribute("type");
@@ -1223,12 +1212,12 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 				if (b.arguments.isAttributeTrue("first")){
 					var codeSnippets = externalCodeStart.get(location);
 					if (codeSnippets == null) codeSnippets = new ArrayList<String>();
-					codeSnippets.add(b.externalCodeToStr);
+					codeSnippets.add(b.toStr);
 					externalCodeStart.put(location, codeSnippets);
 				} else {
 					var codeSnippets = externalCodeEnd.get(location);
 					if (codeSnippets == null) codeSnippets = new ArrayList<String>();
-					codeSnippets.add(b.externalCodeToStr);
+					codeSnippets.add(b.toStr);
 					externalCodeEnd.put(location, codeSnippets);
 				} 
 			}
@@ -1236,7 +1225,7 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 	}	
 	
 	//References to attributes: skip variable name and replace selectors, e.g,  amount.A[2] -> A(2)
-	override String toStr(FullyQualifiedArgumentName name) { 
+	override toStr(FullyQualifiedArgumentName name) { 
 		var res = "";
 		for (s: name.selectors){
 			res = res + s.toStr
@@ -1245,7 +1234,7 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 	}
 	
 	//Selectors [] -> (), e.g., A[2] -> A(2)
-	override String toStr(Selector s) { 
+	override toStr(Selector s) { 
 		if (s.identifier != null)
 			return s.identifier.identifier;
 		if (s.selector != null)
@@ -1259,7 +1248,7 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 		return super.toStr(call);	
 	}
 	
-	//toStr list arguments without change
+	//toStr list arguments without commas
 	def toStrWithoutCommas(Arguments arg){
 		var res  = "";
 		var iterator = arg.arguments.iterator();
