@@ -42,9 +42,10 @@ class Mdl2PharmML extends MdlPrinting{
 	val xmlns_uncert="http://www.pharmml.org/2013/03/Uncertainty";
 	
 	val TYPE_INT = "int";
-	//val TYPE_REAL = "real";
-	
+	val TYPE_REAL = "real";
 	val writtenVersion = "0.1";
+	val level_map = newArrayList("residual", "indiv");
+	
 	var Mcl mcl = null;
 	//Print file name and analyse all MCL objects in the source file
   	def convertToPharmML(Mcl m){
@@ -101,26 +102,59 @@ class Mdl2PharmML extends MdlPrinting{
 	/////////////////////
 	//Function Definition
 	/////////////////////
-	def print_mdef_FunctionDefinition() { }
+	def print_mdef_FunctionDefinition() { 
+		//It is not used as in MDL we do not have user defined function
+	}
+	
+	//Generate function definition from a math expression like a + b*f
+	def print_mdef_FunctionDefinition(Expression expr) { 
+		var arguments = newHashSet;
+		var iterator = expr.eAllContents();
+	    while (iterator.hasNext()){
+	    	var obj = iterator.next();
+	    	if (obj instanceof FullyQualifiedSymbolName){
+	    		var ref = obj as FullyQualifiedSymbolName;
+	    		arguments.add(ref.toStr);
+	    	}
+	    }
+		'''
+		<FunctionDefinition xmlns:ct="«xmlns_ct»"
+			symbId="combinedErrorModel" symbolType="real">
+			«FOR arg: arguments»
+				<FunctionArgument symbId="«arg»" symbolType="«TYPE_REAL»"/>
+			«ENDFOR»
+			<Definition>
+				«expr.print_Math_Equation»
+			</Definition>
+		</FunctionDefinition>
+		'''
+	}
 
 	/////////////////////
 	//Variability Model
 	/////////////////////	
 	
+	//residual - 1, indiv - 2
+	def print_mdef_VariabilityModel(){
+		var model = '''''';
+		for (e: level_vars.entrySet){
+			if (e.value.equals("1"))
+				model = model + '''«print_mdef_VariabilityModel("obsErr", "error", level_map.get(0))»''';
+			if (e.value.equals("2"))	
+				model = model + '''«print_mdef_VariabilityModel("model", "model", level_map.get(1))»''';
+		}
+		'''«model»''';
+	}
+	
+	
 	//+ TODO: derive from MDL
-	def print_mdef_VariabilityModel()'''
-	<VariabilityModel blkId="model" type="model">
-		<Level symbId="indiv">
-			<ct:Name>Individual Variability</ct:Name>
-		</Level>
-	</VariabilityModel>
-	<VariabilityModel blkId="obsErr" type="error">
-		<Level  symbId="residual">
-			<ct:Name>Residual Error</ct:Name>
-		</Level>
+	def print_mdef_VariabilityModel(String blkId, String type, String symbId)	
+	'''	
+	<VariabilityModel blkId="«blkId»" type="«type»">
+		<Level symbId="«symbId»/">
 	</VariabilityModel>
 	'''	
-	
+		
 	/////////////////////////////
 	//Parameter Model
 	////////////////////////////	
@@ -162,11 +196,16 @@ class Mdl2PharmML extends MdlPrinting{
 			«IF varName != null»
 				<Parameter symbId = "omega_«varName»"/>
 				<Parameter symbId = "«varName»"«IF operator != null»«IF operator.length > 0» transformation="«operator»">«ENDIF»«ENDIF» 
-					«print_Math_Equation(operator, paramName)»
+					<Equation xmlns="«xmlns_math»" writtenVersion="«writtenVersion»">;
+						<Uniop op="«operator»">
+							<Var symbId="«paramName»"/>
+						</Uniop>
+					</Equation>
 				</Parameter> 
 			«ENDIF»
 		«ENDIF»
 	'''
+
 	////////////////////
 	//Structural Model
 	////////////////////
@@ -272,7 +311,6 @@ class Mdl2PharmML extends MdlPrinting{
 						for (st: b.observationBlock.statements){
 							if (st.symbol != null){
 								model = model + '''«st.symbol.print_mdef_ObservationModel»''';
-								
 							}
 						}
 					}
@@ -291,18 +329,23 @@ class Mdl2PharmML extends MdlPrinting{
 	//Note: here we print an expression in Random Effect, in the example its value is used (attribute value)
 	def print_mdef_ObservationModel(SymbolDeclaration s)
 		'''
-		<SimpleParameter symbId="pop_«s.identifier»"/>
-		<Continuous>
-			«IF s.expression != null»
-				«IF s.expression.expression != null»
-					«s.expression.expression.print_Math_Contituous»
-				«ENDIF»
+		«IF s.expression != null»
+			«IF s.expression.expression != null»
+				«s.expression.expression.print_mdef_ObservationModel»
 			«ENDIF»
-		</Continuous>	
+		«ENDIF»
+		<General symbId="«s.identifier»"/>
+			«IF s.expression.expression != null»
+				<ct:Assign>
+					«s.expression.expression.print_Math_Equation»
+				</ct:Assign>
+			«ENDIF»
+		</General>
 		'''
 	
+		//DV = 1 = eps = residual, ID = 2 = eta = indiv
 		//+ New version of PharmML - changed
-		def print_Math_Contituous(Expression expr)'''
+		def print_mdef_ObservationModel(Expression expr)'''
 			«var classifiedVars = expr.classifyReferences»
 			«var simpleVars = classifiedVars.filter[k, v | v.equals("other")]»
 			«IF simpleVars.size > 0»
@@ -311,37 +354,44 @@ class Mdl2PharmML extends MdlPrinting{
 					<SimpleParameter symbId="«ref»"/>
 				«ENDFOR»
 			«ENDIF»	
+			«var randomVars = classifiedVars.filter[k, v | v.equals("eps")]»
+			«IF randomVars.size > 0»
+				«FOR s: randomVars.keySet»
+					«val ref = s as String»
+					<RandomVariable symbIdRef="«ref»">
+						<ct:VariabilityReference>
+							<ct:SymbRef symbIdRef="«level_map.get(0)»"/>
+						</ct:VariabilityReference>
+						«ref.print_uncert_Distribution»
+					</RandomVariable>
+				«ENDFOR»
+			«ENDIF»
+		'''
+	
+			/* 
 			«var errorVars = classifiedVars.filter[k, v | v.equals("theta")]»
 			«IF errorVars.size > 0»
 				«FOR s: errorVars.keySet»
 					«val ref = s as String»
 					«ref.print_mdef_ErrorModel»
 				«ENDFOR»
-			«ENDIF»			
-			«var randomVars = classifiedVars.filter[k, v | v.equals("eps")]»
-			«IF randomVars.size > 0»
-				<RandomEffects>
-					«FOR s: randomVars.keySet»
-						«val ref = s as String»
-						<ct:SymbRef symbIdRef="«ref»"/>
-						«ref.print_uncert_Distribution»
-					«ENDFOR»
-				</RandomEffects>
-			«ENDIF»
-		'''
-		
+			«ENDIF»	*/	
+			
 	/////////////////////
 	//Error Model
-	/////////////////////	
-	def print_mdef_ErrorModel(String ref)'''
+	/////////////////////
+	//For named arguments - reorder and match declaration!	
+	def print_mdef_ErrorModel(FunctionCall call)'''
     <ErrorModel>
     	<ct:Assign>
             <Equation xmlns="«xmlns_math»">
                 <FunctionCall>
-                    <ct:SymbRef symbIdRef="constantErrorModel"/>
-                    <FunctionArgument symbId="«ref»">
-                        <ct:SymbRef symbIdRef="«ref»"/>
+                    <ct:SymbRef symbIdRef="«call.identifier.identifier»"/
+                    «FOR arg: call.arguments.arguments»
+                    <FunctionArgument «IF arg.identifier!= null» symbId="«arg.identifier»"«ENDIF»>
+                        «arg.expression.print_Math_Expr»
                     </FunctionArgument>
+                    «ENDFOR»
                 </FunctionCall>
             </Equation>
         </ct:Assign>
@@ -428,8 +478,8 @@ class Mdl2PharmML extends MdlPrinting{
 				for (b: o.modelObject.blocks){
 					if(b.randomVariableDefinitionBlock != null){
 						for (SymbolDeclaration s: b.randomVariableDefinitionBlock.variables){
-							var variance = s.randomList.arguments.getAttribute("variance");
-							if (variance.equalsIgnoreCase(ref)){
+							//var variance = s.randomList.arguments.getAttribute("variance");
+							if (s.identifier.equalsIgnoreCase(ref)){
 								return s.randomList.arguments;
 							}
 						}
@@ -468,6 +518,7 @@ class Mdl2PharmML extends MdlPrinting{
 	    }
 	    return classifiedVars;
 	}
+
 	
 	/////////////////////////////////////
 	//Print expression
@@ -478,20 +529,6 @@ class Mdl2PharmML extends MdlPrinting{
 		<Parameter symbId = "«varName»">;
 			<Var block="«blockName»" xmlns="«xmlns_math»" symbId="«varName»"/>
 		</Parameter>
-	'''
-	
-	//+
-	def print_Math_Equation(String operator, String paramName)'''
-		<Equation xmlns="«xmlns_math»" writtenVersion="«writtenVersion»">;
-			«operator.print_Math_UniOp(paramName)» 
-		</Equation>
-	'''
-	
-	//+
-	def print_Math_UniOp(String operator, String param)'''
-		<Uniop op="«operator»">
-			<Var symbId="«param»"/>
-		</Uniop>
 	'''
 	
 	//+
@@ -517,8 +554,7 @@ class Mdl2PharmML extends MdlPrinting{
 			«expr.expression.print_Math_LogicOr(0)»
 		«ENDIF»
 	'''
-	
-	
+		
 	
 	//+
 	def print_Math_LogicOpPiece(Expression expr, OrExpression condition)'''
@@ -748,18 +784,16 @@ class Mdl2PharmML extends MdlPrinting{
 		«IF args != null»
 			«var distrType = args.getAttribute("type")»
 			«var mean = args.getAttributeExpression("mean")»
-			«var variance = args.getAttributeExpression("variance")»
-			«IF distrType.length > 0»
-				<Distribution xmlns="«xmlns_uncert»" writtenVersion = "«writtenVersion»>";
-					<«distrType»>
-						<Mean>
-							«IF mean != null»«mean.print_Math_Expr»«ENDIF»
-						</Mean>
-						<StdDev>
-							«IF variance != null»«variance.print_Math_Expr»«ENDIF»
-						</StrDev>
-					</«distrType»>
-				</Distribution>"
+			«var variance = args.getAttributeExpression("variance")»			
+			«IF (distrType.length > 0) && distrType.equalsIgnoreCase('Normal')»
+				<NormalDistribution xmlns="«xmlns_uncert»" writtenVersion = "«writtenVersion»>";
+					<Mean>
+						«IF mean != null»«mean.print_Math_Expr»«ENDIF»
+					</Mean>
+					<StdDev>
+						«IF variance != null»«variance.print_Math_Expr»«ENDIF»
+					</StdDev>
+				</NormalDistribution>"
 			«ENDIF»
 		«ENDIF»
 	'''		
@@ -807,15 +841,16 @@ class Mdl2PharmML extends MdlPrinting{
 	def print_ds_DataSet(String fileName, ArrayList<String> names, ArrayList<String> types){
 		var table = '''''';	
 		var BufferedReader fileReader = null;
+		var modelPath = mcl.eResource.getURI.toPlatformString(true);
+		var file = new File(modelPath);
+		var dataPath = file.getParent + "\\" + fileName;		
 		try{
-			//First try the path as it is
-			fileReader = new BufferedReader(new FileReader(fileName));
-		}
+			//First try the path as it is			
+			fileReader = new BufferedReader(new FileReader(dataPath));
+		}		
 		catch(FileNotFoundException e){
 			//If not found, try to look in the folder "data"
-			var modelPath = mcl.eResource.getURI.toPlatformString(true);
-			var file = new File(modelPath);
-			var dataPath = file.getParent + "\\data\\" + fileName;
+			dataPath = file.getParent + "\\data\\" + fileName;
 			try{
 				fileReader = new BufferedReader(new FileReader(dataPath));
 			}
