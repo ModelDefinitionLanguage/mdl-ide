@@ -179,7 +179,6 @@ class MdlPrinting {
 							if (!level.equals("")){
 								if (level_vars.get(s.identifier) == null){
 									level_vars.put(s.identifier, level);
-									//System::out.println(s.identifier + " = " + level);
 								}
 							}
 						}
