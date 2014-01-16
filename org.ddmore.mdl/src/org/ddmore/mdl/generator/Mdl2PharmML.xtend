@@ -46,7 +46,6 @@ class Mdl2PharmML extends MdlPrinting{
 	val TYPE_INT = "int";
 	val TYPE_REAL = "real";
 	val writtenVersion = "0.1";
-	val level_map = newArrayList("residual", "indiv");
 	
 	var Mcl mcl = null;
 	//Print file name and analyse all MCL objects in the source file
@@ -56,23 +55,23 @@ class Mdl2PharmML extends MdlPrinting{
   		//Create a map of variables
   		m.prepareCollections;
   		
-  		var version = "1.002";
-  		var date = "20.11.2013";
-		val info = "mdl2pharmML " + version + " beta, last modification " + date + " Natallia Kokash (natallia.kokash@gmail.com)";  
-		var printIndependent = m.isIndependentVariableDefined; 
+  		//var version = "1.002";
+  		//var date = "20.11.2013";
+		//val info = "mdl2pharmML " + version + " beta, last modification " + date + " Natallia Kokash (natallia.kokash@gmail.com)";  
+		var idv = m.getIndependentVariable; 
+		//«info.print_XS_Comment»
 		'''
-		«info.print_XS_Comment»
 		<?xml version="1.0" encoding="UTF-8"?>
 		<PharmML 
 			«print_PharmML_NameSpaces»
 			writtenVersion="«writtenVersion»">
-			<ct:Name">«m.eResource.fileName»"</ct:Name>
-			«IF printIndependent»
-				<IndependentVariable symbID="t"/>
+			<ct:Name>"«m.eResource.fileName»"</ct:Name>
+			«IF idv != null»
+				<IndependentVariable symbID="«idv»"/>
 			«ENDIF»
-  			«print_mdef_ModelDefinition»
-  			«print_design_TrialDesign»
-  			«print_msteps_ModellingSteps»
+			«print_mdef_ModelDefinition»
+			«print_design_TrialDesign»
+			«print_msteps_ModellingSteps»
 		</PharmML>
 		'''
 	}
@@ -146,9 +145,9 @@ class Mdl2PharmML extends MdlPrinting{
 		var model = '''''';
 		for (e: level_vars.entrySet){
 			if (e.value.equals("1"))
-				model = model + '''«print_mdef_VariabilityModel("obsErr", "error", level_map.get(0))»''';
+				model = model + '''«print_mdef_VariabilityModel("obsErr", "error", e.key as String)»''';
 			if (e.value.equals("2"))	
-				model = model + '''«print_mdef_VariabilityModel("model", "model", level_map.get(1))»''';
+				model = model + '''«print_mdef_VariabilityModel("model", "model", e.key as String)»''';
 		}
 		'''«model»''';
 	}
@@ -158,7 +157,7 @@ class Mdl2PharmML extends MdlPrinting{
 	def print_mdef_VariabilityModel(String blkId, String type, String symbId)	
 	'''	
 	<VariabilityModel blkId="«blkId»" type="«type»">
-		<Level symbId="«symbId»/">
+		<Level symbId="«symbId»"/>
 	</VariabilityModel>
 	'''	
 		
@@ -218,7 +217,7 @@ class Mdl2PharmML extends MdlPrinting{
 			«var operator = s.defineTransformationOperator»
 			«IF operator != null»
 				«IF operator.length > 0»
-					<Transformation>"«operator»"</Transformation>
+					<Transformation>«operator»</Transformation>
 				«ENDIF»
 			«ENDIF» 
 			«IF s.expression != null»
@@ -299,8 +298,6 @@ class Mdl2PharmML extends MdlPrinting{
 	
 	def print_ct_Covariate(SymbolDeclaration s) 
 		'''
-		<SimpleParameter  symbId="pop_«s.identifier»"/>
-		<SimpleParameter  symbId="omega_«s.identifier»"/>
 		<Covariate symbId="«s.identifier»">
 			<Continuous>
 				«s.expression.print_Math_Expr»
@@ -368,7 +365,7 @@ class Mdl2PharmML extends MdlPrinting{
 				«FOR s: randomVars.keySet»
 					«val ref = s as String»
 					<RandomVariable symbIdRef="«ref»">
-						«level_map.get(0).print_VariabilityReference»
+						«ref.print_VariabilityReference»
 						«ref.print_uncert_Distribution»
 					</RandomVariable>
 				«ENDFOR»
@@ -540,9 +537,9 @@ class Mdl2PharmML extends MdlPrinting{
 
 	//+
 	def print_Math_Equation(Expression expr)'''
-		<Equation xmlns="«xmlns_math»" writtenVersion="«writtenVersion»">;
+		<Equation xmlns="«xmlns_math»" writtenVersion="«writtenVersion»">
 			«expr.print_Math_Expr»
-		</Equation>"
+		</Equation>
 	'''
 	
 	//+
@@ -576,12 +573,14 @@ class Mdl2PharmML extends MdlPrinting{
 	//+
 	def print_Math_LogicOr(OrExpression expr, int startIndex){
 		if (expr.expression != null){
-			if (startIndex < expr.operator.size-1){
+			if (startIndex < expr.operator.size){
+				val first = expr.expression.get(startIndex).print_Math_LogicAnd(0);
+				val second = expr.print_Math_LogicOr(startIndex + 1);
 				return 
 				'''
 				<LogicBinop op="or">
-					«expr.expression.get(startIndex).print_Math_LogicAnd(0)»
-					«expr.print_Math_LogicOr(startIndex + 1)»
+					«first»
+					«second»
 				</LogicBinop>
 				'''
 			} else {
@@ -594,12 +593,14 @@ class Mdl2PharmML extends MdlPrinting{
 	//+
 	def print_Math_LogicAnd(AndExpression expr, int startIndex){
 		if (expr.expression != null){
-			if (startIndex < expr.operator.size-1){
+			if (startIndex < expr.operator.size){
+				val first = expr.expression.get(startIndex).print_Math_LogicOp(0);
+				val second = expr.print_Math_LogicAnd(startIndex + 1);
 				return 
 				'''
 				<LogicBinop op="and">
-					«expr.expression.get(startIndex).print_Math_LogicOp(0)»
-					«expr.print_Math_LogicAnd(startIndex + 1)»
+					«first»
+					«second»
 				</LogicBinop>
 				'''
 			} else {
@@ -614,12 +615,15 @@ class Mdl2PharmML extends MdlPrinting{
 	//+
 	def print_Math_LogicOp(LogicalExpression expr, int startIndex){
 		if (expr.expression != null){
-			if (startIndex < expr.operator.size-1){
+			if (startIndex < expr.operator.size){
+				val operator = expr.operator.get(startIndex).convertOperator;
+				val first = expr.expression.get(startIndex).print_Math_AddOp(0);
+				val second = expr.print_Math_LogicOp(startIndex + 1);
 				return 
 				'''
-				<LogicBinop op="«expr.operator.get(startIndex + 1).convertOperator»">
-					«expr.expression.get(startIndex).print_Math_AddOp(0)»
-					«expr.print_Math_LogicOp(startIndex + 1)»
+				<LogicBinop op="«operator»">
+					«first»
+					«second»
 				</LogicBinop>
 				'''
 			} else {
@@ -632,12 +636,15 @@ class Mdl2PharmML extends MdlPrinting{
 	//+
 	def print_Math_AddOp(AdditiveExpression expr, int startIndex) { 
 		if (expr.expression != null){
-			if (startIndex < expr.operator.size-1){
+			if (startIndex < expr.operator.size){
+				val operator = expr.operator.get(startIndex).convertOperator;
+				val first = expr.expression.get(startIndex).print_Math_MultOp(0);
+				val second = expr.print_Math_AddOp(startIndex + 1);
 				return 
 				'''
-				<Binop op="«expr.operator.get(startIndex + 1).convertOperator»">
-					«expr.expression.get(startIndex).print_Math_MultOp(0)»
-					«expr.print_Math_AddOp(startIndex + 1)»
+				<Binop op="«operator»">
+					«first»
+					«second»
 				</Binop>
 				'''
 			} else {
@@ -659,12 +666,15 @@ class Mdl2PharmML extends MdlPrinting{
 	//+
 	def print_Math_MultOp(MultiplicativeExpression expr, int startIndex) { 
 		if (expr.expression != null){
-			if (startIndex < expr.operator.size-1){
+			if (startIndex < expr.operator.size){
+				val operator = expr.operator.get(startIndex).convertOperator;
+				val first = expr.expression.get(startIndex).print_Math_PowerOp(0);
+				val second = expr.print_Math_MultOp(startIndex + 1);
 				return 
 				'''
-				<Binop op="«expr.operator.get(startIndex + 1).convertOperator»">
-					«expr.expression.get(startIndex).print_Math_PowerOp(0)»
-					«expr.print_Math_MultOp(startIndex + 1)»
+				<Binop op="«operator»">
+					«first»
+					«second»
 				</Binop>
 				'''
 			} else {
@@ -676,11 +686,11 @@ class Mdl2PharmML extends MdlPrinting{
 	
 	//+
 	def print_Math_PowerOp(PowerExpression expr, int startIndex) { 
-			if (expr.expression != null){
-			if (startIndex < expr.operator.size-1){
+		if (expr.expression != null){
+			if (startIndex < expr.operator.size){
 				return 
 				'''
-				<Binop op="«expr.operator.get(startIndex + 1).convertOperator»">
+				<Binop op="«expr.operator.get(startIndex).convertOperator»">
 					«expr.expression.get(startIndex).print_Math_UniOp»
 					«expr.print_Math_PowerOp(startIndex + 1)»
 				</Binop>
@@ -732,7 +742,7 @@ class Mdl2PharmML extends MdlPrinting{
 						«expr.primary.attribute.print_ct_SymbolRef»
 					«ENDIF»
 					«IF expr.primary.vector != null»
-						//expr.primary.vector
+						<!-- TODO: print vector -->
 					«ENDIF»
 				«ENDIF»	
 			«ENDIF»
@@ -790,14 +800,14 @@ class Mdl2PharmML extends MdlPrinting{
 			«var mean = args.getAttributeExpression("mean")»
 			«var variance = args.getAttributeExpression("variance")»			
 			«IF (distrType.length > 0) && distrType.equalsIgnoreCase('Normal')»
-				<NormalDistribution xmlns="«xmlns_uncert»" writtenVersion = "«writtenVersion»>";
+				<NormalDistribution xmlns="«xmlns_uncert»" writtenVersion = "«writtenVersion»>"
 					<Mean>
 						«IF mean != null»«mean.print_Math_Expr»«ENDIF»
 					</Mean>
 					<StdDev>
 						«IF variance != null»«variance.print_Math_Expr»«ENDIF»
 					</StdDev>
-				</NormalDistribution>"
+				</NormalDistribution>
 			«ENDIF»
 		«ENDIF»
 	'''		
@@ -806,9 +816,11 @@ class Mdl2PharmML extends MdlPrinting{
 	// II Trial Design
 	/////////////////////////////////////////////////
 	def print_design_TrialDesign()'''
+	<TrialDesign>
 		«print_design_Structure»
 		«print_design_Population»
 		«print_design_IndividualDosing»
+	</TrialDesign>	
 	'''
 	
 	///////////////////////////
@@ -1416,8 +1428,8 @@ class Mdl2PharmML extends MdlPrinting{
 		}
 	}
 	
-	//+ Return true if an input variable with use=idv (individual) is defined
-	def isIndependentVariableDefined(Mcl m){
+	//+ Return first found input variable with use=idv (individual)
+	def getIndependentVariable(Mcl m){
 		for (obj: m.objects){
 			if (obj.modelObject != null){
 				for (ModelObjectBlock block: obj.modelObject.blocks){
@@ -1427,7 +1439,7 @@ class Mdl2PharmML extends MdlPrinting{
 								if (s.expression.list != null){
 									var use = s.expression.list.arguments.getAttribute("use");
 									if (use.equalsIgnoreCase("idv")){
-										return true;
+										return s.identifier;
                 					}
 								}
 							}
@@ -1436,6 +1448,6 @@ class Mdl2PharmML extends MdlPrinting{
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 }
