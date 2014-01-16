@@ -62,12 +62,13 @@ class MdlPrinting {
 	protected var externalCodeStart = new HashMap<String, ArrayList<String>>() //external code per target language section,
 	protected var externalCodeEnd = new HashMap<String, ArrayList<String>>() //external code per target language section,
 	
-	protected var eta_vars = newHashMap	//ETAs
-  	protected var eps_vars = newHashMap   //EPSs
-	protected var theta_vars = newHashMap //THETAs
-	protected var dadt_vars = newHashMap  //DADT	
-	protected var init_vars = newHashMap  //A	
-	protected var level_vars = newHashMap //Levels			
+	protected var eta_vars = newHashMap	//ETAs     - Random variables, level 2
+  	protected var eps_vars = newHashMap   //EPSs   - Random variables, level 1
+	protected var theta_vars = newHashMap //THETAs - Structural parameters
+	protected var dadt_vars = newHashMap  //DADT   - Model prediction, ODE	
+	protected var init_vars = newHashMap  //A      - Model prediction, ODE, init attribute	
+	
+	protected var level_vars = newHashMap //       - Input variables, level attribute			
 	
 	protected val LEVEL_UNDEF = 0;
 	
@@ -449,7 +450,7 @@ class MdlPrinting {
 	///////////////////////////////////////////////////////////////////////////////
 	//Check whether MDL blocks are defined and non empty
 	///////////////////////////////////////////////////////////////////////////////
-	//Check that VARIABILITY block or its subblocks are not empty
+	//Check that HEADER block is not empty
 	def isHeaderDefined(DataObject obj){
 		for (b:obj.blocks){
 			if (b.headerBlock != null){
@@ -461,6 +462,7 @@ class MdlPrinting {
 		return false;
 	}
 
+    //Check that PRIOR block is not empty
 	def isPriorDefined(ParameterObject obj){
 		for (b:obj.blocks){
 			if (b.priorBlock != null){
@@ -565,21 +567,6 @@ class MdlPrinting {
 		}
 		return false;
 	}
-	
-	/*def isIndividualDefined(Mcl m){
-		for (o: m.objects){
-			if (o.modelObject != null){
-				for (mob: o.modelObject.blocks){
-					if (mob.individualVariablesBlock != null){
-						if (mob.individualVariablesBlock.statements.size > 0){
-							return true;
-						}
-					}
-				}				
-			}
-		}
-		return false;
-	}*/
 	
 	//Check if MIXTURE block is defined 
 	def isMixDefined(ModelObject o){
