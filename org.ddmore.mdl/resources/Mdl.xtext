@@ -480,7 +480,7 @@ Argument:
 ;
 
 ConditionalStatement:
-	'if' parExpression=ParExpression 
+	'if' '('expression=OrExpression')' 
 		(ifStatement = BlockStatement | ifBlock = Block)
 	(=> 'else' 
 		(elseStatement = BlockStatement | elseBlock = Block)

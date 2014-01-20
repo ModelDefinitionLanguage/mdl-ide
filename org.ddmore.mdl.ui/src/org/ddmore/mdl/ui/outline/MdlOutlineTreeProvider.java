@@ -526,7 +526,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected void  _createNode(IOutlineNode parentNode, ConditionalStatement st){
 		createEStructuralFeatureNode(parentNode,
 				st,
-				MdlPackage.Literals.CONDITIONAL_STATEMENT__PAR_EXPRESSION,
+				MdlPackage.Literals.CONDITIONAL_STATEMENT__EXPRESSION,
 				_image(st),
 				"if",
 				false);

@@ -1120,8 +1120,8 @@ class Mdl2Nonmem extends MdlPrinting implements IGenerator{
 		
 	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
 	override print(ConditionalStatement s)'''
-	«IF s.parExpression != null»
-		IF «s.parExpression.print» THEN
+	«IF s.expression != null»
+		IF «s.expression.print» THEN
 			«IF s.ifStatement != null»
 				«s.ifStatement.print»
 			«ENDIF»

@@ -35,6 +35,10 @@
       </handler>
       <!-- N.K. -->
       <handler
+	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToPharmMLHandler"
+	    commandId="org.ddmore.mdl.ui.handler.ConvertToPharmML">
+      </handler>
+      <handler
 	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToNONMEMHandler"
 	    commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM">
       </handler>
@@ -45,6 +49,10 @@
       <handler
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToNONMEMHandler_PE"
             commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE">
+      </handler>
+       <handler
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToPharmMLHandler_PE"
+            commandId="org.ddmore.mdl.ui.handler.ConvertToPharmML_PE">
       </handler>
       <handler
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.RunWithNONMEMHandler_PE"

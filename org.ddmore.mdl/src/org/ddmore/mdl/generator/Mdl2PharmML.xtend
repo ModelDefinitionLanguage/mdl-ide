@@ -27,6 +27,21 @@ import java.util.ArrayList
 import java.io.FileNotFoundException
 import java.io.File
 import org.ddmore.mdl.mdl.SymbolModification
+import org.ddmore.mdl.mdl.ConditionalStatement
+import org.ddmore.mdl.mdl.BlockStatement
+import java.util.HashMap
+
+class Piece {
+	var Piece parent = null;
+	var OrExpression condition = null;
+	var Expression expression = null;
+	
+	new (Piece _parent, Expression _expression, OrExpression _condition){
+		parent = _parent;
+		condition = _condition;
+		expression = _expression;
+	}
+}
 
 class Mdl2PharmML extends MdlPrinting{
 	
@@ -234,18 +249,13 @@ class Mdl2PharmML extends MdlPrinting{
 								if (st.statement.symbol != null){
 									val id = st.statement.symbol.identifier;
 									val expr = st.statement.symbol.expression;
-									var param = '''<SimpleParameter symbId = "«id»"/>''';
-									if (expr != null){
-										if (expr.expression != null){
-											param =  
-											'''
-												<SimpleParameter symbId = "«id»">
-													«expr.expression.print_Assign»
-												</SimpleParameter>	
-											'''
-										}
-									}
-									statements = statements + param;
+									statements = statements + id.print_mdef_SimpleParameter(expr);
+								}
+								//conditional statement
+								if (st.statement.statement != null){
+									//val id = st.statement.statement.identifier;
+									//val expr = st.statement.statement.expression;
+									//statements = statements + id.print_mdef_SimpleParameter(expr);
 								}
 							}							
 						}
@@ -280,6 +290,66 @@ class Mdl2PharmML extends MdlPrinting{
   		return model;
 	}
 	
+	def print_mdef_SimpleParameter(String symbId, AnyExpression expr){
+		var param = '''<SimpleParameter symbId = "«symbId»"/>''';
+		if (expr != null){
+			if (expr.expression != null){
+				param =  
+				'''
+					<SimpleParameter symbId = "«symbId»">
+						«expr.expression.print_Assign»
+					</SimpleParameter>	
+				'''
+			}
+		}
+		return param;
+	}
+	
+	def print_ConditionalStatement(ConditionalStatement s){
+		var symbols = new HashMap<String, ArrayList<Piece>>();
+		s.prepareConditionalSymbols(null, symbols);
+	}	
+	
+	def prepareConditionalSymbols(ConditionalStatement s, Piece parent, HashMap<String, ArrayList<Piece>> symbols){
+		if (s.ifStatement != null){
+			s.ifStatement.addConditionalSymbol(s.expression, parent, symbols);
+		}
+		if (s.elseStatement != null){
+			s.elseStatement.addConditionalSymbol(s.expression.dualExpression, parent, symbols);
+		}		
+		if (s.ifBlock != null){
+			for (b:s.ifBlock.statements){
+				b.addConditionalSymbol(s.expression, parent, symbols);
+			}
+		}
+		if (s.elseBlock != null){
+			for (b:s.elseBlock.statements){
+				b.addConditionalSymbol(s.expression.dualExpression, parent, symbols);
+			}
+		}
+	}	
+	 
+	def addConditionalSymbol(BlockStatement s, OrExpression condition, Piece parent, HashMap<String, ArrayList<Piece>> symbols){
+		if (s.symbol != null){
+			var pieces = symbols.get(s.symbol.identifier); 
+			if (pieces == null) pieces = new ArrayList<Piece>();
+			if (s.symbol.expression != null){
+				if (s.symbol.expression.expression != null){
+					var expression = s.symbol.expression.expression;
+					var Piece piece = new Piece(parent, expression, condition);
+					pieces.add(piece);
+				}
+			}
+			//add or update the map
+			symbols.put(s.symbol.identifier, pieces);
+		}	
+		if (s.statement != null){//nested conditional statement
+			var Piece newParent = new Piece(parent, null, condition);
+			s.statement.prepareConditionalSymbols(newParent, symbols);
+		}
+	}
+	
+	
 	def print_mdef_RandomVariable(SymbolDeclaration s)'''
 		<RandomVariable symbIdRef="«s.identifier»">
 			«s.print_VariabilityReference»
@@ -296,9 +366,7 @@ class Mdl2PharmML extends MdlPrinting{
 			«ENDIF»
 		</IndividualParameter>
 	'''
-	
-	
-
+		
 	/////////////////////////
 	// I.e Structural Model
 	/////////////////////////
@@ -379,7 +447,7 @@ class Mdl2PharmML extends MdlPrinting{
 		return model;
 	}
 
-
+	//
 	def print_VariabilityReference(SymbolDeclaration s)'''
 		«IF s.randomList != null»
 			«val level = s.randomList.arguments.getAttribute("level")»
@@ -431,7 +499,8 @@ class Mdl2PharmML extends MdlPrinting{
     	«ENDIF»
     </ErrorModel>
 	'''
-			
+		
+	//+			
 	def print_InitialCondition(SymbolDeclaration s)'''
 		«IF s.expression != null»
 			«IF s.expression.odeList != null»
@@ -559,19 +628,20 @@ class Mdl2PharmML extends MdlPrinting{
 	/////////////////////////////////////
 	// General - print expression
 	/////////////////////////////////////
+	//+
 	def print_Assign(Expression expr)'''
 		<Assign>
 			«expr.print_Math_Equation»
 		</Assign>
 	'''
-
-
+	
 	//+
 	def print_Math_Equation(Expression expr)'''
 		<Equation xmlns="«xmlns_math»" writtenVersion="«writtenVersion»">
 			«expr.print_Math_Expr»
 		</Equation>
 	'''
+	
 	
 	//+
 	def print_Math_Expr(Expression expr)'''
@@ -588,8 +658,7 @@ class Mdl2PharmML extends MdlPrinting{
 		«ELSE»
 			«expr.expression.print_Math_LogicOr(0)»
 		«ENDIF»
-	'''
-		
+	'''		
 	
 	//+
 	def print_Math_LogicOpPiece(Expression expr, OrExpression condition)'''

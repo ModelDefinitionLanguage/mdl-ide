@@ -90,11 +90,11 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap(1).before(f.getBlockStatementRule());
 		
 		//If statement
-		c.setLinewrap(1).after(f.getConditionalStatementAccess().getParExpressionAssignment_1());
-		c.setIndentationIncrement().before(f.getConditionalStatementAccess().getIfStatementAssignment_2_0());
-		c.setIndentationDecrement().after(f.getConditionalStatementAccess().getIfStatementAssignment_2_0());
-		c.setIndentationIncrement().before(f.getConditionalStatementAccess().getElseStatementAssignment_3_1_0());
-		c.setIndentationDecrement().after(f.getConditionalStatementAccess().getElseStatementAssignment_3_1_0());
+		c.setLinewrap(1).after(f.getConditionalStatementAccess().getExpressionAssignment_2());
+		c.setIndentationIncrement().before(f.getConditionalStatementAccess().getIfStatementAssignment_4_0());
+		c.setIndentationDecrement().after(f.getConditionalStatementAccess().getIfStatementAssignment_4_0());
+		c.setIndentationIncrement().before(f.getConditionalStatementAccess().getElseStatementAssignment_5_1_0());
+		c.setIndentationDecrement().after(f.getConditionalStatementAccess().getElseStatementAssignment_5_1_0());
 		
 		c.setLinewrap(1).before(f.getModelPredictionBlockStatementRule());
 		c.setLinewrap(1).before(f.getIgnoreListRule());
