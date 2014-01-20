@@ -27,9 +27,9 @@ import java.util.ArrayList
 import java.io.FileNotFoundException
 import java.io.File
 import org.ddmore.mdl.mdl.SymbolModification
-import org.ddmore.mdl.mdl.ConditionalStatement
-import org.ddmore.mdl.mdl.BlockStatement
-import java.util.HashMap
+//import org.ddmore.mdl.mdl.ConditionalStatement
+//import org.ddmore.mdl.mdl.BlockStatement
+//import java.util.HashMap
 
 class Piece {
 	var Piece parent = null;
@@ -305,7 +305,7 @@ class Mdl2PharmML extends MdlPrinting{
 		return param;
 	}
 	
-	def print_ConditionalStatement(ConditionalStatement s){
+	/*def print_ConditionalStatement(ConditionalStatement s){
 		var symbols = new HashMap<String, ArrayList<Piece>>();
 		s.prepareConditionalSymbols(null, symbols);
 	}	
@@ -347,7 +347,7 @@ class Mdl2PharmML extends MdlPrinting{
 			var Piece newParent = new Piece(parent, null, condition);
 			s.statement.prepareConditionalSymbols(newParent, symbols);
 		}
-	}
+	}*/
 	
 	
 	def print_mdef_RandomVariable(SymbolDeclaration s)'''
