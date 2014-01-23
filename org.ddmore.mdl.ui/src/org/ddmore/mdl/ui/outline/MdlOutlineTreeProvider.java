@@ -5,7 +5,6 @@ package org.ddmore.mdl.ui.outline;
 
 import static org.ddmore.mdl.ui.outline.Images.*;
 
-import org.ddmore.mdl.generator.MdlPrinting;
 import org.ddmore.mdl.mdl.AcceptList;
 import org.ddmore.mdl.mdl.AddList;
 import org.ddmore.mdl.mdl.AndExpression;
@@ -86,6 +85,8 @@ import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider;
 
 import com.google.inject.Inject;
+
+import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 /**
  * customization of the default outline structure
@@ -290,7 +291,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	        return imageHelper.getImage(getPath(FALSE));
 	    }
 	    
-	static MdlPrinting printer = new MdlPrinting();
+	static MdlPrinter printer = new MdlPrinter();
 	
 	protected void _createChildren(IOutlineNode parentNode, Mcl mcl) {
 		for (EObject element : mcl.eContents()) {

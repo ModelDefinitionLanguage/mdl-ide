@@ -9,12 +9,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.eclipse.emf.common.util.URI;
 
-import org.ddmore.mdl.generator.Mdl2Nonmem;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.generator.JavaIoFileSystemAccess;
 import org.eclipse.xtext.resource.XtextResourceSet;
 
 import com.google.inject.Injector;
+
+import eu.ddmore.mdl.generator.Mdl2Nonmem;
 
 public class Main {
 	

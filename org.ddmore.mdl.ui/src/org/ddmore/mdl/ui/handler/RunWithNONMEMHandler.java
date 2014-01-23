@@ -1,7 +1,6 @@
 package org.ddmore.mdl.ui.handler;
 
 import org.ddmore.mdl.controller.RunJobOnTES;
-import org.ddmore.mdl.generator.Mdl2Nonmem;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -22,6 +21,8 @@ import com.google.inject.Provider;
 //import org.eclipse.ui.console.IConsoleDocumentPartitioner;
 //import org.eclipse.ui.console.IConsoleManager;
 //import org.eclipse.ui.console.TextConsole;
+
+import eu.ddmore.mdl.generator.Mdl2Nonmem;
 
 public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
 

@@ -3,17 +3,8 @@
  */
 package org.ddmore.mdl.generator
 
-import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IGenerator
-import org.eclipse.xtext.generator.IFileSystemAccess
-import org.ddmore.mdl.mdl.Mcl
 
-class MdlGenerator extends Mdl2PharmML implements IGenerator{
+class MdlGenerator extends eu.ddmore.mdl.generator.Mdl2PharmML implements IGenerator{
 
- 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
- 		for(m: resource.allContents.toIterable.filter(typeof(Mcl))) {
-			fsa.generateFile(
-				resource.fileName + ".xml", m.convertToPharmML)	
-		}
-	}
 }
