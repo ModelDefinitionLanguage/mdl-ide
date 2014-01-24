@@ -87,6 +87,14 @@
 <!--         </dependency> -->
 <!--     </dependencies> -->
     
+    <dependencies>
+        <dependency>
+            <groupId>eu.ddmore</groupId>
+            <artifactId>converter-toolbox-bundle</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    
 	<build>
 		<resources>
 		<resource>
@@ -175,11 +183,7 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
-				
-		<!-- once the encryption key is changed this can be included : MIFDEV-35 -->
-<!--	                <configuration>
-	                    <pomDependencies>consider</pomDependencies>
-	                </configuration>-->
+	                  <pomDependencies>consider</pomDependencies>
 				      <target>
 				         <artifact>
 				            <groupId>eu.ddmore</groupId>
