@@ -11,6 +11,7 @@ import java.util.Stack;
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.AnyExpressionImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
+import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.BlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
@@ -52,17 +53,15 @@ import org.eclipse.xtext.validation.Check;
 
 public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
-	public final static String MSG_VARIABLE_DEFINED = "A variable with such name already exists";
+	public final static String MSG_VARIABLE_DEFINED  = "A variable with such name already exists";
 	public final static String MSG_PARAMETER_DEFINED = "A parameter with such name already exists";
-	public final static String MSG_FUNCTION_DEFINED = "A function with such name is already defined";
-	public final static String MSG_FUNCTION_UNKNOWN = "Unknown function";
-	//public final static String MSG_SYMBOL_UNKNOWN = "Unresolved reference: parameter, variable, object or formal argument not declared or conditionally declared";
-	//public final static String MSG_PARAMETER_UNKNOWN = "Parameter not declared or conditionally declared";
-	//public final static String MSG_VARIABLE_UNKNOWN = "Variable not declared or conditionally declared";
+	public final static String MSG_FUNCTION_DEFINED  = "A function with such name is already defined";
+	public final static String MSG_FUNCTION_UNKNOWN  = "Unknown function";
+	public final static String MSG_FUNCTION_INVALID = "Invalid function call";
 	
-	public final static String MSG_SYMBOL_UNKNOWN = "Unresolved reference: parameter, variable, object or formal argument not declared";
+	public final static String MSG_SYMBOL_UNKNOWN    = "Unresolved reference: parameter, variable, object or formal argument not declared";
 	public final static String MSG_PARAMETER_UNKNOWN = "Parameter not declared";
-	public final static String MSG_VARIABLE_UNKNOWN = "Variable not declared";
+	public final static String MSG_VARIABLE_UNKNOWN  = "Variable not declared";
 		
 	public final static String MSG_ATTRIBUTE_UNKNOWN = "Unknown attribute";
 	public final static String MSG_ATTRIBUTE_MISSING = "Required attribute is missing";
@@ -169,27 +168,37 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			return attr_req_target;
 		List<String> other = Arrays.asList();
 		return other;
-}
+	}	
 	
-	//final static List<String> attr_funcDecl = Arrays.asList("algo", "sig", "max");
-	//final static List<String> attr_req_funcDecl = Arrays.asList("");
-	
-	//List of recognized mathematical functions
+	//List of recognized mathematical functions (MDL = PharMML)
 	final static List<String> standardFunctions = Arrays.asList(
-			//PharmML
-			"exp", "ln", "minus", "factorial", "sin", "cos", "tan", "sec", "csc", "cot", "sinh", "csch", "coth", "arcsin", 
-			"arccos", "arctan", "arcsec", "arccsc", "arccot", "arcsinh", "arccosh","arctanh", "arcsech", "arccsch", "arccoth", 
-			"floor", "abs", "ceiling", "logit",
-			//MDL
-			"sqrt", "seq",
-			//TEL
-			"update",
-			//TOOL SPECIFIC
-			"runif", "errorexit", "PHI"
-		);
+		"abs", "exp", "factorial", "factl", "gammaln", "ln", "log", "logistic", "logit", "normcdf",
+		"probit", "sqrt", "sin", "cos", "tan", "sec", "csc", "cot", "sinh", "cosh", "tanh", 
+		"sech", "csch", "coth", "arcsin", "arccos", "arctan", "arcsec", "arccsc", 
+		"arccot", "arcsinh", "arccosh", "arctanh", "arcsech", "arccsch", "arccoth", 
+		"floor", "ceiling", "logx", "root", "min", "max");
 	
-	//1=observation, level 2=subject, level 3=study, level 4=country 
+	//List of recognized MDL functions
+	final static List<String> specialFunctions = Arrays.asList("seq", "update", "runif", "errorexit", "PHI");
+	//TODO
+	//Validate named attributes of special functions, e.g., for "seq"
+	//start, stepSize, end
+ 	//start, stepSize, repetition
 
+	//Number of arguments for standard functions 
+	//if a function is not in the list, 1 argument is implied
+	//-1 stands for 1 and more, -2 for 2 and more, etc. 
+	final static HashMap<String, Integer> functionParameters = 
+		new HashMap<String , Integer>() {private static final long serialVersionUID = 1L;
+		{//NOTE: PharmML standard functions (operators) support either 1 or 2 parameters 
+		    put("logx", 2);
+		    put("root", 2);
+		    put("min", 2);
+		    put("max", 2);
+		    put("seq", 3);
+		}
+	};
+	
 	//List of objects
 	static HashSet<String> declaredObjects = new HashSet<String>();
 
@@ -539,11 +548,31 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				}
 				declaredVariables.put(obj.getIdentifier().getName(), varList);
 			}
-			//TODO: add variables from LIBRARY and IMPORT blocks, attribute "output"
+			//Add variables from LIBRARY and IMPORT block's attribute "output" to the list of recognized variables
+			Resource resource = obj.eResource();
+			TreeIterator<EObject> iterator = resource.getAllContents();
+		    while (iterator.hasNext()){
+		    	EObject block = iterator.next();
+		    	if (block instanceof ImportBlockImpl){
+		    		for (ImportedFunction f: ((ImportBlock) block).getFunctions()){
+		    			if (f.getList() != null){
+		    				varList.addAll(extractSymbolNames(f.getList().getArguments(), "output"));
+		    			}
+		    		}
+					declaredVariables.put(obj.getIdentifier().getName(), varList);
+		    	}
+		    	if (block instanceof LibraryBlockImpl){
+		    		for (FunctionCallStatement st: ((LibraryBlock) block).getStatements()){
+		    			if (st.getExpression().getArguments() != null){
+			    			varList.addAll(extractSymbolNames(st.getExpression().getArguments(), "output"));
+		    			}
+		    		}
+					declaredVariables.put(obj.getIdentifier().getName(), varList);
+		    	}
+		    }
 		}
 	}
-	
-	
+		
 	//Update the list of recognised parameters
 	@Check
 	public void updateDeclaredParameterList(Mcl mcl){
@@ -711,13 +740,46 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//Check that the function call is to an existing function
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
-		if (!standardFunctions.contains(call.getIdentifier().getIdentifier()) && 
-				!(isSymbolDeclared(declaredFunctions, call.getIdentifier().getIdentifier(), call.getIdentifier().getObject()))
+		if (!isStandardFunction(call.getIdentifier().getIdentifier())){
+			if(!(isSymbolDeclared(declaredFunctions, call.getIdentifier().getIdentifier(), call.getIdentifier().getObject()))
 				&& !(isSymbolDeclared(externalFunctions, call.getIdentifier().getIdentifier(), call.getIdentifier().getObject()))){
 			warning(MSG_FUNCTION_UNKNOWN, 
 					MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER,
 					MSG_FUNCTION_UNKNOWN, call.getIdentifier().getIdentifier());
+			} else {
+				//declared functions (Task object) or external functions (IMPORT)
+				//TODO: match number of actual parameters with the number of references in param attribute 
+				//or input and output attributes together
+			}
 		}
+		else {//standard function
+			//TODO: check number of expected parameters
+			Integer expected = functionParameters.get(call.getIdentifier().getIdentifier());
+			if (expected == null) expected = 1; //1 by default
+			Integer actual = 0;
+			if (call.getArguments().getArguments() != null)
+				actual = call.getArguments().getArguments().size();
+			if ((expected < 0) && (actual < -expected)){
+				warning(MSG_FUNCTION_INVALID + ": " +  
+						call.getIdentifier().getIdentifier() + " expects " + (-expected) + " or more parameters.", 
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_INVALID, 
+						call.getIdentifier().getIdentifier());
+			}
+			if ((expected >= 0) && (actual < expected)){
+				warning(MSG_FUNCTION_INVALID + ": " +
+						call.getIdentifier().getIdentifier() + " expects " + expected + " parameter(s).", 
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_INVALID, 
+						call.getIdentifier().getIdentifier());
+			}
+		}
+	}
+	
+	//Return true if the function name should be valiadted in MDL without looking for the implementation/import
+	private Boolean isStandardFunction(String funcName){
+		if (standardFunctions.contains(funcName) || specialFunctions.contains(funcName)) return true;
+		return false;
 	}
 		
 	////////////////////////////////////////////////////////////////
@@ -908,22 +970,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    			//Compare reference with references in FunctionCall param attribute
 	    			//Does not guarantee the correctness as references may occur in expressions
 	    			FunctionCall funcCall = s.getExpression();
-	       			for (Argument x: funcCall.getArguments().getArguments()){
-	       				if (x.getIdentifier().equals("param")){
-	       					if (x.getExpression().getList() != null){
-	       						for (Argument paramArg: x.getExpression().getList().getArguments().getArguments()){
-	       							TreeIterator<EObject> paramIterator = paramArg.getExpression().eAllContents();
-	       							while (paramIterator.hasNext()){
-	       						    	EObject paramObj = paramIterator.next();
-	       						    	if (paramObj instanceof FullyQualifiedSymbolNameImpl){
-	       						    		FullyQualifiedSymbolName foundParam = (FullyQualifiedSymbolName) paramObj;
-	       						    		params.add(foundParam.getIdentifier());
-	       						    	}
-	       							}
-	       						}
-	       					}
-	       				}
-	       			}
+	    			params.addAll(extractSymbolNames(funcCall.getArguments(), "param"));
 	       			FormalArgument paramRef = ref.getSelectors().get(0).getIdentifier();
 	       			if (paramRef != null){
 	       				if (!params.contains(paramRef.getIdentifier())){
@@ -955,6 +1002,31 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		String res = "{ ";
 		for (String str: list) res += str + "; ";
 		return res + "}";
+	}
+	
+	public ArrayList<String> extractSymbolNames(Arguments args, String attrName){
+		ArrayList<String> params = new ArrayList<String>();	
+		if (args != null){
+			if (args.getArguments() != null){
+				for (Argument x: args.getArguments()){
+					if (x.getIdentifier().equals(attrName)) {
+						if (x.getExpression().getList() != null) {
+							for (Argument paramArg : x.getExpression().getList().getArguments().getArguments()) {
+								TreeIterator<EObject> paramIterator = paramArg.getExpression().eAllContents();
+								while (paramIterator.hasNext()) {
+									EObject paramObj = paramIterator.next();
+									if (paramObj instanceof FullyQualifiedSymbolNameImpl) {
+										FullyQualifiedSymbolName foundParam = (FullyQualifiedSymbolName) paramObj;
+										params.add(foundParam.getIdentifier());
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return params;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
