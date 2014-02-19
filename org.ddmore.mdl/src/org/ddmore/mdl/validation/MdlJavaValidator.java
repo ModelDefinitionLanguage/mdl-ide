@@ -33,7 +33,6 @@ import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
 import org.ddmore.mdl.mdl.impl.ParameterDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.PrimaryImpl;
-import org.ddmore.mdl.mdl.impl.RandomListImpl;
 import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
@@ -85,8 +84,9 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//Model object
 	final static List<String> attr_inputVariables = Arrays.asList("value", "use", "units", "type", "level");
 	
-	final static List<String> attr_random = Arrays.asList("type", "mean", "variance", "level");
-	final static List<String> attr_req_random = Arrays.asList("type", "mean", "variance");
+	//TODO implement check for distribution attributes
+	//final static List<String> attr_random = Arrays.asList("type", "mean", "variance", "level");
+	final static List<String> attr_req_random = Arrays.asList("type");//, "mean", "variance");
 	
 	final static List<String> attr_library = Arrays.asList("model", "ncmt", "param", "input", "output",
 			"distribution", "elimination", "parameterization", "trans");
@@ -124,8 +124,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			return attr_variability_subblock;
 		if (obj instanceof InputVariablesBlockImpl)
 			return attr_inputVariables;
-		if (obj instanceof RandomVariableDefinitionBlockImpl)
-			return attr_random;
+		//if (obj instanceof RandomVariableDefinitionBlockImpl)
+		//	return attr_random;
 		if (obj instanceof LibraryBlockImpl)
 			return attr_library;
 		if (obj instanceof OdeBlockImpl)
@@ -904,7 +904,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
 		String varName = ref.getParent().getIdentifier();
 		Resource resource = ref.eResource();
-		LinkedList<Argument> args = new LinkedList<Argument>();			
+		LinkedList<Argument> args = new LinkedList<Argument>();		
 		TreeIterator<EObject> iterator = resource.getAllContents();
 	    while (iterator.hasNext()){
 	    	EObject obj = iterator.next();
@@ -921,10 +921,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	       						for (Argument x: s.getExpression().getOdeList().getArguments().getArguments())
 	           						args.add(x);
 	    			}
-	    			if (s.getRandomList() != null)
-	       				if (s.getRandomList().getArguments() != null)
-	   						for (Argument x: s.getRandomList().getArguments().getArguments())
-	       						args.add(x);
 	    		}
 	    	}
 	    	if (obj instanceof SymbolModificationImpl){
@@ -1036,7 +1032,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	@Check
 	public void checkRequiredArguments(Arguments args){
 		EObject container = args.eContainer();
-		if (container instanceof ListImpl || container instanceof OdeListImpl || container instanceof RandomListImpl )
+		if (container instanceof ListImpl || container instanceof OdeListImpl)
 			container = container.eContainer();
 		if (container instanceof AnyExpressionImpl)
 			container = container.eContainer();
@@ -1064,12 +1060,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		}
 	}
 	
+	//TODO add check of DistributionAttributes
+	
 	@Check
 	public void checkAllArguments(Argument argument){
 		EObject argContainer = argument.eContainer();	
 		if (!(argContainer instanceof ArgumentsImpl)) return;
 		EObject container = argContainer.eContainer();
-		if (container instanceof ListImpl || container instanceof OdeListImpl || container instanceof RandomListImpl)
+		if (container instanceof ListImpl || container instanceof OdeListImpl)
 			container = container.eContainer();
 		if (container instanceof AnyExpressionImpl)
 			container = container.eContainer();

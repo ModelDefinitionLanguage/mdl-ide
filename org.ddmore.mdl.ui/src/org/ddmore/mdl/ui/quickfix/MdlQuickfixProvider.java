@@ -16,10 +16,11 @@ import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.Categorical;
 import org.ddmore.mdl.mdl.ConditionalExpression;
 import org.ddmore.mdl.mdl.Continuous;
-import org.ddmore.mdl.mdl.Covariate;
 import org.ddmore.mdl.mdl.DesignBlock;
 import org.ddmore.mdl.mdl.DesignBlockStatement;
 import org.ddmore.mdl.mdl.Distribution;
+import org.ddmore.mdl.mdl.DistributionArgument; 
+import org.ddmore.mdl.mdl.DistributionArguments;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.Expression;
@@ -37,7 +38,6 @@ import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlFactory;
-//import org.ddmore.mdl.mdl.Missing;
 import org.ddmore.mdl.mdl.MixtureBlock;
 import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
@@ -68,6 +68,7 @@ import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
+import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.HeaderBlockImpl;
@@ -157,7 +158,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
     final static List<String> distribution_values = Arrays.asList("Normal", "Binomial", "Poisson", "Student_T", "MVNormal");
     final static List<String> use_values = Arrays.asList("mdv", "id", "dv", "idv", "dvid", "amt");
     final static List<String> likelihood_values = Arrays.asList("likelihood");
-    //final static List<String> missing_values = Arrays.asList("missing");
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Automatically create EObjects
@@ -178,17 +178,10 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			return createContinuousExpression(value);
 		if (categorical_values.contains(value))
 			return createCategoricalExpression(value);
-		if (covariate_values.contains(value))
-			return createCovariateExpression(value);
-		if (distribution_values.contains(value))
-			return createDistributionExpression(value);
 		if (use_values.contains(value))
 			return createUseExpression(value);
 		if (likelihood_values.contains(value))
 			return createLikelyhoodExpression(value);
-		//if (missing_values.contains(value))
-		//	return createMissingExpression(value);
-			//all others are strings
 		return createStringExpression(value);
 	}
 	
@@ -197,16 +190,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		tl.setIdentifier(value);
 		EnumType t = MdlFactory.eINSTANCE.createEnumType();
 		t.setCategorical(tl);
-		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
-		expr.setType(t);
-		return expr;
-	}
-	
-	private AnyExpression createDistributionExpression(String value) {
-		Distribution tl = MdlFactory.eINSTANCE.createDistribution();
-		tl.setIdentifier(value);
-		EnumType t = MdlFactory.eINSTANCE.createEnumType();
-		t.setDistribution(tl);
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		expr.setType(t);
 		return expr;
@@ -222,26 +205,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return expr;
 	}
 	
-	/*private AnyExpression createMissingExpression(String value) {
-		Missing tl = MdlFactory.eINSTANCE.createMissing();
-		tl.setIdentifier(value);
-		EnumType t = MdlFactory.eINSTANCE.createEnumType();
-		t.setMissing(tl);
-		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
-		expr.setType(t);
-		return expr;
-	}*/
-	
-	private AnyExpression createCovariateExpression(String value) {
-		Covariate tl = MdlFactory.eINSTANCE.createCovariate();
-		tl.setIdentifier(value);
-		EnumType t = MdlFactory.eINSTANCE.createEnumType();
-		t.setCovariate(tl);
-		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
-		expr.setType(t);
-		return expr;
-	}
-
 	AnyExpression createTargetLanguageExpression(String value){
 		TargetLanguage tl = MdlFactory.eINSTANCE.createTargetLanguage();
 		tl.setIdentifier(value);
@@ -290,6 +253,11 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	AnyExpression createNumericExpression(String value){
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
+		expr.setExpression(createNumberExpression(value));
+		return expr;
+	}
+	
+	Expression createNumberExpression(String value){
 		Expression e = MdlFactory.eINSTANCE.createExpression();
 		ConditionalExpression cond = MdlFactory.eINSTANCE.createConditionalExpression();
 		OrExpression or = MdlFactory.eINSTANCE.createOrExpression();
@@ -310,8 +278,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		or.getExpression().add(and);
 		cond.setExpression(or);
 		e.setConditionalExpression(cond);
-		expr.setExpression(e);
-		return expr;
+		return e;
 	}
 	
 	AnyExpression createReferenceExpression(String value){
@@ -396,18 +363,61 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return attr;
 	}
 	
+	//TODO: test!
+	DistributionArgument createDistributionArgument(String attrName, String attrValue){
+		DistributionArgument attr = MdlFactory.eINSTANCE.createDistributionArgument();
+		if (attrName != null)
+			attr.setIdentifier(attrName);
+		if (attrName.equals("type")){
+			Distribution distribution = MdlFactory.eINSTANCE.createDistribution();
+			distribution.setIdentifier(attrValue);
+			attr.setDistribution(distribution);
+		}
+		else {
+			Primary primary = MdlFactory.eINSTANCE.createPrimary();
+			try{
+				Double.parseDouble(attrValue);
+				primary.setNumber(attrValue);
+			}
+			catch(NumberFormatException e){
+				if (attrValue.contains(" ") || attrValue.contains(", ") || attrValue.contains("; ")){
+					//a list of values 1 2 3 or 1, 2, 3 or 1; 2; 3
+					Vector vector = MdlFactory.eINSTANCE.createVector();
+					String[] tokens = attrValue.split("(;|,|\\s)");
+					for (int i = 0; i < tokens.length; i++){
+						try{
+							Expression expr = createNumberExpression(tokens[i]);
+							vector.getValues().add(expr);
+						} catch (Exception e1){
+							//skip??
+						}
+					}
+				} else {
+					if (attrValue.contains(".")){//attribute
+						//TODO finish on demand
+					} else {//variable
+						FullyQualifiedSymbolName ref = MdlFactory.eINSTANCE.createFullyQualifiedSymbolName();
+						ref.setIdentifier(attrValue);
+						primary.setSymbol(ref);
+					}
+				}
+			}
+			attr.setValue(primary);
+		}
+		return attr;
+	}
+	
 	RandomList createRandomList(String[] attrNames, String[] attrValues){
 		RandomList list = MdlFactory.eINSTANCE.createRandomList();	
 		list.setIdentifier("~");
-		Arguments args = MdlFactory.eINSTANCE.createArguments();				
+		DistributionArguments args = MdlFactory.eINSTANCE.createDistributionArguments();				
 		for (int i = 0; i< attrNames.length; i++){
-			Argument attr = createArgument(attrNames[i], attrValues[i]);
+			DistributionArgument attr = createDistributionArgument(attrNames[i], attrValues[i]);
 			args.getArguments().add(attr);
 		}
 		list.setArguments(args);
 		return list;
 	}
-
 		
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Fix variable references

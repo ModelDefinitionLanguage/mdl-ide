@@ -361,7 +361,8 @@ BlockStatement:
 ;
 
 TargetBlock: 
-	identifier = 'TARGET_CODE' ('(' arguments = Arguments ')' )? BEGIN  externalCode = EXTERNAL_CODE END
+	identifier = 'TARGET_CODE' ('(' arguments = Arguments ')' )? 
+	BEGIN  externalCode = EXTERNAL_CODE END
 ;
 
 TargetLanguage:
@@ -406,25 +407,21 @@ SymbolDeclaration:
 EnumType:
 	categorical = Categorical | 
 	continuous = Continuous | 
-	covariate = Covariate |
-	distribution = Distribution |
 	use = UseType |       
 	likelyhood = Likelyhood |
-	//missing = Missing |
 	target = TargetLanguage
 ;
 
-//Missing:
-//	identifier = 'MISSING'
-//;
-
 Likelyhood:
 	identifier = 'LIKELIHOOD'	
-	//identifier = 'likelihood'	
 ;
 
 UseType:
-	identifier = ('mdv' | 'id' | 'dv' | 'idv' | 'dvid' | 'amt') 
+	identifier = (
+		'id'| 'idv' |'amt' | 'dv' | 'dvid' | 'ytype' | 'itype' |
+		'covariate' | 'reg' | 'time' | 'dose'| 
+		'cat' | 'occ' | 'occasion' | 'adm' | 'cens' | 'limit' | 'rate' | 'tinf' | 
+		'ss' | 'addl' | 'ii' | 'tau' | 'mdv' | 'evid')
 ;
 
 Categorical:
@@ -435,16 +432,37 @@ Continuous:
 	identifier = 'continuous'
 ;
 
-Covariate:
-	identifier = 'covariate'
-;
-
 Distribution: 
-	identifier = ('Normal' |
+	identifier = (
+	'Bernoulli' |
+	'Beta' |
 	'Binomial' |
+	'Categorical' | 
+	'Cauchy' | 	
+	'ChiSquare' |
+	'Dirichlet' | 	
+	'Exponential' | 	
+	'FDistribution' |
+	'Gamma' | 
+	'Geometric' | 
+	'Hypergeometric' |
+	'InverseGamma' |	
+	'Laplace' |	
+	'Logistic' |
+	'LogNormal'	|
+	'MixtureModel' | 	
+	'Multinomial' |
+	'MultivariateNormal' | 	
+	'MultivariateStudentT' | 	
+	'NegativeBinomial' |
+	'Normal' |
+	'NormalInverseGamma' |
+	'Pareto' |
 	'Poisson' |
-	'Student_T' |
-	'MVNormal') 
+	'StudentT' |
+	'Uniform' |
+	'Weibull' |
+	'Wishart') 
 ;
 
 AnyExpression:
@@ -467,8 +485,15 @@ OdeList:
 ;
 
 RandomList:
-	identifier = '~' '(' arguments = Arguments ')'
+	identifier = '~' '(' arguments = DistributionArguments ')'
 ;
+
+DistributionArguments:
+	arguments += DistributionArgument (=> ',' arguments += DistributionArgument)*
+;
+
+DistributionArgument: 
+	(identifier = ID "=")? (distribution = Distribution | value = Primary);
 
 Arguments: 
 	arguments += Argument (=> ',' arguments += Argument)*
@@ -532,6 +557,7 @@ Primary:
 	vector = Vector
 ;
 
+//TODO simplify, vector of values is enough
 Vector:
 	identifier = 'c' '(' values += Expression (=> ',' values += Expression)* ')'
 ;	
