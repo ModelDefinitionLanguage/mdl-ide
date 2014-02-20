@@ -58,6 +58,8 @@ public class Images {
 	public static final String TASK_FUNCTION_DECLARATION = TASK;
 	public static final String FORMAL_ARGUMENT = ATTRIBUTE;
 	public static final String ESTIMATE_TASK = TASK;
+	public static final String DISTRIBUTION_ATTRIBUTE = ATTRIBUTE;
+	public static final String PRIMARY = EXPRESSION;
 
 	public static final String GROUP_VARIABLES_BLOCK = LIST;
 	public static final String RANDOM_VARIABLES_BLOCK = LIST;

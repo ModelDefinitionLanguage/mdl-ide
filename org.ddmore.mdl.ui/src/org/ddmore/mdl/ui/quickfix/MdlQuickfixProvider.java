@@ -281,6 +281,12 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return e;
 	}
 	
+	Primary createPrimary(String value){
+		Primary primary =  MdlFactory.eINSTANCE.createPrimary();
+		primary.setNumber(value);
+		return primary;
+	}
+	
 	AnyExpression createReferenceExpression(String value){
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		Expression e = MdlFactory.eINSTANCE.createExpression();
@@ -386,8 +392,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 					String[] tokens = attrValue.split("(;|,|\\s)");
 					for (int i = 0; i < tokens.length; i++){
 						try{
-							Expression expr = createNumberExpression(tokens[i]);
-							vector.getValues().add(expr);
+							Primary value = createPrimary(tokens[i]);
+							vector.getValues().add(value);
 						} catch (Exception e1){
 							//skip??
 						}

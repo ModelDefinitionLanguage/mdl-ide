@@ -493,7 +493,8 @@ DistributionArguments:
 ;
 
 DistributionArgument: 
-	(identifier = ID "=")? (distribution = Distribution | value = Primary);
+	(identifier = ID "=")? (distribution = Distribution | value = Primary | component = RandomList)
+; 
 
 Arguments: 
 	arguments += Argument (=> ',' arguments += Argument)*
@@ -550,16 +551,16 @@ UnaryExpression:
 	;
 
 Primary:
-	functionCall = FunctionCall |
 	number = NUMBER |
+	vector = Vector |
 	symbol = FullyQualifiedSymbolName | //Ref to VariableName +, ParameterName +, ObjectName or formal argument 
-	attribute = FullyQualifiedArgumentName |
-	vector = Vector
+	attribute = FullyQualifiedArgumentName | 
+	functionCall = FunctionCall 
 ;
 
 //TODO simplify, vector of values is enough
 Vector:
-	identifier = 'c' '(' values += Expression (=> ',' values += Expression)* ')'
+	identifier = 'c' '(' values += Primary (=> ',' values += Primary)* ')'
 ;	
 
 FullyQualifiedSymbolName: 	//ref VariableName, ParameterName or FunctionName (depending on the container)
