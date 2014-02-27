@@ -20,7 +20,6 @@ Require-Bundle: org.eclipse.xtext;bundle-version="[2.4.0,2.4.1)";visibility:=ree
  org.eclipse.xtend.lib.gwt;bundle-version="2.4.0",
  org.eclipse.xtext.xbase.lib.gwt,
  org.ops4j.pax.logging.pax-logging-api;bundle-version="1.7.0",
- eu.ddmore.converter-toolbox-bundle;bundle-version="0.0.1", 
  org.eclipse.core.resources
 Export-Package: org.ddmore.mdl,
  org.ddmore.mdl.services,
@@ -32,6 +31,5 @@ Export-Package: org.ddmore.mdl,
  org.ddmore.mdl.parser.antlr.internal,
  org.ddmore.mdl.validation,
  org.ddmore.mdl.scoping,
- org.ddmore.mdl.generator,
  org.ddmore.mdl.formatting
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

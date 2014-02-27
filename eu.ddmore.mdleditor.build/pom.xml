@@ -87,13 +87,6 @@
 <!--         </dependency> -->
 <!--     </dependencies> -->
     
-    <dependencies>
-        <dependency>
-            <groupId>eu.ddmore</groupId>
-            <artifactId>converter-toolbox-bundle</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
     
 	<build>
 		<resources>
@@ -442,6 +435,14 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>eu.ddmore</groupId>
+			<artifactId>converter-toolbox-bundle</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 
 	<url>http://ddmore.eu/</url>
 	<name>Drug Disease Model Resources Framework</name>

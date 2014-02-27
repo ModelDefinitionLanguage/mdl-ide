@@ -1,6 +1,5 @@
 package org.ddmore.mdl.ui.handler;
 
-import org.ddmore.mdl.generator.MdlGenerator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -23,11 +22,13 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+import eu.ddmore.mdl.generator.Mdl2PharmML;
+
 
 public class ConvertToPharmMLHandler extends AbstractHandler implements IHandler {
 	
 	@Inject
-	private MdlGenerator generator;
+	private Mdl2PharmML generator;
 
 	@Inject
 	private Provider<JavaIoFileSystemAccess > fileAccessProvider;
