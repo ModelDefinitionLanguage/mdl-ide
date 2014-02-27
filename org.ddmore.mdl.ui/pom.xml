@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<relativePath>../eu.ddmore.mdleditor.build/pom.xml</relativePath>
 		<groupId>eu.ddmore</groupId>
@@ -13,4 +13,12 @@
 
 	<artifactId>org.ddmore.mdl.ui</artifactId>
 	<packaging>eclipse-plugin</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>eu.ddmore</groupId>
+			<artifactId>converter-toolbox-bundle</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
 </project> 
