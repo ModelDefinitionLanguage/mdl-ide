@@ -2,7 +2,6 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<relativePath>../../MDLEditor/eu.ddmore.mdleditor.build/pom.xml</relativePath>
 		<groupId>eu.ddmore</groupId>
 		<artifactId>eu.ddmore.parent</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
