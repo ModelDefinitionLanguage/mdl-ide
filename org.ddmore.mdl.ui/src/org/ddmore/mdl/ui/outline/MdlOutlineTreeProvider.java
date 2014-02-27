@@ -49,6 +49,7 @@ import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.RandomList;
+import org.ddmore.mdl.mdl.RandomVariable;
 import org.ddmore.mdl.mdl.RemoveList;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolList;
@@ -679,12 +680,15 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				 p.getIdentifier(),
 				false);
 		}
-		if (p.getRandomList() != null){
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, RandomVariable v){
+		if (v.getRandomList() != null){
 			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.SYMBOL_DECLARATION__RANDOM_LIST,
-				(p.getFunction() != null)? getLogImage(): _image(p),
-				(p.getFunction() != null)? p.getFunction() + '(' + p.getIdentifier() + ')' : p.getIdentifier(),
+				v,
+				MdlPackage.Literals.RANDOM_VARIABLE__RANDOM_LIST,
+				(v.getFunction() != null)? getLogImage(): _image(v),
+				(v.getFunction() != null)? v.getFunction() + '(' + v.getIdentifier() + ')' : v.getIdentifier(),
 				false);
 		}
 	}
@@ -716,13 +720,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 					_image(p),
 					 printer.toStr(p),
 					true);
-		if (p.getFunctionCall() != null)
-			createEStructuralFeatureNode(parentNode,
-					p,
-					MdlPackage.Literals.PRIMARY__FUNCTION_CALL,
-					_image(p),
-					 printer.toStr(p),
-					false);
 		if (p.getSymbol() != null)
 			createEStructuralFeatureNode(parentNode,
 					p,
@@ -730,13 +727,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 					_image(p),
 					 printer.toStr(p),
 					true);
-		if (p.getAttribute() != null)
-			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.PRIMARY__ATTRIBUTE,
-				_image(p),
-				 printer.toStr(p),
-				true);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, DropList obj) {

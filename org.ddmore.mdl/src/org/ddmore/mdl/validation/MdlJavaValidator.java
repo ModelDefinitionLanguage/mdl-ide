@@ -213,7 +213,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
 	//List of declared parameters per object
 	static HashMap<String, ArrayList<String>> declaredParameters = new HashMap<String, ArrayList<String>>();
-
+	
 	//List of declared variability subblocks diag and matrix (to match with same blocks)
 	static HashSet<String> variabilitySubblockNames = new HashSet<String>();
 	
@@ -450,6 +450,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		}
 	}
 	
+	//TODO: Split variables and random variables!!!
 	//Update the list of recognised variables
 	@Check
 	public void updateDeclaredVariableList(Mcl mcl){
@@ -460,7 +461,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				for (ModelObjectBlock block: obj.getModelObject().getBlocks()){
 					//RANDOM_VARIABLE_DEFINITION
 					if (block.getRandomVariableDefinitionBlock() != null){
-						for (SymbolDeclaration s: block.getRandomVariableDefinitionBlock().getVariables()){
+						for (RandomVariable s: block.getRandomVariableDefinitionBlock().getVariables()){
 							varList.add(s.getIdentifier());
 						}
 					}
@@ -674,8 +675,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					OrExpression orExpr = arg.getExpression().getExpression().getConditionalExpression().getExpression();
 					AndExpression andExpr = orExpr.getExpression().get(0);
 					LogicalExpression logicalExpr = andExpr.getExpression().get(0);	
-					if (logicalExpr.getExpression() != null){	
-						AdditiveExpression addExpr = logicalExpr.getExpression().get(0);
+					if (logicalExpr.getExpression1() != null){	
+						AdditiveExpression addExpr = logicalExpr.getExpression1();
 						if (addExpr.getString() != null)
 							for (String str: addExpr.getString()) res += str;
 					}
@@ -807,7 +808,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
 
 		/*References to variables*/
-		//OUTPUT, INLINE, HEADER
+		//OUTPUT, INLINE
 		//DESIGN: VariableList and DesignBlockStatement
 		if (container instanceof OutputVariablesBlockImpl || 
 				container instanceof InlineBlockImpl ||

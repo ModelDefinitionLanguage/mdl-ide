@@ -54,6 +54,7 @@ import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.RandomList;
+import org.ddmore.mdl.mdl.RandomVariable;
 import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
@@ -267,13 +268,11 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		MultiplicativeExpression mult =  MdlFactory.eINSTANCE.createMultiplicativeExpression();
 		PowerExpression power = MdlFactory.eINSTANCE.createPowerExpression();
 		UnaryExpression unary = MdlFactory.eINSTANCE.createUnaryExpression();
-		Primary primary =  MdlFactory.eINSTANCE.createPrimary();
-		primary.setNumber(value);
-		unary.setPrimary(primary);
+		unary.setNumber(value);
 		power.getExpression().add(unary);
 		mult.getExpression().add(power);
 		add.getExpression().add(mult);
-		logical.getExpression().add(add);
+		logical.setExpression1(add);
 		and.getExpression().add(logical);
 		or.getExpression().add(and);
 		cond.setExpression(or);
@@ -298,15 +297,13 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		MultiplicativeExpression mult =  MdlFactory.eINSTANCE.createMultiplicativeExpression();
 		PowerExpression power = MdlFactory.eINSTANCE.createPowerExpression();
 		UnaryExpression unary = MdlFactory.eINSTANCE.createUnaryExpression();
-		Primary primary =  MdlFactory.eINSTANCE.createPrimary();
 		FullyQualifiedSymbolName symbol = MdlFactory.eINSTANCE.createFullyQualifiedSymbolName();
 		symbol.setIdentifier(value);
-		primary.setSymbol(symbol);
-		unary.setPrimary(primary);
+		unary.setSymbol(symbol);
 		power.getExpression().add(unary);
 		mult.getExpression().add(power);
 		add.getExpression().add(mult);
-		logical.getExpression().add(add);
+		logical.setExpression1(add);
 		and.getExpression().add(logical);
 		or.getExpression().add(and);
 		cond.setExpression(or);
@@ -324,7 +321,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		LogicalExpression logical = MdlFactory.eINSTANCE.createLogicalExpression();
 		AdditiveExpression add =  MdlFactory.eINSTANCE.createAdditiveExpression();
 		add.getString().add(value);
-		logical.getExpression().add(add);
+		logical.setExpression1(add);
 		and.getExpression().add(logical);
 		or.getExpression().add(and);
 		cond.setExpression(or);
@@ -544,12 +541,12 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 				if (obj != null){
 					for (ModelObjectBlock block: obj.getBlocks()){
 						if (block.getRandomVariableDefinitionBlock() != null){
-							insertSymbolDeclaration(block.getRandomVariableDefinitionBlock(), issue.getData()[0]);
+							insertRandomVariable(block.getRandomVariableDefinitionBlock(), issue.getData()[0]);
 							return;
 						}
 					}
 					RandomVariableDefinitionBlock block = MdlFactory.eINSTANCE.createRandomVariableDefinitionBlock();
-					insertSymbolDeclaration(block, issue.getData()[0]);
+					insertRandomVariable(block, issue.getData()[0]);
 					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
 					mdlBlock.setRandomVariableDefinitionBlock(block);
 					obj.getBlocks().add(mdlBlock); 
@@ -558,8 +555,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		});
 	}
 	
-	void insertSymbolDeclaration(RandomVariableDefinitionBlock block, String varName){
-		SymbolDeclaration newSymbol = MdlFactory.eINSTANCE.createSymbolDeclaration();
+	void insertRandomVariable(RandomVariableDefinitionBlock block, String varName){
+		RandomVariable newSymbol = MdlFactory.eINSTANCE.createRandomVariable();
 		newSymbol.setIdentifier(varName);
 		//~ (type=Normal, mean=0, variance=PPV_STATUS,level=ID)
 		String[] attrNames = {"type", "mean", "variance", "level"};
