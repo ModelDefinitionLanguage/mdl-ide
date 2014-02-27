@@ -13,12 +13,5 @@
 
 	<artifactId>org.ddmore.mdl.ui</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<dependencies>
-		<dependency>
-			<groupId>eu.ddmore</groupId>
-			<artifactId>converter-toolbox-bundle</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
 
 </project> 
