@@ -60,7 +60,7 @@ ModelPredictionBlock:
 
 RandomVariableDefinitionBlock:
 	identifier = 'RANDOM_VARIABLE_DEFINITION' 
-	BEGIN variables += SymbolDeclaration* END //new Variable +
+	BEGIN variables += RandomVariable* END //new Variable +
 ;
 
 InputVariablesBlock:
@@ -142,7 +142,7 @@ DataObjectBlock:
  
 HeaderBlock:
  	identifier='HEADER' 
- 	BEGIN variables += SymbolModification* END  //ref to Variable +
+ 	BEGIN variables += SymbolDeclaration* END  //new Variable -
  ;
  
  FileBlock:
@@ -399,9 +399,12 @@ ParameterDeclaration:
 
 //new VariableName, new PropertyName, new ParameterName? (PRIOR_PARAMETERS)
 SymbolDeclaration:
-	(identifier = ID (("=" expression = AnyExpression)? | randomList = RandomList)) | 
-	(function = ID '(' identifier = ID ')' randomList = RandomList)
-	//special function, new VariableName
+	identifier = ID ("=" expression = AnyExpression)?
+;
+
+RandomVariable:
+	((identifier = ID) | (function = ID '(' identifier = ID ')')) 
+	randomList = RandomList
 ;
 
 EnumType:
@@ -468,7 +471,8 @@ Distribution:
 AnyExpression:
 	expression = Expression | 
 	list = List | 
-	odeList = OdeList | 
+	odeList = OdeList |
+	vector = Vector |
 	type = EnumType
 ;
 
@@ -530,12 +534,14 @@ AndExpression:
 	expression += LogicalExpression (operator += LogicalAndOperator expression += LogicalExpression)*;	
 
 LogicalExpression:
-	(negation = "!")? (boolean = BOOLEAN | 
-	expression += AdditiveExpression (operator += LogicalOperator expression += AdditiveExpression)*);
+	(negation = "!")? 
+	((boolean = BOOLEAN) | 
+	(expression1 = AdditiveExpression (operator = LogicalOperator expression2 = AdditiveExpression)?))
+;
 
 AdditiveExpression:
-	expression += MultiplicativeExpression (operator += AdditiveOperator expression+=MultiplicativeExpression)* |
-	string += STRING (operator += '+' string += STRING)*
+	(expression += MultiplicativeExpression (operator += AdditiveOperator expression+=MultiplicativeExpression)*) |
+	(string += STRING (operator += '+' string += STRING)*)
 ;
 
 MultiplicativeExpression:
@@ -547,15 +553,16 @@ PowerExpression:
 UnaryExpression:
 	operator = UnaryOperator expression = UnaryExpression |  
 	parExpression = ParExpression |
-	primary = Primary
-	;
+	number = NUMBER |
+	symbol = FullyQualifiedSymbolName | //Ref to VariableName +, ParameterName +, ObjectName or formal argument 
+	attribute = FullyQualifiedArgumentName | 
+	functionCall = FunctionCall 
+;
 
 Primary:
 	number = NUMBER |
 	vector = Vector |
-	symbol = FullyQualifiedSymbolName | //Ref to VariableName +, ParameterName +, ObjectName or formal argument 
-	attribute = FullyQualifiedArgumentName | 
-	functionCall = FunctionCall 
+	symbol = FullyQualifiedSymbolName //Ref to VariableName +, ParameterName +, ObjectName or formal argument 
 ;
 
 //TODO simplify, vector of values is enough
