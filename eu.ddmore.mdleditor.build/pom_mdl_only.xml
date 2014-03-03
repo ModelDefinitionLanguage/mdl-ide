@@ -434,12 +434,6 @@
 			<groupId>eu.ddmore</groupId>
 			<artifactId>converter-toolbox-bundle</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.eclipse.emf</groupId>
-				</exclusion>
-			</exclusions>
-
 		</dependency>
 	</dependencies>
 
