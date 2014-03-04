@@ -9,28 +9,28 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>../eu.ddmore.mdleditor.target</module>
-		<!--module>../org.ddmore.mdl</module-->
+		<!--module>../org.ddmore.mdl</module -->
 		<module>../org.ddmore.mdl.ui</module>
 		<module>../eu.ddmore.mdleditor.application</module>
 		<module>../org.ddmore.mdl.tests</module>
 		<module>../org.ddmore.mdl.sdk</module>
 		<!-- once the encryption key is changed this can be included : MIFDEV-35 
-		<module>../com.mango.mif.client.feature</module> 
- 		<module>../com.mango.mif.client.site</module>-->
+			<module>../com.mango.mif.client.feature</module> <module>../com.mango.mif.client.site</module> -->
 		<module>../eu.ddmore.mdleditor.site</module>
 	</modules>
 
 	<properties>
-        <mif.version>2.1.6-SNAPSHOT</mif.version>
-        
-        <!-- once the encryption key is changed this can be replaced using the maven artifact : MIFDEV-35 -->
-        <mifclient.repo.url>https://sourceforge.net/projects/ddmore/files/update/mifclient/2.1/ci/</mifclient.repo.url>
+		<mif.version>2.1.6-SNAPSHOT</mif.version>
+
+		<!-- once the encryption key is changed this can be replaced using the 
+			maven artifact : MIFDEV-35 -->
+		<mifclient.repo.url>https://sourceforge.net/projects/ddmore/files/update/mifclient/2.1/ci/</mifclient.repo.url>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jacoco.version>0.6.0.201210061924</jacoco.version>
 		<mvn.clean.plugin.version>2.4.1</mvn.clean.plugin.version>
-        
-        <!-- Tycho -->
+
+		<!-- Tycho -->
 		<tycho.version>0.17.0</tycho.version>
 		<tycho.extras.version>0.17.0</tycho.extras.version>
 		<tycho.repo.url>https://oss.sonatype.org/content/groups/public/</tycho.repo.url>
@@ -49,23 +49,23 @@
 		<sonar.skippedModules>*.tests</sonar.skippedModules>
 		<sonar.skipDesign>true</sonar.skipDesign>
 	</properties>
-	
+
 	<repositories>
-        <repository>
-            <id>xtend</id>
-            <url>${xtend.repo.url}</url>
-        </repository>
-    </repositories>
+		<repository>
+			<id>xtend</id>
+			<url>${xtend.repo.url}</url>
+		</repository>
+	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>fornax.plugin.repository</id>
 			<name>Fornax Plugin Repository</name>
 			<url>${fornax.repo.url}</url>
 		</pluginRepository>
-    	<pluginRepository>
-    		<id>xtend</id>
-    		<url>${xtend.repo.url}</url>
-    	</pluginRepository>
+		<pluginRepository>
+			<id>xtend</id>
+			<url>${xtend.repo.url}</url>
+		</pluginRepository>
 		<pluginRepository>
 			<id>tycho</id>
 			<url>${tycho.repo.url}</url>
@@ -78,27 +78,27 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-<!-- once the encryption key is changed this can be included : MIFDEV-35 -->
-<!--     <dependencies> -->
-<!--         <dependency> -->
-<!--             <groupId>com.mango</groupId> -->
-<!--             <artifactId>MIFClient</artifactId> -->
-<!--             <version>${mif.version}</version> -->
-<!--         </dependency> -->
-<!--     </dependencies> -->
-    
-    
+	<!-- once the encryption key is changed this can be included : MIFDEV-35 -->
+	<!-- <dependencies> -->
+	<!-- <dependency> -->
+	<!-- <groupId>com.mango</groupId> -->
+	<!-- <artifactId>MIFClient</artifactId> -->
+	<!-- <version>${mif.version}</version> -->
+	<!-- </dependency> -->
+	<!-- </dependencies> -->
+
+
 	<build>
 		<resources>
-		<resource>
-			<directory>${basedir}/resources/</directory>
-        </resource>
-        </resources>
-        <plugins>
-              <plugin>
+			<resource>
+				<directory>${basedir}/resources/</directory>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-			    <version>${mvn.clean.plugin.version}</version>
+				<version>${mvn.clean.plugin.version}</version>
 				<configuration>
 					<filesets>
 						<fileset>
@@ -128,17 +128,17 @@
 					</filesets>
 				</configuration>
 			</plugin>
-			
-		      <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-compiler-plugin</artifactId>
-		        <version>3.1</version>
-		        <configuration>
-		          <source>1.6</source>
-		          <target>1.6</target>
-		        </configuration>
-		      </plugin>
-  
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
 			<!-- Code coverage -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
@@ -176,24 +176,24 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
-	                  <pomDependencies>consider</pomDependencies>
-				      <target>
-				         <artifact>
-				            <groupId>eu.ddmore</groupId>
-				            <artifactId>eu.ddmore.mdleditor.target</artifactId>
-				            <version>${project.version}</version>
-				         </artifact>
-				      </target>
+					<pomDependencies>consider</pomDependencies>
+					<target>
+						<artifact>
+							<groupId>eu.ddmore</groupId>
+							<artifactId>eu.ddmore.mdleditor.target</artifactId>
+							<version>${project.version}</version>
+						</artifact>
+					</target>
 					<environments>
 						<environment>
 							<os>win32</os>
 							<ws>win32</ws>
 							<arch>x86_64</arch>
 						</environment>
-						<environment> 
-							<os>win32</os> 
-							<ws>win32</ws> 
-							<arch>x86</arch> 
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
 						</environment>
 						<!-- To support tests on linux box -->
 						<environment>
@@ -202,8 +202,7 @@
 							<arch>x86_64</arch>
 						</environment>
 						<!-- uncomment if you want to build products for other platforms as 
-							well  
-							<environment> <os>linux</os> <ws>gtk</ws> <arch>x86</arch> </environment>  
+							well <environment> <os>linux</os> <ws>gtk</ws> <arch>x86</arch> </environment> 
 							<environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> </environment> -->
 					</environments>
 				</configuration>
@@ -250,9 +249,9 @@
 					<artifactId>tycho-surefire-plugin</artifactId>
 					<version>${tycho.version}</version>
 					<configuration>
-		              	<product>org.eclipse.sdk.ide</product>
-		              	<application>org.eclipse.ui.ide.workbench</application>
-		            </configuration>
+						<product>org.eclipse.sdk.ide</product>
+						<application>org.eclipse.ui.ide.workbench</application>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
@@ -297,7 +296,8 @@
 					</configuration>
 				</plugin>
 
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -325,113 +325,113 @@
 									</action>
 								</pluginExecution>
 								<pluginExecution>
-								    <pluginExecutionFilter>
-								        <groupId>
-								            org.apache.maven.plugins
-								        </groupId>
-								        <artifactId>
-								            maven-antrun-plugin
-								        </artifactId>
-								        <versionRange>
-								            [1.3,)
-								        </versionRange>
-								        <goals>
-								            <goal>run</goal>
-								        </goals>
-								    </pluginExecutionFilter>
-								    <action>
-								        <ignore></ignore>
-								    </action>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-antrun-plugin
+										</artifactId>
+										<versionRange>
+											[1.3,)
+										</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
 								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
 				<plugin>
-				<groupId>org.fornax.toolsupport</groupId>
-				<artifactId>fornax-oaw-m2-plugin</artifactId>
-				<version>${fornax.version}</version>
-				
-				<configuration>
-					<workflowDescriptor>file://${basedir}/src/org/ddmore/mdl/GenerateMdl.mwe2</workflowDescriptor>
-					<workflowEngine>mwe2</workflowEngine>
-					<jvmSettings>
-				    <fork>true</fork>
-				    <jvmArgs>
-				        <jvmArg>-Xms100m</jvmArg>
-				        <jvmArg>-Xmx500m</jvmArg>
-				    </jvmArgs>
-				    </jvmSettings>
-					<force>true</force>
-				    <outletSrcDir>src-gen</outletSrcDir>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>run-workflow</goal>
-						</goals>
-					</execution>
-				 </executions>
-				 <dependencies>
-				 
-					<dependency>
-						<groupId>org.eclipse.emf.mwe</groupId>
-						<artifactId>emf-mwe-utils</artifactId>
-						<version>${xtext.utils.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.eclipse.m2t.xpand</groupId>
-						<artifactId>m2t-xpand-xpand</artifactId>
-						<version>${xtext.utils.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.eclipse.m2t.xpand</groupId>
-						<artifactId>m2t-xpand-xtend-typesystem-emf</artifactId>
-						<version>${xtext.utils.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.eclipse.xtend</groupId>
-						<artifactId>org.eclipse.xtend.standalone</artifactId>
-						<version>${xtend.version}</version>
-					</dependency>
-			        <dependency>
-						<groupId>org.antlr</groupId>
-						<artifactId>antlr-runtime</artifactId>
-						<version>${antlr.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>		    
-		    <plugin>
-			    <groupId>org.eclipse.xtend</groupId>
-			    <artifactId>xtend-maven-plugin</artifactId>
-			    <version>${xtend.version}</version>
-			    <executions>
-			    	<execution>
-			 		   <goals>
-						    <goal>compile</goal>
-			    			<goal>testCompile</goal>
-			    		</goals>
-					    <configuration>
-                            <outputDirectory>${basedir}/xtend-gen</outputDirectory>
-                            <testOutputDirectory>${basedir}/xtend-gen</testOutputDirectory>
- 						</configuration>
-				    </execution>
-			    </executions>
-			    
-			    <dependencies>
-			        <dependency>
-			            <groupId>org.eclipse.xtend</groupId>
-			            <artifactId>org.eclipse.xtend.lib</artifactId>
-			            <version>${xtend.version}</version>
-			        </dependency>
-			        <dependency>
-						<groupId>org.antlr</groupId>
-						<artifactId>antlr-runtime</artifactId>
-						<version>${antlr.version}</version>
-					</dependency>
-			    </dependencies>
-			 </plugin>
+					<groupId>org.fornax.toolsupport</groupId>
+					<artifactId>fornax-oaw-m2-plugin</artifactId>
+					<version>${fornax.version}</version>
+
+					<configuration>
+						<workflowDescriptor>file://${basedir}/src/org/ddmore/mdl/GenerateMdl.mwe2</workflowDescriptor>
+						<workflowEngine>mwe2</workflowEngine>
+						<jvmSettings>
+							<fork>true</fork>
+							<jvmArgs>
+								<jvmArg>-Xms100m</jvmArg>
+								<jvmArg>-Xmx500m</jvmArg>
+							</jvmArgs>
+						</jvmSettings>
+						<force>true</force>
+						<outletSrcDir>src-gen</outletSrcDir>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>run-workflow</goal>
+							</goals>
+						</execution>
+					</executions>
+					<dependencies>
+
+						<dependency>
+							<groupId>org.eclipse.emf.mwe</groupId>
+							<artifactId>emf-mwe-utils</artifactId>
+							<version>${xtext.utils.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.eclipse.m2t.xpand</groupId>
+							<artifactId>m2t-xpand-xpand</artifactId>
+							<version>${xtext.utils.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.eclipse.m2t.xpand</groupId>
+							<artifactId>m2t-xpand-xtend-typesystem-emf</artifactId>
+							<version>${xtext.utils.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.eclipse.xtend</groupId>
+							<artifactId>org.eclipse.xtend.standalone</artifactId>
+							<version>${xtend.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.antlr</groupId>
+							<artifactId>antlr-runtime</artifactId>
+							<version>${antlr.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.xtend</groupId>
+					<artifactId>xtend-maven-plugin</artifactId>
+					<version>${xtend.version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>compile</goal>
+								<goal>testCompile</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${basedir}/xtend-gen</outputDirectory>
+								<testOutputDirectory>${basedir}/xtend-gen</testOutputDirectory>
+							</configuration>
+						</execution>
+					</executions>
+
+					<dependencies>
+						<dependency>
+							<groupId>org.eclipse.xtend</groupId>
+							<artifactId>org.eclipse.xtend.lib</artifactId>
+							<version>${xtend.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.antlr</groupId>
+							<artifactId>antlr-runtime</artifactId>
+							<version>${antlr.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -439,8 +439,25 @@
 	<dependencies>
 		<dependency>
 			<groupId>eu.ddmore</groupId>
+			<artifactId>org.ddmore.mdl</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.ddmore</groupId>
 			<artifactId>converter-toolbox-bundle</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.inject</groupId>
+					<artifactId>guice</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.osgi</groupId>
+					<artifactId>org.eclipse.osgi</artifactId>
+				</exclusion>
+			</exclusions>
+
 		</dependency>
 	</dependencies>
 
