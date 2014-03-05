@@ -64,7 +64,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 				put("preal_truncationLowerInclusiveBound", new DistributionParameter("truncationLowerInclusiveBound", DataTypes.TYPE_REAL, false, 0., Double.MAX_VALUE));
 				put("preal_truncationUpperInclusiveBound", new DistributionParameter("truncationUpperInclusiveBound", DataTypes.TYPE_REAL, false, 0., Double.MAX_VALUE));
 				//Dirichlet
-				put("concentration", new DistributionParameter("concentration", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
+				put("concentration", new DistributionParameter("concentration", DataTypes.TYPE_VECTOR_REAL, true, 0., Double.MAX_VALUE));
 				//Exponential
 				put("rate", new DistributionParameter("rate", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
 				//F
@@ -161,6 +161,10 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attrs.get("scale"), 
 					attrs.get("preal_truncationLowerInclusiveBound"),
 					attrs.get("preal_truncationUpperInclusiveBound")));
+			put("Geometric", Arrays.asList(
+					attrs.get("probability"), 
+					attrs.get("natural_truncationLowerInclusiveBound"),
+					attrs.get("natural_truncationUpperInclusiveBound")));
 			put("Hypergeometric", Arrays.asList(
 					attrs.get("numberOfSuccesses"), 
 					attrs.get("numberOfTrials"), 
@@ -236,6 +240,10 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attrs.get("dof"),
 					attrs.get("continuous_truncationLowerInclusiveBound"),
 					attrs.get("continuous_truncationUpperInclusiveBound")));
+			put("Uniform", Arrays.asList(
+					attrs.get("minimal"),
+					attrs.get("maximal"),
+					attrs.get("numberOfClasses")));
 			put("Weibull", Arrays.asList(
 					attrs.get("scale"),
 					attrs.get("shape"), 
@@ -243,6 +251,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attrs.get("preal_truncationUpperInclusiveBound")));
 			put("Wishart", Arrays.asList(
 					attrs.get("degreesOfFreedom"),
+					attrs.get("dof"),
 					attrs.get("scaleMatrix"),
 					attrs.get("dimension"))); 
 		}
@@ -292,23 +301,23 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			List<DistributionParameter> recognized_attrs = distr_attrs.get(type.getDistribution().getIdentifier());
 			if (recognized_attrs != null){
 				for (DistributionParameter arg: recognized_attrs){
-					if (arg.name.equals(argument.getIdentifier())) 
+					if (arg.name.equals(argument.getArgumentName().getIdentifier())) 
 						return;
 				}
 			}
 			for (DistributionParameter arg: common_attrs){
-				if (arg.name.equals(argument.getIdentifier())) 
+				if (arg.name.equals(argument.getArgumentName().getIdentifier())) 
 					return;
 			}
-			warning(MSG_DISTR_ATTRIBUTE_UNKNOWN + ": " + argument.getIdentifier(), 
-			MdlPackage.Literals.DISTRIBUTION_ARGUMENT__IDENTIFIER,
-			MSG_DISTR_ATTRIBUTE_UNKNOWN, argument.getIdentifier());			
+			warning(MSG_DISTR_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getIdentifier(), 
+			MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME,
+			MSG_DISTR_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getIdentifier());			
 		}
 	}
 	
 	DistributionArgument findDistributionAttribute(DistributionArguments args, String name){
 		for (DistributionArgument arg: args.getArguments()){
-			if (arg.getIdentifier().equals(name)){
+			if (arg.getArgumentName().getIdentifier().equals(name)){
 				return arg;
 			}
 		}

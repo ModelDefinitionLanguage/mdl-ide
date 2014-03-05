@@ -11,6 +11,7 @@ import org.ddmore.mdl.mdl.AdditiveExpression;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.Categorical;
@@ -353,8 +354,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	Argument createArgument(String attrName, String attrValue){
 		Argument attr = MdlFactory.eINSTANCE.createArgument();
-		if (attrName != null)
-			attr.setIdentifier(attrName);
+		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
+		argName.setIdentifier(attrName);
+		attr.setArgumentName(argName);
 		AnyExpression attrExpr = createAttributeExpression(attrName, attrValue);
 		attr.setExpression(attrExpr);
 		return attr;
@@ -362,8 +364,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	Argument createArgumentWithExpression(String attrName, AnyExpression attrExpr){
 		Argument attr = MdlFactory.eINSTANCE.createArgument();
-		if (attrName != null)
-			attr.setIdentifier(attrName);
+		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
+		argName.setIdentifier(attrName);
+		attr.setArgumentName(argName);
 		attr.setExpression(attrExpr);
 		return attr;
 	}
@@ -371,8 +374,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	//TODO: test!
 	DistributionArgument createDistributionArgument(String attrName, String attrValue){
 		DistributionArgument attr = MdlFactory.eINSTANCE.createDistributionArgument();
-		if (attrName != null)
-			attr.setIdentifier(attrName);
+		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
+		argName.setIdentifier(attrName);
+		attr.setArgumentName(argName);
 		if (attrName.equals("type")){
 			Distribution distribution = MdlFactory.eINSTANCE.createDistribution();
 			distribution.setIdentifier(attrValue);
@@ -939,8 +943,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 						while(argIterator.hasNext()){
 					    	Argument x = argIterator.next(); 	
 					    	Argument attr = null;
-					    	if (x.getIdentifier() != null){
-					    		attr = createArgument(null, x.getIdentifier());
+					    	if (x.getArgumentName() != null){
+					    		attr = createArgument(null, x.getArgumentName().getIdentifier());
 					    	} else {
 					    		attr = createArgument(null, "unnamedParam" + k++);
 					    	}

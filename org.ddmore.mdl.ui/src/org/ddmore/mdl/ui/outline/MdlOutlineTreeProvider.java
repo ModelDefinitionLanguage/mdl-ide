@@ -62,11 +62,11 @@ import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariableList;
+import org.ddmore.mdl.mdl.impl.ArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.CategoricalImpl;
 import org.ddmore.mdl.mdl.impl.ContinuousImpl;
 import org.ddmore.mdl.mdl.impl.DataBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
-import org.ddmore.mdl.mdl.impl.FormalArgumentImpl;
 import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.HeaderBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
@@ -259,8 +259,8 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	        return imageHelper.getImage(getPath(TASK_FUNCTION_DECLARATION));
 	    }
 
-	    protected Image _image(FormalArgumentImpl e) {
-	        return imageHelper.getImage(getPath(FORMAL_ARGUMENT));
+	    protected Image _image(ArgumentNameImpl e) {
+	        return imageHelper.getImage(getPath(ARGUMENT_NAME));
 	    }
 
 	    protected Image _image(EstimateTaskImpl e) {
@@ -473,8 +473,8 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	
 	protected void  _createNode(IOutlineNode parentNode, Argument a){
 		String attrName = "unnamed attribute";
-		if (a.getIdentifier() != null)
-			attrName = a.getIdentifier();
+		if (a.getArgumentName() != null)
+			attrName = a.getArgumentName().getIdentifier();
 		createEStructuralFeatureNode(parentNode,
 				a,
 				MdlPackage.Literals.ARGUMENT__EXPRESSION,
@@ -492,8 +492,8 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected void  _createNode(IOutlineNode parentNode, DistributionArgument a){
 		String attrName = "component";
 		EReference ref = MdlPackage.Literals.DISTRIBUTION_ARGUMENT__VALUE;
-		if (a.getIdentifier() != null){
-			attrName = a.getIdentifier();
+		if (a.getArgumentName() != null){
+			attrName = a.getArgumentName().getIdentifier();
 			if (attrName.equals("type"))
 				ref = MdlPackage.Literals.DISTRIBUTION_ARGUMENT__DISTRIBUTION;
 		} else {

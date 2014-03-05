@@ -102,16 +102,16 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	//Check whether the attribute "units" defines a correct unit measurement
 	@Check
 	public void checkUnitValue(Argument arg){
-		if (arg.getIdentifier() != null){
-			if (arg.getIdentifier().equals("units")){
+		if (arg.getArgumentName() != null){
+			if (arg.getArgumentName().getIdentifier().equals("units")){
 				String unitValue = Utils.getAttributeValue(arg);
 				if (unitValue.length() > 0){
 					unitValue = unitValue.replaceAll("\\s+","");
 					String wrongToken = parseUnitExpression(unitValue);
 					if (wrongToken != null){
 						warning(MSG_UNIT_UNKNOWN + ": " + wrongToken, 
-						MdlPackage.Literals.ARGUMENT__IDENTIFIER,
-						MSG_UNIT_UNKNOWN, arg.getIdentifier());
+						MdlPackage.Literals.ARGUMENT_NAME__IDENTIFIER,
+						MSG_UNIT_UNKNOWN, arg.getArgumentName().getIdentifier());
 					}
 				}
 			}

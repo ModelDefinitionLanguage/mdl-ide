@@ -341,11 +341,11 @@ ExecuteTask:
 //////////////////////////////////////////////////////////
 
 FormalArguments:
-	arguments += FormalArgument (=> ',' arguments += FormalArgument)*
+	arguments += ArgumentName (=> ',' arguments += ArgumentName)*
 ;
 
-FormalArgument:
-	identifier = ID
+ArgumentName:
+	identifier=ID
 ;
 
 FunctionCall:
@@ -497,7 +497,7 @@ DistributionArguments:
 ;
 
 DistributionArgument: 
-	(identifier = ID "=")? (distribution = Distribution | value = Primary | component = RandomList)
+	(argumentName = ArgumentName "=")? (distribution = Distribution | value = Primary | component = RandomList)
 ; 
 
 Arguments: 
@@ -505,7 +505,7 @@ Arguments:
 ;
 
 Argument:
-	identifier = ID "=" expression = AnyExpression |
+	argumentName = ArgumentName "=" expression = AnyExpression |
 	expression = AnyExpression
 ;
 
@@ -579,7 +579,7 @@ FullyQualifiedArgumentName:
 ;
 
 Selector:
-	('.' identifier = FormalArgument ) | ('[' selector = INTEGER ']')
+	('.' argumentName = ArgumentName ) | ('[' selector = INTEGER ']')
 ;
 
 ObjectName:

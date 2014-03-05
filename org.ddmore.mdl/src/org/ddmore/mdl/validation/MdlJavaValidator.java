@@ -386,7 +386,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		//TaskFunctionDeclaration found
 		TaskFunctionDeclaration func = (TaskFunctionDeclaration)container;
 		if (func.getFormalArguments() != null){
-			for (FormalArgument arg: func.getFormalArguments().getArguments()){
+			for (ArgumentName arg: func.getFormalArguments().getArguments()){
 				if (arg.getIdentifier().equals(ref.getIdentifier())) return true;
 			}
 		}
@@ -406,10 +406,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					if (!((index >= 1) && (index < currArg.size() + 1))) return false;
 					index = 1;	
 				}
-				if (x.getIdentifier() != null){
+				if (x.getArgumentName() != null){
 					int i = 0;
 					for (Argument arg: currArg){
-						if (arg.getIdentifier().equals(x.getIdentifier().getIdentifier())){
+						if (arg.getArgumentName().getIdentifier().equals(x.getArgumentName().getIdentifier())){
 							index = i + 1;
 							break;
 						}
@@ -500,7 +500,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    			//Does not guarantee the correctness as references may occur in expressions
 	    			FunctionCall funcCall = s.getExpression();
 	    			params.addAll(Utils.extractSymbolNames(funcCall.getArguments(), "param"));
-	       			FormalArgument paramRef = ref.getSelectors().get(0).getIdentifier();
+	       			ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
 	       			if (paramRef != null){
 	       				if (!params.contains(paramRef.getIdentifier())){
 	       					warning(MSG_UNRESOLVED_FUNC_ARGUMENT_REF + ": " + 

@@ -202,9 +202,9 @@ public class ListAttributeValidator extends AbstractDeclarativeValidator{
 			
 		List<String> knownAttributes = getAllAttributes(container);
 		if (knownAttributes != null)
-			if (!knownAttributes.contains(argument.getIdentifier()))
-				warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getIdentifier(), 
-				MdlPackage.Literals.ARGUMENT__IDENTIFIER,
-				MSG_ATTRIBUTE_UNKNOWN, argument.getIdentifier());			
+			if (!knownAttributes.contains(argument.getArgumentName().getIdentifier()))
+				warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getIdentifier(), 
+				MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME,
+				MSG_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getIdentifier());			
 	}
 }

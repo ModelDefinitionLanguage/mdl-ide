@@ -6,10 +6,10 @@ import java.util.HashMap;
 import org.ddmore.mdl.mdl.AdditiveExpression;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.ConditionalStatement;
-import org.ddmore.mdl.mdl.FormalArgument;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.ImportBlock;
@@ -49,8 +49,8 @@ public class Utils {
 	//Check whether the list of attributes contains a given attribute
 	static boolean containsAttribute(Arguments args, String attrName){
 		for (Argument arg: args.getArguments()){
-			if (arg.getIdentifier() != null){
-				if (arg.getIdentifier().equals(attrName)) return true;
+			if (arg.getArgumentName() != null){
+				if (arg.getArgumentName().getIdentifier().equals(attrName)) return true;
 			}
 		}
 		return false;
@@ -169,8 +169,8 @@ public class Utils {
 		if (args != null){
 			if (args.getArguments() != null){	
 				for (Argument arg: args.getArguments()){
-					if (arg.getIdentifier() != null)
-						list.add(arg.getIdentifier());
+					if (arg.getArgumentName() != null)
+						list.add(arg.getArgumentName().getIdentifier());
 				}
 			}
 		}
@@ -178,7 +178,7 @@ public class Utils {
 
 	static void addSymbol(ArrayList<String> list, FormalArguments args){
 		if (args != null){
-			for (FormalArgument id: args.getArguments()){
+			for (ArgumentName id: args.getArguments()){
 				list.add(id.getIdentifier());
 			}
 		}
@@ -195,7 +195,7 @@ public class Utils {
 	//Evaluate STRING expression
 	static String getAttributeValue(Arguments a, String attrName){
 		for (Argument arg: a.getArguments()){
-			if (arg.getIdentifier().equals(attrName))
+			if (arg.getArgumentName().getIdentifier().equals(attrName))
 				return getAttributeValue(arg);
 		}
 		return "";
@@ -227,7 +227,7 @@ public class Utils {
 		if (args != null){
 			if (args.getArguments() != null){
 				for (Argument x: args.getArguments()){
-					if (x.getIdentifier().equals(attrName)) {
+					if (x.getArgumentName().getIdentifier().equals(attrName)) {
 						if (x.getExpression().getList() != null) {
 							for (Argument paramArg : x.getExpression().getList().getArguments().getArguments()) {
 								TreeIterator<EObject> paramIterator = paramArg.getExpression().eAllContents();
