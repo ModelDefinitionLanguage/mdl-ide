@@ -83,7 +83,9 @@ import org.ddmore.mdl.mdl.impl.SymbolListImpl;
 import org.ddmore.mdl.mdl.impl.SymbolModificationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
+import org.ddmore.mdl.validation.ListAttributeValidator;
 import org.ddmore.mdl.validation.MdlJavaValidator;
+import org.ddmore.mdl.validation.FunctionCallValidator;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -100,7 +102,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Fix attributes
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-	@Fix(MdlJavaValidator.MSG_ATTRIBUTE_UNKNOWN)
+	@Fix(ListAttributeValidator.MSG_ATTRIBUTE_UNKNOWN)
 	public void removeAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String attribute = issue.getData()[0];
 		String description = "Remove attribute '" + attribute + "'";
@@ -113,7 +115,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		});
 	}
 	
-	@Fix(MdlJavaValidator.MSG_ATTRIBUTE_MISSING)
+	@Fix(ListAttributeValidator.MSG_ATTRIBUTE_MISSING)
 	public void addAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String attrName = issue.getData()[0];
 		String description = "Insert attribute '" + attrName +"'";
@@ -912,7 +914,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	//block, diag, same
 	
 	//Insert imported function to IMPORT block
-	@Fix(MdlJavaValidator.MSG_FUNCTION_UNKNOWN)
+	@Fix(FunctionCallValidator.MSG_FUNCTION_UNKNOWN)
 	public void addImportedFunction(final Issue issue, IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Declare function in IMPORT block", 
 				"Declare function in IMPORT block", "add.png", new ISemanticModification() {
