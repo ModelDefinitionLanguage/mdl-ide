@@ -110,7 +110,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 					String wrongToken = parseUnitExpression(unitValue);
 					if (wrongToken != null){
 						warning(MSG_UNIT_UNKNOWN + ": " + wrongToken, 
-						MdlPackage.Literals.ARGUMENT_NAME__IDENTIFIER,
+						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 						MSG_UNIT_UNKNOWN, arg.getArgumentName().getIdentifier());
 					}
 				}
