@@ -31,244 +31,229 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_DISTR_ATTRIBUTE_UNKNOWN = "Unknown distribution attribute";
 	public final static String MSG_DISTR_ATTRIBUTE_MISSING = "Required distribution attribute is missing";
 
-	final static HashMap<String, DistributionParameter> attrs = 
-			new HashMap<String , DistributionParameter>() {
-				private static final long serialVersionUID = 551199268331781795L;
-			{
-				//Bernoulli, Binomial, NegativeBinomial
-				put("probability", new DistributionParameter("probability", DataTypes.TYPE_REAL, true, 0., 1.));
-				//Beta
-				put("alpha", new DistributionParameter("alpha", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				put("beta", new DistributionParameter("beta", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				//Beta, Cauchy, StudentT
-				put("continuous_truncationLowerInclusiveBound", new DistributionParameter("truncationLowerInclusiveBound", DataTypes.TYPE_REAL, false, 0., 1.));
-				put("continuous_truncationUpperInclusiveBound", new DistributionParameter("truncationUpperInclusiveBound", DataTypes.TYPE_REAL, false, 0., 1.));
-				//Binomial, Hypergeometric
-				put("numberOfTrials", new DistributionParameter("numberOfTrials", DataTypes.TYPE_INT, true, 0, Integer.MAX_VALUE));
-				//Binomial
-				put("probabilityOfSuccess", new DistributionParameter("probabilityOfSuccess", DataTypes.TYPE_REAL, true, 0., 1.));
-				//Binomial, NegativeBinomial, Poisson
-				put("natural_truncationLowerInclusiveBound", new DistributionParameter("truncationLowerInclusiveBound", DataTypes.TYPE_INT, false, 0, Integer.MAX_VALUE));
-				put("natural_truncationUpperInclusiveBound", new DistributionParameter("truncationUpperInclusiveBound", DataTypes.TYPE_INT, false, 0, Integer.MAX_VALUE));
-				//Categorical
-				put("ncategories", new DistributionParameter("ncategories", DataTypes.TYPE_INT, true, 0, Integer.MAX_VALUE));
-				put("probabilities", new DistributionParameter("probabilities", DataTypes.TYPE_VECTOR_REAL, true, 0., 1.));
-				//Cauchy, Laplace
-				put("location", new DistributionParameter("location", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				//Cauchy, Gamma, InverseGamma, Laplace, Logistic
-				put("scale", new DistributionParameter("scale", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				//ChiSquare	
-				put("degreesOfFreedom", new DistributionParameter("degreesOfFreedom", DataTypes.TYPE_INT, true, 0, Integer.MAX_VALUE));
-				put("dof", new DistributionParameter("dof", DataTypes.TYPE_INT, true, 0, Integer.MAX_VALUE));
-				//ChiSquare, Exponential, F, Gamma, InverseGamma
-				put("preal_truncationLowerInclusiveBound", new DistributionParameter("truncationLowerInclusiveBound", DataTypes.TYPE_REAL, false, 0., Double.MAX_VALUE));
-				put("preal_truncationUpperInclusiveBound", new DistributionParameter("truncationUpperInclusiveBound", DataTypes.TYPE_REAL, false, 0., Double.MAX_VALUE));
-				//Dirichlet
-				put("concentration", new DistributionParameter("concentration", DataTypes.TYPE_VECTOR_REAL, true, 0., Double.MAX_VALUE));
-				//Exponential
-				put("rate", new DistributionParameter("rate", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				//F
-				put("denominator", new DistributionParameter("denominator", DataTypes.TYPE_INT, true, 0, Integer.MAX_VALUE));
-				put("numerator", new DistributionParameter("numerator", DataTypes.TYPE_INT, true, 0, Integer.MAX_VALUE));
-				//Gamma, InverseGamma, LogNormal
-				put("shape", new DistributionParameter("shape", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				//Hypergeometric
-				put("numberOfSuccesses", new DistributionParameter("numberOfSuccesses", DataTypes.TYPE_INT, true, 0, Integer.MAX_VALUE));
-				put("populationSize", new DistributionParameter("populationSize", DataTypes.TYPE_INT, true, 0, Integer.MAX_VALUE));
-				//LogNormal
-				put("logScale", new DistributionParameter("logScale", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				//Multinomial
-				put("probabilities", new DistributionParameter("probabilities", DataTypes.TYPE_VECTOR_REAL, true, 0., 1.));
-				//MultivariateNormal, MultivariateStudentT
-				put("meanVector", new DistributionParameter("meanVector", DataTypes.TYPE_VECTOR_REAL, true, 0., Double.MAX_VALUE));
-				put("covarianceMatrix", new DistributionParameter("covarianceMatrix", DataTypes.TYPE_VECTOR_REAL, true, 0., Double.MAX_VALUE));
-				//NegativeBinomial
-				put("numberOfFailures", new DistributionParameter("numberOfFailures", DataTypes.TYPE_INT, true, 0., Integer.MAX_VALUE));
-				//Normal
-				put("mean", new DistributionParameter("mean", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				put("variance", new DistributionParameter("variance", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				put("stddev", new DistributionParameter("stddev", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				//NormalInverseGamma
-				put("varianceScaling", new DistributionParameter("varianceScaling", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				put("truncationLowerInclusiveBoundN", new DistributionParameter("truncationLowerInclusiveBoundN", DataTypes.TYPE_INT, false, 0, Integer.MAX_VALUE));
-				put("truncationUpperInclusiveBoundN", new DistributionParameter("truncationUpperInclusiveBoundN", DataTypes.TYPE_INT, false, 0, Integer.MAX_VALUE));
-				put("truncationLowerInclusiveBoundIG", new DistributionParameter("truncationLowerInclusiveBoundIG", DataTypes.TYPE_REAL, false, 0., Double.MAX_VALUE));
-				put("truncationUpperInclusiveBoundIG", new DistributionParameter("truncationUpperInclusiveBoundIG", DataTypes.TYPE_REAL, false, 0., Double.MAX_VALUE));
-				//Uniform
-				put("minimal", new DistributionParameter("minimal", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				put("maximal", new DistributionParameter("maximal", DataTypes.TYPE_REAL, true, 0., Double.MAX_VALUE));
-				put("numberOfClasses", new DistributionParameter("numberOfClasses", DataTypes.TYPE_INT, true, 0, Integer.MAX_VALUE));
-				//Wishart
-				put("scaleMatrix", new DistributionParameter("scaleMatrix", DataTypes.TYPE_VECTOR_REAL, true, 0., Double.MAX_VALUE));
-				//MultivariateNormal, MultivariateStudentT, Wishart 
-				put("dimension", new DistributionParameter("dimension", DataTypes.TYPE_INT, false, 0, Integer.MAX_VALUE));
-			}
-		};
-		
+	final static Attribute attr_probability = new Attribute("probability", DataType.TYPE_PROBABILITY, true);
+	final static Attribute attr_probabilityOfSuccess = new Attribute("probabilityOfSuccess", DataType.TYPE_PROBABILITY, true);
+	final static Attribute attr_probabilities = new Attribute("probabilities", DataType.TYPE_VECTOR_PROBABILITY, true);
+	
+	final static Attribute attr_alpha = new Attribute("alpha", DataType.TYPE_REAL, true);
+	final static Attribute attr_beta = new Attribute("beta", DataType.TYPE_REAL, true);
+	
+	final static Attribute attr_continuous_truncationLowerInclusiveBound = new Attribute("truncationLowerInclusiveBound", DataType.TYPE_PROBABILITY, false);
+	final static Attribute attr_continuous_truncationUpperInclusiveBound = new Attribute("truncationUpperInclusiveBound", DataType.TYPE_PROBABILITY, false);
+	final static Attribute attr_natural_truncationLowerInclusiveBound = new Attribute("truncationLowerInclusiveBound", DataType.TYPE_NAT, false);
+	final static Attribute attr_natural_truncationUpperInclusiveBound = new Attribute("truncationUpperInclusiveBound", DataType.TYPE_NAT, false);
+
+	final static Attribute attr_ncategories = new Attribute("ncategories", DataType.TYPE_NAT, true);
+	final static Attribute attr_numberOfTrials = new Attribute("numberOfTrials", DataType.TYPE_NAT, true);
+	final static Attribute attr_numberOfSuccesses = new Attribute("numberOfSuccesses", DataType.TYPE_NAT, true);
+	final static Attribute attr_numberOfFailures = new Attribute("numberOfFailures", DataType.TYPE_NAT, true);
+	final static Attribute attr_populationSize = new Attribute("populationSize", DataType.TYPE_NAT, true);
+	
+	final static Attribute attr_degreesOfFreedom = new Attribute("degreesOfFreedom", DataType.TYPE_PNAT, true);
+	final static Attribute attr_dof = new Attribute("dof", DataType.TYPE_PNAT, true);
+	
+	final static Attribute attr_real_degreesOfFreedom = new Attribute("degreesOfFreedom", DataType.TYPE_PREAL, true);
+	final static Attribute attr_real_dof = new Attribute("dof", DataType.TYPE_PREAL, true);
+
+	final static Attribute attr_preal_truncationLowerInclusiveBound = new Attribute("truncationLowerInclusiveBound", DataType.TYPE_PREAL, false);
+	final static Attribute attr_preal_truncationUpperInclusiveBound = new Attribute("truncationUpperInclusiveBound", DataType.TYPE_PREAL, false);
+	final static Attribute attr_concentration = new Attribute("concentration", DataType.TYPE_VECTOR_PREAL, true);
+	final static Attribute attr_rate = new Attribute("rate", DataType.TYPE_PREAL, true);
+	
+	final static Attribute attr_denominator = new Attribute("denominator", DataType.TYPE_NAT, true);
+	final static Attribute attr_numerator = new Attribute("numerator", DataType.TYPE_NAT, true);
+	
+	final static Attribute attr_location = new Attribute("location", DataType.TYPE_REAL, true);
+	final static Attribute attr_shape = new Attribute("shape", DataType.TYPE_PREAL, true);
+	final static Attribute attr_scale = new Attribute("scale", DataType.TYPE_PREAL, true);
+	final static Attribute attr_logScale = new Attribute("logScale", DataType.TYPE_PREAL, true);
+
+	final static Attribute attr_meanVector = new Attribute("meanVector", DataType.TYPE_VECTOR_REAL, true);
+	final static Attribute attr_covarianceMatrix = new Attribute("covarianceMatrix", DataType.TYPE_VECTOR_REAL, true);
+
+	final static Attribute attr_mean = new Attribute("mean", DataType.TYPE_REAL, true);
+	final static Attribute attr_variance = new Attribute("variance", DataType.TYPE_PREAL, true);
+	final static Attribute attr_stddev = new Attribute("stddev", DataType.TYPE_PREAL, true);
+
+	final static Attribute attr_varianceScaling = new Attribute("varianceScaling", DataType.TYPE_PREAL, true);
+	
+	final static Attribute attr_truncationLowerInclusiveBoundN = new Attribute("truncationLowerInclusiveBoundN", DataType.TYPE_NAT, false);
+	final static Attribute attr_truncationUpperInclusiveBoundN = new Attribute("truncationUpperInclusiveBoundN", DataType.TYPE_NAT, false);
+	final static Attribute attr_truncationLowerInclusiveBoundIG = new Attribute("truncationLowerInclusiveBoundIG", DataType.TYPE_PREAL, false);
+	final static Attribute attr_truncationUpperInclusiveBoundIG = new Attribute("truncationUpperInclusiveBoundIG", DataType.TYPE_REAL, false);
+
+	final static Attribute attr_minimal = new Attribute("minimal", DataType.TYPE_REAL, true);
+	final static Attribute attr_maximal = new Attribute("maximal", DataType.TYPE_REAL, true);
+	final static Attribute attr_numberOfClasses = new Attribute("numberOfClasses", DataType.TYPE_NAT, true);
+
+	final static Attribute attr_scaleMatrix = new Attribute("scaleMatrix", DataType.TYPE_VECTOR_PREAL, true);
+	final static Attribute attr_dimension = new Attribute("dimension", DataType.TYPE_NAT, false);
+	
+	final static Attribute attr_type = new Attribute("type", DataType.TYPE_UNDEFINED, true);
+	final static Attribute attr_level = new Attribute("level", DataType.TYPE_UNDEFINED, false);
+	final static Attribute attr_weight = new Attribute("weight", DataType.TYPE_REAL, false);	
+	
 	//List of synonyms or alternatives
 	HashMap<String, String> alternative_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = 28966755954108955L;
 		{
-			put("degreesOfFreedom", "dof");
-			put("dof", "degreesOfFreedom");
-			put("variance", "stddev");
-			put("stddev", "variance");
-			put("numberOfClasses", "minimal");
-			put("minimal", "numberOfClasses");
-			put("maximal", "numberOfClasses");
+			put(attr_degreesOfFreedom.name, attr_dof.name);
+			put(attr_dof.name, attr_degreesOfFreedom.name);
+			put(attr_variance.name, attr_stddev.name);
+			put(attr_stddev.name, attr_variance.name);
+			put(attr_numberOfClasses.name, attr_minimal.name);
+			put(attr_minimal.name, attr_numberOfClasses.name);
+			put(attr_maximal.name, attr_numberOfClasses.name);
 		}
 	};
 	
-	final static HashMap<String, List<DistributionParameter>> distr_attrs = 
-			new HashMap<String, List<DistributionParameter>>() {
+	final static HashMap<String, List<Attribute>> distr_attrs = 
+			new HashMap<String, List<Attribute>>() {
 				private static final long serialVersionUID = 27681295286815005L;
 		{
-			put("Bernoulli", Arrays.asList(attrs.get("probability")));
+			put("Bernoulli", Arrays.asList(attr_probability));
 			put("Beta", Arrays.asList(
-					attrs.get("alpha"),
-					attrs.get("beta"), 
-					attrs.get("continuous_truncationLowerInclusiveBound"),
-					attrs.get("continuous_truncationUpperInclusiveBound")));
+					attr_alpha,
+					attr_beta, 
+					attr_continuous_truncationLowerInclusiveBound,
+					attr_continuous_truncationUpperInclusiveBound));
 			put("Binomial", Arrays.asList(
-					attrs.get("numberOfTrials"),
-					attrs.get("probabilityOfSuccess"), 
-					attrs.get("natural_truncationLowerInclusiveBound"),
-					attrs.get("natural_truncationUpperInclusiveBound")));
+					attr_numberOfTrials,
+					attr_probabilityOfSuccess, 
+					attr_natural_truncationLowerInclusiveBound,
+					attr_natural_truncationUpperInclusiveBound));
 			put("Categorical", Arrays.asList(
-					attrs.get("ncategories"),
-					attrs.get("probabilities")));
+					attr_ncategories,
+					attr_probabilities));
 			put("Cauchy", Arrays.asList(
-					attrs.get("location"),
-					attrs.get("scale"), 
-					attrs.get("continuous_truncationLowerInclusiveBound"),
-					attrs.get("continuous_truncationUpperInclusiveBound")));
+					attr_location,
+					attr_scale, 
+					attr_continuous_truncationLowerInclusiveBound,
+					attr_continuous_truncationUpperInclusiveBound));
 			put("ChiSquare", Arrays.asList(
-					attrs.get("degreesOfFreedom"),
-					attrs.get("dof"), 
-					attrs.get("preal_truncationLowerInclusiveBound"),
-					attrs.get("preal_truncationUpperInclusiveBound")));
-			put("Dirichlet", Arrays.asList(attrs.get("concentration")));
-			put("Exponential", Arrays.asList(attrs.get("rate"),
-					attrs.get("preal_truncationLowerInclusiveBound"),
-					attrs.get("preal_truncationUpperInclusiveBound")));
+					attr_degreesOfFreedom,
+					attr_dof, 
+					attr_preal_truncationLowerInclusiveBound,
+					attr_preal_truncationUpperInclusiveBound));
+			put("Dirichlet", Arrays.asList(attr_concentration));
+			put("Exponential", Arrays.asList(attr_rate,
+					attr_preal_truncationLowerInclusiveBound,
+					attr_preal_truncationUpperInclusiveBound));
 			put("FDistribution", Arrays.asList(
-					attrs.get("denominator"),
-					attrs.get("numerator"), 
-					attrs.get("preal_truncationLowerInclusiveBound"),
-					attrs.get("preal_truncationUpperInclusiveBound")));
+					attr_denominator,
+					attr_numerator, 
+					attr_preal_truncationLowerInclusiveBound,
+					attr_preal_truncationUpperInclusiveBound));
 			put("Gamma", Arrays.asList(
-					attrs.get("shape"),
-					attrs.get("scale"), 
-					attrs.get("preal_truncationLowerInclusiveBound"),
-					attrs.get("preal_truncationUpperInclusiveBound")));
+					attr_shape,
+					attr_scale, 
+					attr_preal_truncationLowerInclusiveBound,
+					attr_preal_truncationUpperInclusiveBound));
 			put("Geometric", Arrays.asList(
-					attrs.get("probability"), 
-					attrs.get("natural_truncationLowerInclusiveBound"),
-					attrs.get("natural_truncationUpperInclusiveBound")));
+					attr_probability, 
+					attr_natural_truncationLowerInclusiveBound,
+					attr_natural_truncationUpperInclusiveBound));
 			put("Hypergeometric", Arrays.asList(
-					attrs.get("numberOfSuccesses"), 
-					attrs.get("numberOfTrials"), 
-					attrs.get("populationSize"),
-					attrs.get("natural_truncationLowerInclusiveBound"),
-					attrs.get("natural_truncationUpperInclusiveBound")));
+					attr_numberOfSuccesses, 
+					attr_numberOfTrials, 
+					attr_populationSize,
+					attr_natural_truncationLowerInclusiveBound,
+					attr_natural_truncationUpperInclusiveBound));
 			put("InverseGamma", Arrays.asList(
-					attrs.get("shape"),
-					attrs.get("scale"), 
-					attrs.get("preal_truncationLowerInclusiveBound"),
-					attrs.get("preal_truncationUpperInclusiveBound")));
+					attr_shape,
+					attr_scale, 
+					attr_preal_truncationLowerInclusiveBound,
+					attr_preal_truncationUpperInclusiveBound));
 			put("Laplace", Arrays.asList(
-					attrs.get("location"),
-					attrs.get("scale"), 
-					attrs.get("preal_truncationLowerInclusiveBound"),
-					attrs.get("preal_truncationUpperInclusiveBound")));
+					attr_location,
+					attr_scale, 
+					attr_preal_truncationLowerInclusiveBound,
+					attr_preal_truncationUpperInclusiveBound));
 			put("Logistic", Arrays.asList(
-					attrs.get("location"),
-					attrs.get("scale"), 
-					attrs.get("preal_truncationLowerInclusiveBound"),
-					attrs.get("preal_truncationUpperInclusiveBound")));
+					attr_location,
+					attr_scale, 
+					attr_preal_truncationLowerInclusiveBound,
+					attr_preal_truncationUpperInclusiveBound));
 			put("LogScale", Arrays.asList(
-					attrs.get("logScale"),
-					attrs.get("shape"), 
-					attrs.get("preal_truncationLowerInclusiveBound"),
-					attrs.get("preal_truncationUpperInclusiveBound")));
+					attr_logScale,
+					attr_shape, 
+					attr_preal_truncationLowerInclusiveBound,
+					attr_preal_truncationUpperInclusiveBound));
 			put("Multinomial", Arrays.asList(
-					attrs.get("numberOfTrials"),
-					attrs.get("probabilities"))); 
+					attr_numberOfTrials,
+					attr_probabilities)); 
 			put("MultivariateNormal", Arrays.asList(
-					attrs.get("meanVector"),
-					attrs.get("covarianceMatrix"),
-					attrs.get("dimension"))); 
+					attr_meanVector,
+					attr_covarianceMatrix,
+					attr_dimension)); 
 			put("MultivariateStudentT", Arrays.asList(
-					attrs.get("meanVector"),
-					attrs.get("covarianceMatrix"),
-					attrs.get("degreesOfFreedom"),
-					attrs.get("dof"),
-					attrs.get("dimension"))); 
+					attr_meanVector,
+					attr_covarianceMatrix,
+					attr_degreesOfFreedom,
+					attr_dof,
+					attr_dimension)); 
 			put("NegativeBinomial", Arrays.asList(
-					attrs.get("numberOfFailures"),
-					attrs.get("probability"), 
-					attrs.get("natural_truncationLowerInclusiveBound"),
-					attrs.get("natural_truncationUpperInclusiveBound")));
+					attr_numberOfFailures,
+					attr_probability, 
+					attr_natural_truncationLowerInclusiveBound,
+					attr_natural_truncationUpperInclusiveBound));
 			put("Normal", Arrays.asList(
-					attrs.get("mean"),
-					attrs.get("stddev"), 
-					attrs.get("variance"), 
-					attrs.get("continuous_truncationLowerInclusiveBound"),
-					attrs.get("continuous_truncationUpperInclusiveBound")));
+					attr_mean,
+					attr_stddev, 
+					attr_variance, 
+					attr_continuous_truncationLowerInclusiveBound,
+					attr_continuous_truncationUpperInclusiveBound));
 			put("NormalInverseGamma", Arrays.asList(
-					attrs.get("mean"),
-					attrs.get("varianceScaling"), 
-					attrs.get("shape"), 
-					attrs.get("scale"),
-					attrs.get("truncationLowerInclusiveBoundN"), 
-					attrs.get("truncationUpperInclusiveBoundN"), 
-					attrs.get("truncationLowerInclusiveBoundIG"), 
-					attrs.get("truncationUpperInclusiveBoundIG")));
+					attr_mean,
+					attr_varianceScaling, 
+					attr_shape, 
+					attr_scale,
+					attr_truncationLowerInclusiveBoundN, 
+					attr_truncationUpperInclusiveBoundN, 
+					attr_truncationLowerInclusiveBoundIG, 
+					attr_truncationUpperInclusiveBoundIG));
 			put("Pareto", Arrays.asList(
-					attrs.get("scale"),
-					attrs.get("shape"), 
-					attrs.get("continuous_truncationLowerInclusiveBound"), 
-					attrs.get("continuous_truncationUpperInclusiveBound")));
+					attr_scale,
+					attr_shape, 
+					attr_continuous_truncationLowerInclusiveBound, 
+					attr_continuous_truncationUpperInclusiveBound));
 			put("Poisson", Arrays.asList(
-					attrs.get("rate"),
-					attrs.get("natural_truncationLowerInclusiveBound"),
-					attrs.get("natural_truncationUpperInclusiveBound")));
+					attr_rate,
+					attr_natural_truncationLowerInclusiveBound,
+					attr_natural_truncationUpperInclusiveBound));
 			put("StudentT", Arrays.asList(
-					attrs.get("location"),
-					attrs.get("scale"), 
-					attrs.get("degreesOfFreedom"),
-					attrs.get("dof"),
-					attrs.get("continuous_truncationLowerInclusiveBound"),
-					attrs.get("continuous_truncationUpperInclusiveBound")));
+					attr_location,
+					attr_scale, 
+					attr_degreesOfFreedom,
+					attr_dof,
+					attr_continuous_truncationLowerInclusiveBound,
+					attr_continuous_truncationUpperInclusiveBound));
 			put("Uniform", Arrays.asList(
-					attrs.get("minimal"),
-					attrs.get("maximal"),
-					attrs.get("numberOfClasses")));
+					attr_minimal,
+					attr_maximal,
+					attr_numberOfClasses));
 			put("Weibull", Arrays.asList(
-					attrs.get("scale"),
-					attrs.get("shape"), 
-					attrs.get("preal_truncationLowerInclusiveBound"),
-					attrs.get("preal_truncationUpperInclusiveBound")));
+					attr_scale,
+					attr_shape, 
+					attr_preal_truncationLowerInclusiveBound,
+					attr_preal_truncationUpperInclusiveBound));
 			put("Wishart", Arrays.asList(
-					attrs.get("degreesOfFreedom"),
-					attrs.get("dof"),
-					attrs.get("scaleMatrix"),
-					attrs.get("dimension"))); 
+					attr_real_degreesOfFreedom,
+					attr_real_dof,
+					attr_scaleMatrix,
+					attr_dimension)); 
 		}
 	};
 
-	final static List<DistributionParameter> common_attrs = Arrays.asList(
-			new DistributionParameter("type", DataTypes.TYPE_UNDEFINED, true),
-			new DistributionParameter("level", DataTypes.TYPE_UNDEFINED, false),
-			new DistributionParameter("weight", DataTypes.TYPE_REAL, false, 0., 1.));
+	final static List<Attribute> common_attrs = Arrays.asList(attr_type, attr_level,attr_weight);
 	
 	@Check
 	public void checkRequiredArguments(DistributionArguments args){
-		DistributionArgument type = findDistributionAttribute(args, "type");
+		DistributionArgument type = findDistributionAttribute(args, attr_type.name);
 		if (type != null){
-			List<DistributionParameter> recognized_attrs = distr_attrs.get(type.getDistribution().getIdentifier());
+			List<Attribute> recognized_attrs = distr_attrs.get(type.getDistribution().getIdentifier());
 			if (recognized_attrs != null){
-				for (DistributionParameter arg: recognized_attrs){
+				for (Attribute arg: recognized_attrs){
 					if (arg.mandatory){
 						DistributionArgument actualArg = findDistributionAttribute(args, arg.name);
 						if (actualArg == null){
@@ -287,7 +272,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		} else {
 			warning(MSG_DISTR_UNKNOWN, 
 				MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
-				MSG_DISTR_ATTRIBUTE_UNKNOWN, "type");	
+				MSG_DISTR_ATTRIBUTE_UNKNOWN, attr_type.name);	
 		}
 	}
 	
@@ -296,16 +281,16 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		EObject argContainer = argument.eContainer();	
 		if (!(argContainer instanceof DistributionArgumentsImpl)) return;
 		DistributionArguments args = (DistributionArguments)argContainer;
-		DistributionArgument type = findDistributionAttribute(args, "type");
+		DistributionArgument type = findDistributionAttribute(args, attr_type.name);
 		if (type != null){
-			List<DistributionParameter> recognized_attrs = distr_attrs.get(type.getDistribution().getIdentifier());
+			List<Attribute> recognized_attrs = distr_attrs.get(type.getDistribution().getIdentifier());
 			if (recognized_attrs != null){
-				for (DistributionParameter arg: recognized_attrs){
+				for (Attribute arg: recognized_attrs){
 					if (arg.name.equals(argument.getArgumentName().getIdentifier())) 
 						return;
 				}
 			}
-			for (DistributionParameter arg: common_attrs){
+			for (Attribute arg: common_attrs){
 				if (arg.name.equals(argument.getArgumentName().getIdentifier())) 
 					return;
 			}
