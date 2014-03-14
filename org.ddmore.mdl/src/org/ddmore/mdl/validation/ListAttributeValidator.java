@@ -66,7 +66,7 @@ public class ListAttributeValidator extends AbstractDeclarativeValidator{
 	final static Attribute attr_units = new Attribute("units", DataType.TYPE_STRING, false);
 	final static Attribute attr_transform = new Attribute("transform", DataType.TYPE_STRING, false);
 	final static Attribute attr_use = new Attribute("use", DataType.TYPE_USE, false);
-	final static Attribute attr_level = new Attribute("level", DataType.TYPE_ID, false);
+	final static Attribute attr_level = new Attribute("level", DataType.TYPE_NAT, false);
 
 	final static Attribute attr_req_cc_type = new Attribute("type", DataType.TYPE_CC, true);
 	final static Attribute attr_cc_type = new Attribute("type", DataType.TYPE_CC, false);
@@ -101,9 +101,9 @@ public class ListAttributeValidator extends AbstractDeclarativeValidator{
 	final static Attribute attr_missing = new Attribute("missing", DataType.TYPE_INT, false);
 	
 	/*FILE*/
-	final static Attribute attr_req_source = new Attribute("source", DataType.TYPE_FILE, true);
+	final static Attribute attr_req_source = new Attribute("source", DataType.TYPE_STRING, true);
 	final static Attribute attr_ignore = new Attribute("ignore", DataType.TYPE_STRING, false);
-	final static Attribute attr_inputformat = new Attribute("inputformat", DataType.TYPE_INPUT, false);
+	final static Attribute attr_inputformat = new Attribute("inputformat", DataType.TYPE_STRING, false);
 	
 	/*DESIGN*/
 	final static Attribute attr_design_source = new Attribute("source", DataType.TYPE_ID, true);
@@ -271,22 +271,23 @@ public class ListAttributeValidator extends AbstractDeclarativeValidator{
 		List<Attribute> knownAttributes = getAllAttributes(container);
 		if (knownAttributes != null){
 			List<String> attributeNames = getAllNames(knownAttributes);
-			if (!attributeNames.contains(argument.getArgumentName().getIdentifier())){
-				warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getIdentifier(), 
+			if (!attributeNames.contains(argument.getArgumentName().getName())){
+				warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
 				MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-				MSG_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getIdentifier());		
+				MSG_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());		
 				return;
 			}
 			for (Attribute x: knownAttributes){
-				if (x.name.equals(argument.getArgumentName().getIdentifier())){
+				if (x.name.equals(argument.getArgumentName().getName())){
 					boolean isValid = DataType.validateType(x.type, argument.getExpression());
 					if (!isValid){
 						warning(MSG_ATTRIBUTE_WRONG_TYPE + 
-							": attribute \"" + argument.getArgumentName().getIdentifier() + "\" expects value of type " + 
+							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
 								x.type.name(), 
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-							MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getIdentifier());		
+							MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());		
 					}
+
 				}
 			}
 		}			

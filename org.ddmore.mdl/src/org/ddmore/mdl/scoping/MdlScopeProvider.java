@@ -3,7 +3,23 @@
  */
 package org.ddmore.mdl.scoping;
 
+import java.util.List;
+
+import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
+import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.mdl.MclObject;
+import org.ddmore.mdl.mdl.ObjectName;
+import org.ddmore.mdl.mdl.impl.MclImpl;
+import org.ddmore.mdl.mdl.impl.MclObjectImpl;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.xtext.scoping.IScope;
+import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * This class contains custom scoping description.
@@ -13,21 +29,11 @@ import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
  *
  */
 public class MdlScopeProvider extends AbstractDeclarativeScopeProvider {
-	/*
-	IScope scope_StructuralParametersBlock_parameters(Mcl model, EReference ref) {
-		//Get all definitions
+	/*IScope scope_FullyQualifiedSymbolName_object(Mcl mcl, EReference ref){
 		List<EObject> crossRefTargets = Lists.newArrayList();
-		Iterables.addAll(crossRefTargets, EcoreUtil2.getAllContentsOfType(model, StructuralBlock.class));
-		return Scopes.scopeFor(crossRefTargets);
-	}*/
-	
-	/*
-	 * IScope scope_Selector_identifier(Selector selector, EReference ref){
-		EObject eContainer = selector.eContainer();
-		if (eContainer instanceof FullyQualifiedArgumentNameImpl){
-			FullyQualifiedArgumentName arg = (FullyQualifiedArgumentName)eContainer;
-			return 	Scopes.scopeFor(...);
+		for (MclObject m: mcl.getObjects()){
+			crossRefTargets.add(m.getObjectName());
 		}
-		return null;
+		return Scopes.scopeFor(crossRefTargets);
 	}*/
 }

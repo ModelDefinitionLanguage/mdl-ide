@@ -92,10 +92,10 @@ public class FunctionCallValidator extends AbstractDeclarativeValidator{
 				ArrayList<String> funcList =  new ArrayList<String>();
 				for (TaskObjectBlock block : taskObj.getBlocks()){
 					if (block.getFunctionDeclaration() != null){
-						funcList.add(block.getFunctionDeclaration().getIdentifier());
+						funcList.add(block.getFunctionDeclaration().getFunctionName().getName());
 					}
 				}
-				declaredFunctions.put(obj.getIdentifier().getName(), funcList);
+				declaredFunctions.put(obj.getObjectName().getName(), funcList);
 			}
 		}
 	}
@@ -111,28 +111,28 @@ public class FunctionCallValidator extends AbstractDeclarativeValidator{
 				for (ModelObjectBlock block : modelObj.getBlocks()){
 					Utils.addSymbol(funcList, block.getImportBlock());
 				}
-				externalFunctions.put(obj.getIdentifier().getName(), funcList);
+				externalFunctions.put(obj.getObjectName().getName(), funcList);
 			}
 			if (obj.getParameterObject() != null){
 				ParameterObject paramObj = obj.getParameterObject();
 				for (ParameterObjectBlock block : paramObj.getBlocks()){
 					Utils.addSymbol(funcList, block.getImportBlock());
 				}
-				externalFunctions.put(obj.getIdentifier().getName(), funcList);
+				externalFunctions.put(obj.getObjectName().getName(), funcList);
 			}
 			if (obj.getDataObject() != null){
 				DataObject dataObj = obj.getDataObject();
 				for (DataObjectBlock block : dataObj.getBlocks()){
 					Utils.addSymbol(funcList, block.getImportBlock());
 				}
-				externalFunctions.put(obj.getIdentifier().getName(), funcList);
+				externalFunctions.put(obj.getObjectName().getName(), funcList);
 			}
 			if (obj.getTaskObject() != null){
 				TaskObject taskObj = obj.getTaskObject();
 				for (TaskObjectBlock block : taskObj.getBlocks()){
 					Utils.addSymbol(funcList, block.getImportBlock());
 				}
-				externalFunctions.put(obj.getIdentifier().getName(), funcList);
+				externalFunctions.put(obj.getObjectName().getName(), funcList);
 			}
 		}
 	}
@@ -140,19 +140,19 @@ public class FunctionCallValidator extends AbstractDeclarativeValidator{
 	//Check whether the function with such a name is already defined
 	@Check
 	public void checkFunctionDeclaration(TaskFunctionDeclaration func){
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredFunctions, func.getIdentifier())){
-			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__IDENTIFIER);
+		if (Utils.isSymbolDeclaredMoreThanOnce(declaredFunctions, func.getFunctionName().getName())){
+			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FUNCTION_NAME);
 		}
 	}
 	
 	//Check whether the function with such a name is already defined
 	@Check
 	public void checkExportFunctionDeclaration(ImportedFunction func){
-		if (Utils.isSymbolDeclaredMoreThanOnce(externalFunctions, func.getIdentifier())){
-			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__IDENTIFIER);
+		if (Utils.isSymbolDeclaredMoreThanOnce(externalFunctions, func.getFunctionName().getName())){
+			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__FUNCTION_NAME);
 		}
-		if (Utils.isSymbolDeclared(declaredFunctions, func.getIdentifier(), null)){
-			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__IDENTIFIER);
+		if (Utils.isSymbolDeclared(declaredFunctions, func.getFunctionName().getName(), null)){
+			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__FUNCTION_NAME);
 		}
 		//Check that it is not standard and was not defined in Task objects
 	}	
@@ -160,12 +160,12 @@ public class FunctionCallValidator extends AbstractDeclarativeValidator{
 	//Check that the function call is to an existing function
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
-		if (!isStandardFunction(call.getIdentifier().getIdentifier())){
-			if(!(Utils.isSymbolDeclared(declaredFunctions, call.getIdentifier().getIdentifier(), call.getIdentifier().getObject()))
-				&& !(Utils.isSymbolDeclared(externalFunctions, call.getIdentifier().getIdentifier(), call.getIdentifier().getObject()))){
+		if (!isStandardFunction(call.getIdentifier().getSymbol().getName())){
+			if(!(Utils.isSymbolDeclared(declaredFunctions, call.getIdentifier().getSymbol().getName(), call.getIdentifier().getObject()))
+				&& !(Utils.isSymbolDeclared(externalFunctions, call.getIdentifier().getSymbol().getName(), call.getIdentifier().getObject()))){
 			warning(MSG_FUNCTION_UNKNOWN, 
 					MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER,
-					MSG_FUNCTION_UNKNOWN, call.getIdentifier().getIdentifier());
+					MSG_FUNCTION_UNKNOWN, call.getIdentifier().getSymbol().getName());
 			} else {
 				//declared functions (Task object) or external functions (IMPORT)
 				//TODO: match number of actual parameters with the number of references in param attribute 
@@ -174,24 +174,24 @@ public class FunctionCallValidator extends AbstractDeclarativeValidator{
 		}
 		else {//standard function
 			//TODO: check number of expected parameters
-			Integer expected = functionParameters.get(call.getIdentifier().getIdentifier());
+			Integer expected = functionParameters.get(call.getIdentifier().getSymbol().getName());
 			if (expected == null) expected = 1; //1 by default
 			Integer actual = 0;
 			if (call.getArguments().getArguments() != null)
 				actual = call.getArguments().getArguments().size();
 			if ((expected < 0) && (actual < -expected)){
 				warning(MSG_FUNCTION_INVALID + ": " +  
-						call.getIdentifier().getIdentifier() + " expects " + (-expected) + " or more parameters.", 
+						call.getIdentifier().getSymbol().getName() + " expects " + (-expected) + " or more parameters.", 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_INVALID, 
-						call.getIdentifier().getIdentifier());
+						call.getIdentifier().getSymbol().getName());
 			}
 			if ((expected >= 0) && (actual < expected)){
 				warning(MSG_FUNCTION_INVALID + ": " +
-						call.getIdentifier().getIdentifier() + " expects " + expected + " parameter(s).", 
+						call.getIdentifier().getSymbol().getName() + " expects " + expected + " parameter(s).", 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_INVALID, 
-						call.getIdentifier().getIdentifier());
+						call.getIdentifier().getSymbol().getName());
 			}
 		}
 	}

@@ -71,7 +71,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public void updateObjectList(Mcl mcl){
 		declaredObjects.clear();
 		for (MclObject obj: mcl.getObjects()){
-			declaredObjects.add(obj.getIdentifier().getName());
+			declaredObjects.add(obj.getObjectName().getName());
 		}
 	}
 
@@ -87,13 +87,13 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					//RANDOM_VARIABLE_DEFINITION
 					if (block.getRandomVariableDefinitionBlock() != null){
 						for (RandomVariable s: block.getRandomVariableDefinitionBlock().getVariables()){
-							varList.add(s.getIdentifier());
+							varList.add(s.getSymbolName().getName());
 						}
 					}
 					//INPUT_VARIABLES
 					if (block.getInputVariablesBlock() != null){
 						for (SymbolDeclaration s: block.getInputVariablesBlock().getVariables()){
-							varList.add(s.getIdentifier());
+							varList.add(s.getSymbolName().getName());
 						}
 					}
 					//GROUP_VARIABLES, MIXTURE
@@ -124,7 +124,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 							}
 							if (s.getLibraryBlock() != null){
 								for (FunctionCallStatement st: s.getLibraryBlock().getStatements()){
-									varList.add(st.getIdentifier());
+									varList.add(st.getFunctionName().getName());
 								}
 							}
 						}
@@ -148,7 +148,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 						}
 					}
 				}
-				declaredVariables.put(obj.getIdentifier().getName(), varList);
+				declaredVariables.put(obj.getObjectName().getName(), varList);
 			}
 			if (obj.getDataObject() != null){
 				for (DataObjectBlock block: obj.getDataObject().getBlocks()){
@@ -156,23 +156,23 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					if (block.getFileBlock() != null){
 						for (FileBlockStatement s: block.getFileBlock().getStatements()){
 							if (s.getVariable() != null){
-								varList.add(s.getVariable().getIdentifier());
+								varList.add(s.getVariable().getSymbolName().getName());
 							}
 							if (s.getRscriptBlock() != null){
 								for (RScriptBlockStatement rs: s.getRscriptBlock().getVariables()){
-									varList.add(rs.getIdentifier());
+									varList.add(rs.getSymbolName().getName());
 								}
 							}
 						}
 					}
 				}
-				declaredVariables.put(obj.getIdentifier().getName(), varList);
+				declaredVariables.put(obj.getObjectName().getName(), varList);
 			}
 			if (obj.getTelObject() != null){
 				for (BlockStatement st: obj.getTelObject().getStatements()){
 					Utils.addSymbol(varList, st);
 				}
-				declaredVariables.put(obj.getIdentifier().getName(), varList);
+				declaredVariables.put(obj.getObjectName().getName(), varList);
 			}
 			//Add variables from LIBRARY and IMPORT block's attribute "output" to the list of recognized variables
 			Resource resource = obj.eResource();
@@ -185,7 +185,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		    				varList.addAll(Utils.extractSymbolNames(f.getList().getArguments(), "output"));
 		    			}
 		    		}
-					declaredVariables.put(obj.getIdentifier().getName(), varList);
+					declaredVariables.put(obj.getObjectName().getName(), varList);
 		    	}
 		    	if (block instanceof LibraryBlockImpl){
 		    		for (FunctionCallStatement st: ((LibraryBlock) block).getStatements()){
@@ -193,7 +193,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			    			varList.addAll(Utils.extractSymbolNames(st.getExpression().getArguments(), "output"));
 		    			}
 		    		}
-					declaredVariables.put(obj.getIdentifier().getName(), varList);
+					declaredVariables.put(obj.getObjectName().getName(), varList);
 		    	}
 		    }
 		}
@@ -210,14 +210,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					//STRUCTURAL
 					if (block.getStructuralBlock() != null){
 						for (ParameterDeclaration s: block.getStructuralBlock().getParameters()){
-							paramList.add(s.getIdentifier());
+							paramList.add(s.getSymbolName().getName());
 						}
 					}
 					//VARIABILITY, matrix, diag, same
 					if (block.getVariabilityBlock() != null){
 						for (VariabilityBlockStatement s: block.getVariabilityBlock().getStatements()){
 							if (s.getParameter() != null){
-								paramList.add(s.getParameter().getIdentifier());
+								paramList.add(s.getParameter().getSymbolName().getName());
 							}
 							if (s.getMatrixBlock() != null){
 								Utils.addSymbol(paramList, s.getMatrixBlock().getParameters());
@@ -234,12 +234,12 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					if (block.getPriorBlock() != null){
 						for (BlockStatement s: block.getPriorBlock().getStatements()){
 							if (s.getSymbol() != null){
-								paramList.add(s.getSymbol().getIdentifier());
+								paramList.add(s.getSymbol().getSymbolName().getName());
 							}
 						}
 					}
 				}
-				declaredParameters.put(obj.getIdentifier().getName(), paramList);
+				declaredParameters.put(obj.getObjectName().getName(), paramList);
 			}
 		}
 	}
@@ -285,32 +285,32 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//Check whether the symbol with such a name is already defined
 	@Check
 	public void checkSymbolDeclaration(SymbolDeclaration symbol){
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables, symbol.getIdentifier())){
-			warning(MSG_VARIABLE_DEFINED, MdlPackage.Literals.SYMBOL_DECLARATION__IDENTIFIER);
+		if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables, symbol.getSymbolName().getName())){
+			warning(MSG_VARIABLE_DEFINED, MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME);
 		}
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredParameters, symbol.getIdentifier())){
-			warning(MSG_PARAMETER_DEFINED, MdlPackage.Literals.SYMBOL_DECLARATION__IDENTIFIER);
+		if (Utils.isSymbolDeclaredMoreThanOnce(declaredParameters, symbol.getSymbolName().getName())){
+			warning(MSG_PARAMETER_DEFINED, MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME);
 		}
 	}	
 	
 	//Check whether the symbol with such a name is already defined
 	@Check
 	public void checkSymbolDeclaration(ParameterDeclaration symbol){
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables, symbol.getIdentifier())){
-			warning(MSG_VARIABLE_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__IDENTIFIER);
+		if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables, symbol.getSymbolName().getName())){
+			warning(MSG_VARIABLE_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__SYMBOL_NAME);
 		}
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredParameters, symbol.getIdentifier())){
-			warning(MSG_PARAMETER_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__IDENTIFIER);
+		if (Utils.isSymbolDeclaredMoreThanOnce(declaredParameters, symbol.getSymbolName().getName())){
+			warning(MSG_PARAMETER_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__SYMBOL_NAME);
 		}
 	}	
 	
 	@Check
 	public void checkSymbolDeclaration(RScriptBlockStatement symbol){
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables, symbol.getIdentifier())){
-			warning(MSG_VARIABLE_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__IDENTIFIER);
+		if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables, symbol.getSymbolName().getName())){
+			warning(MSG_VARIABLE_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__SYMBOL_NAME);
 		}
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredParameters, symbol.getIdentifier())){
-			warning(MSG_PARAMETER_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__IDENTIFIER);
+		if (Utils.isSymbolDeclaredMoreThanOnce(declaredParameters, symbol.getSymbolName().getName())){
+			warning(MSG_PARAMETER_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__SYMBOL_NAME);
 		}
 	}	
 	
@@ -331,10 +331,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		if (container instanceof StructuralParametersBlockImpl || 
 				container instanceof VariabilityParametersBlockImpl ||
 				container instanceof ParameterBlockImpl){
-			if (!Utils.isSymbolDeclared(declaredParameters, ref.getIdentifier(), ref.getObject())){
+			if (!Utils.isSymbolDeclared(declaredParameters, ref.getSymbol().getName(), ref.getObject())){
 				warning(MSG_PARAMETER_UNKNOWN, 
-						MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__IDENTIFIER,
-						MSG_PARAMETER_UNKNOWN, ref.getIdentifier());
+						MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL,
+						MSG_PARAMETER_UNKNOWN, ref.getSymbol().getName());
 			}
 		}
 
@@ -347,30 +347,30 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				container instanceof VariableListImpl ||
 				container instanceof DesignBlockStatementImpl ||
 				container instanceof SymbolListImpl){
-			if (!(Utils.isSymbolDeclared(declaredVariables, ref.getIdentifier(), ref.getObject()))){
+			if (!(Utils.isSymbolDeclared(declaredVariables, ref.getSymbol().getName(), ref.getObject()))){
 				warning(MSG_VARIABLE_UNKNOWN, 
-						MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__IDENTIFIER,
-						MSG_VARIABLE_UNKNOWN, ref.getIdentifier());
+						MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL,
+						MSG_VARIABLE_UNKNOWN, ref.getSymbol().getName());
 			}
 		}
 		
 		/*References in expressions either to variables of parameters*/
 		if ((container instanceof PrimaryImpl) || (container instanceof UnaryExpression)){
-			if (!(Utils.isSymbolDeclared(declaredVariables, ref.getIdentifier(), ref.getObject()) || 
-					Utils.isSymbolDeclared(declaredParameters, ref.getIdentifier(), ref.getObject()) ||
-					declaredObjects.contains(ref.getIdentifier()) ||
+			if (!(Utils.isSymbolDeclared(declaredVariables, ref.getSymbol().getName(), ref.getObject()) || 
+					Utils.isSymbolDeclared(declaredParameters, ref.getSymbol().getName(), ref.getObject()) ||
+					declaredObjects.contains(ref.getSymbol().getName()) ||
 					isFormalParameter(ref))){
 				warning(MSG_SYMBOL_UNKNOWN, 
-						MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__IDENTIFIER,
-						MSG_SYMBOL_UNKNOWN, ref.getIdentifier());
+						MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL,
+						MSG_SYMBOL_UNKNOWN, ref.getSymbol().getName());
 			}
 		}
 		if (container instanceof FullyQualifiedArgumentNameImpl){
-			if (!(Utils.isSymbolDeclared(declaredVariables, ref.getIdentifier(), ref.getObject()) || 
-					Utils.isSymbolDeclared(declaredParameters, ref.getIdentifier(), ref.getObject()))){
+			if (!(Utils.isSymbolDeclared(declaredVariables, ref.getSymbol().getName(), ref.getObject()) || 
+					Utils.isSymbolDeclared(declaredParameters, ref.getSymbol().getName(), ref.getObject()))){
 				warning(MSG_SYMBOL_UNKNOWN, 
-						MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__IDENTIFIER,
-						MSG_SYMBOL_UNKNOWN, ref.getIdentifier());
+						MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL,
+						MSG_SYMBOL_UNKNOWN, ref.getSymbol().getName());
 			}
 		}
 	}
@@ -387,7 +387,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		TaskFunctionDeclaration func = (TaskFunctionDeclaration)container;
 		if (func.getFormalArguments() != null){
 			for (ArgumentName arg: func.getFormalArguments().getArguments()){
-				if (arg.getIdentifier().equals(ref.getIdentifier())) return true;
+				if (arg.getName().equals(ref.getSymbol().getName())) return true;
 			}
 		}
 		return false;
@@ -409,7 +409,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				if (x.getArgumentName() != null){
 					int i = 0;
 					for (Argument arg: currArg){
-						if (arg.getArgumentName().getIdentifier().equals(x.getArgumentName().getIdentifier())){
+						if (arg.getArgumentName().getName().equals(x.getArgumentName().getName())){
 							index = i + 1;
 							break;
 						}
@@ -435,7 +435,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		//We check that attributes refer to function arguments
 		if (checkReferenceToFuctionOutput(ref)) return;
 
-		String varName = ref.getParent().getIdentifier();
+		String varName = ref.getParent().getSymbol().getName();
 		Resource resource = ref.eResource();
 		LinkedList<Argument> args = new LinkedList<Argument>();		
 		TreeIterator<EObject> iterator = resource.getAllContents();
@@ -443,7 +443,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    	EObject obj = iterator.next();
 	    	if (obj instanceof SymbolDeclarationImpl){
 	    		SymbolDeclaration s = (SymbolDeclaration) obj;
-	    		if (s.getIdentifier().equals(varName)) {
+	    		if (s.getSymbolName().getName().equals(varName)) {
 	    			if (s.getExpression() != null){
 	       				if (s.getExpression().getList() != null)
 	       					if (s.getExpression().getList().getArguments() != null)
@@ -469,7 +469,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    	}
 	    	if (obj instanceof ParameterDeclarationImpl){
 	    		ParameterDeclaration s = (ParameterDeclaration) obj;
-		    	if (s.getIdentifier().equals(varName)) 
+		    	if (s.getSymbolName().getName().equals(varName)) 
 		       		if (s.getList() != null)
 		       			if (s.getList().getArguments() != null)
 		       				for (Argument x: s.getList().getArguments().getArguments())
@@ -479,14 +479,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    if (!checkAttributes(ref, args)){
 			warning(MSG_UNRESOLVED_ATTRIBUTE_REF, 
 					MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-					MSG_UNRESOLVED_ATTRIBUTE_REF, ref.getParent().getIdentifier());
+					MSG_UNRESOLVED_ATTRIBUTE_REF, ref.getParent().getSymbol().getName());
 	    }
 	}
 
 	//Validate a fully qualified argument whose parent refers to a variable declared as a function 
 	//It is assumed that attribute selectors will refer to symbols in attribute "param" of a function call 
 	public boolean checkReferenceToFuctionOutput(FullyQualifiedArgumentName ref) {
-		String varName = ref.getParent().getIdentifier();		
+		String varName = ref.getParent().getSymbol().getName();		
 		//N.K. - exclude/validate standard functions???		
 		Resource resource = ref.eResource();
 		TreeIterator<EObject> iterator = resource.getAllContents();
@@ -495,18 +495,18 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    	EObject obj = iterator.next();
 	    	if (obj instanceof FunctionCallStatementImpl){
 	    		FunctionCallStatement s = (FunctionCallStatement) obj;
-	    		if (s.getIdentifier().equals(varName)) {	    			
+	    		if (s.getFunctionName().getName().equals(varName)) {	    			
 	    			//Compare reference with references in FunctionCall param attribute
 	    			//Does not guarantee the correctness as references may occur in expressions
 	    			FunctionCall funcCall = s.getExpression();
 	    			params.addAll(Utils.extractSymbolNames(funcCall.getArguments(), "param"));
 	       			ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
 	       			if (paramRef != null){
-	       				if (!params.contains(paramRef.getIdentifier())){
+	       				if (!params.contains(paramRef.getName())){
 	       					warning(MSG_UNRESOLVED_FUNC_ARGUMENT_REF + ": " + 
-	       							paramRef.getIdentifier() + " is not in the reference set " + Utils.printList(params), 
+	       							paramRef.getName() + " is not in the reference set " + Utils.printList(params), 
 	       							MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-	       							MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getIdentifier());
+	       							MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getSymbol().getName());
 	       				}
 	       			} else {
 	       				String selector = ref.getSelectors().get(0).getSelector();
@@ -516,7 +516,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	       							"wrong index [" + index + "]. " + 
 	       							"Reference set " + Utils.printList(params) + " contains " + params.size() + " items.", 
 	       							MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-	       							MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getIdentifier());
+	       							MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getSymbol().getName());
 	       				}	       					
 	       			}
 	       			return true; //skip list attribute check
@@ -537,7 +537,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		Boolean isDataDefined = false;
 		for (FileBlockStatement st: b.getStatements()){
 			if (st.getVariable() != null){	
-				if (st.getVariable().getIdentifier().equalsIgnoreCase("data")) {
+				if (st.getVariable().getSymbolName().getName().equalsIgnoreCase("data")) {
 					isDataDefined  = true;
 					break;
 				}

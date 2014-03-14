@@ -22,14 +22,15 @@ Require-Bundle: org.eclipse.xtext;bundle-version="[2.4.0,2.4.1)";visibility:=ree
  org.ops4j.pax.logging.pax-logging-api;bundle-version="1.7.0",
  org.eclipse.core.resources
 Export-Package: org.ddmore.mdl,
- org.ddmore.mdl.services,
+ org.ddmore.mdl.formatting,
+ org.ddmore.mdl.generator,
  org.ddmore.mdl.mdl,
  org.ddmore.mdl.mdl.impl,
  org.ddmore.mdl.mdl.util,
- org.ddmore.mdl.serializer,
  org.ddmore.mdl.parser.antlr,
  org.ddmore.mdl.parser.antlr.internal,
- org.ddmore.mdl.validation,
  org.ddmore.mdl.scoping,
- org.ddmore.mdl.formatting
+ org.ddmore.mdl.serializer,
+ org.ddmore.mdl.services,
+ org.ddmore.mdl.validation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

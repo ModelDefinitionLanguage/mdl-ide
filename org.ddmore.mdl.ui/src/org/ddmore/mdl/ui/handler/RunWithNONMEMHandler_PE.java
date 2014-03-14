@@ -1,6 +1,7 @@
 package org.ddmore.mdl.ui.handler;
 
 import org.ddmore.mdl.controller.RunJobOnTES;
+import org.ddmore.mdl.mdl.Mcl;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -49,10 +50,10 @@ public class RunWithNONMEMHandler_PE extends AbstractHandler implements IHandler
                 Resource r = rs.getResource(uri, true);
 
                 if (generator != null) {
-                	String dataFileName = generator.getDataSource(r);
+                    Mcl mcl = (Mcl) r.getContents().get(0);
+                	String dataFileName = generator.getDataSource(mcl);
                     new RunJobOnTES().run(file, dataFileName);
                 }
-
                 return Boolean.TRUE;
             }
         }

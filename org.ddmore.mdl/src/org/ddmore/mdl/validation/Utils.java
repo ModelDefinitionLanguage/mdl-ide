@@ -50,7 +50,7 @@ public class Utils {
 	static boolean containsAttribute(Arguments args, String attrName){
 		for (Argument arg: args.getArguments()){
 			if (arg.getArgumentName() != null){
-				if (arg.getArgumentName().getIdentifier().equals(attrName)) return true;
+				if (arg.getArgumentName().getName().equals(attrName)) return true;
 			}
 		}
 		return false;
@@ -60,7 +60,7 @@ public class Utils {
 	static void addSymbol(ArrayList<String> list, BlockStatement st){
 		if (st != null){
 			if (st.getSymbol() != null){
-				list.add(st.getSymbol().getIdentifier());
+				list.add(st.getSymbol().getSymbolName().getName());
 			}
 			//conditional declarations
 			if (st.getStatement() != null){
@@ -79,7 +79,8 @@ public class Utils {
 	static void addSymbolNoRepeat(ArrayList<String> list, BlockStatement st){
 		if (st != null){
 			if (st.getSymbol() != null)
-				if (!list.contains(st.getSymbol().getIdentifier())) list.add(st.getSymbol().getIdentifier());
+				if (!list.contains(st.getSymbol().getSymbolName().getName())) 
+					list.add(st.getSymbol().getSymbolName().getName());
 			if (st.getStatement() != null)
 				addSymbol(list, st.getStatement());
 		}
@@ -170,7 +171,7 @@ public class Utils {
 			if (args.getArguments() != null){	
 				for (Argument arg: args.getArguments()){
 					if (arg.getArgumentName() != null)
-						list.add(arg.getArgumentName().getIdentifier());
+						list.add(arg.getArgumentName().getName());
 				}
 			}
 		}
@@ -179,7 +180,7 @@ public class Utils {
 	static void addSymbol(ArrayList<String> list, FormalArguments args){
 		if (args != null){
 			for (ArgumentName id: args.getArguments()){
-				list.add(id.getIdentifier());
+				list.add(id.getName());
 			}
 		}
 	}
@@ -187,7 +188,7 @@ public class Utils {
 	static void addSymbol(ArrayList<String> list, ImportBlock block){
 		if (block != null){
 			for (ImportedFunction id: block.getFunctions()){
-				list.add(id.getIdentifier());
+				list.add(id.getFunctionName().getName());
 			}
 		}
 	}
@@ -195,7 +196,7 @@ public class Utils {
 	//Evaluate STRING expression
 	static String getAttributeValue(Arguments a, String attrName){
 		for (Argument arg: a.getArguments()){
-			if (arg.getArgumentName().getIdentifier().equals(attrName))
+			if (arg.getArgumentName().getName().equals(attrName))
 				return getAttributeValue(arg);
 		}
 		return "";
@@ -212,8 +213,7 @@ public class Utils {
 					LogicalExpression logicalExpr = andExpr.getExpression().get(0);	
 					if (logicalExpr.getExpression1() != null){	
 						AdditiveExpression addExpr = logicalExpr.getExpression1();
-						if (addExpr.getString() != null)
-							for (String str: addExpr.getString()) res += str;
+						if (addExpr.getString() != null) return addExpr.getString();
 					}
 				}
 			}
@@ -227,7 +227,7 @@ public class Utils {
 		if (args != null){
 			if (args.getArguments() != null){
 				for (Argument x: args.getArguments()){
-					if (x.getArgumentName().getIdentifier().equals(attrName)) {
+					if (x.getArgumentName().getName().equals(attrName)) {
 						if (x.getExpression().getList() != null) {
 							for (Argument paramArg : x.getExpression().getList().getArguments().getArguments()) {
 								TreeIterator<EObject> paramIterator = paramArg.getExpression().eAllContents();
@@ -235,7 +235,7 @@ public class Utils {
 									EObject paramObj = paramIterator.next();
 									if (paramObj instanceof FullyQualifiedSymbolNameImpl) {
 										FullyQualifiedSymbolName foundParam = (FullyQualifiedSymbolName) paramObj;
-										params.add(foundParam.getIdentifier());
+										params.add(foundParam.getSymbol().getName());
 									}
 								}
 							}

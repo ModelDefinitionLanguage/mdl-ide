@@ -30,6 +30,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_DISTR_UNKNOWN = "Failed to recognize distribution type";
 	public final static String MSG_DISTR_ATTRIBUTE_UNKNOWN = "Unknown distribution attribute";
 	public final static String MSG_DISTR_ATTRIBUTE_MISSING = "Required distribution attribute is missing";
+	public final static String MSG_DISTR_ATTRIBUTE_WRONG_TYPE = "Type error";
 
 	final static Attribute attr_probability = new Attribute("probability", DataType.TYPE_PROBABILITY, true);
 	final static Attribute attr_probabilityOfSuccess = new Attribute("probabilityOfSuccess", DataType.TYPE_PROBABILITY, true);
@@ -89,8 +90,8 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	final static Attribute attr_scaleMatrix = new Attribute("scaleMatrix", DataType.TYPE_VECTOR_PREAL, true);
 	final static Attribute attr_dimension = new Attribute("dimension", DataType.TYPE_NAT, false);
 	
-	final static Attribute attr_type = new Attribute("type", DataType.TYPE_UNDEFINED, true);
-	final static Attribute attr_level = new Attribute("level", DataType.TYPE_UNDEFINED, false);
+	final static Attribute attr_type = new Attribute("type", DataType.TYPE_DISTRIBUTION, true);
+	final static Attribute attr_level = new Attribute("level", DataType.TYPE_ID, false);
 	final static Attribute attr_weight = new Attribute("weight", DataType.TYPE_REAL, false);	
 	
 	//List of synonyms or alternatives
@@ -285,24 +286,35 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		if (type != null){
 			List<Attribute> recognized_attrs = distr_attrs.get(type.getDistribution().getIdentifier());
 			if (recognized_attrs != null){
-				for (Attribute arg: recognized_attrs){
-					if (arg.name.equals(argument.getArgumentName().getIdentifier())) 
-						return;
-				}
+				if (checkAttribute(argument, recognized_attrs)) return;
 			}
-			for (Attribute arg: common_attrs){
-				if (arg.name.equals(argument.getArgumentName().getIdentifier())) 
-					return;
-			}
-			warning(MSG_DISTR_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getIdentifier(), 
-			MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME,
-			MSG_DISTR_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getIdentifier());			
+			if (!checkAttribute(argument, common_attrs))
+				warning(MSG_DISTR_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
+					MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME,
+					MSG_DISTR_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());	
 		}
+	}
+	
+	Boolean checkAttribute(DistributionArgument argument, List<Attribute> attrs){
+		for (Attribute arg: attrs){
+			if (arg.name.equals(argument.getArgumentName().getName())) {
+				boolean isValid = DataType.validateType(arg.type, argument);
+				if (!isValid){
+					warning(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
+						": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
+							arg.type.name(), 
+						MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME,
+						MSG_DISTR_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());	
+				}
+				return true;
+			}					
+		}
+		return false;
 	}
 	
 	DistributionArgument findDistributionAttribute(DistributionArguments args, String name){
 		for (DistributionArgument arg: args.getArguments()){
-			if (arg.getArgumentName().getIdentifier().equals(name)){
+			if (arg.getArgumentName().getName().equals(name)){
 				return arg;
 			}
 		}
