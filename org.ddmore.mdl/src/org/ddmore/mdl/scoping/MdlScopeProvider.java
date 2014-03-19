@@ -3,23 +3,7 @@
  */
 package org.ddmore.mdl.scoping;
 
-import java.util.List;
-
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
-import org.ddmore.mdl.mdl.Mcl;
-import org.ddmore.mdl.mdl.MclObject;
-import org.ddmore.mdl.mdl.ObjectName;
-import org.ddmore.mdl.mdl.impl.MclImpl;
-import org.ddmore.mdl.mdl.impl.MclObjectImpl;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.xtext.EcoreUtil2;
-import org.eclipse.xtext.scoping.IScope;
-import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 /**
  * This class contains custom scoping description.
@@ -28,6 +12,7 @@ import com.google.common.collect.Lists;
  * on how and when to use it 
  *
  */
+		
 public class MdlScopeProvider extends AbstractDeclarativeScopeProvider {
 	/*IScope scope_FullyQualifiedSymbolName_object(Mcl mcl, EReference ref){
 		List<EObject> crossRefTargets = Lists.newArrayList();
