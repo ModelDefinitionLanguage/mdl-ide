@@ -38,8 +38,8 @@ import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ComposedChecks;
 
 @ComposedChecks(validators = { 
-		ListAttributeValidator.class, 
-		FunctionCallValidator.class, 
+		AttributeValidator.class, 
+		FunctionValidator.class, 
 		DistributionValidator.class, 
 		UnitValidator.class})
 public class MdlJavaValidator extends AbstractMdlJavaValidator {
@@ -54,6 +54,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF = "Unresolved reference to a list attribute";
 	public final static String MSG_UNRESOLVED_FUNC_ARGUMENT_REF = "Unresolved reference to a function output parameter";
 	public final static String MSG_UNRESOLVED_SAME_BLOCK_NAME = "No corresponding matrix or diag block found";
+
+	public final static String MSG_DATA_MISSING = "FILE block does not contain variable \"data\"!";
+	
+	public final static String var_file_data = "data";
 
 	//List of objects
 	static HashSet<String> declaredObjects = new HashSet<String>();
@@ -169,8 +173,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				declaredVariables.put(obj.getObjectName().getName(), varList);
 			}
 			if (obj.getTelObject() != null){
-				for (BlockStatement st: obj.getTelObject().getStatements()){
-					Utils.addSymbol(varList, st);
+				for (FunctionCallStatement st: obj.getTelObject().getStatements()){
+					varList.add(st.getFunctionName().getName());
 				}
 				declaredVariables.put(obj.getObjectName().getName(), varList);
 			}
@@ -255,12 +259,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					if (block.getVariabilityBlock() != null){
 						for (VariabilityBlockStatement s: block.getVariabilityBlock().getStatements()){
 							if (s.getMatrixBlock() != null){
-								String name = Utils.getAttributeValue(s.getMatrixBlock().getArguments(),"name");
+								String name = Utils.getAttributeValue(s.getMatrixBlock().getArguments(),
+										AttributeValidator.attr_name.name);
 								if (name.length() > 0)
 									variabilitySubblockNames.add(name);
 							}
 							if (s.getDiagBlock() != null){
-								String name = Utils.getAttributeValue(s.getDiagBlock().getArguments(),"name");
+								String name = Utils.getAttributeValue(s.getDiagBlock().getArguments(),
+										AttributeValidator.attr_name.name);
 								if (name.length() > 0)
 									variabilitySubblockNames.add(name);
 							}
@@ -274,7 +280,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//Match the name of the same block with the name of a matrix or a diag block
 	@Check
 	public void validateSameSubblockName(SameBlock b){
-		String name = Utils.getAttributeValue(b.getArguments(),"name");
+		String name = Utils.getAttributeValue(b.getArguments(), AttributeValidator.attr_name.name);
 		if (name.length() > 0)
 			if (!variabilitySubblockNames.contains(name))
 				warning(MSG_UNRESOLVED_SAME_BLOCK_NAME, 
@@ -534,17 +540,11 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	@Check
 	public void checkSymbolDeclaration(FileBlock b){
 		//Check that variable "data" is defined 
-		Boolean isDataDefined = false;
 		for (FileBlockStatement st: b.getStatements()){
-			if (st.getVariable() != null){	
-				if (st.getVariable().getSymbolName().getName().equalsIgnoreCase("data")) {
-					isDataDefined  = true;
-					break;
-				}
-			}
+			if (st.getVariable() != null)	
+				if (st.getVariable().getSymbolName().getName().equals(var_file_data)) return;
 		}
-		if (!isDataDefined){
-				warning("FILE block does not contain variable \"data\"!", MdlPackage.Literals.FILE_BLOCK__STATEMENTS);
-		}
+		warning(MSG_DATA_MISSING, MdlPackage.Literals.FILE_BLOCK__STATEMENTS,
+			MSG_DATA_MISSING, var_file_data);
 	}	
 }

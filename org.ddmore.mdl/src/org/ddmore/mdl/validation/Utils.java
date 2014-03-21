@@ -2,6 +2,7 @@ package org.ddmore.mdl.validation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.ddmore.mdl.mdl.AdditiveExpression;
 import org.ddmore.mdl.mdl.AndExpression;
@@ -252,5 +253,22 @@ public class Utils {
 		String res = "{ ";
 		for (String str: list) res += str + "; ";
 		return res + "}";
+	}
+	
+	static ArrayList<String> getAllNames(List<Attribute> attrs){
+		ArrayList<String> names = new ArrayList<String>();
+		for (Attribute attr: attrs){
+			names.add(attr.name);
+		}
+		return names;
+	}
+
+	static ArrayList<String> getRequiredNames(List<Attribute> attrs){
+		ArrayList<String> names = new ArrayList<String>();
+		for (Attribute attr: attrs){
+			if (attr.mandatory)
+				names.add(attr.name);
+		}
+		return names;
 	}
 }

@@ -26,7 +26,7 @@ TaskObject:
 	identifier = 'taskobj' BEGIN blocks += TaskObjectBlock* END;
 	
 TELObject:
-	identifier = 'telobj' BEGIN statements += BlockStatement* END;
+	identifier = 'telobj' BEGIN statements += FunctionCallStatement* END;
 	
 //////////////////////////////////////////////////////////
 //Model Object
