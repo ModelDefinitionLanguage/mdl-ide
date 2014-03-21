@@ -33,7 +33,7 @@ public enum DataType {
     //PharmML vectors
     TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL,TYPE_VECTOR_PROBABILITY,
     //Validation of attribute values
-	TYPE_ID, TYPE_EXPR,
+	TYPE_ID, TYPE_EXPR, TYPE_OBJ_REF,
 	//Composite/nested attributes
 	TYPE_LIST, TYPE_ODE, TYPE_RANDOM_LIST, TYPE_DISTRIBUTION,
 	//Enums
