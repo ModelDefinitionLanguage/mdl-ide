@@ -6,7 +6,7 @@ Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
 MclObject:
-	identifier=ObjectName '=' 
+	objectName=ObjectName '=' 
 	(modelObject=ModelObject | 
 	parameterObject=ParameterObject | 
 	dataObject=DataObject | 
@@ -26,7 +26,7 @@ TaskObject:
 	identifier = 'taskobj' BEGIN blocks += TaskObjectBlock* END;
 	
 TELObject:
-	identifier = 'telobj' BEGIN statements += BlockStatement* END;
+	identifier = 'telobj' BEGIN statements += FunctionCallStatement* END;
 	
 //////////////////////////////////////////////////////////
 //Model Object
@@ -64,7 +64,7 @@ RandomVariableDefinitionBlock:
 ;
 
 InputVariablesBlock:
-  	indentifier = 'INPUT_VARIABLES' 
+  	indentifier = 'MODEL_INPUT_VARIABLES' 
   	BEGIN variables += SymbolDeclaration* END //new Variable +
 ;
 
@@ -79,7 +79,7 @@ VariabilityParametersBlock:
 ;
 
 OutputVariablesBlock:
-	identifier = 'OUTPUT_VARIABLES' 
+	identifier = 'MODEL_OUTPUT_VARIABLES' 
 	BEGIN variables += FullyQualifiedSymbolName* END //Ref to VariableName +
 ; 
 
@@ -141,7 +141,7 @@ DataObjectBlock:
 	importBlock = ImportBlock;
  
 HeaderBlock:
- 	identifier='HEADER' 
+ 	identifier='DATA_INPUT_VARIABLES' 
  	BEGIN variables += SymbolDeclaration* END  //new Variable -
  ;
  
@@ -225,8 +225,9 @@ LibraryBlock:
 ;
 
 FunctionCallStatement:
-	identifier = ID "=" expression = FunctionCall
+	functionName = SymbolName "=" expression = FunctionCall
 ;
+
 
 OdeBlock:
 	identifier = 'ODE' 
@@ -280,7 +281,7 @@ FileBlockStatement:
 
 InlineBlock:
 	identifier = 'INLINE' 
-	BEGIN (variables += FullyQualifiedSymbolName)* (values += (NUMBER | '.'))* END //Ref to VariableName + 
+	BEGIN (variables += FullyQualifiedSymbolName)* (values += NumericValue | '.')* END //Ref to VariableName + 
 ;
 
 DesignBlock:
@@ -302,11 +303,11 @@ RScriptBlock:
 ;
 
 RScriptBlockStatement:
-	identifier = ID "=" (value = STRING | object = ObjectName) // new VariableName +
+	symbolName = SymbolName "=" (value = STRING | object = ObjectName) // new VariableName +
 ;
 
 TaskFunctionDeclaration:
-	identifier = ID "=" 'function'   //new FunctionName +
+	functionName = SymbolName "=" 'function'   //new FunctionName +
 	'(' formalArguments = FormalArguments ')'
 	functionBody = TaskFunctionBody
 ;
@@ -345,7 +346,7 @@ FormalArguments:
 ;
 
 ArgumentName:
-	identifier=ID
+	name=ID
 ;
 
 FunctionCall:
@@ -385,7 +386,7 @@ ImportBlock:
 ;
 
 ImportedFunction:
-	identifier = ID ("=" list = List) 
+	functionName = SymbolName ("=" list = List) 
 ;
 
 SymbolModification:
@@ -394,16 +395,20 @@ SymbolModification:
 ;
 
 ParameterDeclaration:
-	identifier = ID ("=" list = List) //new ParameterName
+	symbolName = SymbolName ("=" list = List) //new ParameterName
+;
+
+SymbolName:
+	name = ID
 ;
 
 //new VariableName, new PropertyName, new ParameterName? (PRIOR_PARAMETERS)
 SymbolDeclaration:
-	identifier = ID ("=" expression = AnyExpression)?
+	symbolName = SymbolName (("=" expression = AnyExpression) | (randomList = RandomList))?
 ;
 
 RandomVariable:
-	((identifier = ID) | (function = ID '(' identifier = ID ')')) 
+	((symbolName = SymbolName) | (functionName = SymbolName '(' symbolName = SymbolName ')')) 
 	randomList = RandomList
 ;
 
@@ -469,16 +474,12 @@ Distribution:
 ;
 
 AnyExpression:
-	expression = Expression | 
+	expression = Expression |
 	list = List | 
 	odeList = OdeList |
 	vector = Vector |
-	type = EnumType
+	type = EnumType 
 ;
-
-Expression:
-	conditionalExpression = ConditionalExpression 
-;	
 
 List:
 	identifier = 'list' '(' arguments = Arguments ')'
@@ -524,6 +525,10 @@ Block: {Block}
 ParExpression:
 	'(' expression = Expression')';
 	
+Expression:
+	conditionalExpression = ConditionalExpression 
+;	
+	
 ConditionalExpression:
 	expression = OrExpression ('?' expression1 = Expression ':' expression2 = Expression)?;
 
@@ -534,14 +539,15 @@ AndExpression:
 	expression += LogicalExpression (operator += LogicalAndOperator expression += LogicalExpression)*;	
 
 LogicalExpression:
-	(negation = "!")? 
-	((boolean = BOOLEAN) | 
-	(expression1 = AdditiveExpression (operator = LogicalOperator expression2 = AdditiveExpression)?))
+	(negation = "!")? (
+		(boolean = BOOLEAN) | 
+		(expression1 = AdditiveExpression (operator = LogicalOperator expression2 = AdditiveExpression)?)
+	)
 ;
 
 AdditiveExpression:
-	(expression += MultiplicativeExpression (operator += AdditiveOperator expression+=MultiplicativeExpression)*) |
-	(string += STRING (operator += '+' string += STRING)*)
+	expression += MultiplicativeExpression (operator += AdditiveOperator expression+=MultiplicativeExpression)* |
+	string = STRING	 
 ;
 
 MultiplicativeExpression:
@@ -553,25 +559,25 @@ PowerExpression:
 UnaryExpression:
 	operator = UnaryOperator expression = UnaryExpression |  
 	parExpression = ParExpression |
-	number = NUMBER |
+	number = NumericValue |
 	symbol = FullyQualifiedSymbolName | //Ref to VariableName +, ParameterName +, ObjectName or formal argument 
 	attribute = FullyQualifiedArgumentName | 
 	functionCall = FunctionCall 
 ;
 
+
 Primary:
-	number = NUMBER |
-	vector = Vector |
-	symbol = FullyQualifiedSymbolName //Ref to VariableName +, ParameterName +, ObjectName or formal argument 
+	number = NumericValue |
+	symbol = FullyQualifiedSymbolName | //Ref to VariableName +, ParameterName +, ObjectName or formal argument 
+	vector = Vector 
 ;
 
-//TODO simplify, vector of values is enough
 Vector:
 	identifier = 'c' '(' values += Primary (=> ',' values += Primary)* ')'
 ;	
 
-FullyQualifiedSymbolName: 	//ref VariableName, ParameterName or FunctionName (depending on the container)
-	(object = [ObjectName] '$')? identifier = ID 
+FullyQualifiedSymbolName: 	//ref VariableName or ParameterName (depending on the container)
+	(object = [ObjectName] '$')? symbol = SymbolName
 ;
 
 FullyQualifiedArgumentName:
@@ -616,8 +622,9 @@ UnaryOperator:
 	'+' | '-' 
 ;
 
-NUMBER:
-	INTEGER | FLOAT; 
+NumericValue:	
+	INTEGER | FLOAT
+; 
 	
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';

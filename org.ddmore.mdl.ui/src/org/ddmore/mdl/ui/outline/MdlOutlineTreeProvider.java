@@ -58,6 +58,7 @@ import org.ddmore.mdl.mdl.TELObject;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.TaskFunctionBlock;
 import org.ddmore.mdl.mdl.TaskFunctionBody;
+import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
 import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
@@ -87,10 +88,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtext.ui.IImageHelper;
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider;
-
 import com.google.inject.Inject;
 
-import eu.ddmore.converter.mdlprinting.MdlPrinter;
+import org.ddmore.mdl.generator.MathPrinter;
 
 /**
  * customization of the default outline structure
@@ -295,8 +295,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	        return imageHelper.getImage(getPath(FALSE));
 	    }
 	    
-	static MdlPrinter printer = new MdlPrinter();
-	
 	protected void _createChildren(IOutlineNode parentNode, Mcl mcl) {
 		for (EObject element : mcl.eContents()) {
 			for (EObject obj: element.eContents()){
@@ -314,9 +312,8 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				false);
 	}
 	
-	
-	protected void _createNode(IOutlineNode parentNode, MclObject obj) {
-	}
+//	protected void _createNode(IOutlineNode parentNode, MclObject obj) {
+//	}
 	
 	/////////////////////////////////////////////////////////////////////////////
 	//Print all object children
@@ -327,7 +324,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				obj,
 				MdlPackage.Literals.MODEL_OBJECT__BLOCKS,
 				_image(obj),
-				((MclObject) obj.eContainer()).getIdentifier().getName(),
+				((MclObject) obj.eContainer()).getObjectName().getName(),
 			false);
 	}
 	
@@ -336,7 +333,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				obj,
 				MdlPackage.Literals.PARAMETER_OBJECT__BLOCKS,
 				_image(obj),
-				((MclObject) obj.eContainer()).getIdentifier().getName(),
+				((MclObject) obj.eContainer()).getObjectName().getName(),
 				false);
 	}
 
@@ -345,7 +342,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				obj,
 				MdlPackage.Literals.TASK_OBJECT__BLOCKS,
 				_image(obj),
-				((MclObject) obj.eContainer()).getIdentifier().getName(),
+				((MclObject) obj.eContainer()).getObjectName().getName(),
 				false);
 	}
 	
@@ -354,7 +351,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				obj,
 				MdlPackage.Literals.DATA_OBJECT__BLOCKS,
 				_image(obj),
-				((MclObject) obj.eContainer()).getIdentifier().getName(),
+				((MclObject) obj.eContainer()).getObjectName().getName(),
 				false);
 	}
 	
@@ -364,7 +361,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				obj,
 				MdlPackage.Literals.TEL_OBJECT__STATEMENTS,
 				_image(obj),
-				((MclObject) obj.eContainer()).getIdentifier().getName(),
+				((MclObject) obj.eContainer()).getObjectName().getName(),
 				false);
 	}
 		
@@ -474,7 +471,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected void  _createNode(IOutlineNode parentNode, Argument a){
 		String attrName = "unnamed attribute";
 		if (a.getArgumentName() != null)
-			attrName = a.getArgumentName().getIdentifier();
+			attrName = a.getArgumentName().getName();
 		createEStructuralFeatureNode(parentNode,
 				a,
 				MdlPackage.Literals.ARGUMENT__EXPRESSION,
@@ -493,7 +490,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		String attrName = "component";
 		EReference ref = MdlPackage.Literals.DISTRIBUTION_ARGUMENT__VALUE;
 		if (a.getArgumentName() != null){
-			attrName = a.getArgumentName().getIdentifier();
+			attrName = a.getArgumentName().getName();
 			if (attrName.equals("type"))
 				ref = MdlPackage.Literals.DISTRIBUTION_ARGUMENT__DISTRIBUTION;
 		} else {
@@ -512,6 +509,15 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			createNode(parentNode, obj);
 		}
 	}	
+	
+	protected void _createNode(IOutlineNode parentNode, TaskFunctionDeclaration t) {
+		createEStructuralFeatureNode(parentNode,
+			t,
+				MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FORMAL_ARGUMENTS,
+				_image(t),
+				t.getFunctionName().getName(),
+		false);
+	}
 	
 	protected void  _createNode(IOutlineNode parentNode, TaskFunctionBody st){
 		for (EObject obj: st.eContents()){
@@ -534,9 +540,9 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedSymbolName name){
 		createEStructuralFeatureNode(parentNode,
 				name,
-				MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__IDENTIFIER,
+				MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL,
 				_image(name),
-				printer.toStr(name),
+				MathPrinter.toStr(name),
 				true);
 	}
 	
@@ -545,7 +551,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				sm,
 				MdlPackage.Literals.SYMBOL_MODIFICATION__LIST,
 				_image(sm),
-				printer.toStr(sm.getIdentifier()),
+				MathPrinter.toStr(sm.getIdentifier()),
 				false);
 	}
 	
@@ -595,7 +601,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				e,
 				MdlPackage.Literals.PAR_EXPRESSION__EXPRESSION,
 				_image(e),
-				 printer.toStr(e),
+				MathPrinter.toStr(e),
 				true);
 	}
 	
@@ -604,7 +610,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				p,
 				MdlPackage.Literals.PARAMETER_DECLARATION__LIST,
 				_image(p),
-				 p.getIdentifier(),
+				 p.getSymbolName().getName(),
 				false);
 	}
 	
@@ -613,7 +619,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				p,
 				MdlPackage.Literals.IMPORTED_FUNCTION__LIST,
 				_image(p),
-				 p.getIdentifier(),
+				 p.getFunctionName().getName(),
 				false);
 	}
 	
@@ -622,7 +628,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				st,
 				MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 				_image(st),
-				printer.toStr(st.getIdentifier()),
+				MathPrinter.toStr(st.getIdentifier()),
 				false);
 	}
 	
@@ -649,7 +655,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			e,
 			MdlPackage.Literals.OR_EXPRESSION__EXPRESSION,
 			_image(e),
-			 printer.toStr(e),
+			MathPrinter.toStr(e),
 			true);
 	}
 	
@@ -658,7 +664,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			e,
 			MdlPackage.Literals.AND_EXPRESSION__EXPRESSION,
 			_image(e),
-			 printer.toStr(e),
+			MathPrinter.toStr(e),
 			true);
 	}
 		
@@ -667,7 +673,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				p,
 				MdlPackage.Literals.DESIGN_BLOCK_STATEMENT__EXPRESSION,
 				_image(p),
-				printer.toStr(p.getIdentifier()),
+				MathPrinter.toStr(p.getIdentifier()),
 				false);
 	}
 	
@@ -677,7 +683,15 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				p,
 				MdlPackage.Literals.SYMBOL_DECLARATION__EXPRESSION,
 				_image(p),
-				 p.getIdentifier(),
+				 p.getSymbolName().getName(),
+				false);
+		}
+		if (p.getRandomList() != null){
+			createEStructuralFeatureNode(parentNode,
+				p,
+				MdlPackage.Literals.SYMBOL_DECLARATION__RANDOM_LIST,
+				_image(p),
+				 p.getSymbolName().getName(),
 				false);
 		}
 	}
@@ -687,8 +701,9 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			createEStructuralFeatureNode(parentNode,
 				v,
 				MdlPackage.Literals.RANDOM_VARIABLE__RANDOM_LIST,
-				(v.getFunction() != null)? getLogImage(): _image(v),
-				(v.getFunction() != null)? v.getFunction() + '(' + v.getIdentifier() + ')' : v.getIdentifier(),
+				(v.getFunctionName() != null)? getLogImage(): _image(v),
+				(v.getFunctionName() != null)? v.getFunctionName().getName() + 
+						'(' + v.getSymbolName().getName() + ')' : v.getSymbolName().getName(),
 				false);
 		}
 	}
@@ -711,21 +726,21 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				p,
 				MdlPackage.Literals.PRIMARY__NUMBER,
 				_image(p),
-				 printer.toStr(p),
+				MathPrinter.toStr(p),
 				true);
 		if (p.getVector() != null)
 			createEStructuralFeatureNode(parentNode,
 					p,
 					MdlPackage.Literals.PRIMARY__VECTOR,
 					_image(p),
-					 printer.toStr(p),
+					MathPrinter.toStr(p),
 					true);
 		if (p.getSymbol() != null)
 			createEStructuralFeatureNode(parentNode,
 					p,
 					MdlPackage.Literals.PRIMARY__SYMBOL,
 					_image(p),
-					 printer.toStr(p),
+					MathPrinter.toStr(p),
 					true);
 	}
 	
@@ -771,7 +786,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			e,
 			MdlPackage.Literals.EXPRESSION__CONDITIONAL_EXPRESSION,
 			_image(e),
-			 printer.toStr(e),
+			MathPrinter.toStr(e),
 			true);
 	}
 }

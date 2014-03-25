@@ -103,7 +103,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	@Check
 	public void checkUnitValue(Argument arg){
 		if (arg.getArgumentName() != null){
-			if (arg.getArgumentName().getIdentifier().equals("units")){
+			if (arg.getArgumentName().getName().equals("units")){
 				String unitValue = Utils.getAttributeValue(arg);
 				if (unitValue.length() > 0){
 					unitValue = unitValue.replaceAll("\\s+","");
@@ -111,7 +111,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 					if (wrongToken != null){
 						warning(MSG_UNIT_UNKNOWN + ": " + wrongToken, 
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-						MSG_UNIT_UNKNOWN, arg.getArgumentName().getIdentifier());
+						MSG_UNIT_UNKNOWN, arg.getArgumentName().getName());
 					}
 				}
 			}

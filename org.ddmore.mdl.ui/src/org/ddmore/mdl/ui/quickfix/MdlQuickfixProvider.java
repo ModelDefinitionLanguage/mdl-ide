@@ -30,6 +30,7 @@ import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.GroupVariablesBlock;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.HeaderBlock;
+import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InlineBlock;
@@ -63,6 +64,7 @@ import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolList;
 import org.ddmore.mdl.mdl.SymbolModification;
+import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.TargetLanguage;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.UseType;
@@ -84,9 +86,9 @@ import org.ddmore.mdl.mdl.impl.SymbolListImpl;
 import org.ddmore.mdl.mdl.impl.SymbolModificationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
-import org.ddmore.mdl.validation.ListAttributeValidator;
+import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.MdlJavaValidator;
-import org.ddmore.mdl.validation.FunctionCallValidator;
+import org.ddmore.mdl.validation.FunctionValidator;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -103,7 +105,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Fix attributes
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-	@Fix(ListAttributeValidator.MSG_ATTRIBUTE_UNKNOWN)
+	@Fix(AttributeValidator.MSG_ATTRIBUTE_UNKNOWN)
 	public void removeAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String attribute = issue.getData()[0];
 		String description = "Remove attribute '" + attribute + "'";
@@ -116,7 +118,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		});
 	}
 	
-	@Fix(ListAttributeValidator.MSG_ATTRIBUTE_MISSING)
+	@Fix(AttributeValidator.MSG_ATTRIBUTE_MISSING)
 	public void addAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String attrName = issue.getData()[0];
 		String description = "Insert attribute '" + attrName +"'";
@@ -301,7 +303,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		PowerExpression power = MdlFactory.eINSTANCE.createPowerExpression();
 		UnaryExpression unary = MdlFactory.eINSTANCE.createUnaryExpression();
 		FullyQualifiedSymbolName symbol = MdlFactory.eINSTANCE.createFullyQualifiedSymbolName();
-		symbol.setIdentifier(value);
+		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+		symbName.setName(value);
+		symbol.setSymbol(symbName);
 		unary.setSymbol(symbol);
 		power.getExpression().add(unary);
 		mult.getExpression().add(power);
@@ -323,7 +327,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		AndExpression and = MdlFactory.eINSTANCE.createAndExpression();
 		LogicalExpression logical = MdlFactory.eINSTANCE.createLogicalExpression();
 		AdditiveExpression add =  MdlFactory.eINSTANCE.createAdditiveExpression();
-		add.getString().add(value);
+		add.setString(value);
 		logical.setExpression1(add);
 		and.getExpression().add(logical);
 		or.getExpression().add(and);
@@ -355,9 +359,10 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	Argument createArgument(String attrName, String attrValue){
 		Argument attr = MdlFactory.eINSTANCE.createArgument();
 		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
-		argName.setIdentifier(attrName);
-		attr.setArgumentName(argName);
+		argName.setName(attrName);
 		AnyExpression attrExpr = createAttributeExpression(attrName, attrValue);
+
+		attr.setArgumentName(argName);
 		attr.setExpression(attrExpr);
 		return attr;
 	}
@@ -365,7 +370,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	Argument createArgumentWithExpression(String attrName, AnyExpression attrExpr){
 		Argument attr = MdlFactory.eINSTANCE.createArgument();
 		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
-		argName.setIdentifier(attrName);
+		argName.setName(attrName);
 		attr.setArgumentName(argName);
 		attr.setExpression(attrExpr);
 		return attr;
@@ -375,7 +380,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	DistributionArgument createDistributionArgument(String attrName, String attrValue){
 		DistributionArgument attr = MdlFactory.eINSTANCE.createDistributionArgument();
 		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
-		argName.setIdentifier(attrName);
+		argName.setName(attrName);
 		attr.setArgumentName(argName);
 		if (attrName.equals("type")){
 			Distribution distribution = MdlFactory.eINSTANCE.createDistribution();
@@ -406,7 +411,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 						//TODO finish on demand
 					} else {//variable
 						FullyQualifiedSymbolName ref = MdlFactory.eINSTANCE.createFullyQualifiedSymbolName();
-						ref.setIdentifier(attrValue);
+						SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+						symbName.setName(attrValue);
+						ref.setSymbol(symbName);
 						primary.setSymbol(ref);
 					}
 				}
@@ -481,7 +488,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	BlockStatement createBlockStatementSymbol(String varName){
 		SymbolDeclaration newSymbol = MdlFactory.eINSTANCE.createSymbolDeclaration();
-		newSymbol.setIdentifier(varName);
+		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+		symbName.setName(varName);
+		newSymbol.setSymbolName(symbName);
 		BlockStatement blockSt = MdlFactory.eINSTANCE.createBlockStatement();
 		blockSt.setSymbol(newSymbol);
 		return blockSt;
@@ -529,7 +538,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	void insertSymbolDeclaration(InputVariablesBlock block, String varName){
 		SymbolDeclaration newSymbol = MdlFactory.eINSTANCE.createSymbolDeclaration();
-		newSymbol.setIdentifier(varName);
+		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+		symbName.setName(varName);
+		newSymbol.setSymbolName(symbName);
 		String[] attrNames = {"type", "units", "use"};
 		String[] attrValues = {"continuous", "kg", "covariate"};
 		AnyExpression expr = createListExpression(attrNames, attrValues);
@@ -563,7 +574,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	void insertRandomVariable(RandomVariableDefinitionBlock block, String varName){
 		RandomVariable newSymbol = MdlFactory.eINSTANCE.createRandomVariable();
-		newSymbol.setIdentifier(varName);
+		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+		symbName.setName(varName);
+		newSymbol.setSymbolName(symbName);
 		//~ (type=Normal, mean=0, variance=PPV_STATUS,level=ID)
 		String[] attrNames = {"type", "mean", "variance", "level"};
 		String[] attrValues = {"Normal", "0", "VarName", "ID"};
@@ -907,7 +920,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	ParameterDeclaration createParameterDeclaration(String varName) {
 		ParameterDeclaration newParam = MdlFactory.eINSTANCE
 				.createParameterDeclaration();
-		newParam.setIdentifier(varName);
+		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+		symbName.setName(varName);
+		newParam.setSymbolName(symbName);
 		String[] attrNames = { "value" };
 		String[] attrValues = { "0" };
 		newParam.setList(createList(attrNames, attrValues));
@@ -918,62 +933,80 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	//block, diag, same
 	
 	//Insert imported function to IMPORT block
-	@Fix(FunctionCallValidator.MSG_FUNCTION_UNKNOWN)
+	@Fix(FunctionValidator.MSG_FUNCTION_UNKNOWN)
 	public void addImportedFunction(final Issue issue, IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Declare function in IMPORT block", 
 				"Declare function in IMPORT block", "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
 				Resource resource = element.eResource();
 				TreeIterator<EObject> iterator = resource.getAllContents();
-			    while (iterator.hasNext()){
+			    ImportBlock importBlock = null;
+			    boolean isNewBlock = false;
+				while (iterator.hasNext()){
 			    	EObject obj = iterator.next();
 			    	if (obj instanceof ImportBlockImpl){
-			    		ImportedFunction importedFunct = MdlFactory.eINSTANCE.createImportedFunction();
-			    		FunctionCall funcCall = (FunctionCall)element;
-			    		String funcName = funcCall.getIdentifier().getIdentifier(); 
-			    		importedFunct.setIdentifier(funcName);
-
-						//Create a list of parameters
-			    		Iterator<Argument> argIterator = funcCall.getArguments().getArguments().iterator();
-			    		org.ddmore.mdl.mdl.List paramList = MdlFactory.eINSTANCE.createList();	
-						paramList.setIdentifier("list");
-						Arguments paramListArgs = MdlFactory.eINSTANCE.createArguments();		
-						AnyExpression paramExpr = MdlFactory.eINSTANCE.createAnyExpression();		
-					    int k = 1;
-						while(argIterator.hasNext()){
-					    	Argument x = argIterator.next(); 	
-					    	Argument attr = null;
-					    	if (x.getArgumentName() != null){
-					    		attr = createArgument(null, x.getArgumentName().getIdentifier());
-					    	} else {
-					    		attr = createArgument(null, "unnamedParam" + k++);
-					    	}
-				    		paramListArgs.getArguments().add(attr);
-					    }
-						paramList.setArguments(paramListArgs);
-						paramExpr.setList(paramList);
-					
-						String[] attrNames = {"target", "name", "param"};
-			    		AnyExpression[] attrValues = {createTargetLanguageExpression("NMTRAN_CODE"), createStringExpression(funcName),
-			    				paramExpr};
-
-			    		org.ddmore.mdl.mdl.List list = MdlFactory.eINSTANCE.createList();		
-			    		list.setIdentifier("list");
-
-			    		Arguments args = MdlFactory.eINSTANCE.createArguments();				
-			    		for (int i = 0; i < attrNames.length; i++){
-			    			Argument attr = createArgumentWithExpression(attrNames[i], attrValues[i]);
-			    			args.getArguments().add(attr);
-			    		}
-			    		list.setArguments(args);
-			    		importedFunct.setList(list);	
-			    		((ImportBlockImpl) obj).getFunctions().add(importedFunct);
-			    		return;
+			    		importBlock = (ImportBlock)obj;
 			    	}
 			    }
+				if (importBlock == null){
+					importBlock = MdlFactory.eINSTANCE.createImportBlock();
+					isNewBlock = true;
+				}
+				ImportedFunction importedFunct = createImportedFunction(element);
+	    		importBlock.getFunctions().add(importedFunct);
+	    		
+	    		if (isNewBlock){
+					ModelObject modelObj = getModelObject(element);
+					ModelObjectBlock modelObjBlock = MdlFactory.eINSTANCE.createModelObjectBlock();
+					modelObjBlock.setImportBlock(importBlock);
+					modelObj.getBlocks().add(modelObjBlock);
+	    		}
 			}
-			//No import block exists, create one in the nearest object
-			//...
 		});
+	}
+	
+	private ImportedFunction createImportedFunction(EObject element){
+		ImportedFunction importedFunct = MdlFactory.eINSTANCE.createImportedFunction();
+		FunctionCall funcCall = (FunctionCall)element;
+		String funcName = funcCall.getIdentifier().getSymbol().getName(); 
+		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+		symbName.setName(funcName);
+		importedFunct.setFunctionName(symbName);
+
+		//Create a list of parameters
+		Iterator<Argument> argIterator = funcCall.getArguments().getArguments().iterator();
+		org.ddmore.mdl.mdl.List paramList = MdlFactory.eINSTANCE.createList();	
+		paramList.setIdentifier("list");
+		Arguments paramListArgs = MdlFactory.eINSTANCE.createArguments();		
+		AnyExpression paramExpr = MdlFactory.eINSTANCE.createAnyExpression();		
+	    int k = 1;
+		while(argIterator.hasNext()){
+	    	Argument x = argIterator.next(); 	
+	    	Argument attr = null;
+	    	if (x.getArgumentName() != null){
+	    		attr = createArgument(x.getArgumentName().getName(), "");
+	    	} else {
+	    		attr = createArgument("unnamedParam" + k++, "");
+	    	}
+    		paramListArgs.getArguments().add(attr);
+	    }
+		paramList.setArguments(paramListArgs);
+		paramExpr.setList(paramList);
+	
+		String[] attrNames = {"target", "name", "param"};
+		AnyExpression[] attrValues = {createTargetLanguageExpression("NMTRAN_CODE"), 
+				createStringExpression(funcName), paramExpr};
+
+		org.ddmore.mdl.mdl.List list = MdlFactory.eINSTANCE.createList();		
+		list.setIdentifier("list");
+
+		Arguments args = MdlFactory.eINSTANCE.createArguments();				
+		for (int i = 0; i < attrNames.length; i++){
+			Argument attr = createArgumentWithExpression(attrNames[i], attrValues[i]);
+			args.getArguments().add(attr);
+		}
+		list.setArguments(args);
+		importedFunct.setList(list);	
+		return importedFunct;
 	}
 }
