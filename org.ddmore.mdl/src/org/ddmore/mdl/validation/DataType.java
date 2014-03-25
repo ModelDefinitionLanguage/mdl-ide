@@ -171,6 +171,11 @@ public enum DataType {
 				if (!ok) return false;
 			} else {
 				if (p.getNumber() == null) return false;
+				/*try{
+					Double.parseDouble(p.getNumber());
+				} catch (NumberFormatException e){
+					return false;
+				}*/ //Validate IDs
 			}
 		}
 		return true;

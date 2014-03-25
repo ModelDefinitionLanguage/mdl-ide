@@ -428,8 +428,8 @@ UseType:
 	identifier = (
 		'id'| 'idv' |'amt' | 'dv' | 'dvid' | 'ytype' | 'itype' |
 		'covariate' | 'reg' | 'time' | 'dose'| 
-		'cat' | 'occ' | 'occasion' | 'adm' | 'cens' | 'limit' | 'rate' | 'tinf' | 
-		'ss' | 'addl' | 'ii' | 'tau' | 'mdv' | 'evid')
+		'cat' | 'occ' | 'occasion' | 'adm' | 'cens' | 'limit' | 'rt' //rate
+		| 'tinf' | 'ss' | 'addl' | 'ii' | 'tau' | 'mdv' | 'evid')
 ;
 
 Categorical:

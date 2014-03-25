@@ -175,7 +175,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_scale, 
 					attr_preal_truncationLowerInclusiveBound,
 					attr_preal_truncationUpperInclusiveBound));
-			put("LogScale", Arrays.asList(
+			put("LogNormal", Arrays.asList(
 					attr_logScale,
 					attr_shape, 
 					attr_preal_truncationLowerInclusiveBound,
@@ -262,7 +262,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 							if (synonym != null){
 								actualArg = findDistributionAttribute(args, synonym);
 							if (actualArg == null)
-								warning(MSG_DISTR_ATTRIBUTE_MISSING, 
+								warning(MSG_DISTR_ATTRIBUTE_MISSING + ": " + arg.name, 
 										MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
 										MSG_DISTR_ATTRIBUTE_MISSING, arg.name);	
 							}
