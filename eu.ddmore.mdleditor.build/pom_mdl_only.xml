@@ -8,7 +8,7 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>../eu.ddmore.mdleditor.target</module>
+		<module>../eu.ddmore.mdleditor.target/pom_mdl_only.xml</module>
 		<module>../org.ddmore.mdl</module>
 	</modules>
 

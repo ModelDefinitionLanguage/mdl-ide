@@ -2,10 +2,10 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<relativePath>../../MDLEditor/eu.ddmore.mdleditor.build/pom.xml</relativePath>
+		<relativePath>../../MDLEditor/eu.ddmore.mdleditor.build/pom_mdl_only.xml</relativePath>
 	
 		<groupId>eu.ddmore</groupId>
-		<artifactId>eu.ddmore.parent</artifactId>
+		<artifactId>eu-ddmore-parent-mdl-only</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
