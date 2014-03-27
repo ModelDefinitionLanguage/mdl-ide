@@ -6,7 +6,13 @@
  */
 package org.ddmore.mdl.validation;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -24,15 +30,47 @@ public class UnitValidator extends AbstractDeclarativeValidator{
     @Inject
     public void register(EValidatorRegistrar registrar) {}
 	
+	UnitValidator(){
+		loadUnits();
+	}
+
 	public final static String MSG_UNIT_UNKNOWN = "Failed to parse the unit value";	
+	public final static String MSG_UNIT_UNDEFINED = "Unknown unit metric";	
 
 	final static List<String> units = Arrays.asList("L", "l", "m", "y", "h", "s", "kg", "g", "mg");
+
+	HashMap<String, String> validUnits = new HashMap<String, String>();
+	
 	final int ID = 1;
 	final int NUMBER = 2;
 	final int OPEN_BRACKET = 3;
 	final int CLOSE_BRACKET = 4;
 	final int MULT_OP = 5;
 	final int POWER_OP = 6;
+	
+	void loadUnits(){
+		URL url;
+		try {
+		    url = new URL("platform:/plugin/org.ddmore.mdl/resources/Units.csv");
+		    InputStream inputStream = url.openConnection().getInputStream();
+		    BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+		    String inputLine;
+		    while ((inputLine = in.readLine()) != null) {
+		        //System.out.println(inputLine);
+		    	String[] tokens = inputLine.split(",");
+		    	if (tokens.length > 1){
+			    	if (!validUnits.containsKey(tokens[1])){
+			    		validUnits.put(tokens[1], tokens[0]);
+			    	}
+		    	}
+		    }
+		 
+		    in.close();
+		 
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	}
 
 	//Check the unit measurement format
 	//Returns an incorrect token or null otherwise
@@ -107,11 +145,18 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 				String unitValue = Utils.getAttributeValue(arg);
 				if (unitValue.length() > 0){
 					unitValue = unitValue.replaceAll("\\s+","");
-					String wrongToken = parseUnitExpression(unitValue);
-					if (wrongToken != null){
-						warning(MSG_UNIT_UNKNOWN + ": " + wrongToken, 
-						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-						MSG_UNIT_UNKNOWN, arg.getArgumentName().getName());
+					if (validUnits.size() > 0){
+						if (!validUnits.containsKey(unitValue))
+							warning(MSG_UNIT_UNDEFINED + ": " + unitValue, 
+							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
+							MSG_UNIT_UNDEFINED, arg.getArgumentName().getName());
+					} else {//syntactic validation
+						String wrongToken = parseUnitExpression(unitValue);
+						if (wrongToken != null){
+							warning(MSG_UNIT_UNKNOWN + ": " + wrongToken, 
+							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
+							MSG_UNIT_UNKNOWN, arg.getArgumentName().getName());
+						}
 					}
 				}
 			}

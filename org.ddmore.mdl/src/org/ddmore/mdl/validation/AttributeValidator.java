@@ -7,6 +7,7 @@
 package org.ddmore.mdl.validation;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -54,69 +55,70 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	final static Attribute attr_name = new Attribute("name", DataType.TYPE_STRING, true);		
-	final static Attribute attr_req_value = new Attribute("value", DataType.TYPE_REAL, true);
+	final public static Attribute attr_name = new Attribute("name", DataType.TYPE_STRING, true, "");		
+	final public static Attribute attr_req_value = new Attribute("value", DataType.TYPE_REAL, true, "0");
+	final public static Attribute attr_value = new Attribute("value", DataType.TYPE_REAL, false, "0");
 
-	final static Attribute attr_value = new Attribute("value", DataType.TYPE_REAL, false);
-	final static Attribute attr_hi = new Attribute("hi", DataType.TYPE_REAL, false);
-	final static Attribute attr_lo = new Attribute("lo", DataType.TYPE_REAL, false);
+	final public static Attribute attr_hi = new Attribute("hi", DataType.TYPE_REAL, false, "0");
+	final public static Attribute attr_lo = new Attribute("lo", DataType.TYPE_REAL, false, "1");
 	
-	final static Attribute attr_fix = new Attribute("fix", DataType.TYPE_BOOLEAN, false);
-	final static Attribute attr_units = new Attribute("units", DataType.TYPE_STRING, false);
-	final static Attribute attr_transform = new Attribute("transform", DataType.TYPE_STRING, false);
-	final static Attribute attr_use = new Attribute("use", DataType.TYPE_USE, false);
-	final static Attribute attr_level = new Attribute("level", DataType.TYPE_NAT, false);
+	final public static Attribute attr_fix = new Attribute("fix", DataType.TYPE_BOOLEAN, false, "false");
+	final public static Attribute attr_units = new Attribute("units", DataType.TYPE_STRING, false, "kg");
+	final public static Attribute attr_transform = new Attribute("transform", DataType.TYPE_STRING, false, "");
+	final public static Attribute attr_use = new Attribute("use", DataType.TYPE_USE, false, DataType.defaultUseVar);
+	final public static Attribute attr_level = new Attribute("level", DataType.TYPE_NAT, false, "ID");
 
-	final static Attribute attr_req_cc_type = new Attribute("type", DataType.TYPE_CC, true);
-	final static Attribute attr_cc_type = new Attribute("type", DataType.TYPE_CC, false);
-	final static Attribute attr_re_type = new Attribute("type", DataType.TYPE_RANDOM_EFFECT, false);
-	final static Attribute attr_mapping = new Attribute("mapping", DataType.TYPE_ID, false);
+	final public static Attribute attr_req_cc_type = new Attribute("type", DataType.TYPE_CC, true, DataType.continuousValue);
+	final public static Attribute attr_cc_type = new Attribute("type", DataType.TYPE_CC, false, DataType.continuousValue);
+	final public static Attribute attr_re_type = new Attribute("type", DataType.TYPE_RANDOM_EFFECT, false);
+	
+	final public static Attribute attr_mapping = new Attribute("mapping", DataType.TYPE_ID, false);
 	
 	/*ODE*/
-	final static Attribute attr_req_deriv = new Attribute("deriv", DataType.TYPE_EXPR, true);	
-	final static Attribute attr_init = new Attribute("init", DataType.TYPE_EXPR, false);	
-	final static Attribute attr_x0 = new Attribute("x0", DataType.TYPE_REAL, false);	
-	final static Attribute attr_wrt = new Attribute("wrt", DataType.TYPE_ID, false);	
+	final public static Attribute attr_req_deriv = new Attribute("deriv", DataType.TYPE_EXPR, true, "VarName");	
+	final public static Attribute attr_init = new Attribute("init", DataType.TYPE_EXPR, false, "0");	
+	final public static Attribute attr_x0 = new Attribute("x0", DataType.TYPE_REAL, false);	
+	final public static Attribute attr_wrt = new Attribute("wrt", DataType.TYPE_ID, false, "TIME");	
 	
 	/*LIBRARY*/
-	final static Attribute attr_library = new Attribute("library", DataType.TYPE_ID, false);
-	final static Attribute attr_req_model = new Attribute("model", DataType.TYPE_NAT, true);
-	final static Attribute attr_param = new Attribute("param", DataType.TYPE_LIST, false);
-	final static Attribute attr_ncmt = new Attribute("ncmt", DataType.TYPE_NAT, false); //number of compartments
-	final static Attribute attr_distribution = new Attribute("distribution", DataType.TYPE_NAT, false);
-	final static Attribute attr_elimination = new Attribute("elimination", DataType.TYPE_STRING, false);
-	final static Attribute attr_parameterization = new Attribute("parameterization", DataType.TYPE_STRING, false);
+	final public static Attribute attr_library = new Attribute("library", DataType.TYPE_ID, false);
+	final public static Attribute attr_req_model = new Attribute("model", DataType.TYPE_NAT, true, "1");
+	final public static Attribute attr_param = new Attribute("param", DataType.TYPE_LIST, false);
+	final public static Attribute attr_ncmt = new Attribute("ncmt", DataType.TYPE_NAT, false); //number of compartments
+	final public static Attribute attr_distribution = new Attribute("distribution", DataType.TYPE_NAT, false);
+	final public static Attribute attr_elimination = new Attribute("elimination", DataType.TYPE_STRING, false);
+	final public static Attribute attr_parameterization = new Attribute("parameterization", DataType.TYPE_STRING, false);
 	/* The "output" attribute is not an official MCL attribute but I think it is needed because
 	 * it introduces new variables (important for validation) as opposed to the declarations in "param"
 	 * attribute that allows any math expressions - which is ok for input but not for output.
 	 * No syntactic distinction between in and out parameters (bad design!)	 */ 
-	final static Attribute attr_output = new Attribute("output", DataType.TYPE_LIST, false);
+	final public static Attribute attr_output = new Attribute("output", DataType.TYPE_LIST, false);
 		
 	/*HEADER*/
-	final static Attribute attr_define = new Attribute("define", DataType.TYPE_LIST, false);
-	final static Attribute attr_recode = new Attribute("recode", DataType.TYPE_LIST, false);
-	final static Attribute attr_boundaries = new Attribute("boundaries", DataType.TYPE_VECTOR_REAL, false);
-	final static Attribute attr_missing = new Attribute("missing", DataType.TYPE_INT, false);
+	final public static Attribute attr_define = new Attribute("define", DataType.TYPE_LIST, false);
+	final public static Attribute attr_recode = new Attribute("recode", DataType.TYPE_LIST, false);
+	final public static Attribute attr_boundaries = new Attribute("boundaries", DataType.TYPE_VECTOR_REAL, false);
+	final public static Attribute attr_missing = new Attribute("missing", DataType.TYPE_INT, false);
 	
 	/*FILE*/
-	final static Attribute attr_req_source = new Attribute("source", DataType.TYPE_STRING, true);
-	final static Attribute attr_ignore = new Attribute("ignore", DataType.TYPE_STRING, false);
-	final static Attribute attr_inputformat = new Attribute("inputformat", DataType.TYPE_STRING, false);
+	final public static Attribute attr_req_source = new Attribute("source", DataType.TYPE_STRING, true, "[fileName]");
+	final public static Attribute attr_ignore = new Attribute("ignore", DataType.TYPE_STRING, false);
+	final public static Attribute attr_inputformat = new Attribute("inputformat", DataType.TYPE_STRING, false, "NONMEM");
 	
 	/*DESIGN*/
-	final static Attribute attr_design_source = new Attribute("source", DataType.TYPE_ID, true);
-	final static Attribute attr_interp = new Attribute("interp", DataType.TYPE_ID, false);
-	final static Attribute attr_idv = new Attribute("idv", DataType.TYPE_IDV, false);
+	final public static Attribute attr_design_source = new Attribute("source", DataType.TYPE_ID, true);
+	final public static Attribute attr_interp = new Attribute("interp", DataType.TYPE_ID, false);
+	final public static Attribute attr_idv = new Attribute("idv", DataType.TYPE_IDV, false);
 
 	/*IMPORT*/
-	final static Attribute attr_req_target = new Attribute("target", DataType.TYPE_TARGET, true);
-	final static Attribute attr_trans = new Attribute("trans", DataType.TYPE_NAT, false);
+	final public static Attribute attr_req_target = new Attribute("target", DataType.TYPE_TARGET, true, DataType.defaultTarget);
+	final public static Attribute attr_trans = new Attribute("trans", DataType.TYPE_NAT, false);
 	
 	/*TARGET*/
-	final static Attribute attr_location = new Attribute("location", DataType.TYPE_STRING, false);
-	final static Attribute attr_first = new Attribute("first", DataType.TYPE_BOOLEAN, false);
-	final static Attribute attr_before = new Attribute("before", DataType.TYPE_STRING, false);
-	final static Attribute attr_after = new Attribute("after", DataType.TYPE_STRING, false);
+	final public static Attribute attr_location = new Attribute("location", DataType.TYPE_STRING, false);
+	final public static Attribute attr_first = new Attribute("first", DataType.TYPE_BOOLEAN, false);
+	final public static Attribute attr_before = new Attribute("before", DataType.TYPE_STRING, false);
+	final public static Attribute attr_after = new Attribute("after", DataType.TYPE_STRING, false);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Data object
@@ -139,6 +141,55 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_before, attr_after);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	final static HashMap<String, Attribute> allAttributeNames = new HashMap<String, Attribute>(){
+		private static final long serialVersionUID = -4512048801509444272L;
+		{
+        	put("name", attr_name);
+        	put("value", attr_value);
+        	put("hi", attr_hi);
+        	put("lo", attr_lo);        	
+        	put("fix", attr_fix);
+        	put("units", attr_units);
+        	put("transform", attr_transform);
+        	put("use", attr_use);
+        	put("level", attr_level);        	
+        	put("type", attr_req_cc_type);        	
+        	put("mapping", attr_mapping);
+        	put("deriv", attr_req_deriv);
+        	put("init", attr_init);
+        	put("x0", attr_x0);
+        	put("wrt", attr_wrt);
+        	put("library", attr_library);
+        	put("model", attr_req_model);
+        	put("param", attr_param);
+        	put("ncmt", attr_ncmt);
+        	put("distribution", attr_distribution);
+        	put("elimination", attr_elimination);
+        	put("parameterization", attr_parameterization);
+        	put("output", attr_output);
+        	put("define", attr_define);
+        	put("recode", attr_recode);
+        	put("boundaries", attr_boundaries);
+        	put("missing", attr_missing);
+        	put("source", attr_req_source);
+        	put("source", attr_ignore);
+        	put("inputformat", attr_inputformat);
+        	put("source", attr_design_source);
+        	put("interp", attr_interp);
+        	put("idv", attr_idv);
+        	put("target", attr_req_target);
+        	put("trans", attr_trans);
+        	put("location", attr_location);
+        	put("first", attr_first);
+        	put("before", attr_before);
+        	put("after", attr_after);
+		}
+	};
+
+	public static final Attribute getAttributeByName(String name){
+        return allAttributeNames.get(name);
+    }
 
 	List<Attribute> getAllAttributes(EObject obj){
 		if (obj instanceof StructuralBlockImpl)

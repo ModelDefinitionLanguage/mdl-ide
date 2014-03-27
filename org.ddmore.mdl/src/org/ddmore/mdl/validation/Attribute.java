@@ -11,10 +11,32 @@ public class Attribute {
 	String name = "undefined";
 	DataType type = DataType.TYPE_UNDEFINED;
 	Boolean mandatory = false;
+	String defaultValue = "";
 	
-	Attribute(String _name, DataType _type, Boolean _mandatory){
-		name = _name;
-		type = _type;
-		mandatory = _mandatory;
+	public Attribute(String name, DataType type, Boolean mandatory){
+		this.name = name;
+		this.type = type;
+		this.mandatory = mandatory;
 	}	
+	
+	public Attribute(String name, DataType type, Boolean mandatory, String defaultValue){
+		this(name, type, mandatory);
+		this.defaultValue = defaultValue;
+	}	
+	
+	public String getName(){
+		return name;
+	}
+	
+	public DataType getType(){
+		return type;
+	}
+
+	public Boolean getMandatory(){
+		return mandatory;
+	}
+	
+	public String getDefaultValue(){
+		return defaultValue;
+	}
 }
