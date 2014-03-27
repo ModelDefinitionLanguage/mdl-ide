@@ -41,6 +41,7 @@ public enum DataType {
 	TYPE_CC,      //continuous vs. categorical
 	TYPE_TARGET,  //Check grammar for TargetLanguage 
 	//Restricted strings (why are they not enumerations?)
+	TYPE_LIKELIHOOD,
 	TYPE_IDV,   //idv in DESIGN block (e.g., "linear")
 	TYPE_RANDOM_EFFECT; //Random effects "VAR" vs. "SD" - why strings?
 	
@@ -171,11 +172,6 @@ public enum DataType {
 				if (!ok) return false;
 			} else {
 				if (p.getNumber() == null) return false;
-				/*try{
-					Double.parseDouble(p.getNumber());
-				} catch (NumberFormatException e){
-					return false;
-				}*/ //Validate IDs
 			}
 		}
 		return true;
@@ -450,4 +446,9 @@ public enum DataType {
 		}
 		return false;	
 	}	
+	public final static String defaultTarget = "NONMEM_CODE";
+	public final static String defaultVarName = "VarName";
+	public final static String defaultUseVar = "covariate";
+	public final static String continuousValue = "continuous";
+	public final static String categoricalValue = "covariate";
 }

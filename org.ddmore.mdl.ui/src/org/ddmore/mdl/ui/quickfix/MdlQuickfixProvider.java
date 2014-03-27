@@ -2,10 +2,7 @@
 package org.ddmore.mdl.ui.quickfix;
 
 import java.awt.image.renderable.ParameterBlock;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import org.ddmore.mdl.mdl.AdditiveExpression;
 import org.ddmore.mdl.mdl.AndExpression;
@@ -86,9 +83,12 @@ import org.ddmore.mdl.mdl.impl.SymbolListImpl;
 import org.ddmore.mdl.mdl.impl.SymbolModificationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
+import org.ddmore.mdl.validation.Attribute;
 import org.ddmore.mdl.validation.AttributeValidator;
+import org.ddmore.mdl.validation.DistributionValidator;
 import org.ddmore.mdl.validation.MdlJavaValidator;
 import org.ddmore.mdl.validation.FunctionValidator;
+import org.ddmore.mdl.validation.DataType;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -101,7 +101,10 @@ import org.eclipse.xtext.validation.Issue;
 
 
 public class MdlQuickfixProvider extends DefaultQuickfixProvider {
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Automatically create EObjects - default values and type selection
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Fix attributes
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,71 +127,87 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		String description = "Insert attribute '" + attrName +"'";
 		acceptor.accept(issue, description, description, "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				String value  = defaultAttributeValues.get(attrName);
-				if (value == null) value = "";
-				Argument newArg = createArgument(attrName, value);
-				Arguments args = (Arguments)element;
-				args.getArguments().add(0, newArg);
+				//TODO: pass the reference to the attribute, not just name
+				Attribute attribute = AttributeValidator.getAttributeByName(attrName);
+				if (attribute != null){
+					Argument newArg = createArgument(attribute);
+					Arguments args = (Arguments)element;
+					args.getArguments().add(0, newArg);
+				}
 			} 
 		});
 	}
 	
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Automatically create EObjects - default values and type selection
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private static final HashMap<String, String> defaultAttributeValues = new HashMap<String, String>(){
-		private static final long serialVersionUID = -1395941477845816149L;
-		{
-            put("value", "0");
-            put("mean", "0");
-            put("init", "0");
-            put("model", "1");
-            put("fix", "false");
-            put("variance", "VarName");
-            put("deriv", "VarName");
-            put("type", "continuous");
-            put("inputformat", "NONMEM");
-            put("target", "NMTRAN_CODE");
-            put("wrt", "TIME");
-            put("source", "[fileName]");
-		}
-    };
-    
-    final static List<String> boolean_values = Arrays.asList("true", "false");
-    final static List<String> target_language_values = Arrays.asList("NMTRAN_CODE", "MLXTRAN_CODE", "PML_CODE", "BUGS_CODE", "R_CODE", "MATLAB_CODE");
-    final static List<String> continuous_values = Arrays.asList("continuous");
-    final static List<String> var_values = Arrays.asList("VarName");
-    
-    final static List<String> categorical_values = Arrays.asList("categorical");
-    final static List<String> covariate_values = Arrays.asList("covariate");
-    final static List<String> distribution_values = Arrays.asList("Normal", "Binomial", "Poisson", "Student_T", "MVNormal");
-    final static List<String> use_values = Arrays.asList("mdv", "id", "dv", "idv", "dvid", "amt");
-    final static List<String> likelihood_values = Arrays.asList("likelihood");
+	@Fix(AttributeValidator.MSG_ATTRIBUTE_DEFINED)
+	public void deleteDuplicateAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
+		final String attribute = issue.getData()[0];
+		String description = "Remove attribute '" + attribute + "'";
+		acceptor.accept(issue, description, description, "remove.png",new ISemanticModification() {
+			public void apply(EObject element, IModificationContext context) {
+				EObject container = element.eContainer();
+				Arguments args = (Arguments)container;
+				args.getArguments().remove(element);
+			}
+		});
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Fix(DistributionValidator.MSG_DISTR_ATTRIBUTE_UNKNOWN)
+	public void removeDistributionAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
+		final String attribute = issue.getData()[0];
+		String description = "Remove attribute '" + attribute + "'";
+		acceptor.accept(issue, description, description, "remove.png",new ISemanticModification() {
+			public void apply(EObject element, IModificationContext context) {
+				EObject container = element.eContainer();
+				Arguments args = (Arguments)container;
+				args.getArguments().remove(element);
+			}
+		});
+	}
+	
+	//TODO: insert missing attribute
+	/*@Fix(DistributionValidator.MSG_DISTR_ATTRIBUTE_MISSING)
+	public void addDistributionAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
+		final String attrName = issue.getData()[0];
+		String description = "Insert attribute '" + attrName +"'";
+		acceptor.accept(issue, description, description, "add.png", new ISemanticModification() {
+			public void apply(EObject element, IModificationContext context) {
+				Attribute attribute = DistributionValidator.getAttributeByName(attrName);
+				if (attribute != null) {
+					Argument newArg = createArgument(attribute);
+					Arguments args = (Arguments)element;
+					args.getArguments().add(0, newArg);
+				}
+			} 
+		});
+	}*/
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Automatically create EObjects
     //////////////////////////////////////////////////////////////////////////////////////////////////////////    
-	AnyExpression createAttributeExpression(String attrName, String value){
-		try{
-			Float.parseFloat(value);
-			return createNumericExpression(value);
-		} catch(Exception e){}
-        
-		if (var_values.contains(value))
-			return createReferenceExpression(value);
-		if (boolean_values.contains(value))
-			return createBooleanExpression(value);
-		if (target_language_values.contains(value))
-			return createTargetLanguageExpression(value);
-		if (continuous_values.contains(value))
-			return createContinuousExpression(value);
-		if (categorical_values.contains(value))
-			return createCategoricalExpression(value);
-		if (use_values.contains(value))
-			return createUseExpression(value);
-		if (likelihood_values.contains(value))
-			return createLikelyhoodExpression(value);
-		return createStringExpression(value);
+	AnyExpression createTypedExpression(Attribute attribute){
+		DataType type = attribute.getType();
+		String value = attribute.getDefaultValue();
+		switch (type){
+			case TYPE_PREAL:
+			case TYPE_REAL:
+			case TYPE_PROBABILITY: return createNumericExpression(value);
+			case TYPE_ID: return createReferenceExpression(value);
+			case TYPE_BOOLEAN: return createBooleanExpression(value);
+			case TYPE_TARGET: return createTargetLanguageExpression(value);
+			case TYPE_CC: 
+				if (type.equals(DataType.continuousValue))
+					createContinuousExpression(value);
+				else 
+					return createCategoricalExpression(value);
+			case TYPE_USE:
+				return createUseExpression(value);
+			case TYPE_LIKELIHOOD:
+				return createLikelyhoodExpression(value);
+			default:
+				return createStringExpression(value);
+		}
 	}
 	
 	private AnyExpression createCategoricalExpression(String value) {
@@ -336,32 +355,31 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		expr.setExpression(e);
 		return expr;
 	}
-	
-	AnyExpression createListExpression(String[] attrNames, String[] attrValues){
+
+	AnyExpression createListExpression(Attribute[] attributes){
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();	
-		org.ddmore.mdl.mdl.List list = createList(attrNames, attrValues);
+		org.ddmore.mdl.mdl.List list = createList(attributes);
 		expr.setList(list);
 		return expr;
 	}
-	
-	org.ddmore.mdl.mdl.List createList(String[] attrNames, String[] attrValues){
+
+	org.ddmore.mdl.mdl.List createList(Attribute[] attributes){
 		org.ddmore.mdl.mdl.List list = MdlFactory.eINSTANCE.createList();		
 		list.setIdentifier("list");
 		Arguments args = MdlFactory.eINSTANCE.createArguments();				
-		for (int i = 0; i< attrNames.length; i++){
-			Argument attr = createArgument(attrNames[i], attrValues[i]);
+		for (int i = 0; i< attributes.length; i++){
+			Argument attr = createArgument(attributes[i]);
 			args.getArguments().add(attr);
 		}
 		list.setArguments(args);
 		return list;
 	}
-	
-	Argument createArgument(String attrName, String attrValue){
+
+	Argument createArgument(Attribute attribute){
 		Argument attr = MdlFactory.eINSTANCE.createArgument();
 		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
-		argName.setName(attrName);
-		AnyExpression attrExpr = createAttributeExpression(attrName, attrValue);
-
+		argName.setName(attribute.getName());
+		AnyExpression attrExpr = createTypedExpression(attribute);
 		attr.setArgumentName(argName);
 		attr.setExpression(attrExpr);
 		return attr;
@@ -377,7 +395,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	}
 	
 	//TODO: test!
-	DistributionArgument createDistributionArgument(String attrName, String attrValue){
+	DistributionArgument createDistributionArgument(Attribute attribute){
+		String attrName = attribute.getName();
+		String attrValue = attribute.getDefaultValue();
 		DistributionArgument attr = MdlFactory.eINSTANCE.createDistributionArgument();
 		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
 		argName.setName(attrName);
@@ -408,7 +428,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 					}
 				} else {
 					if (attrValue.contains(".")){//attribute
-						//TODO finish on demand
+						//TODO fill if references to attributes are required as attribute values
 					} else {//variable
 						FullyQualifiedSymbolName ref = MdlFactory.eINSTANCE.createFullyQualifiedSymbolName();
 						SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
@@ -423,12 +443,12 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return attr;
 	}
 	
-	RandomList createRandomList(String[] attrNames, String[] attrValues){
+	RandomList createRandomList(Attribute[] attributes){
 		RandomList list = MdlFactory.eINSTANCE.createRandomList();	
 		list.setIdentifier("~");
 		DistributionArguments args = MdlFactory.eINSTANCE.createDistributionArguments();				
-		for (int i = 0; i< attrNames.length; i++){
-			DistributionArgument attr = createDistributionArgument(attrNames[i], attrValues[i]);
+		for (int i = 0; i < attributes.length; i++){
+			DistributionArgument attr = createDistributionArgument(attributes[i]);
 			args.getArguments().add(attr);
 		}
 		list.setArguments(args);
@@ -541,9 +561,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 		symbName.setName(varName);
 		newSymbol.setSymbolName(symbName);
-		String[] attrNames = {"type", "units", "use"};
-		String[] attrValues = {"continuous", "kg", "covariate"};
-		AnyExpression expr = createListExpression(attrNames, attrValues);
+		Attribute[] attributes = {AttributeValidator.attr_cc_type, AttributeValidator.attr_units, 
+				AttributeValidator.attr_use};
+		AnyExpression expr = createListExpression(attributes);
 		newSymbol.setExpression(expr);
 		block.getVariables().add(newSymbol);
 	}
@@ -578,9 +598,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		symbName.setName(varName);
 		newSymbol.setSymbolName(symbName);
 		//~ (type=Normal, mean=0, variance=PPV_STATUS,level=ID)
-		String[] attrNames = {"type", "mean", "variance", "level"};
-		String[] attrValues = {"Normal", "0", "VarName", "ID"};
-		RandomList list = createRandomList(attrNames, attrValues);
+		Attribute[] attributes = {DistributionValidator.attr_type, DistributionValidator.attr_mean, 
+				DistributionValidator.attr_variance, DistributionValidator.attr_level};
+		RandomList list = createRandomList(attributes);
 		newSymbol.setRandomList(list);
 		block.getVariables().add(newSymbol);
 	}
@@ -923,9 +943,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 		symbName.setName(varName);
 		newParam.setSymbolName(symbName);
-		String[] attrNames = { "value" };
-		String[] attrValues = { "0" };
-		newParam.setList(createList(attrNames, attrValues));
+		Attribute[] attributes = {AttributeValidator.attr_value};
+		newParam.setList(createList(attributes));
 		return newParam;
 	}
 	
@@ -982,12 +1001,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	    int k = 1;
 		while(argIterator.hasNext()){
 	    	Argument x = argIterator.next(); 	
-	    	Argument attr = null;
-	    	if (x.getArgumentName() != null){
-	    		attr = createArgument(x.getArgumentName().getName(), "");
-	    	} else {
-	    		attr = createArgument("unnamedParam" + k++, "");
-	    	}
+	    	String attrName = (x.getArgumentName() != null)? x.getArgumentName().getName(): "unnamedParam" + k++;
+	    	Attribute attribute = new Attribute(attrName, DataType.TYPE_STRING, false, "");
+	    	Argument attr = createArgument(attribute);
     		paramListArgs.getArguments().add(attr);
 	    }
 		paramList.setArguments(paramListArgs);
