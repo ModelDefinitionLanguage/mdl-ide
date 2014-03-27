@@ -14,6 +14,11 @@
    </configIni>
 
    <launcherArgs>
+      <programArgs>--launcher.XXMaxPermSize
+256M
+
+-Xms40m
+-Xmx1024m</programArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
@@ -52,6 +57,17 @@ http://www.gnu.org/licenses/lgpl-2.1.html
       <feature id="org.eclipse.help" version="1.4.1.v20120912-144938-8R7xFOXFLWUl7PpNBh_HIGkb4"/>
       <feature id="com.mango.mifclient.dependencies.feature"/>
       <feature id="com.mango.mif.client.feature"/>
+      <feature id="de.walware.ecommons.e" version="1.4.0.b201309081345E42sw"/>
+      <feature id="de.walware.ecommons.edb" version="0.2.0.b201309081345E42sw"/>
+      <feature id="de.walware.ecommons.ltk" version="2.2.0.b201309081345E42sw"/>
+      <feature id="de.walware.eutils.autorun" version="0.5.0.b201309081345E42sw"/>
+      <feature id="de.walware.rj.core" version="1.1.4.b201309081345E42sw"/>
+      <feature id="de.walware.rj.eclient" version="1.2.1.b201309081345E42sw"/>
+      <feature id="de.walware.statet.r" version="3.3.1.b201309081345E42sw"/>
+      <feature id="de.walware.statet.r.sweave" version="3.3.0.b201309081345E42sw"/>
+      <feature id="de.walware.statet.rtm.ftable" version="1.0.0.b201309081345E42sw"/>
+      <feature id="de.walware.statet.rtm.ggplot" version="1.0.0.b201309081345E42sw"/>
+      <feature id="de.walware.thirdparty.jsch" version="0.1.50.b201305311230E00sw"/>
    </features>
 
    <configurations>
