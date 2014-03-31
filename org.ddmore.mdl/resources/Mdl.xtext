@@ -135,12 +135,12 @@ PriorParametersBlock:
 //////////////////////////////////////////////////////////
 
 DataObjectBlock:
-	headerBlock = HeaderBlock |
+	dataInputBlock = DataInputBlock |
 	fileBlock = FileBlock |
 	targetBlock = TargetBlock | 
 	importBlock = ImportBlock;
  
-HeaderBlock:
+DataInputBlock:
  	identifier='DATA_INPUT_VARIABLES' 
  	BEGIN variables += SymbolDeclaration* END  //new Variable -
  ;
@@ -382,7 +382,7 @@ terminal EXTERNAL_CODE:
 ImportBlock:
 	identifier = 'IMPORT' BEGIN 
 		functions += ImportedFunction*
-	END //rename to functions
+	END 
 ;
 
 ImportedFunction:
@@ -402,7 +402,6 @@ SymbolName:
 	name = ID
 ;
 
-//new VariableName, new PropertyName, new ParameterName? (PRIOR_PARAMETERS)
 SymbolDeclaration:
 	symbolName = SymbolName (("=" expression = AnyExpression) | (randomList = RandomList))?
 ;
@@ -417,7 +416,8 @@ EnumType:
 	continuous = Continuous | 
 	use = UseType |       
 	likelyhood = Likelyhood |
-	target = TargetLanguage
+	target = TargetLanguage |
+	variability = VariabilityType
 ;
 
 Likelyhood:
@@ -428,8 +428,14 @@ UseType:
 	identifier = (
 		'id'| 'idv' |'amt' | 'dv' | 'dvid' | 'ytype' | 'itype' |
 		'covariate' | 'reg' | 'time' | 'dose'| 
-		'cat' | 'occ' | 'occasion' | 'adm' | 'cens' | 'limit' | 'rt' //rate
-		| 'tinf' | 'ss' | 'addl' | 'ii' | 'tau' | 'mdv' | 'evid')
+		'cat' | 'occ' | 'occasion' | 'adm' | 'cens' | 'limit' | 'rate' | 
+		'tinf' | 'ss' | 'addl' | 'ii' | 'tau' | 'mdv' | 'evid')
+;
+
+VariabilityType:
+	identifier = (
+		'sd' | 'var'
+	)
 ;
 
 Categorical:

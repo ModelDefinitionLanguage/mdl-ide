@@ -14,6 +14,7 @@ import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.Categorical;
 import org.ddmore.mdl.mdl.ConditionalExpression;
 import org.ddmore.mdl.mdl.Continuous;
+import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DesignBlock;
 import org.ddmore.mdl.mdl.DesignBlockStatement;
 import org.ddmore.mdl.mdl.Distribution;
@@ -26,7 +27,6 @@ import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.GroupVariablesBlock;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
-import org.ddmore.mdl.mdl.HeaderBlock;
 import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
@@ -70,9 +70,9 @@ import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.Vector;
+import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
-import org.ddmore.mdl.mdl.impl.HeaderBlockImpl;
 import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.InlineBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclImpl;
@@ -123,12 +123,13 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	@Fix(AttributeValidator.MSG_ATTRIBUTE_MISSING)
 	public void addAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
-		final String attrName = issue.getData()[0];
+		final String attrId = issue.getData()[0];
+		int index = attrId.indexOf(':');
+		String attrName = (index > 0)? attrId.substring(index + 1): attrId;
 		String description = "Insert attribute '" + attrName +"'";
 		acceptor.accept(issue, description, description, "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				//TODO: pass the reference to the attribute, not just name
-				Attribute attribute = AttributeValidator.getAttributeByName(attrName);
+				Attribute attribute = AttributeValidator.getAttributeById(attrId);
 				if (attribute != null){
 					Argument newArg = createArgument(attribute);
 					Arguments args = (Arguments)element;
@@ -166,22 +167,23 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		});
 	}
 	
-	//TODO: insert missing attribute
-	/*@Fix(DistributionValidator.MSG_DISTR_ATTRIBUTE_MISSING)
+	@Fix(DistributionValidator.MSG_DISTR_ATTRIBUTE_MISSING)
 	public void addDistributionAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
-		final String attrName = issue.getData()[0];
+		final String attrId = issue.getData()[0];
+		int index = attrId.indexOf(':');
+		String attrName = (index > 0)? attrId.substring(index + 1): attrId;
 		String description = "Insert attribute '" + attrName +"'";
 		acceptor.accept(issue, description, description, "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				Attribute attribute = DistributionValidator.getAttributeByName(attrName);
+				Attribute attribute = DistributionValidator.getAttributeById(attrId);
 				if (attribute != null) {
-					Argument newArg = createArgument(attribute);
-					Arguments args = (Arguments)element;
+					DistributionArgument newArg = createDistributionArgument(attribute);
+					DistributionArguments args = (DistributionArguments)element;
 					args.getArguments().add(0, newArg);
 				}
 			} 
 		});
-	}*/
+	}
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Automatically create EObjects
@@ -193,7 +195,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			case TYPE_PREAL:
 			case TYPE_REAL:
 			case TYPE_PROBABILITY: return createNumericExpression(value);
-			case TYPE_ID: return createReferenceExpression(value);
+			case TYPE_REF: return createReferenceExpression(value);
 			case TYPE_BOOLEAN: return createBooleanExpression(value);
 			case TYPE_TARGET: return createTargetLanguageExpression(value);
 			case TYPE_CC: 
@@ -394,10 +396,11 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return attr;
 	}
 	
-	//TODO: test!
+	//TODO: check expected type and create expression of the right type
 	DistributionArgument createDistributionArgument(Attribute attribute){
 		String attrName = attribute.getName();
 		String attrValue = attribute.getDefaultValue();
+		if (attrValue.length() == 0) attrValue = "0";
 		DistributionArgument attr = MdlFactory.eINSTANCE.createDistributionArgument();
 		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
 		argName.setName(attrName);
@@ -427,15 +430,11 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 						}
 					}
 				} else {
-					if (attrValue.contains(".")){//attribute
-						//TODO fill if references to attributes are required as attribute values
-					} else {//variable
-						FullyQualifiedSymbolName ref = MdlFactory.eINSTANCE.createFullyQualifiedSymbolName();
-						SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
-						symbName.setName(attrValue);
-						ref.setSymbol(symbName);
-						primary.setSymbol(ref);
-					}
+					FullyQualifiedSymbolName ref = MdlFactory.eINSTANCE.createFullyQualifiedSymbolName();
+					SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+					symbName.setName(attrValue);
+					ref.setSymbol(symbName);
+					primary.setSymbol(ref);
 				}
 			}
 			attr.setValue(primary);
@@ -467,8 +466,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 				if (container instanceof SymbolModificationImpl){
 					SymbolModification symbolModification = (SymbolModification) container;
 					EObject container1 = container.eContainer();
-					if (container1 instanceof HeaderBlockImpl){
-						HeaderBlock block = (HeaderBlock) container1;
+					if (container1 instanceof DataInputBlockImpl){
+						DataInputBlock block = (DataInputBlock) container1;
 						block.getVariables().remove(symbolModification);
 						return;
 					}
@@ -969,6 +968,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			    }
 				if (importBlock == null){
 					importBlock = MdlFactory.eINSTANCE.createImportBlock();
+					importBlock.setIdentifier("IMPORT");
 					isNewBlock = true;
 				}
 				ImportedFunction importedFunct = createImportedFunction(element);

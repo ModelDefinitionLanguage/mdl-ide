@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
@@ -51,7 +52,12 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_FUNCTION_DEFINED  = "A function with such name is already defined";
 	public final static String MSG_FUNCTION_UNKNOWN  = "Unknown function";
 	public final static String MSG_FUNCTION_INVALID = "Invalid function call";
-	
+	public final static String MSG_FUNCTION_WRONG_TYPE = "Type error";
+
+	public final static String MSG_FUNCTION_ATTRIBUTE_DEFINED = "A parameter with such name is already defined";
+	public final static String MSG_FUNCTION_ATTRIBUTE_UNKNOWN = "Unknown function parameter";
+	public final static String MSG_FUNCTION_ATTRIBUTE_MISSING = "Required parameter is not set";
+
 	public final static String MSG_FUNCTION_PROPERTY_UNKNOWN = "Unknown property";
 	public final static String MSG_FUNCTION_PROPERTY_MISSING = "Required property is not set";
 	public final static String MSG_FUNCTION_PROPERTY_DEFINED = "Property defined more than once";
@@ -102,12 +108,19 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov);
 	final static List<Attribute> attrs_exec_task = Arrays.asList(
 			attr_task_command);
+					
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//TODO
 	//Validate named attributes of special functions, e.g., for "seq"
-	//start, stepSize, end
- 	//start, stepSize, repetition
+	//Standard functions
+	final static Attribute attr_seq_start = new Attribute("start", DataType.TYPE_REAL, true);
+	final static Attribute attr_seq_stepSize = new Attribute("stepSize", DataType.TYPE_REAL, true);
+	final static Attribute attr_seq_end = new Attribute("end", DataType.TYPE_REAL, false);
+	final static Attribute attr_seq_repetition = new Attribute("repetition", DataType.TYPE_REAL, false);
+	
+	final static List<Attribute> attrs_seq = Arrays.asList(attr_seq_start, attr_seq_stepSize, attr_seq_end, attr_seq_repetition);
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	Boolean isStandardFunction(String funcName){
@@ -173,7 +186,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	//Check whether the function with such a name is already defined
 	@Check
 	public void checkFunctionDeclaration(TaskFunctionDeclaration func){
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredFunctions, func.getFunctionName().getName())){
+		if (Utils.isSymbolDeclaredMoreThanOnce(declaredFunctions, func.getFunctionName())){
 			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FUNCTION_NAME);
 		}
 	}
@@ -181,21 +194,23 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	//Check whether the function with such a name is already defined
 	@Check
 	public void checkExportFunctionDeclaration(ImportedFunction func){
-		if (Utils.isSymbolDeclaredMoreThanOnce(externalFunctions, func.getFunctionName().getName())){
+		if (Utils.isSymbolDeclaredMoreThanOnce(externalFunctions, func.getFunctionName())){
 			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__FUNCTION_NAME);
 		}
-		if (Utils.isSymbolDeclared(declaredFunctions, func.getFunctionName().getName(), null)){
+		if (Utils.isSymbolDeclared(declaredFunctions, func.getFunctionName())){
 			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__FUNCTION_NAME);
 		}
-		//Check that it is not standard and was not defined in Task objects
+		if (standardFunctions.contains(func.getFunctionName().getName())){
+			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__FUNCTION_NAME);
+		}
 	}	
 	
 	//Check that the function call is to an existing function
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
 		if (!isStandardFunction(call.getIdentifier().getSymbol().getName())){
-			if(!(Utils.isSymbolDeclared(declaredFunctions, call.getIdentifier().getSymbol().getName(), call.getIdentifier().getObject()))
-				&& !(Utils.isSymbolDeclared(externalFunctions, call.getIdentifier().getSymbol().getName(), call.getIdentifier().getObject()))){
+			if(!(Utils.isSymbolDeclared(declaredFunctions, call.getIdentifier()) ||
+					Utils.isSymbolDeclared(externalFunctions, call.getIdentifier()))){
 			warning(MSG_FUNCTION_UNKNOWN, 
 					MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER,
 					MSG_FUNCTION_UNKNOWN, call.getIdentifier().getSymbol().getName());
@@ -207,7 +222,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			}
 		}
 		else {//standard function
-			//TODO: check number of expected parameters
 			Integer expected = functionParameters.get(call.getIdentifier().getSymbol().getName());
 			if (expected == null) expected = 1; //1 by default
 			Integer actual = 0;
@@ -227,6 +241,21 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 						MSG_FUNCTION_INVALID, 
 						call.getIdentifier().getSymbol().getName());
 			}
+			List<Attribute> recognizedAttrs = getAllAttributes(call.getIdentifier().getSymbol().getName());
+			if (recognizedAttrs != null){
+				List<String> attributeNames = Utils.getAllNames(recognizedAttrs);
+				for (Argument arg: call.getArguments().getArguments()){
+					if (arg.getArgumentName() != null){
+						if (!attributeNames.contains(arg.getArgumentName().getName())){
+							warning(MSG_FUNCTION_ATTRIBUTE_UNKNOWN + ": " + arg.getArgumentName().getName(), 
+								MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
+								MSG_FUNCTION_ATTRIBUTE_UNKNOWN, arg.getArgumentName().getName());		
+								return;
+						}
+					}
+				}
+			}			
+			//TODO: check parameter types
 		}
 	}
 	
@@ -335,4 +364,15 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		return null;
 	}	
 	
+	List<Attribute> getAllAttributes(String functName){
+		if (functName.equals("seq"))
+			return attrs_seq;
+		return null;
+	}
+	
+	List<String> getRequiredAttributeNames(String functName){
+		if (functName.equals("seq"))
+			return Utils.getRequiredNames(attrs_seq);
+		return null;
+	}
 }

@@ -498,3 +498,14 @@ pku:001487,HOURS
 pku:001488,DAYS
 pku:001489,Rad
 pku:001490,Gy
+,h
+,h*mg/L
+,h*ng/L
+,h*ug/L
+,L/kg
+,L/70kg/h
+,L/70kg/h
+,mg/L*h
+,ng/L*h
+,ug/L*h
+,g/L*h

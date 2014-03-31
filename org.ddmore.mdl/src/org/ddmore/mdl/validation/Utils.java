@@ -16,34 +16,48 @@ import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.LogicalExpression;
+import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.OrExpression;
+import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl;
+import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 
 public class Utils {
 	
-	//Checks whether the symbol is declared
-	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, String id, ObjectName objName){
-		if (objName != null)
-			if (map.get(objName.getName()).contains(id)) return true;
-		for (String key: map.keySet()){
-			if (map.get(key).contains(id)) return true;
-		} 
+	//Checks whether a given symbol is declared
+	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, FullyQualifiedSymbolName ref){
+		ObjectName objName = ref.getObject();
+		SymbolName symbName = ref.getSymbol();
+		if (objName == null) objName = Utils.getObjectName(symbName);
+		if (map.get(objName.getName()).contains(symbName.getName())) return true;
 		return false;
 	}
 	
-	//Checks whether the symbol is declared more than once
-	static boolean isSymbolDeclaredMoreThanOnce(HashMap<String, ArrayList<String>> map, String id){
+	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName symbName){
+		ObjectName objName = Utils.getObjectName(symbName);
+		if (map.get(objName.getName()).contains(symbName.getName())) return true;
+		return false;
+	}
+
+	//Checks whether a given symbol is declared
+	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, String symbName, ObjectName objName){
+		if (objName == null) return false;
+		if (map.get(objName.getName()).contains(symbName)) return true;
+		return false;
+	}
+	
+	//Checks whether a symbol is declared more than once
+	static boolean isSymbolDeclaredMoreThanOnce(HashMap<String, ArrayList<String>> map, SymbolName symbName){
 		int i = 0;
-		for (String key: map.keySet()){
-			ArrayList<String> functions = map.get(key); 
-			for (String func: functions){
-				if (func.equals(id)) i++;
-				if (i > 1) return true;
-			}
-		} 
+		ObjectName objName = Utils.getObjectName(symbName);
+		ArrayList<String> functions = map.get(objName.getName()); 
+		for (String func: functions){
+			if (func.equals(symbName.getName())) i++;
+			if (i > 1) return true;
+		}
 		return false;
 	}
 	
@@ -220,6 +234,15 @@ public class Utils {
 			}
 		}	
 		return res;
+	}
+	
+	static ObjectName getObjectName(EObject b){
+		EObject container = b.eContainer();
+		while (!(container instanceof MclObjectImpl)){
+			container = container.eContainer();
+		}
+		MclObject obj = (MclObject)container;
+		return obj.getObjectName();
 	}
 	
 	//Extracts references from mathematical expressions

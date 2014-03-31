@@ -33,7 +33,7 @@ public enum DataType {
     //PharmML vectors
     TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL,TYPE_VECTOR_PROBABILITY,
     //Validation of attribute values
-	TYPE_ID, TYPE_EXPR, TYPE_OBJ_REF,
+	TYPE_REF, TYPE_EXPR, TYPE_OBJ_REF,
 	//Composite/nested attributes
 	TYPE_LIST, TYPE_ODE, TYPE_RANDOM_LIST, TYPE_DISTRIBUTION,
 	//Enums
@@ -43,7 +43,7 @@ public enum DataType {
 	//Restricted strings (why are they not enumerations?)
 	TYPE_LIKELIHOOD,
 	TYPE_IDV,   //idv in DESIGN block (e.g., "linear")
-	TYPE_RANDOM_EFFECT; //Random effects "VAR" vs. "SD" - why strings?
+	TYPE_RANDOM_EFFECT; //Random effects {var, sd} 
 	
 	//Check that double value is not passed to an attribute where integer is expected 
 	static boolean isIntegerValue(Number value){
@@ -68,7 +68,7 @@ public enum DataType {
 				case TYPE_VECTOR_PNAT: return (p.getVector() != null)? isVectorPNat(p.getVector()): false;
 				case TYPE_VECTOR_PREAL: return (p.getVector() != null)? isVectorPReal(p.getVector()): false;
 				case TYPE_VECTOR_PROBABILITY: return (p.getVector() != null)? isVectorProbability(p.getVector()): false;
-				case TYPE_ID: return (p.getSymbol() != null)? true: false;  
+				case TYPE_REF: return (p.getSymbol() != null)? true: false;  
 				default:	return false; 
 			}
 		}
@@ -97,7 +97,7 @@ public enum DataType {
 		case TYPE_VECTOR_PNAT: return (expr.getVector() != null)? isVectorPNat(expr.getVector()): false;
 		case TYPE_VECTOR_PREAL: return (expr.getVector() != null)? isVectorPReal(expr.getVector()): false;
 		case TYPE_VECTOR_PROBABILITY: return (expr.getVector() != null)? isVectorProbability(expr.getVector()): false;
-		case TYPE_ID: return (expr.getExpression() != null)? isReference(expr.getExpression()): false;  
+		case TYPE_REF: return (expr.getExpression() != null)? isReference(expr.getExpression()): false;  
 		case TYPE_EXPR: return (expr.getExpression() != null)? true: false;  
 		case TYPE_LIST: return (expr.getList() != null)? true: false;  
 		case TYPE_ODE: return (expr.getOdeList() != null)? true: false;
@@ -105,7 +105,7 @@ public enum DataType {
 		case TYPE_CC: return (expr.getType() != null)? isCCType(expr.getType()): false;
 		case TYPE_TARGET: return (expr.getType() != null)? isTargetType(expr.getType()): false;
 		case TYPE_IDV: return (expr.getExpression() != null)? isIdv(expr.getExpression()): false;
-		case TYPE_RANDOM_EFFECT: return (expr.getExpression() != null)? isRandomEffect(expr.getExpression()): false;
+		case TYPE_RANDOM_EFFECT: return (expr.getType() != null)? isRandomEffect(expr.getType()): false;
 		default:	return false; 
 		}
 	}
@@ -116,9 +116,8 @@ public enum DataType {
 		return false;
 	}
 
-	private static boolean isRandomEffect(Expression expr) {
-		String value = MathPrinter.toStr(expr);
-		if (value.equalsIgnoreCase("var") || value.equalsIgnoreCase("sd")) return true;
+	private static boolean isRandomEffect(EnumType type) {
+		if (type.getVariability() != null) return true;
 		return false;
 	}
 
@@ -153,11 +152,11 @@ public enum DataType {
 			if (logicExpr.getExpression1() != null){
 				if (logicExpr.getExpression2() != null) return false;
 				if (logicExpr.getExpression1().getString() != null) return false;
-				if(logicExpr.getExpression1().getExpression().size() > 0) return false;
+				if(logicExpr.getExpression1().getExpression().size() > 1) return false;
 				MultiplicativeExpression multExpr = logicExpr.getExpression1().getExpression().get(0);
-				if (multExpr.getExpression().size() > 0) return false;
+				if (multExpr.getExpression().size() > 1) return false;
 				PowerExpression powerExpr = multExpr.getExpression().get(0);
-				if (powerExpr.getExpression().size() > 0) return false;
+				if (powerExpr.getExpression().size() > 1) return false;
 				UnaryExpression unaryExpr = powerExpr.getExpression().get(0);
 				if (unaryExpr.getSymbol() != null) return true;
 			}
@@ -446,9 +445,9 @@ public enum DataType {
 		}
 		return false;	
 	}	
-	public final static String defaultTarget = "NONMEM_CODE";
-	public final static String defaultVarName = "VarName";
+	public final static String defaultTarget = "NMTRAN_CODE";
+	public final static String defaultVarName = "${varName}";
+	public final static String defaultFileName = "${fileName}";
 	public final static String defaultUseVar = "covariate";
 	public final static String continuousValue = "continuous";
-	public final static String categoricalValue = "covariate";
 }

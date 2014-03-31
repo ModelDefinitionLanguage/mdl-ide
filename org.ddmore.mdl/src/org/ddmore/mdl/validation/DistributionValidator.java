@@ -39,10 +39,10 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_alpha = new Attribute("alpha", DataType.TYPE_REAL, true);
 	final static Attribute attr_beta = new Attribute("beta", DataType.TYPE_REAL, true);
 	
-	public final static Attribute attr_continuous_truncationLowerInclusiveBound = new Attribute("truncationLowerInclusiveBound", DataType.TYPE_PROBABILITY, false);
-	public final static Attribute attr_continuous_truncationUpperInclusiveBound = new Attribute("truncationUpperInclusiveBound", DataType.TYPE_PROBABILITY, false);
-	public final static Attribute attr_natural_truncationLowerInclusiveBound = new Attribute("truncationLowerInclusiveBound", DataType.TYPE_NAT, false);
-	public final static Attribute attr_natural_truncationUpperInclusiveBound = new Attribute("truncationUpperInclusiveBound", DataType.TYPE_NAT, false);
+	public final static Attribute attr_continuous_truncationLowerInclusiveBound = new Attribute("lower", DataType.TYPE_PROBABILITY, false);
+	public final static Attribute attr_continuous_truncationUpperInclusiveBound = new Attribute("upper", DataType.TYPE_PROBABILITY, false);
+	public final static Attribute attr_natural_truncationLowerInclusiveBound = new Attribute("lower", DataType.TYPE_NAT, false);
+	public final static Attribute attr_natural_truncationUpperInclusiveBound = new Attribute("upper", DataType.TYPE_NAT, false);
 
 	public final static Attribute attr_ncategories = new Attribute("ncategories", DataType.TYPE_NAT, true);
 	public final static Attribute attr_numberOfTrials = new Attribute("numberOfTrials", DataType.TYPE_NAT, true);
@@ -56,10 +56,10 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_real_degreesOfFreedom = new Attribute("degreesOfFreedom", DataType.TYPE_PREAL, true);
 	public final static Attribute attr_real_dof = new Attribute("dof", DataType.TYPE_PREAL, true);
 
-	public final static Attribute attr_preal_truncationLowerInclusiveBound = new Attribute("truncationLowerInclusiveBound", DataType.TYPE_PREAL, false);
-	public final static Attribute attr_preal_truncationUpperInclusiveBound = new Attribute("truncationUpperInclusiveBound", DataType.TYPE_PREAL, false);
+	public final static Attribute attr_preal_truncationLowerInclusiveBound = new Attribute("lower", DataType.TYPE_PREAL, false);
+	public final static Attribute attr_preal_truncationUpperInclusiveBound = new Attribute("upper", DataType.TYPE_PREAL, false);
 	public final static Attribute attr_concentration = new Attribute("concentration", DataType.TYPE_VECTOR_PREAL, true);
-	public final static Attribute attr_rate = new Attribute("rate", DataType.TYPE_PREAL, true);
+	public final static Attribute attr_lambda = new Attribute("lambda", DataType.TYPE_PREAL, true);
 	
 	public final static Attribute attr_denominator = new Attribute("denominator", DataType.TYPE_NAT, true);
 	public final static Attribute attr_numerator = new Attribute("numerator", DataType.TYPE_NAT, true);
@@ -78,10 +78,10 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 
 	public final static Attribute attr_varianceScaling = new Attribute("varianceScaling", DataType.TYPE_PREAL, true);
 	
-	public final static Attribute attr_truncationLowerInclusiveBoundN = new Attribute("truncationLowerInclusiveBoundN", DataType.TYPE_NAT, false);
-	public final static Attribute attr_truncationUpperInclusiveBoundN = new Attribute("truncationUpperInclusiveBoundN", DataType.TYPE_NAT, false);
-	public final static Attribute attr_truncationLowerInclusiveBoundIG = new Attribute("truncationLowerInclusiveBoundIG", DataType.TYPE_PREAL, false);
-	public final static Attribute attr_truncationUpperInclusiveBoundIG = new Attribute("truncationUpperInclusiveBoundIG", DataType.TYPE_REAL, false);
+	public final static Attribute attr_truncationLowerInclusiveBoundN = new Attribute("lowerN", DataType.TYPE_NAT, false);
+	public final static Attribute attr_truncationUpperInclusiveBoundN = new Attribute("upperN", DataType.TYPE_NAT, false);
+	public final static Attribute attr_truncationLowerInclusiveBoundIG = new Attribute("lowerIG", DataType.TYPE_PREAL, false);
+	public final static Attribute attr_truncationUpperInclusiveBoundIG = new Attribute("upperIG", DataType.TYPE_REAL, false);
 
 	public final static Attribute attr_minimal = new Attribute("minimal", DataType.TYPE_REAL, true);
 	public final static Attribute attr_maximal = new Attribute("maximal", DataType.TYPE_REAL, true);
@@ -91,7 +91,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_dimension = new Attribute("dimension", DataType.TYPE_NAT, false);
 	
 	public final static Attribute attr_type = new Attribute("type", DataType.TYPE_DISTRIBUTION, true, "Normal");
-	public final static Attribute attr_level = new Attribute("level", DataType.TYPE_ID, false, "ID");
+	public final static Attribute attr_level = new Attribute("level", DataType.TYPE_REF, false, "ID");
 	public final static Attribute attr_weight = new Attribute("weight", DataType.TYPE_REAL, false);	
 	
 	//List of synonyms or alternatives
@@ -137,7 +137,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_preal_truncationLowerInclusiveBound,
 					attr_preal_truncationUpperInclusiveBound));
 			put("Dirichlet", Arrays.asList(attr_concentration));
-			put("Exponential", Arrays.asList(attr_rate,
+			put("Exponential", Arrays.asList(attr_lambda,
 					attr_preal_truncationLowerInclusiveBound,
 					attr_preal_truncationUpperInclusiveBound));
 			put("FDistribution", Arrays.asList(
@@ -219,7 +219,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_continuous_truncationLowerInclusiveBound, 
 					attr_continuous_truncationUpperInclusiveBound));
 			put("Poisson", Arrays.asList(
-					attr_rate,
+					attr_lambda,
 					attr_natural_truncationLowerInclusiveBound,
 					attr_natural_truncationUpperInclusiveBound));
 			put("StudentT", Arrays.asList(
@@ -248,11 +248,24 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 
 	final static List<Attribute> common_attrs = Arrays.asList(attr_type, attr_level,attr_weight);
 	
+	public static final Attribute getAttributeById(String id){
+		String[] tokens = id.split(":");
+        if (tokens.length > 0){
+        	List<Attribute> recognizedAttrs = distr_attrs.get(tokens[0]);
+        	if (recognizedAttrs != null)
+	        	for (Attribute attr: recognizedAttrs){
+	        		if (attr.name.equals(tokens[1])) return attr;
+	        	}
+        }
+		return null;
+    }
+	
 	@Check
 	public void checkRequiredArguments(DistributionArguments args){
 		DistributionArgument type = findDistributionAttribute(args, attr_type.name);
 		if (type != null){
-			List<Attribute> recognized_attrs = distr_attrs.get(type.getDistribution().getIdentifier());
+			String typeName = type.getDistribution().getIdentifier();
+			List<Attribute> recognized_attrs = distr_attrs.get(typeName);
 			if (recognized_attrs != null){
 				for (Attribute arg: recognized_attrs){
 					if (arg.mandatory){
@@ -264,7 +277,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 							if (actualArg == null)
 								warning(MSG_DISTR_ATTRIBUTE_MISSING + ": " + arg.name, 
 										MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
-										MSG_DISTR_ATTRIBUTE_MISSING, arg.name);	
+										MSG_DISTR_ATTRIBUTE_MISSING, typeName + ":" + arg.name);	
 							}
 						}
 					}

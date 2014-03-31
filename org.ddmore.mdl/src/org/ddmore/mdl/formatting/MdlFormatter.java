@@ -69,7 +69,7 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap(2).before(f.getVariabilityBlockRule());
 		c.setLinewrap(2).before(f.getPriorParametersBlockRule());
 
-		c.setLinewrap(2).before(f.getHeaderBlockRule());
+		c.setLinewrap(2).before(f.getDataInputBlockRule());
 		c.setLinewrap(2).before(f.getFileBlockRule());
 		
 		c.setLinewrap(2).before(f.getTaskFunctionDeclarationRule());
