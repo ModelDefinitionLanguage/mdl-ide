@@ -20,7 +20,7 @@ import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import eu.ddmore.mdl.generator.Mdl2Nonmem;
+import eu.ddmore.converter.mdl2nonmem.Mdl2Nonmem;
 
 public class RunWithNONMEMHandler_PE extends AbstractHandler implements IHandler {
 

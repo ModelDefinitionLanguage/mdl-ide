@@ -22,7 +22,7 @@ import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import eu.ddmore.mdl.generator.Mdl2PharmML;
+import eu.ddmore.mdl.generator.Mdl2PharmMLWrapper;
 
 
 public class ConvertToPharmMLHandler_PE extends AbstractHandler implements IHandler {
@@ -31,7 +31,7 @@ public class ConvertToPharmMLHandler_PE extends AbstractHandler implements IHand
     private Provider<JavaIoFileSystemAccess> fileAccessProvider;
 
     @Inject
-    private Mdl2PharmML generator;
+    private Mdl2PharmMLWrapper generator;
 
     @Inject
     IResourceSetProvider resourceSetProvider;

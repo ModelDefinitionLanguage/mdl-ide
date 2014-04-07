@@ -445,20 +445,15 @@
 
 		<dependency>
 			<groupId>eu.ddmore</groupId>
-			<artifactId>converter-toolbox-bundle</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.inject</groupId>
-					<artifactId>guice</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.osgi</groupId>
-					<artifactId>org.eclipse.osgi</artifactId>
-				</exclusion>
-			</exclusions>
-
+			<artifactId>converter-toolbox-api</artifactId>
+			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>eu.ddmore</groupId>
+			<artifactId>converter-toolbox</artifactId>
+			<version>0.0.4-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
 
 	<url>http://ddmore.eu/</url>

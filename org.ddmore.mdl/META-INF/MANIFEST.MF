@@ -20,8 +20,14 @@ Require-Bundle: org.eclipse.xtext;bundle-version="[2.4.0,2.4.1)";visibility:=ree
  org.eclipse.xtend.lib.gwt;bundle-version="2.4.0",
  org.eclipse.xtext.xbase.lib.gwt,
  org.ops4j.pax.logging.pax-logging-api;bundle-version="1.7.0",
- org.eclipse.core.resources
-Export-Package: org.ddmore.mdl,
+ org.eclipse.core.resources,
+ org.apache.commons.io;bundle-version="2.4.0",
+ org.eclipse.core.runtime;bundle-version="3.8.0"
+Export-Package: eu.ddmore.converter.mdlprinting, 
+ eu.ddmore.converter.mdl2nonmem, 
+ eu.ddmore.converter.mdl2pharmml,  
+ eu.ddmore.mdl.generator,
+ org.ddmore.mdl,
  org.ddmore.mdl.formatting,
  org.ddmore.mdl.generator,
  org.ddmore.mdl.mdl,

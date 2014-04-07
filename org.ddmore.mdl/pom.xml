@@ -25,5 +25,6 @@
 				<artifactId>xtend-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+
 	</build>
 </project> 

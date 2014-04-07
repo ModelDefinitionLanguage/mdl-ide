@@ -23,7 +23,7 @@ import com.google.inject.Provider;
 //import org.eclipse.ui.console.IConsoleManager;
 //import org.eclipse.ui.console.TextConsole;
 
-import eu.ddmore.mdl.generator.Mdl2Nonmem;
+import eu.ddmore.converter.mdl2nonmem.Mdl2Nonmem;
 
 public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
 

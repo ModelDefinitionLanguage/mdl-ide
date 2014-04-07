@@ -22,13 +22,13 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import eu.ddmore.mdl.generator.Mdl2Nonmem;
+import eu.ddmore.mdl.generator.Mdl2NonmemWrapper;
 
 
 public class ConvertToNONMEMHandler extends AbstractHandler implements IHandler {
 	
 	@Inject
-	private Mdl2Nonmem generator;
+	private Mdl2NonmemWrapper generator;
 
 	@Inject
 	private Provider<JavaIoFileSystemAccess > fileAccessProvider;

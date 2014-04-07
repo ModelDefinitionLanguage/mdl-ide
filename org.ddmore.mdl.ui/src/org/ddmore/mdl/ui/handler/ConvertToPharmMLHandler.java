@@ -22,13 +22,13 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import eu.ddmore.mdl.generator.Mdl2PharmML;
+import eu.ddmore.mdl.generator.Mdl2PharmMLWrapper;
 
 
 public class ConvertToPharmMLHandler extends AbstractHandler implements IHandler {
 	
 	@Inject
-	private Mdl2PharmML generator;
+	private Mdl2PharmMLWrapper generator;
 
 	@Inject
 	private Provider<JavaIoFileSystemAccess > fileAccessProvider;
