@@ -20,8 +20,28 @@ import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
+import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
+import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
+import org.ddmore.mdl.mdl.impl.FileBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl;
+import org.ddmore.mdl.mdl.impl.ImportedFunctionImpl;
+import org.ddmore.mdl.mdl.impl.InlineBlockImpl;
+import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
+import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
+import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
+import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
+import org.ddmore.mdl.mdl.impl.SameBlockImpl;
+import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
+import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.SymbolListImpl;
+import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 
@@ -278,7 +298,7 @@ public class Utils {
 		return res + "}";
 	}
 	
-	static ArrayList<String> getAllNames(List<Attribute> attrs){
+	public static ArrayList<String> getAllNames(List<Attribute> attrs){
 		ArrayList<String> names = new ArrayList<String>();
 		for (Attribute attr: attrs){
 			names.add(attr.name);
@@ -286,7 +306,7 @@ public class Utils {
 		return names;
 	}
 
-	static ArrayList<String> getRequiredNames(List<Attribute> attrs){
+	public static ArrayList<String> getRequiredNames(List<Attribute> attrs){
 		ArrayList<String> names = new ArrayList<String>();
 		for (Attribute attr: attrs){
 			if (attr.mandatory)
@@ -294,4 +314,47 @@ public class Utils {
 		}
 		return names;
 	}
+	
+	public static Boolean isListContainer(EObject obj){
+		if (
+			//Data object	
+			obj instanceof DataInputBlockImpl ||
+			obj instanceof FileBlockStatementImpl ||
+			obj instanceof DesignBlockStatementImpl ||
+			//Model object
+			obj instanceof InputVariablesBlockImpl ||
+			obj instanceof LibraryBlockImpl ||
+			obj instanceof OdeBlockImpl ||
+			//Parameter object
+			obj instanceof StructuralBlockImpl ||
+			obj instanceof VariabilityBlockStatementImpl ||
+			obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl ||
+			//All objects
+			obj instanceof ImportedFunctionImpl ||
+			obj instanceof TargetBlockImpl) return true;
+		return false;	
+	}
+	
+	//Blocks that contain references to parameters: STRUCTURAL_PARAMETERS, VARIABILITY_PARAMETERSM, PARAMETER
+	public static Boolean isParameterRefContainer(EObject container){
+		if (
+			container instanceof StructuralParametersBlockImpl || 
+			container instanceof VariabilityParametersBlockImpl ||
+			container instanceof ParameterBlockImpl) return true;
+		return false;	
+	}
+	
+	//Blocks that contain references to variables: OUTPUT_VARIABLES, INLINE, 
+	//VariableList in DesignBlockStatement of DESIGN
+	//SymbolList in DROP, ADD, REMOVE
+	public static Boolean isVariableRefContainer(EObject container){
+		if (
+			container instanceof OutputVariablesBlockImpl || 
+			container instanceof InlineBlockImpl ||
+			container instanceof VariableListImpl ||
+			container instanceof DesignBlockStatementImpl ||
+			container instanceof SymbolListImpl) return true;
+		return false;	
+	}
+
 }

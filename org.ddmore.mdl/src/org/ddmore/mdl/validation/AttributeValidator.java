@@ -107,6 +107,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_req_source = new Attribute("source", DataType.TYPE_STRING, true, DataType.defaultFileName);
 	final public static Attribute attr_ignore = new Attribute("ignore", DataType.TYPE_STRING, false);
 	final public static Attribute attr_inputformat = new Attribute("inputformat", DataType.TYPE_TARGET, false, DataType.defaultTarget);
+	final public static Attribute attr_delimeter = new Attribute("delimeter", DataType.TYPE_STRING, false, ";");
 	
 	/*DESIGN*/
 	final public static Attribute attr_design_source = new Attribute("source", DataType.TYPE_REF, true, DataType.defaultVarName);
@@ -125,28 +126,28 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
-	final static List<Attribute> attrs_header = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
+	final public static List<Attribute> attrs_header = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
 			attr_recode, attr_boundaries, attr_missing, attr_mapping, attr_female, attr_male);
-	final static List<Attribute> attrs_file = Arrays.asList(attr_req_source, attr_ignore, attr_inputformat);
-	final static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp, attr_idv);
+	final public static List<Attribute> attrs_file = Arrays.asList(attr_req_source, attr_ignore, attr_inputformat, attr_delimeter);
+	final public static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp, attr_idv);
 
 	/*Parameter object*/
-	final static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, attr_fix, attr_units, attr_transform);
-	final static List<Attribute> attrs_variability = Arrays.asList(attr_req_value, attr_re_type, attr_fix, attr_units, attr_transform);
-	final static List<Attribute> attrs_variability_subblock = Arrays.asList(attr_name, attr_re_type, attr_fix);
+	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, attr_fix, attr_units, attr_transform);
+	final public static List<Attribute> attrs_variability = Arrays.asList(attr_req_value, attr_re_type, attr_fix, attr_units, attr_transform);
+	final public static List<Attribute> attrs_variability_subblock = Arrays.asList(attr_name, attr_re_type, attr_fix);
 	
 	/*Model object*/
-	final static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_units, attr_cc_type, attr_level);
-	final static List<Attribute> attrs_library = Arrays.asList(attr_library, attr_req_model, attr_ncmt, attr_param, attr_output, attr_distribution, attr_elimination, attr_parameterization);
-	final static List<Attribute> attrs_ode = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
+	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_units, attr_cc_type, attr_level);
+	final public static List<Attribute> attrs_library = Arrays.asList(attr_library, attr_req_model, attr_ncmt, attr_param, attr_output, attr_distribution, attr_elimination, attr_parameterization);
+	final public static List<Attribute> attrs_ode = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 
 	/*All blocks*/
-	final static List<Attribute> attrs_import = Arrays.asList(attr_req_target, attr_name, attr_ncmt, attr_trans, attr_param, attr_output);
-	final static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_before, attr_after);
+	final public static List<Attribute> attrs_import = Arrays.asList(attr_req_target, attr_name, attr_ncmt, attr_trans, attr_param, attr_output);
+	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_before, attr_after);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	final static HashMap<String, Attribute> allAttributes = new HashMap<String, Attribute>(){
+	final public static HashMap<String, Attribute> allAttributes = new HashMap<String, Attribute>(){
 		private static final long serialVersionUID = -4512048801509444272L;
 		{
 			/*Data object*/
@@ -215,7 +216,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
         return allAttributes.get(id);
     }
 	
-	List<Attribute> getAllAttributes(EObject obj){
+	public static List<Attribute> getAllAttributes(EObject obj){
 		if (obj instanceof StructuralBlockImpl)
 			return attrs_structural;
 		if (obj instanceof VariabilityBlockStatementImpl)

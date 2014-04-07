@@ -228,7 +228,6 @@ FunctionCallStatement:
 	functionName = SymbolName "=" expression = FunctionCall
 ;
 
-
 OdeBlock:
 	identifier = 'ODE' 
 	BEGIN statements += BlockStatement* END  //new Variable + 
@@ -429,7 +428,7 @@ UseType:
 		'id'| 'idv' |'amt' | 'dv' | 'dvid' | 'ytype' | 'itype' |
 		'covariate' | 'reg' | 'time' | 'dose'| 
 		'cat' | 'occ' | 'occasion' | 'adm' | 'cens' | 'limit' | 'rate' | 
-		'tinf' | 'ss' | 'addl' | 'ii' | 'tau' | 'mdv' | 'evid')
+		'tinf' | 'ss' | 'addl' | 'ii' | 'tau' | 'mdv' | 'evid' | 'cmt')
 ;
 
 VariabilityType:
