@@ -14,24 +14,16 @@ import java.util.List;
 
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
-import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
-import org.ddmore.mdl.mdl.impl.InlineBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
-import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
 import org.ddmore.mdl.mdl.impl.ParameterDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.PrimaryImpl;
-import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.SymbolListImpl;
 import org.ddmore.mdl.mdl.impl.SymbolModificationImpl;
 import org.ddmore.mdl.mdl.impl.TaskFunctionBlockImpl;
 import org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
-import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -87,6 +79,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		declaredVariables.clear();
 		for (MclObject obj: mcl.getObjects()){
 			ArrayList<String> varList = new ArrayList<String>();
+			//Model object
 			if (obj.getModelObject() != null){
 				for (ModelObjectBlock block: obj.getModelObject().getBlocks()){
 					//RANDOM_VARIABLE_DEFINITION
@@ -155,10 +148,11 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				}
 				declaredVariables.put(obj.getObjectName().getName(), varList);
 			}
+			//Data object
 			if (obj.getDataObject() != null){
 				for (DataObjectBlock block: obj.getDataObject().getBlocks()){
 					if (block.getDataInputBlock() != null){
-						//Add variables from DATA_INPUT_VARIABLES that are not among defined in MODEL_INPUT_VARIABLES 
+						//DATA_INPUT_VARIABLES
 						for (SymbolDeclaration s: block.getDataInputBlock().getVariables()){
 							varList.add(s.getSymbolName().getName());
 						}
@@ -179,6 +173,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				}
 				declaredVariables.put(obj.getObjectName().getName(), varList);
 			}
+			//TEL object
 			if (obj.getTelObject() != null){
 				for (FunctionCallStatement st: obj.getTelObject().getStatements()){
 					varList.add(st.getFunctionName().getName());
@@ -215,6 +210,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public void updateDeclaredParameterList(Mcl mcl){
 		declaredParameters.clear();
 		for (MclObject obj: mcl.getObjects()){
+			//Parameter object
 			if (obj.getParameterObject() != null){
 				ArrayList<String> paramList = new ArrayList<String>();
 				for (ParameterObjectBlock block: obj.getParameterObject().getBlocks()){
@@ -260,6 +256,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public void updateVariabilitySubblockNames(Mcl mcl){
 		variabilitySubblockNames.clear();
 		for (MclObject obj: mcl.getObjects()){
+			//Parameter object
 			if (obj.getParameterObject() != null){
 				ArrayList<String> paramList = new ArrayList<String>();
 				for (ParameterObjectBlock block: obj.getParameterObject().getBlocks()){
@@ -338,11 +335,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			container = container.eContainer();
 			
 		/*References to parameters*/
-		//STRUCTURAL_PARAMETERS, VARIABILITY_PARAMETERS
-		//SymbolModification (PARAMETER)
-		if (container instanceof StructuralParametersBlockImpl || 
-				container instanceof VariabilityParametersBlockImpl ||
-				container instanceof ParameterBlockImpl){
+		if (Utils.isParameterRefContainer(container)){
 			if (!Utils.isSymbolDeclared(declaredParameters, ref)){
 				warning(MSG_PARAMETER_UNKNOWN, 
 						MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL,
@@ -351,13 +344,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		}
 
 		/*References to variables*/
-		//OUTPUT, INLINE
-		//DESIGN: VariableList and DesignBlockStatement
-		if (container instanceof OutputVariablesBlockImpl || 
-				container instanceof InlineBlockImpl ||
-				container instanceof VariableListImpl ||
-				container instanceof DesignBlockStatementImpl ||
-				container instanceof SymbolListImpl){
+		if (Utils.isVariableRefContainer(container)){
 			if (!(Utils.isSymbolDeclared(declaredVariables, ref))){
 				warning(MSG_VARIABLE_UNKNOWN, 
 						MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL,
@@ -365,7 +352,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			}
 		}
 		
-		/*References in expressions either to variables of parameters*/
+		/*References either to variables, parameters or to objects*/
 		if ((container instanceof PrimaryImpl) || (container instanceof UnaryExpression)){
 			if (!(Utils.isSymbolDeclared(declaredVariables, ref) || 
 					Utils.isSymbolDeclared(declaredParameters, ref) ||

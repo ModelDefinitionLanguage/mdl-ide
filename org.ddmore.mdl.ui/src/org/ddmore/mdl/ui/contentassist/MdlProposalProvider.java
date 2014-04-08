@@ -3,10 +3,157 @@
 */
 package org.ddmore.mdl.ui.contentassist;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.DistributionArgument;
+import org.ddmore.mdl.mdl.DistributionArguments;
+import org.ddmore.mdl.mdl.RandomList;
+import org.ddmore.mdl.mdl.impl.ArgumentImpl;
+import org.ddmore.mdl.mdl.impl.DistributionArgumentImpl;
+import org.ddmore.mdl.mdl.impl.ListImpl;
+import org.ddmore.mdl.mdl.impl.MclObjectImpl;
+import org.ddmore.mdl.mdl.impl.OdeListImpl;
+import org.ddmore.mdl.mdl.impl.RandomListImpl;
+import org.ddmore.mdl.services.MdlGrammarAccess;
 import org.ddmore.mdl.ui.contentassist.AbstractMdlProposalProvider;
+import org.ddmore.mdl.ui.outline.Images;
+import org.ddmore.mdl.validation.Attribute;
+import org.ddmore.mdl.validation.AttributeValidator;
+import org.ddmore.mdl.validation.DistributionValidator;
+import org.ddmore.mdl.validation.Utils;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.RuleCall;
+import org.eclipse.xtext.ui.IImageHelper;
+import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
+import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
+import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
+
+import com.google.inject.Inject;
 /**
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
  */
-public class MdlProposalProvider extends AbstractMdlProposalProvider {
 
+public class MdlProposalProvider extends AbstractMdlProposalProvider {
+		
+	@Inject MdlGrammarAccess grammarAccess;
+	@Inject IImageHelper imageHelper;
+	
+	//TODO: Remove all other keywords from the list of proposals
+	/*@Override
+	public void completeKeyword(Keyword keyword, ContentAssistContext contentAssistContext,ICompletionProposalAcceptor acceptor) {
+	}*/
+	
+	@Override
+	public void completeList_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	}
+
+	@Override
+	public void completeOdeList_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	}
+
+	@Override
+	public void completeRandomList_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	}
+	
+	@Override
+	public void completeArguments_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	}
+
+	@Override
+	public void completeArgument_ArgumentName(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		if (model instanceof ListImpl || model instanceof OdeListImpl){
+			EObject container = model.eContainer();
+			while (!(Utils.isListContainer(container))){
+				if (container instanceof MclObjectImpl) return; //we are too high in the tree, block was not found
+				container = container.eContainer();
+			}
+			Image img = imageHelper.getImage(Images.getPath(Images.ATTRIBUTE));
+			ArrayList<String> attributes = Utils.getAllNames(AttributeValidator.getAllAttributes(container));
+			addProposals(context, acceptor, attributes, img);
+		}
+	}
+	
+	@Override
+	public void completeArgument_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		if (model instanceof ArgumentImpl){
+			Argument arg = (Argument)model;
+			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_cc_type.getName())){
+				//Check that block is correct too
+				ArrayList<String> attributes = new ArrayList<String>();
+				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));
+				addProposals(context, acceptor, attributes, img);
+			}
+		}
+	}
+	
+	@Override
+	public void completeDistributionArguments_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	}
+	
+	@Override
+	public void completeDistributionArgument_ArgumentName(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		//Distribution attributes
+		if (model instanceof RandomListImpl){
+			RandomList randomList = (RandomList)model;
+			DistributionArguments args = randomList.getArguments();
+			DistributionArgument type = DistributionValidator.findDistributionAttribute(args, 
+					DistributionValidator.attr_type.getName());
+			Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_ATTRIBUTE));
+			if (type != null){
+				String typeName = type.getDistribution().getIdentifier();
+				List<Attribute> recognized_attrs = DistributionValidator.distr_attrs.get(typeName);
+				if (recognized_attrs != null){
+					ArrayList<String> attributes = Utils.getAllNames(recognized_attrs);
+					addProposals(context, acceptor, attributes, img);
+				}
+			} else {
+				//suggest attribute type
+				ArrayList<String> attributes = new ArrayList<String>();
+				attributes.add(DistributionValidator.attr_type.getName());
+				addProposals(context, acceptor, attributes, img);
+			}
+		}
+	}
+		
+	@Override
+	public void completeDistributionArgument_Distribution(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		if (model instanceof DistributionArgumentImpl){
+			DistributionArgument arg = (DistributionArgument)model;
+			if (arg.getArgumentName().getName().equals(DistributionValidator.attr_type.getName())){
+				ArrayList<String> attributes = new ArrayList<String>();
+				attributes.addAll(DistributionValidator.distr_attrs.keySet()); 
+				Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_TYPE));
+				addProposals(context, acceptor, attributes, img);
+			}
+		}
+	}
+
+	@Override
+	public void completeDistributionArgument_Value(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		//if (model instanceof DistributionArgumentImpl){
+			//DistributionArgument arg = (DistributionArgument)model;
+			//suggest default value for the argument (or other meaningful values)
+		//}
+	}
+
+	@Override
+	public void completeDistributionArgument_Component(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		//if (model instanceof DistributionArgumentImpl){
+		//}
+	}
+	
+	private void addProposals(ContentAssistContext context, ICompletionProposalAcceptor acceptor, 
+			ArrayList<String> attributes, Image img){
+		for (String proposal: attributes){
+			StyledString displayedString = new StyledString();
+			displayedString.append(proposal);
+			ConfigurableCompletionProposal p = doCreateProposal(proposal, displayedString, img, 1, context);
+			acceptor.accept(p);
+		}
+	}
 }

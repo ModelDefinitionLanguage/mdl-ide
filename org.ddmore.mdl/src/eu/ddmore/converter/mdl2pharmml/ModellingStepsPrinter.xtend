@@ -207,13 +207,16 @@ class ModellingStepsPrinter extends DataSetPrinter{
 					if (s.variable.symbolName.name.equals("data")){
 						if (s.variable.expression != null){
 							if (s.variable.expression.list != null){
-								val source = s.variable.expression.list.arguments.getAttribute("source");
-								val inputformat = s.variable.expression.list.arguments.getAttribute("inputformat");
-								if (inputformat.equals(ENUM_FORMAT_NONMEM)){
+								val inputFormat = s.variable.expression.list.arguments.getAttribute("inputformat");
+								if (inputFormat.equals(ENUM_FORMAT_NONMEM)){
 									res  = res + print_NONMEM_DataSet(dObjName, mObjName);
 								}
+								val source = s.variable.expression.list.arguments.getAttribute("source");
 								if (source.length > 0){
-									//res = res + source.print_msteps_ExternalSource;
+									var delimeter = s.variable.expression.list.arguments.getAttribute("delimeter");
+									if (delimeter.length == 0) delimeter = ";";
+									res = res + print_ds_ExternalSource("ds." + dObjName, source, source, 
+										inputFormat, delimeter);
 								}
 							}
 						}
@@ -222,13 +225,8 @@ class ModellingStepsPrinter extends DataSetPrinter{
 			}
 		}
 		return res;
-	}
+	}	
 	
-	def print_msteps_ExternalSource(String source)'''				
-		«val dotIndex = source.indexOf('.')»
-		<ExternalSource url="file=///«source»" 
-			format="«source.substring(dotIndex + 1)»"/>	
-	'''	
 	
 	def getProperty(TaskFunctionBlock t, String name){
 		if (t.estimateBlock != null){

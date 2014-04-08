@@ -20,7 +20,7 @@ class DataSetPrinter {
 	}	
 	
 	//
-	def print_Columns(String[] names, String[] types)
+	def print_ds_Columns(String[] names, String[] types)
 	'''
 		«IF names.size == types.size»
 			«FOR i: 0..names.size-1»
@@ -34,32 +34,31 @@ class DataSetPrinter {
 	'''
 	
 	//
-	def print_Row(String[] atoms)'''
-	<Row>
+	def print_ds_Row(String[] atoms)'''
+	<ds:Row>
 		«FOR row: atoms»
 			«print_ct_Value(row)»
 		«ENDFOR»
-	</Row>
+	</ds:Row>
 	'''
 	
 	// May need to skip first line (repeated column names) 
 	// TODO: Do we need to check actual types against types deduced from MDL???
 	def print_DataSet(ArrayList<String> names, ArrayList<String> types, ArrayList<String[]> values)
 	'''
-	<DataSet>
+	<ds:DataSet>
 		<ds:Definition>
-			«print_Columns(names, types)»
+			«print_ds_Columns(names, types)»
 		</ds:Definition>
 		<ds:Table>	
 			«FOR row: values»
-				«row.print_Row»
+				«row.print_ds_Row»
 			«ENDFOR»
 		</ds:Table>
-	</DataSet>
+	</ds:DataSet>
 	'''
 	
-	def getDataFileContent(String fileName){
-		var values = new ArrayList<String[]>();
+	def getDataFileReader(String fileName){
 		var BufferedReader fileReader = null;
 		var file = new File(fileName);
 		if (file.isAbsolute()) {
@@ -92,6 +91,12 @@ class DataSetPrinter {
 				}
 			}
 		}
+		return fileReader;
+	}
+	
+	def getDataFileContent(String fileName){
+		var values = new ArrayList<String[]>();
+		var fileReader = getDataFileReader(fileName);
 		if (fileReader.ready()){ 
 			var line = "";
 			while ((line = fileReader.readLine()) != null) {
@@ -102,4 +107,14 @@ class DataSetPrinter {
 		}		
 		return values;
 	}	
+	
+	def print_ds_ExternalSource(String oid, String fileName, String filePath, String format, String delimeter)'''				
+		<ds:ImportData oid="«oid»">
+			<ds:name>«fileName»</ds:name>
+			<ds:url>«filePath»</ds:url>
+			<ds:format>«format»</ds:format>
+			<ds:delimiter>«delimeter»</ds:delimiter>
+		</ds:ImportData>
+			
+	'''	
 }

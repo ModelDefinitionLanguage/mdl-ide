@@ -20,7 +20,7 @@ import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import eu.ddmore.converter.mdl2nonmem.Mdl2Nonmem;
+import eu.ddmore.mdl.generator.Mdl2NonmemWrapper;
 
 public class RunWithNONMEMHandler_PE extends AbstractHandler implements IHandler {
 
@@ -28,7 +28,7 @@ public class RunWithNONMEMHandler_PE extends AbstractHandler implements IHandler
     private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
 
     @Inject
-    private Mdl2Nonmem generator;
+    private Mdl2NonmemWrapper generator;
 
     @Inject
     IResourceSetProvider resourceSetProvider;

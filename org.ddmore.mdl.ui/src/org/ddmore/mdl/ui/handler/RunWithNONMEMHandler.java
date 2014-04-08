@@ -23,7 +23,7 @@ import com.google.inject.Provider;
 //import org.eclipse.ui.console.IConsoleManager;
 //import org.eclipse.ui.console.TextConsole;
 
-import eu.ddmore.converter.mdl2nonmem.Mdl2Nonmem;
+import eu.ddmore.mdl.generator.Mdl2NonmemWrapper;
 
 public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
 
@@ -31,7 +31,7 @@ public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
     private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
 
     @Inject
-    private Mdl2Nonmem generator;
+    private Mdl2NonmemWrapper generator;
 
     public Object execute(ExecutionEvent event) throws ExecutionException {
         IEditorPart activeEditor = HandlerUtil.getActiveEditor(event);

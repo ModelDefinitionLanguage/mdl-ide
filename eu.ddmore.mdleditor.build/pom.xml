@@ -443,17 +443,6 @@
 			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
-		<dependency>
-			<groupId>eu.ddmore</groupId>
-			<artifactId>converter-toolbox-api</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>eu.ddmore</groupId>
-			<artifactId>converter-toolbox</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
-		</dependency>
-
 	</dependencies>
 
 	<url>http://ddmore.eu/</url>

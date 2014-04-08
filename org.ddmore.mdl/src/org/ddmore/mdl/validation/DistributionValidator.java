@@ -108,7 +108,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		}
 	};
 	
-	final static HashMap<String, List<Attribute>> distr_attrs = 
+	final public static HashMap<String, List<Attribute>> distr_attrs = 
 			new HashMap<String, List<Attribute>>() {
 				private static final long serialVersionUID = 27681295286815005L;
 		{
@@ -325,14 +325,13 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		return false;
 	}
 	
-	DistributionArgument findDistributionAttribute(DistributionArguments args, String name){
+	public static DistributionArgument findDistributionAttribute(DistributionArguments args, String name){
 		for (DistributionArgument arg: args.getArguments()){
 			if (arg.getArgumentName().getName().equals(name)){
 				return arg;
 			}
 		}
 		return null;
-	}
-	
+	}	
 	
 }

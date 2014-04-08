@@ -1,6 +1,5 @@
 package org.ddmore.mdl.ui.outline;
 
-
 /**
  * 
  * Image name constants.
@@ -10,12 +9,14 @@ public class Images {
 	private static final String ICONS_PATH="diagona-icons-1.0/icons/16/";
 	
 	public static final String MDL = "019-mdl.png";
+	public static final String MODEL_OBJ ="154-model.png";
+	public static final String PARAMETER_OBJ ="153-parameter.png";
+	public static final String TASK_OBJ ="152-task.png";
+	public static final String DATA_OBJ ="157-data.png";
+	public static final String TEL_OBJ ="160-tel.png";
+
 	public static final String ATTRIBUTE ="012-attribute.png";
-	public static final String MODEL ="154-model.png";
-	public static final String PARAMETER ="153-parameter.png";
-	public static final String TASK ="152-task.png";
-	public static final String DATA ="157-data.png";
-	public static final String TEL ="160-tel.png";
+	public static final String DISTRIBUTION_ATTRIBUTE = "011-distribution-attribute.png";
 	public static final String CONDITION ="044-question.png";
 	public static final String PARENT ="046-parent.png";
 	public static final String FUNCTION ="054-function.png";
@@ -38,6 +39,7 @@ public class Images {
 	public static final String TARGET ="196-target.png";
 	public static final String SYMBOL_DECLARATION = "175-variable.png";
 	public static final String SYMBOL_MODIFICATION = "176-variable-mod.png";
+	public static final String FUNCTION_CALL_STATEMENT = SYMBOL_DECLARATION;
 	public static final String RANDOM ="092-random.png";
 	public static final String DROP ="104-remove.png";
 	public static final String IMPORT ="193-import.png";
@@ -50,22 +52,28 @@ public class Images {
 	public static final String MODEL_PREDICTION_BLOCK = LIST;
 	public static final String OBSERVATIONS_BLOCK = LIST;
 	public static final String OUTPUT_VARIABLES_BLOCK = LIST;
-	
-	public static final String CONTINUOUS ="072-variability.png";
-	public static final String CATEGORICAL = CONTINUOUS;
-	public static final String USE_TYPE = LIST;
-	public static final String COVARIATE = ATTRIBUTE;
-	public static final String TASK_FUNCTION_DECLARATION = TASK;
-	public static final String ARGUMENT_NAME = ATTRIBUTE;
-	public static final String ESTIMATE_TASK = TASK;
-	public static final String DISTRIBUTION_ATTRIBUTE = ATTRIBUTE;
-	public static final String PRIMARY = EXPRESSION;
-
 	public static final String GROUP_VARIABLES_BLOCK = LIST;
 	public static final String RANDOM_VARIABLES_BLOCK = LIST;
 	public static final String INDIVIDUAL_VARIABLES_BLOCK = LIST;
 	public static final String HEADER_BLOCK = LIST;
 	public static final String DATA_BLOCK = LIST;
+
+	public static final String CONTINUOUS ="072-continuous-categorical.png";
+	public static final String CATEGORICAL = CONTINUOUS;
+	public static final String USE_TYPE = "073-use-type.png";
+	public static final String DISTRIBUTION_TYPE = "071-distribution-type.png";
+	public static final String TARGET_LANGUAGE = "074-target-language.png";
+	public static final String LIKELYHOOD = "074-likelyhood.png";
+	public static final String VARIABILITY_TYPE = "075-variability-type.png";
+	
+	public static final String TASK_FUNCTION_DECLARATION = "146-task.png";
+	public static final String ESTIMATE_TASK = "127-task-estimate.png";
+	public static final String SIMULATE_TASK = "126-task-simulate.png";
+	public static final String EXECUTE_TASK = "125-task-execute.png";
+
+	public static final String ARGUMENT_NAME = ATTRIBUTE;
+	public static final String PRIMARY = EXPRESSION;
+
 
 	public static final String getPath(String path) {
 		return ICONS_PATH + path;

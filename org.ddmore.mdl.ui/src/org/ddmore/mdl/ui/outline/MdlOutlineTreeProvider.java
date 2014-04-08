@@ -28,6 +28,7 @@ import org.ddmore.mdl.mdl.FileBlockStatement;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.IgnoreList;
 import org.ddmore.mdl.mdl.ImportedFunction;
@@ -68,233 +69,271 @@ import org.ddmore.mdl.mdl.impl.CategoricalImpl;
 import org.ddmore.mdl.mdl.impl.ContinuousImpl;
 import org.ddmore.mdl.mdl.impl.DataBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
+import org.ddmore.mdl.mdl.impl.DistributionImpl;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
+import org.ddmore.mdl.mdl.impl.ExecuteTaskImpl;
 import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.LikelyhoodImpl;
 import org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
+import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.TargetLanguageImpl;
 import org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.UseTypeImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityTypeImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtext.ui.IImageHelper;
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider;
-import com.google.inject.Inject;
 
 import org.ddmore.mdl.generator.MathPrinter;
 
+import com.google.inject.Inject;
+
 /**
  * customization of the default outline structure
- * 
  */
 public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
-	@Inject
-	private IImageHelper imageHelper;
 	
-	 	protected Image _image(Mcl e) {
-	        return imageHelper.getImage(getPath(MDL));
-	    }
-		protected Image _image(ModelObject e) {
-	        return imageHelper.getImage(getPath(MODEL));
-	    }
-	    protected Image _image(ParameterObject d) {
-	        return imageHelper.getImage(getPath(PARAMETER));
-	    }
-	    protected Image _image(DataObject p) {
-	        return imageHelper.getImage(getPath(DATA));
-	    }
-	    protected Image _image(TaskObject f) {
-	        return imageHelper.getImage(getPath(TASK));
-	    }
-	    protected Image _image(TELObject f) {
-	        return imageHelper.getImage(getPath(TEL));
-	    }
-	    
-	    protected Image _image(ConditionalStatement f) {
-	        return imageHelper.getImage(getPath(CONDITION));
-	    }
-	    
-	    protected Image _image(FullyQualifiedSymbolName f) {
-	        return imageHelper.getImage(getPath(REFERENCE));
-	    }
-	    
-	    protected Image _image(ParameterDeclaration f) {
-	        return imageHelper.getImage(getPath(PARAMETER_DECLARATION));
-	    }
-	    
-	    protected Image _image(TargetBlock f) {
-	        return imageHelper.getImage(getPath(TARGET));
-	    }
+	@Inject IImageHelper imageHelper;
+	
+ 	protected Image _image(Mcl e) {
+        return imageHelper.getImage(getPath(MDL));
+    }
+	protected Image _image(ModelObject e) {
+        return imageHelper.getImage(getPath(MODEL_OBJ));
+    }
+    protected Image _image(ParameterObject d) {
+        return imageHelper.getImage(getPath(PARAMETER_OBJ));
+    }
+    protected Image _image(DataObject p) {
+        return imageHelper.getImage(getPath(DATA_OBJ));
+    }
+    protected Image _image(TaskObject f) {
+        return imageHelper.getImage(getPath(TASK_OBJ));
+    }
+    protected Image _image(TELObject f) {
+        return imageHelper.getImage(getPath(TEL_OBJ));
+    }
+    
+    protected Image _image(ConditionalStatement f) {
+        return imageHelper.getImage(getPath(CONDITION));
+    }
+    
+    protected Image _image(FullyQualifiedSymbolName f) {
+        return imageHelper.getImage(getPath(REFERENCE));
+    }
+    
+    protected Image _image(ParameterDeclaration f) {
+        return imageHelper.getImage(getPath(PARAMETER_DECLARATION));
+    }
+    
+    protected Image _image(TargetBlock f) {
+        return imageHelper.getImage(getPath(TARGET));
+    }
 
-	    protected Image _image(ImportedFunction f) {
-	        return imageHelper.getImage(getPath(IMPORT));
-	    }
+    protected Image _image(ImportedFunction f) {
+        return imageHelper.getImage(getPath(IMPORT));
+    }
 
-	    protected Image _image(SymbolDeclaration f) {
-	        return imageHelper.getImage(getPath(SYMBOL_DECLARATION));
-	    }
-	    
-	    protected Image _image(RandomList r) {
-	        return imageHelper.getImage(getPath(RANDOM));
-	    }
-	    	    
-	    protected Image _image(List r) {
-	        return imageHelper.getImage(getPath(LIST));
-	    }
+    protected Image _image(SymbolDeclaration f) {
+        return imageHelper.getImage(getPath(SYMBOL_DECLARATION));
+    }
 
-	    protected Image _image(AddList r) {
-	        return imageHelper.getImage(getPath(ADD));
-	    }
-	    
-	    protected Image _image(IgnoreList r) {
-	        return imageHelper.getImage(getPath(IGNORE));
-	    }
-	    
-	    protected Image _image(AcceptList r) {
-	        return imageHelper.getImage(getPath(ACCEPT));
-	    }	    
+    protected Image _image(FunctionCallStatement f) {
+        return imageHelper.getImage(getPath(FUNCTION_CALL_STATEMENT));
+    }
 
-	    protected Image _image(RemoveList r) {
-	        return imageHelper.getImage(getPath(REMOVE));
-	    }
+    protected Image _image(RandomList r) {
+        return imageHelper.getImage(getPath(RANDOM));
+    }
+    	    
+    protected Image _image(List r) {
+        return imageHelper.getImage(getPath(LIST));
+    }
 
-	    protected Image _image(DropList r) {
-	        return imageHelper.getImage(getPath(DROP));
-	    }
+    protected Image _image(AddList r) {
+        return imageHelper.getImage(getPath(ADD));
+    }
+    
+    protected Image _image(IgnoreList r) {
+        return imageHelper.getImage(getPath(IGNORE));
+    }
+    
+    protected Image _image(AcceptList r) {
+        return imageHelper.getImage(getPath(ACCEPT));
+    }	    
 
-	    protected Image _image(FunctionCall r) {
-	        return imageHelper.getImage(getPath(FUNCTION));
-	    }
-	    
-	    protected Image _image(OdeList r) {
-	        return imageHelper.getImage(getPath(ODE));
-	    }
-	    	    
-	    protected Image _image(Argument f) {
-	        return imageHelper.getImage(getPath(ATTRIBUTE));
-	    }
-	    
-	    protected Image _image(DistributionArgument f) {
-	        return imageHelper.getImage(getPath(DISTRIBUTION_ATTRIBUTE));
-	    }	    
-	    
-	    protected Image _image(SymbolModification f) {
-	        return imageHelper.getImage(getPath(SYMBOL_MODIFICATION));
-	    }
-	    
-	    protected Image _image(ConditionalExpression e) {
-	        return imageHelper.getImage(getPath(EXPRESSION_CONDITION));
-	    }
-	    
-	    protected Image _image(ParExpression e) {
-	        return imageHelper.getImage(getPath(EXPRESSION));
-	    }
-	    
-	    protected Image _image(OrExpression e) {
-	        return imageHelper.getImage(getPath(EXPRESSION_OR));
-	    }
+    protected Image _image(RemoveList r) {
+        return imageHelper.getImage(getPath(REMOVE));
+    }
 
-	    protected Image _image(AndExpression e) {
-	        return imageHelper.getImage(getPath(EXPRESSION_AND));
-	    }
-	    
-	    protected Image _image(MixtureBlock e) {
-	        return imageHelper.getImage(getPath(MIXTURE));
-	    }
+    protected Image _image(DropList r) {
+        return imageHelper.getImage(getPath(DROP));
+    }
 
-	    protected Image _image(StructuralBlockImpl e) {
-	        return imageHelper.getImage(getPath(STRUCTURAL_BLOCK));
-	    }
+    protected Image _image(FunctionCall r) {
+        return imageHelper.getImage(getPath(FUNCTION));
+    }
+    
+    protected Image _image(OdeList r) {
+        return imageHelper.getImage(getPath(ODE));
+    }
+    	    
+    protected Image _image(Argument f) {
+        return imageHelper.getImage(getPath(ATTRIBUTE));
+    }
+    
+    protected Image _image(DistributionArgument f) {
+        return imageHelper.getImage(getPath(DISTRIBUTION_ATTRIBUTE));
+    }	    
+    
+    protected Image _image(SymbolModification f) {
+        return imageHelper.getImage(getPath(SYMBOL_MODIFICATION));
+    }
+    
+    protected Image _image(ConditionalExpression e) {
+        return imageHelper.getImage(getPath(EXPRESSION_CONDITION));
+    }
+    
+    protected Image _image(ParExpression e) {
+        return imageHelper.getImage(getPath(EXPRESSION));
+    }
+    
+    protected Image _image(OrExpression e) {
+        return imageHelper.getImage(getPath(EXPRESSION_OR));
+    }
 
-	    protected Image _image(VariabilityBlockImpl e) {
-	        return imageHelper.getImage(getPath(VARIABILITY_BLOCK));
-	    }
+    protected Image _image(AndExpression e) {
+        return imageHelper.getImage(getPath(EXPRESSION_AND));
+    }
+    
+    protected Image _image(MixtureBlock e) {
+        return imageHelper.getImage(getPath(MIXTURE));
+    }
 
-	    protected Image _image(InputVariablesBlockImpl e) {
-	        return imageHelper.getImage(getPath(INPUT_VARIABLES_BLOCK));
-	    }
+    protected Image _image(StructuralBlockImpl e) {
+        return imageHelper.getImage(getPath(STRUCTURAL_BLOCK));
+    }
 
-	    protected Image _image(StructuralParametersBlockImpl e) {
-	        return imageHelper.getImage(getPath(STRUCTURAL_PARAMETERS_BLOCK));
-	    }
+    protected Image _image(VariabilityBlockImpl e) {
+        return imageHelper.getImage(getPath(VARIABILITY_BLOCK));
+    }
 
-	    protected Image _image(VariabilityParametersBlockImpl e) {
-	        return imageHelper.getImage(getPath(VARIABILITY_PARAMETERS_BLOCK));
-	    }
+    protected Image _image(InputVariablesBlockImpl e) {
+        return imageHelper.getImage(getPath(INPUT_VARIABLES_BLOCK));
+    }
 
-	    protected Image _image(ModelPredictionBlockImpl e) {
-	        return imageHelper.getImage(getPath(MODEL_PREDICTION_BLOCK));
-	    }
+    protected Image _image(StructuralParametersBlockImpl e) {
+        return imageHelper.getImage(getPath(STRUCTURAL_PARAMETERS_BLOCK));
+    }
 
-	    protected Image _image(ObservationBlockImpl e) {
-	        return imageHelper.getImage(getPath(OBSERVATIONS_BLOCK));
-	    }
+    protected Image _image(VariabilityParametersBlockImpl e) {
+        return imageHelper.getImage(getPath(VARIABILITY_PARAMETERS_BLOCK));
+    }
 
-	    protected Image _image(OutputVariablesBlockImpl e) {
-	        return imageHelper.getImage(getPath(OUTPUT_VARIABLES_BLOCK));
-	    }
+    protected Image _image(ModelPredictionBlockImpl e) {
+        return imageHelper.getImage(getPath(MODEL_PREDICTION_BLOCK));
+    }
 
-	    protected Image _image(ContinuousImpl e) {
-	        return imageHelper.getImage(getPath(CONTINUOUS));
-	    }
+    protected Image _image(ObservationBlockImpl e) {
+        return imageHelper.getImage(getPath(OBSERVATIONS_BLOCK));
+    }
 
-	    protected Image _image(UseTypeImpl e) {
-	        return imageHelper.getImage(getPath(USE_TYPE));
-	    }
+    protected Image _image(OutputVariablesBlockImpl e) {
+        return imageHelper.getImage(getPath(OUTPUT_VARIABLES_BLOCK));
+    }
 
-	    protected Image _image(CategoricalImpl e) {
-	        return imageHelper.getImage(getPath(CATEGORICAL));
-	    }
+    protected Image _image(DistributionImpl e) {
+        return imageHelper.getImage(getPath(DISTRIBUTION_TYPE));
+    }
+    
+    protected Image _image(TargetLanguageImpl e) {
+        return imageHelper.getImage(getPath(TARGET_LANGUAGE));
+    }
+    
+    protected Image _image(UseTypeImpl e) {
+        return imageHelper.getImage(getPath(USE_TYPE));
+    }
 
-	    protected Image _image(TaskFunctionDeclarationImpl e) {
-	        return imageHelper.getImage(getPath(TASK_FUNCTION_DECLARATION));
-	    }
+    protected Image _image(ContinuousImpl e) {
+        return imageHelper.getImage(getPath(CONTINUOUS));
+    }
 
-	    protected Image _image(ArgumentNameImpl e) {
-	        return imageHelper.getImage(getPath(ARGUMENT_NAME));
-	    }
+    protected Image _image(CategoricalImpl e) {
+        return imageHelper.getImage(getPath(CATEGORICAL));
+    }
 
-	    protected Image _image(EstimateTaskImpl e) {
-	        return imageHelper.getImage(getPath(ESTIMATE_TASK));
-	    }
+    protected Image _image(LikelyhoodImpl e) {
+        return imageHelper.getImage(getPath(LIKELYHOOD));
+    }
 
-	    protected Image _image(GroupVariablesBlockImpl e) {
-	        return imageHelper.getImage(getPath(GROUP_VARIABLES_BLOCK));
-	    }
-	    protected Image _image(RandomVariableDefinitionBlockImpl e) {
-	        return imageHelper.getImage(getPath(RANDOM_VARIABLES_BLOCK));
-	    }
-	    protected Image _image(IndividualVariablesBlockImpl e) {
-	        return imageHelper.getImage(getPath(INDIVIDUAL_VARIABLES_BLOCK));
-	    }
-	    protected Image _image(DataInputBlockImpl e) {
-	        return imageHelper.getImage(getPath(HEADER_BLOCK));
-	    }
-	    protected Image _image(DataBlockImpl e) {
-	        return imageHelper.getImage(getPath(DATA_BLOCK));
-	    }
-	    
-	    protected Image getLogImage(){
-	    	return imageHelper.getImage(getPath(LOG));
-	    }
-	    
-	    protected Image getTrueImage() {
-	        return imageHelper.getImage(getPath(TRUE));
-	    }
-	    
-	    protected Image getFalseImage() {
-	        return imageHelper.getImage(getPath(FALSE));
-	    }
-	    
+    protected Image _image(VariabilityTypeImpl e) {
+        return imageHelper.getImage(getPath(VARIABILITY_TYPE));
+    }
+
+    protected Image _image(ArgumentNameImpl e) {
+        return imageHelper.getImage(getPath(ARGUMENT_NAME));
+    }
+
+    protected Image _image(TaskFunctionDeclarationImpl e) {
+        return imageHelper.getImage(getPath(TASK_FUNCTION_DECLARATION));
+    }
+
+    protected Image _image(EstimateTaskImpl e) {
+        return imageHelper.getImage(getPath(ESTIMATE_TASK));
+    }
+
+    protected Image _image(SimulateTaskImpl e) {
+        return imageHelper.getImage(getPath(SIMULATE_TASK));
+    }
+
+    protected Image _image(ExecuteTaskImpl e) {
+        return imageHelper.getImage(getPath(EXECUTE_TASK));
+    }
+
+    protected Image _image(GroupVariablesBlockImpl e) {
+        return imageHelper.getImage(getPath(GROUP_VARIABLES_BLOCK));
+    }
+    
+    protected Image _image(RandomVariableDefinitionBlockImpl e) {
+        return imageHelper.getImage(getPath(RANDOM_VARIABLES_BLOCK));
+    }
+    
+    protected Image _image(IndividualVariablesBlockImpl e) {
+        return imageHelper.getImage(getPath(INDIVIDUAL_VARIABLES_BLOCK));
+    }
+    
+    protected Image _image(DataInputBlockImpl e) {
+        return imageHelper.getImage(getPath(HEADER_BLOCK));
+    }
+    
+    protected Image _image(DataBlockImpl e) {
+        return imageHelper.getImage(getPath(DATA_BLOCK));
+    }
+    
+    protected Image getLogImage(){
+    	return imageHelper.getImage(getPath(LOG));
+    }
+    
+    protected Image getTrueImage() {
+        return imageHelper.getImage(getPath(TRUE));
+    }
+    
+    protected Image getFalseImage() {
+        return imageHelper.getImage(getPath(FALSE));    
+    }
+    
 	protected void _createChildren(IOutlineNode parentNode, Mcl mcl) {
 		for (EObject element : mcl.eContents()) {
 			for (EObject obj: element.eContents()){
@@ -311,9 +350,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				obj.eContainingFeature().getName(),
 				false);
 	}
-	
-//	protected void _createNode(IOutlineNode parentNode, MclObject obj) {
-//	}
 	
 	/////////////////////////////////////////////////////////////////////////////
 	//Print all object children
@@ -516,7 +552,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FORMAL_ARGUMENTS,
 				_image(t),
 				t.getFunctionName().getName(),
-		false);
+		true);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, TaskFunctionBody st){
@@ -694,6 +730,15 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				 p.getSymbolName().getName(),
 				false);
 		}
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, FunctionCallStatement s){
+		createEStructuralFeatureNode(parentNode,
+			s,
+			MdlPackage.Literals.FUNCTION_CALL_STATEMENT__EXPRESSION,
+			_image(s),
+			 s.getFunctionName().getName(),
+		false);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, RandomVariable v){
