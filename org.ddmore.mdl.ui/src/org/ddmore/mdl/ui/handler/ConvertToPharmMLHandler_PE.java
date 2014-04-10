@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import eu.ddmore.mdl.generator.Mdl2PharmMLWrapper;
+import eu.ddmore.mdl.generator.Preferences;
 
 
 public class ConvertToPharmMLHandler_PE extends AbstractHandler implements IHandler {
@@ -47,8 +48,8 @@ public class ConvertToPharmMLHandler_PE extends AbstractHandler implements IHand
 			if (firstElement instanceof IFile) {
 				IFile file = (IFile) firstElement;
 				IProject project = file.getProject();
-				IFolder srcGenFolder = project.getFolder("src-gen");
-				if (!srcGenFolder.exists()) {
+				IFolder srcGenFolder = project.getFolder(Preferences.SRC_GEN_PREFIX);
+				if (!srcGenFolder.exists() && (Preferences.SRC_GEN_PREFIX.length() > 0)) {
 					try {
 						srcGenFolder.create(true, true,
 								new NullProgressMonitor());

@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import eu.ddmore.mdl.generator.Mdl2NonmemWrapper;
+import eu.ddmore.mdl.generator.Preferences;
 
 public class ConvertToNONMEMHandler_PE extends AbstractHandler implements IHandler {
 
@@ -46,8 +47,8 @@ public class ConvertToNONMEMHandler_PE extends AbstractHandler implements IHandl
 			if (firstElement instanceof IFile) {
 				IFile file = (IFile) firstElement;
 				IProject project = file.getProject();
-				IFolder srcGenFolder = project.getFolder("src-gen");
-				if (!srcGenFolder.exists()) {
+				IFolder srcGenFolder = project.getFolder(Preferences.SRC_GEN_PREFIX);
+				if (!srcGenFolder.exists() && (Preferences.SRC_GEN_PREFIX.length() > 0)) {
 					try {
 						srcGenFolder.create(true, true,
 								new NullProgressMonitor());

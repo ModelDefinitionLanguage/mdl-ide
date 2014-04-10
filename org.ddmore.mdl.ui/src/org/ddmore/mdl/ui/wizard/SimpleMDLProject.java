@@ -46,7 +46,7 @@ public class SimpleMDLProject extends Wizard implements INewWizard, IExecutableE
 	    IProject project = createBaseProject(projectName, location);
 	    try {
 	        addNature(project);	
-	        String[] paths = { "src/models", "src/data", "src-gen" }; 
+	        String[] paths = { "models"}; 
 	        addToProjectStructure(project, paths);
 	    } catch (CoreException e) {
 	        e.printStackTrace();

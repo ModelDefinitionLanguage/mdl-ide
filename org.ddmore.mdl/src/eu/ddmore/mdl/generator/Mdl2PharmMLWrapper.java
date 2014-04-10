@@ -22,11 +22,7 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter;
 public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
     private static final Logger LOGGER = Logger.getLogger(Mdl2PharmMLWrapper.class);
 
-    //TODO: This is actually a property of the runtime eclipse that the MDLEditor user can change. We need to find that by some Preference class.
-    private static final String SRC_GEN_PREFIX = "/src-gen";
-
-
-    public void doGenerate(final Resource resource, final IFileSystemAccess fsa) {
+   public void doGenerate(final Resource resource, final IFileSystemAccess fsa) {
         String relativeResourcePath = resource.getURI().toPlatformString(true);
         String[] uriParts = relativeResourcePath.split("/");
         String projectName = uriParts[1];
@@ -34,7 +30,7 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
 
         String sourcePath = relativeResourcePath.replace('/' + projectName, projectPath);
         File source = new File(sourcePath);
-        File targetDir = new File(projectPath + SRC_GEN_PREFIX);
+        File targetDir = new File(projectPath + Preferences.SRC_GEN_PREFIX);
         
         performConvert(source, targetDir);
 
