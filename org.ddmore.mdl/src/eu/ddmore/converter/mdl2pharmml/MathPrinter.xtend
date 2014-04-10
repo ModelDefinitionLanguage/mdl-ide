@@ -85,6 +85,21 @@ class MathPrinter extends MdlPrinter{
 		«ENDIF»	
 	'''
 	
+	//+
+	def print_Math_Equation(AnyExpression expr)'''
+		<Equation xmlns="«xmlns_math»">
+			«expr.print_Math_Expr»
+		</Equation>
+	'''	
+		
+	//Print any MDL expression: math expression, list or ode list 
+	//(for the lists selected attribute values will be typically printed, e.g., value or deriv)
+	def CharSequence print_Assign(AnyExpression e)'''
+		<ct:Assign>
+			«e.print_Math_Equation»
+		</ct:Assign>	
+	'''
+	
 	//For ode lists used as part of expression print the values to their attribute deriv
 	def print_odeList(AnyExpression e) '''
 		«var deriv = e.odeList.arguments.getAttributeExpression("deriv")»

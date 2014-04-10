@@ -489,8 +489,8 @@ class Mdl2PharmML{
 		«IF st.symbol != null»
 			<«tag» symbId="«st.symbol.symbolName.name»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
 				«IF st.symbol.expression != null»
-					«IF st.symbol.expression.expression != null»
-						«mathPrinter.print_Assign(st.symbol.expression.expression)»
+					«IF st.symbol.expression != null»
+						«mathPrinter.print_Assign(st.symbol.expression)»
 					«ENDIF»
 				«ENDIF»
 			</«tag»>
