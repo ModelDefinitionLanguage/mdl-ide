@@ -7,7 +7,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
+import org.ddmore.mdl.ui.preference.MDLOutputConfigurationProvider;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.generator.IOutputConfigurationProvider;
+
+import com.google.inject.Binder;
+import com.google.inject.Singleton;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -21,6 +26,12 @@ public class MdlUiModule extends org.ddmore.mdl.ui.AbstractMdlUiModule {
     public MdlUiModule(AbstractUIPlugin plugin) {
         super(plugin);
         init();
+    }
+    
+    @Override
+    public void configure(Binder binder) {
+        super.configure(binder);
+        binder.bind(IOutputConfigurationProvider.class).to(MDLOutputConfigurationProvider.class).in(Singleton.class);
     }
 
     public void init() {

@@ -6,6 +6,9 @@
  */
 package org.ddmore.mdl.validation;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.ddmore.mdl.generator.MathPrinter;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
@@ -444,10 +447,20 @@ public enum DataType {
 			}
 		}
 		return false;	
-	}	
+	}
+	
+	public final static List<String> CC_VALUES = Arrays.asList("continuous", "covariate");
+
+	public final static List<String> USE_VALUES = 
+		Arrays.asList("id", "idv", "amt", "dv", "dvid", "ytype", "itype", 
+			"covariate", "reg", "time", "dose", 
+			"cat", "occ", "occasion", "adm", "cens", "limit", "rate", 
+			"tinf", "ss", "addl", "ii", "tau", "mdv", "evid", "cmt");
+
 	public final static String defaultTarget = "NMTRAN_CODE";
 	public final static String defaultVarName = "${varName}";
 	public final static String defaultFileName = "${fileName}";
-	public final static String defaultUseVar = "covariate";
-	public final static String continuousValue = "continuous";
+	public final static String defaultUseVar   = USE_VALUES.get(0);
+	public final static String continuousValue = CC_VALUES.get(0);
+
 }

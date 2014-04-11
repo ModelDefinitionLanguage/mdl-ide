@@ -3,7 +3,7 @@ package org.ddmore.mdl.ui.preference;
 import java.util.HashMap;
 
 public class MDLPreferenceConstants {
-
+	
     public static final String NONMEM_HOME = "nonmemHome";
     public static final String MLXTRAN_HOME = "mlxtranHome";
     public static final String R_HOME = "rHome";

@@ -12,7 +12,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.xtext.generator.IOutputConfigurationProvider;
 import org.eclipse.xtext.generator.JavaIoFileSystemAccess;
+import org.eclipse.xtext.generator.OutputConfiguration;
 import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
@@ -40,11 +42,22 @@ public class ConvertToNONMEMHandler extends AbstractHandler implements IHandler 
 	@Inject
 	IResourceSetProvider resourceSetProvider;
 	
+	@Inject
+	IOutputConfigurationProvider outputConfigurationProvider;
+
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IEditorPart activeEditor = HandlerUtil.getActiveEditor(event);
 		final IFile file = (IFile) activeEditor.getEditorInput().getAdapter(IFile.class);
 		if (file != null) {
 			IProject project = file.getProject();
+
+			//TODO how to get the output folder modified in preferences?
+			if (outputConfigurationProvider != null){
+				for (OutputConfiguration config: outputConfigurationProvider.getOutputConfigurations()){
+					System.out.println("Output folder: " + config.getOutputDirectory());
+				}
+			}
+			
 			final IFolder srcGenFolder = project.getFolder(Preferences.SRC_GEN_PREFIX);
 			if (!srcGenFolder.exists() && (Preferences.SRC_GEN_PREFIX.length() > 0)) {
 				try {

@@ -21,13 +21,14 @@ import org.ddmore.mdl.ui.contentassist.AbstractMdlProposalProvider;
 import org.ddmore.mdl.ui.outline.Images;
 import org.ddmore.mdl.validation.Attribute;
 import org.ddmore.mdl.validation.AttributeValidator;
+import org.ddmore.mdl.validation.DataType;
 import org.ddmore.mdl.validation.DistributionValidator;
+import org.ddmore.mdl.validation.UnitValidator;
 import org.ddmore.mdl.validation.Utils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtext.Assignment;
-import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.ui.IImageHelper;
 import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
@@ -42,11 +43,6 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 		
 	@Inject MdlGrammarAccess grammarAccess;
 	@Inject IImageHelper imageHelper;
-	
-	//TODO: Remove all other keywords from the list of proposals
-	/*@Override
-	public void completeKeyword(Keyword keyword, ContentAssistContext contentAssistContext,ICompletionProposalAcceptor acceptor) {
-	}*/
 	
 	@Override
 	public void completeList_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
@@ -82,10 +78,26 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 	public void completeArgument_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		if (model instanceof ArgumentImpl){
 			Argument arg = (Argument)model;
+			//TODO: replace comparison of names with the attribute identifiers BLOCK_ID:attr_name!
+			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_use.getName())){
+				//Check that block is correct too
+				ArrayList<String> attributes = new ArrayList<String>();
+				attributes.addAll(DataType.USE_VALUES);
+				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
+				addProposals(context, acceptor, attributes, img);
+			}
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_cc_type.getName())){
 				//Check that block is correct too
 				ArrayList<String> attributes = new ArrayList<String>();
-				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));
+				attributes.addAll(DataType.CC_VALUES);
+				Image img = imageHelper.getImage(Images.getPath(Images.CC_TYPE));				
+				addProposals(context, acceptor, attributes, img);
+			}
+			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
+				//Check that block is correct too
+				ArrayList<String> attributes = new ArrayList<String>();
+				attributes.addAll(UnitValidator.getUnitNames());
+				Image img = imageHelper.getImage(Images.getPath(Images.EXPRESSION));				
 				addProposals(context, acceptor, attributes, img);
 			}
 		}
@@ -135,16 +147,10 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 
 	@Override
 	public void completeDistributionArgument_Value(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		//if (model instanceof DistributionArgumentImpl){
-			//DistributionArgument arg = (DistributionArgument)model;
-			//suggest default value for the argument (or other meaningful values)
-		//}
 	}
 
 	@Override
 	public void completeDistributionArgument_Component(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		//if (model instanceof DistributionArgumentImpl){
-		//}
 	}
 	
 	private void addProposals(ContentAssistContext context, ICompletionProposalAcceptor acceptor, 

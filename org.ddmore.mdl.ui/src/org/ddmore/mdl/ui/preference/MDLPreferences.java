@@ -42,7 +42,6 @@ public class MDLPreferences {
 		MDLPreferenceStore.setValue(MDLPreferenceConstants.LOGIN, value);
 	}
 
-
 	public static String getPasswordHome() {
 		return MDLPreferenceStore.getString(MDLPreferenceConstants.PASSWORD);	
 	}
@@ -50,5 +49,6 @@ public class MDLPreferences {
 	public static void setPasswordHome(String value) {
 		MDLPreferenceStore.setValue(MDLPreferenceConstants.PASSWORD, value);
 	}
-
+	
+	
 }

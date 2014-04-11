@@ -267,11 +267,11 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     }
 
     protected Image _image(ContinuousImpl e) {
-        return imageHelper.getImage(getPath(CONTINUOUS));
+        return imageHelper.getImage(getPath(CC_TYPE));
     }
 
     protected Image _image(CategoricalImpl e) {
-        return imageHelper.getImage(getPath(CATEGORICAL));
+        return imageHelper.getImage(getPath(CC_TYPE));
     }
 
     protected Image _image(LikelyhoodImpl e) {

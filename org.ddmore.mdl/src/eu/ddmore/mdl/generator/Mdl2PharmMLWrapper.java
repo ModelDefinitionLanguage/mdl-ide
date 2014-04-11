@@ -20,7 +20,7 @@ import com.google.inject.Injector;
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
-    private static final Logger LOGGER = Logger.getLogger(Mdl2PharmMLWrapper.class);
+   private static final Logger LOGGER = Logger.getLogger(Mdl2PharmMLWrapper.class);
 
    public void doGenerate(final Resource resource, final IFileSystemAccess fsa) {
         String relativeResourcePath = resource.getURI().toPlatformString(true);

@@ -25,5 +25,4 @@ public class MDLPreferenceStore {
     public static void setValue(String property, String value) {
         preferences.put(property, value);
     }
-
 }

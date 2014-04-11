@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -30,16 +31,12 @@ public class UnitValidator extends AbstractDeclarativeValidator{
     @Inject
     public void register(EValidatorRegistrar registrar) {}
 	
-	UnitValidator(){
-		loadUnits();
-	}
-
 	public final static String MSG_UNIT_UNKNOWN = "Failed to parse the unit value";	
 	public final static String MSG_UNIT_UNDEFINED = "Unknown unit metric";	
 
 	final static List<String> units = Arrays.asList("L", "l", "m", "y", "h", "s", "kg", "g", "mg");
 
-	HashMap<String, String> validUnits = new HashMap<String, String>();
+	static HashMap<String, String> validUnits = loadUnits();
 	
 	final int ID = 1;
 	final int NUMBER = 2;
@@ -48,10 +45,10 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	final int MULT_OP = 5;
 	final int POWER_OP = 6;
 	
-	void loadUnits(){
-		URL url;
+	static HashMap<String, String> loadUnits(){
+		HashMap<String, String> validUnits = new HashMap<String, String>();
 		try {
-		    url = new URL("platform:/plugin/org.ddmore.mdl/resources/Units.csv");
+		    URL url = new URL("platform:/plugin/org.ddmore.mdl/resources/Units.csv");
 		    InputStream inputStream = url.openConnection().getInputStream();
 		    BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
 		    String inputLine;
@@ -64,14 +61,21 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 			    	}
 		    	}
 		    }
-		 
 		    in.close();
-		 
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
+		return validUnits;
 	}
-
+	
+	public static List<String> getUnitNames(){
+		List<String> unitNames = new ArrayList<String>();
+		for (String unit: validUnits.keySet()){
+			unitNames.add("\"" + unit +"\"");
+		}
+		return unitNames;
+	}
+	
 	//Check the unit measurement format
 	//Returns an incorrect token or null otherwise
 	String parseUnitExpression(String str){
