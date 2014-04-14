@@ -25,11 +25,12 @@ import org.ddmore.mdl.mdl.Primary
 import java.util.ArrayList
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
+import org.ddmore.mdl.validation.AttributeValidator
 
 class MathPrinter extends MdlPrinter{
 
 	//Needed to fill BlkIdRef attributes of references in expressions that point to PharmML blocks where variables are defined
-    public extension DataType dataType = new DataType();
+    public extension Constants constants = new Constants();
  	extension ReferenceResolver resolver=null
     
     new(ReferenceResolver resolver) {
@@ -102,7 +103,7 @@ class MathPrinter extends MdlPrinter{
 	
 	//For ode lists used as part of expression print the values to their attribute deriv
 	def print_odeList(AnyExpression e) '''
-		«var deriv = e.odeList.arguments.getAttributeExpression("deriv")»
+		«var deriv = e.odeList.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name)»
 		«IF deriv != null»«deriv.print_Math_Expr»«ENDIF»
 	'''
 	
@@ -110,8 +111,8 @@ class MathPrinter extends MdlPrinter{
 	def	print_list(AnyExpression e){
 		if (e.list != null){
 			val args  = e.list.arguments;
-			val type = args.getAttribute("type");
-			val define =  args.getAttributeExpression("define");
+			val type = args.getAttribute(AttributeValidator::attr_cc_type.name);
+			val define =  args.getAttributeExpression(AttributeValidator::attr_define.name);
 			if (type.equals("categorical") && (define.list != null)){
 				define.list.print_Categorical;
 			}

@@ -6,6 +6,10 @@ import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.TaskFunctionBlock
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.Arguments
+import org.ddmore.mdl.validation.MdlJavaValidator
+import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.validation.FunctionValidator
+import org.ddmore.mdl.validation.DataType
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	
@@ -51,8 +55,8 @@ class ModellingStepsPrinter extends DataSetPrinter{
 				if (b.functionDeclaration.functionName.name.equals(functionName)){
 					for (bb: b.functionDeclaration.functionBody.blocks){
 						if ((bb.estimateBlock != null) || (bb.simulateBlock != null)){
-							val dataParam = getProperty(bb, "data"); 
-							val modelParam = getProperty(bb, "model"); 
+							val dataParam = getProperty(bb, FunctionValidator::attr_task_data.name); 
+							val modelParam = getProperty(bb, FunctionValidator::attr_task_model.name); 
 							if ((dataParam.length > 0) && (modelParam.length > 0)){
 								val data = args.getAttribute(dataParam);
 								val model = args.getAttribute(modelParam);
@@ -154,7 +158,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 					var symbId = s.symbolName.name;
 					if (s.expression != null){
 						if (s.expression.list != null){
-							val newName = s.expression.list.arguments.getAttribute("mapping");
+							val newName = s.expression.list.arguments.getAttribute(AttributeValidator::attr_mapping.name);
 							if (newName.length > 0)
 								symbId = newName;
 						}
@@ -204,17 +208,17 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		for (b: dObj.blocks)	{
 			if (b.fileBlock != null){
 				for (s: b.fileBlock.statements){
-					if (s.variable.symbolName.name.equals("data")){
+					if (s.variable.symbolName.name.equals(MdlJavaValidator::var_file_data)){
 						if (s.variable.expression != null){
 							if (s.variable.expression.list != null){
-								val inputFormat = s.variable.expression.list.arguments.getAttribute("inputformat");
-								if (inputFormat.equals(ENUM_FORMAT_NONMEM)){
+								val inputFormat = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_inputformat.name);
+								if (inputFormat.equals(DataType::FORMAT_NONMEM)){
 									res  = res + print_NONMEM_DataSet(dObjName, mObjName);
 								}
-								val source = s.variable.expression.list.arguments.getAttribute("source");
+								val source = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_req_source.name);
 								if (source.length > 0){
-									var delimeter = s.variable.expression.list.arguments.getAttribute("delimeter");
-									if (delimeter.length == 0) delimeter = ";";
+									var delimeter = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_delimeter.name);
+									if (delimeter.length == 0) delimeter = AttributeValidator::attr_delimeter.defaultValue;
 									res = res + print_ds_ExternalSource("ds." + dObjName, source, source, 
 										inputFormat, delimeter);
 								}

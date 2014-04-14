@@ -11,12 +11,13 @@ import org.ddmore.mdl.mdl.Primary
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.DistributionArgument
 import eu.ddmore.converter.mdlprinting.MdlPrinter
+import org.ddmore.mdl.validation.DistributionValidator
 
 //TODO: test for all types of distributions 
 //TODO: document + examples
 class DistributionPrinter extends MdlPrinter{
 
-	extension DataType dataType = new DataType();
+	extension Constants constants = new Constants();
 
 	//Recognised types of distributions and pairs (attribute, value type) to print as PharmML tags
 	val distribution_attrs = newHashMap(
@@ -160,7 +161,7 @@ class DistributionPrinter extends MdlPrinter{
 	public def CharSequence print_uncert_Distribution(RandomList randomList){
 		if (randomList != null){
 			if (randomList.arguments != null){
-				var type = randomList.arguments.getAttribute("type");
+				var type = randomList.arguments.getAttribute(DistributionValidator::attr_type.name);
 				if (type.length > 0){
 					if (type.equals("FDistribution")) type = "F";	
 					switch(type){
@@ -208,7 +209,7 @@ class DistributionPrinter extends MdlPrinter{
 	//If the attribute dimensions is not found, calculate the dimensions based on the number of nested lists (not reliable)
 	//e.g., c(c(1,2,...), c(10, 20,...), c(100, 200,...)) yields 3	
 	protected def defineDimension(RandomList randomList, DistributionArgument matrixAttr){
-		var dimension = randomList.arguments.getAttribute("dimension");
+		var dimension = randomList.arguments.getAttribute(DistributionValidator::attr_dimension.name);
 		if (dimension.length >= 0) {//explicit dimension is given
 			try{
 				Integer::parseInt(dimension);
@@ -243,7 +244,7 @@ class DistributionPrinter extends MdlPrinter{
 		<MixtureModelDistribution xmlns="«xmlns_uncert»" definition="«definition»mixture-model">
 			«FOR arg: randomList.arguments.arguments»
 				«IF arg.component != null»
-					«val weight = arg.component.arguments.getAttribute("weight")»
+					«val weight = arg.component.arguments.getAttribute(DistributionValidator::attr_weight.name)»
 					«IF weight.length > 0»
 						<component weight="«weight»">
 							«arg.component.print_uncert_Distribution»

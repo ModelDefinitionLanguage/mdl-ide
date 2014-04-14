@@ -10,9 +10,10 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.validation.DataType
 
 class ReferenceResolver{
-
 	val Mcl mcl;
 	extension MdlPrinter mdlPrinter = new MdlPrinter();
 	new(Mcl m) {
@@ -142,8 +143,8 @@ class ReferenceResolver{
 				for (s: block.inputVariablesBlock.variables){
 					if (s.expression != null){
 						if (s.expression.list != null){
-							var use = s.expression.list.arguments.getAttribute("use");
-							if (use.equalsIgnoreCase("idv") && !independentVars.contains(s.symbolName.name)) 
+							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+							if (use.equals(DataType::USE_IDV) && !independentVars.contains(s.symbolName.name)) 
 								independentVars.add(s.symbolName.name);
 						}
 					}
@@ -161,14 +162,13 @@ class ReferenceResolver{
 				for (s: b.inputVariablesBlock.variables){
 					if (s.expression != null){
 						if (s.expression.list != null){
-							var use = s.expression.list.arguments.getAttribute("use");
-							if (use.equalsIgnoreCase("covariate")) {
+							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+							if (use.equals(DataType::USE_COVARIATE)) {
 								if (!covariateVars.contains(s.symbolName.name))
 									covariateVars.add(s.symbolName.name);
 							}
 						}
-					}
-												
+					}												
 				}
 			}					
 		}
@@ -337,7 +337,7 @@ class ReferenceResolver{
 				for (SymbolDeclaration s: b.inputVariablesBlock.variables){
 					if (s.expression != null){
 						if (s.expression.list != null){
-							var level = s.expression.list.arguments.getAttribute("level");
+							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
 							if (level.equals(levelId)){
 								if (!levelVars.contains(s.symbolName.name)){
 									levelVars.add(s.symbolName.name);
@@ -358,7 +358,7 @@ class ReferenceResolver{
 	  		if (b.randomVariableDefinitionBlock != null){
 				for (s: b.randomVariableDefinitionBlock.variables) {
 					if (s.randomList != null){	
-						var level = s.randomList.arguments.getAttribute("level");
+						var level = s.randomList.arguments.getAttribute(AttributeValidator::attr_level.name);
 						val id = s.symbolName.name;
 						if (level_vars.get(level) != null){
 							if (level_vars.get(level).equals("2")){

@@ -9,9 +9,11 @@ import java.util.ArrayList
 import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.ConditionalStatement
 import java.util.HashMap
+import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.validation.DataType
 
 class Mdl2PharmML{
-	extension DataType dataType = new DataType();
+	extension Constants dataType = new Constants();
 
 	Mcl mcl = null;
 	var DistributionPrinter distrPrinter = null;
@@ -431,7 +433,7 @@ class Mdl2PharmML{
 	
 	//
 	def print_VariabilityReference(RandomVariable s)'''
-		«val level = mathPrinter.getAttribute(s.randomList.arguments, "level")»
+		«val level = mathPrinter.getAttribute(s.randomList.arguments, AttributeValidator::attr_level.name)»
 		«IF level.length > 0»
 			<ct:VariabilityReference>
 				<ct:SymbRef symbIdRef="«level»"/>
@@ -455,7 +457,7 @@ class Mdl2PharmML{
 	/*def print_InitialCondition(SymbolDeclaration s)'''
 		«IF s.expression != null»
 			«IF s.expression.odeList != null»
-				«var init = getAttributeExpression(s.expression.odeList.arguments, "init")»
+				«var init = getAttributeExpression(s.expression.odeList.arguments, AttributeValidator::attr_init.name)»
 				«IF init != null»
 					«IF init.expression != null»
 						<InitialCondition symbID="«s.name»">
@@ -513,13 +515,13 @@ class Mdl2PharmML{
 							if (c.diagBlock != null){
 							}
 							if (c.matrixBlock != null){
-								val type = mathPrinter.getAttribute(c.matrixBlock.arguments, "type");
-								if (type.equals(ENUM_RANDOM_EFFECT_SD)){
+								val type = mathPrinter.getAttribute(c.matrixBlock.arguments, AttributeValidator::attr_re_type.name);
+								if (type.equals(DataType::RANDOM_EFFECT_SD)){
 									print_mdef_CollerationModel_CorrelationCoefficient(
 										o.objectName.name, c.matrixBlock.parameters
 									);
 								}
-								if (type.equals(ENUM_RANDOM_EFFECT_VAR)){
+								if (type.equals(DataType::RANDOM_EFFECT_VAR)){
 									print_mdef_CollerationModel_Covariance(
 										o.objectName.name, c.matrixBlock.parameters
 									);									

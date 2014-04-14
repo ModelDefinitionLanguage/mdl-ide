@@ -9,7 +9,7 @@ import java.io.File
 
 class DataSetPrinter {
 	protected Mcl mcl = null;
-	protected extension DataType dataType = new DataType();
+	protected extension Constants constants = new Constants();
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver=null;
 	

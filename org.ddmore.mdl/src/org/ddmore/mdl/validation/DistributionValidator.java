@@ -8,6 +8,7 @@ package org.ddmore.mdl.validation;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.ddmore.mdl.mdl.DistributionArgument;
@@ -30,6 +31,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_DISTR_UNKNOWN = "Failed to recognize distribution type";
 	public final static String MSG_DISTR_ATTRIBUTE_UNKNOWN = "Unknown distribution attribute";
 	public final static String MSG_DISTR_ATTRIBUTE_MISSING = "Required distribution attribute is missing";
+	public final static String MSG_DISTR_ATTRIBUTE_DEFINED    = "Distribution attribute defined more than once";
 	public final static String MSG_DISTR_ATTRIBUTE_WRONG_TYPE = "Type error";
 
 	public final static Attribute attr_probability = new Attribute("probability", DataType.TYPE_PROBABILITY, true);
@@ -283,10 +285,20 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					}
 				}
 			}
+			HashSet<String> argumentNames = new HashSet<String>();	
+			for (DistributionArgument arg: args.getArguments()){
+				if (!argumentNames.contains(arg.getArgumentName().getName())){
+					argumentNames.add(arg.getArgumentName().getName());
+				} else {
+					warning(MSG_DISTR_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
+							MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS, MSG_DISTR_ATTRIBUTE_DEFINED, 
+							typeName + ":" + arg.getArgumentName().getName());				
+				}
+			}			
 		} else {
 			warning(MSG_DISTR_UNKNOWN, 
 				MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
-				MSG_DISTR_ATTRIBUTE_UNKNOWN, attr_type.name);	
+				MSG_DISTR_UNKNOWN, attr_type.name);	
 		}
 	}
 	

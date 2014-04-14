@@ -1,7 +1,7 @@
 package eu.ddmore.converter.mdl2pharmml
 
-class DataType {
-	public val	xsi="http://www.w3.org/2001/XMLSchema-instance"; 
+class Constants {
+	public val xsi="http://www.w3.org/2001/XMLSchema-instance"; 
 	public val xsi_schemaLocation="http://www.pharmml.org/2013/03/PharmML http://www.pharmml.org/2013/03/PharmML";
 	public val xmlns_pharmML="http://www.pharmml.org/2013/03/PharmML";
 	public val xmlns_math="http://www.pharmml.org/2013/03/Maths";
@@ -23,29 +23,8 @@ class DataType {
 	
 	public val TYPE_INT  = "int";
 	public val TYPE_REAL = "real";
-
-	public val ENUM_RANDOM_EFFECT_SD = "sd";
-	public val ENUM_RANDOM_EFFECT_VAR = "var";
-	
-	public val ENUM_FORMAT_NONMEM = "NONMEM";
-	
-	
-	public val ENUM_USE_ID = "id";
-	public val ENUM_USE_COVARIATE = "covariate";
-	
-	public val ENUM_USE_AGE  = "age";
-	public val ENUM_USE_SEX  = "sex";
-	public val ENUM_USE_TIME = "time";
-	public val ENUM_USE_WT   = "wt";
-	public val ENUM_USE_DV   = "dv";
-
-	public val ENUM_USE_AMT  = "amt";
-	public val ENUM_USE_DVID = "dvid";
-	public val ENUM_USE_MDV  = "mdv";
-	
-	public val individualVariables = newHashSet(ENUM_USE_ID);
-	public val covariateVariables = newHashSet(ENUM_USE_COVARIATE);
-
 	public val OPERATION_ESTIMATE = "estim";	
 	public val OPERATION_SIMULATE = "simul";
+	
+		
 }

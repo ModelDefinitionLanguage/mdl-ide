@@ -64,7 +64,7 @@ RandomVariableDefinitionBlock:
 ;
 
 InputVariablesBlock:
-  	indentifier = 'MODEL_INPUT_VARIABLES' 
+  	identifier = 'MODEL_INPUT_VARIABLES' 
   	BEGIN variables += SymbolDeclaration* END //new Variable +
 ;
 
@@ -414,27 +414,47 @@ EnumType:
 	categorical = Categorical | 
 	continuous = Continuous | 
 	use = UseType |       
-	likelyhood = Likelyhood |
+	likelihood = Likelihood |
 	target = TargetLanguage |
 	variability = VariabilityType
 ;
 
-Likelyhood:
+Likelihood:
 	identifier = 'LIKELIHOOD'	
 ;
 
 UseType:
-	identifier = (
-		'id'| 'idv' |'amt' | 'dv' | 'dvid' | 'ytype' | 'itype' |
-		'covariate' | 'reg' | 'time' | 'dose'| 
-		'cat' | 'occ' | 'occasion' | 'adm' | 'cens' | 'limit' | 'rate' | 
-		'tinf' | 'ss' | 'addl' | 'ii' | 'tau' | 'mdv' | 'evid' | 'cmt')
+	identifier = ('id'| 
+	'idv' |
+	'amt' | 
+	'dv' | 
+	'dvid' | 
+	'ytype' | 
+	'itype' |
+	'covariate' |
+	'reg' | 
+	'time' | 
+	'dose'| 
+	'cat' | 
+	'occ' | 
+	'occasion' | 
+	'adm' | 
+	'cens' | 
+	'limit' | 
+	'rate' | 
+	'tinf' | 
+	'ss' | 
+	'addl' | 
+	'ii' | 
+	'tau' | 
+	'mdv' | 
+	'evid' | 
+	'cmt')
 ;
 
 VariabilityType:
-	identifier = (
-		'sd' | 'var'
-	)
+	sd = 'sd' | 
+	var = 'var'
 ;
 
 Categorical:
@@ -446,8 +466,7 @@ Continuous:
 ;
 
 Distribution: 
-	identifier = (
-	'Bernoulli' |
+	identifier = ('Bernoulli' |
 	'Beta' |
 	'Binomial' |
 	'Categorical' | 
@@ -475,7 +494,7 @@ Distribution:
 	'StudentT' |
 	'Uniform' |
 	'Weibull' |
-	'Wishart') 
+	'Wishart')
 ;
 
 AnyExpression:

@@ -51,6 +51,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_DATA_MISSING = "FILE block does not contain variable \"data\"!";
 	
 	public final static String var_file_data = "data";
+	public final static String var_model_tolrel = "tolrel";
 
 	//List of objects
 	static HashSet<String> declaredObjects = new HashSet<String>();

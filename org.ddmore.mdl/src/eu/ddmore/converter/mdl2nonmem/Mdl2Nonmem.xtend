@@ -46,6 +46,10 @@ import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.mdl.OrExpression
 import org.ddmore.mdl.mdl.AndExpression
+import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.validation.MdlJavaValidator
+import org.ddmore.mdl.validation.FunctionValidator
+import org.ddmore.mdl.validation.DataType
 
 class Mdl2Nonmem extends MdlPrinter{
 	
@@ -368,7 +372,7 @@ class Mdl2Nonmem extends MdlPrinter{
 									«x.print»
 								«ENDIF»
 								«IF x.expression.odeList != null»
-									«var deriv = x.expression.odeList.arguments.getAttribute("deriv")»
+									«var deriv = x.expression.odeList.arguments.getAttribute(AttributeValidator::attr_req_deriv.name)»
 									«IF !deriv.equals("")»
 										«var id = x.symbolName.name»
 										«IF dadt_vars.get(id) != null»
@@ -419,8 +423,8 @@ class Mdl2Nonmem extends MdlPrinter{
 						var name = attributes.get("name");
 						if (name != null) library = name;
 					}
-					val model = st.expression.arguments.getAttribute("model");
-					val trans = st.expression.arguments.getAttribute("trans");
+					val model = st.expression.arguments.getAttribute(AttributeValidator::attr_req_model.name);
+					val trans = st.expression.arguments.getAttribute(AttributeValidator::attr_trans.name);
 					val tol = getTOL;
 					return '''«IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF» «IF !trans.equals("")»TRANS«trans»«ENDIF» «IF !tol.equals("")»TOL = «tol»«ENDIF»'''
 				}
@@ -558,7 +562,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	//$OMEGA BLOCK(dim) SAME ; varName
 	//$SIGMA BLOCK(dim) SAME ; varName
 	def printSame(SameBlock b, String section) { 
-		var name = b.arguments.getAttribute("name");
+		var name = b.arguments.getAttribute(AttributeValidator::attr_name.name);
 		if (name.equals("")) return '''''';
 		val isOmega = section.equals("$OMEGA") && (namedOmegaBlocks.get(name) != null);
 		val isSigma = section.equals("$SIGMA") && (namedSigmaBlocks.get(name) != null);
@@ -598,7 +602,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	def collectDimensionsForSame(DiagBlock b)
 	{
 		var k = 0; 
-		var name = b.arguments.getAttribute("name");
+		var name = b.arguments.getAttribute(AttributeValidator::attr_name.name);
 		var isOmega = false;
 		var isSigma = false;
 		if (name != null){
@@ -621,7 +625,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	def collectDimensionsForSame(MatrixBlock b)
 	{
 		var k = 0;
-		var name = b.arguments.getAttribute("name");
+		var name = b.arguments.getAttribute(AttributeValidator::attr_name.name);
 		var isOmega = false;
 		var isSigma = false;
 		if (b.parameters != null)
@@ -646,7 +650,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		var k = 0; 
 		for (a: b.arguments.arguments){
 			if (a.argumentName != null){ 
-				if (a.argumentName.name.equals("fix")){ 
+				if (a.argumentName.name.equals(AttributeValidator::attr_fix.name)){ 
 					if (a.expression != null){
 						printFix = a.expression.isTrue	
 					}
@@ -693,7 +697,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		var k = 0; 
 		for (a: b.arguments.arguments){
 			if (a.argumentName != null){ 
-				if (a.argumentName.name.equals("fix")) 
+				if (a.argumentName.name.equals(AttributeValidator::attr_fix.name)) 
 					if (a.expression != null){
 						printFix = a.expression.isTrue		
 					}
@@ -733,8 +737,8 @@ class Mdl2Nonmem extends MdlPrinter{
 		var isSigma = (section.equals("$SIGMA") && eps_vars.get("eps_" + name) != null);
 		if (isOmega || isSigma)
 		{
-			val value = s.list.arguments.getAttribute("value");
-			val printFix = s.list.arguments.isAttributeTrue("fix");
+			val value = s.list.arguments.getAttribute(AttributeValidator::attr_req_value.name);
+			val printFix = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
 			return							
 			'''
 			«IF !value.equals("")»«value»«IF printFix» FIX«ENDIF»«ENDIF» ; «name»
@@ -748,10 +752,10 @@ class Mdl2Nonmem extends MdlPrinter{
 	def printTheta(ParameterDeclaration s){
 		if (s.list != null){		
 			var name = s.symbolName.name;
-			val value = s.list.arguments.getAttribute("value");
-			val lo = s.list.arguments.getAttribute("lo");
-			val hi = s.list.arguments.getAttribute("hi");
-			val printFix = s.list.arguments.isAttributeTrue("fix");
+			val value = s.list.arguments.getAttribute(AttributeValidator::attr_value.name);
+			val lo = s.list.arguments.getAttribute(AttributeValidator::attr_lo.name);
+			val hi = s.list.arguments.getAttribute(AttributeValidator::attr_hi.name);
+			val printFix = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
 			if (value.equals("")) return "";
 			if (lo.equals("") && hi.equals("")) return '''«value»«IF printFix» FIX«ENDIF» ; «name»'''
 			if (lo.equals("")) return '''(-INF, «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
@@ -827,10 +831,10 @@ class Mdl2Nonmem extends MdlPrinter{
 	//Processing FILE block statement for $DATA
 	def printIGNORE(FileBlockStatement s){
 		if (s.variable != null){
-			if (s.variable.symbolName.name.equals("data")){
+			if (s.variable.symbolName.name.equals(MdlJavaValidator::var_file_data)){
 				if (s.variable.expression != null){
 					if (s.variable.expression.list != null){
-						var ignore = s.variable.expression.list.arguments.getAttribute("ignore");
+						var ignore = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_ignore.name);
 						return '''«IF !ignore.equals("")»IGNORE=«ignore»«ENDIF»'''
 					}
 				}
@@ -840,10 +844,10 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	def getData(FileBlock b){
 		for (s: b.statements){
-			if (s.variable.symbolName.name.equals("data")){
+			if (s.variable.symbolName.name.equals(MdlJavaValidator::var_file_data)){
 				if (s.variable.expression != null){
 					if (s.variable.expression.list != null){
-						var data = s.variable.expression.list.arguments.getAttribute("source");
+						var data = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_req_source.name);
 						return data;
 					}
 				}
@@ -940,7 +944,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Print attributes for default $EST record
 	def printDefaultEstimate(SymbolDeclaration s) { 
-		if (s.symbolName.name.equals("algo")){
+		if (s.symbolName.name.equals(FunctionValidator::attr_task_algo.name)){
 			if (s.expression.expression != null)
 				''' METHOD=«s.expression.expression.toStr»'''
 			else {
@@ -955,10 +959,10 @@ class Mdl2Nonmem extends MdlPrinter{
 			}	
 		}
 		else
-			if (s.symbolName.name.equals("max"))
+			if (s.symbolName.name.equals(FunctionValidator::attr_task_max.name))
 			''' MAX=«s.expression.print»'''
 		else
-			if (s.symbolName.name.equals("sig"))
+			if (s.symbolName.name.equals(FunctionValidator::attr_task_sig.name))
 			''' SIG=«s.expression.print»'''
 	}
 	
@@ -981,7 +985,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Print "cov" attribute for $COVARIATE record 
 	def printCovariance(SymbolDeclaration s) { 
-		if (s.symbolName.name.equals("cov")){
+		if (s.symbolName.name.equals(FunctionValidator::attr_task_cov.name)){
 			if (s.expression != null){
 				if (s.expression.toStr.replaceAll("\\s","").equals(""))
 				'''«s.expression.print»'''
@@ -1024,7 +1028,7 @@ class Mdl2Nonmem extends MdlPrinter{
 				for (ss: b.modelBlock.statements){
 					var x = ss.statement.symbol;
 					if (x != null){
-						if (x.symbolName.name.equals("tolrel")){
+						if (x.symbolName.name.equals(MdlJavaValidator::var_model_tolrel)){
 							if (x.expression != null)
 								return x.expression.toStr;
 						}
@@ -1100,7 +1104,7 @@ class Mdl2Nonmem extends MdlPrinter{
 				for (SymbolDeclaration s: b.inputVariablesBlock.variables){
 					if (s.expression != null){
 						if (s.expression.list != null){
-							var level = s.expression.list.arguments.getAttribute("level");
+							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
 							if (level.equals(levelId)){
 								if (!levelVars.contains(s.symbolName.name)){
 									levelVars.add(s.symbolName.name);
@@ -1121,7 +1125,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	  		if (b.randomVariableDefinitionBlock != null){
 				for (s: b.randomVariableDefinitionBlock.variables) {
 					if (s.randomList != null){	
-						var level = s.randomList.arguments.getAttribute("level");
+						var level = s.randomList.arguments.getAttribute(AttributeValidator::attr_level.name);
 						val id = s.symbolName.name;
 						if (level_vars.get(level) != null){
 							if (level_vars.get(level).equals("2")){
@@ -1154,7 +1158,7 @@ class Mdl2Nonmem extends MdlPrinter{
 							if (ss.symbol != null)
 								if (ss.symbol.expression != null)
 									if (ss.symbol.expression.odeList != null){
-										val initCond = ss.symbol.expression.odeList.arguments.getAttribute("init");
+										val initCond = ss.symbol.expression.odeList.arguments.getAttribute(AttributeValidator::attr_init.name);
 										if (!initCond.equals("")){
 											init_vars.put(i, initCond);
 										} else init_vars.put(i, "0");
@@ -1258,7 +1262,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	 def void prepareExternalFunctions(ImportBlock b, String objName){
 		for (ImportedFunction f: b.functions){
 			var args = new HashMap<String, String>();
-			var target = f.list.arguments.getAttribute("target");
+			var target = f.list.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		 	if (target != null){ 
 				if (target.equals(TARGET)) {
 					for (Argument arg: f.list.arguments.arguments){
@@ -1273,11 +1277,11 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	 //Prepare a map of section with corresponding target blocks
 	 def void prepareExternalCode(TargetBlock b){
-		val target = b.arguments.getAttribute("target");
+		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
 			if (target.equals(TARGET)) {
-				val location = b.arguments.getAttribute("location");
-				if (b.arguments.isAttributeTrue("first")){
+				val location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
+				if (b.arguments.isAttributeTrue(AttributeValidator::attr_first.name)){
 					var codeSnippets = externalCodeStart.get(location);
 					if (codeSnippets == null) codeSnippets = new ArrayList<String>();
 					codeSnippets.add(b.toStr);
@@ -1347,12 +1351,12 @@ class Mdl2Nonmem extends MdlPrinter{
 	override toStr(SymbolDeclaration v){
 		if (v.expression != null){
 			if (v.expression.list != null){
-				var type = v.expression.list.arguments.getAttribute("type");
+				var type = v.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
 				var res = "";
-				if (type.equals("continuous")){
+				if (type.equals(DataType::CC_CONTINUOUS)){
 					res = "F_FLAG = 0\n" 
 				}	
-				if (type.equals("LIKELIHOOD")){
+				if (type.equals(DataType::CC_LIKELIHOOD)){
 					res = "F_FLAG = 1\n"	
 				}		
 				//substitute variable name with Y
@@ -1367,13 +1371,13 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Instead of list(...) we print an expression from a certain attribute (depends on the type)
 	override toStr(List l){		
-		var type = l.arguments.getAttribute("type");
+		var type = l.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
 		var res = "";
-		if (type.equals("LIKELIHOOD")){
-			res = l.arguments.getAttribute("likelihood");
-		} else if (type.equals("continuous")){
-			var ruv = l.arguments.getAttribute("ruv");
-			var prediction = l.arguments.getAttribute("prediction")
+		if (type.equals(DataType::CC_LIKELIHOOD)){
+			res = l.arguments.getAttribute(AttributeValidator::attr_likelihood.name);
+		} else if (type.equals(DataType::CC_CONTINUOUS)){
+			var ruv = l.arguments.getAttribute(AttributeValidator::attr_ruv.name);
+			var prediction = l.arguments.getAttribute(AttributeValidator::attr_prediction.name)
 			res = prediction + ruv
 		}			
 		return res;
@@ -1399,7 +1403,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//toStr function call
 	override toStr(FunctionCall call){
-		if (call.identifier.toStr.trim.equalsIgnoreCase("errorexit"))
+		if (call.identifier.toStr.trim.equals(FunctionValidator::funct_error_exit))
 			return "EXIT" + call.arguments.toStrWithoutCommas;
 		return super.toStr(call);	
 	}	
@@ -1474,7 +1478,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	override print(TargetBlock b){
 		var target = "";
-		if (b.arguments != null) target = b.arguments.getAttribute("target");
+		if (b.arguments != null) target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target.equals(TARGET)) {
 		'''
 		«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»

@@ -41,10 +41,10 @@ public enum DataType {
 	TYPE_LIST, TYPE_ODE, TYPE_RANDOM_LIST, TYPE_DISTRIBUTION,
 	//Enums
 	TYPE_USE,     //Check grammar for UseType
-	TYPE_CC,      //continuous vs. categorical
+	TYPE_CC,      //continuous vs. categorical vs. LIKELIHOOD
 	TYPE_TARGET,  //Check grammar for TargetLanguage 
 	//Restricted strings (why are they not enumerations?)
-	TYPE_LIKELIHOOD,
+	//TYPE_LIKELIHOOD,
 	TYPE_IDV,   //idv in DESIGN block (e.g., "linear")
 	TYPE_RANDOM_EFFECT; //Random effects {var, sd} 
 	
@@ -130,7 +130,7 @@ public enum DataType {
 	}
 
 	private static boolean isCCType(EnumType type) {
-		if ((type.getCategorical() != null) || (type.getContinuous() != null)) return true;
+		if ((type.getCategorical() != null) || (type.getContinuous() != null) || (type.getLikelihood() != null)) return true;
 		return false;
 	}
 
@@ -449,18 +449,54 @@ public enum DataType {
 		return false;	
 	}
 	
-	public final static List<String> CC_VALUES = Arrays.asList("continuous", "covariate");
+	public final static String RANDOM_EFFECT_SD = "sd";
+	public final static String RANDOM_EFFECT_VAR = "var";
+	
+	public final static String FORMAT_NONMEM = "NMTRAN_CODE";	
+	
+	public final static String CC_CONTINUOUS = "continuous";
+	public final static String CC_CATEGORICAL = "categorical";
+	public final static String CC_LIKELIHOOD = "likelihood";
+	public final static List<String> CC_VALUES = Arrays.asList(CC_CONTINUOUS, CC_CATEGORICAL, CC_LIKELIHOOD);
+
+	public final static String USE_ID = "id";
+	public final static String USE_AMT  = "amt";
+	public final static String USE_DVID = "dvid";
+	public final static String USE_IDV  = "idv";
+	public final static String USE_DV  = "dv";
+	public final static String USE_YTYPE  = "ytype";
+	public final static String USE_ITYPE  = "itype";
+	public final static String USE_COVARIATE = "covariate";	
+	public final static String USE_REG = "reg";	
+	public final static String USE_TIME = "time";	
+	public final static String USE_DOSE = "dose";	
+	public final static String USE_CAT = "cat";
+	public final static String USE_OCC = "occ";
+	public final static String USE_OCCASION = "occasion"; 
+	public final static String USE_ADM = "adm"; 
+	public final static String USE_CENS = "cens"; 
+	public final static String USE_LIMIT = "limit"; 
+	public final static String USE_RATE = "rate"; 
+	public final static String USE_TINF = "tinf"; 
+	public final static String USE_SS = "ss"; 
+	public final static String USE_ADDL = "addl";
+	public final static String USE_II = "ii"; 
+	public final static String USE_TAU = "tau"; 
+	public final static String USE_MDV = "mdv"; 
+	public final static String USE_EVID = "evid"; 
+	public final static String USE_CMT = "cmt";
 
 	public final static List<String> USE_VALUES = 
-		Arrays.asList("id", "idv", "amt", "dv", "dvid", "ytype", "itype", 
-			"covariate", "reg", "time", "dose", 
-			"cat", "occ", "occasion", "adm", "cens", "limit", "rate", 
-			"tinf", "ss", "addl", "ii", "tau", "mdv", "evid", "cmt");
+		Arrays.asList(USE_ID, USE_IDV, USE_AMT, USE_DV, USE_DVID, USE_YTYPE, USE_ITYPE, 
+			USE_COVARIATE, USE_REG, USE_TIME, USE_DOSE, 
+			USE_CAT, USE_OCC, USE_OCCASION, USE_ADM, USE_CENS, USE_LIMIT, 
+			USE_RATE, USE_TINF, USE_SS, USE_ADDL, USE_II, USE_TAU, USE_MDV, USE_EVID, USE_CMT);
+
 
 	public final static String defaultTarget = "NMTRAN_CODE";
 	public final static String defaultVarName = "${varName}";
 	public final static String defaultFileName = "${fileName}";
-	public final static String defaultUseVar   = USE_VALUES.get(0);
-	public final static String continuousValue = CC_VALUES.get(0);
+	public final static String defaultUseVar   = USE_ID;
+	public final static String defaultTypeValue = CC_CONTINUOUS;
 
 }

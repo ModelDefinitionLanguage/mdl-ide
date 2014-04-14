@@ -84,6 +84,8 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		}
 	};
 	
+	public final static String funct_error_exit = "errorexit";
+			
 	//List of recognized MDL functions
 	final static List<String> specialFunctions = Arrays.asList("seq", "update", "runif", "errorexit", "PHI");
 	//List of declared function names per object
@@ -93,20 +95,20 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//Task object
-	final static Attribute attr_task_command = new Attribute("command", DataType.TYPE_STRING, true);
-	final static Attribute attr_task_target = new Attribute("target", DataType.TYPE_OBJ_REF, true);
-	final static Attribute attr_task_model = new Attribute("model", DataType.TYPE_OBJ_REF, true);
-	final static Attribute attr_task_parameter = new Attribute("parameter", DataType.TYPE_OBJ_REF, true);
-	final static Attribute attr_task_data = new Attribute("data", DataType.TYPE_OBJ_REF, true);
-	final static Attribute attr_task_algo = new Attribute("algo", DataType.TYPE_OBJ_REF, false);
-	final static Attribute attr_task_max = new Attribute("max", DataType.TYPE_OBJ_REF, false);
-	final static Attribute attr_task_sig = new Attribute("sig", DataType.TYPE_OBJ_REF, false);
-	final static Attribute attr_task_cov = new Attribute("cov", DataType.TYPE_OBJ_REF, false);
+	final public static Attribute attr_task_command = new Attribute("command", DataType.TYPE_STRING, true);
+	final public static Attribute attr_task_target = new Attribute("target", DataType.TYPE_OBJ_REF, true);
+	final public static Attribute attr_task_model = new Attribute("model", DataType.TYPE_OBJ_REF, true);
+	final public static Attribute attr_task_parameter = new Attribute("parameter", DataType.TYPE_OBJ_REF, true);
+	final public static Attribute attr_task_data = new Attribute("data", DataType.TYPE_OBJ_REF, true);
+	final public static Attribute attr_task_algo = new Attribute("algo", DataType.TYPE_OBJ_REF, false);
+	final public static Attribute attr_task_max = new Attribute("max", DataType.TYPE_OBJ_REF, false);
+	final public static Attribute attr_task_sig = new Attribute("sig", DataType.TYPE_OBJ_REF, false);
+	final public static Attribute attr_task_cov = new Attribute("cov", DataType.TYPE_OBJ_REF, false);
 		
-	final static List<Attribute> attrs_task = Arrays.asList(
+	final public static List<Attribute> attrs_task = Arrays.asList(
 			attr_task_target, attr_task_model, attr_task_parameter, attr_task_data, 
 			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov);
-	final static List<Attribute> attrs_exec_task = Arrays.asList(
+	final public static List<Attribute> attrs_exec_task = Arrays.asList(
 			attr_task_command);
 					
 	///////////////////////////////////////////////////////////////////////////////////////////////

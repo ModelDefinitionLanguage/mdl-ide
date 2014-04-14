@@ -14,27 +14,23 @@ import java.util.List;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.MdlPackage;
-import org.ddmore.mdl.mdl.impl.AnyExpressionImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
-import org.ddmore.mdl.mdl.impl.BlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
-import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
+import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
-import org.ddmore.mdl.mdl.impl.FileBlockStatementImpl;
-import org.ddmore.mdl.mdl.impl.ImportedFunctionImpl;
+import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
+import org.ddmore.mdl.mdl.impl.FileBlockImpl;
+import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
-import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
+import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
-import org.ddmore.mdl.mdl.impl.OdeListImpl;
-import org.ddmore.mdl.mdl.impl.ParameterDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
+import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
-import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.SymbolModificationImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
@@ -68,11 +64,16 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_use = new Attribute("use", DataType.TYPE_USE, false, DataType.defaultUseVar);
 	final public static Attribute attr_level = new Attribute("level", DataType.TYPE_NAT, false, "ID");
 
-	final public static Attribute attr_req_cc_type = new Attribute("type", DataType.TYPE_CC, true, DataType.continuousValue);
-	final public static Attribute attr_cc_type = new Attribute("type", DataType.TYPE_CC, false, DataType.continuousValue);
+	final public static Attribute attr_req_cc_type = new Attribute("type", DataType.TYPE_CC, true, DataType.defaultTypeValue);
+	final public static Attribute attr_cc_type = new Attribute("type", DataType.TYPE_CC, false, DataType.defaultTypeValue);
 	final public static Attribute attr_re_type = new Attribute("type", DataType.TYPE_RANDOM_EFFECT, false);
 	
 	final public static Attribute attr_mapping = new Attribute("mapping", DataType.TYPE_REF, false);
+	
+	/*ESTIMATION*/
+	final public static Attribute attr_likelihood = new Attribute("likelihood", DataType.TYPE_EXPR, false);
+	final public static Attribute attr_prediction = new Attribute("prediction", DataType.TYPE_EXPR, false);
+	final public static Attribute attr_ruv = new Attribute("ruv", DataType.TYPE_EXPR, false);
 	
 	/*ODE*/
 	final public static Attribute attr_req_deriv = new Attribute("deriv", DataType.TYPE_EXPR, true, DataType.defaultVarName);	
@@ -88,13 +89,14 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_distribution = new Attribute("distribution", DataType.TYPE_NAT, false);
 	final public static Attribute attr_elimination = new Attribute("elimination", DataType.TYPE_STRING, false);
 	final public static Attribute attr_parameterization = new Attribute("parameterization", DataType.TYPE_STRING, false);
+	final public static Attribute attr_output = new Attribute("output", DataType.TYPE_LIST, false);
 	/* The "output" attribute is not an official MCL attribute but I think it is needed because
 	 * it introduces new variables (important for validation) as opposed to the declarations in "param"
 	 * attribute that allows any math expressions - which is ok for input but not for output.
 	 * No syntactic distinction between in and out parameters (bad design!)	 */ 
-	final public static Attribute attr_output = new Attribute("output", DataType.TYPE_LIST, false);
 		
-	/*HEADER*/
+	/*Data object*/
+	/*DATA_INPUT_VARIABLES*/
 	final public static Attribute attr_define = new Attribute("define", DataType.TYPE_LIST, false);
 	final public static Attribute attr_recode = new Attribute("recode", DataType.TYPE_LIST, false);
 	final public static Attribute attr_boundaries = new Attribute("boundaries", DataType.TYPE_VECTOR_REAL, false);
@@ -114,6 +116,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_interp = new Attribute("interp", DataType.TYPE_REF, false);
 	final public static Attribute attr_idv = new Attribute("idv", DataType.TYPE_IDV, false);
 
+	/*All objects*/
 	/*IMPORT*/
 	final public static Attribute attr_req_target = new Attribute("target", DataType.TYPE_TARGET, true, DataType.defaultTarget);
 	final public static Attribute attr_trans = new Attribute("trans", DataType.TYPE_NAT, false);
@@ -140,159 +143,82 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_units, attr_cc_type, attr_level);
 	final public static List<Attribute> attrs_library = Arrays.asList(attr_library, attr_req_model, attr_ncmt, attr_param, attr_output, attr_distribution, attr_elimination, attr_parameterization);
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
+	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_cc_type, attr_likelihood, attr_prediction, attr_ruv);
+	final public static List<Attribute> attrs_simulation = Arrays.asList();
+	final public static List<Attribute> attrs_observation = Arrays.asList();
 
 	/*All blocks*/
 	final public static List<Attribute> attrs_import = Arrays.asList(attr_req_target, attr_name, attr_ncmt, attr_trans, attr_param, attr_output);
 	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_before, attr_after);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+	//TODO: find how to substitute with identifiers in grammar (statically)
 	final public static HashMap<String, Attribute> allAttributes = new HashMap<String, Attribute>(){
 		private static final long serialVersionUID = -4512048801509444272L;
 		{
 			/*Data object*/
-			for (Attribute attr: attrs_header)
-				put("DATA_INPUT_VARIABLES:" + attr.name, attr);
-			for (Attribute attr: attrs_file)
-				put("FILE:" + attr.name, attr);
-			for (Attribute attr: attrs_design)
-				put("DESIGN:" + attr.name, attr);
+			for (Attribute attr: attrs_header) put("DATA_INPUT_VARIABLES:" + attr.name, attr);
+			for (Attribute attr: attrs_file) put("FILE:" + attr.name, attr);
+			for (Attribute attr: attrs_design) put("DESIGN:" + attr.name, attr);
 			/*Parameter object*/
-			for (Attribute attr: attrs_structural)
-				put("STRUCTURAL:" + attr.name, attr);
-			for (Attribute attr: attrs_variability)
-				put("VARIABILITY:" + attr.name, attr);
+			for (Attribute attr: attrs_structural) put("STRUCTURAL:" + attr.name, attr);
+			for (Attribute attr: attrs_variability) put("VARIABILITY:" + attr.name, attr);
 			for (Attribute attr: attrs_variability_subblock){
 				put("matrix:" + attr.name, attr);
 				put("diag:" + attr.name, attr);
 				put("same:" + attr.name, attr);
 			}
 			/*Model object*/
-			for (Attribute attr: attrs_inputVariables)
-				put("MODEL_INPUT_VARIABLES:" + attr.name, attr);
-			for (Attribute attr: attrs_library)
-				put("LIABRARY:" + attr.name, attr);
-			for (Attribute attr: attrs_ode)
-				put("ODE:" + attr.name, attr);
-			/*All blocks*/
-			for (Attribute attr: attrs_import)
-				put("IMPORT:" + attr.name, attr);
-			for (Attribute attr: attrs_target)
-				put("TARGET_CODE:" + attr.name, attr);
+			for (Attribute attr: attrs_inputVariables) put("MODEL_INPUT_VARIABLES:" + attr.name, attr);
+			for (Attribute attr: attrs_library) put("LIBRARY:" + attr.name, attr);
+			for (Attribute attr: attrs_ode) put("ODE:" + attr.name, attr);
+			for (Attribute attr: attrs_estimation) put("ESTIMATION:" + attr.name, attr);
+			for (Attribute attr: attrs_simulation) put("SIMULATION:" + attr.name, attr);
+			for (Attribute attr: attrs_observation) put("OBSERVATION:" + attr.name, attr);
+			/*All objects*/
+			for (Attribute attr: attrs_import) put("IMPORT:" + attr.name, attr);
+			for (Attribute attr: attrs_target) put("TARGET_CODE:" + attr.name, attr);
 		}
 	};
-	
-	String getBlockPrefix(EObject obj){
-		if (obj instanceof StructuralBlockImpl)
-			return "STRUCTURAL:";
-		if (obj instanceof VariabilityBlockStatementImpl)
-			return "VARIABILITY:";
-		if (obj instanceof MatrixBlockImpl) 
-			return "matrix:";
-		if (obj instanceof DiagBlockImpl)
-			return "diag";
-		if (obj instanceof SameBlockImpl)
-			return "same:";
-		if (obj instanceof InputVariablesBlockImpl)
-			return "MODEL_INPUT_VARIABLES:";
-		if (obj instanceof LibraryBlockImpl)
-			return "LIBRARY:";
-		if (obj instanceof OdeBlockImpl)
-			return "ODE:"; 
-		if (obj instanceof DataInputBlockImpl)
-			return "DATA_INPUT_VARIABLES:"; 
-		if (obj instanceof FileBlockStatementImpl)
-			return "FILE:"; 
-		if (obj instanceof DesignBlockStatementImpl)
-			return "DESIGN:"; 
-		if (obj instanceof ImportedFunctionImpl)
-			return "IMPORT:";
-		if (obj instanceof TargetBlockImpl)
-			return "TARGET_CODE:";
-		return "";
-	}
 		
-	public static final Attribute getAttributeById(String id){
-        return allAttributes.get(id);
-    }
-	
 	public static List<Attribute> getAllAttributes(EObject obj){
-		if (obj instanceof StructuralBlockImpl)
-			return attrs_structural;
-		if (obj instanceof VariabilityBlockStatementImpl)
-			return attrs_variability;
-		if (obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl)
-			return attrs_variability_subblock;
-		if (obj instanceof InputVariablesBlockImpl)
-			return attrs_inputVariables;
-		if (obj instanceof LibraryBlockImpl)
-			return attrs_library;
-		if (obj instanceof OdeBlockImpl)
-			return attrs_ode; 
-		if (obj instanceof DataInputBlockImpl)
-			return attrs_header; 
-		if (obj instanceof FileBlockStatementImpl)
-			return attrs_file; 
-		if (obj instanceof DesignBlockStatementImpl)
-			return attrs_design; 
-		if (obj instanceof ImportedFunctionImpl)
-			return attrs_import;
-		if (obj instanceof TargetBlockImpl)
-			return attrs_target;
+		/*Data object*/
+		if (obj instanceof DataInputBlockImpl) return attrs_header; 
+		if (obj instanceof FileBlockImpl) return attrs_file; 
+		if (obj instanceof DesignBlockImpl) return attrs_design; 
+		/*Parameter object*/
+		if (obj instanceof StructuralBlockImpl) return attrs_structural;
+		if (obj instanceof VariabilityBlockImpl) return attrs_variability;
+		if (obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl) return attrs_variability_subblock;
+		/*Model object*/
+		if (obj instanceof InputVariablesBlockImpl) return attrs_inputVariables;
+		if (obj instanceof LibraryBlockImpl) return attrs_library;
+		if (obj instanceof OdeBlockImpl) return attrs_ode; 
+		if (obj instanceof EstimationBlockImpl) return attrs_estimation; 
+		if (obj instanceof SimulationBlockImpl) return attrs_simulation; 
+		if (obj instanceof ObservationBlockImpl) return attrs_observation; 
+		/*All objects*/
+		if (obj instanceof ImportBlockImpl) return attrs_import;
+		if (obj instanceof TargetBlockImpl) return attrs_target;
 		return null;
 	}
 	
-	List<String> getRequiredAttributeNames(EObject obj){
-		if (obj instanceof StructuralBlockImpl)
-			return Utils.getRequiredNames(attrs_structural);
-		if (obj instanceof VariabilityBlockStatementImpl)
-			return Utils.getRequiredNames(attrs_variability);
-		if (obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl)
-			return Utils.getRequiredNames(attrs_variability_subblock);
-		if (obj instanceof InputVariablesBlockImpl)
-			return Utils.getRequiredNames(attrs_inputVariables);
-		if (obj instanceof LibraryBlockImpl)
-			return Utils.getRequiredNames(attrs_library);
-		if (obj instanceof OdeBlockImpl)
-			return Utils.getRequiredNames(attrs_ode); 
-		if (obj instanceof DataInputBlockImpl)
-			return Utils.getRequiredNames(attrs_header); 
-		if (obj instanceof FileBlockStatementImpl)
-			return Utils.getRequiredNames(attrs_file); 
-		if (obj instanceof DesignBlockStatementImpl)
-			return Utils.getRequiredNames(attrs_design); 
-		if (obj instanceof ImportedFunctionImpl)
-			return Utils.getRequiredNames(attrs_import);
-		if (obj instanceof TargetBlockImpl)
-			return Utils.getRequiredNames(attrs_target);
+	public static List<String> getRequiredAttributeNames(EObject obj){
+		List<Attribute> attrs = getAllAttributes(obj);
+		if (attrs != null) return Utils.getRequiredNames(attrs);
 		return null;
 	}	
+	
+	public static Attribute getAttributeById(String id){
+        return allAttributes.get(id);
+    }
 
 	@Check
 	public void checkRequiredArguments(Arguments args){
-		EObject container = args.eContainer();
-		if (container instanceof ListImpl || container instanceof OdeListImpl)
-			container = container.eContainer();
-		if (container instanceof AnyExpressionImpl)
-			container = container.eContainer();
-		if (container instanceof ParameterDeclarationImpl ||
-			container instanceof SymbolDeclarationImpl ||
-			container instanceof SymbolModificationImpl)
-			container = container.eContainer();
-		if (container instanceof BlockStatementImpl)
-			container = container.eContainer();
-		
-		//Exclude content of Diag and Matrix check from attribute checks
-		if (container instanceof MatrixBlockImpl){
-			MatrixBlockImpl block = (MatrixBlockImpl)container;
-			if (block.getParameters().equals(args)) return;
-		} 
-		if(container instanceof DiagBlockImpl){
-			DiagBlockImpl block = (DiagBlockImpl)container;
-			if (block.getParameters().equals(args)) return;
-		}			
-		
-		String prefix = getBlockPrefix(container);
+		EObject container = Utils.findListContainer(args.eContainer());
+		if (container == null) return;
+		if (isVariabilitySubblock(container, args)) return;
+		String prefix = Utils.getBlockName(container) + ":";
 		
 		HashSet<String> argumentNames = new HashSet<String>();	
 		for (Argument arg: args.getArguments()){
@@ -315,29 +241,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	@Check
 	public void checkAllArguments(Argument argument){
 		EObject argContainer = argument.eContainer();	
+		EObject container = Utils.findListContainer(argContainer.eContainer());
+		if (container == null) return;
+
 		if (!(argContainer instanceof ArgumentsImpl)) return;
-		EObject container = argContainer.eContainer();
-		if (container instanceof ListImpl || container instanceof OdeListImpl)
-			container = container.eContainer();
-		if (container instanceof AnyExpressionImpl)
-			container = container.eContainer();
-		if (container instanceof ParameterDeclarationImpl ||
-			container instanceof SymbolDeclarationImpl ||
-			container instanceof SymbolModificationImpl)
-			container = container.eContainer();
-		if (container instanceof BlockStatementImpl)
-			container = container.eContainer();
-		
 		Arguments args = (Arguments)argContainer;
-		//Exclude content of Diag and Matrix check from attribute checks
-		if (container instanceof MatrixBlockImpl){
-			MatrixBlockImpl block = (MatrixBlockImpl)container;
-			if (block.getParameters().equals(args)) return;
-		} 
-		if(container instanceof DiagBlockImpl){
-			DiagBlockImpl block = (DiagBlockImpl)container;
-			if (block.getParameters().equals(args)) return;
-		}	
+		if (isVariabilitySubblock(container, args)) return;
 		
 		List<Attribute> knownAttributes = getAllAttributes(container);
 		if (knownAttributes != null){
@@ -353,13 +262,27 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 					boolean isValid = DataType.validateType(x.type, argument.getExpression());
 					if (!isValid){
 						warning(MSG_ATTRIBUTE_WRONG_TYPE + 
-							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
-								x.type.name(), 
+							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + x.type.name(), 
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 							MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());		
 					}
 				}
 			}
 		}			
+	}
+	
+	//Do not validate parameters of variability subblocks
+	private Boolean isVariabilitySubblock(EObject container, Arguments args){
+		//Exclude content of Diag and Matrix check from attribute checks
+		if (container instanceof MatrixBlockImpl){
+			MatrixBlockImpl block = (MatrixBlockImpl)container;
+			if (block.getParameters().equals(args)) return true;
+		} 
+		if(container instanceof DiagBlockImpl){
+			DiagBlockImpl block = (DiagBlockImpl)container;
+			if (block.getParameters().equals(args)) return true;
+		}	
+		//Same - content does not contain arguments
+		return false;
 	}
 }

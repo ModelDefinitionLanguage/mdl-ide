@@ -11,34 +11,56 @@ import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.ConditionalStatement;
+import org.ddmore.mdl.mdl.DataInputBlock;
+import org.ddmore.mdl.mdl.DesignBlock;
+import org.ddmore.mdl.mdl.DiagBlock;
+import org.ddmore.mdl.mdl.EstimationBlock;
+import org.ddmore.mdl.mdl.FileBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.ImportedFunction;
+import org.ddmore.mdl.mdl.InputVariablesBlock;
+import org.ddmore.mdl.mdl.LibraryBlock;
 import org.ddmore.mdl.mdl.LogicalExpression;
+import org.ddmore.mdl.mdl.MatrixBlock;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.ObjectName;
+import org.ddmore.mdl.mdl.ObservationBlock;
+import org.ddmore.mdl.mdl.OdeBlock;
 import org.ddmore.mdl.mdl.OrExpression;
+import org.ddmore.mdl.mdl.SameBlock;
+import org.ddmore.mdl.mdl.SimulationBlock;
+import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.TargetBlock;
+import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
+import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
+import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
+import org.ddmore.mdl.mdl.impl.FileBlockImpl;
 import org.ddmore.mdl.mdl.impl.FileBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl;
+import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.ImportedFunctionImpl;
 import org.ddmore.mdl.mdl.impl.InlineBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
+import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
+import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolListImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
@@ -315,6 +337,17 @@ public class Utils {
 		return names;
 	}
 	
+	//Look for the parent block containing lists
+	public static EObject findListContainer(EObject obj){
+		EObject container = obj;
+		while (!isListContainer(container)){
+			if (container instanceof MclObjectImpl) return null;
+			container = container.eContainer();
+		}
+		return container;
+	}
+	
+	//Note: we do not count FunctionCalls as containers of arguments, function calls are validated separately 
 	public static Boolean isListContainer(EObject obj){
 		if (
 			//Data object	
@@ -325,6 +358,9 @@ public class Utils {
 			obj instanceof InputVariablesBlockImpl ||
 			obj instanceof LibraryBlockImpl ||
 			obj instanceof OdeBlockImpl ||
+			obj instanceof EstimationBlockImpl ||
+			obj instanceof SimulationBlockImpl ||
+			obj instanceof ObservationBlockImpl ||
 			//Parameter object
 			obj instanceof StructuralBlockImpl ||
 			obj instanceof VariabilityBlockStatementImpl ||
@@ -356,5 +392,28 @@ public class Utils {
 			container instanceof SymbolListImpl) return true;
 		return false;	
 	}
-
+	
+	public static String getBlockName(EObject obj){
+		/*Data object*/
+		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
+		if (obj instanceof FileBlockImpl) return ((FileBlock)obj).getIdentifier();
+		if (obj instanceof DesignBlockImpl) return ((DesignBlock)obj).getIdentifier();
+		/*Parameter object*/
+		if (obj instanceof StructuralBlockImpl) return ((StructuralBlock)obj).getIdentifier();	
+		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj.eContainer()).getIdentifier();
+		if (obj instanceof MatrixBlockImpl) return ((MatrixBlock)obj).getIdentifier();	
+		if (obj instanceof DiagBlockImpl) return ((DiagBlock)obj).getIdentifier() ;	
+		if (obj instanceof SameBlockImpl) return ((SameBlock)obj).getIdentifier();
+		/*Model object*/
+		if (obj instanceof InputVariablesBlockImpl) return ((InputVariablesBlock)obj).getIdentifier();
+		if (obj instanceof LibraryBlockImpl) return ((LibraryBlock)obj).getIdentifier() ;
+		if (obj instanceof OdeBlockImpl) return ((OdeBlock)obj).getIdentifier() ;
+		if (obj instanceof EstimationBlockImpl) return ((EstimationBlock)obj).getIdentifier() ;
+		if (obj instanceof SimulationBlockImpl) return ((SimulationBlock)obj).getIdentifier() ;
+		if (obj instanceof ObservationBlockImpl) return ((ObservationBlock)obj).getIdentifier() ;
+		/*All objects*/
+		if (obj instanceof ImportBlockImpl) return ((ImportBlock)obj).getIdentifier();
+		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();
+		return "";
+	}
 }

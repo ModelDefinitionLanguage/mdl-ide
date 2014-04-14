@@ -53,7 +53,7 @@ import org.apache.commons.io.FilenameUtils
 
 
 class MdlPrinter {
-
+	
 	//Get MDL file name
 	def fileName(Mcl m){
 		var fileName = m.eResource.getURI().path;
@@ -479,8 +479,8 @@ class MdlPrinter {
 		if (type.use != null){
 			return type.use.toStr
 		} 
-		if (type.likelyhood != null){
-			return type.likelyhood.identifier	
+		if (type.likelihood != null){
+			return type.likelihood.identifier	
 		} 
 		if (type.target != null){
 			return type.target.identifier 

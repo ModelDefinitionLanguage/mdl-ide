@@ -44,8 +44,8 @@ class MathPrinter {
 		if (type.use != null){
 			return type.use.toStr
 		} 
-		if (type.likelyhood != null){
-			return type.likelyhood.identifier	
+		if (type.likelihood != null){
+			return type.likelihood.identifier	
 		} 
 		if (type.target != null){
 			return type.target.identifier 

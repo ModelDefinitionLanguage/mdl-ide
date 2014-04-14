@@ -3,7 +3,6 @@ package org.ddmore.mdl.ui.preference;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IOutputConfigurationProvider;
 import org.eclipse.xtext.generator.OutputConfiguration;
 

@@ -75,7 +75,7 @@ import org.ddmore.mdl.mdl.impl.ExecuteTaskImpl;
 import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.LikelyhoodImpl;
+import org.ddmore.mdl.mdl.impl.LikelihoodImpl;
 import org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
@@ -274,7 +274,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(CC_TYPE));
     }
 
-    protected Image _image(LikelyhoodImpl e) {
+    protected Image _image(LikelihoodImpl e) {
         return imageHelper.getImage(getPath(LIKELYHOOD));
     }
 
