@@ -12,6 +12,7 @@ import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.DistributionArgument
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.DistributionValidator
+import org.ddmore.mdl.types.DistributionType
 
 //TODO: test for all types of distributions 
 //TODO: document + examples
@@ -21,141 +22,158 @@ class DistributionPrinter extends MdlPrinter{
 
 	//Recognised types of distributions and pairs (attribute, value type) to print as PharmML tags
 	val distribution_attrs = newHashMap(
-		'Bernoulli' -> newHashMap(
-			"probability" -> new Attribute("probability", pVal)),          
-		'Beta'  -> newHashMap(
-			"alpha" -> new Attribute("alpha", rVal), 
-			"beta" -> new Attribute("beta", rVal),  
-			"lower" -> new Attribute("truncationLowerInclusiveBound", pVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", pVal)),  
-		'Binomial' -> newHashMap(
-			"numberOfTrials" -> new Attribute("numberOfTrials", nVal), 
-			"probabilityOfSuccess" -> new Attribute("probabilityOfSuccess", pVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", nVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", nVal)),
-		'Categorical' -> newHashMap(
-			"ncategories" -> new Attribute("ncategories", nVal), 
-			"probabilities" -> new Attribute("probabilities", pVal)), 
-		'Cauchy' -> newHashMap(
-			"location" -> new Attribute("location", rVal), 
-			"scale" -> new Attribute("scale", prVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", nVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", nVal)),
-		'ChiSquare' -> newHashMap(
-			"degreesOfFreedom" -> new Attribute("degreesOfFreedom", pnVal), 
-			"dof" -> new Attribute("degreesOfFreedom", pnVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", prVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", prVal)), 
-		'Dirichlet' -> newHashMap(
-			"concentration" -> new Attribute("concentration", prVal)),
-		'Exponential' -> newHashMap(
-			"alpha" -> new Attribute("rate", prVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", prVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", prVal)),
-		'FDistribution' -> newHashMap(
-			"denominator" -> new Attribute("denominator", nVal), 
-			"numerator" -> new Attribute("numerator", nVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", prVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", prVal)),
-		'Gamma' -> newHashMap(
-			"shape" -> new Attribute("shape", prVal), 
-			"scale" -> new Attribute("scale", prVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		'Geometric' -> newHashMap(
-			"probability" -> new Attribute("probability", pVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		'Hypergeometric' -> newHashMap(
-			"numberOfSuccesses" -> new Attribute("numberOfSuccesses", nVal), 
-			"numberOfTrials" -> new Attribute("numberOfTrials", nVal), 
-			"populationSize" -> new Attribute("populationSize", nVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)), 
-		'InverseGamma' -> newHashMap(
-			"shape" -> new Attribute("shape", prVal), 
-			"scale" -> new Attribute("scale", prVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)), 
-		'Laplace' -> newHashMap(
-			"location" -> new Attribute("location", rVal), 
-			"scale" -> new Attribute("scale", prVal),
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)), 
-		'Logistic' -> newHashMap(
-			"location" -> new Attribute("location", rVal), 
-			"scale" -> new Attribute("scale", prVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)), 
-		'LogNormal' -> newHashMap(
-			"logScale" -> new Attribute("logScale", rVal), 
-			"shape" -> new Attribute("shape", prVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		'Multinomial' -> newHashMap(
-			"numberOfTrials" -> new Attribute("numberOfTrials", nVal), 
-			"probabilities" -> new Attribute("probabilities", pVal)), 
-		'MultivariateNormal' -> newHashMap(
-			"meanVector" -> new Attribute("meanVector", rVal), 
-			"covarianceMatrix" -> new Attribute("covarianceMatrix", rVal)), 
-		'MultivariateStudentT'	-> newHashMap(
-			"meanVector" -> new Attribute("meanVector", rVal), 
-			"covarianceMatrix" -> new Attribute("covarianceMatrix", rVal), 
-			"degreesOfFreedom" -> new Attribute("degreesOfFreedom", pnVal), 
-			"dof" -> new Attribute("degreesOfFreedom", pnVal)), 
-		'NegativeBinomial'    	-> newHashMap(
-			"numberOfFailures" -> new Attribute("numberOfFailures", nVal), 
-			"probability" -> new Attribute("probability", pVal),  
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		'Normal' -> newHashMap(
-			"mean" -> new Attribute("mean", rVal), 
-			"variance" -> new Attribute("variance", prVal), 
-			"stddev" -> new Attribute("stddev", prVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		'NormalInverseGamma' 	-> newHashMap(
-			"mean" -> new Attribute("mean", rVal), 
-			"varianceScaling" -> new Attribute("varianceScaling", prVal), 
-			"shape" -> new Attribute("shape", prVal), 
-			"scale" -> new Attribute("scale", prVal),
-			"lowerN" -> new Attribute("truncationLowerInclusiveBoundN", nVal), 
-			"upperN" -> new Attribute("truncationUpperInclusiveBoundN", nVal), 
-			"lowerIG" -> new Attribute("truncationLowerInclusiveBoundIG", rVal), 
-			"upperIG" -> new Attribute("truncationUpperInclusiveBoundIG", rVal)),
-		'Pareto' -> newHashMap(
-			"scale" -> new Attribute("scale", prVal), 
-			"shape" -> new Attribute("shape", prVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		'Poisson' -> newHashMap(
-			"alpha" -> new Attribute("rate", prVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		'StudentT' -> newHashMap(
-			"location" -> new Attribute("location", rVal), 
-			"scale" -> new Attribute("scale", prVal), 
-			"degreesOfFreedom" -> new Attribute("degreesOfFreedom", pnVal), 
-			"dof" -> new Attribute("degreesOfFreedom", pnVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		'Uniform' -> newHashMap(
-			"minimum" -> new Attribute("minimum", rVal), 
-			"maximum" -> new Attribute("maximum", rVal), 
-			"numberOfClasses" -> new Attribute("numberOfClasses", nVal)),
-		'Weibull' -> newHashMap(
-			"scale" -> new Attribute("scale", prVal), 
-			"shape" -> new Attribute("shape", prVal), 
-			"lower" -> new Attribute("truncationLowerInclusiveBound", rVal), 
-			"upper" -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		'Wishart' -> newHashMap(
-			"degreesOfFreedom" -> new Attribute("degreesOfFreedom", rVal), 
-			"dof" -> new Attribute("degreesOfFreedom", rVal), 
-			"scaleMatrix" -> new Attribute("scaleMatrix", prVal))
+		DistributionType::bernoulli -> newHashMap(
+		//	DistributionValidator::attr_probability.name -> new Attribute("probability", pVal),
+			DistributionValidator::attr_p.name -> new Attribute("probability", pVal)),          
+		DistributionType::beta -> newHashMap(
+			DistributionValidator::attr_alpha.name  -> new Attribute("alpha", rVal), 
+			DistributionValidator::attr_beta.name  -> new Attribute("beta", rVal),  
+			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", pVal), 
+			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", pVal)),  
+		DistributionType::binomial -> newHashMap(
+			DistributionValidator::attr_numberOfTrials.name  -> new Attribute("numberOfTrials", nVal), 
+			DistributionValidator::attr_probabilityOfSuccess.name  -> new Attribute("probabilityOfSuccess", pVal), 
+			DistributionValidator::attr_nTrials.name  -> new Attribute("numberOfTrials", nVal), 
+			DistributionValidator::attr_p_ofSuccess.name  -> new Attribute("probabilityOfSuccess", pVal), 
+			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
+			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
+		DistributionType::categorical -> newHashMap(
+			DistributionValidator::attr_ncategories.name  -> new Attribute("ncategories", nVal), 
+			DistributionValidator::attr_probabilities.name  -> new Attribute("probabilities", pVal), 
+			DistributionValidator::attr_ncat.name  -> new Attribute("ncategories", nVal), 
+			DistributionValidator::attr_prob.name  -> new Attribute("probabilities", pVal)), 
+		DistributionType::cauchy -> newHashMap(
+			DistributionValidator::attr_location.name  -> new Attribute("location", rVal), 
+			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
+			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
+			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
+		DistributionType::chiSquare -> newHashMap(
+			DistributionValidator::attr_pnat_degreesOfFreedom.name  -> new Attribute("degreesOfFreedom", pnVal), 
+			DistributionValidator::attr_pnat_dof.name  -> new Attribute("degreesOfFreedom", pnVal), 
+			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
+			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)), 
+		DistributionType::dirichlet -> newHashMap(
+			DistributionValidator::attr_prealVector_alpha.name  -> new Attribute("concentration", prVal)),
+		DistributionType::exponential -> newHashMap(
+			DistributionValidator::attr_alpha.name  -> new Attribute("rate", prVal), 
+			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
+			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)),
+		DistributionType::fDistribution -> newHashMap(
+			DistributionValidator::attr_denominator.name  -> new Attribute("denominator", nVal), 
+			DistributionValidator::attr_numerator.name  -> new Attribute("numerator", nVal), 
+			DistributionValidator::attr_den.name  -> new Attribute("denominator", nVal), 
+			DistributionValidator::attr_num.name  -> new Attribute("numerator", nVal), 
+			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
+			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)),
+		DistributionType::gamma -> newHashMap(
+			DistributionValidator::attr_shape.name  -> new Attribute("shape", prVal), 
+			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
+			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
+			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
+		DistributionType::geometric -> newHashMap(
+		//	DistributionValidator::attr_probability.name  -> new Attribute("probability", pVal), 
+			DistributionValidator::attr_p.name  -> new Attribute("probability", pVal), 
+			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
+			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
+		DistributionType::hypergeometric -> newHashMap(
+			DistributionValidator::attr_numberOfSuccesses.name  -> new Attribute("numberOfSuccesses", nVal), 
+			DistributionValidator::attr_numberOfTrials.name  -> new Attribute("numberOfTrials", nVal), 
+			DistributionValidator::attr_populationSize.name  -> new Attribute("populationSize", nVal), 
+			DistributionValidator::attr_nSuccess.name  -> new Attribute("numberOfSuccesses", nVal), 
+			DistributionValidator::attr_nTrials.name  -> new Attribute("numberOfTrials", nVal), 
+			DistributionValidator::attr_popSize.name  -> new Attribute("populationSize", nVal), 
+			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
+			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)), 
+		DistributionType::inverseGamma -> newHashMap(
+			DistributionValidator::attr_shape.name  -> new Attribute("shape", prVal), 
+			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
+			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
+			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)), 
+		DistributionType::laplace -> newHashMap(
+			DistributionValidator::attr_location.name  -> new Attribute("location", rVal), 
+			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal),
+			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
+			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)), 
+		DistributionType::logistic -> newHashMap(
+			DistributionValidator::attr_location.name  -> new Attribute("location", rVal), 
+			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
+			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
+			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)), 
+		DistributionType::logNormal -> newHashMap(
+			DistributionValidator::attr_median.name  -> new Attribute("logScale", rVal), 
+			DistributionValidator::attr_mu.name  -> new Attribute("logScale", rVal), 
+			DistributionValidator::attr_cv.name  -> new Attribute("shape", prVal), 
+			DistributionValidator::attr_sigmatr.name  -> new Attribute("shape", prVal), 
+			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
+			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)),
+		DistributionType::multinomial -> newHashMap(
+			DistributionValidator::attr_numberOfTrials.name  -> new Attribute("numberOfTrials", nVal), 
+			DistributionValidator::attr_probabilities.name  -> new Attribute("probabilities", pVal), 
+			DistributionValidator::attr_nTrials.name  -> new Attribute("numberOfTrials", nVal), 
+			DistributionValidator::attr_prob.name  -> new Attribute("probabilities", pVal)), 
+		DistributionType::multivariateNormal -> newHashMap(
+			DistributionValidator::attr_realVector_mean.name  -> new Attribute("meanVector", rVal), 
+			DistributionValidator::attr_cov.name  -> new Attribute("covarianceMatrix", rVal)), 
+		DistributionType::multivariateStudentT	-> newHashMap(
+			DistributionValidator::attr_realVector_mean.name  -> new Attribute("meanVector", rVal), 
+			DistributionValidator::attr_cov.name  -> new Attribute("covarianceMatrix", rVal), 
+			DistributionValidator::attr_pnat_degreesOfFreedom.name  -> new Attribute("degreesOfFreedom", pnVal), 
+			DistributionValidator::attr_pnat_dof.name  -> new Attribute("degreesOfFreedom", pnVal)), 
+		DistributionType::negativeBinomial    	-> newHashMap(
+			DistributionValidator::attr_numberOfFailures.name  -> new Attribute("numberOfFailures", nVal), 
+		//	DistributionValidator::attr_probability.name  -> new Attribute("probability", pVal),  
+			DistributionValidator::attr_nFail.name  -> new Attribute("numberOfFailures", nVal), 
+			DistributionValidator::attr_p.name  -> new Attribute("probability", pVal),  
+			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
+			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
+		DistributionType::normal -> newHashMap(
+			DistributionValidator::attr_mean.name  -> new Attribute("mean", rVal), 
+			DistributionValidator::attr_variance.name  -> new Attribute("variance", prVal), 
+			DistributionValidator::attr_stddev.name  -> new Attribute("stddev", prVal), 
+			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
+			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
+		DistributionType::normalInverseGamma 	-> newHashMap(
+			DistributionValidator::attr_mean.name  -> new Attribute("mean", rVal), 
+			DistributionValidator::attr_varianceScaling.name  -> new Attribute("varianceScaling", prVal), 
+			DistributionValidator::attr_shape.name  -> new Attribute("shape", prVal), 
+			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal),
+			DistributionValidator::attr_loN.name  -> new Attribute("truncationLowerInclusiveBoundN", nVal), 
+			DistributionValidator::attr_hiN.name  -> new Attribute("truncationUpperInclusiveBoundN", nVal), 
+			DistributionValidator::attr_loIG.name  -> new Attribute("truncationLowerInclusiveBoundIG", rVal), 
+			DistributionValidator::attr_hiIG.name  -> new Attribute("truncationUpperInclusiveBoundIG", rVal)),
+		DistributionType::pareto -> newHashMap(
+			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
+			DistributionValidator::attr_shape.name  -> new Attribute("shape", prVal), 
+			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
+			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
+		DistributionType::poisson -> newHashMap(
+			DistributionValidator::attr_alpha.name  -> new Attribute("rate", prVal), 
+			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
+			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
+		DistributionType::studentT -> newHashMap(
+			DistributionValidator::attr_location.name  -> new Attribute("location", rVal), 
+			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
+			DistributionValidator::attr_pnat_degreesOfFreedom.name  -> new Attribute("degreesOfFreedom", pnVal), 
+			DistributionValidator::attr_pnat_dof.name  -> new Attribute("degreesOfFreedom", pnVal), 
+			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
+			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
+		DistributionType::uniform -> newHashMap(
+			DistributionValidator::attr_min.name  -> new Attribute("minimum", rVal), 
+			DistributionValidator::attr_max.name  -> new Attribute("maximum", rVal), 
+			DistributionValidator::attr_numberOfClasses.name  -> new Attribute("numberOfClasses", nVal)),
+		DistributionType::weibull -> newHashMap(
+			DistributionValidator::attr_lambda.name  -> new Attribute("scale", prVal), 
+			DistributionValidator::attr_kappa.name  -> new Attribute("shape", prVal), 
+			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
+			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)),
+		DistributionType::wishart -> newHashMap(
+			DistributionValidator::attr_n.name  -> new Attribute("degreesOfFreedom", prVal), 
+			DistributionValidator::attr_scaleMatrix.name  -> new Attribute("scaleMatrix", prVal))
 	)
 	
 	//Names of attributes that expect matrix as a value
-	val matrix_attrs = newHashSet("covarianceMatrix", "scaleMatrix");	
+	val matrix_attrs = newHashSet(DistributionValidator::attr_cov.name, DistributionValidator::attr_scaleMatrix.name
+	);	
 
 	//Prints all distributions
 	public def CharSequence print_uncert_Distribution(RandomList randomList){
@@ -163,22 +181,47 @@ class DistributionPrinter extends MdlPrinter{
 			if (randomList.arguments != null){
 				var type = randomList.arguments.getAttribute(DistributionValidator::attr_type.name);
 				if (type.length > 0){
-					if (type.equals("FDistribution")) type = "F";	
 					switch(type){
-						case type.equals("MixtureModel"): print_MixtureModel(randomList)
-						default: print_DistributionDefault(randomList, type)
+						//For any mixture model
+						case type.contains("Model"): print_MixtureModel(randomList, type)
+						default: {
+							//Types in PharmML start from upper case!
+							print_DistributionDefault(randomList, type)
+						}
 					}
 				}
 			}
 		}
 	}
 	
+	//TODO: add mixed model to the grammar, e.g.,	X = ~(type=mixedModel, ~(type=Normal...), ~(type=StudentT...)...)
+	def print_MixtureModel(RandomList randomList, String type)'''
+		«val tagName = type.substring(0, 1).toUpperCase() + type.substring(1)»
+		<«tagName» xmlns="«xmlns_uncert»" definition="«definition»mixture-model">
+			«FOR arg: randomList.arguments.arguments»
+				«IF arg.component != null»
+					«val weight = arg.component.arguments.getAttribute(DistributionValidator::attr_weight.name)»
+					«IF weight.length > 0»
+						<component weight="«weight»">
+							«arg.component.print_uncert_Distribution»
+						</component>
+					«ENDIF»
+				«ENDIF»
+			«ENDFOR»
+		</«tagName»>
+	'''
+	
 	//NOTE: all attributes in distributions are named
 	protected def print_DistributionDefault(RandomList randomList, String type){
 		val recognizedArgs = distribution_attrs.get(type);
-		if (recognizedArgs == null) return "";
+		if (recognizedArgs == null) {
+			System::out.println("MDL2PharmML: Could not find attributes for " + type);
+			return "";
+		}
 		'''
-		<«type»Distribution xmlns="«xmlns_uncert»" definition="«type.getURLExtension»">
+		«var tagName = type.substring(0, 1).toUpperCase() + type.substring(1)»
+		«if (type.equals(DistributionType::fDistribution)) tagName = "F"»	
+		<«tagName»Distribution xmlns="«xmlns_uncert»" definition="«type.getURLExtension»">
 			«FOR arg: randomList.arguments.arguments»
 				«IF arg.argumentName != null»
 					«IF recognizedArgs.containsKey(arg.argumentName.name)»
@@ -189,18 +232,16 @@ class DistributionPrinter extends MdlPrinter{
 							«IF matrix_attrs.contains(arg.argumentName.name)»
 								«var dimension = defineDimension(randomList, arg)»
 								<«attrName» dimension="«dimension»">
-									<values>«arg.value.toPharmML(dataType)»</values>
-								</«attrName»>
 							«ELSE»	
 								<«attrName»>
+							«ENDIF»
 									«arg.value.toPharmML(dataType)»
 								</«attrName»>
-							«ENDIF»
 							«ENDIF»
 					«ENDIF»
 				«ENDIF»
 			«ENDFOR»	
-		</«type»Distribution>
+		</«tagName»Distribution>
 		'''
 	}	
 	
@@ -237,23 +278,6 @@ class DistributionPrinter extends MdlPrinter{
 			return definition + type.toLowerCase();
 		}
 	}
-	
-	//TODO: add mixed model to the grammar, e.g.,	X = ~(type=mixedModel, ~(type=Normal...), ~(type=StudentT...)...)
-	def print_MixtureModel(RandomList randomList)
-	'''
-		<MixtureModelDistribution xmlns="«xmlns_uncert»" definition="«definition»mixture-model">
-			«FOR arg: randomList.arguments.arguments»
-				«IF arg.component != null»
-					«val weight = arg.component.arguments.getAttribute(DistributionValidator::attr_weight.name)»
-					«IF weight.length > 0»
-						<component weight="«weight»">
-							«arg.component.print_uncert_Distribution»
-						</component>
-					«ENDIF»
-				«ENDIF»
-			«ENDFOR»
-		</MixtureModelDistribution>
-	'''
 	
 	//A value assigned to a distribution attribute can be a number, reference, or vector
 	def toPharmML(Primary p, String type){

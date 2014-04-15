@@ -31,6 +31,8 @@ import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
+import org.ddmore.mdl.types.DefaultValues;
+import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
@@ -51,45 +53,45 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	final public static Attribute attr_name = new Attribute("name", DataType.TYPE_STRING, true, "");		
-	final public static Attribute attr_req_value = new Attribute("value", DataType.TYPE_REAL, true, "0");
-	final public static Attribute attr_value = new Attribute("value", DataType.TYPE_REAL, false, "0");
+	final public static Attribute attr_name = new Attribute("name", MdlDataType.TYPE_STRING, true, "");		
+	final public static Attribute attr_req_value = new Attribute("value", MdlDataType.TYPE_REAL, true, "0");
+	final public static Attribute attr_value = new Attribute("value", MdlDataType.TYPE_REAL, false, "0");
 
-	final public static Attribute attr_hi = new Attribute("hi", DataType.TYPE_REAL, false, "0");
-	final public static Attribute attr_lo = new Attribute("lo", DataType.TYPE_REAL, false, "1");
+	final public static Attribute attr_hi = new Attribute("hi", MdlDataType.TYPE_REAL, false, "0");
+	final public static Attribute attr_lo = new Attribute("lo", MdlDataType.TYPE_REAL, false, "1");
 	
-	final public static Attribute attr_fix = new Attribute("fix", DataType.TYPE_BOOLEAN, false, "false");
-	final public static Attribute attr_units = new Attribute("units", DataType.TYPE_STRING, false, "kg");
-	final public static Attribute attr_transform = new Attribute("transform", DataType.TYPE_STRING, false, "");
-	final public static Attribute attr_use = new Attribute("use", DataType.TYPE_USE, false, DataType.defaultUseVar);
-	final public static Attribute attr_level = new Attribute("level", DataType.TYPE_NAT, false, "ID");
+	final public static Attribute attr_fix = new Attribute("fix", MdlDataType.TYPE_BOOLEAN, false, "false");
+	final public static Attribute attr_units = new Attribute("units", MdlDataType.TYPE_STRING, false, "kg");
+	final public static Attribute attr_transform = new Attribute("transform", MdlDataType.TYPE_STRING, false, "");
+	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, DefaultValues.USE_VAR);
+	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, "ID");
 
-	final public static Attribute attr_req_cc_type = new Attribute("type", DataType.TYPE_CC, true, DataType.defaultTypeValue);
-	final public static Attribute attr_cc_type = new Attribute("type", DataType.TYPE_CC, false, DataType.defaultTypeValue);
-	final public static Attribute attr_re_type = new Attribute("type", DataType.TYPE_RANDOM_EFFECT, false);
+	final public static Attribute attr_req_cc_type = new Attribute("type", MdlDataType.TYPE_CC, true, DefaultValues.VARIABILITY_TYPE);
+	final public static Attribute attr_cc_type = new Attribute("type", MdlDataType.TYPE_CC, false, DefaultValues.VARIABILITY_TYPE);
+	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false);
 	
-	final public static Attribute attr_mapping = new Attribute("mapping", DataType.TYPE_REF, false);
+	final public static Attribute attr_mapping = new Attribute("mapping", MdlDataType.TYPE_REF, false);
 	
 	/*ESTIMATION*/
-	final public static Attribute attr_likelihood = new Attribute("likelihood", DataType.TYPE_EXPR, false);
-	final public static Attribute attr_prediction = new Attribute("prediction", DataType.TYPE_EXPR, false);
-	final public static Attribute attr_ruv = new Attribute("ruv", DataType.TYPE_EXPR, false);
+	final public static Attribute attr_likelihood = new Attribute("likelihood", MdlDataType.TYPE_EXPR, false);
+	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
+	final public static Attribute attr_ruv = new Attribute("ruv", MdlDataType.TYPE_EXPR, false);
 	
 	/*ODE*/
-	final public static Attribute attr_req_deriv = new Attribute("deriv", DataType.TYPE_EXPR, true, DataType.defaultVarName);	
-	final public static Attribute attr_init = new Attribute("init", DataType.TYPE_EXPR, false, "0");	
-	final public static Attribute attr_x0 = new Attribute("x0", DataType.TYPE_REAL, false);	
-	final public static Attribute attr_wrt = new Attribute("wrt", DataType.TYPE_REF, false, "TIME");	
+	final public static Attribute attr_req_deriv = new Attribute("deriv", MdlDataType.TYPE_EXPR, true, DefaultValues.VAR_NAME);	
+	final public static Attribute attr_init = new Attribute("init", MdlDataType.TYPE_EXPR, false, "0");	
+	final public static Attribute attr_x0 = new Attribute("x0", MdlDataType.TYPE_REAL, false);	
+	final public static Attribute attr_wrt = new Attribute("wrt", MdlDataType.TYPE_REF, false, "TIME");	
 	
 	/*LIBRARY*/
-	final public static Attribute attr_library = new Attribute("library", DataType.TYPE_REF, false);
-	final public static Attribute attr_req_model = new Attribute("model", DataType.TYPE_NAT, true, "1");
-	final public static Attribute attr_param = new Attribute("param", DataType.TYPE_LIST, false);
-	final public static Attribute attr_ncmt = new Attribute("ncmt", DataType.TYPE_NAT, false); //number of compartments
-	final public static Attribute attr_distribution = new Attribute("distribution", DataType.TYPE_NAT, false);
-	final public static Attribute attr_elimination = new Attribute("elimination", DataType.TYPE_STRING, false);
-	final public static Attribute attr_parameterization = new Attribute("parameterization", DataType.TYPE_STRING, false);
-	final public static Attribute attr_output = new Attribute("output", DataType.TYPE_LIST, false);
+	final public static Attribute attr_library = new Attribute("library", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_req_model = new Attribute("model", MdlDataType.TYPE_NAT, true, "1");
+	final public static Attribute attr_param = new Attribute("param", MdlDataType.TYPE_LIST, false);
+	final public static Attribute attr_ncmt = new Attribute("ncmt", MdlDataType.TYPE_NAT, false); //number of compartments
+	final public static Attribute attr_distribution = new Attribute("distribution", MdlDataType.TYPE_NAT, false);
+	final public static Attribute attr_elimination = new Attribute("elimination", MdlDataType.TYPE_STRING, false);
+	final public static Attribute attr_parameterization = new Attribute("parameterization", MdlDataType.TYPE_STRING, false);
+	final public static Attribute attr_output = new Attribute("output", MdlDataType.TYPE_LIST, false);
 	/* The "output" attribute is not an official MCL attribute but I think it is needed because
 	 * it introduces new variables (important for validation) as opposed to the declarations in "param"
 	 * attribute that allows any math expressions - which is ok for input but not for output.
@@ -97,42 +99,42 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		
 	/*Data object*/
 	/*DATA_INPUT_VARIABLES*/
-	final public static Attribute attr_define = new Attribute("define", DataType.TYPE_LIST, false);
-	final public static Attribute attr_recode = new Attribute("recode", DataType.TYPE_LIST, false);
-	final public static Attribute attr_boundaries = new Attribute("boundaries", DataType.TYPE_VECTOR_REAL, false);
-	final public static Attribute attr_missing = new Attribute("missing", DataType.TYPE_INT, false);
+	final public static Attribute attr_define = new Attribute("define", MdlDataType.TYPE_LIST, false);
+	final public static Attribute attr_recode = new Attribute("recode", MdlDataType.TYPE_LIST, false);
+	final public static Attribute attr_boundaries = new Attribute("boundaries", MdlDataType.TYPE_VECTOR_REAL, false);
+	final public static Attribute attr_missing = new Attribute("missing", MdlDataType.TYPE_INT, false);
 	//
-	final public static Attribute attr_female = new Attribute("female", DataType.TYPE_INT, false);
-	final public static Attribute attr_male = new Attribute("male", DataType.TYPE_INT, false);
+	final public static Attribute attr_female = new Attribute("female", MdlDataType.TYPE_INT, false);
+	final public static Attribute attr_male = new Attribute("male", MdlDataType.TYPE_INT, false);
 	
 	/*FILE*/
-	final public static Attribute attr_req_source = new Attribute("source", DataType.TYPE_STRING, true, DataType.defaultFileName);
-	final public static Attribute attr_ignore = new Attribute("ignore", DataType.TYPE_STRING, false);
-	final public static Attribute attr_inputformat = new Attribute("inputformat", DataType.TYPE_TARGET, false, DataType.defaultTarget);
-	final public static Attribute attr_delimeter = new Attribute("delimeter", DataType.TYPE_STRING, false, ";");
+	final public static Attribute attr_req_source = new Attribute("source", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
+	final public static Attribute attr_ignore = new Attribute("ignore", MdlDataType.TYPE_STRING, false);
+	final public static Attribute attr_inputformat = new Attribute("inputformat", MdlDataType.TYPE_TARGET, false, DefaultValues.TARGET);
+	final public static Attribute attr_delimeter = new Attribute("delimeter", MdlDataType.TYPE_STRING, false, ";");
 	
 	/*DESIGN*/
-	final public static Attribute attr_design_source = new Attribute("source", DataType.TYPE_REF, true, DataType.defaultVarName);
-	final public static Attribute attr_interp = new Attribute("interp", DataType.TYPE_REF, false);
-	final public static Attribute attr_idv = new Attribute("idv", DataType.TYPE_IDV, false);
+	final public static Attribute attr_design_source = new Attribute("source", MdlDataType.TYPE_REF, true, DefaultValues.VAR_NAME);
+	final public static Attribute attr_interp = new Attribute("interp", MdlDataType.TYPE_INTERP, false);
+	//final public static Attribute attr_idv = new Attribute("idv", MdlDataType.TYPE_IDV, false);
 
 	/*All objects*/
 	/*IMPORT*/
-	final public static Attribute attr_req_target = new Attribute("target", DataType.TYPE_TARGET, true, DataType.defaultTarget);
-	final public static Attribute attr_trans = new Attribute("trans", DataType.TYPE_NAT, false);
+	final public static Attribute attr_req_target = new Attribute("target", MdlDataType.TYPE_TARGET, true, DefaultValues.TARGET);
+	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_NAT, false);
 	
 	/*TARGET*/
-	final public static Attribute attr_location = new Attribute("location", DataType.TYPE_STRING, false);
-	final public static Attribute attr_first = new Attribute("first", DataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_before = new Attribute("before", DataType.TYPE_STRING, false);
-	final public static Attribute attr_after = new Attribute("after", DataType.TYPE_STRING, false);
+	final public static Attribute attr_location = new Attribute("location", MdlDataType.TYPE_STRING, false);
+	final public static Attribute attr_first = new Attribute("first", MdlDataType.TYPE_BOOLEAN, false);
+	final public static Attribute attr_before = new Attribute("before", MdlDataType.TYPE_STRING, false);
+	final public static Attribute attr_after = new Attribute("after", MdlDataType.TYPE_STRING, false);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
 	final public static List<Attribute> attrs_header = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
 			attr_recode, attr_boundaries, attr_missing, attr_mapping, attr_female, attr_male);
 	final public static List<Attribute> attrs_file = Arrays.asList(attr_req_source, attr_ignore, attr_inputformat, attr_delimeter);
-	final public static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp, attr_idv);
+	final public static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp /*,attr_idv*/);
 
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, attr_fix, attr_units, attr_transform);
@@ -259,7 +261,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			}
 			for (Attribute x: knownAttributes){
 				if (x.name.equals(argument.getArgumentName().getName())){
-					boolean isValid = DataType.validateType(x.type, argument.getExpression());
+					boolean isValid = MdlDataType.validateType(x.type, argument.getExpression());
 					if (!isValid){
 						warning(MSG_ATTRIBUTE_WRONG_TYPE + 
 							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + x.type.name(), 

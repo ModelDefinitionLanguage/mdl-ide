@@ -23,9 +23,9 @@ Require-Bundle: org.eclipse.xtext;bundle-version="[2.4.0,2.4.1)";visibility:=ree
  org.eclipse.core.resources,
  org.apache.commons.io;bundle-version="2.4.0",
  org.eclipse.core.runtime;bundle-version="3.8.0"
-Export-Package: eu.ddmore.converter.mdlprinting, 
- eu.ddmore.converter.mdl2nonmem, 
- eu.ddmore.converter.mdl2pharmml,  
+Export-Package: eu.ddmore.converter.mdl2nonmem,
+ eu.ddmore.converter.mdl2pharmml,
+ eu.ddmore.converter.mdlprinting,
  eu.ddmore.mdl.generator,
  org.ddmore.mdl,
  org.ddmore.mdl.formatting,
@@ -38,5 +38,6 @@ Export-Package: eu.ddmore.converter.mdlprinting,
  org.ddmore.mdl.scoping,
  org.ddmore.mdl.serializer,
  org.ddmore.mdl.services,
+ org.ddmore.mdl.types,
  org.ddmore.mdl.validation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

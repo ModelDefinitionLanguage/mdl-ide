@@ -36,6 +36,7 @@ import org.ddmore.mdl.mdl.impl.BlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.ExecuteTaskImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
+import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
@@ -87,7 +88,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String funct_error_exit = "errorexit";
 			
 	//List of recognized MDL functions
-	final static List<String> specialFunctions = Arrays.asList("seq", "update", "runif", "errorexit", "PHI");
+	final static List<String> specialFunctions = Arrays.asList("seq", "update", "errorexit", "PHI");
 	//List of declared function names per object
 	static HashMap<String, ArrayList<String>> externalFunctions = new HashMap<String, ArrayList<String>>();
 	//List of declared function names per object
@@ -95,15 +96,15 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//Task object
-	final public static Attribute attr_task_command = new Attribute("command", DataType.TYPE_STRING, true);
-	final public static Attribute attr_task_target = new Attribute("target", DataType.TYPE_OBJ_REF, true);
-	final public static Attribute attr_task_model = new Attribute("model", DataType.TYPE_OBJ_REF, true);
-	final public static Attribute attr_task_parameter = new Attribute("parameter", DataType.TYPE_OBJ_REF, true);
-	final public static Attribute attr_task_data = new Attribute("data", DataType.TYPE_OBJ_REF, true);
-	final public static Attribute attr_task_algo = new Attribute("algo", DataType.TYPE_OBJ_REF, false);
-	final public static Attribute attr_task_max = new Attribute("max", DataType.TYPE_OBJ_REF, false);
-	final public static Attribute attr_task_sig = new Attribute("sig", DataType.TYPE_OBJ_REF, false);
-	final public static Attribute attr_task_cov = new Attribute("cov", DataType.TYPE_OBJ_REF, false);
+	final public static Attribute attr_task_command = new Attribute("command", MdlDataType.TYPE_STRING, true);
+	final public static Attribute attr_task_target = new Attribute("target", MdlDataType.TYPE_OBJ_REF, true);
+	final public static Attribute attr_task_model = new Attribute("model", MdlDataType.TYPE_OBJ_REF, true);
+	final public static Attribute attr_task_parameter = new Attribute("parameter", MdlDataType.TYPE_OBJ_REF, true);
+	final public static Attribute attr_task_data = new Attribute("data", MdlDataType.TYPE_OBJ_REF, true);
+	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_OBJ_REF, false);
+	final public static Attribute attr_task_max = new Attribute("max", MdlDataType.TYPE_OBJ_REF, false);
+	final public static Attribute attr_task_sig = new Attribute("sig", MdlDataType.TYPE_OBJ_REF, false);
+	final public static Attribute attr_task_cov = new Attribute("cov", MdlDataType.TYPE_OBJ_REF, false);
 		
 	final public static List<Attribute> attrs_task = Arrays.asList(
 			attr_task_target, attr_task_model, attr_task_parameter, attr_task_data, 
@@ -116,10 +117,10 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	//TODO
 	//Validate named attributes of special functions, e.g., for "seq"
 	//Standard functions
-	final static Attribute attr_seq_start = new Attribute("start", DataType.TYPE_REAL, true);
-	final static Attribute attr_seq_stepSize = new Attribute("stepSize", DataType.TYPE_REAL, true);
-	final static Attribute attr_seq_end = new Attribute("end", DataType.TYPE_REAL, false);
-	final static Attribute attr_seq_repetition = new Attribute("repetition", DataType.TYPE_REAL, false);
+	final static Attribute attr_seq_start = new Attribute("start", MdlDataType.TYPE_REAL, true);
+	final static Attribute attr_seq_stepSize = new Attribute("stepSize", MdlDataType.TYPE_REAL, true);
+	final static Attribute attr_seq_end = new Attribute("end", MdlDataType.TYPE_REAL, false);
+	final static Attribute attr_seq_repetition = new Attribute("repetition", MdlDataType.TYPE_REAL, false);
 	
 	final static List<Attribute> attrs_seq = Arrays.asList(attr_seq_start, attr_seq_stepSize, attr_seq_end, attr_seq_repetition);
 	

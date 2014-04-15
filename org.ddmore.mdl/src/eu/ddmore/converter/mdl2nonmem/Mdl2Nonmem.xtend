@@ -49,7 +49,7 @@ import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.MdlJavaValidator
 import org.ddmore.mdl.validation.FunctionValidator
-import org.ddmore.mdl.validation.DataType
+import org.ddmore.mdl.types.VariabilityType
 
 class Mdl2Nonmem extends MdlPrinter{
 	
@@ -1353,10 +1353,10 @@ class Mdl2Nonmem extends MdlPrinter{
 			if (v.expression.list != null){
 				var type = v.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
 				var res = "";
-				if (type.equals(DataType::CC_CONTINUOUS)){
+				if (type.equals(VariabilityType::CC_CONTINUOUS)){
 					res = "F_FLAG = 0\n" 
 				}	
-				if (type.equals(DataType::CC_LIKELIHOOD)){
+				if (type.equals(VariabilityType::CC_LIKELIHOOD)){
 					res = "F_FLAG = 1\n"	
 				}		
 				//substitute variable name with Y
@@ -1373,9 +1373,9 @@ class Mdl2Nonmem extends MdlPrinter{
 	override toStr(List l){		
 		var type = l.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
 		var res = "";
-		if (type.equals(DataType::CC_LIKELIHOOD)){
+		if (type.equals(VariabilityType::CC_LIKELIHOOD)){
 			res = l.arguments.getAttribute(AttributeValidator::attr_likelihood.name);
-		} else if (type.equals(DataType::CC_CONTINUOUS)){
+		} else if (type.equals(VariabilityType::CC_CONTINUOUS)){
 			var ruv = l.arguments.getAttribute(AttributeValidator::attr_ruv.name);
 			var prediction = l.arguments.getAttribute(AttributeValidator::attr_prediction.name)
 			res = prediction + ruv

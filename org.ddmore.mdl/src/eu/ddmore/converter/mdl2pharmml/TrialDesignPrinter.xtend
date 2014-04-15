@@ -5,7 +5,7 @@ import org.ddmore.mdl.mdl.SymbolModification
 import org.ddmore.mdl.mdl.Mcl
 import java.util.ArrayList
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.validation.DataType
+import org.ddmore.mdl.types.UseType
 
 class TrialDesignPrinter extends DataSetPrinter {
 	/////////////////////////////////////////////////////////////////////////
@@ -194,9 +194,9 @@ class TrialDesignPrinter extends DataSetPrinter {
 								if (s.expression.list != null){
 									var use = getAttribute(s.expression.list.arguments, AttributeValidator::attr_use.name);
 									if (use.length > 0){
-										if (use.equals(DataType::USE_ID)) 
+										if (use.equals(UseType::USE_ID)) 
 											mappings = mappings + "IndividualMapping".print_design_Mapping(s.symbolName.name);
-										if (use.equals(DataType::USE_AMT))	
+										if (use.equals(UseType::USE_AMT))	
 											mappings = mappings + "ArmMapping".print_design_Mapping(s.symbolName.name);
 										//...	
                 					}

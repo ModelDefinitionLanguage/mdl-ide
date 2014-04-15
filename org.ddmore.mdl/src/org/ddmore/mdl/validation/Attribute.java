@@ -6,20 +6,22 @@
  */
 package org.ddmore.mdl.validation;
 
+import org.ddmore.mdl.types.MdlDataType;
+
 public class Attribute {
 
 	String name = "undefined";
-	DataType type = DataType.TYPE_UNDEFINED;
+	MdlDataType type = MdlDataType.TYPE_UNDEFINED;
 	Boolean mandatory = false;
 	String defaultValue = "";
 	
-	public Attribute(String name, DataType type, Boolean mandatory){
+	public Attribute(String name, MdlDataType type, Boolean mandatory){
 		this.name = name;
 		this.type = type;
 		this.mandatory = mandatory;
 	}	
 	
-	public Attribute(String name, DataType type, Boolean mandatory, String defaultValue){
+	public Attribute(String name, MdlDataType type, Boolean mandatory, String defaultValue){
 		this(name, type, mandatory);
 		this.defaultValue = defaultValue;
 	}	
@@ -28,7 +30,7 @@ public class Attribute {
 		return name;
 	}
 	
-	public DataType getType(){
+	public MdlDataType getType(){
 		return type;
 	}
 

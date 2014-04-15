@@ -11,7 +11,7 @@ import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.validation.DataType
+import org.ddmore.mdl.types.UseType
 
 class ReferenceResolver{
 	val Mcl mcl;
@@ -144,7 +144,7 @@ class ReferenceResolver{
 					if (s.expression != null){
 						if (s.expression.list != null){
 							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-							if (use.equals(DataType::USE_IDV) && !independentVars.contains(s.symbolName.name)) 
+							if (use.equals(UseType::USE_IDV) && !independentVars.contains(s.symbolName.name)) 
 								independentVars.add(s.symbolName.name);
 						}
 					}
@@ -163,7 +163,7 @@ class ReferenceResolver{
 					if (s.expression != null){
 						if (s.expression.list != null){
 							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-							if (use.equals(DataType::USE_COVARIATE)) {
+							if (use.equals(UseType::USE_COVARIATE)) {
 								if (!covariateVars.contains(s.symbolName.name))
 									covariateVars.add(s.symbolName.name);
 							}

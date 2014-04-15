@@ -10,7 +10,7 @@ import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.ConditionalStatement
 import java.util.HashMap
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.validation.DataType
+import org.ddmore.mdl.types.RandomEffectType
 
 class Mdl2PharmML{
 	extension Constants dataType = new Constants();
@@ -95,7 +95,7 @@ class Mdl2PharmML{
 				if (errorVars != null){
 					model = model + 
 					'''
-						<VariabilityModel blkId="vm_err.«o.objectName.name»" type = "error">
+						<VariabilityModel blkId="vm_err.«o.objectName.name»" type = "«VAR_TYPE_ERROR»">
 							«FOR s: errorVars»
 								<Level symbId="«s»"/>
 							«ENDFOR»
@@ -107,7 +107,7 @@ class Mdl2PharmML{
 				if (mdlVars != null){
 					model = model + 
 					'''
-						<VariabilityModel blkId="vm_mdl.«o.objectName.name»" type = "model">
+						<VariabilityModel blkId="vm_mdl.«o.objectName.name»" type = "VAR_TYPE_PARAMETER">
 							«FOR s: mdlVars»
 								<Level symbId="«s»"/>
 							«ENDFOR»
@@ -516,12 +516,12 @@ class Mdl2PharmML{
 							}
 							if (c.matrixBlock != null){
 								val type = mathPrinter.getAttribute(c.matrixBlock.arguments, AttributeValidator::attr_re_type.name);
-								if (type.equals(DataType::RANDOM_EFFECT_SD)){
+								if (type.equals(RandomEffectType::RE_SD)){
 									print_mdef_CollerationModel_CorrelationCoefficient(
 										o.objectName.name, c.matrixBlock.parameters
 									);
 								}
-								if (type.equals(DataType::RANDOM_EFFECT_VAR)){
+								if (type.equals(RandomEffectType::RE_VAR)){
 									print_mdef_CollerationModel_Covariance(
 										o.objectName.name, c.matrixBlock.parameters
 									);									

@@ -9,13 +9,14 @@ import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.validation.MdlJavaValidator
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.FunctionValidator
-import org.ddmore.mdl.validation.DataType
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	
 	new(Mcl mcl, MathPrinter mathPrinter, ReferenceResolver resolver){
 		super(mcl, mathPrinter, resolver);
 	}	
+	
+	val FORMAT_NONMEM = "NONMEM";
 	
 	////////////////////////////////////////////////
 	// III Modelling Steps
@@ -212,7 +213,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 						if (s.variable.expression != null){
 							if (s.variable.expression.list != null){
 								val inputFormat = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_inputformat.name);
-								if (inputFormat.equals(DataType::FORMAT_NONMEM)){
+								if (inputFormat.equals(FORMAT_NONMEM)){
 									res  = res + print_NONMEM_DataSet(dObjName, mObjName);
 								}
 								val source = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_req_source.name);

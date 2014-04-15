@@ -26,5 +26,7 @@ class Constants {
 	public val OPERATION_ESTIMATE = "estim";	
 	public val OPERATION_SIMULATE = "simul";
 	
-		
+	public val VAR_TYPE_PARAMETER = "variabilityParameter";
+	public val VAR_TYPE_ERROR = "residualError";
+
 }

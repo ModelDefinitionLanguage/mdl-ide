@@ -413,10 +413,17 @@ RandomVariable:
 EnumType:
 	categorical = Categorical | 
 	continuous = Continuous | 
-	use = UseType |       
 	likelihood = Likelihood |
+	use = UseType |       
 	target = TargetLanguage |
-	variability = VariabilityType
+	variability = VariabilityType |
+	interpolation = InterpolationType 
+;
+
+InterpolationType:
+	identifier = (
+		'constant' | 'linear' | 'nearest' | 'spline' | 'pchip' | 'cubic'
+	)
 ;
 
 Likelihood:
@@ -466,35 +473,44 @@ Continuous:
 ;
 
 Distribution: 
-	identifier = ('Bernoulli' |
-	'Beta' |
-	'Binomial' |
-	'Categorical' | 
-	'Cauchy' | 	
-	'ChiSquare' |
-	'Dirichlet' | 	
-	'Exponential' | 	
-	'FDistribution' |
-	'Gamma' | 
-	'Geometric' | 
-	'Hypergeometric' |
-	'InverseGamma' |	
-	'Laplace' |	
-	'Logistic' |
-	'LogNormal'	|
-	'MixtureModel' | 	
-	'Multinomial' |
-	'MultivariateNormal' | 	
-	'MultivariateStudentT' | 	
-	'NegativeBinomial' |
-	'Normal' |
-	'NormalInverseGamma' |
-	'Pareto' |
-	'Poisson' |
-	'StudentT' |
-	'Uniform' |
-	'Weibull' |
-	'Wishart')
+	identifier = ('bernoulli' |
+	'beta' |
+	'binomial' |
+	'categorical' | 
+	'cauchy' | 	
+	'chiSquare' |
+	'dirichlet' | 	
+	'exponential' | 	
+	'fDistribution' |
+	'gamma' | 
+	'geometric' | 
+	'hypergeometric' |
+	'inverseGamma' |	
+	'laplace' |	
+	'logistic' |
+	'logNormal'	|
+	'multinomial' |
+	'multivariateNormal' | 	
+	'multivariateStudentT' | 	
+	'negativeBinomial' |
+	'normal' |
+	'normalInverseGamma' |
+	'pareto' |
+	'poisson' |
+	'runif' |
+	'studentT' |
+	'uniform' |
+	'weibull' |
+	'wishart' |
+	//mixtute models: mixtureModel left for compatibility
+	'mixtureModel' |  	
+	'discreteUnivariateMixtureModel' |
+    'discreteMultivariateMixtureModel' |
+    'categoricalUnivariateMixtureModel' |
+	'categoricalMultivariateMixtureModel' |
+	'continuousMultivariateMixtureModel' |
+	'continuousUnivariateMixtureModel'
+	)
 ;
 
 AnyExpression:

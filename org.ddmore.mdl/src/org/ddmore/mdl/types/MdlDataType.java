@@ -4,10 +4,7 @@
  * 
  * MDL type checking
  */
-package org.ddmore.mdl.validation;
-
-import java.util.Arrays;
-import java.util.List;
+package org.ddmore.mdl.types;
 
 import org.ddmore.mdl.generator.MathPrinter;
 import org.ddmore.mdl.mdl.AndExpression;
@@ -23,42 +20,34 @@ import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.Vector;
 
-public enum DataType {
+public enum MdlDataType {
 
     TYPE_UNDEFINED,
     //Basic
     TYPE_STRING, TYPE_INT, TYPE_REAL, TYPE_BOOLEAN,
-    //PharmML basic
+    //Restrictions of basic (to comply with PharmML)
     TYPE_NAT,TYPE_PNAT, TYPE_PREAL, TYPE_PROBABILITY,
     //Numeric vectors
     TYPE_VECTOR_INTEGER, TYPE_VECTOR_REAL, TYPE_VECTOR_BOOLEAN,
-    //TYPE_VECTOR_UNDEFINED, //TYPE_VECTOR_STRING,
-    //PharmML vectors
+    //Restricted vectors
     TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL,TYPE_VECTOR_PROBABILITY,
-    //Validation of attribute values
-	TYPE_REF, TYPE_EXPR, TYPE_OBJ_REF,
-	//Composite/nested attributes
+    //References to variables and objects, mathematical expressions
+	TYPE_REF, TYPE_OBJ_REF, TYPE_EXPR, 
+	//Nested lists
 	TYPE_LIST, TYPE_ODE, TYPE_RANDOM_LIST, TYPE_DISTRIBUTION,
-	//Enums
-	TYPE_USE,     //Check grammar for UseType
-	TYPE_CC,      //continuous vs. categorical vs. LIKELIHOOD
-	TYPE_TARGET,  //Check grammar for TargetLanguage 
-	//Restricted strings (why are they not enumerations?)
-	//TYPE_LIKELIHOOD,
-	TYPE_IDV,   //idv in DESIGN block (e.g., "linear")
-	TYPE_RANDOM_EFFECT; //Random effects {var, sd} 
-	
-	//Check that double value is not passed to an attribute where integer is expected 
-	static boolean isIntegerValue(Number value){
-		if (value.doubleValue() == value.intValue()) return true;
-		return false;
-	}
+	//Enumerations
+	TYPE_USE,           //UseType
+	TYPE_CC,            //VaiabilityType: {continuous, categorical, LIKELIHOOD}
+	TYPE_TARGET,        //TargetLanguageType 
+	TYPE_INTERP,        //InterpolationType: {constant, linear, nearest, spline, pchip, cubic}
+	TYPE_RANDOM_EFFECT; //RandomEffectType: {var, sd} 
 	
 	//Validates required type or reference
-	static boolean validateType(DataType type, DistributionArgument arg){
+	static public boolean validateType(MdlDataType type, DistributionArgument arg){
 		if (arg.getValue() != null){
 			Primary p = arg.getValue();
 			switch(type){
+				case TYPE_UNDEFINED: return true;
 				case TYPE_INT:  return (p.getNumber() != null)? isInteger(p.getNumber()): (p.getSymbol() != null);   
 				case TYPE_REAL: return (p.getNumber() != null)? isReal(p.getNumber()): (p.getSymbol() != null);     
 				case TYPE_NAT:   return (p.getNumber() != null)? isNatural(p.getNumber()): (p.getSymbol() != null);  
@@ -76,46 +65,46 @@ public enum DataType {
 			}
 		}
 		if (arg.getDistribution() != null){
-			if (type.equals(DataType.TYPE_DISTRIBUTION)) return true;
+			if (type.equals(MdlDataType.TYPE_DISTRIBUTION)) return true;
 		}
 		if (arg.getComponent() != null){
-			if (type.equals(DataType.TYPE_RANDOM_LIST)) return true;
+			if (type.equals(MdlDataType.TYPE_RANDOM_LIST)) return true;
 		}
 		return false;
 	}
 	
-	static boolean validateType(DataType type, AnyExpression expr){
+	static public boolean validateType(MdlDataType type, AnyExpression expr){
 		switch(type){
-		case TYPE_STRING: return (expr.getExpression() != null)? isString(expr.getExpression()): false;
-		case TYPE_INT:  return (expr.getExpression() != null)? isInteger(expr.getExpression()): false;   
-		case TYPE_REAL: return (expr.getExpression() != null)? isReal(expr.getExpression()): false;     
-		case TYPE_BOOLEAN: return (expr.getExpression() != null)? isBoolean(expr.getExpression()): false;
-		case TYPE_NAT:   return (expr.getExpression() != null)? isNatural(expr.getExpression()): false;  
-		case TYPE_PNAT:  return (expr.getExpression() != null)? isPositiveNatural(expr.getExpression()): false;  
-		case TYPE_PREAL: return (expr.getExpression() != null)? isPositiveReal(expr.getExpression()): false; 
-		case TYPE_PROBABILITY:  return (expr.getExpression() != null)? isProbability(expr.getExpression()): false;
-		case TYPE_VECTOR_INTEGER: return (expr.getVector() != null)? isVectorInteger(expr.getVector()): false;
-		case TYPE_VECTOR_REAL: return (expr.getVector() != null)? isVectorReal(expr.getVector()): false;
-		case TYPE_VECTOR_NAT: return (expr.getVector() != null)? isVectorNat(expr.getVector()): false;
-		case TYPE_VECTOR_PNAT: return (expr.getVector() != null)? isVectorPNat(expr.getVector()): false;
-		case TYPE_VECTOR_PREAL: return (expr.getVector() != null)? isVectorPReal(expr.getVector()): false;
-		case TYPE_VECTOR_PROBABILITY: return (expr.getVector() != null)? isVectorProbability(expr.getVector()): false;
-		case TYPE_REF: return (expr.getExpression() != null)? isReference(expr.getExpression()): false;  
-		case TYPE_EXPR: return (expr.getExpression() != null)? true: false;  
-		case TYPE_LIST: return (expr.getList() != null)? true: false;  
-		case TYPE_ODE: return (expr.getOdeList() != null)? true: false;
-		case TYPE_USE: return (expr.getType() != null)? isUseType(expr.getType()): false;
-		case TYPE_CC: return (expr.getType() != null)? isCCType(expr.getType()): false;
-		case TYPE_TARGET: return (expr.getType() != null)? isTargetType(expr.getType()): false;
-		case TYPE_IDV: return (expr.getExpression() != null)? isIdv(expr.getExpression()): false;
-		case TYPE_RANDOM_EFFECT: return (expr.getType() != null)? isRandomEffect(expr.getType()): false;
-		default:	return false; 
+			case TYPE_UNDEFINED: return true;
+			case TYPE_STRING: return (expr.getExpression() != null)? isString(expr.getExpression()): false;
+			case TYPE_INT:  return (expr.getExpression() != null)? isInteger(expr.getExpression()): false;   
+			case TYPE_REAL: return (expr.getExpression() != null)? isReal(expr.getExpression()): false;     
+			case TYPE_BOOLEAN: return (expr.getExpression() != null)? isBoolean(expr.getExpression()): false;
+			case TYPE_NAT:   return (expr.getExpression() != null)? isNatural(expr.getExpression()): false;  
+			case TYPE_PNAT:  return (expr.getExpression() != null)? isPositiveNatural(expr.getExpression()): false;  
+			case TYPE_PREAL: return (expr.getExpression() != null)? isPositiveReal(expr.getExpression()): false; 
+			case TYPE_PROBABILITY:  return (expr.getExpression() != null)? isProbability(expr.getExpression()): false;
+			case TYPE_VECTOR_INTEGER: return (expr.getVector() != null)? isVectorInteger(expr.getVector()): false;
+			case TYPE_VECTOR_REAL: return (expr.getVector() != null)? isVectorReal(expr.getVector()): false;
+			case TYPE_VECTOR_NAT: return (expr.getVector() != null)? isVectorNat(expr.getVector()): false;
+			case TYPE_VECTOR_PNAT: return (expr.getVector() != null)? isVectorPNat(expr.getVector()): false;
+			case TYPE_VECTOR_PREAL: return (expr.getVector() != null)? isVectorPReal(expr.getVector()): false;
+			case TYPE_VECTOR_PROBABILITY: return (expr.getVector() != null)? isVectorProbability(expr.getVector()): false;
+			case TYPE_REF: return (expr.getExpression() != null)? isReference(expr.getExpression()): false;  
+			case TYPE_EXPR: return (expr.getExpression() != null)? true: false;  
+			case TYPE_LIST: return (expr.getList() != null)? true: false;  
+			case TYPE_ODE: return (expr.getOdeList() != null)? true: false;
+			case TYPE_USE: return (expr.getType() != null)? isUseType(expr.getType()): false;
+			case TYPE_CC: return (expr.getType() != null)? isCCType(expr.getType()): false;
+			case TYPE_TARGET: return (expr.getType() != null)? isTargetType(expr.getType()): false;
+			case TYPE_INTERP: return (expr.getType() != null)? isInterp(expr.getType()): false;
+			case TYPE_RANDOM_EFFECT: return (expr.getType() != null)? isRandomEffect(expr.getType()): false;
+			default:	return false; 
 		}
 	}
 
-	private static boolean isIdv(Expression expr) {
-		String value = MathPrinter.toStr(expr);
-		if (value.equalsIgnoreCase("linear")) return true;
+	private static boolean isInterp(EnumType type) {
+		if (type.getInterpolation() != null ) return true;
 		return false;
 	}
 
@@ -447,56 +436,5 @@ public enum DataType {
 			}
 		}
 		return false;	
-	}
-	
-	public final static String RANDOM_EFFECT_SD = "sd";
-	public final static String RANDOM_EFFECT_VAR = "var";
-	
-	public final static String FORMAT_NONMEM = "NMTRAN_CODE";	
-	
-	public final static String CC_CONTINUOUS = "continuous";
-	public final static String CC_CATEGORICAL = "categorical";
-	public final static String CC_LIKELIHOOD = "likelihood";
-	public final static List<String> CC_VALUES = Arrays.asList(CC_CONTINUOUS, CC_CATEGORICAL, CC_LIKELIHOOD);
-
-	public final static String USE_ID = "id";
-	public final static String USE_AMT  = "amt";
-	public final static String USE_DVID = "dvid";
-	public final static String USE_IDV  = "idv";
-	public final static String USE_DV  = "dv";
-	public final static String USE_YTYPE  = "ytype";
-	public final static String USE_ITYPE  = "itype";
-	public final static String USE_COVARIATE = "covariate";	
-	public final static String USE_REG = "reg";	
-	public final static String USE_TIME = "time";	
-	public final static String USE_DOSE = "dose";	
-	public final static String USE_CAT = "cat";
-	public final static String USE_OCC = "occ";
-	public final static String USE_OCCASION = "occasion"; 
-	public final static String USE_ADM = "adm"; 
-	public final static String USE_CENS = "cens"; 
-	public final static String USE_LIMIT = "limit"; 
-	public final static String USE_RATE = "rate"; 
-	public final static String USE_TINF = "tinf"; 
-	public final static String USE_SS = "ss"; 
-	public final static String USE_ADDL = "addl";
-	public final static String USE_II = "ii"; 
-	public final static String USE_TAU = "tau"; 
-	public final static String USE_MDV = "mdv"; 
-	public final static String USE_EVID = "evid"; 
-	public final static String USE_CMT = "cmt";
-
-	public final static List<String> USE_VALUES = 
-		Arrays.asList(USE_ID, USE_IDV, USE_AMT, USE_DV, USE_DVID, USE_YTYPE, USE_ITYPE, 
-			USE_COVARIATE, USE_REG, USE_TIME, USE_DOSE, 
-			USE_CAT, USE_OCC, USE_OCCASION, USE_ADM, USE_CENS, USE_LIMIT, 
-			USE_RATE, USE_TINF, USE_SS, USE_ADDL, USE_II, USE_TAU, USE_MDV, USE_EVID, USE_CMT);
-
-
-	public final static String defaultTarget = "NMTRAN_CODE";
-	public final static String defaultVarName = "${varName}";
-	public final static String defaultFileName = "${fileName}";
-	public final static String defaultUseVar   = USE_ID;
-	public final static String defaultTypeValue = CC_CONTINUOUS;
-
+	}	
 }
