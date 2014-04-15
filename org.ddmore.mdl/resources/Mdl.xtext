@@ -473,7 +473,7 @@ Continuous:
 
 Distribution: 
 	identifier = ('bernoulli' |
-	'beta' |
+	'betaDistribution' |
 	'binomial' |
 	'categorical' | 
 	'cauchy' | 	

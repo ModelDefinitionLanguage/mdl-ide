@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DistributionType {
 	public static final String bernoulli = "bernoulli";
-	public static final String beta = "beta";
+	public static final String beta = "betaDistribution";
 	public static final String binomial = "binomial";
 	public static final String categorical = "categorical"; 
 	public static final String cauchy = "cauchy"; 	

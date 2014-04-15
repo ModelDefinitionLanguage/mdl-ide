@@ -224,7 +224,7 @@ class DistributionPrinter extends MdlPrinter{
 		}
 		'''
 		«var tagName = type.substring(0, 1).toUpperCase() + type.substring(1)»
-		«if (type.equals(DistributionType::fDistribution)) tagName = "F"»	
+		«if (tagName.contains("Distribution")) tagName = tagName.substring(0, tagName.indexOf("Distribution"))»	
 		<«tagName»Distribution xmlns="«xmlns_uncert»" definition="«type.getURLExtension»">
 			«FOR arg: randomList.arguments.arguments»
 				«IF arg.argumentName != null»
