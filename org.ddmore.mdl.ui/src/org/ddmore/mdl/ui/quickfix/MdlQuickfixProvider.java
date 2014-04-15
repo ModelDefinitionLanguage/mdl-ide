@@ -84,12 +84,13 @@ import org.ddmore.mdl.mdl.impl.SymbolModificationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
+import org.ddmore.mdl.types.MdlDataType;
+import org.ddmore.mdl.types.VariableType;
 import org.ddmore.mdl.validation.Attribute;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.DistributionValidator;
 import org.ddmore.mdl.validation.MdlJavaValidator;
 import org.ddmore.mdl.validation.FunctionValidator;
-import org.ddmore.mdl.validation.DataType;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -206,7 +207,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
     //Automatically create EObjects
     //////////////////////////////////////////////////////////////////////////////////////////////////////////    
 	AnyExpression createTypedExpression(Attribute attribute){
-		DataType type = attribute.getType();
+		MdlDataType type = attribute.getType();
 		String value = attribute.getDefaultValue();
 		switch (type){
 			case TYPE_PREAL:
@@ -216,10 +217,10 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			case TYPE_BOOLEAN: return createBooleanExpression(value);
 			case TYPE_TARGET: return createTargetLanguageExpression(value);
 			case TYPE_CC: 
-				if (value.equals(DataType.CC_CONTINUOUS)) {
+				if (value.equals(VariableType.CC_CONTINUOUS)) {
 					return createContinuousExpression(value);
 				} else {
-					if (value.equals(DataType.CC_CATEGORICAL)){
+					if (value.equals(VariableType.CC_CATEGORICAL)){
 						return createCategoricalExpression(value);
 					} else {//LIKELIHOOD
 						return createLikelihoodExpression(value);
@@ -1044,7 +1045,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		while(argIterator.hasNext()){
 	    	Argument x = argIterator.next(); 	
 	    	String attrName = (x.getArgumentName() != null)? x.getArgumentName().getName(): "unnamedParam" + k++;
-	    	Attribute attribute = new Attribute(attrName, DataType.TYPE_STRING, false, "");
+	    	Attribute attribute = new Attribute(attrName, MdlDataType.TYPE_STRING, false, "");
 	    	Argument attr = createArgument(attribute);
     		paramListArgs.getArguments().add(attr);
 	    }

@@ -95,8 +95,8 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_cov = new Attribute("cov", MdlDataType.TYPE_VECTOR_REAL, true);
 
 	public final static Attribute attr_mean = new Attribute("mean", MdlDataType.TYPE_REAL, true, "0");
-	public final static Attribute attr_variance = new Attribute("variance", MdlDataType.TYPE_PREAL, true, "0");
-	public final static Attribute attr_stddev = new Attribute("stddev", MdlDataType.TYPE_PREAL, true);
+	public final static Attribute attr_variance = new Attribute("var", MdlDataType.TYPE_PREAL, true, "0");
+	public final static Attribute attr_stddev = new Attribute("sd", MdlDataType.TYPE_PREAL, true);
 
 	public final static Attribute attr_varianceScaling = new Attribute("varianceScaling", MdlDataType.TYPE_PREAL, true);
 
@@ -259,7 +259,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_min,
 					attr_max,
 					attr_numberOfClasses));
-			put(DistributionType.runif, Arrays.asList(
+			put(DistributionType.unif, Arrays.asList(
 					attr_min,
 					attr_max,
 					attr_numberOfClasses));
@@ -339,9 +339,9 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			put(DistributionType.uniform + ":" + attr_min.name, attr_numberOfClasses.name); 
 			put(DistributionType.uniform + ":" +attr_max.name, attr_numberOfClasses.name);
 			
-			put(DistributionType.runif + ":" + attr_numberOfClasses.name, attr_min.name); 
-			put(DistributionType.runif + ":" + attr_min.name, attr_numberOfClasses.name); 
-			put(DistributionType.runif + ":" +attr_max.name, attr_numberOfClasses.name);
+			put(DistributionType.unif + ":" + attr_numberOfClasses.name, attr_min.name); 
+			put(DistributionType.unif + ":" + attr_min.name, attr_numberOfClasses.name); 
+			put(DistributionType.unif + ":" +attr_max.name, attr_numberOfClasses.name);
 		}
 	};
 	
@@ -360,22 +360,20 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	@Check
 	public void checkRequiredArguments(DistributionArguments args){
 		DistributionArgument type = findDistributionAttribute(args, attr_type.name);
-		if (type != null){
+		if ((type != null) && (DistributionType.DISTR_VALUES.contains(type.getDistribution().getIdentifier()))){
 			String typeName = type.getDistribution().getIdentifier();
 			List<Attribute> recognized_attrs = distr_attrs.get(typeName);
-			if (recognized_attrs != null){
-				for (Attribute arg: recognized_attrs){
-					if (arg.mandatory){
-						DistributionArgument actualArg = findDistributionAttribute(args, arg.name);
-						if (actualArg == null){
-							//System.out.println("Looking for synonyms: " +);
-							String synonym = alternative_attrs.get(type.getDistribution().getIdentifier() +":" + arg.name);
-							if (synonym != null) actualArg = findDistributionAttribute(args, synonym);
-							if (actualArg == null)
-								warning(MSG_DISTR_ATTRIBUTE_MISSING + ": " + arg.name, 
-										MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
-										MSG_DISTR_ATTRIBUTE_MISSING, typeName + ":" + arg.name);	
-						}
+			for (Attribute arg: recognized_attrs){
+				if (arg.mandatory){
+					DistributionArgument actualArg = findDistributionAttribute(args, arg.name);
+					if (actualArg == null){
+						//System.out.println("Looking for synonyms: " +);
+						String synonym = alternative_attrs.get(type.getDistribution().getIdentifier() +":" + arg.name);
+						if (synonym != null) actualArg = findDistributionAttribute(args, synonym);
+						if (actualArg == null)
+							warning(MSG_DISTR_ATTRIBUTE_MISSING + ": " + arg.name, 
+									MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
+									MSG_DISTR_ATTRIBUTE_MISSING, typeName + ":" + arg.name);	
 					}
 				}
 			}
@@ -413,13 +411,13 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	}
 	
 	private Boolean checkAttribute(List<Attribute> recognized_attrs, DistributionArgument argument){
-		for (Attribute arg: recognized_attrs){
-			if (arg.name.equals(argument.getArgumentName().getName())) {
-				boolean isValid = MdlDataType.validateType(arg.type, argument);
+		for (Attribute attr: recognized_attrs){
+			if (attr.name.equals(argument.getArgumentName().getName())) {
+				boolean isValid = MdlDataType.validateType(attr.type, argument);
 				if (!isValid){
 					warning(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
 						": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
-							arg.type.name(), 
+							attr.type.name(), 
 						MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME,
 						MSG_DISTR_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());
 				}

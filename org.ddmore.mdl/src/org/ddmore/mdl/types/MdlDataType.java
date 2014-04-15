@@ -104,17 +104,20 @@ public enum MdlDataType {
 	}
 
 	private static boolean isInterp(EnumType type) {
-		if (type.getInterpolation() != null ) return true;
+		if ((type.getInterpolation() != null) && 
+			(InterpolationType.INTERP_VALUES.contains(type.getInterpolation().getIdentifier()))) return true;
 		return false;
 	}
 
 	private static boolean isRandomEffect(EnumType type) {
-		if (type.getVariability() != null) return true;
+		if ((type.getVariability() != null) && (
+			UseType.USE_VALUES.contains(type.getVariability().getIdentifier()))) return true;
 		return false;
 	}
 
 	private static boolean isTargetType(EnumType type) {
-		if (type.getTarget() != null) return true;
+		if ((type.getTarget() != null && 
+				(TargetCodeType.TARGET_VALUES.contains(type.getTarget().getIdentifier())))) return true;
 		return false;
 	}
 

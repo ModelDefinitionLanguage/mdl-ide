@@ -161,6 +161,10 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_min.name  -> new Attribute("minimum", rVal), 
 			DistributionValidator::attr_max.name  -> new Attribute("maximum", rVal), 
 			DistributionValidator::attr_numberOfClasses.name  -> new Attribute("numberOfClasses", nVal)),
+		DistributionType::unif -> newHashMap(
+			DistributionValidator::attr_min.name  -> new Attribute("minimum", rVal), 
+			DistributionValidator::attr_max.name  -> new Attribute("maximum", rVal), 
+			DistributionValidator::attr_numberOfClasses.name  -> new Attribute("numberOfClasses", nVal)),
 		DistributionType::weibull -> newHashMap(
 			DistributionValidator::attr_lambda.name  -> new Attribute("scale", prVal), 
 			DistributionValidator::attr_kappa.name  -> new Attribute("shape", prVal), 

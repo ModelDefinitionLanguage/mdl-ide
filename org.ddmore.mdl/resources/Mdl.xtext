@@ -460,8 +460,7 @@ UseType:
 ;
 
 VariabilityType:
-	sd = 'sd' | 
-	var = 'var'
+	identifier = ('SD' | 'VAR')
 ;
 
 Categorical:
@@ -497,7 +496,7 @@ Distribution:
 	'normalInverseGamma' |
 	'pareto' |
 	'poisson' |
-	'runif' |
+	'unif' |
 	'studentT' |
 	'uniform' |
 	'weibull' |

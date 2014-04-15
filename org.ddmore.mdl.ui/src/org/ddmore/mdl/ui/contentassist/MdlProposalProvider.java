@@ -17,11 +17,12 @@ import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.OdeListImpl;
 import org.ddmore.mdl.mdl.impl.RandomListImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
+import org.ddmore.mdl.types.UseType;
+import org.ddmore.mdl.types.VariableType;
 import org.ddmore.mdl.ui.contentassist.AbstractMdlProposalProvider;
 import org.ddmore.mdl.ui.outline.Images;
 import org.ddmore.mdl.validation.Attribute;
 import org.ddmore.mdl.validation.AttributeValidator;
-import org.ddmore.mdl.validation.DataType;
 import org.ddmore.mdl.validation.DistributionValidator;
 import org.ddmore.mdl.validation.UnitValidator;
 import org.ddmore.mdl.validation.Utils;
@@ -82,14 +83,14 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_use.getName())){
 				//Check that block is correct too
 				ArrayList<String> attributes = new ArrayList<String>();
-				attributes.addAll(DataType.USE_VALUES);
+				attributes.addAll(UseType.USE_VALUES);
 				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
 				addProposals(context, acceptor, attributes, img);
 			}
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_cc_type.getName())){
 				//Check that block is correct too
 				ArrayList<String> attributes = new ArrayList<String>();
-				attributes.addAll(DataType.CC_VALUES);
+				attributes.addAll(VariableType.CC_VALUES);
 				Image img = imageHelper.getImage(Images.getPath(Images.CC_TYPE));				
 				addProposals(context, acceptor, attributes, img);
 			}
@@ -105,10 +106,6 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 	
 	@Override
 	public void completeDistributionArguments_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
-	
-	@Override
-	public void completeDistributionArgument_ArgumentName(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		//Distribution attributes
 		if (model instanceof RandomListImpl){
 			RandomList randomList = (RandomList)model;

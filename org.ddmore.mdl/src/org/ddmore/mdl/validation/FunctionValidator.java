@@ -88,7 +88,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String funct_error_exit = "errorexit";
 			
 	//List of recognized MDL functions
-	final static List<String> specialFunctions = Arrays.asList("seq", "update", "errorexit", "PHI");
+	final static List<String> specialFunctions = Arrays.asList("seq", "update", "runif", "errorexit", "PHI");
 	//List of declared function names per object
 	static HashMap<String, ArrayList<String>> externalFunctions = new HashMap<String, ArrayList<String>>();
 	//List of declared function names per object

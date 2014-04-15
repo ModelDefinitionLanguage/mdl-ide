@@ -1,5 +1,8 @@
 package org.ddmore.mdl.types;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class DistributionType {
 	public static final String bernoulli = "bernoulli";
 	public static final String beta = "beta";
@@ -25,9 +28,9 @@ public class DistributionType {
 	public static final String normalInverseGamma = "normalInverseGamma";
 	public static final String pareto = "pareto";
 	public static final String poisson = "poisson"; 
-	public static final String runif = "runif"; 
 	public static final String studentT = "studentT";
 	public static final String uniform = "uniform";
+	public static final String unif = "unif"; 
 	public static final String weibull = "weibull"; 
 	public static final String wishart = "wishart"; 
 	//mixtute models: mixtureModel left for compatibility
@@ -38,4 +41,44 @@ public class DistributionType {
 	public static final String categoricalMultivariateMixtureModel = "categoricalMultivariateMixtureModel"; 
 	public static final String continuousMultivariateMixtureModel = "continuousMultivariateMixtureModel"; 
 	public static final String continuousUnivariateMixtureModel = "continuousUnivariateMixtureModel";
+	
+	public final static List<String> DISTR_VALUES = Arrays.asList(
+			bernoulli ,
+			beta ,
+			binomial ,
+			categorical , 
+			cauchy , 	
+			chiSquare ,
+			dirichlet , 	
+			exponential , 	
+			fDistribution ,
+			gamma , 
+			geometric , 
+			hypergeometric ,
+			inverseGamma ,	
+			laplace ,	
+			logistic ,
+			logNormal	,
+			multinomial ,
+			multivariateNormal , 	
+			multivariateStudentT , 	
+			negativeBinomial ,
+			normal ,
+			normalInverseGamma ,
+			pareto ,
+			poisson ,
+			unif ,
+			studentT ,
+			uniform ,
+			weibull ,
+			wishart ,
+			//mixtute models: mixtureModel left for compatibility
+			mixtureModel ,  	
+			discreteUnivariateMixtureModel ,
+		    discreteMultivariateMixtureModel ,
+		    categoricalUnivariateMixtureModel ,
+			categoricalMultivariateMixtureModel ,
+			continuousMultivariateMixtureModel ,
+			continuousUnivariateMixtureModel
+			);
 }
