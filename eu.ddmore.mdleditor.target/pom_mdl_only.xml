@@ -5,7 +5,7 @@
 		<relativePath>../../MDLEditor/eu.ddmore.mdleditor.build/pom_mdl_only.xml</relativePath>
 	
 		<groupId>eu.ddmore</groupId>
-		<artifactId>eu-ddmore-parent-mdl-only</artifactId>
+		<artifactId>mdl-core-parent</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
