@@ -149,7 +149,7 @@ DataInputBlock:
 	identifier='SOURCE' 	
 	BEGIN 
 		source = ParameterDeclaration
-		inlineBlock ?= InlineBlock 
+		(inlineBlock = InlineBlock)? 
 	END
  ;
  

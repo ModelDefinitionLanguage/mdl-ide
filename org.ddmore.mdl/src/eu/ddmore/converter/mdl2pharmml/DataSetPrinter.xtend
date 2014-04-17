@@ -108,12 +108,12 @@ class DataSetPrinter {
 		return values;
 	}	
 	
-	def print_ds_ExternalSource(String oid, String fileName, String filePath, String format, String delimeter)'''				
+	def print_ds_ExternalSource(String oid, String fileName, String filePath, String format, String delimiter)'''				
 		<ds:ImportData oid="«oid»">
 			<ds:name>«fileName»</ds:name>
 			<ds:url>«filePath»</ds:url>
 			<ds:format>«format»</ds:format>
-			<ds:delimiter>«delimeter»</ds:delimiter>
+			<ds:delimiter>«delimiter»</ds:delimiter>
 		</ds:ImportData>
 			
 	'''	

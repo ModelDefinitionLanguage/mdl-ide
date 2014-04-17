@@ -60,7 +60,6 @@ import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolListImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.eclipse.emf.common.util.TreeIterator;

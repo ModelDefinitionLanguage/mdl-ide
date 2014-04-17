@@ -215,8 +215,8 @@ class ModellingStepsPrinter extends DataSetPrinter{
 							}
 							val file = data.list.arguments.getAttribute(AttributeValidator::attr_file.name);
 							if (file.length > 0){
-								var delimeter = data.list.arguments.getAttribute(AttributeValidator::attr_delimeter.name);
-								if (delimeter.length == 0) delimeter = AttributeValidator::attr_delimeter.defaultValue;
+								var delimeter = data.list.arguments.getAttribute(AttributeValidator::attr_delimiter.name);
+								if (delimeter.length == 0) delimeter = AttributeValidator::attr_delimiter.defaultValue;
 								res = res + print_ds_ExternalSource("ds." + dObjName, file, file, inputFormat, delimeter);
 							}
 					}

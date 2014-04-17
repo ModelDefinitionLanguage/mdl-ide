@@ -14,6 +14,7 @@ import java.util.List;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
@@ -103,12 +104,13 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_female = new Attribute("female", MdlDataType.TYPE_INT, false);
 	final public static Attribute attr_male = new Attribute("male", MdlDataType.TYPE_INT, false);
 	
-	/*FILE*/
+	/*SOURCE*/
 	final public static Attribute attr_ignore = new Attribute("ignore", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_inputformat = new Attribute("inputformat", MdlDataType.TYPE_INPUT_FORMAT, false, DefaultValues.INPUT_FORMAT);
-	final public static Attribute attr_delimeter = new Attribute("delimeter", MdlDataType.TYPE_STRING, false, ";");
-	final public static Attribute attr_file = new Attribute("file", MdlDataType.TYPE_STRING, false, DefaultValues.FILE_NAME);
-	final public static Attribute attr_script = new Attribute("script", MdlDataType.TYPE_STRING, false, DefaultValues.FILE_NAME);
+	final public static Attribute attr_inputformat = new Attribute("inputformat", MdlDataType.TYPE_INPUT_FORMAT, true, DefaultValues.INPUT_FORMAT);
+	final public static Attribute attr_delimiter = new Attribute("delimiter", MdlDataType.TYPE_STRING, false, ";");
+	final public static Attribute attr_header = new Attribute("header", MdlDataType.TYPE_BOOLEAN, false, "false");
+	final public static Attribute attr_file = new Attribute("file", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
+	final public static Attribute attr_script = new Attribute("script", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
 	
 	/*DESIGN*/
 	final public static Attribute attr_design_source = new Attribute("source", MdlDataType.TYPE_REF, true, DefaultValues.VAR_NAME);
@@ -130,7 +132,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*Data object*/
 	final public static List<Attribute> attrs_header = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
 			attr_recode, attr_boundaries, attr_missing, attr_mapping, attr_female, attr_male);
-	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, attr_delimeter, attr_file, attr_script);
+	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, 
+			attr_delimiter, attr_file, attr_script, attr_header);
 	final public static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp /*,attr_idv*/);
 
 	/*Parameter object*/
@@ -229,9 +232,17 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		}
 		//getRequiredAttributes contains lists of required attributes for each container
 		for (String attrName: Utils.getRequiredNames(getAllAttributes(container))){
-			if (!argumentNames.contains(attrName)) 
-				warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, 
-				MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attrName);
+			if (!argumentNames.contains(attrName)) {
+				if (!exclusive_attrs.containsKey(attrName) || !argumentNames.contains(exclusive_attrs.get(attrName))){
+					if (container instanceof SourceBlockImpl){
+						//Required attributes file and script are not needed if INLINE subblock is defined.
+						SourceBlock sourceBlock = (SourceBlock)container;
+						if (sourceBlock.getInlineBlock() != null) return;
+					}
+					warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, 
+					MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attrName);
+				}
+			}
 		}
 	}
 	
