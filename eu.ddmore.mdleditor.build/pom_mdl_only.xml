@@ -4,7 +4,7 @@
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.ddmore</groupId>
-	<artifactId>eu-ddmore-parent-mdl-only</artifactId>
+	<artifactId>mdl-core-parent</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
@@ -431,6 +431,6 @@
 
 
 	<url>http://ddmore.eu/</url>
-	<name>Drug Disease Model Resources Framework</name>
+	<name>Drug Disease Model Resources - MDL Core</name>
 	<description>The Drug Disease Model Resources (DDMoRe) consortium builds and maintains a universally applicable, open source, model based framework, intended as the gold standard for future collaborative drug and disease Modelling &amp; Simulation.</description>
 </project> 
