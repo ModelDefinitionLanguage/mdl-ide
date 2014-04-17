@@ -36,12 +36,14 @@ public enum MdlDataType {
 	//Nested lists
 	TYPE_LIST, TYPE_ODE, TYPE_RANDOM_LIST, TYPE_DISTRIBUTION,
 	//Enumerations
-	TYPE_USE,           //UseType
-	TYPE_CC,            //VaiabilityType: {continuous, categorical, LIKELIHOOD}
-	TYPE_TARGET,        //TargetLanguageType 
-	TYPE_INTERP,        //InterpolationType: {constant, linear, nearest, spline, pchip, cubic}
-	TYPE_RANDOM_EFFECT; //RandomEffectType: {var, sd} 
-	
+	TYPE_USE,           //{...}
+	TYPE_VAR_TYPE,      //{continuous, categorical, LIKELIHOOD}
+	TYPE_TARGET,        //{...}
+	TYPE_INTERP,        //{constant, linear, nearest, spline, pchip, cubic}
+	TYPE_RANDOM_EFFECT, //{var, sd} 
+	TYPE_INPUT_FORMAT   //{nonmemFormat, eventFormat}
+	;
+    
 	//Validates required type or reference
 	static public boolean validateType(MdlDataType type, DistributionArgument arg){
 		if (arg.getValue() != null){
@@ -95,14 +97,22 @@ public enum MdlDataType {
 			case TYPE_LIST: return (expr.getList() != null)? true: false;  
 			case TYPE_ODE: return (expr.getOdeList() != null)? true: false;
 			case TYPE_USE: return (expr.getType() != null)? isUseType(expr.getType()): false;
-			case TYPE_CC: return (expr.getType() != null)? isCCType(expr.getType()): false;
+			case TYPE_VAR_TYPE: return (expr.getType() != null)? isVarType(expr.getType()): false;
 			case TYPE_TARGET: return (expr.getType() != null)? isTargetType(expr.getType()): false;
 			case TYPE_INTERP: return (expr.getType() != null)? isInterp(expr.getType()): false;
 			case TYPE_RANDOM_EFFECT: return (expr.getType() != null)? isRandomEffect(expr.getType()): false;
+			case TYPE_INPUT_FORMAT: return (expr.getType() != null)? isInputType(expr.getType()): false;
+			
 			default:	return false; 
 		}
 	}
 
+	private static boolean isInputType(EnumType type) {
+		if ((type.getInput() != null) && 
+			(InputFormatType.FORMAT_VALUES.contains(type.getInput().getIdentifier()))) return true;
+		return false;
+	}
+	
 	private static boolean isInterp(EnumType type) {
 		if ((type.getInterpolation() != null) && 
 			(InterpolationType.INTERP_VALUES.contains(type.getInterpolation().getIdentifier()))) return true;
@@ -111,23 +121,24 @@ public enum MdlDataType {
 
 	private static boolean isRandomEffect(EnumType type) {
 		if ((type.getVariability() != null) && (
-			UseType.USE_VALUES.contains(type.getVariability().getIdentifier()))) return true;
+			RandomEffectType.RE_VALUES.contains(type.getVariability().getIdentifier()))) return true;
 		return false;
 	}
 
 	private static boolean isTargetType(EnumType type) {
 		if ((type.getTarget() != null && 
-				(TargetCodeType.TARGET_VALUES.contains(type.getTarget().getIdentifier())))) return true;
+			(TargetCodeType.TARGET_VALUES.contains(type.getTarget().getIdentifier())))) return true;
 		return false;
 	}
 
-	private static boolean isCCType(EnumType type) {
+	private static boolean isVarType(EnumType type) {
 		if ((type.getCategorical() != null) || (type.getContinuous() != null) || (type.getLikelihood() != null)) return true;
 		return false;
 	}
 
 	private static boolean isUseType(EnumType type) {
-		if (type.getUse() != null) return true;
+		if ((type.getUse() != null) &&
+			(UseType.USE_VALUES.contains(type.getUse().getIdentifier()))) return true;
 		return false;
 	}
 

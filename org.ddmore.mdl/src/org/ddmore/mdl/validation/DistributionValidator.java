@@ -33,7 +33,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_DISTR_UNKNOWN = "Failed to recognize distribution type";
 	public final static String MSG_DISTR_ATTRIBUTE_UNKNOWN = "Unknown distribution attribute";
 	public final static String MSG_DISTR_ATTRIBUTE_MISSING = "Required distribution attribute is missing";
-	public final static String MSG_DISTR_ATTRIBUTE_DEFINED    = "Distribution attribute defined more than once";
+	public final static String MSG_DISTR_ATTRIBUTE_DEFINED    = "Distribution attribute or its synonym is already defined";
 	public final static String MSG_DISTR_ATTRIBUTE_WRONG_TYPE = "Type error";
 
 	public final static Attribute attr_probability = new Attribute("probability", MdlDataType.TYPE_PROBABILITY, true);
@@ -344,7 +344,20 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			put(DistributionType.unif + ":" +attr_max.name, attr_numberOfClasses.name);
 		}
 	};
-	
+
+	//List of synonyms or alternatives
+	HashMap<String, String> exclusive_attrs = new HashMap<String, String>(){
+		private static final long serialVersionUID = -4192464782401647313L;
+		{
+			put(attr_variance.name, attr_stddev.name); 
+			put(attr_stddev.name, attr_variance.name);
+			
+			put(attr_numberOfClasses.name, attr_min.name); 
+			put(attr_min.name, attr_numberOfClasses.name); 
+			put(attr_max.name, attr_numberOfClasses.name);
+		}
+	};
+
 	public static final Attribute getAttributeById(String id){
 		String[] tokens = id.split(":");
         if (tokens.length > 0){
@@ -367,7 +380,6 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 				if (arg.mandatory){
 					DistributionArgument actualArg = findDistributionAttribute(args, arg.name);
 					if (actualArg == null){
-						//System.out.println("Looking for synonyms: " +);
 						String synonym = alternative_attrs.get(type.getDistribution().getIdentifier() +":" + arg.name);
 						if (synonym != null) actualArg = findDistributionAttribute(args, synonym);
 						if (actualArg == null)
@@ -377,16 +389,6 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					}
 				}
 			}
-			HashSet<String> argumentNames = new HashSet<String>();	
-			for (DistributionArgument arg: args.getArguments()){
-				if (!argumentNames.contains(arg.getArgumentName().getName())){
-					argumentNames.add(arg.getArgumentName().getName());
-				} else {
-					warning(MSG_DISTR_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
-							MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS, MSG_DISTR_ATTRIBUTE_DEFINED, 
-							typeName + ":" + arg.getArgumentName().getName());				
-				}
-			}			
 		} else {
 			warning(MSG_DISTR_UNKNOWN, 
 				MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
@@ -399,6 +401,25 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		EObject argContainer = argument.eContainer();	
 		if (!(argContainer instanceof DistributionArgumentsImpl)) return;
 		DistributionArguments args = (DistributionArguments)argContainer;
+		HashSet<String> argumentNames = new HashSet<String>();	
+		for (DistributionArgument arg: args.getArguments()){
+			if (!argumentNames.contains(arg.getArgumentName().getName())){
+				argumentNames.add(arg.getArgumentName().getName());
+			} else {
+				warning(MSG_DISTR_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
+						MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME, 
+						MSG_DISTR_ATTRIBUTE_DEFINED, arg.getArgumentName().getName());				
+			}
+		}	
+		if (exclusive_attrs.containsKey(argument.getArgumentName().getName())){
+			String exclusive = exclusive_attrs.get(argument.getArgumentName().getName());
+			if (argumentNames.contains(exclusive)){
+				warning("Distribution attribute '" + argument.getArgumentName().getName() + "' cannot be used together with '" + 
+						exclusive + "'", 
+						MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME, MSG_DISTR_ATTRIBUTE_DEFINED, 
+						argument.getArgumentName().getName());				
+			}
+		}
 		DistributionArgument type = findDistributionAttribute(args, attr_type.name);
 		if (type != null){
 			List<Attribute> recognized_attrs = distr_attrs.get(type.getDistribution().getIdentifier());

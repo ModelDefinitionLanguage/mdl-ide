@@ -6,17 +6,15 @@ import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.TaskFunctionBlock
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.validation.MdlJavaValidator
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.FunctionValidator
+import org.ddmore.mdl.types.InputFormatType
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	
 	new(Mcl mcl, MathPrinter mathPrinter, ReferenceResolver resolver){
 		super(mcl, mathPrinter, resolver);
 	}	
-	
-	val FORMAT_NONMEM = "NONMEM";
 	
 	////////////////////////////////////////////////
 	// III Modelling Steps
@@ -207,24 +205,20 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		if (dObj == null || mObj == null) return "";
 		var res = "";
 		for (b: dObj.blocks)	{
-			if (b.fileBlock != null){
-				for (s: b.fileBlock.statements){
-					if (s.variable.symbolName.name.equals(MdlJavaValidator::var_file_data)){
-						if (s.variable.expression != null){
-							if (s.variable.expression.list != null){
-								val inputFormat = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_inputformat.name);
-								if (inputFormat.equals(FORMAT_NONMEM)){
-									res  = res + print_NONMEM_DataSet(dObjName, mObjName);
-								}
-								val source = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_req_source.name);
-								if (source.length > 0){
-									var delimeter = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_delimeter.name);
-									if (delimeter.length == 0) delimeter = AttributeValidator::attr_delimeter.defaultValue;
-									res = res + print_ds_ExternalSource("ds." + dObjName, source, source, 
-										inputFormat, delimeter);
-								}
+			if (b.sourceBlock != null){
+				if (b.sourceBlock.source!=null){
+					val data=b.sourceBlock.source
+					if (data.list != null){
+						val inputFormat = data.list.arguments.getAttribute(AttributeValidator::attr_inputformat.name);
+							if (inputFormat.equals(InputFormatType::FORMAT_NONMEM)){
+								res  = res + print_NONMEM_DataSet(dObjName, mObjName);
 							}
-						}
+							val file = data.list.arguments.getAttribute(AttributeValidator::attr_file.name);
+							if (file.length > 0){
+								var delimeter = data.list.arguments.getAttribute(AttributeValidator::attr_delimeter.name);
+								if (delimeter.length == 0) delimeter = AttributeValidator::attr_delimeter.defaultValue;
+								res = res + print_ds_ExternalSource("ds." + dObjName, file, file, inputFormat, delimeter);
+							}
 					}
 				}
 			}

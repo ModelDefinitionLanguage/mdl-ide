@@ -47,10 +47,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF = "Unresolved reference to a list attribute";
 	public final static String MSG_UNRESOLVED_FUNC_ARGUMENT_REF = "Unresolved reference to a function output parameter";
 	public final static String MSG_UNRESOLVED_SAME_BLOCK_NAME = "No corresponding matrix or diag block found";
-
-	public final static String MSG_DATA_MISSING = "FILE block does not contain variable \"data\"!";
-	
-	public final static String var_file_data = "data";
 	public final static String var_model_tolrel = "tolrel";
 
 	//List of objects
@@ -152,25 +148,19 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			//Data object
 			if (obj.getDataObject() != null){
 				for (DataObjectBlock block: obj.getDataObject().getBlocks()){
+					//DATA_INPUT_VARIABLES
 					if (block.getDataInputBlock() != null){
-						//DATA_INPUT_VARIABLES
 						for (SymbolDeclaration s: block.getDataInputBlock().getVariables()){
 							varList.add(s.getSymbolName().getName());
 						}
 					}
-					//FILE, RSCRIPT
-					if (block.getFileBlock() != null){
-						for (FileBlockStatement s: block.getFileBlock().getStatements()){
-							if (s.getVariable() != null){
-								varList.add(s.getVariable().getSymbolName().getName());
-							}
-							if (s.getRscriptBlock() != null){
-								for (RScriptBlockStatement rs: s.getRscriptBlock().getVariables()){
-									varList.add(rs.getSymbolName().getName());
-								}
-							}
+					//SOURCE
+					if (block.getSourceBlock() != null){
+						if (block.getSourceBlock().getSource() != null){
+							varList.add(block.getSourceBlock().getSource().getSymbolName().getName());
 						}
 					}
+
 				}
 				declaredVariables.put(obj.getObjectName().getName(), varList);
 			}
@@ -314,16 +304,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			warning(MSG_PARAMETER_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__SYMBOL_NAME);
 		}
 	}	
-	
-	@Check
-	public void checkSymbolDeclaration(RScriptBlockStatement symbol){
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables, symbol.getSymbolName())){
-			warning(MSG_VARIABLE_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__SYMBOL_NAME);
-		}
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredParameters, symbol.getSymbolName())){
-			warning(MSG_PARAMETER_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__SYMBOL_NAME);
-		}
-	}		
 	
 	////////////////////////////////////////////////////////////////
 	//Check references
@@ -554,15 +534,15 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//Some symbols (variables, parameters) need to be declared
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//DataObject -> FILE
-	@Check
-	public void checkSymbolDeclaration(FileBlock b){
-		//Check that variable "data" is defined 
-		for (FileBlockStatement st: b.getStatements()){
-			if (st.getVariable() != null)	
-				if (st.getVariable().getSymbolName().getName().equals(var_file_data)) return;
+	//DataObject -> SOURCE
+	/*@Check
+	public void checkSymbolDeclaration(SourceBlock b){
+		if (b.getSource() != null){
+			if (b.getSource().getList() != null){
+				String script = Utils.getAttributeValue((b.getSource().getList().getArguments(), AttributeValidator.attr_script.getName());
+				String file = Utils.getAttributeValue(b.getSource().getList().getArguments(), AttributeValidator.attr_file.getName());
+			}
 		}
-		warning(MSG_DATA_MISSING, MdlPackage.Literals.FILE_BLOCK__STATEMENTS,
-			MSG_DATA_MISSING, var_file_data);
 	}	
+	*/
 }

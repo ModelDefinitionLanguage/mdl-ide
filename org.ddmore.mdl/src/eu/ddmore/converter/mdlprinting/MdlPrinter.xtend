@@ -48,9 +48,8 @@ import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.FormalArguments
 import org.ddmore.mdl.mdl.SimulationBlock
 import org.ddmore.mdl.mdl.EstimationBlock
-import org.ddmore.mdl.mdl.FileBlockStatement
 import org.apache.commons.io.FilenameUtils
-
+import org.ddmore.mdl.validation.AttributeValidator
 
 class MdlPrinter {
 	
@@ -132,9 +131,18 @@ class MdlPrinter {
 		for (obj: m.objects){
 			if (obj.dataObject != null){
 				for (b: obj.dataObject.blocks){
-					if (b.fileBlock != null){
-						for (s: b.fileBlock.statements){
-							return s.getDataSource;
+					if (b.sourceBlock != null){
+						if (b.sourceBlock.source != null){
+							if (b.sourceBlock.source.list != null){
+								var source = b.sourceBlock.source.list.arguments.getAttributeExpression(AttributeValidator::attr_file.name);
+								if (source == null){
+									source = b.sourceBlock.source.list.arguments.getAttributeExpression(AttributeValidator::attr_script.name);
+								}
+								if (source != null) 
+									return source.toStr
+								 else 
+									return "";
+							}
 						}
 					} 
 				}
@@ -142,19 +150,6 @@ class MdlPrinter {
 		}
 		return "";
 	}
-	
-	def getDataSource(FileBlockStatement s){
-		if (s.variable != null){
-			if (s.variable.symbolName.name.equals("data")){
-				if (s.variable.expression != null){
-					if (s.variable.expression.list != null)
-						return s.variable.expression.list.arguments.getAttribute("source");
-				}
-			}
-		}
-		return "";
-	}
-	
 	
 	///////////////////////////////////////////////////////////////////////////////
 	//Check whether MDL blocks are defined and non empty

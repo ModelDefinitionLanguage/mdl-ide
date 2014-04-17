@@ -11,6 +11,7 @@ import org.ddmore.mdl.mdl.ConditionalStatement
 import java.util.HashMap
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.types.RandomEffectType
+import org.ddmore.mdl.mdl.MatrixBlock
 
 class Mdl2PharmML{
 	extension Constants dataType = new Constants();
@@ -513,19 +514,10 @@ class Mdl2PharmML{
 					if (b.variabilityBlock != null){
 						for (c: b.variabilityBlock.statements){
 							if (c.diagBlock != null){
+								//TODO process diag blocks
 							}
 							if (c.matrixBlock != null){
-								val type = mathPrinter.getAttribute(c.matrixBlock.arguments, AttributeValidator::attr_re_type.name);
-								if (type.equals(RandomEffectType::RE_SD)){
-									print_mdef_CollerationModel_CorrelationCoefficient(
-										o.objectName.name, c.matrixBlock.parameters
-									);
-								}
-								if (type.equals(RandomEffectType::RE_VAR)){
-									print_mdef_CollerationModel_Covariance(
-										o.objectName.name, c.matrixBlock.parameters
-									);									
-								}
+								print_mdef_CollerationModel_Matrix(o.objectName.name, c.matrixBlock);
 							}
 							if (c.sameBlock != null){
 							}
@@ -546,40 +538,26 @@ class Mdl2PharmML{
 		return model;
 	}	
 	
-	def print_mdef_CollerationModel_CorrelationCoefficient(String objName, Arguments args){
-		var randomVars = "";
-		if (args.arguments.size > 2) 
-			return 
+	def print_mdef_CollerationModel_Matrix(String objName, MatrixBlock matrix){
+		val matrixType = mathPrinter.getAttribute(matrix.arguments, AttributeValidator::attr_re_type.name);
+		var res = "";
+		if (matrix.parameters != null){
+			
+			for (i: 0..matrix.parameters.arguments.size){
+				val arg = matrix.parameters.arguments.get(i);
+				if (arg.argumentName != null){
+				}	
+			}	
+			//Retrieve the name of the block
+			//for (set:resolver.vm_mdl_vars.entrySet)
+			//		if (set.value.contains(name)) return "vm_mdl." + set.key;
 			'''
-				<Description>
-					Conversion of correlations of random effects for large matrices is not supported yet!
-				</Description>
-			'''; 
-		for (i: 0..args.arguments.size){
-			val arg = args.arguments.get(i);
-			if (arg.argumentName != null){
-				randomVars = randomVars + 
-				'''
-					<RandomVariable«i + 1»>
-						<ct:SymbRef symbIdRef="«arg.argumentName»"/>
-					<RandomVariable«i + 1»>
-				'''
-			}		
+				<Correlation blkId="c.«objName»"
+					<Matrix matrixType="«matrixType»">
+						
+					</Matrix>
+				</Correlation>
+			'''			
 		}
-		//Retrieve the name of the block
-		//for (set:resolver.vm_mdl_vars.entrySet)
-		//		if (set.value.contains(name)) return "vm_mdl." + set.key;
-		'''
-			<Correlation blkId="c.«objName»">
-				«randomVars»	
-				<CorrelationCoefficient>
-				</CorrelationCoefficient>
-			</Correlation>
-		'''			
 	}
-
-	def print_mdef_CollerationModel_Covariance(String objName, Arguments args){
-		
-	}
-	
 }

@@ -216,7 +216,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			case TYPE_REF: return createReferenceExpression(value);
 			case TYPE_BOOLEAN: return createBooleanExpression(value);
 			case TYPE_TARGET: return createTargetLanguageExpression(value);
-			case TYPE_CC: 
+			case TYPE_VAR_TYPE: 
 				if (value.equals(VariableType.CC_CONTINUOUS)) {
 					return createContinuousExpression(value);
 				} else {

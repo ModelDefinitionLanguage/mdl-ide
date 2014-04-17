@@ -19,7 +19,7 @@ import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
-import org.ddmore.mdl.mdl.impl.FileBlockImpl;
+import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
@@ -66,8 +66,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, DefaultValues.USE_VAR);
 	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, "ID");
 
-	final public static Attribute attr_req_cc_type = new Attribute("type", MdlDataType.TYPE_CC, true, DefaultValues.VARIABILITY_TYPE);
-	final public static Attribute attr_cc_type = new Attribute("type", MdlDataType.TYPE_CC, false, DefaultValues.VARIABILITY_TYPE);
+	final public static Attribute attr_req_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VARIABILITY_TYPE);
+	final public static Attribute attr_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VARIABILITY_TYPE);
 	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false);
 	
 	final public static Attribute attr_mapping = new Attribute("mapping", MdlDataType.TYPE_REF, false);
@@ -92,10 +92,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_elimination = new Attribute("elimination", MdlDataType.TYPE_STRING, false);
 	final public static Attribute attr_parameterization = new Attribute("parameterization", MdlDataType.TYPE_STRING, false);
 	final public static Attribute attr_output = new Attribute("output", MdlDataType.TYPE_LIST, false);
-	/* The "output" attribute is not an official MCL attribute but I think it is needed because
-	 * it introduces new variables (important for validation) as opposed to the declarations in "param"
-	 * attribute that allows any math expressions - which is ok for input but not for output.
-	 * No syntactic distinction between in and out parameters (bad design!)	 */ 
 		
 	/*Data object*/
 	/*DATA_INPUT_VARIABLES*/
@@ -108,10 +104,11 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_male = new Attribute("male", MdlDataType.TYPE_INT, false);
 	
 	/*FILE*/
-	final public static Attribute attr_req_source = new Attribute("source", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
 	final public static Attribute attr_ignore = new Attribute("ignore", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_inputformat = new Attribute("inputformat", MdlDataType.TYPE_TARGET, false, DefaultValues.TARGET);
+	final public static Attribute attr_inputformat = new Attribute("inputformat", MdlDataType.TYPE_INPUT_FORMAT, false, DefaultValues.INPUT_FORMAT);
 	final public static Attribute attr_delimeter = new Attribute("delimeter", MdlDataType.TYPE_STRING, false, ";");
+	final public static Attribute attr_file = new Attribute("file", MdlDataType.TYPE_STRING, false, DefaultValues.FILE_NAME);
+	final public static Attribute attr_script = new Attribute("script", MdlDataType.TYPE_STRING, false, DefaultValues.FILE_NAME);
 	
 	/*DESIGN*/
 	final public static Attribute attr_design_source = new Attribute("source", MdlDataType.TYPE_REF, true, DefaultValues.VAR_NAME);
@@ -133,7 +130,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*Data object*/
 	final public static List<Attribute> attrs_header = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
 			attr_recode, attr_boundaries, attr_missing, attr_mapping, attr_female, attr_male);
-	final public static List<Attribute> attrs_file = Arrays.asList(attr_req_source, attr_ignore, attr_inputformat, attr_delimeter);
+	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, attr_delimeter, attr_file, attr_script);
 	final public static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp /*,attr_idv*/);
 
 	/*Parameter object*/
@@ -143,7 +140,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*Model object*/
 	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_units, attr_cc_type, attr_level);
-	final public static List<Attribute> attrs_library = Arrays.asList(attr_library, attr_req_model, attr_ncmt, attr_param, attr_output, attr_distribution, attr_elimination, attr_parameterization);
+	final public static List<Attribute> attrs_library = Arrays.asList(attr_library, attr_req_model, attr_ncmt, attr_trans, attr_param, attr_output, attr_distribution, attr_elimination, attr_parameterization);
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_cc_type, attr_likelihood, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
@@ -160,7 +157,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		{
 			/*Data object*/
 			for (Attribute attr: attrs_header) put("DATA_INPUT_VARIABLES:" + attr.name, attr);
-			for (Attribute attr: attrs_file) put("FILE:" + attr.name, attr);
+			for (Attribute attr: attrs_source) put("SOURCE:" + attr.name, attr);
 			for (Attribute attr: attrs_design) put("DESIGN:" + attr.name, attr);
 			/*Parameter object*/
 			for (Attribute attr: attrs_structural) put("STRUCTURAL:" + attr.name, attr);
@@ -182,11 +179,19 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			for (Attribute attr: attrs_target) put("TARGET_CODE:" + attr.name, attr);
 		}
 	};
+	
+	HashMap<String, String> exclusive_attrs = new HashMap<String, String>(){
+		private static final long serialVersionUID = 4646663049359441357L;
+		{
+			put(attr_file.name, attr_script.name);
+			put(attr_script.name, attr_file.name);
+		}
+	};
 		
 	public static List<Attribute> getAllAttributes(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return attrs_header; 
-		if (obj instanceof FileBlockImpl) return attrs_file; 
+		if (obj instanceof SourceBlockImpl) return attrs_source; 
 		if (obj instanceof DesignBlockImpl) return attrs_design; 
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return attrs_structural;
@@ -205,12 +210,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		return null;
 	}
 	
-	public static List<String> getRequiredAttributeNames(EObject obj){
-		List<Attribute> attrs = getAllAttributes(obj);
-		if (attrs != null) return Utils.getRequiredNames(attrs);
-		return null;
-	}	
-	
 	public static Attribute getAttributeById(String id){
         return allAttributes.get(id);
     }
@@ -226,14 +225,10 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		for (Argument arg: args.getArguments()){
 			if (!argumentNames.contains(arg.getArgumentName().getName())){
 				argumentNames.add(arg.getArgumentName().getName());
-			} else {
-				warning(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
-						MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_DEFINED, 
-						prefix + arg.getArgumentName().getName());				
 			}
 		}
 		//getRequiredAttributes contains lists of required attributes for each container
-		for (String attrName: getRequiredAttributeNames(container)){
+		for (String attrName: Utils.getRequiredNames(getAllAttributes(container))){
 			if (!argumentNames.contains(attrName)) 
 				warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, 
 				MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attrName);
@@ -270,7 +265,26 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 					}
 				}
 			}
-		}			
+		}	
+		HashSet<String> argumentNames = new HashSet<String>();	
+		for (Argument arg: args.getArguments()){
+			if (!argumentNames.contains(arg.getArgumentName().getName())){
+				argumentNames.add(arg.getArgumentName().getName());
+			} else {
+				warning(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
+						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
+						arg.getArgumentName().getName());				
+			}
+		}
+		if (exclusive_attrs.containsKey(argument.getArgumentName().getName())){
+			String exclusive = exclusive_attrs.get(argument.getArgumentName().getName());
+			if (argumentNames.contains(exclusive)){
+				warning("Attribute '" + argument.getArgumentName().getName() + "' cannot be used together with '" + 
+						exclusive + "'", 
+						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
+						argument.getArgumentName().getName());				
+			}
+		}
 	}
 	
 	//Do not validate parameters of variability subblocks

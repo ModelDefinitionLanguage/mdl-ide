@@ -12,8 +12,6 @@ import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.ExecuteTask
-import org.ddmore.mdl.mdl.FileBlock
-import org.ddmore.mdl.mdl.FileBlockStatement
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.MatrixBlock
 import org.ddmore.mdl.mdl.Mcl
@@ -809,51 +807,23 @@ class Mdl2Nonmem extends MdlPrinter{
 	//Print NM-TRAN record $DATA
 	def printDATA(DataObject o)'''
 	«FOR b:o.blocks»
-		«IF b.fileBlock != null» 
-			«var data = b.fileBlock.getData»
-			«IF !data.equals("")»
-			
-			$DATA «data»
+		«IF b.sourceBlock != null» 
+			«IF b.sourceBlock.source != null»
+				«IF b.sourceBlock.source.list != null»
+					«var data = b.sourceBlock.source.list.arguments.getAttribute(AttributeValidator::attr_file.name)»
+					«IF !data.equals("")»
+					
+					$DATA «data»
+					«ENDIF»
+					«getExternalCodeStart("$DATA")»
+						«val ignore = b.sourceBlock.source.list.arguments.getAttribute(AttributeValidator::attr_ignore.name)»
+						«IF !ignore.equals("")»IGNORE=«ignore»«ENDIF»
+					«getExternalCodeEnd("$DATA")»
+				«ENDIF»
 			«ENDIF»
-			«getExternalCodeStart("$DATA")»
-			«FOR s: b.fileBlock.statements»
-				«s.printIGNORE»
-			«ENDFOR»
-			«getExternalCodeEnd("$DATA")»
 		«ENDIF»
 	«ENDFOR»
 	'''
-	
-	//if (st.inlineBlock != null) st.inlineBlock.convertToNonmem
-	//if (st.designBlock != null) st.designBlock.convertToNonmem
-	//if (st.rscriptBlock != null) st.rscriptBlock.convertToNonmem
-	
-	//Processing FILE block statement for $DATA
-	def printIGNORE(FileBlockStatement s){
-		if (s.variable != null){
-			if (s.variable.symbolName.name.equals(MdlJavaValidator::var_file_data)){
-				if (s.variable.expression != null){
-					if (s.variable.expression.list != null){
-						var ignore = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_ignore.name);
-						return '''«IF !ignore.equals("")»IGNORE=«ignore»«ENDIF»'''
-					}
-				}
-			}
-		}
-	}
-	
-	def getData(FileBlock b){
-		for (s: b.statements){
-			if (s.variable.symbolName.name.equals(MdlJavaValidator::var_file_data)){
-				if (s.variable.expression != null){
-					if (s.variable.expression.list != null){
-						var data = s.variable.expression.list.arguments.getAttribute(AttributeValidator::attr_req_source.name);
-						return data;
-					}
-				}
-			}
-		}
-	}
 	
 	
 /////////////////////////////////////////////////

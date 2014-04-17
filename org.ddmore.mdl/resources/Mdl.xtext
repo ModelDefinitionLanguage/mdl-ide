@@ -1,7 +1,6 @@
 grammar org.ddmore.mdl.Mdl with org.eclipse.xtext.common.Terminals
 generate mdl "http://www.ddmore.org/mdl/Mdl"
 
-
 Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
@@ -136,18 +135,22 @@ PriorParametersBlock:
 
 DataObjectBlock:
 	dataInputBlock = DataInputBlock |
-	fileBlock = FileBlock |
+	sourceBlock = SourceBlock |
+	designBlock = DesignBlock |
 	targetBlock = TargetBlock | 
 	importBlock = ImportBlock;
  
 DataInputBlock:
  	identifier='DATA_INPUT_VARIABLES' 
- 	BEGIN variables += SymbolDeclaration* END  //new Variable -
+ 	BEGIN variables += SymbolDeclaration* END  //new Variable +
  ;
  
- FileBlock:
-	identifier='FILE' 	
-	BEGIN statements += FileBlockStatement* END
+ SourceBlock:
+	identifier='SOURCE' 	
+	BEGIN 
+		source = ParameterDeclaration
+		inlineBlock ?= InlineBlock 
+	END
  ;
  
 //////////////////////////////////////////////////////////
@@ -271,13 +274,6 @@ SameBlock:
 //Data Object
 //////////////////////////////////////////////////////////
 
-FileBlockStatement:
-	variable = SymbolDeclaration |  //new VariableName which can be only list +
-	inlineBlock = InlineBlock | 
-	designBlock = DesignBlock | 
-	rscriptBlock = RScriptBlock 
-;
-
 InlineBlock:
 	identifier = 'INLINE' 
 	BEGIN (variables += FullyQualifiedSymbolName)* (values += NumericValue | '.')* END //Ref to VariableName + 
@@ -296,15 +292,6 @@ VariableList:
 	'[' identifiers += FullyQualifiedSymbolName (=> ',' identifiers += FullyQualifiedSymbolName)* ']' //Ref to VaraibleName +
 ;
 	
-RScriptBlock:	
-	identifier = 'RSCRIPT' 
-	BEGIN variables += RScriptBlockStatement* END	  			
-;
-
-RScriptBlockStatement:
-	symbolName = SymbolName "=" (value = STRING | object = ObjectName) // new VariableName +
-;
-
 TaskFunctionDeclaration:
 	functionName = SymbolName "=" 'function'   //new FunctionName +
 	'(' formalArguments = FormalArguments ')'
@@ -389,8 +376,7 @@ ImportedFunction:
 ;
 
 SymbolModification:
-	identifier = FullyQualifiedSymbolName ("=" list = List)?  
-	//Ref to ParameterName or VariableName (depending on the container) +
+	identifier = FullyQualifiedSymbolName ("=" list = List)?  //Ref to ParameterName or VariableName +
 ;
 
 ParameterDeclaration:
@@ -417,7 +403,12 @@ EnumType:
 	use = UseType |       
 	target = TargetLanguage |
 	variability = VariabilityType |
-	interpolation = InterpolationType 
+	interpolation = InterpolationType |
+	input = InputType
+;
+
+InputType:
+	identifier = ('nonmemFormat' | 'eventFormat')
 ;
 
 InterpolationType:

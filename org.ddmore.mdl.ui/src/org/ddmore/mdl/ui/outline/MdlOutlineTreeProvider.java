@@ -24,7 +24,6 @@ import org.ddmore.mdl.mdl.DistributionArguments;
 import org.ddmore.mdl.mdl.DropList;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
-import org.ddmore.mdl.mdl.FileBlockStatement;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.FunctionCall;
@@ -475,12 +474,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, VariabilityBlockStatement st){
-		for (EObject obj: st.eContents()){
-			createNode(parentNode, obj);
-		}
-	}
-	
-	protected void  _createNode(IOutlineNode parentNode, FileBlockStatement st){
 		for (EObject obj: st.eContents()){
 			createNode(parentNode, obj);
 		}

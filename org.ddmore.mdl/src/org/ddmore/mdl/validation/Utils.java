@@ -15,7 +15,6 @@ import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DesignBlock;
 import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
-import org.ddmore.mdl.mdl.FileBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.ImportBlock;
@@ -31,6 +30,7 @@ import org.ddmore.mdl.mdl.OdeBlock;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.SameBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
+import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.TargetBlock;
@@ -40,8 +40,6 @@ import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
-import org.ddmore.mdl.mdl.impl.FileBlockImpl;
-import org.ddmore.mdl.mdl.impl.FileBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.ImportedFunctionImpl;
@@ -56,6 +54,7 @@ import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
+import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolListImpl;
@@ -322,17 +321,21 @@ public class Utils {
 	
 	public static ArrayList<String> getAllNames(List<Attribute> attrs){
 		ArrayList<String> names = new ArrayList<String>();
-		for (Attribute attr: attrs){
-			names.add(attr.name);
+		if (attrs != null){
+			for (Attribute attr: attrs){
+				names.add(attr.name);
+			}
 		}
 		return names;
 	}
 
 	public static ArrayList<String> getRequiredNames(List<Attribute> attrs){
 		ArrayList<String> names = new ArrayList<String>();
-		for (Attribute attr: attrs){
-			if (attr.mandatory)
-				names.add(attr.name);
+		if (attrs != null){
+			for (Attribute attr: attrs){
+				if (attr.mandatory)
+					names.add(attr.name);
+			}
 		}
 		return names;
 	}
@@ -352,7 +355,7 @@ public class Utils {
 		if (
 			//Data object	
 			obj instanceof DataInputBlockImpl ||
-			obj instanceof FileBlockStatementImpl ||
+			obj instanceof SourceBlockImpl ||
 			obj instanceof DesignBlockStatementImpl ||
 			//Model object
 			obj instanceof InputVariablesBlockImpl ||
@@ -363,7 +366,7 @@ public class Utils {
 			obj instanceof ObservationBlockImpl ||
 			//Parameter object
 			obj instanceof StructuralBlockImpl ||
-			obj instanceof VariabilityBlockStatementImpl ||
+			obj instanceof VariabilityBlockImpl ||
 			obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl ||
 			//All objects
 			obj instanceof ImportedFunctionImpl ||
@@ -396,11 +399,11 @@ public class Utils {
 	public static String getBlockName(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
-		if (obj instanceof FileBlockImpl) return ((FileBlock)obj).getIdentifier();
+		if (obj instanceof SourceBlockImpl) return ((SourceBlock)obj).getIdentifier();
 		if (obj instanceof DesignBlockImpl) return ((DesignBlock)obj).getIdentifier();
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return ((StructuralBlock)obj).getIdentifier();	
-		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj.eContainer()).getIdentifier();
+		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj).getIdentifier();
 		if (obj instanceof MatrixBlockImpl) return ((MatrixBlock)obj).getIdentifier();	
 		if (obj instanceof DiagBlockImpl) return ((DiagBlock)obj).getIdentifier() ;	
 		if (obj instanceof SameBlockImpl) return ((SameBlock)obj).getIdentifier();
