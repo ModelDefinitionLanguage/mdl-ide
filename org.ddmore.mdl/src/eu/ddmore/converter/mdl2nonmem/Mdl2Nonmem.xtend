@@ -1172,8 +1172,8 @@ class Mdl2Nonmem extends MdlPrinter{
 		for (b: o.blocks){
 	  		if (b.structuralParametersBlock != null){
 				for (id: b.structuralParametersBlock.parameters) {
-					if (theta_vars.get(id.symbol.name) == null){
-						theta_vars.put(id.symbol.name, i);
+					if (theta_vars.get(id.symbolName.name) == null){
+						theta_vars.put(id.symbolName.name, i);
 						i = i + 1;
 					}
 				}

@@ -32,9 +32,11 @@ import org.ddmore.mdl.mdl.SameBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
+import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.VariabilityBlock;
+import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
@@ -43,25 +45,20 @@ import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.ImportedFunctionImpl;
-import org.ddmore.mdl.mdl.impl.InlineBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
-import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
-import org.ddmore.mdl.mdl.impl.SymbolListImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
-import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 
@@ -69,23 +66,32 @@ public class Utils {
 	
 	//Checks whether a given symbol is declared
 	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, FullyQualifiedSymbolName ref){
-		ObjectName objName = ref.getObject();
 		SymbolName symbName = ref.getSymbol();
-		if (objName == null) objName = Utils.getObjectName(symbName);
-		if (map.get(objName.getName()).contains(symbName.getName())) return true;
+		ObjectName objName = ref.getObject();
+		if (objName != null)
+			if (map.get(objName.getName()).contains(symbName.getName())) return true;		
+		//Validate if in MCL
+		for (String key: map.keySet()){
+			if (map.get(key).contains(symbName.getName())) return true;
+		}
 		return false;
 	}
 	
 	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName symbName){
-		ObjectName objName = Utils.getObjectName(symbName);
-		if (map.get(objName.getName()).contains(symbName.getName())) return true;
+		for (String key: map.keySet()){
+			if (map.get(key).contains(symbName.getName())) return true;
+		}
 		return false;
-	}
+	} 
 
 	//Checks whether a given symbol is declared
 	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, String symbName, ObjectName objName){
-		if (objName == null) return false;
-		if (map.get(objName.getName()).contains(symbName)) return true;
+		if (objName != null) 
+			if (map.get(objName.getName()).contains(symbName)) return true;
+		//Validate if in MCL
+		for (String key: map.keySet()){
+			if (map.get(key).contains(symbName)) return true;
+		}
 		return false;
 	}
 	
@@ -234,17 +240,15 @@ public class Utils {
 
 	static void addSymbol(ArrayList<String> list, FormalArguments args){
 		if (args != null){
-			for (ArgumentName id: args.getArguments()){
+			for (ArgumentName id: args.getArguments())
 				list.add(id.getName());
-			}
 		}
 	}
 	
 	static void addSymbol(ArrayList<String> list, ImportBlock block){
 		if (block != null){
-			for (ImportedFunction id: block.getFunctions()){
+			for (ImportedFunction id: block.getFunctions())
 				list.add(id.getFunctionName().getName());
-			}
 		}
 	}
 	
@@ -276,6 +280,7 @@ public class Utils {
 		return res;
 	}
 	
+	//Note: don't use for reference checking
 	static ObjectName getObjectName(EObject b){
 		EObject container = b.eContainer();
 		while (!(container instanceof MclObjectImpl)){
@@ -363,6 +368,8 @@ public class Utils {
 			obj instanceof EstimationBlockImpl ||
 			obj instanceof SimulationBlockImpl ||
 			obj instanceof ObservationBlockImpl ||
+			obj instanceof StructuralParametersBlockImpl || 
+			obj instanceof VariabilityParametersBlockImpl ||
 			//Parameter object
 			obj instanceof StructuralBlockImpl ||
 			obj instanceof VariabilityBlockImpl ||
@@ -372,29 +379,7 @@ public class Utils {
 			obj instanceof TargetBlockImpl) return true;
 		return false;	
 	}
-	
-	//Blocks that contain references to parameters: STRUCTURAL_PARAMETERS, VARIABILITY_PARAMETERSM, PARAMETER
-	public static Boolean isParameterRefContainer(EObject container){
-		if (
-			container instanceof StructuralParametersBlockImpl || 
-			container instanceof VariabilityParametersBlockImpl ||
-			container instanceof ParameterBlockImpl) return true;
-		return false;	
-	}
-	
-	//Blocks that contain references to variables: OUTPUT_VARIABLES, INLINE, 
-	//VariableList in DesignBlockStatement of DESIGN
-	//SymbolList in DROP, ADD, REMOVE
-	public static Boolean isVariableRefContainer(EObject container){
-		if (
-			container instanceof OutputVariablesBlockImpl || 
-			container instanceof InlineBlockImpl ||
-			container instanceof VariableListImpl ||
-			container instanceof DesignBlockStatementImpl ||
-			container instanceof SymbolListImpl) return true;
-		return false;	
-	}
-	
+
 	public static String getBlockName(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
@@ -413,6 +398,8 @@ public class Utils {
 		if (obj instanceof EstimationBlockImpl) return ((EstimationBlock)obj).getIdentifier() ;
 		if (obj instanceof SimulationBlockImpl) return ((SimulationBlock)obj).getIdentifier() ;
 		if (obj instanceof ObservationBlockImpl) return ((ObservationBlock)obj).getIdentifier() ;
+		if (obj instanceof StructuralParametersBlockImpl) return ((StructuralParametersBlock)obj).getIdentifier() ;
+		if (obj instanceof VariabilityParametersBlockImpl) return ((VariabilityParametersBlock)obj).getIdentifier() ;
 		/*All objects*/
 		if (obj instanceof ImportBlockImpl) return ((ImportBlock)obj).getIdentifier();
 		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();

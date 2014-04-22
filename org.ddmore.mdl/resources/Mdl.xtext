@@ -69,12 +69,12 @@ InputVariablesBlock:
 
 StructuralParametersBlock:
   identifier = 'STRUCTURAL_PARAMETERS' 
-  BEGIN parameters += FullyQualifiedSymbolName* END  //Ref to Parameter +
+  BEGIN parameters += ParameterDeclaration* END  //New parameter - match STRUCTURAL
 ; 
 
 VariabilityParametersBlock:
   identifier = 'VARIABILITY_PARAMETERS' 
-  BEGIN parameters += FullyQualifiedSymbolName* END //Ref to Parameter +
+  BEGIN parameters += ParameterDeclaration* END //New parameter - match VARIABILITY
 ;
 
 OutputVariablesBlock:
@@ -380,7 +380,7 @@ SymbolModification:
 ;
 
 ParameterDeclaration:
-	symbolName = SymbolName ("=" list = List) //new ParameterName
+	symbolName = SymbolName ("=" list = List)? //new ParameterName
 ;
 
 SymbolName:

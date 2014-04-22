@@ -30,8 +30,10 @@ import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
+import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.types.DefaultValues;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -71,7 +73,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VARIABILITY_TYPE);
 	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false);
 	
-	final public static Attribute attr_mapping = new Attribute("mapping", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_mapping = new Attribute("alias", MdlDataType.TYPE_REF, false);
 	
 	/*ESTIMATION*/
 	final public static Attribute attr_likelihood = new Attribute("likelihood", MdlDataType.TYPE_EXPR, false);
@@ -137,8 +139,10 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp /*,attr_idv*/);
 
 	/*Parameter object*/
-	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, attr_fix, attr_units, attr_transform);
-	final public static List<Attribute> attrs_variability = Arrays.asList(attr_req_value, attr_re_type, attr_fix, attr_units, attr_transform);
+	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, 
+			attr_fix, attr_units, attr_transform, attr_mapping);
+	final public static List<Attribute> attrs_variability = Arrays.asList(attr_req_value, attr_re_type, attr_fix, 
+			attr_units, attr_transform, attr_mapping);
 	final public static List<Attribute> attrs_variability_subblock = Arrays.asList(attr_name, attr_re_type, attr_fix);
 	
 	/*Model object*/
@@ -148,7 +152,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_cc_type, attr_likelihood, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
 	final public static List<Attribute> attrs_observation = Arrays.asList();
-
+	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units, attr_mapping);
+	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units, attr_mapping);
+	
 	/*All blocks*/
 	final public static List<Attribute> attrs_import = Arrays.asList(attr_req_target, attr_name, attr_ncmt, attr_trans, attr_param, attr_output);
 	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_before, attr_after);
@@ -177,6 +183,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			for (Attribute attr: attrs_estimation) put("ESTIMATION:" + attr.name, attr);
 			for (Attribute attr: attrs_simulation) put("SIMULATION:" + attr.name, attr);
 			for (Attribute attr: attrs_observation) put("OBSERVATION:" + attr.name, attr);
+			for (Attribute attr: attrs_structuralParams) put("STRUCTURAL_PARAMETERS:" + attr.name, attr);
+			for (Attribute attr: attrs_variabilityParams) put("VARIABILITY_PARAMETERS:" + attr.name, attr);
 			/*All objects*/
 			for (Attribute attr: attrs_import) put("IMPORT:" + attr.name, attr);
 			for (Attribute attr: attrs_target) put("TARGET_CODE:" + attr.name, attr);
@@ -207,6 +215,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof EstimationBlockImpl) return attrs_estimation; 
 		if (obj instanceof SimulationBlockImpl) return attrs_simulation; 
 		if (obj instanceof ObservationBlockImpl) return attrs_observation; 
+		if (obj instanceof StructuralParametersBlockImpl) return attrs_structuralParams;
+		if (obj instanceof VariabilityParametersBlockImpl) return attrs_variabilityParams;
 		/*All objects*/
 		if (obj instanceof ImportBlockImpl) return attrs_import;
 		if (obj instanceof TargetBlockImpl) return attrs_target;
