@@ -257,17 +257,30 @@ VariabilityBlockStatement:
 //Renamed to Matrix!
 MatrixBlock:
 	 identifier = 'matrix' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Arguments END)?  //new Parameter +
+	 (BEGIN parameters = Symbols END)?  //new Parameter +
 ;
 
 DiagBlock:	  
 	 identifier = 'diag' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Arguments END)?  //new Parameter +
+	 (BEGIN parameters = Symbols END)?  //new Parameter +
 ;
 
 SameBlock:	  
 	 identifier = 'same' '(' arguments = Arguments ')'
-	 (BEGIN parameters = FormalArguments END)?  //new Parameter +
+	 (BEGIN parameters = SymbolNames END)?  //new Parameter +
+;
+
+Symbols:
+	symbols += Symbol (=> ',' symbols += Symbol)*
+;
+
+Symbol:
+	symbolName = SymbolName "=" expression = AnyExpression |
+	expression = AnyExpression
+;
+
+SymbolNames:
+	symbolNames += SymbolName (=> ',' symbolNames += SymbolName)*
 ;
 
 //////////////////////////////////////////////////////////
@@ -285,11 +298,11 @@ DesignBlock:
 ;
 
 DesignBlockStatement:
-	identifier = FullyQualifiedSymbolName (arguments = VariableList)? '=' expression = AnyExpression  //Ref to VariableName +
+	identifier = FullyQualifiedSymbolName ('[' arguments = VariableList ']')? '=' expression = AnyExpression  //Ref to VariableName +
 ;
 
 VariableList:
-	'[' identifiers += FullyQualifiedSymbolName (=> ',' identifiers += FullyQualifiedSymbolName)* ']' //Ref to VaraibleName +
+	identifiers += FullyQualifiedSymbolName (=> ',' identifiers += FullyQualifiedSymbolName)* //Ref to VaraibleName +
 ;
 	
 TaskFunctionDeclaration:

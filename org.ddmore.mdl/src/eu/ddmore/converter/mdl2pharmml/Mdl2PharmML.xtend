@@ -10,6 +10,7 @@ import org.ddmore.mdl.mdl.ConditionalStatement
 import java.util.HashMap
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.MatrixBlock
+import org.ddmore.mdl.types.RandomEffectType
 
 class Mdl2PharmML{
 	extension Constants dataType = new Constants();
@@ -35,6 +36,7 @@ class Mdl2PharmML{
 			<ct:Name>"«mathPrinter.fileName(m)»"</ct:Name>
 			«print_mdef_IndependentVariables»
 			«print_mdef_ModelDefinition»
+			«print_mdef_CollerationModel»
 			«msPrinter.print_msteps_ModellingSteps»
 		</PharmML>
 		'''
@@ -510,17 +512,17 @@ class Mdl2PharmML{
 			if (o.parameterObject != null){
 				for (b: o.parameterObject.blocks){
 					if (b.variabilityBlock != null){
+						var statements = "";
 						for (c: b.variabilityBlock.statements){
 							if (c.diagBlock != null){
 								//TODO process diag blocks
 							}
 							if (c.matrixBlock != null){
-								print_mdef_CollerationModel_Matrix(o.objectName.name, c.matrixBlock);
+								statements = statements + print_mdef_Matrix(o.objectName.name, c.matrixBlock);
 							}
 							if (c.sameBlock != null){
 							}
 						}
-						var statements = "";
 						model = model +
 						'''
 							«IF (statements.length > 0)»
@@ -533,29 +535,48 @@ class Mdl2PharmML{
 				}
 			}
 		}
-		return model;
+		'''«model»''';
 	}	
 	
-	def print_mdef_CollerationModel_Matrix(String objName, MatrixBlock matrix){
+	def print_mdef_Matrix(String objName, MatrixBlock matrix){
 		val matrixType = mathPrinter.getAttribute(matrix.arguments, AttributeValidator::attr_re_type.name);
-		var res = "";
+		var rowNames = "";
 		if (matrix.parameters != null){
-			
-			for (i: 0..matrix.parameters.arguments.size){
-				val arg = matrix.parameters.arguments.get(i);
-				if (arg.argumentName != null){
-				}	
+			for (symbol: matrix.parameters.symbols){
+				if (symbol.symbolName != null){
+					//TODO: should be reference!
+					rowNames = rowNames + mathPrinter.print_ct_SymbolRef(symbol.symbolName.name);
+				}
 			}	
-			//Retrieve the name of the block
-			//for (set:resolver.vm_mdl_vars.entrySet)
-			//		if (set.value.contains(name)) return "vm_mdl." + set.key;
 			'''
-				<Correlation blkId="c.«objName»"
-					<Matrix matrixType="«matrixType»">
-						
-					</Matrix>
-				</Correlation>
+				<Matrix matrixType="«matrixType.getMatrixType»">
+					<ct:RowNames>
+						«rowNames»
+					</ct:RowNames>
+					«FOR i: 0..matrix.parameters.symbols.size - 1»
+						«val symbol = matrix.parameters.symbols.get(i)»
+						«IF symbol.symbolName != null»
+							<MatrixRow>
+						«ENDIF»
+							«mathPrinter.print_Math_Expr(symbol.expression)»
+						«IF i < matrix.parameters.symbols.size - 1»
+							«IF matrix.parameters.symbols.get(i+1).symbolName != null»
+								</MatrixRow>
+							«ENDIF»
+						«ELSE»
+							</MatrixRow>
+						«ENDIF»
+					«ENDFOR»	
+				</Matrix>
 			'''			
 		}
+	}
+	
+	def getMatrixType(String matrixType){
+		if (matrixType.equals(RandomEffectType::RE_VAR))
+			return "CovMatrix";
+		if (matrixType.equals(RandomEffectType::RE_SD))
+			return "StDevCorrMatrix";
+		return "CovMatrix";	
 	}
 }

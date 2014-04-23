@@ -33,7 +33,10 @@ import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
+import org.ddmore.mdl.mdl.Symbol;
 import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.SymbolNames;
+import org.ddmore.mdl.mdl.Symbols;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
@@ -244,6 +247,26 @@ public class Utils {
 				list.add(id.getName());
 		}
 	}
+	
+	//Add a symbol to a list of known symbols
+	static void addSymbol(ArrayList<String> list, Symbols args){
+		if (args != null){
+			if (args.getSymbols() != null){	
+				for (Symbol arg: args.getSymbols()){
+					if (arg.getSymbolName() != null)
+						list.add(arg.getSymbolName().getName());
+				}
+			}
+		}
+	}
+
+	static void addSymbol(ArrayList<String> list, SymbolNames args){
+		if (args != null){
+			for (SymbolName id: args.getSymbolNames())
+				list.add(id.getName());
+		}
+	}
+
 	
 	static void addSymbol(ArrayList<String> list, ImportBlock block){
 		if (block != null){

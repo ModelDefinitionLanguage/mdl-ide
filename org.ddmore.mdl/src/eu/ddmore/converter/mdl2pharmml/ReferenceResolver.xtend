@@ -95,6 +95,7 @@ class ReferenceResolver{
 		}
 	}	
 	
+	//TODO: correct function (does not work!)
 	def getReferenceBlock(String name){
 		//try to find by name
 		for (set: vm_err_vars.entrySet)

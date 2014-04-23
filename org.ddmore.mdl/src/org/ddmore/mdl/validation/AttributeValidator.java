@@ -140,9 +140,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, 
-			attr_fix, attr_units, attr_transform, attr_mapping);
+			attr_fix, attr_units, attr_transform);
 	final public static List<Attribute> attrs_variability = Arrays.asList(attr_req_value, attr_re_type, attr_fix, 
-			attr_units, attr_transform, attr_mapping);
+			attr_units, attr_transform);
 	final public static List<Attribute> attrs_variability_subblock = Arrays.asList(attr_name, attr_re_type, attr_fix);
 	
 	/*Model object*/
@@ -152,8 +152,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_cc_type, attr_likelihood, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
 	final public static List<Attribute> attrs_observation = Arrays.asList();
-	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units, attr_mapping);
-	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units, attr_mapping);
+	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
+	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	
 	/*All blocks*/
 	final public static List<Attribute> attrs_import = Arrays.asList(attr_req_target, attr_name, attr_ncmt, attr_trans, attr_param, attr_output);

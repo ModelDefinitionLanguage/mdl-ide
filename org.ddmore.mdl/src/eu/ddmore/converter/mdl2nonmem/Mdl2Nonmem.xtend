@@ -573,7 +573,7 @@ class Mdl2Nonmem extends MdlPrinter{
 			
 			«section» «IF k > 0»BLOCK («k») SAME«ENDIF»
 			«IF b.parameters != null»
-				«FOR p: b.parameters.arguments»
+				«FOR p: b.parameters.symbolNames»
 					; «p.name»
 				«ENDFOR»
 			«ENDIF»
@@ -605,12 +605,12 @@ class Mdl2Nonmem extends MdlPrinter{
 		var isSigma = false;
 		if (name != null){
 			if (b.parameters != null)		
-				for (p: b.parameters.arguments) {
+				for (p: b.parameters.symbols) {
 					if (p.expression != null){
 						k = k + 1;
-						if (p.argumentName != null){
-							if (eta_vars.get("eta_" + p.argumentName.name) != null) isOmega = true;
-							if (eps_vars.get("eps_" + p.argumentName.name) != null) isSigma = true;
+						if (p.symbolName != null){
+							if (eta_vars.get("eta_" + p.symbolName.name) != null) isOmega = true;
+							if (eps_vars.get("eps_" + p.symbolName.name) != null) isSigma = true;
 						} 
 					}
 				}		
@@ -627,11 +627,11 @@ class Mdl2Nonmem extends MdlPrinter{
 		var isOmega = false;
 		var isSigma = false;
 		if (b.parameters != null)
-			for (p: b.parameters.arguments) {
+			for (p: b.parameters.symbols) {
 				if (p.expression != null){
-					if (p.argumentName != null){
-						if (eta_vars.get("eta_" + p.argumentName.name) != null) isOmega = true;
-						if (eps_vars.get("eps_" + p.argumentName.name) != null) isSigma = true;
+					if (p.symbolName != null){
+						if (eta_vars.get("eta_" + p.symbolName.name) != null) isOmega = true;
+						if (eps_vars.get("eps_" + p.symbolName.name) != null) isSigma = true;
 						k = k + 1;
 					}
 				}
@@ -656,7 +656,7 @@ class Mdl2Nonmem extends MdlPrinter{
 			}
 		}	
 		if (b.parameters != null)		
-			for (p: b.parameters.arguments) {
+			for (p: b.parameters.symbols) {
 				if (p.expression != null){
 					var  i = 0;
 					var tmpRes = "";
@@ -665,12 +665,12 @@ class Mdl2Nonmem extends MdlPrinter{
 						i = i + 1;
 					}
 					k = k + 1;
-					if (p.argumentName != null){
-						val isOmega = section.equals("$OMEGA") && (eta_vars.get("eta_" + p.argumentName.name) != null);
-						val isSigma = section.equals("$SIGMA") && (eps_vars.get("eps_" + p.argumentName.name) != null);
+					if (p.symbolName != null){
+						val isOmega = section.equals("$OMEGA") && (eta_vars.get("eta_" + p.symbolName.name) != null);
+						val isSigma = section.equals("$SIGMA") && (eps_vars.get("eps_" + p.symbolName.name) != null);
 						if (isOmega || isSigma)	{
 							result = result + tmpRes + p.expression.toStr + " ";
-							result = result + "; " + p.argumentName.name + "\n";
+							result = result + "; " + p.symbolName.name + "\n";
 						}
 					} 
 					else
@@ -702,14 +702,14 @@ class Mdl2Nonmem extends MdlPrinter{
 			}
 		}
 		if (b.parameters != null)
-			for (p: b.parameters.arguments) {
+			for (p: b.parameters.symbols) {
 				if (p.expression != null){
-					if (p.argumentName != null){
-						val isOmega = section.equals("$OMEGA") && (eta_vars.get("eta_" + p.argumentName.name) != null);
-						val isSigma = section.equals("$SIGMA") && (eps_vars.get("eps_" + p.argumentName.name) != null);
+					if (p.symbolName != null){
+						val isOmega = section.equals("$OMEGA") && (eta_vars.get("eta_" + p.symbolName.name) != null);
+						val isSigma = section.equals("$SIGMA") && (eps_vars.get("eps_" + p.symbolName.name) != null);
 						if (isOmega || isSigma)	{
 							result = result + p.expression.toStr + " ";
-							result = result + "; " + p.argumentName.name + "\n";
+							result = result + "; " + p.symbolName.name + "\n";
 							k = k + 1;
 						}
 					} 

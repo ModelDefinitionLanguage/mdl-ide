@@ -419,7 +419,7 @@ class MathPrinter extends MdlPrinter{
 		try{        			
         	if (value.indexOf(".") > -1){
         		Double::parseDouble(value);
-				return '''<ct:Double>«value»</ct:Double>''';
+				return '''<ct:Real>«value»</ct:Real>''';
         	} else {
 	       		Integer::parseInt(value);
     	   		return '''<ct:Int>«value»</ct:Int>''';	
@@ -597,6 +597,18 @@ class MathPrinter extends MdlPrinter{
 			default: operator
 		}
 	}
+
+	//+
+	def print_ct_SymbolRef(String objName, String name)'''
+		«var blkId = resolver.getReferenceBlock(objName, name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
+	'''
+
+	//+
+	def print_ct_SymbolRef(String name)'''
+		«var blkId = resolver.getReferenceBlock(name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
+	'''
 	
 	//+
 	def print_ct_SymbolRef(FullyQualifiedSymbolName ref)'''
