@@ -71,29 +71,37 @@ public class Utils {
 	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, FullyQualifiedSymbolName ref){
 		SymbolName symbName = ref.getSymbol();
 		ObjectName objName = ref.getObject();
-		if (objName != null)
+		if (objName == null) objName = getObjectName(ref);
+		if (objName != null) 
 			if (map.get(objName.getName()).contains(symbName.getName())) return true;		
-		//Validate if in MCL
-		for (String key: map.keySet()){
-			if (map.get(key).contains(symbName.getName())) return true;
-		}
 		return false;
 	}
 	
 	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName symbName){
-		for (String key: map.keySet()){
-			if (map.get(key).contains(symbName.getName())) return true;
-		}
+		ObjectName objName = getObjectName(symbName);
+		if (objName != null) 
+			if (map.get(objName.getName()).contains(symbName)) return true;
 		return false;
 	} 
 
 	//Checks whether a given symbol is declared
-	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, String symbName, ObjectName objName){
+	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, String symbName, String objName){
 		if (objName != null) 
-			if (map.get(objName.getName()).contains(symbName)) return true;
-		//Validate if in MCL
-		for (String key: map.keySet()){
-			if (map.get(key).contains(symbName)) return true;
+			if (map.get(objName).contains(symbName)) return true;
+		return false; 
+	}
+	
+	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, FullyQualifiedSymbolName ref, ArrayList<ModelingObjectGroup> mogs){
+		ObjectName objName = ref.getObject();
+		if (objName == null) objName = getObjectName(ref);
+		if (objName != null){
+			SymbolName symbName = ref.getSymbol();
+			if (isSymbolDeclared(map, symbName.getName(), objName.getName())) return true;
+			for (ModelingObjectGroup mog: mogs){
+				if (mog.getMdlObj().equals(objName.getName()))
+					if (isSymbolDeclared(map, symbName.getName(), mog.getDataObj()) || 
+							isSymbolDeclared(map, symbName.getName(), mog.getParamObj())) return true;
+			}
 		}
 		return false;
 	}

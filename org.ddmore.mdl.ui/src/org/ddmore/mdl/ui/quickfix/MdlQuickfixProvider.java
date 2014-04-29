@@ -14,6 +14,9 @@ import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.Categorical;
 import org.ddmore.mdl.mdl.ConditionalExpression;
 import org.ddmore.mdl.mdl.Continuous;
+import org.ddmore.mdl.mdl.DataInputBlock;
+import org.ddmore.mdl.mdl.DataObject;
+import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.DesignBlock;
 import org.ddmore.mdl.mdl.DesignBlockStatement;
 import org.ddmore.mdl.mdl.Distribution;
@@ -30,7 +33,6 @@ import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InlineBlock;
-import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.Likelihood;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.Mcl;
@@ -562,34 +564,46 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return null;
 	}
 	
-	//MODEL_INPUT_VARIABLES
+	DataObject getDataObject(EObject element){
+		Resource resource = element.eResource();
+		for(EObject obj1: resource.getContents()) {
+			if (obj1 instanceof MclImpl){
+				Mcl mcl = (Mcl)obj1;
+				for (MclObject obj: mcl.getObjects())
+					if (obj.getDataObject() != null) return obj.getDataObject();
+			}
+		}
+		return null;
+	}
+	
+	//DATA_INPUT_VARIABLES
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
 	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
 	public void addVariableToInputVariables(final Issue issue, IssueResolutionAcceptor acceptor) {
-		final String blockName = grammarAccess.getInputVariablesBlockAccess().getIdentifierMODEL_INPUT_VARIABLESKeyword_0_0().getValue();
+		final String blockName = grammarAccess.getDataInputBlockAccess().getIdentifierDATA_INPUT_VARIABLESKeyword_0_0().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
 				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				ModelObject obj = getModelObject(element);
+				DataObject obj = getDataObject(element);
 				if (obj != null){
-					for (ModelObjectBlock block: obj.getBlocks()){
-						if (block.getInputVariablesBlock() != null){
-							insertSymbolDeclaration(block.getInputVariablesBlock(), issue.getData()[0]);
+					for (DataObjectBlock block: obj.getBlocks()){
+						if (block.getDataInputBlock() != null){
+							insertSymbolDeclaration(block.getDataInputBlock(), issue.getData()[0]);
 							return;
 						}
 					}
-					InputVariablesBlock block = MdlFactory.eINSTANCE.createInputVariablesBlock();
+					DataInputBlock block = MdlFactory.eINSTANCE.createDataInputBlock();
 					block.setIdentifier(blockName);
 					insertSymbolDeclaration(block, issue.getData()[0]);
-					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
-					mdlBlock.setInputVariablesBlock(block);
-					obj.getBlocks().add(mdlBlock); 
+					DataObjectBlock dataBlock =  MdlFactory.eINSTANCE.createDataObjectBlock();
+					dataBlock.setDataInputBlock(block);
+					obj.getBlocks().add(dataBlock); 
 				}
 			}
 		});
 	}
 	
-	void insertSymbolDeclaration(InputVariablesBlock block, String varName){
+	void insertSymbolDeclaration(DataInputBlock block, String varName){
 		SymbolDeclaration newSymbol = MdlFactory.eINSTANCE.createSymbolDeclaration();
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 		symbName.setName(varName);

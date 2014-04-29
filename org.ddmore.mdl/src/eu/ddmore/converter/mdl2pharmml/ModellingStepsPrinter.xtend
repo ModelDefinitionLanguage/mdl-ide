@@ -189,7 +189,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		for (b: mObj.blocks){
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
-					if (s.symbolName.name.equals(name)){
+					if (s.symbolName.symbol.name.equals(name)){
 						return s;
 					}
 				}

@@ -580,7 +580,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				sm,
 				MdlPackage.Literals.SYMBOL_MODIFICATION__LIST,
 				_image(sm),
-				MathPrinter.toStr(sm.getIdentifier()),
+				MathPrinter.toStr(sm.getSymbolName()),
 				false);
 	}
 	

@@ -431,8 +431,8 @@ class MdlPrinter {
 
 	def toStr(SymbolModification v){
 		var res = "";
-		if (v.identifier != null){
-			v.identifier.toStr;
+		if (v.symbolName != null){
+			v.symbolName.toStr;
 		}
 		if (v.list != null){	
 			res = res + " = " + v.list.toStr;

@@ -64,17 +64,17 @@ RandomVariableDefinitionBlock:
 
 InputVariablesBlock:
   	identifier = 'MODEL_INPUT_VARIABLES' 
-  	BEGIN variables += SymbolDeclaration* END //new Variable +
+  	BEGIN variables += SymbolModification* END //Ref to Variable - match DATA_INPUT_VARIABLES
 ;
 
 StructuralParametersBlock:
   identifier = 'STRUCTURAL_PARAMETERS' 
-  BEGIN parameters += ParameterDeclaration* END  //New parameter - match STRUCTURAL
+  BEGIN parameters += SymbolModification* END  //Ref to parameter - match STRUCTURAL
 ; 
 
 VariabilityParametersBlock:
   identifier = 'VARIABILITY_PARAMETERS' 
-  BEGIN parameters += ParameterDeclaration* END //New parameter - match VARIABILITY
+  BEGIN parameters += SymbolModification* END //Ref to parameter - match VARIABILITY
 ;
 
 OutputVariablesBlock:
@@ -389,7 +389,7 @@ ImportedFunction:
 ;
 
 SymbolModification:
-	identifier = FullyQualifiedSymbolName ("=" list = List)?  //Ref to ParameterName or VariableName +
+	symbolName = FullyQualifiedSymbolName ("=" list = List)?  //Ref to ParameterName or VariableName +
 ;
 
 ParameterDeclaration:

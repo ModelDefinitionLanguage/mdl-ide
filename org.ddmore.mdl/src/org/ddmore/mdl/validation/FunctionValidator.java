@@ -50,9 +50,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
     @Inject
     public void register(EValidatorRegistrar registrar) {}
 		
-	public final static String MSG_FUNCTION_DEFINED  = "A function with such name is already defined";
-	public final static String MSG_FUNCTION_UNKNOWN  = "Unknown function";
-	public final static String MSG_FUNCTION_INVALID = "Invalid function call";
+	public final static String MSG_FUNCTION_DEFINED    = "A function with such name is already defined";
+	public final static String MSG_FUNCTION_UNKNOWN    = "Unknown function";
+	public final static String MSG_FUNCTION_INVALID    = "Invalid function call";
 	public final static String MSG_FUNCTION_WRONG_TYPE = "Type error";
 
 	public final static String MSG_FUNCTION_ATTRIBUTE_DEFINED = "A parameter with such name is already defined";
@@ -62,6 +62,12 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_FUNCTION_PROPERTY_UNKNOWN = "Unknown property";
 	public final static String MSG_FUNCTION_PROPERTY_MISSING = "Required property is not set";
 	public final static String MSG_FUNCTION_PROPERTY_DEFINED = "Property defined more than once";
+
+	public final static String MSG_FUNCTION_CALL_TARGET_MISSING    = "Target environment is not defined";
+	public final static String MSG_FUNCTION_CALL_MODEL_OBJ_MISSING = "MOG should include a model object";
+	public final static String MSG_FUNCTION_CALL_DATA_OBJ_MISSING  = "MOG should include a data object";
+	public final static String MSG_FUNCTION_CALL_PARAM_OBJ_MISSING = "MOG should include a parameter object";
+	public final static String MSG_FUNCTION_CALL_OBJ_DEFINED     = "Cannot create a MOG";
 	
 	//List of recognized mathematical functions (MDL = PharMML)
 	final static List<String> standardFunctions = Arrays.asList(
@@ -84,33 +90,33 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		    put("seq", 3);
 		}
 	};
-	
-	public final static String funct_error_exit = "errorexit";
-			
+
 	//List of recognized MDL functions
-	final static List<String> specialFunctions = Arrays.asList("seq", "update", "runif", "errorexit", "PHI");
+	//TODO: keep references or full signatures
 	//List of declared function names per object
 	static HashMap<String, ArrayList<String>> externalFunctions = new HashMap<String, ArrayList<String>>();
 	//List of declared function names per object
 	static HashMap<String, ArrayList<String>> declaredFunctions = new HashMap<String, ArrayList<String>>();
 
+	public final static String funct_error_exit = "errorexit";
+	final static List<String> specialFunctions = Arrays.asList("seq", "update", "runif", "errorexit", "PHI");
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//Task object
 	final public static Attribute attr_task_command = new Attribute("command", MdlDataType.TYPE_STRING, true);
 	final public static Attribute attr_task_target = new Attribute("target", MdlDataType.TYPE_OBJ_REF, true);
-	final public static Attribute attr_task_model = new Attribute("model", MdlDataType.TYPE_OBJ_REF, true);
-	final public static Attribute attr_task_parameter = new Attribute("parameter", MdlDataType.TYPE_OBJ_REF, true);
-	final public static Attribute attr_task_data = new Attribute("data", MdlDataType.TYPE_OBJ_REF, true);
-	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_OBJ_REF, false);
-	final public static Attribute attr_task_max = new Attribute("max", MdlDataType.TYPE_OBJ_REF, false);
-	final public static Attribute attr_task_sig = new Attribute("sig", MdlDataType.TYPE_OBJ_REF, false);
-	final public static Attribute attr_task_cov = new Attribute("cov", MdlDataType.TYPE_OBJ_REF, false);
+	final public static Attribute attr_task_model = new Attribute("model", MdlDataType.TYPE_OBJ_REF_MODEL, true);
+	final public static Attribute attr_task_parameter = new Attribute("parameter", MdlDataType.TYPE_OBJ_REF_MODEL, true);
+	final public static Attribute attr_task_data = new Attribute("data", MdlDataType.TYPE_OBJ_REF_DATA, true);
+	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_OBJ_REF_PARAM, false);
+	final public static Attribute attr_task_max = new Attribute("max", MdlDataType.TYPE_NAT, false);
+	final public static Attribute attr_task_sig = new Attribute("sig", MdlDataType.TYPE_NAT, false);
+	final public static Attribute attr_task_cov = new Attribute("cov", MdlDataType.TYPE_STRING, false);
 		
 	final public static List<Attribute> attrs_task = Arrays.asList(
 			attr_task_target, attr_task_model, attr_task_parameter, attr_task_data, 
 			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov);
-	final public static List<Attribute> attrs_exec_task = Arrays.asList(
-			attr_task_command);
+	final public static List<Attribute> attrs_exec_task = Arrays.asList(attr_task_command);
 					
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -218,6 +224,48 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER,
 					MSG_FUNCTION_UNKNOWN, call.getIdentifier().getSymbol().getName());
 			} else {
+				//Check that any call passes a reference to a target environment, and
+				//a model, data, and parameter object
+				if (Utils.isSymbolDeclared(declaredFunctions, call.getIdentifier())){
+					byte params[] = new byte[ 4];
+					for (int i = 0; i < 4; i++) params[i] = 0;
+					for (Argument arg: call.getArguments().getArguments()){
+						//Check that an argument is a ref to an object or target
+						//Check that references to objects refer to 
+						if (MdlDataType.validateType(MdlDataType.TYPE_TARGET, arg.getExpression()))
+							params[0] += 1;
+						if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_MODEL, arg.getExpression()))
+							params[1] += 1;
+						if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_PARAM, arg.getExpression()))
+							params[2] += 1;
+						if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_DATA, arg.getExpression()))
+							params[3] += 1;
+					}
+					String[] names = {"model", "parameter", "data"};
+					if (params[0] == 0)
+						warning(MSG_FUNCTION_CALL_TARGET_MISSING, 
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_CALL_TARGET_MISSING, call.getIdentifier().getSymbol().getName());
+					if (params[1] == 0)
+						warning(MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, 
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, call.getIdentifier().getSymbol().getName());
+					if (params[2] == 0)
+						warning(MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, 
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, call.getIdentifier().getSymbol().getName());
+					if (params[3] == 0)
+						warning(MSG_FUNCTION_CALL_DATA_OBJ_MISSING, 
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_CALL_DATA_OBJ_MISSING, call.getIdentifier().getSymbol().getName());
+					for (int i = 1; i < 4; i++){
+						if (params[i] > 1)
+							warning(MSG_FUNCTION_CALL_OBJ_DEFINED + ": two or more " + names[i-1] + " objects selected!", 
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_CALL_OBJ_DEFINED, call.getIdentifier().getSymbol().getName());
+					}
+					
+				}
 				//declared functions (Task object) or external functions (IMPORT)
 				//TODO: match number of actual parameters with the number of references in param attribute 
 				//or input and output attributes together

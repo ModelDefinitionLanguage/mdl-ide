@@ -12,6 +12,7 @@ import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
 import org.ddmore.mdl.mdl.OrExpression;
@@ -19,6 +20,7 @@ import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.Vector;
+import org.ddmore.mdl.validation.MdlJavaValidator;
 
 public enum MdlDataType {
 
@@ -32,7 +34,8 @@ public enum MdlDataType {
     //Restricted vectors
     TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL,TYPE_VECTOR_PROBABILITY,
     //References to variables and objects, mathematical expressions
-	TYPE_REF, TYPE_OBJ_REF, TYPE_EXPR, 
+	TYPE_REF, TYPE_OBJ_REF, TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM,
+	TYPE_EXPR, 
 	//Nested lists
 	TYPE_LIST, TYPE_ODE, TYPE_RANDOM_LIST, TYPE_DISTRIBUTION,
 	//Enumerations
@@ -102,9 +105,52 @@ public enum MdlDataType {
 			case TYPE_INTERP: return (expr.getType() != null)? isInterp(expr.getType()): false;
 			case TYPE_RANDOM_EFFECT: return (expr.getType() != null)? isRandomEffect(expr.getType()): false;
 			case TYPE_INPUT_FORMAT: return (expr.getType() != null)? isInputType(expr.getType()): false;
-			
-			default:	return false; 
+			case TYPE_OBJ_REF: return (expr.getExpression() != null)? isObjectReference(expr.getExpression()): false;
+			case TYPE_OBJ_REF_MODEL: return (expr.getExpression() != null)? isModelObjectReference(expr.getExpression()): false;
+			case TYPE_OBJ_REF_DATA: return (expr.getExpression() != null)? isDataObjectReference(expr.getExpression()): false;
+			case TYPE_OBJ_REF_PARAM: return (expr.getExpression() != null)? isParameterObjectReference(expr.getExpression()): false;
+			default: return false; 
 		}
+	}
+		
+	private static boolean isObjectReference(Expression expr) {
+		if (expr.getConditionalExpression().getExpression1() == null){
+			FullyQualifiedSymbolName s = getReference(expr.getConditionalExpression().getExpression());
+			if (s!= null) {
+				return MdlJavaValidator.declaredObjects.containsKey(s.getSymbol().getName());
+			}
+		}
+		return false;
+	}
+	
+	private static boolean isModelObjectReference(Expression expr) {
+		if (expr.getConditionalExpression().getExpression1() == null){
+			FullyQualifiedSymbolName s = getReference(expr.getConditionalExpression().getExpression());
+			if (s!= null) {
+				return (MdlJavaValidator.declaredObjects.get(s.getSymbol().getName()) == MdlDataType.TYPE_OBJ_REF_MODEL);
+			}
+		}
+		return false;
+	}
+
+	private static boolean isDataObjectReference(Expression expr) {
+		if (expr.getConditionalExpression().getExpression1() == null){
+			FullyQualifiedSymbolName s = getReference(expr.getConditionalExpression().getExpression());
+			if (s!= null) {
+				return (MdlJavaValidator.declaredObjects.get(s.getSymbol().getName()) == MdlDataType.TYPE_OBJ_REF_DATA);
+			}
+		}
+		return false;
+	}
+
+	private static boolean isParameterObjectReference(Expression expr) {
+		if (expr.getConditionalExpression().getExpression1() == null){
+			FullyQualifiedSymbolName s = getReference(expr.getConditionalExpression().getExpression());
+			if (s!= null) {
+				return (MdlJavaValidator.declaredObjects.get(s.getSymbol().getName()) == MdlDataType.TYPE_OBJ_REF_PARAM);
+			}
+		}
+		return false;
 	}
 
 	private static boolean isInputType(EnumType type) {
@@ -144,30 +190,36 @@ public enum MdlDataType {
 
 	private static boolean isReference(Expression expr) {
 		if (expr.getConditionalExpression().getExpression1() != null){
-			if (expr.getConditionalExpression().getExpression2() != null)
-				return isReference(expr.getConditionalExpression().getExpression1()) 
-						&& isReference(expr.getConditionalExpression().getExpression2());
-			return isReference(expr.getConditionalExpression().getExpression1());
-		}
-		else {
-			OrExpression orExpr = expr.getConditionalExpression().getExpression();
-			if (orExpr.getExpression().size() > 1) return false;
-			AndExpression andExpr = orExpr.getExpression().get(0);
-			if (andExpr.getExpression().size() > 1) return false;
-			LogicalExpression logicExpr = andExpr.getExpression().get(0);
-			if (logicExpr.getExpression1() != null){
-				if (logicExpr.getExpression2() != null) return false;
-				if (logicExpr.getExpression1().getString() != null) return false;
-				if(logicExpr.getExpression1().getExpression().size() > 1) return false;
-				MultiplicativeExpression multExpr = logicExpr.getExpression1().getExpression().get(0);
-				if (multExpr.getExpression().size() > 1) return false;
-				PowerExpression powerExpr = multExpr.getExpression().get(0);
-				if (powerExpr.getExpression().size() > 1) return false;
-				UnaryExpression unaryExpr = powerExpr.getExpression().get(0);
-				if (unaryExpr.getSymbol() != null) return true;
+			if (expr.getConditionalExpression().getExpression2() != null){
+				return 
+					isReference(expr.getConditionalExpression().getExpression1()) && 
+					isReference(expr.getConditionalExpression().getExpression2());
 			}
+			return isReference(expr.getConditionalExpression().getExpression1());
+		} else {
+			OrExpression orExpr = expr.getConditionalExpression().getExpression();
+			if (getReference(orExpr) != null) return true;
 		}
 		return false;
+	}
+
+	public static FullyQualifiedSymbolName getReference(OrExpression orExpr) {
+		if (orExpr.getExpression().size() > 1) return null;
+		AndExpression andExpr = orExpr.getExpression().get(0);
+		if (andExpr.getExpression().size() > 1) return null;
+		LogicalExpression logicExpr = andExpr.getExpression().get(0);
+		if (logicExpr.getExpression1() != null){
+			if (logicExpr.getExpression2() != null) return null;
+			if (logicExpr.getExpression1().getString() != null) return null;
+			if(logicExpr.getExpression1().getExpression().size() > 1) return null;
+			MultiplicativeExpression multExpr = logicExpr.getExpression1().getExpression().get(0);
+			if (multExpr.getExpression().size() > 1) return null;
+			PowerExpression powerExpr = multExpr.getExpression().get(0);
+			if (powerExpr.getExpression().size() > 1) return null;
+			UnaryExpression unaryExpr = powerExpr.getExpression().get(0);
+			if (unaryExpr.getSymbol() != null) return unaryExpr.getSymbol();
+		}
+		return null;
 	}
 
 	private static boolean isVectorReal(Vector v) {

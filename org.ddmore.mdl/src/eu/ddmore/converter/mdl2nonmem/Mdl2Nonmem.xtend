@@ -1071,14 +1071,12 @@ class Mdl2Nonmem extends MdlPrinter{
 		var levelVars = new HashSet<String>();
 		for (b: o.blocks){
 			if(b.inputVariablesBlock != null){
-				for (SymbolDeclaration s: b.inputVariablesBlock.variables){
-					if (s.expression != null){
-						if (s.expression.list != null){
-							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
-							if (level.equals(levelId)){
-								if (!levelVars.contains(s.symbolName.name)){
-									levelVars.add(s.symbolName.name);
-								}
+				for (s: b.inputVariablesBlock.variables){
+					if (s.list != null){
+						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level.name);
+						if (level.equals(levelId)){
+							if (!levelVars.contains(s.symbolName.symbol.name)){
+								levelVars.add(s.symbolName.symbol.name);
 							}
 						}
 					}
@@ -1172,8 +1170,8 @@ class Mdl2Nonmem extends MdlPrinter{
 		for (b: o.blocks){
 	  		if (b.structuralParametersBlock != null){
 				for (id: b.structuralParametersBlock.parameters) {
-					if (theta_vars.get(id.symbolName.name) == null){
-						theta_vars.put(id.symbolName.name, i);
+					if (theta_vars.get(id.symbolName.symbol.name) == null){
+						theta_vars.put(id.symbolName.symbol.name, i);
 						i = i + 1;
 					}
 				}
