@@ -144,6 +144,11 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 						for (SymbolDeclaration s: block.getDataInputBlock().getVariables())
 							varList.add(s.getSymbolName().getName());
 					}
+					//DATA_DERIVED_VARIABLES
+					if (block.getDataDerivedBlock() != null){
+						for (BlockStatement st: block.getDataDerivedBlock().getStatements())
+							Utils.addSymbol(varList, st);
+					}
 					//SOURCE
 					if (block.getSourceBlock() != null){
 						if (block.getSourceBlock().getSource() != null)

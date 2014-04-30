@@ -9,6 +9,7 @@ import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.types.InputFormatType
+import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	
@@ -142,8 +143,6 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	'''
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	//Assume that 
-	// DATA_INPUT_VARIABLES contains attribute 'mapping' with the name of a corresponding variable
 	// MODEL_INPUT_VARIABLES contains attribute 'use'
 	def print_NONMEM_DataSet(String dObjName, String mObjName){
 		val dObj = getDataObject(dObjName);
@@ -155,20 +154,35 @@ class ModellingStepsPrinter extends DataSetPrinter{
 				for (s: b.dataInputBlock.variables){
 					var columnId = s.symbolName.name;
 					var symbId = s.symbolName.name;
-					if (s.expression != null){
-						if (s.expression.list != null){
-							val newName = s.expression.list.arguments.getAttribute(AttributeValidator::attr_mapping.name);
-							if (newName.length > 0)
-								symbId = newName;
-						}
-					}
 					val expectedVar = mObj.getModelInputVariable(symbId);
-					var blkIdRef = mObjName.getReferenceBlock(symbId);
 					if (expectedVar != null){
+						var blkIdRef = mObjName.getReferenceBlock(symbId);
 						res = res + print_msteps_ColumnMapping(columnId, symbId, blkIdRef);
 					}
 				}
 			}
+			if (b.dataDerivedBlock != null){
+				var derivedVars = newHashSet;
+				for (s: b.dataDerivedBlock.statements){
+					var iterator = s.eResource.getAllContents();
+				    while (iterator.hasNext()){
+	    				val obj = iterator.next();
+	    				if (obj instanceof SymbolDeclarationImpl){
+	    					val symbol = obj as SymbolDeclaration;
+	    					if (!derivedVars.contains(symbol.symbolName.name))
+	    						derivedVars.add(symbol.symbolName.name);
+						}
+					}
+				}
+				for (s: derivedVars){
+					val expectedVar = mObj.getModelInputVariable(s);
+					if (expectedVar != null){
+						var blkIdRef = mObjName.getReferenceBlock(s);
+						res = res + print_msteps_ColumnMapping(s, s, blkIdRef);
+					}
+				}
+			}
+			
 		}
 		'''
 		<NONMEMdataSet>
@@ -210,15 +224,15 @@ class ModellingStepsPrinter extends DataSetPrinter{
 					val data=b.sourceBlock.source
 					if (data.list != null){
 						val inputFormat = data.list.arguments.getAttribute(AttributeValidator::attr_inputformat.name);
-							if (inputFormat.equals(InputFormatType::FORMAT_NONMEM)){
-								res  = res + print_NONMEM_DataSet(dObjName, mObjName);
-							}
-							val file = data.list.arguments.getAttribute(AttributeValidator::attr_file.name);
-							if (file.length > 0){
-								var delimeter = data.list.arguments.getAttribute(AttributeValidator::attr_delimiter.name);
-								if (delimeter.length == 0) delimeter = AttributeValidator::attr_delimiter.defaultValue;
-								res = res + print_ds_ExternalSource("ds." + dObjName, file, file, inputFormat, delimeter);
-							}
+						if (inputFormat.equals(InputFormatType::FORMAT_NONMEM)){
+							res  = res + print_NONMEM_DataSet(dObjName, mObjName);
+						}
+						val file = data.list.arguments.getAttribute(AttributeValidator::attr_file.name);
+						if (file.length > 0){
+							var delimeter = data.list.arguments.getAttribute(AttributeValidator::attr_delimiter.name);
+							if (delimeter.length == 0) delimeter = AttributeValidator::attr_delimiter.defaultValue;
+							res = res + print_ds_ExternalSource("ds." + dObjName, file, file, inputFormat, delimeter);
+						}
 					}
 				}
 			}

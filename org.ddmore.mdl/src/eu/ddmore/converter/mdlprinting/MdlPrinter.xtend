@@ -37,8 +37,6 @@ import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.SymbolModification
 import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
-import org.ddmore.mdl.mdl.Distribution
-import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Selector
 import org.ddmore.mdl.mdl.ParameterObject
@@ -471,24 +469,24 @@ class MdlPrinter {
 		if (type.continuous != null){
 			return type.continuous.identifier
 		} 
-		if (type.use != null){
-			return type.use.toStr
-		} 
 		if (type.likelihood != null){
 			return type.likelihood.identifier	
+		} 
+		if (type.use != null){
+			return type.use.identifier
 		} 
 		if (type.target != null){
 			return type.target.identifier 
 		} 
-	}
-	
-	
-	def String toStr(Distribution d) { 
-		return d.identifier
-	}
-
-	def String toStr(UseType l) { 
-		return l.identifier
+		if (type.input != null){
+			return type.input.identifier
+		}
+		if (type.interpolation != null){
+			return type.interpolation.identifier
+		}
+		if (type.variability != null){
+			return type.variability.identifier
+		}
 	}
 	
 	def toStr(RandomList l){

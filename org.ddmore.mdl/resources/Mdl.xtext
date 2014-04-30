@@ -135,6 +135,7 @@ PriorParametersBlock:
 
 DataObjectBlock:
 	dataInputBlock = DataInputBlock |
+	dataDerivedBlock = DataDerivedBlock |
 	sourceBlock = SourceBlock |
 	designBlock = DesignBlock |
 	targetBlock = TargetBlock | 
@@ -143,15 +144,20 @@ DataObjectBlock:
 DataInputBlock:
  	identifier='DATA_INPUT_VARIABLES' 
  	BEGIN variables += SymbolDeclaration* END  //new Variable +
- ;
+;
  
- SourceBlock:
+DataDerivedBlock:
+ 	identifier='DATA_DERIVED_VARIABLES' 
+ 	BEGIN statements += BlockStatement* END  //new Variable +
+; 
+ 
+SourceBlock:
 	identifier='SOURCE' 	
 	BEGIN 
 		source = ParameterDeclaration
 		(inlineBlock = InlineBlock)? 
 	END
- ;
+;
  
 //////////////////////////////////////////////////////////
 //Task Object

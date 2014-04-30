@@ -11,6 +11,7 @@ import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.ConditionalStatement;
+import org.ddmore.mdl.mdl.DataDerivedBlock;
 import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DesignBlock;
 import org.ddmore.mdl.mdl.DiagBlock;
@@ -40,6 +41,7 @@ import org.ddmore.mdl.mdl.Symbols;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
+import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
@@ -390,6 +392,7 @@ public class Utils {
 		if (
 			//Data object	
 			obj instanceof DataInputBlockImpl ||
+			obj instanceof DataDerivedBlockImpl ||
 			obj instanceof SourceBlockImpl ||
 			obj instanceof DesignBlockStatementImpl ||
 			//Model object
@@ -414,6 +417,7 @@ public class Utils {
 	public static String getBlockName(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
+		if (obj instanceof DataDerivedBlockImpl) return ((DataDerivedBlock)obj).getIdentifier();
 		if (obj instanceof SourceBlockImpl) return ((SourceBlock)obj).getIdentifier();
 		if (obj instanceof DesignBlockImpl) return ((DesignBlock)obj).getIdentifier();
 		/*Parameter object*/

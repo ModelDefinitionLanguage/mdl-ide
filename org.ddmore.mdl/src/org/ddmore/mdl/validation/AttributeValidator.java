@@ -16,6 +16,7 @@ import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
+import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
@@ -59,6 +60,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_name = new Attribute("name", MdlDataType.TYPE_STRING, true, "");		
 	final public static Attribute attr_req_value = new Attribute("value", MdlDataType.TYPE_REAL, true, "0");
 	final public static Attribute attr_value = new Attribute("value", MdlDataType.TYPE_REAL, false, "0");
+	final public static Attribute attr_expr_value = new Attribute("value", MdlDataType.TYPE_EXPR, true, "0");
 
 	final public static Attribute attr_hi = new Attribute("hi", MdlDataType.TYPE_REAL, false, "0");
 	final public static Attribute attr_lo = new Attribute("lo", MdlDataType.TYPE_REAL, false, "1");
@@ -72,8 +74,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_req_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VARIABILITY_TYPE);
 	final public static Attribute attr_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VARIABILITY_TYPE);
 	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false);
-	
-	final public static Attribute attr_mapping = new Attribute("alias", MdlDataType.TYPE_REF, false);
 	
 	/*ESTIMATION*/
 	final public static Attribute attr_likelihood = new Attribute("likelihood", MdlDataType.TYPE_EXPR, false);
@@ -132,8 +132,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
-	final public static List<Attribute> attrs_header = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
-			attr_recode, attr_boundaries, attr_missing, attr_mapping, attr_female, attr_male);
+	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
+			attr_recode, attr_boundaries, attr_missing, attr_female, attr_male);
+	final public static List<Attribute> attrs_dataDerived = Arrays.asList(attr_req_cc_type, attr_expr_value, attr_units);
 	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, 
 			attr_delimiter, attr_file, attr_script, attr_header);
 	final public static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp /*,attr_idv*/);
@@ -165,7 +166,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		private static final long serialVersionUID = -4512048801509444272L;
 		{
 			/*Data object*/
-			for (Attribute attr: attrs_header) put("DATA_INPUT_VARIABLES:" + attr.name, attr);
+			for (Attribute attr: attrs_dataInput) put("DATA_INPUT_VARIABLES:" + attr.name, attr);
+			for (Attribute attr: attrs_dataDerived) put("DATA_DERIVED_VARIABLES:" + attr.name, attr);
 			for (Attribute attr: attrs_source) put("SOURCE:" + attr.name, attr);
 			for (Attribute attr: attrs_design) put("DESIGN:" + attr.name, attr);
 			/*Parameter object*/
@@ -201,7 +203,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		
 	public static List<Attribute> getAllAttributes(EObject obj){
 		/*Data object*/
-		if (obj instanceof DataInputBlockImpl) return attrs_header; 
+		if (obj instanceof DataInputBlockImpl) return attrs_dataInput; 
+		if (obj instanceof DataDerivedBlockImpl) return attrs_dataDerived; 
 		if (obj instanceof SourceBlockImpl) return attrs_source; 
 		if (obj instanceof DesignBlockImpl) return attrs_design; 
 		/*Parameter object*/
