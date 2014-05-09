@@ -57,7 +57,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	final public static Attribute attr_name = new Attribute("name", MdlDataType.TYPE_STRING, true, "");		
+	final public static Attribute attr_name = new Attribute("name", MdlDataType.TYPE_STRING, false, "");		
 	final public static Attribute attr_req_value = new Attribute("value", MdlDataType.TYPE_REAL, true, "0");
 	final public static Attribute attr_value = new Attribute("value", MdlDataType.TYPE_REAL, false, "0");
 	final public static Attribute attr_expr_value = new Attribute("value", MdlDataType.TYPE_EXPR, true, "0");

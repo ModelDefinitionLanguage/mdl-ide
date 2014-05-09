@@ -295,7 +295,11 @@ SymbolNames:
 
 InlineBlock:
 	identifier = 'INLINE' 
-	BEGIN (variables += FullyQualifiedSymbolName)* (values += NumericValue | '.')* END //Ref to VariableName + 
+	BEGIN (variables = VariableList)? (values = NumericList)? END //Ref to VariableName + 
+;
+
+NumericList:
+	values += NumericValue (=> (',' | ';')? values += (NumericValue | '.'))* //Ref to VaraibleName +
 ;
 
 DesignBlock:
@@ -308,7 +312,7 @@ DesignBlockStatement:
 ;
 
 VariableList:
-	identifiers += FullyQualifiedSymbolName (=> ',' identifiers += FullyQualifiedSymbolName)* //Ref to VaraibleName +
+	identifiers += FullyQualifiedSymbolName (=> (',' | ';')? identifiers += FullyQualifiedSymbolName)* //Ref to VaraibleName +
 ;
 	
 TaskFunctionDeclaration:

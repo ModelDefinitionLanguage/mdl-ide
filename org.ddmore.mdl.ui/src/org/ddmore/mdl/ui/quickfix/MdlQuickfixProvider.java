@@ -510,11 +510,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 					outputBlock.getVariables().remove(ref);
 					return;
 				}
-				if (container instanceof InlineBlockImpl){
-					InlineBlock inlineBlock = (InlineBlock) container;
-					inlineBlock.getVariables().remove(ref);
-					return;
-				}
 				if (container instanceof VariableListImpl){
 					VariableList variableList = (VariableList) container;
 					variableList.getIdentifiers().remove(ref);

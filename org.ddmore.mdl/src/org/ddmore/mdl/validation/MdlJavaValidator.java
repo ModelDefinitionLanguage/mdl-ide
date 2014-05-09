@@ -6,11 +6,16 @@
  */
 package org.ddmore.mdl.validation;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
@@ -23,7 +28,12 @@ import org.ddmore.mdl.mdl.impl.SymbolModificationImpl;
 import org.ddmore.mdl.mdl.impl.TaskFunctionBlockImpl;
 import org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl;
 import org.ddmore.mdl.types.MdlDataType;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.validation.Check;
@@ -36,8 +46,11 @@ import org.eclipse.xtext.validation.ComposedChecks;
 		UnitValidator.class})
 public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
+	public final static String MSG_DATA_FILE_NOT_FOUND = "Cannot find data file";
+	public final static String MSG_SCRIPT_NOT_FOUND = "Cannot find script file";
+	
 	public final static String MSG_SYMBOL_DEFINED  = "A variable or parameter with such name already exists";
-	public final static String MSG_SYMBOL_UNKNOWN    = "Unresolved reference: parameter, variable, object or formal argument not declared";
+	public final static String MSG_SYMBOL_UNKNOWN  = "Unresolved reference: parameter, variable, object or formal argument not declared";
 		
 	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF = "Unresolved reference to a list attribute";
 	public final static String MSG_UNRESOLVED_FUNC_ARGUMENT_REF = "Unresolved reference to a function output parameter";
@@ -269,7 +282,36 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			}
 		}		
 	}
+
+	//Check that the data/script file exists
+	@Check
+	public void validateDataSource(SourceBlock b){
+		if (b.getInlineBlock() != null) return;
+		boolean isScript = false;
+		String dataPath = Utils.getAttributeValue(b.getSource().getList().getArguments(), AttributeValidator.attr_file.name);
+		if (dataPath.length() == 0){
+			dataPath = Utils.getAttributeValue(b.getSource().getList().getArguments(), AttributeValidator.attr_script.name);
+			isScript = true;	
+		}	
+		if (dataPath.length() > 0){
+			String platformString = b.eResource().getURI().toPlatformString(true);
+			IFile myFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(platformString));
+			IProject proj = myFile.getProject();
+			IFile linkedFile = proj.getFile(new Path(dataPath));
+			if (linkedFile.exists()) return;
+			if (!isScript){
+				warning(MSG_DATA_FILE_NOT_FOUND, 
+						MdlPackage.Literals.SOURCE_BLOCK__SOURCE,
+						MSG_DATA_FILE_NOT_FOUND, dataPath);
+			} else {
+				warning(MSG_SCRIPT_NOT_FOUND, 
+						MdlPackage.Literals.SOURCE_BLOCK__SOURCE,
+						MSG_SCRIPT_NOT_FOUND, dataPath);
+			}				
+		}
+    }
 	
+
 	//Match the name of the same block with the name of a matrix or a diag block
 	@Check
 	public void validateSameSubblockName(SameBlock b){

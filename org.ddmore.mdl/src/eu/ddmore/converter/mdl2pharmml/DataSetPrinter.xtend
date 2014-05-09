@@ -66,7 +66,6 @@ class DataSetPrinter {
 				fileReader = new BufferedReader(new FileReader(fileName)); 
 			} 
 			catch(FileNotFoundException e1){
-				//File does not exist	
 				return null;
 			}		
 		} else {
@@ -85,7 +84,6 @@ class DataSetPrinter {
 						fileReader = new BufferedReader(new FileReader(dataPath));
 					}
 					catch(FileNotFoundException e1){
-						//File does not exist
 						return null;
 					}
 				}
