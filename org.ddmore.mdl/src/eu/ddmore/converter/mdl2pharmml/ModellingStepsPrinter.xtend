@@ -220,19 +220,16 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		var res = "";
 		for (b: dObj.blocks)	{
 			if (b.sourceBlock != null){
-				if (b.sourceBlock.source!=null){
-					val data=b.sourceBlock.source
-					if (data.list != null){
-						val inputFormat = data.list.arguments.getAttribute(AttributeValidator::attr_inputformat.name);
-						if (inputFormat.equals(InputFormatType::FORMAT_NONMEM)){
-							res  = res + print_NONMEM_DataSet(dObjName, mObjName);
-						}
-						val file = data.list.arguments.getAttribute(AttributeValidator::attr_file.name);
-						if (file.length > 0){
-							var delimeter = data.list.arguments.getAttribute(AttributeValidator::attr_delimiter.name);
-							if (delimeter.length == 0) delimeter = AttributeValidator::attr_delimiter.defaultValue;
-							res = res + print_ds_ExternalSource("ds." + dObjName, file, file, inputFormat, delimeter);
-						}
+				if (b.sourceBlock.list!=null){
+					val inputFormat = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_inputformat.name);
+					if (inputFormat.equals(InputFormatType::FORMAT_NONMEM)){
+						res  = res + print_NONMEM_DataSet(dObjName, mObjName);
+					}
+					val file = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_file.name);
+					if (file.length > 0){
+						var delimeter = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_delimiter.name);
+						if (delimeter.length == 0) delimeter = AttributeValidator::attr_delimiter.defaultValue;
+						res = res + print_ds_ExternalSource("ds." + dObjName, file, file, inputFormat, delimeter);
 					}
 				}
 			}

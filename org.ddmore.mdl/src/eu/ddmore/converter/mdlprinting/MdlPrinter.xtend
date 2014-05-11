@@ -130,17 +130,15 @@ class MdlPrinter {
 			if (obj.dataObject != null){
 				for (b: obj.dataObject.blocks){
 					if (b.sourceBlock != null){
-						if (b.sourceBlock.source != null){
-							if (b.sourceBlock.source.list != null){
-								var source = b.sourceBlock.source.list.arguments.getAttributeExpression(AttributeValidator::attr_file.name);
-								if (source == null){
-									source = b.sourceBlock.source.list.arguments.getAttributeExpression(AttributeValidator::attr_script.name);
-								}
-								if (source != null) 
-									return source.toStr
-								 else 
-									return "";
+						if (b.sourceBlock.list != null){
+							var source = b.sourceBlock.list.arguments.getAttributeExpression(AttributeValidator::attr_file.name);
+							if (source == null){
+								source = b.sourceBlock.list.arguments.getAttributeExpression(AttributeValidator::attr_script.name);
 							}
+							if (source != null) 
+								return source.toStr
+							 else 
+								return "";
 						}
 					} 
 				}
@@ -432,12 +430,12 @@ class MdlPrinter {
 		if (v.symbolName != null){
 			v.symbolName.toStr;
 		}
-		if (v.list != null){	
-			res = res + " = " + v.list.toStr;
+		if (v.expression != null){
+			res  = res + "=" + v.expression.toStr;
 		}
 		return res;
 	}	
-	 
+	
 	def String toStr(AnyExpression e){
 		var res = "";
 		if (e.expression != null){

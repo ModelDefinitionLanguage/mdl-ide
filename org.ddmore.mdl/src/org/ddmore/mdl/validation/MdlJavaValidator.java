@@ -6,23 +6,17 @@
  */
 package org.ddmore.mdl.validation;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
-import org.ddmore.mdl.mdl.impl.ParameterDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.SymbolModificationImpl;
 import org.ddmore.mdl.mdl.impl.TaskFunctionBlockImpl;
@@ -33,7 +27,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.validation.Check;
@@ -86,7 +79,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	}
 
 	//TODO: Split variables and random variables?
-	//TODO: simplify: all symbolDeclarations and parameterDeclarations for major blocks
+	//TODO: simplify: all symbolDeclarations for major blocks
 	//Update the list of recognised variables
 	@Check
 	public void updateDeclaredVariableList(Mcl mcl){
@@ -164,8 +157,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					}
 					//SOURCE
 					if (block.getSourceBlock() != null){
-						if (block.getSourceBlock().getSource() != null)
-							varList.add(block.getSourceBlock().getSource().getSymbolName().getName());
+						if (block.getSourceBlock().getSymbolName() != null)
+							varList.add(block.getSourceBlock().getSymbolName().getName());
 					}
 				}
 			}
@@ -173,7 +166,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				for (ParameterObjectBlock block: obj.getParameterObject().getBlocks()){
 					//STRUCTURAL
 					if (block.getStructuralBlock() != null){
-						for (ParameterDeclaration s: block.getStructuralBlock().getParameters())
+						for (SymbolDeclaration s: block.getStructuralBlock().getParameters())
 							varList.add(s.getSymbolName().getName());
 					}
 					//VARIABILITY, matrix, diag, same
@@ -288,9 +281,9 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public void validateDataSource(SourceBlock b){
 		if (b.getInlineBlock() != null) return;
 		boolean isScript = false;
-		String dataPath = Utils.getAttributeValue(b.getSource().getList().getArguments(), AttributeValidator.attr_file.name);
+		String dataPath = Utils.getAttributeValue(b.getList().getArguments(), AttributeValidator.attr_file.name);
 		if (dataPath.length() == 0){
-			dataPath = Utils.getAttributeValue(b.getSource().getList().getArguments(), AttributeValidator.attr_script.name);
+			dataPath = Utils.getAttributeValue(b.getList().getArguments(), AttributeValidator.attr_script.name);
 			isScript = true;	
 		}	
 		if (dataPath.length() > 0){
@@ -302,11 +295,11 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			//TODO make the data file path relative to the model file
 			if (!isScript){
 				warning(MSG_DATA_FILE_NOT_FOUND, 
-						MdlPackage.Literals.SOURCE_BLOCK__SOURCE,
+						MdlPackage.Literals.SOURCE_BLOCK__SYMBOL_NAME,
 						MSG_DATA_FILE_NOT_FOUND, dataPath);
 			} else {
 				warning(MSG_SCRIPT_NOT_FOUND, 
-						MdlPackage.Literals.SOURCE_BLOCK__SOURCE,
+						MdlPackage.Literals.SOURCE_BLOCK__SYMBOL_NAME,
 						MSG_SCRIPT_NOT_FOUND, dataPath);
 			}				
 		}
@@ -331,11 +324,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public void checkSymbolDeclaration(SymbolDeclaration symbol){
 		if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables, symbol.getSymbolName()))
 			warning(MSG_SYMBOL_DEFINED, MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME);
-	}	
-	@Check
-	public void checkSymbolDeclaration(ParameterDeclaration symbol){
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables, symbol.getSymbolName()))
-			warning(MSG_SYMBOL_DEFINED, MdlPackage.Literals.PARAMETER_DECLARATION__SYMBOL_NAME);
 	}	
 	
 	////////////////////////////////////////////////////////////////
@@ -472,22 +460,16 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    	if (obj instanceof SymbolModificationImpl){
 	    		SymbolModification s = (SymbolModification) obj;
 	    		if (s.getSymbolName().getSymbol().getName().equals(varName)) {
-	       			if (s.getList() != null){
-	       				if (s.getList().getArguments() != null){
-	       					for (Argument x: s.getList().getArguments().getArguments())
-	       						args.add(x);
-	       				}
-	       			}   
+	       			if (s.getExpression() != null){
+		    			if (s.getExpression().getList() != null){
+		       				if (s.getExpression().getList().getArguments() != null){
+		       					for (Argument x: s.getExpression().getList().getArguments().getArguments())
+		       						args.add(x);
+		       				}
+		       			}   
+	    			}
 	    		}
 	    	}
-	    	if (obj instanceof ParameterDeclarationImpl){
-	    		ParameterDeclaration s = (ParameterDeclaration) obj;
-		    	if (s.getSymbolName().getName().equals(varName)) 
-		       		if (s.getList() != null)
-		       			if (s.getList().getArguments() != null)
-		       				for (Argument x: s.getList().getArguments().getArguments())
-		          				args.add(x);
-		    }
 	    }
 	    if (!checkAttributes(ref, args)){
 			warning(MSG_UNRESOLVED_ATTRIBUTE_REF, 

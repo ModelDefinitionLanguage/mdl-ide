@@ -44,7 +44,6 @@ import org.ddmore.mdl.mdl.ObservationBlock;
 import org.ddmore.mdl.mdl.OdeBlock;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.OutputVariablesBlock;
-import org.ddmore.mdl.mdl.ParameterDeclaration;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.PowerExpression;
@@ -914,13 +913,13 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 					if (obj != null){
 						for (ParameterObjectBlock block: obj.getBlocks()){
 							if (block.getStructuralBlock() != null){
-								block.getStructuralBlock().getParameters().add(createParameterDeclaration(issue.getData()[0]));
+								block.getStructuralBlock().getParameters().add(createSymbolDeclaration(issue.getData()[0]));
 								return;
 							}
 						}
 						StructuralBlock block = MdlFactory.eINSTANCE.createStructuralBlock();
 						block.setIdentifier(blockName);
-						block.getParameters().add(createParameterDeclaration(issue.getData()[0]));
+						block.getParameters().add(createSymbolDeclaration(issue.getData()[0]));
 						ParameterObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createParameterObjectBlock();
 						mdlBlock.setStructuralBlock(block);
 						obj.getBlocks().add(mdlBlock); 
@@ -957,17 +956,17 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		
 	VariabilityBlockStatement createVariabilityBlockStatementParameter(String varName){
 		VariabilityBlockStatement st = MdlFactory.eINSTANCE.createVariabilityBlockStatement();
-		st.setParameter(createParameterDeclaration(varName));
+		st.setParameter(createSymbolDeclaration(varName));
 		return st;
 	}	
 			
-	ParameterDeclaration createParameterDeclaration(String varName) {
-		ParameterDeclaration newParam = MdlFactory.eINSTANCE.createParameterDeclaration();
+	SymbolDeclaration createSymbolDeclaration(String varName) {
+		SymbolDeclaration newParam = MdlFactory.eINSTANCE.createSymbolDeclaration();
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 		symbName.setName(varName);
 		newParam.setSymbolName(symbName);
 		Attribute[] attributes = {AttributeValidator.attr_value};
-		newParam.setList(createList(attributes));
+		newParam.setExpression(createListExpression(attributes));
 		return newParam;
 	}
 	

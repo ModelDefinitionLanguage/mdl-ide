@@ -141,10 +141,12 @@ class ReferenceResolver{
 		for (block: obj.blocks){
 			if (block.inputVariablesBlock != null){
 				for (s: block.inputVariablesBlock.variables){
-					if (s.list != null){
-						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-						if (use.equals(UseType::USE_IDV) && !independentVars.contains(s.symbolName.symbol.name)) 
-							independentVars.add(s.symbolName.symbol.name);
+					if (s.expression != null){
+						if (s.expression.list != null){
+							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+							if (use.equals(UseType::USE_IDV) && !independentVars.contains(s.symbolName.symbol.name)) 
+								independentVars.add(s.symbolName.symbol.name);
+						}
 					}
 				}
 			}
@@ -158,11 +160,13 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
-					if (s.list != null){
-						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-						if (use.equals(UseType::USE_COVARIATE)) {
-							if (!covariateVars.contains(s.symbolName.symbol.name))
-								covariateVars.add(s.symbolName.symbol.name);
+					if (s.expression != null){
+						if (s.expression.list != null){
+							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+							if (use.equals(UseType::USE_COVARIATE)) {
+								if (!covariateVars.contains(s.symbolName.symbol.name))
+									covariateVars.add(s.symbolName.symbol.name);
+							}
 						}
 					}
 				}
@@ -331,11 +335,13 @@ class ReferenceResolver{
 		for (b: o.blocks){
 			if(b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
-					if (s.list != null){
-						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level.name);
-						if (level.equals(levelId)){
-							if (!levelVars.contains(s.symbolName.symbol.name)){
-								levelVars.add(s.symbolName.symbol.name);
+					if (s.expression != null){
+						if (s.expression.list != null){
+							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
+							if (level.equals(levelId)){
+								if (!levelVars.contains(s.symbolName.symbol.name)){
+									levelVars.add(s.symbolName.symbol.name);
+								}
 							}
 						}
 					}

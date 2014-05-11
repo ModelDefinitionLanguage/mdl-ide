@@ -33,8 +33,8 @@ public class MdlUiModule extends org.ddmore.mdl.ui.AbstractMdlUiModule {
     public void configure(Binder binder) {
         super.configure(binder);
         binder.bind(IOutputConfigurationProvider.class).to(MDLOutputConfigurationProvider.class).in(Singleton.class);
-        //Override automatic editing - annoying } 
-        //binder.bind(DefaultAutoEditStrategyProvider.class).to(MDLAutoEditStartegyProvider.class).in(Singleton.class);
+        //TODO: Override automatic editing - annoying } 
+        binder.bind(DefaultAutoEditStrategyProvider.class).to(MDLAutoEditStartegyProvider.class).in(Singleton.class);
     }
 
     public void init() {

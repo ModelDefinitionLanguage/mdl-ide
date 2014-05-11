@@ -44,7 +44,6 @@ import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.OdeList;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.ParExpression;
-import org.ddmore.mdl.mdl.ParameterDeclaration;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.Primary;
@@ -130,10 +129,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     
     protected Image _image(FullyQualifiedSymbolName f) {
         return imageHelper.getImage(getPath(REFERENCE));
-    }
-    
-    protected Image _image(ParameterDeclaration f) {
-        return imageHelper.getImage(getPath(PARAMETER_DECLARATION));
     }
     
     protected Image _image(TargetBlock f) {
@@ -566,13 +561,15 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				true);
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, SymbolModification sm){
-		createEStructuralFeatureNode(parentNode,
-				sm,
-				MdlPackage.Literals.SYMBOL_MODIFICATION__LIST,
-				_image(sm),
-				MathPrinter.toStr(sm.getSymbolName()),
+	protected void  _createNode(IOutlineNode parentNode, SymbolModification p){
+		if (p.getExpression() != null){
+			createEStructuralFeatureNode(parentNode,
+				p,
+				MdlPackage.Literals.SYMBOL_MODIFICATION__EXPRESSION,
+				_image(p),
+				 MathPrinter.toStr(p.getSymbolName()),
 				false);
+		}
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, ConditionalStatement st){
@@ -623,15 +620,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				_image(e),
 				MathPrinter.toStr(e),
 				true);
-	}
-	
-	protected void  _createNode(IOutlineNode parentNode, ParameterDeclaration p){
-		createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.PARAMETER_DECLARATION__LIST,
-				_image(p),
-				 p.getSymbolName().getName(),
-				false);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, ImportedFunction p){

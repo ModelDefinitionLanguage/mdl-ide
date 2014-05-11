@@ -6,6 +6,7 @@ import org.ddmore.mdl.mdl.Mcl
 import java.util.ArrayList
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.types.UseType
+import org.ddmore.mdl.mdl.AnyExpression
 
 class TrialDesignPrinter extends DataSetPrinter {
 	/////////////////////////////////////////////////////////////////////////
@@ -142,10 +143,19 @@ class TrialDesignPrinter extends DataSetPrinter {
 	def print_design_Assign(SymbolModification s)'''
 	«IF s != null»
 		«print_ct_SymbolRef(s.symbolName)»
-		«val value = getAttributeExpression(s.list.arguments, AttributeValidator::attr_value.name)»
-		«IF value != null»
-			«IF value.expression != null»
-				«print_Assign(value.expression)»
+		«IF s.expression != null»
+			«var AnyExpression value = null»
+			«IF s.expression.list != null»
+				«value = getAttributeExpression(s.expression.list.arguments, AttributeValidator::attr_value.name)»
+			«ELSE»
+				«IF s.expression.expression != null»
+					«value = s.expression»
+				«ENDIF»
+			«ENDIF»
+			«IF value != null»
+				«IF value.expression != null»
+					«print_Assign(value.expression)»
+				«ENDIF»
 			«ENDIF»
 		«ENDIF»
 	«ENDIF»
@@ -190,15 +200,17 @@ class TrialDesignPrinter extends DataSetPrinter {
 				for (block: obj.modelObject.blocks){
 					if (block.inputVariablesBlock != null){
 						for (s: block.inputVariablesBlock.variables){
-							if (s.list != null){
-								var use = getAttribute(s.list.arguments, AttributeValidator::attr_use.name);
-								if (use.length > 0){
-									if (use.equals(UseType::USE_ID)) 
-										mappings = mappings + "IndividualMapping".print_design_Mapping(s.symbolName.symbol.name);
-									if (use.equals(UseType::USE_AMT))	
-										mappings = mappings + "ArmMapping".print_design_Mapping(s.symbolName.symbol.name);
-									//...	
-                				}
+							if (s.expression != null){
+								if (s.expression.list != null){
+									var use = getAttribute(s.expression.list.arguments, AttributeValidator::attr_use.name);
+									if (use.length > 0){
+										if (use.equals(UseType::USE_ID)) 
+											mappings = mappings + "IndividualMapping".print_design_Mapping(s.symbolName.symbol.name);
+										if (use.equals(UseType::USE_AMT))	
+											mappings = mappings + "ArmMapping".print_design_Mapping(s.symbolName.symbol.name);
+										//...	
+	                				}
+								}
 							}
 						}
 					}	

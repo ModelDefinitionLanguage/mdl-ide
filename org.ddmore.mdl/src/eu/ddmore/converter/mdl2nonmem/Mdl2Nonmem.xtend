@@ -18,7 +18,6 @@ import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.MixtureBlock
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ModelPredictionBlock
-import org.ddmore.mdl.mdl.ParameterDeclaration
 import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.SameBlock
 import org.ddmore.mdl.mdl.SimulateTask
@@ -728,37 +727,52 @@ class Mdl2Nonmem extends MdlPrinter{
 	}	
 
 	//Print VARIABILITY parameter in $SIGMA or $OMEGA
-	def printVariabilityParameter(ParameterDeclaration s, String section){
+	def printVariabilityParameter(SymbolDeclaration s, String section){
 		var name = s.symbolName.name;
 		//SIGMA <=> EPS, OMEGA <=> ETA	
 		var isOmega = (section.equals("$OMEGA") && eta_vars.get("eta_" + name) != null);
 		var isSigma = (section.equals("$SIGMA") && eps_vars.get("eps_" + name) != null);
-		if (isOmega || isSigma)
-		{
-			val value = s.list.arguments.getAttribute(AttributeValidator::attr_req_value.name);
-			val printFix = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
-			return							
-			'''
-			«IF !value.equals("")»«value»«IF printFix» FIX«ENDIF»«ENDIF» ; «name»
-			'''
+		if (isOmega || isSigma){
+			if (s.expression != null){
+				if (s.expression.list != null){
+					val value = s.expression.list.arguments.getAttribute(AttributeValidator::attr_req_value.name);
+					val printFix = s.expression.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
+					return							
+					'''
+					«IF !value.equals("")»«value»«IF printFix» FIX«ENDIF»«ENDIF» ; «name»
+					'''
+				} else {
+					if (s.expression.expression != null){
+						val value = s.expression.expression.toStr;
+						return'''«value» ; «name»'''
+					}
+				}
+			}
 		}
 		return "";
 	}
 	
 	
 	//Find attributes in STRUCTURAL_VARIABLES and form an NMTRAN statement
-	def printTheta(ParameterDeclaration s){
-		if (s.list != null){		
-			var name = s.symbolName.name;
-			val value = s.list.arguments.getAttribute(AttributeValidator::attr_value.name);
-			val lo = s.list.arguments.getAttribute(AttributeValidator::attr_lo.name);
-			val hi = s.list.arguments.getAttribute(AttributeValidator::attr_hi.name);
-			val printFix = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
-			if (value.equals("")) return "";
-			if (lo.equals("") && hi.equals("")) return '''«value»«IF printFix» FIX«ENDIF» ; «name»'''
-			if (lo.equals("")) return '''(-INF, «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
-			if (hi.equals("")) return '''(«lo», «value», INF)«IF printFix» FIX«ENDIF» ; «name»'''
-			return '''(«lo», «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
+	def printTheta(SymbolDeclaration s){
+		var name = s.symbolName.name;
+		if (s.expression != null){
+			if (s.expression.list != null){		
+				val args = s.expression.list.arguments;
+				val value = args.getAttribute(AttributeValidator::attr_value.name);
+				val lo = args.getAttribute(AttributeValidator::attr_lo.name);
+				val hi = args.getAttribute(AttributeValidator::attr_hi.name);
+				val printFix = args.isAttributeTrue(AttributeValidator::attr_fix.name);
+				if (value.equals("")) return "";
+				if (lo.equals("") && hi.equals("")) return '''«value»«IF printFix» FIX«ENDIF» ; «name»'''
+				if (lo.equals("")) return '''(-INF, «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
+				if (hi.equals("")) return '''(«lo», «value», INF)«IF printFix» FIX«ENDIF» ; «name»'''
+				return '''(«lo», «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
+			} else {
+				if (s.expression.expression != null) {
+					return '''«s.expression.toStr» ; «name»'''
+				}
+			}
 		}
 	}	
 	
@@ -808,18 +822,16 @@ class Mdl2Nonmem extends MdlPrinter{
 	def printDATA(DataObject o)'''
 	«FOR b:o.blocks»
 		«IF b.sourceBlock != null» 
-			«IF b.sourceBlock.source != null»
-				«IF b.sourceBlock.source.list != null»
-					«var data = b.sourceBlock.source.list.arguments.getAttribute(AttributeValidator::attr_file.name)»
-					«IF !data.equals("")»
-					
-					$DATA «data»
-					«ENDIF»
-					«getExternalCodeStart("$DATA")»
-						«val ignore = b.sourceBlock.source.list.arguments.getAttribute(AttributeValidator::attr_ignore.name)»
-						«IF !ignore.equals("")»IGNORE=«ignore»«ENDIF»
-					«getExternalCodeEnd("$DATA")»
+			«IF b.sourceBlock.list != null»
+				«var data = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_file.name)»
+				«IF !data.equals("")»
+				
+				$DATA «data»
 				«ENDIF»
+				«getExternalCodeStart("$DATA")»
+					«val ignore = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_ignore.name)»
+					«IF !ignore.equals("")»IGNORE=«ignore»«ENDIF»
+				«getExternalCodeEnd("$DATA")»
 			«ENDIF»
 		«ENDIF»
 	«ENDFOR»
@@ -1072,11 +1084,13 @@ class Mdl2Nonmem extends MdlPrinter{
 		for (b: o.blocks){
 			if(b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
-					if (s.list != null){
-						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level.name);
-						if (level.equals(levelId)){
-							if (!levelVars.contains(s.symbolName.symbol.name)){
-								levelVars.add(s.symbolName.symbol.name);
+					if (s.expression != null){
+						if (s.expression.list != null){
+							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
+							if (level.equals(levelId)){
+								if (!levelVars.contains(s.symbolName.symbol.name)){
+									levelVars.add(s.symbolName.symbol.name);
+								}
 							}
 						}
 					}

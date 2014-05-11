@@ -71,9 +71,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, DefaultValues.USE_VAR);
 	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, "ID");
 
-	final public static Attribute attr_req_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VARIABILITY_TYPE);
-	final public static Attribute attr_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VARIABILITY_TYPE);
-	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false);
+	final public static Attribute attr_req_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
+	final public static Attribute attr_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
+	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, DefaultValues.RE_TYPE);
 	
 	/*ESTIMATION*/
 	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);

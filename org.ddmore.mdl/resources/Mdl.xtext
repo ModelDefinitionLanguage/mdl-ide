@@ -116,7 +116,7 @@ ParameterObjectBlock:
 
 StructuralBlock:
 	identifier='STRUCTURAL'   
-	BEGIN parameters += ParameterDeclaration* END //new Parameter +
+	BEGIN parameters += SymbolDeclaration* END //new Parameter +
 ;
 
 VariabilityBlock:
@@ -154,7 +154,7 @@ DataDerivedBlock:
 SourceBlock:
 	identifier='SOURCE' 	
 	BEGIN 
-		source = ParameterDeclaration
+		symbolName = SymbolName "=" list = List
 		(inlineBlock = InlineBlock)? 
 	END
 ;
@@ -252,9 +252,8 @@ MixtureBlock:
 	BEGIN statements += BlockStatement* END //new Variable +
 ;
 
-
 VariabilityBlockStatement:
-	parameter = ParameterDeclaration | 
+	parameter = SymbolDeclaration | 
 	matrixBlock = MatrixBlock | 
 	diagBlock = DiagBlock	|
 	sameBlock = SameBlock
@@ -399,11 +398,7 @@ ImportedFunction:
 ;
 
 SymbolModification:
-	symbolName = FullyQualifiedSymbolName ("=" list = List)?  //Ref to ParameterName or VariableName +
-;
-
-ParameterDeclaration:
-	symbolName = SymbolName ("=" list = List)? //new ParameterName
+	symbolName = FullyQualifiedSymbolName ("=" expression = AnyExpression)?  //Ref to ParameterName or VariableName +
 ;
 
 SymbolName:
