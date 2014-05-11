@@ -6,7 +6,7 @@ import java.util.List;
 public class VariableType {
 	public final static String CC_CONTINUOUS = "continuous";
 	public final static String CC_CATEGORICAL = "categorical";
-	public final static String CC_LIKELIHOOD = "LIKELIHOOD";
+	public final static String CC_LIKELIHOOD = "likelihood";
 
 	public final static List<String> CC_VALUES = Arrays.asList(CC_CONTINUOUS, CC_CATEGORICAL, CC_LIKELIHOOD);
 }

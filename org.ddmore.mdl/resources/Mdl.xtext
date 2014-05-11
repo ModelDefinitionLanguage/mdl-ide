@@ -441,7 +441,7 @@ InterpolationType:
 ;
 
 Likelihood:
-	identifier = 'LIKELIHOOD'	
+	identifier = 'likelihood'	
 ;
 
 UseType:

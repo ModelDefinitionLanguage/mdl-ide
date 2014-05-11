@@ -1342,7 +1342,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		var type = l.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
 		var res = "";
 		if (type.equals(VariableType::CC_LIKELIHOOD)){
-			res = l.arguments.getAttribute(AttributeValidator::attr_likelihood.name);
+			res = l.arguments.getAttribute(AttributeValidator::attr_prediction.name);
 		} else if (type.equals(VariableType::CC_CONTINUOUS)){
 			var ruv = l.arguments.getAttribute(AttributeValidator::attr_ruv.name);
 			var prediction = l.arguments.getAttribute(AttributeValidator::attr_prediction.name)

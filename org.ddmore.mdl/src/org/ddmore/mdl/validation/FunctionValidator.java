@@ -62,6 +62,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_FUNCTION_PROPERTY_UNKNOWN = "Unknown property";
 	public final static String MSG_FUNCTION_PROPERTY_MISSING = "Required property is not set";
 	public final static String MSG_FUNCTION_PROPERTY_DEFINED = "Property defined more than once";
+	public final static String MSG_FUNCTION_PROPERTY_WRONG_TYPE = "Type error";
 
 	public final static String MSG_FUNCTION_CALL_TARGET_MISSING    = "Target environment is not defined";
 	public final static String MSG_FUNCTION_CALL_MODEL_OBJ_MISSING = "MOG should include a model object";
@@ -319,11 +320,10 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			if (b.getSymbol() != null){
 				if (!properties.contains(b.getSymbol().getSymbolName().getName())){
 					properties.add(b.getSymbol().getSymbolName().getName());
-				}
-				else {
+				} else {
 					warning(MSG_FUNCTION_PROPERTY_DEFINED + ": " + b.getSymbol().getSymbolName().getName(), 
 							MdlPackage.Literals.ESTIMATE_TASK__IDENTIFIER,
-							MSG_FUNCTION_PROPERTY_DEFINED, b.getSymbol().getSymbolName().getName());	
+							MSG_FUNCTION_PROPERTY_DEFINED, b.getSymbol().getSymbolName().getName());
 				}
 			}
 		}	
@@ -341,6 +341,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			if (b.getSymbol() != null){
 				if (!properties.contains(b.getSymbol().getSymbolName().getName())){
 					properties.add(b.getSymbol().getSymbolName().getName());
+					//TODO Check type
 				}
 				else {
 					warning(MSG_FUNCTION_PROPERTY_DEFINED + ": " + b.getSymbol().getSymbolName().getName(), 
@@ -394,9 +395,24 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					warning(MSG_FUNCTION_PROPERTY_UNKNOWN + ": " + s.getSymbolName().getName(), 
 					MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
 					MSG_FUNCTION_PROPERTY_UNKNOWN, s.getSymbolName().getName());		
-					return;
 				}
-			}			
+				
+				for (Attribute x: knownAttributes){
+					if (x.name.equals(s.getSymbolName().getName())){
+						boolean isValid = false;
+						if (s.getExpression() != null) 
+							isValid = MdlDataType.validateType(x.type, s.getExpression());
+						if (!isValid){
+							warning(MSG_FUNCTION_PROPERTY_WRONG_TYPE + 
+								": property \"" + s.getSymbolName().getName() + "\" expects value of type " + x.type.name(), 
+								MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
+								MSG_FUNCTION_PROPERTY_WRONG_TYPE, s.getSymbolName().getName());		
+						}
+						break;
+					}
+				}
+			}
+			return;
 		}
 	}
 	

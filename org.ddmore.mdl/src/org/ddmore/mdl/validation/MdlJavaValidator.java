@@ -299,6 +299,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			IProject proj = myFile.getProject();
 			IFile linkedFile = proj.getFile(new Path(dataPath));
 			if (linkedFile.exists()) return;
+			//TODO make the data file path relative to the model file
 			if (!isScript){
 				warning(MSG_DATA_FILE_NOT_FOUND, 
 						MdlPackage.Literals.SOURCE_BLOCK__SOURCE,
