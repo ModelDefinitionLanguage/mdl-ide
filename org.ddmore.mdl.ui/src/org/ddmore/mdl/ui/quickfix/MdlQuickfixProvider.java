@@ -11,9 +11,7 @@ import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.BlockStatement;
-import org.ddmore.mdl.mdl.Categorical;
 import org.ddmore.mdl.mdl.ConditionalExpression;
-import org.ddmore.mdl.mdl.Continuous;
 import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
@@ -32,7 +30,6 @@ import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
-import org.ddmore.mdl.mdl.Likelihood;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
@@ -65,6 +62,7 @@ import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.TargetLanguage;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.UseType;
+import org.ddmore.mdl.mdl.VarType;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
@@ -214,28 +212,33 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			case TYPE_REF: return createReferenceExpression(value);
 			case TYPE_BOOLEAN: return createBooleanExpression(value);
 			case TYPE_TARGET: return createTargetLanguageExpression(value);
-			case TYPE_VAR_TYPE: 
-				if (value.equals(VariableType.CC_CONTINUOUS)) {
-					return createContinuousExpression(value);
-				} else {
-					if (value.equals(VariableType.CC_CATEGORICAL)){
-						return createCategoricalExpression(value);
-					} else {//LIKELIHOOD
-						return createLikelihoodExpression(value);
-					}
-				}	
-			case TYPE_USE:
-				return createUseExpression(value);
+			case TYPE_VAR_TYPE: return createVarTypeExpression(value);
+			case TYPE_USE: return createUseExpression(value);
 			default:
 				return createStringExpression(value);
 		}
 	}
 	
-	private AnyExpression createCategoricalExpression(String value) {
-		Categorical tl = MdlFactory.eINSTANCE.createCategorical();
-		tl.setIdentifier(value);
+	
+	private AnyExpression createVarTypeExpression(String value) {
+		VarType tl = MdlFactory.eINSTANCE.createVarType();
+		if (value.equals(VariableType.CC_CONTINUOUS)) {
+			tl.setContinuous(value);
+		} else {
+			if (value.equals(VariableType.CC_CATEGORICAL)){
+				tl.setCategorical(value);
+			} else {
+				if (value.equals(VariableType.CC_LIKELIHOOD)){
+					tl.setLikelihood(value);
+				} else {
+					if (value.equals(VariableType.CC_M2LL)){
+						tl.setM2LL(value);
+					}
+				}
+			}
+		}	
 		EnumType t = MdlFactory.eINSTANCE.createEnumType();
-		t.setCategorical(tl);
+		t.setType(tl);
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		expr.setType(t);
 		return expr;
@@ -257,26 +260,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		tl.setIdentifier(value);
 		EnumType t = MdlFactory.eINSTANCE.createEnumType();
 		t.setTarget(tl);
-		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
-		expr.setType(t);
-		return expr;
-	}
-	
-	AnyExpression createLikelihoodExpression(String value){
-		Likelihood tl = MdlFactory.eINSTANCE.createLikelihood();
-		tl.setIdentifier(value);
-		EnumType t = MdlFactory.eINSTANCE.createEnumType();
-		t.setLikelihood(tl);
-		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
-		expr.setType(t);
-		return expr;
-	}
-	
-	AnyExpression createContinuousExpression(String value){
-		Continuous cnt = MdlFactory.eINSTANCE.createContinuous();
-		cnt.setIdentifier(value);
-		EnumType t = MdlFactory.eINSTANCE.createEnumType();
-		t.setContinuous(cnt);
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		expr.setType(t);
 		return expr;

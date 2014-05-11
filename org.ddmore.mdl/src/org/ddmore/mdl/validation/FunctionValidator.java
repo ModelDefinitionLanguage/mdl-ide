@@ -105,11 +105,17 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//Task object
 	final public static Attribute attr_task_command = new Attribute("command", MdlDataType.TYPE_STRING, true);
-	final public static Attribute attr_task_target = new Attribute("target", MdlDataType.TYPE_OBJ_REF, true);
-	final public static Attribute attr_task_model = new Attribute("model", MdlDataType.TYPE_OBJ_REF_MODEL, true);
-	final public static Attribute attr_task_parameter = new Attribute("parameter", MdlDataType.TYPE_OBJ_REF_MODEL, true);
-	final public static Attribute attr_task_data = new Attribute("data", MdlDataType.TYPE_OBJ_REF_DATA, true);
-	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_OBJ_REF_PARAM, false);
+	final public static Attribute attr_task_target = new Attribute("target", MdlDataType.TYPE_REF, true);
+	
+	//TODO: for more strict validation, require references to objects
+	final public static Attribute attr_task_model = new Attribute("model", MdlDataType.TYPE_REF, true);
+	final public static Attribute attr_task_parameter = new Attribute("parameter", MdlDataType.TYPE_REF, true);
+	final public static Attribute attr_task_data = new Attribute("data", MdlDataType.TYPE_REF, true);
+	//final public static Attribute attr_task_model = new Attribute("model", MdlDataType.TYPE_OBJ_REF_MODEL, true);
+	//final public static Attribute attr_task_parameter = new Attribute("parameter", MdlDataType.TYPE_OBJ_REF_PARAM, true);
+	//final public static Attribute attr_task_data = new Attribute("data", MdlDataType.TYPE_OBJ_REF_DATA, true);
+	
+	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_task_max = new Attribute("max", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_task_sig = new Attribute("sig", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_task_cov = new Attribute("cov", MdlDataType.TYPE_STRING, false);
@@ -396,7 +402,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
 					MSG_FUNCTION_PROPERTY_UNKNOWN, s.getSymbolName().getName());		
 				}
-				
 				for (Attribute x: knownAttributes){
 					if (x.name.equals(s.getSymbolName().getName())){
 						boolean isValid = false;

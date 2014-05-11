@@ -178,7 +178,7 @@ public enum MdlDataType {
 	}
 
 	private static boolean isVarType(EnumType type) {
-		if ((type.getCategorical() != null) || (type.getContinuous() != null) || (type.getLikelihood() != null)) return true;
+		if (type.getType() != null) return true;
 		return false;
 	}
 

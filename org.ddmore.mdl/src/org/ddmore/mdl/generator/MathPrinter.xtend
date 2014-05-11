@@ -20,6 +20,7 @@ import org.ddmore.mdl.mdl.Distribution
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Selector
+import org.ddmore.mdl.mdl.VarType
 
 //This class repeats some of the methods of eu.ddmore.converter.mdl.MdlPrinter
 //We need math printing in both projects!!!
@@ -34,21 +35,39 @@ class MathPrinter {
 		return res;
 	}
 	
-	static def toStr(EnumType type) {
-		if (type.categorical != null){
-			return type.categorical.identifier
+	static def toStr(EnumType t) {
+		if (t.type != null){
+			return t.type.toStr;
 		} 
-		if (type.continuous != null){
-			return type.continuous.identifier
+		if (t.use != null){
+			return t.use.identifier
 		} 
-		if (type.use != null){
-			return type.use.toStr
+		if (t.target != null){
+			return t.target.identifier 
 		} 
-		if (type.likelihood != null){
-			return type.likelihood.identifier	
+		if (t.input != null){
+			return t.input.identifier
+		}
+		if (t.interpolation != null){
+			return t.interpolation.identifier
+		}
+		if (t.variability != null){
+			return t.variability.identifier
+		}
+	}
+	
+	static def toStr(VarType t) {
+		if (t.categorical != null){
+			return t.categorical
+		}
+		if (t.continuous != null){
+			return t.continuous
 		} 
-		if (type.target != null){
-			return type.target.identifier 
+		if (t.likelihood != null){
+			return t.likelihood	
+		} 
+		if (t.m2LL != null){
+			return t.m2LL	
 		} 
 	}
 		

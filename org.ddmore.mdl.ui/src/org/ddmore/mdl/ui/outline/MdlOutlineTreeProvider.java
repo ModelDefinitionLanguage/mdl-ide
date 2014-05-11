@@ -61,11 +61,10 @@ import org.ddmore.mdl.mdl.TaskFunctionBody;
 import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
 import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
+import org.ddmore.mdl.mdl.VarType;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.impl.ArgumentNameImpl;
-import org.ddmore.mdl.mdl.impl.CategoricalImpl;
-import org.ddmore.mdl.mdl.impl.ContinuousImpl;
 import org.ddmore.mdl.mdl.impl.DataBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DistributionImpl;
@@ -74,7 +73,6 @@ import org.ddmore.mdl.mdl.impl.ExecuteTaskImpl;
 import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.LikelihoodImpl;
 import org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
@@ -85,6 +83,7 @@ import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.TargetLanguageImpl;
 import org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.UseTypeImpl;
+import org.ddmore.mdl.mdl.impl.VarTypeImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityTypeImpl;
@@ -265,16 +264,8 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(USE_TYPE));
     }
 
-    protected Image _image(ContinuousImpl e) {
+    protected Image _image(VarTypeImpl e) {
         return imageHelper.getImage(getPath(CC_TYPE));
-    }
-
-    protected Image _image(CategoricalImpl e) {
-        return imageHelper.getImage(getPath(CC_TYPE));
-    }
-
-    protected Image _image(LikelihoodImpl e) {
-        return imageHelper.getImage(getPath(LIKELYHOOD));
     }
 
     protected Image _image(VariabilityTypeImpl e) {
@@ -754,10 +745,42 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	
 	protected void  _createNode(IOutlineNode parentNode, EnumType b){
 		for (EObject obj: b.eContents()){
-			createNode(parentNode, obj);
+			if (obj instanceof VarTypeImpl)
+				createNode(parentNode, obj);
 		}
 	}
-	
+
+	protected void  _createNode(IOutlineNode parentNode, VarType t){
+		if (t.getCategorical() != null)
+			createEStructuralFeatureNode(parentNode,
+				t,
+				MdlPackage.Literals.VAR_TYPE__CATEGORICAL,
+				_image(t),
+				MathPrinter.toStr(t),
+				true);
+		if (t.getContinuous() != null)
+			createEStructuralFeatureNode(parentNode,
+				t,
+				MdlPackage.Literals.VAR_TYPE__CONTINUOUS,
+				_image(t),
+				MathPrinter.toStr(t),
+				true);
+		if (t.getLikelihood() != null)
+			createEStructuralFeatureNode(parentNode,
+				t,
+				MdlPackage.Literals.VAR_TYPE__LIKELIHOOD,
+				_image(t),
+				MathPrinter.toStr(t),
+				true);
+		if (t.getM2LL() != null)
+			createEStructuralFeatureNode(parentNode,
+				t,
+				MdlPackage.Literals.VAR_TYPE__M2LL,
+				_image(t),
+				MathPrinter.toStr(t),
+				true);
+	}
+
 	protected void  _createNode(IOutlineNode parentNode, Primary p){
 		if (p.getNumber() != null)
 			createEStructuralFeatureNode(parentNode,
@@ -768,18 +791,18 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				true);
 		if (p.getVector() != null)
 			createEStructuralFeatureNode(parentNode,
-					p,
-					MdlPackage.Literals.PRIMARY__VECTOR,
-					_image(p),
-					MathPrinter.toStr(p),
-					true);
+				p,
+				MdlPackage.Literals.PRIMARY__VECTOR,
+				_image(p),
+				MathPrinter.toStr(p),
+				true);
 		if (p.getSymbol() != null)
 			createEStructuralFeatureNode(parentNode,
-					p,
-					MdlPackage.Literals.PRIMARY__SYMBOL,
-					_image(p),
-					MathPrinter.toStr(p),
-					true);
+				p,
+				MdlPackage.Literals.PRIMARY__SYMBOL,
+				_image(p),
+				MathPrinter.toStr(p),
+				true);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, DropList obj) {

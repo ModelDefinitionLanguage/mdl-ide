@@ -420,14 +420,19 @@ RandomVariable:
 ;
 
 EnumType:
-	categorical = Categorical | 
-	continuous = Continuous | 
-	likelihood = Likelihood |
+	type = VarType |
 	use = UseType |       
 	target = TargetLanguage |
 	variability = VariabilityType |
 	interpolation = InterpolationType |
 	input = InputType
+;
+
+VarType:
+	categorical = 'categorical' ('(' arguments = FormalArguments ')')? | 
+	continuous = 'continuous' | 
+	likelihood = 'likelihood' |
+	M2LL = 'M2LL' 	
 ;
 
 InputType:
@@ -438,10 +443,6 @@ InterpolationType:
 	identifier = (
 		'constant' | 'linear' | 'nearest' | 'spline' | 'pchip' | 'cubic'
 	)
-;
-
-Likelihood:
-	identifier = 'likelihood'	
 ;
 
 UseType:
@@ -475,14 +476,6 @@ UseType:
 
 VariabilityType:
 	identifier = ('SD' | 'VAR')
-;
-
-Categorical:
-	identifier = 'categorical' ('(' arguments = FormalArguments ')')?
-;
-
-Continuous:
-	identifier = 'continuous'
 ;
 
 Distribution: 

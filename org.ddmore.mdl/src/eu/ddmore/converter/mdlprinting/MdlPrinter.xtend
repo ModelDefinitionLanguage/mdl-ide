@@ -458,34 +458,40 @@ class MdlPrinter {
 		return res;
 	}
 	
-	def toStr(EnumType type) {
-		if (type.categorical != null){
-			var res = "";
-			if (type.categorical.arguments != null){
-				res = type.categorical.arguments.toStr;
+	def toStr(EnumType t) {
+		if (t.type != null){
+			if (t.type.categorical != null){
+				var res = "";
+				
+				if (t.type.arguments != null){
+					res = t.type.arguments.toStr;
+				}
+				return t.type.categorical + '(' + res + ')'
 			}
-			return type.categorical.identifier + '(' + res + ')'
+			if (t.type.continuous != null){
+				return t.type.continuous
+			} 
+			if (t.type.likelihood != null){
+				return t.type.likelihood	
+			} 
+			if (t.type.m2LL != null){
+				return t.type.m2LL	
+			} 
 		} 
-		if (type.continuous != null){
-			return type.continuous.identifier
+		if (t.use != null){
+			return t.use.identifier
 		} 
-		if (type.likelihood != null){
-			return type.likelihood.identifier	
+		if (t.target != null){
+			return t.target.identifier 
 		} 
-		if (type.use != null){
-			return type.use.identifier
-		} 
-		if (type.target != null){
-			return type.target.identifier 
-		} 
-		if (type.input != null){
-			return type.input.identifier
+		if (t.input != null){
+			return t.input.identifier
 		}
-		if (type.interpolation != null){
-			return type.interpolation.identifier
+		if (t.interpolation != null){
+			return t.interpolation.identifier
 		}
-		if (type.variability != null){
-			return type.variability.identifier
+		if (t.variability != null){
+			return t.variability.identifier
 		}
 	}
 	
