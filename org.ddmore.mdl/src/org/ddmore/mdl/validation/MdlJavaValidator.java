@@ -296,9 +296,21 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	@Check
 	public void checkReference(FullyQualifiedSymbolName ref) {
 		EObject container = ref.eContainer();
-		
 		//Functions validated by FunctionValidator!
 		if (container instanceof FunctionCallImpl) return; 
+		
+		//Skip validation of references that have aliases
+		if (container instanceof SymbolModificationImpl) {
+			SymbolModification s = (SymbolModification) container;
+			if (s.getExpression() != null){
+				if (s.getExpression().getList() != null){
+					String alias = Utils.getAttributeValue(s.getExpression().getList().getArguments(), AttributeValidator.attr_alias.getName());
+					if (alias.length() > 0) {
+						return;
+					}
+				}
+			}
+		}
 		
 		if (container instanceof FullyQualifiedArgumentNameImpl){
 			if (!Utils.isSymbolDeclared(declaredVariables, ref))

@@ -73,6 +73,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_transform = new Attribute("transform", MdlDataType.TYPE_STRING, false, "");
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, DefaultValues.USE_VAR);
 	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, "ID");
+	final public static Attribute attr_alias = new Attribute("alias", MdlDataType.TYPE_REF, false);
 
 	final public static Attribute attr_req_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
 	final public static Attribute attr_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
@@ -149,7 +150,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_variability_subblock = Arrays.asList(attr_name, attr_re_type, attr_fix);
 	
 	/*Model object*/
-	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_units, attr_cc_type, attr_level);
+	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_units, 
+			attr_cc_type, attr_level, attr_alias);
 	final public static List<Attribute> attrs_library = Arrays.asList(attr_library, attr_req_model, attr_ncmt, attr_trans, attr_param, attr_output, attr_distribution, attr_elimination, attr_parameterization);
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_cc_type, attr_prediction, attr_ruv);

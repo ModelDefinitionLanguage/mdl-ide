@@ -153,11 +153,10 @@ class ModellingStepsPrinter extends DataSetPrinter{
 			if (b.dataInputBlock != null){
 				for (s: b.dataInputBlock.variables){
 					var columnId = s.symbolName.name;
-					var symbId = s.symbolName.name;
-					val expectedVar = mObj.getModelInputVariable(symbId);
+					val expectedVar = mObj.getModelInputVariable(columnId);
 					if (expectedVar != null){
-						var blkIdRef = mObjName.getReferenceBlock(symbId);
-						res = res + print_msteps_ColumnMapping(columnId, symbId, blkIdRef);
+						var blkIdRef = mObjName.getReferenceBlock(expectedVar.symbolName.symbol.name);
+						res = res + print_msteps_ColumnMapping(columnId, expectedVar.symbolName.symbol.name, blkIdRef);
 					}
 				}
 			}
@@ -177,8 +176,8 @@ class ModellingStepsPrinter extends DataSetPrinter{
 				for (s: derivedVars){
 					val expectedVar = mObj.getModelInputVariable(s);
 					if (expectedVar != null){
-						var blkIdRef = mObjName.getReferenceBlock(s);
-						res = res + print_msteps_ColumnMapping(s, s, blkIdRef);
+						var blkIdRef = mObjName.getReferenceBlock(expectedVar.symbolName.symbol.name);
+						res = res + print_msteps_ColumnMapping(s, expectedVar.symbolName.symbol.name, blkIdRef);
 					}
 				}
 			}
@@ -198,13 +197,21 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		</NMColumnMapping>
 	'''
 	
-	//Return a corresponding model variable
+	//Return a corresponding model variable (matched by name or by alias name!)
 	def getModelInputVariable(ModelObject mObj, String name){
 		for (b: mObj.blocks){
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
 					if (s.symbolName.symbol.name.equals(name)){
 						return s;
+					}
+					if (s.expression != null){
+						if (s.expression.list != null){
+							var alias = s.expression.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
+							if (alias.length > 0){
+								if (alias.equals(name)) return s;
+							}
+						}
 					}
 				}
 			}

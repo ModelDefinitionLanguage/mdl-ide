@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.ddmore.mdl.mdl.AdditiveExpression;
-import org.ddmore.mdl.mdl.AndExpression;
+import org.ddmore.mdl.generator.MathPrinter;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
@@ -22,13 +21,11 @@ import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
-import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.MatrixBlock;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ObservationBlock;
 import org.ddmore.mdl.mdl.OdeBlock;
-import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.SameBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.SourceBlock;
@@ -293,33 +290,22 @@ public class Utils {
 		}
 	}
 	
-	//Evaluate STRING expression
+	//Return value of an attribute with a given name
 	static String getAttributeValue(Arguments a, String attrName){
-		for (Argument arg: a.getArguments()){
-			if (arg.getArgumentName().getName().equals(attrName))
-				return getAttributeValue(arg);
-		}
+		for (Argument arg: a.getArguments())
+			if (arg.getArgumentName() != null && arg.getArgumentName().getName().equals(attrName)){
+				if (arg.getExpression().getExpression() != null)
+					return MathPrinter.toStr(arg.getExpression().getExpression());
+			}
 		return "";
 	}	
 	
-	//Evaluate STRING expression
+	//Prints value of an attribute with a given name
 	static String getAttributeValue(Argument arg){
-		String res = "";	
-		if (arg.getExpression() != null){
-			if (arg.getExpression().getExpression() != null){
-				if (arg.getExpression().getExpression().getConditionalExpression() != null){
-					OrExpression orExpr = arg.getExpression().getExpression().getConditionalExpression().getExpression();
-					AndExpression andExpr = orExpr.getExpression().get(0);
-					LogicalExpression logicalExpr = andExpr.getExpression().get(0);	
-					if (logicalExpr.getExpression1() != null){	
-						AdditiveExpression addExpr = logicalExpr.getExpression1();
-						if (addExpr.getString() != null) return addExpr.getString();
-					}
-				}
-			}
-		}	
-		return res;
-	}
+		if (arg.getExpression().getExpression() != null)
+			return MathPrinter.toStr(arg.getExpression().getExpression());
+		return "";
+	}	
 	
 	//Note: don't use for reference checking
 	static ObjectName getObjectName(EObject b){
