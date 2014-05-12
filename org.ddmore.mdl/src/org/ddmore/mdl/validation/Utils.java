@@ -64,6 +64,14 @@ import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 
@@ -439,5 +447,26 @@ public class Utils {
 		if (obj instanceof ImportBlockImpl) return ((ImportBlock)obj).getIdentifier();
 		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();
 		return "";
+	}
+	
+	//Locate data/script file in the MDL project
+	public static boolean isFileExist(EObject b, String filePath) {
+		String platformString = b.eResource().getURI().toPlatformString(true);
+		IFile modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(platformString));
+		IPath path = new Path(filePath);
+		//Try path relatively to the model file
+		IContainer parent = modelFile.getParent();
+		try {
+			for(IResource member : parent.members()){
+				if (member.getName().equals(filePath)) return true;
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		//Try path relatively to the project root
+		IProject proj = modelFile.getProject();
+		IFile requestedFile = proj.getFile(path);
+		if (requestedFile.exists()) return true;
+		return false;
 	}
 }

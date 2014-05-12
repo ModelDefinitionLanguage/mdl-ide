@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.ddmore.mdl.generator.MathPrinter;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.MdlPackage;
@@ -55,6 +56,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_ATTRIBUTE_DEFINED    = "Attribute defined more than once";
 	public final static String MSG_ATTRIBUTE_WRONG_TYPE = "Type error";
 
+	public final static String MSG_DATA_FILE_NOT_FOUND = "Cannot find data file";
+	public final static String MSG_SCRIPT_NOT_FOUND = "Cannot find script file";
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	final public static Attribute attr_name = new Attribute("name", MdlDataType.TYPE_STRING, false, "");		
@@ -263,7 +266,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		EObject argContainer = argument.eContainer();	
 		EObject container = Utils.findListContainer(argContainer.eContainer());
 		if (container == null) return;
-
 		if (!(argContainer instanceof ArgumentsImpl)) return;
 		Arguments args = (Arguments)argContainer;
 		if (isVariabilitySubblock(container, args)) return;
@@ -309,8 +311,41 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 						argument.getArgumentName().getName());				
 			}
 		}
+
 	}
 	
+	@Check
+	public void checkSourceFiles(Argument argument){
+		EObject container = Utils.findListContainer(argument.eContainer().eContainer());
+		if (container == null) return;
+		//Locate data/script file in the MDL project
+		if (container instanceof SourceBlockImpl){
+			SourceBlock b = (SourceBlock)container;
+			if (b.getInlineBlock() != null) return;
+			if (argument.getExpression() != null){
+				if (argument.getExpression().getExpression() != null){
+					if (argument.getArgumentName().getName().equals(attr_file.name) || 
+					 argument.getArgumentName().getName().equals(attr_script.name)) {
+						String dataPath = MathPrinter.toStr(argument.getExpression().getExpression());
+						if (!Utils.isFileExist(b, dataPath)){
+							if (argument.getArgumentName().getName().equals(attr_file.name)){
+								warning(MSG_DATA_FILE_NOT_FOUND, 
+										MdlPackage.Literals.ARGUMENT__EXPRESSION,
+										MSG_DATA_FILE_NOT_FOUND, dataPath);
+							}
+							if (argument.getArgumentName().getName().equals(attr_script.name)){
+								warning(MSG_SCRIPT_NOT_FOUND, 
+										MdlPackage.Literals.ARGUMENT__EXPRESSION,
+										MSG_SCRIPT_NOT_FOUND, dataPath);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+
 	//Do not validate parameters of variability subblocks
 	private Boolean isVariabilitySubblock(EObject container, Arguments args){
 		//Exclude content of Diag and Matrix check from attribute checks
