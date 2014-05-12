@@ -41,7 +41,8 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_ncategories.name  -> new Attribute("ncategories", nVal), 
 			DistributionValidator::attr_probabilities.name  -> new Attribute("probabilities", pVal), 
 			DistributionValidator::attr_ncat.name  -> new Attribute("ncategories", nVal), 
-			DistributionValidator::attr_prob.name  -> new Attribute("probabilities", pVal)), 
+			DistributionValidator::attr_prob.name  -> new Attribute("probabilities", pVal), 
+			DistributionValidator::attr_categories.name  -> new Attribute("ncategories", nVal)),
 		DistributionType::cauchy -> newHashMap(
 			DistributionValidator::attr_location.name  -> new Attribute("location", rVal), 
 			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
@@ -239,7 +240,13 @@ class DistributionPrinter extends MdlPrinter{
 							«ELSE»	
 								<«attrName»>
 							«ENDIF»
+							«IF arg.argumentName.name.equals(DistributionValidator::attr_categories.name)»
+								«IF arg.value.vector != null»
+									<«dataType»>«arg.value.vector.values.size»</«dataType»>
+								«ENDIF»
+							«ELSE»	
 								«arg.value.toPharmML(dataType)»
+							«ENDIF»	
 							</«attrName»>
 							«ENDIF»
 					«ENDIF»

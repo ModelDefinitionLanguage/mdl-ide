@@ -58,6 +58,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_loIG = new Attribute("loIG", MdlDataType.TYPE_PREAL, false);
 	public final static Attribute attr_hiIG = new Attribute("hiIG", MdlDataType.TYPE_REAL, false);
 
+	public final static Attribute attr_categories = new Attribute("categories", MdlDataType.TYPE_VECTOR_NAT, true);
 	public final static Attribute attr_ncategories = new Attribute("ncategories", MdlDataType.TYPE_NAT, true);
 	public final static Attribute attr_ncat = new Attribute("ncat", MdlDataType.TYPE_NAT, true);
 	public final static Attribute attr_numberOfTrials = new Attribute("numberOfTrials", MdlDataType.TYPE_NAT, true);
@@ -134,6 +135,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			put(DistributionType.categorical, Arrays.asList(
 					attr_ncategories,
 					attr_ncat,
+					attr_categories,
 					attr_probabilities,
 					attr_prob));
 			put(DistributionType.cauchy, Arrays.asList(
@@ -206,8 +208,8 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			put(DistributionType.multivariateNormal, Arrays.asList(
 					attr_realVector_mean,
 					attr_cov,
-					//attr_corr, //do not exit in PharmML
-					//attr_vector_sd, //do not exist in PharmML
+					//attr_corr,      //does not exist in PharmML
+					//attr_vector_sd, //does not exist in PharmML
 					attr_dimension)); 
 			put(DistributionType.multivariateStudentT, Arrays.asList(
 					//attr_meanVector,
@@ -290,6 +292,10 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 
 			put(DistributionType.categorical+":"+attr_ncategories.name, attr_ncat.name);
 			put(DistributionType.categorical+":"+attr_ncat.name, attr_ncategories.name);
+			put(DistributionType.categorical+":"+attr_categories.name, attr_ncategories.name);
+			put(DistributionType.categorical+":"+attr_categories.name, attr_ncat.name);
+			put(DistributionType.categorical+":"+attr_ncategories.name, attr_categories.name);
+			put(DistributionType.categorical+":"+attr_ncat.name, attr_categories.name);
 			put(DistributionType.categorical+":"+attr_probabilities.name, attr_prob.name);
 			put(DistributionType.categorical+":"+attr_prob.name, attr_probabilities.name);
 			
