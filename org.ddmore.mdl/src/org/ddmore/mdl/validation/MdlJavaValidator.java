@@ -84,7 +84,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				for (ModelObjectBlock block: obj.getModelObject().getBlocks()){
 					//RANDOM_VARIABLE_DEFINITION
 					if (block.getRandomVariableDefinitionBlock() != null){
-						for (RandomVariable s: block.getRandomVariableDefinitionBlock().getVariables())
+						for (SymbolDeclaration s: block.getRandomVariableDefinitionBlock().getVariables())
 							varList.add(s.getSymbolName().getName());
 					}
 					//GROUP_VARIABLES, MIXTURE
@@ -286,7 +286,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	@Check
 	public void checkSymbolDeclaration(SymbolDeclaration symbol){
 		if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables, symbol.getSymbolName()))
-			warning(MSG_SYMBOL_DEFINED, MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME);
+			warning(MSG_SYMBOL_DEFINED, 
+					MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
+					MSG_SYMBOL_DEFINED, symbol.getSymbolName().getName()
+			);
 	}	
 	
 	////////////////////////////////////////////////////////////////

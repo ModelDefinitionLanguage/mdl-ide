@@ -49,7 +49,6 @@ import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.RandomList;
-import org.ddmore.mdl.mdl.RandomVariable;
 import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
@@ -616,18 +615,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		});
 	}
 	
-	void insertRandomVariable(RandomVariableDefinitionBlock block, String varName){
-		RandomVariable newSymbol = MdlFactory.eINSTANCE.createRandomVariable();
-		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
-		symbName.setName(varName);
-		newSymbol.setSymbolName(symbName);
-		Attribute[] attributes = {DistributionValidator.attr_type, DistributionValidator.attr_mean, 
-				DistributionValidator.attr_variance, DistributionValidator.attr_level};
-		RandomList list = createRandomList(attributes);
-		newSymbol.setRandomList(list);
-		block.getVariables().add(newSymbol);
-	}
-	
 	//GROUP_VARIABLES
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
 	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
@@ -968,6 +955,18 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		Attribute[] attributes = {AttributeValidator.attr_value};
 		newParam.setExpression(createListExpression(attributes));
 		return newParam;
+	}
+	
+	void insertRandomVariable(RandomVariableDefinitionBlock block, String varName){
+		SymbolDeclaration newSymbol = MdlFactory.eINSTANCE.createSymbolDeclaration();
+		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+		symbName.setName(varName);
+		newSymbol.setSymbolName(symbName);
+		Attribute[] attributes = {DistributionValidator.attr_type, DistributionValidator.attr_mean, 
+				DistributionValidator.attr_variance, DistributionValidator.attr_level};
+		RandomList list = createRandomList(attributes);
+		newSymbol.setRandomList(list);
+		block.getVariables().add(newSymbol);
 	}
 	
 	//PRIOR_PARAMETERS

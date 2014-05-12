@@ -8,7 +8,6 @@ package eu.ddmore.converter.mdlprinting
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.FunctionCall
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.RandomVariable
 import org.ddmore.mdl.mdl.Block
 import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.List
@@ -393,8 +392,14 @@ class MdlPrinter {
 	
 	def toStr(SymbolDeclaration v){
 		var res = "";
-		if (v.symbolName.name != null) {
+		if (v.functionName != null){
+			res = res + v.functionName.name.convertID + '('      
+		}
+		if (v.symbolName != null) {     
 			res = res + v.symbolName.name.convertID;
+		}
+		if (v.functionName != null){
+			res = res + ')' 
 		}
 		var expr = ""; //First make sure that expression is not empty, than print "=" 
 		if (v.expression != null){
@@ -409,21 +414,6 @@ class MdlPrinter {
 		}
 		return res;
 	}
-
-	def toStr(RandomVariable v){
-		var res = "";
-		if (v.functionName != null){
-			res = res + v.functionName.name.convertID + '('      
-		}
-		if (v.symbolName != null) {     
-			res = res + v.symbolName.name.convertID;
-		}
-		if (v.functionName != null){
-			res = res + ')' 
-		}
-		res = res + " = " + v.randomList.toStr;
-		return res;
-	}	
 
 	def toStr(SymbolModification v){
 		var res = "";
@@ -821,8 +811,6 @@ class MdlPrinter {
 	def print(FunctionCall call)'''«call.toStr»'''
 		
     def print(SymbolDeclaration v)'''«v.toStr»'''
-
-	def print(RandomVariable v)'''«v.toStr»'''
 
     def print(SymbolModification v)'''«v.toStr»'''
 

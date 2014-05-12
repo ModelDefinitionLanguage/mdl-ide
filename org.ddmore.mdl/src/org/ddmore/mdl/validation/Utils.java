@@ -120,7 +120,10 @@ public class Utils {
 		ArrayList<String> functions = map.get(objName.getName()); 
 		for (String func: functions){
 			if (func.equals(symbName.getName())) i++;
-			if (i > 1) return true;
+			if (i > 1) {
+				System.out.println("Found duplicate for " + symbName.getName());
+				return true;
+			}
 		}
 		return false;
 	}

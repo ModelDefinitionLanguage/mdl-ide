@@ -48,7 +48,6 @@ import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.RandomList;
-import org.ddmore.mdl.mdl.RandomVariable;
 import org.ddmore.mdl.mdl.RemoveList;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolList;
@@ -698,8 +697,9 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			createEStructuralFeatureNode(parentNode,
 				p,
 				MdlPackage.Literals.SYMBOL_DECLARATION__RANDOM_LIST,
-				_image(p),
-				 p.getSymbolName().getName(),
+				(p.getFunctionName() != null)? getLogImage(): _image(p),
+				(p.getFunctionName() != null)? p.getFunctionName().getName() + 
+						'(' + p.getSymbolName().getName() + ')' : p.getSymbolName().getName(),
 				false);
 		}
 	}
@@ -711,18 +711,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			_image(s),
 			 s.getFunctionName().getName(),
 		false);
-	}
-	
-	protected void  _createNode(IOutlineNode parentNode, RandomVariable v){
-		if (v.getRandomList() != null){
-			createEStructuralFeatureNode(parentNode,
-				v,
-				MdlPackage.Literals.RANDOM_VARIABLE__RANDOM_LIST,
-				(v.getFunctionName() != null)? getLogImage(): _image(v),
-				(v.getFunctionName() != null)? v.getFunctionName().getName() + 
-						'(' + v.getSymbolName().getName() + ')' : v.getSymbolName().getName(),
-				false);
-		}
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, Block b){

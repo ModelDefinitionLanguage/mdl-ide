@@ -1,7 +1,6 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.RandomVariable
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.MclObject
 import java.util.ArrayList
@@ -327,11 +326,13 @@ class Mdl2PharmML{
 		}
 	}	
 	
-	def print_mdef_RandomVariable(RandomVariable s)'''
-		<RandomVariable symbId="«s.symbolName.name»">
-			«s.print_VariabilityReference»
-			«distrPrinter.print_uncert_Distribution(s.randomList)»
-		</RandomVariable>
+	def print_mdef_RandomVariable(SymbolDeclaration s)'''
+		«IF s.randomList != null»
+			<RandomVariable symbId="«s.symbolName.name»">
+				«s.print_VariabilityReference»
+				«distrPrinter.print_uncert_Distribution(s.randomList)»
+			</RandomVariable>
+		«ENDIF»
 	'''
 	
 	/////////////////////////
@@ -433,12 +434,14 @@ class Mdl2PharmML{
 	'''	
 	
 	//
-	def print_VariabilityReference(RandomVariable s)'''
-		«val level = mathPrinter.getAttribute(s.randomList.arguments, AttributeValidator::attr_level.name)»
-		«IF level.length > 0»
-			<ct:VariabilityReference>
-				<ct:SymbRef symbIdRef="«level»"/>
-			</ct:VariabilityReference>
+	def print_VariabilityReference(SymbolDeclaration s)'''
+		«IF s.randomList != null»
+			«val level = mathPrinter.getAttribute(s.randomList.arguments, AttributeValidator::attr_level.name)»
+			«IF level.length > 0»
+				<ct:VariabilityReference>
+					<ct:SymbRef symbIdRef="«level»"/>
+				</ct:VariabilityReference>
+			«ENDIF»
 		«ENDIF»
 	'''
 	

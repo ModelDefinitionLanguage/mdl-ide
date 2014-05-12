@@ -59,7 +59,7 @@ ModelPredictionBlock:
 
 RandomVariableDefinitionBlock:
 	identifier = 'RANDOM_VARIABLE_DEFINITION' 
-	BEGIN variables += RandomVariable* END //new Variable +
+	BEGIN variables += SymbolDeclaration* END //new Variable +
 ;
 
 InputVariablesBlock:
@@ -406,12 +406,8 @@ SymbolName:
 ;
 
 SymbolDeclaration:
-	symbolName = SymbolName (("=" expression = AnyExpression) | (randomList = RandomList))?
-;
-
-RandomVariable:
-	((symbolName = SymbolName) | (functionName = SymbolName '(' symbolName = SymbolName ')')) 
-	randomList = RandomList
+	symbolName = SymbolName (("=" expression = AnyExpression) | (randomList = RandomList))? |
+	(functionName = SymbolName '(' symbolName = SymbolName ')') randomList = RandomList
 ;
 
 EnumType:
