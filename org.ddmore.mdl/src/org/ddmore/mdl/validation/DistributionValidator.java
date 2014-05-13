@@ -128,6 +128,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			put(DistributionType.binomial, Arrays.asList(
 					attr_numberOfTrials,
 					attr_nTrials,
+					attr_n,
 					attr_probabilityOfSuccess, 
 					attr_p_ofSuccess,
 					attr_nat_lo,
@@ -174,6 +175,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_nSuccess,
 					attr_numberOfTrials, 
 					attr_nTrials,
+					attr_n,
 					attr_populationSize,
 					attr_popSize,
 					attr_nat_lo,
@@ -287,6 +289,11 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			
 			put(DistributionType.binomial+":"+attr_numberOfTrials.name, attr_nTrials.name);
 			put(DistributionType.binomial+":"+attr_nTrials.name, attr_numberOfTrials.name);
+			put(DistributionType.binomial+":"+attr_numberOfTrials.name, attr_n.name);
+			put(DistributionType.binomial+":"+attr_nTrials.name, attr_n.name);
+			put(DistributionType.binomial+":"+attr_n.name, attr_nTrials.name);
+			put(DistributionType.binomial+":"+attr_n.name, attr_numberOfTrials.name);
+
 			put(DistributionType.binomial+":"+attr_probabilityOfSuccess.name, attr_p_ofSuccess.name);
 			put(DistributionType.binomial+":"+attr_p_ofSuccess.name, attr_probabilityOfSuccess.name);
 
@@ -312,6 +319,10 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 
 			put(DistributionType.hypergeometric+":"+attr_numberOfTrials.name, attr_nTrials.name);
 			put(DistributionType.hypergeometric+":"+attr_nTrials.name, attr_numberOfTrials.name);
+			put(DistributionType.hypergeometric+":"+attr_n.name, attr_nTrials.name);
+			put(DistributionType.hypergeometric+":"+attr_n.name, attr_numberOfTrials.name);
+			put(DistributionType.hypergeometric+":"+attr_numberOfTrials.name, attr_n.name);
+			put(DistributionType.hypergeometric+":"+attr_nTrials.name, attr_n.name);
 			put(DistributionType.hypergeometric+":"+attr_populationSize.name, attr_popSize.name);
 			put(DistributionType.hypergeometric+":"+attr_popSize.name, attr_populationSize.name);
 			put(DistributionType.hypergeometric+":"+attr_numberOfSuccesses.name, attr_nSuccess.name);

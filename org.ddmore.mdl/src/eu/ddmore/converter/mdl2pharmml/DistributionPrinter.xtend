@@ -34,6 +34,7 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_numberOfTrials.name  -> new Attribute("numberOfTrials", nVal), 
 			DistributionValidator::attr_probabilityOfSuccess.name  -> new Attribute("probabilityOfSuccess", pVal), 
 			DistributionValidator::attr_nTrials.name  -> new Attribute("numberOfTrials", nVal), 
+			DistributionValidator::attr_n.name  -> new Attribute("numberOfTrials", nVal), 
 			DistributionValidator::attr_p_ofSuccess.name  -> new Attribute("probabilityOfSuccess", pVal), 
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
@@ -82,6 +83,7 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_populationSize.name  -> new Attribute("populationSize", nVal), 
 			DistributionValidator::attr_nSuccess.name  -> new Attribute("numberOfSuccesses", nVal), 
 			DistributionValidator::attr_nTrials.name  -> new Attribute("numberOfTrials", nVal), 
+			DistributionValidator::attr_n.name  -> new Attribute("numberOfTrials", nVal),
 			DistributionValidator::attr_popSize.name  -> new Attribute("populationSize", nVal), 
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)), 
@@ -291,7 +293,7 @@ class DistributionPrinter extends MdlPrinter{
 	}
 	
 	//A value assigned to a distribution attribute can be a number, reference, or vector
-	def toPharmML(Primary p, String type){
+	def String toPharmML(Primary p, String type){
 		if (p.number != null){
 			return '''<«type»>«p.number»</«type»>''';
 		}
@@ -299,7 +301,11 @@ class DistributionPrinter extends MdlPrinter{
 			return '''<var varId="«p.symbol.toStr»"/>'''; 
 		}
 		if (p.vector != null) {
-			return p.vector.toStr;
+			var res = "";
+			for (Primary pp: p.vector.values){
+				 res = res + pp.toPharmML(type);
+			}
+			return '''«res»'''
 		}
 	}
 	
