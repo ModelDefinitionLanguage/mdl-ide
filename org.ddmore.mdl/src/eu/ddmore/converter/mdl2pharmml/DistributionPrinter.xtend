@@ -107,6 +107,7 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_mu.name  -> new Attribute("logScale", rVal), 
 			DistributionValidator::attr_cv.name  -> new Attribute("shape", prVal), 
 			DistributionValidator::attr_sigmatr.name  -> new Attribute("shape", prVal), 
+			DistributionValidator::attr_var.name  -> new Attribute("shape", prVal), 
 			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
 			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)),
 		DistributionType::multinomial -> newHashMap(
@@ -131,8 +132,8 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
 		DistributionType::normal -> newHashMap(
 			DistributionValidator::attr_mean.name  -> new Attribute("mean", rVal), 
-			DistributionValidator::attr_variance.name  -> new Attribute("variance", prVal), 
-			DistributionValidator::attr_stddev.name  -> new Attribute("stddev", prVal), 
+			DistributionValidator::attr_var.name  -> new Attribute("variance", prVal), 
+			DistributionValidator::attr_sd.name  -> new Attribute("stddev", prVal), 
 			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
 			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
 		DistributionType::normalInverseGamma 	-> newHashMap(
