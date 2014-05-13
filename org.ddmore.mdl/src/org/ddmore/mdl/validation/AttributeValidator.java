@@ -57,7 +57,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_ATTRIBUTE_WRONG_TYPE = "Type error";
 
 	public final static String MSG_DATA_FILE_NOT_FOUND = "Cannot find data file";
-	public final static String MSG_SCRIPT_NOT_FOUND = "Cannot find script file";
+	public final static String MSG_SCRIPT_NOT_FOUND    = "Cannot find script file";
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	final public static Attribute attr_name = new Attribute("name", MdlDataType.TYPE_STRING, false, "");		
@@ -346,8 +346,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 				}
 			}
 		}
-	}
-	
+	}	
 
 	//Do not validate parameters of variability subblocks
 	private Boolean isVariabilitySubblock(EObject container, Arguments args){

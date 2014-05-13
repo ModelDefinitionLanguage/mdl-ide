@@ -431,7 +431,21 @@ class MathPrinter extends MdlPrinter{
 		}
 	}
 	
-	//type: int, string, etc.
+	def getValueType(String value){
+		try{        			
+        	if (value.indexOf(".") > -1){
+        		Double::parseDouble(value);
+				return "real";
+        	} else {
+	       		Integer::parseInt(value);
+    	   		return "int";	
+        	}
+        }
+		catch (NumberFormatException e) {
+			return "id";
+		}
+	}
+	
 	def print_ct_Value(String value, String type)'''
 		<ct:«type»>«value»</ct:«type»>
 	'''
@@ -598,7 +612,26 @@ class MathPrinter extends MdlPrinter{
 			default: operator
 		}
 	}
+	
+	//delimeters
+	def convertDelimiter(String id){
+		switch (id){
+			case ",":   "COMMA"
+			case "\\t": "TAB"
+			case "\\s": "SPACE"
+			default: id
+		}
+	}
 
+	//file formats
+	def convertFileFormat(String id){
+		switch (id.toUpperCase){
+			case "R": "R"
+			case "XLS": "SIMCYP" 
+			default: id
+		}
+	}
+	
 	//+
 	def print_ct_SymbolRef(String objName, String name)'''
 		«var blkId = resolver.getReferenceBlock(objName, name)»

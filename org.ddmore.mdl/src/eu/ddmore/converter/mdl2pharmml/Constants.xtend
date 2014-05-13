@@ -23,12 +23,23 @@ class Constants {
 	
 	public val TYPE_INT  = "int";
 	public val TYPE_REAL = "real";
-	public val OPERATION_ESTIMATE = "estim";	
-	public val OPERATION_SIMULATE = "simul";
 	
 	public val VAR_TYPE_PARAMETER = "variabilityParameter";
 	public val VAR_TYPE_ERROR = "residualError";
 	
-	public val BLK_TARGET_TOOL = "tt.";
-	public val BLK_TARGET_TOOL_DATA = "ttd.";
+	public val BLK_DS_TARGET_TOOL = "tt.";
+	public val BLK_DS_TARGET_TOOL_DATA = "ttd.";
+	public val BLK_DS_IMPORT_DATA = "id.";
+	public val BLK_DS_NONMEM_DATASET = "nm_ds."
+	public val BLK_DS_DATASET = "ds."
+	
+	public val BLK_ESTIM_STEP = "estimStep_";	
+	public val BLK_SIMUL_STEP = "simulStep_";
+	
+	public val BLK_DESIGN_EPOCH    = "td_epoch.";
+	public val BLK_DESIGN_CELL     = "td_cell.";
+	public val BLK_DESIGN_ARM      = "td_arm.";
+	public val BLK_DESIGN_SEGMENT  = "td_segment.";
+	public val BLK_DESIGN_ACTIVITY = "td_activity.";
+	
 }

@@ -3,7 +3,6 @@ package eu.ddmore.converter.mdl2pharmml
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.SymbolModification
 import org.ddmore.mdl.mdl.Mcl
-import java.util.ArrayList
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.types.UseType
 import org.ddmore.mdl.mdl.AnyExpression
@@ -17,9 +16,9 @@ class TrialDesignPrinter extends DataSetPrinter {
 		super(mcl, mathPrinter, resolver);
 	}	
 	
-	def print_design_TrialDesign()'''
+	def print_design_TrialDesign(String objName)'''
 	<TrialDesign>
-		«print_design_Structure»
+		«objName.print_design_Structure»
 		«print_design_Population»
 		«print_design_IndividualDosing»
 	</TrialDesign>	
@@ -28,120 +27,74 @@ class TrialDesignPrinter extends DataSetPrinter {
 	///////////////////////////
 	// II.a Structure
 	///////////////////////////
-	def print_design_Structure()
+	def print_design_Structure(String objName)
 	'''
 	<Structure>
-		«print_design_Epoch()»
-		«print_design_Arms»
-		«print_design_Cells»
-		«print_design_Segments»
-		«print_design_Activities»
+		«objName.print_design_Epochs»
+		«objName.print_design_Arms»
+		«objName.print_design_Cells»
+		«objName.print_design_Segments»
+		«objName.print_design_Activities»
 	</Structure>
 	'''
 	
-	def print_design_Epoch(){
-		return print_design_Epoch("", "", "", "");
-	}
-	
-	def print_design_Epoch(String name, String start, String end, String order)
+	def print_design_Epochs(String objName)
 	'''
-	<Epoch oid="«name»">
-		«start.print_design_Start»
-		«start.print_design_End»
-		<Order>«order»</Order>
+	<Epoch oid="«BLK_DESIGN_EPOCH + objName»">
+		<Start><ct:Real>???</ct:Real></Start>
+		<End><ct:Real>???</ct:Real></End>
+		<Order>???</Order>
 	</Epoch>
 	'''
 
-	def print_design_Start(String value)'''
-	<Start>
-		<ct:Real«value»></ct:Real>
-	</Start>
-	'''
-
-	def print_design_End(String value)'''
-	<End>
-		<ct:Real«value»></ct:Real>
-	</End>
+	def print_design_Arms(String objName)'''
+	<Arm oid="«BLK_DESIGN_ARM + objName»"/>
 	'''
 	
-	//TODO
-	def print_design_Arms(){
-		print_design_Arm("");
-	}
-		
-	def print_design_Arm(String name)'''
-	<Arm oid=«name»/>
-	'''
-	
-	//TODO
-	def print_design_Cells(){
-		print_design_Cell("", "", "", "")
-	}
-	
-	def print_design_Cell(String name, String epochRef, String armRef, String segmentRef)'''
-	<Cell oid="«name»">
-		<EpochRef oidRef="«epochRef»"/>
-		<ArmRef oidRef="«armRef»"/>
-		<SegmentRef oidRef="«segmentRef»"/>
+	def print_design_Cells(String objName)'''
+	<Cell oid="«BLK_DESIGN_CELL + objName»">
+		<EpochRef oidRef="???"/>
+		<ArmRef oidRef="???"/>
+		<SegmentRef oidRef="???"/>
 	</Cell>
 	'''
 	
-	//TODO
-	def print_design_Segments(){
-		print_design_Segment("", "");
-	}
-	
-	def print_design_Segment(String name, String activityRef)'''
-	<Segment oid="«name»">
-		«IF !activityRef.equals("")»
-			<ActivityRef oidRef="«activityRef»"/>
-		«ENDIF»
+	def print_design_Segments(String objName)'''
+	<Segment oid="«BLK_DESIGN_SEGMENT + objName»">
+		<ActivityRef oidRef="???"/>
 	</Segment>
 	'''
 	
-	//TODO
-	def print_design_Activities(){
-		print_design_Activity("");
-	}
-	
-	def print_design_Activity(String name)'''
-	<Activity oid="«name»">
-		«print_design_Bolus»
+	def print_design_Activities(String objName)'''
+	<Activity oid="«BLK_DESIGN_ACTIVITY + objName»">
 	</Activity>
 	'''
+	//«print_design_Bolus(objName, s)»
+	
 
-	//TODO - define structure
-	def print_design_Bolus()'''
+	def print_design_Bolus(String objName, SymbolDeclaration s)'''
 	<Bolus>
-		«print_design_DoseAmount»
-		«print_design_DosingTimes(null)»
-		«print_design_SteadyState(null, null)»
+		«print_design_DoseAmount(objName, "target", s)»
+		«print_design_DosingTimes(objName, s)»
+		«print_design_SteadyState(objName, s)»
 	</Bolus>
 	'''
 
-	def print_design_DoseAmount()'''
-	<DoseAmount inputType="target">
-		<ct:SymbRef symbIdRef="" blkIdRef=""/>
+	def print_design_DoseAmount(String objName, String target, SymbolDeclaration s)'''
+	<DoseAmount inputType="«target»">
 	</DoseAmount>
 	'''
 	
-	def print_design_DosingTimes(SymbolDeclaration s)'''
+	def print_design_DosingTimes(String objName, SymbolDeclaration s)'''
 	<DosingTimes>
-		«s.print_design_Assign("")»
-	</DosingTimes>	
-	'''
-	
-	def print_design_Assign(SymbolDeclaration s, String blkIdRef)'''
-	«IF s != null»
-		<ct:SymbRef symbIdRef="«s.symbolName.name»«IF blkIdRef.length > 0» blkIdRef="«blkIdRef»"«ENDIF»"/>
+		«print_ct_SymbolRef(objName, s.symbolName.name)»
 		«IF s.expression.expression != null»
-			«print_Assign(s.expression.expression)»
+			«s.expression.expression.print_Assign»
 		«ENDIF»
-	«ENDIF»
-	'''
+	</DosingTimes>	
+	'''	
 
 	def print_design_Assign(SymbolModification s)'''
-	«IF s != null»
 		«print_ct_SymbolRef(s.symbolName)»
 		«IF s.expression != null»
 			«var AnyExpression value = null»
@@ -154,44 +107,38 @@ class TrialDesignPrinter extends DataSetPrinter {
 			«ENDIF»
 			«IF value != null»
 				«IF value.expression != null»
-					«print_Assign(value.expression)»
+					«value.expression.print_Assign»
 				«ENDIF»
 			«ENDIF»
 		«ENDIF»
-	«ENDIF»
 	'''
 
-	def print_design_SteadyState(SymbolDeclaration endTime, SymbolDeclaration interval)'''
+	def print_design_SteadyState(String objName, SymbolDeclaration s)'''
 	<SteadyState>
-		«endTime.print_design_EndTime»
-		«interval.print_design_Interval»
+		<EndTime>
+			«print_ct_SymbolRef(objName, s.symbolName.name)»
+			«IF s.expression.expression != null»
+				«s.expression.expression.print_Assign»
+			«ENDIF»
+		</EndTime>	
+		<Interval>
+			«print_ct_SymbolRef(objName, s.symbolName.name)»
+			«IF s.expression.expression != null»
+				«s.expression.expression.print_Assign»
+			«ENDIF»
+		</Interval>	
 	</SteadyState>
-	'''
-
-	def print_design_EndTime(SymbolDeclaration s)'''
-	<EndTime>
-		«s.print_design_Assign("")»
-	</EndTime>	
-	'''
-
-	def print_design_Interval(SymbolDeclaration s)'''
-	<Interval>
-		«s.print_design_Assign("")»
-	</Interval>	
 	'''
 
 	///////////////////////////
 	// II.b Population
 	///////////////////////////
 	def print_design_Population()
-		//«print_VariabilityReference(?)»
 	'''
 	<Population>
 		«print_design_IndividualTemplate»
-		«print_design_DataSet»
 	</Population>
 	'''
-	
 	//Print mapping for the input variables with use=idv (individual)
 	def print_design_IndividualTemplate(){
 		var mappings = "";
@@ -232,20 +179,10 @@ class TrialDesignPrinter extends DataSetPrinter {
 	</«mappingType»>
 	'''
 
-	//
-	def print_design_DataSet(){
-		var names = newArrayList;
-		var types = newArrayList;
-		var values = new ArrayList<String[]>();
-		print_DataSet(names, types, values);
-	}
-	
-
 	///////////////////////////
 	// II.c Individual Dosing
 	///////////////////////////
-	def print_design_IndividualDosing()
-	'''
+	def print_design_IndividualDosing()'''
 	<IndividualDosing>
 	</IndividualDosing>
 	'''

@@ -228,6 +228,29 @@ class ReferenceResolver{
 	  	return parameters;
 	}
 	
+	//Return a model variable (matched by name or by alias name!)
+	def getModelInputVariable(ModelObject mObj, String name){
+		for (b: mObj.blocks){
+			if (b.inputVariablesBlock != null){
+				for (s: b.inputVariablesBlock.variables){
+					if (s.symbolName.symbol.name.equals(name)){
+						return s;
+					}
+					if (s.expression != null){
+						if (s.expression.list != null){
+							var alias = s.expression.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
+							if (alias.length > 0){
+								if (alias.equals(name)) return s;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	
 	//+Returns declarations for ParameterModel
 	def getParameters(ParameterObject obj){		
 		var parameters = new HashSet<String>();
