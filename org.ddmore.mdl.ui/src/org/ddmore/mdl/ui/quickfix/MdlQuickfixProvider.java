@@ -963,7 +963,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		symbName.setName(varName);
 		newSymbol.setSymbolName(symbName);
 		Attribute[] attributes = {DistributionValidator.attr_type, DistributionValidator.attr_mean, 
-				DistributionValidator.attr_variance, DistributionValidator.attr_level};
+				DistributionValidator.attr_var, DistributionValidator.attr_level};
 		RandomList list = createRandomList(attributes);
 		newSymbol.setRandomList(list);
 		block.getVariables().add(newSymbol);

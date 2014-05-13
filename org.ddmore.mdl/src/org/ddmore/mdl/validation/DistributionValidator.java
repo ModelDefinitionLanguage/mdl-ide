@@ -96,8 +96,8 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_cov = new Attribute("cov", MdlDataType.TYPE_VECTOR_REAL, true);
 
 	public final static Attribute attr_mean = new Attribute("mean", MdlDataType.TYPE_REAL, true, "0");
-	public final static Attribute attr_variance = new Attribute("var", MdlDataType.TYPE_PREAL, true, "0");
-	public final static Attribute attr_stddev = new Attribute("sd", MdlDataType.TYPE_PREAL, true);
+	public final static Attribute attr_var = new Attribute("var", MdlDataType.TYPE_PREAL, true, "0");
+	public final static Attribute attr_sd = new Attribute("sd", MdlDataType.TYPE_PREAL, true);
 
 	public final static Attribute attr_varianceScaling = new Attribute("varianceScaling", MdlDataType.TYPE_PREAL, true);
 
@@ -198,6 +198,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			put(DistributionType.logNormal, Arrays.asList(
 					attr_median,
 					attr_cv, 
+					attr_var,
 					attr_mu,
 					attr_sigmatr,
 					attr_preal_lo,
@@ -230,8 +231,8 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_nat_hi));
 			put(DistributionType.normal, Arrays.asList(
 					attr_mean,
-					attr_stddev, 
-					attr_variance, 
+					attr_sd, 
+					attr_var, 
 					attr_continuous_lo,
 					attr_continuous_hi));
 			put(DistributionType.normalInverseGamma, Arrays.asList(
@@ -332,6 +333,10 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			put(DistributionType.logNormal+":"+attr_mu.name, attr_median.name);
 			put(DistributionType.logNormal+":"+attr_cv.name, attr_sigmatr.name);
 			put(DistributionType.logNormal+":"+attr_sigmatr.name, attr_cv.name);
+			put(DistributionType.logNormal+":"+attr_cv.name, attr_var.name);
+			put(DistributionType.logNormal+":"+attr_var.name, attr_cv.name);
+			put(DistributionType.logNormal+":"+attr_var.name, attr_sigmatr.name);
+			put(DistributionType.logNormal+":"+attr_sigmatr.name, attr_var.name);
 
 			put(DistributionType.multinomial+":"+attr_numberOfTrials.name, attr_nTrials.name);
 			put(DistributionType.multinomial+":"+attr_nTrials.name, attr_numberOfTrials.name);
@@ -349,8 +354,8 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			put(DistributionType.studentT + ":" + attr_pnat_degreesOfFreedom.name, attr_pnat_dof.name);
 			put(DistributionType.studentT + ":" + attr_pnat_dof.name, attr_pnat_degreesOfFreedom.name); 
 
-			put(DistributionType.normal + ":" + attr_variance.name, attr_stddev.name); 
-			put(DistributionType.normal + ":" + attr_stddev.name, attr_variance.name);
+			put(DistributionType.normal + ":" + attr_var.name, attr_sd.name); 
+			put(DistributionType.normal + ":" + attr_sd.name, attr_var.name);
 			
 			put(DistributionType.uniform + ":" + attr_numberOfClasses.name, attr_min.name); 
 			put(DistributionType.uniform + ":" + attr_min.name, attr_numberOfClasses.name); 
@@ -366,9 +371,12 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	HashMap<String, String> exclusive_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = -4192464782401647313L;
 		{
-			put(attr_variance.name, attr_stddev.name); 
-			put(attr_stddev.name, attr_variance.name);
-			
+			put(attr_var.name, attr_sd.name); 
+			put(attr_sd.name, attr_var.name);
+
+			put(attr_var.name, attr_cv.name); 
+			put(attr_cv.name, attr_var.name);
+
 			put(attr_numberOfClasses.name, attr_min.name); 
 			put(attr_min.name, attr_numberOfClasses.name); 
 			put(attr_max.name, attr_numberOfClasses.name);
