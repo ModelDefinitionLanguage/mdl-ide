@@ -248,7 +248,7 @@ class DistributionPrinter extends MdlPrinter{
 									<«dataType»>«arg.value.vector.values.size»</«dataType»>
 								«ENDIF»
 							«ELSE»	
-								«arg.value.toPharmML(dataType)»
+									«arg.value.toPharmML(dataType)»
 							«ENDIF»	
 							</«attrName»>
 							«ENDIF»

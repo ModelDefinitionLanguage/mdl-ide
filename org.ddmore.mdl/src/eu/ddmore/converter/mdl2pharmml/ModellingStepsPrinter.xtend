@@ -10,6 +10,7 @@ import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.types.InputFormatType
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
+import org.apache.commons.io.FilenameUtils
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	
@@ -61,6 +62,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 								val data = args.getAttribute(dataParam);
 								val model = args.getAttribute(modelParam);
 								if (data.length > 0 && model.length > 0){
+									res  = res + print_mdef_TargetTool(data);
 									if (bb.estimateBlock != null){
 										res = res + print_msteps_EstimationStep(data, model, "estimStep_" + functionName);
 									} else {
@@ -82,64 +84,67 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 	def print_msteps_EstimationStep(String dObjName, String mObjName, String stepId)'''
 	<EstimationStep oid="«stepId»">
+		«print_mdef_TargetToolReference(BLK_TARGET_TOOL + dObjName)»
 		«print_msteps_DataSet(dObjName, mObjName)»
+		«print_msteps_ParametersToEstimate»
 	</EstimationStep>
 	'''
+	
+	def print_msteps_ParametersToEstimate()'''
+	<ParametersToEstimate>
+	</ParametersToEstimate>
+	'''	
 		
 	///////////////////////////////////////////////
 	// III.b Simulation Step
 	////////////////////////////////////////////////
 	def print_msteps_SimulationStep(String dObjName, String mObjName, String stepId)'''
 	<SimulationStep  oid="«stepId»">		
-		«print_msteps_VariableAssignments»	
+		«print_mdef_TargetToolReference(BLK_TARGET_TOOL + dObjName)»
 		«print_msteps_Observations»
 	</SimulationStep>
 	'''
 
-	//TODO
-	def print_msteps_VariableAssignments() { 
-		//call print_msteps_VariableAssignment
-	}	
-
-	//TODO
-	def print_msteps_Observations() { 
-		//call print_msteps_Observation
-	}
-	
-	def print_msteps_VariableAssignment(SymbolDeclaration s, String blockId)'''
-	<ct:VariableAssignment>
-	</ct:VariableAssignment>
-	'''
-	
-	def print_msteps_Observation(String ref, String blockID)'''
+	def print_msteps_Observations()'''
 	<Observations>
-		<Timepoints>
-			«print_ct_Sequence("", "", "")»
-		</Timepoints>
-		<Continuous>
-			<ct:SymbRef symbIdRef="«ref»"«IF blockID.length > 0» blkIdRef="«blockID»"«ENDIF»/>
-		</Continuous>
 	</Observations>
 	'''	
 	
-	///////////////////////////////////////////////
-	// III.c Step Dependencies
-	////////////////////////////////////////////////
-	def print_msteps_StepDependencies()'''
-	<StepDependencies>
-	</StepDependencies>
+	def print_mdef_TargetTool(String dObjName){
+		val dObj = getDataObject(dObjName);
+		if (dObj == null) return "";
+		for (b: dObj.blocks){
+			if (b.sourceBlock != null){
+				if (b.sourceBlock.inlineBlock == null){
+					val script = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_script.name);
+					if (script.length > 0){
+						val baseName = FilenameUtils::getBaseName(script);
+						val path = FilenameUtils::getPath(script);
+						return print_mdef_TargetTool(BLK_TARGET_TOOL + dObjName, "R", 
+							BLK_TARGET_TOOL_DATA + dObjName, baseName, path
+						);
+					}
+				}
+			}
+		}
+	}
+
+	def print_mdef_TargetTool(String ttOid, String toolName, String ttdOid, String ttdName, String ttdURL)'''
+	<TargetTool oid="«ttOid»">
+		<TargetToolName>«toolName»</TargetToolName>
+		<ds:TargetToolData>
+			<ds:ImportTargetData oid="«ttdOid»">
+			<ds:name>«ttdName»</ds:name>
+			<ds:url>«ttdURL»</ds:url>
+			</ds:ImportTargetData>
+		</ds:TargetToolData>
+	</TargetTool>
 	'''
 	
-	def print_msteps_Step(String ref)'''
-	<Step>
-		<ct:OidRef oidRef="«ref»"/>
-	</Step>
-	'''
-	
-	//+
-	def print_msteps_ObjectiveDataSet()'''
-	<ObjectiveDataSet dataSetRef="">
-	</ObjectiveDataSet>
+	def print_mdef_TargetToolReference(String ttrOidRef)'''
+	<TargetToolReference>
+		<ct:OidRef oidRef="«ttrOidRef»"/>
+	</TargetToolReference>
 	'''
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,18 +188,19 @@ class ModellingStepsPrinter extends DataSetPrinter{
 			}
 			
 		}
+		var oid = "ds." + dObjName;
 		'''
-		<NONMEMdataSet>
+		<NONMEMdataSet oid="«oid»">
 			«res»
 		</NONMEMdataSet>
 		'''
 	}
 	
 	def print_msteps_ColumnMapping(String columnId, String symbId, String blkIdRef)'''
-		<NMColumnMapping>
+		<ColumnMapping>
 			<ds:ColumnRef columnIdRef="«columnId»"/>
 			<ds:SymbRef «IF blkIdRef.length > 0» blkIdRef="«blkIdRef»" «ENDIF»symbIdRef="«symbId»"/>
-		</NMColumnMapping>
+		</ColumnMapping>
 	'''
 	
 	//Return a corresponding model variable (matched by name or by alias name!)

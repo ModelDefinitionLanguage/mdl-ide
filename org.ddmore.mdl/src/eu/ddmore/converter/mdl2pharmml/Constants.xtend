@@ -28,5 +28,7 @@ class Constants {
 	
 	public val VAR_TYPE_PARAMETER = "variabilityParameter";
 	public val VAR_TYPE_ERROR = "residualError";
-
+	
+	public val BLK_TARGET_TOOL = "tt.";
+	public val BLK_TARGET_TOOL_DATA = "ttd.";
 }
