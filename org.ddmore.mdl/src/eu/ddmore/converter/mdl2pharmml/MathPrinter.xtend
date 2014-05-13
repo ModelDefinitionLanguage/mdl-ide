@@ -619,7 +619,7 @@ class MathPrinter extends MdlPrinter{
 			case ",":   "COMMA"
 			case "\\t": "TAB"
 			case "\\s": "SPACE"
-			default: id
+			default: "SPACE"
 		}
 	}
 
@@ -628,7 +628,7 @@ class MathPrinter extends MdlPrinter{
 		switch (id.toUpperCase){
 			case "R": "R"
 			case "XLS": "SIMCYP" 
-			default: id
+			default: id.toUpperCase
 		}
 	}
 	

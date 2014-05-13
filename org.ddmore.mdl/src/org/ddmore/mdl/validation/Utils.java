@@ -139,7 +139,7 @@ public class Utils {
 	}
 
 	//Add a symbol to a list of known symbols
-	static void addSymbol(ArrayList<String> list, BlockStatement st){
+	public static void addSymbol(ArrayList<String> list, BlockStatement st){
 		if (st != null){
 			if (st.getSymbol() != null){
 				list.add(st.getSymbol().getSymbolName().getName());
@@ -158,7 +158,7 @@ public class Utils {
 	}
 	
 	//The same as previous, but does not add repeated conditionally developed variables to avoid double declaration warning 
-	static void addSymbolNoRepeat(ArrayList<String> list, BlockStatement st){
+	public static void addSymbolNoRepeat(ArrayList<String> list, BlockStatement st){
 		if (st != null){
 			if (st.getSymbol() != null)
 				if (!list.contains(st.getSymbol().getSymbolName().getName())) 
@@ -169,7 +169,7 @@ public class Utils {
 	}
 	
 	//Weak validation of conditionally declared references - a variable is declared if it is declared in some branch 
-	static void addSymbol(ArrayList<String> list, ConditionalStatement e){
+	public static void addSymbol(ArrayList<String> list, ConditionalStatement e){
 		if (e.getIfStatement() != null){
 			addSymbolNoRepeat(list, e.getIfStatement());
 		}
@@ -248,7 +248,7 @@ public class Utils {
 	}*/
 	
 	//Add a symbol to a list of known symbols
-	static void addSymbol(ArrayList<String> list, Arguments args){
+	public static void addSymbol(ArrayList<String> list, Arguments args){
 		if (args != null){
 			if (args.getArguments() != null){	
 				for (Argument arg: args.getArguments()){
@@ -259,7 +259,7 @@ public class Utils {
 		}
 	}
 
-	static void addSymbol(ArrayList<String> list, FormalArguments args){
+	public static void addSymbol(ArrayList<String> list, FormalArguments args){
 		if (args != null){
 			for (ArgumentName id: args.getArguments())
 				list.add(id.getName());
@@ -267,7 +267,7 @@ public class Utils {
 	}
 	
 	//Add a symbol to a list of known symbols
-	static void addSymbol(ArrayList<String> list, Symbols args){
+	public static void addSymbol(ArrayList<String> list, Symbols args){
 		if (args != null){
 			if (args.getSymbols() != null){	
 				for (Symbol arg: args.getSymbols()){
@@ -278,7 +278,7 @@ public class Utils {
 		}
 	}
 
-	static void addSymbol(ArrayList<String> list, SymbolNames args){
+	public static void addSymbol(ArrayList<String> list, SymbolNames args){
 		if (args != null){
 			for (SymbolName id: args.getSymbolNames())
 				list.add(id.getName());
@@ -286,7 +286,7 @@ public class Utils {
 	}
 
 	
-	static void addSymbol(ArrayList<String> list, ImportBlock block){
+	public static void addSymbol(ArrayList<String> list, ImportBlock block){
 		if (block != null){
 			for (ImportedFunction id: block.getFunctions())
 				list.add(id.getFunctionName().getName());

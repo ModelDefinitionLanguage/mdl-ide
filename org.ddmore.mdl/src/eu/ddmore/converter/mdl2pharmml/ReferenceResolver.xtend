@@ -12,6 +12,8 @@ import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.types.UseType
 import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.DataDerivedBlock
+import org.ddmore.mdl.validation.Utils
 
 class ReferenceResolver{
 	val Mcl mcl;
@@ -108,6 +110,14 @@ class ReferenceResolver{
 	    }
 	}
 	
+	def getDerivedVariables(DataDerivedBlock b){
+		var derivedVars = newArrayList;
+		for (st: b.statements){
+			Utils::addSymbolNoRepeat(derivedVars, st);
+		}
+		return derivedVars;
+	}
+	
 	//+Return name of PharmML block for a given reference
 	def getReferenceBlock(FullyQualifiedSymbolName ref){
 		if (ref.object != null){
@@ -156,7 +166,7 @@ class ReferenceResolver{
 		source = pm_vars.get(objName);
 		if (source != null)
 			if (source.contains(name)) return "pm." + objName	
-		return objName;
+		return "";
 	}	
 	
 	//+ Return input variables with use=idv (individual)

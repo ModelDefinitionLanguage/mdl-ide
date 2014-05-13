@@ -17,7 +17,7 @@ class TrialDesignPrinter extends DataSetPrinter {
 	}	
 	
 	def print_design_TrialDesign(String objName)'''
-	<TrialDesign>
+	<TrialDesign xmlns="«xmlns_design»">
 		«objName.print_design_Structure»
 		«print_design_Population»
 		«print_design_IndividualDosing»

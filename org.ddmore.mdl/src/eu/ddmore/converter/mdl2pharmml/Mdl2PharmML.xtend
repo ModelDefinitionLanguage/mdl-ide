@@ -95,7 +95,7 @@ class Mdl2PharmML{
 				if (errorVars != null){
 					model = model + 
 					'''
-						<VariabilityModel blkId="vm_err.«o.objectName.name»" type = "«VAR_TYPE_ERROR»">
+						<VariabilityModel blkId="vm_err.«o.objectName.name»" type="«VAR_TYPE_ERROR»">
 							«FOR s: errorVars»
 								<Level symbId="«s»"/>
 							«ENDFOR»
@@ -107,7 +107,7 @@ class Mdl2PharmML{
 				if (mdlVars != null){
 					model = model + 
 					'''
-						<VariabilityModel blkId="vm_mdl.«o.objectName.name»" type = "VAR_TYPE_PARAMETER">
+						<VariabilityModel blkId="vm_mdl.«o.objectName.name»" type="«VAR_TYPE_PARAMETER»">
 							«FOR s: mdlVars»
 								<Level symbId="«s»"/>
 							«ENDFOR»

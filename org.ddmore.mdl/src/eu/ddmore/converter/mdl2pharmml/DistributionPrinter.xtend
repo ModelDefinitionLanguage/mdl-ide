@@ -229,7 +229,7 @@ class DistributionPrinter extends MdlPrinter{
 		'''
 		«var tagName = type.substring(0, 1).toUpperCase() + type.substring(1)»
 		«if (tagName.contains("Distribution")) tagName = tagName.substring(0, tagName.indexOf("Distribution"))»	
-		<«tagName»Distribution xmlns="«xmlns_uncert»" definition="«type.getURLExtension»">
+		<«tagName»Distribution xmlns="«xmlns_uncert»" definition="0.1">
 			«FOR arg: randomList.arguments.arguments»
 				«IF arg.argumentName != null»
 					«IF recognizedArgs.containsKey(arg.argumentName.name)»
@@ -243,13 +243,13 @@ class DistributionPrinter extends MdlPrinter{
 							«ELSE»	
 								<«attrName»>
 							«ENDIF»
-							«IF arg.argumentName.name.equals(DistributionValidator::attr_categories.name)»
-								«IF arg.value.vector != null»
-									<«dataType»>«arg.value.vector.values.size»</«dataType»>
-								«ENDIF»
-							«ELSE»	
+								«IF arg.argumentName.name.equals(DistributionValidator::attr_categories.name)»
+									«IF arg.value.vector != null»
+										<«dataType»>«arg.value.vector.values.size»</«dataType»>
+									«ENDIF»
+								«ELSE»	
 									«arg.value.toPharmML(dataType)»
-							«ENDIF»	
+								«ENDIF»	
 							</«attrName»>
 							«ENDIF»
 					«ENDIF»

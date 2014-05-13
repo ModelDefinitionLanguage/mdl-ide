@@ -4,9 +4,7 @@ import org.ddmore.mdl.mdl.Mcl
 import java.util.ArrayList
 import org.ddmore.mdl.validation.AttributeValidator
 import org.apache.commons.io.FilenameUtils
-import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
 import org.ddmore.mdl.types.InputFormatType
-import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.mdl.SymbolModification
 
@@ -100,7 +98,7 @@ class DataSetPrinter {
 		<ds:Definition>
 			«FOR i: 0..columnNames.size-1»
 				«var columnId = columnNames.get(i)»
-				«print_ds_Column(columnId, columnTypes.get(i), i.toString)»
+				«print_ds_Column(columnId, columnTypes.get(i), (i+1).toString)»
 			«ENDFOR»
 		</ds:Definition>
 	'''
@@ -129,7 +127,7 @@ class DataSetPrinter {
 					if (inputFormat.equals(InputFormatType::FORMAT_NONMEM)){
 						res  = res + print_ds_NONMEM_DataSet(dObjName, mObjName);
 					} else {
-						res = res + print_ds_General_DataSet(dObjName, mObjName);
+						res = res + print_ds_Objective_DataSet(dObjName, mObjName);
 					}					
 				}
 			}
@@ -148,7 +146,7 @@ class DataSetPrinter {
 		return columnType;
 	}
 	
-	def print_ds_General_DataSet(String dObjName, String mObjName){
+	def print_ds_Objective_DataSet(String dObjName, String mObjName){
 		val dObj = getDataObject(dObjName);
 		val mObj = getModelObject(mObjName);
 		if (dObj == null || mObj == null) return "";
@@ -161,29 +159,22 @@ class DataSetPrinter {
 					var columnId = s.symbolName.name;
 					val modelVar = mObj.getModelInputVariable(columnId);
 					if (modelVar != null){
-						columnNames.add(modelVar.symbolName.symbol.name);
-						columnTypes.add(modelVar.getColumnType);
+						if (!columnNames.contains(modelVar.symbolName.symbol.name)){
+							columnNames.add(modelVar.symbolName.symbol.name);
+							columnTypes.add(modelVar.getColumnType);
+						}
 					}
 				}
 			}
 			if (b.dataDerivedBlock != null){
-				var derivedVars = newHashSet;
-				for (s: b.dataDerivedBlock.statements){
-					var iterator = s.eResource.getAllContents();
-				    while (iterator.hasNext()){
-	    				val obj = iterator.next();
-	    				if (obj instanceof SymbolDeclarationImpl){
-	    					val symbol = obj as SymbolDeclaration;
-	    					if (!columnNames.contains(symbol.symbolName.name))
-	    						derivedVars.add(symbol.symbolName.name);
-						}
-					}
-				}
+				var derivedVars = b.dataDerivedBlock.getDerivedVariables;
 				for (s: derivedVars){
 					val modelVar = mObj.getModelInputVariable(s);
 					if (modelVar != null){
-						columnNames.add(modelVar.symbolName.symbol.name);
-						columnTypes.add(modelVar.getColumnType);
+						if (!columnNames.contains(modelVar.symbolName.symbol.name)){
+							columnNames.add(modelVar.symbolName.symbol.name);
+							columnTypes.add(modelVar.getColumnType);
+						}
 					}
 				}
 			}	
@@ -193,9 +184,9 @@ class DataSetPrinter {
 		}
 		res = res + print_ds_ImportData(dObjName);
 		'''
-		<ds:DataSet oid="«BLK_DS_DATASET + dObjName»">
+		<ObjectiveDataSet>
 			«res»
-		</ds:DataSet>
+		</ObjectiveDataSet>
 		'''
 	}
 
@@ -211,28 +202,19 @@ class DataSetPrinter {
 					val modelVar = mObj.getModelInputVariable(columnId);
 					if (modelVar != null){
 						var blkIdRef = mObjName.getReferenceBlock(modelVar.symbolName.symbol.name);
-						res = res + print_ds_ColumnMapping(columnId, modelVar.symbolName.symbol.name, blkIdRef);
+						if (blkIdRef.length > 0)
+							res = res + print_ds_ColumnMapping(columnId, modelVar.symbolName.symbol.name, blkIdRef);
 					}
 				}
 			}
 			if (b.dataDerivedBlock != null){
-				var derivedVars = newHashSet;
-				for (s: b.dataDerivedBlock.statements){
-					var iterator = s.eResource.getAllContents();
-				    while (iterator.hasNext()){
-	    				val obj = iterator.next();
-	    				if (obj instanceof SymbolDeclarationImpl){
-	    					val symbol = obj as SymbolDeclaration;
-	    					if (!derivedVars.contains(symbol.symbolName.name))
-	    						derivedVars.add(symbol.symbolName.name);
-						}
-					}
-				}
+				var derivedVars = b.dataDerivedBlock.getDerivedVariables;
 				for (s: derivedVars){
 					val modelVar = mObj.getModelInputVariable(s);
 					if (modelVar != null){
 						var blkIdRef = mObjName.getReferenceBlock(modelVar.symbolName.symbol.name);
-						res = res + print_ds_ColumnMapping(s, modelVar.symbolName.symbol.name, blkIdRef);
+						if (blkIdRef.length > 0)
+							res = res + print_ds_ColumnMapping(s, modelVar.symbolName.symbol.name, blkIdRef);
 					}
 				}
 			}
@@ -248,6 +230,7 @@ class DataSetPrinter {
 	def print_ds_ImportData(String dObjName){
 		val dObj = getDataObject(dObjName);
 		if (dObj == null) return "";
+		var res = "";
 		for (b: dObj.blocks){
 			if (b.sourceBlock != null){
 				if (b.sourceBlock.inlineBlock == null){
@@ -258,7 +241,7 @@ class DataSetPrinter {
 						val fileName = FilenameUtils::getBaseName(file);
 						val filePath = FilenameUtils::getPath(file);
 						val fileExtension = FilenameUtils::getExtension(file);
-						return					
+						res = res +
 						'''				
 							<ds:ImportData oid="«BLK_DS_IMPORT_DATA + dObjName»">
 								<ds:name>«fileName»</ds:name>
@@ -295,12 +278,16 @@ class DataSetPrinter {
 								}
 							}
 						}
-						return rows.print_ds_Table;
+						res  = res + rows.print_ds_Table;
 					}
 				}
 			}
 		}
-		return "";
+		'''
+		<ds:DataSet oid="«BLK_DS_DATASET + dObjName»">
+			«res»
+		</ds:DataSet>
+		''';
 	}
 	
 	def print_ds_TargetToolData(String dObjName, String source){		
@@ -327,14 +314,21 @@ class DataSetPrinter {
 		<TargetTool oid="«BLK_DS_TARGET_TOOL + dObjName»">
 			<TargetToolName>«fileExtension.convertID»</TargetToolName>
 			«dObjName.print_ds_TargetToolData(source)»
-
 		</TargetTool>
 		'''
 	}
 	
-	def print_mdef_TargetToolReference(String dObjName)'''
-		<TargetToolReference>
-			<ct:OidRef oidRef="«BLK_DS_TARGET_TOOL + dObjName»"/>
-		</TargetToolReference>
-	'''
+	def print_mdef_TargetToolReference(String dObjName){
+		val dObj = getDataObject(dObjName);
+		if (dObj == null) return "";
+		val source = dObj.getScriptFile;
+		if (source.length == 0) return "";
+		val fileExtension = FilenameUtils::getExtension(source);
+		if (fileExtension.length == 0) return "";
+		'''
+			<TargetToolReference>
+				<ct:OidRef oidRef="«BLK_DS_TARGET_TOOL + dObjName»"/>
+			</TargetToolReference>
+		'''
+	}
 }

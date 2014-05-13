@@ -36,11 +36,10 @@ class ModellingStepsPrinter extends DataSetPrinter{
 			}
 		}
 		'''
-		<ModellingSteps>
+		<ModellingSteps xmlns="«xmlns_mstep»">
 			«res»
 		</ModellingSteps>		
-		'''
-		
+		'''	
 	}	
 	
 	def print_msteps_ModellingSteps(TaskObject tObj, String functionName, Arguments args){
@@ -56,7 +55,8 @@ class ModellingStepsPrinter extends DataSetPrinter{
 								val data = args.getAttribute(dataParam);
 								val model = args.getAttribute(modelParam);
 								if (data.length > 0 && model.length > 0){
-									res  = res + print_ds_TargetTool(data);
+									res = res + print_ds_TargetTool(data);
+									res = res + print_ds_DataSet(data, model);
 									if (bb.estimateBlock != null){
 										res = res + print_msteps_EstimationStep(data, model, BLK_ESTIM_STEP + functionName);
 									} else {
@@ -79,10 +79,9 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	def print_msteps_EstimationStep(String dObjName, String mObjName, String stepId)'''
 	<EstimationStep oid="«stepId»">
 		«dObjName.print_mdef_TargetToolReference»
-		«print_ds_DataSet(dObjName, mObjName)»
-		«print_msteps_ParametersToEstimate»
 	</EstimationStep>
 	'''
+	//«print_msteps_ParametersToEstimate»
 	
 	def print_msteps_ParametersToEstimate()'''
 	<ParametersToEstimate>
@@ -95,9 +94,9 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	def print_msteps_SimulationStep(String dObjName, String mObjName, String stepId)'''
 	<SimulationStep  oid="«stepId»">		
 		«dObjName.print_mdef_TargetToolReference»
-		«print_msteps_Observations»
 	</SimulationStep>
 	'''
+	//«print_msteps_Observations»
 
 	def print_msteps_Observations()'''
 	<Observations>

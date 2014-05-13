@@ -13,7 +13,7 @@ class Constants {
 	public val xmlns_uncert="http://www.uncertml.org/3.0"; 
 	public val definition = "http://www.uncertml.org/distributions/";	
 
-	public val writtenVersion = "0.1";
+	public val writtenVersion = "0.3";
 	
 	public val nVal  = "nVal";
 	public val pnVal = "pnVal";
@@ -24,7 +24,7 @@ class Constants {
 	public val TYPE_INT  = "int";
 	public val TYPE_REAL = "real";
 	
-	public val VAR_TYPE_PARAMETER = "variabilityParameter";
+	public val VAR_TYPE_PARAMETER = "parameterVariability";
 	public val VAR_TYPE_ERROR = "residualError";
 	
 	public val BLK_DS_TARGET_TOOL = "tt.";
