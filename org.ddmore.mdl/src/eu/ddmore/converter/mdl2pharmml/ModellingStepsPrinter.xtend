@@ -5,6 +5,8 @@ import org.ddmore.mdl.mdl.TaskFunctionBlock
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.validation.FunctionValidator
+import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.validation.AttributeValidator
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	
@@ -51,16 +53,18 @@ class ModellingStepsPrinter extends DataSetPrinter{
 						if ((bb.estimateBlock != null) || (bb.simulateBlock != null)){
 							val dataParam = getProperty(bb, FunctionValidator::attr_task_data.name); 
 							val modelParam = getProperty(bb, FunctionValidator::attr_task_model.name); 
-							if ((dataParam.length > 0) && (modelParam.length > 0)){
-								val data = args.getAttribute(dataParam);
-								val model = args.getAttribute(modelParam);
-								if (data.length > 0 && model.length > 0){
-									res = res + print_ds_TargetTool(data);
-									res = res + print_ds_DataSet(data, model);
+							val paramParam = getProperty(bb, FunctionValidator::attr_task_parameter.name); 
+							if (dataParam.length > 0 && modelParam.length > 0 && paramParam.length > 0){
+								val dObjName = args.getAttribute(dataParam);
+								val mObjName = args.getAttribute(modelParam);
+								val pObjName = args.getAttribute(paramParam);
+								if (dObjName.length > 0 && mObjName.length > 0 && pObjName.length > 0){
+									res = res + print_ds_TargetTool(dObjName);
+									res = res + print_ds_DataSet(dObjName, mObjName);
 									if (bb.estimateBlock != null){
-										res = res + print_msteps_EstimationStep(data, model, BLK_ESTIM_STEP + functionName);
+										res = res + print_msteps_EstimationStep(dObjName, mObjName, pObjName, BLK_ESTIM_STEP + functionName);
 									} else {
-										res = res + print_msteps_SimulationStep(data, model, BLK_SIMUL_STEP + functionName);
+										res = res + print_msteps_SimulationStep(dObjName, mObjName, pObjName, BLK_SIMUL_STEP + functionName);
 									}
 								}
 							}
@@ -76,22 +80,55 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 	// III.a Estimation Step
 	////////////////////////////////////////////////
-	def print_msteps_EstimationStep(String dObjName, String mObjName, String stepId)'''
+	def print_msteps_EstimationStep(String dObjName, String mObjName, String pObjName, String stepId)'''
 	<EstimationStep oid="«stepId»">
 		«dObjName.print_mdef_TargetToolReference»
+		«pObjName.print_msteps_ParametersToEstimate»
 	</EstimationStep>
 	'''
-	//«print_msteps_ParametersToEstimate»
 	
-	def print_msteps_ParametersToEstimate()'''
-	<ParametersToEstimate>
-	</ParametersToEstimate>
-	'''	
+	def print_msteps_ParametersToEstimate(String pObjName){
+		var pObj = pObjName.getParamObject;
+		if (pObj == null) return "";
+		'''
+		<ParametersToEstimate>
+			«FOR b: pObj.blocks»
+				«IF b.structuralBlock != null»
+					«FOR p: b.structuralBlock.parameters»
+						«pObjName.print_msteps_ParameterEstimation(p)»
+					«ENDFOR»
+				«ENDIF»
+				«IF b.variabilityBlock != null»
+					«FOR p: b.variabilityBlock.statements»
+						«IF p.parameter != null»
+							«pObjName.print_msteps_ParameterEstimation(p.parameter)»
+						«ENDIF»
+					«ENDFOR»
+				«ENDIF»
+			«ENDFOR»
+		</ParametersToEstimate>
+		'''	
+	}
+	
+	def print_msteps_ParameterEstimation(String pObjName, SymbolDeclaration s){
+		if (s.expression.list == null) return "";
+		val fixed = s.expression.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
+		var value = s.expression.list.arguments.getAttribute(AttributeValidator::attr_value.name);
+		if (value.length == 0) value = "0";
+		'''
+			<ParameterEstimation>
+				«print_ct_SymbolRef(pObjName, s.symbolName.name)»
+				<InitialEstimate fixed="«fixed»">
+					<ct:Real>«value»</ct:Real>
+				</InitialEstimate>
+			</ParameterEstimation>
+		'''
+	}
 		
 	///////////////////////////////////////////////
 	// III.b Simulation Step
 	////////////////////////////////////////////////
-	def print_msteps_SimulationStep(String dObjName, String mObjName, String stepId)'''
+	def print_msteps_SimulationStep(String dObjName, String mObjName, String pObjName, String stepId)'''
 	<SimulationStep  oid="«stepId»">		
 		«dObjName.print_mdef_TargetToolReference»
 	</SimulationStep>

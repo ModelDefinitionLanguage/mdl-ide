@@ -34,6 +34,13 @@ class DataSetPrinter {
 		return null;
 	}
 	
+	def getParamObject(String name){
+		for (o: mcl.objects){
+			if (o.objectName.name.equals(name)) return o.parameterObject;
+		}
+		return null;
+	}
+	
 	def getTaskObject(String name){
 		for (o: mcl.objects){
 			if (o.objectName.name.equals(name)) return o.taskObject;

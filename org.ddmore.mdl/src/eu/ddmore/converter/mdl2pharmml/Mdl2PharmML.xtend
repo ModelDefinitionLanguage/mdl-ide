@@ -120,7 +120,7 @@ class Mdl2PharmML{
 	}
 
 	/////////////////////////
-	// I.c Covariate Model
+	// I.c Covariate ModelF
 	/////////////////////////
 	
 	//INDIVIDUAL_VARIABLES, use=covariate -> CovariateModel (transformation with reference)

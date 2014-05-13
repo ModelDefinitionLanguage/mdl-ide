@@ -56,7 +56,7 @@ class ReferenceResolver{
 				if (errorVars.size > 0)
 					vm_err_vars.put(o.objectName.name, errorVars);
 
-				var mdlVars = o.modelObject.getLevelVars("2");
+				var mdlVars = o.modelObject.getLevelVars("2")
 				if (mdlVars.size > 0)
 					vm_mdl_vars.put(o.objectName.name, mdlVars);
 
