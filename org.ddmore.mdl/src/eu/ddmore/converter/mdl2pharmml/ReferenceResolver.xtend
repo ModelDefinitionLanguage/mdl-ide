@@ -11,6 +11,7 @@ import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.types.UseType
+import org.ddmore.mdl.mdl.SymbolDeclaration
 
 class ReferenceResolver{
 	val Mcl mcl;
@@ -19,6 +20,8 @@ class ReferenceResolver{
     	this.mcl = m;
     	prepareCollections(m);
  	}
+	
+	protected var deriv_vars = new HashSet<String>();	 
 	
 	//protected val LEVEL_UNDEF = 0;	
 	protected var eps_vars = newHashMap   //EPSs   - Random variables, level 1
@@ -36,6 +39,7 @@ class ReferenceResolver{
 		
 	def prepareCollections(Mcl m){
 		for (o: m.objects){
+			setDerivativeVariables(m);
 			if (o.modelObject != null){
 	  			setLevelVars(o.modelObject);
 	  			setRandomVariables(o.modelObject);
@@ -82,6 +86,26 @@ class ReferenceResolver{
 					pm_vars.put(o.objectName.name, parameters);
 			}
 		}
+	}
+	
+	def setDerivativeVariables(Mcl m){
+		deriv_vars.clear();
+		for (o: m.objects){
+		var iterator = o.eAllContents();
+		    while (iterator.hasNext()){
+		    	var obj = iterator.next();
+		    	if (obj instanceof SymbolDeclaration){
+		    		var s = obj as SymbolDeclaration;
+		    		if (s.expression != null){
+		    			if (s.expression.odeList != null){
+		    				if (!deriv_vars.contains(s.symbolName.name)){
+		    					deriv_vars.add(s.symbolName.name);
+		    				}
+		    			}
+		    		}
+		    	}
+		    }
+	    }
 	}
 	
 	//+Return name of PharmML block for a given reference

@@ -284,11 +284,16 @@ class Mdl2PharmML{
 		}
 	}
 	
-	def print_Pieces(String symbol, String tag, ArrayList<Piece> pieces, boolean printType)'''
-	<«tag» symbId="«symbol»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
-		«mathPrinter.print_Pieces(pieces)»
-	</«tag»>
-	'''
+	def print_Pieces(String symbol, String initTag, ArrayList<Piece> pieces, boolean printType){
+		var tag = initTag;
+		if ((tag.indexOf("Variable") > 0) && resolver.deriv_vars.contains(symbol))
+			tag = "ct:DerivativeVariable";
+		'''	
+		<«tag» symbId="«symbol»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
+			«mathPrinter.print_Pieces(pieces)»
+		</«tag»>
+		'''
+	}
 	
 	//Define order in which symbols will eb translated to PharmML	
 	def void defineOrderOfConditionalSymbols(ConditionalStatement s, HashMap<String, Integer> symbolOrders, Integer base){
@@ -491,7 +496,12 @@ class Mdl2PharmML{
 		return null;
 	}
 	
-	def print_BlockStatement(BlockStatement st, String tag, Boolean printType)'''
+	def print_BlockStatement(BlockStatement st, String initTag, Boolean printType){
+		var tag = initTag;
+		if (st.symbol != null)
+			if ((tag.indexOf("Variable") > 0) && resolver.deriv_vars.contains(st.symbol.symbolName.name))
+				tag = "ct:DerivativeVariable";
+		'''
 		«IF st.symbol != null»
 			<«tag» symbId="«st.symbol.symbolName.name»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
 				«IF st.symbol.expression != null»
@@ -504,7 +514,8 @@ class Mdl2PharmML{
 		«IF st.statement != null»
 			«st.statement.print_ConditionalStatement(tag)»
 		«ENDIF»
-	'''
+		'''
+	}
 	
 	/////////////////////////////
 	// I.i CorrelationModel

@@ -26,6 +26,7 @@ import java.util.ArrayList
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.types.VariableType
 
 class MathPrinter extends MdlPrinter{
 
@@ -113,7 +114,7 @@ class MathPrinter extends MdlPrinter{
 			val args  = e.list.arguments;
 			val type = args.getAttribute(AttributeValidator::attr_cc_type.name);
 			val define =  args.getAttributeExpression(AttributeValidator::attr_define.name);
-			if (type.equals("categorical") && (define.list != null)){
+			if (type.equals(VariableType::CC_CATEGORICAL) && (define.list != null)){
 				define.list.print_Categorical;
 			}
 		}		
