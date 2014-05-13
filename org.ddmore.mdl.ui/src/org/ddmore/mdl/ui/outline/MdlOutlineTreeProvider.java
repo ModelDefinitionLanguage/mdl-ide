@@ -10,6 +10,7 @@ import org.ddmore.mdl.mdl.AddList;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.ArgumentModification;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.Block;
 import org.ddmore.mdl.mdl.BlockStatement;
@@ -25,6 +26,7 @@ import org.ddmore.mdl.mdl.DropList;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.FormalArguments;
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
@@ -71,6 +73,7 @@ import org.ddmore.mdl.mdl.impl.ExecuteTaskImpl;
 import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.InterpolationTypeImpl;
 import org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
@@ -128,6 +131,10 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     
     protected Image _image(FullyQualifiedSymbolName f) {
         return imageHelper.getImage(getPath(REFERENCE));
+    }
+    
+    protected Image _image(FullyQualifiedArgumentName f) {
+        return imageHelper.getImage(getPath(ATTRIBUTE_REFERENCE));
     }
     
     protected Image _image(TargetBlock f) {
@@ -265,6 +272,10 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     protected Image _image(VariabilityTypeImpl e) {
         return imageHelper.getImage(getPath(VARIABILITY_TYPE));
     }
+    
+    protected Image _image(InterpolationTypeImpl e) {
+        return imageHelper.getImage(getPath(INTERPOLATION_TYPE));
+    }    
 
     protected Image _image(ArgumentNameImpl e) {
         return imageHelper.getImage(getPath(ARGUMENT_NAME));
@@ -559,16 +570,14 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				MathPrinter.toStr(name),
 				true);
 	}
-	
-	protected void  _createNode(IOutlineNode parentNode, SymbolModification p){
-		if (p.getExpression() != null){
-			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.SYMBOL_MODIFICATION__EXPRESSION,
-				_image(p),
-				 MathPrinter.toStr(p.getSymbolName()),
-				false);
-		}
+
+	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedArgumentName name){
+		createEStructuralFeatureNode(parentNode,
+				name,
+				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__PARENT,
+				_image(name),
+				MathPrinter.toStr(name),
+				true);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, ConditionalStatement st){
@@ -703,6 +712,43 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				false);
 		}
 	}
+	
+	protected void  _createNode(IOutlineNode parentNode, SymbolModification p){
+		if (p.getExpression() != null){
+			createEStructuralFeatureNode(parentNode,
+				p,
+				MdlPackage.Literals.SYMBOL_MODIFICATION__EXPRESSION,
+				_image(p.getSymbolName()),
+				 MathPrinter.toStr(p.getSymbolName()),
+				false);
+		} else {
+			createEStructuralFeatureNode(parentNode,
+				p,
+				MdlPackage.Literals.SYMBOL_MODIFICATION__SYMBOL_NAME,
+				_image(p.getSymbolName()),
+				MathPrinter.toStr(p.getSymbolName()),
+				true);			
+		}
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, ArgumentModification p){
+		if (p.getExpression() != null){
+			createEStructuralFeatureNode(parentNode,
+				p,
+				MdlPackage.Literals.ARGUMENT_MODIFICATION__EXPRESSION,
+				_image(p.getArgumentName()),
+				 MathPrinter.toStr(p.getArgumentName()),
+				false);
+		} else {
+			createEStructuralFeatureNode(parentNode,
+				p,
+				MdlPackage.Literals.ARGUMENT_MODIFICATION__ARGUMENT_NAME,
+				_image(p.getArgumentName()),
+				MathPrinter.toStr(p.getArgumentName()),
+				true);				
+		}
+	}
+
 	
 	protected void  _createNode(IOutlineNode parentNode, FunctionCallStatement s){
 		createEStructuralFeatureNode(parentNode,

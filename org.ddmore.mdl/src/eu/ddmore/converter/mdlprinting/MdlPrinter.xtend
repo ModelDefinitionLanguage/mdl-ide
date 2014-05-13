@@ -69,7 +69,7 @@ class MdlPrinter {
 				}
 			}
 		}
-		return (e.toStr.equalsIgnoreCase("yes") || e.toStr.equalsIgnoreCase("true") || e.toStr.equals("1"));
+		return e.toStr.equalsIgnoreCase("true");
 	}	
 	
 	def isAttributeTrue(Arguments a, String attrName){
@@ -345,7 +345,7 @@ class MdlPrinter {
     def isInlineTargetDefined(String targetName, EstimateTask task){
 		for (s: task.statements){
 			if (s.targetBlock != null){
-				val target = s.targetBlock.arguments.getAttribute("target");
+				val target = s.targetBlock.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		 		if (target != null) 
 					if (target.equals(targetName)) {
 						return true;
@@ -359,7 +359,7 @@ class MdlPrinter {
     def isInlineTargetDefined(String targetName, SimulateTask task){
 		for (s: task.statements){
 			if (s.targetBlock != null){
-				val target = s.targetBlock.arguments.getAttribute("target");
+				val target = s.targetBlock.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		 		if (target != null) 
 					if (target.equals(targetName)) {
 						return true;
@@ -785,7 +785,7 @@ class MdlPrinter {
 		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
 		«IF st.statement != null»«st.statement.print»«ENDIF»
 		«IF st.targetBlock != null»«st.targetBlock.print»«ENDIF»
-		'''
+	'''
 
 	def print(ConditionalStatement s)'''
 		«IF s.expression != null»

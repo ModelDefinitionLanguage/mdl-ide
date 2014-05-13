@@ -49,7 +49,7 @@ ModelObjectBlock:
 
 IndividualVariablesBlock:
 	identifier = 'INDIVIDUAL_VARIABLES' 
-	BEGIN statements += BlockStatement* END  //new Variable +
+	BEGIN statements += BlockStatement* END  
 ;
 
 ModelPredictionBlock:
@@ -59,27 +59,27 @@ ModelPredictionBlock:
 
 RandomVariableDefinitionBlock:
 	identifier = 'RANDOM_VARIABLE_DEFINITION' 
-	BEGIN variables += SymbolDeclaration* END //new Variable +
+	BEGIN variables += SymbolDeclaration* END 
 ;
 
 InputVariablesBlock:
   	identifier = 'MODEL_INPUT_VARIABLES' 
-  	BEGIN variables += SymbolModification* END //Ref to Variable - match DATA_INPUT_VARIABLES
+  	BEGIN variables += SymbolModification* END 
 ;
 
 StructuralParametersBlock:
   identifier = 'STRUCTURAL_PARAMETERS' 
-  BEGIN parameters += SymbolModification* END  //Ref to parameter - match STRUCTURAL
+  BEGIN parameters += SymbolModification* END 
 ; 
 
 VariabilityParametersBlock:
   identifier = 'VARIABILITY_PARAMETERS' 
-  BEGIN parameters += SymbolModification* END //Ref to parameter - match VARIABILITY
+  BEGIN parameters += SymbolModification* END 
 ;
 
 OutputVariablesBlock:
 	identifier = 'MODEL_OUTPUT_VARIABLES' 
-	BEGIN variables += FullyQualifiedSymbolName* END //Ref to VariableName +
+	BEGIN variables += FullyQualifiedSymbolName* END 
 ; 
 
 GroupVariablesBlock:
@@ -89,17 +89,17 @@ GroupVariablesBlock:
 
 ObservationBlock:
 	identifier = 'OBSERVATION'
-	BEGIN statements += BlockStatement* END  //new Variable +
+	BEGIN statements += BlockStatement* END  
 ;
 
 EstimationBlock:
 	identifier = 'ESTIMATION' 
-	BEGIN statements += BlockStatement* END  //new Variable +
+	BEGIN statements += BlockStatement* END 
 ;
 
 SimulationBlock:
 	identifier = 'SIMULATION' 
-	BEGIN statements += BlockStatement* END  //new Variable +
+	BEGIN statements += BlockStatement* END  
 ;
 
 //////////////////////////////////////////////////////////
@@ -116,7 +116,7 @@ ParameterObjectBlock:
 
 StructuralBlock:
 	identifier='STRUCTURAL'   
-	BEGIN parameters += SymbolDeclaration* END //new Parameter +
+	BEGIN parameters += SymbolDeclaration* END 
 ;
 
 VariabilityBlock:
@@ -126,7 +126,7 @@ VariabilityBlock:
 
 PriorParametersBlock:
 	identifier='PRIOR_PARAMETERS' 
-	BEGIN statements += BlockStatement* END  //new Parameter +
+	BEGIN statements += BlockStatement* END  
 ;
 
 //////////////////////////////////////////////////////////
@@ -143,12 +143,12 @@ DataObjectBlock:
  
 DataInputBlock:
  	identifier='DATA_INPUT_VARIABLES' 
- 	BEGIN variables += SymbolDeclaration* END  //new Variable +
+ 	BEGIN variables += SymbolDeclaration* END  
 ;
  
 DataDerivedBlock:
  	identifier='DATA_DERIVED_VARIABLES' 
- 	BEGIN statements += BlockStatement* END  //new Variable +
+ 	BEGIN statements += BlockStatement* END  
 ; 
  
 SourceBlock:
@@ -174,7 +174,7 @@ TaskObjectBlock:
 
 ParameterBlock:
 	identifier = 'PARAMETER' 
-	BEGIN parameters += SymbolModification* END  //Ref to parameter +
+	BEGIN parameters += SymbolModification* END  
 ;
 
 DataBlock:
@@ -223,14 +223,14 @@ SymbolList:
 ;
 
 ModelPredictionBlockStatement: 
-	statement = BlockStatement | //new Variable +
+	statement = BlockStatement | 
 	odeBlock = OdeBlock | 
 	libraryBlock = LibraryBlock
 ;
 
 LibraryBlock: 
 	identifier = 'LIBRARY' 
-	BEGIN statements += FunctionCallStatement* END //Properties: format restricted to a "variable = function call"
+	BEGIN statements += FunctionCallStatement* END 
 ;
 
 FunctionCallStatement:
@@ -239,17 +239,17 @@ FunctionCallStatement:
 
 OdeBlock:
 	identifier = 'ODE' 
-	BEGIN statements += BlockStatement* END  //new Variable + 
+	BEGIN statements += BlockStatement* END 
 ;
 
 GroupVariablesBlockStatement:
-	statement = BlockStatement |  //new Variable + 
+	statement = BlockStatement |  
 	mixtureBlock = MixtureBlock 
 ;
 
 MixtureBlock:
 	identifier = 'MIXTURE' 
-	BEGIN statements += BlockStatement* END //new Variable +
+	BEGIN statements += BlockStatement* END 
 ;
 
 VariabilityBlockStatement:
@@ -259,20 +259,19 @@ VariabilityBlockStatement:
 	sameBlock = SameBlock
 ;
 
-//Renamed to Matrix!
 MatrixBlock:
 	 identifier = 'matrix' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Symbols END)?  //new Parameter +
+	 (BEGIN parameters = Symbols END)?  
 ;
 
 DiagBlock:	  
 	 identifier = 'diag' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Symbols END)?  //new Parameter +
+	 (BEGIN parameters = Symbols END)?  
 ;
 
 SameBlock:	  
 	 identifier = 'same' '(' arguments = Arguments ')'
-	 (BEGIN parameters = SymbolNames END)?  //new Parameter +
+	 (BEGIN parameters = SymbolNames END)?  
 ;
 
 Symbols:
@@ -294,11 +293,11 @@ SymbolNames:
 
 InlineBlock:
 	identifier = 'INLINE' 
-	BEGIN (variables = VariableList)? (values = NumericList)? END //Ref to VariableName + 
+	BEGIN (variables = VariableList)? (values = NumericList)? END 
 ;
 
 NumericList:
-	values += NumericValue (=> (',' | ';')? values += (NumericValue | '.'))* //Ref to VaraibleName +
+	values += NumericValue (=> (',' | ';')? values += (NumericValue | '.'))* 
 ;
 
 DesignBlock:
@@ -315,7 +314,7 @@ VariableList:
 ;
 	
 TaskFunctionDeclaration:
-	functionName = SymbolName "=" 'function'   //new FunctionName +
+	functionName = SymbolName "=" 'function'   
 	'(' formalArguments = FormalArguments ')'
 	functionBody = TaskFunctionBody
 ;
@@ -332,17 +331,17 @@ TaskFunctionBlock:
 
 EstimateTask: 
 	identifier = 'ESTIMATE' 
-	BEGIN statements += BlockStatement* END //Properties
+	BEGIN statements += BlockStatement* END 
 ;
 
 SimulateTask:
 	identifier = 'SIMULATE' 
-	BEGIN statements += BlockStatement* END  //Properties
+	BEGIN statements += BlockStatement* END  
 ;
 
 ExecuteTask:
 	identifier = "EXECUTE"
-	BEGIN statements += BlockStatement* END  //Properties
+	BEGIN statements += BlockStatement* END  
 ;
 
 //////////////////////////////////////////////////////////
@@ -359,11 +358,11 @@ ArgumentName:
 
 FunctionCall:
 	identifier = FullyQualifiedSymbolName '(' arguments = Arguments ')' 
-	//Ref to ImportedFunction, TaskFunctionDeclaration or standard +
 ;
 
 BlockStatement:
-	symbol = SymbolDeclaration | //Variable, Parameter? or Property
+	symbol = SymbolDeclaration |
+	attribute = ArgumentModification |
 	functionCall = FunctionCall |
 	statement = ConditionalStatement |
 	targetBlock = TargetBlock
@@ -398,7 +397,11 @@ ImportedFunction:
 ;
 
 SymbolModification:
-	symbolName = FullyQualifiedSymbolName ("=" expression = AnyExpression)?  //Ref to ParameterName or VariableName +
+	symbolName = FullyQualifiedSymbolName ("=" expression = AnyExpression)?  
+;
+
+ArgumentModification:
+	argumentName = FullyQualifiedArgumentName  ("=" expression = AnyExpression)? 
 ;
 
 SymbolName:
@@ -597,7 +600,7 @@ UnaryExpression:
 	operator = UnaryOperator expression = UnaryExpression |  
 	parExpression = ParExpression |
 	number = NumericValue |
-	symbol = FullyQualifiedSymbolName | //Ref to VariableName +, ParameterName +, ObjectName or formal argument 
+	symbol = FullyQualifiedSymbolName |
 	attribute = FullyQualifiedArgumentName | 
 	functionCall = FunctionCall 
 ;
@@ -605,7 +608,7 @@ UnaryExpression:
 
 Primary:
 	number = NumericValue |
-	symbol = FullyQualifiedSymbolName | //Ref to VariableName +, ParameterName +, ObjectName or formal argument 
+	symbol = FullyQualifiedSymbolName | 
 	vector = Vector 
 ;
 
@@ -613,12 +616,12 @@ Vector:
 	identifier = 'c' '(' values += Primary (=> ',' values += Primary)* ')'
 ;	
 
-FullyQualifiedSymbolName: 	//ref VariableName or ParameterName (depending on the container)
+FullyQualifiedSymbolName: 
 	(object = [ObjectName] '$')? symbol = SymbolName
 ;
 
 FullyQualifiedArgumentName:
-	parent = FullyQualifiedSymbolName selectors += Selector+  //ref VariableName or ParameterName +
+	parent = FullyQualifiedSymbolName selectors += Selector+  
 ;
 
 Selector:

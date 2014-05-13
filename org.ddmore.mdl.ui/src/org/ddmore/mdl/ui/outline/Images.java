@@ -35,6 +35,7 @@ public class Images {
 	public static final String ACCEPT ="102-accept.png";
 	public static final String MIXTURE ="124-mixture.png";
 	public static final String REFERENCE ="183-reference.png";
+	public static final String ATTRIBUTE_REFERENCE ="065-attr-reference.png";
 	public static final String LIST ="187-list.png";
 	public static final String TARGET ="196-target.png";
 	public static final String SYMBOL_DECLARATION = "175-variable.png";
@@ -62,8 +63,8 @@ public class Images {
 	public static final String USE_TYPE = "073-use-type.png";
 	public static final String DISTRIBUTION_TYPE = "071-distribution-type.png";
 	public static final String TARGET_LANGUAGE = "074-target-language.png";
-	public static final String LIKELYHOOD = "074-likelyhood.png";
 	public static final String VARIABILITY_TYPE = "075-variability-type.png";
+	public static final String INTERPOLATION_TYPE= "076-interpolation-type.png";
 	
 	public static final String TASK_FUNCTION_DECLARATION = "146-task.png";
 	public static final String ESTIMATE_TASK = "127-task-estimate.png";

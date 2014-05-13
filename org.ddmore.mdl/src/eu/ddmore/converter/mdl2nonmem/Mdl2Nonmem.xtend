@@ -1268,7 +1268,8 @@ class Mdl2Nonmem extends MdlPrinter{
 					if (codeSnippets == null) codeSnippets = new ArrayList<String>();
 					codeSnippets.add(b.toStr);
 					externalCodeStart.put(location, codeSnippets);
-				} else {
+				}
+				if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name)){
 					var codeSnippets = externalCodeEnd.get(location);
 					if (codeSnippets == null) codeSnippets = new ArrayList<String>();
 					codeSnippets.add(b.toStr);
@@ -1278,6 +1279,20 @@ class Mdl2Nonmem extends MdlPrinter{
 		}
 	}	
 
+	def getInlineExternalCode(TargetBlock b, String sectionName){
+		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
+		if (target != null){ 
+			if (target.equals(TARGET)) {
+				val location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
+				if (location.equals(sectionName) && 
+					b.arguments.isAttributeTrue(AttributeValidator::attr_first.name) && 
+					b.arguments.isAttributeTrue(AttributeValidator::attr_last.name)) {
+						return b.toStr;
+				}
+			}
+		}
+		return "";
+	}
 	
  	//Print a list of external code snippets: beginning of section
 	def protected getExternalCodeStart(String sectionName){
