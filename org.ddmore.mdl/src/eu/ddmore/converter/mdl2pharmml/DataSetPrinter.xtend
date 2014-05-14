@@ -326,12 +326,6 @@ class DataSetPrinter {
 	}
 	
 	def print_mdef_TargetToolReference(String dObjName){
-		val dObj = getDataObject(dObjName);
-		if (dObj == null) return "";
-		val source = dObj.getScriptFile;
-		if (source.length == 0) return "";
-		val fileExtension = FilenameUtils::getExtension(source);
-		if (fileExtension.length == 0) return "";
 		'''
 			<TargetToolReference>
 				<ct:OidRef oidRef="«BLK_DS_TARGET_TOOL + dObjName»"/>

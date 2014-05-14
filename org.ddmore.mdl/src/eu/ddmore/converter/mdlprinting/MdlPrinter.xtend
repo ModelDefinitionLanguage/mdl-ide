@@ -50,6 +50,8 @@ import org.ddmore.mdl.validation.AttributeValidator
 
 class MdlPrinter {
 	
+	public var mdlVersion = "5.1.4";
+		
 	//Get MDL file name
 	def fileName(Mcl m){
 		var fileName = m.eResource.getURI().path;
