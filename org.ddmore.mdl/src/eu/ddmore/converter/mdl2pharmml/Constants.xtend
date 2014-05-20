@@ -27,6 +27,9 @@ class Constants {
 	public val VAR_TYPE_PARAMETER = "parameterVariability";
 	public val VAR_TYPE_ERROR = "residualError";
 	
+	public val MATRIX_COV = "CovMatrix";
+	public val MATRIX_STDEV = "StDevCorrMatrix";
+	
 	public val BLK_DS_TARGET_TOOL = "tt.";
 	public val BLK_DS_TARGET_TOOL_DATA = "ttd.";
 	public val BLK_DS_IMPORT_DATA = "id.";
