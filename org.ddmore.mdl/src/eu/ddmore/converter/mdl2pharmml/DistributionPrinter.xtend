@@ -106,7 +106,6 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_median.name  -> new Attribute("logScale", rVal), 
 			DistributionValidator::attr_mu.name  -> new Attribute("logScale", rVal), 
 			DistributionValidator::attr_cv.name  -> new Attribute("shape", prVal), 
-			DistributionValidator::attr_sigmatr.name  -> new Attribute("shape", prVal), 
 			DistributionValidator::attr_var.name  -> new Attribute("shape", prVal), 
 			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
 			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)),

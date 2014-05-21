@@ -88,7 +88,6 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_scale = new Attribute("scale", MdlDataType.TYPE_PREAL, true);
 	public final static Attribute attr_shape = new Attribute("shape", MdlDataType.TYPE_PREAL, true);
 	public final static Attribute attr_cv = new Attribute("cv", MdlDataType.TYPE_PREAL, true);
-	public final static Attribute attr_sigmatr = new Attribute("sigmatr", MdlDataType.TYPE_PREAL, true);
 	public final static Attribute attr_median = new Attribute("median", MdlDataType.TYPE_PREAL, true);
 	public final static Attribute attr_mu = new Attribute("mu", MdlDataType.TYPE_PREAL, true);
 	
@@ -200,7 +199,6 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_cv, 
 					attr_var,
 					attr_mu,
-					attr_sigmatr,
 					attr_preal_lo,
 					attr_preal_hi));
 			put(DistributionType.multinomial, Arrays.asList(
@@ -331,12 +329,8 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 
 			put(DistributionType.logNormal+":"+attr_median.name, attr_mu.name);
 			put(DistributionType.logNormal+":"+attr_mu.name, attr_median.name);
-			put(DistributionType.logNormal+":"+attr_cv.name, attr_sigmatr.name);
-			put(DistributionType.logNormal+":"+attr_sigmatr.name, attr_cv.name);
 			put(DistributionType.logNormal+":"+attr_cv.name, attr_var.name);
 			put(DistributionType.logNormal+":"+attr_var.name, attr_cv.name);
-			put(DistributionType.logNormal+":"+attr_var.name, attr_sigmatr.name);
-			put(DistributionType.logNormal+":"+attr_sigmatr.name, attr_var.name);
 
 			put(DistributionType.multinomial+":"+attr_numberOfTrials.name, attr_nTrials.name);
 			put(DistributionType.multinomial+":"+attr_nTrials.name, attr_numberOfTrials.name);

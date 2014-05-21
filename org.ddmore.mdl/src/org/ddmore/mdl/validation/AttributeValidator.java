@@ -56,8 +56,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_ATTRIBUTE_DEFINED    = "Attribute defined more than once";
 	public final static String MSG_ATTRIBUTE_WRONG_TYPE = "Type error";
 
-	public final static String MSG_DATA_FILE_NOT_FOUND = "Cannot find data file";
-	public final static String MSG_SCRIPT_NOT_FOUND    = "Cannot find script file";
+	public final static String MSG_DATA_FILE_NOT_FOUND = "Cannot find data file: path may be incorrect";
+	public final static String MSG_SCRIPT_NOT_FOUND    = "Cannot find script file: path may be incorrect";
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	final public static Attribute attr_name = new Attribute("name", MdlDataType.TYPE_STRING, false, "");		

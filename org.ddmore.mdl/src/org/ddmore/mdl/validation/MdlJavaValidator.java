@@ -376,18 +376,18 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//Check references to list attributes
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	private boolean checkAttributes(FullyQualifiedArgumentName attrName, LinkedList<Argument> arguments) {
-		List <Argument> currArg = arguments; 
+		List <Argument> currArgs = arguments; 
 		for (Selector x: attrName.getSelectors()){
-			if (currArg != null){
+			if (currArgs != null){
 				int index = -1;
 				if (x.getSelector() != null){
 					index = Integer.parseInt(x.getSelector());
-					if (!((index >= 1) && (index < currArg.size() + 1))) return false;
+					if (!((index >= 1) && (index < currArgs.size() + 1))) return false;
 					index = 1;	
 				}
 				if (x.getArgumentName() != null){
 					int i = 0;
-					for (Argument arg: currArg){
+					for (Argument arg: currArgs){
 						if (arg.getArgumentName().getName().equals(x.getArgumentName().getName())){
 							index = i + 1;
 							break;
@@ -396,12 +396,12 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					}
 				}
 				if (index > 0) {
-					if (currArg.get(index - 1).getExpression().getList() != null)
+					if (currArgs.get(index - 1).getExpression().getList() != null)
 						if (arguments.get(index).getExpression().getList().getArguments() != null)
-							currArg = arguments.get(index).getExpression().getList().getArguments().getArguments();
-					if (currArg.get(index - 1).getExpression().getOdeList() != null) 
+							currArgs = arguments.get(index).getExpression().getList().getArguments().getArguments();
+					if (currArgs.get(index - 1).getExpression().getOdeList() != null) 
 						if (arguments.get(index).getExpression().getOdeList().getArguments() != null)
-							currArg = arguments.get(index).getExpression().getOdeList().getArguments().getArguments();
+							currArgs = arguments.get(index).getExpression().getOdeList().getArguments().getArguments();
 				} else return false;
 			} 
 		}
@@ -457,7 +457,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	}
 
 	//Validate a fully qualified argument whose parent refers to a variable declared as a function 
-	//It is assumed that attribute selectors will refer to symbols in attribute "param" of a function call 
+	//It is assumed that attribute selectors will refer to symbols in attribute "output" of a function call 
 	public boolean checkReferenceToFuctionOutput(FullyQualifiedArgumentName ref) {
 		String varName = ref.getParent().getSymbol().getName();		
 		//N.K. - exclude/validate standard functions???		
@@ -472,7 +472,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    			//Compare reference with references in FunctionCall param attribute
 	    			//Does not guarantee the correctness as references may occur in expressions
 	    			FunctionCall funcCall = s.getExpression();
-	    			params.addAll(Utils.extractSymbolNames(funcCall.getArguments(), "param"));
+	    			params.addAll(Utils.extractSymbolNames(funcCall.getArguments(), AttributeValidator.attr_output.name));
 	       			ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
 	       			if (paramRef != null){
 	       				if (!params.contains(paramRef.getName())){

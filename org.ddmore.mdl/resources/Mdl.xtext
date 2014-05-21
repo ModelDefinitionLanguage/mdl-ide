@@ -219,7 +219,6 @@ ModelBlockStatement:
 
 SymbolList: 
 	identifier = 'list' '(' symbols += FullyQualifiedSymbolName (=> ',' symbols += FullyQualifiedSymbolName)* ')'
-	//Ref to VariableName +
 ;
 
 ModelPredictionBlockStatement: 
@@ -409,8 +408,9 @@ SymbolName:
 ;
 
 SymbolDeclaration:
-	symbolName = SymbolName (("=" expression = AnyExpression) | (randomList = RandomList))? |
-	(functionName = SymbolName '(' symbolName = SymbolName ')') randomList = RandomList
+	symbolName = SymbolName ("=" expression = AnyExpression | randomList = RandomList)? 
+	| (functionName = SymbolName '(' symbolName = SymbolName ')') 
+		("=" expression = AnyExpression | randomList = RandomList)
 ;
 
 EnumType:

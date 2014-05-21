@@ -63,10 +63,7 @@ import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -442,20 +439,18 @@ public class Utils {
 	public static boolean isFileExist(EObject b, String filePath) {
 		String platformString = b.eResource().getURI().toPlatformString(true);
 		IFile modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(platformString));
-		IPath path = new Path(filePath);
 		//Try path relatively to the model file
 		IContainer parent = modelFile.getParent();
-		try {
-			for(IResource member : parent.members()){
-				if (member.getName().equals(filePath)) return true;
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
+		String p = filePath;
+		while (p.startsWith("../") && parent != null){
+			parent = parent.getParent();
+			p = p.substring(3);
 		}
-		//Try path relatively to the project root
-		IProject proj = modelFile.getProject();
-		IFile requestedFile = proj.getFile(path);
-		if (requestedFile.exists()) return true;
+		IPath path = new Path(p);
+		if (path.isValidPath(p) && parent != null) {
+			IFile requestedFile = parent.getFile(path);
+			if (requestedFile.exists()) return true;
+		}
 		return false;
 	}
 }

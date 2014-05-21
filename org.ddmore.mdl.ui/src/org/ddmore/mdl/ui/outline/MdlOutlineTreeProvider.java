@@ -698,8 +698,9 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			createEStructuralFeatureNode(parentNode,
 				p,
 				MdlPackage.Literals.SYMBOL_DECLARATION__EXPRESSION,
-				_image(p),
-				 p.getSymbolName().getName(),
+				(p.getFunctionName() != null)? getLogImage(): _image(p),
+				(p.getFunctionName() != null)? p.getFunctionName().getName() + 
+						'(' + p.getSymbolName().getName() + ')' : p.getSymbolName().getName(),
 				false);
 		}
 		if (p.getRandomList() != null){

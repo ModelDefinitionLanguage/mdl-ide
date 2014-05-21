@@ -118,7 +118,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_task_max = new Attribute("max", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_task_sig = new Attribute("sig", MdlDataType.TYPE_NAT, false);
-	final public static Attribute attr_task_cov = new Attribute("cov", MdlDataType.TYPE_STRING, false);
+	final public static Attribute attr_task_cov = new Attribute("cov", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_task_simopt = new Attribute("simopt", MdlDataType.TYPE_LIST, false);
 		
 	final public static List<Attribute> attrs_task = Arrays.asList(
