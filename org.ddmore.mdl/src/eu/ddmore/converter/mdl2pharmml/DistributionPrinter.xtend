@@ -39,7 +39,6 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
 		DistributionType::categorical -> newHashMap(
-			DistributionValidator::attr_ncategories.name  -> new Attribute("ncategories", nVal), 
 			DistributionValidator::attr_probabilities.name  -> new Attribute("probabilities", pVal), 
 			DistributionValidator::attr_ncat.name  -> new Attribute("ncategories", nVal), 
 			DistributionValidator::attr_prob.name  -> new Attribute("probabilities", pVal), 

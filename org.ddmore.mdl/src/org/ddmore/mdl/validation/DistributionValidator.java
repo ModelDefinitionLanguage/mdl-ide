@@ -59,7 +59,6 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_hiIG = new Attribute("hiIG", MdlDataType.TYPE_REAL, false);
 
 	public final static Attribute attr_categories = new Attribute("categories", MdlDataType.TYPE_VECTOR_NAT, true);
-	public final static Attribute attr_ncategories = new Attribute("ncategories", MdlDataType.TYPE_NAT, true);
 	public final static Attribute attr_ncat = new Attribute("ncat", MdlDataType.TYPE_NAT, true);
 	public final static Attribute attr_numberOfTrials = new Attribute("numberOfTrials", MdlDataType.TYPE_NAT, true);
 	public final static Attribute attr_nTrials = new Attribute("nTrials", MdlDataType.TYPE_NAT, true);
@@ -133,7 +132,6 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_nat_lo,
 					attr_nat_hi));
 			put(DistributionType.categorical, Arrays.asList(
-					attr_ncategories,
 					attr_ncat,
 					attr_categories,
 					attr_probabilities,
@@ -296,12 +294,9 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			put(DistributionType.binomial+":"+attr_probabilityOfSuccess.name, attr_p_ofSuccess.name);
 			put(DistributionType.binomial+":"+attr_p_ofSuccess.name, attr_probabilityOfSuccess.name);
 
-			put(DistributionType.categorical+":"+attr_ncategories.name, attr_ncat.name);
-			put(DistributionType.categorical+":"+attr_ncat.name, attr_ncategories.name);
-			put(DistributionType.categorical+":"+attr_categories.name, attr_ncategories.name);
-			put(DistributionType.categorical+":"+attr_categories.name, attr_ncat.name);
-			put(DistributionType.categorical+":"+attr_ncategories.name, attr_categories.name);
 			put(DistributionType.categorical+":"+attr_ncat.name, attr_categories.name);
+			put(DistributionType.categorical+":"+attr_categories.name, attr_ncat.name);
+			
 			put(DistributionType.categorical+":"+attr_probabilities.name, attr_prob.name);
 			put(DistributionType.categorical+":"+attr_prob.name, attr_probabilities.name);
 			
