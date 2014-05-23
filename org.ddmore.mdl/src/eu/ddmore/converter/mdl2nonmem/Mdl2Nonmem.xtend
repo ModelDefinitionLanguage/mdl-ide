@@ -12,7 +12,8 @@ import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.ExecuteTask
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
+import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
+import org.ddmore.mdl.mdl.SymbolName
 import org.ddmore.mdl.mdl.MatrixBlock
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.MixtureBlock
@@ -412,7 +413,7 @@ class Mdl2Nonmem extends MdlPrinter{
 				for (st: ss.libraryBlock.statements){
 					var libraryRef = st.expression.identifier;
 					var attributes = libraryRef.getExternalFunctionAttributes();
-					var library = libraryRef.symbol.name;
+					var library = libraryRef.function.name;
 					if (attributes != null){
 						var name = attributes.get("name");
 						if (name != null) library = name;
@@ -437,7 +438,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		«IF b.outputVariablesBlock != null»
 			«var bb = b.outputVariablesBlock»
 			«IF bb.variables.size > 0»
-				«FOR st: bb.variables SEPARATOR ' '»«st.toStr»«ENDFOR»
+				«FOR st: bb.variables SEPARATOR ' '»«st.name.convertID»«ENDFOR»
 				«val file = getTaskObjectName»
 				ONEHEADER NOPRINT «IF !file.equals("")»FILE=«file».fit«ENDIF» 
 			«ENDIF»
@@ -803,8 +804,8 @@ class Mdl2Nonmem extends MdlPrinter{
                 if (b.dataBlock !=  null) {
                     for (DataBlockStatement block: b.dataBlock.statements) {
                         if (block.dropList != null) {
-                            for (FullyQualifiedSymbolName symbol : block.dropList.list.symbols) {
-                                if (id.equals(symbol.symbol.name))
+                            for (SymbolName symbol : block.dropList.list.symbols) {
+                                if (id.equals(symbol.name))
                                     return true;
                             }
                         }
@@ -1085,8 +1086,8 @@ class Mdl2Nonmem extends MdlPrinter{
 						if (s.expression.list != null){
 							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
 							if (level.equals(levelId)){
-								if (!levelVars.contains(s.symbolName.symbol.name)){
-									levelVars.add(s.symbolName.symbol.name);
+								if (!levelVars.contains(s.symbolName.name)){
+									levelVars.add(s.symbolName.name);
 								}
 							}
 						}
@@ -1181,8 +1182,8 @@ class Mdl2Nonmem extends MdlPrinter{
 		for (b: o.blocks){
 	  		if (b.structuralParametersBlock != null){
 				for (id: b.structuralParametersBlock.parameters) {
-					if (theta_vars.get(id.symbolName.symbol.name) == null){
-						theta_vars.put(id.symbolName.symbol.name, i);
+					if (theta_vars.get(id.symbolName.name) == null){
+						theta_vars.put(id.symbolName.name, i);
 						i = i + 1;
 					}
 				}
@@ -1316,16 +1317,16 @@ class Mdl2Nonmem extends MdlPrinter{
 	}
  
  	//Return attributes of an external function	from the collection
-	def protected getExternalFunctionAttributes(FullyQualifiedSymbolName ref) { 
+	def protected getExternalFunctionAttributes(FullyQualifiedFunctionName ref) { 
 		if (ref.object != null)				
-			return externalFunctions.get(ref.object.name + "$" + ref.symbol.name)
+			return externalFunctions.get(ref.object.name + "$" + ref.function.name)
 		else {
 			//match the short name
 			for (pair: externalFunctions.entrySet){
 				val str = pair.key as String;
 				if (str != null){
 					val functID = str.substring(str.indexOf("$") + 1);
-					if (functID.equals(ref.symbol.name)) return pair.value; 
+					if (functID.equals(ref.function.name)) return pair.value; 
 				}
 			}
 		}	

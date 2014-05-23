@@ -10,7 +10,6 @@ import org.ddmore.mdl.mdl.AddList;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.Argument;
-import org.ddmore.mdl.mdl.ArgumentModification;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.Block;
 import org.ddmore.mdl.mdl.BlockStatement;
@@ -27,7 +26,7 @@ import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
+import org.ddmore.mdl.mdl.FullyQualifiedFunctionName;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
@@ -53,7 +52,7 @@ import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.RemoveList;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolList;
-import org.ddmore.mdl.mdl.SymbolModification;
+import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.TELObject;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.TaskFunctionBlock;
@@ -129,7 +128,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(CONDITION));
     }
     
-    protected Image _image(FullyQualifiedSymbolName f) {
+    protected Image _image(FullyQualifiedFunctionName f) {
         return imageHelper.getImage(getPath(REFERENCE));
     }
     
@@ -196,10 +195,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     protected Image _image(DistributionArgument f) {
         return imageHelper.getImage(getPath(DISTRIBUTION_ATTRIBUTE));
     }	    
-    
-    protected Image _image(SymbolModification f) {
-        return imageHelper.getImage(getPath(SYMBOL_MODIFICATION));
-    }
     
     protected Image _image(ConditionalExpression e) {
         return imageHelper.getImage(getPath(EXPRESSION_CONDITION));
@@ -562,15 +557,24 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		}
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedSymbolName name){
+	protected void  _createNode(IOutlineNode parentNode, SymbolName name){
 		createEStructuralFeatureNode(parentNode,
 				name,
-				MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL,
+				MdlPackage.Literals.SYMBOL_NAME__NAME,
+				_image(name),
+				name.getName(),
+				true);
+	}
+
+	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedFunctionName name){
+		createEStructuralFeatureNode(parentNode,
+				name,
+				MdlPackage.Literals.FULLY_QUALIFIED_FUNCTION_NAME__FUNCTION,
 				_image(name),
 				MathPrinter.toStr(name),
 				true);
 	}
-
+	
 	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedArgumentName name){
 		createEStructuralFeatureNode(parentNode,
 				name,
@@ -689,18 +693,22 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				p,
 				MdlPackage.Literals.DESIGN_BLOCK_STATEMENT__EXPRESSION,
 				_image(p),
-				MathPrinter.toStr(p.getIdentifier()),
+				p.getIdentifier().getName(),
 				false);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, SymbolDeclaration p){
+		String name = "";
+		if (p.getSymbolName() != null)
+			name = 	p.getSymbolName().getName();
+		else name = MathPrinter.toStr(p.getArgumentName());
 		if (p.getExpression() != null){
 			createEStructuralFeatureNode(parentNode,
 				p,
 				MdlPackage.Literals.SYMBOL_DECLARATION__EXPRESSION,
 				(p.getFunctionName() != null)? getLogImage(): _image(p),
 				(p.getFunctionName() != null)? p.getFunctionName().getName() + 
-						'(' + p.getSymbolName().getName() + ')' : p.getSymbolName().getName(),
+						'(' + name + ')' : name,
 				false);
 		}
 		if (p.getRandomList() != null){
@@ -709,54 +717,17 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				MdlPackage.Literals.SYMBOL_DECLARATION__RANDOM_LIST,
 				(p.getFunctionName() != null)? getLogImage(): _image(p),
 				(p.getFunctionName() != null)? p.getFunctionName().getName() + 
-						'(' + p.getSymbolName().getName() + ')' : p.getSymbolName().getName(),
+						'(' + name + ')' : name,
 				false);
 		}
 	}
-	
-	protected void  _createNode(IOutlineNode parentNode, SymbolModification p){
-		if (p.getExpression() != null){
-			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.SYMBOL_MODIFICATION__EXPRESSION,
-				_image(p.getSymbolName()),
-				 MathPrinter.toStr(p.getSymbolName()),
-				false);
-		} else {
-			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.SYMBOL_MODIFICATION__SYMBOL_NAME,
-				_image(p.getSymbolName()),
-				MathPrinter.toStr(p.getSymbolName()),
-				true);			
-		}
-	}
-	
-	protected void  _createNode(IOutlineNode parentNode, ArgumentModification p){
-		if (p.getExpression() != null){
-			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.ARGUMENT_MODIFICATION__EXPRESSION,
-				_image(p.getArgumentName()),
-				 MathPrinter.toStr(p.getArgumentName()),
-				false);
-		} else {
-			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.ARGUMENT_MODIFICATION__ARGUMENT_NAME,
-				_image(p.getArgumentName()),
-				MathPrinter.toStr(p.getArgumentName()),
-				true);				
-		}
-	}
-
 	
 	protected void  _createNode(IOutlineNode parentNode, FunctionCallStatement s){
 		createEStructuralFeatureNode(parentNode,
 			s,
 			MdlPackage.Literals.FUNCTION_CALL_STATEMENT__EXPRESSION,
 			_image(s),
-			 s.getFunctionName().getName(),
+			 s.getSymbolName().getName(),
 		false);
 	}
 	

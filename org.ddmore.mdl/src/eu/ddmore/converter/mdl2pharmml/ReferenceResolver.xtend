@@ -5,7 +5,7 @@ import java.util.HashSet
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
+import org.ddmore.mdl.mdl.SymbolName
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.Expression
@@ -118,16 +118,6 @@ class ReferenceResolver{
 		return derivedVars;
 	}
 	
-	//+Return name of PharmML block for a given reference
-	def getReferenceBlock(FullyQualifiedSymbolName ref){
-		if (ref.object != null){
-			return getReferenceBlock(ref.object.name, ref.symbol.name);
-		} else {
-			//try to find by name
-			return getReferenceBlock(ref.symbol.name);
-		}
-	}	
-	
 	//TODO: correct function (does not work!)
 	def getReferenceBlock(String name){
 		//try to find by name
@@ -178,8 +168,8 @@ class ReferenceResolver{
 					if (s.expression != null){
 						if (s.expression.list != null){
 							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-							if (use.equals(UseType::USE_IDV) && !independentVars.contains(s.symbolName.symbol.name)) 
-								independentVars.add(s.symbolName.symbol.name);
+							if (use.equals(UseType::USE_IDV) && !independentVars.contains(s.symbolName.name)) 
+								independentVars.add(s.symbolName.name);
 						}
 					}
 				}
@@ -198,8 +188,8 @@ class ReferenceResolver{
 						if (s.expression.list != null){
 							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 							if (use.equals(UseType::USE_COVARIATE)) {
-								if (!covariateVars.contains(s.symbolName.symbol.name))
-									covariateVars.add(s.symbolName.symbol.name);
+								if (!covariateVars.contains(s.symbolName.name))
+									covariateVars.add(s.symbolName.name);
 							}
 						}
 					}
@@ -243,7 +233,7 @@ class ReferenceResolver{
 		for (b: mObj.blocks){
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
-					if (s.symbolName.symbol.name.equals(name)){
+					if (s.symbolName.name.equals(name)){
 						return s;
 					}
 					if (s.expression != null){
@@ -362,13 +352,13 @@ class ReferenceResolver{
 		var iterator = expr.eAllContents();
 	    while (iterator.hasNext()){
 	    	var obj = iterator.next();
-	    	if (obj instanceof FullyQualifiedSymbolName){
-	    		var ref = obj as FullyQualifiedSymbolName;
-	    		if (classifiedVars.get(ref.toStr) == null)
-			    	if (eps_vars.get(ref.toStr) != null)
-			    		classifiedVars.put(ref.toStr, "random")
+	    	if (obj instanceof SymbolName){
+	    		var ref = obj as SymbolName;
+	    		if (classifiedVars.get(ref.name) == null)
+			    	if (eps_vars.get(ref.name) != null)
+			    		classifiedVars.put(ref.name, "random")
 			    	else 	
-			    		classifiedVars.put(ref.toStr, "other");
+			    		classifiedVars.put(ref.name, "other");
 	    	}
 	    }
 	    return classifiedVars;
@@ -396,8 +386,8 @@ class ReferenceResolver{
 						if (s.expression.list != null){
 							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
 							if (level.equals(levelId)){
-								if (!levelVars.contains(s.symbolName.symbol.name)){
-									levelVars.add(s.symbolName.symbol.name);
+								if (!levelVars.contains(s.symbolName.name)){
+									levelVars.add(s.symbolName.name);
 								}
 							}
 						}

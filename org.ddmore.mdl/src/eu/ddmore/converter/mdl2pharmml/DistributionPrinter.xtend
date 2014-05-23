@@ -8,7 +8,6 @@ package eu.ddmore.converter.mdl2pharmml
 
 import org.ddmore.mdl.mdl.RandomList
 import org.ddmore.mdl.mdl.Primary 
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.DistributionArgument
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.DistributionValidator
@@ -297,7 +296,7 @@ class DistributionPrinter extends MdlPrinter{
 			return '''<«type»>«p.number»</«type»>''';
 		}
 		if (p.symbol != null){
-			return '''<var varId="«p.symbol.toStr»"/>'''; 
+			return '''<var varId="«p.symbol.name»"/>'''; 
 		}
 		if (p.vector != null) {
 			var res = "";
@@ -307,10 +306,5 @@ class DistributionPrinter extends MdlPrinter{
 			return '''«res»'''
 		}
 	}
-	
-	//For references in distributions we just print its name and 
-	//do not point to the PharmML block (MDL object) it appears  
-	override toStr(FullyQualifiedSymbolName s){
-		return s.symbol.name;
-	}
+
 }

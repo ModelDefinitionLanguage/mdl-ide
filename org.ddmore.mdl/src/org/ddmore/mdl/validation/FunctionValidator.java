@@ -203,7 +203,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	//Check whether the function with such a name is already defined
 	@Check
 	public void checkFunctionDeclaration(TaskFunctionDeclaration func){
-		if (Utils.isSymbolDeclaredMoreThanOnce(declaredFunctions, func.getFunctionName())){
+		if (Utils.isFunctionDeclaredMoreThanOnce(declaredFunctions, func.getFunctionName())){
 			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FUNCTION_NAME);
 		}
 	}
@@ -211,10 +211,10 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	//Check whether the function with such a name is already defined
 	@Check
 	public void checkExportFunctionDeclaration(ImportedFunction func){
-		if (Utils.isSymbolDeclaredMoreThanOnce(externalFunctions, func.getFunctionName())){
+		if (Utils.isFunctionDeclaredMoreThanOnce(externalFunctions, func.getFunctionName())){
 			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__FUNCTION_NAME);
 		}
-		if (Utils.isSymbolDeclared(declaredFunctions, func.getFunctionName())){
+		if (Utils.isFunctionDeclared(declaredFunctions, func.getFunctionName())){
 			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__FUNCTION_NAME);
 		}
 		if (standardFunctions.contains(func.getFunctionName().getName())){
@@ -225,16 +225,16 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	//Check that the function call is to an existing function
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
-		if (!isStandardFunction(call.getIdentifier().getSymbol().getName())){
-			if(!(Utils.isSymbolDeclared(declaredFunctions, call.getIdentifier()) ||
-					Utils.isSymbolDeclared(externalFunctions, call.getIdentifier()))){
+		if (!isStandardFunction(call.getIdentifier().getFunction().getName())){
+			if(!(Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier()) ||
+					Utils.isFunctionDeclared(externalFunctions, call.getIdentifier()))){
 			warning(MSG_FUNCTION_UNKNOWN, 
 					MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER,
-					MSG_FUNCTION_UNKNOWN, call.getIdentifier().getSymbol().getName());
+					MSG_FUNCTION_UNKNOWN, call.getIdentifier().getFunction().getName());
 			} else {
 				//Check that any call passes a reference to a target environment, and
 				//a model, data, and parameter object
-				if (Utils.isSymbolDeclared(declaredFunctions, call.getIdentifier())){
+				if (Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier())){
 					byte params[] = new byte[ 4];
 					for (int i = 0; i < 4; i++) params[i] = 0;
 					for (Argument arg: call.getArguments().getArguments()){
@@ -253,24 +253,24 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					if (params[0] == 0)
 						warning(MSG_FUNCTION_CALL_TARGET_MISSING, 
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_CALL_TARGET_MISSING, call.getIdentifier().getSymbol().getName());
+								MSG_FUNCTION_CALL_TARGET_MISSING, call.getIdentifier().getFunction().getName());
 					if (params[1] == 0)
 						warning(MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, 
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, call.getIdentifier().getSymbol().getName());
+								MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, call.getIdentifier().getFunction().getName());
 					if (params[2] == 0)
 						warning(MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, 
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, call.getIdentifier().getSymbol().getName());
+								MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, call.getIdentifier().getFunction().getName());
 					if (params[3] == 0)
 						warning(MSG_FUNCTION_CALL_DATA_OBJ_MISSING, 
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_CALL_DATA_OBJ_MISSING, call.getIdentifier().getSymbol().getName());
+								MSG_FUNCTION_CALL_DATA_OBJ_MISSING, call.getIdentifier().getFunction().getName());
 					for (int i = 1; i < 4; i++){
 						if (params[i] > 1)
 							warning(MSG_FUNCTION_CALL_OBJ_DEFINED + ": two or more " + names[i-1] + " objects selected!", 
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_CALL_OBJ_DEFINED, call.getIdentifier().getSymbol().getName());
+								MSG_FUNCTION_CALL_OBJ_DEFINED, call.getIdentifier().getFunction().getName());
 					}
 					
 				}
@@ -281,26 +281,26 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			}
 		}
 		else {//standard function
-			Integer expected = functionParameters.get(call.getIdentifier().getSymbol().getName());
+			Integer expected = functionParameters.get(call.getIdentifier().getFunction().getName());
 			if (expected == null) expected = 1; //1 by default
 			Integer actual = 0;
 			if (call.getArguments().getArguments() != null)
 				actual = call.getArguments().getArguments().size();
 			if ((expected < 0) && (actual < -expected)){
 				warning(MSG_FUNCTION_INVALID + ": " +  
-						call.getIdentifier().getSymbol().getName() + " expects " + (-expected) + " or more parameters.", 
+						call.getIdentifier().getFunction().getName() + " expects " + (-expected) + " or more parameters.", 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_INVALID, 
-						call.getIdentifier().getSymbol().getName());
+						call.getIdentifier().getFunction().getName());
 			}
 			if ((expected >= 0) && (actual < expected)){
 				warning(MSG_FUNCTION_INVALID + ": " +
-						call.getIdentifier().getSymbol().getName() + " expects " + expected + " parameter(s).", 
+						call.getIdentifier().getFunction().getName() + " expects " + expected + " parameter(s).", 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_INVALID, 
-						call.getIdentifier().getSymbol().getName());
+						call.getIdentifier().getFunction().getName());
 			}
-			List<Attribute> recognizedAttrs = getAllAttributes(call.getIdentifier().getSymbol().getName());
+			List<Attribute> recognizedAttrs = getAllAttributes(call.getIdentifier().getFunction().getName());
 			if (recognizedAttrs != null){
 				List<String> attributeNames = Utils.getAllNames(recognizedAttrs);
 				for (Argument arg: call.getArguments().getArguments()){

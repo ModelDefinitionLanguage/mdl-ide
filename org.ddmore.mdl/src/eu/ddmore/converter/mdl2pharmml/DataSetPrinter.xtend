@@ -6,7 +6,7 @@ import org.ddmore.mdl.validation.AttributeValidator
 import org.apache.commons.io.FilenameUtils
 import org.ddmore.mdl.types.InputFormatType
 import org.ddmore.mdl.types.DefaultValues
-import org.ddmore.mdl.mdl.SymbolModification
+import org.ddmore.mdl.mdl.SymbolDeclaration
 
 class DataSetPrinter {
 	protected Mcl mcl = null;
@@ -142,7 +142,7 @@ class DataSetPrinter {
 		return res;
 	}
 	
-	def getColumnType(SymbolModification modelVar){
+	def getColumnType(SymbolDeclaration modelVar){
 		var columnType = DefaultValues::USE_VAR;
 		if (modelVar.expression != null){
 			if (modelVar.expression.list != null){
@@ -166,8 +166,8 @@ class DataSetPrinter {
 					var columnId = s.symbolName.name;
 					val modelVar = mObj.getModelInputVariable(columnId);
 					if (modelVar != null){
-						if (!columnNames.contains(modelVar.symbolName.symbol.name)){
-							columnNames.add(modelVar.symbolName.symbol.name);
+						if (!columnNames.contains(modelVar.symbolName.name)){
+							columnNames.add(modelVar.symbolName.name);
 							columnTypes.add(modelVar.getColumnType);
 						}
 					}
@@ -178,8 +178,8 @@ class DataSetPrinter {
 				for (s: derivedVars){
 					val modelVar = mObj.getModelInputVariable(s);
 					if (modelVar != null){
-						if (!columnNames.contains(modelVar.symbolName.symbol.name)){
-							columnNames.add(modelVar.symbolName.symbol.name);
+						if (!columnNames.contains(modelVar.symbolName.name)){
+							columnNames.add(modelVar.symbolName.name);
 							columnTypes.add(modelVar.getColumnType);
 						}
 					}
@@ -208,9 +208,9 @@ class DataSetPrinter {
 					var columnId = s.symbolName.name;
 					val modelVar = mObj.getModelInputVariable(columnId);
 					if (modelVar != null){
-						var blkIdRef = mObjName.getReferenceBlock(modelVar.symbolName.symbol.name);
+						var blkIdRef = mObjName.getReferenceBlock(modelVar.symbolName.name);
 						if (blkIdRef.length > 0)
-							res = res + print_ds_ColumnMapping(columnId, modelVar.symbolName.symbol.name, blkIdRef);
+							res = res + print_ds_ColumnMapping(columnId, modelVar.symbolName.name, blkIdRef);
 					}
 				}
 			}
@@ -219,9 +219,9 @@ class DataSetPrinter {
 				for (s: derivedVars){
 					val modelVar = mObj.getModelInputVariable(s);
 					if (modelVar != null){
-						var blkIdRef = mObjName.getReferenceBlock(modelVar.symbolName.symbol.name);
+						var blkIdRef = mObjName.getReferenceBlock(modelVar.symbolName.name);
 						if (blkIdRef.length > 0)
-							res = res + print_ds_ColumnMapping(s, modelVar.symbolName.symbol.name, blkIdRef);
+							res = res + print_ds_ColumnMapping(s, modelVar.symbolName.name, blkIdRef);
 					}
 				}
 			}
@@ -264,7 +264,7 @@ class DataSetPrinter {
 					var columns = new ArrayList<String>();
 					if (b.sourceBlock.inlineBlock.variables != null){
 						for (value: b.sourceBlock.inlineBlock.variables.identifiers){
-							columns.add(value.symbol.name);
+							columns.add(value.name);
 						}
 					}
 					var rowLength = columns.size;

@@ -16,7 +16,9 @@ import org.ddmore.mdl.mdl.DesignBlock;
 import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
+import org.ddmore.mdl.mdl.FullyQualifiedFunctionName;
+import org.ddmore.mdl.mdl.FunctionName;
+import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
@@ -32,7 +34,6 @@ import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.Symbol;
-import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.SymbolNames;
 import org.ddmore.mdl.mdl.Symbols;
 import org.ddmore.mdl.mdl.TargetBlock;
@@ -44,7 +45,6 @@ import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
-import org.ddmore.mdl.mdl.impl.FullyQualifiedSymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.ImportedFunctionImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
@@ -58,6 +58,7 @@ import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.SymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
@@ -71,56 +72,72 @@ import org.eclipse.emf.ecore.EObject;
 
 public class Utils {
 	
-	//Checks whether a given symbol is declared
-	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, FullyQualifiedSymbolName ref){
-		SymbolName symbName = ref.getSymbol();
-		ObjectName objName = ref.getObject();
-		if (objName == null) objName = getObjectName(ref);
+	//Checks whether a given identifier is declared
+	static boolean isIdentifierDeclared(HashMap<String, ArrayList<String>> map, String id, String objName){
 		if (objName != null) 
-			if (map.get(objName.getName()).contains(symbName.getName())) return true;		
-		return false;
-	}
-	
-	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName symbName){
-		ObjectName objName = getObjectName(symbName);
-		if (objName != null) 
-			if (map.get(objName.getName()).contains(symbName)) return true;
-		return false;
-	} 
-
-	//Checks whether a given symbol is declared
-	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, String symbName, String objName){
-		if (objName != null) 
-			if (map.get(objName).contains(symbName)) return true;
+			if (map.get(objName).contains(id)) return true;
 		return false; 
 	}
+
 	
-	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, FullyQualifiedSymbolName ref, ArrayList<ModelingObjectGroup> mogs){
-		ObjectName objName = ref.getObject();
-		if (objName == null) objName = getObjectName(ref);
+	//Checks whether a given symbol is declared
+	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName ref){
+		ObjectName objName = getObjectName(ref);
+		if (objName != null) 
+			if (map.get(objName.getName()).contains(ref.getName())) return true;		
+		return false;
+	}
+		
+	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName ref, ArrayList<ModelingObjectGroup> mogs){
+		ObjectName objName = getObjectName(ref);
 		if (objName != null){
-			SymbolName symbName = ref.getSymbol();
-			if (isSymbolDeclared(map, symbName.getName(), objName.getName())) return true;
+			if (isIdentifierDeclared(map, ref.getName(), objName.getName())) return true;
 			for (ModelingObjectGroup mog: mogs){
 				if (mog.getMdlObj().equals(objName.getName()))
-					if (isSymbolDeclared(map, symbName.getName(), mog.getDataObj()) || 
-							isSymbolDeclared(map, symbName.getName(), mog.getParamObj())) return true;
+					if (isIdentifierDeclared(map, ref.getName(), mog.getDataObj()) || 
+							isIdentifierDeclared(map, ref.getName(), mog.getParamObj())) return true;
 			}
 		}
 		return false;
 	}
 	
-	//Checks whether a symbol is declared more than once
-	static boolean isSymbolDeclaredMoreThanOnce(HashMap<String, ArrayList<String>> map, SymbolName symbName){
+	//Checks whether a function is declared more than once
+	static boolean isSymbolDeclaredMoreThanOnce(HashMap<String, ArrayList<String>> map, SymbolName ref){
 		int i = 0;
-		ObjectName objName = Utils.getObjectName(symbName);
+		ObjectName objName = Utils.getObjectName(ref);
 		ArrayList<String> functions = map.get(objName.getName()); 
 		for (String func: functions){
-			if (func.equals(symbName.getName())) i++;
-			if (i > 1) {
-				System.out.println("Found duplicate for " + symbName.getName());
-				return true;
-			}
+			if (func.equals(ref.getName())) i++;
+			if (i > 1) return true;
+		}
+		return false;
+	}
+	
+	//Checks whether a given function is declared
+	static boolean isFunctionDeclared(HashMap<String, ArrayList<String>> map, FullyQualifiedFunctionName ref){
+		ObjectName objName = ref.getObject();
+		if (objName == null) objName = getObjectName(ref);
+		if (objName != null) 
+			if (map.get(objName.getName()).contains(ref.getFunction().getName())) return true;		
+		return false;
+	}
+	
+	//Checks whether a given function is declared
+	static boolean isFunctionDeclared(HashMap<String, ArrayList<String>> map, FunctionName ref){
+		ObjectName objName = getObjectName(ref);
+		if (objName != null) 
+			if (map.get(objName.getName()).contains(ref.getName())) return true;		
+		return false;
+	}
+	
+	//Checks whether a function is declared more than once
+	static boolean isFunctionDeclaredMoreThanOnce(HashMap<String, ArrayList<String>> map, FunctionName ref){
+		int i = 0;
+		ObjectName objName = Utils.getObjectName(ref);
+		ArrayList<String> functions = map.get(objName.getName()); 
+		for (String func: functions){
+			if (func.equals(ref.getName())) i++;
+			if (i > 1) return true;
 		}
 		return false;
 	}
@@ -128,9 +145,8 @@ public class Utils {
 	//Check whether the list of attributes contains a given attribute
 	static boolean containsAttribute(Arguments args, String attrName){
 		for (Argument arg: args.getArguments()){
-			if (arg.getArgumentName() != null){
+			if (arg.getArgumentName() != null)
 				if (arg.getArgumentName().getName().equals(attrName)) return true;
-			}
 		}
 		return false;
 	}
@@ -297,7 +313,7 @@ public class Utils {
 				if (arg.getExpression().getExpression() != null)
 					return MathPrinter.toStr(arg.getExpression().getExpression());
 			}
-		return "";
+		return "";  
 	}	
 	
 	//Prints value of an attribute with a given name
@@ -329,9 +345,9 @@ public class Utils {
 								TreeIterator<EObject> paramIterator = paramArg.getExpression().eAllContents();
 								while (paramIterator.hasNext()) {
 									EObject paramObj = paramIterator.next();
-									if (paramObj instanceof FullyQualifiedSymbolNameImpl) {
-										FullyQualifiedSymbolName foundParam = (FullyQualifiedSymbolName) paramObj;
-										params.add(foundParam.getSymbol().getName());
+									if (paramObj instanceof SymbolNameImpl) {
+										SymbolName foundParam = (SymbolName) paramObj;
+										params.add(foundParam.getName());
 									}
 								}
 							}

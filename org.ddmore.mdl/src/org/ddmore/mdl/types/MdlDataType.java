@@ -6,13 +6,16 @@
  */
 package org.ddmore.mdl.types;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.ddmore.mdl.generator.MathPrinter;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
+import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
 import org.ddmore.mdl.mdl.OrExpression;
@@ -51,6 +54,10 @@ public enum MdlDataType {
 	TYPE_INPUT_FORMAT,  //{nonmemFormat, eventFormat}
 	TYPE_DISTRIBUTION   //see 'Distribution' in MDL grammar
 	;
+    
+    public final static List<String> CONSTANTS = Arrays.asList(
+    		"INF", "-INF", "T", "NEWIND", "IREP", "ICALL", "MIXEST", "MIXNUM");
+	
     
 	//Validates required type or reference
 	static public boolean validateType(MdlDataType type, DistributionArgument arg){
@@ -299,9 +306,9 @@ public enum MdlDataType {
 	
 	private static boolean isObjectReference(Expression expr) {
 		if (expr.getConditionalExpression().getExpression1() == null){
-			FullyQualifiedSymbolName s = getReference(expr.getConditionalExpression().getExpression());
+			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
 			if (s!= null) {
-				return MdlJavaValidator.declaredObjects.containsKey(s.getSymbol().getName());
+				return MdlJavaValidator.declaredObjects.containsKey(s.getName());
 			}
 		}
 		return false;
@@ -309,9 +316,9 @@ public enum MdlDataType {
 	
 	private static boolean isModelObjectReference(Expression expr) {
 		if (expr.getConditionalExpression().getExpression1() == null){
-			FullyQualifiedSymbolName s = getReference(expr.getConditionalExpression().getExpression());
+			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
 			if (s!= null) {
-				return (MdlJavaValidator.declaredObjects.get(s.getSymbol().getName()) == MdlDataType.TYPE_OBJ_REF_MODEL);
+				return (MdlJavaValidator.declaredObjects.get(s.getName()) == MdlDataType.TYPE_OBJ_REF_MODEL);
 			}
 		}
 		return false;
@@ -319,9 +326,9 @@ public enum MdlDataType {
 
 	private static boolean isDataObjectReference(Expression expr) {
 		if (expr.getConditionalExpression().getExpression1() == null){
-			FullyQualifiedSymbolName s = getReference(expr.getConditionalExpression().getExpression());
+			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
 			if (s!= null) {
-				return (MdlJavaValidator.declaredObjects.get(s.getSymbol().getName()) == MdlDataType.TYPE_OBJ_REF_DATA);
+				return (MdlJavaValidator.declaredObjects.get(s.getName()) == MdlDataType.TYPE_OBJ_REF_DATA);
 			}
 		}
 		return false;
@@ -329,9 +336,9 @@ public enum MdlDataType {
 
 	private static boolean isParameterObjectReference(Expression expr) {
 		if (expr.getConditionalExpression().getExpression1() == null){
-			FullyQualifiedSymbolName s = getReference(expr.getConditionalExpression().getExpression());
+			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
 			if (s!= null) {
-				return (MdlJavaValidator.declaredObjects.get(s.getSymbol().getName()) == MdlDataType.TYPE_OBJ_REF_PARAM);
+				return (MdlJavaValidator.declaredObjects.get(s.getName()) == MdlDataType.TYPE_OBJ_REF_PARAM);
 			}
 		}
 		return false;
@@ -352,7 +359,7 @@ public enum MdlDataType {
 		return false;
 	}
 
-	public static FullyQualifiedSymbolName getReference(OrExpression orExpr) {
+	public static SymbolName getReference(OrExpression orExpr) {
 		if (orExpr.getExpression().size() > 1) return null;
 		AndExpression andExpr = orExpr.getExpression().get(0);
 		if (andExpr.getExpression().size() > 1) return null;
@@ -457,7 +464,7 @@ public enum MdlDataType {
 			Integer.parseInt(value);
 			return true;
 		} catch (NumberFormatException e){
-			return false;
+			return CONSTANTS.contains(value);
 		}
 	}
 	
@@ -525,7 +532,7 @@ public enum MdlDataType {
 			Double.parseDouble(value);
 			return true;
 		} catch (NumberFormatException e){
-			return false;
+			return CONSTANTS.contains(value);
 		}
 	}	
 	

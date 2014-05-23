@@ -4,20 +4,18 @@ import org.ddmore.mdl.mdl.FunctionCall
 import org.ddmore.mdl.mdl.Primary
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.mdl.OrExpression
-import org.ddmore.mdl.mdl.AndExpression
+import org.ddmore.mdl.mdl.AndExpression 
 import org.ddmore.mdl.mdl.LogicalExpression
-import org.ddmore.mdl.mdl.ConditionalExpression
+import org.ddmore.mdl.mdl.ConditionalExpression 
 import org.ddmore.mdl.mdl.AdditiveExpression
 import org.ddmore.mdl.mdl.MultiplicativeExpression
 import org.ddmore.mdl.mdl.PowerExpression
 import org.ddmore.mdl.mdl.UnaryExpression
 import org.ddmore.mdl.mdl.ParExpression
 import org.ddmore.mdl.mdl.TargetBlock
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
+import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.EnumType
-import org.ddmore.mdl.mdl.Distribution
-import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Selector
 import org.ddmore.mdl.mdl.VarType
@@ -26,14 +24,13 @@ import org.ddmore.mdl.mdl.VarType
 //We need math printing in both projects!!!
 class MathPrinter {
 	
-	static def toStr(FullyQualifiedSymbolName name){
+	static def toStr(FullyQualifiedFunctionName functRef){
 		var res = ""; 
-		if (name.object != null){
-			res  = name.object.name + "$" ;
-		}
-		res = res + name.symbol.name;
+		if (functRef.object != null)
+			res  = functRef.object.name + "$" ;
+		res = res + functRef.function.name;
 		return res;
-	}
+	}	
 	
 	static def toStr(EnumType t) {
 		if (t.type != null){
@@ -71,14 +68,6 @@ class MathPrinter {
 		} 
 	}
 		
-	static def String toStr(Distribution d) { 
-		return d.identifier
-	}
-
-	static def String toStr(UseType l) { 
-		return l.identifier
-	}
-	
 	static def String toStr(Expression e){
 		return e.conditionalExpression.toStr
 	}
@@ -192,7 +181,10 @@ class MathPrinter {
 			return e.number;
 		}
 		if (e.symbol != null){
-			return e.symbol.toStr; 
+			return e.symbol.name; 
+		}
+		if (e.constant != null){
+			return e.constant.identifier
 		}
 		if (e.functionCall != null) {
 			return e.functionCall.toStr
@@ -212,7 +204,7 @@ class MathPrinter {
 			return  p.number;
 		}
 		if (p.symbol != null){
-			return p.symbol.toStr; 
+			return p.symbol.name; 
 		}
 		if (p.vector != null) {
 			return p.vector.toStr
@@ -220,7 +212,7 @@ class MathPrinter {
 	}
 	
 	static def toStr(FullyQualifiedArgumentName name) { 
-		var res = name.parent.toStr;
+		var res = name.parent.name;
 		for (s: name.selectors){
 			res = res + s.toStr
 		}

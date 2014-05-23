@@ -1,7 +1,6 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.SymbolModification
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.types.UseType
@@ -94,7 +93,7 @@ class TrialDesignPrinter extends DataSetPrinter {
 	</DosingTimes>	
 	'''	
 
-	def print_design_Assign(SymbolModification s)'''
+	def print_design_Assign(SymbolDeclaration s)'''
 		«print_ct_SymbolRef(s.symbolName)»
 		«IF s.expression != null»
 			«var AnyExpression value = null»
@@ -152,9 +151,9 @@ class TrialDesignPrinter extends DataSetPrinter {
 									var use = getAttribute(s.expression.list.arguments, AttributeValidator::attr_use.name);
 									if (use.length > 0){
 										if (use.equals(UseType::USE_ID)) 
-											mappings = mappings + "IndividualMapping".print_design_Mapping(s.symbolName.symbol.name);
+											mappings = mappings + "IndividualMapping".print_design_Mapping(s.symbolName.name);
 										if (use.equals(UseType::USE_AMT))	
-											mappings = mappings + "ArmMapping".print_design_Mapping(s.symbolName.symbol.name);
+											mappings = mappings + "ArmMapping".print_design_Mapping(s.symbolName.name);
 										//...	
 	                				}
 								}

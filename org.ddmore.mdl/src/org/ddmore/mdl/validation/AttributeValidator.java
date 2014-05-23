@@ -129,10 +129,11 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*TARGET*/
 	final public static Attribute attr_location = new Attribute("location", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_first = new Attribute("first", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_last = new Attribute("last", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_before = new Attribute("before", MdlDataType.TYPE_STRING, false);
 	final public static Attribute attr_after = new Attribute("after", MdlDataType.TYPE_STRING, false);
+	final public static Attribute attr_first = new Attribute("first", MdlDataType.TYPE_BOOLEAN, false);
+	final public static Attribute attr_last = new Attribute("last", MdlDataType.TYPE_BOOLEAN, false);
+	final public static Attribute attr_sameline = new Attribute("sameline", MdlDataType.TYPE_BOOLEAN, false);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
@@ -163,7 +164,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*All blocks*/
 	final public static List<Attribute> attrs_import = Arrays.asList(attr_req_target, attr_name, attr_ncmt, attr_trans, attr_param, attr_output);
-	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_before, attr_after);
+	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_sameline, attr_before, attr_after);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//TODO: find how to substitute with identifiers in grammar (statically)

@@ -39,8 +39,7 @@ public class Images {
 	public static final String LIST ="187-list.png";
 	public static final String TARGET ="196-target.png";
 	public static final String SYMBOL_DECLARATION = "175-variable.png";
-	public static final String SYMBOL_MODIFICATION = "176-variable-mod.png";
-	public static final String FUNCTION_CALL_STATEMENT = SYMBOL_DECLARATION;
+	public static final String FUNCTION_CALL_STATEMENT = "176-variable-mod.png";
 	public static final String RANDOM ="092-random.png";
 	public static final String DROP ="104-remove.png";
 	public static final String IMPORT ="193-import.png";

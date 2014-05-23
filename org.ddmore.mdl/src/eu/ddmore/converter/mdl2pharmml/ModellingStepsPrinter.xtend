@@ -23,7 +23,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		for (o: mcl.objects){
 			if (o.telObject != null){
 				for (st: o.telObject.statements){
-					val functionName = st.expression.identifier.symbol.name;
+					val functionName = st.expression.identifier.function.name;
 					if (st.expression.identifier.object != null){
 						val tObj = getTaskObject(st.expression.identifier.object.name);
 						res  = res + print_msteps_ModellingSteps(tObj, functionName, st.expression.arguments);

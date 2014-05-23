@@ -64,22 +64,22 @@ RandomVariableDefinitionBlock:
 
 InputVariablesBlock:
   	identifier = 'MODEL_INPUT_VARIABLES' 
-  	BEGIN variables += SymbolModification* END 
+  	BEGIN variables += SymbolDeclaration* END 
 ;
 
 StructuralParametersBlock:
   identifier = 'STRUCTURAL_PARAMETERS' 
-  BEGIN parameters += SymbolModification* END 
+  BEGIN parameters += SymbolDeclaration* END 
 ; 
 
 VariabilityParametersBlock:
   identifier = 'VARIABILITY_PARAMETERS' 
-  BEGIN parameters += SymbolModification* END 
+  BEGIN parameters += SymbolDeclaration* END 
 ;
 
 OutputVariablesBlock:
 	identifier = 'MODEL_OUTPUT_VARIABLES' 
-	BEGIN variables += FullyQualifiedSymbolName* END 
+	BEGIN variables += SymbolName* END 
 ; 
 
 GroupVariablesBlock:
@@ -174,7 +174,7 @@ TaskObjectBlock:
 
 ParameterBlock:
 	identifier = 'PARAMETER' 
-	BEGIN parameters += SymbolModification* END  
+	BEGIN parameters += SymbolDeclaration* END  
 ;
 
 DataBlock:
@@ -218,7 +218,7 @@ ModelBlockStatement:
 ;
 
 SymbolList: 
-	identifier = 'list' '(' symbols += FullyQualifiedSymbolName (=> ',' symbols += FullyQualifiedSymbolName)* ')'
+	identifier = 'list' '(' symbols += SymbolName (=> ',' symbols += SymbolName)* ')'
 ;
 
 ModelPredictionBlockStatement: 
@@ -233,7 +233,7 @@ LibraryBlock:
 ;
 
 FunctionCallStatement:
-	functionName = SymbolName "=" expression = FunctionCall
+	symbolName = SymbolName "=" expression = FunctionCall
 ;
 
 OdeBlock:
@@ -305,15 +305,15 @@ DesignBlock:
 ;
 
 DesignBlockStatement:
-	identifier = FullyQualifiedSymbolName ('[' arguments = VariableList ']')? '=' expression = AnyExpression  //Ref to VariableName +
+	identifier = SymbolName ('[' arguments = VariableList ']')? '=' expression = AnyExpression  //Ref to VariableName +
 ;
 
 VariableList:
-	identifiers += FullyQualifiedSymbolName (=> (',' | ';')? identifiers += FullyQualifiedSymbolName)* //Ref to VaraibleName +
+	identifiers += SymbolName (=> (',' | ';')? identifiers += SymbolName)* //Ref to VaraibleName +
 ;
 	
 TaskFunctionDeclaration:
-	functionName = SymbolName "=" 'function'   
+	functionName = FunctionName "=" 'function'   
 	'(' formalArguments = FormalArguments ')'
 	functionBody = TaskFunctionBody
 ;
@@ -355,13 +355,16 @@ ArgumentName:
 	name=ID
 ;
 
+FunctionName:
+	name=ID
+;
+
 FunctionCall:
-	identifier = FullyQualifiedSymbolName '(' arguments = Arguments ')' 
+	identifier = FullyQualifiedFunctionName '(' arguments = Arguments ')' 
 ;
 
 BlockStatement:
 	symbol = SymbolDeclaration |
-	attribute = ArgumentModification |
 	functionCall = FunctionCall |
 	statement = ConditionalStatement |
 	targetBlock = TargetBlock
@@ -392,15 +395,7 @@ ImportBlock:
 ;
 
 ImportedFunction:
-	functionName = SymbolName ("=" list = List) 
-;
-
-SymbolModification:
-	symbolName = FullyQualifiedSymbolName ("=" expression = AnyExpression)?  
-;
-
-ArgumentModification:
-	argumentName = FullyQualifiedArgumentName  ("=" expression = AnyExpression)? 
+	functionName = FunctionName ("=" list = List) 
 ;
 
 SymbolName:
@@ -408,9 +403,10 @@ SymbolName:
 ;
 
 SymbolDeclaration:
-	symbolName = SymbolName ("=" expression = AnyExpression | randomList = RandomList)? 
-	| (functionName = SymbolName '(' symbolName = SymbolName ')') 
-		("=" expression = AnyExpression | randomList = RandomList)
+	(symbolName = SymbolName | argumentName = FullyQualifiedArgumentName)
+		("=" expression = AnyExpression | randomList = RandomList)? 
+	| (functionName = FunctionName '(' (symbolName = SymbolName | argumentName = FullyQualifiedArgumentName) ')') 
+		("=" expression = AnyExpression | randomList = RandomList)		
 ;
 
 EnumType:
@@ -419,7 +415,11 @@ EnumType:
 	target = TargetLanguage |
 	variability = VariabilityType |
 	interpolation = InterpolationType |
-	input = InputType
+	input = InputType 
+;
+
+Constant:
+	identifier = ('INF' | 'T' | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM')
 ;
 
 VarType:
@@ -600,7 +600,8 @@ UnaryExpression:
 	operator = UnaryOperator expression = UnaryExpression |  
 	parExpression = ParExpression |
 	number = NumericValue |
-	symbol = FullyQualifiedSymbolName |
+	symbol = SymbolName |
+	constant = Constant |
 	attribute = FullyQualifiedArgumentName | 
 	functionCall = FunctionCall 
 ;
@@ -608,7 +609,7 @@ UnaryExpression:
 
 Primary:
 	number = NumericValue |
-	symbol = FullyQualifiedSymbolName | 
+	symbol = SymbolName | 
 	vector = Vector 
 ;
 
@@ -616,12 +617,12 @@ Vector:
 	identifier = 'c' '(' values += Primary (=> ',' values += Primary)* ')'
 ;	
 
-FullyQualifiedSymbolName: 
-	(object = [ObjectName] '$')? symbol = SymbolName
+FullyQualifiedFunctionName: 
+	(object = [ObjectName] '$')? function = FunctionName
 ;
 
 FullyQualifiedArgumentName:
-	parent = FullyQualifiedSymbolName selectors += Selector+  
+	parent = SymbolName selectors += Selector+  
 ;
 
 Selector:

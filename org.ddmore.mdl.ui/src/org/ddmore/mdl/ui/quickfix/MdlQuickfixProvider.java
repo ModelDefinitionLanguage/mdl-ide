@@ -23,8 +23,8 @@ import org.ddmore.mdl.mdl.DistributionArguments;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.Expression;
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.FunctionName;
 import org.ddmore.mdl.mdl.GroupVariablesBlock;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.ImportBlock;
@@ -55,7 +55,6 @@ import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolList;
-import org.ddmore.mdl.mdl.SymbolModification;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.TargetLanguage;
 import org.ddmore.mdl.mdl.UnaryExpression;
@@ -73,8 +72,8 @@ import org.ddmore.mdl.mdl.impl.MclImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.SymbolListImpl;
-import org.ddmore.mdl.mdl.impl.SymbolModificationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
@@ -324,11 +323,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		MultiplicativeExpression mult =  MdlFactory.eINSTANCE.createMultiplicativeExpression();
 		PowerExpression power = MdlFactory.eINSTANCE.createPowerExpression();
 		UnaryExpression unary = MdlFactory.eINSTANCE.createUnaryExpression();
-		FullyQualifiedSymbolName symbol = MdlFactory.eINSTANCE.createFullyQualifiedSymbolName();
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 		symbName.setName(value);
-		symbol.setSymbol(symbName);
-		unary.setSymbol(symbol);
+		unary.setSymbol(symbName);
 		power.getExpression().add(unary);
 		mult.getExpression().add(power);
 		add.getExpression().add(mult);
@@ -431,11 +428,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 						}
 					}
 				} else {
-					FullyQualifiedSymbolName ref = MdlFactory.eINSTANCE.createFullyQualifiedSymbolName();
 					SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 					symbName.setName(attrValue);
-					ref.setSymbol(symbName);
-					primary.setSymbol(ref);
+					primary.setSymbol(symbName);
 				}
 			}
 			attr.setValue(primary);
@@ -463,10 +458,10 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	public void removeVariable(final Issue issue, IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Remove symbol", "Remove symbol", "remove.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				FullyQualifiedSymbolName ref = (FullyQualifiedSymbolName)element;
+				SymbolName ref = (SymbolName)element;
 				EObject container = ref.eContainer();
-				if (container instanceof SymbolModificationImpl){
-					SymbolModification symbolModification = (SymbolModification) container;
+				if (container instanceof SymbolDeclarationImpl){
+					SymbolDeclaration symbolModification = (SymbolDeclaration) container;
 					EObject container1 = container.eContainer();
 					if (container1 instanceof ParameterBlockImpl){
 						ParameterBlock block = (ParameterBlock)container1;
@@ -1009,8 +1004,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	private ImportedFunction createImportedFunction(EObject element){
 		ImportedFunction importedFunct = MdlFactory.eINSTANCE.createImportedFunction();
 		FunctionCall funcCall = (FunctionCall)element;
-		String funcName = funcCall.getIdentifier().getSymbol().getName(); 
-		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+		String funcName = funcCall.getIdentifier().getFunction().getName(); 
+		FunctionName symbName = MdlFactory.eINSTANCE.createFunctionName();
 		symbName.setName(funcName);
 		importedFunct.setFunctionName(symbName);
 

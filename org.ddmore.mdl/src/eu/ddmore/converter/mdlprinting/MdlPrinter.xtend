@@ -31,12 +31,11 @@ import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.DistributionArguments
 import org.ddmore.mdl.mdl.DistributionArgument
 import org.ddmore.mdl.mdl.TargetBlock
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
+import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Vector
-import org.ddmore.mdl.mdl.SymbolModification
 import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
-import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Selector
 import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.EstimateTask
@@ -394,12 +393,12 @@ class MdlPrinter {
 		return op;
 	}
 	
-	def toStr(FullyQualifiedSymbolName name){
+	def toStr(FullyQualifiedFunctionName name){
 		var res = ""; 
 		if (name.object != null){
 			res  = name.object.name + "$" ;
 		}
-		res = res + name.symbol.name.convertID;
+		res = res + name.function.name.convertID;
 		return res;
 	}
 	
@@ -410,6 +409,9 @@ class MdlPrinter {
 		}
 		if (v.symbolName != null) {     
 			res = res + v.symbolName.name.convertID;
+		}
+		if (v.argumentName != null) {     
+			res = res + v.argumentName.toStr.convertID;
 		}
 		if (v.functionName != null){
 			res = res + ')' 
@@ -428,37 +430,7 @@ class MdlPrinter {
 		return res;
 	}
 
-	def toStr(SymbolModification v){
-		var res = "";
-		if (v.symbolName != null){
-			v.symbolName.toStr;
-		}
-		if (v.expression != null){
-			res  = res + "=" + v.expression.toStr;
-		}
-		return res;
-	}	
-	
-	def String toStr(AnyExpression e){
-		var res = "";
-		if (e.expression != null){
-			res = res + e.expression.toStr;
-		}
-		if (e.list != null){
-			res  = res + e.list.toStr;
-		}
-		if (e.odeList != null){
-			res = res + e.odeList.toStr;
-		}
-		if (e.type != null){
-			res = res + e.type.toStr;
-		}
-		if (e.vector != null){
-			res = res + e.vector.toStr;
-		}
-		return res;
-	}
-	
+
 	def toStr(EnumType t) {
 		if (t.type != null){
 			if (t.type.categorical != null){
@@ -514,6 +486,14 @@ class MdlPrinter {
 		if (l.arguments != null){ 
 			return "ode" + "(" + l.arguments.toStr + ")"
 		}
+	}
+
+	def String toStr(AnyExpression e){
+		if (e.expression != null) return e.expression.toStr;
+		if (e.list != null) return e.list.toStr; 
+		if (e.odeList != null) return e.odeList.toStr; 
+		if (e.vector != null) return e.vector.toStr; 
+		if (e.type != null) return e.type.toStr; 
 	}
 	
 	def String toStr(Expression e){
@@ -629,7 +609,10 @@ class MdlPrinter {
 			return e.number;
 		}
 		if (e.symbol != null){
-			return e.symbol.toStr; 
+			return e.symbol.name; 
+		}
+		if (e.constant != null){
+			return e.constant.identifier
 		}
 		if (e.functionCall != null) {
 			return e.functionCall.toStr
@@ -649,7 +632,7 @@ class MdlPrinter {
 			return  p.number;
 		}
 		if (p.symbol != null){
-			return p.symbol.toStr; 
+			return p.symbol.name; 
 		}
 		if (p.vector != null) {
 			return p.vector.toStr
@@ -657,7 +640,7 @@ class MdlPrinter {
 	}
 	
 	def toStr(FullyQualifiedArgumentName name) { 
-		var res = name.parent.toStr;
+		var res = name.parent.name;
 		for (s: name.selectors){
 			res = res + s.toStr
 		}
@@ -824,8 +807,6 @@ class MdlPrinter {
 	def print(FunctionCall call)'''«call.toStr»'''
 		
     def print(SymbolDeclaration v)'''«v.toStr»'''
-
-    def print(SymbolModification v)'''«v.toStr»'''
 
 	def print(AnyExpression e)'''«e.toStr»'''
 		

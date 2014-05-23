@@ -15,7 +15,7 @@ import org.ddmore.mdl.mdl.LogicalExpression
 import org.ddmore.mdl.mdl.AdditiveExpression
 import org.ddmore.mdl.mdl.MultiplicativeExpression
 import org.ddmore.mdl.mdl.PowerExpression
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
+import org.ddmore.mdl.mdl.SymbolName
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.List
 import org.ddmore.mdl.mdl.AnyExpression
@@ -27,6 +27,7 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.types.VariableType
+import org.ddmore.mdl.mdl.FunctionName
 
 class MathPrinter extends MdlPrinter{
 
@@ -55,9 +56,9 @@ class MathPrinter extends MdlPrinter{
 		var iterator = expr.eAllContents();
 	    while (iterator.hasNext()){
 	    	var obj = iterator.next();
-	    	if (obj instanceof FullyQualifiedSymbolName){
-	    		var ref = obj as FullyQualifiedSymbolName;
-	    		arguments.add(ref.toStr);
+	    	if (obj instanceof SymbolName){
+	    		var ref = obj as SymbolName;
+	    		arguments.add(ref.name);
 	    	}
 	    }
 		'''
@@ -133,8 +134,8 @@ class MathPrinter extends MdlPrinter{
 
 	//+ Convert math functions to PharmML 
 	def print_Math_FunctionCall(FunctionCall call){
-		if (specialFunctions.contains(call.identifier.symbol.name)){
-			 if (call.identifier.symbol.name.equals("seq")){
+		if (specialFunctions.contains(call.identifier.function.name)){
+			 if (call.identifier.function.name.equals("seq")){
 			 	val params = call.arguments.arguments;
 			 	//TODO: process named parameters: (start, stepSize, end) or (start, stepSize, repetition)
 			 	if (params.size == 3)
@@ -145,7 +146,7 @@ class MathPrinter extends MdlPrinter{
 			 		);
 			 }
 		} else {
-			if (standardFunctions.contains(call.identifier.symbol.name)){
+			if (standardFunctions.contains(call.identifier.function.name)){
 				//Convert standard mathematical functions to a PharmML operator with the same name;		
 				return call.print_Math_FunctionCall_Standard;	
 			} else {
@@ -158,12 +159,12 @@ class MathPrinter extends MdlPrinter{
 	def print_Math_FunctionCall_Standard(FunctionCall call)
 	'''
 		«IF call.arguments.arguments.size == 1»
-			<Uniop op="«call.identifier.symbol.name»">
+			<Uniop op="«call.identifier.function.name»">
 				«call.arguments.arguments.get(0).expression.print_Math_Expr»
 			</Uniop>
 		«ELSE»
 			«IF call.arguments.arguments.size == 2»
-				<Binop op="«call.identifier.symbol.name»">
+				<Binop op="«call.identifier.function.name»">
 					«call.arguments.arguments.get(0).expression.print_Math_Expr»
 					«call.arguments.arguments.get(1).expression.print_Math_Expr»
 				</Binop>
@@ -175,7 +176,7 @@ class MathPrinter extends MdlPrinter{
 	def print_Math_FunctionCall_UserDefined(FunctionCall call)
 	'''
 		<math:FunctionCall>
-			«call.identifier.print_ct_SymbolRef»
+			«call.identifier.function.print_ct_SymbolRef»
 			«FOR arg: call.arguments.arguments»
 				«arg.print_Math_FunctionArgument»
 			«ENDFOR»
@@ -645,9 +646,15 @@ class MathPrinter extends MdlPrinter{
 	'''
 	
 	//+
-	def print_ct_SymbolRef(FullyQualifiedSymbolName ref)'''
-		«var blkId = resolver.getReferenceBlock(ref)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.symbol.name»"/>
+	def print_ct_SymbolRef(SymbolName ref)'''
+		«var blkId = resolver.getReferenceBlock(ref.name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
+	'''
+	
+	//+
+	def print_ct_SymbolRef(FunctionName ref)'''
+		«var blkId = resolver.getReferenceBlock(ref.name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
 	'''
 	
 	//+ TODO: How to print attributes?
@@ -655,9 +662,9 @@ class MathPrinter extends MdlPrinter{
 		<Description>MDL reference to an attribute «ref.toStr»</Description>
 		«var blkId = ""»
 		«IF ref.parent != null»
-			«blkId = resolver.getReferenceBlock(ref.parent)»
+			«blkId = resolver.getReferenceBlock(ref.parent.name)»
 		«ENDIF»
 		<ct:SymbRef «IF blkId.length > 0»blkIdRef="«blkId»"«ENDIF» 
-			symbIdRef="«ref.parent.symbol.name».«ref.toStr»"/>
+			symbIdRef="«ref.parent.name».«ref.toStr»"/>
 	'''
 }
