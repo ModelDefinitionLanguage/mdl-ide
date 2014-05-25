@@ -9,26 +9,15 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
-//import org.eclipse.jface.resource.ImageDescriptor;
-//import org.eclipse.swt.graphics.ImageData;
-//import org.eclipse.ui.console.ConsolePlugin;
-//import org.eclipse.ui.console.IConsoleDocumentPartitioner;
-//import org.eclipse.ui.console.IConsoleManager;
-//import org.eclipse.ui.console.TextConsole;
 
 import eu.ddmore.mdl.generator.Mdl2NonmemWrapper;
 
 public class RunWithNONMEMHandler extends AbstractHandler implements IHandler {
-
-    @Inject
-    private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
 
     @Inject
     private Mdl2NonmemWrapper generator;
