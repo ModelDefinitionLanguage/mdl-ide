@@ -176,13 +176,12 @@ class DataSetPrinter {
 						var delimiter = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_delimiter.name);
 						if (delimiter.length == 0) delimiter = AttributeValidator::attr_delimiter.defaultValue;
 						val fileName = FilenameUtils::getBaseName(file);
-						val filePath = FilenameUtils::getPath(file);
 						val fileExtension = FilenameUtils::getExtension(file);
 						res = res +
 						'''				
 							<ImportData oid="«BLK_DS_IMPORT_DATA + dObjName»">
 								<name>«fileName»</name>
-								<url>«filePath»</url>
+								<url>«file»</url>
 								<format>«fileExtension.convertFileFormat»</format>
 								<delimiter>«delimiter.convertDelimiter»</delimiter>
 							</ImportData>
