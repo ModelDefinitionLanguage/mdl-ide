@@ -17,7 +17,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	def print_msteps_ModellingSteps(Operation op){
 		var res = "";
 		res  = res + print_ds_TargetTool(op.dObjName);
-		res = res + print_ds_DataSet(op.mObjName, op.dObjName);
+		res = res + print_ds_TargetDataSet(op.mObjName, op.dObjName);
 		if (op.type.equals(BLK_ESTIM_STEP)){
 			res = res + print_msteps_EstimationStep(op.pObjName, op.dObjName, BLK_ESTIM_STEP + op.name);
 		} else {

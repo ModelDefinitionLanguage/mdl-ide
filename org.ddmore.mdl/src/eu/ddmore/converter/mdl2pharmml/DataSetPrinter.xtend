@@ -29,28 +29,19 @@ class DataSetPrinter {
 		return '''<Row>«FOR i: 0..values.size-1»«values.get(i).print_ct_Value»«ENDFOR»</Row>''';
 	}
 	
-	protected def print_ds_Definition(ArrayList<String> columnNames, ArrayList<String> columnTypes)'''
-		<ds:Definition>
-			«FOR i: 0..columnNames.size-1»
-				«var columnId = columnNames.get(i)»
-				«print_ds_Column(columnId, columnTypes.get(i), (i+1).toString)»
-			«ENDFOR»
-		</ds:Definition>
-	'''
-	
 	protected def print_ds_Column(String columnId, String columnType, String columnNum)'''
-		<ds:Column columnId="«columnId»" columnType="«columnType»" valueType="«columnId.getValueType»" columnNum="«columnNum»"/>
+		<Column columnId="«columnId»" columnType="«columnType»" valueType="«columnId.getValueType»" columnNum="«columnNum»"/>
 	'''
 	
-	protected def print_ds_ColumnMapping(String columnId, String symbId, String blkIdRef)'''
+	protected def print_ds_ColumnMapping(String columnId, String symbId)'''
 		<ColumnMapping>
-			<ds:ColumnRef columnIdRef="«columnId»"/>
-			<ds:SymbRef «IF blkIdRef.length > 0» blkIdRef="«blkIdRef»" «ENDIF»symbIdRef="«symbId»"/>
+			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+			«symbId.print_ct_SymbolRef»
 		</ColumnMapping>
 	'''
 		
 	 //+ Print data set
-	protected def print_ds_DataSet(String mObjName, String dObjName){
+	protected def print_ds_TargetDataSet(String mObjName, String dObjName){
 		val mObj = getModelObject(mObjName);
 		val dObj = getDataObject(dObjName);
 		if (dObj == null || mObj == null) return "";
@@ -70,6 +61,7 @@ class DataSetPrinter {
 		return res;
 	}
 	
+
 	protected def getColumnType(SymbolDeclaration modelVar){
 		var columnType = DefaultValues::USE_VAR;
 		if (modelVar.expression != null){
@@ -82,10 +74,51 @@ class DataSetPrinter {
 	}
 	
 	protected def print_ds_Objective_DataSet(String mObjName, String dObjName){
+		var res = print_ds_DataSet(mObjName, dObjName);
+		'''
+		<ObjectiveDataSet>
+			«res»
+		</ObjectiveDataSet>
+		'''
+	}
+	
+	protected def print_ds_NONMEM_DataSet(String mObjName, String dObjName){
 		val mObj = getModelObject(mObjName);
 		val dObj = getDataObject(dObjName);
 		if (dObj == null || mObj == null) return "";
 		var res = "";
+		for (b: dObj.blocks){
+			if (b.dataInputBlock != null){
+				for (s: b.dataInputBlock.variables){
+					var columnId = s.symbolName.name;
+					val modelVar = mObj.getModelInputVariable(columnId);
+					if (modelVar != null){
+						res = res + print_ds_ColumnMapping(columnId, modelVar.symbolName.name);
+					}
+				}
+			}
+			if (b.dataDerivedBlock != null){
+				var derivedVars = b.dataDerivedBlock.getDerivedVariables;
+				for (s: derivedVars){
+					val modelVar = mObj.getModelInputVariable(s);
+					if (modelVar != null){
+						res = res + print_ds_ColumnMapping(s, modelVar.symbolName.name);
+					}
+				}
+			}
+		}
+		res = res + print_ds_DataSet(mObjName, dObjName);
+		'''
+		<NONMEMdataSet oid="«BLK_DS_NONMEM_DATASET + dObjName»">
+			«res»
+		</NONMEMdataSet>
+		'''
+	}
+	
+	protected def print_ds_DataSet(String mObjName, String dObjName){
+		val mObj = getModelObject(mObjName);
+		val dObj = getDataObject(dObjName);
+		if (dObj == null || mObj == null) return "";
 		var columnNames = newHashSet;
 		var columnTypes = new ArrayList<String>();
 		for (b: dObj.blocks){
@@ -113,54 +146,23 @@ class DataSetPrinter {
 					}
 				}
 			}	
-		}
-		if (columnNames.size > 0){
-			res  = res + print_ds_Definition(new ArrayList<String>(columnNames), columnTypes);
-		}
-		res = res + print_ds_ImportData(dObjName);
+		}	
 		'''
-		<ObjectiveDataSet>
-			«res»
-		</ObjectiveDataSet>
+			<DataSet xmlns="«xmlns_ds»" oid="«BLK_DS_DATASET + dObjName»">
+				«print_ds_Definition(new ArrayList<String>(columnNames), columnTypes)»
+				«dObjName.print_ds_ImportData»
+			</DataSet>
 		'''
 	}
-
-	protected def print_ds_NONMEM_DataSet(String mObjName, String dObjName){
-		val mObj = getModelObject(mObjName);
-		val dObj = getDataObject(dObjName);
-		if (dObj == null || mObj == null) return "";
-		var res = "";
-		for (b: dObj.blocks){
-			if (b.dataInputBlock != null){
-				for (s: b.dataInputBlock.variables){
-					var columnId = s.symbolName.name;
-					val modelVar = mObj.getModelInputVariable(columnId);
-					if (modelVar != null){
-						var blkIdRef = mObjName.getReferenceBlock(modelVar.symbolName.name);
-						if (blkIdRef.length > 0)
-							res = res + print_ds_ColumnMapping(columnId, modelVar.symbolName.name, blkIdRef);
-					}
-				}
-			}
-			if (b.dataDerivedBlock != null){
-				var derivedVars = b.dataDerivedBlock.getDerivedVariables;
-				for (s: derivedVars){
-					val modelVar = mObj.getModelInputVariable(s);
-					if (modelVar != null){
-						var blkIdRef = mObjName.getReferenceBlock(modelVar.symbolName.name);
-						if (blkIdRef.length > 0)
-							res = res + print_ds_ColumnMapping(s, modelVar.symbolName.name, blkIdRef);
-					}
-				}
-			}
-		}
-		res = res + print_ds_ImportData(dObjName);
-		'''
-		<NONMEMdataSet oid="«BLK_DS_NONMEM_DATASET + dObjName»">
-			«res»
-		</NONMEMdataSet>
-		'''
-	}
+	
+	protected def print_ds_Definition(ArrayList<String> columnNames, ArrayList<String> columnTypes)'''
+		<Definition>
+			«FOR i: 0..columnNames.size-1»
+				«var columnId = columnNames.get(i)»
+				«print_ds_Column(columnId, columnTypes.get(i), (i+1).toString)»
+			«ENDFOR»
+		</Definition>
+	'''
 	
 	protected def print_ds_ImportData(String dObjName){
 		val dObj = getDataObject(dObjName);
@@ -178,12 +180,12 @@ class DataSetPrinter {
 						val fileExtension = FilenameUtils::getExtension(file);
 						res = res +
 						'''				
-							<ds:ImportData oid="«BLK_DS_IMPORT_DATA + dObjName»">
-								<ds:name>«fileName»</ds:name>
-								<ds:url>«filePath»</ds:url>
-								<ds:format>«fileExtension.convertFileFormat»</ds:format>
-								<ds:delimiter>«delimiter.convertDelimiter»</ds:delimiter>
-							</ds:ImportData>
+							<ImportData oid="«BLK_DS_IMPORT_DATA + dObjName»">
+								<name>«fileName»</name>
+								<url>«filePath»</url>
+								<format>«fileExtension.convertFileFormat»</format>
+								<delimiter>«delimiter.convertDelimiter»</delimiter>
+							</ImportData>
 						'''
 					}
 				} else {
@@ -218,11 +220,7 @@ class DataSetPrinter {
 				}
 			}
 		}
-		'''
-		<DataSet xmln="" oid="«BLK_DS_DATASET + dObjName»">
-			«res»
-		</DataSet>
-		''';
+		return res;
 	}
 	
 	protected def print_ds_TargetToolData(String dObjName, String source){		
@@ -253,11 +251,10 @@ class DataSetPrinter {
 		'''
 	}
 	
-	protected def print_mdef_TargetToolReference(String dObjName){
-		'''
-			<TargetToolReference>
-				<ct:OidRef oidRef="«BLK_DS_TARGET_TOOL + dObjName»"/>
-			</TargetToolReference>
-		'''
-	}
+	protected def print_mdef_TargetToolReference(String dObjName)
+	'''
+		<TargetToolReference>
+			<ct:OidRef oidRef="«BLK_DS_TARGET_TOOL + dObjName»"/>
+		</TargetToolReference>
+	'''
 }
