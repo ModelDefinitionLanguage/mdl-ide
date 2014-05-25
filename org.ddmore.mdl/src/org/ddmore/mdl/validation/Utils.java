@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.ddmore.mdl.generator.MathPrinter;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
@@ -70,6 +69,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 
+import eu.ddmore.converter.mdlprinting.MdlPrinter;
+
 public class Utils {
 	
 	//Checks whether a given identifier is declared
@@ -88,14 +89,14 @@ public class Utils {
 		return false;
 	}
 		
-	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName ref, ArrayList<ModelingObjectGroup> mogs){
+	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName ref, ArrayList<ModellingObjectGroup> mogs){
 		ObjectName objName = getObjectName(ref);
 		if (objName != null){
 			if (isIdentifierDeclared(map, ref.getName(), objName.getName())) return true;
-			for (ModelingObjectGroup mog: mogs){
-				if (mog.getMdlObj().equals(objName.getName()))
-					if (isIdentifierDeclared(map, ref.getName(), mog.getDataObj()) || 
-							isIdentifierDeclared(map, ref.getName(), mog.getParamObj())) return true;
+			for (ModellingObjectGroup mog: mogs){
+				if (mog.getMdlObjName().equals(objName.getName()))
+					if (isIdentifierDeclared(map, ref.getName(), mog.getDataObjName()) || 
+							isIdentifierDeclared(map, ref.getName(), mog.getParamObjName())) return true;
 			}
 		}
 		return false;
@@ -311,7 +312,7 @@ public class Utils {
 		for (Argument arg: a.getArguments())
 			if (arg.getArgumentName() != null && arg.getArgumentName().getName().equals(attrName)){
 				if (arg.getExpression().getExpression() != null)
-					return MathPrinter.toStr(arg.getExpression().getExpression());
+					return MdlPrinter.getInstance().toStr(arg.getExpression().getExpression());
 			}
 		return "";  
 	}	
@@ -319,7 +320,7 @@ public class Utils {
 	//Prints value of an attribute with a given name
 	static String getAttributeValue(Argument arg){
 		if (arg.getExpression().getExpression() != null)
-			return MathPrinter.toStr(arg.getExpression().getExpression());
+			return MdlPrinter.getInstance().toStr(arg.getExpression().getExpression());
 		return "";
 	}	
 	
@@ -370,7 +371,7 @@ public class Utils {
 		ArrayList<String> names = new ArrayList<String>();
 		if (attrs != null){
 			for (Attribute attr: attrs){
-				names.add(attr.name);
+				names.add(attr.getName());
 			}
 		}
 		return names;
@@ -380,8 +381,8 @@ public class Utils {
 		ArrayList<String> names = new ArrayList<String>();
 		if (attrs != null){
 			for (Attribute attr: attrs){
-				if (attr.mandatory)
-					names.add(attr.name);
+				if (attr.isMandatory())
+					names.add(attr.getName());
 			}
 		}
 		return names;

@@ -1,27 +1,30 @@
 package eu.ddmore.converter.mdl2pharmml
-import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.MclObject
 import java.util.ArrayList
 import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.ConditionalStatement
 import java.util.HashMap
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.types.RandomEffectType
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.Symbols
 import org.ddmore.mdl.mdl.SameBlock
 import org.ddmore.mdl.validation.DistributionValidator
+import org.ddmore.mdl.mdl.ModelObject
+import org.ddmore.mdl.mdl.ParameterObject
+import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
+import eu.ddmore.converter.mdl2pharmml.domain.Piece
 
 class ModelDefinitionPrinter {
-	protected Mcl mcl = null;
-	protected extension Constants constants = new Constants();
+	private var String mObjName;
+	private var String pObjName;
+	private var ModelObject mObj;
+	private var ParameterObject pObj;
+
 	protected extension DistributionPrinter = new DistributionPrinter();
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver = null;
 	
-	new(Mcl mcl, MathPrinter mathPrinter, ReferenceResolver resolver){
-		this.mcl = mcl;
+	new(MathPrinter mathPrinter, ReferenceResolver resolver){
 		this.mathPrinter = mathPrinter;
 		this.resolver = resolver;
 	}		
@@ -30,17 +33,22 @@ class ModelDefinitionPrinter {
 	// I. Model Definition
 	//////////////////////////////////////
 	
-	//+ convertToPharmML MCL objects
-	protected def print_mdef_ModelDefinition()'''
-	<ModelDefinition xmlns="«xmlns_mdef»">
-		«print_mdef_VariabilityModel»
-		«print_mdef_CovariateModel»
-		«print_mdef_ParameterModel»
-		«print_mdef_StructuralModel»
-		«print_mdef_ObservationModel»
-	</ModelDefinition>
-	'''
-	
+	//Print <ModelDefinition>
+	def print_mdef_ModelDefinition(String mObjName, String pObjName){
+		this.mObjName = mObjName;
+		this.pObjName = pObjName;
+		this.mObj = getModelObject(mObjName);
+		this.pObj = getParamObject(pObjName);
+		'''
+		<ModelDefinition xmlns="«xmlns_mdef»">
+			«print_mdef_VariabilityModel»
+			«print_mdef_CovariateModel»
+			«print_mdef_ParameterModel»
+			«print_mdef_StructuralModel»
+			«print_mdef_ObservationModel»
+		</ModelDefinition>
+		'''
+	}
 	//////////////////////////////////////
 	// I.a Function Definition (not used) - call from here if needed
 	//////////////////////////////////////
@@ -51,36 +59,31 @@ class ModelDefinitionPrinter {
 	
 	protected def print_mdef_VariabilityModel(){
 		var model = "";
-		for (o: mcl.objects){
-			if (o.modelObject != null){
-				var errorVars = vm_err_vars.get(o.objectName.name);
-				if (errorVars != null){
-					model = model + 
-					'''
-						<VariabilityModel blkId="vm_err.«o.objectName.name»" type="«VAR_TYPE_ERROR»">
-							«FOR s: errorVars»
-								<Level symbId="«s»"/>
-							«ENDFOR»
-						</VariabilityModel>
-					'''		
-				}
-				
-				var mdlVars = vm_mdl_vars.get(o.objectName.name);
-				if (mdlVars != null){
-					model = model + 
-					'''
-						<VariabilityModel blkId="vm_mdl.«o.objectName.name»" type="«VAR_TYPE_PARAMETER»">
-							«FOR s: mdlVars»
-								<Level symbId="«s»"/>
-							«ENDFOR»
-						</VariabilityModel>
-					'''		
-				}
-			}
+		var errorVars = vm_err_vars.get(mObjName);
+		if (errorVars != null){
+			model = model + 
+			'''
+				<VariabilityModel blkId="vm_err.«mObjName»" type="«VAR_TYPE_ERROR»">
+					«FOR s: errorVars»
+						<Level symbId="«s»"/>
+					«ENDFOR»
+				</VariabilityModel>
+			'''		
+		}		
+		var mdlVars = vm_mdl_vars.get(mObjName);
+		if (mdlVars != null){
+			model = model + 
+			'''
+				<VariabilityModel blkId="vm_mdl.«mObjName»" type="«VAR_TYPE_PARAMETER»">
+					«FOR s: mdlVars»
+						<Level symbId="«s»"/>
+					«ENDFOR»
+				</VariabilityModel>
+			'''		
 		}
 		return model;
 	}
-
+    
 	/////////////////////////
 	// I.c Covariate ModelF
 	/////////////////////////
@@ -89,37 +92,30 @@ class ModelDefinitionPrinter {
 	//GROUP_VARIABLES -> ParameterModel, SimpleParameter + expression (see I.d)
 	protected def print_mdef_CovariateModel(){
 		var model = "";
-		for (o: mcl.objects){
-			if (o.modelObject != null){
-				var covariateVars = cm_vars.get(o.objectName.name);
-				if (covariateVars != null){
-					model = model +
-					'''
-					<CovariateModel blkId="cm.«o.objectName.name»">
-						«FOR s: covariateVars»
-							«s.print_mdef_CovariateModel»
-						«ENDFOR»
-					</CovariateModel>
-					'''
-				}
+		if (mObj != null){
+			var covariateVars = cm_vars.get(mObjName);
+			if (covariateVars != null){
+				model = model +
+				'''
+				<CovariateModel blkId="cm.«mObjName»">
+					«FOR s: covariateVars»
+						<Covariate symbId="«s»">
+							<Continuous>
+								<Transformation>
+									<math:Equation>
+										«print_ct_SymbolRef(s)»
+									</math:Equation>
+								</Transformation>
+							</Continuous>	
+						</Covariate>
+					«ENDFOR»
+				</CovariateModel>
+				'''
 			}
 		}
 		return model;
 	}	
 
-	//Keep maps of known PharmML variables per block to use it in blkRefId	
-	protected def print_mdef_CovariateModel(String symbId)'''
-		<Covariate symbId="«symbId»">
-			<Continuous>
-				<Transformation>
-					<math:Equation>
-						«print_ct_SymbolRef(symbId)»
-					</math:Equation>
-				</Transformation>
-			</Continuous>	
-		</Covariate>
-	'''	
-			
 	/////////////////////////////
 	// I.d Parameter Model
 	////////////////////////////	
@@ -128,58 +124,56 @@ class ModelDefinitionPrinter {
 	//RANDOM_VARIABBLES_DEFINITION -> ParameterModel, RandomVariable
 	protected def print_mdef_ParameterModel(){		
 		var model = "";
-		for (o: mcl.objects){
-			var statements = "";
-			if (o.parameterObject != null){
-				for (b: o.parameterObject.blocks){
-					//Parameter object, STRUCTURAL
-					if (b.structuralBlock != null){
-						for (id: b.structuralBlock.parameters) 
+		var statements = "";
+		if (pObj != null){
+			for (b: pObj.blocks){
+				//Parameter object, STRUCTURAL
+				if (b.structuralBlock != null){
+					for (id: b.structuralBlock.parameters) 
+						statements = statements + 
+						'''<SimpleParameter symbId = "«id.symbolName.name»"/>
+						'''
+		  		}
+		  		//ParameterObject, VARIABILITY
+		  		if (b.variabilityBlock != null){
+					for (st: b.variabilityBlock.statements){
+						if (st.parameter != null)
 							statements = statements + 
-							'''<SimpleParameter symbId = "«id.symbolName.name»"/>
+							'''<SimpleParameter symbId = "«st.parameter.symbolName.name»"/>
 							'''
-			  		}
-			  		//ParameterObject, VARIABILITY
-			  		if (b.variabilityBlock != null){
-						for (st: b.variabilityBlock.statements){
-							if (st.parameter != null)
-								statements = statements + 
-								'''<SimpleParameter symbId = "«st.parameter.symbolName.name»"/>
-								'''
-						} 
-			  		}
-			  		statements = statements + o.print_mdef_CollerationModel;
-			  	}
-			}
-			if (o.modelObject != null){
-				for (b: o.modelObject.blocks){
-					//Model object, GROUP_VARIABLES (covariate parameters)
-					if (b.groupVariablesBlock != null){
-						for (st: b.groupVariablesBlock.statements){
-							if (st.statement != null){
-								st.statement.print_BlockStatement("SimpleParameter", false);
-							}							
-						}
-					}	
-					//Model object, RANDOM_VARIABLES_DEFINITION
-					if (b.randomVariableDefinitionBlock != null){
-						for (s: b.randomVariableDefinitionBlock.variables){
-							if (isIndependentVariable(s.symbolName.name))
-								statements = statements + s.print_mdef_RandomVariable;
-						} 
-			  		}
-			  		//Model object, INDIVIDUAL_VARIABLES
-					if (b.individualVariablesBlock != null){
-						for (s: b.individualVariablesBlock.statements){
-							statements = statements + s.print_BlockStatement("IndividualParameter", false);
-						} 
-			  		}
-			  	}
-			}
+					} 
+		  		}
+		  		statements = statements + print_mdef_CollerationModel;
+		  	}
+		}
+		if (mObj != null){
+			for (b: mObj.blocks){
+				//Model object, GROUP_VARIABLES (covariate parameters)
+				if (b.groupVariablesBlock != null){
+					for (st: b.groupVariablesBlock.statements){
+						if (st.statement != null){
+							statements = statements + st.statement.print_BlockStatement("SimpleParameter", false);
+						}							
+					}
+				}	
+				//Model object, RANDOM_VARIABLES_DEFINITION
+				if (b.randomVariableDefinitionBlock != null){
+					for (s: b.randomVariableDefinitionBlock.variables){
+						if (isIndependentVariable(s.symbolName.name))
+							statements = statements + s.print_mdef_RandomVariable;
+					} 
+		  		}
+		  		//Model object, INDIVIDUAL_VARIABLES
+				if (b.individualVariablesBlock != null){
+					for (s: b.individualVariablesBlock.statements){
+						statements = statements + s.print_BlockStatement("IndividualParameter", false);
+					} 
+		  		}
+		  	}
 	  		if (statements.length > 0){
 		  		model = model + 
 				'''
-					<ParameterModel blkId="pm.«o.objectName.name»">
+					<ParameterModel blkId="pm.«mObjName»">
 						«statements»
 					</ParameterModel>
 				''';
@@ -251,7 +245,7 @@ class ModelDefinitionPrinter {
 		}
 	}
 	
-	def print_Pieces(String symbol, String initTag, ArrayList<Piece> pieces, boolean printType){
+	protected def print_Pieces(String symbol, String initTag, ArrayList<Piece> pieces, boolean printType){
 		var tag = initTag;
 		if ((tag.indexOf("Variable") > 0) && deriv_vars.contains(symbol))
 			tag = "ct:DerivativeVariable";
@@ -263,7 +257,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	//Define order in which symbols will eb translated to PharmML	
-	def void defineOrderOfConditionalSymbols(ConditionalStatement s, HashMap<String, Integer> symbolOrders, Integer base){
+	protected def void defineOrderOfConditionalSymbols(ConditionalStatement s, HashMap<String, Integer> symbolOrders, Integer base){
 		if (s.ifStatement != null){
 			s.ifStatement.addOrderOfConditionalSymbol(symbolOrders, base, 0);
 		}
@@ -286,7 +280,7 @@ class ModelDefinitionPrinter {
 		}
 	}	
 	
-	def void addOrderOfConditionalSymbol(BlockStatement s, HashMap<String, Integer> symbolOrders, Integer base, Integer order){
+	protected def void addOrderOfConditionalSymbol(BlockStatement s, HashMap<String, Integer> symbolOrders, Integer base, Integer order){
 		if (s.symbol != null){
 			var prev = symbolOrders.get(s.symbol.symbolName.name); 
 			if (prev == null) prev = 0;
@@ -298,7 +292,8 @@ class ModelDefinitionPrinter {
 		}
 	}	
 	
-	def print_mdef_RandomVariable(SymbolDeclaration s)'''
+	protected def print_mdef_RandomVariable(SymbolDeclaration s)
+	'''
 		«IF s.randomList != null»
 			<RandomVariable symbId="«s.symbolName.name»">
 				«s.print_VariabilityReference»
@@ -312,34 +307,32 @@ class ModelDefinitionPrinter {
 	/////////////////////////
 	
 	//+ STRUCTURAL_PARAMETER -> <StructuralModel>
-	def print_mdef_StructuralModel(){
+	protected def print_mdef_StructuralModel(){
 		var model ="";
-		for (o: mcl.objects){
-			if (o.modelObject != null){
-				var variables = "";
-				for (b: o.modelObject.blocks){
-					if (b.modelPredictionBlock != null){
-						for (st: b.modelPredictionBlock.statements){
-							if (st.statement != null) {
-								variables = variables + '''«st.statement.print_BlockStatement("ct:Variable", true)»''';
-							} else 
-								if (st.odeBlock != null){
-									for (s: st.odeBlock.statements){
-										variables = variables + '''«s.print_BlockStatement("ct:Variable", true)»''';	
-									}
+		if (mObj != null){
+			var variables = "";
+			for (b: mObj.blocks){
+				if (b.modelPredictionBlock != null){
+					for (st: b.modelPredictionBlock.statements){
+						if (st.statement != null) {
+							variables = variables + '''«st.statement.print_BlockStatement("ct:Variable", true)»''';
+						} else 
+							if (st.odeBlock != null){
+								for (s: st.odeBlock.statements){
+									variables = variables + '''«s.print_BlockStatement("ct:Variable", true)»''';	
 								}
-						}
+							}
 					}
 				}
-				model = model + 
-				'''
-					«IF (variables.length > 0)»
-						<StructuralModel blkId="sm.«o.objectName.name»">
-							«IF (variables.length > 0)»«variables»«ENDIF»
-						</StructuralModel>
-					«ENDIF»
-				'''
 			}
+			model = model + 
+			'''
+				«IF (variables.length > 0)»
+					<StructuralModel blkId="sm.«mObjName»">
+						«IF (variables.length > 0)»«variables»«ENDIF»
+					</StructuralModel>
+				«ENDIF»
+			'''
 		}
 		return model;
 	}
@@ -347,33 +340,31 @@ class ModelDefinitionPrinter {
 	/////////////////////////////
 	// I.f Observation Model
 	/////////////////////////////
-	def print_mdef_ObservationModel(){
+	protected def print_mdef_ObservationModel(){
 		var model = "";
-		for (o: mcl.objects){
-			if (o.modelObject != null){
-				var statements = "";
-				for (b: o.modelObject.blocks){
-					if (b.observationBlock != null){
-						for (st: b.observationBlock.statements){
-							statements = statements + '''«st.print_mdef_ObservationModel»''';
-						}
+		if (mObj != null){
+			var statements = "";
+			for (b: mObj.blocks){
+				if (b.observationBlock != null){
+					for (st: b.observationBlock.statements){
+						statements = statements + '''«st.print_mdef_ObservationModel»''';
 					}
 				}
-				model = model +
-				'''
-					«IF (statements.length > 0)»
-						<ObservationModel blkId="om.«o.objectName.name»">
-							«statements»
-						</ObservationModel>
-					«ENDIF»
-				'''				
 			}
+			model = model +
+			'''
+				«IF (statements.length > 0)»
+					<ObservationModel blkId="om.«mObjName»">
+						«statements»
+					</ObservationModel>
+				«ENDIF»
+			'''				
 		}
 		return model;
 	}
 	
 	//Print splitting random variables and simple parameters, needed for ObservationModel 
-	def print_mdef_ObservationModel(BlockStatement st)'''
+	protected def print_mdef_ObservationModel(BlockStatement st)'''
 		«IF st.symbol != null»
 			«st.symbol.print_mdef_ObservationModel»
 		«ENDIF»
@@ -383,7 +374,7 @@ class ModelDefinitionPrinter {
 	//TODO print conditionally defined observation models «st.statement.print_ConditionalStatement(tag)»
 		
 	//Print observation model declaration
-	def print_mdef_ObservationModel(SymbolDeclaration s)'''
+	protected def print_mdef_ObservationModel(SymbolDeclaration s)'''
 		«IF s.expression != null»
 			«IF s.expression.expression != null»
 				«var expr = s.expression.expression»
@@ -406,7 +397,7 @@ class ModelDefinitionPrinter {
 	'''	
 	
 	//TODO: add blkIdRef
-	def print_VariabilityReference(SymbolDeclaration s)'''
+	protected def print_VariabilityReference(SymbolDeclaration s)'''
 		«IF s.randomList != null»
 			«val level = getAttribute(s.randomList.arguments, AttributeValidator::attr_level.name)»
 			«IF level.length > 0»
@@ -446,16 +437,14 @@ class ModelDefinitionPrinter {
 	'''*/
 	
 	//+ returns distribution for the first declaration with a given name
-	def defineDistribution(String ref){
+	protected def defineDistribution(String ref){
 		//find paramName in RANDOM_VARIABLES_DEFINITION
-		for (MclObject o: mcl.objects){
-			if (o.modelObject != null){
-				for (b: o.modelObject.blocks){
-					if(b.randomVariableDefinitionBlock != null){
-						for (s: b.randomVariableDefinitionBlock.variables){
-							if (s.symbolName.name.equals(ref))
-								return s;
-						}
+		if (mObj != null){
+			for (b: mObj.blocks){
+				if(b.randomVariableDefinitionBlock != null){
+					for (s: b.randomVariableDefinitionBlock.variables){
+						if (s.symbolName.name.equals(ref))
+							return s;
 					}
 				}
 			}
@@ -463,7 +452,7 @@ class ModelDefinitionPrinter {
 		return null;
 	}
 	
-	def print_BlockStatement(BlockStatement st, String initTag, Boolean printType){
+	protected def print_BlockStatement(BlockStatement st, String initTag, Boolean printType){
 		var tag = initTag;
 		if (st.symbol != null)
 			if ((tag.indexOf("Variable") > 0) && deriv_vars.contains(st.symbol.symbolName.name))
@@ -487,10 +476,10 @@ class ModelDefinitionPrinter {
 	/////////////////////////////
 	// I.i CorrelationModel
 	/////////////////////////////
-	def print_mdef_CollerationModel(MclObject o){
+	protected def print_mdef_CollerationModel(){
 		var model = "";
-		if (o.parameterObject != null){
-			for (b: o.parameterObject.blocks){
+		if (pObj != null){
+			for (b: pObj.blocks){
 				if (b.variabilityBlock != null){
 					var statements = "";
 					for (c: b.variabilityBlock.statements){
@@ -504,13 +493,13 @@ class ModelDefinitionPrinter {
 					}
 					for (c: b.variabilityBlock.statements){
 						if (c.diagBlock != null){
-							statements = statements + print_mdef_Matrix(o.objectName.name, c.diagBlock.arguments, c.diagBlock.parameters);
+							statements = statements + print_mdef_Matrix(c.diagBlock.arguments, c.diagBlock.parameters);
 						}
 						if (c.matrixBlock != null){
-							statements = statements + print_mdef_Matrix(o.objectName.name, c.matrixBlock.arguments, c.matrixBlock.parameters);
+							statements = statements + print_mdef_Matrix(c.matrixBlock.arguments, c.matrixBlock.parameters);
 						}
 						if (c.sameBlock != null){
-							statements = statements + print_mdef_Same(o.objectName.name, c.sameBlock);
+							statements = statements + print_mdef_Same(c.sameBlock);
 						}
 					}
 					model = model +
@@ -527,23 +516,21 @@ class ModelDefinitionPrinter {
 		'''«model»''';
 	}
 
-	def getGetRandomVariableByVariability(SymbolDeclaration v) {
+	protected def getGetRandomVariableByVariability(SymbolDeclaration v) {
 		if (v.expression == null) return null;
 		if (v.expression.list  == null) return null;
 		var type = getAttribute(v.expression.list.arguments, AttributeValidator::attr_re_type.name);
 		var attrName = DistributionValidator::attr_var.name;
 		if (type.convertMatrixType.equals(MATRIX_STDEV))
 			attrName = DistributionValidator::attr_sd.name;
-		for (o: mcl.objects){
-			if (o.modelObject != null){
-				for (b: o.modelObject.blocks){
-					if (b.randomVariableDefinitionBlock != null){
-						for (s: b.randomVariableDefinitionBlock.variables){
-							if (s.randomList != null){
-								var variance = getAttribute(s.randomList.arguments, attrName);	
-								if (variance.equals(v.symbolName.name))
-									return s;
-							}
+		if (mObj != null){
+			for (b: mObj.blocks){
+				if (b.randomVariableDefinitionBlock != null){
+					for (s: b.randomVariableDefinitionBlock.variables){
+						if (s.randomList != null){
+							var variance = getAttribute(s.randomList.arguments, attrName);	
+							if (variance.equals(v.symbolName.name))
+								return s;
 						}
 					}
 				}
@@ -552,12 +539,12 @@ class ModelDefinitionPrinter {
 		return null;
 	}
 	
-	def print_mdef_Matrix(String objName, Arguments arguments, Symbols parameters){
+	protected def print_mdef_Matrix(Arguments arguments, Symbols parameters){
 		if (parameters != null){
 			var rowNames = "";
 			for (symbol: parameters.symbols){
 				if (symbol.symbolName != null){
-					rowNames = rowNames + print_ct_SymbolRef(objName, symbol.symbolName.name);
+					rowNames = rowNames + print_ct_SymbolRef(pObjName, symbol.symbolName.name);
 				}
 			}	
 			val matrixType = getAttribute(arguments, AttributeValidator::attr_re_type.name);
@@ -565,38 +552,34 @@ class ModelDefinitionPrinter {
 		}
 	}
 	
-	def print_mdef_Same(String objName, SameBlock same){
+	protected def print_mdef_Same(SameBlock same){
 		if (same.parameters != null){
 			var rowNames = "";
 			for (symbol: same.parameters.symbolNames){
 				if (symbol != null){
-					rowNames = rowNames + print_ct_SymbolRef(objName, symbol.name);
+					rowNames = rowNames + print_ct_SymbolRef(pObjName, symbol.name);
 				}
 			}	
 			val sameName = getAttribute(same.arguments, AttributeValidator::attr_name.name);
 			if (sameName.length > 0){
 				var Symbols parameters = null;
 				var String matrixType = null;
-				for (o: mcl.objects){
-					if (o.objectName.name.equals(objName)){
-						if (o.parameterObject != null){
-							for (b: o.parameterObject.blocks){
-								if (b.variabilityBlock != null){
-									for (c: b.variabilityBlock.statements){
-										if (c.diagBlock != null){
-											val name = getAttribute(c.diagBlock.arguments, AttributeValidator::attr_name.name);
-											if (name.equals(sameName)) {
-												parameters = c.diagBlock.parameters;
-												matrixType = getAttribute(c.diagBlock.arguments, AttributeValidator::attr_re_type.name);
-											}
-										}
-										if (c.matrixBlock != null){
-											val name = getAttribute(c.matrixBlock.arguments, AttributeValidator::attr_name.name);
-											if (name.equals(sameName)) {
-												parameters = c.matrixBlock.parameters;
-												matrixType = getAttribute(c.matrixBlock.arguments, AttributeValidator::attr_re_type.name);
-											}
-										}
+				if (pObj != null){
+					for (b: pObj.blocks){
+						if (b.variabilityBlock != null){
+							for (c: b.variabilityBlock.statements){
+								if (c.diagBlock != null){
+									val name = getAttribute(c.diagBlock.arguments, AttributeValidator::attr_name.name);
+									if (name.equals(sameName)) {
+										parameters = c.diagBlock.parameters;
+										matrixType = getAttribute(c.diagBlock.arguments, AttributeValidator::attr_re_type.name);
+									}
+								}
+								if (c.matrixBlock != null){
+									val name = getAttribute(c.matrixBlock.arguments, AttributeValidator::attr_name.name);
+									if (name.equals(sameName)) {
+										parameters = c.matrixBlock.parameters;
+										matrixType = getAttribute(c.matrixBlock.arguments, AttributeValidator::attr_re_type.name);
 									}
 								}
 							}
@@ -609,36 +592,6 @@ class ModelDefinitionPrinter {
 			}
 		}
 	}
-	
-	def print_ct_Matrix(String matrixType, String rowNames, Symbols parameters)
-	'''
-		<Matrix matrixType="«matrixType»">
-			<ct:RowNames>
-				«rowNames»
-			</ct:RowNames>
-			«IF parameters.symbols.size > 0»
-				<ct:MatrixRow>
-				«FOR i: 0..parameters.symbols.size - 1»
-					«val symbol = parameters.symbols.get(i)»
-						«print_Math_Expr(symbol.expression)»
-					«IF symbol.symbolName != null»
-						</ct:MatrixRow>
-						«IF i != parameters.symbols.size - 1»
-							<ct:MatrixRow>
-						«ENDIF»
-					«ENDIF»
-				«ENDFOR»	
-			«ENDIF»
-		</Matrix>
-	'''		
-
-	def convertMatrixType(String matrixType){
-		if (matrixType.equals(RandomEffectType::RE_VAR))
-			return MATRIX_COV;
-		if (matrixType.equals(RandomEffectType::RE_SD))
-			return MATRIX_STDEV;
-		return MATRIX_COV;	
-	}	
 }
 
 

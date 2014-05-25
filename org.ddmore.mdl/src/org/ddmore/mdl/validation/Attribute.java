@@ -34,7 +34,7 @@ public class Attribute {
 		return type;
 	}
 
-	public Boolean getMandatory(){
+	public Boolean isMandatory(){
 		return mandatory;
 	}
 	

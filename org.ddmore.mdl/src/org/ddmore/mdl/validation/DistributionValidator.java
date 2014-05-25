@@ -281,78 +281,78 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	//List of synonyms or alternatives
 	HashMap<String, String> alternative_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = 28966755954108955L; {
-			put(DistributionType.bernoulli+":"+attr_probability.name, attr_p.name);
-			put(DistributionType.bernoulli+":"+attr_p.name, attr_probability.name);
+			put(DistributionType.bernoulli+":"+attr_probability.getName(), attr_p.getName());
+			put(DistributionType.bernoulli+":"+attr_p.getName(), attr_probability.getName());
 			
-			put(DistributionType.binomial+":"+attr_numberOfTrials.name, attr_nTrials.name);
-			put(DistributionType.binomial+":"+attr_nTrials.name, attr_numberOfTrials.name);
-			put(DistributionType.binomial+":"+attr_numberOfTrials.name, attr_n.name);
-			put(DistributionType.binomial+":"+attr_nTrials.name, attr_n.name);
-			put(DistributionType.binomial+":"+attr_n.name, attr_nTrials.name);
-			put(DistributionType.binomial+":"+attr_n.name, attr_numberOfTrials.name);
+			put(DistributionType.binomial+":"+attr_numberOfTrials.getName(), attr_nTrials.getName());
+			put(DistributionType.binomial+":"+attr_nTrials.getName(), attr_numberOfTrials.getName());
+			put(DistributionType.binomial+":"+attr_numberOfTrials.getName(), attr_n.getName());
+			put(DistributionType.binomial+":"+attr_nTrials.getName(), attr_n.getName());
+			put(DistributionType.binomial+":"+attr_n.getName(), attr_nTrials.getName());
+			put(DistributionType.binomial+":"+attr_n.getName(), attr_numberOfTrials.getName());
 
-			put(DistributionType.binomial+":"+attr_probabilityOfSuccess.name, attr_p_ofSuccess.name);
-			put(DistributionType.binomial+":"+attr_p_ofSuccess.name, attr_probabilityOfSuccess.name);
+			put(DistributionType.binomial+":"+attr_probabilityOfSuccess.getName(), attr_p_ofSuccess.getName());
+			put(DistributionType.binomial+":"+attr_p_ofSuccess.getName(), attr_probabilityOfSuccess.getName());
 
-			put(DistributionType.categorical+":"+attr_ncat.name, attr_categories.name);
-			put(DistributionType.categorical+":"+attr_categories.name, attr_ncat.name);
+			put(DistributionType.categorical+":"+attr_ncat.getName(), attr_categories.getName());
+			put(DistributionType.categorical+":"+attr_categories.getName(), attr_ncat.getName());
 			
-			put(DistributionType.categorical+":"+attr_probabilities.name, attr_prob.name);
-			put(DistributionType.categorical+":"+attr_prob.name, attr_probabilities.name);
+			put(DistributionType.categorical+":"+attr_probabilities.getName(), attr_prob.getName());
+			put(DistributionType.categorical+":"+attr_prob.getName(), attr_probabilities.getName());
 			
-			put(DistributionType.chiSquare + ":" + attr_pnat_degreesOfFreedom.name, attr_pnat_dof.name);
-			put(DistributionType.chiSquare + ":" + attr_pnat_dof.name, attr_pnat_degreesOfFreedom.name); 
+			put(DistributionType.chiSquare + ":" + attr_pnat_degreesOfFreedom.getName(), attr_pnat_dof.getName());
+			put(DistributionType.chiSquare + ":" + attr_pnat_dof.getName(), attr_pnat_degreesOfFreedom.getName()); 
 
-			put(DistributionType.fDistribution + ":" + attr_denominator.name, attr_den.name);
-			put(DistributionType.fDistribution + ":" + attr_den.name, attr_denominator.name); 
-			put(DistributionType.fDistribution + ":" + attr_numerator.name, attr_num.name);
-			put(DistributionType.fDistribution + ":" + attr_num.name, attr_numerator.name); 
+			put(DistributionType.fDistribution + ":" + attr_denominator.getName(), attr_den.getName());
+			put(DistributionType.fDistribution + ":" + attr_den.getName(), attr_denominator.getName()); 
+			put(DistributionType.fDistribution + ":" + attr_numerator.getName(), attr_num.getName());
+			put(DistributionType.fDistribution + ":" + attr_num.getName(), attr_numerator.getName()); 
 			
-			put(DistributionType.geometric+":"+attr_probability.name, attr_p.name);
-			put(DistributionType.geometric+":"+attr_p.name, attr_probability.name);
+			put(DistributionType.geometric+":"+attr_probability.getName(), attr_p.getName());
+			put(DistributionType.geometric+":"+attr_p.getName(), attr_probability.getName());
 
-			put(DistributionType.hypergeometric+":"+attr_numberOfTrials.name, attr_nTrials.name);
-			put(DistributionType.hypergeometric+":"+attr_nTrials.name, attr_numberOfTrials.name);
-			put(DistributionType.hypergeometric+":"+attr_n.name, attr_nTrials.name);
-			put(DistributionType.hypergeometric+":"+attr_n.name, attr_numberOfTrials.name);
-			put(DistributionType.hypergeometric+":"+attr_numberOfTrials.name, attr_n.name);
-			put(DistributionType.hypergeometric+":"+attr_nTrials.name, attr_n.name);
-			put(DistributionType.hypergeometric+":"+attr_populationSize.name, attr_popSize.name);
-			put(DistributionType.hypergeometric+":"+attr_popSize.name, attr_populationSize.name);
-			put(DistributionType.hypergeometric+":"+attr_numberOfSuccesses.name, attr_nSuccess.name);
-			put(DistributionType.hypergeometric+":"+attr_nSuccess.name, attr_numberOfSuccesses.name);
+			put(DistributionType.hypergeometric+":"+attr_numberOfTrials.getName(), attr_nTrials.getName());
+			put(DistributionType.hypergeometric+":"+attr_nTrials.getName(), attr_numberOfTrials.getName());
+			put(DistributionType.hypergeometric+":"+attr_n.getName(), attr_nTrials.getName());
+			put(DistributionType.hypergeometric+":"+attr_n.getName(), attr_numberOfTrials.getName());
+			put(DistributionType.hypergeometric+":"+attr_numberOfTrials.getName(), attr_n.getName());
+			put(DistributionType.hypergeometric+":"+attr_nTrials.getName(), attr_n.getName());
+			put(DistributionType.hypergeometric+":"+attr_populationSize.getName(), attr_popSize.getName());
+			put(DistributionType.hypergeometric+":"+attr_popSize.getName(), attr_populationSize.getName());
+			put(DistributionType.hypergeometric+":"+attr_numberOfSuccesses.getName(), attr_nSuccess.getName());
+			put(DistributionType.hypergeometric+":"+attr_nSuccess.getName(), attr_numberOfSuccesses.getName());
 
-			put(DistributionType.logNormal+":"+attr_median.name, attr_mu.name);
-			put(DistributionType.logNormal+":"+attr_mu.name, attr_median.name);
-			put(DistributionType.logNormal+":"+attr_cv.name, attr_var.name);
-			put(DistributionType.logNormal+":"+attr_var.name, attr_cv.name);
+			put(DistributionType.logNormal+":"+attr_median.getName(), attr_mu.getName());
+			put(DistributionType.logNormal+":"+attr_mu.getName(), attr_median.getName());
+			put(DistributionType.logNormal+":"+attr_cv.getName(), attr_var.getName());
+			put(DistributionType.logNormal+":"+attr_var.getName(), attr_cv.getName());
 
-			put(DistributionType.multinomial+":"+attr_numberOfTrials.name, attr_nTrials.name);
-			put(DistributionType.multinomial+":"+attr_nTrials.name, attr_numberOfTrials.name);
-			put(DistributionType.multinomial+":"+attr_probabilities.name, attr_prob.name);
-			put(DistributionType.multinomial+":"+attr_prob.name, attr_probabilities.name);
+			put(DistributionType.multinomial+":"+attr_numberOfTrials.getName(), attr_nTrials.getName());
+			put(DistributionType.multinomial+":"+attr_nTrials.getName(), attr_numberOfTrials.getName());
+			put(DistributionType.multinomial+":"+attr_probabilities.getName(), attr_prob.getName());
+			put(DistributionType.multinomial+":"+attr_prob.getName(), attr_probabilities.getName());
 			
-			put(DistributionType.multivariateStudentT + ":" + attr_pnat_degreesOfFreedom.name, attr_pnat_dof.name);
-			put(DistributionType.multivariateStudentT + ":" + attr_pnat_dof.name, attr_pnat_degreesOfFreedom.name); 
+			put(DistributionType.multivariateStudentT + ":" + attr_pnat_degreesOfFreedom.getName(), attr_pnat_dof.getName());
+			put(DistributionType.multivariateStudentT + ":" + attr_pnat_dof.getName(), attr_pnat_degreesOfFreedom.getName()); 
 
-			put(DistributionType.negativeBinomial+":"+attr_numberOfFailures.name, attr_nFail.name);
-			put(DistributionType.negativeBinomial+":"+attr_nFail.name, attr_numberOfFailures.name);
-			put(DistributionType.negativeBinomial+":"+attr_probability.name, attr_p.name);
-			put(DistributionType.negativeBinomial+":"+attr_p.name, attr_probability.name);					
+			put(DistributionType.negativeBinomial+":"+attr_numberOfFailures.getName(), attr_nFail.getName());
+			put(DistributionType.negativeBinomial+":"+attr_nFail.getName(), attr_numberOfFailures.getName());
+			put(DistributionType.negativeBinomial+":"+attr_probability.getName(), attr_p.getName());
+			put(DistributionType.negativeBinomial+":"+attr_p.getName(), attr_probability.getName());					
 
-			put(DistributionType.studentT + ":" + attr_pnat_degreesOfFreedom.name, attr_pnat_dof.name);
-			put(DistributionType.studentT + ":" + attr_pnat_dof.name, attr_pnat_degreesOfFreedom.name); 
+			put(DistributionType.studentT + ":" + attr_pnat_degreesOfFreedom.getName(), attr_pnat_dof.getName());
+			put(DistributionType.studentT + ":" + attr_pnat_dof.getName(), attr_pnat_degreesOfFreedom.getName()); 
 
-			put(DistributionType.normal + ":" + attr_var.name, attr_sd.name); 
-			put(DistributionType.normal + ":" + attr_sd.name, attr_var.name);
+			put(DistributionType.normal + ":" + attr_var.getName(), attr_sd.getName()); 
+			put(DistributionType.normal + ":" + attr_sd.getName(), attr_var.getName());
 			
-			put(DistributionType.uniform + ":" + attr_numberOfClasses.name, attr_min.name); 
-			put(DistributionType.uniform + ":" + attr_min.name, attr_numberOfClasses.name); 
-			put(DistributionType.uniform + ":" +attr_max.name, attr_numberOfClasses.name);
+			put(DistributionType.uniform + ":" + attr_numberOfClasses.getName(), attr_min.getName()); 
+			put(DistributionType.uniform + ":" + attr_min.getName(), attr_numberOfClasses.getName()); 
+			put(DistributionType.uniform + ":" +attr_max.getName(), attr_numberOfClasses.getName());
 			
-			put(DistributionType.unif + ":" + attr_numberOfClasses.name, attr_min.name); 
-			put(DistributionType.unif + ":" + attr_min.name, attr_numberOfClasses.name); 
-			put(DistributionType.unif + ":" +attr_max.name, attr_numberOfClasses.name);
+			put(DistributionType.unif + ":" + attr_numberOfClasses.getName(), attr_min.getName()); 
+			put(DistributionType.unif + ":" + attr_min.getName(), attr_numberOfClasses.getName()); 
+			put(DistributionType.unif + ":" +attr_max.getName(), attr_numberOfClasses.getName());
 		}
 	};
 
@@ -360,15 +360,15 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	HashMap<String, String> exclusive_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = -4192464782401647313L;
 		{
-			put(attr_var.name, attr_sd.name); 
-			put(attr_sd.name, attr_var.name);
+			put(attr_var.getName(), attr_sd.getName()); 
+			put(attr_sd.getName(), attr_var.getName());
 
-			put(attr_var.name, attr_cv.name); 
-			put(attr_cv.name, attr_var.name);
+			put(attr_var.getName(), attr_cv.getName()); 
+			put(attr_cv.getName(), attr_var.getName());
 
-			put(attr_numberOfClasses.name, attr_min.name); 
-			put(attr_min.name, attr_numberOfClasses.name); 
-			put(attr_max.name, attr_numberOfClasses.name);
+			put(attr_numberOfClasses.getName(), attr_min.getName()); 
+			put(attr_min.getName(), attr_numberOfClasses.getName()); 
+			put(attr_max.getName(), attr_numberOfClasses.getName());
 		}
 	};
 
@@ -378,7 +378,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
         	List<Attribute> recognizedAttrs = distr_attrs.get(tokens[0]);
         	if (recognizedAttrs != null)
 	        	for (Attribute attr: recognizedAttrs){
-	        		if (attr.name.equals(tokens[1])) return attr;
+	        		if (attr.getName().equals(tokens[1])) return attr;
 	        	}
         }
 		return null;
@@ -386,27 +386,27 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	
 	@Check
 	public void checkRequiredArguments(DistributionArguments args){
-		DistributionArgument type = findDistributionAttribute(args, attr_type.name);
+		DistributionArgument type = findDistributionAttribute(args, attr_type.getName());
 		if ((type != null) && (DistributionType.DISTR_VALUES.contains(type.getDistribution().getIdentifier()))){
 			String typeName = type.getDistribution().getIdentifier();
 			List<Attribute> recognized_attrs = distr_attrs.get(typeName);
 			for (Attribute arg: recognized_attrs){
-				if (arg.mandatory){
-					DistributionArgument actualArg = findDistributionAttribute(args, arg.name);
+				if (arg.isMandatory()){
+					DistributionArgument actualArg = findDistributionAttribute(args, arg.getName());
 					if (actualArg == null){
-						String synonym = alternative_attrs.get(type.getDistribution().getIdentifier() +":" + arg.name);
+						String synonym = alternative_attrs.get(type.getDistribution().getIdentifier() +":" + arg.getName());
 						if (synonym != null) actualArg = findDistributionAttribute(args, synonym);
 						if (actualArg == null)
-							warning(MSG_DISTR_ATTRIBUTE_MISSING + ": " + arg.name, 
+							warning(MSG_DISTR_ATTRIBUTE_MISSING + ": " + arg.getName(), 
 									MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
-									MSG_DISTR_ATTRIBUTE_MISSING, typeName + ":" + arg.name);	
+									MSG_DISTR_ATTRIBUTE_MISSING, typeName + ":" + arg.getName());	
 					}
 				}
 			}
 		} else {
 			warning(MSG_DISTR_UNKNOWN, 
 				MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
-				MSG_DISTR_UNKNOWN, attr_type.name);	
+				MSG_DISTR_UNKNOWN, attr_type.getName());	
 		}
 	}
 	
@@ -434,7 +434,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 						argument.getArgumentName().getName());				
 			}
 		}
-		DistributionArgument type = findDistributionAttribute(args, attr_type.name);
+		DistributionArgument type = findDistributionAttribute(args, attr_type.getName());
 		if (type != null){
 			List<Attribute> recognized_attrs = distr_attrs.get(type.getDistribution().getIdentifier());
 			if (checkAttribute(recognized_attrs, argument)) return;
@@ -447,12 +447,12 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	
 	private Boolean checkAttribute(List<Attribute> recognized_attrs, DistributionArgument argument){
 		for (Attribute attr: recognized_attrs){
-			if (attr.name.equals(argument.getArgumentName().getName())) {
-				boolean isValid = MdlDataType.validateType(attr.type, argument);
+			if (attr.getName().equals(argument.getArgumentName().getName())) {
+				boolean isValid = MdlDataType.validateType(attr.getType(), argument);
 				if (!isValid){
 					warning(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
 						": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
-							attr.type.name(), 
+							attr.getType().name(), 
 						MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME,
 						MSG_DISTR_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());
 				}

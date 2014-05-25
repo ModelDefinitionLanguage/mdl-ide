@@ -1,95 +1,23 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import org.ddmore.mdl.mdl.Mcl
 import java.util.ArrayList
 import org.ddmore.mdl.validation.AttributeValidator
 import org.apache.commons.io.FilenameUtils
 import org.ddmore.mdl.types.InputFormatType
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.mdl.SymbolDeclaration
+import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 
 class DataSetPrinter {
-	protected Mcl mcl = null;
-	protected extension Constants constants = new Constants();
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver=null;
 	
-	new(Mcl mcl, MathPrinter mathPrinter, ReferenceResolver resolver){
-		this.mcl = mcl;
+	new(MathPrinter mathPrinter, ReferenceResolver resolver){
 		this.mathPrinter = mathPrinter;
 		this.resolver = resolver;
 	}	
 	
-	def getModelObject(String name){
-		for (o: mcl.objects){
-			if (o.objectName.name.equals(name)) return o.modelObject;
-		}
-		return null;
-	}
-	
-	def getDataObject(String name){
-		for (o: mcl.objects){
-			if (o.objectName.name.equals(name)) return o.dataObject;
-		}
-		return null;
-	}
-	
-	def getParamObject(String name){
-		for (o: mcl.objects){
-			if (o.objectName.name.equals(name)) return o.parameterObject;
-		}
-		return null;
-	}
-	
-	def getTaskObject(String name){
-		for (o: mcl.objects){
-			if (o.objectName.name.equals(name)) return o.taskObject;
-		}
-		return null;
-	}
-	
-	/* //Read the content of an external file
-	def getDataFileReader(String filePath){
-		var BufferedReader fileReader = null;		
-		val platformString = mcl.eResource().getURI().toPlatformString(true);
-		mcl.eResource.URI;
-		val modelFile = ResourcesPlugin::getWorkspace().getRoot().getFile(new Path(platformString));
-		//Try path relatively to the model file
-		val parent = modelFile.getParent();
-		try {
-			for(member : parent.members()){
-				if (member.getName().equals(filePath)) {
-					fileReader = new BufferedReader(new FileReader(filePath)); 
-				}
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-		//Try path relatively to the project root
-		val proj = modelFile.getProject();
-		val path = new Path(filePath);
-		val requestedFile = proj.getFile(path);
-		if (requestedFile.exists()) {
-			fileReader = new BufferedReader(new FileReader(filePath)); 
-		}
-		return fileReader;
-	}
-	
-	def getDataFileContent(String filePath){
-		var values = new ArrayList<String[]>();
-		var fileReader = getDataFileReader(filePath);
-		if (fileReader.ready()){ 
-			var line = "";
-			while ((line = fileReader.readLine()) != null) {
-				val atoms = line.split("\\s{1,}|\\t{1,}|,|;");
-	        	values.add(atoms);
-	        }
-	    	fileReader.close();			
-		}		
-		return values;
-	}	*/
-	
-	def print_ds_Table(ArrayList<String> rows)'''
+	protected def print_ds_Table(ArrayList<String> rows)'''
 		<ds:Table>
 			«FOR i: 0..rows.size-1»
 				«rows.get(i)»
@@ -97,11 +25,11 @@ class DataSetPrinter {
 		<ds:Table>
 	'''
 	
-	def print_ds_Row(ArrayList<String> values){
+	protected def print_ds_Row(ArrayList<String> values){
 		return '''<Row>«FOR i: 0..values.size-1»«values.get(i).print_ct_Value»«ENDFOR»</Row>''';
 	}
 	
-	def print_ds_Definition(ArrayList<String> columnNames, ArrayList<String> columnTypes)'''
+	protected def print_ds_Definition(ArrayList<String> columnNames, ArrayList<String> columnTypes)'''
 		<ds:Definition>
 			«FOR i: 0..columnNames.size-1»
 				«var columnId = columnNames.get(i)»
@@ -110,11 +38,11 @@ class DataSetPrinter {
 		</ds:Definition>
 	'''
 	
-	def print_ds_Column(String columnId, String columnType, String columnNum)'''
+	protected def print_ds_Column(String columnId, String columnType, String columnNum)'''
 		<ds:Column columnId="«columnId»" columnType="«columnType»" valueType="«columnId.getValueType»" columnNum="«columnNum»"/>
 	'''
 	
-	def print_ds_ColumnMapping(String columnId, String symbId, String blkIdRef)'''
+	protected def print_ds_ColumnMapping(String columnId, String symbId, String blkIdRef)'''
 		<ColumnMapping>
 			<ds:ColumnRef columnIdRef="«columnId»"/>
 			<ds:SymbRef «IF blkIdRef.length > 0» blkIdRef="«blkIdRef»" «ENDIF»symbIdRef="«symbId»"/>
@@ -122,9 +50,9 @@ class DataSetPrinter {
 	'''
 		
 	 //+ Print data set
-	def print_ds_DataSet(String dObjName, String mObjName){
-		val dObj = getDataObject(dObjName);
+	protected def print_ds_DataSet(String mObjName, String dObjName){
 		val mObj = getModelObject(mObjName);
+		val dObj = getDataObject(dObjName);
 		if (dObj == null || mObj == null) return "";
 		var res = "";
 		for (b: dObj.blocks)	{
@@ -132,9 +60,9 @@ class DataSetPrinter {
 				if (b.sourceBlock.list!=null){
 					val inputFormat = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_inputformat.name);
 					if (inputFormat.equals(InputFormatType::FORMAT_NONMEM)){
-						res  = res + print_ds_NONMEM_DataSet(dObjName, mObjName);
+						res  = res + print_ds_NONMEM_DataSet(mObjName, dObjName);
 					} else {
-						res = res + print_ds_Objective_DataSet(dObjName, mObjName);
+						res = res + print_ds_Objective_DataSet(mObjName, dObjName);
 					}					
 				}
 			}
@@ -142,7 +70,7 @@ class DataSetPrinter {
 		return res;
 	}
 	
-	def getColumnType(SymbolDeclaration modelVar){
+	protected def getColumnType(SymbolDeclaration modelVar){
 		var columnType = DefaultValues::USE_VAR;
 		if (modelVar.expression != null){
 			if (modelVar.expression.list != null){
@@ -153,9 +81,9 @@ class DataSetPrinter {
 		return columnType;
 	}
 	
-	def print_ds_Objective_DataSet(String dObjName, String mObjName){
-		val dObj = getDataObject(dObjName);
+	protected def print_ds_Objective_DataSet(String mObjName, String dObjName){
 		val mObj = getModelObject(mObjName);
+		val dObj = getDataObject(dObjName);
 		if (dObj == null || mObj == null) return "";
 		var res = "";
 		var columnNames = newHashSet;
@@ -197,9 +125,9 @@ class DataSetPrinter {
 		'''
 	}
 
-	def print_ds_NONMEM_DataSet(String dObjName, String mObjName){
-		val dObj = getDataObject(dObjName);
+	protected def print_ds_NONMEM_DataSet(String mObjName, String dObjName){
 		val mObj = getModelObject(mObjName);
+		val dObj = getDataObject(dObjName);
 		if (dObj == null || mObj == null) return "";
 		var res = "";
 		for (b: dObj.blocks){
@@ -234,7 +162,7 @@ class DataSetPrinter {
 		'''
 	}
 	
-	def print_ds_ImportData(String dObjName){
+	protected def print_ds_ImportData(String dObjName){
 		val dObj = getDataObject(dObjName);
 		if (dObj == null) return "";
 		var res = "";
@@ -291,13 +219,13 @@ class DataSetPrinter {
 			}
 		}
 		'''
-		<ds:DataSet oid="«BLK_DS_DATASET + dObjName»">
+		<DataSet xmln="" oid="«BLK_DS_DATASET + dObjName»">
 			«res»
-		</ds:DataSet>
+		</DataSet>
 		''';
 	}
 	
-	def print_ds_TargetToolData(String dObjName, String source){		
+	protected def print_ds_TargetToolData(String dObjName, String source){		
 		val fileName = FilenameUtils::getBaseName(source);
 		val filePath = FilenameUtils::getFullPath(source);
 		'''
@@ -310,7 +238,7 @@ class DataSetPrinter {
 		'''
 	}
 	
-	def print_ds_TargetTool(String dObjName){
+	protected def print_ds_TargetTool(String dObjName){
 		val dObj = getDataObject(dObjName);
 		if (dObj == null) return "";
 		val source = dObj.getScriptFile;
@@ -325,7 +253,7 @@ class DataSetPrinter {
 		'''
 	}
 	
-	def print_mdef_TargetToolReference(String dObjName){
+	protected def print_mdef_TargetToolReference(String dObjName){
 		'''
 			<TargetToolReference>
 				<ct:OidRef oidRef="«BLK_DS_TARGET_TOOL + dObjName»"/>

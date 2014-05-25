@@ -7,23 +7,44 @@ import org.ddmore.mdl.types.MdlDataType;
 public class FunctionSignature {
 	String name;
 	Integer numberOfParams; 
-	ArrayList<Attribute> input_params;
-	ArrayList<Attribute> output_params;
-	MdlDataType returnType = MdlDataType.TYPE_UNDEFINED;
+	ArrayList<Attribute> inputParams;
+	ArrayList<Attribute> outputParams;
+	MdlDataType type = MdlDataType.TYPE_UNDEFINED;
 	
-	FunctionSignature(String name, Integer numberOfParams){
+	public FunctionSignature(String name, Integer numberOfParams){
 		this.name = name;
 		this.numberOfParams = numberOfParams;
 	}
 
-	FunctionSignature(String name, ArrayList<Attribute> input_params){
+	public FunctionSignature(String name, ArrayList<Attribute> inputParams, ArrayList<Attribute> outputParams){
 		this.name = name;
-		this.input_params = input_params;
+		this.inputParams = inputParams;
+		this.outputParams = outputParams;
+	}
+	
+	public FunctionSignature(String name, ArrayList<Attribute> inputParams, ArrayList<Attribute> outputParams, MdlDataType type){
+		this(name, inputParams, outputParams);
+		this.type = type;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public MdlDataType getType(){
+		return type;
+	}
+	
+	public Integer getNumberOfParams(){
+		return numberOfParams;
 	}
 
-	FunctionSignature(String name, ArrayList<Attribute> input_params, ArrayList<Attribute> output_params){
-		this.name = name;
-		this.input_params = input_params;
-		this.output_params = output_params;
+	public ArrayList<Attribute> getInputParams(){
+		return inputParams;
 	}
+	
+	public ArrayList<Attribute> getOutputParams(){
+		return outputParams;
+	}
+
 }

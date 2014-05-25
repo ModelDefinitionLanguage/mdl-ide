@@ -12,12 +12,10 @@ import org.ddmore.mdl.mdl.DistributionArgument
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.DistributionValidator
 import org.ddmore.mdl.types.DistributionType
+import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
+import eu.ddmore.converter.mdl2pharmml.domain.Attribute
 
-//TODO: test for all types of distributions 
-//TODO: document + examples
 class DistributionPrinter extends MdlPrinter{
-
-	extension Constants constants = new Constants();
 
 	//Recognised types of distributions and pairs (attribute, value type) to print as PharmML tags
 	val distribution_attrs = newHashMap(
@@ -219,10 +217,7 @@ class DistributionPrinter extends MdlPrinter{
 	//NOTE: all attributes in distributions are named
 	protected def print_DistributionDefault(RandomList randomList, String type){
 		val recognizedArgs = distribution_attrs.get(type);
-		if (recognizedArgs == null) {
-			System::out.println("MDL2PharmML: Could not find attributes for " + type);
-			return "";
-		}
+		if (recognizedArgs == null) return "";
 		'''
 		«var tagName = type.substring(0, 1).toUpperCase() + type.substring(1)»
 		«if (tagName.contains("Distribution")) tagName = tagName.substring(0, tagName.indexOf("Distribution"))»	

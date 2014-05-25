@@ -51,7 +51,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//List of declared variability subblocks diag and matrix (to match with same blocks)
 	public static HashMap<String, ArrayList<String>> variabilitySubblockNames = new HashMap<String, ArrayList<String>>();
 
-	public static ArrayList<ModelingObjectGroup> linkedObjects = new ArrayList<ModelingObjectGroup>(); 
+	public static ArrayList<ModellingObjectGroup> linkedObjects = new ArrayList<ModellingObjectGroup>(); 
 	
 	@Check
 	public void updateObjectList(Mcl mcl){
@@ -90,14 +90,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		    	if (container instanceof ImportBlockImpl){
 		    		for (ImportedFunction f: ((ImportBlock) container).getFunctions()){
 		    			if (f.getList() != null)
-		    				varList.addAll(Utils.extractSymbolNames(f.getList().getArguments(), AttributeValidator.attr_output.name));
+		    				varList.addAll(Utils.extractSymbolNames(f.getList().getArguments(), AttributeValidator.attr_output.getName()));
 		    		}
 		    	}
 		    	if (container instanceof FunctionCallStatementImpl){
 		    		FunctionCallStatement st = (FunctionCallStatement) container;
 					varList.add(st.getSymbolName().getName());
 		    		if (st.getExpression().getArguments() != null)
-			    		varList.addAll(Utils.extractSymbolNames(st.getExpression().getArguments(), AttributeValidator.attr_output.name));
+			    		varList.addAll(Utils.extractSymbolNames(st.getExpression().getArguments(), AttributeValidator.attr_output.getName()));
 				}
 				//DataObject -> SOURCE
 		    	if (container instanceof SourceBlockImpl){
@@ -136,11 +136,11 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					if (block.getVariabilityBlock() != null){
 						for (VariabilityBlockStatement s: block.getVariabilityBlock().getStatements()){
 							if (s.getMatrixBlock() != null){
-								String name = Utils.getAttributeValue(s.getMatrixBlock().getArguments(), AttributeValidator.attr_name.name);
+								String name = Utils.getAttributeValue(s.getMatrixBlock().getArguments(), AttributeValidator.attr_name.getName());
 								if (name.length() > 0) paramList.add(name);
 							}
 							if (s.getDiagBlock() != null){
-								String name = Utils.getAttributeValue(s.getDiagBlock().getArguments(), AttributeValidator.attr_name.name);
+								String name = Utils.getAttributeValue(s.getDiagBlock().getArguments(), AttributeValidator.attr_name.getName());
 								if (name.length() > 0) paramList.add(name);
 							}
 						}
@@ -177,7 +177,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 								} 
 						}
 						if ((mdlObj != null) && (dataObj != null) && (paramObj != null)){
-							ModelingObjectGroup mog = new ModelingObjectGroup(mdlObj, paramObj, dataObj);
+							ModellingObjectGroup mog = new ModellingObjectGroup(mdlObj, paramObj, dataObj);
 							linkedObjects.add(mog);
 						}
 					//}
@@ -189,7 +189,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//Match the name of the same block with the name of a matrix or a diag block
 	@Check
 	public void validateSameSubblockName(SameBlock b){
-		String name = Utils.getAttributeValue(b.getArguments(), AttributeValidator.attr_name.name);
+		String name = Utils.getAttributeValue(b.getArguments(), AttributeValidator.attr_name.getName());
 		if (name.length() > 0){
 			ObjectName objName = Utils.getObjectName(b.eContainer());
 			if (!Utils.isIdentifierDeclared(variabilitySubblockNames, name, objName.getName()))
@@ -383,7 +383,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    			//Compare reference with references in FunctionCall param attribute
 	    			//Does not guarantee the correctness as references may occur in expressions
 	    			FunctionCall funcCall = s.getExpression();
-	    			params.addAll(Utils.extractSymbolNames(funcCall.getArguments(), AttributeValidator.attr_output.name));
+	    			params.addAll(Utils.extractSymbolNames(funcCall.getArguments(), AttributeValidator.attr_output.getName()));
 	       			ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
 	       			if (paramRef != null){
 	       				if (!params.contains(paramRef.getName())){

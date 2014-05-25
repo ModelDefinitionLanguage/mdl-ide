@@ -145,7 +145,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	@Check
 	public void checkUnitValue(Argument arg){
 		if (arg.getArgumentName() != null){
-			if (arg.getArgumentName().getName().equals("units")){
+			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
 				String unitValue = Utils.getAttributeValue(arg);
 				if (unitValue.length() > 0){
 					unitValue = unitValue.replaceAll("\\s+","");

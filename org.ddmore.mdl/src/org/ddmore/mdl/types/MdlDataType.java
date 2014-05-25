@@ -9,7 +9,6 @@ package org.ddmore.mdl.types;
 import java.util.Arrays;
 import java.util.List;
 
-import org.ddmore.mdl.generator.MathPrinter;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.DistributionArgument;
@@ -24,6 +23,8 @@ import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.validation.MdlJavaValidator;
+
+import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 public enum MdlDataType {
 
@@ -58,7 +59,6 @@ public enum MdlDataType {
     public final static List<String> CONSTANTS = Arrays.asList(
     		"INF", "-INF", "T", "NEWIND", "IREP", "ICALL", "MIXEST", "MIXNUM");
 	
-    
 	//Validates required type or reference
 	static public boolean validateType(MdlDataType type, DistributionArgument arg){
 		if (arg.getValue() != null){
@@ -409,7 +409,7 @@ public enum MdlDataType {
 		}
 		else {
 			OrExpression orExpr = expr.getConditionalExpression().getExpression();
-			return isPositiveNatural(MathPrinter.toStr(orExpr));
+			return isPositiveNatural(MdlPrinter.getInstance().toStr(orExpr));
 		}
 	}
 	
@@ -432,7 +432,7 @@ public enum MdlDataType {
 		}
 		else {
 			OrExpression orExpr = expr.getConditionalExpression().getExpression();
-			return isNatural(MathPrinter.toStr(orExpr));
+			return isNatural(MdlPrinter.getInstance().toStr(orExpr));
 		}
 	}	
 	
@@ -455,7 +455,7 @@ public enum MdlDataType {
 		}
 		else {
 			OrExpression orExpr = expr.getConditionalExpression().getExpression();
-			return isInteger(MathPrinter.toStr(orExpr));
+			return isInteger(MdlPrinter.getInstance().toStr(orExpr));
 		}
 	}
 	
@@ -477,7 +477,7 @@ public enum MdlDataType {
 		}
 		else {
 			OrExpression orExpr = expr.getConditionalExpression().getExpression();
-			return isProbability(MathPrinter.toStr(orExpr));
+			return isProbability(MdlPrinter.getInstance().toStr(orExpr));
 		}
 	}
 	
@@ -500,7 +500,7 @@ public enum MdlDataType {
 		}
 		else {
 			OrExpression orExpr = expr.getConditionalExpression().getExpression();
-			return isPositiveReal(MathPrinter.toStr(orExpr));
+			return isPositiveReal(MdlPrinter.getInstance().toStr(orExpr));
 		}
 	}
 	
@@ -523,7 +523,7 @@ public enum MdlDataType {
 		}
 		else {
 			OrExpression orExpr = expr.getConditionalExpression().getExpression();
-			return isReal(MathPrinter.toStr(orExpr));
+			return isReal(MdlPrinter.getInstance().toStr(orExpr));
 		}
 	}
 	

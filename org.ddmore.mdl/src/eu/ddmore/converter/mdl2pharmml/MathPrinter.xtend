@@ -28,11 +28,15 @@ import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.mdl.FunctionName
+import org.ddmore.mdl.mdl.Constant
+import org.ddmore.mdl.types.RandomEffectType
+import org.ddmore.mdl.mdl.Symbols
+import org.ddmore.mdl.mdl.TaskFunctionBlock
+import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
+import eu.ddmore.converter.mdl2pharmml.domain.Piece
 
 class MathPrinter extends MdlPrinter{
 
-	//Needed to fill BlkIdRef attributes of references in expressions that point to PharmML blocks where variables are defined
-    public extension Constants constants = new Constants();
  	extension ReferenceResolver resolver=null
     
     new(ReferenceResolver resolver) {
@@ -375,11 +379,14 @@ class MathPrinter extends MdlPrinter{
 		«IF expr.symbol !=null»
 			«expr.symbol.print_ct_SymbolRef»
 		«ENDIF»
+		«IF expr.constant != null»
+			«expr.constant.print_ct_Constant»
+		«ENDIF»
 		«IF expr.attribute !=null»
 			«expr.attribute.print_ct_SymbolRef»
 		«ENDIF»
 	'''
-	
+
 	def CharSequence print_Math_Primary(Primary p)'''
 		«IF p.number != null»
 			«p.number.print_ct_Value»
@@ -431,6 +438,10 @@ class MathPrinter extends MdlPrinter{
 			return '''<ct:Id>«value»</ct:Id>''';
 		}
 	}
+	
+	def getPrint_ct_Constant(Constant constant)'''
+		<Constant op="«constant.identifier.convertConstant»"/>
+	'''
 	
 	def getValueType(String value){
 		try{        			
@@ -582,6 +593,108 @@ class MathPrinter extends MdlPrinter{
 		return model;
 	}
 	
+	//+
+	def print_ct_SymbolRef(String objName, String name)'''
+		«var blkId = resolver.getReferenceBlock(objName, name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
+	'''
+
+	//+
+	def print_ct_SymbolRef(String name)'''
+		«var blkId = resolver.getReferenceBlock(name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
+	'''
+	
+	//+
+	def print_ct_SymbolRef(SymbolName ref)'''
+		«var blkId = resolver.getReferenceBlock(ref.name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
+	'''
+	
+	//+
+	def print_ct_SymbolRef(FunctionName ref)'''
+		«var blkId = resolver.getReferenceBlock(ref.name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
+	'''
+	
+	//TODO: How to print attributes?
+	def print_ct_SymbolRef(FullyQualifiedArgumentName ref)'''
+		<Description>MDL reference to an attribute «ref.toStr»</Description>
+		«var blkId = ""»
+		«IF ref.parent != null»
+			«blkId = resolver.getReferenceBlock(ref.parent.name)»
+		«ENDIF»
+		<ct:SymbRef «IF blkId.length > 0»blkIdRef="«blkId»"«ENDIF» 
+			symbIdRef="«ref.parent.name».«ref.toStr»"/>
+	'''
+	
+	def print_ct_Matrix(String matrixType, String rowNames, Symbols parameters)
+	'''
+		<Matrix matrixType="«matrixType»">
+			<ct:RowNames>
+				«rowNames»
+			</ct:RowNames>
+			«IF parameters.symbols.size > 0»
+				<ct:MatrixRow>
+				«FOR i: 0..parameters.symbols.size - 1»
+					«val symbol = parameters.symbols.get(i)»
+						«print_Math_Expr(symbol.expression)»
+					«IF symbol.symbolName != null»
+						</ct:MatrixRow>
+						«IF i != parameters.symbols.size - 1»
+							<ct:MatrixRow>
+						«ENDIF»
+					«ENDIF»
+				«ENDFOR»	
+			«ENDIF»
+		</Matrix>
+	'''		
+
+	def convertMatrixType(String matrixType){
+		if (matrixType.equals(RandomEffectType::RE_VAR))
+			return MATRIX_COV;
+		if (matrixType.equals(RandomEffectType::RE_SD))
+			return MATRIX_STDEV;
+		return MATRIX_COV;	
+	}	
+	
+	protected def getProperty(TaskFunctionBlock t, String name){
+		if (t.estimateBlock != null){
+			for (s: t.estimateBlock.statements){
+				if (s.symbol != null){
+					if (s.symbol.symbolName.name.equals(name)){
+						if (s.symbol.expression != null){
+							return s.symbol.expression.toStr;
+						}
+					}
+				}
+			}
+		}
+		if (t.simulateBlock != null){
+			for (s: t.simulateBlock.statements){
+				if (s.symbol != null){
+					if (s.symbol.symbolName.name.equals(name)){
+						if (s.symbol.expression != null){
+							return s.symbol.expression.toStr;
+						}
+					}
+				}
+			}
+		}
+		if (t.executeBlock != null){
+			for (s: t.executeBlock.statements){
+				if (s.symbol != null){
+					if (s.symbol.symbolName.name.equals(name)){
+						if (s.symbol.expression != null){
+							return s.symbol.expression.toStr;
+						}
+					}
+				}
+			}
+		}
+		return "";
+	}	
+	
 	
 	//+Returns a dual operator for a given logical operator
 	def getDualOperator(String operator){
@@ -596,7 +709,7 @@ class MathPrinter extends MdlPrinter{
 		}
 	}
 	
-	//+Returns PharmML name for a given operator
+	//operators
 	override convertOperator(String operator){
 		switch (operator){
 			case "<": "lt"
@@ -633,38 +746,12 @@ class MathPrinter extends MdlPrinter{
 		}
 	}
 	
-	//+
-	def print_ct_SymbolRef(String objName, String name)'''
-		«var blkId = resolver.getReferenceBlock(objName, name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
-	'''
-
-	//+
-	def print_ct_SymbolRef(String name)'''
-		«var blkId = resolver.getReferenceBlock(name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
-	'''
+	//constants
+	def convertConstant(String name){
+		switch (name){
+			case "INF": "infinity"
+			default: name
+		}
+	}
 	
-	//+
-	def print_ct_SymbolRef(SymbolName ref)'''
-		«var blkId = resolver.getReferenceBlock(ref.name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
-	'''
-	
-	//+
-	def print_ct_SymbolRef(FunctionName ref)'''
-		«var blkId = resolver.getReferenceBlock(ref.name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
-	'''
-	
-	//+ TODO: How to print attributes?
-	def print_ct_SymbolRef(FullyQualifiedArgumentName ref)'''
-		<Description>MDL reference to an attribute «ref.toStr»</Description>
-		«var blkId = ""»
-		«IF ref.parent != null»
-			«blkId = resolver.getReferenceBlock(ref.parent.name)»
-		«ENDIF»
-		<ct:SymbRef «IF blkId.length > 0»blkIdRef="«blkId»"«ENDIF» 
-			symbIdRef="«ref.parent.name».«ref.toStr»"/>
-	'''
 }
