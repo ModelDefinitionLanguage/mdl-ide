@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import org.ddmore.mdl.generator.MathPrinter;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.MdlPackage;
@@ -172,38 +171,38 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		private static final long serialVersionUID = -4512048801509444272L;
 		{
 			/*Data object*/
-			for (Attribute attr: attrs_dataInput) put("DATA_INPUT_VARIABLES:" + attr.name, attr);
-			for (Attribute attr: attrs_dataDerived) put("DATA_DERIVED_VARIABLES:" + attr.name, attr);
-			for (Attribute attr: attrs_source) put("SOURCE:" + attr.name, attr);
-			for (Attribute attr: attrs_design) put("DESIGN:" + attr.name, attr);
+			for (Attribute attr: attrs_dataInput) put("DATA_INPUT_VARIABLES:" + attr.getName(), attr);
+			for (Attribute attr: attrs_dataDerived) put("DATA_DERIVED_VARIABLES:" + attr.getName(), attr);
+			for (Attribute attr: attrs_source) put("SOURCE:" + attr.getName(), attr);
+			for (Attribute attr: attrs_design) put("DESIGN:" + attr.getName(), attr);
 			/*Parameter object*/
-			for (Attribute attr: attrs_structural) put("STRUCTURAL:" + attr.name, attr);
-			for (Attribute attr: attrs_variability) put("VARIABILITY:" + attr.name, attr);
+			for (Attribute attr: attrs_structural) put("STRUCTURAL:" + attr.getName(), attr);
+			for (Attribute attr: attrs_variability) put("VARIABILITY:" + attr.getName(), attr);
 			for (Attribute attr: attrs_variability_subblock){
-				put("matrix:" + attr.name, attr);
-				put("diag:" + attr.name, attr);
-				put("same:" + attr.name, attr);
+				put("matrix:" + attr.getName(), attr);
+				put("diag:" + attr.getName(), attr);
+				put("same:" + attr.getName(), attr);
 			}
 			/*Model object*/
-			for (Attribute attr: attrs_inputVariables) put("MODEL_INPUT_VARIABLES:" + attr.name, attr);
-			for (Attribute attr: attrs_library) put("LIBRARY:" + attr.name, attr);
-			for (Attribute attr: attrs_ode) put("ODE:" + attr.name, attr);
-			for (Attribute attr: attrs_estimation) put("ESTIMATION:" + attr.name, attr);
-			for (Attribute attr: attrs_simulation) put("SIMULATION:" + attr.name, attr);
-			for (Attribute attr: attrs_observation) put("OBSERVATION:" + attr.name, attr);
-			for (Attribute attr: attrs_structuralParams) put("STRUCTURAL_PARAMETERS:" + attr.name, attr);
-			for (Attribute attr: attrs_variabilityParams) put("VARIABILITY_PARAMETERS:" + attr.name, attr);
+			for (Attribute attr: attrs_inputVariables) put("MODEL_INPUT_VARIABLES:" + attr.getName(), attr);
+			for (Attribute attr: attrs_library) put("LIBRARY:" + attr.getName(), attr);
+			for (Attribute attr: attrs_ode) put("ODE:" + attr.getName(), attr);
+			for (Attribute attr: attrs_estimation) put("ESTIMATION:" + attr.getName(), attr);
+			for (Attribute attr: attrs_simulation) put("SIMULATION:" + attr.getName(), attr);
+			for (Attribute attr: attrs_observation) put("OBSERVATION:" + attr.getName(), attr);
+			for (Attribute attr: attrs_structuralParams) put("STRUCTURAL_PARAMETERS:" + attr.getName(), attr);
+			for (Attribute attr: attrs_variabilityParams) put("VARIABILITY_PARAMETERS:" + attr.getName(), attr);
 			/*All objects*/
-			for (Attribute attr: attrs_import) put("IMPORT:" + attr.name, attr);
-			for (Attribute attr: attrs_target) put("TARGET_CODE:" + attr.name, attr);
+			for (Attribute attr: attrs_import) put("IMPORT:" + attr.getName(), attr);
+			for (Attribute attr: attrs_target) put("TARGET_CODE:" + attr.getName(), attr);
 		}
 	};
 	
 	HashMap<String, String> exclusive_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = 4646663049359441357L;
 		{
-			put(attr_file.name, attr_script.name);
-			put(attr_script.name, attr_file.name);
+			put(attr_file.getName(), attr_script.getName());
+			put(attr_script.getName(), attr_file.getName());
 		}
 	};
 		
@@ -284,11 +283,11 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 				return;
 			}
 			for (Attribute x: knownAttributes){
-				if (x.name.equals(argument.getArgumentName().getName())){
-					boolean isValid = MdlDataType.validateType(x.type, argument.getExpression());
+				if (x.getName().equals(argument.getArgumentName().getName())){
+					boolean isValid = MdlDataType.validateType(x.getType(), argument.getExpression());
 					if (!isValid){
 						warning(MSG_ATTRIBUTE_WRONG_TYPE + 
-							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + x.type.name(), 
+							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + x.getType().name(), 
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 							MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());		
 					}
@@ -328,16 +327,16 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			if (b.getInlineBlock() != null) return;
 			if (argument.getExpression() != null){
 				if (argument.getExpression().getExpression() != null){
-					if (argument.getArgumentName().getName().equals(attr_file.name) || 
-					 argument.getArgumentName().getName().equals(attr_script.name)) {
-						String dataPath = MathPrinter.toStr(argument.getExpression().getExpression());
+					if (argument.getArgumentName().getName().equals(attr_file.getName()) || 
+					 argument.getArgumentName().getName().equals(attr_script.getName())) {
+						String dataPath = Utils.getAttributeValue(argument);
 						if (!Utils.isFileExist(b, dataPath)){
-							if (argument.getArgumentName().getName().equals(attr_file.name)){
+							if (argument.getArgumentName().getName().equals(attr_file.getName())){
 								warning(MSG_DATA_FILE_NOT_FOUND, 
 										MdlPackage.Literals.ARGUMENT__EXPRESSION,
 										MSG_DATA_FILE_NOT_FOUND, dataPath);
 							}
-							if (argument.getArgumentName().getName().equals(attr_script.name)){
+							if (argument.getArgumentName().getName().equals(attr_script.getName())){
 								warning(MSG_SCRIPT_NOT_FOUND, 
 										MdlPackage.Literals.ARGUMENT__EXPRESSION,
 										MSG_SCRIPT_NOT_FOUND, dataPath);

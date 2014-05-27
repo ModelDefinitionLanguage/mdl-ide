@@ -1,4 +1,4 @@
-package eu.ddmore.converter.mdl2pharmml
+package eu.ddmore.converter.mdl2pharmml.domain
 
 class Attribute {
 	public var String name;

@@ -403,13 +403,13 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					MSG_FUNCTION_PROPERTY_UNKNOWN, s.getSymbolName().getName());		
 				}
 				for (Attribute x: knownAttributes){
-					if (x.name.equals(s.getSymbolName().getName())){
+					if (x.getName().equals(s.getSymbolName().getName())){
 						boolean isValid = false;
 						if (s.getExpression() != null) 
-							isValid = MdlDataType.validateType(x.type, s.getExpression());
+							isValid = MdlDataType.validateType(x.getType(), s.getExpression());
 						if (!isValid){
 							warning(MSG_FUNCTION_PROPERTY_WRONG_TYPE + 
-								": property \"" + s.getSymbolName().getName() + "\" expects value of type " + x.type.name(), 
+								": property \"" + s.getSymbolName().getName() + "\" expects value of type " + x.getType().name(), 
 								MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
 								MSG_FUNCTION_PROPERTY_WRONG_TYPE, s.getSymbolName().getName());		
 						}

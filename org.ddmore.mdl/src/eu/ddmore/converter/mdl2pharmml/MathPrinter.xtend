@@ -28,11 +28,18 @@ import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.mdl.FunctionName
+import org.ddmore.mdl.mdl.Constant
+import org.ddmore.mdl.types.RandomEffectType
+import org.ddmore.mdl.mdl.Symbols
+import org.ddmore.mdl.mdl.TaskFunctionBlock
+import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
+import eu.ddmore.converter.mdl2pharmml.domain.Piece
+import org.ddmore.mdl.mdl.BlockStatement
+import java.util.HashMap
+import org.ddmore.mdl.mdl.ConditionalStatement
 
 class MathPrinter extends MdlPrinter{
 
-	//Needed to fill BlkIdRef attributes of references in expressions that point to PharmML blocks where variables are defined
-    public extension Constants constants = new Constants();
  	extension ReferenceResolver resolver=null
     
     new(ReferenceResolver resolver) {
@@ -73,6 +80,117 @@ class MathPrinter extends MdlPrinter{
 		</FunctionDefinition>
 		'''
 	}
+	
+		protected def print_ConditionalStatement(ConditionalStatement s, String tag){
+		var symbols = new HashMap<String, ArrayList<Piece>>();
+		var symbolOrders = new HashMap<String, Integer>();
+		var Piece parent = null;
+		s.prepareConditionalSymbols(parent, symbols);
+		s.defineOrderOfConditionalSymbols(symbolOrders, 0);
+		var max  = 0;
+		for (o: symbolOrders.entrySet){
+			if (max < o.value) max = o.value;
+		}
+		var model = "";
+		for (i: 0..max){
+			for (o: symbolOrders.entrySet){
+				if (i == o.value) {//print a symbol declaration with this number
+					val ArrayList<Piece> pieces = symbols.get(o.key);
+					if (pieces != null)
+						model = model + o.key.print_Pieces(tag, pieces, true);
+				}
+			}	
+		}
+		return model;
+	}	
+	
+	
+	protected def prepareConditionalSymbols(ConditionalStatement s, Piece parent, HashMap<String, ArrayList<Piece>> symbols){
+	 	if (s.ifStatement != null){
+			val mainExpr = print_Math_LogicOr(s.expression, 0).toString;
+			s.ifStatement.addConditionalSymbol(mainExpr, parent, symbols);
+		}
+		if (s.elseStatement != null){
+			val dualExpr = print_DualExpression(s.expression).toString;
+			s.elseStatement.addConditionalSymbol(dualExpr, parent, symbols);
+		}		
+		if (s.ifBlock != null){
+			val mainExpr = print_Math_LogicOr(s.expression, 0).toString;
+			for (b:s.ifBlock.statements)
+				b.addConditionalSymbol(mainExpr, parent, symbols);
+		}
+		if (s.elseBlock != null){
+			val dualExpr = print_DualExpression(s.expression).toString;
+			for (b:s.elseBlock.statements)
+				b.addConditionalSymbol(dualExpr, parent, symbols);
+		}
+	}	
+	 
+	protected def void addConditionalSymbol(BlockStatement s, String condition, Piece parent, HashMap<String, ArrayList<Piece>> symbols){
+		if (s.symbol != null){
+			if (s.symbol.expression != null && s.symbol.symbolName != null){
+				if (s.symbol.expression.expression != null){
+					var pieces = symbols.get(s.symbol.symbolName.name); 
+					if (pieces == null) pieces = new ArrayList<Piece>();
+					var Piece piece = new Piece(parent, print_Math_Expr(s.symbol.expression.expression).toString, condition);
+					pieces.add(piece);
+					symbols.put(s.symbol.symbolName.name, pieces);
+				}
+			}
+		}	
+		if (s.statement != null){//nested conditional statement
+			var Piece newParent = new Piece(parent, null, condition);
+			s.statement.prepareConditionalSymbols(newParent, symbols);
+		}
+	}
+	
+	protected def print_Pieces(String symbol, String initTag, ArrayList<Piece> pieces, boolean printType){
+		var tag = initTag;
+		if ((tag.indexOf("Variable") > 0) && deriv_vars.contains(symbol))
+			tag = "ct:DerivativeVariable";
+		'''	
+		<«tag» symbId="«symbol»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
+			«print_Pieces(pieces)»
+		</«tag»>
+		'''
+	}
+	
+	//Define order in which symbols will eb translated to PharmML	
+	protected def void defineOrderOfConditionalSymbols(ConditionalStatement s, HashMap<String, Integer> symbolOrders, Integer base){
+		if (s.ifStatement != null){
+			s.ifStatement.addOrderOfConditionalSymbol(symbolOrders, base, 0);
+		}
+		if (s.elseStatement != null){
+			s.elseStatement.addOrderOfConditionalSymbol(symbolOrders, base, 0);
+		}		
+		if (s.ifBlock != null){
+			var i = 0;
+			for (b:s.ifBlock.statements){
+				b.addOrderOfConditionalSymbol(symbolOrders, base, i);
+				i = i + 1;
+			}
+		}
+		if (s.elseBlock != null){
+			var i = 0;
+			for (b:s.elseBlock.statements){
+				b.addOrderOfConditionalSymbol(symbolOrders, base, i);
+				i = i + 1;
+			}
+		}
+	}	
+	
+	protected def void addOrderOfConditionalSymbol(BlockStatement s, HashMap<String, Integer> symbolOrders, Integer base, Integer order){
+		if (s.symbol != null && s.symbol.symbolName != null){
+			var prev = symbolOrders.get(s.symbol.symbolName.name); 
+			if (prev == null) prev = 0;
+			if (prev <= base + order)
+				symbolOrders.put(s.symbol.symbolName.name, base + order);
+		}	
+		if (s.statement != null){//nested conditional statement
+			s.statement.defineOrderOfConditionalSymbols(symbolOrders, base + order);
+		}
+	}	
+	
 	
 	//Print any MDL expression: math expression, list or ode list 
 	//(for the lists selected attribute values will be typically printed, e.g., value or deriv)
@@ -375,11 +493,14 @@ class MathPrinter extends MdlPrinter{
 		«IF expr.symbol !=null»
 			«expr.symbol.print_ct_SymbolRef»
 		«ENDIF»
+		«IF expr.constant != null»
+			«expr.constant.print_ct_Constant»
+		«ENDIF»
 		«IF expr.attribute !=null»
 			«expr.attribute.print_ct_SymbolRef»
 		«ENDIF»
 	'''
-	
+
 	def CharSequence print_Math_Primary(Primary p)'''
 		«IF p.number != null»
 			«p.number.print_ct_Value»
@@ -431,6 +552,10 @@ class MathPrinter extends MdlPrinter{
 			return '''<ct:Id>«value»</ct:Id>''';
 		}
 	}
+	
+	def getPrint_ct_Constant(Constant constant)'''
+		<Constant op="«constant.identifier.convertConstant»"/>
+	'''
 	
 	def getValueType(String value){
 		try{        			
@@ -582,6 +707,112 @@ class MathPrinter extends MdlPrinter{
 		return model;
 	}
 	
+	//+
+	def print_ct_SymbolRef(String objName, String name)'''
+		«var blkId = resolver.getReferenceBlock(objName, name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
+	'''
+
+	//+
+	def print_ct_SymbolRef(String name)'''
+		«var blkId = resolver.getReferenceBlock(name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
+	'''
+	
+	//+
+	def print_ct_SymbolRef(SymbolName ref)'''
+		«var blkId = resolver.getReferenceBlock(ref.name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
+	'''
+	
+	//+
+	def print_ct_SymbolRef(FunctionName ref)'''
+		«var blkId = resolver.getReferenceBlock(ref.name)»
+		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
+	'''
+	
+	//TODO: How to print attributes?
+	def print_ct_SymbolRef(FullyQualifiedArgumentName ref)'''
+		<Description>MDL reference to an attribute «ref.toStr»</Description>
+		«var blkId = ""»
+		«IF ref.parent != null»
+			«blkId = resolver.getReferenceBlock(ref.parent.name)»
+		«ENDIF»
+		<ct:SymbRef «IF blkId.length > 0»blkIdRef="«blkId»"«ENDIF» 
+			symbIdRef="«ref.parent.name».«ref.toStr»"/>
+	'''
+	
+	def print_ct_Matrix(String matrixType, String rowNames, Symbols parameters, Boolean useDiagVarNames)
+	'''
+		<Matrix matrixType="«matrixType»">
+			<ct:RowNames>
+				«rowNames»
+			</ct:RowNames>
+			«IF parameters.symbols.size > 0»
+				<ct:MatrixRow>
+				«FOR i: 0..parameters.symbols.size - 1»
+					«val symbol = parameters.symbols.get(i)»
+					«IF useDiagVarNames && symbol.symbolName != null»
+						«print_ct_SymbolRef(symbol.symbolName.name)»
+					«ELSE»
+						«print_Math_Expr(symbol.expression)»
+					«ENDIF»
+					«IF symbol.symbolName != null»
+						</ct:MatrixRow>
+						«IF i != parameters.symbols.size - 1»
+							<ct:MatrixRow>
+						«ENDIF»
+					«ENDIF»
+				«ENDFOR»	
+			«ENDIF»
+		</Matrix>
+	'''		
+
+	def convertMatrixType(String matrixType){
+		if (matrixType.equals(RandomEffectType::RE_VAR))
+			return MATRIX_COV;
+		if (matrixType.equals(RandomEffectType::RE_SD))
+			return MATRIX_STDEV;
+		return MATRIX_COV;	
+	}	
+	
+	protected def getProperty(TaskFunctionBlock t, String name){
+		if (t.estimateBlock != null){
+			for (s: t.estimateBlock.statements){
+				if (s.symbol != null){
+					if (s.symbol.symbolName != null && s.symbol.symbolName.name.equals(name)){
+						if (s.symbol.expression != null){
+							return s.symbol.expression.toStr;
+						}
+					}
+				}
+			}
+		}
+		if (t.simulateBlock != null){
+			for (s: t.simulateBlock.statements){
+				if (s.symbol != null){
+					if (s.symbol.symbolName != null && s.symbol.symbolName.name.equals(name)){
+						if (s.symbol.expression != null){
+							return s.symbol.expression.toStr;
+						}
+					}
+				}
+			}
+		}
+		if (t.executeBlock != null){
+			for (s: t.executeBlock.statements){
+				if (s.symbol != null){
+					if (s.symbol.symbolName != null && s.symbol.symbolName.name.equals(name)){
+						if (s.symbol.expression != null){
+							return s.symbol.expression.toStr;
+						}
+					}
+				}
+			}
+		}
+		return "";
+	}	
+	
 	
 	//+Returns a dual operator for a given logical operator
 	def getDualOperator(String operator){
@@ -596,7 +827,7 @@ class MathPrinter extends MdlPrinter{
 		}
 	}
 	
-	//+Returns PharmML name for a given operator
+	//operators
 	override convertOperator(String operator){
 		switch (operator){
 			case "<": "lt"
@@ -633,38 +864,12 @@ class MathPrinter extends MdlPrinter{
 		}
 	}
 	
-	//+
-	def print_ct_SymbolRef(String objName, String name)'''
-		«var blkId = resolver.getReferenceBlock(objName, name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
-	'''
-
-	//+
-	def print_ct_SymbolRef(String name)'''
-		«var blkId = resolver.getReferenceBlock(name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
-	'''
+	//constants
+	def convertConstant(String name){
+		switch (name){
+			case "INF": "infinity"
+			default: name
+		}
+	}
 	
-	//+
-	def print_ct_SymbolRef(SymbolName ref)'''
-		«var blkId = resolver.getReferenceBlock(ref.name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
-	'''
-	
-	//+
-	def print_ct_SymbolRef(FunctionName ref)'''
-		«var blkId = resolver.getReferenceBlock(ref.name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
-	'''
-	
-	//+ TODO: How to print attributes?
-	def print_ct_SymbolRef(FullyQualifiedArgumentName ref)'''
-		<Description>MDL reference to an attribute «ref.toStr»</Description>
-		«var blkId = ""»
-		«IF ref.parent != null»
-			«blkId = resolver.getReferenceBlock(ref.parent.name)»
-		«ENDIF»
-		<ct:SymbRef «IF blkId.length > 0»blkIdRef="«blkId»"«ENDIF» 
-			symbIdRef="«ref.parent.name».«ref.toStr»"/>
-	'''
 }

@@ -1,4 +1,4 @@
-package eu.ddmore.converter.mdl2pharmml
+package eu.ddmore.converter.mdl2pharmml.domain
 
 /* A class to collect conditions for conditional statements */
 class Piece {

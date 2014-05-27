@@ -14,18 +14,12 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
-
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 import eu.ddmore.mdl.generator.Mdl2NonmemWrapper;
 
 public class RunWithNONMEMHandler_PE extends AbstractHandler implements IHandler {
-
-    @Inject
-    private Provider<EclipseResourceFileSystemAccess2> fileAccessProvider;
 
     @Inject
     private Mdl2NonmemWrapper generator;

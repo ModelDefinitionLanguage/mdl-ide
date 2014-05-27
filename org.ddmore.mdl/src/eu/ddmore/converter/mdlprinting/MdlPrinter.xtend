@@ -46,11 +46,19 @@ import org.ddmore.mdl.mdl.SimulationBlock
 import org.ddmore.mdl.mdl.EstimationBlock
 import org.apache.commons.io.FilenameUtils
 import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.mdl.VarType
 
 class MdlPrinter {
 	
 	public var mdlVersion = "5.1.4";
-		
+	
+	private static val MdlPrinter mdlPrinter = new MdlPrinter();
+	protected new(){}
+	public static def MdlPrinter getInstance(){
+		return mdlPrinter;
+	}
+	
+    
 	//Get MDL file name
 	def fileName(Mcl m){
 		var fileName = m.eResource.getURI().path;
@@ -433,23 +441,7 @@ class MdlPrinter {
 
 	def toStr(EnumType t) {
 		if (t.type != null){
-			if (t.type.categorical != null){
-				var res = "";
-				
-				if (t.type.arguments != null){
-					res = t.type.arguments.toStr;
-				}
-				return t.type.categorical + '(' + res + ')'
-			}
-			if (t.type.continuous != null){
-				return t.type.continuous
-			} 
-			if (t.type.likelihood != null){
-				return t.type.likelihood	
-			} 
-			if (t.type.m2LL != null){
-				return t.type.m2LL	
-			} 
+			return t.type.toStr;
 		} 
 		if (t.use != null){
 			return t.use.identifier
@@ -466,6 +458,21 @@ class MdlPrinter {
 		if (t.variability != null){
 			return t.variability.identifier
 		}
+	}
+	
+	def toStr(VarType t) {
+		if (t.categorical != null){
+			return t.categorical
+		}
+		if (t.continuous != null){
+			return t.continuous
+		} 
+		if (t.likelihood != null){
+			return t.likelihood	
+		} 
+		if (t.m2LL != null){
+			return t.m2LL	
+		} 
 	}
 	
 	def toStr(RandomList l){
