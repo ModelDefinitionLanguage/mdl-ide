@@ -119,14 +119,14 @@ class DataSetPrinter {
 		val mObj = getModelObject(mObjName);
 		val dObj = getDataObject(dObjName);
 		if (dObj == null || mObj == null) return "";
-		var columnNames = newHashSet;
+		var columnNames = new ArrayList<String>();
 		var columnTypes = new ArrayList<String>();
 		for (b: dObj.blocks){
 			if (b.dataInputBlock != null){
 				for (s: b.dataInputBlock.variables){
 					var columnId = s.symbolName.name;
 					val modelVar = mObj.getModelInputVariable(columnId);
-					if (modelVar != null){
+					if (modelVar != null && modelVar.symbolName != null){
 						if (!columnNames.contains(modelVar.symbolName.name)){
 							columnNames.add(modelVar.symbolName.name);
 							columnTypes.add(modelVar.getColumnType);
@@ -138,7 +138,7 @@ class DataSetPrinter {
 				var derivedVars = b.dataDerivedBlock.getDerivedVariables;
 				for (s: derivedVars){
 					val modelVar = mObj.getModelInputVariable(s);
-					if (modelVar != null){
+					if (modelVar != null && modelVar.symbolName != null){
 						if (!columnNames.contains(modelVar.symbolName.name)){
 							columnNames.add(modelVar.symbolName.name);
 							columnTypes.add(modelVar.getColumnType);
@@ -149,7 +149,7 @@ class DataSetPrinter {
 		}	
 		'''
 			<DataSet xmlns="«xmlns_ds»">
-				«print_ds_Definition(new ArrayList<String>(columnNames), columnTypes)»
+				«print_ds_Definition(columnNames, columnTypes)»
 				«dObjName.print_ds_ImportData»
 			</DataSet>
 		'''

@@ -26,6 +26,7 @@ class TrialDesignPrinter extends DataSetPrinter {
 		this.pObjName = pObjName;
 		this.mObj = getModelObject(mObjName);
 		this.pObj = getParamObject(pObjName);
+		return "";
 		/*
 		'''
 		<TrialDesign xmlns="«xmlns_design»">
@@ -99,47 +100,53 @@ class TrialDesignPrinter extends DataSetPrinter {
 	
 	protected def print_design_DosingTimes(SymbolDeclaration s)'''
 	<DosingTimes>
-		«print_ct_SymbolRef(mObjName, s.symbolName.name)»
-		«IF s.expression.expression != null»
-			«s.expression.expression.print_Assign»
+		«IF s.symbolName != null»
+			«print_ct_SymbolRef(mObjName, s.symbolName.name)»
+			«IF s.expression.expression != null»
+				«s.expression.expression.print_Assign»
+			«ENDIF»
 		«ENDIF»
 	</DosingTimes>	
 	'''	
 
 	protected def print_design_Assign(SymbolDeclaration s)'''
-		«print_ct_SymbolRef(s.symbolName)»
-		«IF s.expression != null»
-			«var AnyExpression value = null»
-			«IF s.expression.list != null»
-				«value = getAttributeExpression(s.expression.list.arguments, AttributeValidator::attr_value.name)»
-			«ELSE»
-				«IF s.expression.expression != null»
-					«value = s.expression»
+		«IF s.symbolName != null»
+			«print_ct_SymbolRef(s.symbolName.name)»
+			«IF s.expression != null»
+				«var AnyExpression value = null»
+				«IF s.expression.list != null»
+					«value = getAttributeExpression(s.expression.list.arguments, AttributeValidator::attr_value.name)»
+				«ELSE»
+					«IF s.expression.expression != null»
+						«value = s.expression»
+					«ENDIF»
 				«ENDIF»
-			«ENDIF»
-			«IF value != null»
-				«IF value.expression != null»
-					«value.expression.print_Assign»
+				«IF value != null»
+					«IF value.expression != null»
+						«value.expression.print_Assign»
+					«ENDIF»
 				«ENDIF»
 			«ENDIF»
 		«ENDIF»
 	'''
 
 	protected def print_design_SteadyState(SymbolDeclaration s)'''
-	<SteadyState>
-		<EndTime>
-			«print_ct_SymbolRef(s.symbolName.name)»
-			«IF s.expression.expression != null»
-				«s.expression.expression.print_Assign»
-			«ENDIF»
-		</EndTime>	
-		<Interval>
-			«print_ct_SymbolRef(s.symbolName.name)»
-			«IF s.expression.expression != null»
-				«s.expression.expression.print_Assign»
-			«ENDIF»
-		</Interval>	
-	</SteadyState>
+	«IF s.symbolName != null»
+		<SteadyState>
+			<EndTime>
+				«print_ct_SymbolRef(s.symbolName.name)»
+				«IF s.expression.expression != null»
+					«s.expression.expression.print_Assign»
+				«ENDIF»
+			</EndTime>	
+			<Interval>
+				«print_ct_SymbolRef(s.symbolName.name)»
+				«IF s.expression.expression != null»
+					«s.expression.expression.print_Assign»
+				«ENDIF»
+			</Interval>	
+		</SteadyState>
+	«ENDIF»
 	'''
 
 	///////////////////////////
@@ -159,7 +166,7 @@ class TrialDesignPrinter extends DataSetPrinter {
 				if (block.inputVariablesBlock != null){
 					for (s: block.inputVariablesBlock.variables){
 						if (s.expression != null){
-							if (s.expression.list != null){
+							if (s.expression.list != null && s.symbolName != null){
 								var use = getAttribute(s.expression.list.arguments, AttributeValidator::attr_use.name);
 								if (use.length > 0){
 									if (use.equals(UseType::USE_ID)) 

@@ -128,7 +128,7 @@ class MathPrinter extends MdlPrinter{
 	 
 	protected def void addConditionalSymbol(BlockStatement s, String condition, Piece parent, HashMap<String, ArrayList<Piece>> symbols){
 		if (s.symbol != null){
-			if (s.symbol.expression != null){
+			if (s.symbol.expression != null && s.symbol.symbolName != null){
 				if (s.symbol.expression.expression != null){
 					var pieces = symbols.get(s.symbol.symbolName.name); 
 					if (pieces == null) pieces = new ArrayList<Piece>();
@@ -180,7 +180,7 @@ class MathPrinter extends MdlPrinter{
 	}	
 	
 	protected def void addOrderOfConditionalSymbol(BlockStatement s, HashMap<String, Integer> symbolOrders, Integer base, Integer order){
-		if (s.symbol != null){
+		if (s.symbol != null && s.symbol.symbolName != null){
 			var prev = symbolOrders.get(s.symbol.symbolName.name); 
 			if (prev == null) prev = 0;
 			if (prev <= base + order)
@@ -780,7 +780,7 @@ class MathPrinter extends MdlPrinter{
 		if (t.estimateBlock != null){
 			for (s: t.estimateBlock.statements){
 				if (s.symbol != null){
-					if (s.symbol.symbolName.name.equals(name)){
+					if (s.symbol.symbolName != null && s.symbol.symbolName.name.equals(name)){
 						if (s.symbol.expression != null){
 							return s.symbol.expression.toStr;
 						}
@@ -791,7 +791,7 @@ class MathPrinter extends MdlPrinter{
 		if (t.simulateBlock != null){
 			for (s: t.simulateBlock.statements){
 				if (s.symbol != null){
-					if (s.symbol.symbolName.name.equals(name)){
+					if (s.symbol.symbolName != null && s.symbol.symbolName.name.equals(name)){
 						if (s.symbol.expression != null){
 							return s.symbol.expression.toStr;
 						}
@@ -802,7 +802,7 @@ class MathPrinter extends MdlPrinter{
 		if (t.executeBlock != null){
 			for (s: t.executeBlock.statements){
 				if (s.symbol != null){
-					if (s.symbol.symbolName.name.equals(name)){
+					if (s.symbol.symbolName != null && s.symbol.symbolName.name.equals(name)){
 						if (s.symbol.expression != null){
 							return s.symbol.expression.toStr;
 						}

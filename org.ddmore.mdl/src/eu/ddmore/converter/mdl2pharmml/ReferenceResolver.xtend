@@ -101,7 +101,7 @@ class ReferenceResolver{
 		    	if (obj instanceof SymbolDeclaration){
 		    		var s = obj as SymbolDeclaration;
 		    		if (s.expression != null){
-		    			if (s.expression.odeList != null){
+		    			if (s.expression.odeList != null && s.symbolName != null){
 		    				if (!deriv_vars.contains(s.symbolName.name)){
 		    					deriv_vars.add(s.symbolName.name);
 		    				}
@@ -168,7 +168,7 @@ class ReferenceResolver{
 			if (block.inputVariablesBlock != null){
 				for (s: block.inputVariablesBlock.variables){
 					if (s.expression != null){
-						if (s.expression.list != null){
+						if (s.expression.list != null && s.symbolName != null){
 							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 							if (use.equals(UseType::USE_IDV) && !independentVars.contains(s.symbolName.name)) 
 								independentVars.add(s.symbolName.name);
@@ -187,7 +187,7 @@ class ReferenceResolver{
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
 					if (s.expression != null){
-						if (s.expression.list != null){
+						if (s.expression.list != null && s.symbolName != null){
 							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 							if (use.equals(UseType::USE_COVARIATE)) {
 								if (!covariateVars.contains(s.symbolName.name))
@@ -216,7 +216,7 @@ class ReferenceResolver{
 			//Model object, RANDOM_VARIABLES_DEFINITION
 			if (b.randomVariableDefinitionBlock != null){
 				for (s: b.randomVariableDefinitionBlock.variables){
-					if (eps_vars.get(s.symbolName.name) != null)
+					if (s.symbolName != null && eps_vars.get(s.symbolName.name) != null)
 						parameters.add(s.symbolName.name);
 				} 
 	  		}
@@ -235,7 +235,7 @@ class ReferenceResolver{
 		for (b: mObj.blocks){
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
-					if (s.symbolName.name.equals(name)){
+					if (s.symbolName != null && s.symbolName.name.equals(name)){
 						return s;
 					}
 					if (s.expression != null){
@@ -260,12 +260,13 @@ class ReferenceResolver{
 			//Parameter object, STRUCTURAL
 			if (b.structuralBlock != null){
 				for (id: b.structuralBlock.parameters) 
-					parameters.add(id.symbolName.name);
+					if (id.symbolName != null)
+						parameters.add(id.symbolName.name);
 			}
 			//ParameterObject, VARIABILITY
 			if (b.variabilityBlock != null){
 				for (st: b.variabilityBlock.statements){
-					if (st.parameter != null)
+					if (st.parameter != null && st.parameter.symbolName != null)
 						parameters.add(st.parameter.symbolName.name);
 				} 
 			}
@@ -279,7 +280,8 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.observationBlock != null){
 				for (st: b.observationBlock.statements){
-					if (st.symbol != null){//!TODO: revise
+					if (st.symbol != null && st.symbol.symbolName != null){
+						//!TODO: revise
 						observationVars.add(st.symbol.symbolName.name);
 						if (st.symbol.expression != null){
 							if (st.symbol.expression.expression != null){
@@ -317,7 +319,7 @@ class ReferenceResolver{
 	//+Collect symbol names from a block
 	protected def HashSet<String> getSymbols(BlockStatement b){
 		var symbols = new HashSet<String>();
-		if (b.symbol != null){
+		if (b.symbol != null && b.symbol.symbolName != null){
 			if (!symbols.contains(b.symbol.symbolName.name)) symbols.add(b.symbol.symbolName.name);
 		}
 		if (b.statement != null){
@@ -385,7 +387,7 @@ class ReferenceResolver{
 			if(b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
 					if (s.expression != null){
-						if (s.expression.list != null){
+						if (s.expression.list != null && s.symbolName != null){
 							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
 							if (level.equals(levelId)){
 								if (!levelVars.contains(s.symbolName.name)){
@@ -406,7 +408,7 @@ class ReferenceResolver{
 		for (b: o.blocks){
 	  		if (b.randomVariableDefinitionBlock != null){
 				for (s: b.randomVariableDefinitionBlock.variables) {
-					if (s.randomList != null){	
+					if (s.randomList != null && s.symbolName != null){	
 						var level = s.randomList.arguments.getAttribute(AttributeValidator::attr_level.name);
 						val id = s.symbolName.name;
 						if (level_vars.get(level) != null){
