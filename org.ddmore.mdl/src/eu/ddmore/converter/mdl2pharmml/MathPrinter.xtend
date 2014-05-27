@@ -34,6 +34,9 @@ import org.ddmore.mdl.mdl.Symbols
 import org.ddmore.mdl.mdl.TaskFunctionBlock
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.converter.mdl2pharmml.domain.Piece
+import org.ddmore.mdl.mdl.BlockStatement
+import java.util.HashMap
+import org.ddmore.mdl.mdl.ConditionalStatement
 
 class MathPrinter extends MdlPrinter{
 
@@ -77,6 +80,117 @@ class MathPrinter extends MdlPrinter{
 		</FunctionDefinition>
 		'''
 	}
+	
+		protected def print_ConditionalStatement(ConditionalStatement s, String tag){
+		var symbols = new HashMap<String, ArrayList<Piece>>();
+		var symbolOrders = new HashMap<String, Integer>();
+		var Piece parent = null;
+		s.prepareConditionalSymbols(parent, symbols);
+		s.defineOrderOfConditionalSymbols(symbolOrders, 0);
+		var max  = 0;
+		for (o: symbolOrders.entrySet){
+			if (max < o.value) max = o.value;
+		}
+		var model = "";
+		for (i: 0..max){
+			for (o: symbolOrders.entrySet){
+				if (i == o.value) {//print a symbol declaration with this number
+					val ArrayList<Piece> pieces = symbols.get(o.key);
+					if (pieces != null)
+						model = model + o.key.print_Pieces(tag, pieces, true);
+				}
+			}	
+		}
+		return model;
+	}	
+	
+	
+	protected def prepareConditionalSymbols(ConditionalStatement s, Piece parent, HashMap<String, ArrayList<Piece>> symbols){
+	 	if (s.ifStatement != null){
+			val mainExpr = print_Math_LogicOr(s.expression, 0).toString;
+			s.ifStatement.addConditionalSymbol(mainExpr, parent, symbols);
+		}
+		if (s.elseStatement != null){
+			val dualExpr = print_DualExpression(s.expression).toString;
+			s.elseStatement.addConditionalSymbol(dualExpr, parent, symbols);
+		}		
+		if (s.ifBlock != null){
+			val mainExpr = print_Math_LogicOr(s.expression, 0).toString;
+			for (b:s.ifBlock.statements)
+				b.addConditionalSymbol(mainExpr, parent, symbols);
+		}
+		if (s.elseBlock != null){
+			val dualExpr = print_DualExpression(s.expression).toString;
+			for (b:s.elseBlock.statements)
+				b.addConditionalSymbol(dualExpr, parent, symbols);
+		}
+	}	
+	 
+	protected def void addConditionalSymbol(BlockStatement s, String condition, Piece parent, HashMap<String, ArrayList<Piece>> symbols){
+		if (s.symbol != null){
+			if (s.symbol.expression != null){
+				if (s.symbol.expression.expression != null){
+					var pieces = symbols.get(s.symbol.symbolName.name); 
+					if (pieces == null) pieces = new ArrayList<Piece>();
+					var Piece piece = new Piece(parent, print_Math_Expr(s.symbol.expression.expression).toString, condition);
+					pieces.add(piece);
+					symbols.put(s.symbol.symbolName.name, pieces);
+				}
+			}
+		}	
+		if (s.statement != null){//nested conditional statement
+			var Piece newParent = new Piece(parent, null, condition);
+			s.statement.prepareConditionalSymbols(newParent, symbols);
+		}
+	}
+	
+	protected def print_Pieces(String symbol, String initTag, ArrayList<Piece> pieces, boolean printType){
+		var tag = initTag;
+		if ((tag.indexOf("Variable") > 0) && deriv_vars.contains(symbol))
+			tag = "ct:DerivativeVariable";
+		'''	
+		<«tag» symbId="«symbol»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
+			«print_Pieces(pieces)»
+		</«tag»>
+		'''
+	}
+	
+	//Define order in which symbols will eb translated to PharmML	
+	protected def void defineOrderOfConditionalSymbols(ConditionalStatement s, HashMap<String, Integer> symbolOrders, Integer base){
+		if (s.ifStatement != null){
+			s.ifStatement.addOrderOfConditionalSymbol(symbolOrders, base, 0);
+		}
+		if (s.elseStatement != null){
+			s.elseStatement.addOrderOfConditionalSymbol(symbolOrders, base, 0);
+		}		
+		if (s.ifBlock != null){
+			var i = 0;
+			for (b:s.ifBlock.statements){
+				b.addOrderOfConditionalSymbol(symbolOrders, base, i);
+				i = i + 1;
+			}
+		}
+		if (s.elseBlock != null){
+			var i = 0;
+			for (b:s.elseBlock.statements){
+				b.addOrderOfConditionalSymbol(symbolOrders, base, i);
+				i = i + 1;
+			}
+		}
+	}	
+	
+	protected def void addOrderOfConditionalSymbol(BlockStatement s, HashMap<String, Integer> symbolOrders, Integer base, Integer order){
+		if (s.symbol != null){
+			var prev = symbolOrders.get(s.symbol.symbolName.name); 
+			if (prev == null) prev = 0;
+			if (prev <= base + order)
+				symbolOrders.put(s.symbol.symbolName.name, base + order);
+		}	
+		if (s.statement != null){//nested conditional statement
+			s.statement.defineOrderOfConditionalSymbols(symbolOrders, base + order);
+		}
+	}	
+	
 	
 	//Print any MDL expression: math expression, list or ode list 
 	//(for the lists selected attribute values will be typically printed, e.g., value or deriv)

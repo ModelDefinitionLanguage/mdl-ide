@@ -21,6 +21,10 @@ class Mdl2PharmML{
 		var operations = new ArrayList<Operation>();
 		var MOGs = new HashMap<String, ModellingObjectGroup>();
 
+		//Note: when creating MOG, use the following order to pass object names:
+		//	1 - model object
+		//  2 - parameter object
+		//  3 - data object
 		for (o: m.objects){
 			if (o.telObject != null){
 				for (st: o.telObject.statements){
@@ -47,7 +51,7 @@ class Mdl2PharmML{
 													));
 												val key = mObjName + "-" + dObjName + "-" + pObjName;	
 												if (!MOGs.containsKey(key))	
-													MOGs.put(key, new ModellingObjectGroup(mObjName, dObjName, pObjName));	
+													MOGs.put(key, new ModellingObjectGroup(mObjName, pObjName, dObjName));	
 											}
 										}
 									}
@@ -79,7 +83,7 @@ class Mdl2PharmML{
 					for (dObjName: dataObjects){
 						val key = mObjName + "-" + dObjName + "-" + pObjName;	
 						if (!MOGs.containsKey(key))	
-							MOGs.put(key, new ModellingObjectGroup(mObjName, dObjName, pObjName));	
+							MOGs.put(key, new ModellingObjectGroup(mObjName, pObjName, dObjName));	
 					}
 				}
 			}

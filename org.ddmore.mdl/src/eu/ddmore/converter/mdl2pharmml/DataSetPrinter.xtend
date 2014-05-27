@@ -148,7 +148,7 @@ class DataSetPrinter {
 			}	
 		}	
 		'''
-			<DataSet xmlns="«xmlns_ds»" oid="«BLK_DS_DATASET + dObjName»">
+			<DataSet xmlns="«xmlns_ds»">
 				«print_ds_Definition(new ArrayList<String>(columnNames), columnTypes)»
 				«dObjName.print_ds_ImportData»
 			</DataSet>

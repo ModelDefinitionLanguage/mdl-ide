@@ -1,9 +1,6 @@
 package eu.ddmore.converter.mdl2pharmml
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import java.util.ArrayList
 import org.ddmore.mdl.mdl.BlockStatement
-import org.ddmore.mdl.mdl.ConditionalStatement
-import java.util.HashMap
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.Symbols
@@ -12,7 +9,7 @@ import org.ddmore.mdl.validation.DistributionValidator
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
-import eu.ddmore.converter.mdl2pharmml.domain.Piece
+import java.util.HashSet
 
 class ModelDefinitionPrinter {
 	private var String mObjName;
@@ -37,6 +34,7 @@ class ModelDefinitionPrinter {
 	def print_mdef_ModelDefinition(String mObjName, String pObjName){
 		this.mObjName = mObjName;
 		this.pObjName = pObjName;
+		System::out.println("Model definition for " + mObjName + " and " + pObjName);
 		this.mObj = getModelObject(mObjName);
 		this.pObj = getParamObject(pObjName);
 		'''
@@ -85,7 +83,7 @@ class ModelDefinitionPrinter {
 	}
     
 	/////////////////////////
-	// I.c Covariate ModelF
+	// I.c Covariate Model
 	/////////////////////////
 	
 	//INDIVIDUAL_VARIABLES, use=covariate -> CovariateModel (transformation with reference)
@@ -124,29 +122,41 @@ class ModelDefinitionPrinter {
 	//RANDOM_VARIABBLES_DEFINITION -> ParameterModel, RandomVariable
 	protected def print_mdef_ParameterModel(){		
 		var model = "";
-		var statements = "";
 		if (pObj != null){
+			var statements = "";
 			for (b: pObj.blocks){
 				//Parameter object, STRUCTURAL
 				if (b.structuralBlock != null){
 					for (id: b.structuralBlock.parameters) 
-						statements = statements + 
-						'''<SimpleParameter symbId = "«id.symbolName.name»"/>
-						'''
+						if (id.symbolName != null)
+							statements = statements + 
+							'''<SimpleParameter symbId = "«id.symbolName.name»"/>
+							'''
 		  		}
 		  		//ParameterObject, VARIABILITY
 		  		if (b.variabilityBlock != null){
 					for (st: b.variabilityBlock.statements){
 						if (st.parameter != null)
-							statements = statements + 
-							'''<SimpleParameter symbId = "«st.parameter.symbolName.name»"/>
-							'''
-					} 
+							if (st.parameter.symbolName != null)
+								statements = statements + 
+								'''<SimpleParameter symbId = "«st.parameter.symbolName.name»"/>
+								'''
+					}
+					statements = statements + print_mdef_CollerationModel; 
 		  		}
-		  		statements = statements + print_mdef_CollerationModel;
+		  		
 		  	}
+		  	if (statements.length > 0){
+		  		model = model + 
+				'''
+					<ParameterModel blkId="pm.«pObjName»">
+						«statements»
+					</ParameterModel>
+				''';
+			}
 		}
 		if (mObj != null){
+			var statements = "";
 			for (b: mObj.blocks){
 				//Model object, GROUP_VARIABLES (covariate parameters)
 				if (b.groupVariablesBlock != null){
@@ -159,8 +169,9 @@ class ModelDefinitionPrinter {
 				//Model object, RANDOM_VARIABLES_DEFINITION
 				if (b.randomVariableDefinitionBlock != null){
 					for (s: b.randomVariableDefinitionBlock.variables){
-						if (isIndependentVariable(s.symbolName.name))
-							statements = statements + s.print_mdef_RandomVariable;
+						if (s.symbolName != null)
+							if (isIndependentVariable(s.symbolName.name))
+								statements = statements + s.print_mdef_RandomVariable;
 					} 
 		  		}
 		  		//Model object, INDIVIDUAL_VARIABLES
@@ -182,123 +193,15 @@ class ModelDefinitionPrinter {
   		return model;
 	}
 	
-	protected def print_ConditionalStatement(ConditionalStatement s, String tag){
-		var symbols = new HashMap<String, ArrayList<Piece>>();
-		var symbolOrders = new HashMap<String, Integer>();
-		var Piece parent = null;
-		s.prepareConditionalSymbols(parent, symbols);
-		s.defineOrderOfConditionalSymbols(symbolOrders, 0);
-		var max  = 0;
-		for (o: symbolOrders.entrySet){
-			if (max < o.value) max = o.value;
-		}
-		var model = "";
-		for (i: 0..max){
-			for (o: symbolOrders.entrySet){
-				if (i == o.value) {//print a symbol declaration with this number
-					val ArrayList<Piece> pieces = symbols.get(o.key);
-					if (pieces != null)
-						model = model + o.key.print_Pieces(tag, pieces, true);
-				}
-			}	
-		}
-		return model;
-	}	
-	
-	
-	protected def prepareConditionalSymbols(ConditionalStatement s, Piece parent, HashMap<String, ArrayList<Piece>> symbols){
-	 	if (s.ifStatement != null){
-			val mainExpr = print_Math_LogicOr(s.expression, 0).toString;
-			s.ifStatement.addConditionalSymbol(mainExpr, parent, symbols);
-		}
-		if (s.elseStatement != null){
-			val dualExpr = print_DualExpression(s.expression).toString;
-			s.elseStatement.addConditionalSymbol(dualExpr, parent, symbols);
-		}		
-		if (s.ifBlock != null){
-			val mainExpr = print_Math_LogicOr(s.expression, 0).toString;
-			for (b:s.ifBlock.statements)
-				b.addConditionalSymbol(mainExpr, parent, symbols);
-		}
-		if (s.elseBlock != null){
-			val dualExpr = print_DualExpression(s.expression).toString;
-			for (b:s.elseBlock.statements)
-				b.addConditionalSymbol(dualExpr, parent, symbols);
-		}
-	}	
-	 
-	protected def void addConditionalSymbol(BlockStatement s, String condition, Piece parent, HashMap<String, ArrayList<Piece>> symbols){
-		if (s.symbol != null){
-			if (s.symbol.expression != null){
-				if (s.symbol.expression.expression != null){
-					var pieces = symbols.get(s.symbol.symbolName.name); 
-					if (pieces == null) pieces = new ArrayList<Piece>();
-					var Piece piece = new Piece(parent, print_Math_Expr(s.symbol.expression.expression).toString, condition);
-					pieces.add(piece);
-					symbols.put(s.symbol.symbolName.name, pieces);
-				}
-			}
-		}	
-		if (s.statement != null){//nested conditional statement
-			var Piece newParent = new Piece(parent, null, condition);
-			s.statement.prepareConditionalSymbols(newParent, symbols);
-		}
-	}
-	
-	protected def print_Pieces(String symbol, String initTag, ArrayList<Piece> pieces, boolean printType){
-		var tag = initTag;
-		if ((tag.indexOf("Variable") > 0) && deriv_vars.contains(symbol))
-			tag = "ct:DerivativeVariable";
-		'''	
-		<«tag» symbId="«symbol»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
-			«print_Pieces(pieces)»
-		</«tag»>
-		'''
-	}
-	
-	//Define order in which symbols will eb translated to PharmML	
-	protected def void defineOrderOfConditionalSymbols(ConditionalStatement s, HashMap<String, Integer> symbolOrders, Integer base){
-		if (s.ifStatement != null){
-			s.ifStatement.addOrderOfConditionalSymbol(symbolOrders, base, 0);
-		}
-		if (s.elseStatement != null){
-			s.elseStatement.addOrderOfConditionalSymbol(symbolOrders, base, 0);
-		}		
-		if (s.ifBlock != null){
-			var i = 0;
-			for (b:s.ifBlock.statements){
-				b.addOrderOfConditionalSymbol(symbolOrders, base, i);
-				i = i + 1;
-			}
-		}
-		if (s.elseBlock != null){
-			var i = 0;
-			for (b:s.elseBlock.statements){
-				b.addOrderOfConditionalSymbol(symbolOrders, base, i);
-				i = i + 1;
-			}
-		}
-	}	
-	
-	protected def void addOrderOfConditionalSymbol(BlockStatement s, HashMap<String, Integer> symbolOrders, Integer base, Integer order){
-		if (s.symbol != null){
-			var prev = symbolOrders.get(s.symbol.symbolName.name); 
-			if (prev == null) prev = 0;
-			if (prev <= base + order)
-				symbolOrders.put(s.symbol.symbolName.name, base + order);
-		}	
-		if (s.statement != null){//nested conditional statement
-			s.statement.defineOrderOfConditionalSymbols(symbolOrders, base + order);
-		}
-	}	
-	
 	protected def print_mdef_RandomVariable(SymbolDeclaration s)
 	'''
 		«IF s.randomList != null»
-			<RandomVariable symbId="«s.symbolName.name»">
-				«s.print_VariabilityReference»
-				«print_uncert_Distribution(s.randomList)»
-			</RandomVariable>
+			«IF s.symbolName != null»
+				<RandomVariable symbId="«s.symbolName.name»">
+					«s.print_VariabilityReference»
+					«print_uncert_Distribution(s.randomList)»
+				</RandomVariable>
+			«ENDIF»
 		«ENDIF»
 	'''
 	
@@ -389,11 +292,13 @@ class ModelDefinitionPrinter {
 				«ENDIF»
 			«ENDIF»
 		«ENDIF»
-		<General symbId="«s.symbolName.name»">
-			«IF s.expression.expression != null»
-				«print_Assign(s.expression.expression)»
-			«ENDIF»
-		</General>
+		«IF s.symbolName != null»
+			<General symbId="«s.symbolName.name»">
+				«IF s.expression.expression != null»
+					«print_Assign(s.expression.expression)»
+				«ENDIF»
+			</General>
+		«ENDIF»
 	'''	
 	
 	//TODO: add blkIdRef
@@ -443,8 +348,9 @@ class ModelDefinitionPrinter {
 			for (b: mObj.blocks){
 				if(b.randomVariableDefinitionBlock != null){
 					for (s: b.randomVariableDefinitionBlock.variables){
-						if (s.symbolName.name.equals(ref))
-							return s;
+						if (s.symbolName != null)
+							if (s.symbolName.name.equals(ref))
+								return s;
 					}
 				}
 			}
@@ -454,7 +360,7 @@ class ModelDefinitionPrinter {
 	
 	protected def print_BlockStatement(BlockStatement st, String initTag, Boolean printType){
 		var tag = initTag;
-		if (st.symbol != null)
+		if (st.symbol != null && st.symbol.symbolName != null)
 			if ((tag.indexOf("Variable") > 0) && deriv_vars.contains(st.symbol.symbolName.name))
 				tag = "ct:DerivativeVariable";
 		'''
@@ -480,46 +386,35 @@ class ModelDefinitionPrinter {
 		var model = "";
 		if (pObj != null){
 			for (b: pObj.blocks){
-				if (b.variabilityBlock != null){
-					var statements = "";
+				if (b.variabilityBlock != null){			
 					for (c: b.variabilityBlock.statements){
-						if (c.parameter != null){
-							//find random variable
-							var randomVar = c.parameter.getRandomVariableByVariability;
-							if (randomVar != null){
-								statements = statements + randomVar.print_VariabilityReference;
-							}
-						}	
+						var matrix = 
+						'''
+							«IF c.matrixBlock != null»
+								«print_mdef_Matrix(c.matrixBlock.arguments, c.matrixBlock.parameters)»
+							«ENDIF»
+							«IF c.diagBlock != null»
+								«print_mdef_Matrix(c.diagBlock.arguments, c.diagBlock.parameters)»
+							«ENDIF»
+							«IF c.sameBlock != null»
+								«print_mdef_Same(c.sameBlock)»
+							«ENDIF»
+						'''
+						if (matrix.length > 0)
+							model = model +
+							'''
+								<Correlation>
+									«matrix»
+								</Correlation>
+							'''				
 					}
-					for (c: b.variabilityBlock.statements){
-						if (c.diagBlock != null){
-							statements = statements + print_mdef_Matrix(c.diagBlock.arguments, c.diagBlock.parameters);
-						}
-						if (c.matrixBlock != null){
-							statements = statements + print_mdef_Matrix(c.matrixBlock.arguments, c.matrixBlock.parameters);
-						}
-						if (c.sameBlock != null){
-							statements = statements + print_mdef_Same(c.sameBlock);
-						}
-					}
-					model = model +
-					'''
-						«IF (statements.length > 0)»
-							<Correlation>
-								«statements»
-							</Correlation>
-						«ENDIF»
-					'''				
 				}
 			}
 		}
-		'''«model»''';
+		return model;
 	}
 
-	protected def getGetRandomVariableByVariability(SymbolDeclaration v) {
-		if (v.expression == null) return null;
-		if (v.expression.list  == null) return null;
-		var type = getAttribute(v.expression.list.arguments, AttributeValidator::attr_re_type.name);
+	protected def getRandomVariableByVariability(String varName, String type) {
 		var attrName = DistributionValidator::attr_var.name;
 		if (type.convertMatrixType.equals(MATRIX_STDEV))
 			attrName = DistributionValidator::attr_sd.name;
@@ -529,7 +424,7 @@ class ModelDefinitionPrinter {
 					for (s: b.randomVariableDefinitionBlock.variables){
 						if (s.randomList != null){
 							var variance = getAttribute(s.randomList.arguments, attrName);	
-							if (variance.equals(v.symbolName.name))
+							if (variance.equals(varName))
 								return s;
 						}
 					}
@@ -542,13 +437,32 @@ class ModelDefinitionPrinter {
 	protected def print_mdef_Matrix(Arguments arguments, Symbols parameters){
 		if (parameters != null){
 			var rowNames = "";
+			var varRef = "";
+			var randomVars = new HashSet<String>();
+			val matrixType = getAttribute(arguments, AttributeValidator::attr_re_type.name);
 			for (symbol: parameters.symbols){
 				if (symbol.symbolName != null){
 					rowNames = rowNames + print_ct_SymbolRef(pObjName, symbol.symbolName.name);
+					var s = symbol.symbolName.name.getRandomVariableByVariability(matrixType);
+					if (s != null){
+						if (s.symbolName != null){
+							if (s.randomList != null){
+								val level = getAttribute(s.randomList.arguments, AttributeValidator::attr_level.name);
+								if (level.length > 0 && !randomVars.contains(level)){
+									varRef = varRef + 
+									'''
+										<ct:VariabilityReference>
+											«print_ct_SymbolRef(level)»
+										</ct:VariabilityReference>
+									'''
+									randomVars.add(level);
+								}
+							}
+						}
+					}	
 				}
-			}	
-			val matrixType = getAttribute(arguments, AttributeValidator::attr_re_type.name);
-			print_ct_Matrix(matrixType.convertMatrixType, rowNames, parameters);
+			}
+			return varRef + print_ct_Matrix(matrixType.convertMatrixType, rowNames, parameters);
 		}
 	}
 	
@@ -587,7 +501,7 @@ class ModelDefinitionPrinter {
 					}
 				}	
 				if (parameters != null){
-					print_ct_Matrix(matrixType.convertMatrixType, rowNames, parameters);
+					return print_ct_Matrix(matrixType.convertMatrixType, rowNames, parameters);
 				}
 			}
 		}
