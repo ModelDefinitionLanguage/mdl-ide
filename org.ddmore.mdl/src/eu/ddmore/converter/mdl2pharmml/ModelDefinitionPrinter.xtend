@@ -10,6 +10,8 @@ import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import java.util.HashSet
+import java.util.ArrayList
+import org.ddmore.mdl.mdl.SymbolNames
 
 class ModelDefinitionPrinter {
 	private var String mObjName;
@@ -34,7 +36,6 @@ class ModelDefinitionPrinter {
 	def print_mdef_ModelDefinition(String mObjName, String pObjName){
 		this.mObjName = mObjName;
 		this.pObjName = pObjName;
-		System::out.println("Model definition for " + mObjName + " and " + pObjName);
 		this.mObj = getModelObject(mObjName);
 		this.pObj = getParamObject(pObjName);
 		'''
@@ -390,13 +391,16 @@ class ModelDefinitionPrinter {
 					for (c: b.variabilityBlock.statements){
 						var matrix = 
 						'''
-							«IF c.matrixBlock != null»
+							«IF c.matrixBlock != null && c.matrixBlock.parameters != null»
+								«print_mdef_Correlation_VarRef(c.matrixBlock.arguments, c.matrixBlock.parameters.getParamNames)»
 								«print_mdef_Matrix(c.matrixBlock.arguments, c.matrixBlock.parameters)»
 							«ENDIF»
-							«IF c.diagBlock != null»
+							«IF c.diagBlock != null && c.diagBlock.parameters != null»
+								«print_mdef_Correlation_VarRef(c.diagBlock.arguments, c.diagBlock.parameters.getParamNames)»
 								«print_mdef_Matrix(c.diagBlock.arguments, c.diagBlock.parameters)»
 							«ENDIF»
 							«IF c.sameBlock != null»
+								«print_mdef_Correlation_VarRef(c.sameBlock.arguments, c.sameBlock.parameters.getParamNames)»
 								«print_mdef_Same(c.sameBlock)»
 							«ENDIF»
 						'''
@@ -413,56 +417,47 @@ class ModelDefinitionPrinter {
 		}
 		return model;
 	}
-
-	protected def getRandomVariableByVariability(String varName, String type) {
-		var attrName = DistributionValidator::attr_var.name;
-		if (type.convertMatrixType.equals(MATRIX_STDEV))
-			attrName = DistributionValidator::attr_sd.name;
-		if (mObj != null){
-			for (b: mObj.blocks){
-				if (b.randomVariableDefinitionBlock != null){
-					for (s: b.randomVariableDefinitionBlock.variables){
+	
+	protected def print_mdef_Correlation_VarRef(Arguments arguments, ArrayList<String> paramNames){
+		if (paramNames != null){
+			var varRef = "";
+			var randomVars = new HashSet<String>();
+			val matrixType = getAttribute(arguments, AttributeValidator::attr_re_type.name);
+			for (paramName: paramNames){
+				var s = paramName.getRandomVariableByVariability(matrixType);
+				if (s != null){
+					if (s.symbolName != null){
 						if (s.randomList != null){
-							var variance = getAttribute(s.randomList.arguments, attrName);	
-							if (variance.equals(varName))
-								return s;
+							val level = getAttribute(s.randomList.arguments, AttributeValidator::attr_level.name);
+							if (level.length > 0 && !randomVars.contains(level)){
+								varRef = varRef + 
+								'''
+									<ct:VariabilityReference>
+										«print_ct_SymbolRef(level)»
+									</ct:VariabilityReference>
+								'''
+								randomVars.add(level);
+							}
 						}
 					}
-				}
+				}	
 			}
+			return varRef;
 		}
-		return null;
 	}
 	
 	protected def print_mdef_Matrix(Arguments arguments, Symbols parameters){
 		if (parameters != null){
 			var rowNames = "";
-			var varRef = "";
-			var randomVars = new HashSet<String>();
 			val matrixType = getAttribute(arguments, AttributeValidator::attr_re_type.name);
+			//val isFixed = arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
+			
 			for (symbol: parameters.symbols){
 				if (symbol.symbolName != null){
 					rowNames = rowNames + print_ct_SymbolRef(pObjName, symbol.symbolName.name);
-					var s = symbol.symbolName.name.getRandomVariableByVariability(matrixType);
-					if (s != null){
-						if (s.symbolName != null){
-							if (s.randomList != null){
-								val level = getAttribute(s.randomList.arguments, AttributeValidator::attr_level.name);
-								if (level.length > 0 && !randomVars.contains(level)){
-									varRef = varRef + 
-									'''
-										<ct:VariabilityReference>
-											«print_ct_SymbolRef(level)»
-										</ct:VariabilityReference>
-									'''
-									randomVars.add(level);
-								}
-							}
-						}
-					}	
 				}
 			}
-			return varRef + print_ct_Matrix(matrixType.convertMatrixType, rowNames, parameters);
+			return print_ct_Matrix(matrixType.convertMatrixType, rowNames, parameters, false);
 		}
 	}
 	
@@ -501,10 +496,48 @@ class ModelDefinitionPrinter {
 					}
 				}	
 				if (parameters != null){
-					return print_ct_Matrix(matrixType.convertMatrixType, rowNames, parameters);
+					return print_ct_Matrix(matrixType.convertMatrixType, rowNames, parameters, true);
 				}
 			}
 		}
+	}
+	
+	protected def getParamNames(SymbolNames parameters){
+		var paramNames = new ArrayList<String>();
+		for (symbol: parameters.symbolNames){
+			paramNames.add(symbol.name);	
+		}
+		return paramNames;
+	}
+	
+	protected def getParamNames(Symbols parameters){
+		var paramNames = new ArrayList<String>();
+		for (symbol: parameters.symbols){
+			if (symbol.symbolName != null){
+				paramNames.add(symbol.symbolName.name);	
+			}
+		}
+		return paramNames;
+	}
+	
+	protected def getRandomVariableByVariability(String varName, String type) {
+		var attrName = DistributionValidator::attr_var.name;
+		if (type.convertMatrixType.equals(MATRIX_STDEV))
+			attrName = DistributionValidator::attr_sd.name;
+		if (mObj != null){
+			for (b: mObj.blocks){
+				if (b.randomVariableDefinitionBlock != null){
+					for (s: b.randomVariableDefinitionBlock.variables){
+						if (s.randomList != null){
+							var variance = getAttribute(s.randomList.arguments, attrName);	
+							if (variance.equals(varName))
+								return s;
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 }
 

@@ -742,7 +742,7 @@ class MathPrinter extends MdlPrinter{
 			symbIdRef="«ref.parent.name».«ref.toStr»"/>
 	'''
 	
-	def print_ct_Matrix(String matrixType, String rowNames, Symbols parameters)
+	def print_ct_Matrix(String matrixType, String rowNames, Symbols parameters, Boolean useDiagVarNames)
 	'''
 		<Matrix matrixType="«matrixType»">
 			<ct:RowNames>
@@ -752,7 +752,11 @@ class MathPrinter extends MdlPrinter{
 				<ct:MatrixRow>
 				«FOR i: 0..parameters.symbols.size - 1»
 					«val symbol = parameters.symbols.get(i)»
+					«IF useDiagVarNames && symbol.symbolName != null»
+						«print_ct_SymbolRef(symbol.symbolName.name)»
+					«ELSE»
 						«print_Math_Expr(symbol.expression)»
+					«ENDIF»
 					«IF symbol.symbolName != null»
 						</ct:MatrixRow>
 						«IF i != parameters.symbols.size - 1»

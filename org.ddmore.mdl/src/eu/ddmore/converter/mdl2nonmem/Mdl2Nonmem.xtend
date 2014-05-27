@@ -13,7 +13,6 @@ import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.ExecuteTask
 import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
-import org.ddmore.mdl.mdl.SymbolName
 import org.ddmore.mdl.mdl.MatrixBlock
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.MixtureBlock
@@ -332,7 +331,7 @@ class Mdl2Nonmem extends MdlPrinter{
 				«IF s.odeBlock != null»
 					«FOR ss: s.odeBlock.statements»
 						«var x = ss.symbol»
-						«IF x != null»
+						«IF x != null && x.symbolName != null»
 							«IF x.expression != null»
 								«IF x.expression.odeList != null»
 									COMP(«x.symbolName.name»)
@@ -368,7 +367,7 @@ class Mdl2Nonmem extends MdlPrinter{
 								«ENDIF»
 								«IF x.expression.odeList != null»
 									«var deriv = x.expression.odeList.arguments.getAttribute(AttributeValidator::attr_req_deriv.name)»
-									«IF !deriv.equals("")»
+									«IF deriv.length > 0 && x.symbolName != null»
 										«var id = x.symbolName.name»
 										«IF dadt_vars.get(id) != null»
 											DADT(«dadt_vars.get(id)») = «deriv»
@@ -726,23 +725,25 @@ class Mdl2Nonmem extends MdlPrinter{
 
 	//Print VARIABILITY parameter in $SIGMA or $OMEGA
 	def printVariabilityParameter(SymbolDeclaration s, String section){
-		var name = s.symbolName.name;
-		//SIGMA <=> EPS, OMEGA <=> ETA	
-		var isOmega = (section.equals("$OMEGA") && eta_vars.get("eta_" + name) != null);
-		var isSigma = (section.equals("$SIGMA") && eps_vars.get("eps_" + name) != null);
-		if (isOmega || isSigma){
-			if (s.expression != null){
-				if (s.expression.list != null){
-					val value = s.expression.list.arguments.getAttribute(AttributeValidator::attr_req_value.name);
-					val printFix = s.expression.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
-					return							
-					'''
-					«IF !value.equals("")»«value»«IF printFix» FIX«ENDIF»«ENDIF» ; «name»
-					'''
-				} else {
-					if (s.expression.expression != null){
-						val value = s.expression.expression.toStr;
-						return'''«value» ; «name»'''
+		if (s.symbolName != null){
+			var name = s.symbolName.name;
+			//SIGMA <=> EPS, OMEGA <=> ETA	
+			var isOmega = (section.equals("$OMEGA") && eta_vars.get("eta_" + name) != null);
+			var isSigma = (section.equals("$SIGMA") && eps_vars.get("eps_" + name) != null);
+			if (isOmega || isSigma){
+				if (s.expression != null){
+					if (s.expression.list != null){
+						val value = s.expression.list.arguments.getAttribute(AttributeValidator::attr_req_value.name);
+						val printFix = s.expression.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
+						return							
+						'''
+						«IF !value.equals("")»«value»«IF printFix» FIX«ENDIF»«ENDIF» ; «name»
+						'''
+					} else {
+						if (s.expression.expression != null){
+							val value = s.expression.expression.toStr;
+							return'''«value» ; «name»'''
+						}
 					}
 				}
 			}
@@ -753,22 +754,24 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Find attributes in STRUCTURAL_VARIABLES and form an NMTRAN statement
 	def printTheta(SymbolDeclaration s){
-		var name = s.symbolName.name;
-		if (s.expression != null){
-			if (s.expression.list != null){		
-				val args = s.expression.list.arguments;
-				val value = args.getAttribute(AttributeValidator::attr_value.name);
-				val lo = args.getAttribute(AttributeValidator::attr_lo.name);
-				val hi = args.getAttribute(AttributeValidator::attr_hi.name);
-				val printFix = args.isAttributeTrue(AttributeValidator::attr_fix.name);
-				if (value.equals("")) return "";
-				if (lo.equals("") && hi.equals("")) return '''«value»«IF printFix» FIX«ENDIF» ; «name»'''
-				if (lo.equals("")) return '''(-INF, «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
-				if (hi.equals("")) return '''(«lo», «value», INF)«IF printFix» FIX«ENDIF» ; «name»'''
-				return '''(«lo», «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
-			} else {
-				if (s.expression.expression != null) {
-					return '''«s.expression.toStr» ; «name»'''
+		if (s.symbolName != null){
+			var name = s.symbolName.name;
+			if (s.expression != null){
+				if (s.expression.list != null){		
+					val args = s.expression.list.arguments;
+					val value = args.getAttribute(AttributeValidator::attr_value.name);
+					val lo = args.getAttribute(AttributeValidator::attr_lo.name);
+					val hi = args.getAttribute(AttributeValidator::attr_hi.name);
+					val printFix = args.isAttributeTrue(AttributeValidator::attr_fix.name);
+					if (value.equals("")) return "";
+					if (lo.equals("") && hi.equals("")) return '''«value»«IF printFix» FIX«ENDIF» ; «name»'''
+					if (lo.equals("")) return '''(-INF, «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
+					if (hi.equals("")) return '''(«lo», «value», INF)«IF printFix» FIX«ENDIF» ; «name»'''
+					return '''(«lo», «value», «hi»)«IF printFix» FIX«ENDIF» ; «name»'''
+				} else {
+					if (s.expression.expression != null) {
+						return '''«s.expression.toStr» ; «name»'''
+					}
 				}
 			}
 		}
@@ -791,7 +794,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	«getExternalCodeStart("$INPUT")»
 	«FOR b:d.blocks»
 	    «IF b.dataInputBlock != null»
-			«FOR st: b.dataInputBlock.variables SEPARATOR ' '»«IF isDrop(st.symbolName.name, t)»«st.symbolName.name»=DROP«ELSE»«st.symbolName.name»«ENDIF»«ENDFOR»
+			«FOR st: b.dataInputBlock.variables SEPARATOR ' '»«IF st.symbolName != null»«IF isDrop(st.symbolName.name, t)»«st.symbolName.name»=DROP«ELSE»«st.symbolName.name»«ENDIF»«ENDIF»«ENDFOR»
         «ENDIF»
 	«ENDFOR»
 	«getExternalCodeEnd("$INPUT")»
@@ -804,7 +807,7 @@ class Mdl2Nonmem extends MdlPrinter{
                 if (b.dataBlock !=  null) {
                     for (DataBlockStatement block: b.dataBlock.statements) {
                         if (block.dropList != null) {
-                            for (SymbolName symbol : block.dropList.list.symbols) {
+                            for (symbol: block.dropList.list.symbols) {
                                 if (id.equals(symbol.name))
                                     return true;
                             }
@@ -924,26 +927,28 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Print attributes for default $EST record
 	def printDefaultEstimate(SymbolDeclaration s) { 
-		if (s.symbolName.name.equals(FunctionValidator::attr_task_algo.name)){
-			if (s.expression.expression != null)
-				''' METHOD=«s.expression.expression.toStr»'''
-			else {
-				//print first attribute of the list!?
-				if (s.expression.list != null){
-					var args = s.expression.list.arguments;
-					if (args != null){
-						if (args.arguments.size > 0)
-							''' METHOD=«args.arguments.get(0).expression.toStr»'''
+		if (s.symbolName != null){
+			if (s.symbolName.name.equals(FunctionValidator::attr_task_algo.name)){
+				if (s.expression.expression != null)
+					''' METHOD=«s.expression.expression.toStr»'''
+				else {
+					//print first attribute of the list!?
+					if (s.expression.list != null){
+						var args = s.expression.list.arguments;
+						if (args != null){
+							if (args.arguments.size > 0)
+								''' METHOD=«args.arguments.get(0).expression.toStr»'''
+						}
 					}
-				}
-			}	
+				}	
+			}
+			else
+				if (s.symbolName.name.equals(FunctionValidator::attr_task_max.name))
+				''' MAX=«s.expression.print»'''
+			else
+				if (s.symbolName.name.equals(FunctionValidator::attr_task_sig.name))
+				''' SIG=«s.expression.print»'''
 		}
-		else
-			if (s.symbolName.name.equals(FunctionValidator::attr_task_max.name))
-			''' MAX=«s.expression.print»'''
-		else
-			if (s.symbolName.name.equals(FunctionValidator::attr_task_sig.name))
-			''' SIG=«s.expression.print»'''
 	}
 	
 	//Print attributes for default $SIM record
@@ -965,10 +970,12 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Print "cov" attribute for $COVARIATE record 
 	def printCovariance(SymbolDeclaration s) { 
-		if (s.symbolName.name.equals(FunctionValidator::attr_task_cov.name)){
-			if (s.expression != null){
-				if (s.expression.toStr.replaceAll("\\s","").equals(""))
-				'''«s.expression.print»'''
+		if (s.symbolName != null){
+			if (s.symbolName.name.equals(FunctionValidator::attr_task_cov.name)){
+				if (s.expression != null){
+					if (s.expression.toStr.replaceAll("\\s","").equals(""))
+					'''«s.expression.print»'''
+				}
 			}
 		}
 	}
@@ -1007,7 +1014,7 @@ class Mdl2Nonmem extends MdlPrinter{
 			if (b.modelBlock != null){
 				for (ss: b.modelBlock.statements){
 					var x = ss.statement.symbol;
-					if (x != null){
+					if (x != null && x.symbolName != null){
 						if (x.symbolName.name.equals(MdlJavaValidator::var_model_tolrel)){
 							if (x.expression != null)
 								return x.expression.toStr;
@@ -1083,7 +1090,7 @@ class Mdl2Nonmem extends MdlPrinter{
 			if(b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
 					if (s.expression != null){
-						if (s.expression.list != null){
+						if (s.expression.list != null && s.symbolName != null){
 							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
 							if (level.equals(levelId)){
 								if (!levelVars.contains(s.symbolName.name)){
@@ -1104,7 +1111,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		for (b: o.blocks){
 	  		if (b.randomVariableDefinitionBlock != null){
 				for (s: b.randomVariableDefinitionBlock.variables) {
-					if (s.randomList != null){	
+					if (s.randomList != null && s.symbolName != null){	
 						var level = s.randomList.arguments.getAttribute(AttributeValidator::attr_level.name);
 						val id = s.symbolName.name;
 						if (level_vars.get(level) != null){
@@ -1160,7 +1167,7 @@ class Mdl2Nonmem extends MdlPrinter{
 							var x = ss.symbol;
 							if (x != null){
 								if (x.expression != null){
-									if (x.expression.odeList != null){
+									if (x.expression.odeList != null && x.symbolName != null){
 										var id = x.symbolName.name;
 										if (dadt_vars.get(id) == null){
 											dadt_vars.put(id, i);
