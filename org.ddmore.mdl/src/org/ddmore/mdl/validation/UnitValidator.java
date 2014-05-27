@@ -48,7 +48,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	static HashMap<String, String> loadUnits(){
 		HashMap<String, String> validUnits = new HashMap<String, String>();
 		try {
-		    URL url = new URL("platform:/plugin/org.ddmore.mdl/resources/Units.csv");
+		    URL url = new URL("platform:/plugin/org.ddmore.mdl/runtime/Units.csv");
 		    InputStream inputStream = url.openConnection().getInputStream();
 		    BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
 		    String inputLine;
