@@ -4,11 +4,10 @@
    <extension
          id="product"
          point="org.eclipse.core.runtime.products">
-         <!-- See https://bugs.eclipse.org/bugs/show_bug.cgi?id=312819 for why the product.name is not externalized -->
-      <product name="DDMoRe MDL IDE 1.0 (alpha)" application="org.eclipse.ui.ide.workbench" description="%aboutText">
+      <product name="%productName" application="org.eclipse.ui.ide.workbench" description="%aboutText">
          <property
                name="appName"
-               value="DDMoRe MDL IDE 1.0 (alpha)">
+               value="%productName">
          </property>
          <property
                name="applicationCSS"

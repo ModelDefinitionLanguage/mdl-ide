@@ -1,6 +1,5 @@
-0=1.0 (alpha)
-1=@version@
-2=@buildNo@
-3=@buildId@
-4=@branch@
-5=@revision@
+0=@version@
+1=@buildNo@
+2=@buildId@
+3=@branch@
+4=@revision@

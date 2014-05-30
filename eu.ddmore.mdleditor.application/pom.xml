@@ -18,11 +18,11 @@
       <id>update-branding</id>
       <build>
         <plugins>
-                  <plugin>
-                    <!-- Walkaround for replacing tokens in about.mappings file so build number is included in the 
+			<plugin>
+                    <!-- Workaround for replacing tokens in about.mappings file so build number is included in the 
                         products 'about dialog' See https://bugs.eclipse.org/bugs/show_bug.cgi?id=362252 -->
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <executions>
+                  <artifactId>maven-antrun-plugin</artifactId>
+                  <executions>
                       <execution>
                         <id>update-branding-process-resources</id>
                         <phase>process-resources</phase>
@@ -30,7 +30,7 @@
                           <tasks>
                             <copy file="about.mappings" tofile="about.mappings.orig"/>
                             <replace file="about.mappings" 
-                                     token="@version@" value="${project.version}" />
+                                     token="@version@" value="${unqualifiedVersion}" />
                             <replace file="about.mappings" 
                                      token="@buildNo@" value="${BUILD_NUMBER}" />
                             <replace file="about.mappings" 
@@ -58,9 +58,10 @@
                         </goals>
                       </execution>
                   </executions>
-                  </plugin>
+ 			</plugin>
         </plugins>
       </build>
     </profile>
     </profiles>
+    
 </project>
