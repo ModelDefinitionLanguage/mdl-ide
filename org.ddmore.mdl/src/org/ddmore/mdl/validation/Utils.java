@@ -76,7 +76,8 @@ public class Utils {
 	//Checks whether a given identifier is declared
 	static boolean isIdentifierDeclared(HashMap<String, ArrayList<String>> map, String id, String objName){
 		if (objName != null) 
-			if (map.get(objName).contains(id)) return true;
+			if (map.containsKey(objName))
+				if (map.get(objName).contains(id)) return true;
 		return false; 
 	}
 
@@ -85,7 +86,8 @@ public class Utils {
 	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName ref){
 		ObjectName objName = getObjectName(ref);
 		if (objName != null) 
-			if (map.get(objName.getName()).contains(ref.getName())) return true;		
+			if (map.containsKey(objName.getName()))
+				if (map.get(objName.getName()).contains(ref.getName())) return true;		
 		return false;
 	}
 		
@@ -106,10 +108,12 @@ public class Utils {
 	static boolean isSymbolDeclaredMoreThanOnce(HashMap<String, ArrayList<String>> map, SymbolName ref){
 		int i = 0;
 		ObjectName objName = Utils.getObjectName(ref);
-		ArrayList<String> functions = map.get(objName.getName()); 
-		for (String func: functions){
-			if (func.equals(ref.getName())) i++;
-			if (i > 1) return true;
+		if (map.containsKey(objName.getName())){
+			ArrayList<String> functions = map.get(objName.getName()); 
+			for (String func: functions){
+				if (func.equals(ref.getName())) i++;
+				if (i > 1) return true;
+			}
 		}
 		return false;
 	}
@@ -119,7 +123,8 @@ public class Utils {
 		ObjectName objName = ref.getObject();
 		if (objName == null) objName = getObjectName(ref);
 		if (objName != null) 
-			if (map.get(objName.getName()).contains(ref.getFunction().getName())) return true;		
+			if (map.containsKey(objName.getName()))
+				if (map.get(objName.getName()).contains(ref.getFunction().getName())) return true;	
 		return false;
 	}
 	
@@ -127,7 +132,8 @@ public class Utils {
 	static boolean isFunctionDeclared(HashMap<String, ArrayList<String>> map, FunctionName ref){
 		ObjectName objName = getObjectName(ref);
 		if (objName != null) 
-			if (map.get(objName.getName()).contains(ref.getName())) return true;		
+			if (map.containsKey(objName.getName()))
+				if (map.get(objName.getName()).contains(ref.getName())) return true;
 		return false;
 	}
 	
@@ -135,10 +141,12 @@ public class Utils {
 	static boolean isFunctionDeclaredMoreThanOnce(HashMap<String, ArrayList<String>> map, FunctionName ref){
 		int i = 0;
 		ObjectName objName = Utils.getObjectName(ref);
-		ArrayList<String> functions = map.get(objName.getName()); 
-		for (String func: functions){
-			if (func.equals(ref.getName())) i++;
-			if (i > 1) return true;
+		if (map.containsKey(objName.getName())){
+			ArrayList<String> functions = map.get(objName.getName()); 
+			for (String func: functions){
+				if (func.equals(ref.getName())) i++;
+				if (i > 1) return true;
+			}
 		}
 		return false;
 	}

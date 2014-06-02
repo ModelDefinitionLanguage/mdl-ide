@@ -29,6 +29,7 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter;
 public enum MdlDataType {
 
     TYPE_UNDEFINED,
+    TYPE_VOID,
     /*Basic*/
     TYPE_STRING, TYPE_INT, TYPE_REAL, TYPE_BOOLEAN,
     //Restrictions of basic (to comply with PharmML)

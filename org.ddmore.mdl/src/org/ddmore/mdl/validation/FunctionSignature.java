@@ -1,30 +1,54 @@
 package org.ddmore.mdl.validation;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.ddmore.mdl.types.MdlDataType;
+import org.ddmore.mdl.types.TargetCodeType;
 
 public class FunctionSignature {
 	String name;
 	Integer numberOfParams; 
-	ArrayList<Attribute> inputParams;
-	ArrayList<Attribute> outputParams;
-	MdlDataType type = MdlDataType.TYPE_UNDEFINED;
+	MdlDataType type = MdlDataType.TYPE_VOID;
+	Boolean passingByName = false;
+	//By default we assume unnamed input parameters of type MdlDataType.TYPE_REAL
+	List<FunctionParameter> params;
+	TargetCodeType target = null;
 	
 	public FunctionSignature(String name, Integer numberOfParams){
 		this.name = name;
 		this.numberOfParams = numberOfParams;
 	}
-
-	public FunctionSignature(String name, ArrayList<Attribute> inputParams, ArrayList<Attribute> outputParams){
-		this.name = name;
-		this.inputParams = inputParams;
-		this.outputParams = outputParams;
+	
+	public FunctionSignature(String name, Integer numberOfParams, MdlDataType type){
+		this(name , numberOfParams);
+		this.type = type;
 	}
 	
-	public FunctionSignature(String name, ArrayList<Attribute> inputParams, ArrayList<Attribute> outputParams, MdlDataType type){
-		this(name, inputParams, outputParams);
+	public FunctionSignature(String name, List<FunctionParameter> params){
+		this.name = name;
+		this.params = params;
+		if (params != null)
+			this.numberOfParams = params.size();
+	}
+	
+	public FunctionSignature(String name, List<FunctionParameter> params, MdlDataType type){
+		this(name, params);
 		this.type = type;
+	}
+	
+	public FunctionSignature(String name, Integer numberOfParams, Boolean passingByName){
+		this(name, numberOfParams);
+		this.passingByName = passingByName;
+	}
+
+	public FunctionSignature(String name, List<FunctionParameter> params, Boolean passingByName){
+		this(name, params);
+		this.passingByName = passingByName;
+	}
+	
+	public FunctionSignature(String name, List<FunctionParameter> params, MdlDataType type, Boolean passingByName){
+		this(name, params, type);
+		this.passingByName = passingByName;
 	}
 	
 	public String getName(){
@@ -38,13 +62,12 @@ public class FunctionSignature {
 	public Integer getNumberOfParams(){
 		return numberOfParams;
 	}
-
-	public ArrayList<Attribute> getInputParams(){
-		return inputParams;
-	}
 	
-	public ArrayList<Attribute> getOutputParams(){
-		return outputParams;
+	public Boolean getPassingByName(){
+		return passingByName;
 	}
 
+	public List<FunctionParameter> getParams(){
+		return params;
+	}
 }

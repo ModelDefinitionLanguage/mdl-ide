@@ -67,7 +67,6 @@ import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
-import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
@@ -84,7 +83,6 @@ import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.DistributionValidator;
 import org.ddmore.mdl.validation.MdlJavaValidator;
 import org.ddmore.mdl.validation.FunctionValidator;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.ui.editor.model.edit.IModificationContext;
@@ -973,30 +971,26 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		acceptor.accept(issue, "Declare function in IMPORT block", 
 				"Declare function in IMPORT block", "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				Resource resource = element.eResource();
-				TreeIterator<EObject> iterator = resource.getAllContents();
-			    ImportBlock importBlock = null;
-			    boolean isNewBlock = false;
-				while (iterator.hasNext()){
-			    	EObject obj = iterator.next();
-			    	if (obj instanceof ImportBlockImpl){
-			    		importBlock = (ImportBlock)obj;
-			    	}
-			    }
-				if (importBlock == null){
-					importBlock = MdlFactory.eINSTANCE.createImportBlock();
-					importBlock.setIdentifier(grammarAccess.getImportBlockAccess().getIdentifierIMPORTKeyword_0_0().getValue());
-					isNewBlock = true;
-				}
-				ImportedFunction importedFunct = createImportedFunction(element);
-	    		importBlock.getFunctions().add(importedFunct);
-	    		
-	    		if (isNewBlock){
-					ModelObject modelObj = getModelObject(element);
-					ModelObjectBlock modelObjBlock = MdlFactory.eINSTANCE.createModelObjectBlock();
-					modelObjBlock.setImportBlock(importBlock);
+			    ModelObject modelObj = getModelObject(element);
+				if (modelObj != null){
+					ImportBlock importBlock = null;
+				    ModelObjectBlock modelObjBlock = null;
+					for (ModelObjectBlock b: modelObj.getBlocks()){
+						if (b.getImportBlock() != null){
+							importBlock = b.getImportBlock();
+							modelObjBlock = b;
+						}						
+					}
+					if ((modelObjBlock == null) || (importBlock == null)){
+						importBlock = MdlFactory.eINSTANCE.createImportBlock();
+						importBlock.setIdentifier(grammarAccess.getImportBlockAccess().getIdentifierIMPORTKeyword_0_0().getValue());
+						modelObjBlock = MdlFactory.eINSTANCE.createModelObjectBlock();
+						modelObjBlock.setImportBlock(importBlock);
+					}
+					ImportedFunction importedFunct = createImportedFunction(element);
+		    		importBlock.getFunctions().add(importedFunct);
 					modelObj.getBlocks().add(modelObjBlock);
-	    		}
+				}
 			}
 		});
 	}

@@ -37,6 +37,7 @@ import eu.ddmore.converter.mdl2pharmml.domain.Piece
 import org.ddmore.mdl.mdl.BlockStatement
 import java.util.HashMap
 import org.ddmore.mdl.mdl.ConditionalStatement
+import org.ddmore.mdl.types.UseType
 
 class MathPrinter extends MdlPrinter{
 
@@ -871,5 +872,17 @@ class MathPrinter extends MdlPrinter{
 			default: name
 		}
 	}
+	
+	def convertColumnType(String type){
+		switch (type){ 
+			case UseType::USE_AMT: "dose"
+			case UseType::USE_YTYPE: "dvid"
+			case UseType::USE_ITYPE: "dvid"
+			case UseType::USE_OCC: "occasion"
+			case UseType::USE_CENS: "censoring"
+			default: type
+		}
+	}
+	
 	
 }
