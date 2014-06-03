@@ -360,7 +360,7 @@ FunctionName:
 ;
 
 FunctionCall:
-	identifier = FullyQualifiedFunctionName '(' arguments = Arguments ')' 
+	identifier = FullyQualifiedFunctionName '(' (arguments = Arguments)? ')' 
 ;
 
 BlockStatement:

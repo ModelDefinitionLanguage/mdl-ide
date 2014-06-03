@@ -616,7 +616,7 @@ class MdlPrinter {
 			return e.number;
 		}
 		if (e.symbol != null){
-			return e.symbol.name; 
+			return e.symbol.name.convertID; 
 		}
 		if (e.constant != null){
 			return e.constant.identifier

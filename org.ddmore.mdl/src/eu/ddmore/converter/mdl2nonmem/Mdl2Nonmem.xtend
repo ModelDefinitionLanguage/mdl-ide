@@ -56,8 +56,8 @@ class Mdl2Nonmem extends MdlPrinter{
 	//Print file name and analyse MCL objects in the source file
   	def convertToNMTRAN(Mcl m){
   		mcl = m;
-  		m.prepareCollections();
-		
+  		m.prepareCollections();  		 		
+  			
   		var java.util.List<DataObject> dataObjects = new ArrayList<DataObject>
   		var java.util.List<TaskObject> taskObjects = new ArrayList<TaskObject>
   		
@@ -1189,9 +1189,11 @@ class Mdl2Nonmem extends MdlPrinter{
 		for (b: o.blocks){
 	  		if (b.structuralParametersBlock != null){
 				for (id: b.structuralParametersBlock.parameters) {
-					if (theta_vars.get(id.symbolName.name) == null){
-						theta_vars.put(id.symbolName.name, i);
-						i = i + 1;
+					if (id.symbolName != null){
+						if (theta_vars.get(id.symbolName.name) == null){
+							theta_vars.put(id.symbolName.name, i);
+							i = i + 1;
+						}
 					}
 				}
 	  		}	  				
@@ -1421,10 +1423,9 @@ class Mdl2Nonmem extends MdlPrinter{
 		return res;
 	}	
 	
-		//Convert variable names to NM-TRAN versions
+	//Convert variable names to NM-TRAN versions
 	override convertID(String id){
 		if (id.indexOf('_') > 0){			
-
 			if (eta_vars.get(id) != null){
 				return "ETA(" + eta_vars.get(id) + ")";
 			}

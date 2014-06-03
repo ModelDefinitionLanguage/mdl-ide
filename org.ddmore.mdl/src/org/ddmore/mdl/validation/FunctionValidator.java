@@ -93,7 +93,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			List<String> standardFunctions2 = Arrays.asList(
 				"logx", "root", "min", "max");
 			//Special functions
-			List<String> specialFunctions = Arrays.asList("update", "runif", "errorexit", "PHI");
+			List<String> specialFunctions = Arrays.asList("update", "runif", "errorexit", "errorExit", "PHI");
 
 			//TODO: update returned type	
 			for (String functName: standardFunctions1){
