@@ -70,7 +70,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				container = container.eContainer();
 			}
 			Image img = imageHelper.getImage(Images.getPath(Images.ATTRIBUTE));
-			ArrayList<String> attributes = Utils.getAllNames(AttributeValidator.getAllAttributes(container));
+			List<String> attributes = Utils.getAllNames(AttributeValidator.getAllAttributes(container));
 			addProposals(context, acceptor, attributes, img);
 		}
 	}
@@ -82,21 +82,21 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			//TODO: replace comparison of names with the attribute identifiers BLOCK_ID:attr_name!
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_use.getName())){
 				//Check that block is correct too
-				ArrayList<String> attributes = new ArrayList<String>();
+				List<String> attributes = new ArrayList<String>();
 				attributes.addAll(UseType.USE_VALUES);
 				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
 				addProposals(context, acceptor, attributes, img);
 			}
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_cc_type.getName())){
 				//Check that block is correct too
-				ArrayList<String> attributes = new ArrayList<String>();
+				List<String> attributes = new ArrayList<String>();
 				attributes.addAll(VariableType.CC_VALUES);
 				Image img = imageHelper.getImage(Images.getPath(Images.CC_TYPE));				
 				addProposals(context, acceptor, attributes, img);
 			}
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
 				//Check that block is correct too
-				ArrayList<String> attributes = new ArrayList<String>();
+				List<String> attributes = new ArrayList<String>();
 				attributes.addAll(UnitValidator.getUnitNames());
 				Image img = imageHelper.getImage(Images.getPath(Images.EXPRESSION));				
 				addProposals(context, acceptor, attributes, img);
@@ -117,12 +117,12 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				String typeName = type.getDistribution().getIdentifier();
 				List<Attribute> recognized_attrs = DistributionValidator.distr_attrs.get(typeName);
 				if (recognized_attrs != null){
-					ArrayList<String> attributes = Utils.getAllNames(recognized_attrs);
+					List<String> attributes = Utils.getAllNames(recognized_attrs);
 					addProposals(context, acceptor, attributes, img);
 				}
 			} else {
 				//suggest attribute type
-				ArrayList<String> attributes = new ArrayList<String>();
+				List<String> attributes = new ArrayList<String>();
 				attributes.add(DistributionValidator.attr_type.getName());
 				addProposals(context, acceptor, attributes, img);
 			}
@@ -134,7 +134,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 		if (model instanceof DistributionArgumentImpl){
 			DistributionArgument arg = (DistributionArgument)model;
 			if (arg.getArgumentName().getName().equals(DistributionValidator.attr_type.getName())){
-				ArrayList<String> attributes = new ArrayList<String>();
+				List<String> attributes = new ArrayList<String>();
 				attributes.addAll(DistributionValidator.distr_attrs.keySet()); 
 				Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_TYPE));
 				addProposals(context, acceptor, attributes, img);
@@ -151,7 +151,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 	}
 	
 	private void addProposals(ContentAssistContext context, ICompletionProposalAcceptor acceptor, 
-			ArrayList<String> attributes, Image img){
+			List<String> attributes, Image img){
 		for (String proposal: attributes){
 			StyledString displayedString = new StyledString();
 			displayedString.append(proposal);

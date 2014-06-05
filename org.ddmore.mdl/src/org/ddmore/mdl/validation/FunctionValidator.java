@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.BlockStatement;
@@ -70,14 +71,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_FUNCTION_CALL_PARAM_OBJ_MISSING = "MOG should include a parameter object";
 	public final static String MSG_FUNCTION_CALL_OBJ_DEFINED     = "Cannot create a MOG";
 	
-	
-	///////////////////////////
-	//Recognized MDL functions
-	//////////////////////////
-
-	public final static String funct_error_exit = "errorexit";
-
-	final static HashMap<String, FunctionSignature> recognizedFunctions 
+	final static Map<String, FunctionSignature> recognizedFunctions 
 		= new HashMap<String, FunctionSignature>(){
 			/** * */
 			private static final long serialVersionUID = -3320608024292207312L;
@@ -119,9 +113,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	};
 
 	//List of declared function names per object
-	HashMap<String, ArrayList<String>> externalFunctions = new HashMap<String, ArrayList<String>>();
+	Map<String, List<String>> externalFunctions = new HashMap<String, List<String>>();
 	//List of declared function names per object
-	HashMap<String, ArrayList<String>> declaredFunctions = new HashMap<String, ArrayList<String>>();
+	Map<String, List<String>> declaredFunctions = new HashMap<String, List<String>>();
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//Task object

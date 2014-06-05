@@ -1,18 +1,16 @@
 package eu.ddmore.converter.mdl2pharmml.domain
 
+import org.ddmore.mdl.validation.ModellingObjectGroup
+
 class Operation {
 	public var String name;
 	public var String type;
-	public var String mObjName;
-	public var String pObjName;
-	public var String dObjName;
+	public var ModellingObjectGroup mog;
 	
-	new (String name, String type, String mObjName, String pObjName, String dObjName){
+	new (String name, String type, ModellingObjectGroup mog){
 		this.name = name;
 		this.type = type;
-		this.mObjName = mObjName;
-		this.pObjName = pObjName;
-		this.dObjName = dObjName;	
+		this.mog = mog;
 	}
 	
 }

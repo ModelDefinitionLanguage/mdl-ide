@@ -1,5 +1,7 @@
 package org.ddmore.mdl.ui.handler;
 
+import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.validation.Utils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -10,7 +12,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.xtext.generator.JavaIoFileSystemAccess;
 import org.eclipse.xtext.resource.IResourceDescriptions;
@@ -53,7 +58,8 @@ public class ConvertToPharmMLHandler extends AbstractHandler implements IHandler
 					return null;
 				}
 			}
-							
+			
+
 			final JavaIoFileSystemAccess fsa = fileAccessProvider.get();			
 			fsa.setOutputPath(srcGenFolder.getRawLocation().toString());
 				
@@ -64,6 +70,14 @@ public class ConvertToPharmMLHandler extends AbstractHandler implements IHandler
 							public Boolean exec(XtextResource source)
 									throws Exception {
 								if (generator != null){
+								       Mcl mcl = (Mcl) source.getContents().get(0);
+								       //No MOGs defined
+								       if (mcl != null && Utils.getMOGs(mcl).size() == 0){
+								    	   Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+								    	   MessageDialog.openError(shell, "Error", 
+								    			   "PharmML generation error: no MOG found!");
+								       }
+									
 									System.out.println("Generating PharmML code for " + file.getName());
 					            	generator.doGenerate(source, fsa);
 					            	try {

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.ddmore.mdl.mdl.Argument;
@@ -36,7 +37,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 
 	final static List<String> units = Arrays.asList("L", "l", "m", "y", "h", "s", "kg", "g", "mg");
 
-	static HashMap<String, String> validUnits = loadUnits();
+	static Map<String, String> validUnits = loadUnits();
 	
 	final int ID = 1;
 	final int NUMBER = 2;
@@ -45,8 +46,8 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	final int MULT_OP = 5;
 	final int POWER_OP = 6;
 	
-	static HashMap<String, String> loadUnits(){
-		HashMap<String, String> validUnits = new HashMap<String, String>();
+	static Map<String, String> loadUnits(){
+		Map<String, String> validUnits = new HashMap<String, String>();
 		try {
 		    URL url = new URL("platform:/plugin/org.ddmore.mdl/runtime/Units.csv");
 		    InputStream inputStream = url.openConnection().getInputStream();

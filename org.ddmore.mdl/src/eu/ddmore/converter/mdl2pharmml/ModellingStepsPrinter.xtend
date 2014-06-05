@@ -16,12 +16,12 @@ class ModellingStepsPrinter extends DataSetPrinter{
 
 	def print_msteps_ModellingSteps(Operation op){
 		var res = "";
-		res  = res + print_ds_TargetTool(op.dObjName);
-		res = res + print_ds_TargetDataSet(op.mObjName, op.dObjName);
+		res  = res + print_ds_TargetTool(op.mog.getDataObjName);
+		res = res + print_ds_TargetDataSet(op.mog.getModelObjName, op.mog.getDataObjName);
 		if (op.type.equals(BLK_ESTIM_STEP)){
-			res = res + print_msteps_EstimationStep(op.pObjName, op.dObjName, BLK_ESTIM_STEP + op.name);
+			res = res + print_msteps_EstimationStep(op.mog.getModelObjName, op.mog.getDataObjName, BLK_ESTIM_STEP + op.name);
 		} else {
-			res = res + print_msteps_SimulationStep(op.dObjName, BLK_SIMUL_STEP + op.name);
+			res = res + print_msteps_SimulationStep(op.mog.getDataObjName, BLK_SIMUL_STEP + op.name);
 		}
 		'''
 		<ModellingSteps xmlns="«xmlns_mstep»">

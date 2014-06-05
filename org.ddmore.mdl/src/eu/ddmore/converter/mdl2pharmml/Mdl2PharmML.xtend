@@ -25,12 +25,14 @@ class Mdl2PharmML{
 		//	1 - model object
 		//  2 - parameter object
 		//  3 - data object
+		//  4 - task object 
 		for (o: m.objects){
 			if (o.telObject != null){
 				for (st: o.telObject.statements){
 					val functionName = st.expression.identifier.function.name;
 					if (st.expression.identifier.object != null){
-						val tObj = resolver.getTaskObject(st.expression.identifier.object.name);
+						val tObjName = st.expression.identifier.object.name;
+						val tObj = resolver.getTaskObject(tObjName);
 						for (b: tObj.blocks){
 							if (b.functionDeclaration != null){
 								if (b.functionDeclaration.functionName.name.equals(functionName)){
@@ -44,14 +46,11 @@ class Mdl2PharmML{
 												val dObjName = mathPrinter.getAttribute(st.expression.arguments, dataParam);
 												val pObjName = mathPrinter.getAttribute(st.expression.arguments, paramParam);
 												var stepType = BLK_ESTIM_STEP;
-												if (bb.simulateBlock != null) stepType = BLK_SIMUL_STEP;
-													operations.add(new Operation(
-														functionName, stepType,
-														mObjName, pObjName, dObjName
-													));
 												val key = mObjName + "-" + dObjName + "-" + pObjName;	
-												if (!MOGs.containsKey(key))	
-													MOGs.put(key, new ModellingObjectGroup(mObjName, pObjName, dObjName));	
+												val mog = new ModellingObjectGroup(mObjName, pObjName, dObjName, tObjName);
+												if (!MOGs.containsKey(key)) MOGs.put(key, mog);	
+												if (bb.simulateBlock != null) stepType = BLK_SIMUL_STEP;
+													operations.add(new Operation(functionName, stepType, mog));
 											}
 										}
 									}
@@ -62,33 +61,6 @@ class Mdl2PharmML{
 				}
 			}
 		}
-		if (MOGs.size == 0){
-			//No TEL object or Task object, create MOG from 3 obejcts in the MCL file
-			var mdlObjects = new ArrayList<String>();
-			var paramObjects = new ArrayList<String>();
-			var dataObjects = new ArrayList<String>();			
-			for (o: m.objects){
-				if (o.modelObject != null){				 
-					mdlObjects.add(o.objectName.name);
-				}
-				if (o.parameterObject != null){				 
-					paramObjects.add(o.objectName.name);
-				}
-				if (o.dataObject != null){				 
-					dataObjects.add(o.objectName.name);
-				}
-			}
-			for (mObjName: mdlObjects){
-				for (pObjName: paramObjects){
-					for (dObjName: dataObjects){
-						val key = mObjName + "-" + dObjName + "-" + pObjName;	
-						if (!MOGs.containsKey(key))	
-							MOGs.put(key, new ModellingObjectGroup(mObjName, pObjName, dObjName));	
-					}
-				}
-			}
-		}
-		
 		'''
 			<?xml version="1.0" encoding="UTF-8"?>
 			<PharmML 
@@ -99,13 +71,13 @@ class Mdl2PharmML{
 					<IndependentVariable symbId="«s»"/>
 				«ENDFOR»
 				«FOR mog: MOGs.entrySet»
-					«mdPrinter.print_mdef_ModelDefinition(mog.value.getMdlObjName(), mog.value.getParamObjName())»
+					«mdPrinter.print_mdef_ModelDefinition(mog.value.getModelObjName(), mog.value.getParamObjName())»
 				«ENDFOR»
 				«FOR op: operations»
 					«msPrinter.print_msteps_ModellingSteps(op)»
 				«ENDFOR»
 				«FOR mog: MOGs.entrySet»
-					«tdPrinter.print_design_TrialDesign(mog.value.getMdlObjName(), mog.value.getParamObjName())»
+					«tdPrinter.print_design_TrialDesign(mog.value.getModelObjName(), mog.value.getParamObjName())»
 				«ENDFOR»
 			</PharmML>
 		'''			

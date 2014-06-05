@@ -3,6 +3,7 @@ package org.ddmore.mdl.validation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
@@ -16,7 +17,9 @@ import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedFunctionName;
+import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.FunctionName;
+import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.ImportBlock;
 import org.ddmore.mdl.mdl.ImportedFunction;
@@ -61,6 +64,7 @@ import org.ddmore.mdl.mdl.impl.SymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
+import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -74,7 +78,7 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter;
 public class Utils {
 	
 	//Checks whether a given identifier is declared
-	static boolean isIdentifierDeclared(HashMap<String, ArrayList<String>> map, String id, String objName){
+	static boolean isIdentifierDeclared(Map<String, List<String>> map, String id, String objName){
 		if (objName != null) 
 			if (map.containsKey(objName))
 				if (map.get(objName).contains(id)) return true;
@@ -83,7 +87,7 @@ public class Utils {
 
 	
 	//Checks whether a given symbol is declared
-	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName ref){
+	static boolean isSymbolDeclared(Map<String, List<String>> map, SymbolName ref){
 		ObjectName objName = getObjectName(ref);
 		if (objName != null) 
 			if (map.containsKey(objName.getName()))
@@ -91,25 +95,28 @@ public class Utils {
 		return false;
 	}
 		
-	static boolean isSymbolDeclared(HashMap<String, ArrayList<String>> map, SymbolName ref, ArrayList<ModellingObjectGroup> mogs){
+	static boolean isSymbolDeclared(Map<String, List<String>> map, SymbolName ref, List<ModellingObjectGroup> mogs){
 		ObjectName objName = getObjectName(ref);
 		if (objName != null){
 			if (isIdentifierDeclared(map, ref.getName(), objName.getName())) return true;
 			for (ModellingObjectGroup mog: mogs){
-				if (mog.getMdlObjName().equals(objName.getName()))
-					if (isIdentifierDeclared(map, ref.getName(), mog.getDataObjName()) || 
-							isIdentifierDeclared(map, ref.getName(), mog.getParamObjName())) return true;
+				if (mog.getObjectNames().contains(objName.getName()))
+					return 
+						isIdentifierDeclared(map, ref.getName(), mog.getModelObjName()) || 
+						isIdentifierDeclared(map, ref.getName(), mog.getDataObjName()) || 
+						isIdentifierDeclared(map, ref.getName(), mog.getParamObjName()) ||
+						isIdentifierDeclared(map, ref.getName(), mog.getTaskObjName()); 
 			}
 		}
 		return false;
 	}
 	
 	//Checks whether a function is declared more than once
-	static boolean isSymbolDeclaredMoreThanOnce(HashMap<String, ArrayList<String>> map, SymbolName ref){
+	static boolean isSymbolDeclaredMoreThanOnce(Map<String, List<String>> map, SymbolName ref){
 		int i = 0;
 		ObjectName objName = Utils.getObjectName(ref);
 		if (map.containsKey(objName.getName())){
-			ArrayList<String> functions = map.get(objName.getName()); 
+			List<String> functions = map.get(objName.getName()); 
 			for (String func: functions){
 				if (func.equals(ref.getName())) i++;
 				if (i > 1) return true;
@@ -119,7 +126,7 @@ public class Utils {
 	}
 	
 	//Checks whether a given function is declared
-	static boolean isFunctionDeclared(HashMap<String, ArrayList<String>> map, FullyQualifiedFunctionName ref){
+	static boolean isFunctionDeclared(Map<String, List<String>> map, FullyQualifiedFunctionName ref){
 		ObjectName objName = ref.getObject();
 		if (objName == null) objName = getObjectName(ref);
 		if (objName != null) 
@@ -129,7 +136,7 @@ public class Utils {
 	}
 	
 	//Checks whether a given function is declared
-	static boolean isFunctionDeclared(HashMap<String, ArrayList<String>> map, FunctionName ref){
+	static boolean isFunctionDeclared(Map<String, List<String>> map, FunctionName ref){
 		ObjectName objName = getObjectName(ref);
 		if (objName != null) 
 			if (map.containsKey(objName.getName()))
@@ -138,11 +145,11 @@ public class Utils {
 	}
 	
 	//Checks whether a function is declared more than once
-	static boolean isFunctionDeclaredMoreThanOnce(HashMap<String, ArrayList<String>> map, FunctionName ref){
+	static boolean isFunctionDeclaredMoreThanOnce(Map<String, List<String>> map, FunctionName ref){
 		int i = 0;
 		ObjectName objName = Utils.getObjectName(ref);
 		if (map.containsKey(objName.getName())){
-			ArrayList<String> functions = map.get(objName.getName()); 
+			List<String> functions = map.get(objName.getName()); 
 			for (String func: functions){
 				if (func.equals(ref.getName())) i++;
 				if (i > 1) return true;
@@ -161,7 +168,7 @@ public class Utils {
 	}
 
 	//Add a symbol to a list of known symbols
-	public static void addSymbol(ArrayList<String> list, BlockStatement st){
+	public static void addSymbol(List<String> list, BlockStatement st){
 		if (st != null){
 			if (st.getSymbol() != null){
 				list.add(st.getSymbol().getSymbolName().getName());
@@ -170,17 +177,12 @@ public class Utils {
 			if (st.getStatement() != null){
 				ConditionalStatement e = st.getStatement();
 				addSymbol(list, e);
-				//THE FOLLOWING CODE IS TO ACTIVATE STRONG VARIDATION OF CONDITIONALLY DECLARED VARIABLES or PARAMETERS
-				//ArrayList<BlockStatement> ifBlocks = new ArrayList<BlockStatement>();
-				//ArrayList<BlockStatement> elseBlocks = new ArrayList<BlockStatement>();
-				//prepareConditionalBlocks(e, ifBlocks, elseBlocks);
-				//addSymbol(list, ifBlocks, elseBlocks);
 			}
 		}
 	}
 	
 	//The same as previous, but does not add repeated conditionally developed variables to avoid double declaration warning 
-	public static void addSymbolNoRepeat(ArrayList<String> list, BlockStatement st){
+	public static void addSymbolNoRepeat(List<String> list, BlockStatement st){
 		if (st != null){
 			if (st.getSymbol() != null)
 				if (!list.contains(st.getSymbol().getSymbolName().getName())) 
@@ -191,7 +193,7 @@ public class Utils {
 	}
 	
 	//Weak validation of conditionally declared references - a variable is declared if it is declared in some branch 
-	public static void addSymbol(ArrayList<String> list, ConditionalStatement e){
+	public static void addSymbol(List<String> list, ConditionalStatement e){
 		if (e.getIfStatement() != null){
 			addSymbolNoRepeat(list, e.getIfStatement());
 		}
@@ -207,70 +209,10 @@ public class Utils {
 			for (BlockStatement b: e.getElseBlock().getStatements())
 				addSymbolNoRepeat(list, b);
 		}
-	}
-	
-	/*static void addSymbol(ArrayList<String> list, ArrayList<BlockStatement> ifBlocks, ArrayList<BlockStatement> elseBlocks){
-		//Add symbols defined in both branches of nested conditional statements 
-		ArrayList<String> ifSymbols = new ArrayList<String>();
-		ArrayList<String> elseSymbols = new ArrayList<String>();
-		for (BlockStatement b: ifBlocks){
-			if (b.getStatement() != null){
-				ConditionalStatement e = b.getStatement();
-				ArrayList<BlockStatement> ifBlocks1 = new ArrayList<BlockStatement>();
-				ArrayList<BlockStatement> elseBlocks1 = new ArrayList<BlockStatement>();
-				prepareConditionalBlocks(e, ifBlocks1, elseBlocks1);
-				addSymbol(ifSymbols, ifBlocks1, elseBlocks1);
-			}
-		}
-		for (BlockStatement b: elseBlocks){
-			if (b.getStatement() != null){
-				ConditionalStatement e = b.getStatement();
-				ArrayList<BlockStatement> ifBlocks1 = new ArrayList<BlockStatement>();
-				ArrayList<BlockStatement> elseBlocks1 = new ArrayList<BlockStatement>();
-				prepareConditionalBlocks(e, ifBlocks1, elseBlocks1);
-				addSymbol(elseSymbols, ifBlocks1, elseBlocks1);
-			}
-		}
-		for (String s: ifSymbols){
-			if (isSymbolDefined(elseBlocks, s) || elseSymbols.contains(s)) list.add(s);
-		}
-		//BlockStatement is an unconditional symbol declaration
-		for (BlockStatement b: ifBlocks){
-			if (b.getSymbol() != null){
-				String s = b.getSymbol().getIdentifier();
-				if (isSymbolDefined(elseBlocks, s) || elseSymbols.contains(s)) {
-					list.add(s);
-				}				
-			}
-		}
-	}*/
-	
-	/*static void prepareConditionalBlocks(ConditionalStatement e, ArrayList<BlockStatement> ifBlocks, ArrayList<BlockStatement> elseBlocks){
-		if (e.getIfStatement() != null)
-			ifBlocks.add(e.getIfStatement());	
-		if (e.getIfBlock() != null) {
-			for (BlockStatement b: e.getIfBlock().getStatements())
-				ifBlocks.add(b);
-		}
-		if (e.getElseStatement() != null)
-			elseBlocks.add(e.getElseStatement());
-		if (e.getElseBlock() !=null){
-			for (BlockStatement b: e.getElseBlock().getStatements())
-				elseBlocks.add(b);
-		}
-	}*/
-	
-	/*private boolean isSymbolDefined(ArrayList<BlockStatement> blocks, String name){
-		for (BlockStatement b: blocks){
-			if (b.getSymbol() != null){
-				if (b.getSymbol().getIdentifier().equals(name)) return true;				
-			}
-		}
-		return false;
-	}*/
+	}	
 	
 	//Add a symbol to a list of known symbols
-	public static void addSymbol(ArrayList<String> list, Arguments args){
+	public static void addSymbol(List<String> list, Arguments args){
 		if (args != null){
 			if (args.getArguments() != null){	
 				for (Argument arg: args.getArguments()){
@@ -281,7 +223,7 @@ public class Utils {
 		}
 	}
 
-	public static void addSymbol(ArrayList<String> list, FormalArguments args){
+	public static void addSymbol(List<String> list, FormalArguments args){
 		if (args != null){
 			for (ArgumentName id: args.getArguments())
 				list.add(id.getName());
@@ -289,7 +231,7 @@ public class Utils {
 	}
 	
 	//Add a symbol to a list of known symbols
-	public static void addSymbol(ArrayList<String> list, Symbols args){
+	public static void addSymbol(List<String> list, Symbols args){
 		if (args != null){
 			if (args.getSymbols() != null){	
 				for (Symbol arg: args.getSymbols()){
@@ -300,7 +242,7 @@ public class Utils {
 		}
 	}
 
-	public static void addSymbol(ArrayList<String> list, SymbolNames args){
+	public static void addSymbol(List<String> list, SymbolNames args){
 		if (args != null){
 			for (SymbolName id: args.getSymbolNames())
 				list.add(id.getName());
@@ -308,7 +250,7 @@ public class Utils {
 	}
 
 	
-	public static void addSymbol(ArrayList<String> list, ImportBlock block){
+	public static void addSymbol(List<String> list, ImportBlock block){
 		if (block != null){
 			for (ImportedFunction id: block.getFunctions())
 				list.add(id.getFunctionName().getName());
@@ -343,8 +285,8 @@ public class Utils {
 	}
 	
 	//Extracts references from mathematical expressions
-	static ArrayList<String> extractSymbolNames(Arguments args, String attrName){
-		ArrayList<String> params = new ArrayList<String>();	
+	static List<String> extractSymbolNames(Arguments args, String attrName){
+		List<String> params = new ArrayList<String>();	
 		if (args != null){
 			if (args.getArguments() != null){
 				for (Argument x: args.getArguments()){
@@ -369,14 +311,14 @@ public class Utils {
 	}
 	
 	//Print a given list (used for reporting errors and for testing)
-	static String printList(ArrayList<String> list){
+	static String printList(List<String> list){
 		String res = "{ ";
 		for (String str: list) res += str + "; ";
 		return res + "}";
 	}
 	
-	public static ArrayList<String> getAllNames(List<Attribute> attrs){
-		ArrayList<String> names = new ArrayList<String>();
+	public static List<String> getAllNames(List<Attribute> attrs){
+		List<String> names = new ArrayList<String>();
 		if (attrs != null){
 			for (Attribute attr: attrs){
 				names.add(attr.getName());
@@ -385,7 +327,7 @@ public class Utils {
 		return names;
 	}
 
-	public static ArrayList<String> getRequiredNames(List<Attribute> attrs){
+	public static List<String> getRequiredNames(List<Attribute> attrs){
 		ArrayList<String> names = new ArrayList<String>();
 		if (attrs != null){
 			for (Attribute attr: attrs){
@@ -464,7 +406,6 @@ public class Utils {
 	public static boolean isFileExist(EObject b, String filePath) {
 		String platformString = b.eResource().getURI().toPlatformString(true);
 		IFile modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(platformString));
-		//Try path relatively to the model file
 		IContainer parent = modelFile.getParent();
 		String p = filePath;
 		while (p.startsWith("../") && parent != null){
@@ -477,5 +418,63 @@ public class Utils {
 			if (requestedFile.exists()) return true;
 		}
 		return false;
+	}
+	
+	public static Map<String, MdlDataType> getDeclaredObjects(Mcl mcl){
+		Map<String, MdlDataType> declaredObjects = new HashMap<String, MdlDataType>();
+		for (MclObject obj: mcl.getObjects()){
+			MdlDataType objType = MdlDataType.TYPE_OBJ_REF;
+			if (obj.getModelObject() != null){
+				objType = MdlDataType.TYPE_OBJ_REF_MODEL;
+			}
+			if (obj.getDataObject() != null){
+				objType = MdlDataType.TYPE_OBJ_REF_DATA;
+			}
+			if (obj.getParameterObject() != null){
+				objType = MdlDataType.TYPE_OBJ_REF_PARAM;
+			}
+			declaredObjects.put(obj.getObjectName().getName(), objType);
+		}
+		return declaredObjects;
+	}
+	
+	public static List<ModellingObjectGroup> getMOGs(Mcl mcl){
+		List<ModellingObjectGroup> mogs = new ArrayList<ModellingObjectGroup>();
+		for (MclObject obj: mcl.getObjects()){
+			if (obj.getTelObject() != null){
+				for (FunctionCallStatement call: obj.getTelObject().getStatements()){
+					if (call.getExpression() != null && call.getExpression().getArguments() != null){
+						String mdlObj = null, dataObj = null, paramObj = null;
+						for (Argument arg: call.getExpression().getArguments().getArguments()){
+							if (arg.getExpression().getExpression() != null){
+								if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_MODEL, arg.getExpression())){
+									SymbolName s = MdlDataType.getReference(arg.getExpression().getExpression().getConditionalExpression().getExpression());
+									mdlObj = s.getName();
+								} 
+								else 
+									if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_PARAM, arg.getExpression())){
+										SymbolName s = MdlDataType.getReference(arg.getExpression().getExpression().getConditionalExpression().getExpression());
+										paramObj = s.getName();
+									}
+									else 
+										if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_DATA, arg.getExpression())){
+											SymbolName s = MdlDataType.getReference(arg.getExpression().getExpression().getConditionalExpression().getExpression());
+											dataObj = s.getName();
+										} 
+							}
+						}
+						if ((mdlObj != null) && (dataObj != null) && (paramObj != null)){
+							String taskObj = null;
+							FullyQualifiedFunctionName functName = call.getExpression().getIdentifier();
+							if (functName != null && functName.getObject() != null)
+								taskObj = functName.getObject().getName();
+							ModellingObjectGroup mog = new ModellingObjectGroup(mdlObj, paramObj, dataObj, taskObj);
+							mogs.add(mog);
+						}
+					}
+				}
+			}
+		}
+		return mogs;
 	}
 }

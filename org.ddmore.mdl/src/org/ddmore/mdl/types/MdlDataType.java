@@ -14,6 +14,7 @@ import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
@@ -23,6 +24,7 @@ import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.validation.MdlJavaValidator;
+import org.ddmore.mdl.validation.Utils;
 
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
@@ -309,7 +311,9 @@ public enum MdlDataType {
 		if (expr.getConditionalExpression().getExpression1() == null){
 			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
 			if (s!= null) {
-				return MdlJavaValidator.declaredObjects.containsKey(s.getName());
+				Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
+				if (mcl != null)
+					return Utils.getDeclaredObjects(mcl).containsKey(s.getName());
 			}
 		}
 		return false;
@@ -319,7 +323,9 @@ public enum MdlDataType {
 		if (expr.getConditionalExpression().getExpression1() == null){
 			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
 			if (s!= null) {
-				return (MdlJavaValidator.declaredObjects.get(s.getName()) == MdlDataType.TYPE_OBJ_REF_MODEL);
+				Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
+				if (mcl != null)
+					return (Utils.getDeclaredObjects(mcl).get(s.getName()) == MdlDataType.TYPE_OBJ_REF_MODEL);
 			}
 		}
 		return false;
@@ -329,7 +335,9 @@ public enum MdlDataType {
 		if (expr.getConditionalExpression().getExpression1() == null){
 			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
 			if (s!= null) {
-				return (MdlJavaValidator.declaredObjects.get(s.getName()) == MdlDataType.TYPE_OBJ_REF_DATA);
+				Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
+				if (mcl != null)
+					return (Utils.getDeclaredObjects(mcl).get(s.getName()) == MdlDataType.TYPE_OBJ_REF_DATA);
 			}
 		}
 		return false;
@@ -339,7 +347,9 @@ public enum MdlDataType {
 		if (expr.getConditionalExpression().getExpression1() == null){
 			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
 			if (s!= null) {
-				return (MdlJavaValidator.declaredObjects.get(s.getName()) == MdlDataType.TYPE_OBJ_REF_PARAM);
+				Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
+				if (mcl != null)
+					return (Utils.getDeclaredObjects(mcl).get(s.getName()) == MdlDataType.TYPE_OBJ_REF_PARAM);
 			}
 		}
 		return false;

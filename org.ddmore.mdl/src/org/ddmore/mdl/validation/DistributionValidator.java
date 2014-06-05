@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionArguments;
@@ -111,7 +112,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_weight = new Attribute("weight", MdlDataType.TYPE_REAL, false);	
 	public final static Attribute attr_seed = new Attribute("seed", MdlDataType.TYPE_REAL, false);	
 	
-	final public static HashMap<String, List<Attribute>> distr_attrs = 
+	final public static Map<String, List<Attribute>> distr_attrs = 
 			new HashMap<String, List<Attribute>>() {
 				private static final long serialVersionUID = 27681295286815005L;
 		{
@@ -279,7 +280,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	final static List<Attribute> common_attrs = Arrays.asList(attr_type, attr_level,attr_weight, attr_seed);
 	
 	//List of synonyms or alternatives
-	HashMap<String, String> alternative_attrs = new HashMap<String, String>(){
+	Map<String, String> alternative_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = 28966755954108955L; {
 			put(DistributionType.bernoulli+":"+attr_probability.getName(), attr_p.getName());
 			put(DistributionType.bernoulli+":"+attr_p.getName(), attr_probability.getName());
@@ -357,7 +358,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	};
 
 	//List of synonyms or alternatives
-	HashMap<String, String> exclusive_attrs = new HashMap<String, String>(){
+	Map<String, String> exclusive_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = -4192464782401647313L;
 		{
 			put(attr_var.getName(), attr_sd.getName()); 

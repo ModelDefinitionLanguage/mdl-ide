@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
@@ -41,34 +42,20 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF = "Unresolved reference to a list attribute";
 	public final static String MSG_UNRESOLVED_FUNC_ARGUMENT_REF = "Unresolved reference to a function output parameter";
 	public final static String MSG_UNRESOLVED_SAME_BLOCK_NAME = "No corresponding matrix or diag block found";
-	public final static String var_model_tolrel = "tolrel";
 
 	//List of objects
-	public static HashMap<String, MdlDataType> declaredObjects = new HashMap<String, MdlDataType>();	
+	public Map<String, MdlDataType> declaredObjects = new HashMap<String, MdlDataType>();	
 	//List of declared variables per object
-	public static HashMap<String, ArrayList<String>> declaredVariables = new HashMap<String, ArrayList<String>>();
+	public Map<String, List<String>> declaredVariables = new HashMap<String, List<String>>();
 	
 	//List of declared variability subblocks diag and matrix (to match with same blocks)
-	public static HashMap<String, ArrayList<String>> variabilitySubblockNames = new HashMap<String, ArrayList<String>>();
+	public Map<String, List<String>> variabilitySubblockNames = new HashMap<String, List<String>>();
 
-	public static ArrayList<ModellingObjectGroup> linkedObjects = new ArrayList<ModellingObjectGroup>(); 
+	public List<ModellingObjectGroup> mogs = new ArrayList<ModellingObjectGroup>(); 
 	
 	@Check
 	public void updateObjectList(Mcl mcl){
-		declaredObjects.clear();
-		for (MclObject obj: mcl.getObjects()){
-			MdlDataType objType = MdlDataType.TYPE_OBJ_REF;
-			if (obj.getModelObject() != null){
-				objType = MdlDataType.TYPE_OBJ_REF_MODEL;
-			}
-			if (obj.getDataObject() != null){
-				objType = MdlDataType.TYPE_OBJ_REF_DATA;
-			}
-			if (obj.getParameterObject() != null){
-				objType = MdlDataType.TYPE_OBJ_REF_PARAM;
-			}
-			declaredObjects.put(obj.getObjectName().getName(), objType);
-		}
+		declaredObjects = Utils.getDeclaredObjects(mcl);
 	}
 
 	//Update the list of recognised variables
@@ -153,37 +140,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	
 	@Check
 	public void updateLinkedObjects(Mcl mcl){
-		linkedObjects.clear();
-		for (MclObject obj: mcl.getObjects()){
-			if (obj.getTelObject() != null){
-				for (FunctionCallStatement call: obj.getTelObject().getStatements()){
-					String mdlObj = null, dataObj = null, paramObj = null;
-					//TODO: In what order references are collected?
-					//if (Utils.isFunctionDeclared(FunctionValidator.declaredFunctions, call.getExpression().getIdentifier())){
-						for (Argument arg: call.getExpression().getArguments().getArguments()){
-							if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_MODEL, arg.getExpression())){
-								SymbolName s = MdlDataType.getReference(arg.getExpression().getExpression().getConditionalExpression().getExpression());
-								mdlObj = s.getName();
-							} 
-							else 
-								if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_PARAM, arg.getExpression())){
-									SymbolName s = MdlDataType.getReference(arg.getExpression().getExpression().getConditionalExpression().getExpression());
-									paramObj = s.getName();
-								}
-								else 
-								if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_DATA, arg.getExpression())){
-									SymbolName s = MdlDataType.getReference(arg.getExpression().getExpression().getConditionalExpression().getExpression());
-									dataObj = s.getName();
-								} 
-						}
-						if ((mdlObj != null) && (dataObj != null) && (paramObj != null)){
-							ModellingObjectGroup mog = new ModellingObjectGroup(mdlObj, paramObj, dataObj);
-							linkedObjects.add(mog);
-						}
-					//}
-				}
-			}
-		}		
+		mogs = Utils.getMOGs(mcl);
 	}
 
 	//Match the name of the same block with the name of a matrix or a diag block
@@ -230,7 +187,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		}
 		else {
 			//TODO: for MOG validation, collect declared variables for a given object name instead of all
-			if (!(Utils.isSymbolDeclared(declaredVariables, ref, linkedObjects) ||
+			if (!(Utils.isSymbolDeclared(declaredVariables, ref, mogs) ||
 					declaredObjects.containsKey(ref.getName()) ||
 					isFormalParameter(ref))){
 				warning(MSG_SYMBOL_UNKNOWN, MdlPackage.Literals.SYMBOL_NAME__NAME,

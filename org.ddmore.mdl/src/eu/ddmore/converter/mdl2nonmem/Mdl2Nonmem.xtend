@@ -44,7 +44,6 @@ import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.mdl.OrExpression
 import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.validation.MdlJavaValidator
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.types.VariableType
 
@@ -52,6 +51,8 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	protected var Mcl mcl = null;
 	protected val TARGET = "NMTRAN_CODE";
+	protected val var_model_tolrel = "tolrel"; 
+	protected val funct_error_exit = "errorexit";	
 	
 	//Print file name and analyse MCL objects in the source file
   	def convertToNMTRAN(Mcl m){
@@ -1015,7 +1016,7 @@ class Mdl2Nonmem extends MdlPrinter{
 				for (ss: b.modelBlock.statements){
 					var x = ss.statement.symbol;
 					if (x != null && x.symbolName != null){
-						if (x.symbolName.name.equals(MdlJavaValidator::var_model_tolrel)){
+						if (x.symbolName.name.equals(var_model_tolrel)){
 							if (x.expression != null)
 								return x.expression.toStr;
 						}
@@ -1407,7 +1408,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//toStr function call
 	override toStr(FunctionCall call){
-		if (call.identifier.toStr.trim.equals(FunctionValidator::funct_error_exit))
+		if (call.identifier.toStr.trim.equals(funct_error_exit))
 			return "EXIT" + call.arguments.toStrWithoutCommas;
 		return super.toStr(call);	
 	}	
