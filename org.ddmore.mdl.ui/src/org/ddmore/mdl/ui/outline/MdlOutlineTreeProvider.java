@@ -31,7 +31,6 @@ import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.IgnoreList;
-import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.List;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
@@ -139,10 +138,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     
     protected Image _image(TargetBlock f) {
         return imageHelper.getImage(getPath(TARGET));
-    }
-
-    protected Image _image(ImportedFunction f) {
-        return imageHelper.getImage(getPath(IMPORT));
     }
 
     protected Image _image(SymbolDeclaration f) {
@@ -635,17 +630,8 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				true);
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, ImportedFunction p){
-		createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.IMPORTED_FUNCTION__LIST,
-				_image(p),
-				 p.getFunctionName().getName(),
-				false);
-	}
-	
 	protected void  _createNode(IOutlineNode parentNode, FunctionCall st) {
-		createEStructuralFeatureNode(parentNode,
+			createEStructuralFeatureNode(parentNode,
 				st,
 				MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 				_image(st),

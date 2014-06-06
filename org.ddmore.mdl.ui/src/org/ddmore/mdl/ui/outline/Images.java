@@ -42,7 +42,6 @@ public class Images {
 	public static final String FUNCTION_CALL_STATEMENT = "176-variable-mod.png";
 	public static final String RANDOM ="092-random.png";
 	public static final String DROP ="104-remove.png";
-	public static final String IMPORT ="193-import.png";
 	
 	public static final String STRUCTURAL_BLOCK = LIST;
 	public static final String VARIABILITY_BLOCK = LIST;

@@ -38,6 +38,7 @@ import org.ddmore.mdl.mdl.BlockStatement
 import java.util.HashMap
 import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.types.UseType
+import org.ddmore.mdl.validation.FunctionValidator
 
 class MathPrinter extends MdlPrinter{
 
@@ -46,17 +47,6 @@ class MathPrinter extends MdlPrinter{
     new(ReferenceResolver resolver) {
     	this.resolver = resolver
  	}
-	
-	//List of mathematical functions (MDL = PharmML) converted to PharmML unary or binary operators
-	var standardFunctions = newHashSet("abs", "exp", "factorial", "factl", "gammaln", "ln", "log", 
-		"logistic", "logit", "normcdf", "probit", "sqrt", "sin", "cos", "tan", "sec", "csc", "cot", 
-		"sinh", "cosh", "tanh", "sech", "csch", "coth", "arcsin", "arccos", "arctan", "arcsec", "arccsc", 
-		"arccot", "arcsinh", "arccosh", "arctanh", "arcsech", "arccsch", "arccoth", 
-		"floor", "ceiling", "logx", "root", "min", "max");
-	
-	//List of functions that are represented by special PharmML tags
-	//MDL != PharmML, e.g., "errorexit" is validated in MDL but converts to a usual function call  
-	var specialFunctions = newHashSet("seq", "update", "runif", "PHI");
 	
 	//Generate function definition from a math expression like a + b*f
 	def print_mdef_FunctionDefinition(Expression expr) { 
@@ -253,19 +243,31 @@ class MathPrinter extends MdlPrinter{
 
 	//+ Convert math functions to PharmML 
 	def print_Math_FunctionCall(FunctionCall call){
-		if (specialFunctions.contains(call.identifier.function.name)){
-			 if (call.identifier.function.name.equals("seq")){
-			 	val params = call.arguments.arguments;
-			 	//TODO: process named parameters: (start, stepSize, end) or (start, stepSize, repetition)
-			 	if (params.size == 3)
+		if (call.identifier.function.name.equals(FunctionValidator::funct_seq)){
+			if (call.arguments != null){
+				val params = call.arguments.arguments;
+				var passedByName = true;
+				for (param: params)
+					if (param.argumentName == null) passedByName = false;
+				//(start, stepSize, repetition) - not used in MDL?
+			 	if (params.size == 3 && !passedByName)
 			 		return print_ct_Sequence(
 			 			params.get(0).expression.print_Math_Expr.toString, 
 			 			params.get(1).expression.print_Math_Expr.toString, 
 			 			params.get(2).expression.print_Math_Expr.toString
 			 		);
-			 }
+			 	if (passedByName) {
+			 		return print_ct_Sequence(
+			 			call.arguments.getAttribute(FunctionValidator::param_seq_start.name),
+			 			call.arguments.getAttribute(FunctionValidator::param_seq_stepSize.name),
+			 			call.arguments.getAttribute(FunctionValidator::param_seq_end.name)
+			 		);
+			 	}	
+		 	}
+		 		
 		} else {
-			if (standardFunctions.contains(call.identifier.function.name)){
+			if (FunctionValidator::funct_standard1.contains(call.identifier.function.name) ||
+				FunctionValidator::funct_standard2.contains(call.identifier.function.name)){
 				//Convert standard mathematical functions to a PharmML operator with the same name;		
 				return call.print_Math_FunctionCall_Standard;	
 			} else {

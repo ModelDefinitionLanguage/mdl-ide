@@ -15,19 +15,12 @@ import java.util.Map;
 
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.BlockStatement;
-import org.ddmore.mdl.mdl.DataObject;
-import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.EstimateTask;
 import org.ddmore.mdl.mdl.ExecuteTask;
 import org.ddmore.mdl.mdl.FunctionCall;
-import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
-import org.ddmore.mdl.mdl.ModelObject;
-import org.ddmore.mdl.mdl.ModelObjectBlock;
-import org.ddmore.mdl.mdl.ParameterObject;
-import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.SimulateTask;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
@@ -70,48 +63,80 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_FUNCTION_CALL_DATA_OBJ_MISSING  = "MOG should include a data object";
 	public final static String MSG_FUNCTION_CALL_PARAM_OBJ_MISSING = "MOG should include a parameter object";
 	public final static String MSG_FUNCTION_CALL_OBJ_DEFINED     = "Cannot create a MOG";
+
+	final public static List<String> funct_standard1 = Arrays.asList(
+		"abs", "exp", "factorial", "factl", "gammaln", "ln", "log", "logistic", "logit", "normcdf",
+		"probit", "sqrt", "sin", "cos", "tan", "sec", "csc", "cot", "sinh", "cosh", "tanh", 
+		"sech", "csch", "coth", "arcsin", "arccos", "arctan", "arcsec", "arccsc", 
+		"arccot", "arcsinh", "arccosh", "arctanh", "arcsech", "arccsch", "arccoth", 
+		"floor", "ceiling");
+
+	final public static List<String> funct_standard2 = Arrays.asList("logx", "root", "min", "max");
+
+	final public static String funct_runif     = "runif";
+	final public static String funct_errorExit = "errorExit";
+	final public static String funct_update    = "update";
+	final public static String funct_pnorm     = "pnorm";
 	
-	final static Map<String, FunctionSignature> recognizedFunctions 
+	final public static String funct_seq     = "seq";
+	final public static FunctionParameter param_seq_start = new FunctionParameter("start", 0, MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_seq_stepSize = new FunctionParameter("stepSize", 1, MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_seq_repetition = new FunctionParameter("repetition", 1, MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_seq_end = new FunctionParameter("end", 2, MdlDataType.TYPE_REAL);
+	
+	/*LIBRARY*/
+	final public static String funct_nmadvan = "nmadvan";
+	final public static String funct_PK = "PK";
+	
+	final public static FunctionParameter param_model = new FunctionParameter("model", 1, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_trans = new FunctionParameter("trans", 2, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_ncmt = new FunctionParameter("ncmt", 3, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
+	final public static FunctionParameter param_input = new FunctionParameter("input", 4, MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_output = new FunctionParameter("output", 5, MdlDataType.TYPE_LIST, ParameterPassingMethod.IN_OUT);
+	final public static FunctionParameter param_distribution = new FunctionParameter("distribution", 6, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_elimination = new FunctionParameter("elimination", 7, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_parameterization = new FunctionParameter("parameterization", 8, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	
+	final public static List<String> libraries = Arrays.asList(funct_nmadvan, funct_PK);
+	
+	final public static Map<String, FunctionSignature> standardFunctions 
 		= new HashMap<String, FunctionSignature>(){
 			/** * */
-			private static final long serialVersionUID = -3320608024292207312L;
+		private static final long serialVersionUID = -3320608024292207312L;
 		{
 			//Standard functions with 1 input parameter (MDL = PharMML)
-			List<String> standardFunctions1 = Arrays.asList(
-				"abs", "exp", "factorial", "factl", "gammaln", "ln", "log", "logistic", "logit", "normcdf",
-				"probit", "sqrt", "sin", "cos", "tan", "sec", "csc", "cot", "sinh", "cosh", "tanh", 
-				"sech", "csch", "coth", "arcsin", "arccos", "arctan", "arcsec", "arccsc", 
-				"arccot", "arcsinh", "arccosh", "arctanh", "arcsech", "arccsch", "arccoth", 
-				"floor", "ceiling");
-			//Standard functions with 2 output parameters (MDL = PharMML)
-			List<String> standardFunctions2 = Arrays.asList(
-				"logx", "root", "min", "max");
-			//Special functions
-			List<String> specialFunctions = Arrays.asList("update", "runif", "errorexit", "errorExit", "PHI");
-
-			//TODO: update returned type	
-			for (String functName: standardFunctions1){
+			for (String functName: funct_standard1){
 				put(functName, new FunctionSignature(functName, 1, MdlDataType.TYPE_REAL));
 			}
-			for (String functName: standardFunctions2){
+			//Standard functions with 2 output parameters (MDL = PharMML)
+			for (String functName: funct_standard2){
 				put(functName, new FunctionSignature(functName, 2, MdlDataType.TYPE_REAL));
 			}	
 						
-			FunctionParameter attr_seq_start = new FunctionParameter("start", 0, MdlDataType.TYPE_REAL);
-			FunctionParameter attr_seq_stepSize = new FunctionParameter("stepSize", 1, MdlDataType.TYPE_REAL);
-			FunctionParameter attr_seq_repetition = new FunctionParameter("repetition", 1, MdlDataType.TYPE_REAL);
-			FunctionParameter attr_seq_end = new FunctionParameter("end", 2, MdlDataType.TYPE_REAL);
-
-			put("seq", new FunctionSignature("seq", 
-				Arrays.asList(attr_seq_start, attr_seq_stepSize, attr_seq_repetition, attr_seq_end), 
+			put(funct_seq, new FunctionSignature(funct_seq, 
+				Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition, param_seq_end), 
 				MdlDataType.TYPE_REAL, true));
 
-			for (String functName: specialFunctions){
-				put(functName, new FunctionSignature(functName, 1, MdlDataType.TYPE_REAL));
-			}	
+			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
+			put(funct_update, new FunctionSignature(funct_update, 1, MdlDataType.TYPE_REAL));
+			put(funct_errorExit, new FunctionSignature(funct_errorExit, 2, MdlDataType.TYPE_VOID));
+						 
+			FunctionParameter attr_runif_0 = new FunctionParameter("", 0, MdlDataType.TYPE_INT);
+			FunctionParameter attr_runif_1 = new FunctionParameter("", 1, MdlDataType.TYPE_REAL, ParameterPassingMethod.IN_OUT);
+			put(funct_runif, new FunctionSignature(funct_runif, 
+					Arrays.asList(attr_runif_0, attr_runif_1), MdlDataType.TYPE_VOID));
+			
+			for (String functName: Arrays.asList(funct_nmadvan, funct_PK)){
+				put(functName, new FunctionSignature(functName, Arrays.asList(
+				param_model, param_trans, param_ncmt, param_input, param_output, 
+				param_distribution, param_elimination, param_parameterization), 
+				MdlDataType.TYPE_LIST, true));
+			}
 		}
 	};
-
+	
+	public static List<String> funct_standardWithOutputParams = Arrays.asList(funct_runif);
+	
 	//List of declared function names per object
 	Map<String, List<String>> externalFunctions = new HashMap<String, List<String>>();
 	//List of declared function names per object
@@ -159,43 +184,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		}
 	}
 	
-	//Update the list of recognised external functions
-	@Check
-	public void updateExternalFunctionList(Mcl mcl){
-		externalFunctions.clear();
-		for (MclObject obj: mcl.getObjects()){
-			ArrayList<String> funcList =  new ArrayList<String>();
-			if (obj.getModelObject() != null){
-				ModelObject modelObj = obj.getModelObject();
-				for (ModelObjectBlock block : modelObj.getBlocks()){
-					Utils.addSymbol(funcList, block.getImportBlock());
-				}
-				externalFunctions.put(obj.getObjectName().getName(), funcList);
-			}
-			if (obj.getParameterObject() != null){
-				ParameterObject paramObj = obj.getParameterObject();
-				for (ParameterObjectBlock block : paramObj.getBlocks()){
-					Utils.addSymbol(funcList, block.getImportBlock());
-				}
-				externalFunctions.put(obj.getObjectName().getName(), funcList);
-			}
-			if (obj.getDataObject() != null){
-				DataObject dataObj = obj.getDataObject();
-				for (DataObjectBlock block : dataObj.getBlocks()){
-					Utils.addSymbol(funcList, block.getImportBlock());
-				}
-				externalFunctions.put(obj.getObjectName().getName(), funcList);
-			}
-			if (obj.getTaskObject() != null){
-				TaskObject taskObj = obj.getTaskObject();
-				for (TaskObjectBlock block : taskObj.getBlocks()){
-					Utils.addSymbol(funcList, block.getImportBlock());
-				}
-				externalFunctions.put(obj.getObjectName().getName(), funcList);
-			}
-		}
-	}
-	
 	//Check whether the function with such a name is already defined
 	@Check
 	public void checkFunctionDeclaration(TaskFunctionDeclaration func){
@@ -204,24 +192,10 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		}
 	}
 	
-	//Check whether the function with such a name is already defined
-	@Check
-	public void checkExportFunctionDeclaration(ImportedFunction func){
-		if (Utils.isFunctionDeclaredMoreThanOnce(externalFunctions, func.getFunctionName())){
-			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__FUNCTION_NAME);
-		}
-		if (Utils.isFunctionDeclared(declaredFunctions, func.getFunctionName())){
-			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__FUNCTION_NAME);
-		}
-		if (recognizedFunctions.containsKey(func.getFunctionName().getName())){
-			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.IMPORTED_FUNCTION__FUNCTION_NAME);
-		}
-	}	
-	
 	//Check that the function call is to an existing function
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
-		if (!recognizedFunctions.containsKey(call.getIdentifier().getFunction().getName())){
+		if (!standardFunctions.containsKey(call.getIdentifier().getFunction().getName())){
 			if(!(Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier()) ||
 					Utils.isFunctionDeclared(externalFunctions, call.getIdentifier())))
 			{
@@ -274,20 +248,20 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			}
 		}
 		else {//standard function
-			FunctionSignature functSig = recognizedFunctions.get(call.getIdentifier().getFunction().getName());
+			FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getFunction().getName());
 			Integer expected = functSig.getNumberOfParams();
 			if (expected == null) expected = 1; //1 by default
 			Integer actual = 0;
 			if (call.getArguments().getArguments() != null)
 				actual = call.getArguments().getArguments().size();
-			if ((expected < 0) && (actual < -expected)){
+			if ((expected < 0) && (actual < -expected) && (!functSig.passingByName)){
 				warning(MSG_FUNCTION_INVALID + ": " +  
 						call.getIdentifier().getFunction().getName() + " expects " + (-expected) + " or more parameters.", 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_INVALID, 
 						call.getIdentifier().getFunction().getName());
 			}
-			if ((expected >= 0) && (actual < expected)){
+			if ((expected >= 0) && (actual < expected) && (!functSig.passingByName)){
 				warning(MSG_FUNCTION_INVALID + ": " +
 						call.getIdentifier().getFunction().getName() + " expects " + expected + " parameter(s).", 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,

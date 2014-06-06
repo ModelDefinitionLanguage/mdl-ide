@@ -43,8 +43,7 @@ ModelObjectBlock:
 	observationBlock = ObservationBlock |
 	estimationBlock = EstimationBlock |
 	simulationBlock = SimulationBlock |
-	targetBlock = TargetBlock |
-	importBlock = ImportBlock
+	targetBlock = TargetBlock 
 ;
 
 IndividualVariablesBlock:
@@ -110,8 +109,7 @@ ParameterObjectBlock:
 	structuralBlock = StructuralBlock |
 	variabilityBlock = VariabilityBlock |
 	priorBlock = PriorParametersBlock |
-	targetBlock = TargetBlock |
-	importBlock = ImportBlock
+	targetBlock = TargetBlock 
 ;
 
 StructuralBlock:
@@ -138,8 +136,8 @@ DataObjectBlock:
 	dataDerivedBlock = DataDerivedBlock |
 	sourceBlock = SourceBlock |
 	designBlock = DesignBlock |
-	targetBlock = TargetBlock | 
-	importBlock = ImportBlock;
+	targetBlock = TargetBlock 
+;
  
 DataInputBlock:
  	identifier='DATA_INPUT_VARIABLES' 
@@ -168,9 +166,8 @@ TaskObjectBlock:
 	parameterBlock = ParameterBlock |
 	dataBlock = DataBlock |
 	modelBlock = ModelBlock | 
-	targetBlock = TargetBlock |
-	importBlock = ImportBlock	
-	;
+	targetBlock = TargetBlock 	
+;
 
 ParameterBlock:
 	identifier = 'PARAMETER' 
@@ -387,16 +384,6 @@ TargetLanguage:
 terminal EXTERNAL_CODE:
 	'***' -> '***'
 ; 
-
-ImportBlock:
-	identifier = 'IMPORT' BEGIN 
-		functions += ImportedFunction*
-	END 
-;
-
-ImportedFunction:
-	functionName = FunctionName ("=" list = List) 
-;
 
 SymbolName:
 	name = ID

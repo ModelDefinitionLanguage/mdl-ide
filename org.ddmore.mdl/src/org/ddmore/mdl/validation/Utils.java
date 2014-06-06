@@ -21,8 +21,6 @@ import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.FunctionName;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.SymbolName;
-import org.ddmore.mdl.mdl.ImportBlock;
-import org.ddmore.mdl.mdl.ImportedFunction;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
 import org.ddmore.mdl.mdl.MatrixBlock;
@@ -47,8 +45,6 @@ import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
-import org.ddmore.mdl.mdl.impl.ImportBlockImpl;
-import org.ddmore.mdl.mdl.impl.ImportedFunctionImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
@@ -170,7 +166,7 @@ public class Utils {
 	//Add a symbol to a list of known symbols
 	public static void addSymbol(List<String> list, BlockStatement st){
 		if (st != null){
-			if (st.getSymbol() != null){
+			if (st.getSymbol() != null && st.getSymbol().getSymbolName() != null){
 				list.add(st.getSymbol().getSymbolName().getName());
 			}
 			//conditional declarations
@@ -184,7 +180,7 @@ public class Utils {
 	//The same as previous, but does not add repeated conditionally developed variables to avoid double declaration warning 
 	public static void addSymbolNoRepeat(List<String> list, BlockStatement st){
 		if (st != null){
-			if (st.getSymbol() != null)
+			if (st.getSymbol() != null && st.getSymbol().getSymbolName() != null)
 				if (!list.contains(st.getSymbol().getSymbolName().getName())) 
 					list.add(st.getSymbol().getSymbolName().getName());
 			if (st.getStatement() != null)
@@ -249,14 +245,6 @@ public class Utils {
 		}
 	}
 
-	
-	public static void addSymbol(List<String> list, ImportBlock block){
-		if (block != null){
-			for (ImportedFunction id: block.getFunctions())
-				list.add(id.getFunctionName().getName());
-		}
-	}
-	
 	//Return value of an attribute with a given name
 	static String getAttributeValue(Arguments a, String attrName){
 		for (Argument arg: a.getArguments())
@@ -287,24 +275,31 @@ public class Utils {
 	//Extracts references from mathematical expressions
 	static List<String> extractSymbolNames(Arguments args, String attrName){
 		List<String> params = new ArrayList<String>();	
-		if (args != null){
-			if (args.getArguments() != null){
-				for (Argument x: args.getArguments()){
+		if (args != null && args.getArguments() != null){
+			for (Argument x: args.getArguments()){
+				if (x.getArgumentName() != null){
 					if (x.getArgumentName().getName().equals(attrName)) {
 						if (x.getExpression().getList() != null) {
 							for (Argument paramArg : x.getExpression().getList().getArguments().getArguments()) {
-								TreeIterator<EObject> paramIterator = paramArg.getExpression().eAllContents();
-								while (paramIterator.hasNext()) {
-									EObject paramObj = paramIterator.next();
-									if (paramObj instanceof SymbolNameImpl) {
-										SymbolName foundParam = (SymbolName) paramObj;
-										params.add(foundParam.getName());
-									}
-								}
+								params.addAll(extractSymbolNames(paramArg));
 							}
 						}
 					}
 				}
+			}
+		}
+		return params;
+	}
+	
+	//Extracts references from mathematical expressions
+	static List<String> extractSymbolNames(Argument paramArg){
+		List<String> params = new ArrayList<String>();	
+		TreeIterator<EObject> paramIterator = paramArg.getExpression().eAllContents();
+		while (paramIterator.hasNext()) {
+			EObject paramObj = paramIterator.next();
+			if (paramObj instanceof SymbolNameImpl) {
+				SymbolName foundParam = (SymbolName) paramObj;
+				params.add(foundParam.getName());
 			}
 		}
 		return params;
@@ -370,7 +365,6 @@ public class Utils {
 			obj instanceof VariabilityBlockImpl ||
 			obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl ||
 			//All objects
-			obj instanceof ImportedFunctionImpl ||
 			obj instanceof TargetBlockImpl) return true;
 		return false;	
 	}
@@ -397,7 +391,6 @@ public class Utils {
 		if (obj instanceof StructuralParametersBlockImpl) return ((StructuralParametersBlock)obj).getIdentifier() ;
 		if (obj instanceof VariabilityParametersBlockImpl) return ((VariabilityParametersBlock)obj).getIdentifier() ;
 		/*All objects*/
-		if (obj instanceof ImportBlockImpl) return ((ImportBlock)obj).getIdentifier();
 		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();
 		return "";
 	}

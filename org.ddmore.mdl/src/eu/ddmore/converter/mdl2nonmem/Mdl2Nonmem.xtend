@@ -27,12 +27,9 @@ import org.ddmore.mdl.mdl.TaskObjectBlock
 import java.util.HashMap
 import org.ddmore.mdl.mdl.ModelObjectBlock
 import org.ddmore.mdl.mdl.ParameterObjectBlock
-import org.ddmore.mdl.mdl.ImportBlock
 import org.ddmore.mdl.mdl.DataObjectBlock
 import org.ddmore.mdl.mdl.TargetBlock
 import java.util.HashSet
-import org.ddmore.mdl.mdl.ImportedFunction
-import org.ddmore.mdl.mdl.Argument
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.FunctionCall
@@ -52,7 +49,6 @@ class Mdl2Nonmem extends MdlPrinter{
 	protected var Mcl mcl = null;
 	protected val TARGET = "NMTRAN_CODE";
 	protected val var_model_tolrel = "tolrel"; 
-	protected val funct_error_exit = "errorexit";	
 	
 	//Print file name and analyse MCL objects in the source file
   	def convertToNMTRAN(Mcl m){
@@ -101,21 +97,19 @@ class Mdl2Nonmem extends MdlPrinter{
 ////////////////////////////////////
 	//Print NM-TRAN record $SIZES
 	def printSIZES()'''
-	«IF "$SIZES".isTargetDefined»
+	«IF "$SIZ".isTargetDefined»
 	
-	«getExternalCodeStart("$SIZES")»
-	«getExternalCodeEnd("$SIZES")»
+	«getExternalCodeStart("$SIZ")»
+	«getExternalCodeEnd("$SIZ")»
 	«ENDIF»	
 	'''
 
 	//Print NM-TRAN record $PROB/$PROBLEM
 	def printPROB()'''
-	«IF "$PROBLEM".isTargetDefined || "$PROB".isTargetDefined»
+	«IF "$PRO".isTargetDefined»
 	
-	«getExternalCodeStart("$PROBLEM")»
-	«getExternalCodeStart("$PROB")»
-	«getExternalCodeEnd("$PROBLEM")»
-	«getExternalCodeEnd("$PROB")»
+	«getExternalCodeStart("$PRO")»
+	«getExternalCodeEnd("$PRO")»
 	«ELSE»
 	
 	$PROB «mcl.fileName.toUpperCase»
@@ -124,12 +118,10 @@ class Mdl2Nonmem extends MdlPrinter{
 
 	//Print NM-TRAN record $ABB/$ABBREVIATED
 	def printABBREVIATED()'''
-	«IF "$ABB".isTargetDefined || "$ABBREVIATED".isTargetDefined»
+	«IF "$ABB".isTargetDefined»
 
 	«getExternalCodeStart("$ABB")»
-	«getExternalCodeStart("$ABBREVIATED")»
 	«getExternalCodeEnd("$ABB")»
-	«getExternalCodeEnd("$ABBREVIATED")»
 	«ENDIF»
 	'''
 	
@@ -175,11 +167,11 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	$PRED
 	«ENDIF»
-	«getExternalCodeStart("$PRED")»
+	«getExternalCodeStart("$PRE")»
 	«o.printPKContent»
 	«o.printMIXContent»
 	«o.printErrorContent»
-	«getExternalCodeEnd("$PRED")»
+	«getExternalCodeEnd("$PRE")»
 	'''
 
 	//Print NM-TRAN  record $PK
@@ -227,10 +219,8 @@ class Mdl2Nonmem extends MdlPrinter{
 	$MIX
 	«ENDIF»
 	«getExternalCodeStart("$MIX")»
-	«getExternalCodeStart("$MIXTURE")»
 	«o.printMIXContent»
 	«getExternalCodeEnd("$MIX")»
-	«getExternalCodeEnd("$MIXTURE")»
 	'''
 
 	def printMIXContent(ModelObject o)'''
@@ -277,9 +267,9 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	$ERROR
 	«ENDIF»
-	«getExternalCodeStart("$ERROR")»
+	«getExternalCodeStart("$ERR")»
 	«o.printErrorContent»
-	«getExternalCodeEnd("$ERROR")»
+	«getExternalCodeEnd("$ERR")»
 	'''	
 	
 	//Processing MODEL_PREDICTION, OBSERVATION for $ERROR
@@ -324,7 +314,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	$MODEL
 	«ENDIF»
-	«getExternalCodeStart("$MODEL")»
+	«getExternalCodeStart("$MOD")»
 	«FOR b:o.blocks»
 		«IF b.modelPredictionBlock != null»
 			«var bb = b.modelPredictionBlock»
@@ -344,7 +334,7 @@ class Mdl2Nonmem extends MdlPrinter{
 			«ENDFOR»
 		«ENDIF»
 	«ENDFOR»
-	«getExternalCodeEnd("$MODEL")»
+	«getExternalCodeEnd("$MOD")»
 	'''
 
 	//Processing MODEL_PREDICTION for $DES
@@ -394,15 +384,13 @@ class Mdl2Nonmem extends MdlPrinter{
 
 	$SUBR
 	«ENDIF»
-	«getExternalCodeStart("$SUBR")»
-	«getExternalCodeStart("$SUBROUTINE")»
+	«getExternalCodeStart("$SUB")»
 	«FOR b:o.blocks»
 		«IF b.modelPredictionBlock != null»
 			«b.modelPredictionBlock.printSUBR»
 		«ENDIF»
 	«ENDFOR»
-	«getExternalCodeEnd("$SUBR")»
-	«getExternalCodeEnd("$SUBROUTINE")»
+	«getExternalCodeEnd("$SUB")»
     ''' 
     
     //Processing MODEL_PREDICTION for $SUBR
@@ -411,15 +399,11 @@ class Mdl2Nonmem extends MdlPrinter{
 		for (ss: b.statements){
 			if (ss.libraryBlock != null){
 				for (st: ss.libraryBlock.statements){
-					var libraryRef = st.expression.identifier;
-					var attributes = libraryRef.getExternalFunctionAttributes();
-					var library = libraryRef.function.name;
-					if (attributes != null){
-						var name = attributes.get("name");
-						if (name != null) library = name;
-					}
-					val model = st.expression.arguments.getAttribute(AttributeValidator::attr_req_model.name);
-					val trans = st.expression.arguments.getAttribute(AttributeValidator::attr_trans.name);
+					var library = st.expression.identifier.function.name;
+					if (library.equals(FunctionValidator::funct_nmadvan))
+						library = "ADVAN";
+					val model = st.expression.arguments.getAttribute(FunctionValidator::param_model.name);
+					val trans = st.expression.arguments.getAttribute(FunctionValidator::param_trans.name);
 					val tol = getTOL;
 					return '''«IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF» «IF !trans.equals("")»TRANS«trans»«ENDIF» «IF !tol.equals("")»TOL = «tol»«ENDIF»'''
 				}
@@ -433,7 +417,7 @@ class Mdl2Nonmem extends MdlPrinter{
 
 	$TABLE 
 	«ENDIF»	
-	«getExternalCodeStart("$TABLE")»
+	«getExternalCodeStart("$TAB")»
 	«FOR b:o.blocks»
 		«IF b.outputVariablesBlock != null»
 			«var bb = b.outputVariablesBlock»
@@ -444,7 +428,7 @@ class Mdl2Nonmem extends MdlPrinter{
 			«ENDIF»
 		«ENDIF»	
 	«ENDFOR»
-	«getExternalCodeEnd("$TABLE")»
+	«getExternalCodeEnd("$TAB")»
 	'''
 	
  
@@ -467,7 +451,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	$PRIOR
 	«ENDIF»	
-	«getExternalCodeStart("$PRIOR")»
+	«getExternalCodeStart("$PRI")»
 	«FOR b:obj.blocks»			
 		«IF b.priorBlock != null»
 			«FOR st: b.priorBlock.statements»
@@ -475,7 +459,7 @@ class Mdl2Nonmem extends MdlPrinter{
 			«ENDFOR»
 		«ENDIF»
 	«ENDFOR»
-	«getExternalCodeEnd("$PRIOR")»
+	«getExternalCodeEnd("$PRI")»
 	'''
 		
 	//Processing STRUCTURAL for $THETA
@@ -484,7 +468,7 @@ class Mdl2Nonmem extends MdlPrinter{
 
 	$THETA
 	«ENDIF»
-	«getExternalCodeStart("$THETA")»
+	«getExternalCodeStart("$THE")»
 	«FOR b:obj.blocks»			
 		«IF b.structuralBlock != null»
 			«FOR st: b.structuralBlock.parameters»
@@ -492,7 +476,7 @@ class Mdl2Nonmem extends MdlPrinter{
 			«ENDFOR»
 		«ENDIF»
 	«ENDFOR»
-	«getExternalCodeEnd("$THETA")»
+	«getExternalCodeEnd("$THE")»
 	«IF "$THETAI".isTargetDefined»
 	
 	«externalCodeStart.get("$THETAI")»
@@ -507,16 +491,16 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Processing VARIABILITY for $OMEGA
 	def printOMEGA(ParameterObject obj)'''
-	«externalCodeStart.get("$OMEGA")»
+	«externalCodeStart.get("$OME")»
 	«obj.printVariabilityBlock("$OMEGA")»
-	«externalCodeEnd.get("$OMEGA")»
+	«externalCodeEnd.get("$OME")»
 	'''
 	
 	//Processing VARIABILITY for $SIGMA
 	def printSIGMA(ParameterObject obj)'''
-	«getExternalCodeStart("$SIGMA")»
+	«getExternalCodeStart("$SIG")»
 	«obj.printVariabilityBlock("$SIGMA")»
-	«getExternalCodeEnd("$SIGMA")»
+	«getExternalCodeEnd("$SIG")»
 	'''
 	
 	//Return VARIABILITY block statements for $SIGMA or $OMEGA
@@ -792,13 +776,13 @@ class Mdl2Nonmem extends MdlPrinter{
 		
 	$INPUT
 	«ENDIF»
-	«getExternalCodeStart("$INPUT")»
+	«getExternalCodeStart("$INP")»
 	«FOR b:d.blocks»
 	    «IF b.dataInputBlock != null»
 			«FOR st: b.dataInputBlock.variables SEPARATOR ' '»«IF st.symbolName != null»«IF isDrop(st.symbolName.name, t)»«st.symbolName.name»=DROP«ELSE»«st.symbolName.name»«ENDIF»«ENDIF»«ENDFOR»
         «ENDIF»
 	«ENDFOR»
-	«getExternalCodeEnd("$INPUT")»
+	«getExternalCodeEnd("$INP")»
 	'''
 	
 	//Note: We drop now all the variables in the specification regardless of the object they refer to
@@ -830,10 +814,10 @@ class Mdl2Nonmem extends MdlPrinter{
 				
 				$DATA «data»
 				«ENDIF»
-				«getExternalCodeStart("$DATA")»
+				«getExternalCodeStart("$DAT")»
 					«val ignore = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_ignore.name)»
 					«IF !ignore.equals("")»IGNORE=«ignore»«ENDIF»
-				«getExternalCodeEnd("$DATA")»
+				«getExternalCodeEnd("$DAT")»
 			«ENDIF»
 		«ENDIF»
 	«ENDFOR»
@@ -887,7 +871,6 @@ class Mdl2Nonmem extends MdlPrinter{
 		$SIM 
 		«ENDIF»
 		«getExternalCodeStart("$SIM")»
-		«getExternalCodeStart("$SIMULATION")»
 		«IF !isInlineTargetDefined»
 			«FOR s: b.statements»
 				«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
@@ -899,7 +882,6 @@ class Mdl2Nonmem extends MdlPrinter{
 			«ENDFOR»
 		«ENDIF» 
 		«getExternalCodeEnd("$SIM")»
-		«getExternalCodeEnd("$SIMULATION")»	
 	'''
 	
 	//Processing ESTIMATE block for $EST
@@ -910,7 +892,6 @@ class Mdl2Nonmem extends MdlPrinter{
 		$EST 
 		«ENDIF»
 		«getExternalCodeStart("$EST")»
-		«getExternalCodeStart("$ESTIMATION")»
 		«IF !isInlineTargetDefined»
 			«FOR s: b.statements»
 				«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
@@ -923,7 +904,6 @@ class Mdl2Nonmem extends MdlPrinter{
 			«ENDFOR»
 		«ENDIF»
 		«getExternalCodeEnd("$EST")»
-		«getExternalCodeEnd("$ESTIMATION")»
 	'''
 	
 	//Print attributes for default $EST record
@@ -963,10 +943,8 @@ class Mdl2Nonmem extends MdlPrinter{
 	$COV 
 	«ENDIF»
 	«getExternalCodeStart("$COV")»
-	«getExternalCodeStart("$COVARIANCE")»
 	«FOR s: b.statements»«IF s.symbol != null»«s.symbol.printCovariance»«ENDIF»«ENDFOR»
 	«getExternalCodeEnd("$COV")»
-	«getExternalCodeEnd("$COVARIANCE")»
 	'''	
 	
 	//Print "cov" attribute for $COVARIATE record 
@@ -1016,7 +994,7 @@ class Mdl2Nonmem extends MdlPrinter{
 				for (ss: b.modelBlock.statements){
 					var x = ss.statement.symbol;
 					if (x != null && x.symbolName != null){
-						if (x.symbolName.name.equals(var_model_tolrel)){
+						if (x.symbolName.name.equalsIgnoreCase(var_model_tolrel)){
 							if (x.expression != null)
 								return x.expression.toStr;
 						}
@@ -1027,8 +1005,6 @@ class Mdl2Nonmem extends MdlPrinter{
 		return "";
 	}	
 	
-	 
-	protected var externalFunctions = new HashMap<String, HashMap<String, String>>() //list of external functions 
 	protected var externalCodeStart = new HashMap<String, ArrayList<String>>() //external code per target language section,
 	protected var externalCodeEnd = new HashMap<String, ArrayList<String>>() //external code per target language section,
  	
@@ -1203,86 +1179,57 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Find NM-TRAN functions
 	def protected prepareExternals(Mcl mcl) {
-		externalFunctions.clear;	
 		externalCodeStart.clear;	
 		externalCodeEnd.clear;	
 		for (o:mcl.objects){
   			if (o.modelObject != null){
   				for (ModelObjectBlock block: o.modelObject.blocks){
-  					if (block.importBlock != null)
-  						block.importBlock.prepareExternalFunctions(o.objectName.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
   				}
   			}
   			if (o.parameterObject != null){
   				for (ParameterObjectBlock block: o.parameterObject.blocks){
-  					if (block.importBlock != null)
-  						block.importBlock.prepareExternalFunctions(o.objectName.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
   				}
   	  		}
    			if (o.dataObject != null){
   				for (DataObjectBlock block: o.dataObject.blocks){
-  					if (block.importBlock != null)
-  						block.importBlock.prepareExternalFunctions(o.objectName.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
   				}
   			}
   			if (o.taskObject != null){
   				for (TaskObjectBlock block: o.taskObject.blocks){
-  					if (block.importBlock != null)
-  						block.importBlock.prepareExternalFunctions(o.objectName.name);
   					if (block.targetBlock != null)
   						block.targetBlock.prepareExternalCode;
   				}
   			}
-  			/*if (o.telObject != null){
-  				for (BlockStatement block: o.telObject.statements){
-  					if (block.targetBlock != null)
-  						block.targetBlock.prepareExternalCode;
-  				}
-  			}*/
   		}
 	}
-	
-	//Prepare a list of external function declarations to define their NMTRAN names 
-	 def void prepareExternalFunctions(ImportBlock b, String objName){
-		for (ImportedFunction f: b.functions){
-			var args = new HashMap<String, String>();
-			var target = f.list.arguments.getAttribute(AttributeValidator::attr_req_target.name);
-		 	if (target != null){ 
-				if (target.equals(TARGET)) {
-					for (Argument arg: f.list.arguments.arguments){
-						if (arg.argumentName != null)
-							args.put(arg.argumentName.name, arg.expression.toStr)
-					}
-					externalFunctions.put(objName + "$" + f.functionName.name, args);
-				}
-			}
-		}
-	}	
 	
 	 //Prepare a map of section with corresponding target blocks
 	 def void prepareExternalCode(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
 			if (target.equals(TARGET)) {
-				val location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
-				if (b.arguments.isAttributeTrue(AttributeValidator::attr_first.name)){
-					var codeSnippets = externalCodeStart.get(location);
-					if (codeSnippets == null) codeSnippets = new ArrayList<String>();
-					codeSnippets.add(b.toStr);
-					externalCodeStart.put(location, codeSnippets);
+				var location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
+				if (location.length() > 0){
+					location.substring(0, Math::min(3, location.length()));
+					if (b.arguments.isAttributeTrue(AttributeValidator::attr_first.name)){
+						var codeSnippets = externalCodeStart.get(location);
+						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
+						codeSnippets.add(b.toStr);
+						externalCodeStart.put(location, codeSnippets);
+					}
+					if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name)){
+						var codeSnippets = externalCodeEnd.get(location);
+						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
+						codeSnippets.add(b.toStr);
+						externalCodeEnd.put(location, codeSnippets);
+					} 
 				}
-				if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name)){
-					var codeSnippets = externalCodeEnd.get(location);
-					if (codeSnippets == null) codeSnippets = new ArrayList<String>();
-					codeSnippets.add(b.toStr);
-					externalCodeEnd.put(location, codeSnippets);
-				} 
 			}
 		}
 	}	
@@ -1326,20 +1273,11 @@ class Mdl2Nonmem extends MdlPrinter{
 		return res;
 	}
  
- 	//Return attributes of an external function	from the collection
-	def protected getExternalFunctionAttributes(FullyQualifiedFunctionName ref) { 
-		if (ref.object != null)				
-			return externalFunctions.get(ref.object.name + "$" + ref.function.name)
-		else {
-			//match the short name
-			for (pair: externalFunctions.entrySet){
-				val str = pair.key as String;
-				if (str != null){
-					val functID = str.substring(str.indexOf("$") + 1);
-					if (functID.equals(ref.function.name)) return pair.value; 
-				}
+ 	//Return attributes of the standard function
+	def protected getStandardFunctionAttributes(FullyQualifiedFunctionName ref) { 
+			for (pair: FunctionValidator::standardFunctions.entrySet){
+				if (pair.key.equals(ref.function.name)) return pair.value; 
 			}
-		}	
 	}
 	
 	def isTargetDefined(String sectionName){
@@ -1353,6 +1291,8 @@ class Mdl2Nonmem extends MdlPrinter{
 	}				
 	
 	//Print variableDeclaration substituting ID with "Y" if it is a list with LIKELIHOOD or continuous type
+	
+	//TODO: before printing F_FLAG=1 check that there exists symbol declaration with a type rather than likelihood
 	override toStr(SymbolDeclaration v){
 		if (v.expression != null){
 			if (v.expression.list != null){
@@ -1383,7 +1323,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		} else if (type.equals(VariableType::CC_CONTINUOUS)){
 			var ruv = l.arguments.getAttribute(AttributeValidator::attr_ruv.name);
 			var prediction = l.arguments.getAttribute(AttributeValidator::attr_prediction.name)
-			res = prediction + ruv
+			res = prediction + "+" + ruv
 		}			
 		return res;
 	}
@@ -1408,8 +1348,12 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//toStr function call
 	override toStr(FunctionCall call){
-		if (call.identifier.toStr.trim.equals(funct_error_exit))
+		if (call.identifier.toStr.equalsIgnoreCase(FunctionValidator::funct_errorExit))
 			return "EXIT" + call.arguments.toStrWithoutCommas;
+		if (call.identifier.toStr.equalsIgnoreCase(FunctionValidator::funct_runif))
+			return "CALL RANDOM" + "(" + call.arguments.toStr + ")";			
+		if (call.identifier.toStr.equalsIgnoreCase(FunctionValidator::funct_pnorm))
+			return "PHI" + "(" + call.arguments.toStr + ")";			
 		return super.toStr(call);	
 	}	
 		
@@ -1513,4 +1457,15 @@ class Mdl2Nonmem extends MdlPrinter{
 		ENDIF
 	«ENDIF»
 	'''	
+	
+	//Check if attribute cov is define in ESTIMATE block
+	def isCovarianceDefined(EstimateTask b){
+		for (s: b.statements)
+			if (s.symbol != null && s.symbol.symbolName != null){
+				if (s.symbol.symbolName.name.equals(FunctionValidator::attr_task_cov.name))
+					if (s.symbol.expression != null) return true;
+			}
+		return false;		
+	}
+	
 }

@@ -83,7 +83,7 @@ class MdlPrinter {
 	
 	def isAttributeTrue(Arguments a, String attrName){
 		for (arg: a.arguments)
-			if (arg.argumentName.name.equals(attrName)){
+			if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
 				return arg.expression.isTrue;
 			}
 		return false;
@@ -350,17 +350,6 @@ class MdlPrinter {
 		return false;
 	}
 	
-	//Check if attribute cov is define in ESTIMATE block
-	def isCovarianceDefined(EstimateTask b){
-		for (s: b.statements)
-			if (s.symbol != null){
-				if (s.symbol.symbolName.name.equals("cov"))
-					if (s.symbol.expression != null) return true;
-			}
-		return false;		
-	}
-	
- 
     //Check whether there is a target block in a list of block statements			
     def isInlineTargetDefined(String targetName, EstimateTask task){
 		for (s: task.statements){
@@ -647,9 +636,13 @@ class MdlPrinter {
 	}
 	
 	def toStr(FullyQualifiedArgumentName name) { 
-		var res = name.parent.name;
-		for (s: name.selectors){
-			res = res + s.toStr
+		var res = "";
+		if (name != null){
+			if (name.parent != null)
+				res = name.parent.name;
+			for (s: name.selectors){
+				res = res + s.toStr
+			}
 		}
 		return res;
 	}
