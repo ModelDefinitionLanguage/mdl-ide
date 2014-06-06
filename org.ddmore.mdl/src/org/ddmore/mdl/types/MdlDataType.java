@@ -12,7 +12,7 @@ import java.util.List;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.DistributionArgument;
-import org.ddmore.mdl.mdl.EnumType;
+import org.ddmore.mdl.mdl.EnumType; 
 import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.SymbolName;
@@ -23,7 +23,6 @@ import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.Vector;
-import org.ddmore.mdl.validation.MdlJavaValidator;
 import org.ddmore.mdl.validation.Utils;
 
 import eu.ddmore.converter.mdlprinting.MdlPrinter;

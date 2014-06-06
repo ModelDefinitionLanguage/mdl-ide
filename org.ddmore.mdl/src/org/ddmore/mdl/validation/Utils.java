@@ -395,6 +395,30 @@ public class Utils {
 		return "";
 	}
 	
+	public static boolean isPassedByName(Arguments args){
+		if (args != null){
+			int nNames = 0; 
+			for (Argument arg: args.getArguments()){
+				if (arg.getArgumentName() != null) nNames++;
+			}
+			int count = args.getArguments().size();
+			return (nNames == count && count != 0);
+		}
+		return false;
+	}
+	
+	public static boolean isPassedByPlace(Arguments args){
+		if (args != null){
+			int nNames = 0; 
+			for (Argument arg: args.getArguments()){
+				if (arg.getArgumentName() != null) nNames++;
+			}
+			return (nNames == 0);
+		}
+		return true;
+	}
+
+	
 	//Locate data/script file in the MDL project
 	public static boolean isFileExist(EObject b, String filePath) {
 		String platformString = b.eResource().getURI().toPlatformString(true);

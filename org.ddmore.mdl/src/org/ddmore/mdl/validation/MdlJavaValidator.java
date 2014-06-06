@@ -104,10 +104,12 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		    				varList.addAll(Utils.extractSymbolNames(functCall.getArguments(), 
 		    						FunctionValidator.param_output.name));
 			    		if (FunctionValidator.funct_standardWithOutputParams.contains(functName)){
-							FunctionSignature signature = FunctionValidator.standardFunctions.get(functName);
+							//when parameters passed by place, assume default set of attributes
+			    			//and validate all references assigned to output parameters
+			    			FunctionSignature signature = FunctionValidator.standardFunctions.get(functName);
 				    		if (signature != null){
-				    			for (int i = 0; i < signature.getParams().size(); i++){
-				    				FunctionParameter p = signature.getParams().get(i);
+				    			for (int i = 0; i < signature.getDefaultParams().size(); i++){
+				    				FunctionParameter p = signature.getDefaultParams().get(i);
 				    				if (p.isOutputParameter()){
 					    				if (functCall.getArguments().getArguments().size() > i) {
 						    				Argument arg = functCall.getArguments().getArguments().get(i);
@@ -283,7 +285,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	}
 	
 
-	//TODO: complete the check of attribute references
 	@Check
 	public void checkReference(FullyQualifiedArgumentName ref) {
 		//The reference is to the symbol with assigned expression which is a function call

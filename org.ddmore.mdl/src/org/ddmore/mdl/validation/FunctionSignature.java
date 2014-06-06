@@ -1,5 +1,6 @@
 package org.ddmore.mdl.validation;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.ddmore.mdl.types.MdlDataType;
@@ -7,7 +8,7 @@ import org.ddmore.mdl.types.TargetCodeType;
 
 public class FunctionSignature {
 	String name;
-	Integer numberOfParams; 
+	Integer numberOfParams = 0; 
 	MdlDataType type = MdlDataType.TYPE_VOID;
 	Boolean passingByName = false;
 	//By default we assume unnamed input parameters of type MdlDataType.TYPE_REAL
@@ -27,8 +28,15 @@ public class FunctionSignature {
 	public FunctionSignature(String name, List<FunctionParameter> params){
 		this.name = name;
 		this.params = params;
-		if (params != null)
-			this.numberOfParams = params.size();
+		if (params != null){
+			//max index (because there can be alternative named parameters on the same place)
+			int count = 0;
+			for (FunctionParameter p: params)
+				if (p.getOrder() > count) count = p.getOrder();
+			if (count > 0)
+				this.numberOfParams = count + 1;
+			else this.numberOfParams = params.size();
+		}
 	}
 	
 	public FunctionSignature(String name, List<FunctionParameter> params, MdlDataType type){
@@ -63,11 +71,22 @@ public class FunctionSignature {
 		return numberOfParams;
 	}
 	
-	public Boolean getPassingByName(){
+	public Boolean isPassingByName(){
 		return passingByName;
 	}
 
-	public List<FunctionParameter> getParams(){
+	public List<FunctionParameter> getAllParams(){
 		return params;
+	}
+
+	public List<FunctionParameter> getDefaultParams(){
+		//return an ordered set of default parameters
+		FunctionParameter[] orderedParams = new FunctionParameter[numberOfParams];
+		for (FunctionParameter p: params){
+			if (orderedParams.length > p.getOrder())
+				if (orderedParams[p.getOrder()] == null)
+					orderedParams[p.getOrder()] = p;
+		}
+		return Arrays.asList(orderedParams);
 	}
 }

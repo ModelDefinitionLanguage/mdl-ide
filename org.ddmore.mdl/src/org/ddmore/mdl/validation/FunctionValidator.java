@@ -43,20 +43,20 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	@Override
     @Inject
     public void register(EValidatorRegistrar registrar) {}
-		
+	public final static String MSG_FUNCTION_WRONG_TYPE = "Type error";
+	public final static String MSG_FUNCTION_WRONG_PASSING_METHOD = "Wrong parameter passing method";
+	
 	public final static String MSG_FUNCTION_DEFINED    = "A function with such name is already defined";
 	public final static String MSG_FUNCTION_UNKNOWN    = "Unknown function";
 	public final static String MSG_FUNCTION_INVALID    = "Invalid function call";
-	public final static String MSG_FUNCTION_WRONG_TYPE = "Type error";
-
-	public final static String MSG_FUNCTION_ATTRIBUTE_DEFINED = "A parameter with such name is already defined";
-	public final static String MSG_FUNCTION_ATTRIBUTE_UNKNOWN = "Unknown function parameter";
-	public final static String MSG_FUNCTION_ATTRIBUTE_MISSING = "Required parameter is not set";
+	
+	public final static String MSG_FUNCTION_PARAMETER_DEFINED = "A parameter with such name is already defined";
+	public final static String MSG_FUNCTION_PARAMETER_UNKNOWN = "Unknown function parameter";
+	public final static String MSG_FUNCTION_PARAMETER_MISSING = "Required parameter is not set";
 
 	public final static String MSG_FUNCTION_PROPERTY_UNKNOWN = "Unknown property";
 	public final static String MSG_FUNCTION_PROPERTY_MISSING = "Required property is not set";
 	public final static String MSG_FUNCTION_PROPERTY_DEFINED = "Property defined more than once";
-	public final static String MSG_FUNCTION_PROPERTY_WRONG_TYPE = "Type error";
 
 	public final static String MSG_FUNCTION_CALL_TARGET_MISSING    = "Target environment is not defined";
 	public final static String MSG_FUNCTION_CALL_MODEL_OBJ_MISSING = "MOG should include a model object";
@@ -88,14 +88,14 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static String funct_nmadvan = "nmadvan";
 	final public static String funct_PK = "PK";
 	
-	final public static FunctionParameter param_model = new FunctionParameter("model", 1, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_trans = new FunctionParameter("trans", 2, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_ncmt = new FunctionParameter("ncmt", 3, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
-	final public static FunctionParameter param_input = new FunctionParameter("input", 4, MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_output = new FunctionParameter("output", 5, MdlDataType.TYPE_LIST, ParameterPassingMethod.IN_OUT);
-	final public static FunctionParameter param_distribution = new FunctionParameter("distribution", 6, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_elimination = new FunctionParameter("elimination", 7, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_parameterization = new FunctionParameter("parameterization", 8, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_model = new FunctionParameter("model", 0, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_trans = new FunctionParameter("trans", 1, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_ncmt = new FunctionParameter("ncmt", 2, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
+	final public static FunctionParameter param_input = new FunctionParameter("input", 3, MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_output = new FunctionParameter("output", 4, MdlDataType.TYPE_LIST, ParameterPassingMethod.IN_OUT);
+	final public static FunctionParameter param_distribution = new FunctionParameter("distribution", 5, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_elimination = new FunctionParameter("elimination", 6, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_parameterization = new FunctionParameter("parameterization", 7, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
 	
 	final public static List<String> libraries = Arrays.asList(funct_nmadvan, funct_PK);
 	
@@ -104,29 +104,24 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			/** * */
 		private static final long serialVersionUID = -3320608024292207312L;
 		{
-			//Standard functions with 1 input parameter (MDL = PharMML)
-			for (String functName: funct_standard1){
+			for (String functName: funct_standard1)
 				put(functName, new FunctionSignature(functName, 1, MdlDataType.TYPE_REAL));
-			}
-			//Standard functions with 2 output parameters (MDL = PharMML)
-			for (String functName: funct_standard2){
+			for (String functName: funct_standard2)
 				put(functName, new FunctionSignature(functName, 2, MdlDataType.TYPE_REAL));
-			}	
 						
 			put(funct_seq, new FunctionSignature(funct_seq, 
 				Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition, param_seq_end), 
 				MdlDataType.TYPE_REAL, true));
-
 			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
 			put(funct_update, new FunctionSignature(funct_update, 1, MdlDataType.TYPE_REAL));
 			put(funct_errorExit, new FunctionSignature(funct_errorExit, 2, MdlDataType.TYPE_VOID));
-						 
-			FunctionParameter attr_runif_0 = new FunctionParameter("", 0, MdlDataType.TYPE_INT);
-			FunctionParameter attr_runif_1 = new FunctionParameter("", 1, MdlDataType.TYPE_REAL, ParameterPassingMethod.IN_OUT);
 			put(funct_runif, new FunctionSignature(funct_runif, 
-					Arrays.asList(attr_runif_0, attr_runif_1), MdlDataType.TYPE_VOID));
+				Arrays.asList(
+					new FunctionParameter("n", 0, MdlDataType.TYPE_INT), 
+					new FunctionParameter("R", 1, MdlDataType.TYPE_REAL, ParameterPassingMethod.IN_OUT)), 
+					MdlDataType.TYPE_VOID));
 			
-			for (String functName: Arrays.asList(funct_nmadvan, funct_PK)){
+			for (String functName: libraries){
 				put(functName, new FunctionSignature(functName, Arrays.asList(
 				param_model, param_trans, param_ncmt, param_input, param_output, 
 				param_distribution, param_elimination, param_parameterization), 
@@ -135,20 +130,29 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		}
 	};
 	
-	public static List<String> funct_standardWithOutputParams = Arrays.asList(funct_runif);
+	public static List<String> funct_standardWithOutputParams = new ArrayList<String>() {
+		/** * */
+		private static final long serialVersionUID = -8196317757338022395L;
+		{
+			add(funct_runif);
+			for (String functName: libraries){
+				add(functName);
+			}
+		}
+	};
 	
-	//List of declared function names per object
-	Map<String, List<String>> externalFunctions = new HashMap<String, List<String>>();
 	//List of declared function names per object
 	Map<String, List<String>> declaredFunctions = new HashMap<String, List<String>>();
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//Task object
-	//TODO: for more strict validation, require references to objects
+	//NOTE: the type should be TYPE_OBJ_REF but the validation will fail because task properties
+	//are assigned formal parameters, i.e., model=m, parameter=p, data=d
 	final public static Attribute attr_task_model = new Attribute("model", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_task_parameter = new Attribute("parameter", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_task_data = new Attribute("data", MdlDataType.TYPE_REF, true);
-	
+	//NOTE: the type should be TYPE_TARGET but the validation will fail because task properties
+	//are assigned formal parameters, i.e., target=t
 	final public static Attribute attr_task_target = new Attribute("target", MdlDataType.TYPE_REF, true);
 	
 	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_LIST, false);
@@ -195,94 +199,133 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	//Check that the function call is to an existing function
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
-		if (!standardFunctions.containsKey(call.getIdentifier().getFunction().getName())){
-			if(!(Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier()) ||
-					Utils.isFunctionDeclared(externalFunctions, call.getIdentifier())))
-			{
+		if (!standardFunctions.containsKey(call.getIdentifier().getFunction().getName()))
+			if(!Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier())) 
 				warning(MSG_FUNCTION_UNKNOWN, 
 					MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER,
 					MSG_FUNCTION_UNKNOWN, call.getIdentifier().getFunction().getName());
-			} else {
-				//declared functions (Task object) or external functions (IMPORT)
-				if (Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier())){
-					byte params[] = new byte[ 4];
-					for (int i = 0; i < 4; i++) params[i] = 0;
+			else  //declared functions (Task object) 
+				validateDeclaredFunction(call);
+		else //standard function
+			validateStandardFunction(call);
+	}
+	
+	public void validateStandardFunction(FunctionCall call){
+		FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getFunction().getName());
+		//TODO validate whether the function returns any value to enable/disable its use in expressions
+		if (Utils.isPassedByName(call.getArguments())){
+			if (functSig.isPassingByName()){
+				if (call.getArguments() != null){
 					for (Argument arg: call.getArguments().getArguments()){
-						if (MdlDataType.validateType(MdlDataType.TYPE_TARGET, arg.getExpression()))
-							params[0] += 1;
-						if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_MODEL, arg.getExpression()))
-							params[1] += 1;
-						if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_PARAM, arg.getExpression()))
-							params[2] += 1;
-						if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_DATA, arg.getExpression()))
-							params[3] += 1;
-					}
-					String[] names = {"model", "parameter", "data"};
-					if (params[0] == 0)
-						warning(MSG_FUNCTION_CALL_TARGET_MISSING, 
-								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_CALL_TARGET_MISSING, call.getIdentifier().getFunction().getName());
-					if (params[1] == 0)
-						warning(MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, 
-								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, call.getIdentifier().getFunction().getName());
-					if (params[2] == 0)
-						warning(MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, 
-								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, call.getIdentifier().getFunction().getName());
-					if (params[3] == 0)
-						warning(MSG_FUNCTION_CALL_DATA_OBJ_MISSING, 
-								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_CALL_DATA_OBJ_MISSING, call.getIdentifier().getFunction().getName());
-					for (int i = 1; i < 4; i++){
-						if (params[i] > 1)
-							warning(MSG_FUNCTION_CALL_OBJ_DEFINED + ": two or more " + names[i-1] + " objects selected!", 
-								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_CALL_OBJ_DEFINED, call.getIdentifier().getFunction().getName());
-					}
-					
-				}
-				//TODO: match the number of actual parameters with the number of references in param attribute 
-				//or input and output attributes together
-				//TODO check parameter types
-			}
-		}
-		else {//standard function
-			FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getFunction().getName());
-			Integer expected = functSig.getNumberOfParams();
-			if (expected == null) expected = 1; //1 by default
-			Integer actual = 0;
-			if (call.getArguments().getArguments() != null)
-				actual = call.getArguments().getArguments().size();
-			if ((expected < 0) && (actual < -expected) && (!functSig.passingByName)){
-				warning(MSG_FUNCTION_INVALID + ": " +  
-						call.getIdentifier().getFunction().getName() + " expects " + (-expected) + " or more parameters.", 
-						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_INVALID, 
-						call.getIdentifier().getFunction().getName());
-			}
-			if ((expected >= 0) && (actual < expected) && (!functSig.passingByName)){
-				warning(MSG_FUNCTION_INVALID + ": " +
-						call.getIdentifier().getFunction().getName() + " expects " + expected + " parameter(s).", 
-						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_INVALID, 
-						call.getIdentifier().getFunction().getName());
-			}
-			List<FunctionParameter> recognizedParams = functSig.getParams();
-			if (functSig.getPassingByName()){
-				List<String> paramNames = getParamNames(recognizedParams);
-				for (Argument arg: call.getArguments().getArguments()){
-					if (arg.getArgumentName() != null){
-						if (!paramNames.contains(arg.getArgumentName().getName())){
-							warning(MSG_FUNCTION_ATTRIBUTE_UNKNOWN + ": " + arg.getArgumentName().getName(), 
-								MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-								MSG_FUNCTION_ATTRIBUTE_UNKNOWN, arg.getArgumentName().getName());		
-								return;
+						if (arg.getArgumentName() != null){
+							boolean isFound = false;
+							for (FunctionParameter p: functSig.getAllParams()){
+								if (p.getName().equals(arg.getArgumentName().getName())){
+									isFound = true;
+									if (!MdlDataType.validateType(p.getType(), arg.getExpression()))
+										warning(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getName()
+										+ " expects value of type " + p.getType(),
+										MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+										MSG_FUNCTION_WRONG_TYPE, arg.getArgumentName().getName());		
+								}
+							}
+							if (!isFound)
+								warning(MSG_FUNCTION_PARAMETER_UNKNOWN + ": " + arg.getArgumentName().getName(), 
+									MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+									MSG_FUNCTION_PARAMETER_UNKNOWN, arg.getArgumentName().getName());		
+						}
+					}	
+					HashSet<String> argumentNames = new HashSet<String>();	
+					for (Argument arg: call.getArguments().getArguments()){
+						if (!argumentNames.contains(arg.getArgumentName().getName())){
+							argumentNames.add(arg.getArgumentName().getName());
+						} else {
+							warning(MSG_FUNCTION_PARAMETER_DEFINED + ": " + arg.getArgumentName().getName(), 
+									MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+									MSG_FUNCTION_PARAMETER_DEFINED, arg.getArgumentName().getName());		
 						}
 					}
 				}
 			}	
-			//TODO: check parameter types
+			else {	
+				warning(MSG_FUNCTION_INVALID + ": cannot pass parameters by name to " +
+					call.getIdentifier().getFunction().getName(), 
+					MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+					MSG_FUNCTION_INVALID, 
+					call.getIdentifier().getFunction().getName());					
+			}	
+		} else {
+			if (Utils.isPassedByPlace(call.getArguments())) {
+				int expected = functSig.getNumberOfParams();
+				int actual = 0;
+				if (call.getArguments().getArguments() != null)
+					actual = call.getArguments().getArguments().size();
+				if (actual != expected){
+					warning(MSG_FUNCTION_INVALID + ": " +
+							call.getIdentifier().getFunction().getName() + " expects " + expected + " parameter(s).", 
+							MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+							MSG_FUNCTION_INVALID, 
+							call.getIdentifier().getFunction().getName());
+					return;
+				}
+				if (call.getArguments() != null){
+					List<FunctionParameter> defaultParams = functSig.getDefaultParams();
+					for (int i = 0; i < call.getArguments().getArguments().size(); i++){
+						Argument arg = call.getArguments().getArguments().get(i);
+						if (!MdlDataType.validateType(defaultParams.get(i).getType(), arg.getExpression())){
+							warning(MSG_FUNCTION_WRONG_TYPE + ": parameter #" + i + " expects value of type " + 
+									defaultParams.get(i).getType(),
+							MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+							MSG_FUNCTION_WRONG_TYPE, "" + String.valueOf(i));		
+						}
+					}
+				}
+			} else {
+				warning(MSG_FUNCTION_WRONG_PASSING_METHOD + ": cannot mix parameter passing by place and by name",
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_WRONG_PASSING_METHOD, 
+						call.getIdentifier().getFunction().getName());	
+			}
+		}
+	}
+	
+	public void validateDeclaredFunction(FunctionCall call){
+		if (Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier())){
+			byte params[] = new byte[ 4];
+			for (int i = 0; i < 4; i++) params[i] = 0;
+			for (Argument arg: call.getArguments().getArguments()){
+				if (MdlDataType.validateType(MdlDataType.TYPE_TARGET, arg.getExpression()))
+					params[0] += 1;
+				if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_MODEL, arg.getExpression()))
+					params[1] += 1;
+				if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_PARAM, arg.getExpression()))
+					params[2] += 1;
+				if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_DATA, arg.getExpression()))
+					params[3] += 1;
+			}
+			String[] names = {"model", "parameter", "data"};
+			if (params[0] == 0)
+				warning(MSG_FUNCTION_CALL_TARGET_MISSING, 
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_CALL_TARGET_MISSING, call.getIdentifier().getFunction().getName());
+			if (params[1] == 0)
+				warning(MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, 
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, call.getIdentifier().getFunction().getName());
+			if (params[2] == 0)
+				warning(MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, 
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, call.getIdentifier().getFunction().getName());
+			if (params[3] == 0)
+				warning(MSG_FUNCTION_CALL_DATA_OBJ_MISSING, 
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_CALL_DATA_OBJ_MISSING, call.getIdentifier().getFunction().getName());
+			for (int i = 1; i < 4; i++){
+				if (params[i] > 1)
+					warning(MSG_FUNCTION_CALL_OBJ_DEFINED + ": two or more " + names[i-1] + " objects selected!", 
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_CALL_OBJ_DEFINED, call.getIdentifier().getFunction().getName());
+			}
 		}
 	}
 	
@@ -376,10 +419,10 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 						if (s.getExpression() != null) 
 							isValid = MdlDataType.validateType(x.getType(), s.getExpression());
 						if (!isValid){
-							warning(MSG_FUNCTION_PROPERTY_WRONG_TYPE + 
+							warning(MSG_FUNCTION_WRONG_TYPE + 
 								": property \"" + s.getSymbolName().getName() + "\" expects value of type " + x.getType().name(), 
 								MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
-								MSG_FUNCTION_PROPERTY_WRONG_TYPE, s.getSymbolName().getName());		
+								MSG_FUNCTION_WRONG_TYPE, s.getSymbolName().getName());		
 						}
 						break;
 					}
