@@ -57,8 +57,7 @@ class MdlPrinter {
 	public static def MdlPrinter getInstance(){
 		return mdlPrinter;
 	}
-	
-    
+	    
 	//Get MDL file name
 	def fileName(Mcl m){
 		var fileName = m.eResource.getURI().path;
@@ -81,28 +80,31 @@ class MdlPrinter {
 		return e.toStr.equalsIgnoreCase("true");
 	}	
 	
-	def isAttributeTrue(Arguments a, String attrName){
-		for (arg: a.arguments)
-			if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
-				return arg.expression.isTrue;
-			}
+	def isAttributeTrue(Arguments args, String attrName){
+		if (args != null)
+			for (arg: args.arguments)
+				if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
+					return arg.expression.isTrue;
+				}
 		return false;
 	}
 	
 	//Return value of an attribute with a given name
-	def getAttribute(DistributionArguments a, String attrName){
-		for (arg: a.arguments)
-			if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
-				return arg.valueToStr;
-			}				
+	def getAttribute(DistributionArguments args, String attrName){
+		if (args != null)
+			for (arg: args.arguments)
+				if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
+					return arg.valueToStr;
+				}				
 		return "";
 	} 
 	
-	def findAttribute(DistributionArguments a, String attrName){
-		for (arg: a.arguments)
-			if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
-				return arg;
-			}				
+	def findAttribute(DistributionArguments args, String attrName){
+		if (args != null)
+			for (arg: args.arguments)
+				if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
+					return arg;
+				}				
 		return null;
 	}
 	
@@ -117,18 +119,20 @@ class MdlPrinter {
 	}	
 	
 	//Return value of an attribute with a given name
-	def getAttribute(Arguments a, String attrName){
-		for (arg: a.arguments)
-			if (arg.argumentName != null && arg.argumentName.name.equals(attrName))
-				return arg.expression.toStr
+	def getAttribute(Arguments args, String attrName){
+		if (args != null)
+			for (arg: args.arguments)
+				if (arg.argumentName != null && arg.argumentName.name.equals(attrName))
+					return arg.expression.toStr
 		return "";
 	}	
 	
 	//Return value of an attribute with a given name
-	def getAttributeExpression(Arguments a, String attrName){
-		for (arg: a.arguments)
-			if (arg.argumentName != null && arg.argumentName.name.equals(attrName))
-				return arg.expression
+	def getAttributeExpression(Arguments args, String attrName){
+		if (args != null)
+			for (arg: args.arguments)
+				if (arg.argumentName != null && arg.argumentName.name.equals(attrName))
+					return arg.expression
 		return null;
 	}	
 	
@@ -620,7 +624,10 @@ class MdlPrinter {
 	}	
 	
 	def toStr(FunctionCall call){
-		return call.identifier.toStr + "(" + call.arguments.toStr + ")";
+		var res = call.identifier.toStr;
+		if (call.arguments != null)
+		 	res = res + "(" + call.arguments.toStr + ")";
+		 return res;	
 	}
 	
 	def String toStr(Primary p){

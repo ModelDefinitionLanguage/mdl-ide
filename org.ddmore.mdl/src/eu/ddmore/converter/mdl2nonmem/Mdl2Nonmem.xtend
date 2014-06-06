@@ -43,12 +43,14 @@ import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.types.VariableType
+import org.ddmore.mdl.mdl.impl.FunctionCallImpl
 
 class Mdl2Nonmem extends MdlPrinter{
 	
 	protected var Mcl mcl = null;
 	protected val TARGET = "NMTRAN_CODE";
 	protected val var_model_tolrel = "tolrel"; 
+	protected val var_random_base = "TMPR";
 	
 	//Print file name and analyse MCL objects in the source file
   	def convertToNMTRAN(Mcl m){
@@ -1290,10 +1292,13 @@ class Mdl2Nonmem extends MdlPrinter{
 		return super.toStr(e);
 	}				
 	
-	//Print variableDeclaration substituting ID with "Y" if it is a list with LIKELIHOOD or continuous type
+	//Used to keep track of temporal variables for the conversion of runif to RANDOM
+	var runifCount = 0;	
 	
+	//Print variableDeclaration substituting ID with "Y" if it is a list with LIKELIHOOD or continuous type
 	//TODO: before printing F_FLAG=1 check that there exists symbol declaration with a type rather than likelihood
 	override toStr(SymbolDeclaration v){
+		var preCode = "";
 		if (v.expression != null){
 			if (v.expression.list != null){
 				var type = v.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
@@ -1310,9 +1315,52 @@ class Mdl2Nonmem extends MdlPrinter{
 					return res + "Y = " + listExpr + "\n"; 	
 				}
 			}
+			//preprint CALL RANDOM()
+			runifCount = 0;
+			var subTree = v.expression.eAllContents;
+			while (subTree.hasNext()){
+				var x = subTree.next();
+				if (x instanceof FunctionCall){
+					var call = x as FunctionCall;
+					if (call != null){
+						if (call.identifier.function.name.equals(FunctionValidator::funct_runif)){
+							if (call.arguments != null && call.arguments.arguments.size() > 0){
+								val arg = call.arguments.arguments.get(0);
+								val param = arg.expression.toStr;
+								preCode  = preCode + "RANDOM CALL (" + param +
+								", " +  var_random_base + runifCount + ")\n";
+								runifCount = runifCount + 1;
+							} 
+						}
+					}
+				}
+			}
 		}
-		return super.toStr(v);
+		return preCode + super.toStr(v);
 	}
+	
+	//toStr function call
+	override toStr(FunctionCall call){
+		if (call.identifier.function.name.equals(FunctionValidator::funct_errorExit))
+			return "EXIT" + call.arguments.toStrWithoutCommas;
+		if (call.identifier.function.name.equals(FunctionValidator::funct_runif)){
+			if (call.arguments != null) {
+				var container = call.eContainer()
+				if (container instanceof BlockStatement) {
+					return "RANDOM CALL (" + call.arguments.arguments.get(0) +
+						", " +  var_random_base + ")\n";
+				}
+			}
+			if (runifCount > 0){
+				runifCount = runifCount - 1; 
+				return var_random_base + runifCount;			
+			}
+		}
+		if (call.identifier.function.name.equals(FunctionValidator::funct_pnorm))
+			return "PHI" + "(" + call.arguments.toStr + ")";			
+		return super.toStr(call);	
+	}	
+	
 	
 	//Instead of list(...) we print an expression from a certain attribute (depends on the type)
 	override toStr(List l){		
@@ -1345,17 +1393,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		if (s.selector != null)
 			return "(" + s.selector + ")";
 	}	
-	
-	//toStr function call
-	override toStr(FunctionCall call){
-		if (call.identifier.toStr.equalsIgnoreCase(FunctionValidator::funct_errorExit))
-			return "EXIT" + call.arguments.toStrWithoutCommas;
-		if (call.identifier.toStr.equalsIgnoreCase(FunctionValidator::funct_runif))
-			return "CALL RANDOM" + "(" + call.arguments.toStr + ")";			
-		if (call.identifier.toStr.equalsIgnoreCase(FunctionValidator::funct_pnorm))
-			return "PHI" + "(" + call.arguments.toStr + ")";			
-		return super.toStr(call);	
-	}	
+
 		
 	//toStr list arguments without commas
 	def toStrWithoutCommas(Arguments arg){

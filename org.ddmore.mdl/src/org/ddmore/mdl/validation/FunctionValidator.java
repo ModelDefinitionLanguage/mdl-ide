@@ -117,9 +117,8 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			put(funct_errorExit, new FunctionSignature(funct_errorExit, 2, MdlDataType.TYPE_VOID));
 			put(funct_runif, new FunctionSignature(funct_runif, 
 				Arrays.asList(
-					new FunctionParameter("n", 0, MdlDataType.TYPE_INT), 
-					new FunctionParameter("R", 1, MdlDataType.TYPE_REAL, ParameterPassingMethod.IN_OUT)), 
-					MdlDataType.TYPE_VOID));
+					new FunctionParameter("n", 0, MdlDataType.TYPE_INT)), 
+					MdlDataType.TYPE_REAL));
 			
 			for (String functName: libraries){
 				put(functName, new FunctionSignature(functName, Arrays.asList(
@@ -134,7 +133,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		/** * */
 		private static final long serialVersionUID = -8196317757338022395L;
 		{
-			add(funct_runif);
 			for (String functName: libraries){
 				add(functName);
 			}
