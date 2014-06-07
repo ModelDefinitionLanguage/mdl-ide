@@ -1045,8 +1045,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	protected var namedOmegaBlocks = new HashMap<String, Integer>() //Collection of names of $OMEGA records with dimensions
 	protected var namedSigmaBlocks = new HashMap<String, Integer>() //Collection of names of $SIGMA records with dimensions
 	
-	protected var binomial_vars = new HashMap<String, Integer>();
-	
+	protected var binomial_vars = new HashSet<String>();	
 	
  	def protected clearCollections(){
 		init_vars.clear;
@@ -1078,9 +1077,35 @@ class Mdl2Nonmem extends MdlPrinter{
 	}	
 	
 	def prepareBinomialVars(Mcl m){
+	  	binomial_vars.clear;		  	
     	for (o:m.objects){
-	  		 
-  		}
+			var subTree = mcl.eAllContents;
+			var subTree2 = subTree;
+			while (subTree.hasNext()){
+				var x = subTree.next();
+				if (x instanceof SymbolDeclaration){
+					var s = x as SymbolDeclaration;
+					if (s.symbolName != null && s.expression != null && s.expression.list != null){
+						var type = s.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+						if (type.equals(VariableType::CC_LIKELIHOOD))
+							binomial_vars.add(s.symbolName.name);
+					}		
+				}
+			}
+			while (subTree2.hasNext()){
+				var x = subTree2.next();
+				if (x instanceof SymbolDeclaration){
+					var s = x as SymbolDeclaration;
+					if (s.symbolName != null && s.expression != null && s.expression.list != null){
+						if (binomial_vars.contains(s.symbolName.name)){
+							var type = s.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+							if (!type.equals(VariableType::CC_LIKELIHOOD))
+								binomial_vars.remove(s.symbolName.name);
+						}
+					}		
+				}
+			}			
+		}
 	}
 	
 	def setLevelVars(ModelObject o){
@@ -1102,11 +1127,13 @@ class Mdl2Nonmem extends MdlPrinter{
 			if(b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
 					if (s.expression != null){
-						if (s.expression.list != null && s.symbolName != null){
+						if (s.expression.list != null) {
 							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
 							if (level.equals(levelId)){
-								if (!levelVars.contains(s.symbolName.name)){
-									levelVars.add(s.symbolName.name);
+								if (s.symbolName != null){
+									if (!levelVars.contains(s.symbolName.name)){
+										levelVars.add(s.symbolName.name);
+									}
 								}
 							}
 						}
@@ -1307,7 +1334,9 @@ class Mdl2Nonmem extends MdlPrinter{
 					res = "F_FLAG = 0\n" 
 				}	
 				if (type.equals(VariableType::CC_LIKELIHOOD)){
-					res = "F_FLAG = 1\n"	
+					if (v.symbolName == null || 
+						(v.symbolName != null && !binomial_vars.contains(v.symbolName.name)))
+							res = "F_FLAG = 1\n"	
 				}		
 				//substitute variable name with Y
 				var listExpr  = v.expression.list.toStr;
