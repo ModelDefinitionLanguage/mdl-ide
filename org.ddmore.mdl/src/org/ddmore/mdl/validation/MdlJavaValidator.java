@@ -43,6 +43,9 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_UNRESOLVED_FUNC_ARGUMENT_REF = "Unresolved reference to a function output parameter";
 	public final static String MSG_UNRESOLVED_SAME_BLOCK_NAME = "No corresponding matrix or diag block found";
 
+	public final static String MSG_TARGET_LOCATION = "Target code block is not used inline, "
+		+ "please specify location";
+
 	//List of objects
 	Map<String, MdlDataType> declaredObjects = new HashMap<String, MdlDataType>();	
 	//List of declared variables per object
@@ -162,6 +165,20 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	@Check
 	public void updateLinkedObjects(Mcl mcl){
 		mogs = Utils.getMOGs(mcl);
+	}
+	
+	@Check
+	public void checkTargetLocation(TargetBlock t){
+		EObject container = t.eContainer();
+		if (!(container instanceof BlockStatement)){
+			//external target blocks should have location defined
+			String location = Utils.getAttributeValue(t.getArguments(), AttributeValidator.attr_location.name);
+			if (location.length() == 0){
+				warning(MSG_TARGET_LOCATION, 
+						MdlPackage.Literals.TARGET_BLOCK__ARGUMENTS,
+						MSG_TARGET_LOCATION, t.getIdentifier());
+			}
+		}
 	}
 
 	//Match the name of the same block with the name of a matrix or a diag block

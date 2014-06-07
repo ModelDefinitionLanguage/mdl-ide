@@ -113,7 +113,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 				Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition, param_seq_end), 
 				MdlDataType.TYPE_REAL, true));
 			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
-			put(funct_update, new FunctionSignature(funct_update, 1, MdlDataType.TYPE_REAL));
+			put(funct_update, new FunctionSignature(funct_update, 2, MdlDataType.TYPE_REAL));
 			put(funct_errorExit, new FunctionSignature(funct_errorExit, 2, MdlDataType.TYPE_VOID));
 			put(funct_runif, new FunctionSignature(funct_runif, 
 				Arrays.asList(

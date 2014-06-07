@@ -38,8 +38,6 @@ import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
 import org.ddmore.mdl.mdl.Selector
 import org.ddmore.mdl.mdl.ParameterObject
-import org.ddmore.mdl.mdl.EstimateTask
-import org.ddmore.mdl.mdl.SimulateTask
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.FormalArguments
 import org.ddmore.mdl.mdl.SimulationBlock
@@ -349,34 +347,6 @@ class MdlPrinter {
 		for (b: o.blocks){
 			if ( b.outputVariablesBlock != null){
 				if ( b.outputVariablesBlock.variables.size > 0) return true;
-			}
-		}
-		return false;
-	}
-	
-    //Check whether there is a target block in a list of block statements			
-    def isInlineTargetDefined(String targetName, EstimateTask task){
-		for (s: task.statements){
-			if (s.targetBlock != null){
-				val target = s.targetBlock.arguments.getAttribute(AttributeValidator::attr_req_target.name);
-		 		if (target != null) 
-					if (target.equals(targetName)) {
-						return true;
-					}
-			}
-		}
-		return false;
-	}
-	
-	 //Check whether there is a target block in a list of block statements			
-    def isInlineTargetDefined(String targetName, SimulateTask task){
-		for (s: task.statements){
-			if (s.targetBlock != null){
-				val target = s.targetBlock.arguments.getAttribute(AttributeValidator::attr_req_target.name);
-		 		if (target != null) 
-					if (target.equals(targetName)) {
-						return true;
-					}
 			}
 		}
 		return false;
