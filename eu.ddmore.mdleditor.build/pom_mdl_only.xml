@@ -30,7 +30,7 @@
 		<!-- Xtext and Xtend -->
 		<xtend.repo.url>http://build.eclipse.org/common/xtend/maven/</xtend.repo.url>
 		<xtend.version>2.4.0</xtend.version>
-		<fornax.repo.url>http://www.fornax-platform.org/m2/repository/</fornax.repo.url>
+		<fornax.repo.url>https://projects.itemis.de/nexus/content/groups/public/</fornax.repo.url>
 		<fornax.version>3.4.0</fornax.version>
 		<xtext.utils.version>0.7.2</xtext.utils.version>
 		<antlr.version>3.2</antlr.version>
@@ -429,8 +429,7 @@
 		</pluginManagement>
 	</build>
 
-
 	<url>http://ddmore.eu/</url>
-	<name>Drug Disease Model Resources - MDL Core</name>
+	<name>Drug Disease Model Resources Framework - MDL Core</name>
 	<description>The Drug Disease Model Resources (DDMoRe) consortium builds and maintains a universally applicable, open source, model based framework, intended as the gold standard for future collaborative drug and disease Modelling &amp; Simulation.</description>
 </project> 

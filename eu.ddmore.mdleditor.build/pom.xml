@@ -37,7 +37,7 @@
 		<!-- Xtext and Xtend -->
 		<xtend.repo.url>http://build.eclipse.org/common/xtend/maven/</xtend.repo.url>
 		<xtend.version>2.4.0</xtend.version>
-		<fornax.repo.url>http://www.fornax-platform.org/m2/repository/</fornax.repo.url>
+		<fornax.repo.url>https://projects.itemis.de/nexus/content/groups/public/</fornax.repo.url>
 		<fornax.version>3.4.0</fornax.version>
 		<xtext.utils.version>0.7.2</xtext.utils.version>
 		<antlr.version>3.2</antlr.version>
