@@ -143,10 +143,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		val isErrorDefined = o.isErrorDefined;
 		val isODEDefined = o.isODEDefined;
 		'''
-		«IF isLibraryDefined»
-			
-			«o.printSUBR(isPKDefined)»
-		«ENDIF»
+		«o.printSUBR»
 		«o.printMODEL(isODEDefined)»
 		«o.generateMODEL»
 		«IF isLibraryDefined»
@@ -208,9 +205,36 @@ class Mdl2Nonmem extends MdlPrinter{
 					A_0(«e.key») = «e.value»
 				«ENDFOR»
 			«ENDIF»
+			«b.modelPredictionBlock.printArgInitConditions»
 		«ENDIF»
 	«ENDFOR»
 	'''
+	
+	def printArgInitConditions(ModelPredictionBlock b){
+		var res = "";
+		var replace = true;
+		for (st: b.statements){
+			if (st.libraryBlock != null)
+				replace = false;
+			if (st.statement != null){
+				if (st.statement.symbol != null){
+					val symbol = st.statement.symbol;
+					if (symbol.argumentName != null && symbol.expression.expression != null){
+						if (symbol.argumentName.parent.name.equals("A")){
+							if (replace)
+								res = res + '''
+									A_0«symbol.argumentName.selectors.get(0).toStr» = «symbol.expression.expression.toStr»
+								'''
+							else res = res + '''
+								«symbol.toStr»
+							''';
+						}
+					}
+				}
+			}
+		}
+		return res;
+	}
 	
 	//Print NM-TRAN record $MIX 
 	def printMIX(ModelObject o)'''
@@ -278,7 +302,10 @@ class Mdl2Nonmem extends MdlPrinter{
 			«IF mob.modelPredictionBlock != null»
 				«FOR s: mob.modelPredictionBlock.statements»
 					«IF s.statement != null»
-						«s.statement.print»
+						«IF (s.statement.symbol != null) && (s.statement.symbol.argumentName != null)»
+						«ELSE»
+							«s.statement.print»
+						«ENDIF»
 					«ENDIF»
 				«ENDFOR»
 			«ENDIF»
@@ -378,11 +405,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	'''    
     
 	//Processing MODEL_PREDICTION for $SUBR
-	def printSUBR(ModelObject o, Boolean isPKDefined)'''
-	«IF isPKDefined»
-
-	$SUBR
-	«ENDIF»
+	def printSUBR(ModelObject o)'''
 	«getExternalCodeStart("$SUB")»
 	«FOR b:o.blocks»
 		«IF b.modelPredictionBlock != null»
@@ -395,6 +418,7 @@ class Mdl2Nonmem extends MdlPrinter{
     //Processing MODEL_PREDICTION for $SUBR
     //Find an imported function name and attributes "model", "trans"
 	def printSUBR(ModelPredictionBlock b){
+		var res  = "";
 		for (ss: b.statements){
 			if (ss.libraryBlock != null){
 				for (st: ss.libraryBlock.statements){
@@ -404,10 +428,15 @@ class Mdl2Nonmem extends MdlPrinter{
 					val model = st.expression.arguments.getAttribute(FunctionValidator::param_model.name);
 					val trans = st.expression.arguments.getAttribute(FunctionValidator::param_trans.name);
 					val tol = getTOL;
-					return '''«IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF» «IF !trans.equals("")»TRANS«trans»«ENDIF» «IF !tol.equals("")»TOL = «tol»«ENDIF»'''
+					res = res + '''«IF !model.equals("")»«library.toUpperCase()»«model»«ENDIF» «IF !trans.equals("")»TRANS«trans»«ENDIF» «IF !tol.equals("")»TOL = «tol»«ENDIF»'''
 				}
 			}
 		}
+		if (res.length > 0)
+			return 
+			'''
+			$SUBR «res»
+			'''
 	}
 		
 	//Print NM-TRAN record $TABLE
@@ -862,7 +891,6 @@ class Mdl2Nonmem extends MdlPrinter{
 			«FOR s: b.statements»
 				«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
 			«ENDFOR»
-			NOABORT
 		«ELSE»
 			«FOR s: b.statements»
 				«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
@@ -934,18 +962,19 @@ class Mdl2Nonmem extends MdlPrinter{
 	def printDefaultEstimate(SymbolDeclaration s) { 
 		if (s.symbolName != null){
 			if (s.symbolName.name.equals(FunctionValidator::attr_task_algo.name)){
+				var value = "";
 				if (s.expression.expression != null)
-					''' METHOD=«s.expression.expression.toStr»'''
+					value = s.expression.expression.toStr
 				else {
-					//print first attribute of the list!?
 					if (s.expression.list != null){
 						var args = s.expression.list.arguments;
-						if (args != null){
+						if (args != null)
 							if (args.arguments.size > 0)
-								''' METHOD=«args.arguments.get(0).expression.toStr»'''
-						}
-					}
-				}	
+								value = args.arguments.get(0).expression.toStr;
+					} 
+				}
+				if (value.length > 0)
+					'''METHOD=«value.convertAlgo»'''
 			}
 			else
 				if (s.symbolName.name.equals(FunctionValidator::attr_task_max.name))
@@ -954,6 +983,16 @@ class Mdl2Nonmem extends MdlPrinter{
 				if (s.symbolName.name.equals(FunctionValidator::attr_task_sig.name))
 				''' SIG=«s.expression.print»'''
 		}
+	}
+	
+	def convertAlgo(String str){
+		var res = str;
+		res = str.replace("FOCE", "CONDITIONAL");
+		res = str.replace("FO", "ZERO");
+		if (str.contains("SAEM") || str.contains ("IMP") || str.contains("BAYES")){
+			res = res + " AUTO = 1";
+		}
+		return res;
 	}
 	
 	//Print attributes for default $SIM record
@@ -1357,7 +1396,7 @@ class Mdl2Nonmem extends MdlPrinter{
 								val arg = call.arguments.arguments.get(0);
 								val param = arg.expression.toStr;
 								preCode  = preCode + "RANDOM CALL (" + param +
-								", " +  var_random_base + runifCount + ")\n";
+								", R)\n" + var_random_base + runifCount + " = R\n";
 								runifCount = runifCount + 1;
 							} 
 						}
@@ -1407,11 +1446,12 @@ class Mdl2Nonmem extends MdlPrinter{
 
 	
 	//References to attributes: skip variable name and replace selectors, e.g,  amount.A[2] -> A(2)
-	override toStr(FullyQualifiedArgumentName name) { 
+	override toStr(FullyQualifiedArgumentName arg) { 
 		var res = "";
-		for (s: name.selectors){
+		if (arg.selectors.get(0).argumentName == null)
+			res = res + arg.parent.name;
+		for (s: arg.selectors)
 			res = res + s.toStr
-		}
 		return res;
 	}
 	

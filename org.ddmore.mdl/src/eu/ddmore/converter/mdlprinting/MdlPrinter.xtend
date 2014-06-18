@@ -382,7 +382,7 @@ class MdlPrinter {
 			res = res + v.symbolName.name.convertID;
 		}
 		if (v.argumentName != null) {     
-			res = res + v.argumentName.toStr.convertID;
+			res = res + v.argumentName.toStr;
 		}
 		if (v.functionName != null){
 			res = res + ')' 
@@ -612,12 +612,12 @@ class MdlPrinter {
 		}
 	}
 	
-	def toStr(FullyQualifiedArgumentName name) { 
+	def toStr(FullyQualifiedArgumentName arg) { 
 		var res = "";
-		if (name != null){
-			if (name.parent != null)
-				res = name.parent.name;
-			for (s: name.selectors){
+		if (arg != null){
+			if (arg.parent != null)
+				res = arg.parent.name.convertID;
+			for (s: arg.selectors){
 				res = res + s.toStr
 			}
 		}
@@ -626,7 +626,7 @@ class MdlPrinter {
 	
 	def toStr(Selector s) { 
 		if (s.argumentName != null)
-			return "." + s.argumentName.name;
+			return "." + s.argumentName.name.convertID;
 		if (s.selector != null)
 			return "[" + s.selector + "]";
 	}
