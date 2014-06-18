@@ -87,8 +87,8 @@ class Mdl2Nonmem extends MdlPrinter{
 			«IF o.modelObject != null»«o.modelObject.printTABLE»«ENDIF»
 	  	«ENDFOR»
 		''';
-		nm = nm.replaceAll("(\\n)(?=###)", "");
-		nm = nm.replace("###", "");
+		nm = nm.replaceAll("(\\n)(?=#DEL#)", "");
+		nm = nm.replace("#DEL#", "");
 		return nm;
 	}
 	
@@ -882,12 +882,10 @@ class Mdl2Nonmem extends MdlPrinter{
 	//Processing SIMULATE block for $SIM 
 	def print(SimulateTask b)'''
 		«var isInlineTargetDefined = TARGET.isInlineTargetDefined(b)»
-		«IF !isInlineTargetDefined»
-		
-		$SIM 
-		«ENDIF»
 		«getExternalCodeStart("$SIM")»
 		«IF !isInlineTargetDefined»
+		
+		$SIM
 			«FOR s: b.statements»
 				«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
 			«ENDFOR»
@@ -902,12 +900,10 @@ class Mdl2Nonmem extends MdlPrinter{
 	//Processing ESTIMATE block for $EST
 	def print(EstimateTask b)'''
 		«var isInlineTargetDefined = TARGET.isInlineTargetDefined(b)»
-		«IF !isInlineTargetDefined»
-		
-		$EST 
-		«ENDIF»
 		«getExternalCodeStart("$EST")»
 		«IF !isInlineTargetDefined»
+
+		$EST 
 			«FOR s: b.statements»
 				«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
 			«ENDFOR»
@@ -942,7 +938,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		if (target != null){ 
 			if (target.equals(TARGET)) {
 				val location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
-				return (location.length == 0); 
+				return (location.length == 0 || location.equals("INLINE")); 
 			}
 		}
 		return false;
@@ -1533,7 +1529,7 @@ class Mdl2Nonmem extends MdlPrinter{
 
 	override toStr(TargetBlock b){
 		if (b.isSamelineExternalCode){
-			return "### " + super.toStr(b).trim;
+			return "#DEL# " + super.toStr(b).trim;
 		} 
 		super.toStr(b);
 	}
