@@ -87,8 +87,8 @@ class Mdl2Nonmem extends MdlPrinter{
 			«IF o.modelObject != null»«o.modelObject.printTABLE»«ENDIF»
 	  	«ENDFOR»
 		''';
-		nm = nm.replaceAll("(\\n)(?=###)", "");
-		nm = nm.replace("###", "");
+		nm = nm.replaceAll("(\\n)(?=#DEL#)", "");
+		nm = nm.replace("#DEL#", "");
 		return nm;
 	}
 	
@@ -881,9 +881,9 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Processing SIMULATE block for $SIM 
 	def print(SimulateTask b)'''
-		«var isInlineTargetDefined = TARGET.isInlineTargetDefined(b)»
+		«var isInlineTargetDefined = b.isInlineTargetDefined»
 		«IF !isInlineTargetDefined»
-		
+
 		$SIM 
 		«ENDIF»
 		«getExternalCodeStart("$SIM")»
@@ -901,9 +901,9 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Processing ESTIMATE block for $EST
 	def print(EstimateTask b)'''
-		«var isInlineTargetDefined = TARGET.isInlineTargetDefined(b)»
+		«var isInlineTargetDefined = b.isInlineTargetDefined»
 		«IF !isInlineTargetDefined»
-		
+
 		$EST 
 		«ENDIF»
 		«getExternalCodeStart("$EST")»
@@ -922,7 +922,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	'''
 	
 	//Check whether there is a target block in a list of block statements			
-    def isInlineTargetDefined(String targetName, EstimateTask task){
+    def isInlineTargetDefined(EstimateTask task){
 		for (s: task.statements)
 			if (s.targetBlock != null)
 				if (s.targetBlock.isInlineExternalCode) return true;
@@ -930,7 +930,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	}
 	
 	//Check whether there is a target block in a list of block statements			
-    def isInlineTargetDefined(String targetName, SimulateTask task){
+    def isInlineTargetDefined(SimulateTask task){
 		for (s: task.statements)
 			if (s.targetBlock != null)
 				if (s.targetBlock.isInlineExternalCode) return true;
@@ -942,7 +942,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		if (target != null){ 
 			if (target.equals(TARGET)) {
 				val location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
-				return (location.length == 0); 
+				return (location.length == 0 || location.equals("INLINE")); 
 			}
 		}
 		return false;
@@ -1292,7 +1292,18 @@ class Mdl2Nonmem extends MdlPrinter{
 		}
 	}
 	
-	 //Prepare a map of section with corresponding target blocks
+	override String print(BlockStatement st)'''
+		«IF st.symbol != null»«st.symbol.print»«ENDIF»
+		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
+		«IF st.statement != null»«st.statement.print»«ENDIF»
+		«IF st.targetBlock != null»
+			«IF st.targetBlock.isInlineExternalCode»
+				«st.targetBlock.print»
+			«ENDIF»
+		«ENDIF»
+	'''
+	
+	//Prepare a map of section with corresponding target blocks
 	def void prepareExternalCode(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
@@ -1533,7 +1544,7 @@ class Mdl2Nonmem extends MdlPrinter{
 
 	override toStr(TargetBlock b){
 		if (b.isSamelineExternalCode){
-			return "### " + super.toStr(b).trim;
+			return "#DEL# " + super.toStr(b).trim;
 		} 
 		super.toStr(b);
 	}
