@@ -7,6 +7,8 @@ import java.util.HashMap
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.converter.mdl2pharmml.domain.Operation
 import org.ddmore.mdl.validation.ModellingObjectGroup
+import org.ddmore.mdl.mdl.TargetBlock
+import org.ddmore.mdl.mdl.MclObject
 
 class Mdl2PharmML{
 
@@ -81,6 +83,52 @@ class Mdl2PharmML{
 				«ENDFOR»
 			</PharmML>
 		'''			
+	}
+	
+	def extractTargetCode(Mcl mcl){
+		var tcbIterator = mcl.eAllContents;
+		var res = "";
+	   	while (tcbIterator.hasNext) {
+			var container = tcbIterator.next;
+			if (container instanceof TargetBlock) {
+				var s = container as TargetBlock;
+				res  = res + s.extractExternalCode;
+			}
+		}
+		return res;
+	}
+	
+	def extractTargetCode(MclObject obj){
+		var tcbIterator = obj.eAllContents;
+		var res = "";
+	   	while (tcbIterator.hasNext) {
+			var container = tcbIterator.next;
+			if (container instanceof TargetBlock) {
+				var s = container as TargetBlock;
+				res  = res + s.extractExternalCode;
+			}
+		}
+		return res;
+	}
+	
+	protected def extractExternalCode(TargetBlock s){
+		val mdlPrinter = MdlPrinter::getInstance();
+    	'''
+			<targetBlock>
+			«IF s.arguments != null»
+				«FOR a: s.arguments.arguments»
+					«IF a.argumentName != null»
+						<«a.argumentName.name»>
+							«mdlPrinter.toStr(a.expression)»
+						</«a.argumentName.name»>
+					«ENDIF»
+			   	«ENDFOR»
+		    «ENDIF»
+				<code>
+					«mdlPrinter.toStr(s)»
+				</code>
+			</targetBlock>	
+    	'''
 	}
 	
 	//+ Print PharmML namespaces

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.ddmore.mdl.MdlStandaloneSetup;
 import org.ddmore.mdl.mdl.Mcl;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -20,7 +20,7 @@ import com.google.inject.Injector;
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 public class Mdl2NonmemWrapper extends MdlPrinter implements IGenerator {
-    private static final Logger LOGGER = Logger.getLogger(Mdl2NonmemWrapper.class);
+    //private static final Logger LOGGER = Logger.getLogger(Mdl2NonmemWrapper.class);
 
     public void doGenerate(final Resource resource, final IFileSystemAccess fsa) {
         String relativeResourcePath = resource.getURI().toPlatformString(true);

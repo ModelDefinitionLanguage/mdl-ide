@@ -81,7 +81,7 @@ public class ConvertToPharmMLHandler extends AbstractHandler implements IHandler
 									System.out.println("Generating PharmML code for " + file.getName());
 					            	generator.doGenerate(source, fsa);
 					            	try {
-										srcGenFolder.refreshLocal(IResource.DEPTH_ONE, null);
+										srcGenFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
 									} catch (CoreException e) {
 										e.printStackTrace();
 									}
