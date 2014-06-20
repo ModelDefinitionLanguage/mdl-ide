@@ -1311,13 +1311,15 @@ class Mdl2Nonmem extends MdlPrinter{
 				var location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
 				if (location.length() > 0){
 					location = location.substring(0, Math::min(4, location.length()));
+					var included = false;
 					if (b.arguments.isAttributeTrue(AttributeValidator::attr_first.name)){
 						var codeSnippets = externalCodeStart.get(location);
 						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
 						codeSnippets.add(b.toStr);
 						externalCodeStart.put(location, codeSnippets);
+						included = true;
 					}
-					if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name)){
+					if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name) || !included){
 						var codeSnippets = externalCodeEnd.get(location);
 						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
 						codeSnippets.add(b.toStr);
