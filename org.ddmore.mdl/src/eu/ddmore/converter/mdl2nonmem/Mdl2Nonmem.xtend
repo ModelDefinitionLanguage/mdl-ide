@@ -882,50 +882,50 @@ class Mdl2Nonmem extends MdlPrinter{
 	//Processing SIMULATE block for $SIM 
 	def print(SimulateTask b)'''
 		«var isInlineTargetDefined = b.isInlineTargetDefined»
-		«IF !isInlineTargetDefined»
+		«IF !isInlineTargetDefined && !"$SIM".isTargetDefined»
 
 		$SIM 
-		«ENDIF»
-		«getExternalCodeStart("$SIM")»
-		«IF !isInlineTargetDefined»
 			«FOR s: b.statements»
 				«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
 			«ENDFOR»
 		«ELSE»
+			«getExternalCodeStart("$SIM")»
 			«FOR s: b.statements»
-				«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
+				«IF s.targetBlock != null && s.targetBlock.isInline»
+					«s.targetBlock.toStr»
+				«ENDIF»
 			«ENDFOR»
+			«getExternalCodeEnd("$SIM")»
 		«ENDIF» 
-		«getExternalCodeEnd("$SIM")»
 	'''
 	
 	//Processing ESTIMATE block for $EST
 	def print(EstimateTask b)'''
 		«var isInlineTargetDefined = b.isInlineTargetDefined»
-		«IF !isInlineTargetDefined»
+		«IF !isInlineTargetDefined && !"$EST".isTargetDefined»
 
 		$EST 
-		«ENDIF»
-		«getExternalCodeStart("$EST")»
-		«IF !isInlineTargetDefined»
 			«FOR s: b.statements»
 				«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
 			«ENDFOR»
 			NOABORT 
 			«b.printCovariance»
 		«ELSE»
+			«getExternalCodeStart("$EST")»
 			«FOR s: b.statements»
-				«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
+				«IF s.targetBlock != null && s.targetBlock.isInline»
+					«s.targetBlock.toStr»
+				«ENDIF»
 			«ENDFOR»
+			«getExternalCodeEnd("$EST")»
 		«ENDIF»
-		«getExternalCodeEnd("$EST")»
 	'''
 	
 	//Check whether there is a target block in a list of block statements			
     def isInlineTargetDefined(EstimateTask task){
 		for (s: task.statements)
 			if (s.targetBlock != null)
-				if (s.targetBlock.isInlineExternalCode) return true;
+				if (s.targetBlock.isInline) return true;
 		return false;
 	}
 	
@@ -933,11 +933,11 @@ class Mdl2Nonmem extends MdlPrinter{
     def isInlineTargetDefined(SimulateTask task){
 		for (s: task.statements)
 			if (s.targetBlock != null)
-				if (s.targetBlock.isInlineExternalCode) return true;
+				if (s.targetBlock.isInline) return true;
 		return false;
 	}
 	
-	def isInlineExternalCode(TargetBlock b){
+	def isInline(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
 			if (target.equals(TARGET)) {
@@ -948,7 +948,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		return false;
 	}
 	
-	def isSamelineExternalCode(TargetBlock b){
+	def isSameline(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
 			if (target.equals(TARGET)) {
@@ -986,13 +986,13 @@ class Mdl2Nonmem extends MdlPrinter{
 	}
 	
 	def convertAlgo(String str){
-		var res = str;
-		res = str.replace("FOCE", "CONDITIONAL");
-		res = str.replace("FO", "ZERO");
+		if (str.contains("FOCE "))
+			return str.replace("FOCE ", "CONDITIONAL ");
+		if (str.contains("FO "))
+		 	return str.replace("FO ", "ZERO ");
 		if (str.contains("SAEM") || str.contains ("IMP") || str.contains("BAYES")){
-			res = res + " AUTO = 1";
+			return str + " AUTO = 1";
 		}
-		return res;
 	}
 	
 	//Print attributes for default $SIM record
@@ -1297,7 +1297,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
 		«IF st.statement != null»«st.statement.print»«ENDIF»
 		«IF st.targetBlock != null»
-			«IF st.targetBlock.isInlineExternalCode»
+			«IF st.targetBlock.isInline»
 				«st.targetBlock.print»
 			«ENDIF»
 		«ENDIF»
@@ -1379,21 +1379,21 @@ class Mdl2Nonmem extends MdlPrinter{
 	override toStr(SymbolDeclaration v){
 		var preCode = "";
 		if (v.expression != null){
-			if (v.expression.list != null){
+			if (v.expression.list != null && v.symbolName.name != null){
 				var type = v.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
 				var res = "";
-				if (type.equals(VariableType::CC_CONTINUOUS)){
-					res = "F_FLAG = 0\n" 
-				}	
-				if (type.equals(VariableType::CC_LIKELIHOOD)){
-					if (v.symbolName == null || 
-						(v.symbolName != null && !binomial_vars.contains(v.symbolName.name)))
-							res = "F_FLAG = 1\n"	
-				}		
-				//substitute variable name with Y
-				var listExpr  = v.expression.list.toStr;
-				if (!listExpr.equals("") && !res.equals("")){
-					return res + "Y = " + listExpr + "\n"; 	
+				if (type.equals(VariableType::CC_LIKELIHOOD) || type.equals(VariableType::CC_CONTINUOUS)){
+					if (type.equals(VariableType::CC_CONTINUOUS))
+						res = "F_FLAG = 0\n" 
+					if (type.equals(VariableType::CC_LIKELIHOOD))
+						if (v.symbolName == null || 
+							(v.symbolName != null && !binomial_vars.contains(v.symbolName.name)))
+								res = "F_FLAG = 1\n"	
+					//substitute variable name with Y
+					var listExpr  = v.expression.list.toStr;
+					if (listExpr.length > 0)
+						res = res + "Y = " + listExpr + "\n" 	
+					return res; 			
 				}
 			}
 			//preprint CALL RANDOM()
@@ -1408,7 +1408,7 @@ class Mdl2Nonmem extends MdlPrinter{
 							if (call.arguments != null && call.arguments.arguments.size() > 0){
 								val arg = call.arguments.arguments.get(0);
 								val param = arg.expression.toStr;
-								preCode  = preCode + "RANDOM CALL (" + param +
+								preCode  = preCode + "CALL RANDOM(" + param +
 								", R)\n" + var_random_base + runifCount + " = R\n";
 								runifCount = runifCount + 1;
 							} 
@@ -1545,18 +1545,16 @@ class Mdl2Nonmem extends MdlPrinter{
 	}
 
 	override toStr(TargetBlock b){
-		if (b.isSamelineExternalCode){
-			return "#DEL# " + super.toStr(b).trim;
-		} 
-		super.toStr(b);
-	}
-	
-	override print(TargetBlock b){
 		var target = "";
 		if (b.arguments != null) target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
-		if (target.equals(TARGET)) 
-			'''«b.toStr»'''
+		if (target.equals(TARGET)) {
+			if (b.isSameline){
+				return "#DEL# " + super.toStr(b).trim;
+			} 
+			super.toStr(b);
+		}
 	}
+	
 		
 	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
 	override print(ConditionalStatement s)'''
