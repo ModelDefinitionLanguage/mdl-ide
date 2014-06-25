@@ -114,8 +114,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*TARGET*/
 	final public static Attribute attr_req_target = new Attribute("target", MdlDataType.TYPE_TARGET, true, DefaultValues.TARGET);
 	final public static Attribute attr_location = new Attribute("location", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_before = new Attribute("before", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_after = new Attribute("after", MdlDataType.TYPE_STRING, false);
 	final public static Attribute attr_first = new Attribute("first", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_last = new Attribute("last", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_sameline = new Attribute("sameline", MdlDataType.TYPE_BOOLEAN, false);
@@ -148,7 +146,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	
 	/*All blocks*/
-	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_sameline, attr_before, attr_after);
+	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_sameline);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//TODO: find how to substitute with identifiers in grammar (statically)
@@ -187,6 +185,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		{
 			put(attr_file.getName(), attr_script.getName());
 			put(attr_script.getName(), attr_file.getName());
+			put(attr_first.getName(), attr_last.getName());
+			put(attr_last.getName(), attr_first.getName());
 		}
 	};
 		

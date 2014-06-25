@@ -11,7 +11,6 @@ import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.ExecuteTask
-import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
 import org.ddmore.mdl.mdl.MatrixBlock
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.MixtureBlock
@@ -39,11 +38,12 @@ import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.types.VariableType
+import org.ddmore.mdl.types.TargetCodeType
+import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
 
 class Mdl2Nonmem extends MdlPrinter{
 	
 	protected var Mcl mcl = null;
-	protected val TARGET = "NMTRAN_CODE";
 	protected val var_model_tolrel = "tolrel"; 
 	protected val var_random_base = "TMPR";
 	
@@ -87,7 +87,7 @@ class Mdl2Nonmem extends MdlPrinter{
 			«IF o.modelObject != null»«o.modelObject.printTABLE»«ENDIF»
 	  	«ENDFOR»
 		''';
-		nm = nm.replaceAll("(\\n)(?=#DEL#)", "");
+		nm = nm.replaceAll("(\r\n|\n)(?=#DEL#)", "");
 		nm = nm.replace("#DEL#", "");
 		return nm;
 	}
@@ -940,7 +940,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	def isInline(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
-			if (target.equals(TARGET)) {
+			if (target.equals(TargetCodeType::NMTRAN_CODE)) {
 				val location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
 				return (location.length == 0 || location.equals("INLINE")); 
 			}
@@ -951,7 +951,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	def isSameline(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
-			if (target.equals(TARGET)) {
+			if (target.equals(TargetCodeType::NMTRAN_CODE)) {
 				return b.arguments.isAttributeTrue(AttributeValidator::attr_sameline.name);
 			}
 		}
@@ -1307,24 +1307,21 @@ class Mdl2Nonmem extends MdlPrinter{
 	def void prepareExternalCode(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
-			if (target.equals(TARGET)) {
+			if (target.equals(TargetCodeType::NMTRAN_CODE)) {
 				var location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
 				if (location.length() > 0){
 					location = location.substring(0, Math::min(4, location.length()));
-					var included = false;
-					if (b.arguments.isAttributeTrue(AttributeValidator::attr_first.name)){
-						var codeSnippets = externalCodeStart.get(location);
-						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
-						codeSnippets.add(b.toStr);
-						externalCodeStart.put(location, codeSnippets);
-						included = true;
-					}
-					if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name) || !included){
+					if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name)){
 						var codeSnippets = externalCodeEnd.get(location);
 						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
 						codeSnippets.add(b.toStr);
 						externalCodeEnd.put(location, codeSnippets);
-					} 
+					} else {
+						var codeSnippets = externalCodeStart.get(location);
+						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
+						codeSnippets.add(b.toStr);
+						externalCodeStart.put(location, codeSnippets);
+					}
 				}
 			}
 		}
@@ -1336,7 +1333,9 @@ class Mdl2Nonmem extends MdlPrinter{
 		val snippets = externalCodeStart.get(sectionName) 
 		if (snippets != null){
 			for (x: snippets){
-				res = res + "\n" + x;
+				if (x.startsWith("#DEL#"))
+					res = res + x 
+				else res = res + "\n" + x;
 			}
 		}
 		return res;
@@ -1347,9 +1346,10 @@ class Mdl2Nonmem extends MdlPrinter{
 		var res = "";		
 		val snippets = externalCodeEnd.get(sectionName) 
 		if (snippets != null){
-			for (x: snippets){
-				res = res + "\n" + x;
-			}
+			for (x: snippets)
+				if (x.startsWith("#DEL#"))
+					res = res + x 
+				else res = res + "\n" + x;
 		}
 		return res;
 	}
@@ -1547,7 +1547,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	override toStr(TargetBlock b){
 		var target = "";
 		if (b.arguments != null) target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
-		if (target.equals(TARGET)) {
+		if (target.equals(TargetCodeType::NMTRAN_CODE)) {
 			if (b.isSameline){
 				return "#DEL# " + super.toStr(b).trim;
 			} 
