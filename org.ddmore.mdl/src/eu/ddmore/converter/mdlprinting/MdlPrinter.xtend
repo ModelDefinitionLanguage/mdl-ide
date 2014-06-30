@@ -13,7 +13,6 @@ import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.List
 import org.ddmore.mdl.mdl.RandomList
 import org.ddmore.mdl.mdl.OdeList
-import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.Primary
 import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.mdl.Expression
@@ -37,7 +36,6 @@ import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
 import org.ddmore.mdl.mdl.Selector
-import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.FormalArguments
 import org.ddmore.mdl.mdl.SimulationBlock
@@ -75,7 +73,7 @@ class MdlPrinter {
 				}
 			}
 		}
-		return e.toStr.equalsIgnoreCase("true");
+		return e.toStr.equals("true");
 	}	
 	
 	def isAttributeTrue(Arguments args, String attrName){
@@ -106,7 +104,7 @@ class MdlPrinter {
 		return null;
 	}
 	
-	def valueToStr(DistributionArgument arg){
+	def String valueToStr(DistributionArgument arg){
 		if (arg.distribution != null)
 			return arg.distribution.identifier;
 		if (arg.value != null)
@@ -166,190 +164,6 @@ class MdlPrinter {
 			} 
 		}
 		return "";
-	}
-	
-	///////////////////////////////////////////////////////////////////////////////
-	//Check whether MDL blocks are defined and non empty
-	///////////////////////////////////////////////////////////////////////////////
-	//Check that HEADER block is not empty
-	def isHeaderDefined(DataObject obj){
-		for (b:obj.blocks){
-			if (b.dataInputBlock != null){
-				if (b.dataInputBlock.variables.size > 0){
-				 	return true;
-				}
-			}
-		}
-		return false;
-	}
-
-    //Check that PRIOR block is not empty
-	def isPriorDefined(ParameterObject obj){
-		for (b:obj.blocks){
-			if (b.priorBlock != null){
-				if (b.priorBlock.statements.size > 0)
-				 	return true;
-			}
-		}
-		return false;
-	}
-	
-	//Check that STRUCTURAL is not empty
-	def isStructuralDefined(ParameterObject obj){
-		for (b:obj.blocks){
-			if (b.structuralBlock != null){
-				if (b.structuralBlock.parameters.size > 0)
-				 	return true;
-			}
-		}
-		return false;
-	}
-
-	//Check that VARIABILITY block or its subblocks are not empty
-	def isVariabilityDefined(ParameterObject obj){
-		for (b:obj.blocks){
-			if (b.variabilityBlock != null){
-				if (b.variabilityBlock.statements.size > 0){
-				 	return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	//Check that VARIABILITY subblocks are not empty
-	def isVariabilitySubBlocksDefined(ParameterObject obj){
-		for (b:obj.blocks){
-			if (b.variabilityBlock != null){
-				for (bb: b.variabilityBlock.statements){
-					if ((bb.diagBlock != null) || (bb.matrixBlock != null) || (bb.sameBlock != null))
-				 		return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	//Return true if there are definitions in MODEL PREDICTION or OBSERVATION blocks,
-	def isErrorDefined(ModelObject o){
-    	for (mob:o.blocks){
-	    	if (mob.modelPredictionBlock != null){
-				for (s: mob.modelPredictionBlock.statements){
-					if (s.statement != null) return true;
-				}
-	    	}
-	    	if (mob.observationBlock != null){
-				if (mob.observationBlock.statements.size > 0){
-					return true;
-				}
-	    	}
-	    	if (mob.simulationBlock != null){
-				if (mob.simulationBlock.statements.size > 0){
-					return true;
-				}
-	    	}
-	    	if (mob.estimationBlock != null){
-				if (mob.estimationBlock.statements.size > 0){
-					return true;
-				}
-	    	}	    	
-		}
-    	return false;
-    } 
-	
-    //Check if there are definitions in ODE block
-    def isODEDefined(ModelObject o){
-		for (mob: o.blocks){
-			if (mob.modelPredictionBlock != null){
-				var b = mob.modelPredictionBlock;
-		    	for (s: b.statements){
-		    		if (s.odeBlock != null) return true;
-		    	}
-		    }
-		}
-    	return false;
-    }
-
-	//Check if GROUP or INDIVIDUAL variables are defined
-	def isGroupOrIndividualDefined(ModelObject o){
-		for (mob: o.blocks){
-			if (mob.groupVariablesBlock != null){
-				if (mob.groupVariablesBlock != null){
-					for (st: mob.groupVariablesBlock.statements)
-						if (st.statement != null)
-							return true;
-				}
-			}
-			if (mob.individualVariablesBlock != null){
-				if (mob.individualVariablesBlock.statements.size > 0){
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	//Check if MIXTURE block is defined 
-	def isMixDefined(ModelObject o){
-		for (mob: o.blocks){
-			if (mob.groupVariablesBlock != null){
-				if (mob.groupVariablesBlock != null){
-					for (st: mob.groupVariablesBlock.statements){
-						if (st.mixtureBlock != null){
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-    //Check if LIBRARY block is defined
-    def isLibraryDefined(ModelObject o){
-    	for (mob: o.blocks){
-			if (mob.modelPredictionBlock != null){
-				for (s: mob.modelPredictionBlock.statements){
-				    if (s.libraryBlock != null) return true;
-				}
-			}
-    	}
-    	return false;
-    }
-    
-    //Check if LIBRARY block is defined
-    def getNumberOfCompartments(ModelObject o){
-    	for (mob: o.blocks){
-			if (mob.modelPredictionBlock != null){
-				for (s: mob.modelPredictionBlock.statements){
-				    if (s.libraryBlock != null) {
-				    	for (ss: s.libraryBlock.statements){
-				    		var nmct = ss.expression.arguments.getAttribute("ncmt");
-				    		if (!nmct.equals("")) {
-				    			try{
-						    		return Integer::parseInt(nmct);
-				    			}
-				    			catch(NumberFormatException e){
-				    				return 0;		
-				    			}
-				    		}
-				    	}
-				    }
-				}
-			}
-    	}
-    	return 0;
-    }
-    
-    
-    //Check if OUTPUT_VARIABLES block is defined and has content
-	def isOutputVariablesDefined(ModelObject o){
-		for (b: o.blocks){
-			if ( b.outputVariablesBlock != null){
-				if ( b.outputVariablesBlock.variables.size > 0) return true;
-			}
-		}
-		return false;
 	}
 	
 	/////////////////////////////////////////////////////////////
@@ -720,16 +534,9 @@ class MdlPrinter {
 
 	//////////////////////////////////////////////////////////////////////////
 	//Printing
-    //////////////////////////////////////////////////////////////////////////	
-	 
-	def print(TargetBlock b)'''
-	«IF b.externalCode != null»
-		«var printedCode = b.externalCode.substring(3, b.externalCode.length - 3)»
-		«printedCode»
-	«ENDIF»
-	'''	
+    //////////////////////////////////////////////////////////////////////////		 
 	
-	def String print(Block b)'''
+	def CharSequence print(Block b)'''
 		«FOR st: b.statements»
 			«st.print»
 		«ENDFOR»
@@ -753,7 +560,7 @@ class MdlPrinter {
 		«ENDFOR»
 	'''	
 		
-	def String print(BlockStatement st)'''
+	def CharSequence print(BlockStatement st)'''
 		«IF st.symbol != null»«st.symbol.print»«ENDIF»
 		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
 		«IF st.statement != null»«st.statement.print»«ENDIF»
@@ -781,6 +588,8 @@ class MdlPrinter {
 		«ENDIF»
 	'''
 	
+	def print(TargetBlock b)'''«b.toStr»'''	
+		
 	def print(FunctionCall call)'''«call.toStr»'''
 		
     def print(SymbolDeclaration v)'''«v.toStr»'''
