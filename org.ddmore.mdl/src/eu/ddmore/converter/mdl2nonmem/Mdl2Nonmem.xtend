@@ -40,6 +40,7 @@ import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.types.TargetCodeType
 import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
+import org.eclipse.emf.ecore.EObject
 
 class Mdl2Nonmem extends MdlPrinter{
 	
@@ -1115,35 +1116,41 @@ class Mdl2Nonmem extends MdlPrinter{
   		m.prepareBinomialVars;
 	}	
 	
+	def addToBinomial(EObject x){
+		if (x instanceof SymbolDeclaration){
+			var s = x as SymbolDeclaration;
+			if (s.symbolName != null && s.expression != null && s.expression.list != null){
+				var type = s.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+				if (type.equals(VariableType::CC_LIKELIHOOD))
+					if (!binomial_vars.contains(s.symbolName.name)){
+						binomial_vars.add(s.symbolName.name);
+						System::out.println("Binomial variable was added: " + s.symbolName.name);	
+					}
+			}		
+		}
+	}
+	
+	def removeFromBinomial(EObject x){
+		if (x instanceof SymbolDeclaration){
+			var s = x as SymbolDeclaration;
+			if (s.symbolName != null && s.expression != null && s.expression.list != null){
+				if (binomial_vars.contains(s.symbolName.name)){
+					var type = s.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+					if (!type.equals(VariableType::CC_LIKELIHOOD)){
+						binomial_vars.remove(s.symbolName.name);
+						System::out.println("Binomial variable was removed: " + s.symbolName.name);	
+					}
+				}
+			}		
+		}
+	}
+	
 	def prepareBinomialVars(Mcl m){
-	  	binomial_vars.clear;		  	
-    	for (o:m.objects){
+	  	for (o:m.objects){
 			var subTree = mcl.eAllContents;
-			var subTree2 = subTree;
-			while (subTree.hasNext()){
-				var x = subTree.next();
-				if (x instanceof SymbolDeclaration){
-					var s = x as SymbolDeclaration;
-					if (s.symbolName != null && s.expression != null && s.expression.list != null){
-						var type = s.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
-						if (type.equals(VariableType::CC_LIKELIHOOD))
-							binomial_vars.add(s.symbolName.name);
-					}		
-				}
-			}
-			while (subTree2.hasNext()){
-				var x = subTree2.next();
-				if (x instanceof SymbolDeclaration){
-					var s = x as SymbolDeclaration;
-					if (s.symbolName != null && s.expression != null && s.expression.list != null){
-						if (binomial_vars.contains(s.symbolName.name)){
-							var type = s.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
-							if (!type.equals(VariableType::CC_LIKELIHOOD))
-								binomial_vars.remove(s.symbolName.name);
-						}
-					}		
-				}
-			}			
+			subTree.forEach[addToBinomial]; 
+			var subTree2 = mcl.eAllContents;
+			subTree2.forEach[removeFromBinomial]; 
 		}
 	}
 	
@@ -1374,28 +1381,10 @@ class Mdl2Nonmem extends MdlPrinter{
 	//Used to keep track of temporal variables for the conversion of runif to RANDOM
 	var runifCount = 0;	
 	
-	//Print variableDeclaration substituting ID with "Y" if it is a list with LIKELIHOOD or continuous type
-	//TODO: before printing F_FLAG=1 check that there exists symbol declaration with a type rather than likelihood
+	//Print variableDeclaration substituting ID with "Y" if it is a list with likelihood or continuous type
 	override toStr(SymbolDeclaration v){
-		var preCode = "";
+		var res = "";
 		if (v.expression != null){
-			if (v.expression.list != null && v.symbolName.name != null){
-				var type = v.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
-				var res = "";
-				if (type.equals(VariableType::CC_LIKELIHOOD) || type.equals(VariableType::CC_CONTINUOUS)){
-					if (type.equals(VariableType::CC_CONTINUOUS))
-						res = "F_FLAG = 0\n" 
-					if (type.equals(VariableType::CC_LIKELIHOOD))
-						if (v.symbolName == null || 
-							(v.symbolName != null && !binomial_vars.contains(v.symbolName.name)))
-								res = "F_FLAG = 1\n"	
-					//substitute variable name with Y
-					var listExpr  = v.expression.list.toStr;
-					if (listExpr.length > 0)
-						res = res + "Y = " + listExpr + "\n" 	
-					return res; 			
-				}
-			}
 			//preprint CALL RANDOM()
 			runifCount = 0;
 			var subTree = v.expression.eAllContents;
@@ -1408,7 +1397,7 @@ class Mdl2Nonmem extends MdlPrinter{
 							if (call.arguments != null && call.arguments.arguments.size() > 0){
 								val arg = call.arguments.arguments.get(0);
 								val param = arg.expression.toStr;
-								preCode  = preCode + "CALL RANDOM(" + param +
+								res  = res + "CALL RANDOM(" + param +
 								", R)\n" + var_random_base + runifCount + " = R\n";
 								runifCount = runifCount + 1;
 							} 
@@ -1416,8 +1405,38 @@ class Mdl2Nonmem extends MdlPrinter{
 					}
 				}
 			}
+			if (v.symbolName != null && v.expression.list != null){
+				var type = v.expression.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+				if (type.length() > 0){
+					if (type.equals(VariableType::CC_CONTINUOUS)) 
+						res = res + "F_FLAG = 0\n"; 
+					if (type.equals(VariableType::CC_LIKELIHOOD) && !binomial_vars.contains(v.symbolName.name)) 
+						res = res + "F_FLAG = 1\n";
+					if (type.equals(VariableType::CC_M2LL)) 
+						res = res + "F_FLAG = 2\n";		
+					//substitute variable name with Y
+					var listExpr  = v.expression.list.toStr;
+					if (listExpr.length > 0) return res + "Y = " + listExpr + "\n" 	
+				}
+			}			
 		}
-		return preCode + super.toStr(v);
+		return res + super.toStr(v);
+	}
+		
+	//Instead of list(...) we print an expression from a certain attribute (depends on the type)
+	override toStr(List l){		
+		var res = "";
+		var type = l.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+		if (type.equals(VariableType::CC_LIKELIHOOD)){
+			res = l.arguments.getAttribute(AttributeValidator::attr_prediction.name);
+		} else 
+			if (type.equals(VariableType::CC_CONTINUOUS)){
+				res = l.arguments.getAttribute(AttributeValidator::attr_prediction.name);
+				var ruv = l.arguments.getAttribute(AttributeValidator::attr_ruv.name);
+				if (ruv.length > 0)
+					res = res + "+" + ruv
+			}			
+		return res;
 	}
 	
 	//toStr function call
@@ -1429,7 +1448,7 @@ class Mdl2Nonmem extends MdlPrinter{
 				var container = call.eContainer()
 				if (container instanceof BlockStatement) {
 					return "RANDOM CALL (" + call.arguments.arguments.get(0) +
-						", " +  var_random_base + ")\n";
+						", " + var_random_base + ")\n";
 				}
 			}
 			if (runifCount > 0){
@@ -1442,21 +1461,6 @@ class Mdl2Nonmem extends MdlPrinter{
 		return super.toStr(call);	
 	}	
 	
-	
-	//Instead of list(...) we print an expression from a certain attribute (depends on the type)
-	override toStr(List l){		
-		var type = l.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
-		var res = "";
-		if (type.equals(VariableType::CC_LIKELIHOOD)){
-			res = l.arguments.getAttribute(AttributeValidator::attr_prediction.name);
-		} else if (type.equals(VariableType::CC_CONTINUOUS)){
-			var ruv = l.arguments.getAttribute(AttributeValidator::attr_ruv.name);
-			var prediction = l.arguments.getAttribute(AttributeValidator::attr_prediction.name)
-			res = prediction + "+" + ruv
-		}			
-		return res;
-	}
-
 	
 	//References to attributes: skip variable name and replace selectors, e.g,  amount.A[2] -> A(2)
 	override toStr(FullyQualifiedArgumentName arg) { 
@@ -1477,7 +1481,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	}	
 
 		
-	//toStr list arguments without commas
+	//Print list arguments without commas
 	def toStrWithoutCommas(Arguments arg){
 		var res  = "";
 		var iterator = arg.arguments.iterator();
@@ -1504,8 +1508,8 @@ class Mdl2Nonmem extends MdlPrinter{
 		if (dadt_vars.get(id) != null){
 			return "A(" + dadt_vars.get(id) + ")"; 
 		}
-		if (id.equalsIgnoreCase("ln"))
-			return "LOG";
+		if (id.equalsIgnoreCase("ln")) return "LOG";
+		//if (id.equals("R")) return "myR";	
 		return id.toUpperCase();	
 	}	
 	
@@ -1548,9 +1552,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		var target = "";
 		if (b.arguments != null) target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target.equals(TargetCodeType::NMTRAN_CODE)) {
-			if (b.isSameline){
-				return "#DEL# " + super.toStr(b).trim;
-			} 
+			if (b.isSameline) return "#DEL# " + super.toStr(b).trim;
 			super.toStr(b);
 		}
 	}

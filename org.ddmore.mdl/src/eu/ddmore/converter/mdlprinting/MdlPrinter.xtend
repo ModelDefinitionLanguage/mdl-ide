@@ -106,7 +106,7 @@ class MdlPrinter {
 		return null;
 	}
 	
-	def String valueToStr(DistributionArgument arg){
+	def valueToStr(DistributionArgument arg){
 		if (arg.distribution != null)
 			return arg.distribution.identifier;
 		if (arg.value != null)
