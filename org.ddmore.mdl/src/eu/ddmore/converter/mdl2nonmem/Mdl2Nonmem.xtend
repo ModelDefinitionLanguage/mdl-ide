@@ -1540,7 +1540,7 @@ class Mdl2Nonmem extends MdlPrinter{
 			return "A(" + dadt_vars.get(id) + ")"; 
 		}
 		if (id.equalsIgnoreCase("ln")) return "LOG";
-		//if (id.equals("R")) return "myR";	
+		if (id.equals("R")) return "myR";	
 		return id.toUpperCase();	
 	}	
 	
