@@ -68,25 +68,27 @@ class Mdl2Nonmem extends MdlPrinter{
 		«printSIZES»
 		«printPROB»
 		«FOR d:dataObjects»
-			«convertToNMTRAN(d, taskObjects)»
+			«d.printINPUT(taskObjects)»
+			«d.printDATA»
 	  	«ENDFOR»
 		«FOR t:taskObjects»
 			«t.printIGNORE»
 	  	«ENDFOR»
-		«printABBREVIATED»
 		«FOR o:m.objects»
-			«IF o.modelObject != null»«o.modelObject.convertToNMTRAN»«ENDIF»
-	  	«ENDFOR»
-		«printAES»
-	  	«FOR o:m.objects»
-			«IF o.parameterObject != null»«o.parameterObject.convertToNMTRAN»«ENDIF»
+			«IF o.parameterObject != null»
+				«o.parameterObject.convertToNMTRAN»
+			«ENDIF»
 	  	«ENDFOR»
 		«FOR o:m.objects»
-			«IF o.taskObject != null»«o.taskObject.convertToNMTRAN»«ENDIF»
+			«IF o.modelObject != null»
+				«o.modelObject.convertToNMTRAN»
+			«ENDIF»
+	  	«ENDFOR»
+		«FOR o:m.objects»
+			«IF o.taskObject != null»
+				«o.taskObject.convertToNMTRAN»
+			«ENDIF»
 		«ENDFOR»
-		«FOR o:m.objects»
-			«IF o.modelObject != null»«o.modelObject.printTABLE»«ENDIF»
-	  	«ENDFOR»
 		''';
 		nm = nm.replaceAll("(\r\n|\n)(?=#DEL#)", "");
 		nm = nm.replace("#DEL#", "");
@@ -150,6 +152,7 @@ class Mdl2Nonmem extends MdlPrinter{
 		«o.printSUBR»
 		«contentMODEL.printMODEL»
 		«o.generateMODEL»
+		«printABBREVIATED»
 		«IF isLibraryDefined»
 
 			«contentPK.printPK»
@@ -158,7 +161,9 @@ class Mdl2Nonmem extends MdlPrinter{
 		«ELSE» 
 			«printPRED(contentPK, contentError, contentMIX)»
 		«ENDIF»
+		«o.printTABLE»
 		«contentDES.printDES»
+		«printAES»
 		'''
 	}
 	
@@ -807,11 +812,6 @@ class Mdl2Nonmem extends MdlPrinter{
 ////////////////////////////////////	
 //convertToNonmem DATA OBJECT
 ////////////////////////////////////
-	def convertToNMTRAN(DataObject d, java.util.List<TaskObject> t)'''
-	«printINPUT(d,t)»
-	«d.printDATA»
-	'''
-
 	//Print NM-TRAN record $INPUT
 	def printINPUT(DataObject d, java.util.List<TaskObject> t){
 		val contentINPUT = d.printINPUTContent(t);
