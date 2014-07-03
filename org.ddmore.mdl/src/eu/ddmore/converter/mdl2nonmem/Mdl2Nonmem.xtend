@@ -156,29 +156,24 @@ class Mdl2Nonmem extends MdlPrinter{
 		«IF isLibraryDefined»
 
 			«contentPK.printPK»
+			«contentDES.printDES»
+			«printAES»
 			«contentMIX.printMIX»
 			«contentError.printERROR»
 		«ELSE» 
-			«printPRED(contentPK, contentError, contentMIX)»
+				
+			$PRED
+			«getExternalCodeStart("$PRE")»
+			«contentPK»
+			«contentMIX»
+			«contentError»
+			«getExternalCodeEnd("$PRE")»
+			«contentDES.printDES»
+			«printAES»
 		«ENDIF»
 		«o.printTABLE»
-		«contentDES.printDES»
-		«printAES»
 		'''
 	}
-	
-	//Print NM-TRAN record $PRED
-	def printPRED(CharSequence contentPK, CharSequence contentError, CharSequence contentMIX)'''
-	«IF contentPK.length > 0 || contentError.length > 0 || contentMIX.length > 0»		
-	
-	$PRED
-	«ENDIF»
-	«getExternalCodeStart("$PRE")»
-	«contentPK»
-	«contentMIX»
-	«contentError»
-	«getExternalCodeEnd("$PRE")»
-	'''
 
 	//Print NM-TRAN  record $PK
 	def printPK(CharSequence contentPK)'''
@@ -206,36 +201,35 @@ class Mdl2Nonmem extends MdlPrinter{
 				«s.print»
 			«ENDFOR»
 		«ENDIF»
-		«IF b.modelPredictionBlock != null»		
-			«IF init_vars.entrySet.size > 0»
-
-				;initial conditions
-				«FOR e: init_vars.entrySet»
-					A_0(«e.key») = «e.value»
-				«ENDFOR»
-			«ENDIF»
-			«b.modelPredictionBlock.printArgInitConditions»
+		«IF b.modelPredictionBlock != null»	
+			«b.modelPredictionBlock.printPKContent»	
 		«ENDIF»
 	«ENDFOR»
+	«IF init_vars.entrySet.size > 0»
+
+			;initial conditions
+			«FOR e: init_vars.entrySet»
+				A_0(«e.key») = «e.value»
+			«ENDFOR»
+	«ENDIF»	
 	'''
 	
-	def printArgInitConditions(ModelPredictionBlock b){
-		var res = "";
-		var replace = true;
-		for (st: b.statements){
-			if (st.libraryBlock != null) replace = false;
-			if (st.statement != null && st.statement.symbol != null){
-				val symbol = st.statement.symbol;
-				if (symbol.argumentName != null && symbol.expression.expression != null){
+	//include the content of MODEL_PREDICTION before LIBRARY to $PK
+	def printPKContent(ModelPredictionBlock b){
+		var res  = "";
+		var include = true;
+		for (s: b.statements){
+			if (s.libraryBlock != null) include = false;
+			if (s.statement != null && include){
+				val symbol = s.statement.symbol;
+				if (symbol != null && symbol.argumentName != null && symbol.expression.expression != null){
 					if (symbol.argumentName.parent.name.equals("A")){
-						if (replace)
-							res = res + '''
-								A_0«symbol.argumentName.selectors.get(0).toStr» = «symbol.expression.expression.toStr»
-							'''
-						else res = res + '''
-							«symbol.toStr»
-						''';
+						res = res + '''
+							A_0«symbol.argumentName.selectors.get(0).toStr» = «symbol.expression.expression.toStr»
+						'''
 					}
+				} else {
+					res  = res + '''«s.statement.print»''';
 				}
 			}
 		}
@@ -245,8 +239,8 @@ class Mdl2Nonmem extends MdlPrinter{
 	//Print NM-TRAN record $MIX 
 	def printMIX(CharSequence contentMIX)'''
 	«IF contentMIX.length > 0»
-	
-	$MIX
+		
+		$MIX
 	«ENDIF»
 	«getExternalCodeStart("$MIX")»
 	«contentMIX»
@@ -306,14 +300,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	def printErrorContent(ModelObject o)'''
 		«FOR mob:o.blocks»
 			«IF mob.modelPredictionBlock != null»
-				«FOR s: mob.modelPredictionBlock.statements»
-					«IF s.statement != null»
-						«IF (s.statement.symbol != null) && (s.statement.symbol.argumentName != null)»
-						«ELSE»
-							«s.statement.print»
-						«ENDIF»
-					«ENDIF»
-				«ENDFOR»
+				«mob.modelPredictionBlock.printErrorContent»
 			«ENDIF»
 			«IF mob.observationBlock != null»
 				«mob.observationBlock.print»
@@ -326,6 +313,23 @@ class Mdl2Nonmem extends MdlPrinter{
 			«ENDIF»			
 		«ENDFOR»
 	'''
+	
+	//include the content of MODEL_PREDICTION after LIBRARY to $ERROR
+	def printErrorContent(ModelPredictionBlock b){
+		var res  = "";
+		var include = false;
+		for (s: b.statements){
+			if (s.libraryBlock != null) include = true;
+			if (s.statement != null && include){
+				if (s.statement.symbol != null && s.statement.symbol.argumentName != null){
+					//skip init values (vector field assignments)
+				} else {
+					res  = res + '''«s.statement.print»''';
+				}
+			}
+		}
+		return res;
+	}
 	
 	//If there is a definition with ncmt=N, define N compartment names
 	def generateMODEL(ModelObject o){
@@ -488,10 +492,10 @@ class Mdl2Nonmem extends MdlPrinter{
 		val contentPRIOR = o.printPRIORContent;
 		val contentTHETA = o.printTHETAContent;
 		'''
-		«contentPRIOR.printPRIOR»
 		«contentTHETA.printTHETA»
 		«o.printOMEGA»
 		«o.printSIGMA»
+		«contentPRIOR.printPRIOR»
 		'''
 	}
 
