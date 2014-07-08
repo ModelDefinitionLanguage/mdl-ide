@@ -311,7 +311,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 				if (argument.getExpression().getExpression() != null){
 					if (argument.getArgumentName().getName().equals(attr_file.getName()) || 
 					 argument.getArgumentName().getName().equals(attr_script.getName())) {
-						String dataPath = Utils.getAttributeValue(argument);
+						String dataPath = Utils.getAttributeValue(argument).replaceAll("^\"(.+)\"$", "$1"); // Strip off any enclosing double quotes around the string
 						if (!Utils.isFileExist(b, dataPath)){
 							if (argument.getArgumentName().getName().equals(attr_file.getName())){
 								warning(MSG_DATA_FILE_NOT_FOUND, 

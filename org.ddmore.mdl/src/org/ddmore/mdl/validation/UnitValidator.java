@@ -148,8 +148,8 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 		if (arg.getArgumentName() != null){
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
 				String unitValue = Utils.getAttributeValue(arg);
-				if (unitValue.length() > 0){
-					unitValue = unitValue.replaceAll("\\s+","");
+				if (unitValue.length() > 0) {
+					unitValue = unitValue.replaceAll("\\s+","").replaceAll("^\"(.+)\"$", "$1"); // Replace any whitespace and strip off any enclosing double quotes around the string
 					if (validUnits.size() > 0){
 						if (!validUnits.containsKey(unitValue))
 							warning(MSG_UNIT_UNDEFINED + ": " + unitValue, 
