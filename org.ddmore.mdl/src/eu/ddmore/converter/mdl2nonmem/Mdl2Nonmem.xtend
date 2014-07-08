@@ -674,6 +674,8 @@ class Mdl2Nonmem extends MdlPrinter {
 				}
 			}
 		}
+		//For distributions other than normal (no var or sd parameters), link name (XXX and eta_XXX) 
+		if (eps_vars.get("eta_" + varName) != null) return true;		
 		return false;
 	}
 	
@@ -695,6 +697,8 @@ class Mdl2Nonmem extends MdlPrinter {
 				}
 			}
 		}
+		//For distributions other than normal (no "var" or "sd" attributes), link name (XXX and eps_XXX) 
+		if (eps_vars.get("eps_" + varName) != null) return true;
 		return false;
 	}
 	
