@@ -350,7 +350,8 @@ class MdlPrinter {
 			}
 		}
 		if (e.string != null){		
-			res  = e.string; 
+			res = "\"" + e.string + "\""; 
+			//res = e.string;
 		}
 		return res;
 	}
