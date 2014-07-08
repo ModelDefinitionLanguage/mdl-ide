@@ -5,44 +5,46 @@
  */
 package eu.ddmore.converter.mdl2nonmem
 
+import eu.ddmore.converter.mdlprinting.MdlPrinter
 import java.util.ArrayList
+import java.util.HashMap
+import java.util.HashSet
+import org.apache.log4j.Logger
+import org.ddmore.mdl.mdl.AndExpression
+import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.BlockStatement
+import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.ExecuteTask
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
+import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
+import org.ddmore.mdl.mdl.FunctionCall
+import org.ddmore.mdl.mdl.List
+import org.ddmore.mdl.mdl.LogicalExpression
 import org.ddmore.mdl.mdl.MatrixBlock
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.MixtureBlock
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ModelPredictionBlock
+import org.ddmore.mdl.mdl.OrExpression
 import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.SameBlock
+import org.ddmore.mdl.mdl.Selector
 import org.ddmore.mdl.mdl.SimulateTask
 import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.TaskObjectBlock
-import java.util.HashMap
-import org.ddmore.mdl.mdl.TargetBlock
-import java.util.HashSet
-import eu.ddmore.converter.mdlprinting.MdlPrinter
-import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
-import org.ddmore.mdl.mdl.FunctionCall
-import org.ddmore.mdl.mdl.List
-import org.ddmore.mdl.mdl.LogicalExpression
-import org.ddmore.mdl.mdl.Selector
-import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.mdl.ConditionalStatement
-import org.ddmore.mdl.mdl.OrExpression
-import org.ddmore.mdl.mdl.AndExpression
+import org.ddmore.mdl.types.TargetCodeType
+import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.FunctionValidator
-import org.ddmore.mdl.types.VariableType
-import org.ddmore.mdl.types.TargetCodeType
-import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
 import org.eclipse.emf.ecore.EObject
 
-class Mdl2Nonmem extends MdlPrinter{
+class Mdl2Nonmem extends MdlPrinter {
+    private static val Logger logger = Logger::getLogger("Mdl2Nonmem");
 	
 	protected var Mcl mcl = null;
 	protected val var_model_tolrel = "tolrel"; 
@@ -50,6 +52,8 @@ class Mdl2Nonmem extends MdlPrinter{
 	
 	//Print file name and analyse MCL objects in the source file
   	def convertToNMTRAN(Mcl m){
+  	    logger.info("In MDL2NONMEM converter");
+  	    
   		mcl = m;
   		m.prepareCollections();  		 		
   			
@@ -1351,8 +1355,9 @@ class Mdl2Nonmem extends MdlPrinter{
 		if (target != null){ 
 			if (target.equals(TargetCodeType::NMTRAN_CODE)) {
 				var location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
-				if (location.length() > 0){
-					location = location.substring(0, Math::min(4, location.length()));
+				if (location.length() > 0) {
+				    // Strip off any enclosing double quotes (if present) and truncate to 4 characters
+					location = location.replaceAll("^\"(.+)\"$", "$1").substring(0, Math::min(4, location.length()));
 					if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name)){
 						var codeSnippets = externalCodeEnd.get(location);
 						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
@@ -1414,7 +1419,7 @@ class Mdl2Nonmem extends MdlPrinter{
 	}				
 	
 	//Used to keep track of temporal variables for the conversion of runif to RANDOM
-	var runifCount = 0;	
+	var runifCount = 0;
 	
 	//Print variableDeclaration substituting ID with "Y" if it is a list with likelihood or continuous type
 	override toStr(SymbolDeclaration v){
