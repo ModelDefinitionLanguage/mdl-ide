@@ -1397,8 +1397,8 @@ class Mdl2Nonmem extends MdlPrinter {
 			if (target.equals(TargetCodeType::NMTRAN_CODE)) {
 				var location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
 				if (location.length() > 0) {
-				    // Strip off any enclosing double quotes (if present) and truncate to 4 characters
-					location = location.replaceAll("^\"(.+)\"$", "$1").substring(0, Math::min(4, location.length()));
+					location = location.replaceAll("^\"(.+)\"$", "$1") // Strip off any enclosing double quotes (if present)
+					location = location.substring(0, Math::min(4, location.length())) // And truncate to 4 characters
 					if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name)){
 						var codeSnippets = externalCodeEnd.get(location);
 						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
