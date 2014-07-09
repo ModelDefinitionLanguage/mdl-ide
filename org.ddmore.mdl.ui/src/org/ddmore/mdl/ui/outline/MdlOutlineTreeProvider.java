@@ -49,9 +49,12 @@ import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.RemoveList;
+import org.ddmore.mdl.mdl.Symbol;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolList;
 import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.SymbolNames;
+import org.ddmore.mdl.mdl.Symbols;
 import org.ddmore.mdl.mdl.TELObject;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.TaskFunctionBlock;
@@ -466,6 +469,37 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		}
 	}
 	
+	protected void  _createNode(IOutlineNode parentNode, Symbols b){
+		for (Symbol s: b.getSymbols()){
+			createNode(parentNode, s);
+		}	
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, Symbol b){
+		if (b.getSymbolName() != null){
+			createEStructuralFeatureNode(parentNode,
+				b,
+				MdlPackage.Literals.SYMBOL__EXPRESSION,
+				_image(b),
+				b.getSymbolName().getName(),
+				false);
+		}
+		else {
+			createNode(parentNode, b.getExpression());
+		}
+	}	
+	
+	protected void  _createNode(IOutlineNode parentNode, SymbolNames b){
+		for (SymbolName s: b.getSymbolNames()){
+			createEStructuralFeatureNode(parentNode,
+				s,
+				MdlPackage.Literals.SYMBOL_NAME__NAME,
+				_image(s),
+				s.getName(),
+				true);
+		}	
+	}
+	
 	protected void  _createNode(IOutlineNode parentNode, DataBlockStatement st){
 		for (EObject obj: st.eContents()){
 			createNode(parentNode, obj);
@@ -726,8 +760,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	
 	protected void  _createNode(IOutlineNode parentNode, EnumType b){
 		for (EObject obj: b.eContents()){
-			if (obj instanceof VarTypeImpl)
-				createNode(parentNode, obj);
+			createNode(parentNode, obj);
 		}
 	}
 
