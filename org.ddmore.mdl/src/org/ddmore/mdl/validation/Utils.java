@@ -39,6 +39,7 @@ import org.ddmore.mdl.mdl.Symbols;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
+import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
@@ -47,10 +48,12 @@ import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
+import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
+import org.ddmore.mdl.mdl.impl.OdeListImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
@@ -193,7 +196,7 @@ public class Utils {
 		if (e.getIfStatement() != null){
 			addSymbolNoRepeat(list, e.getIfStatement());
 		}
-		if (e.getElseStatement() != null){
+		if (e.getElseStatement() != null){ 
 			addSymbolNoRepeat(list, e.getElseStatement());
 		}		
 		if (e.getIfBlock() != null) {
@@ -214,6 +217,18 @@ public class Utils {
 				for (Argument arg: args.getArguments()){
 					if (arg.getArgumentName() != null)
 						list.add(arg.getArgumentName().getName());
+				}
+			}
+		}
+	}
+	
+	public static void addSymbolNoRepeat(List<String> list, Arguments args){
+		if (args != null){
+			if (args.getArguments() != null){	
+				for (Argument arg: args.getArguments()){
+					if (arg.getArgumentName() != null)
+						if (!list.contains(arg.getArgumentName().getName()))
+							list.add(arg.getArgumentName().getName());
 				}
 			}
 		}
@@ -417,7 +432,6 @@ public class Utils {
 		}
 		return true;
 	}
-
 	
 	//Locate data/script file in the MDL project
 	public static boolean isFileExist(EObject b, String filePath) {
@@ -493,5 +507,9 @@ public class Utils {
 			}
 		}
 		return mogs;
+	}
+	
+	public static boolean isNestedList(Arguments args){
+		return (args.eContainer() instanceof ListImpl || args.eContainer() instanceof OdeListImpl);
 	}
 }

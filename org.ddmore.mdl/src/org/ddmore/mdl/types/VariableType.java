@@ -9,5 +9,5 @@ public class VariableType {
 	public final static String CC_LIKELIHOOD = "likelihood";
 	public final static String CC_M2LL = "M2LL";
 
-	public final static List<String> CC_VALUES = Arrays.asList(CC_CONTINUOUS, CC_CATEGORICAL, CC_LIKELIHOOD);
+	public final static List<String> CC_VALUES = Arrays.asList(CC_CONTINUOUS, CC_CATEGORICAL, CC_LIKELIHOOD, CC_M2LL);
 }
