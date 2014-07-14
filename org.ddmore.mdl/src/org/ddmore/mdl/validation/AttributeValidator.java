@@ -6,6 +6,7 @@
  */
 package org.ddmore.mdl.validation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.SourceBlock;
+import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
@@ -92,9 +94,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_recode = new Attribute("recode", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_boundaries = new Attribute("boundaries", MdlDataType.TYPE_VECTOR_REAL, false);
 	final public static Attribute attr_missing = new Attribute("missing", MdlDataType.TYPE_INT, false);
-	//
-	final public static Attribute attr_female = new Attribute("female", MdlDataType.TYPE_INT, false);
-	final public static Attribute attr_male = new Attribute("male", MdlDataType.TYPE_INT, false);
 	
 	/*SOURCE*/
 	final public static Attribute attr_ignore = new Attribute("ignore", MdlDataType.TYPE_STRING, false);
@@ -121,7 +120,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
 	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
-			attr_recode, attr_boundaries, attr_missing, attr_female, attr_male);
+			attr_recode, attr_boundaries, attr_missing);
 	final public static List<Attribute> attrs_dataDerived = Arrays.asList(attr_req_cc_type, attr_expr_value, attr_units);
 	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, 
 			attr_delimiter, attr_file, attr_script, attr_header);
@@ -219,17 +218,16 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 
 	@Check
 	public void checkRequiredArguments(Arguments args){
+		//Do not enforce required attributes for blocks to nested lists in this block
+		if (Utils.isNestedList(args)) return;
+			
 		EObject container = Utils.findListContainer(args.eContainer());
 		if (container == null) return;
-		if (isVariabilitySubblock(container, args)) return;
-		String prefix = Utils.getBlockName(container) + ":";
+		if (isVariabilitySubblock(container, args)) return;		
+		String prefix = Utils.getBlockName(container) + ":";		
+		List<String> argumentNames = new ArrayList<String>();	
+		Utils.addSymbolNoRepeat(argumentNames, args); 
 		
-		HashSet<String> argumentNames = new HashSet<String>();	
-		for (Argument arg: args.getArguments()){
-			if (!argumentNames.contains(arg.getArgumentName().getName())){
-				argumentNames.add(arg.getArgumentName().getName());
-			}
-		}
 		//getRequiredAttributes contains lists of required attributes for each container
 		for (String attrName: Utils.getRequiredNames(getAllAttributes(container))){
 			if (!argumentNames.contains(attrName)) {
@@ -255,9 +253,25 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		Arguments args = (Arguments)argContainer;
 		if (isVariabilitySubblock(container, args)) return;
 		
+		//Check that the attribute name is valid
 		List<Attribute> knownAttributes = getAllAttributes(container);
 		if (knownAttributes != null){
-			List<String> attributeNames = Utils.getAllNames(knownAttributes);
+			List<String> attributeNames = new ArrayList<String>();
+			attributeNames.addAll(Utils.getAllNames(knownAttributes));
+			//for categorical values, recognise user defined categories as attributes
+			if (container instanceof DataInputBlockImpl){
+				if (Utils.isNestedList(args)){
+					//Arguments -> List/Ode -> AnyExpression -> Argument
+					if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl){
+						EObject parentArgsContainer = args.eContainer().eContainer().eContainer().eContainer();
+						if (parentArgsContainer instanceof ArgumentsImpl){
+							Arguments parentArgs = (Arguments) parentArgsContainer;
+							List<String> categoricalNames = getCategoricalNames(parentArgs);
+							attributeNames.addAll(categoricalNames);
+						}
+					}
+				}
+			}
 			if (!attributeNames.contains(argument.getArgumentName().getName())){
 				warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
 				MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
@@ -276,7 +290,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 					return;
 				}
 			}
-		}	
+		}
+		//Check that each attribute is defined once
 		HashSet<String> argumentNames = new HashSet<String>();	
 		for (Argument arg: args.getArguments()){
 			if (!argumentNames.contains(arg.getArgumentName().getName())){
@@ -287,6 +302,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 						arg.getArgumentName().getName());				
 			}
 		}
+		//Check mutually exclusive attributes
 		if (exclusive_attrs.containsKey(argument.getArgumentName().getName())){
 			String exclusive = exclusive_attrs.get(argument.getArgumentName().getName());
 			if (argumentNames.contains(exclusive)){
@@ -296,7 +312,25 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 						argument.getArgumentName().getName());				
 			}
 		}
+	}
+	
 
+	private List<String> getCategoricalNames(Arguments parentArgs){
+		List<String> categoricalNames = new ArrayList<String>();
+		for (Argument parentArg: parentArgs.getArguments()){
+			if (parentArg.getArgumentName() != null){
+				if (parentArg.getArgumentName().getName().equals(attr_req_cc_type.getName())){
+					if (parentArg.getExpression().getType() != null && 
+						parentArg.getExpression().getType().getType() != null &&
+						parentArg.getExpression().getType().getType().getCategorical() != null){
+						if (parentArg.getExpression().getType().getType().getArguments() != null){
+							Utils.addSymbol(categoricalNames, parentArg.getExpression().getType().getType().getArguments());
+						}	
+					}
+				}
+			}
+		}
+		return categoricalNames;
 	}
 	
 	@Check
