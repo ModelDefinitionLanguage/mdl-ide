@@ -14,7 +14,9 @@ import java.util.Map;
 
 import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionArguments;
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.Selector;
 import org.ddmore.mdl.mdl.impl.DistributionArgumentsImpl;
 import org.ddmore.mdl.types.MdlDataType;
 import org.ddmore.mdl.types.DistributionType;
@@ -36,7 +38,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_DISTR_ATTRIBUTE_MISSING = "Required distribution attribute is missing";
 	public final static String MSG_DISTR_ATTRIBUTE_DEFINED    = "Distribution attribute or its synonym is already defined";
 	public final static String MSG_DISTR_ATTRIBUTE_WRONG_TYPE = "Type error";
-
+	
 	public final static Attribute attr_probability = new Attribute("probability", MdlDataType.TYPE_PROBABILITY, true);
 	public final static Attribute attr_p = new Attribute("probability", MdlDataType.TYPE_PROBABILITY, true);
 	
@@ -472,4 +474,36 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		return null;
 	}	
 	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Check references to distribution attributes
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	static boolean checkAttributes(FullyQualifiedArgumentName attrName, List<DistributionArgument> arguments) {
+		List <DistributionArgument> currArgs = arguments; 
+		for (Selector x: attrName.getSelectors()){
+			if (currArgs != null){
+				int index = -1;
+				if (x.getSelector() != null){
+					index = Integer.parseInt(x.getSelector());
+					if (!((index >= 1) && (index < currArgs.size() + 1))) return false;
+					index = 1;	
+				}
+				if (x.getArgumentName() != null){
+					int i = 0;
+					for (DistributionArgument arg: currArgs){
+						if (arg.getArgumentName().getName().equals(x.getArgumentName().getName())){
+							index = i + 1;
+							break;
+						}
+						i++; 
+					}
+				}
+				if (index > 0) {
+					if (currArgs.get(index - 1).getComponent() != null)
+						if (arguments.get(index).getComponent().getArguments() != null)
+							currArgs = arguments.get(index).getComponent().getArguments().getArguments();
+				} else return false;
+			} 
+		}
+		return true;		
+	}	
 }

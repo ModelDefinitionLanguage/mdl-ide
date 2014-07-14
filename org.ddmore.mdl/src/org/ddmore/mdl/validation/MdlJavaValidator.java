@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.ddmore.mdl.mdl.*;
-import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
@@ -21,11 +20,9 @@ import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.TaskFunctionBlockImpl;
 import org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ComposedChecks;
 
@@ -39,9 +36,11 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_SYMBOL_DEFINED  = "A variable or parameter with such name already exists";
 	public final static String MSG_SYMBOL_UNKNOWN  = "Unresolved reference: parameter, variable, object or formal argument not declared";
 		
-	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF = "Unresolved reference to a list attribute";
 	public final static String MSG_UNRESOLVED_FUNC_ARGUMENT_REF = "Unresolved reference to a function output parameter";
 	public final static String MSG_UNRESOLVED_SAME_BLOCK_NAME = "No corresponding matrix or diag block found";
+	
+	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF = "Unresolved reference to a list attribute";
+	public final static String MSG_UNRESOLVED_DISTR_ATTRIBUTE_REF = "Unresolved reference to a distribution attribute";
 
 	public final static String MSG_TARGET_LOCATION = "Target code block is not used inline, "
 		+ "please specify location";
@@ -64,74 +63,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//Update the list of recognised variables
 	@Check
 	public void updateDeclaredVariableList(Mcl mcl){
-		//System.out.println("Updating variables...");
-		declaredVariables.clear();
-		for (MclObject obj: mcl.getObjects()){
-			ArrayList<String> varList = new ArrayList<String>();
-			TreeIterator<EObject> symbolIterator = obj.eAllContents();
-			while (symbolIterator.hasNext()) {
-				EObject container = symbolIterator.next();
-				if (container instanceof SymbolDeclarationImpl) {
-					SymbolDeclaration s = (SymbolDeclaration) container;
-					if (s.getSymbolName() != null)
-						varList.add(s.getSymbolName().getName());
-				}
-				if (container instanceof FunctionCallStatementImpl) {
-					FunctionCallStatement s = (FunctionCallStatement) container;
-					if (s.getSymbolName() != null)
-						varList.add(s.getSymbolName().getName());
-				}
-				//DataObject -> SOURCE
-		    	if (container instanceof SourceBlockImpl){
-		    		SourceBlock block = (SourceBlock) container;
-		    		if (block.getSymbolName() != null)
-						varList.add(block.getSymbolName().getName());
-				}
-				//ParameterObject -> VARIABILITY, matrix, diag, same
-		    	if (container instanceof VariabilityBlockStatementImpl){
-					VariabilityBlockStatement s = (VariabilityBlockStatement)container;
-					if (s.getParameter() != null && s.getParameter().getSymbolName() != null)
-						varList.add(s.getParameter().getSymbolName().getName());
-					if (s.getMatrixBlock() != null)
-						Utils.addSymbol(varList, s.getMatrixBlock().getParameters());
-					if (s.getDiagBlock() != null)
-						Utils.addSymbol(varList, s.getDiagBlock().getParameters());
-					if (s.getSameBlock() != null)
-						Utils.addSymbol(varList, s.getSameBlock().getParameters());
-				}
-		    	if (container instanceof FunctionCallImpl){
-		    		FunctionCall functCall = (FunctionCall) container;
-		    		String functName = functCall.getIdentifier().getFunction().getName();
-		    		if (functCall.getArguments() != null){
-		    			if (FunctionValidator.libraries.contains(functName))
-		    				varList.addAll(Utils.extractSymbolNames(functCall.getArguments(), 
-		    						FunctionValidator.param_output.name));
-			    		if (FunctionValidator.funct_standardWithOutputParams.contains(functName)){
-							//when parameters passed by place, assume default set of attributes
-			    			//and validate all references assigned to output parameters
-			    			FunctionSignature signature = FunctionValidator.standardFunctions.get(functName);
-				    		if (signature != null){
-				    			for (int i = 0; i < signature.getDefaultParams().size(); i++){
-				    				FunctionParameter p = signature.getDefaultParams().get(i);
-				    				if (p.isOutputParameter()){
-					    				if (functCall.getArguments().getArguments().size() > i) {
-						    				Argument arg = functCall.getArguments().getArguments().get(i);
-						    				varList.addAll(Utils.extractSymbolNames(arg));
-					    				}
-				    				}
-				    			}
-				    		}
-			    		}
-    	    		}
-		    	}
-			}			
-		    if (varList.size() > 0)
-		    	declaredVariables.put(obj.getObjectName().getName(), varList);
-		}
-		//System.out.println("Declared variables:");
-    	//for (String key: declaredVariables.keySet()){
-    	//	System.out.println(Utils.printList(declaredVariables.get(key)));
-    	//}
+		declaredVariables = Utils.getDeclaredSymbols(mcl);
 	}
 	
 	//Update the list of declared variability subblock names
@@ -173,11 +105,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		if (!(container instanceof BlockStatement)){
 			//external target blocks should have location defined
 			String location = Utils.getAttributeValue(t.getArguments(), AttributeValidator.attr_location.name);
-			if (location.length() == 0){
+			if (location.length() == 0)
 				warning(MSG_TARGET_LOCATION, 
 						MdlPackage.Literals.TARGET_BLOCK__ARGUMENTS,
 						MSG_TARGET_LOCATION, t.getIdentifier());
-			}
 		}
 	}
 
@@ -263,123 +194,84 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		}
 		return false;
 	}
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
-	//Check references to list attributes
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
-	private boolean checkAttributes(FullyQualifiedArgumentName attrName, List<Argument> arguments) {
-		List <Argument> currArgs = arguments; 
-		for (Selector x: attrName.getSelectors()){
-			if (currArgs != null){
-				int index = -1;
-				if (x.getSelector() != null){
-					index = Integer.parseInt(x.getSelector());
-					if (!((index >= 1) && (index < currArgs.size() + 1))) return false;
-					index = 1;	
-				}
-				if (x.getArgumentName() != null){
-					int i = 0;
-					for (Argument arg: currArgs){
-						if (arg.getArgumentName().getName().equals(x.getArgumentName().getName())){
-							index = i + 1;
-							break;
-						}
-						i++; 
-					}
-				}
-				if (index > 0) {
-					if (currArgs.get(index - 1).getExpression().getList() != null)
-						if (arguments.get(index).getExpression().getList().getArguments() != null)
-							currArgs = arguments.get(index).getExpression().getList().getArguments().getArguments();
-					if (currArgs.get(index - 1).getExpression().getOdeList() != null) 
-						if (arguments.get(index).getExpression().getOdeList().getArguments() != null)
-							currArgs = arguments.get(index).getExpression().getOdeList().getArguments().getArguments();
-					
-				} else return false;
-			} 
-		}
-		return true;		
-	}
 	
 
 	@Check
 	public void checkReference(FullyQualifiedArgumentName ref) {
-		//The reference is to the symbol with assigned expression which is a function call
-		//We check that attributes refer to function arguments
+		//Skip if the reference is to the symbol with assigned expression which is a function call
 		if (checkReferenceToFuctionOutput(ref)) return;
-
-		String varName = ref.getParent().getName();
-		Resource resource = ref.eResource();
-		LinkedList<Argument> args = new LinkedList<Argument>();		
-
-		TreeIterator<EObject> iterator = resource.getAllContents();
+		List<Argument> args = new LinkedList<Argument>();
+		List<DistributionArgument> distrArgs = new LinkedList<DistributionArgument>();		
+		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
 	    while (iterator.hasNext()){
 	    	EObject obj = iterator.next();
 	    	if (obj instanceof SymbolDeclarationImpl){
 	    		SymbolDeclaration s = (SymbolDeclaration) obj;
 	    		if (s.getSymbolName() != null){
-		    		if (s.getSymbolName().getName().equals(varName)) {
+		    		if (s.getSymbolName().getName().equals(ref.getParent().getName())) {
 		    			if (s.getExpression() != null){
-		       				if (s.getExpression().getList() != null)
-		       					if (s.getExpression().getList().getArguments() != null)
-		       						for (Argument x: s.getExpression().getList().getArguments().getArguments())
-		           						args.add(x);
+		    				Arguments arguments = null;
+			    			if (s.getExpression().getList() != null)
+		       					arguments = s.getExpression().getList().getArguments();
 		       				if (s.getExpression().getOdeList() != null)
-		       					if (s.getExpression().getOdeList().getArguments() != null)
-		       						for (Argument x: s.getExpression().getOdeList().getArguments().getArguments())
-		           						args.add(x);
+		       					arguments = s.getExpression().getOdeList().getArguments();
+		       				if (arguments != null)
+			       				for (Argument x: arguments.getArguments())
+	           						args.add(x);
 		    			}
-		    			//TODO: validate random lists
-	       				//if (s.getRandomList() != null)
-	       				//	if (s.getRandomList().getArguments() != null)...
+	       				if (s.getRandomList() != null)
+	       					for (DistributionArgument x: s.getRandomList().getArguments().getArguments())
+			           			distrArgs.add(x);
 		    		}
 	    		}
 	    	}
-			//DataObject -> SOURCE
+			//DataObject -> SOURCE -> symbol (to check the reference to the data file)
 	    	if (obj instanceof SourceBlockImpl){
+	    		SourceBlock s = (SourceBlock) obj;
+	    		if (s.getSymbolName().getName().equals(ref.getParent().getName())) 
+		    		if (s.getList() != null)
+						for (Argument x: s.getList().getArguments().getArguments()) args.add(x);
 			}
 	    }
-	    if (args.size() != 0 && !checkAttributes(ref, args)){
+	    if ((args.size() > 0) && !AttributeValidator.checkAttributes(ref, args))
 			warning(MSG_UNRESOLVED_ATTRIBUTE_REF, 
-					MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
+				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
 					MSG_UNRESOLVED_ATTRIBUTE_REF, ref.getParent().getName());
-	    }
+	    if ((distrArgs.size() > 0) && !DistributionValidator.checkAttributes(ref, distrArgs))
+			warning(MSG_UNRESOLVED_DISTR_ATTRIBUTE_REF, 
+				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
+					MSG_UNRESOLVED_DISTR_ATTRIBUTE_REF, ref.getParent().getName());
 	}
 
 	//Validate a fully qualified argument whose parent refers to a variable declared as a function 
 	//It is assumed that attribute selectors will refer to symbols in attribute "output" of a function call 
 	public boolean checkReferenceToFuctionOutput(FullyQualifiedArgumentName ref) {
-		String varName = ref.getParent().getName();		
-		Resource resource = ref.eResource();
-		TreeIterator<EObject> iterator = resource.getAllContents();
+		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
 		ArrayList<String> params = new ArrayList<String>();
 	    while (iterator.hasNext()){
 	    	EObject obj = iterator.next();
 	    	if (obj instanceof FunctionCallStatementImpl){
 	    		FunctionCallStatement s = (FunctionCallStatement) obj;
-	    		if (s.getSymbolName() != null && s.getSymbolName().getName().equals(varName)) {	    			
+	    		if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getParent().getName())) {	    			
 	    			//Compare reference with references in FunctionCall param attribute
 	    			//Does not guarantee the correctness as references may occur in expressions
-	    			FunctionCall funcCall = s.getExpression();
-	    			params.addAll(Utils.extractSymbolNames(funcCall.getArguments(), FunctionValidator.param_output.getName()));
+	    			params.addAll(Utils.extractSymbolNames(s.getExpression().getArguments(), FunctionValidator.param_output.getName()));
 	       			ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
 	       			if (paramRef != null){
-	       				if (!params.contains(paramRef.getName())){
+	       				if (!params.contains(paramRef.getName()))
 	       					warning(MSG_UNRESOLVED_FUNC_ARGUMENT_REF + ": " + 
-	       							paramRef.getName() + " is not in the reference set " + Utils.printList(params), 
-	       							MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-	       							MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getName());
-	       				}
+	       						paramRef.getName() + " is not in the reference set " + Utils.printList(params), 
+	       						MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
+	       						MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getName());
 	       			} else {
 	       				String selector = ref.getSelectors().get(0).getSelector();
 	       				int index = Integer.parseInt(selector);
-	       				if (index < 1 || index > params.size()){
+	       				if (index < 1 || index > params.size())
 	       					warning(MSG_UNRESOLVED_FUNC_ARGUMENT_REF + ": " + 
-	       							"wrong index [" + index + "]. " + 
-	       							"Reference set " + Utils.printList(params) + " contains " + params.size() + " items.", 
-	       							MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-	       							MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getName());
-	       				}	       					
+	       						"wrong index [" + index + "]. " + 
+	       						"Reference set " + Utils.printList(params) + " contains " + params.size() + " items.", 
+	       						MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
+	       						MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getName());
 	       			}
 	       			return true; //skip list attribute check
 	    		}

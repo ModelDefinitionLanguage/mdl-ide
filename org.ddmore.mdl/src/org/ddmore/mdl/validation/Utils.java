@@ -17,9 +17,11 @@ import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedFunctionName;
+import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.FunctionName;
 import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
@@ -38,14 +40,16 @@ import org.ddmore.mdl.mdl.SymbolNames;
 import org.ddmore.mdl.mdl.Symbols;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.VariabilityBlock;
+import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
-import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
+import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
+import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
@@ -59,9 +63,11 @@ import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.SymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.core.resources.IContainer;
@@ -83,7 +89,6 @@ public class Utils {
 				if (map.get(objName).contains(id)) return true;
 		return false; 
 	}
-
 	
 	//Checks whether a given symbol is declared
 	static boolean isSymbolDeclared(Map<String, List<String>> map, SymbolName ref){
@@ -169,9 +174,8 @@ public class Utils {
 	//Add a symbol to a list of known symbols
 	public static void addSymbol(List<String> list, BlockStatement st){
 		if (st != null){
-			if (st.getSymbol() != null && st.getSymbol().getSymbolName() != null){
+			if (st.getSymbol() != null && st.getSymbol().getSymbolName() != null)
 				list.add(st.getSymbol().getSymbolName().getName());
-			}
 			//conditional declarations
 			if (st.getStatement() != null){
 				ConditionalStatement e = st.getStatement();
@@ -193,71 +197,55 @@ public class Utils {
 	
 	//Weak validation of conditionally declared references - a variable is declared if it is declared in some branch 
 	public static void addSymbol(List<String> list, ConditionalStatement e){
-		if (e.getIfStatement() != null){
+		if (e.getIfStatement() != null)
 			addSymbolNoRepeat(list, e.getIfStatement());
-		}
-		if (e.getElseStatement() != null){ 
+		if (e.getElseStatement() != null)
 			addSymbolNoRepeat(list, e.getElseStatement());
-		}		
-		if (e.getIfBlock() != null) {
-			for (BlockStatement b: e.getIfBlock().getStatements()){
+		if (e.getIfBlock() != null) 
+			for (BlockStatement b: e.getIfBlock().getStatements())
 				addSymbolNoRepeat(list, b);
-			}
-		}
-		if (e.getElseBlock() !=null){
+		if (e.getElseBlock() !=null)
 			for (BlockStatement b: e.getElseBlock().getStatements())
 				addSymbolNoRepeat(list, b);
-		}
 	}	
 	
 	//Add a symbol to a list of known symbols
 	public static void addSymbol(List<String> list, Arguments args){
-		if (args != null){
-			if (args.getArguments() != null){	
-				for (Argument arg: args.getArguments()){
+		if (args != null)
+			if (args.getArguments() != null)	
+				for (Argument arg: args.getArguments())
 					if (arg.getArgumentName() != null)
 						list.add(arg.getArgumentName().getName());
-				}
-			}
-		}
 	}
 	
 	public static void addSymbolNoRepeat(List<String> list, Arguments args){
-		if (args != null){
-			if (args.getArguments() != null){	
-				for (Argument arg: args.getArguments()){
+		if (args != null)
+			if (args.getArguments() != null)
+				for (Argument arg: args.getArguments())
 					if (arg.getArgumentName() != null)
 						if (!list.contains(arg.getArgumentName().getName()))
 							list.add(arg.getArgumentName().getName());
-				}
-			}
-		}
 	}
 
 	public static void addSymbol(List<String> list, FormalArguments args){
-		if (args != null){
+		if (args != null)
 			for (ArgumentName id: args.getArguments())
 				list.add(id.getName());
-		}
 	}
 	
 	//Add a symbol to a list of known symbols
 	public static void addSymbol(List<String> list, Symbols args){
-		if (args != null){
-			if (args.getSymbols() != null){	
-				for (Symbol arg: args.getSymbols()){
+		if (args != null)
+			if (args.getSymbols() != null)	
+				for (Symbol arg: args.getSymbols())
 					if (arg.getSymbolName() != null)
 						list.add(arg.getSymbolName().getName());
-				}
-			}
-		}
 	}
 
 	public static void addSymbol(List<String> list, SymbolNames args){
-		if (args != null){
+		if (args != null)
 			for (SymbolName id: args.getSymbolNames())
 				list.add(id.getName());
-		}
 	}
 
 	//Return value of an attribute with a given name
@@ -507,6 +495,76 @@ public class Utils {
 			}
 		}
 		return mogs;
+	}
+	
+	public static Map<String, List<String>> getDeclaredSymbols(Mcl mcl){
+		Map<String, List<String>> declaredVariables = new HashMap<String, List<String>>();
+		for (MclObject obj: mcl.getObjects()){
+			List<String> varList = getDeclaredSymbols(obj);
+			if (varList.size() > 0)
+		    	declaredVariables.put(obj.getObjectName().getName(), varList);
+		}
+		return declaredVariables;
+	}
+	
+	public static List<String> getDeclaredSymbols(MclObject obj){
+		List<String> varList = new ArrayList<String>();
+		TreeIterator<EObject> symbolIterator = obj.eAllContents();
+		while (symbolIterator.hasNext()) {
+			EObject container = symbolIterator.next();
+			if (container instanceof SymbolDeclarationImpl) {
+				SymbolDeclaration s = (SymbolDeclaration) container;
+				if (s.getSymbolName() != null)
+					varList.add(s.getSymbolName().getName());
+			}
+			if (container instanceof FunctionCallStatementImpl) {
+				FunctionCallStatement s = (FunctionCallStatement) container;
+				if (s.getSymbolName() != null)
+					varList.add(s.getSymbolName().getName());
+			}
+			//DataObject -> SOURCE
+	    	if (container instanceof SourceBlockImpl){
+	    		SourceBlock block = (SourceBlock) container;
+	    		if (block.getSymbolName() != null)
+					varList.add(block.getSymbolName().getName());
+			}
+			//ParameterObject -> VARIABILITY, matrix, diag, same
+	    	if (container instanceof VariabilityBlockStatementImpl){
+				VariabilityBlockStatement s = (VariabilityBlockStatement)container;
+				if (s.getParameter() != null && s.getParameter().getSymbolName() != null)
+					varList.add(s.getParameter().getSymbolName().getName());
+				if (s.getMatrixBlock() != null)
+					Utils.addSymbol(varList, s.getMatrixBlock().getParameters());
+				if (s.getDiagBlock() != null)
+					Utils.addSymbol(varList, s.getDiagBlock().getParameters());
+				if (s.getSameBlock() != null)
+					Utils.addSymbol(varList, s.getSameBlock().getParameters());
+			}
+	    	if (container instanceof FunctionCallImpl){
+	    		FunctionCall functCall = (FunctionCall) container;
+	    		String functName = functCall.getIdentifier().getFunction().getName();
+	    		if (functCall.getArguments() != null){
+	    			if (FunctionValidator.libraries.contains(functName))
+	    				varList.addAll(Utils.extractSymbolNames(functCall.getArguments(), 
+	    					FunctionValidator.param_output.name));
+		    		if (FunctionValidator.funct_standardWithOutputParams.contains(functName)){
+						//when parameters passed by place, assume default set of attributes
+		    			//and validate all references assigned to output parameters
+		    			FunctionSignature signature = FunctionValidator.standardFunctions.get(functName);
+			    		if (signature != null)
+			    			for (int i = 0; i < signature.getDefaultParams().size(); i++){
+			    				FunctionParameter p = signature.getDefaultParams().get(i);
+			    				if (p.isOutputParameter())
+				    				if (functCall.getArguments().getArguments().size() > i) {
+					    				Argument arg = functCall.getArguments().getArguments().get(i);
+					    				varList.addAll(Utils.extractSymbolNames(arg));
+				    				}
+			    			}
+		    		}
+	    		}
+	    	}
+		}
+		return varList;
 	}
 	
 	public static boolean isNestedList(Arguments args){

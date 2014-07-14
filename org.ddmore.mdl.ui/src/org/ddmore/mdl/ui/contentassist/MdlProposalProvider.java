@@ -11,12 +11,19 @@ import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionArguments;
 import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
+import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.DistributionArgumentImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
+import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.OdeListImpl;
 import org.ddmore.mdl.mdl.impl.RandomListImpl;
+import org.ddmore.mdl.mdl.impl.SameBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
+import org.ddmore.mdl.types.InputFormatType;
+import org.ddmore.mdl.types.InterpolationType;
+import org.ddmore.mdl.types.RandomEffectType;
 import org.ddmore.mdl.types.UseType;
 import org.ddmore.mdl.types.VariableType;
 import org.ddmore.mdl.ui.contentassist.AbstractMdlProposalProvider;
@@ -81,25 +88,48 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			Argument arg = (Argument)model;
 			//TODO: replace comparison of names with the attribute identifiers BLOCK_ID:attr_name!
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_use.getName())){
-				//Check that block is correct too
 				List<String> attributes = new ArrayList<String>();
 				attributes.addAll(UseType.USE_VALUES);
 				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
 				addProposals(context, acceptor, attributes, img);
-			}
-			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_cc_type.getName())){
-				//Check that block is correct too
-				List<String> attributes = new ArrayList<String>();
-				attributes.addAll(VariableType.CC_VALUES);
-				Image img = imageHelper.getImage(Images.getPath(Images.CC_TYPE));				
-				addProposals(context, acceptor, attributes, img);
-			}
-			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
-				//Check that block is correct too
-				List<String> attributes = new ArrayList<String>();
-				attributes.addAll(UnitValidator.getUnitNames());
-				Image img = imageHelper.getImage(Images.getPath(Images.EXPRESSION));				
-				addProposals(context, acceptor, attributes, img);
+			} else {
+				//type
+				if (arg.getArgumentName().getName().equals(AttributeValidator.attr_req_cc_type.getName())){
+					EObject container = Utils.findListContainer(arg);
+					if (container instanceof VariabilityBlockImpl || container instanceof MatrixBlockImpl || 
+						container instanceof DiagBlockImpl || container instanceof SameBlockImpl){
+						List<String> attributes = new ArrayList<String>();
+						attributes.addAll(RandomEffectType.RE_VALUES);
+						Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
+						addProposals(context, acceptor, attributes, img);
+					} else {
+						List<String> attributes = new ArrayList<String>();
+						attributes.addAll(VariableType.CC_VALUES);
+						Image img = imageHelper.getImage(Images.getPath(Images.CC_TYPE));				
+						addProposals(context, acceptor, attributes, img);
+					}
+				} else {
+					if (arg.getArgumentName().getName().equals(AttributeValidator.attr_interp.getName())){
+						List<String> attributes = new ArrayList<String>();
+						attributes.addAll(InterpolationType.INTERP_VALUES);
+						Image img = imageHelper.getImage(Images.getPath(Images.INTERPOLATION_TYPE));				
+						addProposals(context, acceptor, attributes, img);
+					} else {
+						if (arg.getArgumentName().getName().equals(AttributeValidator.attr_inputformat.getName())){
+							List<String> attributes = new ArrayList<String>();
+							attributes.addAll(InputFormatType.FORMAT_VALUES);
+							Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
+							addProposals(context, acceptor, attributes, img);
+						} else {
+							if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
+								List<String> attributes = new ArrayList<String>();
+								attributes.addAll(UnitValidator.getUnitNames());
+								Image img = imageHelper.getImage(Images.getPath(Images.EXPRESSION));				
+								addProposals(context, acceptor, attributes, img);
+							}
+						}
+					}
+				}
 			}
 		}
 	}

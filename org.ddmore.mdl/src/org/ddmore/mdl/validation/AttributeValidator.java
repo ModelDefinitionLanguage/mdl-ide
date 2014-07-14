@@ -14,7 +14,9 @@ import java.util.List;
 
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
+import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.Selector;
 import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
@@ -54,7 +56,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_ATTRIBUTE_MISSING    = "Required attribute is missing";
 	public final static String MSG_ATTRIBUTE_DEFINED    = "Attribute defined more than once";
 	public final static String MSG_ATTRIBUTE_WRONG_TYPE = "Type error";
-
+	
 	public final static String MSG_DATA_FILE_NOT_FOUND = "Cannot find data file: path may be incorrect";
 	public final static String MSG_SCRIPT_NOT_FOUND    = "Cannot find script file: path may be incorrect";
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,16 +262,15 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			attributeNames.addAll(Utils.getAllNames(knownAttributes));
 			//for categorical values, recognise user defined categories as attributes
 			if (container instanceof DataInputBlockImpl){
-				if (Utils.isNestedList(args)){
-					//Arguments -> List/Ode -> AnyExpression -> Argument
-					if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl){
-						EObject parentArgsContainer = args.eContainer().eContainer().eContainer().eContainer();
-						if (parentArgsContainer instanceof ArgumentsImpl){
-							Arguments parentArgs = (Arguments) parentArgsContainer;
-							List<String> categoricalNames = getCategoricalNames(parentArgs);
-							attributeNames.addAll(categoricalNames);
-						}
-					}
+				EObject parentArgsContainer = argContainer;
+				if (Utils.isNestedList(args)){//Arguments -> List/Ode -> AnyExpression -> Argument
+					if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl)
+						parentArgsContainer = args.eContainer().eContainer().eContainer().eContainer();
+				}
+				if (parentArgsContainer instanceof ArgumentsImpl){
+					Arguments parentArgs = (Arguments) parentArgsContainer;
+					List<String> categoricalNames = getCategoricalNames(parentArgs);
+					attributeNames.addAll(categoricalNames);
 				}
 			}
 			if (!attributeNames.contains(argument.getArgumentName().getName())){
@@ -377,5 +378,41 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		}	
 		//Same - content does not contain arguments
 		return false;
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Check references to list attributes
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	static boolean checkAttributes(FullyQualifiedArgumentName ref, List<Argument> arguments) {
+		List <Argument> currArgs = arguments; 
+		for (Selector x: ref.getSelectors()){
+			if (currArgs != null){
+				int index = -1;
+				if (x.getSelector() != null){
+					index = Integer.parseInt(x.getSelector());
+					if (!((index >= 1) && (index < currArgs.size() + 1))) return false;
+					index = 1;	
+				}
+				if (x.getArgumentName() != null){
+					int i = 0;
+					for (Argument arg: currArgs){
+						if (arg.getArgumentName().getName().equals(x.getArgumentName().getName())){
+							index = i + 1; break;
+						}
+						i++; 
+					}
+				}
+				if (index > 0) {
+					if (currArgs.get(index - 1).getExpression().getList() != null)
+						if (arguments.get(index).getExpression().getList().getArguments() != null)
+							currArgs = arguments.get(index).getExpression().getList().getArguments().getArguments();
+					if (currArgs.get(index - 1).getExpression().getOdeList() != null) 
+						if (arguments.get(index).getExpression().getOdeList().getArguments() != null)
+							currArgs = arguments.get(index).getExpression().getOdeList().getArguments().getArguments();
+					
+				} else return false;
+			} 
+		}
+		return true;
 	}
 }

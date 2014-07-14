@@ -57,9 +57,9 @@ public class Images {
 	public static final String HEADER_BLOCK = LIST;
 	public static final String DATA_BLOCK = LIST;
 
+	public static final String DISTRIBUTION_TYPE = "071-distribution-type.png";
 	public static final String CC_TYPE ="072-var-type.png";
 	public static final String USE_TYPE = "073-use-type.png";
-	public static final String DISTRIBUTION_TYPE = "071-distribution-type.png";
 	public static final String TARGET_LANGUAGE = "074-target-language.png";
 	public static final String VARIABILITY_TYPE = "075-variability-type.png";
 	public static final String INTERPOLATION_TYPE= "076-interpolation-type.png";
