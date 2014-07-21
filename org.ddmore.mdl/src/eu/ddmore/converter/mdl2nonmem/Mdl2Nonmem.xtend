@@ -1063,15 +1063,17 @@ class Mdl2Nonmem extends MdlPrinter {
 								value = args.arguments.get(0).expression.toStr;
 					} 
 				}
-				if (value.length > 0)
-					'''METHOD=«value.convertAlgo»'''
+				if (value.length > 0) {
+				    val algo = value.convertAlgo.replaceAll("^\"(.+)\"$", "$1"); // Strip off any enclosing double quotes around the string
+					'''METHOD=«algo»'''
+				}
 			}
 			else
 				if (s.symbolName.name.equals(FunctionValidator::attr_task_max.name))
-				''' MAX=«s.expression.print»'''
+				    ''' MAX=«s.expression.print»'''
 			else
 				if (s.symbolName.name.equals(FunctionValidator::attr_task_sig.name))
-				''' SIG=«s.expression.print»'''
+				    ''' SIG=«s.expression.print»'''
 		}
 	}
 	
