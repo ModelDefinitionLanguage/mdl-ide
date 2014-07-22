@@ -570,21 +570,21 @@ class MdlPrinter {
 
 	def print(ConditionalStatement s)'''
 		«IF s.expression != null»
-			if («s.expression.print»)
+			if («s.expression.print») {
 				«IF s.ifStatement != null»
 					«s.ifStatement.print»
 				«ENDIF»
 				«IF s.ifBlock != null»
 					«s.ifBlock.print»
 				«ENDIF»
-			«IF s.elseStatement != null || s.elseBlock != null»
-			else 
+			}«IF s.elseStatement != null || s.elseBlock != null» else {
 				«IF s.elseStatement != null»
 					«s.elseStatement.print»
 				«ENDIF»
 				«IF s.elseBlock != null»
 					«s.elseBlock.print»
 				«ENDIF»
+			}
 			«ENDIF»
 		«ENDIF»
 	'''
