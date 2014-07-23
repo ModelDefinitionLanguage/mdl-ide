@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<registration_data version="1.0">
+   <environment>
+      <hostname>mjamieson</hostname>
+      <hostId/>
+      <osName>Windows 7</osName>
+      <osVersion>6.1</osVersion>
+      <osArchitecture>x86</osArchitecture>
+      <systemModel>Latitude E6520</systemModel>
+      <systemManufacturer>Dell Inc.</systemManufacturer>
+      <cpuManufacturer>GenuineIntel</cpuManufacturer>
+      <serialNumber>8QGQ4Q1</serialNumber>
+   </environment>
+   <registry urn="urn:st:71c4996d-c978-4ce3-acf8-b91537660b37" version="1.0">
+      <service_tag>
+         <instance_urn>urn:st:901d2bcc-0cf1-407b-a4e6-6659faf18b89</instance_urn>
+         <product_name>Java SE 6 Development Kit</product_name>
+         <product_version>1.6.0_26</product_version>
+         <product_urn>urn:uuid:b58ef9a8-5ae8-11db-a023-080020a9ed93</product_urn>
+         <product_parent_urn>urn:uuid:fdc90b21-018d-4cab-b866-612c7c119ed3</product_parent_urn>
+         <product_parent>Java Platform Standard Edition 6 (Java SE 6)</product_parent>
+         <product_defined_inst_id>id=1.6.0_26-b03 x86,dir=C:\Program Files (x86)\Java\jdk1.6.0_26\jre</product_defined_inst_id>
+         <product_vendor>Sun Microsystems</product_vendor>
+         <platform_arch>x86</platform_arch>
+         <timestamp>2014-03-13 18:00:31 GMT</timestamp>
+         <container>global</container>
+         <source>Windows JDK i586 installer</source>
+         <installer_uid>-1</installer_uid>
+      </service_tag>
+   </registry>
+</registration_data>
