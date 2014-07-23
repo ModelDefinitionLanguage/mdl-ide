@@ -6,5 +6,8 @@
    <feature id="org.ddmore.mdl.sdk" version="0.0.0">
       <category name="eu.ddmore.mdleditor.tools"/>
    </feature>
+   <feature id="org.ddmore.mdl.sdk.jre" version="0.0.0">
+      <category name="eu.ddmore.mdleditor.tools"/>
+   </feature>
    <category-def name="eu.ddmore.mdleditor.tools" label="DDMoRe Tools"/>
 </site>
