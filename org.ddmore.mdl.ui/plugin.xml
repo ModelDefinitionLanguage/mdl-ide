@@ -100,7 +100,9 @@
               name="External Tools">
             <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
         </page>
-        <page
+        <!-- Commented out for now as this functionality currently does not work -->
+        <!-- It may be re-instated in the future if required -->
+        <!--<page
               category="org.ddmore.mdl.Mdl"
               class="org.ddmore.mdl.ui.preference.TESPreferencePage"
               id="org.ddmore.mdl.Mdl.TES"
@@ -108,7 +110,7 @@
            <keywordReference
                  id="org.ddmore.mdl.ui.keyword_Mdl">
            </keywordReference>
-        </page>
+        </page>-->
     </extension>
     <extension
             point="org.eclipse.ui.propertyPages">
@@ -561,7 +563,9 @@
 	    </menuContribution>
 	</extension>
 	<!--Run with NONMEM -->
-	<extension
+	<!-- Commented out for now as this functionality currently does not work -->
+	<!-- It may be re-instated in the future if required -->
+	<!--<extension
        point="org.eclipse.ui.menus">
         <menuContribution
             locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
@@ -604,7 +608,7 @@
       <initializer
             class="org.ddmore.mdl.ui.preference.PreferenceInitializer">
       </initializer>
- </extension>
+ </extension>-->
  <!--N.K. -->     
  
 </plugin>
