@@ -18,7 +18,6 @@ import org.ddmore.mdl.mdl.ConditionalStatement;
 import org.ddmore.mdl.mdl.DataBlockStatement;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
-import org.ddmore.mdl.mdl.DesignBlockStatement;
 import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionArguments;
 import org.ddmore.mdl.mdl.DropList;
@@ -709,15 +708,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			true);
 	}
 		
-	protected void  _createNode(IOutlineNode parentNode, DesignBlockStatement p){
-			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.DESIGN_BLOCK_STATEMENT__EXPRESSION,
-				_image(p),
-				p.getIdentifier().getName(),
-				false);
-	}
-	
 	protected void  _createNode(IOutlineNode parentNode, SymbolDeclaration p){
 		String name = "";
 		if (p.getSymbolName() != null)

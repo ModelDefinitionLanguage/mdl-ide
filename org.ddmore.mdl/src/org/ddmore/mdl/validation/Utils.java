@@ -12,7 +12,6 @@ import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.ConditionalStatement;
 import org.ddmore.mdl.mdl.DataDerivedBlock;
 import org.ddmore.mdl.mdl.DataInputBlock;
-import org.ddmore.mdl.mdl.DesignBlock;
 import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
@@ -44,8 +43,6 @@ import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
-import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
-import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
@@ -353,7 +350,6 @@ public class Utils {
 			obj instanceof DataInputBlockImpl ||
 			obj instanceof DataDerivedBlockImpl ||
 			obj instanceof SourceBlockImpl ||
-			obj instanceof DesignBlockStatementImpl ||
 			//Model object
 			obj instanceof InputVariablesBlockImpl ||
 			obj instanceof LibraryBlockImpl ||
@@ -377,7 +373,6 @@ public class Utils {
 		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
 		if (obj instanceof DataDerivedBlockImpl) return ((DataDerivedBlock)obj).getIdentifier();
 		if (obj instanceof SourceBlockImpl) return ((SourceBlock)obj).getIdentifier();
-		if (obj instanceof DesignBlockImpl) return ((DesignBlock)obj).getIdentifier();
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return ((StructuralBlock)obj).getIdentifier();	
 		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj).getIdentifier();

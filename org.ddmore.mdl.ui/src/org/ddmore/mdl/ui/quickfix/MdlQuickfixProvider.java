@@ -14,8 +14,6 @@ import org.ddmore.mdl.mdl.ConditionalExpression;
 import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
-import org.ddmore.mdl.mdl.DesignBlock;
-import org.ddmore.mdl.mdl.DesignBlockStatement;
 import org.ddmore.mdl.mdl.Distribution;
 import org.ddmore.mdl.mdl.DistributionArgument; 
 import org.ddmore.mdl.mdl.DistributionArguments;
@@ -60,8 +58,6 @@ import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.Vector;
-import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
-import org.ddmore.mdl.mdl.impl.DesignBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.MclImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
@@ -479,15 +475,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 					VariableList variableList = (VariableList) container;
 					variableList.getIdentifiers().remove(ref);
 					return;
-				}
-				if (container instanceof DesignBlockStatementImpl){
-					DesignBlockStatement designBlockStatement = (DesignBlockStatement) container;
-					EObject container1 = container.eContainer();
-					if (container1 instanceof DesignBlockImpl){
-						DesignBlock block = (DesignBlock) container1;
-						block.getStatements().remove(designBlockStatement);
-						return;
-					}
 				}
 				if (container instanceof SymbolListImpl){
 					SymbolList symbolList = (SymbolList) container;
