@@ -911,17 +911,20 @@ class Mdl2Nonmem extends MdlPrinter {
     }
 	
 	//Print NM-TRAN record $DATA
+	// Note that the double quotes are stripped off the file name; this is because whilst
+	// NONMEM can handle this (to allow spaces in the file name), PsN can not.
+	// The Ignore char may have the same problem so strip the quotes off this too.
 	def printDATA(DataObject o)'''
 	«FOR b:o.blocks»
 		«IF b.sourceBlock != null» 
 			«IF b.sourceBlock.list != null»
-				«var data = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_file.name)»
+				«var data = stripQuotes(b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_file.name))»
 				«IF data.length > 0»
 				
 				$DATA «data»
 				«ENDIF»
 				«getExternalCodeStart("$DAT")»
-					«val ignore = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_ignore.name)»
+					«val ignore = stripQuotes(b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_ignore.name))»
 					«IF ignore.length > 0»IGNORE=«ignore»«ENDIF»
 				«getExternalCodeEnd("$DAT")»
 			«ENDIF»
