@@ -1064,7 +1064,8 @@ class Mdl2Nonmem extends MdlPrinter {
 					} 
 				}
 				if (value.length > 0) {
-				    val algo = value.convertAlgo.replaceAll("^\"(.+)\"$", "$1"); // Strip off any enclosing double quotes around the string
+				    // Strip off any enclosing double quotes around the string first
+				    val algo = stripQuotes(value.convertAlgo);
 					'''METHOD=«algo»'''
 				}
 			}
@@ -1403,7 +1404,7 @@ class Mdl2Nonmem extends MdlPrinter {
 			if (target.equals(TargetCodeType::NMTRAN_CODE)) {
 				var location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
 				if (location.length() > 0) {
-					location = location.replaceAll("^\"(.+)\"$", "$1") // Strip off any enclosing double quotes (if present)
+					location = stripQuotes(location) // Strip off any enclosing double quotes (if present)
 					location = location.substring(0, Math::min(4, location.length())) // And truncate to 4 characters
 					if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name)){
 						var codeSnippets = externalCodeEnd.get(location);
@@ -1698,6 +1699,18 @@ class Mdl2Nonmem extends MdlPrinter {
 			}
     	}
     	return 0;
+    }
+    
+    /**
+     * Strip off any enclosing double quotes around a string.
+     * This is primarily used when writing out to NMTRAN; NONMEM can usually (at least with recent
+     * versions) handle strings in quotes (primarily data file and ignore char) but PsN cannot.
+     * <p>
+     * @param str - input string
+     * @return output string with enclosing double quotes, if present, removed
+     */
+    def static String stripQuotes(String str) {
+        return str.replaceAll("^\"(.+)\"$", "$1");
     }
 	
 }

@@ -20,12 +20,10 @@ import org.ddmore.mdl.mdl.FullyQualifiedFunctionName;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.FunctionName;
-import org.ddmore.mdl.mdl.Mcl;
-import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
 import org.ddmore.mdl.mdl.MatrixBlock;
+import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ObservationBlock;
@@ -36,6 +34,8 @@ import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.Symbol;
+import org.ddmore.mdl.mdl.SymbolDeclaration;
+import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.SymbolNames;
 import org.ddmore.mdl.mdl.Symbols;
 import org.ddmore.mdl.mdl.TargetBlock;
@@ -570,4 +570,15 @@ public class Utils {
 	public static boolean isNestedList(Arguments args){
 		return (args.eContainer() instanceof ListImpl || args.eContainer() instanceof OdeListImpl);
 	}
+	
+	/**
+	 * Strip off any enclosing double quotes around a string.
+	 * <p>
+	 * @param str - input string
+	 * @return output string with enclosing double quotes, if present, removed
+	 */
+	public static String stripQuotes(final String str) {
+		return str.replaceAll("^\"(.+)\"$", "$1");
+	}
+	
 }
