@@ -135,6 +135,7 @@ DataObjectBlock:
 	dataInputBlock = DataInputBlock |
 	dataDerivedBlock = DataDerivedBlock |
 	sourceBlock = SourceBlock |
+	designBlock = DesignBlock |
 	targetBlock = TargetBlock 
 ;
  
@@ -293,6 +294,15 @@ InlineBlock:
 
 NumericList:
 	values += NumericValue (=> (',' | ';')? values += (NumericValue | '.'))* 
+;
+
+DesignBlock:
+	identifier = 'DESIGN' 
+	BEGIN statements += DesignBlockStatement* END
+;
+
+DesignBlockStatement:
+	identifier = SymbolName ('[' arguments = VariableList ']')? '=' expression = AnyExpression  //Ref to VariableName +
 ;
 
 VariableList:

@@ -14,8 +14,6 @@ public class Attribute {
 	MdlDataType type = MdlDataType.TYPE_UNDEFINED;
 	Boolean mandatory = false;
 	String defaultValue = "";
-	Boolean isPrivate = false; //Can be used to control access to list attributes
-	Boolean isFinal = false;   //TODO: make all attributes by default invisible and not modifiable
 	
 	public Attribute(String name, MdlDataType type, Boolean mandatory){
 		this.name = name;
@@ -42,13 +40,5 @@ public class Attribute {
 	
 	public String getDefaultValue(){
 		return defaultValue;
-	}
-	
-	public Boolean isPrivate(){
-		return isPrivate;
-	}
-	
-	public Boolean isFinal(){
-		return isFinal;
 	}
 }

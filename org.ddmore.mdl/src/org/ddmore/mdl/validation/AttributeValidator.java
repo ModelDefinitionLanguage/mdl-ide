@@ -22,6 +22,7 @@ import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
+import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
@@ -104,8 +105,10 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_file = new Attribute("file", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
 	final public static Attribute attr_script = new Attribute("script", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
 	
-	/*DESIGN - not used*/
+	/*DESIGN*/
+	final public static Attribute attr_design_source = new Attribute("source", MdlDataType.TYPE_REF, true, DefaultValues.VAR_NAME);
 	final public static Attribute attr_interp = new Attribute("interp", MdlDataType.TYPE_INTERP, false);
+	//final public static Attribute attr_idv = new Attribute("idv", MdlDataType.TYPE_IDV, false);
 
 	/*All objects*/
 	
@@ -123,6 +126,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_dataDerived = Arrays.asList(attr_req_cc_type, attr_expr_value, attr_units);
 	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, 
 			attr_delimiter, attr_file, attr_script, attr_header);
+	final public static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp /*,attr_idv*/);
 
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, 
@@ -153,6 +157,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			for (Attribute attr: attrs_dataInput) put("DATA_INPUT_VARIABLES:" + attr.getName(), attr);
 			for (Attribute attr: attrs_dataDerived) put("DATA_DERIVED_VARIABLES:" + attr.getName(), attr);
 			for (Attribute attr: attrs_source) put("SOURCE:" + attr.getName(), attr);
+			for (Attribute attr: attrs_design) put("DESIGN:" + attr.getName(), attr);
 			/*Parameter object*/
 			for (Attribute attr: attrs_structural) put("STRUCTURAL:" + attr.getName(), attr);
 			for (Attribute attr: attrs_variability) put("VARIABILITY:" + attr.getName(), attr);
@@ -190,6 +195,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof DataInputBlockImpl) return attrs_dataInput; 
 		if (obj instanceof DataDerivedBlockImpl) return attrs_dataDerived; 
 		if (obj instanceof SourceBlockImpl) return attrs_source; 
+		if (obj instanceof DesignBlockImpl) return attrs_design; 
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return attrs_structural;
 		if (obj instanceof VariabilityBlockImpl) return attrs_variability;
