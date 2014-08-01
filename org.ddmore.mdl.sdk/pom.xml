@@ -10,7 +10,9 @@
 		<artifactId>eu.ddmore.parent</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
-
+	
 	<artifactId>org.ddmore.mdl.sdk</artifactId>
+	<version>1.0.2</version>
 	<packaging>eclipse-feature</packaging>
-</project> 
+	
+</project>
