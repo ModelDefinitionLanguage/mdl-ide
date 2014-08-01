@@ -12,7 +12,9 @@
 	</parent>
 
 	<artifactId>eu.ddmore.mdleditor.application</artifactId>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+	
     <profiles>
      <profile>
       <id>update-branding</id>

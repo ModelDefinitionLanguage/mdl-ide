@@ -12,10 +12,10 @@
   </parent>
 
   <artifactId>eu.ddmore.mdleditor.site</artifactId>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>eclipse-repository</packaging>
 
-
-	<build>
+    <build>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -62,5 +62,5 @@
 			      </configuration>
 			</plugin>
 		</plugins>
-	</build>
-</project> 
+    </build>
+</project>
