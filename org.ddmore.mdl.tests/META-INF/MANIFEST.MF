@@ -5,8 +5,8 @@ Bundle-Vendor: DDMoRe Consortium
 Bundle-Version: 1.0.2.qualifier
 Bundle-SymbolicName: org.ddmore.mdl.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.ddmore.mdl;bundle-version="1.0.2.qualifier",
- org.ddmore.mdl.ui;bundle-version="1.0.2.qualifier",
+Require-Bundle: org.ddmore.mdl;bundle-version="[1.0.2,1.0.3)",
+ org.ddmore.mdl.ui;bundle-version="[1.0.2,1.0.3)",
  org.eclipse.core.runtime,
  org.eclipse.xtext.junit4,
  org.junit4,
