@@ -10,6 +10,8 @@
 		<artifactId>eu.ddmore.parent</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
+	
+    <version>1.0.2-SNAPSHOT</version>
 
 	<artifactId>org.ddmore.mdl</artifactId>
 	<packaging>eclipse-plugin</packaging>
