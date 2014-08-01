@@ -5,9 +5,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<relativePath>../eu.ddmore.mdleditor.build/pom_mdl_only.xml</relativePath>
+		<relativePath>../eu.ddmore.mdleditor.build/pom.xml</relativePath>
 		<groupId>eu.ddmore</groupId>
-		<artifactId>mdl-core-parent</artifactId>
+		<artifactId>eu.ddmore.parent</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
