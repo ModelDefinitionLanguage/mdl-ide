@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+    <groupId>eu.ddmore.build</groupId>
+    <artifactId>mdl-full</artifactId>
+	<version>1.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>../eu.ddmore.mdleditor.target</module>
+		<!--module>../org.ddmore.mdl</module -->
+		<module>../org.ddmore.mdl.ui</module>
+		<module>../eu.ddmore.mdleditor.application</module>
+		<module>../org.ddmore.mdl.tests</module>
+		<module>../org.ddmore.mdl.sdk</module>
+		<module>../org.ddmore.mdl.sdk.jre</module>
+		<!-- once the encryption key is changed this can be included : MIFDEV-35 
+			<module>../com.mango.mif.client.feature</module> <module>../com.mango.mif.client.site</module> -->
+		<module>../eu.ddmore.mdleditor.site</module>
+	</modules>
+
+	<url>http://ddmore.eu/</url>
+	<name>Drug Disease Model Resources Framework</name>
+	<description>The Drug Disease Model Resources (DDMoRe) consortium builds and maintains a universally applicable, open source, model based framework, intended as the gold standard for future collaborative drug and disease Modelling &amp; Simulation.</description>
+</project> 
