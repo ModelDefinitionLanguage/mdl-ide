@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.ddmore.mdl.tests
 Bundle-Vendor: DDMoRe Consortium
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.0.2.qualifier
 Bundle-SymbolicName: org.ddmore.mdl.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.ddmore.mdl;bundle-version="[1.0.1,1.1)",
- org.ddmore.mdl.ui;bundle-version="[1.0.1,1.1)",
+Require-Bundle: org.ddmore.mdl,
+ org.ddmore.mdl.ui,
  org.eclipse.core.runtime,
  org.eclipse.xtext.junit4,
  org.junit4,
