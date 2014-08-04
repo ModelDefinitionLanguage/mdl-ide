@@ -4,11 +4,7 @@
    <extension
          id="product"
          point="org.eclipse.core.runtime.products">
-      <product name="%productName" application="org.eclipse.ui.ide.workbench" description="%aboutText">
-         <property
-               name="appName"
-               value="%productName">
-         </property>
+      <product name="DDMoRe MDL IDE Demonstrator" application="org.eclipse.ui.ide.workbench" description="%aboutText">
          <property
                name="applicationCSS"
                value="platform:/plugin/eu.ddmore.mdleditor.application/css/default.css">
@@ -28,7 +24,7 @@
          <property
                name="aboutImage"
                value="icons/about_image.png">
-         </property> 
+         </property>
       </product>
    </extension>
    
