@@ -9,9 +9,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>../eu.ddmore.mdleditor.target</module>
-		<!--
 		<module>../org.ddmore.mdl</module>
-		-->
 		<module>../org.ddmore.mdl.ui</module>
 		<module>../eu.ddmore.mdleditor.application</module>
 		<module>../org.ddmore.mdl.tests</module>
