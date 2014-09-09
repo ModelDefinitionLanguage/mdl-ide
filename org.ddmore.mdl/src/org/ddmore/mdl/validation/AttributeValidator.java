@@ -25,13 +25,13 @@ import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
-import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
+import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
@@ -346,7 +346,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 				if (argument.getExpression().getExpression() != null){
 					if (argument.getArgumentName().getName().equals(attr_file.getName()) || 
 					 argument.getArgumentName().getName().equals(attr_script.getName())) {
-						String dataPath = Utils.stripQuotes(Utils.getAttributeValue(argument)); // Strip off any enclosing double quotes around the string
+						String dataPath = Utils.getAttributeValue(argument);
 						if (!Utils.isFileExist(b, dataPath)){
 							if (argument.getArgumentName().getName().equals(attr_file.getName())){
 								warning(MSG_DATA_FILE_NOT_FOUND, 
