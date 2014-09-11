@@ -220,12 +220,24 @@ SymbolList:
 ModelPredictionBlockStatement: 
 	statement = BlockStatement | 
 	odeBlock = OdeBlock | 
-	libraryBlock = LibraryBlock
+	libraryBlock = LibraryBlock |
+	compartmentBlock = CompartmentBlock |
+	degBlock = DeqBlock
 ;
 
 LibraryBlock: 
 	identifier = 'LIBRARY' 
 	BEGIN statements += FunctionCallStatement* END 
+;
+
+CompartmentBlock:
+	identifier = 'COMPARTMENT'
+	BEGIN variables += SymbolDeclaration* END 
+;
+
+DeqBlock:
+	identifier = 'DEQ'
+	BEGIN variables += SymbolDeclaration* END 
 ;
 
 FunctionCallStatement:
