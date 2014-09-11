@@ -22,7 +22,6 @@ import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
-import org.ddmore.mdl.mdl.impl.DesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
@@ -195,7 +194,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof DataInputBlockImpl) return attrs_dataInput; 
 		if (obj instanceof DataDerivedBlockImpl) return attrs_dataDerived; 
 		if (obj instanceof SourceBlockImpl) return attrs_source; 
-		if (obj instanceof DesignBlockImpl) return attrs_design; 
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return attrs_structural;
 		if (obj instanceof VariabilityBlockImpl) return attrs_variability;
