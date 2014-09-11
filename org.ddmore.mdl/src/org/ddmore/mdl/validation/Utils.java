@@ -567,14 +567,4 @@ public class Utils {
 		return (args.eContainer() instanceof ListImpl || args.eContainer() instanceof OdeListImpl);
 	}
 	
-	/**
-	 * Strip off any enclosing double quotes around a string.
-	 * <p>
-	 * @param str - input string
-	 * @return output string with enclosing double quotes, if present, removed
-	 */
-	public static String stripQuotes(final String str) {
-		return str.replaceAll("^\"(.+)\"$", "$1");
-	}
-	
 }

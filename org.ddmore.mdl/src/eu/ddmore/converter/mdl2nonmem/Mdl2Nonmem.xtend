@@ -10,6 +10,7 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
 import org.apache.log4j.Logger
+import org.ddmore.mdl.mdl.AdditiveExpression
 import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.BlockStatement
@@ -50,6 +51,12 @@ class Mdl2Nonmem extends MdlPrinter {
 	protected var Mcl mcl = null;
 	protected val var_model_tolrel = "tolrel"; 
 	protected val var_random_base = "TMPR";
+	
+    private static val Mdl2Nonmem mdlPrinter = new Mdl2Nonmem();
+    protected new(){}
+    override static Mdl2Nonmem getInstance(){
+        return mdlPrinter;
+    }
 	
 	//Print file name and analyse MCL objects in the source file
   	def convertToNMTRAN(Mcl m){
@@ -1461,7 +1468,15 @@ class Mdl2Nonmem extends MdlPrinter {
 	
 	def isTargetDefined(String sectionName){
 		return externalCodeStart.containsKey(sectionName) || externalCodeEnd.containsKey(sectionName);
-	}		
+	}
+
+    /**
+     * Override the to-string from the MDL->PharmML printing functionality for a String
+     * to enclose this string within double quotes for NONMEM.
+     */	
+    def quoteStringIfNecessary(String str) {
+        return "\"" + str + "\""
+    }
 	
 	//(==, !=, <, > etc.) - here we skip boolean values!
 	override toStr(LogicalExpression e){

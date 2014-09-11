@@ -346,14 +346,22 @@ class MdlPrinter {
 				res = iterator.next.toStr;
 			}
 			while (iterator.hasNext && operatorIterator.hasNext){
-				res  = res + operatorIterator.next.convertOperator + iterator.next.toStr;
+				res = res + operatorIterator.next.convertOperator + iterator.next.toStr;
 			}
 		}
 		if (e.string != null){		
-			res = "\"" + e.string + "\""; 
-			//res = e.string;
+			res = quoteStringIfNecessary(e.string)
 		}
-		return res;
+		return res
+	}
+	
+	/**
+	 * By default, don't quote string expressions, since this class relates to conversion
+	 * to PharmML. The Mdl2Nonmem subclass will override this to enclose string expressions
+	 * in double quotes.
+	 */
+	def quoteStringIfNecessary(String str) {
+	    return str
 	}
 	
 	def toStr(MultiplicativeExpression e){

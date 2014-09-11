@@ -54,7 +54,7 @@ public class Mdl2NonmemWrapper extends MdlPrinter implements IGenerator {
         Resource resource = resourceSet.getResource(URI.createURI("file:///" + src.getAbsolutePath()), true);
         Mcl mcl = (Mcl) resource.getContents().get(0);
 
-        eu.ddmore.converter.mdl2nonmem.Mdl2Nonmem xtendConverter = new eu.ddmore.converter.mdl2nonmem.Mdl2Nonmem();
+        eu.ddmore.converter.mdl2nonmem.Mdl2Nonmem xtendConverter = eu.ddmore.converter.mdl2nonmem.Mdl2Nonmem.getInstance();
         CharSequence converted = xtendConverter.convertToNMTRAN(mcl);
 
         printOutputFile(src, outputDirectory, converted.toString(), ".ctl");
