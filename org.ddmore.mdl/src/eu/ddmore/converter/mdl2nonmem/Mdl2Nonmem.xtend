@@ -10,7 +10,6 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
 import org.apache.log4j.Logger
-import org.ddmore.mdl.mdl.AdditiveExpression
 import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.BlockStatement
@@ -453,10 +452,10 @@ class Mdl2Nonmem extends MdlPrinter {
 			if (ss.libraryBlock != null){
 				for (st: ss.libraryBlock.statements){
 					var library = st.expression.identifier.function.name;
-					if (library.equals(FunctionValidator::funct_nmadvan))
+					if (library.equals(FunctionValidator::lib_nmadvan))
 						library = "ADVAN";
-					val model = st.expression.arguments.getAttribute(FunctionValidator::param_model.name);
-					val trans = st.expression.arguments.getAttribute(FunctionValidator::param_trans.name);
+					val model = st.expression.arguments.getAttribute(FunctionValidator::param_nmadvan_model.name);
+					val trans = st.expression.arguments.getAttribute(FunctionValidator::param_nmadvan_trans.name);
 					val tol = getTOL;
 					res = res + '''«IF model.length > 0»«library.toUpperCase()»«model»«ENDIF» «IF trans.length > 0»TRANS«trans»«ENDIF» «IF tol.length > 0»TOL = «tol»«ENDIF»'''
 				}
@@ -1702,7 +1701,7 @@ class Mdl2Nonmem extends MdlPrinter {
 				for (s: mob.modelPredictionBlock.statements){
 				    if (s.libraryBlock != null) {
 				    	for (ss: s.libraryBlock.statements){
-				    		var nmct = ss.expression.arguments.getAttribute(FunctionValidator::param_ncmt.name);
+				    		var nmct = ss.expression.arguments.getAttribute(FunctionValidator::param_nmadvan_ncmt.name);
 				    		if (nmct.length > 0) {
 				    			try{
 						    		return Integer::parseInt(nmct);

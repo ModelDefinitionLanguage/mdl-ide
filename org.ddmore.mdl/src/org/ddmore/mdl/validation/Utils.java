@@ -12,7 +12,6 @@ import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.ConditionalStatement;
 import org.ddmore.mdl.mdl.DataDerivedBlock;
 import org.ddmore.mdl.mdl.DataInputBlock;
-import org.ddmore.mdl.mdl.DesignBlock;
 import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
@@ -62,7 +61,6 @@ import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.SymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl;
@@ -274,7 +272,7 @@ public class Utils {
 	}
 	
 	//Extracts references from mathematical expressions
-	static List<String> extractSymbolNames(Arguments args, String attrName){
+	/*static List<String> extractSymbolNames(Arguments args, String attrName){
 		List<String> params = new ArrayList<String>();	
 		if (args != null && args.getArguments() != null){
 			for (Argument x: args.getArguments()){
@@ -290,10 +288,10 @@ public class Utils {
 			}
 		}
 		return params;
-	}
+	}*/
 	
 	//Extracts references from mathematical expressions
-	static List<String> extractSymbolNames(Argument paramArg){
+	/*static List<String> extractSymbolNames(Argument paramArg){
 		List<String> params = new ArrayList<String>();	
 		TreeIterator<EObject> paramIterator = paramArg.getExpression().eAllContents();
 		while (paramIterator.hasNext()) {
@@ -304,7 +302,7 @@ public class Utils {
 			}
 		}
 		return params;
-	}
+	}*/
 	
 	//Print a given list (used for reporting errors and for testing)
 	static String printList(List<String> list){
@@ -539,25 +537,8 @@ public class Utils {
 	    	if (container instanceof FunctionCallImpl){
 	    		FunctionCall functCall = (FunctionCall) container;
 	    		String functName = functCall.getIdentifier().getFunction().getName();
-	    		if (functCall.getArguments() != null){
-	    			if (FunctionValidator.libraries.contains(functName))
-	    				varList.addAll(Utils.extractSymbolNames(functCall.getArguments(), 
-	    					FunctionValidator.param_output.name));
-		    		if (FunctionValidator.funct_standardWithOutputParams.contains(functName)){
-						//when parameters passed by place, assume default set of attributes
-		    			//and validate all references assigned to output parameters
-		    			FunctionSignature signature = FunctionValidator.standardFunctions.get(functName);
-			    		if (signature != null)
-			    			for (int i = 0; i < signature.getDefaultParams().size(); i++){
-			    				FunctionParameter p = signature.getDefaultParams().get(i);
-			    				if (p.isOutputParameter())
-				    				if (functCall.getArguments().getArguments().size() > i) {
-					    				Argument arg = functCall.getArguments().getArguments().get(i);
-					    				varList.addAll(Utils.extractSymbolNames(arg));
-				    				}
-			    			}
-		    		}
-	    		}
+    			if (FunctionValidator.libraries.contains(functName))
+    				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariableNames());
 	    	}
 		}
 		return varList;

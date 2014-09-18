@@ -244,7 +244,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	}
 
 	//Validate a fully qualified argument whose parent refers to a variable declared as a function 
-	//It is assumed that attribute selectors will refer to symbols in attribute "output" of a function call 
 	public boolean checkReferenceToFuctionOutput(FullyQualifiedArgumentName ref) {
 		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
 		ArrayList<String> params = new ArrayList<String>();
@@ -253,9 +252,11 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    	if (obj instanceof FunctionCallStatementImpl){
 	    		FunctionCallStatement s = (FunctionCallStatement) obj;
 	    		if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getParent().getName())) {	    			
-	    			//Compare reference with references in FunctionCall param attribute
-	    			//Does not guarantee the correctness as references may occur in expressions
-	    			params.addAll(Utils.extractSymbolNames(s.getExpression().getArguments(), FunctionValidator.param_output.getName()));
+	    			//Compare reference with returned variables of functions or libraries
+	    			String functName = s.getExpression().getIdentifier().getFunction().getName();
+	    			if (FunctionValidator.libraries.contains(functName))
+	    				params.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariableNames());
+	    			
 	       			ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
 	       			if (paramRef != null){
 	       				if (!params.contains(paramRef.getName()))

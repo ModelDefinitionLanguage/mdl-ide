@@ -83,22 +83,30 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static FunctionParameter param_seq_stepSize = new FunctionParameter("stepSize", 1, MdlDataType.TYPE_REAL);
 	final public static FunctionParameter param_seq_repetition = new FunctionParameter("repetition", 1, MdlDataType.TYPE_REAL);
 	final public static FunctionParameter param_seq_end = new FunctionParameter("end", 2, MdlDataType.TYPE_REAL);
-	
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*LIBRARY*/
-	final public static String funct_nmadvan = "nmadvan";
-	final public static String funct_PK = "PK";
+	final public static String lib_nmadvan = "nmadvan";
+	final public static String lib_PK = "PK";
+
+	final public static List<String> libraries = Arrays.asList(lib_nmadvan, lib_PK);
 	
-	final public static FunctionParameter param_model = new FunctionParameter("model", 0, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_trans = new FunctionParameter("trans", 1, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_ncmt = new FunctionParameter("ncmt", 2, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
-	final public static FunctionParameter param_input = new FunctionParameter("input", 3, MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_output = new FunctionParameter("output", 4, MdlDataType.TYPE_LIST, ParameterPassingMethod.IN_OUT);
-	final public static FunctionParameter param_distribution = new FunctionParameter("distribution", 5, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_elimination = new FunctionParameter("elimination", 6, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_parameterization = new FunctionParameter("parameterization", 7, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	/*nmadvan parameters*/
+	final public static FunctionParameter param_nmadvan_model = new FunctionParameter("model", 0, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_trans = new FunctionParameter("trans", 1, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_ncmt = new FunctionParameter("ncmt", 2, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
+	final public static FunctionParameter param_nmadvan_input = new FunctionParameter("input", 3, MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_distribution = new FunctionParameter("distribution", 4, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_elimination = new FunctionParameter("elimination", 5, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_parameterization = new FunctionParameter("parameterization", 6, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
 	
-	final public static List<String> libraries = Arrays.asList(funct_nmadvan, funct_PK);
+	/*PK parameters*/
+	final public static FunctionParameter param_PK_ndist = new FunctionParameter("ndist", 0, 
+			MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_PK_depot = new FunctionParameter("depot", 1, 
+			MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
 	
+	//////////////////////////////////////////////////////////////////////////
 	final public static Map<String, FunctionSignature> standardFunctions 
 		= new HashMap<String, FunctionSignature>(){
 			/** * */
@@ -109,23 +117,39 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			for (String functName: funct_standard2)
 				put(functName, new FunctionSignature(functName, 2, MdlDataType.TYPE_REAL));
 						
-			put(funct_seq, new FunctionSignature(funct_seq, 
-				Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition, param_seq_end), 
-				MdlDataType.TYPE_REAL, true));
+			put(funct_seq, new FunctionSignature(funct_seq, Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition, param_seq_end), MdlDataType.TYPE_REAL, true));
 			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
 			put(funct_update, new FunctionSignature(funct_update, 2, MdlDataType.TYPE_REAL));
 			put(funct_errorExit, new FunctionSignature(funct_errorExit, 2, MdlDataType.TYPE_VOID));
-			put(funct_runif, new FunctionSignature(funct_runif, 
-				Arrays.asList(
-					new FunctionParameter("n", 0, MdlDataType.TYPE_INT)), 
-					MdlDataType.TYPE_REAL));
+			put(funct_runif, new FunctionSignature(funct_runif, Arrays.asList(new FunctionParameter("n", 0, MdlDataType.TYPE_INT)), MdlDataType.TYPE_REAL));
 			
-			for (String functName: libraries){
-				put(functName, new FunctionSignature(functName, Arrays.asList(
-				param_model, param_trans, param_ncmt, param_input, param_output, 
-				param_distribution, param_elimination, param_parameterization), 
-				MdlDataType.TYPE_LIST, true));
-			}
+			/*libraries*/
+			//nmadvan
+			put(lib_nmadvan, new FunctionSignature(lib_nmadvan, 
+				Arrays.asList(
+					param_nmadvan_model, param_nmadvan_trans, param_nmadvan_ncmt, param_nmadvan_input, 
+					param_nmadvan_distribution, param_nmadvan_elimination, param_nmadvan_parameterization), 
+				MdlDataType.TYPE_LIST, 
+				true,
+				Arrays.asList(
+						new Variable("A", MdlDataType.TYPE_VECTOR_REAL), 
+						new Variable("F", MdlDataType.TYPE_REAL)
+					)
+				)
+			);
+			
+			//PK
+			put(lib_PK, new FunctionSignature(lib_PK, Arrays.asList(
+					param_PK_ndist, param_PK_depot), 
+					MdlDataType.TYPE_LIST, true, 
+					Arrays.asList(
+							new Variable("V", MdlDataType.TYPE_UNDEFINED), 
+							new Variable("KL", MdlDataType.TYPE_UNDEFINED),
+							new Variable("KA", MdlDataType.TYPE_UNDEFINED)
+							)
+					)
+			);
+					
 		}
 	};
 	

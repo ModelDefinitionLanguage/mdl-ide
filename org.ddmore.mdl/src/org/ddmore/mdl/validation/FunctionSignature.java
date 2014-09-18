@@ -1,5 +1,6 @@
 package org.ddmore.mdl.validation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class FunctionSignature {
 	//By default we assume unnamed input parameters of type MdlDataType.TYPE_REAL
 	List<FunctionParameter> params;
 	TargetCodeType target = null;
+	List<Variable> returnedVariables = null;
 	
 	public FunctionSignature(String name, Integer numberOfParams){
 		this.name = name;
@@ -59,6 +61,12 @@ public class FunctionSignature {
 		this.passingByName = passingByName;
 	}
 	
+	public FunctionSignature(String name, List<FunctionParameter> params, MdlDataType type, Boolean passingByName,
+			List<Variable> returnedVariables){
+		this(name, params, type, passingByName);
+		this.returnedVariables = returnedVariables;
+	}
+	
 	public String getName(){
 		return name;
 	}
@@ -89,4 +97,16 @@ public class FunctionSignature {
 		}
 		return Arrays.asList(orderedParams);
 	}
+	
+	public List<Variable> getReturnedVariables(){
+		return returnedVariables;		
+	}
+	
+	public List<String> getReturnedVariableNames(){
+		List<String> varNames = new ArrayList<String>();
+		for (Variable v: returnedVariables)
+			varNames.add(v.getName());		
+		return varNames;
+	}
+
 }
