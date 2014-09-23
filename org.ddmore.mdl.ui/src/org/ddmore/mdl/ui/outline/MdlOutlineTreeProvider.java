@@ -31,6 +31,7 @@ import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.IgnoreList;
 import org.ddmore.mdl.mdl.List;
+import org.ddmore.mdl.mdl.MOGObject;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
@@ -58,7 +59,6 @@ import org.ddmore.mdl.mdl.TELObject;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.TaskFunctionBlock;
 import org.ddmore.mdl.mdl.TaskFunctionBody;
-import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
 import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.VarType;
@@ -82,7 +82,6 @@ import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.TargetLanguageImpl;
-import org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.UseTypeImpl;
 import org.ddmore.mdl.mdl.impl.VarTypeImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
@@ -274,10 +273,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(ARGUMENT_NAME));
     }
 
-    protected Image _image(TaskFunctionDeclarationImpl e) {
-        return imageHelper.getImage(getPath(TASK_FUNCTION_DECLARATION));
-    }
-
     protected Image _image(EstimateTaskImpl e) {
         return imageHelper.getImage(getPath(ESTIMATE_TASK));
     }
@@ -380,10 +375,10 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 	
 	
-	protected void  _createNode(IOutlineNode parentNode, TELObject obj) {
+	protected void  _createNode(IOutlineNode parentNode, MOGObject obj) {
 		createEStructuralFeatureNode(parentNode,
 				obj,
-				MdlPackage.Literals.TEL_OBJECT__STATEMENTS,
+				MdlPackage.Literals.MOG_OBJECT__OBJECTS,
 				_image(obj),
 				((MclObject) obj.eContainer()).getObjectName().getName(),
 				false);
@@ -559,15 +554,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		}
 	}	
 	
-	protected void _createNode(IOutlineNode parentNode, TaskFunctionDeclaration t) {
-		createEStructuralFeatureNode(parentNode,
-			t,
-				MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FORMAL_ARGUMENTS,
-				_image(t),
-				t.getFunctionName().getName(),
-		true);
-	}
-	
 	protected void  _createNode(IOutlineNode parentNode, TaskFunctionBody st){
 		for (EObject obj: st.eContents()){
 			createNode(parentNode, obj);
@@ -595,15 +581,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				true);
 	}
 
-	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedFunctionName name){
-		createEStructuralFeatureNode(parentNode,
-				name,
-				MdlPackage.Literals.FULLY_QUALIFIED_FUNCTION_NAME__FUNCTION,
-				_image(name),
-				mdlPrinter.toStr(name),
-				true);
-	}
-	
 	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedArgumentName name){
 		createEStructuralFeatureNode(parentNode,
 				name,
@@ -668,7 +645,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				st,
 				MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 				_image(st),
-				mdlPrinter.toStr(st.getIdentifier()),
+				st.getIdentifier().getName(),
 				false);
 	}
 	

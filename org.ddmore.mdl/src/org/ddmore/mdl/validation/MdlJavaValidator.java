@@ -15,11 +15,8 @@ import java.util.Map;
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
-import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.TaskFunctionBlockImpl;
-import org.ddmore.mdl.mdl.impl.TaskFunctionDeclarationImpl;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
@@ -147,54 +144,12 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		else {
 			//TODO: for MOG validation, collect declared variables for a given object name instead of all
 			if (!(Utils.isSymbolDeclared(declaredVariables, ref, mogs) ||
-					declaredObjects.containsKey(ref.getName()) ||
-					isFormalParameter(ref))){
+					declaredObjects.containsKey(ref.getName()) )){
 				warning(MSG_SYMBOL_UNKNOWN, MdlPackage.Literals.SYMBOL_NAME__NAME,
 						MSG_SYMBOL_UNKNOWN, ref.getName());
 			}
 		}
 	}
-
-	//Check whether the reference is a formal parameter or local variable (property) in the function declaration
-	private boolean isFormalParameter(SymbolName ref) {
-		//Look for TaskFunctionDeclaration
-		EObject container = ref.eContainer();
-		while (!(container instanceof TaskFunctionBlockImpl)){
-			if (container instanceof MclObjectImpl) return false;
-			container = container.eContainer();
-		}
-		if (container instanceof TaskFunctionBlockImpl){
-			ArrayList<String> varList = new ArrayList<String>();
-			TaskFunctionBlock tfb = (TaskFunctionBlock)container; 
-			if (tfb.getEstimateBlock() != null){
-				for (BlockStatement b: tfb.getEstimateBlock().getStatements())
-					Utils.addSymbol(varList, b);
-			}
-			if (tfb.getSimulateBlock() != null){
-				for (BlockStatement b: tfb.getSimulateBlock().getStatements())
-					Utils.addSymbol(varList, b);
-			}
-			if (tfb.getExecuteBlock() != null){
-				for (BlockStatement b: tfb.getExecuteBlock().getStatements())
-					Utils.addSymbol(varList, b);
-			}
-			if (varList.contains(ref.getName())) return true;
-		}
-		while (!(container instanceof TaskFunctionDeclarationImpl)){
-			if (container instanceof MclObjectImpl) return false;
-			container = container.eContainer();
-		}
-		if (container instanceof TaskFunctionDeclarationImpl) {
-			//TaskFunctionDeclaration found
-			TaskFunctionDeclaration func = (TaskFunctionDeclaration)container;
-			if (func.getFormalArguments() != null){
-				for (ArgumentName arg: func.getFormalArguments().getArguments())
-					if (arg.getName().equals(ref.getName())) return true;
-			}
-		}
-		return false;
-	}
-	
 
 	@Check
 	public void checkReference(FullyQualifiedArgumentName ref) {
@@ -213,8 +168,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		    				Arguments arguments = null;
 			    			if (s.getExpression().getList() != null)
 		       					arguments = s.getExpression().getList().getArguments();
-		       				if (s.getExpression().getOdeList() != null)
-		       					arguments = s.getExpression().getOdeList().getArguments();
 		       				if (arguments != null)
 			       				for (Argument x: arguments.getArguments())
 	           						args.add(x);
@@ -253,7 +206,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    		FunctionCallStatement s = (FunctionCallStatement) obj;
 	    		if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getParent().getName())) {	    			
 	    			//Compare reference with returned variables of functions or libraries
-	    			String functName = s.getExpression().getIdentifier().getFunction().getName();
+	    			String functName = s.getExpression().getIdentifier().getName();
 	    			if (FunctionValidator.libraries.contains(functName))
 	    				params.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariableNames());
 	    			

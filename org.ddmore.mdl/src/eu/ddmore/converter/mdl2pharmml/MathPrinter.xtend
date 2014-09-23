@@ -192,9 +192,6 @@ class MathPrinter extends MdlPrinter{
 		«IF e.list != null»
 			«e.print_list»
 		«ENDIF»	
-		«IF e.odeList != null»
-			«e.print_odeList»
-		«ENDIF»	
 	'''
 	
 	//+
@@ -214,7 +211,7 @@ class MathPrinter extends MdlPrinter{
 	
 	//For ode lists used as part of expression print the values to their attribute deriv
 	def print_odeList(AnyExpression e) '''
-		«var deriv = e.odeList.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name)»
+		«var deriv = e.list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name)»
 		«IF deriv != null»«deriv.print_Math_Expr»«ENDIF»
 	'''
 	
@@ -243,7 +240,7 @@ class MathPrinter extends MdlPrinter{
 
 	//+ Convert math functions to PharmML 
 	def print_Math_FunctionCall(FunctionCall call){
-		if (call.identifier.function.name.equals(FunctionValidator::funct_seq)){
+		if (call.identifier.name.equals(FunctionValidator::funct_seq)){
 			if (call.arguments != null){
 				val params = call.arguments.arguments;
 				var passedByName = true;
@@ -266,8 +263,8 @@ class MathPrinter extends MdlPrinter{
 		 	}
 		 		
 		} else {
-			if (FunctionValidator::funct_standard1.contains(call.identifier.function.name) ||
-				FunctionValidator::funct_standard2.contains(call.identifier.function.name)){
+			if (FunctionValidator::funct_standard1.contains(call.identifier.name) ||
+				FunctionValidator::funct_standard2.contains(call.identifier.name)){
 				//Convert standard mathematical functions to a PharmML operator with the same name;		
 				return call.print_Math_FunctionCall_Standard;	
 			} else {
@@ -280,12 +277,12 @@ class MathPrinter extends MdlPrinter{
 	def print_Math_FunctionCall_Standard(FunctionCall call)
 	'''
 		«IF call.arguments.arguments.size == 1»
-			<Uniop op="«call.identifier.function.name»">
+			<Uniop op="«call.identifier.name»">
 				«call.arguments.arguments.get(0).expression.print_Math_Expr»
 			</Uniop>
 		«ELSE»
 			«IF call.arguments.arguments.size == 2»
-				<Binop op="«call.identifier.function.name»">
+				<Binop op="«call.identifier.name»">
 					«call.arguments.arguments.get(0).expression.print_Math_Expr»
 					«call.arguments.arguments.get(1).expression.print_Math_Expr»
 				</Binop>
@@ -297,7 +294,7 @@ class MathPrinter extends MdlPrinter{
 	def print_Math_FunctionCall_UserDefined(FunctionCall call)
 	'''
 		<math:FunctionCall>
-			«call.identifier.function.print_ct_SymbolRef»
+			«call.identifier.print_ct_SymbolRef»
 			«FOR arg: call.arguments.arguments»
 				«arg.print_Math_FunctionArgument»
 			«ENDFOR»

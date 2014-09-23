@@ -16,7 +16,6 @@ import org.ddmore.mdl.mdl.impl.DistributionArgumentImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
-import org.ddmore.mdl.mdl.impl.OdeListImpl;
 import org.ddmore.mdl.mdl.impl.RandomListImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
@@ -57,10 +56,6 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 	}
 
 	@Override
-	public void completeOdeList_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
-
-	@Override
 	public void completeRandomList_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 	}
 	
@@ -70,7 +65,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 
 	@Override
 	public void completeArgument_ArgumentName(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		if (model instanceof ListImpl || model instanceof OdeListImpl){
+		if (model instanceof ListImpl){
 			EObject container = model.eContainer();
 			while (!(Utils.isListContainer(container))){
 				if (container instanceof MclObjectImpl) return; //we are too high in the tree, block was not found

@@ -10,7 +10,7 @@ MclObject:
 	parameterObject=ParameterObject | 
 	dataObject=DataObject | 
 	taskObject=TaskObject |
-	telObject=TELObject);
+	mogObject=MOGObject);
 	
 ModelObject: 
 	identifier = 'mdlobj' BEGIN blocks += ModelObjectBlock* END;
@@ -24,8 +24,8 @@ DataObject:
 TaskObject:
 	identifier = 'taskobj' BEGIN blocks += TaskObjectBlock* END;
 	
-TELObject:
-	identifier = 'telobj' BEGIN statements += FunctionCallStatement* END;
+MOGObject:
+	identifier = 'mog' BEGIN objects += [ObjectName]* END;
 	
 //////////////////////////////////////////////////////////
 //Model Object
@@ -161,7 +161,9 @@ SourceBlock:
 //////////////////////////////////////////////////////////
  
 TaskObjectBlock: 
-	functionDeclaration = TaskFunctionDeclaration | 
+	estimateBlock = EstimateTask |
+	simulateBlock = SimulateTask |
+	executeBlock = ExecuteTask |
 	parameterBlock = ParameterBlock |
 	dataBlock = DataBlock |
 	modelBlock = ModelBlock | 
@@ -311,22 +313,6 @@ VariableList:
 	identifiers += SymbolName (=> (',' | ';')? identifiers += SymbolName)* //Ref to VaraibleName +
 ;
 	
-TaskFunctionDeclaration:
-	functionName = FunctionName "=" 'function'   
-	'(' formalArguments = FormalArguments ')'
-	functionBody = TaskFunctionBody
-;
-
-TaskFunctionBody: {TaskFunctionBody}	
-	BEGIN (blocks += TaskFunctionBlock)* END
-;
-
-TaskFunctionBlock:
-	estimateBlock = EstimateTask |
-	simulateBlock = SimulateTask |
-	executeBlock = ExecuteTask
-;
-
 EstimateTask: 
 	identifier = 'ESTIMATE' 
 	BEGIN statements += BlockStatement* END 
@@ -359,7 +345,7 @@ FunctionName:
 ;
 
 FunctionCall:
-	identifier = FullyQualifiedFunctionName '(' arguments = Arguments? ')' 
+	identifier = FunctionName '(' arguments = Arguments? ')' 
 ;
 
 BlockStatement:
@@ -505,18 +491,26 @@ Distribution:
 AnyExpression:
 	expression = Expression |
 	list = List | 
-	odeList = OdeList |
+//	odeList = OdeList |
 	vector = Vector |
 	type = EnumType 
 ;
 
-List:
-	identifier = 'list' '(' arguments = Arguments ')'
+//TODO replace number and value with expression
+Primary:
+	number = NumericValue |
+	symbol = SymbolName | 
+	vector = Vector 
 ;
 
-OdeList:
-	 identifier = 'ode' '(' arguments = Arguments ')' 
+List:
+//	identifier = 'list' '(' arguments = Arguments ')'
+	identifier = BEGIN arguments = Arguments END
 ;
+
+//OdeList:
+//	 identifier = 'ode' '(' arguments = Arguments ')' 
+//;
 
 RandomList:
 	identifier = '~' '(' arguments = DistributionArguments ')'
@@ -596,19 +590,9 @@ UnaryExpression:
 ;
 
 
-Primary:
-	number = NumericValue |
-	symbol = SymbolName | 
-	vector = Vector 
-;
-
 Vector:
 	identifier = 'c' '(' values += Primary (=> ',' values += Primary)* ')'
 ;	
-
-FullyQualifiedFunctionName: 
-	(object = [ObjectName] '$')? function = FunctionName
-;
 
 FullyQualifiedArgumentName:
 	parent = SymbolName selectors += Selector+  

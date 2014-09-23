@@ -376,7 +376,7 @@ class Mdl2Nonmem extends MdlPrinter {
 							«var x = ss.symbol»
 							«IF x != null && x.symbolName != null»
 								«IF x.expression != null»
-									«IF x.expression.odeList != null»
+									«IF x.expression.list != null»
 										COMP(«x.symbolName.name»)
 									«ENDIF»
 								«ENDIF»
@@ -412,8 +412,8 @@ class Mdl2Nonmem extends MdlPrinter {
 									«IF x.expression.expression != null»
 										«x.print»
 									«ENDIF»
-									«IF x.expression.odeList != null»
-										«var deriv = x.expression.odeList.arguments.getAttribute(AttributeValidator::attr_req_deriv.name)»
+									«IF x.expression.list != null»
+										«var deriv = x.expression.list.arguments.getAttribute(AttributeValidator::attr_req_deriv.name)»
 										«IF deriv.length > 0 && x.symbolName != null»
 											«var id = x.symbolName.name»
 											«IF dadt_vars.get(id) != null»
@@ -451,7 +451,7 @@ class Mdl2Nonmem extends MdlPrinter {
 		for (ss: b.statements){
 			if (ss.libraryBlock != null){
 				for (st: ss.libraryBlock.statements){
-					var library = st.expression.identifier.function.name;
+					var library = st.expression.identifier.name;
 					if (library.equals(FunctionValidator::lib_nmadvan))
 						library = "ADVAN";
 					val model = st.expression.arguments.getAttribute(FunctionValidator::param_nmadvan_model.name);
@@ -946,22 +946,15 @@ class Mdl2Nonmem extends MdlPrinter {
 	//Processing task object for $EST and $SIM
 	def convertToNMTRAN(TaskObject o)'''
 	«FOR b:o.blocks»
-	«IF b.functionDeclaration != null»
-		«val body = b.functionDeclaration.functionBody»
-		«IF body != null»
-			«FOR bb: body.blocks»
-			«IF bb.estimateBlock != null»
-				«bb.estimateBlock.print»
-			«ENDIF»
-			«IF bb.simulateBlock != null»
-				«bb.simulateBlock.print»
-			«ENDIF»
-			«IF bb.executeBlock != null»
-				«bb.executeBlock.print»
-			«ENDIF»
-			«ENDFOR»
+		«IF b.estimateBlock != null»
+			«b.estimateBlock.print»
 		«ENDIF»
-	«ENDIF»
+		«IF b.simulateBlock != null»
+			«b.simulateBlock.print»
+		«ENDIF»
+		«IF b.executeBlock != null»
+			«b.executeBlock.print»
+		«ENDIF»
 	«ENDFOR»
 	'''
 	
@@ -1325,8 +1318,8 @@ class Mdl2Nonmem extends MdlPrinter {
 						for (ss: s.odeBlock.statements){
 							if (ss.symbol != null)
 								if (ss.symbol.expression != null)
-									if (ss.symbol.expression.odeList != null){
-										val initCond = ss.symbol.expression.odeList.arguments.getAttribute(AttributeValidator::attr_init.name);
+									if (ss.symbol.expression.list != null){
+										val initCond = ss.symbol.expression.list.arguments.getAttribute(AttributeValidator::attr_init.name);
 										if (initCond.length > 0){
 											init_vars.put(i, initCond);
 										} else init_vars.put(i, "0");
@@ -1348,7 +1341,7 @@ class Mdl2Nonmem extends MdlPrinter {
 							var x = ss.symbol;
 							if (x != null){
 								if (x.expression != null){
-									if (x.expression.odeList != null && x.symbolName != null){
+									if (x.expression.list != null && x.symbolName != null){
 										var id = x.symbolName.name;
 										if (dadt_vars.get(id) == null){
 											dadt_vars.put(id, i);
@@ -1498,7 +1491,7 @@ class Mdl2Nonmem extends MdlPrinter {
 				if (x instanceof FunctionCall){
 					var call = x as FunctionCall;
 					if (call != null){
-						if (call.identifier.function.name.equals(FunctionValidator::funct_runif)){
+						if (call.identifier.name.equals(FunctionValidator::funct_runif)){
 							if (call.arguments != null && call.arguments.arguments.size() > 0){
 								val arg = call.arguments.arguments.get(0);
 								val param = arg.expression.toStr;
@@ -1546,9 +1539,9 @@ class Mdl2Nonmem extends MdlPrinter {
 	
 	//toStr function call
 	override toStr(FunctionCall call){
-		if (call.identifier.function.name.equals(FunctionValidator::funct_errorExit))
+		if (call.identifier.name.equals(FunctionValidator::funct_errorExit))
 			return "EXIT" + call.arguments.toStrWithoutCommas;
-		if (call.identifier.function.name.equals(FunctionValidator::funct_runif)){
+		if (call.identifier.name.equals(FunctionValidator::funct_runif)){
 			if (call.arguments != null) {
 				var container = call.eContainer()
 				if (container instanceof BlockStatement) {
@@ -1561,7 +1554,7 @@ class Mdl2Nonmem extends MdlPrinter {
 				return var_random_base + runifCount;			
 			}
 		}
-		if (call.identifier.function.name.equals(FunctionValidator::funct_pnorm))
+		if (call.identifier.name.equals(FunctionValidator::funct_pnorm))
 			return "PHI" + "(" + call.arguments.toStr + ")";			
 		return super.toStr(call);	
 	}	

@@ -38,7 +38,7 @@ public enum MdlDataType {
     //References to variables and objects, mathematical expressions
 	TYPE_REF, TYPE_OBJ_REF, TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_EXPR, 
 	//Nested lists
-	TYPE_LIST, TYPE_ODE, TYPE_RANDOM_LIST, 
+	TYPE_LIST, TYPE_RANDOM_LIST, 
     
 	/*Vectors*/
     //Numeric vectors
@@ -122,7 +122,6 @@ public enum MdlDataType {
 			case TYPE_OBJ_REF_PARAM: return (expr.getExpression() != null)? isParameterObjectReference(expr.getExpression()): false;
 			//Nested lists
 			case TYPE_LIST: return (expr.getList() != null)? true: false;  
-			case TYPE_ODE: return (expr.getOdeList() != null)? true: false;
 			//Vectors
 			case TYPE_VECTOR_INT: return (expr.getVector() != null)? isVectorInteger(expr.getVector()): false;
 			case TYPE_VECTOR_REAL: return (expr.getVector() != null)? isVectorReal(expr.getVector()): false;

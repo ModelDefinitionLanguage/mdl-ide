@@ -71,8 +71,10 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 
 		c.setLinewrap(2).before(f.getDataInputBlockRule());
 		c.setLinewrap(2).before(f.getSourceBlockRule());
-		
-		c.setLinewrap(2).before(f.getTaskFunctionDeclarationRule());
+
+		c.setLinewrap(2).before(f.getEstimateTaskRule());
+		c.setLinewrap(2).before(f.getSimulateTaskRule());
+		c.setLinewrap(2).before(f.getExecuteTaskRule());
 		c.setLinewrap(2).before(f.getParameterBlockRule());
 		c.setLinewrap(2).before(f.getDataBlockRule());
 		c.setLinewrap(2).before(f.getModelBlockRule());
@@ -109,12 +111,6 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap(1).before(f.getOdeBlockRule());
 
 		c.setLinewrap(1).before(f.getInlineBlockAccess().getVariablesAssignment_2());
-		
-		c.setLinewrap(1).before(f.getTaskFunctionDeclarationRule());
-		c.setLinewrap(1).before(f.getTaskFunctionDeclarationAccess().getFunctionBodyAssignment_6());
-		c.setLinewrap(1).before(f.getTaskFunctionDeclarationAccess().getFunctionBodyAssignment_6());
-		
-		c.setLinewrap(1).before(f.getTaskFunctionBlockRule());
 			
 		c.setLinewrap(1).before(f.getMatrixBlockAccess().getParametersAssignment_4_1());
 		c.setLinewrap(1).before(f.getDiagBlockAccess().getParametersAssignment_4_1());

@@ -404,10 +404,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 					if (currArgs.get(index - 1).getExpression().getList() != null)
 						if (arguments.get(index).getExpression().getList().getArguments() != null)
 							currArgs = arguments.get(index).getExpression().getList().getArguments().getArguments();
-					if (currArgs.get(index - 1).getExpression().getOdeList() != null) 
-						if (arguments.get(index).getExpression().getOdeList().getArguments() != null)
-							currArgs = arguments.get(index).getExpression().getOdeList().getArguments().getArguments();
-					
 				} else return false;
 			} 
 		}

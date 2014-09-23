@@ -1,7 +1,6 @@
 package eu.ddmore.converter.mdl2pharmml
 import org.ddmore.mdl.mdl.Mcl
 import eu.ddmore.converter.mdlprinting.MdlPrinter
-import org.ddmore.mdl.validation.FunctionValidator
 import java.util.ArrayList
 import java.util.HashMap
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
@@ -23,42 +22,32 @@ class Mdl2PharmML{
 		var operations = new ArrayList<Operation>();
 		var MOGs = new HashMap<String, ModellingObjectGroup>();
 
-		//Note: when creating MOG, use the following order to pass object names:
-		//	1 - model object
-		//  2 - parameter object
-		//  3 - data object
-		//  4 - task object 
+		var objects = new HashMap<String, MclObject>();
 		for (o: m.objects){
-			if (o.telObject != null){
-				for (st: o.telObject.statements){
-					val functionName = st.expression.identifier.function.name;
-					if (st.expression.identifier.object != null){
-						val tObjName = st.expression.identifier.object.name;
-						val tObj = resolver.getTaskObject(tObjName);
-						for (b: tObj.blocks){
-							if (b.functionDeclaration != null){
-								if (b.functionDeclaration.functionName.name.equals(functionName)){
-									for (bb: b.functionDeclaration.functionBody.blocks){
-										if ((bb.estimateBlock != null) || (bb.simulateBlock != null)){
-											val modelParam = mathPrinter.getProperty(bb, FunctionValidator::attr_task_model.name); 
-											val paramParam = mathPrinter.getProperty(bb, FunctionValidator::attr_task_parameter.name); 
-											val dataParam = mathPrinter.getProperty(bb, FunctionValidator::attr_task_data.name); 
-											if (dataParam.length > 0 && modelParam.length > 0 && paramParam.length > 0){
-												val mObjName = mathPrinter.getAttribute(st.expression.arguments, modelParam);
-												val dObjName = mathPrinter.getAttribute(st.expression.arguments, dataParam);
-												val pObjName = mathPrinter.getAttribute(st.expression.arguments, paramParam);
-												var stepType = BLK_ESTIM_STEP;
-												val key = mObjName + "-" + dObjName + "-" + pObjName;	
-												val mog = new ModellingObjectGroup(mObjName, pObjName, dObjName, tObjName);
-												if (!MOGs.containsKey(key)) MOGs.put(key, mog);	
-												if (bb.simulateBlock != null) stepType = BLK_SIMUL_STEP;
-													operations.add(new Operation(functionName, stepType, mog));
-											}
-										}
-									}
-								}
-							}
-						}
+			objects.put(o.objectName.name, o);	
+		}
+		for (o: m.objects){
+			if (o.mogObject != null){
+				var String tObjName = null;
+				var String mObjName = null;
+				var String dObjName = null;
+				var String pObjName = null;
+				for (oo: o.mogObject.objects){
+					if (objects.containsKey(oo.name)){
+						if (objects.get(oo.name).dataObject != null) dObjName = oo.name;
+						if (objects.get(oo.name).modelObject != null) mObjName = oo.name;
+						if (objects.get(oo.name).parameterObject != null) pObjName = oo.name;
+						if (objects.get(oo.name).taskObject != null) tObjName = oo.name;
+					}
+				}
+				for (b: objects.get(tObjName).taskObject.blocks){
+					if ((b.estimateBlock != null) || (b.simulateBlock != null)){
+						var stepType = BLK_ESTIM_STEP;
+						val key = mObjName + "-" + dObjName + "-" + pObjName;	
+						val mog = new ModellingObjectGroup(mObjName, pObjName, dObjName, tObjName);
+						if (!MOGs.containsKey(key)) MOGs.put(key, mog);	
+						if (b.simulateBlock != null) stepType = BLK_SIMUL_STEP;
+						operations.add(new Operation(tObjName, stepType, mog));
 					}
 				}
 			}

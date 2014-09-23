@@ -352,7 +352,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 
 	org.ddmore.mdl.mdl.List createList(Attribute[] attributes){
 		org.ddmore.mdl.mdl.List list = MdlFactory.eINSTANCE.createList();		
-		list.setIdentifier(grammarAccess.getListAccess().getIdentifierListKeyword_0_0().getValue());
+		//list.setIdentifier(grammarAccess.getListAccess().getIdentifierListKeyword_0_0().getValue());
 		Arguments args = MdlFactory.eINSTANCE.createArguments();				
 		for (int i = 0; i< attributes.length; i++){
 			Argument attr = createArgument(attributes[i]);

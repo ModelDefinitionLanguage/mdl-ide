@@ -275,7 +275,7 @@ class MdlPrinter {
 	def String toStr(AnyExpression e){
 		if (e.expression != null) return e.expression.toStr;
 		if (e.list != null) return e.list.toStr; 
-		if (e.odeList != null) return e.odeList.toStr; 
+		//if (e.odeList != null) return e.odeList.toStr; 
 		if (e.vector != null) return e.vector.toStr; 
 		if (e.type != null) return e.type.toStr; 
 	}
@@ -417,7 +417,7 @@ class MdlPrinter {
 	}	
 	
 	def toStr(FunctionCall call){
-		var res = call.identifier.toStr;
+		var res = call.identifier.name;
 		if (call.arguments != null)
 		 	res = res + "(" + call.arguments.toStr + ")";
 		 return res;	

@@ -101,7 +101,7 @@ class ReferenceResolver{
 		    	if (obj instanceof SymbolDeclaration){
 		    		var s = obj as SymbolDeclaration;
 		    		if (s.expression != null){
-		    			if (s.expression.odeList != null && s.symbolName != null){
+		    			if (s.expression.list != null && s.symbolName != null){
 		    				if (!deriv_vars.contains(s.symbolName.name)){
 		    					deriv_vars.add(s.symbolName.name);
 		    				}
@@ -458,9 +458,9 @@ class ReferenceResolver{
 		return null;
 	}	
 	
-	protected def getTelObject(String name){
+	protected def getMOGObject(String name){
 		for (o: mcl.objects){
-			if (o.objectName.name.equals(name)) return o.telObject;
+			if (o.objectName.name.equals(name)) return o.mogObject;
 		}
 		return null;
 	}	

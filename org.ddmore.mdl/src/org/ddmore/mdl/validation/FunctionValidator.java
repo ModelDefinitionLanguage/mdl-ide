@@ -18,14 +18,9 @@ import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.EstimateTask;
 import org.ddmore.mdl.mdl.ExecuteTask;
 import org.ddmore.mdl.mdl.FunctionCall;
-import org.ddmore.mdl.mdl.Mcl;
-import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.SimulateTask;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.TaskFunctionDeclaration;
-import org.ddmore.mdl.mdl.TaskObject;
-import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.impl.BlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.ExecuteTaskImpl;
@@ -58,7 +53,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_FUNCTION_PROPERTY_MISSING = "Required property is not set";
 	public final static String MSG_FUNCTION_PROPERTY_DEFINED = "Property defined more than once";
 
-	public final static String MSG_FUNCTION_CALL_TARGET_MISSING    = "Target environment is not defined";
 	public final static String MSG_FUNCTION_CALL_MODEL_OBJ_MISSING = "MOG should include a model object";
 	public final static String MSG_FUNCTION_CALL_DATA_OBJ_MISSING  = "MOG should include a data object";
 	public final static String MSG_FUNCTION_CALL_PARAM_OBJ_MISSING = "MOG should include a parameter object";
@@ -163,19 +157,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		}
 	};
 	
-	//List of declared function names per object
-	Map<String, List<String>> declaredFunctions = new HashMap<String, List<String>>();
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//Task object
-	//NOTE: the type should be TYPE_OBJ_REF but the validation will fail because task properties
-	//are assigned formal parameters, i.e., model=m, parameter=p, data=d
-	final public static Attribute attr_task_model = new Attribute("model", MdlDataType.TYPE_REF, true);
-	final public static Attribute attr_task_parameter = new Attribute("parameter", MdlDataType.TYPE_REF, true);
-	final public static Attribute attr_task_data = new Attribute("data", MdlDataType.TYPE_REF, true);
-	//NOTE: the type should be TYPE_TARGET but the validation will fail because task properties
-	//are assigned formal parameters, i.e., target=t
-	final public static Attribute attr_task_target = new Attribute("target", MdlDataType.TYPE_REF, true);
 	
 	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_task_max = new Attribute("max", MdlDataType.TYPE_NAT, false);
@@ -184,7 +168,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_task_simopt = new Attribute("simopt", MdlDataType.TYPE_LIST, false);
 		
 	final public static List<Attribute> attrs_task = Arrays.asList(
-			attr_task_target, attr_task_model, attr_task_parameter, attr_task_data, 
 			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt);
 	
 	final public static Attribute attr_task_command = new Attribute("command", MdlDataType.TYPE_STRING, true);
@@ -192,48 +175,19 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-	//Update the list of recognised functions
-	@Check
-	public void updateDeclaredFunctionList(Mcl mcl){
-		declaredFunctions.clear();
-		for (MclObject obj: mcl.getObjects()){
-			if (obj.getTaskObject() != null){
-				TaskObject taskObj = obj.getTaskObject();
-				ArrayList<String> funcList =  new ArrayList<String>();
-				for (TaskObjectBlock block : taskObj.getBlocks()){
-					if (block.getFunctionDeclaration() != null){
-						funcList.add(block.getFunctionDeclaration().getFunctionName().getName());
-					}
-				}
-				declaredFunctions.put(obj.getObjectName().getName(), funcList);
-			}
-		}
-	}
-	
-	//Check whether the function with such a name is already defined
-	@Check
-	public void checkFunctionDeclaration(TaskFunctionDeclaration func){
-		if (Utils.isFunctionDeclaredMoreThanOnce(declaredFunctions, func.getFunctionName())){
-			warning(MSG_FUNCTION_DEFINED, MdlPackage.Literals.TASK_FUNCTION_DECLARATION__FUNCTION_NAME);
-		}
-	}
-	
 	//Check that the function call is to an existing function
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
-		if (!standardFunctions.containsKey(call.getIdentifier().getFunction().getName()))
-			if(!Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier())) 
-				warning(MSG_FUNCTION_UNKNOWN, 
+		if (!standardFunctions.containsKey(call.getIdentifier().getName()))
+			warning(MSG_FUNCTION_UNKNOWN, 
 					MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER,
-					MSG_FUNCTION_UNKNOWN, call.getIdentifier().getFunction().getName());
-			else  //declared functions (Task object) 
-				validateDeclaredFunction(call);
+			MSG_FUNCTION_UNKNOWN, call.getIdentifier().getName());
 		else //standard function
 			validateStandardFunction(call);
 	}
 	
 	public void validateStandardFunction(FunctionCall call){
-		FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getFunction().getName());
+		FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getName());
 		//TODO validate whether the function returns any value to enable/disable its use in expressions
 		if (Utils.isPassedByName(call.getArguments())){
 			if (functSig.isPassingByName()){
@@ -271,10 +225,10 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			}	
 			else {	
 				warning(MSG_FUNCTION_INVALID + ": cannot pass parameters by name to " +
-					call.getIdentifier().getFunction().getName(), 
+					call.getIdentifier().getName(), 
 					MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 					MSG_FUNCTION_INVALID, 
-					call.getIdentifier().getFunction().getName());					
+					call.getIdentifier().getName());					
 			}	
 		} else {
 			if (Utils.isPassedByPlace(call.getArguments())) {
@@ -284,10 +238,10 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					actual = call.getArguments().getArguments().size();
 				if (actual != expected){
 					warning(MSG_FUNCTION_INVALID + ": " +
-							call.getIdentifier().getFunction().getName() + " expects " + expected + " parameter(s).", 
+							call.getIdentifier().getName() + " expects " + expected + " parameter(s).", 
 							MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 							MSG_FUNCTION_INVALID, 
-							call.getIdentifier().getFunction().getName());
+							call.getIdentifier().getName());
 					return;
 				}
 				if (call.getArguments() != null){
@@ -306,13 +260,14 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 				warning(MSG_FUNCTION_WRONG_PASSING_METHOD + ": cannot mix parameter passing by place and by name",
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_WRONG_PASSING_METHOD, 
-						call.getIdentifier().getFunction().getName());	
+						call.getIdentifier().getName());	
 			}
 		}
 	}
 	
-	public void validateDeclaredFunction(FunctionCall call){
-		if (Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier())){
+	//TODO validate MOG!
+	public void validateMOG(FunctionCall call){
+		/*if (Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier())){
 			byte params[] = new byte[ 4];
 			for (int i = 0; i < 4; i++) params[i] = 0;
 			for (Argument arg: call.getArguments().getArguments()){
@@ -329,26 +284,26 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			if (params[0] == 0)
 				warning(MSG_FUNCTION_CALL_TARGET_MISSING, 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_CALL_TARGET_MISSING, call.getIdentifier().getFunction().getName());
+						MSG_FUNCTION_CALL_TARGET_MISSING, call.getIdentifier().getName());
 			if (params[1] == 0)
 				warning(MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, call.getIdentifier().getFunction().getName());
+						MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, call.getIdentifier().getName());
 			if (params[2] == 0)
 				warning(MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, call.getIdentifier().getFunction().getName());
+						MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, call.getIdentifier().getName());
 			if (params[3] == 0)
 				warning(MSG_FUNCTION_CALL_DATA_OBJ_MISSING, 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_CALL_DATA_OBJ_MISSING, call.getIdentifier().getFunction().getName());
+						MSG_FUNCTION_CALL_DATA_OBJ_MISSING, call.getIdentifier().getName());
 			for (int i = 1; i < 4; i++){
 				if (params[i] > 1)
 					warning(MSG_FUNCTION_CALL_OBJ_DEFINED + ": two or more " + names[i-1] + " objects selected!", 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_CALL_OBJ_DEFINED, call.getIdentifier().getFunction().getName());
+						MSG_FUNCTION_CALL_OBJ_DEFINED, call.getIdentifier().getName());
 			}
-		}
+		}*/
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////

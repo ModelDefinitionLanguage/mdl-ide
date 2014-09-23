@@ -54,7 +54,6 @@ import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
-import org.ddmore.mdl.mdl.impl.OdeListImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
@@ -453,38 +452,24 @@ public class Utils {
 	
 	public static List<ModellingObjectGroup> getMOGs(Mcl mcl){
 		List<ModellingObjectGroup> mogs = new ArrayList<ModellingObjectGroup>();
+		Map<String, MclObject> objects = new HashMap<String, MclObject>();
+		for (MclObject o: mcl.getObjects()){
+			objects.put(o.getObjectName().getName(), o);	
+		}
 		for (MclObject obj: mcl.getObjects()){
-			if (obj.getTelObject() != null){
-				for (FunctionCallStatement call: obj.getTelObject().getStatements()){
-					if (call.getExpression() != null && call.getExpression().getArguments() != null){
-						String mdlObj = null, dataObj = null, paramObj = null;
-						for (Argument arg: call.getExpression().getArguments().getArguments()){
-							if (arg.getExpression().getExpression() != null){
-								if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_MODEL, arg.getExpression())){
-									SymbolName s = MdlDataType.getReference(arg.getExpression().getExpression().getConditionalExpression().getExpression());
-									mdlObj = s.getName();
-								} 
-								else 
-									if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_PARAM, arg.getExpression())){
-										SymbolName s = MdlDataType.getReference(arg.getExpression().getExpression().getConditionalExpression().getExpression());
-										paramObj = s.getName();
-									}
-									else 
-										if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_DATA, arg.getExpression())){
-											SymbolName s = MdlDataType.getReference(arg.getExpression().getExpression().getConditionalExpression().getExpression());
-											dataObj = s.getName();
-										} 
-							}
-						}
-						if ((mdlObj != null) && (dataObj != null) && (paramObj != null)){
-							String taskObj = null;
-							FullyQualifiedFunctionName functName = call.getExpression().getIdentifier();
-							if (functName != null && functName.getObject() != null)
-								taskObj = functName.getObject().getName();
-							ModellingObjectGroup mog = new ModellingObjectGroup(mdlObj, paramObj, dataObj, taskObj);
-							mogs.add(mog);
-						}
+			if (obj.getMogObject() != null){
+				String mObjName = null, dObjName = null, pObjName = null, tObjName = null;
+				for (ObjectName o: obj.getMogObject().getObjects()){
+					if (objects.containsKey(o.getName())){
+						if (objects.get(o.getName()).getDataObject() != null) dObjName = o.getName();
+						if (objects.get(o.getName()).getModelObject() != null) mObjName = o.getName();
+						if (objects.get(o.getName()).getParameterObject() != null) pObjName = o.getName();
+						if (objects.get(o.getName()).getTaskObject() != null) tObjName = o.getName();
 					}
+				}
+				if ((mObjName != null) && (dObjName != null) && (pObjName != null) && (tObjName != null)){
+					ModellingObjectGroup mog = new ModellingObjectGroup(mObjName, pObjName, dObjName, tObjName);
+					mogs.add(mog);
 				}
 			}
 		}
@@ -536,7 +521,7 @@ public class Utils {
 			}
 	    	if (container instanceof FunctionCallImpl){
 	    		FunctionCall functCall = (FunctionCall) container;
-	    		String functName = functCall.getIdentifier().getFunction().getName();
+	    		String functName = functCall.getIdentifier().getName();
     			if (FunctionValidator.libraries.contains(functName))
     				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariableNames());
 	    	}
@@ -545,7 +530,7 @@ public class Utils {
 	}
 	
 	public static boolean isNestedList(Arguments args){
-		return (args.eContainer() instanceof ListImpl || args.eContainer() instanceof OdeListImpl);
+		return (args.eContainer() instanceof ListImpl);
 	}
 	
 }
