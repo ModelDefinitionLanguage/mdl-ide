@@ -453,7 +453,10 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			if (attr.getName().equals(argument.getArgumentName().getName())) {
 				boolean isValid = MdlDataType.validateType(attr.getType(), argument);
 				if (!isValid){
-					warning(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
+					//Check if it is a references
+					//TODO: when type checking is implemented, remove the exception for references!
+					if (!MdlDataType.validateType(MdlDataType.TYPE_REF, argument))
+						warning(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
 						": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
 							attr.getType().name(), 
 						MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME,

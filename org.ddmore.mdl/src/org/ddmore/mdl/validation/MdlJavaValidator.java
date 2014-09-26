@@ -24,7 +24,8 @@ import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ComposedChecks;
 
 @ComposedChecks(validators = { 
-		AttributeValidator.class, 
+		AttributeValidator.class,
+		PropertyValidator.class,
 		FunctionValidator.class, 
 		DistributionValidator.class, 
 		UnitValidator.class})
@@ -39,14 +40,18 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF = "Unresolved reference to a list attribute";
 	public final static String MSG_UNRESOLVED_DISTR_ATTRIBUTE_REF = "Unresolved reference to a distribution attribute";
 
-	public final static String MSG_TARGET_LOCATION = "Target code block is not used inline, "
-		+ "please specify location";
+	public final static String MSG_TARGET_LOCATION = "Target code block is not used inline, please specify location";
+	
+	public final static String MSG_MODEL_OBJ_MISSING = "MOG should include a model object";
+	public final static String MSG_DATA_OBJ_MISSING  = "MOG should include a data object";
+	public final static String MSG_PARAM_OBJ_MISSING = "MOG should include a parameter object";
+	public final static String MSG_TASK_OBJ_MISSING  = "MOG should include a task object";
+	public final static String MSG_OBJ_DEFINED       = "Cannot create a MOG";
 
 	//List of objects
 	Map<String, MdlDataType> declaredObjects = new HashMap<String, MdlDataType>();	
 	//List of declared variables per object
-	Map<String, List<String>> declaredVariables = new HashMap<String, List<String>>();
-	
+	Map<String, List<String>> declaredVariables = new HashMap<String, List<String>>();	
 	//List of declared variability subblocks diag and matrix (to match with same blocks)
 	Map<String, List<String>> variabilitySubblockNames = new HashMap<String, List<String>>();
 
@@ -179,12 +184,12 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    		}
 	    	}
 			//DataObject -> SOURCE -> symbol (to check the reference to the data file)
-	    	if (obj instanceof SourceBlockImpl){
+	    	/*if (obj instanceof SourceBlockImpl){
 	    		SourceBlock s = (SourceBlock) obj;
 	    		if (s.getSymbolName().getName().equals(ref.getParent().getName())) 
 		    		if (s.getList() != null)
 						for (Argument x: s.getList().getArguments().getArguments()) args.add(x);
-			}
+			}*/
 	    }
 	    if ((args.size() > 0) && !AttributeValidator.checkAttributes(ref, args))
 			warning(MSG_UNRESOLVED_ATTRIBUTE_REF, 
@@ -232,5 +237,49 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    	}
 	    }
 	    return false;
+	}
+	
+	//Validate MOG!
+	@Check
+	public void validateMOG(MclObject mcl){
+		if (mcl.getMogObject() != null){
+			MOGObject mog = mcl.getMogObject();	
+			Integer [] params = {0, 0, 0, 0};
+			for (ObjectName obj: mog.getObjects()){
+				if (declaredObjects.containsKey(obj.getName())){
+					if (declaredObjects.get(obj.getName()) == MdlDataType.TYPE_OBJ_REF_MODEL)
+						params[0] += 1;
+					if (declaredObjects.get(obj.getName()) == MdlDataType.TYPE_OBJ_REF_PARAM)
+						params[1] += 1;
+					if (declaredObjects.get(obj.getName()) == MdlDataType.TYPE_OBJ_REF_DATA)
+						params[2] += 1;
+					if (declaredObjects.get(obj.getName()) == MdlDataType.TYPE_OBJ_REF_TASK)
+						params[3] += 1;
+				}
+			}
+			if (params[0] == 0)
+				warning(MSG_MODEL_OBJ_MISSING, 
+						MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
+						MSG_MODEL_OBJ_MISSING, mcl.getObjectName().getName());
+			if (params[1] == 0)
+				warning(MSG_PARAM_OBJ_MISSING, 
+						MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
+						MSG_PARAM_OBJ_MISSING, mcl.getObjectName().getName());
+			if (params[2] == 0)
+				warning(MSG_DATA_OBJ_MISSING, 
+						MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
+						MSG_DATA_OBJ_MISSING, mcl.getObjectName().getName());
+			if (params[3] == 0)
+				warning(MSG_TASK_OBJ_MISSING, 
+						MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
+						MSG_TASK_OBJ_MISSING, mcl.getObjectName().getName());
+			String [] names = {"model", "parameter", "data", "task"};
+			for (int i = 0; i < 4; i++){
+				if (params[i] > 1)
+					warning(MSG_OBJ_DEFINED + ": two or more " + names[i] + " objects selected!", 
+						MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
+						MSG_OBJ_DEFINED,  mcl.getObjectName().getName());
+			}
+		}
 	}
 }

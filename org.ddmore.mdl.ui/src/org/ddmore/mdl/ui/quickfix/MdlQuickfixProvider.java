@@ -47,7 +47,6 @@ import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.SymbolList;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.TargetLanguage;
 import org.ddmore.mdl.mdl.UnaryExpression;
@@ -57,13 +56,11 @@ import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
-import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.mdl.impl.MclImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.SymbolListImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
@@ -396,31 +393,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			attr.setDistribution(distribution);
 		}
 		else {
-			Primary primary = MdlFactory.eINSTANCE.createPrimary();
-			try{
-				Double.parseDouble(attrValue);
-				primary.setNumber(attrValue);
-			}
-			catch(NumberFormatException e){
-				if (attrValue.contains(" ") || attrValue.contains(", ") || attrValue.contains("; ")){
-					//a list of values 1 2 3 or 1, 2, 3 or 1; 2; 3
-					Vector vector = MdlFactory.eINSTANCE.createVector();
-					String[] tokens = attrValue.split("(;|,|\\s)");
-					for (int i = 0; i < tokens.length; i++){
-						try{
-							Primary value = createPrimary(tokens[i]);
-							vector.getValues().add(value);
-						} catch (Exception e1){
-							//skip??
-						}
-					}
-				} else {
-					SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
-					symbName.setName(attrValue);
-					primary.setSymbol(symbName);
-				}
-			}
-			attr.setValue(primary);
+			AnyExpression expr = createTypedExpression(attribute);
+			attr.setExpression(expr);
 		}
 		return attr;
 	}
@@ -474,11 +448,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 				if (container instanceof VariableListImpl){
 					VariableList variableList = (VariableList) container;
 					variableList.getIdentifiers().remove(ref);
-					return;
-				}
-				if (container instanceof SymbolListImpl){
-					SymbolList symbolList = (SymbolList) container;
-					symbolList.getSymbols().remove(ref);
 					return;
 				}
 			}

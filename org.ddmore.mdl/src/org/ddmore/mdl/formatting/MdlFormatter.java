@@ -94,9 +94,6 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		c.setIndentationDecrement().after(f.getConditionalStatementAccess().getElseStatementAssignment_5_1_0());
 		
 		c.setLinewrap(1).before(f.getModelPredictionBlockStatementRule());
-		c.setLinewrap(1).before(f.getIgnoreListRule());
-		c.setLinewrap(1).before(f.getAcceptListRule());
-		c.setLinewrap(1).before(f.getDropListRule());
 		
 		c.setLinewrap(1).before(f.getStructuralParametersBlockAccess().getParametersAssignment_2());
 		c.setLinewrap(1).before(f.getVariabilityParametersBlockAccess().getParametersAssignment_2());
@@ -104,8 +101,6 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		
 		c.setLinewrap(1).before(f.getGroupVariablesBlockStatementRule());
 		c.setLinewrap(1).before(f.getVariabilityBlockStatementRule());
-		c.setLinewrap(1).before(f.getDataBlockStatementRule());
-		c.setLinewrap(1).before(f.getModelBlockStatementRule());
 		c.setLinewrap(1).before(f.getFunctionCallStatementRule());
 		c.setLinewrap(1).before(f.getLibraryBlockRule());
 		c.setLinewrap(1).before(f.getOdeBlockRule());

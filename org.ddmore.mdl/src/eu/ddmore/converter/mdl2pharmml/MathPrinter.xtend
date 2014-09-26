@@ -31,7 +31,6 @@ import org.ddmore.mdl.mdl.FunctionName
 import org.ddmore.mdl.mdl.Constant
 import org.ddmore.mdl.types.RandomEffectType
 import org.ddmore.mdl.mdl.Symbols
-import org.ddmore.mdl.mdl.TaskFunctionBlock
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.converter.mdl2pharmml.domain.Piece
 import org.ddmore.mdl.mdl.BlockStatement
@@ -39,6 +38,7 @@ import java.util.HashMap
 import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.types.UseType
 import org.ddmore.mdl.validation.FunctionValidator
+import org.ddmore.mdl.mdl.TaskObjectBlock
 
 class MathPrinter extends MdlPrinter{
 
@@ -776,36 +776,48 @@ class MathPrinter extends MdlPrinter{
 		return MATRIX_COV;	
 	}	
 	
-	protected def getProperty(TaskFunctionBlock t, String name){
+	protected def getProperty(TaskObjectBlock t, String name){
 		if (t.estimateBlock != null){
 			for (s: t.estimateBlock.statements){
-				if (s.symbol != null){
-					if (s.symbol.symbolName != null && s.symbol.symbolName.name.equals(name)){
-						if (s.symbol.expression != null){
-							return s.symbol.expression.toStr;
-						}
+				if (s.symbolName != null && s.symbolName.name.equals(name)){
+					if (s.expression != null){
+						return s.expression.toStr;
 					}
 				}
 			}
 		}
 		if (t.simulateBlock != null){
 			for (s: t.simulateBlock.statements){
-				if (s.symbol != null){
-					if (s.symbol.symbolName != null && s.symbol.symbolName.name.equals(name)){
-						if (s.symbol.expression != null){
-							return s.symbol.expression.toStr;
-						}
+				if (s.symbolName != null && s.symbolName.name.equals(name)){
+					if (s.expression != null){
+						return s.expression.toStr;
 					}
 				}
 			}
 		}
 		if (t.executeBlock != null){
 			for (s: t.executeBlock.statements){
-				if (s.symbol != null){
-					if (s.symbol.symbolName != null && s.symbol.symbolName.name.equals(name)){
-						if (s.symbol.expression != null){
-							return s.symbol.expression.toStr;
-						}
+				if (s.symbolName != null && s.symbolName.name.equals(name)){
+					if (s.expression != null){
+						return s.expression.toStr;
+					}
+				}
+			}
+		}
+		if (t.dataBlock != null){
+			for (s: t.dataBlock.statements){
+				if (s.symbolName != null && s.symbolName.name.equals(name)){
+					if (s.expression != null){
+						return s.expression.toStr;
+					}
+				}
+			}
+		}
+		if (t.modelBlock != null){
+			for (s: t.modelBlock.statements){
+				if (s.symbolName != null && s.symbolName.name.equals(name)){
+					if (s.expression != null){
+						return s.expression.toStr;
 					}
 				}
 			}

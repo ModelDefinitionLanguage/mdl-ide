@@ -35,18 +35,20 @@ public enum MdlDataType {
     TYPE_STRING, TYPE_INT, TYPE_REAL, TYPE_BOOLEAN,
     //Restrictions of basic (to comply with PharmML)
     TYPE_NAT, TYPE_PNAT, TYPE_PREAL, TYPE_PROBABILITY,
-    //References to variables and objects, mathematical expressions
-	TYPE_REF, TYPE_OBJ_REF, TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_EXPR, 
+    //References to variables and mathematical expressions
+	TYPE_REF, TYPE_EXPR, 
+	//Refernces to objects
+	TYPE_OBJ_REF, TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_OBJ_REF_TASK,
 	//Nested lists
 	TYPE_LIST, TYPE_RANDOM_LIST, 
     
 	/*Vectors*/
     //Numeric vectors
-    TYPE_VECTOR_STRING, TYPE_VECTOR_INT, TYPE_VECTOR_REAL, TYPE_VECTOR_BOOLEAN, 
+    TYPE_VECTOR_STRING, TYPE_VECTOR_INT, TYPE_VECTOR_REAL, //TYPE_VECTOR_BOOLEAN, 
     //Restricted vectors
-    TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL,TYPE_VECTOR_PROBABILITY,
+    TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL, TYPE_VECTOR_PROBABILITY,
     //Reference vectors
-    TYPE_VECTOR_REF,
+    TYPE_VECTOR_REF, TYPE_VECTOR_EXPR,
 	
     /*Enumerations*/
 	TYPE_USE,           //see 'UseType' in MDL grammar
@@ -63,39 +65,12 @@ public enum MdlDataType {
 	
 	//Validates required type or reference
 	static public boolean validateType(MdlDataType type, DistributionArgument arg){
-		if (arg.getValue() != null){
-			Primary p = arg.getValue();
-			switch(type){
-				case TYPE_UNDEFINED: return true;
-				//Basic
-				case TYPE_INT:  return (p.getNumber() != null)? isInteger(p.getNumber()): (p.getSymbol() != null);   
-				case TYPE_REAL: return (p.getNumber() != null)? isReal(p.getNumber()): (p.getSymbol() != null);     
-				//Restrictions
-				case TYPE_NAT:   return (p.getNumber() != null)? isNatural(p.getNumber()): (p.getSymbol() != null);  
-				case TYPE_PNAT:  return (p.getNumber() != null)? isPositiveNatural(p.getNumber()): (p.getSymbol() != null);  
-				case TYPE_PREAL: return (p.getNumber() != null)? isPositiveReal(p.getNumber()): (p.getSymbol() != null); 
-				case TYPE_PROBABILITY:  return (p.getNumber() != null)? isProbability(p.getNumber()): (p.getSymbol() != null);
-				//References
-				case TYPE_REF: return (p.getSymbol() != null)? true: false;  
-				//Vectors
-				case TYPE_VECTOR_INT: return (p.getVector() != null)? isVectorInteger(p.getVector()): false;
-				case TYPE_VECTOR_REAL: return (p.getVector() != null)? isVectorReal(p.getVector()): false;
-				//Vectors of restrictions
-				case TYPE_VECTOR_NAT: return (p.getVector() != null)? isVectorNat(p.getVector()): false;
-				case TYPE_VECTOR_PNAT: return (p.getVector() != null)? isVectorPNat(p.getVector()): false;
-				case TYPE_VECTOR_PREAL: return (p.getVector() != null)? isVectorPReal(p.getVector()): false;
-				case TYPE_VECTOR_PROBABILITY: return (p.getVector() != null)? isVectorProbability(p.getVector()): false;
-				//Vectors of references
-				case TYPE_VECTOR_REF: return (p.getVector() != null)? isVectorReference(p.getVector()): false;  
-				default:	return false; 
-			}
-		}
-		if (arg.getDistribution() != null){
+		if (arg.getExpression() != null)
+			return validateType(type, arg.getExpression());
+		if (arg.getDistribution() != null)
 			if (type.equals(MdlDataType.TYPE_DISTRIBUTION)) return true;
-		}
-		if (arg.getComponent() != null){
+		if (arg.getComponent() != null)
 			if (type.equals(MdlDataType.TYPE_RANDOM_LIST)) return true;
-		}
 		return false;
 	}
 	
@@ -117,20 +92,25 @@ public enum MdlDataType {
 			case TYPE_EXPR: return (expr.getExpression() != null)? true: false;  
 			//References to objects
 			case TYPE_OBJ_REF: return (expr.getExpression() != null)? isObjectReference(expr.getExpression()): false;
-			case TYPE_OBJ_REF_MODEL: return (expr.getExpression() != null)? isModelObjectReference(expr.getExpression()): false;
-			case TYPE_OBJ_REF_DATA: return (expr.getExpression() != null)? isDataObjectReference(expr.getExpression()): false;
-			case TYPE_OBJ_REF_PARAM: return (expr.getExpression() != null)? isParameterObjectReference(expr.getExpression()): false;
+			case TYPE_OBJ_REF_MODEL: return (expr.getExpression() != null)? validObjectTypeReference(expr.getExpression(), TYPE_OBJ_REF_MODEL): false;
+			case TYPE_OBJ_REF_DATA: return (expr.getExpression() != null)? validObjectTypeReference(expr.getExpression(), TYPE_OBJ_REF_DATA): false;
+			case TYPE_OBJ_REF_PARAM: return (expr.getExpression() != null)? validObjectTypeReference(expr.getExpression(), TYPE_OBJ_REF_PARAM): false;
+			case TYPE_OBJ_REF_TASK: return (expr.getExpression() != null)? validObjectTypeReference(expr.getExpression(), TYPE_OBJ_REF_TASK): false;
 			//Nested lists
 			case TYPE_LIST: return (expr.getList() != null)? true: false;  
 			//Vectors
 			case TYPE_VECTOR_INT: return (expr.getVector() != null)? isVectorInteger(expr.getVector()): false;
 			case TYPE_VECTOR_REAL: return (expr.getVector() != null)? isVectorReal(expr.getVector()): false;
+			case TYPE_VECTOR_STRING: return (expr.getVector() != null)? isVectorString(expr.getVector()): false;  
+			//Vectors of references
+			case TYPE_VECTOR_REF: return (expr.getVector() != null)? isVectorReference(expr.getVector()): false;  
+			case TYPE_VECTOR_EXPR: return (expr.getVector() != null);
 			//Vectors of restrictions
 			case TYPE_VECTOR_NAT: return (expr.getVector() != null)? isVectorNat(expr.getVector()): false;
 			case TYPE_VECTOR_PNAT: return (expr.getVector() != null)? isVectorPNat(expr.getVector()): false;
 			case TYPE_VECTOR_PREAL: return (expr.getVector() != null)? isVectorPReal(expr.getVector()): false;
 			case TYPE_VECTOR_PROBABILITY: return (expr.getVector() != null)? isVectorProbability(expr.getVector()): false;
-			
+
 			//Enumerations
 			case TYPE_USE: return (expr.getType() != null)? isUseType(expr.getType()): false;
 			case TYPE_VAR_TYPE: return (expr.getType() != null)? isVarType(expr.getType()): false;
@@ -261,7 +241,19 @@ public enum MdlDataType {
 		}
 		return true;	
 	}
-	
+
+	private static boolean isVectorString(Vector v){
+		for (Primary p: v.getValues()){
+			if (p.getVector() != null) {
+				boolean ok = isVectorString(p.getVector());
+				if (!ok) return false;
+			} else {
+				if (p.getString() == null) return false;
+			}
+		}
+		return true;	
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////
 	//Validate enumerations
 	//////////////////////////////////////////////////////////////////////////////////
@@ -317,37 +309,13 @@ public enum MdlDataType {
 		return false;
 	}
 	
-	private static boolean isModelObjectReference(Expression expr) {
+	private static boolean validObjectTypeReference(Expression expr, MdlDataType type) {
 		if (expr.getConditionalExpression().getExpression1() == null){
 			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
 			if (s!= null) {
 				Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
 				if (mcl != null)
-					return (Utils.getDeclaredObjects(mcl).get(s.getName()) == MdlDataType.TYPE_OBJ_REF_MODEL);
-			}
-		}
-		return false;
-	}
-
-	private static boolean isDataObjectReference(Expression expr) {
-		if (expr.getConditionalExpression().getExpression1() == null){
-			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
-			if (s!= null) {
-				Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
-				if (mcl != null)
-					return (Utils.getDeclaredObjects(mcl).get(s.getName()) == MdlDataType.TYPE_OBJ_REF_DATA);
-			}
-		}
-		return false;
-	}
-
-	private static boolean isParameterObjectReference(Expression expr) {
-		if (expr.getConditionalExpression().getExpression1() == null){
-			SymbolName s = getReference(expr.getConditionalExpression().getExpression());
-			if (s!= null) {
-				Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
-				if (mcl != null)
-					return (Utils.getDeclaredObjects(mcl).get(s.getName()) == MdlDataType.TYPE_OBJ_REF_PARAM);
+					return (Utils.getDeclaredObjects(mcl).get(s.getName()) == type);
 			}
 		}
 		return false;
@@ -405,6 +373,13 @@ public enum MdlDataType {
 			LogicalExpression logicExpr = andExpr.getExpression().get(0);
 			if (logicExpr.getBoolean() != null) return true;
 			if ((logicExpr.getExpression1() != null) && (logicExpr.getExpression2() != null)) return true;
+			if (logicExpr.getExpression1().getExpression().size() == 1){
+				if (logicExpr.getExpression1().getExpression().get(0).getExpression().size() == 1){
+					PowerExpression p = logicExpr.getExpression1().getExpression().get(0).getExpression().get(0);
+					if (p.getExpression().get(0).getParExpression() != null)
+						return isBoolean(p.getExpression().get(0).getParExpression().getExpression());
+				}
+			}
 		}
 		return false;
 	}

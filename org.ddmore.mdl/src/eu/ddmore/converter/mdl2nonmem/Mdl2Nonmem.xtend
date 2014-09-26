@@ -17,7 +17,6 @@ import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.EstimateTask
-import org.ddmore.mdl.mdl.ExecuteTask
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
 import org.ddmore.mdl.mdl.FunctionCall
@@ -43,12 +42,12 @@ import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.FunctionValidator
 import org.eclipse.emf.ecore.EObject
 import org.ddmore.mdl.validation.DistributionValidator
+import org.ddmore.mdl.validation.PropertyValidator
 
 class Mdl2Nonmem extends MdlPrinter {
     private static val Logger logger = Logger::getLogger("Mdl2Nonmem");
 	
 	protected var Mcl mcl = null;
-	protected val var_model_tolrel = "tolrel"; 
 	protected val var_random_base = "TMPR";
 	
     private static val Mdl2Nonmem mdlPrinter = new Mdl2Nonmem();
@@ -902,11 +901,19 @@ class Mdl2Nonmem extends MdlPrinter {
         for (TaskObject tObj :t) {
             for (b: tObj.blocks) {
                 if (b.dataBlock !=  null) {
-                    for (block: b.dataBlock.statements) {
-                        if (block.dropList != null) {
-                            for (symbol: block.dropList.list.symbols) {
-                                if (id.equals(symbol.name))
-                                    return true;
+                    for (s: b.dataBlock.statements) {
+                        if (s.symbolName != null) {
+                            if (s.symbolName.equals(PropertyValidator::attr_data_drop.name)){
+	                            if (s.expression != null){
+	                            	if (s.expression.vector != null){
+	                            		for (value : s.expression.vector.values) {
+	                            			if (value.symbol != null){
+	                            				if (id.equals(value.symbol.name))
+			                                    	return true;
+	                            			}
+	                            		}
+	                            	}
+	                            }
                             }
                         }
                     }
@@ -952,9 +959,6 @@ class Mdl2Nonmem extends MdlPrinter {
 		«IF b.simulateBlock != null»
 			«b.simulateBlock.print»
 		«ENDIF»
-		«IF b.executeBlock != null»
-			«b.executeBlock.print»
-		«ENDIF»
 	«ENDFOR»
 	'''
 	
@@ -962,9 +966,13 @@ class Mdl2Nonmem extends MdlPrinter {
 	def printIGNORE(TaskObject o)'''
 	«FOR b: o.blocks»
 		«IF b.dataBlock !=  null»
-			«FOR block: b.dataBlock.statements»
-				«IF block.ignoreList != null»
-					«block.ignoreList.identifier» («block.ignoreList.expression.toCommaSeparatedStr»)
+			«FOR st: b.dataBlock.statements»
+				«IF st.symbolName != null && st.expression != null»
+					«IF st.symbolName.name.equals(PropertyValidator::attr_data_ignore.name)»
+						«IF st.expression.expression != null»
+							IGNORE («st.expression.expression.conditionalExpression.expression.toCommaSeparatedStr»)
+						«ENDIF»
+					«ENDIF»	
 				«ENDIF»
 			«ENDFOR»
 		«ENDIF»
@@ -973,61 +981,33 @@ class Mdl2Nonmem extends MdlPrinter {
 	
 	//Processing SIMULATE block for $SIM 
 	def print(SimulateTask b)'''
-		«var isInlineTargetDefined = b.isInlineTargetDefined»
-		«IF !isInlineTargetDefined && !"$SIM".isTargetDefined»
+		«IF !"$SIM".isTargetDefined»
 
 		$SIM 
 			«FOR s: b.statements»
-				«IF s.symbol != null»«s.symbol.printDefaultSimulate»«ENDIF»
+				«s.printDefaultSimulate»
 			«ENDFOR»
 		«ELSE»
 			«getExternalCodeStart("$SIM")»
-			«FOR s: b.statements»
-				«IF s.targetBlock != null && s.targetBlock.isInline»
-					«s.targetBlock.toStr»
-				«ENDIF»
-			«ENDFOR»
 			«getExternalCodeEnd("$SIM")»
 		«ENDIF» 
 	'''
 	
 	//Processing ESTIMATE block for $EST
 	def print(EstimateTask b)'''
-		«var isInlineTargetDefined = b.isInlineTargetDefined»
-		«IF !isInlineTargetDefined && !"$EST".isTargetDefined»
+		«IF !"$EST".isTargetDefined»
 
 		$EST 
 			«FOR s: b.statements»
-				«IF s.symbol != null»«s.symbol.printDefaultEstimate»«ENDIF»
+				«IF s != null»«s.printDefaultEstimate»«ENDIF»
 			«ENDFOR»
 			NOABORT 
 			«b.printCovariance»
 		«ELSE»
 			«getExternalCodeStart("$EST")»
-			«FOR s: b.statements»
-				«IF s.targetBlock != null && s.targetBlock.isInline»
-					«s.targetBlock.toStr»
-				«ENDIF»
-			«ENDFOR»
 			«getExternalCodeEnd("$EST")»
 		«ENDIF»
 	'''
-	
-	//Check whether there is a target block in a list of block statements			
-    def isInlineTargetDefined(EstimateTask task){
-		for (s: task.statements)
-			if (s.targetBlock != null)
-				if (s.targetBlock.isInline) return true;
-		return false;
-	}
-	
-	//Check whether there is a target block in a list of block statements			
-    def isInlineTargetDefined(SimulateTask task){
-		for (s: task.statements)
-			if (s.targetBlock != null)
-				if (s.targetBlock.isInline) return true;
-		return false;
-	}
 	
 	def isInline(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
@@ -1053,7 +1033,7 @@ class Mdl2Nonmem extends MdlPrinter {
 	//Print attributes for default $EST record
 	def printDefaultEstimate(SymbolDeclaration s) { 
 		if (s.symbolName != null){
-			if (s.symbolName.name.equals(FunctionValidator::attr_task_algo.name)){
+			if (s.symbolName.name.equals(PropertyValidator::attr_task_algo.name)){
 				var value = "";
 				if (s.expression.expression != null)
 					value = s.expression.expression.toStr
@@ -1072,10 +1052,10 @@ class Mdl2Nonmem extends MdlPrinter {
 				}
 			}
 			else
-				if (s.symbolName.name.equals(FunctionValidator::attr_task_max.name))
+				if (s.symbolName.name.equals(PropertyValidator::attr_task_max.name))
 				    ''' MAX=«s.expression.print»'''
 			else
-				if (s.symbolName.name.equals(FunctionValidator::attr_task_sig.name))
+				if (s.symbolName.name.equals(PropertyValidator::attr_task_sig.name))
 				    ''' SIG=«s.expression.print»'''
 		}
 	}
@@ -1098,9 +1078,9 @@ class Mdl2Nonmem extends MdlPrinter {
 	def printCovariance(EstimateTask b){
 		var covariance = "";
 		for (st: b.statements) {
-			if (st.symbol != null && st.symbol.symbolName != null && 
-				st.symbol.symbolName.name.equals(FunctionValidator::attr_task_cov.name))
-					if (st.symbol.expression != null) covariance = st.symbol.expression.toStr;
+			if (st.symbolName != null && 
+				st.symbolName.name.equals(PropertyValidator::attr_task_cov.name))
+					if (st.expression != null) covariance = st.expression.toStr;
 		}
 		'''
 		«IF covariance.length > 0»
@@ -1113,13 +1093,6 @@ class Mdl2Nonmem extends MdlPrinter {
 		'''	
 	}
 	
-	def print(ExecuteTask b)'''
-	
-	«FOR s: b.statements»
-		«IF s.targetBlock != null»«s.targetBlock.print»«ENDIF»
-	«ENDFOR»
-	'''
-		
 	//Get task object name 
 	def getTaskObjectName(){
 		for (obj: mcl.objects){
@@ -1145,11 +1118,10 @@ class Mdl2Nonmem extends MdlPrinter {
 		for (TaskObjectBlock b: obj.blocks){
 			if (b.modelBlock != null){
 				for (ss: b.modelBlock.statements){
-					var x = ss.statement.symbol;
-					if (x != null && x.symbolName != null){
-						if (x.symbolName.name.equalsIgnoreCase(var_model_tolrel)){
-							if (x.expression != null)
-								return x.expression.toStr;
+					if (ss.symbolName != null){
+						if (ss.symbolName.name.equalsIgnoreCase(PropertyValidator::attr_model_tolrel.name)){
+							if (ss.expression != null)
+								return ss.expression.toStr;
 						}
 					}
 				}

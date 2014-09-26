@@ -445,6 +445,9 @@ public class Utils {
 			if (obj.getParameterObject() != null){
 				objType = MdlDataType.TYPE_OBJ_REF_PARAM;
 			}
+			if (obj.getTaskObject() != null){
+				objType = MdlDataType.TYPE_OBJ_REF_TASK;
+			}
 			declaredObjects.put(obj.getObjectName().getName(), objType);
 		}
 		return declaredObjects;

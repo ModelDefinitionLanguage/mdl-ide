@@ -14,6 +14,8 @@ import org.ddmore.mdl.validation.DistributionValidator
 import org.ddmore.mdl.types.DistributionType
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.converter.mdl2pharmml.domain.Attribute
+import org.ddmore.mdl.types.MdlDataType
+import org.ddmore.mdl.mdl.AnyExpression
 
 class DistributionPrinter extends MdlPrinter{
 
@@ -236,11 +238,11 @@ class DistributionPrinter extends MdlPrinter{
 								<«attrName»>
 							«ENDIF»
 								«IF arg.argumentName.name.equals(DistributionValidator::attr_categories.name)»
-									«IF arg.value.vector != null»
-										<«dataType»>«arg.value.vector.values.size»</«dataType»>
+									«IF arg.expression.vector != null»
+										<«dataType»>«arg.expression.vector.values.size»</«dataType»>
 									«ENDIF»
 								«ELSE»	
-									«arg.value.toPharmML(dataType)»
+									«arg.expression.toPharmML(dataType)»
 								«ENDIF»	
 							</«attrName»>
 							«ENDIF»
@@ -265,9 +267,9 @@ class DistributionPrinter extends MdlPrinter{
 			}
 		}
 		//compute from data 
-		if (matrixAttr.value != null){
-			if (matrixAttr.value.vector != null){
-				val matrix = matrixAttr.value.vector;
+		if (matrixAttr.expression != null){
+			if (matrixAttr.expression.vector != null){
+				val matrix = matrixAttr.expression.vector;
 				return matrix.values.size();
 			}
 		}
@@ -282,6 +284,24 @@ class DistributionPrinter extends MdlPrinter{
 		} 
 		catch(Exception e){//just in case regEx fails...
 			return definition + type.toLowerCase();
+		}
+	}
+	
+	
+	//TODO create temporal variables for complex expressions!!!
+	def String toPharmML(AnyExpression expr, String type){
+		if (MdlDataType::validateType(MdlDataType::TYPE_REAL, expr)){
+			return '''<«type»>«expr.toStr»</«type»>''';
+		}
+		if (MdlDataType::validateType(MdlDataType::TYPE_REF, expr)){
+			return '''<var varId="«expr.toStr»"/>'''; 
+		}
+		if (expr.vector != null) {
+			var res = "";
+			for (Primary pp: expr.vector.values){
+				 res = res + pp.toPharmML(type);
+			}
+			return '''«res»'''
 		}
 	}
 	

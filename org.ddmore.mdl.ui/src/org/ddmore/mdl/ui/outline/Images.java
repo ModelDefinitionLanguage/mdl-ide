@@ -13,7 +13,7 @@ public class Images {
 	public static final String PARAMETER_OBJ ="153-parameter.png";
 	public static final String TASK_OBJ ="152-task.png";
 	public static final String DATA_OBJ ="157-data.png";
-	public static final String TEL_OBJ ="160-tel.png";
+	public static final String MOG_OBJ ="160-tel.png";
 
 	public static final String ATTRIBUTE ="012-attribute.png";
 	public static final String DISTRIBUTION_ATTRIBUTE = "011-distribution-attribute.png";

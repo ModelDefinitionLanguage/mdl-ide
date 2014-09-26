@@ -14,19 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.ddmore.mdl.mdl.Argument;
-import org.ddmore.mdl.mdl.BlockStatement;
-import org.ddmore.mdl.mdl.EstimateTask;
-import org.ddmore.mdl.mdl.ExecuteTask;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.MdlPackage;
-import org.ddmore.mdl.mdl.SimulateTask;
-import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.impl.BlockStatementImpl;
-import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
-import org.ddmore.mdl.mdl.impl.ExecuteTaskImpl;
-import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.types.MdlDataType;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.EValidatorRegistrar;
@@ -48,15 +38,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_FUNCTION_PARAMETER_DEFINED = "A parameter with such name is already defined";
 	public final static String MSG_FUNCTION_PARAMETER_UNKNOWN = "Unknown function parameter";
 	public final static String MSG_FUNCTION_PARAMETER_MISSING = "Required parameter is not set";
-
-	public final static String MSG_FUNCTION_PROPERTY_UNKNOWN = "Unknown property";
-	public final static String MSG_FUNCTION_PROPERTY_MISSING = "Required property is not set";
-	public final static String MSG_FUNCTION_PROPERTY_DEFINED = "Property defined more than once";
-
-	public final static String MSG_FUNCTION_CALL_MODEL_OBJ_MISSING = "MOG should include a model object";
-	public final static String MSG_FUNCTION_CALL_DATA_OBJ_MISSING  = "MOG should include a data object";
-	public final static String MSG_FUNCTION_CALL_PARAM_OBJ_MISSING = "MOG should include a parameter object";
-	public final static String MSG_FUNCTION_CALL_OBJ_DEFINED     = "Cannot create a MOG";
 
 	final public static List<String> funct_standard1 = Arrays.asList(
 		"abs", "exp", "factorial", "factl", "gammaln", "ln", "log", "logistic", "logit", "normcdf",
@@ -123,27 +104,23 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 				Arrays.asList(
 					param_nmadvan_model, param_nmadvan_trans, param_nmadvan_ncmt, param_nmadvan_input, 
 					param_nmadvan_distribution, param_nmadvan_elimination, param_nmadvan_parameterization), 
-				MdlDataType.TYPE_LIST, 
-				true,
+				MdlDataType.TYPE_VECTOR_REF, true,
 				Arrays.asList(
 						new Variable("A", MdlDataType.TYPE_VECTOR_REAL), 
-						new Variable("F", MdlDataType.TYPE_REAL)
-					)
+						new Variable("F", MdlDataType.TYPE_REAL))
 				)
 			);
 			
 			//PK
 			put(lib_PK, new FunctionSignature(lib_PK, Arrays.asList(
-					param_PK_ndist, param_PK_depot), 
-					MdlDataType.TYPE_LIST, true, 
-					Arrays.asList(
-							new Variable("V", MdlDataType.TYPE_UNDEFINED), 
-							new Variable("KL", MdlDataType.TYPE_UNDEFINED),
-							new Variable("KA", MdlDataType.TYPE_UNDEFINED)
-							)
-					)
-			);
-					
+				param_PK_ndist, param_PK_depot), 
+				MdlDataType.TYPE_VECTOR_REF, true, 
+				Arrays.asList(
+						new Variable("V", MdlDataType.TYPE_UNDEFINED), 
+						new Variable("KL", MdlDataType.TYPE_UNDEFINED),
+						new Variable("KA", MdlDataType.TYPE_UNDEFINED))
+				)
+			);					
 		}
 	};
 	
@@ -157,24 +134,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		}
 	};
 	
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	//Task object
-	
-	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_LIST, false);
-	final public static Attribute attr_task_max = new Attribute("max", MdlDataType.TYPE_NAT, false);
-	final public static Attribute attr_task_sig = new Attribute("sig", MdlDataType.TYPE_NAT, false);
-	final public static Attribute attr_task_cov = new Attribute("cov", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_task_simopt = new Attribute("simopt", MdlDataType.TYPE_LIST, false);
-		
-	final public static List<Attribute> attrs_task = Arrays.asList(
-			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt);
-	
-	final public static Attribute attr_task_command = new Attribute("command", MdlDataType.TYPE_STRING, true);
-	final public static List<Attribute> attrs_exec_task = Arrays.asList(attr_task_command);
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	//Check that the function call is to an existing function
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
@@ -264,175 +224,4 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			}
 		}
 	}
-	
-	//TODO validate MOG!
-	public void validateMOG(FunctionCall call){
-		/*if (Utils.isFunctionDeclared(declaredFunctions, call.getIdentifier())){
-			byte params[] = new byte[ 4];
-			for (int i = 0; i < 4; i++) params[i] = 0;
-			for (Argument arg: call.getArguments().getArguments()){
-				if (MdlDataType.validateType(MdlDataType.TYPE_TARGET, arg.getExpression()))
-					params[0] += 1;
-				if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_MODEL, arg.getExpression()))
-					params[1] += 1;
-				if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_PARAM, arg.getExpression()))
-					params[2] += 1;
-				if (MdlDataType.validateType(MdlDataType.TYPE_OBJ_REF_DATA, arg.getExpression()))
-					params[3] += 1;
-			}
-			String[] names = {"model", "parameter", "data"};
-			if (params[0] == 0)
-				warning(MSG_FUNCTION_CALL_TARGET_MISSING, 
-						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_CALL_TARGET_MISSING, call.getIdentifier().getName());
-			if (params[1] == 0)
-				warning(MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, 
-						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_CALL_MODEL_OBJ_MISSING, call.getIdentifier().getName());
-			if (params[2] == 0)
-				warning(MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, 
-						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_CALL_PARAM_OBJ_MISSING, call.getIdentifier().getName());
-			if (params[3] == 0)
-				warning(MSG_FUNCTION_CALL_DATA_OBJ_MISSING, 
-						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_CALL_DATA_OBJ_MISSING, call.getIdentifier().getName());
-			for (int i = 1; i < 4; i++){
-				if (params[i] > 1)
-					warning(MSG_FUNCTION_CALL_OBJ_DEFINED + ": two or more " + names[i-1] + " objects selected!", 
-						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-						MSG_FUNCTION_CALL_OBJ_DEFINED, call.getIdentifier().getName());
-			}
-		}*/
-	}
-	
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	@Check
-	public void checkRequiredProperties(EstimateTask t){
-		HashSet<String> properties = new HashSet<String>();
-		for (BlockStatement b: t.getStatements()){
-			if (b.getSymbol() != null){
-				if (!properties.contains(b.getSymbol().getSymbolName().getName())){
-					properties.add(b.getSymbol().getSymbolName().getName());
-				} else {
-					warning(MSG_FUNCTION_PROPERTY_DEFINED + ": " + b.getSymbol().getSymbolName().getName(), 
-							MdlPackage.Literals.ESTIMATE_TASK__IDENTIFIER,
-							MSG_FUNCTION_PROPERTY_DEFINED, b.getSymbol().getSymbolName().getName());
-				}
-			}
-		}	
-		for (String attrName: getRequiredAttributeNames(t)){
-			if (!properties.contains(attrName)) 
-				warning(MSG_FUNCTION_PROPERTY_MISSING + ": " + attrName, 
-				MdlPackage.Literals.ESTIMATE_TASK__IDENTIFIER, MSG_FUNCTION_PROPERTY_MISSING, attrName);
-		}
-	}
-
-	@Check
-	public void checkRequiredProperties(SimulateTask t){
-		HashSet<String> properties = new HashSet<String>();
-		for (BlockStatement b: t.getStatements()){
-			if (b.getSymbol() != null){
-				if (!properties.contains(b.getSymbol().getSymbolName().getName())){
-					properties.add(b.getSymbol().getSymbolName().getName());
-					//TODO Check type
-				}
-				else {
-					warning(MSG_FUNCTION_PROPERTY_DEFINED + ": " + b.getSymbol().getSymbolName().getName(), 
-							MdlPackage.Literals.SIMULATE_TASK__IDENTIFIER,
-							MSG_FUNCTION_PROPERTY_DEFINED, b.getSymbol().getSymbolName().getName());	
-				}
-			}
-		}
-		for (String attrName: getRequiredAttributeNames(t)){
-			if (!properties.contains(attrName)) 
-				warning(MSG_FUNCTION_PROPERTY_MISSING + ": " + attrName, 
-				MdlPackage.Literals.SIMULATE_TASK__IDENTIFIER, MSG_FUNCTION_PROPERTY_MISSING, attrName);
-		}
-	}
-
-	@Check
-	public void checkRequiredProperties(ExecuteTask t){
-		HashSet<String> properties = new HashSet<String>();
-		for (BlockStatement b: t.getStatements()){
-			if (b.getSymbol() != null){
-				if (!properties.contains(b.getSymbol().getSymbolName().getName())){
-					properties.add(b.getSymbol().getSymbolName().getName());
-				}
-				else {
-					warning(MSG_FUNCTION_PROPERTY_DEFINED + ": " + b.getSymbol().getSymbolName().getName(), 
-							MdlPackage.Literals.EXECUTE_TASK__IDENTIFIER,
-							MSG_FUNCTION_PROPERTY_DEFINED, b.getSymbol().getSymbolName().getName());	
-				}
-			}
-		}	
-		for (String attrName: getRequiredAttributeNames(t)){
-			if (!properties.contains(attrName)) 
-				warning(MSG_FUNCTION_PROPERTY_MISSING + ": " + attrName, 
-				MdlPackage.Literals.EXECUTE_TASK__IDENTIFIER, MSG_FUNCTION_PROPERTY_MISSING, attrName);
-		}
-	}
-	
-	@Check
-	public void checkAllProperties(SymbolDeclaration s){
-		EObject container = s.eContainer();
-		while (container instanceof BlockStatementImpl)
-			container = container.eContainer();
-		if (container instanceof EstimateTaskImpl ||
-			container instanceof SimulateTaskImpl ||
-			container instanceof ExecuteTaskImpl){
-			//check that an argument is recognized
-			List<Attribute> knownAttributes = getAllAttributes(container);
-			if (knownAttributes != null){
-				List<String> attributeNames = Utils.getAllNames(knownAttributes);
-				if (!attributeNames.contains(s.getSymbolName().getName())){
-					warning(MSG_FUNCTION_PROPERTY_UNKNOWN + ": " + s.getSymbolName().getName(), 
-					MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
-					MSG_FUNCTION_PROPERTY_UNKNOWN, s.getSymbolName().getName());		
-				}
-				for (Attribute x: knownAttributes){
-					if (x.getName().equals(s.getSymbolName().getName())){
-						boolean isValid = false;
-						if (s.getExpression() != null) 
-							isValid = MdlDataType.validateType(x.getType(), s.getExpression());
-						if (!isValid){
-							warning(MSG_FUNCTION_WRONG_TYPE + 
-								": property \"" + s.getSymbolName().getName() + "\" expects value of type " + x.getType().name(), 
-								MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
-								MSG_FUNCTION_WRONG_TYPE, s.getSymbolName().getName());		
-						}
-						break;
-					}
-				}
-			}
-			return;
-		}
-	}
-	
-	List<Attribute> getAllAttributes(EObject obj){
-		if (obj instanceof EstimateTaskImpl || obj instanceof SimulateTaskImpl)
-			return attrs_task;
-		if (obj instanceof ExecuteTaskImpl)
-			return attrs_exec_task;
-		return null;
-	}
-	
-	List<String> getRequiredAttributeNames(EObject obj){
-		if (obj instanceof EstimateTaskImpl || obj instanceof SimulateTaskImpl)
-			return Utils.getRequiredNames(attrs_task);
-		if (obj instanceof ExecuteTaskImpl)
-			return Utils.getRequiredNames(attrs_exec_task);
-		return null;
-	}	
-	
-	ArrayList<String> getParamNames(List<FunctionParameter> params){
-		ArrayList<String> names = new ArrayList<String>();
-		if (params != null){
-			for (FunctionParameter param: params){
-				names.add(param.getName());
-			}
-		}
-		return names;
-	}
-
 }

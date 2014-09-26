@@ -177,46 +177,27 @@ ParameterBlock:
 
 DataBlock:
 	identifier = 'DATA' 
-	BEGIN statements += DataBlockStatement* END
-;
-
-DataBlockStatement:
-	ignoreList = IgnoreList | acceptList = AcceptList | dropList = DropList
-;
-
-IgnoreList:
-	identifier = 'IGNORE' "=" 'if' '(' expression = OrExpression ')'
-;
-
-AcceptList:
-	identifier = 'ACCEPT' "=" 'if' '(' expression = AndExpression ')'
-; 
-
-DropList:
-	identifier = 'DROP' "=" list = SymbolList
-;
-
-AddList:
-	identifier = 'ADD' '=' list = SymbolList
-;
-
-RemoveList:
-	identifier = 'REMOVE' '=' list = SymbolList
+	BEGIN statements += SymbolDeclaration* END
 ;
 
 ModelBlock:
 	identifier = 'MODEL' 
-	BEGIN statements += ModelBlockStatement* END
+	BEGIN statements += SymbolDeclaration* END
 ;
 
-ModelBlockStatement:
-	statement = BlockStatement |
-	addList = AddList |
-	removeList = RemoveList
+EstimateTask: 
+	identifier = 'ESTIMATE' 
+	BEGIN statements += SymbolDeclaration* END 
 ;
 
-SymbolList: 
-	identifier = 'list' '(' symbols += SymbolName (=> ',' symbols += SymbolName)* ')'
+SimulateTask:
+	identifier = 'SIMULATE' 
+	BEGIN statements += SymbolDeclaration* END  
+;
+
+ExecuteTask:
+	identifier = "EXECUTE"
+	BEGIN statements += SymbolDeclaration* END  
 ;
 
 ModelPredictionBlockStatement: 
@@ -311,21 +292,6 @@ NumericList:
 
 VariableList:
 	identifiers += SymbolName (=> (',' | ';')? identifiers += SymbolName)* //Ref to VaraibleName +
-;
-	
-EstimateTask: 
-	identifier = 'ESTIMATE' 
-	BEGIN statements += BlockStatement* END 
-;
-
-SimulateTask:
-	identifier = 'SIMULATE' 
-	BEGIN statements += BlockStatement* END  
-;
-
-ExecuteTask:
-	identifier = "EXECUTE"
-	BEGIN statements += BlockStatement* END  
 ;
 
 //////////////////////////////////////////////////////////
@@ -491,7 +457,6 @@ Distribution:
 AnyExpression:
 	expression = Expression |
 	list = List | 
-//	odeList = OdeList |
 	vector = Vector |
 	type = EnumType 
 ;
@@ -500,17 +465,13 @@ AnyExpression:
 Primary:
 	number = NumericValue |
 	symbol = SymbolName | 
+	string = STRING |
 	vector = Vector 
 ;
 
 List:
-//	identifier = 'list' '(' arguments = Arguments ')'
 	identifier = BEGIN arguments = Arguments END
 ;
-
-//OdeList:
-//	 identifier = 'ode' '(' arguments = Arguments ')' 
-//;
 
 RandomList:
 	identifier = '~' '(' arguments = DistributionArguments ')'
@@ -521,7 +482,7 @@ DistributionArguments:
 ;
 
 DistributionArgument: 
-	(argumentName = ArgumentName "=")? (distribution = Distribution | value = Primary | component = RandomList)
+	(argumentName = ArgumentName "=")? (distribution = Distribution | expression = AnyExpression | component = RandomList)
 ; 
 
 Arguments: 
@@ -589,9 +550,8 @@ UnaryExpression:
 	functionCall = FunctionCall 
 ;
 
-
 Vector:
-	identifier = 'c' '(' values += Primary (=> ',' values += Primary)* ')'
+	'[' values += Primary (=> ',' values += Primary)* ']'
 ;	
 
 FullyQualifiedArgumentName:

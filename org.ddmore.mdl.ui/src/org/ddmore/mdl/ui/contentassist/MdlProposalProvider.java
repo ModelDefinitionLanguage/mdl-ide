@@ -168,7 +168,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 	}
 
 	@Override
-	public void completeDistributionArgument_Value(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void completeDistributionArgument_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 	}
 
 	@Override

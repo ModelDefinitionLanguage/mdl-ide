@@ -12,7 +12,6 @@ import org.ddmore.mdl.mdl.Block
 import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.List
 import org.ddmore.mdl.mdl.RandomList
-import org.ddmore.mdl.mdl.OdeList
 import org.ddmore.mdl.mdl.Primary
 import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.mdl.Expression
@@ -107,8 +106,8 @@ class MdlPrinter {
 	def String valueToStr(DistributionArgument arg){
 		if (arg.distribution != null)
 			return arg.distribution.identifier;
-		if (arg.value != null)
-			return arg.value.toStr;	
+		if (arg.expression != null)
+			return arg.expression.toStr;	
 		if (arg.component != null)
 			return arg.component.toStr;
 		return "";	
@@ -261,21 +260,14 @@ class MdlPrinter {
 
 	def toStr(List l){
 		if (l.arguments != null){
-			return "list" + "(" + l.arguments.toStr + ")";
+			return "{" + l.arguments.toStr + "}";
 		}
 		return "";
 	}
 	
-	def toStr(OdeList l){
-		if (l.arguments != null){ 
-			return "ode" + "(" + l.arguments.toStr + ")"
-		}
-	}
-
 	def String toStr(AnyExpression e){
 		if (e.expression != null) return e.expression.toStr;
 		if (e.list != null) return e.list.toStr; 
-		//if (e.odeList != null) return e.odeList.toStr; 
 		if (e.vector != null) return e.vector.toStr; 
 		if (e.type != null) return e.type.toStr; 
 	}
@@ -430,6 +422,9 @@ class MdlPrinter {
 		if (p.symbol != null){
 			return p.symbol.name; 
 		}
+		if (p.string != null){
+			return p.string; 
+		}
 		if (p.vector != null) {
 			return p.vector.toStr
 		}
@@ -455,7 +450,7 @@ class MdlPrinter {
 	}
 	
 	def toStr(Vector v) { 
-		var res  = v.identifier + '(';
+		var res  = '[';
 		var iterator = v.values.iterator();
 		if (iterator.hasNext) {
 			res = res + iterator.next.toStr;
@@ -464,7 +459,7 @@ class MdlPrinter {
 			res  = res + ', ';
 			res = res + iterator.next.toStr;
 		}
-		return res + ')';
+		return res + ']';
 	}
 	
 	def toStr(ParExpression e){
@@ -609,8 +604,6 @@ class MdlPrinter {
 
 	def print(List l)'''«l.toStr»'''
 	
-	def print(OdeList l)'''«l.toStr»'''
-
 	def print(Expression e)'''«e.toStr»'''
 	
 	def print(ConditionalExpression e)'''«e.toStr»'''
