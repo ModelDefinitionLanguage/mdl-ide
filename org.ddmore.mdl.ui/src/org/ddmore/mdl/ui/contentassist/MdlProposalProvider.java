@@ -30,6 +30,7 @@ import org.ddmore.mdl.ui.outline.Images;
 import org.ddmore.mdl.validation.Attribute;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.DistributionValidator;
+import org.ddmore.mdl.validation.PropertyValidator;
 import org.ddmore.mdl.validation.UnitValidator;
 import org.ddmore.mdl.validation.Utils;
 import org.eclipse.emf.ecore.EObject;
@@ -110,7 +111,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 						Image img = imageHelper.getImage(Images.getPath(Images.INTERPOLATION_TYPE));				
 						addProposals(context, acceptor, attributes, img);
 					} else {
-						if (arg.getArgumentName().getName().equals(AttributeValidator.attr_inputformat.getName())){
+						if (arg.getArgumentName().getName().equals(PropertyValidator.attr_inputformat.getName())){
 							List<String> attributes = new ArrayList<String>();
 							attributes.addAll(InputFormatType.FORMAT_VALUES);
 							Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				

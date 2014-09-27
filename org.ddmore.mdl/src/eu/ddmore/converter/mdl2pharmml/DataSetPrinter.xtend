@@ -7,6 +7,7 @@ import org.ddmore.mdl.types.InputFormatType
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
+import org.ddmore.mdl.validation.PropertyValidator
 
 class DataSetPrinter {
 	protected extension MathPrinter mathPrinter = null;
@@ -48,13 +49,14 @@ class DataSetPrinter {
 		var res = "";
 		for (b: dObj.blocks)	{
 			if (b.sourceBlock != null){
-				if (b.sourceBlock.list!=null){
-					val inputFormat = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_inputformat.name);
-					if (inputFormat.equals(InputFormatType::FORMAT_NONMEM)){
-						res  = res + print_ds_NONMEM_DataSet(mObjName, dObjName);
-					} else {
-						res = res + print_ds_Objective_DataSet(mObjName, dObjName);
-					}					
+				for (s: b.sourceBlock.statements){
+					if (s.symbolName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
+						if (s.expression.toStr.equals(InputFormatType::FORMAT_NONMEM)){
+							res  = res + print_ds_NONMEM_DataSet(mObjName, dObjName);
+						} else {
+							res = res + print_ds_Objective_DataSet(mObjName, dObjName);
+						}					
+					}
 				}
 			}
 		}
@@ -171,10 +173,18 @@ class DataSetPrinter {
 		for (b: dObj.blocks){
 			if (b.sourceBlock != null){
 				if (b.sourceBlock.inlineBlock == null){
-					val file = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_file.name);
+					var file = "";
+					var delimiter = "";
+					for (s: b.sourceBlock.statements){
+						if (s.symbolName.name.equals(PropertyValidator::attr_file.name) && s.expression != null){
+							file = s.expression.toStr;
+						}
+						if (s.symbolName.name.equals(PropertyValidator::attr_delimiter.name) && s.expression != null){
+							delimiter = s.expression.toStr;							
+						}
+					}
 					if (file.length > 0){
-						var delimiter = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_delimiter.name);
-						if (delimiter.length == 0) delimiter = AttributeValidator::attr_delimiter.defaultValue;
+						if (delimiter.length == 0) delimiter = PropertyValidator::attr_delimiter.defaultValue;
 						val fileName = FilenameUtils::getBaseName(file);
 						val fileExtension = FilenameUtils::getExtension(file);
 						res = res +

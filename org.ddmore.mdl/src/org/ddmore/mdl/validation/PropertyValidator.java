@@ -1,11 +1,11 @@
 package org.ddmore.mdl.validation;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
 import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.impl.BlockStatementImpl;
@@ -14,6 +14,8 @@ import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.ExecuteTaskImpl;
 import org.ddmore.mdl.mdl.impl.ModelBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
+import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
+import org.ddmore.mdl.types.DefaultValues;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
@@ -50,7 +52,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 
 	//EXECUTE
 	final public static Attribute attr_task_command = new Attribute("command", MdlDataType.TYPE_STRING, true);
-	final public static List<Attribute> attrs_exec_task = Arrays.asList(attr_task_command);
+	final public static List<Attribute> attrs_task_exec = Arrays.asList(attr_task_command);
 	
 	//DATA
 	final public static Attribute attr_data_ignore = new Attribute("ignore", MdlDataType.TYPE_BOOLEAN, false);
@@ -65,6 +67,18 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_model_remove = new Attribute("remove", MdlDataType.TYPE_VECTOR_REF, false);
 	
 	final public static List<Attribute> attrs_task_model = Arrays.asList(attr_model_tolrel, attr_model_add, attr_model_remove);
+	
+	/*SOURCE*/
+	final public static Attribute attr_ignore = new Attribute("ignore", MdlDataType.TYPE_STRING, false);
+	final public static Attribute attr_inputformat = new Attribute("inputformat", MdlDataType.TYPE_INPUT_FORMAT, true, DefaultValues.INPUT_FORMAT);
+	final public static Attribute attr_delimiter = new Attribute("delimiter", MdlDataType.TYPE_STRING, false, ",");
+	final public static Attribute attr_header = new Attribute("header", MdlDataType.TYPE_BOOLEAN, false, "false");
+	final public static Attribute attr_file = new Attribute("file", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
+	final public static Attribute attr_script = new Attribute("script", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
+
+	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, 
+			attr_delimiter, attr_file, attr_script, attr_header);
+
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,7 +127,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 		EObject container = s.eContainer();
 		while (container instanceof BlockStatementImpl)
 			container = container.eContainer();
-		if (isTaskObjectBlock(container)){
+		if (isTaskObjectBlock(container) || container instanceof SourceBlockImpl){
 			//check that an argument is recognized
 			List<Attribute> knownAttributes = getAllAttributes(container);
 			if (knownAttributes != null){
@@ -151,27 +165,19 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	}
 	
 	
-	ArrayList<String> getParamNames(List<FunctionParameter> params){
-		ArrayList<String> names = new ArrayList<String>();
-		if (params != null){
-			for (FunctionParameter param: params){
-				names.add(param.getName());
-			}
-		}
-		return names;
-	}
-
 	List<Attribute> getAllAttributes(EObject obj){
 		if (obj instanceof EstimateTaskImpl)
 			return attrs_task_estimate;
 		if (obj instanceof SimulateTaskImpl)
 			return attrs_task_simulate;
 		if (obj instanceof ExecuteTaskImpl)
-			return attrs_exec_task;
+			return attrs_task_exec;
 		if (obj instanceof DataBlockImpl)
 			return attrs_task_data;
 		if (obj instanceof ModelBlockImpl)
 			return attrs_task_model;
+		if (obj instanceof SourceBlockImpl)
+			return attrs_source;
 		return null;
 	}
 	
@@ -181,12 +187,38 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof SimulateTaskImpl)
 			return Utils.getRequiredNames(attrs_task_simulate);
 		if (obj instanceof ExecuteTaskImpl)
-			return Utils.getRequiredNames(attrs_exec_task);
+			return Utils.getRequiredNames(attrs_task_exec);
 		if (obj instanceof DataBlockImpl)
 			return Utils.getRequiredNames(attrs_task_data);
 		if (obj instanceof ModelBlockImpl)
 			return Utils.getRequiredNames(attrs_task_model);
+		if (obj instanceof SourceBlockImpl)
+			return Utils.getRequiredNames(attrs_source);
 		return null;
+	}	
+	
+	@Check
+	public void checkSourceFiles(SourceBlock b){
+		if (b.getInlineBlock() != null) return;
+		/*for (SymbolDeclaration s: b.get)
+					if (argument.getArgumentName().getName().equals(attr_file.getName()) || 
+					 argument.getArgumentName().getName().equals(attr_script.getName())) {
+						String dataPath = Utils.getAttributeValue(argument);
+						if (!Utils.isFileExist(b, dataPath)){
+							if (argument.getArgumentName().getName().equals(attr_file.getName())){
+								warning(MSG_DATA_FILE_NOT_FOUND, 
+										MdlPackage.Literals.ARGUMENT__EXPRESSION,
+										MSG_DATA_FILE_NOT_FOUND, dataPath);
+							}
+							if (argument.getArgumentName().getName().equals(attr_script.getName())){
+								warning(MSG_SCRIPT_NOT_FOUND, 
+										MdlPackage.Literals.ARGUMENT__EXPRESSION,
+										MSG_SCRIPT_NOT_FOUND, dataPath);
+							}
+						}
+					}
+				}
+			}*/
 	}	
 
 }

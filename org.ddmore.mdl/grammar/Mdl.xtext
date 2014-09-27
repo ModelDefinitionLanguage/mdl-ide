@@ -151,11 +151,11 @@ DataDerivedBlock:
 SourceBlock:
 	identifier='SOURCE' 	
 	BEGIN 
-		symbolName = SymbolName "=" list = List
-		(inlineBlock = InlineBlock)? 
+		statements += SymbolDeclaration* 
+		(inlineBlock = InlineBlock)
 	END
 ;
- 
+
 //////////////////////////////////////////////////////////
 //Task Object
 //////////////////////////////////////////////////////////

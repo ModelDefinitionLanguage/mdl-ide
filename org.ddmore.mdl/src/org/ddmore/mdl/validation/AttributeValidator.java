@@ -96,14 +96,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_boundaries = new Attribute("boundaries", MdlDataType.TYPE_VECTOR_REAL, false);
 	final public static Attribute attr_missing = new Attribute("missing", MdlDataType.TYPE_INT, false);
 	
-	/*SOURCE*/
-	final public static Attribute attr_ignore = new Attribute("ignore", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_inputformat = new Attribute("inputformat", MdlDataType.TYPE_INPUT_FORMAT, true, DefaultValues.INPUT_FORMAT);
-	final public static Attribute attr_delimiter = new Attribute("delimiter", MdlDataType.TYPE_STRING, false, ",");
-	final public static Attribute attr_header = new Attribute("header", MdlDataType.TYPE_BOOLEAN, false, "false");
-	final public static Attribute attr_file = new Attribute("file", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
-	final public static Attribute attr_script = new Attribute("script", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
-	
 	/*DESIGN*/
 	final public static Attribute attr_design_source = new Attribute("source", MdlDataType.TYPE_REF, true, DefaultValues.VAR_NAME);
 	final public static Attribute attr_interp = new Attribute("interp", MdlDataType.TYPE_INTERP, false);
@@ -123,8 +115,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
 			attr_recode, attr_boundaries, attr_missing);
 	final public static List<Attribute> attrs_dataDerived = Arrays.asList(attr_req_cc_type, attr_expr_value, attr_units);
-	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, 
-			attr_delimiter, attr_file, attr_script, attr_header);
 	final public static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp /*,attr_idv*/);
 
 	/*Parameter object*/
@@ -155,7 +145,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			/*Data object*/
 			for (Attribute attr: attrs_dataInput) put("DATA_INPUT_VARIABLES:" + attr.getName(), attr);
 			for (Attribute attr: attrs_dataDerived) put("DATA_DERIVED_VARIABLES:" + attr.getName(), attr);
-			for (Attribute attr: attrs_source) put("SOURCE:" + attr.getName(), attr);
+			//for (Attribute attr: attrs_source) put("SOURCE:" + attr.getName(), attr);
 			for (Attribute attr: attrs_design) put("DESIGN:" + attr.getName(), attr);
 			/*Parameter object*/
 			for (Attribute attr: attrs_structural) put("STRUCTURAL:" + attr.getName(), attr);
@@ -182,8 +172,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	HashMap<String, String> exclusive_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = 4646663049359441357L;
 		{
-			put(attr_file.getName(), attr_script.getName());
-			put(attr_script.getName(), attr_file.getName());
+			//put(attr_file.getName(), attr_script.getName());
+			//put(attr_script.getName(), attr_file.getName());
 			put(attr_first.getName(), attr_last.getName());
 			put(attr_last.getName(), attr_first.getName());
 		}
@@ -193,7 +183,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return attrs_dataInput; 
 		if (obj instanceof DataDerivedBlockImpl) return attrs_dataDerived; 
-		if (obj instanceof SourceBlockImpl) return attrs_source; 
+		//if (obj instanceof SourceBlockImpl) return attrs_source; 
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return attrs_structural;
 		if (obj instanceof VariabilityBlockImpl) return attrs_variability;
@@ -332,37 +322,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		return categoricalNames;
 	}
 	
-	@Check
-	public void checkSourceFiles(Argument argument){
-		EObject container = Utils.findListContainer(argument.eContainer().eContainer());
-		if (container == null) return;
-		//Locate data/script file in the MDL project
-		if (container instanceof SourceBlockImpl){
-			SourceBlock b = (SourceBlock)container;
-			if (b.getInlineBlock() != null) return;
-			if (argument.getExpression() != null){
-				if (argument.getExpression().getExpression() != null){
-					if (argument.getArgumentName().getName().equals(attr_file.getName()) || 
-					 argument.getArgumentName().getName().equals(attr_script.getName())) {
-						String dataPath = Utils.getAttributeValue(argument);
-						if (!Utils.isFileExist(b, dataPath)){
-							if (argument.getArgumentName().getName().equals(attr_file.getName())){
-								warning(MSG_DATA_FILE_NOT_FOUND, 
-										MdlPackage.Literals.ARGUMENT__EXPRESSION,
-										MSG_DATA_FILE_NOT_FOUND, dataPath);
-							}
-							if (argument.getArgumentName().getName().equals(attr_script.getName())){
-								warning(MSG_SCRIPT_NOT_FOUND, 
-										MdlPackage.Literals.ARGUMENT__EXPRESSION,
-										MSG_SCRIPT_NOT_FOUND, dataPath);
-							}
-						}
-					}
-				}
-			}
-		}
-	}	
-
 	//Do not validate parameters of variability subblocks
 	private Boolean isVariabilitySubblock(EObject container, Arguments args){
 		//Exclude content of Diag and Matrix check from attribute checks

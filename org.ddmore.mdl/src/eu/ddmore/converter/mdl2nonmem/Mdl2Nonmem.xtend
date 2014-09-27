@@ -929,16 +929,22 @@ class Mdl2Nonmem extends MdlPrinter {
 	// The Ignore char may have the same problem so strip the quotes off this too.
 	def printDATA(DataObject o)'''
 	«FOR b:o.blocks»
-		«IF b.sourceBlock != null» 
-			«IF b.sourceBlock.list != null»
-				«var data = stripQuotes(b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_file.name))»
-				«IF data.length > 0»
-				
+		«IF b.sourceBlock != null»
+			«var data = ""»
+			«var ignore = ""»
+			«FOR s: b.sourceBlock.statements»
+				«IF s.symbolName.name.equals(PropertyValidator::attr_file.name) && s.expression != null»
+					«data = stripQuotes(s.expression.toStr)»
+				«ENDIF»	
+				«IF s.symbolName.name.equals(PropertyValidator::attr_ignore.name) && s.expression != null»
+					«ignore = stripQuotes(s.expression.toStr)»
+				«ENDIF»	
+			«ENDFOR»
+			«IF data.length > 0»
+								
 				$DATA «data»
-				«ENDIF»
 				«getExternalCodeStart("$DAT")»
-					«val ignore = stripQuotes(b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_ignore.name))»
-					«IF ignore.length > 0»IGNORE=«ignore»«ENDIF»
+				«IF ignore.length > 0»IGNORE=«ignore»«ENDIF»
 				«getExternalCodeEnd("$DAT")»
 			«ENDIF»
 		«ENDIF»

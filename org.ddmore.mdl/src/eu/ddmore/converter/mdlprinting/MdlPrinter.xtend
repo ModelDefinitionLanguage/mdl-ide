@@ -40,8 +40,8 @@ import org.ddmore.mdl.mdl.FormalArguments
 import org.ddmore.mdl.mdl.SimulationBlock
 import org.ddmore.mdl.mdl.EstimationBlock
 import org.apache.commons.io.FilenameUtils
-import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.VarType
+import org.ddmore.mdl.validation.PropertyValidator
 
 class MdlPrinter {
 	
@@ -146,25 +146,30 @@ class MdlPrinter {
 	public def getDataFile(DataObject dataObject){
 		for (b: dataObject.blocks){
 			if (b.sourceBlock != null){
-				var source = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_file.name);
-				return source;
-			} 
-		}
-		return "";
-	}
-
-
-	//Find reference to a data file 
-	public def getScriptFile(DataObject dataObject){
-		for (b: dataObject.blocks){
-			if (b.sourceBlock != null){
-				var source = b.sourceBlock.list.arguments.getAttribute(AttributeValidator::attr_script.name);
-				return source;
+				for (s: b.sourceBlock.statements){
+					if (s.symbolName.name.equals(PropertyValidator::attr_file.name) && s.expression != null)
+						return s.expression.toStr;
+				}
 			} 
 		}
 		return "";
 	}
 	
+	//Find reference to a script file 
+	public def getScriptFile(DataObject dataObject){
+		for (b: dataObject.blocks){
+			if (b.sourceBlock != null){
+				for (s: b.sourceBlock.statements){
+					if (s.symbolName.name.equals(PropertyValidator::attr_script.name) && s.expression != null)
+						return s.expression.toStr;
+				}
+			} 
+		}
+		return "";
+	}
+	
+
+
 	/////////////////////////////////////////////////////////////
 
     //Map variableDeclaration identifiers, identity for MDL printing, to be rewritten in super classes 

@@ -504,12 +504,6 @@ public class Utils {
 				if (s.getSymbolName() != null)
 					varList.add(s.getSymbolName().getName());
 			}
-			//DataObject -> SOURCE
-	    	if (container instanceof SourceBlockImpl){
-	    		SourceBlock block = (SourceBlock) container;
-	    		if (block.getSymbolName() != null)
-					varList.add(block.getSymbolName().getName());
-			}
 			//ParameterObject -> VARIABILITY, matrix, diag, same
 	    	if (container instanceof VariabilityBlockStatementImpl){
 				VariabilityBlockStatement s = (VariabilityBlockStatement)container;
