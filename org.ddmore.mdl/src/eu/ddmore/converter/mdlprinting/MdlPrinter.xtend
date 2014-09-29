@@ -45,7 +45,7 @@ import org.ddmore.mdl.validation.PropertyValidator
 
 class MdlPrinter {
 	
-	public var mdlVersion = "5.1.4";
+	public var mdlVersion = "5.2.0";
 	
 	private static val MdlPrinter mdlPrinter = new MdlPrinter();
 	protected new(){}

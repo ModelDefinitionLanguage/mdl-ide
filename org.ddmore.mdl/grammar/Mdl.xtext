@@ -10,6 +10,7 @@ MclObject:
 	parameterObject=ParameterObject | 
 	dataObject=DataObject | 
 	taskObject=TaskObject |
+	designObject=DesignObject |
 	mogObject=MOGObject);
 	
 ModelObject: 
@@ -23,6 +24,9 @@ DataObject:
 
 TaskObject:
 	identifier = 'taskobj' BEGIN blocks += TaskObjectBlock* END;
+	
+DesignObject:
+	identifier = 'designobj' BEGIN blocks += DesignObjectBlock* END;
 	
 MOGObject:
 	identifier = 'mog' BEGIN objects += [ObjectName]* END;
@@ -164,6 +168,8 @@ TaskObjectBlock:
 	estimateBlock = EstimateTask |
 	simulateBlock = SimulateTask |
 	executeBlock = ExecuteTask |
+	evaluateBlock = EvaluateTask |
+	optimiseBlock = OptimiseTask |
 	parameterBlock = ParameterBlock |
 	dataBlock = DataBlock |
 	modelBlock = ModelBlock | 
@@ -197,6 +203,16 @@ SimulateTask:
 
 ExecuteTask:
 	identifier = "EXECUTE"
+	BEGIN statements += SymbolDeclaration* END  
+;
+
+EvaluateTask:
+	identifier = "EVALUATE"
+	BEGIN statements += SymbolDeclaration* END  
+;
+
+OptimiseTask:
+	identifier = "OPTIMISE"
 	BEGIN statements += SymbolDeclaration* END  
 ;
 
@@ -295,6 +311,43 @@ VariableList:
 ;
 
 //////////////////////////////////////////////////////////
+//Design Object
+//////////////////////////////////////////////////////////
+
+DesignObjectBlock:
+	studyDesignBlock = StudyDesignBlock |
+	populationFeaturesBlock = PopulationFeaturesBlock |
+	adminBlock = AdministrationBlock |
+	actionBlock = ActionBlock |
+	samplingBlock = SamplingBlock
+;
+
+StudyDesignBlock:
+	identifier = 'STUDY_DESIGN'
+	BEGIN variables += SymbolDeclaration* END 
+;
+
+PopulationFeaturesBlock:
+	identifier = 'POPULATION_FEATURES'
+	BEGIN variables += SymbolDeclaration* END
+;
+
+AdministrationBlock:
+	identifier = 'ADMINISTRATION'
+	BEGIN variables += SymbolDeclaration* END
+;
+
+ActionBlock:
+	identifier = 'ACTION'
+	BEGIN variables += SymbolDeclaration* END
+;
+
+SamplingBlock:
+	identifier = 'SAMPLING'
+	BEGIN variables += SymbolDeclaration* END
+;
+
+//////////////////////////////////////////////////////////
 //Common
 //////////////////////////////////////////////////////////
 
@@ -356,7 +409,12 @@ EnumType:
 	target = TargetLanguage |
 	variability = VariabilityType |
 	interpolation = InterpolationType |
-	input = InputType 
+	input = InputType |
+	trial = TrialType
+;
+
+TrialType:
+	identifier = ('simple' | 'combined' | 'sequential')
 ;
 
 Constant:

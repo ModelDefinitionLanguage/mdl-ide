@@ -50,7 +50,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 
 	final public static String funct_runif     = "runif";
 	final public static String funct_errorExit = "errorExit";
-	final public static String funct_update    = "update";
 	final public static String funct_pnorm     = "pnorm";
 	
 	final public static String funct_seq     = "seq";
@@ -94,7 +93,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 						
 			put(funct_seq, new FunctionSignature(funct_seq, Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition, param_seq_end), MdlDataType.TYPE_REAL, true));
 			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
-			put(funct_update, new FunctionSignature(funct_update, 2, MdlDataType.TYPE_REAL));
 			put(funct_errorExit, new FunctionSignature(funct_errorExit, 2, MdlDataType.TYPE_VOID));
 			put(funct_runif, new FunctionSignature(funct_runif, Arrays.asList(new FunctionParameter("n", 0, MdlDataType.TYPE_INT)), MdlDataType.TYPE_REAL));
 			
