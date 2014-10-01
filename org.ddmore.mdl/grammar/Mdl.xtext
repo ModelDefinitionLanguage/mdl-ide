@@ -156,7 +156,7 @@ SourceBlock:
 	identifier='SOURCE' 	
 	BEGIN 
 		statements += SymbolDeclaration* 
-		(inlineBlock = InlineBlock)
+		(inlineBlock = InlineBlock)?
 	END
 ;
 
@@ -315,11 +315,17 @@ VariableList:
 //////////////////////////////////////////////////////////
 
 DesignObjectBlock:
+	covariatesBlock = CovariatesBlock |
 	studyDesignBlock = StudyDesignBlock |
 	populationFeaturesBlock = PopulationFeaturesBlock |
 	adminBlock = AdministrationBlock |
 	actionBlock = ActionBlock |
 	samplingBlock = SamplingBlock
+;
+
+CovariatesBlock:
+	identifier = 'COVARIATES'
+	BEGIN variables += SymbolDeclaration* END 
 ;
 
 StudyDesignBlock:

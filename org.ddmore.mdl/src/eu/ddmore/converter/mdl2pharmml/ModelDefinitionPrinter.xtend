@@ -292,13 +292,13 @@ class ModelDefinitionPrinter {
 					«ENDFOR»
 				«ENDIF»
 			«ENDIF»
-		«ENDIF»
-		«IF s.symbolName != null»
-			<General symbId="«s.symbolName.name»">
-				«IF s.expression.expression != null»
-					«print_Assign(s.expression.expression)»
-				«ENDIF»
-			</General>
+			«IF s.symbolName != null»
+				<General symbId="«s.symbolName.name»">
+					«IF s.expression.expression != null»
+						«print_Assign(s.expression.expression)»
+					«ENDIF»
+				</General>
+			«ENDIF»
 		«ENDIF»
 	'''	
 	
