@@ -221,24 +221,20 @@ class MdlPrinter {
 
 
 	def toStr(EnumType t) {
-		if (t.type != null){
+		if (t.type != null)
 			return t.type.toStr;
-		} 
-		if (t.use != null){
+		if (t.use != null)
 			return t.use.identifier
-		} 
-		if (t.target != null){
+		if (t.target != null)
 			return t.target.identifier 
-		} 
-		if (t.input != null){
+		if (t.input != null)
 			return t.input.identifier
-		}
-		if (t.interpolation != null){
+		if (t.interpolation != null)
 			return t.interpolation.identifier
-		}
-		if (t.variability != null){
+		if (t.variability != null)
 			return t.variability.identifier
-		}
+		if (t.trial != null)
+			return t.trial.identifier
 	}
 	
 	def toStr(VarType t) {
@@ -414,7 +410,7 @@ class MdlPrinter {
 	}	
 	
 	def toStr(FunctionCall call){
-		var res = call.identifier.name;
+		var res = call.identifier.name.convertID;
 		if (call.arguments != null)
 		 	res = res + "(" + call.arguments.toStr + ")";
 		 return res;	

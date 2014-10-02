@@ -1,9 +1,11 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.validation.AttributeValidator
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.converter.mdl2pharmml.domain.Operation
+import org.ddmore.mdl.validation.PropertyValidator
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -19,7 +21,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		res  = res + print_ds_TargetTool(op.mog.getDataObjName);
 		res = res + print_ds_TargetDataSet(op.mog.getModelObjName, op.mog.getDataObjName);
 		if (op.type.equals(BLK_ESTIM_STEP)){
-			res = res + print_msteps_EstimationStep(op.mog.getModelObjName, op.mog.getDataObjName, BLK_ESTIM_STEP + op.name);
+			res = res + print_msteps_EstimationStep(op.mog.getModelObjName, op.mog.getDataObjName, op.mog.getTaskObjName, BLK_ESTIM_STEP + op.name);
 		} else {
 			res = res + print_msteps_SimulationStep(op.mog.getDataObjName, BLK_SIMUL_STEP + op.name);
 		}
@@ -29,15 +31,15 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		</ModellingSteps>		
 		'''	
 	}
-	//«print_msteps_StepDependencies»
 
 	////////////////////////////////////////////////
 	// III.a Estimation Step
 	////////////////////////////////////////////////
-	protected def print_msteps_EstimationStep(String pObjName, String dObjName, String stepId)'''
+	protected def print_msteps_EstimationStep(String pObjName, String dObjName, String tObjName, String stepId)'''
 	<EstimationStep oid="«stepId»">
 		«dObjName.print_mdef_TargetToolReference»
 		«pObjName.print_msteps_ParametersToEstimate»
+		«tObjName.print_msteps_Operation(1, OPERATION_EST_POP)»
 	</EstimationStep>
 	'''
 		
@@ -79,7 +81,8 @@ class ModellingStepsPrinter extends DataSetPrinter{
 			'''
 		}
 	}
-		
+	
+
 	///////////////////////////////////////////////
 	// III.b Simulation Step
 	////////////////////////////////////////////////
@@ -88,10 +91,55 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		«dObjName.print_mdef_TargetToolReference»
 	</SimulationStep>
 	'''
-	//«print_msteps_Observations»
+	
+	///////////////////////////////////////////////
+	//General
+	///////////////////////////////////////////////
 
-	protected def print_msteps_Observations()'''
-	<Observations>
-	</Observations>
-	'''	
+	protected def print_msteps_Operation(String tObjName, Integer order, String opType){
+		var tObj = tObjName.getTaskObject;
+		if (tObj == null) return "";
+	'''
+		«FOR b: tObj.blocks»
+			«IF b.estimateBlock != null»
+				<Operation order="«order»" opType="«opType»">
+				«FOR s: b.estimateBlock.statements»
+					«s.print_msteps_Property»
+				«ENDFOR»
+				</Operation>
+			«ENDIF»
+		«ENDFOR»
+	'''
+	}
+
+	protected def print_msteps_Property(SymbolDeclaration s)
+	'''
+		«IF s.symbolName != null»
+			«IF s.expression != null»
+				«IF s.expression.expression != null»
+					«print_msteps_Property(s.symbolName.name, s.expression.expression)»
+				«ENDIF»
+				«IF s.symbolName.name.equals(PropertyValidator::attr_task_algo.name)»
+					«s.print_msteps_Algorithm»
+				«ENDIF»	
+			«ENDIF»
+		«ENDIF»
+	'''
+		
+	protected def print_msteps_Property(String propertyName, Expression expr)'''
+		<Property name="«propertyName»">
+			«print_Assign(expr)»
+		</Property>
+	'''
+
+	protected def print_msteps_Algorithm(SymbolDeclaration s)
+	'''
+		«IF s.expression.vector != null»
+			«FOR algoName: s.expression.vector.values»
+				«IF algoName.string != null»
+					<Algorithm definition="«algoName.string»"/>
+				«ENDIF»
+			«ENDFOR»
+		«ENDIF»
+	'''
 }

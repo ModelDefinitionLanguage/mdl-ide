@@ -7,7 +7,7 @@ public class DistributionType {
 	public static final String bernoulli = "bernoulli";
 	public static final String beta = "betaDistribution";
 	public static final String binomial = "binomial";
-	public static final String categorical = "categorical"; 
+	public static final String discrete = "discrete"; 
 	public static final String cauchy = "cauchy"; 	
 	public static final String chiSquare = "chiSquare";
 	public static final String dirichlet = "dirichlet"; 	
@@ -46,7 +46,7 @@ public class DistributionType {
 			bernoulli ,
 			beta ,
 			binomial ,
-			categorical , 
+			discrete , 
 			cauchy , 	
 			chiSquare ,
 			dirichlet , 	

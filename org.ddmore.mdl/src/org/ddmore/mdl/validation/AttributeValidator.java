@@ -29,6 +29,7 @@ import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
+import org.ddmore.mdl.mdl.impl.DeqBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
@@ -134,6 +135,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_observation = Arrays.asList();
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
+	final public static List<Attribute> attrs_deq = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 	
 	/*All blocks*/
 	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_sameline);
@@ -146,7 +148,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			/*Data object*/
 			for (Attribute attr: attrs_dataInput) put("DATA_INPUT_VARIABLES:" + attr.getName(), attr);
 			for (Attribute attr: attrs_dataDerived) put("DATA_DERIVED_VARIABLES:" + attr.getName(), attr);
-			//for (Attribute attr: attrs_source) put("SOURCE:" + attr.getName(), attr);
 			for (Attribute attr: attrs_design) put("DESIGN:" + attr.getName(), attr);
 			/*Parameter object*/
 			for (Attribute attr: attrs_structural) put("STRUCTURAL:" + attr.getName(), attr);
@@ -158,8 +159,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			}
 			/*Model object*/
 			for (Attribute attr: attrs_inputVariables) put("MODEL_INPUT_VARIABLES:" + attr.getName(), attr);
-			//for (Attribute attr: attrs_library) put("LIBRARY:" + attr.getName(), attr);
 			for (Attribute attr: attrs_ode) put("ODE:" + attr.getName(), attr);
+			for (Attribute attr: attrs_deq) put("DEQ:" + attr.getName(), attr);
 			for (Attribute attr: attrs_estimation) put("ESTIMATION:" + attr.getName(), attr);
 			for (Attribute attr: attrs_simulation) put("SIMULATION:" + attr.getName(), attr);
 			for (Attribute attr: attrs_observation) put("OBSERVATION:" + attr.getName(), attr);
@@ -173,8 +174,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	HashMap<String, String> exclusive_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = 4646663049359441357L;
 		{
-			//put(attr_file.getName(), attr_script.getName());
-			//put(attr_script.getName(), attr_file.getName());
 			put(attr_first.getName(), attr_last.getName());
 			put(attr_last.getName(), attr_first.getName());
 		}
@@ -184,15 +183,14 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return attrs_dataInput; 
 		if (obj instanceof DataDerivedBlockImpl) return attrs_dataDerived; 
-		//if (obj instanceof SourceBlockImpl) return attrs_source; 
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return attrs_structural;
 		if (obj instanceof VariabilityBlockImpl) return attrs_variability;
 		if (obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl) return attrs_variability_subblock;
 		/*Model object*/
 		if (obj instanceof InputVariablesBlockImpl) return attrs_inputVariables;
-		//if (obj instanceof LibraryBlockImpl) return attrs_library;
 		if (obj instanceof OdeBlockImpl) return attrs_ode; 
+		if (obj instanceof DeqBlockImpl) return attrs_deq; 
 		if (obj instanceof EstimationBlockImpl) return attrs_estimation; 
 		if (obj instanceof SimulationBlockImpl) return attrs_simulation; 
 		if (obj instanceof ObservationBlockImpl) return attrs_observation; 
@@ -252,7 +250,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			//for categorical values, recognise user defined categories as attributes
 			if (container instanceof DataInputBlockImpl){
 				EObject parentArgsContainer = argContainer;
-				if (Utils.isNestedList(args)){//Arguments -> List/Ode -> AnyExpression -> Argument
+				if (Utils.isNestedList(args)){//Arguments -> List -> AnyExpression -> Argument
 					if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl)
 						parentArgsContainer = args.eContainer().eContainer().eContainer().eContainer();
 				}

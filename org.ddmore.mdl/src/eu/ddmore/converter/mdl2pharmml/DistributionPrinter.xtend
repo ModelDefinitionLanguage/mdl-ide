@@ -37,7 +37,7 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_p_ofSuccess.name  -> new Attribute("probabilityOfSuccess", pVal), 
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
-		DistributionType::categorical -> newHashMap(
+		DistributionType::discrete -> newHashMap(
 			DistributionValidator::attr_probabilities.name  -> new Attribute("probabilities", pVal), 
 			DistributionValidator::attr_ncat.name  -> new Attribute("ncategories", nVal), 
 			DistributionValidator::attr_prob.name  -> new Attribute("probabilities", pVal), 
@@ -220,9 +220,11 @@ class DistributionPrinter extends MdlPrinter{
 	protected def print_DistributionDefault(RandomList randomList, String type){
 		val recognizedArgs = distribution_attrs.get(type);
 		if (recognizedArgs == null) return "";
+		var tagName = type.substring(0, 1).toUpperCase() + type.substring(1)
+		if (tagName.equalsIgnoreCase(DistributionType::discrete)) tagName = "Categorical";
+		if (tagName.contains("Distribution")) 
+			tagName = tagName.substring(0, tagName.indexOf("Distribution"));	
 		'''
-		«var tagName = type.substring(0, 1).toUpperCase() + type.substring(1)»
-		«if (tagName.contains("Distribution")) tagName = tagName.substring(0, tagName.indexOf("Distribution"))»	
 		<«tagName»Distribution xmlns="«xmlns_uncert»" definition="0.1">
 			«FOR arg: randomList.arguments.arguments»
 				«IF arg.argumentName != null»

@@ -167,7 +167,6 @@ SourceBlock:
 TaskObjectBlock: 
 	estimateBlock = EstimateTask |
 	simulateBlock = SimulateTask |
-	executeBlock = ExecuteTask |
 	evaluateBlock = EvaluateTask |
 	optimiseBlock = OptimiseTask |
 	parameterBlock = ParameterBlock |
@@ -201,11 +200,6 @@ SimulateTask:
 	BEGIN statements += SymbolDeclaration* END  
 ;
 
-ExecuteTask:
-	identifier = "EXECUTE"
-	BEGIN statements += SymbolDeclaration* END  
-;
-
 EvaluateTask:
 	identifier = "EVALUATE"
 	BEGIN statements += SymbolDeclaration* END  
@@ -236,7 +230,7 @@ CompartmentBlock:
 
 DeqBlock:
 	identifier = 'DEQ'
-	BEGIN variables += SymbolDeclaration* END 
+	BEGIN statements += BlockStatement* END 
 ;
 
 FunctionCallStatement:
@@ -481,7 +475,7 @@ Distribution:
 	identifier = ('bernoulli' |
 	'betaDistribution' |
 	'binomial' |
-	'categorical' | 
+	'discrete' | 
 	'cauchy' | 	
 	'chiSquare' |
 	'dirichlet' | 	

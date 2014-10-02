@@ -12,8 +12,10 @@ import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.impl.BlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.DataBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
-import org.ddmore.mdl.mdl.impl.ExecuteTaskImpl;
+import org.ddmore.mdl.mdl.impl.EvaluateTaskImpl;
 import org.ddmore.mdl.mdl.impl.ModelBlockImpl;
+import org.ddmore.mdl.mdl.impl.OptimiseTaskImpl;
+import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.types.DefaultValues;
@@ -51,10 +53,6 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_task_simulate = Arrays.asList(attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt);
 	final public static List<Attribute> attrs_task_estimate = Arrays.asList(attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt);
 
-	//EXECUTE
-	final public static Attribute attr_task_command = new Attribute("command", MdlDataType.TYPE_STRING, true);
-	final public static List<Attribute> attrs_task_exec = Arrays.asList(attr_task_command);
-	
 	//DATA
 	final public static Attribute attr_data_ignore = new Attribute("ignore", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_data_accept = new Attribute("accept", MdlDataType.TYPE_BOOLEAN, false);
@@ -87,10 +85,6 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	public void checkRequiredProperties(TaskObjectBlock tob){
 		List<SymbolDeclaration> statements = null;
 		List<String> attrNames = null;
-		if (tob.getExecuteBlock() != null){
-			statements = tob.getExecuteBlock().getStatements();
-			attrNames = getRequiredAttributeNames(tob.getExecuteBlock());
-		}
 		if (tob.getSimulateBlock() != null){
 			statements = tob.getSimulateBlock().getStatements();
 			attrNames = getRequiredAttributeNames(tob.getSimulateBlock());
@@ -160,9 +154,11 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	Boolean isTaskObjectBlock(EObject container){
 		return (container instanceof EstimateTaskImpl ||
 		container instanceof SimulateTaskImpl ||
-		container instanceof ExecuteTaskImpl ||
-		container instanceof DataBlockImpl ||
-		container instanceof ModelBlockImpl); 
+		container instanceof ModelBlockImpl ||
+		container instanceof EvaluateTaskImpl ||
+		container instanceof OptimiseTaskImpl ||
+		container instanceof ParameterBlockImpl ||
+		container instanceof DataBlockImpl); 
 	}
 	
 	
@@ -171,8 +167,6 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			return attrs_task_estimate;
 		if (obj instanceof SimulateTaskImpl)
 			return attrs_task_simulate;
-		if (obj instanceof ExecuteTaskImpl)
-			return attrs_task_exec;
 		if (obj instanceof DataBlockImpl)
 			return attrs_task_data;
 		if (obj instanceof ModelBlockImpl)
@@ -187,8 +181,6 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			return Utils.getRequiredNames(attrs_task_estimate);
 		if (obj instanceof SimulateTaskImpl)
 			return Utils.getRequiredNames(attrs_task_simulate);
-		if (obj instanceof ExecuteTaskImpl)
-			return Utils.getRequiredNames(attrs_task_exec);
 		if (obj instanceof DataBlockImpl)
 			return Utils.getRequiredNames(attrs_task_data);
 		if (obj instanceof ModelBlockImpl)

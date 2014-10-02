@@ -10,9 +10,11 @@ import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.BlockStatement;
+import org.ddmore.mdl.mdl.CompartmentBlock;
 import org.ddmore.mdl.mdl.ConditionalStatement;
 import org.ddmore.mdl.mdl.DataDerivedBlock;
 import org.ddmore.mdl.mdl.DataInputBlock;
+import org.ddmore.mdl.mdl.DeqBlock;
 import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
@@ -30,7 +32,6 @@ import org.ddmore.mdl.mdl.ObservationBlock;
 import org.ddmore.mdl.mdl.OdeBlock;
 import org.ddmore.mdl.mdl.SameBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
-import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.Symbol;
@@ -42,8 +43,10 @@ import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
+import org.ddmore.mdl.mdl.impl.CompartmentBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
+import org.ddmore.mdl.mdl.impl.DeqBlockImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
@@ -57,7 +60,6 @@ import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
-import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
@@ -271,39 +273,6 @@ public class Utils {
 		return obj.getObjectName();
 	}
 	
-	//Extracts references from mathematical expressions
-	/*static List<String> extractSymbolNames(Arguments args, String attrName){
-		List<String> params = new ArrayList<String>();	
-		if (args != null && args.getArguments() != null){
-			for (Argument x: args.getArguments()){
-				if (x.getArgumentName() != null){
-					if (x.getArgumentName().getName().equals(attrName)) {
-						if (x.getExpression().getList() != null) {
-							for (Argument paramArg : x.getExpression().getList().getArguments().getArguments()) {
-								params.addAll(extractSymbolNames(paramArg));
-							}
-						}
-					}
-				}
-			}
-		}
-		return params;
-	}*/
-	
-	//Extracts references from mathematical expressions
-	/*static List<String> extractSymbolNames(Argument paramArg){
-		List<String> params = new ArrayList<String>();	
-		TreeIterator<EObject> paramIterator = paramArg.getExpression().eAllContents();
-		while (paramIterator.hasNext()) {
-			EObject paramObj = paramIterator.next();
-			if (paramObj instanceof SymbolNameImpl) {
-				SymbolName foundParam = (SymbolName) paramObj;
-				params.add(foundParam.getName());
-			}
-		}
-		return params;
-	}*/
-	
 	//Print a given list (used for reporting errors and for testing)
 	static String printList(List<String> list){
 		String res = "{ ";
@@ -348,11 +317,12 @@ public class Utils {
 			//Data object	
 			obj instanceof DataInputBlockImpl ||
 			obj instanceof DataDerivedBlockImpl ||
-			obj instanceof SourceBlockImpl ||
 			//Model object
 			obj instanceof InputVariablesBlockImpl ||
 			obj instanceof LibraryBlockImpl ||
 			obj instanceof OdeBlockImpl ||
+			obj instanceof DeqBlockImpl ||
+			obj instanceof CompartmentBlockImpl ||
 			obj instanceof EstimationBlockImpl ||
 			obj instanceof SimulationBlockImpl ||
 			obj instanceof ObservationBlockImpl ||
@@ -371,7 +341,6 @@ public class Utils {
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
 		if (obj instanceof DataDerivedBlockImpl) return ((DataDerivedBlock)obj).getIdentifier();
-		if (obj instanceof SourceBlockImpl) return ((SourceBlock)obj).getIdentifier();
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return ((StructuralBlock)obj).getIdentifier();	
 		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj).getIdentifier();
@@ -382,6 +351,8 @@ public class Utils {
 		if (obj instanceof InputVariablesBlockImpl) return ((InputVariablesBlock)obj).getIdentifier();
 		if (obj instanceof LibraryBlockImpl) return ((LibraryBlock)obj).getIdentifier() ;
 		if (obj instanceof OdeBlockImpl) return ((OdeBlock)obj).getIdentifier() ;
+		if (obj instanceof DeqBlockImpl) return ((DeqBlock)obj).getIdentifier() ;
+		if (obj instanceof CompartmentBlockImpl) return ((CompartmentBlock)obj).getIdentifier() ;
 		if (obj instanceof EstimationBlockImpl) return ((EstimationBlock)obj).getIdentifier() ;
 		if (obj instanceof SimulationBlockImpl) return ((SimulationBlock)obj).getIdentifier() ;
 		if (obj instanceof ObservationBlockImpl) return ((ObservationBlock)obj).getIdentifier() ;

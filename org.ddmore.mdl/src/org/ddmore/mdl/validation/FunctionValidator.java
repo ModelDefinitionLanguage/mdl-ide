@@ -44,7 +44,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_FUNCTION_PARAMETER_MISSING = "Required parameter is not set";
 
 	final public static List<String> funct_standard1 = Arrays.asList(
-		"abs", "exp", "factorial", "factl", "gammaln", "ln", "log", "logistic", "logit", "normcdf",
+		"abs", "exp", "factorial", "factln", "gammaln", "ln", "log", "logistic", "logit", "normcdf",
 		"probit", "sqrt", "sin", "cos", "tan", "sec", "csc", "cot", "sinh", "cosh", "tanh", 
 		"sech", "csch", "coth", "arcsin", "arccos", "arctan", "arcsec", "arccsc", 
 		"arccot", "arcsinh", "arccosh", "arctanh", "arcsech", "arccsch", "arccoth", 
@@ -61,6 +61,10 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static FunctionParameter param_seq_stepSize = new FunctionParameter("stepSize", 1, MdlDataType.TYPE_REAL);
 	final public static FunctionParameter param_seq_repetition = new FunctionParameter("repetition", 1, MdlDataType.TYPE_REAL);
 	final public static FunctionParameter param_seq_end = new FunctionParameter("end", 2, MdlDataType.TYPE_REAL);
+
+	final public static String funct_combinedError     = "combinedError";
+	final public static FunctionParameter param_combinedError_add = new FunctionParameter("add", 0, MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_combinedError_prop = new FunctionParameter("prop", 1, MdlDataType.TYPE_REF);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*LIBRARY*/
@@ -99,6 +103,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
 			put(funct_errorExit, new FunctionSignature(funct_errorExit, 2, MdlDataType.TYPE_VOID));
 			put(funct_runif, new FunctionSignature(funct_runif, Arrays.asList(new FunctionParameter("n", 0, MdlDataType.TYPE_INT)), MdlDataType.TYPE_REAL));
+			put(funct_combinedError, new FunctionSignature(funct_combinedError, 
+						Arrays.asList(param_combinedError_add, param_combinedError_prop), 
+						MdlDataType.TYPE_REAL, true));
 			
 			/*libraries*/
 			//nmadvan

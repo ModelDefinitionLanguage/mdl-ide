@@ -135,7 +135,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_p_ofSuccess,
 					attr_nat_lo,
 					attr_nat_hi));
-			put(DistributionType.categorical, Arrays.asList(
+			put(DistributionType.discrete, Arrays.asList(
 					attr_ncat,
 					attr_categories,
 					attr_probabilities,
@@ -298,11 +298,11 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			put(DistributionType.binomial+":"+attr_probabilityOfSuccess.getName(), attr_p_ofSuccess.getName());
 			put(DistributionType.binomial+":"+attr_p_ofSuccess.getName(), attr_probabilityOfSuccess.getName());
 
-			put(DistributionType.categorical+":"+attr_ncat.getName(), attr_categories.getName());
-			put(DistributionType.categorical+":"+attr_categories.getName(), attr_ncat.getName());
+			put(DistributionType.discrete+":"+attr_ncat.getName(), attr_categories.getName());
+			put(DistributionType.discrete+":"+attr_categories.getName(), attr_ncat.getName());
 			
-			put(DistributionType.categorical+":"+attr_probabilities.getName(), attr_prob.getName());
-			put(DistributionType.categorical+":"+attr_prob.getName(), attr_probabilities.getName());
+			put(DistributionType.discrete+":"+attr_probabilities.getName(), attr_prob.getName());
+			put(DistributionType.discrete+":"+attr_prob.getName(), attr_probabilities.getName());
 			
 			put(DistributionType.chiSquare + ":" + attr_pnat_degreesOfFreedom.getName(), attr_pnat_dof.getName());
 			put(DistributionType.chiSquare + ":" + attr_pnat_dof.getName(), attr_pnat_degreesOfFreedom.getName()); 

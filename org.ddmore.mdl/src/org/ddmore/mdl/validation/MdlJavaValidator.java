@@ -15,7 +15,6 @@ import java.util.Map;
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
-import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -50,8 +49,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
 	//List of objects
 	Map<String, MdlDataType> declaredObjects = new HashMap<String, MdlDataType>();	
+	
 	//List of declared variables per object
 	Map<String, List<String>> declaredVariables = new HashMap<String, List<String>>();	
+	
 	//List of declared variability subblocks diag and matrix (to match with same blocks)
 	Map<String, List<String>> variabilitySubblockNames = new HashMap<String, List<String>>();
 
@@ -136,7 +137,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		EObject container = ref.eContainer();
 		//Skip validation of symbol names which are not references 
 		if (container instanceof SymbolDeclarationImpl ||
-			container instanceof SourceBlockImpl ||
 			container instanceof FunctionCallStatement) {
 			return;
 		}
@@ -183,13 +183,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		    		}
 	    		}
 	    	}
-			//DataObject -> SOURCE -> symbol (to check the reference to the data file)
-	    	/*if (obj instanceof SourceBlockImpl){
-	    		SourceBlock s = (SourceBlock) obj;
-	    		if (s.getSymbolName().getName().equals(ref.getParent().getName())) 
-		    		if (s.getList() != null)
-						for (Argument x: s.getList().getArguments().getArguments()) args.add(x);
-			}*/
 	    }
 	    if ((args.size() > 0) && !AttributeValidator.checkAttributes(ref, args))
 			warning(MSG_UNRESOLVED_ATTRIBUTE_REF, 

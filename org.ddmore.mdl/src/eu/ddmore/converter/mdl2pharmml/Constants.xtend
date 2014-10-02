@@ -39,6 +39,10 @@ static class Constants {
 	public static val BLK_ESTIM_STEP = "estimStep_";	
 	public static val BLK_SIMUL_STEP = "simulStep_";
 	
+	public static val OPERATION_EST_POP = "estPop";
+	public static val OPERATION_EST_INDIV = "estIndiv";
+	public static val OPERATION_EST_FIM = "estFIM";
+	
 	public static val BLK_DESIGN_EPOCH    = "td_epoch.";
 	public static val BLK_DESIGN_CELL     = "td_cell.";
 	public static val BLK_DESIGN_ARM      = "td_arm.";

@@ -780,9 +780,8 @@ class MathPrinter extends MdlPrinter{
 		if (t.estimateBlock != null){
 			for (s: t.estimateBlock.statements){
 				if (s.symbolName != null && s.symbolName.name.equals(name)){
-					if (s.expression != null){
+					if (s.expression != null)
 						return s.expression.toStr;
-					}
 				}
 			}
 		}
@@ -795,8 +794,17 @@ class MathPrinter extends MdlPrinter{
 				}
 			}
 		}
-		if (t.executeBlock != null){
-			for (s: t.executeBlock.statements){
+		if (t.evaluateBlock != null){
+			for (s: t.evaluateBlock.statements){
+				if (s.symbolName != null && s.symbolName.name.equals(name)){
+					if (s.expression != null){
+						return s.expression.toStr;
+					}
+				}
+			}
+		}
+		if (t.optimiseBlock != null){
+			for (s: t.optimiseBlock.statements){
 				if (s.symbolName != null && s.symbolName.name.equals(name)){
 					if (s.expression != null){
 						return s.expression.toStr;
