@@ -34,11 +34,9 @@ import org.ddmore.mdl.mdl.SameBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
-import org.ddmore.mdl.mdl.Symbol;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.SymbolNames;
-import org.ddmore.mdl.mdl.Symbols;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
@@ -193,6 +191,27 @@ public class Utils {
 		}
 	}
 	
+	private static void addSymbolNoRepeat(List<String> list, Arguments args){
+		if (args != null)
+			if (args.getArguments() != null)
+				for (Argument arg: args.getArguments())
+					if (arg.getArgumentName() != null)
+						if (!list.contains(arg.getArgumentName().getName()))
+							list.add(arg.getArgumentName().getName());
+	}
+	
+	public static List<String> getArgumentNames(Arguments args){
+		List<String> argumentNames = new ArrayList<String>();	
+		Utils.addSymbolNoRepeat(argumentNames, args); 
+		return argumentNames;
+	}
+	
+	public static List<String> getSymbolNames(SymbolNames names){
+		List<String> symbolNames = new ArrayList<String>();	
+		addSymbol(symbolNames, names);
+		return symbolNames;
+	}
+	
 	//Weak validation of conditionally declared references - a variable is declared if it is declared in some branch 
 	public static void addSymbol(List<String> list, ConditionalStatement e){
 		if (e.getIfStatement() != null)
@@ -216,31 +235,13 @@ public class Utils {
 						list.add(arg.getArgumentName().getName());
 	}
 	
-	public static void addSymbolNoRepeat(List<String> list, Arguments args){
-		if (args != null)
-			if (args.getArguments() != null)
-				for (Argument arg: args.getArguments())
-					if (arg.getArgumentName() != null)
-						if (!list.contains(arg.getArgumentName().getName()))
-							list.add(arg.getArgumentName().getName());
-	}
-
 	public static void addSymbol(List<String> list, FormalArguments args){
 		if (args != null)
 			for (ArgumentName id: args.getArguments())
 				list.add(id.getName());
 	}
 	
-	//Add a symbol to a list of known symbols
-	public static void addSymbol(List<String> list, Symbols args){
-		if (args != null)
-			if (args.getSymbols() != null)	
-				for (Symbol arg: args.getSymbols())
-					if (arg.getSymbolName() != null)
-						list.add(arg.getSymbolName().getName());
-	}
-
-	public static void addSymbol(List<String> list, SymbolNames args){
+	private static void addSymbol(List<String> list, SymbolNames args){
 		if (args != null)
 			for (SymbolName id: args.getSymbolNames())
 				list.add(id.getName());

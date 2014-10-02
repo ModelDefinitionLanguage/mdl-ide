@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.PropertyDeclaration;
 import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
@@ -15,7 +16,6 @@ import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.EvaluateTaskImpl;
 import org.ddmore.mdl.mdl.impl.ModelBlockImpl;
 import org.ddmore.mdl.mdl.impl.OptimiseTaskImpl;
-import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.types.DefaultValues;
@@ -83,7 +83,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	@Check
 	public void checkRequiredProperties(TaskObjectBlock tob){
-		List<SymbolDeclaration> statements = null;
+		List<PropertyDeclaration> statements = null;
 		List<String> attrNames = null;
 		if (tob.getSimulateBlock() != null){
 			statements = tob.getSimulateBlock().getStatements();
@@ -99,14 +99,14 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 		}
 		
 		HashSet<String> properties = new HashSet<String>();
-		for (SymbolDeclaration b: statements){
-			if (b.getSymbolName() != null){
-				if (!properties.contains(b.getSymbolName().getName())){
-					properties.add(b.getSymbolName().getName());
+		for (PropertyDeclaration b: statements){
+			if (b.getPropertyName() != null){
+				if (!properties.contains(b.getPropertyName().getName())){
+					properties.add(b.getPropertyName().getName());
 				} else {
-					warning(MSG_PROPERTY_DEFINED + ": " + b.getSymbolName().getName(), 
+					warning(MSG_PROPERTY_DEFINED + ": " + b.getPropertyName().getName(), 
 							MdlPackage.Literals.ESTIMATE_TASK__IDENTIFIER,
-							MSG_PROPERTY_DEFINED, b.getSymbolName().getName());
+							MSG_PROPERTY_DEFINED, b.getPropertyName().getName());
 				}
 			}
 		}	
@@ -157,7 +157,6 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 		container instanceof ModelBlockImpl ||
 		container instanceof EvaluateTaskImpl ||
 		container instanceof OptimiseTaskImpl ||
-		container instanceof ParameterBlockImpl ||
 		container instanceof DataBlockImpl); 
 	}
 	

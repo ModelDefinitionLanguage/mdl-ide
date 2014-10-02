@@ -3,15 +3,14 @@ import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.mdl.Symbols
 import org.ddmore.mdl.mdl.SameBlock
 import org.ddmore.mdl.validation.DistributionValidator
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import java.util.HashSet
-import java.util.ArrayList
-import org.ddmore.mdl.mdl.SymbolNames
+import org.ddmore.mdl.validation.Utils
+import java.util.List
 
 class ModelDefinitionPrinter {
 	private var String mObjName;
@@ -280,23 +279,18 @@ class ModelDefinitionPrinter {
 	//Print observation model declaration
 	protected def print_mdef_ObservationModel(SymbolDeclaration s)'''
 		«IF s.expression != null»
-			«IF s.expression.expression != null»
-				«var expr = s.expression.expression»
-				«var classifiedVars = getReferences(expr)»
-				«IF classifiedVars.size > 0»
-					«FOR ss: classifiedVars.entrySet.filter[x | x.value.equals("random")]»
-						«val ref = ss.key.defineDistribution»
-						«IF ref != null»
-							«ref.print_mdef_RandomVariable»
-						«ENDIF»
-					«ENDFOR»
-				«ENDIF»
+			«var classifiedVars = getReferences(s.expression)»
+			«IF classifiedVars.size > 0»
+				«FOR ss: classifiedVars.entrySet.filter[x | x.value.equals("random")]»
+					«val ref = ss.key.defineDistribution»
+					«IF ref != null»
+						«ref.print_mdef_RandomVariable»
+					«ENDIF»
+				«ENDFOR»
 			«ENDIF»
 			«IF s.symbolName != null»
 				<General symbId="«s.symbolName.name»">
-					«IF s.expression.expression != null»
-						«print_Assign(s.expression.expression)»
-					«ENDIF»
+					«print_Assign(s.expression)»
 				</General>
 			«ENDIF»
 		«ENDIF»
@@ -392,15 +386,16 @@ class ModelDefinitionPrinter {
 						var matrix = 
 						'''
 							«IF c.matrixBlock != null && c.matrixBlock.parameters != null»
-								«print_mdef_Correlation_VarRef(c.matrixBlock.arguments, c.matrixBlock.parameters.getParamNames)»
+								«var argumentNames = Utils::getArgumentNames(c.matrixBlock.parameters)»
+								«print_mdef_Correlation_VarRef(c.matrixBlock.arguments, argumentNames)»
 								«print_mdef_Matrix(c.matrixBlock.arguments, c.matrixBlock.parameters)»
 							«ENDIF»
 							«IF c.diagBlock != null && c.diagBlock.parameters != null»
-								«print_mdef_Correlation_VarRef(c.diagBlock.arguments, c.diagBlock.parameters.getParamNames)»
+								«print_mdef_Correlation_VarRef(c.diagBlock.arguments, Utils::getArgumentNames(c.diagBlock.parameters))»
 								«print_mdef_Matrix(c.diagBlock.arguments, c.diagBlock.parameters)»
 							«ENDIF»
 							«IF c.sameBlock != null»
-								«print_mdef_Correlation_VarRef(c.sameBlock.arguments, c.sameBlock.parameters.getParamNames)»
+								«print_mdef_Correlation_VarRef(c.sameBlock.arguments, Utils::getSymbolNames(c.sameBlock.parameters))»
 								«print_mdef_Same(c.sameBlock)»
 							«ENDIF»
 						'''
@@ -418,7 +413,7 @@ class ModelDefinitionPrinter {
 		return model;
 	}
 	
-	protected def print_mdef_Correlation_VarRef(Arguments arguments, ArrayList<String> paramNames){
+	protected def print_mdef_Correlation_VarRef(Arguments arguments, List<String> paramNames){
 		if (paramNames != null){
 			var varRef = "";
 			var randomVars = new HashSet<String>();
@@ -446,15 +441,15 @@ class ModelDefinitionPrinter {
 		}
 	}
 	
-	protected def print_mdef_Matrix(Arguments arguments, Symbols parameters){
+	protected def print_mdef_Matrix(Arguments arguments, Arguments parameters){
 		if (parameters != null){
 			var rowNames = "";
 			val matrixType = getAttribute(arguments, AttributeValidator::attr_re_type.name);
 			//val isFixed = arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
 			
-			for (symbol: parameters.symbols){
-				if (symbol.symbolName != null){
-					rowNames = rowNames + print_ct_SymbolRef(pObjName, symbol.symbolName.name);
+			for (symbol: parameters.arguments){
+				if (symbol.argumentName != null){
+					rowNames = rowNames + print_ct_SymbolRef(pObjName, symbol.argumentName.name);
 				}
 			}
 			return print_ct_Matrix(matrixType.convertMatrixType, rowNames, parameters, false);
@@ -471,7 +466,7 @@ class ModelDefinitionPrinter {
 			}	
 			val sameName = getAttribute(same.arguments, AttributeValidator::attr_name.name);
 			if (sameName.length > 0){
-				var Symbols parameters = null;
+				var Arguments parameters = null;
 				var String matrixType = null;
 				if (pObj != null){
 					for (b: pObj.blocks){
@@ -500,24 +495,6 @@ class ModelDefinitionPrinter {
 				}
 			}
 		}
-	}
-	
-	protected def getParamNames(SymbolNames parameters){
-		var paramNames = new ArrayList<String>();
-		for (symbol: parameters.symbolNames){
-			paramNames.add(symbol.name);	
-		}
-		return paramNames;
-	}
-	
-	protected def getParamNames(Symbols parameters){
-		var paramNames = new ArrayList<String>();
-		for (symbol: parameters.symbols){
-			if (symbol.symbolName != null){
-				paramNames.add(symbol.symbolName.name);	
-			}
-		}
-		return paramNames;
 	}
 	
 	protected def getRandomVariableByVariability(String varName, String type) {

@@ -1,8 +1,6 @@
 
 package org.ddmore.mdl.ui.quickfix;
 
-import java.awt.image.renderable.ParameterBlock;
-
 import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.AdditiveExpression;
 import org.ddmore.mdl.mdl.AndExpression;
@@ -59,9 +57,7 @@ import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.impl.MclImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.ParameterBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
-import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
@@ -421,15 +417,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			public void apply(EObject element, IModificationContext context) {
 				SymbolName ref = (SymbolName)element;
 				EObject container = ref.eContainer();
-				if (container instanceof SymbolDeclarationImpl){
-					SymbolDeclaration symbolModification = (SymbolDeclaration) container;
-					EObject container1 = container.eContainer();
-					if (container1 instanceof ParameterBlockImpl){
-						ParameterBlock block = (ParameterBlock)container1;
-						block.getParameters().remove(symbolModification);
-						return;
-					}
-				}	
 				if (container instanceof StructuralParametersBlockImpl){
 					StructuralParametersBlock structuralParametersBlock = (StructuralParametersBlock)container;
 					structuralParametersBlock.getParameters().remove(element);
@@ -525,8 +512,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		symbName.setName(varName);
 		newSymbol.setSymbolName(symbName);
 		Attribute[] attributes = {AttributeValidator.attr_cc_type, AttributeValidator.attr_units, AttributeValidator.attr_use};
-		AnyExpression expr = createListExpression(attributes);
-		newSymbol.setExpression(expr);
+		newSymbol.setList(createList(attributes));
 		block.getVariables().add(newSymbol);
 	}
 	
@@ -895,7 +881,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		symbName.setName(varName);
 		newParam.setSymbolName(symbName);
 		Attribute[] attributes = {AttributeValidator.attr_value};
-		newParam.setExpression(createListExpression(attributes));
+		newParam.setList(createList(attributes));
 		return newParam;
 	}
 	

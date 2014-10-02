@@ -76,7 +76,6 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap(2).before(f.getSimulateTaskRule());
 		c.setLinewrap(2).before(f.getOptimiseTaskRule());
 		c.setLinewrap(2).before(f.getEvaluateTaskRule());
-		c.setLinewrap(2).before(f.getParameterBlockRule());
 		c.setLinewrap(2).before(f.getDataBlockRule());
 		c.setLinewrap(2).before(f.getModelBlockRule());
 	

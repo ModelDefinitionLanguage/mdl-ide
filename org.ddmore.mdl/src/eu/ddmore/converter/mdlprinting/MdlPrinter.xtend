@@ -147,7 +147,7 @@ class MdlPrinter {
 		for (b: dataObject.blocks){
 			if (b.sourceBlock != null){
 				for (s: b.sourceBlock.statements){
-					if (s.symbolName.name.equals(PropertyValidator::attr_file.name) && s.expression != null)
+					if (s.propertyName.name.equals(PropertyValidator::attr_file.name) && s.expression != null)
 						return s.expression.toStr;
 				}
 			} 
@@ -160,7 +160,7 @@ class MdlPrinter {
 		for (b: dataObject.blocks){
 			if (b.sourceBlock != null){
 				for (s: b.sourceBlock.statements){
-					if (s.symbolName.name.equals(PropertyValidator::attr_script.name) && s.expression != null)
+					if (s.propertyName.name.equals(PropertyValidator::attr_script.name) && s.expression != null)
 						return s.expression.toStr;
 				}
 			} 
@@ -210,6 +210,11 @@ class MdlPrinter {
 			expr = v.expression.toStr;
 			if (!expr.trim().equals(""))
 				res = res + " = " + expr;
+		}
+		if (v.list != null){
+			expr = v.list.toStr;
+			if (!expr.trim().equals(""))
+				res = res + " : " + expr;
 		}
 		if (v.randomList != null){
 			expr = v.randomList.toStr;

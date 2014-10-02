@@ -22,7 +22,6 @@ class DistributionPrinter extends MdlPrinter{
 	//Recognised types of distributions and pairs (attribute, value type) to print as PharmML tags
 	val distribution_attrs = newHashMap(
 		DistributionType::bernoulli -> newHashMap(
-		//	DistributionValidator::attr_probability.name -> new Attribute("probability", pVal),
 			DistributionValidator::attr_p.name -> new Attribute("probability", pVal)),          
 		DistributionType::beta -> newHashMap(
 			DistributionValidator::attr_alpha.name  -> new Attribute("alpha", rVal), 
@@ -71,7 +70,6 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
 			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
 		DistributionType::geometric -> newHashMap(
-		//	DistributionValidator::attr_probability.name  -> new Attribute("probability", pVal), 
 			DistributionValidator::attr_p.name  -> new Attribute("probability", pVal), 
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
@@ -122,7 +120,6 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_pnat_dof.name  -> new Attribute("degreesOfFreedom", pnVal)), 
 		DistributionType::negativeBinomial    	-> newHashMap(
 			DistributionValidator::attr_numberOfFailures.name  -> new Attribute("numberOfFailures", nVal), 
-		//	DistributionValidator::attr_probability.name  -> new Attribute("probability", pVal),  
 			DistributionValidator::attr_nFail.name  -> new Attribute("numberOfFailures", nVal), 
 			DistributionValidator::attr_p.name  -> new Attribute("probability", pVal),  
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 

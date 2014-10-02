@@ -100,11 +100,9 @@ class ReferenceResolver{
 		    	var obj = iterator.next();
 		    	if (obj instanceof SymbolDeclaration){
 		    		var s = obj as SymbolDeclaration;
-		    		if (s.expression != null){
-		    			if (s.expression.list != null && s.symbolName != null){
-		    				if (!deriv_vars.contains(s.symbolName.name)){
-		    					deriv_vars.add(s.symbolName.name);
-		    				}
+		    		if (s.list != null && s.symbolName != null){
+		    			if (!deriv_vars.contains(s.symbolName.name)){
+		    				deriv_vars.add(s.symbolName.name);
 		    			}
 		    		}
 		    	}
@@ -114,9 +112,8 @@ class ReferenceResolver{
 	
 	protected def getDerivedVariables(DataDerivedBlock b){
 		var derivedVars = newArrayList;
-		for (st: b.statements){
+		for (st: b.statements)
 			Utils::addSymbolNoRepeat(derivedVars, st);
-		}
 		return derivedVars;
 	}
 	
@@ -167,12 +164,10 @@ class ReferenceResolver{
 		for (block: obj.blocks){
 			if (block.inputVariablesBlock != null){
 				for (s: block.inputVariablesBlock.variables){
-					if (s.expression != null){
-						if (s.expression.list != null && s.symbolName != null){
-							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-							if (use.equals(UseType::USE_IDV) && !independentVars.contains(s.symbolName.name)) 
-								independentVars.add(s.symbolName.name);
-						}
+					if (s.list != null && s.symbolName != null){
+						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+						if (use.equals(UseType::USE_IDV) && !independentVars.contains(s.symbolName.name)) 
+							independentVars.add(s.symbolName.name);
 					}
 				}
 			}
@@ -186,13 +181,11 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
-					if (s.expression != null){
-						if (s.expression.list != null && s.symbolName != null){
-							var use = s.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-							if (use.equals(UseType::USE_COVARIATE)) {
-								if (!covariateVars.contains(s.symbolName.name))
-									covariateVars.add(s.symbolName.name);
-							}
+					if (s.list != null && s.symbolName != null){
+						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+						if (use.equals(UseType::USE_COVARIATE)) {
+							if (!covariateVars.contains(s.symbolName.name))
+								covariateVars.add(s.symbolName.name);
 						}
 					}
 				}
@@ -238,12 +231,10 @@ class ReferenceResolver{
 					if (s.symbolName != null && s.symbolName.name.equals(name)){
 						return s;
 					}
-					if (s.expression != null){
-						if (s.expression.list != null){
-							var alias = s.expression.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
-							if (alias.length > 0){
-								if (alias.equals(name)) return s;
-							}
+					if (s.list != null){
+						var alias = s.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
+						if (alias.length > 0){
+							if (alias.equals(name)) return s;
 						}
 					}
 				}
@@ -284,10 +275,8 @@ class ReferenceResolver{
 						//!TODO: revise
 						observationVars.add(st.symbol.symbolName.name);
 						if (st.symbol.expression != null){
-							if (st.symbol.expression.expression != null){
-								var classifiedVars = st.symbol.expression.expression.getReferences;
-								observationVars.addAll(classifiedVars.keySet);
-							}
+							var classifiedVars = st.symbol.expression.getReferences;
+							observationVars.addAll(classifiedVars.keySet);
 						}
 					}
 				}
@@ -386,13 +375,11 @@ class ReferenceResolver{
 		for (b: o.blocks){
 			if(b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
-					if (s.expression != null){
-						if (s.expression.list != null && s.symbolName != null){
-							var level = s.expression.list.arguments.getAttribute(AttributeValidator::attr_level.name);
-							if (level.equals(levelId)){
-								if (!levelVars.contains(s.symbolName.name)){
-									levelVars.add(s.symbolName.name);
-								}
+					if (s.list != null && s.symbolName != null){
+						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level.name);
+						if (level.equals(levelId)){
+							if (!levelVars.contains(s.symbolName.name)){
+								levelVars.add(s.symbolName.name);
 							}
 						}
 					}

@@ -50,7 +50,7 @@ class DataSetPrinter {
 		for (b: dObj.blocks)	{
 			if (b.sourceBlock != null){
 				for (s: b.sourceBlock.statements){
-					if (s.symbolName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
+					if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
 						if (s.expression.toStr.equals(InputFormatType::FORMAT_NONMEM)){
 							res  = res + print_ds_NONMEM_DataSet(mObjName, dObjName);
 						} else {
@@ -63,14 +63,11 @@ class DataSetPrinter {
 		return res;
 	}
 	
-
 	protected def getColumnType(SymbolDeclaration modelVar){
 		var columnType = DefaultValues::USE_VAR;
-		if (modelVar.expression != null){
-			if (modelVar.expression.list != null){
-				val useValue = modelVar.expression.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-				if (useValue.length > 0)  columnType = useValue;
-			}
+		if (modelVar.list != null){
+			val useValue = modelVar.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+			if (useValue.length > 0)  columnType = useValue;
 		}
 		return columnType;
 	}
@@ -176,10 +173,10 @@ class DataSetPrinter {
 					var file = "";
 					var delimiter = "";
 					for (s: b.sourceBlock.statements){
-						if (s.symbolName.name.equals(PropertyValidator::attr_file.name) && s.expression != null){
+						if (s.propertyName.name.equals(PropertyValidator::attr_file.name) && s.expression != null){
 							file = s.expression.toStr;
 						}
-						if (s.symbolName.name.equals(PropertyValidator::attr_delimiter.name) && s.expression != null){
+						if (s.propertyName.name.equals(PropertyValidator::attr_delimiter.name) && s.expression != null){
 							delimiter = s.expression.toStr;							
 						}
 					}

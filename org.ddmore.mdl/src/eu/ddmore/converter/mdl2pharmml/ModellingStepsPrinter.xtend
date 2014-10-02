@@ -1,11 +1,12 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.validation.AttributeValidator
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.converter.mdl2pharmml.domain.Operation
 import org.ddmore.mdl.validation.PropertyValidator
+import org.ddmore.mdl.mdl.PropertyDeclaration
+import org.ddmore.mdl.mdl.AnyExpression
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -67,9 +68,9 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	}
 	
 	protected def print_msteps_ParameterEstimation(String pObjName, SymbolDeclaration s){
-		if (s.expression.list != null && s.symbolName != null) {
-			val fixed = s.expression.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
-			var value = s.expression.list.arguments.getAttribute(AttributeValidator::attr_value.name);
+		if (s.list != null && s.symbolName != null) {
+			val fixed = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
+			var value = s.list.arguments.getAttribute(AttributeValidator::attr_value.name);
 			if (value.length == 0) value = "0";
 			'''
 				<ParameterEstimation>
@@ -112,27 +113,25 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	'''
 	}
 
-	protected def print_msteps_Property(SymbolDeclaration s)
+	protected def print_msteps_Property(PropertyDeclaration s)
 	'''
-		«IF s.symbolName != null»
+		«IF s.propertyName != null»
 			«IF s.expression != null»
-				«IF s.expression.expression != null»
-					«print_msteps_Property(s.symbolName.name, s.expression.expression)»
-				«ENDIF»
-				«IF s.symbolName.name.equals(PropertyValidator::attr_task_algo.name)»
+				«print_msteps_Property(s.propertyName.name, s.expression)»
+				«IF s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
 					«s.print_msteps_Algorithm»
 				«ENDIF»	
 			«ENDIF»
 		«ENDIF»
 	'''
 		
-	protected def print_msteps_Property(String propertyName, Expression expr)'''
+	protected def print_msteps_Property(String propertyName, AnyExpression expr)'''
 		<Property name="«propertyName»">
 			«print_Assign(expr)»
 		</Property>
 	'''
 
-	protected def print_msteps_Algorithm(SymbolDeclaration s)
+	protected def print_msteps_Algorithm(PropertyDeclaration s)
 	'''
 		«IF s.expression.vector != null»
 			«FOR algoName: s.expression.vector.values»

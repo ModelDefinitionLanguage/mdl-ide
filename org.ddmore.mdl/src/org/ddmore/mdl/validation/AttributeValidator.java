@@ -25,6 +25,7 @@ import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
+import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
@@ -204,19 +205,25 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	public static Attribute getAttributeById(String id){
         return allAttributes.get(id);
     }
+	
+	//Do not validate arguments in matric/diag definition and function calls
+	private Boolean skipAttributeValidation(EObject container, Arguments args){
+		if (container == null) return true;
+		if (Utils.isNestedList(args)) return true;
+		if (isVariabilitySubblock(container, args) || 
+				args.eContainer() instanceof FunctionCallImpl) return true;		
+		return false;
+	}
 
 	@Check
 	public void checkRequiredArguments(Arguments args){
 		//Do not enforce required attributes for blocks to nested lists in this block
-		if (Utils.isNestedList(args)) return;
-			
 		EObject container = Utils.findListContainer(args.eContainer());
-		if (container == null) return;
-		if (isVariabilitySubblock(container, args)) return;		
+		if (skipAttributeValidation(container, args)) return;
+
 		String prefix = Utils.getBlockName(container) + ":";		
-		List<String> argumentNames = new ArrayList<String>();	
-		Utils.addSymbolNoRepeat(argumentNames, args); 
-		
+		List<String> argumentNames = Utils.getArgumentNames(args);	
+
 		//getRequiredAttributes contains lists of required attributes for each container
 		for (String attrName: Utils.getRequiredNames(getAllAttributes(container))){
 			if (!argumentNames.contains(attrName)) {
@@ -235,13 +242,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	@Check
 	public void checkAllArguments(Argument argument){
-		EObject argContainer = argument.eContainer();	
-		EObject container = Utils.findListContainer(argContainer.eContainer());
-		if (container == null) return;
+		EObject argContainer = argument.eContainer();
 		if (!(argContainer instanceof ArgumentsImpl)) return;
+		EObject container = Utils.findListContainer(argContainer.eContainer());
 		Arguments args = (Arguments)argContainer;
-		if (isVariabilitySubblock(container, args)) return;
-		
+		if (skipAttributeValidation(container, args)) return;
+
 		//Check that the attribute name is valid
 		List<Attribute> knownAttributes = getAllAttributes(container);
 		if (knownAttributes != null){
@@ -332,7 +338,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			DiagBlockImpl block = (DiagBlockImpl)container;
 			if (block.getParameters().equals(args)) return true;
 		}	
-		//Same - content does not contain arguments
 		return false;
 	}
 	

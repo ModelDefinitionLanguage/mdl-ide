@@ -74,52 +74,70 @@ public enum MdlDataType {
 		return false;
 	}
 	
-	static public boolean validateType(MdlDataType type, AnyExpression expr){
+	static public boolean validateType(MdlDataType type, Expression expr){
 		switch(type){
 			case TYPE_UNDEFINED: return true;
 			//Basic
-			case TYPE_STRING: return (expr.getExpression() != null)? isString(expr.getExpression()): false;
-			case TYPE_INT:  return (expr.getExpression() != null)? isInteger(expr.getExpression()): false;   
-			case TYPE_REAL: return (expr.getExpression() != null)? isReal(expr.getExpression()): false;     
-			case TYPE_BOOLEAN: return (expr.getExpression() != null)? isBoolean(expr.getExpression()): false;
+			case TYPE_STRING: return isString(expr);
+			case TYPE_INT:  return isInteger(expr);   
+			case TYPE_REAL: return isReal(expr);     
+			case TYPE_BOOLEAN: return isBoolean(expr);
 			//Restrictions
-			case TYPE_NAT:   return (expr.getExpression() != null)? isNatural(expr.getExpression()): false;  
-			case TYPE_PNAT:  return (expr.getExpression() != null)? isPositiveNatural(expr.getExpression()): false;  
-			case TYPE_PREAL: return (expr.getExpression() != null)? isPositiveReal(expr.getExpression()): false; 
-			case TYPE_PROBABILITY:  return (expr.getExpression() != null)? isProbability(expr.getExpression()): false;
+			case TYPE_NAT:   return isNatural(expr);  
+			case TYPE_PNAT:  return isPositiveNatural(expr);  
+			case TYPE_PREAL: return isPositiveReal(expr); 
+			case TYPE_PROBABILITY:  return isProbability(expr);
 			//References
-			case TYPE_REF: return (expr.getExpression() != null)? isReference(expr.getExpression()): false;  
-			case TYPE_EXPR: return (expr.getExpression() != null)? true: false;  
+			case TYPE_REF: return isReference(expr);  
+			case TYPE_EXPR: return true;  
 			//References to objects
-			case TYPE_OBJ_REF: return (expr.getExpression() != null)? isObjectReference(expr.getExpression()): false;
-			case TYPE_OBJ_REF_MODEL: return (expr.getExpression() != null)? validObjectTypeReference(expr.getExpression(), TYPE_OBJ_REF_MODEL): false;
-			case TYPE_OBJ_REF_DATA: return (expr.getExpression() != null)? validObjectTypeReference(expr.getExpression(), TYPE_OBJ_REF_DATA): false;
-			case TYPE_OBJ_REF_PARAM: return (expr.getExpression() != null)? validObjectTypeReference(expr.getExpression(), TYPE_OBJ_REF_PARAM): false;
-			case TYPE_OBJ_REF_TASK: return (expr.getExpression() != null)? validObjectTypeReference(expr.getExpression(), TYPE_OBJ_REF_TASK): false;
-			//Nested lists
-			case TYPE_LIST: return (expr.getList() != null)? true: false;  
-			//Vectors
-			case TYPE_VECTOR_INT: return (expr.getVector() != null)? isVectorInteger(expr.getVector()): false;
-			case TYPE_VECTOR_REAL: return (expr.getVector() != null)? isVectorReal(expr.getVector()): false;
-			case TYPE_VECTOR_STRING: return (expr.getVector() != null)? isVectorString(expr.getVector()): false;  
+			case TYPE_OBJ_REF: return isObjectReference(expr);
+			case TYPE_OBJ_REF_MODEL: validObjectTypeReference(expr, TYPE_OBJ_REF_MODEL);
+			case TYPE_OBJ_REF_DATA: return validObjectTypeReference(expr, TYPE_OBJ_REF_DATA);
+			case TYPE_OBJ_REF_PARAM: return validObjectTypeReference(expr, TYPE_OBJ_REF_PARAM);
+			case TYPE_OBJ_REF_TASK: return validObjectTypeReference(expr, TYPE_OBJ_REF_TASK);
+			default: return false;
+		}
+	}
+	
+	static public boolean validateType(MdlDataType type, Vector expr){
+		switch(type){
+			case TYPE_VECTOR_INT: return isVectorInteger(expr);
+			case TYPE_VECTOR_REAL: return isVectorReal(expr);
+			case TYPE_VECTOR_STRING: return isVectorString(expr);  
 			//Vectors of references
-			case TYPE_VECTOR_REF: return (expr.getVector() != null)? isVectorReference(expr.getVector()): false;  
-			case TYPE_VECTOR_EXPR: return (expr.getVector() != null);
+			case TYPE_VECTOR_REF: return isVectorReference(expr);  
+			case TYPE_VECTOR_EXPR: return true;
 			//Vectors of restrictions
-			case TYPE_VECTOR_NAT: return (expr.getVector() != null)? isVectorNat(expr.getVector()): false;
-			case TYPE_VECTOR_PNAT: return (expr.getVector() != null)? isVectorPNat(expr.getVector()): false;
-			case TYPE_VECTOR_PREAL: return (expr.getVector() != null)? isVectorPReal(expr.getVector()): false;
-			case TYPE_VECTOR_PROBABILITY: return (expr.getVector() != null)? isVectorProbability(expr.getVector()): false;
+			case TYPE_VECTOR_NAT: return isVectorNat(expr);
+			case TYPE_VECTOR_PNAT: return isVectorPNat(expr);
+			case TYPE_VECTOR_PREAL: return isVectorPReal(expr);
+			case TYPE_VECTOR_PROBABILITY: return isVectorProbability(expr);
+			default: return false;
+		}
+	}
 
-			//Enumerations
-			case TYPE_USE: return (expr.getType() != null)? isUseType(expr.getType()): false;
-			case TYPE_VAR_TYPE: return (expr.getType() != null)? isVarType(expr.getType()): false;
-			case TYPE_TARGET: return (expr.getType() != null)? isTargetType(expr.getType()): false;
-			case TYPE_INTERP: return (expr.getType() != null)? isInterp(expr.getType()): false;
-			case TYPE_RANDOM_EFFECT: return (expr.getType() != null)? isRandomEffect(expr.getType()): false;
-			case TYPE_INPUT_FORMAT: return (expr.getType() != null)? isInputType(expr.getType()): false;
+	static public boolean validateType(MdlDataType type, EnumType expr){
+		switch(type){
+			case TYPE_USE: return isUseType(expr);
+			case TYPE_VAR_TYPE: return isVarType(expr);
+			case TYPE_TARGET: return isTargetType(expr);
+			case TYPE_INTERP: return isInterp(expr);
+			case TYPE_RANDOM_EFFECT: return isRandomEffect(expr);
+			case TYPE_INPUT_FORMAT: return isInputType(expr);
 			default: return false; 
 		}
+	}
+	
+	static public boolean validateType(MdlDataType type, AnyExpression expr){
+		if (expr.getExpression() != null)
+			return validateType(type, expr.getExpression());
+		if ((expr.getList() != null) && (type == TYPE_LIST)) return true;
+		if (expr.getVector() != null)
+			return validateType(type, expr.getVector());
+		if (expr.getType() != null)
+			return validateType(type, expr.getType());
+		return false;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////

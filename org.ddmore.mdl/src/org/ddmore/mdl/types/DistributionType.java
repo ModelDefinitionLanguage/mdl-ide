@@ -33,8 +33,6 @@ public class DistributionType {
 	public static final String unif = "unif"; 
 	public static final String weibull = "weibull"; 
 	public static final String wishart = "wishart"; 
-	//mixtute models: mixtureModel left for compatibility
-	public static final String mixtureModel = "mixtureModel"; 	
 	public static final String discreteUnivariateMixtureModel = "discreteUnivariateMixtureModel"; 
 	public static final String discreteMultivariateMixtureModel = "discreteMultivariateMixtureModel"; 
 	public static final String categoricalUnivariateMixtureModel = "categoricalUnivariateMixtureModel"; 
@@ -72,8 +70,6 @@ public class DistributionType {
 			uniform ,
 			weibull ,
 			wishart ,
-			//mixtute models: mixtureModel left for compatibility
-			mixtureModel ,  	
 			discreteUnivariateMixtureModel ,
 		    discreteMultivariateMixtureModel ,
 		    categoricalUnivariateMixtureModel ,

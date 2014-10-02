@@ -155,7 +155,7 @@ DataDerivedBlock:
 SourceBlock:
 	identifier='SOURCE' 	
 	BEGIN 
-		statements += SymbolDeclaration* 
+		statements += PropertyDeclaration* 
 		(inlineBlock = InlineBlock)?
 	END
 ;
@@ -169,45 +169,39 @@ TaskObjectBlock:
 	simulateBlock = SimulateTask |
 	evaluateBlock = EvaluateTask |
 	optimiseBlock = OptimiseTask |
-	parameterBlock = ParameterBlock |
 	dataBlock = DataBlock |
 	modelBlock = ModelBlock | 
 	targetBlock = TargetBlock 	
 ;
 
-ParameterBlock:
-	identifier = 'PARAMETER' 
-	BEGIN parameters += SymbolDeclaration* END  
-;
-
 DataBlock:
 	identifier = 'DATA' 
-	BEGIN statements += SymbolDeclaration* END
+	BEGIN statements += PropertyDeclaration* END
 ;
 
 ModelBlock:
 	identifier = 'MODEL' 
-	BEGIN statements += SymbolDeclaration* END
+	BEGIN statements += PropertyDeclaration* END
 ;
 
 EstimateTask: 
 	identifier = 'ESTIMATE' 
-	BEGIN statements += SymbolDeclaration* END 
+	BEGIN statements += PropertyDeclaration* END 
 ;
 
 SimulateTask:
 	identifier = 'SIMULATE' 
-	BEGIN statements += SymbolDeclaration* END  
+	BEGIN statements += PropertyDeclaration* END  
 ;
 
 EvaluateTask:
 	identifier = "EVALUATE"
-	BEGIN statements += SymbolDeclaration* END  
+	BEGIN statements += PropertyDeclaration* END  
 ;
 
 OptimiseTask:
 	identifier = "OPTIMISE"
-	BEGIN statements += SymbolDeclaration* END  
+	BEGIN statements += PropertyDeclaration* END  
 ;
 
 ModelPredictionBlockStatement: 
@@ -261,26 +255,17 @@ VariabilityBlockStatement:
 
 MatrixBlock:
 	 identifier = 'matrix' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Symbols END)?  
+	 (BEGIN parameters = Arguments END)?  
 ;
 
 DiagBlock:	  
 	 identifier = 'diag' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Symbols END)?  
+	 (BEGIN parameters = Arguments END)?  
 ;
 
 SameBlock:	  
 	 identifier = 'same' '(' arguments = Arguments ')'
 	 (BEGIN parameters = SymbolNames END)?  
-;
-
-Symbols:
-	symbols += Symbol (=> ',' symbols += Symbol)*
-;
-
-Symbol:
-	symbolName = SymbolName "=" expression = AnyExpression |
-	expression = AnyExpression
 ;
 
 SymbolNames:
@@ -398,9 +383,13 @@ SymbolName:
 
 SymbolDeclaration:
 	(symbolName = SymbolName | argumentName = FullyQualifiedArgumentName)
-		("=" expression = AnyExpression | randomList = RandomList)? 
+		("=" expression = Expression | ":" list = List | randomList = RandomList)? 
 	| (functionName = FunctionName '(' (symbolName = SymbolName | argumentName = FullyQualifiedArgumentName) ')') 
-		("=" expression = AnyExpression | randomList = RandomList)		
+		("=" expression = Expression | randomList = RandomList)		
+;
+
+PropertyDeclaration:
+	propertyName = ArgumentName "=" expression = AnyExpression
 ;
 
 EnumType:
@@ -501,8 +490,6 @@ Distribution:
 	'uniform' |
 	'weibull' |
 	'wishart' |
-	//mixtute models: mixtureModel left for compatibility
-	'mixtureModel' |  	
 	'discreteUnivariateMixtureModel' |
     'discreteMultivariateMixtureModel' |
     'categoricalUnivariateMixtureModel' |
@@ -528,7 +515,7 @@ Primary:
 ;
 
 List:
-	identifier = BEGIN arguments = Arguments END
+	BEGIN arguments = Arguments END
 ;
 
 RandomList:
@@ -540,7 +527,8 @@ DistributionArguments:
 ;
 
 DistributionArgument: 
-	(argumentName = ArgumentName "=")? (distribution = Distribution | expression = AnyExpression | component = RandomList)
+	(argumentName = ArgumentName "=")? 
+	(distribution = Distribution | expression = AnyExpression | component = RandomList)
 ; 
 
 Arguments: 

@@ -169,10 +169,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    		SymbolDeclaration s = (SymbolDeclaration) obj;
 	    		if (s.getSymbolName() != null){
 		    		if (s.getSymbolName().getName().equals(ref.getParent().getName())) {
-		    			if (s.getExpression() != null){
-		    				Arguments arguments = null;
-			    			if (s.getExpression().getList() != null)
-		       					arguments = s.getExpression().getList().getArguments();
+		    			if (s.getList() != null){
+		    				Arguments arguments = s.getList().getArguments();
 		       				if (arguments != null)
 			       				for (Argument x: arguments.getArguments())
 	           						args.add(x);

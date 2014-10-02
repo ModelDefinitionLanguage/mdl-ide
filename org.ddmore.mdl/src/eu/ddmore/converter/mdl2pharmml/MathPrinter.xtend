@@ -30,7 +30,6 @@ import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.mdl.FunctionName
 import org.ddmore.mdl.mdl.Constant
 import org.ddmore.mdl.types.RandomEffectType
-import org.ddmore.mdl.mdl.Symbols
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.converter.mdl2pharmml.domain.Piece
 import org.ddmore.mdl.mdl.BlockStatement
@@ -39,6 +38,7 @@ import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.types.UseType
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.mdl.TaskObjectBlock
+import org.ddmore.mdl.mdl.Arguments
 
 class MathPrinter extends MdlPrinter{
 
@@ -120,13 +120,11 @@ class MathPrinter extends MdlPrinter{
 	protected def void addConditionalSymbol(BlockStatement s, String condition, Piece parent, HashMap<String, ArrayList<Piece>> symbols){
 		if (s.symbol != null){
 			if (s.symbol.expression != null && s.symbol.symbolName != null){
-				if (s.symbol.expression.expression != null){
-					var pieces = symbols.get(s.symbol.symbolName.name); 
-					if (pieces == null) pieces = new ArrayList<Piece>();
-					var Piece piece = new Piece(parent, print_Math_Expr(s.symbol.expression.expression).toString, condition);
-					pieces.add(piece);
-					symbols.put(s.symbol.symbolName.name, pieces);
-				}
+				var pieces = symbols.get(s.symbol.symbolName.name); 
+				if (pieces == null) pieces = new ArrayList<Piece>();
+				var Piece piece = new Piece(parent, print_Math_Expr(s.symbol.expression).toString, condition);
+				pieces.add(piece);
+				symbols.put(s.symbol.symbolName.name, pieces);
 			}
 		}	
 		if (s.statement != null){//nested conditional statement
@@ -742,24 +740,24 @@ class MathPrinter extends MdlPrinter{
 			symbIdRef="«ref.parent.name».«ref.toStr»"/>
 	'''
 	
-	def print_ct_Matrix(String matrixType, String rowNames, Symbols parameters, Boolean useDiagVarNames)
+	def print_ct_Matrix(String matrixType, String rowNames, Arguments parameters, Boolean useDiagVarNames)
 	'''
 		<Matrix matrixType="«matrixType»">
 			<ct:RowNames>
 				«rowNames»
 			</ct:RowNames>
-			«IF parameters.symbols.size > 0»
+			«IF parameters.arguments.size > 0»
 				<ct:MatrixRow>
-				«FOR i: 0..parameters.symbols.size - 1»
-					«val symbol = parameters.symbols.get(i)»
-					«IF useDiagVarNames && symbol.symbolName != null»
-						«print_ct_SymbolRef(symbol.symbolName.name)»
+				«FOR i: 0..parameters.arguments.size - 1»
+					«val symbol = parameters.arguments.get(i)»
+					«IF useDiagVarNames && symbol.argumentName != null»
+						«print_ct_SymbolRef(symbol.argumentName.name)»
 					«ELSE»
 						«print_Math_Expr(symbol.expression)»
 					«ENDIF»
-					«IF symbol.symbolName != null»
+					«IF symbol.argumentName != null»
 						</ct:MatrixRow>
-						«IF i != parameters.symbols.size - 1»
+						«IF i != parameters.arguments.size - 1»
 							<ct:MatrixRow>
 						«ENDIF»
 					«ENDIF»
@@ -779,7 +777,7 @@ class MathPrinter extends MdlPrinter{
 	protected def getProperty(TaskObjectBlock t, String name){
 		if (t.estimateBlock != null){
 			for (s: t.estimateBlock.statements){
-				if (s.symbolName != null && s.symbolName.name.equals(name)){
+				if (s.propertyName != null && s.propertyName.name.equals(name)){
 					if (s.expression != null)
 						return s.expression.toStr;
 				}
@@ -787,7 +785,7 @@ class MathPrinter extends MdlPrinter{
 		}
 		if (t.simulateBlock != null){
 			for (s: t.simulateBlock.statements){
-				if (s.symbolName != null && s.symbolName.name.equals(name)){
+				if (s.propertyName != null && s.propertyName.name.equals(name)){
 					if (s.expression != null){
 						return s.expression.toStr;
 					}
@@ -796,7 +794,7 @@ class MathPrinter extends MdlPrinter{
 		}
 		if (t.evaluateBlock != null){
 			for (s: t.evaluateBlock.statements){
-				if (s.symbolName != null && s.symbolName.name.equals(name)){
+				if (s.propertyName != null && s.propertyName.name.equals(name)){
 					if (s.expression != null){
 						return s.expression.toStr;
 					}
@@ -805,7 +803,7 @@ class MathPrinter extends MdlPrinter{
 		}
 		if (t.optimiseBlock != null){
 			for (s: t.optimiseBlock.statements){
-				if (s.symbolName != null && s.symbolName.name.equals(name)){
+				if (s.propertyName != null && s.propertyName.name.equals(name)){
 					if (s.expression != null){
 						return s.expression.toStr;
 					}
@@ -814,7 +812,7 @@ class MathPrinter extends MdlPrinter{
 		}
 		if (t.dataBlock != null){
 			for (s: t.dataBlock.statements){
-				if (s.symbolName != null && s.symbolName.name.equals(name)){
+				if (s.propertyName != null && s.propertyName.name.equals(name)){
 					if (s.expression != null){
 						return s.expression.toStr;
 					}
@@ -823,7 +821,7 @@ class MathPrinter extends MdlPrinter{
 		}
 		if (t.modelBlock != null){
 			for (s: t.modelBlock.statements){
-				if (s.symbolName != null && s.symbolName.name.equals(name)){
+				if (s.propertyName != null && s.propertyName.name.equals(name)){
 					if (s.expression != null){
 						return s.expression.toStr;
 					}
