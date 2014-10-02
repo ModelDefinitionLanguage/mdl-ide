@@ -13,6 +13,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.ddmore.mdl.domain.FunctionParameter;
+import org.ddmore.mdl.domain.FunctionSignature;
+import org.ddmore.mdl.domain.ParameterPassingMethod;
+import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.MdlPackage;

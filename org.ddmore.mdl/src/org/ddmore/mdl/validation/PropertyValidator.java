@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;

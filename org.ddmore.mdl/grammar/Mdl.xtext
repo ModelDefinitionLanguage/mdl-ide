@@ -395,7 +395,7 @@ TargetLanguage:
 ;
 
 terminal EXTERNAL_CODE:
-	'***' -> '***'
+	'<<' -> '>>'
 ; 
 
 SymbolName:

@@ -3,6 +3,7 @@ package org.ddmore.mdl.ui.quickfix;
 
 import java.awt.image.renderable.ParameterBlock;
 
+import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.AdditiveExpression;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
@@ -66,7 +67,6 @@ import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
 import org.ddmore.mdl.types.MdlDataType;
 import org.ddmore.mdl.types.VariableType;
-import org.ddmore.mdl.validation.Attribute;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.DistributionValidator;
 import org.ddmore.mdl.validation.MdlJavaValidator;

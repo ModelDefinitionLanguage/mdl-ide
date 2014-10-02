@@ -6,6 +6,7 @@ package org.ddmore.mdl.ui.contentassist;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionArguments;
@@ -27,7 +28,6 @@ import org.ddmore.mdl.types.UseType;
 import org.ddmore.mdl.types.VariableType;
 import org.ddmore.mdl.ui.contentassist.AbstractMdlProposalProvider;
 import org.ddmore.mdl.ui.outline.Images;
-import org.ddmore.mdl.validation.Attribute;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.DistributionValidator;
 import org.ddmore.mdl.validation.PropertyValidator;

@@ -1,10 +1,6 @@
-package org.ddmore.mdl.validation;
+package org.ddmore.mdl.domain;
 
 import org.ddmore.mdl.types.MdlDataType;
-
-enum ParameterPassingMethod {
-	IN, OUT, IN_OUT
-}
 
 public class FunctionParameter {
 	String name = "";

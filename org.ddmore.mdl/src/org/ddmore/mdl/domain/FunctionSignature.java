@@ -1,4 +1,4 @@
-package org.ddmore.mdl.validation;
+package org.ddmore.mdl.domain;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -4,7 +4,7 @@
  * 
  * Container for specifying requirements for distribution attributes
  */
-package org.ddmore.mdl.validation;
+package org.ddmore.mdl.domain;
 
 import org.ddmore.mdl.types.MdlDataType;
 

@@ -106,7 +106,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		EObject container = t.eContainer();
 		if (!(container instanceof BlockStatement)){
 			//external target blocks should have location defined
-			String location = Utils.getAttributeValue(t.getArguments(), AttributeValidator.attr_location.name);
+			String location = Utils.getAttributeValue(t.getArguments(), AttributeValidator.attr_location.getName());
 			if (location.length() == 0)
 				warning(MSG_TARGET_LOCATION, 
 						MdlPackage.Literals.TARGET_BLOCK__ARGUMENTS,

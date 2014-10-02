@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
