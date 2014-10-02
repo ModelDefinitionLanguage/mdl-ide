@@ -43,14 +43,52 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_FUNCTION_PARAMETER_UNKNOWN = "Unknown function parameter";
 	public final static String MSG_FUNCTION_PARAMETER_MISSING = "Required parameter is not set";
 
+	//Synchronised with PharmML v.4.0.1 
 	final public static List<String> funct_standard1 = Arrays.asList(
-		"abs", "exp", "factorial", "factln", "gammaln", "ln", "log", "logistic", "logit", "normcdf",
-		"probit", "sqrt", "sin", "cos", "tan", "sec", "csc", "cot", "sinh", "cosh", "tanh", 
-		"sech", "csch", "coth", "arcsin", "arccos", "arctan", "arcsec", "arccsc", 
-		"arccot", "arcsinh", "arccosh", "arctanh", "arcsech", "arccsch", "arccoth", 
-		"floor", "ceiling");
+		"abs",
+		"exp",
+		"factorial",
+		"factln",
+		"gammaln",
+		"ln", //Supported by MDL but not PharmML
+		"log",
+		"log2",
+		"log10",
+		"logistic",
+		"logit",
+		"normcdf",
+		"probit",
+		//"minus",
+		"sqrt",
+		"sin",
+		"cos",
+		"tan",
+		"cot",
+		"atan2",
+		"sec",
+		"csc",
+		"sinh",
+		"cosh",
+		"tanh",
+		"sech",
+		"csch",
+		"coth",
+		"arcsin",
+		"arccos",
+		"arctan",
+		"arcsec",
+		"arccsc",
+		"arccot",
+		"arcsinh",
+		"arccosh",
+		"arctanh",
+		"arcsech",
+		"arccsch",
+		"arccoth",
+		"floor",
+		"ceiling");
 
-	final public static List<String> funct_standard2 = Arrays.asList("logx", "root", "min", "max");
+	final public static List<String> funct_standard2 = Arrays.asList("logx", "root", "min", "max", "rem");
 
 	final public static String funct_runif     = "runif";
 	final public static String funct_errorExit = "errorExit";

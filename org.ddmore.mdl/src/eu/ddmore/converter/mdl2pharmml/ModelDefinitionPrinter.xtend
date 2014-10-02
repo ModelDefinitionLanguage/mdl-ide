@@ -366,6 +366,11 @@ class ModelDefinitionPrinter {
 						«print_Assign(st.symbol.expression)»
 					«ENDIF»
 				«ENDIF»
+				«IF st.symbol.list != null»
+					«IF st.symbol.list != null»
+						«print_Assign(st.symbol.list)»
+					«ENDIF»
+				«ENDIF»
 			</«tag»>
 		«ENDIF»
 		«IF st.statement != null»

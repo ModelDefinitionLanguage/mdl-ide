@@ -1,6 +1,6 @@
 package eu.ddmore.converter.mdl2pharmml.domain
 
-import org.ddmore.mdl.validation.ModellingObjectGroup
+import org.ddmore.mdl.domain.ModellingObjectGroup
 
 class Operation {
 	public var String name;

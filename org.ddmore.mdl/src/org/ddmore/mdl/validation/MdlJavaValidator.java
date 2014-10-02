@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.ddmore.mdl.domain.ModellingObjectGroup;
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;

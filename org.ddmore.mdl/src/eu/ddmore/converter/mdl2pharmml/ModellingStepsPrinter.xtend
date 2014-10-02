@@ -7,6 +7,7 @@ import eu.ddmore.converter.mdl2pharmml.domain.Operation
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.AnyExpression
+import org.ddmore.mdl.domain.ModellingObjectGroup
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -22,9 +23,9 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		res  = res + print_ds_TargetTool(op.mog.getDataObjName);
 		res = res + print_ds_TargetDataSet(op.mog.getModelObjName, op.mog.getDataObjName);
 		if (op.type.equals(BLK_ESTIM_STEP)){
-			res = res + print_msteps_EstimationStep(op.mog.getModelObjName, op.mog.getDataObjName, op.mog.getTaskObjName, BLK_ESTIM_STEP + op.name);
+			res = res + print_msteps_EstimationStep(op.mog, BLK_ESTIM_STEP + op.name);
 		} else {
-			res = res + print_msteps_SimulationStep(op.mog.getDataObjName, BLK_SIMUL_STEP + op.name);
+			res = res + print_msteps_SimulationStep(op.mog, BLK_SIMUL_STEP + op.name);
 		}
 		'''
 		<ModellingSteps xmlns="«xmlns_mstep»">
@@ -36,11 +37,11 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 	// III.a Estimation Step
 	////////////////////////////////////////////////
-	protected def print_msteps_EstimationStep(String pObjName, String dObjName, String tObjName, String stepId)'''
+	protected def print_msteps_EstimationStep(ModellingObjectGroup mog, String stepId)'''
 	<EstimationStep oid="«stepId»">
-		«dObjName.print_mdef_TargetToolReference»
-		«pObjName.print_msteps_ParametersToEstimate»
-		«tObjName.print_msteps_Operation(1, OPERATION_EST_POP)»
+		«mog.getDataObjName.print_mdef_TargetToolReference»
+		«mog.getParamObjName.print_msteps_ParametersToEstimate»
+		«mog.getTaskObjName.print_msteps_Operation(1, OPERATION_EST_POP)»
 	</EstimationStep>
 	'''
 		
@@ -87,9 +88,9 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	///////////////////////////////////////////////
 	// III.b Simulation Step
 	////////////////////////////////////////////////
-	protected def print_msteps_SimulationStep(String dObjName, String stepId)'''
+	protected def print_msteps_SimulationStep(ModellingObjectGroup mog, String stepId)'''
 	<SimulationStep  oid="«stepId»">		
-		«dObjName.print_mdef_TargetToolReference»
+		«mog.getDataObjName.print_mdef_TargetToolReference»
 	</SimulationStep>
 	'''
 	

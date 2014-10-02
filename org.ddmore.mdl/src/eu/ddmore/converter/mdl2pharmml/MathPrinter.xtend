@@ -39,6 +39,7 @@ import org.ddmore.mdl.types.UseType
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import org.ddmore.mdl.mdl.Arguments
+import org.ddmore.mdl.types.ConstantType
 
 class MathPrinter extends MdlPrinter{
 
@@ -188,7 +189,7 @@ class MathPrinter extends MdlPrinter{
 			«e.expression.print_Math_Expr»
 		«ENDIF»
 		«IF e.list != null»
-			«e.print_list»
+			«e.list.print_List»
 		«ENDIF»	
 	'''
 	
@@ -205,26 +206,33 @@ class MathPrinter extends MdlPrinter{
 		<ct:Assign>
 			«e.print_Math_Equation»
 		</ct:Assign>	
+	'''	
+	
+	def CharSequence print_Assign(List l)'''
+		<ct:Assign>
+			«l.print_Math_Equation»
+		</ct:Assign>	
 	'''
 	
-	//For ode lists used as part of expression print the values to their attribute deriv
-	def print_odeList(AnyExpression e) '''
-		«var deriv = e.list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name)»
-		«IF deriv != null»«deriv.print_Math_Expr»«ENDIF»
-	'''
+	def print_Math_Equation(List l)'''
+		<Equation xmlns="«xmlns_math»">
+			«l.print_List»
+		</Equation>
+	'''	
 	
-	//+ Translate depending on list attributes
-	def	print_list(AnyExpression e){
-		if (e.list != null){
-			val args  = e.list.arguments;
-			val type = args.getAttribute(AttributeValidator::attr_cc_type.name);
-			val define =  args.getAttributeExpression(AttributeValidator::attr_define.name);
-			if (type.equals(VariableType::CC_CATEGORICAL) && (define.list != null)){
+	def print_List(List list){
+		val type = list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+		if (type.equals(VariableType::CC_CATEGORICAL)){
+			val define = list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+			if (define.list != null)
 				define.list.print_Categorical;
-			}
-		}		
-	} 
-
+		} else {
+			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name);
+			if (deriv != null)
+				deriv.print_Math_Expr
+		} 
+	}
+	
 	//+
 	def print_Categorical(List categories)'''
 		<Categorical>
@@ -272,21 +280,24 @@ class MathPrinter extends MdlPrinter{
 	}
 
 	//Functions from the standardFunctions list are PharmML operators
-	def print_Math_FunctionCall_Standard(FunctionCall call)
-	'''
-		«IF call.arguments.arguments.size == 1»
-			<Uniop op="«call.identifier.name»">
-				«call.arguments.arguments.get(0).expression.print_Math_Expr»
-			</Uniop>
-		«ELSE»
-			«IF call.arguments.arguments.size == 2»
-				<Binop op="«call.identifier.name»">
+	def print_Math_FunctionCall_Standard(FunctionCall call){
+		var functName = call.identifier.name;
+		if (call.identifier.name.equals("ln")) functName = "log";
+		'''
+			«IF call.arguments.arguments.size == 1»
+				<Uniop op="«functName»">
 					«call.arguments.arguments.get(0).expression.print_Math_Expr»
-					«call.arguments.arguments.get(1).expression.print_Math_Expr»
-				</Binop>
+				</Uniop>
+			«ELSE»
+				«IF call.arguments.arguments.size == 2»
+					<Binop op="«functName»">
+						«call.arguments.arguments.get(0).expression.print_Math_Expr»
+						«call.arguments.arguments.get(1).expression.print_Math_Expr»
+					</Binop>
+				«ENDIF»
 			«ENDIF»
-		«ENDIF»
-	'''
+		'''
+	}
 	
 	//+ Convert user defined math functions to PharmML 
 	def print_Math_FunctionCall_UserDefined(FunctionCall call)
@@ -311,7 +322,7 @@ class MathPrinter extends MdlPrinter{
 			«expr.print_Math_Equation»
 		</ct:Assign>
 	'''
-	
+
 	//+
 	def print_Math_Equation(Expression expr)'''
 		<Equation xmlns="«xmlns_math»">
@@ -552,7 +563,11 @@ class MathPrinter extends MdlPrinter{
 	}
 	
 	def getPrint_ct_Constant(Constant constant)'''
-		<Constant op="«constant.identifier.convertConstant»"/>
+		«IF constant.identifier.equals(ConstantType::T)»
+			<ct:SymbRef symbIdRef="«ConstantType::T»"/>
+		«ELSE»
+			<Constant op="«constant.identifier.convertConstant»"/>
+		«ENDIF»
 	'''
 	
 	def getValueType(String value){
