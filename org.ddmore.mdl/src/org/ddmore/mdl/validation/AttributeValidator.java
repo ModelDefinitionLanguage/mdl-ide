@@ -18,7 +18,6 @@ import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.Selector;
-import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
@@ -26,14 +25,15 @@ import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
+import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
 import org.ddmore.mdl.mdl.impl.DeqBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
-import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
@@ -91,6 +91,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_init = new Attribute("init", MdlDataType.TYPE_EXPR, false, "0");	
 	final public static Attribute attr_x0 = new Attribute("x0", MdlDataType.TYPE_REAL, false);	
 	final public static Attribute attr_wrt = new Attribute("wrt", MdlDataType.TYPE_REF, false, "TIME");	
+	final public static Attribute attr_interp = new Attribute("interp", MdlDataType.TYPE_INTERP, false);
 	
 	/*Data object*/
 	/*DATA_INPUT_VARIABLES*/
@@ -99,11 +100,15 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_boundaries = new Attribute("boundaries", MdlDataType.TYPE_VECTOR_REAL, false);
 	final public static Attribute attr_missing = new Attribute("missing", MdlDataType.TYPE_INT, false);
 	
-	/*DESIGN*/
-	final public static Attribute attr_design_source = new Attribute("source", MdlDataType.TYPE_REF, true, DefaultValues.VAR_NAME);
-	final public static Attribute attr_interp = new Attribute("interp", MdlDataType.TYPE_INTERP, false);
-	//final public static Attribute attr_idv = new Attribute("idv", MdlDataType.TYPE_IDV, false);
 
+	/*INDIVIDUAL_VARIABLES*/
+	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_GAUSSIAN, true);
+	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_FUNCT, true);
+	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_cov = new Attribute("cov", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_fixEff = new Attribute("fixEff", MdlDataType.TYPE_REF, false);
+			
 	/*All objects*/
 	
 	/*TARGET*/
@@ -118,7 +123,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
 			attr_recode, attr_boundaries, attr_missing);
 	final public static List<Attribute> attrs_dataDerived = Arrays.asList(attr_req_cc_type, attr_expr_value, attr_units);
-	final public static List<Attribute> attrs_design = Arrays.asList(attr_design_source, attr_units, attr_interp /*,attr_idv*/);
 
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, 
@@ -131,12 +135,14 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_units, 
 			attr_cc_type, attr_level, attr_alias);
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
+	final public static List<Attribute> attrs_deq = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_cc_type, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
 	final public static List<Attribute> attrs_observation = Arrays.asList();
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
-	final public static List<Attribute> attrs_deq = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
+	final public static List<Attribute> attrs_individualVariables = Arrays.asList(
+			attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff);
 	
 	/*All blocks*/
 	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_sameline);
@@ -149,7 +155,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			/*Data object*/
 			for (Attribute attr: attrs_dataInput) put("DATA_INPUT_VARIABLES:" + attr.getName(), attr);
 			for (Attribute attr: attrs_dataDerived) put("DATA_DERIVED_VARIABLES:" + attr.getName(), attr);
-			for (Attribute attr: attrs_design) put("DESIGN:" + attr.getName(), attr);
 			/*Parameter object*/
 			for (Attribute attr: attrs_structural) put("STRUCTURAL:" + attr.getName(), attr);
 			for (Attribute attr: attrs_variability) put("VARIABILITY:" + attr.getName(), attr);
@@ -160,6 +165,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			}
 			/*Model object*/
 			for (Attribute attr: attrs_inputVariables) put("MODEL_INPUT_VARIABLES:" + attr.getName(), attr);
+			for (Attribute attr: attrs_individualVariables) put("INDIVIDUAL_VARIABLES:" + attr.getName(), attr);
 			for (Attribute attr: attrs_ode) put("ODE:" + attr.getName(), attr);
 			for (Attribute attr: attrs_deq) put("DEQ:" + attr.getName(), attr);
 			for (Attribute attr: attrs_estimation) put("ESTIMATION:" + attr.getName(), attr);
@@ -190,6 +196,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl) return attrs_variability_subblock;
 		/*Model object*/
 		if (obj instanceof InputVariablesBlockImpl) return attrs_inputVariables;
+		if (obj instanceof IndividualVariablesBlockImpl) return attrs_individualVariables;
 		if (obj instanceof OdeBlockImpl) return attrs_ode; 
 		if (obj instanceof DeqBlockImpl) return attrs_deq; 
 		if (obj instanceof EstimationBlockImpl) return attrs_estimation; 
@@ -209,9 +216,10 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//Do not validate arguments in matric/diag definition and function calls
 	private Boolean skipAttributeValidation(EObject container, Arguments args){
 		if (container == null) return true;
-		if (Utils.isNestedList(args)) return true;
+		//Skip nested lists
+		if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl) return true;
 		if (isVariabilitySubblock(container, args) || 
-				args.eContainer() instanceof FunctionCallImpl) return true;		
+				(args.eContainer() instanceof FunctionCallImpl)) return true;		
 		return false;
 	}
 
@@ -228,11 +236,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		for (String attrName: Utils.getRequiredNames(getAllAttributes(container))){
 			if (!argumentNames.contains(attrName)) {
 				if (!exclusive_attrs.containsKey(attrName) || !argumentNames.contains(exclusive_attrs.get(attrName))){
-					if (container instanceof SourceBlockImpl){
-						//Required attributes file and script are not needed if INLINE subblock is defined.
-						SourceBlock sourceBlock = (SourceBlock)container;
-						if (sourceBlock.getInlineBlock() != null) return;
-					}
 					warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, 
 					MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attrName);
 				}
@@ -242,10 +245,10 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	@Check
 	public void checkAllArguments(Argument argument){
-		EObject argContainer = argument.eContainer();
-		if (!(argContainer instanceof ArgumentsImpl)) return;
-		EObject container = Utils.findListContainer(argContainer.eContainer());
-		Arguments args = (Arguments)argContainer;
+		EObject argsContainer = argument.eContainer();
+		if (!(argsContainer instanceof ArgumentsImpl)) return;
+		EObject container = Utils.findListContainer(argsContainer.eContainer());
+		Arguments args = (Arguments)argsContainer;
 		if (skipAttributeValidation(container, args)) return;
 
 		//Check that the attribute name is valid
@@ -255,8 +258,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			attributeNames.addAll(Utils.getAllNames(knownAttributes));
 			//for categorical values, recognise user defined categories as attributes
 			if (container instanceof DataInputBlockImpl){
-				EObject parentArgsContainer = argContainer;
-				if (Utils.isNestedList(args)){//Arguments -> List -> AnyExpression -> Argument
+				EObject parentArgsContainer = argsContainer;
+				if (args.eContainer() instanceof ListImpl){
+					//Arguments -> List -> AnyExpression -> Argument
 					if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl)
 						parentArgsContainer = args.eContainer().eContainer().eContainer().eContainer();
 				}

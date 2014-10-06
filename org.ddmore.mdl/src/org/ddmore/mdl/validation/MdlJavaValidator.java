@@ -17,6 +17,7 @@ import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
+import org.ddmore.mdl.types.ConstantType;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
@@ -138,9 +139,12 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		EObject container = ref.eContainer();
 		//Skip validation of symbol names which are not references 
 		if (container instanceof SymbolDeclarationImpl ||
-			container instanceof FunctionCallStatement) {
-			return;
-		}
+			container instanceof FunctionCallStatement) return;
+		
+		//Skip type=gaussian 
+		if (ref.getName().equals(ConstantType.GAUSSIAN)) return;
+		//Skip reference to a standard function
+		if (FunctionValidator.standardFunctions.containsKey(ref.getName())) return;
 		
 		if (container instanceof FullyQualifiedArgumentNameImpl){
 			if (!Utils.isSymbolDeclared(declaredVariables, ref))

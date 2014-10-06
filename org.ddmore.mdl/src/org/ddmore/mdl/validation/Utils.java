@@ -23,6 +23,7 @@ import org.ddmore.mdl.mdl.FullyQualifiedFunctionName;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.FunctionName;
+import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
 import org.ddmore.mdl.mdl.MatrixBlock;
@@ -50,9 +51,9 @@ import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
+import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
-import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
@@ -321,6 +322,7 @@ public class Utils {
 			obj instanceof DataDerivedBlockImpl ||
 			//Model object
 			obj instanceof InputVariablesBlockImpl ||
+			obj instanceof IndividualVariablesBlockImpl ||
 			obj instanceof LibraryBlockImpl ||
 			obj instanceof OdeBlockImpl ||
 			obj instanceof DeqBlockImpl ||
@@ -351,6 +353,7 @@ public class Utils {
 		if (obj instanceof SameBlockImpl) return ((SameBlock)obj).getIdentifier();
 		/*Model object*/
 		if (obj instanceof InputVariablesBlockImpl) return ((InputVariablesBlock)obj).getIdentifier();
+		if (obj instanceof IndividualVariablesBlockImpl) return ((IndividualVariablesBlock)obj).getIdentifier();
 		if (obj instanceof LibraryBlockImpl) return ((LibraryBlock)obj).getIdentifier() ;
 		if (obj instanceof OdeBlockImpl) return ((OdeBlock)obj).getIdentifier() ;
 		if (obj instanceof DeqBlockImpl) return ((DeqBlock)obj).getIdentifier() ;
@@ -499,9 +502,4 @@ public class Utils {
 		}
 		return varList;
 	}
-	
-	public static boolean isNestedList(Arguments args){
-		return (args.eContainer() instanceof ListImpl);
-	}
-	
 }

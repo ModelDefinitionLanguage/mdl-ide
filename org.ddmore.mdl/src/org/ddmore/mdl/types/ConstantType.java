@@ -15,4 +15,6 @@ public class ConstantType {
 	
 	public final static List<String> CONSTANT_VALUES = 
 			Arrays.asList(T, INF, NEWIND, IREP, ICALL, MIXEST, MIXNUM);
+	
+	public final static String GAUSSIAN = "gaussian";
 }

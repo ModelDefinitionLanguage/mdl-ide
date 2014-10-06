@@ -6,9 +6,6 @@
  */
 package org.ddmore.mdl.types;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.DistributionArgument;
@@ -23,6 +20,7 @@ import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.Vector;
+import org.ddmore.mdl.validation.FunctionValidator;
 import org.ddmore.mdl.validation.Utils;
 
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
@@ -36,8 +34,8 @@ public enum MdlDataType {
     //Restrictions of basic (to comply with PharmML)
     TYPE_NAT, TYPE_PNAT, TYPE_PREAL, TYPE_PROBABILITY,
     //References to variables and mathematical expressions
-	TYPE_REF, TYPE_EXPR, 
-	//Refernces to objects
+	TYPE_REF, TYPE_EXPR, TYPE_FUNCT, 
+	//References to objects
 	TYPE_OBJ_REF, TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_OBJ_REF_TASK,
 	//Nested lists
 	TYPE_LIST, TYPE_RANDOM_LIST, 
@@ -57,12 +55,10 @@ public enum MdlDataType {
 	TYPE_INTERP,        //{constant, linear, nearest, spline, pchip, cubic}
 	TYPE_RANDOM_EFFECT, //{VAR, SD} 
 	TYPE_INPUT_FORMAT,  //{nonmemFormat, eventFormat}
-	TYPE_DISTRIBUTION   //see 'Distribution' in MDL grammar
+	TYPE_DISTRIBUTION,   //see 'Distribution' in MDL grammar
+	TYPE_GAUSSIAN
 	;
     
-    public final static List<String> CONSTANTS = Arrays.asList(
-    		"INF", "-INF", "T", "NEWIND", "IREP", "ICALL", "MIXEST", "MIXNUM");
-	
 	//Validates required type or reference
 	static public boolean validateType(MdlDataType type, DistributionArgument arg){
 		if (arg.getExpression() != null)
@@ -86,10 +82,12 @@ public enum MdlDataType {
 			case TYPE_NAT:   return isNatural(expr);  
 			case TYPE_PNAT:  return isPositiveNatural(expr);  
 			case TYPE_PREAL: return isPositiveReal(expr); 
-			case TYPE_PROBABILITY:  return isProbability(expr);
+			case TYPE_PROBABILITY: return isProbability(expr);
 			//References
 			case TYPE_REF: return isReference(expr);  
 			case TYPE_EXPR: return true;  
+			case TYPE_FUNCT: return isFunctionRef(expr);
+			case TYPE_GAUSSIAN: return MdlPrinter.getInstance().toStr(expr).equals(ConstantType.GAUSSIAN);
 			//References to objects
 			case TYPE_OBJ_REF: return isObjectReference(expr);
 			case TYPE_OBJ_REF_MODEL: validObjectTypeReference(expr, TYPE_OBJ_REF_MODEL);
@@ -353,6 +351,10 @@ public enum MdlDataType {
 		}
 		return false;
 	}
+	
+	private static boolean isFunctionRef(Expression expr){
+		return FunctionValidator.standardFunctions.containsKey(MdlPrinter.getInstance().toStr(expr));
+	}
 
 	public static SymbolName getReference(OrExpression orExpr) {
 		if (orExpr.getExpression().size() > 1) return null;
@@ -466,7 +468,7 @@ public enum MdlDataType {
 			Integer.parseInt(value);
 			return true;
 		} catch (NumberFormatException e){
-			return CONSTANTS.contains(value);
+			return ConstantType.CONSTANT_VALUES.contains(value);
 		}
 	}
 	
@@ -534,7 +536,7 @@ public enum MdlDataType {
 			Double.parseDouble(value);
 			return true;
 		} catch (NumberFormatException e){
-			return CONSTANTS.contains(value);
+			return ConstantType.CONSTANT_VALUES.contains(value);
 		}
 	}	
 	
