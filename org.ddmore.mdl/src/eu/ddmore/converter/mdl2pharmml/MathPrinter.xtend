@@ -25,8 +25,6 @@ import org.ddmore.mdl.mdl.Primary
 import java.util.ArrayList
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
-import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.mdl.FunctionName
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.converter.mdl2pharmml.domain.Piece
@@ -187,9 +185,6 @@ class MathPrinter extends MdlPrinter{
 		«IF e.expression != null»
 			«e.expression.print_Math_Expr»
 		«ENDIF»
-		«IF e.list != null»
-			«e.list.print_List»
-		«ENDIF»	
 	'''
 	
 	//+
@@ -206,31 +201,6 @@ class MathPrinter extends MdlPrinter{
 			«e.print_Math_Equation»
 		</ct:Assign>	
 	'''	
-	
-	def CharSequence print_Assign(List l)'''
-		<ct:Assign>
-			«l.print_Math_Equation»
-		</ct:Assign>	
-	'''
-	
-	def print_Math_Equation(List l)'''
-		<Equation xmlns="«xmlns_math»">
-			«l.print_List»
-		</Equation>
-	'''	
-	
-	def print_List(List list){
-		val type = list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
-		if (type.equals(VariableType::CC_CATEGORICAL)){
-			val define = list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-			if (define.list != null)
-				define.list.print_Categorical;
-		} else {
-			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name);
-			if (deriv != null)
-				deriv.print_Math_Expr
-		} 
-	}
 	
 	//+
 	def print_Categorical(List categories)'''
@@ -516,6 +486,9 @@ class MathPrinter extends MdlPrinter{
 		«IF p.symbol !=null»
 			«p.symbol.print_ct_SymbolRef»
 		«ENDIF»
+		«IF p.string !=null»
+			<ct:String>«p.string»</ct:String>
+		«ENDIF»
 		«IF p.vector != null»
 			«p.vector.print_ct_Vector»
 		«ENDIF»
@@ -781,7 +754,6 @@ class MathPrinter extends MdlPrinter{
 	'''		
 
 	def convertMatrixType(String matrixType){
-		System::out.println("Test (actual value): " + matrixType);
 		if (matrixType.equals(VariabilityEnum::VAR.toString))
 			return MATRIX_COV;
 		if (matrixType.equals(VariabilityEnum::SD.toString))

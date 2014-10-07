@@ -76,7 +76,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	final public static Attribute attr_fix = new Attribute("fix", MdlDataType.TYPE_BOOLEAN, false, "false");
 	final public static Attribute attr_units = new Attribute("units", MdlDataType.TYPE_STRING, false, "kg");
-	final public static Attribute attr_transform = new Attribute("transform", MdlDataType.TYPE_STRING, false, "");
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseEnum.ID.toString());
 	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, "ID");
 	final public static Attribute attr_alias = new Attribute("alias", MdlDataType.TYPE_REF, false);
@@ -110,6 +109,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_cov = new Attribute("cov", MdlDataType.TYPE_VECTOR_REF, false);
 	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
 			
 	/*All objects*/
 	
@@ -128,9 +128,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, 
-			attr_fix, attr_units, attr_transform);
+			attr_fix, attr_units);
 	final public static List<Attribute> attrs_variability = Arrays.asList(attr_req_value, attr_re_type, attr_fix, 
-			attr_units, attr_transform);
+			attr_units);
 	final public static List<Attribute> attrs_variability_subblock = Arrays.asList(attr_name, attr_re_type, attr_fix);
 	
 	/*Model object*/
@@ -144,7 +144,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(
-			attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff);
+			attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff, attr_group);
 	
 	/*All blocks*/
 	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_sameline);

@@ -13,9 +13,9 @@ import org.ddmore.mdl.mdl.ConditionalExpression;
 import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
-import org.ddmore.mdl.mdl.Distribution;
 import org.ddmore.mdl.mdl.DistributionArgument; 
 import org.ddmore.mdl.mdl.DistributionArguments;
+import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.Expression;
@@ -47,7 +47,7 @@ import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolName;
-import org.ddmore.mdl.mdl.TargetLanguage;
+import org.ddmore.mdl.mdl.TargetType;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VarType;
@@ -222,9 +222,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	}
 	
 	private AnyExpression createUseExpression(String value) {
-		System.out.println("Creating use value: " + value);
-		UseType tl = MdlFactory.eINSTANCE.createUseType();
-		tl.setIdentifier(value);
+		UseType tl = UseType.getByName(value);
 		EnumType t = MdlFactory.eINSTANCE.createEnumType();
 		t.setUse(tl);
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
@@ -233,8 +231,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	}
 	
 	AnyExpression createTargetLanguageExpression(String value){
-		TargetLanguage tl = MdlFactory.eINSTANCE.createTargetLanguage();
-		tl.setIdentifier(value);
+		TargetType tl = TargetType.getByName(value);
 		EnumType t = MdlFactory.eINSTANCE.createEnumType();
 		t.setTarget(tl);
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
@@ -374,7 +371,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return attr;
 	}
 	
-	//TODO: check expected type and create expression of the right type
 	DistributionArgument createDistributionArgument(Attribute attribute){
 		String attrName = attribute.getName();
 		String attrValue = attribute.getDefaultValue();
@@ -384,8 +380,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		argName.setName(attrName);
 		attr.setArgumentName(argName);
 		if (attrName.equals(DistributionValidator.attr_type.getName())){
-			Distribution distribution = MdlFactory.eINSTANCE.createDistribution();
-			distribution.setIdentifier(attrValue);
+			DistributionType distribution = DistributionType.getByName(attrValue);
 			attr.setDistribution(distribution);
 		}
 		else {

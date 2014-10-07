@@ -10,7 +10,11 @@ import org.ddmore.mdl.mdl.ParameterObject
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import java.util.HashSet
 import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.types.VariableType
+import org.ddmore.mdl.mdl.IndividualVarType
 import java.util.List
+import org.ddmore.mdl.mdl.Vector
+import org.ddmore.mdl.mdl.Primary
 
 class ModelDefinitionPrinter {
 	private var String mObjName;
@@ -368,7 +372,7 @@ class ModelDefinitionPrinter {
 				«ENDIF»
 				«IF st.symbol.list != null»
 					«IF st.symbol.list != null»
-						«print_Assign(st.symbol.list)»
+						«print_List(st.symbol.list)»
 					«ENDIF»
 				«ENDIF»
 			</«tag»>
@@ -378,6 +382,90 @@ class ModelDefinitionPrinter {
 		«ENDIF»
 		'''
 	}
+	
+	def print_List(org.ddmore.mdl.mdl.List list){
+		var assign = "";
+		val type = list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+		if (type.equals(VariableType::CC_CATEGORICAL)){
+			val define = list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+			if (define.list != null){
+				assign = '''«define.list.print_Categorical»'''
+			}
+		} else {
+			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name);
+			if (deriv != null)
+				assign = '''«deriv.print_Math_Expr»'''
+		} 
+		if (assign.length > 0) return
+		'''
+			<ct:Assign>
+				<Equation xmlns="«xmlns_math»">
+					«assign»
+				</Equation>
+			</ct:Assign>	
+		'''	
+		//Gaussian models
+		if (type.equals(IndividualVarType::GAUSSIAN.toString) || 
+			type.equals(IndividualVarType::LINEAR.toString)){
+			val trans = list.arguments.getAttribute(AttributeValidator::attr_trans.name);
+			val ranEff = list.arguments.getAttributeExpression(AttributeValidator::attr_ranEff.name);
+			var ranEffExpr = '''''';
+			if (ranEff != null){
+				if (ranEff.expression != null) 
+					ranEffExpr = '''«ranEff.expression.print_Math_Expr»'''
+				if (ranEff.vector != null) ranEff.vector.print_ct_Vector;
+			}
+			var covariate = '''''';
+			var covariateType = "GeneralCovariate";
+			if (type.equals(IndividualVarType::LINEAR.toString)) {
+				covariateType = "LinearCovariate";		
+				val cov = list.arguments.getAttributeExpression(AttributeValidator::attr_cov.name);
+				val fixEff = list.arguments.getAttributeExpression(AttributeValidator::attr_fixEff.name);
+				covariate = '''«print_Covariate(cov.vector, fixEff.vector)»''';
+			}
+			return 
+			'''
+			<GaussianModel>
+				«IF trans.length > 0»
+					<Transformation>«trans»</Transformation>
+				«ENDIF»
+				<«covariateType»>
+					«covariate»
+				</«covariateType»>
+				«IF ranEffExpr.length > 0»
+					<RandomEFfect>
+						«ranEffExpr»
+					<RandomEffect>
+				«ENDIF»
+			</GaussianModel>
+			'''
+		}
+	}
+	
+	protected def print_Covariate(Vector cov, Vector ranEff){
+		var res = '''''';
+		if (cov != null){
+			for (i: 0..cov.values.size){
+				if (ranEff.values.size() > i){
+					val covValue = cov.values.get(i);
+					val ranEffValue = ranEff.values.get(i);
+					res = res + print_Covariate(covValue, ranEffValue);
+				}
+			}
+		}
+		return res;
+	}
+	
+	protected def print_Covariate(Primary cov, Primary ranEff)'''
+		«IF cov != null»
+			<Covariate>
+				«cov.print_Math_Primary»
+				<FixedEffect>
+					«ranEff.print_Math_Primary»
+				</FixedEffect>
+			</Covariate>	
+		«ENDIF»
+	'''
 	
 	/////////////////////////////
 	// I.i CorrelationModel

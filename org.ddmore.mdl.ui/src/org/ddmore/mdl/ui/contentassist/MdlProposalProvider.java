@@ -10,21 +10,26 @@ import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionArguments;
+import org.ddmore.mdl.mdl.DistributionEnum;
+import org.ddmore.mdl.mdl.IndividualVarEnum;
+import org.ddmore.mdl.mdl.InputFormatEnum;
+import org.ddmore.mdl.mdl.PropertyDeclaration;
 import org.ddmore.mdl.mdl.RandomList;
+import org.ddmore.mdl.mdl.TargetEnum;
+import org.ddmore.mdl.mdl.UseEnum;
+import org.ddmore.mdl.mdl.VariabilityEnum;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.DistributionArgumentImpl;
+import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
+import org.ddmore.mdl.mdl.impl.PropertyDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.RandomListImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
-import org.ddmore.mdl.types.InputFormatType;
-import org.ddmore.mdl.types.InterpolationType;
-import org.ddmore.mdl.types.RandomEffectType;
-import org.ddmore.mdl.types.UseType;
 import org.ddmore.mdl.types.VariableType;
 import org.ddmore.mdl.ui.contentassist.AbstractMdlProposalProvider;
 import org.ddmore.mdl.ui.outline.Images;
@@ -82,53 +87,69 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 	public void completeArgument_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		if (model instanceof ArgumentImpl){
 			Argument arg = (Argument)model;
-			//TODO: replace comparison of names with the attribute identifiers BLOCK_ID:attr_name!
+			//target
+			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_req_target.getName())){
+				List<String> attributes = new ArrayList<String>();
+				for (TargetEnum value: TargetEnum.VALUES)
+					attributes.add(value.toString());
+				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
+				addProposals(context, acceptor, attributes, img); return;
+			}	
+			//use
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_use.getName())){
 				List<String> attributes = new ArrayList<String>();
-				attributes.addAll(UseType.USE_VALUES);
+				for (UseEnum value: UseEnum.VALUES)
+					attributes.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
-				addProposals(context, acceptor, attributes, img);
-			} else {
-				//type
-				if (arg.getArgumentName().getName().equals(AttributeValidator.attr_req_cc_type.getName())){
-					EObject container = Utils.findListContainer(arg);
-					if (container instanceof VariabilityBlockImpl || container instanceof MatrixBlockImpl || 
-						container instanceof DiagBlockImpl || container instanceof SameBlockImpl){
-						List<String> attributes = new ArrayList<String>();
-						attributes.addAll(RandomEffectType.RE_VALUES);
-						Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
-						addProposals(context, acceptor, attributes, img);
-					} else {
-						List<String> attributes = new ArrayList<String>();
+				addProposals(context, acceptor, attributes, img); return;
+			}		
+			//type
+			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_req_cc_type.getName())){
+				EObject container = Utils.findListContainer(arg);
+				List<String> attributes = new ArrayList<String>();
+				if (container instanceof VariabilityBlockImpl || container instanceof MatrixBlockImpl || 
+					container instanceof DiagBlockImpl || container instanceof SameBlockImpl){
+					for (VariabilityEnum value: VariabilityEnum.VALUES)
+						attributes.add(value.toString());
+					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
+					addProposals(context, acceptor, attributes, img); return;
+				}
+				if (container instanceof IndividualVariablesBlockImpl){
+					for (IndividualVarEnum value: IndividualVarEnum.VALUES)
+						attributes.add(value.toString());
+					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
+					addProposals(context, acceptor, attributes, img); 
+				} else {
 						attributes.addAll(VariableType.CC_VALUES);
 						Image img = imageHelper.getImage(Images.getPath(Images.CC_TYPE));				
 						addProposals(context, acceptor, attributes, img);
-					}
-				} else {
-					if (arg.getArgumentName().getName().equals(AttributeValidator.attr_interp.getName())){
-						List<String> attributes = new ArrayList<String>();
-						attributes.addAll(InterpolationType.INTERP_VALUES);
-						Image img = imageHelper.getImage(Images.getPath(Images.INTERPOLATION_TYPE));				
-						addProposals(context, acceptor, attributes, img);
-					} else {
-						if (arg.getArgumentName().getName().equals(PropertyValidator.attr_inputformat.getName())){
-							List<String> attributes = new ArrayList<String>();
-							attributes.addAll(InputFormatType.FORMAT_VALUES);
-							Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
-							addProposals(context, acceptor, attributes, img);
-						} else {
-							if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
-								List<String> attributes = new ArrayList<String>();
-								attributes.addAll(UnitValidator.getUnitNames());
-								Image img = imageHelper.getImage(Images.getPath(Images.EXPRESSION));				
-								addProposals(context, acceptor, attributes, img);
-							}
-						}
-					}
 				}
+			}
+			//units
+			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
+				List<String> attributes = new ArrayList<String>();
+				attributes.addAll(UnitValidator.getUnitNames());
+				Image img = imageHelper.getImage(Images.getPath(Images.EXPRESSION));				
+				addProposals(context, acceptor, attributes, img);
 			}
 		}
 	}
+	
+	
+	@Override
+	public void completePropertyDeclaration_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
+		if (model instanceof PropertyDeclarationImpl){
+			PropertyDeclaration property = (PropertyDeclaration)model;
+			//inputformat
+			if (property.getPropertyName().getName().equals(PropertyValidator.attr_inputformat.getName())){
+				List<String> values = new ArrayList<String>();
+				for (InputFormatEnum value: InputFormatEnum.VALUES)
+					values.add(value.toString());
+				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
+				addProposals(context, acceptor, values, img);
+			}
+		}
+	} 
 	
 	@Override
 	public void completeDistributionArguments_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
@@ -137,10 +158,10 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			RandomList randomList = (RandomList)model;
 			DistributionArguments args = randomList.getArguments();
 			DistributionArgument type = DistributionValidator.findDistributionAttribute(args, 
-					DistributionValidator.attr_type.getName());
+				DistributionValidator.attr_type.getName());
 			Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_ATTRIBUTE));
 			if (type != null){
-				String typeName = type.getDistribution().getIdentifier();
+				String typeName = type.getDistribution().toString();
 				List<Attribute> recognized_attrs = DistributionValidator.distr_attrs.get(typeName);
 				if (recognized_attrs != null){
 					List<String> attributes = Utils.getAllNames(recognized_attrs);
@@ -161,7 +182,8 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			DistributionArgument arg = (DistributionArgument)model;
 			if (arg.getArgumentName().getName().equals(DistributionValidator.attr_type.getName())){
 				List<String> attributes = new ArrayList<String>();
-				attributes.addAll(DistributionValidator.distr_attrs.keySet()); 
+				for (DistributionEnum value: DistributionEnum.VALUES)
+					attributes.add(value.toString()); 
 				Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_TYPE));
 				addProposals(context, acceptor, attributes, img);
 			}

@@ -62,7 +62,7 @@ public class Images {
 	public static final String USE_TYPE = "073-use-type.png";
 	public static final String TARGET_LANGUAGE = "074-target-language.png";
 	public static final String VARIABILITY_TYPE = "075-variability-type.png";
-	public static final String INTERPOLATION_TYPE= "076-interpolation-type.png";
+	public static final String TRIAL_TYPE= "076-interpolation-type.png";
 	
 	public static final String TASK_FUNCTION_DECLARATION = "146-task.png";
 	public static final String ESTIMATE_TASK = "127-task-estimate.png";
@@ -71,6 +71,7 @@ public class Images {
 
 	public static final String ARGUMENT_NAME = ATTRIBUTE;
 	public static final String PRIMARY = EXPRESSION;
+	public static final String VECTOR = "186.png";
 	
 	public static final String getPath(String path) {
 		return ICONS_PATH + path;
