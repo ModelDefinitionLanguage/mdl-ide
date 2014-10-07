@@ -28,18 +28,17 @@ import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.mdl.FunctionName
-import org.ddmore.mdl.mdl.Constant
-import org.ddmore.mdl.types.RandomEffectType
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.converter.mdl2pharmml.domain.Piece
 import org.ddmore.mdl.mdl.BlockStatement
 import java.util.HashMap
 import org.ddmore.mdl.mdl.ConditionalStatement
-import org.ddmore.mdl.types.UseType
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.types.ConstantType
+import org.ddmore.mdl.mdl.VariabilityEnum
+import org.ddmore.mdl.mdl.UseEnum
+import org.ddmore.mdl.types.DefaultValues
 
 class MathPrinter extends MdlPrinter{
 
@@ -502,11 +501,11 @@ class MathPrinter extends MdlPrinter{
 		«IF expr.symbol !=null»
 			«expr.symbol.print_ct_SymbolRef»
 		«ENDIF»
-		«IF expr.constant != null»
-			«expr.constant.print_ct_Constant»
-		«ENDIF»
 		«IF expr.attribute !=null»
 			«expr.attribute.print_ct_SymbolRef»
+		«ENDIF»
+		«IF expr.constant != null»
+			«expr.constant.print_ct_Constant»
 		«ENDIF»
 	'''
 
@@ -562,11 +561,11 @@ class MathPrinter extends MdlPrinter{
 		}
 	}
 	
-	def getPrint_ct_Constant(Constant constant)'''
-		«IF constant.identifier.equals(ConstantType::T)»
-			<ct:SymbRef symbIdRef="«ConstantType::T»"/>
+	def print_ct_Constant(String constant)'''
+		«IF constant.toString.equals(DefaultValues::INDEPENDENT_VAR)»
+			<ct:SymbRef symbIdRef="«constant»"/>
 		«ELSE»
-			<Constant op="«constant.identifier.convertConstant»"/>
+			<Constant op="«constant.convertConstant»"/>
 		«ENDIF»
 	'''
 	
@@ -782,9 +781,10 @@ class MathPrinter extends MdlPrinter{
 	'''		
 
 	def convertMatrixType(String matrixType){
-		if (matrixType.equals(RandomEffectType::RE_VAR))
+		System::out.println("Test (actual value): " + matrixType);
+		if (matrixType.equals(VariabilityEnum::VAR.toString))
 			return MATRIX_COV;
-		if (matrixType.equals(RandomEffectType::RE_SD))
+		if (matrixType.equals(VariabilityEnum::SD.toString))
 			return MATRIX_STDEV;
 		return MATRIX_COV;	
 	}	
@@ -907,14 +907,12 @@ class MathPrinter extends MdlPrinter{
 	
 	def convertColumnType(String type){
 		switch (type){ 
-			case UseType::USE_AMT: "dose"
-			case UseType::USE_YTYPE: "dvid"
-			case UseType::USE_ITYPE: "dvid"
-			case UseType::USE_OCC: "occasion"
-			case UseType::USE_CENS: "censoring"
+			case UseEnum::AMT: "dose"
+			case UseEnum::YTYPE: "dvid"
+			case UseEnum::ITYPE: "dvid"
+			case UseEnum::OCC: "occasion"
+			case UseEnum::CENS: "censoring"
 			default: type
 		}
-	}
-	
-	
+	}		
 }

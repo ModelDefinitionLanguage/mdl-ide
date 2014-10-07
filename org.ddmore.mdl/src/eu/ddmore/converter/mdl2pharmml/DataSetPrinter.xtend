@@ -3,11 +3,11 @@ package eu.ddmore.converter.mdl2pharmml
 import java.util.ArrayList
 import org.ddmore.mdl.validation.AttributeValidator
 import org.apache.commons.io.FilenameUtils
-import org.ddmore.mdl.types.InputFormatType
-import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.validation.PropertyValidator
+import org.ddmore.mdl.mdl.InputFormatEnum
+import org.ddmore.mdl.mdl.UseEnum
 
 class DataSetPrinter {
 	protected extension MathPrinter mathPrinter = null;
@@ -51,7 +51,7 @@ class DataSetPrinter {
 			if (b.sourceBlock != null){
 				for (s: b.sourceBlock.statements){
 					if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
-						if (s.expression.toStr.equals(InputFormatType::FORMAT_NONMEM)){
+						if (s.expression.toStr.equals(InputFormatEnum::NONMEM_FORMAT.toString)){
 							res  = res + print_ds_NONMEM_DataSet(mObjName, dObjName);
 						} else {
 							res = res + print_ds_Objective_DataSet(mObjName, dObjName);
@@ -64,7 +64,7 @@ class DataSetPrinter {
 	}
 	
 	protected def getColumnType(SymbolDeclaration modelVar){
-		var columnType = DefaultValues::USE_VAR;
+		var columnType = UseEnum::ID.toString;
 		if (modelVar.list != null){
 			val useValue = modelVar.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 			if (useValue.length > 0)  columnType = useValue;

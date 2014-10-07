@@ -9,16 +9,23 @@ package org.ddmore.mdl.types;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.DistributionArgument;
+import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.EnumType; 
 import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.IndividualVarType;
+import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.Mcl;
-import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
+import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.TargetType;
+import org.ddmore.mdl.mdl.TrialType;
 import org.ddmore.mdl.mdl.UnaryExpression;
+import org.ddmore.mdl.mdl.UseType;
+import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.validation.FunctionValidator;
 import org.ddmore.mdl.validation.Utils;
@@ -49,24 +56,24 @@ public enum MdlDataType {
     TYPE_VECTOR_REF, TYPE_VECTOR_EXPR,
 	
     /*Enumerations*/
-	TYPE_USE,           //see 'UseType' in MDL grammar
-	TYPE_VAR_TYPE,      //{continuous, categorical, likelihood, M2LL}
-	TYPE_TARGET,        //{NMTRAN_CODE, MLXTRAN_CODE, PML_CODE, BUGS_CODE, R_CODE MATLAB_CODE}
-	TYPE_INTERP,        //{constant, linear, nearest, spline, pchip, cubic}
-	TYPE_RANDOM_EFFECT, //{VAR, SD} 
-	TYPE_INPUT_FORMAT,  //{nonmemFormat, eventFormat}
+	TYPE_VAR_TYPE,       //{continuous, categorical, likelihood, M2LL}
+	TYPE_USE,            //see 'UseType' in MDL grammar
+	TYPE_TARGET,         //{NMTRAN_CODE, MLXTRAN_CODE, PML_CODE, BUGS_CODE, R_CODE MATLAB_CODE}
+	TYPE_RANDOM_EFFECT,  //{VAR, SD} 
+	TYPE_INPUT_FORMAT,   //{nonmemFormat, eventFormat}
 	TYPE_DISTRIBUTION,   //see 'Distribution' in MDL grammar
-	TYPE_GAUSSIAN
+	TYPE_INDIVIDUAL_VAR, //{linear, gaussian}
+	TYPE_TRIAL           //{simple, sequential, combined}
 	;
     
 	//Validates required type or reference
 	static public boolean validateType(MdlDataType type, DistributionArgument arg){
 		if (arg.getExpression() != null)
 			return validateType(type, arg.getExpression());
-		if (arg.getDistribution() != null)
-			if (type.equals(MdlDataType.TYPE_DISTRIBUTION)) return true;
 		if (arg.getComponent() != null)
 			if (type.equals(MdlDataType.TYPE_RANDOM_LIST)) return true;
+		if (arg.getDistribution() != DistributionType.NONE)
+			if (type.equals(MdlDataType.TYPE_DISTRIBUTION)) return true;
 		return false;
 	}
 	
@@ -87,7 +94,6 @@ public enum MdlDataType {
 			case TYPE_REF: return isReference(expr);  
 			case TYPE_EXPR: return true;  
 			case TYPE_FUNCT: return isFunctionRef(expr);
-			case TYPE_GAUSSIAN: return MdlPrinter.getInstance().toStr(expr).equals(ConstantType.GAUSSIAN);
 			//References to objects
 			case TYPE_OBJ_REF: return isObjectReference(expr);
 			case TYPE_OBJ_REF_MODEL: validObjectTypeReference(expr, TYPE_OBJ_REF_MODEL);
@@ -117,16 +123,17 @@ public enum MdlDataType {
 
 	static public boolean validateType(MdlDataType type, EnumType expr){
 		switch(type){
-			case TYPE_USE: return isUseType(expr);
-			case TYPE_VAR_TYPE: return isVarType(expr);
-			case TYPE_TARGET: return isTargetType(expr);
-			case TYPE_INTERP: return isInterp(expr);
-			case TYPE_RANDOM_EFFECT: return isRandomEffect(expr);
-			case TYPE_INPUT_FORMAT: return isInputType(expr);
+			case TYPE_VAR_TYPE: return expr.getType() != null;
+			case TYPE_USE: return (expr.getUse() != UseType.NONE);
+			case TYPE_TARGET: return (expr.getTarget() != TargetType.NONE);
+			case TYPE_RANDOM_EFFECT: return (expr.getVariability() != VariabilityType.NONE);
+			case TYPE_INPUT_FORMAT: return (expr.getInput() != InputFormatType.NONE);
+			case TYPE_TRIAL: return (expr.getTrial() != TrialType.NONE);
+			case TYPE_INDIVIDUAL_VAR: return (expr.getIndividualVar() != IndividualVarType.NONE);
 			default: return false; 
 		}
 	}
-	
+
 	static public boolean validateType(MdlDataType type, AnyExpression expr){
 		if (expr.getExpression() != null)
 			return validateType(type, expr.getExpression());
@@ -270,45 +277,6 @@ public enum MdlDataType {
 		return true;	
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////
-	//Validate enumerations
-	//////////////////////////////////////////////////////////////////////////////////
-
-	private static boolean isInputType(EnumType type) {
-		if ((type.getInput() != null) && 
-			(InputFormatType.FORMAT_VALUES.contains(type.getInput().getIdentifier()))) return true;
-		return false;
-	}
-	
-	private static boolean isInterp(EnumType type) {
-		if ((type.getInterpolation() != null) && 
-			(InterpolationType.INTERP_VALUES.contains(type.getInterpolation().getIdentifier()))) return true;
-		return false;
-	}
-
-	private static boolean isRandomEffect(EnumType type) {
-		if ((type.getVariability() != null) && (
-			RandomEffectType.RE_VALUES.contains(type.getVariability().getIdentifier()))) return true;
-		return false;
-	}
-
-	private static boolean isTargetType(EnumType type) {
-		if ((type.getTarget() != null && 
-			(TargetCodeType.TARGET_VALUES.contains(type.getTarget().getIdentifier())))) return true;
-		return false;
-	}
-
-	private static boolean isVarType(EnumType type) {
-		if (type.getType() != null) return true;
-		return false;
-	}
-
-	private static boolean isUseType(EnumType type) {
-		if ((type.getUse() != null) &&
-			(UseType.USE_VALUES.contains(type.getUse().getIdentifier()))) return true;
-		return false;
-	}
-	
 	/////////////////////////////////////////////////////////////////////////////////////
 	//Validate references
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -386,6 +354,7 @@ public enum MdlDataType {
 			return isBoolean(expr.getConditionalExpression().getExpression1());
 		}
 		else {
+			
 			OrExpression orExpr = expr.getConditionalExpression().getExpression();
 			if (orExpr.getExpression().size() > 1) return true;
 			AndExpression andExpr = orExpr.getExpression().get(0);
@@ -463,12 +432,17 @@ public enum MdlDataType {
 		}
 	}
 	
+	private static boolean isNumericConstant(String value) {
+		if (value.equals("INF")) return true;
+		return false;
+	}
+		
 	private static boolean isInteger(String value) {
 		try{
 			Integer.parseInt(value);
 			return true;
 		} catch (NumberFormatException e){
-			return ConstantType.CONSTANT_VALUES.contains(value);
+			return isNumericConstant(value);
 		}
 	}
 	
@@ -536,7 +510,7 @@ public enum MdlDataType {
 			Double.parseDouble(value);
 			return true;
 		} catch (NumberFormatException e){
-			return ConstantType.CONSTANT_VALUES.contains(value);
+			return isNumericConstant(value);
 		}
 	}	
 	

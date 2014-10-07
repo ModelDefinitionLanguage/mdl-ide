@@ -364,15 +364,6 @@ TargetBlock:
 	BEGIN  externalCode = EXTERNAL_CODE END
 ;
 
-TargetLanguage:
-	identifier = ('NMTRAN_CODE' | 
-	'MLXTRAN_CODE' | 
-	'PML_CODE' | 
-	'BUGS_CODE' | 
-	'R_CODE' | 
-	'MATLAB_CODE') 	
-;
-
 terminal EXTERNAL_CODE:
 	'<<' -> '>>'
 ; 
@@ -385,7 +376,7 @@ SymbolDeclaration:
 	(symbolName = SymbolName | argumentName = FullyQualifiedArgumentName)
 		("=" expression = Expression | ":" list = List | randomList = RandomList)? 
 	| (functionName = FunctionName '(' (symbolName = SymbolName | argumentName = FullyQualifiedArgumentName) ')') 
-		("=" expression = Expression | randomList = RandomList)		
+		("=" expression = Expression | ":" list = List | randomList = RandomList)		
 ;
 
 PropertyDeclaration:
@@ -394,20 +385,88 @@ PropertyDeclaration:
 
 EnumType:
 	type = VarType |
-	use = UseType |       
-	target = TargetLanguage |
-	variability = VariabilityType |
-	interpolation = InterpolationType |
-	input = InputType |
-	trial = TrialType
+	use = UseEnum |       
+	target = TargetEnum |
+	variability = VariabilityEnum |
+	input = InputFormatEnum |
+	trial = TrialEnum |
+	individualVar = IndividualVarEnum
 ;
 
-TrialType:
-	identifier = ('simple' | 'combined' | 'sequential')
+//NK: in xText enum is always assigned, therefore we introduce an "none" value and hide it from MDL-IDE
+
+enum UseType:
+	none | id | idv | amt | dv | dvid | ytype | itype | covariate | reg | time | dose | cat | 
+	occ | occasion | adm | cens | limit | rate | tinf | ss | addl | ii | tau | mdv |evid | cmt
 ;
 
-Constant:
-	identifier = ('INF' | 'T' | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM')
+enum UseEnum returns UseType:
+ 	id | idv | amt | dv | dvid | ytype | itype | covariate | reg | time | dose | cat | occ | occasion | adm | cens | limit | 
+	rate | tinf | ss | addl | ii | tau | mdv |evid | cmt
+;
+
+enum TargetType:
+	none | NMTRAN_CODE | MLXTRAN_CODE | PML_CODE | BUGS_CODE | R_CODE | MATLAB_CODE 	
+;
+
+enum TargetEnum returns TargetType:
+	NMTRAN_CODE | MLXTRAN_CODE | PML_CODE | BUGS_CODE | R_CODE | MATLAB_CODE 	
+;
+
+enum InputFormatType:
+	none | nonmemFormat | eventFormat 
+;
+
+enum InputFormatEnum returns InputFormatType:
+	nonmemFormat | eventFormat 
+;
+
+enum VariabilityType:
+	none | SD | VAR
+;
+
+enum VariabilityEnum returns VariabilityType:
+	SD | VAR
+;
+
+enum IndividualVarType:
+	none | linear | gaussian
+;
+
+enum IndividualVarEnum returns IndividualVarType:
+	linear | gaussian
+;
+
+enum TrialType:
+	none | simple | combined | sequential 
+;
+
+enum TrialEnum returns TrialType:
+	simple | combined | sequential 
+;
+
+enum DistributionType: 
+	none | bernoulli | betaDistribution | binomial | discrete | cauchy | chiSquare | dirichlet | exponential | 	
+	fDistribution | gamma | geometric | hypergeometric | inverseGamma |	laplace | logistic |
+	logNormal | multinomial | multivariateNormal | multivariateStudentT | negativeBinomial |
+	normal | normalInverseGamma | pareto | poisson | unif | studentT | uniform | weibull | wishart |
+	discreteUnivariateMixtureModel | discreteMultivariateMixtureModel |
+    categoricalUnivariateMixtureModel | categoricalMultivariateMixtureModel |
+	continuousMultivariateMixtureModel | continuousUnivariateMixtureModel
+;
+
+enum DistributionEnum returns DistributionType: 
+	bernoulli | betaDistribution | binomial | discrete | cauchy | chiSquare | dirichlet | exponential | 	
+	fDistribution | gamma | geometric | hypergeometric | inverseGamma |	laplace | logistic |
+	logNormal | multinomial | multivariateNormal | multivariateStudentT | negativeBinomial |
+	normal | normalInverseGamma | pareto | poisson | unif | studentT | uniform | weibull | wishart |
+	discreteUnivariateMixtureModel | discreteMultivariateMixtureModel |
+    categoricalUnivariateMixtureModel | categoricalMultivariateMixtureModel |
+	continuousMultivariateMixtureModel | continuousUnivariateMixtureModel
+;
+
+terminal CONSTANT:
+	'INF' | 'T' | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
 ;
 
 VarType:
@@ -415,88 +474,6 @@ VarType:
 	continuous = 'continuous' | 
 	likelihood = 'likelihood' |
 	M2LL = 'M2LL' 	
-;
-
-InputType:
-	identifier = ('nonmemFormat' | 'eventFormat')
-;
-
-InterpolationType:
-	identifier = (
-		'constant' | 'linear' | 'nearest' | 'spline' | 'pchip' | 'cubic'
-	)
-;
-
-UseType:
-	identifier = ('id'| 
-	'idv' |
-	'amt' | 
-	'dv' | 
-	'dvid' | 
-	'ytype' | 
-	'itype' |
-	'covariate' |
-	'reg' | 
-	'time' | 
-	'dose'| 
-	'cat' | 
-	'occ' | 
-	'occasion' | 
-	'adm' | 
-	'cens' | 
-	'limit' | 
-	'rate' | 
-	'tinf' | 
-	'ss' | 
-	'addl' | 
-	'ii' | 
-	'tau' | 
-	'mdv' | 
-	'evid' | 
-	'cmt')
-;
-
-VariabilityType:
-	identifier = ('SD' | 'VAR')
-;
-
-Distribution: 
-	identifier = ('bernoulli' |
-	'betaDistribution' |
-	'binomial' |
-	'discrete' | 
-	'cauchy' | 	
-	'chiSquare' |
-	'dirichlet' | 	
-	'exponential' | 	
-	'fDistribution' |
-	'gamma' | 
-	'geometric' | 
-	'hypergeometric' |
-	'inverseGamma' |	
-	'laplace' |	
-	'logistic' |
-	'logNormal'	|
-	'multinomial' |
-	'multivariateNormal' | 	
-	'multivariateStudentT' | 	
-	'negativeBinomial' |
-	'normal' |
-	'normalInverseGamma' |
-	'pareto' |
-	'poisson' |
-	'unif' |
-	'studentT' |
-	'uniform' |
-	'weibull' |
-	'wishart' |
-	'discreteUnivariateMixtureModel' |
-    'discreteMultivariateMixtureModel' |
-    'categoricalUnivariateMixtureModel' |
-	'categoricalMultivariateMixtureModel' |
-	'continuousMultivariateMixtureModel' |
-	'continuousUnivariateMixtureModel'
-	)
 ;
 
 AnyExpression:
@@ -528,7 +505,7 @@ DistributionArguments:
 
 DistributionArgument: 
 	(argumentName = ArgumentName "=")? 
-	(distribution = Distribution | expression = AnyExpression | component = RandomList)
+	(distribution = DistributionEnum | expression = AnyExpression | component = RandomList)
 ; 
 
 Arguments: 
@@ -591,7 +568,7 @@ UnaryExpression:
 	parExpression = ParExpression |
 	number = NumericValue |
 	symbol = SymbolName |
-	constant = Constant |
+	constant = CONSTANT |
 	attribute = FullyQualifiedArgumentName | 
 	functionCall = FunctionCall 
 ;
@@ -649,6 +626,19 @@ NumericValue:
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';
 
+terminal BOOLEAN:
+    'true' | 'false';		
+	
+terminal INTEGER:
+	('0' | '1'..'9' '0'..'9'*);
+	
+terminal FLOAT: 
+	'0'..'9' + '.' '0'..'9'* EXPONENT?
+    | '.' '0'..'9'+ EXPONENT?
+    | '0'..'9'+ EXPONENT
+    | ('0'..'9')
+    ;
+
 terminal fragment ESCAPE_SEQUENCE:
 	'\\' ('b' | 't' | 'n' | 'f' | 'r' | '\"' | '\'' | '\\')
 	| UNICODE_ESCAPE
@@ -664,19 +654,6 @@ terminal fragment UNICODE_ESCAPE:
 
 terminal fragment HEXDIGIT:
 	('0'..'9' | 'a'..'f' | 'A'..'F');
-	
-terminal BOOLEAN:
-    'true' | 'false';		
-	
-terminal INTEGER:
-	('0' | '1'..'9' '0'..'9'*);
-	
-terminal FLOAT
-    : '0'..'9' + '.' '0'..'9'* EXPONENT?
-    | '.' '0'..'9'+ EXPONENT?
-    | '0'..'9'+ EXPONENT
-    | ('0'..'9')
-    ;
 
 terminal fragment EXPONENT
 	: ('e'|'E'|'d'|'D') ('+'|'-')?('0'..'9')+;

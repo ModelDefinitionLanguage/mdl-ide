@@ -1,9 +1,9 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.types.UseType
 import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.ModelObject
+import org.ddmore.mdl.mdl.UseEnum
 
 class TrialDesignPrinter extends DataSetPrinter {
 	private var String mObjName;
@@ -145,9 +145,9 @@ class TrialDesignPrinter extends DataSetPrinter {
 						if (s.list != null && s.symbolName != null){
 							var use = getAttribute(s.list.arguments, AttributeValidator::attr_use.name);
 							if (use.length > 0){
-								if (use.equals(UseType::USE_ID)) 
+								if (use.equals(UseEnum::ID)) 
 									mappings = mappings + "IndividualMapping".print_design_Mapping(s.symbolName.name);
-								if (use.equals(UseType::USE_AMT))	
+								if (use.equals(UseEnum::AMT))	
 									mappings = mappings + "ArmMapping".print_design_Mapping(s.symbolName.name);
 								//...	
                 			}

@@ -299,7 +299,7 @@ class ModelDefinitionPrinter {
 	//TODO: add blkIdRef
 	protected def print_VariabilityReference(SymbolDeclaration s)'''
 		«IF s.randomList != null»
-			«val level = getAttribute(s.randomList.arguments, AttributeValidator::attr_level.name)»
+			«val level = s.randomList.arguments.getAttribute(AttributeValidator::attr_level.name)»
 			«IF level.length > 0»
 				<ct:VariabilityReference>
 					«print_ct_SymbolRef(level)»
@@ -422,7 +422,7 @@ class ModelDefinitionPrinter {
 		if (paramNames != null){
 			var varRef = "";
 			var randomVars = new HashSet<String>();
-			val matrixType = getAttribute(arguments, AttributeValidator::attr_re_type.name);
+			val matrixType = arguments.getAttribute(AttributeValidator::attr_re_type.name);
 			for (paramName: paramNames){
 				var s = paramName.getRandomVariableByVariability(matrixType);
 				if (s != null){
@@ -449,9 +449,7 @@ class ModelDefinitionPrinter {
 	protected def print_mdef_Matrix(Arguments arguments, Arguments parameters){
 		if (parameters != null){
 			var rowNames = "";
-			val matrixType = getAttribute(arguments, AttributeValidator::attr_re_type.name);
-			//val isFixed = arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
-			
+			val matrixType = arguments.getAttribute(AttributeValidator::attr_re_type.name);
 			for (symbol: parameters.arguments){
 				if (symbol.argumentName != null){
 					rowNames = rowNames + print_ct_SymbolRef(pObjName, symbol.argumentName.name);

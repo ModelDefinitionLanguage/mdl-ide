@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ddmore.mdl.types.MdlDataType;
-import org.ddmore.mdl.types.TargetCodeType;
 
 public class FunctionSignature {
 	String name;
@@ -14,7 +13,6 @@ public class FunctionSignature {
 	Boolean passingByName = false;
 	//By default we assume unnamed input parameters of type MdlDataType.TYPE_REAL
 	List<FunctionParameter> params;
-	TargetCodeType target = null;
 	List<Variable> returnedVariables = null;
 	
 	public FunctionSignature(String name, Integer numberOfParams){

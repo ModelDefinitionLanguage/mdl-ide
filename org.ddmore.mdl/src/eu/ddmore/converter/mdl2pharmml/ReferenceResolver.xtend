@@ -10,10 +10,10 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.types.UseType
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.DataDerivedBlock
 import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.mdl.UseEnum
 
 class ReferenceResolver{
 	val Mcl mcl;
@@ -166,7 +166,7 @@ class ReferenceResolver{
 				for (s: block.inputVariablesBlock.variables){
 					if (s.list != null && s.symbolName != null){
 						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-						if (use.equals(UseType::USE_IDV) && !independentVars.contains(s.symbolName.name)) 
+						if (use.equals(UseEnum::IDV.toString) && !independentVars.contains(s.symbolName.name)) 
 							independentVars.add(s.symbolName.name);
 					}
 				}
@@ -183,7 +183,7 @@ class ReferenceResolver{
 				for (s: b.inputVariablesBlock.variables){
 					if (s.list != null && s.symbolName != null){
 						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-						if (use.equals(UseType::USE_COVARIATE)) {
+						if (use.equals(UseEnum::COVARIATE.toString)) {
 							if (!covariateVars.contains(s.symbolName.name))
 								covariateVars.add(s.symbolName.name);
 						}

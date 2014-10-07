@@ -42,6 +42,13 @@ import org.ddmore.mdl.mdl.EstimationBlock
 import org.apache.commons.io.FilenameUtils
 import org.ddmore.mdl.mdl.VarType
 import org.ddmore.mdl.validation.PropertyValidator
+import org.ddmore.mdl.mdl.UseType
+import org.ddmore.mdl.mdl.TargetType
+import org.ddmore.mdl.mdl.InputFormatType
+import org.ddmore.mdl.mdl.VariabilityType
+import org.ddmore.mdl.mdl.IndividualVarType
+import org.ddmore.mdl.mdl.TrialType
+import org.ddmore.mdl.mdl.DistributionType
 
 class MdlPrinter {
 	
@@ -89,23 +96,14 @@ class MdlPrinter {
 		if (args != null)
 			for (arg: args.arguments)
 				if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
-					return arg.valueToStr;
+					return arg.toStr;
 				}				
 		return "";
 	} 
 	
-	def findAttribute(DistributionArguments args, String attrName){
-		if (args != null)
-			for (arg: args.arguments)
-				if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
-					return arg;
-				}				
-		return null;
-	}
-	
-	def String valueToStr(DistributionArgument arg){
-		if (arg.distribution != null)
-			return arg.distribution.identifier;
+	def String toStr(DistributionArgument arg){
+		if (arg.distribution != DistributionType::NONE)
+			return arg.distribution.toString;
 		if (arg.expression != null)
 			return arg.expression.toStr;	
 		if (arg.component != null)
@@ -224,22 +222,21 @@ class MdlPrinter {
 		return res;
 	}
 
-
 	def toStr(EnumType t) {
 		if (t.type != null)
 			return t.type.toStr;
-		if (t.use != null)
-			return t.use.identifier
-		if (t.target != null)
-			return t.target.identifier 
-		if (t.input != null)
-			return t.input.identifier
-		if (t.interpolation != null)
-			return t.interpolation.identifier
-		if (t.variability != null)
-			return t.variability.identifier
-		if (t.trial != null)
-			return t.trial.identifier
+		if (t.use != UseType::NONE)
+			return t.use.toString
+		if (t.target != TargetType::NONE)
+			return t.target.toString
+		if (t.input != InputFormatType::NONE)
+			return t.input.toString
+		if (t.variability != VariabilityType::NONE)
+			return t.variability.toString
+		if (t.trial != TrialType::NONE)
+			return t.trial.toString
+		if (t.individualVar != IndividualVarType::NONE)
+			return t.individualVar.toString
 	}
 	
 	def toStr(VarType t) {
@@ -403,7 +400,7 @@ class MdlPrinter {
 			return e.symbol.name.convertID; 
 		}
 		if (e.constant != null){
-			return e.constant.identifier
+			return e.constant.toString
 		}
 		if (e.functionCall != null) {
 			return e.functionCall.toStr
@@ -505,7 +502,7 @@ class MdlPrinter {
 			if (a.argumentName != null){
 				res  = res + a.argumentName.name + " = ";
 			}
-			res = res + a.valueToStr;
+			res = res + a.toStr;
 		}
 		while (iterator.hasNext){
 			res  = res + ', ';
@@ -513,7 +510,7 @@ class MdlPrinter {
 			if (a.argumentName != null){
 				res  = res + a.argumentName.name + " = ";
 			}
-			res  = res + a.valueToStr;
+			res  = res + a.toStr;
 		}
 		return res;
 	}			

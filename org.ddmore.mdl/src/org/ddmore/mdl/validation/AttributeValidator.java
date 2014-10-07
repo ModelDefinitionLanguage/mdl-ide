@@ -18,6 +18,9 @@ import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.Selector;
+import org.ddmore.mdl.mdl.TargetEnum;
+import org.ddmore.mdl.mdl.UseEnum;
+import org.ddmore.mdl.mdl.VariabilityEnum;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
@@ -74,13 +77,13 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_fix = new Attribute("fix", MdlDataType.TYPE_BOOLEAN, false, "false");
 	final public static Attribute attr_units = new Attribute("units", MdlDataType.TYPE_STRING, false, "kg");
 	final public static Attribute attr_transform = new Attribute("transform", MdlDataType.TYPE_STRING, false, "");
-	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, DefaultValues.USE_VAR);
+	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseEnum.ID.toString());
 	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, "ID");
 	final public static Attribute attr_alias = new Attribute("alias", MdlDataType.TYPE_REF, false);
 
 	final public static Attribute attr_req_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
 	final public static Attribute attr_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
-	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, DefaultValues.RE_TYPE);
+	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, VariabilityEnum.SD.toString());
 	
 	/*ESTIMATION*/
 	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
@@ -91,7 +94,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_init = new Attribute("init", MdlDataType.TYPE_EXPR, false, "0");	
 	final public static Attribute attr_x0 = new Attribute("x0", MdlDataType.TYPE_REAL, false);	
 	final public static Attribute attr_wrt = new Attribute("wrt", MdlDataType.TYPE_REF, false, "TIME");	
-	final public static Attribute attr_interp = new Attribute("interp", MdlDataType.TYPE_INTERP, false);
 	
 	/*Data object*/
 	/*DATA_INPUT_VARIABLES*/
@@ -102,17 +104,17 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 
 	/*INDIVIDUAL_VARIABLES*/
-	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_GAUSSIAN, true);
+	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_INDIVIDUAL_VAR, true);
 	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_FUNCT, true);
+	final public static Attribute attr_fixEff = new Attribute("fixEff", MdlDataType.TYPE_VECTOR_REF, false);
+	final public static Attribute attr_cov = new Attribute("cov", MdlDataType.TYPE_VECTOR_REF, false);
 	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_cov = new Attribute("cov", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_fixEff = new Attribute("fixEff", MdlDataType.TYPE_REF, false);
 			
 	/*All objects*/
 	
 	/*TARGET*/
-	final public static Attribute attr_req_target = new Attribute("target", MdlDataType.TYPE_TARGET, true, DefaultValues.TARGET);
+	final public static Attribute attr_req_target = new Attribute("target", MdlDataType.TYPE_TARGET, true, TargetEnum.NMTRAN.toString());
 	final public static Attribute attr_location = new Attribute("location", MdlDataType.TYPE_STRING, false);
 	final public static Attribute attr_first = new Attribute("first", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_last = new Attribute("last", MdlDataType.TYPE_BOOLEAN, false);

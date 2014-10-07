@@ -36,7 +36,6 @@ import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.TaskObjectBlock
-import org.ddmore.mdl.types.TargetCodeType
 import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.FunctionValidator
@@ -44,6 +43,7 @@ import org.eclipse.emf.ecore.EObject
 import org.ddmore.mdl.validation.DistributionValidator
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
+import org.ddmore.mdl.mdl.TargetEnum
 
 class Mdl2Nonmem extends MdlPrinter {
     private static val Logger logger = Logger::getLogger("Mdl2Nonmem");
@@ -1011,7 +1011,7 @@ class Mdl2Nonmem extends MdlPrinter {
 	def isInline(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
-			if (target.equals(TargetCodeType::NMTRAN_CODE)) {
+			if (target.equals(TargetEnum::NMTRAN.toString)) {
 				val location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
 				return (location.length == 0 || location.equals("INLINE")); 
 			}
@@ -1022,7 +1022,7 @@ class Mdl2Nonmem extends MdlPrinter {
 	def isSameline(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
-			if (target.equals(TargetCodeType::NMTRAN_CODE)) {
+			if (target.equals(TargetEnum::NMTRAN.toString)) {
 				return b.arguments.isAttributeTrue(AttributeValidator::attr_sameline.name);
 			}
 		}
@@ -1369,7 +1369,7 @@ class Mdl2Nonmem extends MdlPrinter {
 	def void prepareExternalCode(TargetBlock b){
 		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
 		if (target != null){ 
-			if (target.equals(TargetCodeType::NMTRAN_CODE)) {
+			if (target.equals(TargetEnum::NMTRAN.toString)) {
 				var location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
 				if (location.length() > 0) {
 					location = stripQuotes(location) // Strip off any enclosing double quotes (if present)
@@ -1613,7 +1613,7 @@ class Mdl2Nonmem extends MdlPrinter {
 	override toStr(TargetBlock b){
 		var target = "";
 		if (b.arguments != null) target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
-		if (target.equals(TargetCodeType::NMTRAN_CODE)) {
+		if (target.equals(TargetEnum::NMTRAN.toString)) {
 			if (b.isSameline) return "#DEL# " + super.toStr(b).trim;
 			super.toStr(b);
 		}
