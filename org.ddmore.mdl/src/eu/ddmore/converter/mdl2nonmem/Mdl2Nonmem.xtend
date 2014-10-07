@@ -10,7 +10,6 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
 import org.apache.log4j.Logger
-import org.ddmore.mdl.mdl.AdditiveExpression
 import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.BlockStatement
@@ -1474,7 +1473,7 @@ class Mdl2Nonmem extends MdlPrinter {
      * Override the to-string from the MDL->PharmML printing functionality for a String
      * to enclose this string within double quotes for NONMEM.
      */	
-    def quoteStringIfNecessary(String str) {
+    def toStr(String str) {
         return "\"" + str + "\""
     }
 	
