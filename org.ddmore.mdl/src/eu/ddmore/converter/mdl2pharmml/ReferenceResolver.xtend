@@ -14,13 +14,14 @@ import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.DataDerivedBlock
 import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.UseEnum
+import org.ddmore.mdl.mdl.MOGObject
+import org.ddmore.mdl.mdl.impl.MclObjectImpl
+import org.ddmore.mdl.mdl.MclObject
 
 class ReferenceResolver{
-	val Mcl mcl;
 	extension MdlPrinter mdlPrinter;
 	
 	new(Mcl m, MdlPrinter mdlPrinter) {
-    	this.mcl = m;
     	this.mdlPrinter = mdlPrinter
     	prepareCollections(m);
  	}
@@ -117,7 +118,6 @@ class ReferenceResolver{
 		return derivedVars;
 	}
 	
-	//TODO: correct function (does not work!)
 	protected def getReferenceBlock(String name){
 		//try to find by name
 		for (set: vm_err_vars.entrySet)
@@ -417,37 +417,46 @@ class ReferenceResolver{
   		}
 	}
 	
-	protected def getModelObject(String name){
-		for (o: mcl.objects){
-			if (o.objectName.name.equals(name)) return o.modelObject;
-		}
-		return null;
-	}
-	
-	protected def getDataObject(String name){
-		for (o: mcl.objects){
-			if (o.objectName.name.equals(name)) return o.dataObject;
-		}
-		return null;
-	}
-	
-	protected def getParamObject(String name){
-		for (o: mcl.objects){
-			if (o.objectName.name.equals(name)) return o.parameterObject;
-		}
-		return null;
-	}
-	
-	protected def getTaskObject(String name){
-		for (o: mcl.objects){
-			if (o.objectName.name.equals(name)) return o.taskObject;
+	protected def getTaskObject(MOGObject mog){
+		for (o: mog.objects){
+			var container = o.eContainer;
+			if (container instanceof MclObjectImpl){
+				val mclObject = container as MclObject;
+				if (mclObject.taskObject != null) return mclObject;
+			}
 		}
 		return null;
 	}	
 	
-	protected def getMOGObject(String name){
-		for (o: mcl.objects){
-			if (o.objectName.name.equals(name)) return o.mogObject;
+	protected def getModelObject(MOGObject mog){
+		for (o: mog.objects){
+			var container = o.eContainer;
+			if (container instanceof MclObjectImpl){
+				val mclObject = container as MclObject;
+				if (mclObject.modelObject != null) return mclObject;
+			}
+		}
+		return null;
+	}	
+
+	protected def getParameterObject(MOGObject mog){
+		for (o: mog.objects){
+			var container = o.eContainer;
+			if (container instanceof MclObjectImpl){
+				val mclObject = container as MclObject;
+				if (mclObject.parameterObject != null) return mclObject;
+			}
+		}
+		return null;
+	}	
+
+	protected def getDataObject(MOGObject mog){
+		for (o: mog.objects){
+			var container = o.eContainer;
+			if (container instanceof MclObjectImpl){
+				val mclObject = container as MclObject;
+				if (mclObject.dataObject != null) return mclObject;
+			}
 		}
 		return null;
 	}	

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.ddmore.mdl.domain.Attribute;
-import org.ddmore.mdl.domain.ModellingObjectGroup;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
@@ -26,6 +25,7 @@ import org.ddmore.mdl.mdl.FunctionName;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
+import org.ddmore.mdl.mdl.MOGObject;
 import org.ddmore.mdl.mdl.MatrixBlock;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
@@ -81,10 +81,10 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter;
 public class Utils {
 	
 	//Checks whether a given identifier is declared
-	static boolean isIdentifierDeclared(Map<String, List<String>> map, String id, String objName){
+	static boolean isIdentifierDeclared(Map<String, List<String>> map, String id, ObjectName objName){
 		if (objName != null) 
-			if (map.containsKey(objName))
-				if (map.get(objName).contains(id)) return true;
+			if (map.containsKey(objName.getName()))
+				if (map.get(objName.getName()).contains(id)) return true;
 		return false; 
 	}
 	
@@ -97,17 +97,14 @@ public class Utils {
 		return false;
 	}
 		
-	static boolean isSymbolDeclared(Map<String, List<String>> map, SymbolName ref, List<ModellingObjectGroup> mogs){
+	static boolean isSymbolDeclared(Map<String, List<String>> map, SymbolName ref, List<MOGObject> mogs){
 		ObjectName objName = getObjectName(ref);
 		if (objName != null){
-			if (isIdentifierDeclared(map, ref.getName(), objName.getName())) return true;
-			for (ModellingObjectGroup mog: mogs){
-				if (mog.getObjectNames().contains(objName.getName()))
-					return 
-						isIdentifierDeclared(map, ref.getName(), mog.getModelObjName()) || 
-						isIdentifierDeclared(map, ref.getName(), mog.getDataObjName()) || 
-						isIdentifierDeclared(map, ref.getName(), mog.getParamObjName()) ||
-						isIdentifierDeclared(map, ref.getName(), mog.getTaskObjName()); 
+			for (MOGObject mog: mogs){
+				for (ObjectName o: mog.getObjects()){
+					if (o.getName().equals(objName.getName()))
+						return isIdentifierDeclared(map, ref.getName(), objName);
+				}
 			}
 		}
 		return false;
@@ -430,28 +427,11 @@ public class Utils {
 		return declaredObjects;
 	}
 	
-	public static List<ModellingObjectGroup> getMOGs(Mcl mcl){
-		List<ModellingObjectGroup> mogs = new ArrayList<ModellingObjectGroup>();
-		Map<String, MclObject> objects = new HashMap<String, MclObject>();
-		for (MclObject o: mcl.getObjects()){
-			objects.put(o.getObjectName().getName(), o);	
-		}
+	public static List<MOGObject> getMOGs(Mcl mcl){
+		List<MOGObject> mogs = new ArrayList<MOGObject>();
 		for (MclObject obj: mcl.getObjects()){
-			if (obj.getMogObject() != null){
-				String mObjName = null, dObjName = null, pObjName = null, tObjName = null;
-				for (ObjectName o: obj.getMogObject().getObjects()){
-					if (objects.containsKey(o.getName())){
-						if (objects.get(o.getName()).getDataObject() != null) dObjName = o.getName();
-						if (objects.get(o.getName()).getModelObject() != null) mObjName = o.getName();
-						if (objects.get(o.getName()).getParameterObject() != null) pObjName = o.getName();
-						if (objects.get(o.getName()).getTaskObject() != null) tObjName = o.getName();
-					}
-				}
-				if ((mObjName != null) && (dObjName != null) && (pObjName != null) && (tObjName != null)){
-					ModellingObjectGroup mog = new ModellingObjectGroup(mObjName, pObjName, dObjName, tObjName);
-					mogs.add(mog);
-				}
-			}
+			if (obj.getMogObject() != null)
+				mogs.add(obj.getMogObject());
 		}
 		return mogs;
 	}

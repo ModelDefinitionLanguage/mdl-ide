@@ -422,11 +422,11 @@ enum InputFormatEnum returns InputFormatType:
 ;
 
 enum VariabilityType:
-	none | SD | VAR
+	none | SD | VAR | COV | CORR
 ;
 
 enum VariabilityEnum returns VariabilityType:
-	SD | VAR
+	SD | VAR | COV | CORR
 ;
 
 enum IndividualVarType:

@@ -1,15 +1,11 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.mdl.ParameterObject
-import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.UseEnum
+import org.ddmore.mdl.mdl.MclObject
+import org.ddmore.mdl.mdl.MOGObject
 
 class TrialDesignPrinter extends DataSetPrinter {
-	private var String mObjName;
-	private var String pObjName;
-	private var ModelObject mObj;
-	private var ParameterObject pObj;
 	/////////////////////////////////////////////////////////////////////////
 	// II Trial Design
 	//////////////////////////////////////////////////////////////////////////
@@ -18,11 +14,8 @@ class TrialDesignPrinter extends DataSetPrinter {
 		super(mathPrinter, resolver);
 	}	
 	
-	protected def print_design_TrialDesign(String mObjName, String pObjName){
-		this.mObjName = mObjName;
-		this.pObjName = pObjName;
-		this.mObj = getModelObject(mObjName);
-		this.pObj = getParamObject(pObjName);
+	protected def print_design_TrialDesign(MOGObject mog){
+
 		return "";
 		/*
 		'''
@@ -129,17 +122,17 @@ class TrialDesignPrinter extends DataSetPrinter {
 	///////////////////////////
 	// II.b Population
 	///////////////////////////
-	protected def print_design_Population()
+	protected def print_design_Population(MclObject mObj)
 	'''
 	<Population>
-		«print_design_IndividualTemplate»
+		«mObj.print_design_IndividualTemplate»
 	</Population>
 	'''
 	//Print mapping for the input variables with use=idv (individual)
-	protected def print_design_IndividualTemplate(){
-		if (mObj != null){
+	protected def print_design_IndividualTemplate(MclObject mObj){
+		if (mObj.modelObject != null){
 			var mappings = "";
-			for (block: mObj.blocks){
+			for (block: mObj.modelObject.blocks){
 				if (block.inputVariablesBlock != null){
 					for (s: block.inputVariablesBlock.variables){
 						if (s.list != null && s.symbolName != null){

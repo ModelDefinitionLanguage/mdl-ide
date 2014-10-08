@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.ddmore.mdl.domain.ModellingObjectGroup;
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
@@ -57,7 +56,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//List of declared variability subblocks diag and matrix (to match with same blocks)
 	Map<String, List<String>> variabilitySubblockNames = new HashMap<String, List<String>>();
 
-	List<ModellingObjectGroup> mogs = new ArrayList<ModellingObjectGroup>(); 
+	List<MOGObject> mogs = new ArrayList<MOGObject>(); 
 	
 	@Check
 	public void updateObjectList(Mcl mcl){
@@ -122,7 +121,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		String name = Utils.getAttributeValue(b.getArguments(), AttributeValidator.attr_name.getName());
 		if (name.length() > 0){
 			ObjectName objName = Utils.getObjectName(b.eContainer());
-			if (!Utils.isIdentifierDeclared(variabilitySubblockNames, name, objName.getName()))
+			if (!Utils.isIdentifierDeclared(variabilitySubblockNames, name, objName))
 				warning(MSG_UNRESOLVED_SAME_BLOCK_NAME, 
 						MdlPackage.Literals.SAME_BLOCK__IDENTIFIER,
 						MSG_UNRESOLVED_SAME_BLOCK_NAME, b.getIdentifier());

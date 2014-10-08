@@ -15,12 +15,14 @@ import org.ddmore.mdl.mdl.IndividualVarType
 import java.util.List
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.Primary
+import org.ddmore.mdl.mdl.AnyExpression
+import org.ddmore.mdl.mdl.MOGObject
 
 class ModelDefinitionPrinter {
-	private var String mObjName;
-	private var String pObjName;
 	private var ModelObject mObj;
 	private var ParameterObject pObj;
+	private var String mObjName;
+	private var String pObjName;
 
 	protected extension DistributionPrinter = new DistributionPrinter();
 	protected extension MathPrinter mathPrinter = null;
@@ -36,11 +38,12 @@ class ModelDefinitionPrinter {
 	//////////////////////////////////////
 	
 	//Print <ModelDefinition>
-	def print_mdef_ModelDefinition(String mObjName, String pObjName){
-		this.mObjName = mObjName;
-		this.pObjName = pObjName;
-		this.mObj = getModelObject(mObjName);
-		this.pObj = getParamObject(pObjName);
+	def print_mdef_ModelDefinition(MOGObject mog){
+		this.mObj = mog.getModelObject.modelObject;
+		this.pObj = mog.getParameterObject.parameterObject;
+		this.mObjName = mog.getModelObject.objectName.name;
+		this.pObjName = mog.getParameterObject.objectName.name;
+		
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«print_mdef_VariabilityModel»
@@ -383,8 +386,10 @@ class ModelDefinitionPrinter {
 		'''
 	}
 	
+	//Transform lists to PharmML
 	def print_List(org.ddmore.mdl.mdl.List list){
 		var assign = "";
+		//Categorical variables
 		val type = list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
 		if (type.equals(VariableType::CC_CATEGORICAL)){
 			val define = list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
@@ -392,6 +397,7 @@ class ModelDefinitionPrinter {
 				assign = '''«define.list.print_Categorical»'''
 			}
 		} else {
+		//Derivative variables	
 			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name);
 			if (deriv != null)
 				assign = '''«deriv.print_Math_Expr»'''
@@ -415,13 +421,22 @@ class ModelDefinitionPrinter {
 					ranEffExpr = '''«ranEff.expression.print_Math_Expr»'''
 				if (ranEff.vector != null) ranEff.vector.print_ct_Vector;
 			}
-			var covariate = '''''';
+			var covariateContent = '''''';
+			var popContent = '''''';
 			var covariateType = "GeneralCovariate";
 			if (type.equals(IndividualVarType::LINEAR.toString)) {
 				covariateType = "LinearCovariate";		
+				val pop = list.arguments.getAttributeExpression(AttributeValidator::attr_pop.name);
+				if (pop != null)
+					popContent = '''«pop.print_PopulationParameter»''';
 				val cov = list.arguments.getAttributeExpression(AttributeValidator::attr_cov.name);
 				val fixEff = list.arguments.getAttributeExpression(AttributeValidator::attr_fixEff.name);
-				covariate = '''«print_Covariate(cov.vector, fixEff.vector)»''';
+				if (cov != null && fixEff != null)
+					covariateContent = '''«print_Covariate(cov.vector, fixEff.vector)»''';
+			} else {
+				val group = list.arguments.getAttributeExpression(AttributeValidator::attr_group.name);
+				if (group != null)
+					covariateContent = '''«group.print_Assign»''';
 			}
 			return 
 			'''
@@ -430,7 +445,8 @@ class ModelDefinitionPrinter {
 					<Transformation>«trans»</Transformation>
 				«ENDIF»
 				<«covariateType»>
-					«covariate»
+					«popContent»
+					«covariateContent»
 				</«covariateType»>
 				«IF ranEffExpr.length > 0»
 					<RandomEFfect>
@@ -442,15 +458,19 @@ class ModelDefinitionPrinter {
 		}
 	}
 	
+	protected def print_PopulationParameter(AnyExpression pop)'''
+		<PopulationParameter>
+			«pop.print_Assign»
+		</PopulationParameter>
+	'''
+	
 	protected def print_Covariate(Vector cov, Vector ranEff){
 		var res = '''''';
-		if (cov != null){
-			for (i: 0..cov.values.size){
-				if (ranEff.values.size() > i){
-					val covValue = cov.values.get(i);
-					val ranEffValue = ranEff.values.get(i);
-					res = res + print_Covariate(covValue, ranEffValue);
-				}
+		for (i: 0..cov.values.size){
+			if (ranEff.values.size() > i){
+				val covValue = cov.values.get(i);
+				val ranEffValue = ranEff.values.get(i);
+				res = res + print_Covariate(covValue, ranEffValue);
 			}
 		}
 		return res;
