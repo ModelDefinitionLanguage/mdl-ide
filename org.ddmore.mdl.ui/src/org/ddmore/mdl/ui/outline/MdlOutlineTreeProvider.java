@@ -122,6 +122,10 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(MOG_OBJ));
     }
     
+    protected Image _image(ObjectName objName) {
+    	return imageHelper.getImage(getPath(REFERENCE));
+    }
+    
     protected Image _image(ConditionalStatement f) {
         return imageHelper.getImage(getPath(CONDITION));
     }
@@ -149,7 +153,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     protected Image _image(Vector f) {
         return imageHelper.getImage(getPath(VECTOR));
     }
-    
+
     protected Image _image(PropertyDeclaration s) {
         //Decorate special properties?
         if (s.getPropertyName() != null){
@@ -353,30 +357,29 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 
 	protected void  _createNode(IOutlineNode parentNode, TaskObject obj) {
 		createEStructuralFeatureNode(parentNode,
-				obj,
-				MdlPackage.Literals.TASK_OBJECT__BLOCKS,
-				_image(obj),
-				((MclObject) obj.eContainer()).getObjectName().getName(),
-				false);
+			obj,
+			MdlPackage.Literals.TASK_OBJECT__BLOCKS,
+			_image(obj),
+			((MclObject) obj.eContainer()).getObjectName().getName(),
+			false);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, DataObject obj) {
 		createEStructuralFeatureNode(parentNode,
-				obj,
-				MdlPackage.Literals.DATA_OBJECT__BLOCKS,
-				_image(obj),
-				((MclObject) obj.eContainer()).getObjectName().getName(),
-				false);
+			obj,
+			MdlPackage.Literals.DATA_OBJECT__BLOCKS,
+			_image(obj),
+			((MclObject) obj.eContainer()).getObjectName().getName(),
+			false);
 	}
-	
-	
+		
 	protected void  _createNode(IOutlineNode parentNode, MOGObject obj) {
 		createEStructuralFeatureNode(parentNode,
-				obj,
-				MdlPackage.Literals.MOG_OBJECT__OBJECTS,
-				_image(obj),
-				((MclObject) obj.eContainer()).getObjectName().getName(),
-				false);
+			obj,
+			MdlPackage.Literals.MOG_OBJECT__OBJECTS,
+			_image(obj),
+			((MclObject) obj.eContainer()).getObjectName().getName(),
+			false);
 	}
 		
 	protected void  _createNode(IOutlineNode parentNode, ObjectName name){

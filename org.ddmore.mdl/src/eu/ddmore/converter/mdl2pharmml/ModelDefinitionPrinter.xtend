@@ -449,9 +449,9 @@ class ModelDefinitionPrinter {
 					«covariateContent»
 				</«covariateType»>
 				«IF ranEffExpr.length > 0»
-					<RandomEFfect>
-						«ranEffExpr»
 					<RandomEffect>
+						«ranEffExpr»
+					</RandomEffect>
 				«ENDIF»
 			</GaussianModel>
 			'''

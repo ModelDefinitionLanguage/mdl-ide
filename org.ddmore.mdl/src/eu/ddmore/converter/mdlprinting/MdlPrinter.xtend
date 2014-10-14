@@ -345,7 +345,7 @@ class MdlPrinter {
 			}
 		}
 		if (e.string != null){		
-			res = quoteStringIfNecessary(e.string)
+			res = toStr(e.string)
 		}
 		return res
 	}
@@ -355,7 +355,7 @@ class MdlPrinter {
 	 * to PharmML. The Mdl2Nonmem subclass will override this to enclose string expressions
 	 * in double quotes.
 	 */
-	def quoteStringIfNecessary(String str) {
+	def toStr(String str) {
 	    return str
 	}
 	
