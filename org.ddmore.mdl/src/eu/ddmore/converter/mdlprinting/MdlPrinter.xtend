@@ -41,7 +41,6 @@ import org.ddmore.mdl.mdl.SimulationBlock
 import org.ddmore.mdl.mdl.EstimationBlock
 import org.apache.commons.io.FilenameUtils
 import org.ddmore.mdl.mdl.VarType
-import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.TargetType
 import org.ddmore.mdl.mdl.InputFormatType
@@ -49,6 +48,8 @@ import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.mdl.IndividualVarType
 import org.ddmore.mdl.mdl.TrialType
 import org.ddmore.mdl.mdl.DistributionType
+import org.ddmore.mdl.validation.PropertyValidator
+import org.ddmore.mdl.mdl.PropertyDeclaration
 
 class MdlPrinter {
 	
@@ -187,6 +188,10 @@ class MdlPrinter {
 		}
 		res = res + name.function.name.convertID;
 		return res;
+	}
+	
+	def toStr(PropertyDeclaration p){
+		return p.propertyName.name + " = " + p.expression.toStr;
 	}
 	
 	def toStr(SymbolDeclaration v){

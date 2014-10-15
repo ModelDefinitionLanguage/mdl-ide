@@ -360,8 +360,11 @@ BlockStatement:
 ;
 
 TargetBlock: 
-	identifier = 'TARGET_CODE' ('(' arguments = Arguments ')' )? 
-	BEGIN  externalCode = EXTERNAL_CODE END
+	identifier = 'TARGET_CODE' 
+	BEGIN
+		statements += PropertyDeclaration*  
+		externalCode = EXTERNAL_CODE 
+	END
 ;
 
 terminal EXTERNAL_CODE:

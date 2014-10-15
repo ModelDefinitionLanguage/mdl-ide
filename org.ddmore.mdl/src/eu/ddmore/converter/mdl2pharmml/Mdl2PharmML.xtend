@@ -91,15 +91,11 @@ class Mdl2PharmML{
 		val mdlPrinter = MdlPrinter::getInstance();
     	'''
 			<targetBlock>
-			«IF s.arguments != null»
-				«FOR a: s.arguments.arguments»
-					«IF a.argumentName != null»
-						<«a.argumentName.name»>
-							«mdlPrinter.toStr(a.expression)»
-						</«a.argumentName.name»>
-					«ENDIF»
+				«FOR a: s.statements»
+					<«a.propertyName.name»>
+						«mdlPrinter.toStr(a.expression)»
+					</«a.propertyName.name»>
 			   	«ENDFOR»
-		    «ENDIF»
 				<code>
 					«mdlPrinter.toStr(s)»
 				</code>

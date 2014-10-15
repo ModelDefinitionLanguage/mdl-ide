@@ -18,7 +18,6 @@ import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.Selector;
-import org.ddmore.mdl.mdl.TargetEnum;
 import org.ddmore.mdl.mdl.UseEnum;
 import org.ddmore.mdl.mdl.VariabilityEnum;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
@@ -39,7 +38,6 @@ import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
-import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.types.DefaultValues;
@@ -62,8 +60,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_ATTRIBUTE_DEFINED    = "Attribute defined more than once";
 	public final static String MSG_ATTRIBUTE_WRONG_TYPE = "Type error";
 	
-	public final static String MSG_DATA_FILE_NOT_FOUND = "Cannot find data file: path may be incorrect";
-	public final static String MSG_SCRIPT_NOT_FOUND    = "Cannot find script file: path may be incorrect";
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	final public static Attribute attr_name = new Attribute("name", MdlDataType.TYPE_STRING, false, "");		
@@ -101,7 +97,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_boundaries = new Attribute("boundaries", MdlDataType.TYPE_VECTOR_REAL, false);
 	final public static Attribute attr_missing = new Attribute("missing", MdlDataType.TYPE_INT, false);
 	
-
 	/*INDIVIDUAL_VARIABLES*/
 	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_INDIVIDUAL_VAR, true);
 	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_FUNCT, true);
@@ -111,15 +106,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
 			
-	/*All objects*/
-	
-	/*TARGET*/
-	final public static Attribute attr_req_target = new Attribute("target", MdlDataType.TYPE_TARGET, true, TargetEnum.NMTRAN.toString());
-	final public static Attribute attr_location = new Attribute("location", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_first = new Attribute("first", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_last = new Attribute("last", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_sameline = new Attribute("sameline", MdlDataType.TYPE_BOOLEAN, false);
-	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
 	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
@@ -130,7 +116,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, 
 			attr_fix, attr_units);
 	final public static List<Attribute> attrs_variability = Arrays.asList(attr_req_value, attr_re_type, attr_fix, 
-			attr_units);
+			attr_lo, attr_hi, attr_units);
 	final public static List<Attribute> attrs_variability_subblock = Arrays.asList(attr_name, attr_re_type, attr_fix);
 	
 	/*Model object*/
@@ -145,9 +131,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(
 			attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff, attr_group);
-	
-	/*All blocks*/
-	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_sameline);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//TODO: find how to substitute with identifiers in grammar (statically)
@@ -175,19 +158,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			for (Attribute attr: attrs_observation) put("OBSERVATION:" + attr.getName(), attr);
 			for (Attribute attr: attrs_structuralParams) put("STRUCTURAL_PARAMETERS:" + attr.getName(), attr);
 			for (Attribute attr: attrs_variabilityParams) put("VARIABILITY_PARAMETERS:" + attr.getName(), attr);
-			/*All objects*/
-			for (Attribute attr: attrs_target) put("TARGET_CODE:" + attr.getName(), attr);
 		}
 	};
 	
-	HashMap<String, String> exclusive_attrs = new HashMap<String, String>(){
-		private static final long serialVersionUID = 4646663049359441357L;
-		{
-			put(attr_first.getName(), attr_last.getName());
-			put(attr_last.getName(), attr_first.getName());
-		}
-	};
-		
 	public static List<Attribute> getAllAttributes(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return attrs_dataInput; 
@@ -206,8 +179,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof ObservationBlockImpl) return attrs_observation; 
 		if (obj instanceof StructuralParametersBlockImpl) return attrs_structuralParams;
 		if (obj instanceof VariabilityParametersBlockImpl) return attrs_variabilityParams;
-		/*All objects*/
-		if (obj instanceof TargetBlockImpl) return attrs_target;
 		return null;
 	}
 	
@@ -215,7 +186,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
         return allAttributes.get(id);
     }
 	
-	//Do not validate arguments in matric/diag definition and function calls
+	//Do not validate arguments in matrix/diag definition and function calls
 	private Boolean skipAttributeValidation(EObject container, Arguments args){
 		if (container == null) return true;
 		//Skip nested lists
@@ -237,10 +208,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		//getRequiredAttributes contains lists of required attributes for each container
 		for (String attrName: Utils.getRequiredNames(getAllAttributes(container))){
 			if (!argumentNames.contains(attrName)) {
-				if (!exclusive_attrs.containsKey(attrName) || !argumentNames.contains(exclusive_attrs.get(attrName))){
-					warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, 
-					MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attrName);
-				}
+				warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, 
+				MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attrName);
 			}
 		}
 	}
@@ -300,16 +269,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 				warning(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
 						arg.getArgumentName().getName());				
-			}
-		}
-		//Check mutually exclusive attributes
-		if (exclusive_attrs.containsKey(argument.getArgumentName().getName())){
-			String exclusive = exclusive_attrs.get(argument.getArgumentName().getName());
-			if (argumentNames.contains(exclusive)){
-				warning("Attribute '" + argument.getArgumentName().getName() + "' cannot be used together with '" + 
-						exclusive + "'", 
-						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
-						argument.getArgumentName().getName());				
 			}
 		}
 	}

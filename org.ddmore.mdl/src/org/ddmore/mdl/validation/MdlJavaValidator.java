@@ -39,8 +39,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF = "Unresolved reference to a list attribute";
 	public final static String MSG_UNRESOLVED_DISTR_ATTRIBUTE_REF = "Unresolved reference to a distribution attribute";
 
-	public final static String MSG_TARGET_LOCATION = "Target code block is not used inline, please specify location";
-	
 	public final static String MSG_MODEL_OBJ_MISSING = "MOG should include a model object";
 	public final static String MSG_DATA_OBJ_MISSING  = "MOG should include a data object";
 	public final static String MSG_PARAM_OBJ_MISSING = "MOG should include a parameter object";
@@ -102,19 +100,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		mogs = Utils.getMOGs(mcl);
 	}
 	
-	@Check
-	public void checkTargetLocation(TargetBlock t){
-		EObject container = t.eContainer();
-		if (!(container instanceof BlockStatement)){
-			//external target blocks should have location defined
-			String location = Utils.getAttributeValue(t.getArguments(), AttributeValidator.attr_location.getName());
-			if (location.length() == 0)
-				warning(MSG_TARGET_LOCATION, 
-						MdlPackage.Literals.TARGET_BLOCK__ARGUMENTS,
-						MSG_TARGET_LOCATION, t.getIdentifier());
-		}
-	}
-
 	//Match the name of the same block with the name of a matrix or a diag block
 	@Check
 	public void validateSameSubblockName(SameBlock b){

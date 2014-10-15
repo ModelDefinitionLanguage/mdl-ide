@@ -80,7 +80,7 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap(2).before(f.getModelBlockRule());
 	
 		c.setLinewrap(1).before(f.getTargetBlockRule());
-		c.setIndentation(f.getTargetBlockAccess().getBEGINTerminalRuleCall_2(), f.getTargetBlockAccess().getENDTerminalRuleCall_4());
+		c.setIndentation(f.getTargetBlockAccess().getExternalCodeAssignment_3(), f.getTargetBlockAccess().getENDTerminalRuleCall_4());
 
 		c.setLinewrap(1).before(f.getSymbolDeclarationRule());
 		c.setLinewrap(1).before(f.getConditionalStatementRule());

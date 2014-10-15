@@ -44,6 +44,7 @@ import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.TargetEnum
 import java.util.logging.Logger
+import org.ddmore.mdl.mdl.AnyExpression
 
 class Mdl2Nonmem extends MdlPrinter {
     private static val Logger logger = Logger::getLogger("Mdl2Nonmem");
@@ -1009,23 +1010,31 @@ class Mdl2Nonmem extends MdlPrinter {
 	'''
 	
 	def isInline(TargetBlock b){
-		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
-		if (target != null){ 
-			if (target.equals(TargetEnum::NMTRAN.toString)) {
-				val location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
-				return (location.length == 0 || location.equals("INLINE")); 
-			}
+		var target = "";
+		var location = "";
+		for (p: b.statements){
+			if (p.propertyName.name.equals(PropertyValidator::attr_req_target.name))
+				target = p.expression.toStr;
+			if (p.propertyName.name.equals(PropertyValidator::attr_location.name))
+				location = p.expression.toStr;
 		}
+		if (target.equals(TargetEnum::NMTRAN.toString)) 
+			return (location.length == 0 || location.equals("INLINE")); 
 		return false;
 	}
 	
 	def isSameline(TargetBlock b){
-		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
-		if (target != null){ 
-			if (target.equals(TargetEnum::NMTRAN.toString)) {
-				return b.arguments.isAttributeTrue(AttributeValidator::attr_sameline.name);
-			}
+		var target = "";
+		var AnyExpression sameline = null;
+		for (p: b.statements){
+			if (p.propertyName.name.equals(PropertyValidator::attr_req_target.name))
+				target = p.expression.toStr;
+			if (p.propertyName.name.equals(PropertyValidator::attr_sameline.name))
+				sameline = p.expression;
 		}
+			if (target.equals(TargetEnum::NMTRAN.toString) || sameline != null) {
+				return sameline.isTrue;
+			}
 		return false;
 	}
 		
@@ -1367,25 +1376,31 @@ class Mdl2Nonmem extends MdlPrinter {
 	
 	//Prepare a map of section with corresponding target blocks
 	def void prepareExternalCode(TargetBlock b){
-		val target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
-		if (target != null){ 
-			if (target.equals(TargetEnum::NMTRAN.toString)) {
-				var location = b.arguments.getAttribute(AttributeValidator::attr_location.name);
-				if (location.length() > 0) {
-					location = stripQuotes(location) // Strip off any enclosing double quotes (if present)
-					location = location.substring(0, Math::min(4, location.length())) // And truncate to 4 characters
-					if (b.arguments.isAttributeTrue(AttributeValidator::attr_last.name)){
-						var codeSnippets = externalCodeEnd.get(location);
-						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
-						codeSnippets.add(b.toStr);
-						externalCodeEnd.put(location, codeSnippets);
-					} else {
-						var codeSnippets = externalCodeStart.get(location);
-						if (codeSnippets == null) codeSnippets = new ArrayList<String>();
-						codeSnippets.add(b.toStr);
-						externalCodeStart.put(location, codeSnippets);
-					}
-				}
+		var target  = "";
+		var location = "";
+		var AnyExpression last = null;
+		for (p: b.statements){
+			if (p.propertyName.name.equals(PropertyValidator::attr_req_target.name))
+				target = p.expression.toStr;
+			if (p.propertyName.name.equals(PropertyValidator::attr_location.name))
+				location = p.expression.toStr;
+			if (p.propertyName.name.equals(PropertyValidator::attr_last.name))
+				last = p.expression;
+		}
+		if (target.equals(TargetEnum::NMTRAN.toString) && location.length() > 0) {
+			location = stripQuotes(location.toStr) // Strip off any enclosing double quotes (if present)
+			location = location.substring(0, Math::min(4, location.length())) // And truncate to 4 characters
+			if (last != null && last.isTrue){
+				var codeSnippets = externalCodeEnd.get(location);
+				if (codeSnippets == null) codeSnippets = new ArrayList<String>();
+				codeSnippets.add(b.toStr);
+				externalCodeEnd.put(location, codeSnippets);
+			} 
+			else {
+				var codeSnippets = externalCodeStart.get(location);
+				if (codeSnippets == null) codeSnippets = new ArrayList<String>();
+				codeSnippets.add(b.toStr);
+				externalCodeStart.put(location, codeSnippets);
 			}
 		}
 	}	
@@ -1612,13 +1627,15 @@ class Mdl2Nonmem extends MdlPrinter {
 
 	override toStr(TargetBlock b){
 		var target = "";
-		if (b.arguments != null) target = b.arguments.getAttribute(AttributeValidator::attr_req_target.name);
+		for (p: b.statements){
+			if (p.propertyName.name.equals(PropertyValidator::attr_req_target.name))
+				target = p.expression.toStr;
+		}
 		if (target.equals(TargetEnum::NMTRAN.toString)) {
 			if (b.isSameline) return "#DEL# " + super.toStr(b).trim;
 			super.toStr(b);
 		}
 	}
-	
 		
 	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
 	override print(ConditionalStatement s)'''

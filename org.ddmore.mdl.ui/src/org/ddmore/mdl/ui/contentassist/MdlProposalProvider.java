@@ -87,14 +87,6 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 	public void completeArgument_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		if (model instanceof ArgumentImpl){
 			Argument arg = (Argument)model;
-			//target
-			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_req_target.getName())){
-				List<String> attributes = new ArrayList<String>();
-				for (TargetEnum value: TargetEnum.VALUES)
-					attributes.add(value.toString());
-				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
-				addProposals(context, acceptor, attributes, img); return;
-			}	
 			//use
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_use.getName())){
 				List<String> attributes = new ArrayList<String>();
@@ -147,6 +139,14 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 					values.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
 				addProposals(context, acceptor, values, img);
+			}
+			//target
+			if (property.getPropertyName().getName().equals(PropertyValidator.attr_req_target.getName())){
+				List<String> attributes = new ArrayList<String>();
+				for (TargetEnum value: TargetEnum.VALUES)
+					attributes.add(value.toString());
+				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
+				addProposals(context, acceptor, attributes, img); return;
 			}
 		}
 	} 
