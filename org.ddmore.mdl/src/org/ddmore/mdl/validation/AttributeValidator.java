@@ -80,8 +80,11 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_fix = new Attribute("fix", MdlDataType.TYPE_BOOLEAN, false, "false");
 	final public static Attribute attr_units = new Attribute("units", MdlDataType.TYPE_STRING, false, "kg");
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseEnum.ID.toString());
-	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, "ID");
+	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, DefaultValues.LEVEL);
 	final public static Attribute attr_alias = new Attribute("alias", MdlDataType.TYPE_REF, false);
+
+	final public static Attribute attr_error = new Attribute("error", MdlDataType.TYPE_FUNCT, true);
+	final public static Attribute attr_output = new Attribute("output", MdlDataType.TYPE_REF, false);
 
 	/*ESTIMATION*/
 	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
@@ -128,7 +131,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_deq = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
-	final public static List<Attribute> attrs_observation = Arrays.asList(attr_continuous_type);
+	final public static List<Attribute> attrs_observation = Arrays.asList(attr_continuous_type, attr_error, attr_output);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(

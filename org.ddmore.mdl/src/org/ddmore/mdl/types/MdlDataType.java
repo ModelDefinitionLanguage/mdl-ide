@@ -12,6 +12,7 @@ import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.EnumType; 
 import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.FunctionName;
 import org.ddmore.mdl.mdl.IndividualVarType;
 import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.Mcl;
@@ -29,6 +30,8 @@ import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.validation.FunctionValidator;
 import org.ddmore.mdl.validation.Utils;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EObject;
 
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
@@ -323,7 +326,15 @@ public enum MdlDataType {
 	}
 	
 	private static boolean isFunctionRef(Expression expr){
-		return FunctionValidator.standardFunctions.containsKey(MdlPrinter.getInstance().toStr(expr));
+		TreeIterator<EObject> iterator = expr.eAllContents();
+	    while (iterator.hasNext()){
+	    	EObject obj = iterator.next();
+	    	if (obj instanceof FunctionName){
+	    		FunctionName functName = (FunctionName) obj;
+	    		return FunctionValidator.standardFunctions.containsKey(functName.getName());
+	    	}
+	    }
+		return false;
 	}
 
 	public static SymbolName getReference(OrExpression orExpr) {

@@ -17,6 +17,7 @@ import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.Primary
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.MOGObject
+import org.ddmore.mdl.types.DefaultValues
 
 class ModelDefinitionPrinter {
 	private var ModelObject mObj;
@@ -108,7 +109,7 @@ class ModelDefinitionPrinter {
 							<Continuous>
 								<Transformation>
 									<math:Equation>
-										«print_ct_SymbolRef(s)»
+										«s.print_ct_SymbolRef»
 									</math:Equation>
 								</Transformation>
 							</Continuous>	
@@ -265,7 +266,9 @@ class ModelDefinitionPrinter {
 			'''
 				«IF (statements.length > 0)»
 					<ObservationModel blkId="om.«mObjName»">
-						«statements»
+						<ContinuousData>
+							«statements»
+						</ContinuousData>
 					</ObservationModel>
 				«ENDIF»
 			'''				
@@ -273,6 +276,7 @@ class ModelDefinitionPrinter {
 		return model;
 	}
 	
+	//TODO: either remove the possibility to define conditional statements in OBSERVATION block or process it
 	//Print splitting random variables and simple parameters, needed for ObservationModel 
 	protected def print_mdef_ObservationModel(BlockStatement st)'''
 		«IF st.symbol != null»
@@ -281,7 +285,6 @@ class ModelDefinitionPrinter {
 		«IF st.statement != null»
 		«ENDIF»
 	'''
-	//TODO print conditionally defined observation models «st.statement.print_ConditionalStatement(tag)»
 		
 	//Print observation model declaration
 	protected def print_mdef_ObservationModel(SymbolDeclaration s)'''
@@ -297,13 +300,37 @@ class ModelDefinitionPrinter {
 			«ENDIF»
 			«IF s.symbolName != null»
 				<General symbId="«s.symbolName.name»">
-					«print_Assign(s.expression)»
+					«s.expression.print_Assign»
 				</General>
 			«ENDIF»
 		«ENDIF»
+		«IF s.list != null»
+			«s.print_mdef_StandardObservation»
+		«ENDIF»
 	'''	
 	
-	//TODO: add blkIdRef
+	protected def print_mdef_StandardObservation(SymbolDeclaration s){
+		val type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name);
+		if (type.equals(DefaultValues::VAR_CONTINUOUS)){
+			val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
+			val output = s.list.arguments.getAttribute(AttributeValidator::attr_output.name);
+			'''
+				<Standard>
+					«IF output.length > 0»
+						<Output>
+							«output.print_ct_SymbolRef»
+						</Output>
+					«ENDIF»
+					«IF error != null»
+						<ErrorModel>
+							«error.print_Assign»
+						</ErrorModel>
+					«ENDIF»
+				</Standard>	
+			'''
+		}
+	}
+	
 	protected def print_VariabilityReference(SymbolDeclaration s)'''
 		«IF s.randomList != null»
 			«val level = s.randomList.arguments.getAttribute(AttributeValidator::attr_level.name)»
@@ -314,34 +341,6 @@ class ModelDefinitionPrinter {
 			«ENDIF»
 		«ENDIF»
 	'''
-	
-	/////////////////////
-	// I.g Error Model
-	/////////////////////
-	//For named arguments - reorder and match declaration!	
-	/*def print_mdef_ErrorModel(Expression expr)'''
-    <ErrorModel>
-    	«IF expr != null»
-    		«print_Assign(expr)»
-    	«ENDIF»
-    </ErrorModel>
-	'''*/
-		
-	//+			
-	/*def print_InitialCondition(SymbolDeclaration s)'''
-		«IF s.expression != null»
-			«IF s.expression.odeList != null»
-				«var init = getAttributeExpression(s.expression.odeList.arguments, AttributeValidator::attr_init.name)»
-				«IF init != null»
-					«IF init.expression != null»
-						<InitialCondition symbID="«s.name»">
-							«print_Math_Expr(init.expression)»
-						</InitialCondition>
-					«ENDIF»	
-				«ENDIF»
-			«ENDIF»		
-		«ENDIF»
-	'''*/
 	
 	//+ returns distribution for the first declaration with a given name
 	protected def defineDistribution(String ref){
@@ -477,10 +476,12 @@ class ModelDefinitionPrinter {
 				«IF trans.length > 0»
 					<Transformation>«trans»</Transformation>
 				«ENDIF»
-				<«covariateType»>
-					«popContent»
-					«covariateContent»
-				</«covariateType»>
+				«IF popContent.length > 0 || covariateContent.length > 0»
+					<«covariateType»>
+						«popContent»
+						«covariateContent»
+					</«covariateType»>
+				«ENDIF»
 				«IF ranEffExpr.length > 0»
 					<RandomEffect>
 						«ranEffExpr»

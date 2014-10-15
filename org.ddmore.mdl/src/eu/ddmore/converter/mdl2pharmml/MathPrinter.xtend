@@ -70,7 +70,7 @@ class MathPrinter extends MdlPrinter{
 		'''
 	}
 	
-		protected def print_ConditionalStatement(ConditionalStatement s, String tag){
+	protected def print_ConditionalStatement(ConditionalStatement s, String tag){
 		var symbols = new HashMap<String, ArrayList<Piece>>();
 		var symbolOrders = new HashMap<String, Integer>();
 		var Piece parent = null;
