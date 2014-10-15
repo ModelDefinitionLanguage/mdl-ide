@@ -96,7 +96,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				addProposals(context, acceptor, attributes, img); return;
 			}		
 			//type
-			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_req_cc_type.getName())){
+			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_req_type.getName())){
 				EObject container = Utils.findListContainer(arg);
 				List<String> attributes = new ArrayList<String>();
 				if (container instanceof VariabilityBlockImpl || container instanceof MatrixBlockImpl || 

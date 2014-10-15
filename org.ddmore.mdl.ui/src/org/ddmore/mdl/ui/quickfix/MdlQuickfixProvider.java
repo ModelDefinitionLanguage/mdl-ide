@@ -506,7 +506,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 		symbName.setName(varName);
 		newSymbol.setSymbolName(symbName);
-		Attribute[] attributes = {AttributeValidator.attr_cc_type, AttributeValidator.attr_units, AttributeValidator.attr_use};
+		Attribute[] attributes = {AttributeValidator.attr_type, AttributeValidator.attr_units, AttributeValidator.attr_use};
 		newSymbol.setList(createList(attributes));
 		block.getVariables().add(newSymbol);
 	}

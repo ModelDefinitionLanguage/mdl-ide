@@ -62,11 +62,18 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	//name
 	final public static Attribute attr_name = new Attribute("name", MdlDataType.TYPE_STRING, false, "");		
+	//value
 	final public static Attribute attr_req_value = new Attribute("value", MdlDataType.TYPE_REAL, true, "0");
 	final public static Attribute attr_value = new Attribute("value", MdlDataType.TYPE_REAL, false, "0");
 	final public static Attribute attr_expr_value = new Attribute("value", MdlDataType.TYPE_EXPR, true, "0");
-
+	//type
+	final public static Attribute attr_req_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
+	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
+	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, VariabilityEnum.SD.toString());
+	final public static Attribute attr_continuous_type = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.VAR_CONTINUOUS);
+	
 	final public static Attribute attr_hi = new Attribute("hi", MdlDataType.TYPE_REAL, false, "0");
 	final public static Attribute attr_lo = new Attribute("lo", MdlDataType.TYPE_REAL, false, "1");
 	
@@ -76,10 +83,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, "ID");
 	final public static Attribute attr_alias = new Attribute("alias", MdlDataType.TYPE_REF, false);
 
-	final public static Attribute attr_req_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
-	final public static Attribute attr_cc_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
-	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, VariabilityEnum.SD.toString());
-	
 	/*ESTIMATION*/
 	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
 	final public static Attribute attr_ruv = new Attribute("ruv", MdlDataType.TYPE_EXPR, false);
@@ -88,9 +91,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_req_deriv = new Attribute("deriv", MdlDataType.TYPE_EXPR, true, DefaultValues.VAR_NAME);	
 	final public static Attribute attr_init = new Attribute("init", MdlDataType.TYPE_EXPR, false, "0");	
 	final public static Attribute attr_x0 = new Attribute("x0", MdlDataType.TYPE_REAL, false);	
-	final public static Attribute attr_wrt = new Attribute("wrt", MdlDataType.TYPE_REF, false, "TIME");	
+	final public static Attribute attr_wrt = new Attribute("wrt", MdlDataType.TYPE_REF, false, DefaultValues.INDEPENDENT_VAR);	
 	
-	/*Data object*/
 	/*DATA_INPUT_VARIABLES*/
 	final public static Attribute attr_define = new Attribute("define", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_recode = new Attribute("recode", MdlDataType.TYPE_LIST, false);
@@ -108,9 +110,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
-	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_cc_type, attr_define, attr_units, 
+	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_type, attr_define, attr_units, 
 			attr_recode, attr_boundaries, attr_missing);
-	final public static List<Attribute> attrs_dataDerived = Arrays.asList(attr_req_cc_type, attr_expr_value, attr_units);
+	final public static List<Attribute> attrs_dataDerived = Arrays.asList(attr_req_type, attr_expr_value, attr_units);
 
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, 
@@ -121,12 +123,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*Model object*/
 	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_units, 
-			attr_cc_type, attr_level, attr_alias);
+			attr_type, attr_level, attr_alias);
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_deq = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
-	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_cc_type, attr_prediction, attr_ruv);
+	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
-	final public static List<Attribute> attrs_observation = Arrays.asList();
+	final public static List<Attribute> attrs_observation = Arrays.asList(attr_continuous_type);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(
@@ -278,7 +280,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		List<String> categoricalNames = new ArrayList<String>();
 		for (Argument parentArg: parentArgs.getArguments()){
 			if (parentArg.getArgumentName() != null){
-				if (parentArg.getArgumentName().getName().equals(attr_req_cc_type.getName())){
+				if (parentArg.getArgumentName().getName().equals(attr_req_type.getName())){
 					if (parentArg.getExpression().getType() != null && 
 						parentArg.getExpression().getType().getType() != null &&
 						parentArg.getExpression().getType().getType().getCategorical() != null){

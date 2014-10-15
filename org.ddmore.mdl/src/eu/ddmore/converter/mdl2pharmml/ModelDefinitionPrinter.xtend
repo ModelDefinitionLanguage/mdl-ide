@@ -389,8 +389,9 @@ class ModelDefinitionPrinter {
 	//Transform lists to PharmML
 	def print_List(org.ddmore.mdl.mdl.List list){
 		var assign = "";
+		var res = "";
 		//Categorical variables
-		val type = list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+		val type = list.arguments.getAttribute(AttributeValidator::attr_type.name);
 		if (type.equals(VariableType::CC_CATEGORICAL)){
 			val define = list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 			if (define.list != null){
@@ -399,10 +400,42 @@ class ModelDefinitionPrinter {
 		} else {
 		//Derivative variables	
 			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name);
-			if (deriv != null)
+			if (deriv != null){
 				assign = '''«deriv.print_Math_Expr»'''
+				val independentVar = list.arguments.getAttribute(AttributeValidator::attr_wrt.name);
+				if (independentVar.length > 0)
+					res  = 	
+					'''
+						<ct:IndependentVariable>
+							«independentVar.print_ct_SymbolRef»
+						</ct:IndependentVariable>
+					'''	
+				val initValue = list.arguments.getAttributeExpression(AttributeValidator::attr_x0.name);
+				val initTime = list.arguments.getAttributeExpression(AttributeValidator::attr_init.name);
+				if (initValue != null)
+					res  = 	
+					'''
+						<ct:InitValue>
+							«initValue.print_Assign»
+						</ct:InitValue>
+					'''
+				if (initTime != null)
+					res  = 	
+					'''
+						<ct:InitTime>
+							«initTime.print_Assign»
+						</ct:InitTime>
+					'''
+				if (initValue != null || initTime != null)
+					res  = 
+					'''
+						<ct:InitialCondition>
+							«res»
+						</ct:InitialCondition>
+					'''						
+			}
 		} 
-		if (assign.length > 0) return
+		if (assign.length > 0) return res +
 		'''
 			<ct:Assign>
 				<Equation xmlns="«xmlns_math»">

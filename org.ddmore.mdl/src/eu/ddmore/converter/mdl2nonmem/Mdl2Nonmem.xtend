@@ -1189,7 +1189,7 @@ class Mdl2Nonmem extends MdlPrinter {
 		if (x instanceof SymbolDeclaration){
 			var s = x as SymbolDeclaration;
 			if (s.symbolName != null && s.list != null){
-				var type = s.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+				var type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name);
 				if (type.equals(VariableType::CC_LIKELIHOOD))
 					if (!binomial_vars.contains(s.symbolName.name)){
 						binomial_vars.add(s.symbolName.name);
@@ -1204,7 +1204,7 @@ class Mdl2Nonmem extends MdlPrinter {
 			var s = x as SymbolDeclaration;
 			if (s.symbolName != null && s.list != null){
 				if (binomial_vars.contains(s.symbolName.name)){
-					var type = s.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+					var type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name);
 					if (!type.equals(VariableType::CC_LIKELIHOOD)){
 						binomial_vars.remove(s.symbolName.name);
 						System::out.println("Binomial variable was removed: " + s.symbolName.name);	
@@ -1485,7 +1485,7 @@ class Mdl2Nonmem extends MdlPrinter {
 				}
 			}
 			if (v.symbolName != null && v.list != null){
-				var type = v.list.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+				var type = v.list.arguments.getAttribute(AttributeValidator::attr_type.name);
 				if (type.length() > 0){
 					if (type.equals(VariableType::CC_CONTINUOUS)) 
 						res = res + "F_FLAG = 0\n"; 
@@ -1505,7 +1505,7 @@ class Mdl2Nonmem extends MdlPrinter {
 	//Instead of list(...) we print an expression from a certain attribute (depends on the type)
 	override toStr(List l){		
 		var res = "";
-		var type = l.arguments.getAttribute(AttributeValidator::attr_cc_type.name);
+		var type = l.arguments.getAttribute(AttributeValidator::attr_type.name);
 		if (type.equals(VariableType::CC_LIKELIHOOD)){
 			res = l.arguments.getAttribute(AttributeValidator::attr_prediction.name);
 		} else 

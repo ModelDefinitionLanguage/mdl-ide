@@ -102,7 +102,8 @@ class ReferenceResolver{
 		    	if (obj instanceof SymbolDeclaration){
 		    		var s = obj as SymbolDeclaration;
 		    		if (s.list != null && s.symbolName != null){
-		    			if (!deriv_vars.contains(s.symbolName.name)){
+		    			val deriv = s.list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name);
+						if (deriv != null && !deriv_vars.contains(s.symbolName.name)){
 		    				deriv_vars.add(s.symbolName.name);
 		    			}
 		    		}

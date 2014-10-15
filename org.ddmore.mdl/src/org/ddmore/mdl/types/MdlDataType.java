@@ -63,6 +63,7 @@ public enum MdlDataType {
 	TYPE_INPUT_FORMAT,   //{nonmemFormat, eventFormat}
 	TYPE_DISTRIBUTION,   //see 'Distribution' in MDL grammar
 	TYPE_INDIVIDUAL_VAR, //{linear, gaussian}
+	TYPE_CONTINUOUS, 	 //{continuous}
 	TYPE_TRIAL           //{simple, sequential, combined}
 	;
     
@@ -124,6 +125,7 @@ public enum MdlDataType {
 	static public boolean validateType(MdlDataType type, EnumType expr){
 		switch(type){
 			case TYPE_VAR_TYPE: return expr.getType() != null;
+			case TYPE_CONTINUOUS: return (expr.getType() != null && (expr.getType().getContinuous() != null));
 			case TYPE_USE: return (expr.getUse() != UseType.NONE);
 			case TYPE_TARGET: return (expr.getTarget() != TargetType.NONE);
 			case TYPE_RANDOM_EFFECT: return (expr.getVariability() != VariabilityType.NONE);

@@ -58,7 +58,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		"logit",
 		"normcdf",
 		"probit",
-		//"minus",
 		"sqrt",
 		"sin",
 		"cos",
@@ -100,10 +99,24 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static FunctionParameter param_seq_repetition = new FunctionParameter("repetition", 1, MdlDataType.TYPE_REAL);
 	final public static FunctionParameter param_seq_end = new FunctionParameter("end", 2, MdlDataType.TYPE_REAL);
 
-	final public static String funct_combinedError     = "combinedError";
-	final public static FunctionParameter param_combinedError_add = new FunctionParameter("add", 0, MdlDataType.TYPE_REF);
-	final public static FunctionParameter param_combinedError_prop = new FunctionParameter("prop", 1, MdlDataType.TYPE_REF);
+	final public static String funct_error_combined1  = "errorCombined1";
+	final public static String funct_error_combined2  = "errorCombined2";
+	final public static String funct_error_combined1c = "errorCombined1c";
+	final public static String funct_error_combined2c = "errorCombined2c";
+	final public static String funct_error_additive   = "errorAdditive";
+	final public static String funct_error_prop       = "errorProportional";
+	final public static String funct_error_exp        = "errorExponential";
+	final public static String funct_error_logit      = "errorLogit";
+	final public static String funct_error_band       = "errorBand";
 
+	final public static FunctionParameter param_error_a = new FunctionParameter("a", 0, MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_error_b = new FunctionParameter("b", 1, MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_error_f = new FunctionParameter("f", 1, MdlDataType.TYPE_REF);
+
+	final public static List<String> errorModels = Arrays.asList(funct_error_combined1,
+		funct_error_combined2, funct_error_combined1c, funct_error_combined2c, funct_error_additive,
+		funct_error_prop, funct_error_exp, funct_error_logit, funct_error_band);
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*LIBRARY*/
 	final public static String lib_nmadvan = "nmadvan";
@@ -132,6 +145,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			/** * */
 		private static final long serialVersionUID = -3320608024292207312L;
 		{
+			/*Standard mathematical functions*/
 			for (String functName: funct_standard1)
 				put(functName, new FunctionSignature(functName, 1, MdlDataType.TYPE_REAL));
 			for (String functName: funct_standard2)
@@ -141,11 +155,14 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
 			put(funct_errorExit, new FunctionSignature(funct_errorExit, 2, MdlDataType.TYPE_VOID));
 			put(funct_runif, new FunctionSignature(funct_runif, Arrays.asList(new FunctionParameter("n", 0, MdlDataType.TYPE_INT)), MdlDataType.TYPE_REAL));
-			put(funct_combinedError, new FunctionSignature(funct_combinedError, 
-						Arrays.asList(param_combinedError_add, param_combinedError_prop), 
-						MdlDataType.TYPE_REAL, true));
 			
-			/*libraries*/
+			/*Error models*/
+			for (String errorModel: errorModels){
+				put(errorModel, new FunctionSignature(errorModel, 
+					Arrays.asList(param_error_a, param_error_b, param_error_f), MdlDataType.TYPE_REAL, true));
+			}
+			
+			/*Libraries*/
 			//nmadvan
 			put(lib_nmadvan, new FunctionSignature(lib_nmadvan, 
 				Arrays.asList(
@@ -156,8 +173,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 						new Variable("A", MdlDataType.TYPE_VECTOR_REAL), 
 						new Variable("F", MdlDataType.TYPE_REAL))
 				)
-			);
-			
+			);			
 			//PK
 			put(lib_PK, new FunctionSignature(lib_PK, Arrays.asList(
 				param_PK_ndist, param_PK_depot), 
