@@ -91,7 +91,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_use.getName())){
 				List<String> attributes = new ArrayList<String>();
 				for (UseType value: UseType.VALUES)
-					attributes.add(value.toString());
+					if (value != UseType.NONE) attributes.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
 				addProposals(context, acceptor, attributes, img); return;
 			}		
@@ -102,13 +102,15 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				if (container instanceof VariabilityBlockImpl || container instanceof MatrixBlockImpl || 
 					container instanceof DiagBlockImpl || container instanceof SameBlockImpl){
 					for (VariabilityType value: VariabilityType.VALUES)
-						attributes.add(value.toString());
+						if (value != VariabilityType.NONE) 
+							attributes.add(value.toString());
 					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
 					addProposals(context, acceptor, attributes, img); return;
 				}
 				if (container instanceof IndividualVariablesBlockImpl){
 					for (IndividualVarType value: IndividualVarType.VALUES)
-						attributes.add(value.toString());
+						if (value != IndividualVarType.NONE) 
+							attributes.add(value.toString());
 					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
 					addProposals(context, acceptor, attributes, img); 
 				} else {
@@ -136,7 +138,8 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			if (property.getPropertyName().getName().equals(PropertyValidator.attr_inputformat.getName())){
 				List<String> values = new ArrayList<String>();
 				for (InputFormatType value: InputFormatType.VALUES)
-					values.add(value.toString());
+					if (value != InputFormatType.NONE)
+						values.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
 				addProposals(context, acceptor, values, img);
 			}
@@ -144,7 +147,8 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			if (property.getPropertyName().getName().equals(PropertyValidator.attr_req_target.getName())){
 				List<String> attributes = new ArrayList<String>();
 				for (TargetType value: TargetType.VALUES)
-					attributes.add(value.toString());
+					if (value != TargetType.NONE)
+						attributes.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
 				addProposals(context, acceptor, attributes, img); return;
 			}
@@ -183,7 +187,8 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			if (arg.getArgumentName().getName().equals(DistributionValidator.attr_type.getName())){
 				List<String> attributes = new ArrayList<String>();
 				for (DistributionType value: DistributionType.VALUES)
-					attributes.add(value.toString()); 
+					if (value != DistributionType.NONE)	
+						attributes.add(value.toString()); 
 				Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_TYPE));
 				addProposals(context, acceptor, attributes, img);
 			}
