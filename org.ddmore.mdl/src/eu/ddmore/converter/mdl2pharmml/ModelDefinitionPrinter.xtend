@@ -25,7 +25,7 @@ class ModelDefinitionPrinter {
 	private var String mObjName;
 	private var String pObjName;
 
-	protected extension DistributionPrinter = new DistributionPrinter();
+	protected extension DistributionPrinter distrPrinter = new DistributionPrinter();
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver = null;
 	
@@ -55,14 +55,10 @@ class ModelDefinitionPrinter {
 		</ModelDefinition>
 		'''
 	}
-	//////////////////////////////////////
-	// I.a Function Definition (not used) - call from here if needed
-	//////////////////////////////////////
 
 	/////////////////////////
 	// I.b Variability Model
 	/////////////////////////	
-	
 	protected def print_mdef_VariabilityModel(){
 		var model = "";
 		var errorVars = vm_err_vars.get(mObjName);
@@ -313,7 +309,7 @@ class ModelDefinitionPrinter {
 		val type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name);
 		if (type.equals(DefaultValues::VAR_CONTINUOUS)){
 			val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
-			val output = s.list.arguments.getAttribute(AttributeValidator::attr_output.name);
+			val output = s.list.arguments.getAttribute(AttributeValidator::attr_prediction.name);
 			'''
 				<Standard>
 					«IF output.length > 0»

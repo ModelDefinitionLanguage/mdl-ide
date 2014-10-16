@@ -10,14 +10,14 @@ import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionArguments;
-import org.ddmore.mdl.mdl.DistributionEnum;
-import org.ddmore.mdl.mdl.IndividualVarEnum;
-import org.ddmore.mdl.mdl.InputFormatEnum;
+import org.ddmore.mdl.mdl.DistributionType;
+import org.ddmore.mdl.mdl.IndividualVarType;
+import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.PropertyDeclaration;
 import org.ddmore.mdl.mdl.RandomList;
-import org.ddmore.mdl.mdl.TargetEnum;
-import org.ddmore.mdl.mdl.UseEnum;
-import org.ddmore.mdl.mdl.VariabilityEnum;
+import org.ddmore.mdl.mdl.TargetType;
+import org.ddmore.mdl.mdl.UseType;
+import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.DistributionArgumentImpl;
@@ -90,7 +90,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			//use
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_use.getName())){
 				List<String> attributes = new ArrayList<String>();
-				for (UseEnum value: UseEnum.VALUES)
+				for (UseType value: UseType.VALUES)
 					attributes.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
 				addProposals(context, acceptor, attributes, img); return;
@@ -101,13 +101,13 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				List<String> attributes = new ArrayList<String>();
 				if (container instanceof VariabilityBlockImpl || container instanceof MatrixBlockImpl || 
 					container instanceof DiagBlockImpl || container instanceof SameBlockImpl){
-					for (VariabilityEnum value: VariabilityEnum.VALUES)
+					for (VariabilityType value: VariabilityType.VALUES)
 						attributes.add(value.toString());
 					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
 					addProposals(context, acceptor, attributes, img); return;
 				}
 				if (container instanceof IndividualVariablesBlockImpl){
-					for (IndividualVarEnum value: IndividualVarEnum.VALUES)
+					for (IndividualVarType value: IndividualVarType.VALUES)
 						attributes.add(value.toString());
 					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
 					addProposals(context, acceptor, attributes, img); 
@@ -135,7 +135,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			//inputformat
 			if (property.getPropertyName().getName().equals(PropertyValidator.attr_inputformat.getName())){
 				List<String> values = new ArrayList<String>();
-				for (InputFormatEnum value: InputFormatEnum.VALUES)
+				for (InputFormatType value: InputFormatType.VALUES)
 					values.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
 				addProposals(context, acceptor, values, img);
@@ -143,7 +143,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			//target
 			if (property.getPropertyName().getName().equals(PropertyValidator.attr_req_target.getName())){
 				List<String> attributes = new ArrayList<String>();
-				for (TargetEnum value: TargetEnum.VALUES)
+				for (TargetType value: TargetType.VALUES)
 					attributes.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
 				addProposals(context, acceptor, attributes, img); return;
@@ -182,7 +182,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			DistributionArgument arg = (DistributionArgument)model;
 			if (arg.getArgumentName().getName().equals(DistributionValidator.attr_type.getName())){
 				List<String> attributes = new ArrayList<String>();
-				for (DistributionEnum value: DistributionEnum.VALUES)
+				for (DistributionType value: DistributionType.VALUES)
 					attributes.add(value.toString()); 
 				Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_TYPE));
 				addProposals(context, acceptor, attributes, img);

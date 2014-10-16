@@ -13,7 +13,7 @@ import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.DataDerivedBlock
 import org.ddmore.mdl.validation.Utils
-import org.ddmore.mdl.mdl.UseEnum
+import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.mdl.impl.MclObjectImpl
 import org.ddmore.mdl.mdl.MclObject
@@ -44,7 +44,7 @@ class ReferenceResolver{
 		
 	protected def prepareCollections(Mcl m){
 		for (o: m.objects){
-			setDerivativeVariables(m);
+			m.setDerivativeVariables;
 			if (o.modelObject != null){
 	  			setLevelVars(o.modelObject);
 	  			setRandomVariables(o.modelObject);
@@ -167,7 +167,7 @@ class ReferenceResolver{
 				for (s: block.inputVariablesBlock.variables){
 					if (s.list != null && s.symbolName != null){
 						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-						if (use.equals(UseEnum::IDV.toString) && !independentVars.contains(s.symbolName.name)) 
+						if (use.equals(UseType::IDV.toString) && !independentVars.contains(s.symbolName.name)) 
 							independentVars.add(s.symbolName.name);
 					}
 				}
@@ -184,7 +184,7 @@ class ReferenceResolver{
 				for (s: b.inputVariablesBlock.variables){
 					if (s.list != null && s.symbolName != null){
 						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-						if (use.equals(UseEnum::COVARIATE.toString)) {
+						if (use.equals(UseType::COVARIATE.toString)) {
 							if (!covariateVars.contains(s.symbolName.name))
 								covariateVars.add(s.symbolName.name);
 						}

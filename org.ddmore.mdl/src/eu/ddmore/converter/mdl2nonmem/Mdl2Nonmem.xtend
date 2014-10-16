@@ -17,7 +17,6 @@ import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
-import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
 import org.ddmore.mdl.mdl.FunctionCall
 import org.ddmore.mdl.mdl.List
 import org.ddmore.mdl.mdl.LogicalExpression
@@ -42,7 +41,7 @@ import org.eclipse.emf.ecore.EObject
 import org.ddmore.mdl.validation.DistributionValidator
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
-import org.ddmore.mdl.mdl.TargetEnum
+import org.ddmore.mdl.mdl.TargetType
 import java.util.logging.Logger
 import org.ddmore.mdl.mdl.AnyExpression
 
@@ -1018,7 +1017,7 @@ class Mdl2Nonmem extends MdlPrinter {
 			if (p.propertyName.name.equals(PropertyValidator::attr_location.name))
 				location = p.expression.toStr;
 		}
-		if (target.equals(TargetEnum::NMTRAN.toString)) 
+		if (target.equals(TargetType::NMTRAN_CODE.toString)) 
 			return (location.length == 0 || location.equals("INLINE")); 
 		return false;
 	}
@@ -1032,7 +1031,7 @@ class Mdl2Nonmem extends MdlPrinter {
 			if (p.propertyName.name.equals(PropertyValidator::attr_sameline.name))
 				sameline = p.expression;
 		}
-			if (target.equals(TargetEnum::NMTRAN.toString) || sameline != null) {
+			if (target.equals(TargetType::NMTRAN_CODE.toString) || sameline != null) {
 				return sameline.isTrue;
 			}
 		return false;
@@ -1387,7 +1386,7 @@ class Mdl2Nonmem extends MdlPrinter {
 			if (p.propertyName.name.equals(PropertyValidator::attr_last.name))
 				last = p.expression;
 		}
-		if (target.equals(TargetEnum::NMTRAN.toString) && location.length() > 0) {
+		if (target.equals(TargetType::NMTRAN_CODE.toString) && location.length() > 0) {
 			location = stripQuotes(location.toStr) // Strip off any enclosing double quotes (if present)
 			location = location.substring(0, Math::min(4, location.length())) // And truncate to 4 characters
 			if (last != null && last.isTrue){
@@ -1432,13 +1431,6 @@ class Mdl2Nonmem extends MdlPrinter {
 		return res;
 	}
  
- 	//Return attributes of the standard function
-	def protected getStandardFunctionAttributes(FullyQualifiedFunctionName ref) { 
-			for (pair: FunctionValidator::standardFunctions.entrySet){
-				if (pair.key.equals(ref.function.name)) return pair.value; 
-			}
-	}
-	
 	def isTargetDefined(String sectionName){
 		return externalCodeStart.containsKey(sectionName) || externalCodeEnd.containsKey(sectionName);
 	}
@@ -1631,7 +1623,7 @@ class Mdl2Nonmem extends MdlPrinter {
 			if (p.propertyName.name.equals(PropertyValidator::attr_req_target.name))
 				target = p.expression.toStr;
 		}
-		if (target.equals(TargetEnum::NMTRAN.toString)) {
+		if (target.equals(TargetType::NMTRAN_CODE.toString)) {
 			if (b.isSameline) return "#DEL# " + super.toStr(b).trim;
 			super.toStr(b);
 		}

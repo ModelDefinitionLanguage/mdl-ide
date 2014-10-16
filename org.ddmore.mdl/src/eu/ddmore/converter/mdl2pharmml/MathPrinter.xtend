@@ -34,8 +34,8 @@ import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.mdl.VariabilityEnum
-import org.ddmore.mdl.mdl.UseEnum
+import org.ddmore.mdl.mdl.VariabilityType
+import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.types.DefaultValues
 
 class MathPrinter extends MdlPrinter{
@@ -546,14 +546,14 @@ class MathPrinter extends MdlPrinter{
 		try{        			
         	if (value.indexOf(".") > -1){
         		Double::parseDouble(value);
-				return "real";
+				return Constants::TYPE_REAL;
         	} else {
 	       		Integer::parseInt(value);
-    	   		return "int";	
+    	   		return Constants::TYPE_INT;	
         	}
         }
 		catch (NumberFormatException e) {
-			return "id";
+			return Constants::TYPE_ID;
 		}
 	}
 	
@@ -561,7 +561,7 @@ class MathPrinter extends MdlPrinter{
 		<ct:«type»>«value»</ct:«type»>
 	'''
 	
-	//+ Negation of the expression x || y -> !x && !y 
+	//Negation of the expression x || y -> !x && !y 
 	def print_DualExpression(OrExpression expr){
 		var newAndExprs = new ArrayList<String>();
 		for (andExpr: expr.expression){
@@ -626,7 +626,7 @@ class MathPrinter extends MdlPrinter{
 	}
 	
 	
-	//+ Expr1 && ... && Expr_n (left associative)
+	//Expr1 && ... && Expr_n (left associative)
 	private def CharSequence print_Math_LogicAnd(ArrayList<String> exprs, int startIndex){
 		if (exprs!= null){
 			if (startIndex < exprs.size - 1){
@@ -659,7 +659,7 @@ class MathPrinter extends MdlPrinter{
 		</ct:Assign>
 	'''
 
-	//+ Here expr and condition are PharmML representation of MDL expressions
+	//Here expr and condition are PharmML representation of MDL expressions
 	def print_Math_LogicOpPiece(String expr, String condition)'''
 		<Piece>
 			«expr»
@@ -754,10 +754,14 @@ class MathPrinter extends MdlPrinter{
 	'''		
 
 	def convertMatrixType(String matrixType){
-		if (matrixType.equals(VariabilityEnum::VAR.toString))
+		if (matrixType.equals(VariabilityType::VAR.toString))
 			return MATRIX_COV;
-		if (matrixType.equals(VariabilityEnum::SD.toString))
+		if (matrixType.equals(VariabilityType::SD.toString))
 			return MATRIX_STDEV;
+		if (matrixType.equals(VariabilityType::CORR.toString))
+			return MATRIX_CORR;
+		if (matrixType.equals(VariabilityType::COV.toString))
+			return MATRIX_COV;
 		return MATRIX_COV;	
 	}	
 	
@@ -879,11 +883,11 @@ class MathPrinter extends MdlPrinter{
 	
 	def convertColumnType(String type){
 		switch (type){ 
-			case UseEnum::AMT: "dose"
-			case UseEnum::YTYPE: "dvid"
-			case UseEnum::ITYPE: "dvid"
-			case UseEnum::OCC: "occasion"
-			case UseEnum::CENS: "censoring"
+			case UseType::AMT: "dose"
+			case UseType::YTYPE: "dvid"
+			case UseType::ITYPE: "dvid"
+			case UseType::OCC: "occasion"
+			case UseType::CENS: "censoring"
 			default: type
 		}
 	}		

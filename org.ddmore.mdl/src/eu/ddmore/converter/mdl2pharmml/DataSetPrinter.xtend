@@ -6,8 +6,8 @@ import org.apache.commons.io.FilenameUtils
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.validation.PropertyValidator
-import org.ddmore.mdl.mdl.InputFormatEnum
-import org.ddmore.mdl.mdl.UseEnum
+import org.ddmore.mdl.mdl.InputFormatType
+import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MclObject
 
 class DataSetPrinter {
@@ -50,7 +50,7 @@ class DataSetPrinter {
 			if (b.sourceBlock != null){
 				for (s: b.sourceBlock.statements){
 					if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
-						if (s.expression.toStr.equals(InputFormatEnum::NONMEM_FORMAT.toString)){
+						if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString)){
 							res  = res + print_ds_NONMEM_DataSet(mObj, dObj);
 						} else {
 							res = res + print_ds_Objective_DataSet(mObj, dObj);
@@ -63,7 +63,7 @@ class DataSetPrinter {
 	}
 	
 	protected def getColumnType(SymbolDeclaration modelVar){
-		var columnType = UseEnum::ID.toString;
+		var columnType = UseType::ID.toString;
 		if (modelVar.list != null){
 			val useValue = modelVar.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 			if (useValue.length > 0)  columnType = useValue;

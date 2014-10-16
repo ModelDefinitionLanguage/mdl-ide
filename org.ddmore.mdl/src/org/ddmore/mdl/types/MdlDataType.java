@@ -12,7 +12,6 @@ import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.EnumType; 
 import org.ddmore.mdl.mdl.Expression;
-import org.ddmore.mdl.mdl.FunctionName;
 import org.ddmore.mdl.mdl.IndividualVarType;
 import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.Mcl;
@@ -30,9 +29,6 @@ import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.validation.FunctionValidator;
 import org.ddmore.mdl.validation.Utils;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EObject;
-
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 public enum MdlDataType {
@@ -44,7 +40,7 @@ public enum MdlDataType {
     //Restrictions of basic (to comply with PharmML)
     TYPE_NAT, TYPE_PNAT, TYPE_PREAL, TYPE_PROBABILITY,
     //References to variables and mathematical expressions
-	TYPE_REF, TYPE_EXPR, TYPE_FUNCT, 
+	TYPE_REF, TYPE_EXPR,  
 	//References to objects
 	TYPE_OBJ_REF, TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_OBJ_REF_TASK,
 	//Nested lists
@@ -57,7 +53,10 @@ public enum MdlDataType {
     TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL, TYPE_VECTOR_PROBABILITY,
     //Reference vectors
     TYPE_VECTOR_REF, TYPE_VECTOR_EXPR,
-	
+
+	/*String restrictions*/
+	TYPE_TRANS,          //{log, logit, probit}
+
     /*Enumerations*/
 	TYPE_VAR_TYPE,       //{continuous, categorical, likelihood, M2LL}
 	TYPE_USE,            //see 'UseType' in MDL grammar
@@ -97,13 +96,14 @@ public enum MdlDataType {
 			//References
 			case TYPE_REF: return isReference(expr);  
 			case TYPE_EXPR: return true;  
-			case TYPE_FUNCT: return isFunctionRef(expr);
 			//References to objects
 			case TYPE_OBJ_REF: return isObjectReference(expr);
 			case TYPE_OBJ_REF_MODEL: validObjectTypeReference(expr, TYPE_OBJ_REF_MODEL);
 			case TYPE_OBJ_REF_DATA: return validObjectTypeReference(expr, TYPE_OBJ_REF_DATA);
 			case TYPE_OBJ_REF_PARAM: return validObjectTypeReference(expr, TYPE_OBJ_REF_PARAM);
 			case TYPE_OBJ_REF_TASK: return validObjectTypeReference(expr, TYPE_OBJ_REF_TASK);
+			//String restriction
+			case TYPE_TRANS: return isTransformationOperator(expr);  
 			default: return false;
 		}
 	}
@@ -324,18 +324,6 @@ public enum MdlDataType {
 		}
 		return false;
 	}
-	
-	private static boolean isFunctionRef(Expression expr){
-		TreeIterator<EObject> iterator = expr.eAllContents();
-	    while (iterator.hasNext()){
-	    	EObject obj = iterator.next();
-	    	if (obj instanceof FunctionName){
-	    		FunctionName functName = (FunctionName) obj;
-	    		return FunctionValidator.standardFunctions.containsKey(functName.getName());
-	    	}
-	    }
-		return false;
-	}
 
 	public static SymbolName getReference(OrExpression orExpr) {
 		if (orExpr.getExpression().size() > 1) return null;
@@ -548,4 +536,9 @@ public enum MdlDataType {
 		}
 		return false;	
 	}	
+	
+	private static boolean isTransformationOperator(Expression expr){
+		String trans = MdlPrinter.getInstance().toStr(expr);
+		return (FunctionValidator.funct_standard1.contains(trans));
+	}
 }

@@ -18,7 +18,6 @@ import org.ddmore.mdl.mdl.DeqBlock;
 import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
-import org.ddmore.mdl.mdl.FullyQualifiedFunctionName;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.FunctionName;
@@ -124,16 +123,7 @@ public class Utils {
 		return false;
 	}
 	
-	//Checks whether a given function is declared
-	static boolean isFunctionDeclared(Map<String, List<String>> map, FullyQualifiedFunctionName ref){
-		ObjectName objName = ref.getObject();
-		if (objName == null) objName = getObjectName(ref);
-		if (objName != null) 
-			if (map.containsKey(objName.getName()))
-				if (map.get(objName.getName()).contains(ref.getFunction().getName())) return true;	
-		return false;
-	}
-	
+
 	//Checks whether a given function is declared
 	static boolean isFunctionDeclared(Map<String, List<String>> map, FunctionName ref){
 		ObjectName objName = getObjectName(ref);

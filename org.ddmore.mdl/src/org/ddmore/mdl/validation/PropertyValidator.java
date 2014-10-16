@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.ddmore.mdl.domain.Attribute;
-import org.ddmore.mdl.mdl.InputFormatEnum;
+import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.PropertyDeclaration;
 import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.TargetBlock;
-import org.ddmore.mdl.mdl.TargetEnum;
+import org.ddmore.mdl.mdl.TargetType;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.impl.DataBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
@@ -81,7 +81,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	
 	/*SOURCE*/
 	final public static Attribute attr_ignore = new Attribute("ignore", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_inputformat = new Attribute("inputformat", MdlDataType.TYPE_INPUT_FORMAT, true, InputFormatEnum.NONMEM_FORMAT.toString());
+	final public static Attribute attr_inputformat = new Attribute("inputformat", MdlDataType.TYPE_INPUT_FORMAT, true, InputFormatType.NONMEM_FORMAT.toString());
 	final public static Attribute attr_delimiter = new Attribute("delimiter", MdlDataType.TYPE_STRING, false, ",");
 	final public static Attribute attr_header = new Attribute("header", MdlDataType.TYPE_BOOLEAN, false, "false");
 	final public static Attribute attr_file = new Attribute("file", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
@@ -91,7 +91,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			attr_delimiter, attr_file, attr_script, attr_header);
 
 	/*TARGET*/
-	final public static Attribute attr_req_target = new Attribute("target", MdlDataType.TYPE_TARGET, true, TargetEnum.NMTRAN.toString());
+	final public static Attribute attr_req_target = new Attribute("target", MdlDataType.TYPE_TARGET, true, TargetType.NMTRAN_CODE.toString());
 	final public static Attribute attr_location = new Attribute("location", MdlDataType.TYPE_STRING, false);
 	final public static Attribute attr_first = new Attribute("first", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_last = new Attribute("last", MdlDataType.TYPE_BOOLEAN, false);

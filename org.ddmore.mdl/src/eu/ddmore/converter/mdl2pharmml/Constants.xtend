@@ -23,13 +23,14 @@ static class Constants {
 	
 	public static val TYPE_INT  = "int";
 	public static val TYPE_REAL = "real";
+	public static val TYPE_ID = "id";
 	
 	public static val VAR_TYPE_PARAMETER = "parameterVariability";
 	public static val VAR_TYPE_ERROR = "residualError";
 	
 	public static val MATRIX_COV   = "CovMatrix";
+	public static val MATRIX_VAR   = "CovMatrix"; 
 	public static val MATRIX_STDEV = "StDevCorrMatrix";
-	public static val MATRIX_VAR   = "StDevCorrMatrix"; //??
 	public static val MATRIX_CORR  = "CorrMatrix";
 	
 	public static val BLK_DS_TARGET_TOOL = "tt.";

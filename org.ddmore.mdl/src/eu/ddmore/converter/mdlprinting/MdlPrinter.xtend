@@ -29,7 +29,6 @@ import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.DistributionArguments
 import org.ddmore.mdl.mdl.DistributionArgument
 import org.ddmore.mdl.mdl.TargetBlock
-import org.ddmore.mdl.mdl.FullyQualifiedFunctionName
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.ObservationBlock
@@ -179,15 +178,6 @@ class MdlPrinter {
 	//Map operators, identity for MDL printing, to be rewritten in super classes 
 	def convertOperator(String op){
 		return op;
-	}
-	
-	def toStr(FullyQualifiedFunctionName name){
-		var res = ""; 
-		if (name.object != null){
-			res  = name.object.name + "$" ;
-		}
-		res = res + name.function.name.convertID;
-		return res;
 	}
 	
 	def toStr(PropertyDeclaration p){

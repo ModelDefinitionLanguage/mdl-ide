@@ -22,7 +22,6 @@ import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
-import org.ddmore.mdl.mdl.FullyQualifiedFunctionName;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
@@ -34,7 +33,6 @@ import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.MixtureBlock;
-import org.ddmore.mdl.mdl.ModelBlockStatement;
 import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
 import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
@@ -57,7 +55,6 @@ import org.ddmore.mdl.mdl.TrialType;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VarType;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
-import org.ddmore.mdl.mdl.VariabilityEnum;
 import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.Vector;
@@ -65,7 +62,6 @@ import org.ddmore.mdl.mdl.impl.ArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.DataBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DeqBlockImpl;
-import org.ddmore.mdl.mdl.DistributionEnum;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
@@ -78,8 +74,6 @@ import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
-import org.ddmore.mdl.mdl.TargetEnum;
-import org.ddmore.mdl.mdl.UseEnum;
 import org.ddmore.mdl.mdl.impl.VarTypeImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
@@ -130,10 +124,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(CONDITION));
     }
     
-    protected Image _image(FullyQualifiedFunctionName f) {
-        return imageHelper.getImage(getPath(REFERENCE));
-    }
-    
     protected Image _image(FullyQualifiedArgumentName f) {
         return imageHelper.getImage(getPath(ATTRIBUTE_REFERENCE));
     }
@@ -146,7 +136,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(SYMBOL_DECLARATION));
     }
     
-    protected Image _image(VariabilityEnum e) {
+    protected Image _image(VariabilityType e) {
         return imageHelper.getImage(getPath(VARIABILITY_TYPE));
     }
     
@@ -256,15 +246,15 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(OUTPUT_VARIABLES_BLOCK));
     }
 
-    protected Image _image(DistributionEnum e) {
+    protected Image _image(DistributionType e) {
         return imageHelper.getImage(getPath(DISTRIBUTION_TYPE));
     }
     
-    protected Image _image(TargetEnum e) {
+    protected Image _image(TargetType e) {
         return imageHelper.getImage(getPath(TARGET_LANGUAGE));
     }
     
-    protected Image _image(UseEnum e) {
+    protected Image _image(UseType e) {
         return imageHelper.getImage(getPath(USE_TYPE));
     }
 
@@ -464,12 +454,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				s.getName(),
 				true);
 		}	
-	}
-	
-	protected void  _createNode(IOutlineNode parentNode, ModelBlockStatement st){
-		for (EObject obj: st.eContents()){
-			createNode(parentNode, obj);
-		}
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, Arguments st){
