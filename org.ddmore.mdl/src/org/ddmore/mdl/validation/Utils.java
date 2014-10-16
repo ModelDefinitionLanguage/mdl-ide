@@ -11,7 +11,6 @@ import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.CompartmentBlock;
-import org.ddmore.mdl.mdl.ConditionalStatement;
 import org.ddmore.mdl.mdl.DataDerivedBlock;
 import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DeqBlock;
@@ -20,7 +19,6 @@ import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
-import org.ddmore.mdl.mdl.FunctionName;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
@@ -123,75 +121,43 @@ public class Utils {
 		return false;
 	}
 	
-
-	//Checks whether a given function is declared
-	static boolean isFunctionDeclared(Map<String, List<String>> map, FunctionName ref){
-		ObjectName objName = getObjectName(ref);
-		if (objName != null) 
-			if (map.containsKey(objName.getName()))
-				if (map.get(objName.getName()).contains(ref.getName())) return true;
-		return false;
-	}
-	
-	//Checks whether a function is declared more than once
-	static boolean isFunctionDeclaredMoreThanOnce(Map<String, List<String>> map, FunctionName ref){
-		int i = 0;
-		ObjectName objName = Utils.getObjectName(ref);
-		if (map.containsKey(objName.getName())){
-			List<String> functions = map.get(objName.getName()); 
-			for (String func: functions){
-				if (func.equals(ref.getName())) i++;
-				if (i > 1) return true;
-			}
-		}
-		return false;
-	}
-	
-	//Check whether the list of attributes contains a given attribute
-	static boolean containsAttribute(Arguments args, String attrName){
-		for (Argument arg: args.getArguments()){
-			if (arg.getArgumentName() != null)
-				if (arg.getArgumentName().getName().equals(attrName)) return true;
-		}
-		return false;
-	}
-
-	//Add a symbol to a list of known symbols
+	//Add symbol to a list of known symbols
 	public static void addSymbol(List<String> list, BlockStatement st){
-		if (st != null){
-			if (st.getSymbol() != null && st.getSymbol().getSymbolName() != null)
-				list.add(st.getSymbol().getSymbolName().getName());
-			//conditional declarations
-			if (st.getStatement() != null){
-				ConditionalStatement e = st.getStatement();
-				addSymbol(list, e);
-			}
+		TreeIterator<EObject> iterator = st.eAllContents();
+		while (iterator.hasNext()){
+		EObject obj = iterator.next();
+		   	if (obj instanceof SymbolDeclarationImpl){
+		   		SymbolDeclaration s = (SymbolDeclaration)obj;
+				if (s.getSymbolName() != null){
+					list.add(s.getSymbolName().getName());
+				}
+		   	}
 		}
 	}
 	
 	//The same as previous, but does not add repeated conditionally developed variables to avoid double declaration warning 
 	public static void addSymbolNoRepeat(List<String> list, BlockStatement st){
-		if (st != null){
-			if (st.getSymbol() != null && st.getSymbol().getSymbolName() != null)
-				if (!list.contains(st.getSymbol().getSymbolName().getName())) 
-					list.add(st.getSymbol().getSymbolName().getName());
-			if (st.getStatement() != null)
-				addSymbol(list, st.getStatement());
-		}
+		TreeIterator<EObject> iterator = st.eAllContents();
+	    while (iterator.hasNext()){
+	    	EObject obj = iterator.next();
+	    	if (obj instanceof SymbolDeclarationImpl){
+	    		SymbolDeclaration s = (SymbolDeclaration)obj;
+				if (s.getSymbolName() != null){
+					if (!list.contains(s.getSymbolName().getName())) 
+						list.add(s.getSymbolName().getName());
+				}
+	    	}
+	    }
 	}
 	
-	private static void addSymbolNoRepeat(List<String> list, Arguments args){
-		if (args != null)
-			if (args.getArguments() != null)
-				for (Argument arg: args.getArguments())
-					if (arg.getArgumentName() != null)
-						if (!list.contains(arg.getArgumentName().getName()))
-							list.add(arg.getArgumentName().getName());
-	}
-	
+
 	public static List<String> getArgumentNames(Arguments args){
 		List<String> argumentNames = new ArrayList<String>();	
-		Utils.addSymbolNoRepeat(argumentNames, args); 
+		if (args.getArguments() != null)
+			for (Argument arg: args.getArguments())
+				if (arg.getArgumentName() != null)
+					if (!argumentNames.contains(arg.getArgumentName().getName()))
+						argumentNames.add(arg.getArgumentName().getName());
 		return argumentNames;
 	}
 	
@@ -201,30 +167,15 @@ public class Utils {
 		return symbolNames;
 	}
 	
-	//Weak validation of conditionally declared references - a variable is declared if it is declared in some branch 
-	public static void addSymbol(List<String> list, ConditionalStatement e){
-		if (e.getIfStatement() != null)
-			addSymbolNoRepeat(list, e.getIfStatement());
-		if (e.getElseStatement() != null)
-			addSymbolNoRepeat(list, e.getElseStatement());
-		if (e.getIfBlock() != null) 
-			for (BlockStatement b: e.getIfBlock().getStatements())
-				addSymbolNoRepeat(list, b);
-		if (e.getElseBlock() !=null)
-			for (BlockStatement b: e.getElseBlock().getStatements())
-				addSymbolNoRepeat(list, b);
-	}	
-	
 	//Add a symbol to a list of known symbols
-	public static void addSymbol(List<String> list, Arguments args){
-		if (args != null)
-			if (args.getArguments() != null)	
-				for (Argument arg: args.getArguments())
-					if (arg.getArgumentName() != null)
-						list.add(arg.getArgumentName().getName());
+	private static void addSymbol(List<String> list, Arguments args){
+		if (args.getArguments() != null)	
+			for (Argument arg: args.getArguments())
+				if (arg.getArgumentName() != null)
+					list.add(arg.getArgumentName().getName());
 	}
 	
-	public static void addSymbol(List<String> list, FormalArguments args){
+	static void addSymbol(List<String> list, FormalArguments args){
 		if (args != null)
 			for (ArgumentName id: args.getArguments())
 				list.add(id.getName());

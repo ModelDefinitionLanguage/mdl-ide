@@ -75,7 +75,7 @@ public enum MdlDataType {
 			return validateType(type, arg.getExpression());
 		if (arg.getComponent() != null)
 			if (type.equals(MdlDataType.TYPE_RANDOM_LIST)) return true;
-		if (arg.getDistribution() != DistributionType.NONE)
+		if (arg.getDistribution() != DistributionType.NO_DISTRIBUTION)
 			if (type.equals(MdlDataType.TYPE_DISTRIBUTION)) return true;
 		return false;
 	}
@@ -129,12 +129,12 @@ public enum MdlDataType {
 		switch(type){
 			case TYPE_VAR_TYPE: return expr.getType() != null;
 			case TYPE_CONTINUOUS: return (expr.getType() != null && (expr.getType().getContinuous() != null));
-			case TYPE_USE: return (expr.getUse() != UseType.NONE);
-			case TYPE_TARGET: return (expr.getTarget() != TargetType.NONE);
-			case TYPE_RANDOM_EFFECT: return (expr.getVariability() != VariabilityType.NONE);
-			case TYPE_INPUT_FORMAT: return (expr.getInput() != InputFormatType.NONE);
-			case TYPE_TRIAL: return (expr.getTrial() != TrialType.NONE);
-			case TYPE_INDIVIDUAL_VAR: return (expr.getIndividualVar() != IndividualVarType.NONE);
+			case TYPE_USE: return (expr.getUse() != UseType.NO_USE);
+			case TYPE_TARGET: return (expr.getTarget() != TargetType.NO_TARGET);
+			case TYPE_RANDOM_EFFECT: return (expr.getVariability() != VariabilityType.NO_VARIABILITY);
+			case TYPE_INPUT_FORMAT: return (expr.getInput() != InputFormatType.NO_INPUT_FORMAT);
+			case TYPE_TRIAL: return (expr.getTrial() != TrialType.NO_TRIAL);
+			case TYPE_INDIVIDUAL_VAR: return (expr.getIndividualVar() != IndividualVarType.NO_INDIVIDUAL_VAR);
 			default: return false; 
 		}
 	}

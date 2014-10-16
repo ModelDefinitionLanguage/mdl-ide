@@ -202,7 +202,18 @@ class MathPrinter extends MdlPrinter{
 		</ct:Assign>	
 	'''	
 	
-	//+
+	def print_Assign(Expression expr)'''
+		<ct:Assign>
+			«expr.print_Math_Equation»
+		</ct:Assign>
+	'''
+	
+	def print_Assign(String value)'''
+		<ct:Assign>
+			«value.print_ct_Value»
+		</ct:Assign>
+	'''
+	
 	def print_Categorical(List categories)'''
 		<Categorical>
 		«FOR c: categories.arguments.arguments»
@@ -286,12 +297,6 @@ class MathPrinter extends MdlPrinter{
 	</FunctionArgument>
 	'''	
 	
-	def print_Assign(Expression expr)'''
-		<ct:Assign>
-			«expr.print_Math_Equation»
-		</ct:Assign>
-	'''
-
 	//+
 	def print_Math_Equation(Expression expr)'''
 		<Equation xmlns="«xmlns_math»">

@@ -9,6 +9,7 @@ import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.InputFormatType
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MclObject
+import org.ddmore.mdl.mdl.ModelObject
 
 class DataSetPrinter {
 	protected extension MathPrinter mathPrinter = null;
@@ -78,6 +79,26 @@ class DataSetPrinter {
 			«res»
 		</ObjectiveDataSet>
 		'''
+	}
+	
+	//Return a model variable (matched by name or by alias name!)
+	protected def getModelInputVariable(ModelObject mObj, String name){
+		for (b: mObj.blocks){
+			if (b.inputVariablesBlock != null){
+				for (s: b.inputVariablesBlock.variables){
+					if (s.symbolName != null && s.symbolName.name.equals(name)){
+						return s;
+					}
+					if (s.list != null){
+						var alias = s.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
+						if (alias.length > 0){
+							if (alias.equals(name)) return s;
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	protected def print_ds_NONMEM_DataSet(MclObject mObj, MclObject dObj){

@@ -51,7 +51,7 @@ ModelObjectBlock:
 ;
 
 IndividualVariablesBlock:
-	identifier = 'INDIVIDUAL_VARIABLES' 
+	identifier = 'INDIVIDUAL_VARIABLES'
 	BEGIN statements += BlockStatement* END  
 ;
 
@@ -388,79 +388,41 @@ PropertyDeclaration:
 
 EnumType:
 	type = VarType |
-	use = UseEnum |       
-	target = TargetEnum |
-	variability = VariabilityEnum |
-	input = InputFormatEnum |
-	trial = TrialEnum |
-	individualVar = IndividualVarEnum
-;
-
-//NK: in xText enum is always assigned, therefore we introduce an "none" value and hide it from MDL-IDE
-
-enum UseEnum returns UseType:
- 	id | idv | amt | dv | dvid | ytype | itype | covariate | reg | time | dose | cat | occ | occasion | adm | cens | limit | 
-	rate | tinf | ss | addl | ii | tau | mdv |evid | cmt
+	use = UseType |       
+	target = TargetType|
+	variability = VariabilityType |
+	input = InputFormatType |
+	trial = TrialType |
+	individualVar = IndividualVarType
 ;
 
 enum UseType:
-	none | id | idv | amt | dv | dvid | ytype | itype | covariate | reg | time | dose | cat | 
+	no_use | id | idv | amt | dv | dvid | ytype | itype | covariate | reg | time | dose | cat | 
 	occ | occasion | adm | cens | limit | rate | tinf | ss | addl | ii | tau | mdv |evid | cmt
 ;
 
-enum TargetEnum returns TargetType:
-	NMTRAN_CODE | MLXTRAN_CODE | PML_CODE | BUGS_CODE | R_CODE | MATLAB_CODE 	
-;
-
 enum TargetType:
-	none | NMTRAN_CODE | MLXTRAN_CODE | PML_CODE | BUGS_CODE | R_CODE | MATLAB_CODE 	
-;
-
-enum InputFormatEnum returns InputFormatType:
-	nonmemFormat | eventFormat 
+	no_target | NMTRAN_CODE | MLXTRAN_CODE | PML_CODE | BUGS_CODE | R_CODE | MATLAB_CODE 	
 ;
 
 enum InputFormatType:
-	none | nonmemFormat | eventFormat 
-;
-
-enum VariabilityEnum returns VariabilityType:
-	SD | VAR | COV | CORR
+	no_inputFormat | nonmemFormat | eventFormat 
 ;
 
 enum VariabilityType:
-	none | SD | VAR | COV | CORR
-;
-
-enum IndividualVarEnum returns IndividualVarType:
-	linear | gaussian
+	no_variability | SD | VAR | COV | CORR
 ;
 
 enum IndividualVarType:
-	none | linear | gaussian
-;
-
-
-enum TrialEnum returns TrialType:
-	simple | combined | sequential 
+	no_IndividualVar | linear | gaussian
 ;
 
 enum TrialType:
-	none | simple | combined | sequential 
-;
-
-enum DistributionEnum returns DistributionType: 
-	bernoulli | betaDistribution | binomial | discrete | cauchy | chiSquare | dirichlet | exponential | 	
-	fDistribution | gamma | geometric | hypergeometric | inverseGamma |	laplace | logistic |
-	logNormal | multinomial | multivariateNormal | multivariateStudentT | negativeBinomial |
-	normal | normalInverseGamma | pareto | poisson | unif | studentT | uniform | weibull | wishart |
-	discreteUnivariateMixtureModel | discreteMultivariateMixtureModel |
-    categoricalUnivariateMixtureModel | categoricalMultivariateMixtureModel |
-	continuousMultivariateMixtureModel | continuousUnivariateMixtureModel
+	no_Trial | simple | combined | sequential 
 ;
 
 enum DistributionType: 
-	none | bernoulli | betaDistribution | binomial | discrete | cauchy | chiSquare | dirichlet | exponential | 	
+	no_Distribution | bernoulli | betaDistribution | binomial | discrete | cauchy | chiSquare | dirichlet | exponential | 	
 	fDistribution | gamma | geometric | hypergeometric | inverseGamma |	laplace | logistic |
 	logNormal | multinomial | multivariateNormal | multivariateStudentT | negativeBinomial |
 	normal | normalInverseGamma | pareto | poisson | unif | studentT | uniform | weibull | wishart |
@@ -508,7 +470,7 @@ DistributionArguments:
 
 DistributionArgument: 
 	(argumentName = ArgumentName "=")? 
-	(distribution = DistributionEnum | expression = AnyExpression | component = RandomList)
+	(distribution = DistributionType | expression = AnyExpression | component = RandomList)
 ; 
 
 Arguments: 

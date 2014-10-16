@@ -87,7 +87,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 
 	/*OBSERVATION*/
 	final public static Attribute attr_error = new Attribute("error", MdlDataType.TYPE_EXPR, true);
-	final public static Attribute attr_eps = new Attribute("error", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_eps = new Attribute("eps", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_prediction_ref = new Attribute("prediction", MdlDataType.TYPE_REF, false);
 
 	/*ESTIMATION*/
 	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
@@ -96,7 +97,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*ODE*/
 	final public static Attribute attr_req_deriv = new Attribute("deriv", MdlDataType.TYPE_EXPR, true, DefaultValues.VAR_NAME);	
 	final public static Attribute attr_init = new Attribute("init", MdlDataType.TYPE_EXPR, false, "0");	
-	final public static Attribute attr_x0 = new Attribute("x0", MdlDataType.TYPE_REAL, false);	
+	final public static Attribute attr_x0 = new Attribute("x0", MdlDataType.TYPE_REAL, false, "0");	
 	final public static Attribute attr_wrt = new Attribute("wrt", MdlDataType.TYPE_REF, false, DefaultValues.INDEPENDENT_VAR);	
 	
 	/*DATA_INPUT_VARIABLES*/
@@ -134,7 +135,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_deq = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
-	final public static List<Attribute> attrs_observation = Arrays.asList(attr_continuous_type, attr_error, attr_prediction);
+	final public static List<Attribute> attrs_observation = Arrays.asList(attr_continuous_type, attr_error, attr_eps, attr_prediction_ref);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(

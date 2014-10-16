@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ddmore.mdl.domain.FunctionParameter;
+import org.ddmore.mdl.domain.FunctionParameterSet;
 import org.ddmore.mdl.domain.FunctionSignature;
 import org.ddmore.mdl.domain.ParameterPassingMethod;
 import org.ddmore.mdl.domain.Variable;
@@ -93,29 +94,28 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static String funct_errorExit = "errorExit";
 	final public static String funct_pnorm     = "pnorm";
 	
+	final public static FunctionParameter param_n  = new FunctionParameter("n", MdlDataType.TYPE_INT);
+	
 	final public static String funct_seq     = "seq";
-	final public static FunctionParameter param_seq_start = new FunctionParameter("start", 0, MdlDataType.TYPE_REAL);
-	final public static FunctionParameter param_seq_stepSize = new FunctionParameter("stepSize", 1, MdlDataType.TYPE_REAL);
-	final public static FunctionParameter param_seq_repetition = new FunctionParameter("repetition", 1, MdlDataType.TYPE_REAL);
-	final public static FunctionParameter param_seq_end = new FunctionParameter("end", 2, MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_seq_start = new FunctionParameter("start", MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_seq_stepSize = new FunctionParameter("stepSize", MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_seq_repetition = new FunctionParameter("repetition", MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_seq_end = new FunctionParameter("end", MdlDataType.TYPE_REAL);
 
-	final public static String funct_error_combined1  = "errorCombined1";
-	final public static String funct_error_combined2  = "errorCombined2";
-	final public static String funct_error_combined1c = "errorCombined1c";
-	final public static String funct_error_combined2c = "errorCombined2c";
-	final public static String funct_error_additive   = "errorAdditive";
-	final public static String funct_error_prop       = "errorProportional";
-	final public static String funct_error_exp        = "errorExponential";
-	final public static String funct_error_logit      = "errorLogit";
-	final public static String funct_error_band       = "errorBand";
+	final public static String funct_error_additive   	= "additiveError";
+	final public static String funct_error_prop       	= "proportionalError";
+	final public static String funct_error_combined1  	= "combinedError1";
+	final public static String funct_error_power      	= "powerError";
+	final public static String funct_error_combinedPower1 = "combinedPowerError1";
 
-	final public static FunctionParameter param_error_a = new FunctionParameter("a", 0, MdlDataType.TYPE_REF);
-	final public static FunctionParameter param_error_b = new FunctionParameter("b", 1, MdlDataType.TYPE_REF);
-	final public static FunctionParameter param_error_f = new FunctionParameter("f", 1, MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_error_additive = new FunctionParameter("additive", MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_error_proportional = new FunctionParameter("proportional", MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_error_power = new FunctionParameter("power", MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_error_f = new FunctionParameter("f", MdlDataType.TYPE_REF);
 
-	final public static List<String> errorModels = Arrays.asList(funct_error_combined1,
-		funct_error_combined2, funct_error_combined1c, funct_error_combined2c, funct_error_additive,
-		funct_error_prop, funct_error_exp, funct_error_logit, funct_error_band);
+	final public static List<String> errorModels = Arrays.asList(
+		funct_error_additive, funct_error_prop, funct_error_combined1,
+		funct_error_power, funct_error_combinedPower1);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*LIBRARY*/
@@ -125,19 +125,17 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static List<String> libraries = Arrays.asList(lib_nmadvan, lib_PK);
 	
 	/*nmadvan parameters*/
-	final public static FunctionParameter param_nmadvan_model = new FunctionParameter("model", 0, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_trans = new FunctionParameter("trans", 1, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_ncmt = new FunctionParameter("ncmt", 2, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
-	final public static FunctionParameter param_nmadvan_input = new FunctionParameter("input", 3, MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_distribution = new FunctionParameter("distribution", 4, MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_elimination = new FunctionParameter("elimination", 5, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_parameterization = new FunctionParameter("parameterization", 6, MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_model = new FunctionParameter("model", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_trans = new FunctionParameter("trans", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_ncmt = new FunctionParameter("ncmt", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
+	final public static FunctionParameter param_nmadvan_input = new FunctionParameter("input", MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_distribution = new FunctionParameter("distribution", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_elimination = new FunctionParameter("elimination", MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_parameterization = new FunctionParameter("parameterization", MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
 	
 	/*PK parameters*/
-	final public static FunctionParameter param_PK_ndist = new FunctionParameter("ndist", 0, 
-			MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_PK_depot = new FunctionParameter("depot", 1, 
-			MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_PK_ndist = new FunctionParameter("ndist", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_PK_depot = new FunctionParameter("depot", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
 	
 	//////////////////////////////////////////////////////////////////////////
 	final public static Map<String, FunctionSignature> standardFunctions 
@@ -151,23 +149,37 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			for (String functName: funct_standard2)
 				put(functName, new FunctionSignature(functName, 2, MdlDataType.TYPE_REAL));
 						
-			put(funct_seq, new FunctionSignature(funct_seq, Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition, param_seq_end), MdlDataType.TYPE_REAL, true));
+			put(funct_seq, new FunctionSignature(funct_seq, 
+					Arrays.asList(
+						new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition)),
+						new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_end))
+				), MdlDataType.TYPE_REAL, true));
 			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
 			put(funct_errorExit, new FunctionSignature(funct_errorExit, 2, MdlDataType.TYPE_VOID));
-			put(funct_runif, new FunctionSignature(funct_runif, Arrays.asList(new FunctionParameter("n", 0, MdlDataType.TYPE_INT)), MdlDataType.TYPE_REAL));
+			put(funct_runif, new FunctionSignature(funct_runif, new FunctionParameterSet(param_n), MdlDataType.TYPE_REAL));
 			
 			/*Error models*/
-			for (String errorModel: errorModels){
-				put(errorModel, new FunctionSignature(errorModel, 
-					Arrays.asList(param_error_a, param_error_b, param_error_f), MdlDataType.TYPE_REAL, true));
-			}
+			put(funct_error_additive, new FunctionSignature(funct_error_additive, 
+					new FunctionParameterSet(param_error_additive), MdlDataType.TYPE_REAL, true));
+			put(funct_error_prop, new FunctionSignature(funct_error_prop, 
+					new FunctionParameterSet(Arrays.asList(param_error_proportional, param_error_f)),
+					MdlDataType.TYPE_REAL, true));
+			put(funct_error_combined1, new FunctionSignature(funct_error_combined1, 
+					new FunctionParameterSet(Arrays.asList(param_error_additive, param_error_proportional, param_error_f)),
+					MdlDataType.TYPE_REAL, true));
+			put(funct_error_power, new FunctionSignature(
+					funct_error_power, 
+					new FunctionParameterSet(Arrays.asList(param_error_proportional, param_error_power, param_error_f)), MdlDataType.TYPE_REAL, true));
+			put(funct_error_combinedPower1, new FunctionSignature(
+					funct_error_combinedPower1, 
+					new FunctionParameterSet(Arrays.asList(param_error_additive, param_error_proportional, param_error_power, param_error_f)), MdlDataType.TYPE_REAL, true));
 			
 			/*Libraries*/
 			//nmadvan
 			put(lib_nmadvan, new FunctionSignature(lib_nmadvan, 
-				Arrays.asList(
+					new FunctionParameterSet(Arrays.asList(
 					param_nmadvan_model, param_nmadvan_trans, param_nmadvan_ncmt, param_nmadvan_input, 
-					param_nmadvan_distribution, param_nmadvan_elimination, param_nmadvan_parameterization), 
+					param_nmadvan_distribution, param_nmadvan_elimination, param_nmadvan_parameterization)), 
 				MdlDataType.TYPE_VECTOR_REF, true,
 				Arrays.asList(
 						new Variable("A", MdlDataType.TYPE_VECTOR_REAL), 
@@ -175,8 +187,8 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 				)
 			);			
 			//PK
-			put(lib_PK, new FunctionSignature(lib_PK, Arrays.asList(
-				param_PK_ndist, param_PK_depot), 
+			put(lib_PK, new FunctionSignature(lib_PK, new FunctionParameterSet(Arrays.asList(
+				param_PK_ndist, param_PK_depot)), 
 				MdlDataType.TYPE_VECTOR_REF, true, 
 				Arrays.asList(
 						new Variable("V", MdlDataType.TYPE_UNDEFINED), 
@@ -212,23 +224,21 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	public void validateStandardFunction(FunctionCall call){
 		FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getName());
 		//TODO validate whether the function returns any value to enable/disable its use in expressions
+		//TODO instead of checking whether a parameter is known, match a list of actual parameters with one of valid sets!
 		if (Utils.isPassedByName(call.getArguments())){
 			if (functSig.isPassingByName()){
 				if (call.getArguments() != null){
 					for (Argument arg: call.getArguments().getArguments()){
 						if (arg.getArgumentName() != null){
-							boolean isFound = false;
-							for (FunctionParameter p: functSig.getAllParams()){
-								if (p.getName().equals(arg.getArgumentName().getName())){
-									isFound = true;
-									if (!MdlDataType.validateType(p.getType(), arg.getExpression()))
-										warning(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getName()
-										+ " expects value of type " + p.getType(),
-										MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-										MSG_FUNCTION_WRONG_TYPE, arg.getArgumentName().getName());		
-								}
-							}
-							if (!isFound)
+							Map<String, FunctionParameter> allParams = functSig.getAllParams(); 
+							if (allParams.containsKey(arg.getArgumentName().getName())){
+								FunctionParameter p = allParams.get(arg.getArgumentName().getName());
+								if (!MdlDataType.validateType(p.getType(), arg.getExpression()))
+									warning(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getName()
+									+ " expects value of type " + p.getType(),
+									MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+									MSG_FUNCTION_WRONG_TYPE, arg.getArgumentName().getName());		
+							} else 
 								warning(MSG_FUNCTION_PARAMETER_UNKNOWN + ": " + arg.getArgumentName().getName(), 
 									MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 									MSG_FUNCTION_PARAMETER_UNKNOWN, arg.getArgumentName().getName());		
@@ -268,7 +278,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					return;
 				}
 				if (call.getArguments() != null){
-					List<FunctionParameter> defaultParams = functSig.getDefaultParams();
+					List<FunctionParameter> defaultParams = functSig.getDefaultParamSet();
 					for (int i = 0; i < call.getArguments().getArguments().size(); i++){
 						Argument arg = call.getArguments().getArguments().get(i);
 						if (!MdlDataType.validateType(defaultParams.get(i).getType(), arg.getExpression())){

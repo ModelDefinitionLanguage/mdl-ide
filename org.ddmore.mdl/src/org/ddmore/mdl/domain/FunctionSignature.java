@@ -1,68 +1,114 @@
 package org.ddmore.mdl.domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.ddmore.mdl.types.MdlDataType;
 
 public class FunctionSignature {
 	String name;
-	Integer numberOfParams = 0; 
 	MdlDataType type = MdlDataType.TYPE_VOID;
 	Boolean passingByName = false;
-	//By default we assume unnamed input parameters of type MdlDataType.TYPE_REAL
-	List<FunctionParameter> params;
+	List<FunctionParameterSet> paramSets = new ArrayList<FunctionParameterSet>();
+	Integer numberOfParams = 0; 
 	List<Variable> returnedVariables = null;
 	
+	////////////////////////////////////
+	//Undefined parameter set
+	////////////////////////////////////
+	
+	//By default we assume unnamed input parameters of type MdlDataType.TYPE_EXPR
 	public FunctionSignature(String name, Integer numberOfParams){
 		this.name = name;
 		this.numberOfParams = numberOfParams;
+		List<FunctionParameter> params = new ArrayList<FunctionParameter>();
+		for (int i = 0; i < numberOfParams; i++){
+			params.add(new FunctionParameter("param" + i));
+		}
+		FunctionParameterSet defaultSet = new FunctionParameterSet(params);
+		paramSets.add(defaultSet);
 	}
 	
 	public FunctionSignature(String name, Integer numberOfParams, MdlDataType type){
-		this(name , numberOfParams);
-		this.type = type;
-	}
-	
-	public FunctionSignature(String name, List<FunctionParameter> params){
-		this.name = name;
-		this.params = params;
-		if (params != null){
-			//max index (because there can be alternative named parameters on the same place)
-			int count = 0;
-			for (FunctionParameter p: params)
-				if (p.getOrder() > count) count = p.getOrder();
-			if (count > 0)
-				this.numberOfParams = count + 1;
-			else this.numberOfParams = params.size();
-		}
-	}
-	
-	public FunctionSignature(String name, List<FunctionParameter> params, MdlDataType type){
-		this(name, params);
-		this.type = type;
-	}
-	
-	public FunctionSignature(String name, Integer numberOfParams, Boolean passingByName){
 		this(name, numberOfParams);
+		this.type = type;
+	}
+	
+	//////////////////////////////////////
+	//One parameter set
+	//////////////////////////////////////
+	
+	public FunctionSignature(String name, FunctionParameterSet paramSet){
+		this.name = name;
+		this.paramSets.add(paramSet);
+		this.numberOfParams = paramSet.getParameterSet().size();
+	}
+	
+	public FunctionSignature(String name, FunctionParameterSet paramSet, MdlDataType type){
+		this(name, paramSet);
+		this.type = type;
+	}
+		
+	public FunctionSignature(String name, FunctionParameterSet paramSet, Boolean passingByName){
+		this(name, paramSet);
 		this.passingByName = passingByName;
+	}
+	
+	public FunctionSignature(String name,  FunctionParameterSet paramSet, MdlDataType type, Boolean passingByName){
+		this(name, paramSet, type);
+		this.passingByName = passingByName;
+	}
+	
+	public FunctionSignature(String name,  FunctionParameterSet paramSet, MdlDataType type, Boolean passingByName,
+			List<Variable> returnedVariables){
+		this(name, paramSet, type, passingByName);
+		this.returnedVariables = returnedVariables;
 	}
 
-	public FunctionSignature(String name, List<FunctionParameter> params, Boolean passingByName){
-		this(name, params);
+	//////////////////////////////////////
+	//Multiple parameter sets
+	//////////////////////////////////////
+	
+	public FunctionSignature(String name, List<FunctionParameterSet> paramSets){
+		this.name = name;
+		this.paramSets = paramSets;
+		this.numberOfParams = paramSets.get(0).getParameterSet().size();
+	}
+
+	public FunctionSignature(String name, List<FunctionParameterSet> paramSets, MdlDataType type){
+		this(name, paramSets);
+		this.type = type;
+	}
+	
+	public FunctionSignature(String name, List<FunctionParameterSet> paramSets, Boolean passingByName){
+		this(name, paramSets);
 		this.passingByName = passingByName;
 	}
 	
-	public FunctionSignature(String name, List<FunctionParameter> params, MdlDataType type, Boolean passingByName){
-		this(name, params, type);
+	public FunctionSignature(String name,  List<FunctionParameterSet> paramSets, MdlDataType type, Boolean passingByName){
+		this(name, paramSets, type);
 		this.passingByName = passingByName;
 	}
 	
-	public FunctionSignature(String name, List<FunctionParameter> params, MdlDataType type, Boolean passingByName,
+	public FunctionSignature(String name,  List<FunctionParameterSet> paramSets, MdlDataType type, Boolean passingByName,
 			List<Variable> returnedVariables){
-		this(name, params, type, passingByName);
+		this(name, paramSets, type, passingByName);
 		this.returnedVariables = returnedVariables;
+	}
+	
+	////////////////////////////////////
+	
+	public List<FunctionParameterSet> getParamSet(){
+		return paramSets;
+	}
+	
+	public List<FunctionParameter> getDefaultParamSet(){
+		if (paramSets.size() > 0)
+			return paramSets.get(0).getParameterSet();
+		else 
+			return new ArrayList<FunctionParameter>();
 	}
 	
 	public String getName(){
@@ -81,21 +127,18 @@ public class FunctionSignature {
 		return passingByName;
 	}
 
-	public List<FunctionParameter> getAllParams(){
-		return params;
+	public Map<String, FunctionParameter> getAllParams(){
+		Map<String, FunctionParameter> allParams = new HashMap<String, FunctionParameter>();
+		for (FunctionParameterSet set: this.paramSets){
+			for (FunctionParameter p: set.getParameterSet()){
+				if (!allParams.containsKey(p.getName())){
+					allParams.put(p.getName(), p);
+				}
+			}
+		}
+		return allParams;
 	}
 
-	public List<FunctionParameter> getDefaultParams(){
-		//return an ordered set of default parameters
-		FunctionParameter[] orderedParams = new FunctionParameter[numberOfParams];
-		for (FunctionParameter p: params){
-			if (orderedParams.length > p.getOrder())
-				if (orderedParams[p.getOrder()] == null)
-					orderedParams[p.getOrder()] = p;
-		}
-		return Arrays.asList(orderedParams);
-	}
-	
 	public List<Variable> getReturnedVariables(){
 		return returnedVariables;		
 	}

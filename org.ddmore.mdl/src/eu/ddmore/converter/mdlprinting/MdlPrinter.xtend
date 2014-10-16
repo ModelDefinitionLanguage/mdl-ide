@@ -93,21 +93,20 @@ class MdlPrinter {
 	
 	//Return value of an attribute with a given name
 	def getAttribute(DistributionArguments args, String attrName){
-		if (args != null)
-			for (arg: args.arguments)
-				if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
-					return arg.toStr;
-				}				
+		for (arg: args.arguments)
+			if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
+				return arg.toStr;
+			}				
 		return "";
 	} 
 	
 	def String toStr(DistributionArgument arg){
-		if (arg.distribution != DistributionType::NONE)
-			return arg.distribution.toString;
 		if (arg.expression != null)
 			return arg.expression.toStr;	
 		if (arg.component != null)
 			return arg.component.toStr;
+		if (arg.distribution != DistributionType::NO_DISTRIBUTION)
+			return arg.distribution.toString;
 		return "";	
 	}	
 	
@@ -220,17 +219,17 @@ class MdlPrinter {
 	def toStr(EnumType t) {
 		if (t.type != null)
 			return t.type.toStr;
-		if (t.use != UseType::NONE)
+		if (t.use != UseType::NO_USE)
 			return t.use.toString
-		if (t.target != TargetType::NONE)
+		if (t.target != TargetType::NO_TARGET)
 			return t.target.toString
-		if (t.input != InputFormatType::NONE)
+		if (t.input != InputFormatType::NO_INPUT_FORMAT)
 			return t.input.toString
-		if (t.variability != VariabilityType::NONE)
+		if (t.variability != VariabilityType::NO_VARIABILITY)
 			return t.variability.toString
-		if (t.trial != TrialType::NONE)
+		if (t.trial != TrialType::NO_TRIAL)
 			return t.trial.toString
-		if (t.individualVar != IndividualVarType::NONE)
+		if (t.individualVar != IndividualVarType::NO_INDIVIDUAL_VAR)
 			return t.individualVar.toString
 	}
 	

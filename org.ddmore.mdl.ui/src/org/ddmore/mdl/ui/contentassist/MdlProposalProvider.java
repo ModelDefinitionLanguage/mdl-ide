@@ -58,18 +58,6 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 	@Inject IImageHelper imageHelper;
 	
 	@Override
-	public void completeList_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
-
-	@Override
-	public void completeRandomList_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
-	
-	@Override
-	public void completeArguments_Arguments(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
-
-	@Override
 	public void completeArgument_ArgumentName(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		if (model instanceof ListImpl){
 			EObject container = model.eContainer();
@@ -91,7 +79,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_use.getName())){
 				List<String> attributes = new ArrayList<String>();
 				for (UseType value: UseType.VALUES)
-					if (value != UseType.NONE) attributes.add(value.toString());
+					if (value != UseType.NO_USE) attributes.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
 				addProposals(context, acceptor, attributes, img); return;
 			}		
@@ -102,14 +90,14 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				if (container instanceof VariabilityBlockImpl || container instanceof MatrixBlockImpl || 
 					container instanceof DiagBlockImpl || container instanceof SameBlockImpl){
 					for (VariabilityType value: VariabilityType.VALUES)
-						if (value != VariabilityType.NONE) 
+						if (value != VariabilityType.NO_VARIABILITY) 
 							attributes.add(value.toString());
 					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
 					addProposals(context, acceptor, attributes, img); return;
 				}
 				if (container instanceof IndividualVariablesBlockImpl){
 					for (IndividualVarType value: IndividualVarType.VALUES)
-						if (value != IndividualVarType.NONE) 
+						if (value != IndividualVarType.NO_INDIVIDUAL_VAR) 
 							attributes.add(value.toString());
 					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
 					addProposals(context, acceptor, attributes, img); 
@@ -138,7 +126,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			if (property.getPropertyName().getName().equals(PropertyValidator.attr_inputformat.getName())){
 				List<String> values = new ArrayList<String>();
 				for (InputFormatType value: InputFormatType.VALUES)
-					if (value != InputFormatType.NONE)
+					if (value != InputFormatType.NO_INPUT_FORMAT)
 						values.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
 				addProposals(context, acceptor, values, img);
@@ -147,7 +135,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			if (property.getPropertyName().getName().equals(PropertyValidator.attr_req_target.getName())){
 				List<String> attributes = new ArrayList<String>();
 				for (TargetType value: TargetType.VALUES)
-					if (value != TargetType.NONE)
+					if (value != TargetType.NO_TARGET)
 						attributes.add(value.toString());
 				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
 				addProposals(context, acceptor, attributes, img); return;
@@ -187,7 +175,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			if (arg.getArgumentName().getName().equals(DistributionValidator.attr_type.getName())){
 				List<String> attributes = new ArrayList<String>();
 				for (DistributionType value: DistributionType.VALUES)
-					if (value != DistributionType.NONE)	
+					if (value != DistributionType.NO_DISTRIBUTION)	
 						attributes.add(value.toString()); 
 				Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_TYPE));
 				addProposals(context, acceptor, attributes, img);
@@ -195,14 +183,6 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 		}
 	}
 
-	@Override
-	public void completeDistributionArgument_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
-
-	@Override
-	public void completeDistributionArgument_Component(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
-	
 	private void addProposals(ContentAssistContext context, ICompletionProposalAcceptor acceptor, 
 			List<String> attributes, Image img){
 		for (String proposal: attributes){

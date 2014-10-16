@@ -61,9 +61,13 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_task_sig = new Attribute("sig", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_task_cov = new Attribute("cov", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_task_simopt = new Attribute("simopt", MdlDataType.TYPE_VECTOR_STRING, false);
+	final public static Attribute attr_task_target = new Attribute("target", MdlDataType.TYPE_TARGET, false);
+	final public static Attribute attr_task_version = new Attribute("version", MdlDataType.TYPE_STRING, false);
 		
-	final public static List<Attribute> attrs_task_simulate = Arrays.asList(attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt);
-	final public static List<Attribute> attrs_task_estimate = Arrays.asList(attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt);
+	final public static List<Attribute> attrs_task_simulate = Arrays.asList(
+			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt, attr_task_target, attr_task_version);
+	final public static List<Attribute> attrs_task_estimate = Arrays.asList(
+			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt, attr_task_target, attr_task_version);
 
 	//DATA
 	final public static Attribute attr_data_ignore = new Attribute("ignore", MdlDataType.TYPE_BOOLEAN, false);

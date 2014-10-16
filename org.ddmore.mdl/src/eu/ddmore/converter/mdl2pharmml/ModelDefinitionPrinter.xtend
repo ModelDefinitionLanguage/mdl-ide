@@ -18,6 +18,7 @@ import org.ddmore.mdl.mdl.Primary
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.types.DefaultValues
+import org.ddmore.mdl.types.MdlDataType
 
 class ModelDefinitionPrinter {
 	private var ModelObject mObj;
@@ -122,8 +123,8 @@ class ModelDefinitionPrinter {
 	// I.d Parameter Model
 	////////////////////////////	
 		
-	//Parameter object, STRUCTURAL + VARIABILITY -> ParameterModel, SimpleAttribute  
-	//RANDOM_VARIABBLES_DEFINITION -> ParameterModel, RandomVariable
+	//Parameter object, STRUCTURAL + VARIABILITY -> ParameterModel - SimpleAttribute  
+	//RANDOM_VARIABLES_DEFINITION -> ParameterModel - RandomVariable
 	protected def print_mdef_ParameterModel(){		
 		var model = "";
 		if (pObj != null){
@@ -174,8 +175,8 @@ class ModelDefinitionPrinter {
 				if (b.randomVariableDefinitionBlock != null){
 					for (s: b.randomVariableDefinitionBlock.variables){
 						if (s.symbolName != null)
-							if (isIndependentVariable(s.symbolName.name))
-								statements = statements + s.print_mdef_RandomVariable;
+							//if (eta_vars.containsKey(s.symbolName.name))
+							statements = statements + s.print_mdef_RandomVariable;
 					} 
 		  		}
 		  		//Model object, INDIVIDUAL_VARIABLES
@@ -199,13 +200,11 @@ class ModelDefinitionPrinter {
 	
 	protected def print_mdef_RandomVariable(SymbolDeclaration s)
 	'''
-		«IF s.randomList != null»
-			«IF s.symbolName != null»
-				<RandomVariable symbId="«s.symbolName.name»">
-					«s.print_VariabilityReference»
-					«print_uncert_Distribution(s.randomList)»
-				</RandomVariable>
-			«ENDIF»
+		«IF s.randomList != null && s.symbolName != null»
+			<RandomVariable symbId="«s.symbolName.name»">
+				«s.print_VariabilityReference»
+				«print_uncert_Distribution(s.randomList)»
+			</RandomVariable>
 		«ENDIF»
 	'''
 	
@@ -278,8 +277,6 @@ class ModelDefinitionPrinter {
 		«IF st.symbol != null»
 			«st.symbol.print_mdef_ObservationModel»
 		«ENDIF»
-		«IF st.statement != null»
-		«ENDIF»
 	'''
 		
 	//Print observation model declaration
@@ -306,24 +303,35 @@ class ModelDefinitionPrinter {
 	'''	
 	
 	protected def print_mdef_StandardObservation(SymbolDeclaration s){
-		val type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name);
-		if (type.equals(DefaultValues::VAR_CONTINUOUS)){
-			val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
-			val output = s.list.arguments.getAttribute(AttributeValidator::attr_prediction.name);
-			'''
-				<Standard>
-					«IF output.length > 0»
-						<Output>
-							«output.print_ct_SymbolRef»
-						</Output>
-					«ENDIF»
-					«IF error != null»
-						<ErrorModel>
-							«error.print_Assign»
-						</ErrorModel>
-					«ENDIF»
-				</Standard>	
-			'''
+		val type = s.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+		if (type != null){
+			if (type.toStr.equals(DefaultValues::VAR_CONTINUOUS)){
+				val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
+				val output = s.list.arguments.getAttribute(AttributeValidator::attr_prediction_ref.name);
+				val eps = s.list.arguments.getAttribute(AttributeValidator::attr_eps.name);
+				'''
+					<Standard>
+						«IF output.length > 0»
+							<Output>
+								«output.print_ct_SymbolRef»
+							</Output>
+						«ENDIF»
+						«IF error != null»
+							<ErrorModel>
+								«error.print_Assign»
+							</ErrorModel>
+						«ENDIF»
+						«IF eps.length > 0»
+							<ResidualError>
+								«eps.print_ct_SymbolRef»
+							</ResidualError>
+						«ENDIF»
+					</Standard>	
+				'''
+			} else  //TODO: check???
+			if (MdlDataType::validateType(MdlDataType::TYPE_DISTRIBUTION, type)){
+				'''«s.print_mdef_RandomVariable»'''
+			}
 		}
 	}
 	
@@ -364,14 +372,10 @@ class ModelDefinitionPrinter {
 		«IF st.symbol != null»
 			<«tag» symbId="«st.symbol.symbolName.name»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
 				«IF st.symbol.expression != null»
-					«IF st.symbol.expression != null»
-						«print_Assign(st.symbol.expression)»
-					«ENDIF»
+					«print_Assign(st.symbol.expression)»
 				«ENDIF»
 				«IF st.symbol.list != null»
-					«IF st.symbol.list != null»
-						«print_List(st.symbol.list)»
-					«ENDIF»
+					«print_List(st.symbol.list)»
 				«ENDIF»
 			</«tag»>
 		«ENDIF»
@@ -397,47 +401,45 @@ class ModelDefinitionPrinter {
 			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name);
 			if (deriv != null){
 				assign = '''«deriv.print_Math_Expr»'''
-				val independentVar = list.arguments.getAttribute(AttributeValidator::attr_wrt.name);
-				if (independentVar.length > 0)
-					res  = 	
-					'''
-						<ct:IndependentVariable>
-							«independentVar.print_ct_SymbolRef»
-						</ct:IndependentVariable>
-					'''	
+				var independentVar = DefaultValues::INDEPENDENT_VAR;
+				val independentVarExpr = list.arguments.getAttributeExpression(AttributeValidator::attr_wrt.name);
+				if (independentVarExpr != null)
+					independentVar = independentVarExpr.toStr; 
+				res  = 	
+				'''
+					<ct:IndependentVariable>
+						«independentVar.print_ct_SymbolRef»
+					</ct:IndependentVariable>
+				'''	
 				val initValue = list.arguments.getAttributeExpression(AttributeValidator::attr_x0.name);
 				val initTime = list.arguments.getAttributeExpression(AttributeValidator::attr_init.name);
-				if (initValue != null)
-					res  = 	
-					'''
-						<ct:InitValue>
-							«initValue.print_Assign»
-						</ct:InitValue>
-					'''
+				var initValueRes = '''«AttributeValidator::attr_x0.defaultValue.print_Assign»'''; 
+				var initTimeRes = '''«AttributeValidator::attr_init.defaultValue.print_Assign»'''; 
 				if (initTime != null)
-					res  = 	
-					'''
-						<ct:InitTime>
-							«initTime.print_Assign»
-						</ct:InitTime>
-					'''
-				if (initValue != null || initTime != null)
-					res  = 
-					'''
-						<ct:InitialCondition>
-							«res»
-						</ct:InitialCondition>
-					'''						
+					initTimeRes = '''«initTime.print_Assign»'''; 
+				if (initValue != null)
+					initValueRes = '''«initValue.print_Assign»'''; 
+				res = res + 
+				'''
+					<ct:InitialCondition>
+						<ct:InitialValue>
+							«initValueRes»
+						</ct:InitialValue>
+						<ct:InitialTime>
+							«initTimeRes»
+						</ct:InitialTime>
+					</ct:InitialCondition>
+				'''						
 			}
 		} 
-		if (assign.length > 0) return res +
+		if (assign.length > 0) return 
 		'''
 			<ct:Assign>
 				<Equation xmlns="«xmlns_math»">
 					«assign»
 				</Equation>
 			</ct:Assign>	
-		'''	
+		'''	+ res;
 		//Gaussian models
 		if (type.equals(IndividualVarType::GAUSSIAN.toString) || 
 			type.equals(IndividualVarType::LINEAR.toString)){

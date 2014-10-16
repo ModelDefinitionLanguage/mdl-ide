@@ -4,29 +4,27 @@ import org.ddmore.mdl.types.MdlDataType;
 
 public class FunctionParameter {
 	String name = "";
-	Integer order  = -1;
 	ParameterPassingMethod passingMethod = ParameterPassingMethod.IN;
 	String defaultValue = "";
-	MdlDataType type = MdlDataType.TYPE_REAL;
+	MdlDataType type = MdlDataType.TYPE_EXPR;
 
-	public FunctionParameter(String name, Integer order, MdlDataType type){
+	public FunctionParameter(String name){
 		this.name = name;
-		this.order = order;
+	}
+	
+	public FunctionParameter(String name, MdlDataType type){
+		this.name = name;
 		this.type = type;
 	}
 	
-	public FunctionParameter(String name, Integer order, MdlDataType type, ParameterPassingMethod passingMethod){
-		this(name, order, type);
+	public FunctionParameter(String name,  MdlDataType type, ParameterPassingMethod passingMethod){
+		this(name, type);
 		this.passingMethod = passingMethod;
 	}	
 	
 	public String getName(){
 		return name;
 	}
-	
-	public Integer getOrder(){
-		return order;
-	}	
 	
 	public MdlDataType getType(){
 		return type;

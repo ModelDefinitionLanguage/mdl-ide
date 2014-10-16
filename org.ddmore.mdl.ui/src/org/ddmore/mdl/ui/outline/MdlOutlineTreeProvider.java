@@ -482,7 +482,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, DistributionArgument a){
-		if (a.getDistribution() != DistributionType.NONE){
+		if (a.getDistribution() != DistributionType.NO_DISTRIBUTION){
 			createEStructuralFeatureNode(parentNode,
 				a, MdlPackage.Literals.DISTRIBUTION_ARGUMENT__DISTRIBUTION,
 				_image(a), DistributionValidator.attr_type.getName(), false);
@@ -689,27 +689,27 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected void  _createNode(IOutlineNode parentNode, EnumType b){
 		if (b.getType() != null){
 			createNode(parentNode, b.getType());
-		} else if (b.getUse() != UseType.NONE){
+		} else if (b.getUse() != UseType.NO_USE){
 			createEStructuralFeatureNode(parentNode,
 			b, MdlPackage.Literals.ENUM_TYPE__USE,
 			_image(b), b.getUse().toString(), true);
-		} else if (b.getIndividualVar() != IndividualVarType.NONE){
+		} else if (b.getIndividualVar() != IndividualVarType.NO_INDIVIDUAL_VAR){
 			createEStructuralFeatureNode(parentNode,
 			b, MdlPackage.Literals.ENUM_TYPE__INDIVIDUAL_VAR,
 			_image(b), b.getIndividualVar().toString(), true); 
-		} else if (b.getInput() != InputFormatType.NONE){
+		} else if (b.getInput() != InputFormatType.NO_INPUT_FORMAT){
 			createEStructuralFeatureNode(parentNode,
 			b, MdlPackage.Literals.ENUM_TYPE__INPUT,
 			_image(b), b.getInput().toString(), true); 
-		} else if (b.getTarget() != TargetType.NONE){
+		} else if (b.getTarget() != TargetType.NO_TARGET){
 			createEStructuralFeatureNode(parentNode,
 			b, MdlPackage.Literals.ENUM_TYPE__TARGET,
 			_image(b), b.getTarget().toString(), true); 
-		} else if (b.getTrial() != TrialType.NONE){
+		} else if (b.getTrial() != TrialType.NO_TRIAL){
 			createEStructuralFeatureNode(parentNode,
 			b, MdlPackage.Literals.ENUM_TYPE__TRIAL,
 			_image(b), b.getTrial().toString(), true); 
-		} else if (b.getVariability() != VariabilityType.NONE){
+		} else if (b.getVariability() != VariabilityType.NO_VARIABILITY){
 			createEStructuralFeatureNode(parentNode,
 			b, MdlPackage.Literals.ENUM_TYPE__VARIABILITY,
 			_image(b), b.getVariability().toString(), true); 

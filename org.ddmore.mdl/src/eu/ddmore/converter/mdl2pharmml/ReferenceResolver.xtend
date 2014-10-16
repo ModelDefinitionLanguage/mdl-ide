@@ -7,7 +7,6 @@ import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.SymbolName
 import eu.ddmore.converter.mdlprinting.MdlPrinter
-import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.SymbolDeclaration
@@ -17,6 +16,8 @@ import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.mdl.impl.MclObjectImpl
 import org.ddmore.mdl.mdl.MclObject
+import java.util.ArrayList
+import java.util.List
 
 class ReferenceResolver{
 	extension MdlPrinter mdlPrinter;
@@ -35,12 +36,12 @@ class ReferenceResolver{
 	
 	//List of PharmML declared symbols and corresponding blocks 
 	protected var ind_vars = new HashSet<String>();
-	protected var vm_err_vars = new HashMap<String, HashSet<String>>(); 
-	protected var vm_mdl_vars = new HashMap<String, HashSet<String>>();
-	protected var cm_vars = new HashMap<String, HashSet<String>>();
-	protected var pm_vars = new HashMap<String, HashSet<String>>();	  
-	protected var om_vars = new HashMap<String, HashSet<String>>();	  
-	protected var sm_vars = new HashMap<String, HashSet<String>>();	 
+	protected var vm_err_vars = new HashMap<String, List<String>>(); 
+	protected var vm_mdl_vars = new HashMap<String, List<String>>();
+	protected var cm_vars = new HashMap<String, List<String>>();
+	protected var pm_vars = new HashMap<String, List<String>>();	  
+	protected var om_vars = new HashMap<String, List<String>>();	  
+	protected var sm_vars = new HashMap<String, List<String>>();	 
 		
 	protected def prepareCollections(Mcl m){
 		for (o: m.objects){
@@ -140,7 +141,7 @@ class ReferenceResolver{
 		//try to find by name
 		var source = vm_err_vars.get(objName);
 		if (source != null)
-			if (source.contains(name)) return "vm_err." +objName
+			if (source.contains(name)) return "vm_err." + objName
 		source = vm_mdl_vars.get(name);
 		if (source != null)
 			if (source.contains(name)) return "vm_mdl." + objName
@@ -178,7 +179,7 @@ class ReferenceResolver{
 		
 	//+ Return a list of covariate variables per object
 	protected def getCovariateVars(ModelObject obj){
-		var covariateVars = new HashSet<String>();
+		var covariateVars = new ArrayList<String>();
 		for (b: obj.blocks){
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
@@ -197,57 +198,37 @@ class ReferenceResolver{
 	
 	//+Returns declarations for ParameterModel
 	protected def getParameters(ModelObject obj){		
-		var parameters = new HashSet<String>();
+		var parameters = new ArrayList<String>();
 		for (b: obj.blocks){
 			//Model object, GROUP_VARIABLES (covariate parameters)
 			if (b.groupVariablesBlock != null){
 				for (st: b.groupVariablesBlock.statements){
 					if (st.statement != null){
-						parameters.addAll(st.statement.getSymbols());
+						Utils::addSymbolNoRepeat(parameters, st.statement)
 					}							
 				}
 			}	
 			//Model object, RANDOM_VARIABLES_DEFINITION
 			if (b.randomVariableDefinitionBlock != null){
 				for (s: b.randomVariableDefinitionBlock.variables){
-					if (s.symbolName != null && eps_vars.get(s.symbolName.name) != null)
+					if (s.symbolName != null && s.randomList != null){
 						parameters.add(s.symbolName.name);
+					}
 				} 
 	  		}
 	  		//Model object, INDIVIDUAL_VARIABLES
 			if (b.individualVariablesBlock != null){
 				for (s: b.individualVariablesBlock.statements){
-					parameters.addAll(s.getSymbols());
+					Utils::addSymbolNoRepeat(parameters, s)
 				} 
 	  		}
 	  	}
 	  	return parameters;
 	}
 	
-	//Return a model variable (matched by name or by alias name!)
-	protected def getModelInputVariable(ModelObject mObj, String name){
-		for (b: mObj.blocks){
-			if (b.inputVariablesBlock != null){
-				for (s: b.inputVariablesBlock.variables){
-					if (s.symbolName != null && s.symbolName.name.equals(name)){
-						return s;
-					}
-					if (s.list != null){
-						var alias = s.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
-						if (alias.length > 0){
-							if (alias.equals(name)) return s;
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
-	
-	
 	//+Returns declarations for ParameterModel
 	protected def getParameters(ParameterObject obj){		
-		var parameters = new HashSet<String>();
+		var parameters = new ArrayList<String>();
 		for (b: obj.blocks){
 			//Parameter object, STRUCTURAL
 			if (b.structuralBlock != null){
@@ -268,17 +249,14 @@ class ReferenceResolver{
 	
 	//+Returns declarations in ObservationModel
 	protected def getObservationVars(ModelObject obj){
-		var observationVars = new HashSet<String>();
+		var observationVars = new ArrayList<String>();
 		for (b: obj.blocks){
 			if (b.observationBlock != null){
 				for (st: b.observationBlock.statements){
-					if (st.symbol != null && st.symbol.symbolName != null){
-						//!TODO: revise
-						observationVars.add(st.symbol.symbolName.name);
-						if (st.symbol.expression != null){
-							var classifiedVars = st.symbol.expression.getReferences;
-							observationVars.addAll(classifiedVars.keySet);
-						}
+					Utils::addSymbolNoRepeat(observationVars, st)
+					if (st.symbol.expression != null){
+						var classifiedVars = st.symbol.expression.getReferences;
+						observationVars.addAll(classifiedVars.keySet);
 					}
 				}
 			}
@@ -288,56 +266,22 @@ class ReferenceResolver{
 	
 	//+ Return a list of structural variables per object
 	protected def getStructuralVars(ModelObject obj){
-		var structuralVars = new HashSet<String>();
+		var structuralVars = new ArrayList<String>();
 		for (b: obj.blocks){
 			if (b.modelPredictionBlock != null){
 				for (st: b.modelPredictionBlock.statements){
 					if (st.statement != null) {
-						structuralVars.addAll(st.statement.getSymbols);
+						Utils::addSymbolNoRepeat(structuralVars, st.statement);
 					} else 
 						if (st.odeBlock != null){
 							for (s: st.odeBlock.statements){
-								structuralVars.addAll(s.getSymbols);
+								Utils::addSymbolNoRepeat(structuralVars, s);
 							}
 						}
 				}
 			}			
 		}
 		return structuralVars;
-	}
-	
-	//+Collect symbol names from a block
-	protected def HashSet<String> getSymbols(BlockStatement b){
-		var symbols = new HashSet<String>();
-		if (b.symbol != null && b.symbol.symbolName != null){
-			if (!symbols.contains(b.symbol.symbolName.name)) symbols.add(b.symbol.symbolName.name);
-		}
-		if (b.statement != null){
-			val s = b.statement;
-			if (s.ifStatement != null){
-				symbols.addAll(s.ifStatement.getSymbols);
-			}
-			if (s.elseStatement != null){
-				symbols.addAll(s.elseStatement.getSymbols);
-			}		
-			if (s.ifBlock != null){
-				for (bb:s.ifBlock.statements)
-					symbols.addAll(bb.getSymbols);
-			}
-			if (s.elseBlock != null){
-				for (bb:s.elseBlock.statements)
-					symbols.addAll(bb.getSymbols);
-			}			
-		}
-		return symbols;
-	}
-	
-	protected def isDataVariable(String s){
-		return (eps_vars.get(s) != null)
-	}
-	
-	protected def isIndependentVariable(String s){
-		return (eta_vars.get(s) != null)
 	}
 	
 	//+ For each reference, define its purpose
@@ -372,7 +316,7 @@ class ReferenceResolver{
 	}
 		
 	protected def getLevelVars(ModelObject o, String levelId) {
-		var levelVars = new HashSet<String>();
+		var levelVars = new ArrayList<String>();
 		for (b: o.blocks){
 			if(b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
@@ -398,17 +342,16 @@ class ReferenceResolver{
 				for (s: b.randomVariableDefinitionBlock.variables) {
 					if (s.randomList != null && s.symbolName != null){	
 						var level = s.randomList.arguments.getAttribute(AttributeValidator::attr_level.name);
-						val id = s.symbolName.name;
 						if (level_vars.get(level) != null){
 							if (level_vars.get(level).equals("2")){
-								if (eta_vars.get(id) == null){
-									eta_vars.put(id, i);
+								if (eta_vars.get(s.symbolName.name) == null){
+									eta_vars.put(s.symbolName.name, i);
 									i = i + 1;
 								}
 							}
 							if (level_vars.get(level).equals("1"))
-								if (eps_vars.get(id) == null){
-									eps_vars.put(id, j);
+								if (eps_vars.get(s.symbolName.name) == null){
+									eps_vars.put(s.symbolName.name, j);
 									j = j + 1;
 								}	
 							}
