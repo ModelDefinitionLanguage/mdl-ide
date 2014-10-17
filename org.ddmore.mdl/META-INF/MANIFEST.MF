@@ -42,3 +42,4 @@ Export-Package: eu.ddmore.converter.mdl2nonmem,
  org.ddmore.mdl.types,
  org.ddmore.mdl.validation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.ddmore.mdl.mdl
