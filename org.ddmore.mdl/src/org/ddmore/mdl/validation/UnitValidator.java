@@ -26,6 +26,8 @@ import org.eclipse.xtext.validation.EValidatorRegistrar;
 
 import com.google.inject.Inject;
 
+import eu.ddmore.converter.mdlprinting.MdlPrinter;
+
 public class UnitValidator extends AbstractDeclarativeValidator{
 
 	@Override
@@ -145,9 +147,9 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	//Check whether the attribute "units" defines a correct unit measurement
 	@Check
 	public void checkUnitValue(Argument arg){
-		if (arg.getArgumentName() != null){
+		if (arg.getArgumentName() != null && arg.getExpression() != null){
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
-				String unitValue = Utils.getAttributeValue(arg);
+				String unitValue = MdlPrinter.getInstance().toStr(arg.getExpression());
 				if (unitValue.length() > 0) {
 					unitValue = unitValue.replaceAll("\\s+",""); // Remove any whitespace
 					if (validUnits.size() > 0){

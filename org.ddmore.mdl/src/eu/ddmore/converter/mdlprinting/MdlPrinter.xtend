@@ -26,8 +26,6 @@ import org.ddmore.mdl.mdl.PowerExpression
 import org.ddmore.mdl.mdl.UnaryExpression
 import org.ddmore.mdl.mdl.ParExpression
 import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.mdl.DistributionArguments
-import org.ddmore.mdl.mdl.DistributionArgument
 import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Vector
@@ -85,36 +83,21 @@ class MdlPrinter {
 	def isAttributeTrue(Arguments args, String attrName){
 		if (args != null)
 			for (arg: args.arguments)
-				if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
+				if (arg.argumentName != null 
+					&& arg.argumentName.name.equals(attrName) 
+					&& arg.expression != null){
 					return arg.expression.isTrue;
 				}
 		return false;
 	}
 	
 	//Return value of an attribute with a given name
-	def getAttribute(DistributionArguments args, String attrName){
-		for (arg: args.arguments)
-			if (arg.argumentName != null && arg.argumentName.name.equals(attrName)){
-				return arg.toStr;
-			}				
-		return "";
-	} 
-	
-	def String toStr(DistributionArgument arg){
-		if (arg.expression != null)
-			return arg.expression.toStr;	
-		if (arg.component != null)
-			return arg.component.toStr;
-		if (arg.distribution != DistributionType::NO_DISTRIBUTION)
-			return arg.distribution.toString;
-		return "";	
-	}	
-	
-	//Return value of an attribute with a given name
 	def getAttribute(Arguments args, String attrName){
 		if (args != null)
 			for (arg: args.arguments)
-				if (arg.argumentName != null && arg.argumentName.name.equals(attrName))
+				if (arg.argumentName != null 
+					&& arg.argumentName.name.equals(attrName)
+					&& arg.expression != null)
 					return arg.expression.toStr
 		return "";
 	}	
@@ -123,10 +106,13 @@ class MdlPrinter {
 	def getAttributeExpression(Arguments args, String attrName){
 		if (args != null)
 			for (arg: args.arguments)
-				if (arg.argumentName != null && arg.argumentName.name.equals(attrName))
+				if (arg.argumentName != null 
+					&& arg.argumentName.name.equals(attrName)
+					&& arg.expression != null
+				)
 					return arg.expression
 		return null;
-	}	
+	}
 	
 	//Find reference to a data file 
 	public def getDataSource(Mcl m){
@@ -231,6 +217,8 @@ class MdlPrinter {
 			return t.trial.toString
 		if (t.individualVar != IndividualVarType::NO_INDIVIDUAL_VAR)
 			return t.individualVar.toString
+		if (t.distribution != DistributionType::NO_DISTRIBUTION)
+			return t.distribution.toString
 	}
 	
 	def toStr(VarType t) {
@@ -463,7 +451,7 @@ class MdlPrinter {
 		return "(" + e.expression.toStr + ")";
 	}
 	
-	def toStr(Arguments arg){
+	def String toStr(Arguments arg){
 		var res  = "";
 		var iterator = arg.arguments.iterator();
 		if (iterator.hasNext ) {
@@ -474,6 +462,9 @@ class MdlPrinter {
 			if (a.expression != null){
 				res = res + a.expression.toStr;
 			}
+			if (a.randomList != null){
+				res = res + a.randomList.toStr;
+			}
 		}
 		while (iterator.hasNext){
 			res  = res + ', ';
@@ -483,31 +474,13 @@ class MdlPrinter {
 			}
 			if (a.expression != null){
 				res = res + a.expression.toStr;
+			}
+			if (a.randomList != null){
+				res = res + a.randomList.toStr;
 			}
 		}
 		return res;
 	}
-	
-	def toStr(DistributionArguments arg){
-		var res  = "";
-		var iterator = arg.arguments.iterator();
-		if (iterator.hasNext ) {
-			var a = iterator.next; 
-			if (a.argumentName != null){
-				res  = res + a.argumentName.name + " = ";
-			}
-			res = res + a.toStr;
-		}
-		while (iterator.hasNext){
-			res  = res + ', ';
-			var a = iterator.next; 
-			if (a.argumentName != null){
-				res  = res + a.argumentName.name + " = ";
-			}
-			res  = res + a.toStr;
-		}
-		return res;
-	}			
 	
 	def toStr(FormalArguments arg) { 
 		var res  = "";

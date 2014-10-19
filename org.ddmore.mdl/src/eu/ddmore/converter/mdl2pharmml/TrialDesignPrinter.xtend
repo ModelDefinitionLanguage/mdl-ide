@@ -136,7 +136,7 @@ class TrialDesignPrinter extends DataSetPrinter {
 				if (block.inputVariablesBlock != null){
 					for (s: block.inputVariablesBlock.variables){
 						if (s.list != null && s.symbolName != null){
-							var use = getAttribute(s.list.arguments, AttributeValidator::attr_use.name);
+							var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 							if (use.length > 0){
 								if (use.equals(UseType::ID)) 
 									mappings = mappings + "IndividualMapping".print_design_Mapping(s.symbolName.name);

@@ -18,6 +18,7 @@ import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.EvaluateTaskImpl;
 import org.ddmore.mdl.mdl.impl.ModelBlockImpl;
 import org.ddmore.mdl.mdl.impl.OptimiseTaskImpl;
+import org.ddmore.mdl.mdl.impl.PopulationFeaturesBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
@@ -102,6 +103,14 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_sameline = new Attribute("sameline", MdlDataType.TYPE_BOOLEAN, false);
 
 	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_sameline);
+	
+	/*Design block*/
+	final public static Attribute attr_totalSize = new Attribute("totalSize", MdlDataType.TYPE_NAT, true);
+	final public static Attribute attr_numberSamples = new Attribute("numberSamples", MdlDataType.TYPE_NAT, true);
+	final public static Attribute attr_covariates = new Attribute("covariates", MdlDataType.TYPE_LIST, false);
+	
+	final public static List<Attribute> attrs_populationFeatures = Arrays.asList(
+			attr_totalSize, attr_numberSamples, attr_covariates);
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -265,7 +274,8 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 		container instanceof OptimiseTaskImpl ||
 		container instanceof DataBlockImpl ||
 		container instanceof SourceBlockImpl ||
-		container instanceof TargetBlockImpl); 
+		container instanceof TargetBlockImpl ||
+		container instanceof PopulationFeaturesBlockImpl); 
 	}	
 	
 	List<Attribute> getAllProperties(EObject obj){
@@ -281,22 +291,15 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			return attrs_source;
 		if (obj instanceof TargetBlockImpl)
 			return attrs_target;
+		if (obj instanceof PopulationFeaturesBlockImpl)
+			return attrs_populationFeatures;
 		return null;
 	}
 	
 	List<String> getRequiredPropertyNames(EObject obj){
-		if (obj instanceof EstimateTaskImpl)
-			return Utils.getRequiredNames(attrs_task_estimate);
-		if (obj instanceof SimulateTaskImpl)
-			return Utils.getRequiredNames(attrs_task_simulate);
-		if (obj instanceof DataBlockImpl)
-			return Utils.getRequiredNames(attrs_task_data);
-		if (obj instanceof ModelBlockImpl)
-			return Utils.getRequiredNames(attrs_task_model);
-		if (obj instanceof SourceBlockImpl)
-			return Utils.getRequiredNames(attrs_source);
-		if (obj instanceof TargetBlockImpl)
-			return Utils.getRequiredNames(attrs_target);
+		List<Attribute> allProperties = getAllProperties(obj);
+		if (allProperties != null)
+			return Utils.getRequiredNames(getAllProperties(obj));
 		return null;
 	}	
 }

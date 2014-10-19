@@ -8,7 +8,7 @@ package eu.ddmore.converter.mdl2pharmml
 
 import org.ddmore.mdl.mdl.RandomList
 import org.ddmore.mdl.mdl.Primary 
-import org.ddmore.mdl.mdl.DistributionArgument
+import org.ddmore.mdl.mdl.Argument
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.DistributionValidator
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
@@ -202,11 +202,11 @@ class DistributionPrinter extends MdlPrinter{
 		«val tagName = type.substring(0, 1).toUpperCase() + type.substring(1)»
 		<«tagName» xmlns="«xmlns_uncert»" definition="«definition»mixture-model">
 			«FOR arg: randomList.arguments.arguments»
-				«IF arg.component != null»
-					«val weight = arg.component.arguments.getAttribute(DistributionValidator::attr_weight.name)»
+				«IF arg.randomList != null»
+					«val weight = arg.randomList.arguments.getAttribute(DistributionValidator::attr_weight.name)»
 					«IF weight.length > 0»
 						<component weight="«weight»">
-							«arg.component.print_uncert_Distribution»
+							«arg.randomList.print_uncert_Distribution»
 						</component>
 					«ENDIF»
 				«ENDIF»
@@ -257,7 +257,7 @@ class DistributionPrinter extends MdlPrinter{
 	//First look for an explicitly specified dimensions
 	//If the attribute dimensions is not found, calculate the dimensions based on the number of nested lists (not reliable)
 	//e.g., c(c(1,2,...), c(10, 20,...), c(100, 200,...)) yields 3	
-	protected def defineDimension(RandomList randomList, DistributionArgument matrixAttr){
+	protected def defineDimension(RandomList randomList, Argument matrixAttr){
 		var dimension = randomList.arguments.getAttribute(DistributionValidator::attr_dimension.name);
 		if (dimension.length >= 0) {//explicit dimension is given
 			try{

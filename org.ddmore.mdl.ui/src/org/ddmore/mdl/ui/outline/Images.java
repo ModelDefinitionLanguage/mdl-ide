@@ -9,9 +9,10 @@ public class Images {
 	private static final String ICONS_PATH="diagona-icons-1.0/icons/16/";
 	
 	public static final String MDL = "019-mdl.png";
-	public static final String MODEL_OBJ ="154-model.png";
-	public static final String PARAMETER_OBJ ="153-parameter.png";
 	public static final String TASK_OBJ ="152-task.png";
+	public static final String PARAMETER_OBJ ="153-parameter.png";
+	public static final String MODEL_OBJ ="154-model.png";
+	public static final String DESIGN_OBJ ="155.png";
 	public static final String DATA_OBJ ="157-data.png";
 	public static final String MOG_OBJ ="160-tel.png";
 

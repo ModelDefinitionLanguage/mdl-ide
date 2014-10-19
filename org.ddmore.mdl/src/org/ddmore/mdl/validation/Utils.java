@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.ddmore.mdl.domain.Attribute;
+import org.ddmore.mdl.mdl.ActionBlock;
+import org.ddmore.mdl.mdl.AdministrationBlock;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
@@ -14,11 +16,13 @@ import org.ddmore.mdl.mdl.CompartmentBlock;
 import org.ddmore.mdl.mdl.DataDerivedBlock;
 import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DeqBlock;
+import org.ddmore.mdl.mdl.DesignSpaceBlock;
 import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
+import org.ddmore.mdl.mdl.HyperSpaceBlock;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
@@ -30,9 +34,11 @@ import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ObservationBlock;
 import org.ddmore.mdl.mdl.OdeBlock;
 import org.ddmore.mdl.mdl.SameBlock;
+import org.ddmore.mdl.mdl.SamplingBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
+import org.ddmore.mdl.mdl.StudyDesignBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.SymbolNames;
@@ -40,14 +46,18 @@ import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
+import org.ddmore.mdl.mdl.impl.ActionBlockImpl;
+import org.ddmore.mdl.mdl.impl.AdministrationBlockImpl;
 import org.ddmore.mdl.mdl.impl.CompartmentBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DeqBlockImpl;
+import org.ddmore.mdl.mdl.impl.DesignSpaceBlockImpl;
 import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
+import org.ddmore.mdl.mdl.impl.HyperSpaceBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
@@ -56,9 +66,11 @@ import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
+import org.ddmore.mdl.mdl.impl.SamplingBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.StudyDesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
@@ -72,8 +84,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
-
-import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 public class Utils {
 	
@@ -187,23 +197,6 @@ public class Utils {
 				list.add(id.getName());
 	}
 
-	//Return value of an attribute with a given name
-	static String getAttributeValue(Arguments a, String attrName){
-		for (Argument arg: a.getArguments())
-			if (arg.getArgumentName() != null && arg.getArgumentName().getName().equals(attrName)){
-				if (arg.getExpression().getExpression() != null)
-					return MdlPrinter.getInstance().toStr(arg.getExpression().getExpression());
-			}
-		return "";  
-	}	
-	
-	//Prints value of an attribute with a given name
-	static String getAttributeValue(Argument arg){
-		if (arg.getExpression().getExpression() != null)
-			return MdlPrinter.getInstance().toStr(arg.getExpression().getExpression());
-		return "";
-	}	
-	
 	//Note: don't use for reference checking
 	static ObjectName getObjectName(EObject b){
 		EObject container = b.eContainer();
@@ -274,6 +267,13 @@ public class Utils {
 			obj instanceof StructuralBlockImpl ||
 			obj instanceof VariabilityBlockImpl ||
 			obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl ||
+			//Design object
+			obj instanceof StudyDesignBlockImpl ||
+			obj instanceof AdministrationBlockImpl || 
+			obj instanceof ActionBlockImpl ||
+			obj instanceof SamplingBlockImpl ||
+			obj instanceof DesignSpaceBlockImpl ||
+			obj instanceof HyperSpaceBlockImpl ||
 			//All objects
 			obj instanceof TargetBlockImpl) return true;
 		return false;	
@@ -301,6 +301,13 @@ public class Utils {
 		if (obj instanceof ObservationBlockImpl) return ((ObservationBlock)obj).getIdentifier() ;
 		if (obj instanceof StructuralParametersBlockImpl) return ((StructuralParametersBlock)obj).getIdentifier() ;
 		if (obj instanceof VariabilityParametersBlockImpl) return ((VariabilityParametersBlock)obj).getIdentifier() ;
+		/*Design object*/
+		if (obj instanceof StudyDesignBlockImpl) return ((StudyDesignBlock)obj).getIdentifier();  
+		if (obj instanceof AdministrationBlockImpl) return ((AdministrationBlock)obj).getIdentifier();
+		if (obj instanceof ActionBlockImpl) return ((ActionBlock)obj).getIdentifier();        
+		if (obj instanceof SamplingBlockImpl) return ((SamplingBlock)obj).getIdentifier();      
+		if (obj instanceof DesignSpaceBlockImpl) return ((DesignSpaceBlock)obj).getIdentifier();   
+		if (obj instanceof HyperSpaceBlockImpl) return ((HyperSpaceBlock)obj).getIdentifier(); 		
 		/*All objects*/
 		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();
 		return "";

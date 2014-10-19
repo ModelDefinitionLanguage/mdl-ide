@@ -103,7 +103,7 @@ class ReferenceResolver{
 		    	if (obj instanceof SymbolDeclaration){
 		    		var s = obj as SymbolDeclaration;
 		    		if (s.list != null && s.symbolName != null){
-		    			val deriv = s.list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name);
+		    			val deriv = getAttributeExpression(s.list.arguments, AttributeValidator::attr_req_deriv.name);
 						if (deriv != null && !deriv_vars.contains(s.symbolName.name)){
 		    				deriv_vars.add(s.symbolName.name);
 		    			}
@@ -167,7 +167,7 @@ class ReferenceResolver{
 			if (block.inputVariablesBlock != null){
 				for (s: block.inputVariablesBlock.variables){
 					if (s.list != null && s.symbolName != null){
-						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+						var use = getAttribute(s.list.arguments, AttributeValidator::attr_use.name);
 						if (use.equals(UseType::IDV.toString) && !independentVars.contains(s.symbolName.name)) 
 							independentVars.add(s.symbolName.name);
 					}
@@ -184,7 +184,7 @@ class ReferenceResolver{
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
 					if (s.list != null && s.symbolName != null){
-						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+						var use = getAttribute(s.list.arguments, AttributeValidator::attr_use.name);
 						if (use.equals(UseType::COVARIATE.toString)) {
 							if (!covariateVars.contains(s.symbolName.name))
 								covariateVars.add(s.symbolName.name);

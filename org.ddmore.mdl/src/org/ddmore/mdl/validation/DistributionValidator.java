@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.ddmore.mdl.domain.Attribute;
-import org.ddmore.mdl.mdl.DistributionArgument;
-import org.ddmore.mdl.mdl.DistributionArguments;
+import org.ddmore.mdl.mdl.AnyExpression;
+import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.DistributionType;
-import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.MdlPackage;
-import org.ddmore.mdl.mdl.Selector;
-import org.ddmore.mdl.mdl.impl.DistributionArgumentsImpl;
+import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
+import org.ddmore.mdl.mdl.impl.RandomListImpl;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
@@ -27,6 +27,8 @@ import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.EValidatorRegistrar;
 
 import com.google.inject.Inject;
+
+import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 public class DistributionValidator extends AbstractDeclarativeValidator{
 
@@ -387,43 +389,46 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
     }
 	
 	@Check
-	public void checkRequiredArguments(DistributionArguments args){
-		DistributionArgument type = findDistributionAttribute(args, attr_type.getName());
-		if (type != null){
-			String typeName = type.getDistribution().toString();
+	public void checkRequiredArguments(Arguments args){
+		if (!(args.eContainer() instanceof RandomListImpl)) return; 
+		AnyExpression type = MdlPrinter.getInstance().getAttributeExpression(args, attr_type.getName());
+		if (type != null && type.getType() != null && type.getType().getDistribution() != DistributionType.NO_DISTRIBUTION){
+			DistributionType typeName = type.getType().getDistribution();
 			List<Attribute> recognized_attrs = distr_attrs.get(typeName);
 			for (Attribute arg: recognized_attrs){
 				if (arg.isMandatory()){
-					DistributionArgument actualArg = findDistributionAttribute(args, arg.getName());
+					AnyExpression actualArg = MdlPrinter.getInstance().getAttributeExpression(args, arg.getName());
 					if (actualArg == null){
-						String synonym = alternative_attrs.get(type.getDistribution().toString() +":" + arg.getName());
-						if (synonym != null) actualArg = findDistributionAttribute(args, synonym);
+						String synonym = alternative_attrs.get(typeName +":" + arg.getName());
+						if (synonym != null) actualArg =  MdlPrinter.getInstance().getAttributeExpression(args, synonym);
 						if (actualArg == null)
 							warning(MSG_DISTR_ATTRIBUTE_MISSING + ": " + arg.getName(), 
-									MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
+									MdlPackage.Literals.ARGUMENTS__ARGUMENTS,
 									MSG_DISTR_ATTRIBUTE_MISSING, typeName + ":" + arg.getName());	
 					}
 				}
 			}
 		} else {
 			warning(MSG_DISTR_UNKNOWN, 
-				MdlPackage.Literals.DISTRIBUTION_ARGUMENTS__ARGUMENTS,
+				MdlPackage.Literals.ARGUMENTS__ARGUMENTS,
 				MSG_DISTR_UNKNOWN, attr_type.getName());	
 		}
 	}
 	
 	@Check
-	public void checkAllArguments(DistributionArgument argument){
+	public void checkAllArguments(Argument argument){
 		EObject argContainer = argument.eContainer();	
-		if (!(argContainer instanceof DistributionArgumentsImpl)) return;
-		DistributionArguments args = (DistributionArguments)argContainer;
+		if (!(argContainer instanceof ArgumentsImpl)) return;
+		if (!(argContainer.eContainer() instanceof RandomListImpl)) return; 
+		
+		Arguments args = (Arguments)argContainer;
 		HashSet<String> argumentNames = new HashSet<String>();	
-		for (DistributionArgument arg: args.getArguments()){
+		for (Argument arg: args.getArguments()){
 			if (!argumentNames.contains(arg.getArgumentName().getName())){
 				argumentNames.add(arg.getArgumentName().getName());
 			} else {
 				warning(MSG_DISTR_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
-						MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME, 
+						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, 
 						MSG_DISTR_ATTRIBUTE_DEFINED, arg.getArgumentName().getName());				
 			}
 		}	
@@ -432,80 +437,38 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			if (argumentNames.contains(exclusive)){
 				warning("Distribution attribute '" + argument.getArgumentName().getName() + "' cannot be used together with '" + 
 						exclusive + "'", 
-						MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME, MSG_DISTR_ATTRIBUTE_DEFINED, 
+						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_DISTR_ATTRIBUTE_DEFINED, 
 						argument.getArgumentName().getName());				
 			}
 		}
-		DistributionArgument type = findDistributionAttribute(args, attr_type.getName());
-		if (type != null){
-			List<Attribute> recognized_attrs = distr_attrs.get(type.getDistribution());
+		AnyExpression type = MdlPrinter.getInstance().getAttributeExpression(args, attr_type.getName());
+		if (type != null && type.getType() != null && type.getType().getDistribution() != DistributionType.NO_DISTRIBUTION){
+			List<Attribute> recognized_attrs = distr_attrs.get(type.getType().getDistribution());
 			if (checkAttribute(recognized_attrs, argument)) return;
 		}
 		if (checkAttribute(common_attrs, argument)) return;
 		warning(MSG_DISTR_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
-			MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME,
+			MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 			MSG_DISTR_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());	
 	}
 	
-	private Boolean checkAttribute(List<Attribute> recognized_attrs, DistributionArgument argument){
+	private Boolean checkAttribute(List<Attribute> recognized_attrs, Argument argument){
 		for (Attribute attr: recognized_attrs){
 			if (attr.getName().equals(argument.getArgumentName().getName())) {
-				boolean isValid = MdlDataType.validateType(attr.getType(), argument);
-				if (!isValid){
-					//Check if it is a references
-					//TODO: when type checking is implemented, remove the exception for references!
-					if (!MdlDataType.validateType(MdlDataType.TYPE_REF, argument))
-						warning(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
-						": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
-							attr.getType().name(), 
-						MdlPackage.Literals.DISTRIBUTION_ARGUMENT__ARGUMENT_NAME,
+				if (argument.getExpression() != null
+						&& (!MdlDataType.validateType(attr.getType(), argument.getExpression()) 
+						&& !MdlDataType.validateType(MdlDataType.TYPE_REF, argument.getExpression())) ||
+					argument.getRandomList() != null 
+						&& !MdlDataType.validateType(attr.getType(), argument.getRandomList())){
+					warning(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
+							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
+						attr.getType().name(), 
+						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 						MSG_DISTR_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());
-				}
+				}					
 				return true; //found in the list
-			}					
+			}
 		}
 		return false;
 	}
-	
-	public static DistributionArgument findDistributionAttribute(DistributionArguments args, String name){
-		for (DistributionArgument arg: args.getArguments()){
-			if (arg.getArgumentName().getName().equals(name)){
-				return arg;
-			}
-		}
-		return null;
-	}	
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
-	//Check references to distribution attributes
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
-	static boolean checkAttributes(FullyQualifiedArgumentName attrName, List<DistributionArgument> arguments) {
-		List <DistributionArgument> currArgs = arguments; 
-		for (Selector x: attrName.getSelectors()){
-			if (currArgs != null){
-				int index = -1;
-				if (x.getSelector() != null){
-					index = Integer.parseInt(x.getSelector());
-					if (!((index >= 1) && (index < currArgs.size() + 1))) return false;
-					index = 1;	
-				}
-				if (x.getArgumentName() != null){
-					int i = 0;
-					for (DistributionArgument arg: currArgs){
-						if (arg.getArgumentName().getName().equals(x.getArgumentName().getName())){
-							index = i + 1;
-							break;
-						}
-						i++; 
-					}
-				}
-				if (index > 0) {
-					if (currArgs.get(index - 1).getComponent() != null)
-						if (arguments.get(index).getComponent().getArguments() != null)
-							currArgs = arguments.get(index).getComponent().getArguments().getArguments();
-				} else return false;
-			} 
-		}
-		return true;		
-	}	
 }

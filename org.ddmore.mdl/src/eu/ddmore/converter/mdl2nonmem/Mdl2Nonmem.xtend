@@ -688,9 +688,9 @@ class Mdl2Nonmem extends MdlPrinter {
 		  			if (b.randomVariableDefinitionBlock != null){
 						for (s: b.randomVariableDefinitionBlock.variables) {
 							if (s.randomList != null){	
-								var id = s.randomList.arguments.getAttribute(DistributionValidator::attr_var.name);
+								var id = getAttribute(s.randomList.arguments, DistributionValidator::attr_var.name);
 								if (id.length == 0)
-									id = s.randomList.arguments.getAttribute(DistributionValidator::attr_sd.name);
+									id = getAttribute(s.randomList.arguments, DistributionValidator::attr_sd.name);
 								if (id.equals(varName)) 
 									if (s.symbolName != null && eps_vars.get(s.symbolName.name) != null) return true;
 							}
@@ -707,7 +707,7 @@ class Mdl2Nonmem extends MdlPrinter {
 	//Create maps with dimensions for same blocks corresponding to matrix(...){...}
 	def collectDimensionsForSame(MatrixBlock b){
 		var k = 0;
-		var name = b.arguments.getAttribute(AttributeValidator::attr_name.name);
+		var name = getAttribute(b.arguments, AttributeValidator::attr_name.name);
 		var isOmega = false;
 		var isSigma = false;
 		if (b.parameters != null)
@@ -1558,7 +1558,8 @@ class Mdl2Nonmem extends MdlPrinter {
 		var iterator = arg.arguments.iterator();
 		while (iterator.hasNext){
 			var a = iterator.next; 
-			res = res + " " + a.expression.toStr;
+			if (a.expression != null)
+				res = res + " " + a.expression.toStr;
 		}
 		return res;
 	}	

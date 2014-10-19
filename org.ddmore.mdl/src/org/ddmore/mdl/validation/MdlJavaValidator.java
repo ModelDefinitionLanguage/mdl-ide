@@ -22,6 +22,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ComposedChecks;
 
+import eu.ddmore.converter.mdlprinting.MdlPrinter;
+
 @ComposedChecks(validators = { 
 		AttributeValidator.class,
 		PropertyValidator.class,
@@ -80,11 +82,11 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 					if (block.getVariabilityBlock() != null){
 						for (VariabilityBlockStatement s: block.getVariabilityBlock().getStatements()){
 							if (s.getMatrixBlock() != null){
-								String name = Utils.getAttributeValue(s.getMatrixBlock().getArguments(), AttributeValidator.attr_name.getName());
+								String name = MdlPrinter.getInstance().getAttribute(s.getMatrixBlock().getArguments(), AttributeValidator.attr_name.getName());
 								if (name.length() > 0) paramList.add(name);
 							}
 							if (s.getDiagBlock() != null){
-								String name = Utils.getAttributeValue(s.getDiagBlock().getArguments(), AttributeValidator.attr_name.getName());
+								String name = MdlPrinter.getInstance().getAttribute(s.getDiagBlock().getArguments(), AttributeValidator.attr_name.getName());
 								if (name.length() > 0) paramList.add(name);
 							}
 						}
@@ -103,7 +105,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//Match the name of the same block with the name of a matrix or a diag block
 	@Check
 	public void validateSameSubblockName(SameBlock b){
-		String name = Utils.getAttributeValue(b.getArguments(), AttributeValidator.attr_name.getName());
+		String name = MdlPrinter.getInstance().getAttribute(b.getArguments(), AttributeValidator.attr_name.getName());
 		if (name.length() > 0){
 			ObjectName objName = Utils.getObjectName(b.eContainer());
 			if (!Utils.isIdentifierDeclared(variabilitySubblockNames, name, objName))
@@ -147,7 +149,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		//Skip if the reference is to the symbol with assigned expression which is a function call
 		if (checkReferenceToFuctionOutput(ref)) return;
 		List<Argument> args = new LinkedList<Argument>();
-		List<DistributionArgument> distrArgs = new LinkedList<DistributionArgument>();		
 		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
 	    while (iterator.hasNext()){
 	    	EObject obj = iterator.next();
@@ -161,9 +162,12 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			       				for (Argument x: arguments.getArguments())
 	           						args.add(x);
 		    			}
-	       				if (s.getRandomList() != null)
-	       					for (DistributionArgument x: s.getRandomList().getArguments().getArguments())
-			           			distrArgs.add(x);
+		    			if (s.getRandomList() != null){
+		    				Arguments arguments = s.getRandomList().getArguments();
+		       				if (arguments != null)
+			       				for (Argument x: arguments.getArguments())
+	           						args.add(x);
+		    			}
 		    		}
 	    		}
 	    	}
@@ -172,10 +176,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			warning(MSG_UNRESOLVED_ATTRIBUTE_REF, 
 				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
 					MSG_UNRESOLVED_ATTRIBUTE_REF, ref.getParent().getName());
-	    if ((distrArgs.size() > 0) && !DistributionValidator.checkAttributes(ref, distrArgs))
-			warning(MSG_UNRESOLVED_DISTR_ATTRIBUTE_REF, 
-				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-					MSG_UNRESOLVED_DISTR_ATTRIBUTE_REF, ref.getParent().getName());
 	}
 
 	//Validate a fully qualified argument whose parent refers to a variable declared as a function 

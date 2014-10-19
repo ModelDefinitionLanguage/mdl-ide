@@ -13,8 +13,6 @@ import org.ddmore.mdl.mdl.ConditionalExpression;
 import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
-import org.ddmore.mdl.mdl.DistributionArgument; 
-import org.ddmore.mdl.mdl.DistributionArguments;
 import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.EstimationBlock;
@@ -139,7 +137,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		acceptor.accept(issue, description, description, "remove.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
 				EObject container = element.eContainer();
-				DistributionArguments args = (DistributionArguments)container;
+				Arguments args = (Arguments)container;
 				args.getArguments().remove(element);
 			}
 		});
@@ -155,8 +153,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			public void apply(EObject element, IModificationContext context) {
 				Attribute attribute = DistributionValidator.getAttributeById(attrId);
 				if (attribute != null) {
-					DistributionArgument newArg = createDistributionArgument(attribute);
-					DistributionArguments args = (DistributionArguments)element;
+					Argument newArg = createArgument(attribute);
+					Arguments args = (Arguments)element;
 					args.getArguments().add(0, newArg);
 				}
 			} 
@@ -170,7 +168,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		acceptor.accept(issue, description, description, "remove.png",new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
 				EObject container = element.eContainer();
-				DistributionArguments args = (DistributionArguments)container;
+				Arguments args = (Arguments)container;
 				args.getArguments().remove(element);
 			}
 		});
@@ -191,9 +189,11 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			case TYPE_TARGET: return createTargetLanguageExpression(value);
 			case TYPE_VAR_TYPE: return createVarTypeExpression(value);
 			case TYPE_USE: return createUseExpression(value);
+			case TYPE_DISTRIBUTION: return createDistributionExpression(value);
 			default:
 				return createStringExpression(value);
 		}
+	
 	}
 	
 	
@@ -225,6 +225,15 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		UseType tl = UseType.getByName(value);
 		EnumType t = MdlFactory.eINSTANCE.createEnumType();
 		t.setUse(tl);
+		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
+		expr.setType(t);
+		return expr;
+	}
+	
+	private AnyExpression createDistributionExpression(String value) {
+		DistributionType distribution = DistributionType.getByName(value);
+		EnumType t = MdlFactory.eINSTANCE.createEnumType();
+		t.setDistribution(distribution);
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		expr.setType(t);
 		return expr;
@@ -371,31 +380,12 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return attr;
 	}
 	
-	DistributionArgument createDistributionArgument(Attribute attribute){
-		String attrName = attribute.getName();
-		String attrValue = attribute.getDefaultValue();
-		if (attrValue.length() == 0) attrValue = "0";
-		DistributionArgument attr = MdlFactory.eINSTANCE.createDistributionArgument();
-		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
-		argName.setName(attrName);
-		attr.setArgumentName(argName);
-		if (attrName.equals(DistributionValidator.attr_type.getName())){
-			DistributionType distribution = DistributionType.getByName(attrValue);
-			attr.setDistribution(distribution);
-		}
-		else {
-			AnyExpression expr = createTypedExpression(attribute);
-			attr.setExpression(expr);
-		}
-		return attr;
-	}
-	
 	RandomList createRandomList(Attribute[] attributes){
 		RandomList list = MdlFactory.eINSTANCE.createRandomList();	
 		list.setIdentifier(grammarAccess.getRandomListAccess().getIdentifierTildeKeyword_0_0().getValue());
-		DistributionArguments args = MdlFactory.eINSTANCE.createDistributionArguments();				
+		Arguments args = MdlFactory.eINSTANCE.createArguments();				
 		for (int i = 0; i < attributes.length; i++){
-			DistributionArgument attr = createDistributionArgument(attributes[i]);
+			Argument attr = createArgument(attributes[i]);
 			args.getArguments().add(attr);
 		}
 		list.setArguments(args);

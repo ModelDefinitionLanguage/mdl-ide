@@ -8,7 +8,6 @@ package org.ddmore.mdl.types;
 
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
-import org.ddmore.mdl.mdl.DistributionArgument;
 import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.EnumType; 
 import org.ddmore.mdl.mdl.Expression;
@@ -20,6 +19,7 @@ import org.ddmore.mdl.mdl.MultiplicativeExpression;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
+import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.TargetType;
 import org.ddmore.mdl.mdl.TrialType;
@@ -69,17 +69,6 @@ public enum MdlDataType {
 	TYPE_TRIAL           //{simple, sequential, combined}
 	;
     
-	//Validates required type or reference
-	static public boolean validateType(MdlDataType type, DistributionArgument arg){
-		if (arg.getExpression() != null)
-			return validateType(type, arg.getExpression());
-		if (arg.getComponent() != null)
-			if (type.equals(MdlDataType.TYPE_RANDOM_LIST)) return true;
-		if (arg.getDistribution() != DistributionType.NO_DISTRIBUTION)
-			if (type.equals(MdlDataType.TYPE_DISTRIBUTION)) return true;
-		return false;
-	}
-	
 	static public boolean validateType(MdlDataType type, Expression expr){
 		switch(type){
 			case TYPE_UNDEFINED: return true;
@@ -135,6 +124,7 @@ public enum MdlDataType {
 			case TYPE_INPUT_FORMAT: return (expr.getInput() != InputFormatType.NO_INPUT_FORMAT);
 			case TYPE_TRIAL: return (expr.getTrial() != TrialType.NO_TRIAL);
 			case TYPE_INDIVIDUAL_VAR: return (expr.getIndividualVar() != IndividualVarType.NO_INDIVIDUAL_VAR);
+			case TYPE_DISTRIBUTION: return (expr.getDistribution() != DistributionType.NO_DISTRIBUTION);
 			default: return false; 
 		}
 	}
@@ -149,6 +139,10 @@ public enum MdlDataType {
 			return validateType(type, expr.getType());
 		return false;
 	}
+	
+	static public boolean validateType(MdlDataType type, RandomList expr){
+		return (type == TYPE_RANDOM_LIST);
+	}	
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//Validate vector types

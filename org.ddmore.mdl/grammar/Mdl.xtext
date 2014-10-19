@@ -296,10 +296,23 @@ VariableList:
 DesignObjectBlock:
 	covariatesBlock = CovariatesBlock |
 	studyDesignBlock = StudyDesignBlock |
-	populationFeaturesBlock = PopulationFeaturesBlock |
 	adminBlock = AdministrationBlock |
 	actionBlock = ActionBlock |
-	samplingBlock = SamplingBlock
+	samplingBlock = SamplingBlock |
+	designSpaceBlock = DesignSpaceBlock |
+	hyperSpaceBlock = HyperSpaceBlock |
+	populationFeaturesBlock = PopulationFeaturesBlock |
+	targetBlock = TargetBlock
+;
+
+DesignSpaceBlock:
+	identifier = 'DESIGN_SPACE'
+	BEGIN statements += SymbolDeclaration* END 
+;
+
+HyperSpaceBlock:
+	identifier = 'HYPER_SPACE'
+	BEGIN statements += SymbolDeclaration* END 
 ;
 
 CovariatesBlock:
@@ -314,7 +327,7 @@ StudyDesignBlock:
 
 PopulationFeaturesBlock:
 	identifier = 'POPULATION_FEATURES'
-	BEGIN variables += SymbolDeclaration* END
+	BEGIN variables += PropertyDeclaration* END
 ;
 
 AdministrationBlock:
@@ -378,8 +391,8 @@ SymbolName:
 SymbolDeclaration:
 	(symbolName = SymbolName | argumentName = FullyQualifiedArgumentName)
 		("=" expression = Expression | ":" list = List | randomList = RandomList)? 
-	| (functionName = FunctionName '(' (symbolName = SymbolName | argumentName = FullyQualifiedArgumentName) ')') 
-		("=" expression = Expression | ":" list = List | randomList = RandomList)		
+	| (functionName = FunctionName '(' (symbolName = SymbolName | argumentName = FullyQualifiedArgumentName) ')' 
+		("=" expression = Expression | ":" list = List | randomList = RandomList))		
 ;
 
 PropertyDeclaration:
@@ -393,7 +406,8 @@ EnumType:
 	variability = VariabilityType |
 	input = InputFormatType |
 	trial = TrialType |
-	individualVar = IndividualVarType
+	individualVar = IndividualVarType |
+	distribution = DistributionType
 ;
 
 enum UseType:
@@ -461,25 +475,16 @@ List:
 ;
 
 RandomList:
-	identifier = '~' '(' arguments = DistributionArguments ')'
+	identifier = '~' '(' arguments = Arguments ')'
 ;
-
-DistributionArguments:
-	arguments += DistributionArgument (=> ',' arguments += DistributionArgument)*
-;
-
-DistributionArgument: 
-	(argumentName = ArgumentName "=")? 
-	(distribution = DistributionType | expression = AnyExpression | component = RandomList)
-; 
 
 Arguments: 
 	arguments += Argument (=> ',' arguments += Argument)*
 ;
 
 Argument:
-	argumentName = ArgumentName "=" expression = AnyExpression |
-	expression = AnyExpression
+	(argumentName = ArgumentName ("=" expression = AnyExpression | randomList = RandomList)) | 
+	expression = AnyExpression | randomList = RandomList
 ;
 
 ConditionalStatement:
