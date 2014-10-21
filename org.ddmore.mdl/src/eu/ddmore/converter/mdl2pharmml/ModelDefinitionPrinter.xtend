@@ -17,7 +17,6 @@ import org.ddmore.mdl.mdl.Primary
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.types.DefaultValues
-import org.ddmore.mdl.types.MdlDataType
 import org.ddmore.mdl.mdl.DataObject
 
 class ModelDefinitionPrinter {
@@ -211,7 +210,6 @@ class ModelDefinitionPrinter {
 				if (b.randomVariableDefinitionBlock != null){
 					for (s: b.randomVariableDefinitionBlock.variables){
 						if (s.symbolName != null)
-							//if (eta_vars.containsKey(s.symbolName.name))
 							statements = statements + s.print_mdef_RandomVariable;
 					} 
 		  		}
@@ -307,16 +305,10 @@ class ModelDefinitionPrinter {
 	
 	//Print observation model declaration
 	protected def print_mdef_ObservationModel(SymbolDeclaration s)'''
+		«IF s.randomList != null»
+			«s.print_mdef_RandomVariable»
+		«ENDIF»
 		«IF s.expression != null»
-			«var classifiedVars = getReferences(s.expression)»
-			«IF classifiedVars.size > 0»
-				«FOR ss: classifiedVars.entrySet.filter[x | x.value.equals("random")]»
-					«val ref = ss.key.defineDistribution»
-					«IF ref != null»
-						«ref.print_mdef_RandomVariable»
-					«ENDIF»
-				«ENDFOR»
-			«ENDIF»
 			«IF s.symbolName != null»
 				<General symbId="«s.symbolName.name»">
 					«s.expression.print_Assign»
@@ -359,9 +351,6 @@ class ModelDefinitionPrinter {
 						«ENDIF»
 					</Standard>	
 				'''
-			} else  //TODO: check???
-			if (MdlDataType::validateType(MdlDataType::TYPE_DISTRIBUTION, type)){
-				'''«s.print_mdef_RandomVariable»'''
 			}
 		}
 	}

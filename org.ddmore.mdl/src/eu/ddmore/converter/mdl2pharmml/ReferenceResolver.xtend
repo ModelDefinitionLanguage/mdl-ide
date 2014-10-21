@@ -5,9 +5,7 @@ import java.util.HashSet
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
-import org.ddmore.mdl.mdl.SymbolName
 import eu.ddmore.converter.mdlprinting.MdlPrinter
-import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.DataDerivedBlock
@@ -81,7 +79,7 @@ class ReferenceResolver{
 				//ObservationModel
 				var observationVars = o.modelObject.getObservationVars;	
 				if (observationVars.size > 0)
-					sm_vars.put(o.objectName.name, observationVars);
+					om_vars.put(o.objectName.name, observationVars);
 					
 			}
 			if (o.parameterObject != null){
@@ -257,10 +255,6 @@ class ReferenceResolver{
 				for (st: b.observationBlock.variables){
 					if (st.symbolName != null)
 						observationVars.add(st.symbolName.name);
-					if (st.expression != null){
-						var classifiedVars = st.expression.getReferences;
-						observationVars.addAll(classifiedVars.keySet);
-					}
 				}
 			}
 		}
@@ -289,24 +283,6 @@ class ReferenceResolver{
 		return structuralVars;
 	}
 	
-	//+ For each reference, define its purpose
-	protected def getReferences(Expression expr){
-		var classifiedVars = new HashMap<String, String>();
-		var iterator = expr.eAllContents();
-	    while (iterator.hasNext()){
-	    	var obj = iterator.next();
-	    	if (obj instanceof SymbolName){
-	    		var ref = obj as SymbolName;
-	    		if (classifiedVars.get(ref.name) == null)
-			    	if (eps_vars.get(ref.name) != null)
-			    		classifiedVars.put(ref.name, "random")
-			    	else 	
-			    		classifiedVars.put(ref.name, "other");
-	    	}
-	    }
-	    return classifiedVars;
-	}
-
 	protected def setLevelVars(ModelObject o){
 		var tmp = o.getLevelVars("1");
 		for (v: tmp){
