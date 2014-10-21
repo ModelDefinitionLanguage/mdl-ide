@@ -104,9 +104,9 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		«FOR b: tObj.taskObject.blocks»
 			«IF b.estimateBlock != null»
 				<Operation order="«order»" opType="«opType»">
-				«FOR s: b.estimateBlock.statements»
-					«s.print_msteps_Property»
-				«ENDFOR»
+					«FOR s: b.estimateBlock.statements»
+						«s.print_msteps_Property»
+					«ENDFOR»
 				</Operation>
 			«ENDIF»
 		«ENDFOR»
@@ -117,9 +117,10 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	'''
 		«IF s.propertyName != null»
 			«IF s.expression != null»
-				«print_msteps_Property(s.propertyName.name, s.expression)»
 				«IF s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
 					«s.print_msteps_Algorithm»
+				«ELSE»
+					«print_msteps_Property(s.propertyName.name, s.expression)»
 				«ENDIF»	
 			«ENDIF»
 		«ENDIF»

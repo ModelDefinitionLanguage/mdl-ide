@@ -67,7 +67,7 @@ class DataSetPrinter {
 		var columnType = UseType::ID.toString;
 		if (modelVar.list != null){
 			val useValue = modelVar.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-			if (useValue.length > 0)  columnType = useValue;
+			if (useValue.length > 0) columnType = useValue;
 		}
 		return columnType;
 	}
@@ -197,13 +197,11 @@ class DataSetPrinter {
 					}
 					if (file.length > 0){
 						if (delimiter.length == 0) delimiter = PropertyValidator::attr_delimiter.defaultValue;
-						val fileName = FilenameUtils::getBaseName(file);
 						val fileExtension = FilenameUtils::getExtension(file);
 						res = res +
 						'''				
 							<ImportData oid="«BLK_DS_IMPORT_DATA + dObj.objectName.name»">
-								<name>«fileName»</name>
-								<url>«file»</url>
+								<path>«file»</path>
 								<format>«fileExtension.convertFileFormat»</format>
 								<delimiter>«delimiter.convertDelimiter»</delimiter>
 							</ImportData>

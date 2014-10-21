@@ -42,7 +42,6 @@ import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.TargetType
 import java.util.logging.Logger
 import org.ddmore.mdl.mdl.AnyExpression
-import org.ddmore.mdl.mdl.ConditionalExpression
 
 class Mdl2Nonmem extends MdlPrinter {
     private static val Logger logger = Logger::getLogger("Mdl2Nonmem");
@@ -1601,17 +1600,6 @@ class Mdl2Nonmem extends MdlPrinter {
 		}
 	}
 		
-	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
-	override print(ConditionalExpression s)'''
-		IF («s.condition.print») THEN
-			«s.thenExpression.print»
-		«IF s.elseExpression != null»
-		ELSE 
-			«s.elseExpression.print»
-		«ENDIF»	
-		ENDIF
-	'''	
-	
     //Check if LIBRARY block is defined
     def isLibraryDefined(ModelObject o){
     	for (mob: o.blocks){

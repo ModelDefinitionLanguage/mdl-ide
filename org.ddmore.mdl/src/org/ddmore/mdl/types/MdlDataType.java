@@ -6,6 +6,7 @@
  */
 package org.ddmore.mdl.types;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.ddmore.mdl.mdl.AndExpression;
@@ -133,6 +134,21 @@ public enum MdlDataType {
 	static public boolean validateType(MdlDataType type, RandomList expr){
 		return (type == TYPE_RANDOM_LIST);
 	}	
+	
+	public static boolean isEnumType(AnyExpression expr) {
+		List<MdlDataType> types = Arrays.asList(
+			TYPE_VAR_TYPE,
+			TYPE_CONTINUOUS,
+			TYPE_USE,
+			TYPE_TARGET,
+			TYPE_RANDOM_EFFECT,
+			TYPE_INPUT_FORMAT,
+			TYPE_TRIAL,
+			TYPE_INDIVIDUAL_VAR,
+			TYPE_DISTRIBUTION 
+		);
+		return validateType(types, expr);
+	}
 	
 	static public boolean validateType(MdlDataType type, AnyExpression expr){
 		if (expr.getExpression() != null)

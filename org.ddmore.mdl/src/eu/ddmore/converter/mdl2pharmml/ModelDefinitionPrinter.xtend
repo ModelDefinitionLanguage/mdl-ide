@@ -18,12 +18,15 @@ import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.types.MdlDataType
+import org.ddmore.mdl.mdl.DataObject
 
 class ModelDefinitionPrinter {
 	private var ModelObject mObj;
 	private var ParameterObject pObj;
+	private var DataObject dObj;
 	private var String mObjName;
 	private var String pObjName;
+	private var String dObjName;
 
 	protected extension DistributionPrinter distrPrinter = new DistributionPrinter();
 	protected extension MathPrinter mathPrinter = null;
@@ -44,6 +47,8 @@ class ModelDefinitionPrinter {
 		this.pObj = mog.getParameterObject.parameterObject;
 		this.mObjName = mog.getModelObject.objectName.name;
 		this.pObjName = mog.getParameterObject.objectName.name;
+		this.dObj = mog.getDataObject.dataObject;
+		this.dObjName = mog.getDataObject.objectName.name;
 		
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
@@ -91,7 +96,7 @@ class ModelDefinitionPrinter {
 	/////////////////////////
 	
 	//INDIVIDUAL_VARIABLES, use=covariate -> CovariateModel (transformation with reference)
-	//GROUP_VARIABLES -> ParameterModel, SimpleParameter + expression (see I.d)
+	//TODO: extend to deal not only with continuous covariates (covType = s.getCovariateType)
 	protected def print_mdef_CovariateModel(){
 		var model = "";
 		if (mObj != null){
@@ -101,14 +106,18 @@ class ModelDefinitionPrinter {
 				'''
 				<CovariateModel blkId="cm.«mObjName»">
 					«FOR s: covariateVars»
+						«val covType = "Continuous"»
 						<Covariate symbId="«s»">
-							<Continuous>
-								<Transformation>
-									<math:Equation>
-										«s.print_ct_SymbolRef»
-									</math:Equation>
-								</Transformation>
-							</Continuous>	
+							«var transformation = s.getCovariateTransformation»	
+							«IF transformation != null»
+								<«covType»>
+									<Transformation>
+										«transformation.print_Math_Equation»
+									</Transformation>
+								</«covType»>
+							«ELSE»
+								<«covType»/>
+							«ENDIF»
 						</Covariate>
 					«ENDFOR»
 				</CovariateModel>
@@ -117,7 +126,35 @@ class ModelDefinitionPrinter {
 		}
 		return model;
 	}	
-
+	
+	protected def getCovariateType(String covVar){
+		for (b: mObj.blocks){
+			if (b.inputVariablesBlock != null){
+				for (s: b.inputVariablesBlock.variables){
+					if (s.list != null && s.symbolName != null){
+						var type = getAttribute(s.list.arguments, AttributeValidator::attr_type.name);
+						if (type.length > 0)
+							return type;
+					}
+				}
+			}						
+		}
+		return VariableType::CC_CONTINUOUS;
+	}	
+	
+	protected def getCovariateTransformation(String covVar){
+		for (b: dObj.blocks){
+			if (b.dataDerivedBlock != null){
+				for (s: b.dataDerivedBlock.variables){
+					if (s.symbolName != null && covVar.equals(s.symbolName.name)){
+						return s.expression;
+					}
+				}
+			}					
+		}
+		return null;
+	}	
+	
 	/////////////////////////////
 	// I.d Parameter Model
 	////////////////////////////	
@@ -260,9 +297,7 @@ class ModelDefinitionPrinter {
 			'''
 				«IF (statements.length > 0)»
 					<ObservationModel blkId="om.«mObjName»">
-						<ContinuousData>
-							«statements»
-						</ContinuousData>
+						«statements»
 					</ObservationModel>
 				«ENDIF»
 			'''				
@@ -297,11 +332,16 @@ class ModelDefinitionPrinter {
 		val type = s.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
 		if (type != null){
 			if (type.toStr.equals(DefaultValues::VAR_CONTINUOUS)){
+				var name = "";
+				if (s.symbolName != null) 
+					name = s.symbolName.name 
+				else
+					name = s.argumentName.toStr;
 				val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
 				val output = s.list.arguments.getAttribute(AttributeValidator::attr_prediction_ref.name);
 				val eps = s.list.arguments.getAttribute(AttributeValidator::attr_eps.name);
 				'''
-					<Standard>
+					<Standard symbId="«name»">
 						«IF output.length > 0»
 							<Output>
 								«output.print_ct_SymbolRef»
@@ -469,9 +509,9 @@ class ModelDefinitionPrinter {
 					</«covariateType»>
 				«ENDIF»
 				«IF ranEffExpr.length > 0»
-					<RandomEffect>
+					<RandomEffects>
 						«ranEffExpr»
-					</RandomEffect>
+					</RandomEffects>
 				«ENDIF»
 			</GaussianModel>
 			'''

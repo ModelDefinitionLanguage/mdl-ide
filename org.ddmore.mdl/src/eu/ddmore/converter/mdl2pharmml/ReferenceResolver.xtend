@@ -112,14 +112,6 @@ class ReferenceResolver{
 	    }
 	}
 	
-	protected def getDerivedVariables(DataDerivedBlock b){
-		var derivedVars = newArrayList;
-		for (st: b.variables)
-			if (st.symbolName.name != null)
-				derivedVars.add(st.symbolName.name)
-		return derivedVars;
-	}
-	
 	protected def getReferenceBlock(String name){
 		//try to find by name
 		for (set: vm_err_vars.entrySet)
@@ -194,6 +186,14 @@ class ReferenceResolver{
 			}					
 		}
 		return covariateVars;		
+	}
+	
+	protected def getDerivedVariables(DataDerivedBlock b){
+		var derivedVars = newArrayList;
+		for (st: b.variables)
+			if (st.symbolName.name != null)
+				derivedVars.add(st.symbolName.name)
+		return derivedVars;
 	}
 	
 	//+Returns declarations for ParameterModel

@@ -27,13 +27,13 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.FunctionName
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
-import eu.ddmore.converter.mdl2pharmml.domain.Piece
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.types.DefaultValues
+import org.ddmore.mdl.types.MdlDataType
 
 class MathPrinter extends MdlPrinter{
 
@@ -67,17 +67,7 @@ class MathPrinter extends MdlPrinter{
 		'''
 	}
 	 
-	protected def print_Pieces(String symbol, String initTag, ArrayList<Piece> pieces, boolean printType){
-		var tag = initTag;
-		if ((tag.indexOf("Variable") > 0) && deriv_vars.contains(symbol))
-			tag = "ct:DerivativeVariable";
-		'''	
-		<«tag» symbId="«symbol»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
-			«print_Pieces(pieces)»
-		</«tag»>
-		'''
-	}
-	
+
 	//Print any MDL expression: math expression, list or ode list 
 	//(for the lists selected attribute values will be typically printed, e.g., value or deriv)
 	def CharSequence print_Math_Expr(AnyExpression e)'''
@@ -86,8 +76,17 @@ class MathPrinter extends MdlPrinter{
 		«ENDIF»
 	'''
 	
-	//+
 	def print_Math_Equation(AnyExpression expr)'''
+		«IF MdlDataType::isEnumType(expr) || MdlDataType::validateType(MdlDataType::TYPE_STRING, expr)»
+			<ct:String>«expr.toStr»</ct:String>
+		«ELSE»
+			<Equation xmlns="«xmlns_math»">
+				«expr.print_Math_Expr»
+			</Equation>
+		«ENDIF»
+	'''	
+	
+	def print_Math_Equation(Expression expr)'''
 		<Equation xmlns="«xmlns_math»">
 			«expr.print_Math_Expr»
 		</Equation>
@@ -194,13 +193,6 @@ class MathPrinter extends MdlPrinter{
 	<FunctionArgument«IF arg.argumentName != null» symbId="«arg.argumentName.name»"«ENDIF»>
 		«arg.expression.print_Math_Expr»
 	</FunctionArgument>
-	'''	
-	
-	//+
-	def print_Math_Equation(Expression expr)'''
-		<Equation xmlns="«xmlns_math»">
-			«expr.print_Math_Expr»
-		</Equation>
 	'''	
 	
 	//+
@@ -553,19 +545,6 @@ class MathPrinter extends MdlPrinter{
 		return ''''''
 	}
 	
-	def print_Pieces(ArrayList<Piece> pieces)'''
-		<ct:Assign>
-			<Equation xmlns="«xmlns_math»">
-				<Piecewise>
-					«var parts = pieces.assembleConditions»
-					«FOR part:parts»
-						«print_Math_LogicOpPiece(part.expression, part.condition)»
-					«ENDFOR»
-				</Piecewise>
-			</Equation>
-		</ct:Assign>
-	'''
-
 	//Here expr and condition are PharmML representation of MDL expressions
 	def print_Math_LogicOpPiece(String expr, String condition)'''
 		<Piece>
@@ -578,27 +557,6 @@ class MathPrinter extends MdlPrinter{
 		</Piece>
 	'''	
 						
-	def assembleConditions(ArrayList<Piece> pieces){
-		var ArrayList<Piece> model = new ArrayList<Piece>();
-		var piecesWithExpr = pieces.filter[o | o.expression != null];
-		for (p: piecesWithExpr){
-			var Piece current = p;
-			var ArrayList<String> conditions = new ArrayList<String>();
-			while (current != null){ 
-				if (current.condition != null){
-					conditions.add(current.condition);
-				}
-				current = current.parent
-			}
-			if (conditions.size > 0){
-				var condition = conditions.print_Math_LogicAnd(0).toString;				
-				var Piece assembedPiece = new Piece(null, p.expression, condition);
-				model.add(assembedPiece);
-			}	
-		}
-		return model;
-	}
-	
 	//+
 	def print_ct_SymbolRef(String objName, String name)'''
 		«var blkId = resolver.getReferenceBlock(objName, name)»
@@ -790,12 +748,12 @@ class MathPrinter extends MdlPrinter{
 	
 	def convertColumnType(String type){
 		switch (type){ 
-			case UseType::AMT: "dose"
-			case UseType::YTYPE: "dvid"
-			case UseType::ITYPE: "dvid"
-			case UseType::OCC: "occasion"
-			case UseType::CENS: "censoring"
+			case UseType::AMT.toString: "dose"
+			case UseType::YTYPE.toString: "dvid"
+			case UseType::ITYPE.toString: "dvid"
+			case UseType::OCC.toString: "occasion"
+			case UseType::CENS.toString: "censoring"
 			default: type
 		}
-	}		
+	}	
 }
