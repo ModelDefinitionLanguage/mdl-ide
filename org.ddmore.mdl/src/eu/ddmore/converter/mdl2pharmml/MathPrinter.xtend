@@ -77,13 +77,17 @@ class MathPrinter extends MdlPrinter{
 	'''
 	
 	def print_Math_Equation(AnyExpression expr)'''
-		«IF MdlDataType::isEnumType(expr) || MdlDataType::validateType(MdlDataType::TYPE_STRING, expr)»
+		«IF MdlDataType::validateType(MdlDataType::TYPE_STRING, expr)»
 			<ct:String>«expr.toStr»</ct:String>
-		«ELSE»
-			<Equation xmlns="«xmlns_math»">
-				«expr.print_Math_Expr»
-			</Equation>
-		«ENDIF»
+		«ELSE» 
+			«IF MdlDataType::isEnumType(expr)» 
+				<ct:String>«expr.toStr.convertEnum»</ct:String>
+			«ELSE»
+				<Equation xmlns="«xmlns_math»">
+					«expr.print_Math_Expr»
+				</Equation>
+			«ENDIF»
+		«ENDIF»	
 	'''	
 	
 	def print_Math_Equation(Expression expr)'''
@@ -746,7 +750,7 @@ class MathPrinter extends MdlPrinter{
 		}
 	}
 	
-	def convertColumnType(String type){
+	def convertEnum(String type){
 		switch (type){ 
 			case UseType::AMT.toString: "dose"
 			case UseType::YTYPE.toString: "dvid"

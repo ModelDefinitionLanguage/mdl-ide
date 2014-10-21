@@ -33,7 +33,7 @@ class DataSetPrinter {
 	}
 	
 	protected def print_ds_Column(String columnId, String columnType, String columnNum)'''
-		<Column columnId="«columnId»" columnType="«columnType.convertColumnType»" valueType="«columnId.getValueType»" columnNum="«columnNum»"/>
+		<Column columnId="«columnId»" columnType="«columnType.convertEnum»" valueType="«columnId.getValueType»" columnNum="«columnNum»"/>
 	'''
 	
 	protected def print_ds_ColumnMapping(String columnId, String symbId)'''
