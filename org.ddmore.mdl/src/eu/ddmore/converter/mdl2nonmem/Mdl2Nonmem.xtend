@@ -11,8 +11,6 @@ import java.util.HashMap
 import java.util.HashSet
 import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.mdl.BlockStatement
-import org.ddmore.mdl.mdl.ConditionalStatement
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.EstimateTask
@@ -44,6 +42,7 @@ import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.TargetType
 import java.util.logging.Logger
 import org.ddmore.mdl.mdl.AnyExpression
+import org.ddmore.mdl.mdl.ConditionalExpression
 
 class Mdl2Nonmem extends MdlPrinter {
     private static val Logger logger = Logger::getLogger("Mdl2Nonmem");
@@ -202,13 +201,13 @@ class Mdl2Nonmem extends MdlPrinter {
 	«FOR b:o.blocks»
 		«IF	b.groupVariablesBlock != null»
 			«FOR st: b.groupVariablesBlock.statements»
-				«IF st.statement != null»
-					«st.statement.print»
+				«IF st.variable != null»
+					«st.variable.print»
 				«ENDIF»
 			«ENDFOR»
 		«ENDIF»
 		«IF b.individualVariablesBlock != null»
-			«FOR s: b.individualVariablesBlock.statements SEPARATOR ' '»
+			«FOR s: b.individualVariablesBlock.variables SEPARATOR ' '»
 				«s.print»
 			«ENDFOR»
 		«ENDIF»
@@ -231,16 +230,15 @@ class Mdl2Nonmem extends MdlPrinter {
 		var include = true;
 		for (s: b.statements){
 			if (s.libraryBlock != null) include = false;
-			if (s.statement != null && include){
-				val symbol = s.statement.symbol;
-				if (symbol != null && symbol.argumentName != null && symbol.expression != null){
-					if (symbol.argumentName.parent.name.equals("A")){
+			if (s.variable != null && include){
+				if (s.variable != null && s.variable.argumentName != null && s.variable.expression != null){
+					if (s.variable.argumentName.parent.name.equals("A")){
 						res = res + '''
-							A_0«symbol.argumentName.selectors.get(0).toStr» = «symbol.expression.toStr»
+							A_0«s.variable.argumentName.selectors.get(0).toStr» = «s.variable.expression.toStr»
 						'''
 					}
 				} else {
-					res  = res + '''«s.statement.print»''';
+					res  = res + '''«s.variable.print»''';
 				}
 			}
 		}
@@ -273,23 +271,19 @@ class Mdl2Nonmem extends MdlPrinter {
 	//Print block
 	def print(MixtureBlock b){
 		var nspop = 0;
-		for (st: b.statements){
-			if (st.symbol != null){
-				if (st.symbol.list != null){
-					nspop = st.symbol.list.arguments.arguments.size;
-				}
+		for (st: b.variables){
+			if (st.list != null){
+				nspop = st.list.arguments.arguments.size;
 			}
 		}		
 		var res = "";
 		if (nspop > 0){
 			res  = "NSPOP = " + nspop + "\n";
 			var i = 1;
-			for (st: b.statements){
-				if (st.symbol != null){
-					if (st.symbol.expression != null){
-						res = res + "P(" + i + ") = " + st.symbol.expression.toStr + "\n";
-						i = i + 1;
-					}
+			for (st: b.variables){
+				if (st.expression != null){
+					res = res + "P(" + i + ") = " + st.expression.toStr + "\n";
+					i = i + 1;
 				}
 			}		
 		}
@@ -331,11 +325,11 @@ class Mdl2Nonmem extends MdlPrinter {
 		var include = false;
 		for (s: b.statements){
 			if (s.libraryBlock != null) include = true;
-			if (s.statement != null && include){
-				if (s.statement.symbol != null && s.statement.symbol.argumentName != null){
+			if (s.variable != null && include){
+				if (s.variable.argumentName != null){
 					//skip init values (vector field assignments)
 				} else {
-					res  = res + '''«s.statement.print»''';
+					res  = res + '''«s.variable.print»''';
 				}
 			}
 		}
@@ -372,12 +366,9 @@ class Mdl2Nonmem extends MdlPrinter {
 				«var bb = b.modelPredictionBlock»
 				«FOR s: bb.statements»
 					«IF s.odeBlock != null»
-						«FOR ss: s.odeBlock.statements»
-							«var x = ss.symbol»
-							«IF x != null && x.symbolName != null»
-								«IF x.list!= null»
-									COMP(«x.symbolName.name»)
-								«ENDIF»
+						«FOR ss: s.odeBlock.variables»
+							«IF ss.symbolName != null && ss.list!= null»
+								COMP(«ss.symbolName.name»)
 							«ENDIF»
 						«ENDFOR»
 					«ENDIF»
@@ -403,24 +394,18 @@ class Mdl2Nonmem extends MdlPrinter {
 				«var bb = b.modelPredictionBlock»
 				«FOR s: bb.statements»
 					«IF s.odeBlock != null»
-						«FOR ss: s.odeBlock.statements»
-							«var x = ss.symbol»
-							«IF x != null»
-								«IF x.expression != null»
-									«x.print»
-								«ENDIF»
-								«IF x.list != null»
-									«var deriv = x.list.arguments.getAttribute(AttributeValidator::attr_req_deriv.name)»
-									«IF deriv.length > 0 && x.symbolName != null»
-										«var id = x.symbolName.name»
-										«IF dadt_vars.get(id) != null»
-											DADT(«dadt_vars.get(id)») = «deriv»
-										«ENDIF»	
-									«ENDIF»
-								«ENDIF»
+						«FOR ss: s.odeBlock.variables»
+							«IF ss.expression != null»
+								«ss.print»
 							«ENDIF»
-							«IF ss.statement != null»
-								«ss.statement.print»
+							«IF ss.list != null»
+								«var deriv = ss.list.arguments.getAttribute(AttributeValidator::attr_req_deriv.name)»
+								«IF deriv.length > 0 && ss.symbolName != null»
+									«var id = ss.symbolName.name»
+									«IF dadt_vars.get(id) != null»
+										DADT(«dadt_vars.get(id)») = «deriv»
+									«ENDIF»	
+								«ENDIF»
 							«ENDIF»
 						«ENDFOR»
 					«ENDIF»
@@ -520,7 +505,7 @@ class Mdl2Nonmem extends MdlPrinter {
 	def printPRIORContent(ParameterObject o)'''
 		«FOR b:o.blocks»			
 			«IF b.priorBlock != null»
-				«FOR st: b.priorBlock.statements»
+				«FOR st: b.priorBlock.parameters»
 					«st.print»
 				«ENDFOR»
 			«ENDIF»
@@ -969,7 +954,7 @@ class Mdl2Nonmem extends MdlPrinter {
 				«IF st.propertyName != null && st.expression != null»
 					«IF st.propertyName.name.equals(PropertyValidator::attr_data_ignore.name)»
 						«IF st.expression.expression != null»
-							IGNORE («st.expression.expression.conditionalExpression.expression.toCommaSeparatedStr»)
+							IGNORE («st.expression.expression.expression.toCommaSeparatedStr»)
 						«ENDIF»
 					«ENDIF»	
 				«ENDIF»
@@ -1292,15 +1277,14 @@ class Mdl2Nonmem extends MdlPrinter {
 			if (b.modelPredictionBlock != null)
 				for (s: b.modelPredictionBlock.statements){
 					if (s.odeBlock != null)
-						for (ss: s.odeBlock.statements){
-							if (ss.symbol != null)
-								if (ss.symbol.list != null){
-									val initCond = ss.symbol.list.arguments.getAttribute(AttributeValidator::attr_init.name);
-									if (initCond.length > 0){
-										init_vars.put(i, initCond);
-									} else init_vars.put(i, "0");
-									i = i + 1;
-								}
+						for (ss: s.odeBlock.variables){
+							if (ss.list != null){
+								val initCond = ss.list.arguments.getAttribute(AttributeValidator::attr_init.name);
+								if (initCond.length > 0){
+									init_vars.put(i, initCond);
+								} else init_vars.put(i, "0");
+								i = i + 1;
+							}
 						}
 				}
 		}
@@ -1313,15 +1297,12 @@ class Mdl2Nonmem extends MdlPrinter {
 			if (b.modelPredictionBlock != null){
 				for (s: b.modelPredictionBlock.statements){
 					if (s.odeBlock != null){
-						for (ss: s.odeBlock.statements){
-							var x = ss.symbol;
-							if (x != null){
-								if (x.list != null && x.symbolName != null){
-									var id = x.symbolName.name;
-									if (dadt_vars.get(id) == null){
-										dadt_vars.put(id, i);
-										i = i + 1;
-									}
+						for (ss: s.odeBlock.variables){
+							if (ss.list != null && ss.symbolName != null){
+								var id = ss.symbolName.name;
+								if (dadt_vars.get(id) == null){
+									dadt_vars.put(id, i);
+									i = i + 1;
 								}
 							}
 						}
@@ -1361,17 +1342,6 @@ class Mdl2Nonmem extends MdlPrinter {
 			}
 		}
 	}
-	
-	override String print(BlockStatement st)'''
-		«IF st.symbol != null»«st.symbol.print»«ENDIF»
-		«IF st.functionCall != null»«st.functionCall.print»«ENDIF»
-		«IF st.statement != null»«st.statement.print»«ENDIF»
-		«IF st.targetBlock != null»
-			«IF st.targetBlock.isInline»
-				«st.targetBlock.print»
-			«ENDIF»
-		«ENDIF»
-	'''
 	
 	//Prepare a map of section with corresponding target blocks
 	def void prepareExternalCode(TargetBlock b){
@@ -1512,12 +1482,13 @@ class Mdl2Nonmem extends MdlPrinter {
 	
 	//toStr function call
 	override toStr(FunctionCall call){
-		if (call.identifier.name.equals(FunctionValidator::funct_errorExit))
-			return "EXIT" + call.arguments.toStrWithoutCommas;
+		//if (call.identifier.name.equals(FunctionValidator::funct_errorExit))
+		//	return "EXIT" + call.arguments.toStrWithoutCommas;
+		//No control flow altering statements are allowed in MDL!
 		if (call.identifier.name.equals(FunctionValidator::funct_runif)){
 			if (call.arguments != null) {
 				var container = call.eContainer()
-				if (container instanceof BlockStatement) {
+				if (container instanceof SymbolDeclaration) {
 					return "RANDOM CALL (" + call.arguments.arguments.get(0) +
 						", " + var_random_base + ")\n";
 				}
@@ -1631,26 +1602,14 @@ class Mdl2Nonmem extends MdlPrinter {
 	}
 		
 	//Override statement printing to substitute MDL conditional operators with NM-TRAN operators
-	override print(ConditionalStatement s)'''
-	«IF s.expression != null»
-		IF («s.expression.print») THEN
-			«IF s.ifStatement != null»
-				«s.ifStatement.print»
-			«ENDIF»
-			«IF s.ifBlock != null»
-				«s.ifBlock.print»
-			«ENDIF»
-		«IF s.elseStatement != null || s.elseBlock != null»
+	override print(ConditionalExpression s)'''
+		IF («s.condition.print») THEN
+			«s.thenExpression.print»
+		«IF s.elseExpression != null»
 		ELSE 
-			«IF s.elseStatement != null»
-				«s.elseStatement.print»
-			«ENDIF»
-			«IF s.elseBlock != null»
-				«s.elseBlock.print»
-			«ENDIF»
-		«ENDIF»
+			«s.elseExpression.print»
+		«ENDIF»	
 		ENDIF
-	«ENDIF»
 	'''	
 	
     //Check if LIBRARY block is defined

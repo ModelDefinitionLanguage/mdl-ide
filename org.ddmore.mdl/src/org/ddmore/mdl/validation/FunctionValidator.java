@@ -91,7 +91,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static List<String> funct_standard2 = Arrays.asList("logx", "root", "min", "max", "rem");
 
 	final public static String funct_runif     = "runif";
-	final public static String funct_errorExit = "errorExit";
 	final public static String funct_pnorm     = "pnorm";
 	
 	final public static FunctionParameter param_n  = new FunctionParameter("n", MdlDataType.TYPE_INT);
@@ -155,7 +154,6 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 						new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_end))
 				), MdlDataType.TYPE_REAL, true));
 			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
-			put(funct_errorExit, new FunctionSignature(funct_errorExit, 2, MdlDataType.TYPE_VOID));
 			put(funct_runif, new FunctionSignature(funct_runif, new FunctionParameterSet(param_n), MdlDataType.TYPE_REAL));
 			
 			/*Error models*/

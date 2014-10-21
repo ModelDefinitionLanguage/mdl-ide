@@ -1,6 +1,5 @@
 package eu.ddmore.converter.mdl2pharmml
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.BlockStatement
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.SameBlock
@@ -166,8 +165,8 @@ class ModelDefinitionPrinter {
 				//Model object, GROUP_VARIABLES (covariate parameters)
 				if (b.groupVariablesBlock != null){
 					for (st: b.groupVariablesBlock.statements){
-						if (st.statement != null){
-							statements = statements + st.statement.print_BlockStatement("SimpleParameter", false);
+						if (st.variable != null){
+							statements = statements + st.variable.print_BlockStatement("SimpleParameter", false);
 						}							
 					}
 				}	
@@ -181,7 +180,7 @@ class ModelDefinitionPrinter {
 		  		}
 		  		//Model object, INDIVIDUAL_VARIABLES
 				if (b.individualVariablesBlock != null){
-					for (s: b.individualVariablesBlock.statements){
+					for (s: b.individualVariablesBlock.variables){
 						statements = statements + s.print_BlockStatement("IndividualParameter", false);
 					} 
 		  		}
@@ -220,11 +219,11 @@ class ModelDefinitionPrinter {
 			for (b: mObj.blocks){
 				if (b.modelPredictionBlock != null){
 					for (st: b.modelPredictionBlock.statements){
-						if (st.statement != null) {
-							variables = variables + '''«st.statement.print_BlockStatement("ct:Variable", true)»''';
+						if (st.variable != null) {
+							variables = variables + '''«st.variable.print_BlockStatement("ct:Variable", true)»''';
 						} else 
 							if (st.odeBlock != null){
-								for (s: st.odeBlock.statements){
+								for (s: st.odeBlock.variables){
 									variables = variables + '''«s.print_BlockStatement("ct:Variable", true)»''';	
 								}
 							}
@@ -252,7 +251,7 @@ class ModelDefinitionPrinter {
 			var statements = "";
 			for (b: mObj.blocks){
 				if (b.observationBlock != null){
-					for (st: b.observationBlock.statements){
+					for (st: b.observationBlock.variables){
 						statements = statements + '''«st.print_mdef_ObservationModel»''';
 					}
 				}
@@ -271,14 +270,6 @@ class ModelDefinitionPrinter {
 		return model;
 	}
 	
-	//TODO: either remove the possibility to define conditional statements in OBSERVATION block or process it
-	//Print splitting random variables and simple parameters, needed for ObservationModel 
-	protected def print_mdef_ObservationModel(BlockStatement st)'''
-		«IF st.symbol != null»
-			«st.symbol.print_mdef_ObservationModel»
-		«ENDIF»
-	'''
-		
 	//Print observation model declaration
 	protected def print_mdef_ObservationModel(SymbolDeclaration s)'''
 		«IF s.expression != null»
@@ -363,26 +354,22 @@ class ModelDefinitionPrinter {
 		return null;
 	}
 	
-	protected def print_BlockStatement(BlockStatement st, String initTag, Boolean printType){
+	protected def print_BlockStatement(SymbolDeclaration st, String initTag, Boolean printType){
 		var tag = initTag;
-		if (st.symbol != null && st.symbol.symbolName != null)
-			if ((tag.indexOf("Variable") > 0) && deriv_vars.contains(st.symbol.symbolName.name))
+		if (st.symbolName != null){
+			if ((tag.indexOf("Variable") > 0) && deriv_vars.contains(st.symbolName.name))
 				tag = "ct:DerivativeVariable";
-		'''
-		«IF st.symbol != null»
-			<«tag» symbId="«st.symbol.symbolName.name»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
-				«IF st.symbol.expression != null»
-					«print_Assign(st.symbol.expression)»
+			'''
+			<«tag» symbId="«st.symbolName.name»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
+				«IF st.expression != null»
+					«print_Assign(st.expression)»
 				«ENDIF»
-				«IF st.symbol.list != null»
-					«print_List(st.symbol.list)»
+				«IF st.list != null»
+					«print_List(st.list)»
 				«ENDIF»
 			</«tag»>
-		«ENDIF»
-		«IF st.statement != null»
-			«st.statement.print_ConditionalStatement(tag)»
-		«ENDIF»
-		'''
+			'''
+		}
 	}
 	
 	//Transform lists to PharmML
@@ -462,7 +449,8 @@ class ModelDefinitionPrinter {
 				val cov = list.arguments.getAttributeExpression(AttributeValidator::attr_cov.name);
 				val fixEff = list.arguments.getAttributeExpression(AttributeValidator::attr_fixEff.name);
 				if (cov != null && fixEff != null)
-					covariateContent = '''«print_Covariate(cov.vector, fixEff.vector)»''';
+					if (cov.vector!= null && fixEff.vector != null)
+						covariateContent = '''«print_Covariate(cov.vector, fixEff.vector)»''';
 			} else {
 				val group = list.arguments.getAttributeExpression(AttributeValidator::attr_group.name);
 				if (group != null)

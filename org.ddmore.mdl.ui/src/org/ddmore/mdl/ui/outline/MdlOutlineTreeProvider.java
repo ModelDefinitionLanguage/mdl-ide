@@ -9,10 +9,7 @@ import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
-import org.ddmore.mdl.mdl.Block;
-import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.ConditionalExpression;
-import org.ddmore.mdl.mdl.ConditionalStatement;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.DesignObject;
@@ -121,10 +118,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     
     protected Image _image(ObjectName objName) {
     	return imageHelper.getImage(getPath(REFERENCE));
-    }
-    
-    protected Image _image(ConditionalStatement f) {
-        return imageHelper.getImage(getPath(CONDITION));
     }
     
     protected Image _image(FullyQualifiedArgumentName f) {
@@ -417,16 +410,10 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		}
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, BlockStatement st) {
-		for (EObject obj: st.eContents()){
-			createNode(parentNode, obj);
-		}
-	}
-	
 	protected void  _createNode(IOutlineNode parentNode, MixtureBlock b) {
 		createEStructuralFeatureNode(parentNode,
 			b,
-			MdlPackage.Literals.MIXTURE_BLOCK__STATEMENTS,
+			MdlPackage.Literals.MIXTURE_BLOCK__VARIABLES,
 			_image(b),
 			b.getIdentifier(),
 		false);
@@ -522,47 +509,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				true);
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, ConditionalStatement st){
-		createEStructuralFeatureNode(parentNode,
-				st,
-				MdlPackage.Literals.CONDITIONAL_STATEMENT__EXPRESSION,
-				_image(st),
-				"if",
-				false);
-		if (st.getIfStatement() != null){
-			createEStructuralFeatureNode(parentNode,
-					st,
-					MdlPackage.Literals.CONDITIONAL_STATEMENT__IF_STATEMENT,
-					getTrueImage(),
-					"[true]",
-					false);
-		}
-		if (st.getIfBlock() != null){
-			createEStructuralFeatureNode(parentNode,
-					st,
-					MdlPackage.Literals.CONDITIONAL_STATEMENT__IF_BLOCK,
-					getTrueImage(),
-					"[true]",
-					false);
-		}
-		if (st.getElseStatement() != null){
-			createEStructuralFeatureNode(parentNode,
-					st,
-					MdlPackage.Literals.CONDITIONAL_STATEMENT__ELSE_STATEMENT,
-					getFalseImage(),
-					"else",
-					false);
-		}
-		if (st.getElseBlock() != null){
-			createEStructuralFeatureNode(parentNode,
-					st,
-					MdlPackage.Literals.CONDITIONAL_STATEMENT__ELSE_BLOCK,
-					getFalseImage(),
-					"else",
-					false);
-		}				
-	}
-	
+
 	protected void  _createNode(IOutlineNode parentNode, ParExpression e){
 		createEStructuralFeatureNode(parentNode,
 				e,
@@ -668,12 +615,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		false);
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, Block b){
-		for (EObject obj: b.eContents()){
-			createNode(parentNode, obj);
-		}
-	}
-	
 	protected void  _createNode(IOutlineNode parentNode, EnumType b){
 		if (b.getType() != null){
 			createNode(parentNode, b.getType());
@@ -773,13 +714,27 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		}
 	}
 
-	protected void  _createNode(IOutlineNode parentNode, ConditionalExpression e){
+	protected void  _createNode(IOutlineNode parentNode, ConditionalExpression st){
 		createEStructuralFeatureNode(parentNode,
-			e,
-			MdlPackage.Literals.EXPRESSION__CONDITIONAL_EXPRESSION,
-			_image(e),
-			mdlPrinter.toStr(e),
-			true);
+			st,
+			MdlPackage.Literals.CONDITIONAL_EXPRESSION__CONDITION,
+			_image(st),
+			"if",
+			false);
+		createEStructuralFeatureNode(parentNode,
+			st,
+			MdlPackage.Literals.CONDITIONAL_EXPRESSION__THEN_EXPRESSION,
+			getTrueImage(),
+			"[true]",
+			false);
+		if (st.getElseExpression() != null){
+			createEStructuralFeatureNode(parentNode,
+				st,
+				MdlPackage.Literals.CONDITIONAL_EXPRESSION__ELSE_EXPRESSION,
+				getFalseImage(),
+				"else",
+				false);
+		}
 	}
 }
 

@@ -8,8 +8,6 @@ import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
-import org.ddmore.mdl.mdl.BlockStatement;
-import org.ddmore.mdl.mdl.ConditionalExpression;
 import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
@@ -251,15 +249,13 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	AnyExpression createBooleanExpression(String value){
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		Expression e = MdlFactory.eINSTANCE.createExpression();
-		ConditionalExpression cond = MdlFactory.eINSTANCE.createConditionalExpression();
 		OrExpression or = MdlFactory.eINSTANCE.createOrExpression();
 		AndExpression and = MdlFactory.eINSTANCE.createAndExpression();
 		LogicalExpression logical = MdlFactory.eINSTANCE.createLogicalExpression();
 		logical.setBoolean(value);
 		and.getExpression().add(logical);
 		or.getExpression().add(and);
-		cond.setExpression(or);
-		e.setConditionalExpression(cond);
+		e.setExpression(or);
 		expr.setExpression(e);
 		return expr;
 	}
@@ -272,7 +268,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	Expression createNumberExpression(String value){
 		Expression e = MdlFactory.eINSTANCE.createExpression();
-		ConditionalExpression cond = MdlFactory.eINSTANCE.createConditionalExpression();
 		OrExpression or = MdlFactory.eINSTANCE.createOrExpression();
 		AndExpression and = MdlFactory.eINSTANCE.createAndExpression();
 		LogicalExpression logical = MdlFactory.eINSTANCE.createLogicalExpression();
@@ -287,8 +282,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		logical.setExpression1(add);
 		and.getExpression().add(logical);
 		or.getExpression().add(and);
-		cond.setExpression(or);
-		e.setConditionalExpression(cond);
+		e.setExpression(or);
 		return e;
 	}
 	
@@ -301,7 +295,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	AnyExpression createReferenceExpression(String value){
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		Expression e = MdlFactory.eINSTANCE.createExpression();
-		ConditionalExpression cond = MdlFactory.eINSTANCE.createConditionalExpression();
 		OrExpression or = MdlFactory.eINSTANCE.createOrExpression();
 		AndExpression and = MdlFactory.eINSTANCE.createAndExpression();
 		LogicalExpression logical = MdlFactory.eINSTANCE.createLogicalExpression();
@@ -318,8 +311,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		logical.setExpression1(add);
 		and.getExpression().add(logical);
 		or.getExpression().add(and);
-		cond.setExpression(or);
-		e.setConditionalExpression(cond);
+		e.setExpression(or);
 		expr.setExpression(e);
 		return expr;
 	}
@@ -327,7 +319,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	AnyExpression createStringExpression(String value){
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		Expression e = MdlFactory.eINSTANCE.createExpression();
-		ConditionalExpression cond = MdlFactory.eINSTANCE.createConditionalExpression();
 		OrExpression or = MdlFactory.eINSTANCE.createOrExpression();
 		AndExpression and = MdlFactory.eINSTANCE.createAndExpression();
 		LogicalExpression logical = MdlFactory.eINSTANCE.createLogicalExpression();
@@ -336,8 +327,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		logical.setExpression1(add);
 		and.getExpression().add(logical);
 		or.getExpression().add(and);
-		cond.setExpression(or);
-		e.setConditionalExpression(cond);
+		e.setExpression(or);
 		expr.setExpression(e);
 		return expr;
 	}
@@ -426,17 +416,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		});
 	}
 	
-	BlockStatement createBlockStatementSymbol(String varName){
-		SymbolDeclaration newSymbol = MdlFactory.eINSTANCE.createSymbolDeclaration();
-		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
-		symbName.setName(varName);
-		newSymbol.setSymbolName(symbName);
-		BlockStatement blockSt = MdlFactory.eINSTANCE.createBlockStatement();
-		blockSt.setSymbol(newSymbol);
-		return blockSt;
-	}
-	
-	
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//Insert variable declaration
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -556,7 +536,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	}	
 	void insertSymbolDeclaration(GroupVariablesBlock block, String varName){
 		GroupVariablesBlockStatement groupSt =  MdlFactory.eINSTANCE.createGroupVariablesBlockStatement();
-		groupSt.setStatement(createBlockStatementSymbol(varName));
+		groupSt.setVariable(createSymbolDeclaration(varName));
 		block.getStatements().add(groupSt);
 	}
 	
@@ -574,7 +554,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 						if (block.getGroupVariablesBlock() != null){
 							for (GroupVariablesBlockStatement st: block.getGroupVariablesBlock().getStatements()){
 								if (st.getMixtureBlock() != null){
-									st.getMixtureBlock().getStatements().add(createBlockStatementSymbol(issue.getData()[0]));
+									st.getMixtureBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
 									return;
 								}
 							}
@@ -597,7 +577,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	{
 		MixtureBlock mix = MdlFactory.eINSTANCE.createMixtureBlock();
 		mix.setIdentifier(grammarAccess.getMixtureBlockAccess().getIdentifierMIXTUREKeyword_0_0().getValue());
-		mix.getStatements().add(createBlockStatementSymbol(varName));
+		mix.getVariables().add(createSymbolDeclaration(varName));
 		GroupVariablesBlockStatement groupSt =  MdlFactory.eINSTANCE.createGroupVariablesBlockStatement();
 		groupSt.setMixtureBlock(mix);
 		return groupSt;
@@ -615,13 +595,13 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 				if (obj != null){
 					for (ModelObjectBlock block: obj.getBlocks()){
 						if (block.getIndividualVariablesBlock() != null){
-							block.getIndividualVariablesBlock().getStatements().add(createBlockStatementSymbol(issue.getData()[0]));
+							block.getIndividualVariablesBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
 							return;
 						}
 					}
 					IndividualVariablesBlock block = MdlFactory.eINSTANCE.createIndividualVariablesBlock();
 					block.setIdentifier(blockName);
-					block.getStatements().add(createBlockStatementSymbol(issue.getData()[0]));
+					block.getVariables().add(createSymbolDeclaration(issue.getData()[0]));
 					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
 					mdlBlock.setIndividualVariablesBlock(block);
 					obj.getBlocks().add(mdlBlock); 
@@ -658,7 +638,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	}	
 	void insertSymbolDeclaration(ModelPredictionBlock block, String varName){
 		ModelPredictionBlockStatement groupSt =  MdlFactory.eINSTANCE.createModelPredictionBlockStatement();
-		groupSt.setStatement(createBlockStatementSymbol(varName));
+		groupSt.setVariable(createSymbolDeclaration(varName));
 		block.getStatements().add(groupSt);
 	}
 	
@@ -676,7 +656,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 						if (block.getModelPredictionBlock() != null){
 							for (ModelPredictionBlockStatement st: block.getModelPredictionBlock().getStatements()){
 								if (st.getOdeBlock() != null){
-									st.getOdeBlock().getStatements().add(createBlockStatementSymbol(issue.getData()[0]));
+									st.getOdeBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
 									return;
 								}
 							}
@@ -699,7 +679,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	ModelPredictionBlockStatement createModelPredictionBlockStatementOde(String varName){
 		OdeBlock ode = MdlFactory.eINSTANCE.createOdeBlock();
 		ode.setIdentifier(grammarAccess.getOdeBlockAccess().getIdentifierODEKeyword_0_0().getValue());
-		ode.getStatements().add(createBlockStatementSymbol(varName));
+		ode.getVariables().add(createSymbolDeclaration(varName));
 		ModelPredictionBlockStatement mpSt =  MdlFactory.eINSTANCE.createModelPredictionBlockStatement();
 		mpSt.setOdeBlock(ode);
 		return mpSt;
@@ -717,13 +697,13 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 				if (obj != null){
 					for (ModelObjectBlock block: obj.getBlocks()){
 						if (block.getObservationBlock() != null){
-							block.getObservationBlock().getStatements().add(createBlockStatementSymbol(issue.getData()[0]));
+							block.getObservationBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
 							return;
 						}
 					}
 					ObservationBlock block = MdlFactory.eINSTANCE.createObservationBlock();
 					block.setIdentifier(blockName);
-					block.getStatements().add(createBlockStatementSymbol(issue.getData()[0]));
+					block.getVariables().add(createSymbolDeclaration(issue.getData()[0]));
 					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
 					mdlBlock.setObservationBlock(block);
 					obj.getBlocks().add(mdlBlock); 				
@@ -744,13 +724,13 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 				if (obj != null){
 					for (ModelObjectBlock block: obj.getBlocks()){
 						if (block.getSimulationBlock() != null){
-							block.getSimulationBlock().getStatements().add(createBlockStatementSymbol(issue.getData()[0]));
+							block.getSimulationBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
 							return;
 						}
 					}
 					SimulationBlock block = MdlFactory.eINSTANCE.createSimulationBlock();
 					block.setIdentifier(blockName);
-					block.getStatements().add(createBlockStatementSymbol(issue.getData()[0]));
+					block.getVariables().add(createSymbolDeclaration(issue.getData()[0]));
 					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
 					mdlBlock.setSimulationBlock(block);
 					obj.getBlocks().add(mdlBlock); 
@@ -771,13 +751,13 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 					if (obj != null){
 						for (ModelObjectBlock block: obj.getBlocks()){
 							if (block.getEstimationBlock() != null){
-								block.getEstimationBlock().getStatements().add(createBlockStatementSymbol(issue.getData()[0]));
+								block.getEstimationBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
 								return;
 							}
 						}
 						EstimationBlock block = MdlFactory.eINSTANCE.createEstimationBlock();
 						block.setIdentifier(blockName);
-						block.getStatements().add(createBlockStatementSymbol(issue.getData()[0]));
+						block.getVariables().add(createSymbolDeclaration(issue.getData()[0]));
 						ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
 						mdlBlock.setEstimationBlock(block);
 						obj.getBlocks().add(mdlBlock); 

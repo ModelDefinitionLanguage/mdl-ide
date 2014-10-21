@@ -118,8 +118,10 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*INDIVIDUAL_VARIABLES*/
 	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_INDIVIDUAL_VAR, true);
 	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_TRANS, true);
-	final public static Attribute attr_fixEff = new Attribute("fixEff", MdlDataType.TYPE_VECTOR_REF, false);
-	final public static Attribute attr_cov = new Attribute("cov", MdlDataType.TYPE_VECTOR_REF, false);
+	final public static Attribute attr_fixEff = new Attribute("fixEff", 
+			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
+	final public static Attribute attr_cov = new Attribute("cov", 
+			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
 	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
@@ -140,7 +142,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_reset = new Attribute("reset", MdlDataType.TYPE_LIST, true);
 	
 	/*SAMPLING*/
-	final public static Attribute attr_samplingTime = new Attribute("samplingTime", MdlDataType.TYPE_VECTOR_NAT, true);
+	final public static Attribute attr_samplingTime = new Attribute("samplingTime", 
+			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), true);
 	final public static Attribute attr_outcome = new Attribute("outcome", MdlDataType.TYPE_STRING, false);
 	final public static Attribute attr_bql = new Attribute("bql", MdlDataType.TYPE_REAL, false);
 	
@@ -323,18 +326,19 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 				warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
 				MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 				MSG_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());		
-				return;
 			}
 			for (Attribute x: knownAttributes){
 				if (x.getName().equals(argument.getArgumentName().getName())){
-					boolean isValid = MdlDataType.validateType(x.getType(), argument.getExpression());
+					boolean isValid = false;
+					for (MdlDataType type: x.getTypes())
+						isValid = isValid || MdlDataType.validateType(type, argument.getExpression());
 					if (!isValid){
 						warning(MSG_ATTRIBUTE_WRONG_TYPE + 
-							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + x.getType().name(), 
+							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
+								Utils.printList(x.getTypeNames()), 
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-							MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());		
+							MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());
 					}
-					return;
 				}
 			}
 		}

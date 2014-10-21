@@ -212,18 +212,19 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 				}
 				for (Attribute x: knownAttributes){
 					if (x.getName().equals(p.getPropertyName().getName())){
-						boolean isValid = MdlDataType.validateType(x.getType(), p.getExpression());
+						boolean isValid = false;
+						for (MdlDataType type: x.getTypes())
+							isValid = isValid || MdlDataType.validateType(type, p.getExpression());
 						if (!isValid){
 							warning(MSG_WRONG_TYPE + 
-								": property \"" + p.getPropertyName().getName() + "\" expects value of type " + x.getType().name(), 
+								": property \"" + p.getPropertyName().getName() + "\" expects value of type " + 
+								Utils.printList(x.getTypeNames()), 
 								MdlPackage.Literals.PROPERTY_DECLARATION__PROPERTY_NAME,
 								MSG_WRONG_TYPE, p.getPropertyName().getName());		
 						}
-						break;
 					}
 				}
 			}
-			return;
 		}
 	}
 	

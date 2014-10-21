@@ -9,7 +9,7 @@ import org.ddmore.mdl.types.MdlDataType;
 
 public class FunctionSignature {
 	String name;
-	MdlDataType type = MdlDataType.TYPE_VOID;
+	MdlDataType type = MdlDataType.TYPE_UNDEFINED;
 	Boolean passingByName = false;
 	List<FunctionParameterSet> paramSets = new ArrayList<FunctionParameterSet>();
 	Integer numberOfParams = 0; 

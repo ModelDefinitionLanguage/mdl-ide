@@ -11,7 +11,6 @@ import org.ddmore.mdl.mdl.AdministrationBlock;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
-import org.ddmore.mdl.mdl.BlockStatement;
 import org.ddmore.mdl.mdl.CompartmentBlock;
 import org.ddmore.mdl.mdl.DataDerivedBlock;
 import org.ddmore.mdl.mdl.DataInputBlock;
@@ -131,36 +130,6 @@ public class Utils {
 		return false;
 	}
 	
-	//Add symbol to a list of known symbols
-	public static void addSymbol(List<String> list, BlockStatement st){
-		TreeIterator<EObject> iterator = st.eAllContents();
-		while (iterator.hasNext()){
-		EObject obj = iterator.next();
-		   	if (obj instanceof SymbolDeclarationImpl){
-		   		SymbolDeclaration s = (SymbolDeclaration)obj;
-				if (s.getSymbolName() != null){
-					list.add(s.getSymbolName().getName());
-				}
-		   	}
-		}
-	}
-	
-	//The same as previous, but does not add repeated conditionally developed variables to avoid double declaration warning 
-	public static void addSymbolNoRepeat(List<String> list, BlockStatement st){
-		TreeIterator<EObject> iterator = st.eAllContents();
-	    while (iterator.hasNext()){
-	    	EObject obj = iterator.next();
-	    	if (obj instanceof SymbolDeclarationImpl){
-	    		SymbolDeclaration s = (SymbolDeclaration)obj;
-				if (s.getSymbolName() != null){
-					if (!list.contains(s.getSymbolName().getName())) 
-						list.add(s.getSymbolName().getName());
-				}
-	    	}
-	    }
-	}
-	
-
 	public static List<String> getArgumentNames(Arguments args){
 		List<String> argumentNames = new ArrayList<String>();	
 		if (args.getArguments() != null)

@@ -11,7 +11,6 @@ import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.DataDerivedBlock
-import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.mdl.impl.MclObjectImpl
@@ -115,8 +114,9 @@ class ReferenceResolver{
 	
 	protected def getDerivedVariables(DataDerivedBlock b){
 		var derivedVars = newArrayList;
-		for (st: b.statements)
-			Utils::addSymbolNoRepeat(derivedVars, st);
+		for (st: b.variables)
+			if (st.symbolName.name != null)
+				derivedVars.add(st.symbolName.name)
 		return derivedVars;
 	}
 	
@@ -203,8 +203,9 @@ class ReferenceResolver{
 			//Model object, GROUP_VARIABLES (covariate parameters)
 			if (b.groupVariablesBlock != null){
 				for (st: b.groupVariablesBlock.statements){
-					if (st.statement != null){
-						Utils::addSymbolNoRepeat(parameters, st.statement)
+					if (st.variable != null){
+						if (st.variable.symbolName.name != null)
+							parameters.add(st.variable.symbolName.name)
 					}							
 				}
 			}	
@@ -218,8 +219,9 @@ class ReferenceResolver{
 	  		}
 	  		//Model object, INDIVIDUAL_VARIABLES
 			if (b.individualVariablesBlock != null){
-				for (s: b.individualVariablesBlock.statements){
-					Utils::addSymbolNoRepeat(parameters, s)
+				for (s: b.individualVariablesBlock.variables){
+					if (s.symbolName != null)
+						parameters.add(s.symbolName.name);
 				} 
 	  		}
 	  	}
@@ -252,10 +254,11 @@ class ReferenceResolver{
 		var observationVars = new ArrayList<String>();
 		for (b: obj.blocks){
 			if (b.observationBlock != null){
-				for (st: b.observationBlock.statements){
-					Utils::addSymbolNoRepeat(observationVars, st)
-					if (st.symbol.expression != null){
-						var classifiedVars = st.symbol.expression.getReferences;
+				for (st: b.observationBlock.variables){
+					if (st.symbolName != null)
+						observationVars.add(st.symbolName.name);
+					if (st.expression != null){
+						var classifiedVars = st.expression.getReferences;
 						observationVars.addAll(classifiedVars.keySet);
 					}
 				}
@@ -270,12 +273,14 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.modelPredictionBlock != null){
 				for (st: b.modelPredictionBlock.statements){
-					if (st.statement != null) {
-						Utils::addSymbolNoRepeat(structuralVars, st.statement);
+					if (st.variable != null && st.variable.symbolName != null) {
+						structuralVars.add(st.variable.symbolName.name);
 					} else 
 						if (st.odeBlock != null){
-							for (s: st.odeBlock.statements){
-								Utils::addSymbolNoRepeat(structuralVars, s);
+							for (s: st.odeBlock.variables){
+								if (s.symbolName != null) {
+									structuralVars.add(s.symbolName.name);
+								}
 							}
 						}
 				}

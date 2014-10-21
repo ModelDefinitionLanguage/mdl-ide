@@ -52,7 +52,7 @@ ModelObjectBlock:
 
 IndividualVariablesBlock:
 	identifier = 'INDIVIDUAL_VARIABLES'
-	BEGIN statements += BlockStatement* END  
+	BEGIN variables += SymbolDeclaration* END  
 ;
 
 ModelPredictionBlock:
@@ -92,17 +92,17 @@ GroupVariablesBlock:
 
 ObservationBlock:
 	identifier = 'OBSERVATION'
-	BEGIN statements += BlockStatement* END  
+	BEGIN variables += SymbolDeclaration* END  
 ;
 
 EstimationBlock:
 	identifier = 'ESTIMATION' 
-	BEGIN statements += BlockStatement* END 
+	BEGIN variables += SymbolDeclaration* END 
 ;
 
 SimulationBlock:
 	identifier = 'SIMULATION' 
-	BEGIN statements += BlockStatement* END  
+	BEGIN variables += SymbolDeclaration* END  
 ;
 
 //////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ VariabilityBlock:
 
 PriorParametersBlock:
 	identifier='PRIOR_PARAMETERS' 
-	BEGIN statements += BlockStatement* END  
+	BEGIN parameters += SymbolDeclaration* END  
 ;
 
 //////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ DataInputBlock:
  
 DataDerivedBlock:
  	identifier='DATA_DERIVED_VARIABLES' 
- 	BEGIN statements += BlockStatement* END  
+ 	BEGIN variables += SymbolDeclaration* END  
 ; 
  
 SourceBlock:
@@ -195,17 +195,17 @@ SimulateTask:
 ;
 
 EvaluateTask:
-	identifier = "EVALUATE"
+	identifier = 'EVALUATE'
 	BEGIN statements += PropertyDeclaration* END  
 ;
 
 OptimiseTask:
-	identifier = "OPTIMISE"
+	identifier = 'OPTIMISE'
 	BEGIN statements += PropertyDeclaration* END  
 ;
 
 ModelPredictionBlockStatement: 
-	statement = BlockStatement | 
+	variable = SymbolDeclaration | 
 	odeBlock = OdeBlock | 
 	libraryBlock = LibraryBlock |
 	compartmentBlock = CompartmentBlock |
@@ -224,7 +224,7 @@ CompartmentBlock:
 
 DeqBlock:
 	identifier = 'DEQ'
-	BEGIN statements += BlockStatement* END 
+	BEGIN variables += SymbolDeclaration* END 
 ;
 
 FunctionCallStatement:
@@ -233,17 +233,17 @@ FunctionCallStatement:
 
 OdeBlock:
 	identifier = 'ODE' 
-	BEGIN statements += BlockStatement* END 
+	BEGIN variables += SymbolDeclaration* END 
 ;
 
 GroupVariablesBlockStatement:
-	statement = BlockStatement |  
+	variable = SymbolDeclaration |  
 	mixtureBlock = MixtureBlock 
 ;
 
 MixtureBlock:
 	identifier = 'MIXTURE' 
-	BEGIN statements += BlockStatement* END 
+	BEGIN variables += SymbolDeclaration* END 
 ;
 
 VariabilityBlockStatement:
@@ -307,12 +307,12 @@ DesignObjectBlock:
 
 DesignSpaceBlock:
 	identifier = 'DESIGN_SPACE'
-	BEGIN statements += SymbolDeclaration* END 
+	BEGIN variables += SymbolDeclaration* END 
 ;
 
 HyperSpaceBlock:
 	identifier = 'HYPER_SPACE'
-	BEGIN statements += SymbolDeclaration* END 
+	BEGIN variables += SymbolDeclaration* END 
 ;
 
 CovariatesBlock:
@@ -363,13 +363,6 @@ FunctionName:
 
 FunctionCall:
 	identifier = FunctionName '(' arguments = Arguments? ')' 
-;
-
-BlockStatement:
-	symbol = SymbolDeclaration |
-	functionCall = FunctionCall |
-	statement = ConditionalStatement |
-	targetBlock = TargetBlock
 ;
 
 TargetBlock: 
@@ -487,27 +480,18 @@ Argument:
 	expression = AnyExpression | randomList = RandomList
 ;
 
-ConditionalStatement:
-	'if' '('expression=OrExpression')' 
-		(ifStatement = BlockStatement | ifBlock = Block)
-	(=> 'else' 
-		(elseStatement = BlockStatement | elseBlock = Block)
-	)? 
-;
-
-Block: {Block}
-	BEGIN statements += BlockStatement* END
-;
-
 ParExpression:
 	'(' expression = Expression')';
 	
 Expression:
-	conditionalExpression = ConditionalExpression 
+	expression = OrExpression |
+	conditional = ConditionalExpression 
 ;	
 	
 ConditionalExpression:
-	expression = OrExpression ('?' expression1 = Expression ':' expression2 = Expression)?;
+	'if' '('condition = OrExpression')' thenExpression = Expression
+	(=> 'else' elseExpression = Expression)? 
+;
 
 OrExpression:
 	expression += AndExpression (operator += LogicalOrOperator expression += AndExpression)*;
