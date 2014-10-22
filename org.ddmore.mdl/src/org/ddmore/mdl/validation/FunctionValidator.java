@@ -19,6 +19,7 @@ import org.ddmore.mdl.domain.FunctionSignature;
 import org.ddmore.mdl.domain.ParameterPassingMethod;
 import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.types.MdlDataType;
@@ -223,7 +224,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getName());
 		//TODO validate whether the function returns any value to enable/disable its use in expressions
 		//TODO instead of checking whether a parameter is known, match a list of actual parameters with one of valid sets!
-		if (Utils.isPassedByName(call.getArguments())){
+		if (isPassedByName(call.getArguments())){
 			if (functSig.isPassingByName()){
 				if (call.getArguments() != null){
 					for (Argument arg: call.getArguments().getArguments()){
@@ -262,7 +263,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					call.getIdentifier().getName());					
 			}	
 		} else {
-			if (Utils.isPassedByPlace(call.getArguments())) {
+			if (isPassedByPlace(call.getArguments())) {
 				int expected = functSig.getNumberOfParams();
 				int actual = 0;
 				if (call.getArguments().getArguments() != null)
@@ -294,5 +295,28 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 						call.getIdentifier().getName());	
 			}
 		}
+	}
+	
+	public boolean isPassedByName(Arguments args){
+		if (args != null){
+			int nNames = 0; 
+			for (Argument arg: args.getArguments()){
+				if (arg.getArgumentName() != null) nNames++;
+			}
+			int count = args.getArguments().size();
+			return (nNames == count && count != 0);
+		}
+		return false;
+	}
+	
+	public boolean isPassedByPlace(Arguments args){
+		if (args != null){
+			int nNames = 0; 
+			for (Argument arg: args.getArguments()){
+				if (arg.getArgumentName() != null) nNames++;
+			}
+			return (nNames == 0);
+		}
+		return true;
 	}
 }

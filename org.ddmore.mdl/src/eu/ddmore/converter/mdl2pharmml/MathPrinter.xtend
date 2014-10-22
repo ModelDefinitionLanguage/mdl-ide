@@ -214,7 +214,7 @@ class MathPrinter extends MdlPrinter{
 		<Piecewise>
 			«expr.thenExpression.print_Math_LogicOpPiece(expr.condition.print_Math_LogicOr(0).toString)»
 			«IF expr.elseExpression != null»
-			«expr.elseExpression.print_Math_LogicOpPiece(expr.condition.print_DualExpression.toString)»
+				«expr.elseExpression.print_Math_LogicOpPiece("<math:Otherwise/>")»
 			«ENDIF»
 		</Piecewise>
 	'''		
@@ -561,12 +561,6 @@ class MathPrinter extends MdlPrinter{
 		</Piece>
 	'''	
 						
-	//+
-	def print_ct_SymbolRef(String objName, String name)'''
-		«var blkId = resolver.getReferenceBlock(objName, name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
-	'''
-
 	//+
 	def print_ct_SymbolRef(String name)'''
 		«var blkId = resolver.getReferenceBlock(name)»

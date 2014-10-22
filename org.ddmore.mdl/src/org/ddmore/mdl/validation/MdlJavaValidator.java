@@ -172,10 +172,40 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    		}
 	    	}
 	    }
-	    if ((args.size() > 0) && !AttributeValidator.checkAttributes(ref, args))
+	    if ((args.size() > 0) && !checkAttributes(ref, args))
 			warning(MSG_UNRESOLVED_ATTRIBUTE_REF, 
 				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
 					MSG_UNRESOLVED_ATTRIBUTE_REF, ref.getParent().getName());
+	}
+	
+	//Check references to list attributes
+	public boolean checkAttributes(FullyQualifiedArgumentName ref, List<Argument> arguments) {
+		List <Argument> currArgs = arguments; 
+		for (Selector x: ref.getSelectors()){
+			if (currArgs != null){
+				int index = -1;
+				if (x.getSelector() != null){
+					index = Integer.parseInt(x.getSelector());
+					if (!((index >= 1) && (index < currArgs.size() + 1))) return false;
+					index = 1;	
+				}
+				if (x.getArgumentName() != null){
+					int i = 0;
+					for (Argument arg: currArgs){
+						if (arg.getArgumentName().getName().equals(x.getArgumentName().getName())){
+							index = i + 1; break;
+						}
+						i++; 
+					}
+				}
+				if (index > 0) {
+					if (currArgs.get(index - 1).getExpression().getList() != null)
+						if (arguments.get(index).getExpression().getList().getArguments() != null)
+							currArgs = arguments.get(index).getExpression().getList().getArguments().getArguments();
+				} else return false;
+			} 
+		}
+		return true;
 	}
 
 	//Validate a fully qualified argument whose parent refers to a variable declared as a function 

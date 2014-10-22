@@ -44,7 +44,7 @@ public enum MdlDataType {
     //References to variables and mathematical expressions
 	TYPE_REF, TYPE_EXPR,  //TODO remove after type checking is supported
 	//References to objects
-	TYPE_OBJ_REF, TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_OBJ_REF_TASK,
+	TYPE_OBJ_REF, TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_OBJ_REF_TASK, TYPE_OBJ_REF_DESIGN,
 	//Nested lists
 	TYPE_LIST, TYPE_RANDOM_LIST, 
     
@@ -63,7 +63,7 @@ public enum MdlDataType {
 	TYPE_VAR_TYPE,       //{continuous, categorical, likelihood, M2LL}
 	TYPE_USE,            //see 'UseType' in MDL grammar
 	TYPE_TARGET,         //{NMTRAN_CODE, MLXTRAN_CODE, PML_CODE, BUGS_CODE, R_CODE MATLAB_CODE}
-	TYPE_RANDOM_EFFECT,  //{VAR, SD} 
+	TYPE_RANDOM_EFFECT,  //{VAR, SD, CORR, COV} 
 	TYPE_INPUT_FORMAT,   //{nonmemFormat, eventFormat}
 	TYPE_DISTRIBUTION,   //see 'Distribution' in MDL grammar
 	TYPE_INDIVIDUAL_VAR, //{linear, gaussian}
@@ -93,6 +93,7 @@ public enum MdlDataType {
 			case TYPE_OBJ_REF_DATA: return validObjectTypeReference(expr, TYPE_OBJ_REF_DATA);
 			case TYPE_OBJ_REF_PARAM: return validObjectTypeReference(expr, TYPE_OBJ_REF_PARAM);
 			case TYPE_OBJ_REF_TASK: return validObjectTypeReference(expr, TYPE_OBJ_REF_TASK);
+			case TYPE_OBJ_REF_DESIGN: return validObjectTypeReference(expr, TYPE_OBJ_REF_DESIGN);
 			//String restriction
 			case TYPE_TRANS: return isTransformationOperator(expr);  
 			default: return false;

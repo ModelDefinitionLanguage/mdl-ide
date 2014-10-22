@@ -44,7 +44,7 @@ class TrialDesignPrinter extends DataSetPrinter {
 	
 	protected def print_design_Epochs()
 	'''
-	<Epoch oid="«BLK_DESIGN_EPOCH + mObjName»">
+	<Epoch oid="«BLK_DESIGN_EPOCH»">
 		<Start><ct:Real>???</ct:Real></Start>
 		<End><ct:Real>???</ct:Real></End>
 		<Order>???</Order>
@@ -52,11 +52,11 @@ class TrialDesignPrinter extends DataSetPrinter {
 	'''
 
 	protected def print_design_Arms()'''
-	<Arm oid="«BLK_DESIGN_ARM + mObjName»"/>
+	<Arm oid="«BLK_DESIGN_ARM»"/>
 	'''
 	
 	protected def print_design_Cells()'''
-	<Cell oid="«BLK_DESIGN_CELL + mObjName»">
+	<Cell oid="«BLK_DESIGN_CELL»">
 		<EpochRef oidRef="???"/>
 		<ArmRef oidRef="???"/>
 		<SegmentRef oidRef="???"/>
@@ -64,16 +64,16 @@ class TrialDesignPrinter extends DataSetPrinter {
 	'''
 	
 	protected def print_design_Segments()'''
-	<Segment oid="«BLK_DESIGN_SEGMENT + mObjName»">
+	<Segment oid="«BLK_DESIGN_SEGMENT»">
 		<ActivityRef oidRef="???"/>
 	</Segment>
 	'''
 	
 	protected def print_design_Activities()'''
-	<Activity oid="«BLK_DESIGN_ACTIVITY + mObjName»">
+	<Activity oid="«BLK_DESIGN_ACTIVITY»">
 	</Activity>
 	'''
-	//«print_design_Bolus(mObjName, s)»	
+	//«s.print_design_Bolus»	
 
 	protected def print_design_Bolus(SymbolDeclaration s)'''
 	<Bolus>
@@ -91,7 +91,7 @@ class TrialDesignPrinter extends DataSetPrinter {
 	protected def print_design_DosingTimes(SymbolDeclaration s)'''
 	<DosingTimes>
 		«IF s.symbolName != null»
-			«print_ct_SymbolRef(mObjName, s.symbolName.name)»
+			«print_ct_SymbolRef(s.symbolName.name)»
 			«IF s.expression != null»
 				«s.expression.print_Assign»
 			«ENDIF»

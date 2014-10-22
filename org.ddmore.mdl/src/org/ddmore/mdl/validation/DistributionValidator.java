@@ -282,7 +282,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		}
 	};
 
-	final static List<Attribute> common_attrs = Arrays.asList(attr_type, attr_level,attr_weight, attr_seed);
+	final static List<Attribute> common_attrs = Arrays.asList(attr_type, attr_level, attr_weight, attr_seed);
 	
 	//List of synonyms or alternatives
 	Map<String, String> alternative_attrs = new HashMap<String, String>(){

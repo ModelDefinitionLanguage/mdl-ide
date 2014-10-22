@@ -1,14 +1,11 @@
 package eu.ddmore.converter.mdl2pharmml
 import org.ddmore.mdl.mdl.Mcl
 import eu.ddmore.converter.mdlprinting.MdlPrinter
-import java.util.ArrayList
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
-import eu.ddmore.converter.mdl2pharmml.domain.Operation
 import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.MclObject
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.validation.Utils
-import org.ddmore.mdl.mdl.impl.MclObjectImpl
 
 class Mdl2PharmML{
 
@@ -20,28 +17,8 @@ class Mdl2PharmML{
 		val msPrinter = new ModellingStepsPrinter(mathPrinter, resolver);  		
 		val tdPrinter = new TrialDesignPrinter(mathPrinter, resolver);
 		val functPrinter = new FunctionDefinitionPrinter(); 
-		
-		var operations = new ArrayList<Operation>();
 		var mogs = Utils::getMOGs(m);
 		
-		for (mog: mogs){
-			for (o: mog.objects){
-				var container = o.eContainer;
-				if (container instanceof MclObjectImpl){
-					val mclObject = container as MclObject;
-					if (mclObject.taskObject != null){
-						//Found a task object
-						for (b: mclObject.taskObject.blocks){
-							if ((b.estimateBlock != null) || (b.simulateBlock != null)){
-								var stepType = BLK_ESTIM_STEP;
-								if (b.simulateBlock != null) stepType = BLK_SIMUL_STEP;
-								operations.add(new Operation(o.name, stepType, mog));
-							}
-						}
-					}
-				}
-			}
-		}
 		'''
 			<?xml version="1.0" encoding="UTF-8"?>
 			<PharmML 
@@ -55,8 +32,8 @@ class Mdl2PharmML{
 				«FOR mog: mogs»
 					«mdPrinter.print_mdef_ModelDefinition(mog)»
 				«ENDFOR»
-				«FOR op: operations»
-					«msPrinter.print_msteps_ModellingSteps(op)»
+				«FOR mog: mogs»
+					«msPrinter.print_msteps_ModellingSteps(mog)»
 				«ENDFOR»
 				«FOR mog: mogs»
 					«tdPrinter.print_design_TrialDesign(mog)»

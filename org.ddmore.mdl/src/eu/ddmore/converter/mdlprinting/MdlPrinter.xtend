@@ -47,7 +47,7 @@ import org.ddmore.mdl.mdl.PropertyDeclaration
 
 class MdlPrinter {
 	
-	public var mdlVersion = "5.2.0";
+	public var mdlVersion = "6.0";
 	
 	private static val MdlPrinter mdlPrinter = new MdlPrinter();
 	protected new(){}

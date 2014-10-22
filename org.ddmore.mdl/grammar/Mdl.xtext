@@ -468,7 +468,7 @@ List:
 ;
 
 RandomList:
-	identifier = '~' '(' arguments = Arguments ')'
+	identifier = '~' BEGIN arguments = Arguments END
 ;
 
 Arguments: 

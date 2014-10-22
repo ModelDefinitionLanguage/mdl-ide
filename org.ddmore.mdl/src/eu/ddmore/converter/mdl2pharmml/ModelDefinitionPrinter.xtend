@@ -1,32 +1,23 @@
 package eu.ddmore.converter.mdl2pharmml
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.mdl.SameBlock
-import org.ddmore.mdl.validation.DistributionValidator
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
-import java.util.HashSet
-import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.mdl.IndividualVarType
-import java.util.List
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.Primary
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.mdl.DataObject
+import org.ddmore.mdl.mdl.VariabilityType
 
 class ModelDefinitionPrinter {
 	private var ModelObject mObj;
 	private var ParameterObject pObj;
 	private var DataObject dObj;
-	private var String mObjName;
-	private var String pObjName;
-	private var String dObjName;
-
 	protected extension DistributionPrinter distrPrinter = new DistributionPrinter();
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver = null;
@@ -44,10 +35,7 @@ class ModelDefinitionPrinter {
 	def print_mdef_ModelDefinition(MOGObject mog){
 		this.mObj = mog.getModelObject.modelObject;
 		this.pObj = mog.getParameterObject.parameterObject;
-		this.mObjName = mog.getModelObject.objectName.name;
-		this.pObjName = mog.getParameterObject.objectName.name;
 		this.dObj = mog.getDataObject.dataObject;
-		this.dObjName = mog.getDataObject.objectName.name;
 		
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
@@ -65,23 +53,21 @@ class ModelDefinitionPrinter {
 	/////////////////////////	
 	protected def print_mdef_VariabilityModel(){
 		var model = "";
-		var errorVars = vm_err_vars.get(mObjName);
-		if (errorVars != null){
+		if (vm_err_vars.size() > 0){
 			model = model + 
 			'''
-				<VariabilityModel blkId="vm_err.«mObjName»" type="«VAR_TYPE_ERROR»">
-					«FOR s: errorVars»
+				<VariabilityModel blkId="vm_err" type="«VAR_TYPE_ERROR»">
+					«FOR s: vm_err_vars»
 						<Level symbId="«s»"/>
 					«ENDFOR»
 				</VariabilityModel>
 			'''		
 		}		
-		var mdlVars = vm_mdl_vars.get(mObjName);
-		if (mdlVars != null){
+		if (vm_mdl_vars.size() > 0){
 			model = model + 
 			'''
-				<VariabilityModel blkId="vm_mdl.«mObjName»" type="«VAR_TYPE_PARAMETER»">
-					«FOR s: mdlVars»
+				<VariabilityModel blkId="vm_mdl" type="«VAR_TYPE_PARAMETER»">
+					«FOR s: vm_mdl_vars»
 						<Level symbId="«s»"/>
 					«ENDFOR»
 				</VariabilityModel>
@@ -99,12 +85,11 @@ class ModelDefinitionPrinter {
 	protected def print_mdef_CovariateModel(){
 		var model = "";
 		if (mObj != null){
-			var covariateVars = cm_vars.get(mObjName);
-			if (covariateVars != null){
+			if (cm_vars.size() > 0){
 				model = model +
 				'''
-				<CovariateModel blkId="cm.«mObjName»">
-					«FOR s: covariateVars»
+				<CovariateModel blkId="cm">
+					«FOR s: cm_vars»
 						«val covType = "Continuous"»
 						<Covariate symbId="«s»">
 							«var transformation = s.getCovariateTransformation»	
@@ -161,9 +146,8 @@ class ModelDefinitionPrinter {
 	//Parameter object, STRUCTURAL + VARIABILITY -> ParameterModel - SimpleAttribute  
 	//RANDOM_VARIABLES_DEFINITION -> ParameterModel - RandomVariable
 	protected def print_mdef_ParameterModel(){		
-		var model = "";
+		var statements = "";
 		if (pObj != null){
-			var statements = "";
 			for (b: pObj.blocks){
 				//Parameter object, STRUCTURAL
 				if (b.structuralBlock != null){
@@ -186,17 +170,8 @@ class ModelDefinitionPrinter {
 		  		}
 		  		
 		  	}
-		  	if (statements.length > 0){
-		  		model = model + 
-				'''
-					<ParameterModel blkId="pm.«pObjName»">
-						«statements»
-					</ParameterModel>
-				''';
-			}
 		}
 		if (mObj != null){
-			var statements = "";
 			for (b: mObj.blocks){
 				//Model object, GROUP_VARIABLES (covariate parameters)
 				if (b.groupVariablesBlock != null){
@@ -220,16 +195,14 @@ class ModelDefinitionPrinter {
 					} 
 		  		}
 		  	}
-	  		if (statements.length > 0){
-		  		model = model + 
-				'''
-					<ParameterModel blkId="pm.«mObjName»">
-						«statements»
-					</ParameterModel>
-				''';
-			}
   		}
-  		return model;
+	  	if (statements.length > 0){
+			'''
+				<ParameterModel blkId="pm">
+					«statements»
+				</ParameterModel>
+			''';
+		}
 	}
 	
 	protected def print_mdef_RandomVariable(SymbolDeclaration s)
@@ -268,7 +241,7 @@ class ModelDefinitionPrinter {
 			model = model + 
 			'''
 				«IF (variables.length > 0)»
-					<StructuralModel blkId="sm.«mObjName»">
+					<StructuralModel blkId="sm">
 						«IF (variables.length > 0)»«variables»«ENDIF»
 					</StructuralModel>
 				«ENDIF»
@@ -281,9 +254,8 @@ class ModelDefinitionPrinter {
 	// I.f Observation Model
 	/////////////////////////////
 	protected def print_mdef_ObservationModel(){
-		var model = "";
+		var statements = "";
 		if (mObj != null){
-			var statements = "";
 			for (b: mObj.blocks){
 				if (b.observationBlock != null){
 					for (st: b.observationBlock.variables){
@@ -291,16 +263,15 @@ class ModelDefinitionPrinter {
 					}
 				}
 			}
-			model = model +
-			'''
-				«IF (statements.length > 0)»
-					<ObservationModel blkId="om.«mObjName»">
-						«statements»
-					</ObservationModel>
-				«ENDIF»
-			'''				
 		}
-		return model;
+		if (statements.length() > 0)
+		'''
+			«IF (statements.length > 0)»
+				<ObservationModel blkId="om">
+					«statements»
+				</ObservationModel>
+			«ENDIF»
+		'''				
 	}
 	
 	//Print observation model declaration
@@ -355,16 +326,19 @@ class ModelDefinitionPrinter {
 		}
 	}
 	
-	protected def print_VariabilityReference(SymbolDeclaration s)'''
-		«IF s.randomList != null»
-			«val level = s.randomList.arguments.getAttribute(AttributeValidator::attr_level.name)»
-			«IF level.length > 0»
-				<ct:VariabilityReference>
-					«print_ct_SymbolRef(level)»
-				</ct:VariabilityReference>
-			«ENDIF»
-		«ENDIF»
-	'''
+	protected def print_VariabilityReference(SymbolDeclaration s){
+		var level = "";
+		if (s.randomList != null)
+			level = s.randomList.arguments.getAttribute(AttributeValidator::attr_level.name);
+		if (s.list != null)
+			level = s.list.arguments.getAttribute(AttributeValidator::attr_level.name);
+		if (level.length > 0)
+		'''
+			<ct:VariabilityReference>
+				«print_ct_SymbolRef(level)»
+			</ct:VariabilityReference>
+		'''
+	}
 	
 	//+ returns distribution for the first declaration with a given name
 	protected def defineDistribution(String ref){
@@ -541,11 +515,73 @@ class ModelDefinitionPrinter {
 	/////////////////////////////
 	protected def print_mdef_CollerationModel(){
 		var model = "";
+		if (mObj != null){
+			for (b: mObj.blocks){
+				if (b.randomVariableDefinitionBlock != null){			
+					for (s: b.randomVariableDefinitionBlock.variables){
+						if (s.symbolName.name != null && s.list != null){
+							model = model + s.print_mdef_Correlation;	
+						}
+					}
+				}
+			}
+		}
+		return model;
+	}
+	
+	def print_mdef_Correlation(SymbolDeclaration s){
+		var res = ""
+		val type = s.list.arguments.getAttribute(AttributeValidator::attr_re_type.name);
+		val rv1 = s.list.arguments.getAttribute(AttributeValidator::attr_rv1.name);
+		val rv2 = s.list.arguments.getAttribute(AttributeValidator::attr_rv2.name);
+		if (rv1.length > 0)
+			res = res +
+			'''
+			<RandomVariable1>
+				«rv1.print_ct_SymbolRef»
+			</RandomVariable1>
+			'''
+		if (rv2.length > 0)
+			res  = res +  
+			'''
+			<RandomVariable2>
+				«rv2.print_ct_SymbolRef»
+			</RandomVariable2>
+			'''
+		if (type.equals(VariabilityType::COV.toString)){
+			res  = res + '''
+			<Covariance>
+				«s.symbolName.name.print_ct_SymbolRef»
+			</Covariance>
+			'''
+		}
+		if (type.equals(VariabilityType::CORR.toString)){
+			res  = res + '''
+			<CorrelationCoefficient>
+				«s.symbolName.name.print_ct_SymbolRef»
+			</CorrelationCoefficient>
+			'''
+		}
+		if (res.length > 0)
+		'''
+		<Correlation>
+			«s.print_VariabilityReference»
+			<Pairwise>
+				«res»
+			</Pairwise>
+		</Correlation>	
+		'''
+	}
+	
+	/* 		
+	//Old correlation model
+	protected def print_mdef_CollerationModel(){
+		var model = "";
 		if (pObj != null){
 			for (b: pObj.blocks){
 				if (b.variabilityBlock != null){			
 					for (c: b.variabilityBlock.statements){
-						var matrix = 
+						var correlation = 
 						'''
 							«IF c.matrixBlock != null && c.matrixBlock.parameters != null»
 								«var argumentNames = Utils::getArgumentNames(c.matrixBlock.parameters)»
@@ -561,11 +597,11 @@ class ModelDefinitionPrinter {
 								«print_mdef_Same(c.sameBlock)»
 							«ENDIF»
 						'''
-						if (matrix.length > 0)
+						if (correlation.length > 0)
 							model = model +
 							'''
 								<Correlation>
-									«matrix»
+									«correlation»
 								</Correlation>
 							'''				
 					}
@@ -578,26 +614,11 @@ class ModelDefinitionPrinter {
 	protected def print_mdef_Correlation_VarRef(Arguments arguments, List<String> paramNames){
 		if (paramNames != null){
 			var varRef = "";
-			var randomVars = new HashSet<String>();
 			val matrixType = arguments.getAttribute(AttributeValidator::attr_re_type.name);
 			for (paramName: paramNames){
 				var s = paramName.getRandomVariableByVariability(matrixType);
-				if (s != null){
-					if (s.symbolName != null){
-						if (s.randomList != null){
-							val level = getAttribute(s.randomList.arguments, AttributeValidator::attr_level.name);
-							if (level.length > 0 && !randomVars.contains(level)){
-								varRef = varRef + 
-								'''
-									<ct:VariabilityReference>
-										«print_ct_SymbolRef(level)»
-									</ct:VariabilityReference>
-								'''
-								randomVars.add(level);
-							}
-						}
-					}
-				}	
+				if (s != null)
+					varRef = varRef + s.print_VariabilityReference
 			}
 			return varRef;
 		}
@@ -609,7 +630,7 @@ class ModelDefinitionPrinter {
 			val matrixType = arguments.getAttribute(AttributeValidator::attr_re_type.name);
 			for (symbol: parameters.arguments){
 				if (symbol.argumentName != null){
-					rowNames = rowNames + print_ct_SymbolRef(pObjName, symbol.argumentName.name);
+					rowNames = rowNames + print_ct_SymbolRef(symbol.argumentName.name);
 				}
 			}
 			return print_ct_Matrix(matrixType.convertMatrixType, rowNames, parameters, false);
@@ -621,7 +642,7 @@ class ModelDefinitionPrinter {
 			var rowNames = "";
 			for (symbol: same.parameters.symbolNames){
 				if (symbol != null){
-					rowNames = rowNames + print_ct_SymbolRef(pObjName, symbol.name);
+					rowNames = rowNames + print_ct_SymbolRef(symbol.name);
 				}
 			}	
 			val sameName = getAttribute(same.arguments, AttributeValidator::attr_name.name);
@@ -676,6 +697,7 @@ class ModelDefinitionPrinter {
 		}
 		return null;
 	}
+	*/
 }
 
 

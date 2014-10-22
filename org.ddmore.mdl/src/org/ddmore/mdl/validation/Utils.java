@@ -29,12 +29,15 @@ import org.ddmore.mdl.mdl.MOGObject;
 import org.ddmore.mdl.mdl.MatrixBlock;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
+import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ObservationBlock;
 import org.ddmore.mdl.mdl.OdeBlock;
+import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
 import org.ddmore.mdl.mdl.SameBlock;
 import org.ddmore.mdl.mdl.SamplingBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
+import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.StudyDesignBlock;
@@ -64,9 +67,11 @@ import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
+import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SamplingBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
+import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.StudyDesignBlockImpl;
@@ -204,54 +209,11 @@ public class Utils {
 		return names;
 	}
 	
-	//Look for the parent block containing lists
-	public static EObject findListContainer(EObject obj){
-		EObject container = obj;
-		while (!isListContainer(container)){
-			if (container instanceof MclObjectImpl) return null;
-			container = container.eContainer();
-		}
-		return container;
-	}
-	
-	//Note: we do not count FunctionCalls as containers of arguments, function calls are validated separately 
-	public static Boolean isListContainer(EObject obj){
-		if (
-			//Data object	
-			obj instanceof DataInputBlockImpl ||
-			obj instanceof DataDerivedBlockImpl ||
-			//Model object
-			obj instanceof InputVariablesBlockImpl ||
-			obj instanceof IndividualVariablesBlockImpl ||
-			obj instanceof LibraryBlockImpl ||
-			obj instanceof OdeBlockImpl ||
-			obj instanceof DeqBlockImpl ||
-			obj instanceof CompartmentBlockImpl ||
-			obj instanceof EstimationBlockImpl ||
-			obj instanceof SimulationBlockImpl ||
-			obj instanceof ObservationBlockImpl ||
-			obj instanceof StructuralParametersBlockImpl || 
-			obj instanceof VariabilityParametersBlockImpl ||
-			//Parameter object
-			obj instanceof StructuralBlockImpl ||
-			obj instanceof VariabilityBlockImpl ||
-			obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl ||
-			//Design object
-			obj instanceof StudyDesignBlockImpl ||
-			obj instanceof AdministrationBlockImpl || 
-			obj instanceof ActionBlockImpl ||
-			obj instanceof SamplingBlockImpl ||
-			obj instanceof DesignSpaceBlockImpl ||
-			obj instanceof HyperSpaceBlockImpl ||
-			//All objects
-			obj instanceof TargetBlockImpl) return true;
-		return false;	
-	}
-
 	public static String getBlockName(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
 		if (obj instanceof DataDerivedBlockImpl) return ((DataDerivedBlock)obj).getIdentifier();
+		if (obj instanceof SourceBlockImpl) return ((SourceBlock)obj).getIdentifier();
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return ((StructuralBlock)obj).getIdentifier();	
 		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj).getIdentifier();
@@ -270,6 +232,7 @@ public class Utils {
 		if (obj instanceof ObservationBlockImpl) return ((ObservationBlock)obj).getIdentifier() ;
 		if (obj instanceof StructuralParametersBlockImpl) return ((StructuralParametersBlock)obj).getIdentifier() ;
 		if (obj instanceof VariabilityParametersBlockImpl) return ((VariabilityParametersBlock)obj).getIdentifier() ;
+		if (obj instanceof RandomVariableDefinitionBlockImpl) return ((RandomVariableDefinitionBlock)obj).getIdentifier() ;
 		/*Design object*/
 		if (obj instanceof StudyDesignBlockImpl) return ((StudyDesignBlock)obj).getIdentifier();  
 		if (obj instanceof AdministrationBlockImpl) return ((AdministrationBlock)obj).getIdentifier();
@@ -280,29 +243,6 @@ public class Utils {
 		/*All objects*/
 		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();
 		return "";
-	}
-	
-	public static boolean isPassedByName(Arguments args){
-		if (args != null){
-			int nNames = 0; 
-			for (Argument arg: args.getArguments()){
-				if (arg.getArgumentName() != null) nNames++;
-			}
-			int count = args.getArguments().size();
-			return (nNames == count && count != 0);
-		}
-		return false;
-	}
-	
-	public static boolean isPassedByPlace(Arguments args){
-		if (args != null){
-			int nNames = 0; 
-			for (Argument arg: args.getArguments()){
-				if (arg.getArgumentName() != null) nNames++;
-			}
-			return (nNames == 0);
-		}
-		return true;
 	}
 	
 	//Locate data/script file in the MDL project
@@ -338,6 +278,9 @@ public class Utils {
 			}
 			if (obj.getTaskObject() != null){
 				objType = MdlDataType.TYPE_OBJ_REF_TASK;
+			}
+			if (obj.getDesignObject() != null){
+				objType = MdlDataType.TYPE_OBJ_REF_DESIGN;
 			}
 			declaredObjects.put(obj.getObjectName().getName(), objType);
 		}
