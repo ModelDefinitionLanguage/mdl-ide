@@ -465,6 +465,7 @@ class MathPrinter extends MdlPrinter{
 	'''
 	
 	//Negation of the expression x || y -> !x && !y 
+	/*
 	def print_DualExpression(OrExpression expr){
 		var newAndExprs = new ArrayList<String>();
 		for (andExpr: expr.expression){
@@ -497,16 +498,17 @@ class MathPrinter extends MdlPrinter{
 			newAndExprs.add(dualLogicalExprs.print_Math_LogicAnd(0).toString);		
 		}
 		return newAndExprs.print_Math_LogicOr(0);
-	}
+	}*/
 	
 	// Expr1 >= Expr2 == Expr3 (conversion is left associative, more then 2 operands do not make much sense anyway)
-	private def print_Math_LogicOp(String first, String operator, String second)
+	/*private def print_Math_LogicOp(String first, String operator, String second)
 	'''
 		<LogicBinop op="«operator»">
 			«first»
 			«second»
 		</LogicBinop>
 	'''
+	*/
 	
 	//+ Expr1 || ... || Expr_n (right associative)
 	private def CharSequence print_Math_LogicOr(ArrayList<String> exprs, int startIndex){

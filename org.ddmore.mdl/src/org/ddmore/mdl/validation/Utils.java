@@ -29,7 +29,6 @@ import org.ddmore.mdl.mdl.MOGObject;
 import org.ddmore.mdl.mdl.MatrixBlock;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
-import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ObservationBlock;
 import org.ddmore.mdl.mdl.OdeBlock;
@@ -123,12 +122,12 @@ public class Utils {
 	
 	//Checks whether a function is declared more than once
 	static boolean isSymbolDeclaredMoreThanOnce(Map<String, List<String>> map, SymbolName ref){
-		int i = 0;
-		ObjectName objName = Utils.getObjectName(ref);
+		ObjectName objName = getObjectName(ref);
 		if (map.containsKey(objName.getName())){
-			List<String> functions = map.get(objName.getName()); 
-			for (String func: functions){
-				if (func.equals(ref.getName())) i++;
+			List<String> vars = map.get(objName.getName()); 
+			int i = 0;
+			for (String var: vars){
+				if (var.equals(ref.getName())) i++;
 				if (i > 1) return true;
 			}
 		}
@@ -171,16 +170,19 @@ public class Utils {
 				list.add(id.getName());
 	}
 
-	//Note: don't use for reference checking
 	static ObjectName getObjectName(EObject b){
+		return getMclObject(b).getObjectName();
+	}
+
+	static MclObject getMclObject(EObject b){
 		EObject container = b.eContainer();
 		while (!(container instanceof MclObjectImpl)){
 			container = container.eContainer();
 		}
 		MclObject obj = (MclObject)container;
-		return obj.getObjectName();
+		return obj;
 	}
-	
+
 	//Print a given list (used for reporting errors and for testing)
 	static String printList(List<String> list){
 		String res = "{ ";
@@ -324,8 +326,6 @@ public class Utils {
 			//ParameterObject -> VARIABILITY, matrix, diag, same
 	    	if (container instanceof VariabilityBlockStatementImpl){
 				VariabilityBlockStatement s = (VariabilityBlockStatement)container;
-				if (s.getParameter() != null && s.getParameter().getSymbolName() != null)
-					varList.add(s.getParameter().getSymbolName().getName());
 				if (s.getMatrixBlock() != null)
 					Utils.addSymbol(varList, s.getMatrixBlock().getParameters());
 				if (s.getDiagBlock() != null)
