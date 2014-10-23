@@ -16,7 +16,6 @@ import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.OrExpression
 import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.mdl.LogicalExpression
-import org.ddmore.mdl.mdl.ConditionalExpression
 import org.ddmore.mdl.mdl.AdditiveExpression
 import org.ddmore.mdl.mdl.MultiplicativeExpression
 import org.ddmore.mdl.mdl.PowerExpression
@@ -64,14 +63,12 @@ class MdlPrinter {
 	
 	def isTrue(AnyExpression e){
 		if (e.expression != null){
-			if (e.expression.expression != null){
-				val orExpr = e.expression.expression;
-				val andExpr = orExpr.expression.get(0);
-				val logicalExpr = andExpr.expression.get(0);	
-				if (logicalExpr.boolean != null){	
-					if ((logicalExpr.negation == null) && logicalExpr.boolean.equals("true")) return true;
-					if ((logicalExpr.negation != null) && logicalExpr.boolean.equals("false")) return true;
-				}
+			val orExpr = e.expression.expression;
+			val andExpr = orExpr.expression.get(0);
+			val logicalExpr = andExpr.expression.get(0);	
+			if (logicalExpr.boolean != null){	
+				if ((logicalExpr.negation == null) && logicalExpr.boolean.equals("true")) return true;
+				if ((logicalExpr.negation != null) && logicalExpr.boolean.equals("false")) return true;
 			}
 		}
 		return e.toStr.equals("true");
@@ -255,20 +252,26 @@ class MdlPrinter {
 	}
 	
 	def String toStr(Expression e){
-		if (e.conditional != null)
-			return e.conditional.toStr
-		else	
-			return e.expression.toStr
+		var res = e.expression.toStr;
+		if (e.condition != null){
+			res = res + ''' when «e.expression.toStr»'''
+			if (e.expressions != null && e.conditions != null)
+				for (i: 0..e.expressions.size - 1){
+					if (e.conditions.size > i)
+						res = res + 
+						'''
+						, «e.expressions.get(i).toStr» when «e.expressions.get(i).toStr»
+						'''
+				}		
+			if (e.elseExpression != null)
+				res = res + 
+				'''
+				«e.elseExpression.toStr» otherwise
+				'''
+		}
+		return res;
 	}
 	
-	def String toStr(ConditionalExpression s)'''
-		if («s.condition.toStr»)
-			«s.thenExpression.toStr»
-		«IF s.elseExpression != null»
-		else «s.elseExpression»
-		«ENDIF»	
-	'''
-
 	def toStr(OrExpression e){
 		var res = "";
 		var iterator = e.expression.iterator();
@@ -542,8 +545,6 @@ class MdlPrinter {
 	
 	def print(Expression e)'''«e.toStr»'''
 	
-	def print(ConditionalExpression e)'''«e.toStr»'''
-
 	def print(OrExpression e)'''«e.toStr»'''
 	
 	def print(AndExpression e)'''«e.toStr»'''

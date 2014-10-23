@@ -9,7 +9,6 @@ import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
-import org.ddmore.mdl.mdl.ConditionalExpression;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.DesignObject;
@@ -184,10 +183,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     
     protected Image _image(Argument f) {
         return imageHelper.getImage(getPath(ATTRIBUTE));
-    }
-    
-    protected Image _image(ConditionalExpression e) {
-        return imageHelper.getImage(getPath(EXPRESSION_CONDITION));
     }
     
     protected Image _image(ParExpression e) {
@@ -709,31 +704,30 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	//Show expression as a leaf node
 	/////////////////////////////////////////////////////////////////////////////////////
 	protected void  _createNode(IOutlineNode parentNode, Expression e){
-		for (EObject obj: e.eContents()){
-			createNode(parentNode, obj);
-		}
-	}
-
-	protected void  _createNode(IOutlineNode parentNode, ConditionalExpression st){
 		createEStructuralFeatureNode(parentNode,
-			st,
-			MdlPackage.Literals.CONDITIONAL_EXPRESSION__CONDITION,
-			_image(st),
-			"if",
-			false);
-		createEStructuralFeatureNode(parentNode,
-			st,
-			MdlPackage.Literals.CONDITIONAL_EXPRESSION__THEN_EXPRESSION,
-			getTrueImage(),
-			"[true]",
-			false);
-		if (st.getElseExpression() != null){
+			e,
+			MdlPackage.Literals.EXPRESSION__EXPRESSION,
+			_image(e),
+			mdlPrinter.toStr(e.getExpression()) + 
+				((e.getCondition() != null)? " when " + mdlPrinter.toStr(e.getCondition()): ""),
+		true);
+		if (e.getExpressions() != null && e.getConditions() != null){
+			for (int i = 0; i < e.getExpressions().size() &&  i < e.getConditions().size(); i++){
+				createEStructuralFeatureNode(parentNode,
+					e,
+					MdlPackage.Literals.EXPRESSION__EXPRESSIONS,
+					_image(e),
+					mdlPrinter.toStr(e.getExpressions().get(i)) + " when " + mdlPrinter.toStr(e.getConditions().get(i)),
+					true);
+			}
+		}		
+		if (e.getElseExpression() != null){
 			createEStructuralFeatureNode(parentNode,
-				st,
-				MdlPackage.Literals.CONDITIONAL_EXPRESSION__ELSE_EXPRESSION,
-				getFalseImage(),
-				"else",
-				false);
+					e,
+					MdlPackage.Literals.EXPRESSION__ELSE_EXPRESSION,
+					_image(e),
+					mdlPrinter.toStr(e.getElseExpression()) + " otherwise",
+				true);
 		}
 	}
 }

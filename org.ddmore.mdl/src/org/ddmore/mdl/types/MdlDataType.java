@@ -72,6 +72,19 @@ public enum MdlDataType {
 	;
     
 	static public boolean validateType(MdlDataType type, Expression expr){
+		Boolean res = validateType(type, expr.getExpression());
+		if (expr.getExpressions() != null){
+			for (OrExpression e: expr.getExpressions()){
+				res = res && validateType(type, e);
+			}
+		}
+		if (expr.getElseExpression() != null){
+			res = res && validateType(type, expr.getElseExpression());
+		}
+		return res;
+	}
+	
+	private static boolean validateType(MdlDataType type, OrExpression expr){
 		switch(type){
 			case TYPE_UNDEFINED: return true;
 			//Basic
@@ -305,59 +318,33 @@ public enum MdlDataType {
 	//Validate references
 	/////////////////////////////////////////////////////////////////////////////////////
 	
-	private static boolean isObjectReference(Expression expr) {
-		if (expr.getExpression() == null){
-			SymbolName s = getReference(expr);
-			if (s != null) {
-				Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
-				if (mcl != null)
-					return Utils.getDeclaredObjects(mcl).containsKey(s.getName());
-			}
-		}
-		if (expr.getConditional() != null){
-			boolean valid = isObjectReference(expr.getConditional().getThenExpression());
-			if (expr.getConditional().getElseExpression() != null)
-				valid = valid && isObjectReference(expr.getConditional().getElseExpression());
-			return valid;
+	private static boolean isObjectReference(OrExpression expr) {
+		SymbolName s = getReference(expr);
+		if (s != null) {
+			Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
+			if (mcl != null)
+				return Utils.getDeclaredObjects(mcl).containsKey(s.getName());
 		}
 		return false;
 	}
 	
-	private static boolean validObjectTypeReference(Expression expr, MdlDataType type) {
-		if (expr.getExpression() == null){
-			SymbolName s = getReference(expr);
-			if (s != null) {
-				Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
-				if (mcl != null)
-					return (Utils.getDeclaredObjects(mcl).get(s.getName()) == type);
-			}
-		}
-		if (expr.getConditional() != null){
-			boolean valid = isObjectReference(expr.getConditional().getThenExpression());
-			if (expr.getConditional().getElseExpression() != null)
-				valid = valid && isObjectReference(expr.getConditional().getElseExpression());
-			return valid;
+	private static boolean validObjectTypeReference(OrExpression orExpr, MdlDataType type) {
+		SymbolName s = getReference(orExpr);
+		if (s != null) {
+			Mcl mcl = (Mcl) orExpr.eResource().getContents().get(0);
+			if (mcl != null)
+				return (Utils.getDeclaredObjects(mcl).get(s.getName()) == type);
 		}
 		return false;
 	}
 
-	private static boolean isReference(Expression expr) {
-		if (expr.getConditional() != null){
-			if (expr.getConditional().getElseExpression() != null){
-				return 
-					isReference(expr.getConditional().getThenExpression()) && 
-					isReference(expr.getConditional().getElseExpression());
-			}
-			return isReference(expr.getConditional().getThenExpression());
-		} else {
+	private static boolean isReference(OrExpression expr) {
 			return (getReference(expr) != null);
-		}
 	}
 
-	public static SymbolName getReference(Expression expr) {
-		if (expr.getExpression() == null) return null;
-		if (expr.getExpression().getExpression().size() > 1) return null;
-		AndExpression andExpr = expr.getExpression().getExpression().get(0);
+	public static SymbolName getReference(OrExpression orExpr) {
+		if (orExpr.getExpression().size() > 1) return null;
+		AndExpression andExpr = orExpr.getExpression().get(0);
 		if (andExpr.getExpression().size() > 1) return null;
 		LogicalExpression logicExpr = andExpr.getExpression().get(0);
 		if (logicExpr.getExpression1() != null){
@@ -377,43 +364,25 @@ public enum MdlDataType {
 	//////////////////////////////////////////////////////////////////////////////////
 	//Validate basic types
 	//////////////////////////////////////////////////////////////////////////////////
-	private static boolean isBoolean(Expression expr) {
-		if (expr.getConditional() != null){
-			if (expr.getConditional().getElseExpression() != null)
-				return isBoolean(expr.getConditional().getThenExpression()) 
-						&& isBoolean(expr.getConditional().getElseExpression());
-			return isBoolean(expr.getConditional().getThenExpression());
-		}
-		else {
-			OrExpression orExpr = expr.getExpression();
-			if (orExpr.getExpression().size() > 1) return true;
-			AndExpression andExpr = orExpr.getExpression().get(0);
-			if (andExpr.getExpression().size() > 1) return true;
-			LogicalExpression logicExpr = andExpr.getExpression().get(0);
-			if (logicExpr.getBoolean() != null) return true;
-			if ((logicExpr.getExpression1() != null) && (logicExpr.getExpression2() != null)) return true;
-			if (logicExpr.getExpression1().getExpression().size() == 1){
-				if (logicExpr.getExpression1().getExpression().get(0).getExpression().size() == 1){
-					PowerExpression p = logicExpr.getExpression1().getExpression().get(0).getExpression().get(0);
-					if (p.getExpression().get(0).getParExpression() != null)
-						return isBoolean(p.getExpression().get(0).getParExpression().getExpression());
-				}
+	private static boolean isBoolean(OrExpression orExpr) {
+		if (orExpr.getExpression().size() > 1) return true;
+		AndExpression andExpr = orExpr.getExpression().get(0);
+		if (andExpr.getExpression().size() > 1) return true;
+		LogicalExpression logicExpr = andExpr.getExpression().get(0);
+		if (logicExpr.getBoolean() != null) return true;
+		if ((logicExpr.getExpression1() != null) && (logicExpr.getExpression2() != null)) return true;
+		if (logicExpr.getExpression1().getExpression().size() == 1){
+			if (logicExpr.getExpression1().getExpression().get(0).getExpression().size() == 1){
+				PowerExpression p = logicExpr.getExpression1().getExpression().get(0).getExpression().get(0);
+				if (p.getExpression().get(0).getParExpression() != null)
+					return isBoolean(p.getExpression().get(0).getParExpression().getExpression());
 			}
 		}
 		return false;
 	}
 	
-	private static boolean isPositiveNatural(Expression expr) {
-		if (expr.getConditional() != null){
-			if (expr.getConditional().getElseExpression() != null)
-				return isPositiveNatural(expr.getConditional().getThenExpression()) 
-						&& isPositiveNatural(expr.getConditional().getElseExpression());
-			return isPositiveNatural(expr.getConditional().getThenExpression());
-		}
-		else {
-			OrExpression orExpr = expr.getExpression();
-			return isPositiveNatural(MdlPrinter.getInstance().toStr(orExpr));
-		}
+	private static boolean isPositiveNatural(OrExpression orExpr) {
+		return isPositiveNatural(MdlPrinter.getInstance().toStr(orExpr));
 	}
 	
 	private static boolean isPositiveNatural(String value) {
@@ -426,17 +395,8 @@ public enum MdlDataType {
 		return false;
 	}
 
-	private static boolean isNatural(Expression expr) {
-		if (expr.getConditional() != null){
-			if (expr.getConditional().getElseExpression() != null)
-				return isNatural(expr.getConditional().getThenExpression()) 
-						&& isNatural(expr.getConditional().getElseExpression());
-			return isNatural(expr.getConditional().getThenExpression());
-		}
-		else {
-			OrExpression orExpr = expr.getExpression();
-			return isNatural(MdlPrinter.getInstance().toStr(orExpr));
-		}
+	private static boolean isNatural(OrExpression orExpr) {
+		return isNatural(MdlPrinter.getInstance().toStr(orExpr));
 	}	
 	
 	private static boolean isNatural(String value) {
@@ -449,17 +409,8 @@ public enum MdlDataType {
 		return false;
 	}
 
-	private static boolean isInteger(Expression expr) {
-		if (expr.getConditional() != null){
-			if (expr.getConditional().getElseExpression() != null)
-				return isInteger(expr.getConditional().getThenExpression()) 
-						&& isInteger(expr.getConditional().getElseExpression());
-			return isInteger(expr.getConditional().getThenExpression());
-		}
-		else {
-			OrExpression orExpr = expr.getExpression();
-			return isInteger(MdlPrinter.getInstance().toStr(orExpr));
-		}
+	private static boolean isInteger(OrExpression orExpr) {
+		return isInteger(MdlPrinter.getInstance().toStr(orExpr));
 	}
 	
 	private static boolean isNumericConstant(String value) {
@@ -476,17 +427,8 @@ public enum MdlDataType {
 		}
 	}
 	
-	private static boolean isProbability(Expression expr) {
-		if (expr.getConditional() != null){
-			if (expr.getConditional().getElseExpression() != null)
-				return isProbability(expr.getConditional().getThenExpression()) 
-					&& isProbability(expr.getConditional().getElseExpression());
-			return isProbability(expr.getConditional().getThenExpression());
-		}
-		else {
-			OrExpression orExpr = expr.getExpression();
-			return isProbability(MdlPrinter.getInstance().toStr(orExpr));
-		}
+	private static boolean isProbability(OrExpression orExpr) {
+		return isProbability(MdlPrinter.getInstance().toStr(orExpr));
 	}
 	
 	private static boolean isProbability(String value) {
@@ -499,17 +441,8 @@ public enum MdlDataType {
 		return false;
 	}
 	
-	private static boolean isPositiveReal(Expression expr) {
-		if (expr.getConditional() != null){
-			if (expr.getConditional().getElseExpression() != null)
-				return isPositiveReal(expr.getConditional().getThenExpression()) 
-					&& isPositiveReal(expr.getConditional().getElseExpression());
-			return isPositiveReal(expr.getConditional().getThenExpression());
-		}
-		else {
-			OrExpression orExpr = expr.getExpression();
-			return isPositiveReal(MdlPrinter.getInstance().toStr(orExpr));
-		}
+	private static boolean isPositiveReal(OrExpression orExpr) {
+		return isPositiveReal(MdlPrinter.getInstance().toStr(orExpr));
 	}
 	
 	private static boolean isPositiveReal(String value) {
@@ -522,17 +455,8 @@ public enum MdlDataType {
 		return false;
 	}
 	
-	private static boolean isReal(Expression expr) {
-		if (expr.getConditional() != null){
-			if (expr.getConditional().getElseExpression() != null)
-				return isReal(expr.getConditional().getThenExpression()) 
-					&& isReal(expr.getConditional().getElseExpression());
-			return isReal(expr.getConditional().getThenExpression());
-		}
-		else {
-			OrExpression orExpr = expr.getExpression();
-			return isReal(MdlPrinter.getInstance().toStr(orExpr));
-		}
+	private static boolean isReal(OrExpression orExpr) {
+		return isReal(MdlPrinter.getInstance().toStr(orExpr));
 	}
 	
 	private static boolean isReal(String value) {
@@ -544,29 +468,20 @@ public enum MdlDataType {
 		}
 	}	
 	
-	private static boolean isString(Expression expr) {
-		if (expr.getConditional() != null){
-			if (expr.getConditional().getElseExpression() != null)
-				return isString(expr.getConditional().getThenExpression()) 
-						&& isString(expr.getConditional().getElseExpression());
-			return isString(expr.getConditional().getThenExpression());
-		}
-		else {
-			OrExpression orExpr = expr.getExpression();
-			if (orExpr.getExpression().size() > 1) return false;
-			AndExpression andExpr = orExpr.getExpression().get(0);
-			if (andExpr.getExpression().size() > 1) return false;
-			LogicalExpression logicExpr = andExpr.getExpression().get(0);
-			if (logicExpr.getExpression1() != null){
-				if (logicExpr.getExpression2() != null) return false;
-				if (logicExpr.getExpression1().getString() != null) return true;
-				return false;
-			}
+	private static boolean isString(OrExpression orExpr) {
+		if (orExpr.getExpression().size() > 1) return false;
+		AndExpression andExpr = orExpr.getExpression().get(0);
+		if (andExpr.getExpression().size() > 1) return false;
+		LogicalExpression logicExpr = andExpr.getExpression().get(0);
+		if (logicExpr.getExpression1() != null){
+			if (logicExpr.getExpression2() != null) return false;
+			if (logicExpr.getExpression1().getString() != null) return true;
+			return false;
 		}
 		return false;	
 	}	
 	
-	private static boolean isTransformationOperator(Expression expr){
+	private static boolean isTransformationOperator(OrExpression expr){
 		String trans = MdlPrinter.getInstance().toStr(expr);
 		return (FunctionValidator.funct_standard1.contains(trans));
 	}

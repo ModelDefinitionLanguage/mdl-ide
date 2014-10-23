@@ -481,18 +481,15 @@ Argument:
 ;
 
 ParExpression:
-	'(' expression = Expression')';
+	'(' expression = OrExpression')';
+	
 	
 Expression:
-	expression = OrExpression |
-	conditional = ConditionalExpression 
+	expression = OrExpression ('when' condition = OrExpression 
+	(=> ',' expressions += OrExpression 'when' conditions += OrExpression)*
+	('otherwise' elseExpression = OrExpression)?)?
 ;	
 	
-ConditionalExpression:
-	'if' '('condition = OrExpression')' thenExpression = Expression
-	(=> 'else' elseExpression = Expression)? 
-;
-
 OrExpression:
 	expression += AndExpression (operator += LogicalOrOperator expression += AndExpression)*;
 

@@ -83,7 +83,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
 	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, VariabilityType.SD.toString());
 	final public static Attribute attr_continuous_type = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.VAR_CONTINUOUS);
-	final public static Attribute attr_trial_type = new Attribute("type", MdlDataType.TYPE_TRIAL, true);
 	
 	//VARIABILITY
 	final public static Attribute attr_hi = new Attribute("hi", MdlDataType.TYPE_REAL, false, "0");
@@ -132,13 +131,19 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
-	
+
+	/*Deaign object*/
+	final public static Attribute attr_trial_type = new Attribute("type", MdlDataType.TYPE_TRIAL, false);
+
 	/*ADMINISTRATION*/
 	final public static Attribute attr_start = new Attribute("start", MdlDataType.TYPE_INT, false);
 	final public static Attribute attr_end = new Attribute("end", MdlDataType.TYPE_INT, false);
-	final public static Attribute attr_administration = new Attribute("administration", MdlDataType.TYPE_INT, true);
-	final public static Attribute attr_amount = new Attribute("amount", MdlDataType.TYPE_VECTOR_NAT, true);
-	final public static Attribute attr_doseTime = new Attribute("doseTime", MdlDataType.TYPE_VECTOR_NAT, true);
+	final public static Attribute attr_administration = new Attribute("administration", 
+			MdlDataType.TYPE_INT, false);
+	final public static Attribute attr_amount = new Attribute("amount", 
+			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
+	final public static Attribute attr_doseTime = new Attribute("doseTime", 
+			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
 	final public static Attribute attr_duration = new Attribute("duration", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_steadyState = new Attribute("steadyState", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_interval = new Attribute("interval", MdlDataType.TYPE_NAT, false);
@@ -156,10 +161,13 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*STUDY_DESIGN (ARMS)*/
 	final public static Attribute attr_groupSize = new Attribute("groupSize", MdlDataType.TYPE_INT, true);
-	final public static Attribute attr_inteventionSequence = new Attribute("inteventionSequence", MdlDataType.TYPE_LIST, true);
-	final public static Attribute attr_occasionValue = new Attribute("occasionValue", MdlDataType.TYPE_LIST, true);
+	final public static Attribute attr_inteventionSequence = new Attribute("inteventionSequence", 
+			MdlDataType.TYPE_LIST, true);
+	final public static Attribute attr_occasionValue = new Attribute("occasionValue", 
+			MdlDataType.TYPE_LIST, true);
 	final public static Attribute attr_samplingSequence = new Attribute("samplingSequence", MdlDataType.TYPE_LIST, true);
-	final public static Attribute attr_covariates = new Attribute("covariates", MdlDataType.TYPE_VECTOR_REF, false);
+	final public static Attribute attr_covariates = new Attribute("covariates", 
+			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
 	
 	/*DESIGN_SPACE, HYPER_SPACE*/
 	final public static Attribute attr_admTime = new Attribute("admTime", MdlDataType.TYPE_RANDOM_LIST, false);
@@ -196,7 +204,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*Design object*/
 	final public static List<Attribute> attrs_administration = Arrays.asList(
 		attr_trial_type, attr_administration, attr_amount, attr_doseTime, attr_start, 
-		attr_end, attr_steadyState, attr_interval, attr_treatment);
+		attr_end, attr_steadyState, attr_interval, attr_treatment, attr_combination);
 	final public static List<Attribute> attrs_action = Arrays.asList(attr_start, attr_end, attr_reset);
 	final public static List<Attribute> attrs_sampling = Arrays.asList(
 			attr_trial_type, attr_start, attr_end, attr_samplingTime, attr_outcome, attr_bql, attr_combination);

@@ -6,7 +6,6 @@
  */
 package eu.ddmore.converter.mdl2pharmml
 
-import org.ddmore.mdl.mdl.ConditionalExpression
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.mdl.OrExpression
 import org.ddmore.mdl.mdl.UnaryExpression
@@ -201,18 +200,26 @@ class MathPrinter extends MdlPrinter{
 	
 	//+
 	def CharSequence print_Math_Expr(Expression expr)'''
-		«IF expr.expression != null»
-			«expr.expression.print_Math_LogicOr(0)»
-		«ENDIF»
-		«IF expr.conditional != null»
-			«expr.conditional.print_Math_Piecewise»
+		«IF expr.condition == null»
+			«expr.expression.print_Math_Expr»
+		«ELSE»
+			«expr.print_Math_Piecewise»
 		«ENDIF»
 	'''
-	
+
+	def CharSequence print_Math_Expr(OrExpression expr)'''
+		«expr.print_Math_LogicOr(0)»
+	'''
+
 	//+
-	def print_Math_Piecewise(ConditionalExpression expr)'''
+	def print_Math_Piecewise(Expression expr)'''
 		<Piecewise>
-			«expr.thenExpression.print_Math_LogicOpPiece(expr.condition.print_Math_LogicOr(0).toString)»
+			«expr.expression.print_Math_LogicOpPiece(expr.condition.print_Math_LogicOr(0).toString)»
+			«IF expr.expressions != null && expr.conditions != null»
+				«FOR i: 0..expr.expressions.size - 1»
+					«expr.expressions.get(i).print_Math_LogicOpPiece(expr.conditions.get(i).print_Math_LogicOr(0).toString)»
+				«ENDFOR»
+			«ENDIF»
 			«IF expr.elseExpression != null»
 				«expr.elseExpression.print_Math_LogicOpPiece("<math:Otherwise/>")»
 			«ENDIF»
@@ -220,7 +227,7 @@ class MathPrinter extends MdlPrinter{
 	'''		
 	
 	//+
-	def print_Math_LogicOpPiece(Expression expr, String condition)'''
+	def print_Math_LogicOpPiece(OrExpression expr, String condition)'''
 		<Piece>
 			«expr.print_Math_Expr»
 			«IF condition != null»

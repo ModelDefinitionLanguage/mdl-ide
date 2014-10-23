@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.ddmore.mdl.mdl.*;
-import org.ddmore.mdl.mdl.impl.FullyQualifiedArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.types.MdlDataType;
@@ -140,18 +139,11 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		//Skip reference to a standard function
 		if (FunctionValidator.standardFunctions.containsKey(ref.getName())) return;
 		
-		if (container instanceof FullyQualifiedArgumentNameImpl){
-			if (!Utils.isSymbolDeclared(declaredVariables, ref))
-				warning(MSG_SYMBOL_UNKNOWN, MdlPackage.Literals.SYMBOL_NAME__NAME,
-						MSG_SYMBOL_UNKNOWN, ref.getName());
-		}
-		else {
-			//TODO: for MOG validation, collect declared variables for a given object name instead of all
-			if (!(Utils.isSymbolDeclared(declaredVariables, ref, mogs) ||
-					declaredObjects.containsKey(ref.getName()) )){
-				warning(MSG_SYMBOL_UNKNOWN, MdlPackage.Literals.SYMBOL_NAME__NAME,
-						MSG_SYMBOL_UNKNOWN, ref.getName());
-			}
+		//Check that each variable is in the local object or in the MOG
+		if (!(	Utils.isSymbolDeclared(declaredVariables, ref, mogs) 
+				|| declaredObjects.containsKey(ref.getName())) ){
+			warning(MSG_SYMBOL_UNKNOWN, MdlPackage.Literals.SYMBOL_NAME__NAME,
+					MSG_SYMBOL_UNKNOWN, ref.getName());
 		}
 	}
 
@@ -191,6 +183,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	
 	//Check references to list attributes
 	public boolean checkAttributes(FullyQualifiedArgumentName ref, List<Argument> arguments) {
+		//Skip 
+		if (ref.eContainer() instanceof SymbolDeclarationImpl) return true;
 		List <Argument> currArgs = arguments; 
 		for (Selector x: ref.getSelectors()){
 			if (currArgs != null){

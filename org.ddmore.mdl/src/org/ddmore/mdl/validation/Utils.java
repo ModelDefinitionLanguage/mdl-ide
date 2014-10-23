@@ -116,6 +116,8 @@ public class Utils {
 						return isIdentifierDeclared(map, ref.getName(), objName);
 				}
 			}
+			//Local object
+			return isIdentifierDeclared(map, ref.getName(), objName);
 		}
 		return false;
 	}
