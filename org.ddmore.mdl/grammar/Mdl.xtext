@@ -487,7 +487,8 @@ ParExpression:
 Expression:
 	expression = OrExpression ('when' condition = OrExpression 
 	(=> ',' whenBranches += ExpressionBranch)*
-	('otherwise' elseExpression = OrExpression)?)?
+	(';' | 'otherwise' elseExpression = OrExpression (';')?)
+	)?
 ;
 
 ExpressionBranch:

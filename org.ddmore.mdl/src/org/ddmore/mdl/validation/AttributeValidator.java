@@ -98,12 +98,16 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*MODEL_INPUT_VARIABLES*/
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
 	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, DefaultValues.LEVEL);
-	final public static Attribute attr_alias = new Attribute("alias", MdlDataType.TYPE_REF, false);
+	//final public static Attribute attr_alias = new Attribute("alias", MdlDataType.TYPE_REF, false);
+	//Dosing mapping
+	final public static Attribute attr_administration_ref = new Attribute("administration", 
+			MdlDataType.TYPE_REF, false);
 
 	/*OBSERVATION*/
 	final public static Attribute attr_error = new Attribute("error", MdlDataType.TYPE_EXPR, true);
 	final public static Attribute attr_eps = new Attribute("eps", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_prediction_ref = new Attribute("prediction", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_prediction_ref = new Attribute("prediction", 
+			MdlDataType.TYPE_REF, false);
 
 	/*ESTIMATION*/
 	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
@@ -132,7 +136,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
 
-	/*Deaign object*/
+	/*Design object*/
 	final public static Attribute attr_trial_type = new Attribute("type", MdlDataType.TYPE_TRIAL, false);
 
 	/*ADMINISTRATION*/
@@ -189,8 +193,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*Model object*/
 	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_re_type, attr_rv1, attr_rv2, attr_level_ref);
-	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_units, 
-			attr_type, attr_level, attr_alias);
+	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_type, 
+			attr_level, //attr_alias, attr_compartment, 
+			attr_units, attr_administration_ref, attr_prediction_ref);
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_deq = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);

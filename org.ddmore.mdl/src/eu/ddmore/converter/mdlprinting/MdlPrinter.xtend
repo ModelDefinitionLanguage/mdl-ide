@@ -273,26 +273,30 @@ class MdlPrinter {
 	
 	def toStr(OrExpression e){
 		var res = "";
-		var iterator = e.expression.iterator();
-		var operatorIterator = e.operator.iterator();
-		if (iterator.hasNext ) {
-			res = iterator.next.toStr;
-		}
-		while (iterator.hasNext && operatorIterator.hasNext){
-			res  = res + operatorIterator.next.convertOperator + iterator.next.toStr;
+		if (e.expression != null){
+			var iterator = e.expression.iterator();
+			var operatorIterator = e.operator.iterator();
+			if (iterator.hasNext ) {
+				res = iterator.next.toStr;
+			}
+			while (iterator.hasNext && operatorIterator.hasNext){
+				res  = res + operatorIterator.next.convertOperator + iterator.next.toStr;
+			}
 		}
 		return res;
 	}
 	
 	def toStr(AndExpression e){
 		var res = "";
-		var iterator = e.expression.iterator();
-		var operatorIterator = e.operator.iterator();
-		if (iterator.hasNext ) {
-			res = iterator.next.toStr;
-		}
-		while (iterator.hasNext && operatorIterator.hasNext){
-			res  = res + operatorIterator.next.convertOperator + iterator.next.toStr;
+		if (e.expression != null){
+			var iterator = e.expression.iterator();
+			var operatorIterator = e.operator.iterator();
+			if (iterator.hasNext ) {
+				res = iterator.next.toStr;
+			}
+			while (iterator.hasNext && operatorIterator.hasNext){
+				res  = res + operatorIterator.next.convertOperator + iterator.next.toStr;
+			}
 		}
 		return res;	
 	}

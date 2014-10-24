@@ -310,13 +310,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 						for (SymbolDeclaration s: b.getInputVariablesBlock().getVariables()){
 							String varName = "";
 							if (s.getSymbolName() != null) varName = s.getSymbolName().getName();
+							/*
 							if (s.getList() != null){
 								String alias = MdlPrinter.getInstance().getAttribute
 									(s.getList().getArguments(), AttributeValidator.attr_alias.getName());
 								if (alias.length() > 0){
 									varName = alias;
 								}
-							} 
+							}*/
 							if (varName.length() > 0 && !dVars.contains(varName)){
 								warning(MSG_MODEL_DATA_MISMATCH + 
 									": no mapping for model variable " + varName + " found in " + 

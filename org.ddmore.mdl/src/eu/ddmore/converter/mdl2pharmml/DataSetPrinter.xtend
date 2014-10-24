@@ -90,12 +90,12 @@ class DataSetPrinter {
 					if (s.symbolName != null && s.symbolName.name.equals(name)){
 						return s;
 					}
-					if (s.list != null){
+					/*if (s.list != null){
 						var alias = s.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
 						if (alias.length > 0){
 							if (alias.equals(name)) return s;
 						}
-					}
+					}*/
 				}
 			}
 		}
@@ -118,13 +118,26 @@ class DataSetPrinter {
 						//Covariate mapping
 						if (use.equals(UseType::COVARIATE.toString)){
 							var columnName = s.symbolName.name;
-							var alias = s.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
-							if (alias.length > 0) //matched with DATA_INPUT_VARIABLE via alias?
-								columnName = alias;
+							//var alias = s.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
+							//if (alias.length > 0) //matched with DATA_INPUT_VARIABLE via alias?
+							//	columnName = alias;
 							res = res + print_ds_ColumnMapping(columnName, s.symbolName.name);
 						}
 						//Dosing
-						
+						if (use.equals(UseType::AMT.toString)){
+							var adm = s.list.arguments.getAttributeExpression(AttributeValidator::attr_administration_ref.name);
+							if (adm != null){
+								res = res + print_ds_ColumnMapping(s.symbolName.name, adm.toStr);
+							}
+						}
+						//DV
+						if (use.equals(UseType::DV.toString)){
+							var prediction = s.list.arguments.getAttributeExpression(AttributeValidator::attr_prediction_ref.name);
+							if (prediction != null){
+								if (prediction != null)
+									res = res + print_ds_ColumnMapping(s.symbolName.name, prediction.toStr);
+							}
+						}
 					}
 				}
 			}
