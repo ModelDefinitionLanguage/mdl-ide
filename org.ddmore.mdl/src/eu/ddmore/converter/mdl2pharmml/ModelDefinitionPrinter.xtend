@@ -166,9 +166,7 @@ class ModelDefinitionPrinter {
 								'''<SimpleParameter symbId = "«st.parameter.symbolName.name»"/>
 								'''
 					}
-					statements = statements + print_mdef_CollerationModel; 
 		  		}
-		  		
 		  	}
 		}
 		if (mObj != null){
@@ -196,6 +194,7 @@ class ModelDefinitionPrinter {
 		  		}
 		  	}
   		}
+  		statements = statements + print_mdef_CollerationModel; 
 	  	if (statements.length > 0){
 			'''
 				<ParameterModel blkId="pm">
