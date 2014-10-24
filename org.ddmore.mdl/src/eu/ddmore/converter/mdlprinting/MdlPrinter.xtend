@@ -255,12 +255,11 @@ class MdlPrinter {
 		var res = e.expression.toStr;
 		if (e.condition != null){
 			res = res + ''' when «e.expression.toStr»'''
-			if (e.expressions != null && e.conditions != null)
-				for (i: 0..e.expressions.size - 1){
-					if (e.conditions.size > i)
+			if (e.whenBranches != null)
+				for (b: e.whenBranches){
 						res = res + 
 						'''
-						, «e.expressions.get(i).toStr» when «e.expressions.get(i).toStr»
+						, «b.expression.toStr» when «e.condition.toStr»
 						'''
 				}		
 			if (e.elseExpression != null)

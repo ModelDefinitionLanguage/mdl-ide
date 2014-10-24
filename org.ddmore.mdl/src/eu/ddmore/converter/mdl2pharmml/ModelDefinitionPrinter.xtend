@@ -90,7 +90,7 @@ class ModelDefinitionPrinter {
 				'''
 				<CovariateModel blkId="cm">
 					«FOR s: cm_vars»
-						«val covType = "Continuous"»
+						«val covType = s.getCovariateType»
 						<Covariate symbId="«s»">
 							«var transformation = s.getCovariateTransformation»	
 							«IF transformation != null»
@@ -118,7 +118,7 @@ class ModelDefinitionPrinter {
 					if (s.list != null && s.symbolName != null){
 						var type = getAttribute(s.list.arguments, AttributeValidator::attr_type.name);
 						if (type.length > 0)
-							return type;
+							return type.substring(0, 1).toUpperCase() + type.substring(1);
 					}
 				}
 			}						

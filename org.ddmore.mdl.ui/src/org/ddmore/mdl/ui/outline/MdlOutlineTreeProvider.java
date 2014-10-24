@@ -16,6 +16,7 @@ import org.ddmore.mdl.mdl.DesignObjectBlock;
 import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.ExpressionBranch;
 import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
 import org.ddmore.mdl.mdl.FunctionCall;
@@ -711,13 +712,14 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			mdlPrinter.toStr(e.getExpression()) + 
 				((e.getCondition() != null)? " when " + mdlPrinter.toStr(e.getCondition()): ""),
 		true);
-		if (e.getExpressions() != null && e.getConditions() != null){
-			for (int i = 0; i < e.getExpressions().size() &&  i < e.getConditions().size(); i++){
+		if (e.getWhenBranches() != null){
+			for (ExpressionBranch b: e.getWhenBranches()){
 				createEStructuralFeatureNode(parentNode,
 					e,
-					MdlPackage.Literals.EXPRESSION__EXPRESSIONS,
+					MdlPackage.Literals.EXPRESSION_BRANCH__EXPRESSION,
 					_image(e),
-					mdlPrinter.toStr(e.getExpressions().get(i)) + " when " + mdlPrinter.toStr(e.getConditions().get(i)),
+					mdlPrinter.toStr(b.getExpression()) +
+						" when " + mdlPrinter.toStr(b.getCondition()),
 					true);
 			}
 		}		

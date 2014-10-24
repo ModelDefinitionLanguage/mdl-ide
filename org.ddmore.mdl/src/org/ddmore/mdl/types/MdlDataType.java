@@ -14,6 +14,7 @@ import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.EnumType; 
 import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.ExpressionBranch;
 import org.ddmore.mdl.mdl.IndividualVarType;
 import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.Mcl;
@@ -73,9 +74,9 @@ public enum MdlDataType {
     
 	static public boolean validateType(MdlDataType type, Expression expr){
 		Boolean res = validateType(type, expr.getExpression());
-		if (expr.getExpressions() != null){
-			for (OrExpression e: expr.getExpressions()){
-				res = res && validateType(type, e);
+		if (expr.getWhenBranches() != null){
+			for (ExpressionBranch e: expr.getWhenBranches()){
+				res = res && validateType(type, e.getExpression());
 			}
 		}
 		if (expr.getElseExpression() != null){

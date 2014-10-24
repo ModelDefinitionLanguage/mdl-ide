@@ -10,6 +10,7 @@ import org.ddmore.mdl.mdl.InputFormatType
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.DataObject
+import org.ddmore.mdl.types.DefaultValues
 
 class DataSetPrinter {
 	protected extension MathPrinter mathPrinter = null;
@@ -104,26 +105,31 @@ class DataSetPrinter {
 	protected def print_ds_NONMEM_DataSet(ModelObject mObj, DataObject dObj){
 		if (dObj == null || mObj == null) return "";
 		var res = "";
-		for (b: dObj.blocks){
-			if (b.dataInputBlock != null){
-				for (s: b.dataInputBlock.variables){
-					var columnId = s.symbolName.name;
-					val modelVar = mObj.getModelInputVariable(columnId);
-					if (modelVar != null){
-						res = res + print_ds_ColumnMapping(columnId, modelVar.symbolName.name);
-					}
-				}
-			}
-			if (b.dataDerivedBlock != null){
-				var derivedVars = b.dataDerivedBlock.getDerivedVariables;
-				for (s: derivedVars){
-					val modelVar = mObj.getModelInputVariable(s);
-					if (modelVar != null){
-						res = res + print_ds_ColumnMapping(s, modelVar.symbolName.name);
+		//Time 
+		for (b: mObj.blocks){
+			if (b.inputVariablesBlock != null){
+				for (s: b.inputVariablesBlock.variables){
+					if (s.symbolName != null && s.list != null){
+						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+						//Individual variable
+						if (use.equals(UseType::IDV.toString)){
+							res = res + print_ds_ColumnMapping(s.symbolName.name, DefaultValues::INDEPENDENT_VAR);
+						}
+						//Covariate mapping
+						if (use.equals(UseType::COVARIATE.toString)){
+							var columnName = s.symbolName.name;
+							var alias = s.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
+							if (alias.length > 0) //matched with DATA_INPUT_VARIABLE via alias?
+								columnName = alias;
+							res = res + print_ds_ColumnMapping(columnName, s.symbolName.name);
+						}
+						//Dosing
+						
 					}
 				}
 			}
 		}
+		
 		res = res + print_ds_DataSet(mObj, dObj);
 		'''
 		<NONMEMdataSet oid="«BLK_DS_NONMEM_DATASET»">
