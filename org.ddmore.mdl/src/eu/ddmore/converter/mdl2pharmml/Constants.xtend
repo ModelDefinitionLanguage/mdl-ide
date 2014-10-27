@@ -25,6 +25,8 @@ static class Constants {
 	public static val TYPE_REAL = "real";
 	public static val TYPE_ID = "id";
 	
+	public static val UNDEFINED  = "undefined";
+	
 	public static val VAR_TYPE_PARAMETER = "parameterVariability";
 	public static val VAR_TYPE_ERROR = "residualError";
 	

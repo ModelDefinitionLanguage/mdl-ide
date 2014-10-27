@@ -82,26 +82,6 @@ class DataSetPrinter {
 		'''
 	}
 	
-	//Return a model variable (matched by name or by alias name!)
-	protected def getModelInputVariable(ModelObject mObj, String name){
-		for (b: mObj.blocks){
-			if (b.inputVariablesBlock != null){
-				for (s: b.inputVariablesBlock.variables){
-					if (s.symbolName != null && s.symbolName.name.equals(name)){
-						return s;
-					}
-					/*if (s.list != null){
-						var alias = s.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
-						if (alias.length > 0){
-							if (alias.equals(name)) return s;
-						}
-					}*/
-				}
-			}
-		}
-		return null;
-	}
-	
 	protected def print_ds_NONMEM_DataSet(ModelObject mObj, DataObject dObj){
 		if (dObj == null || mObj == null) return "";
 		var res = "";
@@ -118,9 +98,6 @@ class DataSetPrinter {
 						//Covariate mapping
 						if (use.equals(UseType::COVARIATE.toString)){
 							var columnName = s.symbolName.name;
-							//var alias = s.list.arguments.getAttribute(AttributeValidator::attr_alias.name);
-							//if (alias.length > 0) //matched with DATA_INPUT_VARIABLE via alias?
-							//	columnName = alias;
 							res = res + print_ds_ColumnMapping(columnName, s.symbolName.name);
 						}
 						//Dosing
@@ -151,6 +128,20 @@ class DataSetPrinter {
 		'''
 	}
 	
+	//Return a model variable (matched by name or by alias name!)
+	protected def getModelInputVariable(ModelObject mObj, String name){
+		for (b: mObj.blocks){
+			if (b.inputVariablesBlock != null){
+				for (s: b.inputVariablesBlock.variables){
+					if (s.symbolName != null && s.symbolName.name.equals(name))
+						return s;
+				}
+			}
+		}
+		return null;
+	}
+	
+	
 	protected def print_ds_DataSet(ModelObject mObj, DataObject dObj){
 		if (dObj == null || mObj == null) return "";
 		var columnNames = new ArrayList<String>();
@@ -165,9 +156,14 @@ class DataSetPrinter {
 							columnNames.add(modelVar.symbolName.name);
 							columnTypes.add(modelVar.getColumnType);
 						}
+					} else {//Model variable not found
+							columnNames.add(columnId);
+							columnTypes.add(Constants::UNDEFINED);
 					}
 				}
 			}
+		}	
+		for (b: dObj.blocks){
 			if (b.dataDerivedBlock != null){
 				var derivedVars = b.dataDerivedBlock.getDerivedVariables;
 				for (s: derivedVars){
@@ -177,10 +173,13 @@ class DataSetPrinter {
 							columnNames.add(modelVar.symbolName.name);
 							columnTypes.add(modelVar.getColumnType);
 						}
+					} else {//Model variable not found
+						columnNames.add(s);
+						columnTypes.add(Constants::UNDEFINED);
 					}
 				}
 			}	
-		}	
+		}
 		'''
 			<DataSet xmlns="«xmlns_ds»">
 				«print_ds_Definition(columnNames, columnTypes)»
