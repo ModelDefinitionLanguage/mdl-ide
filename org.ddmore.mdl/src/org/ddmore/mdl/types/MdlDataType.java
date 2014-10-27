@@ -486,4 +486,15 @@ public enum MdlDataType {
 		String trans = MdlPrinter.getInstance().toStr(expr);
 		return (FunctionValidator.funct_standard1.contains(trans));
 	}
+	
+	/*private static MdlDataType computeType(OrExpression orExpr){
+		for (AndExpression andExpr: orExpr.getExpression()){
+			for (LogicalExpression logicExpr: andExpr.getExpression()) {
+				if (logicExpr.getExpression1() != null){
+					if (logicExpr.getExpression2() != null) return TYPE_BOOLEAN; //TODO check compounds!
+					if (logicExpr.getExpression1().getString() != null) return TYPE_STRING;
+			}
+		}
+		return TYPE_UNDEFINED;
+	}*/
 }

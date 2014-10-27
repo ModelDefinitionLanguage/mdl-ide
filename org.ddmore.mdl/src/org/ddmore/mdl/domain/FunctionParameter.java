@@ -6,7 +6,7 @@ public class FunctionParameter {
 	String name = "";
 	ParameterPassingMethod passingMethod = ParameterPassingMethod.IN;
 	String defaultValue = "";
-	MdlDataType type = MdlDataType.TYPE_EXPR;
+	MdlDataType type = MdlDataType.TYPE_REAL;
 
 	public FunctionParameter(String name){
 		this.name = name;

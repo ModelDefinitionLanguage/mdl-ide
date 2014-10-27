@@ -146,35 +146,39 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			MdlDataType.TYPE_INT, false);
 	final public static Attribute attr_amount = new Attribute("amount", 
 			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
+	final public static Attribute attr_amountBSA = new Attribute("amountBSA", 
+			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
 	final public static Attribute attr_doseTime = new Attribute("doseTime", 
 			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
 	final public static Attribute attr_duration = new Attribute("duration", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_steadyState = new Attribute("steadyState", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_interval = new Attribute("interval", MdlDataType.TYPE_NAT, false);
+	final public static Attribute attr_interval = new Attribute("interval", 
+			Arrays.asList(MdlDataType.TYPE_PREAL, MdlDataType.TYPE_VECTOR_PREAL), false);
 	final public static Attribute attr_combination = new Attribute("combination", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_treatment = new Attribute("treatment", MdlDataType.TYPE_REF, false);
 	
 	/*ACTION*/
-	final public static Attribute attr_reset = new Attribute("reset", MdlDataType.TYPE_LIST, true);
+	final public static Attribute attr_reset = new Attribute("reset", MdlDataType.TYPE_LIST, false);
 	
 	/*SAMPLING*/
 	final public static Attribute attr_samplingTime = new Attribute("samplingTime", 
-			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), true);
+			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
 	final public static Attribute attr_outcome = new Attribute("outcome", MdlDataType.TYPE_STRING, false);
 	final public static Attribute attr_bql = new Attribute("bql", MdlDataType.TYPE_REAL, false);
 	
 	/*STUDY_DESIGN (ARMS)*/
-	final public static Attribute attr_groupSize = new Attribute("groupSize", MdlDataType.TYPE_INT, true);
+	final public static Attribute attr_groupSize = new Attribute("groupSize", MdlDataType.TYPE_INT, false);
 	final public static Attribute attr_inteventionSequence = new Attribute("inteventionSequence", 
-			MdlDataType.TYPE_LIST, true);
+			MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_occasionValue = new Attribute("occasionValue", 
-			MdlDataType.TYPE_LIST, true);
-	final public static Attribute attr_samplingSequence = new Attribute("samplingSequence", MdlDataType.TYPE_LIST, true);
+			MdlDataType.TYPE_LIST, false);
+	final public static Attribute attr_samplingSequence = new Attribute("samplingSequence", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_covariates = new Attribute("covariates", 
 			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
 	
 	/*DESIGN_SPACE, HYPER_SPACE*/
 	final public static Attribute attr_admTime = new Attribute("admTime", MdlDataType.TYPE_RANDOM_LIST, false);
+	final public static Attribute attr_numberSamples = new Attribute("numberSamples", MdlDataType.TYPE_RANDOM_LIST, false);
 	final public static Attribute attr_min = new Attribute("min", MdlDataType.TYPE_RANDOM_LIST, false);
 	final public static Attribute attr_max = new Attribute("max", MdlDataType.TYPE_RANDOM_LIST, false);
 	
@@ -208,15 +212,16 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*Design object*/
 	final public static List<Attribute> attrs_administration = Arrays.asList(
-		attr_trial_type, attr_administration, attr_amount, attr_doseTime, attr_start, 
-		attr_end, attr_steadyState, attr_interval, attr_treatment, attr_combination);
+		attr_trial_type, attr_administration, attr_amount, attr_amountBSA, attr_doseTime, attr_start, 
+		attr_end, attr_steadyState, attr_interval, attr_treatment, attr_combination, attr_duration);
 	final public static List<Attribute> attrs_action = Arrays.asList(attr_start, attr_end, attr_reset);
 	final public static List<Attribute> attrs_sampling = Arrays.asList(
-			attr_trial_type, attr_start, attr_end, attr_samplingTime, attr_outcome, attr_bql, attr_combination);
+			attr_trial_type, attr_start, attr_end, attr_samplingTime, 
+			attr_interval, attr_outcome, attr_bql, attr_combination);
 	final public static List<Attribute> attrs_studyDesign = Arrays.asList(
 			attr_groupSize, attr_inteventionSequence, attr_occasionValue, attr_samplingSequence, attr_covariates);
-	final public static List<Attribute> attrs_designSpace = Arrays.asList(attr_name_ref);
-	final public static List<Attribute> attrs_hyperSpace = Arrays.asList(attr_name_ref);
+	final public static List<Attribute> attrs_designSpace = Arrays.asList(attr_name_ref, attr_admTime, attr_numberSamples);
+	final public static List<Attribute> attrs_hyperSpace = Arrays.asList(attr_name_ref, attr_min, attr_max, attr_admTime, attr_numberSamples);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//TODO: find how to substitute with identifiers in grammar (statically)

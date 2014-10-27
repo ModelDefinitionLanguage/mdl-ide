@@ -175,14 +175,13 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			}
 		}
 	} 
-	
-	
+		
 	private void addProposals(ContentAssistContext context, ICompletionProposalAcceptor acceptor, 
 			List<String> attributes, Image img){
 		for (String proposal: attributes){
 			StyledString displayedString = new StyledString();
 			displayedString.append(proposal);
-			ConfigurableCompletionProposal p = doCreateProposal(proposal, displayedString, img, 1, context);
+			ConfigurableCompletionProposal p = doCreateProposal(proposal, displayedString, img, 1000, context);
 			acceptor.accept(p);
 		}
 	}
