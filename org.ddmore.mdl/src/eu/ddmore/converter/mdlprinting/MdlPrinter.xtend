@@ -254,7 +254,7 @@ class MdlPrinter {
 	def String toStr(Expression e){
 		var res = e.expression.toStr;
 		if (e.condition != null){
-			res = res + ''' when «e.expression.toStr»'''
+			res = res + ''' when «e.condition.toStr»'''
 			if (e.whenBranches != null)
 				for (b: e.whenBranches){
 						res = res + 
@@ -264,9 +264,7 @@ class MdlPrinter {
 				}		
 			if (e.elseExpression != null)
 				res = res + 
-				'''
-				«e.elseExpression.toStr» otherwise
-				'''
+				''' otherwise «e.elseExpression.toStr»'''
 		}
 		return res;
 	}
