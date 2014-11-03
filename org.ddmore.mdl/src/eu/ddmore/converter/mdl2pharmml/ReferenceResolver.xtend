@@ -58,7 +58,9 @@ class ReferenceResolver{
 				sm_vars = o.modelObject.getStructuralVars;	
 					
 				//ParameterModel
-				pm_vars = o.modelObject.getParameters;	
+				var parameters = o.modelObject.getParameters;
+				for (p: parameters)
+					if (!pm_vars.contains(p)) pm_vars.add(p);
 					
 				//ObservationModel
 				om_vars = o.modelObject.getObservationVars;	
@@ -66,7 +68,6 @@ class ReferenceResolver{
 			if (o.parameterObject != null){
 				//ParameterModel
 				var parameters = o.parameterObject.getParameters;	
-				if (parameters.size > 0)
 				for (p: parameters)
 					if (!pm_vars.contains(p)) pm_vars.add(p);
 			}
@@ -76,7 +77,7 @@ class ReferenceResolver{
 	protected def setDerivativeVariables(Mcl m){
 		deriv_vars.clear();
 		for (o: m.objects){
-		var iterator = o.eAllContents();
+			var iterator = o.eAllContents();
 		    while (iterator.hasNext()){
 		    	var obj = iterator.next();
 		    	if (obj instanceof SymbolDeclaration){
@@ -93,7 +94,6 @@ class ReferenceResolver{
 	}
 	
 	protected def getReferenceBlock(String name){
-		//try to find by name
 		if (vm_err_vars.contains(name)) return "vm_err";
 		if (vm_mdl_vars.contains(name)) return "vm_mdl";
 		if (cm_vars.contains(name)) return "cm";
@@ -181,7 +181,7 @@ class ReferenceResolver{
 	
 	//+Returns declarations for ParameterModel
 	protected def getParameters(ParameterObject obj){		
-		var parameters = newArrayList;
+		var parameters = new ArrayList<String>();
 		for (b: obj.blocks){
 			//Parameter object, STRUCTURAL
 			if (b.structuralBlock != null){

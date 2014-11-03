@@ -42,30 +42,6 @@ class MathPrinter extends MdlPrinter {
 		this.resolver = resolver
 	}
 
-	//Generate function definition from a math expression like a + b*f
-	def print_mdef_FunctionDefinition(Expression expr) {
-		var arguments = newHashSet;
-		var iterator = expr.eAllContents();
-		while (iterator.hasNext()) {
-			var obj = iterator.next();
-			if (obj instanceof SymbolName) {
-				var ref = obj as SymbolName;
-				arguments.add(ref.name);
-			}
-		}
-		'''
-			<FunctionDefinition xmlns:ct="«xmlns_ct»"
-				symbId="combinedErrorModel" symbolType="«TYPE_REAL»">
-				«FOR arg : arguments»
-					<FunctionArgument symbId="«arg»" symbolType="«TYPE_REAL»"/>
-				«ENDFOR»
-				<Definition>
-					«expr.print_Math_Equation»
-				</Definition>
-			</FunctionDefinition>
-		'''
-	}
-
 	//Print any MDL expression: math expression, list or ode list 
 	//(for the lists selected attribute values will be typically printed, e.g., value or deriv)
 	def CharSequence print_Math_Expr(AnyExpression e) '''
@@ -462,50 +438,6 @@ class MathPrinter extends MdlPrinter {
 		<ct:«type»>«value»</ct:«type»>
 	'''
 
-	//Negation of the expression x || y -> !x && !y 
-	/*
-	def print_DualExpression(OrExpression expr){
-		var newAndExprs = new ArrayList<String>();
-		for (andExpr: expr.expression){
-			var dualLogicalExprs = new ArrayList<String>();
-			for (logicalExpr: andExpr.expression){
-				if (logicalExpr.expression2 != null){
-					var first = logicalExpr.expression1.print_Math_AddOp(0).toString;
-					var second = logicalExpr.expression2.print_Math_AddOp(0).toString;
-					var operator = logicalExpr.operator.getDualOperator.convertOperator;
-					dualLogicalExprs.add(print_Math_LogicOp(first, operator, second).toString);	
-				} else {
-					var res = "";
-					if (logicalExpr.boolean != null) res = logicalExpr.boolean;
-					if (logicalExpr.expression1 != null) res = logicalExpr.expression1.toStr;
-					if (logicalExpr.negation == null){
-						dualLogicalExprs.add( 
-						'''
-							<Uniop op="not">
-								<«res»/>
-							</Uniop>
-						''')
-					} else {
-						dualLogicalExprs.add( 
-						'''
-							<«res»/>
-						''')
-					}
-				}
-			}
-			newAndExprs.add(dualLogicalExprs.print_Math_LogicAnd(0).toString);		
-		}
-		return newAndExprs.print_Math_LogicOr(0);
-	}*/
-	// Expr1 >= Expr2 == Expr3 (conversion is left associative, more then 2 operands do not make much sense anyway)
-	/*private def print_Math_LogicOp(String first, String operator, String second)
-	'''
-		<LogicBinop op="«operator»">
-			«first»
-			«second»
-		</LogicBinop>
-	'''
-	*/
 	//+ Expr1 || ... || Expr_n (right associative)
 	private def CharSequence print_Math_LogicOr(ArrayList<String> exprs, int startIndex) {
 		if (exprs != null) {
@@ -563,16 +495,14 @@ class MathPrinter extends MdlPrinter {
 	'''
 
 	//+
-	def print_ct_SymbolRef(SymbolName ref) '''
-		«var blkId = resolver.getReferenceBlock(ref.name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
-	'''
+	def print_ct_SymbolRef(SymbolName ref) {
+		print_ct_SymbolRef(ref.name)
+	}
 
 	//+
-	def print_ct_SymbolRef(FunctionName ref) '''
-		«var blkId = resolver.getReferenceBlock(ref.name)»
-		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«ref.name»"/>
-	'''
+	def print_ct_SymbolRef(FunctionName ref){
+		print_ct_SymbolRef(ref.name)
+	}
 
 	//TODO: How to print attributes?
 	def print_ct_SymbolRef(FullyQualifiedArgumentName ref) '''
