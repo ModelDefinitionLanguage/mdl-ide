@@ -420,7 +420,7 @@ class MathPrinter extends MdlPrinter {
 		«ENDIF»
 	'''
 
-	def getValueType(String value) {
+	/*def getValueType(String value) {
 		try {
 			if (value.indexOf(".") > -1) {
 				Double::parseDouble(value);
@@ -432,7 +432,7 @@ class MathPrinter extends MdlPrinter {
 		} catch (NumberFormatException e) {
 			return Constants::TYPE_ID;
 		}
-	}
+	}*/
 
 	def print_ct_Value(String value, String type) '''
 		<ct:«type»>«value»</ct:«type»>
