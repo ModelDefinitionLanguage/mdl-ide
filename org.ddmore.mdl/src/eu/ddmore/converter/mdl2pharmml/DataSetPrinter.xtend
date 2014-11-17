@@ -11,6 +11,7 @@ import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.types.DefaultValues
+import org.ddmore.mdl.types.VariableType
 
 class DataSetPrinter {
 	protected extension MathPrinter mathPrinter = null;
@@ -33,9 +34,6 @@ class DataSetPrinter {
 		return '''<Row>«FOR i: 0..values.size-1»«values.get(i).print_ct_Value»«ENDFOR»</Row>''';
 	}
 	
-	protected def print_ds_Column(String columnId, String columnType, String columnNum)'''
-		<Column columnId="«columnId»" columnType="«columnType.convertEnum»" valueType="«Constants::TYPE_REAL»" columnNum="«columnNum»"/>
-	'''
 	
 	protected def print_ds_ColumnMapping(String columnId, String symbId)'''
 		<ColumnMapping>
@@ -72,6 +70,18 @@ class DataSetPrinter {
 		}
 		return columnType;
 	}
+	
+	protected def getValueType(SymbolDeclaration modelVar){
+		var variableType = Constants::TYPE_REAL;
+		if (modelVar.list != null){
+			val valueType = modelVar.list.arguments.getAttribute(AttributeValidator::attr_type.name);
+			if (valueType.equals(VariableType::CC_CATEGORICAL)) 
+				variableType = Constants::TYPE_INT;
+			
+		}
+		return variableType;
+	}
+	
 	
 	protected def print_ds_Objective_DataSet(ModelObject mObj, DataObject dObj){
 		var res = print_ds_DataSet(mObj, dObj);
@@ -146,6 +156,7 @@ class DataSetPrinter {
 		if (dObj == null || mObj == null) return "";
 		var columnNames = new ArrayList<String>();
 		var columnTypes = new ArrayList<String>();
+		var valueTypes = new  ArrayList<String>();
 		for (b: dObj.blocks){
 			if (b.dataInputBlock != null){
 				for (s: b.dataInputBlock.variables){
@@ -160,41 +171,49 @@ class DataSetPrinter {
 							columnNames.add(columnId);
 							columnTypes.add(Constants::UNDEFINED);
 					}
+					valueTypes.add(s.getValueType);
 				}
 			}
 		}	
 		for (b: dObj.blocks){
 			if (b.dataDerivedBlock != null){
-				var derivedVars = b.dataDerivedBlock.getDerivedVariables;
-				for (s: derivedVars){
-					val modelVar = mObj.getModelInputVariable(s);
+				for (s: b.dataDerivedBlock.variables){
+					var columnId = s.symbolName.name;
+					val modelVar = mObj.getModelInputVariable(columnId);
 					if (modelVar != null && modelVar.symbolName != null){
 						if (!columnNames.contains(modelVar.symbolName.name)){
 							columnNames.add(modelVar.symbolName.name);
 							columnTypes.add(modelVar.getColumnType);
 						}
 					} else {//Model variable not found
-						columnNames.add(s);
+						columnNames.add(columnId);
 						columnTypes.add(Constants::UNDEFINED);
 					}
+					valueTypes.add(s.getValueType);
 				}
 			}	
 		}
 		'''
 			<DataSet xmlns="«xmlns_ds»">
-				«print_ds_Definition(columnNames, columnTypes)»
+				«print_ds_Definition(columnNames, columnTypes, valueTypes)»
 				«dObj.print_ds_ImportData»
 			</DataSet>
 		'''
 	}
 	
-	protected def print_ds_Definition(ArrayList<String> columnNames, ArrayList<String> columnTypes)'''
+	protected def print_ds_Definition(ArrayList<String> columnNames, 
+		ArrayList<String> columnTypes, ArrayList<String> valueTypes
+	)'''
 		<Definition>
 			«FOR i: 0..columnNames.size-1»
 				«var columnId = columnNames.get(i)»
-				«print_ds_Column(columnId, columnTypes.get(i), (i+1).toString)»
+				«print_ds_Column(columnId, columnTypes.get(i), valueTypes.get(i), (i+1).toString)»
 			«ENDFOR»
 		</Definition>
+	'''
+	
+	protected def print_ds_Column(String columnId, String columnType, String valueType, String columnNum)'''
+		<Column columnId="«columnId»" columnType="«columnType.convertEnum»" valueType="«valueType»" columnNum="«columnNum»"/>
 	'''
 	
 	protected def print_ds_ImportData(DataObject dObj){
