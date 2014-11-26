@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.ddmore.mdl.domain.Attribute;
+import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.ActionBlock;
 import org.ddmore.mdl.mdl.AdministrationBlock;
 import org.ddmore.mdl.mdl.Argument;
-import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.CompartmentBlock;
 import org.ddmore.mdl.mdl.DataDerivedBlock;
@@ -18,7 +18,6 @@ import org.ddmore.mdl.mdl.DeqBlock;
 import org.ddmore.mdl.mdl.DesignSpaceBlock;
 import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
-import org.ddmore.mdl.mdl.FormalArguments;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.HyperSpaceBlock;
@@ -91,23 +90,25 @@ import org.eclipse.emf.ecore.EObject;
 public class Utils {
 	
 	//Checks whether a given identifier is declared
-	static boolean isIdentifierDeclared(Map<String, List<String>> map, String id, ObjectName objName){
+	static boolean isIdentifierDeclared(Map<String, List<Variable>> map, String id, ObjectName objName){
 		if (objName != null) 
 			if (map.containsKey(objName.getName()))
-				if (map.get(objName.getName()).contains(id)) return true;
+				for (Variable var: map.get(objName.getName()))
+					if (var.getName().equals(id)) return true;
 		return false; 
 	}
 	
 	//Checks whether a given symbol is declared
-	static boolean isSymbolDeclared(Map<String, List<String>> map, SymbolName ref){
+	public static boolean isSymbolDeclared(Map<String, List<Variable>> map, SymbolName ref){
 		ObjectName objName = getObjectName(ref);
 		if (objName != null) 
 			if (map.containsKey(objName.getName()))
-				if (map.get(objName.getName()).contains(ref.getName())) return true;		
+				for (Variable var: map.get(objName.getName()))
+					if (var.getName().equals(ref.getName())) return true;
 		return false;
 	}
 		
-	static boolean isSymbolDeclared(Map<String, List<String>> map, SymbolName ref, List<MOGObject> mogs){
+	static boolean isSymbolDeclared(Map<String, List<Variable>> map, SymbolName ref, List<MOGObject> mogs){
 		ObjectName objName = getObjectName(ref);
 		if (objName != null){
 			for (MOGObject mog: mogs){
@@ -123,13 +124,13 @@ public class Utils {
 	}
 	
 	//Checks whether a function is declared more than once
-	static boolean isSymbolDeclaredMoreThanOnce(Map<String, List<String>> map, SymbolName ref){
+	static boolean isSymbolDeclaredMoreThanOnce(Map<String, List<Variable>> map, SymbolName ref){
 		ObjectName objName = getObjectName(ref);
 		if (map.containsKey(objName.getName())){
-			List<String> vars = map.get(objName.getName()); 
+			List<Variable> vars = map.get(objName.getName()); 
 			int i = 0;
-			for (String var: vars){
-				if (var.equals(ref.getName())) i++;
+			for (Variable var: vars){
+				if (var.getName().equals(ref.getName())) i++;
 				if (i > 1) return true;
 			}
 		}
@@ -146,37 +147,32 @@ public class Utils {
 		return argumentNames;
 	}
 	
-	public static List<String> getSymbolNames(SymbolNames names){
-		List<String> symbolNames = new ArrayList<String>();	
+	public static List<Variable> getSymbolNames(SymbolNames names){
+		List<Variable> symbolNames = new ArrayList<Variable>();	
 		addSymbol(symbolNames, names);
 		return symbolNames;
 	}
-	
-	//Add a symbol to a list of known symbols
-	private static void addSymbol(List<String> list, Arguments args){
-		if (args.getArguments() != null)	
-			for (Argument arg: args.getArguments())
-				if (arg.getArgumentName() != null)
-					list.add(arg.getArgumentName().getName());
-	}
-	
-	static void addSymbol(List<String> list, FormalArguments args){
-		if (args != null)
-			for (ArgumentName id: args.getArguments())
-				list.add(id.getName());
-	}
-	
-	private static void addSymbol(List<String> list, SymbolNames args){
+
+	//SymbolNames are only used in same block, we assume that all parameters there are Real
+	private static void addSymbol(List<Variable> list, SymbolNames args){
 		if (args != null)
 			for (SymbolName id: args.getSymbolNames())
-				list.add(id.getName());
+				list.add(new Variable(id.getName(), MdlDataType.TYPE_REAL));
+	}
+	
+	private static void addSymbol(List<Variable> list, Arguments args){
+		if (args.getArguments() != null)	
+			for (Argument arg: args.getArguments()){
+				if (arg.getArgumentName() != null)
+					list.add(new Variable(arg.getArgumentName().getName(), MdlDataType.getDerivedType(arg)));
+			}
 	}
 
-	static ObjectName getObjectName(EObject b){
+	public static ObjectName getObjectName(EObject b){
 		return getMclObject(b).getObjectName();
 	}
 
-	static MclObject getMclObject(EObject b){
+	public static MclObject getMclObject(EObject b){
 		EObject container = b.eContainer();
 		while (!(container instanceof MclObjectImpl)){
 			container = container.eContainer();
@@ -300,30 +296,30 @@ public class Utils {
 		return mogs;
 	}
 	
-	public static Map<String, List<String>> getDeclaredSymbols(Mcl mcl){
-		Map<String, List<String>> declaredVariables = new HashMap<String, List<String>>();
+	public static Map<String, List<Variable>> getDeclaredSymbols(Mcl mcl){
+		Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();
 		for (MclObject obj: mcl.getObjects()){
-			List<String> varList = getDeclaredSymbols(obj);
+			List<Variable> varList = getDeclaredSymbols(obj);
 			if (varList.size() > 0)
 		    	declaredVariables.put(obj.getObjectName().getName(), varList);
 		}
 		return declaredVariables;
 	}
 	
-	public static List<String> getDeclaredSymbols(MclObject obj){
-		List<String> varList = new ArrayList<String>();
+	public static List<Variable> getDeclaredSymbols(MclObject obj){
+		List<Variable> varList = new ArrayList<Variable>();
 		TreeIterator<EObject> symbolIterator = obj.eAllContents();
 		while (symbolIterator.hasNext()) {
 			EObject container = symbolIterator.next();
 			if (container instanceof SymbolDeclarationImpl) {
 				SymbolDeclaration s = (SymbolDeclaration) container;
 				if (s.getSymbolName() != null)
-					varList.add(s.getSymbolName().getName());
+					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s)));
 			}
 			if (container instanceof FunctionCallStatementImpl) {
 				FunctionCallStatement s = (FunctionCallStatement) container;
 				if (s.getSymbolName() != null)
-					varList.add(s.getSymbolName().getName());
+					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s.getExpression())));
 			}
 			//ParameterObject -> VARIABILITY, matrix, diag, same
 	    	if (container instanceof VariabilityBlockStatementImpl){
@@ -339,7 +335,7 @@ public class Utils {
 	    		FunctionCall functCall = (FunctionCall) container;
 	    		String functName = functCall.getIdentifier().getName();
     			if (FunctionValidator.libraries.contains(functName))
-    				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariableNames());
+    				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariables());
 	    	}
 		}
 		return varList;

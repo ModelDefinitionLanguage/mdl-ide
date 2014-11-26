@@ -36,18 +36,18 @@ MOGObject:
 //////////////////////////////////////////////////////////
 
 ModelObjectBlock: 
-	individualVariablesBlock = IndividualVariablesBlock | 
-	modelPredictionBlock = ModelPredictionBlock |
+	individualVariablesBlock = IndividualVariablesBlock | //+
+	modelPredictionBlock = ModelPredictionBlock | //+
 	randomVariableDefinitionBlock = RandomVariableDefinitionBlock |
 	inputVariablesBlock = InputVariablesBlock |
 	structuralParametersBlock = StructuralParametersBlock |
 	variabilityParametersBlock = VariabilityParametersBlock |
-	outputVariablesBlock = OutputVariablesBlock |
+	outputVariablesBlock = OutputVariablesBlock | //+
 	groupVariablesBlock = GroupVariablesBlock | 
 	observationBlock = ObservationBlock |
 	estimationBlock = EstimationBlock |
 	simulationBlock = SimulationBlock |
-	targetBlock = TargetBlock 
+	targetBlock = TargetBlock //+
 ;
 
 IndividualVariablesBlock:
