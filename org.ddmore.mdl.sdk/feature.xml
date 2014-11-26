@@ -91,15 +91,15 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <update label="%updateLabel" url="http://ddmore.eu"/>
    </url>
 
-   <includes
-         id="eu.ddmore.libpharmml.feature"
-         version="0.0.0"/>
-         
    <requires>
       <import plugin="org.ops4j.pax.configmanager"/>
       <import plugin="org.eclipse.equinox.cm"/>
    </requires>
-
+   
+   <includes
+         id="eu.ddmore.libpharmml.feature"
+         version="0.0.0"/>
+   
    <plugin
          id="org.ddmore.mdl"
          download-size="0"
