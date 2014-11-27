@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
@@ -51,10 +52,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	Map<String, MdlDataType> declaredObjects = new HashMap<String, MdlDataType>();	
 	
 	//List of declared variables per object
-	Map<String, List<String>> declaredVariables = new HashMap<String, List<String>>();	
+	Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();	
 	
 	//List of declared variability subblocks diag and matrix (to match with same blocks)
-	Map<String, List<String>> variabilitySubblockNames = new HashMap<String, List<String>>();
+	Map<String, List<Variable>> variabilitySubblockNames = new HashMap<String, List<Variable>>();
 
 	List<MOGObject> mogs = new ArrayList<MOGObject>(); 
 	
@@ -81,18 +82,18 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		for (MclObject obj: mcl.getObjects()){
 			//Parameter object
 			if (obj.getParameterObject() != null){
-				ArrayList<String> paramList = new ArrayList<String>();
+				ArrayList<Variable> paramList = new ArrayList<Variable>();
 				for (ParameterObjectBlock block: obj.getParameterObject().getBlocks()){
 					//VARIABILITY sub-blocks matrix & diag
 					if (block.getVariabilityBlock() != null){
 						for (VariabilityBlockStatement s: block.getVariabilityBlock().getStatements()){
 							if (s.getMatrixBlock() != null){
 								String name = MdlPrinter.getInstance().getAttribute(s.getMatrixBlock().getArguments(), AttributeValidator.attr_name.getName());
-								if (name.length() > 0) paramList.add(name);
+								if (name.length() > 0) paramList.add(new Variable (name, MdlDataType.TYPE_MATRIX));
 							}
 							if (s.getDiagBlock() != null){
 								String name = MdlPrinter.getInstance().getAttribute(s.getDiagBlock().getArguments(), AttributeValidator.attr_name.getName());
-								if (name.length() > 0) paramList.add(name);
+								if (name.length() > 0) paramList.add(new Variable (name, MdlDataType.TYPE_DIAG));
 							}
 						}
 					}
@@ -304,26 +305,27 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				if (mclObj.getDataObject() != null) dObj = mclObj;
 			}			
 			if (dObj != null && mObj != null){
-				List<String> dVars = declaredVariables.get(dObj.getObjectName().getName());
+				List<Variable> dVars = declaredVariables.get(dObj.getObjectName().getName());
 				for (ModelObjectBlock b: mObj.getModelObject().getBlocks()){
 					if (b.getInputVariablesBlock() != null){
 						for (SymbolDeclaration s: b.getInputVariablesBlock().getVariables()){
 							String varName = "";
 							if (s.getSymbolName() != null) varName = s.getSymbolName().getName();
-							/*
-							if (s.getList() != null){
-								String alias = MdlPrinter.getInstance().getAttribute
-									(s.getList().getArguments(), AttributeValidator.attr_alias.getName());
-								if (alias.length() > 0){
-									varName = alias;
-								}
-							}*/
-							if (varName.length() > 0 && !dVars.contains(varName)){
-								warning(MSG_MODEL_DATA_MISMATCH + 
-									": no mapping for model variable " + varName + " found in " + 
-									dObj.getObjectName().getName() + " object", 
-									MdlPackage.Literals.MCL_OBJECT__OBJECT_NAME,
-									MSG_MODEL_DATA_MISMATCH,  mcl.getObjectName().getName());
+							/* if (s.getList() != null){
+								String alias = MdlPrinter.getInstance().getAttribute(s.getList().getArguments(), AttributeValidator.attr_alias.getName());
+								if (alias.length() > 0) varName = alias;}*/
+							if (varName.length() > 0){
+								boolean notFound = true;
+								for (Variable var: dVars)
+									if (var.getName().equals(varName)){
+										notFound = false; break;
+									}
+								if (notFound)
+									warning(MSG_MODEL_DATA_MISMATCH + 
+										": no mapping for model variable " + varName + " found in " + 
+										dObj.getObjectName().getName() + " object", 
+										MdlPackage.Literals.MCL_OBJECT__OBJECT_NAME,
+										MSG_MODEL_DATA_MISMATCH,  mcl.getObjectName().getName());
 							}
 						}
 					}
