@@ -105,6 +105,8 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		if (s.list != null && s.symbolName != null) {
 			val fixed = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
 			var value = s.list.arguments.getAttribute(AttributeValidator::attr_value.name);
+			var lo = s.list.arguments.getAttribute(AttributeValidator::attr_lo.name);
+			var hi = s.list.arguments.getAttribute(AttributeValidator::attr_hi.name);
 			if (value.length == 0) value = "0";
 			'''
 				<ParameterEstimation>
@@ -112,6 +114,16 @@ class ModellingStepsPrinter extends DataSetPrinter{
 					<InitialEstimate fixed="«fixed»">
 						<ct:Real>«value»</ct:Real>
 					</InitialEstimate>
+					«IF lo.length > 0»
+						<LowerBound>
+							<ct:Real>«lo»</ct:Real>
+						</LowerBound>
+					«ENDIF»
+					«IF hi.length > 0»
+						<UpperBound>
+							<ct:Real>«hi»</ct:Real>
+						</UpperBound>
+					«ENDIF»
 				</ParameterEstimation>
 			'''
 		}
