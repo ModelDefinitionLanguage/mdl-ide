@@ -15,10 +15,9 @@ import org.ddmore.mdl.mdl.MclObject
 import java.util.ArrayList
 
 class ReferenceResolver{
-	extension MdlPrinter mdlPrinter;
+	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
 	
-	new(Mcl m, MdlPrinter mdlPrinter) {
-    	this.mdlPrinter = mdlPrinter
+	new(Mcl m) {
     	prepareCollections(m);
  	}
 	

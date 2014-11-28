@@ -52,7 +52,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	Map<String, MdlDataType> declaredObjects = new HashMap<String, MdlDataType>();	
 	
 	//List of declared variables per object
-	Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();	
+	public static Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();	
 	
 	//List of declared variability subblocks diag and matrix (to match with same blocks)
 	Map<String, List<Variable>> variabilitySubblockNames = new HashMap<String, List<Variable>>();

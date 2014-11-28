@@ -34,9 +34,10 @@ import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.types.MdlDataType
 
-class MathPrinter extends MdlPrinter {
+class MathPrinter{
 
-	extension ReferenceResolver resolver = null
+	extension ReferenceResolver resolver = null;
+	extension MdlPrinter printer = MdlPrinter::getInstance();
 
 	new(ReferenceResolver resolver) {
 		this.resolver = resolver
@@ -623,7 +624,7 @@ class MathPrinter extends MdlPrinter {
 	}
 
 	//operators
-	override convertOperator(String operator) {
+	def convertOperator(String operator) {
 		switch (operator) {
 			case "<": "lt"
 			case ">": "gt"

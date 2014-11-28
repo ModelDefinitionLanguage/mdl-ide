@@ -160,11 +160,12 @@ public class Utils {
 				list.add(new Variable(id.getName(), MdlDataType.TYPE_REAL));
 	}
 	
+	//Arguments are only used in matrix and diag, so all parameters are Real
 	private static void addSymbol(List<Variable> list, Arguments args){
 		if (args.getArguments() != null)	
 			for (Argument arg: args.getArguments()){
 				if (arg.getArgumentName() != null)
-					list.add(new Variable(arg.getArgumentName().getName(), MdlDataType.getDerivedType(arg)));
+					list.add(new Variable(arg.getArgumentName().getName(), MdlDataType.TYPE_REAL));
 			}
 	}
 
@@ -314,13 +315,19 @@ public class Utils {
 			if (container instanceof SymbolDeclarationImpl) {
 				SymbolDeclaration s = (SymbolDeclaration) container;
 				if (s.getSymbolName() != null)
-					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s)));
+					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getExpectedType(s)));
 			}
 			if (container instanceof FunctionCallStatementImpl) {
 				FunctionCallStatement s = (FunctionCallStatement) container;
 				if (s.getSymbolName() != null)
 					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s.getExpression())));
 			}
+	    	if (container instanceof FunctionCallImpl){
+	    		FunctionCall functCall = (FunctionCall) container;
+	    		String functName = functCall.getIdentifier().getName();
+    			if (FunctionValidator.libraries.contains(functName))
+    				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariables());
+	    	}
 			//ParameterObject -> VARIABILITY, matrix, diag, same
 	    	if (container instanceof VariabilityBlockStatementImpl){
 				VariabilityBlockStatement s = (VariabilityBlockStatement)container;
@@ -331,12 +338,6 @@ public class Utils {
 				if (s.getSameBlock() != null)
 					Utils.addSymbol(varList, s.getSameBlock().getParameters());
 			}
-	    	if (container instanceof FunctionCallImpl){
-	    		FunctionCall functCall = (FunctionCall) container;
-	    		String functName = functCall.getIdentifier().getName();
-    			if (FunctionValidator.libraries.contains(functName))
-    				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariables());
-	    	}
 		}
 		return varList;
 	}

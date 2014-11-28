@@ -12,8 +12,10 @@ import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.types.VariableType
+import eu.ddmore.converter.mdlprinting.MdlPrinter
 
 class DataSetPrinter {
+	protected extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver=null;
 	

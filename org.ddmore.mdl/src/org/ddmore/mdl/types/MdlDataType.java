@@ -11,10 +11,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ddmore.mdl.domain.FunctionSignature;
+import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.AdditiveExpression;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
-import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.EnumType; 
 import org.ddmore.mdl.mdl.Expression;
@@ -25,6 +25,7 @@ import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
+import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
@@ -39,6 +40,7 @@ import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.FunctionValidator;
+import org.ddmore.mdl.validation.MdlJavaValidator;
 import org.ddmore.mdl.validation.Utils;
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
@@ -112,7 +114,9 @@ public enum MdlDataType {
 	}
 
 	static public boolean validateType(MdlDataType type, EnumType expr){
-		return (getDerivedType(expr) == type);
+		MdlDataType actualType = getDerivedType(expr);
+		if (type == TYPE_VAR_TYPE && actualType == TYPE_CONTINUOUS) return true;
+		return (actualType == type);
 	}
 	
 	static public boolean validateType(MdlDataType type, RandomList expr){
@@ -344,33 +348,13 @@ public enum MdlDataType {
 	//Validate basic types
 	//////////////////////////////////////////////////////////////////////////////////
 	private static boolean isBoolean(OrExpression orExpr) {
-		if (orExpr.getExpression().size() > 1) return true;
-		AndExpression andExpr = orExpr.getExpression().get(0);
-		if (andExpr.getExpression().size() > 1) return true;
-		LogicalExpression logicExpr = andExpr.getExpression().get(0);
-		if (logicExpr.getBoolean() != null) return true;
-		if ((logicExpr.getExpression1() != null) && (logicExpr.getExpression2() != null)) return true;
-		if (logicExpr.getExpression1().getExpression().size() == 1){
-			if (logicExpr.getExpression1().getExpression().get(0).getExpression().size() == 1){
-				PowerExpression p = logicExpr.getExpression1().getExpression().get(0).getExpression().get(0);
-				if (p.getExpression().get(0).getParExpression() != null)
-					return isBoolean(p.getExpression().get(0).getParExpression().getExpression());
-			}
-		}
-		return false;
+		MdlDataType type = getDerivedType(orExpr);
+		return (type == TYPE_BOOLEAN);
 	}
 	
 	private static boolean isString(OrExpression orExpr) {
-		if (orExpr.getExpression().size() > 1) return false;
-		AndExpression andExpr = orExpr.getExpression().get(0);
-		if (andExpr.getExpression().size() > 1) return false;
-		LogicalExpression logicExpr = andExpr.getExpression().get(0);
-		if (logicExpr.getExpression1() != null){
-			if (logicExpr.getExpression2() != null) return false;
-			if (logicExpr.getExpression1().getString() != null) return true;
-			return false;
-		}
-		return false;	
+		MdlDataType type = getDerivedType(orExpr);
+		return (type == TYPE_STRING);
 	}	
 	
 	///////////////////////////////////////////////
@@ -505,24 +489,33 @@ public enum MdlDataType {
 	//Infer type
 	///////////////////////////////////////////////////////////
 	//Define type of a variable depending on its expression or container!
-	public static MdlDataType getDerivedType(SymbolDeclaration s){
-		if (s.getRandomList() != null)
-			return getDerivedType(s.getRandomList());
+	public static MdlDataType getExpectedType(SymbolDeclaration s){
 		if (s.getList() != null)
-			return getDerivedType(s.getList());
-		if (s.getExpression() != null)
-			return MdlDataType.getDerivedType(s.getExpression());
-		return TYPE_UNDEFINED;
+			return getExpectedType(s.getList());		
+		return TYPE_REAL;
 	}
 	
-	public static MdlDataType getDerivedType(Argument arg){
-		if (arg.getRandomList() != null) 
-			return getDerivedType(arg.getRandomList()); 
-		if (arg.getExpression() != null)
-			return MdlDataType.getDerivedType(arg.getExpression());
-		return TYPE_UNDEFINED;
+	public static MdlDataType getExpectedType(org.ddmore.mdl.mdl.List l){
+		//List contains type attribute - derive based on type
+		AnyExpression type = MdlPrinter.getInstance().getAttributeExpression(l.getArguments(), AttributeValidator.attr_req_type.getName());
+		if (type != null){
+			if (type.getType() != null && type.getType().getType() != null){
+				if (type.getType().getType().getCategorical() != null)
+					return TYPE_INT;
+			}
+		}			
+		return TYPE_REAL;
 	}
-	
+
+	public static MdlDataType getDerivedType(org.ddmore.mdl.mdl.List l){
+		//Derive the type of value
+		AnyExpression value = MdlPrinter.getInstance().getAttributeExpression(l.getArguments(), AttributeValidator.attr_value.getName());
+		if (value != null){
+			return getDerivedType(value);
+		}			
+		return TYPE_REAL;
+	}
+
 	public static MdlDataType getDerivedType(AnyExpression expr){
 		if (expr.getExpression() != null) 
 			return getDerivedType(expr.getExpression());
@@ -535,7 +528,6 @@ public enum MdlDataType {
 		return TYPE_UNDEFINED;
 	}
 	
-	//Derives a type of the vector starting from the most restrictive
 	public static MdlDataType getDerivedType(Vector expr){
 		//Int and restrictions
 		if (isVectorPNat(expr)) return TYPE_VECTOR_PNAT;
@@ -552,8 +544,12 @@ public enum MdlDataType {
 	}
 	
 	public static MdlDataType getDerivedType(EnumType expr){
-		if (expr.getType() != null) return TYPE_VAR_TYPE;
-		if (expr.getType() != null && (expr.getType().getContinuous() != null)) return TYPE_CONTINUOUS;
+		if (expr.getType() != null) {
+			if (expr.getType().getContinuous() != null) 
+				return TYPE_CONTINUOUS;
+			else 
+				return TYPE_VAR_TYPE;
+		}
 		if (expr.getUse() != UseType.NO_USE) return TYPE_USE;
 		if (expr.getTarget() != TargetType.NO_TARGET) return TYPE_TARGET;
 		if (expr.getVariability() != VariabilityType.NO_VARIABILITY) return TYPE_RANDOM_EFFECT;
@@ -585,14 +581,14 @@ public enum MdlDataType {
 				if (subType == TYPE_PROBABILITY) typeRange[3] = true; 
 				if (subType == TYPE_PREAL) typeRange[4] = true; 
 			}
-			if (!typeRange[3]){// no TYPE_PROBABILITY
+			if (!typeRange[3]){// no probability
 				if (!typeRange[4]){//all integer
 					if (typeRange[2]) return TYPE_INT;
 					if (typeRange[1]) return TYPE_NAT;
 					return TYPE_PNAT;
 				} else 
 					return TYPE_PREAL;
-			} else {//TYPE_PROBABILITY
+			} else {//probability 0 <= x < 1
 				if (typeRange[2]) //not all positive
 					return TYPE_REAL;
 				if (typeRange[4]) //not all < 1
@@ -686,45 +682,24 @@ public enum MdlDataType {
 			if (isInteger(unaryExpr.getNumber())) return TYPE_INT;
 			return TYPE_REAL;
 		}
+		//TODO: replace with computed variable type! 
 		if (unaryExpr.getSymbol() != null){
-			/*ObjectName mclObj = Utils.getObjectName(unaryExpr.getSymbol());
+			//Careful with recursive call!
+			ObjectName mclObj = Utils.getObjectName(unaryExpr.getSymbol());
 			if (mclObj != null && MdlJavaValidator.declaredVariables.containsKey(mclObj.getName()))
 				for (Variable var: MdlJavaValidator.declaredVariables.get(mclObj.getName())){
 					if (var.getName() == unaryExpr.getSymbol().getName())
 						return var.getType();
 				}
-			return TYPE_UNDEFINED;
-			*/
-			//TODO: replace with computed variable type! 
-			return TYPE_PNAT; 
+			return TYPE_REAL;
+			
 		}
 		if (unaryExpr.getAttribute() != null){
-			//Derive attribute types??
+			//Find attribute definition and type its value
 		}
 		return TYPE_REAL;	
 	}
 	
-	public static MdlDataType getDerivedType(org.ddmore.mdl.mdl.List l){
-		//List contains value attribute - return value type
-		AnyExpression value = MdlPrinter.getInstance().getAttributeExpression(l.getArguments(), AttributeValidator.attr_value.getName());
-		if (value != null)
-			return getDerivedType(value);
-		//List contains type attribute - derive based on type
-		AnyExpression type = MdlPrinter.getInstance().getAttributeExpression(l.getArguments(), AttributeValidator.attr_req_type.getName());
-		if (type != null){
-			if (type.getType() != null && type.getType().getType() != null){
-				if (type.getType().getType().getCategorical() != null)
-					return TYPE_INT;
-				return TYPE_REAL;
-			}
-		}		
-		return TYPE_REAL;
-	}
-
-	public static MdlDataType getDerivedType(RandomList l){
-		return TYPE_REAL;
-	}
-
 	public static MdlDataType getDerivedType(FunctionCall call){
 		FunctionSignature functSig = FunctionValidator.standardFunctions.get(call.getIdentifier().getName());
 		if (functSig != null)
