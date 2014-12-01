@@ -290,11 +290,12 @@ class DistributionPrinter extends MdlPrinter{
 	
 	//TODO create temporal variables for complex expressions!!!
 	def String toPharmML(AnyExpression expr, String type){
-		if (MdlDataType::validateType(MdlDataType::TYPE_REAL, expr)){
-			return '''<«type»>«expr.toStr»</«type»>''';
-		}
 		if (MdlDataType::validateType(MdlDataType::TYPE_REF, expr)){
 			return '''<var varId="«expr.toStr»"/>'''; 
+		} else {
+			if (MdlDataType::validateType(MdlDataType::TYPE_REAL, expr)){
+				return '''<«type»>«expr.toStr»</«type»>''';
+			}
 		}
 		if (expr.vector != null) {
 			var res = "";
