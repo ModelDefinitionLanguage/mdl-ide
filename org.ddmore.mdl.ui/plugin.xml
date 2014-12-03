@@ -38,26 +38,28 @@
 	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToPharmMLHandler"
 	    commandId="org.ddmore.mdl.ui.handler.ConvertToPharmML">
       </handler>
+       <handler
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToPharmMLHandler_PE"
+            commandId="org.ddmore.mdl.ui.handler.ConvertToPharmML_PE">
+      </handler>
+      <!--
       <handler
 	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToNONMEMHandler"
 	    commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM">
+      </handler>
+      <handler
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToNONMEMHandler_PE"
+            commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE">
       </handler>
       <handler
 	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.RunWithNONMEMHandler"
 	    commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM">
       </handler>
       <handler
-            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToNONMEMHandler_PE"
-            commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE">
-      </handler>
-       <handler
-            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToPharmMLHandler_PE"
-            commandId="org.ddmore.mdl.ui.handler.ConvertToPharmML_PE">
-      </handler>
-      <handler
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.RunWithNONMEMHandler_PE"
             commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM_PE">
       </handler>
+      -->
     </extension>
     <extension point="org.eclipse.core.expressions.definitions">
         <definition id="org.ddmore.mdl.Mdl.Editor.opened">
@@ -139,12 +141,17 @@
             name="Validate">
       </command>
       <command
-            id="org.ddmore.mdl.ui.handler.ConvertToNONMEM"
-            name="Convert to NONMEM">
-      </command>
-      <command
             id="org.ddmore.mdl.ui.handler.ConvertToPharmML"
             name="Convert to PharmML">
+      </command>
+      <command
+            id="org.ddmore.mdl.ui.handler.ConvertToPharmML_PE"
+            name="Convert to PharmML (PE)">
+      </command>
+      <!--
+      <command
+            id="org.ddmore.mdl.ui.handler.ConvertToNONMEM"
+            name="Convert to NONMEM">
       </command>
       <command
             id="org.ddmore.mdl.ui.handler.RunWithNONMEM"
@@ -158,10 +165,8 @@
             id="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE"
             name="Convert to NONMEM (PE)">
       </command>
-      <command
-            id="org.ddmore.mdl.ui.handler.ConvertToPharmML_PE"
-            name="Convert to PharmML (PE)">
-      </command>
+
+      -->
     </extension>
     <extension point="org.eclipse.ui.menus">
         <menuContribution
@@ -505,7 +510,8 @@
  </extension>
     <!--Convert to NONMEM -->
     <extension point="org.eclipse.ui.menus">
-    <menuContribution
+    	<!--
+    	<menuContribution
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
             <separator
                name="org.ddmore.mdl.ui.separatorNONMEMPackage_PE"
@@ -535,6 +541,7 @@
 	                </visibleWhen>
 	        </command>
 	    </menuContribution>
+	    -->
 	    <menuContribution
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
 	        <command
