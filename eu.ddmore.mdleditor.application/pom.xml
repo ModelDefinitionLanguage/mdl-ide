@@ -12,7 +12,7 @@
 	</parent>
 
 	<artifactId>eu.ddmore.mdleditor.application</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 	
     <profiles>
