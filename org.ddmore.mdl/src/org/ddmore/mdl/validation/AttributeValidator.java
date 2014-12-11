@@ -8,7 +8,6 @@ package org.ddmore.mdl.validation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -224,43 +223,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_designSpace = Arrays.asList(attr_name_ref, attr_admTime, attr_numberSamples);
 	final public static List<Attribute> attrs_hyperSpace = Arrays.asList(attr_name_ref, attr_min, attr_max, attr_admTime, attr_numberSamples);
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//TODO: find how to substitute with identifiers in grammar (statically)
-	final public static HashMap<String, Attribute> allAttributes = new HashMap<String, Attribute>(){
-		private static final long serialVersionUID = -4512048801509444272L;
-		{
-			/*Data object*/
-			for (Attribute attr: attrs_dataInput) put("DATA_INPUT_VARIABLES:" + attr.getName(), attr);
-			for (Attribute attr: attrs_dataDerived) put("DATA_DERIVED_VARIABLES:" + attr.getName(), attr);
-			/*Parameter object*/
-			for (Attribute attr: attrs_structural) put("STRUCTURAL:" + attr.getName(), attr);
-			for (Attribute attr: attrs_variability) put("VARIABILITY:" + attr.getName(), attr);
-			for (Attribute attr: attrs_variability_subblock){
-				put("matrix:" + attr.getName(), attr);
-				put("diag:" + attr.getName(), attr);
-				put("same:" + attr.getName(), attr);
-			}
-			/*Model object*/
-			for (Attribute attr: attrs_inputVariables) put("MODEL_INPUT_VARIABLES:" + attr.getName(), attr);
-			for (Attribute attr: attrs_individualVariables) put("INDIVIDUAL_VARIABLES:" + attr.getName(), attr);
-			for (Attribute attr: attrs_ode) put("ODE:" + attr.getName(), attr);
-			for (Attribute attr: attrs_deq) put("DEQ:" + attr.getName(), attr);
-			for (Attribute attr: attrs_estimation) put("ESTIMATION:" + attr.getName(), attr);
-			for (Attribute attr: attrs_simulation) put("SIMULATION:" + attr.getName(), attr);
-			for (Attribute attr: attrs_observation) put("OBSERVATION:" + attr.getName(), attr);
-			for (Attribute attr: attrs_structuralParams) put("STRUCTURAL_PARAMETERS:" + attr.getName(), attr);
-			for (Attribute attr: attrs_variabilityParams) put("VARIABILITY_PARAMETERS:" + attr.getName(), attr);
-			for (Attribute attr: attrs_randomVars) put("RANDOM_VARIABLE_DEFINITION:" + attr.getName(), attr);
-			/*Design object*/
-			for (Attribute attr: attrs_studyDesign)    put("STUDY_DESIGN:" + attr.getName(), attr);
-			for (Attribute attr: attrs_administration) put("ADMINISTRATION:" + attr.getName(), attr);
-			for (Attribute attr: attrs_action)         put("ACTION:" + attr.getName(), attr);
-			for (Attribute attr: attrs_sampling)       put("SAMPLING:" + attr.getName(), attr);
-			for (Attribute attr: attrs_designSpace)    put("DESIGN_SPACE:" + attr.getName(), attr);
-			for (Attribute attr: attrs_hyperSpace)     put("HYPER_SPACE:" + attr.getName(), attr);
-		}
-	};
-	
 	public static List<Attribute> getAllAttributes(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return attrs_dataInput; 
@@ -289,10 +251,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof HyperSpaceBlockImpl) return attrs_hyperSpace; 
 		return null;
 	}
-	
-	public static Attribute getAttributeById(String id){
-        return allAttributes.get(id);
-    }
 	
 	//Do not validate arguments in matrix/diag definition and function calls
 	private Boolean skipAttributeValidation(EObject container, Arguments args){

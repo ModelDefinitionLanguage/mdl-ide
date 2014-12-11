@@ -117,19 +117,19 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_weight = new Attribute("weight", MdlDataType.TYPE_REAL, false);	
 	public final static Attribute attr_seed = new Attribute("seed", MdlDataType.TYPE_REAL, false);	
 	
-	final public static Map<DistributionType, List<Attribute>> distr_attrs = 
-			new HashMap<DistributionType, List<Attribute>>() {
+	final public static Map<String, List<Attribute>> distr_attrs = 
+			new HashMap<String, List<Attribute>>() {
 				private static final long serialVersionUID = 27681295286815005L;
 		{
-			put(DistributionType.BERNOULLI, Arrays.asList(
+			put(DistributionType.BERNOULLI.toString(), Arrays.asList(
 					attr_probability,
 					attr_p));
-			put(DistributionType.BETA_DISTRIBUTION, Arrays.asList(
+			put(DistributionType.BETA_DISTRIBUTION.toString(), Arrays.asList(
 					attr_alpha,
 					attr_beta, 
 					attr_continuous_lo,
 					attr_continuous_hi));
-			put(DistributionType.BINOMIAL, Arrays.asList(
+			put(DistributionType.BINOMIAL.toString(), Arrays.asList(
 					attr_numberOfTrials,
 					attr_nTrials,
 					attr_n,
@@ -137,43 +137,43 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_p_ofSuccess,
 					attr_nat_lo,
 					attr_nat_hi));
-			put(DistributionType.DISCRETE, Arrays.asList(
+			put(DistributionType.DISCRETE.toString(), Arrays.asList(
 					attr_ncat,
 					attr_categories,
 					attr_probabilities,
 					attr_prob));
-			put(DistributionType.CAUCHY, Arrays.asList(
+			put(DistributionType.CAUCHY.toString(), Arrays.asList(
 					attr_location,
 					attr_scale, 
 					attr_continuous_lo,
 					attr_continuous_hi));
-			put(DistributionType.CHI_SQUARE, Arrays.asList(
+			put(DistributionType.CHI_SQUARE.toString(), Arrays.asList(
 					attr_pnat_degreesOfFreedom,
 					attr_pnat_dof, 
 					attr_preal_lo,
 					attr_preal_hi));
-			put(DistributionType.DIRICHLET, Arrays.asList(attr_prealVector_alpha));
-			put(DistributionType.EXPONENTIAL, Arrays.asList(attr_lambda,
+			put(DistributionType.DIRICHLET.toString(), Arrays.asList(attr_prealVector_alpha));
+			put(DistributionType.EXPONENTIAL.toString(), Arrays.asList(attr_lambda,
 					attr_preal_lo,
 					attr_preal_hi));
-			put(DistributionType.FDISTRIBUTION, Arrays.asList(
+			put(DistributionType.FDISTRIBUTION.toString(), Arrays.asList(
 					attr_denominator,
 					attr_den,
 					attr_numerator, 
 					attr_num,
 					attr_preal_lo,
 					attr_preal_hi));
-			put(DistributionType.GAMMA, Arrays.asList(
+			put(DistributionType.GAMMA.toString(), Arrays.asList(
 					attr_shape,
 					attr_scale, 
 					attr_preal_lo,
 					attr_preal_hi));
-			put(DistributionType.GEOMETRIC, Arrays.asList(
+			put(DistributionType.GEOMETRIC.toString(), Arrays.asList(
 					attr_probability, 
 					attr_p,
 					attr_nat_lo,
 					attr_nat_hi));
-			put(DistributionType.HYPERGEOMETRIC, Arrays.asList(
+			put(DistributionType.HYPERGEOMETRIC.toString(), Arrays.asList(
 					attr_numberOfSuccesses,
 					attr_nSuccess,
 					attr_numberOfTrials, 
@@ -183,40 +183,40 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_popSize,
 					attr_nat_lo,
 					attr_nat_hi));
-			put(DistributionType.INVERSE_GAMMA, Arrays.asList(
+			put(DistributionType.INVERSE_GAMMA.toString(), Arrays.asList(
 					attr_shape,
 					attr_scale, 
 					attr_preal_lo,
 					attr_preal_hi));
-			put(DistributionType.LAPLACE, Arrays.asList(
+			put(DistributionType.LAPLACE.toString(), Arrays.asList(
 					attr_location,
 					attr_scale, 
 					attr_preal_lo,
 					attr_preal_hi));
-			put(DistributionType.LOGISTIC, Arrays.asList(
+			put(DistributionType.LOGISTIC.toString(), Arrays.asList(
 					attr_location,
 					attr_scale, 
 					attr_preal_lo,
 					attr_preal_hi));
-			put(DistributionType.LOG_NORMAL, Arrays.asList(
+			put(DistributionType.LOG_NORMAL.toString(), Arrays.asList(
 					attr_median,
 					attr_cv, 
 					attr_var,
 					attr_mu,
 					attr_preal_lo,
 					attr_preal_hi));
-			put(DistributionType.MULTINOMIAL, Arrays.asList(
+			put(DistributionType.MULTINOMIAL.toString(), Arrays.asList(
 					attr_numberOfTrials,
 					attr_nTrials,
 					attr_probabilities,
 					attr_prob)); 
-			put(DistributionType.MULTIVARIATE_NORMAL, Arrays.asList(
+			put(DistributionType.MULTIVARIATE_NORMAL.toString(), Arrays.asList(
 					attr_realVector_mean,
 					attr_cov,
 					//attr_corr,      //does not exist in PharmML
 					//attr_vector_sd, //does not exist in PharmML
 					attr_dimension)); 
-			put(DistributionType.MULTIVARIATE_STUDENT_T, Arrays.asList(
+			put(DistributionType.MULTIVARIATE_STUDENT_T.toString(), Arrays.asList(
 					//attr_meanVector,
 					//attr_covarianceMatrix,
 					attr_realVector_mean,
@@ -224,20 +224,20 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_pnat_degreesOfFreedom,
 					attr_pnat_dof,
 					attr_dimension)); 
-			put(DistributionType.NEGATIVE_BINOMIAL, Arrays.asList(
+			put(DistributionType.NEGATIVE_BINOMIAL.toString(), Arrays.asList(
 					attr_numberOfFailures,
 					attr_nFail,
 					attr_probability, 
 					attr_p,
 					attr_nat_lo,
 					attr_nat_hi));
-			put(DistributionType.NORMAL, Arrays.asList(
+			put(DistributionType.NORMAL.toString(), Arrays.asList(
 					attr_mean,
 					attr_sd, 
 					attr_var, 
 					attr_continuous_lo,
 					attr_continuous_hi));
-			put(DistributionType.NORMAL_INVERSE_GAMMA, Arrays.asList(
+			put(DistributionType.NORMAL_INVERSE_GAMMA.toString(), Arrays.asList(
 					attr_mean,
 					attr_varianceScaling, 
 					attr_shape, 
@@ -246,36 +246,36 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_hiN, 
 					attr_loIG, 
 					attr_hiIG));
-			put(DistributionType.PARETO, Arrays.asList(
+			put(DistributionType.PARETO.toString(), Arrays.asList(
 					attr_scale,
 					attr_shape, 
 					attr_continuous_lo, 
 					attr_continuous_hi));
-			put(DistributionType.POISSON, Arrays.asList(
+			put(DistributionType.POISSON.toString(), Arrays.asList(
 					attr_lambda,
 					attr_nat_lo,
 					attr_nat_hi));
-			put(DistributionType.STUDENT_T, Arrays.asList(
+			put(DistributionType.STUDENT_T.toString(), Arrays.asList(
 					attr_location,
 					attr_scale, 
 					attr_pnat_degreesOfFreedom,
 					attr_pnat_dof,
 					attr_continuous_lo,
 					attr_continuous_hi));
-			put(DistributionType.UNIFORM, Arrays.asList(
+			put(DistributionType.UNIFORM.toString(), Arrays.asList(
 					attr_min,
 					attr_max,
 					attr_numberOfClasses));
-			put(DistributionType.UNIF, Arrays.asList(
+			put(DistributionType.UNIF.toString(), Arrays.asList(
 					attr_min,
 					attr_max,
 					attr_numberOfClasses));
-			put(DistributionType.WEIBULL, Arrays.asList(
+			put(DistributionType.WEIBULL.toString(), Arrays.asList(
 					attr_lambda,
 					attr_kappa, 
 					attr_preal_lo,
 					attr_preal_hi));
-			put(DistributionType.WISHART, Arrays.asList(
+			put(DistributionType.WISHART.toString(), Arrays.asList(
 					attr_n,
 					attr_scaleMatrix,
 					attr_dimension)); 
@@ -376,30 +376,18 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		}
 	};
 
-	public static final Attribute getAttributeById(String id){
-		String[] tokens = id.split(":");
-        if (tokens.length > 0){
-        	List<Attribute> recognizedAttrs = distr_attrs.get(tokens[0]);
-        	if (recognizedAttrs != null)
-	        	for (Attribute attr: recognizedAttrs){
-	        		if (attr.getName().equals(tokens[1])) return attr;
-	        	}
-        }
-		return null;
-    }
-	
 	@Check
 	public void checkRequiredArguments(Arguments args){
 		if (!(args.eContainer() instanceof RandomListImpl)) return; 
 		AnyExpression type = MdlPrinter.getInstance().getAttributeExpression(args, attr_type.getName());
 		if (type != null && type.getType() != null && type.getType().getDistribution() != DistributionType.NO_DISTRIBUTION){
-			DistributionType typeName = type.getType().getDistribution();
+			String typeName = type.getType().getDistribution().toString();
 			List<Attribute> recognized_attrs = distr_attrs.get(typeName);
 			for (Attribute arg: recognized_attrs){
 				if (arg.isMandatory()){
 					AnyExpression actualArg = MdlPrinter.getInstance().getAttributeExpression(args, arg.getName());
 					if (actualArg == null){
-						String synonym = alternative_attrs.get(typeName +":" + arg.getName());
+						String synonym = alternative_attrs.get(typeName + ":" + arg.getName());
 						if (synonym != null) actualArg =  MdlPrinter.getInstance().getAttributeExpression(args, synonym);
 						if (actualArg == null)
 							warning(MSG_DISTR_ATTRIBUTE_MISSING + ": " + arg.getName(), 
@@ -443,7 +431,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		}
 		AnyExpression type = MdlPrinter.getInstance().getAttributeExpression(args, attr_type.getName());
 		if (type != null && type.getType() != null && type.getType().getDistribution() != DistributionType.NO_DISTRIBUTION){
-			List<Attribute> recognized_attrs = distr_attrs.get(type.getType().getDistribution());
+			List<Attribute> recognized_attrs = distr_attrs.get(type.getType().getDistribution().toString());
 			if (checkAttribute(recognized_attrs, argument)) return;
 		}
 		if (checkAttribute(common_attrs, argument)) return;

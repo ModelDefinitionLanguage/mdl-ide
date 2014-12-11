@@ -208,8 +208,7 @@ ModelPredictionBlockStatement:
 	variable = SymbolDeclaration | 
 	odeBlock = OdeBlock | 
 	libraryBlock = LibraryBlock |
-	compartmentBlock = CompartmentBlock |
-	degBlock = DeqBlock
+	compartmentBlock = CompartmentBlock 
 ;
 
 LibraryBlock: 
@@ -232,7 +231,7 @@ FunctionCallStatement:
 ;
 
 OdeBlock:
-	identifier = 'ODE' 
+	identifier = ('ODE' | 'DEQ')
 	BEGIN variables += SymbolDeclaration* END 
 ;
 
