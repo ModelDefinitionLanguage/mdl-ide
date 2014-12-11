@@ -155,7 +155,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_steadyState = new Attribute("steadyState", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_interval = new Attribute("interval", 
 			Arrays.asList(MdlDataType.TYPE_PREAL, MdlDataType.TYPE_VECTOR_PREAL), false);
-	final public static Attribute attr_combination = new Attribute("combination", MdlDataType.TYPE_LIST, false);
+	final public static Attribute attr_combination = new Attribute("combination", MdlDataType.TYPE_VECTOR_REF, false);
 	final public static Attribute attr_treatment = new Attribute("treatment", MdlDataType.TYPE_REF, false);
 	
 	/*ACTION*/

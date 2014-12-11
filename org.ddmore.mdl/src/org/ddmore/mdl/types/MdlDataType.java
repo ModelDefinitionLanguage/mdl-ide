@@ -682,7 +682,6 @@ public enum MdlDataType {
 			if (isInteger(unaryExpr.getNumber())) return TYPE_INT;
 			return TYPE_REAL;
 		}
-		//TODO: replace with computed variable type! 
 		if (unaryExpr.getSymbol() != null){
 			//Careful with recursive call!
 			ObjectName mclObj = Utils.getObjectName(unaryExpr.getSymbol());
@@ -692,7 +691,6 @@ public enum MdlDataType {
 						return var.getType();
 				}
 			return TYPE_REAL;
-			
 		}
 		if (unaryExpr.getAttribute() != null){
 			//Find attribute definition and type its value

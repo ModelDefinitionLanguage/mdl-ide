@@ -299,7 +299,7 @@ class ReferenceResolver{
 			var container = o.eContainer;
 			if (container instanceof MclObjectImpl){
 				val mclObject = container as MclObject;
-				if (mclObject.taskObject != null) return mclObject;
+				if (mclObject.taskObject != null) return mclObject.taskObject;
 			}
 		}
 		return null;
@@ -310,7 +310,7 @@ class ReferenceResolver{
 			var container = o.eContainer;
 			if (container instanceof MclObjectImpl){
 				val mclObject = container as MclObject;
-				if (mclObject.modelObject != null) return mclObject;
+				if (mclObject.modelObject != null) return mclObject.modelObject;
 			}
 		}
 		return null;
@@ -321,7 +321,7 @@ class ReferenceResolver{
 			var container = o.eContainer;
 			if (container instanceof MclObjectImpl){
 				val mclObject = container as MclObject;
-				if (mclObject.parameterObject != null) return mclObject;
+				if (mclObject.parameterObject != null) return mclObject.parameterObject;
 			}
 		}
 		return null;
@@ -332,7 +332,7 @@ class ReferenceResolver{
 			var container = o.eContainer;
 			if (container instanceof MclObjectImpl){
 				val mclObject = container as MclObject;
-				if (mclObject.dataObject != null) return mclObject;
+				if (mclObject.dataObject != null) return mclObject.dataObject;
 			}
 		}
 		return null;

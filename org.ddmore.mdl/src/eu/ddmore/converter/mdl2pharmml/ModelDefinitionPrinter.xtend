@@ -15,9 +15,6 @@ import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.VariabilityType
 
 class ModelDefinitionPrinter {
-	private var ModelObject mObj;
-	private var ParameterObject pObj;
-	private var DataObject dObj;
 	protected extension DistributionPrinter distrPrinter = new DistributionPrinter();
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver = null;
@@ -33,17 +30,16 @@ class ModelDefinitionPrinter {
 	
 	//Print <ModelDefinition>
 	def print_mdef_ModelDefinition(MOGObject mog){
-		this.mObj = mog.getModelObject.modelObject;
-		this.pObj = mog.getParameterObject.parameterObject;
-		this.dObj = mog.getDataObject.dataObject;
-		
+		var ModelObject mObj = mog.getModelObject;
+		var ParameterObject pObj = mog.getParameterObject;
+		var DataObject dObj = mog.getDataObject;
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«print_mdef_VariabilityModel»
-			«print_mdef_CovariateModel»
-			«print_mdef_ParameterModel»
-			«print_mdef_StructuralModel»
-			«print_mdef_ObservationModel»
+			«print_mdef_CovariateModel(mObj, dObj)»
+			«print_mdef_ParameterModel(mObj, pObj)»
+			«print_mdef_StructuralModel(mObj)»
+			«print_mdef_ObservationModel(mObj)»
 		</ModelDefinition>
 		'''
 	}
@@ -82,7 +78,7 @@ class ModelDefinitionPrinter {
 	
 	//INDIVIDUAL_VARIABLES, use=covariate -> CovariateModel (transformation with reference)
 	//TODO: extend to deal not only with continuous covariates (covType = s.getCovariateType)
-	protected def print_mdef_CovariateModel(){
+	protected def print_mdef_CovariateModel(ModelObject mObj, DataObject dObj){
 		var model = "";
 		if (mObj != null){
 			if (cm_vars.size() > 0){
@@ -90,9 +86,9 @@ class ModelDefinitionPrinter {
 				'''
 				<CovariateModel blkId="cm">
 					«FOR s: cm_vars»
-						«val covType = s.getCovariateType»
+						«val covType = s.getCovariateType(mObj)»
 						<Covariate symbId="«s»">
-							«var transformation = s.getCovariateTransformation»	
+							«var transformation = s.getCovariateTransformation(dObj)»	
 							«IF transformation != null»
 								<«covType»>
 									<Transformation>
@@ -111,7 +107,7 @@ class ModelDefinitionPrinter {
 		return model;
 	}	
 	
-	protected def getCovariateType(String covVar){
+	protected def getCovariateType(String covVar, ModelObject mObj){
 		for (b: mObj.blocks){
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
@@ -126,16 +122,17 @@ class ModelDefinitionPrinter {
 		return VariableType::CC_CONTINUOUS;
 	}	
 	
-	protected def getCovariateTransformation(String covVar){
-		for (b: dObj.blocks){
-			if (b.dataDerivedBlock != null){
-				for (s: b.dataDerivedBlock.variables){
-					if (s.symbolName != null && covVar.equals(s.symbolName.name)){
-						return s.expression;
+	protected def getCovariateTransformation(String covVar, DataObject dObj){
+		if (dObj != null)
+			for (b: dObj.blocks){
+				if (b.dataDerivedBlock != null){
+					for (s: b.dataDerivedBlock.variables){
+						if (s.symbolName != null && covVar.equals(s.symbolName.name)){
+							return s.expression;
+						}
 					}
-				}
-			}					
-		}
+				}					
+			}
 		return null;
 	}	
 	
@@ -145,7 +142,7 @@ class ModelDefinitionPrinter {
 		
 	//Parameter object, STRUCTURAL + VARIABILITY -> ParameterModel - SimpleAttribute  
 	//RANDOM_VARIABLES_DEFINITION -> ParameterModel - RandomVariable
-	protected def print_mdef_ParameterModel(){		
+	protected def print_mdef_ParameterModel(ModelObject mObj, ParameterObject pObj){		
 		var statements = "";
 		if (pObj != null){
 			for (b: pObj.blocks){
@@ -194,7 +191,7 @@ class ModelDefinitionPrinter {
 		  		}
 		  	}
   		}
-  		statements = statements + print_mdef_CollerationModel; 
+  		statements = statements + print_mdef_CollerationModel(mObj); 
 	  	if (statements.length > 0){
 			'''
 				<ParameterModel blkId="pm">
@@ -219,7 +216,7 @@ class ModelDefinitionPrinter {
 	/////////////////////////
 	
 	//+ STRUCTURAL_PARAMETER -> <StructuralModel>
-	protected def print_mdef_StructuralModel(){
+	protected def print_mdef_StructuralModel(ModelObject mObj){
 		var model ="";
 		if (mObj != null){
 			var variables = "";
@@ -252,7 +249,7 @@ class ModelDefinitionPrinter {
 	/////////////////////////////
 	// I.f Observation Model
 	/////////////////////////////
-	protected def print_mdef_ObservationModel(){
+	protected def print_mdef_ObservationModel(ModelObject mObj){
 		var statements = "";
 		if (mObj != null){
 			for (b: mObj.blocks){
@@ -340,7 +337,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	//+ returns distribution for the first declaration with a given name
-	protected def defineDistribution(String ref){
+	protected def defineDistribution(String ref, ModelObject mObj){
 		//find paramName in RANDOM_VARIABLES_DEFINITION
 		if (mObj != null){
 			for (b: mObj.blocks){
@@ -512,7 +509,7 @@ class ModelDefinitionPrinter {
 	/////////////////////////////
 	// I.i CorrelationModel
 	/////////////////////////////
-	protected def print_mdef_CollerationModel(){
+	protected def print_mdef_CollerationModel(ModelObject mObj){
 		var model = "";
 		if (mObj != null){
 			for (b: mObj.blocks){

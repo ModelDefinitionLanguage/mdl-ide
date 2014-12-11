@@ -1,6 +1,7 @@
 package org.ddmore.mdl.domain;
 
 //import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,12 +10,21 @@ import org.ddmore.mdl.types.MdlDataType;
 public class Variable {
 	String name;
 	MdlDataType type = MdlDataType.TYPE_UNDEFINED; 
-	HashMap<String, Variable> dependencies = null;
-	List<String> tmpDependencies = null;
+	HashMap<String, Variable> dependencies = new HashMap<String, Variable>();
 	
-	public Variable(String name, List<String> tmpDependencies){
+	public Variable(String name, List<String> dependencies){
 		this.name = name;
-		this.tmpDependencies = tmpDependencies;
+		for (String varName: dependencies){
+			if (!this.dependencies.containsKey(varName))
+				this.dependencies.put(varName, null);
+		}
+	}	
+	
+	public Variable(String name, ArrayList<Variable> dependencies){
+		this.name = name;
+		for (Variable var: dependencies){
+			this.dependencies.put(var.getName(), var);
+		}
 	}	
 	
 	public Variable(String name, MdlDataType type){
@@ -30,6 +40,14 @@ public class Variable {
 		return type;
 	}
 	
+	public boolean deriveType(){
+		for (Variable var: dependencies.values()){
+			if (var == null) return false;
+		}
+		//No unknown dependencies, can compute actual type
+		return true;
+	}
+	
 	public boolean addDependency(Variable newDependency){
 		if (!dependencies.containsKey(newDependency.getName())){
 			dependencies.put(newDependency.getName(), newDependency);
@@ -38,30 +56,11 @@ public class Variable {
 		return false;
 	}
 
-	public boolean addTmpDependency(String newTmpDependency){
-		if (!tmpDependencies.contains(newTmpDependency)){
-			tmpDependencies.add(newTmpDependency);
-			return true;
-		}
-		return false;
-	}
-	
 	public void clearDependencies(){
 		dependencies.clear();
-		dependencies = null;
-	}
-
-	public void clearTmpDependencies(){
-		tmpDependencies.clear();
-		tmpDependencies = null;
 	}
 
 	public HashMap<String, Variable> getDependencies(){
 		return dependencies;
 	}
-
-	public List<String> getTmpDependencies(){
-		return tmpDependencies;
-	}
-	
 }

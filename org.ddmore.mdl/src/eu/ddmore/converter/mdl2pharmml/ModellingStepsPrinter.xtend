@@ -14,11 +14,6 @@ import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.MOGObject
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
-	private var ModelObject mObj;
-	private var ParameterObject pObj;
-	private var DataObject dObj;
-	private var TaskObject tObj;
-	
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
 		super(mathPrinter, resolver);
 	}
@@ -28,32 +23,35 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 
 	def print_msteps_ModellingSteps(MOGObject mog){
-		this.mObj = mog.getModelObject.modelObject;
-		this.pObj = mog.getParameterObject.parameterObject;
-		this.dObj = mog.getDataObject.dataObject;
-		this.tObj = mog.getTaskObject.taskObject;
-		
+		var ModelObject mObj = mog.getModelObject;
+		var ParameterObject pObj = mog.getParameterObject;
+		var DataObject dObj = mog.getDataObject;
+		var TaskObject tObj = mog.getTaskObject;
+
 		var res = "";
 		var dependencies = ""; 
 		res  = res + print_ds_TargetTool(dObj);
 		res = res + print_ds_TargetDataSet(mObj, dObj);
 		var index = 1;
-		for (b: tObj.blocks){
-			if ((b.estimateBlock != null) || (b.simulateBlock != null)){
-				var stepType = BLK_ESTIM_STEP;
-				if (b.simulateBlock != null) stepType = BLK_SIMUL_STEP;
-				if (stepType.equals(BLK_ESTIM_STEP)){
-					res = res + print_msteps_EstimationStep(stepType + index, index);
-				} else {
-					res = res + print_msteps_SimulationStep(stepType + index, index);
+
+		if (tObj != null) {
+			for (b: tObj.blocks){
+				if ((b.estimateBlock != null) || (b.simulateBlock != null)){
+					var stepType = BLK_ESTIM_STEP;
+					if (b.simulateBlock != null) stepType = BLK_SIMUL_STEP;
+					if (stepType.equals(BLK_ESTIM_STEP)){
+						res = res + print_msteps_EstimationStep(stepType + index, index, dObj, pObj, tObj);
+					} else {
+						res = res + print_msteps_SimulationStep(stepType + index, index, dObj);
+					}
+					dependencies  = dependencies +
+					'''
+					<mstep:Step>
+						<ct:OidRef oidRef="«stepType + index»"/>
+					</mstep:Step>
+					'''
+					index  = index + 1;
 				}
-				dependencies  = dependencies +
-				'''
-				<mstep:Step>
-					<ct:OidRef oidRef="«stepType + index»"/>
-				</mstep:Step>
-				'''
-				index  = index + 1;
 			}
 		}
 		'''
@@ -71,15 +69,15 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 	// III.a Estimation Step
 	////////////////////////////////////////////////
-	protected def print_msteps_EstimationStep(String stepId, Integer order)'''
+	protected def print_msteps_EstimationStep(String stepId, Integer order, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
 	<EstimationStep oid="«stepId»">
-		«print_mdef_TargetToolReference»
-		«print_msteps_ParametersToEstimate»
-		«print_msteps_Operation(order, OPERATION_EST_POP)»
+		«print_mdef_TargetToolReference(dObj)»
+		«print_msteps_ParametersToEstimate(pObj)»
+		«print_msteps_Operation(order, OPERATION_EST_POP, tObj)»
 	</EstimationStep>
 	'''
 		
-	protected def print_msteps_ParametersToEstimate(){
+	protected def print_msteps_ParametersToEstimate(ParameterObject pObj){
 		if (pObj == null) return "";
 		'''
 		<ParametersToEstimate>
@@ -132,9 +130,9 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	///////////////////////////////////////////////
 	// III.b Simulation Step
 	////////////////////////////////////////////////
-	protected def print_msteps_SimulationStep(String stepId, Integer order)'''
+	protected def print_msteps_SimulationStep(String stepId, Integer order, DataObject dObj)'''
 	<SimulationStep  oid="«stepId»">
-		«print_mdef_TargetToolReference»
+		«print_mdef_TargetToolReference(dObj)»
 	</SimulationStep>
 	'''
 	
@@ -142,14 +140,16 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	//General
 	///////////////////////////////////////////////
 	
-	protected def print_mdef_TargetToolReference(){
+	protected def print_mdef_TargetToolReference(DataObject dObj){
 		var oidRef = "";
-		for (b: dObj.blocks)	{
-			if (b.sourceBlock != null){
-				for (s: b.sourceBlock.statements){
-					if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
-						if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString))
-							oidRef = BLK_DS_NONMEM_DATASET;
+		if (dObj != null){
+			for (b: dObj.blocks)	{
+				if (b.sourceBlock != null){
+					for (s: b.sourceBlock.statements){
+						if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
+							if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString))
+								oidRef = BLK_DS_NONMEM_DATASET;
+						}
 					}
 				}
 			}
@@ -162,7 +162,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		'''
 	}	
 
-	protected def print_msteps_Operation(Integer order, String opType){
+	protected def print_msteps_Operation(Integer order, String opType, TaskObject tObj){
 		if (tObj == null) return "";
 		'''
 			«FOR b: tObj.blocks»

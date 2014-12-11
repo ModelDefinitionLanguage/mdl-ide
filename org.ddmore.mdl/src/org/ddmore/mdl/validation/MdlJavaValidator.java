@@ -45,7 +45,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_DATA_OBJ_MISSING  = "MOG should include a data object";
 	public final static String MSG_PARAM_OBJ_MISSING = "MOG should include a parameter object";
 	public final static String MSG_TASK_OBJ_MISSING  = "MOG should include a task object";
-	public final static String MSG_OBJ_DEFINED       = "Cannot create a MOG";
+	public final static String MSG_OBJ_DEFINED         = "Cannot create a MOG";
 	public final static String MSG_MODEL_DATA_MISMATCH = "Inconsistent sets of model/data variables";
 	
 	//List of objects
@@ -260,13 +260,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			Integer [] params = {0, 0, 0, 0};
 			for (ObjectName obj: mog.getObjects()){
 				if (declaredObjects.containsKey(obj.getName())){
-					if (declaredObjects.get(obj.getName()) == MdlDataType.TYPE_OBJ_REF_MODEL)
+					MdlDataType objType = declaredObjects.get(obj.getName());
+					if (objType == MdlDataType.TYPE_OBJ_REF_MODEL)
 						params[0] += 1;
-					if (declaredObjects.get(obj.getName()) == MdlDataType.TYPE_OBJ_REF_PARAM)
+					if (objType == MdlDataType.TYPE_OBJ_REF_PARAM)
 						params[1] += 1;
-					if (declaredObjects.get(obj.getName()) == MdlDataType.TYPE_OBJ_REF_DATA)
+					if (objType == MdlDataType.TYPE_OBJ_REF_DATA)
 						params[2] += 1;
-					if (declaredObjects.get(obj.getName()) == MdlDataType.TYPE_OBJ_REF_TASK)
+					if (objType == MdlDataType.TYPE_OBJ_REF_TASK)
 						params[3] += 1;
 				}
 			}
