@@ -22,8 +22,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ComposedChecks;
 
-import eu.ddmore.converter.mdlprinting.MdlPrinter;
-
 @ComposedChecks(validators = { 
 		AttributeValidator.class,
 		PropertyValidator.class,
@@ -54,9 +52,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	//List of declared variables per object
 	public static Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();	
 	
-	//List of declared variability subblocks diag and matrix (to match with same blocks)
-	Map<String, List<Variable>> variabilitySubblockNames = new HashMap<String, List<Variable>>();
-
 	List<MOGObject> mogs = new ArrayList<MOGObject>(); 
 	
 	@Check
@@ -73,47 +68,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	@Check
 	public void updateLinkedObjects(Mcl mcl){
 		mogs = Utils.getMOGs(mcl);
-	}
-	
-	//Update the list of declared variability subblock names
-	@Check
-	public void updateVariabilitySubblockNames(Mcl mcl){
-		variabilitySubblockNames.clear();
-		for (MclObject obj: mcl.getObjects()){
-			//Parameter object
-			if (obj.getParameterObject() != null){
-				ArrayList<Variable> paramList = new ArrayList<Variable>();
-				for (ParameterObjectBlock block: obj.getParameterObject().getBlocks()){
-					//VARIABILITY sub-blocks matrix & diag
-					if (block.getVariabilityBlock() != null){
-						for (VariabilityBlockStatement s: block.getVariabilityBlock().getStatements()){
-							if (s.getMatrixBlock() != null){
-								String name = MdlPrinter.getInstance().getAttribute(s.getMatrixBlock().getArguments(), AttributeValidator.attr_name.getName());
-								if (name.length() > 0) paramList.add(new Variable (name, MdlDataType.TYPE_MATRIX));
-							}
-							if (s.getDiagBlock() != null){
-								String name = MdlPrinter.getInstance().getAttribute(s.getDiagBlock().getArguments(), AttributeValidator.attr_name.getName());
-								if (name.length() > 0) paramList.add(new Variable (name, MdlDataType.TYPE_DIAG));
-							}
-						}
-					}
-				}
-				variabilitySubblockNames.put(obj.getObjectName().getName(), paramList);
-			}
-		}
-	}
-	
-	//Match the name of the same block with the name of a matrix or a diag block
-	@Check
-	public void validateSameSubblockName(SameBlock b){
-		String name = MdlPrinter.getInstance().getAttribute(b.getArguments(), AttributeValidator.attr_name.getName());
-		if (name.length() > 0){
-			ObjectName objName = Utils.getObjectName(b.eContainer());
-			if (!Utils.isIdentifierDeclared(variabilitySubblockNames, name, objName))
-				warning(MSG_UNRESOLVED_SAME_BLOCK_NAME, 
-						MdlPackage.Literals.SAME_BLOCK__IDENTIFIER,
-						MSG_UNRESOLVED_SAME_BLOCK_NAME, b.getIdentifier());
-		}
 	}
 	
 	@Check

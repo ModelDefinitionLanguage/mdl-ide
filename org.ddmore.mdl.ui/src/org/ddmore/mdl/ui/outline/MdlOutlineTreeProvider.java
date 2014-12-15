@@ -43,7 +43,6 @@ import org.ddmore.mdl.mdl.PropertyDeclaration;
 import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolName;
-import org.ddmore.mdl.mdl.SymbolNames;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.TargetType;
 import org.ddmore.mdl.mdl.TaskObject;
@@ -440,17 +439,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		for (EObject obj: st.eContents()){
 			createNode(parentNode, obj);
 		}
-	}
-	
-	protected void  _createNode(IOutlineNode parentNode, SymbolNames b){
-		for (SymbolName s: b.getSymbolNames()){
-			createEStructuralFeatureNode(parentNode,
-				s,
-				MdlPackage.Literals.SYMBOL_NAME__NAME,
-				_image(s),
-				s.getName(),
-				true);
-		}	
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, Arguments st){

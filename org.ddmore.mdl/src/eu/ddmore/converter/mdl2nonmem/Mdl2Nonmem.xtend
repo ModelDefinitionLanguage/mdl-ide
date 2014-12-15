@@ -12,20 +12,17 @@ import java.util.HashSet
 import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.mdl.DiagBlock
 import org.ddmore.mdl.mdl.EstimateTask
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.FunctionCall
 import org.ddmore.mdl.mdl.List
 import org.ddmore.mdl.mdl.LogicalExpression
-import org.ddmore.mdl.mdl.MatrixBlock
 import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.MixtureBlock
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ModelPredictionBlock
 import org.ddmore.mdl.mdl.OrExpression
 import org.ddmore.mdl.mdl.ParameterObject
-import org.ddmore.mdl.mdl.SameBlock
 import org.ddmore.mdl.mdl.Selector
 import org.ddmore.mdl.mdl.SimulateTask
 import org.ddmore.mdl.mdl.SymbolDeclaration
@@ -479,7 +476,6 @@ class Mdl2Nonmem extends MdlPrinter {
 //convertToNonmem PARAMETER OBJECT
 /////////////////////////////////////		
 	def convertToNMTRAN(ParameterObject o){
-		o.collectDimensionsForSame;	
 		val contentPRIOR = o.printPRIORContent;
 		val contentTHETA = o.printTHETAContent;
 		'''
@@ -563,18 +559,6 @@ class Mdl2Nonmem extends MdlPrinter {
 							res = res + tmp;
 						}
 					}
-					if (c.diagBlock != null){
-						res  = res + c.diagBlock.printDiag(section);
-						printSectionName = true;
-					}
-					if (c.matrixBlock != null){
-						res  = res + c.matrixBlock.printMatrix(section);
-						printSectionName = true;
-					}
-					if (c.sameBlock != null){
-						res  = res + c.sameBlock.printSame(section);
-						printSectionName = true;
-					}
 				}
 			}
 		}
@@ -583,7 +567,8 @@ class Mdl2Nonmem extends MdlPrinter {
 	
 	//$OMEGA BLOCK(dim) SAME ; varName
 	//$SIGMA BLOCK(dim) SAME ; varName
-	def printSame(SameBlock b, String section) { 
+	/*
+	 * def printSame(MatrixBlock b, String section) { 
 		var name = b.arguments.getAttribute(AttributeValidator::attr_name.name);
 		if (name.length == 0) return '''''';
 		val isOmega = section.equals("$OMEGA") && (namedOmegaBlocks.get(name) != null);
@@ -605,43 +590,7 @@ class Mdl2Nonmem extends MdlPrinter {
 		}
 		return "";
 	}	
-	
-	//Create maps with dimensions for same blocks
-	def collectDimensionsForSame(ParameterObject obj){
-		for (b:obj.blocks){
-			if (b.variabilityBlock != null){
-				for (c: b.variabilityBlock.statements){
-					if (c.diagBlock != null)
-						c.diagBlock.collectDimensionsForSame;
-					if (c.matrixBlock != null)
-						c.matrixBlock.collectDimensionsForSame;
-				}
-			}
-		}
-	}
-	
-	//Create maps with dimensions for same blocks corresponding to diag(...){...}
-	def collectDimensionsForSame(DiagBlock b){
-		var k = 0; 
-		var name = b.arguments.getAttribute(AttributeValidator::attr_name.name);
-		var isOmega = false;
-		var isSigma = false;
-		if (name != null){
-			if (b.parameters != null)		
-				for (p: b.parameters.arguments) {
-					if (p.expression != null){
-						k = k + 1;
-						if (p.argumentName != null){
-							if (p.argumentName.name.isOmega) isOmega = true;
-							if (p.argumentName.name.isSigma) isSigma = true;
-						} 
-					}
-				}		
-			if (isOmega) namedOmegaBlocks.put(name, k);
-			if (isSigma) namedSigmaBlocks.put(name, k);
-		}
-	}
-	
+	*/
 	def isOmega(String varName){
 		for (o: mcl.objects){
 			if (o.modelObject != null){
@@ -687,41 +636,12 @@ class Mdl2Nonmem extends MdlPrinter {
 		if (eps_vars.get("eps_" + varName) != null) return true;
 		return false;
 	}
-	
-	//Create maps with dimensions for same blocks corresponding to matrix(...){...}
-	def collectDimensionsForSame(MatrixBlock b){
-		var k = 0;
-		var name = getAttribute(b.arguments, AttributeValidator::attr_name.name);
-		var isOmega = false;
-		var isSigma = false;
-		if (b.parameters != null)
-			for (p: b.parameters.arguments) {
-				if (p.expression != null){
-					if (p.argumentName != null){
-						if (p.argumentName.name.isOmega) isOmega = true;
-						if (p.argumentName.name.isSigma) isSigma = true;
-						k = k + 1;
-					}
-				}
-			}
-		if (isOmega) namedOmegaBlocks.put(name, k);
-		if (isSigma) namedSigmaBlocks.put(name, k);
-	}
 
 	//Print diag(...){...} subblock of VARIABILITY
-	def printDiag(DiagBlock b, String section){
-		var result = "";
-		var printFix = false;
-		var k = 0; 
-		for (a: b.arguments.arguments){
-			if (a.argumentName != null){ 
-				if (a.argumentName.name.equals(AttributeValidator::attr_fix.name)){ 
-					if (a.expression != null){
-						printFix = a.expression.isTrue	
-					}
-				}				
-			}
-		}	
+	/*
+	 * def printDiag(DiagBlock b, String section){
+		//Print fix
+		
 		if (b.parameters != null)		
 			for (p: b.parameters.arguments) {
 				if (p.expression != null){
@@ -768,22 +688,30 @@ class Mdl2Nonmem extends MdlPrinter {
 					}
 			}
 		}
-		if (b.parameters != null)
-			for (p: b.parameters.arguments) {
-				if (p.expression != null){
-					if (p.argumentName != null){
-						val isOmega = section.equals("$OMEGA") && p.argumentName.name.isOmega;
-						val isSigma = section.equals("$SIGMA") && p.argumentName.name.isSigma;
+		var parameters = b.arguments.getAttributeExpression(AttributeValidator::attr_params.name);
+		if (parameters != null)
+			if (parameters.vector != null){
+				for (p: parameters.vector.values){
+					if (p.symbol != null){
+						val isOmega = section.equals("$OMEGA") && p.symbol.name.isOmega;
+						val isSigma = section.equals("$SIGMA") && p.symbol.name.isSigma;
 						if (isOmega || isSigma)	{
-							result = result + p.expression.toStr + " ";
-							result = result + "; " + p.argumentName.name + "\n";
-							k = k + 1;
+							//Select the corresponding value from the matrix
+							//result = result + p.expression.toStr + " ";
+							//result = result + "; " + p.argumentName.name + "\n";
+							//k = k + 1;
 						}
-					} 
-					else
-						if (result.length > 0) result = result + p.expression.toStr + " ";
+					}
 				}
 			}
+		var values = b.arguments.getAttributeExpression(AttributeValidator::attr_values.name);
+		if (values != null){
+			if (values.vector != null){
+				for (p: values.vector.values){
+					result = result + p.toStr + " ";
+				}
+			}
+		}
 		if (printFix && result.length > 0) result = result + "FIX\n";
 		if (result.length == 0) return "";
 		return 
@@ -792,7 +720,7 @@ class Mdl2Nonmem extends MdlPrinter {
 		«section» «IF k > 0»BLOCK («k») «ENDIF»
 		«result»
 		'''; 
-	}	
+	}	*/
 
 	//Print VARIABILITY parameter in $SIGMA or $OMEGA
 	def printVariabilityParameter(SymbolDeclaration s, String section){
@@ -1145,8 +1073,6 @@ class Mdl2Nonmem extends MdlPrinter {
 		theta_vars.clear;
 		eta_vars.clear;
     	eps_vars.clear; 
-    	namedOmegaBlocks.clear;
-    	namedSigmaBlocks.clear;	
     	eta_vars.clear;
     	eps_vars.clear; 
     	binomial_vars.clear;

@@ -97,10 +97,5 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap(1).before(f.getOdeBlockRule());
 
 		c.setLinewrap(1).before(f.getInlineBlockAccess().getVariablesAssignment_2());
-			
-		c.setLinewrap(1).before(f.getMatrixBlockAccess().getParametersAssignment_4_1());
-		c.setLinewrap(1).before(f.getDiagBlockAccess().getParametersAssignment_4_1());
-		c.setLinewrap(1).before(f.getSameBlockAccess().getParametersAssignment_4_1());
-
 	}
 }

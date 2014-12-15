@@ -26,7 +26,6 @@ import org.ddmore.mdl.mdl.impl.CompartmentBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignSpaceBlockImpl;
-import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.HyperSpaceBlockImpl;
@@ -34,14 +33,12 @@ import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
-import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
 import org.ddmore.mdl.mdl.impl.DeqBlockImpl;
 import org.ddmore.mdl.mdl.impl.RandomListImpl;
 import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
-import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SamplingBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
@@ -89,6 +86,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_lo = new Attribute("lo", MdlDataType.TYPE_REAL, false, "1");
 	final public static Attribute attr_fix = new Attribute("fix", MdlDataType.TYPE_BOOLEAN, false, "false");
 	final public static Attribute attr_units = new Attribute("units", MdlDataType.TYPE_STRING, false, "kg");
+	final public static Attribute attr_values = new Attribute("values", MdlDataType.TYPE_VECTOR_REAL, true, "[]");
+	final public static Attribute attr_params = new Attribute("params", MdlDataType.TYPE_VECTOR_REF, true, "[]");
 	
 	//RANDOM_VARIABLES_DEFINITION
 	final public static Attribute attr_rv1 = new Attribute("rv1", MdlDataType.TYPE_REF, true);
@@ -193,7 +192,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			attr_fix, attr_units);
 	final public static List<Attribute> attrs_variability = Arrays.asList(attr_req_value, attr_re_type, attr_fix, 
 			attr_lo, attr_hi, attr_units);
-	final public static List<Attribute> attrs_variability_subblock = Arrays.asList(attr_name, attr_re_type, attr_fix);
+	final public static List<Attribute> attrs_matrix = Arrays.asList(attr_re_type, attr_params, attr_values, attr_fix);
 	
 	/*Model object*/
 	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_re_type, attr_rv1, attr_rv2, attr_level_ref);
@@ -230,7 +229,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return attrs_structural;
 		if (obj instanceof VariabilityBlockImpl) return attrs_variability;
-		if (obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl) return attrs_variability_subblock;
 		/*Model object*/
 		if (obj instanceof InputVariablesBlockImpl) return attrs_inputVariables;
 		if (obj instanceof IndividualVariablesBlockImpl) return attrs_individualVariables;
@@ -259,7 +257,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (args.eContainer() instanceof RandomListImpl) return true;
 		//Skip nested lists
 		if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl) return true;
-		if (isVariabilitySubblock(container, args) || (args.eContainer() instanceof FunctionCallImpl)) return true;		
+		if (args.eContainer() instanceof FunctionCallImpl) return true;		
 		return false;
 	}
 
@@ -361,20 +359,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		return categoricalNames;
 	}
 	
-	//Do not validate parameters of variability subblocks
-	private Boolean isVariabilitySubblock(EObject container, Arguments args){
-		//Exclude content of Diag and Matrix check from attribute checks
-		if (container instanceof MatrixBlockImpl){
-			MatrixBlockImpl block = (MatrixBlockImpl)container;
-			if (block.getParameters().equals(args)) return true;
-		} 
-		if(container instanceof DiagBlockImpl){
-			DiagBlockImpl block = (DiagBlockImpl)container;
-			if (block.getParameters().equals(args)) return true;
-		}	
-		return false;
-	}
-	
 	//Look for the parent block containing lists with attributes
 	public static EObject findAttributeContainer(EObject obj){
 		EObject container = obj;
@@ -406,7 +390,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			//Parameter object
 			obj instanceof StructuralBlockImpl ||
 			obj instanceof VariabilityBlockImpl ||
-			obj instanceof MatrixBlockImpl || obj instanceof DiagBlockImpl || obj instanceof SameBlockImpl ||
 			//Design object
 			obj instanceof StudyDesignBlockImpl ||
 			obj instanceof AdministrationBlockImpl || 

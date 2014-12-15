@@ -20,13 +20,10 @@ import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.impl.AdministrationBlockImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
-import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
-import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.PropertyDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.RandomListImpl;
-import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
 import org.ddmore.mdl.types.VariableType;
@@ -114,8 +111,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_req_type.getName())){
 				EObject container = AttributeValidator.findAttributeContainer(arg);
 				List<String> attributes = new ArrayList<String>();
-				if (container instanceof VariabilityBlockImpl || container instanceof MatrixBlockImpl || 
-					container instanceof DiagBlockImpl || container instanceof SameBlockImpl){
+				if (container instanceof VariabilityBlockImpl){
 					for (VariabilityType value: VariabilityType.VALUES)
 						if (value != VariabilityType.NO_VARIABILITY) 
 							attributes.add(value.toString());

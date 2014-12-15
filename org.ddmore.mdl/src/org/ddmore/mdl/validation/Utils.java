@@ -14,9 +14,7 @@ import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.CompartmentBlock;
 import org.ddmore.mdl.mdl.DataDerivedBlock;
 import org.ddmore.mdl.mdl.DataInputBlock;
-import org.ddmore.mdl.mdl.DeqBlock;
 import org.ddmore.mdl.mdl.DesignSpaceBlock;
-import org.ddmore.mdl.mdl.DiagBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
@@ -25,14 +23,12 @@ import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
 import org.ddmore.mdl.mdl.MOGObject;
-import org.ddmore.mdl.mdl.MatrixBlock;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ObservationBlock;
 import org.ddmore.mdl.mdl.OdeBlock;
 import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
-import org.ddmore.mdl.mdl.SameBlock;
 import org.ddmore.mdl.mdl.SamplingBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.SourceBlock;
@@ -41,19 +37,15 @@ import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.StudyDesignBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolName;
-import org.ddmore.mdl.mdl.SymbolNames;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.VariabilityBlock;
-import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.impl.ActionBlockImpl;
 import org.ddmore.mdl.mdl.impl.AdministrationBlockImpl;
 import org.ddmore.mdl.mdl.impl.CompartmentBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
-import org.ddmore.mdl.mdl.impl.DeqBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignSpaceBlockImpl;
-import org.ddmore.mdl.mdl.impl.DiagBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
@@ -61,12 +53,10 @@ import org.ddmore.mdl.mdl.impl.HyperSpaceBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
-import org.ddmore.mdl.mdl.impl.MatrixBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
 import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
-import org.ddmore.mdl.mdl.impl.SameBlockImpl;
 import org.ddmore.mdl.mdl.impl.SamplingBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
@@ -76,7 +66,6 @@ import org.ddmore.mdl.mdl.impl.StudyDesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityBlockStatementImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.core.resources.IContainer;
@@ -86,6 +75,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+
+//import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 public class Utils {
 	
@@ -147,28 +138,6 @@ public class Utils {
 		return argumentNames;
 	}
 	
-	public static List<Variable> getSymbolNames(SymbolNames names){
-		List<Variable> symbolNames = new ArrayList<Variable>();	
-		addSymbol(symbolNames, names);
-		return symbolNames;
-	}
-
-	//SymbolNames are only used in same block, we assume that all parameters there are Real
-	private static void addSymbol(List<Variable> list, SymbolNames args){
-		if (args != null)
-			for (SymbolName id: args.getSymbolNames())
-				list.add(new Variable(id.getName(), MdlDataType.TYPE_REAL));
-	}
-	
-	//Arguments are only used in matrix and diag, so all parameters are Real
-	private static void addSymbol(List<Variable> list, Arguments args){
-		if (args.getArguments() != null)	
-			for (Argument arg: args.getArguments()){
-				if (arg.getArgumentName() != null)
-					list.add(new Variable(arg.getArgumentName().getName(), MdlDataType.TYPE_REAL));
-			}
-	}
-
 	public static ObjectName getObjectName(EObject b){
 		return getMclObject(b).getObjectName();
 	}
@@ -218,15 +187,11 @@ public class Utils {
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return ((StructuralBlock)obj).getIdentifier();	
 		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj).getIdentifier();
-		if (obj instanceof MatrixBlockImpl) return ((MatrixBlock)obj).getIdentifier();	
-		if (obj instanceof DiagBlockImpl) return ((DiagBlock)obj).getIdentifier() ;	
-		if (obj instanceof SameBlockImpl) return ((SameBlock)obj).getIdentifier();
 		/*Model object*/
 		if (obj instanceof InputVariablesBlockImpl) return ((InputVariablesBlock)obj).getIdentifier();
 		if (obj instanceof IndividualVariablesBlockImpl) return ((IndividualVariablesBlock)obj).getIdentifier();
 		if (obj instanceof LibraryBlockImpl) return ((LibraryBlock)obj).getIdentifier() ;
 		if (obj instanceof OdeBlockImpl) return ((OdeBlock)obj).getIdentifier() ;
-		if (obj instanceof DeqBlockImpl) return ((DeqBlock)obj).getIdentifier() ;
 		if (obj instanceof CompartmentBlockImpl) return ((CompartmentBlock)obj).getIdentifier() ;
 		if (obj instanceof EstimationBlockImpl) return ((EstimationBlock)obj).getIdentifier() ;
 		if (obj instanceof SimulationBlockImpl) return ((SimulationBlock)obj).getIdentifier() ;
@@ -328,16 +293,6 @@ public class Utils {
     			if (FunctionValidator.libraries.contains(functName))
     				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariables());
 	    	}
-			//ParameterObject -> VARIABILITY, matrix, diag, same
-	    	if (container instanceof VariabilityBlockStatementImpl){
-				VariabilityBlockStatement s = (VariabilityBlockStatement)container;
-				if (s.getMatrixBlock() != null)
-					Utils.addSymbol(varList, s.getMatrixBlock().getParameters());
-				if (s.getDiagBlock() != null)
-					Utils.addSymbol(varList, s.getDiagBlock().getParameters());
-				if (s.getSameBlock() != null)
-					Utils.addSymbol(varList, s.getSameBlock().getParameters());
-			}
 		}
 		return varList;
 	}

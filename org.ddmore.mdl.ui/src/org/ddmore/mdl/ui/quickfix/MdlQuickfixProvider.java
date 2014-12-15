@@ -1,6 +1,10 @@
 
 package org.ddmore.mdl.ui.quickfix;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.AdditiveExpression;
 import org.ddmore.mdl.mdl.AndExpression;
@@ -75,8 +79,77 @@ import com.google.inject.Inject;
 
 public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
-	@Inject MdlGrammarAccess grammarAccess;
-    
+	@Inject MdlGrammarAccess grammarAccess;    
+
+	Attribute getAttributeById(String id){
+		Map<String, Attribute> allAttributes = new HashMap<String, Attribute>();
+		/*Data object*/
+		for (Attribute attr: AttributeValidator.attrs_dataInput) 
+			allAttributes.put(grammarAccess.getDataInputBlockAccess().
+					getIdentifierDATA_INPUT_VARIABLESKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_dataDerived) 
+			allAttributes.put(grammarAccess.getDataDerivedBlockAccess().
+					getIdentifierDATA_DERIVED_VARIABLESKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		/*Parameter object*/
+		for (Attribute attr: AttributeValidator.attrs_structural) 
+			allAttributes.put(grammarAccess.getStructuralBlockAccess().
+					getIdentifierSTRUCTURALKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_variability) 
+			allAttributes.put(grammarAccess.getVariabilityBlockAccess().
+					getIdentifierVARIABILITYKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		/*Model object*/
+		for (Attribute attr: AttributeValidator.attrs_inputVariables) 
+			allAttributes.put(grammarAccess.getInputVariablesBlockAccess().
+					getIdentifierMODEL_INPUT_VARIABLESKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_individualVariables) 
+			allAttributes.put(grammarAccess.getIndividualVariablesBlockAccess().
+					getIdentifierINDIVIDUAL_VARIABLESKeyword_0_0().getValue()+ ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_ode) {
+			allAttributes.put(grammarAccess.getOdeBlockAccess().
+					getIdentifierODEKeyword_0_0_0().getValue() + ":" + attr.getName(), attr);
+			allAttributes.put(grammarAccess.getOdeBlockAccess().
+					getIdentifierDEQKeyword_0_0_1().getValue() + ":" + attr.getName(), attr);
+		}
+		for (Attribute attr: AttributeValidator.attrs_estimation) 
+			allAttributes.put(grammarAccess.getEstimationBlockAccess().
+					getIdentifierESTIMATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_simulation) 
+			allAttributes.put(grammarAccess.getSimulationBlockAccess().
+					getIdentifierSIMULATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_observation) 
+			allAttributes.put(grammarAccess.getObservationBlockAccess().
+					getIdentifierOBSERVATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_structuralParams) 
+			allAttributes.put(grammarAccess.getStructuralParametersBlockAccess().
+					getIdentifierSTRUCTURAL_PARAMETERSKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_variabilityParams) 
+			allAttributes.put(grammarAccess.getVariabilityParametersBlockAccess().
+					getIdentifierVARIABILITY_PARAMETERSKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_randomVars) 
+			allAttributes.put(grammarAccess.getRandomVariableDefinitionBlockAccess().
+					getIdentifierRANDOM_VARIABLE_DEFINITIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		/*Design object*/
+		for (Attribute attr: AttributeValidator.attrs_studyDesign)    
+			allAttributes.put(grammarAccess.getStudyDesignBlockAccess().
+					getIdentifierSTUDY_DESIGNKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_administration) 
+			allAttributes.put(grammarAccess.getAdministrationBlockAccess().
+					getIdentifierADMINISTRATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_action)         
+			allAttributes.put(grammarAccess.getActionBlockAccess().
+					getIdentifierACTIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_sampling)       
+			allAttributes.put(grammarAccess.getSamplingBlockAccess().
+					getIdentifierSAMPLINGKeyword_0_0().getValue() + ":" + attr.getName() + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_designSpace)    
+			allAttributes.put(grammarAccess.getDesignSpaceBlockAccess().
+					getIdentifierDESIGN_SPACEKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_hyperSpace)     
+			allAttributes.put(grammarAccess.getHyperSpaceBlockAccess().
+					getIdentifierHYPER_SPACEKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+        return allAttributes.get(id);
+    }
+	
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Fix attributes
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +174,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		String description = "Insert attribute '" + attrName +"'";
 		acceptor.accept(issue, description, description, "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				Attribute attribute = AttributeValidator.getAttributeById(attrId);
+				Attribute attribute = getAttributeById(attrId);
 				if (attribute != null){
 					Argument newArg = createArgument(attribute);
 					Arguments args = (Arguments)element;
@@ -144,18 +217,20 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	@Fix(DistributionValidator.MSG_DISTR_ATTRIBUTE_MISSING)
 	public void addDistributionAttribute(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String attrId = issue.getData()[0];
-		int index = attrId.indexOf(':');
-		String attrName = (index > 0)? attrId.substring(index + 1): attrId;
-		String description = "Insert attribute '" + attrName +"'";
+		final String[] tokens = attrId.split(":");
+		String description = "Insert attribute '" + tokens[1] +"'";
 		acceptor.accept(issue, description, description, "add.png", new ISemanticModification() {
-			public void apply(EObject element, IModificationContext context) {
-				Attribute attribute = DistributionValidator.getAttributeById(attrId);
-				if (attribute != null) {
-					Argument newArg = createArgument(attribute);
-					Arguments args = (Arguments)element;
-					args.getArguments().add(0, newArg);
-				}
-			} 
+			public void apply(EObject element, IModificationContext context) { 
+		        List<Attribute> recognizedAttrs = DistributionValidator.distr_attrs.get(tokens[0]);
+		        if (recognizedAttrs != null)
+		        	for (Attribute attr: recognizedAttrs){
+		        		if (attr.getName().equals(tokens[1])) {
+							Argument newArg = createArgument(attr);
+							Arguments args = (Arguments)element;
+							args.getArguments().add(0, newArg);
+		        		}
+			        }
+			}
 		});
 	}
 	
@@ -341,7 +416,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 
 	org.ddmore.mdl.mdl.List createList(Attribute[] attributes){
 		org.ddmore.mdl.mdl.List list = MdlFactory.eINSTANCE.createList();		
-		//list.setIdentifier(grammarAccess.getListAccess().getIdentifierListKeyword_0_0().getValue());
 		Arguments args = MdlFactory.eINSTANCE.createArguments();				
 		for (int i = 0; i< attributes.length; i++){
 			Argument attr = createArgument(attributes[i]);
@@ -646,7 +720,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
 	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
 	public void addVariableToOde(final Issue issue, IssueResolutionAcceptor acceptor) {
-		String blockName = grammarAccess.getOdeBlockAccess().getIdentifierODEKeyword_0_0().getValue();
+		String blockName = grammarAccess.getOdeBlockAccess().getIdentifierDEQKeyword_0_0_1().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
 				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
@@ -678,7 +752,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	}	
 	ModelPredictionBlockStatement createModelPredictionBlockStatementOde(String varName){
 		OdeBlock ode = MdlFactory.eINSTANCE.createOdeBlock();
-		ode.setIdentifier(grammarAccess.getOdeBlockAccess().getIdentifierODEKeyword_0_0().getValue());
+		ode.setIdentifier(grammarAccess.getOdeBlockAccess().getIdentifierDEQKeyword_0_0_1().getValue());
 		ode.getVariables().add(createSymbolDeclaration(varName));
 		ModelPredictionBlockStatement mpSt =  MdlFactory.eINSTANCE.createModelPredictionBlockStatement();
 		mpSt.setOdeBlock(ode);

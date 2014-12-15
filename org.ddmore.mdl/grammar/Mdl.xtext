@@ -246,29 +246,7 @@ MixtureBlock:
 ;
 
 VariabilityBlockStatement:
-	parameter = SymbolDeclaration | 
-	matrixBlock = MatrixBlock | 
-	diagBlock = DiagBlock	|
-	sameBlock = SameBlock
-;
-
-MatrixBlock:
-	 identifier = 'matrix' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Arguments END)?  
-;
-
-DiagBlock:	  
-	 identifier = 'diag' '(' arguments = Arguments ')'
-	 (BEGIN parameters = Arguments END)?  
-;
-
-SameBlock:	  
-	 identifier = 'same' '(' arguments = Arguments ')'
-	 (BEGIN parameters = SymbolNames END)?  
-;
-
-SymbolNames:
-	symbolNames += SymbolName (=> ',' symbolNames += SymbolName)*
+	parameter = SymbolDeclaration 
 ;
 
 //////////////////////////////////////////////////////////
@@ -381,10 +359,18 @@ SymbolName:
 ;
 
 SymbolDeclaration:
-	(symbolName = SymbolName | argumentName = FullyQualifiedArgumentName)
-		("=" expression = Expression | ":" list = List | randomList = RandomList)? 
-	| (functionName = FunctionName '(' (symbolName = SymbolName | argumentName = FullyQualifiedArgumentName) ')' 
-		("=" expression = Expression | ":" list = List | randomList = RandomList))		
+	(symbolName = SymbolName | 
+		argumentName = FullyQualifiedArgumentName
+	)
+		("=" (expression = Expression) | 
+		":" list = List | 
+		randomList = RandomList)? 
+	| (functionName = FunctionName '(' (symbolName = SymbolName 
+		| argumentName = FullyQualifiedArgumentName
+	) ')' 
+		("=" (expression = Expression)| 
+		":" list = List | 
+		randomList = RandomList))		
 ;
 
 PropertyDeclaration:
