@@ -341,7 +341,11 @@ public enum MdlDataType {
 	}
 
 	private static boolean isReference(OrExpression orExpr) {
-		return (getReference(orExpr) != null);
+		if (getReference(orExpr) != null) return true;
+		//Consider constant 'T' also a reference
+		String constant = MdlPrinter.getInstance().toStr(orExpr);
+		if (constant.equals("T")) return true;
+		return false;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -604,23 +608,26 @@ public enum MdlDataType {
 		if (andExpr.getExpression().size() > 1) return TYPE_BOOLEAN;
 		LogicalExpression logicExpr = andExpr.getExpression().get(0);
 		if (logicExpr.getExpression1() != null){
-			if (logicExpr.getExpression2() != null) 
-				return TYPE_BOOLEAN;
-			if (logicExpr.getExpression1().getString() != null) 
-				return TYPE_STRING;
+			if (logicExpr.getExpression2() != null) return TYPE_BOOLEAN;
 			//Additive expressions
-				return getDerivedType(logicExpr.getExpression1());
+			return getDerivedType(logicExpr.getExpression1());
 		} else 
 			return TYPE_BOOLEAN;
 	}
 	
 	private static MdlDataType getDerivedType(AdditiveExpression addExpr) {
-		MdlDataType type = TYPE_PNAT;
+		if (addExpr.getString() != null) return TYPE_STRING;
 		List<MdlDataType> subTypes = new ArrayList<MdlDataType>();
 		for (MultiplicativeExpression multExpr: addExpr.getExpression()){
 			MdlDataType subType = getDerivedType(multExpr);	
 			subTypes.add(subType);
 		}
+		for (MdlDataType subType: subTypes){
+			if (subType == TYPE_BOOLEAN) return TYPE_BOOLEAN;
+			if (subType == TYPE_STRING) return TYPE_STRING;
+		}
+		//Numeric type
+		MdlDataType type = TYPE_PNAT;
 		for (String op: addExpr.getOperator()){
 			if (op.equals("-")) type = TYPE_INT;
 			break;
@@ -633,12 +640,17 @@ public enum MdlDataType {
 	}
 	
 	private static MdlDataType getDerivedType(MultiplicativeExpression multExpr) {
-		MdlDataType type = TYPE_PNAT;
 		List<MdlDataType> subTypes = new ArrayList<MdlDataType>();
 		for (PowerExpression powerExpr: multExpr.getExpression()){
 			MdlDataType subType = getDerivedType(powerExpr);	
 			subTypes.add(subType);
+		}		
+		for (MdlDataType subType: subTypes){
+			if (subType == TYPE_BOOLEAN) return TYPE_BOOLEAN;
+			if (subType == TYPE_STRING) return TYPE_STRING;
 		}
+		//Numeric type
+		MdlDataType type = TYPE_PNAT;
 		for (String op: multExpr.getOperator()){
 			if (op.equals("/")) type = TYPE_PREAL;
 			break;
@@ -652,12 +664,16 @@ public enum MdlDataType {
 	}
 	
 	private static MdlDataType getDerivedType(PowerExpression powerExpr) {
-		MdlDataType type = TYPE_PNAT;
 		List<MdlDataType> subTypes = new ArrayList<MdlDataType>();
 		for (UnaryExpression unaryExpr: powerExpr.getExpression()){
 			MdlDataType subType = getDerivedType(unaryExpr);	
 			subTypes.add(subType);
 		}
+		for (MdlDataType subType: subTypes){
+			if (subType == TYPE_BOOLEAN) return TYPE_BOOLEAN;
+			if (subType == TYPE_STRING) return TYPE_STRING;
+		}
+		MdlDataType type = TYPE_PNAT;
 		for (MdlDataType subType: subTypes){
 			if (subType == TYPE_REAL) type = TYPE_REAL;
 		}
@@ -665,9 +681,8 @@ public enum MdlDataType {
 	}
 	
 	private static MdlDataType getDerivedType(UnaryExpression unaryExpr) {
-		if (unaryExpr.getParExpression() != null){
+		if (unaryExpr.getParExpression() != null)
 			return getDerivedType(unaryExpr.getParExpression().getExpression());
-		}
 		if (unaryExpr.getExpression() != null)
 			return getDerivedType(unaryExpr.getExpression());
 		if (unaryExpr.getFunctionCall() != null) 
@@ -675,8 +690,7 @@ public enum MdlDataType {
 		if (unaryExpr.getConstant() != null){
 			String value = unaryExpr.getConstant();
 			if (value.equals("INF")) return TYPE_PNAT;
-			if (value.equals("T")) return TYPE_REF;
-			return TYPE_STRING;
+			return TYPE_UNDEFINED;
 		}
 		if (unaryExpr.getNumber() != null){
 			if (isInteger(unaryExpr.getNumber())) return TYPE_INT;
