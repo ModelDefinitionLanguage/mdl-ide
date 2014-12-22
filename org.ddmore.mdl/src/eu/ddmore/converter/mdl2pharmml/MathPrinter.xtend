@@ -360,14 +360,8 @@ class MathPrinter{
 	'''
 
 	def CharSequence print_Math_Primary(Primary p) '''
-		«IF p.number != null»
-			«p.number.print_ct_Value»
-		«ENDIF»
-		«IF p.symbol != null»
-			«p.symbol.print_ct_SymbolRef»
-		«ENDIF»
-		«IF p.string != null»
-			<ct:String>«p.string»</ct:String>
+		«IF p.expression != null»
+			«p.expression.print_Math_Expr»
 		«ENDIF»
 		«IF p.vector != null»
 			«p.vector.print_ct_Vector»

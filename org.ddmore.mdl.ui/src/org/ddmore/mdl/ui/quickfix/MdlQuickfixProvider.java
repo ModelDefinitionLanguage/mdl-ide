@@ -343,6 +343,12 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	Expression createNumberExpression(String value){
 		Expression e = MdlFactory.eINSTANCE.createExpression();
+		OrExpression or = createOrExpression(value);
+		e.setExpression(or);
+		return e;
+	}
+
+	OrExpression createOrExpression(String value){
 		OrExpression or = MdlFactory.eINSTANCE.createOrExpression();
 		AndExpression and = MdlFactory.eINSTANCE.createAndExpression();
 		LogicalExpression logical = MdlFactory.eINSTANCE.createLogicalExpression();
@@ -357,13 +363,12 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		logical.setExpression1(add);
 		and.getExpression().add(logical);
 		or.getExpression().add(and);
-		e.setExpression(or);
-		return e;
+		return or;
 	}
-	
+
 	Primary createPrimary(String value){
 		Primary primary =  MdlFactory.eINSTANCE.createPrimary();
-		primary.setNumber(value);
+		primary.setExpression(createOrExpression(value));
 		return primary;
 	}
 	

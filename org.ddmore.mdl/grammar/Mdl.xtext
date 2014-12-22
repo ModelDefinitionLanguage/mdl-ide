@@ -441,13 +441,6 @@ AnyExpression:
 	type = EnumType 
 ;
 
-Primary:
-	number = NumericValue |
-	symbol = SymbolName | 
-	string = STRING |
-	vector = Vector 
-;
-
 List:
 	BEGIN arguments = Arguments END
 ;
@@ -466,7 +459,7 @@ Argument:
 ;
 
 ParExpression:
-	'(' expression = OrExpression')';
+	'(' expression = Expression')';
 	
 	
 Expression:
@@ -517,6 +510,11 @@ UnaryExpression:
 Vector:
 	'[' values += Primary (=> ',' values += Primary)* ']'
 ;	
+
+Primary:
+	expression = OrExpression |
+	vector = Vector 
+;
 
 FullyQualifiedArgumentName:
 	parent = SymbolName selectors += Selector+  

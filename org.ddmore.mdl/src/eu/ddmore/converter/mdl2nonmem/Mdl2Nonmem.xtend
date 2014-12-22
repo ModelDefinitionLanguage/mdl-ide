@@ -811,8 +811,8 @@ class Mdl2Nonmem extends MdlPrinter {
 	                            if (s.expression != null){
 	                            	if (s.expression.vector != null){
 	                            		for (value : s.expression.vector.values) {
-	                            			if (value.symbol != null){
-	                            				if (id.equals(value.symbol.name))
+	                            			if (value.expression != null){
+	                            				if (id.equals(value.expression.toStr))
 			                                    	return true;
 	                            			}
 	                            		}

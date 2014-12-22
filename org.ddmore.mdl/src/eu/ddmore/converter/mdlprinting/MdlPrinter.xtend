@@ -405,14 +405,8 @@ class MdlPrinter {
 	}
 	
 	def String toStr(Primary p){
-		if (p.number != null){
-			return  p.number;
-		}
-		if (p.symbol != null){
-			return p.symbol.name; 
-		}
-		if (p.string != null){
-			return p.string; 
+		if (p.expression != null){
+			return  p.expression.toStr;
 		}
 		if (p.vector != null) {
 			return p.vector.toStr

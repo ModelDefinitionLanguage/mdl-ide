@@ -157,7 +157,7 @@ public enum MdlDataType {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////
-	private static boolean validateType(MdlDataType type, OrExpression expr){
+	public static boolean validateType(MdlDataType type, OrExpression expr){
 		switch(type){
 			case TYPE_UNDEFINED: return true;
 			//Basic
@@ -202,8 +202,8 @@ public enum MdlDataType {
 				boolean ok = isVectorReal(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null){
-					boolean ok = isReal(p.getNumber());
+				if (p.getExpression() != null){
+					boolean ok = isReal(p.getExpression());
 					if (!ok) return false;
 				}					
 			}
@@ -217,8 +217,8 @@ public enum MdlDataType {
 				boolean ok = isVectorNat(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null){
-					boolean ok = isNatural(p.getNumber());
+				if (p.getExpression() != null){
+					boolean ok = isNatural(p.getExpression());
 					if (!ok) return false;
 				}
 			}
@@ -232,8 +232,8 @@ public enum MdlDataType {
 				boolean ok = isVectorNat(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null){
-					boolean ok = isPositiveNatural(p.getNumber());
+				if (p.getExpression() != null){
+					boolean ok = isPositiveNatural(p.getExpression());
 					if (!ok) return false;
 				}
 			}
@@ -247,8 +247,8 @@ public enum MdlDataType {
 				boolean ok = isVectorPReal(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null){
-					boolean ok = isPositiveReal(p.getNumber());
+				if (p.getExpression() != null){
+					boolean ok = isPositiveReal(p.getExpression());
 					if (!ok) return false;
 				}
 			}
@@ -265,13 +265,15 @@ public enum MdlDataType {
 				boolean ok = isVectorPReal(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null){
-					boolean ok = isProbability(p.getNumber());
-					if (!ok) return false;
-					Double x = Double.parseDouble(p.getNumber());
-					total += x;
+				boolean ok = isProbability(p.getExpression());
+				if (!ok) return false;
+				String value = MdlPrinter.getInstance().toStr(p.getExpression());
+				try{
+					Double x = Double.parseDouble(value);
+					total += x;	
+				} catch (NumberFormatException e){
+					containsReference = true; //probably contains a reference - validate
 				}
-				else containsReference = true;
 			}
 		}
 		return ((containsReference && (total <= 1.)) || (total == 1.));
@@ -283,10 +285,8 @@ public enum MdlDataType {
 				boolean ok = isVectorInteger(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null) {
-					boolean ok = isInteger(p.getNumber());
-					if (!ok) return false;
-				}
+				boolean ok = isInteger(p.getExpression());
+				if (!ok) return false;
 			}
 		}
 		return true;
@@ -298,7 +298,7 @@ public enum MdlDataType {
 				boolean ok = isVectorReference(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getSymbol() == null) return false;
+				return (isReference(p.getExpression()));
 			}
 		}
 		return true;	
@@ -310,7 +310,7 @@ public enum MdlDataType {
 				boolean ok = isVectorString(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getString() == null) return false;
+				return isString(p.getExpression());
 			}
 		}
 		return true;	

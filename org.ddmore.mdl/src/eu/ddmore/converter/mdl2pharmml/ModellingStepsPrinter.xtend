@@ -200,8 +200,8 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	'''
 		«IF s.expression.vector != null»
 			«FOR algoName: s.expression.vector.values»
-				«IF algoName.string != null»
-					<Algorithm definition="«algoName.string»"/>
+				«IF algoName.expression != null»
+					<Algorithm definition="«algoName.expression.toStr»"/>
 				«ENDIF»
 			«ENDFOR»
 		«ENDIF»

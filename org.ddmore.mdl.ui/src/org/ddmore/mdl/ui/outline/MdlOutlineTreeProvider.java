@@ -665,10 +665,10 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, Primary p){
-		if (p.getNumber() != null)
+		if (p.getExpression() != null)
 			createEStructuralFeatureNode(parentNode,
 				p,
-				MdlPackage.Literals.PRIMARY__NUMBER,
+				MdlPackage.Literals.PRIMARY__EXPRESSION,
 				_image(p),
 				mdlPrinter.toStr(p),
 				true);
@@ -676,13 +676,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			createEStructuralFeatureNode(parentNode,
 				p,
 				MdlPackage.Literals.PRIMARY__VECTOR,
-				_image(p),
-				mdlPrinter.toStr(p),
-				true);
-		if (p.getSymbol() != null)
-			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.PRIMARY__SYMBOL,
 				_image(p),
 				mdlPrinter.toStr(p),
 				true);
