@@ -385,7 +385,12 @@ EnumType:
 	input = InputFormatType |
 	trial = TrialType |
 	individualVar = IndividualVarType |
-	distribution = DistributionType
+	distribution = DistributionType |
+	pkParameter = PkParameterType
+;
+
+enum PkParameterType:
+	no_param | v_cl | v_k | vss_cl | a_b
 ;
 
 enum UseType:

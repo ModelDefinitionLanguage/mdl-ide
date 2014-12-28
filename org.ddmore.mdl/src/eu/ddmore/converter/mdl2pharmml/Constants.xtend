@@ -38,8 +38,9 @@ static class Constants {
 	public static val BLK_DS_TARGET_TOOL = "tt";
 	public static val BLK_DS_TARGET_TOOL_DATA = "ttd";
 	public static val BLK_DS_IMPORT_DATA = "id";
-	public static val BLK_DS_NONMEM_DATASET = "nm_ds"
-	public static val BLK_DS_DATASET = "ds"
+	public static val BLK_DS_NONMEM_DATASET = "nm_ds";
+	public static val BLK_DS_MONOLIX_DATASET = "mx_ds";
+	public static val BLK_DS_DATASET = "ds";
 	
 	public static val BLK_ESTIM_STEP = "estimStep_";	
 	public static val BLK_SIMUL_STEP = "simulStep_";

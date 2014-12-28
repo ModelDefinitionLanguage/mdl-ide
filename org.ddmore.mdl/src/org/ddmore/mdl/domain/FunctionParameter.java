@@ -22,6 +22,11 @@ public class FunctionParameter {
 		this.passingMethod = passingMethod;
 	}	
 	
+	public FunctionParameter(String name,  MdlDataType type, ParameterPassingMethod passingMethod, String defaultValue){
+		this(name, type, passingMethod);
+		this.defaultValue = defaultValue;
+	}	
+	
 	public String getName(){
 		return name;
 	}

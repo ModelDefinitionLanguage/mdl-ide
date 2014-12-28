@@ -22,6 +22,7 @@ import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.PkParameterType;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
@@ -136,6 +137,11 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	/*PK parameters*/
 	final public static FunctionParameter param_PK_ndist = new FunctionParameter("ndist", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
 	final public static FunctionParameter param_PK_depot = new FunctionParameter("depot", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_PK_par = new FunctionParameter("par", MdlDataType.TYPE_PK_PARAMETER, ParameterPassingMethod.IN, PkParameterType.VCL.toString());
+	final public static FunctionParameter param_PK_glm = new FunctionParameter("glm", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_PK_glmr = new FunctionParameter("glmr", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_PK_ncomp = new FunctionParameter("ncomp", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_PK_mom1 = new FunctionParameter("mom1", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
 	
 	//////////////////////////////////////////////////////////////////////////
 	final public static Map<String, FunctionSignature> standardFunctions 
@@ -175,25 +181,79 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			
 			/*Libraries*/
 			//nmadvan
+			Map<String, List<Variable>> nmadvanReturnedValues = new HashMap<String, List<Variable>>();
+			nmadvanReturnedValues.put("",  Arrays.asList(
+					new Variable("A", MdlDataType.TYPE_VECTOR_REAL), 
+					new Variable("F", MdlDataType.TYPE_REAL)));
+			
 			put(lib_nmadvan, new FunctionSignature(lib_nmadvan, 
 					new FunctionParameterSet(Arrays.asList(
 					param_nmadvan_model, param_nmadvan_trans, param_nmadvan_ncmt, param_nmadvan_input, 
 					param_nmadvan_distribution, param_nmadvan_elimination, param_nmadvan_parameterization)), 
-				MdlDataType.TYPE_VECTOR_REF, true,
-				Arrays.asList(
-						new Variable("A", MdlDataType.TYPE_VECTOR_REAL), 
-						new Variable("F", MdlDataType.TYPE_REAL))
-				)
+				MdlDataType.TYPE_VECTOR_REF, true, nmadvanReturnedValues)
 			);			
+			
 			//PK
+			Variable V = new Variable("V", MdlDataType.TYPE_REAL); 
+			Variable V1 = new Variable("V1", MdlDataType.TYPE_REAL); 
+			Variable V2 = new Variable("V2", MdlDataType.TYPE_REAL); 
+			Variable V3 = new Variable("V3", MdlDataType.TYPE_REAL); 
+			Variable V4 = new Variable("V4", MdlDataType.TYPE_REAL); 
+			Variable VSS = new Variable("VSS", MdlDataType.TYPE_REAL); 
+			Variable CL = new Variable("CL", MdlDataType.TYPE_REAL);
+			Variable K = new Variable("K", MdlDataType.TYPE_REAL);
+			Variable K12 = new Variable("K12", MdlDataType.TYPE_REAL);
+			Variable K21 = new Variable("K21", MdlDataType.TYPE_REAL);
+			Variable K13 = new Variable("K13", MdlDataType.TYPE_REAL);
+			Variable K31 = new Variable("K31", MdlDataType.TYPE_REAL);
+			Variable K23 = new Variable("K23", MdlDataType.TYPE_REAL);
+			Variable K32 = new Variable("K32", MdlDataType.TYPE_REAL);
+			Variable K24 = new Variable("K24", MdlDataType.TYPE_REAL);
+			Variable K42 = new Variable("K42", MdlDataType.TYPE_REAL);
+			Variable KA = new Variable("KA", MdlDataType.TYPE_REAL);
+			Variable Q = new Variable("Q", MdlDataType.TYPE_REAL);
+			Variable Q2 = new Variable("Q2", MdlDataType.TYPE_REAL);
+			Variable Q3 = new Variable("Q3", MdlDataType.TYPE_REAL);
+			Variable Q4 = new Variable("Q4", MdlDataType.TYPE_REAL);
+			Variable VM = new Variable("VM", MdlDataType.TYPE_REAL);
+			Variable KM = new Variable("KM", MdlDataType.TYPE_REAL);
+			Variable ALPHA = new Variable("ALPHA", MdlDataType.TYPE_REAL); 
+			Variable BETA = new Variable("BETA", MdlDataType.TYPE_REAL); 
+			Variable GAMMA = new Variable("GAMMA", MdlDataType.TYPE_REAL); 
+			
+			Map<String, List<Variable>> pkReturnedValues = new HashMap<String, List<Variable>>();
+			/*Key: values of attributes in the following order 
+			 * ndist|depot|par|glm|glmr|ncomp|mom1
+			 * Boolean attributes which are not 'true' are skipped */
+			//v_cl
+			pkReturnedValues.put("ndist=1|par=v_cl", Arrays.asList(V, CL));
+			pkReturnedValues.put("ndist=1|depot=true|par=v_cl", Arrays.asList(V, CL, KA));
+			pkReturnedValues.put("ndist=2|par=v_cl", Arrays.asList(CL, V1, Q, V2));
+			pkReturnedValues.put("ndist=2|depot=true|par=v_cl", Arrays.asList(CL, V2, Q, KA));
+			pkReturnedValues.put("ndist=3|par=v_cl", Arrays.asList(CL,V1,Q2,V2,Q3,V3));
+			pkReturnedValues.put("ndist=3|depot=true|par=v_cl", Arrays.asList(CL, V2, Q3, V3, Q4, V4, KA));
+			pkReturnedValues.put("par=v_cl|mom1=true", Arrays.asList(V, VM, KM));
+			//v_k
+			pkReturnedValues.put("ndist=1|par=v_k", Arrays.asList(V, K));
+			pkReturnedValues.put("ndist=1|depot=true|par=v_k", Arrays.asList(V, K, KA));
+			pkReturnedValues.put("ndist=2|par=v_k", Arrays.asList(V, K, K12, K21));
+			pkReturnedValues.put("ndist=2|depot=true|par=v_k", Arrays.asList(V, K, K23, K32, KA));
+			pkReturnedValues.put("ndist=3|par=v_k", Arrays.asList(V, K, K12, K21, K13, K31));
+			pkReturnedValues.put("ndist=3|depot=true|par=v_k", Arrays.asList(V,K,K23,K32,K24,K42,KA));
+			pkReturnedValues.put("par=v_k|glm=true", Arrays.asList(V,K));
+			pkReturnedValues.put("par=v_k|glmr=true", Arrays.asList(V,K));
+			//vss_cl
+			pkReturnedValues.put("ndist=2|par=vss_cl", Arrays.asList(CL, V, Q, VSS));
+			pkReturnedValues.put("ndist=2|depot=true|par=vss_cl", Arrays.asList(CL, V, Q, VSS, KA));
+			//a_b
+			pkReturnedValues.put("ndist=2|par=a_b", Arrays.asList(ALPHA,BETA,K21));
+			pkReturnedValues.put("ndist=2|depot=true|par=a_b", Arrays.asList(ALPHA,BETA,K32,KA));
+			pkReturnedValues.put("ndist=3|par=a_b", Arrays.asList(ALPHA,BETA,GAMMA,K21,K31));
+			pkReturnedValues.put("ndist=3|depot=true|par=a_b", Arrays.asList(ALPHA,BETA,GAMMA,K32,K42,KA));
+			
 			put(lib_PK, new FunctionSignature(lib_PK, new FunctionParameterSet(Arrays.asList(
-				param_PK_ndist, param_PK_depot)), 
-				MdlDataType.TYPE_VECTOR_REF, true, 
-				Arrays.asList(
-						new Variable("V", MdlDataType.TYPE_UNDEFINED), 
-						new Variable("KL", MdlDataType.TYPE_UNDEFINED),
-						new Variable("KA", MdlDataType.TYPE_UNDEFINED))
-				)
+				param_PK_ndist, param_PK_depot, param_PK_par, param_PK_glm, param_PK_glmr, param_PK_ncomp, param_PK_mom1)), 
+				MdlDataType.TYPE_VECTOR_REF, true, pkReturnedValues)
 			);					
 		}
 	};

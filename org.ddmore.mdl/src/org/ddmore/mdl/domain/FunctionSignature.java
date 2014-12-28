@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.types.MdlDataType;
+
+import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 public class FunctionSignature {
 	String name;
@@ -13,7 +17,7 @@ public class FunctionSignature {
 	Boolean passingByName = false;
 	List<FunctionParameterSet> paramSets = new ArrayList<FunctionParameterSet>();
 	Integer numberOfParams = 0; 
-	List<Variable> returnedVariables = null;
+	Map<String, List<Variable>> returnedVariables = null;
 	
 	////////////////////////////////////
 	//Undefined parameter set
@@ -62,7 +66,7 @@ public class FunctionSignature {
 	}
 	
 	public FunctionSignature(String name,  FunctionParameterSet paramSet, MdlDataType type, Boolean passingByName,
-			List<Variable> returnedVariables){
+			Map<String, List<Variable>> returnedVariables){
 		this(name, paramSet, type, passingByName);
 		this.returnedVariables = returnedVariables;
 	}
@@ -93,7 +97,7 @@ public class FunctionSignature {
 	}
 	
 	public FunctionSignature(String name,  List<FunctionParameterSet> paramSets, MdlDataType type, Boolean passingByName,
-			List<Variable> returnedVariables){
+			Map<String, List<Variable>> returnedVariables){
 		this(name, paramSets, type, passingByName);
 		this.returnedVariables = returnedVariables;
 	}
@@ -139,15 +143,66 @@ public class FunctionSignature {
 		return allParams;
 	}
 
-	public List<Variable> getReturnedVariables(){
-		return returnedVariables;		
+	public List<String> getReturnedVariableNames(Arguments arguments){
+		List<String> varNames = new ArrayList<String>();
+		if (returnedVariables != null){
+			String valueString = getParameterKey(arguments);
+			for (String key: returnedVariables.keySet()){
+				if (valueString.startsWith(key)){
+					for (Variable v: returnedVariables.get(valueString)){
+						varNames.add(v.getName());
+					}
+				}
+			}
+		}	
+		return varNames;
+	}
+
+	public List<Variable> getReturnedVariables(Arguments arguments){
+		if (returnedVariables != null){
+			String valueString = getParameterKey(arguments);
+			for (String key: returnedVariables.keySet()){
+				if (valueString.startsWith(key)){
+					return returnedVariables.get(key);
+				}
+			}
+		}	
+		return new ArrayList<Variable>();
 	}
 	
-	public List<String> getReturnedVariableNames(){
-		List<String> varNames = new ArrayList<String>();
-		for (Variable v: returnedVariables)
-			varNames.add(v.getName());		
-		return varNames;
+	private String getParameterKey(Arguments arguments){
+		String valueString = "";
+		if (paramSets.size() > 0) {
+			FunctionParameterSet params =  this.paramSets.get(0);			
+			//TODO: if there are alternative parameter sets, choose a suitable one
+			for (FunctionParameter param: params.getParameterSet()){
+				Boolean found = false;
+				for (Argument arg: arguments.getArguments()){
+					if (arg.getArgumentName() != null){
+						String argName = arg.getArgumentName().getName();
+						if (argName.equals(param.getName())){
+							found = true;
+							if (param.getType() == MdlDataType.TYPE_BOOLEAN){
+								if (MdlPrinter.getInstance().isTrue(arg.getExpression())){
+									if (valueString.length() > 0) valueString += "|";
+									valueString += argName + "=" + MdlPrinter.getInstance().toStr(arg.getExpression());
+								}
+							} else {
+								if (valueString.length() > 0) valueString += "|";
+								valueString += argName + "=" + MdlPrinter.getInstance().toStr(arg.getExpression());
+							}
+						}
+					}
+				}
+				//If parameter is not specified in the call, add default value to the key
+				if (!found && param.getDefaultValue().length() > 0){
+					if (valueString.length() > 0) valueString += "|";
+					valueString += param.getName() + "=" + param.getDefaultValue();
+				}
+			}
+		}
+		//System.out.println("TEST:" + valueString);
+		return valueString;
 	}
 
 }

@@ -291,7 +291,7 @@ public class Utils {
 	    		FunctionCall functCall = (FunctionCall) container;
 	    		String functName = functCall.getIdentifier().getName();
     			if (FunctionValidator.libraries.contains(functName))
-    				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariables());
+    				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariables(functCall.getArguments()));
 	    	}
 		}
 		return varList;

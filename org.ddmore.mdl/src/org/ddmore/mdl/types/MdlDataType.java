@@ -27,6 +27,7 @@ import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.OrExpression;
+import org.ddmore.mdl.mdl.PkParameterType;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.RandomList;
@@ -80,6 +81,7 @@ public enum MdlDataType {
 	TYPE_DISTRIBUTION,   //see 'Distribution' in MDL grammar
 	TYPE_INDIVIDUAL_VAR, //{linear, gaussian}
 	TYPE_CONTINUOUS, 	 //{continuous}
+	TYPE_PK_PARAMETER,   //{v_cl, v_k, vss_cl, a_b}
 	TYPE_TRIAL           //{simple, sequential, combined}
 	;
     
@@ -133,7 +135,9 @@ public enum MdlDataType {
 			TYPE_INPUT_FORMAT,
 			TYPE_TRIAL,
 			TYPE_INDIVIDUAL_VAR,
-			TYPE_DISTRIBUTION 
+			TYPE_DISTRIBUTION,
+			TYPE_TRIAL,
+			TYPE_PK_PARAMETER
 		);
 		return validateType(types, expr);
 	}
@@ -558,9 +562,10 @@ public enum MdlDataType {
 		if (expr.getTarget() != TargetType.NO_TARGET) return TYPE_TARGET;
 		if (expr.getVariability() != VariabilityType.NO_VARIABILITY) return TYPE_RANDOM_EFFECT;
 		if (expr.getInput() != InputFormatType.NO_INPUT_FORMAT) return TYPE_INPUT_FORMAT;
-		if (expr.getTrial() != TrialType.NO_TRIAL) return TYPE_TRIAL;
 		if (expr.getIndividualVar() != IndividualVarType.NO_INDIVIDUAL_VAR) return TYPE_INDIVIDUAL_VAR;
 		if (expr.getDistribution() != DistributionType.NO_DISTRIBUTION) return TYPE_DISTRIBUTION;
+		if (expr.getTrial() != TrialType.NO_TRIAL) return TYPE_TRIAL;
+		if (expr.getPkParameter() != PkParameterType.NO_PARAM) return TYPE_PK_PARAMETER;
 		return TYPE_UNDEFINED;
 	}
 
