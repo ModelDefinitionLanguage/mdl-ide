@@ -45,8 +45,7 @@ import org.ddmore.mdl.validation.MdlJavaValidator;
 import org.ddmore.mdl.validation.Utils;
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
-public enum MdlDataType {
-
+public enum MdlDataType {	
     TYPE_UNDEFINED,
     /*Basic*/
     TYPE_STRING, TYPE_INT, TYPE_REAL, TYPE_BOOLEAN,
@@ -80,7 +79,7 @@ public enum MdlDataType {
 	TYPE_INPUT_FORMAT,   //{nonmemFormat, eventFormat}
 	TYPE_DISTRIBUTION,   //see 'Distribution' in MDL grammar
 	TYPE_INDIVIDUAL_VAR, //{linear, gaussian}
-	TYPE_CONTINUOUS, 	 //{continuous}
+	TYPE_CONTINUOUS, 	 //{continuous} 
 	TYPE_PK_PARAMETER,   //{v_cl, v_k, vss_cl, a_b}
 	TYPE_TRIAL           //{simple, sequential, combined}
 	;

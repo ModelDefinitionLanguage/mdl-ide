@@ -255,19 +255,34 @@ class MathPrinter{
 
 	//+ 
 	def CharSequence print_Math_LogicOp(LogicalExpression expr) {
+		var res = "";
 		if (expr.expression1 != null) {
 			if (expr.expression2 != null) {
-				return '''
+				res  = 
+				'''
 					<LogicBinop op="«expr.operator.convertOperator»">
 						«expr.expression1.print_Math_AddOp(0)»
 						«expr.expression2.print_Math_AddOp(0)»
 					</LogicBinop>
 				'''
 			} else {
-				return '''«expr.expression1.print_Math_AddOp(0)»'''
+				res = '''«expr.expression1.print_Math_AddOp(0)»'''
+			}
+		} else {
+			if (expr.boolean != null){
+				val booleanValue = expr.boolean.substring(0, 1).toUpperCase() + expr.boolean.substring(1)
+				res = '''<ct:«booleanValue»/>'''
 			}
 		}
-		return ''''''
+		if (expr.negation != null){
+			res = 
+			'''
+				<LogicUniop op="neq">
+					«res»
+				</LogicUniop>
+			'''
+		}
+		return res;
 	}
 
 	//+ (left associative)

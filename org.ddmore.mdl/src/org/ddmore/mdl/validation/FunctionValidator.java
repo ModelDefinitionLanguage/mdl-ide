@@ -106,6 +106,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static String funct_error_additive   	= "additiveError";
 	final public static String funct_error_prop       	= "proportionalError";
 	final public static String funct_error_combined1  	= "combinedError1";
+	final public static String funct_error_combined2  	= "combinedError2";
 	final public static String funct_error_power      	= "powerError";
 	final public static String funct_error_combinedPower1 = "combinedPowerError1";
 
@@ -115,7 +116,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static FunctionParameter param_error_f = new FunctionParameter("f", MdlDataType.TYPE_REF);
 
 	final public static List<String> errorModels = Arrays.asList(
-		funct_error_additive, funct_error_prop, funct_error_combined1,
+		funct_error_additive, funct_error_prop, funct_error_combined1, funct_error_combined2, 
 		funct_error_power, funct_error_combinedPower1);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,6 +171,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					new FunctionParameterSet(Arrays.asList(param_error_proportional, param_error_f)),
 					MdlDataType.TYPE_REAL, true));
 			put(funct_error_combined1, new FunctionSignature(funct_error_combined1, 
+					new FunctionParameterSet(Arrays.asList(param_error_additive, param_error_proportional, param_error_f)),
+					MdlDataType.TYPE_REAL, true));
+			put(funct_error_combined2, new FunctionSignature(funct_error_combined2, 
 					new FunctionParameterSet(Arrays.asList(param_error_additive, param_error_proportional, param_error_f)),
 					MdlDataType.TYPE_REAL, true));
 			put(funct_error_power, new FunctionSignature(
