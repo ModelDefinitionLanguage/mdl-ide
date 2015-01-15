@@ -78,9 +78,9 @@ http://www.gnu.org/licenses/lgpl-2.1.html
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.osgi.services" autoStart="true" startLevel="1" />
-      <plugin id="org.ops4j.pax.configmanager" autoStart="true" startLevel="1" />
-      <plugin id="org.ops4j.pax.logging.pax-logging-api" autoStart="true" startLevel="1" />
-      <plugin id="org.ops4j.pax.logging.pax-logging-service" autoStart="true" startLevel="2" />
+      <plugin id="org.ops4j.pax.configmanager" autoStart="true" startLevel="2" />
+      <plugin id="org.ops4j.pax.logging.pax-logging-api" autoStart="true" startLevel="2" />
+      <plugin id="org.ops4j.pax.logging.pax-logging-service" autoStart="true" startLevel="3" />
       <property name="mif.encryption.key" value="MIF-encryption-key-ddmore.key" />
    </configurations>
 
