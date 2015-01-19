@@ -43,6 +43,7 @@ import org.ddmore.mdl.mdl.TrialType
 import org.ddmore.mdl.mdl.DistributionType
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
+import org.ddmore.mdl.mdl.PkParameterType
 
 class MdlPrinter {
 	
@@ -209,6 +210,8 @@ class MdlPrinter {
 			return t.variability.toString
 		if (t.trial != TrialType::NO_TRIAL)
 			return t.trial.toString
+		if (t.pkParameter != PkParameterType::NO_PARAM)
+			return t.pkParameter.toString
 		if (t.individualVar != IndividualVarType::NO_INDIVIDUAL_VAR)
 			return t.individualVar.toString
 		if (t.distribution != DistributionType::NO_DISTRIBUTION)
@@ -405,14 +408,8 @@ class MdlPrinter {
 	}
 	
 	def String toStr(Primary p){
-		if (p.number != null){
-			return  p.number;
-		}
-		if (p.symbol != null){
-			return p.symbol.name; 
-		}
-		if (p.string != null){
-			return p.string; 
+		if (p.expression != null){
+			return  p.expression.toStr;
 		}
 		if (p.vector != null) {
 			return p.vector.toStr

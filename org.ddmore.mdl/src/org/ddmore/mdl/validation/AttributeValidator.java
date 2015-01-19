@@ -134,7 +134,28 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
-
+	
+	/*COMPARTMENT*/
+	final public static Attribute attr_from = new Attribute("from", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_to = new Attribute("to", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_finput = new Attribute("finput", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_foutput = new Attribute("foutput", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_kin = new Attribute("kin", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_kout = new Attribute("kout", MdlDataType.TYPE_REAL, false);
+	final public static Attribute attr_tlag = new Attribute("tlag", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_tk0 = new Attribute("tk0", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_thalf = new Attribute("thalf", MdlDataType.TYPE_REAL, false);
+	final public static Attribute attr_cl = new Attribute("cl", MdlDataType.TYPE_REAL, false);
+	final public static Attribute attr_v = new Attribute("v", MdlDataType.TYPE_REAL, false);
+	final public static Attribute attr_ka = new Attribute("ka", MdlDataType.TYPE_REAL, false);
+	final public static Attribute attr_rin = new Attribute("rin", MdlDataType.TYPE_REAL, false); 
+	final public static Attribute attr_isinput = new Attribute("isinput", MdlDataType.TYPE_BOOLEAN, false); 
+	final public static Attribute attr_central= new Attribute("central", MdlDataType.TYPE_BOOLEAN, false);
+	final public static Attribute attr_emax = new Attribute("emax", MdlDataType.TYPE_REAL, false); 
+	final public static Attribute attr_vmax = new Attribute("vmax", MdlDataType.TYPE_REAL, false); 
+	final public static Attribute attr_c50 = new Attribute("c50", MdlDataType.TYPE_REAL, false); 
+	final public static Attribute attr_hill = new Attribute("hill", MdlDataType.TYPE_REAL, false); 
+			
 	/*Design object*/
 	final public static Attribute attr_trial_type = new Attribute("type", MdlDataType.TYPE_TRIAL, false);
 
@@ -197,10 +218,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*Model object*/
 	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_re_type, attr_rv1, attr_rv2, attr_level_ref);
 	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_type, 
-			attr_level, //attr_alias, attr_compartment, 
-			attr_units, attr_administration_ref, attr_prediction_ref);
+			attr_level, attr_units, attr_administration_ref, attr_prediction_ref);
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
-	final public static List<Attribute> attrs_deq = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
 	final public static List<Attribute> attrs_observation = Arrays.asList(attr_continuous_type, attr_error, attr_eps, attr_prediction_ref);
@@ -208,6 +227,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(
 			attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff, attr_group);
+	final public static List<Attribute> attrs_compartment = Arrays.asList(
+			attr_from, attr_to, attr_finput, attr_foutput, attr_kin, attr_kout,
+			attr_tlag, attr_tk0, attr_thalf, 
+			attr_cl, attr_v, attr_ka, 
+			attr_isinput, attr_central, 
+			attr_emax, attr_vmax, attr_rin, attr_c50, attr_hill);	
 	
 	/*Design object*/
 	final public static List<Attribute> attrs_administration = Arrays.asList(
@@ -232,8 +257,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		/*Model object*/
 		if (obj instanceof InputVariablesBlockImpl) return attrs_inputVariables;
 		if (obj instanceof IndividualVariablesBlockImpl) return attrs_individualVariables;
-		if (obj instanceof OdeBlockImpl) return attrs_ode; 
-		if (obj instanceof DeqBlockImpl) return attrs_deq; 
+		if (obj instanceof OdeBlockImpl || obj instanceof DeqBlockImpl) return attrs_ode; 
+		if (obj instanceof CompartmentBlockImpl) return attrs_compartment; 
 		if (obj instanceof EstimationBlockImpl) return attrs_estimation; 
 		if (obj instanceof SimulationBlockImpl) return attrs_simulation; 
 		if (obj instanceof ObservationBlockImpl) return attrs_observation; 
@@ -378,8 +403,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			obj instanceof InputVariablesBlockImpl ||
 			obj instanceof IndividualVariablesBlockImpl ||
 			obj instanceof LibraryBlockImpl ||
-			obj instanceof OdeBlockImpl ||
-			obj instanceof DeqBlockImpl ||
+			obj instanceof OdeBlockImpl || obj instanceof DeqBlockImpl ||
 			obj instanceof CompartmentBlockImpl ||
 			obj instanceof EstimationBlockImpl ||
 			obj instanceof SimulationBlockImpl ||

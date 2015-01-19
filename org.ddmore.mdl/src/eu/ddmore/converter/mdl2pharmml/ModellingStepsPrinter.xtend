@@ -5,7 +5,6 @@ import org.ddmore.mdl.validation.AttributeValidator
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
-import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.InputFormatType
@@ -162,6 +161,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		'''
 	}	
 
+	//First print properties, then define algorithm!
 	protected def print_msteps_Operation(Integer order, String opType, TaskObject tObj){
 		if (tObj == null) return "";
 		'''
@@ -170,6 +170,9 @@ class ModellingStepsPrinter extends DataSetPrinter{
 					<Operation order="«order»" opType="«opType»">
 						«FOR s: b.estimateBlock.statements»
 							«s.print_msteps_Property»
+						«ENDFOR»
+						«FOR s: b.estimateBlock.statements»
+							«s.print_msteps_Algorithm»
 						«ENDFOR»
 					</Operation>
 				«ENDIF»
@@ -181,29 +184,29 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	'''
 		«IF s.propertyName != null»
 			«IF s.expression != null»
-				«IF s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
-					«s.print_msteps_Algorithm»
-				«ELSE»
-					«print_msteps_Property(s.propertyName.name, s.expression)»
+				«IF !s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
+					<Property name="«s.propertyName.name»">
+						«print_Assign(s.expression)»
+					</Property>
 				«ENDIF»	
 			«ENDIF»
 		«ENDIF»
 	'''
-		
-	protected def print_msteps_Property(String propertyName, AnyExpression expr)'''
-		<Property name="«propertyName»">
-			«print_Assign(expr)»
-		</Property>
-	'''
-
+	
 	protected def print_msteps_Algorithm(PropertyDeclaration s)
 	'''
-		«IF s.expression.vector != null»
-			«FOR algoName: s.expression.vector.values»
-				«IF algoName.string != null»
-					<Algorithm definition="«algoName.string»"/>
-				«ENDIF»
-			«ENDFOR»
+		«IF s.propertyName != null»
+			«IF s.expression != null»
+				«IF s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
+					«IF s.expression.vector != null»
+						«FOR algoName: s.expression.vector.values»
+							«IF algoName.expression != null»
+								<Algorithm definition="«algoName.expression.toStr»"/>
+							«ENDIF»
+						«ENDFOR»
+					«ENDIF»
+				«ENDIF»	
+			«ENDIF»
 		«ENDIF»
 	'''
 }

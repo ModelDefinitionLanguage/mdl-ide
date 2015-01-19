@@ -385,7 +385,12 @@ EnumType:
 	input = InputFormatType |
 	trial = TrialType |
 	individualVar = IndividualVarType |
-	distribution = DistributionType
+	distribution = DistributionType |
+	pkParameter = PkParameterType
+;
+
+enum PkParameterType:
+	no_param | v_cl | v_k | vss_cl | a_b
 ;
 
 enum UseType:
@@ -441,13 +446,6 @@ AnyExpression:
 	type = EnumType 
 ;
 
-Primary:
-	number = NumericValue |
-	symbol = SymbolName | 
-	string = STRING |
-	vector = Vector 
-;
-
 List:
 	BEGIN arguments = Arguments END
 ;
@@ -466,7 +464,7 @@ Argument:
 ;
 
 ParExpression:
-	'(' expression = OrExpression')';
+	'(' expression = Expression')';
 	
 	
 Expression:
@@ -517,6 +515,11 @@ UnaryExpression:
 Vector:
 	'[' values += Primary (=> ',' values += Primary)* ']'
 ;	
+
+Primary:
+	expression = OrExpression |
+	vector = Vector 
+;
 
 FullyQualifiedArgumentName:
 	parent = SymbolName selectors += Selector+  

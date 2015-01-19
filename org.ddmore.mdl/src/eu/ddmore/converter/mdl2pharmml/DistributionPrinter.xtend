@@ -308,11 +308,12 @@ class DistributionPrinter extends MdlPrinter{
 	
 	//A value assigned to a distribution attribute can be a number, reference, or vector
 	def String toPharmML(Primary p, String type){
-		if (p.number != null){
-			return '''<«type»>«p.number»</«type»>''';
-		}
-		if (p.symbol != null){
-			return '''<var varId="«p.symbol.name»"/>'''; 
+		if (p.expression != null){
+			if (MdlDataType::validateType(MdlDataType::TYPE_STRING, p.expression)){
+				return '''<var varId="«p.expression.toStr»"/>'''; 
+			} else {
+				return '''<«type»>«p.expression.toStr»</«type»>''';
+			}
 		}
 		if (p.vector != null) {
 			var res = "";

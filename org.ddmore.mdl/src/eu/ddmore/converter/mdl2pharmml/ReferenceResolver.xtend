@@ -337,4 +337,15 @@ class ReferenceResolver{
 		}
 		return null;
 	}	
+	
+	protected def getDesignObject(MOGObject mog){
+		for (o: mog.objects){
+			var container = o.eContainer;
+			if (container instanceof MclObjectImpl){
+				val mclObject = container as MclObject;
+				if (mclObject.designObject != null) return mclObject.designObject;
+			}
+		}
+		return null;
+	}
 }

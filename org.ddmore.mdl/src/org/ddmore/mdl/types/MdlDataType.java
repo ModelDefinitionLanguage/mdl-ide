@@ -27,6 +27,7 @@ import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.OrExpression;
+import org.ddmore.mdl.mdl.PkParameterType;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.RandomList;
@@ -44,8 +45,7 @@ import org.ddmore.mdl.validation.MdlJavaValidator;
 import org.ddmore.mdl.validation.Utils;
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
-public enum MdlDataType {
-
+public enum MdlDataType {	
     TYPE_UNDEFINED,
     /*Basic*/
     TYPE_STRING, TYPE_INT, TYPE_REAL, TYPE_BOOLEAN,
@@ -79,7 +79,8 @@ public enum MdlDataType {
 	TYPE_INPUT_FORMAT,   //{nonmemFormat, eventFormat}
 	TYPE_DISTRIBUTION,   //see 'Distribution' in MDL grammar
 	TYPE_INDIVIDUAL_VAR, //{linear, gaussian}
-	TYPE_CONTINUOUS, 	 //{continuous}
+	TYPE_CONTINUOUS, 	 //{continuous} 
+	TYPE_PK_PARAMETER,   //{v_cl, v_k, vss_cl, a_b}
 	TYPE_TRIAL           //{simple, sequential, combined}
 	;
     
@@ -133,7 +134,9 @@ public enum MdlDataType {
 			TYPE_INPUT_FORMAT,
 			TYPE_TRIAL,
 			TYPE_INDIVIDUAL_VAR,
-			TYPE_DISTRIBUTION 
+			TYPE_DISTRIBUTION,
+			TYPE_TRIAL,
+			TYPE_PK_PARAMETER
 		);
 		return validateType(types, expr);
 	}
@@ -157,7 +160,7 @@ public enum MdlDataType {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////
-	private static boolean validateType(MdlDataType type, OrExpression expr){
+	public static boolean validateType(MdlDataType type, OrExpression expr){
 		switch(type){
 			case TYPE_UNDEFINED: return true;
 			//Basic
@@ -202,8 +205,8 @@ public enum MdlDataType {
 				boolean ok = isVectorReal(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null){
-					boolean ok = isReal(p.getNumber());
+				if (p.getExpression() != null){
+					boolean ok = isReal(p.getExpression());
 					if (!ok) return false;
 				}					
 			}
@@ -217,8 +220,8 @@ public enum MdlDataType {
 				boolean ok = isVectorNat(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null){
-					boolean ok = isNatural(p.getNumber());
+				if (p.getExpression() != null){
+					boolean ok = isNatural(p.getExpression());
 					if (!ok) return false;
 				}
 			}
@@ -232,8 +235,8 @@ public enum MdlDataType {
 				boolean ok = isVectorNat(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null){
-					boolean ok = isPositiveNatural(p.getNumber());
+				if (p.getExpression() != null){
+					boolean ok = isPositiveNatural(p.getExpression());
 					if (!ok) return false;
 				}
 			}
@@ -247,8 +250,8 @@ public enum MdlDataType {
 				boolean ok = isVectorPReal(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null){
-					boolean ok = isPositiveReal(p.getNumber());
+				if (p.getExpression() != null){
+					boolean ok = isPositiveReal(p.getExpression());
 					if (!ok) return false;
 				}
 			}
@@ -265,13 +268,15 @@ public enum MdlDataType {
 				boolean ok = isVectorPReal(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null){
-					boolean ok = isProbability(p.getNumber());
-					if (!ok) return false;
-					Double x = Double.parseDouble(p.getNumber());
-					total += x;
+				boolean ok = isProbability(p.getExpression());
+				if (!ok) return false;
+				String value = MdlPrinter.getInstance().toStr(p.getExpression());
+				try{
+					Double x = Double.parseDouble(value);
+					total += x;	
+				} catch (NumberFormatException e){
+					containsReference = true; //probably contains a reference - validate
 				}
-				else containsReference = true;
 			}
 		}
 		return ((containsReference && (total <= 1.)) || (total == 1.));
@@ -283,10 +288,8 @@ public enum MdlDataType {
 				boolean ok = isVectorInteger(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getNumber() != null) {
-					boolean ok = isInteger(p.getNumber());
-					if (!ok) return false;
-				}
+				boolean ok = isInteger(p.getExpression());
+				if (!ok) return false;
 			}
 		}
 		return true;
@@ -298,7 +301,7 @@ public enum MdlDataType {
 				boolean ok = isVectorReference(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getSymbol() == null) return false;
+				return (isReference(p.getExpression()));
 			}
 		}
 		return true;	
@@ -310,7 +313,7 @@ public enum MdlDataType {
 				boolean ok = isVectorString(p.getVector());
 				if (!ok) return false;
 			} else {
-				if (p.getString() == null) return false;
+				return isString(p.getExpression());
 			}
 		}
 		return true;	
@@ -341,7 +344,11 @@ public enum MdlDataType {
 	}
 
 	private static boolean isReference(OrExpression orExpr) {
-		return (getReference(orExpr) != null);
+		if (getReference(orExpr) != null) return true;
+		//Consider constant 'T' also a reference
+		String constant = MdlPrinter.getInstance().toStr(orExpr);
+		if (constant.equals("T")) return true;
+		return false;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -554,9 +561,10 @@ public enum MdlDataType {
 		if (expr.getTarget() != TargetType.NO_TARGET) return TYPE_TARGET;
 		if (expr.getVariability() != VariabilityType.NO_VARIABILITY) return TYPE_RANDOM_EFFECT;
 		if (expr.getInput() != InputFormatType.NO_INPUT_FORMAT) return TYPE_INPUT_FORMAT;
-		if (expr.getTrial() != TrialType.NO_TRIAL) return TYPE_TRIAL;
 		if (expr.getIndividualVar() != IndividualVarType.NO_INDIVIDUAL_VAR) return TYPE_INDIVIDUAL_VAR;
 		if (expr.getDistribution() != DistributionType.NO_DISTRIBUTION) return TYPE_DISTRIBUTION;
+		if (expr.getTrial() != TrialType.NO_TRIAL) return TYPE_TRIAL;
+		if (expr.getPkParameter() != PkParameterType.NO_PARAM) return TYPE_PK_PARAMETER;
 		return TYPE_UNDEFINED;
 	}
 
@@ -604,23 +612,26 @@ public enum MdlDataType {
 		if (andExpr.getExpression().size() > 1) return TYPE_BOOLEAN;
 		LogicalExpression logicExpr = andExpr.getExpression().get(0);
 		if (logicExpr.getExpression1() != null){
-			if (logicExpr.getExpression2() != null) 
-				return TYPE_BOOLEAN;
-			if (logicExpr.getExpression1().getString() != null) 
-				return TYPE_STRING;
+			if (logicExpr.getExpression2() != null) return TYPE_BOOLEAN;
 			//Additive expressions
-				return getDerivedType(logicExpr.getExpression1());
+			return getDerivedType(logicExpr.getExpression1());
 		} else 
 			return TYPE_BOOLEAN;
 	}
 	
 	private static MdlDataType getDerivedType(AdditiveExpression addExpr) {
-		MdlDataType type = TYPE_PNAT;
+		if (addExpr.getString() != null) return TYPE_STRING;
 		List<MdlDataType> subTypes = new ArrayList<MdlDataType>();
 		for (MultiplicativeExpression multExpr: addExpr.getExpression()){
 			MdlDataType subType = getDerivedType(multExpr);	
 			subTypes.add(subType);
 		}
+		for (MdlDataType subType: subTypes){
+			if (subType == TYPE_BOOLEAN) return TYPE_BOOLEAN;
+			if (subType == TYPE_STRING) return TYPE_STRING;
+		}
+		//Numeric type
+		MdlDataType type = TYPE_PNAT;
 		for (String op: addExpr.getOperator()){
 			if (op.equals("-")) type = TYPE_INT;
 			break;
@@ -633,12 +644,17 @@ public enum MdlDataType {
 	}
 	
 	private static MdlDataType getDerivedType(MultiplicativeExpression multExpr) {
-		MdlDataType type = TYPE_PNAT;
 		List<MdlDataType> subTypes = new ArrayList<MdlDataType>();
 		for (PowerExpression powerExpr: multExpr.getExpression()){
 			MdlDataType subType = getDerivedType(powerExpr);	
 			subTypes.add(subType);
+		}		
+		for (MdlDataType subType: subTypes){
+			if (subType == TYPE_BOOLEAN) return TYPE_BOOLEAN;
+			if (subType == TYPE_STRING) return TYPE_STRING;
 		}
+		//Numeric type
+		MdlDataType type = TYPE_PNAT;
 		for (String op: multExpr.getOperator()){
 			if (op.equals("/")) type = TYPE_PREAL;
 			break;
@@ -652,12 +668,16 @@ public enum MdlDataType {
 	}
 	
 	private static MdlDataType getDerivedType(PowerExpression powerExpr) {
-		MdlDataType type = TYPE_PNAT;
 		List<MdlDataType> subTypes = new ArrayList<MdlDataType>();
 		for (UnaryExpression unaryExpr: powerExpr.getExpression()){
 			MdlDataType subType = getDerivedType(unaryExpr);	
 			subTypes.add(subType);
 		}
+		for (MdlDataType subType: subTypes){
+			if (subType == TYPE_BOOLEAN) return TYPE_BOOLEAN;
+			if (subType == TYPE_STRING) return TYPE_STRING;
+		}
+		MdlDataType type = TYPE_PNAT;
 		for (MdlDataType subType: subTypes){
 			if (subType == TYPE_REAL) type = TYPE_REAL;
 		}
@@ -665,9 +685,8 @@ public enum MdlDataType {
 	}
 	
 	private static MdlDataType getDerivedType(UnaryExpression unaryExpr) {
-		if (unaryExpr.getParExpression() != null){
+		if (unaryExpr.getParExpression() != null)
 			return getDerivedType(unaryExpr.getParExpression().getExpression());
-		}
 		if (unaryExpr.getExpression() != null)
 			return getDerivedType(unaryExpr.getExpression());
 		if (unaryExpr.getFunctionCall() != null) 
@@ -675,8 +694,7 @@ public enum MdlDataType {
 		if (unaryExpr.getConstant() != null){
 			String value = unaryExpr.getConstant();
 			if (value.equals("INF")) return TYPE_PNAT;
-			if (value.equals("T")) return TYPE_REF;
-			return TYPE_STRING;
+			return TYPE_UNDEFINED;
 		}
 		if (unaryExpr.getNumber() != null){
 			if (isInteger(unaryExpr.getNumber())) return TYPE_INT;

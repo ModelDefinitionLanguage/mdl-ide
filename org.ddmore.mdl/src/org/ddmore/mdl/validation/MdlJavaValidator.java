@@ -180,8 +180,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    			//Compare reference with returned variables of functions or libraries
 	    			String functName = s.getExpression().getIdentifier().getName();
 	    			if (FunctionValidator.libraries.contains(functName))
-	    				params.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariableNames());
-	    			
+	    				params.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariableNames(s.getExpression().getArguments()));
 	       			ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
 	       			if (paramRef != null){
 	       				if (!params.contains(paramRef.getName()))

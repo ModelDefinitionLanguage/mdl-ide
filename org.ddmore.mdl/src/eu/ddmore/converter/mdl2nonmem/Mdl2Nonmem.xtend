@@ -28,7 +28,6 @@ import org.ddmore.mdl.mdl.SimulateTask
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.TaskObject
-import org.ddmore.mdl.mdl.TaskObjectBlock
 import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.FunctionValidator
@@ -812,8 +811,8 @@ class Mdl2Nonmem extends MdlPrinter {
 	                            if (s.expression != null){
 	                            	if (s.expression.vector != null){
 	                            		for (value : s.expression.vector.values) {
-	                            			if (value.symbol != null){
-	                            				if (id.equals(value.symbol.name))
+	                            			if (value.expression != null){
+	                            				if (id.equals(value.expression.toStr))
 			                                    	return true;
 	                            			}
 	                            		}
@@ -862,8 +861,8 @@ class Mdl2Nonmem extends MdlPrinter {
 /////////////////////////////////////////////////
 
 	//Processing task object for $EST and $SIM
-	def convertToNMTRAN(TaskObject o)'''
-	«FOR b:o.blocks»
+	def convertToNMTRAN(TaskObject tObj)'''
+	«FOR b: tObj.blocks»
 		«IF b.estimateBlock != null»
 			«b.estimateBlock.print»
 		«ENDIF»
@@ -874,8 +873,8 @@ class Mdl2Nonmem extends MdlPrinter {
 	'''
 	
 	//Print NM-TRAN IGNORE=... statements
-	def printIGNORE(TaskObject o)'''
-	«FOR b: o.blocks»
+	def printIGNORE(TaskObject tObj)'''
+	«FOR b: tObj.blocks»
 		«IF b.dataBlock !=  null»
 			«FOR st: b.dataBlock.statements»
 				«IF st.propertyName != null && st.expression != null»
@@ -1033,8 +1032,8 @@ class Mdl2Nonmem extends MdlPrinter {
 	}
 	
 	//Get $TOL attribute
-	def getTOL(TaskObject obj){
-		for (TaskObjectBlock b: obj.blocks){
+	def getTOL(TaskObject tObj){
+		for (b: tObj.blocks){
 			if (b.modelBlock != null){
 				for (ss: b.modelBlock.statements){
 					if (ss.propertyName != null){

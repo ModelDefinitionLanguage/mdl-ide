@@ -37,7 +37,7 @@ class FunctionDefinitionPrinter {
 		if (FunctionValidator::errorModels.contains(functName))
 			'''
 			<ct:FunctionDefinition xmlns="«Constants::xmlns_ct»" 
-				symbId="«FunctionValidator::funct_error_combined1»" 
+				symbId="«functName»" 
 				symbolType="«FunctionValidator::standardFunctions.get(functName).type.convertType»">
 				«FOR p: FunctionValidator::standardFunctions.get(functName).defaultParamSet»
 				<FunctionArgument symbolType="«p.type.convertType»" symbId="«p.name»"/>
@@ -47,6 +47,7 @@ class FunctionDefinitionPrinter {
 			'''	
 	}
 	
+	//combined2: sqrt(a^2  +  b^2*F^2)
 	protected def print_FunctionDefinition(String functName)'''
 		<Definition>
 			<Equation xmlns="«Constants::xmlns_math»">
@@ -67,6 +68,26 @@ class FunctionDefinitionPrinter {
 							<ct:SymbRef symbIdRef="«FunctionValidator::param_error_f.name»"/>
 						</math:Binop>
 					</math:Binop>
+				«ENDIF»
+				«IF (functName.equals(FunctionValidator::funct_error_combined2))»
+					<math:Uniop op="sqrt">
+						<math:Binop op="plus">
+							<math:Binop op="times">
+								<ct:SymbRef symbIdRef="«FunctionValidator::param_error_additive.name»"/>
+								<ct:SymbRef symbIdRef="«FunctionValidator::param_error_additive.name»"/>
+							</math:Binop>
+							<math:Binop op="times">
+								<math:Binop op="times">
+									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_proportional.name»"/>
+									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_proportional.name»"/>
+								</math:Binop>
+								<math:Binop op="times">
+									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_f.name»"/>
+									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_f.name»"/>
+								</math:Binop>
+							</math:Binop>
+						</math:Binop>
+					</math:Uniop>
 				«ENDIF»
 				«IF (functName.equals(FunctionValidator::funct_error_power))»
 					<Binop op="times">

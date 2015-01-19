@@ -111,10 +111,13 @@ class ModelDefinitionPrinter {
 		for (b: mObj.blocks){
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
-					if (s.list != null && s.symbolName != null){
-						var type = getAttribute(s.list.arguments, AttributeValidator::attr_type.name);
-						if (type.length > 0)
-							return type.substring(0, 1).toUpperCase() + type.substring(1);
+					if (s.list != null){
+						//TODO: check!
+						if (s.symbolName != null && covVar.equals(s.symbolName.name)){
+							var type = getAttribute(s.list.arguments, AttributeValidator::attr_type.name);
+							if (type.length > 0)
+								return type.substring(0, 1).toUpperCase() + type.substring(1);
+						}
 					}
 				}
 			}						
@@ -397,10 +400,10 @@ class ModelDefinitionPrinter {
 						«independentVar.print_ct_SymbolRef»
 					</ct:IndependentVariable>
 				'''	
-				val initValue = list.arguments.getAttributeExpression(AttributeValidator::attr_x0.name);
-				val initTime = list.arguments.getAttributeExpression(AttributeValidator::attr_init.name);
-				var initValueRes = '''«AttributeValidator::attr_x0.defaultValue.print_Assign»'''; 
-				var initTimeRes = '''«AttributeValidator::attr_init.defaultValue.print_Assign»'''; 
+				val initValue = list.arguments.getAttributeExpression(AttributeValidator::attr_init.name);
+				val initTime = list.arguments.getAttributeExpression(AttributeValidator::attr_x0.name);
+				var initValueRes = '''«AttributeValidator::attr_init.defaultValue.print_Assign»'''; 
+				var initTimeRes = '''«AttributeValidator::attr_x0.defaultValue.print_Assign»'''; 
 				if (initTime != null)
 					initTimeRes = '''«initTime.print_Assign»'''; 
 				if (initValue != null)
