@@ -13,9 +13,9 @@
 <booleanAttribute key="default" value="false"/>
 <booleanAttribute key="includeOptional" value="true"/>
 <stringAttribute key="location" value="${workspace_loc}/../runtime-MDL-Editor"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -console -consoleLog --launcher.XXMaxPermSize 256M -Xms40m -Xmx1024m"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -console -consoleLog --launcher.XXMaxPermSize 256M"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dbundles.configuration.location=${project_loc:org.ddmore.mdl.sdk}/rootfiles/noarch-common/configurations"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dbundles.configuration.location=${project_loc:org.ddmore.mdl.sdk}/rootfiles/noarch-common/configurations -XX:MaxPermSize=256m -Xms40m -Xmx512m"/>
 <stringAttribute key="pde.version" value="3.3"/>
 <stringAttribute key="product" value="eu.ddmore.mdleditor.application.product"/>
 <stringAttribute key="productFile" value="\eu.ddmore.mdleditor.site\eu.ddmore.mdleditor.product"/>
