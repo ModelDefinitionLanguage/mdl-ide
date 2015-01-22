@@ -6,10 +6,13 @@
  */
 package org.ddmore.mdl.validation;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 import org.ddmore.mdl.mdl.Argument;
@@ -17,8 +20,8 @@ import org.ddmore.mdl.mdl.MdlPackage;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.EValidatorRegistrar;
-import org.eclipse.uomo.units.SI;
-import org.unitsofmeasurement.unit.Unit;
+//import org.eclipse.uomo.units.SI;
+//import org.unitsofmeasurement.unit.Unit;
 
 import com.google.inject.Inject;
 
@@ -31,13 +34,13 @@ public class UnitValidator extends AbstractDeclarativeValidator{
     public void register(EValidatorRegistrar registrar) {}
 	
 	public final static String MSG_UNIT_UNKNOWN = "Failed to recognize a unit value";	
-	//public final static String MSG_UNIT_UNDEFINED = "Unknown unit metric";	
+	public final static String MSG_UNIT_UNDEFINED = "Unknown unit metric";	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//Validation via external resource (string comparison)
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	//static Map<String, String> validUnits = loadUnits();
+	static List<String> validUnits = loadUnits();
 	
 	public static List<String> getUnitNames(){
 		List<String> unitNames = new ArrayList<String>();
@@ -47,9 +50,9 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 		return unitNames;
 	}
 	
-	/*
-	static Map<String, String> loadUnits(){
-		Map<String, String> validUnits = new HashMap<String, String>();
+	
+	static List<String> loadUnits(){
+		List<String> validUnits = new ArrayList<String>();
 		try {
 		    URL url = new URL("platform:/plugin/org.ddmore.mdl/runtime/Units.csv");
 		    InputStream inputStream = url.openConnection().getInputStream();
@@ -58,8 +61,8 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 		    while ((inputLine = in.readLine()) != null) {
 		    	String[] tokens = inputLine.split(",");
 		    	if (tokens.length > 1){
-			    	if (!validUnits.containsKey(tokens[1])){
-			    		validUnits.put(tokens[1], tokens[0]);
+			    	if (!validUnits.contains(tokens[1])){
+			    		validUnits.add(tokens[1]);
 			    	}
 		    	}
 		    }
@@ -69,7 +72,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 		}
 		return validUnits;
 	}
-	*/
+	
 	
 	//Check whether the attribute "units" defines a correct unit measurement
 	@Check
@@ -79,21 +82,22 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 				String unitValue = MdlPrinter.getInstance().toStr(arg.getExpression());
 				if (unitValue.length() > 0) {
 					unitValue = unitValue.replaceAll("\\s+",""); // Remove any whitespace
-					/*
+					
 					if (validUnits.size() > 0){
-						if (!validUnits.containsKey(unitValue))
+						if (!validUnits.contains(unitValue))
 							warning(MSG_UNIT_UNDEFINED + ": " + unitValue, 
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 							MSG_UNIT_UNDEFINED, arg.getArgumentName().getName());
 					} else {//syntactic validation
-						*/
+						
 						String wrongToken = parseUnitExpression(unitValue);
 						if (wrongToken != null){
 							warning(MSG_UNIT_UNKNOWN + ": " + wrongToken, 
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 							MSG_UNIT_UNKNOWN, arg.getArgumentName().getName());
 						}
-					//}
+						
+					}
 				}
 			}
 		}
@@ -102,7 +106,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//Validation via parsing
     /////////////////////////////////////////////////////////////////////////////////////////////////
-	
+	/*
 	@SuppressWarnings("rawtypes")
 	final static Map<String, Unit> unitAliases = new HashMap<String, Unit>(){
 		private static final long serialVersionUID = 7075148739253345344L;
@@ -164,6 +168,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 		unitNames.addAll(unitAliases.keySet());
 		return unitNames;
 	}
+	*/
 
 	final int ID = 1;
 	final int NUMBER = 2;
