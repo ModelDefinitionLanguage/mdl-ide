@@ -4,7 +4,7 @@ import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MclObject
 import org.ddmore.mdl.mdl.MOGObject
-import org.ddmore.mdl.mdl.DesignObject
+//import org.ddmore.mdl.mdl.DesignObject
 
 class TrialDesignPrinter extends DataSetPrinter {
 	/////////////////////////////////////////////////////////////////////////
@@ -16,12 +16,12 @@ class TrialDesignPrinter extends DataSetPrinter {
 	}	
 	
 	protected def print_design_TrialDesign(MOGObject mog){
-		var DesignObject zObj = mog.getDesignObject;
-		'''
-		<TrialDesign xmlns="«Constants::xmlns_design»">
-
-		</TrialDesign>	
-		'''
+		//var DesignObject zObj = mog.getDesignObject;
+		//'''
+		//<TrialDesign xmlns="«Constants::xmlns_design»">
+		//
+		//</TrialDesign>	
+		//'''
 		//«print_design_Structure»
 		//«print_design_Population»
 		//«print_design_IndividualDosing»

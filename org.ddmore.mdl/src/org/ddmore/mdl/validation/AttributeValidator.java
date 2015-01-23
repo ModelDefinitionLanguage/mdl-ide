@@ -97,7 +97,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*MODEL_INPUT_VARIABLES*/
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
 	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, DefaultValues.LEVEL);
-	//final public static Attribute attr_alias = new Attribute("alias", MdlDataType.TYPE_REF, false);
 	//Dosing mapping
 	final public static Attribute attr_administration_ref = new Attribute("administration", 
 			MdlDataType.TYPE_REF, false);
