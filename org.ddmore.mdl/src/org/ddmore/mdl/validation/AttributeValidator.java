@@ -110,7 +110,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*OBSERVATION*/
 	final public static Attribute attr_type_continuous = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.VAR_CONTINUOUS);
 	final public static Attribute attr_error = new Attribute("error", MdlDataType.TYPE_EXPR, true);
-	final public static Attribute attr_eps = new Attribute("eps", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_eps = new Attribute("eps", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_prediction_ref = new Attribute("prediction", MdlDataType.TYPE_REF, true);
 
 	/*ESTIMATION*/
@@ -133,11 +133,11 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*INDIVIDUAL_VARIABLES*/
 	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_INDIVIDUAL_VAR, true);
-	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_TRANS, false);
-	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_fixEff = new Attribute("fixEff", 
 			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
+	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_TRANS, false);
+	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_cov = new Attribute("cov", 
 			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
 	final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
