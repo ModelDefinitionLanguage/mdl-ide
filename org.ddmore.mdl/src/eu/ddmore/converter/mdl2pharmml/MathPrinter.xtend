@@ -684,6 +684,7 @@ class MathPrinter{
 			case UseType::ITYPE.toString: "dvid"
 			case UseType::OCC.toString: "occasion"
 			case UseType::CENS.toString: "censoring"
+			case UseType::TINF.toString: "duration"
 			default: type
 		}
 	}

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.ddmore.mdl.domain.Attribute;
+import org.ddmore.mdl.domain.AttributeDependency;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
@@ -96,7 +97,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*MODEL_INPUT_VARIABLES*/
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
-	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, false, DefaultValues.LEVEL);
+	final public static Attribute attr_level = 
+		new Attribute("level", MdlDataType.TYPE_NAT, false, DefaultValues.LEVEL, 
+			new AttributeDependency(attr_use.getName(), Arrays.asList(UseType.DV.toString(), UseType.AMT.toString())));
 	//Dosing mapping
 	final public static Attribute attr_administration_ref = new Attribute("administration", 
 			MdlDataType.TYPE_REF, false);

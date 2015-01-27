@@ -17,6 +17,7 @@ public class Attribute {
 	List<MdlDataType> types = new ArrayList<MdlDataType>();
 	Boolean mandatory = false;
 	String defaultValue = "";
+	AttributeDependency dependency = null;
 	
 	public Attribute(String name, MdlDataType type, Boolean mandatory){
 		this.name = name;
@@ -30,15 +31,30 @@ public class Attribute {
 		this.mandatory = mandatory;
 	}	
 	
+	public Attribute(String name, List<MdlDataType> types, Boolean mandatory, AttributeDependency dependency){
+		this(name, types, mandatory);
+		this.dependency = dependency;
+	}	
+	
 	public Attribute(String name, MdlDataType type, Boolean mandatory, String defaultValue){
 		this(name, type, mandatory);
 		this.defaultValue = defaultValue;
+	}	
+	
+	public Attribute(String name, MdlDataType type, Boolean mandatory, String defaultValue, AttributeDependency dependency){
+		this(name, type, mandatory, defaultValue);
+		this.dependency = dependency;	
 	}	
 	
 	public Attribute(String name, List<MdlDataType> types, Boolean mandatory, String defaultValue){
 		this(name, types, mandatory);
 		this.defaultValue = defaultValue;
 	}
+	
+	public Attribute(String name, List<MdlDataType> types, Boolean mandatory, String defaultValue, AttributeDependency dependency){
+		this(name, types, mandatory, defaultValue);
+		this.dependency = dependency;
+	}	
 	
 	public String getName(){
 		return name;
@@ -69,4 +85,7 @@ public class Attribute {
 		return defaultValue;
 	}
 	
+	public AttributeDependency getDependency(){
+		return dependency;
+	}
 }
