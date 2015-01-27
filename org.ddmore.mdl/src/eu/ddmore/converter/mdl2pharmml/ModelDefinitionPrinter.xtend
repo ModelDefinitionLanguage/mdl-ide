@@ -387,7 +387,7 @@ class ModelDefinitionPrinter {
 			}
 		} else {
 		//Derivative variables	
-			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_req_deriv.name);
+			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name);
 			if (deriv != null){
 				assign = '''«deriv.print_Math_Expr»'''
 				var independentVar = DefaultValues::INDEPENDENT_VAR;
@@ -530,7 +530,7 @@ class ModelDefinitionPrinter {
 	
 	def print_mdef_Correlation(SymbolDeclaration s){
 		var res = ""
-		val type = s.list.arguments.getAttribute(AttributeValidator::attr_re_type.name);
+		val type = s.list.arguments.getAttribute(AttributeValidator::attr_type_randomEff.name);
 		val rv1 = s.list.arguments.getAttribute(AttributeValidator::attr_rv1.name);
 		val rv2 = s.list.arguments.getAttribute(AttributeValidator::attr_rv2.name);
 		if (rv1.length > 0)

@@ -6,13 +6,13 @@ import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.DataDerivedBlock
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.mdl.impl.MclObjectImpl
 import org.ddmore.mdl.mdl.MclObject
 import java.util.ArrayList
+import org.ddmore.mdl.validation.Utils
 
 class ReferenceResolver{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -38,10 +38,12 @@ class ReferenceResolver{
 		
 	protected def prepareCollections(Mcl m){
 		for (o: m.objects){
-			m.setDerivativeVariables;
 			if (o.modelObject != null){
 	  			setLevelVars(o.modelObject);
 	  			setRandomVariables(o.modelObject);
+
+				//Derivatives
+				deriv_vars = Utils::getDerivativeVariables(o.modelObject);
 
 				//Independent variables
 				ind_vars = o.modelObject.getIndependentVars();
@@ -72,26 +74,7 @@ class ReferenceResolver{
 			}
 		}
 	}
-	
-	protected def setDerivativeVariables(Mcl m){
-		deriv_vars.clear();
-		for (o: m.objects){
-			var iterator = o.eAllContents();
-		    while (iterator.hasNext()){
-		    	var obj = iterator.next();
-		    	if (obj instanceof SymbolDeclaration){
-		    		var s = obj as SymbolDeclaration;
-		    		if (s.list != null && s.symbolName != null){
-		    			val deriv = getAttributeExpression(s.list.arguments, AttributeValidator::attr_req_deriv.name);
-						if (deriv != null && !deriv_vars.contains(s.symbolName.name)){
-		    				deriv_vars.add(s.symbolName.name);
-		    			}
-		    		}
-		    	}
-		    }
-	    }
-	}
-	
+		
 	protected def getReferenceBlock(String name){
 		if (vm_err_vars.contains(name)) return "vm_err";
 		if (vm_mdl_vars.contains(name)) return "vm_mdl";
@@ -254,7 +237,7 @@ class ReferenceResolver{
 			if(b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
 					if (s.list != null && s.symbolName != null){
-						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level.name);
+						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level_use.name);
 						if (level.equals(levelId)){
 							if (!levelVars.contains(s.symbolName.name)){
 								levelVars.add(s.symbolName.name);

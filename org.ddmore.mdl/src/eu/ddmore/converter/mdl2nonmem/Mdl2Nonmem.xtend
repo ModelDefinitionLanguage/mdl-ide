@@ -394,7 +394,7 @@ class Mdl2Nonmem extends MdlPrinter {
 								«ss.print»
 							«ENDIF»
 							«IF ss.list != null»
-								«var deriv = ss.list.arguments.getAttribute(AttributeValidator::attr_req_deriv.name)»
+								«var deriv = ss.list.arguments.getAttribute(AttributeValidator::attr_deriv.name)»
 								«IF deriv.length > 0 && ss.symbolName != null»
 									«var id = ss.symbolName.name»
 									«IF dadt_vars.get(id) != null»

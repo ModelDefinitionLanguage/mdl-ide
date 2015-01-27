@@ -56,6 +56,8 @@ import org.eclipse.xtext.validation.EValidatorRegistrar;
 
 import com.google.inject.Inject;
 
+import eu.ddmore.converter.mdlprinting.MdlPrinter;
+
 public class AttributeValidator extends AbstractDeclarativeValidator{
 
 	@Override
@@ -77,11 +79,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_value = new Attribute("value", MdlDataType.TYPE_REAL, false, "0");
 	final public static Attribute attr_expr_value = new Attribute("value", MdlDataType.TYPE_EXPR, true, "0");
 	//type
-	final public static Attribute attr_req_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
-	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
-	final public static Attribute attr_re_type = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, VariabilityType.SD.toString());
-	final public static Attribute attr_continuous_type = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.VAR_CONTINUOUS);
-	
+	final public static Attribute attr_type_randomEff = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, true, VariabilityType.SD.toString());
+
 	//VARIABILITY
 	final public static Attribute attr_hi = new Attribute("hi", MdlDataType.TYPE_REAL, false, "0");
 	final public static Attribute attr_lo = new Attribute("lo", MdlDataType.TYPE_REAL, false, "1");
@@ -93,34 +92,40 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//RANDOM_VARIABLES_DEFINITION
 	final public static Attribute attr_rv1 = new Attribute("rv1", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_rv2 = new Attribute("rv2", MdlDataType.TYPE_REF, true);
-	final public static Attribute attr_level_ref = new Attribute("level", MdlDataType.TYPE_REF, true);
+	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_REF, true);
 	
 	/*MODEL_INPUT_VARIABLES*/
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
-	final public static Attribute attr_level = 
-		new Attribute("level", MdlDataType.TYPE_NAT, false, DefaultValues.LEVEL, 
+	final public static Attribute attr_level_use = 
+		new Attribute("level", MdlDataType.TYPE_NAT, true, DefaultValues.LEVEL, 
 			new AttributeDependency(attr_use.getName(), Arrays.asList(UseType.DV.toString(), UseType.AMT.toString())));
 	//Dosing mapping
-	final public static Attribute attr_administration_ref = new Attribute("administration", 
-			MdlDataType.TYPE_REF, false);
-
+	final public static Attribute attr_administration_use = new Attribute("administration", 
+			MdlDataType.TYPE_REF_DERIV, true, new AttributeDependency(attr_use.getName(), UseType.AMT.toString()));
+	final public static Attribute attr_prediction_use = new Attribute("prediction", 
+			MdlDataType.TYPE_REF, true, new AttributeDependency(attr_use.getName(), UseType.DV.toString()));
+	final public static Attribute attr_type_use = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, 
+			true, DefaultValues.VAR_TYPE, new AttributeDependency(attr_use.getName(), UseType.COVARIATE.toString()));
+	
 	/*OBSERVATION*/
+	final public static Attribute attr_type_continuous = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.VAR_CONTINUOUS);
 	final public static Attribute attr_error = new Attribute("error", MdlDataType.TYPE_EXPR, true);
 	final public static Attribute attr_eps = new Attribute("eps", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_prediction_ref = new Attribute("prediction", 
-			MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_prediction_ref = new Attribute("prediction", MdlDataType.TYPE_REF, true);
 
 	/*ESTIMATION*/
 	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
 	final public static Attribute attr_ruv = new Attribute("ruv", MdlDataType.TYPE_EXPR, false);
+	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
 	
 	/*ODE*/
-	final public static Attribute attr_req_deriv = new Attribute("deriv", MdlDataType.TYPE_EXPR, true, DefaultValues.VAR_NAME);	
+	final public static Attribute attr_deriv = new Attribute("deriv", MdlDataType.TYPE_EXPR, true, DefaultValues.VAR_NAME);	
 	final public static Attribute attr_init = new Attribute("init", MdlDataType.TYPE_EXPR, false, "0");	
 	final public static Attribute attr_x0 = new Attribute("x0", MdlDataType.TYPE_REAL, false, "0");	
 	final public static Attribute attr_wrt = new Attribute("wrt", MdlDataType.TYPE_REF, false, DefaultValues.INDEPENDENT_VAR);	
 	
 	/*DATA_INPUT_VARIABLES*/
+	final public static Attribute attr_req_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
 	final public static Attribute attr_define = new Attribute("define", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_recode = new Attribute("recode", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_boundaries = new Attribute("boundaries", MdlDataType.TYPE_VECTOR_REAL, false);
@@ -128,13 +133,13 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*INDIVIDUAL_VARIABLES*/
 	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_INDIVIDUAL_VAR, true);
-	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_TRANS, true);
+	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_TRANS, false);
+	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_fixEff = new Attribute("fixEff", 
 			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
 	final public static Attribute attr_cov = new Attribute("cov", 
 			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
-	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
 	
 	/*COMPARTMENT*/
@@ -213,18 +218,19 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, 
 			attr_fix, attr_units);
-	final public static List<Attribute> attrs_variability = Arrays.asList(attr_req_value, attr_re_type, attr_fix, 
+	final public static List<Attribute> attrs_variability = Arrays.asList(attr_req_value, attr_type_randomEff, attr_fix, 
 			attr_lo, attr_hi, attr_units);
-	final public static List<Attribute> attrs_matrix = Arrays.asList(attr_re_type, attr_params, attr_values, attr_fix);
 	
 	/*Model object*/
-	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_re_type, attr_rv1, attr_rv2, attr_level_ref);
-	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_type, 
-			attr_level, attr_units, attr_administration_ref, attr_prediction_ref);
-	final public static List<Attribute> attrs_ode = Arrays.asList(attr_req_deriv, attr_init, attr_x0, attr_wrt);
+	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_type_randomEff, attr_rv1, attr_rv2, attr_level);
+	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_type_use, 
+			attr_level_use, attr_administration_use, attr_prediction_use, attr_units);
+	
+	final public static List<Attribute> attrs_ode = Arrays.asList(attr_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
-	final public static List<Attribute> attrs_observation = Arrays.asList(attr_continuous_type, attr_error, attr_eps, attr_prediction_ref);
+	final public static List<Attribute> attrs_observation = Arrays.asList(attr_type_continuous, 
+			attr_error, attr_eps, attr_prediction_ref);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(
@@ -297,11 +303,23 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		String prefix = Utils.getBlockName(container) + ":";		
 		List<String> argumentNames = Utils.getArgumentNames(args);	
 
-		//getRequiredAttributes contains lists of required attributes for each container
-		for (String attrName: Utils.getRequiredNames(getAllAttributes(container))){
-			if (!argumentNames.contains(attrName)) {
-				warning(MSG_ATTRIBUTE_MISSING + ": " + attrName, 
-				MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attrName);
+		for (Attribute attr: getAllAttributes(container)){
+			if (attr.isMandatory()){
+				if (!argumentNames.contains(attr.getName())) {
+					if (attr.getDependency() != null){
+						//Require attributes only of dependency condition holds
+						if (argumentNames.contains(attr.getDependency().getAttrName())){
+							String value = MdlPrinter.getInstance().getAttribute(args, attr.getDependency().getAttrName());
+							if (attr.getDependency().containsValue(value)) {
+								warning(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
+										MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attr.getName());
+							}
+						}
+					} else {
+						warning(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
+							MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attr.getName());
+					}
+				}
 			}
 		}
 	}

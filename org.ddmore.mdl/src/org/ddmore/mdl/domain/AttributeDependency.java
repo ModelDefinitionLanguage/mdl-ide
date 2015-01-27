@@ -26,11 +26,9 @@ public class AttributeDependency {
 		return attrName;
 	}
 	
-	public boolean equals(String attrName, String value){
-		if (this.attrName.equals(attrName)){
-			for (String attrValue: this.values)
-				if (attrValue.equals(value)) return true;
-		}
+	public boolean containsValue(String value){
+		for (String attrValue: this.values)
+			if (attrValue.equals(value)) return true;
 		return false;
 	}
 }

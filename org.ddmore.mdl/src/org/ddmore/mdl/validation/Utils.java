@@ -2,6 +2,7 @@ package org.ddmore.mdl.validation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,9 @@ import org.ddmore.mdl.mdl.LibraryBlock;
 import org.ddmore.mdl.mdl.MOGObject;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
+import org.ddmore.mdl.mdl.ModelObject;
+import org.ddmore.mdl.mdl.ModelObjectBlock;
+import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ObservationBlock;
 import org.ddmore.mdl.mdl.OdeBlock;
@@ -295,5 +299,28 @@ public class Utils {
 	    	}
 		}
 		return varList;
+	}
+	
+	public static HashSet<String> getDerivativeVariables(ModelObject m){
+		HashSet<String> deriv_vars = new HashSet<String>();
+		for (ModelObjectBlock b: m.getBlocks()){
+			if (b.getModelPredictionBlock() != null){
+				for (ModelPredictionBlockStatement st: b.getModelPredictionBlock().getStatements()){
+					if (st.getOdeBlock() != null){
+						for (SymbolDeclaration s: st.getOdeBlock().getVariables()){
+							if (s.getSymbolName() != null && s.getList() != null){
+				    			for (Argument arg: s.getList().getArguments().getArguments()){
+				    				if (arg.getArgumentName().getName().equals(AttributeValidator.attr_deriv.getName())){
+				    					if (!deriv_vars.contains(s.getSymbolName().getName()))
+				    						deriv_vars.add(s.getSymbolName().getName());
+				    				}
+				    			}
+				    		}
+						}
+					}
+				}
+			}
+		}
+		return deriv_vars;
 	}
 }

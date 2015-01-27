@@ -114,7 +114,7 @@ class DataSetPrinter {
 						}
 						//Dosing
 						if (use.equals(UseType::AMT.toString)){
-							var adm = s.list.arguments.getAttributeExpression(AttributeValidator::attr_administration_ref.name);
+							var adm = s.list.arguments.getAttributeExpression(AttributeValidator::attr_administration_use.name);
 							if (adm != null){
 								res = res + print_ds_ColumnMapping(s.symbolName.name, adm.toStr);
 							}

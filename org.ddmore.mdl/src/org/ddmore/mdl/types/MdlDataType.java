@@ -8,6 +8,7 @@ package org.ddmore.mdl.types;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.ddmore.mdl.domain.FunctionSignature;
@@ -24,6 +25,7 @@ import org.ddmore.mdl.mdl.IndividualVarType;
 import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.LogicalExpression;
+import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.OrExpression;
@@ -52,7 +54,7 @@ public enum MdlDataType {
     //Restrictions of basic (to comply with PharmML)
     TYPE_NAT, TYPE_PNAT, TYPE_PREAL, TYPE_PROBABILITY,
     //References to variables and mathematical expressions
-	TYPE_REF, TYPE_EXPR,  //TODO remove after type checking is supported
+	TYPE_REF, TYPE_REF_DERIV, TYPE_EXPR,  
 	//Matrix
 	TYPE_MATRIX, TYPE_DIAG,
 	//References to objects
@@ -175,6 +177,7 @@ public enum MdlDataType {
 			case TYPE_PROBABILITY: return isProbability(expr);
 			//References
 			case TYPE_REF: return isReference(expr);  
+			case TYPE_REF_DERIV: return isDerivative(expr);
 			case TYPE_EXPR: return true;  
 			//References to objects
 			case TYPE_OBJ_REF: return isObjectReference(expr);
@@ -350,6 +353,23 @@ public enum MdlDataType {
 		if (constant.equals("T")) return true;
 		return false;
 	}
+	
+	private static boolean isDerivative(OrExpression orExpr) {
+		SymbolName s = getReference(orExpr);
+		if (s != null) {
+			Mcl mcl = (Mcl) orExpr.eResource().getContents().get(0);
+			if (mcl != null){
+				for (MclObject obj: mcl.getObjects()){
+					if (obj.getModelObject() != null){
+						HashSet<String> deriv_vars = Utils.getDerivativeVariables(obj.getModelObject());
+						if (deriv_vars.contains(s.getName())) return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//Validate basic types
@@ -510,7 +530,7 @@ public enum MdlDataType {
 				if (type.getType().getType().getCategorical() != null)
 					return TYPE_INT;
 			}
-		}			
+		}	
 		return TYPE_REAL;
 	}
 

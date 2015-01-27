@@ -25,6 +25,11 @@ public class Attribute {
 		this.mandatory = mandatory;
 	}	
 	
+	public Attribute(String name, MdlDataType type, Boolean mandatory, AttributeDependency dependency){
+		this(name, type, mandatory);
+		this.dependency = dependency;
+	}	
+	
 	public Attribute(String name, List<MdlDataType> types, Boolean mandatory){
 		this.name = name;
 		this.types = types;
