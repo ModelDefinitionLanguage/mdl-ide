@@ -411,7 +411,7 @@ enum VariabilityType:
 ;
 
 enum IndividualVarType:
-	no_IndividualVar | linear | gaussian
+	no_IndividualVar | linear | general
 ;
 
 enum TrialType:

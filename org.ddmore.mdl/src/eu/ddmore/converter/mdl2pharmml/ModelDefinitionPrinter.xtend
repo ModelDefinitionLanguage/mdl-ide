@@ -430,7 +430,7 @@ class ModelDefinitionPrinter {
 			</ct:Assign>	
 		'''	+ res;
 		//Gaussian models
-		if (type.equals(IndividualVarType::GAUSSIAN.toString) || 
+		if (type.equals(IndividualVarType::GENERAL.toString) || 
 			type.equals(IndividualVarType::LINEAR.toString)){
 			val trans = list.arguments.getAttribute(AttributeValidator::attr_trans.name);
 			val ranEff = list.arguments.getAttributeExpression(AttributeValidator::attr_ranEff.name);
