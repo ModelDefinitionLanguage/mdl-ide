@@ -98,7 +98,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
 	final public static Attribute attr_level_use = 
 		new Attribute("level", MdlDataType.TYPE_NAT, true, DefaultValues.LEVEL, 
-			new AttributeDependency(attr_use.getName(), Arrays.asList(UseType.DV.toString(), UseType.AMT.toString())));
+			new AttributeDependency(attr_use.getName(), Arrays.asList(UseType.DV.toString(), UseType.ID.toString())));
 	//Dosing mapping
 	final public static Attribute attr_administration_use = new Attribute("administration", 
 			MdlDataType.TYPE_REF_DERIV, true, new AttributeDependency(attr_use.getName(), UseType.AMT.toString()));

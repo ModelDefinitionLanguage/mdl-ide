@@ -42,6 +42,10 @@
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToPharmMLHandler_PE"
             commandId="org.ddmore.mdl.ui.handler.ConvertToPharmML_PE">
       </handler>
+      <handler
+            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ValidatePharmMLHandler_PE"
+            commandId="org.ddmore.mdl.ui.handler.ValidatePharmML_PE">
+      </handler>
       <!--
       <handler
 	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToNONMEMHandler"
@@ -147,6 +151,10 @@
       <command
             id="org.ddmore.mdl.ui.handler.ConvertToPharmML_PE"
             name="Convert to PharmML (PE)">
+      </command>
+      <command
+            id="org.ddmore.mdl.ui.handler.ValidatePharmML_PE"
+            name="Validate PharmML (PE)">
       </command>
       <!--
       <command
@@ -551,6 +559,20 @@
 				       <adapt type="org.eclipse.core.resources.IResource">
 		        			<test property="org.eclipse.core.resources.name"
 				              value="*.mdl"/>
+		    		   </adapt>
+	 	    		</iterate>
+ 	            </visibleWhen>
+	        </command>
+		</menuContribution>
+		<menuContribution
+          locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
+	        <command
+	            commandId="org.ddmore.mdl.ui.handler.ValidatePharmML_PE" style="push">
+	            <visibleWhen checkEnabled="false">
+                	<iterate>
+				       <adapt type="org.eclipse.core.resources.IResource">
+		        			<test property="org.eclipse.core.resources.name"
+				              value="*.xml"/>
 		    		   </adapt>
 	 	    		</iterate>
  	            </visibleWhen>
