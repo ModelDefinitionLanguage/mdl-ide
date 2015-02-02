@@ -87,10 +87,8 @@ class ModellingStepsPrinter extends DataSetPrinter{
 					«ENDFOR»
 				«ENDIF»
 				«IF b.variabilityBlock != null»
-					«FOR p: b.variabilityBlock.statements»
-						«IF p.parameter != null»
-							«print_msteps_ParameterEstimation(p.parameter)»
-						«ENDIF»
+					«FOR p: b.variabilityBlock.parameters»
+						«print_msteps_ParameterEstimation(p)»
 					«ENDFOR»
 				«ENDIF»
 			«ENDFOR»

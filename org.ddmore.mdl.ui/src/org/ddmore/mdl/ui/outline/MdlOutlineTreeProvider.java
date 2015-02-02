@@ -50,14 +50,12 @@ import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.TrialType;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VarType;
-import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.mdl.impl.ArgumentNameImpl;
 import org.ddmore.mdl.mdl.impl.DataBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
-import org.ddmore.mdl.mdl.impl.DeqBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
@@ -172,7 +170,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     	    
     protected Image _image(List r) {
     	EObject container = r.eContainer();
-    	if (container instanceof OdeBlockImpl || container instanceof DeqBlockImpl )
+    	if (container instanceof OdeBlockImpl)
     		return imageHelper.getImage(getPath(ODE)); // decorate ODE lists 
     	return imageHelper.getImage(getPath(LIST));
     }
@@ -430,12 +428,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, ModelPredictionBlockStatement st){
-		for (EObject obj: st.eContents()){
-			createNode(parentNode, obj);
-		}
-	}
-	
-	protected void  _createNode(IOutlineNode parentNode, VariabilityBlockStatement st){
 		for (EObject obj: st.eContents()){
 			createNode(parentNode, obj);
 		}

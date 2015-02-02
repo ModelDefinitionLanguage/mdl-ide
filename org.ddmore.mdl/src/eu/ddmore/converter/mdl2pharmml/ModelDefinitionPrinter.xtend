@@ -159,12 +159,11 @@ class ModelDefinitionPrinter {
 		  		}
 		  		//ParameterObject, VARIABILITY
 		  		if (b.variabilityBlock != null){
-					for (st: b.variabilityBlock.statements){
-						if (st.parameter != null)
-							if (st.parameter.symbolName != null)
-								statements = statements + 
-								'''<SimpleParameter symbId = "«st.parameter.symbolName.name»"/>
-								'''
+					for (id: b.variabilityBlock.parameters){
+						if (id.symbolName != null)
+							statements = statements + 
+							'''<SimpleParameter symbId = "«id.symbolName.name»"/>
+							'''
 					}
 		  		}
 		  	}

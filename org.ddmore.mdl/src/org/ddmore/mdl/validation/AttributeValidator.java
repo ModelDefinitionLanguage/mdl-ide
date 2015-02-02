@@ -37,7 +37,6 @@ import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
-import org.ddmore.mdl.mdl.impl.DeqBlockImpl;
 import org.ddmore.mdl.mdl.impl.RandomListImpl;
 import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.SamplingBlockImpl;
@@ -265,7 +264,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		/*Model object*/
 		if (obj instanceof InputVariablesBlockImpl) return attrs_inputVariables;
 		if (obj instanceof IndividualVariablesBlockImpl) return attrs_individualVariables;
-		if (obj instanceof OdeBlockImpl || obj instanceof DeqBlockImpl) return attrs_ode; 
+		if (obj instanceof OdeBlockImpl) return attrs_ode; 
 		if (obj instanceof CompartmentBlockImpl) return attrs_compartment; 
 		if (obj instanceof EstimationBlockImpl) return attrs_estimation; 
 		if (obj instanceof SimulationBlockImpl) return attrs_simulation; 
@@ -423,7 +422,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			obj instanceof InputVariablesBlockImpl ||
 			obj instanceof IndividualVariablesBlockImpl ||
 			obj instanceof LibraryBlockImpl ||
-			obj instanceof OdeBlockImpl || obj instanceof DeqBlockImpl ||
+			obj instanceof OdeBlockImpl || 
 			obj instanceof CompartmentBlockImpl ||
 			obj instanceof EstimationBlockImpl ||
 			obj instanceof SimulationBlockImpl ||

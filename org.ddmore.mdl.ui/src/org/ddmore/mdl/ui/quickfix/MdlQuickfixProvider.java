@@ -52,7 +52,6 @@ import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VarType;
 import org.ddmore.mdl.mdl.VariabilityBlock;
-import org.ddmore.mdl.mdl.VariabilityBlockStatement;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.impl.MclImpl;
@@ -898,13 +897,13 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 					if (obj != null){
 						for (ParameterObjectBlock block: obj.getBlocks()){
 							if (block.getVariabilityBlock() != null){
-								block.getVariabilityBlock().getStatements().add(createVariabilityBlockStatementParameter(issue.getData()[0]));
+								block.getVariabilityBlock().getParameters().add(createSymbolDeclaration(issue.getData()[0]));
 								return;
 							}
 						}
 						VariabilityBlock block = MdlFactory.eINSTANCE.createVariabilityBlock();
 						block.setIdentifier(blockName);
-						block.getStatements().add(createVariabilityBlockStatementParameter(issue.getData()[0]));
+						block.getParameters().add(createSymbolDeclaration(issue.getData()[0]));
 						ParameterObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createParameterObjectBlock();
 						mdlBlock.setVariabilityBlock(block);
 						obj.getBlocks().add(mdlBlock); 
@@ -913,12 +912,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			});
 		}	
 		
-	VariabilityBlockStatement createVariabilityBlockStatementParameter(String varName){
-		VariabilityBlockStatement st = MdlFactory.eINSTANCE.createVariabilityBlockStatement();
-		st.setParameter(createSymbolDeclaration(varName));
-		return st;
-	}	
-			
 	SymbolDeclaration createSymbolDeclaration(String varName) {
 		SymbolDeclaration newParam = MdlFactory.eINSTANCE.createSymbolDeclaration();
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();

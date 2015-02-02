@@ -173,9 +173,9 @@ class ReferenceResolver{
 			}
 			//ParameterObject, VARIABILITY
 			if (b.variabilityBlock != null){
-				for (st: b.variabilityBlock.statements){
-					if (st.parameter != null && st.parameter.symbolName != null)
-						parameters.add(st.parameter.symbolName.name);
+				for (id: b.variabilityBlock.parameters){
+					if (id.symbolName != null)
+						parameters.add(id.symbolName.name);
 				} 
 			}
 		}

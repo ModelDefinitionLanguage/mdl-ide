@@ -547,16 +547,14 @@ class Mdl2Nonmem extends MdlPrinter {
 		for (b:o.blocks){
 			if (b.variabilityBlock != null){
 				var printSectionName = true;
-				for (c: b.variabilityBlock.statements){
-					if (c.parameter != null){
-						var tmp = c.parameter.printVariabilityParameter(section);
-						if (tmp.length > 0){
-							if (printSectionName){
-								res = res + "\n" + section + "\n";
-								printSectionName = false;
-							}
-							res = res + tmp;
+				for (c: b.variabilityBlock.parameters){
+					var tmp = c.printVariabilityParameter(section);
+					if (tmp.length > 0){
+						if (printSectionName){
+							res = res + "\n" + section + "\n";
+							printSectionName = false;
 						}
+						res = res + tmp;
 					}
 				}
 			}

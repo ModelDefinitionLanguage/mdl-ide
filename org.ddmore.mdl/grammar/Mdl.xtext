@@ -123,7 +123,7 @@ StructuralBlock:
 
 VariabilityBlock:
 	identifier='VARIABILITY' 
-	BEGIN statements += VariabilityBlockStatement* END
+	BEGIN parameters += SymbolDeclaration* END
 ;
 
 PriorParametersBlock:
@@ -221,11 +221,6 @@ CompartmentBlock:
 	BEGIN variables += SymbolDeclaration* END 
 ;
 
-DeqBlock:
-	identifier = 'DEQ'
-	BEGIN variables += SymbolDeclaration* END 
-;
-
 FunctionCallStatement:
 	symbolName = SymbolName "=" expression = FunctionCall
 ;
@@ -243,10 +238,6 @@ GroupVariablesBlockStatement:
 MixtureBlock:
 	identifier = 'MIXTURE' 
 	BEGIN variables += SymbolDeclaration* END 
-;
-
-VariabilityBlockStatement:
-	parameter = SymbolDeclaration 
 ;
 
 //////////////////////////////////////////////////////////
