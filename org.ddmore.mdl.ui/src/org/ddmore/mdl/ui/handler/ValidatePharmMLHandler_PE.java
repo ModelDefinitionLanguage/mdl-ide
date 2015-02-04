@@ -1,12 +1,17 @@
 package org.ddmore.mdl.ui.handler;
 
+import java.io.File;
 import java.io.InputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -30,7 +35,7 @@ public class ValidatePharmMLHandler_PE  extends AbstractHandler implements IHand
 	 
     @Inject
     IResourceSetProvider resourceSetProvider;
-
+    
     public Object execute(ExecutionEvent event) throws ExecutionException {
         ISelection selection = HandlerUtil.getCurrentSelection(event);
 
@@ -42,35 +47,28 @@ public class ValidatePharmMLHandler_PE  extends AbstractHandler implements IHand
 				try {
 	            	IFile file = (IFile) firstElement;
 					InputStream inputStream = file.getContents();
-					
-					/*//Testing: print PharmML file - ok!
-					BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-					String inputLine;
-					while ((inputLine = in.readLine()) != null) System.out.println(inputLine); */
-					
 	            	ILibPharmML libPharmML = PharmMlFactory.getInstance().createLibPharmML();
-	 				System.out.println("Validating generated PharmML...");
+	            	String newline = System.getProperty("line.separator");
+	 				String logData = "Validation of PharmML file " + file.getName() + newline + newline;
 	 				IPharmMLResource res = libPharmML.createDomFromResource(inputStream);
 	 				IPharmMLValidator validator = libPharmML.getValidator();
 	 				IValidationReport rpt = validator.createValidationReport(res);
 	 				if(rpt.isValid()){
-	 					System.out.println(file.getFullPath().toString() + " is valid");
+	 					logData = file.getFullPath().toString() + " is valid" + newline;
 	 				} else {
 	 					for (int i = 1; i <= rpt.numErrors(); i++){
 	 						IValidationError err = rpt.getError(i); 
-	 						System.out.println("Error " + (i) + ": " + err.getErrorMsg());
+	 						logData += "Error " + (i) + ": " + err.getErrorMsg() + newline;
 	 					}
 	 				}
 	 				inputStream.close();
-
-	 				/* //write .log file
-	                JavaIoFileSystemAccess fsa = fileAccessProvider.get();
-					fsa.setOutputPath(file.getParent().getFullPath().toString());
+	 				//Write the report
+	                File outputDirectory = new File(file.getParent().getRawLocation() + "/validation");
+	                File outputFile = new File(outputDirectory.getPath() +'/'+ file.getName().replace(".xml", ".log"));
+					FileUtils.write(outputFile, logData);
 					IProject project = file.getProject();
-					final IFolder srcGenFolder = project.getFolder(Preferences.SRC_GEN_PREFIX);
-					if (srcGenFolder.exists())
-						srcGenFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
-					*/
+					IFolder srcGenFolder = project.getFolder(file.getParent().getName());
+					srcGenFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

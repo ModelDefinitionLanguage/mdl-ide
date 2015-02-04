@@ -74,11 +74,9 @@ public class ConvertToPharmMLHandler extends AbstractHandler implements IHandler
 								       //No MOGs defined
 								       if (mcl != null && Utils.getMOGs(mcl).size() == 0){
 								    	   Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-								    	   MessageDialog.openError(shell, "Error", 
-								    			   "PharmML generation error: no MOG found!");
+								    	   MessageDialog.openError(shell, "Error", "PharmML generation error: no MOG found!");
 								       }
 									
-									System.out.println("Generating PharmML code for " + file.getName());
 					            	generator.doGenerate(source, fsa);
 					            	try {
 										srcGenFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
