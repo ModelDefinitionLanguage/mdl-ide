@@ -48,101 +48,70 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 
 	//Synchronised with PharmML v.4.0.1 
 	final public static List<String> funct_standard1 = Arrays.asList(
-		"abs",
-		"exp",
-		"factorial",
-		"factln",
-		"gammaln",
+		"abs","exp", "factorial", "factln", "gammaln",
 		"ln", //Supported by MDL but not PharmML
-		"log",
-		"log2",
-		"log10",
-		"logistic",
-		"logit",
-		"normcdf",
-		"probit",
-		"sqrt",
-		"sin",
-		"cos",
-		"tan",
-		"cot",
-		"atan2",
-		"sec",
-		"csc",
-		"sinh",
-		"cosh",
-		"tanh",
-		"sech",
-		"csch",
-		"coth",
-		"arcsin",
-		"arccos",
-		"arctan",
-		"arcsec",
-		"arccsc",
-		"arccot",
-		"arcsinh",
-		"arccosh",
-		"arctanh",
-		"arcsech",
-		"arccsch",
-		"arccoth",
-		"floor",
-		"ceiling");
+		"log", "log2", "log10", "logistic", "logit",
+		"normcdf", "probit", "sqrt",
+		//trigonometric
+		"sin", "cos", "tan", "cot", "atan2", "sec", "csc", "sinh", "cosh", "tanh", "sech", "csch", "coth",
+		"arcsin", "arccos", "arctan", "arcsec", "arccsc", "arccot", "arcsinh", "arccosh", "arctanh", "arcsech", "arccsch", "arccoth",
+		//type conversion
+		"floor", "ceiling");
 
 	final public static List<String> funct_standard2 = Arrays.asList("logx", "root", "min", "max", "rem");
 
 	final public static String funct_runif     = "runif";
-	final public static String funct_pnorm     = "pnorm";
+	final public static String funct_pnorm     = "pnorm";	
+	final public static FunctionParameter param_n = new FunctionParameter("n", MdlDataType.TYPE_INT);
 	
-	final public static FunctionParameter param_n  = new FunctionParameter("n", MdlDataType.TYPE_INT);
-	
-	final public static String funct_seq     = "seq";
-	final public static FunctionParameter param_seq_start = new FunctionParameter("start", MdlDataType.TYPE_REAL);
-	final public static FunctionParameter param_seq_stepSize = new FunctionParameter("stepSize", MdlDataType.TYPE_REAL);
+	final public static String funct_seq = "seq";
+	final public static FunctionParameter param_seq_start      = new FunctionParameter("start", MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_seq_stepSize   = new FunctionParameter("stepSize", MdlDataType.TYPE_REAL);
 	final public static FunctionParameter param_seq_repetition = new FunctionParameter("repetition", MdlDataType.TYPE_REAL);
-	final public static FunctionParameter param_seq_end = new FunctionParameter("end", MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_seq_end        = new FunctionParameter("end", MdlDataType.TYPE_REAL);
 
-	final public static String funct_error_additive   	= "additiveError";
-	final public static String funct_error_prop       	= "proportionalError";
-	final public static String funct_error_combined1  	= "combinedError1";
-	final public static String funct_error_combined2  	= "combinedError2";
-	final public static String funct_error_power      	= "powerError";
+	final public static String funct_error_additive   	  = "additiveError";
+	final public static String funct_error_prop       	  = "proportionalError";
+	final public static String funct_error_combined1  	  = "combinedError1";
+	final public static String funct_error_combined2  	  = "combinedError2";
+	final public static String funct_error_combined2log	  = "combinedError2log";
+	final public static String funct_error_combined3  	  = "combinedError3";
+	final public static String funct_error_power      	  = "powerError";
 	final public static String funct_error_combinedPower1 = "combinedPowerError1";
 
-	final public static FunctionParameter param_error_additive = new FunctionParameter("additive", MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_error_additive     = new FunctionParameter("additive", MdlDataType.TYPE_REF);
 	final public static FunctionParameter param_error_proportional = new FunctionParameter("proportional", MdlDataType.TYPE_REF);
-	final public static FunctionParameter param_error_power = new FunctionParameter("power", MdlDataType.TYPE_REF);
-	final public static FunctionParameter param_error_f = new FunctionParameter("f", MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_error_power        = new FunctionParameter("power", MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_error_f            = new FunctionParameter("f", MdlDataType.TYPE_REF);
 
 	final public static List<String> errorModels = Arrays.asList(
-		funct_error_additive, funct_error_prop, funct_error_combined1, funct_error_combined2, 
+		funct_error_additive, funct_error_prop, funct_error_combined1, funct_error_combined2, funct_error_combined2log, funct_error_combined3, 
 		funct_error_power, funct_error_combinedPower1);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*LIBRARY*/
 	final public static String lib_nmadvan = "nmadvan";
-	final public static String lib_PK = "PK";
+	final public static String lib_PK      = "PK";
 
 	final public static List<String> libraries = Arrays.asList(lib_nmadvan, lib_PK);
 	
 	/*nmadvan parameters*/
-	final public static FunctionParameter param_nmadvan_model = new FunctionParameter("model", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_trans = new FunctionParameter("trans", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_ncmt = new FunctionParameter("ncmt", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
-	final public static FunctionParameter param_nmadvan_input = new FunctionParameter("input", MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_distribution = new FunctionParameter("distribution", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_elimination = new FunctionParameter("elimination", MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_model            = new FunctionParameter("model", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_trans            = new FunctionParameter("trans", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_ncmt             = new FunctionParameter("ncmt", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
+	final public static FunctionParameter param_nmadvan_input            = new FunctionParameter("input", MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_distribution     = new FunctionParameter("distribution", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_nmadvan_elimination      = new FunctionParameter("elimination", MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
 	final public static FunctionParameter param_nmadvan_parameterization = new FunctionParameter("parameterization", MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
 	
 	/*PK parameters*/
 	final public static FunctionParameter param_PK_ndist = new FunctionParameter("ndist", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
 	final public static FunctionParameter param_PK_depot = new FunctionParameter("depot", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_PK_par = new FunctionParameter("par", MdlDataType.TYPE_PK_PARAMETER, ParameterPassingMethod.IN, PkParameterType.VCL.toString());
-	final public static FunctionParameter param_PK_glm = new FunctionParameter("glm", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_PK_glmr = new FunctionParameter("glmr", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_PK_par   = new FunctionParameter("par", MdlDataType.TYPE_PK_PARAMETER, ParameterPassingMethod.IN, PkParameterType.VCL.toString());
+	final public static FunctionParameter param_PK_glm   = new FunctionParameter("glm", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_PK_glmr  = new FunctionParameter("glmr", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
 	final public static FunctionParameter param_PK_ncomp = new FunctionParameter("ncomp", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_PK_mom1 = new FunctionParameter("mom1", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
+	final public static FunctionParameter param_PK_mom1  = new FunctionParameter("mom1", MdlDataType.TYPE_BOOLEAN, ParameterPassingMethod.IN);
 	
 	//////////////////////////////////////////////////////////////////////////
 	final public static Map<String, FunctionSignature> standardFunctions 
@@ -176,6 +145,12 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			put(funct_error_combined2, new FunctionSignature(funct_error_combined2, 
 					new FunctionParameterSet(Arrays.asList(param_error_additive, param_error_proportional, param_error_f)),
 					MdlDataType.TYPE_REAL, true));
+			put(funct_error_combined2log, new FunctionSignature(funct_error_combined2log, 
+					new FunctionParameterSet(Arrays.asList(param_error_additive, param_error_proportional, param_error_f)),
+					MdlDataType.TYPE_REAL, true));
+			put(funct_error_combined3, new FunctionSignature(funct_error_combined3, 
+					new FunctionParameterSet(Arrays.asList(param_error_additive, param_error_proportional, param_error_f)),
+					MdlDataType.TYPE_REAL, true));
 			put(funct_error_power, new FunctionSignature(
 					funct_error_power, 
 					new FunctionParameterSet(Arrays.asList(param_error_proportional, param_error_power, param_error_f)), MdlDataType.TYPE_REAL, true));
@@ -198,36 +173,35 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			);			
 			
 			//PK
-			Variable V = new Variable("V", MdlDataType.TYPE_REAL); 
-			Variable V1 = new Variable("V1", MdlDataType.TYPE_REAL); 
-			Variable V2 = new Variable("V2", MdlDataType.TYPE_REAL); 
-			Variable V3 = new Variable("V3", MdlDataType.TYPE_REAL); 
-			Variable V4 = new Variable("V4", MdlDataType.TYPE_REAL); 
-			Variable VSS = new Variable("VSS", MdlDataType.TYPE_REAL); 
-			Variable CL = new Variable("CL", MdlDataType.TYPE_REAL);
-			Variable K = new Variable("K", MdlDataType.TYPE_REAL);
-			Variable K12 = new Variable("K12", MdlDataType.TYPE_REAL);
-			Variable K21 = new Variable("K21", MdlDataType.TYPE_REAL);
-			Variable K13 = new Variable("K13", MdlDataType.TYPE_REAL);
-			Variable K31 = new Variable("K31", MdlDataType.TYPE_REAL);
-			Variable K23 = new Variable("K23", MdlDataType.TYPE_REAL);
-			Variable K32 = new Variable("K32", MdlDataType.TYPE_REAL);
-			Variable K24 = new Variable("K24", MdlDataType.TYPE_REAL);
-			Variable K42 = new Variable("K42", MdlDataType.TYPE_REAL);
-			Variable KA = new Variable("KA", MdlDataType.TYPE_REAL);
-			Variable Q = new Variable("Q", MdlDataType.TYPE_REAL);
-			Variable Q2 = new Variable("Q2", MdlDataType.TYPE_REAL);
-			Variable Q3 = new Variable("Q3", MdlDataType.TYPE_REAL);
-			Variable Q4 = new Variable("Q4", MdlDataType.TYPE_REAL);
-			Variable VM = new Variable("VM", MdlDataType.TYPE_REAL);
-			Variable KM = new Variable("KM", MdlDataType.TYPE_REAL);
+			Variable V     = new Variable("V",     MdlDataType.TYPE_REAL); 
+			Variable V1    = new Variable("V1",    MdlDataType.TYPE_REAL); 
+			Variable V2    = new Variable("V2",    MdlDataType.TYPE_REAL); 
+			Variable V3    = new Variable("V3",    MdlDataType.TYPE_REAL); 
+			Variable V4    = new Variable("V4",    MdlDataType.TYPE_REAL); 
+			Variable VSS   = new Variable("VSS",   MdlDataType.TYPE_REAL); 
+			Variable CL    = new Variable("CL",    MdlDataType.TYPE_REAL);
+			Variable K     = new Variable("K",     MdlDataType.TYPE_REAL);
+			Variable K12   = new Variable("K12",   MdlDataType.TYPE_REAL);
+			Variable K21   = new Variable("K21",   MdlDataType.TYPE_REAL);
+			Variable K13   = new Variable("K13",   MdlDataType.TYPE_REAL);
+			Variable K31   = new Variable("K31",   MdlDataType.TYPE_REAL);
+			Variable K23   = new Variable("K23",   MdlDataType.TYPE_REAL);
+			Variable K32   = new Variable("K32",   MdlDataType.TYPE_REAL);
+			Variable K24   = new Variable("K24",   MdlDataType.TYPE_REAL);
+			Variable K42   = new Variable("K42",   MdlDataType.TYPE_REAL);
+			Variable KA    = new Variable("KA",    MdlDataType.TYPE_REAL);
+			Variable Q     = new Variable("Q",     MdlDataType.TYPE_REAL);
+			Variable Q2    = new Variable("Q2",    MdlDataType.TYPE_REAL);
+			Variable Q3    = new Variable("Q3",    MdlDataType.TYPE_REAL);
+			Variable Q4    = new Variable("Q4",    MdlDataType.TYPE_REAL);
+			Variable VM    = new Variable("VM",    MdlDataType.TYPE_REAL);
+			Variable KM    = new Variable("KM",    MdlDataType.TYPE_REAL);
 			Variable ALPHA = new Variable("ALPHA", MdlDataType.TYPE_REAL); 
-			Variable BETA = new Variable("BETA", MdlDataType.TYPE_REAL); 
+			Variable BETA  = new Variable("BETA",  MdlDataType.TYPE_REAL); 
 			Variable GAMMA = new Variable("GAMMA", MdlDataType.TYPE_REAL); 
 			
 			Map<String, List<Variable>> pkReturnedValues = new HashMap<String, List<Variable>>();
-			/*Key: values of attributes in the following order 
-			 * ndist|depot|par|glm|glmr|ncomp|mom1
+			/*Key: values of attributes in the following order: ndist|depot|par|glm|glmr|ncomp|mom1
 			 * Boolean attributes which are not 'true' are skipped */
 			//v_cl
 			pkReturnedValues.put("ndist=1|par=v_cl", Arrays.asList(A, F, V, CL));
@@ -267,9 +241,8 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		/** * */
 		private static final long serialVersionUID = -8196317757338022395L;
 		{
-			for (String functName: libraries){
+			for (String functName: libraries)
 				add(functName);
-			}
 		}
 	};
 	

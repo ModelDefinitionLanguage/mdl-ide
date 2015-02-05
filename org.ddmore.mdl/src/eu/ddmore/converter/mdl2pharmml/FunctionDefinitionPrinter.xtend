@@ -48,6 +48,7 @@ class FunctionDefinitionPrinter {
 	}
 	
 	//combined2: sqrt(a^2  +  b^2*F^2)
+	//combined2log or combined3: sqrt(b^2 + (a/f)^2)
 	protected def print_FunctionDefinition(String functName)'''
 		<Definition>
 			<Equation xmlns="«Constants::xmlns_math»">
@@ -80,6 +81,26 @@ class FunctionDefinitionPrinter {
 								<math:Binop op="times">
 									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_proportional.name»"/>
 									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_proportional.name»"/>
+								</math:Binop>
+								<math:Binop op="times">
+									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_f.name»"/>
+									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_f.name»"/>
+								</math:Binop>
+							</math:Binop>
+						</math:Binop>
+					</math:Uniop>
+				«ENDIF»
+				«IF (functName.equals(FunctionValidator::funct_error_combined2log) || functName.equals(FunctionValidator::funct_error_combined3))»
+					<math:Uniop op="sqrt">
+						<math:Binop op="plus">
+							<math:Binop op="times">
+								<ct:SymbRef symbIdRef="«FunctionValidator::param_error_proportional.name»"/>
+								<ct:SymbRef symbIdRef="«FunctionValidator::param_error_proportional.name»"/>
+							</math:Binop>
+							<math:Binop op="divide">
+								<math:Binop op="times">
+									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_additive.name»"/>
+									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_additive.name»"/>
 								</math:Binop>
 								<math:Binop op="times">
 									<ct:SymbRef symbIdRef="«FunctionValidator::param_error_f.name»"/>
