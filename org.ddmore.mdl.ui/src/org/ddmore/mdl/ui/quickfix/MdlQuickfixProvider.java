@@ -39,7 +39,6 @@ import org.ddmore.mdl.mdl.OutputVariablesBlock;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.PowerExpression;
-import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
@@ -365,12 +364,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return or;
 	}
 
-	Primary createPrimary(String value){
-		Primary primary =  MdlFactory.eINSTANCE.createPrimary();
-		primary.setExpression(createOrExpression(value));
-		return primary;
-	}
-	
 	AnyExpression createReferenceExpression(String value){
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		Expression e = MdlFactory.eINSTANCE.createExpression();

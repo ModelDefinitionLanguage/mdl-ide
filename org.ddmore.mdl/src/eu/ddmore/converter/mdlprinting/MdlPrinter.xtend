@@ -10,7 +10,6 @@ import org.ddmore.mdl.mdl.FunctionCall
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.List
 import org.ddmore.mdl.mdl.RandomList
-import org.ddmore.mdl.mdl.Primary
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.OrExpression
@@ -407,15 +406,6 @@ class MdlPrinter {
 		 return res;	
 	}
 	
-	def String toStr(Primary p){
-		if (p.expression != null){
-			return  p.expression.toStr;
-		}
-		if (p.vector != null) {
-			return p.vector.toStr
-		}
-	}
-	
 	def toStr(FullyQualifiedArgumentName arg) { 
 		var res = "";
 		if (arg != null){
@@ -557,8 +547,6 @@ class MdlPrinter {
 	
 	def print(UnaryExpression e)'''«e.toStr»'''
 
-	def print(Primary p)'''«p.toStr»'''
-	
 	def print(ParExpression e)'''«e.toStr»'''
 	
 	def print(Arguments arg)'''«arg.toStr»'''

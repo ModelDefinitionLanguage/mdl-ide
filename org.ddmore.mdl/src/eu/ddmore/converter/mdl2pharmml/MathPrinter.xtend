@@ -20,7 +20,6 @@ import org.ddmore.mdl.mdl.List
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.Argument
 import org.ddmore.mdl.mdl.FunctionCall
-import org.ddmore.mdl.mdl.Primary
 import java.util.ArrayList
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
@@ -48,6 +47,9 @@ class MathPrinter{
 	def CharSequence print_Math_Expr(AnyExpression e) '''
 		«IF e.expression != null»
 			«e.expression.print_Math_Expr»
+		«ENDIF»
+		«IF e.vector != null»
+			«e.vector.print_ct_Vector»
 		«ENDIF»
 	'''
 
@@ -374,20 +376,11 @@ class MathPrinter{
 		«ENDIF»
 	'''
 
-	def CharSequence print_Math_Primary(Primary p) '''
-		«IF p.expression != null»
-			«p.expression.print_Math_Expr»
-		«ENDIF»
-		«IF p.vector != null»
-			«p.vector.print_ct_Vector»
-		«ENDIF»
-	'''
-
 	//+
 	def print_ct_Vector(Vector vector) '''
 		<ct:Vector>
 			«FOR v : vector.values»
-				«v.print_Math_Primary»
+				«v.print_Math_Expr»
 			«ENDFOR»
 		</ct:Vector>
 	'''

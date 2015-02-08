@@ -16,19 +16,23 @@ class FunctionDefinitionPrinter {
 
 	def print_FunctionDefinitions(MOGObject mog){
 		var res  = "";
-		for (objectName: mog.objects){
-			var container = objectName.eContainer;
-			if (container instanceof MclObjectImpl){
-				val o = container as MclObject;
-				var iterator = o.eAllContents();
-			    while (iterator.hasNext()){
-			    	var obj = iterator.next();
-			    	if (obj instanceof FunctionCallImpl){
-			    		var functName = (obj as FunctionCall).identifier.name;
-			    		res = res + '''«functName.print_ct_FunctionDefinition»''';
-			    	}
-			    }
-		    }
+		for (b: mog.blocks){
+			if (b.objectBlock != null){
+				for (objectName: b.objectBlock.objects){
+					var container = objectName.eContainer;
+					if (container instanceof MclObjectImpl){
+						val o = container as MclObject;
+						var iterator = o.eAllContents();
+					    while (iterator.hasNext()){
+					    	var obj = iterator.next();
+					    	if (obj instanceof FunctionCallImpl){
+					    		var functName = (obj as FunctionCall).identifier.name;
+					    		res = res + '''«functName.print_ct_FunctionDefinition»''';
+					    	}
+					    }
+				    }
+				}
+			}
 		}
 		'''«res»'''
 	}

@@ -7,7 +7,6 @@ import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.mdl.IndividualVarType
 import org.ddmore.mdl.mdl.Vector
-import org.ddmore.mdl.mdl.Primary
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.types.DefaultValues
@@ -497,12 +496,12 @@ class ModelDefinitionPrinter {
 		return res;
 	}
 	
-	protected def print_Covariate(Primary cov, Primary ranEff)'''
+	protected def print_Covariate(AnyExpression cov, AnyExpression ranEff)'''
 		«IF cov != null»
 			<Covariate>
-				«cov.print_Math_Primary»
+				«cov.print_Math_Expr»
 				<FixedEffect>
-					«ranEff.print_Math_Primary»
+					«ranEff.print_Math_Expr»
 				</FixedEffect>
 			</Covariate>	
 		«ENDIF»

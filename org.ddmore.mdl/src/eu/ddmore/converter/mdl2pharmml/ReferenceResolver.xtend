@@ -278,56 +278,71 @@ class ReferenceResolver{
 	}
 	
 	protected def getTaskObject(MOGObject mog){
-		for (o: mog.objects){
-			var container = o.eContainer;
-			if (container instanceof MclObjectImpl){
-				val mclObject = container as MclObject;
-				if (mclObject.taskObject != null) return mclObject.taskObject;
-			}
+		for (b: mog.blocks)
+			if (b.objectBlock != null){
+				for (o: b.objectBlock.objects){
+					var container = o.eContainer;
+					if (container instanceof MclObjectImpl){
+						val mclObject = container as MclObject;
+						if (mclObject.taskObject != null) return mclObject.taskObject;
+					}
+				}
 		}
 		return null;
 	}	
 	
 	protected def getModelObject(MOGObject mog){
-		for (o: mog.objects){
-			var container = o.eContainer;
-			if (container instanceof MclObjectImpl){
-				val mclObject = container as MclObject;
-				if (mclObject.modelObject != null) return mclObject.modelObject;
-			}
+		for (b: mog.blocks)
+			if (b.objectBlock != null){
+				for (o: b.objectBlock.objects){
+					var container = o.eContainer;
+					if (container instanceof MclObjectImpl){
+						val mclObject = container as MclObject;
+						if (mclObject.modelObject != null) return mclObject.modelObject;
+					}
+				}
 		}
 		return null;
 	}	
 
 	protected def getParameterObject(MOGObject mog){
-		for (o: mog.objects){
-			var container = o.eContainer;
-			if (container instanceof MclObjectImpl){
-				val mclObject = container as MclObject;
-				if (mclObject.parameterObject != null) return mclObject.parameterObject;
-			}
+		for (b: mog.blocks)
+			if (b.objectBlock != null){
+				for (o: b.objectBlock.objects){
+					var container = o.eContainer;
+					if (container instanceof MclObjectImpl){
+						val mclObject = container as MclObject;
+						if (mclObject.parameterObject != null) return mclObject.parameterObject;
+					}
+				}
 		}
 		return null;
 	}	
 
 	protected def getDataObject(MOGObject mog){
-		for (o: mog.objects){
-			var container = o.eContainer;
-			if (container instanceof MclObjectImpl){
-				val mclObject = container as MclObject;
-				if (mclObject.dataObject != null) return mclObject.dataObject;
-			}
+		for (b: mog.blocks)
+			if (b.objectBlock != null){
+				for (o: b.objectBlock.objects){
+					var container = o.eContainer;
+					if (container instanceof MclObjectImpl){
+						val mclObject = container as MclObject;
+						if (mclObject.dataObject != null) return mclObject.dataObject;
+					}
+				}
 		}
 		return null;
 	}	
 	
 	protected def getDesignObject(MOGObject mog){
-		for (o: mog.objects){
-			var container = o.eContainer;
-			if (container instanceof MclObjectImpl){
-				val mclObject = container as MclObject;
-				if (mclObject.designObject != null) return mclObject.designObject;
-			}
+		for (b: mog.blocks)
+			if (b.objectBlock != null){
+				for (o: b.objectBlock.objects){
+					var container = o.eContainer;
+					if (container instanceof MclObjectImpl){
+						val mclObject = container as MclObject;
+						if (mclObject.designObject != null) return mclObject.designObject;
+					}
+				}
 		}
 		return null;
 	}

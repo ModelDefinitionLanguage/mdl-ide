@@ -29,7 +29,7 @@ DesignObject:
 	identifier = 'designobj' BEGIN blocks += DesignObjectBlock* END;
 	
 MOGObject:
-	identifier = 'mog' BEGIN objects += [ObjectName]* END;
+	identifier = 'mogobj' BEGIN blocks += MOGObjectBlock* END;
 	
 //////////////////////////////////////////////////////////
 //Model Object
@@ -314,6 +314,26 @@ SamplingBlock:
 ;
 
 //////////////////////////////////////////////////////////
+//MOG
+//////////////////////////////////////////////////////////
+MOGObjectBlock:
+	objectBlock = ObjectBlock |
+	mappingBlock = MappingBlock	
+;
+
+ ObjectBlock:
+ 	identifier = 'OBJECTS'
+ 	BEGIN //objects += SymbolDeclaration* 
+ 		objects += [ObjectName]*
+ 	END
+ ;
+ 
+ MappingBlock:
+ 	identifier = 'MAPPING'
+ 	BEGIN mappings += List* END
+ ;
+
+//////////////////////////////////////////////////////////
 //Common
 //////////////////////////////////////////////////////////
 
@@ -504,13 +524,8 @@ UnaryExpression:
 ;
 
 Vector:
-	'[' values += Primary (=> ',' values += Primary)* ']'
+	'[' values += AnyExpression (=> ',' values += AnyExpression)* ']'
 ;	
-
-Primary:
-	expression = OrExpression |
-	vector = Vector 
-;
 
 FullyQualifiedArgumentName:
 	parent = SymbolName selectors += Selector+  

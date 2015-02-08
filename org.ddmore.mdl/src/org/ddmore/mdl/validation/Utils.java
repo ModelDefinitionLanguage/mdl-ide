@@ -24,6 +24,7 @@ import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
 import org.ddmore.mdl.mdl.MOGObject;
+import org.ddmore.mdl.mdl.MOGObjectBlock;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.ModelObject;
@@ -107,10 +108,15 @@ public class Utils {
 		ObjectName objName = getObjectName(ref);
 		if (objName != null){
 			for (MOGObject mog: mogs){
-				for (ObjectName o: mog.getObjects()){
-					if (o.getName().equals(objName.getName()))
-						return isIdentifierDeclared(map, ref.getName(), objName);
-				}
+				for (MOGObjectBlock b: mog.getBlocks()){
+					if (b.getObjectBlock() != null){
+						for (ObjectName o: b.getObjectBlock().getObjects()){
+							if (o.getName().equals(objName.getName()))
+								return isIdentifierDeclared(map, ref.getName(), objName);
+						}
+					}
+					
+				}				
 			}
 			//Local object
 			return isIdentifierDeclared(map, ref.getName(), objName);

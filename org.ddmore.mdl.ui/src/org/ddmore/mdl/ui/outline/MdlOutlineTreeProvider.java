@@ -26,6 +26,7 @@ import org.ddmore.mdl.mdl.IndividualVarType;
 import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.List;
 import org.ddmore.mdl.mdl.MOGObject;
+import org.ddmore.mdl.mdl.MOGObjectBlock;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
@@ -38,7 +39,6 @@ import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.ParExpression;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
-import org.ddmore.mdl.mdl.Primary;
 import org.ddmore.mdl.mdl.PropertyDeclaration;
 import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
@@ -360,7 +360,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected void  _createNode(IOutlineNode parentNode, MOGObject obj) {
 		createEStructuralFeatureNode(parentNode,
 			obj,
-			MdlPackage.Literals.MOG_OBJECT__OBJECTS,
+			MdlPackage.Literals.MOG_OBJECT__BLOCKS,
 			_image(obj),
 			((MclObject) obj.eContainer()).getObjectName().getName(),
 			false);
@@ -401,6 +401,11 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		for (EObject obj: block.eContents()){
 			createNode(parentNode, obj);
 		}
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, MOGObjectBlock block){
+		for (EObject obj: block.eContents())
+			createNode(parentNode, obj);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, MixtureBlock b) {
@@ -655,24 +660,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				mdlPrinter.toStr(t),
 				true);
 	}
-	
-	protected void  _createNode(IOutlineNode parentNode, Primary p){
-		if (p.getExpression() != null)
-			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.PRIMARY__EXPRESSION,
-				_image(p),
-				mdlPrinter.toStr(p),
-				true);
-		if (p.getVector() != null)
-			createEStructuralFeatureNode(parentNode,
-				p,
-				MdlPackage.Literals.PRIMARY__VECTOR,
-				_image(p),
-				mdlPrinter.toStr(p),
-				true);
-	}
-	
 	
 	////////////////////////////////////////////////////////////////////////////////////
 	//Show expression as a leaf node

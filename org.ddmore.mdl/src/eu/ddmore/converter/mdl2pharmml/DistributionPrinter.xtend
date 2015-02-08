@@ -7,7 +7,6 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import org.ddmore.mdl.mdl.RandomList
-import org.ddmore.mdl.mdl.Primary 
 import org.ddmore.mdl.mdl.Argument
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.DistributionValidator
@@ -285,43 +284,19 @@ class DistributionPrinter extends MdlPrinter{
 		catch(Exception e){//just in case regEx fails...
 			return definition + type.toLowerCase();
 		}
-	}
-	
+	}	
 	
 	//TODO create temporal variables for complex expressions!!!
 	def String toPharmML(AnyExpression expr, String type){
-		if (MdlDataType::validateType(MdlDataType::TYPE_REF, expr)){
+		if (MdlDataType::validateType(MdlDataType::TYPE_REF, expr) || MdlDataType::validateType(MdlDataType::TYPE_STRING, expr))
 			return '''<var varId="«expr.toStr»"/>'''; 
-		} else {
-			if (MdlDataType::validateType(MdlDataType::TYPE_REAL, expr)){
-				return '''<«type»>«expr.toStr»</«type»>''';
-			}
-		}
+		if (MdlDataType::validateType(MdlDataType::TYPE_REAL, expr))
+			return '''<«type»>«expr.toStr»</«type»>''';
 		if (expr.vector != null) {
 			var res = "";
-			for (Primary pp: expr.vector.values){
-				 res = res + pp.toPharmML(type);
-			}
+			for (pp: expr.vector.values)
+				res = res + '''«pp.toPharmML(type)»'''
 			return '''«res»'''
 		}
 	}
-	
-	//A value assigned to a distribution attribute can be a number, reference, or vector
-	def String toPharmML(Primary p, String type){
-		if (p.expression != null){
-			if (MdlDataType::validateType(MdlDataType::TYPE_STRING, p.expression)){
-				return '''<var varId="«p.expression.toStr»"/>'''; 
-			} else {
-				return '''<«type»>«p.expression.toStr»</«type»>''';
-			}
-		}
-		if (p.vector != null) {
-			var res = "";
-			for (Primary pp: p.vector.values){
-				 res = res + pp.toPharmML(type);
-			}
-			return '''«res»'''
-		}
-	}
-
 }
