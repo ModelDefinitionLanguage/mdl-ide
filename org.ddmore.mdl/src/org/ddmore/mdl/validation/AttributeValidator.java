@@ -100,7 +100,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			new AttributeDependency(attr_use.getName(), Arrays.asList(UseType.DV.toString(), UseType.ID.toString())));
 	//Dosing mapping
 	final public static Attribute attr_administration_use = new Attribute("administration", 
-			MdlDataType.TYPE_REF_DERIV, true, new AttributeDependency(attr_use.getName(), UseType.AMT.toString()));
+			MdlDataType.TYPE_REF_DERIV, false);
 	final public static Attribute attr_prediction_use = new Attribute("prediction", 
 			MdlDataType.TYPE_REF, true, new AttributeDependency(attr_use.getName(), UseType.DV.toString()));
 	final public static Attribute attr_type_use = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, 
