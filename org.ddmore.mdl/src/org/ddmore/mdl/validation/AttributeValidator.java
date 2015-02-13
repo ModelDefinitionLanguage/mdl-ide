@@ -63,10 +63,11 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
     @Inject
     public void register(EValidatorRegistrar registrar) {}
 	
-	public final static String MSG_ATTRIBUTE_UNKNOWN    = "Unknown attribute";
-	public final static String MSG_ATTRIBUTE_MISSING    = "Required attribute is missing";
-	public final static String MSG_ATTRIBUTE_DEFINED    = "Attribute defined more than once";
-	public final static String MSG_ATTRIBUTE_WRONG_TYPE = "Type error";
+	public final static String MSG_ATTRIBUTE_UNKNOWN     = "Unknown attribute";
+	public final static String MSG_ATTRIBUTE_MISSING     = "Required attribute is missing";
+	public final static String MSG_ATTRIBUTE_DEFINED     = "Attribute defined more than once";
+	public final static String MSG_ATTRIBUTE_WRONG_VALUE = "Incompatible attribute values";
+	public final static String MSG_ATTRIBUTE_WRONG_TYPE  = "Type error";
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Common*/
@@ -100,7 +101,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			new AttributeDependency(attr_use.getName(), Arrays.asList(UseType.DV.toString(), UseType.ID.toString())));
 	//Dosing mapping
 	final public static Attribute attr_administration_use = new Attribute("administration", 
-			MdlDataType.TYPE_REF_DERIV, true, new AttributeDependency(attr_use.getName(), UseType.AMT.toString()));
+			MdlDataType.TYPE_REF_DERIV, false, new AttributeDependency(attr_use.getName(), UseType.AMT.toString()));
 	final public static Attribute attr_prediction_use = new Attribute("prediction", 
 			MdlDataType.TYPE_REF, true, new AttributeDependency(attr_use.getName(), UseType.DV.toString()));
 	final public static Attribute attr_type_use = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, 
@@ -282,13 +283,16 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		return null;
 	}
 	
-	//Do not validate arguments in matrix/diag definition and function calls
+	//Do not validate arguments in distributions (this is the job of DistributionValidator) 
+	//in nested lists
+	//and in functions (this is the job of FunctionValidator)
 	private Boolean skipAttributeValidation(EObject container, Arguments args){
 		if (container == null) return true;
 		//Skip distributions
 		if (args.eContainer() instanceof RandomListImpl) return true;
 		//Skip nested lists
 		if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl) return true;
+		//Skip functions
 		if (args.eContainer() instanceof FunctionCallImpl) return true;		
 		return false;
 	}
@@ -367,6 +371,20 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 							MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());
 					}
+					//Check dependency conditions for optional attributes
+					if (!x.isMandatory() && (x.getDependency() != null)){
+						String value = MdlPrinter.getInstance().getAttribute(args, x.getDependency().getAttrName());
+						if (!x.getDependency().getValues().contains(value)){
+							//MSG_ATTRIBUTE_WRONG_VALUE
+							warning(MSG_ATTRIBUTE_WRONG_VALUE + 
+									": attribute \"" + x.getName() + "\" expects the attribute \"" + 
+									x.getDependency().getAttrName() + "\" have of the following values: " +
+									Utils.printList(x.getDependency().getValues()), 
+									MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
+									MSG_ATTRIBUTE_WRONG_VALUE, x.getName());
+						}
+						
+					}
 				}
 			}
 		}
@@ -413,6 +431,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		return container;
 	}	
 	
+	//Determines the container block for a given object
 	public static Boolean isAttributeContainer(EObject obj){
 		return (
 			//Data object	

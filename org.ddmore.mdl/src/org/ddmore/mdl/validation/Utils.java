@@ -81,8 +81,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 
-//import eu.ddmore.converter.mdlprinting.MdlPrinter;
-
 public class Utils {
 	
 	//Checks whether a given identifier is declared
