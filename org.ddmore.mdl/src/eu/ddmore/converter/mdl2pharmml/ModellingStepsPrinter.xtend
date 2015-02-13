@@ -24,10 +24,10 @@ class ModellingStepsPrinter extends DataSetPrinter{
 
 	def print_msteps_ModellingSteps(MOGObject mog){
 		var objects = Utils::getMOGObjects(mog);
-		var ModelObject mObj = objects.getModelObject;
-		var ParameterObject pObj = objects.getParameterObject;
-		var DataObject dObj = objects.getDataObject;
-		var TaskObject tObj = objects.getTaskObject;
+		var ModelObject mObj = Utils::getModelObject(objects);
+		var ParameterObject pObj = Utils::getParameterObject(objects);
+		var DataObject dObj = Utils::getDataObject(objects);
+		var TaskObject tObj = Utils::getTaskObject(objects);
 
 		var res = "";
 		var dependencies = ""; 

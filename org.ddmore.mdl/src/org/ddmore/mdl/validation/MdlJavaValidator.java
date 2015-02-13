@@ -52,8 +52,9 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	Map<String, MdlDataType> declaredObjects = new HashMap<String, MdlDataType>();	
 	
 	//List of declared variables per object
-	public static Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();	
+	Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();	
 	
+	//List of MOGs
 	List<MOGObject> mogs = new ArrayList<MOGObject>(); 
 	
 	@Check
@@ -96,9 +97,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		//Skip reference to a standard function
 		if (FunctionValidator.standardFunctions.containsKey(ref.getName())) return;
 		
-		//Check that each variable is in the local object or in the MOG
-		if (!(	Utils.isSymbolDeclared(declaredVariables, ref, mogs) 
-				|| declaredObjects.containsKey(ref.getName())) ){
+		//Check that each variable is declared in the local object
+		if (!(Utils.isSymbolDeclared(declaredVariables, ref) || declaredObjects.containsKey(ref.getName())) ){
 			warning(MSG_SYMBOL_UNKNOWN, MdlPackage.Literals.SYMBOL_NAME__NAME,
 					MSG_SYMBOL_UNKNOWN, ref.getName());
 		}
@@ -209,58 +209,53 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	
 	//Validate MOG!
 	@Check
-	public void validateMOG(ObjectBlock objBlock){
-		if (objBlock != null){
-			Integer [] params = {0, 0, 0, 0};
-			for (ObjectName obj: objBlock.getObjects()){
-				if (declaredObjects.containsKey(obj.getName())){
-					MdlDataType objType = declaredObjects.get(obj.getName());
-					if (objType == MdlDataType.TYPE_OBJ_REF_MODEL)
-						params[0] += 1;
-					if (objType == MdlDataType.TYPE_OBJ_REF_PARAM)
-						params[1] += 1;
-					if (objType == MdlDataType.TYPE_OBJ_REF_DATA)
-						params[2] += 1;
-					if (objType == MdlDataType.TYPE_OBJ_REF_TASK)
-						params[3] += 1;
-				}
+	public void validateMOG(ImportObjectBlock objBlock){
+		Integer [] params = {0, 0, 0, 0};
+		for (ImportObjectStatement st: objBlock.getObjects()){
+			if (declaredObjects.containsKey(st.getObjectName())){
+				MdlDataType objType = declaredObjects.get(st.getObjectName());
+				if (objType == MdlDataType.TYPE_OBJ_REF_MODEL)
+					params[0] += 1;
+				if (objType == MdlDataType.TYPE_OBJ_REF_PARAM)
+					params[1] += 1;
+				if (objType == MdlDataType.TYPE_OBJ_REF_DATA)
+					params[2] += 1;
+				if (objType == MdlDataType.TYPE_OBJ_REF_TASK)
+					params[3] += 1;
 			}
-			if (params[0] == 0)
-				warning(MSG_MODEL_OBJ_MISSING, 
+		}
+		if (params[0] == 0)
+			warning(MSG_MODEL_OBJ_MISSING, 
+				MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
+				MSG_MODEL_OBJ_MISSING, objBlock.getIdentifier());
+		if (params[1] == 0)
+			warning(MSG_PARAM_OBJ_MISSING, 
 					MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
-					MSG_MODEL_OBJ_MISSING, objBlock.getIdentifier());
-			if (params[1] == 0)
-				warning(MSG_PARAM_OBJ_MISSING, 
-						MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
-						MSG_PARAM_OBJ_MISSING, objBlock.getIdentifier());
-			if (params[2] == 0)
-				warning(MSG_DATA_OBJ_MISSING, 
-						MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
-						MSG_DATA_OBJ_MISSING, objBlock.getIdentifier());
-			if (params[3] == 0)
-				warning(MSG_TASK_OBJ_MISSING, 
-						MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
-						MSG_TASK_OBJ_MISSING, objBlock.getIdentifier());
-			String [] names = {"model", "parameter", "data", "task"};
-			for (int i = 0; i < 4; i++){
-				if (params[i] > 1)
-					warning(MSG_OBJ_DEFINED + ": two or more " + names[i] + " objects selected!", 
-						MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
-						MSG_OBJ_DEFINED,  objBlock.getIdentifier());
-			}			
-			for (int i = 0; i < 4; i++)
-				if (params[i] != 1) return;
-			
-			/*Validate MOG with correct set of objects*/
-			MclObject dObj = null;
-			MclObject mObj = null;
-			MclObject pObj = null;
-			for (ObjectName obj: objBlock.getObjects()){
-				MclObject mclObj = (MclObject)obj.eContainer();
-				if (mclObj.getModelObject() != null) mObj = mclObj;
-				if (mclObj.getDataObject() != null) dObj = mclObj;
-				if (mclObj.getParameterObject() != null) pObj = mclObj;
-			}
+					MSG_PARAM_OBJ_MISSING, objBlock.getIdentifier());
+		if (params[2] == 0)
+			warning(MSG_DATA_OBJ_MISSING, 
+					MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
+					MSG_DATA_OBJ_MISSING, objBlock.getIdentifier());
+		if (params[3] == 0)
+			warning(MSG_TASK_OBJ_MISSING, 
+					MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
+					MSG_TASK_OBJ_MISSING, objBlock.getIdentifier());
+		String [] names = {"model", "parameter", "data", "task"};
+		for (int i = 0; i < 4; i++){
+			if (params[i] > 1)
+				warning(MSG_OBJ_DEFINED + ": two or more " + names[i] + " objects selected!", 
+					MdlPackage.Literals.MCL_OBJECT__MOG_OBJECT,
+					MSG_OBJ_DEFINED,  objBlock.getIdentifier());
+		}			
+		for (int i = 0; i < 4; i++)
+			if (params[i] != 1) return;
+
+		/*Validate MOG with correct set of objects*/
+			MOGObject mog = (MOGObject)objBlock.eContainer();
+			List<MclObject> objects = Utils.getMOGObjects(mog);
+			ModelObject mObj = Utils.getModelObject(objects);
+			ParameterObject pObj = Utils.getParameterObject(objects);
+			DataObject dObj = Utils.getDataObject(objects);
 			if (mObj != null && dObj != null){
 				validateMOG_Model_vs_Data(mObj, dObj, objBlock);
 			}
@@ -269,31 +264,31 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 				validateMOG_Structural_Model_vs_Parameter(mObj, pObj, objBlock);
 				validateMOG_Variability_Model_vs_Parameter(mObj, pObj, objBlock);
 			}
-		}
 	}	
 	
 	//MODEL_INPUT_VARIABLES \in DATA_INPUT_VARIABLES + DATA_DERIVED_VARIABLES
 	//TODO: optimize
-	private void validateMOG_Model_vs_Data(MclObject mObj, MclObject dObj, ObjectBlock mog){
-		List<Variable> dVars = declaredVariables.get(dObj.getObjectName().getName());
-		for (ModelObjectBlock b: mObj.getModelObject().getBlocks()){
+	private void validateMOG_Model_vs_Data(ModelObject mObj, DataObject dObj, ImportObjectBlock mog){
+		List<String> dVars = new ArrayList<String>();
+		for (DataObjectBlock b: dObj.getBlocks()){
+			if (b.getDataInputBlock() != null)
+				for (SymbolDeclaration s: b.getDataInputBlock().getVariables())
+					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
+			if (b.getDataDerivedBlock() != null)
+				for (SymbolDeclaration s: b.getDataDerivedBlock().getVariables())
+					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
+		}
+		for (ModelObjectBlock b: mObj.getBlocks()){
 			if (b.getInputVariablesBlock() != null){
 				for (SymbolDeclaration s: b.getInputVariablesBlock().getVariables()){
 					if (s.getSymbolName() != null) {
 						String varName = s.getSymbolName().getName();
-						if (varName.length() > 0){
-							boolean notFound = true;
-							for (Variable var: dVars)
-								if (var.getName().equals(varName)){
-									notFound = false; break;
-								}
-							if (notFound)
-								warning(MSG_MODEL_DATA_MISMATCH + 
-									": no mapping for model variable " + varName + " found in " + 
-									dObj.getObjectName().getName() + " object", 
-									MdlPackage.Literals.MCL_OBJECT__OBJECT_NAME,
-									MSG_MODEL_DATA_MISMATCH,  mog.getIdentifier());
-						}
+						if (!dVars.contains(varName))
+							warning(MSG_MODEL_DATA_MISMATCH + 
+								": no mapping for model variable " + varName + " found in " + 
+								Utils.getObjectName(dObj).getName() + " object", 
+								MdlPackage.Literals.MOG_OBJECT_BLOCK__OBJECT_BLOCK,
+								MSG_MODEL_DATA_MISMATCH,  mog.getIdentifier());
 					}
 				}
 			}
@@ -301,14 +296,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	}
 	
 	//STRUCTURAL vs. STRUCTURAL_PARAMETERS
-	private void validateMOG_Structural_Model_vs_Parameter(MclObject mObj, MclObject pObj, ObjectBlock mog){
+	private void validateMOG_Structural_Model_vs_Parameter(ModelObject mObj, ParameterObject pObj, ImportObjectBlock mog){
 		List<String> structuralVars = new ArrayList<String>();
 		//Get structural variables
-		for (ModelObjectBlock b: mObj.getModelObject().getBlocks())
+		for (ModelObjectBlock b: mObj.getBlocks())
 			if (b.getStructuralParametersBlock() != null)
 				for (SymbolDeclaration s: b.getStructuralParametersBlock().getParameters())
 					if (s.getSymbolName() != null) structuralVars.add(s.getSymbolName().getName());
-		for (ParameterObjectBlock b: pObj.getParameterObject().getBlocks()){
+		for (ParameterObjectBlock b: pObj.getBlocks()){
 			if (b.getStructuralBlock() != null){
 				for (SymbolDeclaration s: b.getStructuralBlock().getParameters()){
 					if (s.getSymbolName() != null){
@@ -317,8 +312,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 							if (!structuralVars.contains(varName))
 								warning(MSG_STRUCTURAL_MISMATCH + 
 									": no mapping for parameter " + varName + " found in " + 
-									mObj.getObjectName().getName() + " object", 
-									MdlPackage.Literals.MCL_OBJECT__OBJECT_NAME,
+									Utils.getObjectName(mObj).getName() + " object", 
+									MdlPackage.Literals.MOG_OBJECT_BLOCK__OBJECT_BLOCK,
 									MSG_STRUCTURAL_MISMATCH, mog.getIdentifier());
 						}
 					} 
@@ -328,14 +323,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	}
 	
 	//VARIABILITY vs. VARIABILITY_PARAMETERS
-	private void validateMOG_Variability_Model_vs_Parameter(MclObject mObj, MclObject pObj, ObjectBlock mog){
+	private void validateMOG_Variability_Model_vs_Parameter(ModelObject mObj, ParameterObject pObj, ImportObjectBlock mog){
 		List<String> variabilityVars = new ArrayList<String>();
 		//Get structural variables
-		for (ModelObjectBlock b: mObj.getModelObject().getBlocks())
+		for (ModelObjectBlock b: mObj.getBlocks())
 			if (b.getVariabilityParametersBlock() != null)
 				for (SymbolDeclaration s: b.getVariabilityParametersBlock().getParameters())
 					if (s.getSymbolName() != null) variabilityVars.add(s.getSymbolName().getName());
-		for (ParameterObjectBlock b: pObj.getParameterObject().getBlocks()){
+		for (ParameterObjectBlock b: pObj.getBlocks()){
 			if (b.getVariabilityBlock() != null){
 				for (SymbolDeclaration s: b.getVariabilityBlock().getParameters()){
 					if (s.getSymbolName() != null){
@@ -344,8 +339,8 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 							if (!variabilityVars.contains(varName))
 								warning(MSG_VARIABILITY_MISMATCH + 
 									": no mapping for parameter " + varName + " found in " + 
-									mObj.getObjectName().getName() + " object", 
-									MdlPackage.Literals.MCL_OBJECT__OBJECT_NAME,
+									Utils.getObjectName(mObj).getName() + " object", 
+									MdlPackage.Literals.MOG_OBJECT_BLOCK__OBJECT_BLOCK,
 									MSG_VARIABILITY_MISMATCH,  mog.getIdentifier());
 						}
 					} 

@@ -327,7 +327,7 @@ MOGObjectBlock:
  ;
  
  ImportObjectStatement:
- 	propertyName = ArgumentName "=" objectName = [ObjectName] ('from' fileName = STRING)?
+ 	symbolName = SymbolName "=" objectName = [ObjectName] ('from' fileName = STRING)?
  ;
  
  MappingBlock:
@@ -407,8 +407,8 @@ enum PkParameterType:
 ;
 
 enum UseType:
-	no_use | id | idv | amt | dv | dvid | ytype | itype | covariate | reg | time | dose | cat | 
-	occ | occasion | adm | cens | limit | rate | tinf | ss | addl | ii | tau | mdv |evid | cmt
+	no_use | id | idv | amt | dv | dvid | ytype | itype | covariate | reg | dose | cat | 
+	occ | adm | cens | limit | rate | tinf | ss | addl | ii | tau | mdv |evid | cmt
 ;
 
 enum TargetType:

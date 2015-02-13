@@ -31,9 +31,9 @@ class ModelDefinitionPrinter {
 	//Print <ModelDefinition>
 	def print_mdef_ModelDefinition(MOGObject mog){
 		var objects = Utils::getMOGObjects(mog);
-		var ModelObject mObj = objects.getModelObject;
-		var ParameterObject pObj = objects.getParameterObject;
-		var DataObject dObj = objects.getDataObject;
+		var ModelObject mObj = Utils::getModelObject(objects);
+		var ParameterObject pObj = Utils::getParameterObject(objects);
+		var DataObject dObj = Utils::getDataObject(objects);
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«print_mdef_VariabilityModel»
@@ -113,7 +113,6 @@ class ModelDefinitionPrinter {
 			if (b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
 					if (s.list != null){
-						//TODO: check!
 						if (s.symbolName != null && covVar.equals(s.symbolName.name)){
 							var type = getAttribute(s.list.arguments, AttributeValidator::attr_type.name);
 							if (type.length > 0)

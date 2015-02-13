@@ -10,8 +10,6 @@ import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MOGObject
 import java.util.ArrayList
 import org.ddmore.mdl.validation.Utils
-import org.ddmore.mdl.mdl.MclObject
-import java.util.List
 
 class ReferenceResolver{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -267,35 +265,5 @@ class ReferenceResolver{
 	  			}
 	  		}
   		}
-	}
-
-	protected def getTaskObject(List<MclObject> objects){
-		for (mclObject: objects)
-			if (mclObject.taskObject != null) return mclObject.taskObject;
-		return null;
-	}	
-	
-	protected def getModelObject(List<MclObject> objects){
-		for (mclObject: objects)
-			if (mclObject.modelObject != null) return mclObject.modelObject;
-		return null;
-	}	
-
-	protected def getParameterObject(List<MclObject> objects){
-		for (mclObject: objects)
-			if (mclObject.parameterObject != null) return mclObject.parameterObject;
-		return null;
-	}	
-
-	protected def getDataObject(List<MclObject> objects){
-		for (mclObject: objects)
-			if (mclObject.dataObject != null) return mclObject.dataObject;
-		return null;
-	}	
-	
-	protected def getDesignObject(List<MclObject> objects){
-		for (mclObject: objects)
-			if (mclObject.designObject != null) return mclObject.designObject;
-		return null;
 	}
 }

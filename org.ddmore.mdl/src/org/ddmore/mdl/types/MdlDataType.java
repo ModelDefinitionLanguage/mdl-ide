@@ -27,7 +27,6 @@ import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
-import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.PkParameterType;
 import org.ddmore.mdl.mdl.PowerExpression;
@@ -42,7 +41,6 @@ import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.FunctionValidator;
-import org.ddmore.mdl.validation.MdlJavaValidator;
 import org.ddmore.mdl.validation.Utils;
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
@@ -745,9 +743,9 @@ public enum MdlDataType {
 		}
 		if (unaryExpr.getSymbol() != null){
 			//Careful with recursive call!
-			ObjectName mclObj = Utils.getObjectName(unaryExpr.getSymbol());
-			if (mclObj != null && MdlJavaValidator.declaredVariables.containsKey(mclObj.getName()))
-				for (Variable var: MdlJavaValidator.declaredVariables.get(mclObj.getName())){
+			MclObject mclObj = Utils.getMclObject(unaryExpr.getSymbol());
+			if (mclObj != null)
+				for (Variable var: Utils.getDeclaredSymbols(mclObj)){
 					if (var.getName() == unaryExpr.getSymbol().getName())
 						return var.getType();
 				}

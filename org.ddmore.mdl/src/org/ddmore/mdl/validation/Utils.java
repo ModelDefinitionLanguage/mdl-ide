@@ -15,6 +15,8 @@ import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.CompartmentBlock;
 import org.ddmore.mdl.mdl.DataDerivedBlock;
 import org.ddmore.mdl.mdl.DataInputBlock;
+import org.ddmore.mdl.mdl.DataObject;
+import org.ddmore.mdl.mdl.DesignObject;
 import org.ddmore.mdl.mdl.DesignSpaceBlock;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FunctionCall;
@@ -34,6 +36,7 @@ import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ObservationBlock;
 import org.ddmore.mdl.mdl.OdeBlock;
+import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
 import org.ddmore.mdl.mdl.SamplingBlock;
 import org.ddmore.mdl.mdl.SimulationBlock;
@@ -44,6 +47,7 @@ import org.ddmore.mdl.mdl.StudyDesignBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.TargetBlock;
+import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.impl.ActionBlockImpl;
@@ -56,6 +60,7 @@ import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
 import org.ddmore.mdl.mdl.impl.HyperSpaceBlockImpl;
+import org.ddmore.mdl.mdl.impl.ImportObjectStatementImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
@@ -85,7 +90,7 @@ import org.eclipse.emf.ecore.EObject;
 public class Utils {
 	
 	//Checks whether a given identifier is declared
-	static boolean isIdentifierDeclared(Map<String, List<Variable>> map, String id, ObjectName objName){
+	static boolean isSymbolDeclared(Map<String, List<Variable>> map, String id, ObjectName objName){
 		if (objName != null) 
 			if (map.containsKey(objName.getName()))
 				for (Variable var: map.get(objName.getName()))
@@ -103,27 +108,6 @@ public class Utils {
 		return false;
 	}
 		
-	//Checks that a variable is declared in the scope of the given MOGs
-	static boolean isSymbolDeclared(Map<String, List<Variable>> map, SymbolName ref, List<MOGObject> mogs){
-		ObjectName objName = getObjectName(ref);
-		if (objName != null){
-			for (MOGObject mog: mogs){
-				for (MOGObjectBlock b: mog.getBlocks()){
-					if (b.getObjectBlock() != null){
-						for (ImportObjectStatement st: b.getObjectBlock().getObjects()){
-							if (st.getObjectName().getName().equals(objName.getName()))
-								return isIdentifierDeclared(map, ref.getName(), objName);
-						}
-					}
-					
-				}				
-			}
-			//Local object
-			return isIdentifierDeclared(map, ref.getName(), objName);
-		}
-		return false;
-	}
-	
 	//Checks whether a function is declared more than once
 	static boolean isSymbolDeclaredMoreThanOnce(Map<String, List<Variable>> map, SymbolName ref){
 		ObjectName objName = getObjectName(ref);
@@ -289,6 +273,36 @@ public class Utils {
 		return objects;
 	}
 	
+	public static TaskObject getTaskObject(List<MclObject> objects){
+		for (MclObject mclObject: objects)
+			if (mclObject.getTaskObject() != null) return mclObject.getTaskObject();
+		return null;
+	}	
+	
+	public static ModelObject getModelObject(List<MclObject> objects){
+		for (MclObject mclObject: objects)
+			if (mclObject.getModelObject() != null) return mclObject.getModelObject();
+		return null;
+	}	
+
+	public static ParameterObject getParameterObject(List<MclObject> objects){
+		for (MclObject mclObject: objects)
+			if (mclObject.getParameterObject() != null) return mclObject.getParameterObject();
+		return null;
+	}	
+
+	public static DataObject getDataObject(List<MclObject> objects){
+		for (MclObject mclObject: objects)
+			if (mclObject.getDataObject() != null) return mclObject.getDataObject();
+		return null;
+	}	
+	
+	public static DesignObject getDesignObject(List<MclObject> objects){
+		for (MclObject mclObject: objects)
+			if (mclObject.getDesignObject() != null) return mclObject.getDesignObject();
+		return null;
+	}
+	
 	public static Map<String, List<Variable>> getDeclaredSymbols(Mcl mcl){
 		Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();
 		for (MclObject obj: mcl.getObjects()){
@@ -298,8 +312,16 @@ public class Utils {
 		}
 		return declaredVariables;
 	}
-
-	//TODO: Implement  getDeclaredSymbols(MOG mog){}
+	
+	public static Map<String, List<Variable>> getDeclaredSymbols(MOGObject mog){
+		Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();
+		for (MclObject obj: getMOGObjects(mog)){
+			List<Variable> varList = getDeclaredSymbols(obj);
+			if (varList.size() > 0)
+		    	declaredVariables.put(obj.getObjectName().getName(), varList);
+		}
+		return declaredVariables;
+	}
 	
 	public static List<Variable> getDeclaredSymbols(MclObject obj){
 		List<Variable> varList = new ArrayList<Variable>();
@@ -321,6 +343,13 @@ public class Utils {
 	    		String functName = functCall.getIdentifier().getName();
     			if (FunctionValidator.libraries.contains(functName))
     				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariables(functCall.getArguments()));
+	    	}
+	    	//For MOGs: aliases for imported objects
+	    	if (container instanceof ImportObjectStatementImpl){
+	    		ImportObjectStatement s = (ImportObjectStatement) container;
+	    		if (s.getSymbolName() != null){
+					//varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.TYPE_OBJ_REF_MODEL));
+	    		}
 	    	}
 		}
 		return varList;
