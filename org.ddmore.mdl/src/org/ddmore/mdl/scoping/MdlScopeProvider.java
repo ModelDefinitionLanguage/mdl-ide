@@ -3,6 +3,14 @@
  */
 package org.ddmore.mdl.scoping;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.ddmore.mdl.mdl.ImportObjectStatement;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.xtext.scoping.IScope;
+import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 
 /**
@@ -14,11 +22,11 @@ import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
  */
 		
 public class MdlScopeProvider extends AbstractDeclarativeScopeProvider {
-	/*IScope scope_FullyQualifiedSymbolName_object(Mcl mcl, EReference ref){
-		List<EObject> crossRefTargets = Lists.newArrayList();
-		for (MclObject m: mcl.getObjects()){
+	IScope scope_FullyQualifiedSymbolName_object(ImportObjectStatement ios, EReference ref){
+		List<EObject> crossRefTargets = new ArrayList<EObject>();
+		/*for (MclObject m: mcl.getObjects()){
 			crossRefTargets.add(m.getObjectName());
-		}
+		}*/
 		return Scopes.scopeFor(crossRefTargets);
-	}*/
+	}
 }

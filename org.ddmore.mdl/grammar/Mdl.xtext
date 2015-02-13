@@ -36,18 +36,18 @@ MOGObject:
 //////////////////////////////////////////////////////////
 
 ModelObjectBlock: 
-	individualVariablesBlock = IndividualVariablesBlock | //+
-	modelPredictionBlock = ModelPredictionBlock | //+
+	individualVariablesBlock = IndividualVariablesBlock | 
+	modelPredictionBlock = ModelPredictionBlock | 
 	randomVariableDefinitionBlock = RandomVariableDefinitionBlock |
 	inputVariablesBlock = InputVariablesBlock |
 	structuralParametersBlock = StructuralParametersBlock |
 	variabilityParametersBlock = VariabilityParametersBlock |
-	outputVariablesBlock = OutputVariablesBlock | //+
+	outputVariablesBlock = OutputVariablesBlock | 
 	groupVariablesBlock = GroupVariablesBlock | 
 	observationBlock = ObservationBlock |
 	estimationBlock = EstimationBlock |
 	simulationBlock = SimulationBlock |
-	targetBlock = TargetBlock //+
+	targetBlock = TargetBlock 
 ;
 
 IndividualVariablesBlock:
@@ -254,7 +254,7 @@ NumericList:
 ;
 
 VariableList:
-	identifiers += SymbolName (=> (',' | ';')? identifiers += SymbolName)* //Ref to VaraibleName +
+	identifiers += SymbolName (=> (',' | ';')? identifiers += SymbolName)* 
 ;
 
 //////////////////////////////////////////////////////////
@@ -317,15 +317,17 @@ SamplingBlock:
 //MOG
 //////////////////////////////////////////////////////////
 MOGObjectBlock:
-	objectBlock = ObjectBlock |
+	objectBlock = ImportObjectBlock |
 	mappingBlock = MappingBlock	
 ;
 
- ObjectBlock:
+ ImportObjectBlock:
  	identifier = 'OBJECTS'
- 	BEGIN //objects += SymbolDeclaration* 
- 		objects += [ObjectName]*
- 	END
+ 	BEGIN objects += ImportObjectStatement* END
+ ;
+ 
+ ImportObjectStatement:
+ 	propertyName = ArgumentName "=" objectName = [ObjectName] ('from' fileName = STRING)?
  ;
  
  MappingBlock:

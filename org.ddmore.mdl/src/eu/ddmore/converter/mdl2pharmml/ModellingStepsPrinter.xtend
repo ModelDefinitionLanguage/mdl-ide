@@ -11,6 +11,7 @@ import org.ddmore.mdl.mdl.InputFormatType
 import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.MOGObject
+import org.ddmore.mdl.validation.Utils
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -22,10 +23,11 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 
 	def print_msteps_ModellingSteps(MOGObject mog){
-		var ModelObject mObj = mog.getModelObject;
-		var ParameterObject pObj = mog.getParameterObject;
-		var DataObject dObj = mog.getDataObject;
-		var TaskObject tObj = mog.getTaskObject;
+		var objects = Utils::getMOGObjects(mog);
+		var ModelObject mObj = objects.getModelObject;
+		var ParameterObject pObj = objects.getParameterObject;
+		var DataObject dObj = objects.getDataObject;
+		var TaskObject tObj = objects.getTaskObject;
 
 		var res = "";
 		var dependencies = ""; 

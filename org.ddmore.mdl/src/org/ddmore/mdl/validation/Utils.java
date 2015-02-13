@@ -20,6 +20,7 @@ import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.FunctionCallStatement;
 import org.ddmore.mdl.mdl.HyperSpaceBlock;
+import org.ddmore.mdl.mdl.ImportObjectStatement;
 import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.InputVariablesBlock;
 import org.ddmore.mdl.mdl.LibraryBlock;
@@ -102,14 +103,15 @@ public class Utils {
 		return false;
 	}
 		
+	//Checks that a variable is declared in the scope of the given MOGs
 	static boolean isSymbolDeclared(Map<String, List<Variable>> map, SymbolName ref, List<MOGObject> mogs){
 		ObjectName objName = getObjectName(ref);
 		if (objName != null){
 			for (MOGObject mog: mogs){
 				for (MOGObjectBlock b: mog.getBlocks()){
 					if (b.getObjectBlock() != null){
-						for (ObjectName o: b.getObjectBlock().getObjects()){
-							if (o.getName().equals(objName.getName()))
+						for (ImportObjectStatement st: b.getObjectBlock().getObjects()){
+							if (st.getObjectName().getName().equals(objName.getName()))
 								return isIdentifierDeclared(map, ref.getName(), objName);
 						}
 					}
@@ -270,6 +272,23 @@ public class Utils {
 		return mogs;
 	}
 	
+	public static List<MclObject> getMOGObjects(MOGObject mog){
+		List<MclObject> objects = new ArrayList<MclObject>();
+		for (MOGObjectBlock b: mog.getBlocks())
+			if (b.getObjectBlock() != null){
+				for (ImportObjectStatement st: b.getObjectBlock().getObjects()){
+					if (st.getObjectName() != null){
+						EObject container = st.getObjectName().eContainer();
+						if (container instanceof MclObjectImpl){
+							MclObject mclObject = (MclObject)container;
+							objects.add(mclObject);
+						}
+					}
+				}
+		}
+		return objects;
+	}
+	
 	public static Map<String, List<Variable>> getDeclaredSymbols(Mcl mcl){
 		Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();
 		for (MclObject obj: mcl.getObjects()){
@@ -279,6 +298,8 @@ public class Utils {
 		}
 		return declaredVariables;
 	}
+
+	//TODO: Implement  getDeclaredSymbols(MOG mog){}
 	
 	public static List<Variable> getDeclaredSymbols(MclObject obj){
 		List<Variable> varList = new ArrayList<Variable>();

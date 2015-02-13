@@ -2,11 +2,14 @@ package eu.ddmore.mdl.generator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 //import org.apache.log4j.Logger;
 import org.ddmore.mdl.MdlStandaloneSetup;
+import org.ddmore.mdl.mdl.MOGObject;
 import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.validation.Utils;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -44,7 +47,7 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
-        */
+        */ 
     }
     
    public void performConvert(File src, File outputDirectory) {
@@ -60,13 +63,20 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
        //	LOGGER.warn("PharmML generation error: no MOG found!");
        
        eu.ddmore.converter.mdl2pharmml.Mdl2PharmML xtendConverter = new eu.ddmore.converter.mdl2pharmml.Mdl2PharmML();
-       CharSequence converted = xtendConverter.convertToPharmML(mcl);
-       printOutputFile(src.getName().replace(".mdl", ".xml"), outputDirectory, converted.toString());
-       
-       File targetDirectory = new File(outputDirectory.getPath() + "/target");
-       CharSequence externalCode = xtendConverter.extractTargetCode(mcl);
-       if (externalCode.length() > 0)
-    	   printOutputFile(src.getName().replace(".mdl", ".xml"), targetDirectory, externalCode.toString());
+       List<MOGObject> mogs = Utils.getMOGs(mcl); 
+	   String baseName = src.getName().replace(".mdl", ".xml");
+       for (int i = 0; i < mogs.size(); i++){
+    	   MOGObject mog = mogs.get(i);
+    	   String fileName = baseName;
+    	   if (i > 0) fileName = fileName + Utils.getObjectName(mog).getName(); 
+           CharSequence converted = xtendConverter.convertToPharmML(mog, fileName);
+           
+           printOutputFile(fileName, outputDirectory, converted.toString());
+           File targetDirectory = new File(outputDirectory.getPath() + "/target");
+           CharSequence externalCode = xtendConverter.extractTargetCode(mog);
+           if (externalCode.length() > 0)
+        	   printOutputFile(fileName, targetDirectory, externalCode.toString());
+       }
    }
    
    public void printOutputFile(String outputFileName, File outputDirectory, String text) {

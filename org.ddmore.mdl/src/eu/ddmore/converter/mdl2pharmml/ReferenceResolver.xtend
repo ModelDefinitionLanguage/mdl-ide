@@ -1,7 +1,6 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import java.util.HashSet
-import org.ddmore.mdl.mdl.Mcl
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
 import eu.ddmore.converter.mdlprinting.MdlPrinter
@@ -9,16 +8,16 @@ import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.DataDerivedBlock
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MOGObject
-import org.ddmore.mdl.mdl.impl.MclObjectImpl
-import org.ddmore.mdl.mdl.MclObject
 import java.util.ArrayList
 import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.mdl.MclObject
+import java.util.List
 
 class ReferenceResolver{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
 	
-	new(Mcl m) {
-    	prepareCollections(m);
+	new(MOGObject mog) {
+    	mog.prepareCollections;
  	}
 	
 	protected var deriv_vars = new HashSet<String>();	 
@@ -36,33 +35,26 @@ class ReferenceResolver{
 	protected var om_vars = new ArrayList<String>();	  
 	protected var sm_vars = new ArrayList<String>();	 
 		
-	protected def prepareCollections(Mcl m){
-		for (o: m.objects){
-			if (o.modelObject != null){
+	protected def prepareCollections(MOGObject mog){
+		for (o: Utils::getMOGObjects(mog)){
+			if (o.modelObject != null) {
 	  			setLevelVars(o.modelObject);
 	  			setRandomVariables(o.modelObject);
-
 				//Derivatives
 				deriv_vars = Utils::getDerivativeVariables(o.modelObject);
-
 				//Independent variables
 				ind_vars = o.modelObject.getIndependentVars();
-			
 				//VariabilityModel definitions
 				vm_err_vars = o.modelObject.getLevelVars("1");
 				vm_mdl_vars = o.modelObject.getLevelVars("2")
-
 				//CovariateModel				
 				cm_vars = o.modelObject.getCovariateVars();
-					
 				//StructuralModel
 				sm_vars = o.modelObject.getStructuralVars;	
-					
 				//ParameterModel
 				var parameters = o.modelObject.getParameters;
 				for (p: parameters)
 					if (!pm_vars.contains(p)) pm_vars.add(p);
-					
 				//ObservationModel
 				om_vars = o.modelObject.getObservationVars;	
 			}
@@ -276,74 +268,34 @@ class ReferenceResolver{
 	  		}
   		}
 	}
-	
-	protected def getTaskObject(MOGObject mog){
-		for (b: mog.blocks)
-			if (b.objectBlock != null){
-				for (o: b.objectBlock.objects){
-					var container = o.eContainer;
-					if (container instanceof MclObjectImpl){
-						val mclObject = container as MclObject;
-						if (mclObject.taskObject != null) return mclObject.taskObject;
-					}
-				}
-		}
+
+	protected def getTaskObject(List<MclObject> objects){
+		for (mclObject: objects)
+			if (mclObject.taskObject != null) return mclObject.taskObject;
 		return null;
 	}	
 	
-	protected def getModelObject(MOGObject mog){
-		for (b: mog.blocks)
-			if (b.objectBlock != null){
-				for (o: b.objectBlock.objects){
-					var container = o.eContainer;
-					if (container instanceof MclObjectImpl){
-						val mclObject = container as MclObject;
-						if (mclObject.modelObject != null) return mclObject.modelObject;
-					}
-				}
-		}
+	protected def getModelObject(List<MclObject> objects){
+		for (mclObject: objects)
+			if (mclObject.modelObject != null) return mclObject.modelObject;
 		return null;
 	}	
 
-	protected def getParameterObject(MOGObject mog){
-		for (b: mog.blocks)
-			if (b.objectBlock != null){
-				for (o: b.objectBlock.objects){
-					var container = o.eContainer;
-					if (container instanceof MclObjectImpl){
-						val mclObject = container as MclObject;
-						if (mclObject.parameterObject != null) return mclObject.parameterObject;
-					}
-				}
-		}
+	protected def getParameterObject(List<MclObject> objects){
+		for (mclObject: objects)
+			if (mclObject.parameterObject != null) return mclObject.parameterObject;
 		return null;
 	}	
 
-	protected def getDataObject(MOGObject mog){
-		for (b: mog.blocks)
-			if (b.objectBlock != null){
-				for (o: b.objectBlock.objects){
-					var container = o.eContainer;
-					if (container instanceof MclObjectImpl){
-						val mclObject = container as MclObject;
-						if (mclObject.dataObject != null) return mclObject.dataObject;
-					}
-				}
-		}
+	protected def getDataObject(List<MclObject> objects){
+		for (mclObject: objects)
+			if (mclObject.dataObject != null) return mclObject.dataObject;
 		return null;
 	}	
 	
-	protected def getDesignObject(MOGObject mog){
-		for (b: mog.blocks)
-			if (b.objectBlock != null){
-				for (o: b.objectBlock.objects){
-					var container = o.eContainer;
-					if (container instanceof MclObjectImpl){
-						val mclObject = container as MclObject;
-						if (mclObject.designObject != null) return mclObject.designObject;
-					}
-				}
-		}
+	protected def getDesignObject(List<MclObject> objects){
+		for (mclObject: objects)
+			if (mclObject.designObject != null) return mclObject.designObject;
 		return null;
 	}
 }

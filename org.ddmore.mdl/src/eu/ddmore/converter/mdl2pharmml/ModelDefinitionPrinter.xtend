@@ -12,6 +12,7 @@ import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.VariabilityType
+import org.ddmore.mdl.validation.Utils
 
 class ModelDefinitionPrinter {
 	protected extension DistributionPrinter distrPrinter = new DistributionPrinter();
@@ -29,9 +30,10 @@ class ModelDefinitionPrinter {
 	
 	//Print <ModelDefinition>
 	def print_mdef_ModelDefinition(MOGObject mog){
-		var ModelObject mObj = mog.getModelObject;
-		var ParameterObject pObj = mog.getParameterObject;
-		var DataObject dObj = mog.getDataObject;
+		var objects = Utils::getMOGObjects(mog);
+		var ModelObject mObj = objects.getModelObject;
+		var ParameterObject pObj = objects.getParameterObject;
+		var DataObject dObj = objects.getDataObject;
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«print_mdef_VariabilityModel»
