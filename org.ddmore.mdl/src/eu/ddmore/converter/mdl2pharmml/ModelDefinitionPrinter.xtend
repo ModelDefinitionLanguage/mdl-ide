@@ -31,9 +31,9 @@ class ModelDefinitionPrinter {
 	//Print <ModelDefinition>
 	def print_mdef_ModelDefinition(MOGObject mog){
 		var objects = Utils::getMOGObjects(mog);
-		var ModelObject mObj = Utils::getModelObject(objects);
-		var ParameterObject pObj = Utils::getParameterObject(objects);
-		var DataObject dObj = Utils::getDataObject(objects);
+		var mObj = Utils::getModelObject(objects);
+		var pObj = Utils::getParameterObject(objects);
+		var dObj = Utils::getDataObject(objects);
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«print_mdef_VariabilityModel»
@@ -231,6 +231,12 @@ class ModelDefinitionPrinter {
 							if (st.odeBlock != null){
 								for (s: st.odeBlock.variables){
 									variables = variables + '''«s.print_BlockStatement("ct:Variable", true)»''';	
+								}
+							} else {
+								if (st.libraryBlock != null){
+									for (s: st.libraryBlock.statements){
+										variables = variables + s.expression.print_Math_FunctionCall;
+									}
 								}
 							}
 					}

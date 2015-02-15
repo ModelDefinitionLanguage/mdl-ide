@@ -14,9 +14,11 @@ import java.util.List;
 import org.ddmore.mdl.domain.FunctionSignature;
 import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.*;
+import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.FunctionValidator;
 import org.ddmore.mdl.validation.Utils;
+import org.eclipse.emf.ecore.EObject;
 
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
@@ -354,6 +356,10 @@ public enum MdlDataType {
 		//Consider constant 'T' also a reference
 		String constant = MdlPrinter.getInstance().toStr(orExpr);
 		if (constant.equals("T")) return true;
+		FullyQualifiedArgumentName argName = getFullyQualifiedArgumentName(orExpr);
+		if (argName != null) {
+			if (getDerivedType(argName) != TYPE_UNDEFINED) return true; 
+		}
 		return false;
 	}
 	
@@ -508,7 +514,26 @@ public enum MdlDataType {
 		}
 		return null;
 	}
-	
+
+	public static FullyQualifiedArgumentName getFullyQualifiedArgumentName(OrExpression orExpr) {
+		if (orExpr.getExpression().size() > 1) return null;
+		AndExpression andExpr = orExpr.getExpression().get(0);
+		if (andExpr.getExpression().size() > 1) return null;
+		LogicalExpression logicExpr = andExpr.getExpression().get(0);
+		if (logicExpr.getExpression1() != null){
+			if (logicExpr.getExpression2() != null) return null;
+			if (logicExpr.getExpression1().getString() != null) return null;
+			if(logicExpr.getExpression1().getExpression().size() > 1) return null;
+			MultiplicativeExpression multExpr = logicExpr.getExpression1().getExpression().get(0);
+			if (multExpr.getExpression().size() > 1) return null;
+			PowerExpression powerExpr = multExpr.getExpression().get(0);
+			if (powerExpr.getExpression().size() > 1) return null;
+			UnaryExpression unaryExpr = powerExpr.getExpression().get(0);
+			if (unaryExpr.getAttribute() != null) return unaryExpr.getAttribute();
+		}
+		return null;
+	}
+
 	///////////////////////////////////////////////////////////
 	//Infer type
 	///////////////////////////////////////////////////////////
@@ -728,9 +753,43 @@ public enum MdlDataType {
 			return TYPE_REAL;
 		}
 		if (unaryExpr.getAttribute() != null){
-			//Find attribute definition and type its value
+			return getDerivedType(unaryExpr.getAttribute());
 		}
 		return TYPE_REAL;	
+	}
+	
+	private static MdlDataType getDerivedType(FullyQualifiedArgumentName ref){
+		//Find attribute definition and type its value
+		//FullyQualifiedArgumentName refers to imported variables
+		List<Variable> vars = Utils.getImportedVariables(ref);
+		if (vars != null){
+			return getDerivedType(vars, ref.getSelectors().get(0));
+		} else {
+			//FullyQualifiedArgumentName refers to external library variables
+			vars = Utils.getExternalLibraryVariables(ref);
+   			if (vars != null){
+				return getDerivedType(vars, ref.getSelectors().get(0));
+   			} else {
+				//FullyQualifiedArgumentName refers to list attributes
+   				//TODO: Return expected attribute type
+   			}	   			
+		}
+		return TYPE_UNDEFINED;
+	}
+	
+	private static MdlDataType getDerivedType(List<Variable> vars, Selector selector){
+		ArgumentName paramRef = selector.getArgumentName();
+		if (paramRef != null){
+			for (Variable var: vars){
+				if (var.getName().equals(paramRef.getName())) 
+					return var.getType();
+			}
+		} else {
+			int index = Integer.parseInt(selector.getSelector());
+       		if (index < vars.size())
+       			return vars.get(index).getType();
+		}
+		return TYPE_UNDEFINED;
 	}
 	
 	public static MdlDataType getDerivedType(FunctionCall call){
@@ -741,17 +800,16 @@ public enum MdlDataType {
 	}
 
 	public static MdlDataType getDerivedType(ImportObjectStatement s){
-		MclObject obj = Utils.getMclObject(s);
-		if (obj.getMogObject() != null){
-			for (MclObject o: Utils.getMOGObjects(obj.getMogObject())){
-				if (o.getObjectName().getName().equals(s.getObjectName().getName())) {
-					if (o.getModelObject() != null) return TYPE_OBJ_REF_MODEL;
-					if (o.getParameterObject() != null) return TYPE_OBJ_REF_PARAM;
-					if (o.getDataObject() != null) return TYPE_OBJ_REF_DATA;
-					if (o.getTaskObject() != null) return TYPE_OBJ_REF_TASK;
-					if (o.getDesignObject() != null) return TYPE_OBJ_REF_DESIGN;
-					if (o.getMogObject() != null) return TYPE_OBJ_REF_MOG;
-				}
+		if (s.getObjectName() != null){
+			EObject container = s.getObjectName().eContainer();
+			if (container instanceof MclObjectImpl){
+				MclObject o = (MclObject)container;
+				if (o.getModelObject() != null) return TYPE_OBJ_REF_MODEL;
+				if (o.getParameterObject() != null) return TYPE_OBJ_REF_PARAM;
+				if (o.getDataObject() != null) return TYPE_OBJ_REF_DATA;
+				if (o.getTaskObject() != null) return TYPE_OBJ_REF_TASK;
+				if (o.getDesignObject() != null) return TYPE_OBJ_REF_DESIGN;
+				if (o.getMogObject() != null) return TYPE_OBJ_REF_MOG;
 			}
 		}
 		return TYPE_UNDEFINED;

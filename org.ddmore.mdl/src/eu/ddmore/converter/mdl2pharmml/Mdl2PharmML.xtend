@@ -28,8 +28,8 @@ class Mdl2PharmML{
 			<IndependentVariable symbId="«DefaultValues::INDEPENDENT_VAR»"/>
 			«functPrinter.print_FunctionDefinitions(mog)»	
 			«mdPrinter.print_mdef_ModelDefinition(mog)»
-			«msPrinter.print_msteps_ModellingSteps(mog)»
 			«tdPrinter.print_design_TrialDesign(mog)»
+			«msPrinter.print_msteps_ModellingSteps(mog)»
 		</PharmML>
 		'''			
 	}

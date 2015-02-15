@@ -204,30 +204,30 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			/*Key: values of attributes in the following order: ndist|depot|par|glm|glmr|ncomp|mom1
 			 * Boolean attributes which are not 'true' are skipped */
 			//v_cl
-			pkReturnedValues.put("ndist=1|par=v_cl", Arrays.asList(A, F, V, CL));
-			pkReturnedValues.put("ndist=1|depot=true|par=v_cl", Arrays.asList(A, F, V, CL, KA));
-			pkReturnedValues.put("ndist=2|par=v_cl", Arrays.asList(A, F, CL, V1, Q, V2));
-			pkReturnedValues.put("ndist=2|depot=true|par=v_cl", Arrays.asList(A, F, CL, V2, Q, KA));
-			pkReturnedValues.put("ndist=3|par=v_cl", Arrays.asList(A, F, CL,V1,Q2,V2,Q3,V3));
-			pkReturnedValues.put("ndist=3|depot=true|par=v_cl", Arrays.asList(A, F, CL, V2, Q3, V3, Q4, V4, KA));
-			pkReturnedValues.put("par=v_cl|mom1=true", Arrays.asList(A, F, V, VM, KM));
+			pkReturnedValues.put("ndist=1|par=v_cl", Arrays.asList(A, V, CL));
+			pkReturnedValues.put("ndist=1|depot=true|par=v_cl", Arrays.asList(A, V, CL, KA));
+			pkReturnedValues.put("ndist=2|par=v_cl", Arrays.asList(A, CL, V1, Q, V2));
+			pkReturnedValues.put("ndist=2|depot=true|par=v_cl", Arrays.asList(A, CL, V2, Q, KA));
+			pkReturnedValues.put("ndist=3|par=v_cl", Arrays.asList(A, CL,V1,Q2,V2,Q3,V3));
+			pkReturnedValues.put("ndist=3|depot=true|par=v_cl", Arrays.asList(A, CL, V2, Q3, V3, Q4, V4, KA));
+			pkReturnedValues.put("par=v_cl|mom1=true", Arrays.asList(A, V, VM, KM));
 			//v_k
-			pkReturnedValues.put("ndist=1|par=v_k", Arrays.asList(A, F, V, K));
-			pkReturnedValues.put("ndist=1|depot=true|par=v_k", Arrays.asList(A, F, V, K, KA));
-			pkReturnedValues.put("ndist=2|par=v_k", Arrays.asList(A, F, V, K, K12, K21));
-			pkReturnedValues.put("ndist=2|depot=true|par=v_k", Arrays.asList(A, F, V, K, K23, K32, KA));
-			pkReturnedValues.put("ndist=3|par=v_k", Arrays.asList(A, F, V, K, K12, K21, K13, K31));
-			pkReturnedValues.put("ndist=3|depot=true|par=v_k", Arrays.asList(A, F, V,K,K23,K32,K24,K42,KA));
-			pkReturnedValues.put("par=v_k|glm=true", Arrays.asList(A, F, V,K));
-			pkReturnedValues.put("par=v_k|glmr=true", Arrays.asList(A, F, V,K));
+			pkReturnedValues.put("ndist=1|par=v_k", Arrays.asList(A, V, K));
+			pkReturnedValues.put("ndist=1|depot=true|par=v_k", Arrays.asList(A, V, K, KA));
+			pkReturnedValues.put("ndist=2|par=v_k", Arrays.asList(A, V, K, K12, K21));
+			pkReturnedValues.put("ndist=2|depot=true|par=v_k", Arrays.asList(A, V, K, K23, K32, KA));
+			pkReturnedValues.put("ndist=3|par=v_k", Arrays.asList(A, V, K, K12, K21, K13, K31));
+			pkReturnedValues.put("ndist=3|depot=true|par=v_k", Arrays.asList(A, V,K,K23,K32,K24,K42,KA));
+			pkReturnedValues.put("par=v_k|glm=true", Arrays.asList(A, V, K));
+			pkReturnedValues.put("par=v_k|glmr=true", Arrays.asList(A, V, K));
 			//vss_cl
-			pkReturnedValues.put("ndist=2|par=vss_cl", Arrays.asList(A, F, CL, V, Q, VSS));
-			pkReturnedValues.put("ndist=2|depot=true|par=vss_cl", Arrays.asList(A, F, CL, V, Q, VSS, KA));
-			//a_b
-			pkReturnedValues.put("ndist=2|par=a_b", Arrays.asList(A, F, ALPHA, BETA, K21));
-			pkReturnedValues.put("ndist=2|depot=true|par=a_b", Arrays.asList(A, F, ALPHA, BETA, K32, KA));
-			pkReturnedValues.put("ndist=3|par=a_b", Arrays.asList(A, F, ALPHA, BETA, GAMMA, K21, K31));
-			pkReturnedValues.put("ndist=3|depot=true|par=a_b", Arrays.asList(A, F, ALPHA, BETA, GAMMA, K32, K42, KA));
+			pkReturnedValues.put("ndist=2|par=vss_cl", Arrays.asList(A, CL, V, Q, VSS));
+			pkReturnedValues.put("ndist=2|depot=true|par=vss_cl", Arrays.asList(A, CL, V, Q, VSS, KA));
+			//abk
+			pkReturnedValues.put("ndist=2|par=a_b", Arrays.asList(A, ALPHA, BETA, K21));
+			pkReturnedValues.put("ndist=2|depot=true|par=a_b", Arrays.asList(A, ALPHA, BETA, K32, KA));
+			pkReturnedValues.put("ndist=3|par=a_b", Arrays.asList(A, ALPHA, BETA, GAMMA, K21, K31));
+			pkReturnedValues.put("ndist=3|depot=true|par=a_b", Arrays.asList(A, ALPHA, BETA, GAMMA, K32, K42, KA));
 			
 			put(lib_PK, new FunctionSignature(lib_PK, new FunctionParameterSet(Arrays.asList(
 				param_PK_ndist, param_PK_depot, param_PK_par, 

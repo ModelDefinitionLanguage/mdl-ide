@@ -135,7 +135,12 @@ class MathPrinter{
 				//Convert standard mathematical functions to a PharmML operator with the same name;		
 				return call.print_Math_FunctionCall_Standard;
 			} else {
-				return call.print_Math_FunctionCall_UserDefined;
+				if (FunctionValidator::lib_PK.equals(call.identifier.name)){
+					val pkPrinter = PKMacrosPrinter::getInstance();
+					return pkPrinter.print_PKMacros(call);
+				}
+				else
+					return call.print_Math_FunctionCall_UserDefined;
 			}
 		}
 	}

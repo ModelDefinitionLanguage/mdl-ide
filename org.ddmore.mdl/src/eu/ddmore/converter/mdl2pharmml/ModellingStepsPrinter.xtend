@@ -5,7 +5,6 @@ import org.ddmore.mdl.validation.AttributeValidator
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
-import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.InputFormatType
 import org.ddmore.mdl.mdl.ParameterObject
@@ -24,10 +23,10 @@ class ModellingStepsPrinter extends DataSetPrinter{
 
 	def print_msteps_ModellingSteps(MOGObject mog){
 		var objects = Utils::getMOGObjects(mog);
-		var ModelObject mObj = Utils::getModelObject(objects);
-		var ParameterObject pObj = Utils::getParameterObject(objects);
-		var DataObject dObj = Utils::getDataObject(objects);
-		var TaskObject tObj = Utils::getTaskObject(objects);
+		var mObj = Utils::getModelObject(objects);
+		var pObj = Utils::getParameterObject(objects);
+		var dObj = Utils::getDataObject(objects);
+		var tObj = Utils::getTaskObject(objects);
 
 		var res = "";
 		var dependencies = ""; 

@@ -403,7 +403,7 @@ EnumType:
 ;
 
 enum PkParameterType:
-	no_param | v_cl | v_k | vss_cl | a_b
+	no_param | v_cl | v_k | vss_cl | abk
 ;
 
 enum UseType:

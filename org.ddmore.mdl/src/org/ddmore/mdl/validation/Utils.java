@@ -3,6 +3,7 @@ package org.ddmore.mdl.validation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -317,4 +318,68 @@ public class Utils {
 		}
 		return deriv_vars;
 	}
+	
+	public static List<Variable> getExternalLibraryVariables(FullyQualifiedArgumentName ref){
+		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
+	    while (iterator.hasNext()){
+	    	EObject obj = iterator.next();
+	    	if (obj instanceof FunctionCallStatementImpl){
+	    		FunctionCallStatement s = (FunctionCallStatement) obj;
+	    		if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getParent().getName())) {	    			
+	    			//Compare reference with returned variables of functions or libraries
+	    			String functName = s.getExpression().getIdentifier().getName();
+	    			if (FunctionValidator.libraries.contains(functName))
+	    				return FunctionValidator.standardFunctions.get(functName).getReturnedVariables(s.getExpression().getArguments());
+	    		}
+	    	}
+	    }
+	    return null;
+	}
+	
+	public static List<Variable> getImportedVariables(FullyQualifiedArgumentName ref){
+		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
+	    while (iterator.hasNext()){
+	    	EObject obj = iterator.next();
+	    	if (obj instanceof ImportObjectStatementImpl){
+	    		ImportObjectStatement s = (ImportObjectStatement) obj;
+	    		if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getParent().getName())) {	    			
+	    			EObject container = s.getObjectName().eContainer();
+	    			if (container instanceof MclObjectImpl){
+	    				MclObject o = (MclObject)container;
+	    				return Utils.getDeclaredVariables(o);
+	    			}
+	    		}
+	    	}
+	    }
+	    return null;
+	}
+	
+	public static List<Argument> getListArguments(FullyQualifiedArgumentName ref){
+		List<Argument> args = new LinkedList<Argument>();
+		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
+	    while (iterator.hasNext()){
+	    	EObject obj = iterator.next();
+	    	if (obj instanceof SymbolDeclarationImpl){
+	    		SymbolDeclaration s = (SymbolDeclaration) obj;
+	    		if (s.getSymbolName() != null){
+		    		if (s.getSymbolName().getName().equals(ref.getParent().getName())) {
+		    			if (s.getList() != null){
+		    				Arguments arguments = s.getList().getArguments();
+		       				if (arguments != null)
+			       				for (Argument x: arguments.getArguments())
+	           						args.add(x);
+		    			}
+		    			if (s.getRandomList() != null){
+		    				Arguments arguments = s.getRandomList().getArguments();
+		       				if (arguments != null)
+			       				for (Argument x: arguments.getArguments())
+	           						args.add(x);
+		    			}
+		    		}
+	    		}
+	    	}
+	    }
+	    return args;
+	}
+	
 }

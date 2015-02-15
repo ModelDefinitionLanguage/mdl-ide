@@ -1,10 +1,11 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.mdl.UseType
-import org.ddmore.mdl.mdl.MclObject
 import org.ddmore.mdl.mdl.MOGObject
-//import org.ddmore.mdl.mdl.DesignObject
+//import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.mdl.DesignObject
+import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.mdl.AnyExpression
 
 class TrialDesignPrinter extends DataSetPrinter {
 	/////////////////////////////////////////////////////////////////////////
@@ -16,162 +17,115 @@ class TrialDesignPrinter extends DataSetPrinter {
 	}	
 	
 	protected def print_design_TrialDesign(MOGObject mog){
-		//var DesignObject zObj = mog.getDesignObject;
-		//'''
-		//<TrialDesign xmlns="«Constants::xmlns_design»">
-		//
-		//</TrialDesign>	
-		//'''
-		//«print_design_Structure»
-		//«print_design_Population»
-		//«print_design_IndividualDosing»
+		/* 
+		var objects = Utils::getMOGObjects(mog);
+		var dsObj = Utils::getDesignObject(objects);
+		'''
+		<TrialDesign xmlns="«Constants::xmlns_design»">
+			«dsObj.print_design_Structure»
+		</TrialDesign>	
+		'''*/
 	}
 	
-	///////////////////////////
-	// II.a Structure
-	///////////////////////////
-	/*protected def print_design_Structure()
-	'''
-	<Structure>
-		«print_design_Epochs»
-		«print_design_Arms»
-		«print_design_Cells»
-		«print_design_Segments»
-		«print_design_Activities»
-	</Structure>
-	'''
-	
-	protected def print_design_Epochs()
-	'''
-	<Epoch oid="«BLK_DESIGN_EPOCH»">
-		<Start><ct:Real>???</ct:Real></Start>
-		<End><ct:Real>???</ct:Real></End>
-		<Order>???</Order>
-	</Epoch>
-	'''
-
-	protected def print_design_Arms()'''
-	<Arm oid="«BLK_DESIGN_ARM»"/>
-	'''
-	
-	protected def print_design_Cells()'''
-	<Cell oid="«BLK_DESIGN_CELL»">
-		<EpochRef oidRef="???"/>
-		<ArmRef oidRef="???"/>
-		<SegmentRef oidRef="???"/>
-	</Cell>
-	'''
-	
-	protected def print_design_Segments()'''
-	<Segment oid="«BLK_DESIGN_SEGMENT»">
-		<ActivityRef oidRef="???"/>
-	</Segment>
-	'''
-	
-	protected def print_design_Activities()'''
-	<Activity oid="«BLK_DESIGN_ACTIVITY»">
-	</Activity>
-	'''
-	//«s.print_design_Bolus»	
-
-	protected def print_design_Bolus(SymbolDeclaration s)'''
-	<Bolus>
-		«print_design_DoseAmount("target", s)»
-		«print_design_DosingTimes(s)»
-		«print_design_SteadyState(s)»
-	</Bolus>
-	'''
-
-	protected def print_design_DoseAmount(String target, SymbolDeclaration s)'''
-	<DoseAmount inputType="«target»">
-	</DoseAmount>
-	'''
-	
-	protected def print_design_DosingTimes(SymbolDeclaration s)'''
-	<DosingTimes>
-		«IF s.symbolName != null»
-			«print_ct_SymbolRef(s.symbolName.name)»
-			«IF s.expression != null»
-				«s.expression.print_Assign»
-			«ENDIF»
-		«ENDIF»
-	</DosingTimes>	
-	'''	
-
-	protected def print_design_SteadyState(SymbolDeclaration s)'''
-	«IF s.symbolName != null»
-		<SteadyState>
-			<EndTime>
-				«print_ct_SymbolRef(s.symbolName.name)»
-				«IF s.expression != null»
-					«s.expression.print_Assign»
-				«ENDIF»
-			</EndTime>	
-			<Interval>
-				«print_ct_SymbolRef(s.symbolName.name)»
-				«IF s.expression != null»
-					«s.expression.print_Assign»
-				«ENDIF»
-			</Interval>	
-		</SteadyState>
-	«ENDIF»
-	'''
-	*/
-
-	///////////////////////////
-	// II.b Population
-	///////////////////////////
-	protected def print_design_Population(MclObject mObj)
-	'''
-	<Population>
-		«mObj.print_design_IndividualTemplate»
-	</Population>
-	'''
-	//Print mapping for the input variables with use=idv (individual)
-	protected def print_design_IndividualTemplate(MclObject mObj){
-		if (mObj.modelObject != null){
-			var mappings = "";
-			for (block: mObj.modelObject.blocks){
-				if (block.inputVariablesBlock != null){
-					for (s: block.inputVariablesBlock.variables){
-						if (s.list != null && s.symbolName != null){
-							var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-							if (use.length > 0){
-								if (use.equals(UseType::ID)) 
-									mappings = mappings + "IndividualMapping".print_design_Mapping(s.symbolName.name);
-								if (use.equals(UseType::AMT))	
-									mappings = mappings + "ArmMapping".print_design_Mapping(s.symbolName.name);
-								//...	
-                			}
-						}
-					}
-				}	
+	protected def print_design_Structure(DesignObject dsObj){
+		var activities = "";
+		var arms = "";
+		for (b: dsObj.blocks){
+			if (b.adminBlock != null){
+				for (s: b.adminBlock.variables){
+					activities = activities + s.print_design_Activity
+				}
 			}
-			return
-			'''
-			<IndividualTemplate>
-				«mappings»
-			</IndividualTemplate>
-			'''
+			if (b.studyDesignBlock != null){
+				for (s: b.studyDesignBlock.variables){
+					arms = arms + s.print_design_Arm
+				}
+			}
 		}
-		return ''''''
-	}	
-
-	//
-	protected def print_design_Mapping(String mappingType, String ref)'''
-	<«mappingType»>
-		<ColumnRef columnIdRef="«ref»"/>
-	</«mappingType»>
-	'''
-
-	///////////////////////////
-	// II.c Individual Dosing
-	///////////////////////////
-	/* 
-	protected def print_design_IndividualDosing()'''
-	<IndividualDosing>
-	</IndividualDosing>
-	'''
-	*/
+		'''
+		<Strcuture>
+			«arms»
+			«activities»
+		</Structure>
+		'''
+	}
 	
+	protected def print_design_Arm(SymbolDeclaration s){
+		if (s.symbolName != null){
+			if (s.list != null){
+				'''
+				<Arm oid=«s.symbolName.name»>
+				</Arm>
+				'''
+			}
+		}
+	}
+	
+	protected def print_design_Activity(SymbolDeclaration s){
+		if (s.symbolName != null){
+			if (s.list != null){
+				var amount = s.list.arguments.getAttributeExpression(AttributeValidator::attr_amount.name);
+				var doseTimes = s.list.arguments.getAttributeExpression(AttributeValidator::attr_doseTime.name);
+				var steadyState = isTrue(s.list.arguments.getAttributeExpression(AttributeValidator::attr_steadyState.name)); 
+				'''
+				<Activity oid=«s.symbolName.name»>
+					<Bolus>
+						«IF amount != null»
+							«amount.print_design_DoseAmount»
+						«ENDIF»
+						«IF doseTimes != null»
+							«doseTimes.print_design_DoseAmount»
+						«ENDIF»
+						«IF steadyState»
+							«s.print_design_SteadyState»
+						«ENDIF»			
+					</Bolus>
+				</Activity>	
+				'''		
+			}
+		}
+	}
+	
+	protected def print_design_SteadyState(SymbolDeclaration s){
+		var interval = s.list.arguments.getAttributeExpression(AttributeValidator::attr_interval.name); 
+		var start = s.list.arguments.getAttributeExpression(AttributeValidator::attr_start.name); 
+		var end = s.list.arguments.getAttributeExpression(AttributeValidator::attr_end.name); 
+		'''
+		<SteadyState>
+			«IF start != null»
+				<StartTime>
+					«start.print_Assign»
+				</StartTime>	
+			«ENDIF»
+			«IF end != null»
+				<EndTime>
+					«end.print_Assign»
+				</EndTime>	
+			«ENDIF»
+			«IF interval != null»
+				<Interval>
+					«interval.print_Assign»
+				</Interval>	
+			«ENDIF»
+		</SteadyState>
+		'''
+		
+	}
+	
+	protected def print_design_DoseAmount(AnyExpression expr){
+		var inputTarget = "parameter";
+		'''
+			<DoseAmount inputTarget=«inputTarget»>
+				«expr.print_Assign»
+			</DoseAmonut>
+		'''
+	}
+	
+	protected def print_design_DoseTime(AnyExpression expr){
+		'''
+			<DosingTimes>
+				«expr.print_Assign»
+			</DosingTimes>
+		'''
+	}
 }

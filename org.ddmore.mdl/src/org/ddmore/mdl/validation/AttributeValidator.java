@@ -45,6 +45,7 @@ import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.StudyDesignBlockImpl;
+import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.types.DefaultValues;
@@ -298,13 +299,15 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//and in functions (this is the job of FunctionValidator)
 	private Boolean skipAttributeValidation(EObject container, Arguments args){
 		if (container == null) return true;
-		//Skip distributions
-		if (args.eContainer() instanceof RandomListImpl) return true;
-		//Skip nested lists
-		if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl) return true;
-		//Skip functions
-		if (args.eContainer() instanceof FunctionCallImpl) return true;		
-		return false;
+		//Skip attributes of distributions and functions
+		EObject container1 = args.eContainer();
+		if (container1 instanceof RandomListImpl || 
+			container1 instanceof FunctionCallImpl) return true;
+		//Skip everything apart from attributes for symbol declarations and mappings
+		EObject container2 = container1.eContainer();
+		if (container2 instanceof SymbolDeclarationImpl || 
+			container2 instanceof  MappingBlockImpl) return false;
+		return true;
 	}
 
 	@Check
