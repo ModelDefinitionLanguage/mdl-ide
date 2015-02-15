@@ -8,95 +8,18 @@ import java.util.Map;
 
 import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.domain.Variable;
-import org.ddmore.mdl.mdl.ActionBlock;
-import org.ddmore.mdl.mdl.AdministrationBlock;
-import org.ddmore.mdl.mdl.Argument;
-import org.ddmore.mdl.mdl.Arguments;
-import org.ddmore.mdl.mdl.CompartmentBlock;
-import org.ddmore.mdl.mdl.DataDerivedBlock;
-import org.ddmore.mdl.mdl.DataInputBlock;
-import org.ddmore.mdl.mdl.DataObject;
-import org.ddmore.mdl.mdl.DesignObject;
-import org.ddmore.mdl.mdl.DesignSpaceBlock;
-import org.ddmore.mdl.mdl.EstimationBlock;
-import org.ddmore.mdl.mdl.FunctionCall;
-import org.ddmore.mdl.mdl.FunctionCallStatement;
-import org.ddmore.mdl.mdl.HyperSpaceBlock;
-import org.ddmore.mdl.mdl.ImportObjectStatement;
-import org.ddmore.mdl.mdl.IndividualVariablesBlock;
-import org.ddmore.mdl.mdl.InputVariablesBlock;
-import org.ddmore.mdl.mdl.LibraryBlock;
-import org.ddmore.mdl.mdl.MOGObject;
-import org.ddmore.mdl.mdl.MOGObjectBlock;
-import org.ddmore.mdl.mdl.Mcl;
-import org.ddmore.mdl.mdl.MclObject;
-import org.ddmore.mdl.mdl.ModelObject;
-import org.ddmore.mdl.mdl.ModelObjectBlock;
-import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
-import org.ddmore.mdl.mdl.ObjectName;
-import org.ddmore.mdl.mdl.ObservationBlock;
-import org.ddmore.mdl.mdl.OdeBlock;
-import org.ddmore.mdl.mdl.ParameterObject;
-import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
-import org.ddmore.mdl.mdl.SamplingBlock;
-import org.ddmore.mdl.mdl.SimulationBlock;
-import org.ddmore.mdl.mdl.SourceBlock;
-import org.ddmore.mdl.mdl.StructuralBlock;
-import org.ddmore.mdl.mdl.StructuralParametersBlock;
-import org.ddmore.mdl.mdl.StudyDesignBlock;
-import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.SymbolName;
-import org.ddmore.mdl.mdl.TargetBlock;
-import org.ddmore.mdl.mdl.TaskObject;
-import org.ddmore.mdl.mdl.VariabilityBlock;
-import org.ddmore.mdl.mdl.VariabilityParametersBlock;
-import org.ddmore.mdl.mdl.impl.ActionBlockImpl;
-import org.ddmore.mdl.mdl.impl.AdministrationBlockImpl;
-import org.ddmore.mdl.mdl.impl.CompartmentBlockImpl;
-import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
-import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
-import org.ddmore.mdl.mdl.impl.DesignSpaceBlockImpl;
-import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
-import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
-import org.ddmore.mdl.mdl.impl.FunctionCallStatementImpl;
-import org.ddmore.mdl.mdl.impl.HyperSpaceBlockImpl;
-import org.ddmore.mdl.mdl.impl.ImportObjectStatementImpl;
-import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
-import org.ddmore.mdl.mdl.impl.MclObjectImpl;
-import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
-import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
-import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
-import org.ddmore.mdl.mdl.impl.SamplingBlockImpl;
-import org.ddmore.mdl.mdl.impl.SimulationBlockImpl;
-import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
-import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
-import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
-import org.ddmore.mdl.mdl.impl.StudyDesignBlockImpl;
-import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
+import org.ddmore.mdl.mdl.*;
+import org.ddmore.mdl.mdl.impl.*;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 
 public class Utils {
-	
-	//Checks whether a given identifier is declared
-	static boolean isSymbolDeclared(Map<String, List<Variable>> map, String id, ObjectName objName){
-		if (objName != null) 
-			if (map.containsKey(objName.getName()))
-				for (Variable var: map.get(objName.getName()))
-					if (var.getName().equals(id)) return true;
-		return false; 
-	}
 	
 	//Checks whether a given symbol is declared
 	public static boolean isSymbolDeclared(Map<String, List<Variable>> map, SymbolName ref){
@@ -109,19 +32,16 @@ public class Utils {
 	}
 		
 	//Checks whether a function is declared more than once
-	static boolean isSymbolDeclaredMoreThanOnce(Map<String, List<Variable>> map, SymbolName ref){
-		ObjectName objName = getObjectName(ref);
-		if (map.containsKey(objName.getName())){
-			List<Variable> vars = map.get(objName.getName()); 
-			int i = 0;
-			for (Variable var: vars){
-				if (var.getName().equals(ref.getName())) i++;
-				if (i > 1) return true;
-			}
+	static boolean isSymbolDeclaredMoreThanOnce(List<Variable> vars, String ref){
+		int i = 0;
+		for (Variable var: vars){
+			if (var.getName().equals(ref)) i++;
+			if (i > 1) return true;
 		}
 		return false;
 	}
 	
+	//Returns a list of attribute names 
 	public static List<String> getArgumentNames(Arguments args){
 		List<String> argumentNames = new ArrayList<String>();	
 		if (args.getArguments() != null)
@@ -132,10 +52,12 @@ public class Utils {
 		return argumentNames;
 	}
 	
+	//Returns the name of an object containing a given element
 	public static ObjectName getObjectName(EObject b){
 		return getMclObject(b).getObjectName();
 	}
 
+	//Returns the object container for a given element
 	public static MclObject getMclObject(EObject b){
 		EObject container = b.eContainer();
 		while (!(container instanceof MclObjectImpl)){
@@ -151,7 +73,8 @@ public class Utils {
 		for (String str: list) res += str + "; ";
 		return res + "}";
 	}
-	
+
+	//Returns a list of all recognized attribute names
 	public static List<String> getAllNames(List<Attribute> attrs){
 		List<String> names = new ArrayList<String>();
 		if (attrs != null){
@@ -162,6 +85,7 @@ public class Utils {
 		return names;
 	}
 
+	//Returns a list of all required attribute names
 	public static List<String> getRequiredNames(List<Attribute> attrs){
 		ArrayList<String> names = new ArrayList<String>();
 		if (attrs != null){
@@ -173,6 +97,7 @@ public class Utils {
 		return names;
 	}
 	
+	//Returns identifier of an MDL block
 	public static String getBlockName(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
@@ -181,6 +106,7 @@ public class Utils {
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return ((StructuralBlock)obj).getIdentifier();	
 		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj).getIdentifier();
+		if (obj instanceof PriorParametersBlockImpl) return ((PriorParametersBlock)obj).getIdentifier();
 		/*Model object*/
 		if (obj instanceof InputVariablesBlockImpl) return ((InputVariablesBlock)obj).getIdentifier();
 		if (obj instanceof IndividualVariablesBlockImpl) return ((IndividualVariablesBlock)obj).getIdentifier();
@@ -193,13 +119,25 @@ public class Utils {
 		if (obj instanceof StructuralParametersBlockImpl) return ((StructuralParametersBlock)obj).getIdentifier() ;
 		if (obj instanceof VariabilityParametersBlockImpl) return ((VariabilityParametersBlock)obj).getIdentifier() ;
 		if (obj instanceof RandomVariableDefinitionBlockImpl) return ((RandomVariableDefinitionBlock)obj).getIdentifier() ;
+		/*Task object*/
+		if (obj instanceof EstimateTaskImpl) return ((EstimateTask)obj).getIdentifier();	
+		if (obj instanceof SimulateTaskImpl) return ((SimulateTask)obj).getIdentifier();	
+		if (obj instanceof EvaluateTaskImpl) return ((EvaluateTask)obj).getIdentifier();	
+		if (obj instanceof OptimiseTaskImpl) return ((OptimiseTask)obj).getIdentifier();	
+		if (obj instanceof DataBlockImpl) return ((DataBlock)obj).getIdentifier();	
+		if (obj instanceof ModelBlockImpl) return ((ModelBlock)obj).getIdentifier();	
 		/*Design object*/
+		if (obj instanceof CovariatesBlockImpl) return ((CovariatesBlock)obj).getIdentifier();  
 		if (obj instanceof StudyDesignBlockImpl) return ((StudyDesignBlock)obj).getIdentifier();  
 		if (obj instanceof AdministrationBlockImpl) return ((AdministrationBlock)obj).getIdentifier();
 		if (obj instanceof ActionBlockImpl) return ((ActionBlock)obj).getIdentifier();        
 		if (obj instanceof SamplingBlockImpl) return ((SamplingBlock)obj).getIdentifier();      
 		if (obj instanceof DesignSpaceBlockImpl) return ((DesignSpaceBlock)obj).getIdentifier();   
 		if (obj instanceof HyperSpaceBlockImpl) return ((HyperSpaceBlock)obj).getIdentifier(); 		
+		if (obj instanceof PopulationFeaturesBlockImpl) return ((PopulationFeaturesBlock)obj).getIdentifier(); 	
+		/*MOG object*/
+		if (obj instanceof ImportObjectBlockImpl) return ((ImportObjectBlock)obj).getIdentifier();  
+		if (obj instanceof MappingBlockImpl) return ((MappingBlock)obj).getIdentifier();  
 		/*All objects*/
 		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();
 		return "";
@@ -207,46 +145,25 @@ public class Utils {
 	
 	//Locate data/script file in the MDL project
 	public static boolean isFileExist(EObject b, String filePath) {
+		return getFile(b, filePath).exists();
+	}
+	
+	//Locate data/script file in the MDL project
+	public static IFile getFile(EObject b, String filePath) {
 		String platformString = b.eResource().getURI().toPlatformString(true);
 		IFile modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(platformString));
-		IContainer parent = modelFile.getParent();
-		String p = filePath;
+	    IProject project = modelFile.getProject();
+	    IContainer parent = modelFile.getParent();
+    	String p = filePath;
 		while (p.startsWith("../") && parent != null){
 			parent = parent.getParent();
 			p = p.substring(3);
 		}
-		IPath path = new Path(p);
-		if (path.isValidPath(p) && parent != null) {
-			IFile requestedFile = parent.getFile(path);
-			if (requestedFile.exists()) return true;
-		}
-		return false;
+        IFile dataFile = project.getFile(parent.getProjectRelativePath() + "/" + p);
+		return dataFile;
 	}
 	
-	public static Map<String, MdlDataType> getDeclaredObjects(Mcl mcl){
-		Map<String, MdlDataType> declaredObjects = new HashMap<String, MdlDataType>();
-		for (MclObject obj: mcl.getObjects()){
-			MdlDataType objType = MdlDataType.TYPE_OBJ_REF;
-			if (obj.getModelObject() != null){
-				objType = MdlDataType.TYPE_OBJ_REF_MODEL;
-			}
-			if (obj.getDataObject() != null){
-				objType = MdlDataType.TYPE_OBJ_REF_DATA;
-			}
-			if (obj.getParameterObject() != null){
-				objType = MdlDataType.TYPE_OBJ_REF_PARAM;
-			}
-			if (obj.getTaskObject() != null){
-				objType = MdlDataType.TYPE_OBJ_REF_TASK;
-			}
-			if (obj.getDesignObject() != null){
-				objType = MdlDataType.TYPE_OBJ_REF_DESIGN;
-			}
-			declaredObjects.put(obj.getObjectName().getName(), objType);
-		}
-		return declaredObjects;
-	}
-	
+	//Returns a list of MOGs declared in an MDL file
 	public static List<MOGObject> getMOGs(Mcl mcl){
 		List<MOGObject> mogs = new ArrayList<MOGObject>();
 		for (MclObject obj: mcl.getObjects()){
@@ -256,6 +173,7 @@ public class Utils {
 		return mogs;
 	}
 	
+	//Returns a list of objects in a given MOG
 	public static List<MclObject> getMOGObjects(MOGObject mog){
 		List<MclObject> objects = new ArrayList<MclObject>();
 		for (MOGObjectBlock b: mog.getBlocks())
@@ -273,57 +191,69 @@ public class Utils {
 		return objects;
 	}
 	
+	//Finds the first task object in a group of objects (MOG)
 	public static TaskObject getTaskObject(List<MclObject> objects){
 		for (MclObject mclObject: objects)
 			if (mclObject.getTaskObject() != null) return mclObject.getTaskObject();
 		return null;
 	}	
 	
+	//Finds the first model object in a group of objects (MOG)
 	public static ModelObject getModelObject(List<MclObject> objects){
 		for (MclObject mclObject: objects)
 			if (mclObject.getModelObject() != null) return mclObject.getModelObject();
 		return null;
 	}	
 
+	//Finds the first parameter object in a group of objects (MOG)
 	public static ParameterObject getParameterObject(List<MclObject> objects){
 		for (MclObject mclObject: objects)
 			if (mclObject.getParameterObject() != null) return mclObject.getParameterObject();
 		return null;
 	}	
 
+	//Finds the first data object in a group of objects (MOG)
 	public static DataObject getDataObject(List<MclObject> objects){
 		for (MclObject mclObject: objects)
 			if (mclObject.getDataObject() != null) return mclObject.getDataObject();
 		return null;
 	}	
 	
+	//Finds the first design object in a group of objects (MOG)
 	public static DesignObject getDesignObject(List<MclObject> objects){
 		for (MclObject mclObject: objects)
 			if (mclObject.getDesignObject() != null) return mclObject.getDesignObject();
 		return null;
 	}
-	
-	public static Map<String, List<Variable>> getDeclaredSymbols(Mcl mcl){
+
+	//Creates a list of available MDL objects with types
+	public static List<Variable> getDeclaredObjects(Mcl mcl){
+		List<Variable> declaredObjects = new ArrayList<Variable>();
+		for (MclObject obj: mcl.getObjects()){
+			MdlDataType objType = MdlDataType.TYPE_OBJ_REF;
+			if (obj.getModelObject() != null)     objType = MdlDataType.TYPE_OBJ_REF_MODEL;
+			if (obj.getDataObject() != null)      objType = MdlDataType.TYPE_OBJ_REF_DATA;
+			if (obj.getParameterObject() != null) objType = MdlDataType.TYPE_OBJ_REF_PARAM;
+			if (obj.getTaskObject() != null)      objType = MdlDataType.TYPE_OBJ_REF_TASK;
+			if (obj.getDesignObject() != null)    objType = MdlDataType.TYPE_OBJ_REF_DESIGN;
+			if (obj.getMogObject() != null)	      objType = MdlDataType.TYPE_OBJ_REF_MOG;
+			Variable newObj = new Variable(obj.getObjectName().getName(), objType);
+			declaredObjects.add(newObj);
+		}
+		return declaredObjects;
+	}
+
+	public static Map<String, List<Variable>> getDeclaredVariables(Mcl mcl){
 		Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();
 		for (MclObject obj: mcl.getObjects()){
-			List<Variable> varList = getDeclaredSymbols(obj);
+			List<Variable> varList = getDeclaredVariables(obj);
 			if (varList.size() > 0)
 		    	declaredVariables.put(obj.getObjectName().getName(), varList);
 		}
 		return declaredVariables;
 	}
 	
-	public static Map<String, List<Variable>> getDeclaredSymbols(MOGObject mog){
-		Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();
-		for (MclObject obj: getMOGObjects(mog)){
-			List<Variable> varList = getDeclaredSymbols(obj);
-			if (varList.size() > 0)
-		    	declaredVariables.put(obj.getObjectName().getName(), varList);
-		}
-		return declaredVariables;
-	}
-	
-	public static List<Variable> getDeclaredSymbols(MclObject obj){
+	public static List<Variable> getDeclaredVariables(MclObject obj){
 		List<Variable> varList = new ArrayList<Variable>();
 		TreeIterator<EObject> symbolIterator = obj.eAllContents();
 		while (symbolIterator.hasNext()) {
@@ -344,15 +274,25 @@ public class Utils {
     			if (FunctionValidator.libraries.contains(functName))
     				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariables(functCall.getArguments()));
 	    	}
-	    	//For MOGs: aliases for imported objects
 	    	if (container instanceof ImportObjectStatementImpl){
 	    		ImportObjectStatement s = (ImportObjectStatement) container;
 	    		if (s.getSymbolName() != null){
-					//varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.TYPE_OBJ_REF_MODEL));
+					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s)));
+					//varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.TYPE_OBJ_REF));
 	    		}
 	    	}
 		}
 		return varList;
+	}
+	
+	public static Map<String, List<Variable>> getDeclaredVariables(MOGObject mog){
+		Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();
+		for (MclObject obj: getMOGObjects(mog)){
+			List<Variable> varList = getDeclaredVariables(obj);
+			if (varList.size() > 0)
+		    	declaredVariables.put(obj.getObjectName().getName(), varList);
+		}
+		return declaredVariables;
 	}
 	
 	public static HashSet<String> getDerivativeVariables(ModelObject m){

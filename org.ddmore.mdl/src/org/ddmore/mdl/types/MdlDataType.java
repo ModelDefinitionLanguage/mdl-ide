@@ -13,35 +13,11 @@ import java.util.List;
 
 import org.ddmore.mdl.domain.FunctionSignature;
 import org.ddmore.mdl.domain.Variable;
-import org.ddmore.mdl.mdl.AdditiveExpression;
-import org.ddmore.mdl.mdl.AndExpression;
-import org.ddmore.mdl.mdl.AnyExpression;
-import org.ddmore.mdl.mdl.DistributionType;
-import org.ddmore.mdl.mdl.EnumType; 
-import org.ddmore.mdl.mdl.Expression;
-import org.ddmore.mdl.mdl.ExpressionBranch;
-import org.ddmore.mdl.mdl.FunctionCall;
-import org.ddmore.mdl.mdl.IndividualVarType;
-import org.ddmore.mdl.mdl.InputFormatType;
-import org.ddmore.mdl.mdl.Mcl;
-import org.ddmore.mdl.mdl.LogicalExpression;
-import org.ddmore.mdl.mdl.MclObject;
-import org.ddmore.mdl.mdl.MultiplicativeExpression;
-import org.ddmore.mdl.mdl.OrExpression;
-import org.ddmore.mdl.mdl.PkParameterType;
-import org.ddmore.mdl.mdl.PowerExpression;
-import org.ddmore.mdl.mdl.RandomList;
-import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.SymbolName;
-import org.ddmore.mdl.mdl.TargetType;
-import org.ddmore.mdl.mdl.TrialType;
-import org.ddmore.mdl.mdl.UnaryExpression;
-import org.ddmore.mdl.mdl.UseType;
-import org.ddmore.mdl.mdl.VariabilityType;
-import org.ddmore.mdl.mdl.Vector;
+import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.FunctionValidator;
 import org.ddmore.mdl.validation.Utils;
+
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 public enum MdlDataType {	
@@ -52,10 +28,9 @@ public enum MdlDataType {
     TYPE_NAT, TYPE_PNAT, TYPE_PREAL, TYPE_PROBABILITY,
     //References to variables and mathematical expressions
 	TYPE_REF, TYPE_REF_DERIV, TYPE_EXPR,  
-	//Matrix
-	TYPE_MATRIX, TYPE_DIAG,
 	//References to objects
-	TYPE_OBJ_REF, TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_OBJ_REF_TASK, TYPE_OBJ_REF_DESIGN,
+	TYPE_OBJ_REF, TYPE_OBJ_REF_MOG,
+	TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_OBJ_REF_TASK, TYPE_OBJ_REF_DESIGN,
 	//Nested lists
 	TYPE_LIST, TYPE_RANDOM_LIST, 
     
@@ -178,6 +153,7 @@ public enum MdlDataType {
 			case TYPE_EXPR: return true;  
 			//References to objects
 			case TYPE_OBJ_REF: return isObjectReference(expr);
+			case TYPE_OBJ_REF_MOG: return isObjectReference(expr, TYPE_OBJ_REF_MOG);
 			case TYPE_OBJ_REF_MODEL: isObjectReference(expr, TYPE_OBJ_REF_MODEL);
 			case TYPE_OBJ_REF_DATA: return isObjectReference(expr, TYPE_OBJ_REF_DATA);
 			case TYPE_OBJ_REF_PARAM: return isObjectReference(expr, TYPE_OBJ_REF_PARAM);
@@ -351,8 +327,11 @@ public enum MdlDataType {
 		SymbolName s = getReference(expr);
 		if (s != null) {
 			Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
-			if (mcl != null)
-				return Utils.getDeclaredObjects(mcl).containsKey(s.getName());
+			if (mcl != null){
+				List<Variable> objects = Utils.getDeclaredObjects(mcl);
+				for (Variable obj: objects)
+					if (obj.getName().equals(s.getName())) return true;
+			}
 		}
 		return false;
 	}
@@ -361,8 +340,11 @@ public enum MdlDataType {
 		SymbolName s = getReference(orExpr);
 		if (s != null) {
 			Mcl mcl = (Mcl) orExpr.eResource().getContents().get(0);
-			if (mcl != null)
-				return (Utils.getDeclaredObjects(mcl).get(s.getName()) == type);
+			if (mcl != null){
+				List<Variable> objects = Utils.getDeclaredObjects(mcl);
+				for (Variable obj: objects)
+					if (obj.getName().equals(s.getName()) && obj.getType() == type) return true;
+			}
 		}
 		return false;
 	}
@@ -405,9 +387,6 @@ public enum MdlDataType {
 		return (type == TYPE_STRING);
 	}	
 	
-	///////////////////////////////////////////////
-	//TODO: Override to derive types
-	///////////////////////////////////////////////
 	private static boolean isPositiveNatural(OrExpression orExpr) {
 		String str = MdlPrinter.getInstance().toStr(orExpr);
 		if (isPositiveNatural(str)) return true;
@@ -452,9 +431,6 @@ public enum MdlDataType {
 		return false;
 	}
 	
-	////////////////////////////////////////////////////////
-	//String-based type derivation
-	////////////////////////////////////////////////////////
 	private static boolean isPositiveNatural(String value) {
 		try{
 			Integer x = Integer.parseInt(value);
@@ -745,7 +721,7 @@ public enum MdlDataType {
 			//Careful with recursive call!
 			MclObject mclObj = Utils.getMclObject(unaryExpr.getSymbol());
 			if (mclObj != null)
-				for (Variable var: Utils.getDeclaredSymbols(mclObj)){
+				for (Variable var: Utils.getDeclaredVariables(mclObj)){
 					if (var.getName() == unaryExpr.getSymbol().getName())
 						return var.getType();
 				}
@@ -762,5 +738,22 @@ public enum MdlDataType {
 		if (functSig != null)
 			return functSig.getType();
 		return TYPE_REAL;
+	}
+
+	public static MdlDataType getDerivedType(ImportObjectStatement s){
+		MclObject obj = Utils.getMclObject(s);
+		if (obj.getMogObject() != null){
+			for (MclObject o: Utils.getMOGObjects(obj.getMogObject())){
+				if (o.getObjectName().getName().equals(s.getObjectName().getName())) {
+					if (o.getModelObject() != null) return TYPE_OBJ_REF_MODEL;
+					if (o.getParameterObject() != null) return TYPE_OBJ_REF_PARAM;
+					if (o.getDataObject() != null) return TYPE_OBJ_REF_DATA;
+					if (o.getTaskObject() != null) return TYPE_OBJ_REF_TASK;
+					if (o.getDesignObject() != null) return TYPE_OBJ_REF_DESIGN;
+					if (o.getMogObject() != null) return TYPE_OBJ_REF_MOG;
+				}
+			}
+		}
+		return TYPE_UNDEFINED;
 	}
 }

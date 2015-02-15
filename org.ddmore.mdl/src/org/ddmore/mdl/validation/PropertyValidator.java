@@ -22,7 +22,6 @@ import org.ddmore.mdl.mdl.impl.PopulationFeaturesBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
-import org.ddmore.mdl.mdl.impl.TaskObjectBlockImpl;
 import org.ddmore.mdl.types.DefaultValues;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -56,7 +55,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 
 	public final static String MSG_TARGET_LOCATION = "Target code block is not used inline, please specify location";
 
-	//SIMULATE, ESTIMATE
+	//Task object
 	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_VECTOR_STRING, false);
 	final public static Attribute attr_task_max = new Attribute("max", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_task_sig = new Attribute("sig", MdlDataType.TYPE_NAT, false);
@@ -69,7 +68,9 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt, attr_task_target, attr_task_version);
 	final public static List<Attribute> attrs_task_estimate = Arrays.asList(
 			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt, attr_task_target, attr_task_version);
-
+	final public static List<Attribute> attrs_task_evaluate = Arrays.asList();
+	final public static List<Attribute> attrs_task_optimise = Arrays.asList();
+	
 	//DATA
 	final public static Attribute attr_data_ignore = new Attribute("ignore", MdlDataType.TYPE_BOOLEAN, false);
 	final public static Attribute attr_data_accept = new Attribute("accept", MdlDataType.TYPE_BOOLEAN, false);
@@ -257,22 +258,20 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	@Check
 	//External target blocks should have location defined
 	public void checkTargetLocation(TargetBlock t){
-		EObject container = t.eContainer();
-		if (!(container instanceof TaskObjectBlockImpl)){
-			for (PropertyDeclaration p: t.getStatements())
-				if (p.getPropertyName().getName().equals(attr_location.getName())) return;
-			warning(MSG_TARGET_LOCATION, 
-				MdlPackage.Literals.TARGET_BLOCK__STATEMENTS,
-					MSG_TARGET_LOCATION, t.getIdentifier());
-		}
+		for (PropertyDeclaration p: t.getStatements())
+			if (p.getPropertyName().getName().equals(attr_location.getName())) return;
+		warning(MSG_TARGET_LOCATION, 
+			MdlPackage.Literals.TARGET_BLOCK__STATEMENTS,
+				MSG_TARGET_LOCATION, t.getIdentifier());
 	}
 	
 	Boolean isPropertyContainer(EObject container){
-		return (container instanceof EstimateTaskImpl ||
+		return (
+		container instanceof EstimateTaskImpl ||
 		container instanceof SimulateTaskImpl ||
-		container instanceof ModelBlockImpl ||
 		container instanceof EvaluateTaskImpl ||
 		container instanceof OptimiseTaskImpl ||
+		container instanceof ModelBlockImpl ||
 		container instanceof DataBlockImpl ||
 		container instanceof SourceBlockImpl ||
 		container instanceof TargetBlockImpl ||
@@ -288,6 +287,10 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			return attrs_task_data;
 		if (obj instanceof ModelBlockImpl)
 			return attrs_task_model;
+		if (obj instanceof EvaluateTaskImpl)
+			return attrs_task_evaluate;
+		if (obj instanceof OptimiseTaskImpl)
+			return attrs_task_optimise;
 		if (obj instanceof SourceBlockImpl)
 			return attrs_source;
 		if (obj instanceof TargetBlockImpl)

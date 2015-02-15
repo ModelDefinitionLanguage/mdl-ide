@@ -34,6 +34,7 @@ import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
+import org.ddmore.mdl.mdl.impl.MappingBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
@@ -209,6 +210,10 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_min = new Attribute("min", MdlDataType.TYPE_RANDOM_LIST, false);
 	final public static Attribute attr_max = new Attribute("max", MdlDataType.TYPE_RANDOM_LIST, false);
 	
+	/*MOG Object*/
+	final public static Attribute attr_model = new Attribute("model", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_EXPR), true);
+	final public static Attribute attr_data = new Attribute("data", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_EXPR), true);
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
 	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_type, attr_define, attr_units, 
@@ -255,6 +260,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_designSpace = Arrays.asList(attr_name_ref, attr_admTime, attr_numberSamples);
 	final public static List<Attribute> attrs_hyperSpace = Arrays.asList(attr_name_ref, attr_min, attr_max, attr_admTime, attr_numberSamples);
 	
+	/*MOG object*/
+	final public static List<Attribute> attrs_mapping = Arrays.asList(attr_model, attr_data);
+			
 	public static List<Attribute> getAllAttributes(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return attrs_dataInput; 
@@ -280,6 +288,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof SamplingBlockImpl) return attrs_sampling;      
 		if (obj instanceof DesignSpaceBlockImpl) return attrs_designSpace;   
 		if (obj instanceof HyperSpaceBlockImpl) return attrs_hyperSpace; 
+		/*MOG object*/
+		if (obj instanceof MappingBlockImpl) return attrs_mapping;  		
 		return null;
 	}
 	
@@ -458,7 +468,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			obj instanceof ActionBlockImpl ||
 			obj instanceof SamplingBlockImpl ||
 			obj instanceof DesignSpaceBlockImpl ||
-			obj instanceof HyperSpaceBlockImpl);
+			obj instanceof HyperSpaceBlockImpl ||
+			//MOG object
+			obj instanceof MappingBlockImpl);
 	}
-
 }

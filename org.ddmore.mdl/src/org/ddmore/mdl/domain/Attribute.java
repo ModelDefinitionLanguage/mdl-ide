@@ -9,7 +9,12 @@ package org.ddmore.mdl.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.ddmore.mdl.mdl.DistributionType;
+import org.ddmore.mdl.mdl.TargetType;
+import org.ddmore.mdl.mdl.UseType;
+import org.ddmore.mdl.types.DefaultValues;
 import org.ddmore.mdl.types.MdlDataType;
+import org.ddmore.mdl.types.VariableType;
 
 public class Attribute {
 
@@ -87,7 +92,23 @@ public class Attribute {
 	}
 	
 	public String getDefaultValue(){
-		return defaultValue;
+		if (defaultValue.length() > 0)
+			return defaultValue;
+		if (types.size() > 0){
+			MdlDataType type = types.get(0);
+			switch (type){
+				case TYPE_REAL: case TYPE_PROBABILITY: case TYPE_NAT: case TYPE_INT: return "0";
+				case TYPE_PREAL: case TYPE_PNAT:  return "1";
+				case TYPE_REF:      return DefaultValues.VAR_NAME;
+				case TYPE_BOOLEAN:  return Boolean.TRUE.toString();
+				case TYPE_TARGET:       return TargetType.NMTRAN_CODE.toString();
+				case TYPE_VAR_TYPE:     return VariableType.CC_CONTINUOUS.toString();
+				case TYPE_USE:          return UseType.ID.toString();
+				case TYPE_DISTRIBUTION: return DistributionType.NORMAL.toString();
+			default: return "";
+			}
+		}
+		return "";
 	}
 	
 	public AttributeDependency getDependency(){

@@ -252,9 +252,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		MdlDataType type = attribute.getType();
 		String value = attribute.getDefaultValue();
 		switch (type){
-			case TYPE_PREAL:
-			case TYPE_REAL:
-			case TYPE_PROBABILITY: return createNumericExpression(value);
+			case TYPE_NAT: case TYPE_INT: case TYPE_REAL: case TYPE_PNAT: case TYPE_PREAL: 
+				case TYPE_PROBABILITY: return createNumericExpression(value);
 			case TYPE_REF: return createReferenceExpression(value);
 			case TYPE_BOOLEAN: return createBooleanExpression(value);
 			case TYPE_TARGET: return createTargetLanguageExpression(value);
@@ -263,10 +262,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			case TYPE_DISTRIBUTION: return createDistributionExpression(value);
 			default:
 				return createStringExpression(value);
-		}
-	
+		}	
 	}
-	
 	
 	private AnyExpression createVarTypeExpression(String value) {
 		VarType tl = MdlFactory.eINSTANCE.createVarType();
@@ -457,7 +454,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
     //Fix variable references
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void removeVariable(final Issue issue, IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Remove symbol", "Remove symbol", "remove.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
@@ -517,7 +514,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	//DATA_INPUT_VARIABLES
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void addVariableToInputVariables(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String blockName = grammarAccess.getDataInputBlockAccess().getIdentifierDATA_INPUT_VARIABLESKeyword_0_0().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
@@ -554,7 +551,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	//RANDOM_VARIABLE_DEFINITION
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void addVariableToRandomVariables(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String blockName = grammarAccess.getRandomVariableDefinitionBlockAccess().getIdentifierRANDOM_VARIABLE_DEFINITIONKeyword_0_0().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
@@ -581,7 +578,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	//GROUP_VARIABLES
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void addVariableToGroupVariables(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String blockName = grammarAccess.getGroupVariablesBlockAccess().getIdentifierGROUP_VARIABLESKeyword_0_0().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
@@ -613,7 +610,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	//MIXTURE
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void addVariableToMixture(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String blockName = grammarAccess.getMixtureBlockAccess().getIdentifierMIXTUREKeyword_0_0().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
@@ -656,7 +653,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	//INDIVIDUAL_VARIABLES
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void addVariableToIndividualVariables(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String blockName = grammarAccess.getIndividualVariablesBlockAccess().getIdentifierINDIVIDUAL_VARIABLESKeyword_0_0().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
@@ -683,7 +680,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	//MODEL_PREDICTION
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void addVariableToModelPrediction(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String blockName = grammarAccess.getModelPredictionBlockAccess().getIdentifierMODEL_PREDICTIONKeyword_0_0().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
@@ -715,7 +712,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	//ODE
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void addVariableToOde(final Issue issue, IssueResolutionAcceptor acceptor) {
 		String blockName = grammarAccess.getOdeBlockAccess().getIdentifierDEQKeyword_0_0_1().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
@@ -758,7 +755,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	//OBSERVATION
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void addVariableToObservation(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String blockName = grammarAccess.getObservationBlockAccess().getIdentifierOBSERVATIONKeyword_0_0().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
@@ -785,7 +782,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 
 	//SIMULATION
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void addVariableToSimulation(final Issue issue, IssueResolutionAcceptor acceptor) {
 		final String blockName = grammarAccess.getSimulationBlockAccess().getIdentifierSIMULATIONKeyword_0_0().getValue();
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
@@ -812,7 +809,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 
 	//ESTIMATION
 		//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-		@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+		@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 		public void addVariableToEstimation(final Issue issue, IssueResolutionAcceptor acceptor) {
 			final String blockName = grammarAccess.getEstimationBlockAccess().getIdentifierESTIMATIONKeyword_0_0().getValue();
 			acceptor.accept(issue, "Add variable declaration to " + blockName, 
@@ -838,7 +835,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		}	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//Fix parameteter references
+	//Fix parameter references
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		ParameterObject getParameterObject(EObject element){
 			Resource resource = element.eResource();
@@ -854,7 +851,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 
 
 		//STRUCTURAL
-		@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+		@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 		public void addVariableToStructural(final Issue issue, IssueResolutionAcceptor acceptor) {
 			final String blockName = grammarAccess.getStructuralBlockAccess().getIdentifierSTRUCTURALKeyword_0_0().getValue();
 			acceptor.accept(issue, "Add parameter declaration to " + blockName, 
@@ -880,7 +877,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		}	
 		
 		//VARIABILITY
-		@Fix(MdlJavaValidator.MSG_SYMBOL_UNKNOWN)
+		@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 		public void addVariableToVariability(final Issue issue, IssueResolutionAcceptor acceptor) {
 			final String blockName = grammarAccess.getVariabilityBlockAccess().getIdentifierVARIABILITYKeyword_0_0().getValue();
 			acceptor.accept(issue, "Add parameter declaration to " + blockName, 
@@ -926,7 +923,4 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		newSymbol.setRandomList(list);
 		block.getVariables().add(newSymbol);
 	}
-	
-	//PRIOR_PARAMETERS
-	//block, diag, same
 }
