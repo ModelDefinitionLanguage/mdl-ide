@@ -18,9 +18,9 @@ import eu.ddmore.libpharmml.PharmMlFactory;
 /**
  * Tests integration with libPharmML
  */
-public class LibPharmMLTest {
+public class LibPharmMLIntegrationTest {
 
-    private static final Logger LOG = Logger.getLogger(LibPharmMLTest.class);
+    private static final Logger LOG = Logger.getLogger(LibPharmMLIntegrationTest.class);
 
     @Test
     public void shouldValidatePharmMLResource() {
@@ -28,7 +28,7 @@ public class LibPharmMLTest {
         InputStream in = null;
         String modelFile = "/pharmml/0.3.1/warfarin_PK_ODE/Warfarin-ODE-latest.xml";
         try {
-            in = LibPharmMLTest.class.getResourceAsStream(modelFile);
+            in = LibPharmMLIntegrationTest.class.getResourceAsStream(modelFile);
             IPharmMLResource res = libPharmML.createDomFromResource(in);
             IPharmMLValidator validator = libPharmML.getValidator();
             IValidationReport rpt = validator.createValidationReport(res);
@@ -42,9 +42,7 @@ public class LibPharmMLTest {
                 fail("The validation failed");
             }
         } finally {
-            if (in != null) {
-                IOUtils.closeQuietly(in);
-            }
+            IOUtils.closeQuietly(in);
         }
     }
 }
