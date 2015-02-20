@@ -2,7 +2,7 @@
 <feature
       id="org.ddmore.mdl.sdk.jre" 
       label="%label"
-      version="1.0.1"
+      version="1.0.2"
       provider-name="%provider">
       
 	<!-- Note that the version number of this Feature is deliberately fixed (i.e. not having a .qualifier suffix)
