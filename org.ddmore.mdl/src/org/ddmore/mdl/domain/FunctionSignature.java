@@ -170,7 +170,7 @@ public class FunctionSignature {
 		return new ArrayList<Variable>();
 	}
 	
-	private String getParameterKey(Arguments arguments){
+	public String getParameterKey(Arguments arguments){
 		String valueString = "";
 		if (paramSets.size() > 0) {
 			FunctionParameterSet params =  this.paramSets.get(0);			

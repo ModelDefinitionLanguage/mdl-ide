@@ -154,8 +154,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		List<Variable> vars = Utils.getExternalLibraryVariables(ref);
 		if (vars != null){
 			List<String> params = new ArrayList<String>();
-   			for (Variable var: vars)
-   				params.add(var.getName());
+   			for (Variable var: vars) params.add(var.getName());
     		ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
 	       	if (paramRef != null){
 	       		if (!params.contains(paramRef.getName()))
@@ -183,8 +182,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		List<Variable> vars = Utils.getImportedVariables(ref);
 		if (vars != null){
 			List<String> params = new ArrayList<String>();
-   			for (Variable var: vars)
-   				params.add(var.getName());
+   			for (Variable var: vars) params.add(var.getName());
 			ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
    			if (paramRef != null){
    				if (!params.contains(paramRef.getName()))
