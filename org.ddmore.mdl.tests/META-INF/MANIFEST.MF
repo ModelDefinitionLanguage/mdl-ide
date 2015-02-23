@@ -17,5 +17,5 @@ Import-Package: eu.ddmore.libpharmml;version="0.3.12",
  org.apache.log4j;version="1.2.15",
  org.eclipse.xtext.junit4,
  org.junit;version="4.5.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.ddmore.mdl
