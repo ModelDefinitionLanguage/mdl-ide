@@ -39,7 +39,6 @@ import org.ddmore.mdl.mdl.InputFormatType
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.mdl.IndividualVarType
 import org.ddmore.mdl.mdl.TrialType
-import org.ddmore.mdl.mdl.DistributionType
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.PkParameterType
@@ -213,8 +212,6 @@ class MdlPrinter {
 			return t.pkParameter.toString
 		if (t.individualVar != IndividualVarType::NO_INDIVIDUAL_VAR)
 			return t.individualVar.toString
-		if (t.distribution != DistributionType::NO_DISTRIBUTION)
-			return t.distribution.toString
 	}
 	
 	def toStr(VarType t) {
@@ -234,7 +231,7 @@ class MdlPrinter {
 	
 	def toStr(RandomList l){
 		if (l.arguments != null){
-			return l.identifier + "(" + l.arguments.toStr + ")";
+			return "~" + l.type + "(" + l.arguments.toStr + ")";
 		}
 		return "";
 	}

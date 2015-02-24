@@ -332,7 +332,11 @@ MOGObjectBlock:
  
  MappingBlock:
  	identifier = 'MAPPING'
- 	BEGIN mappings += List* END
+ 	BEGIN mappings += MappingBlockStatement* END
+ ;
+ 
+ MappingBlockStatement:
+ 	obj1 = SymbolName '.' var1 = SymbolName '=' obj2 = SymbolName '.' var2 = SymbolName
  ;
 
 //////////////////////////////////////////////////////////
@@ -398,7 +402,6 @@ EnumType:
 	input = InputFormatType |
 	trial = TrialType |
 	individualVar = IndividualVarType |
-	distribution = DistributionType |
 	pkParameter = PkParameterType
 ;
 
@@ -431,6 +434,7 @@ enum TrialType:
 	no_Trial | simple | combined | sequential 
 ;
 
+/*
 enum DistributionType: 
 	no_Distribution | bernoulli | betaDistribution | binomial | discrete | cauchy | chiSquare | dirichlet | exponential | 	
 	fDistribution | gamma | geometric | hypergeometric | inverseGamma |	laplace | logistic |
@@ -439,7 +443,7 @@ enum DistributionType:
 	discreteUnivariateMixtureModel | discreteMultivariateMixtureModel |
     categoricalUnivariateMixtureModel | categoricalMultivariateMixtureModel |
 	continuousMultivariateMixtureModel | continuousUnivariateMixtureModel
-;
+;*/
 
 terminal CONSTANT:
 	'INF' | 'T' | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
@@ -456,7 +460,12 @@ AnyExpression:
 	expression = Expression |
 	list = List | 
 	vector = Vector |
+	matching = Matching |
 	type = EnumType 
+;
+
+Matching:
+	symbolName = SymbolName '<=>' condition = OrExpression
 ;
 
 List:
@@ -464,7 +473,11 @@ List:
 ;
 
 RandomList:
-	identifier = '~' BEGIN arguments = Arguments END
+	'~' type = DistributionName '(' arguments = Arguments? ')'
+;
+
+DistributionName:
+	name = ID
 ;
 
 Arguments: 
@@ -477,8 +490,7 @@ Argument:
 ;
 
 ParExpression:
-	'(' expression = Expression')';
-	
+	'(' expression = Expression')';	
 	
 Expression:
 	expression = OrExpression ('when' condition = OrExpression 

@@ -107,8 +107,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public void checkReferenceToAttribute(FullyQualifiedArgumentName ref) {
 		//Skip if the reference is to the function call
 		if (checkReferenceToFuctionOutput(ref)) return;
-		//Skip if the reference is to the imported object
-		if (checkReferenceToImportedVariable(ref)) return;
 		//Skip attribute declarations
 		if (ref.eContainer() instanceof SymbolDeclarationImpl) return;
 		
@@ -177,28 +175,23 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	    return false;
 	}
 	
-	//Validate a fully qualified argument whose parent refers to a variable that represents an external object 
-	private boolean checkReferenceToImportedVariable(FullyQualifiedArgumentName ref) {
-		List<Variable> vars = Utils.getImportedVariables(ref);
-		if (vars != null){
-			List<String> params = new ArrayList<String>();
-   			for (Variable var: vars) params.add(var.getName());
-			ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
-   			if (paramRef != null){
-   				if (!params.contains(paramRef.getName()))
-   					warning(MSG_UNRESOLVED_EXTERNAL_VARIABLE + ": " + 
-   						paramRef.getName() + " is not in the reference set " + Utils.printList(params), 
-   						MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-   						MSG_UNRESOLVED_EXTERNAL_VARIABLE, ref.getParent().getName());
-   			} 
-   			else 
+	//Validate references to variables from in external blocks; 
+	@Check
+	public void checkReferenceToImportedVariable(MappingBlockStatement st) {
+		List<Variable> vars1 = Utils.getImportedVariables(st.getObj1());
+		List<Variable> vars2 = Utils.getImportedVariables(st.getObj2());
+		if (vars1 != null) checkVariable(vars1, st.getVar1());
+		if (vars2 != null) checkVariable(vars2, st.getVar2());
+	}
+	
+	private void checkVariable(List<Variable> vars, SymbolName ref){
+		List<String> varNames = new ArrayList<String>();
+   		for (Variable var: vars) varNames.add(var.getName());
+   			if (!varNames.contains(ref.getName()))
    				warning(MSG_UNRESOLVED_EXTERNAL_VARIABLE + ": " + 
-   					"External variables cannot be addressed by index", 
+   					ref.getName() + " is not in the reference set " + Utils.printList(varNames), 
    					MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-   					MSG_UNRESOLVED_EXTERNAL_VARIABLE, ref.getParent().getName());
-   			return true; //skip list attribute check
-		}
-		return false;
+   					MSG_UNRESOLVED_EXTERNAL_VARIABLE, ref.getName());
 	}
 	
 }

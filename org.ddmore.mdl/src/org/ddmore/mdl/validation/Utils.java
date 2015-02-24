@@ -336,13 +336,13 @@ public class Utils {
 	    return null;
 	}
 	
-	public static List<Variable> getImportedVariables(FullyQualifiedArgumentName ref){
+	public static List<Variable> getImportedVariables(SymbolName ref){
 		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
 	    while (iterator.hasNext()){
 	    	EObject obj = iterator.next();
 	    	if (obj instanceof ImportObjectStatementImpl){
 	    		ImportObjectStatement s = (ImportObjectStatement) obj;
-	    		if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getParent().getName())) {	    			
+	    		if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getName())) {	    			
 	    			EObject container = s.getObjectName().eContainer();
 	    			if (container instanceof MclObjectImpl){
 	    				MclObject o = (MclObject)container;
@@ -382,4 +382,18 @@ public class Utils {
 	    return args;
 	}
 	
+	public static <E extends Enum<E>> boolean isInEnum(String value, Class<E> enumClass) {
+		  for (E e : enumClass.getEnumConstants()) {
+		    if(e.name().equals(value)) { return true; }
+		  }
+		  return false;
+	}
+
+	public static <E extends Enum<E>> E getEnum(String value, Class<E> enumClass) {
+		  for (E e : enumClass.getEnumConstants()) {
+		    if(e.name().equals(value)) { return e; }
+		  }
+		  return null;
+	}
+
 }

@@ -129,9 +129,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*DATA_INPUT_VARIABLES*/
 	final public static Attribute attr_req_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
 	final public static Attribute attr_define = new Attribute("define", MdlDataType.TYPE_LIST, false);
-	final public static Attribute attr_recode = new Attribute("recode", MdlDataType.TYPE_LIST, false);
-	final public static Attribute attr_boundaries = new Attribute("boundaries", MdlDataType.TYPE_VECTOR_REAL, false);
-	final public static Attribute attr_missing = new Attribute("missing", MdlDataType.TYPE_INT, false);
 	
 	/*INDIVIDUAL_VARIABLES*/
 	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_INDIVIDUAL_VAR, true);
@@ -217,8 +214,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
-	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_type, attr_define, attr_units, 
-			attr_recode, attr_boundaries, attr_missing);
+	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_type, attr_define, attr_units);
 	final public static List<Attribute> attrs_dataDerived = Arrays.asList(attr_req_type, attr_expr_value, attr_units);
 
 	/*Parameter object*/

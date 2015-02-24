@@ -6,14 +6,10 @@ package org.ddmore.mdl.ui.contentassist;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ddmore.mdl.domain.Attribute;
-import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.Argument;
-import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.IndividualVarType;
 import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.PropertyDeclaration;
-import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.TargetType;
 import org.ddmore.mdl.mdl.TrialType;
 import org.ddmore.mdl.mdl.UseType;
@@ -23,14 +19,12 @@ import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.PropertyDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.RandomListImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
 import org.ddmore.mdl.types.VariableType;
 import org.ddmore.mdl.ui.contentassist.AbstractMdlProposalProvider;
 import org.ddmore.mdl.ui.outline.Images;
 import org.ddmore.mdl.validation.AttributeValidator;
-import org.ddmore.mdl.validation.DistributionValidator;
 import org.ddmore.mdl.validation.PropertyValidator;
 import org.ddmore.mdl.validation.UnitValidator;
 import org.ddmore.mdl.validation.Utils;
@@ -45,7 +39,6 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
 import com.google.inject.Inject;
 
-import eu.ddmore.converter.mdlprinting.MdlPrinter;
 /**
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
  */
@@ -65,24 +58,23 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				addProposals(context, acceptor, attributes, img);
 			}
 		}
-		if (model.eContainer() instanceof RandomListImpl){
-			RandomList randomList = (RandomList)model.eContainer();
-			AnyExpression type = MdlPrinter.getInstance().getAttributeExpression(randomList.getArguments(), DistributionValidator.attr_type.getName());
-			Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_ATTRIBUTE));
-			if (type != null && type.getType() != null && type.getType().getDistribution() != DistributionType.NO_DISTRIBUTION){
-				List<Attribute> recognized_attrs = DistributionValidator.distr_attrs.get(type.getType().getDistribution());
-				if (recognized_attrs != null){
-					List<String> attributes = Utils.getAllNames(recognized_attrs);
-					addProposals(context, acceptor, attributes, img);
-				}
-			} else {
-				//suggest attribute type
-				List<String> attributes = new ArrayList<String>();
-				attributes.add(DistributionValidator.attr_type.getName());
+	}
+	
+	/*
+	@Override
+	public void completeRandomList_DistributionName(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		RandomList randomList = (RandomList)model;
+		DistributionType type = Utils.getEnum(randomList.getType().getName(), DistributionType.class);
+		Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_ATTRIBUTE));
+		if (type != null){
+			List<Attribute> recognized_attrs = DistributionValidator.distr_attrs.get(type);
+			if (recognized_attrs != null){
+				List<String> attributes = Utils.getAllNames(recognized_attrs);
 				addProposals(context, acceptor, attributes, img);
 			}
-		}		
-	}
+		}
+	}*/
+	
 	
 	@Override
 	public void completeArgument_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
@@ -96,17 +88,6 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
 				addProposals(context, acceptor, attributes, img); return;
 			} else		
-			//type (distribution)
-			if (arg.eContainer().eContainer() instanceof RandomListImpl){
-				if (arg.getArgumentName().getName().equals(DistributionValidator.attr_type.getName())){
-					List<String> attributes = new ArrayList<String>();
-					for (DistributionType value: DistributionType.VALUES)
-						if (value != DistributionType.NO_DISTRIBUTION)	
-							attributes.add(value.toString()); 
-					Image img = imageHelper.getImage(Images.getPath(Images.DISTRIBUTION_TYPE));
-					addProposals(context, acceptor, attributes, img);			
-				}
-			} else
 			//type			
 			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_req_type.getName())){
 				EObject container = AttributeValidator.findAttributeContainer(arg);

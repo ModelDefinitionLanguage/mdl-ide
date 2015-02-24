@@ -604,7 +604,6 @@ public enum MdlDataType {
 		if (expr.getVariability() != VariabilityType.NO_VARIABILITY) return TYPE_RANDOM_EFFECT;
 		if (expr.getInput() != InputFormatType.NO_INPUT_FORMAT) return TYPE_INPUT_FORMAT;
 		if (expr.getIndividualVar() != IndividualVarType.NO_INDIVIDUAL_VAR) return TYPE_INDIVIDUAL_VAR;
-		if (expr.getDistribution() != DistributionType.NO_DISTRIBUTION) return TYPE_DISTRIBUTION;
 		if (expr.getTrial() != TrialType.NO_TRIAL) return TYPE_TRIAL;
 		if (expr.getPkParameter() != PkParameterType.NO_PARAM) return TYPE_PK_PARAMETER;
 		return TYPE_UNDEFINED;
@@ -760,20 +759,14 @@ public enum MdlDataType {
 	
 	private static MdlDataType getDerivedType(FullyQualifiedArgumentName ref){
 		//Find attribute definition and type its value
-		//FullyQualifiedArgumentName refers to imported variables
-		List<Variable> vars = Utils.getImportedVariables(ref);
-		if (vars != null){
+		//FullyQualifiedArgumentName refers to external library variables
+		List<Variable> vars = Utils.getExternalLibraryVariables(ref);
+   		if (vars != null){
 			return getDerivedType(vars, ref.getSelectors().get(0));
-		} else {
-			//FullyQualifiedArgumentName refers to external library variables
-			vars = Utils.getExternalLibraryVariables(ref);
-   			if (vars != null){
-				return getDerivedType(vars, ref.getSelectors().get(0));
-   			} else {
-				//FullyQualifiedArgumentName refers to list attributes
-   				//TODO: Return expected attribute type
-   			}	   			
-		}
+   		} else {
+			//FullyQualifiedArgumentName refers to list attributes
+   			//TODO: Return expected attribute type
+   		}	   			
 		return TYPE_UNDEFINED;
 	}
 	

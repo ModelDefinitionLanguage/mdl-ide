@@ -9,7 +9,6 @@ package org.ddmore.mdl.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.TargetType;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.types.DefaultValues;
@@ -104,7 +103,6 @@ public class Attribute {
 				case TYPE_TARGET:       return TargetType.NMTRAN_CODE.toString();
 				case TYPE_VAR_TYPE:     return VariableType.CC_CONTINUOUS.toString();
 				case TYPE_USE:          return UseType.ID.toString();
-				case TYPE_DISTRIBUTION: return DistributionType.NORMAL.toString();
 			default: return "";
 			}
 		}

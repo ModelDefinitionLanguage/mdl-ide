@@ -13,7 +13,6 @@ import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.DesignObject;
 import org.ddmore.mdl.mdl.DesignObjectBlock;
-import org.ddmore.mdl.mdl.DistributionType;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.ExpressionBranch;
@@ -231,10 +230,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(OUTPUT_VARIABLES_BLOCK));
     }
 
-    protected Image _image(DistributionType e) {
-        return imageHelper.getImage(getPath(DISTRIBUTION_TYPE));
-    }
-    
     protected Image _image(TargetType e) {
         return imageHelper.getImage(getPath(TARGET_LANGUAGE));
     }
@@ -623,11 +618,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			createEStructuralFeatureNode(parentNode,
 			b, MdlPackage.Literals.ENUM_TYPE__VARIABILITY,
 			_image(b), b.getVariability().toString(), true); 
-		}  else if (b.getDistribution() != DistributionType.NO_DISTRIBUTION){
-			createEStructuralFeatureNode(parentNode,
-			b, MdlPackage.Literals.ENUM_TYPE__DISTRIBUTION,
-			_image(b), b.getDistribution().toString(), true); 
-		} 
+		}
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, VarType t){

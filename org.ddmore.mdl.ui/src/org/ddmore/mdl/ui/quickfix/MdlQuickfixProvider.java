@@ -15,7 +15,7 @@ import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
-import org.ddmore.mdl.mdl.DistributionType;
+import org.ddmore.mdl.mdl.DistributionName;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.Expression;
@@ -59,6 +59,7 @@ import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
+import org.ddmore.mdl.types.DistributionType;
 import org.ddmore.mdl.types.MdlDataType;
 import org.ddmore.mdl.types.VariableType;
 import org.ddmore.mdl.validation.AttributeValidator;
@@ -259,7 +260,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			case TYPE_TARGET: return createTargetLanguageExpression(value);
 			case TYPE_VAR_TYPE: return createVarTypeExpression(value);
 			case TYPE_USE: return createUseExpression(value);
-			case TYPE_DISTRIBUTION: return createDistributionExpression(value);
 			default:
 				return createStringExpression(value);
 		}	
@@ -293,15 +293,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		UseType tl = UseType.getByName(value);
 		EnumType t = MdlFactory.eINSTANCE.createEnumType();
 		t.setUse(tl);
-		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
-		expr.setType(t);
-		return expr;
-	}
-	
-	private AnyExpression createDistributionExpression(String value) {
-		DistributionType distribution = DistributionType.getByName(value);
-		EnumType t = MdlFactory.eINSTANCE.createEnumType();
-		t.setDistribution(distribution);
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
 		expr.setType(t);
 		return expr;
@@ -436,18 +427,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		attr.setArgumentName(argName);
 		attr.setExpression(attrExpr);
 		return attr;
-	}
-	
-	RandomList createRandomList(Attribute[] attributes){
-		RandomList list = MdlFactory.eINSTANCE.createRandomList();	
-		list.setIdentifier(grammarAccess.getRandomListAccess().getIdentifierTildeKeyword_0_0().getValue());
-		Arguments args = MdlFactory.eINSTANCE.createArguments();				
-		for (int i = 0; i < attributes.length; i++){
-			Argument attr = createArgument(attributes[i]);
-			args.getArguments().add(attr);
-		}
-		list.setArguments(args);
-		return list;
 	}
 		
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -917,10 +896,24 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 		symbName.setName(varName);
 		newSymbol.setSymbolName(symbName);
-		Attribute[] attributes = {DistributionValidator.attr_type, DistributionValidator.attr_mean, 
-				DistributionValidator.attr_var, DistributionValidator.attr_level};
-		RandomList list = createRandomList(attributes);
+		RandomList list = createNormalDistribution();
 		newSymbol.setRandomList(list);
 		block.getVariables().add(newSymbol);
 	}
+	
+	RandomList createNormalDistribution(){
+		Attribute[] attributes = {DistributionValidator.attr_mean, DistributionValidator.attr_var};
+		RandomList list = MdlFactory.eINSTANCE.createRandomList();	
+		DistributionName type = MdlFactory.eINSTANCE.createDistributionName();
+		type.setName(DistributionType.Normal.toString());
+		list.setType(type);
+		Arguments args = MdlFactory.eINSTANCE.createArguments();				
+		for (int i = 0; i < attributes.length; i++){
+			Argument attr = createArgument(attributes[i]);
+			args.getArguments().add(attr);
+		}
+		list.setArguments(args);
+		return list;
+	}
+
 }

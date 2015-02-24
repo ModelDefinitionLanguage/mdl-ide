@@ -14,20 +14,20 @@ import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.converter.mdl2pharmml.domain.Attribute
 import org.ddmore.mdl.types.MdlDataType
 import org.ddmore.mdl.mdl.AnyExpression
-import org.ddmore.mdl.mdl.DistributionType
+import org.ddmore.mdl.types.DistributionType
 
 class DistributionPrinter extends MdlPrinter{
 
 	//Recognised types of distributions and pairs (attribute, value type) to print as PharmML tags
 	private val distribution_attrs = newHashMap(
-		DistributionType::BERNOULLI.toString -> newHashMap(
+		DistributionType::Bernoulli.toString -> newHashMap(
 			DistributionValidator::attr_p.name -> new Attribute("probability", pVal)),          
-		DistributionType::BETA_DISTRIBUTION.toString -> newHashMap(
+		DistributionType::BetaDistribution.toString -> newHashMap(
 			DistributionValidator::attr_alpha.name  -> new Attribute("alpha", rVal), 
 			DistributionValidator::attr_beta.name  -> new Attribute("beta", rVal),  
 			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", pVal), 
 			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", pVal)),  
-		DistributionType::BINOMIAL.toString -> newHashMap(
+		DistributionType::Binomial.toString -> newHashMap(
 			DistributionValidator::attr_numberOfTrials.name  -> new Attribute("numberOfTrials", nVal), 
 			DistributionValidator::attr_probabilityOfSuccess.name  -> new Attribute("probabilityOfSuccess", pVal), 
 			DistributionValidator::attr_nTrials.name  -> new Attribute("numberOfTrials", nVal), 
@@ -35,44 +35,44 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_p_ofSuccess.name  -> new Attribute("probabilityOfSuccess", pVal), 
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
-		DistributionType::DISCRETE.toString -> newHashMap(
+		DistributionType::Categorical.toString -> newHashMap(
 			DistributionValidator::attr_probabilities.name  -> new Attribute("probabilities", pVal), 
 			DistributionValidator::attr_ncat.name  -> new Attribute("ncategories", nVal), 
 			DistributionValidator::attr_prob.name  -> new Attribute("probabilities", pVal), 
 			DistributionValidator::attr_categories.name  -> new Attribute("ncategories", nVal)),
-		DistributionType::CAUCHY.toString -> newHashMap(
+		DistributionType::Cauchy.toString -> newHashMap(
 			DistributionValidator::attr_location.name  -> new Attribute("location", rVal), 
 			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
 			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
 			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		DistributionType::CHI_SQUARE.toString -> newHashMap(
+		DistributionType::ChiSquare.toString -> newHashMap(
 			DistributionValidator::attr_pnat_degreesOfFreedom.name  -> new Attribute("degreesOfFreedom", pnVal), 
 			DistributionValidator::attr_pnat_dof.name  -> new Attribute("degreesOfFreedom", pnVal), 
 			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
 			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)), 
-		DistributionType::DIRICHLET.toString -> newHashMap(
+		DistributionType::Dirichlet.toString -> newHashMap(
 			DistributionValidator::attr_prealVector_alpha.name  -> new Attribute("concentration", prVal)),
-		DistributionType::EXPONENTIAL.toString -> newHashMap(
+		DistributionType::Exponential.toString -> newHashMap(
 			DistributionValidator::attr_alpha.name  -> new Attribute("rate", prVal), 
 			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
 			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)),
-		DistributionType::FDISTRIBUTION.toString -> newHashMap(
+		DistributionType::F.toString -> newHashMap(
 			DistributionValidator::attr_denominator.name  -> new Attribute("denominator", nVal), 
 			DistributionValidator::attr_numerator.name  -> new Attribute("numerator", nVal), 
 			DistributionValidator::attr_den.name  -> new Attribute("denominator", nVal), 
 			DistributionValidator::attr_num.name  -> new Attribute("numerator", nVal), 
 			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
 			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)),
-		DistributionType::GAMMA.toString -> newHashMap(
+		DistributionType::Gamma.toString -> newHashMap(
 			DistributionValidator::attr_shape.name  -> new Attribute("shape", prVal), 
 			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
 			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
 			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		DistributionType::GEOMETRIC.toString -> newHashMap(
+		DistributionType::Geometric.toString -> newHashMap(
 			DistributionValidator::attr_p.name  -> new Attribute("probability", pVal), 
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
-		DistributionType::HYPERGEOMETRIC.toString -> newHashMap(
+		DistributionType::Hypergeometric.toString -> newHashMap(
 			DistributionValidator::attr_numberOfSuccesses.name  -> new Attribute("numberOfSuccesses", nVal), 
 			DistributionValidator::attr_numberOfTrials.name  -> new Attribute("numberOfTrials", nVal), 
 			DistributionValidator::attr_populationSize.name  -> new Attribute("populationSize", nVal), 
@@ -82,54 +82,54 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_popSize.name  -> new Attribute("populationSize", nVal), 
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)), 
-		DistributionType::INVERSE_GAMMA.toString -> newHashMap(
+		DistributionType::InverseGamma.toString -> newHashMap(
 			DistributionValidator::attr_shape.name  -> new Attribute("shape", prVal), 
 			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
 			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
 			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)), 
-		DistributionType::LAPLACE.toString -> newHashMap(
+		DistributionType::Laplace.toString -> newHashMap(
 			DistributionValidator::attr_location.name  -> new Attribute("location", rVal), 
 			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal),
 			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
 			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)), 
-		DistributionType::LOGISTIC.toString -> newHashMap(
+		DistributionType::Logistic.toString -> newHashMap(
 			DistributionValidator::attr_location.name  -> new Attribute("location", rVal), 
 			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
 			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
 			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)), 
-		DistributionType::LOG_NORMAL.toString -> newHashMap(
+		DistributionType::LogNormal.toString -> newHashMap(
 			DistributionValidator::attr_median.name  -> new Attribute("logScale", rVal), 
 			DistributionValidator::attr_mu.name  -> new Attribute("logScale", rVal), 
 			DistributionValidator::attr_cv.name  -> new Attribute("shape", prVal), 
 			DistributionValidator::attr_var.name  -> new Attribute("shape", prVal), 
 			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
 			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)),
-		DistributionType::MULTINOMIAL.toString -> newHashMap(
+		DistributionType::Multinomial.toString -> newHashMap(
 			DistributionValidator::attr_numberOfTrials.name  -> new Attribute("numberOfTrials", nVal), 
 			DistributionValidator::attr_probabilities.name  -> new Attribute("probabilities", pVal), 
 			DistributionValidator::attr_nTrials.name  -> new Attribute("numberOfTrials", nVal), 
 			DistributionValidator::attr_prob.name  -> new Attribute("probabilities", pVal)), 
-		DistributionType::MULTIVARIATE_NORMAL.toString -> newHashMap(
+		DistributionType::MultivariateNormal.toString -> newHashMap(
 			DistributionValidator::attr_realVector_mean.name  -> new Attribute("meanVector", rVal), 
 			DistributionValidator::attr_cov.name  -> new Attribute("covarianceMatrix", rVal)), 
-		DistributionType::MULTIVARIATE_STUDENT_T.toString -> newHashMap(
+		DistributionType::MultivariateStudentT.toString -> newHashMap(
 			DistributionValidator::attr_realVector_mean.name  -> new Attribute("meanVector", rVal), 
 			DistributionValidator::attr_cov.name  -> new Attribute("covarianceMatrix", rVal), 
 			DistributionValidator::attr_pnat_degreesOfFreedom.name  -> new Attribute("degreesOfFreedom", pnVal), 
 			DistributionValidator::attr_pnat_dof.name  -> new Attribute("degreesOfFreedom", pnVal)), 
-		DistributionType::NEGATIVE_BINOMIAL.toString -> newHashMap(
+		DistributionType::NegativeBinomial.toString -> newHashMap(
 			DistributionValidator::attr_numberOfFailures.name  -> new Attribute("numberOfFailures", nVal), 
 			DistributionValidator::attr_nFail.name  -> new Attribute("numberOfFailures", nVal), 
 			DistributionValidator::attr_p.name  -> new Attribute("probability", pVal),  
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
-		DistributionType::NORMAL.toString -> newHashMap(
+		DistributionType::Normal.toString -> newHashMap(
 			DistributionValidator::attr_mean.name  -> new Attribute("mean", rVal), 
 			DistributionValidator::attr_var.name  -> new Attribute("variance", prVal), 
 			DistributionValidator::attr_sd.name  -> new Attribute("stddev", prVal), 
 			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
 			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		DistributionType::NORMAL_INVERSE_GAMMA.toString -> newHashMap(
+		DistributionType::NormalInverseGamma.toString -> newHashMap(
 			DistributionValidator::attr_mean.name  -> new Attribute("mean", rVal), 
 			DistributionValidator::attr_varianceScaling.name  -> new Attribute("varianceScaling", prVal), 
 			DistributionValidator::attr_shape.name  -> new Attribute("shape", prVal), 
@@ -138,36 +138,36 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_hiN.name  -> new Attribute("truncationUpperInclusiveBoundN", nVal), 
 			DistributionValidator::attr_loIG.name  -> new Attribute("truncationLowerInclusiveBoundIG", rVal), 
 			DistributionValidator::attr_hiIG.name  -> new Attribute("truncationUpperInclusiveBoundIG", rVal)),
-		DistributionType::PARETO.toString -> newHashMap(
+		DistributionType::Pareto.toString -> newHashMap(
 			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
 			DistributionValidator::attr_shape.name  -> new Attribute("shape", prVal), 
 			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
 			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		DistributionType::POISSON.toString -> newHashMap(
+		DistributionType::Poisson.toString -> newHashMap(
 			DistributionValidator::attr_alpha.name  -> new Attribute("rate", prVal), 
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
-		DistributionType::STUDENT_T.toString -> newHashMap(
+		DistributionType::StudentT.toString -> newHashMap(
 			DistributionValidator::attr_location.name  -> new Attribute("location", rVal), 
 			DistributionValidator::attr_scale.name  -> new Attribute("scale", prVal), 
 			DistributionValidator::attr_pnat_degreesOfFreedom.name  -> new Attribute("degreesOfFreedom", pnVal), 
 			DistributionValidator::attr_pnat_dof.name  -> new Attribute("degreesOfFreedom", pnVal), 
 			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
 			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
-		DistributionType::UNIFORM.toString -> newHashMap(
+		DistributionType::Uniform.toString -> newHashMap(
 			DistributionValidator::attr_min.name  -> new Attribute("minimum", rVal), 
 			DistributionValidator::attr_max.name  -> new Attribute("maximum", rVal), 
 			DistributionValidator::attr_numberOfClasses.name  -> new Attribute("numberOfClasses", nVal)),
-		DistributionType::UNIF.toString -> newHashMap(
+		DistributionType::Unif.toString -> newHashMap(
 			DistributionValidator::attr_min.name  -> new Attribute("minimum", rVal), 
 			DistributionValidator::attr_max.name  -> new Attribute("maximum", rVal), 
 			DistributionValidator::attr_numberOfClasses.name  -> new Attribute("numberOfClasses", nVal)),
-		DistributionType::WEIBULL.toString -> newHashMap(
+		DistributionType::Weibull.toString -> newHashMap(
 			DistributionValidator::attr_lambda.name  -> new Attribute("scale", prVal), 
 			DistributionValidator::attr_kappa.name  -> new Attribute("shape", prVal), 
 			DistributionValidator::attr_preal_lo.name  -> new Attribute("truncationLowerInclusiveBound", prVal), 
 			DistributionValidator::attr_preal_hi.name  -> new Attribute("truncationUpperInclusiveBound", prVal)),
-		DistributionType::WISHART.toString -> newHashMap(
+		DistributionType::Wishart.toString -> newHashMap(
 			DistributionValidator::attr_n.name  -> new Attribute("degreesOfFreedom", prVal), 
 			DistributionValidator::attr_scaleMatrix.name  -> new Attribute("scaleMatrix", prVal))
 	)
@@ -180,15 +180,15 @@ class DistributionPrinter extends MdlPrinter{
 	//Prints all distributions
 	public def CharSequence print_uncert_Distribution(RandomList randomList){
 		if (randomList != null){
-			if (randomList.arguments != null){
-				var type = randomList.arguments.getAttribute(DistributionValidator::attr_type.name);
-				if (type.length > 0){
-					switch(type){
+			if (randomList.type != null){
+				var typeName = randomList.type.name;
+				if (typeName.length > 0){
+					switch(typeName){
 						//For any mixture model
-						case type.contains("Model"): print_MixtureModel(randomList, type)
+						case typeName.contains("Model"): print_MixtureModel(randomList, typeName)
 						default: {
 							//Types in PharmML start from upper case!
-							print_DistributionDefault(randomList, type)
+							print_DistributionDefault(randomList, typeName);
 						}
 					}
 				}
@@ -197,7 +197,7 @@ class DistributionPrinter extends MdlPrinter{
 	}
 	
 	//TODO: add mixed model to the grammar, e.g.,	X = ~(type=mixedModel, ~(type=Normal...), ~(type=StudentT...)...)
-	def print_MixtureModel(RandomList randomList, String type)'''
+	protected def print_MixtureModel(RandomList randomList, String type)'''
 		«val tagName = type.substring(0, 1).toUpperCase() + type.substring(1)»
 		<«tagName» xmlns="«xmlns_uncert»" definition="«definition»mixture-model">
 			«FOR arg: randomList.arguments.arguments»
@@ -217,12 +217,8 @@ class DistributionPrinter extends MdlPrinter{
 	protected def print_DistributionDefault(RandomList randomList, String type){
 		val recognizedArgs = distribution_attrs.get(type);
 		if (recognizedArgs == null) return "";
-		var tagName = type.substring(0, 1).toUpperCase() + type.substring(1)
-		if (tagName.equalsIgnoreCase(DistributionType::DISCRETE.toString)) tagName = "Categorical";
-		if (tagName.contains("Distribution")) 
-			tagName = tagName.substring(0, tagName.indexOf("Distribution"));	
 		'''
-		<«tagName»Distribution xmlns="«xmlns_uncert»" definition="0.1">
+		<«type»Distribution xmlns="«xmlns_uncert»" definition="0.1">
 			«FOR arg: randomList.arguments.arguments»
 				«IF arg.argumentName != null»
 					«IF recognizedArgs.containsKey(arg.argumentName.name)»
@@ -248,7 +244,7 @@ class DistributionPrinter extends MdlPrinter{
 					«ENDIF»
 				«ENDIF»
 			«ENDFOR»	
-		</«tagName»Distribution>
+		</«type»Distribution>
 		'''
 	}	
 	
@@ -287,7 +283,7 @@ class DistributionPrinter extends MdlPrinter{
 	}	
 	
 	//TODO create temporal variables for complex expressions!!!
-	def String toPharmML(AnyExpression expr, String type){
+	protected def String toPharmML(AnyExpression expr, String type){
 		if (MdlDataType::validateType(MdlDataType::TYPE_REF, expr) || MdlDataType::validateType(MdlDataType::TYPE_STRING, expr))
 			return '''<var varId="«expr.toStr»"/>'''; 
 		if (MdlDataType::validateType(MdlDataType::TYPE_REAL, expr))
