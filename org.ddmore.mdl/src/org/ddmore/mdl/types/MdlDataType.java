@@ -53,7 +53,6 @@ public enum MdlDataType {
 	TYPE_TARGET,         //{NMTRAN_CODE, MLXTRAN_CODE, PML_CODE, BUGS_CODE, R_CODE MATLAB_CODE}
 	TYPE_RANDOM_EFFECT,  //{VAR, SD, CORR, COV} 
 	TYPE_INPUT_FORMAT,   //{nonmemFormat, eventFormat}
-	TYPE_DISTRIBUTION,   //see 'Distribution' in MDL grammar
 	TYPE_INDIVIDUAL_VAR, //{linear, general}
 	TYPE_CONTINUOUS, 	 //{continuous} 
 	TYPE_PK_PARAMETER,   //{v_cl, v_k, vss_cl, a_b}
@@ -110,7 +109,6 @@ public enum MdlDataType {
 			TYPE_INPUT_FORMAT,
 			TYPE_TRIAL,
 			TYPE_INDIVIDUAL_VAR,
-			TYPE_DISTRIBUTION,
 			TYPE_TRIAL,
 			TYPE_PK_PARAMETER
 		);

@@ -90,19 +90,8 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*LIBRARY*/
-	final public static String lib_nmadvan = "nmadvan";
 	final public static String lib_PK      = "PK";
-
-	final public static List<String> libraries = Arrays.asList(lib_nmadvan, lib_PK);
-	
-	/*nmadvan parameters*/
-	final public static FunctionParameter param_nmadvan_model            = new FunctionParameter("model", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_trans            = new FunctionParameter("trans", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_ncmt             = new FunctionParameter("ncmt", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
-	final public static FunctionParameter param_nmadvan_input            = new FunctionParameter("input", MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_distribution     = new FunctionParameter("distribution", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_elimination      = new FunctionParameter("elimination", MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_parameterization = new FunctionParameter("parameterization", MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	final public static List<String> libraries = Arrays.asList(lib_PK);
 	
 	/*PK parameters*/
 	final public static FunctionParameter param_PK_ndist = new FunctionParameter("ndist", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
@@ -159,20 +148,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					new FunctionParameterSet(Arrays.asList(param_error_additive, param_error_proportional, param_error_power, param_error_f)), MdlDataType.TYPE_REAL, true));
 			
 			/*Libraries*/
-			//nmadvan
+			//PK
 			Variable A = new Variable("A", MdlDataType.TYPE_VECTOR_REAL); 
 			Variable F = new Variable("F", MdlDataType.TYPE_REAL);
-			Map<String, List<Variable>> nmadvanReturnedValues = new HashMap<String, List<Variable>>();
-			nmadvanReturnedValues.put("",  Arrays.asList(A, F));
-			
-			put(lib_nmadvan, new FunctionSignature(lib_nmadvan, 
-					new FunctionParameterSet(Arrays.asList(
-					param_nmadvan_model, param_nmadvan_trans, param_nmadvan_ncmt, param_nmadvan_input, 
-					param_nmadvan_distribution, param_nmadvan_elimination, param_nmadvan_parameterization)), 
-				MdlDataType.TYPE_VECTOR_REF, true, nmadvanReturnedValues)
-			);	
-			
-			//PK
 			Map<String, List<Variable>> pkReturnedValues = new HashMap<String, List<Variable>>();
 			pkReturnedValues.put("",  Arrays.asList(A, F));
 			

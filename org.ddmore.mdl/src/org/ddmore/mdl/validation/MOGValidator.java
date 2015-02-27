@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.EValidatorRegistrar;
+import org.apache.commons.io.FilenameUtils;
 
 import com.google.inject.Inject;
 
@@ -35,6 +36,7 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_STRUCTURAL_MISMATCH  = "Inconsistent sets of structural parameters";
 	public final static String MSG_VARIABILITY_MISMATCH = "Inconsistent sets of variability parameters";
 	public final static String MSG_MOG_FILE_NOT_FOUND   = "Cannot find MDL file: path may be incorrect";
+	public final static String MSG_MOG_OBJECT_NOT_FOUND = "Incorrect reference to an MDL object";
 
 	@Override
     @Inject
@@ -50,14 +52,17 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 					MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__IMPORT_URI,
 					MSG_MOG_FILE_NOT_FOUND, s.getImportURI());
 			} else {
-				/* Check that the reffered object exists in the given file?
-				Injector injector = new MdlStandaloneSetup().createInjectorAndDoEMFRegistration();
-				XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
-				resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
-	            URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-				Resource resource = resourceSet.getResource(uri, true);
-				Mcl mcl = (Mcl) resource.getContents().get(0);
-				*/
+				String mclObjeResource = s.getObjectName().eResource().getURI().path();
+				mclObjeResource = FilenameUtils.getBaseName(mclObjeResource);
+				String importResource = FilenameUtils.getBaseName(s.getImportURI());
+				if (!mclObjeResource.equalsIgnoreCase(importResource)){
+					warning(MSG_MOG_OBJECT_NOT_FOUND + ": " +
+						"the object is not in the imported file or project contains several objects with the same name.\n" + 
+						"Object resource: " + mclObjeResource + "\n" +
+						"Imported resource: " + importResource,
+						MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__OBJECT_NAME,
+						MSG_MOG_OBJECT_NOT_FOUND, s.getObjectName().getName());
+				}
 			}
 		}
 	}
