@@ -279,7 +279,6 @@ public class Utils {
 	    		ImportObjectStatement s = (ImportObjectStatement) container;
 	    		if (s.getSymbolName() != null){
 					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s)));
-					//varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.TYPE_OBJ_REF));
 	    		}
 	    	}
 		}
@@ -337,20 +336,22 @@ public class Utils {
 	}
 	
 	public static List<Variable> getImportedVariables(SymbolName ref){
-		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
-	    while (iterator.hasNext()){
-	    	EObject obj = iterator.next();
-	    	if (obj instanceof ImportObjectStatementImpl){
-	    		ImportObjectStatement s = (ImportObjectStatement) obj;
-	    		if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getName())) {	    			
-	    			EObject container = s.getObjectName().eContainer();
-	    			if (container instanceof MclObjectImpl){
-	    				MclObject o = (MclObject)container;
-	    				return Utils.getDeclaredVariables(o);
-	    			}
-	    		}
-	    	}
-	    }
+		MclObject obj = getMclObject(ref);
+		if (obj.getMogObject() != null){
+			for (MOGObjectBlock b: obj.getMogObject().getBlocks()){
+				if (b.getObjectBlock() != null){
+					for (ImportObjectStatement s: b.getObjectBlock().getObjects()){
+						if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getName())) {	    			
+			    			EObject container = s.getObjectName().eContainer();
+			    			if (container instanceof MclObjectImpl){
+			    				MclObject o = (MclObject)container;
+			    				return Utils.getDeclaredVariables(o);
+			    			}
+			    		}
+					}
+				}
+			}
+		}
 	    return null;
 	}
 	

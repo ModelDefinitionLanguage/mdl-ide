@@ -180,18 +180,23 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public void checkReferenceToImportedVariable(MappingBlockStatement st) {
 		List<Variable> vars1 = Utils.getImportedVariables(st.getObj1());
 		List<Variable> vars2 = Utils.getImportedVariables(st.getObj2());
-		if (vars1 != null) checkVariable(vars1, st.getVar1());
-		if (vars2 != null) checkVariable(vars2, st.getVar2());
+		checkImportedVariable(vars1, st.getVar1());
+		checkImportedVariable(vars2, st.getVar2());
 	}
 	
-	private void checkVariable(List<Variable> vars, SymbolName ref){
+	private void checkImportedVariable(List<Variable> vars, SymbolName ref){
+		if (!(Utils.isSymbolDeclared(declaredVariables, ref))){
+			warning(MSG_UNRESOLVED_VARIABLE, MdlPackage.Literals.UNARY_EXPRESSION__SYMBOL,
+					MSG_UNRESOLVED_VARIABLE, ref.getName());
+		}		
 		List<String> varNames = new ArrayList<String>();
-   		for (Variable var: vars) varNames.add(var.getName());
-   			if (!varNames.contains(ref.getName()))
-   				warning(MSG_UNRESOLVED_EXTERNAL_VARIABLE + ": " + 
-   					ref.getName() + " is not in the reference set " + Utils.printList(varNames), 
-   					MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-   					MSG_UNRESOLVED_EXTERNAL_VARIABLE, ref.getName());
+   		if (vars != null) 
+   			for (Variable var: vars) varNames.add(var.getName());
+   		if (!varNames.contains(ref.getName()))
+   			warning(MSG_UNRESOLVED_EXTERNAL_VARIABLE + ": " + 
+   				ref.getName() + " is not in the reference set " + Utils.printList(varNames), 
+   				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
+   				MSG_UNRESOLVED_EXTERNAL_VARIABLE, ref.getName());
 	}
 	
 }
