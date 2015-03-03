@@ -31,7 +31,7 @@
                           <tasks>
                             <copy file="about.mappings" tofile="about.mappings.orig"/>
                             <replace file="about.mappings" 
-                                     token="@version@" value="${unqualifiedVersion}" />
+                                     token="@version@" value="${qualifiedVersion}" />
                             <replace file="about.mappings" 
                                      token="@buildNo@" value="${BUILD_NUMBER}" />
                             <replace file="about.mappings" 
