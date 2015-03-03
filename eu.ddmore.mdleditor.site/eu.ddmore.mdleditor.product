@@ -32,6 +32,7 @@
    </launcher>
 
    <vm>
+      <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</windows>
    </vm>
 
    <license>
@@ -56,8 +57,6 @@ http://www.gnu.org/licenses/lgpl-2.1.html
       <feature id="org.eclipse.platform" version="4.2.1.v20130118-173121-9MF7GHYdG0B5kx4E_SkfZV-1mNjVATf67ZAb7"/>
       <feature id="org.eclipse.rcp" version="4.2.2.v20130129-152330-7IARAABrMQkGSvMgQnUlz-DQz00h"/>
       <feature id="org.eclipse.help" version="1.4.1.v20120912-144938-8R7xFOXFLWUl7PpNBh_HIGkb4"/>
-      <feature id="com.mango.mifclient.dependencies.feature"/>
-      <feature id="com.mango.mif.client.feature"/>
       <feature id="de.walware.ecommons.e" version="1.4.0.b201309081345E42sw"/>
       <feature id="de.walware.ecommons.edb" version="0.2.0.b201309081345E42sw"/>
       <feature id="de.walware.ecommons.ltk" version="2.2.0.b201309081345E42sw"/>
@@ -69,6 +68,7 @@ http://www.gnu.org/licenses/lgpl-2.1.html
       <feature id="de.walware.statet.rtm.ftable" version="1.0.0.b201309081345E42sw"/>
       <feature id="de.walware.statet.rtm.ggplot" version="1.0.0.b201309081345E42sw"/>
       <feature id="de.walware.thirdparty.jsch" version="0.1.50.b201305311230E00sw"/>
+      <feature id="eu.ddmore.mdl-ide-dependencies.feature"/>
    </features>
 
    <configurations>

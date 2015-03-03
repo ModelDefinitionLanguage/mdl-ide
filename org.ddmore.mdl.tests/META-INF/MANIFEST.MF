@@ -13,7 +13,6 @@ Require-Bundle: org.ddmore.mdl,
  org.eclipse.ui
 Import-Package: eu.ddmore.libpharmml;version="0.3.12",
  org.apache.commons.io;version="2.0.1",
- org.apache.http;version="4.1.4",
  org.apache.log4j;version="1.2.15",
  org.eclipse.xtext.junit4,
  org.junit;version="4.5.0"
