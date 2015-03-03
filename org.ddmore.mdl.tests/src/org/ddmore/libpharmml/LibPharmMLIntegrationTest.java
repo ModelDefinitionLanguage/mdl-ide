@@ -2,7 +2,9 @@ package org.ddmore.libpharmml;
 
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -23,12 +25,15 @@ public class LibPharmMLIntegrationTest {
     private static final Logger LOG = Logger.getLogger(LibPharmMLIntegrationTest.class);
 
     @Test
-    public void shouldValidatePharmMLResource() {
+    public void shouldValidatePharmMLResource() throws IOException {
         ILibPharmML libPharmML = PharmMlFactory.getInstance().createLibPharmML();
         InputStream in = null;
-        String modelFile = "/pharmml/0.3.1/warfarin_PK_ODE/Warfarin-ODE-latest.xml";
+        
+        String modelFile = "platform:/plugin/eu.ddmore.libpharmml-test-data/pharmml/spec_examples/example1_NONMEM.xml";
+        URL url = null;
         try {
-            in = LibPharmMLIntegrationTest.class.getResourceAsStream(modelFile);
+            url = new URL(modelFile);
+            in = url.openStream();
             IPharmMLResource res = libPharmML.createDomFromResource(in);
             IPharmMLValidator validator = libPharmML.getValidator();
             IValidationReport rpt = validator.createValidationReport(res);

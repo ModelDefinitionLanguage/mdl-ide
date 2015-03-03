@@ -1,38 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="156">
+<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="162">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.3.12.v20141127-1026"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.3.1-b2/release/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="de.walware.ecommons.e.feature.group" version="1.4.0.b201309081345E42sw"/>
-<unit id="de.walware.ecommons.edb.feature.group" version="0.2.0.b201309081345E42sw"/>
-<unit id="de.walware.ecommons.ltk.feature.group" version="2.2.0.b201309081345E42sw"/>
-<unit id="de.walware.rj.eclient.feature.group" version="1.2.1.b201309081345E42sw"/>
-<unit id="de.walware.rj.core.feature.group" version="1.1.4.b201309081345E42sw"/>
-<unit id="de.walware.statet.r.feature.group" version="3.3.1.b201309081345E42sw"/>
-<unit id="de.walware.statet.rtm.ftable.feature.group" version="1.0.0.b201309081345E42sw"/>
-<unit id="de.walware.statet.rtm.ggplot.feature.group" version="1.0.0.b201309081345E42sw"/>
-<unit id="de.walware.statet.r.sweave.feature.group" version="3.3.0.b201309081345E42sw"/>
-<unit id="de.walware.eutils.autorun.feature.group" version="0.5.0.b201309081345E42sw"/>
-<repository location="http://download-01.walware.de/eclipse-4.2/site-statet-03.03.01/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="org.eclipse.wst.common.fproj.feature.group" version="3.4.0.v201202292300-377F8N8s735555393B7B"/>
-<unit id="org.eclipse.help.feature.group" version="1.4.1.v20120912-144938-8R7xFOXFLWUl7PpNBh_HIGkb4"/>
-<unit id="org.eclipse.jdt.feature.group" version="3.8.2.v20130116-090414-8-8nFu3FNOfwKLRuqgXKIy9z0I83"/>
-<unit id="org.eclipse.equinox.executable.feature.group" version="3.6.0.v20121119-201001-7P7OG2BFLWUl7UnqBnO8V4Of"/>
-<unit id="org.eclipse.platform.sdk" version="4.2.2.M20130204-1200"/>
-<unit id="org.eclipse.rcp.sdk.id" version="4.2.2.M20130204-1200"/>
-<unit id="org.eclipse.emf.compare.feature.group" version="1.3.3.v20130213-0806"/>
-<unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.8.0.v20120913-170102-84FAcGeRFnbPjaJrB422VklHlU"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="3.8.0.v20121212-203907-7M7fA78g4_y-gDvtH0ZcFvhMPDZJ"/>
-<unit id="org.eclipse.draw2d.feature.group" version="3.9.0.201212170307"/>
-<unit id="org.eclipse.uml2.feature.group" version="4.0.2.v20130114-0902"/>
-<unit id="org.eclipse.xsd.feature.group" version="2.8.1.v20130125-0826"/>
-<repository location="http://download.eclipse.org/releases/juno"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
 <unit id="org.eclipse.emf.ecore.xcore.sdk.feature.group" version="1.1.1.v20130903-0948"/>
 <unit id="org.eclipse.emf.common.feature.group" version="2.9.1.v20130827-0309"/>
@@ -40,10 +8,6 @@
 <unit id="org.eclipse.emf.ecore.feature.group" version="2.9.1.v20130827-0309"/>
 <unit id="org.eclipse.emf.sdk.feature.group" version="2.9.1.v20130902-0605"/>
 <repository location="http://download.eclipse.org/modeling/emf/emf/updates/releases/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="de.walware.thirdparty.jsch.feature.group" version="0.1.50.b201305311230E00sw"/>
-<repository location="http://download.walware.de/eclipse-4.2/site-jsch-00.01.50"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
 <unit id="org.eclipse.emf.mwe.core.feature.group" version="1.3.1.v201309030422"/>
@@ -77,6 +41,42 @@
 <repository location="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="de.walware.ecommons.e.feature.group" version="1.4.0.b201309081345E42sw"/>
+<unit id="de.walware.ecommons.edb.feature.group" version="0.2.0.b201309081345E42sw"/>
+<unit id="de.walware.ecommons.ltk.feature.group" version="2.2.0.b201309081345E42sw"/>
+<unit id="de.walware.rj.eclient.feature.group" version="1.2.1.b201309081345E42sw"/>
+<unit id="de.walware.rj.core.feature.group" version="1.1.4.b201309081345E42sw"/>
+<unit id="de.walware.statet.r.feature.group" version="3.3.1.b201309081345E42sw"/>
+<unit id="de.walware.statet.rtm.ftable.feature.group" version="1.0.0.b201309081345E42sw"/>
+<unit id="de.walware.statet.rtm.ggplot.feature.group" version="1.0.0.b201309081345E42sw"/>
+<unit id="de.walware.statet.r.sweave.feature.group" version="3.3.0.b201309081345E42sw"/>
+<unit id="de.walware.eutils.autorun.feature.group" version="0.5.0.b201309081345E42sw"/>
+<repository location="http://download-01.walware.de/eclipse-4.2/site-statet-03.03.01/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="org.eclipse.wst.common.fproj.feature.group" version="3.4.0.v201202292300-377F8N8s735555393B7B"/>
+<unit id="org.eclipse.help.feature.group" version="1.4.1.v20120912-144938-8R7xFOXFLWUl7PpNBh_HIGkb4"/>
+<unit id="org.eclipse.jdt.feature.group" version="3.8.2.v20130116-090414-8-8nFu3FNOfwKLRuqgXKIy9z0I83"/>
+<unit id="org.eclipse.equinox.executable.feature.group" version="3.6.0.v20121119-201001-7P7OG2BFLWUl7UnqBnO8V4Of"/>
+<unit id="org.eclipse.platform.sdk" version="4.2.2.M20130204-1200"/>
+<unit id="org.eclipse.rcp.sdk.id" version="4.2.2.M20130204-1200"/>
+<unit id="org.eclipse.emf.compare.feature.group" version="1.3.3.v20130213-0806"/>
+<unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.8.0.v20120913-170102-84FAcGeRFnbPjaJrB422VklHlU"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.8.0.v20121212-203907-7M7fA78g4_y-gDvtH0ZcFvhMPDZJ"/>
+<unit id="org.eclipse.draw2d.feature.group" version="3.9.0.201212170307"/>
+<unit id="org.eclipse.uml2.feature.group" version="4.0.2.v20130114-0902"/>
+<unit id="org.eclipse.xsd.feature.group" version="2.8.1.v20130125-0826"/>
+<repository location="http://download.eclipse.org/releases/juno"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150303-0927"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/ci/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="de.walware.thirdparty.jsch.feature.group" version="0.1.50.b201305311230E00sw"/>
+<repository location="http://download.walware.de/eclipse-4.2/site-jsch-00.01.50"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
 <unit id="org.apache.commons.io" version="2.0.1.v201105210651"/>
 <unit id="org.apache.log4j" version="1.2.15.v201012070815"/>
 <unit id="org.apache.xml.resolver" version="1.2.0.v201005080400"/>
@@ -84,8 +84,8 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150303-0927"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/ci/"/>
+<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.4.0.v20150303-1632"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.4.0-beta-b2/ci/"/>
 </location>
 </locations>
 </target>
