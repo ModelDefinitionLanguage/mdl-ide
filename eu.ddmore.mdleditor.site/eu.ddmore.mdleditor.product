@@ -68,7 +68,7 @@ http://www.gnu.org/licenses/lgpl-2.1.html
       <feature id="de.walware.statet.rtm.ftable" version="1.0.0.b201309081345E42sw"/>
       <feature id="de.walware.statet.rtm.ggplot" version="1.0.0.b201309081345E42sw"/>
       <feature id="de.walware.thirdparty.jsch" version="0.1.50.b201305311230E00sw"/>
-      <feature id="eu.ddmore.mdl-ide-dependencies.feature"/>
+      <feature id="eu.ddmore.mdl-ide-dependencies.feature" version="0.0.1.v20150303-0927"/>
    </features>
 
    <configurations>
