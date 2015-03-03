@@ -25,6 +25,10 @@
                name="aboutImage"
                value="icons/about_image.png">
          </property>
+         <property
+               name="appName"
+               value="DDMoRe MDL IDE Demonstrator">
+         </property>
       </product>
    </extension>
    

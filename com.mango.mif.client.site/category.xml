@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/com.mango.mif.client.feature_2.1.19.qualifier.jar" id="com.mango.mif.client.feature" version="2.1.19.qualifier">
-      <category name="MIF Client"/>
-   </feature>
-   <category-def name="MIF Client" label="MIF Client"/>
-</site>

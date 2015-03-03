@@ -55,14 +55,6 @@
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.ConvertToNONMEMHandler_PE"
             commandId="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE">
       </handler>
-      <handler
-	  	class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.RunWithNONMEMHandler"
-	    commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM">
-      </handler>
-      <handler
-            class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.ddmore.mdl.ui.handler.RunWithNONMEMHandler_PE"
-            commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM_PE">
-      </handler>
       -->
     </extension>
     <extension point="org.eclipse.core.expressions.definitions">
@@ -99,24 +91,6 @@
             name="Templates">
             <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
         </page>
-        <page
-              category="org.ddmore.mdl.Mdl"
-              class="org.ddmore.mdl.ui.preference.ExternalToolsPreferencePage"
-              id="org.ddmore.mdl.Mdl.external"
-              name="External Tools">
-            <keywordReference id="org.ddmore.mdl.ui.keyword_Mdl"/>
-        </page>
-        <!-- Commented out for now as this functionality currently does not work -->
-        <!-- It may be re-instated in the future if required -->
-        <!--<page
-              category="org.ddmore.mdl.Mdl"
-              class="org.ddmore.mdl.ui.preference.TESPreferencePage"
-              id="org.ddmore.mdl.Mdl.TES"
-              name="Task Execution Service">
-           <keywordReference
-                 id="org.ddmore.mdl.ui.keyword_Mdl">
-           </keywordReference>
-        </page>-->
     </extension>
     <extension
             point="org.eclipse.ui.propertyPages">
@@ -160,14 +134,6 @@
       <command
             id="org.ddmore.mdl.ui.handler.ConvertToNONMEM"
             name="Convert to NONMEM">
-      </command>
-      <command
-            id="org.ddmore.mdl.ui.handler.RunWithNONMEM"
-            name="Run with NONMEM">
-      </command>
-      <command
-            id="org.ddmore.mdl.ui.handler.RunWithNONMEM_PE"
-            name="Run with NONMEM">
       </command>
       <command
             id="org.ddmore.mdl.ui.handler.ConvertToNONMEM_PE"
@@ -591,53 +557,4 @@
 	        </command>
 	    </menuContribution>
 	</extension>
-	<!--Run with NONMEM -->
-	<!-- Commented out for now as this functionality currently does not work -->
-	<!-- It may be re-instated in the future if required -->
-	<!--<extension
-       point="org.eclipse.ui.menus">
-        <menuContribution
-            locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
-	        <command
-	            commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM_PE" style="push">
-	            <visibleWhen checkEnabled="false">
-	            		<iterate>
-					       <adapt type="org.eclipse.core.resources.IResource">
-		          				<test property="org.eclipse.core.resources.name"
-				                value="*.mdl"/>
-		    			   </adapt>
-	 	    			</iterate>
-	            </visibleWhen>
-	        </command>
-         <separator
-               name="org.ddmore.mdl.ui.separatorNONMEMPackage_PE"
-               visible="true">
-         </separator>
-	</menuContribution>
-	<menuContribution locationURI="popup:#TextEditorContext?after=group.edit">
-	        <command
-	            commandId="org.ddmore.mdl.ui.handler.RunWithNONMEM"
-	            style="push">
-	            <visibleWhen
-	                      checkEnabled="false">
-	                   <reference
-	                         definitionId="org.ddmore.mdl.Mdl.Editor.opened">
-	                   </reference>
-	                </visibleWhen>
-	        </command>
-         <separator
-               name="org.ddmore.mdl.ui.separatorNONMEMPackage"
-               visible="true">
-         </separator>
-	    </menuContribution>
- </extension>
- <extension
-       point="org.eclipse.core.runtime.preferences">
-       <scope name="TESPreferencePage" class="org.ddmore.mdl.ui.preference.TESPreferencePage"/>
-      <initializer
-            class="org.ddmore.mdl.ui.preference.PreferenceInitializer">
-      </initializer>
- </extension>-->
- <!--N.K. -->     
- 
 </plugin>
