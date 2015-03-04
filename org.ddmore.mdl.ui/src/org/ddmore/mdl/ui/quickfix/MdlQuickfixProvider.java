@@ -86,9 +86,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		for (Attribute attr: AttributeValidator.attrs_dataInput) 
 			allAttributes.put(grammarAccess.getDataInputBlockAccess().
 					getIdentifierDATA_INPUT_VARIABLESKeyword_0_0().getValue() + ":" + attr.getName(), attr);
-		for (Attribute attr: AttributeValidator.attrs_dataDerived) 
-			allAttributes.put(grammarAccess.getDataDerivedBlockAccess().
-					getIdentifierDATA_DERIVED_VARIABLESKeyword_0_0().getValue() + ":" + attr.getName(), attr);
 		/*Parameter object*/
 		for (Attribute attr: AttributeValidator.attrs_structural) 
 			allAttributes.put(grammarAccess.getStructuralBlockAccess().

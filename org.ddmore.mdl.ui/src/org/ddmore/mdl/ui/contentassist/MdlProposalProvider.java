@@ -54,7 +54,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 			EObject container = AttributeValidator.findAttributeContainer(model);
 			if (container != null){
 				Image img = imageHelper.getImage(Images.getPath(Images.ATTRIBUTE));
-				List<String> attributes = Utils.getAllNames(AttributeValidator.getAllAttributes(container));
+				List<String> attributes = Utils.getAllNames(AttributeValidator.getListAttributes(container));
 				addProposals(context, acceptor, attributes, img);
 			}
 		}

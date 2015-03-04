@@ -102,7 +102,6 @@ public class Utils {
 	public static String getBlockName(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
-		if (obj instanceof DataDerivedBlockImpl) return ((DataDerivedBlock)obj).getIdentifier();
 		if (obj instanceof SourceBlockImpl) return ((SourceBlock)obj).getIdentifier();
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return ((StructuralBlock)obj).getIdentifier();	

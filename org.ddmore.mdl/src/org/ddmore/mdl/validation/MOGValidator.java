@@ -127,15 +127,20 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 		}
 	}	
 	
-	//MODEL_INPUT_VARIABLES \in DATA_INPUT_VARIABLES + DATA_DERIVED_VARIABLES
+	//TODO
+	//Check crossmatched variable attribute dependencies:
+	  //required level vs. use=dv, use=id
+	  //optional administration vs. use=amt
+	  //required prediction vs. use=dv		
+	  //required type vs. use = covariate
+
+	
+	//MODEL_INPUT_VARIABLES \in DATA_INPUT_VARIABLES
 	private void validateMOG_Model_vs_Data(ModelObject mObj, DataObject dObj, MOGObject mog){
 		List<String> dVars = new ArrayList<String>();
 		for (DataObjectBlock b: dObj.getBlocks()){
 			if (b.getDataInputBlock() != null)
 				for (SymbolDeclaration s: b.getDataInputBlock().getVariables())
-					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
-			if (b.getDataDerivedBlock() != null)
-				for (SymbolDeclaration s: b.getDataDerivedBlock().getVariables())
 					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
 		}
 		for (ModelObjectBlock b: mObj.getBlocks()){

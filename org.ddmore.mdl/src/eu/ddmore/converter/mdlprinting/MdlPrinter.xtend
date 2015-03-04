@@ -42,6 +42,7 @@ import org.ddmore.mdl.mdl.TrialType
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.PkParameterType
+import org.ddmore.mdl.mdl.Matching
 
 class MdlPrinter {
 	
@@ -247,7 +248,13 @@ class MdlPrinter {
 		if (e.expression != null) return e.expression.toStr;
 		if (e.list != null) return e.list.toStr; 
 		if (e.vector != null) return e.vector.toStr; 
-		if (e.type != null) return e.type.toStr; 
+		if (e.type != null) return e.type.toStr;
+		if (e.matching != null) return e.matching.toStr;
+	}
+	
+	def String toStr(Matching e){
+		var res = '''«e.symbolName.name» <=> «e.condition.toStr»''';
+		return res;		
 	}
 	
 	def String toStr(Expression e){

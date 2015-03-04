@@ -40,6 +40,8 @@ ModelObjectBlock:
 	modelPredictionBlock = ModelPredictionBlock | 
 	randomVariableDefinitionBlock = RandomVariableDefinitionBlock |
 	inputVariablesBlock = InputVariablesBlock |
+	variabilityBlock = VariabilityDefinitionBlock |
+	covariateBlock = CovariateDefinitionBlock |
 	structuralParametersBlock = StructuralParametersBlock |
 	variabilityParametersBlock = VariabilityParametersBlock |
 	outputVariablesBlock = OutputVariablesBlock | 
@@ -61,12 +63,22 @@ ModelPredictionBlock:
 ;
 
 RandomVariableDefinitionBlock:
-	identifier = 'RANDOM_VARIABLE_DEFINITION' 
+	identifier = 'RANDOM_VARIABLE_DEFINITION' '(' arguments = Arguments? ')'
 	BEGIN variables += SymbolDeclaration* END 
 ;
 
 InputVariablesBlock:
   	identifier = 'MODEL_INPUT_VARIABLES' 
+  	BEGIN variables += SymbolDeclaration* END 
+;
+
+VariabilityDefinitionBlock:
+  	identifier = 'VARIABILITY' 
+  	BEGIN variables += SymbolDeclaration* END 
+;
+
+CovariateDefinitionBlock:
+  	identifier = 'COVARIATE' 
   	BEGIN variables += SymbolDeclaration* END 
 ;
 
@@ -137,7 +149,6 @@ PriorParametersBlock:
 
 DataObjectBlock:
 	dataInputBlock = DataInputBlock |
-	dataDerivedBlock = DataDerivedBlock |
 	sourceBlock = SourceBlock |
 	targetBlock = TargetBlock 
 ;
@@ -146,11 +157,6 @@ DataInputBlock:
  	identifier='DATA_INPUT_VARIABLES' 
  	BEGIN variables += SymbolDeclaration* END  
 ;
- 
-DataDerivedBlock:
- 	identifier='DATA_DERIVED_VARIABLES' 
- 	BEGIN variables += SymbolDeclaration* END  
-; 
  
 SourceBlock:
 	identifier='SOURCE' 	

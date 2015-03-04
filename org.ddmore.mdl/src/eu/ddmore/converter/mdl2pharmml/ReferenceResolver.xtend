@@ -227,7 +227,7 @@ class ReferenceResolver{
 			if(b.inputVariablesBlock != null){
 				for (s: b.inputVariablesBlock.variables){
 					if (s.list != null && s.symbolName != null){
-						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level_use.name);
+						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level.name);
 						if (level.equals(levelId)){
 							if (!levelVars.contains(s.symbolName.name)){
 								levelVars.add(s.symbolName.name);
@@ -240,26 +240,30 @@ class ReferenceResolver{
 		return levelVars;
 	}	
 		
-	//Assign indices to variability parameters ($ETA, $ESP)
+	//Assign indices to variability parameters
 	protected def setRandomVariables(ModelObject o){
     	var i = 1; var j = 1; 
 		for (b: o.blocks){
 	  		if (b.randomVariableDefinitionBlock != null){
-				for (s: b.randomVariableDefinitionBlock.variables) {
-					if (s.randomList != null && s.symbolName != null){	
-						var level = s.randomList.arguments.getAttribute(AttributeValidator::attr_level.name);
-						if (level_vars.get(level) != null){
-							if (level_vars.get(level).equals("2")){
-								if (eta_vars.get(s.symbolName.name) == null){
-									eta_vars.put(s.symbolName.name, i);
-									i = i + 1;
+				if  (b.randomVariableDefinitionBlock.arguments != null){
+					var level = b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_block_level.name);
+					if (level.length > 0){
+						for (s: b.randomVariableDefinitionBlock.variables) {
+							if (s.randomList != null && s.symbolName != null){	
+								if (level_vars.get(level) != null){
+									if (level_vars.get(level).equals("2")){
+										if (eta_vars.get(s.symbolName.name) == null){
+											eta_vars.put(s.symbolName.name, i);
+											i = i + 1;
+										}
+									}
+									if (level_vars.get(level).equals("1"))
+										if (eps_vars.get(s.symbolName.name) == null){
+											eps_vars.put(s.symbolName.name, j);
+											j = j + 1;
+										}	
 								}
 							}
-							if (level_vars.get(level).equals("1"))
-								if (eps_vars.get(s.symbolName.name) == null){
-									eps_vars.put(s.symbolName.name, j);
-									j = j + 1;
-								}	
 						}
 					}
 	  			}

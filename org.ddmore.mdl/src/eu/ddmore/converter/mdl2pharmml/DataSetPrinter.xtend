@@ -114,7 +114,7 @@ class DataSetPrinter {
 						}
 						//Dosing
 						if (use.equals(UseType::AMT.toString)){
-							var adm = s.list.arguments.getAttributeExpression(AttributeValidator::attr_administration_use.name);
+							var adm = s.list.arguments.getAttributeExpression(AttributeValidator::attr_administration_ref.name);
 							if (adm != null){
 								res = res + print_ds_ColumnMapping(s.symbolName.name, adm.toStr);
 							}
@@ -177,24 +177,6 @@ class DataSetPrinter {
 				}
 			}
 		}	
-		for (b: dObj.blocks){
-			if (b.dataDerivedBlock != null){
-				for (s: b.dataDerivedBlock.variables){
-					var columnId = s.symbolName.name;
-					val modelVar = mObj.getModelInputVariable(columnId);
-					if (modelVar != null && modelVar.symbolName != null){
-						if (!columnNames.contains(modelVar.symbolName.name)){
-							columnNames.add(modelVar.symbolName.name);
-							columnTypes.add(modelVar.getColumnType);
-						}
-					} else {//Model variable not found
-						columnNames.add(columnId);
-						columnTypes.add(Constants::UNDEFINED);
-					}
-					valueTypes.add(s.getValueType);
-				}
-			}	
-		}
 		'''
 			<DataSet xmlns="«xmlns_ds»">
 				«print_ds_Definition(columnNames, columnTypes, valueTypes)»
