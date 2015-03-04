@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature id="com.mango.mif.client.feature" version="0.0.0">
+   <feature id="eu.ddmore.mdl-ide-dependencies.feature" version="0.0.0">
       <category name="eu.ddmore.mdleditor.tools"/>
    </feature>
    <feature id="org.ddmore.mdl.sdk" version="0.0.0">
