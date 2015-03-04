@@ -440,17 +440,6 @@ enum TrialType:
 	no_Trial | simple | combined | sequential 
 ;
 
-/*
-enum DistributionType: 
-	no_Distribution | bernoulli | betaDistribution | binomial | discrete | cauchy | chiSquare | dirichlet | exponential | 	
-	fDistribution | gamma | geometric | hypergeometric | inverseGamma |	laplace | logistic |
-	logNormal | multinomial | multivariateNormal | multivariateStudentT | negativeBinomial |
-	normal | normalInverseGamma | pareto | poisson | unif | studentT | uniform | weibull | wishart |
-	discreteUnivariateMixtureModel | discreteMultivariateMixtureModel |
-    categoricalUnivariateMixtureModel | categoricalMultivariateMixtureModel |
-	continuousMultivariateMixtureModel | continuousUnivariateMixtureModel
-;*/
-
 terminal CONSTANT:
 	'INF' | 'T' | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
 ;

@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.ddmore.mdl.domain.Attribute;
-import org.ddmore.mdl.domain.AttributeDependency;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
@@ -24,7 +23,6 @@ import org.ddmore.mdl.mdl.impl.AdministrationBlockImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.CompartmentBlockImpl;
-import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignSpaceBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
@@ -34,7 +32,6 @@ import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
-import org.ddmore.mdl.mdl.impl.MappingBlockImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
@@ -81,7 +78,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_value = new Attribute("value", MdlDataType.TYPE_REAL, false, "0");
 	final public static Attribute attr_expr_value = new Attribute("value", MdlDataType.TYPE_EXPR, true, "0");
 	//type
-	final public static Attribute attr_type_randomEff = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, true, VariabilityType.SD.toString());
+	final public static Attribute attr_type_randomEff = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, VariabilityType.SD.toString());
 
 	//VARIABILITY
 	final public static Attribute attr_hi = new Attribute("hi", MdlDataType.TYPE_REAL, false, "0");
@@ -94,20 +91,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//RANDOM_VARIABLES_DEFINITION
 	final public static Attribute attr_rv1 = new Attribute("rv1", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_rv2 = new Attribute("rv2", MdlDataType.TYPE_REF, true);
-	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_REF, true);
 	
 	/*MODEL_INPUT_VARIABLES*/
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
-	final public static Attribute attr_level_use = 
-		new Attribute("level", MdlDataType.TYPE_NAT, true, DefaultValues.LEVEL, 
-			new AttributeDependency(attr_use.getName(), Arrays.asList(UseType.DV.toString(), UseType.ID.toString())));
-	//Dosing mapping
-	final public static Attribute attr_administration_use = new Attribute("administration", 
-			MdlDataType.TYPE_REF_DERIV, false, new AttributeDependency(attr_use.getName(), UseType.AMT.toString()));
-	final public static Attribute attr_prediction_use = new Attribute("prediction", 
-			MdlDataType.TYPE_REF, true, new AttributeDependency(attr_use.getName(), UseType.DV.toString()));
-	final public static Attribute attr_type_use = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, 
-			true, DefaultValues.VAR_TYPE, new AttributeDependency(attr_use.getName(), UseType.COVARIATE.toString()));
+	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, true, "1"); 
+	final public static Attribute attr_administration_ref = new Attribute("administration", MdlDataType.TYPE_REF_DERIV, false);
+	final public static Attribute attr_type_use = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
 	
 	/*OBSERVATION*/
 	final public static Attribute attr_type_continuous = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.VAR_CONTINUOUS);
@@ -211,8 +200,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
 	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_type, attr_define, attr_units);
-	final public static List<Attribute> attrs_dataDerived = Arrays.asList(attr_req_type, attr_expr_value, attr_units);
-
+	
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, 
 			attr_fix, attr_units);
@@ -220,9 +208,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			attr_lo, attr_hi, attr_units);
 	
 	/*Model object*/
-	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_type_randomEff, attr_rv1, attr_rv2, attr_level);
+	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_type_randomEff, attr_rv1, attr_rv2);
 	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_type_use, 
-			attr_level_use, attr_administration_use, attr_prediction_use, attr_units);
+			attr_level, attr_administration_ref, attr_prediction, attr_units);
 	
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
@@ -253,10 +241,10 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_designSpace = Arrays.asList(attr_name_ref, attr_admTime, attr_numberSamples);
 	final public static List<Attribute> attrs_hyperSpace = Arrays.asList(attr_name_ref, attr_min, attr_max, attr_admTime, attr_numberSamples);
 	
-	public static List<Attribute> getAllAttributes(EObject obj){
+	//Returns recognised attributes for list containers
+	public static List<Attribute> getListAttributes(EObject obj){
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return attrs_dataInput; 
-		if (obj instanceof DataDerivedBlockImpl) return attrs_dataDerived; 
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return attrs_structural;
 		if (obj instanceof VariabilityBlockImpl) return attrs_variability;
@@ -279,23 +267,11 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof DesignSpaceBlockImpl) return attrs_designSpace;   
 		if (obj instanceof HyperSpaceBlockImpl) return attrs_hyperSpace; 
 		return null;
-	}
+	}	
 	
-	//Do not validate arguments in distributions (this is the job of DistributionValidator) 
-	//in nested lists
-	//and in functions (this is the job of FunctionValidator)
-	private Boolean skipAttributeValidation(EObject container, Arguments args){
-		if (container == null) return true;
-		//Skip attributes of distributions and functions
-		EObject container1 = args.eContainer();
-		if (container1 instanceof RandomListImpl || 
-			container1 instanceof FunctionCallImpl) return true;
-		//Skip everything apart from attributes for symbol declarations and mappings
-		EObject container2 = container1.eContainer();
-		if (container2 instanceof SymbolDeclarationImpl || 
-			container2 instanceof  MappingBlockImpl) return false;
-		return true;
-	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Validate list attributes
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@Check
 	public void checkRequiredArguments(Arguments args){
@@ -303,10 +279,92 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		EObject container = findAttributeContainer(args.eContainer());
 		if (skipAttributeValidation(container, args)) return;
 
-		String prefix = Utils.getBlockName(container) + ":";		
-		List<String> argumentNames = Utils.getArgumentNames(args);	
+		List<Attribute> knownAttributes = getListAttributes(container);
+		if (knownAttributes != null){
+			String prefix = Utils.getBlockName(container) + ":";		
+			List<String> argumentNames = Utils.getArgumentNames(args);	
+			checkRequiredAttributes(args, argumentNames, knownAttributes, prefix);
+		}
+	}
+	
+	@Check
+	public void checkAllArguments(Argument argument){
+		EObject argsContainer = argument.eContainer();
+		if (!(argsContainer instanceof ArgumentsImpl)) return;
+		EObject container = findAttributeContainer(argsContainer.eContainer());
+		Arguments args = (Arguments)argsContainer;
+		if (skipAttributeValidation(container, args)) return;
+		List<Attribute> knownAttributes = getListAttributes(container);
+		if (knownAttributes != null){
+			//Check that the attribute name is valid
+			List<String> attributeNames = new ArrayList<String>();
+			attributeNames.addAll(Utils.getAllNames(knownAttributes));
+			//For categorical values, recognise user defined categories as attributes
+			if (container instanceof DataInputBlockImpl){
+				EObject parentArgsContainer = argsContainer;
+				if (args.eContainer() instanceof ListImpl){
+					//Arguments -> List -> AnyExpression -> Argument
+					if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl)
+						parentArgsContainer = args.eContainer().eContainer().eContainer().eContainer();
+				}
+				if (parentArgsContainer instanceof ArgumentsImpl){
+					Arguments parentArgs = (Arguments) parentArgsContainer;
+					List<String> categoricalNames = getCategoricalNames(parentArgs);
+					attributeNames.addAll(categoricalNames);
+				}
+			}
+			checkDefinedAttributes(argument, args, knownAttributes, attributeNames);
+			checkDefinedOnce(args);
+		}
+	}
+	
 
-		for (Attribute attr: getAllAttributes(container)){
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*Block attributes*/
+	final public static Attribute attr_block_level = new Attribute("level", MdlDataType.TYPE_REF, true, DefaultValues.LEVEL);
+	final public static List<Attribute> attrs_block_randomVars = Arrays.asList(attr_block_level);
+
+	//Returns recognised attributes for blocks
+	public static List<Attribute> getBlockAttributes(EObject obj){
+		if (obj instanceof RandomVariableDefinitionBlockImpl) return attrs_block_randomVars; 
+		return null;
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	//Validate block attributes
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Check
+	public void checkRequiredBlockArguments(Arguments args){
+		EObject container = args.eContainer();
+		List<Attribute> knownAttributes = getBlockAttributes(container);
+		if (knownAttributes != null){
+			String prefix = Utils.getBlockName(container) + ":";		
+			List<String> argumentNames = Utils.getArgumentNames(args);	
+			checkRequiredAttributes(args, argumentNames, knownAttributes, prefix);
+		}
+	}
+	
+	@Check
+	public void checkAllBlockArguments(Argument argument){
+		EObject argsContainer = argument.eContainer();
+		if (!(argsContainer instanceof ArgumentsImpl)) return;
+		EObject container = argsContainer.eContainer();
+		List<Attribute> knownAttributes = getBlockAttributes(container);
+		if (knownAttributes != null){
+			Arguments args = (Arguments)argsContainer;
+			List<String> attributeNames = new ArrayList<String>();
+			attributeNames.addAll(Utils.getAllNames(knownAttributes));
+			checkDefinedAttributes(argument, args, knownAttributes, attributeNames);
+			checkDefinedOnce(args);
+		}
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//Checks that all required attributes are specified
+	private void checkRequiredAttributes(Arguments args, List<String> argumentNames, List<Attribute> attributes, String prefix){
+		for (Attribute attr: attributes){
 			if (attr.isMandatory()){
 				if (!argumentNames.contains(attr.getName())) {
 					if (attr.getDependency() != null){
@@ -327,68 +385,44 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		}
 	}
 	
-	@Check
-	public void checkAllArguments(Argument argument){
-		EObject argsContainer = argument.eContainer();
-		if (!(argsContainer instanceof ArgumentsImpl)) return;
-		EObject container = findAttributeContainer(argsContainer.eContainer());
-		Arguments args = (Arguments)argsContainer;
-		if (skipAttributeValidation(container, args)) return;
-
-		//Check that the attribute name is valid
-		List<Attribute> knownAttributes = getAllAttributes(container);
-		if (knownAttributes != null){
-			List<String> attributeNames = new ArrayList<String>();
-			attributeNames.addAll(Utils.getAllNames(knownAttributes));
-			//for categorical values, recognise user defined categories as attributes
-			if (container instanceof DataInputBlockImpl){
-				EObject parentArgsContainer = argsContainer;
-				if (args.eContainer() instanceof ListImpl){
-					//Arguments -> List -> AnyExpression -> Argument
-					if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl)
-						parentArgsContainer = args.eContainer().eContainer().eContainer().eContainer();
-				}
-				if (parentArgsContainer instanceof ArgumentsImpl){
-					Arguments parentArgs = (Arguments) parentArgsContainer;
-					List<String> categoricalNames = getCategoricalNames(parentArgs);
-					attributeNames.addAll(categoricalNames);
-				}
-			}
-			if (!attributeNames.contains(argument.getArgumentName().getName())){
-				warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
-				MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-				MSG_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());		
-			}
-			for (Attribute x: knownAttributes){
-				if (x.getName().equals(argument.getArgumentName().getName())){
-					boolean isValid = false;
-					for (MdlDataType type: x.getTypes())
-						isValid = isValid || MdlDataType.validateType(type, argument.getExpression());
-					if (!isValid){
-						warning(MSG_ATTRIBUTE_WRONG_TYPE + 
-							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
-								Utils.printList(x.getTypeNames()), 
-							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-							MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());
-					}
-					//Check dependency conditions for optional attributes
-					if (!x.isMandatory() && (x.getDependency() != null)){
-						String value = MdlPrinter.getInstance().getAttribute(args, x.getDependency().getAttrName());
-						if (!x.getDependency().getValues().contains(value)){
-							//MSG_ATTRIBUTE_WRONG_VALUE
-							warning(MSG_ATTRIBUTE_WRONG_VALUE + 
-									": attribute \"" + x.getName() + "\" expects the attribute \"" + 
-									x.getDependency().getAttrName() + "\" have of the following values: " +
-									Utils.printList(x.getDependency().getValues()), 
-									MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-									MSG_ATTRIBUTE_WRONG_VALUE, x.getName());
-						}
-						
-					}
-				}
-			}
+	//Check that each defined argument is from the recognized set of list attributes
+	private void checkDefinedAttributes(Argument argument, Arguments args , List<Attribute> knownAttributes, List<String> attributeNames){
+		if (!attributeNames.contains(argument.getArgumentName().getName())){
+			warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
+			MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
+			MSG_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());		
 		}
-		//Check that each attribute is defined once
+		for (Attribute x: knownAttributes){
+			if (x.getName().equals(argument.getArgumentName().getName())){
+				boolean isValid = false;
+				for (MdlDataType type: x.getTypes())
+					isValid = isValid || MdlDataType.validateType(type, argument.getExpression());
+				if (!isValid){
+					warning(MSG_ATTRIBUTE_WRONG_TYPE + 
+						": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
+							Utils.printList(x.getTypeNames()), 
+						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
+						MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());
+				}
+				//Check dependency conditions for optional attributes
+				if (!x.isMandatory() && (x.getDependency() != null)){
+					String value = MdlPrinter.getInstance().getAttribute(args, x.getDependency().getAttrName());
+					if (!x.getDependency().getValues().contains(value)){
+						warning(MSG_ATTRIBUTE_WRONG_VALUE + 
+								": attribute \"" + x.getName() + "\" expects the attribute \"" + 
+								x.getDependency().getAttrName() + "\" have of the following values: " +
+								Utils.printList(x.getDependency().getValues()), 
+								MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
+								MSG_ATTRIBUTE_WRONG_VALUE, x.getName());
+					}
+					
+				}
+			}
+		}				
+	}
+	
+	//Check that each attribute is defined once
+	private void checkDefinedOnce(Arguments args){
 		HashSet<String> argumentNames = new HashSet<String>();	
 		for (Argument arg: args.getArguments()){
 			if (!argumentNames.contains(arg.getArgumentName().getName())){
@@ -398,10 +432,24 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
 						arg.getArgumentName().getName());				
 			}
-		}
+		}		
+	}	
+	
+	//Do not validate arguments in distributions (this is the job of DistributionValidator) 
+	//In nested lists and in functions (this is the job of FunctionValidator)
+	private Boolean skipAttributeValidation(EObject container, Arguments args){
+		if (container == null) return true;
+		//Skip attributes of distributions, functions
+		EObject container1 = args.eContainer();
+		if (container1 instanceof RandomListImpl || 
+			container1 instanceof FunctionCallImpl) return true;
+		//Skip everything apart from attributes for symbol declarations
+		EObject container2 = container1.eContainer();
+		if (container2 instanceof SymbolDeclarationImpl) return false;
+		return true;
 	}
 	
-
+	//Gets a list of category names
 	private List<String> getCategoricalNames(Arguments parentArgs){
 		List<String> categoricalNames = new ArrayList<String>();
 		for (Argument parentArg: parentArgs.getArguments()){
@@ -432,11 +480,10 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	}	
 	
 	//Determines the container block for a given object
-	public static Boolean isAttributeContainer(EObject obj){
+	private static Boolean isAttributeContainer(EObject obj){
 		return (
 			//Data object	
 			obj instanceof DataInputBlockImpl ||
-			obj instanceof DataDerivedBlockImpl ||
 			//Model object
 			obj instanceof InputVariablesBlockImpl ||
 			obj instanceof IndividualVariablesBlockImpl ||

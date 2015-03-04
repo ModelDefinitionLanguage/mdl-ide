@@ -5,7 +5,6 @@ import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.mdl.DataDerivedBlock
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MOGObject
 import java.util.ArrayList
@@ -109,14 +108,6 @@ class ReferenceResolver{
 			}					
 		}
 		return covariateVars;		
-	}
-	
-	protected def getDerivedVariables(DataDerivedBlock b){
-		var derivedVars = newArrayList;
-		for (st: b.variables)
-			if (st.symbolName.name != null)
-				derivedVars.add(st.symbolName.name)
-		return derivedVars;
 	}
 	
 	//+Returns declarations for ParameterModel
