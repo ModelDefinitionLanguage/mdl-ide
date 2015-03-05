@@ -10,7 +10,6 @@ import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.types.DefaultValues
-import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.validation.Utils
 
@@ -33,11 +32,10 @@ class ModelDefinitionPrinter {
 		var objects = Utils::getMOGObjects(mog);
 		var mObj = Utils::getModelObject(objects);
 		var pObj = Utils::getParameterObject(objects);
-		var dObj = Utils::getDataObject(objects);
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«print_mdef_VariabilityModel»
-			«print_mdef_CovariateModel(mObj, dObj)»
+			«print_mdef_CovariateModel(mObj)»
 			«print_mdef_ParameterModel(mObj, pObj)»
 			«print_mdef_StructuralModel(mObj)»
 			«print_mdef_ObservationModel(mObj)»
@@ -77,9 +75,8 @@ class ModelDefinitionPrinter {
 	// I.c Covariate Model
 	/////////////////////////
 	
-	//INDIVIDUAL_VARIABLES, use=covariate -> CovariateModel (transformation with reference)
-	//TODO: extend to deal not only with continuous covariates (covType = s.getCovariateType)
-	protected def print_mdef_CovariateModel(ModelObject mObj, DataObject dObj){
+	//CovariateModel (transformation with reference)
+	protected def print_mdef_CovariateModel(ModelObject mObj){
 		var model = "";
 		if (mObj != null){
 			if (cm_vars.size() > 0){
@@ -110,8 +107,8 @@ class ModelDefinitionPrinter {
 	
 	protected def getCovariateType(String covVar, ModelObject mObj){
 		for (b: mObj.blocks){
-			if (b.inputVariablesBlock != null){
-				for (s: b.inputVariablesBlock.variables){
+			if (b.covariateBlock != null){
+				for (s: b.covariateBlock.variables){
 					if (s.list != null){
 						if (s.symbolName != null && covVar.equals(s.symbolName.name)){
 							var type = getAttribute(s.list.arguments, AttributeValidator::attr_type.name);

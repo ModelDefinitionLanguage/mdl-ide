@@ -5,7 +5,6 @@ import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.MOGObject
 import java.util.ArrayList
 import org.ddmore.mdl.validation.Utils
@@ -21,10 +20,9 @@ class ReferenceResolver{
 	
 	protected var eps_vars = newHashMap   //EPSs   - Random variables, level 1
 	protected var eta_vars = newHashMap	  //ETAs   - Random variables, level 2
-	protected var level_vars = newHashMap //       - Input variables, level attribute			
+	protected var level_vars = newHashMap //       - VARIABILITY block			
 	
 	//List of PharmML declared symbols and corresponding blocks 
-	protected var ind_vars = new ArrayList<String>();
 	protected var vm_err_vars = new ArrayList<String>(); 
 	protected var vm_mdl_vars = new ArrayList<String>();
 	protected var cm_vars = new ArrayList<String>();
@@ -39,8 +37,6 @@ class ReferenceResolver{
 	  			setRandomVariables(o.modelObject);
 				//Derivatives
 				deriv_vars = Utils::getDerivativeVariables(o.modelObject);
-				//Independent variables
-				ind_vars = o.modelObject.getIndependentVars();
 				//VariabilityModel definitions
 				vm_err_vars = o.modelObject.getLevelVars("1");
 				vm_mdl_vars = o.modelObject.getLevelVars("2")
@@ -67,42 +63,23 @@ class ReferenceResolver{
 	protected def getReferenceBlock(String name){
 		if (vm_err_vars.contains(name)) return "vm_err";
 		if (vm_mdl_vars.contains(name)) return "vm_mdl";
-		if (cm_vars.contains(name)) return "cm";
+		//if (cm_vars.contains(name)) return "cm";
+		//if (ind_vars.contains(name)) return "ind";
 		if (om_vars.contains(name)) return "om";	
 		if (sm_vars.contains(name)) return "sm";	
 		if (pm_vars.contains(name)) return "pm";	
 		return "";
 	}	
-	
-	//+ Return input variables with use=idv (individual)
-	protected def getIndependentVars(ModelObject obj){
-		var independentVars = newArrayList;
-		for (block: obj.blocks){
-			if (block.inputVariablesBlock != null){
-				for (s: block.inputVariablesBlock.variables){
-					if (s.list != null && s.symbolName != null){
-						var use = getAttribute(s.list.arguments, AttributeValidator::attr_use.name);
-						if (use.equals(UseType::IDV.toString) && !independentVars.contains(s.symbolName.name)) 
-							independentVars.add(s.symbolName.name);
-					}
-				}
-			}
-		}
-		return independentVars;
-	}
 		
 	//+ Return a list of covariate variables per object
 	protected def getCovariateVars(ModelObject obj){
 		var covariateVars = newArrayList;
 		for (b: obj.blocks){
-			if (b.inputVariablesBlock != null){
-				for (s: b.inputVariablesBlock.variables){
+			if (b.covariateBlock != null){
+				for (s: b.covariateBlock.variables){
 					if (s.list != null && s.symbolName != null){
-						var use = getAttribute(s.list.arguments, AttributeValidator::attr_use.name);
-						if (use.equals(UseType::COVARIATE.toString)) {
-							if (!covariateVars.contains(s.symbolName.name))
-								covariateVars.add(s.symbolName.name);
-						}
+						if (!covariateVars.contains(s.symbolName.name))
+							covariateVars.add(s.symbolName.name);
 					}
 				}
 			}					
@@ -215,8 +192,8 @@ class ReferenceResolver{
 	protected def getLevelVars(ModelObject o, String levelId) {
 		var levelVars = newArrayList;
 		for (b: o.blocks){
-			if(b.inputVariablesBlock != null){
-				for (s: b.inputVariablesBlock.variables){
+			if(b.variabilityBlock != null){
+				for (s: b.variabilityBlock.variables){
 					if (s.list != null && s.symbolName != null){
 						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level.name);
 						if (level.equals(levelId)){

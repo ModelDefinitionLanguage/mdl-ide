@@ -23,13 +23,13 @@ import org.ddmore.mdl.mdl.impl.AdministrationBlockImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.CompartmentBlockImpl;
+import org.ddmore.mdl.mdl.impl.CovariateDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.DesignSpaceBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimationBlockImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.HyperSpaceBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.LibraryBlockImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
@@ -44,6 +44,7 @@ import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.StudyDesignBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.types.DefaultValues;
 import org.ddmore.mdl.types.MdlDataType;
@@ -69,34 +70,34 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_ATTRIBUTE_WRONG_TYPE  = "Type error";
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	/*Common*/
-	//name
-	final public static Attribute attr_name = new Attribute("name", MdlDataType.TYPE_STRING, false, "");		
-	final public static Attribute attr_name_ref = new Attribute("name", MdlDataType.TYPE_REF, true);		
-	//value
-	final public static Attribute attr_req_value = new Attribute("value", MdlDataType.TYPE_REAL, true, "0");
-	final public static Attribute attr_value = new Attribute("value", MdlDataType.TYPE_REAL, false, "0");
-	final public static Attribute attr_expr_value = new Attribute("value", MdlDataType.TYPE_EXPR, true, "0");
-	//type
-	final public static Attribute attr_type_randomEff = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, VariabilityType.SD.toString());
+	/*Data object*/
+	/*DATA_INPUT_VARIABLES*/
+	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
+	final public static Attribute attr_define = new Attribute("define", MdlDataType.TYPE_LIST, false);
+	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
 
-	//VARIABILITY
+	/*Parameter object*/
+	//STRUCTURAL
+	final public static Attribute attr_req_value = new Attribute("value", MdlDataType.TYPE_REAL, true, "0");
 	final public static Attribute attr_hi = new Attribute("hi", MdlDataType.TYPE_REAL, false, "0");
 	final public static Attribute attr_lo = new Attribute("lo", MdlDataType.TYPE_REAL, false, "1");
 	final public static Attribute attr_fix = new Attribute("fix", MdlDataType.TYPE_BOOLEAN, false, "false");
 	final public static Attribute attr_units = new Attribute("units", MdlDataType.TYPE_STRING, false, "kg");
+
+	//VARIABILITY
 	final public static Attribute attr_values = new Attribute("values", MdlDataType.TYPE_VECTOR_REAL, true, "[]");
 	final public static Attribute attr_params = new Attribute("params", MdlDataType.TYPE_VECTOR_REF, true, "[]");
+	final public static Attribute attr_type_randomEff = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, VariabilityType.SD.toString());
 	
+	/*Model object*/
+	/*MODEL_INPUT_VARIABLES*/
+	final public static Attribute attr_value = new Attribute("value", MdlDataType.TYPE_REAL, false, "0");
+	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, true, "1"); 
+	final public static Attribute attr_administration_ref = new Attribute("administration", MdlDataType.TYPE_REF_DERIV, false);
+
 	//RANDOM_VARIABLES_DEFINITION
 	final public static Attribute attr_rv1 = new Attribute("rv1", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_rv2 = new Attribute("rv2", MdlDataType.TYPE_REF, true);
-	
-	/*MODEL_INPUT_VARIABLES*/
-	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
-	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, true, "1"); 
-	final public static Attribute attr_administration_ref = new Attribute("administration", MdlDataType.TYPE_REF_DERIV, false);
-	final public static Attribute attr_type_use = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
 	
 	/*OBSERVATION*/
 	final public static Attribute attr_type_continuous = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.VAR_CONTINUOUS);
@@ -107,17 +108,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*ESTIMATION*/
 	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
 	final public static Attribute attr_ruv = new Attribute("ruv", MdlDataType.TYPE_EXPR, false);
-	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
 	
 	/*ODE*/
 	final public static Attribute attr_deriv = new Attribute("deriv", MdlDataType.TYPE_EXPR, true, DefaultValues.VAR_NAME);	
 	final public static Attribute attr_init = new Attribute("init", MdlDataType.TYPE_EXPR, false, "0");	
 	final public static Attribute attr_x0 = new Attribute("x0", MdlDataType.TYPE_REAL, false, "0");	
 	final public static Attribute attr_wrt = new Attribute("wrt", MdlDataType.TYPE_REF, false, DefaultValues.INDEPENDENT_VAR);	
-	
-	/*DATA_INPUT_VARIABLES*/
-	final public static Attribute attr_req_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, true, DefaultValues.VAR_TYPE);
-	final public static Attribute attr_define = new Attribute("define", MdlDataType.TYPE_LIST, false);
 	
 	/*INDIVIDUAL_VARIABLES*/
 	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_INDIVIDUAL_VAR, true);
@@ -152,9 +148,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_hill = new Attribute("hill", MdlDataType.TYPE_REAL, false); 
 			
 	/*Design object*/
-	final public static Attribute attr_trial_type = new Attribute("type", MdlDataType.TYPE_TRIAL, false);
-
 	/*ADMINISTRATION*/
+	final public static Attribute attr_trial_type = new Attribute("type", MdlDataType.TYPE_TRIAL, false);
 	final public static Attribute attr_start = new Attribute("start", MdlDataType.TYPE_INT, false);
 	final public static Attribute attr_end = new Attribute("end", MdlDataType.TYPE_INT, false);
 	final public static Attribute attr_administration = new Attribute("administration", 
@@ -182,6 +177,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_bql = new Attribute("bql", MdlDataType.TYPE_REAL, false);
 	
 	/*STUDY_DESIGN (ARMS)*/
+	final public static Attribute attr_name_ref = new Attribute("name", MdlDataType.TYPE_REF, true);		
 	final public static Attribute attr_groupSize = new Attribute("groupSize", MdlDataType.TYPE_INT, false);
 	final public static Attribute attr_inteventionSequence = new Attribute("inteventionSequence", 
 			MdlDataType.TYPE_LIST, false);
@@ -196,10 +192,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_numberSamples = new Attribute("numberSamples", MdlDataType.TYPE_RANDOM_LIST, false);
 	final public static Attribute attr_min = new Attribute("min", MdlDataType.TYPE_RANDOM_LIST, false);
 	final public static Attribute attr_max = new Attribute("max", MdlDataType.TYPE_RANDOM_LIST, false);
-	
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Attribute sets
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
-	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_req_type, attr_define, attr_units);
+	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_type, attr_define, attr_use, attr_units);
 	
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_req_value, attr_lo, attr_hi, 
@@ -209,8 +207,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*Model object*/
 	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_type_randomEff, attr_rv1, attr_rv2);
-	final public static List<Attribute> attrs_inputVariables = Arrays.asList(attr_value, attr_use, attr_type_use, 
-			attr_level, attr_administration_ref, attr_prediction, attr_units);
+	
+	final public static List<Attribute> attrs_covariateDef   = Arrays.asList(attr_value, attr_type, attr_level, attr_administration_ref, attr_prediction, attr_units);
+	final public static List<Attribute> attrs_variabilityDef = Arrays.asList(attr_value, attr_type, attr_level, attr_administration_ref, attr_prediction, attr_units);
 	
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
@@ -241,6 +240,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_designSpace = Arrays.asList(attr_name_ref, attr_admTime, attr_numberSamples);
 	final public static List<Attribute> attrs_hyperSpace = Arrays.asList(attr_name_ref, attr_min, attr_max, attr_admTime, attr_numberSamples);
 	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	//Returns recognised attributes for list containers
 	public static List<Attribute> getListAttributes(EObject obj){
 		/*Data object*/
@@ -249,7 +250,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof StructuralBlockImpl) return attrs_structural;
 		if (obj instanceof VariabilityBlockImpl) return attrs_variability;
 		/*Model object*/
-		if (obj instanceof InputVariablesBlockImpl) return attrs_inputVariables;
+		if (obj instanceof CovariateDefinitionBlockImpl) return attrs_covariateDef;
+		if (obj instanceof VariabilityDefinitionBlockImpl) return attrs_variabilityDef;
 		if (obj instanceof IndividualVariablesBlockImpl) return attrs_individualVariables;
 		if (obj instanceof OdeBlockImpl) return attrs_ode; 
 		if (obj instanceof CompartmentBlockImpl) return attrs_compartment; 
@@ -454,7 +456,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		List<String> categoricalNames = new ArrayList<String>();
 		for (Argument parentArg: parentArgs.getArguments()){
 			if (parentArg.getArgumentName() != null){
-				if (parentArg.getArgumentName().getName().equals(attr_req_type.getName())){
+				if (parentArg.getArgumentName().getName().equals(attr_type.getName())){
 					if (parentArg.getExpression().getType() != null && 
 						parentArg.getExpression().getType().getType() != null &&
 						parentArg.getExpression().getType().getType().getCategorical() != null){
@@ -485,7 +487,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			//Data object	
 			obj instanceof DataInputBlockImpl ||
 			//Model object
-			obj instanceof InputVariablesBlockImpl ||
+			obj instanceof CovariateDefinitionBlockImpl ||
+			obj instanceof VariabilityDefinitionBlockImpl ||
 			obj instanceof IndividualVariablesBlockImpl ||
 			obj instanceof LibraryBlockImpl ||
 			obj instanceof OdeBlockImpl || 

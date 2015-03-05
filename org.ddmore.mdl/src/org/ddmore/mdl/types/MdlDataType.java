@@ -544,7 +544,7 @@ public enum MdlDataType {
 	
 	public static MdlDataType getExpectedType(org.ddmore.mdl.mdl.List l){
 		//List contains type attribute - derive based on type
-		AnyExpression type = MdlPrinter.getInstance().getAttributeExpression(l.getArguments(), AttributeValidator.attr_req_type.getName());
+		AnyExpression type = MdlPrinter.getInstance().getAttributeExpression(l.getArguments(), AttributeValidator.attr_type.getName());
 		if (type != null){
 			if (type.getType() != null && type.getType().getType() != null){
 				if (type.getType().getType().getCategorical() != null)

@@ -108,7 +108,8 @@ public class Utils {
 		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj).getIdentifier();
 		if (obj instanceof PriorParametersBlockImpl) return ((PriorParametersBlock)obj).getIdentifier();
 		/*Model object*/
-		if (obj instanceof InputVariablesBlockImpl) return ((InputVariablesBlock)obj).getIdentifier();
+		if (obj instanceof CovariateDefinitionBlockImpl) return ((CovariateDefinitionBlock)obj).getIdentifier();
+		if (obj instanceof VariabilityDefinitionBlockImpl) return ((VariabilityDefinitionBlock)obj).getIdentifier();
 		if (obj instanceof IndividualVariablesBlockImpl) return ((IndividualVariablesBlock)obj).getIdentifier();
 		if (obj instanceof LibraryBlockImpl) return ((LibraryBlock)obj).getIdentifier() ;
 		if (obj instanceof OdeBlockImpl) return ((OdeBlock)obj).getIdentifier() ;

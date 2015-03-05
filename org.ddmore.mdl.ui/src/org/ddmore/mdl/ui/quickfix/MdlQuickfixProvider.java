@@ -94,9 +94,12 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			allAttributes.put(grammarAccess.getVariabilityBlockAccess().
 					getIdentifierVARIABILITYKeyword_0_0().getValue() + ":" + attr.getName(), attr);
 		/*Model object*/
-		for (Attribute attr: AttributeValidator.attrs_inputVariables) 
-			allAttributes.put(grammarAccess.getInputVariablesBlockAccess().
-					getIdentifierMODEL_INPUT_VARIABLESKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_covariateDef) 
+			allAttributes.put(grammarAccess.getCovariateDefinitionBlockAccess().
+					getIdentifierCOVARIATEKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+		for (Attribute attr: AttributeValidator.attrs_variabilityDef) 
+			allAttributes.put(grammarAccess.getVariabilityDefinitionBlockAccess().
+					getIdentifierVARIABILITYKeyword_0_0().getValue() + ":" + attr.getName(), attr);
 		for (Attribute attr: AttributeValidator.attrs_individualVariables) 
 			allAttributes.put(grammarAccess.getIndividualVariablesBlockAccess().
 					getIdentifierINDIVIDUAL_VARIABLESKeyword_0_0().getValue()+ ":" + attr.getName(), attr);

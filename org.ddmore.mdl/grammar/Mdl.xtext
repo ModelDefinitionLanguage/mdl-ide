@@ -39,7 +39,6 @@ ModelObjectBlock:
 	individualVariablesBlock = IndividualVariablesBlock | 
 	modelPredictionBlock = ModelPredictionBlock | 
 	randomVariableDefinitionBlock = RandomVariableDefinitionBlock |
-	inputVariablesBlock = InputVariablesBlock |
 	variabilityBlock = VariabilityDefinitionBlock |
 	covariateBlock = CovariateDefinitionBlock |
 	structuralParametersBlock = StructuralParametersBlock |
@@ -65,11 +64,6 @@ ModelPredictionBlock:
 RandomVariableDefinitionBlock:
 	identifier = 'RANDOM_VARIABLE_DEFINITION' '(' arguments = Arguments? ')'
 	BEGIN variables += SymbolDeclaration* END 
-;
-
-InputVariablesBlock:
-  	identifier = 'MODEL_INPUT_VARIABLES' 
-  	BEGIN variables += SymbolDeclaration* END 
 ;
 
 VariabilityDefinitionBlock:

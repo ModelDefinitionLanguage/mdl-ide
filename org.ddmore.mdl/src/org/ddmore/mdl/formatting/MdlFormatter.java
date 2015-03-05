@@ -56,7 +56,8 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap(2).before(f.getIndividualVariablesBlockRule());
 		c.setLinewrap(2).before(f.getModelPredictionBlockRule());
 		c.setLinewrap(2).before(f.getRandomVariableDefinitionBlockRule());
-		c.setLinewrap(2).before(f.getInputVariablesBlockRule());
+		c.setLinewrap(2).before(f.getCovariateDefinitionBlockRule());
+		c.setLinewrap(2).before(f.getVariabilityDefinitionBlockRule());
 		c.setLinewrap(2).before(f.getStructuralParametersBlockRule());
 		c.setLinewrap(2).before(f.getVariabilityParametersBlockRule());
 		c.setLinewrap(2).before(f.getOutputVariablesBlockRule());

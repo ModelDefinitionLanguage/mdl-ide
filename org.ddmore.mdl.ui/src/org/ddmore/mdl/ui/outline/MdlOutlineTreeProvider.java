@@ -53,12 +53,12 @@ import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.VariableList;
 import org.ddmore.mdl.mdl.Vector;
 import org.ddmore.mdl.mdl.impl.ArgumentNameImpl;
+import org.ddmore.mdl.mdl.impl.CovariateDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataBlockImpl;
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.InputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
@@ -69,6 +69,7 @@ import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VarTypeImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.validation.PropertyValidator;
 import org.eclipse.emf.ecore.EObject;
@@ -206,8 +207,12 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(VARIABILITY_BLOCK));
     }
 
-    protected Image _image(InputVariablesBlockImpl e) {
-        return imageHelper.getImage(getPath(INPUT_VARIABLES_BLOCK));
+    protected Image _image(CovariateDefinitionBlockImpl e) {
+        return imageHelper.getImage(getPath(COVARIATE_DEFINITION_BLOCK));
+    }
+
+    protected Image _image(VariabilityDefinitionBlockImpl e) {
+        return imageHelper.getImage(getPath(VARIABILITY_DEFINITION_BLOCK));
     }
 
     protected Image _image(StructuralParametersBlockImpl e) {
@@ -267,7 +272,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     }
     
     protected Image _image(DataInputBlockImpl e) {
-        return imageHelper.getImage(getPath(HEADER_BLOCK));
+        return imageHelper.getImage(getPath(DATA_INPUT_BLOCK));
     }
     
     protected Image _image(DataBlockImpl e) {
