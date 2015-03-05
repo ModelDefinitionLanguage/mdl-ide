@@ -197,6 +197,5 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
    				ref.getName() + " is not in the reference set " + Utils.printList(varNames), 
    				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
    				MSG_UNRESOLVED_EXTERNAL_VARIABLE, ref.getName());
-	}
-	
+	}	
 }

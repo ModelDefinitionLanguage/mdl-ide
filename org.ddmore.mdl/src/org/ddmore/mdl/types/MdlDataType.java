@@ -29,7 +29,7 @@ public enum MdlDataType {
     //Restrictions of basic (to comply with PharmML)
     TYPE_NAT, TYPE_PNAT, TYPE_PREAL, TYPE_PROBABILITY,
     //References to variables and mathematical expressions
-	TYPE_REF, TYPE_REF_DERIV, TYPE_EXPR,  
+	TYPE_REF, TYPE_REF_DERIV, TYPE_EXPR, TYPE_MATCHING,  
 	//References to objects
 	TYPE_OBJ_REF, TYPE_OBJ_REF_MOG,
 	TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_OBJ_REF_TASK, TYPE_OBJ_REF_DESIGN,
@@ -42,7 +42,7 @@ public enum MdlDataType {
     //Restricted vectors
     TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL, TYPE_VECTOR_PROBABILITY,
     //Reference vectors
-    TYPE_VECTOR_REF, TYPE_VECTOR_EXPR,
+    TYPE_VECTOR_REF, TYPE_VECTOR_EXPR, TYPE_VECTOR_MATCHING,
 
 	/*String restrictions*/
 	TYPE_TRANS,          //{log, logit, probit}
@@ -80,6 +80,7 @@ public enum MdlDataType {
 			//Vectors of references
 			case TYPE_VECTOR_REF: return isVectorReference(expr);  
 			case TYPE_VECTOR_EXPR: return true;
+			case TYPE_VECTOR_MATCHING: return isVectorMatching(expr);
 			//Vectors of restrictions
 			case TYPE_VECTOR_NAT: return isVectorNat(expr);
 			case TYPE_VECTOR_PNAT: return isVectorPNat(expr);
@@ -119,9 +120,11 @@ public enum MdlDataType {
 		if (expr.getExpression() != null)
 			return validateType(type, expr.getExpression());
 		if ((expr.getList() != null) && (type == TYPE_LIST)) return true;
-		if (expr.getVector() != null)
+		if (expr.getVector() != null) 
 			return validateType(type, expr.getVector());
-		if (expr.getType() != null)
+		if (expr.getMatching() != null) 
+			return (type == TYPE_MATCHING);
+		if (expr.getType() != null) 
 			return validateType(type, expr.getType());
 		return false;
 	}
@@ -181,6 +184,7 @@ public enum MdlDataType {
 				boolean ok = isVectorReal(p.getVector());
 				if (!ok) return false;
 			} else {
+				if (p.getMatching() != null) return false; 
 				if (p.getExpression() != null){
 					if (p.getExpression().getExpression() != null){
 						boolean ok = isReal(p.getExpression().getExpression());
@@ -198,6 +202,7 @@ public enum MdlDataType {
 				boolean ok = isVectorNat(p.getVector());
 				if (!ok) return false;
 			} else {
+				if (p.getMatching() != null) return false; 
 				if (p.getExpression() != null){
 					if (p.getExpression().getExpression() != null){
 						boolean ok = isNatural(p.getExpression().getExpression());
@@ -215,6 +220,7 @@ public enum MdlDataType {
 				boolean ok = isVectorNat(p.getVector());
 				if (!ok) return false;
 			} else {
+				if (p.getMatching() != null) return false; 
 				if (p.getExpression() != null){
 					if (p.getExpression().getExpression() != null){
 						boolean ok = isPositiveNatural(p.getExpression().getExpression());
@@ -232,6 +238,7 @@ public enum MdlDataType {
 				boolean ok = isVectorPReal(p.getVector());
 				if (!ok) return false;
 			} else {
+				if (p.getMatching() != null) return false; 
 				if (p.getExpression() != null){
 					if (p.getExpression().getExpression() != null){
 						boolean ok = isPositiveReal(p.getExpression().getExpression());
@@ -252,6 +259,7 @@ public enum MdlDataType {
 				boolean ok = isVectorPReal(p.getVector());
 				if (!ok) return false;
 			} else {
+				if (p.getMatching() != null) return false; 
 				if (p.getExpression() != null){
 					if (p.getExpression().getExpression() != null){
 						boolean ok = isProbability(p.getExpression().getExpression());
@@ -276,6 +284,7 @@ public enum MdlDataType {
 				boolean ok = isVectorInteger(p.getVector());
 				if (!ok) return false;
 			} else {
+				if (p.getMatching() != null) return false; 
 				if (p.getExpression() != null){
 					if (p.getExpression().getExpression() != null){
 						boolean ok = isInteger(p.getExpression().getExpression());
@@ -293,15 +302,29 @@ public enum MdlDataType {
 				boolean ok = isVectorReference(p.getVector());
 				if (!ok) return false;
 			} else {
+				if (p.getMatching() != null) return false; 
 				if (p.getExpression() != null){
 					if (p.getExpression().getExpression() != null){
 						return (isReference(p.getExpression().getExpression()));
 					}
-				}
+				} 
 			}
 		}
 		return true;	
 	}
+	
+	private static boolean isVectorMatching(Vector v){
+		for (AnyExpression p: v.getValues()){
+			if (p.getVector() != null) {
+				boolean ok = isVectorMatching(p.getVector());
+				if (!ok) return false;
+			} else {
+				if (p.getMatching() == null) return false;
+			}
+		}
+		return true;	
+	}
+
 
 	private static boolean isVectorString(Vector v){
 		for (AnyExpression p: v.getValues()){
@@ -309,6 +332,7 @@ public enum MdlDataType {
 				boolean ok = isVectorString(p.getVector());
 				if (!ok) return false;
 			} else {
+				if (p.getMatching() != null) return false; 
 				if (p.getExpression() != null){
 					if (p.getExpression().getExpression() != null){
 						return isString(p.getExpression().getExpression());

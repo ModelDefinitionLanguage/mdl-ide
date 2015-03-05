@@ -32,6 +32,7 @@ import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.types.MdlDataType
+import org.ddmore.mdl.mdl.Matching
 
 class MathPrinter{
 
@@ -47,6 +48,9 @@ class MathPrinter{
 	def CharSequence print_Math_Expr(AnyExpression e) '''
 		«IF e.expression != null»
 			«e.expression.print_Math_Expr»
+		«ENDIF»
+		«IF e.matching != null»
+			«e.matching.print_Math_Piece»
 		«ENDIF»
 		«IF e.vector != null»
 			«e.vector.print_ct_Vector»
@@ -381,16 +385,29 @@ class MathPrinter{
 		«ENDIF»
 	'''
 
-	//+
 	def print_ct_Vector(Vector vector) '''
-		<ct:Vector>
-			«FOR v : vector.values»
-				«v.print_Math_Expr»
-			«ENDFOR»
-		</ct:Vector>
+		«IF MdlDataType::validateType(MdlDataType::TYPE_VECTOR_MATCHING, vector)»
+			<Piecewise>
+				«FOR v: vector.values»
+					«IF v.matching != null»
+						«v.matching.print_Math_Piece»
+					«ENDIF»
+				«ENDFOR»
+			</Piecewise>
+		«ELSE» 
+			<ct:Vector>
+				«FOR v: vector.values»
+					«v.print_Math_Expr»
+				«ENDFOR»
+			</ct:Vector>
+		«ENDIF»	
 	'''
+	
+	def print_Math_Piece(Matching expr){
+		val ref = expr.symbolName.print_ct_SymbolRef.toString;
+		ref.print_Math_LogicOpPiece(expr.condition.print_Math_LogicOr(0).toString);
+	}
 
-	//
 	def print_ct_Sequence(String begin, String stepSize, String end) '''
 		<ct:Sequence>
 			<ct:Begin>

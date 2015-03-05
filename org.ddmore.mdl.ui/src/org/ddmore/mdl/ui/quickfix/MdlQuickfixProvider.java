@@ -13,35 +13,21 @@ import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.DataInputBlock;
-import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.DistributionName;
 import org.ddmore.mdl.mdl.EnumType;
-import org.ddmore.mdl.mdl.EstimationBlock;
 import org.ddmore.mdl.mdl.Expression;
-import org.ddmore.mdl.mdl.GroupVariablesBlock;
-import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
-import org.ddmore.mdl.mdl.IndividualVariablesBlock;
 import org.ddmore.mdl.mdl.LogicalExpression;
-import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlFactory;
-import org.ddmore.mdl.mdl.MixtureBlock;
-import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
-import org.ddmore.mdl.mdl.ModelPredictionBlock;
-import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
-import org.ddmore.mdl.mdl.ObservationBlock;
-import org.ddmore.mdl.mdl.OdeBlock;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.OutputVariablesBlock;
-import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
-import org.ddmore.mdl.mdl.SimulationBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
@@ -53,7 +39,6 @@ import org.ddmore.mdl.mdl.VarType;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
-import org.ddmore.mdl.mdl.impl.MclImpl;
 import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
@@ -65,8 +50,8 @@ import org.ddmore.mdl.types.VariableType;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.DistributionValidator;
 import org.ddmore.mdl.validation.MdlJavaValidator;
+import org.ddmore.mdl.validation.Utils;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.ui.editor.model.edit.IModificationContext;
 import org.eclipse.xtext.ui.editor.model.edit.ISemanticModification;
 import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider;
@@ -74,7 +59,6 @@ import org.eclipse.xtext.ui.editor.quickfix.Fix;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor;
 import org.eclipse.xtext.validation.Issue;
 import com.google.inject.Inject;
-
 
 public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
@@ -249,6 +233,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Automatically create EObjects
     //////////////////////////////////////////////////////////////////////////////////////////////////////////    
+	
 	AnyExpression createTypedExpression(Attribute attribute){
 		MdlDataType type = attribute.getType();
 		String value = attribute.getDefaultValue();
@@ -432,6 +417,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Fix variable references
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
 	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 	public void removeVariable(final Issue issue, IssueResolutionAcceptor acceptor) {
@@ -467,29 +453,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//Insert variable declaration
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	ModelObject getModelObject(EObject element){
-		Resource resource = element.eResource();
-		for(EObject obj1: resource.getContents()) {
-			if (obj1 instanceof MclImpl){
-				Mcl mcl = (Mcl)obj1;
-				for (MclObject obj: mcl.getObjects())
-					if (obj.getModelObject() != null) return obj.getModelObject();
-			}
-		}
-		return null;
-	}
-	
-	DataObject getDataObject(EObject element){
-		Resource resource = element.eResource();
-		for(EObject obj1: resource.getContents()) {
-			if (obj1 instanceof MclImpl){
-				Mcl mcl = (Mcl)obj1;
-				for (MclObject obj: mcl.getObjects())
-					if (obj.getDataObject() != null) return obj.getDataObject();
-			}
-		}
-		return null;
-	}
 	
 	//DATA_INPUT_VARIABLES
 	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
@@ -499,9 +462,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
 				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				DataObject obj = getDataObject(element);
-				if (obj != null){
-					for (DataObjectBlock block: obj.getBlocks()){
+				MclObject mclObj = Utils.getMclObject(element);
+				if (mclObj.getDataObject() != null){
+					for (DataObjectBlock block: mclObj.getDataObject().getBlocks()){
 						if (block.getDataInputBlock() != null){
 							insertSymbolDeclaration(block.getDataInputBlock(), issue.getData()[0]);
 							return;
@@ -512,7 +475,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 					insertSymbolDeclaration(block, issue.getData()[0]);
 					DataObjectBlock dataBlock =  MdlFactory.eINSTANCE.createDataObjectBlock();
 					dataBlock.setDataInputBlock(block);
-					obj.getBlocks().add(dataBlock); 
+					mclObj.getDataObject().getBlocks().add(dataBlock); 
 				}
 			}
 		});
@@ -536,9 +499,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		acceptor.accept(issue, "Add variable declaration to " + blockName, 
 				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				ModelObject obj = getModelObject(element);
-				if (obj != null){
-					for (ModelObjectBlock block: obj.getBlocks()){
+				MclObject mclObj = Utils.getMclObject(element);
+				if (mclObj != null && mclObj.getModelObject() != null){
+					for (ModelObjectBlock block: mclObj.getModelObject().getBlocks()){
 						if (block.getRandomVariableDefinitionBlock() != null){
 							insertRandomVariable(block.getRandomVariableDefinitionBlock(), issue.getData()[0]);
 							return;
@@ -549,286 +512,15 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 					insertRandomVariable(block, issue.getData()[0]);
 					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
 					mdlBlock.setRandomVariableDefinitionBlock(block);
-					obj.getBlocks().add(mdlBlock); 
+					mclObj.getModelObject().getBlocks().add(mdlBlock); 
 				}
 			}
 		});
 	}
-	
-	//GROUP_VARIABLES
-	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
-	public void addVariableToGroupVariables(final Issue issue, IssueResolutionAcceptor acceptor) {
-		final String blockName = grammarAccess.getGroupVariablesBlockAccess().getIdentifierGROUP_VARIABLESKeyword_0_0().getValue();
-		acceptor.accept(issue, "Add variable declaration to " + blockName, 
-				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
-			public void apply(EObject element, IModificationContext context) {
-				ModelObject obj = getModelObject(element);
-				if (obj != null){
-					for (ModelObjectBlock block: obj.getBlocks()){
-						if (block.getGroupVariablesBlock() != null){
-							insertSymbolDeclaration(block.getGroupVariablesBlock(), issue.getData()[0]);
-							return;
-						}
-					}
-					GroupVariablesBlock block = MdlFactory.eINSTANCE.createGroupVariablesBlock();
-					block.setIdentifier(blockName);
-					insertSymbolDeclaration(block, issue.getData()[0]);
-					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
-					mdlBlock.setGroupVariablesBlock(block);
-					obj.getBlocks().add(mdlBlock); 
-				}
-			}
-		});
-	}	
-	void insertSymbolDeclaration(GroupVariablesBlock block, String varName){
-		GroupVariablesBlockStatement groupSt =  MdlFactory.eINSTANCE.createGroupVariablesBlockStatement();
-		groupSt.setVariable(createSymbolDeclaration(varName));
-		block.getStatements().add(groupSt);
-	}
-	
-	//MIXTURE
-	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
-	public void addVariableToMixture(final Issue issue, IssueResolutionAcceptor acceptor) {
-		final String blockName = grammarAccess.getMixtureBlockAccess().getIdentifierMIXTUREKeyword_0_0().getValue();
-		acceptor.accept(issue, "Add variable declaration to " + blockName, 
-				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
-			public void apply(EObject element, IModificationContext context) {
-				ModelObject obj = getModelObject(element);
-				if (obj != null){
-					for (ModelObjectBlock block: obj.getBlocks()){
-						if (block.getGroupVariablesBlock() != null){
-							for (GroupVariablesBlockStatement st: block.getGroupVariablesBlock().getStatements()){
-								if (st.getMixtureBlock() != null){
-									st.getMixtureBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
-									return;
-								}
-							}
-							//create MIXTURE block
-							block.getGroupVariablesBlock().getStatements().add(createGroupVariablesBlockStatement(issue.getData()[0]));
-							return;
-						}
-					}
-					GroupVariablesBlock block = MdlFactory.eINSTANCE.createGroupVariablesBlock();
-					block.setIdentifier(grammarAccess.getGroupVariablesBlockAccess().getIdentifierGROUP_VARIABLESKeyword_0_0().getValue());
-					block.getStatements().add(createGroupVariablesBlockStatement(issue.getData()[0]));
-					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
-					mdlBlock.setGroupVariablesBlock(block);
-					obj.getBlocks().add(mdlBlock); 
-				}
-			}
-		});
-	}
-	GroupVariablesBlockStatement createGroupVariablesBlockStatement(String varName)
-	{
-		MixtureBlock mix = MdlFactory.eINSTANCE.createMixtureBlock();
-		mix.setIdentifier(grammarAccess.getMixtureBlockAccess().getIdentifierMIXTUREKeyword_0_0().getValue());
-		mix.getVariables().add(createSymbolDeclaration(varName));
-		GroupVariablesBlockStatement groupSt =  MdlFactory.eINSTANCE.createGroupVariablesBlockStatement();
-		groupSt.setMixtureBlock(mix);
-		return groupSt;
-	}
-	
-	//INDIVIDUAL_VARIABLES
-	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
-	public void addVariableToIndividualVariables(final Issue issue, IssueResolutionAcceptor acceptor) {
-		final String blockName = grammarAccess.getIndividualVariablesBlockAccess().getIdentifierINDIVIDUAL_VARIABLESKeyword_0_0().getValue();
-		acceptor.accept(issue, "Add variable declaration to " + blockName, 
-				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
-			public void apply(EObject element, IModificationContext context) {
-				ModelObject obj = getModelObject(element);
-				if (obj != null){
-					for (ModelObjectBlock block: obj.getBlocks()){
-						if (block.getIndividualVariablesBlock() != null){
-							block.getIndividualVariablesBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
-							return;
-						}
-					}
-					IndividualVariablesBlock block = MdlFactory.eINSTANCE.createIndividualVariablesBlock();
-					block.setIdentifier(blockName);
-					block.getVariables().add(createSymbolDeclaration(issue.getData()[0]));
-					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
-					mdlBlock.setIndividualVariablesBlock(block);
-					obj.getBlocks().add(mdlBlock); 
-				}
-			}
-		});
-	}	
-	
-	//MODEL_PREDICTION
-	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
-	public void addVariableToModelPrediction(final Issue issue, IssueResolutionAcceptor acceptor) {
-		final String blockName = grammarAccess.getModelPredictionBlockAccess().getIdentifierMODEL_PREDICTIONKeyword_0_0().getValue();
-		acceptor.accept(issue, "Add variable declaration to " + blockName, 
-				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
-			public void apply(EObject element, IModificationContext context) {
-				ModelObject obj = getModelObject(element);
-				if (obj != null){
-					for (ModelObjectBlock block: obj.getBlocks()){
-						if (block.getModelPredictionBlock() != null){
-							insertSymbolDeclaration(block.getModelPredictionBlock(), issue.getData()[0]);
-							return;
-						}
-					}
-					ModelPredictionBlock block = MdlFactory.eINSTANCE.createModelPredictionBlock();
-					block.setIdentifier(blockName);
-					insertSymbolDeclaration(block, issue.getData()[0]);
-					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
-					mdlBlock.setModelPredictionBlock(block);
-					obj.getBlocks().add(mdlBlock); 
-				}
-			}
-		});
-	}	
-	void insertSymbolDeclaration(ModelPredictionBlock block, String varName){
-		ModelPredictionBlockStatement groupSt =  MdlFactory.eINSTANCE.createModelPredictionBlockStatement();
-		groupSt.setVariable(createSymbolDeclaration(varName));
-		block.getStatements().add(groupSt);
-	}
-	
-	//ODE
-	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
-	public void addVariableToOde(final Issue issue, IssueResolutionAcceptor acceptor) {
-		String blockName = grammarAccess.getOdeBlockAccess().getIdentifierDEQKeyword_0_0_1().getValue();
-		acceptor.accept(issue, "Add variable declaration to " + blockName, 
-				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
-			public void apply(EObject element, IModificationContext context) {
-				ModelObject obj = getModelObject(element);
-				if (obj != null){
-					for (ModelObjectBlock block: obj.getBlocks()){
-						if (block.getModelPredictionBlock() != null){
-							for (ModelPredictionBlockStatement st: block.getModelPredictionBlock().getStatements()){
-								if (st.getOdeBlock() != null){
-									st.getOdeBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
-									return;
-								}
-							}
-							//create ODE block
-							block.getModelPredictionBlock().getStatements().add(createModelPredictionBlockStatementOde(issue.getData()[0]));
-							return;
-						}
-					}
-					//create MODEL_PREDICATION block
-					ModelPredictionBlock block = MdlFactory.eINSTANCE.createModelPredictionBlock();
-					block.setIdentifier(grammarAccess.getModelPredictionBlockAccess().getIdentifierMODEL_PREDICTIONKeyword_0_0().getValue());
-					block.getStatements().add(createModelPredictionBlockStatementOde(issue.getData()[0]));
-					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
-					mdlBlock.setModelPredictionBlock(block);
-					obj.getBlocks().add(mdlBlock); 
-				}
-			}
-		});
-	}	
-	ModelPredictionBlockStatement createModelPredictionBlockStatementOde(String varName){
-		OdeBlock ode = MdlFactory.eINSTANCE.createOdeBlock();
-		ode.setIdentifier(grammarAccess.getOdeBlockAccess().getIdentifierDEQKeyword_0_0_1().getValue());
-		ode.getVariables().add(createSymbolDeclaration(varName));
-		ModelPredictionBlockStatement mpSt =  MdlFactory.eINSTANCE.createModelPredictionBlockStatement();
-		mpSt.setOdeBlock(ode);
-		return mpSt;
-	}	
-	
-	//OBSERVATION
-	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
-	public void addVariableToObservation(final Issue issue, IssueResolutionAcceptor acceptor) {
-		final String blockName = grammarAccess.getObservationBlockAccess().getIdentifierOBSERVATIONKeyword_0_0().getValue();
-		acceptor.accept(issue, "Add variable declaration to " + blockName, 
-				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
-			public void apply(EObject element, IModificationContext context) {
-				ModelObject obj = getModelObject(element);
-				if (obj != null){
-					for (ModelObjectBlock block: obj.getBlocks()){
-						if (block.getObservationBlock() != null){
-							block.getObservationBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
-							return;
-						}
-					}
-					ObservationBlock block = MdlFactory.eINSTANCE.createObservationBlock();
-					block.setIdentifier(blockName);
-					block.getVariables().add(createSymbolDeclaration(issue.getData()[0]));
-					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
-					mdlBlock.setObservationBlock(block);
-					obj.getBlocks().add(mdlBlock); 				
-				}
-			}
-		});
-	}	
-
-	//SIMULATION
-	//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-	@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
-	public void addVariableToSimulation(final Issue issue, IssueResolutionAcceptor acceptor) {
-		final String blockName = grammarAccess.getSimulationBlockAccess().getIdentifierSIMULATIONKeyword_0_0().getValue();
-		acceptor.accept(issue, "Add variable declaration to " + blockName, 
-				"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
-			public void apply(EObject element, IModificationContext context) {
-				ModelObject obj = getModelObject(element);
-				if (obj != null){
-					for (ModelObjectBlock block: obj.getBlocks()){
-						if (block.getSimulationBlock() != null){
-							block.getSimulationBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
-							return;
-						}
-					}
-					SimulationBlock block = MdlFactory.eINSTANCE.createSimulationBlock();
-					block.setIdentifier(blockName);
-					block.getVariables().add(createSymbolDeclaration(issue.getData()[0]));
-					ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
-					mdlBlock.setSimulationBlock(block);
-					obj.getBlocks().add(mdlBlock); 
-				}
-			}
-		});
-	}	
-
-	//ESTIMATION
-		//@Fix(MdlJavaValidator.MSG_VARIABLE_UNKNOWN)
-		@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
-		public void addVariableToEstimation(final Issue issue, IssueResolutionAcceptor acceptor) {
-			final String blockName = grammarAccess.getEstimationBlockAccess().getIdentifierESTIMATIONKeyword_0_0().getValue();
-			acceptor.accept(issue, "Add variable declaration to " + blockName, 
-					"Add variable declaration to " + blockName, "add.png", new ISemanticModification() {
-				public void apply(EObject element, IModificationContext context) {
-					ModelObject obj = getModelObject(element);
-					if (obj != null){
-						for (ModelObjectBlock block: obj.getBlocks()){
-							if (block.getEstimationBlock() != null){
-								block.getEstimationBlock().getVariables().add(createSymbolDeclaration(issue.getData()[0]));
-								return;
-							}
-						}
-						EstimationBlock block = MdlFactory.eINSTANCE.createEstimationBlock();
-						block.setIdentifier(blockName);
-						block.getVariables().add(createSymbolDeclaration(issue.getData()[0]));
-						ModelObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createModelObjectBlock();
-						mdlBlock.setEstimationBlock(block);
-						obj.getBlocks().add(mdlBlock); 
-					}
-				}
-			});
-		}	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Fix parameter references
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		ParameterObject getParameterObject(EObject element){
-			Resource resource = element.eResource();
-			for(EObject obj1: resource.getContents()) {
-				if (obj1 instanceof MclImpl){
-					Mcl mcl = (Mcl)obj1;
-					for (MclObject obj: mcl.getObjects())
-						if (obj.getParameterObject() != null) return obj.getParameterObject();
-				}
-			}
-			return null;
-		}
-
-
 		//STRUCTURAL
 		@Fix(MdlJavaValidator.MSG_UNRESOLVED_VARIABLE)
 		public void addVariableToStructural(final Issue issue, IssueResolutionAcceptor acceptor) {
@@ -836,9 +528,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			acceptor.accept(issue, "Add parameter declaration to " + blockName, 
 					"Add parameter declaration to " + blockName, "add.png", new ISemanticModification() {
 				public void apply(EObject element, IModificationContext context) {
-					ParameterObject obj = getParameterObject(element);
-					if (obj != null){
-						for (ParameterObjectBlock block: obj.getBlocks()){
+					MclObject mclObj = Utils.getMclObject(element);
+					if (mclObj != null && mclObj.getParameterObject() != null){
+						for (ParameterObjectBlock block: mclObj.getParameterObject().getBlocks()){
 							if (block.getStructuralBlock() != null){
 								block.getStructuralBlock().getParameters().add(createSymbolDeclaration(issue.getData()[0]));
 								return;
@@ -849,7 +541,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 						block.getParameters().add(createSymbolDeclaration(issue.getData()[0]));
 						ParameterObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createParameterObjectBlock();
 						mdlBlock.setStructuralBlock(block);
-						obj.getBlocks().add(mdlBlock); 
+						mclObj.getParameterObject().getBlocks().add(mdlBlock); 
 					}
 				}
 			});
@@ -862,9 +554,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			acceptor.accept(issue, "Add parameter declaration to " + blockName, 
 					"Add parameter declaration to " + blockName, "add.png", new ISemanticModification() {
 				public void apply(EObject element, IModificationContext context) {
-					ParameterObject obj = getParameterObject(element);
-					if (obj != null){
-						for (ParameterObjectBlock block: obj.getBlocks()){
+					MclObject mclObj = Utils.getMclObject(element);
+					if (mclObj != null && mclObj.getParameterObject() != null){
+						for (ParameterObjectBlock block: mclObj.getParameterObject().getBlocks()){
 							if (block.getVariabilityBlock() != null){
 								block.getVariabilityBlock().getParameters().add(createSymbolDeclaration(issue.getData()[0]));
 								return;
@@ -875,17 +567,18 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 						block.getParameters().add(createSymbolDeclaration(issue.getData()[0]));
 						ParameterObjectBlock mdlBlock =  MdlFactory.eINSTANCE.createParameterObjectBlock();
 						mdlBlock.setVariabilityBlock(block);
-						obj.getBlocks().add(mdlBlock); 
+						mclObj.getParameterObject().getBlocks().add(mdlBlock); 
 					}
 				}
 			});
 		}	
 		
+
 	SymbolDeclaration createSymbolDeclaration(String varName) {
 		SymbolDeclaration newParam = MdlFactory.eINSTANCE.createSymbolDeclaration();
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 		symbName.setName(varName);
-		newParam.setSymbolName(symbName);
+		newParam.setSymbolName(symbName);		
 		Attribute[] attributes = {AttributeValidator.attr_value};
 		newParam.setList(createList(attributes));
 		return newParam;
