@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="162">
+<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="164">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
 <unit id="org.eclipse.emf.ecore.xcore.sdk.feature.group" version="1.1.1.v20130903-0948"/>
@@ -69,10 +69,6 @@
 <repository location="http://download.eclipse.org/releases/juno"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150303-0927"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/ci/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
 <unit id="de.walware.thirdparty.jsch.feature.group" version="0.1.50.b201305311230E00sw"/>
 <repository location="http://download.walware.de/eclipse-4.2/site-jsch-00.01.50"/>
 </location>
@@ -84,8 +80,12 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.4.0.v20150303-1632"/>
+<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.4.0.v20150305-1103"/>
 <repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.4.0-beta-b2/ci/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150305-1047"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/ci/"/>
 </location>
 </locations>
 </target>
