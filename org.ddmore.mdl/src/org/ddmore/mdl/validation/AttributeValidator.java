@@ -181,10 +181,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*STUDY_DESIGN (ARMS)*/
 	final public static Attribute attr_name_ref = new Attribute("name", MdlDataType.TYPE_REF, true);		
 	final public static Attribute attr_groupSize = new Attribute("groupSize", MdlDataType.TYPE_INT, false);
-	final public static Attribute attr_inteventionSequence = new Attribute("inteventionSequence", 
-			MdlDataType.TYPE_LIST, false);
-	final public static Attribute attr_occasionValue = new Attribute("occasionValue", 
-			MdlDataType.TYPE_LIST, false);
+	final public static Attribute attr_inteventionSequence = new Attribute("inteventionSequence", MdlDataType.TYPE_LIST, false);
+	final public static Attribute attr_occasionValue = new Attribute("occasionValue", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_samplingSequence = new Attribute("samplingSequence", MdlDataType.TYPE_LIST, false);
 	
 	/*DESIGN_SPACE, HYPER_SPACE*/
@@ -201,8 +199,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_value, attr_lo, attr_hi, attr_fix, attr_units);
-	final public static List<Attribute> attrs_variability = Arrays.asList(attr_value, attr_type_randomEff, attr_fix, 
-			attr_lo, attr_hi, attr_units);
+	final public static List<Attribute> attrs_variability = Arrays.asList(attr_value, attr_type_randomEff, attr_fix, attr_lo, attr_hi, attr_units);
 	
 	/*Model object*/
 	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_type_randomEff, attr_rv1, attr_rv2);
@@ -213,29 +210,20 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
-	final public static List<Attribute> attrs_observation = Arrays.asList(attr_type_continuous, 
-			attr_error, attr_eps, attr_prediction_ref);
+	final public static List<Attribute> attrs_observation = Arrays.asList(attr_type_continuous, attr_error, attr_eps, attr_prediction_ref);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
-	final public static List<Attribute> attrs_individualVariables = Arrays.asList(
-			attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff, attr_group);
+	final public static List<Attribute> attrs_individualVariables = Arrays.asList(attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff, attr_group);
 	final public static List<Attribute> attrs_compartment = Arrays.asList(
-			attr_from, attr_to, attr_finput, attr_foutput, attr_kin, attr_kout,
-			attr_tlag, attr_tk0, attr_thalf, 
-			attr_cl, attr_v, attr_ka, 
-			attr_isinput, attr_central, 
-			attr_emax, attr_vmax, attr_rin, attr_c50, attr_hill);	
+			attr_from, attr_to, attr_finput, attr_foutput, attr_kin, attr_kout, attr_tlag, attr_tk0, attr_thalf, 
+			attr_cl, attr_v, attr_ka, attr_isinput, attr_central, attr_emax, attr_vmax, attr_rin, attr_c50, attr_hill);	
 	
 	/*Design object*/
-	final public static List<Attribute> attrs_administration = Arrays.asList(
-		attr_trial_type, attr_administration, attr_amount, attr_amountBSA, attr_doseTime, attr_start, 
+	final public static List<Attribute> attrs_administration = Arrays.asList(attr_trial_type, attr_administration, attr_amount, attr_amountBSA, attr_doseTime, attr_start, 
 		attr_end, attr_steadyState, attr_interval, attr_treatment, attr_combination, attr_duration);
 	final public static List<Attribute> attrs_action = Arrays.asList(attr_start, attr_end, attr_reset);
-	final public static List<Attribute> attrs_sampling = Arrays.asList(
-			attr_trial_type, attr_start, attr_end, attr_samplingTime, 
-			attr_interval, attr_outcome, attr_bql, attr_combination);
-	final public static List<Attribute> attrs_studyDesign = Arrays.asList(
-			attr_groupSize, attr_inteventionSequence, attr_occasionValue, attr_samplingSequence, attr_cov);
+	final public static List<Attribute> attrs_sampling = Arrays.asList(attr_trial_type, attr_start, attr_end, attr_samplingTime, attr_interval, attr_outcome, attr_bql, attr_combination);
+	final public static List<Attribute> attrs_studyDesign = Arrays.asList(attr_groupSize, attr_inteventionSequence, attr_occasionValue, attr_samplingSequence, attr_cov);
 	final public static List<Attribute> attrs_designSpace = Arrays.asList(attr_name_ref, attr_admTime, attr_numberSamples);
 	final public static List<Attribute> attrs_hyperSpace = Arrays.asList(attr_name_ref, attr_min, attr_max, attr_admTime, attr_numberSamples);
 	

@@ -1,15 +1,24 @@
 package org.ddmore.mdl.validation;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import org.ddmore.mdl.domain.Attribute;
+import org.ddmore.mdl.mdl.DataObject;
+import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.InputFormatType;
+import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.PropertyDeclaration;
 import org.ddmore.mdl.mdl.SourceBlock;
+import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.TargetBlock;
 import org.ddmore.mdl.mdl.TargetType;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
@@ -24,6 +33,8 @@ import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.types.DefaultValues;
 import org.ddmore.mdl.types.MdlDataType;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
@@ -52,10 +63,14 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 
 	public final static String MSG_DATA_FILE_NOT_FOUND = "Cannot find data file: path may be incorrect";
 	public final static String MSG_SCRIPT_NOT_FOUND    = "Cannot find script file: path may be incorrect";
+	public final static String MSG_DATA_HEADERS_MISMATCH  = "Data file headers so not match data variables";
+	public final static String MSG_DATA_COLUMNS_MISMATCH  = "Number of columns does not match the number of data variables";
 
 	public final static String MSG_TARGET_LOCATION = "Target code block is not used inline, please specify location";
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Task object
+	//SIMUATE, ESTIMATE, EVALUATE, OPTIMIZE
 	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_VECTOR_STRING, false);
 	final public static Attribute attr_task_max = new Attribute("max", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_task_sig = new Attribute("sig", MdlDataType.TYPE_NAT, false);
@@ -239,7 +254,8 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			if (p.getPropertyName().getName().equals(attr_file.getName()) || 
 				p.getPropertyName().getName().equals(attr_script.getName())) {
 				String dataPath = MdlPrinter.getInstance().toStr(p.getExpression());
-				if (!Utils.isFileExist(b, dataPath)){
+				IFile dataFile = Utils.getFile(b, dataPath);
+				if (!dataFile.exists()){
 					if (p.getPropertyName().getName().equals(attr_file.getName())){
 						warning(MSG_DATA_FILE_NOT_FOUND, 
 							MdlPackage.Literals.PROPERTY_DECLARATION__EXPRESSION,
@@ -250,10 +266,79 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 							MdlPackage.Literals.PROPERTY_DECLARATION__EXPRESSION,
 							MSG_SCRIPT_NOT_FOUND, dataPath);
 					}
+				} else {
+					//Data file found, check columns
+					checkData(p, dataFile);
 				}
 			}
 		}
 	}	
+	
+	private void checkData(PropertyDeclaration p, IFile dataFile){
+		MclObject mcl = Utils.getMclObject(p);
+		if (mcl.getDataObject() != null){
+			DataObject dObj = mcl.getDataObject();
+			Boolean header = false;
+			String delimiter = ",";
+			for (DataObjectBlock b: dObj.getBlocks()){
+				if (b.getSourceBlock() != null){
+					for (PropertyDeclaration pp: b.getSourceBlock().getStatements()){
+						if (pp.getPropertyName().getName().equals(attr_header.getName()))
+							header = MdlPrinter.getInstance().isTrue(pp.getExpression());
+						if (pp.getPropertyName().getName().equals(attr_delimiter.getName()))
+							delimiter = MdlPrinter.getInstance().toStr(pp.getExpression());
+					}
+				}
+			}
+			//Read first line in the file
+			try {
+				InputStream is = dataFile.getContents();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+				String headers =  reader.readLine();
+				is.close();
+				String[] columns =  headers.split(delimiter);
+
+				if (header){ //Match variable names
+					List<String> notFound = new ArrayList<String>();
+					//Iterate over data variables and match
+					for (DataObjectBlock b: dObj.getBlocks()){
+						if (b.getDataInputBlock() != null){
+							for (SymbolDeclaration s: b.getDataInputBlock().getVariables()){
+								if (s.getSymbolName() != null){
+									boolean isFound = false;
+									for (String column: columns)
+										if (column.equals(s.getSymbolName().getName())) isFound = true;
+									if (!isFound) notFound.add(s.getSymbolName().getName());
+								}
+							}
+						}
+					}
+					if (notFound.size() > 0){
+						String problemVars = Utils.printList(notFound);
+						warning(MSG_DATA_HEADERS_MISMATCH + 
+							" - headers not found for: " + problemVars, 
+							MdlPackage.Literals.PROPERTY_DECLARATION__EXPRESSION,
+							MSG_DATA_HEADERS_MISMATCH, dataFile.getName());
+					}					
+				} else {//Check number of columns
+					int numDataVars = 0;
+					for (DataObjectBlock b: dObj.getBlocks()){
+						if (b.getDataInputBlock() != null)
+							numDataVars += b.getDataInputBlock().getVariables().size();
+					}
+					if (columns.length != numDataVars){
+						warning(MSG_DATA_COLUMNS_MISMATCH, 
+							MdlPackage.Literals.PROPERTY_DECLARATION__EXPRESSION,
+							MSG_DATA_COLUMNS_MISMATCH, dataFile.getName());
+					}
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}		
+		}		
+	}
 	
 	@Check
 	//External target blocks should have location defined
