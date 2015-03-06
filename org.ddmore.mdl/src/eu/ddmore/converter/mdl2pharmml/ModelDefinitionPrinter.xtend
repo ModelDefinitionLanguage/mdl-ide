@@ -6,12 +6,13 @@ import org.ddmore.mdl.mdl.ParameterObject
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.mdl.IndividualVarType
-import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.mdl.VectorExpression
+import org.ddmore.mdl.mdl.Expression
 
 class ModelDefinitionPrinter {
 	protected extension DistributionPrinter distrPrinter = new DistributionPrinter();
@@ -384,9 +385,7 @@ class ModelDefinitionPrinter {
 		val type = list.arguments.getAttribute(AttributeValidator::attr_type.name);
 		if (type.equals(VariableType::CC_CATEGORICAL)){
 			val define = list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-			if (define.list != null){
-				assign = '''«define.list.print_Categorical»'''
-			}
+			if (define.list != null) assign = '''«define.list.print_Categorical»'''
 		} else {
 		//Derivative variables	
 			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name);
@@ -394,8 +393,7 @@ class ModelDefinitionPrinter {
 				assign = '''«deriv.print_Math_Expr»'''
 				var independentVar = DefaultValues::INDEPENDENT_VAR;
 				val independentVarExpr = list.arguments.getAttributeExpression(AttributeValidator::attr_wrt.name);
-				if (independentVarExpr != null)
-					independentVar = independentVarExpr.toStr; 
+				if (independentVarExpr != null) independentVar = independentVarExpr.toStr; 
 				res  = 	
 				'''
 					<ct:IndependentVariable>
@@ -406,10 +404,8 @@ class ModelDefinitionPrinter {
 				val initTime = list.arguments.getAttributeExpression(AttributeValidator::attr_x0.name);
 				var initValueRes = '''«AttributeValidator::attr_init.defaultValue.print_Assign»'''; 
 				var initTimeRes = '''«AttributeValidator::attr_x0.defaultValue.print_Assign»'''; 
-				if (initTime != null)
-					initTimeRes = '''«initTime.print_Assign»'''; 
-				if (initValue != null)
-					initValueRes = '''«initValue.print_Assign»'''; 
+				if (initTime != null) initTimeRes = '''«initTime.print_Assign»'''; 
+				if (initValue != null) initValueRes = '''«initValue.print_Assign»'''; 
 				res = res + 
 				'''
 					<ct:InitialCondition>
@@ -438,8 +434,7 @@ class ModelDefinitionPrinter {
 			val ranEff = list.arguments.getAttributeExpression(AttributeValidator::attr_ranEff.name);
 			var ranEffExpr = '''''';
 			if (ranEff != null){
-				if (ranEff.expression != null) 
-					ranEffExpr = '''«ranEff.expression.print_Math_Expr»'''
+				if (ranEff.expression != null) ranEffExpr = '''«ranEff.expression.print_Math_Expr»'''
 				if (ranEff.vector != null) ranEff.vector.print_ct_Vector;
 			}
 			var covariateContent = '''''';
@@ -448,17 +443,21 @@ class ModelDefinitionPrinter {
 			if (type.equals(IndividualVarType::LINEAR.toString)) {
 				covariateType = "LinearCovariate";		
 				val pop = list.arguments.getAttributeExpression(AttributeValidator::attr_pop.name);
-				if (pop != null)
-					popContent = '''«pop.print_PopulationParameter»''';
+				if (pop != null) popContent = '''«pop.print_PopulationParameter»''';
 				val cov = list.arguments.getAttributeExpression(AttributeValidator::attr_cov.name);
 				val fixEff = list.arguments.getAttributeExpression(AttributeValidator::attr_fixEff.name);
-				if (cov != null && fixEff != null)
-					if (cov.vector!= null && fixEff.vector != null)
-						covariateContent = '''«print_Covariate(cov.vector, fixEff.vector)»''';
+				if (cov != null && fixEff != null){
+					if (cov.vector!= null && fixEff.vector != null &&
+						cov.vector.expression != null && fixEff.vector.expression != null)
+						covariateContent = '''«print_Covariate(cov.vector.expression, fixEff.vector.expression)»'''
+					else 
+					if (cov.expression != null && fixEff.expression != null){
+						covariateContent = '''«print_Covariate(cov.expression, fixEff.expression)»'''
+					}	
+				}
 			} else {
 				val group = list.arguments.getAttributeExpression(AttributeValidator::attr_group.name);
-				if (group != null)
-					covariateContent = '''«group.print_Assign»''';
+				if (group != null) covariateContent = '''«group.print_Assign»''';
 			}
 			return 
 			'''
@@ -488,19 +487,21 @@ class ModelDefinitionPrinter {
 		</PopulationParameter>
 	'''
 	
-	protected def print_Covariate(Vector cov, Vector ranEff){
+	protected def print_Covariate(VectorExpression cov, VectorExpression ranEff){
 		var res = '''''';
-		for (i: 0..cov.values.size){
-			if (ranEff.values.size() > i){
-				val covValue = cov.values.get(i);
-				val ranEffValue = ranEff.values.get(i);
-				res = res + print_Covariate(covValue, ranEffValue);
+		if (cov.expressions != null && ranEff.expressions != null){
+			for (i: 0..cov.expressions.size){
+				if (ranEff.expressions.size() > i){
+					val covValue = cov.expressions.get(i);
+					val ranEffValue = ranEff.expressions.get(i);
+					res = res + print_Covariate(covValue, ranEffValue);
+				}
 			}
 		}
 		return res;
 	}
 	
-	protected def print_Covariate(AnyExpression cov, AnyExpression ranEff)'''
+	protected def print_Covariate(Expression cov, Expression ranEff)'''
 		«IF cov != null»
 			<Covariate>
 				«cov.print_Math_Expr»

@@ -239,9 +239,11 @@ class DataSetPrinter {
 						if (b.sourceBlock.inlineBlock.values != null){
 							var i = 0;
 							for (value: b.sourceBlock.inlineBlock.values.values){
-								if (!value.equals(".")) 
-									values.add(value)
-								else values.add("0");	
+								if (value.value != null) 
+									values.add(value.toStr)
+								else {
+									values.add("0");	
+								}
 								i = i + 1;
 								if (i == rowLength){
 									rows.add(values.print_ds_Row);

@@ -33,6 +33,7 @@ import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.types.MdlDataType
 import org.ddmore.mdl.mdl.Matching
+import org.ddmore.mdl.mdl.VectorExpression
 
 class MathPrinter{
 
@@ -49,13 +50,13 @@ class MathPrinter{
 		«IF e.expression != null»
 			«e.expression.print_Math_Expr»
 		«ENDIF»
-		«IF e.matching != null»
-			«e.matching.print_Math_Piece»
-		«ENDIF»
 		«IF e.vector != null»
 			«e.vector.print_ct_Vector»
 		«ENDIF»
 	'''
+	//«IF e.matching != null»
+	//	«e.matching.print_Math_Piece»
+	//«ENDIF»
 
 	def print_Math_Equation(AnyExpression expr) '''
 		«IF MdlDataType::validateType(MdlDataType::TYPE_STRING, expr)»
@@ -385,22 +386,29 @@ class MathPrinter{
 		«ENDIF»
 	'''
 
-	def print_ct_Vector(Vector vector) '''
-		«IF MdlDataType::validateType(MdlDataType::TYPE_VECTOR_MATCHING, vector)»
-			<Piecewise>
-				«FOR v: vector.values»
-					«IF v.matching != null»
-						«v.matching.print_Math_Piece»
-					«ENDIF»
-				«ENDFOR»
-			</Piecewise>
-		«ELSE» 
+	def print_ct_Vector(Vector v)'''
+		«v.expression.print_Math_Vector»
+		«v.expression.print_Math_Piecewise»
+	'''
+	
+	def print_Math_Vector(VectorExpression expr)'''
+		«IF expr.expressions != null»
 			<ct:Vector>
-				«FOR v: vector.values»
+				«FOR v: expr.expressions»
 					«v.print_Math_Expr»
 				«ENDFOR»
 			</ct:Vector>
-		«ENDIF»	
+		«ENDIF»
+	'''
+	
+	def print_Math_Piecewise(VectorExpression expr)'''
+		«IF expr.matchings != null»
+			<Piecewise>
+				«FOR v: expr.matchings»
+					«v.print_Math_Piece»
+				«ENDFOR»
+			</Piecewise>
+		«ENDIF»
 	'''
 	
 	def print_Math_Piece(Matching expr){

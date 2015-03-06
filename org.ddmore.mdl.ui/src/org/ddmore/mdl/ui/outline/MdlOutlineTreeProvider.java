@@ -572,12 +572,12 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	
 	protected void  _createNode(IOutlineNode parentNode, Vector v){
 		createEStructuralFeatureNode(parentNode,
-			v, MdlPackage.Literals.VECTOR__VALUES,
+			v, MdlPackage.Literals.VECTOR__EXPRESSION,
 			_image(v),
 			mdlPrinter.toStr(v),
 			true);
 	}
-	
+
 	protected void  _createNode(IOutlineNode parentNode, PropertyDeclaration a){
 		createEStructuralFeatureNode(parentNode,
 			a,

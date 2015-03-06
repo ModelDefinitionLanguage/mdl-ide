@@ -197,10 +197,11 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		«IF s.propertyName != null»
 			«IF s.expression != null»
 				«IF s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
-					«IF s.expression.vector != null»
-						«FOR algoName: s.expression.vector.values»
-							«IF algoName.expression != null»
-								<Algorithm definition="«algoName.expression.toStr»"/>
+					«IF s.expression.vector != null && s.expression.vector.expression != null &&
+						s.expression.vector.expression.expressions != null »
+						«FOR algoName: s.expression.vector.expression.expressions»
+							«IF algoName != null»
+								<Algorithm definition="«algoName.toStr»"/>
 							«ENDIF»
 						«ENDFOR»
 					«ENDIF»

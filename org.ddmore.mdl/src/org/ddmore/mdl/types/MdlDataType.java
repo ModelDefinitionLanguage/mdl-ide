@@ -41,8 +41,8 @@ public enum MdlDataType {
     TYPE_VECTOR_STRING, TYPE_VECTOR_INT, TYPE_VECTOR_REAL, //TYPE_VECTOR_BOOLEAN, 
     //Restricted vectors
     TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL, TYPE_VECTOR_PROBABILITY,
-    //Reference vectors
-    TYPE_VECTOR_REF, TYPE_VECTOR_EXPR, TYPE_VECTOR_MATCHING,
+    //Expression vectors
+    TYPE_VECTOR_REF, TYPE_VECTOR_EXPR, TYPE_VECTOR_MATCHING, TYPE_VECTOR_LIST,
 
 	/*String restrictions*/
 	TYPE_TRANS,          //{log, logit, probit}
@@ -77,10 +77,11 @@ public enum MdlDataType {
 			case TYPE_VECTOR_INT: return isVectorInteger(expr);
 			case TYPE_VECTOR_REAL: return isVectorReal(expr);
 			case TYPE_VECTOR_STRING: return isVectorString(expr);  
-			//Vectors of references
+			//Vectors of expressions
 			case TYPE_VECTOR_REF: return isVectorReference(expr);  
-			case TYPE_VECTOR_EXPR: return true;
+			case TYPE_VECTOR_EXPR: return isVectorExpression(expr);
 			case TYPE_VECTOR_MATCHING: return isVectorMatching(expr);
+			case TYPE_VECTOR_LIST: return isVectorList(expr);
 			//Vectors of restrictions
 			case TYPE_VECTOR_NAT: return isVectorNat(expr);
 			case TYPE_VECTOR_PNAT: return isVectorPNat(expr);
@@ -122,8 +123,8 @@ public enum MdlDataType {
 		if ((expr.getList() != null) && (type == TYPE_LIST)) return true;
 		if (expr.getVector() != null) 
 			return validateType(type, expr.getVector());
-		if (expr.getMatching() != null) 
-			return (type == TYPE_MATCHING);
+		//if (expr.getMatching() != null) 
+		//	return (type == TYPE_MATCHING);
 		if (expr.getType() != null) 
 			return validateType(type, expr.getType());
 		return false;
@@ -179,168 +180,132 @@ public enum MdlDataType {
 	////////////////////////////////////////////////////////////////////////////////
 	
 	private static boolean isVectorReal(Vector v) {
-		for (AnyExpression p: v.getValues()){
-			if (p.getVector() != null) {
-				boolean ok = isVectorReal(p.getVector());
-				if (!ok) return false;
-			} else {
-				if (p.getMatching() != null) return false; 
+		if (v.getExpression() != null && v.getExpression().getExpressions() != null){
+			for (Expression p: v.getExpression().getExpressions()){
 				if (p.getExpression() != null){
-					if (p.getExpression().getExpression() != null){
-						boolean ok = isReal(p.getExpression().getExpression());
-						if (!ok) return false;
-					}
-				}					
+					boolean ok = isReal(p.getExpression());
+					if (!ok) return false;
+				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	private static boolean isVectorNat(Vector v) {
-		for (AnyExpression p: v.getValues()){
-			if (p.getVector() != null) {
-				boolean ok = isVectorNat(p.getVector());
-				if (!ok) return false;
-			} else {
-				if (p.getMatching() != null) return false; 
+		if (v.getExpression() != null && v.getExpression().getExpressions() != null){
+			for (Expression p: v.getExpression().getExpressions()){
 				if (p.getExpression() != null){
-					if (p.getExpression().getExpression() != null){
-						boolean ok = isNatural(p.getExpression().getExpression());
-						if (!ok) return false;
-					}
+					boolean ok = isNatural(p.getExpression());
+					if (!ok) return false;
 				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	private static boolean isVectorPNat(Vector v) {
-		for (AnyExpression p: v.getValues()){
-			if (p.getVector() != null) {
-				boolean ok = isVectorNat(p.getVector());
-				if (!ok) return false;
-			} else {
-				if (p.getMatching() != null) return false; 
+		if (v.getExpression() != null && v.getExpression().getExpressions() != null){
+			for (Expression p: v.getExpression().getExpressions()){
 				if (p.getExpression() != null){
-					if (p.getExpression().getExpression() != null){
-						boolean ok = isPositiveNatural(p.getExpression().getExpression());
-						if (!ok) return false;
-					}
+					boolean ok = isPositiveNatural(p.getExpression());
+					if (!ok) return false;
 				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	private static boolean isVectorPReal(Vector v) {
-		for (AnyExpression p: v.getValues()){
-			if (p.getVector() != null) {
-				boolean ok = isVectorPReal(p.getVector());
-				if (!ok) return false;
-			} else {
-				if (p.getMatching() != null) return false; 
+		if (v.getExpression() != null && v.getExpression().getExpressions() != null){
+			for (Expression p: v.getExpression().getExpressions()){
 				if (p.getExpression() != null){
-					if (p.getExpression().getExpression() != null){
-						boolean ok = isPositiveReal(p.getExpression().getExpression());
-						if (!ok) return false;
-					}
+					boolean ok = isPositiveReal(p.getExpression());
+					if (!ok) return false;
 				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	
 	private static boolean isVectorProbability(Vector v) {
-		Double total = 0.;
-		boolean containsReference = false;
-		for (AnyExpression p: v.getValues()){
-			if (p.getVector() != null) {
-				boolean ok = isVectorPReal(p.getVector());
-				if (!ok) return false;
-			} else {
-				if (p.getMatching() != null) return false; 
+		if (v.getExpression() != null && v.getExpression().getExpressions() != null){
+			Double total = 0.;
+			boolean containsReference = false;
+			for (Expression p: v.getExpression().getExpressions()){
 				if (p.getExpression() != null){
-					if (p.getExpression().getExpression() != null){
-						boolean ok = isProbability(p.getExpression().getExpression());
-						if (!ok) return false;
-						String value = MdlPrinter.getInstance().toStr(p.getExpression());
-						try{
-							Double x = Double.parseDouble(value);
-							total += x;	
-						} catch (NumberFormatException e){
-							containsReference = true; //probably contains a reference - validate
-						}
+					boolean ok = isProbability(p.getExpression());
+					if (!ok) return false;
+					String value = MdlPrinter.getInstance().toStr(p.getExpression());
+					try{
+						Double x = Double.parseDouble(value);
+						total += x;	
+					} catch (NumberFormatException e){
+						containsReference = true; //probably contains a reference - validate
 					}
 				}
 			}
+			return ((containsReference && (total <= 1.)) || (total == 1.));
 		}
-		return ((containsReference && (total <= 1.)) || (total == 1.));
+		return false;
 	}
 		
 	private static boolean isVectorInteger(Vector v) {
-		for (AnyExpression p: v.getValues()){
-			if (p.getVector() != null) {
-				boolean ok = isVectorInteger(p.getVector());
-				if (!ok) return false;
-			} else {
-				if (p.getMatching() != null) return false; 
+		if (v.getExpression() != null && v.getExpression().getExpressions() != null){
+			for (Expression p: v.getExpression().getExpressions()){
 				if (p.getExpression() != null){
-					if (p.getExpression().getExpression() != null){
-						boolean ok = isInteger(p.getExpression().getExpression());
-						if (!ok) return false;
-					}
+					boolean ok = isInteger(p.getExpression());
+					if (!ok) return false;
 				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	private static boolean isVectorReference(Vector v){
-		for (AnyExpression p: v.getValues()){
-			if (p.getVector() != null) {
-				boolean ok = isVectorReference(p.getVector());
-				if (!ok) return false;
-			} else {
-				if (p.getMatching() != null) return false; 
+		if (v.getExpression() != null && v.getExpression().getExpressions() != null){
+			for (Expression p: v.getExpression().getExpressions()){
 				if (p.getExpression() != null){
-					if (p.getExpression().getExpression() != null){
-						return (isReference(p.getExpression().getExpression()));
-					}
-				} 
+					boolean ok = isReference(p.getExpression());
+					if (!ok) return false;
+				}
 			}
+			return true;
 		}
-		return true;	
+		return false;
+	}
+	
+	private static boolean isVectorExpression(Vector v){
+		if (v.getExpression() != null && v.getExpression().getExpressions() != null) return true;
+		return false;	
 	}
 	
 	private static boolean isVectorMatching(Vector v){
-		for (AnyExpression p: v.getValues()){
-			if (p.getVector() != null) {
-				boolean ok = isVectorMatching(p.getVector());
-				if (!ok) return false;
-			} else {
-				if (p.getMatching() == null) return false;
-			}
-		}
-		return true;	
+		if (v.getExpression() != null && v.getExpression().getMatchings() != null) return true;
+		return false;	
+	}
+	
+	private static boolean isVectorList(Vector v){
+		if (v.getExpression() != null && v.getExpression().getLists() != null) return true;
+		return false;	
 	}
 
-
 	private static boolean isVectorString(Vector v){
-		for (AnyExpression p: v.getValues()){
-			if (p.getVector() != null) {
-				boolean ok = isVectorString(p.getVector());
-				if (!ok) return false;
-			} else {
-				if (p.getMatching() != null) return false; 
+		if (v.getExpression() != null && v.getExpression().getExpressions() != null){
+			for (Expression p: v.getExpression().getExpressions()){
 				if (p.getExpression() != null){
-					if (p.getExpression().getExpression() != null){
-						return isString(p.getExpression().getExpression());
-					}
+					boolean ok = isString(p.getExpression());
+					if (!ok) return false;
 				}
 			}
+			return true;
 		}
-		return true;	
+		return false;
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////

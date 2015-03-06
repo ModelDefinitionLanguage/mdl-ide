@@ -13,8 +13,8 @@ import java.util.List;
 
 import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.Argument;
-import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
+import org.ddmore.mdl.mdl.Category;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VariabilityType;
@@ -459,9 +459,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 					if (parentArg.getExpression().getType() != null && 
 						parentArg.getExpression().getType().getType() != null &&
 						parentArg.getExpression().getType().getType().getCategorical() != null){
-						if (parentArg.getExpression().getType().getType().getArguments() != null){
-							for (ArgumentName id: parentArg.getExpression().getType().getType().getArguments().getArguments())
-								categoricalNames.add(id.getName());
+						if (parentArg.getExpression().getType().getType().getCategories() != null){
+							for (Category c: parentArg.getExpression().getType().getType().getCategories())
+								categoricalNames.add(c.getCategoryName().getName());
 						}	
 					}
 				}

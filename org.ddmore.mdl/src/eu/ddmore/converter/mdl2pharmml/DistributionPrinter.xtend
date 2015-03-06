@@ -15,6 +15,7 @@ import eu.ddmore.converter.mdl2pharmml.domain.Attribute
 import org.ddmore.mdl.types.MdlDataType
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.types.DistributionType
+import org.ddmore.mdl.mdl.Expression
 
 class DistributionPrinter extends MdlPrinter{
 
@@ -234,7 +235,12 @@ class DistributionPrinter extends MdlPrinter{
 							«ENDIF»
 								«IF arg.argumentName.name.equals(DistributionValidator::attr_categories.name)»
 									«IF arg.expression.vector != null»
-										<«dataType»>«arg.expression.vector.values.size»</«dataType»>
+										«IF arg.expression.vector.expression != null»
+											«var exprVector = arg.expression.vector.expression»
+											«IF exprVector.expressions != null»
+												<«dataType»>«exprVector.expressions.size»</«dataType»>
+											«ENDIF»
+										«ENDIF»
 									«ENDIF»
 								«ELSE»	
 									«arg.expression.toPharmML(dataType)»
@@ -265,7 +271,8 @@ class DistributionPrinter extends MdlPrinter{
 		if (matrixAttr.expression != null){
 			if (matrixAttr.expression.vector != null){
 				val matrix = matrixAttr.expression.vector;
-				return matrix.values.size();
+				if (matrix.expression != null && matrix.expression.expressions != null)
+					return matrix.expression.expressions.size();
 			}
 		}
 		return 0;
@@ -282,17 +289,22 @@ class DistributionPrinter extends MdlPrinter{
 		}
 	}	
 	
-	//TODO create temporal variables for complex expressions!!!
 	protected def String toPharmML(AnyExpression expr, String type){
+		if (expr.expression != null)
+			return toPharmML(expr.expression, type);
+		if (expr.vector != null && expr.vector.expression != null && expr.vector.expression.expressions != null) {
+			var res = "";
+			for (pp: expr.vector.expression.expressions)
+				res = res + '''«pp.toPharmML(type)»'''
+			return '''«res»'''
+		}
+	}
+	
+	//TODO create temporal variables for complex expressions?
+	protected def String toPharmML(Expression expr, String type){
 		if (MdlDataType::validateType(MdlDataType::TYPE_REF, expr) || MdlDataType::validateType(MdlDataType::TYPE_STRING, expr))
 			return '''<var varId="«expr.toStr»"/>'''; 
 		if (MdlDataType::validateType(MdlDataType::TYPE_REAL, expr))
 			return '''<«type»>«expr.toStr»</«type»>''';
-		if (expr.vector != null) {
-			var res = "";
-			for (pp: expr.vector.values)
-				res = res + '''«pp.toPharmML(type)»'''
-			return '''«res»'''
-		}
 	}
 }

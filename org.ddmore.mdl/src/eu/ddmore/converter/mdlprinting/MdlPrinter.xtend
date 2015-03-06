@@ -43,6 +43,8 @@ import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.PkParameterType
 import org.ddmore.mdl.mdl.Matching
+import org.ddmore.mdl.mdl.SignedNumericValue
+import org.ddmore.mdl.mdl.VectorExpression
 
 class MdlPrinter {
 	
@@ -217,7 +219,24 @@ class MdlPrinter {
 	
 	def toStr(VarType t) {
 		if (t.categorical != null){
-			return t.categorical
+			var res = t.categorical;
+			if (t.categories != null){
+				res = res + "("; 
+				var iterator = t.categories.iterator();
+				if (iterator.hasNext ) {
+					var i = iterator.next; 
+					if (i.categoryName != null) res  = res + i.categoryName.name;
+					if (i.expression != null) res = res + " = " + i.expression.toStr;
+				}
+				while (iterator.hasNext){
+					res  = res + ', ';
+					var i = iterator.next; 
+					if (i.categoryName != null) res  = res + i.categoryName.name;
+					if (i.expression != null) res = res + " = " + i.expression.toStr;
+				}
+				res = res + ")";
+			}
+			return res;
 		}
 		if (t.continuous != null){
 			return t.continuous
@@ -229,6 +248,8 @@ class MdlPrinter {
 			return t.m2LL	
 		} 
 	}
+	
+	
 	
 	def toStr(RandomList l){
 		if (l.arguments != null){
@@ -249,7 +270,7 @@ class MdlPrinter {
 		if (e.list != null) return e.list.toStr; 
 		if (e.vector != null) return e.vector.toStr; 
 		if (e.type != null) return e.type.toStr;
-		if (e.matching != null) return e.matching.toStr;
+		//if (e.matching != null) return e.matching.toStr;
 	}
 	
 	def String toStr(Matching e){
@@ -377,6 +398,14 @@ class MdlPrinter {
 		return res;
 	}
 	
+	def String toStr(SignedNumericValue v){
+		var res = "";
+		if (v.operator != null) res = v.operator;
+		if (v.value != null) res = res + v.value;
+		if (v.skip != null) res = v.skip;
+		return res;
+	}
+	
 	def String toStr(UnaryExpression e){
 		var res = "";
 		if (e.expression != null){
@@ -429,18 +458,35 @@ class MdlPrinter {
 			return "[" + s.selector + "]";
 	}
 	
-	def toStr(Vector v) { 
-		var res  = '[';
-		var iterator = v.values.iterator();
-		if (iterator.hasNext) {
-			res = res + iterator.next.toStr;
-		}
-		while (iterator.hasNext){
-			res  = res + ', ';
-			res = res + iterator.next.toStr;
-		}
-		return res + ']';
+	def toStr(Vector v) {
+		return '[' + v.expression.toStr + ']';
 	}
+	
+	def String toStr(VectorExpression e){
+		var res = "";
+		if (e.expressions != null) {
+			var iterator = e.expressions.iterator();
+			if (iterator.hasNext ) res  = res + iterator.next.toStr;
+			while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr; 
+		}
+		if (e.lists != null) {
+			var iterator = e.lists.iterator();
+			if (iterator.hasNext ) res  = res + iterator.next.toStr;
+			while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr; 
+		}
+		/*  if (e.vectors != null) {
+			var iterator = e.vectors.iterator();
+			if (iterator.hasNext ) res  = res + iterator.next.toStr;
+			while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr; 
+		}*/
+		if (e.matchings != null) {
+			var iterator = e.matchings.iterator();
+			if (iterator.hasNext) res  = res + iterator.next.toStr;
+			while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr; 
+		}
+		return res;
+	}
+	
 	
 	def toStr(ParExpression e){
 		return "(" + e.expression.toStr + ")";

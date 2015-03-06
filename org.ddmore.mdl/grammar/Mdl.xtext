@@ -250,7 +250,11 @@ InlineBlock:
 ;
 
 NumericList:
-	values += NumericValue (=> (',' | ';')? values += (NumericValue | '.'))* 
+	values += SignedNumericValue (=> (',' | ';')? values += SignedNumericValue)* 
+;
+
+SignedNumericValue:
+	(operator = UnaryOperator)? value = NumericValue | skip = '.'
 ;
 
 VariableList:
@@ -439,17 +443,21 @@ terminal CONSTANT:
 ;
 
 VarType:
-	categorical = 'categorical' ('(' arguments = FormalArguments ')')? | 
+	categorical = 'categorical' ('(' categories += Category (=> ',' categories += Category)* ')')? | 
 	continuous = 'continuous' | 
 	likelihood = 'likelihood' |
 	M2LL = 'M2LL' 	
+;
+
+Category:
+	categoryName = ArgumentName ("=" expression = SignedNumericValue)?
 ;
 
 AnyExpression:
 	expression = Expression |
 	list = List | 
 	vector = Vector |
-	matching = Matching |
+	//matching = Matching |
 	type = EnumType 
 ;
 
@@ -527,8 +535,15 @@ UnaryExpression:
 ;
 
 Vector:
-	'[' values += AnyExpression (=> ',' values += AnyExpression)* ']'
+	'[' expression = VectorExpression ']'
 ;	
+
+VectorExpression:
+		expressions += Expression (=> ',' expressions += Expression)* |
+		lists += List (=> ',' lists += List)* |
+		//vectors += Vector (=> ',' vectors += Vector)* |
+		matchings += Matching  (=> ',' matchings += Matching)*
+;
 
 FullyQualifiedArgumentName:
 	parent = SymbolName selectors += Selector+  
