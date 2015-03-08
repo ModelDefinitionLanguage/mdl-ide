@@ -335,7 +335,7 @@ public class Utils {
 	    return null;
 	}
 	
-	public static List<Variable> getImportedVariables(SymbolName ref){
+	private static MclObject getImportedObjectByAlias(SymbolName ref){
 		MclObject obj = getMclObject(ref);
 		if (obj.getMogObject() != null){
 			for (MOGObjectBlock b: obj.getMogObject().getBlocks()){
@@ -345,13 +345,19 @@ public class Utils {
 			    			EObject container = s.getObjectName().eContainer();
 			    			if (container instanceof MclObjectImpl){
 			    				MclObject o = (MclObject)container;
-			    				return Utils.getDeclaredVariables(o);
+			    				return o;
 			    			}
 			    		}
 					}
 				}
 			}
 		}
+	    return null;
+	}
+	
+	public static List<Variable> getImportedVariablesByObjectAlias(SymbolName ref){
+		MclObject o = getImportedObjectByAlias(ref);
+		if (o != null) return Utils.getDeclaredVariables(o);
 	    return null;
 	}
 	
@@ -395,6 +401,32 @@ public class Utils {
 		    if(e.name().equals(value)) { return e; }
 		  }
 		  return null;
+	}
+	
+	public static String getMatchingVariable(MOGObject mog, SymbolName s, ObjectName hostObj, ObjectName partnerObj){
+		/*Check explicit mapping in MOG*/
+		if (mog != null){
+			/*Explicit mapping in the MOG*/
+			for (MOGObjectBlock b: mog.getBlocks()){
+				if (b.getMappingBlock() != null){
+					for (MappingBlockStatement m: b.getMappingBlock().getMappings()) {
+						MclObject o1 = getImportedObjectByAlias(m.getObj1());
+						MclObject o2 = getImportedObjectByAlias(m.getObj2());
+						if (o1 != null && o2 != null){
+							if (o1.getObjectName().getName().equals(hostObj.getName()) 
+								&& m.getVar1().getName().equals(s.getName())
+								&& o2.getObjectName().getName().equals(partnerObj.getName())) 
+								return m.getVar2().getName();
+							if (o2.getObjectName().getName().equals(hostObj.getName()) 
+								&& m.getVar2().getName().equals(s.getName())
+								&& o1.getObjectName().getName().equals(partnerObj.getName())) 
+								return m.getVar1().getName();
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 }

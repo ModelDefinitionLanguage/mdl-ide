@@ -14,6 +14,8 @@ import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.types.VariableType
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.MOGObject
+import org.ddmore.mdl.mdl.MclObject
+import org.ddmore.mdl.validation.Utils
 
 class DataSetPrinter {
 	protected extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -56,7 +58,7 @@ class DataSetPrinter {
 						if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString)){
 							res  = res + print_ds_NONMEM_DataSet(mObj, dObj, mog);
 						} else {
-							res = res + print_ds_Objective_DataSet(mObj, dObj, mog);
+							res = res + print_ds_Objective_DataSet(dObj);
 						}					
 					}
 				}
@@ -86,8 +88,8 @@ class DataSetPrinter {
 	}
 	
 	
-	protected def print_ds_Objective_DataSet(ModelObject mObj, DataObject dObj, MOGObject mog){
-		var res = print_ds_DataSet(mObj, dObj, mog);
+	protected def print_ds_Objective_DataSet(DataObject dObj){
+		var res = print_ds_DataSet(dObj);
 		'''
 		<ObjectiveDataSet>
 			«res»
@@ -101,16 +103,16 @@ class DataSetPrinter {
 		for (b: dObj.blocks){
 			if (b.dataInputBlock != null){
 				for (column: b.dataInputBlock.variables){
-					val columnId = column.symbolName.name;
-					var modelVar = mObj.getMatchingVariable(column, mog);
-					if (modelVar != null){
-						res = res + print_ds_ColumnMapping(columnId, modelVar);
+					if (column.symbolName != null){
+						var modelVar = getMatchingVariable(mog, column, dObj, mObj);
+						if (modelVar != null){
+							res = res + print_ds_ColumnMapping(column.symbolName.name, modelVar);
+						}
 					}
 				}
 			}
-		}
-		
-		res = res + print_ds_DataSet(mObj, dObj, mog);
+		}		
+		res = res + print_ds_DataSet(dObj);
 		'''
 		<NONMEMdataSet oid="«BLK_DS_NONMEM_DATASET»">
 			«res»
@@ -119,8 +121,18 @@ class DataSetPrinter {
 	}
 	
 	//Return a model variable (matched by name or in the MOG MAPPING block)
-	protected def getMatchingVariable(ModelObject mObj, SymbolDeclaration column, MOGObject mog){
+	protected def getMatchingVariable(MOGObject mog, SymbolDeclaration column, DataObject dObj, ModelObject mObj){
 		if (column.symbolName != null && column.list != null){
+			//System::out.println("Looking for a  mapping for: " + column.symbolName.name);
+			var mObjName = (mObj.eContainer as MclObject).objectName;
+			var dObjName = (dObj.eContainer as MclObject).objectName;
+			val matchedVar = Utils::getMatchingVariable(mog, column.symbolName, dObjName, mObjName);
+			if (matchedVar != null){
+				//System::out.println("Found matching variable: " + matchedVar);
+				return matchedVar;
+			} 
+			
+			/*Default implicit mapping*/
 			val columnId = column.symbolName.name;
 			val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 			//Individual variable
@@ -153,43 +165,33 @@ class DataSetPrinter {
 					}
 				}
 			}
-		}
+		}			
 		return null;
 	}
 	
 	
-	protected def print_ds_DataSet(ModelObject mObj, DataObject dObj, MOGObject mog){
-		if (dObj == null || mObj == null) return "";
-		var columnNames = new ArrayList<String>();
-		var columnTypes = new ArrayList<String>();
-		var valueTypes = new  ArrayList<String>();
+	protected def print_ds_DataSet(DataObject dObj){
+		if (dObj == null) return "";
+		var k = 1;
+		var res = "";
 		for (b: dObj.blocks){
 			if (b.dataInputBlock != null){
-				for (column: b.dataInputBlock.variables){
-					columnNames.add(column.symbolName.name);
-					columnTypes.add(column.getColumnType);
-					valueTypes.add(column.getValueType);
+				for (i: 0..b.dataInputBlock.variables.size - 1){
+					val column = b.dataInputBlock.variables.get(i);
+					res  = res + print_ds_Column(column.symbolName.name, column.getColumnType, column.getValueType, k.toString)
+					k  = k + 1;
 				}
 			}
 		}	
 		'''
 			<DataSet xmlns="«xmlns_ds»">
-				«print_ds_Definition(columnNames, columnTypes, valueTypes)»
+				<Definition>
+					«res»
+				</Definition>
 				«dObj.print_ds_ImportData»
 			</DataSet>
 		'''
 	}
-	
-	protected def print_ds_Definition(ArrayList<String> columnNames, 
-		ArrayList<String> columnTypes, ArrayList<String> valueTypes
-	)'''
-		<Definition>
-			«FOR i: 0..columnNames.size-1»
-				«var columnId = columnNames.get(i)»
-				«print_ds_Column(columnId, columnTypes.get(i), valueTypes.get(i), (i+1).toString)»
-			«ENDFOR»
-		</Definition>
-	'''
 	
 	protected def print_ds_Column(String columnId, String columnType, String valueType, String columnNum)'''
 		<Column columnId="«columnId»" columnType="«columnType.convertEnum»" valueType="«valueType»" columnNum="«columnNum»"/>

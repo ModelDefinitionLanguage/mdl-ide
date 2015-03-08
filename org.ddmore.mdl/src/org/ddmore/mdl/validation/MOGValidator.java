@@ -13,6 +13,7 @@ import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
+import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
@@ -135,7 +136,7 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 	  //required type vs. use = covariate
 
 	
-	//MODEL_INPUT_VARIABLES \in DATA_INPUT_VARIABLES
+	//MODEL_INPUT_VARIABLES \in COVARIATE and VARIABILITY
 	private void validateMOG_Model_vs_Data(ModelObject mObj, DataObject dObj, MOGObject mog){
 		List<String> dVars = new ArrayList<String>();
 		for (DataObjectBlock b: dObj.getBlocks()){
@@ -143,14 +144,17 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 				for (SymbolDeclaration s: b.getDataInputBlock().getVariables())
 					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
 		}
+		ObjectName mObjName = ((MclObject)mObj.eContainer()).getObjectName();
+		ObjectName dObjName = ((MclObject)dObj.eContainer()).getObjectName();
 		for (ModelObjectBlock b: mObj.getBlocks()){
 			if (b.getCovariateBlock() != null){
 				for (SymbolDeclaration s: b.getCovariateBlock().getVariables()){
 					if (s.getSymbolName() != null) {
-						String varName = s.getSymbolName().getName();
-						if (!dVars.contains(varName))
+						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName(), mObjName, dObjName);
+						if (dVarName == null) dVarName = s.getSymbolName().getName();
+						if (!dVars.contains(dVarName))
 							warning(MSG_MODEL_DATA_MISMATCH + 
-								": no mapping for model variable " + varName + " found in " + 
+								": no mapping for model variable " + s.getSymbolName().getName() + " found in " + 
 								Utils.getObjectName(dObj).getName() + " object", 
 								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
 								MSG_MODEL_DATA_MISMATCH,  mog.getIdentifier());
@@ -160,10 +164,11 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 			if (b.getVariabilityBlock() != null){
 				for (SymbolDeclaration s: b.getVariabilityBlock().getVariables()){
 					if (s.getSymbolName() != null) {
-						String varName = s.getSymbolName().getName();
-						if (!dVars.contains(varName))
+						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName(), mObjName, dObjName);
+						if (dVarName == null) dVarName = s.getSymbolName().getName();
+						if (!dVars.contains(dVarName))
 							warning(MSG_MODEL_DATA_MISMATCH + 
-								": no mapping for model variable " + varName + " found in " + 
+								": no mapping for model variable " + s.getSymbolName().getName() + " found in " + 
 								Utils.getObjectName(dObj).getName() + " object", 
 								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
 								MSG_MODEL_DATA_MISMATCH,  mog.getIdentifier());
