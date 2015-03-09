@@ -6,12 +6,10 @@
  */
 package org.ddmore.mdl.validation;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+//import java.util.HashMap;
+//import java.util.Map;
 import java.util.List;
 import java.util.Stack;
 
@@ -34,13 +32,13 @@ public class UnitValidator extends AbstractDeclarativeValidator{
     public void register(EValidatorRegistrar registrar) {}
 	
 	public final static String MSG_UNIT_UNKNOWN = "Failed to recognize a unit value";	
-	public final static String MSG_UNIT_UNDEFINED = "Unknown unit metric";	
+	//public final static String MSG_UNIT_UNDEFINED = "Unknown unit metric";	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//Validation via external resource (string comparison)
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	static List<String> validUnits = loadUnits();
+	//static Map<String, String> validUnits = loadUnits();
 	
 	public static List<String> getUnitNames(){
 		List<String> unitNames = new ArrayList<String>();
@@ -50,9 +48,9 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 		return unitNames;
 	}
 	
-	
-	static List<String> loadUnits(){
-		List<String> validUnits = new ArrayList<String>();
+	/*
+	static Map<String, String> loadUnits(){
+		Map<String, String> validUnits = new HashMap<String, String>();
 		try {
 		    URL url = new URL("platform:/plugin/org.ddmore.mdl/runtime/Units.csv");
 		    InputStream inputStream = url.openConnection().getInputStream();
@@ -61,8 +59,8 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 		    while ((inputLine = in.readLine()) != null) {
 		    	String[] tokens = inputLine.split(",");
 		    	if (tokens.length > 1){
-			    	if (!validUnits.contains(tokens[1])){
-			    		validUnits.add(tokens[1]);
+			    	if (!validUnits.containsKey(tokens[1])){
+			    		validUnits.put(tokens[1], tokens[0]);
 			    	}
 		    	}
 		    }
@@ -72,7 +70,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 		}
 		return validUnits;
 	}
-	
+	*/
 	
 	//Check whether the attribute "units" defines a correct unit measurement
 	@Check
@@ -82,22 +80,21 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 				String unitValue = MdlPrinter.getInstance().toStr(arg.getExpression());
 				if (unitValue.length() > 0) {
 					unitValue = unitValue.replaceAll("\\s+",""); // Remove any whitespace
-					
+					/*
 					if (validUnits.size() > 0){
-						if (!validUnits.contains(unitValue))
+						if (!validUnits.containsKey(unitValue))
 							warning(MSG_UNIT_UNDEFINED + ": " + unitValue, 
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 							MSG_UNIT_UNDEFINED, arg.getArgumentName().getName());
 					} else {//syntactic validation
-						
+						*/
 						String wrongToken = parseUnitExpression(unitValue);
 						if (wrongToken != null){
-							warning(MSG_UNIT_UNKNOWN + ": " + wrongToken, 
+							warning(MSG_UNIT_UNKNOWN + ": " + wrongToken + " is not in the set " + Utils.printList(unitAliases), 
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 							MSG_UNIT_UNKNOWN, arg.getArgumentName().getName());
 						}
-						
-					}
+					//}
 				}
 			}
 		}
@@ -106,8 +103,8 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//Validation via parsing
     /////////////////////////////////////////////////////////////////////////////////////////////////
-	/*
-	@SuppressWarnings("rawtypes")
+	
+	/*@SuppressWarnings("rawtypes")
 	final static Map<String, Unit> unitAliases = new HashMap<String, Unit>(){
 		private static final long serialVersionUID = 7075148739253345344L;
 		{
@@ -159,16 +156,23 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 			//Area
 			put("m2", SI.SQUARE_METRE);
 		}
-	};
-	
+	};*/
+
+	final static List<String> unitAliases = new ArrayList<String>(Arrays.asList(
+		"s", "ms", "us", "ns", "ps", "fs", "min", "h", "day", "week", "y", "year", 
+		"L", "dL", "mL", "uL", "mcL", "nL", "pL", "fL", 
+		"kg", "g", "mg", "ug", "mcg", "ng", "pg", "fg", 
+		"M", "mole", "mM", "mmol", "millimole", "uM", "mcM", 
+		"umol", "mcmol", "micromole", "nM", "nmol", "nanomole", "pM", "pmol", "picomole", "fM", "fmol", "femtomole", 
+		"m", "km", "cm", "mm", "um", "mcm", "nm", "pm", "fm", "m2"));
+
 	final static List<String> validUnits = getAllUnitNames();
 	
 	public static List<String> getAllUnitNames(){
 		List<String> unitNames = new ArrayList<String>();
-		unitNames.addAll(unitAliases.keySet());
+		unitNames.addAll(unitAliases);
 		return unitNames;
 	}
-	*/
 
 	final int ID = 1;
 	final int NUMBER = 2;
