@@ -144,7 +144,14 @@ PriorParametersBlock:
 DataObjectBlock:
 	dataInputBlock = DataInputBlock |
 	sourceBlock = SourceBlock |
-	targetBlock = TargetBlock 
+	targetBlock = TargetBlock |
+	observationBlock = ObservationBlock |
+	dosingVariables = DosingVariablesBlock
+;
+
+DosingVariablesBlock:
+ 	identifier='DOSING_VARIABLES' 
+ 	BEGIN variables += SymbolDeclaration* END  	
 ;
  
 DataInputBlock:
@@ -208,7 +215,7 @@ ModelPredictionBlockStatement:
 	variable = SymbolDeclaration | 
 	odeBlock = OdeBlock | 
 	libraryBlock = LibraryBlock |
-	compartmentBlock = CompartmentBlock 
+	pkMacroBlock = PkMacroBlock 
 ;
 
 LibraryBlock: 
@@ -216,8 +223,8 @@ LibraryBlock:
 	BEGIN statements += FunctionCallStatement* END 
 ;
 
-CompartmentBlock:
-	identifier = 'COMPARTMENT'
+PkMacroBlock:
+	identifier = 'PKMACRO'
 	BEGIN variables += SymbolDeclaration* END 
 ;
 
@@ -406,11 +413,16 @@ EnumType:
 	input = InputFormatType |
 	trial = TrialType |
 	individualVar = IndividualVarType |
-	pkParameter = PkParameterType
+	pkParameter = PkParameterType |
+	pkMacro = PkMacroType
 ;
 
 enum PkParameterType:
 	no_param | v_cl | v_k | vss_cl | abk
+;
+
+enum PkMacroType:
+	no_macro | iv | elimination | oral | compartment | transfer | periferal | absorption
 ;
 
 enum UseType:

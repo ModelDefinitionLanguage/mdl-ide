@@ -107,6 +107,8 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_header = new Attribute("header", MdlDataType.TYPE_BOOLEAN, false, "false");
 	final public static Attribute attr_file = new Attribute("file", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
 	final public static Attribute attr_script = new Attribute("script", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
+	final public static Attribute attr_skip = new Attribute("skip", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_nrows = new Attribute("nrows", MdlDataType.TYPE_NAT, false);
 
 	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, 
 			attr_delimiter, attr_file, attr_script, attr_header);

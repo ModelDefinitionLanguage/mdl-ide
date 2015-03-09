@@ -103,23 +103,27 @@ public class Utils {
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
 		if (obj instanceof SourceBlockImpl) return ((SourceBlock)obj).getIdentifier();
+		if (obj instanceof DosingVariablesBlockImpl) return ((DosingVariablesBlockImpl)obj).getIdentifier();
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return ((StructuralBlock)obj).getIdentifier();	
 		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj).getIdentifier();
 		if (obj instanceof PriorParametersBlockImpl) return ((PriorParametersBlock)obj).getIdentifier();
 		/*Model object*/
+		if (obj instanceof IndividualVariablesBlockImpl) return ((IndividualVariablesBlock)obj).getIdentifier();
+		if (obj instanceof ModelPredictionBlockImpl) return ((ModelPredictionBlock)obj).getIdentifier();
+		if (obj instanceof RandomVariableDefinitionBlockImpl) return ((RandomVariableDefinitionBlock)obj).getIdentifier() ;
 		if (obj instanceof CovariateDefinitionBlockImpl) return ((CovariateDefinitionBlock)obj).getIdentifier();
 		if (obj instanceof VariabilityDefinitionBlockImpl) return ((VariabilityDefinitionBlock)obj).getIdentifier();
-		if (obj instanceof IndividualVariablesBlockImpl) return ((IndividualVariablesBlock)obj).getIdentifier();
-		if (obj instanceof LibraryBlockImpl) return ((LibraryBlock)obj).getIdentifier() ;
-		if (obj instanceof OdeBlockImpl) return ((OdeBlock)obj).getIdentifier() ;
-		if (obj instanceof CompartmentBlockImpl) return ((CompartmentBlock)obj).getIdentifier() ;
+		if (obj instanceof StructuralParametersBlockImpl) return ((StructuralParametersBlock)obj).getIdentifier() ;
+		if (obj instanceof VariabilityParametersBlockImpl) return ((VariabilityParametersBlock)obj).getIdentifier() ;
 		if (obj instanceof EstimationBlockImpl) return ((EstimationBlock)obj).getIdentifier() ;
 		if (obj instanceof SimulationBlockImpl) return ((SimulationBlock)obj).getIdentifier() ;
 		if (obj instanceof ObservationBlockImpl) return ((ObservationBlock)obj).getIdentifier() ;
-		if (obj instanceof StructuralParametersBlockImpl) return ((StructuralParametersBlock)obj).getIdentifier() ;
-		if (obj instanceof VariabilityParametersBlockImpl) return ((VariabilityParametersBlock)obj).getIdentifier() ;
-		if (obj instanceof RandomVariableDefinitionBlockImpl) return ((RandomVariableDefinitionBlock)obj).getIdentifier() ;
+		if (obj instanceof OutputVariablesBlockImpl) return ((OutputVariablesBlock)obj).getIdentifier() ;
+		//Subblocks
+		if (obj instanceof LibraryBlockImpl) return ((LibraryBlock)obj).getIdentifier() ;
+		if (obj instanceof OdeBlockImpl) return ((OdeBlock)obj).getIdentifier() ;
+		if (obj instanceof PkMacroBlockImpl) return ((PkMacroBlock)obj).getIdentifier() ;
 		/*Task object*/
 		if (obj instanceof EstimateTaskImpl) return ((EstimateTask)obj).getIdentifier();	
 		if (obj instanceof SimulateTaskImpl) return ((SimulateTask)obj).getIdentifier();	

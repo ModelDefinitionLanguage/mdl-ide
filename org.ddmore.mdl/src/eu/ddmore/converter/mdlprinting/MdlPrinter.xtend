@@ -45,6 +45,7 @@ import org.ddmore.mdl.mdl.PkParameterType
 import org.ddmore.mdl.mdl.Matching
 import org.ddmore.mdl.mdl.SignedNumericValue
 import org.ddmore.mdl.mdl.VectorExpression
+import org.ddmore.mdl.mdl.PkMacroType
 
 class MdlPrinter {
 	
@@ -209,12 +210,14 @@ class MdlPrinter {
 			return t.input.toString
 		if (t.variability != VariabilityType::NO_VARIABILITY)
 			return t.variability.toString
+		if (t.individualVar != IndividualVarType::NO_INDIVIDUAL_VAR)
+			return t.individualVar.toString
 		if (t.trial != TrialType::NO_TRIAL)
 			return t.trial.toString
 		if (t.pkParameter != PkParameterType::NO_PARAM)
 			return t.pkParameter.toString
-		if (t.individualVar != IndividualVarType::NO_INDIVIDUAL_VAR)
-			return t.individualVar.toString
+		if (t.pkMacro != PkMacroType::NO_MACRO)
+			return t.pkMacro.toString
 	}
 	
 	def toStr(VarType t) {

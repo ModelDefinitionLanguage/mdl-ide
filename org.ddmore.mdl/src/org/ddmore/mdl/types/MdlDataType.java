@@ -56,6 +56,7 @@ public enum MdlDataType {
 	TYPE_INDIVIDUAL_VAR, //{linear, general}
 	TYPE_CONTINUOUS, 	 //{continuous} 
 	TYPE_PK_PARAMETER,   //{v_cl, v_k, vss_cl, a_b}
+	TYPE_PK_MACRO,          //{iv, elimination, oral, compartment, transfer, periferal}
 	TYPE_TRIAL           //{simple, sequential, combined}
 	;
     
@@ -112,7 +113,8 @@ public enum MdlDataType {
 			TYPE_TRIAL,
 			TYPE_INDIVIDUAL_VAR,
 			TYPE_TRIAL,
-			TYPE_PK_PARAMETER
+			TYPE_PK_PARAMETER,
+			TYPE_PK_MACRO
 		);
 		return validateType(types, expr);
 	}
@@ -593,6 +595,7 @@ public enum MdlDataType {
 		if (expr.getIndividualVar() != IndividualVarType.NO_INDIVIDUAL_VAR) return TYPE_INDIVIDUAL_VAR;
 		if (expr.getTrial() != TrialType.NO_TRIAL) return TYPE_TRIAL;
 		if (expr.getPkParameter() != PkParameterType.NO_PARAM) return TYPE_PK_PARAMETER;
+		if (expr.getPkMacro() != PkMacroType.NO_MACRO) return TYPE_PK_MACRO;
 		return TYPE_UNDEFINED;
 	}
 

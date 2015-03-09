@@ -141,8 +141,8 @@ class MathPrinter{
 				return call.print_Math_FunctionCall_Standard;
 			} else {
 				if (FunctionValidator::lib_PK.equals(call.identifier.name)){
-					val pkPrinter = PKMacrosPrinter::getInstance();
-					return pkPrinter.print_PKMacros(call);
+					//val pkPrinter = PKMacrosPrinter::getInstance();
+					//return pkPrinter.print_PKMacros(call);
 				}
 				else
 					return call.print_Math_FunctionCall_UserDefined;
