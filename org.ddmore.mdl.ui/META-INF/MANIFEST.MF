@@ -29,7 +29,7 @@ Require-Bundle: org.ddmore.mdl;visibility:=reexport,
  org.eclipse.xtext.ui.codetemplates.ui;bundle-version="[2.4.0,2.4.1)",
  org.eclipse.xtext.ui.codetemplates;bundle-version="[2.4.0,2.4.1)",
  org.ops4j.pax.logging.pax-logging-api;bundle-version="1.7.0"
-Import-Package: eu.ddmore.libpharmml;version="0.3.12",
+Import-Package: eu.ddmore.libpharmml,
  org.apache.commons.io;version="2.0.1",
  org.eclipse.ui.console
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
