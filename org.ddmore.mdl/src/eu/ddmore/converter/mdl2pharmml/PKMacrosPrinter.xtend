@@ -5,7 +5,6 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.PkMacroType
 import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.types.MdlDataType
 import org.ddmore.mdl.mdl.List
 
 class PKMacrosPrinter{
@@ -46,7 +45,7 @@ class PKMacrosPrinter{
 							«content»
 						</Oral>
 					'''
-				case PkMacroType::PERIFERAL.toString: res = '''
+				case PkMacroType::PERIPHERAL.toString: res = '''
 						<Periferal>
 							«content»
 						</Periferal>

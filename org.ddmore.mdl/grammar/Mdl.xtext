@@ -427,7 +427,7 @@ enum PkParameterType:
 ;
 
 enum PkMacroType:
-	no_macro | iv | elimination | oral | compartment | transfer | periferal | absorption
+	no_macro | iv | elimination | oral | compartment | transfer | peripheral | absorption
 ;
 
 enum UseType:
