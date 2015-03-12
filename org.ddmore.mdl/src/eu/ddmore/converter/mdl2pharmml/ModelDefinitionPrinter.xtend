@@ -16,12 +16,14 @@ import org.ddmore.mdl.mdl.Expression
 
 class ModelDefinitionPrinter {
 	protected extension DistributionPrinter distrPrinter = new DistributionPrinter();
+	protected extension PKMacrosPrinter pkPrinter = null;
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver = null;
 	
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
 		this.mathPrinter = mathPrinter;
 		this.resolver = resolver;
+		pkPrinter = new PKMacrosPrinter(mathPrinter, resolver);
 	}		
 	
 	//////////////////////////////////////
@@ -230,20 +232,27 @@ class ModelDefinitionPrinter {
 			for (b: mObj.blocks){
 				if (b.modelPredictionBlock != null){
 					for (st: b.modelPredictionBlock.statements){
-						if (st.variable != null) {
+						if (st.variable != null) 
 							variables = variables + '''«st.variable.print_BlockStatement("ct:Variable", true)»''';
-						} else 
-							if (st.odeBlock != null){
-								for (s: st.odeBlock.variables){
-									variables = variables + '''«s.print_BlockStatement("ct:Variable", true)»''';	
-								}
-							} else {
-								if (st.libraryBlock != null){
-									for (s: st.libraryBlock.statements){
-										variables = variables + s.expression.print_Math_FunctionCall;
-									}
-								}
+						if (st.odeBlock != null){
+							for (s: st.odeBlock.variables){
+								variables = variables + '''«s.print_BlockStatement("ct:Variable", true)»''';	
 							}
+						}
+						if (st.libraryBlock != null){
+							for (s: st.libraryBlock.statements){
+								variables = variables + s.expression.print_Math_FunctionCall;
+							}
+						} 
+						if (st.pkMacroBlock != null){
+							for (s: st.pkMacroBlock.statements){
+								if (s.variable != null && s.variable.list != null){
+									variables = variables + s.variable.list.print_PKMAcros;
+								}
+								if (s.list != null)
+									variables = variables + s.list.print_PKMAcros;
+							}
+						}
 					}
 				}
 			}

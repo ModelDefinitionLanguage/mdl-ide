@@ -111,7 +111,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_nrows = new Attribute("nrows", MdlDataType.TYPE_NAT, false);
 
 	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, 
-			attr_delimiter, attr_file, attr_script, attr_header);
+			attr_delimiter, attr_file, attr_script, attr_header, attr_skip, attr_nrows);
 
 	/*TARGET*/
 	final public static Attribute attr_req_target = new Attribute("target", MdlDataType.TYPE_TARGET, true, TargetType.NMTRAN_CODE.toString());

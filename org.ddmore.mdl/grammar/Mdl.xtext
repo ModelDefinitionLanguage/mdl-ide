@@ -225,7 +225,12 @@ LibraryBlock:
 
 PkMacroBlock:
 	identifier = 'PKMACRO'
-	BEGIN variables += SymbolDeclaration* END 
+	BEGIN statements += PkMacroStatement* END 
+;
+
+PkMacroStatement:
+	variable = SymbolDeclaration |
+	list = List
 ;
 
 FunctionCallStatement:
@@ -462,7 +467,7 @@ VarType:
 ;
 
 Category:
-	categoryName = ArgumentName ("=" expression = SignedNumericValue)?
+	categoryName = ArgumentName
 ;
 
 AnyExpression:

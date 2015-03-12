@@ -229,13 +229,13 @@ class MdlPrinter {
 				if (iterator.hasNext ) {
 					var i = iterator.next; 
 					if (i.categoryName != null) res  = res + i.categoryName.name;
-					if (i.expression != null) res = res + " = " + i.expression.toStr;
+					//if (i.expression != null) res = res + " = " + i.expression.toStr;
 				}
 				while (iterator.hasNext){
 					res  = res + ', ';
 					var i = iterator.next; 
 					if (i.categoryName != null) res  = res + i.categoryName.name;
-					if (i.expression != null) res = res + " = " + i.expression.toStr;
+					//if (i.expression != null) res = res + " = " + i.expression.toStr;
 				}
 				res = res + ")";
 			}
