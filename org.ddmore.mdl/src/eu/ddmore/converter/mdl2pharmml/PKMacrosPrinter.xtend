@@ -74,13 +74,11 @@ class PKMacrosPrinter{
 					attrName = "#SKIP#";	
 			}				
 			if (!attrName.equals("#SKIP#")){
-				if (MdlDataType::validateType(MdlDataType::TYPE_REF, a.expression)){
-					res = res + '''
-						<Value «IF attrName.length > 0»«attrName»«ENDIF»> 
-							«a.expression.toStr.print_ct_SymbolRef»
-						</Value>
-					'''
-				}
+				res = res + '''
+					<Value«IF attrName.length > 0» argument="«attrName»"«ENDIF»> 
+						«a.expression.print_Math_Expr»
+					</Value>
+				'''
 			}
 		}
 		return res;
