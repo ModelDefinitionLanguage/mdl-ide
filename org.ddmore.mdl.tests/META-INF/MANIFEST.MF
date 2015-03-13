@@ -8,12 +8,10 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: org.ddmore.mdl,
  org.ddmore.mdl.ui,
  org.eclipse.core.runtime,
- org.eclipse.xtext.junit4,
- org.junit4,
  org.eclipse.ui,
- eu.ddmore.libpharmml-test-data
-Import-Package: eu.ddmore.libpharmml,
- org.apache.commons.io;version="2.0.1",
+ eu.ddmore.libpharmml-test-data,
+ eu.ddmore.libpharmml-osgi
+Import-Package: org.apache.commons.io;version="2.0.1",
  org.apache.log4j;version="1.2.15",
  org.eclipse.xtext.junit4,
  org.junit;version="4.5.0"

@@ -2,12 +2,12 @@
 <?eclipse version="3.0"?>
 
 <plugin>
-
   <extension point="org.eclipse.emf.ecore.generated_package">
     <package 
-       uri = "http://www.xtext.org/mdl/MDL" 
+       uri = "http://www.ddmore.org/mdl/Mdl" 
        class = "org.ddmore.mdl.mdl.MdlPackage"
        genModel = "org/ddmore/mdl/Mdl.genmodel" /> 
 	
   </extension>
+
 </plugin>
