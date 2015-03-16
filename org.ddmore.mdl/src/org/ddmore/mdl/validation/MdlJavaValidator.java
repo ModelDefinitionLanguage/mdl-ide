@@ -13,7 +13,7 @@ import java.util.Map;
 
 import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.*;
-import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
+//import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.validation.Check;
@@ -94,14 +94,14 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	}
 
 	//Check that each variable is declared in the local object
-	@Check
-	public void checkReferenceToVariable(SymbolName ref) {
+	//@Check
+	/*public void checkReferenceToVariable(SymbolName ref) {
 		if (ref.eContainer() instanceof OutputVariablesBlockImpl)
 			if (!(Utils.isSymbolDeclared(declaredVariables, ref))){
 				warning(MSG_UNRESOLVED_VARIABLE, MdlPackage.Literals.SYMBOL_NAME__NAME,
 						MSG_UNRESOLVED_VARIABLE, ref.getName());
 			}
-	}
+	}*/
 
 	//Check references to attributes (varName.attrName)
 	@Check

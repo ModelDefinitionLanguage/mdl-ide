@@ -42,7 +42,7 @@ import org.ddmore.mdl.mdl.TrialType
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.PkParameterType
-import org.ddmore.mdl.mdl.Matching
+//import org.ddmore.mdl.mdl.Matching
 import org.ddmore.mdl.mdl.SignedNumericValue
 import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.mdl.PkMacroType
@@ -276,10 +276,11 @@ class MdlPrinter {
 		//if (e.matching != null) return e.matching.toStr;
 	}
 	
+	/* 
 	def String toStr(Matching e){
 		var res = '''«e.symbolName.name» <=> «e.condition.toStr»''';
 		return res;		
-	}
+	}*/
 	
 	def String toStr(Expression e){
 		var res = e.expression.toStr;
@@ -481,12 +482,12 @@ class MdlPrinter {
 			var iterator = e.vectors.iterator();
 			if (iterator.hasNext ) res  = res + iterator.next.toStr;
 			while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr; 
-		}*/
+		}
 		if (e.matchings != null) {
 			var iterator = e.matchings.iterator();
 			if (iterator.hasNext) res  = res + iterator.next.toStr;
 			while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr; 
-		}
+		}*/
 		return res;
 	}
 	

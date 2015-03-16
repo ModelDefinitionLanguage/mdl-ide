@@ -43,7 +43,7 @@ ModelObjectBlock:
 	covariateBlock = CovariateDefinitionBlock |
 	structuralParametersBlock = StructuralParametersBlock |
 	variabilityParametersBlock = VariabilityParametersBlock |
-	outputVariablesBlock = OutputVariablesBlock | 
+	//outputVariablesBlock = OutputVariablesBlock | 
 	groupVariablesBlock = GroupVariablesBlock | 
 	observationBlock = ObservationBlock |
 	estimationBlock = EstimationBlock |
@@ -67,12 +67,12 @@ RandomVariableDefinitionBlock:
 ;
 
 VariabilityDefinitionBlock:
-  	identifier = 'VARIABILITY' 
+  	identifier = 'VARIABILITY_LEVELS' 
   	BEGIN variables += SymbolDeclaration* END 
 ;
 
 CovariateDefinitionBlock:
-  	identifier = 'COVARIATE' 
+  	identifier = 'COVARIATES' 
   	BEGIN variables += SymbolDeclaration* END 
 ;
 
@@ -86,10 +86,10 @@ VariabilityParametersBlock:
   BEGIN parameters += SymbolDeclaration* END 
 ;
 
-OutputVariablesBlock:
+/*OutputVariablesBlock:
 	identifier = 'MODEL_OUTPUT_VARIABLES' 
 	BEGIN variables += SymbolName* END 
-; 
+; */
 
 GroupVariablesBlock:
 	identifier = 'GROUP_VARIABLES' 
@@ -143,20 +143,26 @@ PriorParametersBlock:
 
 DataObjectBlock:
 	dataInputBlock = DataInputBlock |
+	dataDerivedBlock = DataDerivedBlock |
+	declaredVariables = DeclaredVariablesBlock |
 	sourceBlock = SourceBlock |
-	targetBlock = TargetBlock |
-	observationBlock = ObservationBlock |
-	dosingVariables = DosingVariablesBlock
+	targetBlock = TargetBlock 
 ;
 
-DosingVariablesBlock:
- 	identifier='DOSING_VARIABLES' 
- 	BEGIN variables += SymbolDeclaration* END  	
-;
- 
+
 DataInputBlock:
  	identifier='DATA_INPUT_VARIABLES' 
  	BEGIN variables += SymbolDeclaration* END  
+;
+
+DataDerivedBlock:
+ 	identifier='DATA_DERIVED_VARIABLES' 
+ 	BEGIN variables += SymbolDeclaration* END  	
+;
+
+DeclaredVariablesBlock:
+ 	identifier='DECLARED_VARIABLES' 
+ 	BEGIN variables += SymbolDeclaration* END  	
 ;
  
 SourceBlock:
@@ -343,7 +349,7 @@ MOGObjectBlock:
  ;
  
  ImportObjectStatement:
- 	symbolName = SymbolName "=" objectName = [ObjectName] ('from' importURI = STRING)?
+ 	symbolName = SymbolName "=" objectName = [ObjectName] ('from file' importURI = STRING)?
  ;
  
  MappingBlock:
@@ -432,7 +438,7 @@ enum PkMacroType:
 
 enum UseType:
 	no_use | id | idv | amt | dv | dvid | ytype | itype | covariate | reg | dose | cat | 
-	occ | adm | cens | limit | rate | tinf | ss | addl | ii | tau | mdv |evid | cmt
+	occ | adm | cens | limit | rate | tinf | ss | addl | ii | tau | mdv |evid | cmt | varlevel
 ;
 
 enum TargetType:
@@ -478,9 +484,9 @@ AnyExpression:
 	type = EnumType 
 ;
 
-Matching:
+/*Matching:
 	symbolName = SymbolName '<=>' condition = OrExpression
-;
+;*/
 
 List:
 	BEGIN arguments = Arguments END
@@ -557,9 +563,9 @@ Vector:
 
 VectorExpression:
 		expressions += Expression (=> ',' expressions += Expression)* |
-		lists += List (=> ',' lists += List)* |
+		lists += List (=> ',' lists += List)* //|
 		//vectors += Vector (=> ',' vectors += Vector)* |
-		matchings += Matching  (=> ',' matchings += Matching)*
+		//matchings += Matching  (=> ',' matchings += Matching)*
 ;
 
 FullyQualifiedArgumentName:

@@ -23,7 +23,7 @@ import org.ddmore.mdl.mdl.MdlFactory;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
 import org.ddmore.mdl.mdl.OrExpression;
-import org.ddmore.mdl.mdl.OutputVariablesBlock;
+//import org.ddmore.mdl.mdl.OutputVariablesBlock;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.RandomList;
@@ -39,7 +39,7 @@ import org.ddmore.mdl.mdl.VarType;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
-import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
+//import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
@@ -80,10 +80,10 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		/*Model object*/
 		for (Attribute attr: AttributeValidator.attrs_covariateDef) 
 			allAttributes.put(grammarAccess.getCovariateDefinitionBlockAccess().
-					getIdentifierCOVARIATEKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+					getIdentifierCOVARIATESKeyword_0_0().getValue() + ":" + attr.getName(), attr);
 		for (Attribute attr: AttributeValidator.attrs_variabilityDef) 
 			allAttributes.put(grammarAccess.getVariabilityDefinitionBlockAccess().
-					getIdentifierVARIABILITYKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+					getIdentifierVARIABILITY_LEVELSKeyword_0_0().getValue() + ":" + attr.getName(), attr);
 		for (Attribute attr: AttributeValidator.attrs_individualVariables) 
 			allAttributes.put(grammarAccess.getIndividualVariablesBlockAccess().
 					getIdentifierINDIVIDUAL_VARIABLESKeyword_0_0().getValue()+ ":" + attr.getName(), attr);
@@ -435,11 +435,12 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 					variabilityParametersBlock.getParameters().remove(element);
 					return;
 				} 
+				/*
 				if (container instanceof OutputVariablesBlockImpl){
 					OutputVariablesBlock outputBlock = (OutputVariablesBlock) container;
 					outputBlock.getVariables().remove(ref);
 					return;
-				}
+				}*/
 				if (container instanceof VariableListImpl){
 					VariableList variableList = (VariableList) container;
 					variableList.getIdentifiers().remove(ref);

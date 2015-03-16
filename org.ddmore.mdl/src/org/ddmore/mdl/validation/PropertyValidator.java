@@ -107,7 +107,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_header = new Attribute("header", MdlDataType.TYPE_BOOLEAN, false, "false");
 	final public static Attribute attr_file = new Attribute("file", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
 	final public static Attribute attr_script = new Attribute("script", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
-	final public static Attribute attr_skip = new Attribute("skip", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_skip = new Attribute("skip", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_nrows = new Attribute("nrows", MdlDataType.TYPE_NAT, false);
 
 	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, 
@@ -282,6 +282,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			DataObject dObj = mcl.getDataObject();
 			Boolean header = false;
 			String delimiter = ",";
+			//int skip = 0; 
 			for (DataObjectBlock b: dObj.getBlocks()){
 				if (b.getSourceBlock() != null){
 					for (PropertyDeclaration pp: b.getSourceBlock().getStatements()){
@@ -289,6 +290,12 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 							header = MdlPrinter.getInstance().isTrue(pp.getExpression());
 						if (pp.getPropertyName().getName().equals(attr_delimiter.getName()))
 							delimiter = MdlPrinter.getInstance().toStr(pp.getExpression());
+						/*if (pp.getPropertyName().getName().equals(attr_skip.getName())){
+							String value = MdlPrinter.getInstance().toStr(pp.getExpression());
+							try{
+								skip = Integer.parseInt(value);
+							} catch (NumberFormatException e){}
+						}*/
 					}
 				}
 			}
@@ -297,6 +304,9 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 				InputStream is = dataFile.getContents();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 				String headers =  reader.readLine();
+				/*if (skip > 0) 
+					for (int i = 0; i < skip; i++) headers = reader.readLine();
+				*/
 				is.close();
 				String[] columns =  headers.split(delimiter);
 

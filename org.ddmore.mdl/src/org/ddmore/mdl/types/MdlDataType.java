@@ -42,7 +42,7 @@ public enum MdlDataType {
     //Restricted vectors
     TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL, TYPE_VECTOR_PROBABILITY,
     //Expression vectors
-    TYPE_VECTOR_REF, TYPE_VECTOR_EXPR, TYPE_VECTOR_MATCHING, TYPE_VECTOR_LIST,
+    TYPE_VECTOR_REF, TYPE_VECTOR_EXPR, TYPE_VECTOR_LIST, //TYPE_VECTOR_MATCHING, 
 
 	/*String restrictions*/
 	TYPE_TRANS,          //{log, logit, probit}
@@ -81,7 +81,7 @@ public enum MdlDataType {
 			//Vectors of expressions
 			case TYPE_VECTOR_REF: return isVectorReference(expr);  
 			case TYPE_VECTOR_EXPR: return isVectorExpression(expr);
-			case TYPE_VECTOR_MATCHING: return isVectorMatching(expr);
+			//case TYPE_VECTOR_MATCHING: return isVectorMatching(expr);
 			case TYPE_VECTOR_LIST: return isVectorList(expr);
 			//Vectors of restrictions
 			case TYPE_VECTOR_NAT: return isVectorNat(expr);
@@ -287,10 +287,10 @@ public enum MdlDataType {
 		return false;	
 	}
 	
-	private static boolean isVectorMatching(Vector v){
+	/*private static boolean isVectorMatching(Vector v){
 		if (v.getExpression() != null && v.getExpression().getMatchings() != null) return true;
 		return false;	
-	}
+	}*/
 	
 	private static boolean isVectorList(Vector v){
 		if (v.getExpression() != null && v.getExpression().getLists() != null) return true;

@@ -143,6 +143,9 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 			if (b.getDataInputBlock() != null)
 				for (SymbolDeclaration s: b.getDataInputBlock().getVariables())
 					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
+			if (b.getDataDerivedBlock() != null)
+				for (SymbolDeclaration s: b.getDataDerivedBlock().getVariables())
+					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
 		}
 		ObjectName mObjName = ((MclObject)mObj.eContainer()).getObjectName();
 		ObjectName dObjName = ((MclObject)dObj.eContainer()).getObjectName();

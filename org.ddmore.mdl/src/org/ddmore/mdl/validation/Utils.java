@@ -103,7 +103,8 @@ public class Utils {
 		/*Data object*/
 		if (obj instanceof DataInputBlockImpl) return ((DataInputBlock)obj).getIdentifier();
 		if (obj instanceof SourceBlockImpl) return ((SourceBlock)obj).getIdentifier();
-		if (obj instanceof DosingVariablesBlockImpl) return ((DosingVariablesBlockImpl)obj).getIdentifier();
+		if (obj instanceof DataDerivedBlockImpl) return ((DataDerivedBlockImpl)obj).getIdentifier();
+		if (obj instanceof DeclaredVariablesBlockImpl) return ((DeclaredVariablesBlockImpl)obj).getIdentifier();
 		/*Parameter object*/
 		if (obj instanceof StructuralBlockImpl) return ((StructuralBlock)obj).getIdentifier();	
 		if (obj instanceof VariabilityBlockImpl) return ((VariabilityBlock)obj).getIdentifier();
@@ -119,7 +120,7 @@ public class Utils {
 		if (obj instanceof EstimationBlockImpl) return ((EstimationBlock)obj).getIdentifier() ;
 		if (obj instanceof SimulationBlockImpl) return ((SimulationBlock)obj).getIdentifier() ;
 		if (obj instanceof ObservationBlockImpl) return ((ObservationBlock)obj).getIdentifier() ;
-		if (obj instanceof OutputVariablesBlockImpl) return ((OutputVariablesBlock)obj).getIdentifier() ;
+		//if (obj instanceof OutputVariablesBlockImpl) return ((OutputVariablesBlock)obj).getIdentifier() ;
 		//Subblocks
 		if (obj instanceof LibraryBlockImpl) return ((LibraryBlock)obj).getIdentifier() ;
 		if (obj instanceof OdeBlockImpl) return ((OdeBlock)obj).getIdentifier() ;

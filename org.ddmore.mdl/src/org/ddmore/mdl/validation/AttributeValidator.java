@@ -457,7 +457,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		return (
 			//Data object	
 			obj instanceof DataInputBlockImpl ||
-			obj instanceof DosingVariablesBlockImpl ||
+			obj instanceof DataDerivedBlockImpl ||
 			//Model object
 			obj instanceof CovariateDefinitionBlockImpl ||
 			obj instanceof VariabilityDefinitionBlockImpl ||

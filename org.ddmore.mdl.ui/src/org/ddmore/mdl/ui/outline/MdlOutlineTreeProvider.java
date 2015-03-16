@@ -62,7 +62,7 @@ import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl;
 import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
 import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
-import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
+//import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
@@ -231,9 +231,10 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(OBSERVATIONS_BLOCK));
     }
 
+    /*
     protected Image _image(OutputVariablesBlockImpl e) {
         return imageHelper.getImage(getPath(OUTPUT_VARIABLES_BLOCK));
-    }
+    }*/
 
     protected Image _image(TargetType e) {
         return imageHelper.getImage(getPath(TARGET_LANGUAGE));
