@@ -1,5 +1,8 @@
 0=@version@
-1=@buildNo@
-2=@buildId@
-3=@branch@
-4=@revision@
+1=@versionStatus@
+2=@buildStatus@
+3=@buildNo@
+4=@buildId@
+5=@branch@
+6=@revision@
+7=@message@

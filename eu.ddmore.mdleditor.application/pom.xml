@@ -13,9 +13,31 @@
 
 	<artifactId>eu.ddmore.mdleditor.application</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	
+	<properties>
+	  <version.status>beta</version.status>
+	  <iog.product.name>Interoperability Group Product</iog.product.name>
+	  <iog.product.version>4</iog.product.version>
+	</properties>
+
     <profiles>
-     <profile>
+      <profile>
+        <id>ci</id>
+        <activation>
+          <activeByDefault/>
+        </activation>
+        <properties>
+          <build.status>In Development</build.status>
+          <message>This build is a step towards the ${iog.product.name} ${iog.product.version} deliverable.</message>
+        </properties>        
+      </profile>
+      <profile>
+        <id>release</id>
+        <properties>
+           <build.status>Released</build.status>
+           <message>This build equates to the ${iog.product.name} ${iog.product.version} deliverable.</message>
+        </properties>
+      </profile>
+    <profile>
       <id>update-branding</id>
       <build>
         <plugins>
@@ -31,7 +53,11 @@
                           <tasks>
                             <copy file="about.mappings" tofile="about.mappings.orig"/>
                             <replace file="about.mappings" 
-                                     token="@version@" value="${qualifiedVersion}" />
+                                     token="@version@" value="${unqualifiedVersion}" />
+                            <replace file="about.mappings" 
+                                     token="@versionStatus@" value="${version.status}" />
+                            <replace file="about.mappings" 
+                                     token="@buildStatus@" value="${build.status}" />
                             <replace file="about.mappings" 
                                      token="@buildNo@" value="${BUILD_NUMBER}" />
                             <replace file="about.mappings" 
@@ -40,6 +66,8 @@
                                      token="@branch@" value="${GIT_BRANCH}" />
                             <replace file="about.mappings" 
                                      token="@revision@" value="${GIT_COMMIT}" />
+                            <replace file="about.mappings" 
+                                     token="@message@" value="${message}" />
                           </tasks>
                         </configuration>
                         <goals>
