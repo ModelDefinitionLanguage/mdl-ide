@@ -33,8 +33,30 @@
 		<sonar.surefire.reportsPath>../${project.artifactId}.tests/target/surefire-reports/</sonar.surefire.reportsPath>
 		<sonar.skippedModules>*.tests</sonar.skippedModules>
 		<sonar.skipDesign>true</sonar.skipDesign>
+
+        <!-- A URL where the p2 repository will be published, the value is set in feature.xml of the mdl-ide-dependencies feature -->
+        <sf.publish.location>http://sourceforge.net/projects/ddmore/files/update/ddmore-tools</sf.publish.location>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <properties>
+                 <p2.repository.url>${sf.publish.location}/latest/ci/</p2.repository.url>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>release</id>
+            <properties>
+                 <version.no-snapshot>1.1.0</version.no-snapshot>
+                 <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/release/</p2.repository.url>
+            </properties>
+        </profile>
+    </profiles>
+    
 	<repositories>
 		<repository>
 			<id>xtend</id>
