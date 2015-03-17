@@ -16,4 +16,12 @@
 	<version>1.0.2</version>
 	<packaging>eclipse-feature</packaging>
 
+    <build>
+        <plugins>
+            <plugin>
+                    <!-- Populating feature.properties with appropriate update site url which is different for CI and RELEASE builds -->
+                    <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

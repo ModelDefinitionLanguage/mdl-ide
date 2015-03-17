@@ -15,10 +15,35 @@
 		<module>../../org.ddmore.mdl.tests</module>
 		<module>../../org.ddmore.mdl.sdk</module>
 		<module>../../org.ddmore.mdl.sdk.jre</module>
+        <module>../../eu.ddmore.mdl.ide.feature</module>
 		<!-- once the encryption key is changed this can be included : MIFDEV-35 
 			<module>../com.mango.mif.client.feature</module> <module>../com.mango.mif.client.site</module> -->
 		<module>../../eu.ddmore.mdleditor.site</module>
 	</modules>
+
+    <properties>
+        <!-- A URL where the p2 repository will be published, the value is set in feature.xml of the mdl-ide-dependencies feature -->
+        <version.no-snapshot>1.1.0</version.no-snapshot>
+        <sf.publish.location>http://sourceforge.net/projects/ddmore/files/update/ddmore-tools</sf.publish.location>
+    </properties>
+    
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <properties>
+                 <p2.repository.url>${sf.publish.location}/latest/ci/</p2.repository.url>
+            </properties>
+            <activation>
+                <activeByDefault/>
+            </activation>
+        </profile>
+        <profile>
+            <id>release</id>
+            <properties>
+                 <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/release/</p2.repository.url>
+            </properties>
+        </profile>
+    </profiles>
 
 	<url>http://ddmore.eu/</url>
 	<name>Drug Disease Model Resources Framework</name>

@@ -16,7 +16,7 @@
    </description>
 
    <url>
-      <update label="%updateLabel" url="http://ddmore.eu"/>
+      <update label="%updateLabel" url="%updateUrl"/>
    </url>
 
    <requires>

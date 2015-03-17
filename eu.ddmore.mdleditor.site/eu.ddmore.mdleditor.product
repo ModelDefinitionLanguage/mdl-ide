@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="DDMoRe MDL IDE Product" uid="eu.ddmore.mdleditor" id="eu.ddmore.mdleditor.application.product" application="org.eclipse.ui.ide.workbench" version="1.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="DDMoRe MDL IDE Demonstrator" uid="eu.ddmore.mdleditor" id="eu.ddmore.mdleditor.application.product" application="org.eclipse.ui.ide.workbench" version="1.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/eu.ddmore.mdleditor.application/icons/about_image.png"/>
@@ -31,7 +31,6 @@
       </win>
    </launcher>
 
-
    <vm>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</windows>
    </vm>
@@ -51,34 +50,18 @@ http://www.gnu.org/licenses/lgpl-2.1.html
    </plugins>
 
    <features>
-      <feature id="org.ddmore.mdl.sdk"/>
-      <feature id="org.ddmore.mdl.sdk.jre"/>
-      <feature id="org.eclipse.emf.ecore"/>
-      <feature id="org.eclipse.emf.common"/>
-      <feature id="eu.ddmore.mdl-ide-dependencies.feature"/>
-      <feature id="org.eclipse.platform" version="4.4.2.v20150204-1700"/>
-      <feature id="org.eclipse.rcp" version="4.4.2.v20150204-1700"/>
-      <feature id="org.eclipse.help" version="2.0.103.v20150204-1700"/>
-      <feature id="de.walware.3rdparty.lucene" version="4.7.2.b201407011730sw"/>
-      <feature id="de.walware.ecommons.e" version="1.5.0.b201407171807E43sw"/>
-      <feature id="de.walware.ecommons.edb" version="0.3.0.b201407171807E43sw"/>
-      <feature id="de.walware.ecommons.ltk" version="2.3.0.b201407171807E43sw"/>
-      <feature id="de.walware.eutils.autorun" version="1.0.0.b201404250840E38sw"/>
-      <feature id="de.walware.rj.core" version="2.0.1.b201406211200"/>
-      <feature id="de.walware.rj.eclient" version="2.0.1.b201406211200"/>
-      <feature id="de.walware.statet.r" version="3.4.0.b201407171807E43sw"/>
-      <feature id="de.walware.statet.r.sweave" version="3.4.0.b201407171807E43sw"/>
-      <feature id="de.walware.statet.rtm.ftable" version="1.0.1.b201407171807E43sw"/>
-      <feature id="de.walware.statet.rtm.ggplot" version="1.0.1.b201407171807E43sw"/>
+      <feature id="eu.ddmore.mdl.ide.feature"/>
    </features>
 
    <configurations>
-      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.cm" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="0" />
-      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="0" />
-      <plugin id="org.eclipse.osgi.services" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.ops4j.pax.configmanager" autoStart="true" startLevel="2" />
       <plugin id="org.ops4j.pax.logging.pax-logging-api" autoStart="true" startLevel="2" />
       <plugin id="org.ops4j.pax.logging.pax-logging-service" autoStart="true" startLevel="3" />

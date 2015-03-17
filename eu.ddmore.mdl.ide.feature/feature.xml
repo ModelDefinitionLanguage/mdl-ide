@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="eu.ddmore.mdl.ide.feature"
+      label="%label"
+      version="1.1.0.qualifier"
+      provider-name="%provider">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      Copyright (C) 2015, Leiden University. All rights reserved.
+Leiden University gratefully acknowledges the contributions of
+its partner Mango Business Solutions Limited for their design
+work and support.
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      [Enter License Description here.]
+   </license>
+
+   <url>
+      <update label="%updateLabel"/>
+   </url>
+
+   <includes
+         id="de.walware.3rdparty.lucene"
+         version="0.0.0"/>
+
+   <includes
+         id="de.walware.ecommons.e"
+         version="0.0.0"/>
+
+   <includes
+         id="de.walware.ecommons.edb"
+         version="0.0.0"/>
+
+   <includes
+         id="de.walware.ecommons.ltk"
+         version="0.0.0"/>
+
+   <includes
+         id="de.walware.eutils.autorun"
+         version="0.0.0"/>
+
+   <includes
+         id="de.walware.rj.core"
+         version="0.0.0"/>
+
+   <includes
+         id="de.walware.rj.eclient"
+         version="0.0.0"/>
+
+   <includes
+         id="de.walware.statet.r"
+         version="0.0.0"/>
+
+   <includes
+         id="de.walware.statet.r.sweave"
+         version="0.0.0"/>
+
+   <includes
+         id="de.walware.statet.rtm.ftable"
+         version="0.0.0"/>
+
+   <includes
+         id="de.walware.statet.rtm.ggplot"
+         version="0.0.0"/>
+
+   <includes
+         id="eu.ddmore.mdl-ide-dependencies.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.ddmore.mdl.sdk"
+         version="0.0.0"/>
+
+   <includes
+         id="org.ddmore.mdl.sdk.jre"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.emf.common"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.emf.ecore"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.platform"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rcp"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.help"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.ecf.filetransfer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.ecf.core.feature"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.touchpoint.eclipse"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.touchpoint.natives"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.artifact.repository"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.metadata"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.metadata.repository"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.repository"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.repository.tools"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.ui.importexport"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.updatesite"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.reconciler.dropins"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.p2.ui.sdk"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

@@ -199,6 +199,43 @@
 
 		<pluginManagement>
 			<plugins>
+            
+                <plugin>
+                    <!-- Populating feature.properties with appropriate update site url which is different for CI and RELEASE builds -->
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>update-branding-process-resources</id>
+                            <phase>process-resources</phase>
+                            <configuration>
+                                <tasks>
+                                    <copy file="feature.properties"
+                                        tofile="feature.properties.orig" />
+                                    <replace file="feature.properties"
+                                        token="@UPDATEURL@" value="${p2.repository.url}" />
+                                </tasks>
+                            </configuration>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>update-branding-revert-changes</id>
+                            <phase>package</phase>
+                            <configuration>
+                                <tasks>
+                                    <move file="feature.properties.orig"
+                                        tofile="feature.properties"
+                                        overwrite="true" />
+                                </tasks>
+                            </configuration>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-compiler-plugin</artifactId>
@@ -245,30 +282,9 @@
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-p2-repository-plugin</artifactId>
 					<version>${tycho.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.tycho.extras</groupId>
-					<artifactId>tycho-source-feature-plugin</artifactId>
-					<version>${tycho.extras.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.tycho.extras</groupId>
-					<artifactId>tycho-custom-bundle-plugin</artifactId>
-					<version>${tycho.extras.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>tycho-p2-plugin</artifactId>
-					<version>${tycho.version}</version>
-					<configuration>
-						<baselineMode>warn</baselineMode>
-						<baselineReplace>none</baselineReplace>
-						<baselineRepositories>
-							<repository>
-								<url>http://download.eclipse.org/eclipse/updates/4.2</url>
-							</repository>
-						</baselineRepositories>
-					</configuration>
+                    <configuration>
+                        <includeAllDependencies>true</includeAllDependencies>
+                    </configuration>
 				</plugin>
 
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
@@ -350,7 +366,7 @@
 					</executions>
 					<dependencies>
 
-						<dependency>
+					<dependency>
 							<groupId>org.eclipse.emf.mwe</groupId>
 							<artifactId>emf-mwe-utils</artifactId>
 							<version>${xtext.utils.version}</version>
