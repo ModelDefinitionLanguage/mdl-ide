@@ -205,7 +205,7 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <executions>
                         <execution>
-                            <id>update-branding-process-resources</id>
+                            <id>update-feature-properties-process-resources</id>
                             <phase>process-resources</phase>
                             <configuration>
                                 <tasks>
@@ -220,7 +220,7 @@
                             </goals>
                         </execution>
                         <execution>
-                            <id>update-branding-revert-changes</id>
+                            <id>update-feature-properties-revert-changes</id>
                             <phase>package</phase>
                             <configuration>
                                 <tasks>

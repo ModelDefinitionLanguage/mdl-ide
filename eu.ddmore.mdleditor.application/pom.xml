@@ -49,7 +49,7 @@
                       <execution>
                         <id>update-branding-process-resources</id>
                         <phase>process-resources</phase>
-                       <configuration>
+                        <configuration>
                           <tasks>
                             <copy file="about.mappings" tofile="about.mappings.orig"/>
                             <replace file="about.mappings" 
