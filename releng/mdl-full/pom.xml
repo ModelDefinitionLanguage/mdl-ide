@@ -20,13 +20,11 @@
 			<module>../com.mango.mif.client.feature</module> <module>../com.mango.mif.client.site</module> -->
 		<module>../../eu.ddmore.mdleditor.site</module>
 	</modules>
-
     <properties>
         <!-- A URL where the p2 repository will be published, the value is set in feature.xml of the mdl-ide-dependencies feature -->
-        <version.no-snapshot>1.1.0</version.no-snapshot>
         <sf.publish.location>http://sourceforge.net/projects/ddmore/files/update/ddmore-tools</sf.publish.location>
     </properties>
-    
+
     <profiles>
         <profile>
             <id>ci</id>
@@ -34,18 +32,18 @@
                  <p2.repository.url>${sf.publish.location}/latest/ci/</p2.repository.url>
             </properties>
             <activation>
-                <activeByDefault/>
+                <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
         <profile>
             <id>release</id>
             <properties>
+                 <version.no-snapshot>1.1.0</version.no-snapshot>
                  <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/release/</p2.repository.url>
             </properties>
         </profile>
     </profiles>
-
 	<url>http://ddmore.eu/</url>
 	<name>Drug Disease Model Resources Framework</name>
 	<description>The Drug Disease Model Resources (DDMoRe) consortium builds and maintains a universally applicable, open source, model based framework, intended as the gold standard for future collaborative drug and disease Modelling &amp; Simulation.</description>
-</project> 
+</project>

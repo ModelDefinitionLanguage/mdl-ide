@@ -23,7 +23,7 @@
       <profile>
         <id>ci</id>
         <activation>
-          <activeByDefault/>
+          <activeByDefault>true</activeByDefault>
         </activation>
         <properties>
           <build.status>In Development</build.status>

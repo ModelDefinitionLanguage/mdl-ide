@@ -33,7 +33,7 @@
 		<sonar.surefire.reportsPath>../${project.artifactId}.tests/target/surefire-reports/</sonar.surefire.reportsPath>
 		<sonar.skippedModules>*.tests</sonar.skippedModules>
 		<sonar.skipDesign>true</sonar.skipDesign>
-	</properties>
+    </properties>
 
 	<repositories>
 		<repository>
@@ -206,7 +206,6 @@
                     <executions>
                         <execution>
                             <id>update-feature-properties-process-resources</id>
-                            <phase>process-resources</phase>
                             <configuration>
                                 <tasks>
                                     <copy file="feature.properties"
@@ -221,7 +220,6 @@
                         </execution>
                         <execution>
                             <id>update-feature-properties-revert-changes</id>
-                            <phase>package</phase>
                             <configuration>
                                 <tasks>
                                     <move file="feature.properties.orig"

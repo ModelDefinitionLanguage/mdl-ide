@@ -19,8 +19,19 @@
     <build>
         <plugins>
             <plugin>
-                    <!-- Populating feature.properties with appropriate update site url which is different for CI and RELEASE builds -->
-                    <artifactId>maven-antrun-plugin</artifactId>
+                <!-- Populating feature.properties with appropriate update 
+                    site url which is different for CI and RELEASE builds -->
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>update-feature-properties-process-resources</id>
+                        <phase>process-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>update-feature-properties-revert-changes</id>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
