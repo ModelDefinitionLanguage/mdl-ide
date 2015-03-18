@@ -88,7 +88,9 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </license>
 
    <url>
-      <update label="%updateLabel" url="http://ddmore.eu"/>
+      <!-- Externalized url doesn't pass the Feature Editor validation,
+      don't commit removal of url="%updateUrl"-->
+      <update label="%updateLabel" url="%updateUrl"/>
    </url>
 
    <includes

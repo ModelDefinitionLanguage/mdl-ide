@@ -16,6 +16,8 @@
    </description>
 
    <url>
+      <!-- Externalized url doesn't pass the Feature Editor validation,
+      don't commit removal of url="%updateUrl"-->
       <update label="%updateLabel" url="%updateUrl"/>
    </url>
 
