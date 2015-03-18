@@ -154,6 +154,7 @@ class MathPrinter{
 	def print_Math_FunctionCall_Standard(FunctionCall call) {
 		var functName = call.identifier.name;
 		if(call.identifier.name.equals("ln")) functName = "log";
+		if(call.identifier.name.equals("lfactorial")) functName = "factln";
 		'''
 			«IF call.arguments.arguments.size == 1»
 				<Uniop op="«functName»">

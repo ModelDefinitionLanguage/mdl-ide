@@ -49,7 +49,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	//Synchronised with PharmML v.4.0.1 
 	final public static List<String> funct_standard1 = Arrays.asList(
 		"abs","exp", "factorial", "factln", "gammaln",
-		"ln", //Supported by MDL but not PharmML
+		"lfactorial", "ln", //Supported by MDL but not PharmML
 		"log", "log2", "log10", "logistic", "logit",
 		"normcdf", "probit", "sqrt",
 		//trigonometric
@@ -115,9 +115,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 				put(functName, new FunctionSignature(functName, 2, MdlDataType.TYPE_REAL));
 						
 			put(funct_seq, new FunctionSignature(funct_seq, 
-					Arrays.asList(
-						new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition)),
-						new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_end))
+				Arrays.asList(
+					new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition)),
+					new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_end))
 				), MdlDataType.TYPE_VECTOR_INT, true));
 			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
 			put(funct_runif, new FunctionSignature(funct_runif, new FunctionParameterSet(param_n), MdlDataType.TYPE_REAL));
