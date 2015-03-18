@@ -48,6 +48,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
 	final public static Attribute attr_define = new Attribute("define", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
+	final public static Attribute attr_cmpt = new Attribute("cmpt", MdlDataType.TYPE_EXPR, false);
+	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
 
 	//final public static Attribute attr_administration_ref = new Attribute("administration", MdlDataType.TYPE_REF_DERIV, false);
 
@@ -69,6 +71,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*VARIABILITY*/
 	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, true, "1"); 
+	final public static Attribute attr_type_level = new Attribute("type", MdlDataType.TYPE_LEVEL, false); 
 	
 	//RANDOM_VARIABLES_DEFINITION
 	final public static Attribute attr_rv1 = new Attribute("rv1", MdlDataType.TYPE_REF, true);
@@ -81,7 +84,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_prediction_ref = new Attribute("prediction", MdlDataType.TYPE_REF, true);
 
 	/*ESTIMATION*/
-	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
 	final public static Attribute attr_ruv = new Attribute("ruv", MdlDataType.TYPE_EXPR, false);
 	
 	/*ODE*/
@@ -179,7 +181,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//Attribute sets
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
-	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_type, attr_define, attr_use, attr_units);
+	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_type, attr_define, attr_use, attr_cmpt, attr_prediction, attr_units);
 	
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_value, attr_lo, attr_hi, attr_fix, attr_units);
@@ -189,12 +191,13 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_type_randomEff, attr_rv1, attr_rv2);
 	
 	final public static List<Attribute> attrs_covariateDef   = Arrays.asList(attr_type, attr_units);
-	final public static List<Attribute> attrs_variabilityDef = Arrays.asList(attr_level, attr_units);
+	final public static List<Attribute> attrs_variabilityDef = Arrays.asList(attr_level, attr_type_level, attr_units);
 	
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
 	final public static List<Attribute> attrs_simulation = Arrays.asList();
-	final public static List<Attribute> attrs_observation = Arrays.asList(attr_type_continuous, attr_error, attr_eps, attr_prediction_ref);
+	final public static List<Attribute> attrs_observation = Arrays.asList(attr_type_continuous, attr_error, 
+			attr_eps, attr_prediction_ref, attr_trans);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff, attr_group);

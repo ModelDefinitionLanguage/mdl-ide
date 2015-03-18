@@ -421,11 +421,16 @@ EnumType:
 	use = UseType |       
 	target = TargetType|
 	variability = VariabilityType |
-	input = InputFormatType |
+	input = InputFormatType | 
+	level = LevelType |
 	trial = TrialType |
 	individualVar = IndividualVarType |
 	pkParameter = PkParameterType |
 	pkMacro = PkMacroType
+;
+
+enum LevelType:
+	no_level | model | observation
 ;
 
 enum PkParameterType:
