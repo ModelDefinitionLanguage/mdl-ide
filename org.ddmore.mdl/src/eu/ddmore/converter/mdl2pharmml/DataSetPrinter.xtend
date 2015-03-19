@@ -11,7 +11,6 @@ import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.types.DefaultValues
-import org.ddmore.mdl.types.VariableType
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.mdl.MclObject
@@ -79,8 +78,8 @@ class DataSetPrinter {
 	protected def getValueType(SymbolDeclaration modelVar){
 		var variableType = Constants::TYPE_REAL;
 		if (modelVar.list != null){
-			val valueType = modelVar.list.arguments.getAttribute(AttributeValidator::attr_type.name);
-			if (valueType.equals(VariableType::CC_CATEGORICAL)) 
+			val type = modelVar.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+			if (type.isCategorical) 
 				variableType = Constants::TYPE_INT;
 			
 		}

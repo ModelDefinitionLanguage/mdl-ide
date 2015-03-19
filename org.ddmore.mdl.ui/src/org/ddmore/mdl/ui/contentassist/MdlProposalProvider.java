@@ -21,7 +21,6 @@ import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.PropertyDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
-import org.ddmore.mdl.types.VariableType;
 import org.ddmore.mdl.ui.contentassist.AbstractMdlProposalProvider;
 import org.ddmore.mdl.ui.outline.Images;
 import org.ddmore.mdl.validation.AttributeValidator;
@@ -113,7 +112,10 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 					Image img = imageHelper.getImage(Images.getPath(Images.TRIAL_TYPE));				
 					addProposals(context, acceptor, attributes, img);
 				} else {
-					attributes.addAll(VariableType.CC_VALUES);
+					attributes.add(grammarAccess.getVarTypeAccess().getContinuousContinuousKeyword_1_0().getValue());
+					attributes.add(grammarAccess.getVarTypeAccess().getCategoricalCategoricalKeyword_0_0_0().getValue());
+					attributes.add(grammarAccess.getVarTypeAccess().getLikelihoodLikelihoodKeyword_2_0().getValue());
+					attributes.add(grammarAccess.getVarTypeAccess().getM2LLM2LLKeyword_3_0().getValue());
 					Image img = imageHelper.getImage(Images.getPath(Images.CC_TYPE));				
 					addProposals(context, acceptor, attributes, img);
 				}

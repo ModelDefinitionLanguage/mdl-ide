@@ -101,12 +101,36 @@ class MathPrinter{
 	def print_Categorical(List categories) '''
 		<Categorical>
 		«FOR c : categories.arguments.arguments»
-			<Category>
-				«c.argumentName.name»
-			</Category>
+			«IF c.argumentName != null»
+				<Category catId=«c.argumentName.name»/>
+			«ENDIF»
 		«ENDFOR»
 		</Categorical>
 	'''
+
+	def print_Categorical(AnyExpression e) '''
+		«IF e.type != null && e.type.type != null && e.type.type.categorical != null»
+			«IF e.type.type.categories != null»
+				<Categorical>
+					«FOR c : e.type.type.categories»
+						<Category catId="«c.categoryName.name»"/>
+					«ENDFOR»
+				</Categorical>
+			«ELSE»
+				<Categorical/>
+			«ENDIF»
+		«ENDIF»
+	'''
+	
+	def isCategorical(AnyExpression e){
+		if (e != null && e.type != null && e.type.type != null && e.type.type.categorical != null) return true;
+		return false;
+	}
+	
+	def isContinuous(AnyExpression e){
+		if (e != null && e.type != null && e.type.type != null && e.type.type.continuous != null) return true;
+		return false;
+	}
 
 	//+ Convert math functions to PharmML 
 	def print_Math_FunctionCall(FunctionCall call) {
@@ -136,7 +160,6 @@ class MathPrinter{
 		} else {
 			if (FunctionValidator::funct_standard1.contains(call.identifier.name) ||
 				FunctionValidator::funct_standard2.contains(call.identifier.name)) {
-
 				//Convert standard mathematical functions to a PharmML operator with the same name;		
 				return call.print_Math_FunctionCall_Standard;
 			} else {

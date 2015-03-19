@@ -41,12 +41,12 @@ import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.VariableList;
 //import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.SymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
 import org.ddmore.mdl.types.DistributionType;
 import org.ddmore.mdl.types.MdlDataType;
-import org.ddmore.mdl.types.VariableType;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.DistributionValidator;
 import org.ddmore.mdl.validation.MdlJavaValidator;
@@ -252,16 +252,16 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	private AnyExpression createVarTypeExpression(String value) {
 		VarType tl = MdlFactory.eINSTANCE.createVarType();
-		if (value.equals(VariableType.CC_CONTINUOUS)) {
+		if (value.equals(grammarAccess.getVarTypeAccess().getContinuousContinuousKeyword_1_0().getValue())) {
 			tl.setContinuous(value);
 		} else {
-			if (value.equals(VariableType.CC_CATEGORICAL)){
+			if (value.equals(grammarAccess.getVarTypeAccess().getCategoricalCategoricalKeyword_0_0_0().getValue())){
 				tl.setCategorical(value);
 			} else {
-				if (value.equals(VariableType.CC_LIKELIHOOD)){
+				if (value.equals(grammarAccess.getVarTypeAccess().getLikelihoodLikelihoodKeyword_2_0().getValue())){
 					tl.setLikelihood(value);
 				} else {
-					if (value.equals(VariableType.CC_M2LL)){
+					if (value.equals(grammarAccess.getVarTypeAccess().getM2LLM2LLKeyword_3_0().getValue())){
 						tl.setM2LL(value);
 					}
 				}
@@ -423,28 +423,30 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	public void removeVariable(final Issue issue, IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Remove symbol", "Remove symbol", "remove.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				SymbolName ref = (SymbolName)element;
-				EObject container = ref.eContainer();
-				if (container instanceof StructuralParametersBlockImpl){
-					StructuralParametersBlock structuralParametersBlock = (StructuralParametersBlock)container;
-					structuralParametersBlock.getParameters().remove(element);
-					return;
-				} 
-				if (container instanceof VariabilityParametersBlockImpl){
-					VariabilityParametersBlock variabilityParametersBlock = (VariabilityParametersBlock)container;
-					variabilityParametersBlock.getParameters().remove(element);
-					return;
-				} 
-				/*
-				if (container instanceof OutputVariablesBlockImpl){
-					OutputVariablesBlock outputBlock = (OutputVariablesBlock) container;
-					outputBlock.getVariables().remove(ref);
-					return;
-				}*/
-				if (container instanceof VariableListImpl){
-					VariableList variableList = (VariableList) container;
-					variableList.getIdentifiers().remove(ref);
-					return;
+				if (element instanceof SymbolNameImpl){
+					SymbolName ref = (SymbolName)element;
+					EObject container = ref.eContainer();
+					if (container instanceof StructuralParametersBlockImpl){
+						StructuralParametersBlock structuralParametersBlock = (StructuralParametersBlock)container;
+						structuralParametersBlock.getParameters().remove(element);
+						return;
+					} 
+					if (container instanceof VariabilityParametersBlockImpl){
+						VariabilityParametersBlock variabilityParametersBlock = (VariabilityParametersBlock)container;
+						variabilityParametersBlock.getParameters().remove(element);
+						return;
+					} 
+					/*
+					if (container instanceof OutputVariablesBlockImpl){
+						OutputVariablesBlock outputBlock = (OutputVariablesBlock) container;
+						outputBlock.getVariables().remove(ref);
+						return;
+					}*/
+					if (container instanceof VariableListImpl){
+						VariableList variableList = (VariableList) container;
+						variableList.getIdentifiers().remove(ref);
+						return;
+					}
 				}
 			}
 		});

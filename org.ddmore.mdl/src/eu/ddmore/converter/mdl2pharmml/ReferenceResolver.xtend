@@ -77,7 +77,7 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.covariateBlock != null){
 				for (s: b.covariateBlock.variables){
-					if (s.list != null && s.symbolName != null){
+					if (s.symbolName != null){
 						if (!covariateVars.contains(s.symbolName.name))
 							covariateVars.add(s.symbolName.name);
 					}

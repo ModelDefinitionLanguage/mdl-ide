@@ -4,7 +4,6 @@ import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
-import org.ddmore.mdl.types.VariableType
 import org.ddmore.mdl.mdl.IndividualVarType
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.MOGObject
@@ -82,63 +81,59 @@ class ModelDefinitionPrinter {
 	protected def print_mdef_CovariateModel(ModelObject mObj){
 		var model = "";
 		if (mObj != null){
-			if (cm_vars.size() > 0){
-				model = model +
-				'''
-				<CovariateModel blkId="cm">
-					«FOR s: cm_vars»
-						«val covType = s.getCovariateType(mObj)»
-						<Covariate symbId="«s»">
-							«var transformation = s.getCovariateTransformation(mObj)»	
-							«IF transformation != null»
-								<«covType»>
-									<Transformation>
-										«transformation.print_Math_Equation»
-									</Transformation>
-								</«covType»>
-							«ELSE»
-								<«covType»/>
-							«ENDIF»
-						</Covariate>
-					«ENDFOR»
-				</CovariateModel>
-				'''
-			}
-		}
-		return model;
-	}	
-	
-	protected def getCovariateType(String covVar, ModelObject mObj){
-		for (b: mObj.blocks){
-			if (b.covariateBlock != null){
-				for (s: b.covariateBlock.variables){
-					if (s.list != null){
-						if (s.symbolName != null && covVar.equals(s.symbolName.name)){
-							var type = getAttribute(s.list.arguments, AttributeValidator::attr_type.name);
-							if (type.length > 0)
-								return type.substring(0, 1).toUpperCase() + type.substring(1);
-						}
-					}
-				}
-			}						
-		}
-		return VariableType::CC_CONTINUOUS;
-	}	
-	
-	protected def getCovariateTransformation(String covVar, ModelObject mObj){
-		if (mObj != null)
+			if (mObj != null)
 			for (b: mObj.blocks){
 				if (b.covariateBlock != null){
 					for (s: b.covariateBlock.variables){
-						if (s.symbolName != null && covVar.equals(s.symbolName.name)){
-							return s.expression;
+						var covType = "Continuous";
+						var categorical = "";
+						if (s.list != null){
+							var type = getAttributeExpression(s.list.arguments, AttributeValidator::attr_type.name);
+							if (type.isCategorical){
+								covType = "Categorical";
+								categorical = '''«type.print_Categorical»''';
+							}
+						}
+						var transformation = "";
+						if (s.expression != null){
+							transformation =  '''
+								<«covType»>
+									<Transformation>
+										«s.expression.print_Math_Equation»
+									</Transformation>
+								</«covType»>
+								'''
+						}
+						if (s.symbolName != null){
+							model = model + 
+							'''
+							<Covariate symbId="«s.symbolName.name»">
+								«IF transformation.length > 0»
+									«transformation»
+								«ELSE» 
+									«IF categorical.length > 0»
+										«categorical»
+									«ELSE»
+										<«covType»/>
+									«ENDIF»
+								«ENDIF»	
+							</Covariate>
+						'''
 						}
 					}
-				}					
+				}
 			}
-		return null;
+		}
+		if (model.length > 0){
+			model = '''
+				<CovariateModel blkId="cm">
+					«model»
+				</CovariateModel>
+			'''
+		}
+		return model;
 	}	
-	
+		
 	/////////////////////////////
 	// I.d Parameter Model
 	////////////////////////////	
@@ -308,9 +303,9 @@ class ModelDefinitionPrinter {
 	'''	
 	
 	protected def print_mdef_StandardObservation(SymbolDeclaration s){
-		val type = s.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
-		if (type != null){
-			if (type.toStr.equals(DefaultValues::VAR_CONTINUOUS)){
+		if (s.list != null){
+			val type = s.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+			if (type.isContinuous){
 				var name = "";
 				if (s.symbolName != null) 
 					name = s.symbolName.name 
@@ -391,10 +386,15 @@ class ModelDefinitionPrinter {
 		var assign = "";
 		var res = "";
 		//Categorical variables
-		val type = list.arguments.getAttribute(AttributeValidator::attr_type.name);
-		if (type.equals(VariableType::CC_CATEGORICAL)){
-			val define = list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-			if (define.list != null) assign = '''«define.list.print_Categorical»'''
+		val type = list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+		if (type.isCategorical){
+			if (type.type.type.categories != null && type.type.type.categories.size > 1){
+				assign = '''«type.print_Categorical»'''
+			} else {
+				val define = list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+				if (define.list != null) 
+					assign = '''«define.list.print_Categorical»'''
+			}
 		} else {
 		//Derivative variables	
 			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name);

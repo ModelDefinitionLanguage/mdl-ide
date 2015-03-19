@@ -45,7 +45,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
 	/*DATA_INPUT_VARIABLES*/
-	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.VAR_TYPE);
+	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.CC_CONTINUOUS);
 	final public static Attribute attr_define = new Attribute("define", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
 	final public static Attribute attr_cmpt = new Attribute("cmpt", MdlDataType.TYPE_EXPR, false);
@@ -78,7 +78,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_rv2 = new Attribute("rv2", MdlDataType.TYPE_REF, true);
 	
 	/*OBSERVATION*/
-	final public static Attribute attr_type_continuous = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.VAR_CONTINUOUS);
+	final public static Attribute attr_type_continuous = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.CC_CONTINUOUS);
 	final public static Attribute attr_error = new Attribute("error", MdlDataType.TYPE_EXPR, true);
 	final public static Attribute attr_eps = new Attribute("eps", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_prediction_ref = new Attribute("prediction", MdlDataType.TYPE_REF, true);
