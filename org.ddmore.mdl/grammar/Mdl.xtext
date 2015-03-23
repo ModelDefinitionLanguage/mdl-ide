@@ -398,9 +398,7 @@ SymbolName:
 ;
 
 SymbolDeclaration:
-	(symbolName = SymbolName | 
-		argumentName = FullyQualifiedArgumentName
-	)
+	(symbolName = SymbolName | argumentName = FullyQualifiedArgumentName)
 		("=" (expression = Expression) | 
 		":" list = List | 
 		randomList = RandomList)? 

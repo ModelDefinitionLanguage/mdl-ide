@@ -100,15 +100,18 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	protected def print_msteps_ParameterEstimation(SymbolDeclaration s){
 		if (s.list != null && s.symbolName != null) {
 			val fixed = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
-			var value = s.list.arguments.getAttribute(AttributeValidator::attr_value.name);
+			var value = s.list.arguments.getAttributeExpression(AttributeValidator::attr_value.name);
 			var lo = s.list.arguments.getAttribute(AttributeValidator::attr_lo.name);
 			var hi = s.list.arguments.getAttribute(AttributeValidator::attr_hi.name);
-			if (value.length == 0) value = "0";
+			var estimate = "0";
+			if (value != null){
+				estimate = value.print_Math_Expr.toString();
+			}
 			'''
 				<ParameterEstimation>
 					«print_ct_SymbolRef(s.symbolName.name)»
 					<InitialEstimate fixed="«fixed»">
-						<ct:Real>«value»</ct:Real>
+						«estimate»
 					</InitialEstimate>
 					«IF lo.length > 0»
 						<LowerBound>

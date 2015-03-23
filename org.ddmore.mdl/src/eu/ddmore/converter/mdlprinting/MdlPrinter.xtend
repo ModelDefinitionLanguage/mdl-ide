@@ -46,6 +46,7 @@ import org.ddmore.mdl.mdl.PkParameterType
 import org.ddmore.mdl.mdl.SignedNumericValue
 import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.mdl.PkMacroType
+import org.ddmore.mdl.mdl.LevelType
 
 class MdlPrinter {
 	
@@ -212,6 +213,8 @@ class MdlPrinter {
 			return t.variability.toString
 		if (t.individualVar != IndividualVarType::NO_INDIVIDUAL_VAR)
 			return t.individualVar.toString
+		if (t.level != LevelType::NO_LEVEL)
+			return t.level.toString
 		if (t.trial != TrialType::NO_TRIAL)
 			return t.trial.toString
 		if (t.pkParameter != PkParameterType::NO_PARAM)

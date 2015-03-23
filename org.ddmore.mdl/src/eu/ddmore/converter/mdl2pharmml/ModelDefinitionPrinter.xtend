@@ -2,7 +2,6 @@ package eu.ddmore.converter.mdl2pharmml
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.ModelObject
-import org.ddmore.mdl.mdl.ParameterObject
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.mdl.IndividualVarType
 import org.ddmore.mdl.mdl.AnyExpression
@@ -12,6 +11,9 @@ import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.mdl.Expression
+import java.util.Comparator
+import java.util.Map
+import java.util.TreeMap
 
 class ModelDefinitionPrinter {
 	protected extension DistributionPrinter distrPrinter = new DistributionPrinter();
@@ -33,14 +35,13 @@ class ModelDefinitionPrinter {
 	def print_mdef_ModelDefinition(MOGObject mog){
 		var objects = Utils::getMOGObjects(mog);
 		var mObj = Utils::getModelObject(objects);
-		var pObj = Utils::getParameterObject(objects);
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«print_mdef_VariabilityModel»
-			«print_mdef_CovariateModel(mObj)»
-			«print_mdef_ParameterModel(mObj, pObj)»
-			«print_mdef_StructuralModel(mObj)»
-			«print_mdef_ObservationModel(mObj)»
+			«mObj.print_mdef_CovariateModel»
+			«mObj.print_mdef_ParameterModel»
+			«mObj.print_mdef_StructuralModel»
+			«mObj.print_mdef_ObservationModel»
 		</ModelDefinition>
 		'''
 	}
@@ -51,25 +52,42 @@ class ModelDefinitionPrinter {
 	protected def print_mdef_VariabilityModel(){
 		var model = "";
 		if (vm_err_vars.size() > 0){
-			model = model + 
-			'''
-				<VariabilityModel blkId="vm_err" type="«VAR_TYPE_ERROR»">
-					«FOR s: vm_err_vars»
-						<Level symbId="«s»"/>
-					«ENDFOR»
+			model = model + vm_err_vars.print_mdef_VariabilityModel("vm_err", VAR_TYPE_ERROR);
+		}		
+		if (vm_mdl_vars.size() > 0){
+			model = model + vm_mdl_vars.print_mdef_VariabilityModel("vm_mdl", VAR_TYPE_PARAMETER);
+		}
+		return model;
+	}
+	
+	protected def print_mdef_VariabilityModel(Map<String, Integer> vars, String blkId, String varType){
+		var model = "";
+		if (vars.size() > 0){
+			var bvc =  new ValueComparator(vars);
+			var sorted_map = new TreeMap<String, Integer>(bvc);
+			sorted_map.putAll(vars);
+			var prev = "";
+			var levels = "";
+			for (s: sorted_map.entrySet){
+				levels = levels +	'''
+					«IF prev.length > 0»
+						<Level referenceLevel="«IF s.value == 2»true«ELSE»false«ENDIF»" symbId="«s.key»">
+							<ParentLevel>
+								<ct:SymbRef symbIdRef="«prev»"/>
+							</ParentLevel>
+						</Level>
+					«ELSE»
+						<Level referenceLevel="«IF s.value == 2»true«ELSE»false«ENDIF»" symbId="«s.key»"/>
+					«ENDIF»
+				'''
+				prev = s.key
+			}			
+			model = '''
+				<VariabilityModel blkId="«blkId»" type="«varType»">
+					«levels»
 				</VariabilityModel>
 			'''		
 		}		
-		if (vm_mdl_vars.size() > 0){
-			model = model + 
-			'''
-				<VariabilityModel blkId="vm_mdl" type="«VAR_TYPE_PARAMETER»">
-					«FOR s: vm_mdl_vars»
-						<Level symbId="«s»"/>
-					«ENDFOR»
-				</VariabilityModel>
-			'''		
-		}
 		return model;
 	}
     
@@ -140,32 +158,28 @@ class ModelDefinitionPrinter {
 		
 	//Parameter object, STRUCTURAL + VARIABILITY -> ParameterModel - SimpleAttribute  
 	//RANDOM_VARIABLES_DEFINITION -> ParameterModel - RandomVariable
-	protected def print_mdef_ParameterModel(ModelObject mObj, ParameterObject pObj){		
+	protected def print_mdef_ParameterModel(ModelObject mObj){		
 		var statements = "";
-		if (pObj != null){
-			for (b: pObj.blocks){
-				//Parameter object, STRUCTURAL
-				if (b.structuralBlock != null){
-					for (id: b.structuralBlock.parameters) 
+		if (mObj != null){
+			for (b: mObj.blocks){
+				//STRUCTURAL_PARAMETERS
+				if (b.structuralParametersBlock != null){
+					for (id: b.structuralParametersBlock.parameters) 
 						if (id.symbolName != null)
 							statements = statements + 
 							'''<SimpleParameter symbId = "«id.symbolName.name»"/>
 							'''
 		  		}
-		  		//ParameterObject, VARIABILITY
-		  		if (b.variabilityBlock != null){
-					for (id: b.variabilityBlock.parameters){
+		  		//VARIABILITY_PARAMETERS
+		  		if (b.variabilityParametersBlock != null){
+					for (id: b.variabilityParametersBlock.parameters){
 						if (id.symbolName != null)
 							statements = statements + 
 							'''<SimpleParameter symbId = "«id.symbolName.name»"/>
 							'''
 					}
 		  		}
-		  	}
-		}
-		if (mObj != null){
-			for (b: mObj.blocks){
-				//Model object, GROUP_VARIABLES (covariate parameters)
+		  		//GROUP_VARIABLES (covariate parameters)
 				if (b.groupVariablesBlock != null){
 					for (st: b.groupVariablesBlock.statements){
 						if (st.variable != null){
@@ -173,6 +187,8 @@ class ModelDefinitionPrinter {
 						}							
 					}
 				}	
+		  	}
+			for (b: mObj.blocks){
 				//Model object, RANDOM_VARIABLES_DEFINITION
 				if (b.randomVariableDefinitionBlock != null){
 					if (b.randomVariableDefinitionBlock.arguments != null){
@@ -396,7 +412,7 @@ class ModelDefinitionPrinter {
 					assign = '''«define.list.print_Categorical»'''
 			}
 		} else {
-		//Derivative variables	
+			//Derivative variables	
 			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name);
 			if (deriv != null){
 				assign = '''«deriv.print_Math_Expr»'''
@@ -586,6 +602,21 @@ class ModelDefinitionPrinter {
 		</Correlation>	
 		'''
 	}
+}
+
+
+class ValueComparator implements Comparator<String> {
+    var Map<String, Integer> base;
+    new(Map<String, Integer> base) {
+        this.base = base;
+    }
+    override compare(String a, String b) {
+        if (base.get(a) >= base.get(b)) {
+            return -1;
+        } else {
+            return 1;
+        } 
+    }
 }
 
 

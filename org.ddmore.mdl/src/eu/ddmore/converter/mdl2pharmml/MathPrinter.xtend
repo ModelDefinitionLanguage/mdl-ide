@@ -479,20 +479,6 @@ class MathPrinter{
 		«ENDIF»
 	'''
 
-	/*def getValueType(String value) {
-		try {
-			if (value.indexOf(".") > -1) {
-				Double::parseDouble(value);
-				return Constants::TYPE_REAL;
-			} else {
-				Integer::parseInt(value);
-				return Constants::TYPE_INT;
-			}
-		} catch (NumberFormatException e) {
-			return Constants::TYPE_ID;
-		}
-	}*/
-
 	def print_ct_Value(String value, String type) '''
 		<ct:«type»>«value»</ct:«type»>
 	'''

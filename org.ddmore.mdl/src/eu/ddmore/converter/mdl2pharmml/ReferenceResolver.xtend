@@ -8,6 +8,8 @@ import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.MOGObject
 import java.util.ArrayList
 import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.mdl.LevelType
+import java.util.HashMap
 
 class ReferenceResolver{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -17,14 +19,9 @@ class ReferenceResolver{
  	}
 	
 	protected var deriv_vars = new HashSet<String>();	 
-	
-	protected var eps_vars = newHashMap   //EPSs   - Random variables, level 1
-	protected var eta_vars = newHashMap	  //ETAs   - Random variables, level 2
-	protected var level_vars = newHashMap //       - VARIABILITY block			
-	
 	//List of PharmML declared symbols and corresponding blocks 
-	protected var vm_err_vars = new ArrayList<String>(); 
-	protected var vm_mdl_vars = new ArrayList<String>();
+	protected var vm_err_vars = new HashMap<String, Integer>(); 
+	protected var vm_mdl_vars = new HashMap<String, Integer>();
 	protected var cm_vars = new ArrayList<String>();
 	protected var pm_vars = new ArrayList<String>();	  
 	protected var om_vars = new ArrayList<String>();	  
@@ -33,13 +30,13 @@ class ReferenceResolver{
 	protected def prepareCollections(MOGObject mog){
 		for (o: Utils::getMOGObjects(mog)){
 			if (o.modelObject != null) {
-	  			setLevelVars(o.modelObject);
-	  			setRandomVariables(o.modelObject);
+	  			//setLevelVars(o.modelObject);
+	  			//setRandomVariables(o.modelObject);
 				//Derivatives
 				deriv_vars = Utils::getDerivativeVariables(o.modelObject);
 				//VariabilityModel definitions
-				vm_err_vars = o.modelObject.getLevelVars("1");
-				vm_mdl_vars = o.modelObject.getLevelVars("2")
+				vm_err_vars = o.modelObject.getLevelVars(LevelType::OBSERVATION);
+				vm_mdl_vars = o.modelObject.getLevelVars(LevelType::MODEL)
 				//CovariateModel				
 				cm_vars = o.modelObject.getCovariateVars();
 				//StructuralModel
@@ -61,10 +58,9 @@ class ReferenceResolver{
 	}
 		
 	protected def getReferenceBlock(String name){
-		if (vm_err_vars.contains(name)) return "vm_err";
-		if (vm_mdl_vars.contains(name)) return "vm_mdl";
-		//if (cm_vars.contains(name)) return "cm";
-		//if (ind_vars.contains(name)) return "ind";
+		if (vm_err_vars.containsKey(name)) return "vm_err";
+		if (vm_mdl_vars.containsKey(name)) return "vm_mdl";
+		if (cm_vars.contains(name)) return "cm";
 		if (om_vars.contains(name)) return "om";	
 		if (sm_vars.contains(name)) return "sm";	
 		if (pm_vars.contains(name)) return "pm";	
@@ -176,29 +172,23 @@ class ReferenceResolver{
 		return structuralVars;
 	}
 	
-	protected def setLevelVars(ModelObject o){
-		var tmp = o.getLevelVars("1");
-		for (v: tmp){
-			if (level_vars.get(v) == null)
-				level_vars.put(v, "1");
-		}
-		tmp = o.getLevelVars("2");
-		for (v: tmp){
-			if (level_vars.get(v) == null)
-				level_vars.put(v, "2");
-		}
-	}
-		
-	protected def getLevelVars(ModelObject o, String levelId) {
-		var levelVars = newArrayList;
+	protected def getLevelVars(ModelObject o, LevelType type) {
+		var levelVars = new HashMap<String, Integer>;
 		for (b: o.blocks){
 			if(b.variabilityBlock != null){
 				for (s: b.variabilityBlock.variables){
 					if (s.list != null && s.symbolName != null){
+						var varType = s.list.arguments.getAttributeExpression(AttributeValidator::attr_type_level.name);
 						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level.name);
-						if (level.equals(levelId)){
-							if (!levelVars.contains(s.symbolName.name)){
-								levelVars.add(s.symbolName.name);
+						var x = 0;
+						try{
+							x = Integer::parseInt(level);
+						} catch (NumberFormatException e){}
+						if (//default type = model or explicitly defined requested type 
+							(varType == null && type.toString().equals(LevelType::MODEL.toString)) 
+							|| (varType != null && varType.toStr.equals(type.toString))){
+							if (!levelVars.containsKey(s.symbolName.name)){
+								levelVars.put(s.symbolName.name, x);
 							}
 						}
 					}
@@ -207,35 +197,4 @@ class ReferenceResolver{
 		}
 		return levelVars;
 	}	
-		
-	//Assign indices to variability parameters
-	protected def setRandomVariables(ModelObject o){
-    	var i = 1; var j = 1; 
-		for (b: o.blocks){
-	  		if (b.randomVariableDefinitionBlock != null){
-				if  (b.randomVariableDefinitionBlock.arguments != null){
-					var level = b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_block_level.name);
-					if (level.length > 0){
-						for (s: b.randomVariableDefinitionBlock.variables) {
-							if (s.randomList != null && s.symbolName != null){	
-								if (level_vars.get(level) != null){
-									if (level_vars.get(level).equals("2")){
-										if (eta_vars.get(s.symbolName.name) == null){
-											eta_vars.put(s.symbolName.name, i);
-											i = i + 1;
-										}
-									}
-									if (level_vars.get(level).equals("1"))
-										if (eps_vars.get(s.symbolName.name) == null){
-											eps_vars.put(s.symbolName.name, j);
-											j = j + 1;
-										}	
-								}
-							}
-						}
-					}
-	  			}
-	  		}
-  		}
-	}
 }
