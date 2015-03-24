@@ -40,7 +40,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 					if (stepType.equals(BLK_ESTIM_STEP)){
 						res = res + print_msteps_EstimationStep(stepType + index, index, dObj, pObj, tObj);
 					} else {
-						res = res + print_msteps_SimulationStep(stepType + index, index, dObj);
+						res = res + print_msteps_SimulationStep(stepType + index, index, dObj, pObj, tObj);
 					}
 					dependencies  = dependencies +
 					'''
@@ -141,9 +141,9 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	///////////////////////////////////////////////
 	// III.b Simulation Step
 	////////////////////////////////////////////////
-	protected def print_msteps_SimulationStep(String stepId, Integer order, DataObject dObj)'''
+	protected def print_msteps_SimulationStep(String stepId, Integer order, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
 		<SimulationStep  oid="«stepId»">
-			«print_mdef_TargetToolReference(dObj)»
+			«dObj.print_mdef_TargetToolReference»
 		</SimulationStep>
 	'''
 	

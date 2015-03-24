@@ -186,7 +186,7 @@ class ModelDefinitionPrinter {
 				if (b.groupVariablesBlock != null){
 					for (st: b.groupVariablesBlock.statements){
 						if (st.variable != null){
-							statements = statements + st.variable.print_BlockStatement("SimpleParameter", false);
+							statements = statements + st.variable.print_SymbolDeclaration("SimpleParameter", false);
 						}							
 					}
 				}	
@@ -207,7 +207,7 @@ class ModelDefinitionPrinter {
 		  		//INDIVIDUAL_VARIABLES
 				if (b.individualVariablesBlock != null){
 					for (s: b.individualVariablesBlock.variables){
-						statements = statements + s.print_BlockStatement("IndividualParameter", false);
+						statements = statements + s.print_SymbolDeclaration("IndividualParameter", false);
 					} 
 		  		}
 		  	}
@@ -312,11 +312,17 @@ class ModelDefinitionPrinter {
 					for (st: b.modelPredictionBlock.statements){
 						//MODEL_PREDICTION
 						if (st.variable != null) 
-							variables = variables + '''«st.variable.print_BlockStatement("ct:Variable", true)»''';
+							variables = variables + '''«st.variable.print_SymbolDeclaration("ct:Variable", true)»''';
 						//ODE
 						if (st.odeBlock != null){
 							for (s: st.odeBlock.variables){
-								variables = variables + '''«s.print_BlockStatement("ct:Variable", true)»''';	
+								if (s.list != null){
+									if (s.list.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name) != null){
+										variables = variables + '''«s.print_SymbolDeclaration("ct:DerivativeVariable", true)»''';	
+									}
+								} else {
+									variables = variables + '''«s.print_SymbolDeclaration("ct:Variable", true)»''';	
+								}
 							}
 						}
 						//LIBRARY
@@ -422,22 +428,17 @@ class ModelDefinitionPrinter {
 		}
 	}
 	
-	protected def print_BlockStatement(SymbolDeclaration st, String initTag, Boolean printType){
-		var tag = initTag;
-		if (st.symbolName != null){
-			if ((tag.indexOf("Variable") > 0) && deriv_vars.contains(st.symbolName.name))
-				tag = "ct:DerivativeVariable";
-			'''
+	protected def print_SymbolDeclaration(SymbolDeclaration st, String tag, Boolean printType){
+		if (st.symbolName != null)'''
 			<«tag» symbId="«st.symbolName.name»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
 				«IF st.expression != null»
-					«print_Assign(st.expression)»
+					«st.expression.print_Assign»
 				«ENDIF»
 				«IF st.list != null»
 					«st.list.print_List»
 				«ENDIF»
 			</«tag»>
 			'''
-		}
 	}
 	
 	//Convert special types of lists to PharmML

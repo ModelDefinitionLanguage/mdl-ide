@@ -1,6 +1,5 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import java.util.HashSet
 import org.ddmore.mdl.mdl.ModelObject
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.AttributeValidator
@@ -17,8 +16,7 @@ class ReferenceResolver{
     	mog.prepareCollections;
  	}
 	
-	//Lists/maps of PharmML variables in corresponding blocks 
-	protected var deriv_vars = new HashSet<String>();	 
+	//List of PharmML variables in corresponding blocks 
 	protected var vm_err_vars = new HashMap<String, Integer>(); 
 	protected var vm_mdl_vars = new HashMap<String, Integer>();
 	protected var cm_vars = new ArrayList<String>();
@@ -29,8 +27,6 @@ class ReferenceResolver{
 	protected def prepareCollections(MOGObject mog){
 		for (o: Utils::getMOGObjects(mog)){
 			if (o.modelObject != null) {
-				//Derivatives
-				deriv_vars = Utils::getDerivativeVariables(o.modelObject);
 				//VariabilityModel definitions
 				vm_err_vars = o.modelObject.getLevelVars(LevelType::OBSERVATION);
 				vm_mdl_vars = o.modelObject.getLevelVars(LevelType::MODEL)
