@@ -19,12 +19,14 @@ class TrialDesignPrinter extends DataSetPrinter {
 	protected def print_design_TrialDesign(MOGObject mog){
 		/* 
 		var objects = Utils::getMOGObjects(mog);
-		var dsObj = Utils::getDesignObject(objects);
-		'''
-		<TrialDesign xmlns="«Constants::xmlns_design»">
-			«dsObj.print_design_Structure»
-		</TrialDesign>	
-		'''*/
+		var zObj = Utils::getDesignObject(objects);
+		if (zObj != null)
+			'''
+				<TrialDesign xmlns="«Constants::xmlns_design»">
+					«zObj.print_design_Structure»
+				</TrialDesign>	
+			'''
+		*/
 	}
 	
 	protected def print_design_Structure(DesignObject dsObj){
@@ -43,31 +45,28 @@ class TrialDesignPrinter extends DataSetPrinter {
 			}
 		}
 		'''
-		<Strcuture>
-			«arms»
-			«activities»
-		</Structure>
+			<Structure>
+				«arms»
+				«activities»
+			</Structure>
 		'''
 	}
 	
 	protected def print_design_Arm(SymbolDeclaration s){
-		if (s.symbolName != null){
-			if (s.list != null){
-				'''
-				<Arm oid=«s.symbolName.name»>
-				</Arm>
-				'''
-			}
+		if (s.symbolName != null && s.list != null){
+			'''
+			<Arm oid=«s.symbolName.name»>
+			</Arm>
+			'''
 		}
 	}
 	
 	protected def print_design_Activity(SymbolDeclaration s){
-		if (s.symbolName != null){
-			if (s.list != null){
-				var amount = s.list.arguments.getAttributeExpression(AttributeValidator::attr_amount.name);
-				var doseTimes = s.list.arguments.getAttributeExpression(AttributeValidator::attr_doseTime.name);
-				var steadyState = isTrue(s.list.arguments.getAttributeExpression(AttributeValidator::attr_steadyState.name)); 
-				'''
+		if (s.symbolName != null && s.list != null){
+			var amount = s.list.arguments.getAttributeExpression(AttributeValidator::attr_amount.name);
+			var doseTimes = s.list.arguments.getAttributeExpression(AttributeValidator::attr_doseTime.name);
+			var steadyState = isTrue(s.list.arguments.getAttributeExpression(AttributeValidator::attr_steadyState.name)); 
+			'''
 				<Activity oid=«s.symbolName.name»>
 					<Bolus>
 						«IF amount != null»
@@ -81,8 +80,7 @@ class TrialDesignPrinter extends DataSetPrinter {
 						«ENDIF»			
 					</Bolus>
 				</Activity>	
-				'''		
-			}
+			'''		
 		}
 	}
 	
@@ -91,41 +89,35 @@ class TrialDesignPrinter extends DataSetPrinter {
 		var start = s.list.arguments.getAttributeExpression(AttributeValidator::attr_start.name); 
 		var end = s.list.arguments.getAttributeExpression(AttributeValidator::attr_end.name); 
 		'''
-		<SteadyState>
-			«IF start != null»
-				<StartTime>
-					«start.print_Assign»
-				</StartTime>	
-			«ENDIF»
-			«IF end != null»
-				<EndTime>
-					«end.print_Assign»
-				</EndTime>	
-			«ENDIF»
-			«IF interval != null»
-				<Interval>
-					«interval.print_Assign»
-				</Interval>	
-			«ENDIF»
-		</SteadyState>
-		'''
-		
-	}
-	
-	protected def print_design_DoseAmount(AnyExpression expr){
-		var inputTarget = "parameter";
-		'''
-			<DoseAmount inputTarget=«inputTarget»>
-				«expr.print_Assign»
-			</DoseAmonut>
+			<SteadyState>
+				«IF start != null»
+					<StartTime>
+						«start.print_Assign»
+					</StartTime>	
+				«ENDIF»
+				«IF end != null»
+					<EndTime>
+						«end.print_Assign»
+					</EndTime>	
+				«ENDIF»
+				«IF interval != null»
+					<Interval>
+						«interval.print_Assign»
+					</Interval>	
+				«ENDIF»
+			</SteadyState>
 		'''
 	}
 	
-	protected def print_design_DoseTime(AnyExpression expr){
-		'''
-			<DosingTimes>
-				«expr.print_Assign»
-			</DosingTimes>
-		'''
-	}
+	protected def print_design_DoseAmount(AnyExpression expr)'''
+		<DoseAmount inputTarget="parameter">
+			«expr.print_Assign»
+		</DoseAmonut>
+	'''
+	
+	protected def print_design_DoseTime(AnyExpression expr)'''
+		<DosingTimes>
+			«expr.print_Assign»
+		</DosingTimes>
+	'''
 }

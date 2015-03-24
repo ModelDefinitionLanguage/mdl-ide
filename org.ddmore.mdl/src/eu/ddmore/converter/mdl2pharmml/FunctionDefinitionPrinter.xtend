@@ -40,14 +40,14 @@ class FunctionDefinitionPrinter {
 	protected def print_ct_FunctionDefinition(String functName){
 		if (FunctionValidator::errorModels.contains(functName))
 			'''
-			<ct:FunctionDefinition xmlns="«Constants::xmlns_ct»" 
-				symbId="«functName»" 
-				symbolType="«FunctionValidator::standardFunctions.get(functName).type.convertType»">
-				«FOR p: FunctionValidator::standardFunctions.get(functName).defaultParamSet»
-				<FunctionArgument symbolType="«p.type.convertType»" symbId="«p.name»"/>
-				«ENDFOR»
-				«functName.print_FunctionDefinition»
-			</ct:FunctionDefinition>
+				<ct:FunctionDefinition xmlns="«Constants::xmlns_ct»" 
+					symbId="«functName»" 
+					symbolType="«FunctionValidator::standardFunctions.get(functName).type.convertType»">
+					«FOR p: FunctionValidator::standardFunctions.get(functName).defaultParamSet»
+					<FunctionArgument symbolType="«p.type.convertType»" symbId="«p.name»"/>
+					«ENDFOR»
+					«functName.print_FunctionDefinition»
+				</ct:FunctionDefinition>
 			'''	
 	}
 	
@@ -142,7 +142,7 @@ class FunctionDefinitionPrinter {
 	protected def convertType(MdlDataType p){
 		if (p == MdlDataType::TYPE_INT)  return Constants::TYPE_INT;
 		if (p == MdlDataType::TYPE_REAL) return Constants::TYPE_REAL;
-		return "real"
+		return Constants::TYPE_REAL
 	}
 	
 }

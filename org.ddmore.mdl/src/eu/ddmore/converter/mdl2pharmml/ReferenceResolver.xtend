@@ -2,7 +2,6 @@ package eu.ddmore.converter.mdl2pharmml
 
 import java.util.HashSet
 import org.ddmore.mdl.mdl.ModelObject
-import org.ddmore.mdl.mdl.ParameterObject
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.MOGObject
@@ -18,8 +17,8 @@ class ReferenceResolver{
     	mog.prepareCollections;
  	}
 	
+	//Lists/maps of PharmML variables in corresponding blocks 
 	protected var deriv_vars = new HashSet<String>();	 
-	//List of PharmML declared symbols and corresponding blocks 
 	protected var vm_err_vars = new HashMap<String, Integer>(); 
 	protected var vm_mdl_vars = new HashMap<String, Integer>();
 	protected var cm_vars = new ArrayList<String>();
@@ -30,8 +29,6 @@ class ReferenceResolver{
 	protected def prepareCollections(MOGObject mog){
 		for (o: Utils::getMOGObjects(mog)){
 			if (o.modelObject != null) {
-	  			//setLevelVars(o.modelObject);
-	  			//setRandomVariables(o.modelObject);
 				//Derivatives
 				deriv_vars = Utils::getDerivativeVariables(o.modelObject);
 				//VariabilityModel definitions
@@ -42,17 +39,9 @@ class ReferenceResolver{
 				//StructuralModel
 				sm_vars = o.modelObject.getStructuralVars;	
 				//ParameterModel
-				var parameters = o.modelObject.getParameters;
-				for (p: parameters)
-					if (!pm_vars.contains(p)) pm_vars.add(p);
+				pm_vars = o.modelObject.getParameters;
 				//ObservationModel
 				om_vars = o.modelObject.getObservationVars;	
-			}
-			if (o.parameterObject != null){
-				//ParameterModel
-				var parameters = o.parameterObject.getParameters;	
-				for (p: parameters)
-					if (!pm_vars.contains(p)) pm_vars.add(p);
 			}
 		}
 	}
@@ -83,11 +72,11 @@ class ReferenceResolver{
 		return covariateVars;		
 	}
 	
-	//+Returns declarations for ParameterModel
+	//+ Returns declarations for ParameterModel
 	protected def getParameters(ModelObject obj){		
 		var parameters = newArrayList;
 		for (b: obj.blocks){
-			//Model object, GROUP_VARIABLES (covariate parameters)
+			//GROUP_VARIABLES (covariate parameters)
 			if (b.groupVariablesBlock != null){
 				for (st: b.groupVariablesBlock.statements){
 					if (st.variable != null){
@@ -96,7 +85,7 @@ class ReferenceResolver{
 					}							
 				}
 			}	
-			//Model object, RANDOM_VARIABLES_DEFINITION
+			//RANDOM_VARIABLES_DEFINITION
 			if (b.randomVariableDefinitionBlock != null){
 				for (s: b.randomVariableDefinitionBlock.variables){
 					if (s.symbolName != null && s.randomList != null){
@@ -104,39 +93,31 @@ class ReferenceResolver{
 					}
 				} 
 	  		}
-	  		//Model object, INDIVIDUAL_VARIABLES
+	  		//INDIVIDUAL_VARIABLES
 			if (b.individualVariablesBlock != null){
 				for (s: b.individualVariablesBlock.variables){
 					if (s.symbolName != null)
 						parameters.add(s.symbolName.name);
 				} 
 	  		}
-	  	}
-	  	return parameters;
-	}
-	
-	//+Returns declarations for ParameterModel
-	protected def getParameters(ParameterObject obj){		
-		var parameters = new ArrayList<String>();
-		for (b: obj.blocks){
-			//Parameter object, STRUCTURAL
-			if (b.structuralBlock != null){
-				for (id: b.structuralBlock.parameters) 
+			//STRUCTURAL_PARAMETERS
+			if (b.structuralParametersBlock != null){
+				for (id: b.structuralParametersBlock.parameters) 
 					if (id.symbolName != null)
 						parameters.add(id.symbolName.name);
 			}
-			//ParameterObject, VARIABILITY
-			if (b.variabilityBlock != null){
-				for (id: b.variabilityBlock.parameters){
+			//VARIABILITY_PARAMETERS
+			if (b.variabilityParametersBlock != null){
+				for (id: b.variabilityParametersBlock.parameters){
 					if (id.symbolName != null)
 						parameters.add(id.symbolName.name);
 				} 
 			}
-		}
-  		return parameters;
+	  	}
+	  	return parameters;
 	}
 	
-	//+Returns declarations in ObservationModel
+	//+ Returns declarations in ObservationModel
 	protected def getObservationVars(ModelObject obj){
 		var observationVars = newArrayList;
 		for (b: obj.blocks){
@@ -172,6 +153,7 @@ class ReferenceResolver{
 		return structuralVars;
 	}
 	
+	//+ Returns a map of covariates with levels
 	protected def getLevelVars(ModelObject o, LevelType type) {
 		var levelVars = new HashMap<String, Integer>;
 		for (b: o.blocks){
