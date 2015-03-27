@@ -5,72 +5,8 @@ package org.ddmore.mdl.ui.outline;
 
 import static org.ddmore.mdl.ui.outline.Images.*;
 
-import org.ddmore.mdl.mdl.AndExpression;
-import org.ddmore.mdl.mdl.AnyExpression;
-import org.ddmore.mdl.mdl.Argument;
-import org.ddmore.mdl.mdl.Arguments;
-import org.ddmore.mdl.mdl.DataObject;
-import org.ddmore.mdl.mdl.DataObjectBlock;
-import org.ddmore.mdl.mdl.DesignObject;
-import org.ddmore.mdl.mdl.DesignObjectBlock;
-import org.ddmore.mdl.mdl.EnumType;
-import org.ddmore.mdl.mdl.Expression;
-import org.ddmore.mdl.mdl.ExpressionBranch;
-import org.ddmore.mdl.mdl.FormalArguments;
-import org.ddmore.mdl.mdl.FullyQualifiedArgumentName;
-import org.ddmore.mdl.mdl.FunctionCall;
-import org.ddmore.mdl.mdl.FunctionCallStatement;
-import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
-import org.ddmore.mdl.mdl.IndividualVarType;
-import org.ddmore.mdl.mdl.InputFormatType;
-import org.ddmore.mdl.mdl.List;
-import org.ddmore.mdl.mdl.MOGObject;
-import org.ddmore.mdl.mdl.MOGObjectBlock;
-import org.ddmore.mdl.mdl.Mcl;
-import org.ddmore.mdl.mdl.MclObject;
-import org.ddmore.mdl.mdl.MdlPackage;
-import org.ddmore.mdl.mdl.MixtureBlock;
-import org.ddmore.mdl.mdl.ModelObject;
-import org.ddmore.mdl.mdl.ModelObjectBlock;
-import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
-import org.ddmore.mdl.mdl.ObjectName;
-import org.ddmore.mdl.mdl.OrExpression;
-import org.ddmore.mdl.mdl.ParExpression;
-import org.ddmore.mdl.mdl.ParameterObject;
-import org.ddmore.mdl.mdl.ParameterObjectBlock;
-import org.ddmore.mdl.mdl.PropertyDeclaration;
-import org.ddmore.mdl.mdl.RandomList;
-import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.SymbolName;
-import org.ddmore.mdl.mdl.TargetBlock;
-import org.ddmore.mdl.mdl.TargetType;
-import org.ddmore.mdl.mdl.TaskObject;
-import org.ddmore.mdl.mdl.TaskObjectBlock;
-import org.ddmore.mdl.mdl.TrialType;
-import org.ddmore.mdl.mdl.UseType;
-import org.ddmore.mdl.mdl.VarType;
-import org.ddmore.mdl.mdl.VariabilityType;
-import org.ddmore.mdl.mdl.VariableList;
-import org.ddmore.mdl.mdl.Vector;
-import org.ddmore.mdl.mdl.impl.ArgumentNameImpl;
-import org.ddmore.mdl.mdl.impl.CovariateDefinitionBlockImpl;
-import org.ddmore.mdl.mdl.impl.DataBlockImpl;
-import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
-import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
-import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl;
-import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
-import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
-//import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
-import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
-import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
-import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
-import org.ddmore.mdl.mdl.impl.VarTypeImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityDefinitionBlockImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
+import org.ddmore.mdl.mdl.*;
+import org.ddmore.mdl.mdl.impl.*;
 import org.ddmore.mdl.validation.PropertyValidator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.graphics.Image;
@@ -115,10 +51,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     
     protected Image _image(ObjectName objName) {
     	return imageHelper.getImage(getPath(REFERENCE));
-    }
-    
-    protected Image _image(FullyQualifiedArgumentName f) {
-        return imageHelper.getImage(getPath(ATTRIBUTE_REFERENCE));
     }
     
     protected Image _image(TargetBlock f) {
@@ -417,10 +349,21 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			b.getIdentifier(),
 		false);
 	}
+	
+	protected void  _createNode(IOutlineNode parentNode, ImportObjectBlock block){
+		for (EObject obj: block.eContents())
+			createNode(parentNode, obj);
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//Skip subblock statements
 
+	protected void  _createNode(IOutlineNode parentNode, MappingBlockStatement st){
+		for (EObject obj: st.eContents()){
+			createNode(parentNode, obj);
+		}
+	}
+	
 	protected void  _createNode(IOutlineNode parentNode, VariableList st){
 		for (EObject obj: st.eContents()){
 			createNode(parentNode, obj);
@@ -478,20 +421,19 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				name,
 				MdlPackage.Literals.SYMBOL_NAME__NAME,
 				_image(name),
-				name.getName(),
-				true);
-	}
-
-	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedArgumentName name){
-		createEStructuralFeatureNode(parentNode,
-				name,
-				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__PARENT,
-				_image(name),
 				mdlPrinter.toStr(name),
 				true);
 	}
 	
-
+	protected void  _createNode(IOutlineNode parentNode, ImportObjectStatement st){
+		createEStructuralFeatureNode(parentNode,
+			st,
+			MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__SYMBOL_NAME,
+			_image(st),
+			mdlPrinter.toStr(st),
+			true);
+	}
+	
 	protected void  _createNode(IOutlineNode parentNode, ParExpression e){
 		createEStructuralFeatureNode(parentNode,
 				e,
@@ -529,10 +471,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 		
 	protected void  _createNode(IOutlineNode parentNode, SymbolDeclaration p){
-		String name = "";
-		if (p.getSymbolName() != null)
-			name = 	p.getSymbolName().getName();
-		else name = mdlPrinter.toStr(p.getArgumentName());
+		String name = mdlPrinter.toStr(p.getSymbolName());
 		if (p.getExpression() != null){
 			createEStructuralFeatureNode(parentNode,
 				p,
@@ -593,7 +532,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			s,
 			MdlPackage.Literals.FUNCTION_CALL_STATEMENT__EXPRESSION,
 			_image(s),
-			 s.getSymbolName().getName(),
+			 mdlPrinter.toStr(s.getSymbolName()),
 		false);
 	}
 	

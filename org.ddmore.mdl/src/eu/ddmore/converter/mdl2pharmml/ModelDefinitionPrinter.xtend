@@ -399,9 +399,7 @@ class ModelDefinitionPrinter {
 			if (type.isContinuous){
 				var name = "";
 				if (s.symbolName != null) 
-					name = s.symbolName.name 
-				else
-					name = s.argumentName.toStr;
+					name = s.symbolName.toStr 
 				val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
 				val output = s.list.arguments.getAttribute(AttributeValidator::attr_prediction_ref.name);
 				val eps = s.list.arguments.getAttribute(AttributeValidator::attr_eps.name);

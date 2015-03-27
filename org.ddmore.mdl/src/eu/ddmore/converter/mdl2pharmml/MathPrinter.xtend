@@ -22,7 +22,6 @@ import org.ddmore.mdl.mdl.Argument
 import org.ddmore.mdl.mdl.FunctionCall
 import java.util.ArrayList
 import eu.ddmore.converter.mdlprinting.MdlPrinter
-import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.FunctionName
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.validation.FunctionValidator
@@ -390,9 +389,6 @@ class MathPrinter{
 		«IF expr.symbol != null»
 			«expr.symbol.print_ct_SymbolRef»
 		«ENDIF»
-		«IF expr.attribute != null»
-			«expr.attribute.print_ct_SymbolRef»
-		«ENDIF»
 		«IF expr.constant != null»
 			«expr.constant.print_ct_Constant»
 		«ENDIF»
@@ -532,17 +528,6 @@ class MathPrinter{
 	def print_ct_SymbolRef(FunctionName ref){
 		print_ct_SymbolRef(ref.name)
 	}
-
-	//TODO: How to convert attributes?
-	def print_ct_SymbolRef(FullyQualifiedArgumentName ref) '''
-		<Description>MDL reference to an attribute «ref.toStr»</Description>
-		«var blkId = ""»
-		«IF ref.parent != null»
-			«blkId = resolver.getReferenceBlock(ref.parent.name)»
-		«ENDIF»
-		<ct:SymbRef «IF blkId.length > 0»blkIdRef="«blkId»"«ENDIF» 
-			symbIdRef="«ref.parent.name».«ref.toStr»"/>
-	'''
 
 	/* 
 	def print_ct_Matrix(String matrixType, String rowNames, Arguments parameters, Boolean useDiagVarNames) '''

@@ -14,7 +14,6 @@ import java.util.Map;
 import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.*;
 //import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ComposedChecks;
@@ -32,7 +31,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	public final static String MSG_OBJECT_DEFINED   = "An object with such name already exists";
 
 	public final static String MSG_UNRESOLVED_VARIABLE          = "Unresolved reference: variable not declared";
-	public final static String MSG_UNRESOLVED_ATTRIBUTE_REF     = "Unresolved reference to an attribute";
 	public final static String MSG_UNRESOLVED_FUNC_ARGUMENT_REF = "Unresolved reference to a function output parameter";
 	public final static String MSG_UNRESOLVED_EXTERNAL_VARIABLE = "Unresolved reference to an external variable";
 	
@@ -103,78 +101,6 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			}
 	}*/
 
-	//Check references to attributes (varName.attrName)
-	@Check
-	public void checkReferenceToAttribute(FullyQualifiedArgumentName ref) {
-		//Skip if the reference is to the function call
-		if (checkReferenceToFuctionOutput(ref)) return;
-		//Skip attribute declarations
-		if (ref.eContainer() instanceof SymbolDeclarationImpl) return;
-		
-		List<Argument> args = Utils.getListArguments(ref);
-	    if ((args.size() > 0) && !checkReferenceToAttribute(ref, args))
-			warning(MSG_UNRESOLVED_ATTRIBUTE_REF, 
-				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-					MSG_UNRESOLVED_ATTRIBUTE_REF, ref.getParent().getName());
-	}
-	
-	//Check references to list attributes
-	private boolean checkReferenceToAttribute(FullyQualifiedArgumentName ref, List<Argument> arguments) {
-		List <Argument> currArgs = arguments; 
-		for (Selector x: ref.getSelectors()){
-			if (currArgs != null){
-				int index = -1;
-				if (x.getSelector() != null){
-					index = Integer.parseInt(x.getSelector());
-					if (!((index >= 1) && (index < currArgs.size() + 1))) return false;
-					index = 1;	
-				}
-				if (x.getArgumentName() != null){
-					int i = 0;
-					for (Argument arg: currArgs){
-						if (arg.getArgumentName().getName().equals(x.getArgumentName().getName())){
-							index = i + 1; break;
-						}
-						i++; 
-					}
-				}
-				if (index > 0) {
-					if (currArgs.get(index - 1).getExpression().getList() != null)
-						if (arguments.get(index).getExpression().getList().getArguments() != null)
-							currArgs = arguments.get(index).getExpression().getList().getArguments().getArguments();
-				} else return false;
-			} 
-		}
-		return true;
-	}
-
-	//Validate a fully qualified argument whose parent refers to a variable declared as a function 
-	private boolean checkReferenceToFuctionOutput(FullyQualifiedArgumentName ref) {
-		List<Variable> vars = Utils.getExternalLibraryVariables(ref);
-		if (vars != null){
-			List<String> params = new ArrayList<String>();
-   			for (Variable var: vars) params.add(var.getName());
-    		ArgumentName paramRef = ref.getSelectors().get(0).getArgumentName();
-	       	if (paramRef != null){
-	       		if (!params.contains(paramRef.getName()))
-	       			warning(MSG_UNRESOLVED_FUNC_ARGUMENT_REF + ": " + 
-	       				paramRef.getName() + " is not in the reference set " + Utils.printList(params), 
-	       				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-	       				MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getName());
-	       	} else {
-	       		String selector = ref.getSelectors().get(0).getSelector();
-	       		int index = Integer.parseInt(selector);
-	       		if (index < 1 || index > params.size())
-	       			warning(MSG_UNRESOLVED_FUNC_ARGUMENT_REF + ": " + 
-	       				"wrong index [" + index + "]. " + 
-	       				"Reference set " + Utils.printList(params) + " contains " + params.size() + " items.", 
-	       				MdlPackage.Literals.FULLY_QUALIFIED_ARGUMENT_NAME__SELECTORS,
-	       				MSG_UNRESOLVED_FUNC_ARGUMENT_REF, ref.getParent().getName());
-	       	}
-	       	return true; //skip list attribute check
-	    }
-	    return false;
-	}
 	
 	//Validate references to variables in external blocks; 
 	@Check
@@ -189,8 +115,12 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		//Validate references to imported object variables 
 		List<Variable> vars1 = Utils.getImportedVariablesByObjectAlias(st.getObj1());
 		List<Variable> vars2 = Utils.getImportedVariablesByObjectAlias(st.getObj2());
-		checkImportedVariable(vars1, st.getVar1(), MdlPackage.Literals.MAPPING_BLOCK_STATEMENT__VAR1);
-		checkImportedVariable(vars2, st.getVar2(), MdlPackage.Literals.MAPPING_BLOCK_STATEMENT__VAR2);
+		if (st.getObj1().getSelector() != null && st.getObj2().getSelector() != null){
+			if (st.getObj1().getSelector().getSymbolName() != null && st.getObj2().getSelector().getSymbolName() != null){
+				checkImportedVariable(vars1, st.getObj1().getSelector().getSymbolName(), MdlPackage.Literals.MAPPING_BLOCK_STATEMENT__OBJ1);
+				checkImportedVariable(vars2, st.getObj2().getSelector().getSymbolName(), MdlPackage.Literals.MAPPING_BLOCK_STATEMENT__OBJ2);
+			}
+		}
 	}
 	
 	private void checkImportedVariable(List<Variable> vars, SymbolName ref, EReference literal){

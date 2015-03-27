@@ -22,7 +22,6 @@ import org.ddmore.mdl.mdl.UnaryExpression
 import org.ddmore.mdl.mdl.ParExpression
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.TargetBlock
-import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
@@ -47,6 +46,8 @@ import org.ddmore.mdl.mdl.SignedNumericValue
 import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.mdl.PkMacroType
 import org.ddmore.mdl.mdl.LevelType
+import org.ddmore.mdl.mdl.SymbolName
+import org.ddmore.mdl.mdl.ImportObjectStatement
 
 class MdlPrinter {
 	
@@ -173,10 +174,7 @@ class MdlPrinter {
 			res = res + v.functionName.name.convertID + '('      
 		}
 		if (v.symbolName != null) {     
-			res = res + v.symbolName.name.convertID;
-		}
-		if (v.argumentName != null) {     
-			res = res + v.argumentName.toStr;
+			res = res + v.symbolName.toStr;
 		}
 		if (v.functionName != null){
 			res = res + ')' 
@@ -199,6 +197,33 @@ class MdlPrinter {
 		}
 		return res;
 	}
+	
+	def String toStr(ImportObjectStatement st){
+		var res = st.symbolName.toStr + " = " + st.objectName.name;
+		if (st.importURI != null){
+			res  = res + " from file " + st.importURI;
+		}
+		return res;
+	}
+	
+	def String toStr(SymbolName s){
+		var res = s.name.convertID;
+		if (s.selector != null){
+			res  = res + s.selector.toStr;
+		}
+		return res;
+	}
+	
+	def toStr(Selector s) { 
+		var res = "";
+		if (s.symbolName != null)
+			res = res + "." + s.symbolName.toStr;
+		if (s.index != null){
+			res  = res + '[' + s.index + ']';	
+		}
+		return res;
+	}
+	
 
 	def toStr(EnumType t) {
 		if (t.type != null)
@@ -425,16 +450,13 @@ class MdlPrinter {
 			return e.number;
 		}
 		if (e.symbol != null){
-			return e.symbol.name.convertID; 
+			return e.symbol.toStr; 
 		}
 		if (e.constant != null){
 			return e.constant.toString
 		}
 		if (e.functionCall != null) {
 			return e.functionCall.toStr
-		}
-		if (e.attribute != null) {
-			return e.attribute.toStr
 		}
 		return res;
 	}	
@@ -444,25 +466,6 @@ class MdlPrinter {
 		if (call.arguments != null)
 		 	res = res + "(" + call.arguments.toStr + ")";
 		 return res;	
-	}
-	
-	def toStr(FullyQualifiedArgumentName arg) { 
-		var res = "";
-		if (arg != null){
-			if (arg.parent != null)
-				res = arg.parent.name.convertID;
-			for (s: arg.selectors){
-				res = res + s.toStr
-			}
-		}
-		return res;
-	}
-	
-	def toStr(Selector s) { 
-		if (s.argumentName != null)
-			return "." + s.argumentName.name.convertID;
-		if (s.selector != null)
-			return "[" + s.selector + "]";
 	}
 	
 	def toStr(Vector v) {

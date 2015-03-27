@@ -347,10 +347,6 @@ public enum MdlDataType {
 		//Consider constant 'T' also a reference
 		String constant = MdlPrinter.getInstance().toStr(orExpr);
 		if (constant.equals("T")) return true;
-		FullyQualifiedArgumentName argName = getFullyQualifiedArgumentName(orExpr);
-		if (argName != null) {
-			if (getDerivedType(argName) != TYPE_UNDEFINED) return true; 
-		}
 		return false;
 	}
 	
@@ -502,25 +498,6 @@ public enum MdlDataType {
 			if (powerExpr.getExpression().size() > 1) return null;
 			UnaryExpression unaryExpr = powerExpr.getExpression().get(0);
 			if (unaryExpr.getSymbol() != null) return unaryExpr.getSymbol();
-		}
-		return null;
-	}
-
-	public static FullyQualifiedArgumentName getFullyQualifiedArgumentName(OrExpression orExpr) {
-		if (orExpr.getExpression().size() > 1) return null;
-		AndExpression andExpr = orExpr.getExpression().get(0);
-		if (andExpr.getExpression().size() > 1) return null;
-		LogicalExpression logicExpr = andExpr.getExpression().get(0);
-		if (logicExpr.getExpression1() != null){
-			if (logicExpr.getExpression2() != null) return null;
-			if (logicExpr.getExpression1().getString() != null) return null;
-			if(logicExpr.getExpression1().getExpression().size() > 1) return null;
-			MultiplicativeExpression multExpr = logicExpr.getExpression1().getExpression().get(0);
-			if (multExpr.getExpression().size() > 1) return null;
-			PowerExpression powerExpr = multExpr.getExpression().get(0);
-			if (powerExpr.getExpression().size() > 1) return null;
-			UnaryExpression unaryExpr = powerExpr.getExpression().get(0);
-			if (unaryExpr.getAttribute() != null) return unaryExpr.getAttribute();
 		}
 		return null;
 	}
@@ -744,38 +721,7 @@ public enum MdlDataType {
 				}
 			return TYPE_REAL;
 		}
-		if (unaryExpr.getAttribute() != null){
-			return getDerivedType(unaryExpr.getAttribute());
-		}
 		return TYPE_REAL;	
-	}
-	
-	private static MdlDataType getDerivedType(FullyQualifiedArgumentName ref){
-		//Find attribute definition and type its value
-		//FullyQualifiedArgumentName refers to external library variables
-		List<Variable> vars = Utils.getExternalLibraryVariables(ref);
-   		if (vars != null){
-			return getDerivedType(vars, ref.getSelectors().get(0));
-   		} else {
-			//FullyQualifiedArgumentName refers to list attributes
-   			//TODO: Return expected attribute type
-   		}	   			
-		return TYPE_UNDEFINED;
-	}
-	
-	private static MdlDataType getDerivedType(List<Variable> vars, Selector selector){
-		ArgumentName paramRef = selector.getArgumentName();
-		if (paramRef != null){
-			for (Variable var: vars){
-				if (var.getName().equals(paramRef.getName())) 
-					return var.getType();
-			}
-		} else {
-			int index = Integer.parseInt(selector.getSelector());
-       		if (index < vars.size())
-       			return vars.get(index).getType();
-		}
-		return TYPE_UNDEFINED;
 	}
 	
 	public static MdlDataType getDerivedType(FunctionCall call){

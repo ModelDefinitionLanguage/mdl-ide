@@ -3,7 +3,6 @@ package org.ddmore.mdl.validation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -300,6 +299,20 @@ public class Utils {
 		return declaredVariables;
 	}
 	
+	public static List<String> getDependencies(Expression e){
+		List<String> dependencies = new ArrayList<String>();
+		TreeIterator<EObject> iterator = e.eResource().getAllContents();
+	    while (iterator.hasNext()){
+	    	EObject obj = iterator.next();
+	    	if (obj instanceof SymbolNameImpl){
+	    		SymbolName s = (SymbolName) obj;
+	    		if (!dependencies.contains(s.getName())) dependencies.add(s.getName());
+	    	}
+	    }
+	    return dependencies;
+	}
+
+	
 	public static HashSet<String> getDerivativeVariables(ModelObject m){
 		HashSet<String> deriv_vars = new HashSet<String>();
 		for (ModelObjectBlock b: m.getBlocks()){
@@ -323,13 +336,13 @@ public class Utils {
 		return deriv_vars;
 	}
 	
-	public static List<Variable> getExternalLibraryVariables(FullyQualifiedArgumentName ref){
+	public static List<Variable> getExternalLibraryVariables(SymbolName ref){
 		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
 	    while (iterator.hasNext()){
 	    	EObject obj = iterator.next();
 	    	if (obj instanceof FunctionCallStatementImpl){
 	    		FunctionCallStatement s = (FunctionCallStatement) obj;
-	    		if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getParent().getName())) {	    			
+	    		if (s.getSymbolName().getName().equals(ref.getName())) {	    			
 	    			//Compare reference with returned variables of functions or libraries
 	    			String functName = s.getExpression().getIdentifier().getName();
 	    			if (FunctionValidator.libraries.contains(functName))
@@ -366,6 +379,7 @@ public class Utils {
 	    return null;
 	}
 	
+	/*
 	public static List<Argument> getListArguments(FullyQualifiedArgumentName ref){
 		List<Argument> args = new LinkedList<Argument>();
 		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
@@ -392,7 +406,7 @@ public class Utils {
 	    	}
 	    }
 	    return args;
-	}
+	}*/
 	
 	public static <E extends Enum<E>> boolean isInEnum(String value, Class<E> enumClass) {
 		  for (E e : enumClass.getEnumConstants()) {
@@ -408,6 +422,12 @@ public class Utils {
 		  return null;
 	}
 	
+	private static String getChildName(SymbolName m){
+		if (m.getSelector() != null && m.getSelector().getSymbolName() != null) 
+			return m.getSelector().getSymbolName().getName();
+		return null;
+	}
+	
 	public static String getMatchingVariable(MOGObject mog, SymbolName s, ObjectName hostObj, ObjectName partnerObj){
 		/*Check explicit mapping in MOG*/
 		if (mog != null){
@@ -417,15 +437,17 @@ public class Utils {
 					for (MappingBlockStatement m: b.getMappingBlock().getMappings()) {
 						MclObject o1 = getImportedObjectByAlias(m.getObj1());
 						MclObject o2 = getImportedObjectByAlias(m.getObj2());
-						if (o1 != null && o2 != null){
+						String var1 = getChildName(m.getObj1());
+						String var2 = getChildName(m.getObj2());
+						if (o1 != null && o2 != null && var1 != null && var2 != null){
 							if (o1.getObjectName().getName().equals(hostObj.getName()) 
-								&& m.getVar1().getName().equals(s.getName())
+								&& var1.equals(s.getName())
 								&& o2.getObjectName().getName().equals(partnerObj.getName())) 
-								return m.getVar2().getName();
+								return var2;
 							if (o2.getObjectName().getName().equals(hostObj.getName()) 
-								&& m.getVar2().getName().equals(s.getName())
+								&& var2.equals(s.getName())
 								&& o1.getObjectName().getName().equals(partnerObj.getName())) 
-								return m.getVar1().getName();
+								return var1;
 						}
 					}
 				}

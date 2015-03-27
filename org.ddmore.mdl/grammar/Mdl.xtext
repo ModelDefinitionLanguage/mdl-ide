@@ -358,16 +358,12 @@ MOGObjectBlock:
  ;
  
  MappingBlockStatement:
- 	obj1 = SymbolName '.' var1 = SymbolName '=' obj2 = SymbolName '.' var2 = SymbolName
+ 	obj1 = SymbolName '=' obj2 = SymbolName 
  ;
 
 //////////////////////////////////////////////////////////
 //Common
 //////////////////////////////////////////////////////////
-
-FormalArguments:
-	arguments += ArgumentName (=> ',' arguments += ArgumentName)*
-;
 
 ArgumentName:
 	name=ID
@@ -394,17 +390,15 @@ terminal EXTERNAL_CODE:
 ; 
 
 SymbolName:
-	name = ID
+	name = ID (selector = Selector)?
 ;
 
 SymbolDeclaration:
-	(symbolName = SymbolName | argumentName = FullyQualifiedArgumentName)
+	(symbolName = SymbolName)
 		("=" (expression = Expression) | 
 		":" list = List | 
 		randomList = RandomList)? 
-	| (functionName = FunctionName '(' (symbolName = SymbolName 
-		| argumentName = FullyQualifiedArgumentName
-	) ')' 
+	| (functionName = FunctionName '(' (symbolName = SymbolName) ')' 
 		("=" (expression = Expression)| 
 		":" list = List | 
 		randomList = RandomList))		
@@ -436,12 +430,12 @@ enum PkParameterType:
 ;
 
 enum PkMacroType:
-	no_macro | iv | elimination | oral | compartment | transfer | peripheral | absorption
+	no_macro | iv | oral | compartment | peripheral | absorption | transfer | elimination 
 ;
 
 enum UseType:
 	no_use | id | idv | amt | dv | dvid | ytype | itype | covariate | reg | dose | cat | 
-	occ | adm | cens | limit | rate | tinf | ss | addl | ii | tau | mdv |evid | cmt | varlevel
+	occ | adm | cens | limit | rate | tinf | ss | addl | ii | tau | mdv | evid | cmt | varlevel
 ;
 
 enum TargetType:
@@ -556,7 +550,6 @@ UnaryExpression:
 	number = NumericValue |
 	symbol = SymbolName |
 	constant = CONSTANT |
-	attribute = FullyQualifiedArgumentName | 
 	functionCall = FunctionCall 
 ;
 
@@ -571,12 +564,9 @@ VectorExpression:
 		//matchings += Matching  (=> ',' matchings += Matching)*
 ;
 
-FullyQualifiedArgumentName:
-	parent = SymbolName selectors += Selector+  
-;
-
+//Multidimensional vectors are not supported, so one selector is enough
 Selector:
-	('.' argumentName = ArgumentName ) | ('[' selector = INTEGER ']')
+	'.' symbolName = SymbolName | '[' index = INTEGER ']'
 ;
 
 ObjectName:
