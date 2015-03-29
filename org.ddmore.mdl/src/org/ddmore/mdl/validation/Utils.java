@@ -262,7 +262,7 @@ public class Utils {
 		List<Variable> varList = new ArrayList<Variable>();
 		TreeIterator<EObject> symbolIterator = obj.eAllContents();
 		while (symbolIterator.hasNext()) {
-			EObject container = symbolIterator.next();
+			EObject container = symbolIterator.next();			
 			if (container instanceof SymbolDeclarationImpl) {
 				SymbolDeclaration s = (SymbolDeclaration) container;
 				if (s.getSymbolName() != null)
@@ -279,6 +279,11 @@ public class Utils {
     			if (FunctionValidator.libraries.contains(functName))
     				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariables(functCall.getArguments()));
 	    	}
+			if (container instanceof CategoryImpl) {
+				Category s = (Category) container;
+				if (s.getCategoryName() != null)
+					varList.add(new Variable(s.getCategoryName().getName(), MdlDataType.TYPE_INT));
+			}
 	    	if (container instanceof ImportObjectStatementImpl){
 	    		ImportObjectStatement s = (ImportObjectStatement) container;
 	    		if (s.getSymbolName() != null){

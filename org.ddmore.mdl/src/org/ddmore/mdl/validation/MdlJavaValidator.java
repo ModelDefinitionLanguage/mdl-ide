@@ -55,12 +55,26 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	@Check
 	public void checkVariableDeclarations(SymbolDeclaration s){
 		if (s.getSymbolName() != null){
-			ObjectName objName = Utils.getObjectName(s.getSymbolName());
+			ObjectName objName = Utils.getObjectName(s);
 			if (declaredVariables.containsKey(objName.getName())){
 				if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables.get(objName.getName()), s.getSymbolName().getName())){
 					warning(MSG_VARIABLE_DEFINED, 
 							MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
 							MSG_VARIABLE_DEFINED, s.getSymbolName().getName());
+				}
+			}
+		}
+	} 
+	
+	@Check
+	public void checkVariableDeclarations(Category s){
+		if (s.getCategoryName() != null){
+			ObjectName objName = Utils.getObjectName(s);
+			if (declaredVariables.containsKey(objName.getName())){
+				if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables.get(objName.getName()), s.getCategoryName().getName())){
+					warning(MSG_VARIABLE_DEFINED, 
+							MdlPackage.Literals.CATEGORY__CATEGORY_NAME,
+							MSG_VARIABLE_DEFINED, s.getCategoryName().getName());
 				}
 			}
 		}

@@ -145,6 +145,10 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 			if (b.getDataDerivedBlock() != null)
 				for (SymbolDeclaration s: b.getDataDerivedBlock().getVariables())
 					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
+			if (b.getDeclaredVariables() != null)
+				for (SymbolDeclaration s: b.getDeclaredVariables().getVariables())
+					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
+
 		}
 		for (ModelObjectBlock b: mObj.getBlocks()){
 			if (b.getCovariateBlock() != null){
