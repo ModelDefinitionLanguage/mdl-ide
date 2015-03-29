@@ -425,6 +425,16 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				true);
 	}
 	
+	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedSymbolName name){
+		createEStructuralFeatureNode(parentNode,
+				name,
+				MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL_NAME,
+				_image(name),
+				mdlPrinter.toStr(name),
+				true);
+	}
+
+	
 	protected void  _createNode(IOutlineNode parentNode, ImportObjectStatement st){
 		createEStructuralFeatureNode(parentNode,
 			st,

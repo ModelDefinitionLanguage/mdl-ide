@@ -25,7 +25,6 @@ import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
-import org.ddmore.mdl.mdl.Selector
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.FormalArguments
 import org.ddmore.mdl.mdl.SimulationBlock
@@ -48,6 +47,7 @@ import org.ddmore.mdl.mdl.PkMacroType
 import org.ddmore.mdl.mdl.LevelType
 import org.ddmore.mdl.mdl.SymbolName
 import org.ddmore.mdl.mdl.ImportObjectStatement
+import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 
 class MdlPrinter {
 	
@@ -208,23 +208,17 @@ class MdlPrinter {
 	
 	def String toStr(SymbolName s){
 		var res = s.name.convertID;
-		if (s.selector != null){
-			res  = res + s.selector.toStr;
-		}
-		return res;
-	}
-	
-	def toStr(Selector s) { 
-		var res = "";
-		if (s.symbolName != null)
-			res = res + "." + s.symbolName.toStr;
 		if (s.index != null){
-			res  = res + '[' + s.index + ']';	
+			res  = res + '[' + s.index + ']';
 		}
 		return res;
 	}
 	
-
+	def String toStr(FullyQualifiedSymbolName s){
+		var res = s.parent.toStr + "." + s.symbolName.toStr;
+		return res;
+	}
+	
 	def toStr(EnumType t) {
 		if (t.type != null)
 			return t.type.toStr;

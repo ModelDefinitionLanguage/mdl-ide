@@ -358,7 +358,11 @@ MOGObjectBlock:
  ;
  
  MappingBlockStatement:
- 	obj1 = SymbolName '=' obj2 = SymbolName 
+ 	obj1 = FullyQualifiedSymbolName '=' obj2 = FullyQualifiedSymbolName
+ ;
+ 
+ FullyQualifiedSymbolName:
+ 	parent = SymbolName '.' symbolName = SymbolName
  ;
 
 //////////////////////////////////////////////////////////
@@ -390,7 +394,7 @@ terminal EXTERNAL_CODE:
 ; 
 
 SymbolName:
-	name = ID (selector = Selector)?
+	name = ID ('[' index = INTEGER ']')?
 ;
 
 SymbolDeclaration:
@@ -562,11 +566,6 @@ VectorExpression:
 		lists += List (=> ',' lists += List)* //|
 		//vectors += Vector (=> ',' vectors += Vector)* |
 		//matchings += Matching  (=> ',' matchings += Matching)*
-;
-
-//Multidimensional vectors are not supported, so one selector is enough
-Selector:
-	'.' symbolName = SymbolName | '[' index = INTEGER ']'
 ;
 
 ObjectName:

@@ -106,20 +106,18 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 	@Check
 	public void checkReferenceToImportedVariable(MappingBlockStatement st) {
 		//Validate references to local variables that define aliases for objects 
-		if (!(Utils.isSymbolDeclared(declaredVariables, st.getObj1())))
+		if (!(Utils.isSymbolDeclared(declaredVariables, st.getObj1().getParent())))
 			warning(MSG_UNRESOLVED_VARIABLE, MdlPackage.Literals.MAPPING_BLOCK_STATEMENT__OBJ1, MSG_UNRESOLVED_VARIABLE, 
-				st.getObj1().getName());
-		if (!(Utils.isSymbolDeclared(declaredVariables, st.getObj2())))
+				st.getObj1().getParent().getName());
+		if (!(Utils.isSymbolDeclared(declaredVariables, st.getObj2().getParent())))
 			warning(MSG_UNRESOLVED_VARIABLE, MdlPackage.Literals.MAPPING_BLOCK_STATEMENT__OBJ2, MSG_UNRESOLVED_VARIABLE, 
-				st.getObj2().getName());
+				st.getObj2().getParent().getName());
 		//Validate references to imported object variables 
-		List<Variable> vars1 = Utils.getImportedVariablesByObjectAlias(st.getObj1());
-		List<Variable> vars2 = Utils.getImportedVariablesByObjectAlias(st.getObj2());
-		if (st.getObj1().getSelector() != null && st.getObj2().getSelector() != null){
-			if (st.getObj1().getSelector().getSymbolName() != null && st.getObj2().getSelector().getSymbolName() != null){
-				checkImportedVariable(vars1, st.getObj1().getSelector().getSymbolName(), MdlPackage.Literals.MAPPING_BLOCK_STATEMENT__OBJ1);
-				checkImportedVariable(vars2, st.getObj2().getSelector().getSymbolName(), MdlPackage.Literals.MAPPING_BLOCK_STATEMENT__OBJ2);
-			}
+		List<Variable> vars1 = Utils.getImportedVariablesByObjectAlias(st.getObj1().getParent());
+		List<Variable> vars2 = Utils.getImportedVariablesByObjectAlias(st.getObj2().getParent());
+		if (st.getObj1().getSymbolName() != null && st.getObj2().getSymbolName() != null){
+			checkImportedVariable(vars1, st.getObj1().getSymbolName(), MdlPackage.Literals.MAPPING_BLOCK_STATEMENT__OBJ1);
+			checkImportedVariable(vars2, st.getObj2().getSymbolName(), MdlPackage.Literals.MAPPING_BLOCK_STATEMENT__OBJ2);
 		}
 	}
 	

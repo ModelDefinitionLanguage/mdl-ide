@@ -422,31 +422,28 @@ public class Utils {
 		  return null;
 	}
 	
-	private static String getChildName(SymbolName m){
-		if (m.getSelector() != null && m.getSelector().getSymbolName() != null) 
-			return m.getSelector().getSymbolName().getName();
-		return null;
-	}
-	
-	public static String getMatchingVariable(MOGObject mog, SymbolName s, ObjectName hostObj, ObjectName partnerObj){
+	public static String getMatchingVariable(MOGObject mog, SymbolName s){
 		/*Check explicit mapping in MOG*/
 		if (mog != null){
+			List<MclObject> objects = getMOGObjects(mog);
+			ObjectName dObjName = ((MclObject)getDataObject(objects).eContainer()).getObjectName();
+			ObjectName mObjName = ((MclObject)getModelObject(objects).eContainer()).getObjectName();
 			/*Explicit mapping in the MOG*/
 			for (MOGObjectBlock b: mog.getBlocks()){
 				if (b.getMappingBlock() != null){
 					for (MappingBlockStatement m: b.getMappingBlock().getMappings()) {
-						MclObject o1 = getImportedObjectByAlias(m.getObj1());
-						MclObject o2 = getImportedObjectByAlias(m.getObj2());
-						String var1 = getChildName(m.getObj1());
-						String var2 = getChildName(m.getObj2());
-						if (o1 != null && o2 != null && var1 != null && var2 != null){
-							if (o1.getObjectName().getName().equals(hostObj.getName()) 
+						MclObject o1 = getImportedObjectByAlias(m.getObj1().getParent());
+						MclObject o2 = getImportedObjectByAlias(m.getObj2().getParent());
+						if (o1 != null && o2 != null && m.getObj1().getSymbolName() != null && m.getObj2().getSymbolName() != null){
+							String var1 = m.getObj1().getSymbolName().getName();
+							String var2 = m.getObj2().getSymbolName().getName();
+							if (o1.getObjectName().getName().equals(dObjName.getName()) 
 								&& var1.equals(s.getName())
-								&& o2.getObjectName().getName().equals(partnerObj.getName())) 
+								&& o2.getObjectName().getName().equals(mObjName.getName())) 
 								return var2;
-							if (o2.getObjectName().getName().equals(hostObj.getName()) 
+							if (o2.getObjectName().getName().equals(dObjName.getName()) 
 								&& var2.equals(s.getName())
-								&& o1.getObjectName().getName().equals(partnerObj.getName())) 
+								&& o1.getObjectName().getName().equals(mObjName.getName())) 
 								return var1;
 						}
 					}

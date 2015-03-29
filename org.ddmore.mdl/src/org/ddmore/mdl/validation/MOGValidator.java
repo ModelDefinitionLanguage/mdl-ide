@@ -13,7 +13,6 @@ import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
-import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
@@ -147,13 +146,11 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 				for (SymbolDeclaration s: b.getDataDerivedBlock().getVariables())
 					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
 		}
-		ObjectName mObjName = ((MclObject)mObj.eContainer()).getObjectName();
-		ObjectName dObjName = ((MclObject)dObj.eContainer()).getObjectName();
 		for (ModelObjectBlock b: mObj.getBlocks()){
 			if (b.getCovariateBlock() != null){
 				for (SymbolDeclaration s: b.getCovariateBlock().getVariables()){
 					if (s.getSymbolName() != null) {
-						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName(), mObjName, dObjName);
+						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
 						if (dVarName == null) dVarName = s.getSymbolName().getName();
 						if (!dVars.contains(dVarName))
 							warning(MSG_MODEL_DATA_MISMATCH + 
@@ -167,7 +164,7 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 			if (b.getVariabilityBlock() != null){
 				for (SymbolDeclaration s: b.getVariabilityBlock().getVariables()){
 					if (s.getSymbolName() != null) {
-						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName(), mObjName, dObjName);
+						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
 						if (dVarName == null) dVarName = s.getSymbolName().getName();
 						if (!dVars.contains(dVarName))
 							warning(MSG_MODEL_DATA_MISMATCH + 

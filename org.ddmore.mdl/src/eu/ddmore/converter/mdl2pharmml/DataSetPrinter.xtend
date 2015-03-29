@@ -13,8 +13,8 @@ import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.types.DefaultValues
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.MOGObject
-import org.ddmore.mdl.mdl.MclObject
 import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
 
 class DataSetPrinter {
 	protected extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -99,14 +99,17 @@ class DataSetPrinter {
 	
 	protected def print_ds_NONMEM_DataSet(MOGObject mog, ModelObject mObj, DataObject dObj){
 		var res = "";
-		for (b: dObj.blocks){
-			if (b.dataInputBlock != null){
-				for (column: b.dataInputBlock.variables){
-					if (column.symbolName != null){
-						var modelVar = mog.getMatchingVariable(column, dObj, mObj);
-						if (modelVar != null){
-							res = res + print_ds_ColumnMapping(column.symbolName.name, modelVar);
-						}
+		var symbolIterator = dObj.eAllContents();
+		while (symbolIterator.hasNext()) {
+			var container = symbolIterator.next();
+			if (container instanceof SymbolDeclarationImpl) {
+				var column = container as SymbolDeclaration;
+				if (column != null && column.symbolName != null){
+					var modelVar = Utils::getMatchingVariable(mog, column.symbolName);
+					if (modelVar == null) //Default mapping
+						modelVar = getDefaultMatchingVariable(mog, column, mObj);
+					if (modelVar != null){
+						res = res + print_ds_ColumnMapping(column.symbolName.name, modelVar);
 					}
 				}
 			}
@@ -120,17 +123,10 @@ class DataSetPrinter {
 	}
 	
 	//Return a model variable (matched by name or in the MOG MAPPING block)
-	protected def getMatchingVariable(MOGObject mog, SymbolDeclaration column, DataObject dObj, ModelObject mObj){
-		if (column.symbolName != null && column.list != null){
-			var mObjName = (mObj.eContainer as MclObject).objectName;
-			var dObjName = (dObj.eContainer as MclObject).objectName;
-			val matchedVar = Utils::getMatchingVariable(mog, column.symbolName, dObjName, mObjName);
-			if (matchedVar != null){
-				return matchedVar;
-			} 
-			
+	protected def getDefaultMatchingVariable(MOGObject mog, SymbolDeclaration column, ModelObject mObj){
+		if (column.list != null){
+			var columnId = column.symbolName.name;
 			/*Default implicit mapping*/
-			val columnId = column.symbolName.name;
 			val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 			//Individual variable
 			if (use.equals(UseType::IDV.toString)){
@@ -162,10 +158,9 @@ class DataSetPrinter {
 					}
 				}
 			}
-		}			
+		}
 		return null;
 	}
-	
 	
 	protected def print_ds_DataSet(DataObject dObj){
 		var res = "";
