@@ -404,12 +404,6 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		}
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, FormalArguments st){
-		for (EObject obj: st.eContents()){
-			createNode(parentNode, obj);
-		}
-	}	
-	
 	protected void  _createNode(IOutlineNode parentNode, AnyExpression st){
 		for (EObject obj: st.eContents()){
 			createNode(parentNode, obj);

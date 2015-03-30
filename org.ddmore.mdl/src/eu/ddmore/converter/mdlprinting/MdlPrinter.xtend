@@ -26,7 +26,6 @@ import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
 import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.mdl.FormalArguments
 import org.ddmore.mdl.mdl.SimulationBlock
 import org.ddmore.mdl.mdl.EstimationBlock
 import org.apache.commons.io.FilenameUtils
@@ -526,26 +525,6 @@ class MdlPrinter {
 		}
 		return res;
 	}
-	
-	def toStr(FormalArguments arg) { 
-		var res  = "";
-		var iterator = arg.arguments.iterator();
-		if (iterator.hasNext ) {
-			var a = iterator.next; 
-			if (a.name != null){
-				res  = res + a.name;
-			}
-		}
-		while (iterator.hasNext){
-			res  = res + ', ';
-			var a = iterator.next; 
-			if (a.name != null){
-				res  = res + a.name;
-			}
-		}
-		return res;
-	}
-	
 	
 	def toStr(TargetBlock b){
 		return b.externalCode.substring(3, b.externalCode.length - 3)
