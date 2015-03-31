@@ -134,6 +134,14 @@ public enum MdlDataType {
 		return false;
 	}
 	
+	static public boolean validateType(MdlDataType type, ArgumentExpression expr){
+		if (expr.getExpression() != null)
+			return validateType(type, expr.getExpression());
+		if (expr.getRandomList() != null) 
+			return validateType(type, expr.getRandomList());
+		return false;
+	}
+	
 	static public boolean validateType(List<MdlDataType> types, AnyExpression expr){
 		for (MdlDataType type: types){
 			if (validateType(type, expr)) return true;

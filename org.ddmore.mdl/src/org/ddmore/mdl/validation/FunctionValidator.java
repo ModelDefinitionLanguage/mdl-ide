@@ -19,7 +19,7 @@ import org.ddmore.mdl.domain.FunctionSignature;
 import org.ddmore.mdl.domain.ParameterPassingMethod;
 import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.Argument;
-import org.ddmore.mdl.mdl.Arguments;
+import org.ddmore.mdl.mdl.ArgumentExpression;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.PkParameterType;
@@ -228,35 +228,42 @@ private void validateStandardFunction(FunctionCall call){
 		FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getName());
 		//TODO validate whether the function returns any value to enable/disable its use in expressions
 		//TODO instead of checking whether a parameter is known, match a list of actual parameters with one of valid sets!
-		if (isPassedByName(call.getArguments())){
+		int expected = functSig.getNumberOfParams();
+		if (call.getArguments() == null){
+			if (expected > 0) 
+				warning(MSG_FUNCTION_WRONG_PASSING_METHOD + ": function exprects " + expected + " parameter(s)",
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_WRONG_PASSING_METHOD, 
+						call.getIdentifier().getName());	
+			return;
+		} 
+		if (call.getArguments().getNamedArguments() != null){
 			if (functSig.isPassingByName()){
-				if (call.getArguments() != null){
-					//Check that only valid parameters are passed
-					for (Argument arg: call.getArguments().getArguments()){
-						if (arg.getArgumentName() != null){
-							Map<String, FunctionParameter> allParams = functSig.getAllParams(); 
-							if (allParams.containsKey(arg.getArgumentName().getName())){
-								FunctionParameter p = allParams.get(arg.getArgumentName().getName());
-								if (!MdlDataType.validateType(p.getType(), arg.getExpression()))
-									warning(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getName()
-									+ " expects value of type " + p.getType(),
-									MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-									MSG_FUNCTION_WRONG_TYPE, arg.getArgumentName().getName());		
-							} else 
-								warning(MSG_FUNCTION_PARAMETER_UNKNOWN + ": " + arg.getArgumentName().getName(), 
-									MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-									MSG_FUNCTION_PARAMETER_UNKNOWN, arg.getArgumentName().getName());		
+				//Check that only valid parameters are passed
+				for (Argument arg: call.getArguments().getNamedArguments()){
+					if (arg.getArgumentName() != null){
+						Map<String, FunctionParameter> allParams = functSig.getAllParams(); 
+						if (allParams.containsKey(arg.getArgumentName().getName())){
+							FunctionParameter p = allParams.get(arg.getArgumentName().getName());
+							if (!MdlDataType.validateType(p.getType(), arg.getExpression()))
+								warning(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getName()
+								+ " expects value of type " + p.getType(),
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_WRONG_TYPE, arg.getArgumentName().getName());		
+						} else 
+							warning(MSG_FUNCTION_PARAMETER_UNKNOWN + ": " + arg.getArgumentName().getName(), 
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_PARAMETER_UNKNOWN, arg.getArgumentName().getName());		
 						}
 					}	
-					HashSet<String> argumentNames = new HashSet<String>();	
-					for (Argument arg: call.getArguments().getArguments()){
-						if (!argumentNames.contains(arg.getArgumentName().getName())){
-							argumentNames.add(arg.getArgumentName().getName());
-						} else {
-							warning(MSG_FUNCTION_PARAMETER_DEFINED + ": " + arg.getArgumentName().getName(), 
-									MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-									MSG_FUNCTION_PARAMETER_DEFINED, arg.getArgumentName().getName());		
-						}
+				HashSet<String> argumentNames = new HashSet<String>();	
+				for (Argument arg: call.getArguments().getNamedArguments()){
+					if (!argumentNames.contains(arg.getArgumentName().getName())){
+						argumentNames.add(arg.getArgumentName().getName());
+					} else {
+						warning(MSG_FUNCTION_PARAMETER_DEFINED + ": " + arg.getArgumentName().getName(), 
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_PARAMETER_DEFINED, arg.getArgumentName().getName());		
 					}
 				}
 			}	
@@ -268,11 +275,8 @@ private void validateStandardFunction(FunctionCall call){
 					call.getIdentifier().getName());					
 			}	
 		} else {
-			if (isPassedByPlace(call.getArguments())) {
-				int expected = functSig.getNumberOfParams();
-				int actual = 0;
-				if (call.getArguments().getArguments() != null)
-					actual = call.getArguments().getArguments().size();
+			if (!functSig.isPassingByName()){
+				int actual = call.getArguments().getUnnamedArguments().size();
 				if (actual != expected){
 					warning(MSG_FUNCTION_INVALID + ": " +
 							call.getIdentifier().getName() + " expects " + expected + " parameter(s).", 
@@ -281,20 +285,19 @@ private void validateStandardFunction(FunctionCall call){
 							call.getIdentifier().getName());
 					return;
 				}
-				if (call.getArguments() != null){
-					List<FunctionParameter> defaultParams = functSig.getDefaultParamSet();
-					for (int i = 0; i < call.getArguments().getArguments().size(); i++){
-						Argument arg = call.getArguments().getArguments().get(i);
-						if (!MdlDataType.validateType(defaultParams.get(i).getType(), arg.getExpression())){
-							warning(MSG_FUNCTION_WRONG_TYPE + ": parameter #" + i + " expects value of type " + 
-									defaultParams.get(i).getType(),
-							MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-							MSG_FUNCTION_WRONG_TYPE, "" + String.valueOf(i));		
-						}
+				List<FunctionParameter> defaultParams = functSig.getDefaultParamSet();
+				for (int i = 0; i < call.getArguments().getUnnamedArguments().size(); i++){
+					ArgumentExpression arg = call.getArguments().getUnnamedArguments().get(i);
+					if (!MdlDataType.validateType(defaultParams.get(i).getType(), arg.getExpression())){
+						warning(MSG_FUNCTION_WRONG_TYPE + ": parameter #" + i + " expects value of type " + 
+								defaultParams.get(i).getType(),
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_WRONG_TYPE, "" + String.valueOf(i));		
 					}
 				}
 			} else {
-				warning(MSG_FUNCTION_WRONG_PASSING_METHOD + ": cannot mix parameter passing by place and by name",
+				warning(MSG_FUNCTION_WRONG_PASSING_METHOD + ": cannot pass parameters by place to " +
+						call.getIdentifier().getName(),
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_WRONG_PASSING_METHOD, 
 						call.getIdentifier().getName());	
@@ -313,28 +316,5 @@ private void validateStandardFunction(FunctionCall call){
 						call.getIdentifier().getName());					
 			}
 		}
-	}
-	
-	public boolean isPassedByName(Arguments args){
-		if (args != null){
-			int nNames = 0; 
-			for (Argument arg: args.getArguments()){
-				if (arg.getArgumentName() != null) nNames++;
-			}
-			int count = args.getArguments().size();
-			return (nNames == count && count != 0);
-		}
-		return false;
-	}
-	
-	public boolean isPassedByPlace(Arguments args){
-		if (args != null){
-			int nNames = 0; 
-			for (Argument arg: args.getArguments()){
-				if (arg.getArgumentName() != null) nNames++;
-			}
-			return (nNames == 0);
-		}
-		return true;
 	}
 }

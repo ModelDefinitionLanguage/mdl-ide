@@ -400,12 +400,12 @@ SymbolName:
 SymbolDeclaration:
 	(symbolName = SymbolName)
 		("=" (expression = Expression) | 
-		":" list = List | 
-		randomList = RandomList)? 
+		 ":" list = List | 
+		     randomList = RandomList)? 
 	| (functionName = FunctionName '(' (symbolName = SymbolName) ')' 
 		("=" (expression = Expression)| 
-		":" list = List | 
-		randomList = RandomList))		
+		 ":" list = List | 
+		     randomList = RandomList))		
 ;
 
 PropertyDeclaration:
@@ -502,11 +502,15 @@ DistributionName:
 ;
 
 Arguments: 
-	arguments += Argument (=> ',' arguments += Argument)*
+	namedArguments += Argument (=> ',' namedArguments += Argument)* |
+	unnamedArguments += ArgumentExpression (=> ',' unnamedArguments += ArgumentExpression)*
 ;
 
 Argument:
-	(argumentName = ArgumentName ("=" expression = AnyExpression | randomList = RandomList)) | 
+	argumentName = ArgumentName ("=" expression = ArgumentExpression)  
+;
+
+ArgumentExpression:
 	expression = AnyExpression | randomList = RandomList
 ;
 

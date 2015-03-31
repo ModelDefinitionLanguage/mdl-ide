@@ -177,8 +177,8 @@ public class FunctionSignature {
 			//TODO: if there are alternative parameter sets, choose a suitable one
 			for (FunctionParameter param: params.getParameterSet()){
 				Boolean found = false;
-				for (Argument arg: arguments.getArguments()){
-					if (arg.getArgumentName() != null){
+				if (arguments.getNamedArguments() != null){
+					for (Argument arg: arguments.getNamedArguments()){
 						String argName = arg.getArgumentName().getName();
 						if (argName.equals(param.getName())){
 							found = true;
@@ -201,7 +201,6 @@ public class FunctionSignature {
 				}
 			}
 		}
-		//System.out.println("TEST:" + valueString);
 		return valueString;
 	}
 

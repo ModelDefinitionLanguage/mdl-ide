@@ -31,6 +31,7 @@ import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.types.MdlDataType
 import org.ddmore.mdl.mdl.VectorExpression
+import org.ddmore.mdl.mdl.ArgumentExpression
 
 class MathPrinter{
 
@@ -40,6 +41,15 @@ class MathPrinter{
 	new(ReferenceResolver resolver) {
 		this.resolver = resolver
 	}
+
+	def CharSequence print_Math_Expr(ArgumentExpression e) '''
+		«IF e.expression != null»
+			«e.expression.print_Math_Expr»
+		«ENDIF»
+		«IF e.randomList != null»
+			«DistributionPrinter::getInstance().print_uncert_Distribution(e.randomList)»
+		«ENDIF»
+	'''
 
 	def CharSequence print_Math_Expr(AnyExpression e) '''
 		«IF e.expression != null»
@@ -93,11 +103,13 @@ class MathPrinter{
 
 	def print_Categorical(List categories) '''
 		<Categorical>
-		«FOR c : categories.arguments.arguments»
-			«IF c.argumentName != null»
-				<Category catId=«c.argumentName.name»/>
-			«ENDIF»
-		«ENDFOR»
+		«IF categories.arguments.namedArguments != null»
+			«FOR c : categories.arguments.namedArguments»
+				«IF c.argumentName != null»
+					<Category catId=«c.argumentName.name»/>
+				«ENDIF»
+			«ENDFOR»
+		«ENDIF»
 		</Categorical>
 	'''
 
@@ -115,41 +127,28 @@ class MathPrinter{
 		«ENDIF»
 	'''
 	
-	def isCategorical(AnyExpression e){
-		if (e != null && e.type != null && e.type.type != null && e.type.type.categorical != null) return true;
-		return false;
-	}
-	
-	def isContinuous(AnyExpression e){
-		if (e != null && e.type != null && e.type.type != null && e.type.type.continuous != null) return true;
-		return false;
-	}
-
 	//Convert math functions to PharmML 
 	def print_Math_FunctionCall(FunctionCall call) {
 		if (call.identifier.name.equals(FunctionValidator::funct_seq)) {
 			if (call.arguments != null) {
-				val params = call.arguments.arguments;
-				var passedByName = true;
-				for (param : params)
-					if(param.argumentName == null) passedByName = false;
-
-				//(start, stepSize, repetition) - not used in MDL?
-				if (params.size == 3 && !passedByName)
-					return print_ct_Sequence(
-						params.get(0).expression.print_Math_Expr.toString,
-						params.get(1).expression.print_Math_Expr.toString,
-						params.get(2).expression.print_Math_Expr.toString
-					);
-				if (passedByName) {
+				if(call.arguments.namedArguments != null) {
 					return print_ct_Sequence(
 						call.arguments.getAttribute(FunctionValidator::param_seq_start.name),
 						call.arguments.getAttribute(FunctionValidator::param_seq_stepSize.name),
 						call.arguments.getAttribute(FunctionValidator::param_seq_end.name)
 					);
 				}
+				else {
+					//Unnamed parameters in the default order: start, stepSize, repetition
+					val params = call.arguments.unnamedArguments;
+					if (params.size == 3)
+						return print_ct_Sequence(
+							params.get(0).expression.print_Math_Expr.toString,
+							params.get(1).expression.print_Math_Expr.toString,
+							params.get(2).expression.print_Math_Expr.toString
+						);
+				}
 			}
-
 		} else {
 			if (FunctionValidator::funct_standard1.contains(call.identifier.name) ||
 				FunctionValidator::funct_standard2.contains(call.identifier.name)) {
@@ -171,29 +170,34 @@ class MathPrinter{
 		var functName = call.identifier.name;
 		if(call.identifier.name.equals("ln")) functName = "log";
 		if(call.identifier.name.equals("lfactorial")) functName = "factln";
-		'''
-			«IF call.arguments.arguments.size == 1»
-				<Uniop op="«functName»">
-					«call.arguments.arguments.get(0).expression.print_Math_Expr»
-				</Uniop>
-			«ELSE»
-				«IF call.arguments.arguments.size == 2»
-					<Binop op="«functName»">
-						«call.arguments.arguments.get(0).expression.print_Math_Expr»
-						«call.arguments.arguments.get(1).expression.print_Math_Expr»
-					</Binop>
+		if (call.arguments.unnamedArguments != null) {
+			var argNum = call.arguments.unnamedArguments.size;
+			'''
+				«IF argNum == 1»
+					<Uniop op="«functName»">
+						«call.arguments.unnamedArguments.get(0).expression.print_Math_Expr»
+					</Uniop>
+				«ELSE»
+					«IF argNum == 2»
+						<Binop op="«functName»">
+							«call.arguments.unnamedArguments.get(0).expression.print_Math_Expr»
+							«call.arguments.unnamedArguments.get(1).expression.print_Math_Expr»
+						</Binop>
+					«ENDIF»
 				«ENDIF»
-			«ENDIF»
-		'''
+			'''
+		}
 	}
 
 	//Convert user defined math functions to PharmML 
 	def print_Math_FunctionCall_UserDefined(FunctionCall call) '''
 		<math:FunctionCall>
 			«call.identifier.print_ct_SymbolRef»
-			«FOR arg : call.arguments.arguments»
-				«arg.print_Math_FunctionArgument»
-			«ENDFOR»
+			«IF call.arguments.namedArguments != null»
+				«FOR arg : call.arguments.namedArguments»
+					«arg.print_Math_FunctionArgument»
+				«ENDFOR»
+			«ENDIF»
 		</math:FunctionCall>
 	'''
 

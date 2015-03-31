@@ -62,22 +62,24 @@ class PKMacrosPrinter{
 	//Convert MDL PK macro attributes to PharmML
 	protected def print_PKAttributes(Arguments args){
 		var res = "";
-		for (a: args.arguments){
-			var attrName = "";
-			if (a.argumentName != null){
-				attrName = a.argumentName.name;
-				//type -> cmt
-				if (a.argumentName.name.equals(AttributeValidator::attr_type_nat.name))
-					attrName = "cmt";
-				if (a.argumentName.name.equals(AttributeValidator::attr_macro.name))
-					attrName = "#SKIP#";	
-			}				
-			if (!attrName.equals("#SKIP#")){
-				res = res + '''
-					<Value«IF attrName.length > 0» argument="«attrName»"«ENDIF»> 
-						«a.expression.print_Math_Expr»
-					</Value>
-				'''
+		if (args.namedArguments != null){
+			for (a: args.namedArguments){
+				var attrName = "";
+				if (a.argumentName != null){
+					attrName = a.argumentName.name;
+					//type -> cmt
+					if (a.argumentName.name.equals(AttributeValidator::attr_type_nat.name))
+						attrName = "cmt";
+					if (a.argumentName.name.equals(AttributeValidator::attr_macro.name))
+						attrName = "#SKIP#";	
+				}				
+				if (!attrName.equals("#SKIP#")){
+					res = res + '''
+						<Value«IF attrName.length > 0» argument="«attrName»"«ENDIF»> 
+							«a.expression.print_Math_Expr»
+						</Value>
+					'''
+				}
 			}
 		}
 		return res;

@@ -16,7 +16,7 @@ import java.util.Map
 import java.util.TreeMap
 
 class ModelDefinitionPrinter {
-	protected extension DistributionPrinter distrPrinter = new DistributionPrinter();
+	protected extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
 	protected extension PKMacrosPrinter pkPrinter = null;
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver = null;

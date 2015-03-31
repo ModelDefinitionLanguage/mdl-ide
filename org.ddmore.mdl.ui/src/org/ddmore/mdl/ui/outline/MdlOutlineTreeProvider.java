@@ -389,18 +389,17 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, Argument a){
-		if (a.getArgumentName() != null){
-			createEStructuralFeatureNode(parentNode,
+		createEStructuralFeatureNode(parentNode,
 				a,
 				MdlPackage.Literals.ARGUMENT__EXPRESSION,
 				_image(a),
 				a.getArgumentName().getName(),
-				false);
-		} else {
-			if (a.getExpression() != null)
-				createNode(parentNode, a.getExpression());
-			else if (a.getRandomList() != null)
-				createNode(parentNode, a.getRandomList());
+		false);
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, ArgumentExpression st){
+		for (EObject obj: st.eContents()){
+			createNode(parentNode, obj);
 		}
 	}
 	

@@ -111,8 +111,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	public final static Attribute attr_numberOfClasses = new Attribute("numberOfClasses", MdlDataType.TYPE_NAT, true);
 
 	public final static Attribute attr_scaleMatrix = new Attribute("scaleMatrix", MdlDataType.TYPE_VECTOR_PREAL, true);
-	public final static Attribute attr_dimension = new Attribute("dimension", MdlDataType.TYPE_NAT, false);
-	
+
 	public final static Attribute attr_weight = new Attribute("weight", MdlDataType.TYPE_REAL, false);	
 	public final static Attribute attr_seed = new Attribute("seed", MdlDataType.TYPE_REAL, false);	
 	
@@ -120,7 +119,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			new HashMap<DistributionType, List<Attribute>>() {
 				private static final long serialVersionUID = 27681295286815005L;
 		{
-			put(DistributionType.Bernoulli, Arrays.asList(
+			put(DistributionType.Bernoulli, Arrays.asList( 
 					attr_probability,
 					attr_p));
 			put(DistributionType.BetaDistribution, Arrays.asList(
@@ -211,14 +210,12 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_prob)); 
 			put(DistributionType.MultivariateNormal, Arrays.asList(
 					attr_realVector_mean,
-					attr_cov,
-					attr_dimension)); 
+					attr_cov)); 
 			put(DistributionType.MultivariateStudentT, Arrays.asList(
 					attr_realVector_mean,
 					attr_cov,
 					attr_pnat_degreesOfFreedom,
-					attr_pnat_dof,
-					attr_dimension)); 
+					attr_pnat_dof)); 
 			put(DistributionType.NegativeBinomial, Arrays.asList(
 					attr_numberOfFailures,
 					attr_nFail,
@@ -272,8 +269,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					attr_preal_hi));
 			put(DistributionType.Wishart, Arrays.asList(
 					attr_n,
-					attr_scaleMatrix,
-					attr_dimension)); 
+					attr_scaleMatrix)); 
 		}
 	};
 
@@ -413,7 +409,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		Arguments args = (Arguments)argContainer;
 		RandomList distr = (RandomList)argContainer.eContainer();
 		HashSet<String> argumentNames = new HashSet<String>();	
-		for (Argument arg: args.getArguments()){
+		for (Argument arg: args.getNamedArguments()){
 			if (!argumentNames.contains(arg.getArgumentName().getName())){
 				argumentNames.add(arg.getArgumentName().getName());
 			} else {
@@ -421,7 +417,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, 
 						MSG_DISTR_ATTRIBUTE_DEFINED, arg.getArgumentName().getName());				
 			}
-		}	
+		}
 		if (exclusive_attrs.containsKey(argument.getArgumentName().getName())){
 			String exclusive = exclusive_attrs.get(argument.getArgumentName().getName());
 			if (argumentNames.contains(exclusive)){
@@ -441,18 +437,15 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			if (checkAttribute(common_attrs, argument)) return;
 			warning(MSG_DISTR_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
 				MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-				MSG_DISTR_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());	
+				MSG_DISTR_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());
 		}
 	}
 	
 	private Boolean checkAttribute(List<Attribute> recognized_attrs, Argument argument){
 		for (Attribute attr: recognized_attrs){
 			if (attr.getName().equals(argument.getArgumentName().getName())) {
-				if (argument.getExpression() != null
-						&& (!MdlDataType.validateType(attr.getType(), argument.getExpression()) 
-						&& !MdlDataType.validateType(MdlDataType.TYPE_REF, argument.getExpression())) ||
-					argument.getRandomList() != null 
-						&& !MdlDataType.validateType(attr.getType(), argument.getRandomList())){
+				if (!MdlDataType.validateType(attr.getType(), argument.getExpression()) 
+						&& !MdlDataType.validateType(MdlDataType.TYPE_REF, argument.getExpression())){
 					warning(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
 							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
 						attr.getType().name(), 
@@ -463,5 +456,13 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			}
 		}
 		return false;
+	}
+	
+	public static List<Attribute> getAttributes(String type){
+		for (DistributionType dType: distr_attrs.keySet()){
+			if (dType.toString().equals(type))
+				return distr_attrs.get(dType);
+		}
+		return null;
 	}
 }

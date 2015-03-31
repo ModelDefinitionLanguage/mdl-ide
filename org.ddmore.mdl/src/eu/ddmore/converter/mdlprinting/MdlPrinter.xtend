@@ -47,6 +47,7 @@ import org.ddmore.mdl.mdl.LevelType
 import org.ddmore.mdl.mdl.SymbolName
 import org.ddmore.mdl.mdl.ImportObjectStatement
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
+import org.ddmore.mdl.mdl.ArgumentExpression
 
 class MdlPrinter {
 	
@@ -65,6 +66,16 @@ class MdlPrinter {
 		return baseName;
 	}	
 	
+	def isCategorical(AnyExpression e){
+		if (e != null && e.type != null && e.type.type != null && e.type.type.categorical != null) return true;
+		return false;
+	}
+	
+	def isContinuous(AnyExpression e){
+		if (e != null && e.type != null && e.type.type != null && e.type.type.continuous != null) return true;
+		return false;
+	}
+	
 	def isTrue(AnyExpression e){
 		if (e.expression != null){
 			val orExpr = e.expression.expression;
@@ -76,39 +87,45 @@ class MdlPrinter {
 			}
 		}
 		return e.toStr.equals("true");
+	}
+	
+	def isTrue(ArgumentExpression e){
+		if (e.expression != null)
+			return e.expression.isTrue;
+		return false;	
 	}	
 	
 	def isAttributeTrue(Arguments args, String attrName){
 		if (args != null)
-			for (arg: args.arguments)
-				if (arg.argumentName != null 
-					&& arg.argumentName.name.equals(attrName) 
-					&& arg.expression != null){
+			if (args.namedArguments != null){
+				for (arg: args.namedArguments){
 					return arg.expression.isTrue;
 				}
+			}
+			if (args.unnamedArguments != null){
+				for (arg: args.unnamedArguments){
+					return arg.isTrue;
+				}
+			}
 		return false;
 	}
 	
 	//Return value of an attribute with a given name
 	def getAttribute(Arguments args, String attrName){
-		if (args != null)
-			for (arg: args.arguments)
-				if (arg.argumentName != null 
-					&& arg.argumentName.name.equals(attrName)
-					&& arg.expression != null)
+		if (args != null && args.namedArguments != null)
+			for (arg: args.namedArguments)
+				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
 					return arg.expression.toStr
 		return "";
 	}	
 	
 	//Return value of an attribute with a given name
 	def getAttributeExpression(Arguments args, String attrName){
-		if (args != null)
-			for (arg: args.arguments)
-				if (arg.argumentName != null 
-					&& arg.argumentName.name.equals(attrName)
-					&& arg.expression != null
-				)
-					return arg.expression
+		if (args != null && args.getNamedArguments != null)
+			for (arg: args.namedArguments)
+				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
+					if (arg.expression.expression != null)
+						return arg.expression.expression;
 		return null;
 	}
 	
@@ -497,31 +514,39 @@ class MdlPrinter {
 	
 	def String toStr(Arguments arg){
 		var res  = "";
-		var iterator = arg.arguments.iterator();
-		if (iterator.hasNext ) {
-			var a = iterator.next; 
-			if (a.argumentName != null){
-				res  = res + a.argumentName.name + " = ";
+		if (arg.namedArguments != null){
+			var iterator = arg.namedArguments.iterator();
+			if (iterator.hasNext ) {
+				var a = iterator.next; 
+				res  = a.argumentName.name + " = " + a.expression.toStr;
 			}
-			if (a.expression != null){
-				res = res + a.expression.toStr;
-			}
-			if (a.randomList != null){
-				res = res + a.randomList.toStr;
+			while (iterator.hasNext){
+				res  = res + ', ';
+				var a = iterator.next; 
+				res  = res + a.argumentName.name + " = " + a.expression.toStr;
 			}
 		}
-		while (iterator.hasNext){
-			res  = res + ', ';
-			var a = iterator.next; 
-			if (a.argumentName != null){
-				res  = res + a.argumentName.name + " = ";
+		if (arg.unnamedArguments != null){
+			var iterator = arg.unnamedArguments.iterator();
+			if (iterator.hasNext ) {
+				var a = iterator.next; 
+				res  = a.expression.toStr;
 			}
-			if (a.expression != null){
-				res = res + a.expression.toStr;
+			while (iterator.hasNext){
+				var a = iterator.next; 
+				res  = res + ', ' + a.expression.toStr;
 			}
-			if (a.randomList != null){
-				res = res + a.randomList.toStr;
-			}
+		}
+		return res;
+	}
+	
+	def String toStr(ArgumentExpression a){
+		var res = "";
+		if (a.expression != null){
+			res = res + a.expression.toStr;
+		}
+		if (a.randomList != null){
+			res = res + a.randomList.toStr;
 		}
 		return res;
 	}

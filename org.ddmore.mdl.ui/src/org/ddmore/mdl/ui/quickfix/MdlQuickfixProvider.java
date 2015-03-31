@@ -10,6 +10,7 @@ import org.ddmore.mdl.mdl.AdditiveExpression;
 import org.ddmore.mdl.mdl.AndExpression;
 import org.ddmore.mdl.mdl.AnyExpression;
 import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.ArgumentExpression;
 import org.ddmore.mdl.mdl.ArgumentName;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.DataInputBlock;
@@ -144,7 +145,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			public void apply(EObject element, IModificationContext context) {
 				EObject container = element.eContainer();
 				Arguments args = (Arguments)container;
-				args.getArguments().remove(element);
+				args.getNamedArguments().remove(element);
 			}
 		});
 	}
@@ -161,7 +162,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 				if (attribute != null){
 					Argument newArg = createArgument(attribute);
 					Arguments args = (Arguments)element;
-					args.getArguments().add(0, newArg);
+					args.getNamedArguments().add(0, newArg);
 				}
 			} 
 		});
@@ -175,7 +176,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			public void apply(EObject element, IModificationContext context) {
 				EObject container = element.eContainer();
 				Arguments args = (Arguments)container;
-				args.getArguments().remove(element);
+				args.getNamedArguments().remove(element);
 			}
 		});
 	}
@@ -192,7 +193,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			public void apply(EObject element, IModificationContext context) {
 				EObject container = element.eContainer();
 				Arguments args = (Arguments)container;
-				args.getArguments().remove(element);
+				args.getNamedArguments().remove(element);
 			}
 		});
 	}
@@ -210,7 +211,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		        		if (attr.getName().equals(tokens[1])) {
 							Argument newArg = createArgument(attr);
 							Arguments args = (Arguments)element;
-							args.getArguments().add(0, newArg);
+							args.getNamedArguments().add(0, newArg);
 		        		}
 			        }
 			}
@@ -225,7 +226,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			public void apply(EObject element, IModificationContext context) {
 				EObject container = element.eContainer();
 				Arguments args = (Arguments)container;
-				args.getArguments().remove(element);
+				args.getNamedArguments().remove(element);
 			}
 		});
 	}
@@ -389,7 +390,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		Arguments args = MdlFactory.eINSTANCE.createArguments();				
 		for (int i = 0; i< attributes.length; i++){
 			Argument attr = createArgument(attributes[i]);
-			args.getArguments().add(attr);
+			args.getNamedArguments().add(attr);
 		}
 		list.setArguments(args);
 		return list;
@@ -400,8 +401,10 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
 		argName.setName(attribute.getName());
 		AnyExpression attrExpr = createTypedExpression(attribute);
+		ArgumentExpression argExpr = MdlFactory.eINSTANCE.createArgumentExpression();
+		argExpr.setExpression(attrExpr);
 		attr.setArgumentName(argName);
-		attr.setExpression(attrExpr);
+		attr.setExpression(argExpr);
 		return attr;
 	}
 	
@@ -410,7 +413,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
 		argName.setName(attribute.getName());
 		attr.setArgumentName(argName);
-		attr.setExpression(attrExpr);
+		ArgumentExpression argExpr = MdlFactory.eINSTANCE.createArgumentExpression();
+		argExpr.setExpression(attrExpr);
+		attr.setExpression(argExpr);
 		return attr;
 	}
 		
@@ -606,7 +611,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		Arguments args = MdlFactory.eINSTANCE.createArguments();				
 		for (int i = 0; i < attributes.length; i++){
 			Argument attr = createArgument(attributes[i]);
-			args.getArguments().add(attr);
+			args.getNamedArguments().add(attr);
 		}
 		list.setArguments(args);
 		return list;

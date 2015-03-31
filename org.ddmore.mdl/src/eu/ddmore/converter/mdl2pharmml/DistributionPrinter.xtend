@@ -7,7 +7,6 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import org.ddmore.mdl.mdl.RandomList
-import org.ddmore.mdl.mdl.Argument
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.DistributionValidator
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
@@ -18,6 +17,12 @@ import org.ddmore.mdl.types.DistributionType
 import org.ddmore.mdl.mdl.Expression
 
 class DistributionPrinter extends MdlPrinter{
+	
+	private static val DistributionPrinter distrPrinter = new DistributionPrinter();
+	protected new(){}
+	override public static def DistributionPrinter getInstance(){
+		return distrPrinter;
+	}
 
 	//Recognised types of distributions and pairs (attribute, value type) to print as PharmML tags
 	private val distribution_attrs = newHashMap(
@@ -180,18 +185,12 @@ class DistributionPrinter extends MdlPrinter{
 
 	//Prints all distributions
 	public def CharSequence print_uncert_Distribution(RandomList randomList){
-		if (randomList != null){
-			if (randomList.type != null){
-				var typeName = randomList.type.name;
-				if (typeName.length > 0){
-					switch(typeName){
-						//For any mixture model
-						case typeName.contains("Model"): print_MixtureModel(randomList, typeName)
-						default: {
-							//Types in PharmML start from upper case!
-							print_DistributionDefault(randomList, typeName);
-						}
-					}
+		if (randomList != null && randomList.type != null){
+			var typeName = randomList.type.name;
+			if (typeName.length > 0){
+				switch(typeName){//For any mixture model
+					case typeName.contains("Model"): randomList.print_MixtureModel(typeName)
+					default: randomList.print_DistributionDefault(typeName)
 				}
 			}
 		}
@@ -200,76 +199,88 @@ class DistributionPrinter extends MdlPrinter{
 	protected def print_MixtureModel(RandomList randomList, String type)'''
 		«val tagName = type.substring(0, 1).toUpperCase() + type.substring(1)»
 		<«tagName» xmlns="«xmlns_uncert»" definition="«definition»mixture-model">
-			«FOR arg: randomList.arguments.arguments»
-				«IF arg.randomList != null»
-					«val weight = arg.randomList.arguments.getAttribute(DistributionValidator::attr_weight.name)»
-					«IF weight.length > 0»
-						<component weight="«weight»">
-							«arg.randomList.print_uncert_Distribution»
-						</component>
+			«IF randomList.arguments.namedArguments != null»
+				«FOR arg: randomList.arguments.namedArguments»
+					«IF arg.expression.randomList != null»
+						«val weight = arg.expression.randomList.arguments.getAttribute(DistributionValidator::attr_weight.name)»
+						«IF weight.length > 0»
+							<component weight="«weight»">
+								«arg.expression.randomList.print_uncert_Distribution»
+							</component>
+						«ENDIF»
 					«ENDIF»
-				«ENDIF»
-			«ENDFOR»
+				«ENDFOR»
+			«ENDIF»
 		</«tagName»>
 	'''
 	
-	//NOTE: Conversion works only for definitions with explicit attribute names, no default order supported!
+	//NOTE: Conversion works only for definitions with explicit attribute names, no default order supported
+	//TODO: fix default order case
 	protected def print_DistributionDefault(RandomList randomList, String type){
 		val recognizedArgs = distribution_attrs.get(type);
 		if (recognizedArgs == null) return "";
 		'''
 		<«type»Distribution xmlns="«xmlns_uncert»" definition="0.1">
-			«FOR arg: randomList.arguments.arguments»
-				«IF arg.argumentName != null»
+			«IF randomList.arguments.namedArguments != null»
+				«FOR arg: randomList.arguments.namedArguments»
 					«IF recognizedArgs.containsKey(arg.argumentName.name)»
 						«val attr = recognizedArgs.get(arg.argumentName.name)»
 						«IF attr != null»
-							«val dataType = attr.type»
-							«val attrName = attr.name»
-							«IF matrix_attrs.contains(arg.argumentName.name)»
-								«var dimension = defineDimension(randomList, arg)»
-								<«attrName» dimension="«dimension»">
-							«ELSE»	
-								<«attrName»>
-							«ENDIF»
-								«IF arg.argumentName.name.equals(DistributionValidator::attr_categories.name)»
-									«IF arg.expression.vector != null»
-										«IF arg.expression.vector.expression != null»
-											«var exprVector = arg.expression.vector.expression»
-											«IF exprVector.expressions != null»
-												<«dataType»>«exprVector.expressions.size»</«dataType»>
-											«ENDIF»
-										«ENDIF»
-									«ENDIF»
-								«ELSE»	
-									«arg.expression.toPharmML(dataType)»
-								«ENDIF»	
-							</«attrName»>
-							«ENDIF»
+							«attr.print_DistributionDefault(arg.expression.expression)»
+						«ENDIF»
 					«ENDIF»
+				«ENDFOR»
+			«ELSE»
+				«IF randomList.arguments.unnamedArguments != null»
+					«var mdlAttrs = DistributionValidator::getAttributes(type)»
+					«IF mdlAttrs != null»
+						«FOR i: 0..randomList.arguments.unnamedArguments.size-1»
+							«var arg = randomList.arguments.unnamedArguments.get(i)»
+							«IF mdlAttrs.size - 1 > i»
+								«val mdlAttr = mdlAttrs.get(i)»
+								«val attr = recognizedArgs.get(mdlAttr.name)»
+								«IF attr != null»
+									«attr.print_DistributionDefault(arg.expression)»
+								«ENDIF»
+							«ENDIF»
+						«ENDFOR»
+					«ENDIF»	
 				«ENDIF»
-			«ENDFOR»	
+			«ENDIF»
 		</«type»Distribution>
 		'''
 	}	
 	
-	//For distributions that expect matrix, determine its dimensions
-	//First look for an explicitly specified dimensions
-	protected def defineDimension(RandomList randomList, Argument matrixAttr){
-		var dimension = randomList.arguments.getAttribute(DistributionValidator::attr_dimension.name);
-		if (dimension.length >= 0) {//explicit dimension is given
-			try{
-				Integer::parseInt(dimension);
-			} 
-			catch (NumberFormatException e){}
-		}
-		//compute from data 
-		if (matrixAttr.expression != null){
-			if (matrixAttr.expression.vector != null){
-				val matrix = matrixAttr.expression.vector;
-				if (matrix.expression != null && matrix.expression.expressions != null)
-					return matrix.expression.expressions.size();
-			}
+	protected def print_DistributionDefault(Attribute attr, AnyExpression expr)'''
+		«IF expr != null»
+			«IF matrix_attrs.contains(attr.name)»
+				«var dimension = expr.defineDimension»
+				<«attr.name» dimension="«dimension»">
+			«ELSE»	
+				<«attr.name»>
+			«ENDIF»
+				«IF attr.name.equals(DistributionValidator::attr_categories.name)»
+					«IF expr.vector != null»
+						«IF expr.vector.expression != null»
+							«var exprVector = expr.vector.expression»
+							«IF exprVector.expressions != null»
+								<«attr.type»>«exprVector.expressions.size»</«attr.type»>
+							«ENDIF»
+						«ENDIF»
+					«ENDIF»
+				«ELSE»	
+					«expr.toPharmML(attr.type)»
+				«ENDIF»	
+			</«attr.name»>
+		«ENDIF»
+	'''
+	
+	//For distributions that expect matrix, determine its dimension from the size 
+	protected def defineDimension(AnyExpression expr){
+		if (expr.vector != null){
+			val matrix = expr.vector;
+			if (matrix.expression != null && matrix.expression.expressions != null)
+				return matrix.expression.expressions.size();
 		}
 		return 0;
 	}

@@ -349,12 +349,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 							String value = MdlPrinter.getInstance().getAttribute(args, attr.getDependency().getAttrName());
 							if (attr.getDependency().containsValue(value)) {
 								warning(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
-										MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attr.getName());
+										MdlPackage.Literals.ARGUMENTS__NAMED_ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attr.getName());
 							}
 						}
 					} else {
 						warning(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
-							MdlPackage.Literals.ARGUMENTS__ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attr.getName());
+							MdlPackage.Literals.ARGUMENTS__NAMED_ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attr.getName());
 					}
 				}
 			}
@@ -400,15 +400,17 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//Check that each attribute is defined once
 	private void checkDefinedOnce(Arguments args){
 		HashSet<String> argumentNames = new HashSet<String>();	
-		for (Argument arg: args.getArguments()){
-			if (!argumentNames.contains(arg.getArgumentName().getName())){
-				argumentNames.add(arg.getArgumentName().getName());
-			} else {
-				warning(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
-						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
-						arg.getArgumentName().getName());				
-			}
-		}		
+		if (args.getNamedArguments() != null){
+			for (Argument arg: args.getNamedArguments()){
+				if (!argumentNames.contains(arg.getArgumentName().getName())){
+					argumentNames.add(arg.getArgumentName().getName());
+				} else {
+					warning(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
+							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
+							arg.getArgumentName().getName());				
+				}
+			}		
+		}
 	}	
 	
 	//Do not validate arguments in distributions (this is the job of DistributionValidator) 
@@ -428,20 +430,17 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//Gets a list of category names
 	private List<String> getCategoricalNames(Arguments parentArgs){
 		List<String> categoricalNames = new ArrayList<String>();
-		for (Argument parentArg: parentArgs.getArguments()){
-			if (parentArg.getArgumentName() != null){
+		if (parentArgs.getNamedArguments() != null)
+			for (Argument parentArg: parentArgs.getNamedArguments()){
 				if (parentArg.getArgumentName().getName().equals(attr_type.getName())){
-					if (parentArg.getExpression().getType() != null && 
-						parentArg.getExpression().getType().getType() != null &&
-						parentArg.getExpression().getType().getType().getCategorical() != null){
-						if (parentArg.getExpression().getType().getType().getCategories() != null){
-							for (Category c: parentArg.getExpression().getType().getType().getCategories())
+					if (MdlPrinter.getInstance().isCategorical(parentArg.getExpression().getExpression())){
+						if (parentArg.getExpression().getExpression().getType().getType().getCategories() != null){
+							for (Category c: parentArg.getExpression().getExpression().getType().getType().getCategories())
 								categoricalNames.add(c.getCategoryName().getName());
 						}	
 					}
 				}
 			}
-		}
 		return categoricalNames;
 	}
 	
