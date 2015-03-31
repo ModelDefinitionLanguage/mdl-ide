@@ -200,7 +200,7 @@ class DistributionPrinter extends MdlPrinter{
 		«val tagName = type.substring(0, 1).toUpperCase() + type.substring(1)»
 		<«tagName» xmlns="«xmlns_uncert»" definition="«definition»mixture-model">
 			«IF randomList.arguments.namedArguments != null»
-				«FOR arg: randomList.arguments.namedArguments»
+				«FOR arg: randomList.arguments.namedArguments.arguments»
 					«IF arg.expression.randomList != null»
 						«val weight = arg.expression.randomList.arguments.getAttribute(DistributionValidator::attr_weight.name)»
 						«IF weight.length > 0»
@@ -222,7 +222,7 @@ class DistributionPrinter extends MdlPrinter{
 		'''
 		<«type»Distribution xmlns="«xmlns_uncert»" definition="0.1">
 			«IF randomList.arguments.namedArguments != null»
-				«FOR arg: randomList.arguments.namedArguments»
+				«FOR arg: randomList.arguments.namedArguments.arguments»
 					«IF recognizedArgs.containsKey(arg.argumentName.name)»
 						«val attr = recognizedArgs.get(arg.argumentName.name)»
 						«IF attr != null»
@@ -234,8 +234,8 @@ class DistributionPrinter extends MdlPrinter{
 				«IF randomList.arguments.unnamedArguments != null»
 					«var mdlAttrs = DistributionValidator::getAttributes(type)»
 					«IF mdlAttrs != null»
-						«FOR i: 0..randomList.arguments.unnamedArguments.size-1»
-							«var arg = randomList.arguments.unnamedArguments.get(i)»
+						«FOR i: 0..randomList.arguments.unnamedArguments.arguments.size-1»
+							«var arg = randomList.arguments.unnamedArguments.arguments.get(i)»
 							«IF mdlAttrs.size - 1 > i»
 								«val mdlAttr = mdlAttrs.get(i)»
 								«val attr = recognizedArgs.get(mdlAttr.name)»

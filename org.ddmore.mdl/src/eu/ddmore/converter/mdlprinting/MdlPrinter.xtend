@@ -48,6 +48,8 @@ import org.ddmore.mdl.mdl.SymbolName
 import org.ddmore.mdl.mdl.ImportObjectStatement
 import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.ArgumentExpression
+import org.ddmore.mdl.mdl.NamedArguments
+import org.ddmore.mdl.mdl.UnnamedArguments
 
 class MdlPrinter {
 	
@@ -98,12 +100,12 @@ class MdlPrinter {
 	def isAttributeTrue(Arguments args, String attrName){
 		if (args != null)
 			if (args.namedArguments != null){
-				for (arg: args.namedArguments){
+				for (arg: args.namedArguments.arguments){
 					return arg.expression.isTrue;
 				}
 			}
 			if (args.unnamedArguments != null){
-				for (arg: args.unnamedArguments){
+				for (arg: args.unnamedArguments.arguments){
 					return arg.isTrue;
 				}
 			}
@@ -113,7 +115,7 @@ class MdlPrinter {
 	//Return value of an attribute with a given name
 	def getAttribute(Arguments args, String attrName){
 		if (args != null && args.namedArguments != null)
-			for (arg: args.namedArguments)
+			for (arg: args.namedArguments.arguments)
 				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
 					return arg.expression.toStr
 		return "";
@@ -122,7 +124,7 @@ class MdlPrinter {
 	//Return value of an attribute with a given name
 	def getAttributeExpression(Arguments args, String attrName){
 		if (args != null && args.getNamedArguments != null)
-			for (arg: args.namedArguments)
+			for (arg: args.namedArguments.arguments)
 				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
 					if (arg.expression.expression != null)
 						return arg.expression.expression;
@@ -513,31 +515,42 @@ class MdlPrinter {
 	}
 	
 	def String toStr(Arguments arg){
-		var res  = "";
 		if (arg.namedArguments != null){
-			var iterator = arg.namedArguments.iterator();
-			if (iterator.hasNext ) {
-				var a = iterator.next; 
-				res  = a.argumentName.name + " = " + a.expression.toStr;
-			}
-			while (iterator.hasNext){
-				res  = res + ', ';
-				var a = iterator.next; 
-				res  = res + a.argumentName.name + " = " + a.expression.toStr;
-			}
+			return arg.namedArguments.toStr;
 		}
 		if (arg.unnamedArguments != null){
-			var iterator = arg.unnamedArguments.iterator();
-			if (iterator.hasNext ) {
-				var a = iterator.next; 
-				res  = a.expression.toStr;
-			}
-			while (iterator.hasNext){
-				var a = iterator.next; 
-				res  = res + ', ' + a.expression.toStr;
-			}
+			return arg.unnamedArguments.toStr;
 		}
-		return res;
+		return "";
+	}
+	
+	def String toStr(NamedArguments args){
+		var res = "";
+		var iterator = args.arguments.iterator();
+		if (iterator.hasNext ) {
+			var a = iterator.next; 
+			res  = a.argumentName.name + " = " + a.expression.toStr;
+		}
+		while (iterator.hasNext){
+			res  = res + ', ';
+			var a = iterator.next; 
+			res  = res + a.argumentName.name + " = " + a.expression.toStr;
+		}
+		return res;	
+	}
+	
+	def String toStr(UnnamedArguments args){
+		var res = "";
+		var iterator = args.arguments.iterator();
+		if (iterator.hasNext ) {
+			var a = iterator.next; 
+			res  = a.expression.toStr;
+		}
+		while (iterator.hasNext){
+			var a = iterator.next; 
+			res  = res + ', ' + a.expression.toStr;
+		}
+		return res;	
 	}
 	
 	def String toStr(ArgumentExpression a){

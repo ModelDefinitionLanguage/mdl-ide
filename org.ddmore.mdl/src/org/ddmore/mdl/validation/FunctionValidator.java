@@ -240,7 +240,7 @@ private void validateStandardFunction(FunctionCall call){
 		if (call.getArguments().getNamedArguments() != null){
 			if (functSig.isPassingByName()){
 				//Check that only valid parameters are passed
-				for (Argument arg: call.getArguments().getNamedArguments()){
+				for (Argument arg: call.getArguments().getNamedArguments().getArguments()){
 					if (arg.getArgumentName() != null){
 						Map<String, FunctionParameter> allParams = functSig.getAllParams(); 
 						if (allParams.containsKey(arg.getArgumentName().getName())){
@@ -257,7 +257,7 @@ private void validateStandardFunction(FunctionCall call){
 						}
 					}	
 				HashSet<String> argumentNames = new HashSet<String>();	
-				for (Argument arg: call.getArguments().getNamedArguments()){
+				for (Argument arg: call.getArguments().getNamedArguments().getArguments()){
 					if (!argumentNames.contains(arg.getArgumentName().getName())){
 						argumentNames.add(arg.getArgumentName().getName());
 					} else {
@@ -276,7 +276,7 @@ private void validateStandardFunction(FunctionCall call){
 			}	
 		} else {
 			if (!functSig.isPassingByName()){
-				int actual = call.getArguments().getUnnamedArguments().size();
+				int actual = call.getArguments().getUnnamedArguments().getArguments().size();
 				if (actual != expected){
 					warning(MSG_FUNCTION_INVALID + ": " +
 							call.getIdentifier().getName() + " expects " + expected + " parameter(s).", 
@@ -286,8 +286,8 @@ private void validateStandardFunction(FunctionCall call){
 					return;
 				}
 				List<FunctionParameter> defaultParams = functSig.getDefaultParamSet();
-				for (int i = 0; i < call.getArguments().getUnnamedArguments().size(); i++){
-					ArgumentExpression arg = call.getArguments().getUnnamedArguments().get(i);
+				for (int i = 0; i < call.getArguments().getUnnamedArguments().getArguments().size(); i++){
+					ArgumentExpression arg = call.getArguments().getUnnamedArguments().getArguments().get(i);
 					if (!MdlDataType.validateType(defaultParams.get(i).getType(), arg.getExpression())){
 						warning(MSG_FUNCTION_WRONG_TYPE + ": parameter #" + i + " expects value of type " + 
 								defaultParams.get(i).getType(),

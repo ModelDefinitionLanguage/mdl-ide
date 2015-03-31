@@ -502,12 +502,19 @@ DistributionName:
 ;
 
 Arguments: 
-	namedArguments += Argument (=> ',' namedArguments += Argument)* |
-	unnamedArguments += ArgumentExpression (=> ',' unnamedArguments += ArgumentExpression)*
+	namedArguments = NamedArguments | unnamedArguments = UnnamedArguments
+;
+
+NamedArguments:
+	arguments += Argument (=> ',' arguments += Argument)* 
+;
+
+UnnamedArguments:
+	arguments += ArgumentExpression (=> ',' arguments += ArgumentExpression)*
 ;
 
 Argument:
-	argumentName = ArgumentName ("=" expression = ArgumentExpression)  
+	argumentName = ArgumentName "=" expression = ArgumentExpression 
 ;
 
 ArgumentExpression:

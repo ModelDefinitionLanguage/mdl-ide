@@ -409,7 +409,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		Arguments args = (Arguments)argContainer;
 		RandomList distr = (RandomList)argContainer.eContainer();
 		HashSet<String> argumentNames = new HashSet<String>();	
-		for (Argument arg: args.getNamedArguments()){
+		for (Argument arg: args.getNamedArguments().getArguments()){
 			if (!argumentNames.contains(arg.getArgumentName().getName())){
 				argumentNames.add(arg.getArgumentName().getName());
 			} else {

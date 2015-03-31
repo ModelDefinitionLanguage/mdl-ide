@@ -178,7 +178,7 @@ public class FunctionSignature {
 			for (FunctionParameter param: params.getParameterSet()){
 				Boolean found = false;
 				if (arguments.getNamedArguments() != null){
-					for (Argument arg: arguments.getNamedArguments()){
+					for (Argument arg: arguments.getNamedArguments().getArguments()){
 						String argName = arg.getArgumentName().getName();
 						if (argName.equals(param.getName())){
 							found = true;

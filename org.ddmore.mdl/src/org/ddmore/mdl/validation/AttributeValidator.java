@@ -401,7 +401,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	private void checkDefinedOnce(Arguments args){
 		HashSet<String> argumentNames = new HashSet<String>();	
 		if (args.getNamedArguments() != null){
-			for (Argument arg: args.getNamedArguments()){
+			for (Argument arg: args.getNamedArguments().getArguments()){
 				if (!argumentNames.contains(arg.getArgumentName().getName())){
 					argumentNames.add(arg.getArgumentName().getName());
 				} else {
@@ -431,7 +431,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	private List<String> getCategoricalNames(Arguments parentArgs){
 		List<String> categoricalNames = new ArrayList<String>();
 		if (parentArgs.getNamedArguments() != null)
-			for (Argument parentArg: parentArgs.getNamedArguments()){
+			for (Argument parentArg: parentArgs.getNamedArguments().getArguments()){
 				if (parentArg.getArgumentName().getName().equals(attr_type.getName())){
 					if (MdlPrinter.getInstance().isCategorical(parentArg.getExpression().getExpression())){
 						if (parentArg.getExpression().getExpression().getType().getType().getCategories() != null){

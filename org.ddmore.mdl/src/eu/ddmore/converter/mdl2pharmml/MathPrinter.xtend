@@ -104,7 +104,7 @@ class MathPrinter{
 	def print_Categorical(List categories) '''
 		<Categorical>
 		«IF categories.arguments.namedArguments != null»
-			«FOR c : categories.arguments.namedArguments»
+			«FOR c : categories.arguments.namedArguments.arguments»
 				«IF c.argumentName != null»
 					<Category catId=«c.argumentName.name»/>
 				«ENDIF»
@@ -140,7 +140,7 @@ class MathPrinter{
 				}
 				else {
 					//Unnamed parameters in the default order: start, stepSize, repetition
-					val params = call.arguments.unnamedArguments;
+					val params = call.arguments.unnamedArguments.arguments;
 					if (params.size == 3)
 						return print_ct_Sequence(
 							params.get(0).expression.print_Math_Expr.toString,
@@ -171,17 +171,17 @@ class MathPrinter{
 		if(call.identifier.name.equals("ln")) functName = "log";
 		if(call.identifier.name.equals("lfactorial")) functName = "factln";
 		if (call.arguments.unnamedArguments != null) {
-			var argNum = call.arguments.unnamedArguments.size;
+			var argNum = call.arguments.unnamedArguments.arguments.size;
 			'''
 				«IF argNum == 1»
 					<Uniop op="«functName»">
-						«call.arguments.unnamedArguments.get(0).expression.print_Math_Expr»
+						«call.arguments.unnamedArguments.arguments.get(0).expression.print_Math_Expr»
 					</Uniop>
 				«ELSE»
 					«IF argNum == 2»
 						<Binop op="«functName»">
-							«call.arguments.unnamedArguments.get(0).expression.print_Math_Expr»
-							«call.arguments.unnamedArguments.get(1).expression.print_Math_Expr»
+							«call.arguments.unnamedArguments.arguments.get(0).expression.print_Math_Expr»
+							«call.arguments.unnamedArguments.arguments.get(1).expression.print_Math_Expr»
 						</Binop>
 					«ENDIF»
 				«ENDIF»
@@ -194,7 +194,7 @@ class MathPrinter{
 		<math:FunctionCall>
 			«call.identifier.print_ct_SymbolRef»
 			«IF call.arguments.namedArguments != null»
-				«FOR arg : call.arguments.namedArguments»
+				«FOR arg : call.arguments.namedArguments.arguments»
 					«arg.print_Math_FunctionArgument»
 				«ENDFOR»
 			«ENDIF»

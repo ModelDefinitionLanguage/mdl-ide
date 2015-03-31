@@ -388,12 +388,24 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		}
 	}
 	
+	protected void  _createNode(IOutlineNode parentNode, NamedArguments st){
+		for (EObject obj: st.eContents()){
+			createNode(parentNode, obj);
+		}
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, UnnamedArguments st){
+		for (EObject obj: st.eContents()){
+			createNode(parentNode, obj);
+		}
+	}
+	
 	protected void  _createNode(IOutlineNode parentNode, Argument a){
 		createEStructuralFeatureNode(parentNode,
-				a,
-				MdlPackage.Literals.ARGUMENT__EXPRESSION,
-				_image(a),
-				a.getArgumentName().getName(),
+			a,
+			MdlPackage.Literals.ARGUMENT__EXPRESSION,
+			_image(a),
+			a.getArgumentName().getName(),
 		false);
 	}
 	
@@ -502,6 +514,15 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 						'(' + name + ')' : name,
 				false);
 		}
+	}
+	
+	protected void  _createNode(IOutlineNode parentNode, RandomList l){
+		createEStructuralFeatureNode(parentNode,
+			l,
+			MdlPackage.Literals.RANDOM_LIST__ARGUMENTS,
+			_image(l),
+			l.getType().getName(),
+			false);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, List l){

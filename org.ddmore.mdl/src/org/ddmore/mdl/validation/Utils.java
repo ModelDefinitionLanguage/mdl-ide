@@ -45,7 +45,7 @@ public class Utils {
 	public static List<String> getArgumentNames(Arguments args){
 		List<String> argumentNames = new ArrayList<String>();	
 		if (args.getNamedArguments() != null)
-			for (Argument arg: args.getNamedArguments())
+			for (Argument arg: args.getNamedArguments().getArguments())
 				if (!argumentNames.contains(arg.getArgumentName().getName()))
 					argumentNames.add(arg.getArgumentName().getName());
 		return argumentNames;
@@ -326,7 +326,7 @@ public class Utils {
 						for (SymbolDeclaration s: st.getOdeBlock().getVariables()){
 							if (s.getSymbolName() != null && s.getList() != null){
 								if (s.getList().getArguments().getNamedArguments() != null){
-					    			for (Argument arg: s.getList().getArguments().getNamedArguments()){
+					    			for (Argument arg: s.getList().getArguments().getNamedArguments().getArguments()){
 					    				if (arg.getArgumentName().getName().equals(AttributeValidator.attr_deriv.getName())){
 					    					if (!deriv_vars.contains(s.getSymbolName().getName()))
 					    						deriv_vars.add(s.getSymbolName().getName());

@@ -63,7 +63,7 @@ class PKMacrosPrinter{
 	protected def print_PKAttributes(Arguments args){
 		var res = "";
 		if (args.namedArguments != null){
-			for (a: args.namedArguments){
+			for (a: args.namedArguments.arguments){
 				var attrName = "";
 				if (a.argumentName != null){
 					attrName = a.argumentName.name;

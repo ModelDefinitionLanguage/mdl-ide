@@ -145,7 +145,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			public void apply(EObject element, IModificationContext context) {
 				EObject container = element.eContainer();
 				Arguments args = (Arguments)container;
-				args.getNamedArguments().remove(element);
+				args.getNamedArguments().getArguments().remove(element);
 			}
 		});
 	}
@@ -162,7 +162,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 				if (attribute != null){
 					Argument newArg = createArgument(attribute);
 					Arguments args = (Arguments)element;
-					args.getNamedArguments().add(0, newArg);
+					args.getNamedArguments().getArguments().add(0, newArg);
 				}
 			} 
 		});
@@ -176,7 +176,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			public void apply(EObject element, IModificationContext context) {
 				EObject container = element.eContainer();
 				Arguments args = (Arguments)container;
-				args.getNamedArguments().remove(element);
+				args.getNamedArguments().getArguments().remove(element);
 			}
 		});
 	}
@@ -193,7 +193,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			public void apply(EObject element, IModificationContext context) {
 				EObject container = element.eContainer();
 				Arguments args = (Arguments)container;
-				args.getNamedArguments().remove(element);
+				args.getNamedArguments().getArguments().remove(element);
 			}
 		});
 	}
@@ -211,7 +211,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		        		if (attr.getName().equals(tokens[1])) {
 							Argument newArg = createArgument(attr);
 							Arguments args = (Arguments)element;
-							args.getNamedArguments().add(0, newArg);
+							args.getNamedArguments().getArguments().add(0, newArg);
 		        		}
 			        }
 			}
@@ -226,7 +226,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			public void apply(EObject element, IModificationContext context) {
 				EObject container = element.eContainer();
 				Arguments args = (Arguments)container;
-				args.getNamedArguments().remove(element);
+				args.getNamedArguments().getArguments().remove(element);
 			}
 		});
 	}
@@ -390,7 +390,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		Arguments args = MdlFactory.eINSTANCE.createArguments();				
 		for (int i = 0; i< attributes.length; i++){
 			Argument attr = createArgument(attributes[i]);
-			args.getNamedArguments().add(attr);
+			args.getNamedArguments().getArguments().add(attr);
 		}
 		list.setArguments(args);
 		return list;
@@ -611,7 +611,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		Arguments args = MdlFactory.eINSTANCE.createArguments();				
 		for (int i = 0; i < attributes.length; i++){
 			Argument attr = createArgument(attributes[i]);
-			args.getNamedArguments().add(attr);
+			args.getNamedArguments().getArguments().add(attr);
 		}
 		list.setArguments(args);
 		return list;
