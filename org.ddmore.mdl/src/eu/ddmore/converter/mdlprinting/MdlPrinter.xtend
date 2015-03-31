@@ -244,7 +244,7 @@ class MdlPrinter {
 	def toStr(VarType t) {
 		if (t.categorical != null){
 			var res = t.categorical;
-			if (t.categories != null){
+			if (!t.categories.nullOrEmpty){
 				res = res + "("; 
 				var iterator = t.categories.iterator();
 				if (iterator.hasNext ) {
