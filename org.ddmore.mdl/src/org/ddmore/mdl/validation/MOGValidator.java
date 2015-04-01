@@ -186,20 +186,20 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 	private void validateMOG_Structural_Model_vs_Parameter(ModelObject mObj, ParameterObject pObj, MOGObject mog){
 		List<String> structuralVars = new ArrayList<String>();
 		//Get structural variables
-		for (ModelObjectBlock b: mObj.getBlocks())
-			if (b.getStructuralParametersBlock() != null)
-				for (SymbolDeclaration s: b.getStructuralParametersBlock().getParameters())
+		for (ParameterObjectBlock b: pObj.getBlocks())
+			if (b.getStructuralBlock() != null)
+				for (SymbolDeclaration s: b.getStructuralBlock().getParameters())
 					if (s.getSymbolName() != null) structuralVars.add(s.getSymbolName().getName());
-		for (ParameterObjectBlock b: pObj.getBlocks()){
-			if (b.getStructuralBlock() != null){
-				for (SymbolDeclaration s: b.getStructuralBlock().getParameters()){
+		for (ModelObjectBlock b: mObj.getBlocks()){
+			if (b.getStructuralParametersBlock() != null){
+				for (SymbolDeclaration s: b.getStructuralParametersBlock().getParameters()){
 					if (s.getSymbolName() != null){
 						String varName = s.getSymbolName().getName();
 						if (varName.length() > 0){
 							if (!structuralVars.contains(varName))
 								warning(MSG_STRUCTURAL_MISMATCH + 
 									": no mapping for parameter " + varName + " found in " + 
-									Utils.getObjectName(mObj).getName() + " object", 
+									Utils.getObjectName(pObj).getName() + " object", 
 									MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
 									MSG_STRUCTURAL_MISMATCH, mog.getIdentifier());
 						}
@@ -213,20 +213,20 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 	private void validateMOG_Variability_Model_vs_Parameter(ModelObject mObj, ParameterObject pObj, MOGObject mog){
 		List<String> variabilityVars = new ArrayList<String>();
 		//Get structural variables
-		for (ModelObjectBlock b: mObj.getBlocks())
-			if (b.getVariabilityParametersBlock() != null)
-				for (SymbolDeclaration s: b.getVariabilityParametersBlock().getParameters())
+		for (ParameterObjectBlock b: pObj.getBlocks())
+			if (b.getVariabilityBlock() != null)
+				for (SymbolDeclaration s: b.getVariabilityBlock().getParameters())
 					if (s.getSymbolName() != null) variabilityVars.add(s.getSymbolName().getName());
-		for (ParameterObjectBlock b: pObj.getBlocks()){
-			if (b.getVariabilityBlock() != null){
-				for (SymbolDeclaration s: b.getVariabilityBlock().getParameters()){
+		for (ModelObjectBlock b: mObj.getBlocks()){
+			if (b.getVariabilityParametersBlock() != null){
+				for (SymbolDeclaration s: b.getVariabilityParametersBlock().getParameters()){
 					if (s.getSymbolName() != null){
 						String varName = s.getSymbolName().getName();
 						if (varName.length() > 0){
 							if (!variabilityVars.contains(varName))
 								warning(MSG_VARIABILITY_MISMATCH + 
 									": no mapping for parameter " + varName + " found in " + 
-									Utils.getObjectName(mObj).getName() + " object", 
+									Utils.getObjectName(pObj).getName() + " object", 
 									MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
 									MSG_VARIABILITY_MISMATCH,  mog.getIdentifier());
 						}
