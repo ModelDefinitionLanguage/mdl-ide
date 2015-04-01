@@ -14,7 +14,6 @@ import java.util.List;
 import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
-import org.ddmore.mdl.mdl.Category;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VariabilityType;
@@ -265,30 +264,16 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	@Check
 	public void checkAllArguments(Argument argument){
-		EObject argsContainer = argument.eContainer();
-		if (!(argsContainer instanceof ArgumentsImpl)) return;
-		EObject container = findAttributeContainer(argsContainer.eContainer());
+		EObject namedArgsContainer = argument.eContainer();
+		EObject argsContainer = namedArgsContainer.eContainer();
+		EObject blockContainer = findAttributeContainer(argsContainer);
 		Arguments args = (Arguments)argsContainer;
-		if (skipAttributeValidation(container, args)) return;
-		List<Attribute> knownAttributes = getListAttributes(container);
+		if (skipAttributeValidation(blockContainer, args)) return;
+		List<Attribute> knownAttributes = getListAttributes(blockContainer);
 		if (knownAttributes != null){
 			//Check that the attribute name is valid
 			List<String> attributeNames = new ArrayList<String>();
 			attributeNames.addAll(Utils.getAllNames(knownAttributes));
-			//For categorical values, recognise user defined categories as attributes
-			if (container instanceof DataInputBlockImpl){
-				EObject parentArgsContainer = argsContainer;
-				if (args.eContainer() instanceof ListImpl){
-					//Arguments -> List -> AnyExpression -> Argument
-					if (args.eContainer().eContainer().eContainer() instanceof ArgumentImpl)
-						parentArgsContainer = args.eContainer().eContainer().eContainer().eContainer();
-				}
-				if (parentArgsContainer instanceof ArgumentsImpl){
-					Arguments parentArgs = (Arguments) parentArgsContainer;
-					List<String> categoricalNames = getCategoricalNames(parentArgs);
-					attributeNames.addAll(categoricalNames);
-				}
-			}
 			checkDefinedAttributes(argument, args, knownAttributes, attributeNames);
 			checkDefinedOnce(args);
 		}
@@ -323,10 +308,11 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	@Check
 	public void checkAllBlockArguments(Argument argument){
-		EObject argsContainer = argument.eContainer();
-		if (!(argsContainer instanceof ArgumentsImpl)) return;
-		EObject container = argsContainer.eContainer();
-		List<Attribute> knownAttributes = getBlockAttributes(container);
+		EObject namedArgsContainer = argument.eContainer();
+		EObject argsContainer = namedArgsContainer.eContainer();
+		//NamedArguments -> Arguments -> Block
+		EObject blockContainer = argsContainer.eContainer();
+		List<Attribute> knownAttributes = getBlockAttributes(blockContainer);
 		if (knownAttributes != null){
 			Arguments args = (Arguments)argsContainer;
 			List<String> attributeNames = new ArrayList<String>();
@@ -425,23 +411,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		EObject container2 = container1.eContainer();
 		if (container2 instanceof SymbolDeclarationImpl) return false;
 		return true;
-	}
-	
-	//Gets a list of category names
-	private List<String> getCategoricalNames(Arguments parentArgs){
-		List<String> categoricalNames = new ArrayList<String>();
-		if (parentArgs.getNamedArguments() != null)
-			for (Argument parentArg: parentArgs.getNamedArguments().getArguments()){
-				if (parentArg.getArgumentName().getName().equals(attr_type.getName())){
-					if (MdlPrinter.getInstance().isCategorical(parentArg.getExpression().getExpression())){
-						if (parentArg.getExpression().getExpression().getType().getType().getCategories() != null){
-							for (Category c: parentArg.getExpression().getExpression().getType().getType().getCategories())
-								categoricalNames.add(c.getCategoryName().getName());
-						}	
-					}
-				}
-			}
-		return categoricalNames;
 	}
 	
 	//Look for the parent block containing lists with attributes

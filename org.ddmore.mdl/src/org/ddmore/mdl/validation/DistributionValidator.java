@@ -18,7 +18,6 @@ import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.RandomList;
-import org.ddmore.mdl.mdl.impl.ArgumentsImpl;
 import org.ddmore.mdl.mdl.impl.RandomListImpl;
 import org.ddmore.mdl.types.DistributionType;
 import org.ddmore.mdl.types.MdlDataType;
@@ -402,9 +401,10 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	
 	@Check
 	public void checkAllArguments(Argument argument){
-		EObject argContainer = argument.eContainer();	
-		if (!(argContainer instanceof ArgumentsImpl)) return;
-		if (!(argContainer.eContainer() instanceof RandomListImpl)) return; 
+		EObject namedArgContainer = argument.eContainer();	
+		EObject argContainer = namedArgContainer.eContainer();	
+		EObject blockContainer = argContainer.eContainer().eContainer();
+		if (!(blockContainer instanceof RandomListImpl)) return; 
 		
 		Arguments args = (Arguments)argContainer;
 		RandomList distr = (RandomList)argContainer.eContainer();

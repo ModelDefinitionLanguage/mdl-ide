@@ -247,20 +247,20 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	
 	protected void  _createNode(IOutlineNode parentNode, ModelObject obj) {
 		createEStructuralFeatureNode(parentNode,
-				obj,
-				MdlPackage.Literals.MODEL_OBJECT__BLOCKS,
-				_image(obj),
-				((MclObject) obj.eContainer()).getObjectName().getName(),
+			obj,
+			MdlPackage.Literals.MODEL_OBJECT__BLOCKS,
+			_image(obj),
+			((MclObject) obj.eContainer()).getObjectName().getName(),
 			false);
 	}
 	
 	protected void  _createNode(IOutlineNode parentNode, ParameterObject obj) {
 		createEStructuralFeatureNode(parentNode,
-				obj,
-				MdlPackage.Literals.PARAMETER_OBJECT__BLOCKS,
-				_image(obj),
-				((MclObject) obj.eContainer()).getObjectName().getName(),
-				false);
+			obj,
+			MdlPackage.Literals.PARAMETER_OBJECT__BLOCKS,
+			_image(obj),
+			((MclObject) obj.eContainer()).getObjectName().getName(),
+			false);
 	}
 
 	protected void  _createNode(IOutlineNode parentNode, TaskObject obj) {
@@ -274,10 +274,10 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	
 	protected void  _createNode(IOutlineNode parentNode, DesignObject obj) {
 		createEStructuralFeatureNode(parentNode,
-				obj,
-				MdlPackage.Literals.DESIGN_OBJECT__BLOCKS,
-				_image(obj),
-				((MclObject) obj.eContainer()).getObjectName().getName(),
+			obj,
+			MdlPackage.Literals.DESIGN_OBJECT__BLOCKS,
+			_image(obj),
+			((MclObject) obj.eContainer()).getObjectName().getName(),
 			false);
 	}
 	
@@ -405,7 +405,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			a,
 			MdlPackage.Literals.ARGUMENT__EXPRESSION,
 			_image(a),
-			a.getArgumentName().getName(),
+			(a.getArgumentName() != null)? a.getArgumentName().getName(): "undefined",
 		false);
 	}
 	

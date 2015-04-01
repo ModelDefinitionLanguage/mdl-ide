@@ -50,6 +50,7 @@ import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
 import org.ddmore.mdl.mdl.ArgumentExpression
 import org.ddmore.mdl.mdl.NamedArguments
 import org.ddmore.mdl.mdl.UnnamedArguments
+import java.util.ArrayList
 
 class MdlPrinter {
 	
@@ -71,6 +72,18 @@ class MdlPrinter {
 	def isCategorical(AnyExpression e){
 		if (e != null && e.type != null && e.type.type != null && e.type.type.categorical != null) return true;
 		return false;
+	}
+	
+	def getCategoricalNames(AnyExpression argExpr){
+		if (argExpr.isCategorical) {
+			var categoricalNames = new ArrayList<String>();
+			if (argExpr.getType().getType().getCategories() != null){
+				for (c: argExpr.getType().getType().getCategories())
+					categoricalNames.add(c.getCategoryName().getName());
+			}
+			return categoricalNames;
+		}
+		return null;
 	}
 	
 	def isContinuous(AnyExpression e){
@@ -217,7 +230,11 @@ class MdlPrinter {
 	}
 	
 	def String toStr(ImportObjectStatement st){
-		var res = st.symbolName.toStr + " = " + st.objectName.name;
+		var res = "";
+		if (st.symbolName != null)
+			res = st.symbolName.toStr;
+		if (st.objectName != null)
+			res = res + " = " + st.objectName.name;
 		if (st.importURI != null){
 			res  = res + " from file " + st.importURI;
 		}
