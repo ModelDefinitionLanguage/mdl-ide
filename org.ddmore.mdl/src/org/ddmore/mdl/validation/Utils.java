@@ -305,7 +305,7 @@ public class Utils {
 	
 	public static List<String> getDependencies(Expression e){
 		List<String> dependencies = new ArrayList<String>();
-		TreeIterator<EObject> iterator = e.eResource().getAllContents();
+		TreeIterator<EObject> iterator = e.eAllContents();
 	    while (iterator.hasNext()){
 	    	EObject obj = iterator.next();
 	    	if (obj instanceof SymbolNameImpl){

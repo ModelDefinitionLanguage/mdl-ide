@@ -14,6 +14,7 @@ import org.ddmore.mdl.mdl.Expression
 import java.util.Comparator
 import java.util.Map
 import java.util.TreeMap
+import java.util.ArrayList
 
 class ModelDefinitionPrinter {
 	protected extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -33,6 +34,7 @@ class ModelDefinitionPrinter {
 	def print_mdef_ModelDefinition(MOGObject mog){
 		var objects = Utils::getMOGObjects(mog);
 		var mObj = Utils::getModelObject(objects);
+		if (mObj == null) return '''''';
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«print_mdef_VariabilityModel»
@@ -104,12 +106,57 @@ class ModelDefinitionPrinter {
 	//CovariateModel (transformation with reference)
 	protected def print_mdef_CovariateModel(ModelObject mObj){
 		var model = "";
-		if (mObj != null){
-			if (mObj != null)
-			for (b: mObj.blocks){
-				if (b.covariateBlock != null){
-					for (s: b.covariateBlock.variables){
+		var skipped = new ArrayList<String>();
+		//First print transformed covariates (and exclude them from the list to avoid double defintiion) 
+		for (b: mObj.blocks){
+			if (b.covariateBlock != null){
+				for (s: b.covariateBlock.variables){
+					var covName = s.symbolName.name;
+					var covType = "Continuous";
+					//Print transformed covariates
+					var transformation = "";
+					if (s.expression != null){
+						var dependencies = Utils::getDependencies(s.expression);
+						var isTransformed = false;
+						var continue = true; //no 'break' command in xText
+						for (v: dependencies){
+							if (cm_vars.contains(v) && continue){
+								isTransformed = true;
+								covName = v;
+								skipped.add(covName); 
+								continue = false;
+							} 
+						}
+						if (isTransformed){
+							transformation =  '''
+								<«covType»>
+									<Transformation>
+									    <TransformedCovariate symbId="«s.symbolName.name»"></TransformedCovariate>
+										«s.expression.print_Math_Equation»
+									</Transformation>
+								</«covType»>
+								'''
+								skipped.add(s.symbolName.name);
+							}
+					}
+					model = model + '''
+					«IF transformation.length > 0»
+						<Covariate symbId="«covName»">
+							«transformation»
+						</Covariate>
+					«ENDIF»	
+					'''
+				}
+			}
+		}
+		//Then print all remaining covariates
+		for (b: mObj.blocks){
+			if (b.covariateBlock != null){
+				for (s: b.covariateBlock.variables){
+					var covName = s.symbolName.name;
+					if (!skipped.contains(covName)){
 						var covType = "Continuous";
+						//Print categorical covariates
 						var categorical = "";
 						if (s.list != null){
 							var type = getAttributeExpression(s.list.arguments, AttributeValidator::attr_type.name);
@@ -118,32 +165,15 @@ class ModelDefinitionPrinter {
 								categorical = '''«type.print_Categorical»''';
 							}
 						}
-						var transformation = "";
-						if (s.expression != null){
-							transformation =  '''
-								<«covType»>
-									<Transformation>
-										«s.expression.print_Math_Equation»
-									</Transformation>
-								</«covType»>
-								'''
-						}
-						if (s.symbolName != null){
-							model = model + 
-							'''
-							<Covariate symbId="«s.symbolName.name»">
-								«IF transformation.length > 0»
-									«transformation»
-								«ELSE» 
-									«IF categorical.length > 0»
-										«categorical»
-									«ELSE»
-										<«covType»/>
-									«ENDIF»
-								«ENDIF»	
-							</Covariate>
-						'''
-						}
+						model = '''
+						<Covariate symbId="«covName»">
+							«IF categorical.length > 0»
+								«categorical»
+							«ELSE»
+								<«covType»/>
+							«ENDIF»
+						</Covariate>
+						''' + model;
 					}
 				}
 			}
@@ -496,39 +526,48 @@ class ModelDefinitionPrinter {
 		'''	+ res;
 		if (type != null) {
 			var modelType = type.toStr;
-			if (modelType.equals(IndividualVarType::GENERAL.toString) || 
-				modelType.equals(IndividualVarType::LINEAR.toString)){
-				//Gaussian models
+			//Gaussian models
+			if (modelType.equals(IndividualVarType::GENERAL.toString) || modelType.equals(IndividualVarType::LINEAR.toString)){
+				//Transformation
 				val trans = list.arguments.getAttribute(AttributeValidator::attr_trans.name);
+				//Covariate model
+				var covariateContent = '''''';
+				val cov = list.arguments.getAttributeExpression(AttributeValidator::attr_cov.name);
+				val fixEff = list.arguments.getAttributeExpression(AttributeValidator::attr_fixEff.name);
+				if (cov != null && fixEff != null){
+					if (cov.vector!= null && fixEff.vector != null &&
+						cov.vector.expression != null && fixEff.vector.expression != null)
+						covariateContent = '''«print_Covariate(cov.vector.expression, fixEff.vector.expression)»'''
+					else 
+					if (cov.expression != null && fixEff.expression != null){
+						covariateContent = '''«print_Covariate(cov.expression, fixEff.expression)»'''
+					}	
+				}	
+				//Random effect
 				val ranEff = list.arguments.getAttributeExpression(AttributeValidator::attr_ranEff.name);
 				var ranEffExpr = '''''';
 				if (ranEff != null){
 					if (ranEff.expression != null) ranEffExpr = '''«ranEff.expression.print_Math_Expr»'''
 					if (ranEff.vector != null) ranEff.vector.print_ct_Vector;
-				}
-				var covariateContent = '''''';
+				}				
+				//Population parameter
 				var popContent = '''''';
+				val pop = list.arguments.getAttributeExpression(AttributeValidator::attr_pop.name);
+				if (pop != null) popContent = '''«pop.print_Assign»''';
+				//General vs. linear model - differences
 				var covariateType = "GeneralCovariate";
-				//Linear model
 				if (modelType.equals(IndividualVarType::LINEAR.toString)) {
-					covariateType = "LinearCovariate";		
-					val pop = list.arguments.getAttributeExpression(AttributeValidator::attr_pop.name);
-					if (pop != null) popContent = '''«pop.print_PopulationParameter»''';
-					val cov = list.arguments.getAttributeExpression(AttributeValidator::attr_cov.name);
-					val fixEff = list.arguments.getAttributeExpression(AttributeValidator::attr_fixEff.name);
-					if (cov != null && fixEff != null){
-						if (cov.vector!= null && fixEff.vector != null &&
-							cov.vector.expression != null && fixEff.vector.expression != null)
-							covariateContent = '''«print_Covariate(cov.vector.expression, fixEff.vector.expression)»'''
-						else 
-						if (cov.expression != null && fixEff.expression != null){
-							covariateContent = '''«print_Covariate(cov.expression, fixEff.expression)»'''
-						}	
-					}
-				} else {
-					val group = list.arguments.getAttributeExpression(AttributeValidator::attr_group.name);
-					if (group != null) covariateContent = '''«group.print_Assign»''';
-				}
+					covariateType = "LinearCovariate";	
+					if (popContent != null) popContent = '''
+						<PopulationParameter>
+							«popContent»
+						</PopulationParameter>
+				''';
+				}	
+				//} else {
+				//	val group = list.arguments.getAttributeExpression(AttributeValidator::attr_group.name);
+				//	if (group != null) covariateContent = '''«group.print_Assign»''';
+				//}
 				return 
 				'''
 					<GaussianModel>
@@ -551,12 +590,6 @@ class ModelDefinitionPrinter {
 			}
 		}
 	}
-	
-	protected def print_PopulationParameter(AnyExpression pop)'''
-		<PopulationParameter>
-			«pop.print_Assign»
-		</PopulationParameter>
-	'''
 	
 	protected def print_Covariate(VectorExpression cov, VectorExpression ranEff){
 		var res = '''''';

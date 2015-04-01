@@ -100,7 +100,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_cov = new Attribute("cov", 
 			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
-	final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
+	//final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
 	
 	/*PKMACRO*/
 	final public static Attribute attr_macro = new Attribute("macro", MdlDataType.TYPE_PK_MACRO, true);
@@ -199,7 +199,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			attr_eps, attr_prediction_ref, attr_trans);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
-	final public static List<Attribute> attrs_individualVariables = Arrays.asList(attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff, attr_group);
+	final public static List<Attribute> attrs_individualVariables = Arrays.asList(attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff);//, attr_group);
 	final public static List<Attribute> attrs_pkMacro = Arrays.asList(
 			attr_macro, attr_type_nat, attr_amount_ref, attr_volume, attr_from, attr_to, 
 			attr_target, attr_k, attr_ka, attr_kt, attr_p, attr_tlag, attr_param);	
