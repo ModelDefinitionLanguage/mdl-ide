@@ -22,7 +22,8 @@ class ReferenceResolver{
 	protected var cm_vars = new ArrayList<String>();
 	protected var pm_vars = new ArrayList<String>();	  
 	protected var om_vars = new ArrayList<String>();	  
-	protected var sm_vars = new ArrayList<String>();	 
+	protected var sm_vars = new ArrayList<String>();	
+	protected var cm_assigned_vars = new ArrayList<String>();
 		
 	protected def prepareCollections(MOGObject mog){
 		for (o: Utils::getMOGObjects(mog)){
@@ -31,7 +32,8 @@ class ReferenceResolver{
 				vm_err_vars = o.modelObject.getLevelVars(LevelType::OBSERVATION);
 				vm_mdl_vars = o.modelObject.getLevelVars(LevelType::MODEL)
 				//CovariateModel				
-				cm_vars = o.modelObject.getCovariateVars();
+				cm_vars = o.modelObject.getCovariateVars;
+				cm_assigned_vars = o.modelObject.getAssignedCovariateVars;
 				//StructuralModel
 				sm_vars = o.modelObject.getStructuralVars;	
 				//ParameterModel
@@ -67,6 +69,28 @@ class ReferenceResolver{
 		}
 		return covariateVars;		
 	}
+	
+	//Return covariates with assigned expressions which are not transformations of other covariates
+	protected def getAssignedCovariateVars(ModelObject obj){
+		var assignedVars = newArrayList;
+		for (b: obj.blocks){
+			if (b.covariateBlock != null){
+				for (s: b.covariateBlock.variables){
+					if (s.symbolName != null && s.expression != null){
+						var dependencies = Utils::getDependencies(s.expression);
+						var isTransformed = false;
+						for (v: dependencies)
+							if (cm_vars.contains(v)) isTransformed = true;
+						if (!isTransformed){
+							assignedVars.add(s.symbolName.name);
+						}
+					}
+				}
+			}					
+		}
+		return assignedVars;		
+	}
+	
 	
 	//+ Returns declarations for ParameterModel
 	protected def getParameters(ModelObject obj){		

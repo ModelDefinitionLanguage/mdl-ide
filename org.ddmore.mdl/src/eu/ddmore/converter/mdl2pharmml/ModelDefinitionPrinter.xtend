@@ -4,7 +4,6 @@ import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.ModelObject
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.mdl.IndividualVarType
-import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.mdl.VariabilityType
@@ -464,7 +463,7 @@ class ModelDefinitionPrinter {
 				«ENDIF»
 				«IF st.list != null»
 					«st.list.print_List»
-				«ENDIF»
+				«ENDIF» 
 			</«tag»>
 			'''
 	}
@@ -476,7 +475,7 @@ class ModelDefinitionPrinter {
 		val type = list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
 		if (type.isCategorical){
 			//Categorical variables
-			if (type.type.type.categories != null && type.type.type.categories.size > 1){
+			if (type.type.type.categories != null && type.type.type.categories.size > 0){
 				assign = '''«type.print_Categorical»'''
 			} else {
 				val define = list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);

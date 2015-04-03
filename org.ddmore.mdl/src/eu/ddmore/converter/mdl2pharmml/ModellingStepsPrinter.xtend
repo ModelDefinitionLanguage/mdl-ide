@@ -11,6 +11,7 @@ import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.mdl.ModelObject
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -22,13 +23,14 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 	def print_msteps_ModellingSteps(MOGObject mog){
 		var objects = Utils::getMOGObjects(mog);
+		var mObj = Utils::getModelObject(objects);
 		var pObj = Utils::getParameterObject(objects);
 		var dObj = Utils::getDataObject(objects);
 		var tObj = Utils::getTaskObject(objects);
 
 		var res = "";
 		var dependencies = ""; 
-		if (tObj != null && pObj != null && dObj != null) {
+		if (mObj != null && dObj != null && pObj != null && tObj != null) {
 			res = res + dObj.print_ds_TargetTool;
 			res = res + mog.print_ds_TargetDataSet;
 			var index = 1;
@@ -38,9 +40,9 @@ class ModellingStepsPrinter extends DataSetPrinter{
 					var stepType = BLK_ESTIM_STEP;
 					if (b.simulateBlock != null) stepType = BLK_SIMUL_STEP;
 					if (stepType.equals(BLK_ESTIM_STEP)){
-						res = res + print_msteps_EstimationStep(stepType + index, index, dObj, pObj, tObj);
+						res = res + print_msteps_EstimationStep(stepType + index, index, mObj, dObj, pObj, tObj);
 					} else {
-						res = res + print_msteps_SimulationStep(stepType + index, index, dObj, pObj, tObj);
+						res = res + print_msteps_SimulationStep(stepType + index, index, mObj, dObj, pObj, tObj);
 					}
 					dependencies  = dependencies +
 					'''
@@ -67,11 +69,12 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 	// III.a Estimation Step
 	////////////////////////////////////////////////
-	protected def print_msteps_EstimationStep(String stepId, Integer order, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
+	protected def print_msteps_EstimationStep(String stepId, Integer order, ModelObject mObj, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
 		<EstimationStep oid="«stepId»">
 			«dObj.print_mdef_TargetToolReference»
 			«pObj.print_msteps_ParametersToEstimate»
 			«tObj.print_msteps_EstimateOperations(order)»
+			«mObj.print_ct_variableAssignment»
 		</EstimationStep>
 	'''
 		
@@ -141,15 +144,38 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	///////////////////////////////////////////////
 	// III.b Simulation Step
 	////////////////////////////////////////////////
-	protected def print_msteps_SimulationStep(String stepId, Integer order, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
+	protected def print_msteps_SimulationStep(String stepId, Integer order, ModelObject mObj, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
 		<SimulationStep  oid="«stepId»">
 			«dObj.print_mdef_TargetToolReference»
+			«mObj.print_ct_variableAssignment»
 		</SimulationStep>
 	'''
 	
 	///////////////////////////////////////////////
 	//General
 	///////////////////////////////////////////////	
+	protected def print_ct_variableAssignment(ModelObject mObj){
+		//For covariates that are not transformations but have expression
+		var res = "";
+		for (b: mObj.blocks){
+			if (b.covariateBlock != null){
+				for (s: b.covariateBlock.variables){
+					if (s.symbolName != null && s.expression != null){
+						if (cm_assigned_vars.contains(s.symbolName.name)){
+							res = '''
+								<ct:VariableAssignment>
+									«s.symbolName.print_ct_SymbolRef»
+									«s.expression.print_Assign»
+								</ct:VariableAssignment>
+							'''
+						}
+					}
+				}
+			}
+		}
+		return res;
+	}
+	
 	protected def print_mdef_TargetToolReference(DataObject dObj){
 		var oidRef = "";
 		if (dObj != null){

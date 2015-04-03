@@ -39,10 +39,13 @@ class DataSetPrinter {
 	}
 	
 	
-	protected def print_ds_ColumnMapping(String columnId, String symbId)'''
+	protected def print_ds_ColumnMapping(String columnId, String symbId, String categoricalMapping)'''
 		<ColumnMapping>
 			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
 			«symbId.print_ct_SymbolRef»
+			«IF categoricalMapping.length > 0»
+				«categoricalMapping»
+			«ENDIF»
 		</ColumnMapping>
 	'''
 		
@@ -108,8 +111,38 @@ class DataSetPrinter {
 					var modelVar = Utils::getMatchingVariable(mog, column.symbolName);
 					if (modelVar == null) //Default mapping
 						modelVar = getDefaultMatchingVariable(mog, column, mObj);
+					//Categorical
+					var categoricalMapping = "";
+					if (column.list != null){
+						val type = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+						val define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+						if (type.isCategorical){
+							if (type.type.type.categories != null && type.type.type.categories.size > 0){
+								for (i: 0..type.type.type.categories.size - 1){
+									var value = "";
+									val c = type.type.type.categories.get(i);
+									if (define.list != null)
+										value = define.list.arguments.getAttribute(c.categoryName.name);
+									if (value.length == 0){//unnamed list?
+										if (define.list.arguments.unnamedArguments != null &&
+											define.list.arguments.unnamedArguments.arguments.size == type.type.type.categories.size)
+											value = define.list.arguments.unnamedArguments.arguments.get(i).toStr;	
+									}	
+									categoricalMapping = categoricalMapping + '''
+										<ds:Map«IF value.length > 0» dataSymbol="«value»"«ENDIF» modelSymbol="«c.categoryName.name»"/>
+									''';
+								}
+							}
+							if (categoricalMapping.length > 0)
+								categoricalMapping = '''
+									<ds:CategoryMapping>
+										«categoricalMapping»
+									</ds:CategoryMapping>
+								'''
+						}
+					}	
 					if (modelVar != null){
-						res = res + print_ds_ColumnMapping(column.symbolName.name, modelVar);
+						res = res + print_ds_ColumnMapping(column.symbolName.name, modelVar, categoricalMapping);
 					}
 				}
 			}
