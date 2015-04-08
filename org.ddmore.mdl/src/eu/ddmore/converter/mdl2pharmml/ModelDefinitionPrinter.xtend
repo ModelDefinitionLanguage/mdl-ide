@@ -14,6 +14,7 @@ import java.util.Comparator
 import java.util.Map
 import java.util.TreeMap
 import java.util.ArrayList
+import org.ddmore.mdl.mdl.Vector
 
 class ModelDefinitionPrinter {
 	protected extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -90,14 +91,11 @@ class ModelDefinitionPrinter {
 		return model;
 	}
 	
-	protected def print_VariabilityReference(SymbolDeclaration s, String level){
-		if (level.length > 0)
-		'''
-			<ct:VariabilityReference>
-				«print_ct_SymbolRef(level)»
-			</ct:VariabilityReference>
-		'''
-	}
+	protected def print_VariabilityReference(String level)'''
+		<ct:VariabilityReference>
+			«level.print_ct_SymbolRef»
+		</ct:VariabilityReference>
+	'''
     
 	/////////////////////////
 	// I.c Covariate Model
@@ -224,7 +222,7 @@ class ModelDefinitionPrinter {
 				//RANDOM_VARIABLES_DEFINITION
 				if (b.randomVariableDefinitionBlock != null){
 					if (b.randomVariableDefinitionBlock.arguments != null){
-						var level = b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_block_level.name);
+						var level = b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_level_ref.name);
 						if (level.length > 0){
 							for (s: b.randomVariableDefinitionBlock.variables){
 								if (s.symbolName != null)
@@ -260,7 +258,7 @@ class ModelDefinitionPrinter {
 			for (b: mObj.blocks){
 				if (b.randomVariableDefinitionBlock != null){	
 					if (b.randomVariableDefinitionBlock.arguments != null){
-						var level =	b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_block_level.name);	
+						var level =	b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_level_ref.name);	
 						for (s: b.randomVariableDefinitionBlock.variables){
 							if (s.symbolName.name != null && s.list != null){
 								model = model + s.print_mdef_Correlation(level);	
@@ -268,10 +266,36 @@ class ModelDefinitionPrinter {
 						}
 					}
 				}
+				//TODO: possibly all these attributes will be moved to VARIABILITY_PARAMETERS block of the parameter object
+				if (b.variabilityParametersBlock != null){	
+					for (s: b.variabilityParametersBlock.parameters){
+						if (s.symbolName.name != null && s.list != null){
+							val matrixType = s.list.arguments.getAttribute(AttributeValidator::attr_type_randomEff.name);
+							if (matrixType.length > 0){
+								val values = s.list.arguments.getAttributeExpression(AttributeValidator::attr_value.name);
+								val params = s.list.arguments.getAttributeExpression(AttributeValidator::attr_params.name);
+								if (values != null && params != null && values.vector != null && params.vector != null){
+									//TODO: link the definition to the level
+									matrixType.print_mdef_Correlation_Matrix(values.vector, params.vector, null);
+								}
+							}
+						}
+					}
+				}
+				
 			}
 		}
 		return model;
 	}
+	
+	def print_mdef_Correlation_Matrix(String matrixType, Vector values, Vector params, String level)'''
+		<Correlation deviationMatrixType="«matrixType.convertMatrixType»">
+			«IF level != null»
+				«level.print_VariabilityReference»
+			«ENDIF»
+            «values.print_ct_Matrix(params, "Any")»
+		</Correlation>
+	'''
 	
 	def print_mdef_Correlation(SymbolDeclaration s, String level){
 		var res = ""
@@ -309,7 +333,7 @@ class ModelDefinitionPrinter {
 		if (res.length > 0 && level.length > 0)
 		'''
 		<Correlation>
-			«s.print_VariabilityReference(level)»
+			«level.print_VariabilityReference»
 			<Pairwise>
 				«res»
 			</Pairwise>
@@ -317,12 +341,11 @@ class ModelDefinitionPrinter {
 		'''
 	}
 	
-	protected def print_mdef_RandomVariable(SymbolDeclaration s, String level)
-	'''
+	protected def print_mdef_RandomVariable(SymbolDeclaration s, String level)'''
 		«IF s.randomList != null && s.symbolName != null»
 			<RandomVariable symbId="«s.symbolName.name»">
 				«IF level.length > 0»
-					«s.print_VariabilityReference(level)»
+					«level.print_VariabilityReference»
 				«ENDIF»
 				«print_uncert_Distribution(s.randomList)»
 			</RandomVariable>

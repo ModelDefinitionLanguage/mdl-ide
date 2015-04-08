@@ -51,6 +51,8 @@ import org.ddmore.mdl.mdl.ArgumentExpression
 import org.ddmore.mdl.mdl.NamedArguments
 import org.ddmore.mdl.mdl.UnnamedArguments
 import java.util.ArrayList
+import org.ddmore.mdl.mdl.EventType
+import org.ddmore.mdl.mdl.NonContinuousType
 
 class MdlPrinter {
 	
@@ -258,23 +260,27 @@ class MdlPrinter {
 		if (t.type != null)
 			return t.type.toStr;
 		if (t.use != UseType::NO_USE)
-			return t.use.toString
+			return t.use.toString;
 		if (t.target != TargetType::NO_TARGET)
-			return t.target.toString
+			return t.target.toString;
 		if (t.input != InputFormatType::NO_INPUT_FORMAT)
-			return t.input.toString
+			return t.input.toString;
 		if (t.variability != VariabilityType::NO_VARIABILITY)
-			return t.variability.toString
+			return t.variability.toString;
 		if (t.individualVar != IndividualVarType::NO_INDIVIDUAL_VAR)
-			return t.individualVar.toString
+			return t.individualVar.toString;
 		if (t.level != LevelType::NO_LEVEL)
-			return t.level.toString
+			return t.level.toString;
 		if (t.trial != TrialType::NO_TRIAL)
-			return t.trial.toString
+			return t.trial.toString;
 		if (t.pkParameter != PkParameterType::NO_PARAM)
-			return t.pkParameter.toString
+			return t.pkParameter.toString;
 		if (t.pkMacro != PkMacroType::NO_MACRO)
-			return t.pkMacro.toString
+			return t.pkMacro.toString;
+		if (t.event != EventType::NO_EVENT)
+			return t.event.toString;
+		if (t.nonContinuous != NonContinuousType::NO_TYPE)
+			return t.nonContinuous.toString;	
 	}
 	
 	def toStr(VarType t) {
@@ -307,10 +313,11 @@ class MdlPrinter {
 		if (t.m2LL != null){
 			return t.m2LL	
 		} 
+		if (t.tte != null){
+			return t.tte;
+		}
 	}
-	
-	
-	
+			
 	def toStr(RandomList l){
 		if (l.arguments != null){
 			return "~" + l.type + "(" + l.arguments.toStr + ")";

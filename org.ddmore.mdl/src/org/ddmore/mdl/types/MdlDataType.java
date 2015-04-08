@@ -29,12 +29,11 @@ public enum MdlDataType {
     //Restrictions of basic (to comply with PharmML)
     TYPE_NAT, TYPE_PNAT, TYPE_PREAL, TYPE_PROBABILITY,
     //References to variables and mathematical expressions
-	TYPE_REF, TYPE_REF_DERIV, TYPE_EXPR, TYPE_MATCHING,  
+    //TODO: add expression restrictions
+	TYPE_REF, TYPE_REF_DERIV, TYPE_EXPR, TYPE_LIST, TYPE_RANDOM_LIST, //TYPE_MATCHING, TYPE_PIECEWISE, 
 	//References to objects
 	TYPE_OBJ_REF, TYPE_OBJ_REF_MOG,
 	TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_OBJ_REF_TASK, TYPE_OBJ_REF_DESIGN,
-	//Nested lists
-	TYPE_LIST, TYPE_RANDOM_LIST, 
     
 	/*Vectors*/
     //Numeric vectors
@@ -48,17 +47,19 @@ public enum MdlDataType {
 	TYPE_TRANS,          //{log, logit, probit}
 
     /*Enumerations*/
-	TYPE_VAR_TYPE,       //{continuous, categorical, likelihood, M2LL}
+	TYPE_VAR_TYPE,       //{continuous, categorical, likelihood, M2LL, tte}
 	TYPE_USE,            //see 'UseType' in MDL grammar
 	TYPE_TARGET,         //{NMTRAN_CODE, MLXTRAN_CODE, PML_CODE, BUGS_CODE, R_CODE MATLAB_CODE}
 	TYPE_RANDOM_EFFECT,  //{VAR, SD, CORR, COV} 
 	TYPE_INPUT_FORMAT,   //{nonmemFormat, eventFormat}
 	TYPE_INDIVIDUAL_VAR, //{linear, general}
-	TYPE_CONTINUOUS, 	 //{continuous}
 	TYPE_LEVEL,          //{model, observation}
 	TYPE_PK_PARAMETER,   //{v_cl, v_k, vss_cl, a_b}
 	TYPE_PK_MACRO,       //{iv, elimination, oral, compartment, transfer, periferal}
-	TYPE_TRIAL           //{simple, sequential, combined}
+	TYPE_TRIAL,          //{simple, sequential, combined}
+	TYPE_EVENT,          //{exact, intervalCensored}
+	TYPE_CONTINUOUS, 	 //{continuous, tte} - restriction of TYPE_VAR_TYPE
+	TYPE_NONCONTINUOUS   //{count, discrete, survival}
 	;
     
 	static public boolean validateType(MdlDataType type, Expression expr){
@@ -106,7 +107,6 @@ public enum MdlDataType {
 	public static boolean isEnumType(AnyExpression expr) {
 		List<MdlDataType> types = Arrays.asList(
 			TYPE_VAR_TYPE,
-			TYPE_CONTINUOUS,
 			TYPE_USE,
 			TYPE_TARGET,
 			TYPE_RANDOM_EFFECT,
@@ -116,7 +116,10 @@ public enum MdlDataType {
 			TYPE_TRIAL,
 			TYPE_PK_PARAMETER,
 			TYPE_PK_MACRO,
-			TYPE_LEVEL
+			TYPE_LEVEL,
+			TYPE_CONTINUOUS,
+			TYPE_NONCONTINUOUS,
+			TYPE_EVENT
 		);
 		return validateType(types, expr);
 	}
@@ -570,11 +573,13 @@ public enum MdlDataType {
 	
 	public static MdlDataType getDerivedType(EnumType expr){
 		if (expr.getType() != null) {
-			if (expr.getType().getContinuous() != null) 
+			if (expr.getType().getContinuous() != null || expr.getType().getTte() != null) 
 				return TYPE_CONTINUOUS;
 			else 
 				return TYPE_VAR_TYPE;
 		}
+		if (expr.getNonContinuous() != NonContinuousType.NO_TYPE) return TYPE_NONCONTINUOUS;
+		if (expr.getEvent() != EventType.NO_EVENT) return TYPE_EVENT;
 		if (expr.getUse() != UseType.NO_USE) return TYPE_USE;
 		if (expr.getTarget() != TargetType.NO_TARGET) return TYPE_TARGET;
 		if (expr.getVariability() != VariabilityType.NO_VARIABILITY) return TYPE_RANDOM_EFFECT;

@@ -422,8 +422,21 @@ EnumType:
 	trial = TrialType |
 	individualVar = IndividualVarType |
 	pkParameter = PkParameterType |
-	pkMacro = PkMacroType
+	pkMacro = PkMacroType |
+	nonContinuous = NonContinuousType |
+	event = EventType
 ;
+
+//New 
+enum NonContinuousType:
+	no_type | count | discrete | survival
+;
+
+enum EventType:
+	no_event | exact | intervalCensored
+;
+
+//
 
 enum LevelType:
 	no_level | model | observation
@@ -470,7 +483,8 @@ VarType:
 	categorical = 'categorical' ('(' categories += Category (=> ',' categories += Category)* ')')? | 
 	continuous = 'continuous' | 
 	likelihood = 'likelihood' |
-	M2LL = 'M2LL' 	
+	M2LL = 'M2LL' |
+	tte = 'tte'	
 ;
 
 Category:

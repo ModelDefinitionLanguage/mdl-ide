@@ -15,6 +15,9 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
+import org.ddmore.mdl.mdl.Expression
+import org.ddmore.mdl.mdl.impl.DataInputBlockImpl
+import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl
 
 class DataSetPrinter {
 	protected extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -39,14 +42,23 @@ class DataSetPrinter {
 	}
 	
 	
-	protected def print_ds_ColumnMapping(String columnId, String symbId, String categoricalMapping)'''
+	protected def print_ds_ColumnMapping(String columnId, String symbId, String complexMapping)'''
 		<ColumnMapping>
 			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-			«symbId.print_ct_SymbolRef»
-			«IF categoricalMapping.length > 0»
-				«categoricalMapping»
+			«IF symbId != null»
+				«symbId.print_ct_SymbolRef»
+			«ENDIF»
+			«IF complexMapping.length > 0»
+				«complexMapping»
 			«ENDIF»
 		</ColumnMapping>
+	'''
+	
+	protected def print_ds_MultipleDVMapping(String columnId, Expression expr)'''
+		<MultipleDVMapping>
+			<ds:ColumnRef columnIdRef="«columnId»"/>
+			«expr.print_Math_Expr»
+		</MultipleDVMapping>
 	'''
 		
 	protected def print_ds_TargetDataSet(MOGObject mog){
@@ -104,45 +116,24 @@ class DataSetPrinter {
 		var res = "";
 		var symbolIterator = dObj.eAllContents();
 		while (symbolIterator.hasNext()) {
-			var container = symbolIterator.next();
-			if (container instanceof SymbolDeclarationImpl) {
-				var column = container as SymbolDeclaration;
+			var eObj = symbolIterator.next();
+			if (eObj instanceof SymbolDeclarationImpl) {
+				var column = eObj as SymbolDeclaration;
 				if (column != null && column.symbolName != null){
-					var modelVar = Utils::getMatchingVariable(mog, column.symbolName);
-					if (modelVar == null) //Default mapping
-						modelVar = getDefaultMatchingVariable(mog, column, mObj);
-					//Categorical
-					var categoricalMapping = "";
-					if (column.list != null){
-						val type = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
-						val define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-						if (type.isCategorical){
-							if (type.type.type.categories != null && type.type.type.categories.size > 0){
-								for (i: 0..type.type.type.categories.size - 1){
-									var value = "";
-									val c = type.type.type.categories.get(i);
-									if (define.list != null)
-										value = define.list.arguments.getAttribute(c.categoryName.name);
-									if (value.length == 0){//unnamed list?
-										if (define.list.arguments.unnamedArguments != null &&
-											define.list.arguments.unnamedArguments.arguments.size == type.type.type.categories.size)
-											value = define.list.arguments.unnamedArguments.arguments.get(i).toStr;	
-									}	
-									categoricalMapping = categoricalMapping + '''
-										<ds:Map«IF value.length > 0» dataSymbol="«value»"«ENDIF» modelSymbol="«c.categoryName.name»"/>
-									''';
-								}
-							}
-							if (categoricalMapping.length > 0)
-								categoricalMapping = '''
-									<ds:CategoryMapping>
-										«categoricalMapping»
-									</ds:CategoryMapping>
-								'''
+					var blockContainer = eObj.eContainer;
+					//Map only columns, not DECLARED_VARAIBLES
+					if (blockContainer instanceof DataInputBlockImpl || blockContainer instanceof DataDerivedBlockImpl){
+						var modelVar = Utils::getMatchingVariable(mog, column.symbolName);
+						if (modelVar == null) //Default mapping
+							modelVar = getDefaultMatchingVariable(mog, column, mObj);
+						if (modelVar != null){
+							//Categorical
+							var categoricalMapping = column.print_ds_CategoricalMapping;
+							res = res + column.symbolName.name.print_ds_ColumnMapping(modelVar, categoricalMapping);
 						}
-					}	
-					if (modelVar != null){
-						res = res + print_ds_ColumnMapping(column.symbolName.name, modelVar, categoricalMapping);
+						var attrMapping = column.print_ds_AttributeMapping;
+						if (attrMapping != null)
+							res = res + column.print_ds_AttributeMapping;
 					}
 				}
 			}
@@ -155,9 +146,63 @@ class DataSetPrinter {
 		'''
 	}
 	
+	protected def print_ds_AttributeMapping(SymbolDeclaration column){
+		if (column.symbolName != null && column.list != null){
+			var columnId = column.symbolName.name;
+			val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+			if (use.equals(UseType::AMT.toString)){
+				var expr = column.list.arguments.getAttributeExpression(AttributeValidator::attr_cmpt.name);
+				if (expr == null)
+					expr = column.list.arguments.getAttributeExpression(AttributeValidator::attr_variable.name);
+				//column mapping with piecewise function inside
+				if (expr != null && expr.expression != null)
+					return columnId.print_ds_ColumnMapping(null, expr.expression.print_Math_Expr.toString);
+			}	
+			if (use.equals(UseType::DV.toString)){
+				var expr = column.list.arguments.getAttributeExpression(AttributeValidator::attr_prediction.name);
+				if (expr != null && expr.expression != null)
+				//TODO: check that this is a piecewise function
+					return columnId.print_ds_MultipleDVMapping(expr.expression);
+			}
+		}
+	}	
+	
+	protected def print_ds_CategoricalMapping(SymbolDeclaration column){
+		var categoricalMapping = "";
+		if (column.list != null){
+			val type = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+			val define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+			if (type.isCategorical){
+				if (type.type.type.categories != null && type.type.type.categories.size > 0){
+					for (i: 0..type.type.type.categories.size - 1){
+						var value = "";
+						val c = type.type.type.categories.get(i);
+						if (define.list != null)
+							value = define.list.arguments.getAttribute(c.categoryName.name);
+						if (value.length == 0){//unnamed list?
+							if (define.list.arguments.unnamedArguments != null &&
+								define.list.arguments.unnamedArguments.arguments.size == type.type.type.categories.size)
+								value = define.list.arguments.unnamedArguments.arguments.get(i).toStr;	
+						}	
+						categoricalMapping = categoricalMapping + '''
+							<ds:Map«IF value.length > 0» dataSymbol="«value»"«ENDIF» modelSymbol="«c.categoryName.name»"/>
+						''';
+					}
+				}
+				if (categoricalMapping.length > 0)
+					categoricalMapping = '''
+						<ds:CategoryMapping>
+							«categoricalMapping»
+						</ds:CategoryMapping>
+					'''
+			}
+		}
+		return categoricalMapping;				
+	}
+	
 	//Return a model variable (matched by name or in the MOG MAPPING block)
 	protected def getDefaultMatchingVariable(MOGObject mog, SymbolDeclaration column, ModelObject mObj){
-		if (column.list != null){
+		if (column.symbolName != null && column.list != null){
 			var columnId = column.symbolName.name;
 			/*Default implicit mapping*/
 			val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
@@ -165,7 +210,7 @@ class DataSetPrinter {
 			if (use.equals(UseType::IDV.toString)){
 				return DefaultValues::INDEPENDENT_VAR;
 			}
-			//Covariate mapping
+			//Covariates (ise = covariate)
 			if (use.equals(UseType::COVARIATE.toString)){
 				for (b: mObj.blocks){
 					if (b.covariateBlock != null){
@@ -176,11 +221,7 @@ class DataSetPrinter {
 					}
 				}
 			}	
-			//Dosing
-			if (use.equals(UseType::AMT.toString)){
-				//Search where??
-			}
-			//ID, DV
+			//Variability levels (use = id, use = dv)
 			if (use.equals(UseType::ID.toString) || use.equals(UseType::DV.toString)){
 				for (b: mObj.blocks){
 					if (b.variabilityBlock != null){

@@ -533,32 +533,28 @@ class MathPrinter{
 		print_ct_SymbolRef(ref.name)
 	}
 
-	/* 
-	def print_ct_Matrix(String matrixType, String rowNames, Arguments parameters, Boolean useDiagVarNames) '''
+	def print_ct_Matrix(Vector values, Vector columnNames, String matrixType)'''
 		<Matrix matrixType="«matrixType»">
-			<ct:RowNames>
-				«rowNames»
-			</ct:RowNames>
-			«IF parameters.arguments.size > 0»
+			«IF columnNames != null && columnNames.expression.expressions.size > 0»
+				<ct:ColumnNames>
+					«FOR c: columnNames.expression.expressions»
+						«c.print_Math_Expr»
+					«ENDFOR»
+				</ct:ColumnNames>
+			«ENDIF»
+			«IF values.expression.expressions != null»
 				<ct:MatrixRow>
-				«FOR i : 0 .. parameters.arguments.size - 1»
-					«val symbol = parameters.arguments.get(i)»
-					«IF useDiagVarNames && symbol.argumentName != null»
-						«print_ct_SymbolRef(symbol.argumentName.name)»
-					«ELSE»
-						«print_Math_Expr(symbol.expression)»
-					«ENDIF»
-					«IF symbol.argumentName != null»
-						</ct:MatrixRow>
-						«IF i != parameters.arguments.size - 1»
-							<ct:MatrixRow>
-						«ENDIF»
+				«FOR i : 0 .. values.expression.expressions.size - 1»
+					«val symbol = values.expression.expressions.get(i)»
+					«symbol.expression.print_Math_Expr»
+					</ct:MatrixRow>
+					«IF i != values.expression.expressions.size - 1»
+						<ct:MatrixRow>
 					«ENDIF»
 				«ENDFOR»	
 			«ENDIF»
 		</Matrix>
 	'''
-	*/
 
 	def convertMatrixType(String matrixType) {
 		if (matrixType.equals(VariabilityType::VAR.toString))
