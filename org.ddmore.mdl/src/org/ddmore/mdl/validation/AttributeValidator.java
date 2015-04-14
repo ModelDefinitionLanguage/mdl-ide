@@ -275,8 +275,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//Validate nested attributes
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	final public static List<Attribute> attrs_define_cmt = Arrays.asList(attr_dataCmt, attr_modelCmt);
-	final public static List<Attribute> attrs_define_amt = Arrays.asList(attr_dataCmt, attr_modelCmt);
+	final public static List<Attribute> attrs_define_cmt = Arrays.asList(attr_modelCmt, attr_dataCmt);
+	final public static List<Attribute> attrs_define_amt = Arrays.asList(attr_modelCmt, attr_dataCmt);
 	final public static List<Attribute> attrs_define_covariate = Arrays.asList(attr_category, attr_value);
 	final public static List<Attribute> attrs_define_dv = Arrays.asList(attr_pred, attr_predID);
 	//Check attributes in nested lists
