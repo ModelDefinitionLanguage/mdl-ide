@@ -1,11 +1,11 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import org.ddmore.mdl.mdl.FunctionCall
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.mdl.PkMacroType
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.List
+import org.ddmore.mdl.mdl.SymbolDeclaration
 
 class PKMacrosPrinter{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -17,44 +17,43 @@ class PKMacrosPrinter{
 		this.resolver = resolver;	
 	}
 	
-	//PKMACRO block
+	//PKMACRO / COMPARTMENT block
+	def print_PKMAcros(SymbolDeclaration s){
+		//Convert symbolName to 'amount' PharmML attribute
+		var content = "";
+		if (s.symbolName != null){
+			content = content + '''
+				<Value argument="amount"> 
+					«s.symbolName.print_ct_SymbolRef»
+				</Value>
+			'''
+		}
+		if (s.list != null){
+			var macro = s.list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
+			content = content + s.list.arguments.print_PKAttributes;
+			return macro.print_PKMAcros(content);
+		}
+		return "";
+	}
+	
 	def print_PKMAcros(List list){
-		var res = "";
 		if (list != null){
-			var macro = list.arguments.getAttribute(AttributeValidator::attr_macro.name);
+			var macro = list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
 			var content = list.arguments.print_PKAttributes;
-			switch(macro){
-				case PkMacroType::COMPARTMENT.toString: 
-					res = '''
-						<Compartment>
-							«content»
-						</Compartment>
-					'''
-				case PkMacroType::IV.toString: res  = '''
-						<IV>
-							«content»
-						</IV>
-					'''
-				case PkMacroType::ELIMINATION.toString: res = '''
-						<Elimination>
-							«content»
-						</Elimination>
-					'''
-				case PkMacroType::ORAL.toString: res = '''
-						<Oral>
-							«content»
-						</Oral>
-					'''
-				case PkMacroType::PERIPHERAL.toString: res = '''
-						<Periferal>
-							«content»
-						</Periferal>
-					'''
-			}
-		}	
+			return macro.print_PKMAcros(content);
+		}
+		return "";
+	}
+	
+	def print_PKMAcros(String type, String content){
+		var macroType = type.substring(0, 1).toUpperCase() + type.substring(1);
+		if (type.equals(PkMacroType::DIRECT.toString)) 
+			macroType = "IV";
 		'''
 			<PKmacros>
-			  	«res»
+			  	<«macroType»>
+			  		«content»
+			  	</«macroType»>
 			</PKmacros>
 		'''
 	}
@@ -68,9 +67,9 @@ class PKMacrosPrinter{
 				if (a.argumentName != null){
 					attrName = a.argumentName.name;
 					//type -> cmt
-					if (a.argumentName.name.equals(AttributeValidator::attr_type_nat.name))
+					if (a.argumentName.name.equals(AttributeValidator::attr_modelCmt.name))
 						attrName = "cmt";
-					if (a.argumentName.name.equals(AttributeValidator::attr_macro.name))
+					if (a.argumentName.name.equals(AttributeValidator::attr_type_macro.name))
 						attrName = "#SKIP#";	
 				}				
 				if (!attrName.equals("#SKIP#")){
@@ -83,19 +82,5 @@ class PKMacrosPrinter{
 			}
 		}
 		return res;
-	} 
-	
-	///////////////////////////////////////////
-	//PK library
-	///////////////////////////////////////////
-	def print_PKMacros(FunctionCall call){ 
-		var res = "";
-		if (res.length > 0)
-		res = res + '''
-			<PKmacros>
-			  	«res»
-			</PKmacros>
-		'''
-		return res;
-	}
+	} 	
 }

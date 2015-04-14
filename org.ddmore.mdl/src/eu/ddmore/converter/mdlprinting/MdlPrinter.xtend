@@ -23,11 +23,8 @@ import org.ddmore.mdl.mdl.ParExpression
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.Vector
-import org.ddmore.mdl.mdl.ObservationBlock
 import org.ddmore.mdl.mdl.EnumType
 import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.mdl.SimulationBlock
-import org.ddmore.mdl.mdl.EstimationBlock
 import org.apache.commons.io.FilenameUtils
 import org.ddmore.mdl.mdl.VarType
 import org.ddmore.mdl.mdl.UseType
@@ -53,6 +50,7 @@ import org.ddmore.mdl.mdl.UnnamedArguments
 import java.util.ArrayList
 import org.ddmore.mdl.mdl.EventType
 import org.ddmore.mdl.mdl.NonContinuousType
+import org.ddmore.mdl.mdl.Argument
 
 class MdlPrinter {
 	
@@ -127,6 +125,43 @@ class MdlPrinter {
 		return false;
 	}
 	
+	//Returns a set of attribute pairs (unnamed or with given names for named attributes)
+	def getAttributePairs(AnyExpression expr, String attr1, String attr2){
+		var res = new ArrayList<Pair<AnyExpression, AnyExpression>>();
+		if (expr == null) return res;
+		if (expr.list != null){
+			val pair = expr.list.getAttributePair(attr1, attr2);
+			res.add(pair);
+		}
+		if (expr.vector != null && expr.vector.expression.lists != null){
+			for (pairExpr: expr.vector.expression.lists){
+				val pair = pairExpr.getAttributePair(attr1, attr2);
+				if (pair != null) res.add(pair);
+			}
+		}
+		return res;
+	}
+	
+	//Returns a pair of attributes (unnamed or with given names for named attributes)
+	protected def getAttributePair(List pair, String attr1, String attr2){
+		var AnyExpression key = null;
+		var AnyExpression value = null;
+		if (pair.arguments.unnamedArguments != null){//unnamed
+			var pairArgs = pair.arguments.unnamedArguments.arguments;
+			if (pairArgs.size >= 2){
+				key = pairArgs.get(0).expression; 
+				value =	pairArgs.get(1).expression;
+			}
+		} else {//named
+			var pairArgs = pair.arguments.namedArguments.arguments;
+			key = pairArgs.getAttributeExpression(attr1);
+			value = pairArgs.getAttributeExpression(attr2);
+		}	
+		if (key != null && value != null)
+			return new Pair<AnyExpression, AnyExpression>(key, value);
+		return null;
+	}
+	
 	//Return value of an attribute with a given name
 	def getAttribute(Arguments args, String attrName){
 		if (args != null && args.namedArguments != null)
@@ -137,9 +172,27 @@ class MdlPrinter {
 	}	
 	
 	//Return value of an attribute with a given name
+	def getAttribute(java.util.List<Argument> args, String attrName){
+		if (args != null)
+			for (arg: args)
+				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
+					return arg.expression.toStr
+		return "";
+	}
+	
+	//Return value of an attribute with a given name
 	def getAttributeExpression(Arguments args, String attrName){
 		if (args != null && args.getNamedArguments != null)
 			for (arg: args.namedArguments.arguments)
+				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
+					if (arg.expression.expression != null)
+						return arg.expression.expression;
+		return null;
+	}
+	
+	def getAttributeExpression(java.util.List<Argument> args, String attrName){
+		if (args != null)
+			for (arg: args)
 				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
 					if (arg.expression.expression != null)
 						return arg.expression.expression;
@@ -183,8 +236,6 @@ class MdlPrinter {
 		return "";
 	}
 	
-
-
 	/////////////////////////////////////////////////////////////
 
     //Map variableDeclaration identifiers, identity for MDL printing, to be rewritten in super classes 
@@ -195,6 +246,17 @@ class MdlPrinter {
 	//Map operators, identity for MDL printing, to be rewritten in super classes 
 	def convertOperator(String op){
 		return op;
+	}
+	
+	/////////////////////////////////////////////////////////////
+	
+	/**
+	 * By default, don't quote string expressions, since this class relates to conversion
+	 * to PharmML. The Mdl2Nonmem subclass will override this to enclose string expressions
+	 * in double quotes.
+	 */
+	def toStr(String str) {
+	    return str
 	}
 	
 	def toStr(PropertyDeclaration p){
@@ -212,7 +274,7 @@ class MdlPrinter {
 		if (v.functionName != null){
 			res = res + ')' 
 		}
-		var expr = ""; //First make sure that expression is not empty, than print "=" 
+		var expr = ""; 
 		if (v.expression != null){
 			expr = v.expression.toStr;
 			if (!expr.trim().equals(""))
@@ -337,14 +399,7 @@ class MdlPrinter {
 		if (e.list != null) return e.list.toStr; 
 		if (e.vector != null) return e.vector.toStr; 
 		if (e.type != null) return e.type.toStr;
-		//if (e.matching != null) return e.matching.toStr;
 	}
-	
-	/* 
-	def String toStr(Matching e){
-		var res = '''«e.symbolName.name» <=> «e.condition.toStr»''';
-		return res;		
-	}*/
 	
 	def String toStr(Expression e){
 		var res = e.expression.toStr;
@@ -352,10 +407,10 @@ class MdlPrinter {
 			res = res + ''' when «e.condition.toStr»'''
 			if (e.whenBranches != null)
 				for (b: e.whenBranches){
-						res = res + 
-						'''
-						, «b.expression.toStr» when «e.condition.toStr»
-						'''
+					res = res + 
+					'''
+					, «b.expression.toStr» when «e.condition.toStr»
+					'''
 				}		
 			if (e.elseExpression != null)
 				res = res + 
@@ -429,15 +484,6 @@ class MdlPrinter {
 			res = toStr(e.string)
 		}
 		return res
-	}
-	
-	/**
-	 * By default, don't quote string expressions, since this class relates to conversion
-	 * to PharmML. The Mdl2Nonmem subclass will override this to enclose string expressions
-	 * in double quotes.
-	 */
-	def toStr(String str) {
-	    return str
 	}
 	
 	def toStr(MultiplicativeExpression e){
@@ -518,18 +564,11 @@ class MdlPrinter {
 		if (e.lists != null) {
 			var iterator = e.lists.iterator();
 			if (iterator.hasNext ) res  = res + iterator.next.toStr;
-			while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr; 
+			while (iterator.hasNext) res  = res + 
+				'''
+				, «iterator.next.toStr»
+				''';
 		}
-		/*  if (e.vectors != null) {
-			var iterator = e.vectors.iterator();
-			if (iterator.hasNext ) res  = res + iterator.next.toStr;
-			while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr; 
-		}
-		if (e.matchings != null) {
-			var iterator = e.matchings.iterator();
-			if (iterator.hasNext) res  = res + iterator.next.toStr;
-			while (iterator.hasNext) res  = res + ', ' + iterator.next.toStr; 
-		}*/
 		return res;
 	}
 	
@@ -553,12 +592,18 @@ class MdlPrinter {
 		var iterator = args.arguments.iterator();
 		if (iterator.hasNext ) {
 			var a = iterator.next; 
-			res  = a.argumentName.name + " = " + a.expression.toStr;
+			if (a.expression != null) 
+				if (a.argumentName != null)
+					res  = a.argumentName.name + " = " + a.expression.toStr
+				else res  = res + a.expression.toStr;	
 		}
 		while (iterator.hasNext){
 			res  = res + ', ';
 			var a = iterator.next; 
-			res  = res + a.argumentName.name + " = " + a.expression.toStr;
+			if (a.expression != null) 
+				if (a.argumentName != null)
+					res  = res + a.argumentName.name + " = " + a.expression.toStr
+				else res  = res + a.expression.toStr;	
 		}
 		return res;	
 	}
@@ -571,19 +616,22 @@ class MdlPrinter {
 			res  = a.expression.toStr;
 		}
 		while (iterator.hasNext){
-			var a = iterator.next; 
-			res  = res + ', ' + a.expression.toStr;
+			var a = iterator.next;
+			if (a.expression != null) 
+				res  = res + ', ' + a.expression.toStr;
 		}
 		return res;	
 	}
 	
 	def String toStr(ArgumentExpression a){
 		var res = "";
-		if (a.expression != null){
-			res = res + a.expression.toStr;
-		}
-		if (a.randomList != null){
-			res = res + a.randomList.toStr;
+		if (a != null){
+			if (a.expression != null){
+				res = res + a.expression.toStr;
+			}
+			if (a.randomList != null){
+				res = res + a.randomList.toStr;
+			}
 		}
 		return res;
 	}
@@ -591,58 +639,4 @@ class MdlPrinter {
 	def toStr(TargetBlock b){
 		return b.externalCode.substring(3, b.externalCode.length - 3)
 	}
-
-	//////////////////////////////////////////////////////////////////////////
-	//Printing
-    //////////////////////////////////////////////////////////////////////////		 
-	
-	def print(ObservationBlock b)'''
-		«FOR s: b.variables»
-			«s.print»
-		«ENDFOR»
-	'''		
-	
-	def print(SimulationBlock b)'''
-		«FOR s: b.variables»
-			«s.print»
-		«ENDFOR»
-	'''	
-
-	def print(EstimationBlock b)'''
-		«FOR s: b.variables»
-			«s.print»
-		«ENDFOR»
-	'''	
-		
-	def print(TargetBlock b)'''«b.toStr»'''	
-		
-	def print(FunctionCall call)'''«call.toStr»'''
-		
-    def print(SymbolDeclaration v)'''«v.toStr»'''
-
-	def print(AnyExpression e)'''«e.toStr»'''
-		
-	def print(RandomList l)'''«l.toStr»'''
-
-	def print(List l)'''«l.toStr»'''
-	
-	def print(Expression e)'''«e.toStr»'''
-	
-	def print(OrExpression e)'''«e.toStr»'''
-	
-	def print(AndExpression e)'''«e.toStr»'''
-	
-	def print(LogicalExpression e)'''«e.toStr»'''
-	
-	def print(AdditiveExpression e)'''«e.toStr»'''
-	
-	def print(MultiplicativeExpression e)'''«e.toStr»'''
-	
-	def print(PowerExpression e)'''«e.toStr»'''
-	
-	def print(UnaryExpression e)'''«e.toStr»'''
-
-	def print(ParExpression e)'''«e.toStr»'''
-	
-	def print(Arguments arg)'''«arg.toStr»'''
 }

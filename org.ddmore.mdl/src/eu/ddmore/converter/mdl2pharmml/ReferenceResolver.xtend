@@ -30,7 +30,7 @@ class ReferenceResolver{
 			if (o.modelObject != null) {
 				//VariabilityModel definitions
 				vm_err_vars = o.modelObject.getLevelVars(LevelType::OBSERVATION);
-				vm_mdl_vars = o.modelObject.getLevelVars(LevelType::MODEL)
+				vm_mdl_vars = o.modelObject.getLevelVars(LevelType::PARAMETER)
 				//CovariateModel				
 				cm_vars = o.modelObject.getCovariateVars;
 				cm_assigned_vars = o.modelObject.getAssignedCovariateVars;
@@ -187,7 +187,7 @@ class ReferenceResolver{
 							x = Integer::parseInt(level);
 						} catch (NumberFormatException e){}
 						if (//default type = model or explicitly defined requested type 
-							(varType == null && type.toString().equals(LevelType::MODEL.toString)) 
+							(varType == null && type.toString().equals(LevelType::PARAMETER.toString)) 
 							|| (varType != null && varType.toStr.equals(type.toString))){
 							if (!levelVars.containsKey(s.symbolName.name)){
 								levelVars.put(s.symbolName.name, x);

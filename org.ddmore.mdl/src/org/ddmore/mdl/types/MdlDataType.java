@@ -28,20 +28,19 @@ public enum MdlDataType {
     TYPE_STRING, TYPE_INT, TYPE_REAL, TYPE_BOOLEAN,
     //Restrictions of basic (to comply with PharmML)
     TYPE_NAT, TYPE_PNAT, TYPE_PREAL, TYPE_PROBABILITY,
-    //References to variables and mathematical expressions
-    //TODO: add expression restrictions
-	TYPE_REF, TYPE_REF_DERIV, TYPE_EXPR, TYPE_LIST, TYPE_RANDOM_LIST, //TYPE_MATCHING, TYPE_PIECEWISE, 
+    //Special expression forms
+    TYPE_EXPR, TYPE_REF, TYPE_DERIV, TYPE_LIST, TYPE_RANDOM_LIST, TYPE_PIECEWISE, 
 	//References to objects
-	TYPE_OBJ_REF, TYPE_OBJ_REF_MOG,
+	TYPE_OBJ_REF, TYPE_OBJ_REF_MOG, 
 	TYPE_OBJ_REF_MODEL, TYPE_OBJ_REF_DATA, TYPE_OBJ_REF_PARAM, TYPE_OBJ_REF_TASK, TYPE_OBJ_REF_DESIGN,
     
 	/*Vectors*/
     //Numeric vectors
-    TYPE_VECTOR_STRING, TYPE_VECTOR_INT, TYPE_VECTOR_REAL, //TYPE_VECTOR_BOOLEAN, 
+    TYPE_VECTOR_STRING, TYPE_VECTOR_INT, TYPE_VECTOR_REAL, TYPE_VECTOR_BOOLEAN, 
     //Restricted vectors
     TYPE_VECTOR_NAT, TYPE_VECTOR_PNAT, TYPE_VECTOR_PREAL, TYPE_VECTOR_PROBABILITY,
     //Expression vectors
-    TYPE_VECTOR_REF, TYPE_VECTOR_EXPR, TYPE_VECTOR_LIST, //TYPE_VECTOR_MATCHING, 
+    TYPE_VECTOR_EXPR, TYPE_VECTOR_REF, TYPE_VECTOR_LIST, 
 
 	/*String restrictions*/
 	TYPE_TRANS,          //{log, logit, probit}
@@ -53,7 +52,7 @@ public enum MdlDataType {
 	TYPE_RANDOM_EFFECT,  //{VAR, SD, CORR, COV} 
 	TYPE_INPUT_FORMAT,   //{nonmemFormat, eventFormat}
 	TYPE_INDIVIDUAL_VAR, //{linear, general}
-	TYPE_LEVEL,          //{model, observation}
+	TYPE_LEVEL,          //{parameter, observation}
 	TYPE_PK_PARAMETER,   //{v_cl, v_k, vss_cl, a_b}
 	TYPE_PK_MACRO,       //{iv, elimination, oral, compartment, transfer, periferal}
 	TYPE_TRIAL,          //{simple, sequential, combined}
@@ -63,6 +62,7 @@ public enum MdlDataType {
 	;
     
 	static public boolean validateType(MdlDataType type, Expression expr){
+		if (expr.getWhenBranches() != null && type == TYPE_PIECEWISE) return true;
 		Boolean res = validateType(type, expr.getExpression());
 		if (expr.getWhenBranches() != null){
 			for (ExpressionBranch e: expr.getWhenBranches()){
@@ -80,10 +80,10 @@ public enum MdlDataType {
 			case TYPE_VECTOR_INT: return isVectorInteger(expr);
 			case TYPE_VECTOR_REAL: return isVectorReal(expr);
 			case TYPE_VECTOR_STRING: return isVectorString(expr);  
+			case TYPE_VECTOR_BOOLEAN: return isVectorBoolean(expr);  
 			//Vectors of expressions
-			case TYPE_VECTOR_REF: return isVectorReference(expr);  
 			case TYPE_VECTOR_EXPR: return isVectorExpression(expr);
-			//case TYPE_VECTOR_MATCHING: return isVectorMatching(expr);
+			case TYPE_VECTOR_REF: return isVectorReference(expr);  
 			case TYPE_VECTOR_LIST: return isVectorList(expr);
 			//Vectors of restrictions
 			case TYPE_VECTOR_NAT: return isVectorNat(expr);
@@ -127,11 +127,10 @@ public enum MdlDataType {
 	static public boolean validateType(MdlDataType type, AnyExpression expr){
 		if (expr.getExpression() != null)
 			return validateType(type, expr.getExpression());
-		if ((expr.getList() != null) && (type == TYPE_LIST)) return true;
+		if ((expr.getList() != null) && (type == TYPE_LIST)) 
+			return true;
 		if (expr.getVector() != null) 
 			return validateType(type, expr.getVector());
-		//if (expr.getMatching() != null) 
-		//	return (type == TYPE_MATCHING);
 		if (expr.getType() != null) 
 			return validateType(type, expr.getType());
 		return false;
@@ -146,9 +145,8 @@ public enum MdlDataType {
 	}
 	
 	static public boolean validateType(List<MdlDataType> types, AnyExpression expr){
-		for (MdlDataType type: types){
+		for (MdlDataType type: types)
 			if (validateType(type, expr)) return true;
-		}
 		return false;
 	}
 	
@@ -161,15 +159,15 @@ public enum MdlDataType {
 			case TYPE_INT:  return isInteger(expr);   
 			case TYPE_REAL: return isReal(expr);     
 			case TYPE_BOOLEAN: return isBoolean(expr);
-			//Restrictions
+			//Restrictions of basic
 			case TYPE_NAT:   return isNatural(expr);  
 			case TYPE_PNAT:  return isPositiveNatural(expr);  
 			case TYPE_PREAL: return isPositiveReal(expr); 
 			case TYPE_PROBABILITY: return isProbability(expr);
-			//References
-			case TYPE_REF: return isReference(expr);  
-			case TYPE_REF_DERIV: return isDerivative(expr);
+			//Expressions
 			case TYPE_EXPR: return true;  
+			case TYPE_REF: return isReference(expr);  
+			case TYPE_DERIV: return isDerivative(expr);
 			//References to objects
 			case TYPE_OBJ_REF: return isObjectReference(expr);
 			case TYPE_OBJ_REF_MOG: return isObjectReference(expr, TYPE_OBJ_REF_MOG);
@@ -282,6 +280,20 @@ public enum MdlDataType {
 		return false;
 	}
 	
+	private static boolean isVectorBoolean(Vector v) {
+		if (v.getExpression() != null && v.getExpression().getExpressions() != null){
+			for (Expression p: v.getExpression().getExpressions()){
+				if (p.getExpression() != null){
+					boolean ok = isBoolean(p.getExpression());
+					if (!ok) return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	
 	private static boolean isVectorReference(Vector v){
 		if (v.getExpression() != null && v.getExpression().getExpressions() != null){
 			for (Expression p: v.getExpression().getExpressions()){
@@ -299,11 +311,6 @@ public enum MdlDataType {
 		if (v.getExpression() != null && v.getExpression().getExpressions() != null) return true;
 		return false;	
 	}
-	
-	/*private static boolean isVectorMatching(Vector v){
-		if (v.getExpression() != null && v.getExpression().getMatchings() != null) return true;
-		return false;	
-	}*/
 	
 	private static boolean isVectorList(Vector v){
 		if (v.getExpression() != null && v.getExpression().getLists() != null) return true;
@@ -326,6 +333,13 @@ public enum MdlDataType {
 	/////////////////////////////////////////////////////////////////////////////////////
 	//Validate references
 	/////////////////////////////////////////////////////////////////////////////////////
+	private static boolean isReference(OrExpression orExpr) {
+		if (getReference(orExpr) != null) return true;
+		//Consider constant 'T' also a reference
+		String constant = MdlPrinter.getInstance().toStr(orExpr);
+		if (constant.equals("T")) return true;
+		return false;
+	}
 	
 	private static boolean isObjectReference(OrExpression expr) {
 		SymbolName s = getReference(expr);
@@ -340,27 +354,19 @@ public enum MdlDataType {
 		return false;
 	}
 	
-	private static boolean isObjectReference(OrExpression orExpr, MdlDataType type) {
+	private static boolean isObjectReference(OrExpression orExpr, MdlDataType objType) {
 		SymbolName s = getReference(orExpr);
 		if (s != null) {
 			Mcl mcl = (Mcl) orExpr.eResource().getContents().get(0);
 			if (mcl != null){
 				List<Variable> objects = Utils.getDeclaredObjects(mcl);
 				for (Variable obj: objects)
-					if (obj.getName().equals(s.getName()) && obj.getType() == type) return true;
+					if (obj.getName().equals(s.getName()) && obj.getType() == objType) return true;
 			}
 		}
 		return false;
 	}
 
-	private static boolean isReference(OrExpression orExpr) {
-		if (getReference(orExpr) != null) return true;
-		//Consider constant 'T' also a reference
-		String constant = MdlPrinter.getInstance().toStr(orExpr);
-		if (constant.equals("T")) return true;
-		return false;
-	}
-	
 	private static boolean isDerivative(OrExpression orExpr) {
 		SymbolName s = getReference(orExpr);
 		if (s != null) {

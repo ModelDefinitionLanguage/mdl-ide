@@ -42,16 +42,19 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_ATTRIBUTE_WRONG_TYPE  = "Type error";
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/*Nested*/
+	final public static Attribute attr_category = new Attribute("category", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_pred = new Attribute("pred", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_predID = new Attribute("predID", MdlDataType.TYPE_NAT, false);
+	final public static Attribute attr_dataCmt = new Attribute("dataCmt", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_NAT), false);
+	final public static Attribute attr_modelCmt = new Attribute("modelCmt", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_NAT), false);
+
 	/*Data object*/
 	/*DATA_INPUT_VARIABLES*/
 	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.CC_CONTINUOUS);
-	final public static Attribute attr_define = new Attribute("define", MdlDataType.TYPE_LIST, false);
+	final public static Attribute attr_define = new Attribute("define", 
+			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_PIECEWISE, MdlDataType.TYPE_LIST, MdlDataType.TYPE_VECTOR_LIST), false);
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
-	final public static Attribute attr_cmpt = new Attribute("cmpt", MdlDataType.TYPE_EXPR, false);
-	final public static Attribute attr_variable = new Attribute("variable", MdlDataType.TYPE_EXPR, false);
-	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
-
-	//final public static Attribute attr_administration_ref = new Attribute("administration", MdlDataType.TYPE_REF_DERIV, false);
 
 	/*Parameter object*/
 	//STRUCTURAL
@@ -62,8 +65,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_units = new Attribute("units", MdlDataType.TYPE_STRING, false, "kg");
 
 	//VARIABILITY
-	//final public static Attribute attr_values = new Attribute("values", MdlDataType.TYPE_VECTOR_REAL, true, "[]");
-	final public static Attribute attr_params = new Attribute("params", MdlDataType.TYPE_VECTOR_REF, true, "[]");
+	final public static Attribute attr_params = new Attribute("params", MdlDataType.TYPE_VECTOR_REF, false, "[]");
 	final public static Attribute attr_type_randomEff = new Attribute("type", MdlDataType.TYPE_RANDOM_EFFECT, false, VariabilityType.SD.toString());
 	
 	/*Model object*/
@@ -85,6 +87,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 
 	/*ESTIMATION*/
 	final public static Attribute attr_ruv = new Attribute("ruv", MdlDataType.TYPE_EXPR, false);
+	final public static Attribute attr_prediction = new Attribute("prediction", MdlDataType.TYPE_EXPR, false);
 	
 	/*ODE*/
 	final public static Attribute attr_deriv = new Attribute("deriv", MdlDataType.TYPE_EXPR, true, DefaultValues.VAR_NAME);	
@@ -101,47 +104,35 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_cov = new Attribute("cov", 
 			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
-	//final public static Attribute attr_group = new Attribute("group", MdlDataType.TYPE_REF, false);
 	
 	/*PKMACRO*/
-	final public static Attribute attr_macro = new Attribute("macro", MdlDataType.TYPE_PK_MACRO, true);
-	final public static Attribute attr_type_nat = new Attribute("type", MdlDataType.TYPE_NAT, false);
-	final public static Attribute attr_volume = new Attribute("volume", MdlDataType.TYPE_REF, false);	
-	final public static Attribute attr_amount_ref = new Attribute("amount", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_concentration = new Attribute("concentration", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_target = new Attribute("target", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_type_macro = new Attribute("type", MdlDataType.TYPE_PK_MACRO, true);
 	final public static Attribute attr_from = new Attribute("from", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_to = new Attribute("to", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_tlag = new Attribute("tlag", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_k = new Attribute("k", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_v = new Attribute("v", MdlDataType.TYPE_REAL, false);
+	final public static Attribute attr_cl = new Attribute("cl", MdlDataType.TYPE_REAL, false);
 	final public static Attribute attr_ka = new Attribute("ka", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_kt = new Attribute("kt", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_p = new Attribute("p", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_param = new Attribute("param", MdlDataType.TYPE_REF, false);	
-	/*
-	final public static Attribute attr_finput = new Attribute("finput", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_foutput = new Attribute("foutput", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_tlag = new Attribute("tlag", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_kin = new Attribute("kin", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_kout = new Attribute("kout", MdlDataType.TYPE_REAL, false);
-	final public static Attribute attr_thalf = new Attribute("thalf", MdlDataType.TYPE_REAL, false);
+	final public static Attribute attr_finput = new Attribute("finput", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_foutput = new Attribute("foutput", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_tk0 = new Attribute("tk0", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_cl = new Attribute("cl", MdlDataType.TYPE_REAL, false);
-	final public static Attribute attr_rin = new Attribute("rin", MdlDataType.TYPE_REAL, false); 
-	final public static Attribute attr_isinput = new Attribute("isinput", MdlDataType.TYPE_BOOLEAN, false); 
-	final public static Attribute attr_central= new Attribute("central", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_emax = new Attribute("emax", MdlDataType.TYPE_REAL, false); 
-	final public static Attribute attr_vmax = new Attribute("vmax", MdlDataType.TYPE_REAL, false); 
-	final public static Attribute attr_c50 = new Attribute("c50", MdlDataType.TYPE_REAL, false); 
-	final public static Attribute attr_hill = new Attribute("hill", MdlDataType.TYPE_REAL, false); 
-	*/
-			
+	final public static Attribute attr_alink = new Attribute("alink", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_rate = new Attribute("rate", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_k = new Attribute("k", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_ktr = new Attribute("ktr", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_mtt = new Attribute("mtt", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_vm = new Attribute("vm", MdlDataType.TYPE_REAL, false);
+	final public static Attribute attr_km = new Attribute("km", MdlDataType.TYPE_REAL, false);
+	final public static Attribute attr_keq = new Attribute("keq", MdlDataType.TYPE_EXPR, false);
+	
 	/*Design object*/
 	/*ADMINISTRATION*/
 	final public static Attribute attr_trial_type = new Attribute("type", MdlDataType.TYPE_TRIAL, false);
 	final public static Attribute attr_start = new Attribute("start", MdlDataType.TYPE_INT, false);
 	final public static Attribute attr_end = new Attribute("end", MdlDataType.TYPE_INT, false);
-	final public static Attribute attr_administration = new Attribute("administration", 
-			MdlDataType.TYPE_INT, false);
+	final public static Attribute attr_administration = new Attribute("administration", MdlDataType.TYPE_INT, false);
 	final public static Attribute attr_amount = new Attribute("amount", 
 			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
 	final public static Attribute attr_amountBSA = new Attribute("amountBSA", 
@@ -159,8 +150,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_reset = new Attribute("reset", MdlDataType.TYPE_LIST, false);
 	
 	/*SAMPLING*/
-	final public static Attribute attr_samplingTime = new Attribute("samplingTime", 
-			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
+	final public static Attribute attr_samplingTime = new Attribute("samplingTime", Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
 	final public static Attribute attr_outcome = new Attribute("outcome", MdlDataType.TYPE_STRING, false);
 	final public static Attribute attr_bql = new Attribute("bql", MdlDataType.TYPE_REAL, false);
 	
@@ -181,8 +171,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//Attribute sets
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Data object*/
-	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_type, attr_define, attr_use, 
-			attr_cmpt, attr_variable, attr_prediction, attr_units);
+	final public static List<Attribute> attrs_dataInput = Arrays.asList(attr_type, attr_define, attr_use, attr_units);
 	
 	/*Parameter object*/
 	final public static List<Attribute> attrs_structural = Arrays.asList(attr_value, attr_lo, attr_hi, attr_fix, attr_units);
@@ -190,21 +179,20 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*Model object*/
 	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_type_randomEff, attr_rv1, attr_rv2);
-	
 	final public static List<Attribute> attrs_covariateDef   = Arrays.asList(attr_type, attr_units);
 	final public static List<Attribute> attrs_variabilityDef = Arrays.asList(attr_level, attr_type_level, attr_units);
-	
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_deriv, attr_init, attr_x0, attr_wrt);
 	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
-	final public static List<Attribute> attrs_simulation = Arrays.asList();
+	final public static List<Attribute> attrs_simulation = Arrays.asList(attr_type);
 	final public static List<Attribute> attrs_observation = Arrays.asList(attr_type_continuous, attr_error, 
 			attr_eps, attr_prediction_ref, attr_trans);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff);//, attr_group);
 	final public static List<Attribute> attrs_pkMacro = Arrays.asList(
-			attr_macro, attr_type_nat, attr_amount_ref, attr_volume, attr_from, attr_to, 
-			attr_target, attr_k, attr_ka, attr_kt, attr_p, attr_tlag, attr_param);	
+			attr_type_macro, attr_modelCmt, attr_v, attr_cl, attr_from, attr_to, 
+			attr_kin, attr_kout, attr_ka, attr_tlag, attr_finput, attr_foutput, attr_tk0, 
+			attr_k, attr_alink, attr_rate, attr_ktr, attr_mtt, attr_vm, attr_km, attr_keq);	
 	
 	/*Design object*/
 	final public static List<Attribute> attrs_administration = Arrays.asList(attr_trial_type, attr_administration, attr_amount, attr_amountBSA, attr_doseTime, attr_start, 
@@ -252,7 +240,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 
 	@Check
 	public void checkRequiredArguments(Arguments args){
-		//Do not enforce required attributes for blocks to nested lists in this block
 		EObject container = findAttributeContainer(args.eContainer());
 		if (skipAttributeValidation(container, args)) return;
 
@@ -270,17 +257,56 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		EObject argsContainer = namedArgsContainer.eContainer();
 		EObject blockContainer = findAttributeContainer(argsContainer);
 		Arguments args = (Arguments)argsContainer;
-		if (skipAttributeValidation(blockContainer, args)) return;
-		List<Attribute> knownAttributes = getListAttributes(blockContainer);
+		List<Attribute> knownAttributes = null;
+		if (skipAttributeValidation(blockContainer, args))
+			//check nested attributes if defined (e.g., in the 'define' list)
+			knownAttributes = getListAttributes(argument); 
+		else 
+			knownAttributes = getListAttributes(blockContainer); 
 		if (knownAttributes != null){
-			//Check that the attribute name is valid
 			List<String> attributeNames = new ArrayList<String>();
 			attributeNames.addAll(Utils.getAllNames(knownAttributes));
 			checkDefinedAttributes(argument, args, knownAttributes, attributeNames);
 			checkDefinedOnce(args);
 		}
 	}
-	
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Validate nested attributes
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	final public static List<Attribute> attrs_define_cmt = Arrays.asList(attr_dataCmt, attr_modelCmt);
+	final public static List<Attribute> attrs_define_amt = Arrays.asList(attr_dataCmt, attr_modelCmt);
+	final public static List<Attribute> attrs_define_covariate = Arrays.asList(attr_category, attr_value);
+	final public static List<Attribute> attrs_define_dv = Arrays.asList(attr_pred, attr_predID);
+	//Check attributes in nested lists
+	@Check
+	public List<Attribute> getListAttributes(Argument argument){
+		EObject container = argument.eContainer();
+		//Crawl up until the nearest containing named argument is found
+		while (!(container instanceof ArgumentImpl)){
+			if (container instanceof MclObjectImpl) return null;
+			container = container.eContainer();
+		}
+		Argument argContainer = (Argument) container;
+		if (argContainer.getArgumentName().getName().equals(attr_define.getName())){
+			//Argument -> NamedArguments -> Arguments
+			Arguments args = (Arguments) argContainer.eContainer().eContainer();
+			if (args != null){
+				//Expected attributes depend on the presence of the use option
+				String use = MdlPrinter.getInstance().getAttribute(args, attr_use.getName());
+				if (use.equals(UseType.COVARIATE.toString()))
+					return attrs_define_covariate;
+				if (use.equals(UseType.CMT.toString()))
+					return attrs_define_cmt;
+				if (use.equals(UseType.AMT.toString()))
+					return attrs_define_amt;
+				if (use.equals(UseType.DV.toString()))
+					return attrs_define_dv;
+			}
+		}
+		return null;
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Block attributes*/

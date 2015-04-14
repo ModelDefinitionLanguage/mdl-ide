@@ -167,9 +167,7 @@ class MathPrinter{
 
 	//Functions from the standardFunctions list are PharmML operators
 	def print_Math_FunctionCall_Standard(FunctionCall call) {
-		var functName = call.identifier.name;
-		if(call.identifier.name.equals("ln")) functName = "log";
-		if(call.identifier.name.equals("lfactorial")) functName = "factln";
+		var functName = call.identifier.name.convertUniop;
 		if (call.arguments.unnamedArguments != null) {
 			var argNum = call.arguments.unnamedArguments.arguments.size;
 			'''
@@ -401,8 +399,6 @@ class MathPrinter{
 	def print_ct_Vector(Vector v)'''
 		«v.expression.print_Math_Vector»
 	'''
-	//Matching
-	//«v.expression.print_Math_Piecewise»
 	
 	def print_Math_Vector(VectorExpression expr)'''
 		«IF expr.expressions != null»
@@ -413,23 +409,7 @@ class MathPrinter{
 			</ct:Vector>
 		«ENDIF»
 	'''
-	/*
-	def print_Math_Piecewise(VectorExpression expr)'''
-		«IF expr.matchings != null»
-			<Piecewise>
-				«FOR v: expr.matchings»
-					«v.print_Math_Piece»
-				«ENDFOR»
-			</Piecewise>
-		«ENDIF»
-	'''*/
 	
-	/* 
-	def print_Math_Piece(Matching expr){
-		val ref = expr.symbolName.print_ct_SymbolRef.toString;
-		ref.print_Math_LogicOpPiece(expr.condition.print_Math_LogicOr(0).toString);
-	}*/
-
 	def print_ct_Sequence(String begin, String stepSize, String end) '''
 		<ct:Sequence>
 			<ct:Begin>
@@ -556,18 +536,6 @@ class MathPrinter{
 		</Matrix>
 	'''
 
-	def convertMatrixType(String matrixType) {
-		if (matrixType.equals(VariabilityType::VAR.toString))
-			return MATRIX_COV;
-		if (matrixType.equals(VariabilityType::SD.toString))
-			return MATRIX_STDEV;
-		if (matrixType.equals(VariabilityType::CORR.toString))
-			return MATRIX_CORR;
-		if (matrixType.equals(VariabilityType::COV.toString))
-			return MATRIX_COV;
-		return MATRIX_COV;
-	}
-
 	protected def getProperty(TaskObjectBlock t, String name) {
 		if (t.estimateBlock != null) {
 			for (s : t.estimateBlock.statements) {
@@ -624,42 +592,46 @@ class MathPrinter{
 		}
 		return "";
 	}
-
-	//+Returns a dual operator for a given logical operator
-	def getDualOperator(String operator) {
-		switch (operator) {
-			case "<": ">="
-			case ">": "<="
-			case "<=": ">"
-			case ">=": "<"
-			case "==": "!="
-			case "!=": "=="
-			default: operator
-		}
+	
+	//////////////////////////////////////////////////////////////////////
+	//Name conversions
+	//////////////////////////////////////////////////////////////////////
+	
+	def convertMatrixType(String matrixType) {
+		if (matrixType.equals(VariabilityType::VAR.toString))
+			return MATRIX_COV;
+		if (matrixType.equals(VariabilityType::SD.toString))
+			return MATRIX_STDEV;
+		if (matrixType.equals(VariabilityType::CORR.toString))
+			return MATRIX_CORR;
+		if (matrixType.equals(VariabilityType::COV.toString))
+			return MATRIX_COV;
+		return MATRIX_COV;
 	}
+	
 
 	//operators
 	def convertOperator(String operator) {
 		switch (operator) {
-			case "<": "lt"
-			case ">": "gt"
+			case "<" : "lt"
+			case ">" : "gt"
 			case "<=": "leq"
 			case ">=": "geq"
 			case "==": "neq"
 			case "!=": "eq"
-			case "+": "plus"
-			case "-": "minus"
-			case "*": "times"
-			case "/": "divide"
-			case "^": "power"
+			case "+" : "plus"
+			case "-" : "minus"
+			case "*" : "times"
+			case "/" : "divide"
+			case "^" : "power"
 			default: operator
 		}
 	}
 
-	//delimeters
+	//delimiters
 	def convertDelimiter(String id) {
 		switch (id) {
-			case ",": "COMMA"
+			case ","  : "COMMA"
 			case "\\t": "TAB"
 			case "\\s": "SPACE"
 			default: "SPACE"
@@ -669,7 +641,7 @@ class MathPrinter{
 	//file formats
 	def convertFileFormat(String id) {
 		switch (id.toUpperCase) {
-			case "R": "R"
+			case "R"  : "R"
 			case "XLS": "SIMCYP"
 			default: id.toUpperCase
 		}
@@ -683,16 +655,27 @@ class MathPrinter{
 		}
 	}
 
+	//use option names
 	def convertEnum(String type) {
 		switch (type) {
-			case UseType::AMT.toString: "dose"
-			case UseType::YTYPE.toString: "dvid"
-			case UseType::ITYPE.toString: "dvid"
-			case UseType::OCC.toString: "occasion"
-			case UseType::CENS.toString: "censoring"
-			case UseType::TINF.toString: "duration"
+			case UseType::AMT.toString     : "dose"
+			case UseType::YTYPE.toString   : "dvid"
+			case UseType::ITYPE.toString   : "dvid"
+			case UseType::OCC.toString     : "occasion"
+			case UseType::CENS.toString    : "censoring"
+			case UseType::TINF.toString    : "duration"
 			case UseType::VARLEVEL.toString: "undefined"
 			default: type
+		}
+	}
+	
+	//function names -> PharmML operators
+	def convertUniop(String name) {
+		switch (name){
+			case "ln"        : "log"
+			case "lfactorial": "factln"
+			case "invLogit"  : "logistic"
+			default: name
 		}
 	}
 }

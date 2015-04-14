@@ -36,6 +36,7 @@ MOGObject:
 //////////////////////////////////////////////////////////
 
 ModelObjectBlock: 
+	independentVariableBlock = IndependentVariableBlock |
 	individualVariablesBlock = IndividualVariablesBlock | 
 	modelPredictionBlock = ModelPredictionBlock | 
 	randomVariableDefinitionBlock = RandomVariableDefinitionBlock |
@@ -49,6 +50,11 @@ ModelObjectBlock:
 	estimationBlock = EstimationBlock |
 	simulationBlock = SimulationBlock |
 	targetBlock = TargetBlock 
+;
+
+IndependentVariableBlock:
+	identifier = 'IDV'
+	BEGIN variables += SymbolDeclaration* END  
 ;
 
 IndividualVariablesBlock:
@@ -230,7 +236,7 @@ LibraryBlock:
 ;
 
 PkMacroBlock:
-	identifier = 'PKMACRO'
+	identifier = ('PKMACRO'| 'COMPARTMENT')
 	BEGIN statements += PkMacroStatement* END 
 ;
 
@@ -439,7 +445,7 @@ enum EventType:
 //
 
 enum LevelType:
-	no_level | model | observation
+	no_level | parameter | observation
 ;
 
 enum PkParameterType:
@@ -447,12 +453,12 @@ enum PkParameterType:
 ;
 
 enum PkMacroType:
-	no_macro | iv | oral | compartment | peripheral | absorption | transfer | elimination 
+	no_macro | iv | direct | oral | compartment | peripheral | absorption | transfer | elimination 
 ;
 
 enum UseType:
 	no_use | id | idv | amt | dv | dvid | ytype | itype | covariate | reg | dose | cat | 
-	occ | adm | cens | limit | rate | tinf | ss | addl | ii | tau | mdv | evid | cmt | varlevel
+	occ | adm | cens | limit | tinf | ss | addl | ii | tau | mdv | evid | cmt | varlevel
 ;
 
 enum TargetType:

@@ -102,27 +102,26 @@ public class Attribute {
 		if (types.size() > 0){
 			MdlDataType type = types.get(0);
 			switch (type){
-				case TYPE_REAL:  
-				case TYPE_PROBABILITY: 
-				case TYPE_NAT: 
-				case TYPE_INT:      return "0";
-				case TYPE_PREAL: 
-				case TYPE_PNAT:     return "1";
+				//Basic
+				case TYPE_REAL: case TYPE_PROBABILITY: case TYPE_NAT: case TYPE_INT:      
+									return "0";
+				case TYPE_PREAL: case TYPE_PNAT:     
+									return "1";
 				case TYPE_BOOLEAN:  return Boolean.TRUE.toString();
 				case TYPE_REF:      return DefaultValues.VAR_NAME;
-				case TYPE_CONTINUOUS: 
-				case TYPE_VAR_TYPE: return DefaultValues.CC_CONTINUOUS;
+				case TYPE_CONTINUOUS: case TYPE_VAR_TYPE: 
+									return DefaultValues.CC_CONTINUOUS;
 				//Enumerations
 				case TYPE_TARGET:   return TargetType.NMTRAN_CODE.toString();
 				case TYPE_USE:      return UseType.ID.toString();
 				case TYPE_RANDOM_EFFECT:  return VariabilityType.SD.toString();
 				case TYPE_INPUT_FORMAT:   return InputFormatType.NONMEM_FORMAT.toString();
 				case TYPE_INDIVIDUAL_VAR: return IndividualVarType.GENERAL.toString();
-				case TYPE_LEVEL:          return LevelType.MODEL.toString();
+				case TYPE_LEVEL:          return LevelType.PARAMETER.toString();
 				case TYPE_PK_PARAMETER:   return PkParameterType.VCL.toString();
 				case TYPE_PK_MACRO:       return PkMacroType.COMPARTMENT.toString();
 				case TYPE_TRIAL:          return TrialType.SIMPLE.toString();
-			default: return "";
+				default: return "";
 			}
 		}
 		return "";

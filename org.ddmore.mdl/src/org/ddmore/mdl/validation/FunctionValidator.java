@@ -50,7 +50,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static List<String> funct_standard1 = Arrays.asList(
 		"abs","exp", "factorial", "factln", "gammaln",
 		"lfactorial", "ln", //Supported by MDL but not PharmML
-		"log", "log2", "log10", "logistic", "logit",
+		"log", "log2", "log10", "logit", "logistic", "invLogit",
 		"normcdf", "probit", "sqrt",
 		//trigonometric
 		"sin", "cos", "tan", "cot", "atan2", "sec", "csc", "sinh", "cosh", "tanh", "sech", "csch", "coth",
@@ -60,9 +60,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 
 	final public static List<String> funct_standard2 = Arrays.asList("logx", "root", "min", "max", "rem");
 
-	final public static String funct_runif     = "runif";
-	final public static String funct_pnorm     = "pnorm";	
-	final public static FunctionParameter param_n = new FunctionParameter("n", MdlDataType.TYPE_INT);
+	//final public static String funct_runif     = "runif";
+	//final public static String funct_pnorm     = "pnorm";	
+	//final public static FunctionParameter param_n = new FunctionParameter("n", MdlDataType.TYPE_INT);
 	
 	final public static String funct_seq = "seq";
 	final public static FunctionParameter param_seq_start      = new FunctionParameter("start", MdlDataType.TYPE_REAL);
@@ -119,8 +119,8 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition)),
 					new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_end))
 				), MdlDataType.TYPE_VECTOR_INT, true));
-			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
-			put(funct_runif, new FunctionSignature(funct_runif, new FunctionParameterSet(param_n), MdlDataType.TYPE_REAL));
+			//put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
+			//put(funct_runif, new FunctionSignature(funct_runif, new FunctionParameterSet(param_n), MdlDataType.TYPE_REAL));
 			
 			/*Error models*/
 			put(funct_error_additive, new FunctionSignature(funct_error_additive, 

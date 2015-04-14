@@ -150,54 +150,57 @@ class DataSetPrinter {
 		if (column.symbolName != null && column.list != null){
 			var columnId = column.symbolName.name;
 			val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-			if (use.equals(UseType::AMT.toString)){
-				var expr = column.list.arguments.getAttributeExpression(AttributeValidator::attr_cmpt.name);
-				if (expr == null)
-					expr = column.list.arguments.getAttributeExpression(AttributeValidator::attr_variable.name);
-				//column mapping with piecewise function inside
-				if (expr != null && expr.expression != null)
-					return columnId.print_ds_ColumnMapping(null, expr.expression.print_Math_Expr.toString);
-			}	
-			if (use.equals(UseType::DV.toString)){
-				var expr = column.list.arguments.getAttributeExpression(AttributeValidator::attr_prediction.name);
-				if (expr != null && expr.expression != null)
-				//TODO: check that this is a piecewise function
-					return columnId.print_ds_MultipleDVMapping(expr.expression);
+			var define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+			if (define != null){
+				if (use.equals(UseType::AMT.toString)){
+					//Reference or piecewise
+					if (define.expression != null)
+						return columnId.print_ds_ColumnMapping(null, define.expression.print_Math_Expr.toString)
+					else {//Vector of pairs
+						var pairs = define.getAttributePairs(AttributeValidator::attr_modelCmt.name, AttributeValidator::attr_dataCmt.name);
+						for (pair: pairs){
+							//TODO
+							//val ref = pair.key.print_Math_Expr.toString;
+							//ref.print_Math_LogicOpPiece(pair.value.print_Math_LogicOr(0).toString);
+						}
+					}
+				}	
+				if (use.equals(UseType::DV.toString)){
+					//Piecewise function
+					if (define.expression != null && define.expression.whenBranches != null)
+						return columnId.print_ds_MultipleDVMapping(define.expression)
+					else {//Vector of pairs
+						var pairs = define.getAttributePairs(AttributeValidator::attr_pred.name, AttributeValidator::attr_predID.name);
+						for (pair: pairs){
+							//TODO
+						}
+					}
+						
+				}
 			}
 		}
 	}	
 	
 	protected def print_ds_CategoricalMapping(SymbolDeclaration column){
-		var categoricalMapping = "";
+		var res = "";
 		if (column.list != null){
 			val type = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+			if (!type.isCategorical) return "";
 			val define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-			if (type.isCategorical){
-				if (type.type.type.categories != null && type.type.type.categories.size > 0){
-					for (i: 0..type.type.type.categories.size - 1){
-						var value = "";
-						val c = type.type.type.categories.get(i);
-						if (define.list != null)
-							value = define.list.arguments.getAttribute(c.categoryName.name);
-						if (value.length == 0){//unnamed list?
-							if (define.list.arguments.unnamedArguments != null &&
-								define.list.arguments.unnamedArguments.arguments.size == type.type.type.categories.size)
-								value = define.list.arguments.unnamedArguments.arguments.get(i).toStr;	
-						}	
-						categoricalMapping = categoricalMapping + '''
-							<ds:Map«IF value.length > 0» dataSymbol="«value»"«ENDIF» modelSymbol="«c.categoryName.name»"/>
-						''';
-					}
-				}
-				if (categoricalMapping.length > 0)
-					categoricalMapping = '''
-						<ds:CategoryMapping>
-							«categoricalMapping»
-						</ds:CategoryMapping>
-					'''
+			if (define != null){
+				var pairs = define.getAttributePairs(AttributeValidator::attr_category.name, AttributeValidator::attr_value.name);
+				for (pair: pairs)
+					res = res + '''
+						<ds:Map dataSymbol="«pair.key.toStr»" modelSymbol="«pair.value.toStr»"/>
+					''';
 			}
 		}
-		return categoricalMapping;				
+		if (res.length > 0) res  = '''
+			<ds:CategoryMapping>
+				«res»
+			</ds:CategoryMapping>
+		'''
+		return res;
 	}
 	
 	//Return a model variable (matched by name or in the MOG MAPPING block)

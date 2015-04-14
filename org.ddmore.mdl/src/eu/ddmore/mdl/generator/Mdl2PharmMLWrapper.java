@@ -64,7 +64,9 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
        
        eu.ddmore.converter.mdl2pharmml.Mdl2PharmML xtendConverter = new eu.ddmore.converter.mdl2pharmml.Mdl2PharmML();
        List<MOGObject> mogs = Utils.getMOGs(mcl); 
-	   String baseName = src.getName().replace(".mdl", ".xml");
+	   String baseName = src.getName().replace(".mcl", ".xml");
+	   //If .mdl extension is used
+	   baseName = baseName.replace(".mdl", ".xml");
        for (int i = 0; i < mogs.size(); i++){
     	   MOGObject mog = mogs.get(i);
     	   String fileName = baseName;
