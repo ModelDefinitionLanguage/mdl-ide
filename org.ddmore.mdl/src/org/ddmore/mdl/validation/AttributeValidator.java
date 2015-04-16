@@ -113,8 +113,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_cl = new Attribute("cl", MdlDataType.TYPE_REAL, false);
 	final public static Attribute attr_ka = new Attribute("ka", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_tlag = new Attribute("tlag", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_kin = new Attribute("kin", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_kout = new Attribute("kout", MdlDataType.TYPE_REAL, false);
+	final public static Attribute attr_kin = new Attribute("kin", MdlDataType.TYPE_EXPR, false);
+	final public static Attribute attr_kout = new Attribute("kout", MdlDataType.TYPE_EXPR, false);
 	final public static Attribute attr_finput = new Attribute("finput", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_foutput = new Attribute("foutput", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_tk0 = new Attribute("tk0", MdlDataType.TYPE_REF, false);
@@ -435,9 +435,10 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		EObject container1 = args.eContainer();
 		if (container1 instanceof RandomListImpl || 
 			container1 instanceof FunctionCallImpl) return true;
-		//Skip everything apart from attributes for symbol declarations
+		//Skip everything apart from attributes for symbol declarations and lists in PKMACRO block
 		EObject container2 = container1.eContainer();
-		if (container2 instanceof SymbolDeclarationImpl) return false;
+		if (container2 instanceof SymbolDeclarationImpl ||
+			(container1 instanceof ListImpl && container2 instanceof PkMacroBlockImpl)) return false;
 		return true;
 	}
 	

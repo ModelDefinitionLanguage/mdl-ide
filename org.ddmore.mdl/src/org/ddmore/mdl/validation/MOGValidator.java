@@ -3,7 +3,6 @@ package org.ddmore.mdl.validation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.ImportObjectBlock;
@@ -13,10 +12,10 @@ import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
+import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
@@ -71,17 +70,21 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 	@Check
 	public void validateMOGObjectSet(ImportObjectBlock objBlock){
 		Integer [] params = {0, 0, 0, 0};
-		List<Variable> varList = new ArrayList<Variable>();
+		List<ObjectName> objList = new ArrayList<ObjectName>();
 		for (ImportObjectStatement s: objBlock.getObjects()){
-			if (s.getSymbolName() != null)
-				varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s)));
+			if (s.getObjectName() != null)
+				objList.add(s.getObjectName());
 		}
-		for (Variable var: varList){
-			MdlDataType objType = var.getType();
-			if (objType == MdlDataType.TYPE_OBJ_REF_MODEL) params[0] += 1;
-			if (objType == MdlDataType.TYPE_OBJ_REF_PARAM) params[1] += 1;
-			if (objType == MdlDataType.TYPE_OBJ_REF_DATA)  params[2] += 1;
-			if (objType == MdlDataType.TYPE_OBJ_REF_TASK)  params[3] += 1;
+		for (ObjectName objName: objList){
+			if (objName.eContainer() != null){
+				MclObject obj = (MclObject)objName.eContainer();
+				if (obj != null){
+					if (obj.getModelObject() != null) params[0] += 1;
+					if (obj.getParameterObject() != null) params[1] += 1;
+					if (obj.getDataObject() != null)  params[2] += 1;
+					if (obj.getTaskObject() != null)  params[3] += 1;
+				}
+			}
 		}
 		if (params[0] == 0)
 			warning(MSG_MODEL_OBJ_MISSING, 

@@ -44,7 +44,7 @@ ModelObjectBlock:
 	covariateBlock = CovariateDefinitionBlock |
 	structuralParametersBlock = StructuralParametersBlock |
 	variabilityParametersBlock = VariabilityParametersBlock |
-	//outputVariablesBlock = OutputVariablesBlock | 
+	outputVariablesBlock = OutputVariablesBlock | 
 	groupVariablesBlock = GroupVariablesBlock | 
 	observationBlock = ObservationBlock |
 	estimationBlock = EstimationBlock |
@@ -92,10 +92,10 @@ VariabilityParametersBlock:
   BEGIN parameters += SymbolDeclaration* END 
 ;
 
-/*OutputVariablesBlock:
+OutputVariablesBlock:
 	identifier = 'MODEL_OUTPUT_VARIABLES' 
 	BEGIN variables += SymbolName* END 
-; */
+; 
 
 GroupVariablesBlock:
 	identifier = 'GROUP_VARIABLES' 
@@ -122,6 +122,7 @@ SimulationBlock:
 //////////////////////////////////////////////////////////
 
 ParameterObjectBlock:
+	declaredVariables = DeclaredVariablesBlock |
 	structuralBlock = StructuralBlock |
 	variabilityBlock = VariabilityBlock |
 	priorBlock = PriorParametersBlock |
@@ -154,7 +155,6 @@ DataObjectBlock:
 	sourceBlock = SourceBlock |
 	targetBlock = TargetBlock 
 ;
-
 
 DataInputBlock:
  	identifier='DATA_INPUT_VARIABLES' 
@@ -355,7 +355,7 @@ MOGObjectBlock:
  ;
  
  ImportObjectStatement:
- 	symbolName = SymbolName "=" objectName = [ObjectName] ('from file' importURI = STRING)?
+ 	(symbolName = SymbolName "=")? objectName = [ObjectName] ('from file' importURI = STRING)?
  ;
  
  MappingBlock:
@@ -453,7 +453,7 @@ enum PkParameterType:
 ;
 
 enum PkMacroType:
-	no_macro | iv | direct | oral | compartment | peripheral | absorption | transfer | elimination 
+	no_macro | input | direct | compartment | distribution | depot | transfer | elimination 
 ;
 
 enum UseType:
@@ -487,10 +487,10 @@ terminal CONSTANT:
 
 VarType:
 	categorical = 'categorical' ('(' categories += Category (=> ',' categories += Category)* ')')? | 
-	continuous = 'continuous' | 
-	likelihood = 'likelihood' |
+	continuous  = 'continuous' | 
+	likelihood  = 'likelihood' |
 	M2LL = 'M2LL' |
-	tte = 'tte'	
+	tte  = 'tte'	
 ;
 
 Category:
