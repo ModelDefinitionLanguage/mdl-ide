@@ -386,8 +386,8 @@ class ModelDefinitionPrinter {
 						//PKMACRO
 						if (st.pkMacroBlock != null){
 							for (s: st.pkMacroBlock.statements){
-								if (s.variable != null && s.variable.list != null){
-									variables = variables + s.variable.list.print_PKMAcros;
+								if (s.variable != null){
+									variables = variables + s.variable.print_PKMAcros;
 								}
 								if (s.list != null)
 									variables = variables + s.list.print_PKMAcros;

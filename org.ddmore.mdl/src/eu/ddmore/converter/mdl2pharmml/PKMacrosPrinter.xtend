@@ -32,10 +32,14 @@ class PKMacrosPrinter{
 		AttributeValidator::attr_finput.name -> "p",
 		AttributeValidator::attr_tk0.name -> "Tk0",
 		AttributeValidator::attr_tlag.name -> "Tlag",
-		AttributeValidator::attr_v.name -> "volume",
-		AttributeValidator::attr_cl.name -> "concentration",
+		AttributeValidator::attr_v.name -> "v",
+		AttributeValidator::attr_cl.name -> "Cl",
 		AttributeValidator::attr_ktr.name -> "Ktr",
-		AttributeValidator::attr_mtt.name -> "Mtt"
+		AttributeValidator::attr_mtt.name -> "Mtt",
+		AttributeValidator::attr_k.name -> "k",
+		AttributeValidator::attr_ka.name -> "ka",
+		AttributeValidator::attr_vm.name -> "Vm",
+		AttributeValidator::attr_km.name -> "Km"
 	);
 	
 	//PKMACRO / COMPARTMENT block
@@ -74,14 +78,13 @@ class PKMacrosPrinter{
 	
 	//macroType is a PharmML macro
 	def print_PKMAcros(String macroType, String content){
-		if (macroType != null)
-			'''
-				<PKmacros>
-				  	<«macroType»>
-				  		«content»
-				  	</«macroType»>
-				</PKmacros>
-			'''
+		'''
+			<PKmacros>
+			  	<«macroType»>
+			  		«content»
+			  	</«macroType»>
+			</PKmacros>
+		'''
 	}
 	
 	//Convert MDL PK macro attributes to PharmML
