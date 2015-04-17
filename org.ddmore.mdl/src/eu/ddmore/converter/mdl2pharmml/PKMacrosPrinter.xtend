@@ -17,7 +17,7 @@ class PKMacrosPrinter{
 		this.mathPrinter = mathPrinter;
 		this.resolver = resolver;	
 	}
-	
+		
 	private val pk_types = newHashMap(
 		PkMacroType::DIRECT.toString -> "IV",
 		PkMacroType::COMPARTMENT.toString -> "Compartment",
@@ -42,8 +42,7 @@ class PKMacrosPrinter{
 		AttributeValidator::attr_km.name -> "Km"
 	);
 	
-	//PKMACRO / COMPARTMENT block
-	def print_PKMAcros(SymbolDeclaration s){
+	def print_PKMacros(SymbolDeclaration s){
 		//Convert symbolName to 'amount' PharmML attribute
 		if (s.list != null){
 			var content = "";
@@ -58,26 +57,26 @@ class PKMacrosPrinter{
 			var macroType = pk_types.get(type);
 			if (macroType != null){
 				content = content + type.print_PKAttributes(s.list.arguments);
-				return macroType.print_PKMAcros(content);
+				return macroType.print_PKMacros(content);
 			}
 		}
 		return "";
 	}
 	
-	def print_PKMAcros(List list){
+	def print_PKMacros(List list){
 		if (list != null){
 			var type = list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
 			var macroType = pk_types.get(type);
 			if (macroType != null){
 				var content = type.print_PKAttributes(list.arguments);
-				return macroType.print_PKMAcros(content);
+				return macroType.print_PKMacros(content);
 			}
 		}
 		return "";
 	}
 	
 	//macroType is a PharmML macro
-	def print_PKMAcros(String macroType, String content){
+	def print_PKMacros(String macroType, String content){
 		'''
 			<PKmacros>
 			  	<«macroType»>
@@ -87,8 +86,7 @@ class PKMacrosPrinter{
 		'''
 	}
 	
-	//Convert MDL PK macro attributes to PharmML
-	//type is an MDL macro type
+	//Convert MDL PK macro attributes to PharmML, type here is an MDL macro type
 	protected def print_PKAttributes(String type, Arguments args){
 		var res = "";
 		if (args.namedArguments != null){
@@ -99,6 +97,7 @@ class PKMacrosPrinter{
 				if (attrName != null){
 					var expression = type.replaceExpr(a);
 					if (expression.length > 0){
+						res = res + expression;
 					} else {
 						expression = a.expression.print_Math_Expr;
 						res = res + '''
@@ -121,19 +120,9 @@ class PKMacrosPrinter{
 				if (a.argumentName.name.equals(AttributeValidator::attr_modelCmt.name)){
 					val modelCmt = a.expression.toStr;
 					if (modelCmt.equals("2")) {
-						var cmt = "1";
-						var adm = "1";
-						//TODO: find an actual value and replace
-						/*If data object variable with use=cmt exists and
-						    1) it has define attribute: adm=define[1] from use=cmt
-						    2) it does not have define attribute: adm = modelCmt
-						*/  
-						res = res + '''
-							<Value argument="adm"> 
-								«cmt.print_ct_Value»
-							</Value>
+						res = modelCmt.defineAdmValue + '''
 							<Value argument="cmt"> 
-								«adm.print_ct_Value»
+								«"1".print_ct_Value»
 							</Value>
 						'''
 					}
@@ -142,4 +131,25 @@ class PKMacrosPrinter{
 		}
 		return res;
 	} 	
+	
+	/*If data object variable with use=cmt exists and
+	  1) it has define attribute, assign adm=define[1] from the use=cmt definition
+	  2) it does not have define attribute, assign adm = modelCmt */  
+	protected def defineAdmValue(String modelCmt){
+		var adm = '''«"1".print_ct_Value»''';
+		//cmtVar is available from ReferenceResolver extension
+		if (cmtVar != null){
+			var define = cmtVar.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+			if (define != null){
+				var pairs = define.getAttributePairs(AttributeValidator::attr_modelCmt.name, AttributeValidator::attr_dataCmt.name);
+				if (pairs.size > 0)
+					adm = '''«pairs.get(0).value.print_Math_Expr»''';
+			} else adm = '''«modelCmt.print_ct_Value»''';
+		}
+		return '''
+			<Value argument="adm"> 
+				«adm»
+			</Value>
+		''';
+	}
 }

@@ -10,6 +10,7 @@ import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.*;
 import org.ddmore.mdl.mdl.impl.*;
+import org.ddmore.mdl.types.DefaultValues;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -290,6 +291,8 @@ public class Utils {
 	    		}
 	    	}
 		}
+		//Default independent variable
+		varList.add(new Variable(DefaultValues.INDEPENDENT_VAR, MdlDataType.TYPE_REAL));
 		return varList;
 	}
 	

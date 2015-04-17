@@ -10,7 +10,6 @@ import org.ddmore.mdl.mdl.InputFormatType
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.types.DefaultValues
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.validation.Utils
@@ -170,7 +169,7 @@ class DataSetPrinter {
 					if (define.expression != null && define.expression.whenBranches != null)
 						return columnId.print_ds_MultipleDVMapping(define.expression)
 					else {//Vector of pairs
-						var pairs = define.getAttributePairs(AttributeValidator::attr_pred.name, AttributeValidator::attr_predID.name);
+						var pairs = define.getAttributePairs(AttributeValidator::attr_pred.name, AttributeValidator::attr_predid.name);
 						for (pair: pairs){
 							//TODO
 						}
@@ -211,7 +210,7 @@ class DataSetPrinter {
 			val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 			//Individual variable
 			if (use.equals(UseType::IDV.toString)){
-				return DefaultValues::INDEPENDENT_VAR;
+				return independentVar;
 			}
 			//Covariates (ise = covariate)
 			if (use.equals(UseType::COVARIATE.toString)){

@@ -28,7 +28,6 @@ import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.mdl.UseType
-import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.types.MdlDataType
 import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.mdl.ArgumentExpression
@@ -439,11 +438,7 @@ class MathPrinter{
 	}
 
 	def print_ct_Constant(String constant) '''
-		«IF constant.toString.equals(DefaultValues::INDEPENDENT_VAR)»
-			<ct:SymbRef symbIdRef="«constant»"/>
-		«ELSE»
-			<Constant op="«constant.convertConstant»"/>
-		«ENDIF»
+		<Constant op="«constant.convertConstant»"/>
 	'''
 
 	def print_ct_Value(String value, String type) '''

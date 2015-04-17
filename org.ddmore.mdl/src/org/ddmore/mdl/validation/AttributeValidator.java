@@ -45,7 +45,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*Nested*/
 	final public static Attribute attr_category = new Attribute("category", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_pred = new Attribute("pred", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_predID = new Attribute("predID", MdlDataType.TYPE_NAT, false);
+	final public static Attribute attr_predid = new Attribute("predid", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_dataCmt = new Attribute("dataCmt", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_NAT), false);
 	final public static Attribute attr_modelCmt = new Attribute("modelCmt", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_NAT), false);
 
@@ -99,11 +99,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_INDIVIDUAL_VAR, true);
 	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_fixEff = new Attribute("fixEff", 
+			Arrays.asList(MdlDataType.TYPE_LIST, MdlDataType.TYPE_VECTOR_LIST), false);
+	//TODO remove cov and add sub-attributes coeff and cov to the fixEff
+	final public static Attribute attr_cov = new Attribute("cov", 
 			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
 	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_TRANS, false);
 	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_cov = new Attribute("cov", 
-			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
 	
 	/*PKMACRO*/
 	final public static Attribute attr_type_macro = new Attribute("type", MdlDataType.TYPE_PK_MACRO, true);
@@ -278,13 +279,13 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_define_cmt = Arrays.asList(attr_modelCmt, attr_dataCmt);
 	final public static List<Attribute> attrs_define_amt = Arrays.asList(attr_modelCmt, attr_dataCmt);
 	final public static List<Attribute> attrs_define_covariate = Arrays.asList(attr_category, attr_value);
-	final public static List<Attribute> attrs_define_dv = Arrays.asList(attr_pred, attr_predID);
+	final public static List<Attribute> attrs_define_dv = Arrays.asList(attr_pred, attr_predid);
 	//Check attributes in nested lists
 	@Check
 	public List<Attribute> getListAttributes(Argument argument){
 		EObject container = argument.eContainer();
 		//Crawl up until the nearest containing named argument is found
-		while (!(container instanceof ArgumentImpl)){
+		while (!(container instanceof ArgumentImpl)){ 
 			if (container instanceof MclObjectImpl) return null;
 			container = container.eContainer();
 		}

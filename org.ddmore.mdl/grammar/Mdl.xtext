@@ -482,11 +482,11 @@ enum TrialType:
 ;
 
 terminal CONSTANT:
-	'INF' | 'T' | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
+	'INF' | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
 ;
 
 VarType:
-	categorical = 'categorical' ('(' categories += Category (=> ',' categories += Category)* ')')? | 
+	categorical = 'categorical' ('(' categories += SymbolName (=> ',' categories += Category)* ')')? | 
 	continuous  = 'continuous' | 
 	likelihood  = 'likelihood' |
 	M2LL = 'M2LL' |
@@ -494,20 +494,15 @@ VarType:
 ;
 
 Category:
-	categoryName = ArgumentName
+	categoryName = SymbolName
 ;
 
 AnyExpression:
 	expression = Expression |
 	list = List | 
 	vector = Vector |
-	//matching = Matching |
 	type = EnumType 
 ;
-
-/*Matching:
-	symbolName = SymbolName '<=>' condition = OrExpression
-;*/
 
 List:
 	BEGIN arguments = Arguments END

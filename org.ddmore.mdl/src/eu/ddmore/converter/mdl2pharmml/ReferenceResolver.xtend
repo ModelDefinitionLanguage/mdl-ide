@@ -8,6 +8,10 @@ import java.util.ArrayList
 import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.LevelType
 import java.util.HashMap
+import org.ddmore.mdl.types.DefaultValues
+import org.ddmore.mdl.mdl.DataObject
+import org.ddmore.mdl.mdl.UseType
+import org.ddmore.mdl.mdl.SymbolDeclaration
 
 class ReferenceResolver{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -16,6 +20,10 @@ class ReferenceResolver{
     	mog.prepareCollections;
  	}
 	
+	//References that are needed for the conversion
+	protected var independentVar = DefaultValues::INDEPENDENT_VAR;
+	protected var SymbolDeclaration cmtVar = null;
+
 	//List of PharmML variables in corresponding blocks 
 	protected var vm_err_vars = new HashMap<String, Integer>(); 
 	protected var vm_mdl_vars = new HashMap<String, Integer>();
@@ -28,6 +36,7 @@ class ReferenceResolver{
 	protected def prepareCollections(MOGObject mog){
 		for (o: Utils::getMOGObjects(mog)){
 			if (o.modelObject != null) {
+				independentVar = o.modelObject.getIndependentVar;
 				//VariabilityModel definitions
 				vm_err_vars = o.modelObject.getLevelVars(LevelType::OBSERVATION);
 				vm_mdl_vars = o.modelObject.getLevelVars(LevelType::PARAMETER)
@@ -41,9 +50,12 @@ class ReferenceResolver{
 				//ObservationModel
 				om_vars = o.modelObject.getObservationVars;	
 			}
+			if (o.dataObject != null) {
+				cmtVar = o.dataObject.getCmtVariable;
+			}
 		}
 	}
-		
+	
 	protected def getReferenceBlock(String name){
 		if (vm_err_vars.containsKey(name)) return "vm_err";
 		if (vm_mdl_vars.containsKey(name)) return "vm_mdl";
@@ -52,9 +64,38 @@ class ReferenceResolver{
 		if (sm_vars.contains(name)) return "sm";	
 		if (pm_vars.contains(name)) return "pm";	
 		return "";
+	}
+	
+	protected def getCmtVariable(DataObject obj){
+		for (b: obj.blocks){
+			if (b.dataInputBlock != null){
+				for (s: b.dataInputBlock.variables){
+					if (s.symbolName != null && s.list != null){
+						if (s.list.arguments.getAttribute(AttributeValidator::attr_use.name).equals(
+							UseType::CMT.toString)){
+							return s;							
+						}
+					}
+				}
+			}					
+		}
+	}
+	
+	//Returns independent variable: a first definition from IDV{} block
+	protected def getIndependentVar(ModelObject obj){
+		for (b: obj.blocks){
+			if (b.independentVariableBlock != null){
+				for (s: b.independentVariableBlock.variables){
+					if (s.symbolName != null){
+						return s.symbolName.name;
+					}
+				}
+			}					
+		}
+		return DefaultValues::INDEPENDENT_VAR;
 	}	
 		
-	//+ Return a list of covariate variables per object
+	//Return a list of covariate variables per object
 	protected def getCovariateVars(ModelObject obj){
 		var covariateVars = newArrayList;
 		for (b: obj.blocks){

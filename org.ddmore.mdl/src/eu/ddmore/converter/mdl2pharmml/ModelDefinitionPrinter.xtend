@@ -5,7 +5,6 @@ import org.ddmore.mdl.mdl.ModelObject
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.mdl.IndividualVarType
 import org.ddmore.mdl.mdl.MOGObject
-import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.VectorExpression
@@ -358,6 +357,7 @@ class ModelDefinitionPrinter {
 	protected def print_mdef_StructuralModel(ModelObject mObj){
 		var model ="";
 		if (mObj != null){
+			//Start from PKMACRO / COMPARTMENT definitions
 			var variables = "";
 			for (b: mObj.blocks){
 				if (b.modelPredictionBlock != null){
@@ -379,18 +379,16 @@ class ModelDefinitionPrinter {
 						}
 						//LIBRARY
 						if (st.libraryBlock != null){
-							for (s: st.libraryBlock.statements){
+							for (s: st.libraryBlock.statements)
 								variables = variables + s.expression.print_Math_FunctionCall;
-							}
 						} 
-						//PKMACRO
+						//COMPARTMENT
 						if (st.pkMacroBlock != null){
 							for (s: st.pkMacroBlock.statements){
-								if (s.variable != null){
-									variables = variables + s.variable.print_PKMAcros;
-								}
+								if (s.variable != null)
+									variables = variables + s.variable.print_PKMacros;
 								if (s.list != null)
-									variables = variables + s.list.print_PKMAcros;
+									variables = variables + s.list.print_PKMacros;
 							}
 						}
 					}
@@ -510,13 +508,13 @@ class ModelDefinitionPrinter {
 			val deriv = list.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name);
 			if (deriv != null){
 				assign = '''«deriv.print_Math_Expr»'''
-				var independentVar = DefaultValues::INDEPENDENT_VAR;
-				val independentVarExpr = list.arguments.getAttributeExpression(AttributeValidator::attr_wrt.name);
-				if (independentVarExpr != null) independentVar = independentVarExpr.toStr; 
+				var wrtVar = independentVar;
+				val wrtVarExpr = list.arguments.getAttributeExpression(AttributeValidator::attr_wrt.name);
+				if (wrtVarExpr != null) wrtVar = wrtVarExpr.toStr; 
 				res  = 	
 				'''
 					<ct:IndependentVariable>
-						«independentVar.print_ct_SymbolRef»
+						«wrtVar.print_ct_SymbolRef»
 					</ct:IndependentVariable>
 				'''	
 				val initValue = list.arguments.getAttributeExpression(AttributeValidator::attr_init.name);
