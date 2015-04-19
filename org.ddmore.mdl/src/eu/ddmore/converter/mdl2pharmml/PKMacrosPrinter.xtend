@@ -6,7 +6,9 @@ import org.ddmore.mdl.mdl.PkMacroType
 import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.List
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.Argument
+import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.mdl.ModelObject
+import java.util.HashMap
 
 class PKMacrosPrinter{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -90,52 +92,82 @@ class PKMacrosPrinter{
 	protected def print_PKAttributes(String type, Arguments args){
 		var res = "";
 		if (args.namedArguments != null){
+			var attrExpressions = new HashMap<String, String>();
+			if (type.equals(PkMacroType::DEPOT.toString) || type.equals(PkMacroType::DIRECT.toString)){
+				//Custom mapping
+				//type=depot|direct && modelCmt=2 -> adm=1, cmt=1 or from context
+				val modelCmt = args.getAttribute(AttributeValidator::attr_modelCmt.name);
+				val to = args.getAttribute(AttributeValidator::attr_to.name);
+				if (modelCmt.equals("2"))
+					attrExpressions.put("adm", modelCmt.print_adm);
+				if (to.length > 0){
+					var mObj = Utils::getMclObject(args);
+					if (mObj != null && mObj.modelObject != null){
+						var toCompartmentArgs = mObj.modelObject.getToCompartment(to);
+						if (toCompartmentArgs != null){
+							var toCompartment_cmt = toCompartmentArgs.getAttribute(AttributeValidator::attr_modelCmt.name);
+							if (toCompartment_cmt.length > 0)
+								attrExpressions.put("cmt", "cmt".print_Value(toCompartment_cmt.print_ct_Value));
+							var toCompartment_ka = toCompartmentArgs.getAttribute(AttributeValidator::attr_ka.name);
+							if (toCompartment_ka.length > 0)
+								attrExpressions.put("ka", "ka".print_Value(toCompartment_ka.print_ct_Value));	
+						}
+					}
+				}
+			}
 			for (a: args.namedArguments.arguments){
 				var String attrName = null;
 				if (a.argumentName != null)
 					attrName = pk_attrs.get(a.argumentName.name);
-				if (attrName != null){
-					var expression = type.replaceExpr(a);
-					if (expression.length > 0){
-						res = res + expression;
-					} else {
-						expression = a.expression.print_Math_Expr;
-						res = res + '''
-							<Value argument="«attrName»"> 
-								«expression»
-							</Value>
-						'''
-					}
+				if (attrName != null && !attrExpressions.containsKey(attrName)){
+					attrExpressions.put(attrName, '''
+						<Value argument="«attrName»"> 
+							«a.expression.print_Math_Expr»
+						</Value>
+					''');
 				}
 			}
+			for (expr: attrExpressions.entrySet)
+				res  = res + expr.value;
 		}
 		return res;
 	} 	
 	
-	protected def replaceExpr(String type, Argument a){
-		var CharSequence res = '''''';
-		if (a.argumentName != null){
-			//type=depot, modelCmt=2 -> adm=1, cmt=1
-			if (type.equals(PkMacroType::DEPOT.toString)){
-				if (a.argumentName.name.equals(AttributeValidator::attr_modelCmt.name)){
-					val modelCmt = a.expression.toStr;
-					if (modelCmt.equals("2")) {
-						res = modelCmt.defineAdmValue + '''
-							<Value argument="cmt"> 
-								«"1".print_ct_Value»
-							</Value>
-						'''
+	protected def Arguments getToCompartment(ModelObject mObj, String to){
+		if (to.length > 0){
+			for (b: mObj.blocks){
+				if (b.modelPredictionBlock != null){
+					for (st: b.modelPredictionBlock.statements){
+					if (st.pkMacroBlock != null){
+							for (s: st.pkMacroBlock.statements){
+								if (s.variable != null){
+									if (s.variable.symbolName.name.equals(to) && s.variable.list != null){
+										var cmtMacroType = s.variable.list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
+										if (cmtMacroType.equals(PkMacroType::COMPARTMENT.toString))
+											return s.variable.list.arguments;
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 		}
-		return res;
-	} 	
+		return null;
+	}
+	
+	protected def print_Value(String attrName, String value){
+		return '''
+			<Value argument="«attrName»"> 
+				«value.print_ct_Value»
+			</Value>
+		'''
+	}
 	
 	/*If data object variable with use=cmt exists and
 	  1) it has define attribute, assign adm=define[1] from the use=cmt definition
-	  2) it does not have define attribute, assign adm = modelCmt */  
-	protected def defineAdmValue(String modelCmt){
+	  2) it does not have define attribute, assign adm = modelCmt*/  
+	protected def print_adm(String modelCmt){
 		var adm = '''«"1".print_ct_Value»''';
 		//cmtVar is available from ReferenceResolver extension
 		if (cmtVar != null){
