@@ -32,6 +32,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
     public void register(EValidatorRegistrar registrar) {}
 	
 	public final static String MSG_UNIT_UNKNOWN = "Failed to recognize a unit value";	
+	public final static String MSG_UNIT_ERROR = "Unit expression wrongly formed";	
 	//public final static String MSG_UNIT_UNDEFINED = "Unknown unit metric";	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,9 +91,15 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 						*/
 						String wrongToken = parseUnitExpression(unitValue);
 						if (wrongToken != null){
-							warning(MSG_UNIT_UNKNOWN + ": " + wrongToken + " is not in the set " + Utils.printList(unitAliases), 
-							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-							MSG_UNIT_UNKNOWN, arg.getArgumentName().getName());
+							if (Arrays.asList("(", ")", "*", "/", "^").contains(wrongToken) ||
+									wrongToken.matches("-?\\d+(\\.\\d+)?")){
+								warning(MSG_UNIT_ERROR + ": token \"" + wrongToken + "\" is not expected", 
+										MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
+										MSG_UNIT_UNKNOWN, arg.getArgumentName().getName());
+							} else 
+								warning(MSG_UNIT_UNKNOWN + ": " + wrongToken + " is not in the set " + Utils.printList(unitAliases), 
+										MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
+										MSG_UNIT_UNKNOWN, arg.getArgumentName().getName());
 						}
 					//}
 				}
@@ -185,60 +192,58 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	//Returns an incorrect token or null otherwise
 	String parseUnitExpression(String str){
 		String[] tokens = str.split("(?<=[*/^\\(\\)])|(?=[*/^\\(\\)])");
-		//TEST: return Arrays.toString(tokens);
 		Stack<Integer> stack = new Stack<Integer>(); 
 		for (int i = 0; i < tokens.length; i++){
 			String token = tokens[i];
 			if (token.length() > 0){
 				int lexem = -1;
-				if (validUnits.contains(token)) lexem = ID; //ID
+				if (validUnits.contains(token)) lexem = ID; 
 				else if (token.equals("(")) lexem = OPEN_BRACKET;
 				else if (token.equals(")")) lexem = CLOSE_BRACKET; 
 				else if (token.equals("*") || token.equals("/")) lexem = MULT_OP; 
 				else if (token.equals("^")) lexem = POWER_OP; 	
 				else if (token.matches("-?\\d+(\\.\\d+)?")) lexem = NUMBER;
 				
-				if (lexem < 0) return token; //unrecognized symbol
-				
-				if (lexem == ID){
-					if (!stack.isEmpty()){
-						if ((stack.peek() != MULT_OP) && (stack.peek() != OPEN_BRACKET)) return token;
-					}
-					stack.push(ID);
-				}
-				if (lexem == OPEN_BRACKET){
-					if (!stack.isEmpty()) 
-						if ((stack.peek() != MULT_OP) && (stack.peek() != OPEN_BRACKET)) return token;					
-					stack.push(OPEN_BRACKET);
-				}
-				if (lexem == CLOSE_BRACKET){
-					if (stack.isEmpty()) return token;
-					if ((stack.peek() != ID) && (stack.peek() != OPEN_BRACKET)) return token;	
-					while (stack.peek() != OPEN_BRACKET) {
-						stack.pop();
+				if (lexem < 0) return token; //unrecognized symbol				
+				switch(lexem){
+					case ID:
+						if (!stack.isEmpty())
+							if ((stack.peek() != MULT_OP) && (stack.peek() != OPEN_BRACKET)) return token;
+						stack.push(ID); 
+						break;
+					case OPEN_BRACKET: 
+						if (!stack.isEmpty()) 
+							if ((stack.peek() != MULT_OP) && (stack.peek() != OPEN_BRACKET)) return token;					
+						stack.push(OPEN_BRACKET); 
+						break;
+					case CLOSE_BRACKET:
 						if (stack.isEmpty()) return token;
-					}
-					stack.pop();
-					stack.push(ID);
-				}
-				if (lexem == MULT_OP){
-					if (stack.isEmpty()) return token;
-					if (stack.peek() != ID) return token;
-					if (i == tokens.length - 1) return token; //can't be the last character
-					stack.push(MULT_OP);
-				}
-				if (lexem == POWER_OP){
-					if (stack.isEmpty()) return token;
-					if (stack.peek() != ID) return token;					
-					if (i == tokens.length - 1) return token; //can't be the last character
-					stack.push(POWER_OP);
-				}
-				if (lexem == NUMBER){
-					if (!stack.isEmpty()) 
-						if ((stack.peek() != POWER_OP) && 
-							(stack.peek() != MULT_OP) 
-							&& (stack.peek() != OPEN_BRACKET)) return token;					
-					stack.pop();
+						if ((stack.peek() != ID) && (stack.peek() != NUMBER) && (stack.peek() != OPEN_BRACKET)) return token;	
+						while (stack.peek() != OPEN_BRACKET) {
+							stack.pop();
+							if (stack.isEmpty()) return token;
+						}
+						stack.pop();
+						stack.push(ID); 
+						break;
+					case MULT_OP:
+						if (stack.isEmpty()) return token;
+						if ((stack.peek() != ID) && (stack.peek() != NUMBER)) return token;
+						if (i == tokens.length - 1) return token; //can't be the last character
+						stack.push(MULT_OP);
+						break;
+					case POWER_OP:
+						if (stack.isEmpty()) return token;
+						if (stack.peek() != ID) return token;					
+						if (i == tokens.length - 1) return token; //can't be the last character
+						stack.push(POWER_OP); 
+						break;
+					case NUMBER:
+						if (!stack.isEmpty())
+							if ((stack.peek() != POWER_OP) && (stack.peek() != MULT_OP) && (stack.peek() != OPEN_BRACKET)) 
+								return token;					
+						stack.push(NUMBER);
+						break;
 				}
 			}
 		}
