@@ -486,7 +486,7 @@ terminal CONSTANT:
 ;
 
 VarType:
-	categorical = 'categorical' ('(' categories += SymbolName (=> ',' categories += Category)* ')')? | 
+	categorical = 'categorical' ('(' categories += Category (=> ',' categories += Category)* ')')? | 
 	continuous  = 'continuous' | 
 	likelihood  = 'likelihood' |
 	M2LL = 'M2LL' |
