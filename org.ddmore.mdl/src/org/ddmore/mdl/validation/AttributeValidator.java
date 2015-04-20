@@ -15,6 +15,7 @@ import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.Arguments;
 import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.impl.*;
@@ -243,7 +244,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	public void checkRequiredArguments(Arguments args){
 		EObject container = findAttributeContainer(args.eContainer());
 		if (skipAttributeValidation(container, args)) return;
-
 		List<Attribute> knownAttributes = getListAttributes(container);
 		if (knownAttributes != null){
 			String prefix = Utils.getBlockName(container) + ":";		
@@ -323,23 +323,40 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//Validate block attributes
 	//////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	@Check
+	public void checkRequiredBlockArguments(RandomVariableDefinitionBlock b){
+		Arguments args = b.getArguments();
+		List<String> argumentNames = Utils.getArgumentNames(args);	
+		for (Attribute attr: attrs_block_randomVars){
+			if (attr.isMandatory()){
+				if (!argumentNames.contains(attr.getName()))
+					warning(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
+							MdlPackage.Literals.RANDOM_VARIABLE_DEFINITION_BLOCK__IDENTIFIER, 
+							MSG_ATTRIBUTE_MISSING, b.getIdentifier() + ":" + attr.getName());
+			}
+		}
+	}
+
+	/*
+	@Check
+	//General check for required block attributes (not needed as we only have attributes in RANSOM_VARIABLES_DEFINITION)
 	public void checkRequiredBlockArguments(Arguments args){
-		EObject container = args.eContainer();
-		List<Attribute> knownAttributes = getBlockAttributes(container);
+		//Arguments -> Block
+		EObject blockContainer = args.eContainer();
+		List<Attribute> knownAttributes = getBlockAttributes(blockContainer);
 		if (knownAttributes != null){
-			String prefix = Utils.getBlockName(container) + ":";		
+			String prefix = Utils.getBlockName(blockContainer) + ":";		
 			List<String> argumentNames = Utils.getArgumentNames(args);	
 			checkRequiredAttributes(args, argumentNames, knownAttributes, prefix);
 		}
-	}
+	}*/
 	
 	@Check
 	public void checkAllBlockArguments(Argument argument){
+		//NamedArguments -> Arguments -> Block
 		EObject namedArgsContainer = argument.eContainer();
 		EObject argsContainer = namedArgsContainer.eContainer();
-		//NamedArguments -> Arguments -> Block
 		EObject blockContainer = argsContainer.eContainer();
 		List<Attribute> knownAttributes = getBlockAttributes(blockContainer);
 		if (knownAttributes != null){
@@ -358,8 +375,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		for (Attribute attr: attributes){
 			if (attr.isMandatory()){
 				if (!argumentNames.contains(attr.getName())) {
-					if (attr.getDependency() != null){
-						//Require attributes only of dependency condition holds
+					if (attr.getDependency() != null){//Require attributes only of dependency condition holds
 						if (argumentNames.contains(attr.getDependency().getAttrName())){
 							String value = MdlPrinter.getInstance().getAttribute(args, attr.getDependency().getAttrName());
 							if (attr.getDependency().containsValue(value)) {

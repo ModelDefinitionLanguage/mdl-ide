@@ -85,7 +85,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		if (o.getObjectName() != null){
 			if (Utils.isSymbolDeclaredMoreThanOnce(declaredObjects, o.getObjectName().getName())){
 				warning(MSG_OBJECT_DEFINED, 
-						MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
+						MdlPackage.Literals.MCL_OBJECT__OBJECT_NAME,
 						MSG_OBJECT_DEFINED, o.getObjectName().getName());
 			}
 		}

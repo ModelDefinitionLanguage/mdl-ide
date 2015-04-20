@@ -162,7 +162,7 @@ public class FileNewWizardPage extends WizardPage {
 		int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
 			String ext = fileName.substring(dotLoc + 1);
-			if (ext.equalsIgnoreCase("mdl") == false) {
+			if (!(ext.equalsIgnoreCase("mdl") || ext.equalsIgnoreCase("mcl"))) {
 				updateStatus("File extension must be \"mdl\"");
 				return;
 			}

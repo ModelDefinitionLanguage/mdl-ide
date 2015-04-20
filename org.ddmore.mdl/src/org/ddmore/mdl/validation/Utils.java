@@ -45,7 +45,7 @@ public class Utils {
 	//Returns a list of attribute names 
 	public static List<String> getArgumentNames(Arguments args){
 		List<String> argumentNames = new ArrayList<String>();	
-		if (args.getNamedArguments() != null)
+		if (args != null && args.getNamedArguments() != null)
 			for (Argument arg: args.getNamedArguments().getArguments())
 				if (!argumentNames.contains(arg.getArgumentName().getName()))
 					argumentNames.add(arg.getArgumentName().getName());

@@ -62,7 +62,7 @@ public class FileImportWizardPage extends WizardNewFileCreationPage {
 				setFileName(path.lastSegment());
 			}
 		});
-		String[] extensions = new String[] { "*.mdl" }; //NON-NLS-1
+		String[] extensions = new String[] { "*.mdl", "*.mcl"}; //NON-NLS-1
 		editor.setFileExtensions(extensions);
 		fileSelectionArea.moveAbove(null);
 

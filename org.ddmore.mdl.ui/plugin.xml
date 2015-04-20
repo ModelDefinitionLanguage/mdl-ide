@@ -388,19 +388,19 @@
   <extension point="org.eclipse.compare.contentViewers">
     <viewer id="org.ddmore.mdl.Mdl.compare.contentViewers"
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
-            extensions="mdl">
+            extensions="mdl,mcl">
     </viewer>
   </extension>
   <extension point="org.eclipse.compare.contentMergeViewers">
     <viewer id="org.ddmore.mdl.Mdl.compare.contentMergeViewers"
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
-            extensions="mdl" label="Mdl Compare">
+            extensions="mdl,mcl" label="Mdl Compare">
      </viewer>
   </extension>
   <extension point="org.eclipse.ui.editors.documentProviders">
     <provider id="org.ddmore.mdl.Mdl.editors.documentProviders"
             class="org.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
-            extensions="mdl">
+            extensions="mdl,mcl">
     </provider>
   </extension>
   <extension

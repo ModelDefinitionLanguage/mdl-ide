@@ -49,7 +49,7 @@ public class Attribute {
 	public Attribute(String name, List<MdlDataType> types, Boolean mandatory, AttributeDependency dependency){
 		this(name, types, mandatory);
 		this.dependency = dependency;
-	}	
+	}
 	
 	public Attribute(String name, MdlDataType type, Boolean mandatory, String defaultValue){
 		this(name, type, mandatory);
@@ -112,8 +112,8 @@ public class Attribute {
 				case TYPE_CONTINUOUS: case TYPE_VAR_TYPE: 
 									return DefaultValues.CC_CONTINUOUS;
 				//Enumerations
-				case TYPE_TARGET:   return TargetType.NMTRAN_CODE.toString();
-				case TYPE_USE:      return UseType.ID.toString();
+				case TYPE_TARGET:         return TargetType.NMTRAN_CODE.toString();
+				case TYPE_USE:            return UseType.ID.toString();
 				case TYPE_RANDOM_EFFECT:  return VariabilityType.SD.toString();
 				case TYPE_INPUT_FORMAT:   return InputFormatType.NONMEM_FORMAT.toString();
 				case TYPE_INDIVIDUAL_VAR: return IndividualVarType.GENERAL.toString();
