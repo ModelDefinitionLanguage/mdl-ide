@@ -123,6 +123,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_alink = new Attribute("alink", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_rate = new Attribute("rate", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_k = new Attribute("k", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_kt = new Attribute("kt", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_ktr = new Attribute("ktr", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_mtt = new Attribute("mtt", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_vm = new Attribute("vm", MdlDataType.TYPE_REAL, false);

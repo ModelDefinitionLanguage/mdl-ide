@@ -24,7 +24,9 @@ class PKMacrosPrinter{
 		PkMacroType::DIRECT.toString -> "IV",
 		PkMacroType::COMPARTMENT.toString -> "Compartment",
 		PkMacroType::DISTRIBUTION.toString -> "Peripheral",
+		PkMacroType::INPUT.toString -> "Absorption",
 		PkMacroType::DEPOT.toString -> "Absorption",
+		PkMacroType::EFFECT.toString -> "Effect",
 		PkMacroType::TRANSFER.toString -> "Transfer",
 		PkMacroType::ELIMINATION.toString -> "Elimination"
 	);
@@ -39,23 +41,32 @@ class PKMacrosPrinter{
 		AttributeValidator::attr_ktr.name -> "Ktr",
 		AttributeValidator::attr_mtt.name -> "Mtt",
 		AttributeValidator::attr_k.name -> "k",
+		AttributeValidator::attr_kt.name -> "kt",
 		AttributeValidator::attr_ka.name -> "ka",
 		AttributeValidator::attr_vm.name -> "Vm",
-		AttributeValidator::attr_km.name -> "Km"
+		AttributeValidator::attr_km.name -> "Km",
+		AttributeValidator::attr_keq.name -> "ke0"
 	);
 	
 	def print_PKMacros(SymbolDeclaration s){
 		//Convert symbolName to 'amount' PharmML attribute
 		if (s.list != null){
 			var content = "";
-			if (s.symbolName != null){
-				content = content + '''
-					<Value argument="amount"> 
-						«s.symbolName.print_ct_SymbolRef»
-					</Value>
-				'''
-			}
 			var type = s.list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
+			if (s.symbolName != null){
+				if (type.equals(PkMacroType::EFFECT.toString))
+					content = content + '''
+						<Value argument="concentration"> 
+							«s.symbolName.print_ct_SymbolRef»
+						</Value>
+					'''
+				else 
+					content = content + '''
+						<Value argument="amount"> 
+							«s.symbolName.print_ct_SymbolRef»
+						</Value>
+					'''
+			}
 			var macroType = pk_types.get(type);
 			if (macroType != null){
 				content = content + type.print_PKAttributes(s.list.arguments);
@@ -93,24 +104,86 @@ class PKMacrosPrinter{
 		var res = "";
 		if (args.namedArguments != null){
 			var attrExpressions = new HashMap<String, String>();
+			//Custom mapping
+			//DEPOT, INPUT
 			if (type.equals(PkMacroType::DEPOT.toString) || type.equals(PkMacroType::DIRECT.toString)){
-				//Custom mapping
 				//type=depot|direct && modelCmt=2 -> adm=1, cmt=1 or from context
 				val modelCmt = args.getAttribute(AttributeValidator::attr_modelCmt.name);
-				val to = args.getAttribute(AttributeValidator::attr_to.name);
 				if (modelCmt.equals("2"))
 					attrExpressions.put("adm", modelCmt.print_adm);
+				val to = args.getAttribute(AttributeValidator::attr_to.name);
 				if (to.length > 0){
 					var mObj = Utils::getMclObject(args);
 					if (mObj != null && mObj.modelObject != null){
-						var toCompartmentArgs = mObj.modelObject.getToCompartment(to);
+						var toCompartmentArgs = mObj.modelObject.findCompartment(to);
 						if (toCompartmentArgs != null){
 							var toCompartment_cmt = toCompartmentArgs.getAttribute(AttributeValidator::attr_modelCmt.name);
 							if (toCompartment_cmt.length > 0)
-								attrExpressions.put("cmt", "cmt".print_Value(toCompartment_cmt.print_ct_Value));
-							var toCompartment_ka = toCompartmentArgs.getAttribute(AttributeValidator::attr_ka.name);
-							if (toCompartment_ka.length > 0)
-								attrExpressions.put("ka", "ka".print_Value(toCompartment_ka.print_ct_Value));	
+								attrExpressions.put("cmt", "cmt".print_Attr_Value(toCompartment_cmt.print_ct_Value));
+						}
+					}
+				}
+			}
+			//DISTRIBUTION
+			if (type.equals(PkMacroType::DISTRIBUTION.toString)){
+				attrExpressions.put("cmt", null); //skip cmt attribute in peripheral macro
+				val modelCmt = args.getAttribute(AttributeValidator::attr_modelCmt.name);
+				val from = args.getAttribute(AttributeValidator::attr_from.name);
+				var kin = args.getAttributeExpression(AttributeValidator::attr_kin.name);
+				var kout = args.getAttributeExpression(AttributeValidator::attr_kout.name);
+				if (from.length > 0 && (kin != null || kout != null)){
+					var mObj = Utils::getMclObject(args);
+					if (mObj != null && mObj.modelObject != null){
+						var fromCompartmentArgs = mObj.modelObject.findCompartment(from);
+						if (fromCompartmentArgs != null){
+							var fromCompartment_cmt = fromCompartmentArgs.getAttribute(AttributeValidator::attr_modelCmt.name);
+							if (fromCompartment_cmt.length > 0){
+								if (kin != null){
+									var attr1 = "k" + modelCmt + fromCompartment_cmt;
+									attrExpressions.put(attr1, attr1.print_Attr_Value(kin.print_Math_Expr.toString));
+								}
+								if (kout != null){
+									var attr2 = "k" + fromCompartment_cmt + modelCmt;
+									attrExpressions.put(attr2, attr2.print_Attr_Value(kout.print_Math_Expr.toString));
+								}
+							}
+						}
+					}
+				}
+			}
+			//TRANSFER 
+			if (type.equals(PkMacroType::TRANSFER.toString)){
+				attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
+				val modelCmt = args.getAttribute(AttributeValidator::attr_modelCmt.name);
+				if (modelCmt.length > 0) 
+					attrExpressions.put("to", modelCmt.print_ct_Value);
+				val from = args.getAttribute(AttributeValidator::attr_from.name);
+				if (from.length > 0){
+					var mObj = Utils::getMclObject(args);
+					if (mObj != null && mObj.modelObject != null){
+						var fromCompartmentArgs = mObj.modelObject.findCompartment(from);
+						if (fromCompartmentArgs != null){
+							var fromCompartment_cmt = fromCompartmentArgs.getAttribute(AttributeValidator::attr_modelCmt.name);
+							if (fromCompartment_cmt.length > 0){
+								attrExpressions.put("from", "from".print_Attr_Value(fromCompartment_cmt.print_ct_Value));
+							}
+						}
+					}
+				}
+			}
+			//EFFECT
+			if (type.equals(PkMacroType::EFFECT.toString)){
+				attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
+				val from = args.getAttribute(AttributeValidator::attr_from.name);
+				if (from.length > 0){
+					var mObj = Utils::getMclObject(args);
+					if (mObj != null && mObj.modelObject != null){
+						var fromCompartmentArgs = mObj.modelObject.findCompartment(from);
+						if (fromCompartmentArgs != null){
+							var fromCompartment_cmt = fromCompartmentArgs.getAttribute(AttributeValidator::attr_modelCmt.name);
+							if (fromCompartment_cmt.length > 0){
+								attrExpressions.put("cmt", "cmt".print_Attr_Value(fromCompartment_cmt.print_ct_Value));
+							}
 						}
 					}
 				}
@@ -127,13 +200,15 @@ class PKMacrosPrinter{
 					''');
 				}
 			}
-			for (expr: attrExpressions.entrySet)
-				res  = res + expr.value;
+			for (expr: attrExpressions.entrySet){
+				if (expr.value != null)
+					res  = res + expr.value;
+			}
 		}
 		return res;
 	} 	
 	
-	protected def Arguments getToCompartment(ModelObject mObj, String to){
+	protected def Arguments findCompartment(ModelObject mObj, String to){
 		if (to.length > 0){
 			for (b: mObj.blocks){
 				if (b.modelPredictionBlock != null){
@@ -156,7 +231,7 @@ class PKMacrosPrinter{
 		return null;
 	}
 	
-	protected def print_Value(String attrName, String value){
+	protected def print_Attr_Value(String attrName, String value){
 		return '''
 			<Value argument="«attrName»"> 
 				«value.print_ct_Value»

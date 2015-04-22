@@ -453,7 +453,7 @@ enum PkParameterType:
 ;
 
 enum PkMacroType:
-	no_macro | input | direct | compartment | distribution | depot | transfer | elimination 
+	no_macro | input | direct | effect | compartment | distribution | depot | transfer | elimination 
 ;
 
 enum UseType:
