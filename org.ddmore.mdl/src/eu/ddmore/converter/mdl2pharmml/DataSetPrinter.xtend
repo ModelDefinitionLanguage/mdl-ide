@@ -72,15 +72,19 @@ class DataSetPrinter {
 					for (s: b.sourceBlock.statements){
 						if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
 							if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString)){
-								res  = res + mog.print_ds_NONMEM_DataSet(mObj, dObj);
+								var content = mog.print_ds_NONMEM_DataSet(mObj, dObj);
+								res = res + print_ds_ExternalDataSet(content, "NONMEM", BLK_DS_NONMEM_DATASET);
 							} else {
-								res = res + dObj.print_ds_Objective_DataSet;
-							}					
+								var content = dObj.print_ds_DataSet;
+								res = res + print_ds_ExternalDataSet(content, "Monolix", BLK_DS_MONOLIX_DATASET);
+							}
+												
 						}
 					}
 				}
 			}
 		}
+		//
 		return res;
 	}
 	
@@ -102,13 +106,12 @@ class DataSetPrinter {
 			
 		}
 		return variableType;
-	}
+	}	
 	
-	
-	protected def print_ds_Objective_DataSet(DataObject dObj)'''
-		<ObjectiveDataSet>
-			« dObj.print_ds_DataSet»
-		</ObjectiveDataSet>
+	protected def print_ds_ExternalDataSet(String content, String toolName, String oid)'''
+		<ExternalDataSet toolName="«toolName»", oid="«oid»">
+			«content»
+		</ExternalDataSet>
 	'''
 	
 	protected def print_ds_NONMEM_DataSet(MOGObject mog, ModelObject mObj, DataObject dObj){
@@ -137,12 +140,7 @@ class DataSetPrinter {
 				}
 			}
 		}		
-		res = res + print_ds_DataSet(dObj);
-		'''
-		<NONMEMdataSet oid="«BLK_DS_NONMEM_DATASET»">
-			«res»
-		</NONMEMdataSet>
-		'''
+		res = res + dObj.print_ds_DataSet;
 	}
 	
 	protected def print_ds_AttributeMapping(SymbolDeclaration column){
@@ -255,17 +253,17 @@ class DataSetPrinter {
 				}
 			}
 		}	
-		'''
+		return '''
 			<DataSet xmlns="«xmlns_ds»">
 				<Definition>
 					«res»
 				</Definition>
-				«dObj.print_ds_ImportData»
+				«dObj.print_ds_ExternalFile»
 			</DataSet>
 		'''
 	}
 	
-	protected def print_ds_ImportData(DataObject dObj){
+	protected def print_ds_ExternalFile(DataObject dObj){
 		var res = "";
 		for (b: dObj.blocks){
 			if (b.sourceBlock != null){
@@ -273,23 +271,21 @@ class DataSetPrinter {
 					var file = "";
 					var delimiter = "";
 					for (s: b.sourceBlock.statements){
-						if (s.propertyName.name.equals(PropertyValidator::attr_file.name) && s.expression != null){
+						if (s.propertyName.name.equals(PropertyValidator::attr_file.name) && s.expression != null)
 							file = s.expression.toStr;
-						}
-						if (s.propertyName.name.equals(PropertyValidator::attr_delimiter.name) && s.expression != null){
+						if (s.propertyName.name.equals(PropertyValidator::attr_delimiter.name) && s.expression != null)
 							delimiter = s.expression.toStr;							
-						}
 					}
 					if (file.length > 0){
 						if (delimiter.length == 0) delimiter = PropertyValidator::attr_delimiter.defaultValue;
 						val fileExtension = FilenameUtils::getExtension(file);
 						res = res +
 						'''				
-							<ImportData oid="«BLK_DS_IMPORT_DATA»">
+							<ExternalFile oid="«BLK_DS_IMPORT_DATA»">
 								<path>«file»</path>
 								<format>«fileExtension.convertFileFormat»</format>
 								<delimiter>«delimiter.convertDelimiter»</delimiter>
-							</ImportData>
+							</ExternalFile>
 						'''
 					}
 				} else {
@@ -297,9 +293,8 @@ class DataSetPrinter {
 					var rows = new ArrayList<String>();
 					var columns = new ArrayList<String>();
 					if (b.sourceBlock.inlineBlock.variables != null){
-						for (value: b.sourceBlock.inlineBlock.variables.identifiers){
+						for (value: b.sourceBlock.inlineBlock.variables.identifiers)
 							columns.add(value.name);
-						}
 					}
 					var rowLength = columns.size;
 					if (rowLength > 0){
@@ -310,9 +305,8 @@ class DataSetPrinter {
 							for (value: b.sourceBlock.inlineBlock.values.values){
 								if (value.value != null) 
 									values.add(value.toStr)
-								else {
+								else 
 									values.add("0");	
-								}
 								i = i + 1;
 								if (i == rowLength){
 									rows.add(values.print_ds_Row);
@@ -354,4 +348,27 @@ class DataSetPrinter {
 			</TargetTool>
 		'''
 	}
+	
+	protected def print_mdef_ExternalDataSetReference(DataObject dObj){
+		var oidRef = "";
+		if (dObj != null){
+			for (b: dObj.blocks)	{
+				if (b.sourceBlock != null){
+					for (s: b.sourceBlock.statements){
+						if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
+							if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString))
+								oidRef = BLK_DS_NONMEM_DATASET;
+						}
+					}
+				}
+			}
+		}
+		if (oidRef.length > 0)
+		'''
+			<ExternalDataSetReference>
+				<ct:OidRef oidRef="«oidRef»"/>
+			</ExternalDataSetReference>
+		'''
+	}	
+	
 }

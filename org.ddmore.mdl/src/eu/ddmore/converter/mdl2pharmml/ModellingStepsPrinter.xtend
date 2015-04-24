@@ -6,12 +6,12 @@ import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.mdl.InputFormatType
 import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.ModelObject
+import org.ddmore.mdl.mdl.VariabilityType
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -71,7 +71,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 	protected def print_msteps_EstimationStep(String stepId, Integer order, ModelObject mObj, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
 		<EstimationStep oid="«stepId»">
-			«dObj.print_mdef_TargetToolReference»
+			«dObj.print_mdef_ExternalDataSetReference»
 			«pObj.print_msteps_ParametersToEstimate»
 			«tObj.print_msteps_EstimateOperations(order)»
 			«mObj.print_ct_variableAssignment»
@@ -97,14 +97,17 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	
 	protected def print_msteps_ParameterEstimation(SymbolDeclaration s){
 		if (s.symbolName != null && s.list != null) {
+			//Skip correlation definitions
+			val type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name);
+			if (type.equals(VariabilityType::COV.toString) || type.equals(VariabilityType::CORR.toString)) return "";
+	
 			val fixed = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
 			var value = s.list.arguments.getAttributeExpression(AttributeValidator::attr_value.name);
 			var lo = s.list.arguments.getAttributeExpression(AttributeValidator::attr_lo.name);
 			var hi = s.list.arguments.getAttributeExpression(AttributeValidator::attr_hi.name);
 			var estimate = "0".print_ct_Value;
-			if (value != null){
+			if (value != null)
 				estimate = value.print_Math_Expr.toString();
-			}
 			'''
 				<ParameterEstimation>
 					«print_ct_SymbolRef(s.symbolName.name)»
@@ -146,7 +149,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 	protected def print_msteps_SimulationStep(String stepId, Integer order, ModelObject mObj, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
 		<SimulationStep  oid="«stepId»">
-			«dObj.print_mdef_TargetToolReference»
+			«dObj.print_mdef_ExternalDataSetReference»
 			«mObj.print_ct_variableAssignment»
 		</SimulationStep>
 	'''
@@ -176,28 +179,6 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		return res;
 	}
 	
-	protected def print_mdef_TargetToolReference(DataObject dObj){
-		var oidRef = "";
-		if (dObj != null){
-			for (b: dObj.blocks)	{
-				if (b.sourceBlock != null){
-					for (s: b.sourceBlock.statements){
-						if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
-							if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString))
-								oidRef = BLK_DS_NONMEM_DATASET;
-						}
-					}
-				}
-			}
-		}
-		if (oidRef.length > 0)
-		'''
-			<TargetToolReference>
-				<ct:OidRef oidRef="«oidRef»"/>
-			</TargetToolReference>
-		'''
-	}	
-
 	protected def print_msteps_Property(PropertyDeclaration s)'''
 		«IF s.propertyName != null && s.expression != null»
 			«IF !s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»

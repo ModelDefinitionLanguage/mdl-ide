@@ -7,7 +7,6 @@ import org.ddmore.mdl.mdl.IndividualVarType
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.validation.Utils
-import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.mdl.Expression
 import java.util.Comparator
 import java.util.Map
@@ -552,16 +551,11 @@ class ModelDefinitionPrinter {
 				val trans = list.arguments.getAttribute(AttributeValidator::attr_trans.name);
 				//Covariate model
 				var covariateContent = '''''';
-				val cov = list.arguments.getAttributeExpression(AttributeValidator::attr_cov.name);
-				val fixEff = list.arguments.getAttributeExpression(AttributeValidator::attr_fixEff.name);
-				if (cov != null && fixEff != null){
-					if (cov.vector!= null && fixEff.vector != null &&
-						cov.vector.expression != null && fixEff.vector.expression != null)
-						covariateContent = '''«print_Covariate(cov.vector.expression, fixEff.vector.expression)»'''
-					else 
-					if (cov.expression != null && fixEff.expression != null){
-						covariateContent = '''«print_Covariate(cov.expression, fixEff.expression)»'''
-					}	
+				val fixEffList = list.arguments.getAttributeExpression(AttributeValidator::attr_fixEff.name);
+				if (fixEffList != null){
+					var pairs = fixEffList.getAttributePairs(AttributeValidator::attr_coeff.name, AttributeValidator::attr_cov.name);
+					for (pair: pairs)
+						covariateContent = covariateContent + '''«print_Covariate(pair.key.expression, pair.value.expression)»'''		
 				}	
 				//Random effect
 				val ranEff = list.arguments.getAttributeExpression(AttributeValidator::attr_ranEff.name);
@@ -584,10 +578,6 @@ class ModelDefinitionPrinter {
 						</PopulationParameter>
 				''';
 				}	
-				//} else {
-				//	val group = list.arguments.getAttributeExpression(AttributeValidator::attr_group.name);
-				//	if (group != null) covariateContent = '''«group.print_Assign»''';
-				//}
 				return 
 				'''
 					<GaussianModel>
@@ -611,26 +601,12 @@ class ModelDefinitionPrinter {
 		}
 	}
 	
-	protected def print_Covariate(VectorExpression cov, VectorExpression ranEff){
-		var res = '''''';
-		if (cov.expressions != null && ranEff.expressions != null){
-			for (i: 0..cov.expressions.size){
-				if (ranEff.expressions.size() > i){
-					val covValue = cov.expressions.get(i);
-					val ranEffValue = ranEff.expressions.get(i);
-					res = res + print_Covariate(covValue, ranEffValue);
-				}
-			}
-		}
-		return res;
-	}
-	
-	protected def print_Covariate(Expression cov, Expression ranEff)'''
-		«IF cov != null»
+	protected def print_Covariate(Expression coeff, Expression cov)'''
+		«IF coeff != null && cov != null»
 			<Covariate>
 				«cov.print_Math_Expr»
 				<FixedEffect>
-					«ranEff.print_Math_Expr»
+					«coeff.print_Math_Expr»
 				</FixedEffect>
 			</Covariate>	
 		«ENDIF»

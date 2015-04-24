@@ -50,6 +50,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_dataCmt = new Attribute("dataCmt", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_NAT), false);
 	final public static Attribute attr_modelCmt = new Attribute("modelCmt", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_NAT), false);
 
+	final public static Attribute attr_coeff = new Attribute("coeff", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_cov = new Attribute("cov", MdlDataType.TYPE_REF, false);
+
 	/*Data object*/
 	/*DATA_INPUT_VARIABLES*/
 	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.CC_CONTINUOUS);
@@ -101,9 +104,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, true);
 	final public static Attribute attr_fixEff = new Attribute("fixEff", 
 			Arrays.asList(MdlDataType.TYPE_LIST, MdlDataType.TYPE_VECTOR_LIST), false);
-	//TODO remove cov and add sub-attributes coeff and cov to the fixEff
-	final public static Attribute attr_cov = new Attribute("cov", 
-			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), false);
 	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_TRANS, false);
 	final public static Attribute attr_pop = new Attribute("pop", MdlDataType.TYPE_REF, false);
 	
@@ -121,7 +121,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_foutput = new Attribute("foutput", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_tk0 = new Attribute("tk0", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_alink = new Attribute("alink", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_rate = new Attribute("rate", MdlDataType.TYPE_REF, false);
+	//final public static Attribute attr_rate = new Attribute("rate", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_k = new Attribute("k", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_kt = new Attribute("kt", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_ktr = new Attribute("ktr", MdlDataType.TYPE_REF, false);
@@ -163,7 +163,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_inteventionSequence = new Attribute("inteventionSequence", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_occasionValue = new Attribute("occasionValue", MdlDataType.TYPE_LIST, false);
 	final public static Attribute attr_samplingSequence = new Attribute("samplingSequence", MdlDataType.TYPE_LIST, false);
-	
+
 	/*DESIGN_SPACE, HYPER_SPACE*/
 	final public static Attribute attr_admTime = new Attribute("admTime", MdlDataType.TYPE_RANDOM_LIST, false);
 	final public static Attribute attr_numberSamples = new Attribute("numberSamples", MdlDataType.TYPE_RANDOM_LIST, false);
@@ -191,18 +191,19 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			attr_eps, attr_prediction_ref, attr_trans);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
-	final public static List<Attribute> attrs_individualVariables = Arrays.asList(attr_g_type, attr_trans, attr_pop, attr_cov, attr_fixEff, attr_ranEff);//, attr_group);
+	final public static List<Attribute> attrs_individualVariables = Arrays.asList(attr_g_type, attr_trans, attr_pop, 
+			attr_fixEff, attr_ranEff);//, attr_group);
 	final public static List<Attribute> attrs_pkMacro = Arrays.asList(
 			attr_type_macro, attr_modelCmt, attr_v, attr_cl, attr_from, attr_to, 
 			attr_kin, attr_kout, attr_ka, attr_tlag, attr_finput, attr_foutput, attr_tk0, 
-			attr_k, attr_alink, attr_rate, attr_ktr, attr_mtt, attr_vm, attr_km, attr_keq);	
+			attr_k, attr_alink, attr_ktr, attr_mtt, attr_vm, attr_km, attr_keq);	
 	
 	/*Design object*/
 	final public static List<Attribute> attrs_administration = Arrays.asList(attr_trial_type, attr_administration, attr_amount, attr_amountBSA, attr_doseTime, attr_start, 
 		attr_end, attr_steadyState, attr_interval, attr_treatment, attr_combination, attr_duration);
 	final public static List<Attribute> attrs_action = Arrays.asList(attr_start, attr_end, attr_reset);
 	final public static List<Attribute> attrs_sampling = Arrays.asList(attr_trial_type, attr_start, attr_end, attr_samplingTime, attr_interval, attr_outcome, attr_bql, attr_combination);
-	final public static List<Attribute> attrs_studyDesign = Arrays.asList(attr_groupSize, attr_inteventionSequence, attr_occasionValue, attr_samplingSequence, attr_cov);
+	final public static List<Attribute> attrs_studyDesign = Arrays.asList(attr_groupSize, attr_inteventionSequence, attr_occasionValue, attr_samplingSequence);//, attr_cov);
 	final public static List<Attribute> attrs_designSpace = Arrays.asList(attr_name_ref, attr_admTime, attr_numberSamples);
 	final public static List<Attribute> attrs_hyperSpace = Arrays.asList(attr_name_ref, attr_min, attr_max, attr_admTime, attr_numberSamples);
 	
@@ -281,6 +282,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_define_amt = Arrays.asList(attr_modelCmt, attr_dataCmt);
 	final public static List<Attribute> attrs_define_covariate = Arrays.asList(attr_category, attr_value);
 	final public static List<Attribute> attrs_define_dv = Arrays.asList(attr_pred, attr_predid);
+	final public static List<Attribute> attrs_fixEff = Arrays.asList(attr_coeff, attr_cov);
+	
 	//Check attributes in nested lists
 	@Check
 	public List<Attribute> getListAttributes(Argument argument){
@@ -306,6 +309,9 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 				if (use.equals(UseType.DV.toString()))
 					return attrs_define_dv;
 			}
+		}
+		if (argContainer.getArgumentName().getName().equals(attr_fixEff.getName())){
+			return attrs_fixEff;
 		}
 		return null;
 	}

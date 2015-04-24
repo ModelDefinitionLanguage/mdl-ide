@@ -457,8 +457,8 @@ enum PkMacroType:
 ;
 
 enum UseType:
-	no_use | id | idv | amt | dv | dvid | ytype | itype | covariate | reg | dose | cat | 
-	occ | adm | cens | limit | tinf | ss | addl | ii | tau | mdv | evid | cmt | varlevel
+	no_use | date | dat1 | dat2 | dat3 | id | idv | amt | dv | dvid | ytype | covariate | rate | adm | 
+	cens | ss | addl | ii | mdv | evid | cmt | varlevel
 ;
 
 enum TargetType:
