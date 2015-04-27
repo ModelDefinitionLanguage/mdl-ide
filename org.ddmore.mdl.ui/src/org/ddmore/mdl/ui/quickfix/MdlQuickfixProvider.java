@@ -109,9 +109,6 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		for (Attribute attr: AttributeValidator.attrs_variabilityParams) 
 			allAttributes.put(grammarAccess.getVariabilityParametersBlockAccess().
 					getIdentifierVARIABILITY_PARAMETERSKeyword_0_0().getValue() + ":" + attr.getName(), attr);
-		for (Attribute attr: AttributeValidator.attrs_randomVars) 
-			allAttributes.put(grammarAccess.getRandomVariableDefinitionBlockAccess().
-					getIdentifierRANDOM_VARIABLE_DEFINITIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
 		/*Design object*/
 		for (Attribute attr: AttributeValidator.attrs_studyDesign)    
 			allAttributes.put(grammarAccess.getStudyDesignBlockAccess().

@@ -79,10 +79,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_level = new Attribute("level", MdlDataType.TYPE_NAT, true, "1"); 
 	final public static Attribute attr_type_level = new Attribute("type", MdlDataType.TYPE_LEVEL, false); 
 	
-	//RANDOM_VARIABLES_DEFINITION
-	final public static Attribute attr_rv1 = new Attribute("rv1", MdlDataType.TYPE_REF, true);
-	final public static Attribute attr_rv2 = new Attribute("rv2", MdlDataType.TYPE_REF, true);
-	
 	/*OBSERVATION*/
 	final public static Attribute attr_type_continuous = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.CC_CONTINUOUS);
 	final public static Attribute attr_error = new Attribute("error", MdlDataType.TYPE_EXPR, true);
@@ -181,7 +177,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_variability = Arrays.asList(attr_value, attr_params, attr_type_randomEff, attr_fix, attr_lo, attr_hi, attr_units);
 	
 	/*Model object*/
-	final public static List<Attribute> attrs_randomVars = Arrays.asList(attr_type_randomEff, attr_rv1, attr_rv2);
 	final public static List<Attribute> attrs_covariateDef   = Arrays.asList(attr_type, attr_units);
 	final public static List<Attribute> attrs_variabilityDef = Arrays.asList(attr_level, attr_type_level, attr_units);
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_deriv, attr_init, attr_x0, attr_wrt);
@@ -192,7 +187,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(attr_g_type, attr_trans, attr_pop, 
-			attr_fixEff, attr_ranEff);//, attr_group);
+			attr_fixEff, attr_ranEff);
 	final public static List<Attribute> attrs_pkMacro = Arrays.asList(
 			attr_type_macro, attr_modelCmt, attr_v, attr_cl, attr_from, attr_to, 
 			attr_kin, attr_kout, attr_ka, attr_tlag, attr_finput, attr_foutput, attr_tk0, 
@@ -227,7 +222,6 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof ObservationBlockImpl) return attrs_observation; 
 		if (obj instanceof StructuralParametersBlockImpl) return attrs_structuralParams;
 		if (obj instanceof VariabilityParametersBlockImpl) return attrs_variabilityParams;
-		if (obj instanceof RandomVariableDefinitionBlockImpl) return attrs_randomVars;
 		/*Design object*/
 		if (obj instanceof StudyDesignBlockImpl) return attrs_studyDesign;  
 		if (obj instanceof AdministrationBlockImpl) return attrs_administration;
