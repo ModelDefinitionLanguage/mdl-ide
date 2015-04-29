@@ -97,7 +97,8 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*INDIVIDUAL_VARIABLES*/
 	final public static Attribute attr_g_type = new Attribute("type", MdlDataType.TYPE_INDIVIDUAL_VAR, true);
-	final public static Attribute attr_ranEff = new Attribute("ranEff", MdlDataType.TYPE_REF, true);
+	final public static Attribute attr_ranEff = new Attribute("ranEff", 
+			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_VECTOR_REF), true);
 	final public static Attribute attr_fixEff = new Attribute("fixEff", 
 			Arrays.asList(MdlDataType.TYPE_LIST, MdlDataType.TYPE_VECTOR_LIST), false);
 	final public static Attribute attr_trans = new Attribute("trans", MdlDataType.TYPE_TRANS, false);

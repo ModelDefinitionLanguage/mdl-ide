@@ -575,7 +575,7 @@ class ModelDefinitionPrinter {
 				var ranEffExpr = '''''';
 				if (ranEff != null){
 					if (ranEff.expression != null) ranEffExpr = '''«ranEff.expression.print_Math_Expr»'''
-					if (ranEff.vector != null) ranEff.vector.print_ct_Vector;
+					if (ranEff.vector != null) ranEffExpr = '''«ranEff.vector.print_ct_Vector»''';
 				}				
 				//Population parameter
 				var popContent = '''''';
