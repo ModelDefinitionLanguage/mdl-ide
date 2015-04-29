@@ -574,8 +574,19 @@ class ModelDefinitionPrinter {
 				val ranEff = list.arguments.getAttributeExpression(AttributeValidator::attr_ranEff.name);
 				var ranEffExpr = '''''';
 				if (ranEff != null){
-					if (ranEff.expression != null) ranEffExpr = '''«ranEff.expression.print_Math_Expr»'''
-					if (ranEff.vector != null) ranEffExpr = '''«ranEff.vector.print_ct_Vector»''';
+					if (ranEff.expression != null) ranEffExpr = '''
+						<RandomEffects>
+							«ranEff.expression.print_Math_Expr»
+						</RandomEffects>
+						'''	
+					if (ranEff.vector != null && ranEff.vector.expression.expressions != null) {
+						for (expr: ranEff.vector.expression.expressions)
+							ranEffExpr = ranEffExpr + '''
+							<RandomEffects>
+								«expr.print_Math_Expr»
+							</RandomEffects>
+							''';
+					}
 				}				
 				//Population parameter
 				var popContent = '''''';
@@ -603,11 +614,7 @@ class ModelDefinitionPrinter {
 								«covariateContent»
 							</«covariateType»>
 						«ENDIF»
-						«IF ranEffExpr.length > 0»
-							<RandomEffects>
-								«ranEffExpr»
-							</RandomEffects>
-						«ENDIF»
+						«ranEffExpr»
 					</GaussianModel>
 				'''
 			}
