@@ -265,15 +265,8 @@ class MdlPrinter {
 	
 	def toStr(SymbolDeclaration v){
 		var res = "";
-		if (v.functionName != null){
-			res = res + v.functionName.name.convertID + '('      
-		}
-		if (v.symbolName != null) {     
+		if (v.symbolName != null) 
 			res = res + v.symbolName.toStr;
-		}
-		if (v.functionName != null){
-			res = res + ')' 
-		}
 		var expr = ""; 
 		if (v.expression != null){
 			expr = v.expression.toStr;

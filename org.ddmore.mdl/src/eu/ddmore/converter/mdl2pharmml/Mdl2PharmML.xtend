@@ -13,10 +13,10 @@ class Mdl2PharmML{
   		val mdlPrinter = MdlPrinter::getInstance();
 		val ReferenceResolver resolver = new ReferenceResolver(mog); 
 		val MathPrinter mathPrinter = new MathPrinter(resolver);
+		val functPrinter = new FunctionDefinitionPrinter(); 
 		val mdPrinter = new ModelDefinitionPrinter(mathPrinter, resolver);  		
 		val msPrinter = new ModellingStepsPrinter(mathPrinter, resolver);  		
 		val tdPrinter = new TrialDesignPrinter(mathPrinter, resolver);
-		val functPrinter = new FunctionDefinitionPrinter(); 
 		
 		'''
 		<?xml version="1.0" encoding="UTF-8"?>

@@ -491,27 +491,24 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			createEStructuralFeatureNode(parentNode,
 				p,
 				MdlPackage.Literals.SYMBOL_DECLARATION__EXPRESSION,
-				(p.getFunctionName() != null)? getLogImage(): _image(p),
-				(p.getFunctionName() != null)? p.getFunctionName().getName() + 
-						'(' + name + ')' : name,
+				_image(p),
+				name,
 				false);
 		}
 		if (p.getList() != null){
 			createEStructuralFeatureNode(parentNode,
 				p,
 				MdlPackage.Literals.SYMBOL_DECLARATION__LIST,
-				(p.getFunctionName() != null)? getLogImage(): _image(p),
-				(p.getFunctionName() != null)? p.getFunctionName().getName() + 
-						'(' + name + ')' : name,
+				_image(p),
+				name,
 				false);
 		}
 		if (p.getRandomList() != null){
 			createEStructuralFeatureNode(parentNode,
 				p,
 				MdlPackage.Literals.SYMBOL_DECLARATION__RANDOM_LIST,
-				(p.getFunctionName() != null)? getLogImage(): _image(p),
-				(p.getFunctionName() != null)? p.getFunctionName().getName() + 
-						'(' + name + ')' : name,
+				_image(p),
+				name,
 				false);
 		}
 	}

@@ -156,7 +156,8 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 		for (ModelObjectBlock b: mObj.getBlocks()){
 			if (b.getCovariateBlock() != null){
 				for (SymbolDeclaration s: b.getCovariateBlock().getVariables()){
-					if (s.getSymbolName() != null) {
+					//Math only unassigned covariates
+					if (s.getSymbolName() != null && s.getExpression() == null) {
 						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
 						if (dVarName == null) dVarName = s.getSymbolName().getName();
 						if (!dVars.contains(dVarName))

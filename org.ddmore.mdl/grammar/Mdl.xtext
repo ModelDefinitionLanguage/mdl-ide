@@ -404,14 +404,10 @@ SymbolName:
 ;
 
 SymbolDeclaration:
-	(symbolName = SymbolName)
+	symbolName = SymbolName
 		("=" (expression = Expression) | 
 		 ":" list = List | 
 		     randomList = RandomList)? 
-	| (functionName = FunctionName '(' (symbolName = SymbolName) ')' 
-		("=" (expression = Expression)| 
-		 ":" list = List | 
-		     randomList = RandomList))		
 ;
 
 PropertyDeclaration:
@@ -441,8 +437,6 @@ enum NonContinuousType:
 enum EventType:
 	no_event | exact | intervalCensored
 ;
-
-//
 
 enum LevelType:
 	no_level | parameter | observation

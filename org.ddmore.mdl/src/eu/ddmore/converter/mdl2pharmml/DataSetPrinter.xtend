@@ -84,7 +84,6 @@ class DataSetPrinter {
 				}
 			}
 		}
-		//
 		return res;
 	}
 	
@@ -157,8 +156,6 @@ class DataSetPrinter {
 						var pairs = define.getAttributePairs(AttributeValidator::attr_modelCmt.name, AttributeValidator::attr_dataCmt.name);
 						for (pair: pairs){
 							//TODO
-							//val ref = pair.key.print_Math_Expr.toString;
-							//ref.print_Math_LogicOpPiece(pair.value.print_Math_LogicOr(0).toString);
 						}
 					}
 				}	
@@ -171,8 +168,7 @@ class DataSetPrinter {
 						for (pair: pairs){
 							//TODO
 						}
-					}
-						
+					}						
 				}
 			}
 		}
@@ -246,7 +242,7 @@ class DataSetPrinter {
 					val columnId = column.symbolName.name;
 					val columnType = column.getColumnType.convertEnum;
 					val valueType = column.getValueType
-					res  = res + '''
+					res = res + '''
 						<Column columnId="«columnId»" columnType="«columnType»" valueType="«valueType»" columnNum="«k»"/>
 					'''
 					k  = k + 1;
