@@ -105,7 +105,7 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.4.0.v20150424-1529"/>
+<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.4.0.v20150428-1301"/>
 <repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.4.0-beta-b2/ci/"/>
 </location>
 </locations>
