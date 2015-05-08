@@ -29,25 +29,32 @@ DesignObject:
 	identifier = 'designobj' BEGIN blocks += DesignObjectBlock* END;
 	
 MOGObject:
-	identifier = 'mog' BEGIN objects += [ObjectName]* END;
+	identifier = 'mogobj' BEGIN blocks += MOGObjectBlock* END;
 	
 //////////////////////////////////////////////////////////
 //Model Object
 //////////////////////////////////////////////////////////
 
 ModelObjectBlock: 
-	individualVariablesBlock = IndividualVariablesBlock | //+
-	modelPredictionBlock = ModelPredictionBlock | //+
+	independentVariableBlock = IndependentVariableBlock |
+	individualVariablesBlock = IndividualVariablesBlock | 
+	modelPredictionBlock = ModelPredictionBlock | 
 	randomVariableDefinitionBlock = RandomVariableDefinitionBlock |
-	inputVariablesBlock = InputVariablesBlock |
+	variabilityBlock = VariabilityDefinitionBlock |
+	covariateBlock = CovariateDefinitionBlock |
 	structuralParametersBlock = StructuralParametersBlock |
 	variabilityParametersBlock = VariabilityParametersBlock |
-	outputVariablesBlock = OutputVariablesBlock | //+
+	outputVariablesBlock = OutputVariablesBlock | 
 	groupVariablesBlock = GroupVariablesBlock | 
 	observationBlock = ObservationBlock |
 	estimationBlock = EstimationBlock |
 	simulationBlock = SimulationBlock |
-	targetBlock = TargetBlock //+
+	targetBlock = TargetBlock 
+;
+
+IndependentVariableBlock:
+	identifier = 'IDV'
+	BEGIN variables += SymbolDeclaration* END  
 ;
 
 IndividualVariablesBlock:
@@ -61,12 +68,17 @@ ModelPredictionBlock:
 ;
 
 RandomVariableDefinitionBlock:
-	identifier = 'RANDOM_VARIABLE_DEFINITION' 
+	identifier = 'RANDOM_VARIABLE_DEFINITION' '(' arguments = Arguments? ')'
 	BEGIN variables += SymbolDeclaration* END 
 ;
 
-InputVariablesBlock:
-  	identifier = 'MODEL_INPUT_VARIABLES' 
+VariabilityDefinitionBlock:
+  	identifier = 'VARIABILITY_LEVELS' 
+  	BEGIN variables += SymbolDeclaration* END 
+;
+
+CovariateDefinitionBlock:
+  	identifier = 'COVARIATES' 
   	BEGIN variables += SymbolDeclaration* END 
 ;
 
@@ -110,6 +122,7 @@ SimulationBlock:
 //////////////////////////////////////////////////////////
 
 ParameterObjectBlock:
+	declaredVariables = DeclaredVariablesBlock |
 	structuralBlock = StructuralBlock |
 	variabilityBlock = VariabilityBlock |
 	priorBlock = PriorParametersBlock |
@@ -138,19 +151,25 @@ PriorParametersBlock:
 DataObjectBlock:
 	dataInputBlock = DataInputBlock |
 	dataDerivedBlock = DataDerivedBlock |
+	declaredVariables = DeclaredVariablesBlock |
 	sourceBlock = SourceBlock |
 	targetBlock = TargetBlock 
 ;
- 
+
 DataInputBlock:
  	identifier='DATA_INPUT_VARIABLES' 
  	BEGIN variables += SymbolDeclaration* END  
 ;
- 
+
 DataDerivedBlock:
  	identifier='DATA_DERIVED_VARIABLES' 
- 	BEGIN variables += SymbolDeclaration* END  
-; 
+ 	BEGIN variables += SymbolDeclaration* END  	
+;
+
+DeclaredVariablesBlock:
+ 	identifier='DECLARED_VARIABLES' 
+ 	BEGIN variables += SymbolDeclaration* END  	
+;
  
 SourceBlock:
 	identifier='SOURCE' 	
@@ -208,7 +227,7 @@ ModelPredictionBlockStatement:
 	variable = SymbolDeclaration | 
 	odeBlock = OdeBlock | 
 	libraryBlock = LibraryBlock |
-	compartmentBlock = CompartmentBlock 
+	pkMacroBlock = PkMacroBlock 
 ;
 
 LibraryBlock: 
@@ -216,9 +235,14 @@ LibraryBlock:
 	BEGIN statements += FunctionCallStatement* END 
 ;
 
-CompartmentBlock:
-	identifier = 'COMPARTMENT'
-	BEGIN variables += SymbolDeclaration* END 
+PkMacroBlock:
+	identifier = ('PKMACRO'| 'COMPARTMENT')
+	BEGIN statements += PkMacroStatement* END 
+;
+
+PkMacroStatement:
+	variable = SymbolDeclaration |
+	list = List
 ;
 
 FunctionCallStatement:
@@ -250,11 +274,15 @@ InlineBlock:
 ;
 
 NumericList:
-	values += NumericValue (=> (',' | ';')? values += (NumericValue | '.'))* 
+	values += SignedNumericValue (=> (',' | ';')? values += SignedNumericValue)* 
+;
+
+SignedNumericValue:
+	(operator = UnaryOperator)? value = NumericValue | skip = '.'
 ;
 
 VariableList:
-	identifiers += SymbolName (=> (',' | ';')? identifiers += SymbolName)* //Ref to VaraibleName +
+	identifiers += SymbolName (=> (',' | ';')? identifiers += SymbolName)* 
 ;
 
 //////////////////////////////////////////////////////////
@@ -314,12 +342,38 @@ SamplingBlock:
 ;
 
 //////////////////////////////////////////////////////////
+//MOG
+//////////////////////////////////////////////////////////
+MOGObjectBlock:
+	objectBlock = ImportObjectBlock |
+	mappingBlock = MappingBlock	
+;
+
+ ImportObjectBlock:
+ 	identifier = 'OBJECTS'
+ 	BEGIN objects += ImportObjectStatement* END
+ ;
+ 
+ ImportObjectStatement:
+ 	(symbolName = SymbolName "=")? objectName = [ObjectName] ('from file' importURI = STRING)?
+ ;
+ 
+ MappingBlock:
+ 	identifier = 'MAPPING'
+ 	BEGIN mappings += MappingBlockStatement* END
+ ;
+ 
+ MappingBlockStatement:
+ 	obj1 = FullyQualifiedSymbolName '=' obj2 = FullyQualifiedSymbolName
+ ;
+ 
+ FullyQualifiedSymbolName:
+ 	parent = SymbolName '.' symbolName = SymbolName
+ ;
+
+//////////////////////////////////////////////////////////
 //Common
 //////////////////////////////////////////////////////////
-
-FormalArguments:
-	arguments += ArgumentName (=> ',' arguments += ArgumentName)*
-;
 
 ArgumentName:
 	name=ID
@@ -346,22 +400,14 @@ terminal EXTERNAL_CODE:
 ; 
 
 SymbolName:
-	name = ID
+	name = ID ('[' index = INTEGER ']')?
 ;
 
 SymbolDeclaration:
-	(symbolName = SymbolName | 
-		argumentName = FullyQualifiedArgumentName
-	)
+	symbolName = SymbolName
 		("=" (expression = Expression) | 
-		":" list = List | 
-		randomList = RandomList)? 
-	| (functionName = FunctionName '(' (symbolName = SymbolName 
-		| argumentName = FullyQualifiedArgumentName
-	) ')' 
-		("=" (expression = Expression)| 
-		":" list = List | 
-		randomList = RandomList))		
+		 ":" list = List | 
+		     randomList = RandomList)? 
 ;
 
 PropertyDeclaration:
@@ -373,20 +419,40 @@ EnumType:
 	use = UseType |       
 	target = TargetType|
 	variability = VariabilityType |
-	input = InputFormatType |
+	input = InputFormatType | 
+	level = LevelType |
 	trial = TrialType |
 	individualVar = IndividualVarType |
-	distribution = DistributionType |
-	pkParameter = PkParameterType
+	pkParameter = PkParameterType |
+	pkMacro = PkMacroType |
+	nonContinuous = NonContinuousType |
+	event = EventType
+;
+
+//New 
+enum NonContinuousType:
+	no_type | count | discrete | survival
+;
+
+enum EventType:
+	no_event | exact | intervalCensored
+;
+
+enum LevelType:
+	no_level | parameter | observation
 ;
 
 enum PkParameterType:
-	no_param | v_cl | v_k | vss_cl | a_b
+	no_param | v_cl | v_k | vss_cl | abk
+;
+
+enum PkMacroType:
+	no_macro | input | direct | effect | compartment | distribution | depot | transfer | elimination 
 ;
 
 enum UseType:
-	no_use | id | idv | amt | dv | dvid | ytype | itype | covariate | reg | time | dose | cat | 
-	occ | occasion | adm | cens | limit | rate | tinf | ss | addl | ii | tau | mdv |evid | cmt
+	no_use | date | dat1 | dat2 | dat3 | id | idv | amt | dv | dvid | ytype | covariate | rate | adm | 
+	cens | ss | addl | ii | mdv | evid | cmt | varlevel
 ;
 
 enum TargetType:
@@ -409,25 +475,20 @@ enum TrialType:
 	no_Trial | simple | combined | sequential 
 ;
 
-enum DistributionType: 
-	no_Distribution | bernoulli | betaDistribution | binomial | discrete | cauchy | chiSquare | dirichlet | exponential | 	
-	fDistribution | gamma | geometric | hypergeometric | inverseGamma |	laplace | logistic |
-	logNormal | multinomial | multivariateNormal | multivariateStudentT | negativeBinomial |
-	normal | normalInverseGamma | pareto | poisson | unif | studentT | uniform | weibull | wishart |
-	discreteUnivariateMixtureModel | discreteMultivariateMixtureModel |
-    categoricalUnivariateMixtureModel | categoricalMultivariateMixtureModel |
-	continuousMultivariateMixtureModel | continuousUnivariateMixtureModel
-;
-
 terminal CONSTANT:
-	'INF' | 'T' | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
+	'INF' | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
 ;
 
 VarType:
-	categorical = 'categorical' ('(' arguments = FormalArguments ')')? | 
-	continuous = 'continuous' | 
-	likelihood = 'likelihood' |
-	M2LL = 'M2LL' 	
+	categorical = 'categorical' ('(' categories += Category (=> ',' categories += Category)* ')')? | 
+	continuous  = 'continuous' | 
+	likelihood  = 'likelihood' |
+	M2LL = 'M2LL' |
+	tte  = 'tte'	
+;
+
+Category:
+	categoryName = SymbolName
 ;
 
 AnyExpression:
@@ -442,21 +503,35 @@ List:
 ;
 
 RandomList:
-	identifier = '~' BEGIN arguments = Arguments END
+	'~' type = DistributionName '(' arguments = Arguments? ')'
+;
+
+DistributionName:
+	name = ID
 ;
 
 Arguments: 
-	arguments += Argument (=> ',' arguments += Argument)*
+	namedArguments = NamedArguments | unnamedArguments = UnnamedArguments
+;
+
+NamedArguments:
+	arguments += Argument (=> ',' arguments += Argument)* 
+;
+
+UnnamedArguments:
+	arguments += ArgumentExpression (=> ',' arguments += ArgumentExpression)*
 ;
 
 Argument:
-	(argumentName = ArgumentName ("=" expression = AnyExpression | randomList = RandomList)) | 
+	argumentName = ArgumentName "=" expression = ArgumentExpression 
+;
+
+ArgumentExpression:
 	expression = AnyExpression | randomList = RandomList
 ;
 
 ParExpression:
-	'(' expression = Expression')';
-	
+	'(' expression = Expression')';	
 	
 Expression:
 	expression = OrExpression ('when' condition = OrExpression 
@@ -499,25 +574,18 @@ UnaryExpression:
 	number = NumericValue |
 	symbol = SymbolName |
 	constant = CONSTANT |
-	attribute = FullyQualifiedArgumentName | 
 	functionCall = FunctionCall 
 ;
 
 Vector:
-	'[' values += Primary (=> ',' values += Primary)* ']'
+	'[' expression = VectorExpression ']'
 ;	
 
-Primary:
-	expression = OrExpression |
-	vector = Vector 
-;
-
-FullyQualifiedArgumentName:
-	parent = SymbolName selectors += Selector+  
-;
-
-Selector:
-	('.' argumentName = ArgumentName ) | ('[' selector = INTEGER ']')
+VectorExpression:
+		expressions += Expression (=> ',' expressions += Expression)* |
+		lists += List (=> ',' lists += List)* //|
+		//vectors += Vector (=> ',' vectors += Vector)* |
+		//matchings += Matching  (=> ',' matchings += Matching)*
 ;
 
 ObjectName:

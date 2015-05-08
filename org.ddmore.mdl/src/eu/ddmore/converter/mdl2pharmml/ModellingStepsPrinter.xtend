@@ -5,12 +5,13 @@ import org.ddmore.mdl.validation.AttributeValidator
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
-import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.mdl.InputFormatType
 import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.MOGObject
+import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.mdl.ModelObject
+import org.ddmore.mdl.mdl.VariabilityType
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -20,28 +21,28 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 	// III Modelling Steps
 	////////////////////////////////////////////////
-
 	def print_msteps_ModellingSteps(MOGObject mog){
-		var ModelObject mObj = mog.getModelObject;
-		var ParameterObject pObj = mog.getParameterObject;
-		var DataObject dObj = mog.getDataObject;
-		var TaskObject tObj = mog.getTaskObject;
+		var objects = Utils::getMOGObjects(mog);
+		var mObj = Utils::getModelObject(objects);
+		var pObj = Utils::getParameterObject(objects);
+		var dObj = Utils::getDataObject(objects);
+		var tObj = Utils::getTaskObject(objects);
 
 		var res = "";
 		var dependencies = ""; 
-		res  = res + print_ds_TargetTool(dObj);
-		res = res + print_ds_TargetDataSet(mObj, dObj);
-		var index = 1;
+		if (mObj != null && dObj != null && pObj != null && tObj != null) {
+			res = res + dObj.print_ds_TargetTool;
+			res = res + mog.print_ds_TargetDataSet;
+			var index = 1;
 
-		if (tObj != null) {
 			for (b: tObj.blocks){
 				if ((b.estimateBlock != null) || (b.simulateBlock != null)){
 					var stepType = BLK_ESTIM_STEP;
 					if (b.simulateBlock != null) stepType = BLK_SIMUL_STEP;
 					if (stepType.equals(BLK_ESTIM_STEP)){
-						res = res + print_msteps_EstimationStep(stepType + index, index, dObj, pObj, tObj);
+						res = res + print_msteps_EstimationStep(stepType + index, index, mObj, dObj, pObj, tObj);
 					} else {
-						res = res + print_msteps_SimulationStep(stepType + index, index, dObj);
+						res = res + print_msteps_SimulationStep(stepType + index, index, mObj, dObj, pObj, tObj);
 					}
 					dependencies  = dependencies +
 					'''
@@ -68,143 +69,138 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	////////////////////////////////////////////////
 	// III.a Estimation Step
 	////////////////////////////////////////////////
-	protected def print_msteps_EstimationStep(String stepId, Integer order, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
-	<EstimationStep oid="«stepId»">
-		«print_mdef_TargetToolReference(dObj)»
-		«print_msteps_ParametersToEstimate(pObj)»
-		«print_msteps_Operation(order, OPERATION_EST_POP, tObj)»
-	</EstimationStep>
+	protected def print_msteps_EstimationStep(String stepId, Integer order, ModelObject mObj, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
+		<EstimationStep oid="«stepId»">
+			«dObj.print_mdef_ExternalDataSetReference»
+			«pObj.print_msteps_ParametersToEstimate»
+			«tObj.print_msteps_EstimateOperations(order)»
+			«mObj.print_ct_variableAssignment»
+		</EstimationStep>
 	'''
 		
-	protected def print_msteps_ParametersToEstimate(ParameterObject pObj){
-		if (pObj == null) return "";
-		'''
+	protected def print_msteps_ParametersToEstimate(ParameterObject pObj)'''
 		<ParametersToEstimate>
 			«FOR b: pObj.blocks»
 				«IF b.structuralBlock != null»
 					«FOR p: b.structuralBlock.parameters»
-						«print_msteps_ParameterEstimation(p)»
+						«p.print_msteps_ParameterEstimation»
 					«ENDFOR»
 				«ENDIF»
 				«IF b.variabilityBlock != null»
 					«FOR p: b.variabilityBlock.parameters»
-						«print_msteps_ParameterEstimation(p)»
+						«p.print_msteps_ParameterEstimation»
 					«ENDFOR»
 				«ENDIF»
 			«ENDFOR»
 		</ParametersToEstimate>
-		'''	
-	}
+	'''	
 	
 	protected def print_msteps_ParameterEstimation(SymbolDeclaration s){
-		if (s.list != null && s.symbolName != null) {
+		if (s.symbolName != null && s.list != null) {
+			//Skip correlation definitions
+			val type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name);
+			if (type.equals(VariabilityType::COV.toString) || type.equals(VariabilityType::CORR.toString)) return "";
+	
 			val fixed = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
-			var value = s.list.arguments.getAttribute(AttributeValidator::attr_value.name);
-			var lo = s.list.arguments.getAttribute(AttributeValidator::attr_lo.name);
-			var hi = s.list.arguments.getAttribute(AttributeValidator::attr_hi.name);
-			if (value.length == 0) value = "0";
+			var value = s.list.arguments.getAttributeExpression(AttributeValidator::attr_value.name);
+			var lo = s.list.arguments.getAttributeExpression(AttributeValidator::attr_lo.name);
+			var hi = s.list.arguments.getAttributeExpression(AttributeValidator::attr_hi.name);
+			var estimate = "0".print_ct_Value;
+			if (value != null)
+				estimate = value.print_Math_Expr.toString();
 			'''
 				<ParameterEstimation>
 					«print_ct_SymbolRef(s.symbolName.name)»
 					<InitialEstimate fixed="«fixed»">
-						<ct:Real>«value»</ct:Real>
+						«estimate»
 					</InitialEstimate>
-					«IF lo.length > 0»
+					«IF lo != null»
 						<LowerBound>
-							<ct:Real>«lo»</ct:Real>
+							«lo.print_Math_Equation»
 						</LowerBound>
 					«ENDIF»
-					«IF hi.length > 0»
+					«IF hi != null»
 						<UpperBound>
-							<ct:Real>«hi»</ct:Real>
+							«hi.print_Math_Equation»
 						</UpperBound>
 					«ENDIF»
 				</ParameterEstimation>
 			'''
 		}
 	}
+	
+	protected def print_msteps_EstimateOperations(TaskObject tObj, Integer order)'''
+		«FOR b: tObj.blocks»
+			«IF b.estimateBlock != null»
+				<Operation order="«order»" opType="«OPERATION_EST_POP»">
+					«FOR s: b.estimateBlock.statements»
+						«s.print_msteps_Property»
+					«ENDFOR»
+					«FOR s: b.estimateBlock.statements»
+						«s.print_msteps_Algorithm»
+					«ENDFOR»
+				</Operation>
+			«ENDIF»
+		«ENDFOR»
+	'''
 
 	///////////////////////////////////////////////
 	// III.b Simulation Step
 	////////////////////////////////////////////////
-	protected def print_msteps_SimulationStep(String stepId, Integer order, DataObject dObj)'''
-	<SimulationStep  oid="«stepId»">
-		«print_mdef_TargetToolReference(dObj)»
-	</SimulationStep>
+	protected def print_msteps_SimulationStep(String stepId, Integer order, ModelObject mObj, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
+		<SimulationStep  oid="«stepId»">
+			«dObj.print_mdef_ExternalDataSetReference»
+			«mObj.print_ct_variableAssignment»
+		</SimulationStep>
 	'''
 	
 	///////////////////////////////////////////////
 	//General
-	///////////////////////////////////////////////
-	
-	protected def print_mdef_TargetToolReference(DataObject dObj){
-		var oidRef = "";
-		if (dObj != null){
-			for (b: dObj.blocks)	{
-				if (b.sourceBlock != null){
-					for (s: b.sourceBlock.statements){
-						if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
-							if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString))
-								oidRef = BLK_DS_NONMEM_DATASET;
+	///////////////////////////////////////////////	
+	protected def print_ct_variableAssignment(ModelObject mObj){
+		//For covariates that are not transformations but have expression
+		var res = "";
+		for (b: mObj.blocks){
+			if (b.covariateBlock != null){
+				for (s: b.covariateBlock.variables){
+					if (s.symbolName != null && s.expression != null){
+						if (cm_assigned_vars.contains(s.symbolName.name)){
+							res = '''
+								<ct:VariableAssignment>
+									«s.symbolName.print_ct_SymbolRef»
+									«s.expression.print_Assign»
+								</ct:VariableAssignment>
+							'''
 						}
 					}
 				}
 			}
 		}
-		if (oidRef.length > 0)
-		'''
-			<TargetToolReference>
-				<ct:OidRef oidRef="«oidRef»"/>
-			</TargetToolReference>
-		'''
-	}	
-
-	//First print properties, then define algorithm!
-	protected def print_msteps_Operation(Integer order, String opType, TaskObject tObj){
-		if (tObj == null) return "";
-		'''
-			«FOR b: tObj.blocks»
-				«IF b.estimateBlock != null»
-					<Operation order="«order»" opType="«opType»">
-						«FOR s: b.estimateBlock.statements»
-							«s.print_msteps_Property»
-						«ENDFOR»
-						«FOR s: b.estimateBlock.statements»
-							«s.print_msteps_Algorithm»
-						«ENDFOR»
-					</Operation>
-				«ENDIF»
-			«ENDFOR»
-		'''
+		return res;
 	}
-
-	protected def print_msteps_Property(PropertyDeclaration s)
-	'''
-		«IF s.propertyName != null»
-			«IF s.expression != null»
-				«IF !s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
-					<Property name="«s.propertyName.name»">
-						«print_Assign(s.expression)»
-					</Property>
-				«ENDIF»	
-			«ENDIF»
+	
+	protected def print_msteps_Property(PropertyDeclaration s)'''
+		«IF s.propertyName != null && s.expression != null»
+			«IF !s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
+				<Property name="«s.propertyName.name»">
+					«s.expression.print_Assign»
+				</Property>
+			«ENDIF»	
 		«ENDIF»
 	'''
 	
-	protected def print_msteps_Algorithm(PropertyDeclaration s)
-	'''
-		«IF s.propertyName != null»
-			«IF s.expression != null»
-				«IF s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
-					«IF s.expression.vector != null»
-						«FOR algoName: s.expression.vector.values»
-							«IF algoName.expression != null»
-								<Algorithm definition="«algoName.expression.toStr»"/>
-							«ENDIF»
-						«ENDFOR»
-					«ENDIF»
-				«ENDIF»	
-			«ENDIF»
+	protected def print_msteps_Algorithm(PropertyDeclaration s)'''
+		«IF s.propertyName != null && s.expression != null»
+			«IF s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
+				«IF s.expression.vector != null && s.expression.vector.expression != null &&
+					s.expression.vector.expression.expressions != null »
+					«FOR algoName: s.expression.vector.expression.expressions»
+						«IF algoName != null»
+							<Algorithm definition="«algoName.toStr»"/>
+						«ENDIF»
+					«ENDFOR»
+				«ENDIF»
+			«ENDIF»	
 		«ENDIF»
 	'''
 }

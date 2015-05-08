@@ -19,7 +19,7 @@ import org.ddmore.mdl.domain.FunctionSignature;
 import org.ddmore.mdl.domain.ParameterPassingMethod;
 import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.Argument;
-import org.ddmore.mdl.mdl.Arguments;
+import org.ddmore.mdl.mdl.ArgumentExpression;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.PkParameterType;
@@ -49,8 +49,8 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	//Synchronised with PharmML v.4.0.1 
 	final public static List<String> funct_standard1 = Arrays.asList(
 		"abs","exp", "factorial", "factln", "gammaln",
-		"ln", //Supported by MDL but not PharmML
-		"log", "log2", "log10", "logistic", "logit",
+		"lfactorial", "ln", //Supported by MDL but not PharmML
+		"log", "log2", "log10", "logit", "logistic", "invLogit",
 		"normcdf", "probit", "sqrt",
 		//trigonometric
 		"sin", "cos", "tan", "cot", "atan2", "sec", "csc", "sinh", "cosh", "tanh", "sech", "csch", "coth",
@@ -60,9 +60,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 
 	final public static List<String> funct_standard2 = Arrays.asList("logx", "root", "min", "max", "rem");
 
-	final public static String funct_runif     = "runif";
-	final public static String funct_pnorm     = "pnorm";	
-	final public static FunctionParameter param_n = new FunctionParameter("n", MdlDataType.TYPE_INT);
+	//final public static String funct_runif     = "runif";
+	//final public static String funct_pnorm     = "pnorm";	
+	//final public static FunctionParameter param_n = new FunctionParameter("n", MdlDataType.TYPE_INT);
 	
 	final public static String funct_seq = "seq";
 	final public static FunctionParameter param_seq_start      = new FunctionParameter("start", MdlDataType.TYPE_REAL);
@@ -90,19 +90,8 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*LIBRARY*/
-	final public static String lib_nmadvan = "nmadvan";
 	final public static String lib_PK      = "PK";
-
-	final public static List<String> libraries = Arrays.asList(lib_nmadvan, lib_PK);
-	
-	/*nmadvan parameters*/
-	final public static FunctionParameter param_nmadvan_model            = new FunctionParameter("model", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_trans            = new FunctionParameter("trans", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_ncmt             = new FunctionParameter("ncmt", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN); //number of compartments
-	final public static FunctionParameter param_nmadvan_input            = new FunctionParameter("input", MdlDataType.TYPE_LIST, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_distribution     = new FunctionParameter("distribution", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_elimination      = new FunctionParameter("elimination", MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
-	final public static FunctionParameter param_nmadvan_parameterization = new FunctionParameter("parameterization", MdlDataType.TYPE_STRING, ParameterPassingMethod.IN);
+	final public static List<String> libraries = Arrays.asList(lib_PK);
 	
 	/*PK parameters*/
 	final public static FunctionParameter param_PK_ndist = new FunctionParameter("ndist", MdlDataType.TYPE_NAT, ParameterPassingMethod.IN);
@@ -126,12 +115,12 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 				put(functName, new FunctionSignature(functName, 2, MdlDataType.TYPE_REAL));
 						
 			put(funct_seq, new FunctionSignature(funct_seq, 
-					Arrays.asList(
-						new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition)),
-						new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_end))
+				Arrays.asList(
+					new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_repetition)),
+					new FunctionParameterSet(Arrays.asList(param_seq_start, param_seq_stepSize, param_seq_end))
 				), MdlDataType.TYPE_VECTOR_INT, true));
-			put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
-			put(funct_runif, new FunctionSignature(funct_runif, new FunctionParameterSet(param_n), MdlDataType.TYPE_REAL));
+			//put(funct_pnorm, new FunctionSignature(funct_pnorm, 1, MdlDataType.TYPE_REAL));
+			//put(funct_runif, new FunctionSignature(funct_runif, new FunctionParameterSet(param_n), MdlDataType.TYPE_REAL));
 			
 			/*Error models*/
 			put(funct_error_additive, new FunctionSignature(funct_error_additive, 
@@ -159,75 +148,11 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					new FunctionParameterSet(Arrays.asList(param_error_additive, param_error_proportional, param_error_power, param_error_f)), MdlDataType.TYPE_REAL, true));
 			
 			/*Libraries*/
-			//nmadvan
+			//PK
 			Variable A = new Variable("A", MdlDataType.TYPE_VECTOR_REAL); 
 			Variable F = new Variable("F", MdlDataType.TYPE_REAL);
-			Map<String, List<Variable>> nmadvanReturnedValues = new HashMap<String, List<Variable>>();
-			nmadvanReturnedValues.put("",  Arrays.asList(A, F));
-			
-			put(lib_nmadvan, new FunctionSignature(lib_nmadvan, 
-					new FunctionParameterSet(Arrays.asList(
-					param_nmadvan_model, param_nmadvan_trans, param_nmadvan_ncmt, param_nmadvan_input, 
-					param_nmadvan_distribution, param_nmadvan_elimination, param_nmadvan_parameterization)), 
-				MdlDataType.TYPE_VECTOR_REF, true, nmadvanReturnedValues)
-			);			
-			
-			//PK
-			Variable V     = new Variable("V",     MdlDataType.TYPE_REAL); 
-			Variable V1    = new Variable("V1",    MdlDataType.TYPE_REAL); 
-			Variable V2    = new Variable("V2",    MdlDataType.TYPE_REAL); 
-			Variable V3    = new Variable("V3",    MdlDataType.TYPE_REAL); 
-			Variable V4    = new Variable("V4",    MdlDataType.TYPE_REAL); 
-			Variable VSS   = new Variable("VSS",   MdlDataType.TYPE_REAL); 
-			Variable CL    = new Variable("CL",    MdlDataType.TYPE_REAL);
-			Variable K     = new Variable("K",     MdlDataType.TYPE_REAL);
-			Variable K12   = new Variable("K12",   MdlDataType.TYPE_REAL);
-			Variable K21   = new Variable("K21",   MdlDataType.TYPE_REAL);
-			Variable K13   = new Variable("K13",   MdlDataType.TYPE_REAL);
-			Variable K31   = new Variable("K31",   MdlDataType.TYPE_REAL);
-			Variable K23   = new Variable("K23",   MdlDataType.TYPE_REAL);
-			Variable K32   = new Variable("K32",   MdlDataType.TYPE_REAL);
-			Variable K24   = new Variable("K24",   MdlDataType.TYPE_REAL);
-			Variable K42   = new Variable("K42",   MdlDataType.TYPE_REAL);
-			Variable KA    = new Variable("KA",    MdlDataType.TYPE_REAL);
-			Variable Q     = new Variable("Q",     MdlDataType.TYPE_REAL);
-			Variable Q2    = new Variable("Q2",    MdlDataType.TYPE_REAL);
-			Variable Q3    = new Variable("Q3",    MdlDataType.TYPE_REAL);
-			Variable Q4    = new Variable("Q4",    MdlDataType.TYPE_REAL);
-			Variable VM    = new Variable("VM",    MdlDataType.TYPE_REAL);
-			Variable KM    = new Variable("KM",    MdlDataType.TYPE_REAL);
-			Variable ALPHA = new Variable("ALPHA", MdlDataType.TYPE_REAL); 
-			Variable BETA  = new Variable("BETA",  MdlDataType.TYPE_REAL); 
-			Variable GAMMA = new Variable("GAMMA", MdlDataType.TYPE_REAL); 
-			
 			Map<String, List<Variable>> pkReturnedValues = new HashMap<String, List<Variable>>();
-			/*Key: values of attributes in the following order: ndist|depot|par|glm|glmr|ncomp|mom1
-			 * Boolean attributes which are not 'true' are skipped */
-			//v_cl
-			pkReturnedValues.put("ndist=1|par=v_cl", Arrays.asList(A, F, V, CL));
-			pkReturnedValues.put("ndist=1|depot=true|par=v_cl", Arrays.asList(A, F, V, CL, KA));
-			pkReturnedValues.put("ndist=2|par=v_cl", Arrays.asList(A, F, CL, V1, Q, V2));
-			pkReturnedValues.put("ndist=2|depot=true|par=v_cl", Arrays.asList(A, F, CL, V2, Q, KA));
-			pkReturnedValues.put("ndist=3|par=v_cl", Arrays.asList(A, F, CL,V1,Q2,V2,Q3,V3));
-			pkReturnedValues.put("ndist=3|depot=true|par=v_cl", Arrays.asList(A, F, CL, V2, Q3, V3, Q4, V4, KA));
-			pkReturnedValues.put("par=v_cl|mom1=true", Arrays.asList(A, F, V, VM, KM));
-			//v_k
-			pkReturnedValues.put("ndist=1|par=v_k", Arrays.asList(A, F, V, K));
-			pkReturnedValues.put("ndist=1|depot=true|par=v_k", Arrays.asList(A, F, V, K, KA));
-			pkReturnedValues.put("ndist=2|par=v_k", Arrays.asList(A, F, V, K, K12, K21));
-			pkReturnedValues.put("ndist=2|depot=true|par=v_k", Arrays.asList(A, F, V, K, K23, K32, KA));
-			pkReturnedValues.put("ndist=3|par=v_k", Arrays.asList(A, F, V, K, K12, K21, K13, K31));
-			pkReturnedValues.put("ndist=3|depot=true|par=v_k", Arrays.asList(A, F, V,K,K23,K32,K24,K42,KA));
-			pkReturnedValues.put("par=v_k|glm=true", Arrays.asList(A, F, V,K));
-			pkReturnedValues.put("par=v_k|glmr=true", Arrays.asList(A, F, V,K));
-			//vss_cl
-			pkReturnedValues.put("ndist=2|par=vss_cl", Arrays.asList(A, F, CL, V, Q, VSS));
-			pkReturnedValues.put("ndist=2|depot=true|par=vss_cl", Arrays.asList(A, F, CL, V, Q, VSS, KA));
-			//a_b
-			pkReturnedValues.put("ndist=2|par=a_b", Arrays.asList(A, F, ALPHA, BETA, K21));
-			pkReturnedValues.put("ndist=2|depot=true|par=a_b", Arrays.asList(A, F, ALPHA, BETA, K32, KA));
-			pkReturnedValues.put("ndist=3|par=a_b", Arrays.asList(A, F, ALPHA, BETA, GAMMA, K21, K31));
-			pkReturnedValues.put("ndist=3|depot=true|par=a_b", Arrays.asList(A, F, ALPHA, BETA, GAMMA, K32, K42, KA));
+			pkReturnedValues.put("",  Arrays.asList(A, F));
 			
 			put(lib_PK, new FunctionSignature(lib_PK, new FunctionParameterSet(Arrays.asList(
 				param_PK_ndist, param_PK_depot, param_PK_par, 
@@ -236,6 +161,43 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			);					
 		}
 	};
+	
+	/*Key: values of attributes in the following order: ndist|depot|par|glm|glmr|ncomp|mom1
+	 * Boolean attributes which are not 'true' are skipped */
+
+	//PK
+	static Map<String, List<String>> pkInputParameters = new HashMap<String, List<String>>(){
+		/** * */
+		private static final long serialVersionUID = -8196317757338022395L;
+		{
+			//v_cl
+			put("ndist=1|par=v_cl", Arrays.asList("V", "CL"));
+			put("ndist=1|depot=true|par=v_cl", Arrays.asList("V", "CL", "KA"));
+			put("ndist=2|par=v_cl", Arrays.asList("CL", "V1", "Q", "V2"));
+			put("ndist=2|depot=true|par=v_cl", Arrays.asList("CL", "V2", "Q", "KA"));
+			put("ndist=3|par=v_cl", Arrays.asList("CL","V1","Q2","V2","Q3" , "V3"));
+			put("ndist=3|depot=true|par=v_cl", Arrays.asList("CL", "V2", "Q3", "V3", "Q4", "V4", "KA"));
+			put("par=v_cl|mom1=true", Arrays.asList("V", "VM", "KM"));
+			//v_k
+			put("ndist=1|par=v_k", Arrays.asList("V", "K"));
+			put("ndist=1|depot=true|par=v_k", Arrays.asList("V", "K", "KA"));
+			put("ndist=2|par=v_k", Arrays.asList("V", "K", "K12", "K21"));
+			put("ndist=2|depot=true|par=v_k", Arrays.asList("V", "K", "K23", "K32", "KA"));
+			put("ndist=3|par=v_k", Arrays.asList("V", "K", "K12", "K21", "K13", "K31"));
+			put("ndist=3|depot=true|par=v_k", Arrays.asList("V", "K", "K23", "K32", "K24", "K42", "KA"));
+			put("par=v_k|glm=true", Arrays.asList("V", "K"));
+			put("par=v_k|glmr=true", Arrays.asList("V", "K"));
+			//vss_cl
+			put("ndist=2|par=vss_cl", Arrays.asList("CL", "V", "Q", "VSS"));
+			put("ndist=2|depot=true|par=vss_cl", Arrays.asList("CL", "V", "Q", "VSS", "KA"));
+			//abk
+			put("ndist=2|par=abk", Arrays.asList("ALPHA", "BETA", "K21"));
+			put("ndist=2|depot=true|par=abk", Arrays.asList("ALPHA", "BETA", "K32", "KA"));
+			put("ndist=3|par=abk", Arrays.asList("ALPHA", "BETA", "GAMMA", "K21", "K31"));
+			put("ndist=3|depot=true|par=abk", Arrays.asList("ALPHA", "BETA", "GAMMA", "K32", "K42", "KA"));
+		}
+	};
+		
 	
 	public static List<String> funct_standardWithOutputParams = new ArrayList<String>() {
 		/** * */
@@ -254,42 +216,54 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 			warning(MSG_FUNCTION_UNKNOWN, 
 					MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER,
 			MSG_FUNCTION_UNKNOWN, call.getIdentifier().getName());
-		else //standard function
+		else {
+			//standard function
 			validateStandardFunction(call);
+			if (call.getIdentifier().getName().equals(lib_PK))
+				validatePK(call);
+		}
 	}
 	
-	public void validateStandardFunction(FunctionCall call){
+private void validateStandardFunction(FunctionCall call){
 		FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getName());
 		//TODO validate whether the function returns any value to enable/disable its use in expressions
 		//TODO instead of checking whether a parameter is known, match a list of actual parameters with one of valid sets!
-		if (isPassedByName(call.getArguments())){
+		int expected = functSig.getNumberOfParams();
+		if (call.getArguments() == null){
+			if (expected > 0) 
+				warning(MSG_FUNCTION_WRONG_PASSING_METHOD + ": function exprects " + expected + " parameter(s)",
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_WRONG_PASSING_METHOD, 
+						call.getIdentifier().getName());	
+			return;
+		} 
+		if (call.getArguments().getNamedArguments() != null){
 			if (functSig.isPassingByName()){
-				if (call.getArguments() != null){
-					for (Argument arg: call.getArguments().getArguments()){
-						if (arg.getArgumentName() != null){
-							Map<String, FunctionParameter> allParams = functSig.getAllParams(); 
-							if (allParams.containsKey(arg.getArgumentName().getName())){
-								FunctionParameter p = allParams.get(arg.getArgumentName().getName());
-								if (!MdlDataType.validateType(p.getType(), arg.getExpression()))
-									warning(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getName()
-									+ " expects value of type " + p.getType(),
-									MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-									MSG_FUNCTION_WRONG_TYPE, arg.getArgumentName().getName());		
-							} else 
-								warning(MSG_FUNCTION_PARAMETER_UNKNOWN + ": " + arg.getArgumentName().getName(), 
-									MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-									MSG_FUNCTION_PARAMETER_UNKNOWN, arg.getArgumentName().getName());		
+				//Check that only valid parameters are passed
+				for (Argument arg: call.getArguments().getNamedArguments().getArguments()){
+					if (arg.getArgumentName() != null){
+						Map<String, FunctionParameter> allParams = functSig.getAllParams(); 
+						if (allParams.containsKey(arg.getArgumentName().getName())){
+							FunctionParameter p = allParams.get(arg.getArgumentName().getName());
+							if (!MdlDataType.validateType(p.getType(), arg.getExpression()))
+								warning(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getName()
+								+ " expects value of type " + p.getType(),
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_WRONG_TYPE, arg.getArgumentName().getName());		
+						} else 
+							warning(MSG_FUNCTION_PARAMETER_UNKNOWN + ": " + arg.getArgumentName().getName(), 
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_PARAMETER_UNKNOWN, arg.getArgumentName().getName());		
 						}
 					}	
-					HashSet<String> argumentNames = new HashSet<String>();	
-					for (Argument arg: call.getArguments().getArguments()){
-						if (!argumentNames.contains(arg.getArgumentName().getName())){
-							argumentNames.add(arg.getArgumentName().getName());
-						} else {
-							warning(MSG_FUNCTION_PARAMETER_DEFINED + ": " + arg.getArgumentName().getName(), 
-									MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-									MSG_FUNCTION_PARAMETER_DEFINED, arg.getArgumentName().getName());		
-						}
+				HashSet<String> argumentNames = new HashSet<String>();	
+				for (Argument arg: call.getArguments().getNamedArguments().getArguments()){
+					if (!argumentNames.contains(arg.getArgumentName().getName())){
+						argumentNames.add(arg.getArgumentName().getName());
+					} else {
+						warning(MSG_FUNCTION_PARAMETER_DEFINED + ": " + arg.getArgumentName().getName(), 
+								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+								MSG_FUNCTION_PARAMETER_DEFINED, arg.getArgumentName().getName());		
 					}
 				}
 			}	
@@ -301,11 +275,8 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 					call.getIdentifier().getName());					
 			}	
 		} else {
-			if (isPassedByPlace(call.getArguments())) {
-				int expected = functSig.getNumberOfParams();
-				int actual = 0;
-				if (call.getArguments().getArguments() != null)
-					actual = call.getArguments().getArguments().size();
+			if (!functSig.isPassingByName()){
+				int actual = call.getArguments().getUnnamedArguments().getArguments().size();
 				if (actual != expected){
 					warning(MSG_FUNCTION_INVALID + ": " +
 							call.getIdentifier().getName() + " expects " + expected + " parameter(s).", 
@@ -314,20 +285,19 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 							call.getIdentifier().getName());
 					return;
 				}
-				if (call.getArguments() != null){
-					List<FunctionParameter> defaultParams = functSig.getDefaultParamSet();
-					for (int i = 0; i < call.getArguments().getArguments().size(); i++){
-						Argument arg = call.getArguments().getArguments().get(i);
-						if (!MdlDataType.validateType(defaultParams.get(i).getType(), arg.getExpression())){
-							warning(MSG_FUNCTION_WRONG_TYPE + ": parameter #" + i + " expects value of type " + 
-									defaultParams.get(i).getType(),
-							MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-							MSG_FUNCTION_WRONG_TYPE, "" + String.valueOf(i));		
-						}
+				List<FunctionParameter> defaultParams = functSig.getDefaultParamSet();
+				for (int i = 0; i < call.getArguments().getUnnamedArguments().getArguments().size(); i++){
+					ArgumentExpression arg = call.getArguments().getUnnamedArguments().getArguments().get(i);
+					if (!MdlDataType.validateType(defaultParams.get(i).getType(), arg.getExpression())){
+						warning(MSG_FUNCTION_WRONG_TYPE + ": parameter #" + i + " expects value of type " + 
+								defaultParams.get(i).getType(),
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_WRONG_TYPE, "" + String.valueOf(i));		
 					}
 				}
 			} else {
-				warning(MSG_FUNCTION_WRONG_PASSING_METHOD + ": cannot mix parameter passing by place and by name",
+				warning(MSG_FUNCTION_WRONG_PASSING_METHOD + ": cannot pass parameters by place to " +
+						call.getIdentifier().getName(),
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_WRONG_PASSING_METHOD, 
 						call.getIdentifier().getName());	
@@ -335,26 +305,16 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		}
 	}
 	
-	public boolean isPassedByName(Arguments args){
-		if (args != null){
-			int nNames = 0; 
-			for (Argument arg: args.getArguments()){
-				if (arg.getArgumentName() != null) nNames++;
+	//Check that only valid values are passed to PK 
+	private void validatePK(FunctionCall call){
+		if (call.getArguments() != null){
+			String paramKey = standardFunctions.get(lib_PK).getParameterKey(call.getArguments());
+			if (!pkInputParameters.containsKey(paramKey)){
+				warning(MSG_FUNCTION_INVALID + ": unknown " + lib_PK + " parameters value combination", 
+						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
+						MSG_FUNCTION_INVALID, 
+						call.getIdentifier().getName());					
 			}
-			int count = args.getArguments().size();
-			return (nNames == count && count != 0);
 		}
-		return false;
-	}
-	
-	public boolean isPassedByPlace(Arguments args){
-		if (args != null){
-			int nNames = 0; 
-			for (Argument arg: args.getArguments()){
-				if (arg.getArgumentName() != null) nNames++;
-			}
-			return (nNames == 0);
-		}
-		return true;
 	}
 }

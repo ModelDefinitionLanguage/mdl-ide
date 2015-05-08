@@ -20,19 +20,17 @@ import org.ddmore.mdl.mdl.List
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.Argument
 import org.ddmore.mdl.mdl.FunctionCall
-import org.ddmore.mdl.mdl.Primary
 import java.util.ArrayList
 import eu.ddmore.converter.mdlprinting.MdlPrinter
-import org.ddmore.mdl.mdl.FullyQualifiedArgumentName
 import org.ddmore.mdl.mdl.FunctionName
 import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.validation.FunctionValidator
 import org.ddmore.mdl.mdl.TaskObjectBlock
-import org.ddmore.mdl.mdl.Arguments
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.mdl.UseType
-import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.types.MdlDataType
+import org.ddmore.mdl.mdl.VectorExpression
+import org.ddmore.mdl.mdl.ArgumentExpression
 
 class MathPrinter{
 
@@ -43,13 +41,26 @@ class MathPrinter{
 		this.resolver = resolver
 	}
 
-	//Print any MDL expression: math expression, list or ode list 
-	//(for the lists selected attribute values will be typically printed, e.g., value or deriv)
+	def CharSequence print_Math_Expr(ArgumentExpression e) '''
+		«IF e.expression != null»
+			«e.expression.print_Math_Expr»
+		«ENDIF»
+		«IF e.randomList != null»
+			«DistributionPrinter::getInstance().print_uncert_Distribution(e.randomList)»
+		«ENDIF»
+	'''
+
 	def CharSequence print_Math_Expr(AnyExpression e) '''
 		«IF e.expression != null»
 			«e.expression.print_Math_Expr»
 		«ENDIF»
+		«IF e.vector != null»
+			«e.vector.print_ct_Vector»
+		«ENDIF»
 	'''
+	//«IF e.matching != null»
+	//	«e.matching.print_Math_Piece»
+	//«ENDIF»
 
 	def print_Math_Equation(AnyExpression expr) '''
 		«IF MdlDataType::validateType(MdlDataType::TYPE_STRING, expr)»
@@ -71,8 +82,6 @@ class MathPrinter{
 		</Equation>
 	'''
 
-	//Print any MDL expression: math expression, list or ode list 
-	//(for the lists selected attribute values will be typically printed, e.g., value or deriv)
 	def CharSequence print_Assign(AnyExpression e) '''
 		<ct:Assign>
 			«e.print_Math_Equation»
@@ -93,89 +102,108 @@ class MathPrinter{
 
 	def print_Categorical(List categories) '''
 		<Categorical>
-		«FOR c : categories.arguments.arguments»
-			<Category>
-				«c.argumentName.name»
-			</Category>
-		«ENDFOR»
+		«IF categories.arguments.namedArguments != null»
+			«FOR c : categories.arguments.namedArguments.arguments»
+				«IF c.argumentName != null»
+					<Category catId=«c.argumentName.name»/>
+				«ENDIF»
+			«ENDFOR»
+		«ENDIF»
 		</Categorical>
 	'''
 
-	//+ Convert math functions to PharmML 
+	def print_Categorical(AnyExpression e) '''
+		«IF e.type != null && e.type.type != null && e.type.type.categorical != null»
+			«IF e.type.type.categories != null»
+				<Categorical>
+					«FOR c : e.type.type.categories»
+						<Category catId="«c.categoryName.name»"/>
+					«ENDFOR»
+				</Categorical>
+			«ELSE»
+				<Categorical/>
+			«ENDIF»
+		«ENDIF»
+	'''
+	
+	//Convert math functions to PharmML 
 	def print_Math_FunctionCall(FunctionCall call) {
 		if (call.identifier.name.equals(FunctionValidator::funct_seq)) {
 			if (call.arguments != null) {
-				val params = call.arguments.arguments;
-				var passedByName = true;
-				for (param : params)
-					if(param.argumentName == null) passedByName = false;
-
-				//(start, stepSize, repetition) - not used in MDL?
-				if (params.size == 3 && !passedByName)
-					return print_ct_Sequence(
-						params.get(0).expression.print_Math_Expr.toString,
-						params.get(1).expression.print_Math_Expr.toString,
-						params.get(2).expression.print_Math_Expr.toString
-					);
-				if (passedByName) {
+				if(call.arguments.namedArguments != null) {
 					return print_ct_Sequence(
 						call.arguments.getAttribute(FunctionValidator::param_seq_start.name),
 						call.arguments.getAttribute(FunctionValidator::param_seq_stepSize.name),
 						call.arguments.getAttribute(FunctionValidator::param_seq_end.name)
 					);
 				}
+				else {
+					//Unnamed parameters in the default order: start, stepSize, repetition
+					val params = call.arguments.unnamedArguments.arguments;
+					if (params.size == 3)
+						return print_ct_Sequence(
+							params.get(0).expression.print_Math_Expr.toString,
+							params.get(1).expression.print_Math_Expr.toString,
+							params.get(2).expression.print_Math_Expr.toString
+						);
+				}
 			}
-
 		} else {
 			if (FunctionValidator::funct_standard1.contains(call.identifier.name) ||
 				FunctionValidator::funct_standard2.contains(call.identifier.name)) {
-
 				//Convert standard mathematical functions to a PharmML operator with the same name;		
 				return call.print_Math_FunctionCall_Standard;
 			} else {
-				return call.print_Math_FunctionCall_UserDefined;
+				if (FunctionValidator::lib_PK.equals(call.identifier.name)){
+					//val pkPrinter = PKMacrosPrinter::getInstance();
+					//return pkPrinter.print_PKMacros(call);
+				}
+				else
+					return call.print_Math_FunctionCall_UserDefined;
 			}
 		}
 	}
 
 	//Functions from the standardFunctions list are PharmML operators
 	def print_Math_FunctionCall_Standard(FunctionCall call) {
-		var functName = call.identifier.name;
-		if(call.identifier.name.equals("ln")) functName = "log";
-		'''
-			«IF call.arguments.arguments.size == 1»
-				<Uniop op="«functName»">
-					«call.arguments.arguments.get(0).expression.print_Math_Expr»
-				</Uniop>
-			«ELSE»
-				«IF call.arguments.arguments.size == 2»
-					<Binop op="«functName»">
-						«call.arguments.arguments.get(0).expression.print_Math_Expr»
-						«call.arguments.arguments.get(1).expression.print_Math_Expr»
-					</Binop>
+		var functName = call.identifier.name.convertUniop;
+		if (call.arguments.unnamedArguments != null) {
+			var argNum = call.arguments.unnamedArguments.arguments.size;
+			'''
+				«IF argNum == 1»
+					<Uniop op="«functName»">
+						«call.arguments.unnamedArguments.arguments.get(0).expression.print_Math_Expr»
+					</Uniop>
+				«ELSE»
+					«IF argNum == 2»
+						<Binop op="«functName»">
+							«call.arguments.unnamedArguments.arguments.get(0).expression.print_Math_Expr»
+							«call.arguments.unnamedArguments.arguments.get(1).expression.print_Math_Expr»
+						</Binop>
+					«ENDIF»
 				«ENDIF»
-			«ENDIF»
-		'''
+			'''
+		}
 	}
 
-	//+ Convert user defined math functions to PharmML 
+	//Convert user defined math functions to PharmML 
 	def print_Math_FunctionCall_UserDefined(FunctionCall call) '''
 		<math:FunctionCall>
 			«call.identifier.print_ct_SymbolRef»
-			«FOR arg : call.arguments.arguments»
-				«arg.print_Math_FunctionArgument»
-			«ENDFOR»
+			«IF call.arguments.namedArguments != null»
+				«FOR arg : call.arguments.namedArguments.arguments»
+					«arg.print_Math_FunctionArgument»
+				«ENDFOR»
+			«ENDIF»
 		</math:FunctionCall>
 	'''
 
-	//+
 	def print_Math_FunctionArgument(Argument arg) '''
 		<FunctionArgument«IF arg.argumentName != null» symbId="«arg.argumentName.name»"«ENDIF»>
 			«arg.expression.print_Math_Expr»
 		</FunctionArgument>
 	'''
 
-	//+
 	def CharSequence print_Math_Expr(Expression expr) '''
 		«IF expr.condition == null»
 			«expr.expression.print_Math_Expr»
@@ -188,7 +216,6 @@ class MathPrinter{
 		«expr.print_Math_LogicOr(0)»
 	'''
 
-	//+
 	def print_Math_Piecewise(Expression expr) '''
 		<Piecewise>
 			«expr.expression.print_Math_LogicOpPiece(expr.condition.print_Math_LogicOr(0).toString)»
@@ -203,7 +230,6 @@ class MathPrinter{
 		</Piecewise>
 	'''
 
-	//+
 	def print_Math_LogicOpPiece(OrExpression expr, String condition) '''
 		<Piece>
 			«expr.print_Math_Expr»
@@ -215,7 +241,7 @@ class MathPrinter{
 		</Piece>
 	'''
 
-	//+ (right associative)
+	//(right associative)
 	def CharSequence print_Math_LogicOr(OrExpression expr, int startIndex) {
 		if (expr.expression != null) {
 			if (expr.expression.size - startIndex > 1) {
@@ -234,7 +260,7 @@ class MathPrinter{
 		return ''''''
 	}
 
-	//+ (right associative)
+	//(right associative)
 	def CharSequence print_Math_LogicAnd(AndExpression expr, int startIndex) {
 		if (expr.expression != null) {
 			if (expr.expression.size - startIndex > 1) {
@@ -253,7 +279,6 @@ class MathPrinter{
 		return ''''''
 	}
 
-	//+ 
 	def CharSequence print_Math_LogicOp(LogicalExpression expr) {
 		var res = "";
 		if (expr.expression1 != null) {
@@ -285,7 +310,7 @@ class MathPrinter{
 		return res;
 	}
 
-	//+ (left associative)
+	//(left associative)
 	def CharSequence print_Math_AddOp(AdditiveExpression expr, int offset) {
 		if (expr.expression != null) {
 			if (expr.expression.size > 0) {
@@ -310,7 +335,7 @@ class MathPrinter{
 		return ''''''
 	}
 
-	//+ (left associative)
+	//(left associative)
 	def CharSequence print_Math_MultOp(MultiplicativeExpression expr, int offset) {
 		if (expr.expression != null) {
 			if (expr.expression.size - offset > 1) {
@@ -330,7 +355,7 @@ class MathPrinter{
 		return ''''''
 	}
 
-	//+ (right associative)
+	//(right associative)
 	def CharSequence print_Math_PowerOp(PowerExpression expr, int startIndex) {
 		if (expr.expression != null) {
 			if (expr.expression.size - startIndex > 1) {
@@ -347,7 +372,6 @@ class MathPrinter{
 		return ''''''
 	}
 
-	//+
 	def CharSequence print_Math_UniOp(UnaryExpression expr) '''
 		«IF expr.operator != null»
 			<Uniop op="«expr.operator.convertOperator»">
@@ -366,33 +390,25 @@ class MathPrinter{
 		«IF expr.symbol != null»
 			«expr.symbol.print_ct_SymbolRef»
 		«ENDIF»
-		«IF expr.attribute != null»
-			«expr.attribute.print_ct_SymbolRef»
-		«ENDIF»
 		«IF expr.constant != null»
 			«expr.constant.print_ct_Constant»
 		«ENDIF»
 	'''
 
-	def CharSequence print_Math_Primary(Primary p) '''
-		«IF p.expression != null»
-			«p.expression.print_Math_Expr»
-		«ENDIF»
-		«IF p.vector != null»
-			«p.vector.print_ct_Vector»
+	def print_ct_Vector(Vector v)'''
+		«v.expression.print_Math_Vector»
+	'''
+	
+	def print_Math_Vector(VectorExpression expr)'''
+		«IF expr.expressions != null»
+			<ct:Vector>
+				«FOR v: expr.expressions»
+					«v.print_Math_Expr»
+				«ENDFOR»
+			</ct:Vector>
 		«ENDIF»
 	'''
-
-	//+
-	def print_ct_Vector(Vector vector) '''
-		<ct:Vector>
-			«FOR v : vector.values»
-				«v.print_Math_Primary»
-			«ENDFOR»
-		</ct:Vector>
-	'''
-
-	//
+	
 	def print_ct_Sequence(String begin, String stepSize, String end) '''
 		<ct:Sequence>
 			<ct:Begin>
@@ -407,7 +423,6 @@ class MathPrinter{
 		</ct:Sequence>
 	'''
 
-	//+
 	def print_ct_Value(String value) {
 		try {
 			if (value.indexOf(".") > -1) {
@@ -423,32 +438,14 @@ class MathPrinter{
 	}
 
 	def print_ct_Constant(String constant) '''
-		«IF constant.toString.equals(DefaultValues::INDEPENDENT_VAR)»
-			<ct:SymbRef symbIdRef="«constant»"/>
-		«ELSE»
-			<Constant op="«constant.convertConstant»"/>
-		«ENDIF»
+		<Constant op="«constant.convertConstant»"/>
 	'''
-
-	/*def getValueType(String value) {
-		try {
-			if (value.indexOf(".") > -1) {
-				Double::parseDouble(value);
-				return Constants::TYPE_REAL;
-			} else {
-				Integer::parseInt(value);
-				return Constants::TYPE_INT;
-			}
-		} catch (NumberFormatException e) {
-			return Constants::TYPE_ID;
-		}
-	}*/
 
 	def print_ct_Value(String value, String type) '''
 		<ct:«type»>«value»</ct:«type»>
 	'''
 
-	//+ Expr1 || ... || Expr_n (right associative)
+	//Expr1 || ... || Expr_n
 	private def CharSequence print_Math_LogicOr(ArrayList<String> exprs, int startIndex) {
 		if (exprs != null) {
 			if (startIndex < exprs.size - 1) {
@@ -467,7 +464,7 @@ class MathPrinter{
 		return ''''''
 	}
 
-	//Expr1 && ... && Expr_n (left associative)
+	//Expr1 && ... && Expr_n
 	private def CharSequence print_Math_LogicAnd(ArrayList<String> exprs, int startIndex) {
 		if (exprs != null) {
 			if (startIndex < exprs.size - 1) {
@@ -486,7 +483,7 @@ class MathPrinter{
 		return ''''''
 	}
 
-	//Here expr and condition are PharmML representation of MDL expressions
+	//Here expr and condition must be PharmML representations of MDL expressions!
 	def print_Math_LogicOpPiece(String expr, String condition) '''
 		<Piece>
 			«expr»
@@ -498,69 +495,41 @@ class MathPrinter{
 		</Piece>
 	'''
 
-	//+
 	def print_ct_SymbolRef(String name) '''
 		«var blkId = resolver.getReferenceBlock(name)»
 		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
 	'''
 
-	//+
 	def print_ct_SymbolRef(SymbolName ref) {
 		print_ct_SymbolRef(ref.name)
 	}
 
-	//+
 	def print_ct_SymbolRef(FunctionName ref){
 		print_ct_SymbolRef(ref.name)
 	}
 
-	//TODO: How to print attributes?
-	def print_ct_SymbolRef(FullyQualifiedArgumentName ref) '''
-		<Description>MDL reference to an attribute «ref.toStr»</Description>
-		«var blkId = ""»
-		«IF ref.parent != null»
-			«blkId = resolver.getReferenceBlock(ref.parent.name)»
-		«ENDIF»
-		<ct:SymbRef «IF blkId.length > 0»blkIdRef="«blkId»"«ENDIF» 
-			symbIdRef="«ref.parent.name».«ref.toStr»"/>
-	'''
-
-	def print_ct_Matrix(String matrixType, String rowNames, Arguments parameters, Boolean useDiagVarNames) '''
+	def print_ct_Matrix(Vector values, Vector columnNames, String matrixType)'''
 		<Matrix matrixType="«matrixType»">
-			<ct:RowNames>
-				«rowNames»
-			</ct:RowNames>
-			«IF parameters.arguments.size > 0»
+			«IF columnNames != null && columnNames.expression.expressions.size > 0»
+				<ct:ColumnNames>
+					«FOR c: columnNames.expression.expressions»
+						«c.print_Math_Expr»
+					«ENDFOR»
+				</ct:ColumnNames>
+			«ENDIF»
+			«IF values.expression.expressions != null»
 				<ct:MatrixRow>
-				«FOR i : 0 .. parameters.arguments.size - 1»
-					«val symbol = parameters.arguments.get(i)»
-					«IF useDiagVarNames && symbol.argumentName != null»
-						«print_ct_SymbolRef(symbol.argumentName.name)»
-					«ELSE»
-						«print_Math_Expr(symbol.expression)»
-					«ENDIF»
-					«IF symbol.argumentName != null»
-						</ct:MatrixRow>
-						«IF i != parameters.arguments.size - 1»
-							<ct:MatrixRow>
-						«ENDIF»
+				«FOR i : 0 .. values.expression.expressions.size - 1»
+					«val symbol = values.expression.expressions.get(i)»
+					«symbol.expression.print_Math_Expr»
+					</ct:MatrixRow>
+					«IF i != values.expression.expressions.size - 1»
+						<ct:MatrixRow>
 					«ENDIF»
 				«ENDFOR»	
 			«ENDIF»
 		</Matrix>
 	'''
-
-	def convertMatrixType(String matrixType) {
-		if (matrixType.equals(VariabilityType::VAR.toString))
-			return MATRIX_COV;
-		if (matrixType.equals(VariabilityType::SD.toString))
-			return MATRIX_STDEV;
-		if (matrixType.equals(VariabilityType::CORR.toString))
-			return MATRIX_CORR;
-		if (matrixType.equals(VariabilityType::COV.toString))
-			return MATRIX_COV;
-		return MATRIX_COV;
-	}
 
 	protected def getProperty(TaskObjectBlock t, String name) {
 		if (t.estimateBlock != null) {
@@ -618,42 +587,46 @@ class MathPrinter{
 		}
 		return "";
 	}
-
-	//+Returns a dual operator for a given logical operator
-	def getDualOperator(String operator) {
-		switch (operator) {
-			case "<": ">="
-			case ">": "<="
-			case "<=": ">"
-			case ">=": "<"
-			case "==": "!="
-			case "!=": "=="
-			default: operator
-		}
+	
+	//////////////////////////////////////////////////////////////////////
+	//Name conversions
+	//////////////////////////////////////////////////////////////////////
+	
+	def convertMatrixType(String matrixType) {
+		if (matrixType.equals(VariabilityType::VAR.toString))
+			return MATRIX_COV;
+		if (matrixType.equals(VariabilityType::SD.toString))
+			return MATRIX_STDEV;
+		if (matrixType.equals(VariabilityType::CORR.toString))
+			return MATRIX_CORR;
+		if (matrixType.equals(VariabilityType::COV.toString))
+			return MATRIX_COV;
+		return MATRIX_COV;
 	}
+	
 
 	//operators
 	def convertOperator(String operator) {
 		switch (operator) {
-			case "<": "lt"
-			case ">": "gt"
+			case "<" : "lt"
+			case ">" : "gt"
 			case "<=": "leq"
 			case ">=": "geq"
 			case "==": "neq"
 			case "!=": "eq"
-			case "+": "plus"
-			case "-": "minus"
-			case "*": "times"
-			case "/": "divide"
-			case "^": "power"
+			case "+" : "plus"
+			case "-" : "minus"
+			case "*" : "times"
+			case "/" : "divide"
+			case "^" : "power"
 			default: operator
 		}
 	}
 
-	//delimeters
+	//delimiters
 	def convertDelimiter(String id) {
 		switch (id) {
-			case ",": "COMMA"
+			case ","  : "COMMA"
 			case "\\t": "TAB"
 			case "\\s": "SPACE"
 			default: "SPACE"
@@ -663,7 +636,7 @@ class MathPrinter{
 	//file formats
 	def convertFileFormat(String id) {
 		switch (id.toUpperCase) {
-			case "R": "R"
+			case "R"  : "R"
 			case "XLS": "SIMCYP"
 			default: id.toUpperCase
 		}
@@ -677,15 +650,27 @@ class MathPrinter{
 		}
 	}
 
+	//use option names
 	def convertEnum(String type) {
 		switch (type) {
-			case UseType::AMT.toString: "dose"
-			case UseType::YTYPE.toString: "dvid"
-			case UseType::ITYPE.toString: "dvid"
-			case UseType::OCC.toString: "occasion"
-			case UseType::CENS.toString: "censoring"
-			case UseType::TINF.toString: "duration"
+			case UseType::AMT.toString     : "dose"
+			case UseType::YTYPE.toString   : "dvid"
+			case UseType::CENS.toString    : "censoring"
+			case UseType::VARLEVEL.toString: "occasion"
+			//case UseType::ITYPE.toString   : "dvid"
+			//case UseType::OCC.toString     : "occasion"
+			//case UseType::TINF.toString    : "duration"
 			default: type
+		}
+	}
+	
+	//function names -> PharmML operators
+	def convertUniop(String name) {
+		switch (name){
+			case "ln"        : "log"
+			case "lfactorial": "factln"
+			case "invLogit"  : "logistic"
+			default: name
 		}
 	}
 }

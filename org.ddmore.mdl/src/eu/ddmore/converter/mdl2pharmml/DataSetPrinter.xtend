@@ -10,9 +10,13 @@ import org.ddmore.mdl.mdl.InputFormatType
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.types.DefaultValues
-import org.ddmore.mdl.types.VariableType
 import eu.ddmore.converter.mdlprinting.MdlPrinter
+import org.ddmore.mdl.mdl.MOGObject
+import org.ddmore.mdl.validation.Utils
+import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
+import org.ddmore.mdl.mdl.Expression
+import org.ddmore.mdl.mdl.impl.DataInputBlockImpl
+import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl
 
 class DataSetPrinter {
 	protected extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -37,26 +41,45 @@ class DataSetPrinter {
 	}
 	
 	
-	protected def print_ds_ColumnMapping(String columnId, String symbId)'''
+	protected def print_ds_ColumnMapping(String columnId, String symbId, String complexMapping)'''
 		<ColumnMapping>
 			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-			«symbId.print_ct_SymbolRef»
+			«IF symbId != null»
+				«symbId.print_ct_SymbolRef»
+			«ENDIF»
+			«IF complexMapping.length > 0»
+				«complexMapping»
+			«ENDIF»
 		</ColumnMapping>
 	'''
+	
+	protected def print_ds_MultipleDVMapping(String columnId, Expression expr)'''
+		<MultipleDVMapping>
+			<ds:ColumnRef columnIdRef="«columnId»"/>
+			«expr.print_Math_Expr»
+		</MultipleDVMapping>
+	'''
 		
-	 //+ Print data set
-	protected def print_ds_TargetDataSet(ModelObject mObj, DataObject dObj){
-		if (dObj == null || mObj == null) return "";
+	protected def print_ds_TargetDataSet(MOGObject mog){
+		var objects = Utils::getMOGObjects(mog);
+		var mObj = Utils::getModelObject(objects);
+		var dObj = Utils::getDataObject(objects);
+		
 		var res = "";
-		for (b: dObj.blocks)	{
-			if (b.sourceBlock != null){
-				for (s: b.sourceBlock.statements){
-					if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
-						if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString)){
-							res  = res + print_ds_NONMEM_DataSet(mObj, dObj);
-						} else {
-							res = res + print_ds_Objective_DataSet(mObj, dObj);
-						}					
+		if (dObj != null || mObj != null) {
+			for (b: dObj.blocks)	{
+				if (b.sourceBlock != null){
+					for (s: b.sourceBlock.statements){
+						if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
+							if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString)){
+								var content = mog.print_ds_NONMEM_DataSet(mObj, dObj);
+								res = res + print_ds_ExternalDataSet(content, "NONMEM", BLK_DS_NONMEM_DATASET);
+							} else {
+								var content = dObj.print_ds_DataSet;
+								res = res + print_ds_ExternalDataSet(content, "Monolix", BLK_DS_MONOLIX_DATASET);
+							}
+												
+						}
 					}
 				}
 			}
@@ -64,10 +87,10 @@ class DataSetPrinter {
 		return res;
 	}
 	
-	protected def getColumnType(SymbolDeclaration modelVar){
+	protected def getColumnType(SymbolDeclaration dataColumn){
 		var columnType = UseType::ID.toString;
-		if (modelVar.list != null){
-			val useValue = modelVar.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+		if (dataColumn.list != null){
+			val useValue = dataColumn.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 			if (useValue.length > 0) columnType = useValue;
 		}
 		return columnType;
@@ -76,150 +99,167 @@ class DataSetPrinter {
 	protected def getValueType(SymbolDeclaration modelVar){
 		var variableType = Constants::TYPE_REAL;
 		if (modelVar.list != null){
-			val valueType = modelVar.list.arguments.getAttribute(AttributeValidator::attr_type.name);
-			if (valueType.equals(VariableType::CC_CATEGORICAL)) 
+			val type = modelVar.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+			if (type.isCategorical) 
 				variableType = Constants::TYPE_INT;
 			
 		}
 		return variableType;
-	}
+	}	
 	
+	protected def print_ds_ExternalDataSet(String content, String toolName, String oid)'''
+		<ExternalDataSet toolName="«toolName»", oid="«oid»">
+			«content»
+		</ExternalDataSet>
+	'''
 	
-	protected def print_ds_Objective_DataSet(ModelObject mObj, DataObject dObj){
-		var res = print_ds_DataSet(mObj, dObj);
-		'''
-		<ObjectiveDataSet>
-			«res»
-		</ObjectiveDataSet>
-		'''
-	}
-	
-	protected def print_ds_NONMEM_DataSet(ModelObject mObj, DataObject dObj){
-		if (dObj == null || mObj == null) return "";
+	protected def print_ds_NONMEM_DataSet(MOGObject mog, ModelObject mObj, DataObject dObj){
 		var res = "";
-		//Time 
-		for (b: mObj.blocks){
-			if (b.inputVariablesBlock != null){
-				for (s: b.inputVariablesBlock.variables){
-					if (s.symbolName != null && s.list != null){
-						var use = s.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-						//Individual variable
-						if (use.equals(UseType::IDV.toString)){
-							res = res + print_ds_ColumnMapping(s.symbolName.name, DefaultValues::INDEPENDENT_VAR);
+		var symbolIterator = dObj.eAllContents();
+		while (symbolIterator.hasNext()) {
+			var eObj = symbolIterator.next();
+			if (eObj instanceof SymbolDeclarationImpl) {
+				var column = eObj as SymbolDeclaration;
+				if (column != null && column.symbolName != null){
+					var blockContainer = eObj.eContainer;
+					//Map only columns, not DECLARED_VARAIBLES
+					if (blockContainer instanceof DataInputBlockImpl || blockContainer instanceof DataDerivedBlockImpl){
+						var modelVar = Utils::getMatchingVariable(mog, column.symbolName);
+						if (modelVar == null) //Default mapping
+							modelVar = getDefaultMatchingVariable(mog, column, mObj);
+						if (modelVar != null){
+							//Categorical
+							var categoricalMapping = column.print_ds_CategoricalMapping;
+							res = res + column.symbolName.name.print_ds_ColumnMapping(modelVar, categoricalMapping);
 						}
-						//Covariate mapping
-						if (use.equals(UseType::COVARIATE.toString)){
-							var columnName = s.symbolName.name;
-							res = res + print_ds_ColumnMapping(columnName, s.symbolName.name);
-						}
-						//Dosing
-						if (use.equals(UseType::AMT.toString)){
-							var adm = s.list.arguments.getAttributeExpression(AttributeValidator::attr_administration_use.name);
-							if (adm != null){
-								res = res + print_ds_ColumnMapping(s.symbolName.name, adm.toStr);
-							}
-						}
-						//DV
-						if (use.equals(UseType::DV.toString)){
-							var prediction = s.list.arguments.getAttributeExpression(AttributeValidator::attr_prediction_ref.name);
-							if (prediction != null){
-								if (prediction != null)
-									res = res + print_ds_ColumnMapping(s.symbolName.name, prediction.toStr);
-							}
-						}
+						var attrMapping = column.print_ds_AttributeMapping;
+						if (attrMapping != null)
+							res = res + column.print_ds_AttributeMapping;
 					}
 				}
 			}
-		}
-		
-		res = res + print_ds_DataSet(mObj, dObj);
-		'''
-		<NONMEMdataSet oid="«BLK_DS_NONMEM_DATASET»">
-			«res»
-		</NONMEMdataSet>
-		'''
+		}		
+		res = res + dObj.print_ds_DataSet;
 	}
 	
-	//Return a model variable (matched by name or by alias name!)
-	protected def getModelInputVariable(ModelObject mObj, String name){
-		for (b: mObj.blocks){
-			if (b.inputVariablesBlock != null){
-				for (s: b.inputVariablesBlock.variables){
-					if (s.symbolName != null && s.symbolName.name.equals(name))
-						return s;
+	protected def print_ds_AttributeMapping(SymbolDeclaration column){
+		if (column.symbolName != null && column.list != null){
+			var columnId = column.symbolName.name;
+			val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+			var define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+			if (define != null){
+				if (use.equals(UseType::AMT.toString)){
+					//Reference or piecewise
+					if (define.expression != null)
+						return columnId.print_ds_ColumnMapping(null, define.expression.print_Math_Expr.toString)
+					else {//Vector of pairs
+						var pairs = define.getAttributePairs(AttributeValidator::attr_modelCmt.name, AttributeValidator::attr_dataCmt.name);
+						for (pair: pairs){
+							//TODO
+						}
+					}
+				}	
+				if (use.equals(UseType::DV.toString)){
+					//Piecewise function
+					if (define.expression != null && define.expression.whenBranches != null)
+						return columnId.print_ds_MultipleDVMapping(define.expression)
+					else {//Vector of pairs
+						var pairs = define.getAttributePairs(AttributeValidator::attr_pred.name, AttributeValidator::attr_predid.name);
+						for (pair: pairs){
+							//TODO
+						}
+					}						
+				}
+			}
+		}
+	}	
+	
+	protected def print_ds_CategoricalMapping(SymbolDeclaration column){
+		var res = "";
+		if (column.list != null){
+			val type = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+			if (!type.isCategorical) return "";
+			val define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+			if (define != null){
+				var pairs = define.getAttributePairs(AttributeValidator::attr_category.name, AttributeValidator::attr_value.name);
+				for (pair: pairs)
+					res = res + '''
+						<ds:Map dataSymbol="«pair.key.toStr»" modelSymbol="«pair.value.toStr»"/>
+					''';
+			}
+		}
+		if (res.length > 0) res  = '''
+			<ds:CategoryMapping>
+				«res»
+			</ds:CategoryMapping>
+		'''
+		return res;
+	}
+	
+	//Return a model variable (matched by name or in the MOG MAPPING block)
+	protected def getDefaultMatchingVariable(MOGObject mog, SymbolDeclaration column, ModelObject mObj){
+		if (column.symbolName != null && column.list != null){
+			var columnId = column.symbolName.name;
+			/*Default implicit mapping*/
+			val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+			//Individual variable
+			if (use.equals(UseType::IDV.toString)){
+				return independentVar;
+			}
+			//Covariates (ise = covariate)
+			if (use.equals(UseType::COVARIATE.toString)){
+				for (b: mObj.blocks){
+					if (b.covariateBlock != null){
+						for (s: b.covariateBlock.variables){
+							if (s.symbolName != null && s.symbolName.name.equals(columnId))
+								return s.symbolName.name;
+						}
+					}
+				}
+			}	
+			//Variability levels (use = id, use = dv)
+			if (use.equals(UseType::ID.toString) || use.equals(UseType::DV.toString)){
+				for (b: mObj.blocks){
+					if (b.variabilityBlock != null){
+						for (s: b.variabilityBlock.variables){
+							if (s.symbolName != null && s.symbolName.name.equals(columnId))
+								return s.symbolName.name;
+						}
+					}
 				}
 			}
 		}
 		return null;
 	}
 	
-	
-	protected def print_ds_DataSet(ModelObject mObj, DataObject dObj){
-		if (dObj == null || mObj == null) return "";
-		var columnNames = new ArrayList<String>();
-		var columnTypes = new ArrayList<String>();
-		var valueTypes = new  ArrayList<String>();
+	protected def print_ds_DataSet(DataObject dObj){
+		var res = "";
+		var k = 1;
 		for (b: dObj.blocks){
 			if (b.dataInputBlock != null){
-				for (s: b.dataInputBlock.variables){
-					var columnId = s.symbolName.name;
-					val modelVar = mObj.getModelInputVariable(columnId);
-					if (modelVar != null && modelVar.symbolName != null){
-						if (!columnNames.contains(modelVar.symbolName.name)){
-							columnNames.add(modelVar.symbolName.name);
-							columnTypes.add(modelVar.getColumnType);
-						}
-					} else {//Model variable not found
-							columnNames.add(columnId);
-							columnTypes.add(Constants::UNDEFINED);
-					}
-					valueTypes.add(s.getValueType);
+				for (i: 0..b.dataInputBlock.variables.size - 1){
+					val column = b.dataInputBlock.variables.get(i);
+					val columnId = column.symbolName.name;
+					val columnType = column.getColumnType.convertEnum;
+					val valueType = column.getValueType
+					res = res + '''
+						<Column columnId="«columnId»" columnType="«columnType»" valueType="«valueType»" columnNum="«k»"/>
+					'''
+					k  = k + 1;
 				}
 			}
 		}	
-		for (b: dObj.blocks){
-			if (b.dataDerivedBlock != null){
-				for (s: b.dataDerivedBlock.variables){
-					var columnId = s.symbolName.name;
-					val modelVar = mObj.getModelInputVariable(columnId);
-					if (modelVar != null && modelVar.symbolName != null){
-						if (!columnNames.contains(modelVar.symbolName.name)){
-							columnNames.add(modelVar.symbolName.name);
-							columnTypes.add(modelVar.getColumnType);
-						}
-					} else {//Model variable not found
-						columnNames.add(columnId);
-						columnTypes.add(Constants::UNDEFINED);
-					}
-					valueTypes.add(s.getValueType);
-				}
-			}	
-		}
-		'''
+		return '''
 			<DataSet xmlns="«xmlns_ds»">
-				«print_ds_Definition(columnNames, columnTypes, valueTypes)»
-				«dObj.print_ds_ImportData»
+				<Definition>
+					«res»
+				</Definition>
+				«dObj.print_ds_ExternalFile»
 			</DataSet>
 		'''
 	}
 	
-	protected def print_ds_Definition(ArrayList<String> columnNames, 
-		ArrayList<String> columnTypes, ArrayList<String> valueTypes
-	)'''
-		<Definition>
-			«FOR i: 0..columnNames.size-1»
-				«var columnId = columnNames.get(i)»
-				«print_ds_Column(columnId, columnTypes.get(i), valueTypes.get(i), (i+1).toString)»
-			«ENDFOR»
-		</Definition>
-	'''
-	
-	protected def print_ds_Column(String columnId, String columnType, String valueType, String columnNum)'''
-		<Column columnId="«columnId»" columnType="«columnType.convertEnum»" valueType="«valueType»" columnNum="«columnNum»"/>
-	'''
-	
-	protected def print_ds_ImportData(DataObject dObj){
-		if (dObj == null) return "";
+	protected def print_ds_ExternalFile(DataObject dObj){
 		var res = "";
 		for (b: dObj.blocks){
 			if (b.sourceBlock != null){
@@ -227,23 +267,21 @@ class DataSetPrinter {
 					var file = "";
 					var delimiter = "";
 					for (s: b.sourceBlock.statements){
-						if (s.propertyName.name.equals(PropertyValidator::attr_file.name) && s.expression != null){
+						if (s.propertyName.name.equals(PropertyValidator::attr_file.name) && s.expression != null)
 							file = s.expression.toStr;
-						}
-						if (s.propertyName.name.equals(PropertyValidator::attr_delimiter.name) && s.expression != null){
+						if (s.propertyName.name.equals(PropertyValidator::attr_delimiter.name) && s.expression != null)
 							delimiter = s.expression.toStr;							
-						}
 					}
 					if (file.length > 0){
 						if (delimiter.length == 0) delimiter = PropertyValidator::attr_delimiter.defaultValue;
 						val fileExtension = FilenameUtils::getExtension(file);
 						res = res +
 						'''				
-							<ImportData oid="«BLK_DS_IMPORT_DATA»">
+							<ExternalFile oid="«BLK_DS_IMPORT_DATA»">
 								<path>«file»</path>
 								<format>«fileExtension.convertFileFormat»</format>
 								<delimiter>«delimiter.convertDelimiter»</delimiter>
-							</ImportData>
+							</ExternalFile>
 						'''
 					}
 				} else {
@@ -251,9 +289,8 @@ class DataSetPrinter {
 					var rows = new ArrayList<String>();
 					var columns = new ArrayList<String>();
 					if (b.sourceBlock.inlineBlock.variables != null){
-						for (value: b.sourceBlock.inlineBlock.variables.identifiers){
+						for (value: b.sourceBlock.inlineBlock.variables.identifiers)
 							columns.add(value.name);
-						}
 					}
 					var rowLength = columns.size;
 					if (rowLength > 0){
@@ -262,9 +299,10 @@ class DataSetPrinter {
 						if (b.sourceBlock.inlineBlock.values != null){
 							var i = 0;
 							for (value: b.sourceBlock.inlineBlock.values.values){
-								if (!value.equals(".")) 
-									values.add(value)
-								else values.add("0");	
+								if (value.value != null) 
+									values.add(value.toStr)
+								else 
+									values.add("0");	
 								i = i + 1;
 								if (i == rowLength){
 									rows.add(values.print_ds_Row);
@@ -285,26 +323,48 @@ class DataSetPrinter {
 		val fileName = FilenameUtils::getBaseName(source);
 		val filePath = FilenameUtils::getFullPath(source);
 		'''
-		<ds:TargetToolData>
-			<ds:ImportTargetData oid="«BLK_DS_TARGET_TOOL_DATA»">
-				<ds:name>«fileName»</ds:name>
-				<ds:url>«filePath»</ds:url>
-			</ds:ImportTargetData>
-		</ds:TargetToolData>
+			<ds:TargetToolData>
+				<ds:ImportTargetData oid="«BLK_DS_TARGET_TOOL_DATA»">
+					<ds:name>«fileName»</ds:name>
+					<ds:url>«filePath»</ds:url>
+				</ds:ImportTargetData>
+			</ds:TargetToolData>
 		'''
 	}
 	
 	protected def print_ds_TargetTool(DataObject dObj){
-		if (dObj == null) return "";
 		val source = dObj.getScriptFile;
 		if (source.length == 0) return "";
 		val fileExtension = FilenameUtils::getExtension(source);
 		if (fileExtension.length == 0) return "";
 		'''
-		<TargetTool oid="«BLK_DS_TARGET_TOOL»">
-			<TargetToolName>«fileExtension.convertID»</TargetToolName>
-			«print_ds_TargetToolData(source)»
-		</TargetTool>
+			<TargetTool oid="«BLK_DS_TARGET_TOOL»">
+				<TargetToolName>«fileExtension.convertID»</TargetToolName>
+				«print_ds_TargetToolData(source)»
+			</TargetTool>
 		'''
 	}
+	
+	protected def print_mdef_ExternalDataSetReference(DataObject dObj){
+		var oidRef = "";
+		if (dObj != null){
+			for (b: dObj.blocks)	{
+				if (b.sourceBlock != null){
+					for (s: b.sourceBlock.statements){
+						if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) && s.expression != null){
+							if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString))
+								oidRef = BLK_DS_NONMEM_DATASET;
+						}
+					}
+				}
+			}
+		}
+		if (oidRef.length > 0)
+		'''
+			<ExternalDataSetReference>
+				<ct:OidRef oidRef="«oidRef»"/>
+			</ExternalDataSetReference>
+		'''
+	}	
+	
 }

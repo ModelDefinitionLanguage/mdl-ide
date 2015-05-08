@@ -170,15 +170,15 @@ public class FunctionSignature {
 		return new ArrayList<Variable>();
 	}
 	
-	private String getParameterKey(Arguments arguments){
+	public String getParameterKey(Arguments arguments){
 		String valueString = "";
 		if (paramSets.size() > 0) {
 			FunctionParameterSet params =  this.paramSets.get(0);			
 			//TODO: if there are alternative parameter sets, choose a suitable one
 			for (FunctionParameter param: params.getParameterSet()){
 				Boolean found = false;
-				for (Argument arg: arguments.getArguments()){
-					if (arg.getArgumentName() != null){
+				if (arguments.getNamedArguments() != null){
+					for (Argument arg: arguments.getNamedArguments().getArguments()){
 						String argName = arg.getArgumentName().getName();
 						if (argName.equals(param.getName())){
 							found = true;
@@ -201,7 +201,6 @@ public class FunctionSignature {
 				}
 			}
 		}
-		//System.out.println("TEST:" + valueString);
 		return valueString;
 	}
 

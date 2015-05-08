@@ -9,6 +9,16 @@ package org.ddmore.mdl.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.ddmore.mdl.mdl.IndividualVarType;
+import org.ddmore.mdl.mdl.InputFormatType;
+import org.ddmore.mdl.mdl.LevelType;
+import org.ddmore.mdl.mdl.PkMacroType;
+import org.ddmore.mdl.mdl.PkParameterType;
+import org.ddmore.mdl.mdl.TargetType;
+import org.ddmore.mdl.mdl.TrialType;
+import org.ddmore.mdl.mdl.UseType;
+import org.ddmore.mdl.mdl.VariabilityType;
+import org.ddmore.mdl.types.DefaultValues;
 import org.ddmore.mdl.types.MdlDataType;
 
 public class Attribute {
@@ -39,7 +49,7 @@ public class Attribute {
 	public Attribute(String name, List<MdlDataType> types, Boolean mandatory, AttributeDependency dependency){
 		this(name, types, mandatory);
 		this.dependency = dependency;
-	}	
+	}
 	
 	public Attribute(String name, MdlDataType type, Boolean mandatory, String defaultValue){
 		this(name, type, mandatory);
@@ -87,7 +97,34 @@ public class Attribute {
 	}
 	
 	public String getDefaultValue(){
-		return defaultValue;
+		if (defaultValue.length() > 0)
+			return defaultValue;
+		if (types.size() > 0){
+			MdlDataType type = types.get(0);
+			switch (type){
+				//Basic
+				case TYPE_REAL: case TYPE_PROBABILITY: case TYPE_NAT: case TYPE_INT:      
+									return "0";
+				case TYPE_PREAL: case TYPE_PNAT:     
+									return "1";
+				case TYPE_BOOLEAN:  return Boolean.TRUE.toString();
+				case TYPE_REF:      return DefaultValues.VAR_NAME;
+				case TYPE_CONTINUOUS: case TYPE_VAR_TYPE: 
+									return DefaultValues.CC_CONTINUOUS;
+				//Enumerations
+				case TYPE_TARGET:         return TargetType.NMTRAN_CODE.toString();
+				case TYPE_USE:            return UseType.ID.toString();
+				case TYPE_RANDOM_EFFECT:  return VariabilityType.SD.toString();
+				case TYPE_INPUT_FORMAT:   return InputFormatType.NONMEM_FORMAT.toString();
+				case TYPE_INDIVIDUAL_VAR: return IndividualVarType.GENERAL.toString();
+				case TYPE_LEVEL:          return LevelType.PARAMETER.toString();
+				case TYPE_PK_PARAMETER:   return PkParameterType.VCL.toString();
+				case TYPE_PK_MACRO:       return PkMacroType.COMPARTMENT.toString();
+				case TYPE_TRIAL:          return TrialType.SIMPLE.toString();
+				default: return "";
+			}
+		}
+		return "";
 	}
 	
 	public AttributeDependency getDependency(){
