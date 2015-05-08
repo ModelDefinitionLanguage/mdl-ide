@@ -654,11 +654,10 @@ class MathPrinter{
 	def convertEnum(String type) {
 		switch (type) {
 			case UseType::AMT.toString     : "dose"
-			case UseType::YTYPE.toString   : "dvid"
-			case UseType::CENS.toString    : "censoring"
+			case UseType::DVID.toString   : "dvid"
+//			case UseType::CENS.toString    : "censoring"
 			case UseType::VARLEVEL.toString: "occasion"
-			//case UseType::ITYPE.toString   : "dvid"
-			//case UseType::OCC.toString     : "occasion"
+			//case UseType::ITYPE.toString   : "dvid"		//case UseType::OCC.toString     : "occasion"
 			//case UseType::TINF.toString    : "duration"
 			default: type
 		}

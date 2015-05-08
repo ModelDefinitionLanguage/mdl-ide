@@ -46,7 +46,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*Nested*/
 	final public static Attribute attr_category = new Attribute("category", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_pred = new Attribute("pred", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_predid = new Attribute("predid", MdlDataType.TYPE_NAT, false);
+	final public static Attribute attr_predid = new Attribute("predID", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_dataCmt = new Attribute("dataCmt", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_NAT), false);
 	final public static Attribute attr_modelCmt = new Attribute("modelCmt", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_NAT), false);
 

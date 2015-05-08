@@ -423,18 +423,20 @@ class ModelDefinitionPrinter {
 	protected def print_mdef_ObservationModel(ModelObject mObj){
 		var res = "";
 		if (mObj != null){
+			var idx = 1 as int;
 			for (b: mObj.blocks){
 				if (b.observationBlock != null){
 					for (st: b.observationBlock.variables){
 						var observation = st.print_mdef_ObservationModel;
 						if (observation.length >0 )
 							res = res + '''
-								<ObservationModel blkId="om">
+								<ObservationModel blkId="om«idx»">
 									«observation»
 								</ObservationModel>
 							''';
 						}
 				}
+				idx = idx + 1;
 			}
 		}
 		return res;
@@ -647,6 +649,3 @@ class ValueComparator implements Comparator<String> {
         } 
     }
 }
-
-
-	
