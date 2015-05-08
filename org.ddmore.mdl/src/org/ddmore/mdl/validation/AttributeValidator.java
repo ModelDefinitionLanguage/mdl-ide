@@ -46,7 +46,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*Nested*/
 	final public static Attribute attr_category = new Attribute("category", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_pred = new Attribute("pred", MdlDataType.TYPE_REF, false);
-	final public static Attribute attr_predid = new Attribute("predID", MdlDataType.TYPE_NAT, false);
+	final public static Attribute attr_predid = new Attribute("predid", MdlDataType.TYPE_NAT, false);
 	final public static Attribute attr_dataCmt = new Attribute("dataCmt", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_NAT), false);
 	final public static Attribute attr_modelCmt = new Attribute("modelCmt", Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_NAT), false);
 
@@ -332,7 +332,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		for (Attribute attr: attrs_block_randomVars){
 			if (attr.isMandatory()){
 				if (!argumentNames.contains(attr.getName()))
-					warning(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
+					error(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
 							MdlPackage.Literals.RANDOM_VARIABLE_DEFINITION_BLOCK__IDENTIFIER, 
 							MSG_ATTRIBUTE_MISSING, b.getIdentifier() + ":" + attr.getName());
 			}
@@ -396,7 +396,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	//Check that each defined argument is from the recognized set of list attributes
 	private void checkDefinedAttributes(Argument argument, Arguments args , List<Attribute> knownAttributes, List<String> attributeNames){
 		if (!attributeNames.contains(argument.getArgumentName().getName())){
-			warning(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
+			error(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
 			MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 			MSG_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());		
 		}
@@ -406,7 +406,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 				for (MdlDataType type: x.getTypes())
 					isValid = isValid || MdlDataType.validateType(type, argument.getExpression());
 				if (!isValid){
-					warning(MSG_ATTRIBUTE_WRONG_TYPE + 
+					error(MSG_ATTRIBUTE_WRONG_TYPE + 
 						": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
 							Utils.printList(x.getTypeNames()), 
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
@@ -416,7 +416,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 				if (!x.isMandatory() && (x.getDependency() != null)){
 					String value = MdlPrinter.getInstance().getAttribute(args, x.getDependency().getAttrName());
 					if (!x.getDependency().getValues().contains(value)){
-						warning(MSG_ATTRIBUTE_WRONG_VALUE + 
+						error(MSG_ATTRIBUTE_WRONG_VALUE + 
 								": attribute \"" + x.getName() + "\" expects the attribute \"" + 
 								x.getDependency().getAttrName() + "\" have of the following values: " +
 								Utils.printList(x.getDependency().getValues()), 

@@ -58,7 +58,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			ObjectName objName = Utils.getObjectName(s);
 			if (declaredVariables.containsKey(objName.getName())){
 				if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables.get(objName.getName()), s.getSymbolName().getName())){
-					warning(MSG_VARIABLE_DEFINED, 
+					error(MSG_VARIABLE_DEFINED, 
 							MdlPackage.Literals.SYMBOL_DECLARATION__SYMBOL_NAME,
 							MSG_VARIABLE_DEFINED, s.getSymbolName().getName());
 				}
@@ -72,7 +72,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			ObjectName objName = Utils.getObjectName(s);
 			if (declaredVariables.containsKey(objName.getName())){
 				if (Utils.isSymbolDeclaredMoreThanOnce(declaredVariables.get(objName.getName()), s.getCategoryName().getName())){
-					warning(MSG_VARIABLE_DEFINED, 
+					error(MSG_VARIABLE_DEFINED, 
 							MdlPackage.Literals.CATEGORY__CATEGORY_NAME,
 							MSG_VARIABLE_DEFINED, s.getCategoryName().getName());
 				}
@@ -99,7 +99,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 			if (FunctionValidator.funct_standard1.contains(u.getSymbol().getName())) return;
 			
 			if (!(Utils.isSymbolDeclared(declaredVariables, u.getSymbol()))){
-				warning(MSG_UNRESOLVED_VARIABLE, MdlPackage.Literals.UNARY_EXPRESSION__SYMBOL,
+				error(MSG_UNRESOLVED_VARIABLE, MdlPackage.Literals.UNARY_EXPRESSION__SYMBOL,
 						MSG_UNRESOLVED_VARIABLE, u.getSymbol().getName());
 			}
 		}

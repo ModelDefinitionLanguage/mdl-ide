@@ -224,7 +224,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			if (knownAttributes != null){
 				List<String> attributeNames = Utils.getAllNames(knownAttributes);
 				if (!attributeNames.contains(p.getPropertyName().getName())){
-					warning(MSG_PROPERTY_UNKNOWN + ": " + p.getPropertyName().getName(), 
+					error(MSG_PROPERTY_UNKNOWN + ": " + p.getPropertyName().getName(), 
 					MdlPackage.Literals.PROPERTY_DECLARATION__PROPERTY_NAME,
 					MSG_PROPERTY_UNKNOWN, p.getPropertyName().getName());		
 				}

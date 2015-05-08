@@ -161,7 +161,7 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
 						if (dVarName == null) dVarName = s.getSymbolName().getName();
 						if (!dVars.contains(dVarName))
-							warning(MSG_MODEL_DATA_MISMATCH + 
+							error(MSG_MODEL_DATA_MISMATCH + 
 								": no mapping for model variable " + s.getSymbolName().getName() + " found in " + 
 								Utils.getObjectName(dObj).getName() + " object", 
 								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
@@ -175,7 +175,7 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
 						if (dVarName == null) dVarName = s.getSymbolName().getName();
 						if (!dVars.contains(dVarName))
-							warning(MSG_MODEL_DATA_MISMATCH + 
+							error(MSG_MODEL_DATA_MISMATCH + 
 								": no mapping for model variable " + s.getSymbolName().getName() + " found in " + 
 								Utils.getObjectName(dObj).getName() + " object", 
 								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
@@ -201,7 +201,7 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 						String varName = s.getSymbolName().getName();
 						if (varName.length() > 0){
 							if (!structuralVars.contains(varName))
-								warning(MSG_STRUCTURAL_MISMATCH + 
+								error(MSG_STRUCTURAL_MISMATCH + 
 									": no mapping for parameter " + varName + " found in " + 
 									Utils.getObjectName(pObj).getName() + " object", 
 									MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
@@ -228,7 +228,7 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 						String varName = s.getSymbolName().getName();
 						if (varName.length() > 0){
 							if (!variabilityVars.contains(varName))
-								warning(MSG_VARIABILITY_MISMATCH + 
+								error(MSG_VARIABILITY_MISMATCH + 
 									": no mapping for parameter " + varName + " found in " + 
 									Utils.getObjectName(pObj).getName() + " object", 
 									MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
