@@ -466,9 +466,15 @@ class ModelDefinitionPrinter {
 				val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
 				val prediction = s.list.arguments.getAttribute(AttributeValidator::attr_prediction_ref.name);
 				val eps = s.list.arguments.getAttribute(AttributeValidator::attr_eps.name);
+				val transfn = s.list.arguments.getAttribute(AttributeValidator::attr_trans.name);
 				'''
 					<ContinuousData>
 						<Standard symbId="«name»">
+							«IF transfn.length > 0»
+								<Transformation>
+									«transfn»
+								</Transformation>
+							«ENDIF»
 							«IF prediction.length > 0»
 								<Output>
 									«prediction.print_ct_SymbolRef»
