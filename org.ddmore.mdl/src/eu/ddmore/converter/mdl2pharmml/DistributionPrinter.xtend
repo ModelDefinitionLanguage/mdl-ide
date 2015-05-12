@@ -20,7 +20,7 @@ class DistributionPrinter extends MdlPrinter{
 	
 	private static val DistributionPrinter distrPrinter = new DistributionPrinter();
 	protected new(){}
-	override public static def DistributionPrinter getInstance(){
+	public static def DistributionPrinter getInstance(){
 		return distrPrinter;
 	}
 

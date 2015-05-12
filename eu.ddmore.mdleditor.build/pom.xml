@@ -21,10 +21,10 @@
 		<tycho.repo.url>https://oss.sonatype.org/content/groups/public/</tycho.repo.url>
 		<!-- Xtext and Xtend -->
 		<xtend.repo.url>http://build.eclipse.org/common/xtend/maven/</xtend.repo.url>
-		<xtend.version>2.4.0</xtend.version>
+		<xtend.version>2.7.3</xtend.version>
 		<fornax.repo.url>https://projects.itemis.de/nexus/content/groups/public/</fornax.repo.url>
 		<fornax.version>3.4.0</fornax.version>
-		<xtext.utils.version>0.7.2</xtext.utils.version>
+        <xtext.version>${xtend.version}</xtext.version>
 		<antlr.version>3.2</antlr.version>
 		<!-- Sonar -->
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
@@ -362,7 +362,6 @@
 					<groupId>org.fornax.toolsupport</groupId>
 					<artifactId>fornax-oaw-m2-plugin</artifactId>
 					<version>${fornax.version}</version>
-
 					<configuration>
 						<workflowDescriptor>file://${basedir}/src/org/ddmore/mdl/GenerateMdl.mwe2</workflowDescriptor>
 						<workflowEngine>mwe2</workflowEngine>
@@ -385,27 +384,21 @@
 						</execution>
 					</executions>
 					<dependencies>
-
 					<dependency>
-							<groupId>org.eclipse.emf.mwe</groupId>
-							<artifactId>emf-mwe-utils</artifactId>
-							<version>${xtext.utils.version}</version>
-						</dependency>
-						<dependency>
-							<groupId>org.eclipse.m2t.xpand</groupId>
-							<artifactId>m2t-xpand-xpand</artifactId>
-							<version>${xtext.utils.version}</version>
-						</dependency>
-						<dependency>
-							<groupId>org.eclipse.m2t.xpand</groupId>
-							<artifactId>m2t-xpand-xtend-typesystem-emf</artifactId>
-							<version>${xtext.utils.version}</version>
-						</dependency>
-						<dependency>
-							<groupId>org.eclipse.xtend</groupId>
-							<artifactId>org.eclipse.xtend.standalone</artifactId>
-							<version>${xtend.version}</version>
-						</dependency>
+						<groupId>org.eclipse.xtext</groupId>
+						<artifactId>org.eclipse.xtext.xtext</artifactId>
+						<version>${xtext.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.eclipse.xtext</groupId>
+						<artifactId>org.eclipse.xtext.xbase</artifactId>
+						<version>${xtext.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.eclipse.equinox</groupId>
+						<artifactId>common</artifactId>
+						<version>3.6.200-v20130402-1505</version>
+					</dependency>
 						<dependency>
 							<groupId>org.antlr</groupId>
 							<artifactId>antlr-runtime</artifactId>

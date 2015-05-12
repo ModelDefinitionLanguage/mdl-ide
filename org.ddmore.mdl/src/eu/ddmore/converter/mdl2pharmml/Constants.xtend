@@ -1,6 +1,6 @@
 package eu.ddmore.converter.mdl2pharmml
 
-static class Constants {
+final class Constants {
 	public static val writtenVersion     = "0.6";
 	public static val baseURL            = "http://www.pharmml.org/pharmml/" + writtenVersion;
 
