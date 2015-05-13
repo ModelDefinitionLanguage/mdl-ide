@@ -345,8 +345,9 @@ SamplingBlock:
 //MOG
 //////////////////////////////////////////////////////////
 MOGObjectBlock:
-	objectBlock = ImportObjectBlock |
-	mappingBlock = MappingBlock	
+	objectBlock = ImportObjectBlock
+//	 |
+//	mappingBlock = MappingBlock	
 ;
 
  ImportObjectBlock:
@@ -358,18 +359,18 @@ MOGObjectBlock:
  	(symbolName = SymbolName "=")? objectName = [ObjectName] ('from file' importURI = STRING)?
  ;
  
- MappingBlock:
- 	identifier = 'MAPPING'
- 	BEGIN mappings += MappingBlockStatement* END
- ;
- 
- MappingBlockStatement:
- 	obj1 = FullyQualifiedSymbolName '=' obj2 = FullyQualifiedSymbolName
- ;
- 
- FullyQualifiedSymbolName:
- 	parent = SymbolName '.' symbolName = SymbolName
- ;
+// MappingBlock:
+// 	identifier = 'MAPPING'
+// 	BEGIN mappings += MappingBlockStatement* END
+// ;
+// 
+// MappingBlockStatement:
+// 	obj1 = FullyQualifiedSymbolName '=' obj2 = FullyQualifiedSymbolName
+// ;
+// 
+// FullyQualifiedSymbolName:
+// 	parent = SymbolName '.' symbolName = SymbolName
+// ;
 
 //////////////////////////////////////////////////////////
 //Common

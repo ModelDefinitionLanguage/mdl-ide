@@ -158,8 +158,9 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 				for (SymbolDeclaration s: b.getCovariateBlock().getVariables()){
 					//Math only unassigned covariates
 					if (s.getSymbolName() != null && s.getExpression() == null) {
-						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
-						if (dVarName == null) dVarName = s.getSymbolName().getName();
+//						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
+//						if (dVarName == null) dVarName = s.getSymbolName().getName();
+						String dVarName = s.getSymbolName().getName();
 						if (!dVars.contains(dVarName))
 							error(MSG_MODEL_DATA_MISMATCH + 
 								": no mapping for model variable " + s.getSymbolName().getName() + " found in " + 
@@ -172,8 +173,9 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 			if (b.getVariabilityBlock() != null){
 				for (SymbolDeclaration s: b.getVariabilityBlock().getVariables()){
 					if (s.getSymbolName() != null) {
-						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
-						if (dVarName == null) dVarName = s.getSymbolName().getName();
+//						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
+//						if (dVarName == null) dVarName = s.getSymbolName().getName();
+						String dVarName = s.getSymbolName().getName();
 						if (!dVars.contains(dVarName))
 							error(MSG_MODEL_DATA_MISMATCH + 
 								": no mapping for model variable " + s.getSymbolName().getName() + " found in " + 

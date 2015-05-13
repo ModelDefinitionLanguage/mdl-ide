@@ -54,7 +54,6 @@ import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
 import org.ddmore.mdl.mdl.ExpressionBranch;
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName;
 import org.ddmore.mdl.mdl.FunctionCall;
 import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
 import org.ddmore.mdl.mdl.ImportObjectBlock;
@@ -64,7 +63,6 @@ import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.List;
 import org.ddmore.mdl.mdl.MOGObject;
 import org.ddmore.mdl.mdl.MOGObjectBlock;
-import org.ddmore.mdl.mdl.MappingBlockStatement;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
@@ -457,11 +455,11 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	//////////////////////////////////////////////////////////////////////////////////////
 	//Skip subblock statements
 
-	protected void  _createNode(IOutlineNode parentNode, MappingBlockStatement st){
-		for (EObject obj: st.eContents()){
-			createNode(parentNode, obj);
-		}
-	}
+//	protected void  _createNode(IOutlineNode parentNode, MappingBlockStatement st){
+//		for (EObject obj: st.eContents()){
+//			createNode(parentNode, obj);
+//		}
+//	}
 	
 //	protected void  _createNode(IOutlineNode parentNode, VariableList st){
 //		for (EObject obj: st.eContents()){
@@ -529,14 +527,14 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				true);
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedSymbolName name){
-		createEStructuralFeatureNode(parentNode,
-				name,
-				MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL_NAME,
-				_image(name),
-				mdlPrinter.toStr(name),
-				true);
-	}
+//	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedSymbolName name){
+//		createEStructuralFeatureNode(parentNode,
+//				name,
+//				MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL_NAME,
+//				_image(name),
+//				mdlPrinter.toStr(name),
+//				true);
+//	}
 
 	
 	protected void  _createNode(IOutlineNode parentNode, ImportObjectStatement st){
