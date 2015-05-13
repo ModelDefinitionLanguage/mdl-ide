@@ -430,7 +430,7 @@ class DataSetPrinter {
 		var res = "";
 		for (b: dObj.blocks){
 			if (b.sourceBlock != null){
-				if (b.sourceBlock.inlineBlock == null){
+//				if (b.sourceBlock.inlineBlock == null){
 					var file = "";
 					var delimiter = "";
 					for (s: b.sourceBlock.statements){
@@ -451,66 +451,66 @@ class DataSetPrinter {
 							</ExternalFile>
 						'''
 					}
-				} else {
-					//Process INLINE block
-					var rows = new ArrayList<String>();
-					var columns = new ArrayList<String>();
-					if (b.sourceBlock.inlineBlock.variables != null){
-						for (value: b.sourceBlock.inlineBlock.variables.identifiers)
-							columns.add(value.name);
-					}
-					var rowLength = columns.size;
-					if (rowLength > 0){
-						rows.add(columns.print_ds_Row);
-						var values = new ArrayList<String>();
-						if (b.sourceBlock.inlineBlock.values != null){
-							var i = 0;
-							for (value: b.sourceBlock.inlineBlock.values.values){
-								if (value.value != null) 
-									values.add(value.toStr)
-								else 
-									values.add("0");	
-								i = i + 1;
-								if (i == rowLength){
-									rows.add(values.print_ds_Row);
-									values.clear;
-									i = 0;
-								}
-							}
-						}
-						res  = res + rows.print_ds_Table;
-					}
-				}
+//				} else {
+//					//Process INLINE block
+//					var rows = new ArrayList<String>();
+//					var columns = new ArrayList<String>();
+//					if (b.sourceBlock.inlineBlock.variables != null){
+//						for (value: b.sourceBlock.inlineBlock.variables.identifiers)
+//							columns.add(value.name);
+//					}
+//					var rowLength = columns.size;
+//					if (rowLength > 0){
+//						rows.add(columns.print_ds_Row);
+//						var values = new ArrayList<String>();
+//						if (b.sourceBlock.inlineBlock.values != null){
+//							var i = 0;
+//							for (value: b.sourceBlock.inlineBlock.values.values){
+//								if (value.value != null) 
+//									values.add(value.toStr)
+//								else 
+//									values.add("0");	
+//								i = i + 1;
+//								if (i == rowLength){
+//									rows.add(values.print_ds_Row);
+//									values.clear;
+//									i = 0;
+//								}
+//							}
+//						}
+//						res  = res + rows.print_ds_Table;
+//					}
+//				}
 			}
 		}
 		return res;
 	}
 	
-	protected def print_ds_TargetToolData(String source){		
-		val fileName = FilenameUtils::getBaseName(source);
-		val filePath = FilenameUtils::getFullPath(source);
-		'''
-			<ds:TargetToolData>
-				<ds:ImportTargetData oid="«BLK_DS_TARGET_TOOL_DATA»">
-					<ds:name>«fileName»</ds:name>
-					<ds:url>«filePath»</ds:url>
-				</ds:ImportTargetData>
-			</ds:TargetToolData>
-		'''
-	}
+//	protected def print_ds_TargetToolData(String source){		
+//		val fileName = FilenameUtils::getBaseName(source);
+//		val filePath = FilenameUtils::getFullPath(source);
+//		'''
+//			<ds:TargetToolData>
+//				<ds:ImportTargetData oid="«BLK_DS_TARGET_TOOL_DATA»">
+//					<ds:name>«fileName»</ds:name>
+//					<ds:url>«filePath»</ds:url>
+//				</ds:ImportTargetData>
+//			</ds:TargetToolData>
+//		'''
+//	}
 	
-	protected def print_ds_TargetTool(DataObject dObj){
-		val source = dObj.getScriptFile;
-		if (source.length == 0) return "";
-		val fileExtension = FilenameUtils::getExtension(source);
-		if (fileExtension.length == 0) return "";
-		'''
-			<TargetTool oid="«BLK_DS_TARGET_TOOL»">
-				<TargetToolName>«fileExtension.convertID»</TargetToolName>
-				«print_ds_TargetToolData(source)»
-			</TargetTool>
-		'''
-	}
+//	protected def print_ds_TargetTool(DataObject dObj){
+//		val source = dObj.getScriptFile;
+//		if (source.length == 0) return "";
+//		val fileExtension = FilenameUtils::getExtension(source);
+//		if (fileExtension.length == 0) return "";
+//		'''
+//			<TargetTool oid="«BLK_DS_TARGET_TOOL»">
+//				<TargetToolName>«fileExtension.convertID»</TargetToolName>
+//				«print_ds_TargetToolData(source)»
+//			</TargetTool>
+//		'''
+//	}
 	
 	protected def print_mdef_ExternalDataSetReference(DataObject dObj){
 		var oidRef = "";

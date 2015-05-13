@@ -1,23 +1,15 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import org.ddmore.mdl.mdl.MOGObject
-//import org.ddmore.mdl.validation.Utils
-import org.ddmore.mdl.mdl.DesignObject
-import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.mdl.AnyExpression
-
 class TrialDesignPrinter extends DataSetPrinter {
 	/////////////////////////////////////////////////////////////////////////
 	// II Trial Design
 	//////////////////////////////////////////////////////////////////////////
-
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
 		super(mathPrinter, resolver);
 	}	
 	
+/*
 	protected def print_design_TrialDesign(MOGObject mog){
-		/* 
 		var objects = Utils::getMOGObjects(mog);
 		var zObj = Utils::getDesignObject(objects);
 		if (zObj != null)
@@ -26,7 +18,6 @@ class TrialDesignPrinter extends DataSetPrinter {
 					«zObj.print_design_Structure»
 				</TrialDesign>	
 			'''
-		*/
 	}
 	
 	protected def print_design_Structure(DesignObject dsObj){
@@ -120,4 +111,7 @@ class TrialDesignPrinter extends DataSetPrinter {
 			«expr.print_Assign»
 		</DosingTimes>
 	'''
+	
+	
+	*/
 }

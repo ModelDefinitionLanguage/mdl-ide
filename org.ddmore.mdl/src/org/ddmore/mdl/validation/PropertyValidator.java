@@ -19,18 +19,10 @@ import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.PropertyDeclaration;
 import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.TargetBlock;
-import org.ddmore.mdl.mdl.TargetType;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
-import org.ddmore.mdl.mdl.impl.DataBlockImpl;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
-import org.ddmore.mdl.mdl.impl.EvaluateTaskImpl;
-import org.ddmore.mdl.mdl.impl.ModelBlockImpl;
-import org.ddmore.mdl.mdl.impl.OptimiseTaskImpl;
-import org.ddmore.mdl.mdl.impl.PopulationFeaturesBlockImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
-import org.ddmore.mdl.mdl.impl.TargetBlockImpl;
 import org.ddmore.mdl.types.DefaultValues;
 import org.ddmore.mdl.types.MdlDataType;
 import org.eclipse.core.resources.IFile;
@@ -83,22 +75,22 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt, attr_task_target, attr_task_version);
 	final public static List<Attribute> attrs_task_estimate = Arrays.asList(
 			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt, attr_task_target, attr_task_version);
-	final public static List<Attribute> attrs_task_evaluate = Arrays.asList();
-	final public static List<Attribute> attrs_task_optimise = Arrays.asList();
+//	final public static List<Attribute> attrs_task_evaluate = Arrays.asList();
+//	final public static List<Attribute> attrs_task_optimise = Arrays.asList();
 	
-	//DATA
-	final public static Attribute attr_data_ignore = new Attribute("ignore", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_data_accept = new Attribute("accept", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_data_drop = new Attribute("drop", MdlDataType.TYPE_VECTOR_REF, false);
+//	//DATA
+//	final public static Attribute attr_data_ignore = new Attribute("ignore", MdlDataType.TYPE_BOOLEAN, false);
+//	final public static Attribute attr_data_accept = new Attribute("accept", MdlDataType.TYPE_BOOLEAN, false);
+//	final public static Attribute attr_data_drop = new Attribute("drop", MdlDataType.TYPE_VECTOR_REF, false);
 	
-	final public static List<Attribute> attrs_task_data = Arrays.asList(attr_data_ignore, attr_data_accept, attr_data_drop);
+//	final public static List<Attribute> attrs_task_data = Arrays.asList(attr_data_ignore, attr_data_accept, attr_data_drop);
 	
-	//MODEL
-	final public static Attribute attr_model_tolrel = new Attribute("tolrel", MdlDataType.TYPE_NAT, false);
-	final public static Attribute attr_model_add = new Attribute("add", MdlDataType.TYPE_VECTOR_REF, false);
-	final public static Attribute attr_model_remove = new Attribute("remove", MdlDataType.TYPE_VECTOR_REF, false);
-	
-	final public static List<Attribute> attrs_task_model = Arrays.asList(attr_model_tolrel, attr_model_add, attr_model_remove);
+//	//MODEL
+//	final public static Attribute attr_model_tolrel = new Attribute("tolrel", MdlDataType.TYPE_NAT, false);
+//	final public static Attribute attr_model_add = new Attribute("add", MdlDataType.TYPE_VECTOR_REF, false);
+//	final public static Attribute attr_model_remove = new Attribute("remove", MdlDataType.TYPE_VECTOR_REF, false);
+//	
+//	final public static List<Attribute> attrs_task_model = Arrays.asList(attr_model_tolrel, attr_model_add, attr_model_remove);
 	
 	/*SOURCE*/
 	final public static Attribute attr_ignore = new Attribute("ignore", MdlDataType.TYPE_STRING, false);
@@ -114,29 +106,29 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			attr_delimiter, attr_file, attr_script, attr_header, attr_skip, attr_nrows);
 
 	/*TARGET*/
-	final public static Attribute attr_req_target = new Attribute("target", MdlDataType.TYPE_TARGET, true, TargetType.NMTRAN_CODE.toString());
-	final public static Attribute attr_location = new Attribute("location", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_first = new Attribute("first", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_last = new Attribute("last", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_sameline = new Attribute("sameline", MdlDataType.TYPE_BOOLEAN, false);
-
-	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_sameline);
+//	final public static Attribute attr_req_target = new Attribute("target", MdlDataType.TYPE_TARGET, true, TargetType.NMTRAN_CODE.toString());
+//	final public static Attribute attr_location = new Attribute("location", MdlDataType.TYPE_STRING, false);
+//	final public static Attribute attr_first = new Attribute("first", MdlDataType.TYPE_BOOLEAN, false);
+//	final public static Attribute attr_last = new Attribute("last", MdlDataType.TYPE_BOOLEAN, false);
+//	final public static Attribute attr_sameline = new Attribute("sameline", MdlDataType.TYPE_BOOLEAN, false);
+//
+//	final public static List<Attribute> attrs_target = Arrays.asList(attr_req_target, attr_location, attr_first, attr_last, attr_sameline);
 	
 	/*Design block*/
-	final public static Attribute attr_totalSize = new Attribute("totalSize", MdlDataType.TYPE_NAT, true);
-	final public static Attribute attr_numberSamples = new Attribute("numberSamples", MdlDataType.TYPE_NAT, true);
-	final public static Attribute attr_covariates = new Attribute("covariates", MdlDataType.TYPE_LIST, false);
-	
-	final public static List<Attribute> attrs_populationFeatures = Arrays.asList(
-			attr_totalSize, attr_numberSamples, attr_covariates);
+//	final public static Attribute attr_totalSize = new Attribute("totalSize", MdlDataType.TYPE_NAT, true);
+//	final public static Attribute attr_numberSamples = new Attribute("numberSamples", MdlDataType.TYPE_NAT, true);
+//	final public static Attribute attr_covariates = new Attribute("covariates", MdlDataType.TYPE_LIST, false);
+//	
+//	final public static List<Attribute> attrs_populationFeatures = Arrays.asList(
+//			attr_totalSize, attr_numberSamples, attr_covariates);
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	HashMap<String, String> exclusive_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = 4646663049359441357L;
 		{
-			put(attr_first.getName(), attr_last.getName());
-			put(attr_last.getName(), attr_first.getName());
+//			put(attr_first.getName(), attr_last.getName());
+//			put(attr_last.getName(), attr_first.getName());
 			put(attr_script.getName(), attr_file.getName());
 			put(attr_file.getName(), attr_script.getName());
 		}
@@ -158,20 +150,20 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			attrNames = getRequiredPropertyNames(tob.getEstimateBlock());
 			ref = MdlPackage.Literals.TASK_OBJECT_BLOCK__ESTIMATE_BLOCK;
 		}
-		if (tob.getDataBlock() != null){
-			statements = tob.getDataBlock().getStatements(); 
-			attrNames = getRequiredPropertyNames(tob.getDataBlock());
-			ref = MdlPackage.Literals.TASK_OBJECT_BLOCK__DATA_BLOCK;
-		}
+//		if (tob.getDataBlock() != null){
+//			statements = tob.getDataBlock().getStatements(); 
+//			attrNames = getRequiredPropertyNames(tob.getDataBlock());
+//			ref = MdlPackage.Literals.TASK_OBJECT_BLOCK__DATA_BLOCK;
+//		}
 		checkRequiredProperties(statements, attrNames, ref);
 	}
 	
-	@Check
+//	@Check
 	//Check required properties in TargetBlock
-	public void checkRequiredProperties(TargetBlock t){
-		checkRequiredProperties(t.getStatements(), getRequiredPropertyNames(t), 
-			MdlPackage.Literals.TARGET_BLOCK__STATEMENTS);
-	}
+//	public void checkRequiredProperties(TargetBlock t){
+//		checkRequiredProperties(t.getStatements(), getRequiredPropertyNames(t), 
+//			MdlPackage.Literals.TARGET_BLOCK__STATEMENTS);
+//	}
 
 	@Check
 	//Check required properties in SourceBlock
@@ -252,7 +244,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 		EObject container = p.eContainer();
 		if (container instanceof SourceBlockImpl){
 			SourceBlock b = (SourceBlock) container;
-			if (b.getInlineBlock() != null) return;
+//			if (b.getInlineBlock() != null) return;
 			if (p.getPropertyName().getName().equals(attr_file.getName()) || 
 				p.getPropertyName().getName().equals(attr_script.getName())) {
 				String dataPath = MdlPrinter.getInstance().toStr(p.getExpression());
@@ -352,27 +344,28 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 		}		
 	}
 	
-	@Check
-	//External target blocks should have location defined
-	public void checkTargetLocation(TargetBlock t){
-		for (PropertyDeclaration p: t.getStatements())
-			if (p.getPropertyName().getName().equals(attr_location.getName())) return;
-		warning(MSG_TARGET_LOCATION, 
-			MdlPackage.Literals.TARGET_BLOCK__STATEMENTS,
-				MSG_TARGET_LOCATION, t.getIdentifier());
-	}
+//	@Check
+//	//External target blocks should have location defined
+//	public void checkTargetLocation(TargetBlock t){
+//		for (PropertyDeclaration p: t.getStatements())
+//			if (p.getPropertyName().getName().equals(attr_location.getName())) return;
+//		warning(MSG_TARGET_LOCATION, 
+//			MdlPackage.Literals.TARGET_BLOCK__STATEMENTS,
+//				MSG_TARGET_LOCATION, t.getIdentifier());
+//	}
 	
 	Boolean isPropertyContainer(EObject container){
 		return (
 		container instanceof EstimateTaskImpl ||
 		container instanceof SimulateTaskImpl ||
-		container instanceof EvaluateTaskImpl ||
-		container instanceof OptimiseTaskImpl ||
-		container instanceof ModelBlockImpl ||
-		container instanceof DataBlockImpl ||
-		container instanceof SourceBlockImpl ||
-		container instanceof TargetBlockImpl ||
-		container instanceof PopulationFeaturesBlockImpl); 
+//		container instanceof EvaluateTaskImpl ||
+//		container instanceof OptimiseTaskImpl ||
+//		container instanceof ModelBlockImpl ||
+//		container instanceof DataBlockImpl ||
+		container instanceof SourceBlockImpl //||
+//		container instanceof TargetBlockImpl ||
+//		container instanceof PopulationFeaturesBlockImpl
+		); 
 	}	
 	
 	List<Attribute> getAllProperties(EObject obj){
@@ -380,20 +373,20 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			return attrs_task_estimate;
 		if (obj instanceof SimulateTaskImpl)
 			return attrs_task_simulate;
-		if (obj instanceof DataBlockImpl)
-			return attrs_task_data;
-		if (obj instanceof ModelBlockImpl)
-			return attrs_task_model;
-		if (obj instanceof EvaluateTaskImpl)
-			return attrs_task_evaluate;
-		if (obj instanceof OptimiseTaskImpl)
-			return attrs_task_optimise;
+//		if (obj instanceof DataBlockImpl)
+//			return attrs_task_data;
+//		if (obj instanceof ModelBlockImpl)
+//			return attrs_task_model;
+//		if (obj instanceof EvaluateTaskImpl)
+//			return attrs_task_evaluate;
+//		if (obj instanceof OptimiseTaskImpl)
+//			return attrs_task_optimise;
 		if (obj instanceof SourceBlockImpl)
 			return attrs_source;
-		if (obj instanceof TargetBlockImpl)
-			return attrs_target;
-		if (obj instanceof PopulationFeaturesBlockImpl)
-			return attrs_populationFeatures;
+//		if (obj instanceof TargetBlockImpl)
+//			return attrs_target;
+//		if (obj instanceof PopulationFeaturesBlockImpl)
+//			return attrs_populationFeatures;
 		return null;
 	}
 	

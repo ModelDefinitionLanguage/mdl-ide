@@ -389,10 +389,10 @@ class ModelDefinitionPrinter {
 							}
 						}
 						//LIBRARY
-						if (st.libraryBlock != null){
-							for (s: st.libraryBlock.statements)
-								variables = variables + s.expression.print_Math_FunctionCall;
-						} 
+//						if (st.libraryBlock != null){
+//							for (s: st.libraryBlock.statements)
+//								variables = variables + s.expression.print_Math_FunctionCall;
+//						} 
 						//COMPARTMENT
 						if (st.pkMacroBlock != null){
 							for (s: st.pkMacroBlock.statements){

@@ -115,35 +115,35 @@ public class Utils {
 		if (obj instanceof VariabilityDefinitionBlockImpl) return ((VariabilityDefinitionBlock)obj).getIdentifier();
 		if (obj instanceof StructuralParametersBlockImpl) return ((StructuralParametersBlock)obj).getIdentifier() ;
 		if (obj instanceof VariabilityParametersBlockImpl) return ((VariabilityParametersBlock)obj).getIdentifier() ;
-		if (obj instanceof EstimationBlockImpl) return ((EstimationBlock)obj).getIdentifier() ;
-		if (obj instanceof SimulationBlockImpl) return ((SimulationBlock)obj).getIdentifier() ;
+//		if (obj instanceof EstimationBlockImpl) return ((EstimationBlock)obj).getIdentifier() ;
+//		if (obj instanceof SimulationBlockImpl) return ((SimulationBlock)obj).getIdentifier() ;
 		if (obj instanceof ObservationBlockImpl) return ((ObservationBlock)obj).getIdentifier() ;
 		//if (obj instanceof OutputVariablesBlockImpl) return ((OutputVariablesBlock)obj).getIdentifier() ;
 		//Subblocks
-		if (obj instanceof LibraryBlockImpl) return ((LibraryBlock)obj).getIdentifier() ;
+//		if (obj instanceof LibraryBlockImpl) return ((LibraryBlock)obj).getIdentifier() ;
 		if (obj instanceof OdeBlockImpl) return ((OdeBlock)obj).getIdentifier() ;
 		if (obj instanceof PkMacroBlockImpl) return ((PkMacroBlock)obj).getIdentifier() ;
 		/*Task object*/
 		if (obj instanceof EstimateTaskImpl) return ((EstimateTask)obj).getIdentifier();	
 		if (obj instanceof SimulateTaskImpl) return ((SimulateTask)obj).getIdentifier();	
-		if (obj instanceof EvaluateTaskImpl) return ((EvaluateTask)obj).getIdentifier();	
-		if (obj instanceof OptimiseTaskImpl) return ((OptimiseTask)obj).getIdentifier();	
-		if (obj instanceof DataBlockImpl) return ((DataBlock)obj).getIdentifier();	
-		if (obj instanceof ModelBlockImpl) return ((ModelBlock)obj).getIdentifier();	
+//		if (obj instanceof EvaluateTaskImpl) return ((EvaluateTask)obj).getIdentifier();	
+//		if (obj instanceof OptimiseTaskImpl) return ((OptimiseTask)obj).getIdentifier();	
+//		if (obj instanceof DataBlockImpl) return ((DataBlock)obj).getIdentifier();	
+//		if (obj instanceof ModelBlockImpl) return ((ModelBlock)obj).getIdentifier();	
 		/*Design object*/
-		if (obj instanceof CovariatesBlockImpl) return ((CovariatesBlock)obj).getIdentifier();  
-		if (obj instanceof StudyDesignBlockImpl) return ((StudyDesignBlock)obj).getIdentifier();  
-		if (obj instanceof AdministrationBlockImpl) return ((AdministrationBlock)obj).getIdentifier();
-		if (obj instanceof ActionBlockImpl) return ((ActionBlock)obj).getIdentifier();        
-		if (obj instanceof SamplingBlockImpl) return ((SamplingBlock)obj).getIdentifier();      
-		if (obj instanceof DesignSpaceBlockImpl) return ((DesignSpaceBlock)obj).getIdentifier();   
-		if (obj instanceof HyperSpaceBlockImpl) return ((HyperSpaceBlock)obj).getIdentifier(); 		
-		if (obj instanceof PopulationFeaturesBlockImpl) return ((PopulationFeaturesBlock)obj).getIdentifier(); 	
+//		if (obj instanceof CovariatesBlockImpl) return ((CovariatesBlock)obj).getIdentifier();  
+//		if (obj instanceof StudyDesignBlockImpl) return ((StudyDesignBlock)obj).getIdentifier();  
+//		if (obj instanceof AdministrationBlockImpl) return ((AdministrationBlock)obj).getIdentifier();
+//		if (obj instanceof ActionBlockImpl) return ((ActionBlock)obj).getIdentifier();        
+//		if (obj instanceof SamplingBlockImpl) return ((SamplingBlock)obj).getIdentifier();      
+//		if (obj instanceof DesignSpaceBlockImpl) return ((DesignSpaceBlock)obj).getIdentifier();   
+//		if (obj instanceof HyperSpaceBlockImpl) return ((HyperSpaceBlock)obj).getIdentifier(); 		
+//		if (obj instanceof PopulationFeaturesBlockImpl) return ((PopulationFeaturesBlock)obj).getIdentifier(); 	
 		/*MOG object*/
 		if (obj instanceof ImportObjectBlockImpl) return ((ImportObjectBlock)obj).getIdentifier();  
 		if (obj instanceof MappingBlockImpl) return ((MappingBlock)obj).getIdentifier();  
 		/*All objects*/
-		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();
+//		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();
 		return "";
 	}
 	
@@ -224,11 +224,11 @@ public class Utils {
 	}	
 	
 	//Finds the first design object in a group of objects (MOG)
-	public static DesignObject getDesignObject(List<MclObject> objects){
-		for (MclObject mclObject: objects)
-			if (mclObject.getDesignObject() != null) return mclObject.getDesignObject();
-		return null;
-	}
+//	public static DesignObject getDesignObject(List<MclObject> objects){
+//		for (MclObject mclObject: objects)
+//			if (mclObject.getDesignObject() != null) return mclObject.getDesignObject();
+//		return null;
+//	}
 
 	//Creates a list of available MDL objects with types
 	public static List<Variable> getDeclaredObjects(Mcl mcl){
@@ -239,7 +239,7 @@ public class Utils {
 			if (obj.getDataObject() != null)      objType = MdlDataType.TYPE_OBJ_REF_DATA;
 			if (obj.getParameterObject() != null) objType = MdlDataType.TYPE_OBJ_REF_PARAM;
 			if (obj.getTaskObject() != null)      objType = MdlDataType.TYPE_OBJ_REF_TASK;
-			if (obj.getDesignObject() != null)    objType = MdlDataType.TYPE_OBJ_REF_DESIGN;
+//			if (obj.getDesignObject() != null)    objType = MdlDataType.TYPE_OBJ_REF_DESIGN;
 			if (obj.getMogObject() != null)	      objType = MdlDataType.TYPE_OBJ_REF_MOG;
 			Variable newObj = new Variable(obj.getObjectName().getName(), objType);
 			declaredObjects.add(newObj);
@@ -267,11 +267,11 @@ public class Utils {
 				if (s.getSymbolName() != null)
 					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getExpectedType(s)));
 			}
-			if (container instanceof FunctionCallStatementImpl) {
-				FunctionCallStatement s = (FunctionCallStatement) container;
-				if (s.getSymbolName() != null)
-					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s.getExpression())));
-			}
+//			if (container instanceof FunctionCallStatementImpl) {
+//				FunctionCallStatement s = (FunctionCallStatement) container;
+//				if (s.getSymbolName() != null)
+//					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s.getExpression())));
+//			}
 	    	if (container instanceof FunctionCallImpl){
 	    		FunctionCall functCall = (FunctionCall) container;
 	    		String functName = functCall.getIdentifier().getName();
@@ -342,22 +342,22 @@ public class Utils {
 		return deriv_vars;
 	}
 	
-	public static List<Variable> getExternalLibraryVariables(SymbolName ref){
-		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
-	    while (iterator.hasNext()){
-	    	EObject obj = iterator.next();
-	    	if (obj instanceof FunctionCallStatementImpl){
-	    		FunctionCallStatement s = (FunctionCallStatement) obj;
-	    		if (s.getSymbolName().getName().equals(ref.getName())) {	    			
-	    			//Compare reference with returned variables of functions or libraries
-	    			String functName = s.getExpression().getIdentifier().getName();
-	    			if (FunctionValidator.libraries.contains(functName))
-	    				return FunctionValidator.standardFunctions.get(functName).getReturnedVariables(s.getExpression().getArguments());
-	    		}
-	    	}
-	    }
-	    return null;
-	}
+//	public static List<Variable> getExternalLibraryVariables(SymbolName ref){
+//		TreeIterator<EObject> iterator = ref.eResource().getAllContents();
+//	    while (iterator.hasNext()){
+//	    	EObject obj = iterator.next();
+//	    	if (obj instanceof FunctionCallStatementImpl){
+//	    		FunctionCallStatement s = (FunctionCallStatement) obj;
+//	    		if (s.getSymbolName().getName().equals(ref.getName())) {	    			
+//	    			//Compare reference with returned variables of functions or libraries
+//	    			String functName = s.getExpression().getIdentifier().getName();
+//	    			if (FunctionValidator.libraries.contains(functName))
+//	    				return FunctionValidator.standardFunctions.get(functName).getReturnedVariables(s.getExpression().getArguments());
+//	    		}
+//	    	}
+//	    }
+//	    return null;
+//	}
 	
 	private static MclObject getImportedObjectByAlias(SymbolName ref){
 		MclObject obj = getMclObject(ref);

@@ -63,8 +63,8 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		//c.setLinewrap(2).before(f.getOutputVariablesBlockRule());
 		c.setLinewrap(2).before(f.getGroupVariablesBlockRule());
 		c.setLinewrap(2).before(f.getObservationBlockRule());
-		c.setLinewrap(2).before(f.getEstimationBlockRule());
-		c.setLinewrap(2).before(f.getSimulationBlockRule());
+//		c.setLinewrap(2).before(f.getEstimationBlockRule());
+//		c.setLinewrap(2).before(f.getSimulationBlockRule());
 
 		c.setLinewrap(2).before(f.getStructuralBlockRule());
 		c.setLinewrap(2).before(f.getVariabilityBlockRule());
@@ -75,13 +75,13 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 
 		c.setLinewrap(2).before(f.getEstimateTaskRule());
 		c.setLinewrap(2).before(f.getSimulateTaskRule());
-		c.setLinewrap(2).before(f.getOptimiseTaskRule());
-		c.setLinewrap(2).before(f.getEvaluateTaskRule());
-		c.setLinewrap(2).before(f.getDataBlockRule());
-		c.setLinewrap(2).before(f.getModelBlockRule());
+//		c.setLinewrap(2).before(f.getOptimiseTaskRule());
+//		c.setLinewrap(2).before(f.getEvaluateTaskRule());
+//		c.setLinewrap(2).before(f.getDataBlockRule());
+//		c.setLinewrap(2).before(f.getModelBlockRule());
 	
-		c.setLinewrap(1).before(f.getTargetBlockRule());
-		c.setIndentation(f.getTargetBlockAccess().getExternalCodeAssignment_3(), f.getTargetBlockAccess().getENDTerminalRuleCall_4());
+//		c.setLinewrap(1).before(f.getTargetBlockRule());
+//		c.setIndentation(f.getTargetBlockAccess().getExternalCodeAssignment_3(), f.getTargetBlockAccess().getENDTerminalRuleCall_4());
 
 		c.setLinewrap(1).before(f.getSymbolDeclarationRule());
 		
@@ -92,10 +92,10 @@ public class MdlFormatter extends AbstractDeclarativeFormatter {
 		//c.setLinewrap(1).before(f.getOutputVariablesBlockAccess().getVariablesAssignment_2());
 		
 		c.setLinewrap(1).before(f.getGroupVariablesBlockStatementRule());
-		c.setLinewrap(1).before(f.getFunctionCallStatementRule());
-		c.setLinewrap(1).before(f.getLibraryBlockRule());
+//		c.setLinewrap(1).before(f.getFunctionCallStatementRule());
+//		c.setLinewrap(1).before(f.getLibraryBlockRule());
 		c.setLinewrap(1).before(f.getOdeBlockRule());
 
-		c.setLinewrap(1).before(f.getInlineBlockAccess().getVariablesAssignment_2());
+//		c.setLinewrap(1).before(f.getInlineBlockAccess().getVariablesAssignment_2());
 	}
 }

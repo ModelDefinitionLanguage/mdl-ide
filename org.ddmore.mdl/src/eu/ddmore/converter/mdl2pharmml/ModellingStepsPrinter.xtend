@@ -31,7 +31,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 		var res = "";
 		var dependencies = ""; 
 		if (mObj != null && dObj != null && pObj != null && tObj != null) {
-			res = res + dObj.print_ds_TargetTool;
+//			res = res + dObj.print_ds_TargetTool;
 			res = res + mog.print_ds_TargetDataSet;
 			var index = 1;
 

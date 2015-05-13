@@ -80,10 +80,17 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_type_level = new Attribute("type", MdlDataType.TYPE_LEVEL, false); 
 	
 	/*OBSERVATION*/
-	final public static Attribute attr_type_continuous = new Attribute("type", MdlDataType.TYPE_CONTINUOUS, true, DefaultValues.CC_CONTINUOUS);
-	final public static Attribute attr_error = new Attribute("error", MdlDataType.TYPE_EXPR, true);
-	final public static Attribute attr_eps = new Attribute("eps", MdlDataType.TYPE_REF, true);
-	final public static Attribute attr_prediction_ref = new Attribute("prediction", MdlDataType.TYPE_REF, true);
+	final public static Attribute attr_type_continuous = new Attribute("type", Arrays.asList(MdlDataType.TYPE_VAR_TYPE, MdlDataType.TYPE_NONCONTINUOUS), true, DefaultValues.CC_CONTINUOUS);
+	final public static Attribute attr_error = new Attribute("error", MdlDataType.TYPE_EXPR, false);
+	final public static Attribute attr_eps = new Attribute("eps", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_prediction_ref = new Attribute("prediction", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_distrib = new Attribute("distn", MdlDataType.TYPE_RANDOM_LIST, false);
+	final public static Attribute attr_link = new Attribute("link", MdlDataType.TYPE_TRANS, false);
+	final public static Attribute attr_event = new Attribute("event", MdlDataType.TYPE_EVENT, false);
+	final public static Attribute attr_hazard = new Attribute("haz", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_categories = new Attribute("categories", MdlDataType.TYPE_VECTOR_INT, false);
+	final public static Attribute attr_probabilities = new Attribute("probabilities", MdlDataType.TYPE_VECTOR_REAL, false);
+	
 
 	/*ESTIMATION*/
 	final public static Attribute attr_ruv = new Attribute("ruv", MdlDataType.TYPE_EXPR, false);
@@ -128,43 +135,43 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	/*Design object*/
 	/*ADMINISTRATION*/
-	final public static Attribute attr_trial_type = new Attribute("type", MdlDataType.TYPE_TRIAL, false);
-	final public static Attribute attr_start = new Attribute("start", MdlDataType.TYPE_INT, false);
-	final public static Attribute attr_end = new Attribute("end", MdlDataType.TYPE_INT, false);
-	final public static Attribute attr_administration = new Attribute("administration", MdlDataType.TYPE_INT, false);
-	final public static Attribute attr_amount = new Attribute("amount", 
-			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
-	final public static Attribute attr_amountBSA = new Attribute("amountBSA", 
-			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
-	final public static Attribute attr_doseTime = new Attribute("doseTime", 
-			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
-	final public static Attribute attr_duration = new Attribute("duration", MdlDataType.TYPE_NAT, false);
-	final public static Attribute attr_steadyState = new Attribute("steadyState", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_interval = new Attribute("interval", 
-			Arrays.asList(MdlDataType.TYPE_PREAL, MdlDataType.TYPE_VECTOR_PREAL), false);
-	final public static Attribute attr_combination = new Attribute("combination", MdlDataType.TYPE_VECTOR_REF, false);
-	final public static Attribute attr_treatment = new Attribute("treatment", MdlDataType.TYPE_REF, false);
-	
-	/*ACTION*/
-	final public static Attribute attr_reset = new Attribute("reset", MdlDataType.TYPE_LIST, false);
-	
-	/*SAMPLING*/
-	final public static Attribute attr_samplingTime = new Attribute("samplingTime", Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
-	final public static Attribute attr_outcome = new Attribute("outcome", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_bql = new Attribute("bql", MdlDataType.TYPE_REAL, false);
-	
-	/*STUDY_DESIGN (ARMS)*/
-	final public static Attribute attr_name_ref = new Attribute("name", MdlDataType.TYPE_REF, true);		
-	final public static Attribute attr_groupSize = new Attribute("groupSize", MdlDataType.TYPE_INT, false);
-	final public static Attribute attr_inteventionSequence = new Attribute("inteventionSequence", MdlDataType.TYPE_LIST, false);
-	final public static Attribute attr_occasionValue = new Attribute("occasionValue", MdlDataType.TYPE_LIST, false);
-	final public static Attribute attr_samplingSequence = new Attribute("samplingSequence", MdlDataType.TYPE_LIST, false);
-
-	/*DESIGN_SPACE, HYPER_SPACE*/
-	final public static Attribute attr_admTime = new Attribute("admTime", MdlDataType.TYPE_RANDOM_LIST, false);
-	final public static Attribute attr_numberSamples = new Attribute("numberSamples", MdlDataType.TYPE_RANDOM_LIST, false);
-	final public static Attribute attr_min = new Attribute("min", MdlDataType.TYPE_RANDOM_LIST, false);
-	final public static Attribute attr_max = new Attribute("max", MdlDataType.TYPE_RANDOM_LIST, false);
+//	final public static Attribute attr_trial_type = new Attribute("type", MdlDataType.TYPE_TRIAL, false);
+//	final public static Attribute attr_start = new Attribute("start", MdlDataType.TYPE_INT, false);
+//	final public static Attribute attr_end = new Attribute("end", MdlDataType.TYPE_INT, false);
+//	final public static Attribute attr_administration = new Attribute("administration", MdlDataType.TYPE_INT, false);
+//	final public static Attribute attr_amount = new Attribute("amount", 
+//			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
+//	final public static Attribute attr_amountBSA = new Attribute("amountBSA", 
+//			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
+//	final public static Attribute attr_doseTime = new Attribute("doseTime", 
+//			Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
+//	final public static Attribute attr_duration = new Attribute("duration", MdlDataType.TYPE_NAT, false);
+//	final public static Attribute attr_steadyState = new Attribute("steadyState", MdlDataType.TYPE_BOOLEAN, false);
+//	final public static Attribute attr_interval = new Attribute("interval", 
+//			Arrays.asList(MdlDataType.TYPE_PREAL, MdlDataType.TYPE_VECTOR_PREAL), false);
+//	final public static Attribute attr_combination = new Attribute("combination", MdlDataType.TYPE_VECTOR_REF, false);
+//	final public static Attribute attr_treatment = new Attribute("treatment", MdlDataType.TYPE_REF, false);
+//	
+//	/*ACTION*/
+//	final public static Attribute attr_reset = new Attribute("reset", MdlDataType.TYPE_LIST, false);
+//	
+//	/*SAMPLING*/
+//	final public static Attribute attr_samplingTime = new Attribute("samplingTime", Arrays.asList(MdlDataType.TYPE_NAT, MdlDataType.TYPE_VECTOR_NAT), false);
+//	final public static Attribute attr_outcome = new Attribute("outcome", MdlDataType.TYPE_STRING, false);
+//	final public static Attribute attr_bql = new Attribute("bql", MdlDataType.TYPE_REAL, false);
+//	
+//	/*STUDY_DESIGN (ARMS)*/
+//	final public static Attribute attr_name_ref = new Attribute("name", MdlDataType.TYPE_REF, true);		
+//	final public static Attribute attr_groupSize = new Attribute("groupSize", MdlDataType.TYPE_INT, false);
+//	final public static Attribute attr_inteventionSequence = new Attribute("inteventionSequence", MdlDataType.TYPE_LIST, false);
+//	final public static Attribute attr_occasionValue = new Attribute("occasionValue", MdlDataType.TYPE_LIST, false);
+//	final public static Attribute attr_samplingSequence = new Attribute("samplingSequence", MdlDataType.TYPE_LIST, false);
+//
+//	/*DESIGN_SPACE, HYPER_SPACE*/
+//	final public static Attribute attr_admTime = new Attribute("admTime", MdlDataType.TYPE_RANDOM_LIST, false);
+//	final public static Attribute attr_numberSamples = new Attribute("numberSamples", MdlDataType.TYPE_RANDOM_LIST, false);
+//	final public static Attribute attr_min = new Attribute("min", MdlDataType.TYPE_RANDOM_LIST, false);
+//	final public static Attribute attr_max = new Attribute("max", MdlDataType.TYPE_RANDOM_LIST, false);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Attribute sets
@@ -180,10 +187,11 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_covariateDef   = Arrays.asList(attr_type, attr_units);
 	final public static List<Attribute> attrs_variabilityDef = Arrays.asList(attr_level, attr_type_level, attr_units);
 	final public static List<Attribute> attrs_ode = Arrays.asList(attr_deriv, attr_init, attr_x0, attr_wrt);
-	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
-	final public static List<Attribute> attrs_simulation = Arrays.asList(attr_type);
+//	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
+//	final public static List<Attribute> attrs_simulation = Arrays.asList(attr_type);
 	final public static List<Attribute> attrs_observation = Arrays.asList(attr_type_continuous, attr_error, 
-			attr_eps, attr_prediction_ref, attr_trans);
+			attr_eps, attr_prediction_ref, attr_trans, attr_distrib, attr_link, attr_hazard, attr_event, attr_categories, attr_probabilities
+			);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_individualVariables = Arrays.asList(attr_g_type, attr_trans, attr_pop, 
@@ -194,13 +202,13 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			attr_k, attr_alink, attr_ktr, attr_mtt, attr_vm, attr_km, attr_keq);	
 	
 	/*Design object*/
-	final public static List<Attribute> attrs_administration = Arrays.asList(attr_trial_type, attr_administration, attr_amount, attr_amountBSA, attr_doseTime, attr_start, 
-		attr_end, attr_steadyState, attr_interval, attr_treatment, attr_combination, attr_duration);
-	final public static List<Attribute> attrs_action = Arrays.asList(attr_start, attr_end, attr_reset);
-	final public static List<Attribute> attrs_sampling = Arrays.asList(attr_trial_type, attr_start, attr_end, attr_samplingTime, attr_interval, attr_outcome, attr_bql, attr_combination);
-	final public static List<Attribute> attrs_studyDesign = Arrays.asList(attr_groupSize, attr_inteventionSequence, attr_occasionValue, attr_samplingSequence);//, attr_cov);
-	final public static List<Attribute> attrs_designSpace = Arrays.asList(attr_name_ref, attr_admTime, attr_numberSamples);
-	final public static List<Attribute> attrs_hyperSpace = Arrays.asList(attr_name_ref, attr_min, attr_max, attr_admTime, attr_numberSamples);
+//	final public static List<Attribute> attrs_administration = Arrays.asList(attr_trial_type, attr_administration, attr_amount, attr_amountBSA, attr_doseTime, attr_start, 
+//		attr_end, attr_steadyState, attr_interval, attr_treatment, attr_combination, attr_duration);
+//	final public static List<Attribute> attrs_action = Arrays.asList(attr_start, attr_end, attr_reset);
+//	final public static List<Attribute> attrs_sampling = Arrays.asList(attr_trial_type, attr_start, attr_end, attr_samplingTime, attr_interval, attr_outcome, attr_bql, attr_combination);
+//	final public static List<Attribute> attrs_studyDesign = Arrays.asList(attr_groupSize, attr_inteventionSequence, attr_occasionValue, attr_samplingSequence);//, attr_cov);
+//	final public static List<Attribute> attrs_designSpace = Arrays.asList(attr_name_ref, attr_admTime, attr_numberSamples);
+//	final public static List<Attribute> attrs_hyperSpace = Arrays.asList(attr_name_ref, attr_min, attr_max, attr_admTime, attr_numberSamples);
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -217,18 +225,18 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		if (obj instanceof IndividualVariablesBlockImpl) return attrs_individualVariables;
 		if (obj instanceof OdeBlockImpl) return attrs_ode; 
 		if (obj instanceof PkMacroBlockImpl) return attrs_pkMacro; 
-		if (obj instanceof EstimationBlockImpl) return attrs_estimation; 
-		if (obj instanceof SimulationBlockImpl) return attrs_simulation; 
+//		if (obj instanceof EstimationBlockImpl) return attrs_estimation; 
+//		if (obj instanceof SimulationBlockImpl) return attrs_simulation; 
 		if (obj instanceof ObservationBlockImpl) return attrs_observation; 
 		if (obj instanceof StructuralParametersBlockImpl) return attrs_structuralParams;
 		if (obj instanceof VariabilityParametersBlockImpl) return attrs_variabilityParams;
 		/*Design object*/
-		if (obj instanceof StudyDesignBlockImpl) return attrs_studyDesign;  
-		if (obj instanceof AdministrationBlockImpl) return attrs_administration;
-		if (obj instanceof ActionBlockImpl) return attrs_action;        
-		if (obj instanceof SamplingBlockImpl) return attrs_sampling;      
-		if (obj instanceof DesignSpaceBlockImpl) return attrs_designSpace;   
-		if (obj instanceof HyperSpaceBlockImpl) return attrs_hyperSpace; 
+//		if (obj instanceof StudyDesignBlockImpl) return attrs_studyDesign;  
+//		if (obj instanceof AdministrationBlockImpl) return attrs_administration;
+//		if (obj instanceof ActionBlockImpl) return attrs_action;        
+//		if (obj instanceof SamplingBlockImpl) return attrs_sampling;      
+//		if (obj instanceof DesignSpaceBlockImpl) return attrs_designSpace;   
+//		if (obj instanceof HyperSpaceBlockImpl) return attrs_hyperSpace; 
 		return null;
 	}	
 	
@@ -480,24 +488,25 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			obj instanceof CovariateDefinitionBlockImpl ||
 			obj instanceof VariabilityDefinitionBlockImpl ||
 			obj instanceof IndividualVariablesBlockImpl ||
-			obj instanceof LibraryBlockImpl ||
+//			obj instanceof LibraryBlockImpl ||
 			obj instanceof OdeBlockImpl || 
 			obj instanceof PkMacroBlockImpl ||
-			obj instanceof EstimationBlockImpl ||
-			obj instanceof SimulationBlockImpl ||
+//			obj instanceof EstimationBlockImpl ||
+//			obj instanceof SimulationBlockImpl ||
 			obj instanceof ObservationBlockImpl ||
 			obj instanceof StructuralParametersBlockImpl || 
 			obj instanceof VariabilityParametersBlockImpl ||
 			obj instanceof RandomVariableDefinitionBlockImpl ||
 			//Parameter object
 			obj instanceof StructuralBlockImpl ||
-			obj instanceof VariabilityBlockImpl ||
+			obj instanceof VariabilityBlockImpl // ||
 			//Design object
-			obj instanceof StudyDesignBlockImpl ||
-			obj instanceof AdministrationBlockImpl || 
-			obj instanceof ActionBlockImpl ||
-			obj instanceof SamplingBlockImpl ||
-			obj instanceof DesignSpaceBlockImpl ||
-			obj instanceof HyperSpaceBlockImpl);
+//			obj instanceof StudyDesignBlockImpl ||
+//			obj instanceof AdministrationBlockImpl || 
+//			obj instanceof ActionBlockImpl ||
+//			obj instanceof SamplingBlockImpl ||
+//			obj instanceof DesignSpaceBlockImpl ||
+//			obj instanceof HyperSpaceBlockImpl
+			);
 	}
 }

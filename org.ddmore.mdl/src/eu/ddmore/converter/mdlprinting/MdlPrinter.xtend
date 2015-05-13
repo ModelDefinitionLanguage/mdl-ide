@@ -21,14 +21,12 @@ import org.ddmore.mdl.mdl.PowerExpression
 import org.ddmore.mdl.mdl.UnaryExpression
 import org.ddmore.mdl.mdl.ParExpression
 import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.mdl.TargetBlock
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.EnumType
 import org.ddmore.mdl.mdl.DataObject
 import org.apache.commons.io.FilenameUtils
 import org.ddmore.mdl.mdl.VarType
 import org.ddmore.mdl.mdl.UseType
-import org.ddmore.mdl.mdl.TargetType
 import org.ddmore.mdl.mdl.InputFormatType
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.mdl.IndividualVarType
@@ -37,7 +35,6 @@ import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.PkParameterType
 //import org.ddmore.mdl.mdl.Matching
-import org.ddmore.mdl.mdl.SignedNumericValue
 import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.mdl.PkMacroType
 import org.ddmore.mdl.mdl.LevelType
@@ -316,8 +313,8 @@ class MdlPrinter {
 			return t.type.toStr;
 		if (t.use != UseType::NO_USE)
 			return t.use.toString;
-		if (t.target != TargetType::NO_TARGET)
-			return t.target.toString;
+//		if (t.target != TargetType::NO_TARGET)
+//			return t.target.toString;
 		if (t.input != InputFormatType::NO_INPUT_FORMAT)
 			return t.input.toString;
 		if (t.variability != VariabilityType::NO_VARIABILITY)
@@ -362,15 +359,15 @@ class MdlPrinter {
 		if (t.continuous != null){
 			return t.continuous
 		} 
-		if (t.likelihood != null){
-			return t.likelihood	
-		} 
-		if (t.m2LL != null){
-			return t.m2LL	
-		} 
-		if (t.tte != null){
-			return t.tte;
-		}
+//		if (t.likelihood != null){
+//			return t.likelihood	
+//		} 
+//		if (t.m2LL != null){
+//			return t.m2LL	
+//		} 
+//		if (t.tte != null){
+//			return t.tte;
+//		}
 	}
 			
 	def toStr(RandomList l){
@@ -505,13 +502,13 @@ class MdlPrinter {
 		return res;
 	}
 	
-	def String toStr(SignedNumericValue v){
-		var res = "";
-		if (v.operator != null) res = v.operator;
-		if (v.value != null) res = res + v.value;
-		if (v.skip != null) res = v.skip;
-		return res;
-	}
+//	def String toStr(SignedNumericValue v){
+//		var res = "";
+//		if (v.operator != null) res = v.operator;
+//		if (v.value != null) res = res + v.value;
+//		if (v.skip != null) res = v.skip;
+//		return res;
+//	}
 	
 	def String toStr(UnaryExpression e){
 		var res = "";
@@ -629,7 +626,7 @@ class MdlPrinter {
 		return res;
 	}
 	
-	def toStr(TargetBlock b){
-		return b.externalCode.substring(3, b.externalCode.length - 3)
-	}
+//	def toStr(TargetBlock b){
+//		return b.externalCode.substring(3, b.externalCode.length - 3)
+//	}
 }

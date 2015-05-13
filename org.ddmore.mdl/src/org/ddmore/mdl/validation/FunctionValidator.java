@@ -56,7 +56,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		"sin", "cos", "tan", "cot", "atan2", "sec", "csc", "sinh", "cosh", "tanh", "sech", "csch", "coth",
 		"arcsin", "arccos", "arctan", "arcsec", "arccsc", "arccot", "arcsinh", "arccosh", "arctanh", "arcsech", "arccsch", "arccoth",
 		//type conversion
-		"floor", "ceiling");
+		"floor", "ceiling",
+		// not really a function but required for some transformations. This needs to be refactored out of here.
+		"identity");
 
 	final public static List<String> funct_standard2 = Arrays.asList("logx", "root", "min", "max", "rem");
 

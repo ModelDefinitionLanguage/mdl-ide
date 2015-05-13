@@ -10,18 +10,14 @@ import org.ddmore.mdl.mdl.Argument;
 import org.ddmore.mdl.mdl.IndividualVarType;
 import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.PropertyDeclaration;
-import org.ddmore.mdl.mdl.TargetType;
-import org.ddmore.mdl.mdl.TrialType;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VariabilityType;
-import org.ddmore.mdl.mdl.impl.AdministrationBlockImpl;
 import org.ddmore.mdl.mdl.impl.ArgumentImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ListImpl;
 import org.ddmore.mdl.mdl.impl.PropertyDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
-import org.ddmore.mdl.ui.contentassist.AbstractMdlProposalProvider;
 import org.ddmore.mdl.ui.outline.Images;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.PropertyValidator;
@@ -104,18 +100,18 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 							attributes.add(value.toString());
 					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
 					addProposals(context, acceptor, attributes, img); 
-				} else
-				if (container instanceof AdministrationBlockImpl){
-					for (TrialType value: TrialType.VALUES)
-						if (value != TrialType.NO_TRIAL) 
-							attributes.add(value.toString());
-					Image img = imageHelper.getImage(Images.getPath(Images.TRIAL_TYPE));				
-					addProposals(context, acceptor, attributes, img);
+//				} else
+//				if (container instanceof AdministrationBlockImpl){
+//					for (TrialType value: TrialType.VALUES)
+//						if (value != TrialType.NO_TRIAL) 
+//							attributes.add(value.toString());
+//					Image img = imageHelper.getImage(Images.getPath(Images.TRIAL_TYPE));				
+//					addProposals(context, acceptor, attributes, img);
 				} else {
 					attributes.add(grammarAccess.getVarTypeAccess().getContinuousContinuousKeyword_1_0().getValue());
 					attributes.add(grammarAccess.getVarTypeAccess().getCategoricalCategoricalKeyword_0_0_0().getValue());
-					attributes.add(grammarAccess.getVarTypeAccess().getLikelihoodLikelihoodKeyword_2_0().getValue());
-					attributes.add(grammarAccess.getVarTypeAccess().getM2LLM2LLKeyword_3_0().getValue());
+//					attributes.add(grammarAccess.getVarTypeAccess().getLikelihoodLikelihoodKeyword_2_0().getValue());
+//					attributes.add(grammarAccess.getVarTypeAccess().getM2LLM2LLKeyword_3_0().getValue());
 					Image img = imageHelper.getImage(Images.getPath(Images.CC_TYPE));				
 					addProposals(context, acceptor, attributes, img);
 				}
@@ -144,14 +140,14 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				addProposals(context, acceptor, values, img);
 			}
 			//target
-			if (property.getPropertyName().getName().equals(PropertyValidator.attr_req_target.getName())){
-				List<String> attributes = new ArrayList<String>();
-				for (TargetType value: TargetType.VALUES)
-					if (value != TargetType.NO_TARGET)
-						attributes.add(value.toString());
-				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
-				addProposals(context, acceptor, attributes, img); return;
-			}
+//			if (property.getPropertyName().getName().equals(PropertyValidator.attr_req_target.getName())){
+//				List<String> attributes = new ArrayList<String>();
+//				for (TargetType value: TargetType.VALUES)
+//					if (value != TargetType.NO_TARGET)
+//						attributes.add(value.toString());
+//				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
+//				addProposals(context, acceptor, attributes, img); return;
+//			}
 		}
 	} 
 		
