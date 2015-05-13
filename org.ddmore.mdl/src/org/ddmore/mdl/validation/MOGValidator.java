@@ -16,11 +16,9 @@ import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.EValidatorRegistrar;
-import org.apache.commons.io.FilenameUtils;
 
 import com.google.inject.Inject;
 
@@ -42,29 +40,29 @@ public class MOGValidator extends AbstractDeclarativeValidator{
     public void register(EValidatorRegistrar registrar) {}
 
 	/*Validate that MDL files are in the workspace*/
-	@Check
-	public void validateMOGObjectFiles(ImportObjectStatement s){
-		if (s.getImportURI() != null){
-		    IFile file = Utils.getFile(s, s.getImportURI());
-		    if (!file.exists()){
-				warning(MSG_MOG_FILE_NOT_FOUND, 
-					MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__IMPORT_URI,
-					MSG_MOG_FILE_NOT_FOUND, s.getImportURI());
-			} else {
-				String mclObjeResource = s.getObjectName().eResource().getURI().path();
-				mclObjeResource = FilenameUtils.getBaseName(mclObjeResource);
-				String importResource = FilenameUtils.getBaseName(s.getImportURI());
-				if (!mclObjeResource.equalsIgnoreCase(importResource)){
-					warning(MSG_MOG_OBJECT_NOT_FOUND + ": " +
-						"the object is not in the imported file or project contains several objects with the same name.\n" + 
-						"Object resource: " + mclObjeResource + "\n" +
-						"Imported resource: " + importResource,
-						MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__OBJECT_NAME,
-						MSG_MOG_OBJECT_NOT_FOUND, s.getObjectName().getName());
-				}
-			}
-		}
-	}
+//	@Check
+//	public void validateMOGObjectFiles(ImportObjectStatement s){
+//		if (s.getImportURI() != null){
+//		    IFile file = Utils.getFile(s, s.getImportURI());
+//		    if (!file.exists()){
+//				warning(MSG_MOG_FILE_NOT_FOUND, 
+//					MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__IMPORT_URI,
+//					MSG_MOG_FILE_NOT_FOUND, s.getImportURI());
+//			} else {
+//				String mclObjeResource = s.getObjectName().eResource().getURI().path();
+//				mclObjeResource = FilenameUtils.getBaseName(mclObjeResource);
+//				String importResource = FilenameUtils.getBaseName(s.getImportURI());
+//				if (!mclObjeResource.equalsIgnoreCase(importResource)){
+//					warning(MSG_MOG_OBJECT_NOT_FOUND + ": " +
+//						"the object is not in the imported file or project contains several objects with the same name.\n" + 
+//						"Object resource: " + mclObjeResource + "\n" +
+//						"Imported resource: " + importResource,
+//						MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__OBJECT_NAME,
+//						MSG_MOG_OBJECT_NOT_FOUND, s.getObjectName().getName());
+//				}
+//			}
+//		}
+//	}
 	
 	/*Validate MOG object set*/
 	@Check

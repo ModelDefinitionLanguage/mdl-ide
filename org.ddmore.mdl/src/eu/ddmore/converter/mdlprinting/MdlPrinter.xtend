@@ -288,9 +288,9 @@ class MdlPrinter {
 			res = st.symbolName.toStr;
 		if (st.objectName != null)
 			res = res + " = " + st.objectName.name;
-		if (st.importURI != null){
-			res  = res + " from file " + st.importURI;
-		}
+//		if (st.importURI != null){
+//			res  = res + " from file " + st.importURI;
+//		}
 		return res;
 	}
 	
