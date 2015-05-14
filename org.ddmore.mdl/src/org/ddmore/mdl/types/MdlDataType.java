@@ -333,11 +333,11 @@ public enum MdlDataType {
 	/////////////////////////////////////////////////////////////////////////////////////
 	//Validate references
 	/////////////////////////////////////////////////////////////////////////////////////
-	private static boolean isReference(OrExpression orExpr) {
+	public static boolean isReference(OrExpression orExpr) {
 		if (getReference(orExpr) != null) return true;
-		//Consider constant 'T' also a reference
-		String constant = MdlPrinter.getInstance().toStr(orExpr);
-		if (constant.equals("T")) return true;
+//		//Consider constant 'T' also a reference
+//		String constant = MdlPrinter.getInstance().toStr(orExpr);
+//		if (constant.equals("T")) return true;
 		return false;
 	}
 	
