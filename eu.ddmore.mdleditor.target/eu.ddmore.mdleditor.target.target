@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="186">
+<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="189">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150311-1332"/>
@@ -105,8 +105,8 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.4.0.v20150428-1301"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.4.0-beta-b2/ci/"/>
+<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.4.0.v20150514-1522"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.4.0-SNAPSHOT/"/>
 </location>
 </locations>
 </target>
