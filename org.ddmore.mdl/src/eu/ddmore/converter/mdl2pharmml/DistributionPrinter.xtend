@@ -150,7 +150,7 @@ class DistributionPrinter extends MdlPrinter{
 			DistributionValidator::attr_continuous_lo.name  -> new Attribute("truncationLowerInclusiveBound", rVal), 
 			DistributionValidator::attr_continuous_hi.name  -> new Attribute("truncationUpperInclusiveBound", rVal)),
 		DistributionType::Poisson.toString -> newHashMap(
-			DistributionValidator::attr_alpha.name  -> new Attribute("rate", prVal), 
+			DistributionValidator::attr_lambda.name  -> new Attribute("rate", prVal), 
 			DistributionValidator::attr_nat_lo.name  -> new Attribute("truncationLowerInclusiveBound", nVal), 
 			DistributionValidator::attr_nat_hi.name  -> new Attribute("truncationUpperInclusiveBound", nVal)),
 		DistributionType::StudentT.toString -> newHashMap(

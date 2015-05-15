@@ -1,24 +1,34 @@
 package eu.ddmore.converter.mdl2pharmml
-import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.mdl.ModelObject
-import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
-import org.ddmore.mdl.mdl.IndividualVarType
-import org.ddmore.mdl.mdl.MOGObject
-import org.ddmore.mdl.mdl.VariabilityType
-import org.ddmore.mdl.validation.Utils
-import org.ddmore.mdl.mdl.Expression
+
+import java.util.ArrayList
 import java.util.Comparator
 import java.util.Map
 import java.util.TreeMap
-import java.util.ArrayList
+import org.ddmore.mdl.mdl.Argument
+import org.ddmore.mdl.mdl.Expression
+import org.ddmore.mdl.mdl.IndividualVarType
+import org.ddmore.mdl.mdl.List
+import org.ddmore.mdl.mdl.MOGObject
+import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ParameterObject
+import org.ddmore.mdl.mdl.RandomList
+import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.VariabilityType
+import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.validation.Utils
+
+import static eu.ddmore.converter.mdl2pharmml.Constants.*
+import org.ddmore.mdl.types.MdlDataType
+import org.ddmore.mdl.mdl.ArgumentExpression
 
 class ModelDefinitionPrinter {
 	protected extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
 	protected extension PKMacrosPrinter pkPrinter = null;
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver = null;
+	
+	private val CONTINUOUS_OBS = "continuous"
+	private val COUNT_OBS = "count"
 	
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
 		this.mathPrinter = mathPrinter;
@@ -443,10 +453,22 @@ class ModelDefinitionPrinter {
 		return res;
 	}
 	
-	protected def print_mdef_ObservationModel(SymbolDeclaration s)'''
-		«IF s.list != null»
-			«s.print_mdef_StandardObservation»
-		«ENDIF»
+	protected def print_mdef_ObservationModel(SymbolDeclaration s){
+		var retVal = ''''''
+		if(s.list != null){
+			val type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name)
+			switch type{
+				case CONTINUOUS_OBS: retVal = s.print_mdef_StandardObservation.toString
+				case COUNT_OBS: retVal = s.print_mdef_CountObservations.toString
+			} 
+		}
+		else{
+			retVal = s.print_mdef_ExplicitObservation.toString
+		}
+		return retVal
+	}
+	
+	private def print_mdef_ExplicitObservation(SymbolDeclaration s)'''
 		«IF s.symbolName != null && s.expression != null»
 			<ContinuousData>
 				<General symbId="«s.symbolName.toStr»">
@@ -456,45 +478,107 @@ class ModelDefinitionPrinter {
 		«ENDIF»
 	'''	
 	
-	protected def print_mdef_StandardObservation(SymbolDeclaration s){
-		if (s.list != null){
-			val type = s.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
-			if (type.isContinuous){
-				var name = "";
-				if (s.symbolName != null) 
-					name = s.symbolName.toStr 
-				val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
-				val prediction = s.list.arguments.getAttribute(AttributeValidator::attr_prediction_ref.name);
-				val eps = s.list.arguments.getAttribute(AttributeValidator::attr_eps.name);
-				val transfn = s.list.arguments.getAttribute(AttributeValidator::attr_trans.name);
-				'''
-					<ContinuousData>
-						<Standard symbId="«name»">
-							«IF transfn.length > 0»
-								<Transformation>
-									«transfn»
-								</Transformation>
-							«ENDIF»
-							«IF prediction.length > 0»
-								<Output>
-									«prediction.print_ct_SymbolRef»
-								</Output>
-							«ENDIF»
-							«IF error != null»
-								<ErrorModel>
-									«error.print_Assign»
-								</ErrorModel>
-							«ENDIF»
-							«IF eps.length > 0»
-								<ResidualError>
-									«eps.print_ct_SymbolRef»
-								</ResidualError>
-							«ENDIF»
-						</Standard>
-					</ContinuousData>
-				'''
+	private def getInverseFunction(String linkFunction, String paramVar){
+		switch(linkFunction){
+			case "log": return '''
+			<math:Uniop op="exp">
+				«paramVar.print_ct_SymbolRef»
+			</math:Uniop>
+			'''
+			case "identity": return '''
+				«paramVar.print_ct_SymbolRef»
+			'''
+		}
+	}
+	
+	def getFunctionArgument(RandomList distn, String argName){
+		if(distn.arguments.namedArguments != null){
+			for(Argument arg : distn.arguments.namedArguments.arguments){
+				if(arg.argumentName.name == argName)	
+					return arg.expression
 			}
 		}
+		else if(!distn.arguments.unnamedArguments.arguments.isEmpty)
+			return distn.arguments.unnamedArguments.arguments.get(0)
+	}
+		
+	def isReference(ArgumentExpression expr){
+		var retVal = false
+		if(expr.expression != null && expr.expression.expression != null
+			&& expr.expression.expression.expression != null)
+			retVal = MdlDataType::isReference(expr.expression.expression.expression)
+			
+		retVal
+	}	
+	
+	private def print_mdef_CountObservations(SymbolDeclaration s) {
+		var name = s.symbolName.toStr
+		val linkFunction = s.list.arguments.getAttribute(AttributeValidator::attr_link.name);
+		val distn = s.list.arguments.getAttributeRandomList(AttributeValidator::attr_distrib.name);
+		val paramVar = getFunctionArgument(distn, "lambda");
+		var String tmpParamVar = null;
+		if(isReference(paramVar)){
+			tmpParamVar = paramVar.toStr
+		}
+		'''
+			<Discrete>
+				<CountData>
+				«IF tmpParamVar != null»
+						<!-- Note that this parameter is local to this block, but uses the same name
+							as the lambda argument. The  --> 
+						<SimpleParameter symbId="«tmpParamVar»">
+						<ct:Assign>
+							<math:Equation>
+				«IF linkFunction.length > 0»
+					«getInverseFunction(linkFunction, paramVar.toStr)»
+				«ELSE»
+					«paramVar.toStr.print_ct_SymbolRef»
+				«ENDIF»
+				</math:Equation>
+				</ct:Assign>
+				</SimpleParameter>
+				«ENDIF»
+				<CountVariable symbId="«name»"/>
+				<PMF linkFunction="identity">
+					«print_uncert_Distribution(distn)»
+				</PMF>
+				</CountData>
+			</Discrete>
+		'''
+	}
+	
+	private def print_mdef_StandardObservation(SymbolDeclaration s){
+		var name = s.symbolName.toStr
+		val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
+		val prediction = s.list.arguments.getAttribute(AttributeValidator::attr_prediction_ref.name);
+		val eps = s.list.arguments.getAttribute(AttributeValidator::attr_eps.name);
+		val transfn = s.list.arguments.getAttribute(AttributeValidator::attr_trans.name);
+		'''
+			<ContinuousData>
+				<Standard symbId="«name»">
+					«IF transfn.length > 0»
+						<Transformation>
+							«transfn»
+						</Transformation>
+					«ENDIF»
+					«IF prediction.length > 0»
+						<Output>
+							«prediction.print_ct_SymbolRef»
+						</Output>
+					«ENDIF»
+					«IF error != null»
+						<ErrorModel>
+							«error.print_Assign»
+						</ErrorModel>
+					«ENDIF»
+					«IF eps.length > 0»
+						<ResidualError>
+							«eps.print_ct_SymbolRef»
+						</ResidualError>
+					«ENDIF»
+				</Standard>
+			</ContinuousData>
+		'''
 	}
 	
 	protected def print_SymbolDeclaration(SymbolDeclaration st, String tag, Boolean printType){
@@ -511,7 +595,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	//Convert special types of lists to PharmML
-	def print_List(org.ddmore.mdl.mdl.List list){
+	def print_List(List list){
 		var assign = "";
 		var res = "";
 		val type = list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);

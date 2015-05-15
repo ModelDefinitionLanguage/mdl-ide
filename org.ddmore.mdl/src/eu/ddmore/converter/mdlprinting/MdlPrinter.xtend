@@ -184,6 +184,18 @@ class MdlPrinter {
 				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
 					if (arg.expression.expression != null)
 						return arg.expression.expression;
+
+		return null;
+	}
+	
+	//Return value of an attribute with a given name
+	def getAttributeRandomList(Arguments args, String attrName){
+		if (args != null && args.getNamedArguments != null)
+			for (arg: args.namedArguments.arguments)
+				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
+					if(arg.expression.randomList != null)
+						return arg.expression.randomList;
+
 		return null;
 	}
 	
