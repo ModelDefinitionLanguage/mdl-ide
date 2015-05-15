@@ -29,7 +29,8 @@ class ReferenceResolver{
 	protected var vm_mdl_vars = new HashMap<String, Integer>();
 	protected var cm_vars = new ArrayList<String>();
 	protected var pm_vars = new ArrayList<String>();	  
-	protected var om_vars = new ArrayList<String>();	  
+	protected var om_vars = new HashMap<String, String>();	  
+//	protected var om_vars = new ArrayList<String>();	  
 	protected var sm_vars = new ArrayList<String>();	
 	protected var cm_assigned_vars = new ArrayList<String>();
 		
@@ -48,7 +49,13 @@ class ReferenceResolver{
 				//ParameterModel
 				pm_vars = o.modelObject.getParameters;
 				//ObservationModel
-				om_vars = o.modelObject.getObservationVars;	
+//				om_vars = o.modelObject.getObservationVars;
+				val omBlkPrefix = "om";	
+				var idx = 1;
+				for(omVar : o.modelObject.getObservationVars){
+					om_vars.put(omVar, omBlkPrefix + idx);
+					idx = idx + 1;
+				}
 			}
 			if (o.dataObject != null) {
 				cmtVar = o.dataObject.getCmtVariable;
@@ -60,7 +67,8 @@ class ReferenceResolver{
 		if (vm_err_vars.containsKey(name)) return "vm_err";
 		if (vm_mdl_vars.containsKey(name)) return "vm_mdl";
 		if (cm_vars.contains(name)) return "cm";
-		if (om_vars.contains(name)) return "om";	
+//		if (om_vars.contains(name)) return "om";	
+		if (om_vars.containsKey(name)) return om_vars.get(name);	
 		if (sm_vars.contains(name)) return "sm";	
 		if (pm_vars.contains(name)) return "pm";	
 		return "";

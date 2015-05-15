@@ -549,42 +549,42 @@ class MathPrinter{
 				}
 			}
 		}
-		if (t.evaluateBlock != null) {
-			for (s : t.evaluateBlock.statements) {
-				if (s.propertyName != null && s.propertyName.name.equals(name)) {
-					if (s.expression != null) {
-						return s.expression.toStr;
-					}
-				}
-			}
-		}
-		if (t.optimiseBlock != null) {
-			for (s : t.optimiseBlock.statements) {
-				if (s.propertyName != null && s.propertyName.name.equals(name)) {
-					if (s.expression != null) {
-						return s.expression.toStr;
-					}
-				}
-			}
-		}
-		if (t.dataBlock != null) {
-			for (s : t.dataBlock.statements) {
-				if (s.propertyName != null && s.propertyName.name.equals(name)) {
-					if (s.expression != null) {
-						return s.expression.toStr;
-					}
-				}
-			}
-		}
-		if (t.modelBlock != null) {
-			for (s : t.modelBlock.statements) {
-				if (s.propertyName != null && s.propertyName.name.equals(name)) {
-					if (s.expression != null) {
-						return s.expression.toStr;
-					}
-				}
-			}
-		}
+//		if (t.evaluateBlock != null) {
+//			for (s : t.evaluateBlock.statements) {
+//				if (s.propertyName != null && s.propertyName.name.equals(name)) {
+//					if (s.expression != null) {
+//						return s.expression.toStr;
+//					}
+//				}
+//			}
+//		}
+//		if (t.optimiseBlock != null) {
+//			for (s : t.optimiseBlock.statements) {
+//				if (s.propertyName != null && s.propertyName.name.equals(name)) {
+//					if (s.expression != null) {
+//						return s.expression.toStr;
+//					}
+//				}
+//			}
+//		}
+//		if (t.dataBlock != null) {
+//			for (s : t.dataBlock.statements) {
+//				if (s.propertyName != null && s.propertyName.name.equals(name)) {
+//					if (s.expression != null) {
+//						return s.expression.toStr;
+//					}
+//				}
+//			}
+//		}
+//		if (t.modelBlock != null) {
+//			for (s : t.modelBlock.statements) {
+//				if (s.propertyName != null && s.propertyName.name.equals(name)) {
+//					if (s.expression != null) {
+//						return s.expression.toStr;
+//					}
+//				}
+//			}
+//		}
 		return "";
 	}
 	
@@ -654,11 +654,10 @@ class MathPrinter{
 	def convertEnum(String type) {
 		switch (type) {
 			case UseType::AMT.toString     : "dose"
-			case UseType::YTYPE.toString   : "dvid"
-			case UseType::CENS.toString    : "censoring"
+			case UseType::DVID.toString   : "dvid"
+//			case UseType::CENS.toString    : "censoring"
 			case UseType::VARLEVEL.toString: "occasion"
-			//case UseType::ITYPE.toString   : "dvid"
-			//case UseType::OCC.toString     : "occasion"
+			//case UseType::ITYPE.toString   : "dvid"		//case UseType::OCC.toString     : "occasion"
 			//case UseType::TINF.toString    : "duration"
 			default: type
 		}

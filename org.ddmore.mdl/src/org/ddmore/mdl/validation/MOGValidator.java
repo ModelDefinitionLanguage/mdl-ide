@@ -16,11 +16,9 @@ import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.EValidatorRegistrar;
-import org.apache.commons.io.FilenameUtils;
 
 import com.google.inject.Inject;
 
@@ -42,29 +40,29 @@ public class MOGValidator extends AbstractDeclarativeValidator{
     public void register(EValidatorRegistrar registrar) {}
 
 	/*Validate that MDL files are in the workspace*/
-	@Check
-	public void validateMOGObjectFiles(ImportObjectStatement s){
-		if (s.getImportURI() != null){
-		    IFile file = Utils.getFile(s, s.getImportURI());
-		    if (!file.exists()){
-				warning(MSG_MOG_FILE_NOT_FOUND, 
-					MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__IMPORT_URI,
-					MSG_MOG_FILE_NOT_FOUND, s.getImportURI());
-			} else {
-				String mclObjeResource = s.getObjectName().eResource().getURI().path();
-				mclObjeResource = FilenameUtils.getBaseName(mclObjeResource);
-				String importResource = FilenameUtils.getBaseName(s.getImportURI());
-				if (!mclObjeResource.equalsIgnoreCase(importResource)){
-					warning(MSG_MOG_OBJECT_NOT_FOUND + ": " +
-						"the object is not in the imported file or project contains several objects with the same name.\n" + 
-						"Object resource: " + mclObjeResource + "\n" +
-						"Imported resource: " + importResource,
-						MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__OBJECT_NAME,
-						MSG_MOG_OBJECT_NOT_FOUND, s.getObjectName().getName());
-				}
-			}
-		}
-	}
+//	@Check
+//	public void validateMOGObjectFiles(ImportObjectStatement s){
+//		if (s.getImportURI() != null){
+//		    IFile file = Utils.getFile(s, s.getImportURI());
+//		    if (!file.exists()){
+//				warning(MSG_MOG_FILE_NOT_FOUND, 
+//					MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__IMPORT_URI,
+//					MSG_MOG_FILE_NOT_FOUND, s.getImportURI());
+//			} else {
+//				String mclObjeResource = s.getObjectName().eResource().getURI().path();
+//				mclObjeResource = FilenameUtils.getBaseName(mclObjeResource);
+//				String importResource = FilenameUtils.getBaseName(s.getImportURI());
+//				if (!mclObjeResource.equalsIgnoreCase(importResource)){
+//					warning(MSG_MOG_OBJECT_NOT_FOUND + ": " +
+//						"the object is not in the imported file or project contains several objects with the same name.\n" + 
+//						"Object resource: " + mclObjeResource + "\n" +
+//						"Imported resource: " + importResource,
+//						MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__OBJECT_NAME,
+//						MSG_MOG_OBJECT_NOT_FOUND, s.getObjectName().getName());
+//				}
+//			}
+//		}
+//	}
 	
 	/*Validate MOG object set*/
 	@Check
@@ -158,10 +156,11 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 				for (SymbolDeclaration s: b.getCovariateBlock().getVariables()){
 					//Math only unassigned covariates
 					if (s.getSymbolName() != null && s.getExpression() == null) {
-						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
-						if (dVarName == null) dVarName = s.getSymbolName().getName();
+//						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
+//						if (dVarName == null) dVarName = s.getSymbolName().getName();
+						String dVarName = s.getSymbolName().getName();
 						if (!dVars.contains(dVarName))
-							warning(MSG_MODEL_DATA_MISMATCH + 
+							error(MSG_MODEL_DATA_MISMATCH + 
 								": no mapping for model variable " + s.getSymbolName().getName() + " found in " + 
 								Utils.getObjectName(dObj).getName() + " object", 
 								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
@@ -172,10 +171,11 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 			if (b.getVariabilityBlock() != null){
 				for (SymbolDeclaration s: b.getVariabilityBlock().getVariables()){
 					if (s.getSymbolName() != null) {
-						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
-						if (dVarName == null) dVarName = s.getSymbolName().getName();
+//						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
+//						if (dVarName == null) dVarName = s.getSymbolName().getName();
+						String dVarName = s.getSymbolName().getName();
 						if (!dVars.contains(dVarName))
-							warning(MSG_MODEL_DATA_MISMATCH + 
+							error(MSG_MODEL_DATA_MISMATCH + 
 								": no mapping for model variable " + s.getSymbolName().getName() + " found in " + 
 								Utils.getObjectName(dObj).getName() + " object", 
 								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
@@ -201,7 +201,7 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 						String varName = s.getSymbolName().getName();
 						if (varName.length() > 0){
 							if (!structuralVars.contains(varName))
-								warning(MSG_STRUCTURAL_MISMATCH + 
+								error(MSG_STRUCTURAL_MISMATCH + 
 									": no mapping for parameter " + varName + " found in " + 
 									Utils.getObjectName(pObj).getName() + " object", 
 									MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
@@ -228,7 +228,7 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 						String varName = s.getSymbolName().getName();
 						if (varName.length() > 0){
 							if (!variabilityVars.contains(varName))
-								warning(MSG_VARIABILITY_MISMATCH + 
+								error(MSG_VARIABILITY_MISMATCH + 
 									": no mapping for parameter " + varName + " found in " + 
 									Utils.getObjectName(pObj).getName() + " object", 
 									MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,

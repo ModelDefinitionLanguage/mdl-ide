@@ -10,7 +10,7 @@ MclObject:
 	parameterObject=ParameterObject | 
 	dataObject=DataObject | 
 	taskObject=TaskObject |
-	designObject=DesignObject |
+//	designObject=DesignObject |
 	mogObject=MOGObject);
 	
 ModelObject: 
@@ -25,8 +25,8 @@ DataObject:
 TaskObject:
 	identifier = 'taskobj' BEGIN blocks += TaskObjectBlock* END;
 	
-DesignObject:
-	identifier = 'designobj' BEGIN blocks += DesignObjectBlock* END;
+//DesignObject:
+//	identifier = 'designobj' BEGIN blocks += DesignObjectBlock* END;
 	
 MOGObject:
 	identifier = 'mogobj' BEGIN blocks += MOGObjectBlock* END;
@@ -46,10 +46,10 @@ ModelObjectBlock:
 	variabilityParametersBlock = VariabilityParametersBlock |
 	outputVariablesBlock = OutputVariablesBlock | 
 	groupVariablesBlock = GroupVariablesBlock | 
-	observationBlock = ObservationBlock |
+	observationBlock = ObservationBlock /*|
 	estimationBlock = EstimationBlock |
-	simulationBlock = SimulationBlock |
-	targetBlock = TargetBlock 
+	simulationBlock = SimulationBlock|
+	targetBlock = TargetBlock  */
 ;
 
 IndependentVariableBlock:
@@ -107,15 +107,15 @@ ObservationBlock:
 	BEGIN variables += SymbolDeclaration* END  
 ;
 
-EstimationBlock:
-	identifier = 'ESTIMATION' 
-	BEGIN variables += SymbolDeclaration* END 
-;
-
-SimulationBlock:
-	identifier = 'SIMULATION' 
-	BEGIN variables += SymbolDeclaration* END  
-;
+//EstimationBlock:
+//	identifier = 'ESTIMATION' 
+//	BEGIN variables += SymbolDeclaration* END 
+//;
+//
+//SimulationBlock:
+//	identifier = 'SIMULATION' 
+//	BEGIN variables += SymbolDeclaration* END  
+//;
 
 //////////////////////////////////////////////////////////
 //Parameter Object
@@ -125,8 +125,8 @@ ParameterObjectBlock:
 	declaredVariables = DeclaredVariablesBlock |
 	structuralBlock = StructuralBlock |
 	variabilityBlock = VariabilityBlock |
-	priorBlock = PriorParametersBlock |
-	targetBlock = TargetBlock 
+	priorBlock = PriorParametersBlock /*|
+	targetBlock = TargetBlock  */
 ;
 
 StructuralBlock:
@@ -152,8 +152,8 @@ DataObjectBlock:
 	dataInputBlock = DataInputBlock |
 	dataDerivedBlock = DataDerivedBlock |
 	declaredVariables = DeclaredVariablesBlock |
-	sourceBlock = SourceBlock |
-	targetBlock = TargetBlock 
+	sourceBlock = SourceBlock /*|
+	targetBlock = TargetBlock   */
 ;
 
 DataInputBlock:
@@ -175,7 +175,7 @@ SourceBlock:
 	identifier='SOURCE' 	
 	BEGIN 
 		statements += PropertyDeclaration* 
-		(inlineBlock = InlineBlock)?
+//		(inlineBlock = InlineBlock)?
 	END
 ;
 
@@ -185,23 +185,23 @@ SourceBlock:
  
 TaskObjectBlock: 
 	estimateBlock = EstimateTask |
-	simulateBlock = SimulateTask |
+	simulateBlock = SimulateTask /*|
 	evaluateBlock = EvaluateTask |
 	optimiseBlock = OptimiseTask |
 	dataBlock = DataBlock |
 	modelBlock = ModelBlock | 
-	targetBlock = TargetBlock 	
+	targetBlock = TargetBlock  */	
 ;
 
-DataBlock:
-	identifier = 'DATA' 
-	BEGIN statements += PropertyDeclaration* END
-;
-
-ModelBlock:
-	identifier = 'MODEL' 
-	BEGIN statements += PropertyDeclaration* END
-;
+//DataBlock:
+//	identifier = 'DATA' 
+//	BEGIN statements += PropertyDeclaration* END
+//;
+//
+//ModelBlock:
+//	identifier = 'MODEL' 
+//	BEGIN statements += PropertyDeclaration* END
+//;
 
 EstimateTask: 
 	identifier = 'ESTIMATE' 
@@ -213,27 +213,27 @@ SimulateTask:
 	BEGIN statements += PropertyDeclaration* END  
 ;
 
-EvaluateTask:
-	identifier = 'EVALUATE'
-	BEGIN statements += PropertyDeclaration* END  
-;
-
-OptimiseTask:
-	identifier = 'OPTIMISE'
-	BEGIN statements += PropertyDeclaration* END  
-;
+//EvaluateTask:
+//	identifier = 'EVALUATE'
+//	BEGIN statements += PropertyDeclaration* END  
+//;
+//
+//OptimiseTask:
+//	identifier = 'OPTIMISE'
+//	BEGIN statements += PropertyDeclaration* END  
+//;
 
 ModelPredictionBlockStatement: 
 	variable = SymbolDeclaration | 
 	odeBlock = OdeBlock | 
-	libraryBlock = LibraryBlock |
+//	libraryBlock = LibraryBlock |
 	pkMacroBlock = PkMacroBlock 
 ;
 
-LibraryBlock: 
-	identifier = 'LIBRARY' 
-	BEGIN statements += FunctionCallStatement* END 
-;
+//LibraryBlock: 
+//	identifier = 'LIBRARY' 
+//	BEGIN statements += FunctionCallStatement* END 
+//;
 
 PkMacroBlock:
 	identifier = ('PKMACRO'| 'COMPARTMENT')
@@ -245,12 +245,12 @@ PkMacroStatement:
 	list = List
 ;
 
-FunctionCallStatement:
-	symbolName = SymbolName "=" expression = FunctionCall
-;
+//FunctionCallStatement:
+//	symbolName = SymbolName "=" expression = FunctionCall
+//;
 
 OdeBlock:
-	identifier = ('ODE' | 'DEQ')
+	identifier = ('DEQ')
 	BEGIN variables += SymbolDeclaration* END 
 ;
 
@@ -268,27 +268,27 @@ MixtureBlock:
 //Data Object
 //////////////////////////////////////////////////////////
 
-InlineBlock:
-	identifier = 'INLINE' 
-	BEGIN (variables = VariableList)? (values = NumericList)? END 
-;
+//InlineBlock:
+//	identifier = 'INLINE' 
+//	BEGIN (variables = VariableList)? (values = NumericList)? END 
+//;
 
-NumericList:
-	values += SignedNumericValue (=> (',' | ';')? values += SignedNumericValue)* 
-;
+//NumericList:
+//	values += SignedNumericValue (=> (',' | ';')? values += SignedNumericValue)* 
+//;
 
-SignedNumericValue:
-	(operator = UnaryOperator)? value = NumericValue | skip = '.'
-;
-
-VariableList:
-	identifiers += SymbolName (=> (',' | ';')? identifiers += SymbolName)* 
-;
+//SignedNumericValue:
+//	(operator = UnaryOperator)? value = NumericValue | skip = '.'
+//;
+//
+//VariableList:
+//	identifiers += SymbolName (=> (',' | ';')? identifiers += SymbolName)* 
+//;
 
 //////////////////////////////////////////////////////////
 //Design Object
 //////////////////////////////////////////////////////////
-
+/*
 DesignObjectBlock:
 	covariatesBlock = CovariatesBlock |
 	studyDesignBlock = StudyDesignBlock |
@@ -298,7 +298,7 @@ DesignObjectBlock:
 	designSpaceBlock = DesignSpaceBlock |
 	hyperSpaceBlock = HyperSpaceBlock |
 	populationFeaturesBlock = PopulationFeaturesBlock |
-	targetBlock = TargetBlock
+	targetBlock = TargetBlock 
 ;
 
 DesignSpaceBlock:
@@ -340,13 +340,14 @@ SamplingBlock:
 	identifier = 'SAMPLING'
 	BEGIN variables += SymbolDeclaration* END
 ;
-
+*/
 //////////////////////////////////////////////////////////
 //MOG
 //////////////////////////////////////////////////////////
 MOGObjectBlock:
-	objectBlock = ImportObjectBlock |
-	mappingBlock = MappingBlock	
+	objectBlock = ImportObjectBlock
+//	 |
+//	mappingBlock = MappingBlock	
 ;
 
  ImportObjectBlock:
@@ -355,21 +356,21 @@ MOGObjectBlock:
  ;
  
  ImportObjectStatement:
- 	(symbolName = SymbolName "=")? objectName = [ObjectName] ('from file' importURI = STRING)?
+ 	(symbolName = SymbolName "=")? objectName = [ObjectName] //('from file' importURI = STRING)?
  ;
  
- MappingBlock:
- 	identifier = 'MAPPING'
- 	BEGIN mappings += MappingBlockStatement* END
- ;
- 
- MappingBlockStatement:
- 	obj1 = FullyQualifiedSymbolName '=' obj2 = FullyQualifiedSymbolName
- ;
- 
- FullyQualifiedSymbolName:
- 	parent = SymbolName '.' symbolName = SymbolName
- ;
+// MappingBlock:
+// 	identifier = 'MAPPING'
+// 	BEGIN mappings += MappingBlockStatement* END
+// ;
+// 
+// MappingBlockStatement:
+// 	obj1 = FullyQualifiedSymbolName '=' obj2 = FullyQualifiedSymbolName
+// ;
+// 
+// FullyQualifiedSymbolName:
+// 	parent = SymbolName '.' symbolName = SymbolName
+// ;
 
 //////////////////////////////////////////////////////////
 //Common
@@ -387,17 +388,17 @@ FunctionCall:
 	identifier = FunctionName '(' arguments = Arguments? ')' 
 ;
 
-TargetBlock: 
-	identifier = 'TARGET_CODE' 
-	BEGIN
-		statements += PropertyDeclaration*  
-		externalCode = EXTERNAL_CODE 
-	END
-;
+//TargetBlock: 
+//	identifier = 'TARGET_CODE' 
+//	BEGIN
+//		statements += PropertyDeclaration*  
+//		externalCode = EXTERNAL_CODE 
+//	END
+//;
 
-terminal EXTERNAL_CODE:
-	'<<' -> '>>'
-; 
+//terminal EXTERNAL_CODE:
+//	'<<' -> '>>'
+//; 
 
 SymbolName:
 	name = ID ('[' index = INTEGER ']')?
@@ -431,7 +432,7 @@ EnumType:
 
 //New 
 enum NonContinuousType:
-	no_type | count | discrete | survival
+	no_type | count | discrete | tte
 ;
 
 enum EventType:
@@ -476,15 +477,16 @@ enum TrialType:
 ;
 
 terminal CONSTANT:
-	'INF' | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
+	'INF'
+	// | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
 ;
 
 VarType:
 	categorical = 'categorical' ('(' categories += Category (=> ',' categories += Category)* ')')? | 
-	continuous  = 'continuous' | 
+	continuous  = 'continuous' /* | 
 	likelihood  = 'likelihood' |
 	M2LL = 'M2LL' |
-	tte  = 'tte'	
+	tte  = 'tte'	*/
 ;
 
 Category:

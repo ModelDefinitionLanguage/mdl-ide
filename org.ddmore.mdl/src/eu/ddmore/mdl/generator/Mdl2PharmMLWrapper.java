@@ -74,10 +74,10 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
            CharSequence converted = xtendConverter.convertToPharmML(mog, fileName);
            
            printOutputFile(fileName, outputDirectory, converted.toString());
-           File targetDirectory = new File(outputDirectory.getPath() + "/target");
-           CharSequence externalCode = xtendConverter.extractTargetCode(mog);
-           if (externalCode.length() > 0)
-        	   printOutputFile(fileName, targetDirectory, externalCode.toString());
+//           File targetDirectory = new File(outputDirectory.getPath() + "/target");
+//           CharSequence externalCode = xtendConverter.extractTargetCode(mog);
+//           if (externalCode.length() > 0)
+//        	   printOutputFile(fileName, targetDirectory, externalCode.toString());
        }
    }
    

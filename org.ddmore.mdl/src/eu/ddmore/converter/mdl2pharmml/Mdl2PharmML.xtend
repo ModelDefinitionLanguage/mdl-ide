@@ -1,10 +1,9 @@
 package eu.ddmore.converter.mdl2pharmml
+
 import eu.ddmore.converter.mdlprinting.MdlPrinter
-import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
-import org.ddmore.mdl.mdl.TargetBlock
-import org.ddmore.mdl.mdl.MclObject
 import org.ddmore.mdl.mdl.MOGObject
-import org.ddmore.mdl.validation.Utils
+
+import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 class Mdl2PharmML{
 
@@ -16,7 +15,7 @@ class Mdl2PharmML{
 		val functPrinter = new FunctionDefinitionPrinter(); 
 		val mdPrinter = new ModelDefinitionPrinter(mathPrinter, resolver);  		
 		val msPrinter = new ModellingStepsPrinter(mathPrinter, resolver);  		
-		val tdPrinter = new TrialDesignPrinter(mathPrinter, resolver);
+//		val tdPrinter = new TrialDesignPrinter(mathPrinter, resolver);
 		
 		'''
 		<?xml version="1.0" encoding="UTF-8"?>
@@ -27,56 +26,56 @@ class Mdl2PharmML{
 			<IndependentVariable symbId="«resolver.independentVar»"/>
 			«functPrinter.print_FunctionDefinitions(mog)»	
 			«mdPrinter.print_mdef_ModelDefinition(mog)»
-			«tdPrinter.print_design_TrialDesign(mog)»
+«««			«tdPrinter.print_design_TrialDesign(mog)»
 			«msPrinter.print_msteps_ModellingSteps(mog)»
 		</PharmML>
 		'''			
 	}
 	
-	def extractTargetCode(MOGObject mog){
-		var objects = Utils::getMOGObjects(mog);
-		var res = "";
-		for (o: objects){
-			var tcbIterator = o.eAllContents;
-		   	while (tcbIterator.hasNext) {
-				var container = tcbIterator.next;
-				if (container instanceof TargetBlock) {
-					var s = container as TargetBlock;
-					res  = res + s.extractExternalCode;
-				}
-			}
-		}
-		return res;
-	}
+//	def extractTargetCode(MOGObject mog){
+//		var objects = Utils::getMOGObjects(mog);
+//		var res = "";
+//		for (o: objects){
+//			var tcbIterator = o.eAllContents;
+//		   	while (tcbIterator.hasNext) {
+//				var container = tcbIterator.next;
+//				if (container instanceof TargetBlock) {
+//					var s = container as TargetBlock;
+//					res  = res + s.extractExternalCode;
+//				}
+//			}
+//		}
+//		return res;
+//	}
+//	
+//	def extractTargetCode(MclObject obj){
+//		var tcbIterator = obj.eAllContents;
+//		var res = "";
+//	   	while (tcbIterator.hasNext) {
+//			var container = tcbIterator.next;
+//			if (container instanceof TargetBlock) {
+//				var s = container as TargetBlock;
+//				res  = res + s.extractExternalCode;
+//			}
+//		}
+//		return res;
+//	}
 	
-	def extractTargetCode(MclObject obj){
-		var tcbIterator = obj.eAllContents;
-		var res = "";
-	   	while (tcbIterator.hasNext) {
-			var container = tcbIterator.next;
-			if (container instanceof TargetBlock) {
-				var s = container as TargetBlock;
-				res  = res + s.extractExternalCode;
-			}
-		}
-		return res;
-	}
-	
-	protected def extractExternalCode(TargetBlock s){
-		val mdlPrinter = MdlPrinter::getInstance();
-    	'''
-			<targetBlock>
-				«FOR a: s.statements»
-					<«a.propertyName.name»>
-						«mdlPrinter.toStr(a.expression)»
-					</«a.propertyName.name»>
-			   	«ENDFOR»
-				<code>
-					«mdlPrinter.toStr(s)»
-				</code>
-			</targetBlock>	
-    	'''
-	}
+//	protected def extractExternalCode(TargetBlock s){
+//		val mdlPrinter = MdlPrinter::getInstance();
+//    	'''
+//			<targetBlock>
+//				«FOR a: s.statements»
+//					<«a.propertyName.name»>
+//						«mdlPrinter.toStr(a.expression)»
+//					</«a.propertyName.name»>
+//			   	«ENDFOR»
+//				<code>
+//					«mdlPrinter.toStr(s)»
+//				</code>
+//			</targetBlock>	
+//    	'''
+//	}
 	
 	//+ Print PharmML namespaces
 	protected def print_PharmML_NameSpaces()

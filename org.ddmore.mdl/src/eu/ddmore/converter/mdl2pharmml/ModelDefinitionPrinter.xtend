@@ -389,10 +389,10 @@ class ModelDefinitionPrinter {
 							}
 						}
 						//LIBRARY
-						if (st.libraryBlock != null){
-							for (s: st.libraryBlock.statements)
-								variables = variables + s.expression.print_Math_FunctionCall;
-						} 
+//						if (st.libraryBlock != null){
+//							for (s: st.libraryBlock.statements)
+//								variables = variables + s.expression.print_Math_FunctionCall;
+//						} 
 						//COMPARTMENT
 						if (st.pkMacroBlock != null){
 							for (s: st.pkMacroBlock.statements){
@@ -427,12 +427,15 @@ class ModelDefinitionPrinter {
 				if (b.observationBlock != null){
 					for (st: b.observationBlock.variables){
 						var observation = st.print_mdef_ObservationModel;
+						var idx = 1 as int;
+						val omBlkId = resolver.getReferenceBlock(st.symbolName.toStr)
 						if (observation.length >0 )
 							res = res + '''
-								<ObservationModel blkId="om">
+								<ObservationModel blkId="«omBlkId»">
 									«observation»
 								</ObservationModel>
 							''';
+							idx = idx + 1;
 						}
 				}
 			}
@@ -463,9 +466,15 @@ class ModelDefinitionPrinter {
 				val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
 				val prediction = s.list.arguments.getAttribute(AttributeValidator::attr_prediction_ref.name);
 				val eps = s.list.arguments.getAttribute(AttributeValidator::attr_eps.name);
+				val transfn = s.list.arguments.getAttribute(AttributeValidator::attr_trans.name);
 				'''
 					<ContinuousData>
 						<Standard symbId="«name»">
+							«IF transfn.length > 0»
+								<Transformation>
+									«transfn»
+								</Transformation>
+							«ENDIF»
 							«IF prediction.length > 0»
 								<Output>
 									«prediction.print_ct_SymbolRef»
@@ -647,6 +656,3 @@ class ValueComparator implements Comparator<String> {
         } 
     }
 }
-
-
-	

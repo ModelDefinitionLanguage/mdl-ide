@@ -384,7 +384,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 								}
 							}
 							if (actualArg == null){
-								warning(MSG_DISTR_ATTRIBUTE_MISSING + ": " + arg.getName(), 
+								error(MSG_DISTR_ATTRIBUTE_MISSING + ": " + arg.getName(), 
 										MdlPackage.Literals.RANDOM_LIST__ARGUMENTS,
 										MSG_DISTR_ATTRIBUTE_MISSING, type + ":" + arg.getName());	
 							}
@@ -392,7 +392,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 					}
 				}
 			} else {
-				warning(MSG_DISTR_UNKNOWN, 
+				error(MSG_DISTR_UNKNOWN, 
 					MdlPackage.Literals.RANDOM_LIST__TYPE,
 					MSG_DISTR_UNKNOWN, distr.getType().getName());	
 			}
@@ -413,7 +413,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			if (!argumentNames.contains(arg.getArgumentName().getName())){
 				argumentNames.add(arg.getArgumentName().getName());
 			} else {
-				warning(MSG_DISTR_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
+				error(MSG_DISTR_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, 
 						MSG_DISTR_ATTRIBUTE_DEFINED, arg.getArgumentName().getName());				
 			}
@@ -421,7 +421,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		if (exclusive_attrs.containsKey(argument.getArgumentName().getName())){
 			String exclusive = exclusive_attrs.get(argument.getArgumentName().getName());
 			if (argumentNames.contains(exclusive)){
-				warning("Distribution attribute '" + argument.getArgumentName().getName() + "' cannot be used together with '" + 
+				error("Distribution attribute '" + argument.getArgumentName().getName() + "' cannot be used together with '" + 
 						exclusive + "'", 
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_DISTR_ATTRIBUTE_DEFINED, 
 						argument.getArgumentName().getName());				
@@ -435,7 +435,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 				if (checkAttribute(recognized_attrs, argument)) return;
 			}
 			if (checkAttribute(common_attrs, argument)) return;
-			warning(MSG_DISTR_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
+			error(MSG_DISTR_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
 				MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 				MSG_DISTR_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());
 		}
@@ -446,7 +446,7 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 			if (attr.getName().equals(argument.getArgumentName().getName())) {
 				if (!MdlDataType.validateType(attr.getType(), argument.getExpression()) 
 						&& !MdlDataType.validateType(MdlDataType.TYPE_REF, argument.getExpression())){
-					warning(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
+					error(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
 							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
 						attr.getType().name(), 
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,

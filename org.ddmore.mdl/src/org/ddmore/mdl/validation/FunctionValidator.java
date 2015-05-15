@@ -56,7 +56,9 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 		"sin", "cos", "tan", "cot", "atan2", "sec", "csc", "sinh", "cosh", "tanh", "sech", "csch", "coth",
 		"arcsin", "arccos", "arctan", "arcsec", "arccsc", "arccot", "arcsinh", "arccosh", "arctanh", "arcsech", "arccsch", "arccoth",
 		//type conversion
-		"floor", "ceiling");
+		"floor", "ceiling",
+		// not really a function but required for some transformations. This needs to be refactored out of here.
+		"identity");
 
 	final public static List<String> funct_standard2 = Arrays.asList("logx", "root", "min", "max", "rem");
 
@@ -79,10 +81,10 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	final public static String funct_error_power      	  = "powerError";
 	final public static String funct_error_combinedPower1 = "combinedPowerError1";
 
-	final public static FunctionParameter param_error_additive     = new FunctionParameter("additive", MdlDataType.TYPE_REF);
-	final public static FunctionParameter param_error_proportional = new FunctionParameter("proportional", MdlDataType.TYPE_REF);
-	final public static FunctionParameter param_error_power        = new FunctionParameter("power", MdlDataType.TYPE_REF);
-	final public static FunctionParameter param_error_f            = new FunctionParameter("f", MdlDataType.TYPE_REF);
+	final public static FunctionParameter param_error_additive     = new FunctionParameter("additive", MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_error_proportional = new FunctionParameter("proportional", MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_error_power        = new FunctionParameter("power", MdlDataType.TYPE_REAL);
+	final public static FunctionParameter param_error_f            = new FunctionParameter("f", MdlDataType.TYPE_REAL);
 
 	final public static List<String> errorModels = Arrays.asList(
 		funct_error_additive, funct_error_prop, funct_error_combined1, funct_error_combined2, funct_error_combined2log, funct_error_combined3, 
@@ -213,7 +215,7 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
 		if (!standardFunctions.containsKey(call.getIdentifier().getName()))
-			warning(MSG_FUNCTION_UNKNOWN, 
+			error(MSG_FUNCTION_UNKNOWN, 
 					MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER,
 			MSG_FUNCTION_UNKNOWN, call.getIdentifier().getName());
 		else {
@@ -231,7 +233,7 @@ private void validateStandardFunction(FunctionCall call){
 		int expected = functSig.getNumberOfParams();
 		if (call.getArguments() == null){
 			if (expected > 0) 
-				warning(MSG_FUNCTION_WRONG_PASSING_METHOD + ": function exprects " + expected + " parameter(s)",
+				error(MSG_FUNCTION_WRONG_PASSING_METHOD + ": function exprects " + expected + " parameter(s)",
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_WRONG_PASSING_METHOD, 
 						call.getIdentifier().getName());	
@@ -246,12 +248,12 @@ private void validateStandardFunction(FunctionCall call){
 						if (allParams.containsKey(arg.getArgumentName().getName())){
 							FunctionParameter p = allParams.get(arg.getArgumentName().getName());
 							if (!MdlDataType.validateType(p.getType(), arg.getExpression()))
-								warning(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getName()
+								error(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getName()
 								+ " expects value of type " + p.getType(),
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 								MSG_FUNCTION_WRONG_TYPE, arg.getArgumentName().getName());		
 						} else 
-							warning(MSG_FUNCTION_PARAMETER_UNKNOWN + ": " + arg.getArgumentName().getName(), 
+							error(MSG_FUNCTION_PARAMETER_UNKNOWN + ": " + arg.getArgumentName().getName(), 
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 								MSG_FUNCTION_PARAMETER_UNKNOWN, arg.getArgumentName().getName());		
 						}
@@ -261,7 +263,7 @@ private void validateStandardFunction(FunctionCall call){
 					if (!argumentNames.contains(arg.getArgumentName().getName())){
 						argumentNames.add(arg.getArgumentName().getName());
 					} else {
-						warning(MSG_FUNCTION_PARAMETER_DEFINED + ": " + arg.getArgumentName().getName(), 
+						error(MSG_FUNCTION_PARAMETER_DEFINED + ": " + arg.getArgumentName().getName(), 
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 								MSG_FUNCTION_PARAMETER_DEFINED, arg.getArgumentName().getName());		
 					}

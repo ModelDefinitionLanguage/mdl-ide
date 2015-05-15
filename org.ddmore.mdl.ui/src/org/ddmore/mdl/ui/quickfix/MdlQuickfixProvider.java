@@ -24,7 +24,6 @@ import org.ddmore.mdl.mdl.MdlFactory;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
 import org.ddmore.mdl.mdl.MultiplicativeExpression;
 import org.ddmore.mdl.mdl.OrExpression;
-//import org.ddmore.mdl.mdl.OutputVariablesBlock;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.RandomList;
@@ -33,18 +32,14 @@ import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolName;
-import org.ddmore.mdl.mdl.TargetType;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VarType;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
-import org.ddmore.mdl.mdl.VariableList;
-//import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
-import org.ddmore.mdl.mdl.impl.VariableListImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
 import org.ddmore.mdl.types.DistributionType;
 import org.ddmore.mdl.types.MdlDataType;
@@ -59,7 +54,10 @@ import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider;
 import org.eclipse.xtext.ui.editor.quickfix.Fix;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor;
 import org.eclipse.xtext.validation.Issue;
+
 import com.google.inject.Inject;
+//import org.ddmore.mdl.mdl.OutputVariablesBlock;
+//import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 
 public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
@@ -89,17 +87,17 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			allAttributes.put(grammarAccess.getIndividualVariablesBlockAccess().
 					getIdentifierINDIVIDUAL_VARIABLESKeyword_0_0().getValue()+ ":" + attr.getName(), attr);
 		for (Attribute attr: AttributeValidator.attrs_ode) {
+//			allAttributes.put(grammarAccess.getOdeBlockAccess().
+//					getIdentifierODEKeyword_0_0_0().getValue() + ":" + attr.getName(), attr);
 			allAttributes.put(grammarAccess.getOdeBlockAccess().
-					getIdentifierODEKeyword_0_0_0().getValue() + ":" + attr.getName(), attr);
-			allAttributes.put(grammarAccess.getOdeBlockAccess().
-					getIdentifierDEQKeyword_0_0_1().getValue() + ":" + attr.getName(), attr);
+					getIdentifierDEQKeyword_0_0().getValue() + ":" + attr.getName(), attr);
 		}
-		for (Attribute attr: AttributeValidator.attrs_estimation) 
-			allAttributes.put(grammarAccess.getEstimationBlockAccess().
-					getIdentifierESTIMATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
-		for (Attribute attr: AttributeValidator.attrs_simulation) 
-			allAttributes.put(grammarAccess.getSimulationBlockAccess().
-					getIdentifierSIMULATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+//		for (Attribute attr: AttributeValidator.attrs_estimation) 
+//			allAttributes.put(grammarAccess.getEstimationBlockAccess().
+//					getIdentifierESTIMATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+//		for (Attribute attr: AttributeValidator.attrs_simulation) 
+//			allAttributes.put(grammarAccess.getSimulationBlockAccess().
+//					getIdentifierSIMULATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
 		for (Attribute attr: AttributeValidator.attrs_observation) 
 			allAttributes.put(grammarAccess.getObservationBlockAccess().
 					getIdentifierOBSERVATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
@@ -110,24 +108,24 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 			allAttributes.put(grammarAccess.getVariabilityParametersBlockAccess().
 					getIdentifierVARIABILITY_PARAMETERSKeyword_0_0().getValue() + ":" + attr.getName(), attr);
 		/*Design object*/
-		for (Attribute attr: AttributeValidator.attrs_studyDesign)    
-			allAttributes.put(grammarAccess.getStudyDesignBlockAccess().
-					getIdentifierSTUDY_DESIGNKeyword_0_0().getValue() + ":" + attr.getName(), attr);
-		for (Attribute attr: AttributeValidator.attrs_administration) 
-			allAttributes.put(grammarAccess.getAdministrationBlockAccess().
-					getIdentifierADMINISTRATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
-		for (Attribute attr: AttributeValidator.attrs_action)         
-			allAttributes.put(grammarAccess.getActionBlockAccess().
-					getIdentifierACTIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
-		for (Attribute attr: AttributeValidator.attrs_sampling)       
-			allAttributes.put(grammarAccess.getSamplingBlockAccess().
-					getIdentifierSAMPLINGKeyword_0_0().getValue() + ":" + attr.getName() + attr.getName(), attr);
-		for (Attribute attr: AttributeValidator.attrs_designSpace)    
-			allAttributes.put(grammarAccess.getDesignSpaceBlockAccess().
-					getIdentifierDESIGN_SPACEKeyword_0_0().getValue() + ":" + attr.getName(), attr);
-		for (Attribute attr: AttributeValidator.attrs_hyperSpace)     
-			allAttributes.put(grammarAccess.getHyperSpaceBlockAccess().
-					getIdentifierHYPER_SPACEKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+//		for (Attribute attr: AttributeValidator.attrs_studyDesign)    
+//			allAttributes.put(grammarAccess.getStudyDesignBlockAccess().
+//					getIdentifierSTUDY_DESIGNKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+//		for (Attribute attr: AttributeValidator.attrs_administration) 
+//			allAttributes.put(grammarAccess.getAdministrationBlockAccess().
+//					getIdentifierADMINISTRATIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+//		for (Attribute attr: AttributeValidator.attrs_action)         
+//			allAttributes.put(grammarAccess.getActionBlockAccess().
+//					getIdentifierACTIONKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+//		for (Attribute attr: AttributeValidator.attrs_sampling)       
+//			allAttributes.put(grammarAccess.getSamplingBlockAccess().
+//					getIdentifierSAMPLINGKeyword_0_0().getValue() + ":" + attr.getName() + attr.getName(), attr);
+//		for (Attribute attr: AttributeValidator.attrs_designSpace)    
+//			allAttributes.put(grammarAccess.getDesignSpaceBlockAccess().
+//					getIdentifierDESIGN_SPACEKeyword_0_0().getValue() + ":" + attr.getName(), attr);
+//		for (Attribute attr: AttributeValidator.attrs_hyperSpace)     
+//			allAttributes.put(grammarAccess.getHyperSpaceBlockAccess().
+//					getIdentifierHYPER_SPACEKeyword_0_0().getValue() + ":" + attr.getName(), attr);
         return allAttributes.get(id);
     }
 	
@@ -240,7 +238,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 				case TYPE_PROBABILITY: return createNumericExpression(value);
 			case TYPE_REF: return createReferenceExpression(value);
 			case TYPE_BOOLEAN: return createBooleanExpression(value);
-			case TYPE_TARGET: return createTargetLanguageExpression(value);
+//			case TYPE_TARGET: return createTargetLanguageExpression(value);
 			case TYPE_VAR_TYPE: return createVarTypeExpression(value);
 			case TYPE_USE: return createUseExpression(value);
 			default:
@@ -255,15 +253,16 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		} else {
 			if (value.equals(grammarAccess.getVarTypeAccess().getCategoricalCategoricalKeyword_0_0_0().getValue())){
 				tl.setCategorical(value);
-			} else {
-				if (value.equals(grammarAccess.getVarTypeAccess().getLikelihoodLikelihoodKeyword_2_0().getValue())){
-					tl.setLikelihood(value);
-				} else {
-					if (value.equals(grammarAccess.getVarTypeAccess().getM2LLM2LLKeyword_3_0().getValue())){
-						tl.setM2LL(value);
-					}
-				}
 			}
+//			else {
+//				if (value.equals(grammarAccess.getVarTypeAccess().getLikelihoodLikelihoodKeyword_2_0().getValue())){
+//					tl.setLikelihood(value);
+//				} else {
+//					if (value.equals(grammarAccess.getVarTypeAccess().getM2LLM2LLKeyword_3_0().getValue())){
+//						tl.setM2LL(value);
+//					}
+//				}
+//			}
 		}	
 		EnumType t = MdlFactory.eINSTANCE.createEnumType();
 		t.setType(tl);
@@ -281,14 +280,14 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		return expr;
 	}
 	
-	AnyExpression createTargetLanguageExpression(String value){
-		TargetType tl = TargetType.getByName(value);
-		EnumType t = MdlFactory.eINSTANCE.createEnumType();
-		t.setTarget(tl);
-		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
-		expr.setType(t);
-		return expr;
-	}
+//	AnyExpression createTargetLanguageExpression(String value){
+//		TargetType tl = TargetType.getByName(value);
+//		EnumType t = MdlFactory.eINSTANCE.createEnumType();
+//		t.setTarget(tl);
+//		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
+//		expr.setType(t);
+//		return expr;
+//	}
 	
 	AnyExpression createBooleanExpression(String value){
 		AnyExpression expr = MdlFactory.eINSTANCE.createAnyExpression();		
@@ -443,12 +442,12 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 						OutputVariablesBlock outputBlock = (OutputVariablesBlock) container;
 						outputBlock.getVariables().remove(ref);
 						return;
-					}*/
+					}
 					if (container instanceof VariableListImpl){
 						VariableList variableList = (VariableList) container;
 						variableList.getIdentifiers().remove(ref);
 						return;
-					}
+					}*/
 				}
 			}
 		});

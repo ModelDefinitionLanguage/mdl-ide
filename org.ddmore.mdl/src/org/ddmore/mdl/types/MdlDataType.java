@@ -46,7 +46,7 @@ public enum MdlDataType {
 	TYPE_TRANS,          //{log, logit, probit}
 
     /*Enumerations*/
-	TYPE_VAR_TYPE,       //{continuous, categorical, likelihood, M2LL, tte}
+	TYPE_VAR_TYPE,       //{continuous, categorical}
 	TYPE_USE,            //see 'UseType' in MDL grammar
 	TYPE_TARGET,         //{NMTRAN_CODE, MLXTRAN_CODE, PML_CODE, BUGS_CODE, R_CODE MATLAB_CODE}
 	TYPE_RANDOM_EFFECT,  //{VAR, SD, CORR, COV} 
@@ -579,7 +579,7 @@ public enum MdlDataType {
 	
 	public static MdlDataType getDerivedType(EnumType expr){
 		if (expr.getType() != null) {
-			if (expr.getType().getContinuous() != null || expr.getType().getTte() != null) 
+			if (expr.getType().getContinuous() != null) // || expr.getType().getTte() != null) 
 				return TYPE_CONTINUOUS;
 			else 
 				return TYPE_VAR_TYPE;
@@ -759,7 +759,7 @@ public enum MdlDataType {
 				if (o.getParameterObject() != null) return TYPE_OBJ_REF_PARAM;
 				if (o.getDataObject() != null) return TYPE_OBJ_REF_DATA;
 				if (o.getTaskObject() != null) return TYPE_OBJ_REF_TASK;
-				if (o.getDesignObject() != null) return TYPE_OBJ_REF_DESIGN;
+//				if (o.getDesignObject() != null) return TYPE_OBJ_REF_DESIGN;
 				if (o.getMogObject() != null) return TYPE_OBJ_REF_MOG;
 			}
 		}

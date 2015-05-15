@@ -3,11 +3,108 @@
 */
 package org.ddmore.mdl.ui.outline;
 
-import static org.ddmore.mdl.ui.outline.Images.*;
+import static org.ddmore.mdl.ui.outline.Images.ARGUMENT_NAME;
+import static org.ddmore.mdl.ui.outline.Images.ATTRIBUTE;
+import static org.ddmore.mdl.ui.outline.Images.CC_TYPE;
+import static org.ddmore.mdl.ui.outline.Images.COVARIATE_DEFINITION_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.DATA_INPUT_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.DATA_OBJ;
+import static org.ddmore.mdl.ui.outline.Images.ESTIMATE_TASK;
+import static org.ddmore.mdl.ui.outline.Images.EXPRESSION;
+import static org.ddmore.mdl.ui.outline.Images.EXPRESSION_AND;
+import static org.ddmore.mdl.ui.outline.Images.EXPRESSION_OR;
+import static org.ddmore.mdl.ui.outline.Images.FALSE;
+import static org.ddmore.mdl.ui.outline.Images.FUNCTION;
+import static org.ddmore.mdl.ui.outline.Images.GROUP_VARIABLES_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.INDIVIDUAL_VARIABLES_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.LIST;
+import static org.ddmore.mdl.ui.outline.Images.LOG;
+import static org.ddmore.mdl.ui.outline.Images.MDL;
+import static org.ddmore.mdl.ui.outline.Images.MIXTURE;
+import static org.ddmore.mdl.ui.outline.Images.MODEL_OBJ;
+import static org.ddmore.mdl.ui.outline.Images.MODEL_PREDICTION_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.MOG_OBJ;
+import static org.ddmore.mdl.ui.outline.Images.OBSERVATIONS_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.ODE;
+import static org.ddmore.mdl.ui.outline.Images.PARAMETER_OBJ;
+import static org.ddmore.mdl.ui.outline.Images.RANDOM;
+import static org.ddmore.mdl.ui.outline.Images.RANDOM_VARIABLES_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.REFERENCE;
+import static org.ddmore.mdl.ui.outline.Images.SIMULATE_TASK;
+import static org.ddmore.mdl.ui.outline.Images.STRUCTURAL_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.STRUCTURAL_PARAMETERS_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.SYMBOL_DECLARATION;
+import static org.ddmore.mdl.ui.outline.Images.TASK_OBJ;
+import static org.ddmore.mdl.ui.outline.Images.TRUE;
+import static org.ddmore.mdl.ui.outline.Images.USE_TYPE;
+import static org.ddmore.mdl.ui.outline.Images.VARIABILITY_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.VARIABILITY_DEFINITION_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.VARIABILITY_PARAMETERS_BLOCK;
+import static org.ddmore.mdl.ui.outline.Images.VARIABILITY_TYPE;
+import static org.ddmore.mdl.ui.outline.Images.VECTOR;
+import static org.ddmore.mdl.ui.outline.Images.getPath;
 
-import org.ddmore.mdl.mdl.*;
-import org.ddmore.mdl.mdl.impl.*;
-import org.ddmore.mdl.validation.PropertyValidator;
+import org.ddmore.mdl.mdl.AndExpression;
+import org.ddmore.mdl.mdl.AnyExpression;
+import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.ArgumentExpression;
+import org.ddmore.mdl.mdl.Arguments;
+import org.ddmore.mdl.mdl.DataObject;
+import org.ddmore.mdl.mdl.DataObjectBlock;
+import org.ddmore.mdl.mdl.EnumType;
+import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.ExpressionBranch;
+import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.GroupVariablesBlockStatement;
+import org.ddmore.mdl.mdl.ImportObjectBlock;
+import org.ddmore.mdl.mdl.ImportObjectStatement;
+import org.ddmore.mdl.mdl.IndividualVarType;
+import org.ddmore.mdl.mdl.InputFormatType;
+import org.ddmore.mdl.mdl.List;
+import org.ddmore.mdl.mdl.MOGObject;
+import org.ddmore.mdl.mdl.MOGObjectBlock;
+import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.mdl.MclObject;
+import org.ddmore.mdl.mdl.MdlPackage;
+import org.ddmore.mdl.mdl.MixtureBlock;
+import org.ddmore.mdl.mdl.ModelObject;
+import org.ddmore.mdl.mdl.ModelObjectBlock;
+import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
+import org.ddmore.mdl.mdl.NamedArguments;
+import org.ddmore.mdl.mdl.ObjectName;
+import org.ddmore.mdl.mdl.OrExpression;
+import org.ddmore.mdl.mdl.ParExpression;
+import org.ddmore.mdl.mdl.ParameterObject;
+import org.ddmore.mdl.mdl.ParameterObjectBlock;
+import org.ddmore.mdl.mdl.PropertyDeclaration;
+import org.ddmore.mdl.mdl.RandomList;
+import org.ddmore.mdl.mdl.SymbolDeclaration;
+import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.TaskObject;
+import org.ddmore.mdl.mdl.TaskObjectBlock;
+import org.ddmore.mdl.mdl.TrialType;
+import org.ddmore.mdl.mdl.UnnamedArguments;
+import org.ddmore.mdl.mdl.UseType;
+import org.ddmore.mdl.mdl.VarType;
+import org.ddmore.mdl.mdl.VariabilityType;
+import org.ddmore.mdl.mdl.Vector;
+import org.ddmore.mdl.mdl.impl.ArgumentNameImpl;
+import org.ddmore.mdl.mdl.impl.CovariateDefinitionBlockImpl;
+import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
+import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
+import org.ddmore.mdl.mdl.impl.GroupVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl;
+import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
+import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
+import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
+import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
+import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
+import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.VarTypeImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityDefinitionBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtext.ui.IImageHelper;
@@ -41,9 +138,9 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     protected Image _image(TaskObject f) {
         return imageHelper.getImage(getPath(TASK_OBJ));
     }
-    protected Image _image(DesignObject f) {
-        return imageHelper.getImage(getPath(DESIGN_OBJ));
-    }
+//    protected Image _image(DesignObject f) {
+//        return imageHelper.getImage(getPath(DESIGN_OBJ));
+//    }
 
     protected Image _image(MOGObject f) {
         return imageHelper.getImage(getPath(MOG_OBJ));
@@ -53,9 +150,9 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     	return imageHelper.getImage(getPath(REFERENCE));
     }
     
-    protected Image _image(TargetBlock f) {
-        return imageHelper.getImage(getPath(TARGET));
-    }
+//    protected Image _image(TargetBlock f) {
+//        return imageHelper.getImage(getPath(TARGET));
+//    }
 
     protected Image _image(SymbolDeclaration s) {
         return imageHelper.getImage(getPath(SYMBOL_DECLARATION));
@@ -71,30 +168,30 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 
     protected Image _image(PropertyDeclaration s) {
         //Decorate special properties?
-        if (s.getPropertyName() != null){
-        	if (s.getPropertyName().getName().equals(PropertyValidator.attr_data_ignore.getName())){
-                return imageHelper.getImage(getPath(IGNORE));
-        	}
-        	if (s.getPropertyName().getName().equals(PropertyValidator.attr_data_accept.getName())){
-                return imageHelper.getImage(getPath(ACCEPT));
-        	}
-        	if (s.getPropertyName().getName().equals(PropertyValidator.attr_data_drop.getName())){
-                return imageHelper.getImage(getPath(DROP));
-        	}
-        	if (s.getPropertyName().getName().equals(PropertyValidator.attr_model_remove.getName())){
-                return imageHelper.getImage(getPath(REMOVE));
-        	}
-        	if (s.getPropertyName().getName().equals(PropertyValidator.attr_model_add.getName())){
-                return imageHelper.getImage(getPath(ADD));
-        	}
-        }
+//        if (s.getPropertyName() != null){
+//        	if (s.getPropertyName().getName().equals(PropertyValidator.attr_data_ignore.getName())){
+//                return imageHelper.getImage(getPath(IGNORE));
+//        	}
+//        	if (s.getPropertyName().getName().equals(PropertyValidator.attr_data_accept.getName())){
+//                return imageHelper.getImage(getPath(ACCEPT));
+//        	}
+//        	if (s.getPropertyName().getName().equals(PropertyValidator.attr_data_drop.getName())){
+//                return imageHelper.getImage(getPath(DROP));
+//        	}
+//        	if (s.getPropertyName().getName().equals(PropertyValidator.attr_model_remove.getName())){
+//                return imageHelper.getImage(getPath(REMOVE));
+//        	}
+//        	if (s.getPropertyName().getName().equals(PropertyValidator.attr_model_add.getName())){
+//                return imageHelper.getImage(getPath(ADD));
+//        	}
+//        }
         return imageHelper.getImage(getPath(ATTRIBUTE));
     }
 
 
-    protected Image _image(FunctionCallStatement f) {
-        return imageHelper.getImage(getPath(FUNCTION_CALL_STATEMENT));
-    }
+//    protected Image _image(FunctionCallStatement f) {
+//        return imageHelper.getImage(getPath(FUNCTION_CALL_STATEMENT));
+//    }
 
     protected Image _image(RandomList r) {
         return imageHelper.getImage(getPath(RANDOM));
@@ -168,9 +265,9 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(OUTPUT_VARIABLES_BLOCK));
     }*/
 
-    protected Image _image(TargetType e) {
-        return imageHelper.getImage(getPath(TARGET_LANGUAGE));
-    }
+//    protected Image _image(TargetType e) {
+//        return imageHelper.getImage(getPath(TARGET_LANGUAGE));
+//    }
     
     protected Image _image(UseType e) {
         return imageHelper.getImage(getPath(USE_TYPE));
@@ -208,9 +305,9 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(DATA_INPUT_BLOCK));
     }
     
-    protected Image _image(DataBlockImpl e) {
-        return imageHelper.getImage(getPath(DATA_BLOCK));
-    }
+//    protected Image _image(DataBlockImpl e) {
+//        return imageHelper.getImage(getPath(DATA_BLOCK));
+//    }
     
     protected Image getLogImage(){
     	return imageHelper.getImage(getPath(LOG));
@@ -272,14 +369,14 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			false);
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, DesignObject obj) {
-		createEStructuralFeatureNode(parentNode,
-			obj,
-			MdlPackage.Literals.DESIGN_OBJECT__BLOCKS,
-			_image(obj),
-			((MclObject) obj.eContainer()).getObjectName().getName(),
-			false);
-	}
+//	protected void  _createNode(IOutlineNode parentNode, DesignObject obj) {
+//		createEStructuralFeatureNode(parentNode,
+//			obj,
+//			MdlPackage.Literals.DESIGN_OBJECT__BLOCKS,
+//			_image(obj),
+//			((MclObject) obj.eContainer()).getObjectName().getName(),
+//			false);
+//	}
 	
 	protected void  _createNode(IOutlineNode parentNode, DataObject obj) {
 		createEStructuralFeatureNode(parentNode,
@@ -330,11 +427,11 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		}
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, DesignObjectBlock block) {
-		for (EObject obj: block.eContents()){
-			createNode(parentNode, obj);
-		}
-	}
+//	protected void  _createNode(IOutlineNode parentNode, DesignObjectBlock block) {
+//		for (EObject obj: block.eContents()){
+//			createNode(parentNode, obj);
+//		}
+//	}
 	
 	protected void  _createNode(IOutlineNode parentNode, MOGObjectBlock block){
 		for (EObject obj: block.eContents())
@@ -358,17 +455,17 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	//////////////////////////////////////////////////////////////////////////////////////
 	//Skip subblock statements
 
-	protected void  _createNode(IOutlineNode parentNode, MappingBlockStatement st){
-		for (EObject obj: st.eContents()){
-			createNode(parentNode, obj);
-		}
-	}
+//	protected void  _createNode(IOutlineNode parentNode, MappingBlockStatement st){
+//		for (EObject obj: st.eContents()){
+//			createNode(parentNode, obj);
+//		}
+//	}
 	
-	protected void  _createNode(IOutlineNode parentNode, VariableList st){
-		for (EObject obj: st.eContents()){
-			createNode(parentNode, obj);
-		}
-	}
+//	protected void  _createNode(IOutlineNode parentNode, VariableList st){
+//		for (EObject obj: st.eContents()){
+//			createNode(parentNode, obj);
+//		}
+//	}
 	
 	protected void  _createNode(IOutlineNode parentNode, GroupVariablesBlockStatement st){
 		for (EObject obj: st.eContents()){
@@ -430,14 +527,14 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				true);
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedSymbolName name){
-		createEStructuralFeatureNode(parentNode,
-				name,
-				MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL_NAME,
-				_image(name),
-				mdlPrinter.toStr(name),
-				true);
-	}
+//	protected void  _createNode(IOutlineNode parentNode, FullyQualifiedSymbolName name){
+//		createEStructuralFeatureNode(parentNode,
+//				name,
+//				MdlPackage.Literals.FULLY_QUALIFIED_SYMBOL_NAME__SYMBOL_NAME,
+//				_image(name),
+//				mdlPrinter.toStr(name),
+//				true);
+//	}
 
 	
 	protected void  _createNode(IOutlineNode parentNode, ImportObjectStatement st){
@@ -548,14 +645,14 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			false);
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, FunctionCallStatement s){
-		createEStructuralFeatureNode(parentNode,
-			s,
-			MdlPackage.Literals.FUNCTION_CALL_STATEMENT__EXPRESSION,
-			_image(s),
-			 mdlPrinter.toStr(s.getSymbolName()),
-		false);
-	}
+//	protected void  _createNode(IOutlineNode parentNode, FunctionCallStatement s){
+//		createEStructuralFeatureNode(parentNode,
+//			s,
+//			MdlPackage.Literals.FUNCTION_CALL_STATEMENT__EXPRESSION,
+//			_image(s),
+//			 mdlPrinter.toStr(s.getSymbolName()),
+//		false);
+//	}
 	
 	protected void  _createNode(IOutlineNode parentNode, EnumType b){
 		if (b.getType() != null){
@@ -572,10 +669,10 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			createEStructuralFeatureNode(parentNode,
 			b, MdlPackage.Literals.ENUM_TYPE__INPUT,
 			_image(b), b.getInput().toString(), true); 
-		} else if (b.getTarget() != TargetType.NO_TARGET){
-			createEStructuralFeatureNode(parentNode,
-			b, MdlPackage.Literals.ENUM_TYPE__TARGET,
-			_image(b), b.getTarget().toString(), true); 
+//		} else if (b.getTarget() != TargetType.NO_TARGET){
+//			createEStructuralFeatureNode(parentNode,
+//			b, MdlPackage.Literals.ENUM_TYPE__TARGET,
+//			_image(b), b.getTarget().toString(), true); 
 		} else if (b.getTrial() != TrialType.NO_TRIAL){
 			createEStructuralFeatureNode(parentNode,
 			b, MdlPackage.Literals.ENUM_TYPE__TRIAL,
@@ -602,20 +699,20 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				_image(t),
 				mdlPrinter.toStr(t),
 				true);
-		if (t.getLikelihood() != null)
-			createEStructuralFeatureNode(parentNode,
-				t,
-				MdlPackage.Literals.VAR_TYPE__LIKELIHOOD,
-				_image(t),
-				mdlPrinter.toStr(t),
-				true);
-		if (t.getM2LL() != null)
-			createEStructuralFeatureNode(parentNode,
-				t,
-				MdlPackage.Literals.VAR_TYPE__M2LL,
-				_image(t),
-				mdlPrinter.toStr(t),
-				true);
+//		if (t.getLikelihood() != null)
+//			createEStructuralFeatureNode(parentNode,
+//				t,
+//				MdlPackage.Literals.VAR_TYPE__LIKELIHOOD,
+//				_image(t),
+//				mdlPrinter.toStr(t),
+//				true);
+//		if (t.getM2LL() != null)
+//			createEStructuralFeatureNode(parentNode,
+//				t,
+//				MdlPackage.Literals.VAR_TYPE__M2LL,
+//				_image(t),
+//				mdlPrinter.toStr(t),
+//				true);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////

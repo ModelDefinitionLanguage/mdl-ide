@@ -5,52 +5,49 @@
  */
 package eu.ddmore.converter.mdlprinting
 
-import org.ddmore.mdl.mdl.Mcl
-import org.ddmore.mdl.mdl.FunctionCall
-import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.List
-import org.ddmore.mdl.mdl.RandomList
-import org.ddmore.mdl.mdl.Expression
-import org.ddmore.mdl.mdl.AnyExpression
-import org.ddmore.mdl.mdl.OrExpression
-import org.ddmore.mdl.mdl.AndExpression
-import org.ddmore.mdl.mdl.LogicalExpression
-import org.ddmore.mdl.mdl.AdditiveExpression
-import org.ddmore.mdl.mdl.MultiplicativeExpression
-import org.ddmore.mdl.mdl.PowerExpression
-import org.ddmore.mdl.mdl.UnaryExpression
-import org.ddmore.mdl.mdl.ParExpression
-import org.ddmore.mdl.mdl.Arguments
-import org.ddmore.mdl.mdl.TargetBlock
-import org.ddmore.mdl.mdl.Vector
-import org.ddmore.mdl.mdl.EnumType
-import org.ddmore.mdl.mdl.DataObject
-import org.apache.commons.io.FilenameUtils
-import org.ddmore.mdl.mdl.VarType
-import org.ddmore.mdl.mdl.UseType
-import org.ddmore.mdl.mdl.TargetType
-import org.ddmore.mdl.mdl.InputFormatType
-import org.ddmore.mdl.mdl.VariabilityType
-import org.ddmore.mdl.mdl.IndividualVarType
-import org.ddmore.mdl.mdl.TrialType
-import org.ddmore.mdl.validation.PropertyValidator
-import org.ddmore.mdl.mdl.PropertyDeclaration
-import org.ddmore.mdl.mdl.PkParameterType
-//import org.ddmore.mdl.mdl.Matching
-import org.ddmore.mdl.mdl.SignedNumericValue
-import org.ddmore.mdl.mdl.VectorExpression
-import org.ddmore.mdl.mdl.PkMacroType
-import org.ddmore.mdl.mdl.LevelType
-import org.ddmore.mdl.mdl.SymbolName
-import org.ddmore.mdl.mdl.ImportObjectStatement
-import org.ddmore.mdl.mdl.FullyQualifiedSymbolName
-import org.ddmore.mdl.mdl.ArgumentExpression
-import org.ddmore.mdl.mdl.NamedArguments
-import org.ddmore.mdl.mdl.UnnamedArguments
 import java.util.ArrayList
-import org.ddmore.mdl.mdl.EventType
-import org.ddmore.mdl.mdl.NonContinuousType
+import org.apache.commons.io.FilenameUtils
+import org.ddmore.mdl.mdl.AdditiveExpression
+import org.ddmore.mdl.mdl.AndExpression
+import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.Argument
+import org.ddmore.mdl.mdl.ArgumentExpression
+import org.ddmore.mdl.mdl.Arguments
+import org.ddmore.mdl.mdl.DataObject
+import org.ddmore.mdl.mdl.EnumType
+import org.ddmore.mdl.mdl.EventType
+import org.ddmore.mdl.mdl.Expression
+import org.ddmore.mdl.mdl.FunctionCall
+import org.ddmore.mdl.mdl.ImportObjectStatement
+import org.ddmore.mdl.mdl.IndividualVarType
+import org.ddmore.mdl.mdl.InputFormatType
+import org.ddmore.mdl.mdl.LevelType
+import org.ddmore.mdl.mdl.List
+import org.ddmore.mdl.mdl.LogicalExpression
+import org.ddmore.mdl.mdl.Mcl
+import org.ddmore.mdl.mdl.MultiplicativeExpression
+import org.ddmore.mdl.mdl.NamedArguments
+import org.ddmore.mdl.mdl.NonContinuousType
+import org.ddmore.mdl.mdl.OrExpression
+import org.ddmore.mdl.mdl.ParExpression
+import org.ddmore.mdl.mdl.PkMacroType
+import org.ddmore.mdl.mdl.PkParameterType
+import org.ddmore.mdl.mdl.PowerExpression
+import org.ddmore.mdl.mdl.PropertyDeclaration
+import org.ddmore.mdl.mdl.RandomList
+import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.SymbolName
+import org.ddmore.mdl.mdl.TrialType
+import org.ddmore.mdl.mdl.UnaryExpression
+import org.ddmore.mdl.mdl.UnnamedArguments
+import org.ddmore.mdl.mdl.UseType
+import org.ddmore.mdl.mdl.VarType
+import org.ddmore.mdl.mdl.VariabilityType
+import org.ddmore.mdl.mdl.Vector
+import org.ddmore.mdl.mdl.VectorExpression
+import org.ddmore.mdl.validation.PropertyValidator
+import org.eclipse.xtext.xbase.lib.Pair
+import org.ddmore.mdl.mdl.TargetType
 
 class MdlPrinter {
 	
@@ -292,9 +289,9 @@ class MdlPrinter {
 			res = st.symbolName.toStr;
 		if (st.objectName != null)
 			res = res + " = " + st.objectName.name;
-		if (st.importURI != null){
-			res  = res + " from file " + st.importURI;
-		}
+//		if (st.importURI != null){
+//			res  = res + " from file " + st.importURI;
+//		}
 		return res;
 	}
 	
@@ -306,10 +303,10 @@ class MdlPrinter {
 		return res;
 	}
 	
-	def String toStr(FullyQualifiedSymbolName s){
-		var res = s.parent.toStr + "." + s.symbolName.toStr;
-		return res;
-	}
+//	def String toStr(FullyQualifiedSymbolName s){
+//		var res = s.parent.toStr + "." + s.symbolName.toStr;
+//		return res;
+//	}
 	
 	def toStr(EnumType t) {
 		if (t.type != null)
@@ -362,15 +359,15 @@ class MdlPrinter {
 		if (t.continuous != null){
 			return t.continuous
 		} 
-		if (t.likelihood != null){
-			return t.likelihood	
-		} 
-		if (t.m2LL != null){
-			return t.m2LL	
-		} 
-		if (t.tte != null){
-			return t.tte;
-		}
+//		if (t.likelihood != null){
+//			return t.likelihood	
+//		} 
+//		if (t.m2LL != null){
+//			return t.m2LL	
+//		} 
+//		if (t.tte != null){
+//			return t.tte;
+//		}
 	}
 			
 	def toStr(RandomList l){
@@ -505,13 +502,13 @@ class MdlPrinter {
 		return res;
 	}
 	
-	def String toStr(SignedNumericValue v){
-		var res = "";
-		if (v.operator != null) res = v.operator;
-		if (v.value != null) res = res + v.value;
-		if (v.skip != null) res = v.skip;
-		return res;
-	}
+//	def String toStr(SignedNumericValue v){
+//		var res = "";
+//		if (v.operator != null) res = v.operator;
+//		if (v.value != null) res = res + v.value;
+//		if (v.skip != null) res = v.skip;
+//		return res;
+//	}
 	
 	def String toStr(UnaryExpression e){
 		var res = "";
@@ -629,7 +626,7 @@ class MdlPrinter {
 		return res;
 	}
 	
-	def toStr(TargetBlock b){
-		return b.externalCode.substring(3, b.externalCode.length - 3)
-	}
+//	def toStr(TargetBlock b){
+//		return b.externalCode.substring(3, b.externalCode.length - 3)
+//	}
 }
