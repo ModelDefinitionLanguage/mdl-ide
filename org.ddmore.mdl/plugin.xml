@@ -6,7 +6,7 @@
     <package 
        uri = "http://www.ddmore.org/mdl/Mdl" 
        class = "org.ddmore.mdl.mdl.MdlPackage"
-       genModel = "org/ddmore/mdl/Mdl.genmodel" /> 
+       genModel = "src-gen/org/ddmore/mdl/Mdl.genmodel" /> 
 	
   </extension>
 
