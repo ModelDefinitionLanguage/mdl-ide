@@ -27,8 +27,8 @@ class ModelDefinitionPrinter {
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver = null;
 	
-	private val CONTINUOUS_OBS = "continuous"
-	private val COUNT_OBS = "count"
+	private static val CONTINUOUS_OBS = "continuous"
+	private static val COUNT_OBS = "count"
 	
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
 		this.mathPrinter = mathPrinter;
