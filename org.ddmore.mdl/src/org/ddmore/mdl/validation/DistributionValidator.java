@@ -119,156 +119,156 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 				private static final long serialVersionUID = 27681295286815005L;
 		{
 			put(DistributionType.Bernoulli, Arrays.asList( 
-					attr_probability,
-					attr_p));
-			put(DistributionType.BetaDistribution, Arrays.asList(
-					attr_alpha,
-					attr_beta, 
-					attr_continuous_lo,
-					attr_continuous_hi));
+					attr_probability /*,
+					attr_p*/));
+//			put(DistributionType.BetaDistribution, Arrays.asList(
+//					attr_alpha,
+//					attr_beta, 
+//					attr_continuous_lo,
+//					attr_continuous_hi));
 			put(DistributionType.Binomial, Arrays.asList(
-					attr_numberOfTrials,
+					attr_numberOfTrials/*,
 					attr_nTrials,
-					attr_n,
-					attr_probabilityOfSuccess, 
-					attr_p_ofSuccess,
+					attr_n*/,
+					attr_probabilityOfSuccess/*, 
+					attr_p_ofSuccess*/,
 					attr_nat_lo,
 					attr_nat_hi));
-			put(DistributionType.Categorical, Arrays.asList(
-					attr_ncat,
-					attr_categories,
-					attr_probabilities,
-					attr_prob));
-			put(DistributionType.Cauchy, Arrays.asList(
-					attr_location,
-					attr_scale, 
-					attr_continuous_lo,
-					attr_continuous_hi));
-			put(DistributionType.ChiSquare, Arrays.asList(
-					attr_pnat_degreesOfFreedom,
-					attr_pnat_dof, 
-					attr_preal_lo,
-					attr_preal_hi));
-			put(DistributionType.Dirichlet, Arrays.asList(attr_prealVector_alpha));
-			put(DistributionType.Exponential, Arrays.asList(attr_lambda,
-					attr_preal_lo,
-					attr_preal_hi));
-			put(DistributionType.F, Arrays.asList(
-					attr_denominator,
-					attr_den,
-					attr_numerator, 
-					attr_num,
-					attr_preal_lo,
-					attr_preal_hi));
-			put(DistributionType.Gamma, Arrays.asList(
-					attr_shape,
-					attr_scale, 
-					attr_preal_lo,
-					attr_preal_hi));
-			put(DistributionType.Geometric, Arrays.asList(
-					attr_probability, 
-					attr_p,
-					attr_nat_lo,
-					attr_nat_hi));
-			put(DistributionType.Hypergeometric, Arrays.asList(
-					attr_numberOfSuccesses,
-					attr_nSuccess,
-					attr_numberOfTrials, 
-					attr_nTrials,
-					attr_n,
-					attr_populationSize,
-					attr_popSize,
-					attr_nat_lo,
-					attr_nat_hi));
-			put(DistributionType.InverseGamma, Arrays.asList(
-					attr_shape,
-					attr_scale, 
-					attr_preal_lo,
-					attr_preal_hi));
-			put(DistributionType.Laplace, Arrays.asList(
-					attr_location,
-					attr_scale, 
-					attr_preal_lo,
-					attr_preal_hi));
-			put(DistributionType.Logistic, Arrays.asList(
-					attr_location,
-					attr_scale, 
-					attr_preal_lo,
-					attr_preal_hi));
-			put(DistributionType.LogNormal, Arrays.asList(
-					attr_median,
-					attr_cv, 
-					attr_var,
-					attr_mu,
-					attr_preal_lo,
-					attr_preal_hi));
-			put(DistributionType.Multinomial, Arrays.asList(
-					attr_numberOfTrials,
-					attr_nTrials,
-					attr_probabilities,
-					attr_prob)); 
-			put(DistributionType.MultivariateNormal, Arrays.asList(
-					attr_realVector_mean,
-					attr_cov)); 
-			put(DistributionType.MultivariateStudentT, Arrays.asList(
-					attr_realVector_mean,
-					attr_cov,
-					attr_pnat_degreesOfFreedom,
-					attr_pnat_dof)); 
-			put(DistributionType.NegativeBinomial, Arrays.asList(
-					attr_numberOfFailures,
-					attr_nFail,
-					attr_probability, 
-					attr_p,
-					attr_nat_lo,
-					attr_nat_hi));
+//			put(DistributionType.Categorical, Arrays.asList(
+//					attr_ncat,
+//					attr_categories,
+//					attr_probabilities,
+//					attr_prob));
+//			put(DistributionType.Cauchy, Arrays.asList(
+//					attr_location,
+//					attr_scale, 
+//					attr_continuous_lo,
+//					attr_continuous_hi));
+//			put(DistributionType.ChiSquare, Arrays.asList(
+//					attr_pnat_degreesOfFreedom,
+//					attr_pnat_dof, 
+//					attr_preal_lo,
+//					attr_preal_hi));
+//			put(DistributionType.Dirichlet, Arrays.asList(attr_prealVector_alpha));
+//			put(DistributionType.Exponential, Arrays.asList(attr_lambda,
+//					attr_preal_lo,
+//					attr_preal_hi));
+//			put(DistributionType.F, Arrays.asList(
+//					attr_denominator,
+//					attr_den,
+//					attr_numerator, 
+//					attr_num,
+//					attr_preal_lo,
+//					attr_preal_hi));
+//			put(DistributionType.Gamma, Arrays.asList(
+//					attr_shape,
+//					attr_scale, 
+//					attr_preal_lo,
+//					attr_preal_hi));
+//			put(DistributionType.Geometric, Arrays.asList(
+//					attr_probability, 
+//					attr_p,
+//					attr_nat_lo,
+//					attr_nat_hi));
+//			put(DistributionType.Hypergeometric, Arrays.asList(
+//					attr_numberOfSuccesses,
+//					attr_nSuccess,
+//					attr_numberOfTrials, 
+//					attr_nTrials,
+//					attr_n,
+//					attr_populationSize,
+//					attr_popSize,
+//					attr_nat_lo,
+//					attr_nat_hi));
+//			put(DistributionType.InverseGamma, Arrays.asList(
+//					attr_shape,
+//					attr_scale, 
+//					attr_preal_lo,
+//					attr_preal_hi));
+//			put(DistributionType.Laplace, Arrays.asList(
+//					attr_location,
+//					attr_scale, 
+//					attr_preal_lo,
+//					attr_preal_hi));
+//			put(DistributionType.Logistic, Arrays.asList(
+//					attr_location,
+//					attr_scale, 
+//					attr_preal_lo,
+//					attr_preal_hi));
+//			put(DistributionType.LogNormal, Arrays.asList(
+//					attr_median,
+//					attr_cv, 
+//					attr_var,
+//					attr_mu,
+//					attr_preal_lo,
+//					attr_preal_hi));
+//			put(DistributionType.Multinomial, Arrays.asList(
+//					attr_numberOfTrials,
+//					attr_nTrials,
+//					attr_probabilities,
+//					attr_prob)); 
+//			put(DistributionType.MultivariateNormal, Arrays.asList(
+//					attr_realVector_mean,
+//					attr_cov)); 
+//			put(DistributionType.MultivariateStudentT, Arrays.asList(
+//					attr_realVector_mean,
+//					attr_cov,
+//					attr_pnat_degreesOfFreedom,
+//					attr_pnat_dof)); 
+//			put(DistributionType.NegativeBinomial, Arrays.asList(
+//					attr_numberOfFailures,
+//					attr_nFail,
+//					attr_probability, 
+//					attr_p,
+//					attr_nat_lo,
+//					attr_nat_hi));
 			put(DistributionType.Normal, Arrays.asList(
 					attr_mean,
 					attr_sd, 
 					attr_var, 
 					attr_continuous_lo,
 					attr_continuous_hi));
-			put(DistributionType.NormalInverseGamma, Arrays.asList(
-					attr_mean,
-					attr_varianceScaling, 
-					attr_shape, 
-					attr_scale,
-					attr_loN, 
-					attr_hiN, 
-					attr_loIG, 
-					attr_hiIG));
-			put(DistributionType.Pareto, Arrays.asList(
-					attr_scale,
-					attr_shape, 
-					attr_continuous_lo, 
-					attr_continuous_hi));
+//			put(DistributionType.NormalInverseGamma, Arrays.asList(
+//					attr_mean,
+//					attr_varianceScaling, 
+//					attr_shape, 
+//					attr_scale,
+//					attr_loN, 
+//					attr_hiN, 
+//					attr_loIG, 
+//					attr_hiIG));
+//			put(DistributionType.Pareto, Arrays.asList(
+//					attr_scale,
+//					attr_shape, 
+//					attr_continuous_lo, 
+//					attr_continuous_hi));
 			put(DistributionType.Poisson, Arrays.asList(
 					attr_lambda,
 					attr_nat_lo,
 					attr_nat_hi));
-			put(DistributionType.StudentT, Arrays.asList(
-					attr_location,
-					attr_scale, 
-					attr_pnat_degreesOfFreedom,
-					attr_pnat_dof,
-					attr_continuous_lo,
-					attr_continuous_hi));
-			put(DistributionType.Uniform, Arrays.asList(
-					attr_min,
-					attr_max,
-					attr_numberOfClasses));
-			put(DistributionType.Unif, Arrays.asList(
-					attr_min,
-					attr_max,
-					attr_numberOfClasses));
-			put(DistributionType.Weibull, Arrays.asList(
-					attr_lambda,
-					attr_kappa, 
-					attr_preal_lo,
-					attr_preal_hi));
-			put(DistributionType.Wishart, Arrays.asList(
-					attr_n,
-					attr_scaleMatrix)); 
+//			put(DistributionType.StudentT, Arrays.asList(
+//					attr_location,
+//					attr_scale, 
+//					attr_pnat_degreesOfFreedom,
+//					attr_pnat_dof,
+//					attr_continuous_lo,
+//					attr_continuous_hi));
+//			put(DistributionType.Uniform, Arrays.asList(
+//					attr_min,
+//					attr_max,
+//					attr_numberOfClasses));
+//			put(DistributionType.Unif, Arrays.asList(
+//					attr_min,
+//					attr_max,
+//					attr_numberOfClasses));
+//			put(DistributionType.Weibull, Arrays.asList(
+//					attr_lambda,
+//					attr_kappa, 
+//					attr_preal_lo,
+//					attr_preal_hi));
+//			put(DistributionType.Wishart, Arrays.asList(
+//					attr_n,
+//					attr_scaleMatrix)); 
 		}
 	};
 
@@ -277,76 +277,76 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 	//List of synonyms or alternatives
 	Map<String, String> alternative_attrs = new HashMap<String, String>(){
 		private static final long serialVersionUID = 28966755954108955L; {
-			put(DistributionType.Bernoulli + ":" +attr_probability.getName(), attr_p.getName());
-			put(DistributionType.Bernoulli + ":" +attr_p.getName(), attr_probability.getName());
-			
-			put(DistributionType.Binomial + ":"+attr_numberOfTrials.getName(), attr_nTrials.getName());
-			put(DistributionType.Binomial + ":"+attr_nTrials.getName(), attr_numberOfTrials.getName());
-			put(DistributionType.Binomial + ":"+attr_numberOfTrials.getName(), attr_n.getName());
-			put(DistributionType.Binomial + ":"+attr_nTrials.getName(), attr_n.getName());
-			put(DistributionType.Binomial + ":"+attr_n.getName(), attr_nTrials.getName());
-			put(DistributionType.Binomial + ":"+attr_n.getName(), attr_numberOfTrials.getName());
-			put(DistributionType.Binomial + ":"+attr_probabilityOfSuccess.getName(), attr_p_ofSuccess.getName());
-			put(DistributionType.Binomial + ":"+attr_p_ofSuccess.getName(), attr_probabilityOfSuccess.getName());
-
-			put(DistributionType.Categorical +":"+attr_ncat.getName(), attr_categories.getName());
-			put(DistributionType.Categorical +":"+attr_categories.getName(), attr_ncat.getName());
-			put(DistributionType.Categorical +":"+attr_probabilities.getName(), attr_prob.getName());
-			put(DistributionType.Categorical +":"+attr_prob.getName(), attr_probabilities.getName());
-			
-			put(DistributionType.ChiSquare + ":" + attr_pnat_degreesOfFreedom.getName(), attr_pnat_dof.getName());
-			put(DistributionType.ChiSquare + ":" + attr_pnat_dof.getName(), attr_pnat_degreesOfFreedom.getName()); 
-
-			put(DistributionType.F + ":" + attr_denominator.getName(), attr_den.getName());
-			put(DistributionType.F + ":" + attr_den.getName(), attr_denominator.getName()); 
-			put(DistributionType.F + ":" + attr_numerator.getName(), attr_num.getName());
-			put(DistributionType.F + ":" + attr_num.getName(), attr_numerator.getName()); 
-			
-			put(DistributionType.Geometric +":"+attr_probability.getName(), attr_p.getName());
-			put(DistributionType.Geometric +":"+attr_p.getName(), attr_probability.getName());
-
-			put(DistributionType.Hypergeometric + ":" + attr_numberOfTrials.getName(), attr_nTrials.getName());
-			put(DistributionType.Hypergeometric + ":" + attr_nTrials.getName(), attr_numberOfTrials.getName());
-			put(DistributionType.Hypergeometric + ":" + attr_n.getName(), attr_nTrials.getName());
-			put(DistributionType.Hypergeometric + ":" + attr_n.getName(), attr_numberOfTrials.getName());
-			put(DistributionType.Hypergeometric + ":" + attr_numberOfTrials.getName(), attr_n.getName());
-			put(DistributionType.Hypergeometric + ":" + attr_nTrials.getName(), attr_n.getName());
-			put(DistributionType.Hypergeometric + ":" + attr_populationSize.getName(), attr_popSize.getName());
-			put(DistributionType.Hypergeometric + ":" + attr_popSize.getName(), attr_populationSize.getName());
-			put(DistributionType.Hypergeometric + ":" + attr_numberOfSuccesses.getName(), attr_nSuccess.getName());
-			put(DistributionType.Hypergeometric + ":" + attr_nSuccess.getName(), attr_numberOfSuccesses.getName());
-
-			put(DistributionType.LogNormal + ":" + attr_median.getName(), attr_mu.getName());
-			put(DistributionType.LogNormal + ":" + attr_mu.getName(), attr_median.getName());
-			put(DistributionType.LogNormal + ":" + attr_cv.getName(), attr_var.getName());
-			put(DistributionType.LogNormal + ":" + attr_var.getName(), attr_cv.getName());
-
-			put(DistributionType.Multinomial + ":" + attr_numberOfTrials.getName(), attr_nTrials.getName());
-			put(DistributionType.Multinomial + ":" + attr_nTrials.getName(), attr_numberOfTrials.getName());
-			put(DistributionType.Multinomial + ":" + attr_probabilities.getName(), attr_prob.getName());
-			put(DistributionType.Multinomial + ":" + attr_prob.getName(), attr_probabilities.getName());
-			
-			put(DistributionType.MultivariateStudentT + ":" + attr_pnat_degreesOfFreedom.getName(), attr_pnat_dof.getName());
-			put(DistributionType.MultivariateStudentT + ":" + attr_pnat_dof.getName(), attr_pnat_degreesOfFreedom.getName()); 
-
-			put(DistributionType.NegativeBinomial +":"+attr_numberOfFailures.getName(), attr_nFail.getName());
-			put(DistributionType.NegativeBinomial +":"+attr_nFail.getName(), attr_numberOfFailures.getName());
-			put(DistributionType.NegativeBinomial +":"+attr_probability.getName(), attr_p.getName());
-			put(DistributionType.NegativeBinomial +":"+attr_p.getName(), attr_probability.getName());					
-
-			put(DistributionType.StudentT + ":" + attr_pnat_degreesOfFreedom.getName(), attr_pnat_dof.getName());
-			put(DistributionType.StudentT + ":" + attr_pnat_dof.getName(), attr_pnat_degreesOfFreedom.getName()); 
-
+//			put(DistributionType.Bernoulli + ":" +attr_probability.getName(), attr_p.getName());
+//			put(DistributionType.Bernoulli + ":" +attr_p.getName(), attr_probability.getName());
+//			
+//			put(DistributionType.Binomial + ":"+attr_numberOfTrials.getName(), attr_nTrials.getName());
+//			put(DistributionType.Binomial + ":"+attr_nTrials.getName(), attr_numberOfTrials.getName());
+//			put(DistributionType.Binomial + ":"+attr_numberOfTrials.getName(), attr_n.getName());
+//			put(DistributionType.Binomial + ":"+attr_nTrials.getName(), attr_n.getName());
+//			put(DistributionType.Binomial + ":"+attr_n.getName(), attr_nTrials.getName());
+//			put(DistributionType.Binomial + ":"+attr_n.getName(), attr_numberOfTrials.getName());
+//			put(DistributionType.Binomial + ":"+attr_probabilityOfSuccess.getName(), attr_p_ofSuccess.getName());
+//			put(DistributionType.Binomial + ":"+attr_p_ofSuccess.getName(), attr_probabilityOfSuccess.getName());
+//
+//			put(DistributionType.Categorical +":"+attr_ncat.getName(), attr_categories.getName());
+//			put(DistributionType.Categorical +":"+attr_categories.getName(), attr_ncat.getName());
+//			put(DistributionType.Categorical +":"+attr_probabilities.getName(), attr_prob.getName());
+//			put(DistributionType.Categorical +":"+attr_prob.getName(), attr_probabilities.getName());
+//			
+//			put(DistributionType.ChiSquare + ":" + attr_pnat_degreesOfFreedom.getName(), attr_pnat_dof.getName());
+//			put(DistributionType.ChiSquare + ":" + attr_pnat_dof.getName(), attr_pnat_degreesOfFreedom.getName()); 
+//
+//			put(DistributionType.F + ":" + attr_denominator.getName(), attr_den.getName());
+//			put(DistributionType.F + ":" + attr_den.getName(), attr_denominator.getName()); 
+//			put(DistributionType.F + ":" + attr_numerator.getName(), attr_num.getName());
+//			put(DistributionType.F + ":" + attr_num.getName(), attr_numerator.getName()); 
+//			
+//			put(DistributionType.Geometric +":"+attr_probability.getName(), attr_p.getName());
+//			put(DistributionType.Geometric +":"+attr_p.getName(), attr_probability.getName());
+//
+//			put(DistributionType.Hypergeometric + ":" + attr_numberOfTrials.getName(), attr_nTrials.getName());
+//			put(DistributionType.Hypergeometric + ":" + attr_nTrials.getName(), attr_numberOfTrials.getName());
+//			put(DistributionType.Hypergeometric + ":" + attr_n.getName(), attr_nTrials.getName());
+//			put(DistributionType.Hypergeometric + ":" + attr_n.getName(), attr_numberOfTrials.getName());
+//			put(DistributionType.Hypergeometric + ":" + attr_numberOfTrials.getName(), attr_n.getName());
+//			put(DistributionType.Hypergeometric + ":" + attr_nTrials.getName(), attr_n.getName());
+//			put(DistributionType.Hypergeometric + ":" + attr_populationSize.getName(), attr_popSize.getName());
+//			put(DistributionType.Hypergeometric + ":" + attr_popSize.getName(), attr_populationSize.getName());
+//			put(DistributionType.Hypergeometric + ":" + attr_numberOfSuccesses.getName(), attr_nSuccess.getName());
+//			put(DistributionType.Hypergeometric + ":" + attr_nSuccess.getName(), attr_numberOfSuccesses.getName());
+//
+//			put(DistributionType.LogNormal + ":" + attr_median.getName(), attr_mu.getName());
+//			put(DistributionType.LogNormal + ":" + attr_mu.getName(), attr_median.getName());
+//			put(DistributionType.LogNormal + ":" + attr_cv.getName(), attr_var.getName());
+//			put(DistributionType.LogNormal + ":" + attr_var.getName(), attr_cv.getName());
+//
+//			put(DistributionType.Multinomial + ":" + attr_numberOfTrials.getName(), attr_nTrials.getName());
+//			put(DistributionType.Multinomial + ":" + attr_nTrials.getName(), attr_numberOfTrials.getName());
+//			put(DistributionType.Multinomial + ":" + attr_probabilities.getName(), attr_prob.getName());
+//			put(DistributionType.Multinomial + ":" + attr_prob.getName(), attr_probabilities.getName());
+//			
+//			put(DistributionType.MultivariateStudentT + ":" + attr_pnat_degreesOfFreedom.getName(), attr_pnat_dof.getName());
+//			put(DistributionType.MultivariateStudentT + ":" + attr_pnat_dof.getName(), attr_pnat_degreesOfFreedom.getName()); 
+//
+//			put(DistributionType.NegativeBinomial +":"+attr_numberOfFailures.getName(), attr_nFail.getName());
+//			put(DistributionType.NegativeBinomial +":"+attr_nFail.getName(), attr_numberOfFailures.getName());
+//			put(DistributionType.NegativeBinomial +":"+attr_probability.getName(), attr_p.getName());
+//			put(DistributionType.NegativeBinomial +":"+attr_p.getName(), attr_probability.getName());					
+//
+//			put(DistributionType.StudentT + ":" + attr_pnat_degreesOfFreedom.getName(), attr_pnat_dof.getName());
+//			put(DistributionType.StudentT + ":" + attr_pnat_dof.getName(), attr_pnat_degreesOfFreedom.getName()); 
+//
 			put(DistributionType.Normal + ":" + attr_var.getName(), attr_sd.getName()); 
 			put(DistributionType.Normal + ":" + attr_sd.getName(), attr_var.getName());
-			
-			put(DistributionType.Uniform + ":" + attr_numberOfClasses.getName(), attr_min.getName()); 
-			put(DistributionType.Uniform + ":" + attr_min.getName(), attr_numberOfClasses.getName()); 
-			put(DistributionType.Uniform + ":" +attr_max.getName(), attr_numberOfClasses.getName());
-			
-			put(DistributionType.Unif + ":" + attr_numberOfClasses.getName(), attr_min.getName()); 
-			put(DistributionType.Unif + ":" + attr_min.getName(), attr_numberOfClasses.getName()); 
-			put(DistributionType.Unif + ":" +attr_max.getName(), attr_numberOfClasses.getName());
+//			
+//			put(DistributionType.Uniform + ":" + attr_numberOfClasses.getName(), attr_min.getName()); 
+//			put(DistributionType.Uniform + ":" + attr_min.getName(), attr_numberOfClasses.getName()); 
+//			put(DistributionType.Uniform + ":" +attr_max.getName(), attr_numberOfClasses.getName());
+//			
+//			put(DistributionType.Unif + ":" + attr_numberOfClasses.getName(), attr_min.getName()); 
+//			put(DistributionType.Unif + ":" + attr_min.getName(), attr_numberOfClasses.getName()); 
+//			put(DistributionType.Unif + ":" +attr_max.getName(), attr_numberOfClasses.getName());
 		}
 	};
 

@@ -23,16 +23,20 @@ import org.ddmore.mdl.mdl.ArgumentExpression
 
 class ModelDefinitionPrinter {
 	protected extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
+	protected extension CustomDistributionPrinter custDistPrinter
 	protected extension PKMacrosPrinter pkPrinter = null;
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver = null;
 	
 	private static val CONTINUOUS_OBS = "continuous"
 	private static val COUNT_OBS = "count"
+	private static val DISCRETE_OBS = "discrete"
+	
 	
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
 		this.mathPrinter = mathPrinter;
 		this.resolver = resolver;
+		this.custDistPrinter = new CustomDistributionPrinter(distrPrinter)
 		pkPrinter = new PKMacrosPrinter(mathPrinter, resolver);
 	}		
 	
@@ -460,6 +464,7 @@ class ModelDefinitionPrinter {
 			switch type{
 				case CONTINUOUS_OBS: retVal = s.print_mdef_StandardObservation.toString
 				case COUNT_OBS: retVal = s.print_mdef_CountObservations.toString
+				case DISCRETE_OBS: retVal = s.print_mdef_DiscreteObservations.toString
 			} 
 		}
 		else{
@@ -504,7 +509,7 @@ class ModelDefinitionPrinter {
 		
 	def isReference(ArgumentExpression expr){
 		var retVal = false
-		if(expr.expression != null && expr.expression.expression != null
+		if(expr != null && expr.expression != null && expr.expression.expression != null
 			&& expr.expression.expression.expression != null)
 			retVal = MdlDataType::isReference(expr.expression.expression.expression)
 			
@@ -543,6 +548,46 @@ class ModelDefinitionPrinter {
 					«print_uncert_Distribution(distn)»
 				</PMF>
 				</CountData>
+			</Discrete>
+		'''
+	}
+	
+	private def print_mdef_DiscreteObservations(SymbolDeclaration s) {
+		var name = s.symbolName.toStr
+		val linkFunction = s.list.arguments.getAttribute(AttributeValidator::attr_link.name);
+		val distn = s.list.arguments.getAttributeRandomList(AttributeValidator::attr_distrib.name);
+		val paramVar = getFunctionArgument(distn, "probability");
+		var String tmpParamVar = null;
+		if(isReference(paramVar)){
+			tmpParamVar = paramVar.toStr
+		}
+		val category = "cat1"
+		'''
+			<Discrete>
+				<CategoricalData ordered="no">
+				«IF tmpParamVar != null»
+						<!-- Note that this parameter is local to this block, but uses the same name
+							as the lambda argument. The  --> 
+						<SimpleParameter symbId="«tmpParamVar»">
+						<ct:Assign>
+							<math:Equation>
+				«IF linkFunction.length > 0»
+					«getInverseFunction(linkFunction, paramVar.toStr)»
+				«ELSE»
+					«paramVar.toStr.print_ct_SymbolRef»
+				«ENDIF»
+				</math:Equation>
+				</ct:Assign>
+				</SimpleParameter>
+				«ENDIF»
+					<ListOfCategories>
+						<Category symbId="«category»"/>
+					</ListOfCategories>
+					<CategoryVariable symbId="«name»"/>
+				<PMF linkFunction="identity">
+					«distn.printDiscreteDistribution(category)»
+				</PMF>
+				</CategoricalData>
 			</Discrete>
 		'''
 	}
