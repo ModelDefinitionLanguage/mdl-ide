@@ -27,7 +27,7 @@ class CustomDistributionPrinter {
 		var retVal = ''''''
 		switch(typeName){
 			case "Bernoulli": retVal = distnDef.printBernoulliDistn(category).toString
-			case "Binomial": retVal = distnDef.print_DistributionDefault(typeName).toString
+			case "Binomial": retVal = distnDef.printBinomialDistn.toString
 		}
 		retVal
 	}
@@ -47,20 +47,22 @@ class CustomDistributionPrinter {
 		'''
 		}
 
-//	public def printBinomialDistn(RandomList randomList, String category){
-//		var typeName = randomList.type.name;
-//		val recognizedArgs = distribution_attrs.get(typeName);
-//		val attr = recognizedArgs.get(DistributionValidator::attr_p.name)
-//		val expr = randomList.arguments.namedArguments.arguments.get(0)
-//		'''
-//						<BinomialDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/3.0">
-//							<categoryProb definition="">
-//								<name>«category»</name>
-//								<probability>«expr.expression.expression.expression.toPharmML(attr.type)»</probability>
-//							</categoryProb>
-//						</BernoulliDistribution>
-//		'''
-//		}
+	public def printBinomialDistn(RandomList randomList){
+		var typeName = randomList.type.name;
+		val recognizedArgs = distribution_attrs.get(typeName);
+		val numTrials = randomList.arguments.getAttributeExpression(DistributionValidator::attr_numberOfTrials.name);
+		val probs = randomList.arguments.getAttributeExpression(DistributionValidator::attr_probabilityOfSuccess.name);
+		'''
+						<BinomialDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/3.0">
+							<numberOfTrial>
+								«numTrials.expression.toPharmML(recognizedArgs.get(DistributionValidator::attr_numberOfTrials.name).type)»
+							</numberOfTrials>
+							<probabilityOfSuccess>
+								«probs.expression.toPharmML(recognizedArgs.get(DistributionValidator::attr_probabilityOfSuccess.name).type)»
+							</probabilityOfSuccess>
+						</BernoulliDistribution>
+		'''
+		}
 
 	protected def String toPharmML(Expression expr, String type){
 		if (MdlDataType::validateType(MdlDataType::TYPE_REF, expr) || MdlDataType::validateType(MdlDataType::TYPE_STRING, expr))

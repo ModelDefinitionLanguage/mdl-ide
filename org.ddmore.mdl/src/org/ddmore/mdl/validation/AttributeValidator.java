@@ -88,6 +88,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_link = new Attribute("link", MdlDataType.TYPE_TRANS, false);
 	final public static Attribute attr_event = new Attribute("event", MdlDataType.TYPE_EVENT, false);
 	final public static Attribute attr_hazard = new Attribute("haz", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_max_event = new Attribute("maxEvent", MdlDataType.TYPE_REAL, false);
 	final public static Attribute attr_categories = new Attribute("categories", MdlDataType.TYPE_VECTOR_INT, false);
 	final public static Attribute attr_probabilities = new Attribute("probabilities", MdlDataType.TYPE_VECTOR_REAL, false);
 	
@@ -190,7 +191,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 //	final public static List<Attribute> attrs_estimation = Arrays.asList(attr_type, attr_prediction, attr_ruv);
 //	final public static List<Attribute> attrs_simulation = Arrays.asList(attr_type);
 	final public static List<Attribute> attrs_observation = Arrays.asList(attr_type_continuous, attr_error, 
-			attr_eps, attr_prediction_ref, attr_trans, attr_distrib, attr_link, attr_hazard, attr_event, attr_categories, attr_probabilities
+			attr_eps, attr_prediction_ref, attr_trans, attr_distrib, attr_link, attr_hazard, attr_event, attr_max_event, attr_categories, attr_probabilities
 			);
 	final public static List<Attribute> attrs_structuralParams = Arrays.asList(attr_units);
 	final public static List<Attribute> attrs_variabilityParams = Arrays.asList(attr_units);

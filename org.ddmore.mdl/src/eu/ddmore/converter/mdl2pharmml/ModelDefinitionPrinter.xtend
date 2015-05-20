@@ -31,6 +31,7 @@ class ModelDefinitionPrinter {
 	private static val CONTINUOUS_OBS = "continuous"
 	private static val COUNT_OBS = "count"
 	private static val DISCRETE_OBS = "discrete"
+	private static val CATEGORICAL_OBS = "categorical"
 	
 	
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -465,6 +466,7 @@ class ModelDefinitionPrinter {
 				case CONTINUOUS_OBS: retVal = s.print_mdef_StandardObservation.toString
 				case COUNT_OBS: retVal = s.print_mdef_CountObservations.toString
 				case DISCRETE_OBS: retVal = s.print_mdef_DiscreteObservations.toString
+				case CATEGORICAL_OBS: retVal = s.print_mdef_CategoricalObservations.toString
 			} 
 		}
 		else{
@@ -592,6 +594,39 @@ class ModelDefinitionPrinter {
 		'''
 	}
 	
+	
+	private def print_mdef_CategoricalObservations(SymbolDeclaration s) {
+		var name = s.symbolName.toStr
+		val categories = s.list.arguments.getAttributeExpression(AttributeValidator::attr_categories.name);
+		val probabilities = s.list.arguments.getAttributeExpression(AttributeValidator::attr_probabilities.name);
+		'''
+			<Discrete>
+				<CategoricalData>
+					<ListOfCategories>
+					«FOR cat : categories.vector.expression.expressions»
+						<Category symbId="c«cat.toStr»"/>
+					«ENDFOR»
+					</ListOfCategories>
+				<CategoryVariable symbId="«name»"/>
+				«FOR i : 0 ..< categories.vector.expression.expressions.size»
+					<ProbabilityAssignment>
+						<Probability linkFunction="identity">
+							<math:LogicBinop op="eq">
+								<ct:SymbRef symbIdRef="«name»"/>
+								<ct:SymbRef symbIdRef="c«categories.vector.expression.expressions.get(i).toStr»"/>
+							</math:LogicBinop>
+						</Probability>
+						<ct:Assign>
+							«probabilities.vector.expression.expressions.get(i).print_Math_Expr»
+						</ct:Assign>
+					</ProbabilityAssignment>
+				«ENDFOR»
+				</CategoricalData>
+			</Discrete>
+		'''
+	}
+
+
 	private def print_mdef_StandardObservation(SymbolDeclaration s){
 		var name = s.symbolName.toStr
 		val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);

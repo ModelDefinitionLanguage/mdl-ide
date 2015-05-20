@@ -105,14 +105,14 @@ class ModellingStepsPrinter extends DataSetPrinter{
 			var value = s.list.arguments.getAttributeExpression(AttributeValidator::attr_value.name);
 			var lo = s.list.arguments.getAttributeExpression(AttributeValidator::attr_lo.name);
 			var hi = s.list.arguments.getAttributeExpression(AttributeValidator::attr_hi.name);
-			var estimate = "0".print_ct_Value;
-			if (value != null)
-				estimate = value.print_Math_Expr.toString();
+//			var estimate = "0".print_ct_Value;
+//			if (value != null)
+//				estimate = value.print_Math_Expr.toString();
 			'''
 				<ParameterEstimation>
 					«print_ct_SymbolRef(s.symbolName.name)»
 					<InitialEstimate fixed="«fixed»">
-						«estimate»
+							«value.print_Math_Equation»
 					</InitialEstimate>
 					«IF lo != null»
 						<LowerBound>
