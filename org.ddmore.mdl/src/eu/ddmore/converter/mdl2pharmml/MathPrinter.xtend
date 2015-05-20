@@ -438,7 +438,10 @@ class MathPrinter{
 	}
 
 	def print_ct_Constant(String constant) '''
-		<Constant op="«constant.convertConstant»"/>
+		<Binop op="times">
+			<ct:Int>1</ct:Int>
+			<Constant op="«constant.convertConstant»"/>
+		</Binop>
 	'''
 
 	def print_ct_Value(String value, String type) '''

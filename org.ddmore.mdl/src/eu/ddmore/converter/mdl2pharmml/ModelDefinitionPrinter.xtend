@@ -5,6 +5,8 @@ import java.util.Comparator
 import java.util.Map
 import java.util.TreeMap
 import org.ddmore.mdl.mdl.Argument
+import org.ddmore.mdl.mdl.ArgumentExpression
+import org.ddmore.mdl.mdl.EventType
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.mdl.IndividualVarType
 import org.ddmore.mdl.mdl.List
@@ -14,12 +16,11 @@ import org.ddmore.mdl.mdl.ParameterObject
 import org.ddmore.mdl.mdl.RandomList
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.VariabilityType
+import org.ddmore.mdl.types.MdlDataType
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.Utils
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
-import org.ddmore.mdl.types.MdlDataType
-import org.ddmore.mdl.mdl.ArgumentExpression
 
 class ModelDefinitionPrinter {
 	protected extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -32,6 +33,7 @@ class ModelDefinitionPrinter {
 	private static val COUNT_OBS = "count"
 	private static val DISCRETE_OBS = "discrete"
 	private static val CATEGORICAL_OBS = "categorical"
+	private static val TTE_OBS = "tte"
 	
 	
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -467,6 +469,7 @@ class ModelDefinitionPrinter {
 				case COUNT_OBS: retVal = s.print_mdef_CountObservations.toString
 				case DISCRETE_OBS: retVal = s.print_mdef_DiscreteObservations.toString
 				case CATEGORICAL_OBS: retVal = s.print_mdef_CategoricalObservations.toString
+				case TTE_OBS: retVal = s.print_mdef_TimeToEventObservations.toString
 			} 
 		}
 		else{
@@ -624,6 +627,44 @@ class ModelDefinitionPrinter {
 				</CategoricalData>
 			</Discrete>
 		'''
+	}
+
+
+	private def print_mdef_TimeToEventObservations(SymbolDeclaration s) {
+		var name = s.symbolName.toStr
+		val haz = s.list.arguments.getAttributeExpression(AttributeValidator::attr_hazard.name);
+		val event = s.list.arguments.getAttribute(AttributeValidator::attr_event.name);
+		val maxEvent = s.list.arguments.getAttributeExpression(AttributeValidator::attr_max_event.name);
+		'''
+			<Discrete>
+				<TimeToEventData>
+					<EventVariable symbId="«name»"/>
+					<HazardFunction symbId="«haz.toStr»">
+						<ct:Assign>
+							«haz.print_Math_Expr»
+						</ct:Assign>
+					</HazardFunction>
+					«IF event != null»
+						<Censoring censoringType="«event.getEventType»"/>
+					«ENDIF»
+					«IF maxEvent != null»
+						<MaximumNumberEvents>
+							<ct:Assign>
+								«maxEvent.print_Math_Equation»
+							</ct:Assign>
+						</MaximumNumberEvents>
+					«ENDIF»
+				</TimeToEventData>
+			</Discrete>
+		'''
+	}
+	
+	def getEventType(String eventType){
+		switch(eventType){
+			case EventType::EXACT.toString: '''rightCensored'''
+			case EventType::INTERVAL_CENSORED.toString: '''intervalCensored'''
+			default: ''''''
+		}
 	}
 
 
