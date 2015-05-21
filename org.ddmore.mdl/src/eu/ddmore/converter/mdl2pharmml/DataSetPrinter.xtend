@@ -15,6 +15,8 @@ import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl
+import org.ddmore.mdl.mdl.Expression
+import org.ddmore.mdl.mdl.SymbolName
 
 class DataSetPrinter {
 	protected extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -50,15 +52,24 @@ class DataSetPrinter {
 		</ColumnMapping>
 	'''
 
-	protected def print_ds_DvMapping(SymbolDeclaration dvColumn, DataObject dObj) {
+	protected def print_ds_DvMapping(SymbolDeclaration dvColumn, DataObject dObj, ModelObject mObj) {
 		val define = dvColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 		val columnId = dvColumn.symbolName.name;
 		var res = '';
 		if (define != null) {
-			// Reference or piecewise
+			// Reference or mapped to data
 			if (define.expression != null)
-				res = columnId.print_ds_ColumnMapping(null, define.expression.print_Math_Expr.toString).toString
-			else { // Vector of pairs
+//				res = columnId.print_ds_ColumnMapping(null, define.expression.print_Math_Expr.toString).toString
+				res = '''
+					<ColumnMapping>
+					    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+			    	   	«define.expression.print_Math_Expr»
+			    	   	«IF define.expression.isCategoricalObs(mObj)»
+			    	   		«define.expression.printCategoricalObsMapping(mObj)»
+			    	   	«ENDIF»
+					</ColumnMapping>
+				  '''
+			else { 
 				val pairs = define.getAttributePairs(AttributeValidator::attr_pred.name,
 					AttributeValidator::attr_predid.name);
 				val dvidColId = dObj.getUseDvidColumn
@@ -69,6 +80,9 @@ class DataSetPrinter {
 						    «FOR p : pairs»
 						    	<math:Piece>
 						    	   	«p.key.expression.print_Math_Expr»
+						    	   	«IF p.key.expression.isCategoricalObs(mObj)»
+						    	   		«p.key.expression.printCategoricalObsMapping(mObj)»
+						    	   	«ENDIF»
 						    	   	<math:Condition>
 						    	   		<math:LogicBinop op="eq">
 						    	   			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«dvidColId»"/>
@@ -86,7 +100,7 @@ class DataSetPrinter {
 		}
 		res
 	}
-
+	
 	protected def print_ds_TargetDataSet(MOGObject mog) {
 		var objects = Utils::getMOGObjects(mog);
 		var mObj = Utils::getModelObject(objects);
@@ -216,7 +230,7 @@ class DataSetPrinter {
 								res = res + column.print_ds_AmtMapping(dObj)
 							} else if (use.equals(UseType::DV.toString)) {
 								// handle amount mapping
-								res = res + column.print_ds_DvMapping(dObj)
+								res = res + column.print_ds_DvMapping(dObj, mObj)
 							}
 						}
 					}
@@ -243,7 +257,6 @@ class DataSetPrinter {
 							<Piecewise xmlns="«xmlns_ds»">
 							    «FOR p : pairs»
 							    	<math:Piece>
-							    	   	«p.key.expression.print_Math_Expr»
 							    	   	<math:Condition>
 							    	   		<math:LogicBinop op="eq">
 							    	   			<ColumnRef columnIdRef="«cmtColId»"/>
@@ -261,43 +274,82 @@ class DataSetPrinter {
 			}
 			res
 		}
+	
+	def printCategoricalObsMapping(Expression expression, ModelObject object){
+		val obsVar = expression.getSymbolReference
+		val obsExpr = object.getMatchingObservationExpression(obsVar.name)
+		// assume we have tested that this caregorical
+		val catsExpr = obsExpr.list.arguments.getAttributeExpression(AttributeValidator::attr_categories.name) 
+		'''
+		<ds:CategoryMapping>
+		«FOR cat : catsExpr.vector.expression.expressions»
+			<ds:Map dataSymbol="«cat.toStr»" modelSymbol="c«cat.toStr»"/>
+		«ENDFOR»
+		</ds:CategoryMapping>
+		'''
+	}
+	
+	
+	def getMatchingObservationExpression(ModelObject mObj, String symbName){
+		for(block : mObj.blocks){
+			if(block.observationBlock != null){
+				for(symbDefn : block.observationBlock.variables){
+					if(symbName == symbDefn.symbolName.name){
+						return symbDefn
+					}
+				}
+			}
+		}				
+	}
+	
+	
+	def SymbolName getSymbolReference(Expression expression){
+		if(expression.expression != null &&
+			expression.expression.expression != null &&
+			expression.expression.expression.size > 0 &&
+			expression.expression.expression.head.expression.size > 0 &&
+			expression.expression.expression.head.expression.head.expression1 != null &&
+			expression.expression.expression.head.expression.head.expression1.expression.size >0 &&
+			expression.expression.expression.head.expression.head.expression1.expression.head.expression.size > 0 &&
+			expression.expression.expression.head.expression.head.expression1.expression.head.expression.head.expression.size > 0 &&
+				expression.expression.expression.head.expression.head.expression1.expression.head.expression.head.expression.head.symbol != null){
+			return expression.expression.expression.head.expression.head.expression1.expression.head.expression.head.expression.head.symbol;
+		}
+	}
+	
+	def boolean isCategoricalObs(Expression expression, ModelObject mObj){
+//		if(expression.expression != null &&
+//			expression.expression.expression != null &&
+//			expression.expression.expression.size > 0 &&
+//			expression.expression.expression.head.expression.size > 0 &&
+//			expression.expression.expression.head.expression.head.expression1 != null &&
+//			expression.expression.expression.head.expression.head.expression1.expression.size >0 &&
+//			expression.expression.expression.head.expression.head.expression1.expression.head.expression.size > 0 &&
+//			expression.expression.expression.head.expression.head.expression1.expression.head.expression.head.expression.size > 0 &&
+//				expression.expression.expression.head.expression.head.expression1.expression.head.expression.head.expression.head.symbol != null){
+		val symbRef = expression.getSymbolReference
+		if(symbRef != null){
+//			val symbName = 	expression.expression.expression.head.expression.head.expression1.expression.head.expression.head.expression.head.symbol.name;
+			val symbName = 	symbRef.name;
+//			for(block : mObj.blocks){
+//				if(block.observationBlock != null){
+//					for(symbDefn : block.observationBlock.variables){
+//						return symbName == symbDefn.symbolName && symbDefn.list != null &&
+//							symbDefn.list.arguments.getAttribute(AttributeValidator::attr_type.name) == "categorical"  
+//					}
+//				}
+//			}
+			val symbDefn = mObj.getMatchingObservationExpression(symbName)
+			return 	symbDefn.list != null && symbDefn.list.arguments != null &&
+						symbDefn.list.arguments.getAttribute(AttributeValidator::attr_type.name) == "categorical" 
+		}
+		return false
+	}
 
 		protected def print_ds_MagicMapping(String columnId, String symbId) {
 			columnId.print_ds_ColumnMapping(symbId, "").toString
 		}
 
-//	protected def print_ds_AttributeMapping(SymbolDeclaration column){
-//		if (column.symbolName != null && column.list != null){
-//			var columnId = column.symbolName.name;
-//			val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-//			var define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-//			if (define != null){
-//				if (use.equals(UseType::AMT.toString)){
-//					//Reference or piecewise
-//					if (define.expression != null)
-//						return columnId.print_ds_ColumnMapping(null, define.expression.print_Math_Expr.toString)
-//					else {//Vector of pairs
-//						var pairs = define.getAttributePairs(AttributeValidator::attr_modelCmt.name, AttributeValidator::attr_dataCmt.name);
-//						for (pair: pairs){
-//							// @TODO:
-//						}
-//					}
-//				}	
-//				if (use.equals(UseType::DV.toString)){
-//					//Piecewise function
-//					if (define.expression != null && define.expression.whenBranches != null)
-//						//return columnId.print_ds_ColumnMapping(null, define.expression.print_Math_Expr.toString)
-//						return columnId.print_ds_MultipleDVMapping(define.expression)
-//					else {//Vector of pairs
-//						var pairs = define.getAttributePairs(AttributeValidator::attr_pred.name, AttributeValidator::attr_predid.name);
-//						for (pair: pairs){
-//							// @TODO:
-//						}
-//					}						
-//				}
-//			}
-//		}
-//	}	
 		protected def print_ds_CategoricalMapping(SymbolDeclaration column) {
 			var res = "";
 			if (column.list != null) {

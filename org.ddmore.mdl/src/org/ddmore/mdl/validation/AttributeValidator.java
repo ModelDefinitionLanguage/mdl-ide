@@ -57,7 +57,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	/*DATA_INPUT_VARIABLES*/
 	final public static Attribute attr_type = new Attribute("type", MdlDataType.TYPE_VAR_TYPE, false, DefaultValues.CC_CONTINUOUS);
 	final public static Attribute attr_define = new Attribute("define", 
-			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_PIECEWISE, MdlDataType.TYPE_LIST, MdlDataType.TYPE_VECTOR_LIST), false);
+			Arrays.asList(MdlDataType.TYPE_REF, MdlDataType.TYPE_LIST, MdlDataType.TYPE_VECTOR_LIST), false);
 	final public static Attribute attr_use = new Attribute("use", MdlDataType.TYPE_USE, false, UseType.ID.toString());
 
 	/*Parameter object*/
