@@ -4,7 +4,7 @@ import org.eclipse.emf.mwe.utils.*
 import org.eclipse.xtext.generator.*
 import org.eclipse.xtext.ui.generator.*
 
-var grammarURI = "grammar/Mdl.xtext"
+var grammarURI = "src/org/ddmore/mdl/Mdl.xtext"
 var file.extensions = "mdl,mcl"
 var projectName = "org.ddmore.mdl"
 var runtimeProject = "../${projectName}"
