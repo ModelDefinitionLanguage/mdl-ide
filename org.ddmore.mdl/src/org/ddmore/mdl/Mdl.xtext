@@ -401,7 +401,7 @@ FunctionCall:
 //; 
 
 SymbolName:
-	name = ID ('[' index = INTEGER ']')?
+	name = ID //('[' index = INTEGER ']')?
 ;
 
 SymbolDeclaration:

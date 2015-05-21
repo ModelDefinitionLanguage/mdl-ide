@@ -309,9 +309,9 @@ class MdlPrinter {
 	
 	def String toStr(SymbolName s){
 		var res = s.name.convertID;
-		if (s.index != null){
-			res  = res + '[' + s.index + ']';
-		}
+//		if (s.index != null){
+//			res  = res + '[' + s.index + ']';
+//		}
 		return res;
 	}
 	
