@@ -87,7 +87,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static Attribute attr_distrib = new Attribute("distn", MdlDataType.TYPE_RANDOM_LIST, false);
 	final public static Attribute attr_link = new Attribute("link", MdlDataType.TYPE_TRANS, false);
 	final public static Attribute attr_event = new Attribute("event", MdlDataType.TYPE_EVENT, false);
-	final public static Attribute attr_hazard = new Attribute("haz", MdlDataType.TYPE_REF, false);
+	final public static Attribute attr_hazard = new Attribute("hazard", MdlDataType.TYPE_REF, false);
 	final public static Attribute attr_max_event = new Attribute("maxEvent", MdlDataType.TYPE_REAL, false);
 	final public static Attribute attr_categories = new Attribute("categories", MdlDataType.TYPE_VECTOR_INT, false);
 	final public static Attribute attr_probabilities = new Attribute("probabilities", MdlDataType.TYPE_VECTOR_REAL, false);
