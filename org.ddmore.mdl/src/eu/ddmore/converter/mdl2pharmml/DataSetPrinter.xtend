@@ -1,22 +1,25 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import java.util.ArrayList
-import org.ddmore.mdl.validation.AttributeValidator
-import org.apache.commons.io.FilenameUtils
-import org.ddmore.mdl.mdl.SymbolDeclaration
-import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
-import org.ddmore.mdl.validation.PropertyValidator
-import org.ddmore.mdl.mdl.InputFormatType
-import org.ddmore.mdl.mdl.UseType
-import org.ddmore.mdl.mdl.ModelObject
-import org.ddmore.mdl.mdl.DataObject
 import eu.ddmore.converter.mdlprinting.MdlPrinter
-import org.ddmore.mdl.mdl.MOGObject
-import org.ddmore.mdl.validation.Utils
-import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
-import org.ddmore.mdl.mdl.impl.DataInputBlockImpl
+import java.util.ArrayList
+import org.apache.commons.io.FilenameUtils
+import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.Expression
+import org.ddmore.mdl.mdl.InputFormatType
+import org.ddmore.mdl.mdl.MOGObject
+import org.ddmore.mdl.mdl.ModelObject
+import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.SymbolName
+import org.ddmore.mdl.mdl.UseType
+import org.ddmore.mdl.mdl.impl.DataInputBlockImpl
+import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
+import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.validation.PropertyValidator
+import org.ddmore.mdl.validation.Utils
+
+import static eu.ddmore.converter.mdl2pharmml.Constants.*
+import org.ddmore.mdl.types.DistributionType
+import org.ddmore.mdl.mdl.NonContinuousType
 
 class DataSetPrinter {
 	protected extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -59,13 +62,14 @@ class DataSetPrinter {
 		if (define != null) {
 			// Reference or mapped to data
 			if (define.expression != null)
-//				res = columnId.print_ds_ColumnMapping(null, define.expression.print_Math_Expr.toString).toString
 				res = '''
 					<ColumnMapping>
 					    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
 			    	   	«define.expression.print_Math_Expr»
 			    	   	«IF define.expression.isCategoricalObs(mObj)»
 			    	   		«define.expression.printCategoricalObsMapping(mObj)»
+			    	   	«ELSEIF define.expression.isDiscreteBernoulliObs(mObj)»
+			    	   		«printDiscreteBernoulliObsMapping»
 			    	   	«ENDIF»
 					</ColumnMapping>
 				  '''
@@ -82,6 +86,8 @@ class DataSetPrinter {
 						    	   	«p.key.expression.print_Math_Expr»
 						    	   	«IF p.key.expression.isCategoricalObs(mObj)»
 						    	   		«p.key.expression.printCategoricalObsMapping(mObj)»
+						    	   	«ELSEIF define.expression.isDiscreteBernoulliObs(mObj)»
+						    	   		«printDiscreteBernoulliObsMapping»
 						    	   	«ENDIF»
 						    	   	<math:Condition>
 						    	   		<math:LogicBinop op="eq">
@@ -290,6 +296,17 @@ class DataSetPrinter {
 	}
 	
 	
+	def printDiscreteBernoulliObsMapping(){
+		val cat = "cat1"
+		val catDataValue = 1 
+		'''
+		<ds:CategoryMapping>
+		<ds:Map dataSymbol="«catDataValue»" modelSymbol="«cat»"/>
+		</ds:CategoryMapping>
+		'''
+	}
+	
+	
 	def getMatchingObservationExpression(ModelObject mObj, String symbName){
 		for(block : mObj.blocks){
 			if(block.observationBlock != null){
@@ -318,30 +335,26 @@ class DataSetPrinter {
 	}
 	
 	def boolean isCategoricalObs(Expression expression, ModelObject mObj){
-//		if(expression.expression != null &&
-//			expression.expression.expression != null &&
-//			expression.expression.expression.size > 0 &&
-//			expression.expression.expression.head.expression.size > 0 &&
-//			expression.expression.expression.head.expression.head.expression1 != null &&
-//			expression.expression.expression.head.expression.head.expression1.expression.size >0 &&
-//			expression.expression.expression.head.expression.head.expression1.expression.head.expression.size > 0 &&
-//			expression.expression.expression.head.expression.head.expression1.expression.head.expression.head.expression.size > 0 &&
-//				expression.expression.expression.head.expression.head.expression1.expression.head.expression.head.expression.head.symbol != null){
 		val symbRef = expression.getSymbolReference
 		if(symbRef != null){
-//			val symbName = 	expression.expression.expression.head.expression.head.expression1.expression.head.expression.head.expression.head.symbol.name;
 			val symbName = 	symbRef.name;
-//			for(block : mObj.blocks){
-//				if(block.observationBlock != null){
-//					for(symbDefn : block.observationBlock.variables){
-//						return symbName == symbDefn.symbolName && symbDefn.list != null &&
-//							symbDefn.list.arguments.getAttribute(AttributeValidator::attr_type.name) == "categorical"  
-//					}
-//				}
-//			}
 			val symbDefn = mObj.getMatchingObservationExpression(symbName)
 			return 	symbDefn != null && symbDefn.list != null && symbDefn.list.arguments != null &&
 						symbDefn.list.arguments.getAttribute(AttributeValidator::attr_type.name) == "categorical" 
+		}
+		return false
+	}
+
+	def boolean isDiscreteBernoulliObs(Expression expression, ModelObject mObj){
+		val symbRef = expression.getSymbolReference
+		if(symbRef != null){
+			val symbName = 	symbRef.name;
+			val symbDefn = mObj.getMatchingObservationExpression(symbName)
+			if(symbDefn != null && symbDefn.list != null && symbDefn.list.arguments != null){
+				val typeName = symbDefn.list.arguments.getAttribute(AttributeValidator::attr_type.name)
+				val distName = symbDefn.list.arguments.getAttributeRandomList(AttributeValidator::attr_distrib.name)
+				return typeName == NonContinuousType.DISCRETE.toString && distName.type.name  == DistributionType.Bernoulli.toString
+			}
 		}
 		return false
 	}
