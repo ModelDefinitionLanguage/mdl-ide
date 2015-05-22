@@ -340,7 +340,7 @@ class DataSetPrinter {
 //				}
 //			}
 			val symbDefn = mObj.getMatchingObservationExpression(symbName)
-			return 	symbDefn.list != null && symbDefn.list.arguments != null &&
+			return 	symbDefn != null && symbDefn.list != null && symbDefn.list.arguments != null &&
 						symbDefn.list.arguments.getAttribute(AttributeValidator::attr_type.name) == "categorical" 
 		}
 		return false
