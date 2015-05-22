@@ -19,7 +19,10 @@ class CustomDistributionPrinter {
 
 	private val distribution_attrs = newHashMap(
 		DistributionType::Bernoulli.toString -> newHashMap(
-			DistributionValidator::attr_p.name -> new Attribute("probability", pVal))        
+			DistributionValidator::attr_p.name -> new Attribute("probability", pVal)),        
+		DistributionType::Binomial.toString -> newHashMap(
+			DistributionValidator::attr_numberOfTrials.name -> new Attribute("numberOfTrials", nVal),        
+			DistributionValidator::attr_probabilityOfSuccess.name -> new Attribute("probabilityOfSuccess", pVal))        
 		)
 
 	public def printDiscreteDistribution(RandomList distnDef, String category){
@@ -54,13 +57,13 @@ class CustomDistributionPrinter {
 		val probs = randomList.arguments.getAttributeExpression(DistributionValidator::attr_probabilityOfSuccess.name);
 		'''
 						<BinomialDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/3.0">
-							<numberOfTrial>
+							<numberOfTrials>
 								«numTrials.expression.toPharmML(recognizedArgs.get(DistributionValidator::attr_numberOfTrials.name).type)»
 							</numberOfTrials>
 							<probabilityOfSuccess>
 								«probs.expression.toPharmML(recognizedArgs.get(DistributionValidator::attr_probabilityOfSuccess.name).type)»
 							</probabilityOfSuccess>
-						</BernoulliDistribution>
+						</BinomialDistribution>
 		'''
 		}
 
