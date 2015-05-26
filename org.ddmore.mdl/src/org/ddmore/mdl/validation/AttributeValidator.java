@@ -443,7 +443,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		HashSet<String> argumentNames = new HashSet<String>();	
 		if (args.getNamedArguments() != null){
 			for (Argument arg: args.getNamedArguments().getArguments()){
-				if (!argumentNames.contains(arg.getArgumentName().getName())){
+				if (arg.getArgumentName() != null && !argumentNames.contains(arg.getArgumentName().getName())){
 					argumentNames.add(arg.getArgumentName().getName());
 				} else {
 					warning(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 

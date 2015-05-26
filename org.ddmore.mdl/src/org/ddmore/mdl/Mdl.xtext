@@ -236,7 +236,7 @@ ModelPredictionBlockStatement:
 //;
 
 PkMacroBlock:
-	identifier = ('PKMACRO'| 'COMPARTMENT')
+	identifier = 'COMPARTMENT'
 	BEGIN statements += PkMacroStatement* END 
 ;
 

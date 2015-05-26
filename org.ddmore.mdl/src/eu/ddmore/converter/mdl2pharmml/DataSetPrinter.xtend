@@ -20,6 +20,8 @@ import org.ddmore.mdl.validation.Utils
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import org.ddmore.mdl.types.DistributionType
 import org.ddmore.mdl.mdl.NonContinuousType
+import org.ddmore.mdl.mdl.ModelPredictionBlockStatement
+import org.ddmore.mdl.mdl.List
 
 class DataSetPrinter {
 	protected extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -56,20 +58,13 @@ class DataSetPrinter {
 	'''
 
 
-	// @TODO: Need to sort out mapping to PK Macros.
-	// Need to do the following:
-	//	- if there is only PK macros in model then write out target mapping
-	//  - if there are a mixture then write out a ColumnMapping or MultipleDVMapping elements
-	//		for the nonPKMaco mappings and the a ColumnMapping element containing a TargetMapping
-	//  - if only non-PKMacro mappings then write out only standard column mappings
-	protected def print_ds_DvMapping(SymbolDeclaration dvColumn, DataObject dObj, ModelObject mObj) {
+	def print_ds_DvMapping(SymbolDeclaration dvColumn, DataObject dObj, ModelObject mObj){
 		val define = dvColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 		val columnId = dvColumn.symbolName.name;
-		var res = '';
 		if (define != null) {
 			// Reference or mapped to data
 			if (define.expression != null)
-				res = '''
+				return '''
 					<ColumnMapping>
 					    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
 			    	   	«define.expression.print_Math_Expr»
@@ -84,34 +79,109 @@ class DataSetPrinter {
 				val pairs = define.getAttributePairs(AttributeValidator::attr_pred.name,
 					AttributeValidator::attr_predid.name);
 				val dvidColId = dObj.getUseDvidColumn
-				res = '''
+				return '''
+					«FOR p : pairs»
 					<MultipleDVMapping>
 					    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
 						<Piecewise xmlns="«xmlns_mstep»">
-						    «FOR p : pairs»
-						    	<math:Piece>
-						    	   	«p.key.expression.print_Math_Expr»
-						    	   	«IF p.key.expression.isCategoricalObs(mObj)»
-						    	   		«p.key.expression.printCategoricalObsMapping(mObj)»
-						    	   	«ELSEIF p.key.expression.isDiscreteBernoulliObs(mObj)»
-						    	   		«printDiscreteBernoulliObsMapping»
-						    	   	«ENDIF»
-						    	   	<math:Condition>
-						    	   		<math:LogicBinop op="eq">
-						    	   			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«dvidColId»"/>
-						    	   			«p.value.expression.print_Math_Expr»
-						    	   		</math:LogicBinop>
-						    	   	</math:Condition>
-						    	</math:Piece>
-						«ENDFOR» 
+							<math:Piece>
+							   	«p.key.expression.print_Math_Expr»
+							   	«IF p.key.expression.isCategoricalObs(mObj)»
+							   		«p.key.expression.printCategoricalObsMapping(mObj)»
+							   	«ELSEIF p.key.expression.isDiscreteBernoulliObs(mObj)»
+							   		«printDiscreteBernoulliObsMapping»
+							   	«ENDIF»
+							   	<math:Condition>
+							   		<math:LogicBinop op="eq">
+							   			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«dvidColId»"/>
+							   			«p.value.expression.print_Math_Expr»
+							   		</math:LogicBinop>
+							   	</math:Condition>
+							</math:Piece>
 						</Piecewise>
 					</MultipleDVMapping>
+					«ENDFOR» 
+				  '''
+			}
+		}
+	}
+	
+	def print_ds_TargetMapping(SymbolDeclaration dvColumn, DataObject dObj, ModelObject mObj){
+		val define = dvColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+		val columnId = dvColumn.symbolName.name;
+		var toolMappingDefn = '''''';
+		if (define != null) {
+			// There really must be define in this case.
+			if (define.expression != null){}
+				// ERROR: Can only do PK Macro mapping with define pairs
+			else { 
+				var pairs = define.getAttributePairs(AttributeValidator::attr_modelCmt.name,
+					AttributeValidator::attr_dataCmt.name);
+				toolMappingDefn = '''
+				    «FOR p : pairs»
+			    	   	«IF p.key.expression.isCompartmentVar(mObj)»
+			    	   		«p.key.expression.printTargetMapping(p.value.expression, mObj)»
+			    	   	«ENDIF»
+					«ENDFOR» 
 				  '''
 			}
 		} else {
 			// this is a bug as the language will be invalid if this is true.
 		}
-		res
+		'''
+			«IF toolMappingDefn.length > 0»
+			<ColumnMapping>
+				<ds:ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+				<TargetMapping blkIdRef="sm">
+					«toolMappingDefn»
+				</TargetMapping>
+			</ColumnMapping>
+			«ENDIF»
+		'''
+	}
+	
+	def printTargetMapping(Expression expression, Expression valExpr, ModelObject mObj)'''
+		«FOR block : mObj.blocks»
+			«IF block.modelPredictionBlock != null»
+				«FOR ModelPredictionBlockStatement stmt : block.modelPredictionBlock.statements»
+					«IF stmt.pkMacroBlock != null »
+						«FOR pkstmt : stmt.pkMacroBlock.statements»
+							«IF pkstmt.variable != null && pkstmt.variable.isAdministrationMacro»
+								<ds:Map dataSymbol="«valExpr.toStr»" admNumber="«getAdmValue(pkstmt.variable.list)»"/>
+							«ENDIF»
+						«ENDFOR»
+					«ENDIF»
+				«ENDFOR»
+			«ENDIF»
+		«ENDFOR»
+	'''
+	
+	def boolean isAdministrationMacro(SymbolDeclaration cmtDefn){
+		val type = cmtDefn.list.arguments.namedArguments.arguments.getAttribute(AttributeValidator::attr_type_macro.name)
+		return type == 'depot'
+	}
+	
+	def getAdmValue(List cptList){
+		val retVal = cptList.arguments.namedArguments.arguments.getAttribute(AttributeValidator::attr_modelCmt.name)
+		retVal
+	}
+	
+	def boolean isCompartmentVar(Expression expression, ModelObject mObj){
+		for(block : mObj.blocks){
+			if(block.modelPredictionBlock != null){
+				for(ModelPredictionBlockStatement stmt : block.modelPredictionBlock.statements){
+					if(stmt.pkMacroBlock != null){
+						for(pkstmt : stmt.pkMacroBlock.statements){
+							if(pkstmt.variable != null){
+								val pkVar = pkstmt.variable.symbolName.name.toStr
+								val dataVar = expression.toStr
+								return pkVar == dataVar
+							}
+						}
+					}
+				}
+			}
+		}				
 	}
 	
 	protected def print_ds_TargetDataSet(MOGObject mog) {
@@ -224,38 +294,51 @@ class DataSetPrinter {
 				if (column != null && column.symbolName != null) {
 					var blockContainer = eObj.eContainer;
 					// Map only columns, not DECLARED_VARAIBLES
-					val modelVar = getDefaultMatchingVariable(mog, column, mObj);
-					if (modelVar != null && blockContainer instanceof DataInputBlockImpl) {
+					if(blockContainer instanceof DataInputBlockImpl) {
 						// } || blockContainer instanceof DataDerivedBlockImpl){
 						val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 						val colType = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
-						if (use.equals(UseType::ID.toString) || use.equals(UseType::IDV.toString) ||
+						val modelVar = getDefaultMatchingVariable(mog, column, mObj);
+						if (modelVar != null && use.equals(UseType::ID.toString) || use.equals(UseType::IDV.toString) ||
 							use.equals(UseType::VARLEVEL.toString) || (use.equals(UseType::COVARIATE.toString) &&
 								!colType.isCategorical())) {
 								// use magic mapping with no conditions 
-								res = res + column.symbolName.name.print_ds_MagicMapping(modelVar);
-							} else if (use.equals(UseType::COVARIATE.toString) && colType.isCategorical()) {
-								// categorical covariates
-								var categoricalMapping = column.print_ds_CategoricalMapping;
-								res = res + column.symbolName.name.print_ds_ColumnMapping(modelVar, categoricalMapping);
-							} else if (use.equals(UseType::AMT.toString)) {
-								// handle amount mapping
-								res = res + column.print_ds_AmtMapping(dObj)
-							} else if (use.equals(UseType::DV.toString)) {
-								// handle amount mapping
-								res = res + column.print_ds_DvMapping(dObj, mObj)
-							}
+							res = res + column.symbolName.name.print_ds_MagicMapping(modelVar);
+						} else if (modelVar != null && use.equals(UseType::COVARIATE.toString) && colType.isCategorical()) {
+							// categorical covariates
+							var categoricalMapping = column.print_ds_CategoricalMapping;
+							res = res + column.symbolName.name.print_ds_ColumnMapping(modelVar, categoricalMapping);
+						}
+						else if (use.equals(UseType::AMT.toString)) {
+							// handle amount mapping
+							res = res + column.print_ds_AmtMapping(dObj, mObj)
+						} else if (use.equals(UseType::DV.toString)) {
+							// handle amount mapping
+							res = res + column.print_ds_DvMapping(dObj, mObj)
 						}
 					}
 				}
 			}
-			res = res + dObj.print_ds_DataSet;
+		}
+		res = res + dObj.print_ds_DataSet;
+	}
+
+		def print_ds_AmtMapping(SymbolDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
+			amtColumn.print_ds_StandardAmtMapping(dObj, mObj)
+			amtColumn.print_ds_TargetMapping(dObj, mObj)
 		}
 
-		protected def print_ds_AmtMapping(SymbolDeclaration amtColumn, DataObject dObj) {
+
+	// @TODO: Need to sort out mapping to PK Macros.
+	// Need to do the following:
+	//	- if there is only PK macros in model then write out target mapping
+	//  - if there are a mixture then write out a ColumnMapping elements
+	//		for the nonPKMaco mappings and the a ColumnMapping element containing a TargetMapping
+	//  - if only non-PKMacro mappings then write out only standard column mappings
+		protected def print_ds_StandardAmtMapping(SymbolDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
 			val define = amtColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 			val columnId = amtColumn.symbolName.name;
-			var res = '';
+			var res = '''''';
 			if (define != null) {
 				// Reference or piecewise
 				if (define.expression != null)
@@ -264,23 +347,30 @@ class DataSetPrinter {
 					val pairs = define.getAttributePairs(AttributeValidator::attr_modelCmt.name,
 						AttributeValidator::attr_dataCmt.name);
 					val cmtColId = dObj.getUseCmtColumn
-					res = '''
+					val colMapping = '''
+						«FOR p : pairs»
+						«IF !p.key.expression.isCompartmentVar(mObj)»
+							<math:Piece>
+							   	<math:Condition>
+							   		<math:LogicBinop op="eq">
+										<ColumnRef columnIdRef="«cmtColId»"/>
+								   		«p.value.expression.print_Math_Expr»
+									</math:LogicBinop>
+							   	</math:Condition>
+							</math:Piece>
+						«ENDIF»
+						«ENDFOR» 
+					  '''
+					 res = '''
+						«IF colMapping.length > 0»
 						<ColumnMapping>
 						    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
 							<Piecewise xmlns="«xmlns_ds»">
-							    «FOR p : pairs»
-							    	<math:Piece>
-							    	   	<math:Condition>
-							    	   		<math:LogicBinop op="eq">
-							    	   			<ColumnRef columnIdRef="«cmtColId»"/>
-							    	   			«p.value.expression.print_Math_Expr»
-							    	   		</math:LogicBinop>
-							    	   	</math:Condition>
-							    	</math:Piece>
-							«ENDFOR» 
+								«colMapping»
 							</Piecewise>
 						</ColumnMapping>
-					  '''
+						«ENDIF»
+					 '''
 				}
 			} else {
 				// this is a bug as the language will be invalid if this is true.
