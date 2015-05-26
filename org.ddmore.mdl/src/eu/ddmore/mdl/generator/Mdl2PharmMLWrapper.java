@@ -5,16 +5,20 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 //import org.apache.log4j.Logger;
 import org.ddmore.mdl.MdlStandaloneSetup;
 import org.ddmore.mdl.mdl.MOGObject;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.validation.Utils;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
+import org.eclipse.xtext.parser.ParseException;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 
@@ -22,8 +26,9 @@ import com.google.inject.Injector;
 
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
+
 public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
-   //private static final Logger LOGGER = Logger.getLogger(Mdl2PharmMLWrapper.class);
+   private static final Logger LOGGER = Logger.getLogger(Mdl2PharmMLWrapper.class);
 
    public void doGenerate(final Resource resource, final IFileSystemAccess fsa) {
         String relativeResourcePath = resource.getURI().toPlatformString(true);
@@ -57,6 +62,26 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
 
        Resource resource = resourceSet.getResource(URI.createURI("file:///" + src.getAbsolutePath()), true);
        Mcl mcl = (Mcl) resource.getContents().get(0);
+       
+       EList<Diagnostic> errors = resource.getErrors();
+       EList<Diagnostic> warnings = resource.getWarnings();
+       if (!errors.isEmpty()) {
+           LOGGER.error(errors.size() + " errors encountered in parsing MDL file " + src.getAbsolutePath());
+           for (Diagnostic e : errors) {
+               LOGGER.error(e);
+               System.err.println(e);
+               throw new ParseException("Unable to parse MDL file " + src.getAbsolutePath() + "; " + errors.size() + " error(s) encountered; see the log output.");
+           }
+           
+       }
+       if (!warnings.isEmpty()) {
+           LOGGER.error(warnings.size() + " warning(s) encountered in parsing MDL file " + src.getAbsolutePath());
+           for (Diagnostic w : warnings) {
+               LOGGER.error(w);
+               System.err.println(w);
+           }
+       }
+       
 
        //TODO: we do not need this check when the converter is called from Eclipse UI
        //if (Utils.getMOGs(mcl).size() == 0)
