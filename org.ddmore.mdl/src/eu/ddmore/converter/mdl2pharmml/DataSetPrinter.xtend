@@ -55,6 +55,13 @@ class DataSetPrinter {
 		</ColumnMapping>
 	'''
 
+
+	// @TODO: Need to sort out mapping to PK Macros.
+	// Need to do the following:
+	//	- if there is only PK macros in model then write out target mapping
+	//  - if there are a mixture then write out a ColumnMapping or MultipleDVMapping elements
+	//		for the nonPKMaco mappings and the a ColumnMapping element containing a TargetMapping
+	//  - if only non-PKMacro mappings then write out only standard column mappings
 	protected def print_ds_DvMapping(SymbolDeclaration dvColumn, DataObject dObj, ModelObject mObj) {
 		val define = dvColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 		val columnId = dvColumn.symbolName.name;
@@ -86,7 +93,7 @@ class DataSetPrinter {
 						    	   	«p.key.expression.print_Math_Expr»
 						    	   	«IF p.key.expression.isCategoricalObs(mObj)»
 						    	   		«p.key.expression.printCategoricalObsMapping(mObj)»
-						    	   	«ELSEIF define.expression.isDiscreteBernoulliObs(mObj)»
+						    	   	«ELSEIF p.key.expression.isDiscreteBernoulliObs(mObj)»
 						    	   		«printDiscreteBernoulliObsMapping»
 						    	   	«ENDIF»
 						    	   	<math:Condition>

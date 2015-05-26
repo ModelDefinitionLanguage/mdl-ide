@@ -386,7 +386,9 @@ class ModelDefinitionPrinter {
 		var model ="";
 		if (mObj != null){
 			//Start from PKMACRO / COMPARTMENT definitions
+			//@TODO: Need to change order. PKMacros must be last and must be in 1 block.
 			var variables = "";
+			var macros = "";
 			for (b: mObj.blocks){
 				if (b.modelPredictionBlock != null){
 					for (st: b.modelPredictionBlock.statements){
@@ -412,12 +414,20 @@ class ModelDefinitionPrinter {
 //						} 
 						//COMPARTMENT
 						if (st.pkMacroBlock != null){
+							macros = macros + '''
+			<PKmacros>
+		'''
+							
 							for (s: st.pkMacroBlock.statements){
 								if (s.variable != null)
-									variables = variables + s.variable.print_PKMacros;
+									macros = macros + s.variable.print_PKMacros;
 								if (s.list != null)
-									variables = variables + s.list.print_PKMacros;
+									macros = macros + s.list.print_PKMacros;
 							}
+							macros = macros + '''
+			</PKmacros>
+		'''
+							 
 						}
 					}
 				}
@@ -427,6 +437,7 @@ class ModelDefinitionPrinter {
 				«IF (variables.length > 0)»
 					<StructuralModel blkId="sm">
 						«IF (variables.length > 0)»«variables»«ENDIF»
+						«IF (macros.length > 0)»«macros»«ENDIF»
 					</StructuralModel>
 				«ENDIF»
 			'''

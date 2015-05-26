@@ -14,6 +14,7 @@ class PKMacrosPrinter{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
 	protected extension MathPrinter mathPrinter = null;
 	protected extension ReferenceResolver resolver = null;
+	private static val MATH_NS = "http://www.pharmml.org/pharmml/0.6/Maths"; 
 	
 	protected new(MathPrinter mathPrinter, ReferenceResolver resolver){
 		this.mathPrinter = mathPrinter;
@@ -36,8 +37,8 @@ class PKMacrosPrinter{
 		AttributeValidator::attr_finput.name -> "p",
 		AttributeValidator::attr_tk0.name -> "Tk0",
 		AttributeValidator::attr_tlag.name -> "Tlag",
-		AttributeValidator::attr_v.name -> "v",
-		AttributeValidator::attr_cl.name -> "Cl",
+		AttributeValidator::attr_v.name -> "V",
+		AttributeValidator::attr_cl.name -> "CL",
 		AttributeValidator::attr_ktr.name -> "Ktr",
 		AttributeValidator::attr_mtt.name -> "Mtt",
 		AttributeValidator::attr_k.name -> "k",
@@ -60,7 +61,7 @@ class PKMacrosPrinter{
 							«s.symbolName.print_ct_SymbolRef»
 						</Value>
 					'''
-				else 
+				else if(type == PkMacroType::COMPARTMENT.toString)
 					content = content + '''
 						<Value argument="amount"> 
 							«s.symbolName.print_ct_SymbolRef»
@@ -77,27 +78,25 @@ class PKMacrosPrinter{
 	}
 	
 	def print_PKMacros(List list){
+		var retVal = ''''''
 		if (list != null){
 			var type = list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
 			var macroType = pk_types.get(type);
 			if (macroType != null){
 				var content = type.print_PKAttributes(list.arguments);
-				return macroType.print_PKMacros(content);
+				retVal = macroType.print_PKMacros(content).toString;
 			}
 		}
-		return "";
+		return retVal;
 	}
 	
 	//macroType is a PharmML macro
-	def print_PKMacros(String macroType, String content){
-		'''
-			<PKmacros>
+	def print_PKMacros(String macroType, String content)'''
 			  	<«macroType»>
 			  		«content»
 			  	</«macroType»>
-			</PKmacros>
 		'''
-	}
+
 	
 	//Convert MDL PK macro attributes to PharmML, type here is an MDL macro type
 	protected def print_PKAttributes(String type, Arguments args){
@@ -109,8 +108,8 @@ class PKMacrosPrinter{
 			if (type.equals(PkMacroType::DEPOT.toString) || type.equals(PkMacroType::DIRECT.toString)){
 				//type=depot|direct && modelCmt=2 -> adm=1, cmt=1 or from context
 				val modelCmt = args.getAttribute(AttributeValidator::attr_modelCmt.name);
-				if (modelCmt.equals("2"))
-					attrExpressions.put("adm", modelCmt.print_adm);
+//				if (modelCmt.equals("2"))
+				attrExpressions.put("adm", modelCmt.print_adm);
 				val to = args.getAttribute(AttributeValidator::attr_to.name);
 				if (to.length > 0){
 					var mObj = Utils::getMclObject(args);
@@ -139,11 +138,11 @@ class PKMacrosPrinter{
 							var fromCompartment_cmt = fromCompartmentArgs.getAttribute(AttributeValidator::attr_modelCmt.name);
 							if (fromCompartment_cmt.length > 0){
 								if (kin != null){
-									var attr1 = "k" + modelCmt + fromCompartment_cmt;
+									var attr1 = "k" + fromCompartment_cmt + modelCmt;
 									attrExpressions.put(attr1, attr1.print_Attr_Value(kin.print_Math_Expr.toString));
 								}
 								if (kout != null){
-									var attr2 = "k" + fromCompartment_cmt + modelCmt;
+									var attr2 = "k" + modelCmt + fromCompartment_cmt;
 									attrExpressions.put(attr2, attr2.print_Attr_Value(kout.print_Math_Expr.toString));
 								}
 							}
@@ -233,8 +232,12 @@ class PKMacrosPrinter{
 	
 	protected def print_Attr_Value(String attrName, String value){
 		return '''
-			<Value argument="«attrName»"> 
-				«value.print_ct_Value»
+		<Value argument="«attrName»">
+				<ct:Assign>
+					<Equation xmlns="«MATH_NS»">
+						«value»
+					</Equation>
+				</ct:Assign>
 			</Value>
 		'''
 	}
