@@ -41,18 +41,6 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
         File targetDir = new File(projectPath + Preferences.SRC_GEN_PREFIX);
         
         performConvert(source, targetDir);
-
-        /*
-        //TODO: How do we pass that info to the user?
-        try {
-            Converter converter = converterManager.getConverter(mdl, target);
-            converter.convert(source, targetDir);
-        } catch (ConverterNotFoundException e) {
-            LOGGER.error(e.getMessage());
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-        }
-        */ 
     }
     
    public void performConvert(File src, File outputDirectory) {
@@ -80,11 +68,6 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
                LOGGER.warn(w);
            }
        }
-       
-
-       //TODO: we do not need this check when the converter is called from Eclipse UI
-       //if (Utils.getMOGs(mcl).size() == 0)
-       //	LOGGER.warn("PharmML generation error: no MOG found!");
        
        eu.ddmore.converter.mdl2pharmml.Mdl2PharmML xtendConverter = new eu.ddmore.converter.mdl2pharmml.Mdl2PharmML();
        List<MOGObject> mogs = Utils.getMOGs(mcl); 
