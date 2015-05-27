@@ -63,6 +63,8 @@ abstract class AbstractConvertToPharmMLHandler extends AbstractHandler implement
                 srcGenFolder.create(true, true, new NullProgressMonitor());
             } catch (CoreException e) {
                 LOGGER.error("Unable to create output folder for PharmML generation: " + srcGenFolder, e);
+                MessageDialog.openError(shell, "Error",
+                        "Internal error in attempting to create output folder for PharmML generation; see the log output for details.");
                 return false;
             }
         }
@@ -86,6 +88,8 @@ abstract class AbstractConvertToPharmMLHandler extends AbstractHandler implement
                 srcGenFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
             } catch (CoreException e) {
                 LOGGER.error("CoreException thrown while trying to convert to PharmML", e);
+                MessageDialog.openError(shell, "Error",
+                        "Internal error in attempting to convert to PharmML; see the log output for details.");
                 return false;
             }
 
