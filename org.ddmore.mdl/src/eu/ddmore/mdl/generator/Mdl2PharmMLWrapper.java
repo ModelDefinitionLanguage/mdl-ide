@@ -69,16 +69,15 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
            LOGGER.error(errors.size() + " errors encountered in parsing MDL file " + src.getAbsolutePath());
            for (Diagnostic e : errors) {
                LOGGER.error(e);
-               System.err.println(e);
            }
-           throw new ParseException("Unable to parse MDL file " + src.getAbsolutePath() + "; " + errors.size() + " error(s) encountered; see the log output.");
+           throw new ParseException(String.format("Unable to parse MDL file %1$s; %2$d error(s) encountered; see the log output.",
+               src.getAbsolutePath(), errors.size()));
            
        }
        if (!warnings.isEmpty()) {
-           LOGGER.error(warnings.size() + " warning(s) encountered in parsing MDL file " + src.getAbsolutePath());
+           LOGGER.warn(warnings.size() + " warning(s) encountered in parsing MDL file " + src.getAbsolutePath());
            for (Diagnostic w : warnings) {
-               LOGGER.error(w);
-               System.err.println(w);
+               LOGGER.warn(w);
            }
        }
        
