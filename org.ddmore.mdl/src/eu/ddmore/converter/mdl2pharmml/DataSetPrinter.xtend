@@ -131,10 +131,10 @@ class DataSetPrinter {
 		'''
 			«IF toolMappingDefn.length > 0»
 			<ColumnMapping>
-				<ds:ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-				<TargetMapping blkIdRef="sm">
+				<ds:ColumnRef columnIdRef="«columnId»"/>
+				<ds:TargetMapping blkIdRef="sm">
 					«toolMappingDefn»
-				</TargetMapping>
+				</ds:TargetMapping>
 			</ColumnMapping>
 			«ENDIF»
 		'''
@@ -325,16 +325,10 @@ class DataSetPrinter {
 
 		def print_ds_AmtMapping(SymbolDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
 			amtColumn.print_ds_StandardAmtMapping(dObj, mObj)
-			amtColumn.print_ds_TargetMapping(dObj, mObj)
+			+ amtColumn.print_ds_TargetMapping(dObj, mObj)
 		}
 
 
-	// @TODO: Need to sort out mapping to PK Macros.
-	// Need to do the following:
-	//	- if there is only PK macros in model then write out target mapping
-	//  - if there are a mixture then write out a ColumnMapping elements
-	//		for the nonPKMaco mappings and the a ColumnMapping element containing a TargetMapping
-	//  - if only non-PKMacro mappings then write out only standard column mappings
 		protected def print_ds_StandardAmtMapping(SymbolDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
 			val define = amtColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 			val columnId = amtColumn.symbolName.name;
@@ -342,7 +336,7 @@ class DataSetPrinter {
 			if (define != null) {
 				// Reference or piecewise
 				if (define.expression != null)
-					res = columnId.print_ds_ColumnMapping(null, define.expression.print_Math_Expr.toString).toString
+					res = columnId.print_ds_ColumnMapping(define.expression.toStr, "").toString
 				else { // Vector of pairs
 					val pairs = define.getAttributePairs(AttributeValidator::attr_modelCmt.name,
 						AttributeValidator::attr_dataCmt.name);

@@ -123,6 +123,20 @@ class PKMacrosPrinter{
 					}
 				}
 			}
+			if (type.equals(PkMacroType::ELIMINATION.toString)){
+				val from = args.getAttribute(AttributeValidator::attr_from.name);
+				if (from.length > 0){
+					var mObj = Utils::getMclObject(args);
+					if (mObj != null && mObj.modelObject != null){
+						var fromCompartmentArgs = mObj.modelObject.findCompartment(from);
+						if (fromCompartmentArgs != null){
+							var fromCompartmentCmt = fromCompartmentArgs.getAttribute(AttributeValidator::attr_modelCmt.name);
+							if (fromCompartmentCmt.length > 0)
+								attrExpressions.put("cmt", "cmt".print_Attr_Value(fromCompartmentCmt.print_ct_Value));
+						}
+					}
+				}
+			}
 			//DISTRIBUTION
 			if (type.equals(PkMacroType::DISTRIBUTION.toString)){
 				attrExpressions.put("cmt", null); //skip cmt attribute in peripheral macro
