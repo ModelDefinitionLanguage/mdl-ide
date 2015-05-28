@@ -106,9 +106,9 @@ class DataSetPrinter {
 		}
 	}
 	
-	def print_ds_TargetMapping(SymbolDeclaration dvColumn, DataObject dObj, ModelObject mObj){
-		val define = dvColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-		val columnId = dvColumn.symbolName.name;
+	def print_ds_TargetMapping(SymbolDeclaration amtColumn, DataObject dObj, ModelObject mObj){
+		val define = amtColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+		val columnId = amtColumn.symbolName.name;
 		var toolMappingDefn = '''''';
 		if (define != null) {
 			// There really must be define in this case.
@@ -200,7 +200,7 @@ class DataSetPrinter {
 								var content = mog.print_ds_NONMEM_DataSet(mObj, dObj);
 								res = res + print_ds_ExternalDataSet(content, "NONMEM", BLK_DS_NONMEM_DATASET);
 							} else {
-								var content = dObj.print_ds_DataSet;
+								var content = dObj.print_ds_DataSet(mObj);
 								res = res + print_ds_ExternalDataSet(content, "Monolix", BLK_DS_MONOLIX_DATASET);
 							}
 
@@ -320,7 +320,7 @@ class DataSetPrinter {
 				}
 			}
 		}
-		res = res + dObj.print_ds_DataSet;
+		res = res + dObj.print_ds_DataSet(mObj);
 	}
 
 		def print_ds_AmtMapping(SymbolDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
@@ -515,18 +515,22 @@ class DataSetPrinter {
 			return null;
 		}
 
-		protected def print_ds_DataSet(DataObject dObj) {
+		protected def print_ds_DataSet(DataObject dObj, ModelObject mObj) {
 			var res = "";
 			var k = 1;
 			for (b : dObj.blocks) {
+				var dosingToCompartmentMacro = false;
 				if (b.dataInputBlock != null) {
 					for (i : 0 .. b.dataInputBlock.variables.size - 1) {
 						val column = b.dataInputBlock.variables.get(i);
 						val columnId = column.symbolName.name;
 						val columnType = column.getColumnType
+						if(UseType::AMT.toString == columnType){
+							dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
+						}
 						var convertedColType = "undefined"
 						if (columnType != null) {
-							convertedColType = columnType.convertEnum;
+							convertedColType = column.convertEnum(dosingToCompartmentMacro);
 						}
 						val valueType = column.getValueType
 						res = res +
@@ -547,6 +551,40 @@ class DataSetPrinter {
 			'''
 		}
 
+	//use option names
+	def convertEnum(SymbolDeclaration columnDefn, boolean isDosingToCompartmentMacro) {
+		val type = columnDefn.getColumnType
+		
+		switch (type) {
+			case UseType::AMT.toString     : "dose"
+			case UseType::DVID.toString   : "dvid"
+//			case UseType::CENS.toString    : "censoring"
+			case UseType::VARLEVEL.toString: "occasion"
+			//case UseType::ITYPE.toString   : "dvid"		//case UseType::OCC.toString     : "occasion"
+			//case UseType::TINF.toString    : "duration"
+			case UseType::CMT.toString : if(isDosingToCompartmentMacro) 'adm' else 'cmt'
+			default: type
+		}
+	}
+	
+	def boolean isDosingToCompartmentMacro(SymbolDeclaration amtColumn, ModelObject mObj){
+		val define = amtColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+	
+		var retVal = false
+		if (define != null) {
+			if (define.expression == null){
+				var pairs = define.getAttributePairs(AttributeValidator::attr_modelCmt.name,
+					AttributeValidator::attr_dataCmt.name);
+					for(p : pairs){
+			    	   	if(p.key.expression.isCompartmentVar(mObj)){
+			    	   		retVal = true
+			    	   	}
+					} 
+			}
+		}
+		return retVal
+	}
+	
 		protected def print_ds_ExternalFile(DataObject dObj) {
 			var res = "";
 			for (b : dObj.blocks) {

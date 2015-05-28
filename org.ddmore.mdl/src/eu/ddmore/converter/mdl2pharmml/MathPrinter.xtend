@@ -6,31 +6,31 @@
  */
 package eu.ddmore.converter.mdl2pharmml
 
-import org.ddmore.mdl.mdl.Expression
-import org.ddmore.mdl.mdl.OrExpression
-import org.ddmore.mdl.mdl.UnaryExpression
-import org.ddmore.mdl.mdl.AndExpression
-import org.ddmore.mdl.mdl.LogicalExpression
+import eu.ddmore.converter.mdlprinting.MdlPrinter
+import java.util.ArrayList
 import org.ddmore.mdl.mdl.AdditiveExpression
-import org.ddmore.mdl.mdl.MultiplicativeExpression
-import org.ddmore.mdl.mdl.PowerExpression
-import org.ddmore.mdl.mdl.SymbolName
-import org.ddmore.mdl.mdl.Vector
-import org.ddmore.mdl.mdl.List
+import org.ddmore.mdl.mdl.AndExpression
 import org.ddmore.mdl.mdl.AnyExpression
 import org.ddmore.mdl.mdl.Argument
-import org.ddmore.mdl.mdl.FunctionCall
-import java.util.ArrayList
-import eu.ddmore.converter.mdlprinting.MdlPrinter
-import org.ddmore.mdl.mdl.FunctionName
-import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
-import org.ddmore.mdl.validation.FunctionValidator
-import org.ddmore.mdl.mdl.TaskObjectBlock
-import org.ddmore.mdl.mdl.VariabilityType
-import org.ddmore.mdl.mdl.UseType
-import org.ddmore.mdl.types.MdlDataType
-import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.mdl.ArgumentExpression
+import org.ddmore.mdl.mdl.Expression
+import org.ddmore.mdl.mdl.FunctionCall
+import org.ddmore.mdl.mdl.FunctionName
+import org.ddmore.mdl.mdl.List
+import org.ddmore.mdl.mdl.LogicalExpression
+import org.ddmore.mdl.mdl.MultiplicativeExpression
+import org.ddmore.mdl.mdl.OrExpression
+import org.ddmore.mdl.mdl.PowerExpression
+import org.ddmore.mdl.mdl.SymbolName
+import org.ddmore.mdl.mdl.TaskObjectBlock
+import org.ddmore.mdl.mdl.UnaryExpression
+import org.ddmore.mdl.mdl.VariabilityType
+import org.ddmore.mdl.mdl.Vector
+import org.ddmore.mdl.mdl.VectorExpression
+import org.ddmore.mdl.types.MdlDataType
+import org.ddmore.mdl.validation.FunctionValidator
+
+import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 class MathPrinter{
 
@@ -67,7 +67,8 @@ class MathPrinter{
 			<ct:String>«expr.toStr»</ct:String>
 		«ELSE» 
 			«IF MdlDataType::isEnumType(expr)» 
-				<ct:String>«expr.toStr.convertEnum»</ct:String>
+«««				<ct:String>«expr.toStr.convertEnum»</ct:String>
+				<ct:String>«expr.toStr»</ct:String>
 			«ELSE»
 				<Equation xmlns="«xmlns_math»">
 					«expr.print_Math_Expr»
@@ -653,18 +654,18 @@ class MathPrinter{
 		}
 	}
 
-	//use option names
-	def convertEnum(String type) {
-		switch (type) {
-			case UseType::AMT.toString     : "dose"
-			case UseType::DVID.toString   : "dvid"
-//			case UseType::CENS.toString    : "censoring"
-			case UseType::VARLEVEL.toString: "occasion"
-			//case UseType::ITYPE.toString   : "dvid"		//case UseType::OCC.toString     : "occasion"
-			//case UseType::TINF.toString    : "duration"
-			default: type
-		}
-	}
+//	//use option names
+//	def convertEnum(String type) {
+//		switch (type) {
+//			case UseType::AMT.toString     : "dose"
+//			case UseType::DVID.toString   : "dvid"
+////			case UseType::CENS.toString    : "censoring"
+//			case UseType::VARLEVEL.toString: "occasion"
+//			//case UseType::ITYPE.toString   : "dvid"		//case UseType::OCC.toString     : "occasion"
+//			//case UseType::TINF.toString    : "duration"
+//			default: type
+//		}
+//	}
 	
 	//function names -> PharmML operators
 	def convertUniop(String name) {
