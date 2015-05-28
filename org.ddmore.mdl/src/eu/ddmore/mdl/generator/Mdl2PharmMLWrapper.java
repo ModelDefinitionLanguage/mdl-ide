@@ -41,18 +41,6 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
         File targetDir = new File(projectPath + Preferences.SRC_GEN_PREFIX);
         
         performConvert(source, targetDir);
-
-        /*
-        //TODO: How do we pass that info to the user?
-        try {
-            Converter converter = converterManager.getConverter(mdl, target);
-            converter.convert(source, targetDir);
-        } catch (ConverterNotFoundException e) {
-            LOGGER.error(e.getMessage());
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-        }
-        */ 
     }
     
    public void performConvert(File src, File outputDirectory) {
@@ -69,23 +57,17 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
            LOGGER.error(errors.size() + " errors encountered in parsing MDL file " + src.getAbsolutePath());
            for (Diagnostic e : errors) {
                LOGGER.error(e);
-               System.err.println(e);
-               throw new ParseException("Unable to parse MDL file " + src.getAbsolutePath() + "; " + errors.size() + " error(s) encountered; see the log output.");
            }
+           throw new ParseException(String.format("Unable to parse MDL file %1$s; %2$d error(s) encountered; see the log output.",
+               src.getAbsolutePath(), errors.size()));
            
        }
        if (!warnings.isEmpty()) {
-           LOGGER.error(warnings.size() + " warning(s) encountered in parsing MDL file " + src.getAbsolutePath());
+           LOGGER.warn(warnings.size() + " warning(s) encountered in parsing MDL file " + src.getAbsolutePath());
            for (Diagnostic w : warnings) {
-               LOGGER.error(w);
-               System.err.println(w);
+               LOGGER.warn(w);
            }
        }
-       
-
-       //TODO: we do not need this check when the converter is called from Eclipse UI
-       //if (Utils.getMOGs(mcl).size() == 0)
-       //	LOGGER.warn("PharmML generation error: no MOG found!");
        
        eu.ddmore.converter.mdl2pharmml.Mdl2PharmML xtendConverter = new eu.ddmore.converter.mdl2pharmml.Mdl2PharmML();
        List<MOGObject> mogs = Utils.getMOGs(mcl); 
