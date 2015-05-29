@@ -48,6 +48,7 @@ import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.UnnamedArguments
+import org.ddmore.mdl.mdl.transformExpr
 
 class MdlPrinter {
 	
@@ -319,6 +320,10 @@ class MdlPrinter {
 		return s.symbolRef.toStr;
 	}
 	
+	def String toStr(transformExpr t){
+		return t.transform;
+	}
+	
 //	def String toStr(FullyQualifiedSymbolName s){
 //		var res = s.parent.toStr + "." + s.symbolName.toStr;
 //		return res;
@@ -405,6 +410,7 @@ class MdlPrinter {
 		if (e.list != null) return e.list.toStr; 
 		if (e.vector != null) return e.vector.toStr; 
 		if (e.type != null) return e.type.toStr;
+		if (e.transform != null) return e.transform.toStr
 	}
 	
 	def String toStr(Expression e){

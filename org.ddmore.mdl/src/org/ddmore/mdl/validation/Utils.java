@@ -44,6 +44,7 @@ import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.SymbolRef;
 import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityDefinitionBlock;
@@ -390,9 +391,9 @@ public class Utils {
 		TreeIterator<EObject> iterator = e.eAllContents();
 	    while (iterator.hasNext()){
 	    	EObject obj = iterator.next();
-	    	if (obj instanceof SymbolNameImpl){
-	    		SymbolName s = (SymbolName) obj;
-	    		if (!dependencies.contains(s.getName())) dependencies.add(s.getName());
+	    	if (obj instanceof SymbolRef){
+	    		SymbolRef s = (SymbolRef) obj;
+	    		if (!dependencies.contains(s.getSymbolRef().getName())) dependencies.add(s.getSymbolRef().getName());
 	    	}
 	    }
 	    return dependencies;

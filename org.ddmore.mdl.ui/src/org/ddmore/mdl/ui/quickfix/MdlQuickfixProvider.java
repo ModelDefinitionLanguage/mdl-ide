@@ -40,7 +40,6 @@ import org.ddmore.mdl.mdl.VarType;
 import org.ddmore.mdl.mdl.VariabilityBlock;
 import org.ddmore.mdl.mdl.VariabilityParametersBlock;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
-import org.ddmore.mdl.mdl.impl.SymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
 import org.ddmore.mdl.types.DistributionType;
@@ -428,8 +427,8 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	public void removeVariable(final Issue issue, IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Remove symbol", "Remove symbol", "remove.png", new ISemanticModification() {
 			public void apply(EObject element, IModificationContext context) {
-				if (element instanceof SymbolNameImpl){
-					SymbolName ref = (SymbolName)element;
+				if (element instanceof SymbolRef){
+					SymbolRef ref = (SymbolRef)element;
 					EObject container = ref.eContainer();
 					if (container instanceof StructuralParametersBlockImpl){
 						StructuralParametersBlock structuralParametersBlock = (StructuralParametersBlock)container;

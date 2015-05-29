@@ -66,15 +66,15 @@ class MathPrinter{
 	def print_Math_Equation(AnyExpression expr) '''
 		«IF MdlDataType::validateType(MdlDataType::TYPE_STRING, expr)»
 			<ct:String>«expr.toStr»</ct:String>
-		«ELSE» 
-			«IF MdlDataType::isEnumType(expr)» 
+		«ELSEIF MdlDataType::validateType(MdlDataType::TYPE_TRANS, expr)»
+			<ct:String>«expr.toStr»</ct:String>
+		«ELSEIF MdlDataType::isEnumType(expr)» 
 «««				<ct:String>«expr.toStr.convertEnum»</ct:String>
-				<ct:String>«expr.toStr»</ct:String>
-			«ELSE»
-				<Equation xmlns="«xmlns_math»">
-					«expr.print_Math_Expr»
-				</Equation>
-			«ENDIF»
+			<ct:String>«expr.toStr»</ct:String>
+		«ELSE»
+			<Equation xmlns="«xmlns_math»">
+				«expr.print_Math_Expr»
+			</Equation>
 		«ENDIF»	
 	'''
 
