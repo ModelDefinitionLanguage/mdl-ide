@@ -12,14 +12,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.xtext.generator.JavaIoFileSystemAccess;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
+import org.xml.sax.SAXParseException;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 import eu.ddmore.libpharmml.ILibPharmML;
 import eu.ddmore.libpharmml.IPharmMLResource;
@@ -30,8 +32,8 @@ import eu.ddmore.libpharmml.PharmMlFactory;
 
 public class ValidatePharmMLHandler_PE  extends AbstractHandler implements IHandler {
 
-	@Inject
-	private Provider<JavaIoFileSystemAccess> fileAccessProvider;
+//	@Inject
+//	private Provider<JavaIoFileSystemAccess> fileAccessProvider;
 	 
     @Inject
     IResourceSetProvider resourceSetProvider;
@@ -69,7 +71,24 @@ public class ValidatePharmMLHandler_PE  extends AbstractHandler implements IHand
 					IProject project = file.getProject();
 					IFolder srcGenFolder = project.getFolder(file.getParent().getName());
 					srcGenFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
-				} catch (Exception e) {
+			        final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					if(rpt.isValid()){
+			            MessageDialog.openInformation(shell, "Information", "PharmML file is valid: "
+			                    + srcGenFolder.getFile(file.getName().replaceAll("\\.mdl$", ".xml")).getFullPath());
+					}
+					else{
+			            MessageDialog.openError(shell, "Error", "PharmML file is invalid. Check log file for error report: "
+			                    + srcGenFolder.getFile(file.getName().replaceAll("\\.mdl$", ".xml")).getFullPath());
+					}
+				}
+				catch(RuntimeException e){
+					if(e.getCause() instanceof SAXParseException){
+						final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+						MessageDialog.openError(shell, "Error", "PharmML file is invalid. XML Error: "
+								+ e.getMessage());
+					}
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 	            return Boolean.TRUE;
