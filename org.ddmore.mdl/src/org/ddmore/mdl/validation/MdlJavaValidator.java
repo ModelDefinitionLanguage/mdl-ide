@@ -7,18 +7,12 @@
 package org.ddmore.mdl.validation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.ddmore.mdl.domain.Variable;
-import org.ddmore.mdl.mdl.Category;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
-import org.ddmore.mdl.mdl.ObjectName;
-import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.UnaryExpression;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ComposedChecks;
 //import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
