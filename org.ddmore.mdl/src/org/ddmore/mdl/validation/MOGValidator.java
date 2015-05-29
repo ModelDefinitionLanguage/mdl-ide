@@ -85,25 +85,25 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 			}
 		}
 		if (params[0] == 0)
-			warning(MSG_MODEL_OBJ_MISSING, 
+			error(MSG_MODEL_OBJ_MISSING, 
 				MdlPackage.Literals.IMPORT_OBJECT_BLOCK__OBJECTS,
 				MSG_MODEL_OBJ_MISSING, objBlock.getIdentifier());
 		if (params[1] == 0)
-			warning(MSG_PARAM_OBJ_MISSING, 
+			error(MSG_PARAM_OBJ_MISSING, 
 					MdlPackage.Literals.IMPORT_OBJECT_BLOCK__OBJECTS,
 					MSG_PARAM_OBJ_MISSING, objBlock.getIdentifier());
 		if (params[2] == 0)
-			warning(MSG_DATA_OBJ_MISSING, 
+			error(MSG_DATA_OBJ_MISSING, 
 					MdlPackage.Literals.IMPORT_OBJECT_BLOCK__OBJECTS,
 					MSG_DATA_OBJ_MISSING, objBlock.getIdentifier());
 		if (params[3] == 0)
-			warning(MSG_TASK_OBJ_MISSING, 
+			error(MSG_TASK_OBJ_MISSING, 
 					MdlPackage.Literals.IMPORT_OBJECT_BLOCK__OBJECTS,
 					MSG_TASK_OBJ_MISSING, objBlock.getIdentifier());
 		String [] names = {"model", "parameter", "data", "task"};
 		for (int i = 0; i < 4; i++){
 			if (params[i] > 1)
-				warning(MSG_OBJ_DEFINED + ": two or more " + names[i] + " objects selected!", 
+				error(MSG_OBJ_DEFINED + ": two or more " + names[i] + " objects selected!", 
 					MdlPackage.Literals.IMPORT_OBJECT_BLOCK__OBJECTS,
 					MSG_OBJ_DEFINED,  objBlock.getIdentifier());
 		}			

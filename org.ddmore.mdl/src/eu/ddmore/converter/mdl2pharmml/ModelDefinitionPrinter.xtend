@@ -385,8 +385,6 @@ class ModelDefinitionPrinter {
 	protected def print_mdef_StructuralModel(ModelObject mObj){
 		var model ="";
 		if (mObj != null){
-			//Start from PKMACRO / COMPARTMENT definitions
-			//@TODO: Need to change order. PKMacros must be last and must be in 1 block.
 			var variables = "";
 			var macros = "";
 			for (b: mObj.blocks){

@@ -200,7 +200,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	final public static List<Attribute> attrs_pkMacro = Arrays.asList(
 			attr_type_macro, attr_modelCmt, attr_v, attr_cl, attr_from, attr_to, 
 			attr_kin, attr_kout, attr_ka, attr_tlag, attr_finput, attr_tk0, 
-			attr_k, attr_ktr, attr_mtt, attr_vm, attr_km, attr_keq);	
+			attr_k, attr_ktr, attr_kt, attr_mtt, attr_vm, attr_km, attr_keq);	
 	
 	/*Design object*/
 //	final public static List<Attribute> attrs_administration = Arrays.asList(attr_trial_type, attr_administration, attr_amount, attr_amountBSA, attr_doseTime, attr_start, 
