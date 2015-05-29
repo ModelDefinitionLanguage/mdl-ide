@@ -200,7 +200,7 @@ class DataSetPrinter {
 								var content = mog.print_ds_NONMEM_DataSet(mObj, dObj);
 								res = res + print_ds_ExternalDataSet(content, "NONMEM", BLK_DS_NONMEM_DATASET);
 							} else {
-								var content = dObj.print_ds_DataSet(mObj);
+								var content = dObj.print_ds_DataSet(mObj, mog);
 								res = res + print_ds_ExternalDataSet(content, "Monolix", BLK_DS_MONOLIX_DATASET);
 							}
 
@@ -299,9 +299,9 @@ class DataSetPrinter {
 						val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 						val colType = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
 						val modelVar = getDefaultMatchingVariable(mog, column, mObj);
-						if (modelVar != null && use.equals(UseType::ID.toString) || use.equals(UseType::IDV.toString) ||
+						if (modelVar != null && (use.equals(UseType::ID.toString) || use.equals(UseType::IDV.toString) ||
 							use.equals(UseType::VARLEVEL.toString) || (use.equals(UseType::COVARIATE.toString) &&
-								!colType.isCategorical())) {
+								!colType.isCategorical()))) {
 								// use magic mapping with no conditions 
 							res = res + column.symbolName.name.print_ds_MagicMapping(modelVar);
 						} else if (modelVar != null && use.equals(UseType::COVARIATE.toString) && colType.isCategorical()) {
@@ -320,7 +320,7 @@ class DataSetPrinter {
 				}
 			}
 		}
-		res = res + dObj.print_ds_DataSet(mObj);
+		res = res + dObj.print_ds_DataSet(mObj, mog);
 	}
 
 		def print_ds_AmtMapping(SymbolDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
@@ -478,7 +478,9 @@ class DataSetPrinter {
 			return res;
 		}
 
-		// Return a model variable (matched by name or in the MOG MAPPING block)
+		// Return a model variable (matched by name)
+		// not only valid matched are returned. So for example
+		// no covariate with an RHS is returned as this does not match the data column.
 		protected def getDefaultMatchingVariable(MOGObject mog, SymbolDeclaration column, ModelObject mObj) {
 			if (column.symbolName != null && column.list != null) {
 				var columnId = column.symbolName.name;
@@ -494,7 +496,7 @@ class DataSetPrinter {
 						if (b.covariateBlock != null) {
 							for (s : b.covariateBlock.variables) {
 								if (s.symbolName != null && s.symbolName.name.equals(columnId))
-									return s.symbolName.name;
+									return if(s.expression == null) s.symbolName.name else null;
 							}
 						}
 					}
@@ -515,7 +517,7 @@ class DataSetPrinter {
 			return null;
 		}
 
-		protected def print_ds_DataSet(DataObject dObj, ModelObject mObj) {
+		protected def print_ds_DataSet(DataObject dObj, ModelObject mObj, MOGObject mog) {
 			var res = "";
 			var k = 1;
 			for (b : dObj.blocks) {
@@ -529,7 +531,7 @@ class DataSetPrinter {
 							dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
 						}
 						var convertedColType = "undefined"
-						if (columnType != null) {
+						if (columnType != null && column.isUsedInModel(mog, mObj)) {
 							convertedColType = column.convertEnum(dosingToCompartmentMacro);
 						}
 						val valueType = column.getValueType
@@ -550,7 +552,18 @@ class DataSetPrinter {
 				</DataSet>
 			'''
 		}
-
+	
+	def boolean isUsedInModel(SymbolDeclaration column, MOGObject mog, ModelObject mObj){
+		val type = column.list.arguments.namedArguments.arguments.getAttribute(AttributeValidator::attr_use.name);
+		switch(type){
+			case UseType::IDV.toString,
+			case UseType::VARLEVEL.toString,
+			case UseType::COVARIATE.toString,
+			case UseType::ID.toString: getDefaultMatchingVariable(mog, column, mObj) != null
+			default: true
+		}
+	}
+	
 	//use option names
 	def convertEnum(SymbolDeclaration columnDefn, boolean isDosingToCompartmentMacro) {
 		val type = columnDefn.getColumnType

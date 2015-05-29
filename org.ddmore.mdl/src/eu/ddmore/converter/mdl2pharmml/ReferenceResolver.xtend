@@ -1,17 +1,16 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import org.ddmore.mdl.mdl.ModelObject
 import eu.ddmore.converter.mdlprinting.MdlPrinter
-import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.mdl.MOGObject
 import java.util.ArrayList
-import org.ddmore.mdl.validation.Utils
-import org.ddmore.mdl.mdl.LevelType
 import java.util.HashMap
-import org.ddmore.mdl.types.DefaultValues
 import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.mdl.UseType
+import org.ddmore.mdl.mdl.LevelType
+import org.ddmore.mdl.mdl.MOGObject
+import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.UseType
+import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.validation.Utils
 
 class ReferenceResolver{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -21,7 +20,7 @@ class ReferenceResolver{
  	}
 	
 	//References that are needed for the conversion
-	protected var independentVar = DefaultValues::INDEPENDENT_VAR;
+	protected var String independentVar = null;
 	protected var SymbolDeclaration cmtVar = null;
 
 	//List of PharmML variables in corresponding blocks 
@@ -100,7 +99,7 @@ class ReferenceResolver{
 				}
 			}					
 		}
-		return DefaultValues::INDEPENDENT_VAR;
+		return null;
 	}	
 		
 	//Return a list of covariate variables per object
