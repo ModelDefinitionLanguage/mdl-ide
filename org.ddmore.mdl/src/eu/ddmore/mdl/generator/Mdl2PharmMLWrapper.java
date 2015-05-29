@@ -53,6 +53,12 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
        
        EList<Diagnostic> errors = resource.getErrors();
        EList<Diagnostic> warnings = resource.getWarnings();
+       if (!warnings.isEmpty()) {
+           LOGGER.warn(warnings.size() + " warning(s) encountered in parsing MDL file " + src.getAbsolutePath());
+           for (Diagnostic w : warnings) {
+               LOGGER.warn(w);
+           }
+       }
        if (!errors.isEmpty()) {
            LOGGER.error(errors.size() + " errors encountered in parsing MDL file " + src.getAbsolutePath());
            for (Diagnostic e : errors) {
@@ -60,13 +66,6 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
            }
            throw new ParseException(String.format("Unable to parse MDL file %1$s; %2$d error(s) encountered; see the log output.",
                src.getAbsolutePath(), errors.size()));
-           
-       }
-       if (!warnings.isEmpty()) {
-           LOGGER.warn(warnings.size() + " warning(s) encountered in parsing MDL file " + src.getAbsolutePath());
-           for (Diagnostic w : warnings) {
-               LOGGER.warn(w);
-           }
        }
        
        eu.ddmore.converter.mdl2pharmml.Mdl2PharmML xtendConverter = new eu.ddmore.converter.mdl2pharmml.Mdl2PharmML();
