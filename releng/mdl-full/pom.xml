@@ -16,8 +16,6 @@
 		<module>../../org.ddmore.mdl.sdk</module>
 		<module>../../org.ddmore.mdl.sdk.jre</module>
         <module>../../eu.ddmore.mdl.ide.feature</module>
-		<!-- once the encryption key is changed this can be included : MIFDEV-35 
-			<module>../com.mango.mif.client.feature</module> <module>../com.mango.mif.client.site</module> -->
 		<module>../../eu.ddmore.mdleditor.site</module>
 	</modules>
 	<url>http://ddmore.eu/</url>
