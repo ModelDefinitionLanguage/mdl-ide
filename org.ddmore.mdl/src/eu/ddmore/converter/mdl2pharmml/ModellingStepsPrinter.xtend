@@ -74,7 +74,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 			«dObj.print_mdef_ExternalDataSetReference»
 			«pObj.print_msteps_ParametersToEstimate»
 			«tObj.print_msteps_EstimateOperations(order)»
-			«mObj.print_ct_variableAssignment»
+«««			«mObj.print_ct_variableAssignment»
 		</EstimationStep>
 	'''
 		
@@ -150,34 +150,34 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	protected def print_msteps_SimulationStep(String stepId, Integer order, ModelObject mObj, DataObject dObj, ParameterObject pObj, TaskObject tObj)'''
 		<SimulationStep  oid="«stepId»">
 			«dObj.print_mdef_ExternalDataSetReference»
-			«mObj.print_ct_variableAssignment»
+«««			«mObj.print_ct_variableAssignment»
 		</SimulationStep>
 	'''
 	
-	///////////////////////////////////////////////
-	//General
-	///////////////////////////////////////////////	
-	protected def print_ct_variableAssignment(ModelObject mObj){
-		//For covariates that are not transformations but have expression
-		var res = "";
-		for (b: mObj.blocks){
-			if (b.covariateBlock != null){
-				for (s: b.covariateBlock.variables){
-					if (s.symbolName != null && s.expression != null){
-						if (cm_assigned_vars.contains(s.symbolName.name)){
-							res = '''
-								<ct:VariableAssignment>
-									«s.symbolName.print_ct_SymbolName»
-									«s.expression.print_Assign»
-								</ct:VariableAssignment>
-							'''
-						}
-					}
-				}
-			}
-		}
-		return res;
-	}
+//	///////////////////////////////////////////////
+//	//General
+//	///////////////////////////////////////////////	
+//	protected def print_ct_variableAssignment(ModelObject mObj){
+//		//For covariates that are not transformations but have expression
+//		var res = "";
+//		for (b: mObj.blocks){
+//			if (b.covariateBlock != null){
+//				for (s: b.covariateBlock.variables){
+//					if (s.symbolName != null && s.expression != null){
+//						if (cm_assigned_vars.contains(s.symbolName.name)){
+//							res = '''
+//								<ct:VariableAssignment>
+//									«s.symbolName.print_ct_SymbolName»
+//									«s.expression.print_Assign»
+//								</ct:VariableAssignment>
+//							'''
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return res;
+//	}
 	
 	protected def print_msteps_Property(PropertyDeclaration s)'''
 		«IF s.propertyName != null && s.expression != null»

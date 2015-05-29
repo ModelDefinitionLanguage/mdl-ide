@@ -381,7 +381,7 @@ ArgumentName:
 ;
 
 FunctionName:
-	name=ID
+	name=(ID|TRANSFORMS)
 ;
 
 FunctionCall:
@@ -464,8 +464,7 @@ enum PkMacroType:
 ;
 
 enum UseType:
-	no_use | date | dat1 | dat2 | dat3 | id | idv | amt | dv | dvid | ytype | covariate | rate | adm | 
-	cens | ss | addl | ii | mdv | evid | cmt | varlevel
+	no_use | id | idv | amt | dv | dvid | covariate | rate | adm | ss | mdv | cmt | varlevel
 ;
 
 enum TargetType:
@@ -506,10 +505,11 @@ Category:
 ;
 
 AnyExpression:
-	expression = Expression |
-	list = List | 
-	vector = Vector |
-	type = EnumType 
+		expression = Expression
+	|	list = List
+	|	vector = Vector
+	|	type = EnumType 
+	|	transform=transformExpr
 ;
 
 List:
@@ -542,6 +542,10 @@ Argument:
 
 ArgumentExpression:
 	expression = AnyExpression | randomList = RandomList
+;
+
+transformExpr:
+	transform = TRANSFORMS
 ;
 
 ParExpression:
@@ -643,6 +647,10 @@ UnaryOperator:
 NumericValue:	
 	INTEGER | FLOAT
 ; 
+
+terminal TRANSFORMS:
+	'log'|'logit'|'probit'|'indentity'
+;
 	
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';

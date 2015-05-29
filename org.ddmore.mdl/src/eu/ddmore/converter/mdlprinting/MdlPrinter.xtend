@@ -37,18 +37,17 @@ import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.RandomList
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.SymbolName
+import org.ddmore.mdl.mdl.SymbolRef
+import org.ddmore.mdl.mdl.TargetType
 import org.ddmore.mdl.mdl.TrialType
 import org.ddmore.mdl.mdl.UnaryExpression
-import org.ddmore.mdl.mdl.UnnamedArguments
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.VarType
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.validation.PropertyValidator
-import org.eclipse.xtext.xbase.lib.Pair
-import org.ddmore.mdl.mdl.TargetType
-import org.ddmore.mdl.mdl.SymbolRef
+import org.ddmore.mdl.mdl.UnnamedArguments
 
 class MdlPrinter {
 	

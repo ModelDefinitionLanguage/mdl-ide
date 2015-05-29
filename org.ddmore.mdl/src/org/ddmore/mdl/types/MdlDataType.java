@@ -47,6 +47,7 @@ import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VariabilityType;
 import org.ddmore.mdl.mdl.Vector;
+import org.ddmore.mdl.mdl.transformExpr;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
 import org.ddmore.mdl.validation.AttributeValidator;
 import org.ddmore.mdl.validation.FunctionValidator;
@@ -108,6 +109,11 @@ public enum MdlDataType {
 		return res;
 	}
 	
+	static public boolean validateType(MdlDataType type, transformExpr expr){
+		if (expr.getTransform() != null && type == MdlDataType.TYPE_TRANS) return true;
+		return false;
+	}
+	
 	static public boolean validateType(MdlDataType type, Vector expr){
 		switch(type){
 			case TYPE_VECTOR_INT: return isVectorInteger(expr);
@@ -166,6 +172,8 @@ public enum MdlDataType {
 			return validateType(type, expr.getVector());
 		if (expr.getType() != null) 
 			return validateType(type, expr.getType());
+		if (expr.getTransform() != null) 
+			return validateType(type, expr.getTransform());
 		return false;
 	}
 	

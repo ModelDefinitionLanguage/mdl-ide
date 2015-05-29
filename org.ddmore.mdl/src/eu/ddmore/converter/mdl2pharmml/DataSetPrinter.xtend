@@ -285,44 +285,38 @@ class DataSetPrinter {
 		getColumnByUse(dObj, UseType::DVID)
 	}
 
-	protected def print_ds_NONMEM_DataSet(MOGObject mog, ModelObject mObj, DataObject dObj) {
+	def print_ds_NONMEM_DataSet(MOGObject mog, ModelObject mObj, DataObject dObj) {
 		var res = "";
-		var symbolIterator = dObj.eAllContents();
-		while (symbolIterator.hasNext()) {
-			var eObj = symbolIterator.next();
-//			if (eObj instanceof SymbolDeclarationImpl) {
-				var column = eObj as ListDeclaration;
-				if (column != null && column.symbolName != null) {
-					var blockContainer = eObj.eContainer;
-					// Map only columns, not DECLARED_VARAIBLES
-					if(blockContainer instanceof DataInputBlockImpl) {
-						// } || blockContainer instanceof DataDerivedBlockImpl){
-						val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-						val colType = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
-						val modelVar = getDefaultMatchingVariable(mog, column, mObj);
-						if (modelVar != null && (use.equals(UseType::ID.toString) || use.equals(UseType::IDV.toString) ||
+		for (blocks : dObj.blocks) {
+			if (blocks.dataInputBlock != null) {
+				for (column : blocks.dataInputBlock.variables) {
+					val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+					val colType = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+					val modelVar = getDefaultMatchingVariable(mog, column, mObj);
+					if (modelVar != null &&
+						(use.equals(UseType::ID.toString) || use.equals(UseType::IDV.toString) ||
 							use.equals(UseType::VARLEVEL.toString) || (use.equals(UseType::COVARIATE.toString) &&
 								!colType.isCategorical()))) {
 								// use magic mapping with no conditions 
-							res = res + column.symbolName.name.print_ds_MagicMapping(modelVar);
-						} else if (modelVar != null && use.equals(UseType::COVARIATE.toString) && colType.isCategorical()) {
-							// categorical covariates
-							var categoricalMapping = column.print_ds_CategoricalMapping;
-							res = res + column.symbolName.name.print_ds_ColumnMapping(modelVar, categoricalMapping);
-						}
-						else if (use.equals(UseType::AMT.toString)) {
-							// handle amount mapping
-							res = res + column.print_ds_AmtMapping(dObj, mObj)
-						} else if (use.equals(UseType::DV.toString)) {
-							// handle amount mapping
-							res = res + column.print_ds_DvMapping(dObj, mObj)
+								res = res + column.symbolName.name.print_ds_MagicMapping(modelVar);
+							} else if (modelVar != null && use.equals(UseType::COVARIATE.toString) &&
+								colType.isCategorical()) {
+								// categorical covariates
+								var categoricalMapping = column.print_ds_CategoricalMapping;
+								res = res + column.symbolName.name.print_ds_ColumnMapping(modelVar, categoricalMapping);
+							} else if (use.equals(UseType::AMT.toString)) {
+								// handle amount mapping
+								res = res + column.print_ds_AmtMapping(dObj, mObj)
+							} else if (use.equals(UseType::DV.toString)) {
+								// handle amount mapping
+								res = res + column.print_ds_DvMapping(dObj, mObj)
+							}
 						}
 					}
 				}
-//			}
-		}
-		res = res + dObj.print_ds_DataSet(mObj, mog);
-	}
+				res = res + dObj.print_ds_DataSet(mObj, mog);
+			}
+
 
 		def print_ds_AmtMapping(ListDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
 			amtColumn.print_ds_StandardAmtMapping(dObj, mObj)
