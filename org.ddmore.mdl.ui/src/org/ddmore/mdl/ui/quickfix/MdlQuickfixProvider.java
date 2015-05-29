@@ -18,6 +18,7 @@ import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.DistributionName;
 import org.ddmore.mdl.mdl.EnumType;
 import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.ListDeclaration;
 import org.ddmore.mdl.mdl.LogicalExpression;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlFactory;
@@ -32,6 +33,7 @@ import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.SymbolRef;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.UseType;
 import org.ddmore.mdl.mdl.VarType;
@@ -344,9 +346,11 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		MultiplicativeExpression mult =  MdlFactory.eINSTANCE.createMultiplicativeExpression();
 		PowerExpression power = MdlFactory.eINSTANCE.createPowerExpression();
 		UnaryExpression unary = MdlFactory.eINSTANCE.createUnaryExpression();
+		SymbolRef symbRef = MdlFactory.eINSTANCE.createSymbolRef();
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 		symbName.setName(value);
-		unary.setSymbol(symbName);
+		symbRef.setSymbolRef(symbName);
+		unary.setSymbol(symbRef);
 		power.getExpression().add(unary);
 		mult.getExpression().add(power);
 		add.getExpression().add(mult);
@@ -486,7 +490,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	}
 	
 	void insertSymbolDeclaration(DataInputBlock block, String varName){
-		SymbolDeclaration newSymbol = MdlFactory.eINSTANCE.createSymbolDeclaration();
+		ListDeclaration newSymbol = MdlFactory.eINSTANCE.createListDeclaration();
 		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
 		symbName.setName(varName);
 		newSymbol.setSymbolName(symbName);

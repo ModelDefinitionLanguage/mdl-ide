@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
+import org.ddmore.mdl.mdl.ExpressionDeclaration;
 import org.ddmore.mdl.mdl.ImportObjectBlock;
 import org.ddmore.mdl.mdl.ImportObjectStatement;
+import org.ddmore.mdl.mdl.ListDeclaration;
 import org.ddmore.mdl.mdl.MOGObject;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
@@ -15,7 +17,9 @@ import org.ddmore.mdl.mdl.ModelObjectBlock;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
+import org.ddmore.mdl.mdl.ReferenceDeclaration;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
+import org.ddmore.mdl.mdl.SymbolName;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.EValidatorRegistrar;
@@ -141,13 +145,13 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 		List<String> dVars = new ArrayList<String>();
 		for (DataObjectBlock b: dObj.getBlocks()){
 			if (b.getDataInputBlock() != null)
-				for (SymbolDeclaration s: b.getDataInputBlock().getVariables())
+				for (ListDeclaration s: b.getDataInputBlock().getVariables())
 					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
 			if (b.getDataDerivedBlock() != null)
-				for (SymbolDeclaration s: b.getDataDerivedBlock().getVariables())
+				for (ExpressionDeclaration s: b.getDataDerivedBlock().getVariables())
 					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
 			if (b.getDeclaredVariables() != null)
-				for (SymbolDeclaration s: b.getDeclaredVariables().getVariables())
+				for (ReferenceDeclaration s: b.getDeclaredVariables().getVariables())
 					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
 
 		}

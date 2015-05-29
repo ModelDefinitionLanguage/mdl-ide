@@ -6,22 +6,23 @@ import org.apache.commons.io.FilenameUtils
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.mdl.InputFormatType
+import org.ddmore.mdl.mdl.List
+import org.ddmore.mdl.mdl.ListDeclaration
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.mdl.ModelObject
+import org.ddmore.mdl.mdl.ModelPredictionBlockStatement
+import org.ddmore.mdl.mdl.NonContinuousType
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.SymbolName
+import org.ddmore.mdl.mdl.SymbolRef
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.mdl.impl.DataInputBlockImpl
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
+import org.ddmore.mdl.types.DistributionType
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.validation.Utils
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
-import org.ddmore.mdl.types.DistributionType
-import org.ddmore.mdl.mdl.NonContinuousType
-import org.ddmore.mdl.mdl.ModelPredictionBlockStatement
-import org.ddmore.mdl.mdl.List
 
 class DataSetPrinter {
 	protected extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -58,7 +59,7 @@ class DataSetPrinter {
 	'''
 
 
-	def print_ds_DvMapping(SymbolDeclaration dvColumn, DataObject dObj, ModelObject mObj){
+	def print_ds_DvMapping(ListDeclaration dvColumn, DataObject dObj, ModelObject mObj){
 		val define = dvColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 		val columnId = dvColumn.symbolName.name;
 		if (define != null) {
@@ -106,7 +107,7 @@ class DataSetPrinter {
 		}
 	}
 	
-	def print_ds_TargetMapping(SymbolDeclaration amtColumn, DataObject dObj, ModelObject mObj){
+	def print_ds_TargetMapping(ListDeclaration amtColumn, DataObject dObj, ModelObject mObj){
 		val define = amtColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 		val columnId = amtColumn.symbolName.name;
 		var toolMappingDefn = '''''';
@@ -212,7 +213,7 @@ class DataSetPrinter {
 		return res;
 	}
 
-	protected def getColumnType(SymbolDeclaration dataColumn) {
+	protected def getColumnType(ListDeclaration dataColumn) {
 		var columnType = null as String;
 		if (dataColumn.list != null) {
 			val useValue = dataColumn.list.arguments.getAttribute(AttributeValidator::attr_use.name);
@@ -221,7 +222,7 @@ class DataSetPrinter {
 		return columnType;
 	}
 
-	protected def getValueType(SymbolDeclaration dataColumn) {
+	protected def getValueType(ListDeclaration dataColumn) {
 		val useValue = dataColumn.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 		val type = dataColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
 
@@ -289,8 +290,8 @@ class DataSetPrinter {
 		var symbolIterator = dObj.eAllContents();
 		while (symbolIterator.hasNext()) {
 			var eObj = symbolIterator.next();
-			if (eObj instanceof SymbolDeclarationImpl) {
-				var column = eObj as SymbolDeclaration;
+//			if (eObj instanceof SymbolDeclarationImpl) {
+				var column = eObj as ListDeclaration;
 				if (column != null && column.symbolName != null) {
 					var blockContainer = eObj.eContainer;
 					// Map only columns, not DECLARED_VARAIBLES
@@ -318,18 +319,18 @@ class DataSetPrinter {
 						}
 					}
 				}
-			}
+//			}
 		}
 		res = res + dObj.print_ds_DataSet(mObj, mog);
 	}
 
-		def print_ds_AmtMapping(SymbolDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
+		def print_ds_AmtMapping(ListDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
 			amtColumn.print_ds_StandardAmtMapping(dObj, mObj)
 			+ amtColumn.print_ds_TargetMapping(dObj, mObj)
 		}
 
 
-		protected def print_ds_StandardAmtMapping(SymbolDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
+		protected def print_ds_StandardAmtMapping(ListDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
 			val define = amtColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 			val columnId = amtColumn.symbolName.name;
 			var res = '''''';
@@ -374,7 +375,7 @@ class DataSetPrinter {
 	
 	def printCategoricalObsMapping(Expression expression, ModelObject object){
 		val obsVar = expression.getSymbolReference
-		val obsExpr = object.getMatchingObservationExpression(obsVar.name)
+		val obsExpr = object.getMatchingObservationExpression(obsVar.symbolRef.name)
 		// assume we have tested that this caregorical
 		val catsExpr = obsExpr.list.arguments.getAttributeExpression(AttributeValidator::attr_categories.name) 
 		'''
@@ -411,7 +412,7 @@ class DataSetPrinter {
 	}
 	
 	
-	def SymbolName getSymbolReference(Expression expression){
+	def SymbolRef getSymbolReference(Expression expression){
 		if(expression.expression != null &&
 			expression.expression.expression != null &&
 			expression.expression.expression.size > 0 &&
@@ -428,7 +429,7 @@ class DataSetPrinter {
 	def boolean isCategoricalObs(Expression expression, ModelObject mObj){
 		val symbRef = expression.getSymbolReference
 		if(symbRef != null){
-			val symbName = 	symbRef.name;
+			val symbName = 	symbRef.symbolRef.name;
 			val symbDefn = mObj.getMatchingObservationExpression(symbName)
 			return 	symbDefn != null && symbDefn.list != null && symbDefn.list.arguments != null &&
 						symbDefn.list.arguments.getAttribute(AttributeValidator::attr_type.name) == "categorical" 
@@ -439,7 +440,7 @@ class DataSetPrinter {
 	def boolean isDiscreteBernoulliObs(Expression expression, ModelObject mObj){
 		val symbRef = expression.getSymbolReference
 		if(symbRef != null){
-			val symbName = 	symbRef.name;
+			val symbName = 	symbRef.symbolRef.name;
 			val symbDefn = mObj.getMatchingObservationExpression(symbName)
 			if(symbDefn != null && symbDefn.list != null && symbDefn.list.arguments != null){
 				val typeName = symbDefn.list.arguments.getAttribute(AttributeValidator::attr_type.name)
@@ -454,7 +455,7 @@ class DataSetPrinter {
 			columnId.print_ds_ColumnMapping(symbId, "").toString
 		}
 
-		protected def print_ds_CategoricalMapping(SymbolDeclaration column) {
+		protected def print_ds_CategoricalMapping(ListDeclaration column) {
 			var res = "";
 			if (column.list != null) {
 				val type = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
@@ -481,7 +482,7 @@ class DataSetPrinter {
 		// Return a model variable (matched by name)
 		// not only valid matched are returned. So for example
 		// no covariate with an RHS is returned as this does not match the data column.
-		protected def getDefaultMatchingVariable(MOGObject mog, SymbolDeclaration column, ModelObject mObj) {
+		protected def getDefaultMatchingVariable(MOGObject mog, ListDeclaration column, ModelObject mObj) {
 			if (column.symbolName != null && column.list != null) {
 				var columnId = column.symbolName.name;
 				/*Default implicit mapping*/
@@ -553,7 +554,7 @@ class DataSetPrinter {
 			'''
 		}
 	
-	def boolean isUsedInModel(SymbolDeclaration column, MOGObject mog, ModelObject mObj){
+	def boolean isUsedInModel(ListDeclaration column, MOGObject mog, ModelObject mObj){
 		val type = column.list.arguments.namedArguments.arguments.getAttribute(AttributeValidator::attr_use.name);
 		switch(type){
 			case UseType::IDV.toString,
@@ -565,7 +566,7 @@ class DataSetPrinter {
 	}
 	
 	//use option names
-	def convertEnum(SymbolDeclaration columnDefn, boolean isDosingToCompartmentMacro) {
+	def convertEnum(ListDeclaration columnDefn, boolean isDosingToCompartmentMacro) {
 		val type = columnDefn.getColumnType
 		
 		switch (type) {
@@ -580,7 +581,7 @@ class DataSetPrinter {
 		}
 	}
 	
-	def boolean isDosingToCompartmentMacro(SymbolDeclaration amtColumn, ModelObject mObj){
+	def boolean isDosingToCompartmentMacro(ListDeclaration amtColumn, ModelObject mObj){
 		val define = amtColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 	
 		var retVal = false

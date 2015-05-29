@@ -48,6 +48,7 @@ import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.validation.PropertyValidator
 import org.eclipse.xtext.xbase.lib.Pair
 import org.ddmore.mdl.mdl.TargetType
+import org.ddmore.mdl.mdl.SymbolRef
 
 class MdlPrinter {
 	
@@ -313,6 +314,10 @@ class MdlPrinter {
 //			res  = res + '[' + s.index + ']';
 //		}
 		return res;
+	}
+	
+	def String toStr(SymbolRef s){
+		return s.symbolRef.toStr;
 	}
 	
 //	def String toStr(FullyQualifiedSymbolName s){

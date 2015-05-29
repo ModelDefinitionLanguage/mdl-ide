@@ -14,11 +14,11 @@ import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
 import org.ddmore.mdl.mdl.InputFormatType;
+import org.ddmore.mdl.mdl.ListDeclaration;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.PropertyDeclaration;
 import org.ddmore.mdl.mdl.SourceBlock;
-import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
@@ -307,7 +307,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 					//Iterate over data variables and match
 					for (DataObjectBlock b: dObj.getBlocks()){
 						if (b.getDataInputBlock() != null){
-							for (SymbolDeclaration s: b.getDataInputBlock().getVariables()){
+							for (ListDeclaration s: b.getDataInputBlock().getVariables()){
 								if (s.getSymbolName() != null){
 									boolean isFound = false;
 									for (String column: columns)

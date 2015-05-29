@@ -514,7 +514,7 @@ public enum MdlDataType {
 			PowerExpression powerExpr = multExpr.getExpression().get(0);
 			if (powerExpr.getExpression().size() > 1) return null;
 			UnaryExpression unaryExpr = powerExpr.getExpression().get(0);
-			if (unaryExpr.getSymbol() != null) return unaryExpr.getSymbol();
+			if (unaryExpr.getSymbol() != null) return unaryExpr.getSymbol().getSymbolRef();
 		}
 		return null;
 	}
@@ -526,6 +526,20 @@ public enum MdlDataType {
 	public static MdlDataType getExpectedType(SymbolDeclaration s){
 		if (s.getList() != null)
 			return getExpectedType(s.getList());		
+		return TYPE_REAL;
+	}
+	
+	public static MdlDataType getExpectedType(ListDeclaration s){
+		if (s.getList() != null)
+			return getExpectedType(s.getList());		
+		return TYPE_REAL;
+	}
+	
+	public static MdlDataType getExpectedType(ExpressionDeclaration s){
+		return TYPE_REAL;
+	}
+	
+	public static MdlDataType getExpectedType(ReferenceDeclaration s){
 		return TYPE_REAL;
 	}
 	
@@ -735,7 +749,7 @@ public enum MdlDataType {
 			MclObject mclObj = Utils.getMclObject(unaryExpr.getSymbol());
 			if (mclObj != null)
 				for (Variable var: Utils.getDeclaredVariables(mclObj)){
-					if (var.getName() == unaryExpr.getSymbol().getName())
+					if (var.getName() == unaryExpr.getSymbol().getSymbolRef().getName())
 						return var.getType();
 				}
 			return TYPE_REAL;

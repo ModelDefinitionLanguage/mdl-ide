@@ -267,6 +267,21 @@ public class Utils {
 				if (s.getSymbolName() != null)
 					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getExpectedType(s)));
 			}
+			if (container instanceof ListDeclarationImpl) {
+				ListDeclaration s = (ListDeclaration) container;
+				if (s.getSymbolName() != null)
+					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getExpectedType(s)));
+			}
+			if (container instanceof ExpressionDeclarationImpl) {
+				ExpressionDeclaration s = (ExpressionDeclaration) container;
+				if (s.getSymbolName() != null)
+					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getExpectedType(s)));
+			}
+			if (container instanceof ReferenceDeclarationImpl) {
+				ReferenceDeclaration s = (ReferenceDeclaration) container;
+				if (s.getSymbolName() != null)
+					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getExpectedType(s)));
+			}
 //			if (container instanceof FunctionCallStatementImpl) {
 //				FunctionCallStatement s = (FunctionCallStatement) container;
 //				if (s.getSymbolName() != null)

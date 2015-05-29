@@ -167,7 +167,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 						if (cm_assigned_vars.contains(s.symbolName.name)){
 							res = '''
 								<ct:VariableAssignment>
-									«s.symbolName.print_ct_SymbolRef»
+									«s.symbolName.print_ct_SymbolName»
 									«s.expression.print_Assign»
 								</ct:VariableAssignment>
 							'''

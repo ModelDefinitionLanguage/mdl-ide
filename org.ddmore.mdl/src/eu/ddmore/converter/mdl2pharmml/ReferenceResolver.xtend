@@ -5,9 +5,9 @@ import java.util.ArrayList
 import java.util.HashMap
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.LevelType
+import org.ddmore.mdl.mdl.ListDeclaration
 import org.ddmore.mdl.mdl.MOGObject
 import org.ddmore.mdl.mdl.ModelObject
-import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.UseType
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.Utils
@@ -21,7 +21,7 @@ class ReferenceResolver{
 	
 	//References that are needed for the conversion
 	protected var String independentVar = null;
-	protected var SymbolDeclaration cmtVar = null;
+	protected var ListDeclaration cmtVar = null;
 
 	//List of PharmML variables in corresponding blocks 
 	protected var vm_err_vars = new HashMap<String, Integer>(); 

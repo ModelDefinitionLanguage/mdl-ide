@@ -1,36 +1,18 @@
 package org.ddmore.mdl.validation
 
-import org.eclipse.xtext.validation.Check
-import org.ddmore.mdl.mdl.PkMacroBlock
+import org.ddmore.mdl.mdl.DataInputBlock
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
-import org.ddmore.mdl.mdl.List
-import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.eclipse.xtext.validation.Check
 
-class CompartmentValidator extends AbstractDeclarativeValidator{
+class DataInpurVariablesValidator extends AbstractDeclarativeValidator{
 
 
 	@Check
-	def checkCompartmentAttributes(PkMacroBlock macroBlock){
-		for(stmt : macroBlock.statements){
-			if(stmt.variable != null){
-				if(stmt.variable.list != null){
-					stmt.variable.list.validateCompartmentList
-					stmt.variable.validateNamedMacro(stmt.list)
-				}
-			}
-			else if(stmt.list != null) {
-				stmt.list.validateCompartmentList
-			}
+	def checkCompartmentAttributes(DataInputBlock macroBlock){
+		for(stmt : macroBlock.variables){
+						
 		}
 	}
 	
-	def void validateNamedMacro(SymbolDeclaration declaration, List list){
-		
-	}
-
-	
-	def void getValidateCompartmentList(List list){
-		
-	}
 	
 }

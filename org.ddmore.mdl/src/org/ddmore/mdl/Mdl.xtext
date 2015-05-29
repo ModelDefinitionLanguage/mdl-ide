@@ -158,17 +158,17 @@ DataObjectBlock:
 
 DataInputBlock:
  	identifier='DATA_INPUT_VARIABLES' 
- 	BEGIN variables += SymbolDeclaration* END  
+ 	BEGIN variables += ListDeclaration* END  
 ;
 
 DataDerivedBlock:
  	identifier='DATA_DERIVED_VARIABLES' 
- 	BEGIN variables += SymbolDeclaration* END  	
+ 	BEGIN variables += ExpressionDeclaration* END  	
 ;
 
 DeclaredVariablesBlock:
  	identifier='DECLARED_VARIABLES' 
- 	BEGIN variables += SymbolDeclaration* END  	
+ 	BEGIN variables += ReferenceDeclaration* END  	
 ;
  
 SourceBlock:
@@ -411,6 +411,18 @@ SymbolDeclaration:
 		     randomList = RandomList)? 
 ;
 
+ListDeclaration:
+	symbolName = SymbolName ":" list = List 
+;
+
+ExpressionDeclaration:
+	symbolName = SymbolName "=" (expression = Expression) 
+;
+
+ReferenceDeclaration:
+		symbolName = SymbolName
+;
+
 PropertyDeclaration:
 	propertyName = ArgumentName "=" expression = AnyExpression
 ;
@@ -574,9 +586,13 @@ UnaryExpression:
 	operator = UnaryOperator expression = UnaryExpression |  
 	parExpression = ParExpression |
 	number = NumericValue |
-	symbol = SymbolName |
+	symbol = SymbolRef |
 	constant = CONSTANT |
 	functionCall = FunctionCall 
+;
+
+SymbolRef:
+	symbolRef = [SymbolName]
 ;
 
 Vector:

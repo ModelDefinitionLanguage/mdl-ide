@@ -21,7 +21,7 @@ import org.ddmore.mdl.mdl.LogicalExpression
 import org.ddmore.mdl.mdl.MultiplicativeExpression
 import org.ddmore.mdl.mdl.OrExpression
 import org.ddmore.mdl.mdl.PowerExpression
-import org.ddmore.mdl.mdl.SymbolName
+import org.ddmore.mdl.mdl.SymbolRef
 import org.ddmore.mdl.mdl.TaskObjectBlock
 import org.ddmore.mdl.mdl.UnaryExpression
 import org.ddmore.mdl.mdl.VariabilityType
@@ -31,6 +31,7 @@ import org.ddmore.mdl.types.MdlDataType
 import org.ddmore.mdl.validation.FunctionValidator
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
+import org.ddmore.mdl.mdl.SymbolName
 
 class MathPrinter{
 
@@ -504,8 +505,12 @@ class MathPrinter{
 		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
 	'''
 
-	def print_ct_SymbolRef(SymbolName ref) {
-		print_ct_SymbolRef(ref.name)
+	def print_ct_SymbolName(SymbolName symbName) {
+		print_ct_SymbolRef(symbName.name)
+	}
+
+	def print_ct_SymbolRef(SymbolRef ref) {
+		print_ct_SymbolRef(ref.symbolRef.name)
 	}
 
 	def print_ct_SymbolRef(FunctionName ref){

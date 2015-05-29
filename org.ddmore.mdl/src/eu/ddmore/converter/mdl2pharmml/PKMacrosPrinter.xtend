@@ -60,13 +60,13 @@ class PKMacrosPrinter{
 				if (type.equals(PkMacroType::EFFECT.toString))
 					content = content + '''
 						<Value argument="concentration"> 
-							«s.symbolName.print_ct_SymbolRef»
+							«s.symbolName.print_ct_SymbolName»
 						</Value>
 					'''
 				else if(type == PkMacroType::COMPARTMENT.toString)
 					content = content + '''
 						<Value argument="amount"> 
-							«s.symbolName.print_ct_SymbolRef»
+							«s.symbolName.print_ct_SymbolName»
 						</Value>
 					'''
 			}
@@ -87,7 +87,7 @@ class PKMacrosPrinter{
 	def printImplicitCompartment(SymbolName name, Arguments args)'''
 		<Compartment>
 			<Value argument="amount"> 
-				«name.print_ct_SymbolRef»
+				«name.print_ct_SymbolName»
 			</Value>
 			«"cmt".print_Attr_Value(args.getAttribute(AttributeValidator::attr_modelCmt.name).print_ct_Value)»
 		</Compartment>
