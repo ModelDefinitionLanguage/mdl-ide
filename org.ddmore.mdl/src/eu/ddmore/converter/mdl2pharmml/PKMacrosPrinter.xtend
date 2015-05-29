@@ -92,50 +92,6 @@ class PKMacrosPrinter{
 			«"cmt".print_Attr_Value(args.getAttribute(AttributeValidator::attr_modelCmt.name).print_ct_Value)»
 		</Compartment>
 	'''
-//		var res = "";
-//		if (args.namedArguments != null){
-//			var attrExpressions = new HashMap<String, String>();
-//			//TRANSFER 
-//			if (type.equals(PkMacroType::TRANSFER.toString)){
-//				attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
-//				val modelCmt = args.getAttribute(AttributeValidator::attr_modelCmt.name);
-//				if (modelCmt.length > 0){ 
-//					attrExpressions.put("to", "to".print_Attr_Value(modelCmt.print_ct_Value));
-//				}
-//				val from = args.getAttribute(AttributeValidator::attr_from.name);
-//				if (from.length > 0){
-//					var mObj = Utils::getMclObject(args);
-//					if (mObj != null && mObj.modelObject != null){
-//						var fromCompartmentArgs = mObj.modelObject.findCompartment(from);
-//						if (fromCompartmentArgs != null){
-//							var fromCompartment_cmt = fromCompartmentArgs.getAttribute(AttributeValidator::attr_modelCmt.name);
-//							if (fromCompartment_cmt.length > 0){
-//								attrExpressions.put("from", "from".print_Attr_Value(fromCompartment_cmt.print_ct_Value));
-//							}
-//						}
-//					}
-//				}
-//			}
-//			for (a: args.namedArguments.arguments){
-//				var String attrName = null;
-//				if (a.argumentName != null)
-//					attrName = pk_attrs.get(a.argumentName.name);
-//				if (attrName != null && !attrExpressions.containsKey(attrName)){
-//					attrExpressions.put(attrName, '''
-//						<Value argument="«attrName»"> 
-//							«a.expression.print_Math_Expr»
-//						</Value>
-//					''');
-//				}
-//			}
-//			for (expr: attrExpressions.entrySet){
-//				if (expr.value != null)
-//					res  = res + expr.value;
-//			}
-//		}
-//		return res;
-//	}
-	
 	
 	def print_PKMacros(List list){
 		var retVal = ''''''
