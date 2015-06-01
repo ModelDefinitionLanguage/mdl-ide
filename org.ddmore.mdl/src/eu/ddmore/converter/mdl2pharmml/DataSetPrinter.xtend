@@ -195,7 +195,7 @@ class DataSetPrinter {
 			for (b : dObj.blocks) {
 				if (b.sourceBlock != null) {
 					for (s : b.sourceBlock.statements) {
-						if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) &&
+						if (s.propertyName.argName.equals(PropertyValidator::attr_inputformat.name) &&
 							s.expression != null) {
 							if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString)) {
 								var content = mog.print_ds_NONMEM_DataSet(mObj, dObj);
@@ -244,41 +244,61 @@ class DataSetPrinter {
 	'''
 
 	protected def getUseCmtColumn(DataObject dObj) {
-		var symbolIterator = dObj.eAllContents();
-		while (symbolIterator.hasNext()) {
-			var eObj = symbolIterator.next();
-			if (eObj instanceof SymbolDeclarationImpl) {
-				var column = eObj as SymbolDeclaration;
-				if (column != null && column.name != null) {
-					var blockContainer = eObj.eContainer;
-					if (blockContainer instanceof DataInputBlockImpl) {
-						val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-						if (use.equals(UseType::CMT.toString)) {
-							return column.name;
-						}
+		for(block : dObj.blocks){
+			if(block.dataInputBlock != null){
+				for(colDefn : block.dataInputBlock.variables){
+					val use = colDefn.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+					if (use.equals(UseType::CMT.toString)) {
+						return colDefn.name;
 					}
 				}
 			}
 		}
+//		var symbolIterator = dObj.blocks;
+//		while (symbolIterator.hasNext()) {
+//			var eObj = symbolIterator.next();
+//			if (eObj instanceof SymbolDeclarationImpl) {
+//				var column = eObj as SymbolDeclaration;
+//				if (column != null && column.name != null) {
+//					var blockContainer = eObj.eContainer;
+//					if (blockContainer instanceof DataInputBlockImpl) {
+//						val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+//						if (use.equals(UseType::CMT.toString)) {
+//							return column.name;
+//						}
+//					}
+//				}
+//			}
+//		}
 	}
 
 	protected def getColumnByUse(DataObject dObj, UseType useType) {
-		var symbolIterator = dObj.eAllContents();
-		while (symbolIterator.hasNext()) {
-			var eObj = symbolIterator.next();
-			if (eObj instanceof SymbolDeclarationImpl) {
-				var column = eObj as SymbolDeclaration;
-				if (column != null && column.name != null) {
-					var blockContainer = eObj.eContainer;
-					if (blockContainer instanceof DataInputBlockImpl) {
-						val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
-						if (use.equals(useType.toString)) {
-							return column.name;
-						}
+		for(block : dObj.blocks){
+			if(block.dataInputBlock != null){
+				for(colDefn : block.dataInputBlock.variables){
+					val use = colDefn.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+					if (use.equals(useType.toString)) {
+						return colDefn.name;
 					}
 				}
 			}
 		}
+//		var symbolIterator = dObj.eAllContents();
+//		while (symbolIterator.hasNext()) {
+//			var eObj = symbolIterator.next();
+//			if (eObj instanceof SymbolDeclarationImpl) {
+//				var column = eObj as SymbolDeclaration;
+//				if (column != null && column.name != null) {
+//					var blockContainer = eObj.eContainer;
+//					if (blockContainer instanceof DataInputBlockImpl) {
+//						val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
+//						if (use.equals(useType.toString)) {
+//							return column.name;
+//						}
+//					}
+//				}
+//			}
+//		}
 	}
 
 	protected def getUseDvidColumn(DataObject dObj) {
@@ -340,6 +360,7 @@ class DataSetPrinter {
 						«FOR p : pairs»
 						«IF !p.key.expression.isCompartmentVar(mObj)»
 							<math:Piece>
+								«p.key.expression.print_Math_Expr»
 							   	<math:Condition>
 							   		<math:LogicBinop op="eq">
 										<ColumnRef columnIdRef="«cmtColId»"/>
@@ -600,9 +621,9 @@ class DataSetPrinter {
 					var file = "";
 					var delimiter = "";
 					for (s : b.sourceBlock.statements) {
-						if (s.propertyName.name.equals(PropertyValidator::attr_file.name) && s.expression != null)
+						if (s.propertyName.argName.equals(PropertyValidator::attr_file.name) && s.expression != null)
 							file = s.expression.toStr;
-						if (s.propertyName.name.equals(PropertyValidator::attr_delimiter.name) && s.expression != null)
+						if (s.propertyName.argName.equals(PropertyValidator::attr_delimiter.name) && s.expression != null)
 							delimiter = s.expression.toStr;
 					}
 					if (file.length > 0) {
@@ -627,7 +648,7 @@ class DataSetPrinter {
 				for (b : dObj.blocks) {
 					if (b.sourceBlock != null) {
 						for (s : b.sourceBlock.statements) {
-							if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) &&
+							if (s.propertyName.argName.equals(PropertyValidator::attr_inputformat.name) &&
 								s.expression != null) {
 								if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString))
 									oidRef = BLK_DS_NONMEM_DATASET;

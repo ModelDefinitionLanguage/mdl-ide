@@ -315,7 +315,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			container = container.eContainer();
 		}
 		Argument argContainer = (Argument) container;
-		if (argContainer.getArgumentName().getName().equals(attr_define.getName())){
+		if (argContainer.getArgumentName().getArgName().equals(attr_define.getName())){
 			//Argument -> NamedArguments -> Arguments
 			Arguments args = (Arguments) argContainer.eContainer().eContainer();
 			if (args != null){
@@ -331,7 +331,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 					return attrs_define_dv;
 			}
 		}
-		if (argContainer.getArgumentName().getName().equals(attr_fixEff.getName())){
+		if (argContainer.getArgumentName().getArgName().equals(attr_fixEff.getName())){
 			return attrs_fixEff;
 		}
 		return null;
@@ -422,22 +422,22 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	//Check that each defined argument is from the recognized set of list attributes
 	private void checkDefinedAttributes(Argument argument, Arguments args , List<Attribute> knownAttributes, List<String> attributeNames){
-		if (!attributeNames.contains(argument.getArgumentName().getName())){
-			error(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
+		if (!attributeNames.contains(argument.getArgumentName().getArgName())){
+			error(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getArgName(), 
 			MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-			MSG_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());		
+			MSG_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getArgName());		
 		}
 		for (Attribute x: knownAttributes){
-			if (x.getName().equals(argument.getArgumentName().getName())){
+			if (x.getName().equals(argument.getArgumentName().getArgName())){
 				boolean isValid = false;
 				for (MdlDataType type: x.getTypes())
 					isValid = isValid || MdlDataType.validateType(type, argument.getExpression());
 				if (!isValid){
 					error(MSG_ATTRIBUTE_WRONG_TYPE + 
-						": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
+						": attribute \"" + argument.getArgumentName().getArgName() + "\" expects value of type " + 
 							Utils.printList(x.getTypeNames()), 
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-						MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());
+						MSG_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getArgName());
 				}
 				//Check dependency conditions for optional attributes
 				if (!x.isMandatory() && (x.getDependency() != null)){
@@ -461,12 +461,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		HashSet<String> argumentNames = new HashSet<String>();	
 		if (args.getNamedArguments() != null){
 			for (Argument arg: args.getNamedArguments().getArguments()){
-				if (arg.getArgumentName() != null && !argumentNames.contains(arg.getArgumentName().getName())){
-					argumentNames.add(arg.getArgumentName().getName());
+				if (arg.getArgumentName() != null && !argumentNames.contains(arg.getArgumentName().getArgName())){
+					argumentNames.add(arg.getArgumentName().getArgName());
 				} else {
-					warning(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
+					warning(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getArgName(), 
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
-							arg.getArgumentName().getName());				
+							arg.getArgumentName().getArgName());				
 				}
 			}		
 		}

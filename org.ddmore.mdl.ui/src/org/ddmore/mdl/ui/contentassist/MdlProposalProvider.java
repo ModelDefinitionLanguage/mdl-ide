@@ -76,7 +76,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 		if (model instanceof ArgumentImpl){
 			Argument arg = (Argument)model;
 			//use
-			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_use.getName())){
+			if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_use.getName())){
 				List<String> attributes = new ArrayList<String>();
 				for (UseType value: UseType.VALUES)
 					if (value != UseType.NO_USE) attributes.add(value.toString());
@@ -84,7 +84,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				addProposals(context, acceptor, attributes, img); return;
 			} else		
 			//type			
-			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_type.getName())){
+			if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_type.getName())){
 				EObject container = AttributeValidator.findAttributeContainer(arg);
 				List<String> attributes = new ArrayList<String>();
 				if (container instanceof VariabilityBlockImpl){
@@ -117,7 +117,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 				}
 			} else
 			//units
-			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
+			if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_units.getName())){
 				List<String> attributes = new ArrayList<String>();
 				attributes.addAll(UnitValidator.getUnitNames());
 				Image img = imageHelper.getImage(Images.getPath(Images.EXPRESSION));				
@@ -131,7 +131,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 		if (model instanceof PropertyDeclarationImpl){
 			PropertyDeclaration property = (PropertyDeclaration)model;
 			//inputformat
-			if (property.getPropertyName().getName().equals(PropertyValidator.attr_inputformat.getName())){
+			if (property.getPropertyName().getArgName().equals(PropertyValidator.attr_inputformat.getName())){
 				List<String> values = new ArrayList<String>();
 				for (InputFormatType value: InputFormatType.VALUES)
 					if (value != InputFormatType.NO_INPUT_FORMAT)

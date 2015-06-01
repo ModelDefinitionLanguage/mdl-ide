@@ -42,6 +42,7 @@ import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
+import org.ddmore.mdl.mdl.SymbolDefn;
 import org.ddmore.mdl.mdl.SymbolRef;
 import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.VariabilityBlock;
@@ -110,8 +111,8 @@ public class Utils {
 		List<String> argumentNames = new ArrayList<String>();	
 		if (args != null && args.getNamedArguments() != null)
 			for (Argument arg: args.getNamedArguments().getArguments())
-				if (!argumentNames.contains(arg.getArgumentName().getName()))
-					argumentNames.add(arg.getArgumentName().getName());
+				if (!argumentNames.contains(arg.getArgumentName().getArgName()))
+					argumentNames.add(arg.getArgumentName().getArgName());
 		return argumentNames;
 	}
 	
@@ -248,7 +249,7 @@ public class Utils {
 			if (b.getObjectBlock() != null){
 				for (ImportObjectStatement st: b.getObjectBlock().getObjects()){
 					if (st.getObjectRef() != null){
-						EObject container = st.getObjectRef().eContainer();
+						SymbolDefn container = st.getObjectRef().getSymbolRef();
 						if (container instanceof MclObjectImpl){
 							MclObject mclObject = (MclObject)container;
 							objects.add(mclObject);
@@ -353,7 +354,7 @@ public class Utils {
 //			}
 	    	if (container instanceof FunctionCallImpl){
 	    		FunctionCall functCall = (FunctionCall) container;
-	    		String functName = functCall.getIdentifier().getName();
+	    		String functName = functCall.getIdentifier().getFuncName();
     			if (FunctionValidator.libraries.contains(functName))
     				varList.addAll(FunctionValidator.standardFunctions.get(functName).getReturnedVariables(functCall.getArguments()));
 	    	}
@@ -406,7 +407,7 @@ public class Utils {
 							if (s.getName() != null && s.getList() != null){
 								if (s.getList().getArguments().getNamedArguments() != null){
 					    			for (Argument arg: s.getList().getArguments().getNamedArguments().getArguments()){
-					    				if (arg.getArgumentName().getName().equals(AttributeValidator.attr_deriv.getName())){
+					    				if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_deriv.getName())){
 					    					if (!deriv_vars.contains(s.getName()))
 					    						deriv_vars.add(s.getName());
 					    				}

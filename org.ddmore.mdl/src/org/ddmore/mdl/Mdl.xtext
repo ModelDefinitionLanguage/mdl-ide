@@ -381,11 +381,11 @@ MOGObjectBlock:
 //////////////////////////////////////////////////////////
 
 ArgumentName:
-	name=ID
+	argName=ID
 ;
 
 FunctionName:
-	name=(ID|TRANSFORMS)
+	funcName=(ID|TRANSFORMS)
 ;
 
 FunctionCall:

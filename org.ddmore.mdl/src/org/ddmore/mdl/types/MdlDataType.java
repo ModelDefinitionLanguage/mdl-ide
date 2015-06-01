@@ -799,7 +799,7 @@ public enum MdlDataType {
 	}
 	
 	public static MdlDataType getDerivedType(FunctionCall call){
-		FunctionSignature functSig = FunctionValidator.standardFunctions.get(call.getIdentifier().getName());
+		FunctionSignature functSig = FunctionValidator.standardFunctions.get(call.getIdentifier().getFuncName());
 		if (functSig != null)
 			return functSig.getType();
 		return TYPE_REAL;

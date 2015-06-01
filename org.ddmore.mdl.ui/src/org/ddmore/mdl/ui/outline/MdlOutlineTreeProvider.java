@@ -501,7 +501,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			a,
 			MdlPackage.Literals.ARGUMENT__EXPRESSION,
 			_image(a),
-			(a.getArgumentName() != null)? a.getArgumentName().getName(): "undefined",
+			(a.getArgumentName() != null)? a.getArgumentName().getArgName(): "undefined",
 		false);
 	}
 	
@@ -559,7 +559,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 				st,
 				MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 				_image(st),
-				st.getIdentifier().getName(),
+				st.getIdentifier().getFuncName(),
 				false);
 	}
 
@@ -640,7 +640,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			a,
 			MdlPackage.Literals.PROPERTY_DECLARATION__EXPRESSION,
 			_image(a),
-			a.getPropertyName().getName(),
+			a.getPropertyName().getArgName(),
 			false);
 	}
 	

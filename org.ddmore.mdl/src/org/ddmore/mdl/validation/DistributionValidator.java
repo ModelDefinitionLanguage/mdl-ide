@@ -410,21 +410,21 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 		RandomList distr = (RandomList)argContainer.eContainer();
 		HashSet<String> argumentNames = new HashSet<String>();	
 		for (Argument arg: args.getNamedArguments().getArguments()){
-			if (!argumentNames.contains(arg.getArgumentName().getName())){
-				argumentNames.add(arg.getArgumentName().getName());
+			if (!argumentNames.contains(arg.getArgumentName().getArgName())){
+				argumentNames.add(arg.getArgumentName().getArgName());
 			} else {
-				error(MSG_DISTR_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
+				error(MSG_DISTR_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getArgName(), 
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, 
-						MSG_DISTR_ATTRIBUTE_DEFINED, arg.getArgumentName().getName());				
+						MSG_DISTR_ATTRIBUTE_DEFINED, arg.getArgumentName().getArgName());				
 			}
 		}
-		if (exclusive_attrs.containsKey(argument.getArgumentName().getName())){
-			String exclusive = exclusive_attrs.get(argument.getArgumentName().getName());
+		if (exclusive_attrs.containsKey(argument.getArgumentName().getArgName())){
+			String exclusive = exclusive_attrs.get(argument.getArgumentName().getArgName());
 			if (argumentNames.contains(exclusive)){
-				error("Distribution attribute '" + argument.getArgumentName().getName() + "' cannot be used together with '" + 
+				error("Distribution attribute '" + argument.getArgumentName().getArgName() + "' cannot be used together with '" + 
 						exclusive + "'", 
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_DISTR_ATTRIBUTE_DEFINED, 
-						argument.getArgumentName().getName());				
+						argument.getArgumentName().getArgName());				
 			}
 		}
 		if (distr.getType() == null) return;
@@ -435,22 +435,22 @@ public class DistributionValidator extends AbstractDeclarativeValidator{
 				if (checkAttribute(recognized_attrs, argument)) return;
 			}
 			if (checkAttribute(common_attrs, argument)) return;
-			error(MSG_DISTR_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
+			error(MSG_DISTR_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getArgName(), 
 				MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-				MSG_DISTR_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());
+				MSG_DISTR_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getArgName());
 		}
 	}
 	
 	private Boolean checkAttribute(List<Attribute> recognized_attrs, Argument argument){
 		for (Attribute attr: recognized_attrs){
-			if (attr.getName().equals(argument.getArgumentName().getName())) {
+			if (attr.getName().equals(argument.getArgumentName().getArgName())) {
 				if (!MdlDataType.validateType(attr.getType(), argument.getExpression()) 
 						&& !MdlDataType.validateType(MdlDataType.TYPE_REF, argument.getExpression())){
 					error(MSG_DISTR_ATTRIBUTE_WRONG_TYPE + 
-							": attribute \"" + argument.getArgumentName().getName() + "\" expects value of type " + 
+							": attribute \"" + argument.getArgumentName().getArgName() + "\" expects value of type " + 
 						attr.getType().name(), 
 						MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-						MSG_DISTR_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getName());
+						MSG_DISTR_ATTRIBUTE_WRONG_TYPE, argument.getArgumentName().getArgName());
 				}					
 				return true; //found in the list
 			}

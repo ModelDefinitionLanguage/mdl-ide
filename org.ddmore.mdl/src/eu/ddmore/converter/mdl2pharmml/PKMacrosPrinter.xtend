@@ -220,7 +220,7 @@ class PKMacrosPrinter{
 			for (a: args.namedArguments.arguments){
 				var String attrName = null;
 				if (a.argumentName != null)
-					attrName = pk_attrs.get(a.argumentName.name);
+					attrName = pk_attrs.get(a.argumentName.argName);
 				if (attrName != null && !attrExpressions.containsKey(attrName)){
 					attrExpressions.put(attrName, '''
 						<Value argument="«attrName»"> 

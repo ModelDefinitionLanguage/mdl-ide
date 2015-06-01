@@ -223,8 +223,8 @@ class DistributionPrinter extends MdlPrinter{
 		<«type»Distribution xmlns="«xmlns_uncert»" definition="0.1">
 			«IF randomList.arguments.namedArguments != null»
 				«FOR arg: randomList.arguments.namedArguments.arguments»
-					«IF recognizedArgs.containsKey(arg.argumentName.name)»
-						«val attr = recognizedArgs.get(arg.argumentName.name)»
+					«IF recognizedArgs.containsKey(arg.argumentName.argName)»
+						«val attr = recognizedArgs.get(arg.argumentName.argName)»
 						«IF attr != null»
 							«attr.print_DistributionDefault(arg.expression.expression)»
 						«ENDIF»

@@ -77,8 +77,8 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 				objList.add(s.getObjectRef());
 		}
 		for (SymbolRef objName: objList){
-			if (objName.eContainer() != null && objName.eContainer() instanceof MclObject){
-				MclObject obj = (MclObject)objName.eContainer();
+			if (objName.getSymbolRef() instanceof MclObject){
+				MclObject obj = (MclObject)objName.getSymbolRef();
 				if (obj != null){
 					if (obj.getModelObject() != null) params[0] += 1;
 					if (obj.getParameterObject() != null) params[1] += 1;

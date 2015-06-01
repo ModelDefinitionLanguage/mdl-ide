@@ -106,7 +106,7 @@ class MathPrinter{
 		«IF categories.arguments.namedArguments != null»
 			«FOR c : categories.arguments.namedArguments.arguments»
 				«IF c.argumentName != null»
-					<Category catId=«c.argumentName.name»/>
+					<Category catId=«c.argumentName.argName»/>
 				«ENDIF»
 			«ENDFOR»
 		«ENDIF»
@@ -129,7 +129,7 @@ class MathPrinter{
 	
 	//Convert math functions to PharmML 
 	def print_Math_FunctionCall(FunctionCall call) {
-		if (call.identifier.name.equals(FunctionValidator::funct_seq)) {
+		if (call.identifier.funcName.equals(FunctionValidator::funct_seq)) {
 			if (call.arguments != null) {
 				if(call.arguments.namedArguments != null) {
 					return print_ct_Sequence(
@@ -150,12 +150,12 @@ class MathPrinter{
 				}
 			}
 		} else {
-			if (FunctionValidator::funct_standard1.contains(call.identifier.name) ||
-				FunctionValidator::funct_standard2.contains(call.identifier.name)) {
+			if (FunctionValidator::funct_standard1.contains(call.identifier.funcName) ||
+				FunctionValidator::funct_standard2.contains(call.identifier.funcName)) {
 				//Convert standard mathematical functions to a PharmML operator with the same name;		
 				return call.print_Math_FunctionCall_Standard;
 			} else {
-				if (FunctionValidator::lib_PK.equals(call.identifier.name)){
+				if (FunctionValidator::lib_PK.equals(call.identifier.funcName)){
 					//val pkPrinter = PKMacrosPrinter::getInstance();
 					//return pkPrinter.print_PKMacros(call);
 				}
@@ -167,7 +167,7 @@ class MathPrinter{
 
 	//Functions from the standardFunctions list are PharmML operators
 	def print_Math_FunctionCall_Standard(FunctionCall call) {
-		var functName = call.identifier.name.convertUniop;
+		var functName = call.identifier.funcName.convertUniop;
 		if (call.arguments.unnamedArguments != null) {
 			var argNum = call.arguments.unnamedArguments.arguments.size;
 			'''
@@ -200,7 +200,7 @@ class MathPrinter{
 	'''
 
 	def print_Math_FunctionArgument(Argument arg) '''
-		<FunctionArgument«IF arg.argumentName != null» symbId="«arg.argumentName.name»"«ENDIF»>
+		<FunctionArgument«IF arg.argumentName != null» symbId="«arg.argumentName.argName»"«ENDIF»>
 			«arg.expression.print_Math_Expr»
 		</FunctionArgument>
 	'''
@@ -513,7 +513,7 @@ class MathPrinter{
 	}
 
 	def print_ct_SymbolRef(FunctionName ref){
-		print_ct_SymbolRef(ref.name)
+		print_ct_SymbolRef(ref.funcName)
 	}
 
 	def print_ct_Matrix(Vector values, Vector columnNames, String matrixType)'''
@@ -542,7 +542,7 @@ class MathPrinter{
 	protected def getProperty(TaskObjectBlock t, String name) {
 		if (t.estimateBlock != null) {
 			for (s : t.estimateBlock.statements) {
-				if (s.propertyName != null && s.propertyName.name.equals(name)) {
+				if (s.propertyName != null && s.propertyName.argName.equals(name)) {
 					if (s.expression != null)
 						return s.expression.toStr;
 				}
@@ -550,7 +550,7 @@ class MathPrinter{
 		}
 		if (t.simulateBlock != null) {
 			for (s : t.simulateBlock.statements) {
-				if (s.propertyName != null && s.propertyName.name.equals(name)) {
+				if (s.propertyName != null && s.propertyName.argName.equals(name)) {
 					if (s.expression != null) {
 						return s.expression.toStr;
 					}

@@ -214,20 +214,20 @@ public class FunctionValidator extends AbstractDeclarativeValidator{
 	//Check that the function call is to an existing function
 	@Check
 	public void checkFunctionCall(FunctionCall call) {
-		if (!standardFunctions.containsKey(call.getIdentifier().getName()))
+		if (!standardFunctions.containsKey(call.getIdentifier().getFuncName()))
 			error(MSG_FUNCTION_UNKNOWN, 
 					MdlPackage.Literals.FUNCTION_CALL__IDENTIFIER,
-			MSG_FUNCTION_UNKNOWN, call.getIdentifier().getName());
+			MSG_FUNCTION_UNKNOWN, call.getIdentifier().getFuncName());
 		else {
 			//standard function
 			validateStandardFunction(call);
-			if (call.getIdentifier().getName().equals(lib_PK))
+			if (call.getIdentifier().getFuncName().equals(lib_PK))
 				validatePK(call);
 		}
 	}
 	
 private void validateStandardFunction(FunctionCall call){
-		FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getName());
+		FunctionSignature functSig = standardFunctions.get(call.getIdentifier().getFuncName());
 		//TODO validate whether the function returns any value to enable/disable its use in expressions
 		//TODO instead of checking whether a parameter is known, match a list of actual parameters with one of valid sets!
 		int expected = functSig.getNumberOfParams();
@@ -236,7 +236,7 @@ private void validateStandardFunction(FunctionCall call){
 				error(MSG_FUNCTION_WRONG_PASSING_METHOD + ": function exprects " + expected + " parameter(s)",
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_WRONG_PASSING_METHOD, 
-						call.getIdentifier().getName());	
+						call.getIdentifier().getFuncName());	
 			return;
 		} 
 		if (call.getArguments().getNamedArguments() != null){
@@ -245,46 +245,46 @@ private void validateStandardFunction(FunctionCall call){
 				for (Argument arg: call.getArguments().getNamedArguments().getArguments()){
 					if (arg.getArgumentName() != null){
 						Map<String, FunctionParameter> allParams = functSig.getAllParams(); 
-						if (allParams.containsKey(arg.getArgumentName().getName())){
-							FunctionParameter p = allParams.get(arg.getArgumentName().getName());
+						if (allParams.containsKey(arg.getArgumentName().getArgName())){
+							FunctionParameter p = allParams.get(arg.getArgumentName().getArgName());
 							if (!MdlDataType.validateType(p.getType(), arg.getExpression()))
-								error(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getName()
+								error(MSG_FUNCTION_WRONG_TYPE + ": parameter " + arg.getArgumentName().getArgName()
 								+ " expects value of type " + p.getType(),
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_WRONG_TYPE, arg.getArgumentName().getName());		
+								MSG_FUNCTION_WRONG_TYPE, arg.getArgumentName().getArgName());		
 						} else 
-							error(MSG_FUNCTION_PARAMETER_UNKNOWN + ": " + arg.getArgumentName().getName(), 
+							error(MSG_FUNCTION_PARAMETER_UNKNOWN + ": " + arg.getArgumentName().getArgName(), 
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_PARAMETER_UNKNOWN, arg.getArgumentName().getName());		
+								MSG_FUNCTION_PARAMETER_UNKNOWN, arg.getArgumentName().getArgName());		
 						}
 					}	
 				HashSet<String> argumentNames = new HashSet<String>();	
 				for (Argument arg: call.getArguments().getNamedArguments().getArguments()){
-					if (!argumentNames.contains(arg.getArgumentName().getName())){
-						argumentNames.add(arg.getArgumentName().getName());
+					if (!argumentNames.contains(arg.getArgumentName().getArgName())){
+						argumentNames.add(arg.getArgumentName().getArgName());
 					} else {
-						error(MSG_FUNCTION_PARAMETER_DEFINED + ": " + arg.getArgumentName().getName(), 
+						error(MSG_FUNCTION_PARAMETER_DEFINED + ": " + arg.getArgumentName().getArgName(), 
 								MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
-								MSG_FUNCTION_PARAMETER_DEFINED, arg.getArgumentName().getName());		
+								MSG_FUNCTION_PARAMETER_DEFINED, arg.getArgumentName().getArgName());		
 					}
 				}
 			}	
 			else {	
 				warning(MSG_FUNCTION_INVALID + ": cannot pass parameters by name to " +
-					call.getIdentifier().getName(), 
+					call.getIdentifier().getFuncName(), 
 					MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 					MSG_FUNCTION_INVALID, 
-					call.getIdentifier().getName());					
+					call.getIdentifier().getFuncName());					
 			}	
 		} else {
 			if (!functSig.isPassingByName()){
 				int actual = call.getArguments().getUnnamedArguments().getArguments().size();
 				if (actual != expected){
 					warning(MSG_FUNCTION_INVALID + ": " +
-							call.getIdentifier().getName() + " expects " + expected + " parameter(s).", 
+							call.getIdentifier().getFuncName() + " expects " + expected + " parameter(s).", 
 							MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 							MSG_FUNCTION_INVALID, 
-							call.getIdentifier().getName());
+							call.getIdentifier().getFuncName());
 					return;
 				}
 				List<FunctionParameter> defaultParams = functSig.getDefaultParamSet();
@@ -299,10 +299,10 @@ private void validateStandardFunction(FunctionCall call){
 				}
 			} else {
 				warning(MSG_FUNCTION_WRONG_PASSING_METHOD + ": cannot pass parameters by place to " +
-						call.getIdentifier().getName(),
+						call.getIdentifier().getFuncName(),
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_WRONG_PASSING_METHOD, 
-						call.getIdentifier().getName());	
+						call.getIdentifier().getFuncName());	
 			}
 		}
 	}
@@ -315,7 +315,7 @@ private void validateStandardFunction(FunctionCall call){
 				warning(MSG_FUNCTION_INVALID + ": unknown " + lib_PK + " parameters value combination", 
 						MdlPackage.Literals.FUNCTION_CALL__ARGUMENTS,
 						MSG_FUNCTION_INVALID, 
-						call.getIdentifier().getName());					
+						call.getIdentifier().getFuncName());					
 			}
 		}
 	}

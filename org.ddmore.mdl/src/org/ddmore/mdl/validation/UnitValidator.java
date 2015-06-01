@@ -77,7 +77,7 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 	@Check
 	public void checkUnitValue(Argument arg){
 		if (arg.getArgumentName() != null && arg.getExpression() != null){
-			if (arg.getArgumentName().getName().equals(AttributeValidator.attr_units.getName())){
+			if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_units.getName())){
 				String unitValue = MdlPrinter.getInstance().toStr(arg.getExpression());
 				if (unitValue.length() > 0) {
 					unitValue = unitValue.replaceAll("\\s+",""); // Remove any whitespace
@@ -95,11 +95,11 @@ public class UnitValidator extends AbstractDeclarativeValidator{
 									wrongToken.matches("-?\\d+(\\.\\d+)?")){
 								warning(MSG_UNIT_ERROR + ": token \"" + wrongToken + "\" is not expected", 
 										MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-										MSG_UNIT_UNKNOWN, arg.getArgumentName().getName());
+										MSG_UNIT_UNKNOWN, arg.getArgumentName().getArgName());
 							} else 
 								warning(MSG_UNIT_UNKNOWN + ": " + wrongToken + " is not in the set " + Utils.printList(unitAliases), 
 										MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
-										MSG_UNIT_UNKNOWN, arg.getArgumentName().getName());
+										MSG_UNIT_UNKNOWN, arg.getArgumentName().getArgName());
 						}
 					//}
 				}

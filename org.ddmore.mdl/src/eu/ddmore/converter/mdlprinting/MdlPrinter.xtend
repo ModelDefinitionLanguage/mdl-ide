@@ -164,7 +164,7 @@ class MdlPrinter {
 	def getAttribute(Arguments args, String attrName){
 		if (args != null && args.namedArguments != null)
 			for (arg: args.namedArguments.arguments)
-				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
+				if (arg.argumentName.argName.equals(attrName) && arg.expression != null)
 					return arg.expression.toStr
 		return "";
 	}	
@@ -173,7 +173,7 @@ class MdlPrinter {
 	def getAttribute(java.util.List<Argument> args, String attrName){
 		if (args != null)
 			for (arg: args)
-				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
+				if (arg.argumentName.argName.equals(attrName) && arg.expression != null)
 					return arg.expression.toStr
 		return "";
 	}
@@ -182,7 +182,7 @@ class MdlPrinter {
 	def getAttributeExpression(Arguments args, String attrName){
 		if (args != null && args.getNamedArguments != null)
 			for (arg: args.namedArguments.arguments)
-				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
+				if (arg.argumentName.argName.equals(attrName) && arg.expression != null)
 					if (arg.expression.expression != null)
 						return arg.expression.expression;
 
@@ -193,7 +193,7 @@ class MdlPrinter {
 	def getAttributeRandomList(Arguments args, String attrName){
 		if (args != null && args.getNamedArguments != null)
 			for (arg: args.namedArguments.arguments)
-				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
+				if (arg.argumentName.argName.equals(attrName) && arg.expression != null)
 					if(arg.expression.randomList != null)
 						return arg.expression.randomList;
 
@@ -203,7 +203,7 @@ class MdlPrinter {
 	def getAttributeExpression(java.util.List<Argument> args, String attrName){
 		if (args != null)
 			for (arg: args)
-				if (arg.argumentName.name.equals(attrName) && arg.expression != null)
+				if (arg.argumentName.argName.equals(attrName) && arg.expression != null)
 					if (arg.expression.expression != null)
 						return arg.expression.expression;
 		return null;
@@ -225,7 +225,7 @@ class MdlPrinter {
 		for (b: dataObject.blocks){
 			if (b.sourceBlock != null){
 				for (s: b.sourceBlock.statements){
-					if (s.propertyName.name.equals(PropertyValidator::attr_file.name) && s.expression != null)
+					if (s.propertyName.argName.equals(PropertyValidator::attr_file.name) && s.expression != null)
 						return s.expression.toStr;
 				}
 			} 
@@ -238,7 +238,7 @@ class MdlPrinter {
 		for (b: dataObject.blocks){
 			if (b.sourceBlock != null){
 				for (s: b.sourceBlock.statements){
-					if (s.propertyName.name.equals(PropertyValidator::attr_script.name) && s.expression != null)
+					if (s.propertyName.argName.equals(PropertyValidator::attr_script.name) && s.expression != null)
 						return s.expression.toStr;
 				}
 			} 
@@ -270,7 +270,7 @@ class MdlPrinter {
 	}
 	
 	def toStr(PropertyDeclaration p){
-		return p.propertyName.name + " = " + p.expression.toStr;
+		return p.propertyName.argName + " = " + p.expression.toStr;
 	}
 	
 	def toStr(SymbolDeclaration v){
@@ -555,7 +555,7 @@ class MdlPrinter {
 	}	
 	
 	def toStr(FunctionCall call){
-		var res = call.identifier.name.convertID;
+		var res = call.identifier.funcName.convertID;
 		if (call.arguments != null)
 		 	res = res + "(" + call.arguments.toStr + ")";
 		 return res;	
@@ -605,7 +605,7 @@ class MdlPrinter {
 			var a = iterator.next; 
 			if (a.expression != null) 
 				if (a.argumentName != null)
-					res  = a.argumentName.name + " = " + a.expression.toStr
+					res  = a.argumentName.argName + " = " + a.expression.toStr
 				else res  = res + a.expression.toStr;	
 		}
 		while (iterator.hasNext){
@@ -613,7 +613,7 @@ class MdlPrinter {
 			var a = iterator.next; 
 			if (a.expression != null) 
 				if (a.argumentName != null)
-					res  = res + a.argumentName.name + " = " + a.expression.toStr
+					res  = res + a.argumentName.argName + " = " + a.expression.toStr
 				else res  = res + a.expression.toStr;	
 		}
 		return res;	

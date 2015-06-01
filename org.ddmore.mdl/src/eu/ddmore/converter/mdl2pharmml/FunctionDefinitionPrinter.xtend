@@ -22,7 +22,7 @@ class FunctionDefinitionPrinter {
 			while (iterator.hasNext()){
 			   	var obj = iterator.next();
 				if (obj instanceof FunctionCallImpl){
-					var functName = (obj as FunctionCall).identifier.name;
+					var functName = (obj as FunctionCall).identifier.funcName;
 					if (!printedFunctions.contains(functName)){
 						res = res + '''«functName.print_ct_FunctionDefinition»''';
 						printedFunctions.add(functName);

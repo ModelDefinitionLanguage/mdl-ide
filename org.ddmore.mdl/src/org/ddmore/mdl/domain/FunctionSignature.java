@@ -179,7 +179,7 @@ public class FunctionSignature {
 				Boolean found = false;
 				if (arguments.getNamedArguments() != null){
 					for (Argument arg: arguments.getNamedArguments().getArguments()){
-						String argName = arg.getArgumentName().getName();
+						String argName = arg.getArgumentName().getArgName();
 						if (argName.equals(param.getName())){
 							found = true;
 							if (param.getType() == MdlDataType.TYPE_BOOLEAN){

@@ -176,12 +176,12 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 		HashSet<String> properties = new HashSet<String>();
 		for (PropertyDeclaration p: statements){
 			if (p.getPropertyName() != null){
-				if (!properties.contains(p.getPropertyName().getName())){
-					properties.add(p.getPropertyName().getName());
+				if (!properties.contains(p.getPropertyName().getArgName())){
+					properties.add(p.getPropertyName().getArgName());
 				} else {
-					warning(MSG_PROPERTY_DEFINED + ": " + p.getPropertyName().getName(), 
+					warning(MSG_PROPERTY_DEFINED + ": " + p.getPropertyName().getArgName(), 
 						ref,
-						MSG_PROPERTY_DEFINED, p.getPropertyName().getName());
+						MSG_PROPERTY_DEFINED, p.getPropertyName().getArgName());
 				}
 			}
 		}	
@@ -215,22 +215,22 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			List<Attribute> knownAttributes = getAllProperties(container);
 			if (knownAttributes != null){
 				List<String> attributeNames = Utils.getAllNames(knownAttributes);
-				if (!attributeNames.contains(p.getPropertyName().getName())){
-					error(MSG_PROPERTY_UNKNOWN + ": " + p.getPropertyName().getName(), 
+				if (!attributeNames.contains(p.getPropertyName().getArgName())){
+					error(MSG_PROPERTY_UNKNOWN + ": " + p.getPropertyName().getArgName(), 
 					MdlPackage.Literals.PROPERTY_DECLARATION__PROPERTY_NAME,
-					MSG_PROPERTY_UNKNOWN, p.getPropertyName().getName());		
+					MSG_PROPERTY_UNKNOWN, p.getPropertyName().getArgName());		
 				}
 				for (Attribute x: knownAttributes){
-					if (x.getName().equals(p.getPropertyName().getName())){
+					if (x.getName().equals(p.getPropertyName().getArgName())){
 						boolean isValid = false;
 						for (MdlDataType type: x.getTypes())
 							isValid = isValid || MdlDataType.validateType(type, p.getExpression());
 						if (!isValid){
 							warning(MSG_WRONG_TYPE + 
-								": property \"" + p.getPropertyName().getName() + "\" expects value of type " + 
+								": property \"" + p.getPropertyName().getArgName() + "\" expects value of type " + 
 								Utils.printList(x.getTypeNames()), 
 								MdlPackage.Literals.PROPERTY_DECLARATION__PROPERTY_NAME,
-								MSG_WRONG_TYPE, p.getPropertyName().getName());		
+								MSG_WRONG_TYPE, p.getPropertyName().getArgName());		
 						}
 					}
 				}
@@ -245,17 +245,17 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 		if (container instanceof SourceBlockImpl){
 			SourceBlock b = (SourceBlock) container;
 //			if (b.getInlineBlock() != null) return;
-			if (p.getPropertyName().getName().equals(attr_file.getName()) || 
-				p.getPropertyName().getName().equals(attr_script.getName())) {
+			if (p.getPropertyName().getArgName().equals(attr_file.getName()) || 
+				p.getPropertyName().getArgName().equals(attr_script.getName())) {
 				String dataPath = MdlPrinter.getInstance().toStr(p.getExpression());
 				IFile dataFile = Utils.getFile(b, dataPath);
 				if (!dataFile.exists()){
-					if (p.getPropertyName().getName().equals(attr_file.getName())){
+					if (p.getPropertyName().getArgName().equals(attr_file.getName())){
 						warning(MSG_DATA_FILE_NOT_FOUND, 
 							MdlPackage.Literals.PROPERTY_DECLARATION__EXPRESSION,
 							MSG_DATA_FILE_NOT_FOUND, dataPath);
 					}
-					if (p.getPropertyName().getName().equals(attr_script.getName())){
+					if (p.getPropertyName().getArgName().equals(attr_script.getName())){
 						warning(MSG_SCRIPT_NOT_FOUND, 
 							MdlPackage.Literals.PROPERTY_DECLARATION__EXPRESSION,
 							MSG_SCRIPT_NOT_FOUND, dataPath);
@@ -278,11 +278,11 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			for (DataObjectBlock b: dObj.getBlocks()){
 				if (b.getSourceBlock() != null){
 					for (PropertyDeclaration pp: b.getSourceBlock().getStatements()){
-						if (pp.getPropertyName().getName().equals(attr_header.getName()))
+						if (pp.getPropertyName().getArgName().equals(attr_header.getName()))
 							header = MdlPrinter.getInstance().isTrue(pp.getExpression());
-						if (pp.getPropertyName().getName().equals(attr_delimiter.getName()))
+						if (pp.getPropertyName().getArgName().equals(attr_delimiter.getName()))
 							delimiter = MdlPrinter.getInstance().toStr(pp.getExpression());
-						/*if (pp.getPropertyName().getName().equals(attr_skip.getName())){
+						/*if (pp.getPropertyName().getArgName().equals(attr_skip.getName())){
 							String value = MdlPrinter.getInstance().toStr(pp.getExpression());
 							try{
 								skip = Integer.parseInt(value);
@@ -348,7 +348,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 //	//External target blocks should have location defined
 //	public void checkTargetLocation(TargetBlock t){
 //		for (PropertyDeclaration p: t.getStatements())
-//			if (p.getPropertyName().getName().equals(attr_location.getName())) return;
+//			if (p.getPropertyName().getArgName().equals(attr_location.getName())) return;
 //		warning(MSG_TARGET_LOCATION, 
 //			MdlPackage.Literals.TARGET_BLOCK__STATEMENTS,
 //				MSG_TARGET_LOCATION, t.getIdentifier());

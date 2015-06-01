@@ -513,7 +513,7 @@ class ModelDefinitionPrinter {
 	def getFunctionArgument(RandomList distn, String argName){
 		if(distn.arguments.namedArguments != null){
 			for(Argument arg : distn.arguments.namedArguments.arguments){
-				if(arg.argumentName.name == argName)	
+				if(arg.argumentName.argName == argName)	
 					return arg.expression
 			}
 		}

@@ -398,7 +398,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	Argument createArgument(Attribute attribute){
 		Argument attr = MdlFactory.eINSTANCE.createArgument();
 		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
-		argName.setName(attribute.getName());
+		argName.setArgName(attribute.getName());
 		AnyExpression attrExpr = createTypedExpression(attribute);
 		ArgumentExpression argExpr = MdlFactory.eINSTANCE.createArgumentExpression();
 		argExpr.setExpression(attrExpr);
@@ -410,7 +410,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	Argument createArgumentWithExpression(Attribute attribute, AnyExpression attrExpr){
 		Argument attr = MdlFactory.eINSTANCE.createArgument();
 		ArgumentName argName = MdlFactory.eINSTANCE.createArgumentName();
-		argName.setName(attribute.getName());
+		argName.setArgName(attribute.getName());
 		attr.setArgumentName(argName);
 		ArgumentExpression argExpr = MdlFactory.eINSTANCE.createArgumentExpression();
 		argExpr.setExpression(attrExpr);

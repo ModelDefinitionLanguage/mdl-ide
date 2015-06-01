@@ -181,8 +181,8 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	
 	protected def print_msteps_Property(PropertyDeclaration s)'''
 		«IF s.propertyName != null && s.expression != null»
-			«IF !s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
-				<Property name="«s.propertyName.name»">
+			«IF !s.propertyName.argName.equals(PropertyValidator::attr_task_algo.name)»
+				<Property name="«s.propertyName.argName»">
 					«s.expression.print_Assign»
 				</Property>
 			«ENDIF»	
@@ -191,7 +191,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	
 	protected def print_msteps_Algorithm(PropertyDeclaration s)'''
 		«IF s.propertyName != null && s.expression != null»
-			«IF s.propertyName.name.equals(PropertyValidator::attr_task_algo.name)»
+			«IF s.propertyName.argName.equals(PropertyValidator::attr_task_algo.name)»
 				«IF s.expression.vector != null && s.expression.vector.expression != null &&
 					s.expression.vector.expression.expressions != null »
 					«FOR algoName: s.expression.vector.expression.expressions»
