@@ -5,7 +5,7 @@ Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
 MclObject:
-	objectName=ObjectName '=' 
+	name=ID '=' 
 	(modelObject=ModelObject | 
 	parameterObject=ParameterObject | 
 	dataObject=DataObject | 
@@ -94,7 +94,7 @@ VariabilityParametersBlock:
 
 OutputVariablesBlock:
 	identifier = 'MODEL_OUTPUT_VARIABLES' 
-	BEGIN variables += SymbolName* END 
+	BEGIN variables += ReferenceDeclaration* END 
 ; 
 
 GroupVariablesBlock:
@@ -355,10 +355,14 @@ MOGObjectBlock:
  	BEGIN objects += ImportObjectStatement* END
  ;
  
- ImportObjectStatement:
- 	(symbolName = SymbolName "=")? objectName = [ObjectName] //('from file' importURI = STRING)?
- ;
+// ImportObjectStatement:
+// 	(name = ID "=")? objectName = [ObjectName] //('from file' importURI = STRING)?
+// ;
  
+ ImportObjectStatement:
+ 	objectRef = SymbolRef //('from file' importURI = STRING)?
+ ;
+
 // MappingBlock:
 // 	identifier = 'MAPPING'
 // 	BEGIN mappings += MappingBlockStatement* END
@@ -400,27 +404,28 @@ FunctionCall:
 //	'<<' -> '>>'
 //; 
 
-SymbolName:
-	name = ID //('[' index = INTEGER ']')?
+SymbolDefn:
+	SymbolDeclaration | ListDeclaration | ExpressionDeclaration | ReferenceDeclaration |
+		MclObject | Category
 ;
 
 SymbolDeclaration:
-	symbolName = SymbolName
+	name = ID
 		("=" (expression = Expression) | 
 		 ":" list = List | 
 		     randomList = RandomList)? 
 ;
 
 ListDeclaration:
-	symbolName = SymbolName ":" list = List 
+	name = ID ":" list = List 
 ;
 
 ExpressionDeclaration:
-	symbolName = SymbolName "=" (expression = Expression) 
+	name = ID "=" (expression = Expression) 
 ;
 
 ReferenceDeclaration:
-		symbolName = SymbolName
+		name = ID
 ;
 
 PropertyDeclaration:
@@ -501,7 +506,7 @@ VarType:
 ;
 
 Category:
-	categoryName = SymbolName
+	name = ID
 ;
 
 AnyExpression:
@@ -596,7 +601,7 @@ UnaryExpression:
 ;
 
 SymbolRef:
-	symbolRef = [SymbolName]
+	symbolRef = [SymbolDefn|ID]
 ;
 
 Vector:
@@ -610,9 +615,9 @@ VectorExpression:
 		//matchings += Matching  (=> ',' matchings += Matching)*
 ;
 
-ObjectName:
-	name = ID
-;
+//ObjectName:
+//	name = ID
+//;
 
 LogicalAndOperator: '&&'
 ;		

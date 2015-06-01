@@ -31,7 +31,6 @@ import org.ddmore.mdl.types.MdlDataType
 import org.ddmore.mdl.validation.FunctionValidator
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
-import org.ddmore.mdl.mdl.SymbolName
 
 class MathPrinter{
 
@@ -119,7 +118,7 @@ class MathPrinter{
 			«IF e.type.type.categories != null»
 				<Categorical>
 					«FOR c : e.type.type.categories»
-						<Category catId="«c.categoryName.name»"/>
+						<Category catId="«c.name»"/>
 					«ENDFOR»
 				</Categorical>
 			«ELSE»
@@ -505,9 +504,9 @@ class MathPrinter{
 		<ct:SymbRef«IF blkId.length > 0» blkIdRef="«blkId»"«ENDIF» symbIdRef="«name»"/>
 	'''
 
-	def print_ct_SymbolName(SymbolName symbName) {
-		print_ct_SymbolRef(symbName.name)
-	}
+//	def print_ct_SymbolName(String symbName) {
+//		print_ct_SymbolRef(symbName)
+//	}
 
 	def print_ct_SymbolRef(SymbolRef ref) {
 		print_ct_SymbolRef(ref.symbolRef.name)

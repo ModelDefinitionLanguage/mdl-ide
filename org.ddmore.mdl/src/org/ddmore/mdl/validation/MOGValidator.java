@@ -14,11 +14,11 @@ import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
-import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.ReferenceDeclaration;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
+import org.ddmore.mdl.mdl.SymbolRef;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.EValidatorRegistrar;
@@ -71,13 +71,13 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 	@Check
 	public void validateMOGObjectSet(ImportObjectBlock objBlock){
 		Integer [] params = {0, 0, 0, 0};
-		List<ObjectName> objList = new ArrayList<ObjectName>();
+		List<SymbolRef> objList = new ArrayList<SymbolRef>();
 		for (ImportObjectStatement s: objBlock.getObjects()){
-			if (s.getObjectName() != null)
-				objList.add(s.getObjectName());
+			if (s.getObjectRef() != null)
+				objList.add(s.getObjectRef());
 		}
-		for (ObjectName objName: objList){
-			if (objName.eContainer() != null){
+		for (SymbolRef objName: objList){
+			if (objName.eContainer() != null && objName.eContainer() instanceof MclObject){
 				MclObject obj = (MclObject)objName.eContainer();
 				if (obj != null){
 					if (obj.getModelObject() != null) params[0] += 1;
@@ -145,27 +145,27 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 		for (DataObjectBlock b: dObj.getBlocks()){
 			if (b.getDataInputBlock() != null)
 				for (ListDeclaration s: b.getDataInputBlock().getVariables())
-					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
+					if (s.getName() != null) dVars.add(s.getName());
 			if (b.getDataDerivedBlock() != null)
 				for (ExpressionDeclaration s: b.getDataDerivedBlock().getVariables())
-					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
+					if (s.getName() != null) dVars.add(s.getName());
 			if (b.getDeclaredVariables() != null)
 				for (ReferenceDeclaration s: b.getDeclaredVariables().getVariables())
-					if (s.getSymbolName() != null) dVars.add(s.getSymbolName().getName());
+					if (s.getName() != null) dVars.add(s.getName());
 
 		}
 		for (ModelObjectBlock b: mObj.getBlocks()){
 			if (b.getCovariateBlock() != null){
 				for (SymbolDeclaration s: b.getCovariateBlock().getVariables()){
 					//Math only unassigned covariates
-					if (s.getSymbolName() != null && s.getExpression() == null) {
+					if (s.getName() != null && s.getExpression() == null) {
 //						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
 //						if (dVarName == null) dVarName = s.getSymbolName().getName();
-						String dVarName = s.getSymbolName().getName();
+						String dVarName = s.getName();
 						if (!dVars.contains(dVarName))
 							error(MSG_MODEL_DATA_MISMATCH + 
-								": no mapping for model variable " + s.getSymbolName().getName() + " found in " + 
-								Utils.getObjectName(dObj).getName() + " object", 
+								": no mapping for model variable " + s.getName() + " found in " + 
+								Utils.getObjectName(dObj) + " object", 
 								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
 								MSG_MODEL_DATA_MISMATCH,  mog.getIdentifier());
 					}
@@ -173,14 +173,14 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 			}
 			if (b.getVariabilityBlock() != null){
 				for (SymbolDeclaration s: b.getVariabilityBlock().getVariables()){
-					if (s.getSymbolName() != null) {
+					if (s.getName() != null) {
 //						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
 //						if (dVarName == null) dVarName = s.getSymbolName().getName();
-						String dVarName = s.getSymbolName().getName();
+						String dVarName = s.getName();
 						if (!dVars.contains(dVarName))
 							error(MSG_MODEL_DATA_MISMATCH + 
-								": no mapping for model variable " + s.getSymbolName().getName() + " found in " + 
-								Utils.getObjectName(dObj).getName() + " object", 
+								": no mapping for model variable " + s.getName() + " found in " + 
+								Utils.getObjectName(dObj) + " object", 
 								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
 								MSG_MODEL_DATA_MISMATCH,  mog.getIdentifier());
 					}
@@ -196,17 +196,17 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 		for (ParameterObjectBlock b: pObj.getBlocks())
 			if (b.getStructuralBlock() != null)
 				for (SymbolDeclaration s: b.getStructuralBlock().getParameters())
-					if (s.getSymbolName() != null) structuralVars.add(s.getSymbolName().getName());
+					if (s.getName() != null) structuralVars.add(s.getName());
 		for (ModelObjectBlock b: mObj.getBlocks()){
 			if (b.getStructuralParametersBlock() != null){
 				for (SymbolDeclaration s: b.getStructuralParametersBlock().getParameters()){
-					if (s.getSymbolName() != null){
-						String varName = s.getSymbolName().getName();
+					if (s.getName() != null){
+						String varName = s.getName();
 						if (varName.length() > 0){
 							if (!structuralVars.contains(varName))
 								error(MSG_STRUCTURAL_MISMATCH + 
 									": no mapping for parameter " + varName + " found in " + 
-									Utils.getObjectName(pObj).getName() + " object", 
+									Utils.getObjectName(pObj) + " object", 
 									MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
 									MSG_STRUCTURAL_MISMATCH, mog.getIdentifier());
 						}
@@ -223,17 +223,17 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 		for (ParameterObjectBlock b: pObj.getBlocks())
 			if (b.getVariabilityBlock() != null)
 				for (SymbolDeclaration s: b.getVariabilityBlock().getParameters())
-					if (s.getSymbolName() != null) variabilityVars.add(s.getSymbolName().getName());
+					if (s.getName() != null) variabilityVars.add(s.getName());
 		for (ModelObjectBlock b: mObj.getBlocks()){
 			if (b.getVariabilityParametersBlock() != null){
 				for (SymbolDeclaration s: b.getVariabilityParametersBlock().getParameters()){
-					if (s.getSymbolName() != null){
-						String varName = s.getSymbolName().getName();
+					if (s.getName() != null){
+						String varName = s.getName();
 						if (varName.length() > 0){
 							if (!variabilityVars.contains(varName))
 								error(MSG_VARIABILITY_MISMATCH + 
 									": no mapping for parameter " + varName + " found in " + 
-									Utils.getObjectName(pObj).getName() + " object", 
+									Utils.getObjectName(pObj) + " object", 
 									MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
 									MSG_VARIABILITY_MISMATCH,  mog.getIdentifier());
 						}

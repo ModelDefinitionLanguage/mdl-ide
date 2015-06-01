@@ -8,8 +8,8 @@ package org.ddmore.mdl.types;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.ddmore.mdl.domain.FunctionSignature;
 import org.ddmore.mdl.domain.Variable;
@@ -40,7 +40,7 @@ import org.ddmore.mdl.mdl.PowerExpression;
 import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.ReferenceDeclaration;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.SymbolRef;
 import org.ddmore.mdl.mdl.TargetType;
 import org.ddmore.mdl.mdl.TrialType;
 import org.ddmore.mdl.mdl.UnaryExpression;
@@ -383,40 +383,40 @@ public enum MdlDataType {
 	}
 	
 	private static boolean isObjectReference(OrExpression expr) {
-		SymbolName s = getReference(expr);
+		SymbolRef s = getReference(expr);
 		if (s != null) {
 			Mcl mcl = (Mcl) expr.eResource().getContents().get(0);
 			if (mcl != null){
 				List<Variable> objects = Utils.getDeclaredObjects(mcl);
 				for (Variable obj: objects)
-					if (obj.getName().equals(s.getName())) return true;
+					if (obj.getName().equals(s.getSymbolRef().getName())) return true;
 			}
 		}
 		return false;
 	}
 	
 	private static boolean isObjectReference(OrExpression orExpr, MdlDataType objType) {
-		SymbolName s = getReference(orExpr);
+		SymbolRef s = getReference(orExpr);
 		if (s != null) {
 			Mcl mcl = (Mcl) orExpr.eResource().getContents().get(0);
 			if (mcl != null){
 				List<Variable> objects = Utils.getDeclaredObjects(mcl);
 				for (Variable obj: objects)
-					if (obj.getName().equals(s.getName()) && obj.getType() == objType) return true;
+					if (obj.getName().equals(s.getSymbolRef().getName()) && obj.getType() == objType) return true;
 			}
 		}
 		return false;
 	}
 
 	private static boolean isDerivative(OrExpression orExpr) {
-		SymbolName s = getReference(orExpr);
+		SymbolRef s = getReference(orExpr);
 		if (s != null) {
 			Mcl mcl = (Mcl) orExpr.eResource().getContents().get(0);
 			if (mcl != null){
 				for (MclObject obj: mcl.getObjects()){
 					if (obj.getModelObject() != null){
-						HashSet<String> deriv_vars = Utils.getDerivativeVariables(obj.getModelObject());
-						if (deriv_vars.contains(s.getName())) return true;
+						Set<String> deriv_vars = Utils.getDerivativeVariables(obj.getModelObject());
+						if (deriv_vars.contains(s.getSymbolRef().getName())) return true;
 					}
 				}
 			}
@@ -541,7 +541,7 @@ public enum MdlDataType {
 	}	
 	
 	///////////////////////////////////////////////////////////
-	public static SymbolName getReference(OrExpression orExpr) {
+	public static SymbolRef getReference(OrExpression orExpr) {
 		if (orExpr.getExpression().size() > 1) return null;
 		AndExpression andExpr = orExpr.getExpression().get(0);
 		if (andExpr.getExpression().size() > 1) return null;
@@ -555,7 +555,7 @@ public enum MdlDataType {
 			PowerExpression powerExpr = multExpr.getExpression().get(0);
 			if (powerExpr.getExpression().size() > 1) return null;
 			UnaryExpression unaryExpr = powerExpr.getExpression().get(0);
-			if (unaryExpr.getSymbol() != null) return unaryExpr.getSymbol().getSymbolRef();
+			if (unaryExpr.getSymbol() != null) return unaryExpr.getSymbol();
 		}
 		return null;
 	}
@@ -806,8 +806,8 @@ public enum MdlDataType {
 	}
 
 	public static MdlDataType getDerivedType(ImportObjectStatement s){
-		if (s.getObjectName() != null){
-			EObject container = s.getObjectName().eContainer();
+		if (s.getObjectRef() != null){
+			EObject container = s.getObjectRef().eContainer();
 			if (container instanceof MclObjectImpl){
 				MclObject o = (MclObject)container;
 				if (o.getModelObject() != null) return TYPE_OBJ_REF_MODEL;

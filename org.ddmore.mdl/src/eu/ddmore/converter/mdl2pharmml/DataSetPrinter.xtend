@@ -61,7 +61,7 @@ class DataSetPrinter {
 
 	def print_ds_DvMapping(ListDeclaration dvColumn, DataObject dObj, ModelObject mObj){
 		val define = dvColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-		val columnId = dvColumn.symbolName.name;
+		val columnId = dvColumn.name;
 		if (define != null) {
 			// Reference or mapped to data
 			if (define.expression != null)
@@ -109,7 +109,7 @@ class DataSetPrinter {
 	
 	def print_ds_TargetMapping(ListDeclaration amtColumn, DataObject dObj, ModelObject mObj){
 		val define = amtColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-		val columnId = amtColumn.symbolName.name;
+		val columnId = amtColumn.name;
 		var toolMappingDefn = '''''';
 		if (define != null) {
 			// There really must be define in this case.
@@ -174,7 +174,7 @@ class DataSetPrinter {
 					if(stmt.pkMacroBlock != null){
 						for(pkstmt : stmt.pkMacroBlock.statements){
 							if(pkstmt.variable != null){
-								val pkVar = pkstmt.variable.symbolName.name.toStr
+								val pkVar = pkstmt.variable.name
 								val dataVar = expression.toStr
 								return pkVar == dataVar
 							}
@@ -249,12 +249,12 @@ class DataSetPrinter {
 			var eObj = symbolIterator.next();
 			if (eObj instanceof SymbolDeclarationImpl) {
 				var column = eObj as SymbolDeclaration;
-				if (column != null && column.symbolName != null) {
+				if (column != null && column.name != null) {
 					var blockContainer = eObj.eContainer;
 					if (blockContainer instanceof DataInputBlockImpl) {
 						val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 						if (use.equals(UseType::CMT.toString)) {
-							return column.symbolName.name;
+							return column.name;
 						}
 					}
 				}
@@ -268,12 +268,12 @@ class DataSetPrinter {
 			var eObj = symbolIterator.next();
 			if (eObj instanceof SymbolDeclarationImpl) {
 				var column = eObj as SymbolDeclaration;
-				if (column != null && column.symbolName != null) {
+				if (column != null && column.name != null) {
 					var blockContainer = eObj.eContainer;
 					if (blockContainer instanceof DataInputBlockImpl) {
 						val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 						if (use.equals(useType.toString)) {
-							return column.symbolName.name;
+							return column.name;
 						}
 					}
 				}
@@ -298,12 +298,12 @@ class DataSetPrinter {
 							use.equals(UseType::VARLEVEL.toString) || (use.equals(UseType::COVARIATE.toString) &&
 								!colType.isCategorical()))) {
 								// use magic mapping with no conditions 
-								res = res + column.symbolName.name.print_ds_MagicMapping(modelVar);
+								res = res + column.name.print_ds_MagicMapping(modelVar);
 							} else if (modelVar != null && use.equals(UseType::COVARIATE.toString) &&
 								colType.isCategorical()) {
 								// categorical covariates
 								var categoricalMapping = column.print_ds_CategoricalMapping;
-								res = res + column.symbolName.name.print_ds_ColumnMapping(modelVar, categoricalMapping);
+								res = res + column.name.print_ds_ColumnMapping(modelVar, categoricalMapping);
 							} else if (use.equals(UseType::AMT.toString)) {
 								// handle amount mapping
 								res = res + column.print_ds_AmtMapping(dObj, mObj)
@@ -326,7 +326,7 @@ class DataSetPrinter {
 
 		protected def print_ds_StandardAmtMapping(ListDeclaration amtColumn, DataObject dObj, ModelObject mObj) {
 			val define = amtColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-			val columnId = amtColumn.symbolName.name;
+			val columnId = amtColumn.name;
 			var res = '''''';
 			if (define != null) {
 				// Reference or piecewise
@@ -397,7 +397,7 @@ class DataSetPrinter {
 		for(block : mObj.blocks){
 			if(block.observationBlock != null){
 				for(symbDefn : block.observationBlock.variables){
-					if(symbName == symbDefn.symbolName.name){
+					if(symbName == symbDefn.name){
 						return symbDefn
 					}
 				}
@@ -477,8 +477,8 @@ class DataSetPrinter {
 		// not only valid matched are returned. So for example
 		// no covariate with an RHS is returned as this does not match the data column.
 		protected def getDefaultMatchingVariable(MOGObject mog, ListDeclaration column, ModelObject mObj) {
-			if (column.symbolName != null && column.list != null) {
-				var columnId = column.symbolName.name;
+			if (column.name != null && column.list != null) {
+				var columnId = column.name;
 				/*Default implicit mapping*/
 				val use = column.list.arguments.getAttribute(AttributeValidator::attr_use.name);
 				// Individual variable
@@ -490,8 +490,8 @@ class DataSetPrinter {
 					for (b : mObj.blocks) {
 						if (b.covariateBlock != null) {
 							for (s : b.covariateBlock.variables) {
-								if (s.symbolName != null && s.symbolName.name.equals(columnId))
-									return if(s.expression == null) s.symbolName.name else null;
+								if (s.name != null && s.name.equals(columnId))
+									return if(s.expression == null) s.name else null;
 							}
 						}
 					}
@@ -502,8 +502,8 @@ class DataSetPrinter {
 					for (b : mObj.blocks) {
 						if (b.variabilityBlock != null) {
 							for (s : b.variabilityBlock.variables) {
-								if (s.symbolName != null && s.symbolName.name.equals(columnId))
-									return s.symbolName.name;
+								if (s.name != null && s.name.equals(columnId))
+									return s.name;
 							}
 						}
 					}
@@ -520,7 +520,7 @@ class DataSetPrinter {
 				if (b.dataInputBlock != null) {
 					for (i : 0 .. b.dataInputBlock.variables.size - 1) {
 						val column = b.dataInputBlock.variables.get(i);
-						val columnId = column.symbolName.name;
+						val columnId = column.name;
 						val columnType = column.getColumnType
 						if(UseType::AMT.toString == columnType){
 							dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)

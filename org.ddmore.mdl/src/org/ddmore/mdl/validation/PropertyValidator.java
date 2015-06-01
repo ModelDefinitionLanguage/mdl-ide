@@ -308,11 +308,11 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 					for (DataObjectBlock b: dObj.getBlocks()){
 						if (b.getDataInputBlock() != null){
 							for (ListDeclaration s: b.getDataInputBlock().getVariables()){
-								if (s.getSymbolName() != null){
+								if (s.getName() != null){
 									boolean isFound = false;
 									for (String column: columns)
-										if (column.equals(s.getSymbolName().getName())) isFound = true;
-									if (!isFound) notFound.add(s.getSymbolName().getName());
+										if (column.equals(s.getName())) isFound = true;
+									if (!isFound) notFound.add(s.getName());
 								}
 							}
 						}

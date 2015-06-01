@@ -30,7 +30,6 @@ import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
 import org.ddmore.mdl.mdl.ModelPredictionBlock;
 import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
-import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.ObservationBlock;
 import org.ddmore.mdl.mdl.OdeBlock;
 import org.ddmore.mdl.mdl.ParameterObject;
@@ -43,7 +42,6 @@ import org.ddmore.mdl.mdl.SourceBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.SymbolName;
 import org.ddmore.mdl.mdl.SymbolRef;
 import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.VariabilityBlock;
@@ -58,7 +56,6 @@ import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.ExpressionDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
 import org.ddmore.mdl.mdl.impl.ImportObjectBlockImpl;
-import org.ddmore.mdl.mdl.impl.ImportObjectStatementImpl;
 import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
 import org.ddmore.mdl.mdl.impl.ListDeclarationImpl;
 import org.ddmore.mdl.mdl.impl.MclObjectImpl;
@@ -74,7 +71,6 @@ import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
 import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.SymbolNameImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
@@ -89,25 +85,25 @@ import org.eclipse.emf.ecore.EObject;
 
 public class Utils {
 	
-	//Checks whether a given symbol is declared
-	public static boolean isSymbolDeclared(Map<String, List<Variable>> map, SymbolName ref){
-		ObjectName objName = getObjectName(ref);
-		if (objName != null) 
-			if (map.containsKey(objName.getName()))
-				for (Variable var: map.get(objName.getName()))
-					if (var.getName().equals(ref.getName())) return true;
-		return false;
-	}
+//	//Checks whether a given symbol is declared
+//	public static boolean isSymbolDeclared(Map<String, List<Variable>> map, SymbolName ref){
+//		ObjectName objName = getObjectName(ref);
+//		if (objName != null) 
+//			if (map.containsKey(objName.getName()))
+//				for (Variable var: map.get(objName.getName()))
+//					if (var.getName().equals(ref.getName())) return true;
+//		return false;
+//	}
 		
 	//Checks whether a function is declared more than once
-	static boolean isSymbolDeclaredMoreThanOnce(List<Variable> vars, String ref){
-		int i = 0;
-		for (Variable var: vars){
-			if (var.getName().equals(ref)) i++;
-			if (i > 1) return true;
-		}
-		return false;
-	}
+//	static boolean isSymbolDeclaredMoreThanOnce(List<Variable> vars, String ref){
+//		int i = 0;
+//		for (Variable var: vars){
+//			if (var.getName().equals(ref)) i++;
+//			if (i > 1) return true;
+//		}
+//		return false;
+//	}
 	
 	//Returns a list of attribute names 
 	public static List<String> getArgumentNames(Arguments args){
@@ -120,8 +116,8 @@ public class Utils {
 	}
 	
 	//Returns the name of an object containing a given element
-	public static ObjectName getObjectName(EObject b){
-		return getMclObject(b).getObjectName();
+	public static String getObjectName(EObject b){
+		return getMclObject(b).getName();
 	}
 
 	//Returns the object container for a given element
@@ -251,8 +247,8 @@ public class Utils {
 		for (MOGObjectBlock b: mog.getBlocks())
 			if (b.getObjectBlock() != null){
 				for (ImportObjectStatement st: b.getObjectBlock().getObjects()){
-					if (st.getObjectName() != null){
-						EObject container = st.getObjectName().eContainer();
+					if (st.getObjectRef() != null){
+						EObject container = st.getObjectRef().eContainer();
 						if (container instanceof MclObjectImpl){
 							MclObject mclObject = (MclObject)container;
 							objects.add(mclObject);
@@ -309,7 +305,7 @@ public class Utils {
 			if (obj.getTaskObject() != null)      objType = MdlDataType.TYPE_OBJ_REF_TASK;
 //			if (obj.getDesignObject() != null)    objType = MdlDataType.TYPE_OBJ_REF_DESIGN;
 			if (obj.getMogObject() != null)	      objType = MdlDataType.TYPE_OBJ_REF_MOG;
-			Variable newObj = new Variable(obj.getObjectName().getName(), objType);
+			Variable newObj = new Variable(obj.getName(), objType);
 			declaredObjects.add(newObj);
 		}
 		return declaredObjects;
@@ -320,7 +316,7 @@ public class Utils {
 		for (MclObject obj: mcl.getObjects()){
 			List<Variable> varList = getDeclaredVariables(obj);
 			if (varList.size() > 0)
-		    	declaredVariables.put(obj.getObjectName().getName(), varList);
+		    	declaredVariables.put(obj.getName(), varList);
 		}
 		return declaredVariables;
 	}
@@ -332,23 +328,23 @@ public class Utils {
 			EObject container = symbolIterator.next();			
 			if (container instanceof SymbolDeclarationImpl) {
 				SymbolDeclaration s = (SymbolDeclaration) container;
-				if (s.getSymbolName() != null)
-					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getExpectedType(s)));
+				if (s.getName() != null)
+					varList.add(new Variable(s.getName(), MdlDataType.getExpectedType(s)));
 			}
 			if (container instanceof ListDeclarationImpl) {
 				ListDeclaration s = (ListDeclaration) container;
-				if (s.getSymbolName() != null)
-					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getExpectedType(s)));
+				if (s.getName() != null)
+					varList.add(new Variable(s.getName(), MdlDataType.getExpectedType(s)));
 			}
 			if (container instanceof ExpressionDeclarationImpl) {
 				ExpressionDeclaration s = (ExpressionDeclaration) container;
-				if (s.getSymbolName() != null)
-					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getExpectedType(s)));
+				if (s.getName() != null)
+					varList.add(new Variable(s.getName(), MdlDataType.getExpectedType(s)));
 			}
 			if (container instanceof ReferenceDeclarationImpl) {
 				ReferenceDeclaration s = (ReferenceDeclaration) container;
-				if (s.getSymbolName() != null)
-					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getExpectedType(s)));
+				if (s.getName() != null)
+					varList.add(new Variable(s.getName(), MdlDataType.getExpectedType(s)));
 			}
 //			if (container instanceof FunctionCallStatementImpl) {
 //				FunctionCallStatement s = (FunctionCallStatement) container;
@@ -363,15 +359,15 @@ public class Utils {
 	    	}
 			if (container instanceof CategoryImpl) {
 				Category s = (Category) container;
-				if (s.getCategoryName() != null)
-					varList.add(new Variable(s.getCategoryName().getName(), MdlDataType.TYPE_INT));
+				if (s.getName() != null)
+					varList.add(new Variable(s.getName(), MdlDataType.TYPE_INT));
 			}
-	    	if (container instanceof ImportObjectStatementImpl){
-	    		ImportObjectStatement s = (ImportObjectStatement) container;
-	    		if (s.getSymbolName() != null){
-					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s)));
-	    		}
-	    	}
+//	    	if (container instanceof ImportObjectStatementImpl){
+//	    		ImportObjectStatement s = (ImportObjectStatement) container;
+//	    		if (s.getSymbolName() != null){
+//					varList.add(new Variable(s.getSymbolName().getName(), MdlDataType.getDerivedType(s)));
+//	    		}
+//	    	}
 		}
 		return varList;
 	}
@@ -381,7 +377,7 @@ public class Utils {
 		for (MclObject obj: getMOGObjects(mog)){
 			List<Variable> varList = getDeclaredVariables(obj);
 			if (varList.size() > 0)
-		    	declaredVariables.put(obj.getObjectName().getName(), varList);
+		    	declaredVariables.put(obj.getName(), varList);
 		}
 		return declaredVariables;
 	}
@@ -407,12 +403,12 @@ public class Utils {
 				for (ModelPredictionBlockStatement st: b.getModelPredictionBlock().getStatements()){
 					if (st.getOdeBlock() != null){
 						for (SymbolDeclaration s: st.getOdeBlock().getVariables()){
-							if (s.getSymbolName() != null && s.getList() != null){
+							if (s.getName() != null && s.getList() != null){
 								if (s.getList().getArguments().getNamedArguments() != null){
 					    			for (Argument arg: s.getList().getArguments().getNamedArguments().getArguments()){
 					    				if (arg.getArgumentName().getName().equals(AttributeValidator.attr_deriv.getName())){
-					    					if (!deriv_vars.contains(s.getSymbolName().getName()))
-					    						deriv_vars.add(s.getSymbolName().getName());
+					    					if (!deriv_vars.contains(s.getName()))
+					    						deriv_vars.add(s.getName());
 					    				}
 					    			}
 				    			}
@@ -442,31 +438,31 @@ public class Utils {
 //	    return null;
 //	}
 	
-	private static MclObject getImportedObjectByAlias(SymbolName ref){
-		MclObject obj = getMclObject(ref);
-		if (obj.getMogObject() != null){
-			for (MOGObjectBlock b: obj.getMogObject().getBlocks()){
-				if (b.getObjectBlock() != null){
-					for (ImportObjectStatement s: b.getObjectBlock().getObjects()){
-						if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getName())) {	    			
-			    			EObject container = s.getObjectName().eContainer();
-			    			if (container instanceof MclObjectImpl){
-			    				MclObject o = (MclObject)container;
-			    				return o;
-			    			}
-			    		}
-					}
-				}
-			}
-		}
-	    return null;
-	}
+//	private static MclObject getImportedObjectByAlias(SymbolName ref){
+//		MclObject obj = getMclObject(ref);
+//		if (obj.getMogObject() != null){
+//			for (MOGObjectBlock b: obj.getMogObject().getBlocks()){
+//				if (b.getObjectBlock() != null){
+//					for (ImportObjectStatement s: b.getObjectBlock().getObjects()){
+//						if (s.getSymbolName() != null && s.getSymbolName().getName().equals(ref.getName())) {	    			
+//			    			EObject container = s.getObjectName().eContainer();
+//			    			if (container instanceof MclObjectImpl){
+//			    				MclObject o = (MclObject)container;
+//			    				return o;
+//			    			}
+//			    		}
+//					}
+//				}
+//			}
+//		}
+//	    return null;
+//	}
 	
-	public static List<Variable> getImportedVariablesByObjectAlias(SymbolName ref){
-		MclObject o = getImportedObjectByAlias(ref);
-		if (o != null) return Utils.getDeclaredVariables(o);
-	    return null;
-	}
+//	public static List<Variable> getImportedVariablesByObjectAlias(SymbolName ref){
+//		MclObject o = getImportedObjectByAlias(ref);
+//		if (o != null) return Utils.getDeclaredVariables(o);
+//	    return null;
+//	}
 	
 	/*
 	public static List<Argument> getListArguments(FullyQualifiedArgumentName ref){

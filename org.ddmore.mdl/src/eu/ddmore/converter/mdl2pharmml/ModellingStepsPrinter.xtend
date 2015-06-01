@@ -96,7 +96,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	'''	
 	
 	protected def print_msteps_ParameterEstimation(SymbolDeclaration s){
-		if (s.symbolName != null && s.list != null) {
+		if (s.name != null && s.list != null) {
 			//Skip correlation definitions
 			val type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name);
 			if (type.equals(VariabilityType::COV.toString) || type.equals(VariabilityType::CORR.toString)) return "";
@@ -110,7 +110,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 //				estimate = value.print_Math_Expr.toString();
 			'''
 				<ParameterEstimation>
-					«print_ct_SymbolRef(s.symbolName.name)»
+					«print_ct_SymbolRef(s.name)»
 					<InitialEstimate fixed="«fixed»">
 							«value.print_Math_Equation»
 					</InitialEstimate>

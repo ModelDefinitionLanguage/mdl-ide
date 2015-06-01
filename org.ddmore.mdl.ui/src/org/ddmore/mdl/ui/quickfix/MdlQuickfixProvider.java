@@ -32,7 +32,7 @@ import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
 import org.ddmore.mdl.mdl.StructuralBlock;
 import org.ddmore.mdl.mdl.StructuralParametersBlock;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.SymbolDefn;
 import org.ddmore.mdl.mdl.SymbolRef;
 import org.ddmore.mdl.mdl.UnaryExpression;
 import org.ddmore.mdl.mdl.UseType;
@@ -346,7 +346,7 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 		PowerExpression power = MdlFactory.eINSTANCE.createPowerExpression();
 		UnaryExpression unary = MdlFactory.eINSTANCE.createUnaryExpression();
 		SymbolRef symbRef = MdlFactory.eINSTANCE.createSymbolRef();
-		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+		SymbolDefn symbName = MdlFactory.eINSTANCE.createSymbolDefn();
 		symbName.setName(value);
 		symbRef.setSymbolRef(symbName);
 		unary.setSymbol(symbRef);
@@ -490,9 +490,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	void insertSymbolDeclaration(DataInputBlock block, String varName){
 		ListDeclaration newSymbol = MdlFactory.eINSTANCE.createListDeclaration();
-		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
-		symbName.setName(varName);
-		newSymbol.setSymbolName(symbName);
+//		SymbolDefn symbName = MdlFactory.eINSTANCE.createSymbolDefn();
+//		symbName.setName(varName);
+		newSymbol.setName(varName);
 		Attribute[] attributes = {AttributeValidator.attr_type, AttributeValidator.attr_units, AttributeValidator.attr_use};
 		newSymbol.setList(createList(attributes));
 		block.getVariables().add(newSymbol);
@@ -583,9 +583,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 
 	SymbolDeclaration createSymbolDeclaration(String varName) {
 		SymbolDeclaration newParam = MdlFactory.eINSTANCE.createSymbolDeclaration();
-		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
-		symbName.setName(varName);
-		newParam.setSymbolName(symbName);		
+//		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+//		symbName.setName(varName);
+		newParam.setName(varName);		
 		Attribute[] attributes = {AttributeValidator.attr_value};
 		newParam.setList(createList(attributes));
 		return newParam;
@@ -593,9 +593,9 @@ public class MdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	void insertRandomVariable(RandomVariableDefinitionBlock block, String varName){
 		SymbolDeclaration newSymbol = MdlFactory.eINSTANCE.createSymbolDeclaration();
-		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
-		symbName.setName(varName);
-		newSymbol.setSymbolName(symbName);
+//		SymbolName symbName = MdlFactory.eINSTANCE.createSymbolName();
+//		symbName.setName(varName);
+		newSymbol.setName(varName);
 		RandomList list = createNormalDistribution();
 		newSymbol.setRandomList(list);
 		block.getVariables().add(newSymbol);

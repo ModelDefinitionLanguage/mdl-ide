@@ -76,7 +76,7 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
        for (int i = 0; i < mogs.size(); i++){
     	   MOGObject mog = mogs.get(i);
     	   String fileName = baseName;
-    	   if (i > 0) fileName = fileName + Utils.getObjectName(mog).getName(); 
+    	   if (i > 0) fileName = fileName + Utils.getObjectName(mog); 
            CharSequence converted = xtendConverter.convertToPharmML(mog, fileName);
            
            printOutputFile(fileName, outputDirectory, converted.toString());

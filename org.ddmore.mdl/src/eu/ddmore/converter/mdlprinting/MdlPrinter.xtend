@@ -36,7 +36,6 @@ import org.ddmore.mdl.mdl.PowerExpression
 import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.RandomList
 import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.mdl.SymbolName
 import org.ddmore.mdl.mdl.SymbolRef
 import org.ddmore.mdl.mdl.TargetType
 import org.ddmore.mdl.mdl.TrialType
@@ -49,6 +48,7 @@ import org.ddmore.mdl.mdl.VectorExpression
 import org.ddmore.mdl.validation.PropertyValidator
 import org.ddmore.mdl.mdl.UnnamedArguments
 import org.ddmore.mdl.mdl.transformExpr
+import org.ddmore.mdl.mdl.SymbolDefn
 
 class MdlPrinter {
 	
@@ -77,7 +77,7 @@ class MdlPrinter {
 			var categoricalNames = new ArrayList<String>();
 			if (argExpr.getType().getType().getCategories() != null){
 				for (c: argExpr.getType().getType().getCategories())
-					categoricalNames.add(c.getCategoryName().getName());
+					categoricalNames.add(c.getName());
 			}
 			return categoricalNames;
 		}
@@ -275,8 +275,7 @@ class MdlPrinter {
 	
 	def toStr(SymbolDeclaration v){
 		var res = "";
-		if (v.symbolName != null) 
-			res = res + v.symbolName.toStr;
+		res = res + v.name.toStr;
 		var expr = ""; 
 		if (v.expression != null){
 			expr = v.expression.toStr;
@@ -298,17 +297,17 @@ class MdlPrinter {
 	
 	def String toStr(ImportObjectStatement st){
 		var res = "";
-		if (st.symbolName != null)
-			res = st.symbolName.toStr;
-		if (st.objectName != null)
-			res = res + " = " + st.objectName.name;
+//		if (st.symbolName != null)
+//			res = st.symbolName.toStr;
+		if (st.objectRef != null)
+			res = res + " = " + st.objectRef.symbolRef.name;
 //		if (st.importURI != null){
 //			res  = res + " from file " + st.importURI;
 //		}
 		return res;
 	}
 	
-	def String toStr(SymbolName s){
+	def String toStr(SymbolDefn s){
 		var res = s.name.convertID;
 //		if (s.index != null){
 //			res  = res + '[' + s.index + ']';
@@ -364,13 +363,13 @@ class MdlPrinter {
 				var iterator = t.categories.iterator();
 				if (iterator.hasNext ) {
 					var i = iterator.next; 
-					if (i.categoryName != null) res  = res + i.categoryName.name;
+					if (i.name != null) res  = res + i.name;
 					//if (i.expression != null) res = res + " = " + i.expression.toStr;
 				}
 				while (iterator.hasNext){
 					res  = res + ', ';
 					var i = iterator.next; 
-					if (i.categoryName != null) res  = res + i.categoryName.name;
+					if (i.name != null) res  = res + i.name;
 					//if (i.expression != null) res = res + " = " + i.expression.toStr;
 				}
 				res = res + ")";

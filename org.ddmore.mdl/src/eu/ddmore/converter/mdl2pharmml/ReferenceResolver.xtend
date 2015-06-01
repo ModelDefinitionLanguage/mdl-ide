@@ -77,7 +77,7 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.dataInputBlock != null){
 				for (s: b.dataInputBlock.variables){
-					if (s.symbolName != null && s.list != null){
+					if (s.name != null && s.list != null){
 						if (s.list.arguments.getAttribute(AttributeValidator::attr_use.name).equals(
 							UseType::CMT.toString)){
 							return s;							
@@ -93,8 +93,8 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.independentVariableBlock != null){
 				for (s: b.independentVariableBlock.variables){
-					if (s.symbolName != null){
-						return s.symbolName.name;
+					if (s.name != null){
+						return s.name;
 					}
 				}
 			}					
@@ -108,9 +108,9 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.covariateBlock != null){
 				for (s: b.covariateBlock.variables){
-					if (s.symbolName != null){
-						if (!covariateVars.contains(s.symbolName.name))
-							covariateVars.add(s.symbolName.name);
+					if (s.name != null){
+						if (!covariateVars.contains(s.name))
+							covariateVars.add(s.name);
 					}
 				}
 			}					
@@ -124,13 +124,13 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.covariateBlock != null){
 				for (s: b.covariateBlock.variables){
-					if (s.symbolName != null && s.expression != null){
+					if (s.name != null && s.expression != null){
 						var dependencies = Utils::getDependencies(s.expression);
 						var isTransformed = false;
 						for (v: dependencies)
 							if (cm_vars.contains(v)) isTransformed = true;
 						if (!isTransformed){
-							assignedVars.add(s.symbolName.name);
+							assignedVars.add(s.name);
 						}
 					}
 				}
@@ -148,37 +148,37 @@ class ReferenceResolver{
 			if (b.groupVariablesBlock != null){
 				for (st: b.groupVariablesBlock.statements){
 					if (st.variable != null){
-						if (st.variable.symbolName.name != null)
-							parameters.add(st.variable.symbolName.name)
+						if (st.variable.name != null)
+							parameters.add(st.variable.name)
 					}							
 				}
 			}	
 			//RANDOM_VARIABLES_DEFINITION
 			if (b.randomVariableDefinitionBlock != null){
 				for (s: b.randomVariableDefinitionBlock.variables){
-					if (s.symbolName != null && s.randomList != null){
-						parameters.add(s.symbolName.name);
+					if (s.name != null && s.randomList != null){
+						parameters.add(s.name);
 					}
 				} 
 	  		}
 	  		//INDIVIDUAL_VARIABLES
 			if (b.individualVariablesBlock != null){
 				for (s: b.individualVariablesBlock.variables){
-					if (s.symbolName != null)
-						parameters.add(s.symbolName.name);
+					if (s.name != null)
+						parameters.add(s.name);
 				} 
 	  		}
 			//STRUCTURAL_PARAMETERS
 			if (b.structuralParametersBlock != null){
 				for (id: b.structuralParametersBlock.parameters) 
-					if (id.symbolName != null)
-						parameters.add(id.symbolName.name);
+					if (id.name != null)
+						parameters.add(id.name);
 			}
 			//VARIABILITY_PARAMETERS
 			if (b.variabilityParametersBlock != null){
 				for (id: b.variabilityParametersBlock.parameters){
-					if (id.symbolName != null)
-						parameters.add(id.symbolName.name);
+					if (id.name != null)
+						parameters.add(id.name);
 				} 
 			}
 	  	}
@@ -191,8 +191,8 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.observationBlock != null){
 				for (st: b.observationBlock.variables){
-					if (st.symbolName != null)
-						observationVars.add(st.symbolName.name);
+					if (st.name != null)
+						observationVars.add(st.name);
 				}
 			}
 		}
@@ -205,13 +205,13 @@ class ReferenceResolver{
 		for (b: obj.blocks){
 			if (b.modelPredictionBlock != null){
 				for (st: b.modelPredictionBlock.statements){
-					if (st.variable != null && st.variable.symbolName != null) {
-						structuralVars.add(st.variable.symbolName.name);
+					if (st.variable != null && st.variable.name != null) {
+						structuralVars.add(st.variable.name);
 					} else 
 						if (st.odeBlock != null){
 							for (s: st.odeBlock.variables){
-								if (s.symbolName != null) {
-									structuralVars.add(s.symbolName.name);
+								if (s.name != null) {
+									structuralVars.add(s.name);
 								}
 							}
 						}
@@ -227,7 +227,7 @@ class ReferenceResolver{
 		for (b: o.blocks){
 			if(b.variabilityBlock != null){
 				for (s: b.variabilityBlock.variables){
-					if (s.list != null && s.symbolName != null){
+					if (s.list != null && s.name != null){
 						var varType = s.list.arguments.getAttributeExpression(AttributeValidator::attr_type_level.name);
 						var level = s.list.arguments.getAttribute(AttributeValidator::attr_level.name);
 						var x = 0;
@@ -237,8 +237,8 @@ class ReferenceResolver{
 						if (//default type = model or explicitly defined requested type 
 							(varType == null && type.toString().equals(LevelType::PARAMETER.toString)) 
 							|| (varType != null && varType.toStr.equals(type.toString))){
-							if (!levelVars.containsKey(s.symbolName.name)){
-								levelVars.put(s.symbolName.name, x);
+							if (!levelVars.containsKey(s.name)){
+								levelVars.put(s.name, x);
 							}
 						}
 					}

@@ -124,7 +124,7 @@ class ModelDefinitionPrinter {
 		for (b: mObj.blocks){
 			if (b.covariateBlock != null){
 				for (s: b.covariateBlock.variables){
-					var covName = s.symbolName.toStr;
+					var covName = s.name;
 					var covType = "Continuous";
 					//Print transformed covariates
 					var transformation = "";
@@ -144,12 +144,12 @@ class ModelDefinitionPrinter {
 							transformation =  '''
 								<«covType»>
 									<Transformation>
-									    <TransformedCovariate symbId="«s.symbolName.toStr»"></TransformedCovariate>
+									    <TransformedCovariate symbId="«s.name»"></TransformedCovariate>
 										«s.expression.print_Math_Equation»
 									</Transformation>
 								</«covType»>
 								'''
-								skipped.add(s.symbolName.toStr);
+								skipped.add(s.name);
 							}
 					}
 					model = model + '''
@@ -166,7 +166,7 @@ class ModelDefinitionPrinter {
 		for (b: mObj.blocks){
 			if (b.covariateBlock != null){
 				for (s: b.covariateBlock.variables){
-					var covName = s.symbolName.toStr;
+					var covName = s.name;
 					if (!skipped.contains(covName)){
 						var covType = "Continuous";
 						//Print categorical covariates
@@ -211,17 +211,17 @@ class ModelDefinitionPrinter {
 				//STRUCTURAL_PARAMETERS
 				if (b.structuralParametersBlock != null){
 					for (id: b.structuralParametersBlock.parameters) 
-						if (id.symbolName != null)
+						if (id.name != null)
 							statements = statements + 
-							'''<SimpleParameter symbId = "«id.symbolName.toStr»"/>
+							'''<SimpleParameter symbId = "«id.name»"/>
 							'''
 		  		}
 		  		//VARIABILITY_PARAMETERS
 		  		if (b.variabilityParametersBlock != null){
 					for (id: b.variabilityParametersBlock.parameters){
-						if (id.symbolName != null)
+						if (id.name != null)
 							statements = statements + 
-							'''<SimpleParameter symbId = "«id.symbolName.toStr»"/>
+							'''<SimpleParameter symbId = "«id.name»"/>
 							'''
 					}
 		  		}
@@ -241,7 +241,7 @@ class ModelDefinitionPrinter {
 						var level = b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_level_ref.name);
 						if (level.length > 0){
 							for (s: b.randomVariableDefinitionBlock.variables){
-								if (s.symbolName != null)
+								if (s.name != null)
 									statements = statements + s.print_mdef_RandomVariable(level);
 							} 
 						}
@@ -313,7 +313,7 @@ class ModelDefinitionPrinter {
 					if (b.randomVariableDefinitionBlock.arguments != null){
 						var level =	b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_level_ref.name);	
 						for (s: b.randomVariableDefinitionBlock.variables){
-							if (s.symbolName.toStr.equals(randomVar)){
+							if (s.name.equals(randomVar)){
 								return level;	
 							}
 						}
@@ -369,8 +369,8 @@ class ModelDefinitionPrinter {
 	}
 	
 	protected def print_mdef_RandomVariable(SymbolDeclaration s, String level)'''
-		«IF s.randomList != null && s.symbolName != null»
-			<RandomVariable symbId="«s.symbolName.name»">
+		«IF s.randomList != null && s.name != null»
+			<RandomVariable symbId="«s.name»">
 				«IF level.length > 0»
 					«level.print_VariabilityReference»
 				«ENDIF»
@@ -454,7 +454,7 @@ class ModelDefinitionPrinter {
 					for (st: b.observationBlock.variables){
 						var observation = st.print_mdef_ObservationModel;
 						var idx = 1 as int;
-						val omBlkId = resolver.getReferenceBlock(st.symbolName.toStr)
+						val omBlkId = resolver.getReferenceBlock(st.name)
 						if (observation.length >0 )
 							res = res + '''
 								<ObservationModel blkId="«omBlkId»">
@@ -488,9 +488,9 @@ class ModelDefinitionPrinter {
 	}
 	
 	private def print_mdef_ExplicitObservation(SymbolDeclaration s)'''
-		«IF s.symbolName != null && s.expression != null»
+		«IF s.name != null && s.expression != null»
 			<ContinuousData>
-				<General symbId="«s.symbolName.toStr»">
+				<General symbId="«s.name»">
 					«s.expression.print_Assign»
 				</General>
 			</ContinuousData>
@@ -531,7 +531,7 @@ class ModelDefinitionPrinter {
 	}	
 	
 	private def print_mdef_CountObservations(SymbolDeclaration s) {
-		var name = s.symbolName.toStr
+		var name = s.name
 		val linkFunction = s.list.arguments.getAttribute(AttributeValidator::attr_link.name);
 		val distn = s.list.arguments.getAttributeRandomList(AttributeValidator::attr_distrib.name);
 		val paramVar = getFunctionArgument(distn, "lambda");
@@ -567,7 +567,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	private def print_mdef_DiscreteObservations(SymbolDeclaration s) {
-		var name = s.symbolName.toStr
+		var name = s.name
 		val linkFunction = s.list.arguments.getAttribute(AttributeValidator::attr_link.name);
 		val distn = s.list.arguments.getAttributeRandomList(AttributeValidator::attr_distrib.name);
 		val paramVar = getFunctionArgument(distn, "probability");
@@ -608,7 +608,7 @@ class ModelDefinitionPrinter {
 	
 	
 	private def print_mdef_CategoricalObservations(SymbolDeclaration s) {
-		var name = s.symbolName.toStr
+		var name = s.name
 		val categories = s.list.arguments.getAttributeExpression(AttributeValidator::attr_categories.name);
 		val probabilities = s.list.arguments.getAttributeExpression(AttributeValidator::attr_probabilities.name);
 		'''
@@ -640,7 +640,7 @@ class ModelDefinitionPrinter {
 
 
 	private def print_mdef_TimeToEventObservations(SymbolDeclaration s) {
-		var name = s.symbolName.toStr
+		var name = s.name
 		val haz = s.list.arguments.getAttributeExpression(AttributeValidator::attr_hazard.name);
 		val event = s.list.arguments.getAttribute(AttributeValidator::attr_event.name);
 		val maxEvent = s.list.arguments.getAttributeExpression(AttributeValidator::attr_max_event.name);
@@ -678,7 +678,7 @@ class ModelDefinitionPrinter {
 
 
 	private def print_mdef_StandardObservation(SymbolDeclaration s){
-		var name = s.symbolName.toStr
+		var name = s.name
 		val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
 		val prediction = s.list.arguments.getAttribute(AttributeValidator::attr_prediction_ref.name);
 		val eps = s.list.arguments.getAttribute(AttributeValidator::attr_eps.name);
@@ -712,8 +712,8 @@ class ModelDefinitionPrinter {
 	}
 	
 	protected def print_SymbolDeclaration(SymbolDeclaration st, String tag, Boolean printType){
-		if (st.symbolName != null)'''
-			<«tag» symbId="«st.symbolName.name»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
+		if (st.name != null)'''
+			<«tag» symbId="«st.name»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
 				«IF st.expression != null»
 					«st.expression.print_Assign»
 				«ENDIF»

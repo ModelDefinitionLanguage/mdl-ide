@@ -9,7 +9,6 @@ import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.ModelObject
 import java.util.HashMap
-import org.ddmore.mdl.mdl.SymbolName
 
 class PKMacrosPrinter{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -56,17 +55,17 @@ class PKMacrosPrinter{
 		if (s.list != null){
 			var content = "";
 			var type = s.list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
-			if (s.symbolName != null){
+			if (s.name != null){
 				if (type.equals(PkMacroType::EFFECT.toString))
 					content = content + '''
 						<Value argument="concentration"> 
-							«s.symbolName.print_ct_SymbolName»
+							«s.name.print_ct_SymbolRef»
 						</Value>
 					'''
 				else if(type == PkMacroType::COMPARTMENT.toString)
 					content = content + '''
 						<Value argument="amount"> 
-							«s.symbolName.print_ct_SymbolName»
+							«s.name.print_ct_SymbolRef»
 						</Value>
 					'''
 			}
@@ -78,16 +77,16 @@ class PKMacrosPrinter{
 			if(type == PkMacroType::TRANSFER.toString){
 				// because a transfer is also a compartment it means that we need to also
 				// create a new compartment definition for it.
-					retVal = retVal + s.symbolName.printImplicitCompartment(s.list.arguments)
+					retVal = retVal + s.printImplicitCompartment(s.list.arguments)
 			}
 		}
 		return retVal;
 	}
 	
-	def printImplicitCompartment(SymbolName name, Arguments args)'''
+	def printImplicitCompartment(SymbolDeclaration decl, Arguments args)'''
 		<Compartment>
 			<Value argument="amount"> 
-				«name.print_ct_SymbolName»
+				«decl.name.print_ct_SymbolRef»
 			</Value>
 			«"cmt".print_Attr_Value(args.getAttribute(AttributeValidator::attr_modelCmt.name).print_ct_Value)»
 		</Compartment>
@@ -246,7 +245,7 @@ class PKMacrosPrinter{
 					if (st.pkMacroBlock != null){
 							for (s: st.pkMacroBlock.statements){
 								if (s.variable != null){
-									if (s.variable.symbolName.name.equals(to) && s.variable.list != null){
+									if (s.variable.name.equals(to) && s.variable.list != null){
 										var cmtMacroType = s.variable.list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
 										if (cmtMacroType.equals(PkMacroType::COMPARTMENT.toString))
 											return s.variable.list.arguments;

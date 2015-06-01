@@ -71,7 +71,6 @@ import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
 import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
 import org.ddmore.mdl.mdl.NamedArguments;
-import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.OrExpression;
 import org.ddmore.mdl.mdl.ParExpression;
 import org.ddmore.mdl.mdl.ParameterObject;
@@ -79,7 +78,7 @@ import org.ddmore.mdl.mdl.ParameterObjectBlock;
 import org.ddmore.mdl.mdl.PropertyDeclaration;
 import org.ddmore.mdl.mdl.RandomList;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
-import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.SymbolRef;
 import org.ddmore.mdl.mdl.TaskObject;
 import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.TrialType;
@@ -146,7 +145,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
         return imageHelper.getImage(getPath(MOG_OBJ));
     }
     
-    protected Image _image(ObjectName objName) {
+    protected Image _image(SymbolRef objName) {
     	return imageHelper.getImage(getPath(REFERENCE));
     }
     
@@ -347,7 +346,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			obj,
 			MdlPackage.Literals.MODEL_OBJECT__BLOCKS,
 			_image(obj),
-			((MclObject) obj.eContainer()).getObjectName().getName(),
+			((MclObject) obj.eContainer()).getName(),
 			false);
 	}
 	
@@ -356,7 +355,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			obj,
 			MdlPackage.Literals.PARAMETER_OBJECT__BLOCKS,
 			_image(obj),
-			((MclObject) obj.eContainer()).getObjectName().getName(),
+			((MclObject) obj.eContainer()).getName(),
 			false);
 	}
 
@@ -365,7 +364,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			obj,
 			MdlPackage.Literals.TASK_OBJECT__BLOCKS,
 			_image(obj),
-			((MclObject) obj.eContainer()).getObjectName().getName(),
+			((MclObject) obj.eContainer()).getName(),
 			false);
 	}
 	
@@ -383,7 +382,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			obj,
 			MdlPackage.Literals.DATA_OBJECT__BLOCKS,
 			_image(obj),
-			((MclObject) obj.eContainer()).getObjectName().getName(),
+			((MclObject) obj.eContainer()).getName(),
 			false);
 	}
 		
@@ -392,12 +391,12 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			obj,
 			MdlPackage.Literals.MOG_OBJECT__BLOCKS,
 			_image(obj),
-			((MclObject) obj.eContainer()).getObjectName().getName(),
+			((MclObject) obj.eContainer()).getName(),
 			false);
 	}
 		
-	protected void  _createNode(IOutlineNode parentNode, ObjectName name){
-	}
+//	protected void  _createNode(IOutlineNode parentNode, SymbolRef name){
+//	}
 				
 	/////////////////////////////////////////////////////////////////////////////
 	//Print object blocks
@@ -518,10 +517,10 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		}
 	}
 	
-	protected void  _createNode(IOutlineNode parentNode, SymbolName name){
+	protected void  _createNode(IOutlineNode parentNode, SymbolRef name){
 		createEStructuralFeatureNode(parentNode,
 				name,
-				MdlPackage.Literals.SYMBOL_NAME__NAME,
+				MdlPackage.Literals.SYMBOL_REF__SYMBOL_REF,
 				_image(name),
 				mdlPrinter.toStr(name),
 				true);
@@ -540,7 +539,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	protected void  _createNode(IOutlineNode parentNode, ImportObjectStatement st){
 		createEStructuralFeatureNode(parentNode,
 			st,
-			MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__SYMBOL_NAME,
+			MdlPackage.Literals.IMPORT_OBJECT_STATEMENT__OBJECT_REF,
 			_image(st),
 			mdlPrinter.toStr(st),
 			true);
@@ -583,7 +582,7 @@ public class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 		
 	protected void  _createNode(IOutlineNode parentNode, SymbolDeclaration p){
-		String name = mdlPrinter.toStr(p.getSymbolName());
+		String name = mdlPrinter.toStr(p.getName());
 		if (p.getExpression() != null){
 			createEStructuralFeatureNode(parentNode,
 				p,

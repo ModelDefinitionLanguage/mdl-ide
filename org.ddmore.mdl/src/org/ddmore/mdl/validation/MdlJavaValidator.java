@@ -6,14 +6,6 @@
  */
 package org.ddmore.mdl.validation;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.ddmore.mdl.domain.Variable;
-import org.ddmore.mdl.mdl.Mcl;
-import org.ddmore.mdl.mdl.MclObject;
-import org.ddmore.mdl.mdl.MdlPackage;
-import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ComposedChecks;
 //import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
 
@@ -37,7 +29,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 //	Map<String, List<Variable>> declaredVariables = new HashMap<String, List<Variable>>();	
 
 	//List of declared objects
-	List<Variable> declaredObjects = new ArrayList<Variable>();	
+//	List<Variable> declaredObjects = new ArrayList<Variable>();	
 
 	//Update the list of recognised variables
 //	@Check
@@ -46,10 +38,10 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 //	}
 	
 	//Update the list of recognised objects
-	@Check
-	public void updateDeclaredObjectList(Mcl mcl){
-		declaredObjects = Utils.getDeclaredObjects(mcl);
-	}
+//	@Check
+//	public void updateDeclaredObjectList(Mcl mcl){
+//		declaredObjects = Utils.getDeclaredObjects(mcl);
+//	}
 	
 //	@Check
 //	public void checkVariableDeclarations(SymbolDeclaration s){
@@ -79,16 +71,16 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 //		}
 //	} 
 
-	@Check
-	public void checkObjectDeclarations(MclObject o){
-		if (o.getObjectName() != null){
-			if (Utils.isSymbolDeclaredMoreThanOnce(declaredObjects, o.getObjectName().getName())){
-				warning(MSG_OBJECT_DEFINED, 
-						MdlPackage.Literals.MCL_OBJECT__OBJECT_NAME,
-						MSG_OBJECT_DEFINED, o.getObjectName().getName());
-			}
-		}
-	} 
+//	@Check
+//	public void checkObjectDeclarations(MclObject o){
+//		if (o.getObjectName() != null){
+//			if (Utils.isSymbolDeclaredMoreThanOnce(declaredObjects, o.getObjectName().getName())){
+//				warning(MSG_OBJECT_DEFINED, 
+//						MdlPackage.Literals.MCL_OBJECT__OBJECT_NAME,
+//						MSG_OBJECT_DEFINED, o.getObjectName().getName());
+//			}
+//		}
+//	} 
 
 	//Check that each variable is declared in the local object
 //	@Check
