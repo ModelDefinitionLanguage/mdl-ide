@@ -345,6 +345,7 @@ class DataSetPrinter {
 						«FOR p : pairs»
 						«IF !p.key.expression.isCompartmentVar(mObj)»
 							<math:Piece>
+								«p.key.expression.print_Math_Expr»
 							   	<math:Condition>
 							   		<math:LogicBinop op="eq">
 										<ColumnRef columnIdRef="«cmtColId»"/>
