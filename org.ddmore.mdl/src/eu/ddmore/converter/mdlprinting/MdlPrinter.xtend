@@ -111,15 +111,17 @@ class MdlPrinter {
 		if (args != null)
 			if (args.namedArguments != null){
 				for (arg: args.namedArguments.arguments){
-					return arg.expression.isTrue;
-				}
-			}
-			if (args.unnamedArguments != null){
-				for (arg: args.unnamedArguments.arguments){
-					return arg.isTrue;
+					if(arg.argumentName.name == attrName){
+						return arg.expression.isTrue;
+					}
 				}
 			}
 		return false;
+//			if (args.unnamedArguments != null){
+//				for (arg: args.unnamedArguments.arguments){
+//					return arg.isTrue;
+//				}
+//			}
 	}
 	
 	//Returns a set of attribute pairs (unnamed or with given names for named attributes)
