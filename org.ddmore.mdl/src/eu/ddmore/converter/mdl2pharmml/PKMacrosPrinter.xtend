@@ -95,7 +95,7 @@ class PKMacrosPrinter{
 							«s.symbolName.print_ct_SymbolRef»
 						</Value>
 					'''
-				else if(type == PkMacroType::COMPARTMENT.toString)
+				else if(type == PkMacroType::COMPARTMENT.toString || type == PkMacroType::DISTRIBUTION.toString)
 					content = content + '''
 						<Value argument="amount"> 
 							«s.symbolName.print_ct_SymbolRef»
