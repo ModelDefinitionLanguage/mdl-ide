@@ -10,6 +10,8 @@ import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.ModelObject
 import java.util.HashMap
 import org.ddmore.mdl.mdl.SymbolName
+import org.ddmore.mdl.mdl.PkMacroStatement
+import org.eclipse.emf.common.util.EList
 
 class PKMacrosPrinter{
 	extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -50,6 +52,36 @@ class PKMacrosPrinter{
 		AttributeValidator::attr_keq.name -> "ke0"
 	);
 	
+	def printCompartmentDefinitions(EList<PkMacroStatement> statements) {
+		var defns = ''''''
+		for (s : statements) {
+			if(s.variable != null && s.variable.list != null){
+				var type = s.variable.list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
+				if(type == PkMacroType::COMPARTMENT.toString){
+					defns += '''<ct:Variable symbId="«s.variable.symbolName.name»" symbolType="real"/>
+					'''
+				}
+			}
+		}
+		return defns
+	}
+	
+	def printMacros(EList<PkMacroStatement> statements) {
+		var macros = '''
+			<PKmacros>
+		'''
+		for (s : statements) {
+			if (s.variable != null)
+				macros = macros + s.variable.print_PKMacros;
+			if (s.list != null)
+				macros = macros + s.list.print_PKMacros;
+		}
+		macros = macros + '''
+			</PKmacros>
+		'''
+
+	}
+	
 	def print_PKMacros(SymbolDeclaration s){
 		//Convert symbolName to 'amount' PharmML attribute
 		var retVal = ''''''
@@ -75,11 +107,11 @@ class PKMacrosPrinter{
 				content = content + type.print_PKAttributes(s.list.arguments);
 				retVal = macroType.print_PKMacros(content).toString;
 			}
-			if(type == PkMacroType::TRANSFER.toString){
-				// because a transfer is also a compartment it means that we need to also
-				// create a new compartment definition for it.
-					retVal = retVal + s.symbolName.printImplicitCompartment(s.list.arguments)
-			}
+//			if(type == PkMacroType::TRANSFER.toString){
+//				// because a transfer is also a compartment it means that we need to also
+//				// create a new compartment definition for it.
+//					retVal = retVal + s.symbolName.printImplicitCompartment(s.list.arguments)
+//			}
 		}
 		return retVal;
 	}
