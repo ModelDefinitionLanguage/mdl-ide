@@ -3,30 +3,11 @@
 */
 package org.ddmore.mdl.ui.contentassist;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.ddmore.mdl.mdl.Argument;
-import org.ddmore.mdl.mdl.IndividualVarType;
-import org.ddmore.mdl.mdl.InputFormatType;
-import org.ddmore.mdl.mdl.PropertyDeclaration;
-import org.ddmore.mdl.mdl.UseType;
-import org.ddmore.mdl.mdl.VariabilityType;
-import org.ddmore.mdl.mdl.impl.ArgumentImpl;
-import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
-import org.ddmore.mdl.mdl.impl.ListImpl;
-import org.ddmore.mdl.mdl.impl.PropertyDeclarationImpl;
-import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
-import org.ddmore.mdl.ui.outline.Images;
-import org.ddmore.mdl.validation.AttributeValidator;
-import org.ddmore.mdl.validation.PropertyValidator;
-import org.ddmore.mdl.validation.UnitValidator;
-import org.ddmore.mdl.validation.Utils;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.ui.IImageHelper;
 import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
@@ -43,17 +24,17 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 	@Inject MdlGrammarAccess grammarAccess;
 	@Inject IImageHelper imageHelper;
 	
-	@Override
-	public void completeArgument_ArgumentName(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		if (model.eContainer() instanceof ListImpl){
-			EObject container = AttributeValidator.findAttributeContainer(model);
-			if (container != null){
-				Image img = imageHelper.getImage(Images.getPath(Images.ATTRIBUTE));
-				List<String> attributes = Utils.getAllNames(AttributeValidator.getListAttributes(container));
-				addProposals(context, acceptor, attributes, img);
-			}
-		}
-	}
+//	@Override
+//	public void completeArgument_ArgumentName(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+//		if (model.eContainer() instanceof ListImpl){
+//			EObject container = AttributeValidator.findAttributeContainer(model);
+//			if (container != null){
+//				Image img = imageHelper.getImage(Images.getPath(Images.ATTRIBUTE));
+//				List<String> attributes = Utils.getAllNames(AttributeValidator.getListAttributes(container));
+//				addProposals(context, acceptor, attributes, img);
+//			}
+//		}
+//	}
 	
 	/*
 	@Override
@@ -71,85 +52,85 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 	}*/
 	
 	
-	@Override
-	public void completeArgument_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		if (model instanceof ArgumentImpl){
-			Argument arg = (Argument)model;
-			//use
-			if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_use.getName())){
-				List<String> attributes = new ArrayList<String>();
-				for (UseType value: UseType.VALUES)
-					if (value != UseType.NO_USE) attributes.add(value.toString());
-				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
-				addProposals(context, acceptor, attributes, img); return;
-			} else		
-			//type			
-			if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_type.getName())){
-				EObject container = AttributeValidator.findAttributeContainer(arg);
-				List<String> attributes = new ArrayList<String>();
-				if (container instanceof VariabilityBlockImpl){
-					for (VariabilityType value: VariabilityType.VALUES)
-						if (value != VariabilityType.NO_VARIABILITY) 
-							attributes.add(value.toString());
-					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
-					addProposals(context, acceptor, attributes, img); return;
-				} else
-				if (container instanceof IndividualVariablesBlockImpl){
-					for (IndividualVarType value: IndividualVarType.VALUES)
-						if (value != IndividualVarType.NO_INDIVIDUAL_VAR) 
-							attributes.add(value.toString());
-					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
-					addProposals(context, acceptor, attributes, img); 
-//				} else
-//				if (container instanceof AdministrationBlockImpl){
-//					for (TrialType value: TrialType.VALUES)
-//						if (value != TrialType.NO_TRIAL) 
-//							attributes.add(value.toString());
-//					Image img = imageHelper.getImage(Images.getPath(Images.TRIAL_TYPE));				
-//					addProposals(context, acceptor, attributes, img);
-				} else {
-					attributes.add(grammarAccess.getVarTypeAccess().getContinuousContinuousKeyword_1_0().getValue());
-					attributes.add(grammarAccess.getVarTypeAccess().getCategoricalCategoricalKeyword_0_0_0().getValue());
-//					attributes.add(grammarAccess.getVarTypeAccess().getLikelihoodLikelihoodKeyword_2_0().getValue());
-//					attributes.add(grammarAccess.getVarTypeAccess().getM2LLM2LLKeyword_3_0().getValue());
-					Image img = imageHelper.getImage(Images.getPath(Images.CC_TYPE));				
-					addProposals(context, acceptor, attributes, img);
-				}
-			} else
-			//units
-			if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_units.getName())){
-				List<String> attributes = new ArrayList<String>();
-				attributes.addAll(UnitValidator.getUnitNames());
-				Image img = imageHelper.getImage(Images.getPath(Images.EXPRESSION));				
-				addProposals(context, acceptor, attributes, img);
-			}
-		}
-	}	
-	
-	@Override
-	public void completePropertyDeclaration_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
-		if (model instanceof PropertyDeclarationImpl){
-			PropertyDeclaration property = (PropertyDeclaration)model;
-			//inputformat
-			if (property.getPropertyName().getArgName().equals(PropertyValidator.attr_inputformat.getName())){
-				List<String> values = new ArrayList<String>();
-				for (InputFormatType value: InputFormatType.VALUES)
-					if (value != InputFormatType.NO_INPUT_FORMAT)
-						values.add(value.toString());
-				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
-				addProposals(context, acceptor, values, img);
-			}
-			//target
-//			if (property.getPropertyName().getName().equals(PropertyValidator.attr_req_target.getName())){
+//	@Override
+//	public void completeArgument_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+//		if (model instanceof ArgumentImpl){
+//			Argument arg = (Argument)model;
+//			//use
+//			if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_use.getName())){
 //				List<String> attributes = new ArrayList<String>();
-//				for (TargetType value: TargetType.VALUES)
-//					if (value != TargetType.NO_TARGET)
-//						attributes.add(value.toString());
-//				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
+//				for (UseType value: UseType.VALUES)
+//					if (value != UseType.NO_USE) attributes.add(value.toString());
+//				Image img = imageHelper.getImage(Images.getPath(Images.USE_TYPE));				
 //				addProposals(context, acceptor, attributes, img); return;
+//			} else		
+//			//type			
+//			if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_type.getName())){
+//				EObject container = AttributeValidator.findAttributeContainer(arg);
+//				List<String> attributes = new ArrayList<String>();
+//				if (container instanceof VariabilityBlockImpl){
+//					for (VariabilityType value: VariabilityType.VALUES)
+//						if (value != VariabilityType.NO_VARIABILITY) 
+//							attributes.add(value.toString());
+//					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
+//					addProposals(context, acceptor, attributes, img); return;
+//				} else
+//				if (container instanceof IndividualVariablesBlockImpl){
+//					for (IndividualVarType value: IndividualVarType.VALUES)
+//						if (value != IndividualVarType.NO_INDIVIDUAL_VAR) 
+//							attributes.add(value.toString());
+//					Image img = imageHelper.getImage(Images.getPath(Images.VARIABILITY_TYPE));				
+//					addProposals(context, acceptor, attributes, img); 
+////				} else
+////				if (container instanceof AdministrationBlockImpl){
+////					for (TrialType value: TrialType.VALUES)
+////						if (value != TrialType.NO_TRIAL) 
+////							attributes.add(value.toString());
+////					Image img = imageHelper.getImage(Images.getPath(Images.TRIAL_TYPE));				
+////					addProposals(context, acceptor, attributes, img);
+//				} else {
+//					attributes.add(grammarAccess.getVarTypeAccess().getContinuousContinuousKeyword_1_0().getValue());
+//					attributes.add(grammarAccess.getVarTypeAccess().getCategoricalCategoricalKeyword_0_0_0().getValue());
+////					attributes.add(grammarAccess.getVarTypeAccess().getLikelihoodLikelihoodKeyword_2_0().getValue());
+////					attributes.add(grammarAccess.getVarTypeAccess().getM2LLM2LLKeyword_3_0().getValue());
+//					Image img = imageHelper.getImage(Images.getPath(Images.CC_TYPE));				
+//					addProposals(context, acceptor, attributes, img);
+//				}
+//			} else
+//			//units
+//			if (arg.getArgumentName().getArgName().equals(AttributeValidator.attr_units.getName())){
+//				List<String> attributes = new ArrayList<String>();
+//				attributes.addAll(UnitValidator.getUnitNames());
+//				Image img = imageHelper.getImage(Images.getPath(Images.EXPRESSION));				
+//				addProposals(context, acceptor, attributes, img);
 //			}
-		}
-	} 
+//		}
+//	}	
+//	
+//	@Override
+//	public void completePropertyDeclaration_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
+//		if (model instanceof PropertyDeclarationImpl){
+//			PropertyDeclaration property = (PropertyDeclaration)model;
+//			//inputformat
+//			if (property.getPropertyName().getArgName().equals(PropertyValidator.attr_inputformat.getName())){
+//				List<String> values = new ArrayList<String>();
+//				for (InputFormatType value: InputFormatType.VALUES)
+//					if (value != InputFormatType.NO_INPUT_FORMAT)
+//						values.add(value.toString());
+//				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
+//				addProposals(context, acceptor, values, img);
+//			}
+//			//target
+////			if (property.getPropertyName().getName().equals(PropertyValidator.attr_req_target.getName())){
+////				List<String> attributes = new ArrayList<String>();
+////				for (TargetType value: TargetType.VALUES)
+////					if (value != TargetType.NO_TARGET)
+////						attributes.add(value.toString());
+////				Image img = imageHelper.getImage(Images.getPath(Images.TARGET_LANGUAGE));				
+////				addProposals(context, acceptor, attributes, img); return;
+////			}
+//		}
+//	} 
 		
 	private void addProposals(ContentAssistContext context, ICompletionProposalAcceptor acceptor, 
 			List<String> attributes, Image img){

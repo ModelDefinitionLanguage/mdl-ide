@@ -4,52 +4,50 @@ generate mdl "http://www.ddmore.org/mdl/Mdl"
 Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
-MclObject:
-	name=ID '=' 
-	(modelObject=ModelObject | 
-	parameterObject=ParameterObject | 
-	dataObject=DataObject | 
-	taskObject=TaskObject |
-//	designObject=DesignObject |
-	mogObject=MOGObject);
+MclObject returns MclObject:
+	ModelObject | 
+	ParameterObject | 
+	DataObject | 
+	TaskObject |
+	MOGObject;
 	
-ModelObject: 
-	identifier = 'mdlobj' BEGIN blocks += ModelObjectBlock* END;
+ModelObject returns MclObject: 
+	{ModelObject} (name=ID '=' identifier = 'mdlobj' BEGIN blocks += ModelObjectBlock* END);
 
-ParameterObject:
-	identifier = 'parobj' BEGIN blocks += ParameterObjectBlock* END;
+ParameterObject returns MclObject:
+	{ParameterObject} (name=ID '=' identifier = 'parobj' BEGIN blocks += ParameterObjectBlock* END);
 	
-DataObject:
-	identifier = 'dataobj' BEGIN blocks += DataObjectBlock* END;
+DataObject returns MclObject:
+	{DataObject} (name=ID '=' identifier = 'dataobj' BEGIN blocks += DataObjectBlock* END);
 
-TaskObject:
-	identifier = 'taskobj' BEGIN blocks += TaskObjectBlock* END;
+TaskObject returns MclObject:
+	{TaskObject} (name=ID '=' identifier = 'taskobj' BEGIN blocks += TaskObjectBlock* END);
 	
-//DesignObject:
-//	identifier = 'designobj' BEGIN blocks += DesignObjectBlock* END;
-	
-MOGObject:
-	identifier = 'mogobj' BEGIN blocks += MOGObjectBlock* END;
+MOGObject returns MclObject:
+	{MOGObject} (name=ID '=' identifier = 'mogobj' BEGIN blocks += MOGObjectBlock* END);
 	
 //////////////////////////////////////////////////////////
 //Model Object
 //////////////////////////////////////////////////////////
 
-ModelObjectBlock: 
-	independentVariableBlock = IndependentVariableBlock |
-	individualVariablesBlock = IndividualVariablesBlock | 
-	modelPredictionBlock = ModelPredictionBlock | 
-	randomVariableDefinitionBlock = RandomVariableDefinitionBlock |
-	variabilityBlock = VariabilityDefinitionBlock |
-	covariateBlock = CovariateDefinitionBlock |
-	structuralParametersBlock = StructuralParametersBlock |
-	variabilityParametersBlock = VariabilityParametersBlock |
-	outputVariablesBlock = OutputVariablesBlock | 
-	groupVariablesBlock = GroupVariablesBlock | 
-	observationBlock = ObservationBlock /*|
-	estimationBlock = EstimationBlock |
-	simulationBlock = SimulationBlock|
-	targetBlock = TargetBlock  */
+ObjectBlock:
+	ModelObjectBlock|
+	DataObjectBlock |
+	ParameterObjectBlock |
+	TaskObjectBlock
+;
+
+ModelObjectBlock returns ObjectBlock: 
+	IndependentVariableBlock |
+	IndividualVariablesBlock | 
+	ModelPredictionBlock | 
+	RandomVariableDefinitionBlock |
+	VariabilityDefinitionBlock |
+	CovariateDefinitionBlock |
+	StructuralParametersBlock |
+	VariabilityParametersBlock |
+	GroupVariablesBlock | 
+	ObservationBlock 
 ;
 
 IndependentVariableBlock:
@@ -92,11 +90,6 @@ VariabilityParametersBlock:
   BEGIN parameters += SymbolDeclaration* END 
 ;
 
-OutputVariablesBlock:
-	identifier = 'MODEL_OUTPUT_VARIABLES' 
-	BEGIN variables += ReferenceDeclaration* END 
-; 
-
 GroupVariablesBlock:
 	identifier = 'GROUP_VARIABLES' 
 	BEGIN statements += GroupVariablesBlockStatement* END
@@ -107,26 +100,15 @@ ObservationBlock:
 	BEGIN variables += SymbolDeclaration* END  
 ;
 
-//EstimationBlock:
-//	identifier = 'ESTIMATION' 
-//	BEGIN variables += SymbolDeclaration* END 
-//;
-//
-//SimulationBlock:
-//	identifier = 'SIMULATION' 
-//	BEGIN variables += SymbolDeclaration* END  
-//;
-
 //////////////////////////////////////////////////////////
 //Parameter Object
 //////////////////////////////////////////////////////////
 
-ParameterObjectBlock:
-	declaredVariables = DeclaredVariablesBlock |
-	structuralBlock = StructuralBlock |
-	variabilityBlock = VariabilityBlock |
-	priorBlock = PriorParametersBlock /*|
-	targetBlock = TargetBlock  */
+ParameterObjectBlock returns ObjectBlock:
+	DeclaredVariablesBlock |
+	StructuralBlock |
+	VariabilityBlock |
+	PriorParametersBlock 
 ;
 
 StructuralBlock:
@@ -148,12 +130,11 @@ PriorParametersBlock:
 //Data Object
 //////////////////////////////////////////////////////////
 
-DataObjectBlock:
-	dataInputBlock = DataInputBlock |
-	dataDerivedBlock = DataDerivedBlock |
-	declaredVariables = DeclaredVariablesBlock |
-	sourceBlock = SourceBlock /*|
-	targetBlock = TargetBlock   */
+DataObjectBlock returns ObjectBlock:
+	DataInputBlock |
+	DataDerivedBlock |
+	DeclaredVariablesBlock |
+	SourceBlock
 ;
 
 DataInputBlock:
@@ -163,7 +144,7 @@ DataInputBlock:
 
 DataDerivedBlock:
  	identifier='DATA_DERIVED_VARIABLES' 
- 	BEGIN variables += ExpressionDeclaration* END  	
+ 	BEGIN variables += ListDeclaration* END  	
 ;
 
 DeclaredVariablesBlock:
@@ -183,25 +164,11 @@ SourceBlock:
 //Task Object
 //////////////////////////////////////////////////////////
  
-TaskObjectBlock: 
-	estimateBlock = EstimateTask |
-	simulateBlock = SimulateTask /*|
-	evaluateBlock = EvaluateTask |
-	optimiseBlock = OptimiseTask |
-	dataBlock = DataBlock |
-	modelBlock = ModelBlock | 
-	targetBlock = TargetBlock  */	
+TaskObjectBlock returns ObjectBlock: 
+	EstimateTask |
+	SimulateTask 	
 ;
 
-//DataBlock:
-//	identifier = 'DATA' 
-//	BEGIN statements += PropertyDeclaration* END
-//;
-//
-//ModelBlock:
-//	identifier = 'MODEL' 
-//	BEGIN statements += PropertyDeclaration* END
-//;
 
 EstimateTask: 
 	identifier = 'ESTIMATE' 
@@ -213,27 +180,11 @@ SimulateTask:
 	BEGIN statements += PropertyDeclaration* END  
 ;
 
-//EvaluateTask:
-//	identifier = 'EVALUATE'
-//	BEGIN statements += PropertyDeclaration* END  
-//;
-//
-//OptimiseTask:
-//	identifier = 'OPTIMISE'
-//	BEGIN statements += PropertyDeclaration* END  
-//;
-
 ModelPredictionBlockStatement: 
 	variable = SymbolDeclaration | 
 	odeBlock = OdeBlock | 
-//	libraryBlock = LibraryBlock |
 	pkMacroBlock = PkMacroBlock 
 ;
-
-//LibraryBlock: 
-//	identifier = 'LIBRARY' 
-//	BEGIN statements += FunctionCallStatement* END 
-//;
 
 PkMacroBlock:
 	identifier = 'COMPARTMENT'
@@ -245,109 +196,21 @@ PkMacroStatement:
 	list = List
 ;
 
-//FunctionCallStatement:
-//	symbolName = SymbolName "=" expression = FunctionCall
-//;
-
 OdeBlock:
 	identifier = ('DEQ')
 	BEGIN variables += SymbolDeclaration* END 
 ;
 
 GroupVariablesBlockStatement:
-	variable = SymbolDeclaration |  
-	mixtureBlock = MixtureBlock 
+	variable = SymbolDeclaration //|  
 ;
 
-MixtureBlock:
-	identifier = 'MIXTURE' 
-	BEGIN variables += SymbolDeclaration* END 
-;
 
-//////////////////////////////////////////////////////////
-//Data Object
-//////////////////////////////////////////////////////////
-
-//InlineBlock:
-//	identifier = 'INLINE' 
-//	BEGIN (variables = VariableList)? (values = NumericList)? END 
-//;
-
-//NumericList:
-//	values += SignedNumericValue (=> (',' | ';')? values += SignedNumericValue)* 
-//;
-
-//SignedNumericValue:
-//	(operator = UnaryOperator)? value = NumericValue | skip = '.'
-//;
-//
-//VariableList:
-//	identifiers += SymbolName (=> (',' | ';')? identifiers += SymbolName)* 
-//;
-
-//////////////////////////////////////////////////////////
-//Design Object
-//////////////////////////////////////////////////////////
-/*
-DesignObjectBlock:
-	covariatesBlock = CovariatesBlock |
-	studyDesignBlock = StudyDesignBlock |
-	adminBlock = AdministrationBlock |
-	actionBlock = ActionBlock |
-	samplingBlock = SamplingBlock |
-	designSpaceBlock = DesignSpaceBlock |
-	hyperSpaceBlock = HyperSpaceBlock |
-	populationFeaturesBlock = PopulationFeaturesBlock |
-	targetBlock = TargetBlock 
-;
-
-DesignSpaceBlock:
-	identifier = 'DESIGN_SPACE'
-	BEGIN variables += SymbolDeclaration* END 
-;
-
-HyperSpaceBlock:
-	identifier = 'HYPER_SPACE'
-	BEGIN variables += SymbolDeclaration* END 
-;
-
-CovariatesBlock:
-	identifier = 'COVARIATES'
-	BEGIN variables += SymbolDeclaration* END 
-;
-
-StudyDesignBlock:
-	identifier = 'STUDY_DESIGN'
-	BEGIN variables += SymbolDeclaration* END 
-;
-
-PopulationFeaturesBlock:
-	identifier = 'POPULATION_FEATURES'
-	BEGIN variables += PropertyDeclaration* END
-;
-
-AdministrationBlock:
-	identifier = 'ADMINISTRATION'
-	BEGIN variables += SymbolDeclaration* END
-;
-
-ActionBlock:
-	identifier = 'ACTION'
-	BEGIN variables += SymbolDeclaration* END
-;
-
-SamplingBlock:
-	identifier = 'SAMPLING'
-	BEGIN variables += SymbolDeclaration* END
-;
-*/
 //////////////////////////////////////////////////////////
 //MOG
 //////////////////////////////////////////////////////////
-MOGObjectBlock:
-	objectBlock = ImportObjectBlock
-//	 |
-//	mappingBlock = MappingBlock	
+MOGObjectBlock returns ObjectBlock:
+	ImportObjectBlock
 ;
 
  ImportObjectBlock:
@@ -355,26 +218,10 @@ MOGObjectBlock:
  	BEGIN objects += ImportObjectStatement* END
  ;
  
-// ImportObjectStatement:
-// 	(name = ID "=")? objectName = [ObjectName] //('from file' importURI = STRING)?
-// ;
- 
  ImportObjectStatement:
- 	objectRef = SymbolRef //('from file' importURI = STRING)?
+ 	mdlObjRef = [SymbolName|ID]
  ;
-
-// MappingBlock:
-// 	identifier = 'MAPPING'
-// 	BEGIN mappings += MappingBlockStatement* END
-// ;
-// 
-// MappingBlockStatement:
-// 	obj1 = FullyQualifiedSymbolName '=' obj2 = FullyQualifiedSymbolName
-// ;
-// 
-// FullyQualifiedSymbolName:
-// 	parent = SymbolName '.' symbolName = SymbolName
-// ;
+ 
 
 //////////////////////////////////////////////////////////
 //Common
@@ -392,28 +239,21 @@ FunctionCall:
 	identifier = FunctionName '(' arguments = Arguments? ')' 
 ;
 
-//TargetBlock: 
-//	identifier = 'TARGET_CODE' 
-//	BEGIN
-//		statements += PropertyDeclaration*  
-//		externalCode = EXTERNAL_CODE 
-//	END
-//;
 
 //terminal EXTERNAL_CODE:
 //	'<<' -> '>>'
 //; 
 
-SymbolDefn:
-	SymbolDeclaration | ListDeclaration | ExpressionDeclaration | ReferenceDeclaration |
-		MclObject | Category
+SymbolName:
+	SymbolDeclaration | ListDeclaration | ExpressionDeclaration | ReferenceDeclaration 
+	| ImportObjectStatement | MclObject
 ;
 
 SymbolDeclaration:
 	name = ID
 		("=" (expression = Expression) | 
 		 ":" list = List | 
-		     randomList = RandomList)? 
+		  '~' randomList = RandomList)? 
 ;
 
 ListDeclaration:
@@ -429,7 +269,7 @@ ReferenceDeclaration:
 ;
 
 PropertyDeclaration:
-	propertyName = ArgumentName "=" expression = AnyExpression
+	propertyName = ID "=" expression = AnyExpression
 ;
 
 EnumType:
@@ -492,11 +332,6 @@ enum TrialType:
 	no_Trial | simple | combined | sequential 
 ;
 
-terminal CONSTANT:
-	'INF'
-	// | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
-;
-
 VarType:
 	categorical = 'categorical' ('(' categories += Category (=> ',' categories += Category)* ')')? | 
 	continuous  = 'continuous' /* | 
@@ -522,87 +357,131 @@ List:
 ;
 
 RandomList:
-	'~' type = DistributionName '(' arguments = Arguments? ')'
+	type = DistributionName '(' arguments = Arguments? ')'
 ;
 
 DistributionName:
-	name = ID
+	distName = ID
 ;
 
 Arguments: 
-	namedArguments = NamedArguments | unnamedArguments = UnnamedArguments
+	namedArguments = NamedArguments //| unnamedArguments = UnnamedArguments
 ;
 
 NamedArguments:
 	arguments += Argument (=> ',' arguments += Argument)* 
 ;
 
-UnnamedArguments:
-	arguments += ArgumentExpression (=> ',' arguments += ArgumentExpression)*
-;
+//UnnamedArguments:
+//	arguments += ArgumentExpression (=> ',' arguments += ArgumentExpression)*
+//;
 
 Argument:
 	argumentName = ArgumentName "=" expression = ArgumentExpression 
 ;
 
 ArgumentExpression:
-	expression = AnyExpression | randomList = RandomList
+	expression = AnyExpression// | randomList = RandomList
 ;
 
 transformExpr:
 	transform = TRANSFORMS
 ;
 
-ParExpression:
-	'(' expression = Expression')';	
-	
 Expression:
-	expression = OrExpression ('when' condition = OrExpression 
-	(=> ',' whenBranches += ExpressionBranch)*
-	(';' | 'otherwise' elseExpression = OrExpression (';')?)
-	)?
+	OrExpression
 ;
 
-ExpressionBranch:
-	expression = OrExpression 'when' condition = OrExpression
-;	
+OrExpression returns Expression:
+	AndExpression (=>({BinaryOperation.leftOperand=current} feature=OpOr) rightOperand=AndExpression)*;
+
+OpOr:
+	'||';
+
+AndExpression returns Expression:
+	EqualityExpression (=>({BinaryOperation.leftOperand=current} feature=OpAnd) rightOperand=EqualityExpression)*;
+
+OpAnd:
+	'&&';
+
+EqualityExpression returns Expression:
+	RelationalExpression (=>({BinaryOperation.leftOperand=current} feature=OpEquality)
+	rightOperand=RelationalExpression)*;
+
+OpEquality:
+	'==' | '!=' ;
+
+RelationalExpression returns Expression:
+	AdditiveExpression
+	(
+	 =>({BinaryOperation.leftOperand=current} feature=OpCompare) rightOperand=AdditiveExpression)*;
+
+OpCompare:
+	'>=' | '<=' | '>' | '<' ;
+
+AdditiveExpression returns Expression:
+	MultiplicativeExpression (=>({BinaryOperation.leftOperand=current} feature=OpAdd)
+	rightOperand=MultiplicativeExpression)*;
+
+OpAdd:
+	'+' | '-';
+
+MultiplicativeExpression returns Expression:
+	UnaryOperation (=>({BinaryOperation.leftOperand=current} feature=OpMulti) rightOperand=UnaryOperation)*;
+
+OpMulti:
+	'*' | '^' | '/' | '%';
+
+UnaryOperation returns Expression:
+	{XUnaryOperation} feature=OpUnary operand=UnaryOperation
+	| PrimaryExpression
+	;
+
+OpUnary:
+	"!" | "-" | "+";
+
+PrimaryExpression returns Expression:
+	Literal
+	| ReferenceLiteral 
+	| WhenExpression
+	| ParExpression
+	;
+
+
+ParExpression returns Expression:
+	'(' Expression ')'
+;
+
+WhenExpression returns Expression:
+	 {XIfExpression}
+	 	'when' '(' if+=Expression ')' then+=Expression
+	 	(=>',' 'when' '(' if+=Expression ')' then+=Expression)*
+		(=>'otherwise' else=Expression)?
+	;
+
+Literal returns Expression:
+	NumberLiteral |
+	StringLiteral |
+	BooleanLiteral
+;
+
+ReferenceLiteral:
+	{ReferenceLiteral} ref=[SymbolName|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')?
+;
+
+BooleanLiteral returns Expression :
+	{BooleanLiteral} ('false' | isTrue?='true');
+
+NumberLiteral returns Expression :
+	{NumberLiteral} value=Number;
+
+StringLiteral returns Expression:
+	{StringLiteral} value=STRING;
+
+Number hidden():
+	(INTEGER | FLOAT) 
+	;
 	
-OrExpression:
-	expression += AndExpression (operator += LogicalOrOperator expression += AndExpression)*;
-
-AndExpression:
-	expression += LogicalExpression (operator += LogicalAndOperator expression += LogicalExpression)*;	
-
-LogicalExpression:
-	(negation = "!")? (
-		(boolean = BOOLEAN) | 
-		(expression1 = AdditiveExpression (operator = LogicalOperator expression2 = AdditiveExpression)?)
-	)
-;
-
-AdditiveExpression:
-	expression += MultiplicativeExpression (operator += AdditiveOperator expression+=MultiplicativeExpression)* |
-	string = STRING	 
-;
-
-MultiplicativeExpression:
-	expression += PowerExpression (operator += MultiplicativeOperator expression += PowerExpression)*;
-
-PowerExpression:
-	expression += UnaryExpression (operator += PowerOperator expression += UnaryExpression)*;
-
-UnaryExpression:
-	operator = UnaryOperator expression = UnaryExpression |  
-	parExpression = ParExpression |
-	number = NumericValue |
-	symbol = SymbolRef |
-	constant = CONSTANT |
-	functionCall = FunctionCall 
-;
-
-SymbolRef:
-	symbolRef = [SymbolDefn|ID]
-;
 
 Vector:
 	'[' expression = VectorExpression ']'
@@ -615,43 +494,11 @@ VectorExpression:
 		//matchings += Matching  (=> ',' matchings += Matching)*
 ;
 
-//ObjectName:
-//	name = ID
-//;
 
-LogicalAndOperator: '&&'
-;		
-
-LogicalOrOperator: '||'
+terminal CONSTANT:
+	'INF'
+	// | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
 ;
-
-LogicalOperator:
-	'<' | 
-	'>' | 
-	"<=" | 
-	">=" | 
-	'==' | 
-	'!=';
-
-PowerOperator:
-	'^'
-;
-
-MultiplicativeOperator:
-	'*' | '/' | '%'  
-;	
-
-AdditiveOperator:
-	'+' | '-'
-;
-
-UnaryOperator:
-	'+' | '-' 
-;
-
-NumericValue:	
-	INTEGER | FLOAT
-; 
 
 terminal TRANSFORMS:
 	'log'|'logit'|'probit'|'indentity'
@@ -660,8 +507,8 @@ terminal TRANSFORMS:
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';
 
-terminal BOOLEAN:
-    'true' | 'false';		
+//terminal BOOLEAN:
+//    'true' | 'false';		
 	
 terminal INTEGER:
 	('0' | '1'..'9' '0'..'9'*);
@@ -701,6 +548,5 @@ terminal BEGIN: '{';
 terminal END: '}' ;
 
 terminal ID: ('a'..'z'|'A'..'Z'|'_')('a'..'z'|'A'..'Z'|'_'| '0'..'9')*;
-
 
 
