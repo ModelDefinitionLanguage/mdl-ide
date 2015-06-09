@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="eu.ddmore.mdl.sdk.jre"
+      label="%label"
+      version="1.0.2"
+      provider-name="%provider">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseUrl">
+      %license
+   </license>
+
+
+   <requires>
+      <import plugin="org.ops4j.pax.configmanager"/>
+      <import plugin="org.eclipse.equinox.cm"/>
+   </requires>
+
+</feature>
