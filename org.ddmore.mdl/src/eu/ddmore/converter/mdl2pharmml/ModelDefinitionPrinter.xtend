@@ -412,19 +412,21 @@ class ModelDefinitionPrinter {
 //						} 
 						//COMPARTMENT
 						if (st.pkMacroBlock != null){
-							macros = macros + '''
-			<PKmacros>
-		'''
-							
-							for (s: st.pkMacroBlock.statements){
-								if (s.variable != null)
-									macros = macros + s.variable.print_PKMacros;
-								if (s.list != null)
-									macros = macros + s.list.print_PKMacros;
-							}
-							macros = macros + '''
-			</PKmacros>
-		'''
+							macros += st.pkMacroBlock.statements.printCompartmentDefinitions
+							macros += st.pkMacroBlock.statements.printMacros
+//							macros = macros + '''
+//			<PKmacros>
+//		'''
+//							
+//							for (s: st.pkMacroBlock.statements){
+//								if (s.variable != null)
+//									macros = macros + s.variable.print_PKMacros;
+//								if (s.list != null)
+//									macros = macros + s.list.print_PKMacros;
+//							}
+//							macros = macros + '''
+//			</PKmacros>
+//		'''
 							 
 						}
 					}

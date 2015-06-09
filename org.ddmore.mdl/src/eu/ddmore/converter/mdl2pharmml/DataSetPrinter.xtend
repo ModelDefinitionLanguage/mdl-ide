@@ -15,8 +15,6 @@ import org.ddmore.mdl.mdl.NonContinuousType
 import org.ddmore.mdl.mdl.SymbolDeclaration
 import org.ddmore.mdl.mdl.SymbolRef
 import org.ddmore.mdl.mdl.UseType
-import org.ddmore.mdl.mdl.impl.DataInputBlockImpl
-import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
 import org.ddmore.mdl.types.DistributionType
 import org.ddmore.mdl.validation.AttributeValidator
 import org.ddmore.mdl.validation.PropertyValidator
