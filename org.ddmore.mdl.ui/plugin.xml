@@ -377,7 +377,7 @@
      </category>
      <wizard
            category="org.ddmore.mdl.ui.wizard"
-           class="org.ddmore.mdl.ui.wizard.FileNewWizard"
+           class="eu.ddmore.mdl.ui.wizard.FileNewWizard"
            finalPerspective="org.ddmore.mdl.ui.perspective.MDL"
            id="org.ddmore.mdl.ui.wizard.FileNewWizard"
            name="MDL File"
@@ -393,7 +393,7 @@
      </wizard>-->
      <wizard
            category="org.ddmore.mdl.ui.wizard"
-           class="org.ddmore.mdl.ui.wizard.SimpleMDLProject"
+           class="eu.ddmore.mdl.ui.wizard.SimpleMDLProject"
            finalPerspective="org.ddmore.mdl.ui.perspective.MDL"
            id="org.ddmore.mdl.ui.wizard.SimpleMDLProject"
            name="MDL Project"
@@ -404,7 +404,7 @@
   	<extension point="org.eclipse.ui.perspectives">
 	   <perspective
 	         name="MDL"
-	         class="org.ddmore.mdl.ui.perspective.MDLPerspective"
+	         class="eu.ddmore.mdl.ui.perspective.MDLPerspective"
 	         id="org.ddmore.mdl.ui.perspective.MDL">
 	   </perspective>
 	</extension>
@@ -434,7 +434,7 @@
     </category>
     <wizard
           category="org.ddmore.mdl.ui.wizard.ImportMDLCategory"
-          class="org.ddmore.mdl.ui.wizard.FileImportWizard"
+          class="eu.ddmore.mdl.ui.wizard.FileImportWizard"
           id="org.ddmore.mdl.ui.wizard.FileImportWizard"
           name="MDL File">
        <description>
@@ -443,7 +443,7 @@
     </wizard>
     <wizard
           category="org.ddmore.mdl.ui.wizard.ImportMDLCategory"
-          class="org.ddmore.mdl.ui.wizard.DataSetImportWizard"
+          class="eu.ddmore.mdl.ui.wizard.DataSetImportWizard"
            id="org.ddmore.mdl.ui.wizard.DataSetFileImportWizard"
           name="Data File">
        <description>

@@ -38,9 +38,9 @@ Require-Bundle: org.ddmore.mdl;visibility:=reexport,
 Import-Package: org.apache.commons.io;version="2.0.1",
  org.eclipse.ui.console
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: org.ddmore.mdl.ui.contentassist,
- org.ddmore.mdl.ui.contentassist.antlr,
- org.ddmore.mdl.ui.internal,
- org.ddmore.mdl.ui.preference;x-friends:="org.ddmore.mdl.tests",
- org.ddmore.mdl.ui.quickfix
+Export-Package: eu.ddmore.mdl.ui.contentassist,
+ eu.ddmore.mdl.ui.preference;x-friends:="org.ddmore.mdl.tests",
+ eu.ddmore.mdl.ui.quickfix,
+ eu.ddmore.mdl.ui.contentassist.antlr,
+ eu.ddmore.mdl.ui.internal
 Bundle-Activator: org.ddmore.mdl.ui.internal.MdlActivator
