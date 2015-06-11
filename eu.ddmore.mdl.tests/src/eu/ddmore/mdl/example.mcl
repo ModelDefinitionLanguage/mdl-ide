@@ -1,0 +1,137 @@
+warfarin_PK_v2_dat = dataobj{
+	DECLARED_VARIABLES{ Y; D; TD}
+	
+	DATA_INPUT_VARIABLES {
+		ID : { use=id }
+		TIME : { use=idv }
+		WT : { use = covariate }
+		AGE : { use = covariate }
+		SEX : { use=covariate, type=categorical(male, female), 
+				define=[{category=male, value=0}, {category=female,value=1}]}
+		AMT : { use = amt , define = D }
+		DVID : { use = dvid }
+		DV : { use = dv, define = Y }
+		MDV : { use = mdv}
+	}
+
+	DATA_DERIVED_VARIABLES{
+		DT : { column=TIME, type=dosetime }
+	}
+	
+	SOURCE {
+	    file = "warfarin_conc_sex.csv"
+        inputformat = nonmemFormat 
+	    ignore = "#" 
+#		header = true  # or false
+#		skip =  0  ##  << integer >> Skips number of rows before header / data
+	} # end SOURCE
+} # end data object
+
+warfarin_PK_ANALYTIC_mdl = mdlobj {
+	IDV { T }
+
+	VARIABILITY_LEVELS{
+		ID : { level=2, type=parameter }
+		DV : { level=1, type=observation }
+   }
+
+	COVARIATES{
+		WT
+		logtWT = log(WT/70)
+	}
+
+	STRUCTURAL_PARAMETERS {
+		POP_CL
+		POP_V
+		POP_KA
+		POP_TLAG
+		BETA_CL_WT
+		BETA_V_WT
+		RUV_PROP
+		RUV_ADD
+	} # end STRUCTURAL_PARAMETERS
+	
+	VARIABILITY_PARAMETERS {
+		PPV_CL
+		PPV_V
+		PPV_KA
+		PPV_TLAG
+	} # end VARIABILITY_PARAMETERS 
+	
+	RANDOM_VARIABLE_DEFINITION(level=ID) {
+		ETA_CL ~ Normal(mean = 0, sd = PPV_CL)
+		ETA_V ~ Normal(mean = 0, sd = PPV_V)
+		ETA_KA ~ Normal(mean = 0, sd = PPV_KA)
+		ETA_TLAG ~ Normal(mean = 0, sd = PPV_TLAG)
+	} # end RANDOM_VARIABLE_DEFINITION 
+	
+	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
+	    CL : { type = linear, trans = log, pop = POP_CL, fixEff = {coeff=BETA_CL_WT , covariate = logtWT }, ranEff = ETA_CL }
+	    V : { type = linear, trans = log, pop = POP_V, fixEff =  {coeff=BETA_V_WT , covariate = logtWT } , ranEff = ETA_V }
+	    KA : { type = linear, trans = log, pop = POP_KA, ranEff = ETA_KA }
+	    TLAG : { type = linear, trans = log, pop = POP_TLAG, ranEff = ETA_TLAG } 
+	} # end INDIVIDUAL_VARIABLES
+	
+	MODEL_PREDICTION {
+	    D # dosing variable
+	    DT # dosing time
+	    k = CL/V
+	    CC = when(T - DT < TLAG) 0 
+	         otherwise (D/V) * (KA/(KA-k) * (exp(-k * (T -DT-TLAG) - exp(-KA*(T-DT-TLAG)))))
+	} # end MODEL_PREDICTION
+
+	RANDOM_VARIABLE_DEFINITION(level=DV){
+		EPS_Y ~ Normal(mean = 0, var = 1) # This maps the standard error model in PharmML. The error model is predefined. 
+	}
+
+	OBSERVATION {
+	    Y : { type = combinedError1, additive = RUV_ADD, proportional = RUV_PROP,
+	              eps = EPS_Y, prediction = CC } 
+	} # end OBSERVATION
+} # end of model object
+
+warfarin_PK_ODE_par = parobj {
+	DECLARED_VARIABLES{ETA_CL ETA_V}
+
+	# By default a parameter is to be estimated if fix is omitted
+ 	STRUCTURAL {
+		POP_CL = (0.1, 0.001 )
+		POP_V = (8, 0.001) 
+		POP_KA = (0.362, 0.001)
+		POP_TLAG = (1, 0.001, 10)
+		BETA_CL_WT = 0.75
+		BETA_V_WT = 1 
+		RUV_PROP = (0.1, 0 )
+		RUV_ADD = (0.1, 0) 
+		} # end STRUCTURAL
+	VARIABILITY {
+		PPV_CL = (0.1) 
+		PPV_V = (0.1, 0, 1)
+		PPV_KA = 0.1
+		PPV_TLAG = (0.1) 
+	} # end VARIABILITY
+	CORR { parameter=[ETA_CL, ETA_V]; value = [0.01] }
+} # end of parameter object 
+
+nonmem_task = taskobj {
+	ESTIMATE{
+		target = "NONMEM"
+		<<
+			; this is defined in INI format
+			[method]
+				algorithm=SAEM
+				typeIndPar=MAP
+				approximationSE=linear
+				seed=19245
+
+			[compute]
+			estimationSE=TRUE
+			estimationIndPar=TRUE
+			plotGraphs=TRUE
+	
+			[softwareSettings]
+			TOL=3
+			NOABORT=TRUE
+		>>
+	}
+}

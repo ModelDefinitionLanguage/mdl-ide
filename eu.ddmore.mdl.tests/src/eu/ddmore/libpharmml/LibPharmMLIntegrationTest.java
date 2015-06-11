@@ -1,4 +1,4 @@
-package org.ddmore.libpharmml;
+package eu.ddmore.libpharmml;
 
 import static org.junit.Assert.fail;
 
@@ -29,7 +29,7 @@ public class LibPharmMLIntegrationTest {
         ILibPharmML libPharmML = PharmMlFactory.getInstance().createLibPharmML();
         InputStream in = null;
         
-        String modelFile = "platform:/plugin/eu.ddmore.libpharmml-test-data/pharmml/spec_examples/example1_NONMEM.xml";
+        String modelFile = "file:src/eu/ddmore/libpharmml/UseCase1.xml";
         URL url = null;
         try {
             url = new URL(modelFile);

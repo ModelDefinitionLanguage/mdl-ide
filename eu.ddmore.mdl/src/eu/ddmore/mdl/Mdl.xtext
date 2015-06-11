@@ -108,22 +108,43 @@ ParameterObjectBlock returns ObjectBlock:
 	DeclaredVariablesBlock |
 	StructuralBlock |
 	VariabilityBlock |
-	PriorParametersBlock 
+	CorrelationBlock 
 ;
 
 StructuralBlock:
 	identifier='STRUCTURAL'   
-	BEGIN parameters += SymbolDeclaration* END 
+	BEGIN parameters += ParameterDeclaration* END 
 ;
+
+ParameterDeclaration:
+	name=ID '=' rhs=(EstimateRange|FixedValue)
+;
+
+EstimateRange:
+	'(' initial=NumberLiteral (',' low=NumberLiteral (',' high=NumberLiteral)?)? ')'
+;
+
+FixedValue:
+	NumberLiteral
+;
+
 
 VariabilityBlock:
 	identifier='VARIABILITY' 
-	BEGIN parameters += SymbolDeclaration* END
+	BEGIN parameters += ParameterDeclaration* END
 ;
 
-PriorParametersBlock:
-	identifier='PRIOR_PARAMETERS' 
-	BEGIN parameters += SymbolDeclaration* END  
+CorrelationBlock:
+	identifier='CORR' 
+	BEGIN params=CorrelatedParams matrix=CorrelationMatrix END  
+;
+
+CorrelatedParams:
+	PARAMETER '=' Vector ';'?
+;
+
+CorrelationMatrix:
+	VALUE '=' Vector ';'?
 ;
 
 //////////////////////////////////////////////////////////
@@ -172,7 +193,15 @@ TaskObjectBlock returns ObjectBlock:
 
 EstimateTask: 
 	identifier = 'ESTIMATE' 
-	BEGIN statements += PropertyDeclaration* END 
+	BEGIN stmt=TargetStatement? props=TargetProperties? END 
+;
+
+TargetStatement:
+	TARGET '=' target=StringLiteral
+;
+
+TargetProperties:
+	PROPERTIES '=' properties=StringLiteral	
 ;
 
 SimulateTask:
@@ -245,8 +274,7 @@ MOGObjectBlock returns ObjectBlock:
 //; 
 
 SymbolName:
-	SymbolDeclaration | ListDeclaration| ReferenceDeclaration //| ExpressionDeclaration  
-	| MclObject
+	SymbolDeclaration | ListDeclaration| ReferenceDeclaration | MclObject|CategoryDefn
 ;
 
 SymbolDeclaration:
@@ -265,7 +293,7 @@ ListDeclaration:
 //;
 
 ReferenceDeclaration:
-		name = ID
+		name = ID ';'?
 ;
 
 PropertyDeclaration:
@@ -273,83 +301,95 @@ PropertyDeclaration:
 ;
 
 EnumType:
-	type = VarType |
-	use = UseType |       
-	target = TargetType|
-	variability = VariabilityType |
-	input = InputFormatType | 
-	level = LevelType |
-	trial = TrialType |
-	individualVar = IndividualVarType |
-	pkParameter = PkParameterType |
-	pkMacro = PkMacroType |
-	nonContinuous = NonContinuousType |
-	event = EventType
+	{EnumType}(ID_USE |
+	DV |
+	DVID |
+	DOSETIME |
+	DEFINE |
+	CMT |
+	COVARIATE |
+	AMT |
+	MDV |
+	RATE |
+	SS |
+	IDV |
+	VARLEVEL |
+	CONTINUOUS|
+	NONMEM_FORMAT|
+	PARAMETER|
+	OBSERVATION|
+	LINEAR|
+	GENERAL|
+	COMBINED_ERROR_1|
+	LOG|
+	LOGIT|
+	PROBIT|
+	IDENTITY)
 ;
 
 //New 
-enum NonContinuousType:
-	no_type | count | discrete | tte
-;
+//enum NonContinuousType:
+//	no_type | count | discrete | tte
+//;
+//
+//enum EventType:
+//	no_event | exact | intervalCensored
+//;
 
-enum EventType:
-	no_event | exact | intervalCensored
-;
+//enum LevelType:
+//	no_level | parameter | observation
+//;
 
-enum LevelType:
-	no_level | parameter | observation
-;
+//enum PkParameterType:
+//	no_param | v_cl | v_k | vss_cl | abk
+//;
 
-enum PkParameterType:
-	no_param | v_cl | v_k | vss_cl | abk
-;
+//enum PkMacroType:
+//	no_macro | input | direct | effect | compartment | distribution | depot | transfer | elimination 
+//;
 
-enum PkMacroType:
-	no_macro | input | direct | effect | compartment | distribution | depot | transfer | elimination 
-;
+//enum UseType:
+//	no_use | id | idv | amt | dv | dvid | covariate | rate | adm | ss | mdv | cmt | varlevel
+//;
 
-enum UseType:
-	no_use | id | idv | amt | dv | dvid | covariate | rate | adm | ss | mdv | cmt | varlevel
-;
+//enum TargetType:
+//	no_target | NMTRAN_CODE | MLXTRAN_CODE | PML_CODE | BUGS_CODE | R_CODE | MATLAB_CODE 	
+//;
 
-enum TargetType:
-	no_target | NMTRAN_CODE | MLXTRAN_CODE | PML_CODE | BUGS_CODE | R_CODE | MATLAB_CODE 	
-;
+//enum InputFormatType:
+//	no_inputFormat | nonmemFormat | eventFormat 
+//;
 
-enum InputFormatType:
-	no_inputFormat | nonmemFormat | eventFormat 
-;
+//enum VariabilityType:
+//	no_variability | SD | VAR | COV | CORR
+//;
 
-enum VariabilityType:
-	no_variability | SD | VAR | COV | CORR
-;
+//enum IndividualVarType:
+//	no_IndividualVar | linear | general
+//;
 
-enum IndividualVarType:
-	no_IndividualVar | linear | general
-;
-
-enum TrialType:
-	no_Trial | simple | combined | sequential 
-;
+//enum TrialType:
+//	no_Trial | simple | combined | sequential 
+//;
 
 VarType:
-	categorical = 'categorical' ('(' categories += Category (=> ',' categories += Category)* ')')? | 
-	continuous  = 'continuous' /* | 
+	categorical = CATEGORICAL '(' categories += CategoryDefn (=> ',' categories += CategoryDefn)* ')' /* | 
+	continuous  = 'continuous' | 
 	likelihood  = 'likelihood' |
 	M2LL = 'M2LL' |
 	tte  = 'tte'	*/
 ;
 
-Category:
+CategoryDefn:
 	name = ID
 ;
 
 AnyExpression:
-		expression = Expression
-	|	list = List
-	|	vector = Vector
-	|	type = EnumType 
-	|	transform=transformExpr
+		Expression
+	|	List
+	|	Vector
+	|	EnumType
+	|   VarType 
 ;
 
 List:
@@ -372,20 +412,21 @@ NamedArguments:
 	arguments += Argument (=> ',' arguments += Argument)* 
 ;
 
-//UnnamedArguments:
-//	arguments += ArgumentExpression (=> ',' arguments += ArgumentExpression)*
-//;
-
 Argument:
-	argumentName = ID "=" expression = ArgumentExpression 
+	argumentName = AttributeName "=" expression = ArgumentExpression 
+;
+
+AttributeName:
+	USE|DEFINE|TYPE|CATEGORY|VALUE|COLUMN|LEVEL|DERIV|INIT_TIME|INIT_VAL|TRANS|RANEFF|FIXEFF|POP|GROUP|MEAN|SD|VAR|
+		ERROR|EPS|PREDICTION|COEFF|COVARIATE|ADDITIVE|PROPORTIONAL
 ;
 
 ArgumentExpression:
 	expression = AnyExpression// | randomList = RandomList
 ;
 
-transformExpr:
-	transform = TRANSFORMS
+TransformExpr:
+	{TransformExpr} (LOG|LOGIT|PROBIT|IDENTITY)
 ;
 
 Expression:
@@ -442,7 +483,8 @@ OpUnary:
 
 PrimaryExpression returns Expression:
 	Literal
-	| ReferenceLiteral 
+	| SymbolReference 
+	| BuiltinFunction
 	| WhenExpression
 	| ParExpression
 	;
@@ -465,8 +507,16 @@ Literal returns Expression:
 	BooleanLiteral
 ;
 
-ReferenceLiteral:
-	{ReferenceLiteral} ref=[SymbolName|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')?
+SymbolReference:
+	{SymbolReference} ref=[SymbolName|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')?
+;
+
+BuiltinFunction:
+	{BuiltinFunction} func=BuiltinId '(' (args+=Expression (=>',' args+=Expression)*)? ')'
+;
+
+BuiltinId:
+	LOG|LOGIT|PROBIT|EXP|SQRT
 ;
 
 BooleanLiteral returns Expression :
@@ -494,22 +544,117 @@ VectorExpression:
 		//matchings += Matching  (=> ',' matchings += Matching)*
 ;
 
+terminal ID_USE: 'id';
+
+terminal AMT : 'amt';
+
+terminal IDV : 'idv';
+
+terminal COVARIATE : 'covariate';
+
+terminal DV : 'dv';
+
+terminal DVID : 'dvid';
+
+terminal RATE : 'rate';
+
+terminal SS : 'ss';
+
+terminal MDV : 'mdv';
+
+terminal CMT : 'cmt';
+
+terminal VARLEVEL : 'varlevel';  
+
+terminal DOSETIME : 'dosetime';  
+
+terminal PARAMETER : 'parameter';
+
+terminal OBSERVATION : 'observation';
+
+terminal LINEAR : 'linear';
+
+terminal GENERAL : 'general';
+
+terminal USE: 'use';
+
+terminal DEFINE: 'define';
+
+terminal TYPE: 'type';
+
+terminal CATEGORY: 'category';
+
+terminal COLUMN: 'column';
+
+terminal CATEGORICAL: 'categorical';
+
+terminal CONTINUOUS: 'continuous';
+
+terminal VALUE : 'value';
+
+terminal NONMEM_FORMAT : 'nonmemFormat';
+
+terminal LEVEL : 'level';
+
+terminal MEAN : 'mean';
+
+terminal PREDICTION: 'prediction';
+
+terminal SD : 'sd';
+
+terminal VAR : 'var';
+
+terminal TRANS : 'trans';
+
+terminal POP : 'pop';
+
+terminal GROUP : 'group';
+
+terminal FIXEFF : 'fixEff';
+
+terminal COEFF : 'coeff';
+
+terminal RANEFF : 'ranEff';
+
+terminal ERROR : 'error';
+
+terminal EPS : 'eps';
+
+terminal DERIV : 'deriv';
+
+terminal INIT_TIME : 'init';
+
+terminal INIT_VAL : 'x0';
+
+terminal ADDITIVE : 'additive';
+
+terminal PROPORTIONAL : 'proportional';
+
+terminal COMBINED_ERROR_1 : 'combinedError1';
+
+terminal TARGET : 'target';
+
+terminal PROPERTIES : 'properties';
+
+terminal LOG : 'log';
+
+terminal LOGIT : 'logit';
+
+terminal PROBIT : 'probit';
+
+terminal IDENTITY : 'identity';
+
+terminal SQRT : 'sqrt';
+
+terminal EXP : 'exp';
 
 terminal CONSTANT:
 	'INF'
-	// | 'NEWIND' | 'IREP' | 'ICALL' | 'MIXEST' | 'MIXNUM'
 ;
 
-terminal TRANSFORMS:
-	'log'|'logit'|'probit'|'indentity'
-;
-	
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';
 
-//terminal BOOLEAN:
-//    'true' | 'false';		
-	
 terminal INTEGER:
 	('0' | '1'..'9' '0'..'9'*);
 	
