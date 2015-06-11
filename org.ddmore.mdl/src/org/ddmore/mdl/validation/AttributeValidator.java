@@ -389,12 +389,12 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 						if (argumentNames.contains(attr.getDependency().getAttrName())){
 							String value = MdlPrinter.getInstance().getAttribute(args, attr.getDependency().getAttrName());
 							if (attr.getDependency().containsValue(value)) {
-								warning(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
+								error(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
 										MdlPackage.Literals.ARGUMENTS__NAMED_ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attr.getName());
 							}
 						}
 					} else {
-						warning(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
+						error(MSG_ATTRIBUTE_MISSING + ": " + attr.getName(), 
 							MdlPackage.Literals.ARGUMENTS__NAMED_ARGUMENTS, MSG_ATTRIBUTE_MISSING, prefix + attr.getName());
 					}
 				}
@@ -446,7 +446,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 				if (arg.getArgumentName() != null && !argumentNames.contains(arg.getArgumentName().getName())){
 					argumentNames.add(arg.getArgumentName().getName());
 				} else {
-					warning(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
+					error(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
 							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
 							arg.getArgumentName().getName());				
 				}
