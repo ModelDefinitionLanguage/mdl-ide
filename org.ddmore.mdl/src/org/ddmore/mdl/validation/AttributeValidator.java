@@ -297,7 +297,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 			container = container.eContainer();
 		}
 		Argument argContainer = (Argument) container;
-		if (argContainer.getArgumentName().getName().equals(attr_define.getName())){
+		if (argContainer.getArgumentName() != null && argContainer.getArgumentName().getName().equals(attr_define.getName())){
 			//Argument -> NamedArguments -> Arguments
 			Arguments args = (Arguments) argContainer.eContainer().eContainer();
 			if (args != null){
@@ -313,7 +313,7 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 					return attrs_define_dv;
 			}
 		}
-		if (argContainer.getArgumentName().getName().equals(attr_fixEff.getName())){
+		if (argContainer.getArgumentName() != null && argContainer.getArgumentName().getName().equals(attr_fixEff.getName())){
 			return attrs_fixEff;
 		}
 		return null;
@@ -404,13 +404,13 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 	
 	//Check that each defined argument is from the recognized set of list attributes
 	private void checkDefinedAttributes(Argument argument, Arguments args , List<Attribute> knownAttributes, List<String> attributeNames){
-		if (!attributeNames.contains(argument.getArgumentName().getName())){
+		if (argument.getArgumentName() != null && !attributeNames.contains(argument.getArgumentName().getName())){
 			error(MSG_ATTRIBUTE_UNKNOWN + ": " + argument.getArgumentName().getName(), 
 			MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME,
 			MSG_ATTRIBUTE_UNKNOWN, argument.getArgumentName().getName());		
 		}
 		for (Attribute x: knownAttributes){
-			if (x.getName().equals(argument.getArgumentName().getName())){
+			if (argument.getArgumentName() != null && x.getName().equals(argument.getArgumentName().getName())){
 				boolean isValid = false;
 				for (MdlDataType type: x.getTypes())
 					isValid = isValid || MdlDataType.validateType(type, argument.getExpression());
@@ -443,12 +443,14 @@ public class AttributeValidator extends AbstractDeclarativeValidator{
 		HashSet<String> argumentNames = new HashSet<String>();	
 		if (args.getNamedArguments() != null){
 			for (Argument arg: args.getNamedArguments().getArguments()){
-				if (arg.getArgumentName() != null && !argumentNames.contains(arg.getArgumentName().getName())){
-					argumentNames.add(arg.getArgumentName().getName());
-				} else {
-					error(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
-							MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
-							arg.getArgumentName().getName());				
+				if (arg.getArgumentName() != null){
+					if(!argumentNames.contains(arg.getArgumentName().getName())){
+						argumentNames.add(arg.getArgumentName().getName());
+					} else {
+						error(MSG_ATTRIBUTE_DEFINED + ": " + arg.getArgumentName().getName(), 
+								MdlPackage.Literals.ARGUMENT__ARGUMENT_NAME, MSG_ATTRIBUTE_DEFINED, 
+								arg.getArgumentName().getName());
+					}
 				}
 			}		
 		}
