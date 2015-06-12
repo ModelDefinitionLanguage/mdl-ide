@@ -29,7 +29,7 @@ class MclParserTestObj1Test {
 nonmem_task = taskobj {
 	ESTIMATE{
 		target = "NONMEM"
-		"
+		properties="
 			; this is defined in INI format
 			[method]
 				algorithm=SAEM

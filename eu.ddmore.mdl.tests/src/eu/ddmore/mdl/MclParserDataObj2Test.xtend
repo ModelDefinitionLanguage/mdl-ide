@@ -43,7 +43,7 @@ warfarin_PK_v2_dat = dataobj{
 	}
 
 	DATA_DERIVED_VARIABLES{
-		DT : { column=TIME, type=dosetime }
+		DT : { column=TIME, condition=AMT > 0 }
 	}
 	
 	SOURCE {

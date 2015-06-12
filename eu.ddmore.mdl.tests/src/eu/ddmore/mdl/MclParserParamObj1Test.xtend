@@ -40,11 +40,11 @@ warfarin_PK_ODE_par = parobj {
 		RUV_PROP = (0.1, 0 )
 		RUV_ADD = (0.1, 0) 
 		} # end STRUCTURAL
-	VARIABILITY {
-		PPV_CL = (0.1) 
+	VARIABILITY(type=sd) {
+		PPV_CL = (, 0.1) 
 		PPV_V = (0.1, 0, 1)
 		PPV_KA = 0.1
-		PPV_TLAG = (0.1) 
+		PPV_TLAG = (, 0.1) 
 	} # end VARIABILITY
 	#CORR { params=[ETA_CL, ETA_V]; value = [0.01] }
 } # end of parameter object 

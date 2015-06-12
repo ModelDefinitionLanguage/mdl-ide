@@ -9,13 +9,15 @@ warfarin_PK_v2_dat = dataobj{
 		SEX : { use=covariate, type=categorical(male, female), 
 				define=[{category=male, value=0}, {category=female,value=1}]}
 		AMT : { use = amt , define = D }
+		IOV : { use = varlevel }
 		DVID : { use = dvid }
 		DV : { use = dv, define = Y }
 		MDV : { use = mdv}
 	}
 
 	DATA_DERIVED_VARIABLES{
-		DT : { column=TIME, type=dosetime }
+		DT : { column=TIME, use=covariate, condition=AMT > 0 }
+		IOV_COVAR : { use=covariate, column=IOV }
 	}
 	
 	SOURCE {
@@ -38,6 +40,7 @@ warfarin_PK_ANALYTIC_mdl = mdlobj {
 	COVARIATES{
 		WT
 		logtWT = log(WT/70)
+	    DT # dosing time
 	}
 
 	STRUCTURAL_PARAMETERS {
@@ -74,10 +77,10 @@ warfarin_PK_ANALYTIC_mdl = mdlobj {
 	
 	MODEL_PREDICTION {
 	    D # dosing variable
-	    DT # dosing time
-	    k = CL/V
-	    CC = when(T - DT < TLAG) 0 
-	         otherwise (D/V) * (KA/(KA-k) * (exp(-k * (T -DT-TLAG) - exp(-KA*(T-DT-TLAG)))))
+	    k = (CL/V)
+	    CC = when(T - DT < TLAG) 0, 
+	    	 	when(false) T - DT  + KA/(KA-k)
+	         	otherwise (D/V) * (KA/(KA-k) * (exp(-k * (T -DT-TLAG) - exp(-KA*(T-DT-TLAG)))))
 	} # end MODEL_PREDICTION
 
 	RANDOM_VARIABLE_DEFINITION(level=DV){
@@ -91,11 +94,11 @@ warfarin_PK_ANALYTIC_mdl = mdlobj {
 } # end of model object
 
 warfarin_PK_ODE_par = parobj {
-	DECLARED_VARIABLES{ETA_CL ETA_V}
+	DECLARED_VARIABLES{ETA_CL; ETA_V}
 
 	# By default a parameter is to be estimated if fix is omitted
  	STRUCTURAL {
-		POP_CL = (0.1, 0.001 )
+		POP_CL = [0.1, 0.001 )
 		POP_V = (8, 0.001) 
 		POP_KA = (0.362, 0.001)
 		POP_TLAG = (1, 0.001, 10)
@@ -104,19 +107,28 @@ warfarin_PK_ODE_par = parobj {
 		RUV_PROP = (0.1, 0 )
 		RUV_ADD = (0.1, 0) 
 		} # end STRUCTURAL
-	VARIABILITY {
-		PPV_CL = (0.1) 
+	VARIABILITY(type=SD) {
+	# lo, init, hi
+		PPV_CL = (,0.1) 
 		PPV_V = (0.1, 0, 1)
 		PPV_KA = 0.1
-		PPV_TLAG = (0.1) 
+		PPV_TLAG = (,0.1) 
 	} # end VARIABILITY
-	CORR { parameter=[ETA_CL, ETA_V]; value = [0.01] }
+
+	CORR { 
+		parameter=[ETA_CL, ETA_V];
+		value = [0.01]
+	}
+	CORR { 
+		parameter=[ETA_TLAG, ETA_KA];
+		value = [0.01]
+	}
 } # end of parameter object 
 
 nonmem_task = taskobj {
 	ESTIMATE{
 		target = "NONMEM"
-		<<
+		properties = "
 			; this is defined in INI format
 			[method]
 				algorithm=SAEM
@@ -132,6 +144,6 @@ nonmem_task = taskobj {
 			[softwareSettings]
 			TOL=3
 			NOABORT=TRUE
-		>>
+		"
 	}
 }

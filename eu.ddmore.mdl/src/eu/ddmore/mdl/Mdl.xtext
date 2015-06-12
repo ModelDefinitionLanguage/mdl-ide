@@ -66,7 +66,7 @@ ModelPredictionBlock:
 ;
 
 RandomVariableDefinitionBlock:
-	identifier = 'RANDOM_VARIABLE_DEFINITION' '(' arguments = Arguments? ')'
+	identifier = 'RANDOM_VARIABLE_DEFINITION' '(' argument = Argument ')'
 	BEGIN variables += SymbolDeclaration* END 
 ;
 
@@ -107,8 +107,7 @@ ObservationBlock:
 ParameterObjectBlock returns ObjectBlock:
 	DeclaredVariablesBlock |
 	StructuralBlock |
-	VariabilityBlock |
-	CorrelationBlock 
+	VariabilityBlock
 ;
 
 StructuralBlock:
@@ -121,7 +120,7 @@ ParameterDeclaration:
 ;
 
 EstimateRange:
-	'(' initial=NumberLiteral (',' low=NumberLiteral (',' high=NumberLiteral)?)? ')'
+	(exclusiveLow ?= '(' | '[') low=NumberLiteral? ',' initial=NumberLiteral (',' high=NumberLiteral)? (exclusiveHigh ?= ')' | ']')
 ;
 
 FixedValue:
@@ -130,21 +129,8 @@ FixedValue:
 
 
 VariabilityBlock:
-	identifier='VARIABILITY' 
-	BEGIN parameters += ParameterDeclaration* END
-;
-
-CorrelationBlock:
-	identifier='CORR' 
-	BEGIN params=CorrelatedParams matrix=CorrelationMatrix END  
-;
-
-CorrelatedParams:
-	PARAMETER '=' Vector ';'?
-;
-
-CorrelationMatrix:
-	VALUE '=' Vector ';'?
+	identifier='VARIABILITY' '(' TYPE '=' varType=(SD|VAR) ')'
+	BEGIN parameters += (ParameterDeclaration|ListDeclaration)* END
 ;
 
 //////////////////////////////////////////////////////////
@@ -304,7 +290,6 @@ EnumType:
 	{EnumType}(ID_USE |
 	DV |
 	DVID |
-	DOSETIME |
 	DEFINE |
 	CMT |
 	COVARIATE |
@@ -324,7 +309,10 @@ EnumType:
 	LOG|
 	LOGIT|
 	PROBIT|
-	IDENTITY)
+	IDENTITY|
+	CORR|
+	COV
+	)
 ;
 
 //New 
@@ -418,7 +406,7 @@ Argument:
 
 AttributeName:
 	USE|DEFINE|TYPE|CATEGORY|VALUE|COLUMN|LEVEL|DERIV|INIT_TIME|INIT_VAL|TRANS|RANEFF|FIXEFF|POP|GROUP|MEAN|SD|VAR|
-		ERROR|EPS|PREDICTION|COEFF|COVARIATE|ADDITIVE|PROPORTIONAL
+		ERROR|EPS|PREDICTION|COEFF|COVARIATE|ADDITIVE|PROPORTIONAL|CMT|PARAMETER|CONDITION
 ;
 
 ArgumentExpression:
@@ -484,6 +472,7 @@ OpUnary:
 PrimaryExpression returns Expression:
 	Literal
 	| SymbolReference 
+	| UserFunctionCall
 	| BuiltinFunction
 	| WhenExpression
 	| ParExpression
@@ -508,8 +497,12 @@ Literal returns Expression:
 ;
 
 SymbolReference:
-	{SymbolReference} ref=[SymbolName|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')?
+	{SymbolReference} ref=[SymbolName|ID]
 ;
+
+UserFunctionCall:
+	 ref=[SymbolName|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')
+; 
 
 BuiltinFunction:
 	{BuiltinFunction} func=BuiltinId '(' (args+=Expression (=>',' args+=Expression)*)? ')'
@@ -566,8 +559,6 @@ terminal CMT : 'cmt';
 
 terminal VARLEVEL : 'varlevel';  
 
-terminal DOSETIME : 'dosetime';  
-
 terminal PARAMETER : 'parameter';
 
 terminal OBSERVATION : 'observation';
@@ -586,6 +577,8 @@ terminal CATEGORY: 'category';
 
 terminal COLUMN: 'column';
 
+terminal CONDITION: 'condition';
+
 terminal CATEGORICAL: 'categorical';
 
 terminal CONTINUOUS: 'continuous';
@@ -603,6 +596,10 @@ terminal PREDICTION: 'prediction';
 terminal SD : 'sd';
 
 terminal VAR : 'var';
+
+terminal CORR : 'corr';
+
+terminal COV : 'cov';
 
 terminal TRANS : 'trans';
 

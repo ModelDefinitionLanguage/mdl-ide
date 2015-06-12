@@ -80,7 +80,7 @@ warfarin_PK_ODE_mdl = mdlobj {
 	    CC = CENTRAL / V 
 	} # end MODEL_PREDICTION
 	
-	RANDOM_VARIABLE_DEFINITION(){
+	RANDOM_VARIABLE_DEFINITION(level=DV){
 	    EPS_Y ~ Normal(mean = 0, var = 1) # This maps the standard error model in PharmML. The error model is predefined.
 	}
 
