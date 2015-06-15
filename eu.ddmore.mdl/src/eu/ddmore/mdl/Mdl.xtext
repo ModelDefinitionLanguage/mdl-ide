@@ -12,19 +12,19 @@ MclObject returns MclObject:
 	MOGObject;
 	
 ModelObject returns MclObject: 
-	{ModelObject} (name=ID '=' identifier = 'mdlobj' BEGIN blocks += ModelObjectBlock* END);
+	{ModelObject} (name=ID '=' 'mdlobj' '(' ID '=' idv=ReferenceDeclaration ')' BEGIN blocks += ModelObjectBlock* END);
 
 ParameterObject returns MclObject:
-	{ParameterObject} (name=ID '=' identifier = 'parobj' BEGIN blocks += ParameterObjectBlock* END);
+	{ParameterObject} (name=ID '=' 'parobj' BEGIN blocks += ParameterObjectBlock* END);
 	
 DataObject returns MclObject:
-	{DataObject} (name=ID '=' identifier = 'dataobj' BEGIN blocks += DataObjectBlock* END);
+	{DataObject} (name=ID '=' 'dataobj' BEGIN blocks += DataObjectBlock* END);
 
 TaskObject returns MclObject:
-	{TaskObject} (name=ID '=' identifier = 'taskobj' BEGIN blocks += TaskObjectBlock* END);
+	{TaskObject} (name=ID '=' 'taskobj' BEGIN blocks += TaskObjectBlock* END);
 	
 MOGObject returns MclObject:
-	{MOGObject} (name=ID '=' identifier = 'mogobj' BEGIN blocks += MOGObjectBlock* END);
+	{MOGObject} (name=ID '=' 'mogobj' BEGIN blocks += MOGObjectBlock* END);
 	
 //////////////////////////////////////////////////////////
 //Model Object
@@ -38,7 +38,6 @@ ObjectBlock:
 ;
 
 ModelObjectBlock returns ObjectBlock: 
-	IndependentVariableBlock |
 	IndividualVariablesBlock | 
 	ModelPredictionBlock | 
 	RandomVariableDefinitionBlock |
@@ -52,12 +51,12 @@ ModelObjectBlock returns ObjectBlock:
 
 IndependentVariableBlock:
 	identifier = 'IDV'
-	BEGIN variables += SymbolDeclaration* END  
+	BEGIN variables += ReferenceDeclaration END  
 ;
 
 IndividualVariablesBlock:
 	identifier = 'INDIVIDUAL_VARIABLES'
-	BEGIN variables += SymbolDeclaration* END  
+	BEGIN variables += (EquationDeclaration|ListDeclaration)* END  
 ;
 
 ModelPredictionBlock:
@@ -67,37 +66,37 @@ ModelPredictionBlock:
 
 RandomVariableDefinitionBlock:
 	identifier = 'RANDOM_VARIABLE_DEFINITION' '(' argument = Argument ')'
-	BEGIN variables += SymbolDeclaration* END 
+	BEGIN variables += RandomVariableDeclaration* END 
 ;
 
 VariabilityDefinitionBlock:
   	identifier = 'VARIABILITY_LEVELS' 
-  	BEGIN variables += SymbolDeclaration* END 
+  	BEGIN variables += ListDeclaration* END 
 ;
 
 CovariateDefinitionBlock:
   	identifier = 'COVARIATES' 
-  	BEGIN variables += SymbolDeclaration* END 
+  	BEGIN variables += (EquationDeclaration|ListDeclaration)* END 
 ;
 
 StructuralParametersBlock:
-  identifier = 'STRUCTURAL_PARAMETERS' 
-  BEGIN parameters += SymbolDeclaration* END 
+  identifier = 'STRUCTURAL_PARAMETERS'
+  BEGIN parameters += EquationDeclaration* END 
 ; 
 
 VariabilityParametersBlock:
-  identifier = 'VARIABILITY_PARAMETERS' 
-  BEGIN parameters += SymbolDeclaration* END 
+  identifier = 'VARIABILITY_PARAMETERS'
+  BEGIN parameters += EquationDeclaration* END 
 ;
 
 GroupVariablesBlock:
 	identifier = 'GROUP_VARIABLES' 
-	BEGIN statements += GroupVariablesBlockStatement* END
+	BEGIN statements += EquationDeclaration* END
 ;
 
 ObservationBlock:
 	identifier = 'OBSERVATION'
-	BEGIN variables += SymbolDeclaration* END  
+	BEGIN variables += (EquationDeclaration|ListDeclaration)* END  
 ;
 
 //////////////////////////////////////////////////////////
@@ -179,16 +178,8 @@ TaskObjectBlock returns ObjectBlock:
 
 EstimateTask: 
 	identifier = 'ESTIMATE' 
-	BEGIN stmts+=TargetStatement* END 
+	BEGIN stmts+=PropertyStatement* END 
 ;
-
-TargetStatement:
-	propName=ID '=' propValue=StringLiteral
-;
-
-//TargetProperties:
-//	PROPERTIES '=' properties=StringLiteral	
-//;
 
 SimulateTask:
 	identifier = 'SIMULATE' 
@@ -196,7 +187,7 @@ SimulateTask:
 ;
 
 ModelPredictionBlockStatement: 
-	variable = SymbolDeclaration | 
+	variable = EquationDeclaration | 
 	odeBlock = OdeBlock | 
 	pkMacroBlock = PkMacroBlock 
 ;
@@ -207,17 +198,18 @@ PkMacroBlock:
 ;
 
 PkMacroStatement:
-	variable = SymbolDeclaration |
-	list = List
+	EquationDeclaration | 
+	ListDeclaration|
+	List
 ;
 
 OdeBlock:
-	identifier = ('DEQ')
-	BEGIN variables += SymbolDeclaration* END 
+	identifier = 'DEQ'
+	BEGIN variables += (EquationDeclaration|ListDeclaration)* END 
 ;
 
 GroupVariablesBlockStatement:
-	variable = SymbolDeclaration //|  
+	variable = EquationDeclaration   
 ;
 
 
@@ -260,23 +252,20 @@ MOGObjectBlock returns ObjectBlock:
 //; 
 
 SymbolName:
-	SymbolDeclaration | ListDeclaration| ReferenceDeclaration | MclObject|CategoryDefn
+	EquationDeclaration | ListDeclaration| ReferenceDeclaration | MclObject | CategoryDefn | RandomVariableDeclaration
 ;
 
-SymbolDeclaration:
-	name = ID
-		("=" (expression = Expression) | 
-		 ":" list = List | 
-		  '~' randomList = RandomList)? 
+EquationDeclaration:
+	name = ID ("=" expression = Expression)? ';'?
+;
+
+RandomVariableDeclaration:
+	name = ID "~" distn = BuiltinFunction ';'?
 ;
 
 ListDeclaration:
-	name = ID ":" list = List 
+	name = ID ":" list = List ';'?
 ;
-
-//ExpressionDeclaration:
-//	name = ID "=" (expression = Expression) 
-//;
 
 ReferenceDeclaration:
 		name = ID ';'?
@@ -384,13 +373,13 @@ List:
 	BEGIN arguments = Arguments END
 ;
 
-RandomList:
-	type = DistributionName '(' arguments = Arguments? ')'
-;
+//NamedBuiltinFunction:
+//	type = ID '(' arguments = Arguments? ')'
+//;
 
-DistributionName:
-	distName = ID
-;
+//DistributionName:
+//	distName = ID
+//;
 
 //Arguments: 
 //	namedArguments = NamedArguments //| unnamedArguments = UnnamedArguments
@@ -509,13 +498,27 @@ SymbolReference:
 	{SymbolReference} ref=[SymbolName|ID]
 ;
 
-UserFunctionCall:
-	 '&' ref=[SymbolName|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')
+UserFunctionCall returns Expression:
+	{UserFunctionCall} '&' ref=[SymbolName|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')
 ; 
 
-BuiltinFunction:
-	{BuiltinFunction} func=ID '(' (args+=Expression (=>',' args+=Expression)*)? ')'
+BuiltinFunction returns Expression:
+	{BuiltinFunction} func=ID '(' funcArgs+=( UnnamedFuncArguments
+							| NamedFuncArguments)? ')'
 ;
+
+UnnamedFuncArguments:
+	args+=Expression (=>',' args+=Expression)* 
+;
+
+NamedFuncArguments:
+	args+=NamedFuncArgument (',' args+=NamedFuncArgument)*
+;
+
+NamedFuncArgument:
+	argName = ID '=' value = Expression
+;
+
 
 //BuiltinId:
 //	LOG|LOGIT|PROBIT|EXP|SQRT

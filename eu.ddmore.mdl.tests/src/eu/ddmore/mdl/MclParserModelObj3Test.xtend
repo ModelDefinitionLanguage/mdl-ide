@@ -21,14 +21,12 @@ import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
-class MclParserModelObjTest {
+class MclParserModelObj3Test {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_2Compartments_mdl = mdlobj{
-
-   IDV{TIME}
+warfarin_PK_2Compartments_mdl = mdlobj (idv=TIME) {
    COVARIATES{
       WT
       logtWT = logtWT(WT/70)

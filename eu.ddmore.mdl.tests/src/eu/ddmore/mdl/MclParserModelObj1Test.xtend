@@ -26,9 +26,7 @@ class MclParserModelObj1Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_ODE_mdl = mdlobj {
-	IDV{ T }
-
+warfarin_PK_ODE_mdl = mdlobj (idv=T) {
 	COVARIATES{
 		logtWT
 	}
@@ -57,7 +55,7 @@ warfarin_PK_ODE_mdl = mdlobj {
 	} # end VARIABILITY_PARAMETERS 
 	
 	RANDOM_VARIABLE_DEFINITION(level=ID) {
-		ETA_CL ~ Normal(mean = 0, sd = PPV_CL)
+		ETA_CL ~ Normal(mean = 0, sd = PPV_CL) 
 		ETA_V ~ Normal(mean = 0, sd = PPV_V)
 		ETA_KA ~ Normal(mean = 0, sd = PPV_KA)
 		ETA_TLAG ~ Normal(mean = 0, sd = PPV_TLAG) # We define correlation here
