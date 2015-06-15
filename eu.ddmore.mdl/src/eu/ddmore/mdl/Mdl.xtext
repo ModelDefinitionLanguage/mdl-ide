@@ -51,7 +51,7 @@ ModelObjectBlock returns ObjectBlock:
 
 IndividualVariablesBlock:
 	identifier = 'INDIVIDUAL_VARIABLES'
-	BEGIN variables += EquationDeclaration* END  
+	BEGIN variables += (EquationDeclaration|TransformedDeclaration)* END  
 ;
 
 ModelPredictionBlock:
@@ -91,7 +91,7 @@ GroupVariablesBlock:
 
 ObservationBlock:
 	identifier = 'OBSERVATION'
-	BEGIN variables += EquationDeclaration* END  
+	BEGIN variables += (EquationDeclaration|TransformedDeclaration)* END  
 ;
 
 //////////////////////////////////////////////////////////
@@ -157,7 +157,6 @@ SourceBlock:
 	identifier='SOURCE' 	
 	BEGIN 
 		statements += PropertyStatement* 
-//		(inlineBlock = InlineBlock)?
 	END
 ;
 
@@ -203,11 +202,6 @@ OdeBlock:
 	BEGIN variables += (EquationDeclaration|ListDeclaration)* END 
 ;
 
-//GroupVariablesBlockStatement:
-//	variable = EquationDeclaration   
-//;
-
-
 //////////////////////////////////////////////////////////
 //MOG
 //////////////////////////////////////////////////////////
@@ -225,33 +219,16 @@ MOGObjectBlock returns ObjectBlock:
  ;
  
 
-//////////////////////////////////////////////////////////
-//Common
-//////////////////////////////////////////////////////////
-
-//ArgumentName:
-//	argName=ID
-//;
-
-//FunctionName:
-//	funcName=(ID|TRANSFORMS)
-//;
-//
-//FunctionCall:
-//	identifier = FunctionName '(' arguments = Arguments? ')' 
-//;
-
-
-//terminal EXTERNAL_CODE:
-//	'<<' -> '>>'
-//; 
-
 SymbolName:
-	EquationDeclaration | ListDeclaration| ReferenceDeclaration | MclObject | CategoryDefn | RandomVariableDeclaration
+	EquationDeclaration | ListDeclaration| ReferenceDeclaration | MclObject | CategoryDefn | RandomVariableDeclaration | TransformedDeclaration
 ;
 
 EquationDeclaration:
 	name = ID ("=" expression = Expression)? ';'?
+;
+
+TransformedDeclaration:
+	transfrom = ID '(' name=ID ')' '=' expression=Expression ';'?
 ;
 
 RandomVariableDeclaration:
@@ -270,115 +247,17 @@ PropertyStatement returns Argument:
 	Argument ';'?
 ;
 
-//EnumType:
-//	{EnumType}ENUM
-////	{EnumType}(ID_USE |
-////	DV |
-////	DVID |
-////	DEFINE |
-////	CMT |
-////	COVARIATE |
-////	AMT |
-////	MDV |
-////	RATE |
-////	SS |
-////	IDV |
-////	VARLEVEL |
-////	CONTINUOUS|
-////	NONMEM_FORMAT|
-////	PARAMETER|
-////	OBSERVATION|
-////	LINEAR|
-////	GENERAL|
-////	COMBINED_ERROR_1|
-////	LOG|
-////	LOGIT|
-////	PROBIT|
-////	IDENTITY|
-////	CORR|
-////	COV
-////	)
-//;
-
-//New 
-//enum NonContinuousType:
-//	no_type | count | discrete | tte
-//;
-//
-//enum EventType:
-//	no_event | exact | intervalCensored
-//;
-
-//enum LevelType:
-//	no_level | parameter | observation
-//;
-
-//enum PkParameterType:
-//	no_param | v_cl | v_k | vss_cl | abk
-//;
-
-//enum PkMacroType:
-//	no_macro | input | direct | effect | compartment | distribution | depot | transfer | elimination 
-//;
-
-//enum UseType:
-//	no_use | id | idv | amt | dv | dvid | covariate | rate | adm | ss | mdv | cmt | varlevel
-//;
-
-//enum TargetType:
-//	no_target | NMTRAN_CODE | MLXTRAN_CODE | PML_CODE | BUGS_CODE | R_CODE | MATLAB_CODE 	
-//;
-
-//enum InputFormatType:
-//	no_inputFormat | nonmemFormat | eventFormat 
-//;
-
-//enum VariabilityType:
-//	no_variability | SD | VAR | COV | CORR
-//;
-
-//enum IndividualVarType:
-//	no_IndividualVar | linear | general
-//;
-
-//enum TrialType:
-//	no_Trial | simple | combined | sequential 
-//;
-
 VarType:
-	categorical = CATEGORICAL '(' categories += CategoryDefn (=> ',' categories += CategoryDefn)* ')' /* | 
-	continuous  = 'continuous' | 
-	likelihood  = 'likelihood' |
-	M2LL = 'M2LL' |
-	tte  = 'tte'	*/
+	categorical = CATEGORICAL '(' categories += CategoryDefn (=> ',' categories += CategoryDefn)* ')' 
 ;
 
 CategoryDefn:
 	name = ID
 ;
 
-//AnyExpression:
-//		Expression
-//	|	List
-//	|	Vector
-//	|   VarType 
-//;
-
 List:
 	BEGIN arguments = Arguments END
 ;
-
-//NamedBuiltinFunction:
-//	type = ID '(' arguments = Arguments? ')'
-//;
-
-//DistributionName:
-//	distName = ID
-//;
-
-//Arguments: 
-//	namedArguments = NamedArguments //| unnamedArguments = UnnamedArguments
-//;
 
 Arguments:
 	arguments += Argument (=> ',' arguments += Argument)* 
@@ -394,21 +273,11 @@ Argument:
 
 AttributeName:
 	ID
-//	USE|DEFINE|TYPE|CATEGORY|VALUE|COLUMN|LEVEL|DERIV|INIT_TIME|INIT_VAL|TRANS|RANEFF|FIXEFF|POP|GROUP|MEAN|SD|VAR|
-//		ERROR|EPS|PREDICTION|COEFF|COVARIATE|ADDITIVE|PROPORTIONAL|CMT|PARAMETER|CONDITION
 ;
 
 EnumExpression returns Expression:
 	{EnumExpression}ID
 ;
-
-//ArgumentExpression:
-//	expression = (AnyExpression | EnumExpression)
-//;
-
-//TransformExpr:
-//	{TransformExpr} (LOG|LOGIT|PROBIT|IDENTITY)
-//;
 
 Expression:
 	OrExpression
@@ -506,19 +375,6 @@ UnnamedFuncArguments:
 	args+=Expression (=>',' args+=Expression)* 
 ;
 
-//NamedFuncArguments:
-//	args+=NamedFuncArgument (',' args+=NamedFuncArgument)*
-//;
-//
-//NamedFuncArgument:
-//	argName = ID '=' value = Expression
-//;
-
-
-//BuiltinId:
-//	LOG|LOGIT|PROBIT|EXP|SQRT
-//;
-
 BooleanLiteral returns Expression :
 	{BooleanLiteral} ('false' | isTrue?='true');
 
@@ -539,126 +395,14 @@ Vector:
 
 VectorExpression:
 		expressions += Expression (=> ',' expressions += Expression)* |
-		lists += List (=> ',' lists += List)* //|
-		//vectors += Vector (=> ',' vectors += Vector)* |
-		//matchings += Matching  (=> ',' matchings += Matching)*
+		lists += List (=> ',' lists += List)*
 ;
 
-//terminal ID_USE: 'id';
-//
-//terminal AMT : 'amt';
-//
-//terminal IDV : 'idv';
-//
-//terminal COVARIATE : 'covariate';
-//
-//terminal DV : 'dv';
-//
-//terminal DVID : 'dvid';
-//
-//terminal RATE : 'rate';
-//
-//terminal SS : 'ss';
-//
-//terminal MDV : 'mdv';
-//
-//terminal CMT : 'cmt';
-//
-//terminal VARLEVEL : 'varlevel';  
-//
-//terminal PARAMETER : 'parameter';
-//
-//terminal OBSERVATION : 'observation';
-//
-//terminal LINEAR : 'linear';
-//
-//terminal GENERAL : 'general';
-//
-//terminal USE: 'use';
-//
-//terminal DEFINE: 'define';
-//
-//terminal TYPE: 'type';
-//
-//terminal CATEGORY: 'category';
-//
-//terminal COLUMN: 'column';
-//
-//terminal CONDITION: 'condition';
-
 terminal CATEGORICAL: 'categorical';
-
-//terminal CONTINUOUS: 'continuous';
-//
-//terminal VALUE : 'value';
-//
-//terminal NONMEM_FORMAT : 'nonmemFormat';
-//
-//terminal LEVEL : 'level';
-//
-//terminal MEAN : 'mean';
-//
-//terminal PREDICTION: 'prediction';
-//
-//terminal SD : 'sd';
-//
-//terminal VAR : 'var';
-//
-//terminal CORR : 'corr';
-//
-//terminal COV : 'cov';
-//
-//terminal TRANS : 'trans';
-//
-//terminal POP : 'pop';
-//
-//terminal GROUP : 'group';
-//
-//terminal FIXEFF : 'fixEff';
-//
-//terminal COEFF : 'coeff';
-//
-//terminal RANEFF : 'ranEff';
-//
-//terminal ERROR : 'error';
-//
-//terminal EPS : 'eps';
-//
-//terminal DERIV : 'deriv';
-//
-//terminal INIT_TIME : 'init';
-//
-//terminal INIT_VAL : 'x0';
-//
-//terminal ADDITIVE : 'additive';
-//
-//terminal PROPORTIONAL : 'proportional';
-//
-//terminal COMBINED_ERROR_1 : 'combinedError1';
-//
-//terminal TARGET : 'target';
-//
-//terminal PROPERTIES : 'properties';
-//
-//terminal LOG : 'log';
-//
-//terminal LOGIT : 'logit';
-//
-//terminal PROBIT : 'probit';
-//
-//terminal IDENTITY : 'identity';
-//
-//terminal SQRT : 'sqrt';
-//
-//terminal EXP : 'exp';
 
 terminal CONSTANT:
 	'INF'
 ;
-
-//terminal ENUM:
-//	'\''ID
-//;
 
 terminal IS: 'is';
 
