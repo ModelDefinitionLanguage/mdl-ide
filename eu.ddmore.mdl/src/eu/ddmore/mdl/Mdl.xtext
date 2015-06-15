@@ -49,14 +49,9 @@ ModelObjectBlock returns ObjectBlock:
 	ObservationBlock 
 ;
 
-IndependentVariableBlock:
-	identifier = 'IDV'
-	BEGIN variables += ReferenceDeclaration END  
-;
-
 IndividualVariablesBlock:
 	identifier = 'INDIVIDUAL_VARIABLES'
-	BEGIN variables += (EquationDeclaration|ListDeclaration)* END  
+	BEGIN variables += EquationDeclaration* END  
 ;
 
 ModelPredictionBlock:
@@ -96,7 +91,7 @@ GroupVariablesBlock:
 
 ObservationBlock:
 	identifier = 'OBSERVATION'
-	BEGIN variables += (EquationDeclaration|ListDeclaration)* END  
+	BEGIN variables += EquationDeclaration* END  
 ;
 
 //////////////////////////////////////////////////////////
@@ -208,9 +203,9 @@ OdeBlock:
 	BEGIN variables += (EquationDeclaration|ListDeclaration)* END 
 ;
 
-GroupVariablesBlockStatement:
-	variable = EquationDeclaration   
-;
+//GroupVariablesBlockStatement:
+//	variable = EquationDeclaration   
+//;
 
 
 //////////////////////////////////////////////////////////
@@ -504,20 +499,20 @@ UserFunctionCall returns Expression:
 
 BuiltinFunction returns Expression:
 	{BuiltinFunction} func=ID '(' funcArgs+=( UnnamedFuncArguments
-							| NamedFuncArguments)? ')'
+							| Arguments)? ')'
 ;
 
 UnnamedFuncArguments:
 	args+=Expression (=>',' args+=Expression)* 
 ;
 
-NamedFuncArguments:
-	args+=NamedFuncArgument (',' args+=NamedFuncArgument)*
-;
-
-NamedFuncArgument:
-	argName = ID '=' value = Expression
-;
+//NamedFuncArguments:
+//	args+=NamedFuncArgument (',' args+=NamedFuncArgument)*
+//;
+//
+//NamedFuncArgument:
+//	argName = ID '=' value = Expression
+//;
 
 
 //BuiltinId:
@@ -528,7 +523,7 @@ BooleanLiteral returns Expression :
 	{BooleanLiteral} ('false' | isTrue?='true');
 
 NumberLiteral returns Expression :
-	{NumberLiteral} value=Number;
+	{NumberLiteral} value=(Number|CONSTANT);
 
 StringLiteral returns Expression:
 	{StringLiteral} value=STRING;

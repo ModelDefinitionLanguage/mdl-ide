@@ -77,12 +77,12 @@ warfarin_PK_2Compartments_mdl = mdlobj (idv=TIME) {
    }# end RANDOM_VARIABLE_DEFINITION (level=DV)
 
    INDIVIDUAL_VARIABLES{
-      CL : { type is linear, trans is log, pop = POP_CL, fixEff = [{coeff=POP_BETA_CL_WT, covariate=logtWT}] , ranEff = eta_PPV_CL }
-      VC : { type is linear, trans is log, pop = POP_VC, fixEff = [{coeff=POP_BETA_V_WT, covariate=logtWT}] , ranEff = eta_PPV_VC }
-      Q : { type is linear, trans is log, pop = POP_Q, fixEff = [{coeff=POP_BETA_CL_WT, covariate=logtWT}] , ranEff = eta_PPV_Q }
-      VP : { type is linear, trans is log, pop = POP_VP, fixEff = [{coeff=POP_BETA_V_WT, covariate=logtWT}] , ranEff = eta_PPV_VP }
-      KA : { type is linear, trans is log, pop = POP_KA, ranEff = eta_PPV_KA }
-      TLAG : { type is linear, trans is log, pop = POP_TLAG, ranEff = eta_PPV_TLAG } 
+      CL = linear(trans is log, pop = POP_CL, fixEff = [{coeff=POP_BETA_CL_WT, covariate=logtWT}] , ranEff = eta_PPV_CL)
+      VC = linear( type is linear, trans is log, pop = POP_VC, fixEff = [{coeff=POP_BETA_V_WT, covariate=logtWT}] , ranEff = eta_PPV_VC )
+      Q = linear(trans is log, pop = POP_Q, fixEff = [{coeff=POP_BETA_CL_WT, covariate=logtWT}] , ranEff = eta_PPV_Q)
+      VP = linear(trans is log, pop = POP_VP, fixEff = [{coeff=POP_BETA_V_WT, covariate=logtWT}] , ranEff = eta_PPV_VP)
+      KA = linear(trans is log, pop = POP_KA, ranEff = eta_PPV_KA)
+      TLAG = linear(trans is log, pop = POP_TLAG, ranEff = eta_PPV_TLAG) 
       ALAG1=TLAG
       V2=VC
       V3=VP
@@ -107,7 +107,7 @@ warfarin_PK_2Compartments_mdl = mdlobj (idv=TIME) {
    }# end MODEL_PREDICTION
 
    OBSERVATION{
-         CC_obs : { type is combinedError1, additive = RUV_ADD, proportional = RUV_PROP, eps = eps_RUV_EPS1, prediction = CC } 
+         CC_obs = combinedError1(additive = RUV_ADD, proportional = RUV_PROP, eps = eps_RUV_EPS1, prediction = CC) 
    }# end OBSERVATION
 } # end of model object
 		'''
