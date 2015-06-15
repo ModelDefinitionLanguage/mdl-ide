@@ -40,13 +40,12 @@ warfarin_PK_ODE_par = parobj {
 		RUV_PROP = (0.1, 0 )
 		RUV_ADD = (0.1, 0) 
 		} # end STRUCTURAL
-	VARIABILITY(type=sd) {
+	VARIABILITY(type is sd) {
 		PPV_CL = (, 0.1) 
 		PPV_V = (0.1, 0, 1)
 		PPV_KA = 0.1
 		PPV_TLAG = (, 0.1) 
 	} # end VARIABILITY
-	#CORR { params=[ETA_CL, ETA_V]; value = [0.01] }
 } # end of parameter object 
 		'''
 	
@@ -103,7 +102,7 @@ warfarin_PK_ODE_par = parobj {
 	def dispatch assertBlock(SourceBlock blk){
 		val expectedVars = newLinkedList('file', 'inputformat', 'ignore')
 		for(stmt : blk.statements){
-			Assert::assertEquals(expectedVars.pop, stmt.propertyName)
+			Assert::assertEquals(expectedVars.pop, stmt.argumentName)
 		}
 	}
 	

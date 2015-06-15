@@ -30,16 +30,16 @@ warfarin_PK_v2_dat = dataobj{
 	DECLARED_VARIABLES{ Y; D; TD}
 	
 	DATA_INPUT_VARIABLES {
-		ID : { use=id }
-		TIME : { use=idv }
-		WT : { use = covariate }
-		AGE : { use = covariate }
-		SEX : { use=covariate, type=categorical(male, female), 
+		ID : { use is id }
+		TIME : { use is idv }
+		WT : { use  is covariate }
+		AGE : { use  is covariate }
+		SEX : { use is covariate, type=categorical(male, female), 
 				define=[{category=male, value=0}, {category=female,value=1}]}
-		AMT : { use = amt , define = D }
-		DVID : { use = dvid }
-		DV : { use = dv, define = Y }
-		MDV : { use = mdv}
+		AMT : { use  is amt , define = D }
+		DVID : { use  is dvid }
+		DV : { use  is dv, define = Y }
+		MDV : { use  is mdv}
 	}
 
 	DATA_DERIVED_VARIABLES{
@@ -48,7 +48,7 @@ warfarin_PK_v2_dat = dataobj{
 	
 	SOURCE {
 	    file = "warfarin_conc_sex.csv"
-        inputformat = nonmemFormat 
+        inputformat  is nonmemFormat 
 	    ignore = "#" 
 #		header = true  # or false
 #		skip =  0  ##  << integer >> Skips number of rows before header / data
@@ -109,7 +109,7 @@ warfarin_PK_v2_dat = dataobj{
 	def dispatch assertBlock(SourceBlock blk){
 		val expectedVars = newLinkedList('file', 'inputformat', 'ignore')
 		for(stmt : blk.statements){
-			Assert::assertEquals(expectedVars.pop, stmt.propertyName)
+			Assert::assertEquals(expectedVars.pop, stmt.argumentName)
 		}
 	}
 	

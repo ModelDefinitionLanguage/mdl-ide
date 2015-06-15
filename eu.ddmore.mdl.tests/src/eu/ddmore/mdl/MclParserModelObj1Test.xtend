@@ -34,8 +34,8 @@ warfarin_PK_ODE_mdl = mdlobj {
 	}
 
 	VARIABILITY_LEVELS{
-		ID : { level=2, type=parameter }
-		DV : { level=1, type=observation }
+		ID : { level=2, type is parameter }
+		DV : { level=1, type is observation }
 	} 
 
 	STRUCTURAL_PARAMETERS { 
@@ -65,10 +65,10 @@ warfarin_PK_ODE_mdl = mdlobj {
 
 	
 	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    CL : { type = linear, trans = log, pop = POP_CL, fixEff = {coeff=BETA_CL_WT, covariate=logtWT} , ranEff = ETA_CL }
-	    V : { type = linear, trans = log, pop = POP_V, fixEff = {coeff=BETA_V_WT, covariate=logtWT} , ranEff = ETA_V }
-	    KA : { type = linear, trans = log, pop = POP_KA, ranEff = ETA_KA }
-	    TLAG : { type = linear, trans = log, pop = POP_TLAG, ranEff = ETA_TLAG } 
+	    CL : { type  is linear, trans  is log, pop = POP_CL, fixEff = {coeff=BETA_CL_WT, covariate=logtWT} , ranEff = ETA_CL }
+	    V : { type  is linear, trans  is log, pop = POP_V, fixEff = {coeff=BETA_V_WT, covariate=logtWT} , ranEff = ETA_V }
+	    KA : { type  is linear, trans  is log, pop = POP_KA, ranEff = ETA_KA }
+	    TLAG : { type  is linear, trans  is log, pop = POP_TLAG, ranEff = ETA_TLAG } 
 	} # end INDIVIDUAL_VARIABLES
 
 	MODEL_PREDICTION {
@@ -85,7 +85,7 @@ warfarin_PK_ODE_mdl = mdlobj {
 	}
 
 	OBSERVATION {
-	    Y : { type = combinedError1, additive = RUV_ADD, proportional = RUV_PROP, eps = EPS_Y, prediction = CC } 
+	    Y : { type  is combinedError1, additive = RUV_ADD, proportional = RUV_PROP, eps = EPS_Y, prediction = CC } 
 	} # end OBSERVATION
 } # end of model object
 		'''
@@ -143,7 +143,7 @@ warfarin_PK_ODE_mdl = mdlobj {
 	def dispatch assertBlock(SourceBlock blk){
 		val expectedVars = newLinkedList('file', 'inputformat', 'ignore')
 		for(stmt : blk.statements){
-			Assert::assertEquals(expectedVars.pop, stmt.propertyName)
+			Assert::assertEquals(expectedVars.pop, stmt.argumentName)
 		}
 	}
 	

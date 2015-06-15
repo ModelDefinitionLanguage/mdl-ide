@@ -129,7 +129,7 @@ FixedValue:
 
 
 VariabilityBlock:
-	identifier='VARIABILITY' '(' TYPE '=' varType=(SD|VAR) ')'
+	identifier='VARIABILITY' '(' levelArg=Argument ')'
 	BEGIN parameters += (ParameterDeclaration|ListDeclaration)* END
 ;
 
@@ -162,7 +162,7 @@ DeclaredVariablesBlock:
 SourceBlock:
 	identifier='SOURCE' 	
 	BEGIN 
-		statements += PropertyDeclaration* 
+		statements += PropertyStatement* 
 //		(inlineBlock = InlineBlock)?
 	END
 ;
@@ -179,20 +179,20 @@ TaskObjectBlock returns ObjectBlock:
 
 EstimateTask: 
 	identifier = 'ESTIMATE' 
-	BEGIN stmt=TargetStatement? props=TargetProperties? END 
+	BEGIN stmts+=TargetStatement* END 
 ;
 
 TargetStatement:
-	TARGET '=' target=StringLiteral
+	propName=ID '=' propValue=StringLiteral
 ;
 
-TargetProperties:
-	PROPERTIES '=' properties=StringLiteral	
-;
+//TargetProperties:
+//	PROPERTIES '=' properties=StringLiteral	
+//;
 
 SimulateTask:
 	identifier = 'SIMULATE' 
-	BEGIN statements += PropertyDeclaration* END  
+	BEGIN statements += PropertyStatement* END  
 ;
 
 ModelPredictionBlockStatement: 
@@ -282,38 +282,39 @@ ReferenceDeclaration:
 		name = ID ';'?
 ;
 
-PropertyDeclaration:
-	propertyName = ID "=" expression = AnyExpression
+PropertyStatement returns Argument:
+	Argument ';'?
 ;
 
-EnumType:
-	{EnumType}(ID_USE |
-	DV |
-	DVID |
-	DEFINE |
-	CMT |
-	COVARIATE |
-	AMT |
-	MDV |
-	RATE |
-	SS |
-	IDV |
-	VARLEVEL |
-	CONTINUOUS|
-	NONMEM_FORMAT|
-	PARAMETER|
-	OBSERVATION|
-	LINEAR|
-	GENERAL|
-	COMBINED_ERROR_1|
-	LOG|
-	LOGIT|
-	PROBIT|
-	IDENTITY|
-	CORR|
-	COV
-	)
-;
+//EnumType:
+//	{EnumType}ENUM
+////	{EnumType}(ID_USE |
+////	DV |
+////	DVID |
+////	DEFINE |
+////	CMT |
+////	COVARIATE |
+////	AMT |
+////	MDV |
+////	RATE |
+////	SS |
+////	IDV |
+////	VARLEVEL |
+////	CONTINUOUS|
+////	NONMEM_FORMAT|
+////	PARAMETER|
+////	OBSERVATION|
+////	LINEAR|
+////	GENERAL|
+////	COMBINED_ERROR_1|
+////	LOG|
+////	LOGIT|
+////	PROBIT|
+////	IDENTITY|
+////	CORR|
+////	COV
+////	)
+//;
 
 //New 
 //enum NonContinuousType:
@@ -372,13 +373,12 @@ CategoryDefn:
 	name = ID
 ;
 
-AnyExpression:
-		Expression
-	|	List
-	|	Vector
-	|	EnumType
-	|   VarType 
-;
+//AnyExpression:
+//		Expression
+//	|	List
+//	|	Vector
+//	|   VarType 
+//;
 
 List:
 	BEGIN arguments = Arguments END
@@ -392,30 +392,39 @@ DistributionName:
 	distName = ID
 ;
 
-Arguments: 
-	namedArguments = NamedArguments //| unnamedArguments = UnnamedArguments
-;
+//Arguments: 
+//	namedArguments = NamedArguments //| unnamedArguments = UnnamedArguments
+//;
 
-NamedArguments:
+Arguments:
 	arguments += Argument (=> ',' arguments += Argument)* 
 ;
 
 Argument:
-	argumentName = AttributeName "=" expression = ArgumentExpression 
+	argumentName = AttributeName ("=" (expression = Expression
+									|	expression=List
+									|	expression=Vector
+									|   expression=VarType) 
+								| IS expression = EnumExpression)
 ;
 
 AttributeName:
-	USE|DEFINE|TYPE|CATEGORY|VALUE|COLUMN|LEVEL|DERIV|INIT_TIME|INIT_VAL|TRANS|RANEFF|FIXEFF|POP|GROUP|MEAN|SD|VAR|
-		ERROR|EPS|PREDICTION|COEFF|COVARIATE|ADDITIVE|PROPORTIONAL|CMT|PARAMETER|CONDITION
+	ID
+//	USE|DEFINE|TYPE|CATEGORY|VALUE|COLUMN|LEVEL|DERIV|INIT_TIME|INIT_VAL|TRANS|RANEFF|FIXEFF|POP|GROUP|MEAN|SD|VAR|
+//		ERROR|EPS|PREDICTION|COEFF|COVARIATE|ADDITIVE|PROPORTIONAL|CMT|PARAMETER|CONDITION
 ;
 
-ArgumentExpression:
-	expression = AnyExpression// | randomList = RandomList
+EnumExpression returns Expression:
+	{EnumExpression}ID
 ;
 
-TransformExpr:
-	{TransformExpr} (LOG|LOGIT|PROBIT|IDENTITY)
-;
+//ArgumentExpression:
+//	expression = (AnyExpression | EnumExpression)
+//;
+
+//TransformExpr:
+//	{TransformExpr} (LOG|LOGIT|PROBIT|IDENTITY)
+//;
 
 Expression:
 	OrExpression
@@ -501,16 +510,16 @@ SymbolReference:
 ;
 
 UserFunctionCall:
-	 ref=[SymbolName|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')
+	 '&' ref=[SymbolName|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')
 ; 
 
 BuiltinFunction:
-	{BuiltinFunction} func=BuiltinId '(' (args+=Expression (=>',' args+=Expression)*)? ')'
+	{BuiltinFunction} func=ID '(' (args+=Expression (=>',' args+=Expression)*)? ')'
 ;
 
-BuiltinId:
-	LOG|LOGIT|PROBIT|EXP|SQRT
-;
+//BuiltinId:
+//	LOG|LOGIT|PROBIT|EXP|SQRT
+//;
 
 BooleanLiteral returns Expression :
 	{BooleanLiteral} ('false' | isTrue?='true');
@@ -537,117 +546,124 @@ VectorExpression:
 		//matchings += Matching  (=> ',' matchings += Matching)*
 ;
 
-terminal ID_USE: 'id';
-
-terminal AMT : 'amt';
-
-terminal IDV : 'idv';
-
-terminal COVARIATE : 'covariate';
-
-terminal DV : 'dv';
-
-terminal DVID : 'dvid';
-
-terminal RATE : 'rate';
-
-terminal SS : 'ss';
-
-terminal MDV : 'mdv';
-
-terminal CMT : 'cmt';
-
-terminal VARLEVEL : 'varlevel';  
-
-terminal PARAMETER : 'parameter';
-
-terminal OBSERVATION : 'observation';
-
-terminal LINEAR : 'linear';
-
-terminal GENERAL : 'general';
-
-terminal USE: 'use';
-
-terminal DEFINE: 'define';
-
-terminal TYPE: 'type';
-
-terminal CATEGORY: 'category';
-
-terminal COLUMN: 'column';
-
-terminal CONDITION: 'condition';
+//terminal ID_USE: 'id';
+//
+//terminal AMT : 'amt';
+//
+//terminal IDV : 'idv';
+//
+//terminal COVARIATE : 'covariate';
+//
+//terminal DV : 'dv';
+//
+//terminal DVID : 'dvid';
+//
+//terminal RATE : 'rate';
+//
+//terminal SS : 'ss';
+//
+//terminal MDV : 'mdv';
+//
+//terminal CMT : 'cmt';
+//
+//terminal VARLEVEL : 'varlevel';  
+//
+//terminal PARAMETER : 'parameter';
+//
+//terminal OBSERVATION : 'observation';
+//
+//terminal LINEAR : 'linear';
+//
+//terminal GENERAL : 'general';
+//
+//terminal USE: 'use';
+//
+//terminal DEFINE: 'define';
+//
+//terminal TYPE: 'type';
+//
+//terminal CATEGORY: 'category';
+//
+//terminal COLUMN: 'column';
+//
+//terminal CONDITION: 'condition';
 
 terminal CATEGORICAL: 'categorical';
 
-terminal CONTINUOUS: 'continuous';
-
-terminal VALUE : 'value';
-
-terminal NONMEM_FORMAT : 'nonmemFormat';
-
-terminal LEVEL : 'level';
-
-terminal MEAN : 'mean';
-
-terminal PREDICTION: 'prediction';
-
-terminal SD : 'sd';
-
-terminal VAR : 'var';
-
-terminal CORR : 'corr';
-
-terminal COV : 'cov';
-
-terminal TRANS : 'trans';
-
-terminal POP : 'pop';
-
-terminal GROUP : 'group';
-
-terminal FIXEFF : 'fixEff';
-
-terminal COEFF : 'coeff';
-
-terminal RANEFF : 'ranEff';
-
-terminal ERROR : 'error';
-
-terminal EPS : 'eps';
-
-terminal DERIV : 'deriv';
-
-terminal INIT_TIME : 'init';
-
-terminal INIT_VAL : 'x0';
-
-terminal ADDITIVE : 'additive';
-
-terminal PROPORTIONAL : 'proportional';
-
-terminal COMBINED_ERROR_1 : 'combinedError1';
-
-terminal TARGET : 'target';
-
-terminal PROPERTIES : 'properties';
-
-terminal LOG : 'log';
-
-terminal LOGIT : 'logit';
-
-terminal PROBIT : 'probit';
-
-terminal IDENTITY : 'identity';
-
-terminal SQRT : 'sqrt';
-
-terminal EXP : 'exp';
+//terminal CONTINUOUS: 'continuous';
+//
+//terminal VALUE : 'value';
+//
+//terminal NONMEM_FORMAT : 'nonmemFormat';
+//
+//terminal LEVEL : 'level';
+//
+//terminal MEAN : 'mean';
+//
+//terminal PREDICTION: 'prediction';
+//
+//terminal SD : 'sd';
+//
+//terminal VAR : 'var';
+//
+//terminal CORR : 'corr';
+//
+//terminal COV : 'cov';
+//
+//terminal TRANS : 'trans';
+//
+//terminal POP : 'pop';
+//
+//terminal GROUP : 'group';
+//
+//terminal FIXEFF : 'fixEff';
+//
+//terminal COEFF : 'coeff';
+//
+//terminal RANEFF : 'ranEff';
+//
+//terminal ERROR : 'error';
+//
+//terminal EPS : 'eps';
+//
+//terminal DERIV : 'deriv';
+//
+//terminal INIT_TIME : 'init';
+//
+//terminal INIT_VAL : 'x0';
+//
+//terminal ADDITIVE : 'additive';
+//
+//terminal PROPORTIONAL : 'proportional';
+//
+//terminal COMBINED_ERROR_1 : 'combinedError1';
+//
+//terminal TARGET : 'target';
+//
+//terminal PROPERTIES : 'properties';
+//
+//terminal LOG : 'log';
+//
+//terminal LOGIT : 'logit';
+//
+//terminal PROBIT : 'probit';
+//
+//terminal IDENTITY : 'identity';
+//
+//terminal SQRT : 'sqrt';
+//
+//terminal EXP : 'exp';
 
 terminal CONSTANT:
 	'INF'
 ;
+
+//terminal ENUM:
+//	'\''ID
+//;
+
+terminal IS: 'is';
+
 
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';

@@ -29,14 +29,14 @@ class MclParserDataObj1Test {
 	DECLARED_VARIABLES{GUT Y}
 
 	DATA_INPUT_VARIABLES {
-		ID : { use=id }
-		TIME : { use=idv }
-		WT : { type = continuous, use=covariate }
-		AMT : { use=amt, define = GUT }
+		ID : { use is id }
+		TIME : { use is idv }
+		WT : { type  is continuous, use is covariate }
+		AMT : { use is amt, define = GUT }
 	} # end DATA_INPUT_VARIABLES
 	SOURCE {
 	    file = "warfarin_conc.csv" 
-        inputformat = nonmemFormat 
+        inputformat  is nonmemFormat 
 	    ignore = "#" 
 	} # end SOURCE
 } # end data object
@@ -95,7 +95,7 @@ class MclParserDataObj1Test {
 	def dispatch assertBlock(SourceBlock blk){
 		val expectedVars = newLinkedList('file', 'inputformat', 'ignore')
 		for(stmt : blk.statements){
-			Assert::assertEquals(expectedVars.pop, stmt.propertyName)
+			Assert::assertEquals(expectedVars.pop, stmt.argumentName)
 		}
 	}
 	

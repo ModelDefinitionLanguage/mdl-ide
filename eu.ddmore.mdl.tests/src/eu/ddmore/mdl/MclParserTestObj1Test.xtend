@@ -103,7 +103,7 @@ nonmem_task = taskobj {
 	def dispatch assertBlock(SourceBlock blk){
 		val expectedVars = newLinkedList('file', 'inputformat', 'ignore')
 		for(stmt : blk.statements){
-			Assert::assertEquals(expectedVars.pop, stmt.propertyName)
+			Assert::assertEquals(expectedVars.pop, stmt.argumentName)
 		}
 	}
 	
