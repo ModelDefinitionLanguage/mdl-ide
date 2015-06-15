@@ -391,8 +391,16 @@ class ModelDefinitionPrinter {
 				if (b.modelPredictionBlock != null){
 					for (st: b.modelPredictionBlock.statements){
 						//MODEL_PREDICTION
-						if (st.variable != null) 
-							variables = variables + '''«st.variable.print_SymbolDeclaration("ct:Variable", true)»''';
+						if (st.variable != null){
+								if (st.variable.list != null){
+									if (st.variable.list.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name) != null){
+										variables = variables + '''«st.variable.print_SymbolDeclaration("ct:DerivativeVariable", true)»''';	
+									}
+								} else {
+									variables = variables + '''«st.variable.print_SymbolDeclaration("ct:Variable", true)»''';	
+								}
+						} 
+//							variables = variables + '''«st.variable.print_SymbolDeclaration("ct:Variable", true)»''';
 						//ODE
 						if (st.odeBlock != null){
 							for (s: st.odeBlock.variables){
