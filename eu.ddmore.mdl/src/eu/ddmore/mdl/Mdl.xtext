@@ -12,7 +12,7 @@ MclObject returns MclObject:
 	MOGObject;
 	
 ModelObject returns MclObject: 
-	{ModelObject} (name=ID '=' 'mdlobj' '(' ID '=' idv=ReferenceDeclaration ')' BEGIN blocks += ModelObjectBlock* END);
+	{ModelObject} (name=ID '=' 'mdlobj' '(' type=ID idv=ReferenceDeclaration ')' BEGIN blocks += ModelObjectBlock* END);
 
 ParameterObject returns MclObject:
 	{ParameterObject} (name=ID '=' 'parobj' BEGIN blocks += ParameterObjectBlock* END);
@@ -49,49 +49,50 @@ ModelObjectBlock returns ObjectBlock:
 	ObservationBlock 
 ;
 
-IndividualVariablesBlock:
+IndividualVariablesBlock returns ModelObjectBlock:
 	identifier = 'INDIVIDUAL_VARIABLES'
-	BEGIN variables += (EquationDeclaration|TransformedDeclaration)* END  
+	BEGIN statements += (EquationDeclaration|TransformedDeclaration)* END  
 ;
 
-ModelPredictionBlock:
+ModelPredictionBlock returns ModelObjectBlock:
 	identifier = 'MODEL_PREDICTION' 
 	BEGIN statements += ModelPredictionBlockStatement* END
 ;
 
-RandomVariableDefinitionBlock:
+RandomVariableDefinitionBlock returns ModelObjectBlock:
 	identifier = 'RANDOM_VARIABLE_DEFINITION' '(' argument = Argument ')'
-	BEGIN variables += RandomVariableDeclaration* END 
+	BEGIN statements += RandomVariableDeclaration* END 
 ;
 
-VariabilityDefinitionBlock:
+VariabilityDefinitionBlock returns ModelObjectBlock:
   	identifier = 'VARIABILITY_LEVELS' 
-  	BEGIN variables += ListDeclaration* END 
+  	BEGIN statements += ListDeclaration* END 
 ;
 
-CovariateDefinitionBlock:
+CovariateDefinitionBlock returns ModelObjectBlock:
   	identifier = 'COVARIATES' 
-  	BEGIN variables += (EquationDeclaration|ListDeclaration)* END 
+  	BEGIN statements += (EquationDeclaration|ListDeclaration)* END 
 ;
 
-StructuralParametersBlock:
+
+StructuralParametersBlock returns ModelObjectBlock:
   identifier = 'STRUCTURAL_PARAMETERS'
-  BEGIN parameters += EquationDeclaration* END 
+  BEGIN statements += EquationDeclaration* END 
 ; 
 
-VariabilityParametersBlock:
+VariabilityParametersBlock returns ModelObjectBlock:
   identifier = 'VARIABILITY_PARAMETERS'
-  BEGIN parameters += EquationDeclaration* END 
+  BEGIN statements += EquationDeclaration* END 
 ;
 
-GroupVariablesBlock:
+GroupVariablesBlock returns ModelObjectBlock:
 	identifier = 'GROUP_VARIABLES' 
 	BEGIN statements += EquationDeclaration* END
 ;
 
-ObservationBlock:
+ObservationBlock returns ModelObjectBlock:
 	identifier = 'OBSERVATION'
-	BEGIN variables += (EquationDeclaration|TransformedDeclaration)* END  
+	BEGIN statements += (EquationDeclaration|TransformedDeclaration)* END  
 ;
 
 //////////////////////////////////////////////////////////
@@ -104,27 +105,27 @@ ParameterObjectBlock returns ObjectBlock:
 	VariabilityBlock
 ;
 
-StructuralBlock:
+StructuralBlock returns ParameterObjectBlock:
 	identifier='STRUCTURAL'   
-	BEGIN parameters += ParameterDeclaration* END 
+	BEGIN statements += ParameterDeclaration* END 
 ;
 
-ParameterDeclaration:
-	name=ID '=' rhs=(EstimateRange|FixedValue)
+ParameterDeclaration returns ParameterObjectBlock:
+	{ParameterDeclaration} name=ID '=' rhs=(EstimateRange|FixedValue)
 ;
 
-EstimateRange:
-	(exclusiveLow ?= '(' | '[') low=NumberLiteral? ',' initial=NumberLiteral (',' high=NumberLiteral)? (exclusiveHigh ?= ')' | ']')
+EstimateRange returns Estimate:
+	(exclusiveLow ?= '(' | '[') low=Number? ',' initial=Number (',' high=Number)? (exclusiveHigh ?= ')' | ']')
 ;
 
-FixedValue:
-	NumberLiteral
+FixedValue returns Estimate:
+	{FixedValue}Number
 ;
 
 
-VariabilityBlock:
+VariabilityBlock returns ParameterObjectBlock:
 	identifier='VARIABILITY' '(' levelArg=Argument ')'
-	BEGIN parameters += (ParameterDeclaration|ListDeclaration)* END
+	BEGIN statements += (ParameterDeclaration|ListDeclaration)* END
 ;
 
 //////////////////////////////////////////////////////////
@@ -138,22 +139,22 @@ DataObjectBlock returns ObjectBlock:
 	SourceBlock
 ;
 
-DataInputBlock:
+DataInputBlock returns DataObjectBlock:
  	identifier='DATA_INPUT_VARIABLES' 
- 	BEGIN variables += ListDeclaration* END  
+ 	BEGIN statements += ListDeclaration* END  
 ;
 
-DataDerivedBlock:
+DataDerivedBlock returns DataObjectBlock:
  	identifier='DATA_DERIVED_VARIABLES' 
- 	BEGIN variables += ListDeclaration* END  	
+ 	BEGIN statements += ListDeclaration* END  	
 ;
 
-DeclaredVariablesBlock:
+DeclaredVariablesBlock returns ObjectBlock:
  	identifier='DECLARED_VARIABLES' 
- 	BEGIN variables += ReferenceDeclaration* END  	
+ 	BEGIN statements += ReferenceDeclaration* END  	
 ;
  
-SourceBlock:
+SourceBlock returns DataObjectBlock:
 	identifier='SOURCE' 	
 	BEGIN 
 		statements += PropertyStatement* 
@@ -170,18 +171,18 @@ TaskObjectBlock returns ObjectBlock:
 ;
 
 
-EstimateTask: 
+EstimateTask returns TaskObjectBlock: 
 	identifier = 'ESTIMATE' 
-	BEGIN stmts+=PropertyStatement* END 
+	BEGIN statements+=PropertyStatement* END 
 ;
 
-SimulateTask:
+SimulateTask returns TaskObjectBlock:
 	identifier = 'SIMULATE' 
 	BEGIN statements += PropertyStatement* END  
 ;
 
 ModelPredictionBlockStatement: 
-	variable = EquationDeclaration | 
+	statememts = EquationDeclaration | 
 	odeBlock = OdeBlock | 
 	pkMacroBlock = PkMacroBlock 
 ;
@@ -215,12 +216,12 @@ MOGObjectBlock returns ObjectBlock:
  ;
  
  ImportObjectStatement:
- 	mdlObjRef = [SymbolName|ID]
+ 	mdlObjRef = [SymbolDeclaration|ID]
  ;
  
 
-SymbolName:
-	EquationDeclaration | ListDeclaration| ReferenceDeclaration | MclObject | CategoryDefn | RandomVariableDeclaration | TransformedDeclaration
+SymbolDeclaration:
+	EquationDeclaration | ListDeclaration| ReferenceDeclaration | CategoryDefn | RandomVariableDeclaration | TransformedDeclaration
 ;
 
 EquationDeclaration:
@@ -256,11 +257,11 @@ CategoryDefn:
 ;
 
 List:
-	BEGIN arguments = Arguments END
+	BEGIN arguments=Arguments END
 ;
 
 Arguments:
-	arguments += Argument (=> ',' arguments += Argument)* 
+	{Arguments} arguments += Argument (=> ',' arguments += Argument)* 
 ;
 
 Argument:
@@ -359,11 +360,12 @@ Literal returns Expression:
 ;
 
 SymbolReference:
-	{SymbolReference} ref=[SymbolName|ID]
+	{SymbolReference} ref=[SymbolDeclaration|ID]
 ;
 
+
 UserFunctionCall returns Expression:
-	{UserFunctionCall} '&' ref=[SymbolName|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')
+	{UserFunctionCall} '&' ref=[SymbolDeclaration|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')
 ; 
 
 BuiltinFunction returns Expression:

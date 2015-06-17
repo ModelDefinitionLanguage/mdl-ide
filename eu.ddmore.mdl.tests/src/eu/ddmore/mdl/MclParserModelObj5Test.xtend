@@ -11,21 +11,23 @@ import org.junit.runner.RunWith
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
-class MclParserModelObj2Test {
+class MclParserModelObj5Test {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_ANALYTIC_mdl = mdlobj(idv T) {
-
-	VARIABILITY_LEVELS{
-		ID : { level=2, type is parameter }
-		DV : { level=1, type is observation }
-   }
-
+warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
 	COVARIATES{
 		WT
-		logtWT = log(WT/70)
+		AGE
+		SEX : { type=categorical(female, male, MISSING) }
+		logtWT = ln(WT/70)
+		tAGE = AGE - 40
+	}
+
+	VARIABILITY_LEVELS{
+		ID : { type is parameter, level=2 }
+		DV : { type is observation, level=1 }
 	}
 
 	STRUCTURAL_PARAMETERS {
@@ -34,7 +36,9 @@ warfarin_PK_ANALYTIC_mdl = mdlobj(idv T) {
 		POP_KA
 		POP_TLAG
 		BETA_CL_WT
+		BETA_CL_AGE
 		BETA_V_WT
+		POP_FCL_FEM
 		RUV_PROP
 		RUV_ADD
 	} # end STRUCTURAL_PARAMETERS
@@ -45,39 +49,47 @@ warfarin_PK_ANALYTIC_mdl = mdlobj(idv T) {
 		PPV_KA
 		PPV_TLAG
 	} # end VARIABILITY_PARAMETERS 
-	
+
+	GROUP_VARIABLES{
+		FAGECL = exp(BETA_CL_AGE * tAGE)
+		FSEXCL = when(SEX == female) POP_FCL_FEM  otherwise 1
+		GRPCL = ln(POP_CL * FAGECL * FSEXCL ) + BETA_CL_WT * logtWT
+		GRPV = POP_V * (WT/70)^BETA_V_WT
+	}
+
 	RANDOM_VARIABLE_DEFINITION(level=ID) {
 		ETA_CL ~ Normal(mean = 0, sd = PPV_CL)
 		ETA_V ~ Normal(mean = 0, sd = PPV_V)
 		ETA_KA ~ Normal(mean = 0, sd = PPV_KA)
-		ETA_TLAG ~ Normal(mean = 0, sd = PPV_TLAG)
+		ETA_TLAG ~ Normal(mean = 0, sd = PPV_TLAG) # We define correlation here
 	} # end RANDOM_VARIABLE_DEFINITION 
 	
-	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    CL = linear(trans  is log, pop = POP_CL, fixEff = {coeff=BETA_CL_WT , covariate = logtWT }, ranEff = ETA_CL)
-	    V = linear(trans  is log, pop = POP_V, fixEff =  {coeff=BETA_V_WT , covariate = logtWT } , ranEff = ETA_V)
-	    KA = linear(trans  is log, pop = POP_KA, ranEff = ETA_KA)
-	    TLAG = linear(trans  is log, pop = POP_TLAG, ranEff = ETA_TLAG) 
+	INDIVIDUAL_VARIABLES { # This maps to the "Type 1" individual parameter definition in PharmML
+		CL = exp(GRPCL + ETA_CL)
+		V = exp(GRPV + ETA_V)
+	    KA = exp(POP_KA + ETA_KA)
+	    TLAG = exp(POP_TLAG + ETA_TLAG)
 	} # end INDIVIDUAL_VARIABLES
+
 	
 	MODEL_PREDICTION {
-	    D # dosing variable
-	    DT # dosing time
-	    k = CL/V
-	    CC = when(T - DT < TLAG) 0 
-	         otherwise (D/V) * (KA/(KA-k) * (exp(-k * (T -DT-TLAG) - exp(-KA*(T-DT-TLAG)))))
+		DEQ{
+			RATEIN = when(T >= TLAG) GUT * KA otherwise 0
+			GUT : { deriv =(- RATEIN), init = 0, x0 = 0 }
+			CENTRAL : { deriv =(RATEIN - CL * CENTRAL / V), init = 0, x0 = 0 } 
+		}
+	    CC = CENTRAL / V 
 	} # end MODEL_PREDICTION
-
-	RANDOM_VARIABLE_DEFINITION(level=DV){
+	
+	RANDOM_VARIABLE_DEFINITION(level=DV) {
 		EPS_Y ~ Normal(mean = 0, var = 1) # This maps the standard error model in PharmML. The error model is predefined. 
-	}
+	} # end RANDOM_VARIABLE_DEFINITION 
 
 	OBSERVATION {
-	    Y = combinedError1(additive = RUV_ADD, proportional = RUV_PROP,
-	              eps = EPS_Y, prediction = CC) 
+	    Y = combinedError1(additive = RUV_ADD, proportional = RUV_PROP, eps = EPS_Y, prediction = CC ) 
 	} # end OBSERVATION
 } # end of model object
-		'''
+'''
 	
 	@Test
 	def void testParsing(){

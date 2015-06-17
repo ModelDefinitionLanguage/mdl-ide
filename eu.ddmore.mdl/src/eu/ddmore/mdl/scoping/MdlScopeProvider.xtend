@@ -3,6 +3,16 @@
  */
 package eu.ddmore.mdl.scoping
 
+import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.MclObject
+import eu.ddmore.mdl.mdl.SymbolDeclaration
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EReference
+import org.eclipse.xtext.EcoreUtil2
+import org.eclipse.xtext.scoping.IScope
+import org.eclipse.xtext.scoping.Scopes
+import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
+
 /**
  * This class contains custom scoping description.
  * 
@@ -10,6 +20,18 @@ package eu.ddmore.mdl.scoping
  * on how and when to use it 
  *
  */
-class MdlScopeProvider extends org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider {
+class MdlScopeProvider extends AbstractDeclarativeScopeProvider {
+
+	def scope_SymbolReference_ref(Expression context, EReference reference){
+		context.eContainer.findDeclarationsInContext(context)
+	}
+
+	def dispatch IScope findDeclarationsInContext(EObject container, EObject o) {
+		container.eContainer.findDeclarationsInContext(o.eContainer)
+	}
+
+	def dispatch IScope findDeclarationsInContext(MclObject m, EObject o) {
+		Scopes::scopeFor(EcoreUtil2.getAllContentsOfType(m, SymbolDeclaration))
+	}
 
 }
