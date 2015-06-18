@@ -5,220 +5,37 @@ Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
 MclObject returns MclObject:
-	ModelObject | 
-	ParameterObject | 
-	DataObject | 
-	TaskObject |
-	MOGObject;
-	
-ModelObject returns MclObject: 
-	{ModelObject} (name=ID '=' 'mdlobj' '(' type=ID idv=ReferenceDeclaration ')' BEGIN blocks += ModelObjectBlock* END);
-
-ParameterObject returns MclObject:
-	{ParameterObject} (name=ID '=' 'parobj' BEGIN blocks += ParameterObjectBlock* END);
-	
-DataObject returns MclObject:
-	{DataObject} (name=ID '=' 'dataobj' BEGIN blocks += DataObjectBlock* END);
-
-TaskObject returns MclObject:
-	{TaskObject} (name=ID '=' 'taskobj' BEGIN blocks += TaskObjectBlock* END);
-	
-MOGObject returns MclObject:
-	{MOGObject} (name=ID '=' 'mogobj' BEGIN blocks += MOGObjectBlock* END);
-	
-//////////////////////////////////////////////////////////
-//Model Object
-//////////////////////////////////////////////////////////
-
-ObjectBlock:
-	ModelObjectBlock|
-	DataObjectBlock |
-	ParameterObjectBlock |
-	TaskObjectBlock
-;
-
-ModelObjectBlock returns ObjectBlock: 
-	IndividualVariablesBlock | 
-	ModelPredictionBlock | 
-	RandomVariableDefinitionBlock |
-	VariabilityDefinitionBlock |
-	CovariateDefinitionBlock |
-	StructuralParametersBlock |
-	VariabilityParametersBlock |
-	GroupVariablesBlock | 
-	ObservationBlock 
-;
-
-IndividualVariablesBlock returns ModelObjectBlock:
-	identifier = 'INDIVIDUAL_VARIABLES'
-	BEGIN statements += (EquationDeclaration|TransformedDeclaration)* END  
-;
-
-ModelPredictionBlock returns ModelObjectBlock:
-	identifier = 'MODEL_PREDICTION' 
-	BEGIN statements += ModelPredictionBlockStatement* END
-;
-
-RandomVariableDefinitionBlock returns ModelObjectBlock:
-	identifier = 'RANDOM_VARIABLE_DEFINITION' '(' argument = Argument ')'
-	BEGIN statements += RandomVariableDeclaration* END 
-;
-
-VariabilityDefinitionBlock returns ModelObjectBlock:
-  	identifier = 'VARIABILITY_LEVELS' 
-  	BEGIN statements += ListDeclaration* END 
-;
-
-CovariateDefinitionBlock returns ModelObjectBlock:
-  	identifier = 'COVARIATES' 
-  	BEGIN statements += (EquationDeclaration|ListDeclaration)* END 
-;
+	name=ID '=' mdlObjType=('mdlobj'|'parobj'|'dataobj'|'taskobj'|'mogobj') blkArgs=BlockArguments? BEGIN blocks += BlockStatement* END;
 
 
-StructuralParametersBlock returns ModelObjectBlock:
-  identifier = 'STRUCTURAL_PARAMETERS'
-  BEGIN statements += EquationDeclaration* END 
-; 
-
-VariabilityParametersBlock returns ModelObjectBlock:
-  identifier = 'VARIABILITY_PARAMETERS'
-  BEGIN statements += EquationDeclaration* END 
-;
-
-GroupVariablesBlock returns ModelObjectBlock:
-	identifier = 'GROUP_VARIABLES' 
-	BEGIN statements += EquationDeclaration* END
-;
-
-ObservationBlock returns ModelObjectBlock:
-	identifier = 'OBSERVATION'
-	BEGIN statements += (EquationDeclaration|TransformedDeclaration)* END  
-;
-
-//////////////////////////////////////////////////////////
-//Parameter Object
-//////////////////////////////////////////////////////////
-
-ParameterObjectBlock returns ObjectBlock:
-	DeclaredVariablesBlock |
-	StructuralBlock |
-	VariabilityBlock
-;
-
-StructuralBlock returns ParameterObjectBlock:
-	identifier='STRUCTURAL'   
-	BEGIN statements += ParameterDeclaration* END 
-;
-
-ParameterDeclaration returns ParameterObjectBlock:
-	{ParameterDeclaration} name=ID '=' rhs=(EstimateRange|FixedValue)
-;
-
-EstimateRange returns Estimate:
-	(exclusiveLow ?= '(' | '[') low=Number? ',' initial=Number (',' high=Number)? (exclusiveHigh ?= ')' | ']')
-;
-
-FixedValue returns Estimate:
-	{FixedValue}Number
-;
-
-
-VariabilityBlock returns ParameterObjectBlock:
-	identifier='VARIABILITY' '(' levelArg=Argument ')'
-	BEGIN statements += (ParameterDeclaration|ListDeclaration)* END
-;
-
-//////////////////////////////////////////////////////////
-//Data Object
-//////////////////////////////////////////////////////////
-
-DataObjectBlock returns ObjectBlock:
-	DataInputBlock |
-	DataDerivedBlock |
-	DeclaredVariablesBlock |
-	SourceBlock
-;
-
-DataInputBlock returns DataObjectBlock:
- 	identifier='DATA_INPUT_VARIABLES' 
- 	BEGIN statements += ListDeclaration* END  
-;
-
-DataDerivedBlock returns DataObjectBlock:
- 	identifier='DATA_DERIVED_VARIABLES' 
- 	BEGIN statements += ListDeclaration* END  	
-;
-
-DeclaredVariablesBlock returns ObjectBlock:
- 	identifier='DECLARED_VARIABLES' 
- 	BEGIN statements += ReferenceDeclaration* END  	
-;
- 
-SourceBlock returns DataObjectBlock:
-	identifier='SOURCE' 	
-	BEGIN 
-		statements += PropertyStatement* 
+BlockStatement:
+	identifier = ID blkArgs=BlockArguments? BEGIN
+		statements+=Statement*
 	END
 ;
 
-//////////////////////////////////////////////////////////
-//Task Object
-//////////////////////////////////////////////////////////
- 
-TaskObjectBlock returns ObjectBlock: 
-	EstimateTask |
-	SimulateTask 	
+BlockArguments:
+	'(' args+=BlockArgument (',' args+=BlockArgument)* ')'
+;
+
+BlockArgument:
+	Argument|ForwardDeclaration
 ;
 
 
-EstimateTask returns TaskObjectBlock: 
-	identifier = 'ESTIMATE' 
-	BEGIN statements+=PropertyStatement* END 
+ForwardDeclaration:
+	declType=ID idv=ReferenceDeclaration
 ;
 
-SimulateTask returns TaskObjectBlock:
-	identifier = 'SIMULATE' 
-	BEGIN statements += PropertyStatement* END  
+Statement:
+	EquationDeclaration|TransformedDeclaration|ListDeclaration|
+	RandomVariableDeclaration|BlockStatement|PropertyStatement
 ;
 
-ModelPredictionBlockStatement: 
-	statememts = EquationDeclaration | 
-	odeBlock = OdeBlock | 
-	pkMacroBlock = PkMacroBlock 
-;
 
-PkMacroBlock:
-	identifier = 'COMPARTMENT'
-	BEGIN statements += PkMacroStatement* END 
+EstimateRange returns Expression:
+	(exclusiveLow ?= '<(' | '<[') low=Number? ',' initial=Number (',' high=Number)? (exclusiveHigh ?= ')>' | ']>')
 ;
-
-PkMacroStatement:
-	EquationDeclaration | 
-	ListDeclaration|
-	List
-;
-
-OdeBlock:
-	identifier = 'DEQ'
-	BEGIN variables += (EquationDeclaration|ListDeclaration)* END 
-;
-
-//////////////////////////////////////////////////////////
-//MOG
-//////////////////////////////////////////////////////////
-MOGObjectBlock returns ObjectBlock:
-	ImportObjectBlock
-;
-
- ImportObjectBlock:
- 	identifier = 'OBJECTS'
- 	BEGIN objects += ImportObjectStatement* END
- ;
- 
- ImportObjectStatement:
- 	mdlObjRef = [SymbolDeclaration|ID]
- ;
- 
 
 SymbolDeclaration:
 	EquationDeclaration | ListDeclaration| ReferenceDeclaration | CategoryDefn | RandomVariableDeclaration | TransformedDeclaration
@@ -244,8 +61,12 @@ ReferenceDeclaration:
 		name = ID ';'?
 ;
 
-PropertyStatement returns Argument:
-	Argument ';'?
+PropertyStatement:
+	 PropertyDefinition ';'?
+;
+
+PropertyDefinition:
+	'set' Argument
 ;
 
 VarType:
@@ -339,6 +160,7 @@ PrimaryExpression returns Expression:
 	| BuiltinFunction
 	| WhenExpression
 	| ParExpression
+	| EstimateRange
 	;
 
 

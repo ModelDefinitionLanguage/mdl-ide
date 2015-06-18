@@ -1,10 +1,10 @@
 package eu.ddmore.mdl
 
 import com.google.inject.Inject
+import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.EquationDeclaration
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MdlPackage
-import eu.ddmore.mdl.mdl.ObjectBlock
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtext.junit4.InjectWith
@@ -15,7 +15,6 @@ import org.eclipse.xtext.scoping.IScopeProvider
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import eu.ddmore.mdl.mdl.ModelPredictionBlockStatement
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -82,9 +81,9 @@ warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
 
 	@Test
 	def void testExpectedEObjectDescriptions(){
-		val grpBlk = CODE_SNIPPET.parse.objects.last.blocks.last as ObjectBlock
+		val grpBlk = CODE_SNIPPET.parse.objects.last.blocks.last as BlockStatement
 		(grpBlk.statements.last as EquationDeclaration).expression =>  [
-			assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "WT, AGE, SEX, female, male, MISSING, logtWT, tAGE, POP_FCL_FEM, FSEXCL, TLAG, RATEIN, GUT, foo, T")
+			assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "T, WT, AGE, SEX, female, male, MISSING, logtWT, tAGE, POP_FCL_FEM, FSEXCL, TLAG, RATEIN, GUT, foo")
 		]
 	}
 	
