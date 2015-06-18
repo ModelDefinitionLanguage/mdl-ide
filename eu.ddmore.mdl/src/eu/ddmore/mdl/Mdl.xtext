@@ -62,12 +62,10 @@ ReferenceDeclaration:
 ;
 
 PropertyStatement:
-	 PropertyDefinition ';'?
+	 SET properties+=Argument (',' properties+=Argument)* ';'?
 ;
 
-PropertyDefinition:
-	'set' Argument
-;
+
 
 VarType:
 	categorical = CATEGORICAL '(' categories += CategoryDefn (=> ',' categories += CategoryDefn)* ')' 
@@ -230,6 +228,7 @@ terminal CONSTANT:
 
 terminal IS: 'is';
 
+terminal SET: 'set';
 
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';

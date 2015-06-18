@@ -29,101 +29,90 @@ warfarin_PK_v2_dat = dataobj{
 	} # end SOURCE
 } # end data object
 
-warfarin_PK_ANALYTIC_mdl = mdlobj {
-	IDV { T }
+warfarin_PK_2Compartments_mdl = mdlobj (idv TIME) {
+   COVARIATES{
+      WT
+      logtWT = logtWT(WT/70)
+   }# end COVARIATES
 
-	VARIABILITY_LEVELS{
-		ID : { level=2, type=parameter }
-		DV : { level=1, type=observation }
-   }
+   VARIABILITY_LEVELS{
+      ID: {type is parameter, level=2}
+      DV: {type is observation, level=1 }
+   }# end VARIABILITY_LEVELS
 
-	COVARIATES{
-		WT
-		logtWT = log(WT/70)
-	    DT # dosing time
-	}
+   STRUCTURAL_PARAMETERS{
+      POP_CL
+      POP_VC
+      POP_Q
+      POP_VP
+      POP_KA
+      POP_TLAG
+      POP_BETA_CL_WT
+      POP_BETA_V_WT
+      RUV_PROP
+      RUV_ADD
+   }# end STRUCTURAL_PARAMETERS
 
-	STRUCTURAL_PARAMETERS {
-		POP_CL
-		POP_V
-		POP_KA
-		POP_TLAG
-		BETA_CL_WT
-		BETA_V_WT
-		RUV_PROP
-		RUV_ADD
-	} # end STRUCTURAL_PARAMETERS
-	
-	VARIABILITY_PARAMETERS {
-		PPV_CL
-		PPV_V
-		PPV_KA
-		PPV_TLAG
-	} # end VARIABILITY_PARAMETERS 
-	
-	RANDOM_VARIABLE_DEFINITION(level=ID) {
-		ETA_CL ~ Normal(mean = 0, sd = PPV_CL)
-		ETA_V ~ Normal(mean = 0, sd = PPV_V)
-		ETA_KA ~ Normal(mean = 0, sd = PPV_KA)
-		ETA_TLAG ~ Normal(mean = 0, sd = PPV_TLAG)
-	} # end RANDOM_VARIABLE_DEFINITION 
-	
-	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    CL : { type = linear, trans = log, pop = POP_CL, fixEff = {coeff=BETA_CL_WT , covariate = logtWT }, ranEff = ETA_CL }
-	    V : { type = linear, trans = log, pop = POP_V, fixEff =  {coeff=BETA_V_WT , covariate = logtWT } , ranEff = ETA_V }
-	    KA : { type = linear, trans = log, pop = POP_KA, ranEff = ETA_KA }
-	    TLAG : { type = linear, trans = log, pop = POP_TLAG, ranEff = ETA_TLAG } 
-	} # end INDIVIDUAL_VARIABLES
-	
-	MODEL_PREDICTION {
-	    D # dosing variable
-	    k = (CL/V)
-	    CC = when(T - DT < TLAG) 0, 
-	    	 	when(false) T - DT  + KA/(KA-k)
-	         	otherwise (D/V) * (KA/(KA-k) * (exp(-k * (T -DT-TLAG) - exp(-KA*(T-DT-TLAG)))))
-	} # end MODEL_PREDICTION
+   VARIABILITY_PARAMETERS{
+      PPV_CL
+      PPV_VC
+      PPV_Q
+      PPV_VP
+      PPV_KA
+      PPV_TLAG
+      RUV_EPS1
+   }# end VARIABILITY_PARAMETERS
 
-	RANDOM_VARIABLE_DEFINITION(level=DV){
-		EPS_Y ~ Normal(mean = 0, var = 1) # This maps the standard error model in PharmML. The error model is predefined. 
-	}
+   GROUP_VARIABLES{
+   }# end GROUP_VARIABLES
 
-	OBSERVATION {
-	    Y : { type = combinedError1, additive = RUV_ADD, proportional = RUV_PROP,
-	              eps = EPS_Y, prediction = CC } 
-	} # end OBSERVATION
+   RANDOM_VARIABLE_DEFINITION (level=ID) {
+      eta_PPV_CL ~ Normal(mean=0, sd=PPV_CL)
+      eta_PPV_VC ~ Normal(mean=0, sd=PPV_VC)
+      eta_PPV_Q ~ Normal(mean=0, sd=PPV_Q)
+      eta_PPV_VP ~ Normal(mean=0, sd=PPV_VP)
+      eta_PPV_KA ~ Normal(mean=0, sd=PPV_KA)
+      eta_PPV_TLAG ~ Normal(mean=0, sd=PPV_TLAG)
+   }# end RANDOM_VARIABLE_DEFINITION (level=ID)
+
+   RANDOM_VARIABLE_DEFINITION (level=DV) {
+      eps_RUV_EPS1 ~ Normal(mean=0, sd=RUV_EPS1)
+   }# end RANDOM_VARIABLE_DEFINITION (level=DV)
+
+   INDIVIDUAL_VARIABLES{
+      log(CL) = linear(pop = log(POP_CL), fixEff = [{coeff=POP_BETA_CL_WT, covariate=logtWT}] , ranEff = eta_PPV_CL)
+      log(VC) = linear(pop = log(POP_VC), fixEff = [{coeff=POP_BETA_V_WT, covariate=logtWT}] , ranEff = eta_PPV_VC )
+      Q = linear(trans is log, pop = POP_Q, fixEff = [{coeff=POP_BETA_CL_WT, covariate=logtWT}] , ranEff = eta_PPV_Q)
+      VP = linear(trans is log, pop = POP_VP, fixEff = [{coeff=POP_BETA_V_WT, covariate=logtWT}] , ranEff = eta_PPV_VP)
+      KA = linear(trans is log, pop = POP_KA, ranEff = eta_PPV_KA)
+      TLAG = linear(trans is log, pop = POP_TLAG, ranEff = eta_PPV_TLAG) 
+      ALAG1=TLAG
+      V2=VC
+      V3=VP
+      S2=VC
+
+   }# end INDIVIDUAL_VARIABLES
+
+   MODEL_PREDICTION{
+
+   COMPARTMENT{
+      ##  Parameters = CL,V2,Q,V3,KA,S2,ALAG1
+      INPUT_KA:   {type is depot, cmt=1, to=CENTRAL, ka=KA, tlag=ALAG1}
+      CENTRAL:    {type is compartment, cmt=2}
+              #    {type is elimination, cmt=2, from=CENTRAL, v=V2, cl=CL}
+      PERIPHERAL: {type is distribution, cmt=3, from=CENTRAL, kin=Q/V2, kout=Q/V3}
+   }# end COMPARTMENT
+
+      F=CENTRAL/S2
+
+      CC=F
+   
+   }# end MODEL_PREDICTION
+
+   OBSERVATION{
+         log(CC_obs) = combinedError1(additive = RUV_ADD, proportional = RUV_PROP, eps = eps_RUV_EPS1, prediction = CC) 
+   }# end OBSERVATION
 } # end of model object
-
-warfarin_PK_ODE_par = parobj {
-	DECLARED_VARIABLES{ETA_CL; ETA_V}
-
-	# By default a parameter is to be estimated if fix is omitted
- 	STRUCTURAL {
-		POP_CL = [0.1, 0.001 )
-		POP_V = (8, 0.001) 
-		POP_KA = (0.362, 0.001)
-		POP_TLAG = (1, 0.001, 10)
-		BETA_CL_WT = 0.75
-		BETA_V_WT = 1 
-		RUV_PROP = (0.1, 0 )
-		RUV_ADD = (0.1, 0) 
-		} # end STRUCTURAL
-	VARIABILITY(type=SD) {
-	# lo, init, hi
-		PPV_CL = (,0.1) 
-		PPV_V = (0.1, 0, 1)
-		PPV_KA = 0.1
-		PPV_TLAG = (,0.1) 
-	} # end VARIABILITY
-
-	CORR { 
-		parameter=[ETA_CL, ETA_V];
-		value = [0.01]
-	}
-	CORR { 
-		parameter=[ETA_TLAG, ETA_KA];
-		value = [0.01]
-	}
-} # end of parameter object 
 
 nonmem_task = taskobj {
 	ESTIMATE{
