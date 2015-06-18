@@ -9,7 +9,7 @@ MclObject returns MclObject:
 
 
 BlockStatement:
-	identifier = ID blkArgs=BlockArguments? BEGIN
+	identifier = BLOCKID blkArgs=BlockArguments? BEGIN
 		statements+=Statement*
 	END
 ;
@@ -29,7 +29,8 @@ ForwardDeclaration:
 
 Statement:
 	EquationDeclaration|TransformedDeclaration|ListDeclaration|
-	RandomVariableDeclaration|BlockStatement|PropertyStatement
+	RandomVariableDeclaration|BlockStatement|PropertyStatement|
+	AnonymousListStatement
 ;
 
 
@@ -55,6 +56,10 @@ RandomVariableDeclaration:
 
 ListDeclaration:
 	name = ID ":" list = List ';'?
+;
+
+AnonymousListStatement:
+	List ';'?
 ;
 
 ReferenceDeclaration:
@@ -224,6 +229,14 @@ terminal CATEGORICAL: 'categorical';
 
 terminal CONSTANT:
 	'INF'
+;
+
+terminal BLOCKID:
+	'MODEL_PREDICTION'|'DEQ'|'MODEL_INPUT_VARIABLES'|'RANDOM_VARIABLES'|'DECLARED_VARIABLES'|
+	'INDIVIDUAL_VARIABLES'|'COVARIATES'|'ESTIMATE'|'SIMULATE'|'OPTIMISATION'|'DATA_INPUT_VARIABLES'|
+	'DATA_DERIVED_VARIABLES'|'SOURCE'|'VARIABILITY'|'STRUCTURAL_PARAMETERS'|
+	'VARIABILITY_LEVELS'|'VARIABILITY_PARAMETERS'|'STRUCTURAL'|
+	'GROUP_VARIABLES'|'RANDOM_VARIABLE_DEFINITION'|'COMPARTMENT'|'OBSERVATION'
 ;
 
 terminal IS: 'is';
