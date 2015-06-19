@@ -25,9 +25,9 @@ class MclBlockValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
 			MdlValidator::UNKNOWN_BLOCK,
-			"unrecognised block in mdlobj 'foo'"
+			"block 'DATA_INPUT_VARIABLES' cannot be used in a mdlobj"
 		)
 	}
 
@@ -43,6 +43,54 @@ class MclBlockValidationTest {
 			"mandatory block 'VARIABILITY_LEVELS' is missing in mdlobj 'foo'"
 		)
 	}
+
+	@Test
+	def void testUnknownSubBlock(){
+		val mcl = '''foo = mdlobj {
+			VARIABILITY_LEVELS{
+			}
+			MODEL_PREDICTION{
+				MODEL_PREDICTION{}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
+			MdlValidator::WRONG_SUBBLOCK,
+			"block 'MODEL_PREDICTION' cannot be used as a sub-block"
+		)
+	}
+
+	@Test
+	def void testWrongParentBlock(){
+		val mcl = '''foo = mdlobj {
+			VARIABILITY_LEVELS{
+				DEQ{}
+			}
+			MODEL_PREDICTION{
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
+			MdlValidator::WRONG_PARENT_BLOCK,
+			"sub-block 'DEQ' cannot be used in the 'VARIABILITY_LEVELS' block"
+		)
+	}
+
+	@Test
+	def void testSubBlockOk(){
+		val mcl = '''foo = mdlobj {
+			VARIABILITY_LEVELS{
+			}
+			MODEL_PREDICTION{
+				DEQ{}
+				COMPARTMENT{}
+			}
+		}'''.parse
+		mcl.assertNoErrors
+//		mcl.assertNoErrors(MdlValidator::WRONG_PARENT_BLOCK)
+//		mcl.assertNoErrors(MdlValidator::WRONG_SUBBLOCK)
+	}
+
 
 
 }

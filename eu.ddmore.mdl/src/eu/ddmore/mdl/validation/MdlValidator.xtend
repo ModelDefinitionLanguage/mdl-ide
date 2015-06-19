@@ -7,6 +7,7 @@ import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import org.eclipse.xtext.validation.Check
 import java.util.HashSet
+import eu.ddmore.mdl.mdl.BlockStatement
 
 //import org.eclipse.xtext.validation.Check
 
@@ -22,6 +23,8 @@ class MdlValidator extends AbstractMdlValidator {
 	val static PARAMOBJ = 'paramobj'
 
 	public static val UNKNOWN_BLOCK = "eu.ddmore.mdl.validation.UnknownBlock"
+	public static val WRONG_SUBBLOCK = "eu.ddmore.mdl.validation.WrongSubBlock"
+	public static val WRONG_PARENT_BLOCK = "eu.ddmore.mdl.validation.WrongParentBlock"
 	public static val MANDATORY_BLOCK_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockMissing"
 
 
@@ -32,15 +35,19 @@ class MdlValidator extends AbstractMdlValidator {
 		"OBSERVATION" -> false, "GROUP_VARIABLES" -> false
 	}
 
+	val static SubBlkData = #{
+		"DEQ" -> "MODEL_PREDICTION", "COMPARTMENT" -> "MODEL_PREDICTION"
+	}
+
 	@Check
-	def validateMdlObjects(MclObject mclObject){
+	def validateMclObjects(MclObject mclObject){
 		switch(mclObject.mdlObjType){
 			case MDLOBJ: mclObject.validateMdlObject
 		}
 	}
 	
 	def validateMdlObject(MclObject it){
-		validateMdlObjBlocks
+		validateMdlObjectHasCorrectBlocks
 	}
 	
 	
@@ -48,24 +55,43 @@ class MdlValidator extends AbstractMdlValidator {
 //		blkArgs.args.forEach[  ]
 //	}
 	
-
-	def validateMdlObjBlocks(MclObject it){
+	def validateMdlObjectHasCorrectBlocks(MclObject it){
 		// map of just the mandatory blocks
 		val mandatoryBlock = new HashSet<String>(BlkData.filter[blk, mand|mand == true].keySet)
-		// check if expected blocks present
 		for(blk : blocks){
-			if(!BlkData.containsKey(blk.identifier)){
-				error("unrecognised block in mdlobj '" + name + "'",
-					MdlPackage.eINSTANCE.mclObject_Blocks, UNKNOWN_BLOCK, blk.identifier)
-			}
-			else{
-				// remove mandatory block if it exists
-				mandatoryBlock.remove(blk.identifier)
-			}
+			// remove mandatory block if it exists
+			mandatoryBlock.remove(blk.identifier)
 		}
 		// check if mandatory blocks missing
 		mandatoryBlock.forEach[blk, mand| error("mandatory block '" + blk + "' is missing in mdlobj '" + name + "'",
 					MdlPackage.eINSTANCE.mclObject_Blocks, MANDATORY_BLOCK_MISSING, blk) ]
+	}
+
+	@Check
+	def validateMdlObjBlocks(BlockStatement it){
+		if(eContainer instanceof MclObject){
+			val mdlObj = eContainer as MclObject
+			if(mdlObj.mdlObjType == MDLOBJ){
+				if(!BlkData.containsKey(identifier)){
+					error("block '" + identifier + "' cannot be used in a mdlobj",
+						MdlPackage.eINSTANCE.blockStatement_Identifier, UNKNOWN_BLOCK, identifier)
+				}
+			}
+		}
+		if (eContainer instanceof BlockStatement) {
+			val blkStatement = eContainer as BlockStatement
+			if (!SubBlkData.containsKey(identifier)) {
+				error("block '" + identifier + "' cannot be used as a sub-block",
+					MdlPackage.eINSTANCE.blockStatement_Identifier, WRONG_SUBBLOCK,
+					identifier)
+			} else if (SubBlkData.get(identifier) != blkStatement.identifier) {
+				// recognised sub-block but in the wrong place
+				error("sub-block '" + identifier + "' cannot be used in the '" + blkStatement.identifier + "' block",
+						MdlPackage.eINSTANCE.blockStatement_Identifier,
+						WRONG_PARENT_BLOCK, identifier)
+
+			}
+		}
 	}
 
 }
