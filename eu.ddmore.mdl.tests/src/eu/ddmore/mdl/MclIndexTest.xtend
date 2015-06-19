@@ -30,6 +30,9 @@ warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
 		tAGE = AGE - 40
 	}
 
+	VARIABILITY_LEVELS{
+	}
+
 	STRUCTURAL_PARAMETERS {
 		POP_FCL_FEM
 	} # end STRUCTURAL_PARAMETERS

@@ -24,7 +24,7 @@ BlockArgument:
 
 
 ForwardDeclaration:
-	declType=ID name=ID
+	{ForwardDeclaration}declType=ID name=ID
 ;
 
 Statement:

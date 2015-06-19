@@ -32,6 +32,9 @@ warfarin_PK_SEXAGE_mdl2 = mdlobj(idv T) {
 		logtWT = ln(WT/70)
 		tAGE = AGE - 40
 	}
+	
+	VARIABILITY_LEVELS{
+	}
 
 	STRUCTURAL_PARAMETERS {
 		POP_FCL_FEM
@@ -55,6 +58,9 @@ warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
 		POP_FCL_FEM
 	} # end STRUCTURAL_PARAMETERS
 	
+	VARIABILITY_LEVELS{
+	}
+
 	GROUP_VARIABLES{
 		FSEXCL = when(SEX == female) POP_FCL_FEM  otherwise 1
 		TLAG

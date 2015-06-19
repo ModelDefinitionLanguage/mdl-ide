@@ -31,7 +31,6 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	
 } # end of model object
 		'''.parse
-		mcl.assertNoErrors
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
 "(GUT*KA) when T>=TLAG,
@@ -51,7 +50,6 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	
 } # end of model object
 		'''.parse
-		mcl.assertNoErrors
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals("10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))", eqn.expression.getString)
 	}
@@ -66,7 +64,6 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	
 } # end of model object
 		'''.parse
-		mcl.assertNoErrors
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals("10<22==true", eqn.expression.getString)
 	}
@@ -86,7 +83,6 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	
 } # end of model object
 		'''.parse
-		mcl.assertNoErrors
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
 "(10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))) when 10<22==!true,
@@ -105,7 +101,6 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	
 } # end of model object
 		'''.parse
-		mcl.assertNoErrors
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals("\"doo\"", eqn.expression.getString)
 	}
@@ -123,7 +118,6 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	
 } # end of model object
 		'''.parse
-		mcl.assertNoErrors
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals("[KA,4,true,\"help\",log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))),1+2+3*4+5]", eqn.expression.getString)
 	}
