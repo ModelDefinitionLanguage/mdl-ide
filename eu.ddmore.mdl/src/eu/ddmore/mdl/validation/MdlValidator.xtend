@@ -22,22 +22,13 @@ class MdlValidator extends AbstractMdlValidator {
 	val static TASKOBJ = 'taskobj'
 	val static PARAMOBJ = 'paramobj'
 
+	extension ModelObjectValidationHelper movh = new ModelObjectValidationHelper
+
 	public static val UNKNOWN_BLOCK = "eu.ddmore.mdl.validation.UnknownBlock"
 	public static val WRONG_SUBBLOCK = "eu.ddmore.mdl.validation.WrongSubBlock"
 	public static val WRONG_PARENT_BLOCK = "eu.ddmore.mdl.validation.WrongParentBlock"
 	public static val MANDATORY_BLOCK_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockMissing"
 
-
-	val static BlkData = #{
-		"COVARIATES" -> false, "VARIABILITY_LEVELS" -> true, "STRUCTURAL_PARAMETERS" -> false,
-		"VARIABILITY_PARAMETERS" -> false, "RANDOM_VARIABLE_DEFINITION" -> false,
-		"INDIVIDUAL_VARIABLES" -> false, "MODEL_PREDICTION" -> false,
-		"OBSERVATION" -> false, "GROUP_VARIABLES" -> false
-	}
-
-	val static SubBlkData = #{
-		"DEQ" -> "MODEL_PREDICTION", "COMPARTMENT" -> "MODEL_PREDICTION"
-	}
 
 	@Check
 	def validateMclObjects(MclObject mclObject){
@@ -56,14 +47,8 @@ class MdlValidator extends AbstractMdlValidator {
 //	}
 	
 	def validateMdlObjectHasCorrectBlocks(MclObject it){
-		// map of just the mandatory blocks
-		val mandatoryBlock = new HashSet<String>(BlkData.filter[blk, mand|mand == true].keySet)
-		for(blk : blocks){
-			// remove mandatory block if it exists
-			mandatoryBlock.remove(blk.identifier)
-		}
 		// check if mandatory blocks missing
-		mandatoryBlock.forEach[blk, mand| error("mandatory block '" + blk + "' is missing in mdlobj '" + name + "'",
+		getUnusedMandatoryBlocks.forEach[blk, mand| error("mandatory block '" + blk + "' is missing in mdlobj '" + name + "'",
 					MdlPackage.eINSTANCE.mclObject_Blocks, MANDATORY_BLOCK_MISSING, blk) ]
 	}
 
@@ -72,7 +57,7 @@ class MdlValidator extends AbstractMdlValidator {
 		if(eContainer instanceof MclObject){
 			val mdlObj = eContainer as MclObject
 			if(mdlObj.mdlObjType == MDLOBJ){
-				if(!BlkData.containsKey(identifier)){
+				if(!identifier.isModelBlock){
 					error("block '" + identifier + "' cannot be used in a mdlobj",
 						MdlPackage.eINSTANCE.blockStatement_Identifier, UNKNOWN_BLOCK, identifier)
 				}
@@ -80,11 +65,11 @@ class MdlValidator extends AbstractMdlValidator {
 		}
 		if (eContainer instanceof BlockStatement) {
 			val blkStatement = eContainer as BlockStatement
-			if (!SubBlkData.containsKey(identifier)) {
+			if (!identifier.isModelSubBlock) {
 				error("block '" + identifier + "' cannot be used as a sub-block",
 					MdlPackage.eINSTANCE.blockStatement_Identifier, WRONG_SUBBLOCK,
 					identifier)
-			} else if (SubBlkData.get(identifier) != blkStatement.identifier) {
+			} else if (!identifier.subBlockHasCorrectParent(blkStatement.identifier)) {
 				// recognised sub-block but in the wrong place
 				error("sub-block '" + identifier + "' cannot be used in the '" + blkStatement.identifier + "' block",
 						MdlPackage.eINSTANCE.blockStatement_Identifier,
