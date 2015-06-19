@@ -2,10 +2,12 @@ package eu.ddmore.mdl
 
 import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.Mcl
+import java.util.Deque
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -53,8 +55,8 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 
 	
 	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    CL = linear(trans is log, pop = POP_CL, fixEff = {coeff=BETA_CL_WT, covariate=logtWT} , ranEff = ETA_CL )
-	    V = linear(trans is log, pop = POP_V, fixEff = {coeff=BETA_V_WT, covariate=logtWT} , ranEff = ETA_V )
+	    CL = linear(trans is log, pop = POP_CL, fixEff = {{coeff=BETA_CL_WT, covariate=logtWT}} , ranEff = ETA_CL )
+	    V = linear(trans is log, pop = POP_V, fixEff = {{coeff=BETA_V_WT, covariate=logtWT}} , ranEff = ETA_V )
 	    KA = linear(trans is log, pop = POP_KA, ranEff = ETA_KA)
 	    TLAG = linear(trans is log, pop = POP_TLAG, ranEff = ETA_TLAG) 
 	} # end INDIVIDUAL_VARIABLES
@@ -82,6 +84,18 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	def void testParsing(){
 		CODE_SNIPPET.parse.assertNoErrors
 		
+	}
+	
+	@Test
+	def void testBlocks(){
+		val mcl = CODE_SNIPPET.parse
+		val Deque<String> expectedBlks = newLinkedList("COVARIATES", "VARIABILITY_LEVELS", "STRUCTURAL_PARAMETERS",
+			"VARIABILITY_PARAMETERS", "RANDOM_VARIABLE_DEFINITION", "INDIVIDUAL_VARIABLES", "MODEL_PREDICTION",
+			"RANDOM_VARIABLE_DEFINITION", "OBSERVATION"
+		);
+		for(blk : mcl.objects.last.blocks){
+			Assert::assertEquals(expectedBlks.pop, blk.identifier)
+		}
 	}
 
 	

@@ -2,10 +2,12 @@ package eu.ddmore.mdl
 
 import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.Mcl
+import java.util.Deque
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -39,59 +41,13 @@ class MclParserDataObj1Test {
 		
 	}
 
-//	@Test
-//	def void testExpectedAst(){
-//		val mcl = CODE_SNIPPET.parse
-//		
-//		val expectedVars = newLinkedList('warfarin_PK_ODE_dat', 'b', 'c')
-//		for(obj : mcl.objects){
-//			Assert::assertEquals(expectedVars.pop, obj.name)
-//		
-//			assertObject(obj)
-//		}
-//	}
-	
-//	def dispatch assertObject(DataObject decl){
-//		for(blk : decl.blocks){
-//			assertBlock(blk);
-//		}
-//	}
+	@Test
+	def void testBlocks(){
+		val mcl = CODE_SNIPPET.parse
+		val Deque<String> expectedBlks = newLinkedList("DECLARED_VARIABLES", "DATA_INPUT_VARIABLES", "SOURCE");
+		for(blk : mcl.objects.last.blocks){
+			Assert::assertEquals(expectedBlks.pop, blk.identifier)
+		}
+	}
 
-//	def dispatch assertObject(MclObject decl){
-//		Assert::fail("Don't go here!")
-//	}
-
-//	def dispatch assertBlock(DataObjectBlock blk){
-//		val expectedVars = newLinkedList('ID', 'TIME', 'WT', 'AMT')
-//		Assert::assertEquals(expectedVars.size, blk.variables.size)
-//		for(stmt : blk.variables){
-//			Assert::assertEquals(expectedVars.pop, stmt.name)
-//		}
-//	}
-//	
-//	def dispatch assertBlock(DataDerivedBlock blk){
-//		val expectedVars = newLinkedList('DT')
-//		for(stmt : blk.variables){
-//			Assert::assertEquals(expectedVars.pop, stmt.name)
-//		}
-//	}
-//	
-//	def dispatch assertBlock(DeclaredVariablesBlock blk){
-//		val expectedVars = newLinkedList('GUT', 'Y')
-//		for(stmt : blk.variables){
-//			Assert::assertEquals(expectedVars.pop, stmt.name)
-//		}
-//	}
-//	
-//	def dispatch assertBlock(SourceBlock blk){
-//		val expectedVars = newLinkedList('file', 'inputformat', 'ignore')
-//		for(stmt : blk.statements){
-//			Assert::assertEquals(expectedVars.pop, stmt.argumentName)
-//		}
-//	}
-//	
-//	def dispatch assertBlock(ObjectBlock blk){
-//		Assert::fail("Don't go here!")
-//	}
-	
 }

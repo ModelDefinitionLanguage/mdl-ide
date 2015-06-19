@@ -24,37 +24,37 @@ BlockArgument:
 
 
 ForwardDeclaration:
-	declType=ID idv=ReferenceDeclaration
+	declType=ID name=ID
 ;
 
 Statement:
-	EquationDeclaration|TransformedDeclaration|ListDeclaration|
-	RandomVariableDeclaration|BlockStatement|PropertyStatement|
+	EquationDefinition|TransformedDefinition|ListDefinition|
+	RandomVariableDefinition|BlockStatement|PropertyStatement|
 	AnonymousListStatement
 ;
 
 
 EstimateRange returns Expression:
-	(exclusiveLow ?= '<(' | '<[') low=Number? ',' initial=Number (',' high=Number)? (exclusiveHigh ?= ')>' | ']>')
+	{EstimateRange}(exclusiveLow ?= '<(' | '<[') low=Number? ',' initial=Number (',' high=Number)? (exclusiveHigh ?= ')>' | ']>')
 ;
 
-SymbolDeclaration:
-	EquationDeclaration | ListDeclaration| ReferenceDeclaration | CategoryDefn | RandomVariableDeclaration | TransformedDeclaration
+SymbolDefinition:
+	EquationDefinition | ListDefinition| ForwardDeclaration | CategoryDefinition| RandomVariableDefinition | TransformedDefinition
 ;
 
-EquationDeclaration:
+EquationDefinition:
 	name = ID ("=" expression = Expression)? ';'?
 ;
 
-TransformedDeclaration:
-	transfrom = ID '(' name=ID ')' '=' expression=Expression ';'?
+TransformedDefinition:
+	transform = ID '(' name=ID ')' '=' expression=Expression ';'?
 ;
 
-RandomVariableDeclaration:
-	name = ID "~" distn = BuiltinFunction ';'?
+RandomVariableDefinition:
+	name = ID "~" distn = BuiltinFunctionCall ';'?
 ;
 
-ListDeclaration:
+ListDefinition:
 	name = ID ":" list = List ';'?
 ;
 
@@ -62,9 +62,6 @@ AnonymousListStatement:
 	List ';'?
 ;
 
-ReferenceDeclaration:
-		name = ID ';'?
-;
 
 PropertyStatement:
 	 SET properties+=Argument (',' properties+=Argument)* ';'?
@@ -72,11 +69,11 @@ PropertyStatement:
 
 
 
-VarType:
-	categorical = CATEGORICAL '(' categories += CategoryDefn (=> ',' categories += CategoryDefn)* ')' 
+CategoricalDefinition:
+	{CategoricalDefinition} CATEGORICAL '=' '[' categories += CategoryDefinition (=> ',' categories += CategoryDefinition)* ']' 
 ;
 
-CategoryDefn:
+CategoryDefinition:
 	name = ID
 ;
 
@@ -89,11 +86,18 @@ Arguments:
 ;
 
 Argument:
-	argumentName = AttributeName ("=" (expression = Expression
-									|	expression=List
-									|	expression=Vector
-									|   expression=VarType) 
+	ValuePair|
+	CategoricalDefinition
+;
+
+ValuePair:
+	{ValuePair}argumentName = AttributeName ("=" (expression = Expression
+									| expression = InfoMapping) 
 								| IS expression = EnumExpression)
+;
+
+InfoMapping:
+	{InfoMapping} BEGIN mappings+=List (',' mappings+=List)* END
 ;
 
 AttributeName:
@@ -109,19 +113,19 @@ Expression:
 ;
 
 OrExpression returns Expression:
-	AndExpression (=>({BinaryOperation.leftOperand=current} feature=OpOr) rightOperand=AndExpression)*;
+	AndExpression (=>({OrExpression.leftOperand=current} feature=OpOr) rightOperand=AndExpression)*;
 
 OpOr:
 	'||';
 
 AndExpression returns Expression:
-	EqualityExpression (=>({BinaryOperation.leftOperand=current} feature=OpAnd) rightOperand=EqualityExpression)*;
+	EqualityExpression (=>({AndExpression.leftOperand=current} feature=OpAnd) rightOperand=EqualityExpression)*;
 
 OpAnd:
 	'&&';
 
 EqualityExpression returns Expression:
-	RelationalExpression (=>({BinaryOperation.leftOperand=current} feature=OpEquality)
+	RelationalExpression (=>({EqualityExpression.leftOperand=current} feature=OpEquality)
 	rightOperand=RelationalExpression)*;
 
 OpEquality:
@@ -130,26 +134,26 @@ OpEquality:
 RelationalExpression returns Expression:
 	AdditiveExpression
 	(
-	 =>({BinaryOperation.leftOperand=current} feature=OpCompare) rightOperand=AdditiveExpression)*;
+	 =>({RelationalExpression.leftOperand=current} feature=OpCompare) rightOperand=AdditiveExpression)*;
 
 OpCompare:
 	'>=' | '<=' | '>' | '<' ;
 
 AdditiveExpression returns Expression:
-	MultiplicativeExpression (=>({BinaryOperation.leftOperand=current} feature=OpAdd)
+	MultiplicativeExpression (=>({AdditiveExpression.leftOperand=current} feature=OpAdd)
 	rightOperand=MultiplicativeExpression)*;
 
 OpAdd:
 	'+' | '-';
 
 MultiplicativeExpression returns Expression:
-	UnaryOperation (=>({BinaryOperation.leftOperand=current} feature=OpMulti) rightOperand=UnaryOperation)*;
+	UnaryExpression (=>({MultiplicativeExpression.leftOperand=current} feature=OpMulti) rightOperand=UnaryExpression)*;
 
 OpMulti:
 	'*' | '^' | '/' | '%';
 
-UnaryOperation returns Expression:
-	{XUnaryOperation} feature=OpUnary operand=UnaryOperation
+UnaryExpression returns Expression:
+	{UnaryExpression} feature=OpUnary operand=PrimaryExpression
 	| PrimaryExpression
 	;
 
@@ -159,8 +163,7 @@ OpUnary:
 PrimaryExpression returns Expression:
 	Literal
 	| SymbolReference 
-	| UserFunctionCall
-	| BuiltinFunction
+	| BuiltinFunctionCall
 	| WhenExpression
 	| ParExpression
 	| EstimateRange
@@ -168,33 +171,34 @@ PrimaryExpression returns Expression:
 
 
 ParExpression returns Expression:
-	'(' Expression ')'
+	{ParExpression} '(' expr=Expression ')'
 ;
 
 WhenExpression returns Expression:
-	 {XIfExpression}
-	 	'when' '(' if+=Expression ')' then+=Expression
-	 	(=>',' 'when' '(' if+=Expression ')' then+=Expression)*
-		(=>'otherwise' else=Expression)?
+	 {WhenExpression}
+	 	when+=WhenClause
+	 	(=>',' when+=WhenClause)*
+		(=>'otherwise' other=Expression)?
 	;
+
+WhenClause:
+	'when' '(' cond=Expression ')' value=Expression
+;
 
 Literal returns Expression:
 	NumberLiteral |
 	StringLiteral |
-	BooleanLiteral
+	BooleanLiteral |
+	VectorLiteral
 ;
 
 SymbolReference:
-	{SymbolReference} ref=[SymbolDeclaration|ID]
+	{SymbolReference} ref=[SymbolDefinition|ID]
 ;
 
 
-UserFunctionCall returns Expression:
-	{UserFunctionCall} '&' ref=[SymbolDeclaration|ID] ( =>'(' (args+=Expression (=>',' args+=Expression)*)? ')')
-; 
-
-BuiltinFunction returns Expression:
-	{BuiltinFunction} func=ID '(' funcArgs+=( UnnamedFuncArguments
+BuiltinFunctionCall returns Expression:
+	{BuiltinFunctionCall} func=ID '(' argList=(UnnamedFuncArguments
 							| Arguments)? ')'
 ;
 
@@ -216,16 +220,15 @@ Number hidden():
 	;
 	
 
-Vector:
-	'[' expression = VectorExpression ']'
+VectorLiteral returns Expression:
+	{VectorLiteral} '[' expression = VectorExpression ']'
 ;	
 
 VectorExpression:
-		expressions += Expression (=> ',' expressions += Expression)* |
-		lists += List (=> ',' lists += List)*
+		expressions += Expression (=> ',' expressions += Expression)*
 ;
 
-terminal CATEGORICAL: 'categorical';
+terminal CATEGORICAL: 'categories';
 
 terminal CONSTANT:
 	'INF'

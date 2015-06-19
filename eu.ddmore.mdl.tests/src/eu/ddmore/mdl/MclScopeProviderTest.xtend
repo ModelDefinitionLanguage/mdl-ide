@@ -2,7 +2,7 @@ package eu.ddmore.mdl
 
 import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.mdl.EquationDeclaration
+import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MdlPackage
 import org.eclipse.emf.ecore.EObject
@@ -28,7 +28,7 @@ warfarin_PK_SEXAGE_mdl2 = mdlobj(idv T) {
 	COVARIATES{
 		WT
 		AGE
-		SEX : { type=categorical(female, male, MISSING) }
+		SEX : { categories = [female, male, MISSING] }
 		logtWT = ln(WT/70)
 		tAGE = AGE - 40
 	}
@@ -46,7 +46,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
 	COVARIATES{
 		WT
 		AGE
-		SEX : { type=categorical(female, male, MISSING) }
+		SEX : { categories = [female, male, MISSING] }
 		logtWT = ln(WT/70)
 		tAGE = AGE - 40
 	}
@@ -82,7 +82,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
 	@Test
 	def void testExpectedEObjectDescriptions(){
 		val grpBlk = CODE_SNIPPET.parse.objects.last.blocks.last as BlockStatement
-		(grpBlk.statements.last as EquationDeclaration).expression =>  [
+		(grpBlk.statements.last as EquationDefinition).expression =>  [
 			assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "T, WT, AGE, SEX, female, male, MISSING, logtWT, tAGE, POP_FCL_FEM, FSEXCL, TLAG, RATEIN, GUT, foo")
 		]
 	}
