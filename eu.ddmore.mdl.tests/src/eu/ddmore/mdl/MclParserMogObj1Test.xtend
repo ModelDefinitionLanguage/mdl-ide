@@ -11,31 +11,33 @@ import org.junit.runner.RunWith
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
-class MclParserTestObj1Test {
+class MclParserMogObj1Test {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-nonmem_task = taskobj {
-	ESTIMATE{
-		target = "NONMEM"
-		properties="
-			; this is defined in INI format
-			[method]
-				algorithm=SAEM
-				typeIndPar=MAP
-				approximationSE=linear
-				seed=19245
+mobj = mdlobj (idv T) {
+	VARIABILITY_LEVELS{
+	} 
+}
 
-			[compute]
-			estimationSE=TRUE
-			estimationIndPar=TRUE
-			plotGraphs=TRUE
-	
-			[softwareSettings]
-			TOL=3
-			NOABORT=TRUE
-		"
+pobj = parobj {
+}
+
+dobj = dataobj {
+	DATA_INPUT_VARIABLES{}
+	SOURCE{}
+}
+
+tobj = taskobj {
+}
+
+mgobj = mogobj {
+	OBJECTS{
+		mobj
+		pobj
+		dobj
+		tobj
 	}
 }
 		'''
@@ -45,6 +47,5 @@ nonmem_task = taskobj {
 		CODE_SNIPPET.parse.assertNoErrors
 		
 	}
-
 	
 }

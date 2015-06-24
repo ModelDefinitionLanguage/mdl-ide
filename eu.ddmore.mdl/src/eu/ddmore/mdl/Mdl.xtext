@@ -5,21 +5,21 @@ Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
 MclObject returns MclObject:
-	name=ID '=' mdlObjType=('mdlobj'|'parobj'|'dataobj'|'taskobj'|'mogobj') blkArgs=BlockArguments? BEGIN blocks += BlockStatement* END;
+	name=ID '=' mdlObjType=('mdlobj'|'parobj'|'dataobj'|'taskobj'|'mogobj') blkArgs=BlockArguments BEGIN blocks += BlockStatement* END;
 
 
 BlockStatement:
-	identifier = BLOCKID blkArgs=BlockArguments? BEGIN
+	identifier = BLOCKID blkArgs=BlockArguments BEGIN
 		statements+=Statement*
 	END
 ;
 
 BlockArguments:
-	'(' args+=BlockArgument (',' args+=BlockArgument)* ')'
+	{BlockArguments} ('(' args+=BlockArgument (',' args+=BlockArgument)* ')')?
 ;
 
 BlockArgument:
-	Argument|ForwardDeclaration
+	ValuePair|ForwardDeclaration
 ;
 
 
@@ -238,7 +238,7 @@ terminal BLOCKID:
 	'MODEL_PREDICTION'|'DEQ'|'MODEL_INPUT_VARIABLES'|'RANDOM_VARIABLES'|'DECLARED_VARIABLES'|
 	'INDIVIDUAL_VARIABLES'|'COVARIATES'|'ESTIMATE'|'SIMULATE'|'OPTIMISATION'|'DATA_INPUT_VARIABLES'|
 	'DATA_DERIVED_VARIABLES'|'SOURCE'|'VARIABILITY'|'STRUCTURAL_PARAMETERS'|
-	'VARIABILITY_LEVELS'|'VARIABILITY_PARAMETERS'|'STRUCTURAL'|
+	'VARIABILITY_LEVELS'|'VARIABILITY_PARAMETERS'|'STRUCTURAL'|'OBJECTS'|
 	'GROUP_VARIABLES'|'RANDOM_VARIABLE_DEFINITION'|'COMPARTMENT'|'OBSERVATION'
 ;
 

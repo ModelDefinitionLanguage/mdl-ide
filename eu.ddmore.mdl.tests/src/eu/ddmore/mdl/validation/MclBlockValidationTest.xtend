@@ -78,7 +78,7 @@ class MclBlockValidationTest {
 
 	@Test
 	def void testSubBlockOk(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlobj (idv T) {
 			VARIABILITY_LEVELS{
 			}
 			MODEL_PREDICTION{

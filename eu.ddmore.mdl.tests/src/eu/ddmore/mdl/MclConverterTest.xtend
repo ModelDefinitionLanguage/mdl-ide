@@ -3,20 +3,19 @@ package eu.ddmore.mdl
 import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Mcl
-import static extension eu.ddmore.mdl.MclConverter.getString
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.eclipse.xtext.junit4.validation.ValidationTestHelper
+
+import static extension eu.ddmore.mdl.MclConverter.getString
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
 class MclConverterTest {
 	@Inject extension ParseHelper<Mcl>
-	@Inject extension ValidationTestHelper
 	
 	@Test
 	def void testConverter1(){
