@@ -28,7 +28,7 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter;
 
 
 public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
-   private static final Logger LOGGER = Logger.getLogger(Mdl2PharmMLWrapper.class);
+   private static final Logger LOG = Logger.getLogger(Mdl2PharmMLWrapper.class);
 
    public void doGenerate(final Resource resource, final IFileSystemAccess fsa) {
         String relativeResourcePath = resource.getURI().toPlatformString(true);
@@ -54,15 +54,15 @@ public class Mdl2PharmMLWrapper extends MdlPrinter implements IGenerator {
        EList<Diagnostic> errors = resource.getErrors();
        EList<Diagnostic> warnings = resource.getWarnings();
        if (!warnings.isEmpty()) {
-           LOGGER.warn(warnings.size() + " warning(s) encountered in parsing MDL file " + src.getAbsolutePath());
+           LOG.warn(warnings.size() + " warning(s) encountered in parsing MDL file " + src.getAbsolutePath());
            for (Diagnostic w : warnings) {
-               LOGGER.warn(w);
+               LOG.warn(w);
            }
        }
        if (!errors.isEmpty()) {
-           LOGGER.error(errors.size() + " errors encountered in parsing MDL file " + src.getAbsolutePath());
+           LOG.error(errors.size() + " errors encountered in parsing MDL file " + src.getAbsolutePath());
            for (Diagnostic e : errors) {
-               LOGGER.error(e);
+               LOG.error(e);
            }
            throw new ParseException(String.format("Unable to parse MDL file %1$s; %2$d error(s) encountered; see the log output.",
                src.getAbsolutePath(), errors.size()));
