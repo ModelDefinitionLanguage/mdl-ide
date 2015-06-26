@@ -4,11 +4,13 @@ import eu.ddmore.converter.mdlprinting.MdlPrinter
 import org.ddmore.mdl.mdl.MOGObject
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
+import java.io.File
 
 class Mdl2PharmML{
 
 	//Convert one MOG to PharmML
-  	def convertToPharmML(MOGObject mog, String fileName){
+  	def convertToPharmML(MOGObject mog, String filePath) {
+  	    val fileName = new File(filePath).getName();
   		val mdlPrinter = MdlPrinter::getInstance();
 		val ReferenceResolver resolver = new ReferenceResolver(mog); 
 		val MathPrinter mathPrinter = new MathPrinter(resolver);
