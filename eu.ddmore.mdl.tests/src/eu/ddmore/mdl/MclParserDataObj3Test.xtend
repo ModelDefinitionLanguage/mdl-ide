@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
-class MclParserDataObj2Test {
+class MclParserDataObj3Test {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
@@ -26,14 +26,15 @@ warfarin_PK_v2_dat = dataobj{
 		AGE : { use  is covariate  }
 		SEX : { use is covariate, categories = [male, female], 
 				define={ 0 as male,  1 as female} }
-		AMT : { use  is amt , define={ 1 as GUT } }
-		DVID : { use  is dvid, define = Y }
+		AMT : { use  is amt, define={ 1 as GUT } }
+		DVID : { use  is dvid, define = { 1 as Y, 2 as PCA } }
 		DV : { use  is dv }
 		MDV : { use  is mdv}
 	}
 
 	DATA_DERIVED_VARIABLES{
 		DT : { column=TIME, condition=AMT > 0 }
+		PCA : { column=DV, categories=[dead, alive], define={1 as dead, 2 as alive, 3 as alive} }
 	}
 	
 	SOURCE {

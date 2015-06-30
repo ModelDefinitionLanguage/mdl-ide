@@ -1,4 +1,4 @@
-package eu.ddmore.mdl
+package eu.ddmore.mdl.utils
 
 import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.EquationDefinition
@@ -10,11 +10,13 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
-import static extension eu.ddmore.mdl.MclConverter.getString
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.MdlInjectorProvider
+import eu.ddmore.mdl.mdl.PropertyStatement
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
-class MclConverterTest {
+class ExpressionConverterTest {
 	@Inject extension ParseHelper<Mcl>
 	
 	@Test
@@ -33,7 +35,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
 "(GUT*KA) when T>=TLAG,
-0 otherwise", eqn.expression.getString)
+0 otherwise", eqn.expression.convertToString)
 	}
 
 	@Test
@@ -50,7 +52,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
-		Assert::assertEquals("10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))", eqn.expression.getString)
+		Assert::assertEquals("10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))", eqn.expression.convertToString)
 	}
 	
 	@Test
@@ -64,7 +66,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
-		Assert::assertEquals("10<22==true", eqn.expression.getString)
+		Assert::assertEquals("10<22==true", eqn.expression.convertToString)
 	}
 
 	@Test
@@ -87,7 +89,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 "(10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))) when 10<22==!true,
 ((GUT*KA) when T>=TLAG,
 0 otherwise) when KA&&GUT||false,
-INF otherwise", eqn.expression.getString)
+INF otherwise", eqn.expression.convertToString)
 	}
 	
 		@Test
@@ -101,7 +103,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
-		Assert::assertEquals("\"doo\"", eqn.expression.getString)
+		Assert::assertEquals("\"doo\"", eqn.expression.convertToString)
 	}
 
 		@Test
@@ -118,7 +120,23 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
-		Assert::assertEquals("[KA,4,true,\"help\",log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))),1+2+3*4+5]", eqn.expression.getString)
+		Assert::assertEquals("[KA,4,true,\"help\",log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))),1+2+3*4+5]", eqn.expression.convertToString)
+	}
+
+		@Test
+	def void testConverter7(){
+		val mcl =  '''
+warfarin_PK_ODE_mdl = dataobj {
+	DATA_INPUT_VARIABLES{
+	} # end MODEL_PREDICTION
+	SOURCE
+		set file is nonmem
+	}
+	
+} # end of model object
+		'''.parse
+		val eqn = mcl.objects.head.blocks.last.statements.last as PropertyStatement
+		Assert::assertEquals("nonmem", eqn.properties.head.expression.convertToString)
 	}
 
 	

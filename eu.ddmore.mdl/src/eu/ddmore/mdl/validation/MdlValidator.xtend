@@ -3,14 +3,16 @@
  */
 package eu.ddmore.mdl.validation
 
+import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.BlockArgument
+import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.ForwardDeclaration
+import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.validation.Check
-import eu.ddmore.mdl.mdl.BlockArguments
 
 //import org.eclipse.xtext.validation.Check
 
@@ -28,12 +30,15 @@ class MdlValidator extends AbstractMdlValidator {
 
 	extension BlockArgumentValidationHelper movh = new BlockArgumentValidationHelper
 	extension BlockValidationHelper blokHelper = new BlockValidationHelper
+	extension ListValidationHelper listHelper = new ListValidationHelper
 
 	// Block arguments validation
 	public static val UNKNOWN_BLOCK_ARG_DECL = "eu.ddmore.mdl.validation.UnknownBlockArgDecl"
 	public static val UNKNOWN_BLOCK_ARG_PROP = "eu.ddmore.mdl.validation.UnknownBlockArgProp"
 	public static val MANDATORY_BLOCK_ARG_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockArgMissing"
 	public static val MANDATORY_BLOCK_PROP_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockPropMissing"
+	public static val MANDATORY_LIST_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryAttributeMissing"
+	public static val MANDATORY_LIST_KEY_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryKeyAttributeMissing"
 
 	// Block validation
 	public static val UNKNOWN_BLOCK = "eu.ddmore.mdl.validation.UnknownBlock"
@@ -88,27 +93,6 @@ class MdlValidator extends AbstractMdlValidator {
 			}
 				
 		}
-//		if(eContainer instanceof MclObject){
-//			val mdlObj = eContainer as MclObject
-//			if(mdlObj.mdlObjType == MDLOBJ){
-//				if(!identifier.isModelBlock){
-//				}
-//			}
-//		}
-//		if (eContainer instanceof BlockStatement) {
-//			val blkStatement = eContainer as BlockStatement
-//			if (!identifier.isModelSubBlock) {
-//				error("block '" + identifier + "' cannot be used as a sub-block",
-//					MdlPackage.eINSTANCE.blockStatement_Identifier, WRONG_SUBBLOCK,
-//					identifier)
-//			} else if (!identifier.subBlockHasCorrectParent(blkStatement.identifier)) {
-//				// recognised sub-block but in the wrong place
-//				error("sub-block '" + identifier + "' cannot be used in the '" + blkStatement.identifier + "' block",
-//						MdlPackage.eINSTANCE.blockStatement_Identifier,
-//						WRONG_PARENT_BLOCK, identifier)
-//
-//			}
-//		}
 	}
 
 
@@ -125,6 +109,31 @@ class MdlValidator extends AbstractMdlValidator {
 						MdlPackage.eINSTANCE.valuePair_ArgumentName, UNKNOWN_BLOCK_ARG_PROP, blkArg.argumentName)
 				}
 			}
+		}
+	}
+	
+	@Check
+	def validateAttributeList(ListDefinition it){
+		if(list.isKeyAttributeDefined){
+			list.unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
+				MdlPackage.eINSTANCE.listDefinition_List, MANDATORY_LIST_ATT_MISSING, name) ]
+		}		
+		else{
+			error("mandatory key attribute is missing in list.",
+				MdlPackage.eINSTANCE.listDefinition_List, MANDATORY_LIST_KEY_ATT_MISSING, "")
+		}
+	}
+
+	@Check
+	def validateAttributeList(AnonymousListStatement it){
+		if(list.isKeyAttributeDefined){
+			list.unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
+				MdlPackage.eINSTANCE.anonymousListStatement_List, MANDATORY_LIST_ATT_MISSING, name) ]
+			
+		}
+		else{
+			error("mandatory key attribute is missing in list.",
+				MdlPackage.eINSTANCE.anonymousListStatement_List, MANDATORY_LIST_KEY_ATT_MISSING, "")
 		}
 	}
 }

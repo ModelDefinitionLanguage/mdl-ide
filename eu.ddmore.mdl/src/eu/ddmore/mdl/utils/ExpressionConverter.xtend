@@ -1,4 +1,4 @@
-package eu.ddmore.mdl
+package eu.ddmore.mdl.utils
 
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
@@ -20,15 +20,24 @@ import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
+import eu.ddmore.mdl.mdl.EnumExpression
 
-public class MclConverter {
+public class ExpressionConverter {
 	
+	public def static String convertToString(Expression it){
+		getString
+	}
+
 	def static dispatch String getString(Expression exp){
-		getString(exp)
+		throw new IllegalStateException("Bug. Concrete dispatch method missing: " + exp.class.simpleName );
 	}
 	
 	def static dispatch String getString(OrExpression exp){
 		exp.leftOperand.getString + (exp.feature ?: "") + exp.rightOperand?.getString
+	}
+	
+	def static dispatch String getString(EnumExpression exp){
+		exp.enumValue
 	}
 	
 	def static dispatch String getString(AndExpression exp){

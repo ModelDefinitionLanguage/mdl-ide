@@ -8,6 +8,7 @@ import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.ddmore.libpharmml.ILibPharmML;
@@ -24,7 +25,7 @@ public class LibPharmMLIntegrationTest {
 
     private static final Logger LOG = Logger.getLogger(LibPharmMLIntegrationTest.class);
 
-    @Test
+    @Ignore
     public void shouldValidatePharmMLResource() throws IOException {
         ILibPharmML libPharmML = PharmMlFactory.getInstance().createLibPharmML();
         InputStream in = null;

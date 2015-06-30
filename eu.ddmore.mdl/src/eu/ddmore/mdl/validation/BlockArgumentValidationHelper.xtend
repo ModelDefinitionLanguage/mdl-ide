@@ -5,9 +5,7 @@ import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdl.List
 import java.util.HashSet
-import eu.ddmore.mdl.mdl.BlockArgument
 
 class BlockArgumentValidationHelper {
 	
@@ -118,7 +116,8 @@ class BlockArgumentValidationHelper {
 				objectName = OBJECT_ARG
 				parentName = parent.mdlObjType
 			}
-			BlockStatement case parent.eContainer instanceof MclObject && blkArgPropNames.containsKey((parent.eContainer as MclObject).mdlObjType): {
+			BlockStatement case parent.eContainer instanceof MclObject
+				 && blkArgPropNames.containsKey((parent.eContainer as MclObject).mdlObjType): {
 				objectName = (parent.eContainer as MclObject).mdlObjType 
 				parentName = parent.identifier
 			}

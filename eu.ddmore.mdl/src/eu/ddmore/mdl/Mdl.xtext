@@ -30,16 +30,17 @@ ForwardDeclaration:
 Statement:
 	EquationDefinition|TransformedDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|PropertyStatement|
-	AnonymousListStatement
+	AnonymousListStatement|EstimateDefinition
 ;
 
 
 EstimateRange returns Expression:
-	{EstimateRange}(exclusiveLow ?= '<(' | '<[') low=Number? ',' initial=Number (',' high=Number)? (exclusiveHigh ?= ')>' | ']>')
+	{EstimateRange}(exclusiveLow ?= '(' | '[') low=Number? ',' initial=Number (',' high=Number)? (exclusiveHigh ?= ')' | ']')
 ;
 
 SymbolDefinition:
-	EquationDefinition | ListDefinition| ForwardDeclaration | CategoryDefinition| RandomVariableDefinition | TransformedDefinition
+	EquationDefinition | ListDefinition| ForwardDeclaration | CategoryDefinition| RandomVariableDefinition | TransformedDefinition|
+		EstimateDefinition
 ;
 
 EquationDefinition:
@@ -55,19 +56,21 @@ RandomVariableDefinition:
 ;
 
 ListDefinition:
-	name = ID ":" list = List ';'?
+	name = ID ":" list = AttributeList ';'?
 ;
 
 AnonymousListStatement:
-	List ';'?
+	list = AttributeList ';'?
 ;
 
 
 PropertyStatement:
-	 SET properties+=Argument (',' properties+=Argument)* ';'?
+	 SET properties+=ValuePair (',' properties+=ValuePair)* ';'?
 ;
 
-
+EstimateDefinition:
+	name = ID =>"~=" estRange=EstimateRange
+;
 
 CategoricalDefinition:
 	{CategoricalDefinition} CATEGORICAL '=' '[' categories += CategoryDefinition (=> ',' categories += CategoryDefinition)* ']' 
@@ -77,27 +80,19 @@ CategoryDefinition:
 	name = ID
 ;
 
-List:
-	BEGIN arguments=Arguments END
+AttributeList:
+	BEGIN attributes += Attribute (=> ',' attributes += Attribute)*  END
 ;
 
-Arguments:
-	{Arguments} arguments += Argument (=> ',' arguments += Argument)* 
-;
-
-Argument:
+Attribute:
 	ValuePair|
 	CategoricalDefinition
 ;
 
 ValuePair:
-	{ValuePair}argumentName = AttributeName ("=" (expression = Expression
-									| expression = InfoMapping) 
-								| IS expression = EnumExpression)
-;
-
-InfoMapping:
-	{InfoMapping} BEGIN mappings+=List (',' mappings+=List)* END
+	{ValuePair}argumentName = AttributeName ("=" expression = Expression
+								| IS expression = EnumExpression
+								| '=' expression = MappingExpression)
 ;
 
 AttributeName:
@@ -105,8 +100,21 @@ AttributeName:
 ;
 
 EnumExpression returns Expression:
-	{EnumExpression}ID
+	{EnumExpression}enumValue=ID
 ;
+
+MappingExpression returns Expression:
+	BEGIN
+		(attLists+=AttributeList (',' attLists+=AttributeList)* |
+			attList+=MappingPair (',' attLists+=MappingPair)*
+		)
+	END
+;
+
+MappingPair:
+	leftOperand=OrExpression AS rightOperand=OrExpression
+;
+
 
 Expression:
 	OrExpression
@@ -166,7 +174,6 @@ PrimaryExpression returns Expression:
 	| BuiltinFunctionCall
 	| WhenExpression
 	| ParExpression
-	| EstimateRange
 	;
 
 
@@ -198,12 +205,15 @@ SymbolReference:
 
 
 BuiltinFunctionCall returns Expression:
-	{BuiltinFunctionCall} func=ID '(' argList=(UnnamedFuncArguments
-							| Arguments)? ')'
+	{BuiltinFunctionCall} func=ID '(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
 ;
 
-UnnamedFuncArguments:
-	args+=Expression (=>',' args+=Expression)* 
+NamedFuncArguments returns FuncAgument:
+	{NamedFuncArguments} arguments += ValuePair (=> ',' arguments += ValuePair)* 
+;
+
+UnnamedFuncArguments returns FuncAgument:
+	{UnnamedFuncArguments} args+=Expression (=>',' args+=Expression)* 
 ;
 
 BooleanLiteral returns Expression :
@@ -243,6 +253,8 @@ terminal BLOCKID:
 ;
 
 terminal IS: 'is';
+
+terminal AS: 'as';
 
 terminal SET: 'set';
 
