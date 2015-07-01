@@ -13,10 +13,10 @@ import com.google.inject.Inject;
  * 
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#labelProvider
  */
-public class MdlLabelProvider extends DefaultEObjectLabelProvider {
+public class OrigMdlLabelProvider extends DefaultEObjectLabelProvider {
 
 	@Inject
-	public MdlLabelProvider(AdapterFactoryLabelProvider delegate) {
+	public OrigMdlLabelProvider(AdapterFactoryLabelProvider delegate) {
 		super(delegate);
 	}
 

@@ -3,23 +3,17 @@
 */
 package eu.ddmore.mdl.ui.contentassist;
 
-import java.util.List;
-
-import eu.ddmore.mdl.services.MdlGrammarAccess;
-import org.eclipse.jface.viewers.StyledString;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtext.ui.IImageHelper;
-import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
-import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
-import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
 import com.google.inject.Inject;
+
+import eu.ddmore.mdl.services.MdlGrammarAccess;
 
 /**
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
  */
 
-public class MdlProposalProvider extends AbstractMdlProposalProvider {
+public class OrigMdlProposalProvider extends AbstractMdlProposalProvider {
 		
 	@Inject MdlGrammarAccess grammarAccess;
 	@Inject IImageHelper imageHelper;
@@ -132,13 +126,13 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 //		}
 //	} 
 		
-	private void addProposals(ContentAssistContext context, ICompletionProposalAcceptor acceptor, 
-			List<String> attributes, Image img){
-		for (String proposal: attributes){
-			StyledString displayedString = new StyledString();
-			displayedString.append(proposal);
-			ConfigurableCompletionProposal p = doCreateProposal(proposal, displayedString, img, 1000, context);
-			acceptor.accept(p);
-		}
-	}
+//	private void addProposals(ContentAssistContext context, ICompletionProposalAcceptor acceptor, 
+//			List<String> attributes, Image img){
+//		for (String proposal: attributes){
+//			StyledString displayedString = new StyledString();
+//			displayedString.append(proposal);
+//			ConfigurableCompletionProposal p = doCreateProposal(proposal, displayedString, img, 1000, context);
+//			acceptor.accept(p);
+//		}
+//	}
 }

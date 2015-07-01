@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 
 import eu.ddmore.mdl.services.MdlGrammarAccess;
 
-public class MdlQuickfixProvider extends DefaultQuickfixProvider {
+public class OrigMdlQuickfixProvider extends DefaultQuickfixProvider {
 	
 	@Inject MdlGrammarAccess grammarAccess;    
 
