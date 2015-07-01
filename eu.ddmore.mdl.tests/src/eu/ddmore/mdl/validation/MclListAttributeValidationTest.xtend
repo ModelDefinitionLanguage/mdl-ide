@@ -43,7 +43,7 @@ class MclListAttributeValidationTest {
 			SOURCE{	}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
 			MdlValidator::MANDATORY_LIST_KEY_ATT_MISSING,
 			"mandatory key attribute is missing in list"
 		)
@@ -61,7 +61,7 @@ class MclListAttributeValidationTest {
 			SOURCE{	}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
 			MdlValidator::MANDATORY_LIST_ATT_MISSING,
 			"mandatory attribute 'define'"
 		)
@@ -79,7 +79,7 @@ class MclListAttributeValidationTest {
 			SOURCE{	}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
 			MdlValidator::MANDATORY_LIST_ATT_MISSING,
 			"mandatory attribute 'categories'"
 		)
@@ -91,7 +91,7 @@ class MclListAttributeValidationTest {
 			DECLARED_VARIABLES{ Y }
 			
 			DATA_INPUT_VARIABLES{
-				dvid : { use is dv, define = { 0 as Y, 1 as PCA } }
+				dvid : { use is dvid, define = { 0 as Y, 1 as PCA } }
 				dv : { use is dv }
 			}
 			DATA_DERIVED_VARIABLES{
@@ -102,6 +102,97 @@ class MclListAttributeValidationTest {
 		}'''.parse
 		
 		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testAnonymousCompartmentAttributesOK(){
+		val mcl = '''bar = mdlobj(idv T) {
+			VARIABILITY_LEVELS{
+				ID { type is idv, level=1 }
+			}
+			
+			STRUCTURAL_PARAMETERS{
+				KA
+				ALAG1
+				F1
+				V
+				CL
+			}
+			
+			MODEL_PREDICTION{
+	  			COMPARTMENT {
+					INPUT_KA:   {type is depot, cmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
+					CENTRAL:    {type is compartment, cmt=2}
+                    			{type is elimination, cmt=2, from=CENTRAL, v=V, cl=CL}
+   				}# end COMPARTMENT
+				CONC=CENTRAL/V
+			} # end MODEL_PREDICTION
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testAnonymousCompartmentAttributesNoKey(){
+		val mcl = '''bar = mdlobj(idv T) {
+			VARIABILITY_LEVELS{
+				ID { type is idv, level=1 }
+			}
+			
+			STRUCTURAL_PARAMETERS{
+				KA
+				ALAG1
+				F1
+				V
+				CL
+			}
+			
+			MODEL_PREDICTION{
+	  			COMPARTMENT {
+					INPUT_KA:   {type is depot, cmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
+					CENTRAL:    {type is compartment, cmt=2}
+                    			{cmt=2, from=CENTRAL, v=V, cl=CL}
+   				}# end COMPARTMENT
+				CONC=CENTRAL/V
+			} # end MODEL_PREDICTION
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
+			MdlValidator::MANDATORY_LIST_KEY_ATT_MISSING,
+			"mandatory key attribute is missing in list"
+		)
+	}
+
+
+	@Test
+	def void testUnrecognizedAttribute(){
+		val mcl = '''bar = mdlobj(idv T) {
+			VARIABILITY_LEVELS{
+				ID { type is idv, level=1 }
+			}
+			
+			STRUCTURAL_PARAMETERS{
+				KA
+				ALAG1
+				F1
+				V
+				CL
+			}
+			
+			MODEL_PREDICTION{
+	  			COMPARTMENT {
+					INPUT_KA:   {type is depot, blahblah=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
+					CENTRAL:    {type is compartment, cmt=2}
+                    			{cmt=2, from=CENTRAL, v=V, cl=CL}
+   				}# end COMPARTMENT
+				CONC=CENTRAL/V
+			} # end MODEL_PREDICTION
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::UNRECOGNIZED_LIST_ATT_MISSING,
+			"attribute 'blahblah' is not recognised in this context"
+		)
 	}
 
 }

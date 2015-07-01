@@ -105,7 +105,7 @@ EnumExpression returns Expression:
 
 MappingExpression returns Expression:
 	BEGIN
-		(attLists+=AttributeList (',' attLists+=AttributeList)* |
+		(attLists+=MappingList (',' attLists+=MappingList)* |
 			attList+=MappingPair (',' attLists+=MappingPair)*
 		)
 	END
@@ -115,6 +115,9 @@ MappingPair:
 	leftOperand=OrExpression AS rightOperand=OrExpression
 ;
 
+MappingList:
+	BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
+;
 
 Expression:
 	OrExpression

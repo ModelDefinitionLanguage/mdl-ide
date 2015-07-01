@@ -21,12 +21,18 @@ import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.CategoricalDefinition
+import eu.ddmore.mdl.mdl.SymbolDefinition
 
 public class ExpressionConverter {
 	
 	public def static String convertToString(Expression it){
 		getString
 	}
+
+	def static String convertToString(CategoricalDefinition defn)'''
+		[«FOR c : defn.categories SEPARATOR ','»
+			«(c as SymbolDefinition).name»«ENDFOR»]'''
 
 	def static dispatch String getString(Expression exp){
 		throw new IllegalStateException("Bug. Concrete dispatch method missing: " + exp.class.simpleName );

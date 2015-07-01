@@ -26,56 +26,149 @@ class ListValidationHelper {
 	}
 	
 	static class ListDefinition {
-		String key
 		String keyValue
 		List<AttributeDefn> attributes 
 	}
 	
+	static class BlockListDefinition {
+		String key
+		List<ListDefinition> listDefns
+	}
+	
 	// owning block -> key attribute -> key value -> attributes associated with key
 	static val attDefns = #{ 
-		"DATA_INPUT_VARIABLES" -> #[
-				new ListDefinition => [ key= 'use' keyValue='covariate' attributes = #[
-					 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categories', null, false),
-					 new AttributeDefn('define', 'categories', false)
-					 ] 
-				],
-				new ListDefinition => [ key= 'use' keyValue='amt' attributes = #[
-					 new AttributeDefn('use', null, true), new AttributeDefn('define', null, false), new AttributeDefn('variable', null, false)
-					 ] 
-				],
-				new ListDefinition => [ key= 'use' keyValue='dv' attributes = #[
-					 new AttributeDefn('use', null, true), new AttributeDefn('variable', null, false)
-					 ] 
-				],
-				new ListDefinition => [ key= 'use' keyValue='idv' attributes = #[
-					 new AttributeDefn('use', null, true)
-					 ] 
-				],
-				new ListDefinition => [ key= 'use' keyValue='id' attributes = #[
-					 new AttributeDefn('use', null, true)
-					 ] 
-				],
-				new ListDefinition => [ key= 'use' keyValue='mdv' attributes = #[
-					 new AttributeDefn('use', null, true)
-					 ] 
-				],
-				new ListDefinition => [ key= 'use' keyValue='rate' attributes = #[
-					 new AttributeDefn('use', null, true)
-					 ] 
-				],
-				new ListDefinition => [ key= 'use' keyValue='dvid' attributes = #[
-					 new AttributeDefn('use', null, true), new AttributeDefn('define', null, true)
-					 ] 
-				]
-			],
-		"DATA_DERIVED_VARIABLES" -> #[
-				new ListDefinition => [ key= 'column' keyValue=null attributes = #[
-					 new AttributeDefn('column', null, true), new AttributeDefn('condition', null, false),
-					 	new AttributeDefn('categories', null, false), new AttributeDefn('define', 'categories', false) 
-					 ] 
-				]
+		"DATA_INPUT_VARIABLES" -> (
+			new BlockListDefinition => [
+				key = 'use'
+				listDefns = newArrayList(
+					new ListDefinition => [  keyValue='covariate' attributes = #[
+						 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categories', null, false),
+						 new AttributeDefn('define', 'categories', false)
+						 ] 
+					],
+					new ListDefinition => [keyValue='amt' attributes = #[
+						 new AttributeDefn('use', null, true), new AttributeDefn('define', null, false), new AttributeDefn('variable', null, false)
+						 ] 
+					],
+					new ListDefinition => [keyValue='dv' attributes = #[
+						 new AttributeDefn('use', null, true), new AttributeDefn('variable', null, false)
+						 ] 
+					],
+					new ListDefinition => [keyValue='idv' attributes = #[
+						 new AttributeDefn('use', null, true)
+						 ] 
+					],
+					new ListDefinition => [keyValue='id' attributes = #[
+						 new AttributeDefn('use', null, true)
+						 ] 
+					],
+					new ListDefinition => [keyValue='mdv' attributes = #[
+						 new AttributeDefn('use', null, true)
+						 ] 
+					],
+					new ListDefinition => [keyValue='rate' attributes = #[
+						 new AttributeDefn('use', null, true)
+						 ] 
+					],
+					new ListDefinition => [keyValue='dvid' attributes = #[
+						 new AttributeDefn('use', null, true), new AttributeDefn('define', null, true)
+						 ] 
+					]
+				)
 			]
-		}
+		),
+		"DATA_DERIVED_VARIABLES" -> (
+			new BlockListDefinition => [
+				key = 'column'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue=null attributes = #[
+						 new AttributeDefn('column', null, true), new AttributeDefn('condition', null, false),
+						 	new AttributeDefn('categories', null, false), new AttributeDefn('define', 'categories', false) 
+						 ] 
+					]
+				)
+			]
+		),
+		"VARIABILITY_LEVELS" -> (
+			new BlockListDefinition => [
+				key = 'type'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue=null attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('level', null, true)
+						 ]
+					]
+				)
+			]
+		),
+		"COMPARTMENT" -> (
+			new BlockListDefinition => [
+				key = 'type'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue='depot' attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('cmt', null, true),
+						 new AttributeDefn('to', null, true), new AttributeDefn('ka', null, true),
+						 new AttributeDefn('tlag', null, true), new AttributeDefn('finput', null, false)
+						 ]
+					],
+					new ListDefinition => [ keyValue='compartment' attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('cmt', null, true)
+						 ]
+					],
+					new ListDefinition => [ keyValue='elimination' attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('cmt', null, true),
+						 new AttributeDefn('from', null, true), new AttributeDefn('v', null, true),
+						 new AttributeDefn('cl', null, true)
+						 ]
+					],
+					new ListDefinition => [ keyValue='distribution' attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('cmt', null, true),
+						 new AttributeDefn('kin', null, true), new AttributeDefn('kout', null, true),
+						 new AttributeDefn('from', null, true)
+						 ]
+					]
+				)
+			]
+		),
+		"DEQ" -> (
+			new BlockListDefinition => [
+				key = 'deriv'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue=null attributes = #[
+						 new AttributeDefn('deriv', null, true), new AttributeDefn('init', null, false),
+						 new AttributeDefn('x0', null, false)
+						 ]
+					]
+				)
+			]
+		),
+		"VARIABILITY" -> (
+			new BlockListDefinition => [
+				key = 'type'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue=null attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('parameter', null, true),
+						 new AttributeDefn('value', null, true)
+						 ]
+					]
+				)
+			]
+		),
+		"COVARIATES" -> (
+			new BlockListDefinition => [
+				key = 'type'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue='categorical' attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('categories', null, true)
+						 ]
+					],
+					new ListDefinition => [ keyValue='continuous' attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('value', null, true) 
+						 ]
+					]
+				)
+			]
+		)
+	}
 	
 	def isKeyAttributeDefined(AttributeList it){
 				// expect AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
@@ -85,9 +178,10 @@ class ListValidationHelper {
 			var expectedAttributes = new ArrayList<ListDefinition>()
 			while(iter.hasNext && expectedAttributes.isEmpty){
 				val att = iter.next
-				expectedAttributes.addAll(attDefns.get(parent.identifier).filter[at| 
+				val blockDefn = attDefns.get(parent.identifier)
+				expectedAttributes.addAll(blockDefn.listDefns.filter[at|
 					switch(att){
-						ValuePair case att.argumentName == at.key:{
+						ValuePair case att.argumentName == blockDefn.key:{
 							if(at.keyValue != null){
 								val keyVal = att.expression.convertToString
 								keyVal == at.keyValue
@@ -113,9 +207,10 @@ class ListValidationHelper {
 			var expectedAttributes = new ArrayList<ListDefinition>()
 			while(iter.hasNext && expectedAttributes.isEmpty){
 				val att = iter.next
-				expectedAttributes.addAll(attDefns.get(parent.identifier).filter[at| 
+				val blockDefn = attDefns.get(parent.identifier)
+				expectedAttributes.addAll(blockDefn.listDefns.filter[at| 
 					switch(att){
-						ValuePair case att.argumentName == at.key:{
+						ValuePair case att.argumentName == blockDefn.key:{
 							if(at.keyValue != null){
 								val keyVal = att.expression.convertToString
 								keyVal == at.keyValue
@@ -170,6 +265,66 @@ class ListValidationHelper {
 				default: false
 			}
 		]
+	}
+	
+	def getAttributeName(Attribute attrib){
+		switch(attrib){
+			ValuePair: attrib.argumentName
+			CategoricalDefinition: CATEGORIES_KWD 
+		}
+	}
+
+	def getAttributeValueString(Attribute attrib){
+		switch(attrib){
+			ValuePair: attrib.expression.convertToString
+			CategoricalDefinition: attrib.convertToString
+		}
+	}
+
+	def attributeDefnExists(ListDefinition it, Attribute att){
+		attributes.exists[attrib|
+			attrib.name == att.attributeName
+		]
+	}
+	
+	def attributeExistsInAnyListDefn(BlockListDefinition it, Attribute att){
+		it.listDefns.exists[ld| ld.attributeDefnExists(att)]
+	}
+
+	def getListDefnByKeyValue(List<ListDefinition> defns, String queryValue){
+		defns.filter[d | d.keyValue == queryValue]
+	}
+
+
+	def getKeyValue(AttributeList attList, String key){
+		attList.attributes.findFirst[at | at.attributeName == key].attributeValueString
+	}
+	
+	def getListDefnByKeyValue(BlockListDefinition it, String keyValQuery){
+		listDefns.findFirst[defn| defn.keyValue == keyValQuery ]
+	}
+
+	def attributeRecognised(Attribute it){
+		// expect Attribute->AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
+		// get key from parent list
+		val parentList = eContainer as AttributeList
+		val parentBlock = eContainer.eContainer.eContainer as BlockStatement
+		if(attDefns.containsKey(parentBlock.identifier)){
+			val blkDefn = attDefns.get(parentBlock.identifier)
+			val keyVal = parentList.getKeyValue(blkDefn.key)
+			val listDefn = blkDefn.getListDefnByKeyValue(keyVal)
+			if(listDefn != null){
+				// there is a listDefn so check if attribute is in list
+				listDefn.attributeDefnExists(it)
+			}
+			else{
+				// no list definition so need to check all attributes in list definition
+				blkDefn.attributeExistsInAnyListDefn(it)
+			} 
+		}
+		else{
+			false
+		}
 	}
 
 }

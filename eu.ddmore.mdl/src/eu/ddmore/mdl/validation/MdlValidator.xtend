@@ -3,12 +3,12 @@
  */
 package eu.ddmore.mdl.validation
 
-import eu.ddmore.mdl.mdl.AnonymousListStatement
+import eu.ddmore.mdl.mdl.Attribute
+import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockArgument
 import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.ForwardDeclaration
-import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ValuePair
@@ -37,6 +37,9 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val UNKNOWN_BLOCK_ARG_PROP = "eu.ddmore.mdl.validation.UnknownBlockArgProp"
 	public static val MANDATORY_BLOCK_ARG_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockArgMissing"
 	public static val MANDATORY_BLOCK_PROP_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockPropMissing"
+	
+	// List attribute validation
+	public static val UNRECOGNIZED_LIST_ATT_MISSING = "eu.ddmore.mdl.validation.UnrecognisedAttribute"
 	public static val MANDATORY_LIST_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryAttributeMissing"
 	public static val MANDATORY_LIST_KEY_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryKeyAttributeMissing"
 
@@ -113,27 +116,22 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 	
 	@Check
-	def validateAttributeList(ListDefinition it){
-		if(list.isKeyAttributeDefined){
-			list.unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
-				MdlPackage.eINSTANCE.listDefinition_List, MANDATORY_LIST_ATT_MISSING, name) ]
+	def validateAttributeList(AttributeList it){
+		if(isKeyAttributeDefined){
+			unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
+				MdlPackage.eINSTANCE.attributeList_Attributes, MANDATORY_LIST_ATT_MISSING, name) ]
 		}		
 		else{
 			error("mandatory key attribute is missing in list.",
-				MdlPackage.eINSTANCE.listDefinition_List, MANDATORY_LIST_KEY_ATT_MISSING, "")
+				MdlPackage.eINSTANCE.attributeList_Attributes, MANDATORY_LIST_KEY_ATT_MISSING, "")
 		}
 	}
 
 	@Check
-	def validateAttributeList(AnonymousListStatement it){
-		if(list.isKeyAttributeDefined){
-			list.unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
-				MdlPackage.eINSTANCE.anonymousListStatement_List, MANDATORY_LIST_ATT_MISSING, name) ]
-			
-		}
-		else{
-			error("mandatory key attribute is missing in list.",
-				MdlPackage.eINSTANCE.anonymousListStatement_List, MANDATORY_LIST_KEY_ATT_MISSING, "")
+	def validateAttribute(Attribute it){
+		if(eContainer instanceof AttributeList && !attributeRecognised){
+			error("attribute '" + attributeName + "' is not recognised in this context.",
+				MdlPackage.eINSTANCE.valuePair_ArgumentName, UNRECOGNIZED_LIST_ATT_MISSING, attributeName)
 		}
 	}
 }
