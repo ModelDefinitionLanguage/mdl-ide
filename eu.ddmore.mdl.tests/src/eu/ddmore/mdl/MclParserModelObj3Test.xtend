@@ -19,7 +19,7 @@ class MclParserModelObj3Test {
 warfarin_PK_2Compartments_mdl = mdlobj (idv TIME) {
    COVARIATES{
       WT
-      logtWT = logtWT(WT/70)
+      logtWT = log(WT/70)
    }# end COVARIATES
 
    VARIABILITY_LEVELS{

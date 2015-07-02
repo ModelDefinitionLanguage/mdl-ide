@@ -13,6 +13,7 @@ import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.validation.Check
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 //import org.eclipse.xtext.validation.Check
 
@@ -31,6 +32,7 @@ class MdlValidator extends AbstractMdlValidator {
 	extension BlockArgumentValidationHelper movh = new BlockArgumentValidationHelper
 	extension BlockValidationHelper blokHelper = new BlockValidationHelper
 	extension ListValidationHelper listHelper = new ListValidationHelper
+	extension BuiltinFunctionValidationProvider funcHelper = new BuiltinFunctionValidationProvider
 
 	// Block arguments validation
 	public static val UNKNOWN_BLOCK_ARG_DECL = "eu.ddmore.mdl.validation.UnknownBlockArgDecl"
@@ -42,6 +44,10 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val UNRECOGNIZED_LIST_ATT_MISSING = "eu.ddmore.mdl.validation.UnrecognisedAttribute"
 	public static val MANDATORY_LIST_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryAttributeMissing"
 	public static val MANDATORY_LIST_KEY_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryKeyAttributeMissing"
+
+	// Builtin Function validation
+	public static val UNRECOGNIZED_FUNCTION_NAME = "eu.ddmore.mdl.validation.UnrecognisedFunctionName"
+	public static val INCORRECT_NUM_FUNC_ARGS = "eu.ddmore.mdl.validation.IncorrectNumArgs"
 
 	// Block validation
 	public static val UNKNOWN_BLOCK = "eu.ddmore.mdl.validation.UnknownBlock"
@@ -133,5 +139,15 @@ class MdlValidator extends AbstractMdlValidator {
 			error("attribute '" + attributeName + "' is not recognised in this context.",
 				MdlPackage.eINSTANCE.valuePair_ArgumentName, UNRECOGNIZED_LIST_ATT_MISSING, attributeName)
 		}
+	}
+
+	@Check
+	def validateFunctionCall(BuiltinFunctionCall it){
+		checkFunctionDefn(
+			[fName| error("A function of name '" + fName + "' is not recognised.",
+				MdlPackage.eINSTANCE.builtinFunctionCall_Func, UNRECOGNIZED_FUNCTION_NAME, fName)],
+				 [fName, eArgNum | error("Function '" + fName + "' has the wrong number of arguments. Expected " + eArgNum + ".",
+				MdlPackage.eINSTANCE.builtinFunctionCall_ArgList, INCORRECT_NUM_FUNC_ARGS, fName)]
+				)
 	}
 }
