@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="191">
+<?pde version="3.8"?><target name="eu.ddmore.mdleditor.target" sequenceNumber="195">
 <locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
+<repository location="http://download.eclipse.org/uomo/0.6/kepler/repository/"/>
+</location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.xpand.feature.group" version="2.0.0.v201406030414"/>
 <unit id="org.eclipse.xpand.sdk.feature.group" version="2.0.0.v201406030414"/>
@@ -40,21 +44,6 @@
 <repository location="http://download.walware.de/eclipse-4.4/site-statet-03.04.00/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.ecore.feature.group" version="2.10.2.v20150123-0348"/>
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.10.2.v20150123-0452"/>
-<unit id="org.eclipse.emf.ecore.xcore.feature.group" version="1.2.2.v20150202-0452"/>
-<unit id="org.eclipse.emf.ecore.xcore.sdk.feature.group" version="1.2.2.v20150202-0452"/>
-<unit id="org.eclipse.emf.common.feature.group" version="2.10.1.v20150123-0348"/>
-<unit id="org.eclipse.emf.compare.feature.group" version="3.0.2.201501201328"/>
-<unit id="org.eclipse.emf.codegen.ecore.feature.group" version="2.10.2.v20150123-0452"/>
-<unit id="org.eclipse.emf.validation.feature.group" version="1.8.0.201405281429"/>
-<unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.7.0.v201409021051"/>
-<unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="2.7.0.v201409021027"/>
-<unit id="org.eclipse.emf.mwe.core.feature.group" version="1.3.4.v201409021027"/>
-<unit id="org.eclipse.emf.mwe.sdk.feature.group" version="1.3.4.v201409021027"/>
-<repository location="http://download.eclipse.org/releases/luna/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ecf.core.feature.feature.group" version="1.1.0.v20141221-2352"/>
 <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="3.9.2.v20141221-2352"/>
 <unit id="org.eclipse.ecf.provider.generic.feature.feature.group" version="1.0.0.v20141221-2352"/>
@@ -71,8 +60,19 @@
 <repository location="http://download.eclipse.org/releases/luna/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
-<repository location="http://download.eclipse.org/uomo/0.6/kepler/repository/"/>
+<unit id="org.eclipse.emf.ecore.feature.group" version="2.10.2.v20150123-0348"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.10.2.v20150123-0452"/>
+<unit id="org.eclipse.emf.ecore.xcore.feature.group" version="1.2.2.v20150202-0452"/>
+<unit id="org.eclipse.emf.ecore.xcore.sdk.feature.group" version="1.2.2.v20150202-0452"/>
+<unit id="org.eclipse.emf.common.feature.group" version="2.10.1.v20150123-0348"/>
+<unit id="org.eclipse.emf.compare.feature.group" version="3.0.2.201501201328"/>
+<unit id="org.eclipse.emf.codegen.ecore.feature.group" version="2.10.2.v20150123-0452"/>
+<unit id="org.eclipse.emf.validation.feature.group" version="1.8.0.201405281429"/>
+<unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.7.0.v201409021051"/>
+<unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="2.7.0.v201409021027"/>
+<unit id="org.eclipse.emf.mwe.core.feature.group" version="1.3.4.v201409021027"/>
+<unit id="org.eclipse.emf.mwe.sdk.feature.group" version="1.3.4.v201409021027"/>
+<repository location="http://download.eclipse.org/releases/luna/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.xerces" version="2.9.0.v201101211617"/>
@@ -101,12 +101,12 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.4.0.v20150514-1522"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.4.0-SNAPSHOT/"/>
+<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.4.0.v20150701-1648"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.4-b1"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150520-1251"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/ci/"/>
+<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150701-1608"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/"/>
 </location>
 </locations>
 </target>
