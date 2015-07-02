@@ -4,6 +4,8 @@ import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BooleanLiteral
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.CategoricalDefinition
+import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EstimateRange
 import eu.ddmore.mdl.mdl.Expression
@@ -13,16 +15,14 @@ import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.StringLiteral
+import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
-import eu.ddmore.mdl.mdl.VectorExpression
+import eu.ddmore.mdl.mdl.UnnamedFuncArguments
+import eu.ddmore.mdl.mdl.VectorContent
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
-import eu.ddmore.mdl.mdl.UnnamedFuncArguments
-import eu.ddmore.mdl.mdl.EnumExpression
-import eu.ddmore.mdl.mdl.CategoricalDefinition
-import eu.ddmore.mdl.mdl.SymbolDefinition
 
 public class ExpressionConverter {
 	
@@ -110,7 +110,7 @@ public class ExpressionConverter {
 		[«exp.expression?.getString»]'''
 	
 	
-	def static dispatch String getString(VectorExpression exp)'''
+	def static dispatch String getString(VectorContent exp)'''
 		«FOR e : exp.expressions SEPARATOR ','»
 			«e.getString»«ENDFOR»'''
 	

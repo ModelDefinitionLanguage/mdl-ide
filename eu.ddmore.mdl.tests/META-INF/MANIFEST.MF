@@ -27,5 +27,4 @@ Import-Package: org.apache.commons.io;version="2.0.1",
  org.junit.runners.model;version="4.5.0",
  org.hamcrest.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: eu.ddmore.mdl,
- eu.ddmore.mdl
+Export-Package: eu.ddmore.mdl

@@ -104,11 +104,11 @@ EnumExpression returns Expression:
 ;
 
 MappingExpression returns Expression:
-	BEGIN
+	{MappingExpression}(BEGIN
 		(attLists+=MappingList (',' attLists+=MappingList)* |
 			attList+=MappingPair (',' attLists+=MappingPair)*
 		)
-	END
+	END)
 ;
 
 MappingPair:
@@ -234,10 +234,10 @@ Number hidden():
 	
 
 VectorLiteral returns Expression:
-	{VectorLiteral} '[' expression = VectorExpression ']'
+	{VectorLiteral} '[' expression = VectorContent ']'
 ;	
 
-VectorExpression:
+VectorContent:
 		expressions += Expression (=> ',' expressions += Expression)*
 ;
 

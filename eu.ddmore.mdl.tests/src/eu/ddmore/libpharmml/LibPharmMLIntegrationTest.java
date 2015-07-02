@@ -9,14 +9,6 @@ import java.net.URL;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
-import org.junit.Test;
-
-import eu.ddmore.libpharmml.ILibPharmML;
-import eu.ddmore.libpharmml.IPharmMLResource;
-import eu.ddmore.libpharmml.IPharmMLValidator;
-import eu.ddmore.libpharmml.IValidationError;
-import eu.ddmore.libpharmml.IValidationReport;
-import eu.ddmore.libpharmml.PharmMlFactory;
 
 /**
  * Tests integration with libPharmML
