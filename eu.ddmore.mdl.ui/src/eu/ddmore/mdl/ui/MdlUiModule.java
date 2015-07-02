@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.generator.IOutputConfigurationProvider;
 import org.eclipse.xtext.ui.editor.autoedit.DefaultAutoEditStrategyProvider;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultSemanticHighlightingCalculator;
 
 import com.google.inject.Binder;
 import com.google.inject.Singleton;
@@ -36,6 +37,7 @@ public class MdlUiModule extends eu.ddmore.mdl.ui.AbstractMdlUiModule {
         binder.bind(IOutputConfigurationProvider.class).to(MDLOutputConfigurationProvider.class).in(Singleton.class);
         //TODO: Override automatic editing - annoying } 
         binder.bind(DefaultAutoEditStrategyProvider.class).to(MDLAutoEditStartegyProvider.class).in(Singleton.class);
+        binder.bind(DefaultSemanticHighlightingCalculator.class).to(MdlSemanticHighlightingCalculator.class);
     }
 
     public void init() {
