@@ -153,6 +153,18 @@ class ListValidationHelper {
 				)
 			]
 		),
+		"OBSERVATION" -> (
+			new BlockListDefinition => [
+				key = 'type'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue='categorical' attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('categories', null, true),
+						 new AttributeDefn('probabilities', null, true)
+						 ]
+					]
+				)
+			]
+		),
 		"COVARIATES" -> (
 			new BlockListDefinition => [
 				key = 'type'
