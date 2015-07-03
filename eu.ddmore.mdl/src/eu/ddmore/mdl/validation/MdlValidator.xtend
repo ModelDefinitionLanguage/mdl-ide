@@ -3,17 +3,33 @@
  */
 package eu.ddmore.mdl.validation
 
+import eu.ddmore.mdl.mdl.AdditiveExpression
+import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.Attribute
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockArgument
 import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.mdl.MultiplicativeExpression
+import eu.ddmore.mdl.mdl.OrExpression
+import eu.ddmore.mdl.mdl.RelationalExpression
+import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.mdl.VectorContent
+import eu.ddmore.mdl.mdl.WhenClause
+import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.validation.Check
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.RandomVariableDefinition
+import eu.ddmore.mdl.mdl.EstimateDefinition
+import eu.ddmore.mdl.mdl.TransformedDefinition
 
 //import org.eclipse.xtext.validation.Check
 
@@ -33,6 +49,7 @@ class MdlValidator extends AbstractMdlValidator {
 	extension BlockValidationHelper blokHelper = new BlockValidationHelper
 	extension ListValidationHelper listHelper = new ListValidationHelper
 	extension BuiltinFunctionValidationProvider funcHelper = new BuiltinFunctionValidationProvider
+	extension MclTypeProvider typeProvider = new MclTypeProvider
 
 	// Block arguments validation
 	public static val UNKNOWN_BLOCK_ARG_DECL = "eu.ddmore.mdl.validation.UnknownBlockArgDecl"
@@ -54,6 +71,9 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val WRONG_SUBBLOCK = "eu.ddmore.mdl.validation.WrongSubBlock"
 	public static val WRONG_PARENT_BLOCK = "eu.ddmore.mdl.validation.WrongParentBlock"
 	public static val MANDATORY_BLOCK_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockMissing"
+
+	// Type validation
+	public static val INCOMPATIBLE_TYPES = "eu.ddmore.mdl.validation.IncompatibleTypes"
 
 
 	@Check
@@ -149,5 +169,83 @@ class MdlValidator extends AbstractMdlValidator {
 				 [fName, eArgNum | error("Function '" + fName + "' has the wrong number of arguments. Expected " + eArgNum + ".",
 				MdlPackage.eINSTANCE.builtinFunctionCall_ArgList, INCORRECT_NUM_FUNC_ARGS, fName)]
 				)
+	}
+
+
+	// Type handling	
+	
+	private def (PrimitiveType, PrimitiveType) => void typeError(EStructuralFeature feature){ 
+		[expectedType, actualType |error("Expected " + expectedType + " type, but was " + actualType + ".", feature, INCOMPATIBLE_TYPES) ]
+	}
+	
+			
+	@Check
+	def validateCompatibleTypes(AndExpression e){
+		checkBoolOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.andExpression_LeftOperand),
+			typeError(MdlPackage::eINSTANCE.andExpression_RightOperand))
+	}
+	
+	@Check
+	def validateCompatibleTypes(OrExpression e){
+		checkBoolOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.orExpression_LeftOperand),
+			typeError(MdlPackage::eINSTANCE.orExpression_RightOperand))
+	}
+	
+	@Check
+	def validateCompatibleTypes(EqualityExpression e){
+		checkRelationalOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.equalityExpression_LeftOperand),
+			typeError(MdlPackage::eINSTANCE.equalityExpression_RightOperand))
+	}
+		
+	@Check
+	def validateCompatibleTypes(RelationalExpression e){
+		checkRelationalOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.relationalExpression_LeftOperand),
+			typeError(MdlPackage::eINSTANCE.relationalExpression_RightOperand))
+	}
+		
+	@Check
+	def validateCompatibleTypes(AdditiveExpression e){
+		checkMathsOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.additiveExpression_LeftOperand),
+			typeError(MdlPackage::eINSTANCE.additiveExpression_RightOperand))
+	}
+		
+	@Check
+	def validateCompatibleTypes(MultiplicativeExpression e){
+		checkMathsOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.multiplicativeExpression_LeftOperand),
+			typeError(MdlPackage::eINSTANCE.multiplicativeExpression_RightOperand))
+	}
+		
+	@Check
+	def validateCompatibleTypes(UnaryExpression e){
+		checkUnaryOp(e.feature, e.operand, typeError(MdlPackage::eINSTANCE.unaryExpression_Operand))
+	}
+		
+	@Check
+	def validateCompatibleTypes(WhenClause e){
+		checkExpectedBoolean(e.cond, typeError(MdlPackage::eINSTANCE.whenClause_Cond))
+		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.whenClause_Value))
+	}
+		
+	@Check
+	def validateCompatibleTypes(EquationDefinition e){
+		// only check if there is an RHS to check 
+		if(e.expression != null)
+			checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+	}
+		
+	@Check
+	def validateCompatibleTypes(RandomVariableDefinition e){
+		checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+	}
+		
+	@Check
+	def validateCompatibleTypes(TransformedDefinition e){
+		checkExpectedRealTransform(e.transform, typeError(MdlPackage::eINSTANCE.transformedDefinition_Transform))
+		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.transformedDefinition_Expression))
+	}
+		
+	@Check
+	def validateCompatibleTypes(VectorContent e){
+		e.expressions.forEach[ex| checkExpectedReal(ex, typeError(MdlPackage::eINSTANCE.vectorContent_Expressions)) ]
 	}
 }
