@@ -10,7 +10,7 @@ class BlockValidationHelper {
 			"COVARIATES" -> false, "VARIABILITY_LEVELS" -> true, "STRUCTURAL_PARAMETERS" -> false,
 			"VARIABILITY_PARAMETERS" -> false, "RANDOM_VARIABLE_DEFINITION" -> false,
 			"INDIVIDUAL_VARIABLES" -> false, "MODEL_PREDICTION" -> false,
-			"OBSERVATION" -> false, "GROUP_VARIABLES" -> false
+			"OBSERVATION" -> false, "GROUP_VARIABLES" -> false, "IDV" -> false
 		},
 		MdlValidator::DATAOBJ -> #{
 			"DATA_INPUT_VARIABLES" -> true, "DECLARED_VARIABLES" -> false, "DATA_DERIVED_VARIABLES" -> false,

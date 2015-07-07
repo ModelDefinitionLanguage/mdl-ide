@@ -51,10 +51,14 @@ class ListValidationHelper {
 						 ] 
 					],
 					new ListDefinition => [keyValue='dv' attributes = #[
-						 new AttributeDefn('use', null, true), new AttributeDefn('variable', null, false)
+						 new AttributeDefn('use', null, true), new AttributeDefn('variable', null, false), new AttributeDefn('define', null, false)
 						 ] 
 					],
 					new ListDefinition => [keyValue='idv' attributes = #[
+						 new AttributeDefn('use', null, true)
+						 ] 
+					],
+					new ListDefinition => [keyValue='cmt' attributes = #[
 						 new AttributeDefn('use', null, true)
 						 ] 
 					],

@@ -12,7 +12,7 @@ class BlockArgumentValidationHelper {
 	static val OBJECT_ARG = "ObjectArg"
 	
 	static val objArgVarDeclNames = #{ 
-		OBJECT_ARG -> #{ MdlValidator::MDLOBJ -> #{ 'idv' -> true } }
+		OBJECT_ARG -> #{ MdlValidator::MDLOBJ -> #{ 'idv' -> false } }
 	}
 	
 	def getUnusedMandatoryObjVarDecl(BlockArguments it) {
