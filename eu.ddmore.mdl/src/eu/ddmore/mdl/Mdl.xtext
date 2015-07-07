@@ -187,12 +187,12 @@ ParExpression returns Expression:
 WhenExpression returns Expression:
 	 {WhenExpression}
 	 	when+=WhenClause
-	 	(=>',' when+=WhenClause)*
-		(=>'otherwise' other=Expression)?
+	 	(=> when+=WhenClause)*
+		(=>'else' other=Expression)?
 	;
 
 WhenClause:
-	'when' '(' cond=Expression ')' value=Expression
+	'if' '(' cond=Expression ')' => 'then' value=Expression
 ;
 
 Literal returns Expression:

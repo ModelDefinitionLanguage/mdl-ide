@@ -1,8 +1,10 @@
 package eu.ddmore.mdl.utils
 
 import com.google.inject.Inject
+import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Mcl
+import eu.ddmore.mdl.mdl.PropertyStatement
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
@@ -11,13 +13,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.MdlInjectorProvider
-import eu.ddmore.mdl.mdl.PropertyStatement
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
 class ExpressionConverterTest {
 	@Inject extension ParseHelper<Mcl>
+//	@Inject extension ValidationTestHelper
 	
 	@Test
 	def void testConverter1(){
@@ -27,7 +28,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 			KA
 			GUT
 			TLAG
-			RATEIN = when(T >= TLAG) GUT * KA otherwise 0
+			RATEIN = if(T >= TLAG) then GUT * KA else 0
 	} # end MODEL_PREDICTION
 	
 } # end of model object
@@ -77,13 +78,14 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 			KA
 			GUT
 			TLAG
-			RATEIN = when (10 < 22 == !true) 10 * log(GUT/KA^2) / ( 1 - TLAG /(1 + sqrt(GUT))),
-			when(KA && GUT || false) when(T >= TLAG) GUT * KA otherwise 0
-			otherwise INF
+			RATEIN = if (10 < 22 == !true) then 10 * log(GUT/KA^2) / ( 1 - TLAG /(1 + sqrt(GUT)))
+			if(KA && GUT || false) then if(T >= TLAG) then GUT * KA else 0
+			else INF
 	} # end MODEL_PREDICTION
 	
 } # end of model object
 		'''.parse
+		
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
 "(10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))) when 10<22==!true,

@@ -41,7 +41,7 @@ warfarin_PK_SEXAGE_mdl2 = mdlobj(idv T) {
 	} # end STRUCTURAL_PARAMETERS
 	
 	GROUP_VARIABLES{
-		FSEXCL = when(SEX == female) POP_FCL_FEM  otherwise 1
+		FSEXCL = if(SEX == female) then POP_FCL_FEM  else 1
 	}
 } # end of model object
 
@@ -62,13 +62,13 @@ warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
 	}
 
 	GROUP_VARIABLES{
-		FSEXCL = when(SEX == female) POP_FCL_FEM  otherwise 1
+		FSEXCL = if(SEX == female) then POP_FCL_FEM  else 1
 		TLAG
 	}
 	
 	MODEL_PREDICTION{
 		DEQ{
-			RATEIN = when(T >= TLAG) GUT  otherwise 0
+			RATEIN = if(T >= TLAG) then GUT  else 0
 			GUT : { deriv =(- RATEIN), init = 0, x0 = 0 }
 		}
 	}

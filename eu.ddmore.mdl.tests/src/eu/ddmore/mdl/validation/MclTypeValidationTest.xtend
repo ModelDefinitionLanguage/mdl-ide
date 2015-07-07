@@ -51,7 +51,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A = when(B > 0 && false) B + C - 22, when(C == B || 22 < 0) B^180 otherwise 22
+				A = if(B > 0 && false) then B + C - 22 if(C == B || 22 < 0) then B^180 else 22
 			}
 			
 		} # end of model object
@@ -92,7 +92,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				B = when(!true) 0 
+				B = if(!true) then 0 
 			}
 			
 		} # end of model object
@@ -196,7 +196,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A = when(B > 0 && "false") B + C - 22, when(C == B || 22 < 0) B^180 otherwise 22
+				A = if(B > 0 && "false") then B + C - 22 if(C == B || 22 < 0) then B^180 else 22
 			}
 			
 		} # end of model object

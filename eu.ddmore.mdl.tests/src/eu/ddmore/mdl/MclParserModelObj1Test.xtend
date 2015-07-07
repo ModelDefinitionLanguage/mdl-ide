@@ -63,7 +63,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 
 	MODEL_PREDICTION {
 		DEQ{
-			RATEIN = when(T >= TLAG) GUT * KA otherwise 0
+			RATEIN = if(T >= TLAG) then GUT * KA else 0
 			GUT : { deriv =(- RATEIN), init = 0, x0 = 0 }
 			CENTRAL : { deriv =(RATEIN - CL * CENTRAL / V), init = 0, x0 = 0 } 
 		}

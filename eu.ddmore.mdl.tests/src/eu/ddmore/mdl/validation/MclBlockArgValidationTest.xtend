@@ -10,6 +10,7 @@ import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -32,7 +33,7 @@ class MclBlockArgValidationTest {
 		mcl.assertNoErrors
 	}
 
-	@Test
+	@Ignore
 	def void testUnknownBlockArg(){
 		val mcl = '''bar = mdlobj ( foo T ){
 			VARIABILITY_LEVELS{
@@ -50,6 +51,23 @@ class MclBlockArgValidationTest {
 	}
 
 	@Test
+	def void testUnknownBlockArgWithOptionIdv(){
+		val mcl = '''bar = mdlobj ( foo T ){
+			VARIABILITY_LEVELS{
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
+			MdlValidator::UNKNOWN_BLOCK_ARG_DECL,
+			"unrecognised variable declaration type 'foo'"
+		)
+		mcl.assertNoErrors(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MANDATORY_BLOCK_ARG_MISSING,
+			"mandatory argument 'idv' is missing in mdlobj 'bar'"
+		)
+	}
+
+	@Ignore
 	def void tesNoBlockArg(){
 		val mcl = '''foo = mdlobj {
 			VARIABILITY_LEVELS{
@@ -75,7 +93,7 @@ class MclBlockArgValidationTest {
 		)
 	}
 
-	@Test
+	@Ignore
 	def void testUnknownBlockArgPropAndMandBlockArg(){
 		val mcl = '''bar = mdlobj ( foo T, prop = "value" ){
 			VARIABILITY_LEVELS{
@@ -90,6 +108,25 @@ class MclBlockArgValidationTest {
 			MdlValidator::MANDATORY_BLOCK_ARG_MISSING,
 			"mandatory argument 'idv' is missing in mdlobj 'bar'"
 		)
+		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
+			MdlValidator::UNKNOWN_BLOCK_ARG_DECL,
+			"unrecognised variable declaration type 'foo'"
+		)
+	}
+
+	@Test
+	def void testUnknownBlockArgPropAndMandBlockArgOptionalIdv(){
+		val mcl = '''bar = mdlobj ( foo T, prop = "value" ){
+			VARIABILITY_LEVELS{
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::UNKNOWN_BLOCK_ARG_PROP,
+			"unrecognised property 'prop'"
+		)
+		mcl.assertNoErrors(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MANDATORY_BLOCK_ARG_MISSING)
 		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
 			MdlValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"

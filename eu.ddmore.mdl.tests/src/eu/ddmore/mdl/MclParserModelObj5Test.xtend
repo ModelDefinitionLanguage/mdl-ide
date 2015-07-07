@@ -52,7 +52,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
 
 	GROUP_VARIABLES{
 		FAGECL = exp(BETA_CL_AGE * tAGE)
-		FSEXCL = when(SEX == female) POP_FCL_FEM  otherwise 1
+		FSEXCL = if(SEX == female) then POP_FCL_FEM  else 1
 		GRPCL = log(POP_CL * FAGECL * FSEXCL ) + BETA_CL_WT * logtWT
 		GRPV = POP_V * (WT/70)^BETA_V_WT
 	}
@@ -74,7 +74,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
 	
 	MODEL_PREDICTION {
 		DEQ{
-			RATEIN = when(T >= TLAG) GUT * KA otherwise 0
+			RATEIN = if(T >= TLAG) then GUT * KA else 0
 			GUT : { deriv =(- RATEIN), init = 0, x0 = 0 }
 			CENTRAL : { deriv =(RATEIN - CL * CENTRAL / V), init = 0, x0 = 0 } 
 		}
