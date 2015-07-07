@@ -93,6 +93,18 @@ class ListValidationHelper {
 				)
 			]
 		),
+		"SOURCE" -> (
+			new BlockListDefinition => [
+				key = 'file'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue=null attributes = #[
+						 new AttributeDefn('file', null, true), new AttributeDefn('inputformat', null, true),
+						 	new AttributeDefn('ignore', null, false) 
+						 ] 
+					]
+				)
+			]
+		),
 		"VARIABILITY_LEVELS" -> (
 			new BlockListDefinition => [
 				key = 'type'
