@@ -30,17 +30,21 @@ ForwardDeclaration:
 Statement:
 	EquationDefinition|TransformedDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|PropertyStatement|
-	AnonymousListStatement|EstimateDefinition
+	AnonymousListStatement
 ;
 
 
 EstimateRange returns Expression:
-	{EstimateRange}(exclusiveLow ?= '(' | '[') low=Number? ',' initial=Number (',' high=Number)? (exclusiveHigh ?= ')' | ']')
+	{EstimateRange}initial=Number fixed?='fixed'  limit=Limit? |
+	{EstimateRange}initial=Number  limit=Limit
+;
+
+Limit:
+	{Limit}'limit' '(' low=Number? ','  high=Number? ')'	
 ;
 
 SymbolDefinition:
-	EquationDefinition | ListDefinition| ForwardDeclaration | CategoryDefinition| RandomVariableDefinition | TransformedDefinition|
-		EstimateDefinition
+	EquationDefinition | ListDefinition| ForwardDeclaration | CategoryDefinition| RandomVariableDefinition | TransformedDefinition
 ;
 
 EquationDefinition:
@@ -66,10 +70,6 @@ AnonymousListStatement:
 
 PropertyStatement:
 	 SET properties+=ValuePair (',' properties+=ValuePair)* ';'?
-;
-
-EstimateDefinition:
-	name = ID =>"~=" estRange=EstimateRange
 ;
 
 CategoricalDefinition:
@@ -176,6 +176,7 @@ PrimaryExpression returns Expression:
 	| SymbolReference 
 	| BuiltinFunctionCall
 	| WhenExpression
+	| EstimateRange
 	| ParExpression
 	;
 

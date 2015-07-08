@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.validation.Check
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
-import eu.ddmore.mdl.mdl.EstimateDefinition
 import eu.ddmore.mdl.mdl.TransformedDefinition
 
 //import org.eclipse.xtext.validation.Check

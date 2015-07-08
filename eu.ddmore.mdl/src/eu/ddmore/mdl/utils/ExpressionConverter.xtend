@@ -23,6 +23,7 @@ import eu.ddmore.mdl.mdl.VectorContent
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdl.mdl.Limit
 
 public class ExpressionConverter {
 	
@@ -84,8 +85,10 @@ public class ExpressionConverter {
 		«FOR arg: exp.args SEPARATOR ','»«arg.getString»«ENDFOR»'''
 	
 	def static dispatch String getString(EstimateRange exp)'''
-		«IF exp.exclusiveLow»(«ELSE»[«ENDIF» «exp.low?:''», «exp.initial», «exp.high?:''» «IF exp.exclusiveHigh»)«ELSE»]«ENDIF»
-	'''
+		«IF !exp.isFixed»(«ENDIF»«exp.initial» «exp.limit?.getLimitString(exp.initial) ?: exp.initial»«IF !exp.isFixed»)«ENDIF»'''
+	
+	def static String getLimitString(Limit limit, String initial)'''
+		(«limit.low?:''», «initial», «limit.high?:''»)'''
 	
 	def static dispatch String getString(WhenExpression exp)'''
 		«FOR w : exp.when SEPARATOR ',\n'»«w.getString»«ENDFOR»«IF exp.other != null»,«ENDIF»

@@ -1,23 +1,20 @@
 package eu.ddmore.mdl.type
 
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.CategoryDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.mdl.EstimateDefinition
 import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.ForwardDeclaration
+import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
-import org.eclipse.xtend.lib.annotations.Data
 import eu.ddmore.mdl.mdl.UnaryExpression
-import eu.ddmore.mdl.mdl.ParExpression
+import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import eu.ddmore.mdl.mdl.UnnamedFuncArguments
-import eu.ddmore.mdl.mdl.FuncAgument
-import eu.ddmore.mdl.mdl.ForwardDeclaration
-import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.CategoryDefinition
 
 public class MclTypeProvider {
 
@@ -71,10 +68,10 @@ public class MclTypeProvider {
 		ep.categoryDefinition -> REAL_TYPE, // @TODO: Do category typing properly
 		
 		ep.estimateRange -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
+		ep.limit -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
 		
 		ep.equationDefinition -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,
-		ep.estimateDefinition -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
 		ep.randomVariableDefinition -> REAL_TYPE,
 		ep.forwardDeclaration -> REAL_TYPE,
 		ep.listDefinition -> REAL_TYPE // @TODO: Do list typing properly
@@ -98,9 +95,9 @@ public class MclTypeProvider {
 			SymbolReference: e.ref.typeFor.markReference
 			ParExpression: e.expr.typeFor
 			BuiltinFunctionCall:
-				functionTypeTable.get(e.func) ?: eu.ddmore.mdl.type.MclTypeProvider.UNDEFINED_TYPE
+				functionTypeTable.get(e.func) ?: MclTypeProvider.UNDEFINED_TYPE
 			default:
-				typeTable.get(e.eClass) ?: eu.ddmore.mdl.type.MclTypeProvider.UNDEFINED_TYPE
+				typeTable.get(e.eClass) ?: MclTypeProvider.UNDEFINED_TYPE
 		}
 	}
 	
@@ -118,7 +115,6 @@ public class MclTypeProvider {
 		switch(sd){
 			EquationDefinition,
 			TransformedDefinition,
-			EstimateDefinition,
 			ForwardDeclaration,
 			ListDefinition,
 			CategoryDefinition,
