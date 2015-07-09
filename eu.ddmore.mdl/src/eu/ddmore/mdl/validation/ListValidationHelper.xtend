@@ -2,7 +2,6 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.Attribute
 import eu.ddmore.mdl.mdl.AttributeList
-import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.CategoricalDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import java.util.ArrayList
@@ -11,6 +10,7 @@ import java.util.HashSet
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Data
 
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 
 class ListValidationHelper {
@@ -200,7 +200,7 @@ class ListValidationHelper {
 	
 	def isKeyAttributeDefined(AttributeList it){
 				// expect AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
-		val parent = eContainer.eContainer as BlockStatement
+		val parent = parentStatement
 		if(attDefns.containsKey(parent.identifier)){
 			val iter = attributes.iterator
 			var expectedAttributes = new ArrayList<ListDefinition>()
@@ -228,7 +228,7 @@ class ListValidationHelper {
 	// Method assumes that there is a key. Check for this first
 	def getUnusedMandatoryAttributes(AttributeList it) {
 		// expect AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
-		val parent = eContainer.eContainer as BlockStatement
+		val parent = parentStatement
 		val unused = new HashSet
 		if(attDefns.containsKey(parent.identifier)){
 			val iter = attributes.iterator
@@ -335,8 +335,8 @@ class ListValidationHelper {
 	def attributeRecognised(Attribute it){
 		// expect Attribute->AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
 		// get key from parent list
-		val parentList = eContainer as AttributeList
-		val parentBlock = eContainer.eContainer.eContainer as BlockStatement
+//		val parentList = eContainer as AttributeList
+//		val parentBlock = eContainer.eContainer.eContainer as BlockStatement
 		if(attDefns.containsKey(parentBlock.identifier)){
 			val blkDefn = attDefns.get(parentBlock.identifier)
 			val keyVal = parentList.getKeyValue(blkDefn.key)

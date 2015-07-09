@@ -9,9 +9,17 @@ MclObject returns MclObject:
 
 
 BlockStatement:
-	identifier = BLOCKID blkArgs=BlockArguments BEGIN
+	identifier = BLOCKID blkArgs=BlockArguments body=(BlockStatementBody|BlockTextBody)
+;
+
+BlockStatementBody returns BlockBody:
+	{BlockStatementBody}BEGIN
 		statements+=Statement*
 	END
+;
+
+BlockTextBody returns BlockBody:
+	{BlockTextBody}text=TEXT_BLOCK
 ;
 
 BlockArguments:
@@ -265,6 +273,9 @@ terminal SET: 'set';
 
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';
+
+terminal TEXT_BLOCK:
+	'<<' -> '>>';
 
 terminal INTEGER:
 	SIGN?('0' | '1'..'9' '0'..'9'*);

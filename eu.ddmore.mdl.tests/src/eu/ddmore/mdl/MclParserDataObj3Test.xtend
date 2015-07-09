@@ -29,6 +29,12 @@ warfarin_PK_v2_dat = dataobj{
 		AMT : { use  is amt, define={ 1 as GUT } }
 		DVID : { use  is dvid, define = { 1 as Y, 2 as PCA } }
 		DV : { use  is dv }
+		#DVID : { use  is dvid }
+		#DV : { use  is dv, , define = {
+		#			1 from DVID as Y,
+		#			2 from DVID as PCA categories={ dead when 1, alive when 2}
+		#		}
+		#	  }
 		MDV : { use  is mdv}
 	}
 

@@ -73,7 +73,8 @@ class BlockArgumentValidationHelper {
 		},
 		MdlValidator::PARAMOBJ -> #{
 			'VARIABILITY' -> #{ 'type' -> true }
-		}
+		},
+		MdlValidator::TASKOBJ -> #{ "ESTIMATE" -> #{ 'software' -> true } }
 	}
 	
 	def getUnusedMandatoryPropertyArguments(BlockArguments it) {

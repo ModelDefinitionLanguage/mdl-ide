@@ -15,6 +15,7 @@ import org.eclipse.xtext.scoping.IScopeProvider
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.mdl.BlockStatementBody
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -88,7 +89,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
 	@Test
 	def void testExpectedEObjectDescriptions(){
 		val grpBlk = CODE_SNIPPET.parse.objects.last.blocks.last as BlockStatement
-		(grpBlk.statements.last as EquationDefinition).expression =>  [
+		((grpBlk.body as BlockStatementBody).statements.last as EquationDefinition).expression =>  [
 			assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "T, WT, AGE, SEX, female, male, MISSING, logtWT, tAGE, POP_FCL_FEM, FSEXCL, TLAG, RATEIN, GUT, foo")
 		]
 	}

@@ -30,6 +30,9 @@ import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.TransformedDefinition
 
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+
+
 //import org.eclipse.xtext.validation.Check
 
 /**
@@ -102,7 +105,7 @@ class MdlValidator extends AbstractMdlValidator {
 
 	@Check
 	def validateMdlObjBlocks(BlockStatement it){
-		val parent = eContainer
+		val parent = parentOfBlockStatement
 		switch(parent){
 			MclObject case !isModelBlock:
 					error("block '" + identifier + "' cannot be used in a " + parent.mdlObjType,

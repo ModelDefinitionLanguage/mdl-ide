@@ -13,6 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -131,7 +132,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 warfarin_PK_ODE_mdl = dataobj {
 	DATA_INPUT_VARIABLES{
 	} # end MODEL_PREDICTION
-	SOURCE
+	SOURCE{
 		set file is nonmem
 	}
 	
