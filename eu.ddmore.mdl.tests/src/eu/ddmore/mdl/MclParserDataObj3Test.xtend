@@ -17,38 +17,34 @@ class MclParserDataObj3Test {
 	
 	val static CODE_SNIPPET = '''
 warfarin_PK_v2_dat = dataobj{
-	DECLARED_VARIABLES{ Y; D; TD; GUT}
+	DECLARED_VARIABLES{ Y; D; TD; GUT; PCA}
 	
 	DATA_INPUT_VARIABLES {
 		ID : { use is id }
 		TIME : { use is idv }
 		WT : { use  is covariate }
 		AGE : { use  is covariate  }
-		SEX : { use is covariate, categories = [male, female], 
-				define={ 0 as male,  1 as female} }
+		SEX : { use is covariate, categories are { male when 0, female when 1} } #, 
+			#	define={ 0 as male,  1 as female} }
 		AMT : { use  is amt, define={ 1 as GUT } }
-		DVID : { use  is dvid, define = { 1 as Y, 2 as PCA } }
-		DV : { use  is dv }
 		#DVID : { use  is dvid }
-		#DV : { use  is dv, , define = {
-		#			1 from DVID as Y,
-		#			2 from DVID as PCA categories={ dead when 1, alive when 2}
-		#		}
-		#	  }
+		#DV : { use  is dv, define = { 1 as Y, 2 as PCA } }
+		DVID : { use  is dvid }
+		DV : { use  is dv, define = {
+					1 of DVID as Y,
+					2 of DVID as PCA are { dead when 1, alive when 2}
+				}
+			  }
 		MDV : { use  is mdv}
 	}
 
 	DATA_DERIVED_VARIABLES{
 		DT : { column=TIME, condition=AMT > 0 }
-		PCA : { column=DV, categories=[dead, alive], define={1 as dead, 2 as alive, 3 as alive} }
+		#PCA : { column=DV, categories are {dead, alive}, define={1 as dead, 2 as alive, 3 as alive} }
 	}
 	
 	SOURCE {
-	    set file = "warfarin_conc_sex.csv",
-        	inputformat  is nonmemFormat, 
-	    	ignore = "#" 
-#		header = true  # or false
-#		skip =  0  ##  << integer >> Skips number of rows before header / data
+	    SrcFile : { file="warfarin_conc_sex.csv", inputformat  is nonmemFormat, ignore = "#" } 
 	} # end SOURCE
 } # end data object
 		'''

@@ -42,16 +42,16 @@ class ListValidationHelper {
 				key = 'use'
 				listDefns = newArrayList(
 					new ListDefinition => [  keyValue='covariate' attributes = #[
-						 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categories', null, false),
-						 new AttributeDefn('define', 'categories', false)
+						 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categories', null, false)//,
+//						 new AttributeDefn('define', 'categories', false)
 						 ] 
 					],
 					new ListDefinition => [keyValue='amt' attributes = #[
-						 new AttributeDefn('use', null, true), new AttributeDefn('define', null, false), new AttributeDefn('variable', null, false)
+						 new AttributeDefn('use', null, true), new AttributeDefn('define', null, true)
 						 ] 
 					],
 					new ListDefinition => [keyValue='dv' attributes = #[
-						 new AttributeDefn('use', null, true), new AttributeDefn('variable', null, false), new AttributeDefn('define', null, false)
+						 new AttributeDefn('use', null, true), new AttributeDefn('define', null, false)//, new AttributeDefn('variable', null, true)
 						 ] 
 					],
 					new ListDefinition => [keyValue='idv' attributes = #[
@@ -75,7 +75,7 @@ class ListValidationHelper {
 						 ] 
 					],
 					new ListDefinition => [keyValue='dvid' attributes = #[
-						 new AttributeDefn('use', null, true), new AttributeDefn('define', null, true)
+						 new AttributeDefn('use', null, true)
 						 ] 
 					]
 				)
@@ -174,8 +174,9 @@ class ListValidationHelper {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='categorical' attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('categories', null, true),
-						 new AttributeDefn('probabilities', null, true)
+//						 new AttributeDefn('type', null, true), new AttributeDefn('categories', null, true),
+//						 new AttributeDefn('probabilities', null, true)
+						 new AttributeDefn('type', null, true), new AttributeDefn('predictions', null, true)
 						 ]
 					]
 				)

@@ -80,12 +80,12 @@ PropertyStatement:
 	 SET properties+=ValuePair (',' properties+=ValuePair)* ';'?
 ;
 
-CategoricalDefinition:
-	{CategoricalDefinition} CATEGORICAL '=' '[' categories += CategoryDefinition (=> ',' categories += CategoryDefinition)* ']' 
+CategoricalDefinitionExpr returns Expression:
+	{CategoricalDefinition} 'are' BEGIN categories += CategoryDefinition (=>',' categories += CategoryDefinition)* END  
 ;
 
 CategoryDefinition:
-	name = ID
+	name = ID ('when' whenValue=Expression)?
 ;
 
 AttributeList:
@@ -93,13 +93,14 @@ AttributeList:
 ;
 
 Attribute:
-	ValuePair|
-	CategoricalDefinition
+	ValuePair//|
+	//CategoricalDefinition
 ;
 
 ValuePair:
 	{ValuePair}argumentName = AttributeName ("=" expression = Expression
 								| IS expression = EnumExpression
+								| expression=CategoricalDefinitionExpr
 								| '=' expression = MappingExpression)
 ;
 
@@ -120,7 +121,7 @@ MappingExpression returns Expression:
 ;
 
 MappingPair:
-	leftOperand=OrExpression AS rightOperand=OrExpression
+	leftOperand=OrExpression ('of' srcColumn=SymbolReference)?  AS rightOperand=OrExpression (catDefn=CategoricalDefinitionExpr)?
 ;
 
 MappingList:
@@ -250,7 +251,7 @@ VectorContent:
 		expressions += Expression (=> ',' expressions += Expression)*
 ;
 
-terminal CATEGORICAL: 'categories';
+//terminal CATEGORICAL: 'categories';
 
 terminal CONSTANT:
 	'INF'
