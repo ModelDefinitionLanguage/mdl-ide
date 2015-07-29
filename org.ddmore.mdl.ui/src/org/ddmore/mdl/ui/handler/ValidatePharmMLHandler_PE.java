@@ -73,8 +73,8 @@ public class ValidatePharmMLHandler_PE  extends AbstractHandler implements IHand
 					srcGenFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
 			        final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 					if(rpt.isValid()){
-			            MessageDialog.openInformation(shell, "Information", "PharmML file is valid: "
-			                    + srcGenFolder.getFile(file.getName().replaceAll("\\.mdl$", ".xml")).getFullPath());
+//			            MessageDialog.openInformation(shell, "Information", "PharmML file is valid: "
+//			                    + srcGenFolder.getFile(file.getName().replaceAll("\\.mdl$", ".xml")).getFullPath());
 					}
 					else{
 			            MessageDialog.openError(shell, "Error", "PharmML file is invalid. Check log file for error report: "

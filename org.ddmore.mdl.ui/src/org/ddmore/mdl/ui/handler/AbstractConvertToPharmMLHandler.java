@@ -93,8 +93,8 @@ abstract class AbstractConvertToPharmMLHandler extends AbstractHandler implement
                 return false;
             }
 
-            MessageDialog.openInformation(shell, "Information", "PharmML successfully generated to "
-                + srcGenFolder.getFile(file.getName().replaceAll("\\.mdl$", ".xml")).getFullPath());
+//            MessageDialog.openInformation(shell, "Information", "PharmML successfully generated to "
+//                + srcGenFolder.getFile(file.getName().replaceAll("\\.mdl$", ".xml")).getFullPath());
             return true;
         }
         return false;
