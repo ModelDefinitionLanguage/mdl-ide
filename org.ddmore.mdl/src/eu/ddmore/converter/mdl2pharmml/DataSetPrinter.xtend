@@ -556,7 +556,7 @@ class DataSetPrinter {
 							dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
 						}
 						var convertedColType = "undefined"
-						if (columnType != null && column.isUsedInModel(mog, mObj)) {
+						if (columnType != null && (UseType::ID.toString == columnType || column.isUsedInModel(mog, mObj))) {
 							convertedColType = column.convertEnum(dosingToCompartmentMacro);
 						}
 						val valueType = column.getValueType
