@@ -125,9 +125,9 @@ class MclListAttributeValidationTest {
 			
 			MODEL_PREDICTION{
 	  			COMPARTMENT {
-					INPUT_KA:   {type is depot, modelCmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
-					CENTRAL:    {type is compartment, modelCmt=2}
-                    			{type is elimination, modelCmt=2, from=CENTRAL, v=V, cl=CL}
+					INPUT_KA : {type is depot, modelCmt=1, output=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
+					CENTRAL  : {type is compartment, modelCmt=2}
+                    		   {type is elimination, modelCmt=2, input=CENTRAL, v=V, cl=CL}
    				}# end COMPARTMENT
 				CONC=CENTRAL/V
 			} # end MODEL_PREDICTION
@@ -155,9 +155,9 @@ class MclListAttributeValidationTest {
 			
 			MODEL_PREDICTION{
 	  			COMPARTMENT {
-					INPUT_KA:   {type is depot, modelCmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
+					INPUT_KA:   {type is depot, modelCmt=1, output=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
 					CENTRAL:    {type is compartment, modelCmt=2}
-                    			{modelCmt=2, from=CENTRAL, v=V, cl=CL}
+                    			{modelCmt=2, input=CENTRAL, v=V, cl=CL}
    				}# end COMPARTMENT
 				CONC=CENTRAL/V
 			} # end MODEL_PREDICTION

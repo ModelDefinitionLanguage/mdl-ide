@@ -43,12 +43,12 @@ Statement:
 
 
 EstimateRange returns Expression:
-	{EstimateRange}initial=Number limit=Limit? fixed?='fixed' |
-	{EstimateRange}initial=Number limit=Limit
+	{EstimateRange}initial=Number limit=LimitDefn? fixed?=FIXED |
+	{EstimateRange}initial=Number limit=LimitDefn
 ;
 
-Limit:
-	{Limit}'limit' '(' low=Number? ','  high=Number? ')'	
+LimitDefn:
+	{LimitDefn}LIMIT '(' low=Number? ','  high=Number? ')'	
 ;
 
 SymbolDefinition:
@@ -81,11 +81,11 @@ PropertyStatement:
 ;
 
 CategoricalDefinitionExpr returns Expression:
-	{CategoricalDefinition} 'with' BEGIN categories += CategoryDefinition (=>',' categories += CategoryDefinition)* END  
+	{CategoricalDefinition} WITH BEGIN categories += CategoryDefinition (=>',' categories += CategoryDefinition)* END  
 ;
 
 CategoryDefinition:
-	name = ID ('when' whenValue=Expression)?
+	name = ID (WHEN whenValue=Expression)?
 ;
 
 AttributeList:
@@ -121,7 +121,7 @@ MappingExpression returns Expression:
 ;
 
 MappingPair:
-	leftOperand=OrExpression ('of' srcColumn=SymbolReference)?  AS rightOperand=OrExpression (catDefn=CategoricalDefinitionExpr)?
+	leftOperand=OrExpression (FROM srcColumn=SymbolReference)?  AS rightOperand=OrExpression (catDefn=CategoricalDefinitionExpr)?
 ;
 
 MappingList:
@@ -198,15 +198,15 @@ WhenExpression returns Expression:
 	 {WhenExpression}
 	 	when+=WhenClause
 	 	(=> when+=ElifClause)*
-		(=>'else' other=Expression)?
+		(=>ELSE other=Expression)?
 	;
 
 WhenClause:
-	'if' '(' cond=Expression ')' => 'then' value=Expression
+	IF '(' cond=Expression ')' => THEN value=Expression
 ;
 
 ElifClause:
-	'elseif' '(' cond=Expression ')' => 'then' value=Expression
+	ELSEIF '(' cond=Expression ')' => THEN value=Expression
 ;
 
 Literal returns Expression:
@@ -255,8 +255,6 @@ VectorContent:
 		expressions += Expression (=> ',' expressions += Expression)*
 ;
 
-//terminal CATEGORICAL: 'categories';
-
 terminal CONSTANT:
 	'INF'
 ;
@@ -267,14 +265,33 @@ terminal BLOCKID:
 	'DATA_DERIVED_VARIABLES'|'SOURCE'|'VARIABILITY'|'STRUCTURAL_PARAMETERS'|
 	'VARIABILITY_LEVELS'|'VARIABILITY_PARAMETERS'|'STRUCTURAL'|'OBJECTS'|
 	'GROUP_VARIABLES'|'RANDOM_VARIABLE_DEFINITION'|'COMPARTMENT'|'OBSERVATION'|
-	'IDV'
+	'IDV'|'OPTIMISE'
 ;
+
+
+terminal FROM: 'from';
 
 terminal IS: 'is';
 
 terminal AS: 'as';
 
 terminal SET: 'set';
+
+terminal IF: 'if';
+
+terminal THEN: 'then';
+
+terminal ELSEIF: 'elseif';
+
+terminal ELSE: 'else';
+
+terminal WITH: 'with';
+
+terminal WHEN: 'when';
+
+terminal LIMIT: 'limit';
+
+terminal FIXED: 'fixed';
 
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';

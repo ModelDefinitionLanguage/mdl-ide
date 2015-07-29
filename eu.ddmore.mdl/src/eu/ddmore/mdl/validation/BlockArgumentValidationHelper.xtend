@@ -13,6 +13,7 @@ class BlockArgumentValidationHelper {
 	
 	static val OBJECT_ARG = "ObjectArg"
 	
+	// Arguments to objects and blocks go here.
 	static val objArgVarDeclNames = new HashMap<String, Map<String, Map<String, Boolean> > > 
 //	#{ 
 //		OBJECT_ARG -> #{ MdlValidator::MDLOBJ -> #{ 'idv' -> false } }
@@ -69,7 +70,7 @@ class BlockArgumentValidationHelper {
 	}
 	
 
-
+	// properties to blocks and MclObjects go here 
 	static val blkArgPropNames = #{ 
 		MdlValidator::MDLOBJ -> #{
 			'RANDOM_VARIABLE_DEFINITION' -> #{ 'level' -> true }

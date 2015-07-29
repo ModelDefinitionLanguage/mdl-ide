@@ -68,7 +68,7 @@ public class MclTypeProvider {
 		ep.categoryDefinition -> REAL_TYPE, // @TODO: Do category typing properly
 		
 		ep.estimateRange -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
-		ep.limit -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
+		ep.limitDefn -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
 		
 		ep.equationDefinition -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,

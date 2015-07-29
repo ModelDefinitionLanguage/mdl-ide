@@ -84,10 +84,10 @@ warfarin_PK_2Compartments_mdl = mdlobj {
 
    COMPARTMENT{
       ##  Parameters = CL,V2,Q,V3,KA,S2,ALAG1
-      INPUT_KA:   {type is depot, modelCmt=1, to=CENTRAL, ka=KA, tlag=ALAG1}
+      INPUT_KA:   {type is depot, modelCmt=1, output=CENTRAL, ka=KA, tlag=ALAG1}
       CENTRAL:    {type is compartment, modelCmt=2}
-                  {type is elimination, modelCmt=2, from=CENTRAL, v=V2, cl=CL}
-      PERIPHERAL: {type is distribution, modelCmt=3, from=CENTRAL, kin=Q/V2, kout=Q/V3}
+                  {type is elimination, modelCmt=2, input=CENTRAL, v=V2, cl=CL}
+      PERIPHERAL: {type is distribution, modelCmt=3, input=CENTRAL, kin=Q/V2, kout=Q/V3}
    }# end COMPARTMENT
 
       F=CENTRAL/S2

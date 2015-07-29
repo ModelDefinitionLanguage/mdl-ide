@@ -8,6 +8,8 @@ import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.validation.MdlValidator
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -26,12 +28,10 @@ warfarin_PK_v2_dat = dataobj{
 		AGE : { use is covariate }
 		SEX : { use is covariate, categorical with { male when 0, female when 1} } 
 		AMT : { use  is amt, define={ 1 as GUT } }
-		#DVID : { use  is dvid }
-		#DV : { use  is dv, define = { 1 as Y, 2 as PCA } }
 		DVID : { use  is dvid }
 		DV : { use  is dv, define = {
-					1 of DVID as Y,
-					2 of DVID as PCA with { dead when 1, alive when 2}
+					1 from DVID as Y,
+					2 from DVID as PCA with { dead when 1, alive when 2}
 				}
 			  }
 		MDV : { use  is mdv}
@@ -53,5 +53,26 @@ warfarin_PK_v2_dat = dataobj{
 		
 	}
 
+	@Test
+	def void testInvalidDvidAttribs(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataobj{
+	DECLARED_VARIABLES{ Y; D; TD; GUT; PCA}
 	
+	DATA_INPUT_VARIABLES {
+		DVID : { use  is dvid, define= { 1 as Y, 2 as PCA } }
+	}
+
+	SOURCE {
+	    SrcFile : { file="warfarin_conc_sex.csv", inputformat  is nonmemFormat, ignore = "#" } 
+	} # end SOURCE
+} # end data object
+		'''.parse
+
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::UNRECOGNIZED_LIST_ATT_MISSING,
+			"attribute 'define' is not recognised in this context"
+		)
+		
+	}
 }

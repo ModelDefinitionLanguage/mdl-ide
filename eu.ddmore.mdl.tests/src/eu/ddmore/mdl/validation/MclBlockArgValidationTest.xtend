@@ -34,6 +34,17 @@ class MclBlockArgValidationTest {
 	}
 
 	@Test
+	def void testValidTaskBlockProps(){
+		val mcl = '''bar = taskobj{
+			OPTIMISE(target="NONMEM")<<
+				Any old text
+			>>
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
 	def void testUnknownBlockArg(){
 		val mcl = '''bar = mdlobj ( foo T ){
 			VARIABILITY_LEVELS{
