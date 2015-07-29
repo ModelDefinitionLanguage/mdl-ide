@@ -53,6 +53,8 @@ class MdlValidator extends AbstractMdlValidator {
 	extension BuiltinFunctionValidationProvider funcHelper = new BuiltinFunctionValidationProvider
 	extension MclTypeProvider typeProvider = new MclTypeProvider
 
+	public static val UNRECOGNISED_OBJECT_TYPE = "eu.ddmore.mdl.validation.UnrecognisedObjectType"
+
 	// Block arguments validation
 	public static val UNKNOWN_BLOCK_ARG_DECL = "eu.ddmore.mdl.validation.UnknownBlockArgDecl"
 	public static val UNKNOWN_BLOCK_ARG_PROP = "eu.ddmore.mdl.validation.UnknownBlockArgProp"
@@ -77,9 +79,15 @@ class MdlValidator extends AbstractMdlValidator {
 	// Type validation
 	public static val INCOMPATIBLE_TYPES = "eu.ddmore.mdl.validation.IncompatibleTypes"
 
+	private static val VALID_OBJECT_TYPES = #[ MDLOBJ, PARAMOBJ, TASKOBJ, DATAOBJ, MOGOBJ ]
+
 
 	@Check
 	def validateMdlObjArguments(MclObject it){
+		if(!VALID_OBJECT_TYPES.contains(mdlObjType)){
+			error("unrecognised object type '" + mdlObjType + "'",
+					MdlPackage.eINSTANCE.mclObject_MdlObjType, UNRECOGNISED_OBJECT_TYPE, mdlObjType)
+		}
 		blkArgs.unusedMandatoryObjVarDecl.forEach[blk, mand| error("mandatory argument '" + blk + "' is missing in " + mdlObjType
 															+ " '" + name + "'",
 					MdlPackage.eINSTANCE.mclObject_BlkArgs, MANDATORY_BLOCK_ARG_MISSING, blk) ]
@@ -108,7 +116,7 @@ class MdlValidator extends AbstractMdlValidator {
 		val parent = parentOfBlockStatement
 		switch(parent){
 			MclObject case !isModelBlock:
-					error("block '" + identifier + "' cannot be used in a " + parent.mdlObjType,
+					error("block '" + identifier + "' cannot be used in an object of type " + parent.mdlObjType,
 						MdlPackage.eINSTANCE.blockStatement_Identifier, UNKNOWN_BLOCK, identifier)
 			BlockStatement: {
 				if (!isModelSubBlock) {

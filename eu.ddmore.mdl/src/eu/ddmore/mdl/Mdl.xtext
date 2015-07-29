@@ -5,7 +5,7 @@ Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
 MclObject returns MclObject:
-	name=ID '=' mdlObjType=('mdlobj'|'parobj'|'dataobj'|'taskobj'|'mogobj') blkArgs=BlockArguments BEGIN blocks += BlockStatement* END;
+	name=ID '=' mdlObjType=ID blkArgs=BlockArguments BEGIN blocks += BlockStatement* END;
 
 
 BlockStatement:
@@ -93,8 +93,7 @@ AttributeList:
 ;
 
 Attribute:
-	ValuePair//|
-	//CategoricalDefinition
+	ValuePair
 ;
 
 ValuePair:

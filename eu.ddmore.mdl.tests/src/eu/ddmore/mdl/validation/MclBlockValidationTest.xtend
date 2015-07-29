@@ -27,7 +27,7 @@ class MclBlockValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
 			MdlValidator::UNKNOWN_BLOCK,
-			"block 'DATA_INPUT_VARIABLES' cannot be used in a mdlobj"
+			"block 'DATA_INPUT_VARIABLES' cannot be used in an object of type mdlobj"
 		)
 	}
 
