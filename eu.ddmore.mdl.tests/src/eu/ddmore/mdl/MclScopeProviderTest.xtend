@@ -25,11 +25,13 @@ class MclScopeProviderTest {
 	@Inject extension IScopeProvider
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_SEXAGE_mdl2 = mdlobj(idv T) {
+warfarin_PK_SEXAGE_mdl2 = mdlobj {
+	IDV{ T }
+			
 	COVARIATES{
 		WT
 		AGE
-		SEX : { type is categorical, categories are {female,  male,  MISSING} }
+		SEX : { type is categorical with {female,  male,  MISSING} }
 		logtWT = log(WT/70)
 		tAGE = AGE - 40
 	}
@@ -46,11 +48,13 @@ warfarin_PK_SEXAGE_mdl2 = mdlobj(idv T) {
 	}
 } # end of model object
 
-warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+warfarin_PK_SEXAGE_mdl = mdlobj {
+	IDV{ T }
+			
 	COVARIATES{
 		WT
 		AGE
-		SEX : { type is categorical, categories are {female, male, MISSING} }
+		SEX : { type is categorical with {female, male, MISSING} }
 		logtWT = log(WT/70)
 		tAGE = AGE - 40
 	}

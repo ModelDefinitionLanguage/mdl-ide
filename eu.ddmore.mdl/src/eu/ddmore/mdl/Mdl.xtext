@@ -43,8 +43,8 @@ Statement:
 
 
 EstimateRange returns Expression:
-	{EstimateRange}initial=Number fixed?='fixed'  limit=Limit? |
-	{EstimateRange}initial=Number  limit=Limit
+	{EstimateRange}initial=Number limit=Limit? fixed?='fixed' |
+	{EstimateRange}initial=Number limit=Limit
 ;
 
 Limit:
@@ -60,7 +60,7 @@ EquationDefinition:
 ;
 
 TransformedDefinition:
-	transform = ID '(' name=ID ')' '=' expression=Expression ';'?
+	transform = ID '(' name=ID (',' idv=[SymbolDefinition|ID] )? ')' '=' expression=Expression ';'?
 ;
 
 RandomVariableDefinition:
@@ -81,7 +81,7 @@ PropertyStatement:
 ;
 
 CategoricalDefinitionExpr returns Expression:
-	{CategoricalDefinition} 'are' BEGIN categories += CategoryDefinition (=>',' categories += CategoryDefinition)* END  
+	{CategoricalDefinition} 'with' BEGIN categories += CategoryDefinition (=>',' categories += CategoryDefinition)* END  
 ;
 
 CategoryDefinition:
@@ -99,7 +99,7 @@ Attribute:
 
 ValuePair:
 	{ValuePair}argumentName = AttributeName ("=" expression = Expression
-								| IS expression = EnumExpression
+								| IS expression = EnumExpression (catDefn=CategoricalDefinitionExpr)?
 								| expression=CategoricalDefinitionExpr
 								| '=' expression = MappingExpression)
 ;
@@ -197,12 +197,16 @@ ParExpression returns Expression:
 WhenExpression returns Expression:
 	 {WhenExpression}
 	 	when+=WhenClause
-	 	(=> when+=WhenClause)*
+	 	(=> when+=ElifClause)*
 		(=>'else' other=Expression)?
 	;
 
 WhenClause:
 	'if' '(' cond=Expression ')' => 'then' value=Expression
+;
+
+ElifClause:
+	'elseif' '(' cond=Expression ')' => 'then' value=Expression
 ;
 
 Literal returns Expression:

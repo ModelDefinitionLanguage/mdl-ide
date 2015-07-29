@@ -16,11 +16,13 @@ class MclParserModelObj5Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+warfarin_PK_SEXAGE_mdl = mdlobj {
+	IDV{T}
+	
 	COVARIATES{
 		WT
 		AGE
-		SEX : { type is categorical, categories are {female, male, MISSING} }
+		SEX : { type is categorical with {female, male, MISSING} }
 		logtWT = log(WT/70)
 		tAGE = AGE - 40
 	}

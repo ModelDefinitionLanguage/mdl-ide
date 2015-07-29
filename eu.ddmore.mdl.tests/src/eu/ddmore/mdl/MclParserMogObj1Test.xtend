@@ -16,7 +16,7 @@ class MclParserMogObj1Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-mobj = mdlobj (idv T) {
+mobj = mdlobj {
 	VARIABILITY_LEVELS{
 	} 
 }

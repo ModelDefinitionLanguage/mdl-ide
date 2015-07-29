@@ -23,7 +23,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidNumericalEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+			
 			VARIABILITY_LEVELS{
 			}
 		
@@ -43,7 +45,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidWhenEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
 			VARIABILITY_LEVELS{
 			}
 		
@@ -51,7 +55,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A = if(B > 0 && false) then B + C - 22 if(C == B || 22 < 0) then B^180 else 22
+				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
 			}
 			
 		} # end of model object
@@ -63,7 +67,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidRelation(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
 			VARIABILITY_LEVELS{
 			}
 		
@@ -86,7 +92,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidUniopExpressionOK(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
 			VARIABILITY_LEVELS{
 			}
 		
@@ -104,7 +112,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidUniopExpressionInvalid(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
 			VARIABILITY_LEVELS{
 			}
 		
@@ -125,7 +135,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidUniopExpressionInvalidNumber(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
 			VARIABILITY_LEVELS{
 			}
 		
@@ -146,7 +158,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidUniopExpressionInvalidMalformed(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
 			VARIABILITY_LEVELS{
 			}
 		
@@ -167,7 +181,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidUniopExpressionInvalidBool(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
 			VARIABILITY_LEVELS{
 			}
 		
@@ -188,7 +204,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testInvalidWhenEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+			
 			VARIABILITY_LEVELS{
 			}
 		
@@ -211,7 +229,9 @@ class MclTypeValidationTest {
 	@Ignore
 	def void testInValidFunctionArgumentExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+			
 			VARIABILITY_LEVELS{
 			}
 		
@@ -234,7 +254,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidFunctionEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+			
 			VARIABILITY_LEVELS{
 			}
 		
@@ -254,7 +276,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidDistnFunctionExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+			
 			VARIABILITY_LEVELS{
 				ID : { type is parameter, level = 1 }
 			}
@@ -273,7 +297,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidVectorEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+			
 			VARIABILITY_LEVELS{
 			}
 		
@@ -293,7 +319,9 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidVectorEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj(idv T) {
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
 			VARIABILITY_LEVELS{
 			}
 		

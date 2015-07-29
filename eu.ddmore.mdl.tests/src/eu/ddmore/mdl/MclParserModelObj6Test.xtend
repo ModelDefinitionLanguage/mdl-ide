@@ -17,11 +17,13 @@ class MclParserModelObj6Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_SEXAGE_mdl = mdlobj(idv CP) {
+warfarin_PK_SEXAGE_mdl = mdlobj {
+	IDV{ CP }
+
 	COVARIATES{
 		WT
 		AGE
-		SEX : { type is categorical, categories are {female, male, MISSING} }
+		SEX : { type is categorical with {female, male, MISSING} }
 		logtWT = log(WT/70)
 		tAGE = AGE - 40
 	}
@@ -73,9 +75,9 @@ warfarin_PK_SEXAGE_mdl = mdlobj(idv CP) {
 
 	OBSERVATION{
 		# 11) Now use category definitions to describe categorical observations
-		PAIN : { type is categorical, predictions are {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} }
+		PAIN : { type is categorical with {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} }
 		
-		#TENDERNESS : { type is categorical, predictions are {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} } 
+		#TENDERNESS : { type is categorical with {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} } 
 	}
 } # end of model object
 '''

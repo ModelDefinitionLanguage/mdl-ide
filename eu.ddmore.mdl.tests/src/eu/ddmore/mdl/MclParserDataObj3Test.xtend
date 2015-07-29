@@ -22,17 +22,16 @@ warfarin_PK_v2_dat = dataobj{
 	DATA_INPUT_VARIABLES {
 		ID : { use is id }
 		TIME : { use is idv }
-		WT : { use  is covariate }
-		AGE : { use  is covariate  }
-		SEX : { use is covariate, categories are { male when 0, female when 1} } #, 
-			#	define={ 0 as male,  1 as female} }
+		WT : { use is covariate }
+		AGE : { use is covariate }
+		SEX : { use is covariate, categorical with { male when 0, female when 1} } 
 		AMT : { use  is amt, define={ 1 as GUT } }
 		#DVID : { use  is dvid }
 		#DV : { use  is dv, define = { 1 as Y, 2 as PCA } }
 		DVID : { use  is dvid }
 		DV : { use  is dv, define = {
 					1 of DVID as Y,
-					2 of DVID as PCA are { dead when 1, alive when 2}
+					2 of DVID as PCA with { dead when 1, alive when 2}
 				}
 			  }
 		MDV : { use  is mdv}
@@ -40,7 +39,6 @@ warfarin_PK_v2_dat = dataobj{
 
 	DATA_DERIVED_VARIABLES{
 		DT : { column=TIME, condition=AMT > 0 }
-		#PCA : { column=DV, categories are {dead, alive}, define={1 as dead, 2 as alive, 3 as alive} }
 	}
 	
 	SOURCE {

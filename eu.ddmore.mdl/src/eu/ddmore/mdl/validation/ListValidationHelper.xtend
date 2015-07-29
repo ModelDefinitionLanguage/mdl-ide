@@ -42,7 +42,7 @@ class ListValidationHelper {
 				key = 'use'
 				listDefns = newArrayList(
 					new ListDefinition => [  keyValue='covariate' attributes = #[
-						 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categories', null, false)//,
+						 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categorical', null, false)//,
 //						 new AttributeDefn('define', 'categories', false)
 						 ] 
 					],
@@ -121,23 +121,23 @@ class ListValidationHelper {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='depot' attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('cmt', null, true),
+						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
 						 new AttributeDefn('to', null, true), new AttributeDefn('ka', null, true),
 						 new AttributeDefn('tlag', null, true), new AttributeDefn('finput', null, false)
 						 ]
 					],
 					new ListDefinition => [ keyValue='compartment' attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('cmt', null, true)
+						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true)
 						 ]
 					],
 					new ListDefinition => [ keyValue='elimination' attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('cmt', null, true),
+						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
 						 new AttributeDefn('from', null, true), new AttributeDefn('v', null, true),
 						 new AttributeDefn('cl', null, true)
 						 ]
 					],
 					new ListDefinition => [ keyValue='distribution' attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('cmt', null, true),
+						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
 						 new AttributeDefn('kin', null, true), new AttributeDefn('kout', null, true),
 						 new AttributeDefn('from', null, true)
 						 ]
@@ -176,7 +176,7 @@ class ListValidationHelper {
 					new ListDefinition => [ keyValue='categorical' attributes = #[
 //						 new AttributeDefn('type', null, true), new AttributeDefn('categories', null, true),
 //						 new AttributeDefn('probabilities', null, true)
-						 new AttributeDefn('type', null, true), new AttributeDefn('predictions', null, true)
+						 new AttributeDefn('type', null, true) //, new AttributeDefn('predictions', null, true)
 						 ]
 					]
 				)
@@ -187,7 +187,7 @@ class ListValidationHelper {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='categorical' attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('categories', null, true)
+						 new AttributeDefn('type', null, true)//, new AttributeDefn('categories', null, true)
 						 ]
 					],
 					new ListDefinition => [ keyValue='continuous' attributes = #[
@@ -204,7 +204,7 @@ class ListValidationHelper {
 		val parent = parentStatement
 		if(attDefns.containsKey(parent.identifier)){
 			val iter = attributes.iterator
-			var expectedAttributes = new ArrayList<ListDefinition>()
+			val expectedAttributes = new ArrayList<ListDefinition>()
 			while(iter.hasNext && expectedAttributes.isEmpty){
 				val att = iter.next
 				val blockDefn = attDefns.get(parent.identifier)
@@ -338,7 +338,7 @@ class ListValidationHelper {
 		// get key from parent list
 //		val parentList = eContainer as AttributeList
 //		val parentBlock = eContainer.eContainer.eContainer as BlockStatement
-		if(attDefns.containsKey(parentBlock.identifier)){
+		if (attDefns.containsKey(parentBlock.identifier)) {
 			val blkDefn = attDefns.get(parentBlock.identifier)
 			val keyVal = parentList.getKeyValue(blkDefn.key)
 			val listDefn = blkDefn.getListDefnByKeyValue(keyVal)

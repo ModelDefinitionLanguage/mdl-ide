@@ -50,13 +50,13 @@ class MclListAttributeValidationTest {
 		)
 	}
 
-	@Test
+	@Ignore  // language currently doesn't have any cases that use this.
 	def void testMissingAttributeWithDep(){
 		val mcl = '''bar = dataobj {
 			DECLARED_VARIABLES{ Y }
 			
 			DATA_INPUT_VARIABLES{
-				aCov : { use is covariate, categories are {male, female} }
+				aCov : { use is covariate, categorical with {male, female} }
 			}
 			
 			SOURCE{	}
@@ -75,7 +75,7 @@ class MclListAttributeValidationTest {
 			DECLARED_VARIABLES{ Y }
 			
 			DATA_INPUT_VARIABLES{
-				aCov : { use is covariate, categories are male when 1 female when 2 }
+				aCov : { use is covariate, categories with {male when 1, female when 2} }
 			}
 			
 			SOURCE{	}
@@ -108,7 +108,9 @@ class MclListAttributeValidationTest {
 
 	@Test
 	def void testAnonymousCompartmentAttributesOK(){
-		val mcl = '''bar = mdlobj(idv T) {
+		val mcl = '''bar = mdlobj {
+			IDV{ T }
+			
 			VARIABILITY_LEVELS{
 				ID { type is idv, level=1 }
 			}
@@ -123,9 +125,9 @@ class MclListAttributeValidationTest {
 			
 			MODEL_PREDICTION{
 	  			COMPARTMENT {
-					INPUT_KA:   {type is depot, cmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
-					CENTRAL:    {type is compartment, cmt=2}
-                    			{type is elimination, cmt=2, from=CENTRAL, v=V, cl=CL}
+					INPUT_KA:   {type is depot, modelCmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
+					CENTRAL:    {type is compartment, modelCmt=2}
+                    			{type is elimination, modelCmt=2, from=CENTRAL, v=V, cl=CL}
    				}# end COMPARTMENT
 				CONC=CENTRAL/V
 			} # end MODEL_PREDICTION
@@ -136,7 +138,9 @@ class MclListAttributeValidationTest {
 
 	@Test
 	def void testAnonymousCompartmentAttributesNoKey(){
-		val mcl = '''bar = mdlobj(idv T) {
+		val mcl = '''bar = mdlobj {
+			IDV{ T }
+			
 			VARIABILITY_LEVELS{
 				ID { type is idv, level=1 }
 			}
@@ -151,9 +155,9 @@ class MclListAttributeValidationTest {
 			
 			MODEL_PREDICTION{
 	  			COMPARTMENT {
-					INPUT_KA:   {type is depot, cmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
-					CENTRAL:    {type is compartment, cmt=2}
-                    			{cmt=2, from=CENTRAL, v=V, cl=CL}
+					INPUT_KA:   {type is depot, modelCmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
+					CENTRAL:    {type is compartment, modelCmt=2}
+                    			{modelCmt=2, from=CENTRAL, v=V, cl=CL}
    				}# end COMPARTMENT
 				CONC=CENTRAL/V
 			} # end MODEL_PREDICTION
@@ -184,8 +188,8 @@ class MclListAttributeValidationTest {
 			MODEL_PREDICTION{
 	  			COMPARTMENT {
 					INPUT_KA:   {type is depot, blahblah=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
-					CENTRAL:    {type is compartment, cmt=2}
-                    			{cmt=2, from=CENTRAL, v=V, cl=CL}
+					CENTRAL:    {type is compartment, modelCmt=2}
+                    			{modelCmt=2, from=CENTRAL, v=V, cl=CL}
    				}# end COMPARTMENT
 				CONC=CENTRAL/V
 			} # end MODEL_PREDICTION

@@ -17,7 +17,7 @@ class MclParserTaskObj1Test {
 	
 	val static CODE_SNIPPET = '''
 nonmem_task = taskobj {
-	ESTIMATE(software="NONMEM")<<
+	ESTIMATE(target="NONMEM")<<
 			; this is defined in INI format
 			[method]
 				algorithm=SAEM

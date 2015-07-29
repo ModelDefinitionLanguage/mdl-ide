@@ -24,6 +24,7 @@ import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.mdl.Limit
+import eu.ddmore.mdl.mdl.ElifClause
 
 public class ExpressionConverter {
 	
@@ -95,6 +96,10 @@ public class ExpressionConverter {
 		«IF exp.other!=null»«exp.other.getString» otherwise«ENDIF»'''
 	
 	def static dispatch String getString(WhenClause exp)'''
+		(«exp.value.getString») when «exp.cond.getString»'''
+
+	
+	def static dispatch String getString(ElifClause exp)'''
 		(«exp.value.getString») when «exp.cond.getString»'''
 
 	

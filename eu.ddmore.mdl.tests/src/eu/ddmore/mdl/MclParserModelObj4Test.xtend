@@ -16,7 +16,9 @@ class MclParserModelObj4Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_2Compartments_mdl = mdlobj (idv TIME) {
+warfarin_PK_2Compartments_mdl = mdlobj {
+   IDV { T }
+	
    COVARIATES{
       WT
       logtWT = log(WT/70)
@@ -84,10 +86,10 @@ warfarin_PK_2Compartments_mdl = mdlobj (idv TIME) {
 
    COMPARTMENT{
       ##  Parameters = CL,V2,Q,V3,KA,S2,ALAG1
-      INPUT_KA:   {type is depot, cmt=1, to=CENTRAL, ka=KA, tlag=ALAG1}
-      CENTRAL:    {type is compartment, cmt=2}
-                  {type is elimination, cmt=2, from=CENTRAL, v=V2, cl=CL}
-      PERIPHERAL: {type is distribution, cmt=3, from=CENTRAL, kin=Q/V2, kout=Q/V3}
+      INPUT_KA:   {type is depot, modelCmt=1, to=CENTRAL, ka=KA, tlag=ALAG1}
+      CENTRAL:    {type is compartment, modelCmt=2}
+                  {type is elimination, modelCmt=2, from=CENTRAL, v=V2, cl=CL}
+      PERIPHERAL: {type is distribution, modelCmt=3, from=CENTRAL, kin=Q/V2, kout=Q/V3}
    }# end COMPARTMENT
 
       F=CENTRAL/S2

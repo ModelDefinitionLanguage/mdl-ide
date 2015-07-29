@@ -20,7 +20,9 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testValidUnanmedFunction(){
-		val mcl = '''bar = mdlobj(idv T) {
+		val mcl = '''bar = mdlobj {
+			IDV{T}
+			
 			COVARIATES{
 				other
 				cov = log(other)

@@ -18,7 +18,9 @@ class MclParserModelObj1Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlobj {
+	IDV{ T }
+	
 	COVARIATES{
 		logtWT
 	}
@@ -89,7 +91,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	@Test
 	def void testBlocks(){
 		val mcl = CODE_SNIPPET.parse
-		val Deque<String> expectedBlks = newLinkedList("COVARIATES", "VARIABILITY_LEVELS", "STRUCTURAL_PARAMETERS",
+		val Deque<String> expectedBlks = newLinkedList("IDV", "COVARIATES", "VARIABILITY_LEVELS", "STRUCTURAL_PARAMETERS",
 			"VARIABILITY_PARAMETERS", "RANDOM_VARIABLE_DEFINITION", "INDIVIDUAL_VARIABLES", "MODEL_PREDICTION",
 			"RANDOM_VARIABLE_DEFINITION", "OBSERVATION"
 		);

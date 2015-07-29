@@ -24,7 +24,7 @@ class MclParserDataObj1Test {
 	DATA_INPUT_VARIABLES {
 		ID : { use is id }
 		TIME : { use is idv }
-		WT : { type  is continuous, use is covariate }
+		WT : { use is covariate }
 		AMT : { use is amt, define = GUT }
 	} # end DATA_INPUT_VARIABLES
 	SOURCE {

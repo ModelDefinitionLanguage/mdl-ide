@@ -6,14 +6,17 @@ import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.ValuePair
 import java.util.HashSet
+import java.util.HashMap
+import java.util.Map
 
 class BlockArgumentValidationHelper {
 	
 	static val OBJECT_ARG = "ObjectArg"
 	
-	static val objArgVarDeclNames = #{ 
-		OBJECT_ARG -> #{ MdlValidator::MDLOBJ -> #{ 'idv' -> false } }
-	}
+	static val objArgVarDeclNames = new HashMap<String, Map<String, Map<String, Boolean> > > 
+//	#{ 
+//		OBJECT_ARG -> #{ MdlValidator::MDLOBJ -> #{ 'idv' -> false } }
+//	}
 	
 	def getUnusedMandatoryObjVarDecl(BlockArguments it) {
 		val parent = eContainer
@@ -74,7 +77,11 @@ class BlockArgumentValidationHelper {
 		MdlValidator::PARAMOBJ -> #{
 			'VARIABILITY' -> #{ 'type' -> true }
 		},
-		MdlValidator::TASKOBJ -> #{ "ESTIMATE" -> #{ 'software' -> true } }
+		MdlValidator::TASKOBJ -> #{ 
+			"ESTIMATE" -> #{ 'target' -> true },
+			"SIMULATE" -> #{ 'target' -> true },
+			"OPTIMISE" -> #{ 'target' -> true }
+		}
 	}
 	
 	def getUnusedMandatoryPropertyArguments(BlockArguments it) {
