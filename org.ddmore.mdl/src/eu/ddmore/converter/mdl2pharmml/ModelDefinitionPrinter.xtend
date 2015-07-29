@@ -347,13 +347,17 @@ class ModelDefinitionPrinter {
 		if (type.equals(VariabilityType::COV.toString))
 			res  = res + '''
 				<Covariance>
-					«value.print_Math_Expr»
+					<Equation xmlns="«xmlns_math»">
+						«value.print_Math_Expr»
+					</Equation>
 				</Covariance>
 			'''
 		if (type.equals(VariabilityType::CORR.toString))
 			res  = res + '''
 				<CorrelationCoefficient>
-					«value.print_Math_Expr»
+					<Equation xmlns="«xmlns_math»">
+						«value.print_Math_Expr»
+					</Equation>
 				</CorrelationCoefficient>
 			'''
 		'''
