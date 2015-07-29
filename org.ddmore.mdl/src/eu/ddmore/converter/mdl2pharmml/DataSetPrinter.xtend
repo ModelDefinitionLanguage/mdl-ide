@@ -67,11 +67,11 @@ class DataSetPrinter {
 				return '''
 					<ColumnMapping>
 					    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-			    	   	«define.expression.print_Math_Expr»
-			    	   	«IF define.expression.isCategoricalObs(mObj)»
-			    	   		«define.expression.printCategoricalObsMapping(mObj)»
+						«define.expression.print_Math_Expr»
+							«IF define.expression.isCategoricalObs(mObj)»
+							«define.expression.printCategoricalObsMapping(mObj)»
 			    	   	«ELSEIF define.expression.isDiscreteBernoulliObs(mObj)»
-			    	   		«printDiscreteBernoulliObsMapping»
+							«printDiscreteBernoulliObsMapping»
 			    	   	«ENDIF»
 					</ColumnMapping>
 				  '''
@@ -80,10 +80,10 @@ class DataSetPrinter {
 					AttributeValidator::attr_predid.name);
 				val dvidColId = dObj.getUseDvidColumn
 				return '''
-					«FOR p : pairs»
 					<MultipleDVMapping>
-					    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+						<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
 						<Piecewise xmlns="«xmlns_mstep»">
+							«FOR p : pairs»
 							<math:Piece>
 							   	«p.key.expression.print_Math_Expr»
 							   	«IF p.key.expression.isCategoricalObs(mObj)»
@@ -98,9 +98,9 @@ class DataSetPrinter {
 							   		</math:LogicBinop>
 							   	</math:Condition>
 							</math:Piece>
+					«ENDFOR» 
 						</Piecewise>
 					</MultipleDVMapping>
-					«ENDFOR» 
 				  '''
 			}
 		}
