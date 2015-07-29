@@ -22,6 +22,7 @@ class ReferenceResolver{
 	//References that are needed for the conversion
 	protected var String independentVar = null;
 	protected var SymbolDeclaration cmtVar = null;
+	private static val String DEFAULT_IDV = "t"
 
 	//List of PharmML variables in corresponding blocks 
 	protected var vm_err_vars = new HashMap<String, Integer>(); 
@@ -36,7 +37,7 @@ class ReferenceResolver{
 	protected def prepareCollections(MOGObject mog){
 		for (o: Utils::getMOGObjects(mog)){
 			if (o.modelObject != null) {
-				independentVar = o.modelObject.getIndependentVar;
+				independentVar = o.modelObject.getIndependentVar ?: DEFAULT_IDV;
 				//VariabilityModel definitions
 				vm_err_vars = o.modelObject.getLevelVars(LevelType::OBSERVATION);
 				vm_mdl_vars = o.modelObject.getLevelVars(LevelType::PARAMETER)
