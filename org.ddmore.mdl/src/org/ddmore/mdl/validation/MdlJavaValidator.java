@@ -13,12 +13,15 @@ import java.util.Map;
 
 import org.ddmore.mdl.domain.Variable;
 import org.ddmore.mdl.mdl.Category;
+import org.ddmore.mdl.mdl.DataInputBlock;
 import org.ddmore.mdl.mdl.Mcl;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.ObjectName;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.UnaryExpression;
+import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ComposedChecks;
 //import org.ddmore.mdl.mdl.impl.OutputVariablesBlockImpl;
@@ -34,6 +37,7 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 
 	public final static String MSG_VARIABLE_DEFINED = "A variable with such name already exists";
 	public final static String MSG_OBJECT_DEFINED   = "An object with such name already exists";
+	public final static String MALFORMED_COLUMN_DEFN = "org.ddmore.mdl.validation.malformedcoldefn";
 
 	public final static String MSG_UNRESOLVED_VARIABLE          = "Unresolved reference: variable not declared";
 	public final static String MSG_UNRESOLVED_FUNC_ARGUMENT_REF = "Unresolved reference to a function output parameter";
@@ -96,6 +100,19 @@ public class MdlJavaValidator extends AbstractMdlJavaValidator {
 		}
 	} 
 
+	@Check
+	public void checkDataColumnsAreWellFormed(SymbolDeclaration sd){
+		SymbolDeclarationImpl sdImpl = (SymbolDeclarationImpl)sd;
+		EObject parent = sdImpl.eContainer();
+		if(parent instanceof DataInputBlock){
+			if(sdImpl.getList() == null){
+				String colName = sd.getSymbolName().getName();
+				error("The column definition for '" + colName + "' is malformed.", MdlPackage.Literals.SYMBOL_DECLARATION__LIST,
+						MALFORMED_COLUMN_DEFN, colName);
+			}
+		}
+	}
+	
 	//Check that each variable is declared in the local object
 	@Check
 	public void checkReferenceToVariable(UnaryExpression u) {
