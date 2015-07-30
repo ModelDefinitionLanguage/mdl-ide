@@ -19,7 +19,7 @@ class MclParserDataObj3Test {
 	
 	val static CODE_SNIPPET = '''
 warfarin_PK_v2_dat = dataobj{
-	DECLARED_VARIABLES{ Y; D; TD; GUT; PCA with {dead, alive}; OTHER with {dead, alive} }
+	DECLARED_VARIABLES{ Y; GUT; PCA with {dead, alive}; OTHER with {dead, alive} }
 	
 	DATA_INPUT_VARIABLES {
 		ID : { use is id }
@@ -27,12 +27,12 @@ warfarin_PK_v2_dat = dataobj{
 		WT : { use is covariate }
 		AGE : { use is covariate }
 		SEX : { use is covariate, categorical with { male when 0, female when 1} } 
-		AMT : { use  is amt, define={ 1 as GUT } }
+		AMT : { use  is amt, define = { 1 as GUT } }
 		DVID : { use  is dvid }
-		DV : { use  is dv, define = {
-					1 from DVID as Y,
-					2 from DVID as { PCA.dead when 1, PCA.alive when 2},
-					3 from DVID as { OTHER.dead when 1, OTHER.alive when 2}
+		DV : { use  is dv, define = DVID {
+					1 as Y,
+					2 as { PCA.dead when 1, PCA.alive when 2},
+					3 as { OTHER.dead when 1, OTHER.alive when 2}
 				}
 			  }
 		MDV : { use  is mdv}
