@@ -123,7 +123,7 @@ class ListValidationHelper {
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='depot' attributes = #[
 						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
-						 new AttributeDefn('output', null, true), new AttributeDefn('ka', null, true),
+						 new AttributeDefn('to', null, true), new AttributeDefn('ka', null, true),
 						 new AttributeDefn('tlag', null, true), new AttributeDefn('finput', null, false)
 						 ]
 					],
@@ -133,14 +133,14 @@ class ListValidationHelper {
 					],
 					new ListDefinition => [ keyValue='elimination' attributes = #[
 						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
-						 new AttributeDefn('input', null, true), new AttributeDefn('v', null, true),
+						 new AttributeDefn('from', null, true), new AttributeDefn('v', null, true),
 						 new AttributeDefn('cl', null, true)
 						 ]
 					],
 					new ListDefinition => [ keyValue='distribution' attributes = #[
 						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
 						 new AttributeDefn('kin', null, true), new AttributeDefn('kout', null, true),
-						 new AttributeDefn('input', null, true)
+						 new AttributeDefn('from', null, true)
 						 ]
 					]
 				)
