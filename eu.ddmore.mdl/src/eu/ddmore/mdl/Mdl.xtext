@@ -77,7 +77,7 @@ ListDefinition:
 ;
 
 AnonymousListStatement:
-	list = AttributeList ';'?
+	':' ':' list = AttributeList ';'?
 ;
 
 
