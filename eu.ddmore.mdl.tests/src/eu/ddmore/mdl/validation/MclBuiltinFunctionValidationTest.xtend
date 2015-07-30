@@ -25,7 +25,7 @@ class MclBuiltinFunctionValidationTest {
 			
 			COVARIATES{
 				other
-				cov = log(other)
+				cov = ln(other)
 				foo = exp(22)
 			}
 			
@@ -41,7 +41,7 @@ class MclBuiltinFunctionValidationTest {
 		val mcl = '''bar = mdlobj(idv T) {
 			COVARIATES{
 				other
-				cov = log()
+				cov = ln()
 				foo = exp(22)
 			}
 			
@@ -51,7 +51,7 @@ class MclBuiltinFunctionValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
 			MdlValidator::INCORRECT_NUM_FUNC_ARGS,
-			"Function 'log' has the wrong number of arguments. Expected 1."
+			"Function 'ln' has the wrong number of arguments. Expected 1."
 		)
 	}
 
@@ -60,7 +60,7 @@ class MclBuiltinFunctionValidationTest {
 		val mcl = '''bar = mdlobj(idv T) {
 			COVARIATES{
 				other
-				cov = log(other, 2)
+				cov = ln(other, 2)
 				foo = exp(22)
 			}
 			
@@ -70,7 +70,7 @@ class MclBuiltinFunctionValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
 			MdlValidator::INCORRECT_NUM_FUNC_ARGS,
-			"Function 'log' has the wrong number of arguments. Expected 1."
+			"Function 'ln' has the wrong number of arguments. Expected 1."
 		)
 	}
 

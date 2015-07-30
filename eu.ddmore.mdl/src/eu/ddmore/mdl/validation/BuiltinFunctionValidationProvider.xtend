@@ -11,7 +11,8 @@ class BuiltinFunctionValidationProvider {
 	}
 	
 	static val functDefns = #{
-		'log' -> ( new FuncArgDefn => [ numArgs = 1 ] ),
+		'log' -> ( new FuncArgDefn => [ numArgs = 2 ] ),
+		'ln' -> ( new FuncArgDefn => [ numArgs = 1 ] ),
 		'abs' -> ( new FuncArgDefn => [ numArgs = 1 ] ),
 		'exp' -> ( new FuncArgDefn => [ numArgs = 1 ] )
 	}

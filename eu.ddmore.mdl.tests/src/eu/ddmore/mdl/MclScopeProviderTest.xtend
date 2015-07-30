@@ -32,7 +32,7 @@ warfarin_PK_SEXAGE_mdl2 = mdlobj {
 		WT
 		AGE
 		SEX : { type is categorical with {female,  male,  MISSING} }
-		logtWT = log(WT/70)
+		logtWT = ln(WT/70)
 		tAGE = AGE - 40
 	}
 	
@@ -55,7 +55,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 		WT
 		AGE
 		SEX : { type is categorical with {female, male, MISSING} }
-		logtWT = log(WT/70)
+		logtWT = ln(WT/70)
 		tAGE = AGE - 40
 	}
 

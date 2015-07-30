@@ -80,7 +80,7 @@ public class MclTypeProvider {
 	
 	
 	static val functionTypeTable = #{
-		'log' -> REAL_TYPE,
+		'ln' -> REAL_TYPE,
 		'abs' -> REAL_TYPE,
 		'exp' -> REAL_TYPE,
 		'Normal' -> PDF_TYPE,

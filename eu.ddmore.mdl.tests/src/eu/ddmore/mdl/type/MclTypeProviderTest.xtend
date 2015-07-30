@@ -31,7 +31,7 @@ class MclTypeProviderTest {
 	@Test
 	def void testTypeExpectedFuncCallExpression(){
 		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
-		funcCall.func = 'log'
+		funcCall.func = 'ln'
 		funcCall.typeFor.assertEquals(new TypeInfo(PrimitiveType.Real, TypeProperty.None))
 	}
 

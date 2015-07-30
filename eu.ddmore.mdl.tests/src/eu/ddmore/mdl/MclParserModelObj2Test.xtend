@@ -26,7 +26,7 @@ warfarin_PK_ANALYTIC_mdl = mdlobj {
 
 	COVARIATES{
 		WT
-		logtWT = log(WT/70)
+		logtWT = ln(WT/70)
 	}
 
 	STRUCTURAL_PARAMETERS {

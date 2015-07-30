@@ -21,7 +21,7 @@ warfarin_PK_2Compartments_mdl = mdlobj {
 	
    COVARIATES{
       WT
-      logtWT = log(WT/70)
+      logtWT = ln(WT/70)
    }# end COVARIATES
 
    VARIABILITY_LEVELS{
@@ -69,8 +69,8 @@ warfarin_PK_2Compartments_mdl = mdlobj {
    }# end RANDOM_VARIABLE_DEFINITION (level=DV)
 
    INDIVIDUAL_VARIABLES{
-      log(CL) = linear(pop = log(POP_CL), fixEff = {{coeff=POP_BETA_CL_WT, covariate=logtWT}} , ranEff = eta_PPV_CL)
-      log(VC) = linear(pop = log(POP_VC), fixEff = {{coeff=POP_BETA_V_WT, covariate=logtWT}} , ranEff = eta_PPV_VC )
+      ln(CL) = linear(pop = ln(POP_CL), fixEff = {{coeff=POP_BETA_CL_WT, covariate=logtWT}} , ranEff = eta_PPV_CL)
+      ln(VC) = linear(pop = ln(POP_VC), fixEff = {{coeff=POP_BETA_V_WT, covariate=logtWT}} , ranEff = eta_PPV_VC )
       Q = linear(trans is log, pop = POP_Q, fixEff = {{coeff=POP_BETA_CL_WT, covariate=logtWT}} , ranEff = eta_PPV_Q)
       VP = linear(trans is log, pop = POP_VP, fixEff = {{coeff=POP_BETA_V_WT, covariate=logtWT}} , ranEff = eta_PPV_VP)
       KA = linear(trans is log, pop = POP_KA, ranEff = eta_PPV_KA)
@@ -99,7 +99,7 @@ warfarin_PK_2Compartments_mdl = mdlobj {
    }# end MODEL_PREDICTION
 
    OBSERVATION{
-         log(CC_obs) = combinedError1(additive = RUV_ADD, proportional = RUV_PROP, eps = eps_RUV_EPS1, prediction = CC) 
+         ln(CC_obs) = combinedError1(additive = RUV_ADD, proportional = RUV_PROP, eps = eps_RUV_EPS1, prediction = CC) 
    }# end OBSERVATION
 } # end of model object
 		'''

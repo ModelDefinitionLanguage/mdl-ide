@@ -23,7 +23,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 		WT
 		AGE
 		SEX : { type is categorical with {female, male, MISSING} }
-		logtWT = log(WT/70)
+		logtWT = ln(WT/70)
 		tAGE = AGE - 40
 	}
 
@@ -55,7 +55,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 	GROUP_VARIABLES{
 		FAGECL = exp(BETA_CL_AGE * tAGE)
 		FSEXCL = if(SEX == SEX.female) then POP_FCL_FEM  else 1
-		GRPCL = log(POP_CL * FAGECL * FSEXCL ) + BETA_CL_WT * logtWT
+		GRPCL = ln(POP_CL * FAGECL * FSEXCL ) + BETA_CL_WT * logtWT
 		GRPV = POP_V * (WT/70)^BETA_V_WT
 	}
 
