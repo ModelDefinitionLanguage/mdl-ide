@@ -44,7 +44,7 @@ warfarin_PK_SEXAGE_mdl2 = mdlobj {
 	} # end STRUCTURAL_PARAMETERS
 	
 	GROUP_VARIABLES{
-		FSEXCL = if(SEX == female) then POP_FCL_FEM  else 1
+		FSEXCL = if(SEX == SEX.female) then POP_FCL_FEM  else 1
 	}
 } # end of model object
 
@@ -67,7 +67,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 	}
 
 	GROUP_VARIABLES{
-		FSEXCL = if(SEX == female) then POP_FCL_FEM  else 1
+		FSEXCL = if(SEX == SEX.female) then POP_FCL_FEM  else 1
 		TLAG
 	}
 	
@@ -94,7 +94,10 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 	def void testExpectedEObjectDescriptions(){
 		val grpBlk = CODE_SNIPPET.parse.objects.last.blocks.last as BlockStatement
 		((grpBlk.body as BlockStatementBody).statements.last as EquationDefinition).expression =>  [
-			assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "T, WT, AGE, SEX, female, male, MISSING, logtWT, tAGE, POP_FCL_FEM, FSEXCL, TLAG, RATEIN, GUT, foo")
+			assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "T, WT, AGE, SEX, logtWT, tAGE, POP_FCL_FEM, FSEXCL, TLAG, RATEIN, GUT, foo")
+		]
+		((grpBlk.body as BlockStatementBody).statements.last as EquationDefinition).expression =>  [
+			assertScope(MdlPackage::eINSTANCE.categoryReference_Ref, "SEX.female, SEX.male, SEX.MISSING, warfarin_PK_SEXAGE_mdl2.SEX.female, warfarin_PK_SEXAGE_mdl2.SEX.male, warfarin_PK_SEXAGE_mdl2.SEX.MISSING, warfarin_PK_SEXAGE_mdl.SEX.female, warfarin_PK_SEXAGE_mdl.SEX.male, warfarin_PK_SEXAGE_mdl.SEX.MISSING")
 		]
 	}
 	

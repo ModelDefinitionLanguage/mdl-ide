@@ -4,7 +4,6 @@ import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BooleanLiteral
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
-import eu.ddmore.mdl.mdl.CategoricalDefinition
 import eu.ddmore.mdl.mdl.ElifClause
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
@@ -25,6 +24,7 @@ import eu.ddmore.mdl.mdl.VectorContent
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 
 public class ExpressionConverter {
 	
@@ -32,7 +32,7 @@ public class ExpressionConverter {
 		getString
 	}
 
-	def static String convertToString(CategoricalDefinition defn)'''
+	def static String convertToString(CategoricalDefinitionExpr defn)'''
 		[«FOR c : defn.categories SEPARATOR ','»
 			«(c as SymbolDefinition).name»«ENDFOR»]'''
 

@@ -76,7 +76,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 		# 11) Now use category definitions to describe categorical observations
 		PAIN : { type is categorical with {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} }
 		
-		#TENDERNESS : { type is categorical with {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} } 
+		TENDERNESS : { type is categorical with {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} } 
 	}
 } # end of model object
 '''

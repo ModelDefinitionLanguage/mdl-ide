@@ -23,7 +23,8 @@ import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
 class MdlScopeProvider extends AbstractDeclarativeScopeProvider {
 
 	def scope_SymbolReference_ref(Expression context, EReference reference){
-		context.eContainer.findDeclarationsInContext(context)
+		val retVal = context.eContainer.findDeclarationsInContext(context)
+		retVal
 	}
 
 	def dispatch IScope findDeclarationsInContext(EObject container, EObject o) {
@@ -31,7 +32,8 @@ class MdlScopeProvider extends AbstractDeclarativeScopeProvider {
 	}
 
 	def dispatch IScope findDeclarationsInContext(MclObject m, EObject o) {
-		Scopes::scopeFor(EcoreUtil2.getAllContentsOfType(m, SymbolDefinition))
+		val retVal = Scopes::scopeFor(EcoreUtil2.getAllContentsOfType(m, SymbolDefinition))
+		retVal
 	}
 
 }

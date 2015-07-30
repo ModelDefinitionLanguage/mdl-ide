@@ -54,7 +54,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 
 	GROUP_VARIABLES{
 		FAGECL = exp(BETA_CL_AGE * tAGE)
-		FSEXCL = if(SEX == female) then POP_FCL_FEM  else 1
+		FSEXCL = if(SEX == SEX.female) then POP_FCL_FEM  else 1
 		GRPCL = log(POP_CL * FAGECL * FSEXCL ) + BETA_CL_WT * logtWT
 		GRPV = POP_V * (WT/70)^BETA_V_WT
 	}

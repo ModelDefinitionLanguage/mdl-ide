@@ -38,7 +38,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 	} # end STRUCTURAL_PARAMETERS
 	
 	GROUP_VARIABLES{
-		FSEXCL = if(SEX == female) then POP_FCL_FEM  else 1
+		FSEXCL = if(SEX == SEX.female) then POP_FCL_FEM  else 1
 	}
 } # end of model object
 '''

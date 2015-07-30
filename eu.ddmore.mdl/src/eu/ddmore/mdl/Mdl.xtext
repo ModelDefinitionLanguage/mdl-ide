@@ -38,7 +38,7 @@ ForwardDeclaration:
 Statement:
 	EquationDefinition|TransformedDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|PropertyStatement|
-	AnonymousListStatement
+	AnonymousListStatement|EnumerationDefinition
 ;
 
 
@@ -52,11 +52,16 @@ LimitDefn:
 ;
 
 SymbolDefinition:
-	EquationDefinition | ListDefinition| ForwardDeclaration | CategoryDefinition| RandomVariableDefinition | TransformedDefinition
+	EquationDefinition | ListDefinition| ForwardDeclaration | RandomVariableDefinition | TransformedDefinition|
+	  EnumerationDefinition
 ;
 
 EquationDefinition:
 	name = ID ("=" expression = Expression)? ';'?
+;
+
+EnumerationDefinition:
+	name = ID  catDefn=CategoricalDefinitionExpr ';'?
 ;
 
 TransformedDefinition:
@@ -81,7 +86,7 @@ PropertyStatement:
 ;
 
 CategoricalDefinitionExpr returns Expression:
-	{CategoricalDefinition} WITH BEGIN categories += CategoryDefinition (=>',' categories += CategoryDefinition)* END  
+	{CategoricalDefinitionExpr} WITH BEGIN categories += CategoryDefinition (=>',' categories += CategoryDefinition)* END  
 ;
 
 CategoryDefinition:
@@ -99,8 +104,8 @@ Attribute:
 ValuePair:
 	{ValuePair}argumentName = AttributeName ("=" expression = Expression
 								| IS expression = EnumExpression (catDefn=CategoricalDefinitionExpr)?
-								| expression=CategoricalDefinitionExpr
-								| '=' expression = MappingExpression)
+								| expression=CategoricalDefinitionExpr )
+//								| '=' expression = MappingExpression)
 ;
 
 AttributeName:
@@ -119,8 +124,18 @@ MappingExpression returns Expression:
 	END)
 ;
 
+CategoryMappingExpression returns Expression:
+	{CategoryMappingExpression}(BEGIN
+		attLists+=CategoryMapping (',' attLists+=CategoryMapping)*
+	END)
+;
+
+CategoryMapping:
+	CategoryReference WHEN whenValue=Expression
+;
+
 MappingPair:
-	leftOperand=OrExpression (FROM srcColumn=SymbolReference)?  AS rightOperand=OrExpression (catDefn=CategoricalDefinitionExpr)?
+	leftOperand=OrExpression (FROM srcColumn=SymbolReference)?  AS rightOperand=OrExpression
 ;
 
 MappingList:
@@ -182,6 +197,9 @@ OpUnary:
 PrimaryExpression returns Expression:
 	Literal
 	| SymbolReference 
+	| CategoryReference
+	| CategoryMappingExpression
+	| MappingExpression
 	| BuiltinFunctionCall
 	| WhenExpression
 	| EstimateRange
@@ -220,6 +238,11 @@ SymbolReference:
 ;
 
 
+CategoryReference:
+	{CategoryReference} ref=[CategoryDefinition|QualifiedName]
+;
+
+
 BuiltinFunctionCall returns Expression:
 	{BuiltinFunctionCall} func=ID '(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
 ;
@@ -253,6 +276,11 @@ VectorLiteral returns Expression:
 VectorContent:
 		expressions += Expression (=> ',' expressions += Expression)*
 ;
+
+QualifiedName:
+	ID ('.' ID)
+;
+
 
 terminal CONSTANT:
 	'INF'

@@ -2,7 +2,6 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.Attribute
 import eu.ddmore.mdl.mdl.AttributeList
-import eu.ddmore.mdl.mdl.CategoricalDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import java.util.ArrayList
 import java.util.HashMap
@@ -12,6 +11,7 @@ import org.eclipse.xtend.lib.annotations.Data
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 
 class ListValidationHelper {
 	static val CATEGORIES_KWD = "categories"
@@ -291,7 +291,7 @@ class ListValidationHelper {
 		attributes.exists[attrib|
 			switch(attrib){
 				ValuePair case attrib.argumentName == queryName: true
-				CategoricalDefinition case CATEGORIES_KWD == queryName: true 
+				CategoricalDefinitionExpr case CATEGORIES_KWD == queryName: true 
 				default: false
 			}
 		]
@@ -300,14 +300,14 @@ class ListValidationHelper {
 	def getAttributeName(Attribute attrib){
 		switch(attrib){
 			ValuePair: attrib.argumentName
-			CategoricalDefinition: CATEGORIES_KWD 
+			CategoricalDefinitionExpr: CATEGORIES_KWD 
 		}
 	}
 
 	def getAttributeValueString(Attribute attrib){
 		switch(attrib){
 			ValuePair: attrib.expression.convertToString
-			CategoricalDefinition: attrib.convertToString
+			CategoricalDefinitionExpr: attrib.convertToString
 		}
 	}
 

@@ -15,6 +15,7 @@ import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import eu.ddmore.mdl.mdl.CategoryReference
 
 public class MclTypeProvider {
 
@@ -93,6 +94,8 @@ public class MclTypeProvider {
 	def dispatch TypeInfo typeFor(Expression e){
 		switch(e){
 			SymbolReference: e.ref.typeFor.markReference
+			CategoryReference:
+				e.ref.typeFor.markReference
 			ParExpression: e.expr.typeFor
 			BuiltinFunctionCall:
 				functionTypeTable.get(e.func) ?: MclTypeProvider.UNDEFINED_TYPE
@@ -119,6 +122,14 @@ public class MclTypeProvider {
 			ListDefinition,
 			CategoryDefinition,
 			RandomVariableDefinition: typeTable.get(sd.eClass)
+			default:
+				UNDEFINED_TYPE
+		}
+	}
+	
+	def dispatch TypeInfo typeFor(CategoryDefinition sd){
+		switch(sd){
+			CategoryDefinition: typeTable.get(sd.eClass)
 			default:
 				UNDEFINED_TYPE
 		}
