@@ -7,7 +7,7 @@ import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider
 import java.util.Map
 
-class BuiltinFunctionValidationProvider {
+class BuiltinFunctionProvider {
 	
 	interface FunctDefn{
 		def int getNumArgs()

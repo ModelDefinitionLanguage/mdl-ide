@@ -50,7 +50,7 @@ class MdlValidator extends AbstractMdlValidator {
 	extension BlockArgumentValidationHelper movh = new BlockArgumentValidationHelper
 	extension BlockValidationHelper blokHelper = new BlockValidationHelper
 	extension ListValidationHelper listHelper = new ListValidationHelper
-	extension BuiltinFunctionValidationProvider funcHelper = new BuiltinFunctionValidationProvider
+	extension BuiltinFunctionProvider funcHelper = new BuiltinFunctionProvider
 	extension MclTypeProvider typeProvider = new MclTypeProvider
 
 	public static val UNRECOGNISED_OBJECT_TYPE = "eu.ddmore.mdl.validation.UnrecognisedObjectType"

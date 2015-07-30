@@ -16,12 +16,12 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import eu.ddmore.mdl.mdl.CategoryReference
-import eu.ddmore.mdl.validation.BuiltinFunctionValidationProvider
 import eu.ddmore.mdl.mdl.EnumerationDefinition
+import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 
 public class MclTypeProvider {
 
-	extension BuiltinFunctionValidationProvider typeProvider = new BuiltinFunctionValidationProvider
+	extension BuiltinFunctionProvider typeProvider = new BuiltinFunctionProvider
 	
 
 	enum PrimitiveType {
