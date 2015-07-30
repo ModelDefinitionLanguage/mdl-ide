@@ -39,7 +39,7 @@ class MclTypeProviderTest {
 	def void testTypeUnknownFuncCallExpression(){
 		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
 		funcCall.func = 'foobar'
-		funcCall.typeFor.assertEquals(MclTypeProvider::UNDEFINED_TYPE)
+		MclTypeProvider::UNDEFINED_TYPE.assertEquals(funcCall.typeFor)
 	}
 
 	@Test

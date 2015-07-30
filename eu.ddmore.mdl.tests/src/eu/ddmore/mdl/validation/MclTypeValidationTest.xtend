@@ -386,9 +386,63 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.vectorContent,
+		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Expected Enum type, but was Real."
+		)
+	}
+	
+	@Test
+	def void testInValidNumEnumExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			COVARIATES{
+				SEX with {male, female}
+			}
+		
+			
+			MODEL_PREDICTION{
+				V = if(2 == SEX) then 1 else 0
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was Enum."
+		)
+	}
+	
+	@Test
+	def void testInValidEnumStringExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			COVARIATES{
+				SEX with {male, female}
+			}
+		
+			
+			MODEL_PREDICTION{
+				V = if(SEX == "2") then 1 else 0
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Enum type, but was String."
 		)
 	}
 	
