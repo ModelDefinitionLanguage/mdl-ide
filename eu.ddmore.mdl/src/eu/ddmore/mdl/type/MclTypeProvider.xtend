@@ -20,7 +20,7 @@ import eu.ddmore.mdl.mdl.CategoryReference
 public class MclTypeProvider {
 
 	enum PrimitiveType {
-		String, Real, Boolean, VarLevel, Pdf, Undefined
+		String, Real, Boolean, VarLevel, Pdf, Enum, Undefined
 	}
 	enum TypeProperty{
 		Deriv, Vector, DataCol, Estimate, None
@@ -45,10 +45,12 @@ public class MclTypeProvider {
 
 	public static val UNDEFINED_TYPE = new TypeInfo(PrimitiveType.Undefined, TypeProperty.None)
 	public static val REAL_TYPE = new TypeInfo(PrimitiveType.Real, TypeProperty.None)
+	public static val ENUM_TYPE = new TypeInfo(PrimitiveType.Enum, TypeProperty.None)
 	public static val STRING_TYPE = new TypeInfo(PrimitiveType.String, TypeProperty.None)
 	public static val BOOL_TYPE = new TypeInfo(PrimitiveType.Boolean, TypeProperty.None)
 	public static val PDF_TYPE = new TypeInfo(PrimitiveType.Pdf, TypeProperty.None)
 	public static val VAR_LEVEL_TYPE = new TypeInfo(PrimitiveType.VarLevel, TypeProperty.None)
+	public static val VECTOR_TYPE = new TypeInfo(PrimitiveType.Real, TypeProperty.Vector)
 	
 	
 	static val ep = MdlPackage::eINSTANCE 
@@ -66,7 +68,7 @@ public class MclTypeProvider {
 		ep.orExpression -> BOOL_TYPE,
 		ep.additiveExpression -> REAL_TYPE,
 		ep.multiplicativeExpression -> REAL_TYPE,
-		ep.categoryDefinition -> REAL_TYPE, // @TODO: Do category typing properly
+		ep.categoryDefinition -> ENUM_TYPE, // @TODO: Do category typing properly
 		
 		ep.estimateRange -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
 		ep.limitDefn -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
@@ -168,16 +170,15 @@ public class MclTypeProvider {
 //	}
 	
 	def checkRelationalOp(Expression lhs, Expression rhs, (PrimitiveType, PrimitiveType) => void leftErrorLambda,
-		(PrimitiveType, PrimitiveType) => void rightErrorLambda){
-		checkExpectedAndExpression(PrimitiveType.Real, lhs, leftErrorLambda)
-		checkExpectedAndExpression(PrimitiveType.Real, rhs, rightErrorLambda)
-//		if(lhs == null || rhs == null) return
-//		val lhsType = lhs.typeFor.theType
-//		val rhsType = rhs.typeFor.theType
-//		if(lhsType != PrimitiveType.Real)
-//			leftErrorLambda.apply(PrimitiveType.Real, lhsType)
-//		if(rhsType != PrimitiveType.Real)
-//			rightErrorLambda.apply(PrimitiveType.Real, rhsType)
+			(PrimitiveType, PrimitiveType) => void rightErrorLambda){
+		val lhsType = lhs?.typeFor?.theType ?: UNDEFINED_TYPE.theType
+		val rhsType = rhs?.typeFor?.theType ?: UNDEFINED_TYPE.theType
+		if(lhsType != REAL_TYPE.theType && lhsType != ENUM_TYPE.theType)
+			leftErrorLambda.apply(PrimitiveType.Real, lhsType)
+		if(rhsType != REAL_TYPE.theType && rhsType != ENUM_TYPE.theType)
+			rightErrorLambda.apply(PrimitiveType.Real, rhsType)
+		if(rhsType != lhsType)
+			leftErrorLambda.apply(lhsType, rhsType)
 	}
 
 	def checkMathsOp(Expression lhs, Expression rhs, (PrimitiveType, PrimitiveType) => void leftErrorLambda,

@@ -341,4 +341,55 @@ class MclTypeValidationTest {
 		)
 	}
 	
+	@Test
+	def void testValidEnumExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			COVARIATES{
+				SEX with {male, female}
+			}
+		
+			
+			MODEL_PREDICTION{
+				V = if(SEX == SEX.male) then 1 else 0
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInValidEnumNumExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			COVARIATES{
+				SEX with {male, female}
+			}
+		
+			
+			MODEL_PREDICTION{
+				V = if(SEX == 2) then 1 else 0
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.vectorContent,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Enum type, but was Real."
+		)
+	}
+	
 }
