@@ -84,16 +84,20 @@ class MdlValidator extends AbstractMdlValidator {
 
 	@Check
 	def validateMdlObjArguments(MclObject it){
-		if(!VALID_OBJECT_TYPES.contains(mdlObjType)){
-			error("unrecognised object type '" + mdlObjType + "'",
-					MdlPackage.eINSTANCE.mclObject_MdlObjType, UNRECOGNISED_OBJECT_TYPE, mdlObjType)
+		if (mdlObjType != null) {
+			if (!VALID_OBJECT_TYPES.contains(mdlObjType)) {
+				error("unrecognised object type '" + mdlObjType + "'", MdlPackage.eINSTANCE.mclObject_MdlObjType,
+					UNRECOGNISED_OBJECT_TYPE, mdlObjType)
+			}
+			blkArgs.unusedMandatoryObjVarDecl.forEach [ blk, mand |
+				error("mandatory argument '" + blk + "' is missing in " + mdlObjType + " '" + name + "'",
+					MdlPackage.eINSTANCE.mclObject_BlkArgs, MANDATORY_BLOCK_ARG_MISSING, blk)
+			]
+			blkArgs.unusedMandatoryPropertyArguments.forEach [ blk, mand |
+				error("mandatory property '" + blk + "' is missing in " + mdlObjType + " '" + name + "'",
+					MdlPackage.eINSTANCE.mclObject_BlkArgs, MANDATORY_BLOCK_PROP_MISSING, blk)
+			]
 		}
-		blkArgs.unusedMandatoryObjVarDecl.forEach[blk, mand| error("mandatory argument '" + blk + "' is missing in " + mdlObjType
-															+ " '" + name + "'",
-					MdlPackage.eINSTANCE.mclObject_BlkArgs, MANDATORY_BLOCK_ARG_MISSING, blk) ]
-		blkArgs.unusedMandatoryPropertyArguments.forEach[blk, mand| error("mandatory property '" + blk + "' is missing in " + mdlObjType
-															+ " '" + name + "'",
-					MdlPackage.eINSTANCE.mclObject_BlkArgs, MANDATORY_BLOCK_PROP_MISSING, blk) ]
 	}
 	
 	@Check

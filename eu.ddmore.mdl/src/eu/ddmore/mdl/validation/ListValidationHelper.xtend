@@ -42,7 +42,7 @@ class ListValidationHelper {
 				key = 'use'
 				listDefns = newArrayList(
 					new ListDefinition => [  keyValue='covariate' attributes = #[
-						 new AttributeDefn('use', null, true), new AttributeDefn('categorical', null, false)//,
+						 new AttributeDefn('use', null, true)//, new AttributeDefn('categorical', null, false)//,
 //						 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categorical', null, false)//,
 //						 new AttributeDefn('define', 'categories', false)
 						 ] 
@@ -182,22 +182,22 @@ class ListValidationHelper {
 					]
 				)
 			]
-		),
-		"COVARIATES" -> (
-			new BlockListDefinition => [
-				key = 'type'
-				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='categorical' attributes = #[
-						 new AttributeDefn('type', null, true)//, new AttributeDefn('categories', null, true)
-						 ]
-					],
-					new ListDefinition => [ keyValue='continuous' attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('value', null, true) 
-						 ]
-					]
-				)
-			]
-		)
+		) //,
+//		"COVARIATES" -> (
+//			new BlockListDefinition => [
+//				key = 'type'
+//				listDefns = newArrayList(
+//					new ListDefinition => [ keyValue='categorical' attributes = #[
+//						 new AttributeDefn('type', null, true)//, new AttributeDefn('categories', null, true)
+//						 ]
+//					],
+//					new ListDefinition => [ keyValue='continuous' attributes = #[
+//						 new AttributeDefn('type', null, true), new AttributeDefn('value', null, true) 
+//						 ]
+//					]
+//				)
+//			]
+//		)
 	}
 	
 	def isKeyAttributeDefined(AttributeList it){

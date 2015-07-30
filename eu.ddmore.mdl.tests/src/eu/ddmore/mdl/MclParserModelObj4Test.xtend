@@ -22,6 +22,7 @@ warfarin_PK_2Compartments_mdl = mdlobj {
    COVARIATES{
       WT
       logtWT = ln(WT/70)
+      SEX with { male, female}
    }# end COVARIATES
 
    VARIABILITY_LEVELS{
@@ -40,6 +41,7 @@ warfarin_PK_2Compartments_mdl = mdlobj {
       POP_BETA_V_WT
       RUV_PROP
       RUV_ADD
+      BETA_CL_SEX
    }# end STRUCTURAL_PARAMETERS
 
    VARIABILITY_PARAMETERS{
@@ -69,7 +71,9 @@ warfarin_PK_2Compartments_mdl = mdlobj {
    }# end RANDOM_VARIABLE_DEFINITION (level=DV)
 
    INDIVIDUAL_VARIABLES{
-      ln(CL) = linear(pop = ln(POP_CL), fixEff = {{coeff=POP_BETA_CL_WT, covariate=logtWT}} , ranEff = eta_PPV_CL)
+      ln(CL) = linear(pop = ln(POP_CL), fixEff = {{coeff=POP_BETA_CL_WT, covariate=logtWT},
+      				{coeff=BETA_CL_SEX, cov=SEX.female}
+      				} , ranEff = eta_PPV_CL)
       ln(VC) = linear(pop = ln(POP_VC), fixEff = {{coeff=POP_BETA_V_WT, covariate=logtWT}} , ranEff = eta_PPV_VC )
       Q = linear(trans is log, pop = POP_Q, fixEff = {{coeff=POP_BETA_CL_WT, covariate=logtWT}} , ranEff = eta_PPV_Q)
       VP = linear(trans is log, pop = POP_VP, fixEff = {{coeff=POP_BETA_V_WT, covariate=logtWT}} , ranEff = eta_PPV_VP)
