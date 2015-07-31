@@ -176,6 +176,28 @@ class MclBuiltinFunctionValidationTest {
 	}
 
 	@Test
+	def void testValidOverloadedNamedFunction(){
+		val mcl = '''bar = mdlobj {
+			
+			
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+				ID : { level = 1, type is parameter }
+			}
+			
+			RANDOM_VARIABLE_DEFINITION(level = ID){
+				foo ~ Normal(mean=0, sd=1)
+				foo2 ~ Normal(mean=0, var=1)
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
 	def void testNamedFunctionWithNoArgs(){
 		val mcl = '''bar = mdlobj {
 			VARIABILITY_LEVELS{
@@ -290,10 +312,6 @@ class MclBuiltinFunctionValidationTest {
 
 		}'''.parse
 		
-//		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
-//			MdlValidator::INCORRECT_NUM_FUNC_ARGS,
-//			"Function 'linear' has the wrong number of arguments. Expected 3."
-//		)
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
 			MdlValidator::MULTIPLE_IDENTICAL_FUNC_ARG,
 			"Function argument 'pop' occurs more than once."

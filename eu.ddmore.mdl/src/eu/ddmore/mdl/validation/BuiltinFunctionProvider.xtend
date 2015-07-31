@@ -11,6 +11,7 @@ import java.util.HashSet
 import java.util.Set
 
 import org.eclipse.xtend.lib.annotations.Data
+import java.util.List
 
 class BuiltinFunctionProvider {
 	
@@ -52,45 +53,99 @@ class BuiltinFunctionProvider {
 	}
 	
 	static val functDefns = #{
-		'log' -> ( new SimpleFuncDefn => [ numArgs = 2 returnType = MclTypeProvider::REAL_TYPE ] ),
-		'ln' -> ( new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ),
-		'abs' -> ( new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ),
-		'exp' -> ( new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ),
-		'Normal' -> ( new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
+		'log' -> #[ new SimpleFuncDefn => [ numArgs = 2 returnType = MclTypeProvider::REAL_TYPE ] ],
+		'ln' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
+		'abs' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
+		'exp' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
+		'Normal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
 						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ] ),
-		'linear' -> ( new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+					} ],
+					new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
+						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'var' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ]					 ],
+		'linear' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'fixEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false),
 						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ] ),
-		'general' -> ( new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+					} ]					],
+		'general' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'grp' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ] ),
-		'combinedError1' -> ( new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+					} ] ],
+		'combinedError1' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
-					} ] ),
-		'combinedError2' -> ( new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+					} ] ],
+		'combinedError2' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
-					} ] )
+					} ] ]
 	}
 
 	
-	def getFunctionType(String name){
-		functDefns.get(name)?.returnType ?: MclTypeProvider::UNDEFINED_TYPE
+	def getTransformFunctionType(String fName){
+		val defns = functDefns.get(fName)
+		if(defns != null)
+			if(defns.size > 1)
+				MclTypeProvider::UNDEFINED_TYPE
+			else
+				defns.head.returnType
+		else
+			MclTypeProvider::UNDEFINED_TYPE
+	}
+	
+	def getFunctionType(BuiltinFunctionCall it){
+		findFuncDefn?.returnType ?: MclTypeProvider::UNDEFINED_TYPE
+	}
+	
+	// precindition is that this is a list of NamedFuncDefns
+	private def chooseBestMatchingArguments(NamedFuncArguments it, List<? extends FunctDefn> availableDefns){
+		var matchCount = 0;
+		var FunctDefn bestMatch = availableDefns.head
+		for(fd : availableDefns){
+			var currMatchCount = 0
+			val nfd = fd as NamedArgFuncDefn
+			for(vp : arguments){
+				if(nfd.arguments.containsKey(vp.argumentName)) currMatchCount++
+			}
+			if(currMatchCount > matchCount){
+				bestMatch = fd
+				matchCount = currMatchCount
+			}
+		}
+		bestMatch
+	}
+	
+	private def findFuncDefn(BuiltinFunctionCall it){
+		val availableDefns = functDefns.get(func)
+		var FunctDefn retVal = null
+		if(availableDefns != null){
+			val firstDefn = availableDefns.head
+			retVal = switch(firstDefn){
+				SimpleFuncDefn: firstDefn
+				NamedArgFuncDefn
+					case availableDefns.size == 1: firstDefn
+					case availableDefns.size > 1:{
+						if(argList == null) firstDefn
+						else if(argList instanceof NamedFuncArguments){
+							(argList as NamedFuncArguments).chooseBestMatchingArguments(availableDefns)
+						}
+						else null
+					}
+			}
+		}
+		retVal
 	}
 	
 	// precondition - this is a unnamed function 	
 	def checkUnnamedFunctionDefn(BuiltinFunctionCall it, (String) => void unkFuncErr, (String, int) => void incorrectNumArgsErr){
-		val funcDefn = functDefns.get(func)
+		val FunctDefn funcDefn = findFuncDefn
 		if(funcDefn == null || !(funcDefn instanceof SimpleFuncDefn)){
 			unkFuncErr.apply(func)
 		}
@@ -107,7 +162,7 @@ class BuiltinFunctionProvider {
 	}
 	
 	def checkNamedFunctionDefn(BuiltinFunctionCall it, (String) => void unkFuncErr){
-		val funcDefn = functDefns.get(func)
+		val funcDefn = findFuncDefn
 		if(funcDefn == null || !(funcDefn instanceof NamedArgFuncDefn)){
 			unkFuncErr.apply(func)
 		}
@@ -117,7 +172,7 @@ class BuiltinFunctionProvider {
 	// empty set if the function name is not recognised.
 	def getMissingMandatoryArgumentNames(NamedFuncArguments it){
 		val Set<String> mandatoryArgs = new HashSet<String>
-		val funcDefn = functDefns.get(functionCall.func)
+		val funcDefn = functionCall.findFuncDefn
 		if(funcDefn != null && funcDefn instanceof NamedArgFuncDefn){
 			// store all the mandatory argument names
 			(funcDefn as NamedArgFuncDefn).arguments.forEach[arg, fa| if(fa.isMandatory) mandatoryArgs.add(arg) ]
@@ -139,7 +194,7 @@ class BuiltinFunctionProvider {
 	// The validator should check on a per argument basis is an argument name is valid.
 	def checkNamedArguments(ValuePair it, (String) => void unkArgError, (String) => void duplicateArgError){
 		// assume that this is a named argument to a function
-		val funcDefn = functDefns.get(functionCall.func)
+		val funcDefn = functionCall.findFuncDefn
 		if(funcDefn != null && funcDefn instanceof NamedArgFuncDefn){
 			val namedFuncDefn = funcDefn as NamedArgFuncDefn
 			if(!namedFuncDefn.arguments.containsKey(argumentName)){

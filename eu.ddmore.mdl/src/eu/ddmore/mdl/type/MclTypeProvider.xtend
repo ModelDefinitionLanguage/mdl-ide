@@ -106,7 +106,7 @@ public class MclTypeProvider {
 				e.ref.typeFor.markReference
 			ParExpression: e.expr.typeFor
 			BuiltinFunctionCall:
-				e.func.functionType
+				e.functionType
 			default:
 				typeTable.get(e.eClass) ?: MclTypeProvider.UNDEFINED_TYPE
 		}
@@ -157,7 +157,7 @@ public class MclTypeProvider {
 	}
 
 	def checkExpectedRealTransform(String transform, (PrimitiveType, PrimitiveType) => void errorLambda){
-		val actualType = transform.functionType.theType
+		val actualType = transform.transformFunctionType.theType
 		val expectedType = PrimitiveType.Real
 		if(actualType != expectedType)
 			errorLambda.apply(expectedType, actualType ?: UNDEFINED_TYPE.theType)

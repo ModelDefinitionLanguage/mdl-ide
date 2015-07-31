@@ -46,7 +46,7 @@ class MclTypeProviderTest {
 	def void testTypeDistributionFuncCallExpression(){
 		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
 		funcCall.func = 'Normal'
-		funcCall.typeFor.assertEquals(MclTypeProvider::PDF_TYPE)
+		MclTypeProvider::PDF_TYPE.assertEquals(funcCall.typeFor)
 	}
 
 	@Test
