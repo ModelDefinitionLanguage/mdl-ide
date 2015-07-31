@@ -103,7 +103,7 @@ Attribute:
 
 ValuePair:
 	{ValuePair}argumentName = AttributeName ("=" expression = Expression
-								| IS expression = EnumExpression (catDefn=CategoricalDefinitionExpr)?
+								| IS expression = EnumExpression
 								| expression=CategoricalDefinitionExpr )
 //								| '=' expression = MappingExpression)
 ;
@@ -113,7 +113,7 @@ AttributeName:
 ;
 
 EnumExpression returns Expression:
-	{EnumExpression}enumValue=ID
+	{EnumExpression}enumValue=ID  (catDefn=CategoricalDefinitionExpr)?
 ;
 
 MappingExpression returns Expression:

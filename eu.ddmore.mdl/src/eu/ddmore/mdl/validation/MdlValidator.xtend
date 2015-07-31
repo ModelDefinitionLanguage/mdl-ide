@@ -31,7 +31,8 @@ import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.TransformedDefinition
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-
+import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 
 //import org.eclipse.xtext.validation.Check
 
@@ -67,8 +68,12 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val MANDATORY_LIST_KEY_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryKeyAttributeMissing"
 
 	// Builtin Function validation
-	public static val UNRECOGNIZED_FUNCTION_NAME = "eu.ddmore.mdl.validation.UnrecognisedFunctionName"
-	public static val INCORRECT_NUM_FUNC_ARGS = "eu.ddmore.mdl.validation.IncorrectNumArgs"
+	public static val UNRECOGNIZED_FUNCTION_NAME = "eu.ddmore.mdl.validation.function.named.UnrecognisedFunctionName"
+	public static val INCORRECT_NUM_FUNC_ARGS = "eu.ddmore.mdl.validation.function.IncorrectNumArgs"
+	public static val MULTIPLE_IDENTICAL_FUNC_ARG = "eu.ddmore.mdl.validation.function.named.MultipleArgs"
+	public static val UNRECOGNIZED_FUNCTION_ARGUMENT_NAME = "eu.ddmore.mdl.validation.function.named.UnrecognisedArgName"
+	public static val MANDATORY_NAMED_FUNC_ARG_MISSING = "eu.ddmore.mdl.validation.function.named.MandatoryArgMissing"
+	
 
 	// Block validation
 	public static val UNKNOWN_BLOCK = "eu.ddmore.mdl.validation.UnknownBlock"
@@ -177,17 +182,41 @@ class MdlValidator extends AbstractMdlValidator {
 
 	@Check
 	def validateFunctionCall(BuiltinFunctionCall it){
-		checkFunctionDefn(
-			[fName| error("A function of name '" + fName + "' is not recognised.",
-				MdlPackage.eINSTANCE.builtinFunctionCall_Func, UNRECOGNIZED_FUNCTION_NAME, fName)],
-				 [fName, eArgNum | error("Function '" + fName + "' has the wrong number of arguments. Expected " + eArgNum + ".",
-				MdlPackage.eINSTANCE.builtinFunctionCall_ArgList, INCORRECT_NUM_FUNC_ARGS, fName)]
-				)
+		if(argList == null || argList instanceof UnnamedFuncArguments){
+			checkUnnamedFunctionDefn(
+				[fName| error("Simple function '" + fName + "' is not recognised.",
+					MdlPackage.eINSTANCE.builtinFunctionCall_Func, UNRECOGNIZED_FUNCTION_NAME, fName)],
+					 [fName, eArgNum | error("Function '" + fName + "' has the wrong number of arguments. Expected " + eArgNum + ".",
+					MdlPackage.eINSTANCE.builtinFunctionCall_ArgList, INCORRECT_NUM_FUNC_ARGS, fName)]
+					)
+		}
+		else{
+			checkNamedFunctionDefn(
+				[fName| error("Named argument function '" + fName + "' is not recognised.",
+					MdlPackage.eINSTANCE.builtinFunctionCall_Func, UNRECOGNIZED_FUNCTION_NAME, fName)]
+					)
+		}
 	}
 
+	@Check
+	def validateFunctionArgument(ValuePair it){
+		if(eContainer instanceof NamedFuncArguments){
+			checkNamedArguments(
+				[fName| error("Unrecognised argument '" + argumentName + "'.",
+				MdlPackage.eINSTANCE.valuePair_ArgumentName, UNRECOGNIZED_FUNCTION_ARGUMENT_NAME, fName)],
+				[fName| error("Function argument '" + argumentName + "' occurs more than once.",
+				MdlPackage.eINSTANCE.valuePair_ArgumentName, MULTIPLE_IDENTICAL_FUNC_ARG, fName)]
+			)
+		}
+	}
+
+	@Check
+	def validateNamedFunctionArguments(NamedFuncArguments it){
+		missingMandatoryArgumentNames.forEach[arg, mand| error("mandatory argument '" + arg + "' is missing.",
+					MdlPackage.eINSTANCE.namedFuncArguments_Arguments, MANDATORY_NAMED_FUNC_ARG_MISSING, arg) ]
+	}
 
 	// Type handling	
-	
 	private def (PrimitiveType, PrimitiveType) => void typeError(EStructuralFeature feature){ 
 		[expectedType, actualType |error("Expected " + expectedType + " type, but was " + actualType + ".", feature, INCOMPATIBLE_TYPES) ]
 	}
