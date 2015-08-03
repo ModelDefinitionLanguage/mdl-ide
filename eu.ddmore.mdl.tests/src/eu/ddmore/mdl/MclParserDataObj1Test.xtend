@@ -28,9 +28,9 @@ class MclParserDataObj1Test {
 		AMT : { use is amt, define = GUT }
 	} # end DATA_INPUT_VARIABLES
 	SOURCE {
-	    set file = "warfarin_conc.csv" 
-        set inputformat  is nonmemFormat 
-	    set ignore = "#" 
+	    foo : {file = "warfarin_conc.csv", 
+        		inputformat  is nonmemFormat, 
+	    		ignore = "#" } 
 	} # end SOURCE
 } # end data object
 		'''

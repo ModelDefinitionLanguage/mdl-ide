@@ -37,8 +37,7 @@ ForwardDeclaration:
 
 Statement:
 	EquationDefinition|TransformedDefinition|ListDefinition|
-	RandomVariableDefinition|BlockStatement|PropertyStatement|
-	AnonymousListStatement|EnumerationDefinition
+	RandomVariableDefinition|BlockStatement|AnonymousListStatement|EnumerationDefinition
 ;
 
 
@@ -81,10 +80,6 @@ AnonymousListStatement:
 ;
 
 
-PropertyStatement:
-	 SET properties+=ValuePair (',' properties+=ValuePair)* ';'?
-;
-
 CategoricalDefinitionExpr returns Expression:
 	{CategoricalDefinitionExpr} WITH BEGIN categories += CategoryDefinition (=>',' categories += CategoryDefinition)* END  
 ;
@@ -103,9 +98,7 @@ Attribute:
 
 ValuePair:
 	{ValuePair}argumentName = AttributeName ("=" expression = Expression
-								| IS expression = EnumExpression
-								| expression=CategoricalDefinitionExpr )
-//								| '=' expression = MappingExpression)
+								| IS expression = EnumExpression)
 ;
 
 AttributeName:
@@ -302,8 +295,6 @@ terminal CONSTANT:
 terminal IS: 'is';
 
 terminal AS: 'as';
-
-terminal SET: 'set';
 
 terminal IF: 'if';
 

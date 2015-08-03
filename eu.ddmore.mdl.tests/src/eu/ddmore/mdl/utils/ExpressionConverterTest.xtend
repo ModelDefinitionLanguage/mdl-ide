@@ -4,7 +4,6 @@ import com.google.inject.Inject
 import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Mcl
-import eu.ddmore.mdl.mdl.PropertyStatement
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
@@ -12,8 +11,10 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.ValuePair
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -133,13 +134,13 @@ warfarin_PK_ODE_mdl = dataobj {
 	DATA_INPUT_VARIABLES{
 	} # end MODEL_PREDICTION
 	SOURCE{
-		set file is nonmem
+		file : { file="foo" }
 	}
 	
 } # end of model object
 		'''.parse
-		val eqn = mcl.objects.head.blocks.last.statements.last as PropertyStatement
-		Assert::assertEquals("nonmem", eqn.properties.head.expression.convertToString)
+		val eqn = mcl.objects.head.blocks.last.statements.last as ListDefinition
+		Assert::assertEquals("\"foo\"", (eqn.list.attributes.head as ValuePair).expression.convertToString)
 	}
 
 	

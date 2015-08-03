@@ -25,7 +25,7 @@ public class MclTypeProvider {
 	
 
 	enum PrimitiveType {
-		String, Real, Boolean, VarLevel, Pdf, Enum, Undefined
+		Int, String, Real, Boolean, VarLevel, Pdf, Enum, Undefined
 	}
 	enum TypeProperty{
 		Deriv, Vector, DataCol, Estimate, None
