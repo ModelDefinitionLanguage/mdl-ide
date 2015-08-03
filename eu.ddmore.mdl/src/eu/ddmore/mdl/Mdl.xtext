@@ -37,7 +37,8 @@ ForwardDeclaration:
 
 Statement:
 	EquationDefinition|TransformedDefinition|ListDefinition|
-	RandomVariableDefinition|BlockStatement|AnonymousListStatement|EnumerationDefinition
+	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
+	EnumerationDefinition|DerivativeDefinition
 ;
 
 
@@ -52,7 +53,12 @@ LimitDefn:
 
 SymbolDefinition:
 	EquationDefinition | ListDefinition| ForwardDeclaration | RandomVariableDefinition | TransformedDefinition|
-	  EnumerationDefinition
+	  EnumerationDefinition|DerivativeDefinition
+;
+
+
+DerivativeDefinition:
+	DERIV name = ID '=' expression = Expression (',' INIT '=' initExpr = Expression)? (',' INIT_TIME '=' initTime = Expression)?   
 ;
 
 EquationDefinition:
@@ -290,7 +296,11 @@ terminal CONSTANT:
 //;
 
 
-//terminal FROM: 'from';
+terminal DERIV: 'deriv';
+
+terminal INIT: 'init';
+
+terminal INIT_TIME: 'x0';
 
 terminal IS: 'is';
 

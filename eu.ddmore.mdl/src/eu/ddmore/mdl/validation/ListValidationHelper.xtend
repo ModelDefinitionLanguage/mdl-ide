@@ -146,18 +146,18 @@ class ListValidationHelper {
 				)
 			]
 		),
-		"DEQ" -> (
-			new BlockListDefinition => [
-				key = 'deriv'
-				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null attributes = #[
-						 new AttributeDefn('deriv', null, true), new AttributeDefn('init', null, false),
-						 new AttributeDefn('x0', null, false)
-						 ]
-					]
-				)
-			]
-		),
+//		"DEQ" -> (
+//			new BlockListDefinition => [
+//				key = 'deriv'
+//				listDefns = newArrayList(
+//					new ListDefinition => [ keyValue=null attributes = #[
+//						 new AttributeDefn('deriv', null, true), new AttributeDefn('init', null, false),
+//						 new AttributeDefn('x0', null, false)
+//						 ]
+//					]
+//				)
+//			]
+//		),
 		"VARIABILITY" -> (
 			new BlockListDefinition => [
 				key = 'type'

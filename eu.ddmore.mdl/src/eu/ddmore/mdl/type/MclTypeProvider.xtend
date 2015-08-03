@@ -18,6 +18,7 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import eu.ddmore.mdl.mdl.CategoryReference
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
+import eu.ddmore.mdl.mdl.DerivativeDefinition
 
 public class MclTypeProvider {
 
@@ -49,7 +50,9 @@ public class MclTypeProvider {
 	}
 
 	public static val UNDEFINED_TYPE = new TypeInfo(PrimitiveType.Undefined, TypeProperty.None)
+	public static val INT_TYPE = new TypeInfo(PrimitiveType.Int, TypeProperty.None)
 	public static val REAL_TYPE = new TypeInfo(PrimitiveType.Real, TypeProperty.None)
+	public static val DERIV_TYPE = new TypeInfo(PrimitiveType.Real, TypeProperty.Deriv)
 	public static val ENUM_TYPE = new TypeInfo(PrimitiveType.Enum, TypeProperty.None)
 	public static val STRING_TYPE = new TypeInfo(PrimitiveType.String, TypeProperty.None)
 	public static val BOOL_TYPE = new TypeInfo(PrimitiveType.Boolean, TypeProperty.None)
@@ -73,7 +76,8 @@ public class MclTypeProvider {
 		ep.orExpression -> BOOL_TYPE,
 		ep.additiveExpression -> REAL_TYPE,
 		ep.multiplicativeExpression -> REAL_TYPE,
-		ep.categoryDefinition -> ENUM_TYPE, // @TODO: Do category typing properly
+		ep.categoryDefinition -> ENUM_TYPE,
+		ep.derivativeDefinition -> DERIV_TYPE,
 		
 		ep.estimateRange -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
 		ep.limitDefn -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
@@ -85,19 +89,6 @@ public class MclTypeProvider {
 		ep.enumerationDefinition -> ENUM_TYPE,
 		ep.listDefinition -> REAL_TYPE // @TODO: Do list typing properly
 	}
-	
-	
-//	static val functionTypeTable = #{
-//		'ln' -> REAL_TYPE,
-//		'abs' -> REAL_TYPE,
-//		'exp' -> REAL_TYPE,
-//		'Normal' -> PDF_TYPE,
-//		'linear' -> REAL_TYPE,
-//		'general' -> REAL_TYPE,
-//		'combinedError1' -> REAL_TYPE,
-//		'combinedError2' -> REAL_TYPE
-//	}
-	
 	
 	def dispatch TypeInfo typeFor(Expression e){
 		switch(e){
@@ -130,6 +121,7 @@ public class MclTypeProvider {
 			ListDefinition,
 			CategoryDefinition,
 			EnumerationDefinition,
+			DerivativeDefinition,
 			RandomVariableDefinition: typeTable.get(sd.eClass)
 			default:
 				UNDEFINED_TYPE
