@@ -26,7 +26,7 @@ public class MclTypeProvider {
 	
 
 	enum PrimitiveType {
-		Int, String, Real, Boolean, VarLevel, Pdf, Enum, Undefined
+		Int, String, Real, Boolean, VarLevel, Pdf, Enum, List, Undefined
 	}
 	enum TypeProperty{
 		Deriv, Vector, DataCol, Estimate, None
@@ -59,6 +59,7 @@ public class MclTypeProvider {
 	public static val PDF_TYPE = new TypeInfo(PrimitiveType.Pdf, TypeProperty.None)
 	public static val VAR_LEVEL_TYPE = new TypeInfo(PrimitiveType.VarLevel, TypeProperty.None)
 	public static val VECTOR_TYPE = new TypeInfo(PrimitiveType.Real, TypeProperty.Vector)
+	public static val LIST_TYPE =  new TypeInfo(PrimitiveType.List, TypeProperty.None)
 	
 	
 	static val ep = MdlPackage::eINSTANCE 
@@ -87,7 +88,7 @@ public class MclTypeProvider {
 		ep.randomVariableDefinition -> REAL_TYPE,
 		ep.forwardDeclaration -> REAL_TYPE,
 		ep.enumerationDefinition -> ENUM_TYPE,
-		ep.listDefinition -> REAL_TYPE // @TODO: Do list typing properly
+		ep.listDefinition -> LIST_TYPE
 	}
 	
 	def dispatch TypeInfo typeFor(Expression e){
