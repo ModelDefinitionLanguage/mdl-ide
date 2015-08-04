@@ -43,12 +43,12 @@ Statement:
 
 
 EstimateRange returns Expression:
-	{EstimateRange}initial=Number limit=LimitDefn? fixed?=FIXED |
-	{EstimateRange}initial=Number limit=LimitDefn
+	{EstimateRange}initial=(RealLiteral|IntegerLiteral) limit=LimitDefn? fixed?=FIXED |
+	{EstimateRange}initial=(RealLiteral|IntegerLiteral) limit=LimitDefn
 ;
 
 LimitDefn:
-	{LimitDefn}LIMIT '(' low=Number? ','  high=Number? ')'	
+	{LimitDefn}LIMIT '(' low=(RealLiteral|IntegerLiteral)? ','  high=(RealLiteral|IntegerLiteral)? ')'	
 ;
 
 SymbolDefinition:
@@ -227,7 +227,8 @@ ElifClause:
 ;
 
 Literal returns Expression:
-	NumberLiteral |
+	RealLiteral |
+	IntegerLiteral |
 	StringLiteral |
 	BooleanLiteral |
 	VectorLiteral
@@ -258,16 +259,16 @@ UnnamedFuncArguments returns FuncAgument:
 BooleanLiteral returns Expression :
 	{BooleanLiteral} ('false' | isTrue?='true');
 
-NumberLiteral returns Expression :
-	{NumberLiteral} value=(Number|CONSTANT);
+
+RealLiteral returns Expression :
+	{RealLiteral} value=(FLOAT|CONSTANT);
+
+IntegerLiteral returns Expression :
+	{IntegerLiteral} value=INTEGER;
 
 StringLiteral returns Expression:
 	{StringLiteral} value=STRING;
 
-Number hidden():
-	(INTEGER | FLOAT) 
-	;
-	
 
 VectorLiteral returns Expression:
 	{VectorLiteral} '[' expression = VectorContent ']'

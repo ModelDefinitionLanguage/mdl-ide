@@ -57,10 +57,17 @@ class MclTypeProviderTest {
 	}
 
 	@Test
-	def void testNumberLiteralExpression(){
-		val actual = MdlFactory::eINSTANCE.createNumberLiteral
+	def void testRealLiteralExpression(){
+		val actual = MdlFactory::eINSTANCE.createRealLiteral
 		actual.value = 'foobar'
 		actual.typeFor.assertEquals(MclTypeProvider::REAL_TYPE)
+	}
+
+	@Test
+	def void testIntegerLiteralExpression(){
+		val actual = MdlFactory::eINSTANCE.createIntegerLiteral
+		actual.value = 'foobar'
+		actual.typeFor.assertEquals(MclTypeProvider::INT_TYPE)
 	}
 
 	@Test
@@ -78,8 +85,8 @@ class MclTypeProviderTest {
 
 	@Test
 	def void testRelationalOp(){
-		val Expression actual = MdlFactory::eINSTANCE.createNumberLiteral
-		val Expression rhs = MdlFactory::eINSTANCE.createNumberLiteral
+		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
+		val Expression rhs = MdlFactory::eINSTANCE.createRealLiteral
 		val (PrimitiveType, PrimitiveType) => void errorFunc = [e, a| fail("should not call me!")]
 		actual.checkRelationalOp(rhs, errorFunc, errorFunc)
 	}
@@ -100,7 +107,7 @@ class MclTypeProviderTest {
 
 	@Test
 	def void testRelationalOpWithNumAndEnum(){
-		val Expression actual = MdlFactory::eINSTANCE.createNumberLiteral
+		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val rhs = MdlFactory::eINSTANCE.createCategoryReference
 		val rhsDefn = MdlFactory::eINSTANCE.createCategoryDefinition
 		rhsDefn.name = "tst2"
@@ -116,7 +123,7 @@ class MclTypeProviderTest {
 		val lhsDefn = MdlFactory::eINSTANCE.createCategoryDefinition
 		lhsDefn.name = "tst1"
 		actual.ref = lhsDefn 
-		val rhs = MdlFactory::eINSTANCE.createNumberLiteral
+		val rhs = MdlFactory::eINSTANCE.createRealLiteral
 		val (PrimitiveType, PrimitiveType) => void errorFunc = [e, a| fail("should not call me!")]
 		val (PrimitiveType, PrimitiveType) => void failingErrorFunc = [e, a| e.assertSame(PrimitiveType.Enum) a.assertSame(PrimitiveType.Real)]
 		actual.checkRelationalOp(rhs, failingErrorFunc, errorFunc)
@@ -124,7 +131,7 @@ class MclTypeProviderTest {
 
 	@Test
 	def void testRelationalOpWithNullRhs(){
-		val Expression actual = MdlFactory::eINSTANCE.createNumberLiteral
+		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val Expression rhs = null
 		val (PrimitiveType, PrimitiveType) => void errorFunc = [e, a| e.assertSame(PrimitiveType.Real) a.assertSame(PrimitiveType.Undefined)]
 		val (PrimitiveType, PrimitiveType) => void failingErrorFunc = [e, a| a.assertSame(PrimitiveType.Undefined)]
@@ -133,15 +140,15 @@ class MclTypeProviderTest {
 
 	@Test
 	def void testMathsOp(){
-		val Expression actual = MdlFactory::eINSTANCE.createNumberLiteral
-		val Expression rhs = MdlFactory::eINSTANCE.createNumberLiteral
+		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
+		val Expression rhs = MdlFactory::eINSTANCE.createRealLiteral
 		val (PrimitiveType, PrimitiveType) => void errorFunc = [e, a| fail("should not call me!")]
 		actual.checkMathsOp(rhs, errorFunc, errorFunc)
 	}
 
 	@Test
 	def void testMathsOpWithString(){
-		val Expression actual = MdlFactory::eINSTANCE.createNumberLiteral
+		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val Expression rhs = MdlFactory::eINSTANCE.createStringLiteral
 		val (PrimitiveType, PrimitiveType) => void errorFunc = [e, a| a.assertSame(PrimitiveType.String)]
 		actual.checkMathsOp(rhs, errorFunc, errorFunc)
@@ -149,7 +156,7 @@ class MclTypeProviderTest {
 
 	@Test
 	def void testMathsOpWithNullRhs(){
-		val Expression actual = MdlFactory::eINSTANCE.createNumberLiteral
+		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val Expression rhs = null
 		val (PrimitiveType, PrimitiveType) => void errorFunc = [e, a| fail("should not call me!")]
 		val (PrimitiveType, PrimitiveType) => void failingErrorFunc = [e, a| a.assertSame(PrimitiveType.Undefined)]
@@ -189,7 +196,7 @@ class MclTypeProviderTest {
 
 	@Test
 	def void testUnaryOpReal(){
-		val Expression actual = MdlFactory::eINSTANCE.createNumberLiteral
+		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val (PrimitiveType, PrimitiveType) => void errorFunc = [e, a| fail("should not call me!")]
 		'+'.checkUnaryOp(actual, errorFunc)
 	}

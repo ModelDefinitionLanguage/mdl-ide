@@ -88,7 +88,7 @@ d1g=desobj{
 	@Test
 	def void testBlocks(){
 		val mcl = CODE_SNIPPET.parse
-		val Deque<String> expectedBlks = newLinkedList("DECLARED_VARIABLES", "ADMINISTRATION", "STUDY_DESIGN");
+		val Deque<String> expectedBlks = newLinkedList("DECLARED_VARIABLES", "ADMINISTRATION", "SAMPLING", "DESIGN_SPACES", "STUDY_DESIGN");
 		for(blk : mcl.objects.last.blocks){
 			Assert::assertEquals(expectedBlks.pop, blk.identifier)
 		}

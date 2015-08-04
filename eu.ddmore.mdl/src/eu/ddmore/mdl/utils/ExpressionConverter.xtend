@@ -4,16 +4,18 @@ import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BooleanLiteral
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.ElifClause
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EstimateRange
 import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.IntegerLiteral
 import eu.ddmore.mdl.mdl.LimitDefn
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
-import eu.ddmore.mdl.mdl.NumberLiteral
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
+import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.SymbolDefinition
@@ -24,7 +26,6 @@ import eu.ddmore.mdl.mdl.VectorContent
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
-import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 
 public class ExpressionConverter {
 	
@@ -88,8 +89,8 @@ public class ExpressionConverter {
 	def static dispatch String getString(EstimateRange exp)'''
 		«IF !exp.isFixed»(«ENDIF»«exp.initial» «exp.limit?.getLimitString(exp.initial) ?: exp.initial»«IF !exp.isFixed»)«ENDIF»'''
 	
-	def static String getLimitString(LimitDefn limit, String initial)'''
-		(«limit.low?:''», «initial», «limit.high?:''»)'''
+	def static String getLimitString(LimitDefn limit, Expression initial)'''
+		(«limit.low?:''», «initial.getString», «limit.high?:''»)'''
 	
 	def static dispatch String getString(WhenExpression exp)'''
 		«FOR w : exp.when SEPARATOR ',\n'»«w.getString»«ENDFOR»«IF exp.other != null»,«ENDIF»
@@ -107,7 +108,11 @@ public class ExpressionConverter {
 		if(exp.isTrue)  "true" else "false"
 	}
 	
-	def static dispatch String getString(NumberLiteral exp){
+	def static dispatch String getString(RealLiteral exp){
+		exp.value
+	}
+	
+	def static dispatch String getString(IntegerLiteral exp){
 		exp.value
 	}
 	

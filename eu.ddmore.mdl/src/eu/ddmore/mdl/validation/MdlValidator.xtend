@@ -223,73 +223,73 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 	
 			
-	@Check
-	def validateCompatibleTypes(AndExpression e){
-		checkBoolOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.andExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.andExpression_RightOperand))
-	}
-	
-	@Check
-	def validateCompatibleTypes(OrExpression e){
-		checkBoolOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.orExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.orExpression_RightOperand))
-	}
-	
-	@Check
-	def validateCompatibleTypes(EqualityExpression e){
-		checkRelationalOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.equalityExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.equalityExpression_RightOperand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(RelationalExpression e){
-		checkRelationalOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.relationalExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.relationalExpression_RightOperand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(AdditiveExpression e){
-		checkMathsOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.additiveExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.additiveExpression_RightOperand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(MultiplicativeExpression e){
-		checkMathsOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.multiplicativeExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.multiplicativeExpression_RightOperand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(UnaryExpression e){
-		checkUnaryOp(e.feature, e.operand, typeError(MdlPackage::eINSTANCE.unaryExpression_Operand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(WhenClause e){
-		checkExpectedBoolean(e.cond, typeError(MdlPackage::eINSTANCE.whenClause_Cond))
-		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.whenClause_Value))
-	}
-		
-	@Check
-	def validateCompatibleTypes(EquationDefinition e){
-		// only check if there is an RHS to check 
-		if(e.expression != null)
-			checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
-	}
-		
-	@Check
-	def validateCompatibleTypes(RandomVariableDefinition e){
-		checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
-	}
-		
-	@Check
-	def validateCompatibleTypes(TransformedDefinition e){
-		checkExpectedRealTransform(e.transform, typeError(MdlPackage::eINSTANCE.transformedDefinition_Transform))
-		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.transformedDefinition_Expression))
-	}
-		
-	@Check
-	def validateCompatibleTypes(VectorContent e){
-		e.expressions.forEach[ex| checkExpectedReal(ex, typeError(MdlPackage::eINSTANCE.vectorContent_Expressions)) ]
-	}
+//	@Check
+//	def validateCompatibleTypes(AndExpression e){
+//		checkBoolOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.andExpression_LeftOperand),
+//			typeError(MdlPackage::eINSTANCE.andExpression_RightOperand))
+//	}
+//	
+//	@Check
+//	def validateCompatibleTypes(OrExpression e){
+//		checkBoolOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.orExpression_LeftOperand),
+//			typeError(MdlPackage::eINSTANCE.orExpression_RightOperand))
+//	}
+//	
+//	@Check
+//	def validateCompatibleTypes(EqualityExpression e){
+//		checkRelationalOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.equalityExpression_LeftOperand),
+//			typeError(MdlPackage::eINSTANCE.equalityExpression_RightOperand))
+//	}
+//		
+//	@Check
+//	def validateCompatibleTypes(RelationalExpression e){
+//		checkRelationalOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.relationalExpression_LeftOperand),
+//			typeError(MdlPackage::eINSTANCE.relationalExpression_RightOperand))
+//	}
+//		
+//	@Check
+//	def validateCompatibleTypes(AdditiveExpression e){
+//		checkMathsOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.additiveExpression_LeftOperand),
+//			typeError(MdlPackage::eINSTANCE.additiveExpression_RightOperand))
+//	}
+//		
+//	@Check
+//	def validateCompatibleTypes(MultiplicativeExpression e){
+//		checkMathsOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.multiplicativeExpression_LeftOperand),
+//			typeError(MdlPackage::eINSTANCE.multiplicativeExpression_RightOperand))
+//	}
+//		
+//	@Check
+//	def validateCompatibleTypes(UnaryExpression e){
+//		checkUnaryOp(e.feature, e.operand, typeError(MdlPackage::eINSTANCE.unaryExpression_Operand))
+//	}
+//		
+//	@Check
+//	def validateCompatibleTypes(WhenClause e){
+//		checkExpectedBoolean(e.cond, typeError(MdlPackage::eINSTANCE.whenClause_Cond))
+//		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.whenClause_Value))
+//	}
+//		
+//	@Check
+//	def validateCompatibleTypes(EquationDefinition e){
+//		// only check if there is an RHS to check 
+//		if(e.expression != null)
+//			checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+//	}
+//		
+//	@Check
+//	def validateCompatibleTypes(RandomVariableDefinition e){
+//		checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+//	}
+//		
+//	@Check
+//	def validateCompatibleTypes(TransformedDefinition e){
+//		checkExpectedRealTransform(e.transform, typeError(MdlPackage::eINSTANCE.transformedDefinition_Transform))
+//		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.transformedDefinition_Expression))
+//	}
+//		
+//	@Check
+//	def validateCompatibleTypes(VectorContent e){
+//		e.expressions.forEach[ex| checkExpectedReal(ex, typeError(MdlPackage::eINSTANCE.vectorContent_Expressions)) ]
+//	}
 }

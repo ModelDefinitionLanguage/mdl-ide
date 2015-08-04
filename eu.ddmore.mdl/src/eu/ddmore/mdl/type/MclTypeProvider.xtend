@@ -64,7 +64,8 @@ public class MclTypeProvider {
 	static val ep = MdlPackage::eINSTANCE 
 	
 	static val typeTable = #{
-		ep.numberLiteral -> REAL_TYPE,
+		ep.realLiteral -> REAL_TYPE,
+		ep.integerLiteral -> INT_TYPE,
 		ep.stringLiteral -> STRING_TYPE,
 		ep.booleanLiteral -> BOOL_TYPE,
 		ep.vectorLiteral -> new TypeInfo(PrimitiveType.Real, TypeProperty.Vector),
@@ -141,7 +142,11 @@ public class MclTypeProvider {
 	}
 	
 	def checkExpectedReal(Expression exp, (PrimitiveType, PrimitiveType) => void errorLambda){
-		checkExpectedAndExpression(typeTable.get(MdlPackage::eINSTANCE.numberLiteral).theType, exp, errorLambda)
+		checkExpectedAndExpression(typeTable.get(MdlPackage::eINSTANCE.realLiteral).theType, exp, errorLambda)
+	}
+	
+	def checkExpectedIntl(Expression exp, (PrimitiveType, PrimitiveType) => void errorLambda){
+		checkExpectedAndExpression(typeTable.get(MdlPackage::eINSTANCE.integerLiteral).theType, exp, errorLambda)
 	}
 	
 	def checkExpectedPdf(Expression exp, (PrimitiveType, PrimitiveType) => void errorLambda){
