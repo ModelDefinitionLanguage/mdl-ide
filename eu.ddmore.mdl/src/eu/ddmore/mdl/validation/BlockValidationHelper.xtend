@@ -24,6 +24,9 @@ class BlockValidationHelper {
 		},
 		MdlValidator::MOGOBJ -> #{
 			"OBJECTS" -> true
+		},
+		MdlValidator::DESIGNOBJ -> #{
+			"DECLARED_VARIABLES" -> false, "ADMINISTRATION" -> true, "STUDY_DESIGN" -> true, "SAMPLING" -> false, "DESIGN_SPACES" -> false
 		}
 	}
 

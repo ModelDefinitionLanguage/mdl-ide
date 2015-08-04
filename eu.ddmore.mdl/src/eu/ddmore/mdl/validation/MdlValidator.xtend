@@ -47,6 +47,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public val static TASKOBJ = 'taskobj'
 	public val static PARAMOBJ = 'parobj'
 	public val static MOGOBJ = 'mogobj'
+	public val static DESIGNOBJ = 'desobj'
 
 	extension BlockArgumentValidationHelper movh = new BlockArgumentValidationHelper
 	extension BlockValidationHelper blokHelper = new BlockValidationHelper
@@ -84,7 +85,7 @@ class MdlValidator extends AbstractMdlValidator {
 	// Type validation
 	public static val INCOMPATIBLE_TYPES = "eu.ddmore.mdl.validation.IncompatibleTypes"
 
-	private static val VALID_OBJECT_TYPES = #[ MDLOBJ, PARAMOBJ, TASKOBJ, DATAOBJ, MOGOBJ ]
+	private static val VALID_OBJECT_TYPES = #[ MDLOBJ, PARAMOBJ, TASKOBJ, DATAOBJ, MOGOBJ, DESIGNOBJ ]
 
 
 	@Check

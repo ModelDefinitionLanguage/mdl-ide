@@ -26,10 +26,10 @@ public class MclTypeProvider {
 	
 
 	enum PrimitiveType {
-		Int, String, Real, Boolean, VarLevel, Pdf, Enum, List, Undefined
+		Int, String, Real, Boolean, Pdf, Enum, EnumValue, List, Undefined
 	}
 	enum TypeProperty{
-		Deriv, Vector, DataCol, Estimate, None
+		Deriv, Vector, Estimate, None
 	}
 	
 	@Data @FinalFieldsConstructor
@@ -57,7 +57,6 @@ public class MclTypeProvider {
 	public static val STRING_TYPE = new TypeInfo(PrimitiveType.String, TypeProperty.None)
 	public static val BOOL_TYPE = new TypeInfo(PrimitiveType.Boolean, TypeProperty.None)
 	public static val PDF_TYPE = new TypeInfo(PrimitiveType.Pdf, TypeProperty.None)
-	public static val VAR_LEVEL_TYPE = new TypeInfo(PrimitiveType.VarLevel, TypeProperty.None)
 	public static val VECTOR_TYPE = new TypeInfo(PrimitiveType.Real, TypeProperty.Vector)
 	public static val LIST_TYPE =  new TypeInfo(PrimitiveType.List, TypeProperty.None)
 	

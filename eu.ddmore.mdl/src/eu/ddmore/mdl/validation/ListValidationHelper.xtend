@@ -175,29 +175,65 @@ class ListValidationHelper {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='categorical' attributes = #[
-//						 new AttributeDefn('type', null, true), new AttributeDefn('categories', null, true),
-//						 new AttributeDefn('probabilities', null, true)
-						 new AttributeDefn('type', null, true) //, new AttributeDefn('predictions', null, true)
+						 new AttributeDefn('type', null, true)
 						 ]
 					]
 				)
 			]
-		) //,
-//		"COVARIATES" -> (
-//			new BlockListDefinition => [
-//				key = 'type'
-//				listDefns = newArrayList(
-//					new ListDefinition => [ keyValue='categorical' attributes = #[
-//						 new AttributeDefn('type', null, true)//, new AttributeDefn('categories', null, true)
-//						 ]
-//					],
-//					new ListDefinition => [ keyValue='continuous' attributes = #[
-//						 new AttributeDefn('type', null, true), new AttributeDefn('value', null, true) 
-//						 ]
-//					]
-//				)
-//			]
-//		)
+		),
+		"ADMINISTRATION" -> (
+			new BlockListDefinition => [
+				key = 'adm'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue=null attributes = #[
+						 new AttributeDefn('adm', null, true) , new AttributeDefn('amount', null, true), new AttributeDefn('doseTime', null, false),
+						 new AttributeDefn('duration', null, false), new AttributeDefn('start', null, false), new AttributeDefn('end', null, false)
+						 ]
+					]
+				)
+			]
+		),
+		"STUDY_DESIGN" -> (
+			new BlockListDefinition => [
+				key = 'armSize'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue=null attributes = #[
+						 new AttributeDefn('armSize', null, true) , new AttributeDefn('interventionSequence', null, true),
+						 new AttributeDefn('samplingSequence', null, false)
+						 ]
+					]
+				)
+			]
+		),
+		"DESIGN_SPACES" -> (
+			new BlockListDefinition => [
+				key = 'name'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue=null attributes = #[
+						 new AttributeDefn('name', null, true), new AttributeDefn('element', null, true) , new AttributeDefn('discrete', null, false),
+						 new AttributeDefn('range', null, false)
+						 ]
+					]
+				)
+			]
+		),
+		"SAMPLING" -> (
+			new BlockListDefinition => [
+				key = 'type'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue='simple' attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('outcome', null, true), new AttributeDefn('sampleTime', null, false),
+						 new AttributeDefn('numberSamples', null, false)
+						 ]
+					],
+					new ListDefinition => [ keyValue='complex' attributes = #[
+						 new AttributeDefn('type', null, true), new AttributeDefn('combination', null, true)
+						 ]
+					]
+				)
+			]
+		)
+		
 	}
 	
 	def isKeyAttributeDefined(AttributeList it){

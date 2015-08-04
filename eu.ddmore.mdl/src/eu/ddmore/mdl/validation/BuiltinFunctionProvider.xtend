@@ -52,11 +52,12 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
-	static val functDefns = #{
+	private static val functDefns = #{
 		'log' -> #[ new SimpleFuncDefn => [ numArgs = 2 returnType = MclTypeProvider::REAL_TYPE ] ],
 		'ln' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
 		'abs' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
 		'exp' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
+		'seq' -> #[ new SimpleFuncDefn => [ numArgs = 3 returnType = MclTypeProvider::VECTOR_TYPE ] ],
 		'Normal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
 						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
