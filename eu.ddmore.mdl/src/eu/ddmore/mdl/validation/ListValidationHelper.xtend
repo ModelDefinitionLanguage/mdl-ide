@@ -42,7 +42,7 @@ class ListValidationHelper {
 				key = 'use'
 				listDefns = newArrayList(
 					new ListDefinition => [  keyValue='covariate' attributes = #[
-						 new AttributeDefn('use', null, true)//, new AttributeDefn('categorical', null, false)//,
+						 new AttributeDefn('use', null, true), new AttributeDefn('categorical', null, false)//,
 //						 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categorical', null, false)//,
 //						 new AttributeDefn('define', 'categories', false)
 						 ] 
@@ -146,18 +146,18 @@ class ListValidationHelper {
 				)
 			]
 		),
-//		"DEQ" -> (
-//			new BlockListDefinition => [
-//				key = 'deriv'
-//				listDefns = newArrayList(
-//					new ListDefinition => [ keyValue=null attributes = #[
-//						 new AttributeDefn('deriv', null, true), new AttributeDefn('init', null, false),
-//						 new AttributeDefn('x0', null, false)
-//						 ]
-//					]
-//				)
-//			]
-//		),
+		"DEQ" -> (
+			new BlockListDefinition => [
+				key = 'deriv'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue=null attributes = #[
+						 new AttributeDefn('deriv', null, true), new AttributeDefn('init', null, false),
+						 new AttributeDefn('x0', null, false)
+						 ]
+					]
+				)
+			]
+		),
 		"VARIABILITY" -> (
 			new BlockListDefinition => [
 				key = 'type'

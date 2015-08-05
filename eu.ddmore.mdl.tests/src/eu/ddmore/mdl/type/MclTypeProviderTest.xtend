@@ -114,7 +114,7 @@ class MclTypeProviderTest {
 		rhs.ref = rhsDefn
 		val (PrimitiveType, PrimitiveType) => void errorFunc = [e, a| fail("should not call me!")]
 		val (PrimitiveType, PrimitiveType) => void failingErrorFunc = [e, a| e.assertSame(PrimitiveType.Real) a.assertSame(PrimitiveType.Enum)]
-		actual.checkRelationalOp(rhs, failingErrorFunc, errorFunc)
+		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
 	@Test
@@ -126,7 +126,7 @@ class MclTypeProviderTest {
 		val rhs = MdlFactory::eINSTANCE.createRealLiteral
 		val (PrimitiveType, PrimitiveType) => void errorFunc = [e, a| fail("should not call me!")]
 		val (PrimitiveType, PrimitiveType) => void failingErrorFunc = [e, a| e.assertSame(PrimitiveType.Enum) a.assertSame(PrimitiveType.Real)]
-		actual.checkRelationalOp(rhs, failingErrorFunc, errorFunc)
+		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
 	@Test

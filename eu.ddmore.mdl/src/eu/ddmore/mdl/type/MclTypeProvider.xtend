@@ -2,6 +2,8 @@ package eu.ddmore.mdl.type
 
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoryDefinition
+import eu.ddmore.mdl.mdl.CategoryReference
+import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ForwardDeclaration
@@ -13,12 +15,11 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
+import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import eu.ddmore.mdl.mdl.CategoryReference
-import eu.ddmore.mdl.mdl.EnumerationDefinition
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider
-import eu.ddmore.mdl.mdl.DerivativeDefinition
+import java.util.Map
+import java.util.Set
 
 public class MclTypeProvider {
 
@@ -47,6 +48,18 @@ public class MclTypeProvider {
 
 	def TypeInfo markReference(TypeInfo t){
 		new TypeInfo(t.theType, t.typeProp, true)
+	}
+
+	static val Map<PrimitiveType, Set<PrimitiveType>> compatibleTypes = #{
+		PrimitiveType.Real -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.List },
+		PrimitiveType.Int -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.List },
+		PrimitiveType.String -> #{ PrimitiveType.String },
+		PrimitiveType.Boolean -> #{ PrimitiveType.Boolean },
+		PrimitiveType.Pdf -> #{ PrimitiveType.Pdf },
+		PrimitiveType.Enum -> #{ PrimitiveType.EnumValue, PrimitiveType.Enum },
+		PrimitiveType.EnumValue -> #{ PrimitiveType.EnumValue, PrimitiveType.Enum },
+		PrimitiveType.List -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.List },
+		PrimitiveType.Undefined -> #{  }
 	}
 
 	public static val UNDEFINED_TYPE = new TypeInfo(PrimitiveType.Undefined, TypeProperty.None)
@@ -78,7 +91,7 @@ public class MclTypeProvider {
 		ep.additiveExpression -> REAL_TYPE,
 		ep.multiplicativeExpression -> REAL_TYPE,
 		ep.categoryDefinition -> ENUM_TYPE,
-		ep.derivativeDefinition -> DERIV_TYPE,
+//		ep.derivativeDefinition -> DERIV_TYPE,
 		
 		ep.estimateRange -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
 		ep.limitDefn -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
@@ -122,7 +135,7 @@ public class MclTypeProvider {
 			ListDefinition,
 			CategoryDefinition,
 			EnumerationDefinition,
-			DerivativeDefinition,
+//			DerivativeDefinition,
 			RandomVariableDefinition: typeTable.get(sd.eClass)
 			default:
 				UNDEFINED_TYPE
@@ -167,13 +180,22 @@ public class MclTypeProvider {
 	def checkRelationalOp(Expression lhs, Expression rhs, (PrimitiveType, PrimitiveType) => void leftErrorLambda,
 			(PrimitiveType, PrimitiveType) => void rightErrorLambda){
 		val lhsType = lhs?.typeFor?.theType ?: UNDEFINED_TYPE.theType
-		val rhsType = rhs?.typeFor?.theType ?: UNDEFINED_TYPE.theType
-		if(lhsType != REAL_TYPE.theType && lhsType != ENUM_TYPE.theType)
-			leftErrorLambda.apply(PrimitiveType.Real, lhsType)
-		if(rhsType != REAL_TYPE.theType && rhsType != ENUM_TYPE.theType)
-			rightErrorLambda.apply(PrimitiveType.Real, rhsType)
-		if(rhsType != lhsType)
-			leftErrorLambda.apply(lhsType, rhsType)
+//		val rhsType = rhs?.typeFor?.theType ?: UNDEFINED_TYPE.theType
+		if(lhsType == PrimitiveType.Enum || lhsType == PrimitiveType.EnumValue){
+			checkExpectedAndExpression(PrimitiveType.Enum, lhs, leftErrorLambda)
+			checkExpectedAndExpression(PrimitiveType.Enum, rhs, rightErrorLambda)
+		}
+		else{
+			checkExpectedAndExpression(PrimitiveType.Real, lhs, leftErrorLambda)
+			checkExpectedAndExpression(PrimitiveType.Real, rhs, rightErrorLambda)
+		}
+		
+//		if(lhsType != REAL_TYPE.theType && lhsType != ENUM_TYPE.theType)
+//			leftErrorLambda.apply(PrimitiveType.Real, lhsType)
+//		if(rhsType != REAL_TYPE.theType && rhsType != ENUM_TYPE.theType)
+//			rightErrorLambda.apply(PrimitiveType.Real, rhsType)
+//		if(rhsType != lhsType)
+//			leftErrorLambda.apply(lhsType, rhsType)
 	}
 
 	def checkMathsOp(Expression lhs, Expression rhs, (PrimitiveType, PrimitiveType) => void leftErrorLambda,
@@ -196,8 +218,9 @@ public class MclTypeProvider {
 	
 	def void checkExpectedAndExpression(PrimitiveType expectedType, Expression exp, (PrimitiveType, PrimitiveType) => void errorLambda){
 		val actualType = exp?.typeFor?.theType ?: UNDEFINED_TYPE.theType
-		if(actualType != expectedType)
-			errorLambda.apply(expectedType, actualType ?: PrimitiveType.Undefined)
+		if(!compatibleTypes.get(expectedType).contains(actualType)){
+			errorLambda.apply(expectedType, actualType)
+		} 
 	}
 	
 	

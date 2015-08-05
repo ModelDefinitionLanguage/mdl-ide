@@ -77,8 +77,8 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 	MODEL_PREDICTION {
 		DEQ{
 			RATEIN = if(T >= TLAG) then GUT * KA else 0
-			deriv GUT =(- RATEIN), init = 0, x0 = 0 
-			deriv CENTRAL = (RATEIN - CL * CENTRAL / V), init = 0, x0 = 0  
+			GUT : { deriv =(- RATEIN), init = 0, x0 = 0 } 
+			CENTRAL : { deriv = (RATEIN - CL * CENTRAL / V), init = 0, x0 = 0 }  
 		}
 	    CC = CENTRAL / V 
 	} # end MODEL_PREDICTION

@@ -128,7 +128,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.unaryExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Boolean type, but was Real."
+			"Expected Boolean type, but was Int."
 		)
 	}
 	
@@ -388,7 +388,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Enum type, but was Real."
+			"Expected Enum type, but was Int."
 		)
 	}
 	

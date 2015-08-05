@@ -52,7 +52,7 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
-	private static val functDefns = #{
+	private static val Map<String, List<? extends FunctDefn>> functDefns = #{
 		'log' -> #[ new SimpleFuncDefn => [ numArgs = 2 returnType = MclTypeProvider::REAL_TYPE ] ],
 		'ln' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
 		'abs' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
