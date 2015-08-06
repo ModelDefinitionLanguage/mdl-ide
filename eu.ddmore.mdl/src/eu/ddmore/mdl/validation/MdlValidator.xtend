@@ -33,6 +33,7 @@ import eu.ddmore.mdl.mdl.TransformedDefinition
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 
 //import org.eclipse.xtext.validation.Check
 
@@ -218,8 +219,8 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 
 	// Type handling	
-	private def (PrimitiveType, PrimitiveType) => void typeError(EStructuralFeature feature){ 
-		[expectedType, actualType |error("Expected " + expectedType + " type, but was " + actualType + ".", feature, INCOMPATIBLE_TYPES) ]
+	private def (TypeInfo, TypeInfo) => void typeError(EStructuralFeature feature){ 
+		[expectedType, actualType |error("Expected " + expectedType.typeName + " type, but was " + actualType.typeName + ".", feature, INCOMPATIBLE_TYPES) ]
 	}
 	
 			
@@ -274,7 +275,10 @@ class MdlValidator extends AbstractMdlValidator {
 	def validateCompatibleTypes(EquationDefinition e){
 		// only check if there is an RHS to check 
 		if(e.expression != null)
-			checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+			if(e.isVector)
+				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+			else
+				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
 	}
 		
 	@Check

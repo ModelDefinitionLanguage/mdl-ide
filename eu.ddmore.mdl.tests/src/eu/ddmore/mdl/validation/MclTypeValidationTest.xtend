@@ -307,7 +307,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B = 26
 				C
-				log(A) =  [ 20, C, B]
+				A[] =  [ 20, C, B]
 			}
 			
 		} # end of model object
@@ -329,7 +329,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B = 26
 				C
-				log(A) =  [ 20, true, B]
+				A[] =  [ 20, true, B]
 			}
 			
 		} # end of model object
@@ -338,6 +338,31 @@ class MclTypeValidationTest {
 		mcl.assertError(MdlPackage::eINSTANCE.vectorContent,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Expected Real type, but was Boolean."
+		)
+	}
+	
+	@Test
+	def void testInValidVectorEquationDefinition(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B = 26
+				C
+				A =  [ 20, C, B]
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was Vector."
 		)
 	}
 	
@@ -388,7 +413,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Enum type, but was Int."
+			"Expected Enum:SEX type, but was Int."
 		)
 	}
 	
@@ -415,7 +440,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Real type, but was Enum."
+			"Expected Real type, but was Enum:SEX."
 		)
 	}
 	
@@ -442,7 +467,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Enum type, but was String."
+			"Expected Enum:SEX type, but was String."
 		)
 	}
 	
