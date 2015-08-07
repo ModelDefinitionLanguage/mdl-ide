@@ -4,13 +4,13 @@ import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MdlFactory
 import eu.ddmore.mdl.type.MclTypeProvider.EnumTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -126,8 +126,8 @@ class MclTypeProviderTest {
 	def void testRelationalOpWithNullRhs(){
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val Expression rhs = null
-		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| e.assertSame(MclTypeProvider::REAL_TYPE) a.assertSame(MclTypeProvider::UNDEFINED_TYPE)]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertSame(MclTypeProvider::UNDEFINED_TYPE)]
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| e.assertEquals(MclTypeProvider::REAL_TYPE) a.assertEquals(MclTypeProvider::UNDEFINED_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertEquals(MclTypeProvider::UNDEFINED_TYPE)]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
@@ -143,7 +143,7 @@ class MclTypeProviderTest {
 	def void testMathsOpWithString(){
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val Expression rhs = MdlFactory::eINSTANCE.createStringLiteral
-		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| a.assertSame(MclTypeProvider::STRING_TYPE)]
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| a.assertEquals(MclTypeProvider::STRING_TYPE)]
 		actual.checkMathsOp(rhs, errorFunc, errorFunc)
 	}
 
@@ -152,7 +152,7 @@ class MclTypeProviderTest {
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val Expression rhs = null
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertSame(MclTypeProvider::UNDEFINED_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertEquals(MclTypeProvider::UNDEFINED_TYPE)]
 		actual.checkMathsOp(rhs, errorFunc, failingErrorFunc)
 	}
 

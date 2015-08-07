@@ -5,7 +5,7 @@ import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveTypeInfo
 import java.util.Map
 import java.util.HashSet
 import java.util.Set
@@ -17,37 +17,37 @@ class BuiltinFunctionProvider {
 	
 	interface FunctDefn{
 		def int getNumArgs()
-		def TypeInfo getReturnType()
+		def PrimitiveTypeInfo getReturnType()
 	} 	
 
 	static class SimpleFuncDefn implements FunctDefn{
 		int numArgs
-		TypeInfo returnType	 
+		PrimitiveTypeInfo returnType	 
 
 		override int getNumArgs(){
 			numArgs
 		}
 		
-		override TypeInfo getReturnType(){
+		override PrimitiveTypeInfo getReturnType(){
 			returnType
 		}
 	}
 
 	@Data
 	static class FunctionArgument{
-		TypeInfo expectedType
+		PrimitiveTypeInfo expectedType
 		boolean mandatory
 	}
 
 	static class NamedArgFuncDefn implements FunctDefn{
-		TypeInfo returnType
+		PrimitiveTypeInfo returnType
 		Map<String, FunctionArgument> arguments	 
 		
 		override int getNumArgs(){
 			arguments.size
 		}
 		
-		override TypeInfo getReturnType(){
+		override PrimitiveTypeInfo getReturnType(){
 			returnType
 		}
 	}

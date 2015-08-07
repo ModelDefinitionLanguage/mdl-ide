@@ -21,10 +21,14 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.validation.ListValidationHelper
 
 public class MclTypeProvider {
 
 	extension BuiltinFunctionProvider typeProvider = new BuiltinFunctionProvider
+	extension ListValidationHelper listProvider = new ListValidationHelper
 	
 
 	enum PrimitiveType {
@@ -34,31 +38,41 @@ public class MclTypeProvider {
 		Deriv, Estimate, None
 	}
 	
+	@Data
+	static abstract class TypeInfo{
+		def abstract PrimitiveType getTheType()
+		def abstract TypeProperty getTypeProp()
+		def abstract boolean isReference()
+		def abstract boolean isCompatible(TypeInfo otherType)
+		def abstract TypeInfo markReference()
+		def abstract String getTypeName()
+	} 
+	
 	@Data @FinalFieldsConstructor
-	static class TypeInfo{
+	static class PrimitiveTypeInfo extends TypeInfo{
 		PrimitiveType theType
 		TypeProperty typeProp
-		boolean isReference
+		boolean reference
 		
 		new(PrimitiveType theType, TypeProperty typeProp){
 			this(theType, typeProp, false)
 		}
 		
-		def isCompatible(TypeInfo otherType){
+		override isCompatible(TypeInfo otherType){
 			compatibleTypes.get(this.theType).contains(otherType.theType)
 		}
 		
-		def getTypeName(){
+		override getTypeName(){
 			theType.toString
 		}
 		
-		def markReference(){
-			new TypeInfo(theType, typeProp, true);
+		override markReference(){
+			new PrimitiveTypeInfo(theType, typeProp, true);
 		}
 	}
 
 	@Data @FinalFieldsConstructor
-	static class EnumTypeInfo extends TypeInfo{
+	static class EnumTypeInfo extends PrimitiveTypeInfo{
 		String enumName
 		
 		new(String name){
@@ -88,28 +102,75 @@ public class MclTypeProvider {
 		}
 	}
 
-	public static val UNDEFINED_TYPE = new TypeInfo(PrimitiveType.Undefined, TypeProperty.None)
-	public static val INT_TYPE = new TypeInfo(PrimitiveType.Int, TypeProperty.None)
-	public static val BOOLEAN_TYPE = new TypeInfo(PrimitiveType.Boolean, TypeProperty.None)
-	public static val REAL_TYPE = new TypeInfo(PrimitiveType.Real, TypeProperty.None)
-//	public static val DERIV_TYPE = new TypeInfo(PrimitiveType.Real, TypeProperty.Deriv)
-//	public static val ENUM_TYPE = new TypeInfo(PrimitiveType.Enum, TypeProperty.None)
-	public static val STRING_TYPE = new TypeInfo(PrimitiveType.String, TypeProperty.None)
-	public static val BOOL_TYPE = new TypeInfo(PrimitiveType.Boolean, TypeProperty.None)
-	public static val PDF_TYPE = new TypeInfo(PrimitiveType.Pdf, TypeProperty.None)
-	public static val VECTOR_TYPE = new TypeInfo(PrimitiveType.Vector, TypeProperty.None)
-	public static val LIST_TYPE =  new TypeInfo(PrimitiveType.List, TypeProperty.None)
+	@Data @FinalFieldsConstructor
+	static class ListTypeInfo extends TypeInfo{
+		String name
+		PrimitiveType apparentType
+		TypeProperty typeProp
+		boolean reference
+		
+		new(String name, PrimitiveType appType){
+			this(name, appType, TypeProperty.None, false)
+		}
+		
+		new(String name, PrimitiveType appType, TypeProperty typeProp){
+			this(name, appType, typeProp, false)
+		}
+		
+		new(String name, PrimitiveType appType, boolean isRef){
+			this(name, appType, TypeProperty.None, isRef)
+		}
+		
+		override isCompatible(TypeInfo otherType){
+			switch(otherType){
+				ListTypeInfo:
+					this.apparentType == otherType.theType
+				default:
+					false 
+			}
+		}
+		
+		override getTheType(){
+			apparentType
+		}
+		
+		override getTypeProp(){
+			typeProp
+		}
+		
+		override getTypeName(){
+			"List:" + name
+		}
+		
+		override markReference(){
+			new ListTypeInfo(name, apparentType, typeProp, true)
+		}
+	}
+	
+
+
+	public static val UNDEFINED_TYPE = new PrimitiveTypeInfo(PrimitiveType.Undefined, TypeProperty.None)
+	public static val INT_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int, TypeProperty.None)
+	public static val BOOLEAN_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean, TypeProperty.None)
+	public static val REAL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.None)
+//	public static val DERIV_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.Deriv)
+//	public static val ENUM_TYPE = new PrimitiveTypeInfo(PrimitiveType.Enum, TypeProperty.None)
+	public static val STRING_TYPE = new PrimitiveTypeInfo(PrimitiveType.String, TypeProperty.None)
+	public static val BOOL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean, TypeProperty.None)
+	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf, TypeProperty.None)
+	public static val VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Vector, TypeProperty.None)
+	public static val LIST_TYPE =  new PrimitiveTypeInfo(PrimitiveType.List, TypeProperty.None)
 	
 	static val Map<PrimitiveType, Set<PrimitiveType>> compatibleTypes = #{
-		PrimitiveType.Real -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.List },
-		PrimitiveType.Int -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.List },
+		PrimitiveType.Real -> #{ PrimitiveType.Real, PrimitiveType.Int },
+		PrimitiveType.Int -> #{ PrimitiveType.Real, PrimitiveType.Int },
 		PrimitiveType.String -> #{ PrimitiveType.String },
 		PrimitiveType.Vector -> #{ PrimitiveType.Vector },
 		PrimitiveType.Boolean -> #{ PrimitiveType.Boolean },
 		PrimitiveType.Pdf -> #{ PrimitiveType.Pdf },
 //		PrimitiveType.Enum -> #{ PrimitiveType.EnumValue, PrimitiveType.Enum },
 //		PrimitiveType.EnumValue -> #{ PrimitiveType.EnumValue, PrimitiveType.Enum },
-		PrimitiveType.List -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.List },
+//		PrimitiveType.List -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.List },
 		PrimitiveType.Undefined -> #{  }
 	}
 	
@@ -132,15 +193,15 @@ public class MclTypeProvider {
 //		ep.categoryDefinition -> ENUM_TYPE,
 //		ep.derivativeDefinition -> DERIV_TYPE,
 		
-		ep.estimateRange -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
-		ep.limitDefn -> new TypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
+		ep.estimateRange -> new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
+		ep.limitDefn -> new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
 		
 //		ep.equationDefinition -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,
 		ep.randomVariableDefinition -> REAL_TYPE,
-		ep.forwardDeclaration -> REAL_TYPE,
+		ep.forwardDeclaration -> REAL_TYPE
 //		ep.enumerationDefinition -> ENUM_TYPE,
-		ep.listDefinition -> LIST_TYPE
+//		ep.listDefinition -> LIST_TYPE
 	}
 	
 	def dispatch TypeInfo typeFor(Expression e){
@@ -157,7 +218,7 @@ public class MclTypeProvider {
 		}
 	}
 
-//	def dispatch TypeInfo typeFor(EquationDefinition exp){
+//	def dispatch PrimitiveTypeInfo typeFor(EquationDefinition exp){
 //		if(exp.isVector){
 //			VECTOR_TYPE
 //		}
@@ -180,9 +241,10 @@ public class MclTypeProvider {
 		switch(sd){
 			EquationDefinition:
 				if(sd.isVector) VECTOR_TYPE else REAL_TYPE
+			ListDefinition:
+				getTypeOfList(sd.list)
 			TransformedDefinition,
 			ForwardDeclaration,
-			ListDefinition,
 //			DerivativeDefinition,
 			RandomVariableDefinition: typeTable.get(sd.eClass)
 			EnumerationDefinition:

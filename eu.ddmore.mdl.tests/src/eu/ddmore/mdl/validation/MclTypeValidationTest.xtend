@@ -65,6 +65,58 @@ class MclTypeValidationTest {
 	}
 	
 	@Test
+	def void testValidWithDerivExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				DEQ{
+					B : { deriv = C, init = 33 }
+				}
+				C
+				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInValidWithVarLvlExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+				ID : { type is parameter, level=1 }
+			}
+		
+			
+			MODEL_PREDICTION{
+				DEQ{
+					B : { deriv = C, init = 33 }
+				}
+				C = ID
+				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was List:VarLevel."
+		)
+	}
+	
+	@Test
 	def void testInValidRelation(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlobj {

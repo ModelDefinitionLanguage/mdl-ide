@@ -12,6 +12,10 @@ import org.eclipse.xtend.lib.annotations.Data
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.type.MclTypeProvider.ListTypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.TypeProperty
 
 class ListValidationHelper {
 	static val CATEGORIES_KWD = "categories"
@@ -27,6 +31,7 @@ class ListValidationHelper {
 	
 	static class ListDefinition {
 		String keyValue
+		TypeInfo listType
 		List<AttributeDefn> attributes 
 	}
 	
@@ -41,41 +46,41 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'use'
 				listDefns = newArrayList(
-					new ListDefinition => [  keyValue='covariate' attributes = #[
+					new ListDefinition => [  keyValue='covariate' listType = new ListTypeInfo("Covariate", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('use', null, true), new AttributeDefn('categorical', null, false)//,
 //						 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categorical', null, false)//,
 //						 new AttributeDefn('define', 'categories', false)
 						 ] 
 					],
-					new ListDefinition => [keyValue='amt' attributes = #[
+					new ListDefinition => [keyValue='amt' listType = new ListTypeInfo("Amt", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('use', null, true), new AttributeDefn('define', null, true)
 						 ] 
 					],
-					new ListDefinition => [keyValue='dv' attributes = #[
+					new ListDefinition => [keyValue='dv' listType = new ListTypeInfo("Dv", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true), new AttributeDefn('define', null, false)//, new AttributeDefn('variable', null, true)
 						 ] 
 					],
-					new ListDefinition => [keyValue='idv' attributes = #[
+					new ListDefinition => [keyValue='idv' listType = new ListTypeInfo("Idv", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true)
 						 ] 
 					],
-					new ListDefinition => [keyValue='cmt' attributes = #[
+					new ListDefinition => [keyValue='cmt' listType = new ListTypeInfo("Cmt", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true)
 						 ] 
 					],
-					new ListDefinition => [keyValue='id' attributes = #[
+					new ListDefinition => [keyValue='id' listType = new ListTypeInfo("Id", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true)
 						 ] 
 					],
-					new ListDefinition => [keyValue='mdv' attributes = #[
+					new ListDefinition => [keyValue='mdv' listType = new ListTypeInfo("Mdv", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true)
 						 ] 
 					],
-					new ListDefinition => [keyValue='rate' attributes = #[
+					new ListDefinition => [keyValue='rate' listType = new ListTypeInfo("Rate", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true)
 						 ] 
 					],
-					new ListDefinition => [keyValue='dvid' attributes = #[
+					new ListDefinition => [keyValue='dvid' listType = new ListTypeInfo("Dvid", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true)
 						 ] 
 					]
@@ -86,7 +91,7 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'column'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null attributes = #[
+					new ListDefinition => [ keyValue=null  listType = new ListTypeInfo("Column", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('column', null, true), new AttributeDefn('condition', null, false),
 						 	new AttributeDefn('categories', null, false), new AttributeDefn('define', 'categories', false) 
 						 ] 
@@ -98,7 +103,7 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'file'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null attributes = #[
+					new ListDefinition => [ keyValue=null  listType = new ListTypeInfo("Source", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('file', null, true), new AttributeDefn('inputformat', null, true),
 						 	new AttributeDefn('ignore', null, false) 
 						 ] 
@@ -110,7 +115,7 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null attributes = #[
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("VarLevel", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('type', null, true), new AttributeDefn('level', null, true)
 						 ]
 					]
@@ -121,23 +126,23 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='depot' attributes = #[
+					new ListDefinition => [ keyValue='depot' listType = new ListTypeInfo("Depot", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
 						 new AttributeDefn('to', null, true), new AttributeDefn('ka', null, true),
 						 new AttributeDefn('tlag', null, true), new AttributeDefn('finput', null, false)
 						 ]
 					],
-					new ListDefinition => [ keyValue='compartment' attributes = #[
+					new ListDefinition => [ keyValue='compartment' listType = new ListTypeInfo("Compartment", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true)
 						 ]
 					],
-					new ListDefinition => [ keyValue='elimination' attributes = #[
+					new ListDefinition => [ keyValue='elimination' listType = new ListTypeInfo("Elimination", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
 						 new AttributeDefn('from', null, true), new AttributeDefn('v', null, true),
 						 new AttributeDefn('cl', null, true)
 						 ]
 					],
-					new ListDefinition => [ keyValue='distribution' attributes = #[
+					new ListDefinition => [ keyValue='distribution' listType = new ListTypeInfo("Distribution", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
 						 new AttributeDefn('kin', null, true), new AttributeDefn('kout', null, true),
 						 new AttributeDefn('from', null, true)
@@ -150,7 +155,7 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'deriv'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null attributes = #[
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("Derivative", PrimitiveType.Real, TypeProperty.Deriv) attributes = #[
 						 new AttributeDefn('deriv', null, true), new AttributeDefn('init', null, false),
 						 new AttributeDefn('x0', null, false)
 						 ]
@@ -162,7 +167,7 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null attributes = #[
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("CovarianceMat", PrimitiveType.List, TypeProperty.None) attributes = #[
 						 new AttributeDefn('type', null, true), new AttributeDefn('parameter', null, true),
 						 new AttributeDefn('value', null, true)
 						 ]
@@ -174,7 +179,7 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='categorical' attributes = #[
+					new ListDefinition => [ keyValue='categorical' listType = new ListTypeInfo("CatObs", PrimitiveType.Int, TypeProperty.None) attributes = #[
 						 new AttributeDefn('type', null, true)
 						 ]
 					]
@@ -185,7 +190,7 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'adm'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null attributes = #[
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("Administration", PrimitiveType.List, TypeProperty.None) attributes = #[
 						 new AttributeDefn('adm', null, true) , new AttributeDefn('amount', null, true), new AttributeDefn('doseTime', null, false),
 						 new AttributeDefn('duration', null, false), new AttributeDefn('start', null, false), new AttributeDefn('end', null, false)
 						 ]
@@ -197,7 +202,7 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'armSize'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null attributes = #[
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("StudyDesign", PrimitiveType.List, TypeProperty.None) attributes = #[
 						 new AttributeDefn('armSize', null, true) , new AttributeDefn('interventionSequence', null, true),
 						 new AttributeDefn('samplingSequence', null, false)
 						 ]
@@ -209,7 +214,7 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'name'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null attributes = #[
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("DesignSpace", PrimitiveType.List, TypeProperty.None) attributes = #[
 						 new AttributeDefn('name', null, true), new AttributeDefn('element', null, true) , new AttributeDefn('discrete', null, false),
 						 new AttributeDefn('range', null, false)
 						 ]
@@ -221,7 +226,7 @@ class ListValidationHelper {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='simple' attributes = #[
+					new ListDefinition => [ keyValue='simple' listType = new ListTypeInfo("Sampling", PrimitiveType.List, TypeProperty.None) attributes = #[
 						 new AttributeDefn('type', null, true), new AttributeDefn('outcome', null, true), new AttributeDefn('sampleTime', null, false),
 						 new AttributeDefn('numberSamples', null, false)
 						 ]
@@ -234,6 +239,38 @@ class ListValidationHelper {
 			]
 		)
 		
+	}
+
+
+	def ListDefinition getListDefinition(AttributeList it){
+		val parent = parentStatement
+		if(attDefns.containsKey(parent.identifier)){
+			val iter = attributes.iterator
+			val expectedAttributes = new ArrayList<ListDefinition>()
+			while(iter.hasNext && expectedAttributes.isEmpty){
+				val att = iter.next
+				val blockDefn = attDefns.get(parent.identifier)
+				expectedAttributes.addAll(blockDefn.listDefns.filter[at|
+					switch(att){
+						ValuePair case att.argumentName == blockDefn.key:{
+							if(at.keyValue != null){
+								val keyVal = att.expression.convertToString
+								keyVal == at.keyValue
+							}
+							else true
+						}
+						default: false
+					}
+				])
+			}
+			return expectedAttributes.head
+		}
+		null
+	}	
+	
+	def TypeInfo getTypeOfList(AttributeList attList){
+		val listDefn = attList.listDefinition
+		listDefn?.listType
 	}
 	
 	def isKeyAttributeDefined(AttributeList it){
@@ -369,6 +406,12 @@ class ListValidationHelper {
 	def getListDefnByKeyValue(BlockListDefinition it, String keyValQuery){
 		listDefns.findFirst[defn| defn.keyValue == keyValQuery ]
 	}
+
+	def	getListDefnByBlockAndKeyValue(String blockName, String keyValQuery){
+		val blkDefn = attDefns.get(blockName)
+		blkDefn?.listDefns.findFirst[defn| defn.keyValue == keyValQuery ]
+	}
+	
 
 	def attributeRecognised(Attribute it){
 		// expect Attribute->AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement

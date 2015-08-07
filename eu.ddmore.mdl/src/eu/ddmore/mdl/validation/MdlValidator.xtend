@@ -12,28 +12,27 @@ import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EqualityExpression
+import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
+import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
+import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
+import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
+import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorContent
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.validation.Check
-import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.mdl.RandomVariableDefinition
-import eu.ddmore.mdl.mdl.TransformedDefinition
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.mdl.NamedFuncArguments
-import eu.ddmore.mdl.mdl.UnnamedFuncArguments
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 
 //import org.eclipse.xtext.validation.Check
 
