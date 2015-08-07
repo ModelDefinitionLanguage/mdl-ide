@@ -387,9 +387,9 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.vectorContent,
+		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Real type, but was Boolean."
+			"Element type 'Boolean' is incompatible with vector type 'Vector:Real'."
 		)
 	}
 	
@@ -414,9 +414,134 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Real type, but was Vector."
+			"Expected Real type, but was Vector:Real."
 		)
 	}
+	
+	@Test
+	def void testInValidVectorLiteralIncompatibleEquationDefinition(){
+		val mcl = '''
+		d1g=desobj{
+			ADMINISTRATION{
+			}
+			
+			STUDY_DESIGN{
+				Conc
+			}
+			
+			SAMPLING{
+			 	pkwin1 : { type is simple, outcome=Conc, sampleTime = 0.5 }
+				pkwin2 : { type is simple, outcome=Conc, numberSamples=0 }
+			}
+			DESIGN_SPACES{
+				DS3[] = [pkwin1,pkwin2]
+			}
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Vector:Real type, but was Vector:List:Sampling."
+		)
+	}
+	
+	@Test
+	def void testInValidVectorNestedVectorEquationDefinition(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A[] =  [ [ 0 ], 20, 26]
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Element type 'Vector:Int' is incompatible with vector type 'Vector:Int'."
+		)
+	}
+	
+	@Test
+	def void testInValidVectorNestedVectorRefEquationDefinition(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A[] =  [ C, 20, 26]
+				C[] = [ 1, 2, 3]
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Element type 'Vector:Real' is incompatible with vector type 'Vector:Int'."
+		)
+	}
+	
+	@Test
+	def void testInValidInconsistentVectorLiteral(){
+		val mcl = 	'''
+		d1g=desobj{
+			STUDY_DESIGN{}
+			
+			
+			ADMINISTRATION{
+				Conc
+			}
+			SAMPLING{
+			 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
+				pkwin2 : { type is simple, outcome=Conc, numberSamples=0 }
+			}
+			DESIGN_SPACES{
+				DS3 : { name=[pkwin1,pkwin2, 1.0], element is numberTimes, discrete=[1,2] }
+			}
+		}
+	'''.parse
+		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Element type 'Real' is incompatible with vector type 'Vector:List:Sampling'."
+		)
+	}
+	
+	
+	@Test
+	def void testValidListVectorLiteral(){
+		val mcl = 	'''
+		d1g=desobj{
+			ADMINISTRATION{
+			}
+			
+			STUDY_DESIGN{
+				Conc
+			}
+			
+			SAMPLING{
+			 	pkwin1 : { type is simple, outcome=Conc, sampleTime = 0.5 }
+				pkwin2 : { type is simple, outcome=Conc, numberSamples=0 }
+			}
+			DESIGN_SPACES{
+				DS3 : { name=[pkwin1,pkwin2], element is numberTimes, discrete=1 }
+			}
+		}
+	'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
 	
 	@Test
 	def void testValidEnumExpression(){

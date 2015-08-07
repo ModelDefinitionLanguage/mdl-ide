@@ -16,14 +16,16 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
-import org.eclipse.xtend.lib.annotations.Data
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import eu.ddmore.mdl.validation.ListValidationHelper
 import java.util.Map
 import java.util.Set
+import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.Statement
-import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.validation.ListValidationHelper
+
+import static eu.ddmore.mdl.type.MclTypeProvider.*
+import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.mdl.VectorElement
 
 public class MclTypeProvider {
 
@@ -32,10 +34,10 @@ public class MclTypeProvider {
 	
 
 	enum PrimitiveType {
-		Int, String, Real, Boolean, Vector, Pdf, Enum, EnumValue, List, Undefined
+		Int, String, Real, Boolean, Pdf, Enum, EnumValue, List, Undefined
 	}
 	enum TypeProperty{
-		Deriv, Estimate, None
+		Deriv, Estimate, Vector, None
 	}
 	
 	@Data
@@ -44,8 +46,10 @@ public class MclTypeProvider {
 		def abstract TypeProperty getTypeProp()
 		def abstract boolean isReference()
 		def abstract boolean isCompatible(TypeInfo otherType)
+		def abstract boolean isCompatibleElement(TypeInfo otherType)
 		def abstract TypeInfo markReference()
 		def abstract String getTypeName()
+		def abstract TypeInfo makeVector()
 	} 
 	
 	@Data @FinalFieldsConstructor
@@ -60,14 +64,27 @@ public class MclTypeProvider {
 		
 		override isCompatible(TypeInfo otherType){
 			compatibleTypes.get(this.theType).contains(otherType.theType)
+				&& compatibleTypeProps.get(this.typeProp).contains(otherType.typeProp)
+		}
+		
+		override isCompatibleElement(TypeInfo elementType){
+			if(this.typeProp != TypeProperty.Vector) throw new IllegalArgumentException("vectorType must have a vector property type")
+			
+			if(elementType.typeProp != TypeProperty.Vector)
+				compatibleTypes.get(this.theType).contains(elementType.theType)
+			else false		
 		}
 		
 		override getTypeName(){
-			theType.toString
+			(if(typeProp != TypeProperty.None) typeProp + ':' else '') + theType.toString
 		}
 		
 		override markReference(){
 			new PrimitiveTypeInfo(theType, typeProp, true);
+		}
+		
+		override makeVector(){
+			new PrimitiveTypeInfo(theType, TypeProperty.Vector, reference);
 		}
 	}
 
@@ -84,6 +101,11 @@ public class MclTypeProvider {
 			enumName = name
 		}
 		
+		new(String name, TypeProperty typeProp, boolean isRef){
+			super(PrimitiveType.Enum, typeProp, isRef)
+			enumName = name
+		}
+		
 		override isCompatible(TypeInfo otherType){
 			switch(otherType){
 				EnumTypeInfo:
@@ -94,13 +116,46 @@ public class MclTypeProvider {
 		}
 		
 		override getTypeName(){
-			"Enum:" + enumName
+			(if(this.getTypeProp != TypeProperty.None) this.getTypeProp + ':' else '') + "Enum:" + enumName
 		}
 		
 		override markReference(){
 			new EnumTypeInfo (enumName, true)
 		}
+		
+		override makeVector(){
+			new EnumTypeInfo(enumName, TypeProperty.Vector, isReference);
+		}
+		
 	}
+
+//	@Data @FinalFieldsConstructor
+//	static class VectorTypeInfo extends PrimitiveTypeInfo{
+//		new(PrimitiveType type){
+//			super(type, TypeProperty.Vector, false)
+//		}
+//		
+//		new(PrimitiveType type, boolean isRef){
+//			super(type, TypeProperty.Vector, isRef)
+//		}
+//		
+//		override isCompatible(TypeInfo otherType){
+//			switch(otherType){
+//				VectorTypeInfo:
+//					this.theType
+//				default:
+//					false 
+//			}
+//		}
+//		
+//		override getTypeName(){
+//			"Enum:" + enumName
+//		}
+//		
+//		override markReference(){
+//			new EnumTypeInfo (enumName, true)
+//		}
+//	}
 
 	@Data @FinalFieldsConstructor
 	static class ListTypeInfo extends TypeInfo{
@@ -130,6 +185,14 @@ public class MclTypeProvider {
 			}
 		}
 		
+		override isCompatibleElement(TypeInfo elementType){
+			if(this.typeProp != TypeProperty.Vector) throw new IllegalArgumentException("vectorType must have a vector property type")
+			
+			if(elementType.typeProp != TypeProperty.Vector)
+				this.isCompatible(elementType)
+			else false		
+		}
+		
 		override getTheType(){
 			apparentType
 		}
@@ -139,11 +202,15 @@ public class MclTypeProvider {
 		}
 		
 		override getTypeName(){
-			"List:" + name
+			(if(typeProp != TypeProperty.None) typeProp + ':' else '') + "List:" + name
 		}
 		
 		override markReference(){
 			new ListTypeInfo(name, apparentType, typeProp, true)
+		}
+
+		override makeVector(){
+			new ListTypeInfo(name, apparentType, TypeProperty.Vector, reference);
 		}
 	}
 	
@@ -158,20 +225,26 @@ public class MclTypeProvider {
 	public static val STRING_TYPE = new PrimitiveTypeInfo(PrimitiveType.String, TypeProperty.None)
 	public static val BOOL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean, TypeProperty.None)
 	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf, TypeProperty.None)
-	public static val VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Vector, TypeProperty.None)
+	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.Vector)
 	public static val LIST_TYPE =  new PrimitiveTypeInfo(PrimitiveType.List, TypeProperty.None)
 	
 	static val Map<PrimitiveType, Set<PrimitiveType>> compatibleTypes = #{
 		PrimitiveType.Real -> #{ PrimitiveType.Real, PrimitiveType.Int },
-		PrimitiveType.Int -> #{ PrimitiveType.Real, PrimitiveType.Int },
+		PrimitiveType.Int -> #{ PrimitiveType.Int },
 		PrimitiveType.String -> #{ PrimitiveType.String },
-		PrimitiveType.Vector -> #{ PrimitiveType.Vector },
 		PrimitiveType.Boolean -> #{ PrimitiveType.Boolean },
 		PrimitiveType.Pdf -> #{ PrimitiveType.Pdf },
 //		PrimitiveType.Enum -> #{ PrimitiveType.EnumValue, PrimitiveType.Enum },
 //		PrimitiveType.EnumValue -> #{ PrimitiveType.EnumValue, PrimitiveType.Enum },
 //		PrimitiveType.List -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.List },
 		PrimitiveType.Undefined -> #{  }
+	}
+	
+	static val Map<TypeProperty, Set<TypeProperty>> compatibleTypeProps = #{
+		TypeProperty.None -> #{ TypeProperty.None, TypeProperty.Estimate, TypeProperty.Deriv },
+		TypeProperty.Estimate -> #{ TypeProperty.None, TypeProperty.Estimate, TypeProperty.Deriv },
+		TypeProperty.Deriv -> #{ TypeProperty.None, TypeProperty.Estimate, TypeProperty.Deriv },
+		TypeProperty.Vector -> #{ TypeProperty.Vector }
 	}
 	
 	static val ep = MdlPackage::eINSTANCE 
@@ -181,7 +254,6 @@ public class MclTypeProvider {
 		ep.integerLiteral -> INT_TYPE,
 		ep.stringLiteral -> STRING_TYPE,
 		ep.booleanLiteral -> BOOL_TYPE,
-		ep.vectorLiteral -> VECTOR_TYPE,
 		ep.whenExpression -> REAL_TYPE,
 		ep.whenClause -> REAL_TYPE,
 		ep.relationalExpression -> BOOL_TYPE,
@@ -204,6 +276,37 @@ public class MclTypeProvider {
 //		ep.listDefinition -> LIST_TYPE
 	}
 	
+	// returns the richest type if they are different or null if they are the same
+	// of the types are incompatible.
+	def getRichestPromotableType(TypeInfo refType, TypeInfo otherType){
+		if(refType.theType == PrimitiveType.Real && otherType.theType == PrimitiveType.Int)
+			refType
+		else if(refType.theType == PrimitiveType.Int && otherType.theType == PrimitiveType.Real)
+			otherType
+		else null
+	}
+	
+	def getTypeForArray(VectorLiteral vl){
+		// first type determines array type unless one of the other elements is a type
+		// that it could be promoted to. For example if the first element is an int
+		// and a later type is a Real the the type for the vector as a whole is a Real.
+		var TypeInfo refType = null
+		for(Expression e : vl.expressions){
+			val exprType = e.typeFor
+			// can't have a vector here
+			if(exprType.typeProp != TypeProperty.Vector){
+				if(refType == null)
+					refType = exprType
+				else{
+					val promotedType = refType.getRichestPromotableType(exprType)
+					if(promotedType != null && refType != promotedType)
+						refType = promotedType
+				}
+			}
+		}
+		(refType ?: UNDEFINED_TYPE).makeVector
+	}
+	
 	def dispatch TypeInfo typeFor(Expression e){
 		switch(e){
 			SymbolReference:
@@ -213,6 +316,11 @@ public class MclTypeProvider {
 			ParExpression: e.expr.typeFor
 			BuiltinFunctionCall:
 				e.functionType
+			VectorElement:
+				e.element.head.typeFor
+			VectorLiteral:
+				if(e.expressions.isEmpty) eu.ddmore.mdl.type.MclTypeProvider.REAL_VECTOR_TYPE
+				else e.typeForArray
 			default:
 				typeTable.get(e.eClass) ?: MclTypeProvider.UNDEFINED_TYPE
 		}
@@ -240,7 +348,7 @@ public class MclTypeProvider {
 	def dispatch TypeInfo typeFor(SymbolDefinition sd){
 		switch(sd){
 			EquationDefinition:
-				if(sd.isVector) VECTOR_TYPE else REAL_TYPE
+				if(sd.isVector) eu.ddmore.mdl.type.MclTypeProvider.REAL_VECTOR_TYPE else REAL_TYPE
 			ListDefinition:
 				getTypeOfList(sd.list)
 			TransformedDefinition,
@@ -275,7 +383,7 @@ public class MclTypeProvider {
 	}
 	
 	def checkExpectedVector(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
-		checkExpectedAndExpression(VECTOR_TYPE, exp, errorLambda)
+		checkExpectedAndExpression(eu.ddmore.mdl.type.MclTypeProvider.REAL_VECTOR_TYPE, exp, errorLambda)
 	}
 	
 	def checkExpectedIntl(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){

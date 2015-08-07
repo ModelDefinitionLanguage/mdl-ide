@@ -22,10 +22,10 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
-import eu.ddmore.mdl.mdl.VectorContent
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdl.mdl.VectorElement
 
 public class ExpressionConverter {
 	
@@ -120,11 +120,15 @@ public class ExpressionConverter {
 	"«exp.value»"'''
 	
 	def static dispatch String getString(VectorLiteral exp)'''
-		[«exp.expression?.getString»]'''
+		[«FOR e : exp.expressions SEPARATOR ','»«e.getString»«ENDFOR»]'''
 	
 	
-	def static dispatch String getString(VectorContent exp)'''
-		«FOR e : exp.expressions SEPARATOR ','»
-			«e.getString»«ENDFOR»'''
+	def static dispatch String getString(VectorElement exp)'''
+		«exp.element.head.getString»'''
+		
+
+//	def static dispatch String getString(VectorContent exp)'''
+//		«FOR e : exp.expressions SEPARATOR ','»
+//			«e.getString»«ENDFOR»'''
 	
 }

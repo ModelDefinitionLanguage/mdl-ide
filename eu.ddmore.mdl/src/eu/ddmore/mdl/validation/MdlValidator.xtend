@@ -25,7 +25,8 @@ import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdl.VectorContent
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
@@ -219,7 +220,7 @@ class MdlValidator extends AbstractMdlValidator {
 
 	// Type handling	
 	private def (TypeInfo, TypeInfo) => void typeError(EStructuralFeature feature){ 
-		[expectedType, actualType |error("Expected " + expectedType.typeName + " type, but was " + actualType.typeName + ".", feature, INCOMPATIBLE_TYPES) ]
+		[expectedType, actualType |error("Expected " + expectedType.typeName + " type, but was " + actualType.typeName + ".", feature, INCOMPATIBLE_TYPES, expectedType.typeName) ]
 	}
 	
 			
@@ -291,8 +292,30 @@ class MdlValidator extends AbstractMdlValidator {
 		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.transformedDefinition_Expression))
 	}
 		
+//	@Check
+//	def validateCompatibleTypes(VectorLiteral e){
+//		e.expressions.forEach[ex| checkExpectedReal(ex, typeError(MdlPackage::eINSTANCE.vectorLiteral_Expressions)) ]
+//	}
+		
 	@Check
-	def validateCompatibleTypes(VectorContent e){
-		e.expressions.forEach[ex| checkExpectedReal(ex, typeError(MdlPackage::eINSTANCE.vectorContent_Expressions)) ]
+	def validateCompatibleVectorElement(VectorElement e){
+		if(e.eContainer instanceof VectorLiteral){
+			val vect = e.eContainer as VectorLiteral
+			val vectType = vect.typeFor
+			val exprType = e.typeFor
+			if(!vectType.isCompatibleElement(exprType)){
+//				val feature = switch(e){
+//					RealLiteral: MdlPackage.eINSTANCE.realLiteral_Value
+//					IntegerLiteral: MdlPackage.eINSTANCE.integerLiteral_Value
+//					StringLiteral: MdlPackage.eINSTANCE.stringLiteral_Value
+//					BooleanLiteral: MdlPackage.eINSTANCE.booleanLiteral_IsTrue
+//					VectorLiteral: MdlPackage.eINSTANCE.vectorLiteral_Expressions
+//				}
+//				error("Element type '" + exprType.typeName + "' is incompatible with vector type '" + vectType.typeName + "'.",
+//					feature, INCOMPATIBLE_TYPES, vectType.typeName)
+				error("Element type '" + exprType.typeName + "' is incompatible with vector type '" + vectType.typeName + "'.",
+					MdlPackage.eINSTANCE.vectorElement_Element, INCOMPATIBLE_TYPES, vectType.typeName)
+			}			
+		}
 	}
 }

@@ -72,7 +72,7 @@ class MclTypeProviderTest {
 	@Test
 	def void testVectorLiteralExpression(){
 		val actual = MdlFactory::eINSTANCE.createVectorLiteral
-		actual.typeFor.assertEquals(MclTypeProvider::VECTOR_TYPE)
+		actual.typeFor.assertEquals(MclTypeProvider::REAL_VECTOR_TYPE)
 	}
 
 	@Test

@@ -267,11 +267,11 @@ StringLiteral returns Expression:
 
 
 VectorLiteral returns Expression:
-	{VectorLiteral} '[' expression = VectorContent ']'
+	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
 ;	
 
-VectorContent:
-		expressions += Expression (=> ',' expressions += Expression)*
+VectorElement returns Expression:
+	{VectorElement} element+=Expression
 ;
 
 QualifiedName:

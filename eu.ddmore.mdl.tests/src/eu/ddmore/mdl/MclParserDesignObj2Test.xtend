@@ -10,7 +10,6 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -80,7 +79,7 @@ d1g=desobj{
 }
 		'''
 	
-	@Ignore
+	@Test
 	def void testParsing(){
 		CODE_SNIPPET.parse.assertNoErrors
 		
