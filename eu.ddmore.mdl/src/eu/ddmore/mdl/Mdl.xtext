@@ -313,7 +313,7 @@ terminal ELSEIF: 'elseif';
 
 terminal ELSE: 'else';
 
-terminal WITH: 'with';
+terminal WITH: 'withCategories';
 
 terminal WHEN: 'when';
 

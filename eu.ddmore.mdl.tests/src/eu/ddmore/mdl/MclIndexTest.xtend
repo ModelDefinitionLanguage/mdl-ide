@@ -25,7 +25,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 	COVARIATES{
 		WT
 		AGE
-		SEX with {female, male, MISSING}
+		SEX withCategories {female, male, MISSING}
 		logtWT = ln(WT/70)
 		tAGE = AGE - 40
 	}

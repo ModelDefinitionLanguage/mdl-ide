@@ -22,7 +22,7 @@ warfarin_PK_2Compartments_mdl = mdlobj {
    COVARIATES{
       WT
       logtWT = ln(WT/70)
-      SEX with { male, female}
+      SEX withCategories { male, female}
    }# end COVARIATES
 
    VARIABILITY_LEVELS{

@@ -553,7 +553,7 @@ class MclTypeValidationTest {
 			}
 		
 			COVARIATES{
-				SEX with {male, female}
+				SEX withCategories {male, female}
 			}
 		
 			
@@ -577,7 +577,7 @@ class MclTypeValidationTest {
 			}
 		
 			COVARIATES{
-				SEX with {male, female}
+				SEX withCategories {male, female}
 			}
 		
 			
@@ -604,7 +604,7 @@ class MclTypeValidationTest {
 			}
 		
 			COVARIATES{
-				SEX with {male, female}
+				SEX withCategories {male, female}
 			}
 		
 			
@@ -631,7 +631,7 @@ class MclTypeValidationTest {
 			}
 		
 			COVARIATES{
-				SEX with {male, female}
+				SEX withCategories {male, female}
 			}
 		
 			

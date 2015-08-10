@@ -22,7 +22,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 	COVARIATES{
 		WT
 		AGE
-		SEX with {female, male, MISSING}
+		SEX withCategories {female, male, MISSING}
 		logtWT = ln(WT/70)
 		tAGE = AGE - 40
 	}
@@ -74,9 +74,9 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 
 	OBSERVATION{
 		# 11) Now use category definitions to describe categorical observations
-		PAIN : { type is categorical with {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} }
+		PAIN : { type is categorical withCategories {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} }
 		
-		TENDERNESS : { type is categorical with {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} } 
+		TENDERNESS : { type is categorical withCategories {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} } 
 	}
 } # end of model object
 '''

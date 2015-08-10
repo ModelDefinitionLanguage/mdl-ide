@@ -25,14 +25,14 @@ obj1 = dataobj{
 	DECLARED_VARIABLES{
 			Y
 			GUT
-			PCA with {dead, alive}
-			OTHER with {dead, alive}
+			PCA withCategories {dead, alive}
+			OTHER withCategories {dead, alive}
 	}
 	
 	DATA_INPUT_VARIABLES {
 		ID : { use is id }
 		TIME : { use is idv }
-		SEX : { use is covariate with { male when 0, female when 1} } 
+		SEX : { use is covariate withCategories { male when 0, female when 1} } 
 		AMT : { use  is amt, define = { 1 as GUT } }
 		DVID : { use  is dvid }
 		DV : { use  is dv, define = DVID {
