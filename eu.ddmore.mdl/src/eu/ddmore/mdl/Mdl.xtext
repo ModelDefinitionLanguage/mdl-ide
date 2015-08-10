@@ -112,11 +112,16 @@ EnumExpression returns Expression:
 ;
 
 MappingExpression returns Expression:
-	{MappingExpression} mapColumn=ID? (BEGIN
+	{MappingExpression} (BEGIN
 		(attLists+=MappingList (',' attLists+=MappingList)* |
 			attList+=MappingPair (',' attLists+=MappingPair)*
 		)
 	END)
+//	{MappingExpression} mapColumn=ID? (BEGIN
+//		(attLists+=MappingList (',' attLists+=MappingList)* |
+//			attList+=MappingPair (',' attLists+=MappingPair)*
+//		)
+//	END)
 ;
 
 CategoryMappingExpression returns Expression:
@@ -130,8 +135,8 @@ CategoryMapping:
 ;
 
 MappingPair:
-//	leftOperand=OrExpression (FROM srcColumn=SymbolReference)?  AS rightOperand=OrExpression
-	leftOperand=OrExpression AS rightOperand=OrExpression
+	leftOperand=OrExpression (IN srcColumn=SymbolReference)?  AS rightOperand=OrExpression
+//	leftOperand=OrExpression AS rightOperand=OrExpression
 ;
 
 MappingList:
@@ -283,23 +288,7 @@ terminal CONSTANT:
 	'INF'
 ;
 
-//terminal BLOCKID:
-//	'MODEL_PREDICTION'|'DEQ'|'MODEL_INPUT_VARIABLES'|'RANDOM_VARIABLES'|'DECLARED_VARIABLES'|
-//	'INDIVIDUAL_VARIABLES'|'COVARIATES'|'ESTIMATE'|'SIMULATE'|'OPTIMISATION'|'DATA_INPUT_VARIABLES'|
-//	'DATA_DERIVED_VARIABLES'|'SOURCE'|'VARIABILITY'|'STRUCTURAL_PARAMETERS'|
-//	'VARIABILITY_LEVELS'|'VARIABILITY_PARAMETERS'|'STRUCTURAL'|'OBJECTS'|
-//	'GROUP_VARIABLES'|'RANDOM_VARIABLE_DEFINITION'|'COMPARTMENT'|'OBSERVATION'|
-//	'IDV'|'OPTIMISE'
-//;
-
-
-//terminal DERIV: 'd';
-//
-//terminal INIT: 'init';
-//
-//terminal INIT_TIME: 'x0';
-//
-//terminal WRT: 'wrt';
+terminal IN: 'in';
 
 terminal IS: 'is';
 

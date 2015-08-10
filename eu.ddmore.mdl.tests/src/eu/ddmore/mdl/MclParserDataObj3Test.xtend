@@ -29,10 +29,10 @@ warfarin_PK_v2_dat = dataobj{
 		SEX : { use is covariate withCategories { male when 0, female when 1} } 
 		AMT : { use  is amt, define = { 1 as GUT } }
 		DVID : { use  is dvid }
-		DV : { use  is dv, define = DVID {
-					1 as Y,
-					2 as { PCA.dead when 1, PCA.alive when 2},
-					3 as { OTHER.dead when 1, OTHER.alive when 2}
+		DV : { use  is dv, define =  {
+					1 in DVID as Y,
+					2 in DVID as { PCA.dead when 1, PCA.alive when 2},
+					3 in DVID as { OTHER.dead when 1, OTHER.alive when 2}
 				}
 			  }
 		MDV : { use  is mdv}
