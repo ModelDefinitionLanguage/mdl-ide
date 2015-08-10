@@ -50,9 +50,9 @@ class MdlValidator extends AbstractMdlValidator {
 	public val static MOGOBJ = 'mogobj'
 	public val static DESIGNOBJ = 'desobj'
 
-	extension BlockArgumentValidationHelper movh = new BlockArgumentValidationHelper
-	extension BlockValidationHelper blokHelper = new BlockValidationHelper
-	extension ListValidationHelper listHelper = new ListValidationHelper
+	extension BlockArgumentDefinitionProvider movh = new BlockArgumentDefinitionProvider
+	extension BlockDefinitionProvider blokHelper = new BlockDefinitionProvider
+	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
 	extension BuiltinFunctionProvider funcHelper = new BuiltinFunctionProvider
 	extension MclTypeProvider typeProvider = new MclTypeProvider
 

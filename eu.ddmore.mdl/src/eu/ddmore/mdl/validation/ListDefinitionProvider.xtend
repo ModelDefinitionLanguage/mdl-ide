@@ -17,7 +17,7 @@ import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
 import eu.ddmore.mdl.type.MclTypeProvider.ListTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeProperty
 
-class ListValidationHelper {
+class ListDefinitionProvider {
 	static val CATEGORIES_KWD = "categories"
 	
 	// @TODO: need an addition set of validations to make sure that DVID is used if AMT has a define attribute

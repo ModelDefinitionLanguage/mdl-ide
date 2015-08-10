@@ -1,10 +1,10 @@
 package eu.ddmore.mdl.validation
 
+import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.MclObject
 import java.util.HashSet
-import eu.ddmore.mdl.mdl.BlockStatement
 
-class BlockValidationHelper {
+class BlockDefinitionProvider {
 	val static BlkData = #{
 		MdlValidator::MDLOBJ -> #{
 			"COVARIATES" -> false, "VARIABILITY_LEVELS" -> true, "STRUCTURAL_PARAMETERS" -> false,

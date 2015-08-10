@@ -15,8 +15,10 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
-import eu.ddmore.mdl.validation.ListValidationHelper
+import eu.ddmore.mdl.validation.ListDefinitionProvider
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
@@ -24,13 +26,11 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.type.MclTypeProvider.*
-import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.VectorElement
 
 public class MclTypeProvider {
 
 	extension BuiltinFunctionProvider typeProvider = new BuiltinFunctionProvider
-	extension ListValidationHelper listProvider = new ListValidationHelper
+	extension ListDefinitionProvider listProvider = new ListDefinitionProvider
 	
 
 	enum PrimitiveType {
@@ -319,7 +319,7 @@ public class MclTypeProvider {
 			VectorElement:
 				e.element.head.typeFor
 			VectorLiteral:
-				if(e.expressions.isEmpty) eu.ddmore.mdl.type.MclTypeProvider.REAL_VECTOR_TYPE
+				if(e.expressions.isEmpty) MclTypeProvider.REAL_VECTOR_TYPE
 				else e.typeForArray
 			default:
 				typeTable.get(e.eClass) ?: MclTypeProvider.UNDEFINED_TYPE
@@ -348,7 +348,7 @@ public class MclTypeProvider {
 	def dispatch TypeInfo typeFor(SymbolDefinition sd){
 		switch(sd){
 			EquationDefinition:
-				if(sd.isVector) eu.ddmore.mdl.type.MclTypeProvider.REAL_VECTOR_TYPE else REAL_TYPE
+				if(sd.isVector) MclTypeProvider.REAL_VECTOR_TYPE else REAL_TYPE
 			ListDefinition:
 				getTypeOfList(sd.list)
 			TransformedDefinition,
@@ -383,7 +383,7 @@ public class MclTypeProvider {
 	}
 	
 	def checkExpectedVector(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
-		checkExpectedAndExpression(eu.ddmore.mdl.type.MclTypeProvider.REAL_VECTOR_TYPE, exp, errorLambda)
+		checkExpectedAndExpression(MclTypeProvider.REAL_VECTOR_TYPE, exp, errorLambda)
 	}
 	
 	def checkExpectedIntl(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){

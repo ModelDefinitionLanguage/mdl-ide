@@ -9,7 +9,7 @@ import java.util.HashSet
 import java.util.HashMap
 import java.util.Map
 
-class BlockArgumentValidationHelper {
+class BlockArgumentDefinitionProvider {
 	
 	static val OBJECT_ARG = "ObjectArg"
 	
