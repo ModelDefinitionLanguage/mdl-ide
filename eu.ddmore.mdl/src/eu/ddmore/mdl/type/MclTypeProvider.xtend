@@ -1,8 +1,10 @@
 package eu.ddmore.mdl.type
 
+import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoryDefinition
 import eu.ddmore.mdl.mdl.CategoryReference
+import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
@@ -15,10 +17,12 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
+import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
+import java.util.List
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
@@ -34,7 +38,7 @@ public class MclTypeProvider {
 	
 
 	enum PrimitiveType {
-		Int, String, Real, Boolean, Pdf, Enum, EnumValue, List, Undefined
+		Int, String, Real, Boolean, Pdf, Enum, EnumValue, List, Mapping, Undefined
 	}
 	enum TypeProperty{
 		Deriv, Estimate, Vector, None
@@ -129,34 +133,35 @@ public class MclTypeProvider {
 		
 	}
 
-//	@Data @FinalFieldsConstructor
-//	static class VectorTypeInfo extends PrimitiveTypeInfo{
-//		new(PrimitiveType type){
-//			super(type, TypeProperty.Vector, false)
+	@Data @FinalFieldsConstructor
+	static class BuiltinEnumTypeInfo extends EnumTypeInfo{
+		List<String> expectedValues
+		
+//		new(String name, List<String> expectedValues){
+//			this(name, expectedValues, false)
 //		}
-//		
-//		new(PrimitiveType type, boolean isRef){
-//			super(type, TypeProperty.Vector, isRef)
-//		}
-//		
-//		override isCompatible(TypeInfo otherType){
-//			switch(otherType){
-//				VectorTypeInfo:
-//					this.theType
-//				default:
-//					false 
-//			}
-//		}
-//		
-//		override getTypeName(){
-//			"Enum:" + enumName
-//		}
-//		
-//		override markReference(){
-//			new EnumTypeInfo (enumName, true)
-//		}
-//	}
+		
+		new(String name, List<String> expectedValues, boolean isRef){
+			this(name, expectedValues, TypeProperty.None, isRef)
+		}
+		
+		new(String name, List<String> expectedValues, TypeProperty typeProp, boolean isRef){
+			super(name, typeProp, isRef)
+			this.expectedValues = expectedValues
+		}
+		
+		override markReference(){
+			new BuiltinEnumTypeInfo (typeName, expectedValues, true)
+		}
+		
+		override makeVector(){
+			new BuiltinEnumTypeInfo(typeName, expectedValues, TypeProperty.Vector, isReference);
+		}
+		
+	}
 
+	//@TODO: we need to change this from Primitive toy TypeInfo so that potentially 
+	// derivs and vector types could be returned correctly
 	@Data @FinalFieldsConstructor
 	static class ListTypeInfo extends TypeInfo{
 		String name
@@ -226,7 +231,9 @@ public class MclTypeProvider {
 	public static val BOOL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean, TypeProperty.None)
 	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf, TypeProperty.None)
 	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.Vector)
-	public static val LIST_TYPE =  new PrimitiveTypeInfo(PrimitiveType.List, TypeProperty.None)
+	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int, TypeProperty.Vector)
+//	public static val LIST_TYPE =  new PrimitiveTypeInfo(PrimitiveType.List, TypeProperty.None)
+	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping, TypeProperty.None)
 	
 	static val Map<PrimitiveType, Set<PrimitiveType>> compatibleTypes = #{
 		PrimitiveType.Real -> #{ PrimitiveType.Real, PrimitiveType.Int },
@@ -271,7 +278,8 @@ public class MclTypeProvider {
 //		ep.equationDefinition -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,
 		ep.randomVariableDefinition -> REAL_TYPE,
-		ep.forwardDeclaration -> REAL_TYPE
+		ep.forwardDeclaration -> REAL_TYPE,
+		ep.mappingExpression -> MAPPING_TYPE
 //		ep.enumerationDefinition -> ENUM_TYPE,
 //		ep.listDefinition -> LIST_TYPE
 	}
@@ -314,6 +322,9 @@ public class MclTypeProvider {
 			CategoryReference:
 				e.ref.typeFor.markReference
 			ParExpression: e.expr.typeFor
+			EnumExpression:{
+				e.typeOfBuiltinEnum
+			}
 			BuiltinFunctionCall:
 				e.functionType
 			VectorElement:
@@ -455,6 +466,18 @@ public class MclTypeProvider {
 		if(!expectedType.isCompatible(actualType)){
 			errorLambda.apply(expectedType, actualType)
 		} 
+	}
+
+	def checkAttributeTyping(ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
+		val attList = at.eContainer as AttributeList
+		val listDefn = attList.matchingListDefn
+		if(listDefn != null){
+			val attType = listDefn.getAttributeType(at.attributeName)
+			switch(at){
+				ValuePair:
+					checkExpectedAndExpression(attType, at.expression, errorLambda)				
+			}
+		}
 	}
 
 }

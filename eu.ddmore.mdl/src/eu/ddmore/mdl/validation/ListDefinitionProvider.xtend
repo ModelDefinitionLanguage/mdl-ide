@@ -1,32 +1,58 @@
 package eu.ddmore.mdl.validation
 
-import eu.ddmore.mdl.mdl.Attribute
 import eu.ddmore.mdl.mdl.AttributeList
+import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.ListTypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.TypeProperty
 import java.util.ArrayList
+import java.util.Collections
 import java.util.HashMap
 import java.util.HashSet
 import java.util.List
+import java.util.Map
 import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
-import eu.ddmore.mdl.type.MclTypeProvider.ListTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.TypeProperty
 
 class ListDefinitionProvider {
-	static val CATEGORIES_KWD = "categories"
+//	static val CATEGORIES_KWD = "categories"
+	
+	static val USE_TYPE = new BuiltinEnumTypeInfo('use', #['covariate', 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate'])
+	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #['parameter', 'observation'])
+	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #['nonmemFormat'])
+	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo('cmpt', #['depot', 'compartment', 'elimination', 'transfer', 'distribution'])
+	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #['COV', 'CORR'])
+	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #['categorical', 'count', 'discrete'])
+	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #['simple', 'complex'])
+//	static val SAMPLE_OUTCOME_TYPE = new BuiltinEnumTypeInfo('sampouttype', #['conc', 'effect'])
+	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #['amount', 'duration', 'sampleTime', 'numberTimes'])
+	
+	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
+	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
+	static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration", PrimitiveType.List, TypeProperty.None)
+	static val SAMPLING_TYPE = new ListTypeInfo("Sampling", PrimitiveType.List, TypeProperty.None)
 	
 	// @TODO: need an addition set of validations to make sure that DVID is used if AMT has a define attribute
 	
-	@Data
+	@Data @FinalFieldsConstructor
 	static class AttributeDefn{
 		String name
 		String depAtt // other att that must be present
 		boolean mandatory
+		TypeInfo attType
+		
+//		new(String name, String depAtt, boolean mand){
+//			this(name, depAtt, mand, MclTypeProvider::REAL_TYPE)
+//		}
 	}
 	
 	static class ListDefinition {
@@ -39,49 +65,64 @@ class ListDefinitionProvider {
 		String key
 		List<ListDefinition> listDefns
 	}
-	
+
+//	static val Map<String, Map<String, ? extends TypeInfo>> attributeEnumTypeDefaults = #{
+//		"DATA_INPUT_VARIABLES" -> #{
+//				'covariate' -> USE_TYPE,
+//				'amt' -> USE_TYPE,
+//				'dv' -> USE_TYPE,
+//				'dvid' -> USE_TYPE,
+//				'mdv' -> USE_TYPE,
+//				'cmt' -> USE_TYPE,
+//				'idv' -> USE_TYPE,
+//				'id' -> USE_TYPE,
+//				'rate' -> USE_TYPE
+//			}
+//		 
+//	}	
+
 	// owning block -> key attribute -> key value -> attributes associated with key
-	static val attDefns = #{ 
+	static val Map<String, BlockListDefinition> attributeDefnDefaults = #{ 
 		"DATA_INPUT_VARIABLES" -> (
 			new BlockListDefinition => [
 				key = 'use'
 				listDefns = newArrayList(
 					new ListDefinition => [  keyValue='covariate' listType = new ListTypeInfo("Covariate", PrimitiveType.Real) attributes = #[
-						 new AttributeDefn('use', null, true), new AttributeDefn('categorical', null, false)//,
+						 new AttributeDefn('use', null, true, USE_TYPE)
 //						 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categorical', null, false)//,
 //						 new AttributeDefn('define', 'categories', false)
 						 ] 
 					],
 					new ListDefinition => [keyValue='amt' listType = new ListTypeInfo("Amt", PrimitiveType.Real) attributes = #[
-						 new AttributeDefn('use', null, true), new AttributeDefn('define', null, true)
+						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, true, MclTypeProvider::MAPPING_TYPE)
 						 ] 
 					],
 					new ListDefinition => [keyValue='dv' listType = new ListTypeInfo("Dv", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('use', null, true), new AttributeDefn('define', null, false)//, new AttributeDefn('variable', null, true)
+						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE)//, new AttributeDefn('variable', null, true)
 						 ] 
 					],
-					new ListDefinition => [keyValue='idv' listType = new ListTypeInfo("Idv", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('use', null, true)
+					new ListDefinition => [keyValue='idv' listType = IDV_COL_TYPE attributes = #[
+						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
 					],
 					new ListDefinition => [keyValue='cmt' listType = new ListTypeInfo("Cmt", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('use', null, true)
+						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
 					],
 					new ListDefinition => [keyValue='id' listType = new ListTypeInfo("Id", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('use', null, true)
+						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
 					],
 					new ListDefinition => [keyValue='mdv' listType = new ListTypeInfo("Mdv", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('use', null, true)
+						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
 					],
 					new ListDefinition => [keyValue='rate' listType = new ListTypeInfo("Rate", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('use', null, true)
+						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
 					],
 					new ListDefinition => [keyValue='dvid' listType = new ListTypeInfo("Dvid", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('use', null, true)
+						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
 					]
 				)
@@ -92,8 +133,7 @@ class ListDefinitionProvider {
 				key = 'column'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue=null  listType = new ListTypeInfo("Column", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('column', null, true), new AttributeDefn('condition', null, false),
-						 	new AttributeDefn('categories', null, false), new AttributeDefn('define', 'categories', false) 
+						 new AttributeDefn('column', null, true, IDV_COL_TYPE), new AttributeDefn('condition', null, false, MclTypeProvider::BOOLEAN_TYPE) 
 						 ] 
 					]
 				)
@@ -104,8 +144,8 @@ class ListDefinitionProvider {
 				key = 'file'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue=null  listType = new ListTypeInfo("Source", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('file', null, true), new AttributeDefn('inputformat', null, true),
-						 	new AttributeDefn('ignore', null, false) 
+						 new AttributeDefn('file', null, true, MclTypeProvider::STRING_TYPE), new AttributeDefn('inputFormat', null, true, INPUT_FORMAT_TYPE),
+						 	new AttributeDefn('ignore', null, false, MclTypeProvider::STRING_TYPE) 
 						 ] 
 					]
 				)
@@ -116,7 +156,7 @@ class ListDefinitionProvider {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("VarLevel", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('level', null, true)
+						 new AttributeDefn('type', null, true, VARIABILITY_TYPE_TYPE), new AttributeDefn('level', null, true, MclTypeProvider::INT_TYPE)
 						 ]
 					]
 				)
@@ -127,25 +167,25 @@ class ListDefinitionProvider {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='depot' listType = new ListTypeInfo("Depot", PrimitiveType.Real) attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
-						 new AttributeDefn('to', null, true), new AttributeDefn('ka', null, true),
-						 new AttributeDefn('tlag', null, true), new AttributeDefn('finput', null, false)
+						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.markReference), new AttributeDefn('ka', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('tlag', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
 					],
 					new ListDefinition => [ keyValue='compartment' listType = new ListTypeInfo("Compartment", PrimitiveType.Real) attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true)
+						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE)
 						 ]
 					],
 					new ListDefinition => [ keyValue='elimination' listType = new ListTypeInfo("Elimination", PrimitiveType.Real) attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
-						 new AttributeDefn('from', null, true), new AttributeDefn('v', null, true),
-						 new AttributeDefn('cl', null, true)
+						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.markReference), new AttributeDefn('v', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('cl', null, true, MclTypeProvider::REAL_TYPE)
 						 ]
 					],
 					new ListDefinition => [ keyValue='distribution' listType = new ListTypeInfo("Distribution", PrimitiveType.Real) attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('modelCmt', null, true),
-						 new AttributeDefn('kin', null, true), new AttributeDefn('kout', null, true),
-						 new AttributeDefn('from', null, true)
+						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn('kin', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('kout', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.markReference)
 						 ]
 					]
 				)
@@ -156,8 +196,8 @@ class ListDefinitionProvider {
 				key = 'deriv'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("Derivative", PrimitiveType.Real, TypeProperty.Deriv) attributes = #[
-						 new AttributeDefn('deriv', null, true), new AttributeDefn('init', null, false),
-						 new AttributeDefn('x0', null, false)
+						 new AttributeDefn('deriv', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('x0', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
 					]
 				)
@@ -168,8 +208,8 @@ class ListDefinitionProvider {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("CovarianceMat", PrimitiveType.List, TypeProperty.None) attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('parameter', null, true),
-						 new AttributeDefn('value', null, true)
+						 new AttributeDefn('type', null, true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', null, true, MclTypeProvider::REAL_VECTOR_TYPE),
+						 new AttributeDefn('value', null, true, MclTypeProvider::REAL_VECTOR_TYPE)
 						 ]
 					]
 				)
@@ -180,7 +220,7 @@ class ListDefinitionProvider {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='categorical' listType = new ListTypeInfo("CatObs", PrimitiveType.Int, TypeProperty.None) attributes = #[
-						 new AttributeDefn('type', null, true)
+						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE)
 						 ]
 					]
 				)
@@ -190,9 +230,11 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'adm'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("Administration", PrimitiveType.List, TypeProperty.None) attributes = #[
-						 new AttributeDefn('adm', null, true) , new AttributeDefn('amount', null, true), new AttributeDefn('doseTime', null, false),
-						 new AttributeDefn('duration', null, false), new AttributeDefn('start', null, false), new AttributeDefn('end', null, false)
+					new ListDefinition => [ keyValue=null listType = ADMINISTRATION_TYPE attributes = #[
+						 new AttributeDefn('adm', null, true, MclTypeProvider::REAL_TYPE.markReference) , new AttributeDefn('amount', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('doseTime', null, false, MclTypeProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('duration', null, false, MclTypeProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('start', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('end', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
 					]
 				)
@@ -203,8 +245,9 @@ class ListDefinitionProvider {
 				key = 'armSize'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("StudyDesign", PrimitiveType.List, TypeProperty.None) attributes = #[
-						 new AttributeDefn('armSize', null, true) , new AttributeDefn('interventionSequence', null, true),
-						 new AttributeDefn('samplingSequence', null, false)
+						 new AttributeDefn('armSize', null, true, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn('interventionSequence', null, true, MclTypeProvider::MAPPING_TYPE),
+						 new AttributeDefn('samplingSequence', null, false, MclTypeProvider::MAPPING_TYPE)
 						 ]
 					]
 				)
@@ -215,8 +258,9 @@ class ListDefinitionProvider {
 				key = 'name'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("DesignSpace", PrimitiveType.List, TypeProperty.None) attributes = #[
-						 new AttributeDefn('name', null, true), new AttributeDefn('element', null, true) , new AttributeDefn('discrete', null, false),
-						 new AttributeDefn('range', null, false)
+						 new AttributeDefn('name', null, true, SAMPLING_TYPE.makeVector), new AttributeDefn('element', null, true, ELEMENT_TYPE),
+						 new AttributeDefn('discrete', null, false, MclTypeProvider::INT_TYPE.makeVector),
+						 new AttributeDefn('range', null, false, MclTypeProvider::REAL_TYPE.makeVector)
 						 ]
 					]
 				)
@@ -226,13 +270,14 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='simple' listType = new ListTypeInfo("Sampling", PrimitiveType.List, TypeProperty.None) attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('outcome', null, true), new AttributeDefn('sampleTime', null, false),
-						 new AttributeDefn('numberSamples', null, false)
+					new ListDefinition => [ keyValue='simple' listType = SAMPLING_TYPE attributes = #[
+						 new AttributeDefn('type', null, true, SAMPLING_TYPE_TYPE), new AttributeDefn('outcome', null, true, MclTypeProvider::REAL_TYPE.markReference),
+						 new AttributeDefn('sampleTime', null, false, MclTypeProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('numberSamples', null, false, MclTypeProvider::INT_TYPE.makeVector)
 						 ]
 					],
 					new ListDefinition => [ keyValue='complex' attributes = #[
-						 new AttributeDefn('type', null, true), new AttributeDefn('combination', null, true)
+						 new AttributeDefn('type', null, true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', null, true, SAMPLING_TYPE.makeVector)
 						 ]
 					]
 				)
@@ -241,6 +286,47 @@ class ListDefinitionProvider {
 		
 	}
 
+	val Map<String, BlockListDefinition> attDefns
+	val Map<String, Map<String, ? extends TypeInfo>> attEnumTypes
+
+	new(){
+		attDefns = attributeDefnDefaults
+//		attEnumTypes = attributeEnumTypeDefaults
+		attEnumTypes = new HashMap<String, Map<String, ? extends TypeInfo>>
+		buildEnumTypes
+	}
+
+	new(Map<String, BlockListDefinition>  ad, Map<String, Map<String, ? extends TypeInfo>> enumTypes){
+		attDefns = ad
+//		attEnumTypes = enumTypes
+		attEnumTypes = new HashMap<String, Map<String, ? extends TypeInfo>>
+		buildEnumTypes
+	}
+
+
+	def void setAttDefns(Map<String, Map<String, ? extends TypeInfo>> newAttDefn){
+		attDefns = newAttDefn
+		buildEnumTypes
+	}
+
+	private def buildEnumTypes(){
+		for(blkName : attDefns.keySet){
+			val valueMap = new HashMap<String, BuiltinEnumTypeInfo>
+			attEnumTypes.put(blkName, valueMap)
+			val bd = attDefns.get(blkName)
+			for(a : bd.listDefns){
+				for(att : a.attributes){
+					if(att.attType instanceof BuiltinEnumTypeInfo){
+						val builtinType = att.attType as BuiltinEnumTypeInfo
+						for(v : builtinType.expectedValues){
+							valueMap.put(v, builtinType)
+						}
+					}
+				}
+			}
+		}
+		attEnumTypes
+	} 
 
 	def ListDefinition getListDefinition(AttributeList it){
 		val parent = parentStatement
@@ -272,6 +358,32 @@ class ListDefinitionProvider {
 		val listDefn = attList.listDefinition
 		listDefn?.listType
 	}
+	
+	def getOwningBlock(ValuePair it){
+		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+	} 
+	
+	def getOwningBlock(EnumExpression it){
+		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+	} 
+	
+	def getAttributeType(ListDefinition it, String attName){
+		attributes.findFirst(ad | ad.name == attName)?.attType ?: MclTypeProvider::UNDEFINED_TYPE 
+	}
+	
+	def getTypeOfBuiltinEnum(EnumExpression ee){
+		val blockName = ee.owningBlock.identifier
+		val enumValue = ee.convertToString
+		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
+		defnType
+	}
+
+//	def getTypeOfBuiltinEnum(Attribute att){
+//		val blockName = att.owningBlock.identifier
+//		val enumValue = att.attributeValueString
+//		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
+//		defnType
+//	}
 	
 	def isKeyAttributeDefined(AttributeList it){
 				// expect AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
@@ -360,49 +472,67 @@ class ListDefinitionProvider {
 		unused
 	}
 	
-	def attributeExists(List<Attribute> attributes, String queryName){
+	def attributeExists(List<ValuePair> attributes, String queryName){
 		attributes.exists[attrib|
 			switch(attrib){
 				ValuePair case attrib.argumentName == queryName: true
-				CategoricalDefinitionExpr case CATEGORIES_KWD == queryName: true 
+//				CategoricalDefinitionExpr case CATEGORIES_KWD == queryName: true 
 				default: false
 			}
 		]
 	}
 	
-	def getAttributeName(Attribute attrib){
+	def getAttributeName(ValuePair attrib){
 		switch(attrib){
 			ValuePair: attrib.argumentName
-			CategoricalDefinitionExpr: CATEGORIES_KWD 
+//			CategoricalDefinitionExpr: CATEGORIES_KWD 
 		}
 	}
 
-	def getAttributeValueString(Attribute attrib){
+	def getAttributeValueString(ValuePair attrib){
 		switch(attrib){
 			ValuePair: attrib.expression.convertToString
-			CategoricalDefinitionExpr: attrib.convertToString
+//			CategoricalDefinitionExpr: attrib.convertToString
 		}
 	}
 
-	def attributeDefnExists(ListDefinition it, Attribute att){
+	def attributeDefnExists(ListDefinition it, ValuePair att){
 		attributes.exists[attrib|
 			attrib.name == att.attributeName
 		]
 	}
 	
-	def attributeExistsInAnyListDefn(BlockListDefinition it, Attribute att){
+	def attributeExistsInAnyListDefn(BlockListDefinition it, ValuePair att){
 		it.listDefns.exists[ld| ld.attributeDefnExists(att)]
 	}
 
-	def getListDefnByKeyValue(List<ListDefinition> defns, String queryValue){
-		defns.filter[d | d.keyValue == queryValue]
-	}
+//	def getListDefnByKeyValue(List<ListDefinition> defns, String queryValue){
+//		defns.filter[d | d.keyValue == queryValue]
+//	}
 
 
+	// gets the key value of an attribute list
 	def getKeyValue(AttributeList attList, String key){
 		attList.attributes.findFirst[at | at.attributeName == key].attributeValueString
 	}
 	
+	// gets a list definition based on a key value combination 
+	def getMatchingListDefn(AttributeList attList){
+		val owningBlock = EcoreUtil2.getContainerOfType(attList.eContainer, BlockStatement)
+		val blkDefn = attDefns.get(owningBlock.identifier)
+		val listDefns = blkDefn?.listDefns ?: Collections.emptyList
+		listDefns.findFirst[defn|
+			for(a : attList.attributes){
+				if(blkDefn.key == a.attributeName)
+					if(defn.keyValue == null || defn.keyValue == a.attributeValueString){
+						return true;
+					}
+			} 
+			false
+		]
+	}
+
+	// gets a list definition based on its key 
 	def getListDefnByKeyValue(BlockListDefinition it, String keyValQuery){
 		listDefns.findFirst[defn| defn.keyValue == keyValQuery ]
 	}
@@ -413,7 +543,7 @@ class ListDefinitionProvider {
 	}
 	
 
-	def attributeRecognised(Attribute it){
+	def attributeRecognised(ValuePair it){
 		// expect Attribute->AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
 		// get key from parent list
 //		val parentList = eContainer as AttributeList

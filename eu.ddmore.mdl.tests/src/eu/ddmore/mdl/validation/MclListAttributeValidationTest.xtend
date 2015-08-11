@@ -112,7 +112,7 @@ class MclListAttributeValidationTest {
 			IDV{ T }
 			
 			VARIABILITY_LEVELS{
-				ID : { type is idv, level=1 }
+				ID : { type is parameter, level=1 }
 			}
 			
 			STRUCTURAL_PARAMETERS{
@@ -198,6 +198,25 @@ class MclListAttributeValidationTest {
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
 			MdlValidator::UNRECOGNIZED_LIST_ATT_MISSING,
 			"attribute 'blahblah' is not recognised in this context"
+		)
+	}
+
+	@Test
+	def void testUnrecognizedAttribute2(){
+		val mcl = '''
+		foo = dataobj {
+			DATA_INPUT_VARIABLES{
+			}
+
+			SOURCE{
+				foo : { file="aFile", inputformat is nonmem }
+			}
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::UNRECOGNIZED_LIST_ATT_MISSING,
+			"attribute 'inputformat' is not recognised in this context"
 		)
 	}
 

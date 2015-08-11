@@ -530,11 +530,11 @@ class MclTypeValidationTest {
 			}
 			
 			SAMPLING{
-			 	pkwin1 : { type is simple, outcome=Conc, sampleTime = 0.5 }
-				pkwin2 : { type is simple, outcome=Conc, numberSamples=0 }
+			 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5] }
+				pkwin2 : { type is simple, outcome=Conc, numberSamples = [0] }
 			}
 			DESIGN_SPACES{
-				DS3 : { name=[pkwin1,pkwin2], element is numberTimes, discrete=1 }
+				DS3 : { name=[pkwin1,pkwin2], element is numberTimes, discrete = [1] }
 			}
 		}
 	'''.parse
@@ -645,6 +645,118 @@ class MclTypeValidationTest {
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Expected Enum:SEX type, but was String."
+		)
+	}
+	
+	@Test
+	def void testValidBuiltinEnum(){
+		val mcl = '''
+		foo = dataobj {
+			DATA_INPUT_VARIABLES{
+			}
+
+			SOURCE{
+				foo : { file="aFile", inputFormat is nonmemFormat }
+			}
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors()
+	}
+	
+	@Test
+	def void testValidIntVectorWithIntVector(){
+		val mcl = '''
+d1g=desobj{
+	DECLARED_VARIABLES{
+		Conc
+		Effect
+	}
+	ADMINISTRATION{
+		dose1 : {adm=1, amount=100, doseTime=[0], duration=[1]} 
+	}
+	SAMPLING{
+	}
+	DESIGN_SPACES{
+		DS1 : { name=[dose1], element is amount, discrete=[10,100,200] }
+	}
+	STUDY_DESIGN{
+	}
+}
+		'''.parse
+		
+		mcl.assertNoErrors()
+	}
+	
+	@Test
+	def void testValidMappingStructure(){
+		val mcl = '''
+d1g=desobj{
+	DECLARED_VARIABLES{
+		Conc
+	}
+	ADMINISTRATION{
+		dose1 : {adm=1, amount=100, doseTime=[0], duration=[1]} 
+	}
+	SAMPLING{
+	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
+	}
+
+	STUDY_DESIGN{
+		totalSize=100
+		arm1 : {
+			armSize=100,
+			interventionSequence={{
+				interventionList=[dose1]
+			}},
+			samplingSequence={{
+				samplingList=[pkwin1],
+				start=[0]
+				}
+			}
+		}
+	}
+}
+		'''.parse
+		
+		mcl.assertNoErrors()
+	}
+	
+	@Test
+	def void testInvalidBuiltinEnum(){
+		val mcl = '''
+		foo = dataobj {
+			DATA_INPUT_VARIABLES{
+			}
+
+			SOURCE{
+				foo : { file="aFile", inputFormat is foobar }
+			}
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'inputFormat' expected value of type 'Enum:input' but was 'Undefined'"
+		)
+	}
+	
+	
+	@Test
+	def void testInvalidBuiltinEnumWrongType(){
+		val mcl = '''
+		foo = dataobj {
+			DATA_INPUT_VARIABLES{ alt }
+
+			SOURCE{
+				foo : { file="aFile", inputFormat = alt }
+			}
+		} 
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'inputFormat' expected value of type 'Enum:input' but was 'Real'"
 		)
 	}
 	

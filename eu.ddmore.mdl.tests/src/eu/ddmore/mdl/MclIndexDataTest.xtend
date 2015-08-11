@@ -45,7 +45,7 @@ obj1 = dataobj{
 	}
 
 	SOURCE {
-	    SrcFile : { file="warfarin_conc_sex.csv", inputformat  is nonmemFormat, ignore = "#" } 
+	    SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } 
 	} # end SOURCE
 }
 '''

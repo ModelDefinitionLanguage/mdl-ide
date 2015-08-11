@@ -5,7 +5,6 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
-import eu.ddmore.mdl.mdl.Attribute
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockArgument
 import eu.ddmore.mdl.mdl.BlockArguments
@@ -88,6 +87,7 @@ class MdlValidator extends AbstractMdlValidator {
 
 	private static val VALID_OBJECT_TYPES = #[ MDLOBJ, PARAMOBJ, TASKOBJ, DATAOBJ, MOGOBJ, DESIGNOBJ ]
 
+	def void setFoo(){}
 
 	@Check
 	def validateMdlObjArguments(MclObject it){
@@ -175,7 +175,7 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 
 	@Check
-	def validateAttribute(Attribute it){
+	def validateAttribute(ValuePair it){
 		if(eContainer instanceof AttributeList && !attributeRecognised){
 			error("attribute '" + attributeName + "' is not recognised in this context.",
 				MdlPackage.eINSTANCE.valuePair_ArgumentName, UNRECOGNIZED_LIST_ATT_MISSING, attributeName)
@@ -292,11 +292,6 @@ class MdlValidator extends AbstractMdlValidator {
 		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.transformedDefinition_Expression))
 	}
 		
-//	@Check
-//	def validateCompatibleTypes(VectorLiteral e){
-//		e.expressions.forEach[ex| checkExpectedReal(ex, typeError(MdlPackage::eINSTANCE.vectorLiteral_Expressions)) ]
-//	}
-		
 	@Check
 	def validateCompatibleVectorElement(VectorElement e){
 		if(e.eContainer instanceof VectorLiteral){
@@ -318,4 +313,17 @@ class MdlValidator extends AbstractMdlValidator {
 			}			
 		}
 	}
+	
+	
+	@Check
+	def validateListAttributeTypes(ValuePair it){
+		if(eContainer instanceof AttributeList){
+			checkAttributeTyping([e, a|
+				error("attribute '" + attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
+						MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
+			])
+		}
+	}
+
+	
 }

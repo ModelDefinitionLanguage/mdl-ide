@@ -24,21 +24,21 @@ d1g=desobj{
 		Effect
 	}
 	ADMINISTRATION{
-		dose1 : {adm=1, amount=100, doseTime=0, duration=1} 
+		dose1 : {adm=1, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
-		pkwin2 : { type is simple, outcome=Conc, numberSamples=0 }
+		pkwin2 : { type is simple, outcome=Conc, numberSamples=[0] }
 		pkwin3 : { type is simple, outcome=Conc, sampleTime = [30]}
 	 	pkwin4 : { type is simple, outcome=Conc, sampleTime = [49]}
-		pkwin5 : { type is simple, outcome=Conc, numberSamples=0}
+		pkwin5 : { type is simple, outcome=Conc, numberSamples=[0]}
 		pkwin6 : { type is simple, outcome=Conc, sampleTime = [180]}
 		pdwin1 : { type is simple, outcome=Effect, sampleTime = [0.5,2]}
 		pdwin2 : { type is simple, outcome=Effect, sampleTime = [14]}
-		pdwin3 : { type is simple, outcome=Effect, numberSamples=0}
+		pdwin3 : { type is simple, outcome=Effect, numberSamples=[0]}
 	 	pdwin4 : { type is simple, outcome=Effect, sampleTime = [110]}
 		pdwin5 : { type is simple, outcome=Effect, sampleTime = [150]}
-		pdwin6 : { type is simple, outcome=Effect,numberSamples=0 }
+		pdwin6 : { type is simple, outcome=Effect,numberSamples=[0] }
 	# Create sampling for PK and PD by stringing windows
 		sampPK : {  type is complex, combination=[pkwin1,pkwin2,pkwin3,pkwin4,pkwin5,pkwin6] }
 		sampPD : { type is complex, combination=[pdwin1,pdwin2,pdwin3,pdwin4,pdwin5,pdwin6] }

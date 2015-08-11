@@ -91,11 +91,7 @@ CategoryDefinition:
 ;
 
 AttributeList:
-	BEGIN attributes += Attribute (=> ',' attributes += Attribute)*  END
-;
-
-Attribute:
-	ValuePair
+	BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
 ;
 
 ValuePair:

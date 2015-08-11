@@ -29,7 +29,7 @@ class MclParserDataObj1Test {
 	} # end DATA_INPUT_VARIABLES
 	SOURCE {
 	    foo : {file = "warfarin_conc.csv", 
-        		inputformat  is nonmemFormat, 
+        		inputFormat  is nonmemFormat, 
 	    		ignore = "#" } 
 	} # end SOURCE
 } # end data object

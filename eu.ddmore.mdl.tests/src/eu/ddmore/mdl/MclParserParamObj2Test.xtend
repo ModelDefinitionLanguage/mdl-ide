@@ -35,7 +35,7 @@ class MclParserParamObj2Test {
 			PPV_V = 0.1 limit(0, 1)
 			PPV_KA = 0.1 fixed
 			PPV_TLAG = 0.1 
-			OMEGA : { type is corr, parameter=[ETA_CL, ETA_V], value = [0.01] } 
+			OMEGA : { type is CORR, parameter=[ETA_CL, ETA_V], value = [0.01] } 
 		} # end VARIABILITY
 	} # end of parameter object 
 		'''

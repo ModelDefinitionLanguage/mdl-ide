@@ -1,11 +1,12 @@
 package eu.ddmore.mdl.utils
 
+import eu.ddmore.mdl.mdl.AttributeList
+import eu.ddmore.mdl.mdl.BlockBody
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockTextBody
-import eu.ddmore.mdl.mdl.AttributeList
-import eu.ddmore.mdl.mdl.Attribute
-import eu.ddmore.mdl.mdl.BlockBody
+import eu.ddmore.mdl.mdl.ValuePair
+import org.eclipse.xtext.EcoreUtil2
 
 class DomainObjectModelUtils {
 	
@@ -23,15 +24,18 @@ class DomainObjectModelUtils {
 	}
 	
 	static def getParentStatement(AttributeList it){
-		eContainer.eContainer.eContainer as BlockStatement
+		EcoreUtil2.getContainerOfType(it, BlockStatement)
+//		eContainer.eContainer.eContainer as BlockStatement
 	}
 
-	static def getParentBlock(Attribute it){
-		eContainer.eContainer.eContainer.eContainer as BlockStatement
+	static def getParentBlock(ValuePair it){
+		EcoreUtil2.getContainerOfType(it, BlockStatement)
+//		eContainer.eContainer.eContainer.eContainer as BlockStatement
 	}
 	
-	static def getParentList(Attribute it){
-		eContainer as AttributeList
+	static def getParentList(ValuePair it){
+		EcoreUtil2.getContainerOfType(it, AttributeList)
+//		eContainer as AttributeList
 	}
 	
 }
