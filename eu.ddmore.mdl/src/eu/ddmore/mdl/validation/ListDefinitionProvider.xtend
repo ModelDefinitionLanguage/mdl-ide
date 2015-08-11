@@ -26,7 +26,7 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 class ListDefinitionProvider {
 //	static val CATEGORIES_KWD = "categories"
 	
-	static val USE_TYPE = new BuiltinEnumTypeInfo('use', #['covariate', 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate'])
+	static val USE_TYPE = new BuiltinEnumTypeInfo('use', #['covariate', 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore'])
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #['parameter', 'observation'])
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #['nonmemFormat'])
 	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo('cmpt', #['depot', 'compartment', 'elimination', 'transfer', 'distribution'])
@@ -122,6 +122,10 @@ class ListDefinitionProvider {
 						 ] 
 					],
 					new ListDefinition => [keyValue='dvid' listType = new ListTypeInfo("Dvid", PrimitiveType.List) attributes = #[
+						 new AttributeDefn('use', null, true, USE_TYPE)
+						 ] 
+					],
+					new ListDefinition => [keyValue='ignore' listType = new ListTypeInfo("Ignore", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
 					]
