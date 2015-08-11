@@ -202,6 +202,32 @@ class MclBuiltinFunctionValidationTest {
 	}
 
 	@Test
+	def void testInValidTypeUnnamedFunction(){
+		val mcl = '''bar = mdlobj {
+			
+			
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				POP_CL
+				BETA_CL_WT
+				ETA_CL
+				Cl[] = seq(true, 1, 2)
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.unnamedArgument,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument '1' expected value of type 'Real' but was 'Boolean'"
+		)
+	}
+
+	@Test
 	def void testValidOverloadedNamedFunction(){
 		val mcl = '''bar = mdlobj {
 			

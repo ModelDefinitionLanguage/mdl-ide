@@ -245,13 +245,18 @@ BuiltinFunctionCall returns Expression:
 	{BuiltinFunctionCall} func=ID '(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
 ;
 
-NamedFuncArguments returns FuncAgument:
+NamedFuncArguments returns FuncArguments:
 	{NamedFuncArguments} arguments += ValuePair (=> ',' arguments += ValuePair)* 
 ;
 
-UnnamedFuncArguments returns FuncAgument:
-	{UnnamedFuncArguments} args+=Expression (=>',' args+=Expression)* 
+UnnamedFuncArguments returns FuncArguments:
+	{UnnamedFuncArguments} args+=UnnamedArgument (=>',' args+=UnnamedArgument)* 
 ;
+
+UnnamedArgument:
+	{UnnamedArgument} argument=Expression
+;
+
 
 BooleanLiteral returns Expression :
 	{BooleanLiteral} ('false' | isTrue?='true');

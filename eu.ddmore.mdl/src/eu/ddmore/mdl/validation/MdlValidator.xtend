@@ -22,6 +22,7 @@ import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
+import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
@@ -299,21 +300,22 @@ class MdlValidator extends AbstractMdlValidator {
 			val vectType = vect.typeFor
 			val exprType = e.typeFor
 			if(!vectType.isCompatibleElement(exprType)){
-//				val feature = switch(e){
-//					RealLiteral: MdlPackage.eINSTANCE.realLiteral_Value
-//					IntegerLiteral: MdlPackage.eINSTANCE.integerLiteral_Value
-//					StringLiteral: MdlPackage.eINSTANCE.stringLiteral_Value
-//					BooleanLiteral: MdlPackage.eINSTANCE.booleanLiteral_IsTrue
-//					VectorLiteral: MdlPackage.eINSTANCE.vectorLiteral_Expressions
-//				}
-//				error("Element type '" + exprType.typeName + "' is incompatible with vector type '" + vectType.typeName + "'.",
-//					feature, INCOMPATIBLE_TYPES, vectType.typeName)
 				error("Element type '" + exprType.typeName + "' is incompatible with vector type '" + vectType.typeName + "'.",
 					MdlPackage.eINSTANCE.vectorElement_Element, INCOMPATIBLE_TYPES, vectType.typeName)
 			}			
 		}
 	}
 	
+	
+	@Check
+	def validUnnamedFuctionArgumentType(UnnamedArgument it){
+		if(eContainer instanceof UnnamedFuncArguments){
+			checkFunctionArgumentTyping([e, a|
+				error("argument '" + (funcArgNum + 1) + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
+						MdlPackage.eINSTANCE.unnamedArgument_Argument, INCOMPATIBLE_TYPES, a.typeName)
+			])
+		}
+	}
 	
 	@Check
 	def validateListAttributeTypes(ValuePair it){

@@ -30,6 +30,7 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.type.MclTypeProvider.*
+import eu.ddmore.mdl.mdl.UnnamedArgument
 
 public class MclTypeProvider {
 
@@ -480,6 +481,10 @@ public class MclTypeProvider {
 
 	def checkNamedFunctionArgumentTyping(ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
 		checkExpectedAndExpression(at.namedArgumentType, at.expression, errorLambda)				
+	}
+
+	def checkFunctionArgumentTyping(UnnamedArgument at, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(at.unamedArgumentType, at.argument, errorLambda)				
 	}
 
 }

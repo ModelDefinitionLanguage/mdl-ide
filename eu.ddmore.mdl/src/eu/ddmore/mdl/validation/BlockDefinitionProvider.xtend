@@ -3,9 +3,10 @@ package eu.ddmore.mdl.validation
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.MclObject
 import java.util.HashSet
+import java.util.Map
 
 class BlockDefinitionProvider {
-	val static BlkData = #{
+	val static Map<String, Map<String, Boolean> > BlkData = #{
 		MdlValidator::MDLOBJ -> #{
 			"COVARIATES" -> false, "VARIABILITY_LEVELS" -> true, "STRUCTURAL_PARAMETERS" -> false,
 			"VARIABILITY_PARAMETERS" -> false, "RANDOM_VARIABLE_DEFINITION" -> false,

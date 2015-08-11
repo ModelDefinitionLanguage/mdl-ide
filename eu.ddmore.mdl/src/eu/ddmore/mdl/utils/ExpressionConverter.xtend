@@ -26,6 +26,7 @@ import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.UnnamedArgument
 
 public class ExpressionConverter {
 	
@@ -85,6 +86,9 @@ public class ExpressionConverter {
 	
 	def static dispatch String getString(UnnamedFuncArguments exp)'''
 		«FOR arg: exp.args SEPARATOR ','»«arg.getString»«ENDFOR»'''
+	
+	def static dispatch String getString(UnnamedArgument exp)'''
+		«exp.argument.getString»'''
 	
 	def static dispatch String getString(EstimateRange exp)'''
 		«IF !exp.isFixed»(«ENDIF»«exp.initial» «exp.limit?.getLimitString(exp.initial) ?: exp.initial»«IF !exp.isFixed»)«ENDIF»'''

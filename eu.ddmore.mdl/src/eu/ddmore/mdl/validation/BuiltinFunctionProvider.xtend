@@ -2,19 +2,19 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveTypeInfo
-import java.util.Map
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import java.util.HashSet
-import java.util.Set
-
-import org.eclipse.xtend.lib.annotations.Data
 import java.util.List
+import java.util.Map
+import java.util.Set
+import org.eclipse.xtend.lib.annotations.Data
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 
 class BuiltinFunctionProvider {
 	
@@ -24,11 +24,11 @@ class BuiltinFunctionProvider {
 	} 	
 
 	static class SimpleFuncDefn implements FunctDefn{
-		int numArgs
+		List<? extends TypeInfo> argTypes
 		TypeInfo returnType	 
 
 		override int getNumArgs(){
-			numArgs
+			argTypes.size
 		}
 		
 		override TypeInfo getReturnType(){
@@ -56,11 +56,11 @@ class BuiltinFunctionProvider {
 	}
 	
 	private static val Map<String, List<? extends FunctDefn>> functDefns = #{
-		'log' -> #[ new SimpleFuncDefn => [ numArgs = 2 returnType = MclTypeProvider::REAL_TYPE ] ],
-		'ln' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
-		'abs' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
-		'exp' -> #[ new SimpleFuncDefn => [ numArgs = 1 returnType = MclTypeProvider::REAL_TYPE ] ],
-		'seq' -> #[ new SimpleFuncDefn => [ numArgs = 3 returnType = MclTypeProvider::INT_VECTOR_TYPE ] ],
+		'log' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'ln' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'abs' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'exp' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'seq' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::INT_VECTOR_TYPE ] ],
 		'Normal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
 						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
@@ -114,6 +114,18 @@ class BuiltinFunctionProvider {
 		switch(defn){
 			NamedArgFuncDefn:
 				defn.arguments.get(vp.argumentName)?.expectedType ?: MclTypeProvider::UNDEFINED_TYPE
+			default:
+				MclTypeProvider::UNDEFINED_TYPE
+		}
+	}
+	
+	def getUnamedArgumentType(UnnamedArgument vp){
+		val funcDefn = vp.parentFunction
+		val argIdx = vp.funcArgNum
+		val defn = funcDefn.findFuncDefn
+		switch(defn){
+			SimpleFuncDefn case argIdx >= 0 && argIdx < defn.numArgs:
+				defn.argTypes.get(argIdx)
 			default:
 				MclTypeProvider::UNDEFINED_TYPE
 		}
