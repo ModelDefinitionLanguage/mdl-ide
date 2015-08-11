@@ -176,6 +176,32 @@ class MclBuiltinFunctionValidationTest {
 	}
 
 	@Test
+	def void testInValidTypeNamedFunction(){
+		val mcl = '''bar = mdlobj {
+			
+			
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				POP_CL
+				BETA_CL_WT
+				ETA_CL
+				Cl = linear(pop = POP_CL, fixEff = BETA_CL_WT, ranEff = ETA_CL)
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument 'fixEff' expected value of type 'Mapping' but was 'Real'"
+		)
+	}
+
+	@Test
 	def void testValidOverloadedNamedFunction(){
 		val mcl = '''bar = mdlobj {
 			

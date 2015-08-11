@@ -766,7 +766,6 @@ d1g=desobj{
 			DECLARED_VARIABLES{ D }
 			
 			DATA_INPUT_VARIABLES{
-				AMT : { use is amt, define = D }
 				TIME : { use is idv }
 			}
 			DATA_DERIVED_VARIABLES{
@@ -780,12 +779,68 @@ d1g=desobj{
 	}
 
 	@Test
-	def void testInvalidNonBoolExpressionAttributes(){
+	def void testValidMappingExpressionAttributes(){
+		val mcl = '''bar = dataobj {
+			DECLARED_VARIABLES{ D; E }
+			
+			DATA_INPUT_VARIABLES{
+				AMT : { use is amt, define = {1 as D, 2 as E } }
+			}
+			DATA_DERIVED_VARIABLES{
+			}
+			
+			SOURCE{	}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInValidMappingExpressionAttributes(){
 		val mcl = '''bar = dataobj {
 			DECLARED_VARIABLES{ D }
 			
 			DATA_INPUT_VARIABLES{
 				AMT : { use is amt, define = D }
+			}
+			DATA_DERIVED_VARIABLES{
+			}
+			
+			SOURCE{	}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'define' expected value of type 'Mapping' but was 'Real'"
+		)
+	}
+
+	@Ignore
+	def void testInvalidNoVarRefAttributes(){
+		val mcl = '''bar = dataobj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				AMT : { use is amt, variable = 0.0 }
+			}
+			DATA_DERIVED_VARIABLES{
+			}
+			
+			SOURCE{	}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'define' expected REFERENCE of type 'Real' but was non-reference 'Real'"
+		)
+	}
+
+	@Test
+	def void testInvalidNonBoolExpressionAttributes(){
+		val mcl = '''bar = dataobj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
 				TIME : { use is idv }
 			}
 			DATA_DERIVED_VARIABLES{

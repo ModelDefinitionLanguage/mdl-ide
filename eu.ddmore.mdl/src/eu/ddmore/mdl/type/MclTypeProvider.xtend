@@ -67,8 +67,8 @@ public class MclTypeProvider {
 		}
 		
 		override isCompatible(TypeInfo otherType){
-			compatibleTypes.get(this.theType).contains(otherType.theType)
-				&& compatibleTypeProps.get(this.typeProp).contains(otherType.typeProp)
+			compatibleTypes?.get(this.theType)?.contains(otherType.theType) 
+				&& compatibleTypeProps?.get(this.typeProp)?.contains(otherType.typeProp)
 		}
 		
 		override isCompatibleElement(TypeInfo elementType){
@@ -241,9 +241,7 @@ public class MclTypeProvider {
 		PrimitiveType.String -> #{ PrimitiveType.String },
 		PrimitiveType.Boolean -> #{ PrimitiveType.Boolean },
 		PrimitiveType.Pdf -> #{ PrimitiveType.Pdf },
-//		PrimitiveType.Enum -> #{ PrimitiveType.EnumValue, PrimitiveType.Enum },
-//		PrimitiveType.EnumValue -> #{ PrimitiveType.EnumValue, PrimitiveType.Enum },
-//		PrimitiveType.List -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.List },
+		PrimitiveType.Mapping -> #{ PrimitiveType.Mapping },
 		PrimitiveType.Undefined -> #{  }
 	}
 	
@@ -478,6 +476,10 @@ public class MclTypeProvider {
 					checkExpectedAndExpression(attType, at.expression, errorLambda)				
 			}
 		}
+	}
+
+	def checkNamedFunctionArgumentTyping(ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(at.namedArgumentType, at.expression, errorLambda)				
 	}
 
 }

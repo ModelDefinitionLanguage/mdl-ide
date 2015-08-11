@@ -89,16 +89,16 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefinition => [  keyValue='covariate' listType = new ListTypeInfo("Covariate", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
-//						 new AttributeDefn('use', null, true), new AttributeDefn('type', null, false), new AttributeDefn('categorical', null, false)//,
-//						 new AttributeDefn('define', 'categories', false)
 						 ] 
 					],
 					new ListDefinition => [keyValue='amt' listType = new ListTypeInfo("Amt", PrimitiveType.Real) attributes = #[
-						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, true, MclTypeProvider::MAPPING_TYPE)
+						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE),
+						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.markReference)
 						 ] 
 					],
 					new ListDefinition => [keyValue='dv' listType = new ListTypeInfo("Dv", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE)//, new AttributeDefn('variable', null, true)
+						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE),
+						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.markReference)
 						 ] 
 					],
 					new ListDefinition => [keyValue='idv' listType = IDV_COL_TYPE attributes = #[

@@ -323,6 +323,12 @@ class MdlValidator extends AbstractMdlValidator {
 						MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
 			])
 		}
+		else if(eContainer instanceof NamedFuncArguments){
+			checkNamedFunctionArgumentTyping([e, a|
+				error("argument '" + attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
+						MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
+			])
+		}
 	}
 
 	

@@ -7,6 +7,7 @@ import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockTextBody
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class DomainObjectModelUtils {
 	
@@ -36,6 +37,10 @@ class DomainObjectModelUtils {
 	static def getParentList(ValuePair it){
 		EcoreUtil2.getContainerOfType(it, AttributeList)
 //		eContainer as AttributeList
+	}
+	
+	static def getParentFunction(ValuePair it){
+		EcoreUtil2.getContainerOfType(it, BuiltinFunctionCall)
 	}
 	
 }

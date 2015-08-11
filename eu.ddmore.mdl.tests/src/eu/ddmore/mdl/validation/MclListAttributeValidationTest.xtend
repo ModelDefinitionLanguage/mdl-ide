@@ -93,7 +93,7 @@ class MclListAttributeValidationTest {
 			DECLARED_VARIABLES{ D }
 			
 			DATA_INPUT_VARIABLES{
-				AMT : { use is amt, define = D }
+				AMT : { use is amt, variable = D }
 				TIME : { use is idv }
 			}
 			DATA_DERIVED_VARIABLES{

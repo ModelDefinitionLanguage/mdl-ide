@@ -13,22 +13,25 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import java.util.List
 
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+
 class BuiltinFunctionProvider {
 	
 	interface FunctDefn{
 		def int getNumArgs()
-		def PrimitiveTypeInfo getReturnType()
+		def TypeInfo getReturnType()
 	} 	
 
 	static class SimpleFuncDefn implements FunctDefn{
 		int numArgs
-		PrimitiveTypeInfo returnType	 
+		TypeInfo returnType	 
 
 		override int getNumArgs(){
 			numArgs
 		}
 		
-		override PrimitiveTypeInfo getReturnType(){
+		override TypeInfo getReturnType(){
 			returnType
 		}
 	}
@@ -68,7 +71,7 @@ class BuiltinFunctionProvider {
 					} ]					 ],
 		'linear' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'fixEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false),
+						'fixEff' -> new FunctionArgument(MclTypeProvider::MAPPING_TYPE, false),
 						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]					],
 		'general' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
@@ -103,6 +106,17 @@ class BuiltinFunctionProvider {
 	
 	def getFunctionType(BuiltinFunctionCall it){
 		findFuncDefn?.returnType ?: MclTypeProvider::UNDEFINED_TYPE
+	}
+	
+	def getNamedArgumentType(ValuePair vp){
+		val funcDefn = vp.parentFunction
+		val defn = funcDefn.findFuncDefn
+		switch(defn){
+			NamedArgFuncDefn:
+				defn.arguments.get(vp.argumentName)?.expectedType ?: MclTypeProvider::UNDEFINED_TYPE
+			default:
+				MclTypeProvider::UNDEFINED_TYPE
+		}
 	}
 	
 	// precindition is that this is a list of NamedFuncDefns
