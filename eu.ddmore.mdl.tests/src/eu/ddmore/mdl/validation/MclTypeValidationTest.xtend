@@ -760,4 +760,72 @@ d1g=desobj{
 		)
 	}
 	
+	@Test
+	def void testValidBoolExpressionAttributes(){
+		val mcl = '''bar = dataobj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				AMT : { use is amt, define = D }
+				TIME : { use is idv }
+			}
+			DATA_DERIVED_VARIABLES{
+				DT : { column = TIME, condition = (D - 4) > (0 - 2) }
+			}
+			
+			SOURCE{	}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidNonBoolExpressionAttributes(){
+		val mcl = '''bar = dataobj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				AMT : { use is amt, define = D }
+				TIME : { use is idv }
+			}
+			DATA_DERIVED_VARIABLES{
+				DT : { column = TIME, condition = D + 0 - 2 }
+			}
+			
+			SOURCE{	}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'condition' expected value of type 'Boolean' but was 'Real'"
+		)
+	}
+
+	@Test
+	def void testInvalidNonRealExpressionAttributes(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				DEQ{
+					B : { deriv = C > 0 && false, init = 33 }
+				}
+				C
+				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'deriv' expected value of type 'Real' but was 'Boolean'"
+		)
+	}
+
 }
