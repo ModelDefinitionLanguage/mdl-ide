@@ -85,10 +85,17 @@ class BuiltinFunctionProvider {
 						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
 					} ] ],
 		'combinedError2' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'a' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'b' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
+					} ] ],
+		'combinedError2eps' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+						'a' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'b' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'eps1' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false),
+						'eps2' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
 					} ] ]
 	}
 

@@ -87,7 +87,7 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'use'
 				listDefns = newArrayList(
-					new ListDefinition => [  keyValue='covariate' listType = new ListTypeInfo("Covariate", PrimitiveType.Real) attributes = #[
+					new ListDefinition => [  keyValue='covariate' listType = new ListTypeInfo("Covariate", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
 					],

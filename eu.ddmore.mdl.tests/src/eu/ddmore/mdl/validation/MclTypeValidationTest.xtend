@@ -784,7 +784,8 @@ d1g=desobj{
 			DECLARED_VARIABLES{ D; E }
 			
 			DATA_INPUT_VARIABLES{
-				AMT : { use is amt, define = {1 as D, 2 as E } }
+				CMT : { use is cmt }
+				AMT : { use is amt, define = {1 in CMT as D, 2 in CMT as E } }
 			}
 			DATA_DERIVED_VARIABLES{
 			}

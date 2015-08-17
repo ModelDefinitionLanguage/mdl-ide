@@ -131,7 +131,7 @@ CategoryMapping:
 ;
 
 MappingPair:
-	leftOperand=OrExpression (IN srcColumn=SymbolReference)?  AS rightOperand=OrExpression
+	leftOperand=OrExpression IN srcColumn=SymbolReference  AS rightOperand=OrExpression
 //	leftOperand=OrExpression AS rightOperand=OrExpression
 ;
 
