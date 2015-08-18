@@ -3,6 +3,13 @@
 */
 package eu.ddmore.mdl.ui.quickfix
 
+import org.eclipse.jface.text.FindReplaceDocumentAdapter
+import org.eclipse.xtext.diagnostics.Diagnostic
+import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider
+import org.eclipse.xtext.ui.editor.quickfix.Fix
+import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor
+import org.eclipse.xtext.validation.Issue
+
 //import org.eclipse.xtext.ui.editor.quickfix.Fix
 //import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor
 //import org.eclipse.xtext.validation.Issue
@@ -12,15 +19,16 @@ package eu.ddmore.mdl.ui.quickfix
  *
  * see http://www.eclipse.org/Xtext/documentation.html#quickfixes
  */
-class MdlQuickfixProvider extends org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider {
+class MdlQuickfixProvider extends DefaultQuickfixProvider {
 
-//	@Fix(MyDslValidator::INVALID_NAME)
-//	def capitalizeName(Issue issue, IssueResolutionAcceptor acceptor) {
-//		acceptor.accept(issue, 'Capitalize name', 'Capitalize the name.', 'upcase.png') [
-//			context |
-//			val xtextDocument = context.xtextDocument
-//			val firstLetter = xtextDocument.get(issue.offset, 1)
-//			xtextDocument.replace(issue.offset, 1, firstLetter.toUpperCase)
-//		]
-//	}
+	@Fix(Diagnostic::LINKING_DIAGNOSTIC)
+	def fixDanglingRef(Issue issue, IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, 'Change to an enumeration', "Changes '=' to 'is' to make this an enumeration.", '') [
+			context |
+			val xtextDoc = context.xtextDocument
+			val adapt = new FindReplaceDocumentAdapter(xtextDoc)
+			val rgn = adapt.find(issue.offset, '=', false, true, false, false)
+			if(rgn != null) adapt.replace('is', false)
+		]
+	}
 }

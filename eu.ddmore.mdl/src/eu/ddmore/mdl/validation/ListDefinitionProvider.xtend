@@ -382,6 +382,17 @@ class ListDefinitionProvider {
 		defnType
 	}
 
+	def getTypeOfEnumAttribute(String blockName, String attributeName){
+		val defns = attDefns.get(blockName)
+		for(lst :defns.listDefns){
+			val attDefn = lst.attributes.findFirst[a | a.name == attributeName]
+			if(attDefn != null){
+				return attDefn.attType
+			} 
+		}
+		null
+	}
+
 //	def getTypeOfBuiltinEnum(Attribute att){
 //		val blockName = att.owningBlock.identifier
 //		val enumValue = att.attributeValueString
@@ -495,7 +506,7 @@ class ListDefinitionProvider {
 
 	def getAttributeValueString(ValuePair attrib){
 		switch(attrib){
-			ValuePair: attrib.expression.convertToString
+			ValuePair: attrib.expression?.convertToString
 //			CategoricalDefinitionExpr: attrib.convertToString
 		}
 	}

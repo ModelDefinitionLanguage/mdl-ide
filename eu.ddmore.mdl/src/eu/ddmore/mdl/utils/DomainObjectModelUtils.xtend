@@ -5,12 +5,11 @@ import eu.ddmore.mdl.mdl.BlockBody
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockTextBody
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.UnnamedArgument
+import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.UnnamedFuncArguments
-import eu.ddmore.mdl.mdl.UnnamedArgument
 
 class DomainObjectModelUtils {
 	

@@ -1,6 +1,5 @@
 package eu.ddmore.mdl.ui;
 
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.xtext.ui.editor.autoedit.DefaultAutoEditStrategyProvider;
 
 public class MDLAutoEditStartegyProvider extends DefaultAutoEditStrategyProvider {
