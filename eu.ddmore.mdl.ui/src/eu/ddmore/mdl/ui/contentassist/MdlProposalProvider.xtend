@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.jface.viewers.StyledString
 import org.eclipse.swt.graphics.Image
 import org.eclipse.xtext.Assignment
+import org.eclipse.xtext.RuleCall
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
 
@@ -26,6 +27,18 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
 class MdlProposalProvider extends AbstractMdlProposalProvider {
 
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
+
+	override complete_IS(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		val props = #['is']
+		addProposals(context, acceptor, props, null)
+	}
+	
+	
+	override complete_ASSIGN(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		val props = #['=']
+		addProposals(context, acceptor, props, null)
+	}
+
 
 	override completeEnumPair_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		val parent = model.getContainerOfType(ListDefinition)

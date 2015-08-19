@@ -5,7 +5,7 @@ Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
 MclObject returns MclObject:
-	name=ID '=' mdlObjType=ID blkArgs=BlockArguments BEGIN blocks += BlockStatement* END;
+	name=ID ASSIGN mdlObjType=ID blkArgs=BlockArguments BEGIN blocks += BlockStatement* END;
 
 
 BlockStatement:
@@ -58,7 +58,7 @@ SymbolDefinition:
 
 
 EquationDefinition:
-	name = ID (vector?='[' ']')? ("=" expression = Expression)? ';'?
+	name = ID (vector?='[' ']')? (ASSIGN expression = Expression)? ';'?
 ;
 
 EnumerationDefinition:
@@ -66,7 +66,7 @@ EnumerationDefinition:
 ;
 
 TransformedDefinition:
-	transform = ID '(' name=ID (',' idv=[SymbolDefinition|ID] )? ')' '=' expression=Expression ';'?
+	transform = ID '(' name=ID (',' idv=[SymbolDefinition|ID] )? ')' ASSIGN expression=Expression ';'?
 ;
 
 RandomVariableDefinition:
@@ -99,12 +99,12 @@ ValuePair:
 ;
 
 AssignPair:
-	argumentName = AttributeName "=" expression = Expression
+	argumentName = AttributeName ASSIGN expression = Expression
 	
 ;
 
 EnumPair:
-	argumentName = AttributeName 'is' expression = EnumExpression
+	argumentName = AttributeName IS expression = EnumExpression
 	
 ;
 
@@ -300,7 +300,9 @@ terminal CONSTANT:
 
 terminal IN: 'in';
 
-//terminal IS: 'is';
+terminal IS: 'is';
+
+terminal ASSIGN: '=';
 
 terminal AS: 'as';
 
