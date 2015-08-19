@@ -51,14 +51,14 @@ class MclTypeProviderTest {
 	@Test
 	def void testRealLiteralExpression(){
 		val actual = MdlFactory::eINSTANCE.createRealLiteral
-		actual.value = 'foobar'
+		actual.value = 1.0
 		actual.typeFor.assertEquals(MclTypeProvider::REAL_TYPE)
 	}
 
 	@Test
 	def void testIntegerLiteralExpression(){
 		val actual = MdlFactory::eINSTANCE.createIntegerLiteral
-		actual.value = 'foobar'
+		actual.value = 1
 		actual.typeFor.assertEquals(MclTypeProvider::INT_TYPE)
 	}
 

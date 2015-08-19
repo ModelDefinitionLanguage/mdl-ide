@@ -1,5 +1,7 @@
-grammar eu.ddmore.mdl.Mdl with org.eclipse.xtext.common.Terminals
+grammar eu.ddmore.mdl.Mdl
 generate mdl "http://www.ddmore.eu/mdl/Mdl"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
@@ -234,6 +236,7 @@ ElifClause:
 
 Literal returns Expression:
 	RealLiteral |
+	ConstantLiteral|
 	IntegerLiteral |
 	StringLiteral |
 	BooleanLiteral |
@@ -268,11 +271,14 @@ UnnamedArgument:
 
 
 BooleanLiteral returns Expression :
-	{BooleanLiteral} ('false' | isTrue?='true');
+	{BooleanLiteral} (FALSE | isTrue?=TRUE);
 
 
 RealLiteral returns Expression :
-	{RealLiteral} value=(FLOAT|CONSTANT);
+	{RealLiteral} value=FLOAT;
+
+ConstantLiteral returns Expression :
+	{ConstantLiteral} value=CONSTANT;
 
 IntegerLiteral returns Expression :
 	{IntegerLiteral} value=INTEGER;
@@ -322,16 +328,20 @@ terminal LIMIT: 'limit';
 
 terminal FIXED: 'fixed';
 
+terminal TRUE: 'true';
+
+terminal FALSE: 'false';
+
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';
 
 terminal TEXT_BLOCK:
 	'<<' -> '>>';
 
-terminal INTEGER:
+terminal INTEGER returns ecore::EInt:
 	SIGN?('0' | '1'..'9' '0'..'9'*);
 	
-terminal FLOAT: 
+terminal FLOAT returns ecore::EDouble: 
 	SIGN?'0'..'9' + '.' '0'..'9'* EXPONENT?
     | SIGN?'.' '0'..'9'+ EXPONENT?
     | SIGN?'0'..'9'+ EXPONENT
@@ -371,4 +381,4 @@ terminal END: '}' ;
 
 terminal ID: ('a'..'z'|'A'..'Z'|'_')('a'..'z'|'A'..'Z'|'_'| '0'..'9')*;
 
-
+terminal WS: (' '|'\t'|'\r'|'\n')+; 

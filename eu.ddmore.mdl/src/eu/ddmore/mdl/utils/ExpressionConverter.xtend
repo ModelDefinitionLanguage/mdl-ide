@@ -27,6 +27,7 @@ import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.UnnamedArgument
+import eu.ddmore.mdl.mdl.ConstantLiteral
 
 public class ExpressionConverter {
 	
@@ -113,11 +114,15 @@ public class ExpressionConverter {
 	}
 	
 	def static dispatch String getString(RealLiteral exp){
+		exp.value.toString
+	}
+	
+	def static dispatch String getString(ConstantLiteral exp){
 		exp.value
 	}
 	
 	def static dispatch String getString(IntegerLiteral exp){
-		exp.value
+		exp.value.toString
 	}
 	
 	def static dispatch String getString(StringLiteral exp)'''
