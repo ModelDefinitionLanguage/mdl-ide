@@ -29,7 +29,7 @@ class ListDefinitionProvider {
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #['parameter', 'observation'])
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #['nonmemFormat'])
 	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo('cmpt', #['depot', 'compartment', 'elimination', 'transfer', 'distribution'])
-	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #['COV', 'CORR'])
+	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #['cov', 'corr','sd', 'var'])
 	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #['categorical', 'count', 'discrete'])
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #['simple', 'complex'])
 //	static val SAMPLE_OUTCOME_TYPE = new BuiltinEnumTypeInfo('sampouttype', #['conc', 'effect'])
@@ -210,9 +210,39 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("CovarianceMat", PrimitiveType.List) attributes = #[
+					new ListDefinition => [ keyValue='corr' listType = new ListTypeInfo("CovarMatrix", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('type', null, true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', null, true, MclTypeProvider::REAL_VECTOR_TYPE),
 						 new AttributeDefn('value', null, true, MclTypeProvider::REAL_VECTOR_TYPE)
+						 ]
+					],
+					new ListDefinition => [ keyValue='cov' listType = new ListTypeInfo("CorrMatrix", PrimitiveType.List) attributes = #[
+						 new AttributeDefn('type', null, true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', null, true, MclTypeProvider::REAL_VECTOR_TYPE),
+						 new AttributeDefn('value', null, true, MclTypeProvider::REAL_VECTOR_TYPE)
+						 ]
+					],
+					new ListDefinition => [ keyValue='sd' listType = new ListTypeInfo("SDEstimate", PrimitiveType.Real) attributes = #[
+						 new AttributeDefn('type', null, true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('value', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('lo', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('hi', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('fix', null, false, MclTypeProvider::BOOLEAN_TYPE)
+						 ]
+					],
+					new ListDefinition => [ keyValue='var' listType = new ListTypeInfo("VarEstimate", PrimitiveType.Real) attributes = #[
+						 new AttributeDefn('type', null, true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('value', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('lo', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('hi', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('fix', null, false, MclTypeProvider::BOOLEAN_TYPE)
+						 ]
+					]
+				)
+			]
+		),
+		"STRUCTURAL" -> (
+			new BlockListDefinition => [
+				key = 'value'
+				listDefns = newArrayList(
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("StructuralEstimate", PrimitiveType.Real) attributes = #[
+						 new AttributeDefn('value', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('lo', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('hi', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('fix', null, false, MclTypeProvider::BOOLEAN_TYPE)
 						 ]
 					]
 				)

@@ -44,14 +44,14 @@ Statement:
 ;
 
 
-EstimateRange returns Expression:
-	{EstimateRange}initial=(RealLiteral|IntegerLiteral) limit=LimitDefn? fixed?=FIXED |
-	{EstimateRange}initial=(RealLiteral|IntegerLiteral) limit=LimitDefn
-;
+//EstimateRange returns Expression:
+//	{EstimateRange}initial=(RealLiteral|IntegerLiteral) limit=LimitDefn? fixed?=FIXED |
+//	{EstimateRange}initial=(RealLiteral|IntegerLiteral) limit=LimitDefn
+//;
 
-LimitDefn:
-	{LimitDefn}LIMIT '(' low=(RealLiteral|IntegerLiteral)? ','  high=(RealLiteral|IntegerLiteral)? ')'	
-;
+//LimitDefn:
+//	{LimitDefn}LIMIT '(' low=(RealLiteral|IntegerLiteral)? ','  high=(RealLiteral|IntegerLiteral)? ')'	
+//;
 
 SymbolDefinition:
 	EquationDefinition | ListDefinition| ForwardDeclaration | RandomVariableDefinition | TransformedDefinition|
@@ -210,7 +210,7 @@ PrimaryExpression returns Expression:
 	| MappingExpression
 	| BuiltinFunctionCall
 	| WhenExpression
-	| EstimateRange
+//	| EstimateRange
 	| ParExpression
 	;
 
@@ -324,9 +324,9 @@ terminal WITH: 'withCategories';
 
 terminal WHEN: 'when';
 
-terminal LIMIT: 'limit';
-
-terminal FIXED: 'fixed';
+//terminal LIMIT: 'limit';
+//
+//terminal FIXED: 'fixed';
 
 terminal TRUE: 'true';
 

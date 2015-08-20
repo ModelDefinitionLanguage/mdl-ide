@@ -75,9 +75,9 @@ class BlockArgumentDefinitionProvider {
 		MdlValidator::MDLOBJ -> #{
 			'RANDOM_VARIABLE_DEFINITION' -> #{ 'level' -> true }
 		},
-		MdlValidator::PARAMOBJ -> #{
-			'VARIABILITY' -> #{ 'type' -> true }
-		},
+//		MdlValidator::PARAMOBJ -> #{
+//			'VARIABILITY' -> #{ 'type' -> true }
+//		},
 		MdlValidator::TASKOBJ -> #{ 
 			"ESTIMATE" -> #{ 'target' -> true },
 			"SIMULATE" -> #{ 'target' -> true },

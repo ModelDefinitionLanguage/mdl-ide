@@ -21,21 +21,21 @@ class MclParserParamObj2Test {
 
 		# By default a parameter is to be estimated if fix is omitted
 		STRUCTURAL {
-			POP_CL =  0.1 limit(0.001,)
-			POP_V = 8 limit(0.001, )
-			POP_KA = 0.362 limit(0.001,)
-			POP_TLAG = 1 limit(0.001, 10)
-			BETA_CL_WT = 0.75 fixed
-			BETA_V_WT = 1 fixed 
-			RUV_PROP = 0.1 limit(0, )
-			RUV_ADD = 0.1 limit(0, ) 
-			} # end STRUCTURAL
-		VARIABILITY(type is sd) {
-			PPV_CL = 0.1 
-			PPV_V = 0.1 limit(0, 1)
-			PPV_KA = 0.1 fixed
-			PPV_TLAG = 0.1 
-			OMEGA : { type is CORR, parameter=[ETA_CL, ETA_V], value = [0.01] } 
+			POP_CL : { value = 0.1, lo=0.001 }
+			POP_V : { value = 8, lo=0.001 }
+			POP_KA : { value = 0.362, lo=0.001 }
+			POP_TLAG : { value = 1, lo=0.001, hi=10 }
+			BETA_CL_WT : { value = 0.75, fix=true }
+			BETA_V_WT : { value = 1, fix=true }
+			RUV_PROP : { value = 0.1, lo=0 }
+			RUV_ADD : { value = 0.1, lo=0 }
+		} # end STRUCTURAL
+		VARIABILITY {
+			PPV_CL : { type is sd, value=0.1 } 
+			PPV_V : { type is sd, value=0.1, lo=0, hi=1 } 
+			PPV_KA : { type is sd, value=0.1, fix=true } 
+			PPV_TLAG : { type is sd, value=0.1, fix=false } 
+			OMEGA : { type is corr, parameter=[ETA_CL, ETA_V], value = [0.01] } 
 		} # end VARIABILITY
 	} # end of parameter object 
 		'''
