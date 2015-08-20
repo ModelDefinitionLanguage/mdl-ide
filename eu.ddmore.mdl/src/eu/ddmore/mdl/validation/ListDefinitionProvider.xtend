@@ -9,7 +9,6 @@ import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.ListTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.TypeProperty
 import java.util.ArrayList
 import java.util.Collections
 import java.util.HashMap
@@ -38,8 +37,8 @@ class ListDefinitionProvider {
 	
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
-	static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration", PrimitiveType.List, TypeProperty.None)
-	static val SAMPLING_TYPE = new ListTypeInfo("Sampling", PrimitiveType.List, TypeProperty.None)
+	static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration", PrimitiveType.List)
+	static val SAMPLING_TYPE = new ListTypeInfo("Sampling", PrimitiveType.List)
 	
 	// @TODO: need an addition set of validations to make sure that DVID is used if AMT has a define attribute
 	
@@ -199,7 +198,7 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'deriv'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("Derivative", PrimitiveType.Real, TypeProperty.Deriv) attributes = #[
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("Derivative", PrimitiveType.Deriv) attributes = #[
 						 new AttributeDefn('deriv', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('x0', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
@@ -211,7 +210,7 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("CovarianceMat", PrimitiveType.List, TypeProperty.None) attributes = #[
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("CovarianceMat", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('type', null, true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', null, true, MclTypeProvider::REAL_VECTOR_TYPE),
 						 new AttributeDefn('value', null, true, MclTypeProvider::REAL_VECTOR_TYPE)
 						 ]
@@ -223,7 +222,7 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='categorical' listType = new ListTypeInfo("CatObs", PrimitiveType.Int, TypeProperty.None) attributes = #[
+					new ListDefinition => [ keyValue='categorical' listType = new ListTypeInfo("CatObs", PrimitiveType.Int) attributes = #[
 						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE)
 						 ]
 					]
@@ -248,7 +247,7 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'armSize'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("StudyDesign", PrimitiveType.List, TypeProperty.None) attributes = #[
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("StudyDesign", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('armSize', null, true, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('interventionSequence', null, true, MclTypeProvider::MAPPING_TYPE),
 						 new AttributeDefn('samplingSequence', null, false, MclTypeProvider::MAPPING_TYPE)
@@ -261,7 +260,7 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'name'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("DesignSpace", PrimitiveType.List, TypeProperty.None) attributes = #[
+					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("DesignSpace", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('name', null, true, SAMPLING_TYPE.makeVector), new AttributeDefn('element', null, true, ELEMENT_TYPE),
 						 new AttributeDefn('discrete', null, false, MclTypeProvider::INT_TYPE.makeVector),
 						 new AttributeDefn('range', null, false, MclTypeProvider::REAL_TYPE.makeVector)

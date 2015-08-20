@@ -39,16 +39,12 @@ public class MclTypeProvider {
 	
 
 	enum PrimitiveType {
-		Int, String, Real, Boolean, Pdf, Enum, EnumValue, List, Mapping, Undefined
+		Int, String, Real, Deriv, Boolean, Pdf, Enum, EnumValue, List, Mapping, Undefined
 	}
-	enum TypeProperty{
-		Deriv, Estimate, Vector, None
-	}
-	
 	@Data
 	static abstract class TypeInfo{
 		def abstract PrimitiveType getTheType()
-		def abstract TypeProperty getTypeProp()
+		def abstract boolean isVector()
 		def abstract boolean isReference()
 		def abstract boolean isCompatible(TypeInfo otherType)
 		def abstract boolean isCompatibleElement(TypeInfo otherType)
@@ -60,36 +56,44 @@ public class MclTypeProvider {
 	@Data @FinalFieldsConstructor
 	static class PrimitiveTypeInfo extends TypeInfo{
 		PrimitiveType theType
-		TypeProperty typeProp
+		boolean vector
 		boolean reference
 		
-		new(PrimitiveType theType, TypeProperty typeProp){
-			this(theType, typeProp, false)
+		new(PrimitiveType theType){
+			this(theType, false, false)
+		}
+		
+		new(PrimitiveType theType, boolean isVector){
+			this(theType, isVector, false)
 		}
 		
 		override isCompatible(TypeInfo otherType){
 			compatibleTypes?.get(this.theType)?.contains(otherType.theType) 
-				&& compatibleTypeProps?.get(this.typeProp)?.contains(otherType.typeProp)
+				&& this.vector == otherType.isVector
 		}
 		
 		override isCompatibleElement(TypeInfo elementType){
-			if(this.typeProp != TypeProperty.Vector) throw new IllegalArgumentException("vectorType must have a vector property type")
+			if(!this.vector) throw new IllegalArgumentException("vectorType must have a vector property type")
 			
-			if(elementType.typeProp != TypeProperty.Vector)
+			if(!elementType.isVector)
 				compatibleTypes.get(this.theType).contains(elementType.theType)
 			else false		
 		}
 		
 		override getTypeName(){
-			(if(typeProp != TypeProperty.None) typeProp + ':' else '') + theType.toString
+			(if(isVector) 'vector:' else '') + theType.toString
 		}
 		
 		override markReference(){
-			new PrimitiveTypeInfo(theType, typeProp, true);
+			new PrimitiveTypeInfo(theType, vector, true);
 		}
 		
 		override makeVector(){
-			new PrimitiveTypeInfo(theType, TypeProperty.Vector, reference);
+			new PrimitiveTypeInfo(theType, true, reference);
+		}
+		
+		override isVector(){
+			vector
 		}
 	}
 
@@ -102,12 +106,12 @@ public class MclTypeProvider {
 		}
 		
 		new(String name, boolean isRef){
-			super(PrimitiveType.Enum, TypeProperty.None, isRef)
+			super(PrimitiveType.Enum, false, isRef)
 			enumName = name
 		}
 		
-		new(String name, TypeProperty typeProp, boolean isRef){
-			super(PrimitiveType.Enum, typeProp, isRef)
+		new(String name, boolean isVector, boolean isRef){
+			super(PrimitiveType.Enum, isVector, isRef)
 			enumName = name
 		}
 		
@@ -121,7 +125,7 @@ public class MclTypeProvider {
 		}
 		
 		override getTypeName(){
-			(if(this.getTypeProp != TypeProperty.None) this.getTypeProp + ':' else '') + "Enum:" + enumName
+			(if(this.isVector) 'Vector:' else '') + "Enum:" + enumName
 		}
 		
 		override markReference(){
@@ -129,7 +133,7 @@ public class MclTypeProvider {
 		}
 		
 		override makeVector(){
-			new EnumTypeInfo(enumName, TypeProperty.Vector, isReference);
+			new EnumTypeInfo(enumName, true, isReference);
 		}
 		
 	}
@@ -143,11 +147,11 @@ public class MclTypeProvider {
 //		}
 		
 		new(String name, List<String> expectedValues, boolean isRef){
-			this(name, expectedValues, TypeProperty.None, isRef)
+			this(name, expectedValues, false, isRef)
 		}
 		
-		new(String name, List<String> expectedValues, TypeProperty typeProp, boolean isRef){
-			super(name, typeProp, isRef)
+		new(String name, List<String> expectedValues, boolean isVector, boolean isRef){
+			super(name, isVector, isRef)
 			this.expectedValues = expectedValues
 		}
 		
@@ -156,31 +160,29 @@ public class MclTypeProvider {
 		}
 		
 		override makeVector(){
-			new BuiltinEnumTypeInfo(typeName, expectedValues, TypeProperty.Vector, isReference);
+			new BuiltinEnumTypeInfo(typeName, expectedValues, true, isReference);
 		}
 		
 	}
 
-	//@TODO: we need to change this from Primitive toy TypeInfo so that potentially 
-	// derivs and vector types could be returned correctly
 	@Data @FinalFieldsConstructor
 	static class ListTypeInfo extends TypeInfo{
 		String name
 		PrimitiveType apparentType
-		TypeProperty typeProp
+		boolean isVector
 		boolean reference
 		
 		new(String name, PrimitiveType appType){
-			this(name, appType, TypeProperty.None, false)
+			this(name, appType, false, false)
 		}
 		
-		new(String name, PrimitiveType appType, TypeProperty typeProp){
-			this(name, appType, typeProp, false)
-		}
-		
-		new(String name, PrimitiveType appType, boolean isRef){
-			this(name, appType, TypeProperty.None, isRef)
-		}
+//		new(String name, PrimitiveType appType, boolean isVector){
+//			this(name, appType, isVector, false)
+//		}
+//		
+//		new(String name, PrimitiveType appType, boolean isRef){
+//			this(name, appType, false, isRef)
+//		}
 		
 		override isCompatible(TypeInfo otherType){
 			switch(otherType){
@@ -192,9 +194,9 @@ public class MclTypeProvider {
 		}
 		
 		override isCompatibleElement(TypeInfo elementType){
-			if(this.typeProp != TypeProperty.Vector) throw new IllegalArgumentException("vectorType must have a vector property type")
+			if(!this.isVector) throw new IllegalArgumentException("vectorType must have a vector property type")
 			
-			if(elementType.typeProp != TypeProperty.Vector)
+			if(!elementType.isVector)
 				this.isCompatible(elementType)
 			else false		
 		}
@@ -203,41 +205,42 @@ public class MclTypeProvider {
 			apparentType
 		}
 		
-		override getTypeProp(){
-			typeProp
+		override isVector(){
+			isVector
 		}
 		
 		override getTypeName(){
-			(if(typeProp != TypeProperty.None) typeProp + ':' else '') + "List:" + name
+			(if(isVector) 'Vector:' else '') + "List:" + name
 		}
 		
 		override markReference(){
-			new ListTypeInfo(name, apparentType, typeProp, true)
+			new ListTypeInfo(name, apparentType, isVector, true)
 		}
 
 		override makeVector(){
-			new ListTypeInfo(name, apparentType, TypeProperty.Vector, reference);
+			new ListTypeInfo(name, apparentType, true, reference);
 		}
 	}
 	
 
 
-	public static val UNDEFINED_TYPE = new PrimitiveTypeInfo(PrimitiveType.Undefined, TypeProperty.None)
-	public static val INT_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int, TypeProperty.None)
-	public static val BOOLEAN_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean, TypeProperty.None)
-	public static val REAL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.None)
+	public static val UNDEFINED_TYPE = new PrimitiveTypeInfo(PrimitiveType.Undefined)
+	public static val INT_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int)
+	public static val BOOLEAN_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean)
+	public static val REAL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real)
 //	public static val DERIV_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.Deriv)
 //	public static val ENUM_TYPE = new PrimitiveTypeInfo(PrimitiveType.Enum, TypeProperty.None)
-	public static val STRING_TYPE = new PrimitiveTypeInfo(PrimitiveType.String, TypeProperty.None)
-	public static val BOOL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean, TypeProperty.None)
-	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf, TypeProperty.None)
-	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.Vector)
-	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int, TypeProperty.Vector)
+	public static val STRING_TYPE = new PrimitiveTypeInfo(PrimitiveType.String)
+	public static val BOOL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean)
+	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf)
+	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real, true)
+	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int, true)
 //	public static val LIST_TYPE =  new PrimitiveTypeInfo(PrimitiveType.List, TypeProperty.None)
-	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping, TypeProperty.None)
+	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping)
 	
 	static val Map<PrimitiveType, Set<PrimitiveType>> compatibleTypes = #{
-		PrimitiveType.Real -> #{ PrimitiveType.Real, PrimitiveType.Int },
+		PrimitiveType.Deriv -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.Deriv },
+		PrimitiveType.Real -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.Deriv },
 		PrimitiveType.Int -> #{ PrimitiveType.Int },
 		PrimitiveType.String -> #{ PrimitiveType.String },
 		PrimitiveType.Boolean -> #{ PrimitiveType.Boolean },
@@ -246,12 +249,12 @@ public class MclTypeProvider {
 		PrimitiveType.Undefined -> #{  }
 	}
 	
-	static val Map<TypeProperty, Set<TypeProperty>> compatibleTypeProps = #{
-		TypeProperty.None -> #{ TypeProperty.None, TypeProperty.Estimate, TypeProperty.Deriv },
-		TypeProperty.Estimate -> #{ TypeProperty.None, TypeProperty.Estimate, TypeProperty.Deriv },
-		TypeProperty.Deriv -> #{ TypeProperty.None, TypeProperty.Estimate, TypeProperty.Deriv },
-		TypeProperty.Vector -> #{ TypeProperty.Vector }
-	}
+//	static val Map<TypeProperty, Set<TypeProperty>> compatibleTypeProps = #{
+//		TypeProperty.None -> #{ TypeProperty.None, TypeProperty.Estimate, TypeProperty.Deriv },
+//		TypeProperty.Estimate -> #{ TypeProperty.None, TypeProperty.Estimate, TypeProperty.Deriv },
+//		TypeProperty.Deriv -> #{ TypeProperty.None, TypeProperty.Estimate, TypeProperty.Deriv },
+//		TypeProperty.Vector -> #{ TypeProperty.Vector }
+//	}
 	
 	static val ep = MdlPackage::eINSTANCE 
 	
@@ -271,8 +274,8 @@ public class MclTypeProvider {
 //		ep.categoryDefinition -> ENUM_TYPE,
 //		ep.derivativeDefinition -> DERIV_TYPE,
 		
-		ep.estimateRange -> new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
-		ep.limitDefn -> new PrimitiveTypeInfo(PrimitiveType.Real, TypeProperty.Estimate),
+		ep.estimateRange -> new ListTypeInfo("Estimate", PrimitiveType.Real),
+		ep.limitDefn -> new ListTypeInfo("Estimate", PrimitiveType.Real),
 		
 //		ep.equationDefinition -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,
@@ -301,7 +304,7 @@ public class MclTypeProvider {
 		for(Expression e : vl.expressions){
 			val exprType = e.typeFor
 			// can't have a vector here
-			if(exprType.typeProp != TypeProperty.Vector){
+			if(!exprType.isVector){
 				if(refType == null)
 					refType = exprType
 				else{
@@ -321,9 +324,8 @@ public class MclTypeProvider {
 			CategoryReference:
 				e.ref.typeFor.markReference
 			ParExpression: e.expr.typeFor
-			EnumExpression:{
+			EnumExpression:
 				e.typeOfBuiltinEnum
-			}
 			BuiltinFunctionCall:
 				e.functionType
 			VectorElement:
