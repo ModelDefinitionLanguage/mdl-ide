@@ -73,9 +73,7 @@ public class MclTypeProvider {
 		}
 		
 		override isCompatibleElement(TypeInfo elementType){
-			if(!this.vector) throw new IllegalArgumentException("vectorType must have a vector property type")
-			
-			if(!elementType.isVector)
+			if(this.vector && !elementType.isVector)
 				compatibleTypes.get(this.theType).contains(elementType.theType)
 			else false		
 		}
