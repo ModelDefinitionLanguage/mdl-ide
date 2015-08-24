@@ -35,7 +35,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 	GROUP_VARIABLES{
 		B0 = Lgt0
 		B1 = B0 + Lgt1
-	B2 = B1 + Lgt2
+		B2 = B1 + Lgt2
 	}
 
 	MODEL_PREDICTION{

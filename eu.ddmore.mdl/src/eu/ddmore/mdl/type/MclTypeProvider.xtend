@@ -272,8 +272,8 @@ public class MclTypeProvider {
 //		ep.categoryDefinition -> ENUM_TYPE,
 //		ep.derivativeDefinition -> DERIV_TYPE,
 		
-		ep.estimateRange -> new ListTypeInfo("Estimate", PrimitiveType.Real),
-		ep.limitDefn -> new ListTypeInfo("Estimate", PrimitiveType.Real),
+//		ep.estimateRange -> new ListTypeInfo("Estimate", PrimitiveType.Real),
+//		ep.limitDefn -> new ListTypeInfo("Estimate", PrimitiveType.Real),
 		
 //		ep.equationDefinition -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,
@@ -328,9 +328,9 @@ public class MclTypeProvider {
 				e.functionType
 			VectorElement:
 				e.element.head.typeFor
-//			VectorLiteral:
-//				if(e.expressions.isEmpty) MclTypeProvider.REAL_VECTOR_TYPE
-//				else e.typeForArray
+			VectorLiteral:
+				if(e.expressions.isEmpty) MclTypeProvider.REAL_VECTOR_TYPE
+				else e.typeForArray
 			default:
 				typeTable.get(e.eClass) ?: MclTypeProvider.UNDEFINED_TYPE
 		}

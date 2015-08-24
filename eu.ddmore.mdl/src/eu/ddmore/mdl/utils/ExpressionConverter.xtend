@@ -8,10 +8,8 @@ import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.ElifClause
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
-import eu.ddmore.mdl.mdl.EstimateRange
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IntegerLiteral
-import eu.ddmore.mdl.mdl.LimitDefn
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
@@ -91,11 +89,11 @@ public class ExpressionConverter {
 	def static dispatch String getString(UnnamedArgument exp)'''
 		«exp.argument.getString»'''
 	
-	def static dispatch String getString(EstimateRange exp)'''
-		«IF !exp.isFixed»(«ENDIF»«exp.initial» «exp.limit?.getLimitString(exp.initial) ?: exp.initial»«IF !exp.isFixed»)«ENDIF»'''
+//	def static dispatch String getString(EstimateRange exp)'''
+//		«IF !exp.isFixed»(«ENDIF»«exp.initial» «exp.limit?.getLimitString(exp.initial) ?: exp.initial»«IF !exp.isFixed»)«ENDIF»'''
 	
-	def static String getLimitString(LimitDefn limit, Expression initial)'''
-		(«limit.low?:''», «initial.getString», «limit.high?:''»)'''
+//	def static String getLimitString(LimitDefn limit, Expression initial)'''
+//		(«limit.low?:''», «initial.getString», «limit.high?:''»)'''
 	
 	def static dispatch String getString(WhenExpression exp)'''
 		«FOR w : exp.when SEPARATOR ',\n'»«w.getString»«ENDFOR»«IF exp.other != null»,«ENDIF»
