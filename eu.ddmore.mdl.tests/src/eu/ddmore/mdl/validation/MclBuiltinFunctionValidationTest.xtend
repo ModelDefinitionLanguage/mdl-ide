@@ -197,7 +197,7 @@ class MclBuiltinFunctionValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"argument 'fixEff' expected value of type 'Mapping' but was 'Real'"
+			"argument 'fixEff' expected value of type 'Mapping' but was 'ref:Real'"
 		)
 	}
 

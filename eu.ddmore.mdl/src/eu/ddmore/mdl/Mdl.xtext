@@ -85,11 +85,11 @@ AnonymousListStatement:
 
 
 CategoricalDefinitionExpr returns Expression:
-	{CategoricalDefinitionExpr} WITH BEGIN categories += CategoryDefinition (=>',' categories += CategoryDefinition)* END  
+	{CategoricalDefinitionExpr} WITH BEGIN categories += CategoryValueDefinition (=>',' categories += CategoryValueDefinition)* END  
 ;
 
-CategoryDefinition:
-	name = ID (WHEN whenValue=Expression)?
+CategoryValueDefinition:
+	name = ID (WHEN mappedTo=Expression)?
 ;
 
 AttributeList:
@@ -138,7 +138,7 @@ CategoryMappingExpression returns Expression:
 ;
 
 CategoryMapping:
-	CategoryReference WHEN whenValue=Expression
+	catRef=CategoryValueReference WHEN mappedTo=Expression
 ;
 
 MappingPair:
@@ -205,7 +205,7 @@ OpUnary:
 PrimaryExpression returns Expression:
 	Literal
 	| SymbolReference 
-	| CategoryReference
+	| CategoryValueReference
 	| CategoryMappingExpression
 	| MappingExpression
 	| BuiltinFunctionCall
@@ -248,8 +248,8 @@ SymbolReference:
 ;
 
 
-CategoryReference:
-	{CategoryReference} ref=[CategoryDefinition|QualifiedName]
+CategoryValueReference:
+	{CategoryValueReference} ref=[CategoryValueDefinition|QualifiedName]
 ;
 
 

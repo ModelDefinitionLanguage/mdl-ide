@@ -84,8 +84,8 @@ class MclTypeProviderTest {
 	}
 
 	def createDummyEnumRef(String enumType, String enumValue){
-		val actual = MdlFactory::eINSTANCE.createCategoryReference
-		val lhsDefn = MdlFactory::eINSTANCE.createCategoryDefinition
+		val actual = MdlFactory::eINSTANCE.createCategoryValueReference
+		val lhsDefn = MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val enumDefn = MdlFactory::eINSTANCE.createEnumerationDefinition
 		enumDefn.name = enumType
 		val catDefnExpr = MdlFactory::eINSTANCE.createCategoricalDefinitionExpr
@@ -99,7 +99,7 @@ class MclTypeProviderTest {
 	@Test
 	def void testRelationalOpWithEnums(){
 		val actual = createDummyEnumRef("tst", "tst1")
-		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryDefinition
+		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
 		actual.checkRelationalOp(rhs, errorFunc, errorFunc)
 	}
@@ -107,7 +107,7 @@ class MclTypeProviderTest {
 	@Test
 	def void testRelationalOpWithNumAndEnum(){
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
-		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryDefinition
+		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
 		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(MclTypeProvider::REAL_TYPE) a.assertEquals(new EnumTypeInfo("tst").markReference)]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)

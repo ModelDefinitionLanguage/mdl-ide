@@ -220,4 +220,26 @@ class MclListAttributeValidationTest {
 		)
 	}
 
+	@Test
+	def void testInValidMissingWithCats(){
+		val mcl = '''
+		foo = mdlobj{
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				PAIN : { type is categorical }
+			}
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::INCOMPLETE_CATEGORY_DEFINITION,
+			"Expected ref:Real type, but was Int."
+		)
+	}
+
 }

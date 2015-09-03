@@ -10,9 +10,13 @@ import eu.ddmore.mdl.mdl.BlockArgument
 import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.CategoryMapping
+import eu.ddmore.mdl.mdl.CategoryValueDefinition
+import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.ForwardDeclaration
+import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
@@ -28,9 +32,11 @@ import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
+import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
@@ -82,6 +88,12 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val WRONG_SUBBLOCK = "eu.ddmore.mdl.validation.WrongSubBlock"
 	public static val WRONG_PARENT_BLOCK = "eu.ddmore.mdl.validation.WrongParentBlock"
 	public static val MANDATORY_BLOCK_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockMissing"
+
+	// Validation of syntactic structures
+	public static val INCORRECT_STATEMENT_CONTEXT = "eu.ddmore.mdl.validation.IncorrectStatementContext"
+	public static val INCORRECT_LIST_CONTEXT = "eu.ddmore.mdl.validation.IncorrectListContext"
+	public static val UNDER_DEFINED_IF_ELSE = "eu.ddmore.mdl.validation.UnderDefinedIfElse"
+	public static val INCOMPLETE_CATEGORY_DEFINITION = "eu.ddmore.mdl.validation.IncompleteCategories"
 
 	// Type validation
 	public static val INCOMPATIBLE_TYPES = "eu.ddmore.mdl.validation.IncompatibleTypes"
@@ -273,6 +285,24 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 		
 	@Check
+	def validateCompatibleTypes(MappingPair e){
+		checkAsOperator(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.mappingPair_LeftOperand),
+			typeError(MdlPackage::eINSTANCE.mappingPair_RightOperand))
+	}
+		
+	@Check
+	def validateCompatibleTypes(CategoryMapping e){
+		checkWhenOperator(e.catRef, e.mappedTo, typeError(MdlPackage::eINSTANCE.categoryMapping_CatRef),
+			typeError(MdlPackage::eINSTANCE.categoryMapping_MappedTo))
+	}
+		
+	@Check
+	def validateCompatibleTypes(CategoryValueDefinition e){
+		checkWhenOperator(e, typeError(MdlPackage::eINSTANCE.categoryValueDefinition_Name),
+			typeError(MdlPackage::eINSTANCE.categoryValueDefinition_MappedTo))
+	}
+		
+	@Check
 	def validateCompatibleTypes(EquationDefinition e){
 		// only check if there is an RHS to check 
 		if(e.expression != null)
@@ -333,5 +363,26 @@ class MdlValidator extends AbstractMdlValidator {
 		}
 	}
 
+	@Check
+	def validateIfElseWellFormed(WhenExpression e){
+		if(e.other == null){
+			if(e.when.size < 2){
+				error("More than one condition or an else statement is required in this expression.",
+					MdlPackage.eINSTANCE.whenExpression_When, UNDER_DEFINED_IF_ELSE, '')
+			}
+		} 
+	}
+	
+	@Check
+	def validateCatDefinitionUsedCorrectlyInStatement(CategoryValueDefinition e){
+		if(EcoreUtil2.getContainerOfType(e, EnumerationDefinition) != null && e.mappedTo != null){
+			error("Cannot use category mappings in a statement.",
+					MdlPackage.eINSTANCE.categoryValueDefinition_MappedTo, INCORRECT_STATEMENT_CONTEXT, e.name)
+		}
+		else if(EcoreUtil2.getContainerOfType(e, AttributeList) != null && e.mappedTo == null){
+			error("A category definition in a list must have a mapping.",
+					MdlPackage.eINSTANCE.categoryValueDefinition_Name, INCORRECT_LIST_CONTEXT, e.name)
+		}
+	}
 	
 }

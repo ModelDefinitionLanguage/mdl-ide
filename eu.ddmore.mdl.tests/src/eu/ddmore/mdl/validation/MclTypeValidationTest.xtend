@@ -152,7 +152,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				B = if(!true) then 0 
+				B = if(!true) then 0 else 1
 			}
 			
 		} # end of model object
@@ -671,9 +671,10 @@ d1g=desobj{
 	DECLARED_VARIABLES{
 		Conc
 		Effect
+		Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {adm=1, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {adm=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	}
@@ -693,10 +694,10 @@ d1g=desobj{
 		val mcl = '''
 d1g=desobj{
 	DECLARED_VARIABLES{
-		Conc
+		Conc; Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {adm=1, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {adm=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
@@ -756,7 +757,7 @@ d1g=desobj{
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"attribute 'inputFormat' expected value of type 'Enum:input' but was 'Real'"
+			"attribute 'inputFormat' expected value of type 'Enum:input' but was 'ref:Real'"
 		)
 	}
 	
@@ -812,7 +813,7 @@ d1g=desobj{
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"attribute 'define' expected value of type 'Mapping' but was 'Real'"
+			"attribute 'define' expected value of type 'Mapping' but was 'ref:Real'"
 		)
 	}
 
@@ -884,4 +885,183 @@ d1g=desobj{
 		)
 	}
 
+	@Test
+	def void testValidAsExpression(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataobj{
+	DECLARED_VARIABLES{ GUT}
+	
+	DATA_INPUT_VARIABLES {
+		CMT : { use is cmt } 
+		AMT : { use  is amt , define={ 1 in CMT as GUT } }
+	}
+	SOURCE {
+	    foo: {file = "warfarin_conc_sex.csv",
+        	inputFormat  is nonmemFormat, 
+	    	ignore = "#"} 
+	} # end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInValidLhsAsExpression(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataobj{
+	DECLARED_VARIABLES{ GUT; Y}
+	
+	DATA_INPUT_VARIABLES {
+		CMT : { use is cmt } 
+		AMT : { use  is amt , define={ Y in CMT as GUT } }
+	}
+	SOURCE {
+	    foo: {file = "warfarin_conc_sex.csv",
+        	inputFormat  is nonmemFormat, 
+	    	ignore = "#"} 
+	} # end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.mappingPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Int type, but was ref:Real."
+		)
+	}
+	
+	@Test
+	def void testInValidRhsAsExpression(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataobj{
+	DECLARED_VARIABLES{ GUT; Y}
+	
+	DATA_INPUT_VARIABLES {
+		CMT : { use is cmt } 
+		AMT : { use  is amt , define={ 1 in CMT as 0.0 } }
+	}
+	SOURCE {
+	    foo: {file = "warfarin_conc_sex.csv",
+        	inputFormat  is nonmemFormat, 
+	    	ignore = "#"} 
+	} # end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.mappingPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected ref:Real type, but was Real."
+		)
+	}
+	
+	@Test
+	def void testValidSimpleDataWhenExpression(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataobj{
+	DECLARED_VARIABLES{ GUT}
+	
+	DATA_INPUT_VARIABLES {
+		SEX : { use is covariate withCategories {male when 0, female when 1} }
+	}
+	SOURCE {
+	    foo: {file = "warfarin_conc_sex.csv",
+        	inputFormat  is nonmemFormat, 
+	    	ignore = "#"} 
+	} # end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInValidRhsSimpleDataWhenExpression(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataobj{
+	DECLARED_VARIABLES{ GUT}
+	
+	DATA_INPUT_VARIABLES {
+		SEX : { use is covariate withCategories {male when GUT, female when 1} }
+	}
+	SOURCE {
+	    foo: {file = "warfarin_conc_sex.csv",
+        	inputFormat  is nonmemFormat, 
+	    	ignore = "#"} 
+	} # end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Int type, but was ref:Real."
+		)
+	}
+	
+	@Test
+	def void testValidDataMappingWhenExpression(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataobj{
+	DECLARED_VARIABLES{ Y; GUT; PCA withCategories {dead, alive}; OTHER withCategories {dead, alive} }
+	
+	DATA_INPUT_VARIABLES {
+		DVID : { use  is dvid }
+		DV : { use  is dv, define =  {
+					1 in DVID as Y,
+					2 in DVID as { PCA.dead when 1, PCA.alive when 2},
+					3 in DVID as { OTHER.dead when 1, OTHER.alive when 2}
+				}
+			  }
+	}
+
+	SOURCE {
+	    SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } 
+	} # end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidObsWhenExpression(){
+		val mcl = '''
+		foo = mdlobj{
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				Prob0 
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				PAIN : { type is categorical withCategories {mild when Prob0} }
+			}
+		}
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInValidRhsObsWhenExpression(){
+		val mcl = '''
+		foo = mdlobj{
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				PAIN : { type is categorical withCategories {mild when 0} }
+			}
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected ref:Real type, but was Int."
+		)
+	}
+	
 }

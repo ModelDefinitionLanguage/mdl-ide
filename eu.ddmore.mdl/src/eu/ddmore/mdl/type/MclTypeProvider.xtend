@@ -2,8 +2,8 @@ package eu.ddmore.mdl.type
 
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
-import eu.ddmore.mdl.mdl.CategoryDefinition
-import eu.ddmore.mdl.mdl.CategoryReference
+import eu.ddmore.mdl.mdl.CategoryValueDefinition
+import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
@@ -17,6 +17,7 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
+import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
@@ -30,7 +31,6 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.type.MclTypeProvider.*
-import eu.ddmore.mdl.mdl.UnnamedArgument
 
 public class MclTypeProvider {
 
@@ -39,8 +39,9 @@ public class MclTypeProvider {
 	
 
 	enum PrimitiveType {
-		Int, String, Real, Deriv, Boolean, Pdf, Enum, EnumValue, List, Mapping, Undefined
+		Int, String, Real, Deriv, Boolean, Pdf, Enum, List, Mapping, Undefined
 	}
+	
 	@Data
 	static abstract class TypeInfo{
 		def abstract PrimitiveType getTheType()
@@ -67,9 +68,13 @@ public class MclTypeProvider {
 			this(theType, isVector, false)
 		}
 		
-		override isCompatible(TypeInfo otherType){
-			compatibleTypes?.get(this.theType)?.contains(otherType.theType) 
-				&& this.vector == otherType.isVector
+		override boolean isCompatible(TypeInfo otherType){
+			
+			val compType = compatibleTypes?.get(this.theType)
+			if(compType != null)
+				compType.contains(otherType.theType) && this.vector == otherType.isVector
+					&& if(this.reference) otherType.isReference else true
+			else false
 		}
 		
 		override isCompatibleElement(TypeInfo elementType){
@@ -79,7 +84,7 @@ public class MclTypeProvider {
 		}
 		
 		override getTypeName(){
-			(if(isVector) 'vector:' else '') + theType.toString
+			(if(isVector) 'vector:' else if(isReference) 'ref:' else '') + theType.toString
 		}
 		
 		override markReference(){
@@ -140,10 +145,6 @@ public class MclTypeProvider {
 	static class BuiltinEnumTypeInfo extends EnumTypeInfo{
 		List<String> expectedValues
 		
-//		new(String name, List<String> expectedValues){
-//			this(name, expectedValues, false)
-//		}
-		
 		new(String name, List<String> expectedValues, boolean isRef){
 			this(name, expectedValues, false, isRef)
 		}
@@ -173,14 +174,6 @@ public class MclTypeProvider {
 		new(String name, PrimitiveType appType){
 			this(name, appType, false, false)
 		}
-		
-//		new(String name, PrimitiveType appType, boolean isVector){
-//			this(name, appType, isVector, false)
-//		}
-//		
-//		new(String name, PrimitiveType appType, boolean isRef){
-//			this(name, appType, false, isRef)
-//		}
 		
 		override isCompatible(TypeInfo otherType){
 			switch(otherType){
@@ -220,6 +213,51 @@ public class MclTypeProvider {
 		}
 	}
 	
+//	@Data @FinalFieldsConstructor
+//	static class MappingTypeInfo extends TypeInfo{
+//		PrimitiveType mappingType
+//		
+//		new(String name, PrimitiveType mapType){
+//			this(mapType)
+//		}
+//		
+//		override isCompatible(TypeInfo otherType){
+//			switch(otherType){
+//				ListTypeInfo:
+//					this.apparentType == otherType.theType
+//				default:
+//					false 
+//			}
+//		}
+//		
+//		override isCompatibleElement(TypeInfo elementType){
+//			if(!this.isVector) throw new IllegalArgumentException("vectorType must have a vector property type")
+//			
+//			if(!elementType.isVector)
+//				this.isCompatible(elementType)
+//			else false		
+//		}
+//		
+//		override getTheType(){
+//			apparentType
+//		}
+//		
+//		override isVector(){
+//			isVector
+//		}
+//		
+//		override getTypeName(){
+//			(if(isVector) 'Vector:' else '') + "List:" + name
+//		}
+//		
+//		override markReference(){
+//			new ListTypeInfo(name, apparentType, isVector, true)
+//		}
+//
+//		override makeVector(){
+//			new ListTypeInfo(name, apparentType, true, reference);
+//		}
+//	}
 
 
 	public static val UNDEFINED_TYPE = new PrimitiveTypeInfo(PrimitiveType.Undefined)
@@ -279,7 +317,8 @@ public class MclTypeProvider {
 		ep.transformedDefinition -> REAL_TYPE,
 		ep.randomVariableDefinition -> REAL_TYPE,
 		ep.forwardDeclaration -> REAL_TYPE,
-		ep.mappingExpression -> MAPPING_TYPE
+		ep.mappingExpression -> MAPPING_TYPE,
+		ep.categoryMappingExpression -> MAPPING_TYPE
 //		ep.enumerationDefinition -> ENUM_TYPE,
 //		ep.listDefinition -> LIST_TYPE
 	}
@@ -319,7 +358,7 @@ public class MclTypeProvider {
 		switch(e){
 			SymbolReference:
 				e.ref.typeFor.markReference
-			CategoryReference:
+			CategoryValueReference:
 				e.ref.typeFor.markReference
 			ParExpression: e.expr.typeFor
 			EnumExpression:
@@ -372,10 +411,10 @@ public class MclTypeProvider {
 		}
 	}
 	
-	def dispatch TypeInfo typeFor(CategoryDefinition sd){
+	def dispatch TypeInfo typeFor(CategoryValueDefinition sd){
 //		return new EnumTypeInfo(exp.name)
 		switch(sd){
-			CategoryDefinition:{
+			CategoryValueDefinition:{
 				val enumDefn = EcoreUtil2.getContainerOfType(sd.eContainer, SymbolDefinition)
 				new EnumTypeInfo(enumDefn.name)
 			}
@@ -419,7 +458,7 @@ public class MclTypeProvider {
 			(TypeInfo, TypeInfo) => void rightErrorLambda){
 		val lhsType = lhs?.typeFor ?: UNDEFINED_TYPE
 //		val rhsType = rhs?.typeFor?.theType ?: UNDEFINED_TYPE.theType
-		if(lhsType.theType == PrimitiveType.Enum || lhsType.theType == PrimitiveType.EnumValue){
+		if(lhsType.theType == PrimitiveType.Enum){
 			checkExpectedAndExpression(lhsType, lhs, leftErrorLambda)
 			checkExpectedAndExpression(lhsType, rhs, rightErrorLambda)
 		}
@@ -453,11 +492,47 @@ public class MclTypeProvider {
 		else checkExpectedAndExpression(REAL_TYPE, operand, errorLambda)
 	}
 	
+	
+	def checkAsOperator(Expression lhs, Expression rhs,  (TypeInfo, TypeInfo) => void leftErrorLambda,
+				(TypeInfo, TypeInfo) => void rightErrorLambda){
+		checkExpectedAndExpression(INT_TYPE, lhs, leftErrorLambda)
+		if(rhs?.typeFor ?: UNDEFINED_TYPE == MAPPING_TYPE){
+			checkExpectedAndExpression(MAPPING_TYPE, rhs, rightErrorLambda)
+		}
+		else{
+			checkExpectedAndExpression(REAL_TYPE.markReference, rhs, rightErrorLambda)
+		}
+	}
+	
+	def checkWhenOperator(CategoryValueReference lhs, Expression rhs,  (TypeInfo, TypeInfo) => void leftErrorLambda,
+				(TypeInfo, TypeInfo) => void rightErrorLambda){
+		checkExpectedEnumType(lhs, leftErrorLambda)
+		if(rhs != null)
+			checkExpectedAndExpression(INT_TYPE, rhs, rightErrorLambda)
+	}
+	
+	def checkWhenOperator(CategoryValueDefinition catValDefn,  (TypeInfo, TypeInfo) => void leftErrorLambda,
+				(TypeInfo, TypeInfo) => void rightErrorLambda){
+		val actualType = catValDefn.typeFor
+		if(actualType.theType != PrimitiveType.Enum){
+			leftErrorLambda.apply(new EnumTypeInfo(catValDefn.name), actualType)
+		}
+		if(catValDefn.mappedTo != null)
+			checkExpectedAndExpression(INT_TYPE, catValDefn.mappedTo, rightErrorLambda)
+	}
+	
 	def dispatch void checkExpectedAndExpression(EnumTypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: UNDEFINED_TYPE
 		if(!expectedType.isCompatible(actualType)){
 			errorLambda.apply(expectedType, actualType)
 		} 
+	}
+	
+	def void checkExpectedEnumType(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		val actualType = exp?.typeFor ?: UNDEFINED_TYPE
+		if(actualType.theType != PrimitiveType.Enum){
+			errorLambda.apply(new EnumTypeInfo("any"), actualType)
+		}
 	}
 	
 	def dispatch void checkExpectedAndExpression(TypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){

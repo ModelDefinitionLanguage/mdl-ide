@@ -97,7 +97,7 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 			assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "T, WT, AGE, SEX, logtWT, tAGE, POP_FCL_FEM, FSEXCL, TLAG, RATEIN, GUT, foo")
 		]
 		((grpBlk.body as BlockStatementBody).statements.last as EquationDefinition).expression =>  [
-			assertScope(MdlPackage::eINSTANCE.categoryReference_Ref, "SEX.female, SEX.male, SEX.MISSING, warfarin_PK_SEXAGE_mdl2.SEX.female, warfarin_PK_SEXAGE_mdl2.SEX.male, warfarin_PK_SEXAGE_mdl2.SEX.MISSING, warfarin_PK_SEXAGE_mdl.SEX.female, warfarin_PK_SEXAGE_mdl.SEX.male, warfarin_PK_SEXAGE_mdl.SEX.MISSING")
+			assertScope(MdlPackage::eINSTANCE.categoryValueReference_Ref, "SEX.female, SEX.male, SEX.MISSING, warfarin_PK_SEXAGE_mdl2.SEX.female, warfarin_PK_SEXAGE_mdl2.SEX.male, warfarin_PK_SEXAGE_mdl2.SEX.MISSING, warfarin_PK_SEXAGE_mdl.SEX.female, warfarin_PK_SEXAGE_mdl.SEX.male, warfarin_PK_SEXAGE_mdl.SEX.MISSING")
 		]
 	}
 	

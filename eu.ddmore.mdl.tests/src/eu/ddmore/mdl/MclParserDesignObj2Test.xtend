@@ -22,9 +22,10 @@ d1g=desobj{
 	DECLARED_VARIABLES{
 		Conc
 		Effect
+		Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {adm=1, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {adm=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
