@@ -11,7 +11,6 @@ import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
