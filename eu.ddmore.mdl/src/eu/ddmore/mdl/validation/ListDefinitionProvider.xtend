@@ -21,6 +21,7 @@ import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.EnumPair
 
 class ListDefinitionProvider {
 //	static val CATEGORIES_KWD = "categories"
@@ -48,10 +49,24 @@ class ListDefinitionProvider {
 		String depAtt // other att that must be present
 		boolean mandatory
 		TypeInfo attType
+		TypeInfo catMappingType
+		boolean catMappingMandatory
 		
-//		new(String name, String depAtt, boolean mand){
-//			this(name, depAtt, mand, MclTypeProvider::REAL_TYPE)
-//		}
+		new(String name, String depAtt, boolean mand, TypeInfo attType){
+			this(name, depAtt, mand, attType, null, false)
+		}
+		
+		def isCatMappingMandatory(){
+			return catMappingType != null && catMappingMandatory
+		}
+		
+		def isCatMappingOptional(){
+			return catMappingType != null && !catMappingMandatory
+		}
+		
+		def isCatMappingPossible(){
+			return catMappingType != null
+		}
 	}
 	
 	static class ListDefinition {
@@ -87,7 +102,7 @@ class ListDefinitionProvider {
 				key = 'use'
 				listDefns = newArrayList(
 					new ListDefinition => [  keyValue='covariate' listType = new ListTypeInfo("Covariate", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+						 new AttributeDefn('use', null, true, USE_TYPE, MclTypeProvider::INT_TYPE, false)
 						 ] 
 					],
 					new ListDefinition => [keyValue='amt' listType = new ListTypeInfo("Amt", PrimitiveType.Real) attributes = #[
@@ -253,7 +268,7 @@ class ListDefinitionProvider {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='categorical' listType = new ListTypeInfo("CatObs", PrimitiveType.Int) attributes = #[
-						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE)
+						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.markReference, true)
 						 ]
 					]
 				)
@@ -402,6 +417,10 @@ class ListDefinitionProvider {
 	
 	def getAttributeType(ListDefinition it, String attName){
 		attributes.findFirst(ad | ad.name == attName)?.attType ?: MclTypeProvider::UNDEFINED_TYPE 
+	}
+	
+	def getAttributeDefinition(ListDefinition it, String attName){
+		attributes.findFirst(ad | ad.name == attName) 
 	}
 	
 	def getTypeOfBuiltinEnum(EnumExpression ee){
@@ -607,6 +626,19 @@ class ListDefinitionProvider {
 		}
 		else{
 			false
+		}
+	}
+
+	def checkCategoryDefinitionWellFormed(EnumPair ep, () => void unexpectedCatDefnErrorLambda, () => void missingCatErrorLambda){
+		val attList = ep.eContainer as AttributeList
+		val listDefn = attList.matchingListDefn
+		val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
+		val mappingExpr = ep.expression as EnumExpression
+		if(attDefn.isCatMappingMandatory && mappingExpr.catDefn == null){
+			missingCatErrorLambda.apply
+		}
+		else if(!attDefn.isCatMappingPossible && mappingExpr.catDefn != null){
+			unexpectedCatDefnErrorLambda.apply
 		}
 	}
 

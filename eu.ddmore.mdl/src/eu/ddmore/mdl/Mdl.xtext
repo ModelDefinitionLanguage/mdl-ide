@@ -44,15 +44,6 @@ Statement:
 ;
 
 
-//EstimateRange returns Expression:
-//	{EstimateRange}initial=(RealLiteral|IntegerLiteral) limit=LimitDefn? fixed?=FIXED |
-//	{EstimateRange}initial=(RealLiteral|IntegerLiteral) limit=LimitDefn
-//;
-
-//LimitDefn:
-//	{LimitDefn}LIMIT '(' low=(RealLiteral|IntegerLiteral)? ','  high=(RealLiteral|IntegerLiteral)? ')'	
-//;
-
 SymbolDefinition:
 	EquationDefinition | ListDefinition| ForwardDeclaration | RandomVariableDefinition | TransformedDefinition|
 	  EnumerationDefinition //|DerivativeDefinition
@@ -120,30 +111,24 @@ EnumExpression returns Expression:
 
 MappingExpression returns Expression:
 	{MappingExpression} (BEGIN
-		(attLists+=MappingList (',' attLists+=MappingList)* |
-			attList+=MappingPair (',' attLists+=MappingPair)*
+		(attList+=MappingList (',' attList+=MappingList)* |
+			attList+=MappingPair (',' attList+=MappingPair)*
 		)
 	END)
-//	{MappingExpression} mapColumn=ID? (BEGIN
-//		(attLists+=MappingList (',' attLists+=MappingList)* |
-//			attList+=MappingPair (',' attLists+=MappingPair)*
-//		)
-//	END)
 ;
 
-CategoryMappingExpression returns Expression:
-	{CategoryMappingExpression}(BEGIN
-		attLists+=CategoryMapping (',' attLists+=CategoryMapping)*
+CatValRefMappingExpression returns Expression:
+	{CatValRefMappingExpression}(BEGIN
+		attLists+=CatValRefMapping (',' attLists+=CatValRefMapping)*
 	END)
 ;
 
-CategoryMapping:
+CatValRefMapping:
 	catRef=CategoryValueReference WHEN mappedTo=Expression
 ;
 
 MappingPair:
 	leftOperand=OrExpression IN srcColumn=SymbolReference  AS rightOperand=OrExpression
-//	leftOperand=OrExpression AS rightOperand=OrExpression
 ;
 
 MappingList:
@@ -206,11 +191,10 @@ PrimaryExpression returns Expression:
 	Literal
 	| SymbolReference 
 	| CategoryValueReference
-	| CategoryMappingExpression
+	| CatValRefMappingExpression
 	| MappingExpression
 	| BuiltinFunctionCall
 	| WhenExpression
-//	| EstimateRange
 	| ParExpression
 	;
 
@@ -323,10 +307,6 @@ terminal ELSE: 'else';
 terminal WITH: 'withCategories';
 
 terminal WHEN: 'when';
-
-//terminal LIMIT: 'limit';
-//
-//terminal FIXED: 'fixed';
 
 terminal TRUE: 'true';
 

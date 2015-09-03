@@ -10,8 +10,9 @@ import eu.ddmore.mdl.mdl.BlockArgument
 import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
-import eu.ddmore.mdl.mdl.CategoryMapping
+import eu.ddmore.mdl.mdl.CatValRefMapping
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
+import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
@@ -93,7 +94,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val INCORRECT_STATEMENT_CONTEXT = "eu.ddmore.mdl.validation.IncorrectStatementContext"
 	public static val INCORRECT_LIST_CONTEXT = "eu.ddmore.mdl.validation.IncorrectListContext"
 	public static val UNDER_DEFINED_IF_ELSE = "eu.ddmore.mdl.validation.UnderDefinedIfElse"
-	public static val INCOMPLETE_CATEGORY_DEFINITION = "eu.ddmore.mdl.validation.IncompleteCategories"
+	public static val INVALID_CATEGORY_DEFINITION = "eu.ddmore.mdl.validation.IncompleteCategories"
 
 	// Type validation
 	public static val INCOMPATIBLE_TYPES = "eu.ddmore.mdl.validation.IncompatibleTypes"
@@ -291,15 +292,32 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 		
 	@Check
-	def validateCompatibleTypes(CategoryMapping e){
-		checkWhenOperator(e.catRef, e.mappedTo, typeError(MdlPackage::eINSTANCE.categoryMapping_CatRef),
-			typeError(MdlPackage::eINSTANCE.categoryMapping_MappedTo))
+	def validateCompatibleTypes(CatValRefMapping e){
+		var parentAt = EcoreUtil2.getContainerOfType(e, EnumPair)
+		if(parentAt != null)
+			checkWhenOperator(parentAt, e.catRef, e.mappedTo, typeError(MdlPackage::eINSTANCE.catValRefMapping_CatRef),
+				typeError(MdlPackage::eINSTANCE.catValRefMapping_MappedTo)
+			)
 	}
 		
 	@Check
 	def validateCompatibleTypes(CategoryValueDefinition e){
-		checkWhenOperator(e, typeError(MdlPackage::eINSTANCE.categoryValueDefinition_Name),
-			typeError(MdlPackage::eINSTANCE.categoryValueDefinition_MappedTo))
+		var parentAt = EcoreUtil2.getContainerOfType(e, EnumPair)
+		if(parentAt != null)
+			checkWhenOperator(parentAt, e, typeError(MdlPackage::eINSTANCE.categoryValueDefinition_Name),
+				typeError(MdlPackage::eINSTANCE.categoryValueDefinition_MappedTo)
+			)
+	}
+		
+	@Check
+	def validateCategoryDefinitionWellFormed(EnumPair parentAt){
+		if(parentAt != null)
+			checkCategoryDefinitionWellFormed(parentAt,
+				[error("Unexpected category definition.", 
+					MdlPackage::eINSTANCE.valuePair_Expression, eu.ddmore.mdl.validation.MdlValidator.INVALID_CATEGORY_DEFINITION, "") ],
+				[error("Category definition is missing.", 
+					MdlPackage::eINSTANCE.valuePair_Expression, eu.ddmore.mdl.validation.MdlValidator.INVALID_CATEGORY_DEFINITION, "") ]
+			)
 	}
 		
 	@Check

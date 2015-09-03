@@ -236,9 +236,28 @@ class MclListAttributeValidationTest {
 		}
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
-			MdlValidator::INCOMPLETE_CATEGORY_DEFINITION,
-			"Expected ref:Real type, but was Int."
+		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
+			MdlValidator::INVALID_CATEGORY_DEFINITION,
+			"Category definition is missing."
+		)
+	}
+
+	@Test
+	def void testInvalidAttributeWithUnexpectedCatDefn(){
+		val mcl = '''
+		foo = dataobj {
+			DATA_INPUT_VARIABLES{
+			}
+
+			SOURCE{
+				foo : { file="aFile", inputFormat is nonmemFormat withCategories { hello when 0, goodbye when 2 } }
+			}
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
+			MdlValidator::INVALID_CATEGORY_DEFINITION,
+			"Unexpected category definition."
 		)
 	}
 

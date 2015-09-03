@@ -5,11 +5,13 @@ import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
@@ -318,7 +320,7 @@ public class MclTypeProvider {
 		ep.randomVariableDefinition -> REAL_TYPE,
 		ep.forwardDeclaration -> REAL_TYPE,
 		ep.mappingExpression -> MAPPING_TYPE,
-		ep.categoryMappingExpression -> MAPPING_TYPE
+		ep.catValRefMappingExpression -> MAPPING_TYPE
 //		ep.enumerationDefinition -> ENUM_TYPE,
 //		ep.listDefinition -> LIST_TYPE
 	}
@@ -504,22 +506,43 @@ public class MclTypeProvider {
 		}
 	}
 	
-	def checkWhenOperator(CategoryValueReference lhs, Expression rhs,  (TypeInfo, TypeInfo) => void leftErrorLambda,
+	def checkWhenOperator(EnumPair at, CategoryValueReference lhs, Expression rhs,  (TypeInfo, TypeInfo) => void leftErrorLambda,
 				(TypeInfo, TypeInfo) => void rightErrorLambda){
 		checkExpectedEnumType(lhs, leftErrorLambda)
-		if(rhs != null)
-			checkExpectedAndExpression(INT_TYPE, rhs, rightErrorLambda)
+		if(rhs != null){
+			validateCategoricalMappingType(at, rhs, rightErrorLambda)
+//			val attList = at.eContainer as AttributeList
+//			val listDefn = attList.matchingListDefn
+//			var expectedType = listDefn?.getCategoryMappingType(at.attributeName) ?: UNDEFINED_TYPE
+//			checkExpectedAndExpression(expectedType, rhs, rightErrorLambda)
+		}
 	}
 	
-	def checkWhenOperator(CategoryValueDefinition catValDefn,  (TypeInfo, TypeInfo) => void leftErrorLambda,
+	def checkWhenOperator(EnumPair at, CategoryValueDefinition catValDefn,  (TypeInfo, TypeInfo) => void leftErrorLambda,
 				(TypeInfo, TypeInfo) => void rightErrorLambda){
 		val actualType = catValDefn.typeFor
 		if(actualType.theType != PrimitiveType.Enum){
 			leftErrorLambda.apply(new EnumTypeInfo(catValDefn.name), actualType)
 		}
-		if(catValDefn.mappedTo != null)
-			checkExpectedAndExpression(INT_TYPE, catValDefn.mappedTo, rightErrorLambda)
+		if(catValDefn.mappedTo != null){
+			validateCategoricalMappingType(at, catValDefn.mappedTo, rightErrorLambda)
+//			val attList = at.eContainer as AttributeList
+//			val listDefn = attList.matchingListDefn
+//			var expectedType = listDefn?.getCategoryMappingType(at.attributeName) ?: UNDEFINED_TYPE
+//			checkExpectedAndExpression(expectedType, catValDefn.mappedTo, rightErrorLambda)
+		}
 	}
+
+	private  def void validateCategoricalMappingType(EnumPair at, Expression mappingExpr, (TypeInfo, TypeInfo) => void typeErrorLambda){
+		val attList = at.eContainer as AttributeList
+		val listDefn = attList.matchingListDefn
+		val attDefn = listDefn?.getAttributeDefinition(at.attributeName)
+		if(attDefn.isCatMappingPossible){
+			val expectedType = attDefn.catMappingType ?: UNDEFINED_TYPE
+			checkExpectedAndExpression(expectedType, mappingExpr, typeErrorLambda)
+		}
+	}
+
 	
 	def dispatch void checkExpectedAndExpression(EnumTypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: UNDEFINED_TYPE
