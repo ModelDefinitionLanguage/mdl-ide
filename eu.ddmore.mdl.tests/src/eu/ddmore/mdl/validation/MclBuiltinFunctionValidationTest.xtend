@@ -392,5 +392,31 @@ class MclBuiltinFunctionValidationTest {
 		)
 	}
 
+	@Test
+	def void testInValidNamedFunctionSublistWronAttribsType(){
+		val mcl = '''bar = mdlobj {
+			
+			
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				POP_CL
+				BETA_CL_WT
+				ETA_CL
+				Cl = general(pop = POP_CL, fixEff = [{co=BETA_CL_WT, cov=logtWT}], ranEff = ETA_CL)
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::UNRECOGNIZED_LIST_ATT,
+			"attribute name 'co' is not recognised."
+		)
+	}
+	
 
 }

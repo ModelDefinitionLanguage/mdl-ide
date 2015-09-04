@@ -4,14 +4,12 @@ import com.google.inject.Inject
 import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MdlPackage
-import eu.ddmore.mdl.validation.MdlValidator
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -112,7 +110,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Real type, but was List:VarLevel."
+			"Expected Real type, but was ref:List:VarLevel."
 		)
 	}
 	
@@ -278,7 +276,7 @@ class MclTypeValidationTest {
 		)
 	}
 	
-	@Ignore
+	@Test
 	def void testInValidFunctionArgumentExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlobj {
@@ -296,6 +294,94 @@ class MclTypeValidationTest {
 			
 		} # end of model object
 		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.unnamedArgument,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument '1' expected value of type 'Real' but was 'String'."
+		)
+	}
+	
+	@Test
+	def void testInValidNamedFunctionSublistArgumentType(){
+		val mcl = '''bar = mdlobj {
+			
+			
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				POP_CL
+				BETA_CL_WT
+				ETA_CL
+				Cl = linear(pop = POP_CL, fixEff = BETA_CL_WT, ranEff = ETA_CL)
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument 'fixEff' expected value of type 'vector:ref:Sublist:fixEffAtts' but was 'ref:Real'"
+		)
+	}
+	
+	@Test
+	def void testInValidNamedFunctionSimpleArgumentType(){
+		val mcl = '''bar = mdlobj {
+			
+			
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				POP_CL
+				BETA_CL_WT
+				ETA_CL
+				Cl = linear(pop = false, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}], ranEff = ETA_CL)
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument 'fixEff' expected value of type 'Mapping' but was 'ref:Real'"
+		)
+		
+		mcl.assertError(MdlPackage::eINSTANCE.unnamedFuncArguments,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was String."
+		)
+	}
+	
+	@Test
+	def void testInValidNamedFunctionSublistNotVectType(){
+		val mcl = '''bar = mdlobj {
+			
+			
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				POP_CL
+				BETA_CL_WT
+				ETA_CL
+				Cl = linear(pop = POP_CL, fixEff = {coeff=BETA_CL_WT, cov=logtWT}, ranEff = ETA_CL)
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument 'fixEff' expected value of type 'Mapping' but was 'ref:Real'"
+		)
 		
 		mcl.assertError(MdlPackage::eINSTANCE.unnamedFuncArguments,
 			MdlValidator::INCOMPATIBLE_TYPES,
@@ -590,7 +676,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Enum:SEX type, but was Int."
+			"Expected ref:Enum:SEX type, but was Int."
 		)
 	}
 	
@@ -617,7 +703,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Real type, but was Enum:SEX."
+			"Expected Real type, but was ref:Enum:SEX."
 		)
 	}
 	
@@ -644,7 +730,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Enum:SEX type, but was String."
+			"Expected ref:Enum:SEX type, but was String."
 		)
 	}
 	
@@ -707,14 +793,14 @@ d1g=desobj{
 		totalSize=100
 		arm1 : {
 			armSize=100,
-			interventionSequence={{
+			interventionSequence=[{
 				interventionList=[dose1]
-			}},
-			samplingSequence={{
+			}],
+			samplingSequence=[{
 				samplingList=[pkwin1],
 				start=[0]
 				}
-			}
+			]
 		}
 	}
 }
@@ -817,7 +903,7 @@ d1g=desobj{
 		)
 	}
 
-	@Ignore
+	@Test
 	def void testInvalidNoVarRefAttributes(){
 		val mcl = '''bar = dataobj {
 			DECLARED_VARIABLES{ D }
@@ -831,9 +917,9 @@ d1g=desobj{
 			SOURCE{	}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"attribute 'define' expected REFERENCE of type 'Real' but was non-reference 'Real'"
+			"attribute 'variable' expected value of type 'ref:Real' but was 'Real'."
 		)
 	}
 

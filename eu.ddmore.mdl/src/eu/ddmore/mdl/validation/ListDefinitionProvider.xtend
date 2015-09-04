@@ -80,21 +80,6 @@ class ListDefinitionProvider {
 		List<ListDefinition> listDefns
 	}
 
-//	static val Map<String, Map<String, ? extends TypeInfo>> attributeEnumTypeDefaults = #{
-//		"DATA_INPUT_VARIABLES" -> #{
-//				'covariate' -> USE_TYPE,
-//				'amt' -> USE_TYPE,
-//				'dv' -> USE_TYPE,
-//				'dvid' -> USE_TYPE,
-//				'mdv' -> USE_TYPE,
-//				'cmt' -> USE_TYPE,
-//				'idv' -> USE_TYPE,
-//				'id' -> USE_TYPE,
-//				'rate' -> USE_TYPE
-//			}
-//		 
-//	}	
-
 	// owning block -> key attribute -> key value -> attributes associated with key
 	static val Map<String, BlockListDefinition> attributeDefnDefaults = #{ 
 		"DATA_INPUT_VARIABLES" -> (
@@ -107,12 +92,12 @@ class ListDefinitionProvider {
 					],
 					new ListDefinition => [keyValue='amt' listType = new ListTypeInfo("Amt", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE),
-						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.markReference)
+						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ] 
 					],
 					new ListDefinition => [keyValue='dv' listType = new ListTypeInfo("Dv", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE),
-						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.markReference)
+						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ] 
 					],
 					new ListDefinition => [keyValue='idv' listType = IDV_COL_TYPE attributes = #[
@@ -186,7 +171,7 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='depot' listType = new ListTypeInfo("Depot", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.markReference), new AttributeDefn('ka', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('ka', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('tlag', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
 					],
@@ -196,14 +181,14 @@ class ListDefinitionProvider {
 					],
 					new ListDefinition => [ keyValue='elimination' listType = new ListTypeInfo("Elimination", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.markReference), new AttributeDefn('v', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('v', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('cl', null, true, MclTypeProvider::REAL_TYPE)
 						 ]
 					],
 					new ListDefinition => [ keyValue='distribution' listType = new ListTypeInfo("Distribution", PrimitiveType.Real) attributes = #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('kin', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('kout', null, true, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.markReference)
+						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
 						 ]
 					]
 				)
@@ -268,7 +253,7 @@ class ListDefinitionProvider {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='categorical' listType = new ListTypeInfo("CatObs", PrimitiveType.Int) attributes = #[
-						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.markReference, true)
+						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
 						 ]
 					]
 				)
@@ -279,7 +264,7 @@ class ListDefinitionProvider {
 				key = 'adm'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue=null listType = ADMINISTRATION_TYPE attributes = #[
-						 new AttributeDefn('adm', null, true, MclTypeProvider::REAL_TYPE.markReference) , new AttributeDefn('amount', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('adm', null, true, MclTypeProvider::REAL_TYPE.makeReference) , new AttributeDefn('amount', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('doseTime', null, false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('duration', null, false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('start', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('end', null, false, MclTypeProvider::REAL_TYPE)
@@ -319,7 +304,7 @@ class ListDefinitionProvider {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue='simple' listType = SAMPLING_TYPE attributes = #[
-						 new AttributeDefn('type', null, true, SAMPLING_TYPE_TYPE), new AttributeDefn('outcome', null, true, MclTypeProvider::REAL_TYPE.markReference),
+						 new AttributeDefn('type', null, true, SAMPLING_TYPE_TYPE), new AttributeDefn('outcome', null, true, MclTypeProvider::REAL_TYPE.makeReference),
 						 new AttributeDefn('sampleTime', null, false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('numberSamples', null, false, MclTypeProvider::INT_TYPE.makeVector)
 						 ]
@@ -423,7 +408,7 @@ class ListDefinitionProvider {
 		attributes.findFirst(ad | ad.name == attName) 
 	}
 	
-	def getTypeOfBuiltinEnum(EnumExpression ee){
+	def TypeInfo getTypeOfBuiltinEnum(EnumExpression ee){
 		val blockName = ee.owningBlock.identifier
 		val enumValue = ee.convertToString
 		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE

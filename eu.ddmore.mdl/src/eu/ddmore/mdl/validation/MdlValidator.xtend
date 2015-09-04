@@ -72,7 +72,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val MANDATORY_BLOCK_PROP_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockPropMissing"
 	
 	// List attribute validation
-	public static val UNRECOGNIZED_LIST_ATT_MISSING = "eu.ddmore.mdl.validation.UnrecognisedAttribute"
+	public static val UNRECOGNIZED_LIST_ATT = "eu.ddmore.mdl.validation.UnrecognisedAttribute"
 	public static val MANDATORY_LIST_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryAttributeMissing"
 	public static val MANDATORY_LIST_KEY_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryKeyAttributeMissing"
 
@@ -192,7 +192,7 @@ class MdlValidator extends AbstractMdlValidator {
 	def validateAttribute(ValuePair it){
 		if(eContainer instanceof AttributeList && !attributeRecognised){
 			error("attribute '" + attributeName + "' is not recognised in this context.",
-				MdlPackage.eINSTANCE.valuePair_ArgumentName, UNRECOGNIZED_LIST_ATT_MISSING, attributeName)
+				MdlPackage.eINSTANCE.valuePair_ArgumentName, eu.ddmore.mdl.validation.MdlValidator.UNRECOGNIZED_LIST_ATT, attributeName)
 		}
 	}
 

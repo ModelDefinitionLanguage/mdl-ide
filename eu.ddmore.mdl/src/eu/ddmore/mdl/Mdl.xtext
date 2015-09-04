@@ -111,10 +111,14 @@ EnumExpression returns Expression:
 
 MappingExpression returns Expression:
 	{MappingExpression} (BEGIN
-		(attList+=MappingList (',' attList+=MappingList)* |
+		(//attList+=MappingList (',' attList+=MappingList)* |
 			attList+=MappingPair (',' attList+=MappingPair)*
 		)
 	END)
+;
+
+SubListExpression returns Expression:
+	{SubListExpression} BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END 
 ;
 
 CatValRefMappingExpression returns Expression:
@@ -131,9 +135,9 @@ MappingPair:
 	leftOperand=OrExpression IN srcColumn=SymbolReference  AS rightOperand=OrExpression
 ;
 
-MappingList:
-	BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
-;
+//MappingList:
+//	BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
+//;
 
 Expression:
 	OrExpression
@@ -196,6 +200,7 @@ PrimaryExpression returns Expression:
 	| BuiltinFunctionCall
 	| WhenExpression
 	| ParExpression
+	| SubListExpression
 	;
 
 

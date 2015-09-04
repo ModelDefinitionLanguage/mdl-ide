@@ -71,7 +71,7 @@ warfarin_PK_v2_dat = dataobj{
 		'''.parse
 
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
-			MdlValidator::UNRECOGNIZED_LIST_ATT_MISSING,
+			MdlValidator::UNRECOGNIZED_LIST_ATT,
 			"attribute 'define' is not recognised in this context"
 		)
 		

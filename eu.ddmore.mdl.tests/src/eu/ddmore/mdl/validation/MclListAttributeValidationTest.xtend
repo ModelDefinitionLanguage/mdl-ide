@@ -196,7 +196,7 @@ class MclListAttributeValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
-			MdlValidator::UNRECOGNIZED_LIST_ATT_MISSING,
+			MdlValidator::UNRECOGNIZED_LIST_ATT,
 			"attribute 'blahblah' is not recognised in this context"
 		)
 	}
@@ -215,7 +215,7 @@ class MclListAttributeValidationTest {
 		'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
-			MdlValidator::UNRECOGNIZED_LIST_ATT_MISSING,
+			MdlValidator::UNRECOGNIZED_LIST_ATT,
 			"attribute 'inputformat' is not recognised in this context"
 		)
 	}
@@ -258,6 +258,110 @@ class MclListAttributeValidationTest {
 		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
 			MdlValidator::INVALID_CATEGORY_DEFINITION,
 			"Unexpected category definition."
+		)
+	}
+
+	@Test
+	def void testValidSubListDefinition(){
+		val mcl = '''
+foo = mdlobj {
+   COVARIATES{
+   	  WT
+   }# end COVARIATES
+
+   VARIABILITY_LEVELS{
+      ID: {type is parameter, level=2}
+   }# end VARIABILITY_LEVELS
+
+   STRUCTURAL_PARAMETERS{
+      POP_CL
+      POP_VC
+      POP_Q
+      POP_VP
+      POP_KA
+      POP_TLAG
+      POP_BETA_CL_WT
+      POP_BETA_V_WT
+      RUV_PROP
+      RUV_ADD
+   }# end STRUCTURAL_PARAMETERS
+
+   VARIABILITY_PARAMETERS{
+      PPV_CL
+      PPV_VC
+      PPV_Q
+      PPV_VP
+      PPV_KA
+      PPV_TLAG
+      RUV_EPS1
+   }# end VARIABILITY_PARAMETERS
+
+   RANDOM_VARIABLE_DEFINITION (level=ID) {
+      eta_PPV_CL ~ Normal(mean=0, sd=PPV_CL)
+   }# end RANDOM_VARIABLE_DEFINITION (level=ID)
+
+   INDIVIDUAL_VARIABLES{
+      CL = linear(pop = POP_CL, fixEff = [{coeff=POP_BETA_CL_WT, covariate=WT}] , ranEff = eta_PPV_CL)
+   }# end INDIVIDUAL_VARIABLES
+} 
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+
+	@Test
+	def void testInvalidSubListDefinition(){
+		val mcl = '''
+foo = mdlobj {
+   COVARIATES{
+   	  WT
+   }# end COVARIATES
+
+   VARIABILITY_LEVELS{
+      ID: {type is parameter, level=2}
+   }# end VARIABILITY_LEVELS
+
+   STRUCTURAL_PARAMETERS{
+      POP_CL
+      POP_VC
+      POP_Q
+      POP_VP
+      POP_KA
+      POP_TLAG
+      POP_BETA_CL_WT
+      POP_BETA_V_WT
+      RUV_PROP
+      RUV_ADD
+   }# end STRUCTURAL_PARAMETERS
+
+   VARIABILITY_PARAMETERS{
+      PPV_CL
+      PPV_VC
+      PPV_Q
+      PPV_VP
+      PPV_KA
+      PPV_TLAG
+      RUV_EPS1
+   }# end VARIABILITY_PARAMETERS
+
+   RANDOM_VARIABLE_DEFINITION (level=ID) {
+      eta_PPV_CL ~ Normal(mean=0, sd=PPV_CL)
+   }# end RANDOM_VARIABLE_DEFINITION (level=ID)
+
+   INDIVIDUAL_VARIABLES{
+      CL = linear(pop = POP_CL, fixEff = [{foobar=POP_BETA_CL_WT, covariate=WT}] , ranEff = eta_PPV_CL)
+   }# end INDIVIDUAL_VARIABLES
+} 
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
+			MdlValidator::UNRECOGNIZED_LIST_ATT,
+			"attribute 'foobar' is not recognised in this context"
+		)
+		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
+			MdlValidator::MANDATORY_LIST_ATT_MISSING,
+			"mandatory attribute 'categories' is missing"
 		)
 	}
 
