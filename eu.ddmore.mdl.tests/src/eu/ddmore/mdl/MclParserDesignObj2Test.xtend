@@ -67,14 +67,14 @@ d1g=desobj{
 		totalSize=100
 		arm1 : {
 			armSize=100,
-			interventionSequence={{
+			interventionSequence=[{
 				interventionList=[dose1]
-			}},
-			samplingSequence={{
+			}],
+			samplingSequence=[{
 				samplingList=[sampPKPD],
 				start=[0]
 				}
-			}
+			]
 		}
 	}
 }

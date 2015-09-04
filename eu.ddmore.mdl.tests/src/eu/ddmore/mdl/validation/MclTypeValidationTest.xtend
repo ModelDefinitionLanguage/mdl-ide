@@ -323,7 +323,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"argument 'fixEff' expected value of type 'vector:ref:Sublist:fixEffAtts' but was 'ref:Real'"
+			"argument 'fixEff' expected value of type 'vector:Sublist:fixEffAtts' but was 'ref:Real'"
 		)
 	}
 	
@@ -349,12 +349,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"argument 'fixEff' expected value of type 'Mapping' but was 'ref:Real'"
-		)
-		
-		mcl.assertError(MdlPackage::eINSTANCE.unnamedFuncArguments,
-			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Real type, but was String."
+			"argument 'pop' expected value of type 'Real' but was 'Boolean'"
 		)
 	}
 	
@@ -378,14 +373,35 @@ class MclTypeValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"argument 'fixEff' expected value of type 'Mapping' but was 'ref:Real'"
+			"argument 'fixEff' expected value of type 'vector:Sublist:fixEffAtts' but was 'Sublist:fixEffAtts'"
 		)
+	}
+	
+	@Test
+	def void testInValidNamedFunctionSublistAttributeType(){
+		val mcl = '''bar = mdlobj {
+			
+			
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				POP_CL
+				BETA_CL_WT
+				ETA_CL
+				Cl = linear(pop = POP_CL, fixEff = [{coeff=0.0, cov=logtWT}], ranEff = ETA_CL)
+			}
+		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.unnamedFuncArguments,
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Real type, but was String."
+			"argument 'coeff' expected value of type 'ref:Real' but was 'Real'"
 		)
 	}
 	
@@ -516,8 +532,8 @@ class MclTypeValidationTest {
 			}
 			
 			SAMPLING{
-			 	pkwin1 : { type is simple, outcome=Conc, sampleTime = 0.5 }
-				pkwin2 : { type is simple, outcome=Conc, numberSamples=0 }
+			 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5] }
+				pkwin2 : { type is simple, outcome=Conc, numberSamples=[0] }
 			}
 			DESIGN_SPACES{
 				DS3[] = [pkwin1,pkwin2]
@@ -527,7 +543,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Vector:Real type, but was Vector:List:Sampling."
+			"Expected vector:Real type, but was vector:ref:List:Sampling."
 		)
 	}
 	
@@ -574,7 +590,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Element type 'Vector:Real' is incompatible with vector type 'Vector:Int'."
+			"Element type 'ref:vector:Real' is incompatible with vector type 'vector:Real'."
 		)
 	}
 	
@@ -1107,6 +1123,51 @@ warfarin_PK_v2_dat = dataobj{
 		
 		mcl.assertNoErrors
 	}
+
+
+	@Test
+	def void testValidExpectedRefTypeAttribute(){
+		val mcl = '''
+		foo = desobj{
+			DECLARED_VARIABLES{
+				Conc
+				Effect
+				Cmt
+			}
+			
+			STUDY_DESIGN{}
+			
+			ADMINISTRATION{
+				dose1 : {adm=Cmt, amount=100, doseTime=[0], duration=[1]} 
+			}
+		}
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+
+	@Test
+	def void testInValidExpectedRefTypeAttributeNoRef(){
+		val mcl = '''
+		foo = desobj{
+			DECLARED_VARIABLES{
+			}
+
+			STUDY_DESIGN{}
+			
+			ADMINISTRATION{
+				dose1 : {adm=0.0, amount=100, doseTime=[0], duration=[1]} 
+			}
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'adm' expected value of type 'ref:Real' but was 'Real'.")
+	}
+	
+
 	
 	@Test
 	def void testValidObsWhenExpression(){

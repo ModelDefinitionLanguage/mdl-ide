@@ -168,7 +168,7 @@ class MclBuiltinFunctionValidationTest {
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
-				Cl = linear(pop = POP_CL, fixEff = {{coeff=BETA_CL_WT, covariate=logtWT}}, ranEff = ETA_CL)
+				Cl = linear(pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, covariate=logtWT}], ranEff = ETA_CL)
 			}
 		}'''.parse
 		
@@ -197,7 +197,7 @@ class MclBuiltinFunctionValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"argument 'fixEff' expected value of type 'Mapping' but was 'ref:Real'"
+			"argument 'fixEff' expected value of type 'vector:Sublist:fixEffAtts' but was 'ref:Real'"
 		)
 	}
 
@@ -408,7 +408,7 @@ class MclBuiltinFunctionValidationTest {
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
-				Cl = general(pop = POP_CL, fixEff = [{co=BETA_CL_WT, cov=logtWT}], ranEff = ETA_CL)
+				Cl = linear(pop = POP_CL, fixEff = [{co=BETA_CL_WT, cov=logtWT}], ranEff = ETA_CL)
 			}
 		}'''.parse
 		

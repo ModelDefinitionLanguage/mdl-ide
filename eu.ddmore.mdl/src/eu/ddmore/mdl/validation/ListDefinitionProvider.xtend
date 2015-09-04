@@ -22,6 +22,7 @@ import org.eclipse.xtext.EcoreUtil2
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.EnumPair
+import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
 
 class ListDefinitionProvider {
 //	static val CATEGORIES_KWD = "categories"
@@ -40,6 +41,14 @@ class ListDefinitionProvider {
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
 	static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration", PrimitiveType.List)
 	static val SAMPLING_TYPE = new ListTypeInfo("Sampling", PrimitiveType.List)
+
+	public static val TypeInfo INTERVENTION_SEQ_SUBLIST = new SublistTypeInfo("intSeqAtts", #[new AttributeDefn("interventionList", null, true, ADMINISTRATION_TYPE.makeReference.makeVector),
+																							new AttributeDefn("epochStart", null, true, MclTypeProvider::REAL_TYPE.makeVector),
+																							new AttributeDefn("epochEnd", null, true, MclTypeProvider::REAL_TYPE.makeVector)])
+	public static val TypeInfo SAMPLING_SEQ_SUBLIST = new SublistTypeInfo("sampSeqAtts", #[new AttributeDefn("samplingList", null, true, SAMPLING_TYPE.makeReference.makeVector),
+																							new AttributeDefn("start", null, true, MclTypeProvider::REAL_TYPE.makeVector),
+																							new AttributeDefn("end", null, true, MclTypeProvider::REAL_TYPE.makeVector)])
+
 	
 	// @TODO: need an addition set of validations to make sure that DVID is used if AMT has a define attribute
 	
@@ -279,8 +288,8 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("StudyDesign", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('armSize', null, true, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('interventionSequence', null, true, MclTypeProvider::MAPPING_TYPE),
-						 new AttributeDefn('samplingSequence', null, false, MclTypeProvider::MAPPING_TYPE)
+						 new AttributeDefn('interventionSequence', null, true, INTERVENTION_SEQ_SUBLIST),
+						 new AttributeDefn('samplingSequence', null, false, SAMPLING_SEQ_SUBLIST)
 						 ]
 					]
 				)

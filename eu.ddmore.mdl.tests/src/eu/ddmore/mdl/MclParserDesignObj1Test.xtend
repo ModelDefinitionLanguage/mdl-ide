@@ -55,42 +55,42 @@ warfarin_design = desobj {
 		varlevel = bsv_lvl
 		arm1 : {
 		     	armSize = 10,
-		     	interventionSequence = {
+		     	interventionSequence = [
 		       	{
 		       		interventionList = dreg1,
 		       		start = epochStart,
 		       		end = epochEnd
 		      	}
-		     }
+		     ]
 		}
 		arm2 : {
 		     armSize = 20,
-		     interventionSequence = {
+		     interventionSequence = [
 		     	{
 		     		interventionList = dreg2,
 		       		start = epochStart,
 		       		end = epochEnd}
-		     }
+		     ]
 		}
 		arm3 : {
 		     armSize = 20,
-		     interventionSequence = {
+		     interventionSequence = [
 		     	{
 			       interventionList = dreg3,
 			       start = epochStart,
 			       end = epochEnd
 			     }
-		     }
+		     ]
 		}
 		arm4 : {
 		     armSize = 20,
-		     interventionSequence = {
+		     interventionSequence = [
 		     	{
 			       interventionList = dreg4,
 			       start = epochStart,
 			       end = epochEnd
 			     }
-		     }
+		     ]
 		}
 	}
 }
