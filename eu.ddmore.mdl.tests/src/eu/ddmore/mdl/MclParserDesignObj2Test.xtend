@@ -47,21 +47,21 @@ d1g=desobj{
 		sampPKPD : {type is complex, combination=[sampPK,sampPD]}
 	}
 	DESIGN_SPACES{
-		DS1 : { name=[dose1], element is amount, discrete=[10,100,200] }
-		DS2 : { name=[dose1], element is duration, range=[0.5, 2] }
-		DS3 : { name=[pkwin1,pdwin1], element is numberTimes, discrete=[1,2] }
-		DS4 : { name=[pkwin1,pdwin1], element is sampleTime, range=[0.25,2] }
-		DS5 : { name=[pkwin2,pdwin2], element is numberTimes, discrete=[0,1]}
-		DS6 : { name=[pkwin2,pdwin2], element is sampleTime, range=[12,16] }
-		DS7 : { name=[pkwin3,pdwin3], element is numberTimes, discrete=[1,2] }
-		DS8 : { name=[pkwin3,pdwin3], element is sampleTime, range=[24,36] }
-		DS9 : { name=[pkwin4,pdwin4], element is numberTimes, discrete=[1,2] }
-		DS10 : { name=[pkwin4,pdwin4], element is sampleTime, range=[48,144] }
-		DS11 : { name=[pkwin5,pdwin5], element is numberTimes, discrete=[0,1]}
-		DS12 : { name=[pkwin5,pdwin5], element is sampleTime, range=[144,156] }
-		DS13 : { name=[pkwin6,pdwin6], element is numberTimes, discrete=[0,1]}
-		DS14 : { name=[pkwin6,pdwin6], element is sampleTime, range=[168,180] }
-		DS15 : { name=[sampPK,sampPD], element is numberTimes, discrete=seq(4,8,1) }
+		DS1 : { admins=[dose1], element is amount, discrete=[10,100,200] }
+		DS2 : { admins=[dose1], element is duration, range=[0.5, 2] }
+		DS3 : { samples=[pkwin1,pdwin1], element is numberTimes, discrete=[1,2] }
+		DS4 : { samples=[pkwin1,pdwin1], element is sampleTime, range=[0.25,2] }
+		DS5 : { samples=[pkwin2,pdwin2], element is numberTimes, discrete=[0,1]}
+		DS6 : { samples=[pkwin2,pdwin2], element is sampleTime, range=[12,16] }
+		DS7 : { samples=[pkwin3,pdwin3], element is numberTimes, discrete=[1,2] }
+		DS8 : { samples=[pkwin3,pdwin3], element is sampleTime, range=[24,36] }
+		DS9 : { samples=[pkwin4,pdwin4], element is numberTimes, discrete=[1,2] }
+		DS10 : { samples=[pkwin4,pdwin4], element is sampleTime, range=[48,144] }
+		DS11 : { samples=[pkwin5,pdwin5], element is numberTimes, discrete=[0,1]}
+		DS12 : { samples=[pkwin5,pdwin5], element is sampleTime, range=[144,156] }
+		DS13 : { samples=[pkwin6,pdwin6], element is numberTimes, discrete=[0,1]}
+		DS14 : { samples=[pkwin6,pdwin6], element is sampleTime, range=[168,180] }
+		DS15 : { samples=[sampPK,sampPD], element is numberTimes, discrete=seq(4,8,1) }
 	}
 	STUDY_DESIGN{
 		totalSize=100

@@ -35,6 +35,7 @@ import static eu.ddmore.mdl.type.MclTypeProvider.*
 import java.util.ArrayList
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 
 public class MclTypeProvider {
 
@@ -175,12 +176,6 @@ public class MclTypeProvider {
 				ReferenceTypeInfo: elementType.isCompatible(otherType.elementType)
 				default: false
 			}
-//			if(otherType.isVector){
-//				elementType.isCompatible(otherType.elementType)				
-//			}
-//				compType.contains(otherType.theType) && this.vector == otherType.isVector
-//					&& if(this.reference) otherType.isReference else true
-//			else false
 		}
 		
 		override isCompatibleElement(TypeInfo otherElementType){
@@ -230,14 +225,14 @@ public class MclTypeProvider {
 		
 	}
 
-	@Data @FinalFieldsConstructor
+	@Data 
 	static class BuiltinEnumTypeInfo extends EnumTypeInfo{
 		List<String> expectedValues
-		
-//		new(String name, List<String> expectedValues){
-//			super(name)
-//			this.expectedValues = expectedValues
-//		}
+
+		new (String name, List<String> ev){
+			super(name)
+			this.expectedValues = new ArrayList<String>(ev)
+		}
 		
 	}
 

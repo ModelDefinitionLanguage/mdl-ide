@@ -3,11 +3,13 @@ package eu.ddmore.mdl.validation
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.ListTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import java.util.ArrayList
 import java.util.Collections
@@ -21,8 +23,6 @@ import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.mdl.EnumPair
-import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
 
 class ListDefinitionProvider {
 //	static val CATEGORIES_KWD = "categories"
@@ -297,11 +297,29 @@ class ListDefinitionProvider {
 		),
 		"DESIGN_SPACES" -> (
 			new BlockListDefinition => [
-				key = 'name'
+				key = 'element'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("DesignSpace", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('name', null, true, SAMPLING_TYPE.makeVector), new AttributeDefn('element', null, true, ELEMENT_TYPE),
-						 new AttributeDefn('discrete', null, false, MclTypeProvider::INT_TYPE.makeVector),
+					new ListDefinition => [ keyValue='amount' listType = new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List) attributes = #[
+						 new AttributeDefn('admins', null, true, ADMINISTRATION_TYPE.makeVector),
+						 new AttributeDefn('element', null, true, ELEMENT_TYPE),
+						 new AttributeDefn('discrete', null, false, MclTypeProvider::INT_TYPE.makeVector)
+						 ]
+					],
+					new ListDefinition => [ keyValue='duration' listType = new ListTypeInfo("DesignSpaceDur", PrimitiveType.List) attributes = #[
+						 new AttributeDefn('admins', null, true, ADMINISTRATION_TYPE.makeVector),
+						 new AttributeDefn('element', null, true, ELEMENT_TYPE),
+						 new AttributeDefn('range', null, false, MclTypeProvider::REAL_TYPE.makeVector)
+						 ]
+					],
+					new ListDefinition => [ keyValue='numberTimes' listType = new ListTypeInfo("DesignSpaceNum", PrimitiveType.List) attributes = #[
+						 new AttributeDefn('element', null, true, ELEMENT_TYPE),
+						 new AttributeDefn('samples', null, true, SAMPLING_TYPE.makeVector),
+						 new AttributeDefn('discrete', null, false, MclTypeProvider::INT_TYPE.makeVector)
+						 ]
+					],
+					new ListDefinition => [ keyValue='sampleTime' listType = new ListTypeInfo("DesignSpaceSample", PrimitiveType.List) attributes = #[
+						 new AttributeDefn('element', null, true, ELEMENT_TYPE),
+						 new AttributeDefn('samples', null, true, SAMPLING_TYPE.makeVector),
 						 new AttributeDefn('range', null, false, MclTypeProvider::REAL_TYPE.makeVector)
 						 ]
 					]

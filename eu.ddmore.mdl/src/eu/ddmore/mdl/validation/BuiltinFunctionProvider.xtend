@@ -7,8 +7,8 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
 import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
 import java.util.HashSet
 import java.util.List
