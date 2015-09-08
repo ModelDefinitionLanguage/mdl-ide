@@ -8,13 +8,13 @@ import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
-import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
 import java.util.HashSet
 import java.util.List
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
+
+import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 
@@ -58,10 +58,6 @@ class BuiltinFunctionProvider {
 	}
 	
 	
-	public static val TypeInfo FIX_EFF_SUBLIST = new SublistTypeInfo("fixEffAtts", #[new AttributeDefn('cov', null, true, MclTypeProvider::REAL_TYPE.makeReference),
-																					new AttributeDefn('coeff', null, true, MclTypeProvider::REAL_TYPE.makeReference)
-	])
-	
 	private static val Map<String, List<? extends FunctDefn>> functDefns = #{
 		'log' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'ln' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
@@ -78,7 +74,7 @@ class BuiltinFunctionProvider {
 					} ]					 ],
 		'linear' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'fixEff' -> new FunctionArgument(FIX_EFF_SUBLIST.makeVector, false),
+						'fixEff' -> new FunctionArgument(getSublist(FIX_EFF_SUBLIST).makeVector, false),
 						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]					],
 		'general' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{

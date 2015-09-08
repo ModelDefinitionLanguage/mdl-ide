@@ -14,6 +14,7 @@ import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
+import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
@@ -24,6 +25,9 @@ import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
+import eu.ddmore.mdl.validation.SublistDefinitionProvider
+import java.util.ArrayList
 import java.util.List
 import java.util.Map
 import java.util.Set
@@ -32,15 +36,12 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.type.MclTypeProvider.*
-import java.util.ArrayList
-import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 
 public class MclTypeProvider {
 
 	extension BuiltinFunctionProvider typeProvider = new BuiltinFunctionProvider
 	extension ListDefinitionProvider listProvider = new ListDefinitionProvider
+	extension SublistDefinitionProvider subListProvider = new SublistDefinitionProvider
 	
 
 	enum PrimitiveType {
@@ -289,9 +290,11 @@ public class MclTypeProvider {
 		String name
 		PrimitiveType theType
 		List<AttributeDefn> attributes
+		List<Map<String, Boolean>> nameSets 
 		
-		new(String name, List<AttributeDefn> attributes){
-			this(name, PrimitiveType.Sublist, new ArrayList<AttributeDefn>(attributes))
+		new(String name, List<AttributeDefn> attributes, List<Map<String, Boolean>> nameSets){
+			//@TODO copy nameset list properly
+			this(name, PrimitiveType.Sublist, new ArrayList<AttributeDefn>(attributes), nameSets)
 		}
 		
 		override getUnderlyingType(){
@@ -343,6 +346,7 @@ public class MclTypeProvider {
 	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector
 	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int).makeVector
 	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping)
+	public static val GENERIC_ENUM_VALUE_TYPE =  new EnumTypeInfo("GenericEnumValue")
 	
 	static val Map<PrimitiveType, Set<PrimitiveType>> compatibleTypes = #{
 		PrimitiveType.Deriv -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.Deriv },
@@ -412,7 +416,9 @@ public class MclTypeProvider {
 	}
 	
 	def TypeInfo getTypeForSublist(SubListExpression e){
-		BuiltinFunctionProvider::FIX_EFF_SUBLIST
+		// find attribute name and get the subtype from it.
+		val subListType = e.findSublistMatch ?: UNDEFINED_TYPE
+		return subListType
 	}
 	
 	def dispatch TypeInfo typeFor(Expression e){
@@ -617,8 +623,7 @@ public class MclTypeProvider {
 		} 
 	}
 
-	def checkAttributeTyping(ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
-		val attList = at.eContainer as AttributeList
+	def checkAttributeTyping(AttributeList attList, ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
 		val listDefn = attList.matchingListDefn
 		if(listDefn != null){
 			val attType = listDefn.getAttributeType(at.attributeName)
@@ -626,6 +631,15 @@ public class MclTypeProvider {
 				ValuePair:
 					checkExpectedAndExpression(attType, at.expression, errorLambda)				
 			}
+		}
+	}
+
+	def checkSublistAttributeTyping(SubListExpression it, ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
+		val subListDefn = findSublistMatch
+
+		if(subListDefn != null){
+			val attDefn = subListDefn.attributes.findFirst[name == at.attributeName]
+			checkExpectedAndExpression(attDefn.attType, at.expression, errorLambda)
 		}
 	}
 

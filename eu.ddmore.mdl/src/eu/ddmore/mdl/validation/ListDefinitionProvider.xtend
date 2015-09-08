@@ -9,7 +9,6 @@ import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.ListTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
-import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import java.util.ArrayList
 import java.util.Collections
@@ -23,10 +22,11 @@ import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import static extension eu.ddmore.mdl.validation.SublistDefinitionProvider.*
+
 
 class ListDefinitionProvider {
-//	static val CATEGORIES_KWD = "categories"
-	
+
 	static val USE_TYPE = new BuiltinEnumTypeInfo('use', #['covariate', 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore'])
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #['parameter', 'observation'])
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #['nonmemFormat'])
@@ -39,15 +39,15 @@ class ListDefinitionProvider {
 	
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
-	static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration", PrimitiveType.List)
-	static val SAMPLING_TYPE = new ListTypeInfo("Sampling", PrimitiveType.List)
+	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration", PrimitiveType.List)
+	public static val SAMPLING_TYPE = new ListTypeInfo("Sampling", PrimitiveType.List)
 
-	public static val TypeInfo INTERVENTION_SEQ_SUBLIST = new SublistTypeInfo("intSeqAtts", #[new AttributeDefn("interventionList", null, true, ADMINISTRATION_TYPE.makeReference.makeVector),
-																							new AttributeDefn("epochStart", null, true, MclTypeProvider::REAL_TYPE.makeVector),
-																							new AttributeDefn("epochEnd", null, true, MclTypeProvider::REAL_TYPE.makeVector)])
-	public static val TypeInfo SAMPLING_SEQ_SUBLIST = new SublistTypeInfo("sampSeqAtts", #[new AttributeDefn("samplingList", null, true, SAMPLING_TYPE.makeReference.makeVector),
-																							new AttributeDefn("start", null, true, MclTypeProvider::REAL_TYPE.makeVector),
-																							new AttributeDefn("end", null, true, MclTypeProvider::REAL_TYPE.makeVector)])
+//	public static val TypeInfo INTERVENTION_SEQ_SUBLIST = new SublistTypeInfo("intSeqAtts", #[new AttributeDefn("interventionList", null, true, ADMINISTRATION_TYPE.makeReference.makeVector),
+//																							new AttributeDefn("epochStart", null, true, MclTypeProvider::REAL_TYPE.makeVector),
+//																							new AttributeDefn("epochEnd", null, true, MclTypeProvider::REAL_TYPE.makeVector)])
+//	public static val TypeInfo SAMPLING_SEQ_SUBLIST = new SublistTypeInfo("sampSeqAtts", #[new AttributeDefn("samplingList", null, true, SAMPLING_TYPE.makeReference.makeVector),
+//																							new AttributeDefn("start", null, true, MclTypeProvider::REAL_TYPE.makeVector),
+//																							new AttributeDefn("end", null, true, MclTypeProvider::REAL_TYPE.makeVector)])
 
 	
 	// @TODO: need an addition set of validations to make sure that DVID is used if AMT has a define attribute
@@ -288,8 +288,8 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("StudyDesign", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('armSize', null, true, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('interventionSequence', null, true, INTERVENTION_SEQ_SUBLIST),
-						 new AttributeDefn('samplingSequence', null, false, SAMPLING_SEQ_SUBLIST)
+						 new AttributeDefn('interventionSequence', null, true, getSublist(INTERVENTION_SEQ_SUBLIST).makeVector),
+						 new AttributeDefn('samplingSequence', null, false, getSublist(SAMPLING_SEQ_SUBLIST).makeVector)
 						 ]
 					]
 				)

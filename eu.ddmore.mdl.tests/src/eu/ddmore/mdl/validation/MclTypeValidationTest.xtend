@@ -401,7 +401,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"argument 'coeff' expected value of type 'ref:Real' but was 'Real'"
+			"attribute 'coeff' expected value of type 'ref:Real' but was 'Real'."
 		)
 	}
 	
@@ -636,7 +636,7 @@ class MclTypeValidationTest {
 				pkwin2 : { type is simple, outcome=Conc, numberSamples = [0] }
 			}
 			DESIGN_SPACES{
-				DS3 : { name=[pkwin1,pkwin2], element is numberTimes, discrete = [1] }
+				DS3 : { samples=[pkwin1,pkwin2], element is numberTimes, discrete = [1] }
 			}
 		}
 	'''.parse
@@ -781,7 +781,7 @@ d1g=desobj{
 	SAMPLING{
 	}
 	DESIGN_SPACES{
-		DS1 : { name=[dose1], element is amount, discrete=[10,100,200] }
+		DS1 : { admins=[dose1], element is amount, discrete=[10,100,200] }
 	}
 	STUDY_DESIGN{
 	}
