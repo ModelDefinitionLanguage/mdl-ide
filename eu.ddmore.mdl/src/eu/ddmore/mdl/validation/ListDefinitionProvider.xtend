@@ -27,7 +27,7 @@ import static extension eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 class ListDefinitionProvider {
 
-	static val USE_TYPE = new BuiltinEnumTypeInfo('use', #['covariate', 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore'])
+	static val USE_TYPE = new BuiltinEnumTypeInfo('use', #['covariate', 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore', 'varlevel'])
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #['parameter', 'observation'])
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #['nonmemFormat'])
 	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo('cmpt', #['depot', 'compartment', 'elimination', 'transfer', 'distribution'])
@@ -119,6 +119,10 @@ class ListDefinitionProvider {
 					],
 					new ListDefinition => [keyValue='id' listType = new ListTypeInfo("Id", PrimitiveType.List) attributes = #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
+						 ] 
+					],
+					new ListDefinition => [keyValue='varlevel' listType = new ListTypeInfo("VarLevel", PrimitiveType.List) attributes = #[
+						 new AttributeDefn('varlevel', null, true, USE_TYPE)
 						 ] 
 					],
 					new ListDefinition => [keyValue='mdv' listType = new ListTypeInfo("Mdv", PrimitiveType.List) attributes = #[
@@ -435,7 +439,7 @@ class ListDefinitionProvider {
 		attributes.findFirst(ad | ad.name == attName) 
 	}
 	
-	def TypeInfo getTypeOfBuiltinEnum(EnumExpression ee){
+	def TypeInfo getTypeOfAttributeBuiltinEnum(EnumExpression ee){
 		val blockName = ee.owningBlock.identifier
 		val enumValue = ee.convertToString
 		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
@@ -642,15 +646,17 @@ class ListDefinitionProvider {
 	}
 
 	def checkCategoryDefinitionWellFormed(EnumPair ep, () => void unexpectedCatDefnErrorLambda, () => void missingCatErrorLambda){
-		val attList = ep.eContainer as AttributeList
-		val listDefn = attList.matchingListDefn
-		val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
-		val mappingExpr = ep.expression as EnumExpression
-		if(attDefn.isCatMappingMandatory && mappingExpr.catDefn == null){
-			missingCatErrorLambda.apply
-		}
-		else if(!attDefn.isCatMappingPossible && mappingExpr.catDefn != null){
-			unexpectedCatDefnErrorLambda.apply
+		if(ep.eContainer instanceof AttributeList){
+			val attList = ep.eContainer as AttributeList
+			val listDefn = attList.matchingListDefn
+			val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
+			val mappingExpr = ep.expression as EnumExpression
+			if(attDefn.isCatMappingMandatory && mappingExpr.catDefn == null){
+				missingCatErrorLambda.apply
+			}
+			else if(!attDefn.isCatMappingPossible && mappingExpr.catDefn != null){
+				unexpectedCatDefnErrorLambda.apply
+			}
 		}
 	}
 

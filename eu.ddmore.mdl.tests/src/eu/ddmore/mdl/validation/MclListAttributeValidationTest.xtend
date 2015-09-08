@@ -301,7 +301,7 @@ foo = mdlobj {
    }# end RANDOM_VARIABLE_DEFINITION (level=ID)
 
    INDIVIDUAL_VARIABLES{
-      CL = linear(pop = POP_CL, fixEff = [{coeff=POP_BETA_CL_WT, covariate=WT}] , ranEff = eta_PPV_CL)
+      CL = linear(pop = POP_CL, fixEff = [{coeff=POP_BETA_CL_WT, cov=WT}] , ranEff = eta_PPV_CL)
    }# end INDIVIDUAL_VARIABLES
 } 
 		'''.parse
@@ -355,14 +355,14 @@ foo = mdlobj {
 } 
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
-			MdlValidator::UNRECOGNIZED_LIST_ATT,
-			"attribute 'foobar' is not recognised in this context"
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument 'fixEff' expected value of type 'vector:Sublist:fixEffAtts' but was 'vector:Undefined'."
 		)
-		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
-			MdlValidator::MANDATORY_LIST_ATT_MISSING,
-			"mandatory attribute 'categories' is missing"
-		)
+//		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
+//			MdlValidator::MANDATORY_LIST_ATT_MISSING,
+//			"mandatory attribute 'categories' is missing"
+//		)
 	}
 
 }

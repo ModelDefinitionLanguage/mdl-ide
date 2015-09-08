@@ -168,7 +168,7 @@ class MclBuiltinFunctionValidationTest {
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
-				Cl = linear(pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, covariate=logtWT}], ranEff = ETA_CL)
+				Cl = linear(pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}], ranEff = ETA_CL)
 			}
 		}'''.parse
 		
@@ -413,8 +413,8 @@ class MclBuiltinFunctionValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
-			MdlValidator::UNRECOGNIZED_LIST_ATT,
-			"attribute name 'co' is not recognised."
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument 'fixEff' expected value of type 'vector:Sublist:fixEffAtts' but was 'vector:Undefined'."
 		)
 	}
 	

@@ -24,9 +24,9 @@ class SublistDefinitionProvider {
 																   		#{COEFF.name -> true, CAT_COV.name -> true}
 																   ])),
 		INTERVENTION_SEQ_SUBLIST -> (new SublistTypeInfo(INTERVENTION_SEQ_SUBLIST, #[new AttributeDefn("interventionList", null, true, ListDefinitionProvider::ADMINISTRATION_TYPE.makeReference.makeVector),
-											new AttributeDefn("epochStart", null, true, MclTypeProvider::REAL_TYPE.makeVector),
-											new AttributeDefn("epochEnd", null, true, MclTypeProvider::REAL_TYPE.makeVector)],
-											#[#{'interventionList' -> true, 'epochStart' -> false, 'epochEnd' -> false}])),
+											new AttributeDefn("start", null, true, MclTypeProvider::REAL_TYPE.makeVector),
+											new AttributeDefn("end", null, true, MclTypeProvider::REAL_TYPE.makeVector)],
+											#[#{'interventionList' -> true, 'start' -> false, 'end' -> false}])),
 		SAMPLING_SEQ_SUBLIST -> (new SublistTypeInfo(SAMPLING_SEQ_SUBLIST, #[new AttributeDefn("samplingList", null, true, ListDefinitionProvider::SAMPLING_TYPE.makeReference.makeVector),
 												new AttributeDefn("start", null, true, MclTypeProvider::REAL_TYPE.makeVector),
 												new AttributeDefn("end", null, true, MclTypeProvider::REAL_TYPE.makeVector)],

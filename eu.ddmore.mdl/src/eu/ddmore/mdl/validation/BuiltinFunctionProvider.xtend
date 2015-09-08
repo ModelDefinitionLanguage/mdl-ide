@@ -15,8 +15,13 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
-
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+
+import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.mdl.EnumExpression
+import java.util.HashMap
+import org.eclipse.xtext.EcoreUtil2
 
 class BuiltinFunctionProvider {
 	
@@ -57,6 +62,7 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
+	static val TRANS_TYPE = new BuiltinEnumTypeInfo('type', #['none', 'ln', 'logit', 'probit'])
 	
 	private static val Map<String, List<? extends FunctDefn>> functDefns = #{
 		'log' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
@@ -73,11 +79,13 @@ class BuiltinFunctionProvider {
 						'var' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]					 ],
 		'linear' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'fixEff' -> new FunctionArgument(getSublist(FIX_EFF_SUBLIST).makeVector, false),
 						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]					],
 		'general' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'grp' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ] ],
@@ -99,10 +107,43 @@ class BuiltinFunctionProvider {
 						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'eps1' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false),
 						'eps2' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
+					} ] ],
+		'additiveError' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
 					} ] ]
 	}
 
+	val Map<String, Map<String, ? extends TypeInfo>> attEnumTypes
+
+	new(){
+		attEnumTypes = new HashMap<String, Map<String, ? extends TypeInfo>>
+		buildEnumTypes
+	}
 	
+	private def buildEnumTypes(){
+		for(blkName : functDefns.keySet){
+			val valueMap = new HashMap<String, BuiltinEnumTypeInfo>
+			attEnumTypes.put(blkName, valueMap)
+			val bd = functDefns.get(blkName)
+			for(a : bd){
+				if(a instanceof NamedArgFuncDefn){
+					val nfd = a as NamedArgFuncDefn 
+				for(att : nfd.arguments.values){
+					if(att.expectedType instanceof BuiltinEnumTypeInfo){
+						val builtinType = att.expectedType as BuiltinEnumTypeInfo
+						for(v : builtinType.expectedValues){
+							valueMap.put(v, builtinType)
+						}
+					}
+				}
+				}
+			}
+		}
+		attEnumTypes
+	} 
+
 	def getTransformFunctionType(String fName){
 		val defns = functDefns.get(fName)
 		if(defns != null)
@@ -248,5 +289,13 @@ class BuiltinFunctionProvider {
 			
 		}
 	}
-	
+
+	def TypeInfo getTypeOfFunctionBuiltinEnum(EnumExpression ee){
+		val funct = EcoreUtil2.getContainerOfType(ee, BuiltinFunctionCall)
+		val blockName = funct.func
+		val enumValue = ee.convertToString
+		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
+		defnType
+	}
+		
 }

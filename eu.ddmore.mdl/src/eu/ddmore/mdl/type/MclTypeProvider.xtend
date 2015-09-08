@@ -226,6 +226,22 @@ public class MclTypeProvider {
 		
 	}
 
+	@Data @FinalFieldsConstructor
+	static class GenericEnumTypeInfo extends EnumTypeInfo{
+		
+		new(){
+			super("generic")
+		}
+		
+		override isCompatible(TypeInfo otherType){
+			switch(otherType){
+				EnumTypeInfo: true
+				default: false 
+			}
+		}
+		
+	}
+
 	@Data 
 	static class BuiltinEnumTypeInfo extends EnumTypeInfo{
 		List<String> expectedValues
@@ -346,7 +362,7 @@ public class MclTypeProvider {
 	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector
 	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int).makeVector
 	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping)
-	public static val GENERIC_ENUM_VALUE_TYPE =  new EnumTypeInfo("GenericEnumValue")
+	public static val GENERIC_ENUM_VALUE_TYPE =  new GenericEnumTypeInfo
 	
 	static val Map<PrimitiveType, Set<PrimitiveType>> compatibleTypes = #{
 		PrimitiveType.Deriv -> #{ PrimitiveType.Real, PrimitiveType.Int, PrimitiveType.Deriv },
@@ -428,8 +444,8 @@ public class MclTypeProvider {
 			CategoryValueReference:
 				e.ref.typeFor.makeReference
 			ParExpression: e.expr.typeFor
-			EnumExpression:
-				e.typeOfBuiltinEnum
+//			EnumExpression:
+//				e.typeOfBuiltinEnum
 			BuiltinFunctionCall:
 				e.functionType
 			VectorElement:
@@ -441,6 +457,16 @@ public class MclTypeProvider {
 				e.typeForSublist 
 			default:
 				typeTable.get(e.eClass) ?: MclTypeProvider.UNDEFINED_TYPE
+		}
+	}
+	
+	def dispatch TypeInfo typeFor(EnumExpression e){
+		val parent = EcoreUtil2.getContainerOfType(e, BuiltinFunctionCall)
+		if(parent != null){
+			e.typeOfFunctionBuiltinEnum
+		}
+		else{
+			e.typeOfAttributeBuiltinEnum
 		}
 	}
 

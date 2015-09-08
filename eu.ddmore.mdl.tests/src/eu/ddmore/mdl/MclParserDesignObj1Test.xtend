@@ -57,9 +57,9 @@ warfarin_design = desobj {
 		     	armSize = 10,
 		     	interventionSequence = [
 		       	{
-		       		interventionList = dreg1,
-		       		start = epochStart,
-		       		end = epochEnd
+		       		interventionList = [dreg1],
+		       		start = [epochStart],
+		       		end = [epochEnd]
 		      	}
 		     ]
 		}
@@ -67,18 +67,18 @@ warfarin_design = desobj {
 		     armSize = 20,
 		     interventionSequence = [
 		     	{
-		     		interventionList = dreg2,
-		       		start = epochStart,
-		       		end = epochEnd}
+		     		interventionList = [dreg2],
+		       		start = [epochStart],
+		       		end = [epochEnd]}
 		     ]
 		}
 		arm3 : {
 		     armSize = 20,
 		     interventionSequence = [
 		     	{
-			       interventionList = dreg3,
-			       start = epochStart,
-			       end = epochEnd
+			       interventionList = [dreg3],
+			       start = [epochStart],
+			       end = [epochEnd]
 			     }
 		     ]
 		}
@@ -86,9 +86,9 @@ warfarin_design = desobj {
 		     armSize = 20,
 		     interventionSequence = [
 		     	{
-			       interventionList = dreg4,
-			       start = epochStart,
-			       end = epochEnd
+			       interventionList = [dreg4],
+			       start = [epochStart],
+			       end = [epochEnd]
 			     }
 		     ]
 		}
