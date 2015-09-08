@@ -71,7 +71,7 @@ class BlockArgumentDefinitionProvider {
 	
 
 	// properties to blocks and MclObjects go here 
-	static val blkArgPropNames = #{ 
+	static val Map<String, Map<String, Map<String, Boolean>>> blkArgPropNames = #{ 
 		MdlValidator::MDLOBJ -> #{
 			'RANDOM_VARIABLE_DEFINITION' -> #{ 'level' -> true }
 		},
