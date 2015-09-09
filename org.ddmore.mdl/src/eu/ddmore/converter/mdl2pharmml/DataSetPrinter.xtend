@@ -22,6 +22,10 @@ import org.ddmore.mdl.types.DistributionType
 import org.ddmore.mdl.mdl.NonContinuousType
 import org.ddmore.mdl.mdl.ModelPredictionBlockStatement
 import org.ddmore.mdl.mdl.List
+import java.util.Collections
+
+import static extension eu.ddmore.converter.mdlprinting.MdlPrinter.*
+
 
 class DataSetPrinter {
 	protected extension MdlPrinter mdlPrinter = MdlPrinter::getInstance();
@@ -542,6 +546,36 @@ class DataSetPrinter {
 			return null;
 		}
 
+		def isARegressor(SymbolDeclaration sd, ModelObject mObj){
+			// go through model object and see if we can identify 			
+			for(blk : mObj.blocks){
+				if(blk.individualVariablesBlock != null){
+					for(symbDec : blk.individualVariablesBlock.variables){
+						if(symbDec.list != null){
+							for(arg : symbDec.list.arguments?.namedArguments?.arguments ?: Collections::emptyList){
+								if(AttributeValidator::attr_fixEff.name == arg?.argumentName?.name){
+									// fixEff found
+									val subList = arg.expression?.expression?.list
+									if(subList != null){
+										// now look a matching cov
+										for(subListArg : subList?.arguments?.namedArguments?.arguments ?: Collections::emptyList){
+											if(AttributeValidator::attr_cov.name == subListArg?.argumentName?.name){
+												// match the cov att so lets see if it uses this var name
+												if(subListArg?.expression?.expression?.toStr?:"" == sd.symbolName.name) return false
+											}
+										}
+									}
+								}
+							}
+						}
+					}					
+				}
+			}
+			
+			return true
+		}
+
+
 		protected def print_ds_DataSet(DataObject dObj, ModelObject mObj, MOGObject mog) {
 			var res = "";
 			var k = 1;
@@ -557,7 +591,7 @@ class DataSetPrinter {
 						}
 						var convertedColType = "undefined"
 						if (columnType != null && (UseType::ID.toString == columnType || column.isUsedInModel(mog, mObj))) {
-							convertedColType = column.convertEnum(dosingToCompartmentMacro);
+							convertedColType = column.convertEnum(dosingToCompartmentMacro, isARegressor(column, mObj));
 						}
 						val valueType = column.getValueType
 						res = res +
@@ -590,12 +624,13 @@ class DataSetPrinter {
 	}
 	
 	//use option names
-	def convertEnum(SymbolDeclaration columnDefn, boolean isDosingToCompartmentMacro) {
+	def convertEnum(SymbolDeclaration columnDefn, boolean isDosingToCompartmentMacro, boolean isRegressor) {
 		val type = columnDefn.getColumnType
 		
 		switch (type) {
 			case UseType::AMT.toString     : "dose"
 			case UseType::DVID.toString   : "dvid"
+			case UseType::COVARIATE.toString: if(isRegressor) "reg" else "covariate"
 //			case UseType::CENS.toString    : "censoring"
 			case UseType::VARLEVEL.toString: "occasion"
 			//case UseType::ITYPE.toString   : "dvid"		//case UseType::OCC.toString     : "occasion"

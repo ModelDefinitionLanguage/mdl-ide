@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Sdk
+Bundle-SymbolicName: org.ddmore.mdl.sdk
+Bundle-Version: 1.0.0.qualifier
