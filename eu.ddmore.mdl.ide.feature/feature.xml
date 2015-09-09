@@ -72,11 +72,11 @@
          version="0.0.0"/>
 
    <includes
-         id="org.ddmore.mdl.sdk"
+         id="eu.ddmore.mdl.sdk"
          version="0.0.0"/>
 
    <includes
-         id="org.ddmore.mdl.sdk.jre"
+         id="eu.ddmore.mdl.sdk.jre"
          version="0.0.0"/>
 
    <includes

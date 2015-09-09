@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.ddmore.mdl.sdk.jre"
+      id="eu.ddmore.mdl.sdk.jre"
       label="%label"
       version="1.0.3"
       provider-name="%provider">

@@ -11,13 +11,13 @@
 		<version>1.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>org.ddmore.mdl.ui</artifactId>
+	<artifactId>eu.ddmore.mdl.ui</artifactId>
 	<packaging>eclipse-plugin</packaging>
 	
     <dependencies>
         <dependency>
             <groupId>eu.ddmore</groupId>
-            <artifactId>org.ddmore.mdl</artifactId>
+            <artifactId>eu.ddmore.mdl</artifactId>
             <version>1.3.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

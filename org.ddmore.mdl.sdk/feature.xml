@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.ddmore.mdl.sdk"
+      id="eu.ddmore.mdl.sdk"
       label="%label"
       version="1.3.0.qualifier"
       provider-name="%provider">
@@ -77,14 +77,14 @@
    </requires>
 
    <plugin
-         id="org.ddmore.mdl"
+         id="eu.ddmore.mdl"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.ddmore.mdl.ui"
+         id="eu.ddmore.mdl.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
