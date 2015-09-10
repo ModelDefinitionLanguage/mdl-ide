@@ -363,7 +363,7 @@
 					<artifactId>fornax-oaw-m2-plugin</artifactId>
 					<version>${fornax.version}</version>
 					<configuration>
-						<workflowDescriptor>file://${basedir}/src/org/ddmore/mdl/GenerateMdl.mwe2</workflowDescriptor>
+						<workflowDescriptor>file://${basedir}/src/eu/ddmore/mdl/GenerateMdl.mwe2</workflowDescriptor>
 						<workflowEngine>mwe2</workflowEngine>
 						<jvmSettings>
 							<fork>true</fork>
