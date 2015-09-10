@@ -3,8 +3,10 @@ package org.ddmore.mdl.validation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.ddmore.mdl.mdl.CovariateDefinitionBlock;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
+import org.ddmore.mdl.mdl.DeclaredVariablesBlock;
 import org.ddmore.mdl.mdl.ExpressionDeclaration;
 import org.ddmore.mdl.mdl.ImportObjectBlock;
 import org.ddmore.mdl.mdl.ImportObjectStatement;
@@ -14,8 +16,10 @@ import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.ModelObject;
 import org.ddmore.mdl.mdl.ModelObjectBlock;
+import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
 import org.ddmore.mdl.mdl.ParameterObject;
 import org.ddmore.mdl.mdl.ParameterObjectBlock;
+import org.ddmore.mdl.mdl.PkMacroStatement;
 import org.ddmore.mdl.mdl.ReferenceDeclaration;
 import org.ddmore.mdl.mdl.SymbolDeclaration;
 import org.ddmore.mdl.mdl.SymbolRef;
@@ -32,11 +36,12 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 	public final static String MSG_PARAM_OBJ_MISSING = "MOG should include a parameter object";
 	public final static String MSG_TASK_OBJ_MISSING  = "MOG should include a task object";
 	public final static String MSG_OBJ_DEFINED          = "Cannot create a MOG";
-	public final static String MSG_MODEL_DATA_MISMATCH  = "Inconsistent sets of model/data variables";
+	public final static String MSG_MODEL_DATA_MISMATCH  = "Inconsistent model and data variable";
 	public final static String MSG_STRUCTURAL_MISMATCH  = "Inconsistent sets of structural parameters";
 	public final static String MSG_VARIABILITY_MISMATCH = "Inconsistent sets of variability parameters";
 	public final static String MSG_MOG_FILE_NOT_FOUND   = "Cannot find MDL file: path may be incorrect";
 	public final static String MSG_MOG_OBJECT_NOT_FOUND = "Incorrect reference to an MDL object";
+	public static final String MSG_MODEL_DATA_COLUMN_MASK = "Data column hidden";
 
 	@Override
     @Inject
@@ -142,53 +147,134 @@ public class MOGValidator extends AbstractDeclarativeValidator{
 	//MODEL_INPUT_VARIABLES \in COVARIATE and VARIABILITY
 	private void validateMOG_Model_vs_Data(ModelObject mObj, DataObject dObj, MOGObject mog){
 		List<String> dVars = new ArrayList<String>();
+		DeclaredVariablesBlock dvb = null;
+		// find data variables
 		for (DataObjectBlock b: dObj.getBlocks()){
-			if (b.getDataInputBlock() != null)
+			if (b.getDataInputBlock() != null){
 				for (ListDeclaration s: b.getDataInputBlock().getVariables())
 					if (s.getName() != null) dVars.add(s.getName());
-			if (b.getDataDerivedBlock() != null)
+			}
+			else if (b.getDataDerivedBlock() != null){
 				for (ExpressionDeclaration s: b.getDataDerivedBlock().getVariables())
 					if (s.getName() != null) dVars.add(s.getName());
-			if (b.getDeclaredVariables() != null)
-				for (ReferenceDeclaration s: b.getDeclaredVariables().getVariables())
+			}
+			else if (b.getDeclaredVariables() != null){
+				dvb = b.getDeclaredVariables();
+				for (ReferenceDeclaration s: dvb.getVariables())
 					if (s.getName() != null) dVars.add(s.getName());
+			}
 
 		}
+		CovariateDefinitionBlock covBlock = null;
+		// match model variables
+		List<SymbolDeclaration> stmts = new ArrayList<SymbolDeclaration>();
 		for (ModelObjectBlock b: mObj.getBlocks()){
 			if (b.getCovariateBlock() != null){
-				for (SymbolDeclaration s: b.getCovariateBlock().getVariables()){
+				covBlock = b.getCovariateBlock();
+				for (SymbolDeclaration s: covBlock.getVariables()){
 					//Math only unassigned covariates
-					if (s.getName() != null && s.getExpression() == null) {
-//						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
-//						if (dVarName == null) dVarName = s.getSymbolName().getName();
-						String dVarName = s.getName();
-						if (!dVars.contains(dVarName))
-							error(MSG_MODEL_DATA_MISMATCH + 
-								": no mapping for model variable " + s.getName() + " found in " + 
-								Utils.getObjectName(dObj) + " object", 
+					if (s.getName() != null){
+						if (s.getExpression() != null){
+							// covs without RHS
+							if (dVars.contains(s.getName())){
+								warning(MSG_MODEL_DATA_COLUMN_MASK + 
+									": transformed covariate " + s.getName() + " masks data column found in " +
+									Utils.getObjectName(dObj) + " object", 
+									MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
+									MSG_MODEL_DATA_MISMATCH,  mog.getIdentifier());
+								dVars.remove(s.getName());
+							}
+							else{
+								stmts.add(s);
+							}
+						}
+					}
+				}
+			}
+//			else if(b.getIndependentVariableBlock() != null){
+//				
+//			}
+//			else if(b.getGroupVariablesBlock() != null){
+//				
+//			}
+			else if(b.getModelPredictionBlock() != null){
+				for(ModelPredictionBlockStatement mps : b.getModelPredictionBlock().getStatements()){
+					if(mps.getVariable() != null){
+						stmts.add(mps.getVariable());
+					}
+					else if(mps.getOdeBlock() != null){
+						stmts.addAll(mps.getOdeBlock().getVariables());
+					}
+					else if(mps.getPkMacroBlock() != null){
+						for(PkMacroStatement pms : mps.getPkMacroBlock().getStatements()){
+							if(pms.getVariable() != null){
+								stmts.add(pms.getVariable());
+							}
+						}
+					}
+				}
+			}
+			else if(b.getObservationBlock() != null){
+				stmts.addAll(b.getObservationBlock().getVariables());
+			}
+//			else if(b.getRandomVariableDefinitionBlock() != null){
+//				
+//			}
+//			else if(b.getStructuralParametersBlock() != null){
+//				
+//			}
+			else if(b.getVariabilityBlock() != null){
+				stmts.addAll(b.getVariabilityBlock().getVariables());
+			}
+//			else if(b.getVariabilityParametersBlock() != null){
+//				
+//			}
+		}
+		matchModelAndDataVariables(stmts, dVars, dObj, mog);
+//		// check that not DofE
+//		if(covBlock != null && !dVars.isEmpty()){
+//			for (SymbolDeclaration s: covBlock.getVariables()){
+//				if (s.getName() != null && s.getExpression() == null){
+//					// covs without RHS
+//					if(dVars.contains(s.getName())){
+//						warning(MSG_MODEL_DATA_COLUMN_MASK + 
+//								": transformed covariate " + s.getName() + " masks data column found in " + 
+//								Utils.getObjectName(dObj).getName() + " object", 
+//								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
+//								MSG_MODEL_DATA_MISMATCH,  mog.getIdentifier());
+//					}
+//				}
+//			}
+//		}
+		if (dvb != null && !dVars.isEmpty()){
+			for (SymbolDeclaration s: dvb.getVariables()){
+				if (s.getName() != null){
+					if(dVars.contains(s.getName())){
+						error(MSG_MODEL_DATA_MISMATCH + 
+								": the data variable " + s.getName() + " cannot be found in the model object " + 
+								Utils.getObjectName(mObj).getName() , 
 								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
 								MSG_MODEL_DATA_MISMATCH,  mog.getIdentifier());
 					}
 				}
 			}
-			if (b.getVariabilityBlock() != null){
-				for (SymbolDeclaration s: b.getVariabilityBlock().getVariables()){
-					if (s.getName() != null) {
-//						String dVarName = Utils.getMatchingVariable(mog, s.getSymbolName());
-//						if (dVarName == null) dVarName = s.getSymbolName().getName();
-						String dVarName = s.getName();
-						if (!dVars.contains(dVarName))
-							error(MSG_MODEL_DATA_MISMATCH + 
-								": no mapping for model variable " + s.getName() + " found in " + 
-								Utils.getObjectName(dObj) + " object", 
-								MdlPackage.Literals.MOG_OBJECT__IDENTIFIER,
-								MSG_MODEL_DATA_MISMATCH,  mog.getIdentifier());
-					}
+		}
+		
+	}
+	
+	
+	private void matchModelAndDataVariables(List<SymbolDeclaration> variables, List<String> dVars, DataObject dObj, MOGObject mog) {
+		for (SymbolDeclaration s: variables){
+			if (s.getName() != null) {
+				String dVarName = s.getName();
+				if (dVars.contains(dVarName)){
+					dVars.remove(dVarName);
 				}
 			}
 		}
 	}
-	
+
+
 	//STRUCTURAL vs. STRUCTURAL_PARAMETERS
 	private void validateMOG_Structural_Model_vs_Parameter(ModelObject mObj, ParameterObject pObj, MOGObject mog){
 		List<String> structuralVars = new ArrayList<String>();
