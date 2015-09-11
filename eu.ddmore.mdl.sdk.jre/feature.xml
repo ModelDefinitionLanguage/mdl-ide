@@ -4,7 +4,12 @@
       label="%label"
       version="1.0.2"
       provider-name="%provider">
-
+	<!-- Note that the version number of this Feature is deliberately fixed (i.e. not having a .qualifier suffix)
+	     since otherwise the Feature will attempt to be updated each time an update is performed within the MDL IDE
+	     and this will fail due to the JRE being in use (by the MDL IDE itself) and thus not replaceable by the
+	     update process (even if the JRE hasn't physically changed; the contents of a Feature are always replaced
+	     by the P2 update). -->
+	     
    <description>
       %description
    </description>
