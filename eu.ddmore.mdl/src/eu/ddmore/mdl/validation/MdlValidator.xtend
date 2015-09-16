@@ -410,4 +410,9 @@ class MdlValidator extends AbstractMdlValidator {
 		}
 	}
 	
+	
+	def validateMog(MogValidator mogBuilder){
+		
+	}
+	
 }

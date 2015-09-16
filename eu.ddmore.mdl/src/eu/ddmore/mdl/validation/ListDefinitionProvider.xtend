@@ -27,7 +27,9 @@ import static extension eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 class ListDefinitionProvider {
 
-	static val USE_TYPE = new BuiltinEnumTypeInfo('use', #['covariate', 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore', 'varlevel'])
+	public static val COV_USE_VALUE = 'covariate'
+
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #[COV_USE_VALUE, 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore', 'varlevel'])
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #['parameter', 'observation'])
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #['nonmemFormat'])
 	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo('cmpt', #['depot', 'compartment', 'elimination', 'transfer', 'distribution'])

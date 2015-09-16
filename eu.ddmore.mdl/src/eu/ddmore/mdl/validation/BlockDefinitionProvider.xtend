@@ -6,15 +6,19 @@ import java.util.HashSet
 import java.util.Map
 
 class BlockDefinitionProvider {
+	public static val COVARIATE_BLK_NAME = "COVARIATES"
+	public static val DIV_BLK_NAME = "DATA_INPUT_VARIABLES"
+	
+	
 	val static Map<String, Map<String, Boolean> > BlkData = #{
 		MdlValidator::MDLOBJ -> #{
-			"COVARIATES" -> false, "VARIABILITY_LEVELS" -> true, "STRUCTURAL_PARAMETERS" -> false,
+			COVARIATE_BLK_NAME -> false, "VARIABILITY_LEVELS" -> true, "STRUCTURAL_PARAMETERS" -> false,
 			"VARIABILITY_PARAMETERS" -> false, "RANDOM_VARIABLE_DEFINITION" -> false,
 			"INDIVIDUAL_VARIABLES" -> false, "MODEL_PREDICTION" -> false,
 			"OBSERVATION" -> false, "GROUP_VARIABLES" -> false, "IDV" -> false
 		},
 		MdlValidator::DATAOBJ -> #{
-			"DATA_INPUT_VARIABLES" -> true, "DECLARED_VARIABLES" -> false, "DATA_DERIVED_VARIABLES" -> false,
+			DIV_BLK_NAME -> true, "DECLARED_VARIABLES" -> false, "DATA_DERIVED_VARIABLES" -> false,
 			"SOURCE" -> true
 		},
 		MdlValidator::PARAMOBJ -> #{
