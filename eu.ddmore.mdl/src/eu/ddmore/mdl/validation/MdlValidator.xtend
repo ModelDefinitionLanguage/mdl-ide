@@ -100,6 +100,9 @@ class MdlValidator extends AbstractMdlValidator {
 	// Type validation
 	public static val INCOMPATIBLE_TYPES = "eu.ddmore.mdl.validation.IncompatibleTypes"
 
+	// MOG validation
+	public static val MODEL_DATA_MISMATCH = "eu.ddmore.mdl.validation.mog.mismatch_mod_data"
+
 	private static val VALID_OBJECT_TYPES = #[ MDLOBJ, PARAMOBJ, TASKOBJ, DATAOBJ, MOGOBJ, DESIGNOBJ ]
 
 	def void setFoo(){}

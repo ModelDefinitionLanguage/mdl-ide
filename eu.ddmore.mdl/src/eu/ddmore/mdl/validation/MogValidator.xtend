@@ -42,14 +42,14 @@ class MogValidator {
 	}
 	
 	
-	def validateForEstimation((String) => void errorLambda){
+	def validateForEstimation((String, String) => void errorLambda){
 		if(!isReadyToValidate) throw new IllegalStateException("Class is not properly initialised")
 		
 		validateCovariates(errorLambda)
 	}
 	
 	
-	def validateCovariates((String) => void errorLambda){
+	def validateCovariates((String, String) => void errorLambda){
 		val expectedMdlCovars = new ArrayList<SymbolDefinition>
 		
 		mdlObj.mdlCovariateDefns.forEach[
@@ -62,10 +62,10 @@ class MogValidator {
 		for(mdlCov : expectedMdlCovars){
 			val dataCovar = dataCovars.findFirst[name == mdlCov.name]
 			if(dataCovar == null){
-				errorLambda.apply("covariate " + mdlCov +" has no match in dataObj");
+				errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "covariate " + mdlCov +" has no match in dataObj");
 			}
 			else if(!mdlCov.typeFor.isCompatible(dataCovar.typeFor)){
-				errorLambda.apply("covariate " + mdlCov +" has an inconsistent type with its match in the dataObj");
+				errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "covariate " + mdlCov +" has an inconsistent type with its match in the dataObj");
 			}
 		}
 	}

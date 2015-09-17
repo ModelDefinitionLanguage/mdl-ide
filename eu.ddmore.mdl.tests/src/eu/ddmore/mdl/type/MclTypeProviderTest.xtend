@@ -99,9 +99,18 @@ class MclTypeProviderTest {
 	@Test
 	def void testRelationalOpWithEnums(){
 		val actual = createDummyEnumRef("tst", "tst1")
-		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
+		val rhs = createDummyEnumRef("tst", "tst1") MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
 		actual.checkRelationalOp(rhs, errorFunc, errorFunc)
+	}
+
+	@Test
+	def void testRelationalOpWithIncompatibleEnums(){
+		val actual = createDummyEnumRef("tst", "tst1")
+		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(new EnumTypeInfo("tst", #{"tst1"}).makeReference) a.assertEquals(new EnumTypeInfo("tst", #{"tst2"}).makeReference)]
+		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
 	@Test
@@ -109,7 +118,7 @@ class MclTypeProviderTest {
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(MclTypeProvider::REAL_TYPE) a.assertEquals(new EnumTypeInfo("tst").makeReference)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(MclTypeProvider::REAL_TYPE) a.assertEquals(new EnumTypeInfo("tst", #{"tst2"}).makeReference)]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
@@ -118,7 +127,7 @@ class MclTypeProviderTest {
 		val actual = createDummyEnumRef("tst", "tst1")
 		val rhs = MdlFactory::eINSTANCE.createRealLiteral
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(new EnumTypeInfo("tst").makeReference) a.assertEquals(MclTypeProvider::REAL_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(new EnumTypeInfo("tst", #{"tst1"}).makeReference) a.assertEquals(MclTypeProvider::REAL_TYPE)]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 

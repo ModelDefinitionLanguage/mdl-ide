@@ -543,7 +543,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected vector:Real type, but was vector:ref:List:Sampling."
+			"Expected vector:Real type, but was vector:ref:List:SimpleSampling."
 		)
 	}
 	
@@ -615,7 +615,7 @@ class MclTypeValidationTest {
 	'''.parse
 		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Element type 'Real' is incompatible with vector type 'Vector:List:Sampling'."
+			"Element type 'Real' is incompatible with vector type 'Vector:List:SimpleSampling'."
 		)
 	}
 	
@@ -693,6 +693,90 @@ class MclTypeValidationTest {
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Expected ref:Enum:SEX type, but was Int."
+		)
+	}
+	
+	@Test
+	def void testInValidInconsistentEnumExpressionSameCats(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			COVARIATES{
+				SEX withCategories {male, female}
+				SEX2 withCategories {male, female}
+			}
+		
+			
+			MODEL_PREDICTION{
+				V = if(SEX == SEX2.male) then 1 else 0
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected ref:Enum:SEX type, but was ref:Enum:SEX2."
+		)
+	}
+	
+	@Test
+	def void testInValidInconsistentEnumExpressionDiffCats(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			COVARIATES{
+				SEX withCategories {male, female}
+				SEX2 withCategories {male1, female2}
+			}
+		
+			
+			MODEL_PREDICTION{
+				V = if(SEX == SEX2.female2) then 1 else 0
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected ref:Enum:SEX type, but was ref:Enum:SEX2."
+		)
+	}
+	
+	@Test
+	def void testInValidInconsistentEnumExpressionNoCatValues(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlobj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			COVARIATES{
+				SEX withCategories {male, female}
+				SEX2 withCategories {male1, female2}
+			}
+		
+			
+			MODEL_PREDICTION{
+				V = if(SEX == SEX2) then 1 else 0
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected ref:Enum:SEX type, but was ref:Enum:SEX2."
 		)
 	}
 	
@@ -1063,7 +1147,7 @@ warfarin_PK_v2_dat = dataobj{
 	DECLARED_VARIABLES{ GUT}
 	
 	DATA_INPUT_VARIABLES {
-		SEX : { use is covariate withCategories {male when 0, female when 1} }
+		SEX : { use is catCov withCategories {male when 0, female when 1} }
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
@@ -1083,7 +1167,7 @@ warfarin_PK_v2_dat = dataobj{
 	DECLARED_VARIABLES{ GUT}
 	
 	DATA_INPUT_VARIABLES {
-		SEX : { use is covariate withCategories {male when GUT, female when 1} }
+		SEX : { use is catCov withCategories {male when GUT, female when 1} }
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",

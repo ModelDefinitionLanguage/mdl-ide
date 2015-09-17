@@ -24,7 +24,7 @@ warfarin_PK_v2_dat = dataobj{
 		TIME : { use is idv }
 		WT : { use is covariate }
 		AGE : { use is covariate  }
-		SEX : { use is covariate withCategories {male when 0, female when 1} }
+		SEX : { use is catCov withCategories {male when 0, female when 1} }
 		CMT : { use is cmt } 
 		AMT : { use  is amt , define={ 1 in CMT as GUT } }
 		DVID : { use  is dvid }

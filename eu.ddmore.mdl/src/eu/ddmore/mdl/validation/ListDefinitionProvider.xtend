@@ -23,26 +23,31 @@ import org.eclipse.xtext.EcoreUtil2
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import static extension eu.ddmore.mdl.validation.SublistDefinitionProvider.*
-
+import eu.ddmore.mdl.type.MclTypeProvider.EnumListTypeInfo
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
+import eu.ddmore.mdl.mdl.ListDefinition
 
 class ListDefinitionProvider {
 
 	public static val COV_USE_VALUE = 'covariate'
+	public static val CATCOV_USE_VALUE = 'catCov'
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #[COV_USE_VALUE, 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore', 'varlevel'])
-	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #['parameter', 'observation'])
-	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #['nonmemFormat'])
-	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo('cmpt', #['depot', 'compartment', 'elimination', 'transfer', 'distribution'])
-	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #['cov', 'corr','sd', 'var'])
-	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #['categorical', 'count', 'discrete'])
-	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #['simple', 'complex'])
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore', 'varLevel', 'catCov'})
+	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
+	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
+	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo('cmpt', #{'depot', 'compartment', 'elimination', 'transfer', 'distribution'})
+	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
+	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{'categorical', 'count', 'discrete'})
+	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
 //	static val SAMPLE_OUTCOME_TYPE = new BuiltinEnumTypeInfo('sampouttype', #['conc', 'effect'])
-	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #['amount', 'duration', 'sampleTime', 'numberTimes'])
+	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
 	
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
 	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration", PrimitiveType.List)
-	public static val SAMPLING_TYPE = new ListTypeInfo("Sampling", PrimitiveType.List)
+	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", PrimitiveType.List)
+	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", PrimitiveType.List)
+	public static val DERIV_SAMPLING_TYPE = new ListTypeInfo("DerivedSampling", PrimitiveType.List)
 
 //	public static val TypeInfo INTERVENTION_SEQ_SUBLIST = new SublistTypeInfo("intSeqAtts", #[new AttributeDefn("interventionList", null, true, ADMINISTRATION_TYPE.makeReference.makeVector),
 //																							new AttributeDefn("epochStart", null, true, MclTypeProvider::REAL_TYPE.makeVector),
@@ -80,15 +85,16 @@ class ListDefinitionProvider {
 		}
 	}
 	
-	static class ListDefinition {
-		String keyValue
+	@Data @FinalFieldsConstructor
+	static class ListDefInfo {
+		val String keyValue
 		TypeInfo listType
 		List<AttributeDefn> attributes 
 	}
 	
 	static class BlockListDefinition {
 		String key
-		List<ListDefinition> listDefns
+		List<ListDefInfo> listDefns
 	}
 
 	// owning block -> key attribute -> key value -> attributes associated with key
@@ -97,52 +103,56 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'use'
 				listDefns = newArrayList(
-					new ListDefinition => [  keyValue='covariate' listType = new ListTypeInfo("Covariate", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('use', null, true, USE_TYPE, MclTypeProvider::INT_TYPE, false)
+					new ListDefInfo('covariate', new ListTypeInfo("Covariate", PrimitiveType.Real),#[
+						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
-					],
-					new ListDefinition => [keyValue='amt' listType = new ListTypeInfo("Amt", PrimitiveType.Real) attributes = #[
+					),
+					new ListDefInfo('catCov', new EnumListTypeInfo("CatCovariate"), #[
+						 new AttributeDefn('use', null, true, USE_TYPE, MclTypeProvider::INT_TYPE, true)
+						 ] 
+					),
+					new ListDefInfo ('amt', new ListTypeInfo("Amt", PrimitiveType.Real),  #[
 						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE),
 						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ] 
-					],
-					new ListDefinition => [keyValue='dv' listType = new ListTypeInfo("Dv", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('dv', new ListTypeInfo("Dv", PrimitiveType.List),  #[
 						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE),
 						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ] 
-					],
-					new ListDefinition => [keyValue='idv' listType = IDV_COL_TYPE attributes = #[
+					),
+					new ListDefInfo ('idv', IDV_COL_TYPE,  #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
-					],
-					new ListDefinition => [keyValue='cmt' listType = new ListTypeInfo("Cmt", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('cmt', new ListTypeInfo("Cmt", PrimitiveType.List),  #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
-					],
-					new ListDefinition => [keyValue='id' listType = new ListTypeInfo("Id", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('id', new ListTypeInfo("Id", PrimitiveType.List),  #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
-					],
-					new ListDefinition => [keyValue='varlevel' listType = new ListTypeInfo("VarLevel", PrimitiveType.List) attributes = #[
-						 new AttributeDefn('varlevel', null, true, USE_TYPE)
-						 ] 
-					],
-					new ListDefinition => [keyValue='mdv' listType = new ListTypeInfo("Mdv", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('varLevel', new ListTypeInfo("VarLevel", PrimitiveType.List),  #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
-					],
-					new ListDefinition => [keyValue='rate' listType = new ListTypeInfo("Rate", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('mdv', new ListTypeInfo("Mdv", PrimitiveType.List),  #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
-					],
-					new ListDefinition => [keyValue='dvid' listType = new ListTypeInfo("Dvid", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('rate', new ListTypeInfo("Rate", PrimitiveType.List),  #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
-					],
-					new ListDefinition => [keyValue='ignore' listType = new ListTypeInfo("Ignore", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('dvid', new ListTypeInfo("Dvid", PrimitiveType.List),  #[
 						 new AttributeDefn('use', null, true, USE_TYPE)
 						 ] 
-					]
+					),
+					new ListDefInfo ('ignore', new ListTypeInfo("Ignore", PrimitiveType.List),  #[
+						 new AttributeDefn('use', null, true, USE_TYPE)
+						 ] 
+					)
 				)
 			]
 		),
@@ -150,10 +160,10 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'column'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null  listType = new ListTypeInfo("Column", PrimitiveType.List) attributes = #[
+					new ListDefInfo (null, new ListTypeInfo("Column", PrimitiveType.List),  #[
 						 new AttributeDefn('column', null, true, IDV_COL_TYPE), new AttributeDefn('condition', null, false, MclTypeProvider::BOOLEAN_TYPE) 
 						 ] 
-					]
+					)
 				)
 			]
 		),
@@ -161,11 +171,11 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'file'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null  listType = new ListTypeInfo("Source", PrimitiveType.List) attributes = #[
+					new ListDefInfo (null, new ListTypeInfo("Source", PrimitiveType.List),  #[
 						 new AttributeDefn('file', null, true, MclTypeProvider::STRING_TYPE), new AttributeDefn('inputFormat', null, true, INPUT_FORMAT_TYPE),
 						 	new AttributeDefn('ignore', null, false, MclTypeProvider::STRING_TYPE) 
 						 ] 
-					]
+					)
 				)
 			]
 		),
@@ -173,10 +183,10 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("VarLevel", PrimitiveType.List) attributes = #[
+					new ListDefInfo (null, new ListTypeInfo("VarLevel", PrimitiveType.List),  #[
 						 new AttributeDefn('type', null, true, VARIABILITY_TYPE_TYPE), new AttributeDefn('level', null, true, MclTypeProvider::INT_TYPE)
 						 ]
-					]
+					)
 				)
 			]
 		),
@@ -184,28 +194,28 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='depot' listType = new ListTypeInfo("Depot", PrimitiveType.Real) attributes = #[
+					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('ka', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('tlag', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
-					],
-					new ListDefinition => [ keyValue='compartment' listType = new ListTypeInfo("Compartment", PrimitiveType.Real) attributes = #[
+					),
+					new ListDefInfo ('compartment', new ListTypeInfo("Compartment", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE)
 						 ]
-					],
-					new ListDefinition => [ keyValue='elimination' listType = new ListTypeInfo("Elimination", PrimitiveType.Real) attributes = #[
+					),
+					new ListDefInfo ('elimination', new ListTypeInfo("Elimination", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('v', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('cl', null, true, MclTypeProvider::REAL_TYPE)
 						 ]
-					],
-					new ListDefinition => [ keyValue='distribution' listType = new ListTypeInfo("Distribution", PrimitiveType.Real) attributes = #[
+					),
+					new ListDefInfo ('distribution', new ListTypeInfo("Distribution", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, true, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('kin', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('kout', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
 						 ]
-					]
+					)
 				)
 			]
 		),
@@ -213,11 +223,11 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'deriv'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("Derivative", PrimitiveType.Deriv) attributes = #[
+					new ListDefInfo (null, new ListTypeInfo("Derivative", PrimitiveType.Deriv),  #[
 						 new AttributeDefn('deriv', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('x0', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
-					]
+					)
 				)
 			]
 		),
@@ -225,28 +235,28 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='corr' listType = new ListTypeInfo("CovarMatrix", PrimitiveType.List) attributes = #[
+					new ListDefInfo ('corr', new ListTypeInfo("CovarMatrix", PrimitiveType.List),  #[
 						 new AttributeDefn('type', null, true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', null, true, MclTypeProvider::REAL_VECTOR_TYPE),
 						 new AttributeDefn('value', null, true, MclTypeProvider::REAL_VECTOR_TYPE)
 						 ]
-					],
-					new ListDefinition => [ keyValue='cov' listType = new ListTypeInfo("CorrMatrix", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('cov', new ListTypeInfo("CorrMatrix", PrimitiveType.List),  #[
 						 new AttributeDefn('type', null, true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', null, true, MclTypeProvider::REAL_VECTOR_TYPE),
 						 new AttributeDefn('value', null, true, MclTypeProvider::REAL_VECTOR_TYPE)
 						 ]
-					],
-					new ListDefinition => [ keyValue='sd' listType = new ListTypeInfo("SDEstimate", PrimitiveType.Real) attributes = #[
+					),
+					new ListDefInfo ('sd', new ListTypeInfo("SDEstimate", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('value', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('lo', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('hi', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('fix', null, false, MclTypeProvider::BOOLEAN_TYPE)
 						 ]
-					],
-					new ListDefinition => [ keyValue='var' listType = new ListTypeInfo("VarEstimate", PrimitiveType.Real) attributes = #[
+					),
+					new ListDefInfo ('var', new ListTypeInfo("VarEstimate", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('value', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('lo', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('hi', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('fix', null, false, MclTypeProvider::BOOLEAN_TYPE)
 						 ]
-					]
+					)
 				)
 			]
 		),
@@ -254,12 +264,12 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'value'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("StructuralEstimate", PrimitiveType.Real) attributes = #[
+					new ListDefInfo (null, new ListTypeInfo("StructuralEstimate", PrimitiveType.Real),  #[
 						 new AttributeDefn('value', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('lo', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('hi', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('fix', null, false, MclTypeProvider::BOOLEAN_TYPE)
 						 ]
-					]
+					)
 				)
 			]
 		),
@@ -267,10 +277,10 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='categorical' listType = new ListTypeInfo("CatObs", PrimitiveType.Int) attributes = #[
+					new ListDefInfo ('categorical', new ListTypeInfo("CatObs", PrimitiveType.Int),  #[
 						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
 						 ]
-					]
+					)
 				)
 			]
 		),
@@ -278,13 +288,13 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'adm'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = ADMINISTRATION_TYPE attributes = #[
+					new ListDefInfo (null, ADMINISTRATION_TYPE,  #[
 						 new AttributeDefn('adm', null, true, MclTypeProvider::REAL_TYPE.makeReference) , new AttributeDefn('amount', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('doseTime', null, false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('duration', null, false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('start', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('end', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
-					]
+					)
 				)
 			]
 		),
@@ -292,12 +302,12 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'armSize'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue=null listType = new ListTypeInfo("StudyDesign", PrimitiveType.List) attributes = #[
+					new ListDefInfo (null, new ListTypeInfo("StudyDesign", PrimitiveType.List),  #[
 						 new AttributeDefn('armSize', null, true, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('interventionSequence', null, true, getSublist(INTERVENTION_SEQ_SUBLIST).makeVector),
 						 new AttributeDefn('samplingSequence', null, false, getSublist(SAMPLING_SEQ_SUBLIST).makeVector)
 						 ]
-					]
+					)
 				)
 			]
 		),
@@ -305,30 +315,30 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'element'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='amount' listType = new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List) attributes = #[
+					new ListDefInfo ('amount', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
 						 new AttributeDefn('admins', null, true, ADMINISTRATION_TYPE.makeVector),
 						 new AttributeDefn('element', null, true, ELEMENT_TYPE),
 						 new AttributeDefn('discrete', null, false, MclTypeProvider::INT_TYPE.makeVector)
 						 ]
-					],
-					new ListDefinition => [ keyValue='duration' listType = new ListTypeInfo("DesignSpaceDur", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('duration', new ListTypeInfo("DesignSpaceDur", PrimitiveType.List),  #[
 						 new AttributeDefn('admins', null, true, ADMINISTRATION_TYPE.makeVector),
 						 new AttributeDefn('element', null, true, ELEMENT_TYPE),
 						 new AttributeDefn('range', null, false, MclTypeProvider::REAL_TYPE.makeVector)
 						 ]
-					],
-					new ListDefinition => [ keyValue='numberTimes' listType = new ListTypeInfo("DesignSpaceNum", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('numberTimes', new ListTypeInfo("DesignSpaceNum", PrimitiveType.List),  #[
 						 new AttributeDefn('element', null, true, ELEMENT_TYPE),
 						 new AttributeDefn('samples', null, true, SAMPLING_TYPE.makeVector),
 						 new AttributeDefn('discrete', null, false, MclTypeProvider::INT_TYPE.makeVector)
 						 ]
-					],
-					new ListDefinition => [ keyValue='sampleTime' listType = new ListTypeInfo("DesignSpaceSample", PrimitiveType.List) attributes = #[
+					),
+					new ListDefInfo ('sampleTime', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', null, true, ELEMENT_TYPE),
 						 new AttributeDefn('samples', null, true, SAMPLING_TYPE.makeVector),
 						 new AttributeDefn('range', null, false, MclTypeProvider::REAL_TYPE.makeVector)
 						 ]
-					]
+					)
 				)
 			]
 		),
@@ -336,16 +346,20 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefinition => [ keyValue='simple' listType = SAMPLING_TYPE attributes = #[
+					new ListDefInfo ('simple', SAMPLING_TYPE,  #[
 						 new AttributeDefn('type', null, true, SAMPLING_TYPE_TYPE), new AttributeDefn('outcome', null, true, MclTypeProvider::REAL_TYPE.makeReference),
 						 new AttributeDefn('sampleTime', null, false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('numberSamples', null, false, MclTypeProvider::INT_TYPE.makeVector)
 						 ]
-					],
-					new ListDefinition => [ keyValue='complex' attributes = #[
+					),
+					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
 						 new AttributeDefn('type', null, true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', null, true, SAMPLING_TYPE.makeVector)
 						 ]
-					]
+					),
+					new ListDefInfo('derived', DERIV_SAMPLING_TYPE, #[
+						 new AttributeDefn('type', null, true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', null, true, CPLX_SAMPLING_TYPE.makeVector)
+						 ]
+					)
 				)
 			]
 		)
@@ -394,11 +408,11 @@ class ListDefinitionProvider {
 		attEnumTypes
 	} 
 
-	def ListDefinition getListDefinition(AttributeList it){
+	def ListDefInfo getListDefinition(AttributeList it){
 		val parent = parentStatement
 		if(attDefns.containsKey(parent.identifier)){
 			val iter = attributes.iterator
-			val expectedAttributes = new ArrayList<ListDefinition>()
+			val expectedAttributes = new ArrayList<ListDefInfo>()
 			while(iter.hasNext && expectedAttributes.isEmpty){
 				val att = iter.next
 				val blockDefn = attDefns.get(parent.identifier)
@@ -420,11 +434,7 @@ class ListDefinitionProvider {
 		null
 	}	
 	
-	def TypeInfo getTypeOfList(AttributeList attList){
-		val listDefn = attList.listDefinition
-		listDefn?.listType
-	}
-	
+
 	def getOwningBlock(ValuePair it){
 		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	} 
@@ -433,11 +443,11 @@ class ListDefinitionProvider {
 		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	} 
 	
-	def getAttributeType(ListDefinition it, String attName){
+	def getAttributeType(ListDefInfo it, String attName){
 		attributes.findFirst(ad | ad.name == attName)?.attType ?: MclTypeProvider::UNDEFINED_TYPE 
 	}
 	
-	def getAttributeDefinition(ListDefinition it, String attName){
+	def getAttributeDefinition(ListDefInfo it, String attName){
 		attributes.findFirst(ad | ad.name == attName) 
 	}
 	
@@ -471,7 +481,7 @@ class ListDefinitionProvider {
 		val parent = parentStatement
 		if(attDefns.containsKey(parent.identifier)){
 			val iter = attributes.iterator
-			val expectedAttributes = new ArrayList<ListDefinition>()
+			val expectedAttributes = new ArrayList<ListDefInfo>()
 			while(iter.hasNext && expectedAttributes.isEmpty){
 				val att = iter.next
 				val blockDefn = attDefns.get(parent.identifier)
@@ -500,7 +510,7 @@ class ListDefinitionProvider {
 		val unused = new HashSet
 		if(attDefns.containsKey(parent.identifier)){
 			val iter = attributes.iterator
-			var expectedAttributes = new ArrayList<ListDefinition>()
+			var expectedAttributes = new ArrayList<ListDefInfo>()
 			while(iter.hasNext && expectedAttributes.isEmpty){
 				val att = iter.next
 				val blockDefn = attDefns.get(parent.identifier)
@@ -577,7 +587,7 @@ class ListDefinitionProvider {
 		}
 	}
 
-	def attributeDefnExists(ListDefinition it, ValuePair att){
+	def attributeDefnExists(ListDefInfo it, ValuePair att){
 		attributes.exists[attrib|
 			attrib.name == att.attributeName
 		]
@@ -587,7 +597,7 @@ class ListDefinitionProvider {
 		it.listDefns.exists[ld| ld.attributeDefnExists(att)]
 	}
 
-//	def getListDefnByKeyValue(List<ListDefinition> defns, String queryValue){
+//	def getListDefnByKeyValue(List<ListDefInfo> defns, String queryValue){
 //		defns.filter[d | d.keyValue == queryValue]
 //	}
 
@@ -625,7 +635,7 @@ class ListDefinitionProvider {
 	
 
 	def attributeRecognised(ValuePair it){
-		// expect Attribute->AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
+		// expect Attribute->AttributeList->ListDefInfo|AnaonolymousListStatement->BlockStatement
 		// get key from parent list
 //		val parentList = eContainer as AttributeList
 //		val parentBlock = eContainer.eContainer.eContainer as BlockStatement

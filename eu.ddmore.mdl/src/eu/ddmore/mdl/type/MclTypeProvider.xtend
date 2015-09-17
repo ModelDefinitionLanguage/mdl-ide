@@ -36,6 +36,11 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.type.MclTypeProvider.*
+import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
+import java.util.Collections
+import java.util.HashSet
+import eu.ddmore.mdl.validation.ListDefinitionProvider.ListDefInfo
 
 public class MclTypeProvider {
 
@@ -207,17 +212,31 @@ public class MclTypeProvider {
 	@Data @FinalFieldsConstructor
 	static class EnumTypeInfo extends PrimitiveTypeInfo{
 		String enumName
+		Set<String> categories = new HashSet<String>
 		
-		new(String name){
+		new(String name, Set<String> categories){
 			super(PrimitiveType.Enum)
 			enumName = name
+			this.categories.addAll(categories)
 		}
 		
 		override isCompatible(TypeInfo otherType){
+			if(this === otherType) return true
 			switch(otherType){
 				EnumTypeInfo: this.enumName == otherType.enumName
+					&& isCompatibleCategories(otherType)
+				EnumListTypeInfo:
+					this.isCompatible(otherType.underlyingEnum)
 				default: false 
 			}
+		}
+		
+		
+		def boolean isCompatibleCategories(EnumTypeInfo otherType){
+			for(cat : categories){
+				if(!otherType.categories.exists[it == cat]) return false
+			}
+			true
 		}
 		
 		override getTypeName(){
@@ -228,9 +247,11 @@ public class MclTypeProvider {
 
 	@Data @FinalFieldsConstructor
 	static class GenericEnumTypeInfo extends EnumTypeInfo{
+		static val GENERIC_ENUM_TYPE_NAME = "generic"
+		
 		
 		new(){
-			super("generic")
+			super(GENERIC_ENUM_TYPE_NAME, Collections::emptySet)
 		}
 		
 		override isCompatible(TypeInfo otherType){
@@ -242,15 +263,49 @@ public class MclTypeProvider {
 		
 	}
 
-	@Data 
-	static class BuiltinEnumTypeInfo extends EnumTypeInfo{
-		List<String> expectedValues
 
-		new (String name, List<String> ev){
-			super(name)
-			this.expectedValues = new ArrayList<String>(ev)
+	
+	@Data
+	static class EnumListTypeInfo extends ListTypeInfo {
+		val EnumTypeInfo underlyingEnum		
+
+		new(String listName, EnumTypeInfo underlyingEnum) {
+			super(listName, PrimitiveType.Enum)
+			this.underlyingEnum = underlyingEnum
 		}
 		
+		new(String listName) {
+			super(listName, PrimitiveType.Enum)
+			this.underlyingEnum = new GenericEnumTypeInfo
+		}
+		
+		override isCompatible(TypeInfo otherType){
+			switch(otherType){
+				EnumTypeInfo:
+					 underlyingEnum.isCompatible(otherType)
+				default:
+					super.isCompatible(otherType)
+			}
+		}
+		
+		def EnumListTypeInfo populateType(EnumTypeInfo realEnum){
+			new EnumListTypeInfo(this.getName, realEnum)
+		}
+	}
+
+
+	@Data 
+	static class BuiltinEnumTypeInfo extends EnumTypeInfo{
+//		List<String> expectedValues
+
+		new (String name, Set<String> ev){
+			super(name, ev)
+//			this.expectedValues = new ArrayList<String>(ev)
+		}
+
+		def getExpectedValues(){
+			super.categories
+		}		
 	}
 
 	@Data @FinalFieldsConstructor
@@ -485,13 +540,18 @@ public class MclTypeProvider {
 			EquationDefinition:
 				if(sd.isVector) MclTypeProvider.REAL_VECTOR_TYPE else REAL_TYPE
 			ListDefinition:
-				getTypeOfList(sd.list)
+				getTypeOfList(sd)
 			TransformedDefinition,
 			ForwardDeclaration,
-//			DerivativeDefinition,
 			RandomVariableDefinition: typeTable.get(sd.eClass)
-			EnumerationDefinition:
-				new EnumTypeInfo(sd.name)
+			EnumerationDefinition:{
+					val defn = sd.catDefn 
+					switch(defn){
+						CategoricalDefinitionExpr:
+							new EnumTypeInfo(sd.name, defn.getCategoryNames)
+						default: UNDEFINED_TYPE							
+					}
+				}
 			default:
 				UNDEFINED_TYPE
 		}
@@ -502,11 +562,47 @@ public class MclTypeProvider {
 		switch(sd){
 			CategoryValueDefinition:{
 				val enumDefn = EcoreUtil2.getContainerOfType(sd.eContainer, SymbolDefinition)
-				new EnumTypeInfo(enumDefn.name)
+				val catDefn = EcoreUtil2.getContainerOfType(sd.eContainer, CategoricalDefinitionExpr)
+				new EnumTypeInfo(enumDefn.name, catDefn.getCategoryNames)
 			}
 			default:
 				UNDEFINED_TYPE
 		}
+	}
+	
+	def getCategoryNames(CategoricalDefinitionExpr catDefn){
+		val catNames = new HashSet<String>
+		catDefn.categories.forEach[catNames.add(name)]
+		catNames
+	}
+	
+	def TypeInfo getTypeOfList(ListDefinition it){
+		val listDefn = list.listDefinition
+		val type = listDefn?.listType
+		switch(type){
+			EnumListTypeInfo:
+				getPopulatedType(listDefn)
+			ListTypeInfo: type
+		}
+	}
+	
+	def TypeInfo getPopulatedType(ListDefinition it, ListDefInfo listDefn){
+		for(att : list.attributes){
+			val expr = att.expression
+			switch(expr){
+				EnumExpression case expr.catDefn != null:
+					if(expr.catDefn instanceof CategoricalDefinitionExpr){
+						val catNames = (expr.catDefn as CategoricalDefinitionExpr).getCategoryNames
+						if(listDefn.listType instanceof EnumListTypeInfo){
+							return (listDefn.listType as EnumListTypeInfo).populateType(new EnumTypeInfo(name, catNames))	
+						}
+						else{
+							return UNDEFINED_TYPE
+						}
+					}
+			}
+		}
+		UNDEFINED_TYPE
 	}
 	
 	def checkExpectedBoolean(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
@@ -606,7 +702,7 @@ public class MclTypeProvider {
 				(TypeInfo, TypeInfo) => void rightErrorLambda){
 		val actualType = catValDefn.typeFor
 		if(actualType.theType != PrimitiveType.Enum){
-			leftErrorLambda.apply(new EnumTypeInfo(catValDefn.name), actualType)
+			leftErrorLambda.apply(new GenericEnumTypeInfo, actualType)
 		}
 		if(catValDefn.mappedTo != null){
 			validateCategoricalMappingType(at, catValDefn.mappedTo, rightErrorLambda)
@@ -638,7 +734,7 @@ public class MclTypeProvider {
 	def void checkExpectedEnumType(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: UNDEFINED_TYPE
 		if(actualType.theType != PrimitiveType.Enum){
-			errorLambda.apply(new EnumTypeInfo("any"), actualType)
+			errorLambda.apply(new GenericEnumTypeInfo, actualType)
 		}
 	}
 	

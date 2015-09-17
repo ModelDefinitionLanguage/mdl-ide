@@ -32,7 +32,7 @@ class MogValidatorTest {
 		warfarin_PK_ODE_dat = dataobj {
 		
 			DATA_INPUT_VARIABLES {
-				SEX : { use is covariate withCategories{male when 0, female when 1} }
+				SEX : { use is catCov withCategories{male when 0, female when 1} }
 				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -141,7 +141,7 @@ class MogValidatorTest {
 		validator.paramObj = mcl.modelObject
 		validator.taskObj = mcl.modelObject
 		
-		validator.validateCovariates[errorCount++]
+		validator.validateCovariates[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
 		
 		assertEquals(1, errorCount)
 	}
@@ -178,7 +178,7 @@ class MogValidatorTest {
 		validator.paramObj = mcl.modelObject
 		validator.taskObj = mcl.modelObject
 		
-		validator.validateCovariates[errorCount++]
+		validator.validateCovariates[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
 		
 		assertEquals(0, errorCount)
 	}
@@ -215,7 +215,7 @@ class MogValidatorTest {
 		validator.paramObj = mcl.modelObject
 		validator.taskObj = mcl.modelObject
 		
-		validator.validateCovariates[errorCount++]
+		validator.validateCovariates[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
 		
 		assertEquals(0, errorCount)
 	}
@@ -225,7 +225,7 @@ class MogValidatorTest {
 		val mcl = '''
 		warfarin_PK_ODE_dat = dataobj {
 			DATA_INPUT_VARIABLES {
-				SEX : { use is covariate withCategories{male when 0, female when 1} }
+				SEX : { use is catCov withCategories{male when 0, female when 1} }
 				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
 
@@ -242,7 +242,6 @@ class MogValidatorTest {
 				COVARIATES{
 					WT withCategories{male, female}
 					SEX
-					logWT = ln(WT/70)
 				}
 		}
 		'''.parse
@@ -255,9 +254,47 @@ class MogValidatorTest {
 		validator.paramObj = mcl.modelObject
 		validator.taskObj = mcl.modelObject
 		
-		validator.validateCovariates[errorCount++]
+		validator.validateCovariates[t, m| if(t == MdlValidator::INCOMPATIBLE_TYPES) errorCount++]
 		
 		assertEquals(2, errorCount)
+	}
+		
+	@Test
+	def void testInValidCovariateOfInconsistentCategories(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DATA_INPUT_VARIABLES {
+				SEX : { use is catCov withCategories{male when 0, female when 1} }
+			} # end DATA_INPUT_VARIABLES
+
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}
+		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+				}
+		
+				COVARIATES{
+					SEX withCategories{male, fem}
+				}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors	
+	
+		val validator = new MogValidator
+		validator.mdlObj = mcl.modelObject
+		validator.dataObj = mcl.dataObject
+		validator.paramObj = mcl.modelObject
+		validator.taskObj = mcl.modelObject
+		
+		validator.validateCovariates[t, m| if(t == MdlValidator::INCOMPATIBLE_TYPES) errorCount++]
+		
+		assertEquals(1, errorCount)
 	}
 		
 }

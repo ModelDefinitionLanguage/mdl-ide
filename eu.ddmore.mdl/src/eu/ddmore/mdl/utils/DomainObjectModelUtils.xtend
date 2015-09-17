@@ -122,7 +122,8 @@ class DomainObjectModelUtils {
 
 
 	static def boolean isDataCovariate(ListDefinition it){
-		list.attributes.exists[argumentName == ListDefinitionProvider::USE_TYPE.enumName && expression.convertToString == ListDefinitionProvider::COV_USE_VALUE]
+		list.attributes.exists[argumentName == ListDefinitionProvider::USE_TYPE.enumName && (
+			expression.convertToString == ListDefinitionProvider::COV_USE_VALUE || expression.convertToString == ListDefinitionProvider::CATCOV_USE_VALUE)]
 	}
 
 	static def getDataCovariateDefns(MclObject dataObj){

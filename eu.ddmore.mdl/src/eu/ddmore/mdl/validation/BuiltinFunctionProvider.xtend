@@ -62,7 +62,7 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
-	static val TRANS_TYPE = new BuiltinEnumTypeInfo('type', #['none', 'ln', 'logit', 'probit'])
+	static val TRANS_TYPE = new BuiltinEnumTypeInfo('type', #{'none', 'ln', 'logit', 'probit'})
 	
 	private static val Map<String, List<? extends FunctDefn>> functDefns = #{
 		'log' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
