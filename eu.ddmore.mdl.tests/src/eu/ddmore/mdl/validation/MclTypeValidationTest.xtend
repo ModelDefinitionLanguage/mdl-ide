@@ -954,9 +954,10 @@ d1g=desobj{
 			
 			DATA_INPUT_VARIABLES{
 				TIME : { use is idv }
+				c2 : { use is amt, variable=D }
 			}
 			DATA_DERIVED_VARIABLES{
-				DT : { column = TIME, condition = (D - 4) > (0 - 2) }
+				DT : { use is doseTime, idvColumn = TIME, amtColumn = c2 }
 			}
 			
 			SOURCE{	}
@@ -1032,15 +1033,15 @@ d1g=desobj{
 				TIME : { use is idv }
 			}
 			DATA_DERIVED_VARIABLES{
-				DT : { column = TIME, condition = D + 0 - 2 }
+				DT : { use is doseTime, idvColumn = TIME, amtColumn = D + 0 - 2 }
 			}
 			
 			SOURCE{	}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"attribute 'condition' expected value of type 'Boolean' but was 'Real'"
+			"attribute 'amtColumn' expected value of type 'ref:List:Amt' but was 'Real'"
 		)
 	}
 

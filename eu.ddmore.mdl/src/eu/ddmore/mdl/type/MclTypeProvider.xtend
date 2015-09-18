@@ -50,7 +50,7 @@ public class MclTypeProvider {
 	
 
 	enum PrimitiveType {
-		Int, String, Real, Deriv, Boolean, Pdf, Enum, List, Mapping, Sublist, Vector, Reference, Undefined
+		Int, String, Real, Deriv, Boolean, Pdf, Pmf, Enum, List, Mapping, Sublist, Vector, Reference, Undefined
 	}
 	
 	@Data
@@ -414,6 +414,7 @@ public class MclTypeProvider {
 	public static val STRING_TYPE = new PrimitiveTypeInfo(PrimitiveType.String)
 	public static val BOOL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean)
 	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf)
+	public static val PMF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pmf)
 	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector
 	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int).makeVector
 	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping)
@@ -426,6 +427,7 @@ public class MclTypeProvider {
 		PrimitiveType.String -> #{ PrimitiveType.String },
 		PrimitiveType.Boolean -> #{ PrimitiveType.Boolean },
 		PrimitiveType.Pdf -> #{ PrimitiveType.Pdf },
+		PrimitiveType.Pmf -> #{ PrimitiveType.Pmf },
 		PrimitiveType.Mapping -> #{ PrimitiveType.Mapping },
 		PrimitiveType.Undefined -> #{  }
 	}

@@ -70,6 +70,10 @@ class MogValidator {
 		}
 	}
 	
+	def validateObservations((String, String) => void errorLambda){
+//		mdkObj.mdlObsDefinitions
+	}
+	
 	
 	def validateForSimulation(){
 		

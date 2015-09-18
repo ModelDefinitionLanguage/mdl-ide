@@ -97,7 +97,7 @@ class MclListAttributeValidationTest {
 				TIME : { use is idv }
 			}
 			DATA_DERIVED_VARIABLES{
-				DT : { column = TIME, condition = D > 0 }
+				DT : { use is doseTime, idvColumn = TIME, amtColumn = AMT }
 			}
 			
 			SOURCE{	}

@@ -77,41 +77,64 @@ class BuiltinFunctionProvider {
 					new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
 						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'var' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ]					 ],
+					} ]
+					],
+		'Bernoulli' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
+						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ]
+					],
+		'Poisson' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
+						'lambda' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ]
+					],
 		'linear' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'fixEff' -> new FunctionArgument(getSublist(FIX_EFF_SUBLIST).makeVector, false),
 						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ]					],
+					} ],
+					new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+						'trans' -> new FunctionArgument(TRANS_TYPE, false),
+						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'fixEff' -> new FunctionArgument(getSublist(FIX_EFF_SUBLIST).makeVector, false),
+						'ranEffs' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+					} ]
+					],
 		'general' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'grp' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ],
+					 new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+						'trans' -> new FunctionArgument(TRANS_TYPE, false),
+						'grp' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'ranEffs' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
 					} ] ],
 		'combinedError1' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
+						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ] ],
 		'combinedError2' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'a' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'b' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'trans' -> new FunctionArgument(TRANS_TYPE, false),
+						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
-					} ] ],
-		'combinedError2eps' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'a' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'b' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps1' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false),
-						'eps2' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
+						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ] ],
 		'additiveError' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
+						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ] ],
+		'proportionalError' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+						'trans' -> new FunctionArgument(TRANS_TYPE, false),
+						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ] ]
 	}
 
