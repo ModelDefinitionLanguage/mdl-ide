@@ -10,6 +10,17 @@ import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.MclObject
+import eu.ddmore.mdl.validation.MdlValidator
+import eu.ddmore.mdl.validation.BlockDefinitionProvider
+import eu.ddmore.mdl.mdl.EquationDefinition
+import java.util.ArrayList
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.validation.ListDefinitionProvider
+
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
+import eu.ddmore.mdl.mdl.Mcl
+import eu.ddmore.mdl.mdl.Statement
 
 class DomainObjectModelUtils {
 	
@@ -65,5 +76,68 @@ class DomainObjectModelUtils {
 			default: idx		
 		}
 	}
-	
+
+	static def isMclObjectOfType(MclObject obj, String typeCode){
+		obj.mdlObjType == typeCode	
+	} 
+
+	static def isTaskObject(MclObject obj){
+		obj.isMclObjectOfType(MdlValidator::TASKOBJ)	
+	}
+
+	static def isDataObject(MclObject obj){
+		obj.isMclObjectOfType(MdlValidator::DATAOBJ)	
+	}
+
+	static def isParamObject(MclObject obj){
+		obj.isMclObjectOfType(MdlValidator::PARAMOBJ)	
+	}
+
+	static def isModelObject(MclObject obj){
+		obj.isMclObjectOfType(MdlValidator::MDLOBJ)	
+	}
+
+
+	static def getModelObject(Mcl mcl){
+		mcl.objects.findFirst[isModelObject]
+	}
+
+	static def getDataObject(Mcl mcl){
+		mcl.objects.findFirst[isDataObject]
+	}
+
+	static def getParamObject(Mcl mcl){
+		mcl.objects.findFirst[isParamObject]
+	}
+
+	static def getTaskObject(Mcl mcl){
+		mcl.objects.findFirst[isTaskObject]
+	}
+
+	static def getMdlCovariateDefns(MclObject mdlObj){
+		val retVal = new ArrayList<Statement>
+		mdlObj.blocks.filter[identifier == BlockDefinitionProvider::COVARIATE_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[retVal.add(it)]]
+		retVal
+	}	
+
+
+	static def boolean isDataCovariate(ListDefinition it){
+		list.attributes.exists[argumentName == ListDefinitionProvider::USE_TYPE.enumName && (
+			expression.convertToString == ListDefinitionProvider::COV_USE_VALUE || expression.convertToString == ListDefinitionProvider::CATCOV_USE_VALUE)]
+	}
+
+	static def getDataCovariateDefns(MclObject dataObj){
+		val retVal = new ArrayList<ListDefinition>
+		dataObj.blocks.filter[identifier == BlockDefinitionProvider::DIV_BLK_NAME].forEach[(body as BlockStatementBody).statements.
+			filter[st|
+				switch(st){
+					ListDefinition:
+						st.isDataCovariate
+					default: false
+				}
+			]
+			.forEach[retVal.add(it as ListDefinition)]
+		]
+		retVal
+	}	
 }

@@ -26,6 +26,7 @@ class MclParserDataObj1Test {
 		TIME : { use is idv }
 		WT : { use is covariate }
 		AMT : { use is amt, variable = GUT }
+		OCC : { use is varLevel }
 	} # end DATA_INPUT_VARIABLES
 	SOURCE {
 	    foo : {file = "warfarin_conc.csv", 

@@ -32,7 +32,7 @@ obj1 = dataobj{
 	DATA_INPUT_VARIABLES {
 		ID : { use is id }
 		TIME : { use is idv }
-		SEX : { use is covariate withCategories { male when 0, female when 1} } 
+		SEX : { use is catCov withCategories { male when 0, female when 1} } 
 		AMT : { use  is amt, variable = GUT  }
 		DVID : { use  is dvid }
 		DV : { use  is dv, define = {

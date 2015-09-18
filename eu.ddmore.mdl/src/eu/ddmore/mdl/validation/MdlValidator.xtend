@@ -25,6 +25,7 @@ import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
+import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedArgument
@@ -98,6 +99,9 @@ class MdlValidator extends AbstractMdlValidator {
 
 	// Type validation
 	public static val INCOMPATIBLE_TYPES = "eu.ddmore.mdl.validation.IncompatibleTypes"
+
+	// MOG validation
+	public static val MODEL_DATA_MISMATCH = "eu.ddmore.mdl.validation.mog.mismatch_mod_data"
 
 	private static val VALID_OBJECT_TYPES = #[ MDLOBJ, PARAMOBJ, TASKOBJ, DATAOBJ, MOGOBJ, DESIGNOBJ ]
 
@@ -192,7 +196,7 @@ class MdlValidator extends AbstractMdlValidator {
 	def validateAttribute(ValuePair it){
 		if(eContainer instanceof AttributeList && !attributeRecognised){
 			error("attribute '" + attributeName + "' is not recognised in this context.",
-				MdlPackage.eINSTANCE.valuePair_ArgumentName, eu.ddmore.mdl.validation.MdlValidator.UNRECOGNIZED_LIST_ATT, attributeName)
+				MdlPackage.eINSTANCE.valuePair_ArgumentName, MdlValidator.UNRECOGNIZED_LIST_ATT, attributeName)
 		}
 	}
 
@@ -314,9 +318,9 @@ class MdlValidator extends AbstractMdlValidator {
 		if(parentAt != null)
 			checkCategoryDefinitionWellFormed(parentAt,
 				[error("Unexpected category definition.", 
-					MdlPackage::eINSTANCE.valuePair_Expression, eu.ddmore.mdl.validation.MdlValidator.INVALID_CATEGORY_DEFINITION, "") ],
+					MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator.INVALID_CATEGORY_DEFINITION, "") ],
 				[error("Category definition is missing.", 
-					MdlPackage::eINSTANCE.valuePair_Expression, eu.ddmore.mdl.validation.MdlValidator.INVALID_CATEGORY_DEFINITION, "") ]
+					MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator.INVALID_CATEGORY_DEFINITION, "") ]
 			)
 	}
 		
@@ -366,18 +370,24 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 	
 	@Check
-	def validateListAttributeTypes(ValuePair it){
-		if(eContainer instanceof AttributeList){
-			checkAttributeTyping([e, a|
-				error("attribute '" + attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
-						MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
-			])
-		}
-		else if(eContainer instanceof NamedFuncArguments){
-			checkNamedFunctionArgumentTyping([e, a|
-				error("argument '" + attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
-						MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
-			])
+	def validateListAttributeTypes(ValuePair vp){
+		val parent = vp.eContainer
+		switch(parent){
+			AttributeList:
+				parent.checkAttributeTyping(vp, [e, a|
+					error("attribute '" + vp.attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
+							MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
+				])
+			NamedFuncArguments:
+				vp.checkNamedFunctionArgumentTyping([e, a|
+					error("argument '" + vp.attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
+							MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
+				])
+			SubListExpression:
+				parent.checkSublistAttributeTyping(vp, [e, a|
+					error("attribute '" + vp.attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
+							MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
+				])
 		}
 	}
 
@@ -401,6 +411,11 @@ class MdlValidator extends AbstractMdlValidator {
 			error("A category definition in a list must have a mapping.",
 					MdlPackage.eINSTANCE.categoryValueDefinition_Name, INCORRECT_LIST_CONTEXT, e.name)
 		}
+	}
+	
+	
+	def validateMog(MogValidator mogBuilder){
+		
 	}
 	
 }
