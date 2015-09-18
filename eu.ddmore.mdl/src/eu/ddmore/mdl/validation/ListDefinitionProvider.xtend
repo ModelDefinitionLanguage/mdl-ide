@@ -232,7 +232,8 @@ class ListDefinitionProvider {
 					new ListDefInfo ('transfer', new ListTypeInfo("Transfer", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('kt', null, true, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
+						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference),
+						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
 						 ]
 					),
 					new ListDefInfo ('compartment', new ListTypeInfo("Compartment", PrimitiveType.Real),  #[
@@ -241,7 +242,7 @@ class ListDefinitionProvider {
 					),
 					new ListDefInfo ('elimination', new ListTypeInfo("Elimination", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('v', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('v', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('cl', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('k', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('vm', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('km', 'vm', false, MclTypeProvider::REAL_TYPE)
 						 ]
