@@ -77,7 +77,7 @@
 			<id>tycho</id>
 			<url>${tycho.repo.url}</url>
 			<releases>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>
