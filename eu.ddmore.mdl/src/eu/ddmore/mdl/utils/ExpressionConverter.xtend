@@ -26,6 +26,7 @@ import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.ConstantLiteral
+import eu.ddmore.mdl.mdl.NamedFuncArguments
 
 public class ExpressionConverter {
 	
@@ -82,9 +83,12 @@ public class ExpressionConverter {
 	
 	def static dispatch String getString(BuiltinFunctionCall exp)'''
 		«exp.func»(«exp.argList.getString»)'''
+
+    def static dispatch String getString(NamedFuncArguments exp)'''
+        «FOR arg: exp.arguments SEPARATOR ', '»«arg.getArgumentName»=«arg.getExpression.getString»«ENDFOR»'''
 	
 	def static dispatch String getString(UnnamedFuncArguments exp)'''
-		«FOR arg: exp.args SEPARATOR ','»«arg.getString»«ENDFOR»'''
+		«FOR arg: exp.args SEPARATOR ', '»«arg.getString»«ENDFOR»'''
 	
 	def static dispatch String getString(UnnamedArgument exp)'''
 		«exp.argument.getString»'''
