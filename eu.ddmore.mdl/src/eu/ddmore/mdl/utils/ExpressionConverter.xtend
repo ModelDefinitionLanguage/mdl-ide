@@ -27,6 +27,7 @@ import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.ConstantLiteral
 import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.CategoryValueDefinition
 
 public class ExpressionConverter {
 	
@@ -34,9 +35,12 @@ public class ExpressionConverter {
 		getString
 	}
 
-	def static String convertToString(CategoricalDefinitionExpr defn)'''
-		[«FOR c : defn.categories SEPARATOR ','»
-			«(c as SymbolDefinition).name»«ENDFOR»]'''
+	def static dispatch String getString(CategoricalDefinitionExpr defn)'''
+		withCategories {«FOR catValDefn : defn.categories SEPARATOR ', '»«catValDefn.getString»«ENDFOR»}'''
+
+    def static dispatch String getString(CategoryValueDefinition catValDefn) {
+        catValDefn.name + if (catValDefn.mappedTo != null) " when " + catValDefn.mappedTo.getString else ""
+    }
 
 	def static dispatch String getString(Expression exp){
 		throw new IllegalStateException("Bug. Concrete dispatch method missing: " + exp.class.simpleName );
@@ -47,7 +51,7 @@ public class ExpressionConverter {
 	}
 	
 	def static dispatch String getString(EnumExpression exp){
-		exp.enumValue
+	  exp.enumValue + (if (exp.catDefn != null) " " + exp.catDefn.getString else "")
 	}
 	
 	def static dispatch String getString(AndExpression exp){
