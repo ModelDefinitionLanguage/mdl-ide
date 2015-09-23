@@ -11,14 +11,18 @@ import eu.ddmore.mdl.mdl.Mcl
 import org.junit.Test
 import static org.junit.Assert.*
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import org.junit.Before
+import eu.ddmore.mdl.utils.MclUtils
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
 class MogValidatorTest {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
+
+	extension MclUtils domu = new MclUtils
+
+
 	int errorCount
 	
 	@Before
@@ -297,4 +301,388 @@ class MogValidatorTest {
 		assertEquals(1, errorCount)
 	}
 		
+	@Test
+	def void testValidSingleObsMatching(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y }
+		
+			DATA_INPUT_VARIABLES {
+				DV : { use is dv, variable = Y }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					DV : { type is observation, level = 1 }
+				}
+		
+				MODEL_PREDICTION{
+					F = 1
+				}
+		
+				RANDOM_VARIABLE_DEFINITION(level is DV){
+					EPS
+				}
+		
+				OBSERVATION{
+					Y = additiveError(additive=1, prediction=F, eps=EPS)
+				}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors	
+	
+		val validator = new MogValidator
+		validator.mdlObj = mcl.modelObject
+		validator.dataObj = mcl.dataObject
+		validator.paramObj = mcl.modelObject
+		validator.taskObj = mcl.modelObject
+		
+		validator.validateObservations[errorCount++]
+		
+		assertEquals(0, errorCount)
+	}
+
+	@Test
+	def void testInvalidSingleObsMismatchingType(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y }
+		
+			DATA_INPUT_VARIABLES {
+				DV : { use is dv, variable = Y }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					DV : { type is observation, level = 1 }
+				}
+		
+				MODEL_PREDICTION{
+					F = 1
+				}
+		
+				RANDOM_VARIABLE_DEFINITION(level is DV){
+					EPS
+				}
+		
+				OBSERVATION{
+					Y : { type is count, distn = Poisson(lambda = F), link is ln }
+				}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors	
+	
+		val validator = new MogValidator
+		validator.mdlObj = mcl.modelObject
+		validator.dataObj = mcl.dataObject
+		validator.paramObj = mcl.modelObject
+		validator.taskObj = mcl.modelObject
+		
+		validator.validateObservations[t, m| if(t == MdlValidator::INCOMPATIBLE_TYPES) errorCount++]
+		
+		assertEquals(1, errorCount)
+	}
+
+	@Test
+	def void testInvalidSingleObsMismatchedName(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Z }
+		
+			DATA_INPUT_VARIABLES {
+				DV : { use is dv, variable = Z }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					DV : { type is observation, level = 1 }
+				}
+		
+				MODEL_PREDICTION{
+					F = 1
+				}
+		
+				RANDOM_VARIABLE_DEFINITION(level is DV){
+					EPS
+				}
+		
+				OBSERVATION{
+					Y = additiveError(additive=1, prediction=F, eps=EPS)
+				}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors	
+	
+		val validator = new MogValidator
+		validator.mdlObj = mcl.modelObject
+		validator.dataObj = mcl.dataObject
+		validator.paramObj = mcl.modelObject
+		validator.taskObj = mcl.modelObject
+		
+		validator.validateObservations[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
+		
+		assertEquals(1, errorCount)
+	}
+
+	@Test
+	def void testInvalidSingleObsMismatchedNoData(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y }
+		
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable = Y }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					DV : { type is observation, level = 1 }
+				}
+		
+				MODEL_PREDICTION{
+					F = 1
+				}
+		
+				RANDOM_VARIABLE_DEFINITION(level is DV){
+					EPS
+				}
+		
+				OBSERVATION{
+					Y = additiveError(additive=1, prediction=F, eps=EPS)
+				}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors	
+	
+		val validator = new MogValidator
+		validator.mdlObj = mcl.modelObject
+		validator.dataObj = mcl.dataObject
+		validator.paramObj = mcl.modelObject
+		validator.taskObj = mcl.modelObject
+		
+		validator.validateObservations[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
+		
+		assertEquals(1, errorCount)
+	}
+
+	@Test
+	def void testValidMultiObsContinuousMatching(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y; Z }
+		
+			DATA_INPUT_VARIABLES {
+				DVID : { use is dvid }
+				DV : { use is dv, define = { 1 in DVID as Y, 2 in DVID as Z } }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					DV : { type is observation, level = 1 }
+				}
+		
+				MODEL_PREDICTION{
+					F = 1
+				}
+		
+				RANDOM_VARIABLE_DEFINITION(level is DV){
+					EPS
+				}
+		
+				OBSERVATION{
+					Y = additiveError(additive=1, prediction=F, eps=EPS)
+					Z = additiveError(additive=1, prediction=F, eps=EPS)
+				}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors	
+	
+		val validator = new MogValidator
+		validator.mdlObj = mcl.modelObject
+		validator.dataObj = mcl.dataObject
+		validator.paramObj = mcl.modelObject
+		validator.taskObj = mcl.modelObject
+		
+		validator.validateObservations[errorCount++]
+		
+		assertEquals(0, errorCount)
+	}
+
+	@Test
+	def void testInvalidMultiObsContinuousMisMatchedName(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y; X }
+		
+			DATA_INPUT_VARIABLES {
+				DVID : { use is dvid }
+				DV : { use is dv, define = { 1 in DVID as Y, 2 in DVID as X } }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					DV : { type is observation, level = 1 }
+				}
+		
+				MODEL_PREDICTION{
+					F = 1
+				}
+		
+				RANDOM_VARIABLE_DEFINITION(level is DV){
+					EPS
+				}
+		
+				OBSERVATION{
+					Y = additiveError(additive=1, prediction=F, eps=EPS)
+					Z = additiveError(additive=1, prediction=F, eps=EPS)
+				}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors	
+	
+		val validator = new MogValidator
+		validator.mdlObj = mcl.modelObject
+		validator.dataObj = mcl.dataObject
+		validator.paramObj = mcl.modelObject
+		validator.taskObj = mcl.modelObject
+		
+		validator.validateObservations[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
+		
+		assertEquals(1, errorCount)
+	}
+
+	@Test
+	def void testInvalidMultiObsContinuousMissing(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y; Z }
+		
+			DATA_INPUT_VARIABLES {
+				DVID : { use is dvid }
+				DV : { use is dv, define = { 1 in DVID as Y } }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					DV : { type is observation, level = 1 }
+				}
+		
+				MODEL_PREDICTION{
+					F = 1
+				}
+		
+				RANDOM_VARIABLE_DEFINITION(level is DV){
+					EPS
+				}
+		
+				OBSERVATION{
+					Y = additiveError(additive=1, prediction=F, eps=EPS)
+					Z = additiveError(additive=1, prediction=F, eps=EPS)
+				}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors	
+	
+		val validator = new MogValidator
+		validator.mdlObj = mcl.modelObject
+		validator.dataObj = mcl.dataObject
+		validator.paramObj = mcl.modelObject
+		validator.taskObj = mcl.modelObject
+		
+		validator.validateObservations[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
+		
+		assertEquals(1, errorCount)
+	}
+
+	@Test
+	def void testInvalidMultiObsContinuousMismatchType(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y; Z withCategories { a, b }}
+		
+			DATA_INPUT_VARIABLES {
+				DVID : { use is dvid }
+				DV : { use is dv, define = { 1 in DVID as Y, 2 in DVID as {Z.a when 0, Z.b when 1 } } }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					DV : { type is observation, level = 1 }
+				}
+		
+				MODEL_PREDICTION{
+					F = 1
+				}
+		
+				RANDOM_VARIABLE_DEFINITION(level is DV){
+					EPS
+				}
+		
+				OBSERVATION{
+					Y = additiveError(additive=1, prediction=F, eps=EPS)
+					Z = additiveError(additive=1, prediction=F, eps=EPS)
+				}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors	
+	
+		val validator = new MogValidator
+		validator.mdlObj = mcl.modelObject
+		validator.dataObj = mcl.dataObject
+		validator.paramObj = mcl.modelObject
+		validator.taskObj = mcl.modelObject
+		
+		validator.validateObservations[t, m| if(t == MdlValidator::INCOMPATIBLE_TYPES) errorCount++]
+		
+		assertEquals(1, errorCount)
+	}
+
 }

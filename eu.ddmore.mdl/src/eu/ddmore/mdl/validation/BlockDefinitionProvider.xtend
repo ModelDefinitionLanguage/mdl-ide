@@ -7,6 +7,7 @@ import java.util.Map
 
 class BlockDefinitionProvider {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"
+	public static val OBS_BLK_NAME = "OBSERVATION"
 	public static val DIV_BLK_NAME = "DATA_INPUT_VARIABLES"
 	
 	
@@ -15,7 +16,7 @@ class BlockDefinitionProvider {
 			COVARIATE_BLK_NAME -> false, "VARIABILITY_LEVELS" -> true, "STRUCTURAL_PARAMETERS" -> false,
 			"VARIABILITY_PARAMETERS" -> false, "RANDOM_VARIABLE_DEFINITION" -> false,
 			"INDIVIDUAL_VARIABLES" -> false, "MODEL_PREDICTION" -> false,
-			"OBSERVATION" -> false, "GROUP_VARIABLES" -> false, "IDV" -> false
+			OBS_BLK_NAME -> false, "GROUP_VARIABLES" -> false, "IDV" -> false
 		},
 		MdlValidator::DATAOBJ -> #{
 			DIV_BLK_NAME -> true, "DECLARED_VARIABLES" -> false, "DATA_DERIVED_VARIABLES" -> false,

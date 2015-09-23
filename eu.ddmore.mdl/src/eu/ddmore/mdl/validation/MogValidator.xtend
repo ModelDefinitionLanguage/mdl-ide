@@ -1,18 +1,17 @@
 package eu.ddmore.mdl.validation
 
+import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.MclObject
-import java.util.ArrayList
-
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.mdl.EnumerationDefinition
-import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
+import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.utils.MclUtils
+import java.util.ArrayList
 
 class MogValidator {
 
 	extension MclTypeProvider typeProvider = new MclTypeProvider 
+	extension MclUtils mclu = new MclUtils
 
 
 
@@ -71,13 +70,22 @@ class MogValidator {
 	}
 	
 	def validateObservations((String, String) => void errorLambda){
-//		mdkObj.mdlObsDefinitions
+		val dataObs = dataObj.dataObservations
+		for(mdlOb : mdlObj.mdlObservations){
+			if(mdlOb instanceof SymbolDefinition){
+				val dataOb = dataObs.findFirst[name == (mdlOb as SymbolDefinition).name]
+				if(dataOb == null){
+					errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "observation " + mdlOb +" has no match in dataObj");
+				}
+				else if(!mdlOb.typeFor.isCompatible(dataOb.typeFor)){
+					errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "observation " + mdlOb +" has an inconsistent type with its match in the dataObj");
+				}
+			}
+		}
 	}
 	
 	
 	def validateForSimulation(){
 		
-	} 
-	
-	
+	}
 }

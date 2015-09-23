@@ -29,9 +29,10 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 class ListDefinitionProvider {
 
 	public static val COV_USE_VALUE = 'covariate'
+	public static val OBS_USE_VALUE = 'dv'
 	public static val CATCOV_USE_VALUE = 'catCov'
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'amt', 'dv', 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore', 'varLevel', 'catCov', 'rate', 'ss', 'ii', 'addl'})
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'amt', OBS_USE_VALUE, 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore', 'varLevel', 'catCov', 'rate', 'ss', 'ii', 'addl'})
 	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
@@ -695,6 +696,10 @@ class ListDefinitionProvider {
 		blkDefn?.listDefns.findFirst[defn| defn.keyValue == keyValQuery ]
 	}
 	
+	def getAttributeExpression(AttributeList it, String attName){
+		attributes.findFirst[argumentName == attName]?.expression
+	}
+
 
 	def attributeRecognised(ValuePair it){
 		// expect Attribute->AttributeList->ListDefInfo|AnaonolymousListStatement->BlockStatement
