@@ -100,19 +100,19 @@ public class ExpressionConverter {
 //		(«limit.low?:''», «initial.getString», «limit.high?:''»)'''
 	
 	def static dispatch String getString(WhenExpression exp)'''
-		«FOR w : exp.when SEPARATOR ',\n'»«w.getString»«ENDFOR»«IF exp.other != null»,«ENDIF»
-		«IF exp.other!=null»«exp.other.getString» otherwise«ENDIF»'''
+		«FOR w : exp.when SEPARATOR '\nelse'»«w.getString»«ENDFOR»
+		«IF exp.other!=null»else «exp.other.getString»«ENDIF»'''
 	
 	def static dispatch String getString(WhenClause exp)'''
-		(«exp.value.getString») when «exp.cond.getString»'''
+		if («exp.cond.getString») then «exp.value.getString»'''
 
 	
 	def static dispatch String getString(ElifClause exp)'''
-		(«exp.value.getString») when «exp.cond.getString»'''
+		if («exp.cond.getString») then «exp.value.getString»'''
 
 	
 	def static dispatch String getString(BooleanLiteral exp){
-		if(exp.isTrue)  "true" else "false"
+		if (exp.isTrue) "true" else "false"
 	}
 	
 	def static dispatch String getString(RealLiteral exp){
