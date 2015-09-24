@@ -26,10 +26,6 @@ import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.ConstantLiteral
-import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.mdl.MappingExpression
-import eu.ddmore.mdl.mdl.MappingPair
-import eu.ddmore.mdl.mdl.ValuePair
 
 public class ExpressionConverter {
 	
@@ -37,17 +33,9 @@ public class ExpressionConverter {
 		getString
 	}
 
-	def static dispatch String getString(CategoricalDefinitionExpr defn)'''
-		{«FOR c : defn.categories SEPARATOR ','»
-			«c.name» : «c.mappedTo.getString»«ENDFOR»}'''
-
-	def static dispatch String getString(SubListExpression expr)'''
-		{«FOR c : expr.attributes SEPARATOR ','»
-			«c.getString»«ENDFOR»}'''
-
-	def static dispatch String getString(MappingExpression expr)'''
-		{«FOR c : expr.attList SEPARATOR ','»
-			«c.getString»«ENDFOR»}'''
+	def static String convertToString(CategoricalDefinitionExpr defn)'''
+		[«FOR c : defn.categories SEPARATOR ','»
+			«(c as SymbolDefinition).name»«ENDFOR»]'''
 
 	def static dispatch String getString(Expression exp){
 		throw new IllegalStateException("Bug. Concrete dispatch method missing: " + exp.class.simpleName );
@@ -145,12 +133,9 @@ public class ExpressionConverter {
 	def static dispatch String getString(VectorElement exp)'''
 		«exp.element.head.getString»'''
 		
-	def static getMappingPair(MappingPair mp)'''
-		data=«mp.leftOperand.getString» col=«mp.srcColumn.getString» varRef=«mp.rightOperand.getString»'''
-		
-	def static getMappingPair(ValuePair mp)'''
-		«mp.argumentName» = «mp.expression.getString»'''
-		
-	
+
+//	def static dispatch String getString(VectorContent exp)'''
+//		«FOR e : exp.expressions SEPARATOR ','»
+//			«e.getString»«ENDFOR»'''
 	
 }
