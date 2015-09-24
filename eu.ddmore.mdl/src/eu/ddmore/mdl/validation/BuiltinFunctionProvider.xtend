@@ -92,25 +92,15 @@ class BuiltinFunctionProvider {
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'fixEff' -> new FunctionArgument(getSublist(FIX_EFF_SUBLIST).makeVector, false),
-						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ],
-					new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'fixEff' -> new FunctionArgument(getSublist(FIX_EFF_SUBLIST).makeVector, false),
-						'ranEffs' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
 					} ]
 					],
 		'general' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'grp' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ],
-					 new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'grp' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'ranEffs' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
-					} ] ],
+						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+					} ]
+					],
 		'combinedError1' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),

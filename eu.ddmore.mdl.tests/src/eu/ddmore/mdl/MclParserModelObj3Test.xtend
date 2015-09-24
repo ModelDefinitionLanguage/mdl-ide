@@ -67,12 +67,12 @@ warfarin_PK_2Compartments_mdl = mdlobj {
    }# end RANDOM_VARIABLE_DEFINITION (level=DV)
 
    INDIVIDUAL_VARIABLES{
-      ln(CL) = linear(pop = ln(POP_CL), fixEff = [{coeff=POP_BETA_CL_WT, cov=logtWT}] , ranEff = eta_PPV_CL)
-      ln(VC) = linear(pop = ln(POP_VC), fixEff = [{coeff=POP_BETA_V_WT, cov=logtWT}] , ranEff = eta_PPV_VC )
-      ln(Q) = linear(pop = ln(POP_Q), fixEff = [{coeff=POP_BETA_CL_WT, cov=logtWT}] , ranEff = eta_PPV_Q)
-      ln(VP) = linear(pop = ln(POP_VP), fixEff = [{coeff=POP_BETA_V_WT, cov=logtWT}] , ranEff = eta_PPV_VP)
-      ln(KA) = linear(pop = ln(POP_KA), ranEff = eta_PPV_KA)
-      ln(TLAG) = linear(pop = ln(POP_TLAG), ranEff = eta_PPV_TLAG) 
+      ln(CL) = linear(pop = ln(POP_CL), fixEff = [{coeff=POP_BETA_CL_WT, cov=logtWT}] , ranEff = [eta_PPV_CL])
+      ln(VC) = linear(pop = ln(POP_VC), fixEff = [{coeff=POP_BETA_V_WT, cov=logtWT}] , ranEff = [eta_PPV_VC] )
+      ln(Q) = linear(pop = ln(POP_Q), fixEff = [{coeff=POP_BETA_CL_WT, cov=logtWT}] , ranEff = [eta_PPV_Q])
+      ln(VP) = linear(pop = ln(POP_VP), fixEff = [{coeff=POP_BETA_V_WT, cov=logtWT}] , ranEff = [eta_PPV_VP])
+      ln(KA) = linear(pop = ln(POP_KA), ranEff = [eta_PPV_KA])
+      ln(TLAG) = linear(pop = ln(POP_TLAG), ranEff = [eta_PPV_TLAG]) 
       ALAG1=TLAG
       V2=VC
       V3=VP

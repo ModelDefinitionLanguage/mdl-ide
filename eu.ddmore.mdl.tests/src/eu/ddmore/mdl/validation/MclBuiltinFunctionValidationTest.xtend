@@ -168,7 +168,7 @@ class MclBuiltinFunctionValidationTest {
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
-				Cl = linear(pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}], ranEff = ETA_CL)
+				Cl = linear(pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}], ranEff = [ETA_CL])
 			}
 		}'''.parse
 		
@@ -191,7 +191,7 @@ class MclBuiltinFunctionValidationTest {
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
-				Cl = linear(pop = POP_CL, fixEff = BETA_CL_WT, ranEff = ETA_CL)
+				Cl = linear(pop = POP_CL, fixEff = BETA_CL_WT, ranEff = [ETA_CL])
 			}
 		}'''.parse
 		
@@ -280,7 +280,7 @@ class MclBuiltinFunctionValidationTest {
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
-				Cl = linear(pop = POP_CL, wrong = {{coeff=BETA_CL_WT, covariate=logtWT}}, ranEff = ETA_CL)
+				Cl = linear(pop = POP_CL, wrong = {{coeff=BETA_CL_WT, covariate=logtWT}}, ranEff = [ETA_CL])
 			}
 		}'''.parse
 		
@@ -334,7 +334,7 @@ class MclBuiltinFunctionValidationTest {
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
-				Cl = linear(pop = POP_CL, ranEff = ETA_CL)
+				Cl = linear(pop = POP_CL, ranEff = [ETA_CL])
 			}
 			INDIVIDUAL_VARIABLES{
 			}

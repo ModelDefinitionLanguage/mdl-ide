@@ -301,7 +301,7 @@ foo = mdlobj {
    }# end RANDOM_VARIABLE_DEFINITION (level=ID)
 
    INDIVIDUAL_VARIABLES{
-      CL = linear(pop = POP_CL, fixEff = [{coeff=POP_BETA_CL_WT, cov=WT}] , ranEff = eta_PPV_CL)
+      CL = linear(pop = POP_CL, fixEff = [{coeff=POP_BETA_CL_WT, cov=WT}] , ranEff = [eta_PPV_CL])
    }# end INDIVIDUAL_VARIABLES
 } 
 		'''.parse
@@ -350,7 +350,7 @@ foo = mdlobj {
    }# end RANDOM_VARIABLE_DEFINITION (level=ID)
 
    INDIVIDUAL_VARIABLES{
-      CL = linear(pop = POP_CL, fixEff = [{foobar=POP_BETA_CL_WT, covariate=WT}] , ranEff = eta_PPV_CL)
+      CL = linear(pop = POP_CL, fixEff = [{foobar=POP_BETA_CL_WT, covariate=WT}] , ranEff = [eta_PPV_CL])
    }# end INDIVIDUAL_VARIABLES
 } 
 		'''.parse

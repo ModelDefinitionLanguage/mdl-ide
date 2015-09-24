@@ -56,10 +56,10 @@ warfarin_PK_SEXAGE_mdl = mdlobj {
 	} # end RANDOM_VARIABLE_DEFINITION 
 	
 	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    CL = linear(trans is ln, pop = POP_CL, fixEff = [{coeff=BETA_CL_WT , cov = logtWT }], ranEff = ETA_CL)
-	    V = linear(trans is none, pop = POP_V, fixEff =  [{coeff=BETA_V_WT , cov = logtWT }] , ranEff = ETA_V)
-	    KA = linear(trans is probit, pop = POP_KA, ranEff = ETA_KA)
-	    TLAG = linear(trans is logit, pop = POP_TLAG, ranEff = ETA_TLAG) 
+	    CL = linear(trans is ln, pop = POP_CL, fixEff = [{coeff=BETA_CL_WT , cov = logtWT }], ranEff = [ETA_CL])
+	    V = linear(trans is none, pop = POP_V, fixEff =  [{coeff=BETA_V_WT , cov = logtWT }] , ranEff = [ETA_V])
+	    KA = linear(trans is probit, pop = POP_KA, ranEff = [ETA_KA])
+	    TLAG = linear(trans is logit, pop = POP_TLAG, ranEff = [ETA_TLAG]) 
 	} # end INDIVIDUAL_VARIABLES
 	
 	MODEL_PREDICTION {
