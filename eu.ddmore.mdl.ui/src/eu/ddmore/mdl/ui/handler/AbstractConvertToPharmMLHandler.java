@@ -1,15 +1,29 @@
 package eu.ddmore.mdl.ui.handler;
 
 import org.apache.log4j.Logger;
+//import eu.ddmore.mdl.mdl.Mcl;
+//import eu.ddmore.mdl.validation.Utils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.generator.JavaIoFileSystemAccess;
+import org.eclipse.xtext.parser.ParseException;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+
+//import eu.ddmore.mdl.generator.Mdl2PharmMLWrapper;
+//import eu.ddmore.mdl.generator.Preferences;
 
 
 /**

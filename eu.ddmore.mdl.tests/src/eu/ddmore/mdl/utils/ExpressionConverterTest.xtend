@@ -38,7 +38,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
 "(GUT*KA) when T>=TLAG,
-0 otherwise", eqn.expression.convertToString)
+0 otherwise", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
 	}
 
 	@Test
@@ -93,7 +93,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 "(10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))) when 10<22==!true,
 ((GUT*KA) when T>=TLAG,
 0 otherwise) when KA&&GUT||false,
-INF otherwise", eqn.expression.convertToString)
+INF otherwise", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
 	}
 	
 		@Test

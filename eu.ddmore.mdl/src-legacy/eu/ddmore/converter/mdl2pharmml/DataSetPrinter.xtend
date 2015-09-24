@@ -66,11 +66,11 @@ class DataSetPrinter {
 				return '''
 					<ColumnMapping>
 					    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-			    	   	«define.expression.print_Math_Expr»
-			    	   	«IF define.expression.isCategoricalObs(mObj)»
-			    	   		«define.expression.printCategoricalObsMapping(mObj)»
+						«define.expression.print_Math_Expr»
+							«IF define.expression.isCategoricalObs(mObj)»
+							«define.expression.printCategoricalObsMapping(mObj)»
 			    	   	«ELSEIF define.expression.isDiscreteBernoulliObs(mObj)»
-			    	   		«printDiscreteBernoulliObsMapping»
+							«printDiscreteBernoulliObsMapping»
 			    	   	«ENDIF»
 					</ColumnMapping>
 				  '''
@@ -79,10 +79,10 @@ class DataSetPrinter {
 					AttributeValidator::attr_predid.name);
 				val dvidColId = dObj.getUseDvidColumn
 				return '''
-					«FOR p : pairs»
 					<MultipleDVMapping>
-					    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+						<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
 						<Piecewise xmlns="«xmlns_mstep»">
+							«FOR p : pairs»
 							<math:Piece>
 							   	«p.key.expression.print_Math_Expr»
 							   	«IF p.key.expression.isCategoricalObs(mObj)»
@@ -97,9 +97,9 @@ class DataSetPrinter {
 							   		</math:LogicBinop>
 							   	</math:Condition>
 							</math:Piece>
+					«ENDFOR» 
 						</Piecewise>
 					</MultipleDVMapping>
-					«ENDFOR» 
 				  '''
 			}
 		}
@@ -349,7 +349,25 @@ class DataSetPrinter {
 			if (define != null) {
 				// Reference or piecewise
 				if (define.expression != null)
-					res = columnId.print_ds_ColumnMapping(define.expression.toStr, "").toString
+//					res = columnId.print_ds_ColumnMapping(define.expression.toStr, '''
+					res = '''
+						<ColumnMapping>
+							<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+							<Piecewise xmlns="«xmlns_ds»">
+								<math:Piece>
+									«IF define.expression != null»
+										«define.expression.toStr.print_ct_SymbolRef»
+									«ENDIF»
+									<math:Condition>
+										<math:LogicBinop op="gt">
+											<ColumnRef columnIdRef="«columnId»"/>
+											<ct:Int>0</ct:Int>
+										</math:LogicBinop>
+									</math:Condition>
+								</math:Piece>
+							</Piecewise>
+						</ColumnMapping>
+						'''
 				else { // Vector of pairs
 					val pairs = define.getAttributePairs(AttributeValidator::attr_modelCmt.name,
 						AttributeValidator::attr_dataCmt.name);
@@ -360,9 +378,15 @@ class DataSetPrinter {
 							<math:Piece>
 								«p.key.expression.print_Math_Expr»
 							   	<math:Condition>
-							   		<math:LogicBinop op="eq">
-										<ColumnRef columnIdRef="«cmtColId»"/>
-								   		«p.value.expression.print_Math_Expr»
+							   		<math:LogicBinop op="and">
+							   			<math:LogicBinop op="eq">
+											<ColumnRef columnIdRef="«cmtColId»"/>
+								   			«p.value.expression.print_Math_Expr»
+										</math:LogicBinop>
+							   			<math:LogicBinop op="gt">
+											<ColumnRef columnIdRef="«columnId»"/>
+								   			<ct:Int>0</ct:Int>
+										</math:LogicBinop>
 									</math:LogicBinop>
 							   	</math:Condition>
 							</math:Piece>
@@ -545,7 +569,7 @@ class DataSetPrinter {
 							dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
 						}
 						var convertedColType = "undefined"
-						if (columnType != null && column.isUsedInModel(mog, mObj)) {
+						if (columnType != null && (UseType::ID.toString == columnType || column.isUsedInModel(mog, mObj))) {
 							convertedColType = column.convertEnum(dosingToCompartmentMacro);
 						}
 						val valueType = column.getValueType

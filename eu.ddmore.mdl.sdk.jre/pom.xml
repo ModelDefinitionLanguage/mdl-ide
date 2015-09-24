@@ -13,7 +13,7 @@
 
 	<artifactId>eu.ddmore.mdl.sdk.jre</artifactId>
 	<!-- Fix the version of this Feature - see comment within feature.xml -->
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<packaging>eclipse-feature</packaging>
 
     <build>

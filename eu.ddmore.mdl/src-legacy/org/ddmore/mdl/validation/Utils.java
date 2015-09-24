@@ -111,7 +111,7 @@ public class Utils {
 		List<String> argumentNames = new ArrayList<String>();	
 		if (args != null && args.getNamedArguments() != null)
 			for (Argument arg: args.getNamedArguments().getArguments())
-				if (!argumentNames.contains(arg.getArgumentName().getArgName()))
+				if (arg.getArgumentName() != null && !argumentNames.contains(arg.getArgumentName().getArgName()))
 					argumentNames.add(arg.getArgumentName().getArgName());
 		return argumentNames;
 	}
