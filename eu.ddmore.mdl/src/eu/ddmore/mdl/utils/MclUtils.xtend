@@ -44,6 +44,11 @@ class MclUtils {
 	}
 
 
+	def isMogObject(MclObject obj){
+		obj.isMclObjectOfType(MdlValidator::MOGOBJ)	
+	}
+
+
 	def getModelObject(Mcl mcl){
 		mcl.objects.findFirst[isModelObject]
 	}

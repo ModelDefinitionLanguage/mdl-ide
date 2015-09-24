@@ -42,6 +42,7 @@ import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.utils.MclUtils
 
 //import org.eclipse.xtext.validation.Check
 
@@ -63,6 +64,8 @@ class MdlValidator extends AbstractMdlValidator {
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
 	extension BuiltinFunctionProvider funcHelper = new BuiltinFunctionProvider
 	extension MclTypeProvider typeProvider = new MclTypeProvider
+	extension MclUtils mclUtils = new MclUtils
+	extension MogValidator mogValidator = new MogValidator
 
 	public static val UNRECOGNISED_OBJECT_TYPE = "eu.ddmore.mdl.validation.UnrecognisedObjectType"
 
@@ -413,9 +416,12 @@ class MdlValidator extends AbstractMdlValidator {
 		}
 	}
 	
-	
-	def validateMog(MogValidator mogBuilder){
-		
+	@Check
+	def validateMog(MclObject mclObject){
+		if(mclObject.isMogObject){
+//			mclObject.getModelObjectFromMog
+//			mclObject.getDataObjectFromMog
+		}
 	}
 	
 }
