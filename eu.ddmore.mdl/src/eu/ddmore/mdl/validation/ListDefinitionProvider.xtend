@@ -214,7 +214,7 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefInfo ('input', new ListTypeInfo("Input", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('ktr', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('mtt', 'ktr', true, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('ktr', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('mtt', null, true, MclTypeProvider::REAL_TYPE)
 						 ]
 					),
 					new ListDefInfo ('effect', new ListTypeInfo("Effect", PrimitiveType.Real),  #[
@@ -225,9 +225,9 @@ class ListDefinitionProvider {
 					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('ka', null, false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('tlag', 'ka', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('tlag', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('modelDur', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('modelRate', null, false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('ktr', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('mtt', 'ktr', false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('ktr', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('mtt', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
 					),
 					new ListDefInfo ('transfer', new ListTypeInfo("Transfer", PrimitiveType.Real),  #[
@@ -245,7 +245,7 @@ class ListDefinitionProvider {
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('v', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('cl', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('k', null, false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('vm', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('km', 'vm', false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('vm', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('km', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
 					),
 					new ListDefInfo ('distribution', new ListTypeInfo("Distribution", PrimitiveType.Real),  #[
@@ -256,7 +256,7 @@ class ListDefinitionProvider {
 					),
 					new ListDefInfo ('direct', new ListTypeInfo("Direct", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('tlag', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', 'tlag', false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('tlag', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
 						 ]
 					)
@@ -268,7 +268,7 @@ class ListDefinitionProvider {
 				key = 'deriv'
 				listDefns = newArrayList(
 					new ListDefInfo (null, new ListTypeInfo("Derivative", PrimitiveType.Deriv),  #[
-						 new AttributeDefn('deriv', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('deriv', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('x0', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('wrt', null, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]
 					)
