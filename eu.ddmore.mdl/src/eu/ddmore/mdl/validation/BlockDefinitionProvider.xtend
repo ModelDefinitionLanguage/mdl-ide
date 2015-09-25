@@ -9,6 +9,7 @@ class BlockDefinitionProvider {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"
 	public static val OBS_BLK_NAME = "OBSERVATION"
 	public static val DIV_BLK_NAME = "DATA_INPUT_VARIABLES"
+	public static val MOG_OBJ_NAME = "OBJECTS"
 	
 	
 	val static Map<String, Map<String, Boolean> > BlkData = #{
@@ -29,7 +30,7 @@ class BlockDefinitionProvider {
 			"ESTIMATE" -> false, "SIMULATE" -> false, "OPTIMISE" -> false
 		},
 		MdlValidator::MOGOBJ -> #{
-			"OBJECTS" -> true
+			MOG_OBJ_NAME -> true
 		},
 		MdlValidator::DESIGNOBJ -> #{
 			"DECLARED_VARIABLES" -> false, "ADMINISTRATION" -> true, "STUDY_DESIGN" -> true, "SAMPLING" -> false, "DESIGN_SPACES" -> false

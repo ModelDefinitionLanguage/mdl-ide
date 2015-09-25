@@ -324,18 +324,18 @@ terminal TEXT_BLOCK:
 	'<<' -> '>>';
 
 terminal INTEGER returns ecore::EInt:
-	SIGN?('0' | '1'..'9' '0'..'9'*);
+	('0' | '1'..'9' '0'..'9'*);
 	
 terminal FLOAT returns ecore::EDouble: 
-	SIGN?'0'..'9' + '.' '0'..'9'* EXPONENT?
-    | SIGN?'.' '0'..'9'+ EXPONENT?
-    | SIGN?'0'..'9'+ EXPONENT
-    | SIGN?('0'..'9')
+	'0'..'9' + '.' '0'..'9'* EXPONENT?
+    | '.' '0'..'9'+ EXPONENT?
+    | '0'..'9'+ EXPONENT
+    | ('0'..'9')
     ;
 
-terminal fragment SIGN:
-	('+'|'-')
-;
+//terminal fragment SIGN:
+//	('+'|'-')
+//;
 
 terminal fragment ESCAPE_SEQUENCE:
 	'\\' ('b' | 't' | 'n' | 'f' | 'r' | '\"' | '\'' | '\\')

@@ -65,7 +65,6 @@ class MdlValidator extends AbstractMdlValidator {
 	extension BuiltinFunctionProvider funcHelper = new BuiltinFunctionProvider
 	extension MclTypeProvider typeProvider = new MclTypeProvider
 	extension MclUtils mclUtils = new MclUtils
-	extension MogValidator mogValidator = new MogValidator
 
 	public static val UNRECOGNISED_OBJECT_TYPE = "eu.ddmore.mdl.validation.UnrecognisedObjectType"
 
@@ -417,10 +416,9 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 	
 	@Check
-	def validateMog(MclObject mclObject){
-		if(mclObject.isMogObject){
-//			mclObject.getModelObjectFromMog
-//			mclObject.getDataObjectFromMog
+	def validateMog(MclObject mogObj){
+		if(mogObj.isMogObject){
+			val mogValidator = new MogValidator(mogObj)
 		}
 	}
 	

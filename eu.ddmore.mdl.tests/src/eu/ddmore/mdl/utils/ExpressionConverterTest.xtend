@@ -15,12 +15,36 @@ import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.ValuePair
+import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
 class ExpressionConverterTest {
 	@Inject extension ParseHelper<Mcl>
-//	@Inject extension ValidationTestHelper
+	@Inject extension ValidationTestHelper
+	
+	@Test
+	def void testValidExpressionSyntax(){
+		val mcl =  '''
+warfarin_PK_ODE_mdl = mdlobj {
+	IDV { T }
+	
+	VARIABILITY_LEVELS{}
+	
+	
+	MODEL_PREDICTION {
+			KA
+			GUT
+			TLAG = GUT-1
+			RATEIN = if(T >= TLAG) then GUT * KA else 0
+	} # end MODEL_PREDICTION
+	
+} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
 	
 	@Test
 	def void testConverter1(){

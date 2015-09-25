@@ -10,6 +10,7 @@ import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.MclObject
 
 class DomainObjectModelUtils {
 	
@@ -64,6 +65,10 @@ class DomainObjectModelUtils {
 			}
 			default: idx		
 		}
+	}
+	
+	static def getBlocksByName(MclObject mdlObj, String blkName){
+		mdlObj.blocks.filter[identifier == blkName]
 	}
 
 }

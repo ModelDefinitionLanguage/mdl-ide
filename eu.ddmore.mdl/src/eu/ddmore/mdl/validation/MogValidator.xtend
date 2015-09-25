@@ -8,7 +8,18 @@ import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.utils.MclUtils
 import java.util.ArrayList
 
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+
 class MogValidator {
+	public static class MogProvider{
+		
+		def getModelObject(MclObject mog){
+			// assume mandatory and 
+			val objDefns = mog.getBlocksByName(BlockDefinitionProvider::MOG_OBJ_NAME).head
+		}
+		
+	}
+
 
 	extension MclTypeProvider typeProvider = new MclTypeProvider 
 	extension MclUtils mclu = new MclUtils
@@ -19,6 +30,14 @@ class MogValidator {
 	public var MclObject dataObj
 	public var MclObject paramObj
 	public var MclObject taskObj
+	
+	new(){
+		
+	}
+
+	new(MclObject mog) {
+		
+	}
 	
 	
 	// MOG validation rules

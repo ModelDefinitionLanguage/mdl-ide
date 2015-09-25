@@ -53,7 +53,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
+				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < INF) then B^180 else 22
 			}
 			
 		} # end of model object

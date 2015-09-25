@@ -32,7 +32,7 @@ class ListDefinitionProvider {
 	public static val OBS_USE_VALUE = 'dv'
 	public static val CATCOV_USE_VALUE = 'catCov'
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'amt', OBS_USE_VALUE, 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore', 'varLevel', 'catCov', 'rate', 'ss', 'ii', 'addl'})
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'amt', OBS_USE_VALUE, 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore', 'varLevel', CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
 	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
@@ -40,7 +40,6 @@ class ListDefinitionProvider {
 	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
 	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{'categorical', 'count', 'discrete', 'tte'})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
-//	static val SAMPLE_OUTCOME_TYPE = new BuiltinEnumTypeInfo('sampouttype', #['conc', 'effect'])
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
 	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'exact', 'intervalCensored'})
@@ -52,13 +51,6 @@ class ListDefinitionProvider {
 	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", PrimitiveType.List)
 	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", PrimitiveType.List)
 	public static val DERIV_SAMPLING_TYPE = new ListTypeInfo("DerivedSampling", PrimitiveType.List)
-
-//	public static val TypeInfo INTERVENTION_SEQ_SUBLIST = new SublistTypeInfo("intSeqAtts", #[new AttributeDefn("interventionList", null, true, ADMINISTRATION_TYPE.makeReference.makeVector),
-//																							new AttributeDefn("epochStart", null, true, MclTypeProvider::REAL_TYPE.makeVector),
-//																							new AttributeDefn("epochEnd", null, true, MclTypeProvider::REAL_TYPE.makeVector)])
-//	public static val TypeInfo SAMPLING_SEQ_SUBLIST = new SublistTypeInfo("sampSeqAtts", #[new AttributeDefn("samplingList", null, true, SAMPLING_TYPE.makeReference.makeVector),
-//																							new AttributeDefn("start", null, true, MclTypeProvider::REAL_TYPE.makeVector),
-//																							new AttributeDefn("end", null, true, MclTypeProvider::REAL_TYPE.makeVector)])
 
 	
 	// @TODO: need an addition set of validations to make sure that DVID is used if AMT has a define attribute

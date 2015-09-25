@@ -439,6 +439,7 @@ public class MclTypeProvider {
 		ep.integerLiteral -> INT_TYPE,
 		ep.stringLiteral -> STRING_TYPE,
 		ep.booleanLiteral -> BOOL_TYPE,
+		ep.constantLiteral -> REAL_TYPE,
 		ep.whenExpression -> REAL_TYPE,
 		ep.whenClause -> REAL_TYPE,
 		ep.relationalExpression -> BOOL_TYPE,
