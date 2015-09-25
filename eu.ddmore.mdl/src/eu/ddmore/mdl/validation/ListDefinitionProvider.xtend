@@ -43,6 +43,7 @@ class ListDefinitionProvider {
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
 	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'exact', 'intervalCensored'})
+	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
@@ -305,6 +306,17 @@ class ListDefinitionProvider {
 						 new AttributeDefn('lo', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('hi', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('fix', null, false, MclTypeProvider::BOOLEAN_TYPE)
 						 ]
+					)
+				)
+			]
+		),
+		"OBJECTS" -> (
+			new BlockListDefinition => [
+				key = 'type'
+				listDefns = newArrayList(
+					new ListDefInfo (null, new ListTypeInfo("MdlObjInMog", PrimitiveType.Real),  #[
+						 new AttributeDefn('type', null, true, MOG_OBJ_TYPE_TYPE)
+						]
 					)
 				)
 			]

@@ -13,6 +13,7 @@ import static org.junit.Assert.*
 
 import org.junit.Before
 import eu.ddmore.mdl.utils.MclUtils
+import eu.ddmore.mdl.mdl.MdlPackage
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -55,19 +56,17 @@ class MogValidatorTest {
 					logWT = ln(WT/70)
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
+		
 		'''.parse
 	
 		mcl.assertNoErrors	
 	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateCovariates[errorCount++]
-		
-		assertEquals(0, errorCount)
 	}
 		
 	@Test
@@ -96,19 +95,15 @@ class MogValidatorTest {
 					logWT = ln(WT/70)
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
 		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateCovariates[errorCount++]
-		
-		assertEquals(0, errorCount)
 	}
 		
 	@Test
@@ -135,19 +130,18 @@ class MogValidatorTest {
 					logWT
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
-		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateCovariates[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
-		
-		assertEquals(1, errorCount)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"covariate logWT has no match in dataObj"
+		)
 	}
 		
 	@Test
@@ -172,19 +166,15 @@ class MogValidatorTest {
 				COVARIATES{
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
 		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateCovariates[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
-		
-		assertEquals(0, errorCount)
 	}
 		
 	
@@ -209,19 +199,15 @@ class MogValidatorTest {
 					logWT = ln(70)
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
 		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateCovariates[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
-		
-		assertEquals(0, errorCount)
 	}
 		
 	@Test
@@ -248,19 +234,22 @@ class MogValidatorTest {
 					SEX
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
-		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateCovariates[t, m| if(t == MdlValidator::INCOMPATIBLE_TYPES) errorCount++]
-		
-		assertEquals(2, errorCount)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"covariate WT has an inconsistent type with its match in the dataObj"
+		)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"covariate SEX has an inconsistent type with its match in the dataObj"
+		)
 	}
 		
 	@Test
@@ -286,19 +275,18 @@ class MogValidatorTest {
 					SEX withCategories{male, fem}
 				}
 		}
+				mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
-		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateCovariates[t, m| if(t == MdlValidator::INCOMPATIBLE_TYPES) errorCount++]
-		
-		assertEquals(1, errorCount)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"covariate SEX has an inconsistent type with its match in the dataObj"
+		)
 	}
 		
 	@Test
@@ -333,19 +321,15 @@ class MogValidatorTest {
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
 		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateObservations[errorCount++]
-		
-		assertEquals(0, errorCount)
 	}
 
 	@Test
@@ -380,19 +364,18 @@ class MogValidatorTest {
 					Y : { type is count, distn = Poisson(lambda = F), link is ln }
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
-		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateObservations[t, m| if(t == MdlValidator::INCOMPATIBLE_TYPES) errorCount++]
-		
-		assertEquals(1, errorCount)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"observation Y has an inconsistent type with its match in the dataObj"
+		)
 	}
 
 	@Test
@@ -427,19 +410,17 @@ class MogValidatorTest {
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
-	
-		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateObservations[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
-		
-		assertEquals(1, errorCount)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"observation Y has no match in dataObj"
+		)
 	}
 
 	@Test
@@ -474,19 +455,18 @@ class MogValidatorTest {
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
-		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateObservations[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
-		
-		assertEquals(1, errorCount)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"observation Y has no match in dataObj"
+		)
 	}
 
 	@Test
@@ -523,19 +503,15 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
 		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateObservations[errorCount++]
-		
-		assertEquals(0, errorCount)
 	}
 
 	@Test
@@ -572,19 +548,18 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
-		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateObservations[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
-		
-		assertEquals(1, errorCount)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"observation Z has no match in dataObj"
+		)
 	}
 
 	@Test
@@ -621,19 +596,18 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
-		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateObservations[t, m| if(t == MdlValidator::MODEL_DATA_MISMATCH) errorCount++]
-		
-		assertEquals(1, errorCount)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"observation Z has no match in dataObj"
+		)
 	}
 
 	@Test
@@ -670,19 +644,18 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
 		'''.parse
 	
-		mcl.assertNoErrors	
-	
-		val validator = new MogValidator
-		validator.mdlObj = mcl.modelObject
-		validator.dataObj = mcl.dataObject
-		validator.paramObj = mcl.modelObject
-		validator.taskObj = mcl.modelObject
-		
-		validator.validateObservations[t, m| if(t == MdlValidator::INCOMPATIBLE_TYPES) errorCount++]
-		
-		assertEquals(1, errorCount)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"observation Z has an inconsistent type with its match in the dataObj"
+		)
 	}
 
 }

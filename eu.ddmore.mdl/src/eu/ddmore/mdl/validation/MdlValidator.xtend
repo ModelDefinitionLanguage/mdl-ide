@@ -418,7 +418,15 @@ class MdlValidator extends AbstractMdlValidator {
 	@Check
 	def validateMog(MclObject mogObj){
 		if(mogObj.isMogObject){
-			val mogValidator = new MogValidator(mogObj)
+			val mogValidator = new MogValidator
+			mogValidator.buildMog(mogObj)
+			// assume has a data obj
+			mogValidator.validateCovariates[
+				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+			]
+			mogValidator.validateObservations[
+				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+			]
 		}
 	}
 	
