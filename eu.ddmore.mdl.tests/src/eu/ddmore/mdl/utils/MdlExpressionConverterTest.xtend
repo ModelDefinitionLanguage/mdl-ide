@@ -12,13 +12,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import static extension eu.ddmore.mdl.utils.MdlExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
-class ExpressionConverterTest {
+class MdlExpressionConverterTest {
 	@Inject extension ParseHelper<Mcl>
 //	@Inject extension ValidationTestHelper
 	
@@ -37,8 +37,8 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
-"(GUT*KA) when T>=TLAG,
-0 otherwise", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
+"if (T>=TLAG) then GUT*KA
+else 0", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
 	}
 
 	@Test
@@ -90,10 +90,10 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 		
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
-"(10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))) when 10<22==!true,
-((GUT*KA) when T>=TLAG,
-0 otherwise) when KA&&GUT||false,
-INF otherwise", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
+"if (10<22==!true) then 10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))
+elseif (KA&&GUT||false) then if (T>=TLAG) then GUT*KA
+else 0
+else INF", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
 	}
 	
 		@Test
