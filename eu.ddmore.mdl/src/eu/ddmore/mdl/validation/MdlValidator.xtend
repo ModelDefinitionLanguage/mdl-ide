@@ -427,6 +427,9 @@ class MdlValidator extends AbstractMdlValidator {
 			mogValidator.validateObservations[
 				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
 			]
+			mogValidator.validateVariabilityLevels[
+				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+			]
 		}
 	}
 	

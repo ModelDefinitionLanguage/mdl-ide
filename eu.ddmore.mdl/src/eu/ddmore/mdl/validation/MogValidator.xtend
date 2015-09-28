@@ -1,39 +1,38 @@
 package eu.ddmore.mdl.validation
 
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.utils.MclUtils
 import java.util.ArrayList
+import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.mdl.AttributeList
-import eu.ddmore.mdl.mdl.EnumExpression
-import eu.ddmore.mdl.mdl.Mcl
-import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.ListDefinition
 
 class MogValidator {
-	public static class MogProvider{
-		
-		def getModelObject(MclObject mog){
-			// assume mandatory and 
-			val objDefns = mog.getBlocksByName(BlockDefinitionProvider::MOG_OBJ_NAME).head
-			for(idx : 0 .. 3){
-//				val symBolRef
-//				if(objDeEquationDefinition )
-//				switch(idx){
-//					case 0:
-//					
-//				}
-//				
-			}
-		}
-		
-	}
+//	public static class MogProvider{
+//		
+//		def getModelObject(MclObject mog){
+//			// assume mandatory and 
+//			val objDefns = mog.getBlocksByName(BlockDefinitionProvider::MOG_OBJ_NAME).head
+//			for(idx : 0 .. 3){
+////				val symBolRef
+////				if(objDeEquationDefinition )
+////				switch(idx){
+////					case 0:
+////					
+////				}
+////				
+//			}
+//		}
+//		
+//	}
 
 
 	extension ListDefinitionProvider listProvider = new ListDefinitionProvider 
@@ -202,6 +201,27 @@ class MogValidator {
 				else if(!mdlOb.typeFor.isCompatible(dataOb.typeFor)){
 					errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "observation " + mdlOb.name +" has an inconsistent type with its match in the dataObj");
 				}
+			}
+		}
+	}
+	
+	def validateVariabilityLevels((String, String) => void errorLambda){
+		val dataVarLvls = dataObj.dataVariabilityLevels
+		for(mdlOb : mdlObj.mdlVariabilityLevels){
+			if(mdlOb instanceof SymbolDefinition){
+				val dataOb = dataVarLvls.findFirst[name == (mdlOb as ListDefinition).name]
+				if(dataOb == null){
+					errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "variability level " + mdlOb.name +" has no match in dataObj");
+				}
+				else if(mdlOb.isParameterVarLevel){
+					if(!dataOb.isMatchingDataUse(ListDefinitionProvider::ID_USE_VALUE, ListDefinitionProvider::VARLVL_USE_VALUE)){
+						errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "variability level " + mdlOb.name +" has an inconsistent type with its match in the dataObj");
+					}
+				}
+				else if(mdlOb.isObservationVarLevel)
+					if(!dataOb.isMatchingDataUse(ListDefinitionProvider::OBS_USE_VALUE)){
+						errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "variability level " + mdlOb.name +" has an inconsistent type with its match in the dataObj");
+					}
 			}
 		}
 	}

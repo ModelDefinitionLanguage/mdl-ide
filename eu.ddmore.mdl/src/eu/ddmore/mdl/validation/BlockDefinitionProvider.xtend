@@ -10,6 +10,7 @@ class BlockDefinitionProvider {
 	public static val OBS_BLK_NAME = "OBSERVATION"
 	public static val DIV_BLK_NAME = "DATA_INPUT_VARIABLES"
 	public static val MOG_OBJ_NAME = "OBJECTS"
+	public static val VAR_LVL_BLK_NAME = "VARIABILITY_LEVELS"
 	
 	
 	val static Map<String, Map<String, Boolean> > BlkData = #{

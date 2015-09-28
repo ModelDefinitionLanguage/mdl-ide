@@ -18,6 +18,7 @@ import java.util.List
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.CatValRefMappingExpression
 import org.eclipse.xtext.EcoreUtil2
+import java.util.Arrays
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -132,6 +133,34 @@ class MclUtils {
 		}
 		retVal
 	}	
+
+
+	def getDataVariabilityLevels(MclObject it){
+		getDataColumnDefn(ListDefinitionProvider::ID_USE_VALUE, ListDefinitionProvider::VARLVL_USE_VALUE, ListDefinitionProvider::OBS_USE_VALUE)
+	}	
+
+	def getMdlVariabilityLevels(MclObject it){
+		val retVal = new ArrayList<ListDefinition>
+		for(obsStmt : blocks.filter[identifier == BlockDefinitionProvider::VAR_LVL_BLK_NAME]){
+			val body = obsStmt.body
+			switch(body){
+				BlockStatementBody:{
+					body.statements.forEach[s|if(s instanceof ListDefinition) retVal.add(s)]
+				}
+			}
+		}
+		retVal
+	}	
+
+	def isParameterVarLevel(ListDefinition it){
+		val enumValue = list.getAttributeEnumValue("type")
+		enumValue == 'parameter'
+	}
+
+	def isObservationVarLevel(ListDefinition it){
+		val enumValue = list.getAttributeEnumValue("type")
+		enumValue == 'observation'
+	}
 
 
 	def getDataColumnDefn(MclObject dataObj, String ... useValue){

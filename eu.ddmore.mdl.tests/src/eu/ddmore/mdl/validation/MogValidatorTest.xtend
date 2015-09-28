@@ -658,4 +658,146 @@ class MogValidatorTest {
 		)
 	}
 
+	@Test
+	def void testValidVariabilityLevelsMatch(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y }
+		
+			DATA_INPUT_VARIABLES {
+				ID : { use is id }
+				DV : { use is dv, variable = Y }
+				OCC : { use is varLevel }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					OCC : { type is parameter, level = 3 }
+					ID : { type is parameter, level = 2 }
+					DV : { type is observation, level = 1 }
+				}
+		
+		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInalidVariabilityLevelsMissingInData(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y }
+		
+			DATA_INPUT_VARIABLES {
+				ID : { use is id }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					ID : { type is parameter, level = 2 }
+					DV : { type is observation, level = 1 }
+				}
+		
+		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"variability level DV has no match in dataObj"
+		)
+	}
+
+	@Test
+	def void testInvalidVariabilityLevelsWrongType(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y }
+		
+			DATA_INPUT_VARIABLES {
+				ID : { use is varLevel }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					ID : { type is observation, level = 2 }
+				}
+		
+		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"variability level ID has an inconsistent type with its match in the dataObj"
+		)
+	}
+
+	@Test
+	def void testInvalidVariabilityLevelsWrongType2(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataobj {
+			DECLARED_VARIABLES{ Y }
+		
+			DATA_INPUT_VARIABLES {
+				ID : { use is dv, variable = Y }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlobj {
+				VARIABILITY_LEVELS{
+					ID : { type is parameter, level = 2 }
+				}
+		
+		}
+		mog = mogobj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataobj }
+				foo : { type is mdlobj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"variability level ID has an inconsistent type with its match in the dataObj"
+		)
+	}
+
 }
