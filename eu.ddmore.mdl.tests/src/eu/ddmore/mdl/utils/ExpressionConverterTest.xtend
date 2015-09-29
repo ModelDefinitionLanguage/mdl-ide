@@ -26,7 +26,7 @@ class ExpressionConverterTest {
 	@Test
 	def void testValidExpressionSyntax(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj {
+warfarin_PK_ODE_mdl = mdlObj {
 	IDV { T }
 	
 	VARIABILITY_LEVELS{}
@@ -49,7 +49,7 @@ warfarin_PK_ODE_mdl = mdlobj {
 	@Test
 	def void testConverter1(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -68,7 +68,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	@Test
 	def void testConverter2(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -85,7 +85,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	@Test
 	def void testConverter3(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			RATEIN = 10 < 22 == true
 	} # end MODEL_PREDICTION
@@ -99,7 +99,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	@Test
 	def void testConverter4(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -123,7 +123,7 @@ INF otherwise", eqn.expression.convertToString.replace("\r\n", "\n")) // The rep
 		@Test
 	def void testConverter5(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			RATEIN = "doo"
 	} # end MODEL_PREDICTION
@@ -137,7 +137,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 		@Test
 	def void testConverter6(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -154,7 +154,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 		@Test
 	def void testConverter7(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = dataobj {
+warfarin_PK_ODE_mdl = dataObj {
 	DATA_INPUT_VARIABLES{
 	} # end MODEL_PREDICTION
 	SOURCE{

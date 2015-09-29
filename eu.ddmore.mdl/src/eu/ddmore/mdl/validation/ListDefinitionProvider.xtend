@@ -44,7 +44,7 @@ class ListDefinitionProvider {
 	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{'categorical', 'count', 'discrete', 'tte'})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
-	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
+//	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'exact', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 
@@ -332,19 +332,17 @@ class ListDefinitionProvider {
 						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
 						 ]
 					),
-					new ListDefInfo ('count', new ListTypeInfo("CountObs", PrimitiveType.Int),  #[
+					new ListDefInfo ('count', new ListTypeInfo("CountObs", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE),
-						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE),
-						 new AttributeDefn('link', null, true, LINK_FUNC_TYPE)
+						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo ('discrete', new ListTypeInfo("DiscreteObs", PrimitiveType.Int),  #[
+					new ListDefInfo ('discrete', new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE),
-						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE),
-						 new AttributeDefn('link', null, true, LINK_FUNC_TYPE)
+						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo ('tte', new ListTypeInfo("DiscreteObs", PrimitiveType.Int),  #[
+					new ListDefInfo ('tte', new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('hazard', null, true, MclTypeProvider::REAL_TYPE.makeReference),
 						 new AttributeDefn('event', null, true, TTE_EVENT_TYPE),

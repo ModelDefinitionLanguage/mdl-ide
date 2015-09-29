@@ -16,7 +16,7 @@ class MclParserTaskObj1Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-nonmem_task = taskobj {
+nonmem_task = taskObj {
 	ESTIMATE(target="NONMEM")<<
 			; this is defined in INI format
 			[method]

@@ -52,12 +52,12 @@ import eu.ddmore.mdl.utils.MclUtils
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
 class MdlValidator extends AbstractMdlValidator {
-	public val static MDLOBJ = 'mdlobj'
-	public val static DATAOBJ = 'dataobj'
-	public val static TASKOBJ = 'taskobj'
-	public val static PARAMOBJ = 'parobj'
-	public val static MOGOBJ = 'mogobj'
-	public val static DESIGNOBJ = 'desobj'
+	public val static MDLOBJ = 'mdlObj'
+	public val static DATAOBJ = 'dataObj'
+	public val static TASKOBJ = 'taskObj'
+	public val static PARAMOBJ = 'parObj'
+	public val static MOGOBJ = 'mogObj'
+	public val static DESIGNOBJ = 'desObj'
 
 	extension BlockArgumentDefinitionProvider movh = new BlockArgumentDefinitionProvider
 	extension BlockDefinitionProvider blokHelper = new BlockDefinitionProvider
@@ -130,7 +130,7 @@ class MdlValidator extends AbstractMdlValidator {
 	@Check
 	def validateMdlObjectHasCorrectBlocks(MclObject it){
 		// check if mandatory blocks missing
-		unusedMandatoryBlocks.forEach[blk, mand| error("mandatory block '" + blk + "' is missing in mdlobj '" + name + "'",
+		unusedMandatoryBlocks.forEach[blk, mand| error("mandatory block '" + blk + "' is missing in mdlObj '" + name + "'",
 					MdlPackage.eINSTANCE.mclObject_Blocks, MANDATORY_BLOCK_MISSING, blk) ]
 	}
 

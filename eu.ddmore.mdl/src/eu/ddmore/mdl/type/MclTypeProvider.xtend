@@ -322,6 +322,14 @@ public class MclTypeProvider {
 			val otherType = other.underlyingType
 			switch(otherType){
 				ListTypeInfo:  this.name == otherType.name
+				PrimitiveTypeInfo:{
+					// If other is primitive type then check compatibility
+					val compType = compatibleTypes?.get(this.theType)
+					if(compType != null)
+						compType.contains(otherType.theType)
+					else false
+				}
+					
 				default:
 					false 
 			}
@@ -528,11 +536,18 @@ public class MclTypeProvider {
 		}
 	}
 
-	def dispatch TypeInfo typeFor(UnaryExpression exp){
-		switch(exp.feature){
+	def dispatch TypeInfo typeFor(UnaryExpression it){
+		switch(feature){
 			case('!'): BOOL_TYPE
 			case('+'),
-			case('-'): REAL_TYPE
+			case('-'):{
+				val operandType = operand.typeFor.underlyingType
+				if(operandType == INT_TYPE)
+					INT_TYPE
+				else if(operandType == REAL_TYPE)
+					REAL_TYPE
+				else UNDEFINED_TYPE
+			}
 			default:
 				throw new RuntimeException("Unrecognised unary operator.")
 		}

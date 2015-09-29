@@ -18,7 +18,7 @@ class MclParserDesignObj1Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_design = desobj {
+warfarin_design = desObj {
 	DECLARED_VARIABLES{
 		bsv_lvl; GUT; oral1
 	}

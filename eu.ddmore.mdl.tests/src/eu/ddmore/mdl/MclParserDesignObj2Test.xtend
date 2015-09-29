@@ -18,7 +18,7 @@ class MclParserDesignObj2Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-d1g=desobj{
+d1g=desObj{
 	DECLARED_VARIABLES{
 		Conc
 		Effect

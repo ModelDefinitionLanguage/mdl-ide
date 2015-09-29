@@ -34,7 +34,7 @@ class MogValidatorTest {
 	@Test
 	def void testValidCovariateMatching(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
 				SEX : { use is catCov withCategories{male when 0, female when 1} }
@@ -46,7 +46,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 				}
 		
@@ -56,10 +56,10 @@ class MogValidatorTest {
 					logWT = ln(WT/70)
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		
@@ -72,7 +72,7 @@ class MogValidatorTest {
 	@Test
 	def void testValidCovariateMatchingWithMatchingDayaVar(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{GUT Y}
 		
 			DATA_INPUT_VARIABLES {
@@ -86,7 +86,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}
 			
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 				}
 		
@@ -95,10 +95,10 @@ class MogValidatorTest {
 					logWT = ln(WT/70)
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -109,7 +109,7 @@ class MogValidatorTest {
 	@Test
 	def void testInValidCovariateMatchingDataMissing(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
 				WT : { use is covariate }
@@ -121,7 +121,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}
 				
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 				}
 		
@@ -130,10 +130,10 @@ class MogValidatorTest {
 					logWT
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -147,7 +147,7 @@ class MogValidatorTest {
 	@Test
 	def void testValidCovariateNoMdlCovars(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
 				WT : { use is covariate }
@@ -159,17 +159,17 @@ class MogValidatorTest {
 			} # end SOURCE
 		}
 				
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 				}
 		
 				COVARIATES{
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -181,7 +181,7 @@ class MogValidatorTest {
 	@Test
 	def void testValidCovariateNoMatchingDataCovars(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
 			} # end DATA_INPUT_VARIABLES
@@ -191,7 +191,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 				}
 		
@@ -199,10 +199,10 @@ class MogValidatorTest {
 					logWT = ln(70)
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -213,7 +213,7 @@ class MogValidatorTest {
 	@Test
 	def void testInValidCovariateOfWrongType(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DATA_INPUT_VARIABLES {
 				SEX : { use is catCov withCategories{male when 0, female when 1} }
 				WT : { use is covariate }
@@ -225,7 +225,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 				}
 		
@@ -234,10 +234,10 @@ class MogValidatorTest {
 					SEX
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -255,7 +255,7 @@ class MogValidatorTest {
 	@Test
 	def void testInValidCovariateOfInconsistentCategories(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DATA_INPUT_VARIABLES {
 				SEX : { use is catCov withCategories{male when 0, female when 1} }
 			} # end DATA_INPUT_VARIABLES
@@ -267,7 +267,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}
 		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 				}
 		
@@ -275,10 +275,10 @@ class MogValidatorTest {
 					SEX withCategories{male, fem}
 				}
 		}
-				mog = mogobj{
+				mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -292,7 +292,7 @@ class MogValidatorTest {
 	@Test
 	def void testValidSingleObsMatching(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Y }
 		
 			DATA_INPUT_VARIABLES {
@@ -304,7 +304,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -321,10 +321,10 @@ class MogValidatorTest {
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -335,8 +335,8 @@ class MogValidatorTest {
 	@Test
 	def void testInvalidSingleObsMismatchingType(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
-			DECLARED_VARIABLES{ Y }
+		warfarin_PK_ODE_dat = dataObj {
+			DECLARED_VARIABLES{ Y withCategories {true, false} }
 		
 			DATA_INPUT_VARIABLES {
 				DV : { use is dv, variable = Y }
@@ -347,7 +347,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -361,13 +361,13 @@ class MogValidatorTest {
 				}
 		
 				OBSERVATION{
-					Y : { type is count, distn = Poisson(lambda = F), link is ln }
+					Y : { type is count, distn = Poisson(lambda = F) }
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -381,7 +381,7 @@ class MogValidatorTest {
 	@Test
 	def void testInvalidSingleObsMismatchedName(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Z }
 		
 			DATA_INPUT_VARIABLES {
@@ -393,7 +393,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -410,10 +410,10 @@ class MogValidatorTest {
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -426,7 +426,7 @@ class MogValidatorTest {
 	@Test
 	def void testInvalidSingleObsMismatchedNoData(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Y }
 		
 			DATA_INPUT_VARIABLES {
@@ -438,7 +438,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -455,10 +455,10 @@ class MogValidatorTest {
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -472,7 +472,7 @@ class MogValidatorTest {
 	@Test
 	def void testValidMultiObsContinuousMatching(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Y; Z }
 		
 			DATA_INPUT_VARIABLES {
@@ -485,7 +485,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -503,10 +503,10 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -517,7 +517,7 @@ class MogValidatorTest {
 	@Test
 	def void testInvalidMultiObsContinuousMisMatchedName(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Y; X }
 		
 			DATA_INPUT_VARIABLES {
@@ -530,7 +530,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -548,10 +548,10 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -565,7 +565,7 @@ class MogValidatorTest {
 	@Test
 	def void testInvalidMultiObsContinuousMissing(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Y; Z }
 		
 			DATA_INPUT_VARIABLES {
@@ -578,7 +578,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -596,10 +596,10 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -613,7 +613,7 @@ class MogValidatorTest {
 	@Test
 	def void testInvalidMultiObsContinuousMismatchType(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Y; Z withCategories { a, b }}
 		
 			DATA_INPUT_VARIABLES {
@@ -626,7 +626,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -644,10 +644,10 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -659,9 +659,53 @@ class MogValidatorTest {
 	}
 
 	@Test
+	def void testValidDiscreteType(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataObj {
+			DECLARED_VARIABLES{ Z }
+		
+			DATA_INPUT_VARIABLES {
+				DVID : { use is dvid }
+				DV : { use is dv, variable = Z }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlObj {
+				VARIABILITY_LEVELS{
+					DV : { type is observation, level = 1 }
+				}
+		
+				MODEL_PREDICTION{
+					F = 1
+				}
+		
+				RANDOM_VARIABLE_DEFINITION(level is DV){
+					EPS
+				}
+		
+				OBSERVATION{
+					Z : { type is count, distn = Poisson(lambda=0.0) }
+				}
+		}
+		mog = mogObj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
 	def void testValidVariabilityLevelsMatch(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Y }
 		
 			DATA_INPUT_VARIABLES {
@@ -675,7 +719,7 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					OCC : { type is parameter, level = 3 }
 					ID : { type is parameter, level = 2 }
@@ -683,10 +727,10 @@ class MogValidatorTest {
 				}
 		
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -697,7 +741,7 @@ class MogValidatorTest {
 	@Test
 	def void testInalidVariabilityLevelsMissingInData(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Y }
 		
 			DATA_INPUT_VARIABLES {
@@ -709,17 +753,17 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					ID : { type is parameter, level = 2 }
 					DV : { type is observation, level = 1 }
 				}
 		
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -733,7 +777,7 @@ class MogValidatorTest {
 	@Test
 	def void testInvalidVariabilityLevelsWrongType(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Y }
 		
 			DATA_INPUT_VARIABLES {
@@ -745,16 +789,16 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					ID : { type is observation, level = 2 }
 				}
 		
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse
@@ -768,7 +812,7 @@ class MogValidatorTest {
 	@Test
 	def void testInvalidVariabilityLevelsWrongType2(){
 		val mcl = '''
-		warfarin_PK_ODE_dat = dataobj {
+		warfarin_PK_ODE_dat = dataObj {
 			DECLARED_VARIABLES{ Y }
 		
 			DATA_INPUT_VARIABLES {
@@ -780,16 +824,16 @@ class MogValidatorTest {
 			    		ignore = "#" } 
 			} # end SOURCE
 		}		
-		foo = mdlobj {
+		foo = mdlObj {
 				VARIABILITY_LEVELS{
 					ID : { type is parameter, level = 2 }
 				}
 		
 		}
-		mog = mogobj{
+		mog = mogObj{
 			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataobj }
-				foo : { type is mdlobj }
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
 			}
 		}
 		'''.parse

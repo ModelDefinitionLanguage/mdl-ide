@@ -18,7 +18,7 @@ class MclParserDataObj3Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_v2_dat = dataobj{
+warfarin_PK_v2_dat = dataObj{
 	DECLARED_VARIABLES{ Y; GUT; PCA withCategories {dead, alive}; OTHER withCategories {dead, alive} }
 	
 	DATA_INPUT_VARIABLES {
@@ -26,7 +26,7 @@ warfarin_PK_v2_dat = dataobj{
 		TIME : { use is idv }
 		WT : { use is covariate }
 		AGE : { use is covariate }
-		SEX : { use is catCov withCategories { male when 0, female when 1} } 
+		SEX : { use is catCov withCategories { male when 0, female when 1,MISSING when -99} } 
 		AMT : { use  is amt, variable = GUT }
 		DVID : { use  is dvid }
 		DV : { use  is dv, define =  {
@@ -57,7 +57,7 @@ warfarin_PK_v2_dat = dataobj{
 	@Test
 	def void testInvalidDvidAttribs(){
 		val mcl = '''
-warfarin_PK_v2_dat = dataobj{
+warfarin_PK_v2_dat = dataObj{
 	DECLARED_VARIABLES{ Y; D; TD; GUT; PCA}
 	
 	DATA_INPUT_VARIABLES {

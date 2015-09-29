@@ -148,9 +148,9 @@ class MogValidator {
 	// 1) All covariates (unless they have an RHS) must be matched to the data object
 	// 1a) All covariates must be of the same type.
 	// 2) All observations must be matched to a data object - unless this is a simulation
-	// 3) All uninitialised parameters in STRUCURAL_PARAMS must match STRUCTURAL in parobj
-	// 4) All unitinitialised parameters in VARIABILITY_PARAMETERS must match VARIABILITY in parobj
-	// 5) Variability levels of type parameter must be matched to dataobj.
+	// 3) All uninitialised parameters in STRUCURAL_PARAMS must match STRUCTURAL in parObj
+	// 4) All unitinitialised parameters in VARIABILITY_PARAMETERS must match VARIABILITY in parObj
+	// 5) Variability levels of type parameter must be matched to dataObj.
 	// 6) Variability parameters of type dv must be matched to data if an estimation (not simulation)
 	// 7) If IDV is specified in the model then it must match TIME in the data.
 	// 8) Dosing variables must be mapped to variables in to MODEL_PREDICTION block

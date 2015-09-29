@@ -20,7 +20,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testValidUnnamedFunction(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			IDV{T}
 			
 			COVARIATES{
@@ -38,7 +38,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testFunctionWithNoArgs(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			COVARIATES{
 				other
 				cov = ln()
@@ -57,7 +57,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testUnnamedFunctionWithNamedArgs(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			COVARIATES{
 				other
 				cov = ln(val=other)
@@ -76,7 +76,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testFunctionWithTooManyArgs(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			COVARIATES{
 				other
 				cov = ln(other, 2)
@@ -95,7 +95,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testUnrecognisedFunction(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			COVARIATES{
 				other
 				cov = blah(other, 2)
@@ -116,7 +116,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testUnrecognisedFunctionSameSymbolName(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			COVARIATES{
 				other
 				cov = cov(other, 2)
@@ -135,7 +135,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testUnrecognisedFunctionOtherSymbolName(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			COVARIATES{
 				other
 				cov = foo(other, 2)
@@ -154,7 +154,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testValidNamedFunction(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			
 			
 			COVARIATES{
@@ -177,7 +177,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testInValidTypeNamedFunction(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			
 			
 			COVARIATES{
@@ -203,7 +203,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testInValidTypeUnnamedFunction(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			
 			
 			COVARIATES{
@@ -229,7 +229,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testValidOverloadedNamedFunction(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			
 			
 			COVARIATES{
@@ -251,7 +251,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testNamedFunctionWithNoArgs(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			VARIABILITY_LEVELS{
 			}
 
@@ -268,7 +268,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testNamedFunctionWithWrongArg(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			COVARIATES{
 				logtWT
 			}
@@ -292,7 +292,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testInvalidNamedFunctionWithMissingArg(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			COVARIATES{
 				logtWT
 			}
@@ -322,7 +322,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testNamedFunctionWithoutOptionalArg(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			COVARIATES{
 				logtWT
 			}
@@ -345,7 +345,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testNamedFunctionWithDuplicateArg(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			
 			COVARIATES{
 				logtWT
@@ -376,7 +376,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testNamedFunctionWithUnnamedArgs(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			COVARIATES{
 				other
 				foo = linear(10, 20, 30)
@@ -394,7 +394,7 @@ class MclBuiltinFunctionValidationTest {
 
 	@Test
 	def void testInValidNamedFunctionSublistWronAttribsType(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			
 			
 			COVARIATES{

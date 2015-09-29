@@ -21,7 +21,7 @@ class MclBlockArgValidationTest {
 
 	@Ignore
 	def void testValidArgs(){
-		val mcl = '''bar = mdlobj ( idv T ){
+		val mcl = '''bar = mdlObj ( idv T ){
 			VARIABILITY_LEVELS{
 				ID : {type is parameter, level=2 }
 			}
@@ -35,7 +35,7 @@ class MclBlockArgValidationTest {
 
 	@Test
 	def void testValidTaskBlockProps(){
-		val mcl = '''bar = taskobj{
+		val mcl = '''bar = taskObj{
 			OPTIMISE(target="NONMEM")<<
 				Any old text
 			>>
@@ -46,7 +46,7 @@ class MclBlockArgValidationTest {
 
 	@Test
 	def void testUnknownBlockArg(){
-		val mcl = '''bar = mdlobj ( foo T ){
+		val mcl = '''bar = mdlObj ( foo T ){
 			VARIABILITY_LEVELS{
 			}
 		}'''.parse
@@ -57,13 +57,13 @@ class MclBlockArgValidationTest {
 		)
 //		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
 //			MdlValidator::MANDATORY_BLOCK_ARG_MISSING,
-//			"mandatory argument 'idv' is missing in mdlobj 'bar'"
+//			"mandatory argument 'idv' is missing in mdlObj 'bar'"
 //		)
 	}
 
 	@Test
 	def void testUnknownBlockArgWithOptionIdv(){
-		val mcl = '''bar = mdlobj ( foo T ){
+		val mcl = '''bar = mdlObj ( foo T ){
 			VARIABILITY_LEVELS{
 			}
 		}'''.parse
@@ -74,26 +74,26 @@ class MclBlockArgValidationTest {
 		)
 		mcl.assertNoErrors(MdlPackage::eINSTANCE.mclObject,
 			MdlValidator::MANDATORY_BLOCK_ARG_MISSING,
-			"mandatory argument 'idv' is missing in mdlobj 'bar'"
+			"mandatory argument 'idv' is missing in mdlObj 'bar'"
 		)
 	}
 
 	@Ignore
 	def void tesNoBlockArg(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlObj {
 			VARIABILITY_LEVELS{
 			}
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
 			MdlValidator::MANDATORY_BLOCK_ARG_MISSING,
-			"mandatory argument 'idv' is missing in mdlobj 'foo'"
+			"mandatory argument 'idv' is missing in mdlObj 'foo'"
 		)
 	}
 
 	@Test
 	def void testUnknownBlockArgProp(){
-		val mcl = '''bar = mdlobj ( idv T, prop = "value" ){
+		val mcl = '''bar = mdlObj ( idv T, prop = "value" ){
 			VARIABILITY_LEVELS{
 			}
 		}'''.parse
@@ -106,7 +106,7 @@ class MclBlockArgValidationTest {
 
 	@Ignore
 	def void testUnknownBlockArgPropAndMandBlockArg(){
-		val mcl = '''bar = mdlobj ( foo T, prop = "value" ){
+		val mcl = '''bar = mdlObj ( foo T, prop = "value" ){
 			VARIABILITY_LEVELS{
 			}
 		}'''.parse
@@ -117,7 +117,7 @@ class MclBlockArgValidationTest {
 		)
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
 			MdlValidator::MANDATORY_BLOCK_ARG_MISSING,
-			"mandatory argument 'idv' is missing in mdlobj 'bar'"
+			"mandatory argument 'idv' is missing in mdlObj 'bar'"
 		)
 		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
 			MdlValidator::UNKNOWN_BLOCK_ARG_DECL,
@@ -127,7 +127,7 @@ class MclBlockArgValidationTest {
 
 	@Test
 	def void testUnknownBlockArgPropAndMandBlockArgOptionalIdv(){
-		val mcl = '''bar = mdlobj ( foo T, prop = "value" ){
+		val mcl = '''bar = mdlObj ( foo T, prop = "value" ){
 			VARIABILITY_LEVELS{
 			}
 		}'''.parse
@@ -146,7 +146,7 @@ class MclBlockArgValidationTest {
 
 	@Test
 	def void testUnusedBlockArgProps(){
-		val mcl = '''bar = mdlobj ( idv T ){
+		val mcl = '''bar = mdlObj ( idv T ){
 			VARIABILITY_LEVELS{
 			}
 			RANDOM_VARIABLE_DEFINITION{
@@ -161,7 +161,7 @@ class MclBlockArgValidationTest {
 
 	@Test
 	def void testUnusedBlockArgWithUnkPropProps(){
-		val mcl = '''bar = mdlobj ( idv T ){
+		val mcl = '''bar = mdlObj ( idv T ){
 			VARIABILITY_LEVELS{
 			}
 			RANDOM_VARIABLE_DEFINITION(prop = 3){

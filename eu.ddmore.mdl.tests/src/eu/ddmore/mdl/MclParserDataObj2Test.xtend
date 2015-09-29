@@ -16,7 +16,7 @@ class MclParserDataObj2Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_v2_dat = dataobj{
+warfarin_PK_v2_dat = dataObj{
 	DECLARED_VARIABLES{ Y; D; TD; GUT}
 	
 	DATA_INPUT_VARIABLES {

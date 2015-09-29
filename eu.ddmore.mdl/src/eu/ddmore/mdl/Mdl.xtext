@@ -333,9 +333,9 @@ terminal FLOAT returns ecore::EDouble:
     | ('0'..'9')
     ;
 
-//terminal fragment SIGN:
-//	('+'|'-')
-//;
+terminal fragment SIGN:
+	('+'|'-')
+;
 
 terminal fragment ESCAPE_SEQUENCE:
 	'\\' ('b' | 't' | 'n' | 'f' | 'r' | '\"' | '\'' | '\\')
