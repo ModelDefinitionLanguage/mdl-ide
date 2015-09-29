@@ -29,13 +29,14 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 class ListDefinitionProvider {
 
 	public static val COV_USE_VALUE = 'covariate'
+	public static val AMT_USE_VALUE = 'amt'
 	public static val OBS_USE_VALUE = 'dv'
 	public static val CATCOV_USE_VALUE = 'catCov'
 	public static val IDV_USE_VALUE = 'idv'
 	public static val ID_USE_VALUE = 'id'
 	public static val VARLVL_USE_VALUE = 'varLevel'
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'amt', OBS_USE_VALUE, 'dvid', 'cmt', 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', 'ignore', VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, 'dvid', 'cmt', 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', 'ignore', VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
 	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})

@@ -1,28 +1,22 @@
 package eu.ddmore.mdl.validation
 
-import org.junit.runner.RunWith
-import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.InjectWith
-import eu.ddmore.mdl.MdlInjectorProvider
 import com.google.inject.Inject
+import eu.ddmore.mdl.MdlInjectorProvider
+import eu.ddmore.mdl.mdl.Mcl
+import eu.ddmore.mdl.mdl.MdlPackage
+import org.eclipse.xtext.junit4.InjectWith
+import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
-import eu.ddmore.mdl.mdl.Mcl
-import org.junit.Test
-import static org.junit.Assert.*
-
 import org.junit.Before
-import eu.ddmore.mdl.utils.MclUtils
-import eu.ddmore.mdl.mdl.MdlPackage
+import org.junit.Test
+import org.junit.runner.RunWith
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
 class MogValidatorTest {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
-
-	extension MclUtils domu = new MclUtils
-
 
 	int errorCount
 	
@@ -886,4 +880,504 @@ class MogValidatorTest {
 		)
 	}
 
+	@Test
+	def void testValidIdvMatchInMog(){
+		val mcl = '''
+		testData = dataObj {
+			DATA_INPUT_VARIABLES {
+				T : { use is idv }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+		
+				IDV{ T }
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidIdvMismatchInMog(){
+		val mcl = '''
+		testData = dataObj {
+			DATA_INPUT_VARIABLES {
+				TTI : { use is idv }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+		
+				IDV{ T }
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"individual variable T has no match in dataObj")
+	}
+
+	@Test
+	def void testInvalidIdvMissingInDataMismatchInMog(){
+		val mcl = '''
+		testData = dataObj {
+			DATA_INPUT_VARIABLES {
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+		
+				IDV{ T }
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"individual variable T has no match in dataObj")
+	}
+
+	@Test
+	def void testValidIdvMissingInModelMog(){
+		val mcl = '''
+		testData = dataObj {
+			DATA_INPUT_VARIABLES {
+				TTI : { use is idv }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidSingleSimpleDosingMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+					Y
+					A
+					D
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidDosingNoMdlMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { Y }
+			DATA_INPUT_VARIABLES {
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+					Y
+					A
+					D
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidSingleOdeDosingMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+					DEQ{
+						D : { deriv=1 }
+						X : { deriv=1 }
+					}
+					Y
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidSingleCompartmentDosingMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+					}
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+	@Test
+	def void testInvalidSingleSimpleDosingNoMdlVarMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+					Y
+					A
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"dosing variable D has no match in mdlObj")
+	}
+
+	@Test
+	def void testValidSingleOdeDosingMissingModelMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+					DEQ{
+						X : { type is deriv, value=1 }
+					}
+					Y
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"dosing variable D has no match in mdlObj")
+	}
+
+	@Test
+	def void testValidSingleCompartmentDosingMissingModelMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidMultiDosingMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D; CENTRAL; Y }
+			DATA_INPUT_VARIABLES {
+				CMT : { use is cmt }
+				AMT : { use is amt, define = { 1 in CMT as D, 2 in CMT as CENTRAL, 3 in CMT as Y } }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+					COMPARTMENT{
+						D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				     	CENTRAL:    {type is compartment, modelCmt=2}
+			             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+						}
+					Y
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidMultiDosingMisMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D, CENTRAL, Y }
+			DATA_INPUT_VARIABLES {
+				CMT : { use is cmt }
+				AMT : { use is amt, define = { 1 in CMT as D, 2 in CMT as CENTRAL, 3 in CMT as Y } }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+					DEQ{
+						D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				     	CENTRAL:    {type is compartment, modelCmt=2}
+			             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+						}
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"dosing variable Y has no match in mdlObj")
+	}
+	
+	@Test
+	def void testInvalidSingleDosingIncompatibleTypesMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+			      D []
+				}
+		
+		}
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"dosing variable D has an inconsistent type with its match in the mdlObj")
+	}
+
+	
 }

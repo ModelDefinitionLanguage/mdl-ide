@@ -19,6 +19,7 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.CatValRefMappingExpression
 import org.eclipse.xtext.EcoreUtil2
 import java.util.Arrays
+import eu.ddmore.mdl.mdl.BlockStatement
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -105,6 +106,18 @@ class MclUtils {
 //		retVal
 	}
 	
+	def getDataIdv(MclObject it){
+		val idvs = getDataColumnDefn(ListDefinitionProvider::IDV_USE_VALUE)
+		if(idvs.empty) null
+		else idvs.head
+	}	
+	
+	def getMdlIdv(MclObject it){
+		val retVal = new ArrayList<Statement>
+		blocks.filter[identifier == BlockDefinitionProvider::IDV_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[retVal.add(it)]]
+		if(retVal.empty) null
+		else retVal.head
+	}	
 	
 	def getDataObservations(MclObject it){
 		val retVal = new ArrayList<SymbolDefinition>
@@ -121,6 +134,47 @@ class MclUtils {
 		retVal
 	}	
 
+	def getDataDosingVariables(MclObject it){
+		val retVal = new ArrayList<SymbolDefinition>
+		for(obsLst :getDataColumnDefn(ListDefinitionProvider::AMT_USE_VALUE)){
+			val varRef = obsLst.list.getAttributeExpression('variable')
+			if(varRef != null){
+				retVal.add(varRef.singleSymbolRef) // expect a var ref here.
+			}
+			else{
+				val defineRef = obsLst.list.getAttributeExpression('define')
+				retVal.addAll(defineRef.mappedSymbolRef)
+			}
+		}
+		retVal
+	}	
+
+	def List<Statement> getNonBlockStatements(BlockStatement it){
+		val retVal = new ArrayList<Statement>
+		val body = body
+		switch(body){
+			BlockStatementBody:{
+				for(stmt : body.statements){
+					switch(stmt){
+						BlockStatement:
+							retVal.addAll(stmt.getNonBlockStatements)
+						default:
+							retVal.add(stmt)
+					}
+						
+				}
+			}
+		}
+		retVal
+	}
+
+	def getMdlPredictionVariables(MclObject it){
+		val retVal = new ArrayList<Statement>
+		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]){
+			retVal.addAll(stmt.nonBlockStatements)
+		}
+		retVal
+	}	
 	def getMdlObservations(MclObject it){
 		val retVal = new ArrayList<Statement>
 		for(obsStmt : blocks.filter[identifier == BlockDefinitionProvider::OBS_BLK_NAME]){

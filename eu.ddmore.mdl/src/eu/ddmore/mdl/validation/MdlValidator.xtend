@@ -430,6 +430,12 @@ class MdlValidator extends AbstractMdlValidator {
 			mogValidator.validateVariabilityLevels[
 				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
 			]
+			mogValidator.validateIndividualVariable[
+				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+			]
+			mogValidator.validateDosing[
+				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+			]
 		}
 	}
 	
