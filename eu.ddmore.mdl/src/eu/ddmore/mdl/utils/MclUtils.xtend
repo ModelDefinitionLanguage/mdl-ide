@@ -186,7 +186,7 @@ class MclUtils {
 			SymbolReference:
 				return expr.ref
 			CatValRefMappingExpression:
-				expr.getSymbolDefnFromCatValRef
+				expr.symbolDefnFromCatValRef
 			ParExpression:
 				return expr.expr.singleSymbolRef
 			default: null
@@ -200,6 +200,9 @@ class MclUtils {
 				for(mp : expr.attList){
 					retVal.add(mp.rightOperand.getSingleSymbolRef)
 				}
+			}
+			CatValRefMappingExpression:{
+				retVal.add(expr.symbolDefnFromCatValRef)
 			}
 		}
 		retVal

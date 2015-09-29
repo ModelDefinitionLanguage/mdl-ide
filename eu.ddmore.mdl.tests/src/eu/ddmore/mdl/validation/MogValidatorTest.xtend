@@ -333,6 +333,48 @@ class MogValidatorTest {
 	}
 
 	@Test
+	def void testValidCategoricalObsMatching(){
+		val mcl = '''
+		warfarin_PK_ODE_dat = dataObj {
+			DECLARED_VARIABLES{ Y withCategories { c1, c0, c3, c2 } }
+		
+			DATA_INPUT_VARIABLES {
+		      DV:{ use is dv, define= {Y.c0 when 0, Y.c2 when 1, Y.c3 when 2, Y.c1 when 3 } }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		foo = mdlObj {
+				VARIABILITY_LEVELS{
+					DV : { type is observation, level = 1 }
+				}
+		
+			   MODEL_PREDICTION{
+				  Prob0 = 0.1
+				  Prob1 = 0.2
+				  Prob2 = 0.5
+				  Prob3 = 1 - sum([Prob0, Prob1, Prob2]) 
+			   }# end MODEL_PREDICTION
+			
+			   OBSERVATION{
+				   Y : {type is categorical withCategories{ c0 when Prob0, c1 when Prob1, c2 when Prob2, c3 when Prob3} } 
+			    }# end ESTIMATION
+		}
+		mog = mogObj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors	
+	}
+
+	@Test
 	def void testInvalidSingleObsMismatchingType(){
 		val mcl = '''
 		warfarin_PK_ODE_dat = dataObj {
