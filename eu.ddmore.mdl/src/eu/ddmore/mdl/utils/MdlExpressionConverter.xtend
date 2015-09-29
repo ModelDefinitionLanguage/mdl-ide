@@ -14,6 +14,9 @@ import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.mdl.MappingPair
+import eu.ddmore.mdl.mdl.SubListExpression
+import eu.ddmore.mdl.mdl.MappingExpression
+import eu.ddmore.mdl.mdl.EnumPair
 
 public class MdlExpressionConverter extends ExpressionConverter {
 	
@@ -42,7 +45,7 @@ public class MdlExpressionConverter extends ExpressionConverter {
 		«exp.func»(«exp.argList.getString»)'''
 
     def dispatch String getString(NamedFuncArguments exp)'''
-        «FOR arg: exp.arguments SEPARATOR ', '»«arg.getArgumentName»=«arg.getExpression.getString»«ENDFOR»'''
+        «FOR arg: exp.arguments SEPARATOR ', '»«arg.getString»«ENDFOR»'''
 	
 	def dispatch String getString(UnnamedFuncArguments exp)'''
 		«FOR arg: exp.args SEPARATOR ', '»«arg.argument.getString»«ENDFOR»'''
@@ -67,7 +70,16 @@ public class MdlExpressionConverter extends ExpressionConverter {
 //		«FOR e : exp.expressions SEPARATOR ','»
 //			«e.getString»«ENDFOR»'''
 
+    override dispatch String getString(SubListExpression expr)'''
+        [«FOR c : expr.attributes SEPARATOR ', '»«c.getString»«ENDFOR»]'''
+
+    override dispatch String getString(MappingExpression expr)'''
+        [«FOR c : expr.attList SEPARATOR ', '»«c.getString»«ENDFOR»]'''
+
     override dispatch String getString(MappingPair mp)'''
         «mp.leftOperand.getString» in «mp.srcColumn.getString» as «mp.rightOperand.getString»'''
+        
+    def dispatch String getString(EnumPair mp)'''
+        «mp.argumentName» is «mp.expression.getString»'''
 	
 }

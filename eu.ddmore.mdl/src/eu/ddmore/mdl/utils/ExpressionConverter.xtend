@@ -4,23 +4,23 @@ import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BooleanLiteral
 import eu.ddmore.mdl.mdl.ConstantLiteral
+import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
+import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IntegerLiteral
+import eu.ddmore.mdl.mdl.MappingExpression
+import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.StringLiteral
+import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
-import org.eclipse.emf.ecore.EObject
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.EnumExpression
-import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdl.MappingExpression
-import eu.ddmore.mdl.mdl.SubListExpression
+import org.eclipse.emf.ecore.EObject
 
 public class ExpressionConverter {
 
@@ -135,18 +135,21 @@ public class ExpressionConverter {
 //		«FOR e : exp.expressions SEPARATOR ','»
 //			«e.getString»«ENDFOR»'''
 
+    // TODO: Used?
     def dispatch String getString(SubListExpression expr)'''
         {«FOR c : expr.attributes SEPARATOR ','»
             «c.getString»«ENDFOR»}'''
 
+    // TODO: Used?
     def dispatch String getString(MappingExpression expr)'''
         {«FOR c : expr.attList SEPARATOR ','»
             «c.getString»«ENDFOR»}'''
             
+    // TODO: Used?
     def dispatch String getString(MappingPair mp)'''
         «mp.leftOperand.getString» col=«mp.srcColumn.getString» varRef=«mp.rightOperand.getString»'''
         
     def dispatch String getString(ValuePair mp)'''
-        «mp.argumentName» = «mp.expression.getString»'''
+        «mp.argumentName»=«mp.expression.getString»'''
 	
 }
