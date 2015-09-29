@@ -541,7 +541,7 @@ public class MclTypeProvider {
 			case('!'): BOOL_TYPE
 			case('+'),
 			case('-'):{
-				val operandType = operand.typeFor.underlyingType
+				val operandType = operand?.typeFor.underlyingType
 				if(operandType == INT_TYPE)
 					INT_TYPE
 				else if(operandType == REAL_TYPE)
