@@ -29,6 +29,11 @@ import eu.ddmore.mdl.mdl.ConstantLiteral
 
 public class ExpressionConverter {
 	
+	public def static Integer convertToInteger(Expression it){
+		val strRep = getString
+		Integer::valueOf(strRep)
+	}
+
 	public def static String convertToString(Expression it){
 		getString
 	}

@@ -215,12 +215,12 @@ WhenExpression returns Expression:
 		(=>ELSE other=Expression)?
 	;
 
-WhenClause:
-	IF '(' cond=Expression ')' => THEN value=Expression
+WhenClause returns Expression:
+	{WhenClause} IF '(' cond=Expression ')' => THEN value=Expression
 ;
 
-ElifClause:
-	ELSEIF '(' cond=Expression ')' => THEN value=Expression
+ElifClause returns Expression:
+	{ElifClause} ELSEIF '(' cond=Expression ')' => THEN value=Expression
 ;
 
 Literal returns Expression:

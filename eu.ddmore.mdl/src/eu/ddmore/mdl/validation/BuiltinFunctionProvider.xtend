@@ -22,8 +22,11 @@ import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.mdl.EnumExpression
 import java.util.HashMap
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.FuncArguments
 
 class BuiltinFunctionProvider {
+	
+	static val funct_error_additive = 'additiveError'
 	
 	interface FunctDefn{
 		def int getNumArgs()
@@ -305,6 +308,20 @@ class BuiltinFunctionProvider {
 	private def getFunctionCall(ValuePair it){
 		eContainer.eContainer as BuiltinFunctionCall
 	}
+	
+	def isNamedArgFunction(BuiltinFunctionCall it){
+		val funcDefn = functDefns.get(func)
+		funcDefn != null && funcDefn instanceof NamedFuncArguments
+	}
+	
+	def getAttributeEnumValue(FuncArguments it, String argName){
+		switch(it){
+			NamedFuncArguments:
+				arguments
+			default: null
+		}
+	}
+	
 	
 	// The validator should check on a per argument basis is an argument name is valid.
 	def checkNamedArguments(ValuePair it, (String) => void unkArgError, (String) => void duplicateArgError){

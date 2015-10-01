@@ -1,25 +1,26 @@
 package eu.ddmore.mdl.utils
 
-import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.validation.MdlValidator
-import eu.ddmore.mdl.mdl.Statement
-import java.util.ArrayList
-import eu.ddmore.mdl.validation.BlockDefinitionProvider
-import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.validation.ListDefinitionProvider
-import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.Mcl
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
-import eu.ddmore.mdl.mdl.SymbolReference
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.ParExpression
-import eu.ddmore.mdl.mdl.MappingExpression
-import java.util.List
-import eu.ddmore.mdl.mdl.SymbolDefinition
-import eu.ddmore.mdl.mdl.CatValRefMappingExpression
-import org.eclipse.xtext.EcoreUtil2
-import java.util.Arrays
 import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.CatValRefMappingExpression
+import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.MappingExpression
+import eu.ddmore.mdl.mdl.Mcl
+import eu.ddmore.mdl.mdl.MclObject
+import eu.ddmore.mdl.mdl.ParExpression
+import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.SymbolDefinition
+import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.validation.BlockDefinitionProvider
+import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.validation.MdlValidator
+import java.util.ArrayList
+import java.util.List
+import org.eclipse.xtext.EcoreUtil2
+
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
+import eu.ddmore.mdl.mdl.EquationDefinition
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -65,6 +66,10 @@ class MclUtils {
 
 	def getTaskObject(Mcl mcl){
 		mcl.objects.findFirst[isTaskObject]
+	}
+
+	def getMogObject(Mcl mcl){
+		mcl.objects.findFirst[isMogObject]
 	}
 
 	def getMdlCovariateDefns(MclObject mdlObj){
@@ -113,8 +118,8 @@ class MclUtils {
 	}	
 	
 	def getMdlIdv(MclObject it){
-		val retVal = new ArrayList<Statement>
-		blocks.filter[identifier == BlockDefinitionProvider::IDV_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[retVal.add(it)]]
+		val retVal = new ArrayList<EquationDefinition>
+		blocks.filter[identifier == BlockDefinitionProvider::IDV_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[if(it instanceof EquationDefinition) retVal.add(it)]]
 		if(retVal.empty) null
 		else retVal.head
 	}	
