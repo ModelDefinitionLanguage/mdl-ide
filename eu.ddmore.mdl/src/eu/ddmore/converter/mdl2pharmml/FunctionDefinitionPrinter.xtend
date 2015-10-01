@@ -186,7 +186,7 @@ class FunctionDefinitionPrinter {
 		val defn = standardErrorFunctionMappingTable.get(func)
 		if(defn != null){
 			// is a standard error function
-			val transFunc = argList.getAttributeEnumValue('trans')
+			val transFunc = argList.getArgumentEnumValue('trans') ?: 'none'
 			for(defnTrans : defn.keySet){
 				if(defnTrans.contains(transFunc)){
 					return functionDefinitions.get(defn.get(defnTrans))
@@ -199,7 +199,7 @@ class FunctionDefinitionPrinter {
 
 	def print_FunctionDefinitions(MclObject it){
 		var res  = "";
-		var printedFunctions = new ArrayList<String>();
+//		var printedFunctions = new ArrayList<String>();
 		for (o: mdlObservations){
 			switch(o){
 				EquationDefinition:{
@@ -209,7 +209,7 @@ class FunctionDefinitionPrinter {
 							if(rhsExpr.isNamedArgFunction){
 								val funcDefn = rhsExpr.pharmMLFuncDefn
 								res = res + funcDefn;
-								printedFunctions.add(o.name);
+//								printedFunctions.add(o.name);
 							}
 					}
 				}

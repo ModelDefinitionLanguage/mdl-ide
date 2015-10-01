@@ -479,7 +479,7 @@ public class MclTypeProvider {
 		// and a later type is a Real the the type for the vector as a whole is a Real.
 		var TypeInfo refType = null
 		var allRefs = true
-		for(Expression e : vl.expressions){
+		for(e : vl.expressions){
 			val origType = e.typeFor
 			// check to see if amy non refs present. If so resulting array type will be non-ref
 			if(!origType.isReference) allRefs = false  

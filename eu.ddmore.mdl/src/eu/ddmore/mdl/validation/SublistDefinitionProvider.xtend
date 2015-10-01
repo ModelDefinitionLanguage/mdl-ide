@@ -37,7 +37,7 @@ class SublistDefinitionProvider {
 		return sublistDefns.get(name)
 	}
 
-	def findSublistMatch(SubListExpression sle){
+	def SublistTypeInfo findSublistMatch(SubListExpression sle){
 		val attNames = sle.attributeNames
 		val candidateDefns = sublistDefns.values.filter(sl|
 			sl.attributes.exists(ad| 

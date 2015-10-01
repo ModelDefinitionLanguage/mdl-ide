@@ -287,8 +287,8 @@ class MdlValidator extends AbstractMdlValidator {
 		
 	@Check
 	def validateCompatibleTypes(WhenClause e){
-		checkExpectedBoolean(e.cond, typeError(MdlPackage::eINSTANCE.whenClause_Cond))
-		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.whenClause_Value))
+		checkExpectedBoolean(e.cond, typeError(MdlPackage::eINSTANCE.ifExprPart_Cond))
+		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.ifExprPart_Value))
 	}
 		
 	@Check

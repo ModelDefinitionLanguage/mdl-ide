@@ -3,10 +3,12 @@ package eu.ddmore.converter.mdl2pharmml
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
-import eu.ddmore.mdl.mdl.ElifClause
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
+import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
@@ -20,7 +22,6 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.validation.ListDefinitionProvider
@@ -34,9 +35,6 @@ import java.util.TreeMap
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.mdl.EnumerationDefinition
-import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 
 class ModelDefinitionPrinter {
 //	extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -47,6 +45,7 @@ class ModelDefinitionPrinter {
 
 	extension MclUtils mu = new MclUtils
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder 
 	
 	private static val CONTINUOUS_OBS = "continuous"
 	private static val COUNT_OBS = "count"
@@ -185,12 +184,6 @@ class ModelDefinitionPrinter {
     			}
     			retVal.addAll(expr.other.symbolReferences)
     		}
-    		WhenClause:{
-				retVal.addAll(expr.value.symbolReferences)    			
-    		}
-    		ElifClause:{
-				retVal.addAll(expr.value.symbolReferences)    			
-    		}
     		VectorLiteral:{
     			for(v : expr.expressions){
     				v.symbolReferences
@@ -205,6 +198,11 @@ class ModelDefinitionPrinter {
     			
     	}
     	retVal
+    }
+    
+    
+    def dispatch List<SymbolDefinition> getSymbolReferences(IfExprPart it){
+		value.symbolReferences    			
     }
     
     def dispatch List<SymbolDefinition> getSymbolReferences(BuiltinFunctionCall it){
@@ -249,21 +247,21 @@ class ModelDefinitionPrinter {
 				EquationDefinition case(s.expression != null):{
 					var transformation = "";
 					var dependencies = s.expression.getCovariateDependencies;
-					var isTransformed = false;
+					var SymbolDefinition transformedCov = null 
 					var continue = true; //no 'break' command in xText
 					for (v: dependencies){
 						if (covDefns.exists[it == v] && continue){
-							isTransformed = true;
+							transformedCov = v
 							skipped.add(v); 
 							continue = false;
 						} 
 					}
-					if (isTransformed){
+					if (transformedCov != null){
 						transformation =  '''
 							<Continuous>
 								<Transformation>
 								    <TransformedCovariate symbId="«s.name»"></TransformedCovariate>
-									«s.expression.convertToString»
+									«s.expression.pharmMLExpr»
 								</Transformation>
 							</Continuous>
 							'''
@@ -271,7 +269,7 @@ class ModelDefinitionPrinter {
 					}
 					model = model + '''
 					«IF transformation.length > 0»
-						<Covariate symbId="«s.name»">
+						<Covariate symbId="«transformedCov.name»">
 							«transformation»
 						</Covariate>
 					«ENDIF»	
@@ -279,47 +277,6 @@ class ModelDefinitionPrinter {
 				}
 			}
 		} 
-//		for (b: mObj.blocks){
-//			if (b.covariateBlock != null){
-//				for (s: b.covariateBlock.variables){
-//					var covName = s.name;
-//					var covType = "Continuous";
-//					//Print transformed covariates
-//					var transformation = "";
-//					if (s.expression != null){
-//						var dependencies = Utils::getDependencies(s.expression);
-//						var isTransformed = false;
-//						var continue = true; //no 'break' command in xText
-//						for (v: dependencies){
-//							if (cm_vars.contains(v) && continue){
-//								isTransformed = true;
-//								covName = v;
-//								skipped.add(covName); 
-//								continue = false;
-//							} 
-//						}
-//						if (isTransformed){
-//							transformation =  '''
-//								<«covType»>
-//									<Transformation>
-//									    <TransformedCovariate symbId="«s.name»"></TransformedCovariate>
-//										«s.expression.print_Math_Equation»
-//									</Transformation>
-//								</«covType»>
-//								'''
-//								skipped.add(s.name);
-//							}
-//					}
-//					model = model + '''
-//					«IF transformation.length > 0»
-//						<Covariate symbId="«covName»">
-//							«transformation»
-//						</Covariate>
-//					«ENDIF»	
-//					'''
-//				}
-//			}
-//		}
 		//Then print all remaining covariates
 		for(s : mObj.mdlCovariateDefns){
 			switch(s){
@@ -346,28 +303,6 @@ class ModelDefinitionPrinter {
 					}
 				}
 			}
-//			var covName = s.name;
-//			if (!skipped.contains(covName)){
-//				var covType = "Continuous";
-//				//Print categorical covariates
-//				var categorical = "";
-//				if (s.list != null){
-//					var type = getAttributeExpression(s.list.arguments, AttributeValidator::attr_type.name);
-//					if (type.isCategorical){
-//						covType = "Categorical";
-//						categorical = '''«type.print_Categorical»''';
-//					}
-//				}
-//				model = '''
-//				<Covariate symbId="«covName»">
-//					«IF categorical.length > 0»
-//						«categorical»
-//					«ELSE»
-//						<«covType»/>
-//					«ENDIF»
-//				</Covariate>
-//				''' + model;
-//			}
 		}
 		if (model.length > 0){
 			model = '''

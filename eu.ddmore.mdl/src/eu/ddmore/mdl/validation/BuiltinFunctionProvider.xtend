@@ -311,13 +311,23 @@ class BuiltinFunctionProvider {
 	
 	def isNamedArgFunction(BuiltinFunctionCall it){
 		val funcDefn = functDefns.get(func)
-		funcDefn != null && funcDefn instanceof NamedFuncArguments
+		funcDefn != null && funcDefn.head instanceof NamedArgFuncDefn
 	}
 	
-	def getAttributeEnumValue(FuncArguments it, String argName){
-		switch(it){
-			NamedFuncArguments:
-				arguments
+	def getArgumentExpression(NamedFuncArguments it, String attName){
+		arguments.findFirst[argumentName == attName]?.expression
+	}
+
+	def getArgumentEnumValue(FuncArguments args, String argName){
+		switch(args){
+			NamedFuncArguments:{
+				val enumExp = args.getArgumentExpression(argName)
+				switch(enumExp){
+					EnumExpression:
+						return enumExp.enumValue
+					default: null
+				}
+			}
 			default: null
 		}
 	}
