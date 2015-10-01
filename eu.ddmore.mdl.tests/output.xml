@@ -51,5 +51,108 @@
 				</Continuous>
 			</Covariate>
 		</CovariateModel>
+		<ParameterModel blkId="pm">
+			<SimpleParameter symbId = "POP_CL">
+			</SimpleParameter>
+			<SimpleParameter symbId = "POP_V">
+			</SimpleParameter>
+			<SimpleParameter symbId = "POP_KA">
+			</SimpleParameter>
+			<SimpleParameter symbId = "POP_TLAG">
+			</SimpleParameter>
+			<SimpleParameter symbId = "BETA_CL_WT">
+			</SimpleParameter>
+			<SimpleParameter symbId = "BETA_V_WT">
+			</SimpleParameter>
+			<SimpleParameter symbId = "RUV_PROP">
+			</SimpleParameter>
+			<SimpleParameter symbId = "RUV_ADD">
+			</SimpleParameter>
+			<SimpleParameter symbId = "PPV_CL">
+			</SimpleParameter>
+			<SimpleParameter symbId = "PPV_V">
+			</SimpleParameter>
+			<SimpleParameter symbId = "PPV_KA">
+			</SimpleParameter>
+			<SimpleParameter symbId = "PPV_TLAG">
+			</SimpleParameter>
+			<RandomVariable symbId="ETA_CL">
+				<ct:VariabilityReference>
+					<ct:SymbRef symbIdRef=ID/>
+				</ct:VariabilityReference>
+				<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
+					<mean>
+						<rVal>
+							0
+						</rVal>
+					</mean>
+					<stddev>
+						<var varId="PPV_CL"/>
+					</stddev>
+				</NormalDistribution>
+			</RandomVariable>
+			<RandomVariable symbId="ETA_V">
+				<ct:VariabilityReference>
+					<ct:SymbRef symbIdRef=ID/>
+				</ct:VariabilityReference>
+				<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
+					<mean>
+						<rVal>
+							0
+						</rVal>
+					</mean>
+					<stddev>
+						<var varId="PPV_V"/>
+					</stddev>
+				</NormalDistribution>
+			</RandomVariable>
+			<RandomVariable symbId="ETA_KA">
+				<ct:VariabilityReference>
+					<ct:SymbRef symbIdRef=ID/>
+				</ct:VariabilityReference>
+				<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
+					<mean>
+						<rVal>
+							0
+						</rVal>
+					</mean>
+					<stddev>
+						<var varId="PPV_KA"/>
+					</stddev>
+				</NormalDistribution>
+			</RandomVariable>
+			<RandomVariable symbId="ETA_TLAG">
+				<ct:VariabilityReference>
+					<ct:SymbRef symbIdRef=ID/>
+				</ct:VariabilityReference>
+				<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
+					<mean>
+						<rVal>
+							0
+						</rVal>
+					</mean>
+					<stddev>
+						<var varId="PPV_TLAG"/>
+					</stddev>
+				</NormalDistribution>
+			</RandomVariable>
+			<RandomVariable symbId="EPS_Y">
+				<ct:VariabilityReference>
+					<ct:SymbRef symbIdRef=DV/>
+				</ct:VariabilityReference>
+				<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
+					<mean>
+						<rVal>
+							0
+						</rVal>
+					</mean>
+					<variance>
+						<rVal>
+							1
+						</rVal>
+					</variance>
+				</NormalDistribution>
+			</RandomVariable>
+		</ParameterModel>
 	</ModelDefinition>
 </PharmML>

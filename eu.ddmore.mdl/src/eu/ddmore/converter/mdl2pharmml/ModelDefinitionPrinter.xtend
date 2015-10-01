@@ -24,6 +24,7 @@ import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.utils.MclUtils
+import eu.ddmore.mdl.validation.BlockDefinitionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
 import java.util.ArrayList
 import java.util.Comparator
@@ -35,6 +36,7 @@ import java.util.TreeMap
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
+import eu.ddmore.mdl.mdl.RandomVariableDefinition
 
 class ModelDefinitionPrinter {
 //	extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -46,6 +48,7 @@ class ModelDefinitionPrinter {
 	extension MclUtils mu = new MclUtils
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder 
+	extension DistributionPrinter dp = new DistributionPrinter 
 	
 	private static val CONTINUOUS_OBS = "continuous"
 	private static val COUNT_OBS = "count"
@@ -69,7 +72,7 @@ class ModelDefinitionPrinter {
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«mObj.print_mdef_VariabilityModel»
 			«mObj.print_mdef_CovariateModel»
-«««			«mObj.print_mdef_ParameterModel»
+			«mObj.print_mdef_ParameterModel»
 «««			«mObj.print_mdef_StructuralModel»
 «««			«mObj.print_mdef_ObservationModel»
 		</ModelDefinition>
@@ -314,42 +317,80 @@ class ModelDefinitionPrinter {
 		return model;
 	}	
 		
+		
+	def writeSimpleParameter(EquationDefinition stmt)'''
+		<SimpleParameter symbId = "«stmt.name»">
+			«IF stmt.expression != null»
+				<ct:Assign>
+					<ct:Equation>
+						«stmt.expression.pharmMLExpr»
+					</ct:Equation>
+				</ct:Assign>
+			«ENDIF»
+		</SimpleParameter>
+	'''
+		
+	def writeRandomVariable(RandomVariableDefinition stmt, SymbolReference level)'''
+		<RandomVariable symbId="«stmt.name»">
+			<ct:VariabilityReference>
+				«level.pharmMLExpr»
+			</ct:VariabilityReference>
+			«writeUncertMlDistribution(stmt.distn)»
+		</RandomVariable>
+	'''
+		
+	def writeUncertMlDistribution(Expression functionCall){
+		switch(functionCall){
+			BuiltinFunctionCall:
+				functionCall.writeUncertmlDist
+			default:
+				''''''
+		}
+	}
+		
+
 //	/////////////////////////////
 //	// I.d Parameter Model
 //	////////////////////////////	
-//	def print_mdef_ParameterModel(ModelObject mObj, ParameterObject pObj){		
-//		var statements = "";
-//		if (mObj != null){
-//			for (b: mObj.blocks){
-//				//STRUCTURAL_PARAMETERS
-//				if (b.structuralParametersBlock != null){
-//					for (id: b.structuralParametersBlock.parameters) 
-//						if (id.name != null)
-//							statements = statements + 
-//							'''<SimpleParameter symbId = "«id.name»"/>
-//							'''
-//		  		}
-//		  		//VARIABILITY_PARAMETERS
-//		  		if (b.variabilityParametersBlock != null){
-//					for (id: b.variabilityParametersBlock.parameters){
-//						if (id.name != null)
-//							statements = statements + 
-//							'''<SimpleParameter symbId = "«id.name»"/>
-//							'''
-//					}
-//		  		}
-//		  		//GROUP_VARIABLES (covariate parameters)
-//				if (b.groupVariablesBlock != null){
-//					for (st: b.groupVariablesBlock.statements){
-//						if (st.variable != null){
-//							statements = statements + st.variable.print_SymbolDeclaration("SimpleParameter", false);
-//						}							
-//					}
-//				}	
-//		  	}
-//			for (b: mObj.blocks){
-//				//RANDOM_VARIABLES_DEFINITION
-//				if (b.randomVariableDefinitionBlock != null){
+	def print_mdef_ParameterModel(MclObject mObj){		
+		var statements = '''''';
+		if (mObj != null){
+			for (b: mObj.blocks){
+				//STRUCTURAL_PARAMETERS
+				if (b.identifier == BlockDefinitionProvider::MDL_STRUCT_PARAMS){
+					for (stmt: b.getNonBlockStatements)
+						switch(stmt){
+							EquationDefinition:
+							statements += writeSimpleParameter(stmt)
+						} 
+		  		}
+		  		//VARIABILITY_PARAMETERS
+		  		if (b.identifier == BlockDefinitionProvider::MDL_VAR_PARAMS){
+					for (stmt: b.getNonBlockStatements)
+						switch(stmt){
+							EquationDefinition:
+							statements += writeSimpleParameter(stmt)
+						} 
+		  		}
+		  		//GROUP_VARIABLES (covariate parameters)
+		  		if (b.identifier == BlockDefinitionProvider::MDL_GRP_PARAMS){
+					for (stmt: b.getNonBlockStatements)
+						switch(stmt){
+							EquationDefinition:
+							statements += writeSimpleParameter(stmt)
+						} 
+		  		}
+		  	}
+			for (b: mObj.blocks){
+				//RANDOM_VARIABLES_DEFINITION
+				if (b.identifier == BlockDefinitionProvider::MDL_RND_VARS){
+					val levelExpr = b.getVarLevel
+					for (stmt: b.getNonBlockStatements)
+						switch(stmt){
+						RandomVariableDefinition:
+							statements += writeRandomVariable(stmt, levelExpr)
+						} 
+						
 //					if (b.randomVariableDefinitionBlock.arguments != null){
 //						var level = b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_level_ref.name);
 //						if (level.length > 0){
@@ -359,25 +400,25 @@ class ModelDefinitionPrinter {
 //							} 
 //						}
 //					}
-//		  		}
-//		  		//INDIVIDUAL_VARIABLES
+		  		}
+		  		//INDIVIDUAL_VARIABLES
 //				if (b.individualVariablesBlock != null){
 //					for (s: b.individualVariablesBlock.variables){
 //						statements = statements + s.print_SymbolDeclaration("IndividualParameter", false);
 //					} 
 //		  		}
-//		  	}
-//  		}
+		  	}
+  		}
 //  		statements = statements + mObj.print_mdef_CollerationModel(pObj); 
-//	  	if (statements.length > 0){
-//			'''
-//				<ParameterModel blkId="pm">
-//					«statements»
-//				</ParameterModel>
-//			''';
-//		}
-//	}
-//	
+	  	if (statements.length > 0){
+			'''
+				<ParameterModel blkId="pm">
+					«statements»
+				</ParameterModel>
+			''';
+		}
+	}
+	
 //	/////////////////////////////
 //	// I.d_1 CorrelationModel
 //	/////////////////////////////

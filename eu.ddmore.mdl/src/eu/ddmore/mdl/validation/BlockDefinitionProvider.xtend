@@ -13,14 +13,19 @@ class BlockDefinitionProvider {
 	public static val VAR_LVL_BLK_NAME = "VARIABILITY_LEVELS"
 	public static val IDV_BLK_NAME = "IDV"
 	public static val MDL_PRED_BLK_NAME = "MODEL_PREDICTION"
+	public static val MDL_STRUCT_PARAMS = "STRUCTURAL_PARAMETERS"
+	public static val MDL_VAR_PARAMS = "VARIABILITY_PARAMETERS"
+	public static val MDL_INDIV_PARAMS = "INDIVIDUAL_VARIABLES"
+	public static val MDL_GRP_PARAMS = "GROUP_VARIABLES"
+	public static val MDL_RND_VARS = "RANDOM_VARIABLE_DEFINITION"
 	
 	
 	val static Map<String, Map<String, Boolean> > BlkData = #{
 		MdlValidator::MDLOBJ -> #{
-			COVARIATE_BLK_NAME -> false, "VARIABILITY_LEVELS" -> true, "STRUCTURAL_PARAMETERS" -> false,
-			"VARIABILITY_PARAMETERS" -> false, "RANDOM_VARIABLE_DEFINITION" -> false,
-			"INDIVIDUAL_VARIABLES" -> false, MDL_PRED_BLK_NAME -> false,
-			OBS_BLK_NAME -> false, "GROUP_VARIABLES" -> false, IDV_BLK_NAME -> false
+			COVARIATE_BLK_NAME -> false, VAR_LVL_BLK_NAME -> true, MDL_STRUCT_PARAMS -> false,
+			MDL_VAR_PARAMS -> false, MDL_RND_VARS -> false,
+			MDL_INDIV_PARAMS -> false, MDL_PRED_BLK_NAME -> false,
+			OBS_BLK_NAME -> false, MDL_GRP_PARAMS -> false, IDV_BLK_NAME -> false
 		},
 		MdlValidator::DATAOBJ -> #{
 			DIV_BLK_NAME -> true, "DECLARED_VARIABLES" -> false, "DATA_DERIVED_VARIABLES" -> false,

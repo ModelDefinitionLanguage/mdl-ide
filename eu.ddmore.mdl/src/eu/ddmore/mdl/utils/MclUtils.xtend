@@ -21,6 +21,7 @@ import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
 import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.ValuePair
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -267,6 +268,18 @@ class MclUtils {
 		retVal
 	}
 	
+	// get varlevel from RAND_VAR_BLK
+	def SymbolReference getVarLevel(BlockStatement it){
+		for(arg : blkArgs.args){
+			switch(arg){
+				ValuePair case(arg.argumentName == 'level'):
+					if(arg.expression instanceof SymbolReference){
+						return arg.expression as SymbolReference
+					}
+			}
+		}
+		null
+	}
 	
 	def SymbolDefinition getSymbolDefnFromCatValRef(CatValRefMappingExpression expr){
 		var SymbolDefinition retVal = null
