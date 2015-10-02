@@ -515,7 +515,7 @@ public class MclTypeProvider {
 			BuiltinFunctionCall:
 				e.functionType
 			VectorElement:
-				e.element.head.typeFor
+				e.element.typeFor
 			VectorLiteral:
 				if(e.expressions.isEmpty) MclTypeProvider.REAL_VECTOR_TYPE
 				else e.typeForArray

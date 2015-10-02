@@ -37,29 +37,39 @@ ForwardDeclaration:
 	{ForwardDeclaration}declType=ID name=ID
 ;
 
+//Statement:
+//	EquationDefinition|TransformedDefinition|ListDefinition|
+//	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
+//	EnumerationDefinition //|DerivativeDefinition
+//;
+
 Statement:
-	EquationDefinition|TransformedDefinition|ListDefinition|
+	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-	EnumerationDefinition //|DerivativeDefinition
+	EnumerationDefinition
 ;
 
 
 SymbolDefinition:
 	EquationDefinition | ListDefinition| ForwardDeclaration | RandomVariableDefinition | TransformedDefinition|
-	  EnumerationDefinition //|DerivativeDefinition
+	  EnumerationDefinition
 ;
 
 
-EquationDefinition:
-	name = ID (vector?='[' ']')? (ASSIGN expression = Expression)? ';'?
+EquationTypeDefinition:
+	EquationDefinition|TransformedDefinition
+;
+
+EquationDefinition returns EquationTypeDefinition:
+	{EquationDefinition} name = ID (vector?='[' ']')? (ASSIGN expression = Expression)? ';'?
 ;
 
 EnumerationDefinition:
 	name = ID  catDefn=CategoricalDefinitionExpr ';'?
 ;
 
-TransformedDefinition:
-	transform = ID '(' name=ID (',' idv=[SymbolDefinition|ID] )? ')' ASSIGN expression=Expression ';'?
+TransformedDefinition returns EquationTypeDefinition:
+	{TransformedDefinition} transform = ID '(' name=ID ')' ASSIGN expression=Expression ';'?
 ;
 
 RandomVariableDefinition:
@@ -280,12 +290,20 @@ StringLiteral returns Expression:
 	{StringLiteral} value=STRING;
 
 
+//VectorLiteral returns Expression:
+//	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
+//;	
+//
+//VectorElement returns Expression:
+//	{VectorElement} element+=Expression
+//;
+
 VectorLiteral returns Expression:
 	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
 ;	
 
 VectorElement returns Expression:
-	{VectorElement} element+=Expression
+	{VectorElement} element=Expression
 ;
 
 QualifiedName:

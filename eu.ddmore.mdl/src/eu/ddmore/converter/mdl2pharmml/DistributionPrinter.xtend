@@ -1,19 +1,18 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import org.eclipse.xtend.lib.annotations.Data
-import java.util.Map
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider.NamedArgFuncDefn
-import eu.ddmore.mdl.mdl.NamedFuncArguments
-import java.util.List
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IntegerLiteral
+import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.RealLiteral
+import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.validation.BuiltinFunctionProvider
+import java.util.List
+import java.util.Map
+import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.mdl.SymbolReference
 
 class DistributionPrinter {
 	
@@ -52,9 +51,7 @@ class DistributionPrinter {
 					IntegerLiteral,
 					RealLiteral:
 						'''
-						<«defn.typeStr»>
-							«argExpression.convertToString»
-						</«defn.typeStr»>
+						<«defn.typeStr»>«argExpression.convertToString»</«defn.typeStr»>
 						'''
 					SymbolReference:
 						'''

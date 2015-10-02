@@ -1,19 +1,17 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import java.util.ArrayList
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.utils.MclUtils
-import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
-import eu.ddmore.mdl.validation.ListDefinitionProvider
 
 class FunctionDefinitionPrinter {
 
 	extension MclUtils mclUtil = new MclUtils
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
-	extension PharmMLConverterUtils pcu = new PharmMLConverterUtils
-	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+//	extension PharmMLConverterUtils pcu = new PharmMLConverterUtils
+//	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 
 	static val functionDefinitions = #{
 		'additiveError' -> '''

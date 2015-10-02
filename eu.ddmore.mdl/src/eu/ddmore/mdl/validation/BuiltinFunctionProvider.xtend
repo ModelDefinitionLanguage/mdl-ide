@@ -1,32 +1,30 @@
 package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.FuncArguments
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import java.util.HashMap
 import java.util.HashSet
 import java.util.List
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.mdl.EnumExpression
-import java.util.HashMap
-import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.FuncArguments
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 
 class BuiltinFunctionProvider {
-	
-	static val funct_error_additive = 'additiveError'
 	
 	interface FunctDefn{
 		def int getNumArgs()

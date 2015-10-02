@@ -331,20 +331,20 @@ class MdlValidator extends AbstractMdlValidator {
 		// only check if there is an RHS to check 
 		if(e.expression != null)
 			if(e.isVector)
-				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 			else
-				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 	}
 		
 	@Check
 	def validateCompatibleTypes(RandomVariableDefinition e){
-		checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+		checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 	}
 		
 	@Check
 	def validateCompatibleTypes(TransformedDefinition e){
 		checkExpectedRealTransform(e.transform, typeError(MdlPackage::eINSTANCE.transformedDefinition_Transform))
-		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.transformedDefinition_Expression))
+		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 	}
 		
 	@Check

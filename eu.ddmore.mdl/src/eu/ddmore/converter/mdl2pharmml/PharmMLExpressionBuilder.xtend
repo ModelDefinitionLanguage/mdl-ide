@@ -59,7 +59,7 @@ class PharmMLExpressionBuilder {
     			getVectorLiteralExpression(expr)
     		}
     		VectorElement:{
-    			expr.element.head.pharmMLExpr
+    			expr.element.pharmMLExpr
     		}
     		BooleanLiteral:{
     			getBooleanLiteral(expr)

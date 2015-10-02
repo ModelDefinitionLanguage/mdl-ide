@@ -20,4 +20,12 @@ class PharmMLConverterUtils {
 		}
 	}
 	
+	def getPharmMLTransFunc(String mclName){
+		switch(mclName){
+			case('ln'): 'log'
+			default:
+				mclName
+		}
+	}
+	
 }

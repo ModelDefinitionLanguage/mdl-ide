@@ -136,7 +136,7 @@ public class ExpressionConverter {
 	
 	
 	def static dispatch String getString(VectorElement exp)'''
-		«exp.element.head.getString»'''
+		«exp.element.getString»'''
 		
 
 //	def static dispatch String getString(VectorContent exp)'''

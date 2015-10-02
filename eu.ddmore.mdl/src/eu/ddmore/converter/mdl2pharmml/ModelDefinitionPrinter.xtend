@@ -7,6 +7,7 @@ import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.ListDefinition
@@ -15,6 +16,7 @@ import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
+import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
@@ -25,7 +27,9 @@ import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.validation.BlockDefinitionProvider
+import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.validation.SublistDefinitionProvider
 import java.util.ArrayList
 import java.util.Comparator
 import java.util.HashMap
@@ -36,7 +40,8 @@ import java.util.TreeMap
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
-import eu.ddmore.mdl.mdl.RandomVariableDefinition
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.SubListExpression
 
 class ModelDefinitionPrinter {
 //	extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -47,14 +52,17 @@ class ModelDefinitionPrinter {
 
 	extension MclUtils mu = new MclUtils
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
 	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder 
 	extension DistributionPrinter dp = new DistributionPrinter 
+	extension PharmMLConverterUtils pcu = new PharmMLConverterUtils
+	extension SublistDefinitionProvider sdp = new SublistDefinitionProvider
 	
-	private static val CONTINUOUS_OBS = "continuous"
-	private static val COUNT_OBS = "count"
-	private static val DISCRETE_OBS = "discrete"
-	private static val CATEGORICAL_OBS = "categorical"
-	private static val TTE_OBS = "tte"
+//	private static val CONTINUOUS_OBS = "continuous"
+//	private static val COUNT_OBS = "count"
+//	private static val DISCRETE_OBS = "discrete"
+//	private static val CATEGORICAL_OBS = "categorical"
+//	private static val TTE_OBS = "tte"
 	
 	
 //	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -193,7 +201,7 @@ class ModelDefinitionPrinter {
     			}
     		}
     		VectorElement:{
-    			expr.element.head.symbolReferences
+    			expr.element.symbolReferences
     		}
     		SymbolReference:{
     			retVal.add(expr.ref)
@@ -321,13 +329,17 @@ class ModelDefinitionPrinter {
 	def writeSimpleParameter(EquationDefinition stmt)'''
 		<SimpleParameter symbId = "«stmt.name»">
 			«IF stmt.expression != null»
-				<ct:Assign>
-					<ct:Equation>
-						«stmt.expression.pharmMLExpr»
-					</ct:Equation>
-				</ct:Assign>
+				«stmt.expression.writeAssignment»
 			«ENDIF»
 		</SimpleParameter>
+	'''
+	
+	def writeAssignment(Expression expr)'''
+		<ct:Assign>
+			<ct:Equation>
+				«expr.pharmMLExpr»
+			</ct:Equation>
+		</ct:Assign>
 	'''
 		
 	def writeRandomVariable(RandomVariableDefinition stmt, SymbolReference level)'''
@@ -352,72 +364,161 @@ class ModelDefinitionPrinter {
 //	/////////////////////////////
 //	// I.d Parameter Model
 //	////////////////////////////	
-	def print_mdef_ParameterModel(MclObject mObj){		
-		var statements = '''''';
-		if (mObj != null){
-			for (b: mObj.blocks){
-				//STRUCTURAL_PARAMETERS
-				if (b.identifier == BlockDefinitionProvider::MDL_STRUCT_PARAMS){
-					for (stmt: b.getNonBlockStatements)
-						switch(stmt){
+	def print_mdef_ParameterModel(MclObject mObj)'''		
+		«IF mObj != null»
+			«FOR b: mObj.blocks»
+«««				//STRUCTURAL_PARAMETERS
+				«IF b.identifier == BlockDefinitionProvider::MDL_STRUCT_PARAMS»
+					«FOR stmt: b.getNonBlockStatements»
+						«switch(stmt){
 							EquationDefinition:
-							statements += writeSimpleParameter(stmt)
-						} 
-		  		}
-		  		//VARIABILITY_PARAMETERS
-		  		if (b.identifier == BlockDefinitionProvider::MDL_VAR_PARAMS){
-					for (stmt: b.getNonBlockStatements)
-						switch(stmt){
+								writeSimpleParameter(stmt)
+						}»
+					«ENDFOR» 
+		  		«ENDIF»
+«««				//VARIABILITY_PARAMETERS
+				«IF b.identifier == BlockDefinitionProvider::MDL_VAR_PARAMS»
+					«FOR stmt: b.getNonBlockStatements»
+						«switch(stmt){
 							EquationDefinition:
-							statements += writeSimpleParameter(stmt)
-						} 
-		  		}
-		  		//GROUP_VARIABLES (covariate parameters)
-		  		if (b.identifier == BlockDefinitionProvider::MDL_GRP_PARAMS){
-					for (stmt: b.getNonBlockStatements)
-						switch(stmt){
+							writeSimpleParameter(stmt)
+						}»
+					«ENDFOR» 
+		  		«ENDIF»
+«««		  		GROUP_VARIABLES (covariate parameters)
+				«IF b.identifier == BlockDefinitionProvider::MDL_GRP_PARAMS»
+					«FOR stmt: b.getNonBlockStatements»
+						«switch(stmt){
 							EquationDefinition:
-							statements += writeSimpleParameter(stmt)
-						} 
-		  		}
-		  	}
-			for (b: mObj.blocks){
-				//RANDOM_VARIABLES_DEFINITION
-				if (b.identifier == BlockDefinitionProvider::MDL_RND_VARS){
-					val levelExpr = b.getVarLevel
-					for (stmt: b.getNonBlockStatements)
-						switch(stmt){
-						RandomVariableDefinition:
-							statements += writeRandomVariable(stmt, levelExpr)
-						} 
-						
-//					if (b.randomVariableDefinitionBlock.arguments != null){
-//						var level = b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_level_ref.name);
-//						if (level.length > 0){
-//							for (s: b.randomVariableDefinitionBlock.variables){
-//								if (s.name != null)
-//									statements = statements + s.print_mdef_RandomVariable(level);
-//							} 
-//						}
-//					}
-		  		}
-		  		//INDIVIDUAL_VARIABLES
-//				if (b.individualVariablesBlock != null){
-//					for (s: b.individualVariablesBlock.variables){
-//						statements = statements + s.print_SymbolDeclaration("IndividualParameter", false);
-//					} 
-//		  		}
-		  	}
-  		}
+								writeSimpleParameter(stmt)
+						}»
+					«ENDFOR» 
+		  		«ENDIF»
+«««				//RANDOM_VARIABLES_DEFINITION
+				«IF b.identifier == BlockDefinitionProvider::MDL_RND_VARS»
+					«FOR stmt: b.getNonBlockStatements»
+						«switch(stmt){
+							RandomVariableDefinition:{
+								writeRandomVariable(stmt, b.getVarLevel)
+							}
+						}»
+					«ENDFOR» 
+		  		«ENDIF»
+«««		  		//INDIVIDUAL_VARIABLES
+				«IF b.identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS»
+					«FOR stmt: b.getNonBlockStatements»
+						«switch(stmt){
+							EquationTypeDefinition:
+								writeIndividualParameter(stmt)
+						}»
+					«ENDFOR» 
+		  		«ENDIF»
+		  	«ENDFOR»
+  		«ENDIF»
+  	'''
 //  		statements = statements + mObj.print_mdef_CollerationModel(pObj); 
-	  	if (statements.length > 0){
-			'''
-				<ParameterModel blkId="pm">
-					«statements»
-				</ParameterModel>
-			''';
+//	  	if (statements.length > 0){
+//			'''
+//				<ParameterModel blkId="pm">
+//					«statements»
+//				</ParameterModel>
+//			''';
+//		}
+//	}
+	
+	
+	def writeGeneralIdv(EquationTypeDefinition it){
+		var funcExpr = expression as BuiltinFunctionCall
+		var namedArgList = funcExpr.argList as NamedFuncArguments 
+		'''
+		<IndividualParameter symbId="«name»">
+			<GaussianModel>
+				«IF namedArgList.getArgumentExpression('trans') != null»
+					<Transformation>«namedArgList.getArgumentExpression('trans').convertToString.getPharmMLTransFunc»
+				«ENDIF»
+				<GeneralCovariate>
+					«namedArgList.getArgumentExpression('grp').writeAssignment»
+				</GeneralCovariate>
+				<RandomEffects>
+					«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
+				</RandomEffects>
+			</GaussianModel>
+		</IndividualParameter>
+		''' 
+	}
+	
+	def writeFixedEffects(Expression expr){
+		val it = expr as VectorLiteral
+		'''
+		«FOR el : expressions»
+			<Covariate>
+				«((el as VectorElement).element as SubListExpression).getAttributeExpression('cov')?.pharmMLExpr ?: "<Error!>"»
+				<FixedEffect>
+					«((el as VectorElement).element as SubListExpression).getAttributeExpression('coeff')?.pharmMLExpr ?: "<Error!>"»
+				</FixedEffect>
+			</Covariate>
+		«ENDFOR»
+		'''
+		
+	}
+	
+	def writeRandomEffects(Expression expr)'''
+		«IF expr instanceof VectorLiteral»
+			«FOR e : (expr as VectorLiteral).expressions»
+				«IF (e as VectorElement).element instanceof SymbolReference»
+					«(e as VectorElement).element.pharmMLExpr»
+				«ELSE»
+					<ERROR!>
+				«ENDIF»
+			«ENDFOR»
+		«ENDIF»
+		'''
+	
+	def writeLinearIdv(EquationTypeDefinition it){
+		var funcExpr = expression as BuiltinFunctionCall
+		var namedArgList = funcExpr.argList as NamedFuncArguments 
+		val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
+		'''
+		<IndividualParameter symbId="«name»">
+			<GaussianModel>
+				«IF namedArgList.getArgumentExpression('trans') != null»
+					<Transformation>«namedArgList.getArgumentExpression('trans').convertToString.getPharmMLTransFunc»
+				«ENDIF»
+				<LinearCovariate>
+					<PopulationParameter>
+						«namedArgList.getArgumentExpression('pop').writeAssignment»
+					</PopulationParameter>
+					«IF fixEff != null && !fixEff.expressions.isEmpty »
+						«namedArgList.getArgumentExpression('fixEff').writeFixedEffects»
+					«ENDIF»
+				</LinearCovariate>
+				<RandomEffects>
+					«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
+				</RandomEffects>
+			</GaussianModel>
+		</IndividualParameter>
+		''' 
+	}
+	
+	def writeExplicitIdv(EquationTypeDefinition it)'''
+		<IndividualParameter symbId="«name»">
+			«expression.writeAssignment»
+		</IndividualParameter>
+	''' 
+	
+	// assume definition has a RHS
+	def writeIndividualParameter(EquationTypeDefinition it){
+		val expr = it.expression
+		switch(expr){
+			BuiltinFunctionCall case(expr.func == 'general'):
+				writeGeneralIdv
+			BuiltinFunctionCall case(expr.func == 'linear'):
+				writeLinearIdv
+			default:
+				writeExplicitIdv			
 		}
 	}
+	
 	
 //	/////////////////////////////
 //	// I.d_1 CorrelationModel
@@ -879,24 +980,29 @@ class ModelDefinitionPrinter {
 //		'''
 //	}
 //	
-//	def print_SymbolDeclaration(SymbolDeclaration st, String tag, Boolean printType){
+//	def print_SymbolDeclaration(EquationDefinition st, String tag, Boolean printType){
+//		val expr = st.expression
 //		if (st.name != null)'''
 //			<«tag» symbId="«st.name»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
-//				«IF st.expression != null»
-//					«st.expression.print_Assign»
-//				«ENDIF»
-//				«IF st.list != null»
-//					«st.list.print_List»
-//				«ENDIF» 
+//			«IF expr != null»
+//				«switch(expr){
+//					BuiltinFunctionCall:
+//						expr.print_List
+//					default:
+//						expr.writeAssignment
+//				}
+//				»
+//				
+//			«ENDIF»
 //			</«tag»>
 //			'''
 //	}
 //	
 //	//Convert special types of lists to PharmML
-//	def print_List(List list){
+//	def print_List(BuiltinFunctionCall list){
 //		var assign = "";
 //		var res = "";
-//		val type = list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+//		val type = list.func;
 //		if (type.isCategorical){
 //			//Categorical variables
 //			if (type.type.type.categories != null && type.type.type.categories.size > 0){

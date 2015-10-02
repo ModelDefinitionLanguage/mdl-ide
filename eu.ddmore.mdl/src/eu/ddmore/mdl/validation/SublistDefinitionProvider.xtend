@@ -75,4 +75,8 @@ class SublistDefinitionProvider {
 		attNames
 	}
 
+	def getAttributeExpression(SubListExpression sle, String name){
+		sle.attributes.findFirst[argumentName == name].expression
+	}
+
 }
