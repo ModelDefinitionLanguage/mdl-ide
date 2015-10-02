@@ -58,4 +58,8 @@ final class Constants {
 	public static val BLK_DESIGN_SEGMENT  = "td_segment";
 	public static val BLK_DESIGN_ACTIVITY = "td_activity";
 	
+	
+	static def getMathsUri(){
+		baseURL + xmlns_math
+	}
 }

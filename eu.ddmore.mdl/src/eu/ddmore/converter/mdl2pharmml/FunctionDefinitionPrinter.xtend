@@ -178,147 +178,74 @@ class FunctionDefinitionPrinter {
 	}
 
 
+	static val standardArgumentLookup = #{
+		'additiveError' -> #{'additive' -> 'additive'},
+		'proportionalError' -> #{'proportional' -> 'proportional', 'prediction' -> 'f'},
+		'combinedError1' -> #{'additive' -> 'additive', 'proportional' -> 'proportional', 'prediction' -> 'f'},
+		'combinedError2' -> #{'additive' -> 'additive', 'proportional' -> 'proportional', 'prediction' -> 'f'},
+		'powerError' -> #{'proportional' -> 'proportional', 'power' -> 'power', 'prediction' -> 'f'},
+		'combinedPowerError1' -> #{'additive' -> 'additive', 'proportional' -> 'proportional', 'power' -> 'power', 'prediction' -> 'f'}
+	}
+	
+
+
+//	def getPharmMLFuncDefn(BuiltinFunctionCall it){
+//		var retVal = ''
+//		val defn = standardErrorFunctionMappingTable.get(func)
+//		if(defn != null){
+//			// is a standard error function
+//			val transFunc = argList.getArgumentEnumValue('trans') ?: 'none'
+//			for(defnTrans : defn.keySet){
+//				if(defnTrans.contains(transFunc)){
+//					return functionDefinitions.get(defn.get(defnTrans))
+//				}
+//			}
+//		}
+//		retVal
+//	}
 
 	def getPharmMLFuncDefn(BuiltinFunctionCall it){
-		var retVal = ''
+		functionDefinitions.get(standardErrorName)
+	}
+
+	def String getStandardErrorName(BuiltinFunctionCall it){
 		val defn = standardErrorFunctionMappingTable.get(func)
 		if(defn != null){
 			// is a standard error function
 			val transFunc = argList.getArgumentEnumValue('trans') ?: 'none'
 			for(defnTrans : defn.keySet){
 				if(defnTrans.contains(transFunc)){
-					return functionDefinitions.get(defn.get(defnTrans))
+					return defn.get(defnTrans)
 				}
 			}
 		}
-		retVal
+		return null
+	}
+	
+//	def isStandardErrorArgument(BuiltinFunctionCall it, String name){
+//		standardArgumentLookup.get(standardErrorName)?.containsKey(name) 
+//	}
+
+	def getStandardErrorArgument(BuiltinFunctionCall it, String name){
+		standardArgumentLookup.get(standardErrorName)?.get(name) 
 	}
 
-
-	def print_FunctionDefinitions(MclObject it){
-		var res  = "";
-//		var printedFunctions = new ArrayList<String>();
-		for (o: mdlObservations){
-			switch(o){
+	def print_FunctionDefinitions(MclObject it)'''
+		«FOR o: mdlObservations»
+			«switch(o){
 				EquationDefinition:{
 					val rhsExpr = o.expression
 					switch(rhsExpr){
 						BuiltinFunctionCall:
 							if(rhsExpr.isNamedArgFunction){
-								val funcDefn = rhsExpr.pharmMLFuncDefn
-								res = res + funcDefn;
-//								printedFunctions.add(o.name);
+								'''
+								«rhsExpr.pharmMLFuncDefn»
+								'''
 							}
 					}
 				}
-			}
-		}
-		'''«res»'''
-	}
-	
-//	def print_ct_FunctionDefinition(BuiltinFunctionCall it)'''
-//			<ct:FunctionDefinition xmlns="«Constants::xmlns_ct»" 
-//				symbId="«func»" 
-//				symbolType="«getFunctionType.pharmMLType»">
-//				«FOR p: BuiltinFunctionProvider::standardFunctions.get(functName).defaultParamSet»
-//					<FunctionArgument symbolType="«p.type.convertType»" symbId="«p.name»"/>
-//				«ENDFOR»
-//				«functName.print_FunctionDefinition»
-//			</ct:FunctionDefinition>
-//		'''	
-//	
-//	//combined2: sqrt(a^2  +  b^2*F^2)
-//	//combined2log or combined3: sqrt(b^2 + (a/f)^2)
-//	def print_FunctionDefinition(String functName)'''
-//		<Definition>
-//			<Equation xmlns="«Constants::xmlns_math»">
-//				«IF (functName.equals(BuiltinFunctionProvider::funct_error_additive))»
-//					<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_additive.name»"/>
-//				«ENDIF»
-//				«IF (functName.equals(BuiltinFunctionProvider::funct_error_prop))»
-//					<Binop op="times">
-//						<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_proportional.name»"/>
-//						<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_f.name»"/>
-//					</Binop>
-//				«ENDIF»
-//				«IF (functName.equals(BuiltinFunctionProvider::funct_error_combined1))»
-//					<math:Binop op="plus">
-//						<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_additive.name»"/>
-//						<math:Binop op="times">
-//							<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_proportional.name»"/>
-//							<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_f.name»"/>
-//						</math:Binop>
-//					</math:Binop>
-//				«ENDIF»
-//				«IF (functName.equals(BuiltinFunctionProvider::funct_error_combined2))»
-//					<math:Uniop op="sqrt">
-//						<math:Binop op="plus">
-//							<math:Binop op="times">
-//								<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_additive.name»"/>
-//								<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_additive.name»"/>
-//							</math:Binop>
-//							<math:Binop op="times">
-//								<math:Binop op="times">
-//									<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_proportional.name»"/>
-//									<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_proportional.name»"/>
-//								</math:Binop>
-//								<math:Binop op="times">
-//									<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_f.name»"/>
-//									<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_f.name»"/>
-//								</math:Binop>
-//							</math:Binop>
-//						</math:Binop>
-//					</math:Uniop>
-//				«ENDIF»
-//				«IF (functName.equals(BuiltinFunctionProvider::funct_error_combined2log) || functName.equals(BuiltinFunctionProvider::funct_error_combined3))»
-//					<math:Uniop op="sqrt">
-//						<math:Binop op="plus">
-//							<math:Binop op="times">
-//								<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_proportional.name»"/>
-//								<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_proportional.name»"/>
-//							</math:Binop>
-//							<math:Binop op="divide">
-//								<math:Binop op="times">
-//									<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_additive.name»"/>
-//									<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_additive.name»"/>
-//								</math:Binop>
-//								<math:Binop op="times">
-//									<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_f.name»"/>
-//									<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_f.name»"/>
-//								</math:Binop>
-//							</math:Binop>
-//						</math:Binop>
-//					</math:Uniop>
-//				«ENDIF»
-//				«IF (functName.equals(BuiltinFunctionProvider::funct_error_power))»
-//					<Binop op="times">
-//						<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_proportional.name»"/>
-//						<Binop op="power">
-//							<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_f.name»"/>
-//							<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_power.name»"/>
-//						</Binop>
-//					</Binop>
-//				«ENDIF»
-//				«IF (functName.equals(BuiltinFunctionProvider::funct_error_combinedPower1))»
-//					<Binop op="plus">
-//						<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_additive.name»"/>
-//						<Binop op="times">
-//							<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_proportional.name»"/>
-//							<Binop op="power">
-//								<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_f.name»"/>
-//								<ct:SymbRef symbIdRef="«BuiltinFunctionProvider::param_error_power.name»"/>
-//							</Binop>
-//						</Binop>
-//					</Binop>
-//				«ENDIF»
-//			</Equation>
-//		</Definition>
-//	'''
-//	
-//	def convertType(MdlDataType p){
-//		if (p == MdlDataType::TYPE_INT)  return Constants::TYPE_INT;
-//		if (p == MdlDataType::TYPE_REAL) return Constants::TYPE_REAL;
-//		return Constants::TYPE_REAL
-//	}
+			}»
+		«ENDFOR»
+	'''
 	
 }

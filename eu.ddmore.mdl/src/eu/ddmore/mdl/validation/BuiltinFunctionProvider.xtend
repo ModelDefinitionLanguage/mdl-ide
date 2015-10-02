@@ -23,6 +23,7 @@ import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import java.util.Collections
 
 class BuiltinFunctionProvider {
 	
@@ -312,6 +313,24 @@ class BuiltinFunctionProvider {
 		funcDefn != null && funcDefn.head instanceof NamedArgFuncDefn
 	}
 	
+	
+	def getNamedArguments(BuiltinFunctionCall it){
+		val args = argList
+		switch(args){
+			NamedFuncArguments:	args.arguments
+			default: Collections::emptyList
+		}
+	}
+	
+	def getArgumentExpression(BuiltinFunctionCall it, String attName){
+		val args = argList
+		switch(args){
+			NamedFuncArguments:
+				args.getArgumentExpression(attName)
+			default: null
+		}
+	}
+
 	def getArgumentExpression(NamedFuncArguments it, String attName){
 		arguments.findFirst[argumentName == attName]?.expression
 	}

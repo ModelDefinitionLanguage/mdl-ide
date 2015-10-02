@@ -59,6 +59,7 @@ class ModelDefinitionPrinter {
 	extension DistributionPrinter dp = new DistributionPrinter 
 	extension PharmMLConverterUtils pcu = new PharmMLConverterUtils
 	extension SublistDefinitionProvider sdp = new SublistDefinitionProvider
+	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter
 	
 //	private static val CONTINUOUS_OBS = "continuous"
 //	private static val COUNT_OBS = "count"
@@ -84,7 +85,7 @@ class ModelDefinitionPrinter {
 			«mObj.print_mdef_CovariateModel»
 			«mObj.print_mdef_ParameterModel»
 			«mObj.writeStructuralModel»
-«««			«mObj.print_mdef_ObservationModel»
+			«mObj.writeObservationModel»
 		</ModelDefinition>
 		'''
 	}
@@ -586,7 +587,7 @@ class ModelDefinitionPrinter {
 	
 	def writeStructuralModel(MclObject mdlObject)'''
 		<StructuralModel blkId="sm">
-			«FOR blk : mdlObject.getModelPredictionBlocks»
+			«FOR blk : mdlObject.modelPredictionBlocks»
 				«IF blk.body instanceof BlockStatementBody»
 					«mdlObject.writeModelPredictionBlock(blk.body as BlockStatementBody)»
 				«ENDIF»
@@ -594,6 +595,73 @@ class ModelDefinitionPrinter {
 		</StructuralModel>
 	'''
 	
+	
+	def writeObservationModel(MclObject mdlObject)'''
+		«FOR stmt : mdlObject.mdlObservations»
+			«switch(stmt){
+				EquationTypeDefinition:
+					'''
+					«writeContinuousObservation(stmt)»
+					'''
+				ListDefinition:
+					'''
+					«writeDiscreteObservations(stmt)»
+					'''
+			}»
+		«ENDFOR»
+	'''
+	
+	def writeDiscreteObservations(ListDefinition definition) {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
+	def isStandardErrorDefinition(Expression expr){
+		expr != null && expr instanceof BuiltinFunctionCall
+	}
+	
+	def writeContinuousObservation(EquationTypeDefinition definition)'''
+		<ObservationModel blkId="om">
+			<ContinuousData>
+				«IF isStandardErrorDefinition(definition.expression)»
+					<Standard symbId="«definition.name»">
+						«IF (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null»
+							<Transformation>«(definition.expression as BuiltinFunctionCall).getArgumentExpression('trans').convertToString.getPharmMLTransFunc»</Tranformation>
+						«ENDIF»
+						<Output>
+							«(definition.expression as BuiltinFunctionCall).getArgumentExpression('prediction').pharmMLExpr»
+						</Output>
+						«writeStandardErrorModel(definition.expression as BuiltinFunctionCall)»
+						<ResidualError>
+							«(definition.expression as BuiltinFunctionCall).getArgumentExpression('eps').pharmMLExpr»
+						</ResidualError>
+					</Standard>
+				«ENDIF»
+			</ContinuousData>
+		</ObservationModel>
+	''' 
+	
+	private def writeStandardErrorModel(BuiltinFunctionCall it){
+		'''
+		<ErrorModel>
+			<ct:Assign>
+				<Equation  xmlns="«mathsUri»">
+					<FunctionCall>
+						<ct:SymbRef symbIdRef="«standardErrorName»"/>
+						«FOR vp : getNamedArguments»
+							«IF getStandardErrorArgument(vp.argumentName) != null»
+								<FunctionArgument symbId="«getStandardErrorArgument(vp.argumentName)»">
+									<Equation>
+										«vp.expression.pharmMLExpr»
+									</Equation>
+								</FunctionArgument>
+							«ENDIF»
+						«ENDFOR»
+					</FunctionCall>
+				</math:Equation>
+			</ct:Assign>
+		</ErrorModel>
+		'''
+	}
 	
 //	/////////////////////////////
 //	// I.d_1 CorrelationModel
