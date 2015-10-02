@@ -12,6 +12,7 @@ class Mdl2Pharmml {
 	extension MogValidator mv = new MogValidator
 	extension MclUtils mu = new MclUtils
 	extension ModelDefinitionPrinter mdp = new ModelDefinitionPrinter
+	extension ModellingStepsPrinter msp = new ModellingStepsPrinter
 	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter
 
   	def convertToPharmML(MclObject mog) {
@@ -32,7 +33,7 @@ class Mdl2Pharmml {
 			«mv.mdlObj.print_FunctionDefinitions»	
 			«mv.mdlObj.print_mdef_ModelDefinition»
 «««			«tdPrinter.print_design_TrialDesign(mog)»
-«««			«msPrinter.print_msteps_ModellingSteps(mog)»
+			«mv.print_msteps_ModellingSteps»
 		</PharmML>
 		'''			
 	}

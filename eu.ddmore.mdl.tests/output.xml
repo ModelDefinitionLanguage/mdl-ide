@@ -317,7 +317,7 @@
 					</Output>
 					<ErrorModel>
 						<ct:Assign>
-							<Equation  xmlns="http://www.pharmml.org/pharmml/0.6http://www.pharmml.org/pharmml/0.6/Maths">
+							<Equation  xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 								<FunctionCall>
 									<ct:SymbRef symbIdRef="combinedError1"/>
 									<FunctionArgument symbId="additive">
@@ -346,4 +346,203 @@
 			</ContinuousData>
 		</ObservationModel>
 	</ModelDefinition>
+	<ModellingSteps xmlns="http://www.pharmml.org/pharmml/0.6/ModellingSteps">
+		<EstimationStep oid="estimStep_1">
+			<ParametersToEstimate>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="POP_CL""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.1</ct:Real>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.001</ct:Real>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="POP_V""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Int>8</ct:Int>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.001</ct:Real>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="POP_KA""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.362</ct:Real>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.001</ct:Real>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="POP_TLAG""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Int>1</ct:Int>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.001</ct:Real>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="BETA_CL_WT""/>
+					<InitialEstimate fixed="true">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.75</ct:Real>
+						</Equation>
+					</InitialEstimate>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="BETA_V_WT""/>
+					<InitialEstimate fixed="true">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Int>1</ct:Int>
+						</Equation>
+					</InitialEstimate>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="RUV_PROP""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.1</ct:Real>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Int>0</ct:Int>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="RUV_ADD""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.1</ct:Real>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Int>0</ct:Int>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="POP_CL""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.1</ct:Real>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.001</ct:Real>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="POP_V""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Int>8</ct:Int>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.001</ct:Real>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="POP_KA""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.362</ct:Real>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.001</ct:Real>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="POP_TLAG""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Int>1</ct:Int>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.001</ct:Real>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="BETA_CL_WT""/>
+					<InitialEstimate fixed="true">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.75</ct:Real>
+						</Equation>
+					</InitialEstimate>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="BETA_V_WT""/>
+					<InitialEstimate fixed="true">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Int>1</ct:Int>
+						</Equation>
+					</InitialEstimate>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="RUV_PROP""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.1</ct:Real>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Int>0</ct:Int>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+				<ParameterEstimation>
+					<ct:SymbRef symbId="RUV_ADD""/>
+					<InitialEstimate fixed="false">
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.1</ct:Real>
+						</Equation>
+					</InitialEstimate>
+					<LowerBound>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Int>0</ct:Int>
+						</Equation>
+					</LowerBound>
+				</ParameterEstimation>
+			</ParametersToEstimate>
+		</EstimationStep>
+		<mstep:StepDependencies>
+			<mstep:Step>
+				<ct:OidRef oidRef="estimStep_1"/>
+			</mstep:Step>
+		</mstep:StepDependencies>
+	</ModellingSteps>		
 </PharmML>

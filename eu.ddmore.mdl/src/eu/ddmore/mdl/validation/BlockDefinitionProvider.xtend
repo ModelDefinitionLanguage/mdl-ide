@@ -20,6 +20,9 @@ class BlockDefinitionProvider {
 	public static val MDL_INDIV_PARAMS = "INDIVIDUAL_VARIABLES"
 	public static val MDL_GRP_PARAMS = "GROUP_VARIABLES"
 	public static val MDL_RND_VARS = "RANDOM_VARIABLE_DEFINITION"
+	public static val PARAM_STRUCT_BLK = "STRUCTURAL"
+	public static val PARAM_VARIABILITY_BLK = "VARIABILITY"
+	
 	
 	
 	val static Map<String, Map<String, Boolean> > BlkData = #{
@@ -34,7 +37,7 @@ class BlockDefinitionProvider {
 			"SOURCE" -> true
 		},
 		MdlValidator::PARAMOBJ -> #{
-			"VARIABILITY" -> false, "DECLARED_VARIABLES" -> false, "STRUCTURAL" -> false
+			PARAM_VARIABILITY_BLK -> false, "DECLARED_VARIABLES" -> false, PARAM_STRUCT_BLK -> false
 		},
 		MdlValidator::TASKOBJ -> #{
 			"ESTIMATE" -> false, "SIMULATE" -> false, "OPTIMISE" -> false

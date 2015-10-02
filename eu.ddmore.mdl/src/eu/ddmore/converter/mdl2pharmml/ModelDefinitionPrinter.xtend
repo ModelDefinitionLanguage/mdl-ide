@@ -644,7 +644,7 @@ class ModelDefinitionPrinter {
 		'''
 		<ErrorModel>
 			<ct:Assign>
-				<Equation  xmlns="«mathsUri»">
+				<Equation  xmlns="«xmlns_math»">
 					<FunctionCall>
 						<ct:SymbRef symbIdRef="«standardErrorName»"/>
 						«FOR vp : getNamedArguments»

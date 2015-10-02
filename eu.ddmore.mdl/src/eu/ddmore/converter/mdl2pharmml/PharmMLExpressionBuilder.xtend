@@ -22,11 +22,18 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
+import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 class PharmMLExpressionBuilder {
 	
 	def getSymbolReference(SymbolReference it)'''
 		<ct:SymbRef symbIdRef="«ref.name»"/>
+	'''
+	
+	def getExpressionAsEquation(Expression it)'''
+		<Equation xmlns="«xmlns_math»">
+			«pharmMLExpr»
+		</Equation>
 	'''
 	
     def dispatch CharSequence getPharmMLExpr(Expression expr){

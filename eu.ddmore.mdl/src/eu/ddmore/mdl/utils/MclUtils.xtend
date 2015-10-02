@@ -199,6 +199,32 @@ class MclUtils {
 		retVal
 	}	
 
+	def getParamStructuralParams(MclObject it){
+		val retVal = new ArrayList<Statement>
+		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_STRUCT_BLK]){
+			val body = stmt.body
+			switch(body){
+				BlockStatementBody:{
+					retVal.addAll(body.statements)
+				}
+			}
+		}
+		retVal
+	}
+
+	def getParamVariabilityParams(MclObject it){
+		val retVal = new ArrayList<Statement>
+		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_STRUCT_BLK]){
+			val body = stmt.body
+			switch(body){
+				BlockStatementBody:{
+					retVal.addAll(body.statements)
+				}
+			}
+		}
+		retVal
+	}
+
 
 	def getDataVariabilityLevels(MclObject it){
 		getDataColumnDefn(ListDefinitionProvider::ID_USE_VALUE, ListDefinitionProvider::VARLVL_USE_VALUE, ListDefinitionProvider::OBS_USE_VALUE)
