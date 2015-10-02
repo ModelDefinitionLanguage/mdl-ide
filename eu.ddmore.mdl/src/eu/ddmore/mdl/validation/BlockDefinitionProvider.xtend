@@ -13,6 +13,8 @@ class BlockDefinitionProvider {
 	public static val VAR_LVL_BLK_NAME = "VARIABILITY_LEVELS"
 	public static val IDV_BLK_NAME = "IDV"
 	public static val MDL_PRED_BLK_NAME = "MODEL_PREDICTION"
+	public static val MDL_DEQ_BLK = "DEQ" 
+	public static val MDL_CMT_BLK = "COMPARTMENT"
 	public static val MDL_STRUCT_PARAMS = "STRUCTURAL_PARAMETERS"
 	public static val MDL_VAR_PARAMS = "VARIABILITY_PARAMETERS"
 	public static val MDL_INDIV_PARAMS = "INDIVIDUAL_VARIABLES"
@@ -46,7 +48,7 @@ class BlockDefinitionProvider {
 	}
 
 	val static SubBlkData = #{
-		"DEQ" -> "MODEL_PREDICTION", "COMPARTMENT" -> "MODEL_PREDICTION"
+		MDL_DEQ_BLK -> MDL_PRED_BLK_NAME, MDL_CMT_BLK -> MDL_PRED_BLK_NAME
 	}
 	
 	new(){

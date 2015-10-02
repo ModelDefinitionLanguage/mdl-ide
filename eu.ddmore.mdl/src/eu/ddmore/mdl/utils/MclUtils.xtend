@@ -181,6 +181,11 @@ class MclUtils {
 		}
 		retVal
 	}	
+	
+	def getModelPredictionBlocks(MclObject it){
+		blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]
+	}
+	
 	def getMdlObservations(MclObject it){
 		val retVal = new ArrayList<Statement>
 		for(obsStmt : blocks.filter[identifier == BlockDefinitionProvider::OBS_BLK_NAME]){

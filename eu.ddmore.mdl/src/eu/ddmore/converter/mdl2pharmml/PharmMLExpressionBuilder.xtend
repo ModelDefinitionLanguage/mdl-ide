@@ -26,7 +26,7 @@ import eu.ddmore.mdl.mdl.WhenExpression
 class PharmMLExpressionBuilder {
 	
 	def getSymbolReference(SymbolReference it)'''
-		<ct:SymbRef symbIdRef=«ref.name»/>
+		<ct:SymbRef symbIdRef="«ref.name»"/>
 	'''
 	
     def dispatch CharSequence getPharmMLExpr(Expression expr){
@@ -193,17 +193,17 @@ class PharmMLExpressionBuilder {
 	
 	def getWhenExpression(WhenExpression it)'''
 		<math:Piecewise>
-		«FOR w : when»
-			«w.whenClause»
-		«ENDFOR»
-		«IF other != null»
-			<math:Piece>
-				«other.pharmMLExpr»
-				<math:Condition>
-					<math:Otherwise/>
-				</math:Condition>
-			</math:Piece>
-		«ENDIF»
+			«FOR w : when»
+				«w.whenClause»
+			«ENDFOR»
+			«IF other != null»
+				<math:Piece>
+					«other.pharmMLExpr»
+					<math:Condition>
+						<math:Otherwise/>
+					</math:Condition>
+				</math:Piece>
+			«ENDIF»
 		</math:Piecewise>
 	'''
 	
@@ -285,6 +285,6 @@ class PharmMLExpressionBuilder {
 	'''
 	
 	def getLocalSymbolReference(String v) '''
-		<ct:SymbRef symbId=«v»/>
+		<ct:SymbRef symbId="«v»""/>
 	'''
 }

@@ -42,6 +42,8 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.SubListExpression
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.BlockStatement
 
 class ModelDefinitionPrinter {
 //	extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -81,7 +83,7 @@ class ModelDefinitionPrinter {
 			«mObj.print_mdef_VariabilityModel»
 			«mObj.print_mdef_CovariateModel»
 			«mObj.print_mdef_ParameterModel»
-«««			«mObj.print_mdef_StructuralModel»
+			«mObj.writeStructuralModel»
 «««			«mObj.print_mdef_ObservationModel»
 		</ModelDefinition>
 		'''
@@ -518,6 +520,79 @@ class ModelDefinitionPrinter {
 				writeExplicitIdv			
 		}
 	}
+	
+	def writeVariableDefinition(EquationDefinition stmt)'''
+		<ct:Variable symbId="«stmt.name»" symbolType="«IF stmt.isVector»ERROR!«ELSE»real«ENDIF»">
+			«IF stmt.expression != null»
+				«stmt.expression.pharmMLExpr»
+			«ENDIF»
+		</ct:Variable>
+	'''
+	
+	
+	def writeAssignZero()'''
+		<ct:Assign>
+			<math:Equation>
+				<ct:Int>0</ct:Int>
+			</math:Equation>
+		</ct:Assign>	
+	'''
+	
+	def writeDefaultWrt(EquationDefinition it)'''
+		<ct:SymbRef symbIdRef="«name»"/>
+	'''
+	
+	
+	def writeDerivativeDefinition(ListDefinition stmt, EquationDefinition defaultWrt)'''
+		<ct:DerivativeVariable symbId="«stmt.name»" symbolType="real">
+			«stmt.list.getAttributeExpression("deriv").writeAssignment»
+			<ct:IndependentVariable>
+				«stmt.list.getAttributeExpression("wrt")?.pharmMLExpr ?: defaultWrt.writeDefaultWrt»
+			</ct:IndependentVariable>
+			<ct:InitialValue>
+				«stmt.list.getAttributeExpression("init")?.writeAssignment ?: writeAssignZero »
+			</ct:InitialValue>
+			<ct:InitialTime>
+				«stmt.list.getAttributeExpression("x0")?.writeAssignment ?: writeAssignZero »
+			</ct:InitialTime>
+		</ct:DerivativeVariable>
+	'''
+	
+	
+	def CharSequence writeModelPredictionBlock(MclObject mdlObject, BlockStatementBody currBlkBody)'''
+		«FOR stmt : currBlkBody.statements»
+			«switch(stmt){
+				BlockStatement:
+					if(stmt.identifier == BlockDefinitionProvider::MDL_DEQ_BLK && stmt.body instanceof BlockStatementBody){
+						'''
+						«mdlObject.writeModelPredictionBlock(stmt.body as BlockStatementBody)»
+						'''
+					}
+				ListDefinition:
+					'''
+					«stmt.writeDerivativeDefinition(mdlObject.mdlIdv)»
+					'''
+				EquationDefinition:
+					'''
+					«stmt.writeVariableDefinition»
+					'''
+				default:
+					'''
+					<ERROR!>
+					'''
+			}»
+		«ENDFOR»
+	'''
+	
+	def writeStructuralModel(MclObject mdlObject)'''
+		<StructuralModel blkId="sm">
+			«FOR blk : mdlObject.getModelPredictionBlocks»
+				«IF blk.body instanceof BlockStatementBody»
+					«mdlObject.writeModelPredictionBlock(blk.body as BlockStatementBody)»
+				«ENDIF»
+			«ENDFOR»
+		</StructuralModel>
+	'''
 	
 	
 //	/////////////////////////////
