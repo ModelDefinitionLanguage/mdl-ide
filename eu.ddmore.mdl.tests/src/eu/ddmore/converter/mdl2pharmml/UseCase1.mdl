@@ -52,8 +52,7 @@ warfarin_PK_ODE_mdl = mdlObj {
 	IDV{ T }
 
 	COVARIATES{
-		logtWT = ln(WT/70)
-		WT
+		logtWT
 	}
 
 	VARIABILITY_LEVELS{

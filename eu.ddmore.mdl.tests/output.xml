@@ -39,18 +39,8 @@
 			<Level referenceLevel="true" symbId="ID"/>
 		</VariabilityModel>
 		<CovariateModel blkId="cm">
-			<Covariate symbId="WT">
-				<Continuous>
-					<Transformation>
-					    <TransformedCovariate symbId="logtWT"></TransformedCovariate>
-						<math:Binop op="ln">
-							<math:Binop op="divide">
-								<ct:SymbRef blkIdRef="cm" symbIdRef="WT"/>
-								<ct:Int>70</ct:Int>
-							</math:Binop>
-						</math:Binop>	
-					</Transformation>
-				</Continuous>
+			<Covariate symbId="logtWT">
+				<Continuous/>
 			</Covariate>
 		</CovariateModel>
 		<SimpleParameter symbId = "POP_CL">
@@ -359,10 +349,6 @@
 				<ct:SymbRef  symbIdRef="T"/>
 			</ColumnMapping>
 			<ColumnMapping>
-				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.6/Dataset" columnIdRef="WT"/>
-				<ct:SymbRef blkIdRef="cm" symbIdRef="WT"/>
-			</ColumnMapping>
-			<ColumnMapping>
 				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.6/Dataset" columnIdRef="AMT"/>
 				<Piecewise xmlns="http://www.pharmml.org/pharmml/0.6/Dataset">
 					<math:Piece>
@@ -388,7 +374,7 @@
 				<Definition>
 					<Column columnId="ID" columnType="id" valueType="int" columnNum="1"/>
 					<Column columnId="T" columnType="idv" valueType="real" columnNum="2"/>
-					<Column columnId="WT" columnType="covariate" valueType="real" columnNum="3"/>
+					<Column columnId="WT" columnType="undefined" valueType="real" columnNum="3"/>
 					<Column columnId="AMT" columnType="dose" valueType="real" columnNum="4"/>
 					<Column columnId="DVID" columnType="dvid" valueType="int" columnNum="5"/>
 					<Column columnId="DV" columnType="dv" valueType="real" columnNum="6"/>

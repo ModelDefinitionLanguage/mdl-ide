@@ -1,18 +1,18 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import static eu.ddmore.converter.mdl2pharmml.Constants.*
-import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.validation.MogValidator
-import eu.ddmore.mdl.utils.MclUtils
-import eu.ddmore.mdl.mdl.Statement
-import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.validation.ListDefinitionProvider
-
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingExpression
+import eu.ddmore.mdl.mdl.MclObject
+import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
+import eu.ddmore.mdl.utils.MclUtils
+import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.validation.MogValidator
+
+import static eu.ddmore.converter.mdl2pharmml.Constants.*
+
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 
 class ModellingStepsPrinter { 
 	
@@ -159,11 +159,14 @@ class ModellingStepsPrinter {
 			switch(use){
 				case(ListDefinitionProvider::ID_USE_VALUE),
 				case(ListDefinitionProvider::IDV_USE_VALUE),
-				case(ListDefinitionProvider::VARLVL_USE_VALUE),
-				case(ListDefinitionProvider::COV_USE_VALUE):
+				case(ListDefinitionProvider::VARLVL_USE_VALUE):
 					res = res + mObj.print_ds_MagicMapping(column)
+				case(ListDefinitionProvider::COV_USE_VALUE):
+					if(isUsedInModel(column, mObj))
+						res = res + mObj.print_ds_MagicMapping(column)
 				case(ListDefinitionProvider::CATCOV_USE_VALUE):{
-					res = res + mObj.print_ds_CategoricalMagicMapping(column)
+					if(isUsedInModel(column, mObj))
+						res = res + mObj.print_ds_CategoricalMagicMapping(column)
 //					var categoricalMapping = column.print_ds_CategoricalMapping
 //					// @TODO: fix this
 //					res = res + mObj.print_ds_ColumnMapping(column, categoricalMapping)
@@ -508,9 +511,12 @@ class ModellingStepsPrinter {
 			if(columnType == ListDefinitionProvider::AMT_USE_VALUE){
 				dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
 			}
-			var convertedColType = "undefined"
-			if ((ListDefinitionProvider::AMT_USE_VALUE == columnType || column.isUsedInModel(mObj))) {
-				convertedColType = columnType.convertEnum(dosingToCompartmentMacro);
+			var convertedColType = switch(columnType){
+				case(ListDefinitionProvider::COV_USE_VALUE),
+				case(ListDefinitionProvider::CATCOV_USE_VALUE):
+					if(isUsedInModel(column, mObj)) convertEnum(columnType, dosingToCompartmentMacro) else "undefined"
+				default:
+					convertEnum(columnType, dosingToCompartmentMacro)
 			}
 			val valueType = column.getValueType
 			res = res +
@@ -530,8 +536,7 @@ class ModellingStepsPrinter {
 	}
 	
 	def isUsedInModel(ListDefinition col, MclObject mdlObj){
-		// @TODO: Implement this!
-		true
+		mdlObj.findMdlSymbolDefn(col.name) != null
 	}
 	
 	

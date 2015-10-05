@@ -297,7 +297,7 @@ class ModelDefinitionPrinter {
 				EquationDefinition:{
 					if (!skipped.contains(s)){
 						model = model + '''
-						<Covariate symbId=«s.name»>
+						<Covariate symbId="«s.name»">
 							<Continuous/>
 						</Covariate>
 						'''
@@ -306,7 +306,7 @@ class ModelDefinitionPrinter {
 				EnumerationDefinition:{
 					if (!skipped.contains(s)){
 						model = model + '''
-						<Covariate symbId=«s.name»>
+						<Covariate symbId="«s.name»">
 							<Categorical>
 								«FOR c : s.catDefn.getCategoryDefinitions»
 									<Category catId="«c»"/>"
