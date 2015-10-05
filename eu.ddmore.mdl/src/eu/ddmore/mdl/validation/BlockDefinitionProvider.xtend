@@ -22,6 +22,7 @@ class BlockDefinitionProvider {
 	public static val MDL_RND_VARS = "RANDOM_VARIABLE_DEFINITION"
 	public static val PARAM_STRUCT_BLK = "STRUCTURAL"
 	public static val PARAM_VARIABILITY_BLK = "VARIABILITY"
+	public static val DATA_SRC_BLK = "SOURCE"
 	
 	
 	
@@ -34,7 +35,7 @@ class BlockDefinitionProvider {
 		},
 		MdlValidator::DATAOBJ -> #{
 			DIV_BLK_NAME -> true, "DECLARED_VARIABLES" -> false, "DATA_DERIVED_VARIABLES" -> false,
-			"SOURCE" -> true
+			DATA_SRC_BLK -> true
 		},
 		MdlValidator::PARAMOBJ -> #{
 			PARAM_VARIABILITY_BLK -> false, "DECLARED_VARIABLES" -> false, PARAM_STRUCT_BLK -> false

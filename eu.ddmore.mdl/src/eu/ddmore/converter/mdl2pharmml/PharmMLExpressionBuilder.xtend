@@ -23,8 +23,13 @@ import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
+import eu.ddmore.mdl.mdl.SymbolDefinition
 
 class PharmMLExpressionBuilder {
+	
+	def getSymbolRef(SymbolDefinition it)'''
+		<ct:SymbRef symbIdRef="«name»"/>
+	'''
 	
 	def getSymbolReference(SymbolReference it)'''
 		<ct:SymbRef symbIdRef="«ref.name»"/>

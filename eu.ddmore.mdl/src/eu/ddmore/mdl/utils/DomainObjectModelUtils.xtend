@@ -11,6 +11,7 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.mdl.MclObject
+import java.util.Collections
 
 class DomainObjectModelUtils {
 	
@@ -70,5 +71,18 @@ class DomainObjectModelUtils {
 	static def getBlocksByName(MclObject mdlObj, String blkName){
 		mdlObj.blocks.filter[identifier == blkName]
 	}
+
+	static def getStatementsFromBlock(BlockStatement it){
+		val b = body
+		switch(b){
+			BlockStatementBody:
+				b.statements
+			default:
+				Collections::emptyList
+		}
+			
+	}
+
+	
 
 }

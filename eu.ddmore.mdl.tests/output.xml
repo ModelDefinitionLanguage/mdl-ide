@@ -347,6 +347,59 @@
 		</ObservationModel>
 	</ModelDefinition>
 	<ModellingSteps xmlns="http://www.pharmml.org/pharmml/0.6/ModellingSteps">
+		<ExternalDataSet toolName="NONMEM" oid="nm_ds">
+			<ColumnMapping>
+				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.6/Dataset" columnIdRef="ID"/>
+				<ct:SymbRef symbId="ID""/>
+			</ColumnMapping>
+			<ColumnMapping>
+				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.6/Dataset" columnIdRef="T"/>
+				<ct:SymbRef symbId="T""/>
+			</ColumnMapping>
+			<ColumnMapping>
+				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.6/Dataset" columnIdRef="WT"/>
+				<ct:SymbRef symbId="WT""/>
+			</ColumnMapping>
+			<ColumnMapping>
+				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.6/Dataset" columnIdRef="AMT"/>
+				<Piecewise xmlns="http://www.pharmml.org/pharmml/0.6/Dataset">
+					<math:Piece>
+						<ct:SymbRef symbIdRef="GUT"/>
+						<math:Condition>
+							<math:LogicBinop op="gt">
+								<ColumnRef columnIdRef="AMT"/>
+								<ct:Int>0</ct:Int>
+							</math:LogicBinop>
+						</math:Condition>
+					</math:Piece>
+				</Piecewise>
+			</ColumnMapping>
+			<ColumnMapping>
+			    <ColumnRef xmlns="http://www.pharmml.org/pharmml/0.6/Dataset" columnIdRef="DV"/>
+				<ct:SymbRef symbIdRef="Y"/>
+			</ColumnMapping>
+			<ColumnMapping>
+				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.6/Dataset" columnIdRef="logtWT"/>
+				<ct:SymbRef symbId="logtWT""/>
+			</ColumnMapping>
+			<DataSet xmlns="http://www.pharmml.org/pharmml/0.6/Dataset">
+				<Definition>
+					<Column columnId="ID" columnType="id" valueType="int" columnNum="1"/>
+					<Column columnId="T" columnType="idv" valueType="real" columnNum="2"/>
+					<Column columnId="WT" columnType="covariate" valueType="real" columnNum="3"/>
+					<Column columnId="AMT" columnType="dose" valueType="real" columnNum="4"/>
+					<Column columnId="DVID" columnType="dvid" valueType="int" columnNum="5"/>
+					<Column columnId="DV" columnType="dv" valueType="real" columnNum="6"/>
+					<Column columnId="MDV" columnType="mdv" valueType="int" columnNum="7"/>
+					<Column columnId="logtWT" columnType="covariate" valueType="real" columnNum="8"/>
+				</Definition>
+				<ExternalFile oid="id">
+					<path>"warfarin_conc.csv"</path>
+					<format>CSV</format>
+					<delimiter>COMMA</delimiter>
+				</ExternalFile>
+			</DataSet>
+		</ExternalDataSet>
 		<EstimationStep oid="estimStep_1">
 			<ParametersToEstimate>
 				<ParameterEstimation>

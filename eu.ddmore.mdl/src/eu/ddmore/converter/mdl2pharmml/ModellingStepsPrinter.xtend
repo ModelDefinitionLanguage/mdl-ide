@@ -10,7 +10,8 @@ import eu.ddmore.mdl.validation.ListDefinitionProvider
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-
+import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.MappingExpression
 
 class ModellingStepsPrinter { 
 	
@@ -31,7 +32,7 @@ class ModellingStepsPrinter {
 		var dependencies = ""; 
 		if (mObj != null && dObj != null && pObj != null && tObj != null) {
 //			res = res + dObj.print_ds_TargetTool;
-//			res = res + mog.print_ds_TargetDataSet;
+			res = res + print_ds_TargetDataSet(mObj, dObj);
 			var index = 1;
 
 			for (b: tObj.blocks){
@@ -124,7 +125,399 @@ class ModellingStepsPrinter {
 «««			«ENDFOR»
 		</ParametersToEstimate>
 	'''	
+
+	protected def print_ds_TargetDataSet(MclObject mObj, MclObject dObj) {
+
+		var res = "";
+		if (dObj != null || mObj != null) {
+			val s = dObj.dataSourceStmt
+				// get first statement
+			if (s != null){
+				if(s.list.getAttributeEnumValue('inputFormat') == 'nonmemFormat') {
+					var content = print_ds_NONMEM_DataSet(mObj, dObj);
+					res = res + print_ds_ExternalDataSet(content, "NONMEM", BLK_DS_NONMEM_DATASET);
+//				} else {
+//					var content = print_ds_DataSet(dObj, mObj);
+//					res = res + print_ds_ExternalDataSet(content, "Monolix", BLK_DS_MONOLIX_DATASET);
+				}
+			}
+		}
+		return res;
+	}
+
+	protected def print_ds_ExternalDataSet(String content, String toolName, String oid) '''
+		<ExternalDataSet toolName="«toolName»" oid="«oid»">
+			«content»
+		</ExternalDataSet>
+	'''
+
+	def print_ds_NONMEM_DataSet(MclObject mObj, MclObject dObj) {
+		var res = "";
+		for (column : dObj.dataColumnDefinitions) {
+			val use = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
+			switch(use){
+				case(ListDefinitionProvider::ID_USE_VALUE),
+				case(ListDefinitionProvider::IDV_USE_VALUE),
+				case(ListDefinitionProvider::VARLVL_USE_VALUE),
+				case(ListDefinitionProvider::COV_USE_VALUE):
+					res = res + column.print_ds_MagicMapping
+				case(ListDefinitionProvider::CATCOV_USE_VALUE):{
+					var categoricalMapping = column.print_ds_CategoricalMapping
+					// @TODO: fix this
+					res = res + column.name.print_ds_ColumnMapping(column.name, categoricalMapping)
+				}
+				case(ListDefinitionProvider::AMT_USE_VALUE):
+					res = res + column.print_ds_AmtMapping(dObj, mObj)
+				case(ListDefinitionProvider::OBS_USE_VALUE):
+					res = res + column.print_ds_DvMapping(dObj, mObj)
+			}
+//					if (modelVar != null &&
+//						(use.equals(UseType::ID.toString) || use.equals(UseType::IDV.toString) ||
+//							use.equals(UseType::VARLEVEL.toString) || (use.equals(UseType::COVARIATE.toString) &&
+//								!colType.isCategorical()))) {
+//								// use magic mapping with no conditions 
+//								res = res + column.name.print_ds_MagicMapping(modelVar);
+//							} else if (modelVar != null && use.equals(UseType::COVARIATE.toString) &&
+//								colType.isCategorical()) {
+//								// categorical covariates
+//								var categoricalMapping = column.print_ds_CategoricalMapping;
+//								res = res + column.name.print_ds_ColumnMapping(modelVar, categoricalMapping);
+//							} else if (use.equals(UseType::AMT.toString)) {
+//								// handle amount mapping
+//								res = res + column.print_ds_AmtMapping(dObj, mObj)
+//							} else if (use.equals(UseType::DV.toString)) {
+//								// handle amount mapping
+//								res = res + column.print_ds_DvMapping(dObj, mObj)
+//							}
+//						}
+//					}
+//				}
+		}
+		res = res + dObj.print_ds_DataSet(mObj);
+	}
+
+	def print_ds_AmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj) {
+		amtColumn.print_ds_StandardAmtMapping(dObj, mObj)
+		+ amtColumn.print_ds_TargetMapping(dObj, mObj)
+	}
+
+	protected def print_ds_StandardAmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj) {
+		val define = amtColumn.list.getAttributeExpression('define');
+		val columnId = amtColumn.name;
+		var res = '''''';
+		var colMapping = ''''''
+		if (define == null) {
+			val varDefn = amtColumn.list.getAttributeExpression('variable');
+			// Reference or piecewise
+			res = '''
+				<ColumnMapping>
+					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+					<Piecewise xmlns="«xmlns_ds»">
+						<math:Piece>
+							«IF varDefn != null»
+								«varDefn.pharmMLExpr»
+							«ENDIF»
+							<math:Condition>
+								<math:LogicBinop op="gt">
+									<ColumnRef columnIdRef="«columnId»"/>
+									<ct:Int>0</ct:Int>
+								</math:LogicBinop>
+							</math:Condition>
+						</math:Piece>
+					</Piecewise>
+				</ColumnMapping>
+				'''
+		}
+		else { // Vector of pairs
+			colMapping = switch(define){
+				MappingExpression:{
+					'''
+					«FOR p : define.attList»
+						«IF !mObj.isCompartmentInput(p.mappedSymbol.ref)»
+							<math:Piece>
+								«p.rightOperand.pharmMLExpr»
+							   	<math:Condition>
+							   		<math:LogicBinop op="and">
+							   			<math:LogicBinop op="eq">
+											<ColumnRef columnIdRef="«p.srcColumn.ref.name»"/>
+								   			«p.leftOperand.pharmMLExpr»
+										</math:LogicBinop>
+							   			<math:LogicBinop op="gt">
+											<ColumnRef columnIdRef="«columnId»"/>
+								   			<ct:Int>0</ct:Int>
+										</math:LogicBinop>
+									</math:LogicBinop>
+							   	</math:Condition>
+							</math:Piece>
+						«ENDIF»
+					«ENDFOR» 
+					'''
+				}
+				default:''
+			}
+//			val colMapping = '''
+//				«FOR p : pairs»
+//				«IF !mObj.isCompartmentInput(p)»
+//					<math:Piece>
+//						«p.name.localSymbolReference»
+//					   	<math:Condition>
+//					   		<math:LogicBinop op="and">
+//					   			<math:LogicBinop op="eq">
+//									<ColumnRef columnIdRef="«cmtCols.head.name»"/>
+//						   			«p.symbolRef»
+//								</math:LogicBinop>
+//					   			<math:LogicBinop op="gt">
+//									<ColumnRef columnIdRef="«columnId»"/>
+//						   			<ct:Int>0</ct:Int>
+//								</math:LogicBinop>
+//							</math:LogicBinop>
+//					   	</math:Condition>
+//					</math:Piece>
+//				«ENDIF»
+//				«ENDFOR» 
+//			  '''
+			 res = '''
+				«IF colMapping.length > 0»
+				<ColumnMapping>
+				    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+					<Piecewise xmlns="«xmlns_ds»">
+						«colMapping»
+					</Piecewise>
+				</ColumnMapping>
+				«ENDIF»
+			 '''
+		}
+		res
+	}
+
+	def print_ds_TargetMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj){
+		// @TODO : fix this.
+		val define = amtColumn.list.getAttributeExpression('define');
+		val columnId = amtColumn.name;
+		var toolMappingDefn = '''''';
+		if (define != null) {
+			// There really must be define in this case.
+			val pairs = define.mappedSymbolRef
+			toolMappingDefn = '''
+			    «FOR p : pairs»
+		    	   	«IF mObj.isCompartmentInput(p)»
+«««		    	   		«p.printTargetMapping(p.value.expression, mObj)»
+		    	   	«ENDIF»
+				«ENDFOR» 
+			'''
+		} else {
+			// this is a bug as the language will be invalid if this is true.
+		}
+		'''
+			«IF toolMappingDefn.length > 0»
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="«columnId»"/>
+				<ds:TargetMapping blkIdRef="sm">
+					«toolMappingDefn»
+				</ds:TargetMapping>
+			</ColumnMapping>
+			«ENDIF»
+		'''
+	}
+
+	// @TODO: implement this	
+	def printTargetMapping(Expression expression, Expression valExpr, MclObject mObj)'''
+«««		«FOR block : mObj.getMdlCompartmentStatements»
+«««			«IF block.modelPredictionBlock != null»
+«««				«FOR ModelPredictionBlockStatement stmt : block.modelPredictionBlock.statements»
+«««					«IF stmt.pkMacroBlock != null »
+«««						«FOR pkstmt : stmt.pkMacroBlock.statements»
+«««							«IF pkstmt.variable != null && pkstmt.variable.isAdministrationMacro»
+«««								<ds:Map dataSymbol="«valExpr.toStr»" admNumber="«getAdmValue(pkstmt.variable.list)»"/>
+«««							«ENDIF»
+«««						«ENDFOR»
+«««					«ENDIF»
+«««				«ENDFOR»
+«««			«ENDIF»
+«««		«ENDFOR»
+	'''
 	
+	protected def print_ds_CategoricalMapping(ListDefinition column) {
+		var res = "";
+		// @TODO implement this
+//		if (column.list != null) {
+//			val type = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
+//			if(!type.isCategorical) return "";
+//			val define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+//			if (define != null) {
+//				var pairs = define.getAttributePairs(AttributeValidator::attr_category.name,
+//					AttributeValidator::attr_value.name);
+//				for (pair : pairs)
+//					res = res + '''
+//						<ds:Map modelSymbol="«pair.key.toStr»" dataSymbol="«pair.value.toStr»"/>
+//					''';
+//			}
+//		}
+		if (res.length > 0)
+			res = '''
+				<ds:CategoryMapping>
+					«res»
+				</ds:CategoryMapping>
+			'''
+		return res;
+	}
+
+	protected def print_ds_ColumnMapping(String columnId, String symbId, String complexMapping) '''
+		<ColumnMapping>
+			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+			«IF symbId != null»
+				«symbId.localSymbolReference»
+			«ENDIF»
+			«IF complexMapping.length > 0»
+				«complexMapping»
+			«ENDIF»
+		</ColumnMapping>
+	'''
+
+	protected def print_ds_MagicMapping(ListDefinition column) {
+		// @TODO: fix this
+		print_ds_ColumnMapping(column.name, column.name, "").toString
+	}
+
+	def print_ds_DvMapping(ListDefinition dvColumn, MclObject dObj, MclObject mObj){
+		val variable = dvColumn.list.getAttributeExpression('variable');
+		val columnId = dvColumn.name;
+		if (variable != null) {
+			// Reference or mapped to data
+			return '''
+				<ColumnMapping>
+				    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+					«variable.pharmMLExpr»
+«««						«IF define.isCategoricalObs(mObj)»
+«««							«define.expression.printCategoricalObsMapping(mObj)»
+«««			    	   	«ELSEIF define.expression.isDiscreteBernoulliObs(mObj)»
+«««							«printDiscreteBernoulliObsMapping»
+«««			    	   	«ENDIF»
+				</ColumnMapping>
+			  '''
+		}
+		else { 
+			val define = dvColumn.list.getAttributeExpression('variable');
+			switch(define){
+				MappingExpression:{
+					return '''
+				<MultipleDVMapping>
+					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+					<Piecewise xmlns="«xmlns_mstep»">
+						«FOR p : define.attList»
+							<math:Piece>
+							   	«p.mappedSymbol.pharmMLExpr»
+«««						   	«IF p.key.expression.isCategoricalObs(mObj)»
+«««						   		«p.key.expression.printCategoricalObsMapping(mObj)»
+«««						   	«ELSEIF p.key.expression.isDiscreteBernoulliObs(mObj)»
+«««						   		«printDiscreteBernoulliObsMapping»
+«««						   	«ENDIF»
+								<math:Condition>
+									<math:LogicBinop op="eq">
+									<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«p.srcColumn.ref.name»"/>
+										«p.leftOperand.pharmMLExpr»
+							   		</math:LogicBinop>
+							   	</math:Condition>
+							</math:Piece>
+						«ENDFOR» 
+					</Piecewise>
+				</MultipleDVMapping>
+			  '''
+				}
+			}
+		}
+	}
+
+	
+	def print_ds_DataSet(MclObject dObj, MclObject mObj) {
+		var res = "";
+		var k = 1;
+		for (column : dObj.dataColumnDefinitions) {
+			val columnType = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
+			var dosingToCompartmentMacro = false;
+			val columnId = column.name;
+			if(columnType == ListDefinitionProvider::AMT_USE_VALUE){
+				dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
+			}
+			var convertedColType = "undefined"
+			if ((ListDefinitionProvider::AMT_USE_VALUE == columnType || column.isUsedInModel(mObj))) {
+				convertedColType = columnType.convertEnum(dosingToCompartmentMacro);
+			}
+			val valueType = column.getValueType
+			res = res +
+				'''
+					<Column columnId="«columnId»" columnType="«convertedColType»" valueType="«valueType»" columnNum="«k»"/>
+				'''
+			k = k + 1;
+		}
+		return '''
+			<DataSet xmlns="«xmlns_ds»">
+				<Definition>
+					«res»
+				</Definition>
+				«dObj.print_ds_ExternalFile»
+			</DataSet>
+		'''
+	}
+	
+	def isUsedInModel(ListDefinition col, MclObject mdlObj){
+		// @TODO: Implement this!
+		true
+	}
+	
+	
+	def convertEnum(String type, boolean isDosingToCompartmentMacro) {
+		switch (type) {
+			case ListDefinitionProvider::AMT_USE_VALUE     : "dose"
+			case ListDefinitionProvider::DVID_USE_VALUE   : "dvid"
+			case ListDefinitionProvider::VARLVL_USE_VALUE: "occasion"
+			case ListDefinitionProvider::CMT_USE_VALUE : if(isDosingToCompartmentMacro) 'adm' else 'cmt'
+			default: type
+		}
+	}
+	
+	def boolean isDosingToCompartmentMacro(ListDefinition amtColumn, MclObject mObj){
+		val define = amtColumn.list.getAttributeExpression('define');
+	
+		val mappedSymbol = define.getMappedSymbolRef
+		for(symb : mappedSymbol){
+			if(mObj.isCompartmentInput(symb)) return true
+		}
+		false
+	}
+	
+	protected def getValueType(ListDefinition dataColumn) {
+		val useValue = dataColumn.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
+
+		switch useValue {
+			case ListDefinitionProvider::ID_USE_VALUE: Constants::TYPE_INT
+			case ListDefinitionProvider::COV_USE_VALUE: Constants::TYPE_REAL
+			case ListDefinitionProvider::CATCOV_USE_VALUE: Constants::TYPE_INT
+			case ListDefinitionProvider::DVID_USE_VALUE: Constants::TYPE_INT
+			case 'mdv': Constants::TYPE_INT
+			case 'cmt': Constants::TYPE_INT
+			case ListDefinitionProvider::VARLVL_USE_VALUE: Constants::TYPE_INT
+			default: Constants::TYPE_REAL
+		}
+	}
+
+	protected def print_ds_ExternalFile(MclObject dObj) {
+		var res = "";
+		val s = dObj.getDataSourceStmt
+		var file = "";
+		file = s.list.getAttributeExpression('file').convertToString
+		if (file.length > 0) {
+			res = res + '''				
+				<ExternalFile oid="«BLK_DS_IMPORT_DATA»">
+					<path>«file»</path>
+					<format>CSV</format>
+					<delimiter>COMMA</delimiter>
+				</ExternalFile>
+			'''
+		}
+		return res;
+	}
+
 //	protected def print_msteps_ParameterEstimation(SymbolDeclaration s){
 //		if (s.name != null && s.list != null) {
 //			//Skip correlation definitions

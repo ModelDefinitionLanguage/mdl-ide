@@ -20,8 +20,11 @@ import java.util.List
 import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.mdl.MappingPair
+import java.util.Collections
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -96,6 +99,19 @@ class MclUtils {
 		list.attributes.exists[argumentName == ListDefinitionProvider::USE_TYPE.enumName &&	useValue.exists[uv | expression.convertToString == uv] ]
 	}
 
+	def getDataSourceStmt(MclObject it){
+		val blk = blocks.findFirst[identifier== BlockDefinitionProvider::DATA_SRC_BLK]
+		val stmts = blk.getStatementsFromBlock
+		if(stmts.isEmpty) null
+		else{
+			val retVal = stmts.head
+			if(retVal instanceof ListDefinition){
+				retVal as ListDefinition
+			}
+			else null
+		} 
+	}
+
 	def getDataCovariateDefns(MclObject it){
 		getDataColumnDefn(ListDefinitionProvider::COV_USE_VALUE, ListDefinitionProvider::CATCOV_USE_VALUE)
 //		val retVal = new ArrayList<ListDefinition>
@@ -138,7 +154,7 @@ class MclUtils {
 			}
 		}
 		retVal
-	}	
+	}
 
 	def getDataDosingVariables(MclObject it){
 		val retVal = new ArrayList<SymbolDefinition>
@@ -199,6 +215,10 @@ class MclUtils {
 		retVal
 	}	
 
+	def List<Statement> getMdlCompartmentStatements(MclObject it){
+		Collections::emptyList
+	}
+
 	def getParamStructuralParams(MclObject it){
 		val retVal = new ArrayList<Statement>
 		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_STRUCT_BLK]){
@@ -253,6 +273,11 @@ class MclUtils {
 		enumValue == 'observation'
 	}
 
+	def isCompartmentInput(MclObject model, SymbolDefinition testVar){
+		//@TODO: Finish this
+		false
+	}
+
 
 	def getDataColumnDefn(MclObject dataObj, String ... useValue){
 		val retVal = new ArrayList<ListDefinition>
@@ -271,6 +296,27 @@ class MclUtils {
 
 		retVal
 	}
+	
+	def getDataColumnDefinitions(MclObject it){
+		val retVal = new ArrayList<ListDefinition>
+		for(divBlk : blocks.filter[identifier == BlockDefinitionProvider::DIV_BLK_NAME]){
+			if(divBlk.body instanceof BlockStatementBody){
+				for(divList : (divBlk.body as BlockStatementBody).statements){
+					switch(divList){
+						ListDefinition:{
+							retVal.add(divList)
+						}
+					}
+				}
+				
+			}
+		}
+
+		retVal
+	}
+
+
+	
 	
 	def SymbolDefinition getSingleSymbolRef(Expression expr){
 		switch(expr){
@@ -297,6 +343,15 @@ class MclUtils {
 			}
 		}
 		retVal
+	}
+	
+	def SymbolReference getMappedSymbol(MappingPair it){
+		val ro = rightOperand
+		switch(ro){
+			SymbolReference:
+				ro
+			default: null
+		}
 	}
 	
 	// get varlevel from RAND_VAR_BLK
