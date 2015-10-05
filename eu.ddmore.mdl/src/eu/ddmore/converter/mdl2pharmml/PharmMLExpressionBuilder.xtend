@@ -24,15 +24,55 @@ import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.mdl.mdl.SymbolDefinition
+import eu.ddmore.mdl.validation.BlockDefinitionProvider
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.validation.ListDefinitionProvider
 
 class PharmMLExpressionBuilder {
+	
+	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
+	
+	static val GLOBAL_VAR = 'global'
+	
+	static val blockPharmMLModelMapping = #{
+		BlockDefinitionProvider::MDL_PRED_BLK_NAME -> 'sm',
+		BlockDefinitionProvider::MDL_DEQ_BLK -> 'sm',
+		BlockDefinitionProvider::MDL_CMT_BLK -> 'sm',
+		BlockDefinitionProvider::MDL_INDIV_PARAMS -> 'pm',
+		BlockDefinitionProvider::MDL_VAR_PARAMS -> 'pm',
+		BlockDefinitionProvider::MDL_STRUCT_PARAMS -> 'pm',
+		BlockDefinitionProvider::MDL_RND_VARS -> 'pm',
+		BlockDefinitionProvider::COVARIATE_BLK_NAME -> 'cm',
+		BlockDefinitionProvider::IDV_BLK_NAME -> GLOBAL_VAR
+	}
+	
 	
 	def getSymbolRef(SymbolDefinition it)'''
 		<ct:SymbRef symbIdRef="«name»"/>
 	'''
 	
-	def getSymbolReference(SymbolReference it)'''
-		<ct:SymbRef symbIdRef="«ref.name»"/>
+	
+	def getBlockId(SymbolDefinition it){
+		val blkName = owningBlock.identifier
+		val blkId = blockPharmMLModelMapping.get(blkName)
+		if(blkId == null && blkName == BlockDefinitionProvider::VAR_LVL_BLK_NAME){
+			// handle variability model
+			if((it as ListDefinition).list.getAttributeEnumValue('type') == 'parameter') 'vm_mdl'
+			else 'vm_err'
+		}
+		else blkId
+	}
+	
+	def getSymbolReference(SymbolReference it){
+		val blkId = ref.blockId
+		'''
+			<ct:SymbRef «IF blkId != GLOBAL_VAR»blkIdRef="«blkId ?: 'ERROR!'»"«ENDIF» symbIdRef="«ref.name»"/>
+		'''
+	}
+	
+	def getLocalSymbolReference(SymbolReference it)'''
+			<ct:SymbRef symbIdRef="«ref.name»"/>
 	'''
 	
 	def getExpressionAsEquation(Expression it)'''

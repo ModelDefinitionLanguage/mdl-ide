@@ -26,6 +26,7 @@ class BlockDefinitionProvider {
 	
 	
 	
+	
 	val static Map<String, Map<String, Boolean> > BlkData = #{
 		MdlValidator::MDLOBJ -> #{
 			COVARIATE_BLK_NAME -> false, VAR_LVL_BLK_NAME -> true, MDL_STRUCT_PARAMS -> false,

@@ -12,6 +12,7 @@ import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.mdl.MclObject
 import java.util.Collections
+import eu.ddmore.mdl.mdl.SymbolDefinition
 
 class DomainObjectModelUtils {
 	
@@ -26,6 +27,10 @@ class DomainObjectModelUtils {
 	static def getParentOfBlockStatement(BlockStatement it){
 		if(eContainer instanceof BlockBody)	eContainer.eContainer
 		else eContainer
+	}
+	
+	static def getOwningBlock(SymbolDefinition it){
+		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	}
 	
 	static def getParentStatement(AttributeList it){
