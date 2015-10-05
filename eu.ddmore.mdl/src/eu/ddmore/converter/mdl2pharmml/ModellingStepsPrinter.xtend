@@ -74,18 +74,20 @@ class ModellingStepsPrinter {
 		<EstimationStep oid="«stepId»">
 «««			«dObj.print_mdef_ExternalDataSetReference»
 			«pObj.print_msteps_ParametersToEstimate»
-«««			«tObj.print_msteps_EstimateOperations(order)»
+			«tObj.print_msteps_EstimateOperations(order)»
 «««			«mObj.print_ct_variableAssignment»
 		</EstimationStep>
 	'''
 		
 		
-	def writeParameterEstimate(Statement stmt){
+	def writeParameterEstimate(Statement s, MclObject pObj){
+		val stmt = s
 		switch(stmt){
-			ListDefinition:
+			ListDefinition:{
+				val paramVar = pObj.findMdlSymbolDefn(stmt.name)
 				'''
 				<ParameterEstimation>
-					«stmt.name.getLocalSymbolReference»
+					«paramVar.getSymbolReference»
 					<InitialEstimate fixed="«stmt.list.getAttributeExpression('fix')?.convertToString ?: 'false'»">
 						«stmt.list.getAttributeExpression('value').expressionAsEquation»
 					</InitialEstimate>
@@ -101,6 +103,7 @@ class ModellingStepsPrinter {
 					«ENDIF»
 				</ParameterEstimation>
 				'''
+			}
 			default:''''''
 		}
 	}
@@ -108,10 +111,10 @@ class ModellingStepsPrinter {
 	protected def print_msteps_ParametersToEstimate(MclObject pObj)'''
 		<ParametersToEstimate>
 			«FOR stmt: pObj.paramStructuralParams»
-				«stmt.writeParameterEstimate»
+				«stmt.writeParameterEstimate(pObj)»
 			«ENDFOR»
 			«FOR stmt: pObj.paramVariabilityParams»
-				«stmt.writeParameterEstimate»
+				«stmt.writeParameterEstimate(pObj)»
 			«ENDFOR»
 «««				«IF b.structuralBlock != null»
 «««					«FOR p: b.structuralBlock.parameters»
@@ -640,6 +643,24 @@ class ModellingStepsPrinter {
 //			«ENDIF»
 //		«ENDFOR»
 //	'''
+
+	def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
+		<Operation order="1" opType="estPop">
+			<Property name="target">
+				<ct:Assign>
+					<ct:String>MLXTRAN_CODE</ct:String>
+				</ct:Assign>	
+			</Property>
+			<Property name="version">
+				<ct:Assign>
+					<ct:String>4.3.2</ct:String>
+				</ct:Assign>	
+			</Property>
+			<Algorithm definition="SAEM"/>
+		</Operation>
+	'''
+
+
 
 	///////////////////////////////////////////////
 	// III.b Simulation Step

@@ -20,7 +20,7 @@
 	    <ct:FunctionArgument symbolType="real" symbId="proportional"/>
 	    <ct:FunctionArgument symbolType="real" symbId="f"/>
 	    <ct:Definition>
-	        <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+	        <Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 	            <Binop op="plus">
 	                <ct:SymbRef symbIdRef="additive"/>
 	                <Binop op="times">
@@ -43,227 +43,235 @@
 				<Continuous/>
 			</Covariate>
 		</CovariateModel>
-		<SimpleParameter symbId = "POP_CL">
-		</SimpleParameter>
-		<SimpleParameter symbId = "POP_V">
-		</SimpleParameter>
-		<SimpleParameter symbId = "POP_KA">
-		</SimpleParameter>
-		<SimpleParameter symbId = "POP_TLAG">
-		</SimpleParameter>
-		<SimpleParameter symbId = "BETA_CL_WT">
-		</SimpleParameter>
-		<SimpleParameter symbId = "BETA_V_WT">
-		</SimpleParameter>
-		<SimpleParameter symbId = "RUV_PROP">
-		</SimpleParameter>
-		<SimpleParameter symbId = "RUV_ADD">
-		</SimpleParameter>
-		<SimpleParameter symbId = "PPV_CL">
-		</SimpleParameter>
-		<SimpleParameter symbId = "PPV_V">
-		</SimpleParameter>
-		<SimpleParameter symbId = "PPV_KA">
-		</SimpleParameter>
-		<SimpleParameter symbId = "PPV_TLAG">
-		</SimpleParameter>
-		<RandomVariable symbId="ETA_CL">
-			<ct:VariabilityReference>
-				<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
-			</ct:VariabilityReference>
-			<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
-				<mean>
-					<rVal>0</rVal>
-				</mean>
-				<stddev>
-					<var varId="PPV_CL"/>
-				</stddev>
-			</NormalDistribution>
-		</RandomVariable>
-		<RandomVariable symbId="ETA_V">
-			<ct:VariabilityReference>
-				<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
-			</ct:VariabilityReference>
-			<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
-				<mean>
-					<rVal>0</rVal>
-				</mean>
-				<stddev>
-					<var varId="PPV_V"/>
-				</stddev>
-			</NormalDistribution>
-		</RandomVariable>
-		<RandomVariable symbId="ETA_KA">
-			<ct:VariabilityReference>
-				<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
-			</ct:VariabilityReference>
-			<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
-				<mean>
-					<rVal>0</rVal>
-				</mean>
-				<stddev>
-					<var varId="PPV_KA"/>
-				</stddev>
-			</NormalDistribution>
-		</RandomVariable>
-		<RandomVariable symbId="ETA_TLAG">
-			<ct:VariabilityReference>
-				<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
-			</ct:VariabilityReference>
-			<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
-				<mean>
-					<rVal>0</rVal>
-				</mean>
-				<stddev>
-					<var varId="PPV_TLAG"/>
-				</stddev>
-			</NormalDistribution>
-		</RandomVariable>
-		<IndividualParameter symbId="CL">
-			<GaussianModel>
-				<Transformation>log</Transformation>
-				<LinearCovariate>
-					<PopulationParameter>
-						<ct:Assign>
-							<ct:Equation>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_CL"/>
-							</ct:Equation>
-						</ct:Assign>
-					</PopulationParameter>
-					<Covariate>
-						<ct:SymbRef blkIdRef="cm" symbIdRef="logtWT"/>
-						<FixedEffect>
-							<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_CL_WT"/>
-						</FixedEffect>
-					</Covariate>
-				</LinearCovariate>
-				<RandomEffects>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_CL"/>
-				</RandomEffects>
-			</GaussianModel>
-		</IndividualParameter>
-		<IndividualParameter symbId="V">
-			<GaussianModel>
-				<Transformation>log</Transformation>
-				<LinearCovariate>
-					<PopulationParameter>
-						<ct:Assign>
-							<ct:Equation>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_V"/>
-							</ct:Equation>
-						</ct:Assign>
-					</PopulationParameter>
-					<Covariate>
-						<ct:SymbRef blkIdRef="cm" symbIdRef="logtWT"/>
-						<FixedEffect>
-							<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_V_WT"/>
-						</FixedEffect>
-					</Covariate>
-				</LinearCovariate>
-				<RandomEffects>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_V"/>
-				</RandomEffects>
-			</GaussianModel>
-		</IndividualParameter>
-		<IndividualParameter symbId="KA">
-			<GaussianModel>
-				<Transformation>log</Transformation>
-				<LinearCovariate>
-					<PopulationParameter>
-						<ct:Assign>
-							<ct:Equation>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_KA"/>
-							</ct:Equation>
-						</ct:Assign>
-					</PopulationParameter>
-				</LinearCovariate>
-				<RandomEffects>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_KA"/>
-				</RandomEffects>
-			</GaussianModel>
-		</IndividualParameter>
-		<IndividualParameter symbId="TLAG">
-			<GaussianModel>
-				<Transformation>log</Transformation>
-				<LinearCovariate>
-					<PopulationParameter>
-						<ct:Assign>
-							<ct:Equation>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_TLAG"/>
-							</ct:Equation>
-						</ct:Assign>
-					</PopulationParameter>
-				</LinearCovariate>
-				<RandomEffects>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_TLAG"/>
-				</RandomEffects>
-			</GaussianModel>
-		</IndividualParameter>
-		<RandomVariable symbId="EPS_Y">
-			<ct:VariabilityReference>
-				<ct:SymbRef blkIdRef="vm_err" symbIdRef="DV"/>
-			</ct:VariabilityReference>
-			<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
-				<mean>
-					<rVal>0</rVal>
-				</mean>
-				<variance>
-					<rVal>1</rVal>
-				</variance>
-			</NormalDistribution>
-		</RandomVariable>
+		<ParameterModel blkId="pm">
+			<SimpleParameter symbId = "POP_CL">
+			</SimpleParameter>
+			<SimpleParameter symbId = "POP_V">
+			</SimpleParameter>
+			<SimpleParameter symbId = "POP_KA">
+			</SimpleParameter>
+			<SimpleParameter symbId = "POP_TLAG">
+			</SimpleParameter>
+			<SimpleParameter symbId = "BETA_CL_WT">
+			</SimpleParameter>
+			<SimpleParameter symbId = "BETA_V_WT">
+			</SimpleParameter>
+			<SimpleParameter symbId = "RUV_PROP">
+			</SimpleParameter>
+			<SimpleParameter symbId = "RUV_ADD">
+			</SimpleParameter>
+			<SimpleParameter symbId = "PPV_CL">
+			</SimpleParameter>
+			<SimpleParameter symbId = "PPV_V">
+			</SimpleParameter>
+			<SimpleParameter symbId = "PPV_KA">
+			</SimpleParameter>
+			<SimpleParameter symbId = "PPV_TLAG">
+			</SimpleParameter>
+			<RandomVariable symbId="ETA_CL">
+				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
+				</ct:VariabilityReference>
+				<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
+					<mean>
+						<rVal>0</rVal>
+					</mean>
+					<stddev>
+						<var varId="PPV_CL"/>
+					</stddev>
+				</NormalDistribution>
+			</RandomVariable>
+			<RandomVariable symbId="ETA_V">
+				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
+				</ct:VariabilityReference>
+				<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
+					<mean>
+						<rVal>0</rVal>
+					</mean>
+					<stddev>
+						<var varId="PPV_V"/>
+					</stddev>
+				</NormalDistribution>
+			</RandomVariable>
+			<RandomVariable symbId="ETA_KA">
+				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
+				</ct:VariabilityReference>
+				<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
+					<mean>
+						<rVal>0</rVal>
+					</mean>
+					<stddev>
+						<var varId="PPV_KA"/>
+					</stddev>
+				</NormalDistribution>
+			</RandomVariable>
+			<RandomVariable symbId="ETA_TLAG">
+				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
+				</ct:VariabilityReference>
+				<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
+					<mean>
+						<rVal>0</rVal>
+					</mean>
+					<stddev>
+						<var varId="PPV_TLAG"/>
+					</stddev>
+				</NormalDistribution>
+			</RandomVariable>
+			<IndividualParameter symbId="CL">
+				<GaussianModel>
+					<Transformation>log</Transformation>
+					<LinearCovariate>
+						<PopulationParameter>
+							<ct:Assign>
+								<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="POP_CL"/>
+								</Equation>
+							</ct:Assign>
+						</PopulationParameter>
+						<Covariate>
+							<ct:SymbRef blkIdRef="cm" symbIdRef="logtWT"/>
+							<FixedEffect>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_CL_WT"/>
+							</FixedEffect>
+						</Covariate>
+					</LinearCovariate>
+					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_CL"/>
+					</RandomEffects>
+				</GaussianModel>
+			</IndividualParameter>
+			<IndividualParameter symbId="V">
+				<GaussianModel>
+					<Transformation>log</Transformation>
+					<LinearCovariate>
+						<PopulationParameter>
+							<ct:Assign>
+								<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="POP_V"/>
+								</Equation>
+							</ct:Assign>
+						</PopulationParameter>
+						<Covariate>
+							<ct:SymbRef blkIdRef="cm" symbIdRef="logtWT"/>
+							<FixedEffect>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_V_WT"/>
+							</FixedEffect>
+						</Covariate>
+					</LinearCovariate>
+					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_V"/>
+					</RandomEffects>
+				</GaussianModel>
+			</IndividualParameter>
+			<IndividualParameter symbId="KA">
+				<GaussianModel>
+					<Transformation>log</Transformation>
+					<LinearCovariate>
+						<PopulationParameter>
+							<ct:Assign>
+								<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="POP_KA"/>
+								</Equation>
+							</ct:Assign>
+						</PopulationParameter>
+					</LinearCovariate>
+					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_KA"/>
+					</RandomEffects>
+				</GaussianModel>
+			</IndividualParameter>
+			<IndividualParameter symbId="TLAG">
+				<GaussianModel>
+					<Transformation>log</Transformation>
+					<LinearCovariate>
+						<PopulationParameter>
+							<ct:Assign>
+								<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="POP_TLAG"/>
+								</Equation>
+							</ct:Assign>
+						</PopulationParameter>
+					</LinearCovariate>
+					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_TLAG"/>
+					</RandomEffects>
+				</GaussianModel>
+			</IndividualParameter>
+			<RandomVariable symbId="EPS_Y">
+				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_err" symbIdRef="DV"/>
+				</ct:VariabilityReference>
+				<NormalDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/normal">
+					<mean>
+						<rVal>0</rVal>
+					</mean>
+					<variance>
+						<prVal>1</prVal>
+					</variance>
+				</NormalDistribution>
+			</RandomVariable>
+		  		</ParameterModel>
 		<StructuralModel blkId="sm">
 			<ct:Variable symbId="RATEIN" symbolType="real">
-				<math:Piecewise>
-					<math:Piece>
-						<math:Binop op="times">
-							<ct:SymbRef blkIdRef="sm" symbIdRef="GUT"/>
-							<ct:SymbRef blkIdRef="pm" symbIdRef="KA"/>
-						</math:Binop>
-						<math:Condition>
-							<math:LogicBinop op="ge">
-								<ct:SymbRef  symbIdRef="T"/>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="TLAG"/>
-							</math:LogicBinop>
-						</math:Condition>
-					</math:Piece>
-					<math:Piece>
-						<ct:Int>0</ct:Int>
-						<math:Condition>
-							<math:Otherwise/>
-						</math:Condition>
-					</math:Piece>
-				</math:Piecewise>
+				<ct:Assign>
+					<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+						<math:Piecewise>
+							<math:Piece>
+								<math:Binop op="times">
+									<ct:SymbRef blkIdRef="sm" symbIdRef="GUT"/>
+									<ct:SymbRef blkIdRef="pm" symbIdRef="KA"/>
+								</math:Binop>
+								<math:Condition>
+									<math:LogicBinop op="geq">
+										<ct:SymbRef  symbIdRef="T"/>
+										<ct:SymbRef blkIdRef="pm" symbIdRef="TLAG"/>
+									</math:LogicBinop>
+								</math:Condition>
+							</math:Piece>
+							<math:Piece>
+								<ct:Int>0</ct:Int>
+								<math:Condition>
+									<math:Otherwise/>
+								</math:Condition>
+							</math:Piece>
+						</math:Piecewise>
+					</Equation>
+				</ct:Assign>
 			</ct:Variable>
 			<ct:DerivativeVariable symbId="GUT" symbolType="real">
 				<ct:Assign>
-					<ct:Equation>
+					<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 						<math:Uniop op="minus">
 							<ct:SymbRef blkIdRef="sm" symbIdRef="RATEIN"/>
 						</math:Uniop>
-					</ct:Equation>
+					</Equation>
 				</ct:Assign>
 				<ct:IndependentVariable>
 					<ct:SymbRef symbIdRef="T"/>
 				</ct:IndependentVariable>
-				<ct:InitialValue>
-					<ct:Assign>
-						<ct:Equation>
-							<ct:Int>0</ct:Int>
-						</ct:Equation>
-					</ct:Assign>
-				</ct:InitialValue>
-				<ct:InitialTime>
-					<ct:Assign>
-						<ct:Equation>
-							<ct:Int>0</ct:Int>
-						</ct:Equation>
-					</ct:Assign>
-				</ct:InitialTime>
+				<ct:InitialCondition>
+					<ct:InitialValue>
+						<ct:Assign>
+							<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+								<ct:Int>0</ct:Int>
+							</Equation>
+						</ct:Assign>
+					</ct:InitialValue>
+					<ct:InitialTime>
+						<ct:Assign>
+							<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+								<ct:Int>0</ct:Int>
+							</Equation>
+						</ct:Assign>
+					</ct:InitialTime>
+				</ct:InitialCondition>
 			</ct:DerivativeVariable>
 			<ct:DerivativeVariable symbId="CENTRAL" symbolType="real">
 				<ct:Assign>
-					<ct:Equation>
+					<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 						<math:Binop op="minus">
 							<ct:SymbRef blkIdRef="sm" symbIdRef="RATEIN"/>
 							<math:Binop op="divide">
@@ -274,34 +282,40 @@
 								<ct:SymbRef blkIdRef="pm" symbIdRef="V"/>
 							</math:Binop>
 						</math:Binop>
-					</ct:Equation>
+					</Equation>
 				</ct:Assign>
 				<ct:IndependentVariable>
 					<ct:SymbRef symbIdRef="T"/>
 				</ct:IndependentVariable>
-				<ct:InitialValue>
-					<ct:Assign>
-						<ct:Equation>
-							<ct:Int>0</ct:Int>
-						</ct:Equation>
-					</ct:Assign>
-				</ct:InitialValue>
-				<ct:InitialTime>
-					<ct:Assign>
-						<ct:Equation>
-							<ct:Int>0</ct:Int>
-						</ct:Equation>
-					</ct:Assign>
-				</ct:InitialTime>
+				<ct:InitialCondition>
+					<ct:InitialValue>
+						<ct:Assign>
+							<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+								<ct:Int>0</ct:Int>
+							</Equation>
+						</ct:Assign>
+					</ct:InitialValue>
+					<ct:InitialTime>
+						<ct:Assign>
+							<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+								<ct:Int>0</ct:Int>
+							</Equation>
+						</ct:Assign>
+					</ct:InitialTime>
+				</ct:InitialCondition>
 			</ct:DerivativeVariable>
 			<ct:Variable symbId="CC" symbolType="real">
-				<math:Binop op="divide">
-					<ct:SymbRef blkIdRef="sm" symbIdRef="CENTRAL"/>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="V"/>
-				</math:Binop>
+				<ct:Assign>
+					<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+						<math:Binop op="divide">
+							<ct:SymbRef blkIdRef="sm" symbIdRef="CENTRAL"/>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="V"/>
+						</math:Binop>
+					</Equation>
+				</ct:Assign>
 			</ct:Variable>
 		</StructuralModel>
-		<ObservationModel blkId="om">
+		<ObservationModel blkId="om1">
 			<ContinuousData>
 				<Standard symbId="Y">
 					<Output>
@@ -309,21 +323,21 @@
 					</Output>
 					<ErrorModel>
 						<ct:Assign>
-							<Equation  xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 								<FunctionCall>
 									<ct:SymbRef symbIdRef="combinedError1"/>
 									<FunctionArgument symbId="additive">
-										<Equation>
+										<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 											<ct:SymbRef blkIdRef="pm" symbIdRef="RUV_ADD"/>
 										</Equation>
 									</FunctionArgument>
 									<FunctionArgument symbId="proportional">
-										<Equation>
+										<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 											<ct:SymbRef blkIdRef="pm" symbIdRef="RUV_PROP"/>
 										</Equation>
 									</FunctionArgument>
 									<FunctionArgument symbId="f">
-										<Equation>
+										<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 											<ct:SymbRef blkIdRef="sm" symbIdRef="CC"/>
 										</Equation>
 									</FunctionArgument>
@@ -364,7 +378,7 @@
 			</ColumnMapping>
 			<ColumnMapping>
 			    <ColumnRef xmlns="http://www.pharmml.org/pharmml/0.6/Dataset" columnIdRef="DV"/>
-				<ct:SymbRef blkIdRef="ERROR!" symbIdRef="Y"/>
+				<ct:SymbRef blkIdRef="om1" symbIdRef="Y"/>
 			</ColumnMapping>
 			<ColumnMapping>
 				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.6/Dataset" columnIdRef="logtWT"/>
@@ -391,7 +405,7 @@
 		<EstimationStep oid="estimStep_1">
 			<ParametersToEstimate>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="POP_CL"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_CL"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.1</ct:Real>
@@ -404,7 +418,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="POP_V"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_V"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Int>8</ct:Int>
@@ -417,7 +431,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="POP_KA"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_KA"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.362</ct:Real>
@@ -430,7 +444,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="POP_TLAG"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_TLAG"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Int>1</ct:Int>
@@ -443,7 +457,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="BETA_CL_WT"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_CL_WT"/>
 					<InitialEstimate fixed="true">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.75</ct:Real>
@@ -451,7 +465,7 @@
 					</InitialEstimate>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="BETA_V_WT"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_V_WT"/>
 					<InitialEstimate fixed="true">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Int>1</ct:Int>
@@ -459,7 +473,7 @@
 					</InitialEstimate>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="RUV_PROP"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="RUV_PROP"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.1</ct:Real>
@@ -472,7 +486,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="RUV_ADD"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="RUV_ADD"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.1</ct:Real>
@@ -485,7 +499,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="POP_CL"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_CL"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.1</ct:Real>
@@ -498,7 +512,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="POP_V"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_V"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Int>8</ct:Int>
@@ -511,7 +525,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="POP_KA"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_KA"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.362</ct:Real>
@@ -524,7 +538,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="POP_TLAG"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_TLAG"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Int>1</ct:Int>
@@ -537,7 +551,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="BETA_CL_WT"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_CL_WT"/>
 					<InitialEstimate fixed="true">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.75</ct:Real>
@@ -545,7 +559,7 @@
 					</InitialEstimate>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="BETA_V_WT"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_V_WT"/>
 					<InitialEstimate fixed="true">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Int>1</ct:Int>
@@ -553,7 +567,7 @@
 					</InitialEstimate>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="RUV_PROP"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="RUV_PROP"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.1</ct:Real>
@@ -566,7 +580,7 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef symbId="RUV_ADD"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="RUV_ADD"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.1</ct:Real>
@@ -579,6 +593,19 @@
 					</LowerBound>
 				</ParameterEstimation>
 			</ParametersToEstimate>
+			<Operation order="1" opType="estPop">
+				<Property name="target">
+					<ct:Assign>
+						<ct:String>MLXTRAN_CODE</ct:String>
+					</ct:Assign>	
+				</Property>
+				<Property name="version">
+					<ct:Assign>
+						<ct:String>4.3.2</ct:String>
+					</ct:Assign>	
+				</Property>
+				<Algorithm definition="SAEM"/>
+			</Operation>
 		</EstimationStep>
 		<mstep:StepDependencies>
 			<mstep:Step>

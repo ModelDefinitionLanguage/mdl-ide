@@ -37,8 +37,8 @@ class DistributionPrinter {
 		'Normal' -> new UncertMlMapping('NormalDistribution', 'http://www.uncertml.org/distributions/normal',
 							#['mean', 'var', 'sd'],
 							#{ 'mean' -> new UncertMlArgument('mean', 'rVal'),
-								'var' -> new UncertMlArgument('variance', 'rVal'),
-								'sd' -> new UncertMlArgument('stddev', 'rVal')
+								'var' -> new UncertMlArgument('variance', 'prVal'),
+								'sd' -> new UncertMlArgument('stddev', 'prVal')
 							}
 		)
 	}

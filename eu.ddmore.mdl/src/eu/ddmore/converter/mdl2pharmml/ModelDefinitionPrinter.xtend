@@ -339,9 +339,9 @@ class ModelDefinitionPrinter {
 	
 	def writeAssignment(Expression expr)'''
 		<ct:Assign>
-			<ct:Equation>
+			<Equation xmlns="«xmlns_math»">
 				«expr.pharmMLExpr»
-			</ct:Equation>
+			</Equation>
 		</ct:Assign>
 	'''
 		
@@ -368,56 +368,58 @@ class ModelDefinitionPrinter {
 //	// I.d Parameter Model
 //	////////////////////////////	
 	def print_mdef_ParameterModel(MclObject mObj)'''		
-		«IF mObj != null»
-			«FOR b: mObj.blocks»
+		<ParameterModel blkId="pm">
+			«IF mObj != null»
+				«FOR b: mObj.blocks»
 «««				//STRUCTURAL_PARAMETERS
-				«IF b.identifier == BlockDefinitionProvider::MDL_STRUCT_PARAMS»
-					«FOR stmt: b.getNonBlockStatements»
-						«switch(stmt){
-							EquationDefinition:
-								writeSimpleParameter(stmt)
-						}»
-					«ENDFOR» 
-		  		«ENDIF»
+					«IF b.identifier == BlockDefinitionProvider::MDL_STRUCT_PARAMS»
+						«FOR stmt: b.getNonBlockStatements»
+							«switch(stmt){
+								EquationDefinition:
+									writeSimpleParameter(stmt)
+							}»
+						«ENDFOR» 
+			  		«ENDIF»
 «««				//VARIABILITY_PARAMETERS
-				«IF b.identifier == BlockDefinitionProvider::MDL_VAR_PARAMS»
-					«FOR stmt: b.getNonBlockStatements»
-						«switch(stmt){
-							EquationDefinition:
-							writeSimpleParameter(stmt)
-						}»
-					«ENDFOR» 
-		  		«ENDIF»
+					«IF b.identifier == BlockDefinitionProvider::MDL_VAR_PARAMS»
+						«FOR stmt: b.getNonBlockStatements»
+							«switch(stmt){
+								EquationDefinition:
+									writeSimpleParameter(stmt)
+							}»
+						«ENDFOR» 
+			  		«ENDIF»
 «««		  		GROUP_VARIABLES (covariate parameters)
-				«IF b.identifier == BlockDefinitionProvider::MDL_GRP_PARAMS»
-					«FOR stmt: b.getNonBlockStatements»
-						«switch(stmt){
-							EquationDefinition:
-								writeSimpleParameter(stmt)
-						}»
-					«ENDFOR» 
-		  		«ENDIF»
+					«IF b.identifier == BlockDefinitionProvider::MDL_GRP_PARAMS»
+						«FOR stmt: b.getNonBlockStatements»
+							«switch(stmt){
+								EquationDefinition:
+									writeSimpleParameter(stmt)
+							}»
+						«ENDFOR» 
+			  		«ENDIF»
 «««				//RANDOM_VARIABLES_DEFINITION
-				«IF b.identifier == BlockDefinitionProvider::MDL_RND_VARS»
-					«FOR stmt: b.getNonBlockStatements»
-						«switch(stmt){
-							RandomVariableDefinition:{
-								writeRandomVariable(stmt, b.getVarLevel)
-							}
-						}»
-					«ENDFOR» 
-		  		«ENDIF»
+					«IF b.identifier == BlockDefinitionProvider::MDL_RND_VARS»
+						«FOR stmt: b.getNonBlockStatements»
+							«switch(stmt){
+								RandomVariableDefinition:{
+									writeRandomVariable(stmt, b.getVarLevel)
+								}
+							}»
+						«ENDFOR» 
+			  		«ENDIF»
 «««		  		//INDIVIDUAL_VARIABLES
-				«IF b.identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS»
-					«FOR stmt: b.getNonBlockStatements»
-						«switch(stmt){
-							EquationTypeDefinition:
-								writeIndividualParameter(stmt)
-						}»
-					«ENDFOR» 
-		  		«ENDIF»
-		  	«ENDFOR»
-  		«ENDIF»
+					«IF b.identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS»
+						«FOR stmt: b.getNonBlockStatements»
+							«switch(stmt){
+								EquationTypeDefinition:
+									writeIndividualParameter(stmt)
+							}»
+						«ENDFOR» 
+			  		«ENDIF»
+			  	«ENDFOR»
+	  		«ENDIF»
+  		</ParameterModel>
   	'''
 //  		statements = statements + mObj.print_mdef_CollerationModel(pObj); 
 //	  	if (statements.length > 0){
@@ -525,7 +527,7 @@ class ModelDefinitionPrinter {
 	def writeVariableDefinition(EquationDefinition stmt)'''
 		<ct:Variable symbId="«stmt.name»" symbolType="«IF stmt.isVector»ERROR!«ELSE»real«ENDIF»">
 			«IF stmt.expression != null»
-				«stmt.expression.pharmMLExpr»
+				«stmt.expression.writeAssignment»
 			«ENDIF»
 		</ct:Variable>
 	'''
@@ -533,9 +535,9 @@ class ModelDefinitionPrinter {
 	
 	def writeAssignZero()'''
 		<ct:Assign>
-			<math:Equation>
+			<Equation xmlns="«xmlns_math»">
 				<ct:Int>0</ct:Int>
-			</math:Equation>
+			</Equation>
 		</ct:Assign>	
 	'''
 	
@@ -550,12 +552,14 @@ class ModelDefinitionPrinter {
 			<ct:IndependentVariable>
 				«stmt.list.getAttributeExpression("wrt")?.pharmMLExpr ?: defaultWrt.writeDefaultWrt»
 			</ct:IndependentVariable>
-			<ct:InitialValue>
-				«stmt.list.getAttributeExpression("init")?.writeAssignment ?: writeAssignZero »
-			</ct:InitialValue>
-			<ct:InitialTime>
-				«stmt.list.getAttributeExpression("x0")?.writeAssignment ?: writeAssignZero »
-			</ct:InitialTime>
+			<ct:InitialCondition>
+				<ct:InitialValue>
+					«stmt.list.getAttributeExpression("init")?.writeAssignment ?: writeAssignZero »
+				</ct:InitialValue>
+				<ct:InitialTime>
+					«stmt.list.getAttributeExpression("x0")?.writeAssignment ?: writeAssignZero »
+				</ct:InitialTime>
+			</ct:InitialCondition>
 		</ct:DerivativeVariable>
 	'''
 	
@@ -596,22 +600,28 @@ class ModelDefinitionPrinter {
 	'''
 	
 	
-	def writeObservationModel(MclObject mdlObject)'''
-		«FOR stmt : mdlObject.mdlObservations»
+	def writeObservationModel(MclObject mdlObject){
+		var idx = 0
+		'''«FOR stmt : mdlObject.mdlObservations»
 			«switch(stmt){
 				EquationTypeDefinition:
 					'''
-					«writeContinuousObservation(stmt)»
+					«writeContinuousObservation(stmt, idx += 1)»
 					'''
 				ListDefinition:
 					'''
-					«writeDiscreteObservations(stmt)»
+					«writeDiscreteObservations(stmt, idx += 1)»
 					'''
+				default:{
+					idx += 1
+					''''''
+				}
 			}»
 		«ENDFOR»
-	'''
+		'''
+	}
 	
-	def writeDiscreteObservations(ListDefinition definition) {
+	def writeDiscreteObservations(ListDefinition definition, int idx) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
 	
@@ -619,8 +629,8 @@ class ModelDefinitionPrinter {
 		expr != null && expr instanceof BuiltinFunctionCall
 	}
 	
-	def writeContinuousObservation(EquationTypeDefinition definition)'''
-		<ObservationModel blkId="om">
+	def writeContinuousObservation(EquationTypeDefinition definition, int idx)'''
+		<ObservationModel blkId="om«idx»">
 			<ContinuousData>
 				«IF isStandardErrorDefinition(definition.expression)»
 					<Standard symbId="«definition.name»">
@@ -644,13 +654,13 @@ class ModelDefinitionPrinter {
 		'''
 		<ErrorModel>
 			<ct:Assign>
-				<Equation  xmlns="«xmlns_math»">
+				<Equation xmlns="«xmlns_math»">
 					<FunctionCall>
 						<ct:SymbRef symbIdRef="«standardErrorName»"/>
 						«FOR vp : getNamedArguments»
 							«IF getStandardErrorArgument(vp.argumentName) != null»
 								<FunctionArgument symbId="«getStandardErrorArgument(vp.argumentName)»">
-									<Equation>
+									<Equation xmlns="«xmlns_math»">
 										«vp.expression.pharmMLExpr»
 									</Equation>
 								</FunctionArgument>

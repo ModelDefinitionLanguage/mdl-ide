@@ -28,10 +28,12 @@ import eu.ddmore.mdl.validation.BlockDefinitionProvider
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.utils.MclUtils
 
 class PharmMLExpressionBuilder {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
+	extension MclUtils mu = new MclUtils 
 	
 	static val GLOBAL_VAR = 'global'
 	
@@ -44,7 +46,10 @@ class PharmMLExpressionBuilder {
 		BlockDefinitionProvider::MDL_STRUCT_PARAMS -> 'pm',
 		BlockDefinitionProvider::MDL_RND_VARS -> 'pm',
 		BlockDefinitionProvider::COVARIATE_BLK_NAME -> 'cm',
-		BlockDefinitionProvider::IDV_BLK_NAME -> GLOBAL_VAR
+		BlockDefinitionProvider::IDV_BLK_NAME -> GLOBAL_VAR,
+		BlockDefinitionProvider::PARAM_STRUCT_BLK -> 'pm',
+		BlockDefinitionProvider::PARAM_VARIABILITY_BLK -> 'pm',
+		BlockDefinitionProvider::OBS_BLK_NAME-> 'om'
 	}
 	
 	
@@ -56,14 +61,32 @@ class PharmMLExpressionBuilder {
 	}
 	
 	def getBlockId(SymbolDefinition it){
-		val blkName = owningBlock.identifier
+		val blk = owningBlock
+		val blkName = blk.identifier
 		val blkId = blockPharmMLModelMapping.get(blkName)
-		if(blkId == null && blkName == BlockDefinitionProvider::VAR_LVL_BLK_NAME){
-			// handle variability model
-			if((it as ListDefinition).list.getAttributeEnumValue('type') == 'parameter') 'vm_mdl'
-			else 'vm_err'
+		switch(blkName){
+			case BlockDefinitionProvider::VAR_LVL_BLK_NAME:
+				if((it as ListDefinition).list.getAttributeEnumValue('type') == 'parameter') 'vm_mdl'
+				else 'vm_err'
+			case BlockDefinitionProvider::OBS_BLK_NAME:{
+				// number obs based on order in block.
+				var cntr = 1
+				for(obsStmt : blk.statements){
+					switch(obsStmt){
+						SymbolDefinition:
+							if(obsStmt.name == name) return blkId + cntr
+					}
+					cntr += 1
+				}
+			}
+			default: blkId
 		}
-		else blkId
+//		if(blkId == null && blkName == BlockDefinitionProvider::VAR_LVL_BLK_NAME){
+//			// handle variability model
+//			if((it as ListDefinition).list.getAttributeEnumValue('type') == 'parameter') 'vm_mdl'
+//			else 'vm_err'
+//		}
+//		else blkId
 	}
 	
 	def getSymbolReference(SymbolReference it){
@@ -146,11 +169,11 @@ class PharmMLExpressionBuilder {
 			case '||': 'or'
 			case '&&': 'and'
 			case '<': 'lt'
-			case '<=': 'le'
+			case '<=': 'leq'
 			case '>': 'gt'
-			case '>=': 'ge'
+			case '>=': 'geq'
 			case '==': 'eq'
-			case '!=': 'ne'
+			case '!=': 'neq'
 			case '%': 'rem'
 		}
 	}

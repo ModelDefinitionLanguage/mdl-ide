@@ -21,7 +21,7 @@ class FunctionDefinitionPrinter {
         <ct:Description>Constant or additive error model</ct:Description>
         <ct:FunctionArgument symbolType="real" symbId="additive"/>
         <ct:Definition>
-            <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+            <Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
                <ct:SymbRef symbIdRef="additive"/>
             </Equation>
         </ct:Definition>
@@ -35,7 +35,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
-            <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+            <Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
                 <Binop op="times">
                     <ct:SymbRef symbIdRef="proportional"/>
                     <ct:SymbRef symbIdRef="f"/>
@@ -53,7 +53,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
-            <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+            <Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
                 <Binop op="plus">
                     <ct:SymbRef symbIdRef="additive"/>
                     <Binop op="times">
@@ -75,7 +75,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
-            <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+            <Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
                 <Uniop op="sqrt">
                     <Binop op="plus">
                         <Binop op="power">
@@ -108,7 +108,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
-            <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+            <Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
                 <Uniop op="sqrt">
                     <Binop op="plus">
                         <Binop op="times">
@@ -137,7 +137,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="power"/>
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
-            <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+            <Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
                 <Binop op="times">
                     <ct:SymbRef symbIdRef="proportional"/>
                     <Binop op="power">
@@ -159,7 +159,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="power"/>
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
-            <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+            <Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
                 <Binop op="plus">
                     <ct:SymbRef symbIdRef="additive"/>
                     <Binop op="times">
