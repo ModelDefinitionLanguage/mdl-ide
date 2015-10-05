@@ -15,7 +15,9 @@ class FunctionDefinitionPrinter {
 
 	static val functionDefinitions = #{
 		'additiveError' -> '''
-    <ct:FunctionDefinition symbolType="real" symbId="additiveError">
+    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.6/CommonTypes"
+    	symbolType="real"
+    	symbId="additiveError">
         <ct:Description>Constant or additive error model</ct:Description>
         <ct:FunctionArgument symbolType="real" symbId="additive"/>
         <ct:Definition>
@@ -26,7 +28,9 @@ class FunctionDefinitionPrinter {
     </ct:FunctionDefinition>
 		''',
 		'proportionalError' -> '''
-    <ct:FunctionDefinition symbolType="real" symbId="proportionalError">
+    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.6/CommonTypes" 
+    	symbolType="real"
+    	symbId="proportionalError">
         <ct:Description>Proportional or constant CV (CVV)</ct:Description>
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>
         <ct:FunctionArgument symbolType="real" symbId="f"/>
@@ -41,7 +45,9 @@ class FunctionDefinitionPrinter {
     </ct:FunctionDefinition>
 		''',
 		'combinedError1' -> '''
-    <ct:FunctionDefinition symbolType="real" symbId="combinedError1">
+    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.6/CommonTypes"
+    	symbolType="real"
+    	symbId="combinedError1">
         <ct:Description>Combined additive ad proportional for 1 epsilon</ct:Description>
         <ct:FunctionArgument symbolType="real" symbId="additive"/>
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>
@@ -61,7 +67,9 @@ class FunctionDefinitionPrinter {
 		''',
 		'combinedError2' -> '''
     <!-- SQRT(PROP**2+ADD**2*F**2) -->
-    <ct:FunctionDefinition symbolType="real" symbId="combinedError2">
+    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.6/CommonTypes" 
+    	symbolType="real"
+    	symbId="combinedError2">
         <ct:Description>Combined additive ad proportional for 1 epsilon</ct:Description>
         <ct:FunctionArgument symbolType="real" symbId="additive"/>
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>
@@ -92,7 +100,9 @@ class FunctionDefinitionPrinter {
 		''',
 		'combinedError2Log' -> '''
     <!-- SQRT(PROP**2 + (ADD/F)**2) -->
-    <ct:FunctionDefinition symbolType="real" symbId="combinedError2Log">
+    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.6/CommonTypes" 
+    	symbolType="real"
+    	symbId="combinedError2Log">
         <ct:Description>Combined additive ad proportional for 1 epsilon where prediction is log transformed</ct:Description>
         <ct:FunctionArgument symbolType="real" symbId="additive"/>
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>
@@ -119,7 +129,9 @@ class FunctionDefinitionPrinter {
     </ct:FunctionDefinition>
 		''',
 		'powerError' -> '''
-    <ct:FunctionDefinition symbolType="real" symbId="powerError">
+    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.6/CommonTypes"
+    	symbolType="real"
+    	symbId="powerError">
         <ct:Description>Power error model</ct:Description>
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>
         <ct:FunctionArgument symbolType="real" symbId="power"/>
@@ -138,7 +150,9 @@ class FunctionDefinitionPrinter {
     </ct:FunctionDefinition>
 		''',
 		'combinedPowerError1' -> '''
-    <ct:FunctionDefinition symbolType="real" symbId="combinedPowerError1">
+    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.6/CommonTypes"
+    	symbolType="real"
+    	symbId="combinedPowerError1">
         <ct:Description>Combined additive and power error model for 1 epsilon.</ct:Description>
         <ct:FunctionArgument symbolType="real" symbId="additive"/>
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>

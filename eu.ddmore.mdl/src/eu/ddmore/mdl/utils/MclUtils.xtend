@@ -315,7 +315,18 @@ class MclUtils {
 		retVal
 	}
 
-
+	def findMdlSymbolDefn(MclObject it, String symbolName){
+		for(blk : blocks){
+			val retVal = blk.nonBlockStatements.findFirst[s|
+				switch(s){
+					SymbolDefinition: s.name == symbolName
+					default: false
+				}
+			]
+			if(retVal != null) return retVal as SymbolDefinition
+		}
+		null
+	}
 	
 	
 	def SymbolDefinition getSingleSymbolRef(Expression expr){

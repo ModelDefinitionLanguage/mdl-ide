@@ -12,6 +12,7 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MappingExpression
+import eu.ddmore.mdl.mdl.SymbolDefinition
 
 class ModellingStepsPrinter { 
 	
@@ -160,82 +161,57 @@ class ModellingStepsPrinter {
 				case(ListDefinitionProvider::IDV_USE_VALUE),
 				case(ListDefinitionProvider::VARLVL_USE_VALUE),
 				case(ListDefinitionProvider::COV_USE_VALUE):
-					res = res + column.print_ds_MagicMapping
+					res = res + mObj.print_ds_MagicMapping(column)
 				case(ListDefinitionProvider::CATCOV_USE_VALUE):{
-					var categoricalMapping = column.print_ds_CategoricalMapping
-					// @TODO: fix this
-					res = res + column.name.print_ds_ColumnMapping(column.name, categoricalMapping)
+					res = res + mObj.print_ds_CategoricalMagicMapping(column)
+//					var categoricalMapping = column.print_ds_CategoricalMapping
+//					// @TODO: fix this
+//					res = res + mObj.print_ds_ColumnMapping(column, categoricalMapping)
 				}
 				case(ListDefinitionProvider::AMT_USE_VALUE):
 					res = res + column.print_ds_AmtMapping(dObj, mObj)
 				case(ListDefinitionProvider::OBS_USE_VALUE):
 					res = res + column.print_ds_DvMapping(dObj, mObj)
 			}
-//					if (modelVar != null &&
-//						(use.equals(UseType::ID.toString) || use.equals(UseType::IDV.toString) ||
-//							use.equals(UseType::VARLEVEL.toString) || (use.equals(UseType::COVARIATE.toString) &&
-//								!colType.isCategorical()))) {
-//								// use magic mapping with no conditions 
-//								res = res + column.name.print_ds_MagicMapping(modelVar);
-//							} else if (modelVar != null && use.equals(UseType::COVARIATE.toString) &&
-//								colType.isCategorical()) {
-//								// categorical covariates
-//								var categoricalMapping = column.print_ds_CategoricalMapping;
-//								res = res + column.name.print_ds_ColumnMapping(modelVar, categoricalMapping);
-//							} else if (use.equals(UseType::AMT.toString)) {
-//								// handle amount mapping
-//								res = res + column.print_ds_AmtMapping(dObj, mObj)
-//							} else if (use.equals(UseType::DV.toString)) {
-//								// handle amount mapping
-//								res = res + column.print_ds_DvMapping(dObj, mObj)
-//							}
-//						}
-//					}
-//				}
 		}
 		res = res + dObj.print_ds_DataSet(mObj);
 	}
 
-	def print_ds_AmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj) {
-		amtColumn.print_ds_StandardAmtMapping(dObj, mObj)
-		+ amtColumn.print_ds_TargetMapping(dObj, mObj)
+	def print_ds_AmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj)'''
+		«amtColumn.print_ds_StandardAmtMapping(dObj, mObj)»
+		«amtColumn.print_ds_TargetMapping(dObj, mObj)»
+	'''
+
+	def writeSingleDoseMapping(MclObject mObj, ListDefinition column, Expression dataVariable){
+		var mdlSymb = mObj.findMdlSymbolDefn(dataVariable.convertToString)
+		'''
+		<ColumnMapping>
+			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
+			<Piecewise xmlns="«xmlns_ds»">
+				<math:Piece>
+					«mdlSymb.symbolReference»
+					<math:Condition>
+						<math:LogicBinop op="gt">
+							<ColumnRef columnIdRef="«column.name»"/>
+							<ct:Int>0</ct:Int>
+						</math:LogicBinop>
+					</math:Condition>
+				</math:Piece>
+			</Piecewise>
+		</ColumnMapping>
+		'''
 	}
 
-	protected def print_ds_StandardAmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj) {
-		val define = amtColumn.list.getAttributeExpression('define');
-		val columnId = amtColumn.name;
-		var res = '''''';
-		var colMapping = ''''''
-		if (define == null) {
-			val varDefn = amtColumn.list.getAttributeExpression('variable');
-			// Reference or piecewise
-			res = '''
-				<ColumnMapping>
-					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-					<Piecewise xmlns="«xmlns_ds»">
-						<math:Piece>
-							«IF varDefn != null»
-								«varDefn.pharmMLExpr»
-							«ENDIF»
-							<math:Condition>
-								<math:LogicBinop op="gt">
-									<ColumnRef columnIdRef="«columnId»"/>
-									<ct:Int>0</ct:Int>
-								</math:LogicBinop>
-							</math:Condition>
-						</math:Piece>
-					</Piecewise>
-				</ColumnMapping>
+	def writeMultiDoseMapping(MclObject mObj, ListDefinition column, Expression dataDefine){
+		switch(dataDefine){
+			MappingExpression:
 				'''
-		}
-		else { // Vector of pairs
-			colMapping = switch(define){
-				MappingExpression:{
-					'''
-					«FOR p : define.attList»
-						«IF !mObj.isCompartmentInput(p.mappedSymbol.ref)»
+				<ColumnMapping>
+				    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
+					<Piecewise xmlns="«xmlns_ds»">
+						«FOR p : dataDefine.attList»
 							<math:Piece>
-								«p.rightOperand.pharmMLExpr»
+								«mObj.findMdlSymbolDefn(p.mappedSymbol.ref.name).symbolReference»
 							   	<math:Condition>
 							   		<math:LogicBinop op="and">
 							   			<math:LogicBinop op="eq">
@@ -243,17 +219,97 @@ class ModellingStepsPrinter {
 								   			«p.leftOperand.pharmMLExpr»
 										</math:LogicBinop>
 							   			<math:LogicBinop op="gt">
-											<ColumnRef columnIdRef="«columnId»"/>
+											<ColumnRef columnIdRef="«column.name»"/>
 								   			<ct:Int>0</ct:Int>
 										</math:LogicBinop>
 									</math:LogicBinop>
 							   	</math:Condition>
 							</math:Piece>
-						«ENDIF»
-					«ENDFOR» 
-					'''
-				}
-				default:''
+						«ENDFOR» 
+					</Piecewise>
+				</ColumnMapping>
+				'''
+//				'''
+//				<MultipleDVMapping>
+//					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
+//					<Piecewise xmlns="«xmlns_mstep»">
+//						«FOR p : dataDefine.attList»
+//							<math:Piece>
+//							   	«mObj.findMdlSymbolDefn(p.mappedSymbol.ref.name).symbolRef»
+//«««						   	«IF p.key.expression.isCategoricalObs(mObj)»
+//«««						   		«p.key.expression.printCategoricalObsMapping(mObj)»
+//«««						   	«ELSEIF p.key.expression.isDiscreteBernoulliObs(mObj)»
+//«««						   		«printDiscreteBernoulliObsMapping»
+//«««						   	«ENDIF»
+//								<math:Condition>
+//									<math:LogicBinop op="eq">
+//									<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«p.srcColumn.ref.name»"/>
+//										«p.leftOperand.pharmMLExpr»
+//							   		</math:LogicBinop>
+//							   	</math:Condition>
+//							</math:Piece>
+//						«ENDFOR» 
+//					</Piecewise>
+//				</MultipleDVMapping>
+//				'''
+		  default: ''''''
+		}
+	}
+	protected def print_ds_StandardAmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj) {
+		val define = amtColumn.list.getAttributeExpression('define');
+//		val columnId = amtColumn.name;
+//		var res = '''''';
+//		var colMapping = ''''''
+		if (define == null) {
+			val varDefn = amtColumn.list.getAttributeExpression('variable');
+			writeSingleDoseMapping(mObj, amtColumn, varDefn)
+			// Reference or piecewise
+//			res = '''
+//				<ColumnMapping>
+//					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+//					<Piecewise xmlns="«xmlns_ds»">
+//						<math:Piece>
+//							«IF varDefn != null»
+//								«varDefn.pharmMLExpr»
+//							«ENDIF»
+//							<math:Condition>
+//								<math:LogicBinop op="gt">
+//									<ColumnRef columnIdRef="«columnId»"/>
+//									<ct:Int>0</ct:Int>
+//								</math:LogicBinop>
+//							</math:Condition>
+//						</math:Piece>
+//					</Piecewise>
+//				</ColumnMapping>
+//				'''
+		}
+		else { // Vector of pairs
+			writeMultiDoseMapping(mObj, amtColumn, define)
+//			colMapping = switch(define){
+//				MappingExpression:{
+//					'''
+//					«FOR p : define.attList»
+//						«IF !mObj.isCompartmentInput(p.mappedSymbol.ref)»
+//							<math:Piece>
+//								«p.rightOperand.pharmMLExpr»
+//							   	<math:Condition>
+//							   		<math:LogicBinop op="and">
+//							   			<math:LogicBinop op="eq">
+//											<ColumnRef columnIdRef="«p.srcColumn.ref.name»"/>
+//								   			«p.leftOperand.pharmMLExpr»
+//										</math:LogicBinop>
+//							   			<math:LogicBinop op="gt">
+//											<ColumnRef columnIdRef="«columnId»"/>
+//								   			<ct:Int>0</ct:Int>
+//										</math:LogicBinop>
+//									</math:LogicBinop>
+//							   	</math:Condition>
+//							</math:Piece>
+//						«ENDIF»
+//					«ENDFOR» 
+//					'''
+//				}
+//				default:''
 			}
 //			val colMapping = '''
 //				«FOR p : pairs»
@@ -276,48 +332,49 @@ class ModellingStepsPrinter {
 //				«ENDIF»
 //				«ENDFOR» 
 //			  '''
-			 res = '''
-				«IF colMapping.length > 0»
-				<ColumnMapping>
-				    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-					<Piecewise xmlns="«xmlns_ds»">
-						«colMapping»
-					</Piecewise>
-				</ColumnMapping>
-				«ENDIF»
-			 '''
-		}
-		res
+//			 res = '''
+//				«IF colMapping.length > 0»
+//				<ColumnMapping>
+//				    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+//					<Piecewise xmlns="«xmlns_ds»">
+//						«colMapping»
+//					</Piecewise>
+//				</ColumnMapping>
+//				«ENDIF»
+//			 '''
+//		}
+//		res
 	}
 
 	def print_ds_TargetMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj){
 		// @TODO : fix this.
-		val define = amtColumn.list.getAttributeExpression('define');
-		val columnId = amtColumn.name;
-		var toolMappingDefn = '''''';
-		if (define != null) {
-			// There really must be define in this case.
-			val pairs = define.mappedSymbolRef
-			toolMappingDefn = '''
-			    «FOR p : pairs»
-		    	   	«IF mObj.isCompartmentInput(p)»
-«««		    	   		«p.printTargetMapping(p.value.expression, mObj)»
-		    	   	«ENDIF»
-				«ENDFOR» 
-			'''
-		} else {
-			// this is a bug as the language will be invalid if this is true.
-		}
-		'''
-			«IF toolMappingDefn.length > 0»
-			<ColumnMapping>
-				<ds:ColumnRef columnIdRef="«columnId»"/>
-				<ds:TargetMapping blkIdRef="sm">
-					«toolMappingDefn»
-				</ds:TargetMapping>
-			</ColumnMapping>
-			«ENDIF»
-		'''
+		''''''
+//		val define = amtColumn.list.getAttributeExpression('define');
+//		val columnId = amtColumn.name;
+//		var toolMappingDefn = '''''';
+//		if (define != null) {
+//			// There really must be define in this case.
+//			val pairs = define.mappedSymbolRef
+//			toolMappingDefn = '''
+//			    «FOR p : pairs»
+//		    	   	«IF mObj.isCompartmentInput(p)»
+//«««		    	   		«p.printTargetMapping(p.value.expression, mObj)»
+//		    	   	«ENDIF»
+//				«ENDFOR» 
+//			'''
+//		} else {
+//			// this is a bug as the language will be invalid if this is true.
+//		}
+//		'''
+//			«IF toolMappingDefn.length > 0»
+//			<ColumnMapping>
+//				<ds:ColumnRef columnIdRef="«columnId»"/>
+//				<ds:TargetMapping blkIdRef="sm">
+//					«toolMappingDefn»
+//				</ds:TargetMapping>
+//			</ColumnMapping>
+//			«ENDIF»
+//		'''
 	}
 
 	// @TODO: implement this	
@@ -362,51 +419,52 @@ class ModellingStepsPrinter {
 		return res;
 	}
 
-	protected def print_ds_ColumnMapping(String columnId, String symbId, String complexMapping) '''
+	protected def print_ds_ColumnMapping(ListDefinition column, SymbolDefinition mdlSymb, String complexMapping) '''
 		<ColumnMapping>
-			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-			«IF symbId != null»
-				«symbId.localSymbolReference»
-			«ENDIF»
+			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
+			«mdlSymb.symbolReference»
 			«IF complexMapping.length > 0»
 				«complexMapping»
 			«ENDIF»
 		</ColumnMapping>
 	'''
 
-	protected def print_ds_MagicMapping(ListDefinition column) {
-		// @TODO: fix this
-		print_ds_ColumnMapping(column.name, column.name, "").toString
+	def print_ds_MagicMapping(MclObject mdlObj, ListDefinition column) {
+		var mdlSymb = mdlObj.findMdlSymbolDefn(column.name)
+		print_ds_ColumnMapping(column, mdlSymb, "").toString
+	}
+	
+	def print_ds_CategoricalMagicMapping(MclObject mdlObj, ListDefinition column){
+		var mdlSymb = mdlObj.findMdlSymbolDefn(column.name)
+		var categoricalMapping = column.print_ds_CategoricalMapping
+		print_ds_ColumnMapping(column, mdlSymb, categoricalMapping)
 	}
 
-	def print_ds_DvMapping(ListDefinition dvColumn, MclObject dObj, MclObject mObj){
-		val variable = dvColumn.list.getAttributeExpression('variable');
-		val columnId = dvColumn.name;
-		if (variable != null) {
-			// Reference or mapped to data
-			return '''
-				<ColumnMapping>
-				    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-					«variable.pharmMLExpr»
+	def writeSingleObsMapping(MclObject mObj, ListDefinition column, Expression dataVariable){
+		var mdlSymb = mObj.findMdlSymbolDefn(dataVariable.convertToString)
+		'''
+			<ColumnMapping>
+			    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
+				«mdlSymb.symbolReference»
 «««						«IF define.isCategoricalObs(mObj)»
 «««							«define.expression.printCategoricalObsMapping(mObj)»
 «««			    	   	«ELSEIF define.expression.isDiscreteBernoulliObs(mObj)»
 «««							«printDiscreteBernoulliObsMapping»
 «««			    	   	«ENDIF»
-				</ColumnMapping>
-			  '''
-		}
-		else { 
-			val define = dvColumn.list.getAttributeExpression('variable');
-			switch(define){
-				MappingExpression:{
-					return '''
+			</ColumnMapping>
+		'''
+	}
+
+	def writeMultipleObsMapping(MclObject mObj, ListDefinition column, Expression dataDefine){
+		switch(dataDefine){
+			MappingExpression:
+				'''
 				<MultipleDVMapping>
-					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
 					<Piecewise xmlns="«xmlns_mstep»">
-						«FOR p : define.attList»
+						«FOR p : dataDefine.attList»
 							<math:Piece>
-							   	«p.mappedSymbol.pharmMLExpr»
+							   	«mObj.findMdlSymbolDefn(p.mappedSymbol.ref.name).symbolReference»
 «««						   	«IF p.key.expression.isCategoricalObs(mObj)»
 «««						   		«p.key.expression.printCategoricalObsMapping(mObj)»
 «««						   	«ELSEIF p.key.expression.isDiscreteBernoulliObs(mObj)»
@@ -422,9 +480,20 @@ class ModellingStepsPrinter {
 						«ENDFOR» 
 					</Piecewise>
 				</MultipleDVMapping>
-			  '''
-				}
-			}
+				'''
+		  default: ''''''
+		}
+	}
+
+	def print_ds_DvMapping(ListDefinition dvColumn, MclObject dObj, MclObject mObj){
+		val variable = dvColumn.list.getAttributeExpression('variable');
+		if (variable != null) {
+			// Reference or mapped to data
+			writeSingleObsMapping(mObj, dvColumn, variable)
+		}
+		else { 
+			val define = dvColumn.list.getAttributeExpression(ListDefinitionProvider::DEFINE_ATT);
+			writeMultipleObsMapping(mObj, dvColumn, define)
 		}
 	}
 

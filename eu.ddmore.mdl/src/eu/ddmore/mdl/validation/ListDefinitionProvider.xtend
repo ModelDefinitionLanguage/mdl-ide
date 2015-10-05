@@ -29,6 +29,8 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 class ListDefinitionProvider {
 
 	public static val USE_ATT = 'use'
+	public static val DEFINE_ATT = 'define'
+	public static val VARIABLE_ATT = 'variable'
 	public static val COV_USE_VALUE = 'covariate'
 	public static val AMT_USE_VALUE = 'amt'
 	public static val OBS_USE_VALUE = 'dv'
@@ -117,16 +119,16 @@ class ListDefinitionProvider {
 						 ] 
 					),
 					new ListDefInfo ('amt', AMT_COL_TYPE,  #[
-						 new AttributeDefn(USE_ATT, null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE),
-						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, null, false, MclTypeProvider::MAPPING_TYPE),
+						 new AttributeDefn(VARIABLE_ATT, null, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ] 
 					),
 					new ListDefInfo ('dv', new ListTypeInfo("Dv", PrimitiveType.List),  #[
-						 new AttributeDefn(USE_ATT, null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE),
-						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, null, false, MclTypeProvider::MAPPING_TYPE),
+						 new AttributeDefn(VARIABLE_ATT, null, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ] 
 					),
-					new ListDefInfo ('idv', IDV_COL_TYPE,  #[
+					new ListDefInfo (IDV_USE_VALUE, IDV_COL_TYPE,  #[
 						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
@@ -134,7 +136,7 @@ class ListDefinitionProvider {
 						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
-					new ListDefInfo ('id', new ListTypeInfo("Id", PrimitiveType.List),  #[
+					new ListDefInfo (ID_USE_VALUE, new ListTypeInfo("Id", PrimitiveType.List),  #[
 						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),

@@ -485,7 +485,7 @@ class ModelDefinitionPrinter {
 		<IndividualParameter symbId="«name»">
 			<GaussianModel>
 				«IF namedArgList.getArgumentExpression('trans') != null»
-					<Transformation>«namedArgList.getArgumentExpression('trans').convertToString.getPharmMLTransFunc»
+					<Transformation>«namedArgList.getArgumentExpression('trans').convertToString.getPharmMLTransFunc»</Transformation>
 				«ENDIF»
 				<LinearCovariate>
 					<PopulationParameter>
@@ -657,7 +657,7 @@ class ModelDefinitionPrinter {
 							«ENDIF»
 						«ENDFOR»
 					</FunctionCall>
-				</math:Equation>
+				</Equation>
 			</ct:Assign>
 		</ErrorModel>
 		'''

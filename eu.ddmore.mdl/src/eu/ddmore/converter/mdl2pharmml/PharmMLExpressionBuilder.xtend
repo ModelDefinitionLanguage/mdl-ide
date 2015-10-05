@@ -48,10 +48,12 @@ class PharmMLExpressionBuilder {
 	}
 	
 	
-	def getSymbolRef(SymbolDefinition it)'''
-		<ct:SymbRef symbIdRef="«name»"/>
-	'''
-	
+	def getSymbolReference(SymbolDefinition it){
+		val blkId = blockId
+		'''
+			<ct:SymbRef «IF blkId != GLOBAL_VAR»blkIdRef="«blkId ?: 'ERROR!'»"«ENDIF» symbIdRef="«name»"/>
+		'''
+	}
 	
 	def getBlockId(SymbolDefinition it){
 		val blkName = owningBlock.identifier
@@ -65,14 +67,15 @@ class PharmMLExpressionBuilder {
 	}
 	
 	def getSymbolReference(SymbolReference it){
-		val blkId = ref.blockId
-		'''
-			<ct:SymbRef «IF blkId != GLOBAL_VAR»blkIdRef="«blkId ?: 'ERROR!'»"«ENDIF» symbIdRef="«ref.name»"/>
-		'''
+		ref.getSymbolReference
 	}
 	
-	def getLocalSymbolReference(SymbolReference it)'''
-			<ct:SymbRef symbIdRef="«ref.name»"/>
+	def getLocalSymbolReference(SymbolReference it){
+		ref.getLocalSymbolReference
+	}
+
+	def getLocalSymbolReference(SymbolDefinition it)'''
+		<ct:SymbRef symbIdRef="«name»"/>
 	'''
 	
 	def getExpressionAsEquation(Expression it)'''
@@ -192,15 +195,15 @@ class PharmMLExpressionBuilder {
 	
 	def getUnaryExpression(UnaryExpression it)'''
 		«IF feature.isLogicOp»
-			<math:LogicUniop op=«feature.pharmMLUniop»>
+			<math:LogicUniop op="«feature.pharmMLUniop»">
 		«ELSE»
-			<math:Uniop op=«feature.pharmMLUniop»>
+			<math:Uniop op="«feature.pharmMLUniop»">
 		«ENDIF»
 			«operand.pharmMLExpr»
 		«IF feature.isLogicOp»
 			</math:LogicUniop>
 		«ELSE»
-			<math:Uniop>
+			</math:Uniop>
 		«ENDIF»
 	'''
 	
@@ -230,16 +233,16 @@ class PharmMLExpressionBuilder {
 		
 	def getBinaryOperator(String feature, Expression leftOperand, Expression rightOperand)'''
 		«IF feature.isLogicOp»
-			<math:LogicBinop op=«feature.pharmMLBinop»>
+			<math:LogicBinop op="«feature.pharmMLBinop»">
 		«ELSE»
-			<math:Binop op=«feature.pharmMLBinop»>
+			<math:Binop op="«feature.pharmMLBinop»">
 		«ENDIF»
 			«leftOperand.pharmMLExpr»
 			«rightOperand.pharmMLExpr»
 		«IF feature.isLogicOp»
 			</math:LogicBinop>
 		«ELSE»
-			<math:Binop>
+			</math:Binop>
 		«ENDIF»
 	'''
 	
@@ -283,7 +286,7 @@ class PharmMLExpressionBuilder {
 				"error:NotDefined"	
 		}
 		'''
-		<math:Constant op=«constType»/>
+		<math:Constant op="«constType»"/>
 		'''
 	}
 	
@@ -314,7 +317,7 @@ class PharmMLExpressionBuilder {
     			retVal += '''
     					<math:«opType» op="«func»">
     						«a.unnamedArguments»
-    					<math:«opType»/>	
+    					</math:«opType»>	
     					'''
     		}
     	}
@@ -337,6 +340,6 @@ class PharmMLExpressionBuilder {
 	'''
 	
 	def getLocalSymbolReference(String v) '''
-		<ct:SymbRef symbId="«v»""/>
+		<ct:SymbRef symbId="«v»"/>
 	'''
 }
