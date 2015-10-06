@@ -11,6 +11,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -47,7 +48,7 @@ class Mcl2PharmMLConverterTest1 {
 		mcl.convertTo("convertedFiles/UseCase2.xml")
 	}
 
-	@Test
+	@Ignore
 	def void testUseCase3(){
 		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase3.mdl").parse
 		mcl.assertNoErrors
@@ -61,7 +62,7 @@ class Mcl2PharmMLConverterTest1 {
 		mcl.convertTo("convertedFiles/UseCase4.xml")
 	}
 
-	@Test
+	@Ignore
 	def void testUseCase5(){
 		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase5.mdl").parse
 		mcl.assertNoErrors
