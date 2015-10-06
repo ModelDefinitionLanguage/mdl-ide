@@ -144,9 +144,10 @@ class MogValidator {
 	def validateIndividualVariable((String, String) => void errorLambda){
 		val dataOb = dataObj.dataIdv
 		val mdlOb = mdlObj.mdlIdv
-		if(mdlOb != null && mdlOb instanceof EquationDefinition){
+		if(mdlOb != null){
 			val mdlIdvName = (mdlOb as EquationDefinition).name
-			if(dataOb == null || dataOb.name != mdlIdvName){
+			// idv does not need to have the same name
+			if(dataOb == null){ //} || dataOb.name != mdlIdvName){
 				errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "individual variable " + mdlIdvName +" has no match in dataObj");
 			}
 		}

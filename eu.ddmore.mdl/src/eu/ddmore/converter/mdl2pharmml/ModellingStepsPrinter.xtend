@@ -163,9 +163,10 @@ class ModellingStepsPrinter {
 			val use = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
 			switch(use){
 				case(ListDefinitionProvider::ID_USE_VALUE),
-				case(ListDefinitionProvider::IDV_USE_VALUE),
 				case(ListDefinitionProvider::VARLVL_USE_VALUE):
-					res = res + mObj.print_ds_MagicMapping(column)
+					res += mObj.print_ds_MagicMapping(column)
+				case(ListDefinitionProvider::IDV_USE_VALUE):
+					res += mObj.writeIdvMapping(column)
 				case(ListDefinitionProvider::COV_USE_VALUE):
 					if(isUsedInModel(column, mObj))
 						res = res + mObj.print_ds_MagicMapping(column)
@@ -441,6 +442,12 @@ class ModellingStepsPrinter {
 		var mdlSymb = mdlObj.findMdlSymbolDefn(column.name)
 		print_ds_ColumnMapping(column, mdlSymb, "").toString
 	}
+	
+	def writeIdvMapping(MclObject mdlObj, ListDefinition column) {
+		var mdlIdvSymb = mdlObj.mdlIdv
+		print_ds_ColumnMapping(column, mdlIdvSymb, "").toString
+	}
+	
 	
 	def print_ds_CategoricalMagicMapping(MclObject mdlObj, ListDefinition column){
 		var mdlSymb = mdlObj.findMdlSymbolDefn(column.name)

@@ -9,7 +9,7 @@ warfarin_PK_ODE_dat = dataObj {
 
 	DATA_INPUT_VARIABLES {
 		ID : { use is id }
-		T : { use is idv }
+		TIME : { use is idv }
 		WT : { use is covariate }
 		AMT : { use is amt, variable = GUT }
 		DVID : { use is dvid}
