@@ -46,13 +46,13 @@ class FunctionDefinitionPrinter {
 		''',
 		'combinedError1' -> '''
     <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.6/CommonTypes"
-    	symbolType="real"
-    	symbId="combinedError1">
-        <ct:Description>Combined additive ad proportional for 1 epsilon</ct:Description>
-        <ct:FunctionArgument symbolType="real" symbId="additive"/>
-        <ct:FunctionArgument symbolType="real" symbId="proportional"/>
-        <ct:FunctionArgument symbolType="real" symbId="f"/>
-        <ct:Definition>
+    	symbId="combinedError1"
+    	symbolType="real">
+        <Description>Combined additive ad proportional for 1 epsilon</Description>
+        <FunctionArgument symbolType="real" symbId="additive"/>
+        <FunctionArgument symbolType="real" symbId="proportional"/>
+        <FunctionArgument symbolType="real" symbId="f"/>
+        <Definition>
             <Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
                 <Binop op="plus">
                     <ct:SymbRef symbIdRef="additive"/>
@@ -62,7 +62,7 @@ class FunctionDefinitionPrinter {
                     </Binop>
                 </Binop>
             </Equation>
-        </ct:Definition>
+        </Definition>
     </ct:FunctionDefinition>
 		''',
 		'combinedError2' -> '''
@@ -151,8 +151,8 @@ class FunctionDefinitionPrinter {
 		''',
 		'combinedPowerError1' -> '''
     <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.6/CommonTypes"
-    	symbolType="real"
-    	symbId="combinedPowerError1">
+    	symbId="combinedPowerError1"
+    	symbolType="real">
         <ct:Description>Combined additive and power error model for 1 epsilon.</ct:Description>
         <ct:FunctionArgument symbolType="real" symbId="additive"/>
         <ct:FunctionArgument symbolType="real" symbId="proportional"/>
