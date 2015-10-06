@@ -664,9 +664,13 @@ class ModelDefinitionPrinter {
 						«FOR vp : getNamedArguments»
 							«IF getStandardErrorArgument(vp.argumentName) != null»
 								<FunctionArgument symbId="«getStandardErrorArgument(vp.argumentName)»">
-									<Equation xmlns="«xmlns_math»">
+									«IF !(vp.expression instanceof SymbolReference)»
+										<Equation xmlns="«xmlns_math»">
+											«vp.expression.pharmMLExpr»
+										</Equation>
+									«ELSE»
 										«vp.expression.pharmMLExpr»
-									</Equation>
+									«ENDIF»
 								</FunctionArgument>
 							«ENDIF»
 						«ENDFOR»
