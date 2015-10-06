@@ -557,6 +557,7 @@ class ModellingStepsPrinter {
 			case ListDefinitionProvider::AMT_USE_VALUE     : "dose"
 			case ListDefinitionProvider::DVID_USE_VALUE   : "dvid"
 			case ListDefinitionProvider::VARLVL_USE_VALUE: "occasion"
+			case ListDefinitionProvider::CATCOV_USE_VALUE: "covariate"
 			case ListDefinitionProvider::CMT_USE_VALUE : if(isDosingToCompartmentMacro) 'adm' else 'cmt'
 			default: type
 		}

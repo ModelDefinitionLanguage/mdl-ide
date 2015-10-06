@@ -101,7 +101,7 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
 	    ln(CL) = linear( trans is ln, pop = POP_CL, fixEff = [
 	    	  {coeff = BETA_CL_WT, cov = logtWT},
-	    	  {coeff = POP_FCL_FEM, catCov = SEX },
+	    	  {coeff = POP_FCL_FEM, catCov = SEX.female },
 	    	  {coeff = BETA_CL_AGE, cov = tAGE}
 	    	  ], 
 			  ranEff = [ETA_CL] )

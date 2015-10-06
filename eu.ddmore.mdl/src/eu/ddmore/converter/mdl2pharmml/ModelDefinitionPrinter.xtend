@@ -45,6 +45,8 @@ import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.CategoryValueReference
+import org.eclipse.xtext.EcoreUtil2
 
 class ModelDefinitionPrinter {
 //	extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -310,7 +312,7 @@ class ModelDefinitionPrinter {
 						<Covariate symbId="«s.name»">
 							<Categorical>
 								«FOR c : s.catDefn.getCategoryDefinitions»
-									<Category catId="«c»"/>"
+									<Category catId="«c»"/>
 								«ENDFOR»
 							</Categorical>
 						</Covariate>
@@ -461,15 +463,57 @@ class ModelDefinitionPrinter {
 		'''
 		«FOR el : expressions»
 			<Covariate>
-				«((el as VectorElement).element as SubListExpression).getAttributeExpression('cov')?.pharmMLExpr ?: "<Error!>"»
+				«((el as VectorElement).element as SubListExpression).writeFixedEffectCovariate»
 				<FixedEffect>
-					«((el as VectorElement).element as SubListExpression).getAttributeExpression('coeff')?.pharmMLExpr ?: "<Error!>"»
+					«((el as VectorElement).element as SubListExpression).writeFixedEffectCoefficient»
 				</FixedEffect>
 			</Covariate>
 		«ENDFOR»
 		'''
 		
 	}
+	
+	def writeFixedEffectCovariate(SubListExpression it){
+		val cov = getAttributeExpression('cov')
+		if(cov != null){
+			'''
+			«cov.pharmMLExpr»
+			'''
+		}
+		else{
+			val catCov = getAttributeExpression('catCov')
+			'''
+			«catCov.getEnumType.symbolReference»
+			'''
+		}
+	}
+	
+	def writeFixedEffectCoefficient(SubListExpression it){
+		val catCov = getAttributeExpression('catCov')
+		'''
+		«getAttributeExpression('coeff')?.pharmMLExpr»
+		«IF catCov != null»
+			<Category catId="«catCov.getEnumValue.name»"/>
+		«ENDIF»
+		'''
+	}
+	
+	def getEnumType(Expression expr){
+		switch(expr){
+			CategoryValueReference:{
+				EcoreUtil2.getContainerOfType(expr.ref, SymbolDefinition)
+			}
+			default: null
+		}
+	}
+	
+	def getEnumValue(Expression expr){
+		switch(expr){
+			CategoryValueReference:	expr.ref
+			default: null
+		}
+	}
+	
 	
 	def writeRandomEffects(Expression expr)'''
 		«IF expr instanceof VectorLiteral»

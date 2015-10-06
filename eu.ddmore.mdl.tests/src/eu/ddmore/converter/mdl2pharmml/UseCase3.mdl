@@ -1,7 +1,5 @@
 warfarin_PKPD_turnover_dat = dataObj{
-    DECLARED_VARIABLES{CP_obs 
-    				   PCA_obs
-    }
+     DECLARED_VARIABLES{CP_obs; PCA_obs; GUT }
 
      DATA_INPUT_VARIABLES{
       ID : 	 { use is id }
@@ -9,7 +7,7 @@ warfarin_PKPD_turnover_dat = dataObj{
       WT : 	 { use is covariate }
       AGE :  { use is covariate }
       SEX :  { use is catCov withCategories{female when 0, male when 1} }
-      AMT :  { use is amt }
+      AMT :  { use is amt, variable = GUT }
       DVID : { use is dvid }
       DV :   { use is dv, define={1 in DVID as CP_obs, 2 in DVID as PCA_obs} }
       MDV :  { use is mdv }
@@ -192,8 +190,3 @@ warfarin_PK_ODE_mog = mogObj {
 		warfarin_PKPD_turnover_task : { type is taskObj }
 	}
 }
-
-
-
-
-

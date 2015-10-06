@@ -48,7 +48,7 @@ class Mcl2PharmMLConverterTest1 {
 		mcl.convertTo("convertedFiles/UseCase2.xml")
 	}
 
-	@Ignore
+	@Test
 	def void testUseCase3(){
 		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase3.mdl").parse
 		mcl.assertNoErrors
@@ -62,7 +62,7 @@ class Mcl2PharmMLConverterTest1 {
 		mcl.convertTo("convertedFiles/UseCase4.xml")
 	}
 
-	@Ignore
+	@Test
 	def void testUseCase5(){
 		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase5.mdl").parse
 		mcl.assertNoErrors
