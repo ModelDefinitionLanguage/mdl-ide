@@ -74,15 +74,15 @@ class BlockArgumentDefinitionProvider {
 	static val blkArgPropNames = #{ 
 		MdlValidator::MDLOBJ -> #{
 			'RANDOM_VARIABLE_DEFINITION' -> #{ 'level' -> true }
-		},
+		}//,
 //		MdlValidator::PARAMOBJ -> #{
 //			'VARIABILITY' -> #{ 'type' -> true }
 //		},
-		MdlValidator::TASKOBJ -> #{ 
-			"ESTIMATE" -> #{ 'target' -> true },
-			"SIMULATE" -> #{ 'target' -> true },
-			"OPTIMISE" -> #{ 'target' -> true }
-		}
+//		MdlValidator::TASKOBJ -> #{ 
+//			"ESTIMATE" -> #{ 'target' -> true },
+//			"SIMULATE" -> #{ 'target' -> true },
+//			"OPTIMISE" -> #{ 'target' -> true }
+//		}
 	}
 	
 	def getUnusedMandatoryPropertyArguments(BlockArguments it) {

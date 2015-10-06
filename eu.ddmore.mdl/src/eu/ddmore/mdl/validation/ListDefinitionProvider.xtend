@@ -54,6 +54,7 @@ class ListDefinitionProvider {
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'exact', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
+	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
 
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
@@ -354,6 +355,34 @@ class ListDefinitionProvider {
 						 new AttributeDefn('hazard', null, true, MclTypeProvider::REAL_TYPE.makeReference),
 						 new AttributeDefn('event', null, true, TTE_EVENT_TYPE),
 						 new AttributeDefn('maxEvent', null, false, MclTypeProvider::REAL_TYPE)
+						 ]
+					)
+				)
+			]
+		),
+		"ESTIMATE" -> (
+			new BlockListDefinition => [
+				key = 'target'
+				listDefns = newArrayList(
+					new ListDefInfo (null, TARGET_TYPE,  #[
+						 new AttributeDefn('target', null, true,  TARGET_TYPE),
+						 new AttributeDefn('version', null, false, MclTypeProvider::STRING_TYPE),
+						 new AttributeDefn('algo', null, false, MclTypeProvider::STRING_TYPE),
+						 new AttributeDefn('tol', null, false, MclTypeProvider::REAL_TYPE)
+						 ]
+					)
+				)
+			]
+		),
+		"SIMULATE" -> (
+			new BlockListDefinition => [
+				key = 'target'
+				listDefns = newArrayList(
+					new ListDefInfo (null, TARGET_TYPE,  #[
+						 new AttributeDefn('target', null, true,  TARGET_TYPE),
+						 new AttributeDefn('version', null, false, MclTypeProvider::STRING_TYPE),
+						 new AttributeDefn('algo', null, false, MclTypeProvider::STRING_TYPE),
+						 new AttributeDefn('tol', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
 					)
 				)
