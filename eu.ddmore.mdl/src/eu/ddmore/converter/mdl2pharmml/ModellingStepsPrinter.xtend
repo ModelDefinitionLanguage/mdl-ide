@@ -114,7 +114,9 @@ class ModellingStepsPrinter {
 				«stmt.writeParameterEstimate(pObj)»
 			«ENDFOR»
 			«FOR stmt: pObj.paramVariabilityParams»
-				«stmt.writeParameterEstimate(pObj)»
+				«IF (stmt as ListDefinition).list.getAttributeEnumValue('type') != 'corr' && (stmt as ListDefinition).list.getAttributeEnumValue('type') != 'cov'»
+					«stmt.writeParameterEstimate(pObj)»
+				«ENDIF»
 			«ENDFOR»
 «««				«IF b.structuralBlock != null»
 «««					«FOR p: b.structuralBlock.parameters»

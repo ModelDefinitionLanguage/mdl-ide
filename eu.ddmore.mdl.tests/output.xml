@@ -44,30 +44,18 @@
 			</Covariate>
 		</CovariateModel>
 		<ParameterModel blkId="pm">
-			<SimpleParameter symbId = "POP_CL">
-			</SimpleParameter>
-			<SimpleParameter symbId = "POP_V">
-			</SimpleParameter>
-			<SimpleParameter symbId = "POP_KA">
-			</SimpleParameter>
-			<SimpleParameter symbId = "POP_TLAG">
-			</SimpleParameter>
-			<SimpleParameter symbId = "BETA_CL_WT">
-			</SimpleParameter>
-			<SimpleParameter symbId = "BETA_V_WT">
-			</SimpleParameter>
-			<SimpleParameter symbId = "RUV_PROP">
-			</SimpleParameter>
-			<SimpleParameter symbId = "RUV_ADD">
-			</SimpleParameter>
-			<SimpleParameter symbId = "PPV_CL">
-			</SimpleParameter>
-			<SimpleParameter symbId = "PPV_V">
-			</SimpleParameter>
-			<SimpleParameter symbId = "PPV_KA">
-			</SimpleParameter>
-			<SimpleParameter symbId = "PPV_TLAG">
-			</SimpleParameter>
+			<SimpleParameter symbId = "POP_CL"/>
+			<SimpleParameter symbId = "POP_V"/>
+			<SimpleParameter symbId = "POP_KA"/>
+			<SimpleParameter symbId = "POP_TLAG"/>
+			<SimpleParameter symbId = "BETA_CL_WT"/>
+			<SimpleParameter symbId = "BETA_V_WT"/>
+			<SimpleParameter symbId = "RUV_PROP"/>
+			<SimpleParameter symbId = "RUV_ADD"/>
+			<SimpleParameter symbId = "PPV_CL"/>
+			<SimpleParameter symbId = "PPV_V"/>
+			<SimpleParameter symbId = "PPV_KA"/>
+			<SimpleParameter symbId = "PPV_TLAG"/>
 			<RandomVariable symbId="ETA_CL">
 				<ct:VariabilityReference>
 					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
@@ -213,7 +201,25 @@
 					</variance>
 				</NormalDistribution>
 			</RandomVariable>
-		  		</ParameterModel>
+			<Correlation>
+				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
+				</ct:VariabilityReference>
+				<Pairwise>
+					<RandomVariable1>
+						<ct:SymbRef symbIdRef="ETA_CL"/>
+					</RandomVariable1>
+					<RandomVariable2>
+						<ct:SymbRef symbIdRef="ETA_V"/>
+					</RandomVariable2>
+					<CorrelationCoefficient>
+						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
+							<ct:Real>0.01</ct:Real>
+						</Equation>
+					</CorrelationCoefficient>
+				</Pairwise>
+			</Correlation>	
+		</ParameterModel>
 		<StructuralModel blkId="sm">
 			<ct:Variable symbId="RATEIN" symbolType="real">
 				<ct:Assign>
@@ -499,98 +505,36 @@
 					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_CL"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="PPV_CL"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.1</ct:Real>
 						</Equation>
 					</InitialEstimate>
-					<LowerBound>
-						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Real>0.001</ct:Real>
-						</Equation>
-					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_V"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="PPV_V"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Int>8</ct:Int>
+							<ct:Real>0.1</ct:Real>
 						</Equation>
 					</InitialEstimate>
-					<LowerBound>
-						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Real>0.001</ct:Real>
-						</Equation>
-					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_KA"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="PPV_KA"/>
 					<InitialEstimate fixed="false">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Real>0.362</ct:Real>
+							<ct:Real>0.1</ct:Real>
 						</Equation>
 					</InitialEstimate>
-					<LowerBound>
-						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Real>0.001</ct:Real>
-						</Equation>
-					</LowerBound>
 				</ParameterEstimation>
 				<ParameterEstimation>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_TLAG"/>
-					<InitialEstimate fixed="false">
-						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Int>1</ct:Int>
-						</Equation>
-					</InitialEstimate>
-					<LowerBound>
-						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Real>0.001</ct:Real>
-						</Equation>
-					</LowerBound>
-				</ParameterEstimation>
-				<ParameterEstimation>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_CL_WT"/>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="PPV_TLAG"/>
 					<InitialEstimate fixed="true">
 						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Real>0.75</ct:Real>
-						</Equation>
-					</InitialEstimate>
-				</ParameterEstimation>
-				<ParameterEstimation>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_V_WT"/>
-					<InitialEstimate fixed="true">
-						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Int>1</ct:Int>
-						</Equation>
-					</InitialEstimate>
-				</ParameterEstimation>
-				<ParameterEstimation>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="RUV_PROP"/>
-					<InitialEstimate fixed="false">
-						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
 							<ct:Real>0.1</ct:Real>
 						</Equation>
 					</InitialEstimate>
-					<LowerBound>
-						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Int>0</ct:Int>
-						</Equation>
-					</LowerBound>
-				</ParameterEstimation>
-				<ParameterEstimation>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="RUV_ADD"/>
-					<InitialEstimate fixed="false">
-						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Real>0.1</ct:Real>
-						</Equation>
-					</InitialEstimate>
-					<LowerBound>
-						<Equation xmlns="http://www.pharmml.org/pharmml/0.6/Maths">
-							<ct:Int>0</ct:Int>
-						</Equation>
-					</LowerBound>
 				</ParameterEstimation>
 			</ParametersToEstimate>
 			<Operation order="1" opType="estPop">

@@ -76,6 +76,10 @@ class MclUtils {
 		mcl.objects.findFirst[isMogObject]
 	}
 
+	def getMogObjects(Mcl mcl){
+		mcl.objects.filter[isMogObject]
+	}
+
 	def getMdlCovariateDefns(MclObject mdlObj){
 		val retVal = new ArrayList<Statement>
 		mdlObj.blocks.filter[identifier == BlockDefinitionProvider::COVARIATE_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[retVal.add(it)]]
@@ -234,7 +238,7 @@ class MclUtils {
 
 	def getParamVariabilityParams(MclObject it){
 		val retVal = new ArrayList<Statement>
-		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_STRUCT_BLK]){
+		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_VARIABILITY_BLK]){
 			val body = stmt.body
 			switch(body){
 				BlockStatementBody:{
@@ -245,6 +249,17 @@ class MclUtils {
 		retVal
 	}
 
+	def getParamCorrelations(MclObject it){
+		paramVariabilityParams.filter[s|
+			switch(s){
+				ListDefinition:{
+					val varType = s.list.getAttributeEnumValue('type')
+					varType == 'corr' || varType == 'cov'
+				}
+				default: false
+			}
+		]
+	}
 
 	def getDataVariabilityLevels(MclObject it){
 		getDataColumnDefn(ListDefinitionProvider::ID_USE_VALUE, ListDefinitionProvider::VARLVL_USE_VALUE, ListDefinitionProvider::OBS_USE_VALUE)
@@ -262,6 +277,18 @@ class MclUtils {
 		}
 		retVal
 	}	
+
+	def getRandomVarLevel(SymbolDefinition it){
+		val rvBlock = owningBlock
+		val blkArgs = rvBlock.blkArgs
+		for(arg : blkArgs.args){
+			switch(arg){
+				ValuePair:
+					if(arg.argumentName == 'level') return arg.expression as SymbolReference
+			}
+		}
+		null
+	}
 
 	def isParameterVarLevel(ListDefinition it){
 		val enumValue = list.getAttributeEnumValue("type")

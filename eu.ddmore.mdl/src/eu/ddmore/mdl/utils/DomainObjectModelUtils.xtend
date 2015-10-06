@@ -13,6 +13,9 @@ import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.mdl.MclObject
 import java.util.Collections
 import eu.ddmore.mdl.mdl.SymbolDefinition
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.Expression
 
 class DomainObjectModelUtils {
 	
@@ -88,6 +91,17 @@ class DomainObjectModelUtils {
 			
 	}
 
-	
+	static def getVectorElementAsSymbolReference(Expression expr){
+		switch(expr){
+			VectorElement:{
+				val e = expr.element
+				switch(e){
+					SymbolReference: e as SymbolReference
+					default: null
+				}
+			}
+			default: null
+		}
+	}
 
 }

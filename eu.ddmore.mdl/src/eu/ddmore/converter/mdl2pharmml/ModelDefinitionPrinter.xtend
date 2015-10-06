@@ -41,6 +41,7 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockStatement
@@ -78,12 +79,12 @@ class ModelDefinitionPrinter {
 	//////////////////////////////////////
 	// I. Model Definition
 	//////////////////////////////////////	
-	def print_mdef_ModelDefinition(MclObject mObj){
+	def print_mdef_ModelDefinition(MclObject mObj, MclObject pObj){
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«mObj.print_mdef_VariabilityModel»
 			«mObj.print_mdef_CovariateModel»
-			«mObj.print_mdef_ParameterModel»
+			«mObj.print_mdef_ParameterModel(pObj)»
 			«mObj.writeStructuralModel»
 			«mObj.writeObservationModel»
 		</ModelDefinition>
@@ -330,11 +331,13 @@ class ModelDefinitionPrinter {
 		
 		
 	def writeSimpleParameter(EquationDefinition stmt)'''
-		<SimpleParameter symbId = "«stmt.name»">
-			«IF stmt.expression != null»
+		«IF stmt.expression != null»
+			<SimpleParameter symbId = "«stmt.name»">
 				«stmt.expression.writeAssignment»
-			«ENDIF»
-		</SimpleParameter>
+			</SimpleParameter>
+		«ELSE»
+			<SimpleParameter symbId = "«stmt.name»"/>
+		«ENDIF»
 	'''
 	
 	def writeAssignment(Expression expr)'''
@@ -367,7 +370,7 @@ class ModelDefinitionPrinter {
 //	/////////////////////////////
 //	// I.d Parameter Model
 //	////////////////////////////	
-	def print_mdef_ParameterModel(MclObject mObj)'''		
+	def print_mdef_ParameterModel(MclObject mObj, MclObject pObj)'''		
 		<ParameterModel blkId="pm">
 			«IF mObj != null»
 				«FOR b: mObj.blocks»
@@ -407,7 +410,7 @@ class ModelDefinitionPrinter {
 								}
 							}»
 						«ENDFOR» 
-			  		«ENDIF»
+					«ENDIF»
 «««		  		//INDIVIDUAL_VARIABLES
 					«IF b.identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS»
 						«FOR stmt: b.getNonBlockStatements»
@@ -416,10 +419,11 @@ class ModelDefinitionPrinter {
 									writeIndividualParameter(stmt)
 							}»
 						«ENDFOR» 
-			  		«ENDIF»
-			  	«ENDFOR»
+					«ENDIF»
+				«ENDFOR»
 	  		«ENDIF»
-  		</ParameterModel>
+			«print_mdef_CollerationModel(mObj, pObj)»
+		</ParameterModel>
   	'''
 //  		statements = statements + mObj.print_mdef_CollerationModel(pObj); 
 //	  	if (statements.length > 0){
@@ -676,47 +680,50 @@ class ModelDefinitionPrinter {
 //	/////////////////////////////
 //	// I.d_1 CorrelationModel
 //	/////////////////////////////
-//	def print_mdef_CollerationModel(ModelObject mObj, ParameterObject pObj){
-//		var model = "";
-//		if (pObj != null){
-//			for (b: pObj.blocks){
-//				if (b.variabilityBlock != null){	
-//					for (s: b.variabilityBlock.parameters){
-//						if (s.list != null){
-//							val type = s.list.arguments.getAttribute(AttributeValidator::attr_type_randomEff.name);
-//							if (type.equals(VariabilityType::CORR.toString) || type.equals(VariabilityType::COV.toString)){
-//								val params = s.list.arguments.getAttributeExpression(AttributeValidator::attr_params.name);
-//								val values = s.list.arguments.getAttributeExpression(AttributeValidator::attr_value.name);
-//								if (params != null && values != null 
-//									&& params.vector != null && values.vector != null
-//									&& params.vector.expression.expressions != null && values.vector.expression.expressions != null
-//								){
-//									var k = 0; 
-//									for (i: 1..params.vector.expression.expressions.size - 1){
-//										for (j: 0..i - 1){
-//											var rv1 = params.vector.expression.expressions.get(j);
-//											var rv2 = params.vector.expression.expressions.get(i);
-//											if (k < values.vector.expression.expressions.size){
-//												var value = values.vector.expression.expressions.get(k);
-//												k = k + 1;
-//												var level = mObj.getLevel(rv1.toStr);
-//												model = model + type.print_mdef_Correlation(level, rv1, rv2, value);
-//											}
-//										}
-//									}
-//								}
+	def print_mdef_CollerationModel(MclObject mObj, MclObject pObj){
+		var model = "";
+			for (s: pObj.getParamCorrelations){
+				val corrDefn = s as ListDefinition
+				val type = corrDefn.list.getAttributeEnumValue('type');
+				if (type == 'corr' || type == 'cov'){
+					val params = corrDefn.list.getAttributeExpression('parameter') as VectorLiteral
+					val values = corrDefn.list.getAttributeExpression('value') as VectorLiteral
+					var k = 0;
+					for(i : 1 .. params.expressions.size - 1){
+						for(j : 0 .. i -1){
+							val rv1 = params.expressions.get(j).vectorElementAsSymbolReference
+							val rv2 = params.expressions.get(i).vectorElementAsSymbolReference
+							if (k < values.expressions.size){
+								var value = values.expressions.get(k) as VectorElement;
+								k = k + 1;
+								val level = mObj.getLevel(rv1.ref);
+								model += print_mdef_Correlation(type, level, rv1, rv2, value.element)
+							}							
+						}
+					}
+				}
+			} 
+//					for (i: 1..params.vector.expression.expressions.size - 1){
+//						for (j: 0..i - 1){
+//							var rv1 = params.vector.expression.expressions.get(j);
+//							var rv2 = params.vector.expression.expressions.get(i);
+//							if (k < values.vector.expression.expressions.size){
+//								var value = values.vector.expression.expressions.get(k);
+//								k = k + 1;
+//								var level = mObj.getLevel(rv1.toStr);
+//								model = model + type.print_mdef_Correlation(level, rv1, rv2, value);
 //							}
 //						}
 //					}
-//				}				
-//			}
 //		}
-//		return model;
-//	}
-//	
-//	def getLevel(ModelObject mObj, String randomVar){
-//		if (mObj != null){
-//			for (b: mObj.blocks){
+		return model;
+	}
+	
+	def getLevel(MclObject mObj, SymbolDefinition randomVar){
+		val randVar = mObj.findMdlSymbolDefn(randomVar.name)
+		randVar.getRandomVarLevel
+//			for (b: mObj.mdlVariabilityLevels){
+//				
 //				if (b.randomVariableDefinitionBlock != null){	
 //					if (b.randomVariableDefinitionBlock.arguments != null){
 //						var level =	b.randomVariableDefinitionBlock.arguments.getAttribute(AttributeValidator::attr_level_ref.name);	
@@ -728,10 +735,9 @@ class ModelDefinitionPrinter {
 //					}
 //				}
 //			}
-//		}
 //		return null;
-//	}
-//	
+	}
+	
 //	/*
 //	def print_mdef_Correlation_Matrix(String matrixType, Vector values, Vector params, String level)'''
 //		<Correlation deviationMatrixType="«matrixType.convertMatrixType»">
@@ -743,42 +749,46 @@ class ModelDefinitionPrinter {
 //	'''
 //	*/
 //	
-//	def print_mdef_Correlation(String type, String level, Expression rv1, Expression rv2, Expression value){
-//		var res = '''
-//			<RandomVariable1>
-//				«rv1.print_Math_Expr»
-//			</RandomVariable1>
-//			<RandomVariable2>
-//				«rv2.print_Math_Expr»
-//			</RandomVariable2>
-//		'''
-//		if (type.equals(VariabilityType::COV.toString))
-//			res  = res + '''
-//				<Covariance>
-//					<Equation xmlns="«xmlns_math»">
-//						«value.print_Math_Expr»
-//					</Equation>
-//				</Covariance>
-//			'''
-//		if (type.equals(VariabilityType::CORR.toString))
-//			res  = res + '''
-//				<CorrelationCoefficient>
-//					<Equation xmlns="«xmlns_math»">
-//						«value.print_Math_Expr»
-//					</Equation>
-//				</CorrelationCoefficient>
-//			'''
-//		'''
-//			<Correlation>
-//				«IF level != null»
-//					«level.print_VariabilityReference»
-//				«ENDIF»
-//				<Pairwise>
-//					«res»
-//				</Pairwise>
-//			</Correlation>	
-//		'''
-//	}
+	def print_mdef_Correlation(String type, SymbolReference level, SymbolReference rv1, SymbolReference rv2, Expression value){
+		var res = '''
+			<RandomVariable1>
+				«rv1.localSymbolReference»
+			</RandomVariable1>
+			<RandomVariable2>
+				«rv2.localSymbolReference»
+			</RandomVariable2>
+		'''
+		if (type == 'cov')
+			res  = res + '''
+				<Covariance>
+					«value.expressionAsEquation»
+«««					<Equation xmlns="«xmlns_math»">
+«««						«value.print_Math_Expr»
+«««					</Equation>
+				</Covariance>
+			'''
+		if (type == 'corr')
+			res  = res + '''
+				<CorrelationCoefficient>
+					«value.expressionAsEquation»
+«««					<Equation xmlns="«xmlns_math»">
+«««						«value.print_Math_Expr»
+«««					</Equation>
+				</CorrelationCoefficient>
+			'''
+		'''
+			<Correlation>
+				«IF level != null»
+					<ct:VariabilityReference>
+						«level.symbolReference»
+					</ct:VariabilityReference>
+				«ENDIF»
+				<Pairwise>
+					«res»
+				</Pairwise>
+			</Correlation>	
+		'''
+	}
 //	
 //	def print_mdef_RandomVariable(SymbolDeclaration s, String level)'''
 //		«IF s.randomList != null && s.name != null»
