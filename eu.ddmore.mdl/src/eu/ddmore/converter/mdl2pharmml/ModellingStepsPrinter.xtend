@@ -638,37 +638,71 @@ class ModellingStepsPrinter {
 //			'''
 //		}
 //	}
-//	
-//	protected def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
-//		«FOR b: tObj.blocks»
-//			«IF b.estimateBlock != null»
-//				<Operation order="«order»" opType="«OPERATION_EST_POP»">
-//					«FOR s: b.estimateBlock.statements»
-//						«s.print_msteps_Property»
-//					«ENDFOR»
-//					«FOR s: b.estimateBlock.statements»
-//						«s.print_msteps_Algorithm»
-//					«ENDFOR»
-//				</Operation>
-//			«ENDIF»
-//		«ENDFOR»
-//	'''
-
-	def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
-		<Operation order="1" opType="estPop">
-			<Property name="target">
-				<ct:Assign>
-					<ct:String>MLXTRAN_CODE</ct:String>
-				</ct:Assign>	
-			</Property>
-			<Property name="version">
-				<ct:Assign>
-					<ct:String>4.3.2</ct:String>
-				</ct:Assign>	
-			</Property>
-			<Algorithm definition="SAEM"/>
-		</Operation>
+	
+	def writeConfiguration(Statement stmt){
+		switch(stmt){
+			ListDefinition:{
+				val targetExpr = stmt.list.getAttributeExpression('target')
+				val versionExpr = stmt.list.getAttributeExpression('version')
+				val algoExpr = stmt.list.getAttributeExpression('algo')
+				val tolExpr = stmt.list.getAttributeExpression('tol')
+				'''
+				«IF targetExpr != null»
+					«writeProperty('target', targetExpr)»
+				«ENDIF»
+				«IF versionExpr != null»
+					«writeProperty('version', versionExpr)»
+				«ENDIF»
+				«IF tolExpr != null»
+					«writeProperty('tol', tolExpr)»
+				«ENDIF»
+				«IF algoExpr != null»
+					<Algorithm definition="«algoExpr.convertToString»"/>
+				«ENDIF»
+				'''
+			}
+		}
+	}
+	
+	def writeProperty(String propName, Expression value)'''
+		<Property name="«propName»">
+			<ct:Assign>
+				«value.pharmMLExpr»
+			</ct:Assign>	
+		</Property>
 	'''
+	
+	protected def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
+		«FOR b: tObj.blocks»
+			«IF b.identifier == "ESTIMATE"»
+				<Operation order="«order»" opType="«OPERATION_EST_POP»">
+					«FOR s: b.nonBlockStatements»
+						«writeConfiguration(s)»
+«««						«s.print_msteps_Property»
+					«ENDFOR»
+«««					«FOR s: b.estimateBlock.statements»
+«««						«s.print_msteps_Algorithm»
+«««					«ENDFOR»
+				</Operation>
+			«ENDIF»
+		«ENDFOR»
+	'''
+
+//	def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
+//		<Operation order="1" opType="estPop">
+//			<Property name="target">
+//				<ct:Assign>
+//					<ct:String>MLXTRAN_CODE</ct:String>
+//				</ct:Assign>	
+//			</Property>
+//			<Property name="version">
+//				<ct:Assign>
+//					<ct:String>4.3.2</ct:String>
+//				</ct:Assign>	
+//			</Property>
+//			<Algorithm definition="SAEM"/>
+//		</Operation>
+//	'''
 
 
 

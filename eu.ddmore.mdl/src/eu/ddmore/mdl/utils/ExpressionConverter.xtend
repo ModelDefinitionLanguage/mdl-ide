@@ -129,7 +129,7 @@ public class ExpressionConverter {
 	}
 	
 	def static dispatch String getString(StringLiteral exp)'''
-	"«exp.value»"'''
+	«exp.value»'''
 	
 	def static dispatch String getString(VectorLiteral exp)'''
 		[«FOR e : exp.expressions SEPARATOR ','»«e.getString»«ENDFOR»]'''

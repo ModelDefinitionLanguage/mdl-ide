@@ -131,7 +131,7 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
-		Assert::assertEquals("\"doo\"", eqn.expression.convertToString)
+		Assert::assertEquals("doo", eqn.expression.convertToString)
 	}
 
 		@Test
@@ -148,7 +148,7 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
-		Assert::assertEquals("[KA,4,true,\"help\",log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))),1+2+3*4+5]", eqn.expression.convertToString)
+		Assert::assertEquals("[KA,4,true,help,log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))),1+2+3*4+5]", eqn.expression.convertToString)
 	}
 
 		@Test
@@ -164,7 +164,7 @@ warfarin_PK_ODE_mdl = dataObj {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as ListDefinition
-		Assert::assertEquals("\"foo\"", (eqn.list.attributes.head as ValuePair).expression.convertToString)
+		Assert::assertEquals("foo", (eqn.list.attributes.head as ValuePair).expression.convertToString)
 	}
 
 	
