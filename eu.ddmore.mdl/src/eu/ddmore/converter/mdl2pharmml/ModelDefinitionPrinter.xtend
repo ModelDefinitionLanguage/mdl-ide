@@ -474,11 +474,13 @@ class ModelDefinitionPrinter {
 	def writeRandomEffects(Expression expr)'''
 		«IF expr instanceof VectorLiteral»
 			«FOR e : (expr as VectorLiteral).expressions»
-				«IF (e as VectorElement).element instanceof SymbolReference»
-					«(e as VectorElement).element.pharmMLExpr»
-				«ELSE»
-					<ERROR!>
-				«ENDIF»
+				<RandomEffects>
+					«IF (e as VectorElement).element instanceof SymbolReference»
+						«(e as VectorElement).element.pharmMLExpr»
+					«ELSE»
+						<ERROR!>
+					«ENDIF»
+				</RandomEffects>
 			«ENDFOR»
 		«ENDIF»
 		'''
@@ -501,9 +503,7 @@ class ModelDefinitionPrinter {
 						«namedArgList.getArgumentExpression('fixEff').writeFixedEffects»
 					«ENDIF»
 				</LinearCovariate>
-				<RandomEffects>
-					«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
-				</RandomEffects>
+				«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
 			</GaussianModel>
 		</IndividualParameter>
 		''' 
