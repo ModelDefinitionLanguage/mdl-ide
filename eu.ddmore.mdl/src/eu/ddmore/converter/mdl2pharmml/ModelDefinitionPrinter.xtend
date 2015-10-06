@@ -275,8 +275,8 @@ class ModelDefinitionPrinter {
 						transformation =  '''
 							<Continuous>
 								<Transformation>
-								    <TransformedCovariate symbId="«s.name»"></TransformedCovariate>
-									«s.expression.pharmMLExpr»
+								    <TransformedCovariate symbId="«s.name»"/>
+									«s.expression.expressionAsEquation»
 								</Transformation>
 							</Continuous>
 							'''

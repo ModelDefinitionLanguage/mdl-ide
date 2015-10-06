@@ -83,7 +83,7 @@ class MdlGenerator implements IGenerator {
 	   //If .mdl extension is used
 	   baseName = baseName.replace(".mdl", ".xml");
        for (mog : mcl.getMogObjects){
-    	   val fileName = baseName+ mog.name; 
+    	   val fileName = baseName; 
            val converted = xtendConverter.convertToPharmML(mog);
            
            printOutputFile(fileName, outputDirectory, converted.toString());

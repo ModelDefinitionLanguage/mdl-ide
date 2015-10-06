@@ -175,6 +175,7 @@ class PharmMLExpressionBuilder {
 			case '==': 'eq'
 			case '!=': 'neq'
 			case '%': 'rem'
+			default: operator
 		}
 	}
 	
@@ -183,6 +184,7 @@ class PharmMLExpressionBuilder {
 			case '+': 'plus'
 			case '-': 'minus'
 			case '!': 'not'
+			default: operator
 		}
 	}
 	
@@ -199,6 +201,13 @@ class PharmMLExpressionBuilder {
 			case '%',
 			case '!': true
 			default: false
+		}
+	}
+	
+	def getPharmMlFunction(String fName){
+		switch(fName){
+			case 'ln' : 'log'
+			default: fName
 		}
 	}
 	
@@ -336,9 +345,9 @@ class PharmMLExpressionBuilder {
     			''' 
     			
     		UnnamedFuncArguments:{
-    			val opType = if(a.args.length == 1) "Binop" else "Uniop"
+    			val opType = if(a.args.size > 1) "Binop" else "Uniop"
     			retVal += '''
-    					<math:«opType» op="«func»">
+    					<math:«opType» op="«func.pharmMlFunction»">
     						«a.unnamedArguments»
     					</math:«opType»>	
     					'''
