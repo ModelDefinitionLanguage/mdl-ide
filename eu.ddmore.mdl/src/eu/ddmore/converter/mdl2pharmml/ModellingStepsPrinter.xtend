@@ -531,7 +531,7 @@ class ModellingStepsPrinter {
 
 	def boolean isCatCovUsedInSublist(SubListExpression it, String covName){
 		val catVal = getAttributeExpression('catCov') as CategoryValueReference
-		val cov = catVal.symbolDefnFromCatValRef
+		val cov = catVal?.symbolDefnFromCatValRef
 		cov != null && cov.name == covName
 	}
 
