@@ -13,12 +13,24 @@ import eu.ddmore.mdl.validation.MogValidator
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.EquationTypeDefinition
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.validation.BuiltinFunctionProvider
+import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.SubListExpression
+import eu.ddmore.mdl.validation.SublistDefinitionProvider
+import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.CategoryValueReference
 
 class ModellingStepsPrinter { 
 	
 	extension MclUtils mu = new MclUtils 
 	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder 
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+	extension SublistDefinitionProvider sldp = new SublistDefinitionProvider
+	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
 
 	////////////////////////////////////////////////
 	// III Modelling Steps
@@ -512,6 +524,43 @@ class ModellingStepsPrinter {
 		}
 	}
 
+	def boolean isCovariateUsedInSublist(SubListExpression it, String covName){
+		val cov = getAttributeExpression('cov') as SymbolReference
+		cov != null && cov.ref.name == covName
+	}
+
+	def boolean isCatCovUsedInSublist(SubListExpression it, String covName){
+		val catVal = getAttributeExpression('catCov') as CategoryValueReference
+		val cov = catVal.symbolDefnFromCatValRef
+		cov != null && cov.name == covName
+	}
+
+	def isCovUsedInIndivParams(ListDefinition it, MclObject mObj){
+		for(stmt : mObj.mdlIndvParams){
+			switch(stmt){
+				EquationTypeDefinition:{
+					if(stmt.expression instanceof BuiltinFunctionCall){
+						var funcExpr = stmt.expression as BuiltinFunctionCall
+						var namedArgList = funcExpr.argList as NamedFuncArguments 
+						val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
+						if(fixEff != null && !fixEff.expressions.isEmpty){
+							for(e : fixEff.expressions){
+								switch(e){
+									VectorElement:{
+										if(e.element instanceof SubListExpression &&
+											((e.element as SubListExpression).isCovariateUsedInSublist(name) ||
+											(e.element as SubListExpression).isCatCovUsedInSublist(name)))
+												return true
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		false
+	}
 	
 	def print_ds_DataSet(MclObject dObj, MclObject mObj) {
 		var res = "";
@@ -526,9 +575,9 @@ class ModellingStepsPrinter {
 			var convertedColType = switch(columnType){
 				case(ListDefinitionProvider::COV_USE_VALUE),
 				case(ListDefinitionProvider::CATCOV_USE_VALUE):
-					if(isUsedInModel(column, mObj)) convertEnum(columnType, dosingToCompartmentMacro) else "undefined"
+					if(isUsedInModel(column, mObj)) convertEnum(columnType, dosingToCompartmentMacro, !column.isCovUsedInIndivParams(mObj)) else "undefined"
 				default:
-					convertEnum(columnType, dosingToCompartmentMacro)
+					convertEnum(columnType, dosingToCompartmentMacro, false)
 			}
 			val valueType = column.getValueType
 			res = res +
@@ -552,12 +601,14 @@ class ModellingStepsPrinter {
 	}
 	
 	
-	def convertEnum(String type, boolean isDosingToCompartmentMacro) {
+	def convertEnum(String type, boolean isDosingToCompartmentMacro, boolean isRegressor) {
 		switch (type) {
 			case ListDefinitionProvider::AMT_USE_VALUE     : "dose"
 			case ListDefinitionProvider::DVID_USE_VALUE   : "dvid"
 			case ListDefinitionProvider::VARLVL_USE_VALUE: "occasion"
-			case ListDefinitionProvider::CATCOV_USE_VALUE: "covariate"
+			case ListDefinitionProvider::COV_USE_VALUE,
+			case ListDefinitionProvider::CATCOV_USE_VALUE:
+				if(isRegressor) "reg" else "covariate"
 			case ListDefinitionProvider::CMT_USE_VALUE : if(isDosingToCompartmentMacro) 'adm' else 'cmt'
 			default: type
 		}
