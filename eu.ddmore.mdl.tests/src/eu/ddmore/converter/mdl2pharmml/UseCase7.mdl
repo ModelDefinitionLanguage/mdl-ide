@@ -99,7 +99,7 @@ warfarin_PK_Compartments_mdl = mdlObj {
 	  COMPARTMENT {
 		INPUT_KA:   {type is depot, modelCmt=1, to=CENTRAL, ka=KA, tlag=TLAG, finput=F1}
 		CENTRAL:    {type is compartment, modelCmt=2}
-        FOO:        {type is elimination, modelCmt=2, from=CENTRAL, v=V, cl=CL}
+        	::      {type is elimination, modelCmt=2, from=CENTRAL, v=V, cl=CL}
    }# end COMPARTMENT
 
       CONC=CENTRAL/V

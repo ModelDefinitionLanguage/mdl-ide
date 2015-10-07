@@ -220,7 +220,23 @@ class MclUtils {
 	}	
 
 	def List<Statement> getMdlCompartmentStatements(MclObject it){
-		Collections::emptyList
+		val retVal = new ArrayList<Statement>
+		for(b :  modelPredictionBlocks){
+			for(s : (b.body as BlockStatementBody).statements.filter[s|
+					switch(s){
+						BlockStatement:
+							s.identifier == BlockDefinitionProvider::MDL_CMT_BLK
+						default: false
+					}
+				]){
+				switch(s){
+					BlockStatement:{
+						retVal.addAll((s.body as BlockStatementBody).statements)
+					}
+				}
+			}
+		}
+		retVal
 	}
 
 	def getParamStructuralParams(MclObject it){

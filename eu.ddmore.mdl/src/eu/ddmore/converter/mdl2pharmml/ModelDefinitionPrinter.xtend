@@ -47,6 +47,7 @@ import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.Statement
 
 class ModelDefinitionPrinter {
 //	extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -63,6 +64,7 @@ class ModelDefinitionPrinter {
 	extension PharmMLConverterUtils pcu = new PharmMLConverterUtils
 	extension SublistDefinitionProvider sdp = new SublistDefinitionProvider
 	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter
+	extension PKMacrosPrinter pkp = new PKMacrosPrinter
 	
 //	private static val CONTINUOUS_OBS = "continuous"
 //	private static val COUNT_OBS = "count"
@@ -644,8 +646,31 @@ class ModelDefinitionPrinter {
 					«mdlObject.writeModelPredictionBlock(blk.body as BlockStatementBody)»
 				«ENDIF»
 			«ENDFOR»
+			«mdlObject.mdlCompartmentStatements.writeCompartmentMacros»
 		</StructuralModel>
 	'''
+	
+	def writeCompartmentMacros(List<Statement> stmts){
+		'''
+		«stmts.printCompartmentDefinitions»
+		«stmts.printMacros»
+		'''
+//							macros = macros + '''
+//			<PKmacros>
+//		'''
+//							
+//							for (s: st.pkMacroBlock.statements){
+//								if (s.variable != null)
+//									macros = macros + s.variable.print_PKMacros;
+//								if (s.list != null)
+//									macros = macros + s.list.print_PKMacros;
+//							}
+//							macros = macros + '''
+//			</PKmacros>
+//		'''
+							 
+//						}
+	}
 	
 	
 	def writeObservationModel(MclObject mdlObject){
