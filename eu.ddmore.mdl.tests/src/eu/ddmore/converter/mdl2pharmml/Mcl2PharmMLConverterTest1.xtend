@@ -18,11 +18,11 @@ class Mcl2PharmMLConverterTest1 {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 
-//	extension MclUtils mu = new MclUtils
-//	extension Mdl2Pharmml mpc = new Mdl2Pharmml
-
 	extension ConverterTestHarness cth = new ConverterTestHarness
 	
+	static val useCases = #[
+		"UseCase1", "UseCase2", "UseCase3", "UseCase4", "UseCase4_1", "UseCase5", "UseCase6", "UseCase7", "UseCase8", "UseCase8_4", "UseCase9"
+	]
 
 	@Before
 	def void setUp(){
@@ -43,76 +43,10 @@ class Mcl2PharmMLConverterTest1 {
 	} 
 	
 	@Test
-	def void testUseCase1(){
-		validateConversion("UseCase1")
-//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase1.mdl").parse
-//		mcl.assertNoErrors
-//		mcl.convertTo("convertedFiles/UseCase1.xml")
-//		assertIsValid("convertedFiles/UseCase1.xml")
-	}
-
-	@Test
-	def void testUseCase2(){
-		validateConversion("UseCase2")
-//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase2.mdl").parse
-//		mcl.assertNoErrors
-//		mcl.convertTo("convertedFiles/UseCase2.xml")
-	}
-
-	@Test
-	def void testUseCase3(){
-		validateConversion("UseCase3")
-//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase3.mdl").parse
-//		mcl.assertNoErrors
-//		mcl.convertTo("convertedFiles/UseCase3.xml")
-	}
-
-	@Test
-	def void testUseCase4(){
-		validateConversion("UseCase4")
-//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase4.mdl").parse
-//		mcl.assertNoErrors
-//		mcl.convertTo("convertedFiles/UseCase4.xml")
-	}
-
-	@Test
-	def void testUseCase5(){
-		validateConversion("UseCase5")
-//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase5.mdl").parse
-//		mcl.assertNoErrors
-//		mcl.convertTo("convertedFiles/UseCase5.xml")
-	}
-
-	@Test
-	def void testUseCase6(){
-		validateConversion("UseCase6")
-//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase6.mdl").parse
-//		mcl.assertNoErrors
-//		mcl.convertTo("convertedFiles/UseCase6.xml")
-	}
-
-	@Test
-	def void testUseCase7(){
-		validateConversion("UseCase7")
-//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase7.mdl").parse
-//		mcl.assertNoErrors
-//		mcl.convertTo("convertedFiles/UseCase7.xml")
-	}
-
-	@Test
-	def void testUseCase8(){
-		validateConversion("UseCase8")
-//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase8.mdl").parse
-//		mcl.assertNoErrors
-//		mcl.convertTo("convertedFiles/UseCase8.xml")
-	}
-
-	@Test
-	def void testUseCase9(){
-		validateConversion("UseCase9")
-//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase9.mdl").parse
-//		mcl.assertNoErrors
-//		mcl.convertTo("convertedFiles/UseCase9.xml")
+	def void testUseCases(){
+		for(uc : useCases){
+			validateConversion(uc)
+		}
 	}
 
 }

@@ -452,9 +452,7 @@ class ModelDefinitionPrinter {
 				<GeneralCovariate>
 					«namedArgList.getArgumentExpression('grp').writeAssignment»
 				</GeneralCovariate>
-				<RandomEffects>
-					«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
-				</RandomEffects>
+				«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
 			</GaussianModel>
 		</IndividualParameter>
 		''' 

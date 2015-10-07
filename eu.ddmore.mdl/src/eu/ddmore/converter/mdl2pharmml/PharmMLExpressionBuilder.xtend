@@ -47,6 +47,7 @@ class PharmMLExpressionBuilder {
 		BlockDefinitionProvider::MDL_VAR_PARAMS -> 'pm',
 		BlockDefinitionProvider::MDL_STRUCT_PARAMS -> 'pm',
 		BlockDefinitionProvider::MDL_RND_VARS -> 'pm',
+		BlockDefinitionProvider::MDL_GRP_PARAMS -> 'pm',
 		BlockDefinitionProvider::COVARIATE_BLK_NAME -> 'cm',
 		BlockDefinitionProvider::IDV_BLK_NAME -> GLOBAL_VAR,
 		BlockDefinitionProvider::PARAM_STRUCT_BLK -> 'pm',
