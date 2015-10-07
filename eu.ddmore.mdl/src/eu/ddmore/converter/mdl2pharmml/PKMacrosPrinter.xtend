@@ -118,11 +118,11 @@ class PKMacrosPrinter{
 				content = content + type.print_PKAttributes(s.list);
 				retVal = macroType.print_PKMacros(content).toString;
 			}
-//			if(type == PkMacroType::TRANSFER.toString){
-//				// because a transfer is also a compartment it means that we need to also
-//				// create a new compartment definition for it.
-//					retVal = retVal + s.symbolName.printImplicitCompartment(s.list.arguments)
-//			}
+			if(type == 'transfer'){
+				// because a transfer is also a compartment it means that we need to also
+				// create a new compartment definition for it.
+					retVal = retVal + s.printImplicitCompartment()
+			}
 		return retVal;
 	}
 	
@@ -131,7 +131,7 @@ class PKMacrosPrinter{
 			<Value argument="amount"> 
 				«decl.symbolReference»
 			</Value>
-			«"cmt".print_Attr_Value(decl.list.getAttributeExpression('modelCmt').convertToString)»
+			«decl.list.getAttributeExpression('modelCmt').writeValue("cmt")» //.print_Attr_Value(decl.list.getAttributeExpression('modelCmt').convertToString)»
 		</Compartment>
 	'''
 	
@@ -275,21 +275,21 @@ class PKMacrosPrinter{
 		return null;
 	}
 	
-	protected def print_Attr_Value(String attrName, String value){
-		return '''
-		<Value argument="«attrName»">
-				<ct:Assign>
-					<Equation xmlns="«MATH_NS»">
-						«value»
-					</Equation>
-				</ct:Assign>
-			</Value>
-		'''
-	}
+//	protected def print_Attr_Value(String attrName, String value){
+//		return '''
+//		<Value argument="«attrName»">
+//				<ct:Assign>
+//					<Equation xmlns="«MATH_NS»">
+//						«value»
+//					</Equation>
+//				</ct:Assign>
+//			</Value>
+//		'''
+//	}
 
 	def writeValue(Expression value, String arg)'''
 		<Value argument="«arg»"> 
-			«value.pharmMLExpr»
+			«value.expressionAsAssignment»
 		</Value>
 	'''
 

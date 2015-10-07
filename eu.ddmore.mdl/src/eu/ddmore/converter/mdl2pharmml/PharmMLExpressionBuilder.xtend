@@ -110,6 +110,12 @@ class PharmMLExpressionBuilder {
 		</Equation>
 	'''
 	
+	def getExpressionAsAssignment(Expression it)'''
+		<ct:Assign>
+			«expressionAsEquation»
+		</ct:Assign>
+	'''
+	
     def dispatch CharSequence getPharmMLExpr(Expression expr){
     	switch(expr){
     		OrExpression:

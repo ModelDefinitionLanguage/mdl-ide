@@ -48,6 +48,8 @@ import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.impl.TransformedDefinitionImpl
+import eu.ddmore.mdl.mdl.TransformedDefinition
 
 class ModelDefinitionPrinter {
 //	extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -442,12 +444,17 @@ class ModelDefinitionPrinter {
 	
 	def writeGeneralIdv(EquationTypeDefinition it){
 		var funcExpr = expression as BuiltinFunctionCall
-		var namedArgList = funcExpr.argList as NamedFuncArguments 
+		var namedArgList = funcExpr.argList as NamedFuncArguments
+		val trans = switch(it){
+			TransformedDefinition:
+				getPharmMLTransFunc(transform)
+			default: null
+		} 
 		'''
 		<IndividualParameter symbId="«name»">
 			<GaussianModel>
-				«IF namedArgList.getArgumentExpression('trans') != null»
-					<Transformation>«namedArgList.getArgumentExpression('trans').convertToString.getPharmMLTransFunc»
+				«IF trans!= null»
+					<Transformation>«trans»</Transformation>
 				«ENDIF»
 				<GeneralCovariate>
 					«namedArgList.getArgumentExpression('grp').writeAssignment»

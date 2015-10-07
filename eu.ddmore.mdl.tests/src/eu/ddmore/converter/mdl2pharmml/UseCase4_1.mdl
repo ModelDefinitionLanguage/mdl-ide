@@ -95,9 +95,9 @@ warfarin_PK_IVPO_mdl = mdlObj {
 
 	
 	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    ln(CL) = linear( pop = ln(POP_CL), fixEff = [{coeff=BETA_CL_WT, cov=logtWT}] , ranEff = [ETA_CL] )
-	    ln(V) = linear( pop = ln(POP_V), fixEff = [{coeff=BETA_V_WT, cov=logtWT}] , ranEff = [ETA_V] )
-	    ln(KA) = linear( pop = ln(POP_KA), ranEff = [ETA_KA] )
+	    ln(CL) = linear( pop = POP_CL, trans is ln, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}] , ranEff = [ETA_CL] )
+	    ln(V) = linear( pop = POP_V, trans is ln, fixEff = [{coeff=BETA_V_WT, cov=logtWT}] , ranEff = [ETA_V] )
+	    ln(KA) = linear( pop = POP_KA, trans is ln, ranEff = [ETA_KA] )
 	    ln(ALAG1) = linear(trans is ln, pop = POP_TLAG, ranEff = [ETA_TLAG]) 
 
 		F1=1

@@ -11,6 +11,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -20,10 +21,6 @@ class Mcl2PharmMLConverterTest1 {
 
 	extension ConverterTestHarness cth = new ConverterTestHarness
 	
-	static val useCases = #[
-		"UseCase1", "UseCase2", "UseCase3", "UseCase4", "UseCase4_1", "UseCase5", "UseCase6", "UseCase7", "UseCase8", "UseCase8_4", "UseCase9"
-	]
-
 	@Before
 	def void setUp(){
 	}
@@ -43,10 +40,78 @@ class Mcl2PharmMLConverterTest1 {
 	} 
 	
 	@Test
-	def void testUseCases(){
-		for(uc : useCases){
-			validateConversion(uc)
-		}
+	def void testUseCase1(){
+		validateConversion("UseCase1")
+	}
+
+	@Test
+	def void testUseCase2(){
+		validateConversion("UseCase2")
+	}
+
+	@Ignore
+	def void testUseCase2_5(){
+		validateConversion("UseCase2_5")
+	}
+
+	@Test
+	def void testUseCase3(){
+		validateConversion("UseCase3")
+	}
+
+	@Test
+	def void testUseCase4(){
+		validateConversion("UseCase4")
+	}
+
+	@Test
+	def void testUseCase4_1(){
+		validateConversion("UseCase4_1")
+	}
+
+	@Test
+	def void testUseCase5(){
+		validateConversion("UseCase5")
+	}
+
+	@Test
+	def void testUseCase6(){
+		validateConversion("UseCase6")
+	}
+
+	@Test
+	def void testUseCase7(){
+		validateConversion("UseCase7")
+	}
+
+	@Test
+	def void testUseCase8(){
+		validateConversion("UseCase8")
+	}
+
+	@Test
+	def void testUseCase8_4(){
+		validateConversion("UseCase8_4")
+	}
+
+	@Test
+	def void testUseCase9(){
+		validateConversion("UseCase9")
+	}
+
+	@Test
+	def void testUseCase10(){
+		validateConversion("UseCase10")
+	}
+
+	@Test
+	def void testUseCase10_1(){
+		validateConversion("UseCase10_1")
+	}
+
+	@Ignore
+	def void testUseCase11(){
+		validateConversion("UseCase11")
 	}
 
 }
