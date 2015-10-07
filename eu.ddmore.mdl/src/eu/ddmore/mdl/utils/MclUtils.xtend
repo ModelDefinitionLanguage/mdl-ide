@@ -1,30 +1,32 @@
 package eu.ddmore.mdl.utils
 
+import java.util.ArrayList
+import java.util.Collections
+import java.util.List
+
+import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.CatValRefMappingExpression
+import eu.ddmore.mdl.mdl.CategoryValueReference
+import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingExpression
+import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.validation.BlockDefinitionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
 import eu.ddmore.mdl.validation.MdlValidator
-import java.util.ArrayList
-import java.util.List
-import org.eclipse.xtext.EcoreUtil2
 
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdl.MappingPair
-import java.util.Collections
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -407,11 +409,18 @@ class MclUtils {
 	
 	def SymbolDefinition getSymbolDefnFromCatValRef(CatValRefMappingExpression expr){
 		var SymbolDefinition retVal = null
-		if(!expr.attLists.isEmpty){
-			var catValDefn = expr.attLists.head.catRef.ref
-			// now get symbol defn that owns cat defn
-			retVal = EcoreUtil2.getContainerOfType(catValDefn, SymbolDefinition)
+		if (!expr.attLists.isEmpty) {
+			retVal = getSymbolDefnFromCatValRef(expr.attLists.head.catRef)
 		}
 		retVal
 	}
+	
+	/**
+	 * Get symbol defn that owns cat defn
+	 */
+	def SymbolDefinition getSymbolDefnFromCatValRef(CategoryValueReference catValRef){
+        var catValDefn = catValRef.ref
+        EcoreUtil2.getContainerOfType(catValDefn, SymbolDefinition)
+	}
+	
 }
