@@ -11,7 +11,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -34,67 +33,86 @@ class Mcl2PharmMLConverterTest1 {
 	def void tearDown(){
 	}
 	
+	private def validateConversion(String useCaseName){
+		val mclFile = "src/eu/ddmore/converter/mdl2pharmml/" + useCaseName + ".mdl"
+		val mcl = readFile(mclFile).parse
+		mcl.assertNoErrors
+		val pharmMLFile = "convertedFiles/" + useCaseName + ".xml" 
+		mcl.convertTo(pharmMLFile)
+		assertIsValid(pharmMLFile)
+	} 
+	
 	@Test
 	def void testUseCase1(){
-		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase1.mdl").parse
-		mcl.assertNoErrors
-		mcl.convertTo("convertedFiles/UseCase1.xml")
+		validateConversion("UseCase1")
+//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase1.mdl").parse
+//		mcl.assertNoErrors
+//		mcl.convertTo("convertedFiles/UseCase1.xml")
+//		assertIsValid("convertedFiles/UseCase1.xml")
 	}
 
 	@Test
 	def void testUseCase2(){
-		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase2.mdl").parse
-		mcl.assertNoErrors
-		mcl.convertTo("convertedFiles/UseCase2.xml")
+		validateConversion("UseCase2")
+//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase2.mdl").parse
+//		mcl.assertNoErrors
+//		mcl.convertTo("convertedFiles/UseCase2.xml")
 	}
 
 	@Test
 	def void testUseCase3(){
-		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase3.mdl").parse
-		mcl.assertNoErrors
-		mcl.convertTo("convertedFiles/UseCase3.xml")
+		validateConversion("UseCase3")
+//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase3.mdl").parse
+//		mcl.assertNoErrors
+//		mcl.convertTo("convertedFiles/UseCase3.xml")
 	}
 
 	@Test
 	def void testUseCase4(){
-		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase4.mdl").parse
-		mcl.assertNoErrors
-		mcl.convertTo("convertedFiles/UseCase4.xml")
+		validateConversion("UseCase4")
+//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase4.mdl").parse
+//		mcl.assertNoErrors
+//		mcl.convertTo("convertedFiles/UseCase4.xml")
 	}
 
 	@Test
 	def void testUseCase5(){
-		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase5.mdl").parse
-		mcl.assertNoErrors
-		mcl.convertTo("convertedFiles/UseCase5.xml")
+		validateConversion("UseCase5")
+//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase5.mdl").parse
+//		mcl.assertNoErrors
+//		mcl.convertTo("convertedFiles/UseCase5.xml")
 	}
 
 	@Test
 	def void testUseCase6(){
-		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase6.mdl").parse
-		mcl.assertNoErrors
-		mcl.convertTo("convertedFiles/UseCase6.xml")
+		validateConversion("UseCase6")
+//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase6.mdl").parse
+//		mcl.assertNoErrors
+//		mcl.convertTo("convertedFiles/UseCase6.xml")
 	}
 
 	@Test
 	def void testUseCase7(){
-		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase7.mdl").parse
-		mcl.assertNoErrors
-		mcl.convertTo("convertedFiles/UseCase7.xml")
+		validateConversion("UseCase7")
+//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase7.mdl").parse
+//		mcl.assertNoErrors
+//		mcl.convertTo("convertedFiles/UseCase7.xml")
 	}
 
 	@Test
 	def void testUseCase8(){
-		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase8.mdl").parse
-		mcl.assertNoErrors
-		mcl.convertTo("convertedFiles/UseCase8.xml")
+		validateConversion("UseCase8")
+//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase8.mdl").parse
+//		mcl.assertNoErrors
+//		mcl.convertTo("convertedFiles/UseCase8.xml")
 	}
 
 	@Test
 	def void testUseCase9(){
-		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase9.mdl").parse
-		mcl.assertNoErrors
-		mcl.convertTo("convertedFiles/UseCase9.xml")
+		validateConversion("UseCase9")
+//		val mcl = readFile("src/eu/ddmore/converter/mdl2pharmml/UseCase9.mdl").parse
+//		mcl.assertNoErrors
+//		mcl.convertTo("convertedFiles/UseCase9.xml")
 	}
 
 }
