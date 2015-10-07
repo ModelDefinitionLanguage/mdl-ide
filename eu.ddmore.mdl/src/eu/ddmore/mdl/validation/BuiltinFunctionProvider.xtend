@@ -1,27 +1,29 @@
 package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.FuncArguments
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import java.util.HashMap
 import java.util.HashSet
 import java.util.List
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.mdl.EnumExpression
-import java.util.HashMap
-import org.eclipse.xtext.EcoreUtil2
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import java.util.Collections
 
 class BuiltinFunctionProvider {
 	
@@ -66,11 +68,29 @@ class BuiltinFunctionProvider {
 	
 	private static val Map<String, List<? extends FunctDefn>> functDefns = #{
 		'log' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'log2' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'log10' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'ln' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'probit' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'logit' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'invLogit' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'invProbit' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'factorial' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'lnFactorial' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'sin' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'cos' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'tan' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'floor' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'ceiling' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'min' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'max' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'abs' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'exp' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'seq' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::INT_VECTOR_TYPE ] ],
+		'seq' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_VECTOR_TYPE ] ],
 		'sqrt' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'sum' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'mean' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'median' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'Normal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
 						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
@@ -86,6 +106,11 @@ class BuiltinFunctionProvider {
 					],
 		'Poisson' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
 						'lambda' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ]
+					],
+		'Gamma' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
+						'shape' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'scale' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]
 					],
 		'linear' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
@@ -282,6 +307,48 @@ class BuiltinFunctionProvider {
 	private def getFunctionCall(ValuePair it){
 		eContainer.eContainer as BuiltinFunctionCall
 	}
+	
+	def isNamedArgFunction(BuiltinFunctionCall it){
+		val funcDefn = functDefns.get(func)
+		funcDefn != null && funcDefn.head instanceof NamedArgFuncDefn
+	}
+	
+	
+	def getNamedArguments(BuiltinFunctionCall it){
+		val args = argList
+		switch(args){
+			NamedFuncArguments:	args.arguments
+			default: Collections::emptyList
+		}
+	}
+	
+	def getArgumentExpression(BuiltinFunctionCall it, String attName){
+		val args = argList
+		switch(args){
+			NamedFuncArguments:
+				args.getArgumentExpression(attName)
+			default: null
+		}
+	}
+
+	def getArgumentExpression(NamedFuncArguments it, String attName){
+		arguments.findFirst[argumentName == attName]?.expression
+	}
+
+	def getArgumentEnumValue(FuncArguments args, String argName){
+		switch(args){
+			NamedFuncArguments:{
+				val enumExp = args.getArgumentExpression(argName)
+				switch(enumExp){
+					EnumExpression:
+						return enumExp.enumValue
+					default: null
+				}
+			}
+			default: null
+		}
+	}
+	
 	
 	// The validator should check on a per argument basis is an argument name is valid.
 	def checkNamedArguments(ValuePair it, (String) => void unkArgError, (String) => void duplicateArgError){

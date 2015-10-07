@@ -37,7 +37,7 @@ class SublistDefinitionProvider {
 		return sublistDefns.get(name)
 	}
 
-	def findSublistMatch(SubListExpression sle){
+	def SublistTypeInfo findSublistMatch(SubListExpression sle){
 		val attNames = sle.attributeNames
 		val candidateDefns = sublistDefns.values.filter(sl|
 			sl.attributes.exists(ad| 
@@ -73,6 +73,10 @@ class SublistDefinitionProvider {
 		val attNames = new ArrayList<String>
 		sle.attributes.forEach([at|attNames.add(at.argumentName)])
 		attNames
+	}
+
+	def getAttributeExpression(SubListExpression sle, String name){
+		sle.attributes.findFirst[argumentName == name]?.expression
 	}
 
 }

@@ -20,6 +20,8 @@ import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.mdl.VectorElement
+
 import org.eclipse.emf.ecore.EObject
 
 public class ExpressionConverter {
@@ -28,6 +30,11 @@ public class ExpressionConverter {
     
     public def static String convertToString(Expression expr) {
         INSTANCE.getString(expr)
+    }
+
+    public def static Integer convertToInteger(Expression it) {
+        val strRep = INSTANCE.getString(it)
+        Integer::valueOf(strRep)
     }
 
     def dispatch String getString(EObject eobj){
@@ -85,13 +92,13 @@ public class ExpressionConverter {
 //	
 //	def static dispatch String getString(UnnamedArgument exp)'''
 //		«exp.argument.getString»'''
-	
+//	
 //	def static dispatch String getString(EstimateRange exp)'''
 //		«IF !exp.isFixed»(«ENDIF»«exp.initial» «exp.limit?.getLimitString(exp.initial) ?: exp.initial»«IF !exp.isFixed»)«ENDIF»'''
-	
+//	
 //	def static String getLimitString(LimitDefn limit, Expression initial)'''
 //		(«limit.low?:''», «initial.getString», «limit.high?:''»)'''
-	
+//	
 //	def static dispatch String getString(WhenExpression exp)'''
 //		«FOR w : exp.when SEPARATOR ',\n'»«w.getString»«ENDFOR»«IF exp.other != null»,«ENDIF»
 //		«IF exp.other!=null»«exp.other.getString» otherwise«ENDIF»'''
@@ -126,9 +133,9 @@ public class ExpressionConverter {
 //	def static dispatch String getString(VectorLiteral exp)'''
 //		[«FOR e : exp.expressions SEPARATOR ','»«e.getString»«ENDFOR»]'''
 //	
-//	
-//	def static dispatch String getString(VectorElement exp)'''
-//		«exp.element.head.getString»'''
+	
+	def dispatch String getString(VectorElement exp)'''
+		«exp.element.getString»'''
 		
 
 //	def static dispatch String getString(VectorContent exp)'''

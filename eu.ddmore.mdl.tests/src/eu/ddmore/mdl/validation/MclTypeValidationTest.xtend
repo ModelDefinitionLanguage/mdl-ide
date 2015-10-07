@@ -21,7 +21,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidNumericalEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 			
 			VARIABILITY_LEVELS{
@@ -43,7 +43,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidWhenEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -53,7 +53,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
+				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < INF) then B^180 else 22
 			}
 			
 		} # end of model object
@@ -65,7 +65,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidWithDerivExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -89,7 +89,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidWithVarLvlExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -117,7 +117,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidRelation(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -142,7 +142,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidUniopExpressionOK(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -162,7 +162,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidUniopExpressionInvalid(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -185,7 +185,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidUniopExpressionInvalidNumber(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -208,7 +208,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidUniopExpressionInvalidMalformed(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -231,7 +231,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidUniopExpressionInvalidBool(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -254,7 +254,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInvalidWhenEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 			
 			VARIABILITY_LEVELS{
@@ -279,7 +279,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidFunctionArgumentExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 			
 			VARIABILITY_LEVELS{
@@ -303,7 +303,7 @@ class MclTypeValidationTest {
 	
 	@Test
 	def void testInValidNamedFunctionSublistArgumentType(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			
 			
 			COVARIATES{
@@ -329,7 +329,7 @@ class MclTypeValidationTest {
 	
 	@Test
 	def void testInValidNamedFunctionSimpleArgumentType(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			
 			
 			COVARIATES{
@@ -355,7 +355,7 @@ class MclTypeValidationTest {
 	
 	@Test
 	def void testInValidNamedFunctionSublistNotVectType(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			
 			
 			COVARIATES{
@@ -381,7 +381,7 @@ class MclTypeValidationTest {
 	
 	@Test
 	def void testInValidNamedFunctionSublistAttributeType(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			
 			
 			COVARIATES{
@@ -408,7 +408,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidFunctionEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 			
 			VARIABILITY_LEVELS{
@@ -430,7 +430,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidDistnFunctionExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 			
 			VARIABILITY_LEVELS{
@@ -451,7 +451,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidVectorEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 			
 			VARIABILITY_LEVELS{
@@ -473,7 +473,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidVectorEquationExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -498,7 +498,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidVectorEquationDefinition(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -523,7 +523,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidVectorLiteralIncompatibleEquationDefinition(){
 		val mcl = '''
-		d1g=desobj{
+		d1g=desObj{
 			ADMINISTRATION{
 			}
 			
@@ -550,7 +550,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidVectorNestedVectorEquationDefinition(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -573,7 +573,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidVectorNestedVectorRefEquationDefinition(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -597,7 +597,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidInconsistentVectorLiteral(){
 		val mcl = 	'''
-		d1g=desobj{
+		d1g=desObj{
 			STUDY_DESIGN{}
 			
 			
@@ -623,7 +623,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidListVectorLiteral(){
 		val mcl = 	'''
-		d1g=desobj{
+		d1g=desObj{
 			ADMINISTRATION{
 			}
 			
@@ -648,7 +648,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidEnumExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -672,7 +672,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidEnumNumExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -699,7 +699,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidInconsistentEnumExpressionSameCats(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -727,7 +727,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidInconsistentEnumExpressionDiffCats(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -755,7 +755,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidInconsistentEnumExpressionNoCatValues(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -783,7 +783,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidNumEnumExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -810,7 +810,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidEnumStringExpression(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -837,7 +837,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidBuiltinEnum(){
 		val mcl = '''
-		foo = dataobj {
+		foo = dataObj {
 			DATA_INPUT_VARIABLES{
 			}
 
@@ -853,7 +853,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidIntVectorWithIntVector(){
 		val mcl = '''
-d1g=desobj{
+d1g=desObj{
 	DECLARED_VARIABLES{
 		Conc
 		Effect
@@ -878,7 +878,7 @@ d1g=desobj{
 	@Test
 	def void testValidMappingStructure(){
 		val mcl = '''
-d1g=desobj{
+d1g=desObj{
 	DECLARED_VARIABLES{
 		Conc; Cmt
 	}
@@ -912,7 +912,7 @@ d1g=desobj{
 	@Test
 	def void testInvalidBuiltinEnum(){
 		val mcl = '''
-		foo = dataobj {
+		foo = dataObj {
 			DATA_INPUT_VARIABLES{
 			}
 
@@ -932,7 +932,7 @@ d1g=desobj{
 	@Test
 	def void testInvalidBuiltinEnumWrongType(){
 		val mcl = '''
-		foo = dataobj {
+		foo = dataObj {
 			DATA_INPUT_VARIABLES{ alt }
 
 			SOURCE{
@@ -949,7 +949,7 @@ d1g=desobj{
 	
 	@Test
 	def void testValidBoolExpressionAttributes(){
-		val mcl = '''bar = dataobj {
+		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ D }
 			
 			DATA_INPUT_VARIABLES{
@@ -968,7 +968,7 @@ d1g=desobj{
 
 	@Test
 	def void testValidMappingExpressionAttributes(){
-		val mcl = '''bar = dataobj {
+		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ D; E }
 			
 			DATA_INPUT_VARIABLES{
@@ -986,7 +986,7 @@ d1g=desobj{
 
 	@Test
 	def void testInValidMappingExpressionAttributes(){
-		val mcl = '''bar = dataobj {
+		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ D }
 			
 			DATA_INPUT_VARIABLES{
@@ -1006,7 +1006,7 @@ d1g=desobj{
 
 	@Test
 	def void testInvalidNoVarRefAttributes(){
-		val mcl = '''bar = dataobj {
+		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ D }
 			
 			DATA_INPUT_VARIABLES{
@@ -1026,7 +1026,7 @@ d1g=desobj{
 
 	@Test
 	def void testInvalidNonBoolExpressionAttributes(){
-		val mcl = '''bar = dataobj {
+		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ D }
 			
 			DATA_INPUT_VARIABLES{
@@ -1048,7 +1048,7 @@ d1g=desobj{
 	@Test
 	def void testInvalidNonRealExpressionAttributes(){
 		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlobj {
+		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
 
 			VARIABILITY_LEVELS{
@@ -1075,7 +1075,7 @@ d1g=desobj{
 	@Test
 	def void testValidAsExpression(){
 		val mcl = '''
-warfarin_PK_v2_dat = dataobj{
+warfarin_PK_v2_dat = dataObj{
 	DECLARED_VARIABLES{ GUT}
 	
 	DATA_INPUT_VARIABLES {
@@ -1096,7 +1096,7 @@ warfarin_PK_v2_dat = dataobj{
 	@Test
 	def void testInValidLhsAsExpression(){
 		val mcl = '''
-warfarin_PK_v2_dat = dataobj{
+warfarin_PK_v2_dat = dataObj{
 	DECLARED_VARIABLES{ GUT; Y}
 	
 	DATA_INPUT_VARIABLES {
@@ -1120,7 +1120,7 @@ warfarin_PK_v2_dat = dataobj{
 	@Test
 	def void testInValidRhsAsExpression(){
 		val mcl = '''
-warfarin_PK_v2_dat = dataobj{
+warfarin_PK_v2_dat = dataObj{
 	DECLARED_VARIABLES{ GUT; Y}
 	
 	DATA_INPUT_VARIABLES {
@@ -1144,7 +1144,7 @@ warfarin_PK_v2_dat = dataobj{
 	@Test
 	def void testValidSimpleDataWhenExpression(){
 		val mcl = '''
-warfarin_PK_v2_dat = dataobj{
+warfarin_PK_v2_dat = dataObj{
 	DECLARED_VARIABLES{ GUT}
 	
 	DATA_INPUT_VARIABLES {
@@ -1164,7 +1164,7 @@ warfarin_PK_v2_dat = dataobj{
 	@Test
 	def void testInValidRhsSimpleDataWhenExpression(){
 		val mcl = '''
-warfarin_PK_v2_dat = dataobj{
+warfarin_PK_v2_dat = dataObj{
 	DECLARED_VARIABLES{ GUT}
 	
 	DATA_INPUT_VARIABLES {
@@ -1187,7 +1187,7 @@ warfarin_PK_v2_dat = dataobj{
 	@Test
 	def void testValidDataMappingWhenExpression(){
 		val mcl = '''
-warfarin_PK_v2_dat = dataobj{
+warfarin_PK_v2_dat = dataObj{
 	DECLARED_VARIABLES{ Y; GUT; PCA withCategories {dead, alive}; OTHER withCategories {dead, alive} }
 	
 	DATA_INPUT_VARIABLES {
@@ -1213,7 +1213,7 @@ warfarin_PK_v2_dat = dataobj{
 	@Test
 	def void testValidExpectedRefTypeAttribute(){
 		val mcl = '''
-		foo = desobj{
+		foo = desObj{
 			DECLARED_VARIABLES{
 				Conc
 				Effect
@@ -1235,7 +1235,7 @@ warfarin_PK_v2_dat = dataobj{
 	@Test
 	def void testInValidExpectedRefTypeAttributeNoRef(){
 		val mcl = '''
-		foo = desobj{
+		foo = desObj{
 			DECLARED_VARIABLES{
 			}
 
@@ -1257,7 +1257,7 @@ warfarin_PK_v2_dat = dataobj{
 	@Test
 	def void testValidObsWhenExpression(){
 		val mcl = '''
-		foo = mdlobj{
+		foo = mdlObj{
 			VARIABILITY_LEVELS{
 			}
 
@@ -1277,7 +1277,7 @@ warfarin_PK_v2_dat = dataobj{
 	@Test
 	def void testInValidRhsObsWhenExpression(){
 		val mcl = '''
-		foo = mdlobj{
+		foo = mdlObj{
 			VARIABILITY_LEVELS{
 			}
 

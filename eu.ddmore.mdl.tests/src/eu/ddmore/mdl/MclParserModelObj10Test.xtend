@@ -16,7 +16,7 @@ class MclParserModelObj10Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-Bernoulli_DIST_mdl = mdlobj{
+Bernoulli_DIST_mdl = mdlObj{
    IDV{ CP }
 
    VARIABILITY_LEVELS{
@@ -52,7 +52,7 @@ Bernoulli_DIST_mdl = mdlobj{
    }# end MODEL_PREDICTION
 
    OBSERVATION{
-     Y : { type is discrete, distn = Bernoulli(probability=P1), link is identity}
+     Y : { type is discrete, distn = Bernoulli(probability=P1)}
    }# end ESTIMATION
 } # end of model object
 '''

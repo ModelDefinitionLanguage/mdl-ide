@@ -1,4 +1,4 @@
-warfarin_PK_v2_dat = dataobj{
+warfarin_PK_v2_dat = dataObj{
 	DECLARED_VARIABLES{ Y; D; TD}
 	
 	DATA_INPUT_VARIABLES {
@@ -29,7 +29,7 @@ warfarin_PK_v2_dat = dataobj{
 	} # end SOURCE
 } # end data object
 
-warfarin_PK_2Compartments_mdl = mdlobj (idv TIME) {
+warfarin_PK_2Compartments_mdl = mdlObj (idv TIME) {
    COVARIATES{
       WT
       logtWT = logtWT(WT/70)
@@ -114,7 +114,7 @@ warfarin_PK_2Compartments_mdl = mdlobj (idv TIME) {
    }# end OBSERVATION
 } # end of model object
 
-nonmem_task = taskobj {
+nonmem_task = taskObj {
 	ESTIMATE{
 		target = "NONMEM"
 		properties = "

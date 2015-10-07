@@ -21,7 +21,7 @@ class MclStatementValidationTest {
 
 	@Test
 	def void testValidStatementCategories(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlObj {
 			VARIABILITY_LEVELS{
 			}
 
@@ -35,7 +35,7 @@ class MclStatementValidationTest {
 
 	@Test
 	def void testInValidWithMappingStatementCategories(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlObj {
 			VARIABILITY_LEVELS{
 			}
 
@@ -53,7 +53,7 @@ class MclStatementValidationTest {
 
 	@Test
 	def void testInValidStatementNoCategories(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlObj {
 			VARIABILITY_LEVELS{
 			}
 
@@ -69,7 +69,7 @@ class MclStatementValidationTest {
 
 	@Test
 	def void testInValidWithStatementMissingCategories(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlObj {
 			VARIABILITY_LEVELS{
 			}
 
@@ -86,7 +86,7 @@ class MclStatementValidationTest {
 	@Test
 	def void testValidCategoryDefnInList(){
 		val mcl = '''
-		foo = mdlobj{
+		foo = mdlObj{
 			VARIABILITY_LEVELS{
 			}
 
@@ -106,7 +106,7 @@ class MclStatementValidationTest {
 	@Test
 	def void testInValidCategoryDefnInList(){
 		val mcl = '''
-		foo = mdlobj{
+		foo = mdlObj{
 			VARIABILITY_LEVELS{
 			}
 
@@ -129,7 +129,7 @@ class MclStatementValidationTest {
 	@Test
 	def void testValidIfElseWithElse(){
 		val mcl = '''
-		foo = mdlobj{
+		foo = mdlObj{
 			VARIABILITY_LEVELS{
 			}
 
@@ -146,7 +146,7 @@ class MclStatementValidationTest {
 	@Test
 	def void testValidIfElseWithElseIf(){
 		val mcl = '''
-		foo = mdlobj{
+		foo = mdlObj{
 			VARIABILITY_LEVELS{
 			}
 
@@ -163,7 +163,7 @@ class MclStatementValidationTest {
 	@Test
 	def void testInValidIfElseOneClause(){
 		val mcl = '''
-		foo = mdlobj{
+		foo = mdlObj{
 			VARIABILITY_LEVELS{
 			}
 
@@ -183,7 +183,7 @@ class MclStatementValidationTest {
 	@Test
 	def void testInValidIfElseWithNestedOneClauseIf(){
 		val mcl = '''
-		foo = mdlobj{
+		foo = mdlObj{
 			VARIABILITY_LEVELS{
 			}
 
@@ -203,7 +203,7 @@ class MclStatementValidationTest {
 	@Test
 	def void testInValidMissingCategories(){
 		val mcl = '''
-		foo = mdlobj{
+		foo = mdlObj{
 			VARIABILITY_LEVELS{
 			}
 

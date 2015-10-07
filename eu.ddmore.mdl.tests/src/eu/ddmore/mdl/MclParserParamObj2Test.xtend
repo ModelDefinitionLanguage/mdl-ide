@@ -16,7 +16,7 @@ class MclParserParamObj2Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-	warfarin_PK_ODE_par = parobj {
+	warfarin_PK_ODE_par = parObj {
 		DECLARED_VARIABLES{ETA_CL ETA_V}
 
 		# By default a parameter is to be estimated if fix is omitted

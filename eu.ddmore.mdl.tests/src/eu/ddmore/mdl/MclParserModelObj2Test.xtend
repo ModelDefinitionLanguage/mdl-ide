@@ -16,7 +16,7 @@ class MclParserModelObj2Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_ANALYTIC_mdl = mdlobj {
+warfarin_PK_ANALYTIC_mdl = mdlObj {
 	IDV{ T }
 
 	VARIABILITY_LEVELS{

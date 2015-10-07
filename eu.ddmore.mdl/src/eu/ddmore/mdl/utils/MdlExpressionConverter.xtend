@@ -63,13 +63,6 @@ public class MdlExpressionConverter extends ExpressionConverter {
 	def dispatch String getString(VectorLiteral exp)'''
 		[«FOR e : exp.expressions SEPARATOR ','»«e.getString»«ENDFOR»]'''
 	
-	def dispatch String getString(VectorElement exp)'''
-		«exp.element.head.getString»'''
-		
-//	def static dispatch String getString(VectorContent exp)'''
-//		«FOR e : exp.expressions SEPARATOR ','»
-//			«e.getString»«ENDFOR»'''
-
     override dispatch String getString(SubListExpression expr)'''
         [«FOR c : expr.attributes SEPARATOR ', '»«c.getString»«ENDFOR»]'''
 

@@ -16,23 +16,23 @@ class MclParserMogObj1Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-mobj = mdlobj {
+mobj = mdlObj {
 	VARIABILITY_LEVELS{
 	} 
 }
 
-pobj = parobj {
+pobj = parObj {
 }
 
-dobj = dataobj {
+dobj = dataObj {
 	DATA_INPUT_VARIABLES{}
 	SOURCE{}
 }
 
-tobj = taskobj {
+tobj = taskObj {
 }
 
-mgobj = mogobj {
+mgobj = mogObj {
 	OBJECTS{
 		mobj
 		pobj

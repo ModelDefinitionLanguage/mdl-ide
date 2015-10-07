@@ -15,17 +15,41 @@ import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.MdlExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.ValuePair
+import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
 class MdlExpressionConverterTest {
 	@Inject extension ParseHelper<Mcl>
-//	@Inject extension ValidationTestHelper
+	@Inject extension ValidationTestHelper
+	
+	@Test
+	def void testValidExpressionSyntax(){
+		val mcl =  '''
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV { T }
+	
+	VARIABILITY_LEVELS{}
+	
+	
+	MODEL_PREDICTION {
+			KA
+			GUT
+			TLAG = GUT-1
+			RATEIN = if(T >= TLAG) then GUT * KA else 0
+	} # end MODEL_PREDICTION
+	
+} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
 	
 	@Test
 	def void testConverter1(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -44,7 +68,7 @@ else 0", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() 
 	@Test
 	def void testConverter2(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -61,7 +85,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	@Test
 	def void testConverter3(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			RATEIN = 10 < 22 == true
 	} # end MODEL_PREDICTION
@@ -75,7 +99,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 	@Test
 	def void testConverter4(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -99,7 +123,7 @@ else INF", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace(
 		@Test
 	def void testConverter5(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			RATEIN = "doo"
 	} # end MODEL_PREDICTION
@@ -113,7 +137,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 		@Test
 	def void testConverter6(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlobj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -130,7 +154,7 @@ warfarin_PK_ODE_mdl = mdlobj (idv T) {
 		@Test
 	def void testConverter7(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = dataobj {
+warfarin_PK_ODE_mdl = dataObj {
 	DATA_INPUT_VARIABLES{
 	} # end MODEL_PREDICTION
 	SOURCE{

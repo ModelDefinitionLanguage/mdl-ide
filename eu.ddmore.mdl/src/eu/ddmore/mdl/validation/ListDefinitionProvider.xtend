@@ -28,11 +28,21 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 
 class ListDefinitionProvider {
 
+	public static val USE_ATT = 'use'
+	public static val DEFINE_ATT = 'define'
+	public static val VARIABLE_ATT = 'variable'
 	public static val COV_USE_VALUE = 'covariate'
+	public static val AMT_USE_VALUE = 'amt'
 	public static val OBS_USE_VALUE = 'dv'
+	public static val DVID_USE_VALUE = 'dvid'
 	public static val CATCOV_USE_VALUE = 'catCov'
+	public static val IDV_USE_VALUE = 'idv'
+	public static val ID_USE_VALUE = 'id'
+	public static val VARLVL_USE_VALUE = 'varLevel'
+	public static val CMT_USE_VALUE = 'cmt'
+	
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'amt', OBS_USE_VALUE, 'dvid', 'cmt', 'mdv', 'idv', 'id', 'rate', 'ignore', 'varLevel', 'catCov', 'rate', 'ss', 'ii', 'addl'})
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', 'ignore', VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
 	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
@@ -40,10 +50,10 @@ class ListDefinitionProvider {
 	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
 	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{'categorical', 'count', 'discrete', 'tte'})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
-//	static val SAMPLE_OUTCOME_TYPE = new BuiltinEnumTypeInfo('sampouttype', #['conc', 'effect'])
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
-	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
+//	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'exact', 'intervalCensored'})
+	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
@@ -52,13 +62,6 @@ class ListDefinitionProvider {
 	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", PrimitiveType.List)
 	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", PrimitiveType.List)
 	public static val DERIV_SAMPLING_TYPE = new ListTypeInfo("DerivedSampling", PrimitiveType.List)
-
-//	public static val TypeInfo INTERVENTION_SEQ_SUBLIST = new SublistTypeInfo("intSeqAtts", #[new AttributeDefn("interventionList", null, true, ADMINISTRATION_TYPE.makeReference.makeVector),
-//																							new AttributeDefn("epochStart", null, true, MclTypeProvider::REAL_TYPE.makeVector),
-//																							new AttributeDefn("epochEnd", null, true, MclTypeProvider::REAL_TYPE.makeVector)])
-//	public static val TypeInfo SAMPLING_SEQ_SUBLIST = new SublistTypeInfo("sampSeqAtts", #[new AttributeDefn("samplingList", null, true, SAMPLING_TYPE.makeReference.makeVector),
-//																							new AttributeDefn("start", null, true, MclTypeProvider::REAL_TYPE.makeVector),
-//																							new AttributeDefn("end", null, true, MclTypeProvider::REAL_TYPE.makeVector)])
 
 	
 	// @TODO: need an addition set of validations to make sure that DVID is used if AMT has a define attribute
@@ -105,68 +108,68 @@ class ListDefinitionProvider {
 	static val Map<String, BlockListDefinition> attributeDefnDefaults = #{ 
 		"DATA_INPUT_VARIABLES" -> (
 			new BlockListDefinition => [
-				key = 'use'
+				key = USE_ATT
 				listDefns = newArrayList(
 					new ListDefInfo('covariate', new ListTypeInfo("Covariate", PrimitiveType.Real),#[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
 					new ListDefInfo('catCov', new EnumListTypeInfo("CatCovariate"), #[
-						 new AttributeDefn('use', null, true, USE_TYPE, MclTypeProvider::INT_TYPE, true)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE, MclTypeProvider::INT_TYPE, true)
 						 ] 
 					),
 					new ListDefInfo ('amt', AMT_COL_TYPE,  #[
-						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE),
-						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, null, false, MclTypeProvider::MAPPING_TYPE),
+						 new AttributeDefn(VARIABLE_ATT, null, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ] 
 					),
 					new ListDefInfo ('dv', new ListTypeInfo("Dv", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE), new AttributeDefn('define', null, false, MclTypeProvider::MAPPING_TYPE),
-						 new AttributeDefn('variable', null, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, null, false, MclTypeProvider::MAPPING_TYPE),
+						 new AttributeDefn(VARIABLE_ATT, null, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ] 
 					),
-					new ListDefInfo ('idv', IDV_COL_TYPE,  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+					new ListDefInfo (IDV_USE_VALUE, IDV_COL_TYPE,  #[
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
-					new ListDefInfo ('cmt', new ListTypeInfo("Cmt", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+					new ListDefInfo (CMT_USE_VALUE, new ListTypeInfo("Cmt", PrimitiveType.List),  #[
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
-					new ListDefInfo ('id', new ListTypeInfo("Id", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+					new ListDefInfo (ID_USE_VALUE, new ListTypeInfo("Id", PrimitiveType.List),  #[
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
 					new ListDefInfo ('varLevel', new ListTypeInfo("VarLevel", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
 					new ListDefInfo ('mdv', new ListTypeInfo("Mdv", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
 					new ListDefInfo ('rate', new ListTypeInfo("Rate", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
 					new ListDefInfo ('ss', new ListTypeInfo("SteadyState", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
 					new ListDefInfo ('ii', new ListTypeInfo("InterDosInterval", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
 					new ListDefInfo ('addl', new ListTypeInfo("AdditionImplicitDoses", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
-					new ListDefInfo ('dvid', new ListTypeInfo("Dvid", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+					new ListDefInfo (DVID_USE_VALUE, new ListTypeInfo("Dvid", PrimitiveType.List),  #[
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					),
 					new ListDefInfo ('ignore', new ListTypeInfo("Ignore", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, USE_TYPE)
+						 new AttributeDefn(USE_ATT, null, true, USE_TYPE)
 						 ] 
 					)
 				)
@@ -174,10 +177,10 @@ class ListDefinitionProvider {
 		),
 		"DATA_DERIVED_VARIABLES" -> (
 			new BlockListDefinition => [
-				key = 'use'
+				key = USE_ATT
 				listDefns = newArrayList(
 					new ListDefInfo ('doseTime', new ListTypeInfo("DoseTime", PrimitiveType.List),  #[
-						 new AttributeDefn('use', null, true, DDV_USE_TYPE),
+						 new AttributeDefn(USE_ATT, null, true, DDV_USE_TYPE),
 						 new AttributeDefn('idvColumn', null, true, IDV_COL_TYPE.makeReference),
 						 new AttributeDefn('amtColumn', null, true, AMT_COL_TYPE.makeReference) 
 						 ] 
@@ -317,6 +320,17 @@ class ListDefinitionProvider {
 				)
 			]
 		),
+		"OBJECTS" -> (
+			new BlockListDefinition => [
+				key = 'type'
+				listDefns = newArrayList(
+					new ListDefInfo (null, new ListTypeInfo("MdlObjInMog", PrimitiveType.Real),  #[
+						 new AttributeDefn('type', null, true, MOG_OBJ_TYPE_TYPE)
+						]
+					)
+				)
+			]
+		),
 		"OBSERVATION" -> (
 			new BlockListDefinition => [
 				key = 'type'
@@ -325,19 +339,17 @@ class ListDefinitionProvider {
 						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
 						 ]
 					),
-					new ListDefInfo ('count', new ListTypeInfo("CountObs", PrimitiveType.Int),  #[
+					new ListDefInfo ('count', new ListTypeInfo("CountObs", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE),
-						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE),
-						 new AttributeDefn('link', null, true, LINK_FUNC_TYPE)
+						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo ('discrete', new ListTypeInfo("DiscreteObs", PrimitiveType.Int),  #[
+					new ListDefInfo ('discrete', new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE),
-						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE),
-						 new AttributeDefn('link', null, true, LINK_FUNC_TYPE)
+						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo ('tte', new ListTypeInfo("DiscreteObs", PrimitiveType.Int),  #[
+					new ListDefInfo ('tte', new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('hazard', null, true, MclTypeProvider::REAL_TYPE.makeReference),
 						 new AttributeDefn('event', null, true, TTE_EVENT_TYPE),
@@ -698,6 +710,15 @@ class ListDefinitionProvider {
 	
 	def getAttributeExpression(AttributeList it, String attName){
 		attributes.findFirst[argumentName == attName]?.expression
+	}
+
+	def getAttributeEnumValue(AttributeList it, String attName){
+		val enumExp = getAttributeExpression(attName)
+		switch(enumExp){
+			EnumExpression:
+				return enumExp.enumValue
+			default: null
+		}
 	}
 
 

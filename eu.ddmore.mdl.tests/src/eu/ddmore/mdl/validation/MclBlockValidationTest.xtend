@@ -20,33 +20,33 @@ class MclBlockValidationTest {
 
 	@Test
 	def void testUnknownBlock(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlObj {
 			DATA_INPUT_VARIABLES{
 			}
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
 			MdlValidator::UNKNOWN_BLOCK,
-			"block 'DATA_INPUT_VARIABLES' cannot be used in an object of type mdlobj"
+			"block 'DATA_INPUT_VARIABLES' cannot be used in an object of type mdlObj"
 		)
 	}
 
 	@Test
 	def void testMissingMandatoryBlocks(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlObj {
 			DATA_INPUT_VARIABLES{
 			}
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
 			MdlValidator::MANDATORY_BLOCK_MISSING,
-			"mandatory block 'VARIABILITY_LEVELS' is missing in mdlobj 'foo'"
+			"mandatory block 'VARIABILITY_LEVELS' is missing in mdlObj 'foo'"
 		)
 	}
 
 	@Test
 	def void testUnknownSubBlock(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlObj {
 			VARIABILITY_LEVELS{
 			}
 			MODEL_PREDICTION{
@@ -62,7 +62,7 @@ class MclBlockValidationTest {
 
 	@Test
 	def void testWrongParentBlock(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlObj {
 			VARIABILITY_LEVELS{
 				DEQ{}
 			}
@@ -78,7 +78,7 @@ class MclBlockValidationTest {
 
 	@Test
 	def void testSubBlockOk(){
-		val mcl = '''foo = mdlobj {
+		val mcl = '''foo = mdlObj {
 			IDV{  T }
 			VARIABILITY_LEVELS{
 			}

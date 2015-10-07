@@ -10,6 +10,12 @@ import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.MclObject
+import java.util.Collections
+import eu.ddmore.mdl.mdl.SymbolDefinition
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.Expression
 
 class DomainObjectModelUtils {
 	
@@ -24,6 +30,10 @@ class DomainObjectModelUtils {
 	static def getParentOfBlockStatement(BlockStatement it){
 		if(eContainer instanceof BlockBody)	eContainer.eContainer
 		else eContainer
+	}
+	
+	static def getOwningBlock(SymbolDefinition it){
+		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	}
 	
 	static def getParentStatement(AttributeList it){
@@ -63,6 +73,34 @@ class DomainObjectModelUtils {
 				}
 			}
 			default: idx		
+		}
+	}
+	
+	static def getBlocksByName(MclObject mdlObj, String blkName){
+		mdlObj.blocks.filter[identifier == blkName]
+	}
+
+	static def getStatementsFromBlock(BlockStatement it){
+		val b = body
+		switch(b){
+			BlockStatementBody:
+				b.statements
+			default:
+				Collections::emptyList
+		}
+			
+	}
+
+	static def getVectorElementAsSymbolReference(Expression expr){
+		switch(expr){
+			VectorElement:{
+				val e = expr.element
+				switch(e){
+					SymbolReference: e as SymbolReference
+					default: null
+				}
+			}
+			default: null
 		}
 	}
 

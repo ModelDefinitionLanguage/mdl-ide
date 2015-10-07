@@ -25,7 +25,7 @@ class MclScopeProviderTest {
 	@Inject extension IScopeProvider
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_SEXAGE_mdl2 = mdlobj {
+warfarin_PK_SEXAGE_mdl2 = mdlObj {
 	IDV{ T }
 			
 	COVARIATES{
@@ -48,7 +48,7 @@ warfarin_PK_SEXAGE_mdl2 = mdlobj {
 	}
 } # end of model object
 
-warfarin_PK_SEXAGE_mdl = mdlobj {
+warfarin_PK_SEXAGE_mdl = mdlObj {
 	IDV{ T }
 			
 	COVARIATES{

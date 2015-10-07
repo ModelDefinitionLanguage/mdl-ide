@@ -9,27 +9,43 @@ class BlockDefinitionProvider {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"
 	public static val OBS_BLK_NAME = "OBSERVATION"
 	public static val DIV_BLK_NAME = "DATA_INPUT_VARIABLES"
+	public static val MOG_OBJ_NAME = "OBJECTS"
+	public static val VAR_LVL_BLK_NAME = "VARIABILITY_LEVELS"
+	public static val IDV_BLK_NAME = "IDV"
+	public static val MDL_PRED_BLK_NAME = "MODEL_PREDICTION"
+	public static val MDL_DEQ_BLK = "DEQ" 
+	public static val MDL_CMT_BLK = "COMPARTMENT"
+	public static val MDL_STRUCT_PARAMS = "STRUCTURAL_PARAMETERS"
+	public static val MDL_VAR_PARAMS = "VARIABILITY_PARAMETERS"
+	public static val MDL_INDIV_PARAMS = "INDIVIDUAL_VARIABLES"
+	public static val MDL_GRP_PARAMS = "GROUP_VARIABLES"
+	public static val MDL_RND_VARS = "RANDOM_VARIABLE_DEFINITION"
+	public static val PARAM_STRUCT_BLK = "STRUCTURAL"
+	public static val PARAM_VARIABILITY_BLK = "VARIABILITY"
+	public static val DATA_SRC_BLK = "SOURCE"
+	
+	
 	
 	
 	val static Map<String, Map<String, Boolean> > BlkData = #{
 		MdlValidator::MDLOBJ -> #{
-			COVARIATE_BLK_NAME -> false, "VARIABILITY_LEVELS" -> true, "STRUCTURAL_PARAMETERS" -> false,
-			"VARIABILITY_PARAMETERS" -> false, "RANDOM_VARIABLE_DEFINITION" -> false,
-			"INDIVIDUAL_VARIABLES" -> false, "MODEL_PREDICTION" -> false,
-			OBS_BLK_NAME -> false, "GROUP_VARIABLES" -> false, "IDV" -> false
+			COVARIATE_BLK_NAME -> false, VAR_LVL_BLK_NAME -> true, MDL_STRUCT_PARAMS -> false,
+			MDL_VAR_PARAMS -> false, MDL_RND_VARS -> false,
+			MDL_INDIV_PARAMS -> false, MDL_PRED_BLK_NAME -> false,
+			OBS_BLK_NAME -> false, MDL_GRP_PARAMS -> false, IDV_BLK_NAME -> false
 		},
 		MdlValidator::DATAOBJ -> #{
 			DIV_BLK_NAME -> true, "DECLARED_VARIABLES" -> false, "DATA_DERIVED_VARIABLES" -> false,
-			"SOURCE" -> true
+			DATA_SRC_BLK -> true
 		},
 		MdlValidator::PARAMOBJ -> #{
-			"VARIABILITY" -> false, "DECLARED_VARIABLES" -> false, "STRUCTURAL" -> false
+			PARAM_VARIABILITY_BLK -> false, "DECLARED_VARIABLES" -> false, PARAM_STRUCT_BLK -> false
 		},
 		MdlValidator::TASKOBJ -> #{
 			"ESTIMATE" -> false, "SIMULATE" -> false, "OPTIMISE" -> false
 		},
 		MdlValidator::MOGOBJ -> #{
-			"OBJECTS" -> true
+			MOG_OBJ_NAME -> true
 		},
 		MdlValidator::DESIGNOBJ -> #{
 			"DECLARED_VARIABLES" -> false, "ADMINISTRATION" -> true, "STUDY_DESIGN" -> true, "SAMPLING" -> false, "DESIGN_SPACES" -> false
@@ -37,7 +53,7 @@ class BlockDefinitionProvider {
 	}
 
 	val static SubBlkData = #{
-		"DEQ" -> "MODEL_PREDICTION", "COMPARTMENT" -> "MODEL_PREDICTION"
+		MDL_DEQ_BLK -> MDL_PRED_BLK_NAME, MDL_CMT_BLK -> MDL_PRED_BLK_NAME
 	}
 	
 	new(){

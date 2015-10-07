@@ -21,7 +21,7 @@ class MclIndexDataTest {
 	@Inject ResourceDescriptionsProvider rdp
 	
 	val static CODE_SNIPPET = '''
-obj1 = dataobj{
+obj1 = dataObj{
 	DECLARED_VARIABLES{
 			Y
 			GUT

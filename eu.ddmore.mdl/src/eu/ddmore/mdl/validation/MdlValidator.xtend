@@ -42,6 +42,7 @@ import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.utils.MclUtils
 
 //import org.eclipse.xtext.validation.Check
 
@@ -51,18 +52,19 @@ import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
 class MdlValidator extends AbstractMdlValidator {
-	public val static MDLOBJ = 'mdlobj'
-	public val static DATAOBJ = 'dataobj'
-	public val static TASKOBJ = 'taskobj'
-	public val static PARAMOBJ = 'parobj'
-	public val static MOGOBJ = 'mogobj'
-	public val static DESIGNOBJ = 'desobj'
+	public val static MDLOBJ = 'mdlObj'
+	public val static DATAOBJ = 'dataObj'
+	public val static TASKOBJ = 'taskObj'
+	public val static PARAMOBJ = 'parObj'
+	public val static MOGOBJ = 'mogObj'
+	public val static DESIGNOBJ = 'desObj'
 
 	extension BlockArgumentDefinitionProvider movh = new BlockArgumentDefinitionProvider
 	extension BlockDefinitionProvider blokHelper = new BlockDefinitionProvider
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
 	extension BuiltinFunctionProvider funcHelper = new BuiltinFunctionProvider
 	extension MclTypeProvider typeProvider = new MclTypeProvider
+	extension MclUtils mclUtils = new MclUtils
 
 	public static val UNRECOGNISED_OBJECT_TYPE = "eu.ddmore.mdl.validation.UnrecognisedObjectType"
 
@@ -128,7 +130,7 @@ class MdlValidator extends AbstractMdlValidator {
 	@Check
 	def validateMdlObjectHasCorrectBlocks(MclObject it){
 		// check if mandatory blocks missing
-		unusedMandatoryBlocks.forEach[blk, mand| error("mandatory block '" + blk + "' is missing in mdlobj '" + name + "'",
+		unusedMandatoryBlocks.forEach[blk, mand| error("mandatory block '" + blk + "' is missing in mdlObj '" + name + "'",
 					MdlPackage.eINSTANCE.mclObject_Blocks, MANDATORY_BLOCK_MISSING, blk) ]
 	}
 
@@ -285,8 +287,8 @@ class MdlValidator extends AbstractMdlValidator {
 		
 	@Check
 	def validateCompatibleTypes(WhenClause e){
-		checkExpectedBoolean(e.cond, typeError(MdlPackage::eINSTANCE.whenClause_Cond))
-		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.whenClause_Value))
+		checkExpectedBoolean(e.cond, typeError(MdlPackage::eINSTANCE.ifExprPart_Cond))
+		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.ifExprPart_Value))
 	}
 		
 	@Check
@@ -329,20 +331,20 @@ class MdlValidator extends AbstractMdlValidator {
 		// only check if there is an RHS to check 
 		if(e.expression != null)
 			if(e.isVector)
-				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 			else
-				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 	}
 		
 	@Check
 	def validateCompatibleTypes(RandomVariableDefinition e){
-		checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.equationDefinition_Expression))
+		checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 	}
 		
 	@Check
 	def validateCompatibleTypes(TransformedDefinition e){
 		checkExpectedRealTransform(e.transform, typeError(MdlPackage::eINSTANCE.transformedDefinition_Transform))
-		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.transformedDefinition_Expression))
+		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 	}
 		
 	@Check
@@ -413,9 +415,28 @@ class MdlValidator extends AbstractMdlValidator {
 		}
 	}
 	
-	
-	def validateMog(MogValidator mogBuilder){
-		
+	@Check
+	def validateMog(MclObject mogObj){
+		if(mogObj.isMogObject){
+			val mogValidator = new MogValidator
+			mogValidator.buildMog(mogObj)
+			// assume has a data obj
+			mogValidator.validateCovariates[
+				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+			]
+			mogValidator.validateObservations[
+				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+			]
+			mogValidator.validateVariabilityLevels[
+				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+			]
+			mogValidator.validateIndividualVariable[
+				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+			]
+			mogValidator.validateDosing[
+				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+			]
+		}
 	}
 	
 }

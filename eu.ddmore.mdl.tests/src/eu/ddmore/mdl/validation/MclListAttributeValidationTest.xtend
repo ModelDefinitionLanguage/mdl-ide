@@ -21,7 +21,7 @@ class MclListAttributeValidationTest {
 
 	@Test
 	def void testValidAttributes(){
-		val mcl = '''bar = dataobj {
+		val mcl = '''bar = dataObj {
 			DATA_INPUT_VARIABLES{
 				ID : { use is id }
 			}
@@ -34,7 +34,7 @@ class MclListAttributeValidationTest {
 
 	@Test
 	def void testMissingMandatoryAttribute(){
-		val mcl = '''bar = dataobj {
+		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ Y }
 			
 			DATA_INPUT_VARIABLES{
@@ -52,7 +52,7 @@ class MclListAttributeValidationTest {
 
 	@Ignore  // language currently doesn't have any cases that use this.
 	def void testMissingAttributeWithDep(){
-		val mcl = '''bar = dataobj {
+		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ Y }
 			
 			DATA_INPUT_VARIABLES{
@@ -71,7 +71,7 @@ class MclListAttributeValidationTest {
 
 	@Ignore // @TODO: Write a test for dep attributes.
 	def void testMissingDependentAttribute(){
-		val mcl = '''bar = dataobj {
+		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ Y }
 			
 			DATA_INPUT_VARIABLES{
@@ -89,7 +89,7 @@ class MclListAttributeValidationTest {
 
 	@Test
 	def void testDataDerivedVariablesAttributes(){
-		val mcl = '''bar = dataobj {
+		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ D }
 			
 			DATA_INPUT_VARIABLES{
@@ -108,7 +108,7 @@ class MclListAttributeValidationTest {
 
 	@Test
 	def void testAnonymousCompartmentAttributesOK(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			IDV{ T }
 			
 			VARIABILITY_LEVELS{
@@ -138,7 +138,7 @@ class MclListAttributeValidationTest {
 
 	@Test
 	def void testAnonymousCompartmentAttributesNoKey(){
-		val mcl = '''bar = mdlobj {
+		val mcl = '''bar = mdlObj {
 			IDV{ T }
 			
 			VARIABILITY_LEVELS{
@@ -172,7 +172,7 @@ class MclListAttributeValidationTest {
 
 	@Test
 	def void testUnrecognizedAttribute(){
-		val mcl = '''bar = mdlobj(idv T) {
+		val mcl = '''bar = mdlObj(idv T) {
 			VARIABILITY_LEVELS{
 				ID : { type is idv, level=1 }
 			}
@@ -204,7 +204,7 @@ class MclListAttributeValidationTest {
 	@Test
 	def void testUnrecognizedAttribute2(){
 		val mcl = '''
-		foo = dataobj {
+		foo = dataObj {
 			DATA_INPUT_VARIABLES{
 			}
 
@@ -223,7 +223,7 @@ class MclListAttributeValidationTest {
 	@Test
 	def void testInValidMissingWithCats(){
 		val mcl = '''
-		foo = mdlobj{
+		foo = mdlObj{
 			VARIABILITY_LEVELS{
 			}
 
@@ -245,7 +245,7 @@ class MclListAttributeValidationTest {
 	@Test
 	def void testInvalidAttributeWithUnexpectedCatDefn(){
 		val mcl = '''
-		foo = dataobj {
+		foo = dataObj {
 			DATA_INPUT_VARIABLES{
 			}
 
@@ -264,7 +264,7 @@ class MclListAttributeValidationTest {
 	@Test
 	def void testValidSubListDefinition(){
 		val mcl = '''
-foo = mdlobj {
+foo = mdlObj {
    COVARIATES{
    	  WT
    }# end COVARIATES
@@ -313,7 +313,7 @@ foo = mdlobj {
 	@Test
 	def void testInvalidSubListDefinition(){
 		val mcl = '''
-foo = mdlobj {
+foo = mdlObj {
    COVARIATES{
    	  WT
    }# end COVARIATES

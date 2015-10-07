@@ -37,29 +37,39 @@ ForwardDeclaration:
 	{ForwardDeclaration}declType=ID name=ID
 ;
 
+//Statement:
+//	EquationDefinition|TransformedDefinition|ListDefinition|
+//	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
+//	EnumerationDefinition //|DerivativeDefinition
+//;
+
 Statement:
-	EquationDefinition|TransformedDefinition|ListDefinition|
+	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-	EnumerationDefinition //|DerivativeDefinition
+	EnumerationDefinition
 ;
 
 
 SymbolDefinition:
 	EquationDefinition | ListDefinition| ForwardDeclaration | RandomVariableDefinition | TransformedDefinition|
-	  EnumerationDefinition //|DerivativeDefinition
+	  EnumerationDefinition
 ;
 
 
-EquationDefinition:
-	name = ID (vector?='[' ']')? (ASSIGN expression = Expression)? ';'?
+EquationTypeDefinition:
+	EquationDefinition|TransformedDefinition
+;
+
+EquationDefinition returns EquationTypeDefinition:
+	{EquationDefinition} name = ID (vector?='[' ']')? (ASSIGN expression = Expression)? ';'?
 ;
 
 EnumerationDefinition:
 	name = ID  catDefn=CategoricalDefinitionExpr ';'?
 ;
 
-TransformedDefinition:
-	transform = ID '(' name=ID (',' idv=[SymbolDefinition|ID] )? ')' ASSIGN expression=Expression ';'?
+TransformedDefinition returns EquationTypeDefinition:
+	{TransformedDefinition} transform = ID '(' name=ID ')' ASSIGN expression=Expression ';'?
 ;
 
 RandomVariableDefinition:
@@ -215,12 +225,16 @@ WhenExpression returns Expression:
 		(=>ELSE other=Expression)?
 	;
 
-WhenClause:
-	IF '(' cond=Expression ')' => THEN value=Expression
+IfExprPart:
+	WhenClause | ElifClause
 ;
 
-ElifClause:
-	ELSEIF '(' cond=Expression ')' => THEN value=Expression
+WhenClause returns IfExprPart:
+	{WhenClause} IF '(' cond=Expression ')' => THEN value=Expression
+;
+
+ElifClause returns IfExprPart:
+	{ElifClause} ELSEIF '(' cond=Expression ')' => THEN value=Expression
 ;
 
 Literal returns Expression:
@@ -276,12 +290,20 @@ StringLiteral returns Expression:
 	{StringLiteral} value=STRING;
 
 
+//VectorLiteral returns Expression:
+//	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
+//;	
+//
+//VectorElement returns Expression:
+//	{VectorElement} element+=Expression
+//;
+
 VectorLiteral returns Expression:
 	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
 ;	
 
 VectorElement returns Expression:
-	{VectorElement} element+=Expression
+	{VectorElement} element=Expression
 ;
 
 QualifiedName:
@@ -324,13 +346,13 @@ terminal TEXT_BLOCK:
 	'<<' -> '>>';
 
 terminal INTEGER returns ecore::EInt:
-	SIGN?('0' | '1'..'9' '0'..'9'*);
+	('0' | '1'..'9' '0'..'9'*);
 	
 terminal FLOAT returns ecore::EDouble: 
-	SIGN?'0'..'9' + '.' '0'..'9'* EXPONENT?
-    | SIGN?'.' '0'..'9'+ EXPONENT?
-    | SIGN?'0'..'9'+ EXPONENT
-    | SIGN?('0'..'9')
+	'0'..'9' + '.' '0'..'9'* EXPONENT?
+    | '.' '0'..'9'+ EXPONENT?
+    | '0'..'9'+ EXPONENT
+    | ('0'..'9')
     ;
 
 terminal fragment SIGN:

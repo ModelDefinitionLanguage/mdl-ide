@@ -16,7 +16,7 @@ class MclParserModelObj9Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-Poisson_DIST_mdl = mdlobj{
+Poisson_DIST_mdl = mdlObj{
    IDV{ CP }
 
    VARIABILITY_LEVELS{
@@ -43,7 +43,7 @@ Poisson_DIST_mdl = mdlobj{
    }# end INDIVIDUAL_VARIABLES
 
    OBSERVATION{
-	  Y : { type is count, distn = Poisson(lambda = logLAMBDA), link is ln }
+	  Y : { type is count, distn = Poisson(lambda = logLAMBDA) }
    }# end ESTIMATION
 
 } # end of model object

@@ -16,7 +16,7 @@ class MclParserModelObj3Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_PK_2Compartments_mdl = mdlobj {
+warfarin_PK_2Compartments_mdl = mdlObj {
    COVARIATES{
       WT
       logtWT = ln(WT/70)

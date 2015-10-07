@@ -322,6 +322,14 @@ public class MclTypeProvider {
 			val otherType = other.underlyingType
 			switch(otherType){
 				ListTypeInfo:  this.name == otherType.name
+				PrimitiveTypeInfo:{
+					// If other is primitive type then check compatibility
+					val compType = compatibleTypes?.get(this.theType)
+					if(compType != null)
+						compType.contains(otherType.theType)
+					else false
+				}
+					
 				default:
 					false 
 			}
@@ -439,6 +447,7 @@ public class MclTypeProvider {
 		ep.integerLiteral -> INT_TYPE,
 		ep.stringLiteral -> STRING_TYPE,
 		ep.booleanLiteral -> BOOL_TYPE,
+		ep.constantLiteral -> REAL_TYPE,
 		ep.whenExpression -> REAL_TYPE,
 		ep.whenClause -> REAL_TYPE,
 		ep.relationalExpression -> BOOL_TYPE,
@@ -470,7 +479,7 @@ public class MclTypeProvider {
 		// and a later type is a Real the the type for the vector as a whole is a Real.
 		var TypeInfo refType = null
 		var allRefs = true
-		for(Expression e : vl.expressions){
+		for(e : vl.expressions){
 			val origType = e.typeFor
 			// check to see if amy non refs present. If so resulting array type will be non-ref
 			if(!origType.isReference) allRefs = false  
@@ -506,7 +515,7 @@ public class MclTypeProvider {
 			BuiltinFunctionCall:
 				e.functionType
 			VectorElement:
-				e.element.head.typeFor
+				e.element.typeFor
 			VectorLiteral:
 				if(e.expressions.isEmpty) MclTypeProvider.REAL_VECTOR_TYPE
 				else e.typeForArray
@@ -527,11 +536,18 @@ public class MclTypeProvider {
 		}
 	}
 
-	def dispatch TypeInfo typeFor(UnaryExpression exp){
-		switch(exp.feature){
+	def dispatch TypeInfo typeFor(UnaryExpression it){
+		switch(feature){
 			case('!'): BOOL_TYPE
 			case('+'),
-			case('-'): REAL_TYPE
+			case('-'):{
+				val operandType = operand?.typeFor.underlyingType
+				if(operandType == INT_TYPE)
+					INT_TYPE
+				else if(operandType == REAL_TYPE)
+					REAL_TYPE
+				else UNDEFINED_TYPE
+			}
 			default:
 				throw new RuntimeException("Unrecognised unary operator.")
 		}
