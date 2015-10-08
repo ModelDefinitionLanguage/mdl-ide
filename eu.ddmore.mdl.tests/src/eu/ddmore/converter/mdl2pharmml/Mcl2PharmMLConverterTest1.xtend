@@ -49,7 +49,7 @@ class Mcl2PharmMLConverterTest1 {
 		validateConversion("UseCase2")
 	}
 
-	@Ignore
+	@Test
 	def void testUseCase2_5(){
 		validateConversion("UseCase2_5")
 	}

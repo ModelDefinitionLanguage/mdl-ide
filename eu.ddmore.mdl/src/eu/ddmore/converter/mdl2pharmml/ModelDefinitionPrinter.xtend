@@ -2,8 +2,11 @@ package eu.ddmore.converter.mdl2pharmml
 
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
+import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
+import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
@@ -18,8 +21,11 @@ import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
+import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
@@ -36,20 +42,13 @@ import java.util.HashMap
 import java.util.List
 import java.util.Map
 import java.util.TreeMap
+import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.mdl.CategoryValueReference
-import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.Statement
-import eu.ddmore.mdl.mdl.impl.TransformedDefinitionImpl
-import eu.ddmore.mdl.mdl.TransformedDefinition
 
 class ModelDefinitionPrinter {
 //	extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();

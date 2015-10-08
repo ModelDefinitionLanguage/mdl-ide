@@ -195,7 +195,38 @@ class ModellingStepsPrinter {
 					res = res + column.print_ds_DvMapping(dObj, mObj)
 			}
 		}
-		res = res + dObj.print_ds_DataSet(mObj);
+		for (column : dObj.dataDerivedColumnDefinitions) {
+			val use = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
+			switch(use){
+				case(ListDefinitionProvider::DOSE_TIME_USE_VALUE):{
+					res += column.writeDoseTimeMapping(dObj, mObj)
+				}
+			}
+		}
+		res += dObj.print_ds_DataSet(mObj);
+	}
+
+
+	def CharSequence writeDoseTimeMapping(ListDefinition column, MclObject dObj, MclObject mObj){
+		var idvCol = column.list.getAttributeExpression(ListDefinitionProvider::IDV_COL_ATT)
+		var amtCol = column.list.getAttributeExpression(ListDefinitionProvider::AMT_COL_ATT)
+		var mdlDtSymb = mObj.findMdlSymbolDefn(column.name)
+		'''
+		<ColumnMapping>
+			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«idvCol.convertToString»"/>
+			<Piecewise xmlns="«xmlns_ds»">
+				<math:Piece>
+					«mdlDtSymb.symbolReference»
+					<math:Condition>
+						<math:LogicBinop op="gt">
+							<ColumnRef columnIdRef="«amtCol.convertToString»"/>
+							<ct:Int>0</ct:Int>
+						</math:LogicBinop>
+					</math:Condition>
+				</math:Piece>
+			</Piecewise>
+		</ColumnMapping>
+		'''
 	}
 
 	def print_ds_AmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj)'''
@@ -610,6 +641,7 @@ class ModellingStepsPrinter {
 			case ListDefinitionProvider::CATCOV_USE_VALUE:
 				if(isRegressor) "reg" else "covariate"
 			case ListDefinitionProvider::CMT_USE_VALUE : if(isDosingToCompartmentMacro) 'adm' else 'cmt'
+			case ListDefinitionProvider::IGNORE_USE_VALUE: 'undefined'
 			default: type
 		}
 	}

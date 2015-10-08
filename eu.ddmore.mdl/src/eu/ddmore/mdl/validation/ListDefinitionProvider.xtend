@@ -33,6 +33,7 @@ class ListDefinitionProvider {
 	public static val VARIABLE_ATT = 'variable'
 	public static val COV_USE_VALUE = 'covariate'
 	public static val AMT_USE_VALUE = 'amt'
+	public static val IGNORE_USE_VALUE = 'ignore'
 	public static val OBS_USE_VALUE = 'dv'
 	public static val DVID_USE_VALUE = 'dvid'
 	public static val CATCOV_USE_VALUE = 'catCov'
@@ -40,9 +41,12 @@ class ListDefinitionProvider {
 	public static val ID_USE_VALUE = 'id'
 	public static val VARLVL_USE_VALUE = 'varLevel'
 	public static val CMT_USE_VALUE = 'cmt'
+	public static val DOSE_TIME_USE_VALUE = 'doseTime'
+	public static val IDV_COL_ATT = 'idvColumn'
+	public static val AMT_COL_ATT = 'amtColumn'
 	
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', 'ignore', VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
 	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
@@ -182,8 +186,8 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefInfo ('doseTime', new ListTypeInfo("DoseTime", PrimitiveType.List),  #[
 						 new AttributeDefn(USE_ATT, null, true, DDV_USE_TYPE),
-						 new AttributeDefn('idvColumn', null, true, IDV_COL_TYPE.makeReference),
-						 new AttributeDefn('amtColumn', null, true, AMT_COL_TYPE.makeReference) 
+						 new AttributeDefn(IDV_COL_ATT, null, true, IDV_COL_TYPE.makeReference),
+						 new AttributeDefn(AMT_COL_ATT, null, true, AMT_COL_TYPE.makeReference) 
 						 ] 
 					)
 				)

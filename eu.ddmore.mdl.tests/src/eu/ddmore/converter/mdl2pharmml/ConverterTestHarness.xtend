@@ -51,6 +51,11 @@ class ConverterTestHarness {
 			val res = libPharmML.createDomFromResource(inputStream);
 			val validator = libPharmML.getValidator();
 			val rpt = validator.createValidationReport(res);
+			val iter = rpt.errorIterator
+			while(iter.hasNext){
+				val error = iter.next
+				System.err.println(error.errorMsg)
+			}
 			assertTrue("PharmML is valid: " + destFile, rpt.isValid())
 		}
 		finally{

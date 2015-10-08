@@ -9,6 +9,7 @@ class BlockDefinitionProvider {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"
 	public static val OBS_BLK_NAME = "OBSERVATION"
 	public static val DIV_BLK_NAME = "DATA_INPUT_VARIABLES"
+	public static val DATA_DERIV_BLK_NAME = "DATA_DERIVED_VARIABLES"
 	public static val MOG_OBJ_NAME = "OBJECTS"
 	public static val VAR_LVL_BLK_NAME = "VARIABILITY_LEVELS"
 	public static val IDV_BLK_NAME = "IDV"

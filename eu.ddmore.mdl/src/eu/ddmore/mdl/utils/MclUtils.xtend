@@ -366,6 +366,25 @@ class MclUtils {
 		retVal
 	}
 
+	def getDataDerivedColumnDefinitions(MclObject it){
+		val retVal = new ArrayList<ListDefinition>
+		for(divBlk : blocks.filter[identifier == BlockDefinitionProvider::DATA_DERIV_BLK_NAME]){
+			if(divBlk.body instanceof BlockStatementBody){
+				for(divList : (divBlk.body as BlockStatementBody).statements){
+					switch(divList){
+						ListDefinition:{
+							retVal.add(divList)
+						}
+					}
+				}
+				
+			}
+		}
+
+		retVal
+	}
+
+
 	def findMdlSymbolDefn(MclObject it, String symbolName){
 		for(blk : blocks){
 			val retVal = blk.nonBlockStatements.findFirst[s|
