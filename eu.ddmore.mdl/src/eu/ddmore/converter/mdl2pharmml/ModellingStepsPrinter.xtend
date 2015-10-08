@@ -32,7 +32,7 @@ class ModellingStepsPrinter {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension SublistDefinitionProvider sldp = new SublistDefinitionProvider
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
-	extension PKMacrosPrinter bmp = new PKMacrosPrinter
+//	extension PKMacrosPrinter bmp = new PKMacrosPrinter
 
 	////////////////////////////////////////////////
 	// III Modelling Steps
@@ -301,13 +301,22 @@ class ModellingStepsPrinter {
 		  default: ''''''
 		}
 	}
+	
+	def hasNonCompartmentDosing(MclObject mdlObj, MappingExpression me){
+		me.attList.exists[
+			val mdlSymb = mdlObj.findMdlSymbolDefn(mappedSymbol.ref.name)
+			mdlSymb instanceof ListDefinition && (mdlSymb as ListDefinition).isAdministrationMacro
+		]
+		false
+	}
+	
 	protected def print_ds_StandardAmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj) {
 		val define = amtColumn.list.getAttributeExpression('define');
 		if (define == null) {
 			val varDefn = amtColumn.list.getAttributeExpression('variable');
 			writeSingleDoseMapping(mObj, amtColumn, varDefn)
 		}
-		else { // Vector of pairs
+		else if(mObj.hasNonCompartmentDosing(define as MappingExpression)){
 			writeMultiDoseMapping(mObj, amtColumn, define)
 		}
 	}
@@ -322,7 +331,7 @@ class ModellingStepsPrinter {
 					toolMappingDefn += '''
 						«FOR me : define.attList»
 							«IF mObj.isCompartmentInput(me.mappedSymbol.ref)»
-								«me.printTargetMapping»
+								«mObj.printTargetMapping(me)»
 							«ENDIF»	
 						«ENDFOR»
 					'''
@@ -354,10 +363,13 @@ class ModellingStepsPrinter {
 		return type == 'depot' || type == 'input' || type == 'direct'
 	}
 
-	def printTargetMapping(MappingPair expression)'''
-«««		<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«expression.mappedSymbol.ref.getCompartmentNum»"/>
-		<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«expression.leftOperand.convertToString»"/>
-	'''
+	def printTargetMapping(MclObject it, MappingPair expression){
+		val mdlDefn = findMdlSymbolDefn(expression.mappedSymbol.ref.name)
+		'''
+			<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«(mdlDefn as ListDefinition).list.getAttributeExpression('modelCmt').convertToString»"/>
+«««		<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«expression.leftOperand.convertToString»"/>
+		'''
+	}
 	
 	protected def print_ds_CategoricalMapping(ListDefinition column) {
 		var res = "";
@@ -581,7 +593,7 @@ class ModellingStepsPrinter {
 			}
 			
 		]
-	} 
+	}
 
 	protected def getValueType(ListDefinition dataColumn) {
 		val useValue = dataColumn.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);

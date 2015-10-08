@@ -14,11 +14,9 @@ import java.util.List
 import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
-import eu.ddmore.mdl.mdl.SymbolDefinition
 
 class PKMacrosPrinter{
-	private static val MATH_NS = "http://www.pharmml.org/pharmml/0.6/Maths"; 
+//	private static val MATH_NS = "http://www.pharmml.org/pharmml/0.6/Maths"; 
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder
@@ -94,7 +92,7 @@ class PKMacrosPrinter{
 	}
 	
 	
-	val cmpNumMap = new HashMap<String, Integer>
+//	val cmpNumMap = new HashMap<String, Integer>
 //	int cmpNum = 0
 	
 //	def storeCompartment(ListDefinition it){
@@ -102,14 +100,9 @@ class PKMacrosPrinter{
 //		cmpNumMap.put(name, cmpNum)
 //	}
 	
-	def storeCompartment(ListDefinition it){
-		val cmpNum = list.getAttributeExpression('modelCmt').convertToInteger
-		cmpNumMap.put(name, cmpNum)
-	}
-
-	def getCompartmentNum(SymbolDefinition it){
-		cmpNumMap.get(name)
-	}
+//	def getCompartmentNum(SymbolDefinition it){
+//		cmpNumMap.get(name)
+//	}
 	
 	def print_PKMacros(ListDefinition s){
 		//Convert symbolName to 'amount' PharmML attribute
