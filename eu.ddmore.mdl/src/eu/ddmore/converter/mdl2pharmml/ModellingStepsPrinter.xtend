@@ -521,13 +521,16 @@ class ModellingStepsPrinter {
 	def print_ds_DataSet(MclObject dObj, MclObject mObj) {
 		var res = "";
 		var k = 1;
+		val dosingToCompartmentMacro = dObj.dataColumnDefinitions.exists[
+				list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT) == ListDefinitionProvider::AMT_USE_VALUE &&
+				isDosingToCompartmentMacro(mObj)
+		]
 		for (column : dObj.dataColumnDefinitions) {
 			val columnType = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
-			var dosingToCompartmentMacro = false;
 			val columnId = column.name;
-			if(columnType == ListDefinitionProvider::AMT_USE_VALUE){
-				dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
-			}
+//			if(columnType == ListDefinitionProvider::AMT_USE_VALUE){
+//				dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
+//			}
 			var convertedColType = switch(columnType){
 				case(ListDefinitionProvider::COV_USE_VALUE),
 				case(ListDefinitionProvider::CATCOV_USE_VALUE):
