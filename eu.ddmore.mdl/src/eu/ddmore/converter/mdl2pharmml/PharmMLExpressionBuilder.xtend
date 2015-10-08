@@ -218,6 +218,7 @@ class PharmMLExpressionBuilder {
 	def getPharmMlFunction(String fName){
 		switch(fName){
 			case 'ln' : 'log'
+			case 'invLogit': 'logistic'
 			default: fName
 		}
 	}

@@ -705,7 +705,8 @@ class ModelDefinitionPrinter {
 			«switch type{
 				case ListDefinitionProvider::COUNT_OBS_VALUE:
 					s.print_mdef_CountObservations
-	//				case DISCRETE_OBS: retVal = s.print_mdef_DiscreteObservations.toString
+				case ListDefinitionProvider::DISCRETE_OBS_VALUE:
+					s.print_mdef_DiscreteObservations.toString
 	//				case CATEGORICAL_OBS: retVal = s.print_mdef_CategoricalObservations.toString
 	//				case TTE_OBS: retVal = s.print_mdef_TimeToEventObservations.toString
 				default: ''''''
@@ -1091,47 +1092,43 @@ class ModelDefinitionPrinter {
 		'''
 	}
 	
-//	private def print_mdef_DiscreteObservations(SymbolDeclaration s) {
-//		var name = s.name
-//		val linkFunction = s.list.arguments.getAttribute(AttributeValidator::attr_link.name);
-//		val distn = s.list.arguments.getAttributeRandomList(AttributeValidator::attr_distrib.name);
-//		val paramVar = getFunctionArgument(distn, "probability");
-//		var String tmpParamVar = null;
-//		if(isReference(paramVar)){
-//			tmpParamVar = paramVar.toStr
-//		}
-//		val category = "cat1"
-//		'''
-//			<Discrete>
-//				<CategoricalData ordered="no">
-//				«IF tmpParamVar != null»
-//						<!-- Note that this parameter is local to this block, but uses the same name
-//							as the lambda argument. The  --> 
-//						<SimpleParameter symbId="«tmpParamVar»">
-//						<ct:Assign>
-//							<math:Equation>
-//				«IF linkFunction.length > 0»
-//					«getInverseFunction(linkFunction, paramVar.toStr)»
-//				«ELSE»
-//					«paramVar.toStr.print_ct_SymbolRef»
-//				«ENDIF»
-//				</math:Equation>
-//				</ct:Assign>
-//				</SimpleParameter>
-//				«ENDIF»
-//					<ListOfCategories>
-//						<Category symbId="«category»"/>
-//					</ListOfCategories>
-//					<CategoryVariable symbId="«name»"/>
-//				<PMF linkFunction="identity">
-//					«distn.printDiscreteDistribution(category)»
-//				</PMF>
-//				</CategoricalData>
-//			</Discrete>
-//		'''
-//	}
-//	
-//	
+	private def print_mdef_DiscreteObservations(ListDefinition s) {
+		var name = s.name
+		val linkFunction = s.list.getAttributeExpression('link');
+		val distn = s.list.getAttributeExpression('distn') as BuiltinFunctionCall
+		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("probability")
+		val category = "cat1"
+		'''
+			<Discrete>
+				<CategoricalData ordered="no">
+					«IF paramVar != null»
+						<!-- Note that this parameter is local to this block, but uses the same name
+							as the lambda argument.  --> 
+						<SimpleParameter symbId="«paramVar.convertToString»">
+							<ct:Assign>
+								<math:Equation>
+									«IF linkFunction != null»
+										«getInverseFunction(linkFunction, paramVar)»
+									«ELSE»
+										«paramVar.pharmMLExpr»
+									«ENDIF»
+								</math:Equation>
+							</ct:Assign>
+						</SimpleParameter>
+					«ENDIF»
+					<ListOfCategories>
+						<Category symbId="«category»"/>
+					</ListOfCategories>
+					<CategoryVariable symbId="«name»"/>
+					<PMF linkFunction="identity">
+						«printDiscreteDistribution(distn, category)»
+					</PMF>
+				</CategoricalData>
+			</Discrete>
+		'''
+	}
+	
+	
 //	private def print_mdef_CategoricalObservations(SymbolDeclaration s) {
 //		var name = s.name
 //		val categories = s.list.arguments.getAttributeExpression(AttributeValidator::attr_categories.name);
