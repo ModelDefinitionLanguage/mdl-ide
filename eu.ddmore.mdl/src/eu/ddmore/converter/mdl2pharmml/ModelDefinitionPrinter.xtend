@@ -698,8 +698,20 @@ class ModelDefinitionPrinter {
 		'''
 	}
 	
-	def writeDiscreteObservations(ListDefinition definition, int idx) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	def writeDiscreteObservations(ListDefinition s, int idx) {
+		val type = s.list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT)
+		'''
+		<ObservationModel blkId="om«idx»">
+			«switch type{
+				case ListDefinitionProvider::COUNT_OBS_VALUE:
+					s.print_mdef_CountObservations
+	//				case DISCRETE_OBS: retVal = s.print_mdef_DiscreteObservations.toString
+	//				case CATEGORICAL_OBS: retVal = s.print_mdef_CategoricalObservations.toString
+	//				case TTE_OBS: retVal = s.print_mdef_TimeToEventObservations.toString
+				default: ''''''
+			}» 
+		</ObservationModel>
+		'''
 	}
 	
 	def isStandardErrorDefinition(Expression expr){
@@ -722,6 +734,10 @@ class ModelDefinitionPrinter {
 							«(definition.expression as BuiltinFunctionCall).getArgumentExpression('eps').pharmMLExpr»
 						</ResidualError>
 					</Standard>
+				«ELSEIF !(definition.expression instanceof BuiltinFunctionCall)»
+					<General symbId="«definition.name»">
+						«definition.expression.expressionAsAssignment»
+					</General>
 				«ENDIF»
 			</ContinuousData>
 		</ObservationModel>
@@ -1005,20 +1021,20 @@ class ModelDefinitionPrinter {
 //			</ContinuousData>
 //		«ENDIF»
 //	'''	
-//	
-//	private def getInverseFunction(String linkFunction, String paramVar){
-//		switch(linkFunction){
-//			case "log": return '''
-//			<math:Uniop op="exp">
-//				«paramVar.print_ct_SymbolRef»
-//			</math:Uniop>
-//			'''
-//			case "identity": return '''
-//				«paramVar.print_ct_SymbolRef»
-//			'''
-//		}
-//	}
-//	
+	
+	private def getInverseFunction(Expression linkFunction, Expression paramVar){
+		switch(linkFunction){
+			BuiltinFunctionCall case linkFunction.func == "log": return '''
+			<math:Uniop op="exp">
+				«paramVar.pharmMLExpr»
+			</math:Uniop>
+			'''
+			BuiltinFunctionCall case linkFunction.func == "identity": return '''
+				«paramVar.pharmMLExpr»
+			'''
+		}
+	}
+	
 //	def getFunctionArgument(RandomList distn, String argName){
 //		if(distn.arguments.namedArguments != null){
 //			for(Argument arg : distn.arguments.namedArguments.arguments){
@@ -1039,42 +1055,42 @@ class ModelDefinitionPrinter {
 //		retVal
 //	}	
 //	
-//	private def print_mdef_CountObservations(SymbolDeclaration s) {
-//		var name = s.name
-//		val linkFunction = s.list.arguments.getAttribute(AttributeValidator::attr_link.name);
-//		val distn = s.list.arguments.getAttributeRandomList(AttributeValidator::attr_distrib.name);
-//		val paramVar = getFunctionArgument(distn, "lambda");
+	private def print_mdef_CountObservations(ListDefinition s) {
+		var name = s.name
+		val linkFunction = s.list.getAttributeExpression('link');
+		val distn = s.list.getAttributeExpression('distn');
+		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("lambda");
 //		var String tmpParamVar = null;
-//		if(isReference(paramVar)){
+//		if(paramVar ){
 //			tmpParamVar = paramVar.toStr
 //		}
-//		'''
-//			<Discrete>
-//				<CountData>
-//				«IF tmpParamVar != null»
-//						<!-- Note that this parameter is local to this block, but uses the same name
-//							as the lambda argument. The  --> 
-//						<SimpleParameter symbId="«tmpParamVar»">
-//						<ct:Assign>
-//							<math:Equation>
-//				«IF linkFunction.length > 0»
-//					«getInverseFunction(linkFunction, paramVar.toStr)»
-//				«ELSE»
-//					«paramVar.toStr.print_ct_SymbolRef»
-//				«ENDIF»
-//				</math:Equation>
-//				</ct:Assign>
-//				</SimpleParameter>
-//				«ENDIF»
-//				<CountVariable symbId="«name»"/>
-//				<PMF linkFunction="identity">
-//					«print_uncert_Distribution(distn)»
-//				</PMF>
-//				</CountData>
-//			</Discrete>
-//		'''
-//	}
-//	
+		'''
+			<Discrete>
+				<CountData>
+				«IF paramVar != null»
+					<!-- Note that this parameter is local to this block, but uses the same name
+						as the lambda argument. --> 
+					<SimpleParameter symbId="«paramVar.convertToString»">
+					<ct:Assign>
+						<math:Equation>
+						«IF linkFunction != null»
+							«getInverseFunction(linkFunction, paramVar)»
+						«ELSE»
+							«paramVar.pharmMLExpr»
+						«ENDIF»
+						</math:Equation>
+					</ct:Assign>
+				</SimpleParameter>
+				«ENDIF»
+				<CountVariable symbId="«name»"/>
+				<PMF linkFunction="identity">
+					«distn.writeUncertMlDistribution»
+				</PMF>
+				</CountData>
+			</Discrete>
+		'''
+	}
+	
 //	private def print_mdef_DiscreteObservations(SymbolDeclaration s) {
 //		var name = s.name
 //		val linkFunction = s.list.arguments.getAttribute(AttributeValidator::attr_link.name);

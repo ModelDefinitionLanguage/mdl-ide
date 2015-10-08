@@ -40,6 +40,11 @@ class DistributionPrinter {
 								'var' -> new UncertMlArgument('variance', 'prVal'),
 								'sd' -> new UncertMlArgument('stddev', 'prVal')
 							}
+		),
+		'Poisson' -> new UncertMlMapping('PoissonDistribution', 'http://www.uncertml.org/distributions/poisson',
+							#['lambda'],
+							#{ 'lambda' -> new UncertMlArgument('rate', 'prVal')
+							}
 		)
 	}
 
