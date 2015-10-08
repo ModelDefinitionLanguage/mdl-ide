@@ -14,6 +14,8 @@ import java.util.List
 import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
+import eu.ddmore.mdl.mdl.SymbolDefinition
 
 class PKMacrosPrinter{
 	private static val MATH_NS = "http://www.pharmml.org/pharmml/0.6/Maths"; 
@@ -78,15 +80,10 @@ class PKMacrosPrinter{
 			switch(s){
 				ListDefinition:{
 					macros += s.print_PKMacros
-//					macros += s.list.print_PKMacros
 				}
 				AnonymousListStatement:
 					macros += s.list.print_PKMacros
 			}
-//			if (s.variable != null)
-//				macros = macros + s.variable.print_PKMacros;
-//			if (s.list != null)
-//				macros = macros + s.list.print_PKMacros;
 		}
 		'''
 		<PKmacros>
@@ -96,33 +93,51 @@ class PKMacrosPrinter{
 
 	}
 	
+	
+	val cmpNumMap = new HashMap<String, Integer>
+//	int cmpNum = 0
+	
+//	def storeCompartment(ListDefinition it){
+//		cmpNum += 1
+//		cmpNumMap.put(name, cmpNum)
+//	}
+	
+	def storeCompartment(ListDefinition it){
+		val cmpNum = list.getAttributeExpression('modelCmt').convertToInteger
+		cmpNumMap.put(name, cmpNum)
+	}
+
+	def getCompartmentNum(SymbolDefinition it){
+		cmpNumMap.get(name)
+	}
+	
 	def print_PKMacros(ListDefinition s){
 		//Convert symbolName to 'amount' PharmML attribute
 		var retVal = ''''''
-			var content = "";
-			var type = s.list.getAttributeEnumValue('type')
-				if (type == 'effect')
-					content = content + '''
-						<Value argument="concentration"> 
-							«s.symbolReference»
-						</Value>
-					'''
-				else if(type == 'compartment' || type == 'distribution')
-					content = content + '''
-						<Value argument="amount"> 
-							«s.symbolReference»
-						</Value>
-					'''
-			var macroType = pk_types.get(type);
-			if (macroType != null){
-				content = content + type.print_PKAttributes(s.list);
-				retVal = macroType.print_PKMacros(content).toString;
-			}
-			if(type == 'transfer'){
-				// because a transfer is also a compartment it means that we need to also
-				// create a new compartment definition for it.
-					retVal = retVal + s.printImplicitCompartment()
-			}
+		var content = '''''';
+		var type = s.list.getAttributeEnumValue('type')
+		if (type == 'effect')
+			content = content + '''
+				<Value argument="concentration"> 
+					«s.symbolReference»
+				</Value>
+			'''
+		else if(type == 'compartment' || type == 'distribution')
+			content = content + '''
+				<Value argument="amount"> 
+					«s.symbolReference»
+				</Value>
+			'''
+		var macroType = pk_types.get(type);
+		if (macroType != null){
+			content += type.print_PKAttributes(s.list);
+			retVal += macroType.print_PKMacros(content);
+		}
+		if(type == 'transfer'){
+			// because a transfer is also a compartment it means that we need to also
+			// create a new compartment definition for it.
+			retVal += s.printImplicitCompartment()
+		}
 		return retVal;
 	}
 	
@@ -131,7 +146,7 @@ class PKMacrosPrinter{
 			<Value argument="amount"> 
 				«decl.symbolReference»
 			</Value>
-			«decl.list.getAttributeExpression('modelCmt').writeValue("cmt")» //.print_Attr_Value(decl.list.getAttributeExpression('modelCmt').convertToString)»
+			«decl.list.getAttributeExpression('modelCmt').writeValue("cmt")»
 		</Compartment>
 	'''
 	
@@ -156,85 +171,163 @@ class PKMacrosPrinter{
 		'''
 
 	
+//	def getAmtId(SymbolReference it, MclObject dObj){
+//		val symbDefn = ref
+//		dObj.getDataMappingForDoseVariable(symbDefn)
+//	}
+
 	//Convert MDL PK macro attributes to PharmML, type here is an MDL macro type
-	protected def print_PKAttributes(String type, AttributeList args){
+	def print_PKAttributes(String type, AttributeList args){
 		var res = "";
 		val attrExpressions = new HashMap<String, CharSequence>();
 		val mObj = EcoreUtil2.getContainerOfType(args, MclObject)
-		//Custom mapping
-		//DEPOT, INPUT
-		if (type.equals('depot') || type.equals('direct')){
-			//type=depot|direct
-			val modelCmt = args.getAttributeExpression('modelCmt')
-//				if (modelCmt.equals("2"))
-			attrExpressions.put("adm", modelCmt.writeAdm)
-			val to = args.getAttributeExpression('to')
-			if (to != null){
-				var toCompartmentArgs = mObj.findCompartment(to as SymbolReference)
-				if (toCompartmentArgs != null){
-					var toCompartment_cmt = toCompartmentArgs.list.getAttributeExpression('modelCmt')
-					attrExpressions.put("cmt", toCompartment_cmt.writeValue("cmt"))
-				}
-			}
-		}
-		if (type.equals('elimination')){
-			val from = args.getAttributeExpression('from');
-			val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
-			if (fromCompartmentArgs != null){
-				val fromCompartmentCmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt')
-				attrExpressions.put("cmt", fromCompartmentCmt.writeValue("cmt"))
-			}
-		}
-		//DISTRIBUTION
-		if (type == 'distribution'){
-			attrExpressions.put("cmt", null); //skip cmt attribute in peripheral macro
-			val modelCmt = args.getAttributeExpression('modelCmt');
-			val from = args.getAttributeExpression('from');
-			var kin = args.getAttributeExpression('kin');
-			val kout = args.getAttributeExpression('kout');
-			if (from != null && (kin != null || kout != null)){
-				val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
-				if (fromCompartmentArgs != null){
-					val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
-					if (kin != null){
-						val attr1 = "k" + fromCompartment_cmt.convertToString + modelCmt.convertToString;
-						attrExpressions.put(attr1, kin.writeValue(attr1));
-					}
-					if (kout != null){
-						val attr2 = "k" + modelCmt.convertToString + fromCompartment_cmt.convertToString;
-						attrExpressions.put(attr2, kout.writeValue(attr2));
+		switch(type){
+			case('depot'),
+			case('direct'):{
+				val modelCmt = args.getAttributeExpression('modelCmt');
+		//				if (modelCmt.equals("2"))
+				attrExpressions.put("adm", modelCmt.writeAdm)
+				val to = args.getAttributeExpression('to')
+				if (to != null){
+					var toCompartmentArgs = mObj.findCompartment(to as SymbolReference)
+					if (toCompartmentArgs != null){
+						var toCompartment_cmt = toCompartmentArgs.list.getAttributeExpression('modelCmt')
+						attrExpressions.put("cmt", toCompartment_cmt.writeValue("cmt"))
 					}
 				}
 			}
-		}
-		//TRANSFER 
-		if (type == 'transfer'){
-			attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
-			val modelCmt = args.getAttributeExpression('modelCmt')
-			if (modelCmt != null){ 
-				attrExpressions.put("to", modelCmt.writeValue("to")) //""to".print_Attr_Value(modelCmt.print_ct_Value));
-			}
-			val from = args.getAttributeExpression('from')
-			if (from != null){
+			case('elimination'):{
+				val from = args.getAttributeExpression('from');
 				val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
 				if (fromCompartmentArgs != null){
-					val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
-					attrExpressions.put("from", fromCompartment_cmt.writeValue("from"))
+					val fromCompartmentCmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt')
+					attrExpressions.put("cmt", fromCompartmentCmt.writeValue("cmt"))
 				}
 			}
-		}
-		//EFFECT
-		if (type == "effect"){
-			attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
-			val from = args.getAttributeExpression('from');
-			if (from != null){
-				val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
-				if (fromCompartmentArgs != null){
-					val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
-					attrExpressions.put("cmt", fromCompartment_cmt.writeValue("cmt"))//"cmt".print_Attr_Value(fromCompartment_cmt.print_ct_Value));
+			case('distribution'):{
+				attrExpressions.put("cmt", null); //skip cmt attribute in peripheral macro
+				val modelCmt = args.getAttributeExpression('modelCmt');
+				val from = args.getAttributeExpression('from');
+				var kin = args.getAttributeExpression('kin');
+				val kout = args.getAttributeExpression('kout');
+				if (from != null && (kin != null || kout != null)){
+					val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
+					if (fromCompartmentArgs != null){
+						val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
+						if (kin != null){
+							val attr1 = "k" + fromCompartment_cmt.convertToString + modelCmt.convertToString;
+							attrExpressions.put(attr1, kin.writeValue(attr1));
+						}
+						if (kout != null){
+							val attr2 = "k" + modelCmt.convertToString + fromCompartment_cmt.convertToString;
+							attrExpressions.put(attr2, kout.writeValue(attr2));
+						}
+					}
 				}
 			}
+			case('transfer'):{
+				attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
+				val modelCmt = args.getAttributeExpression('modelCmt')
+				if (modelCmt != null){ 
+					attrExpressions.put("to", modelCmt.writeValue("to")) //""to".print_Attr_Value(modelCmt.print_ct_Value));
+				}
+				val from = args.getAttributeExpression('from')
+				if (from != null){
+					val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
+					if (fromCompartmentArgs != null){
+						val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
+						attrExpressions.put("from", fromCompartment_cmt.writeValue("from"))
+					}
+				}
+			}
+			case('effect'):{
+				attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
+				val from = args.getAttributeExpression('from');
+				if (from != null){
+					val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
+					if (fromCompartmentArgs != null){
+						val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
+						attrExpressions.put("cmt", fromCompartment_cmt.writeValue("cmt"))//"cmt".print_Attr_Value(fromCompartment_cmt.print_ct_Value));
+					}
+				}
+			}
+				
 		}
+//		//Custom mapping
+//		//DEPOT, INPUT
+//		if (type.equals('depot') || type.equals('direct')){
+//			//type=depot|direct
+////			val modelCmt = args.getAttributeExpression('modelCmt')
+//			args.StoreCompartment
+////				if (modelCmt.equals("2"))
+//			attrExpressions.put("adm", modelCmt.writeAdm)
+//			val to = args.getAttributeExpression('to')
+//			if (to != null){
+//				var toCompartmentArgs = mObj.findCompartment(to as SymbolReference)
+//				if (toCompartmentArgs != null){
+//					var toCompartment_cmt = toCompartmentArgs.list.getAttributeExpression('modelCmt')
+//					attrExpressions.put("cmt", toCompartment_cmt.writeValue("cmt"))
+//				}
+//			}
+//		}
+//		if (type.equals('elimination')){
+//			val from = args.getAttributeExpression('from');
+//			val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
+//			if (fromCompartmentArgs != null){
+//				val fromCompartmentCmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt')
+//				attrExpressions.put("cmt", fromCompartmentCmt.writeValue("cmt"))
+//			}
+//		}
+//		//DISTRIBUTION
+//		if (type == 'distribution'){
+//			attrExpressions.put("cmt", null); //skip cmt attribute in peripheral macro
+//			val modelCmt = args.getAttributeExpression('modelCmt');
+//			val from = args.getAttributeExpression('from');
+//			var kin = args.getAttributeExpression('kin');
+//			val kout = args.getAttributeExpression('kout');
+//			if (from != null && (kin != null || kout != null)){
+//				val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
+//				if (fromCompartmentArgs != null){
+//					val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
+//					if (kin != null){
+//						val attr1 = "k" + fromCompartment_cmt.convertToString + modelCmt.convertToString;
+//						attrExpressions.put(attr1, kin.writeValue(attr1));
+//					}
+//					if (kout != null){
+//						val attr2 = "k" + modelCmt.convertToString + fromCompartment_cmt.convertToString;
+//						attrExpressions.put(attr2, kout.writeValue(attr2));
+//					}
+//				}
+//			}
+//		}
+//		//TRANSFER 
+//		if (type == 'transfer'){
+//			attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
+//			val modelCmt = args.getAttributeExpression('modelCmt')
+//			if (modelCmt != null){ 
+//				attrExpressions.put("to", modelCmt.writeValue("to")) //""to".print_Attr_Value(modelCmt.print_ct_Value));
+//			}
+//			val from = args.getAttributeExpression('from')
+//			if (from != null){
+//				val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
+//				if (fromCompartmentArgs != null){
+//					val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
+//					attrExpressions.put("from", fromCompartment_cmt.writeValue("from"))
+//				}
+//			}
+//		}
+//		//EFFECT
+//		if (type == "effect"){
+//			attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
+//			val from = args.getAttributeExpression('from');
+//			if (from != null){
+//				val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
+//				if (fromCompartmentArgs != null){
+//					val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
+//					attrExpressions.put("cmt", fromCompartment_cmt.writeValue("cmt"))//"cmt".print_Attr_Value(fromCompartment_cmt.print_ct_Value));
+//				}
+//			}
+//		}
 		for (a: args.attributes){
 			var String attrName = null;
 			if (a.argumentName != null)

@@ -324,12 +324,6 @@ class MclUtils {
 		enumValue == 'observation'
 	}
 
-	def isCompartmentInput(MclObject model, SymbolDefinition testVar){
-		//@TODO: Finish this
-		false
-	}
-
-
 	def getDataColumnDefn(MclObject dataObj, String ... useValue){
 		val retVal = new ArrayList<ListDefinition>
 		for(divBlk : dataObj.blocks.filter[identifier == BlockDefinitionProvider::DIV_BLK_NAME]){
@@ -384,6 +378,14 @@ class MclUtils {
 		retVal
 	}
 
+//	def getDataMappingForDoseVariable(MclObject it, SymbolDefinition doseVar){
+//		val doseColumn = dataColumnDefinitions.findFirst[list.getAttributeEnumValue('use') == ListDefinitionProvider::AMT_USE_VALUE]
+//		val mappingAtt = doseColumn.list.getAttributeExpression(ListDefinitionProvider::DEFINE_ATT)
+//		if(mappingAtt != null){
+//			
+//		}
+//	}
+
 
 	def findMdlSymbolDefn(MclObject it, String symbolName){
 		for(blk : blocks){
@@ -424,6 +426,15 @@ class MclUtils {
 			}
 		}
 		retVal
+	}
+	
+	def getDataMappingValueFromSymbol(MappingExpression it, String symbolName){
+		for(mp : attList){
+			if(mp.rightOperand.getSingleSymbolRef.name == symbolName){
+				return mp.leftOperand
+			}
+		}
+		null
 	}
 	
 	def SymbolReference getMappedSymbol(MappingPair it){
