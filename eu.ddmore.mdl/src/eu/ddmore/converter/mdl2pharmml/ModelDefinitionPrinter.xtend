@@ -2,8 +2,11 @@ package eu.ddmore.converter.mdl2pharmml
 
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
+import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
+import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
@@ -18,8 +21,11 @@ import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
+import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
@@ -36,17 +42,13 @@ import java.util.HashMap
 import java.util.List
 import java.util.Map
 import java.util.TreeMap
+import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.mdl.CategoryValueReference
-import org.eclipse.xtext.EcoreUtil2
 
 class ModelDefinitionPrinter {
 //	extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
@@ -63,6 +65,7 @@ class ModelDefinitionPrinter {
 	extension PharmMLConverterUtils pcu = new PharmMLConverterUtils
 	extension SublistDefinitionProvider sdp = new SublistDefinitionProvider
 	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter
+	extension PKMacrosPrinter pkp = new PKMacrosPrinter
 	
 //	private static val CONTINUOUS_OBS = "continuous"
 //	private static val COUNT_OBS = "count"
@@ -440,19 +443,22 @@ class ModelDefinitionPrinter {
 	
 	def writeGeneralIdv(EquationTypeDefinition it){
 		var funcExpr = expression as BuiltinFunctionCall
-		var namedArgList = funcExpr.argList as NamedFuncArguments 
+		var namedArgList = funcExpr.argList as NamedFuncArguments
+		val trans = switch(it){
+			TransformedDefinition:
+				getPharmMLTransFunc(transform)
+			default: null
+		} 
 		'''
 		<IndividualParameter symbId="«name»">
 			<GaussianModel>
-				«IF namedArgList.getArgumentExpression('trans') != null»
-					<Transformation>«namedArgList.getArgumentExpression('trans').convertToString.getPharmMLTransFunc»
+				«IF trans!= null»
+					<Transformation>«trans»</Transformation>
 				«ENDIF»
 				<GeneralCovariate>
 					«namedArgList.getArgumentExpression('grp').writeAssignment»
 				</GeneralCovariate>
-				<RandomEffects>
-					«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
-				</RandomEffects>
+				«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
 			</GaussianModel>
 		</IndividualParameter>
 		''' 
@@ -644,8 +650,31 @@ class ModelDefinitionPrinter {
 					«mdlObject.writeModelPredictionBlock(blk.body as BlockStatementBody)»
 				«ENDIF»
 			«ENDFOR»
+			«mdlObject.mdlCompartmentStatements.writeCompartmentMacros»
 		</StructuralModel>
 	'''
+	
+	def writeCompartmentMacros(List<Statement> stmts){
+		'''
+		«stmts.printCompartmentDefinitions»
+		«stmts.printMacros»
+		'''
+//							macros = macros + '''
+//			<PKmacros>
+//		'''
+//							
+//							for (s: st.pkMacroBlock.statements){
+//								if (s.variable != null)
+//									macros = macros + s.variable.print_PKMacros;
+//								if (s.list != null)
+//									macros = macros + s.list.print_PKMacros;
+//							}
+//							macros = macros + '''
+//			</PKmacros>
+//		'''
+							 
+//						}
+	}
 	
 	
 	def writeObservationModel(MclObject mdlObject){
@@ -669,8 +698,21 @@ class ModelDefinitionPrinter {
 		'''
 	}
 	
-	def writeDiscreteObservations(ListDefinition definition, int idx) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	def writeDiscreteObservations(ListDefinition s, int idx) {
+		val type = s.list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT)
+		'''
+		<ObservationModel blkId="om«idx»">
+			«switch type{
+				case ListDefinitionProvider::COUNT_OBS_VALUE:
+					s.print_mdef_CountObservations
+				case ListDefinitionProvider::DISCRETE_OBS_VALUE:
+					s.print_mdef_DiscreteObservations.toString
+	//				case CATEGORICAL_OBS: retVal = s.print_mdef_CategoricalObservations.toString
+	//				case TTE_OBS: retVal = s.print_mdef_TimeToEventObservations.toString
+				default: ''''''
+			}» 
+		</ObservationModel>
+		'''
 	}
 	
 	def isStandardErrorDefinition(Expression expr){
@@ -693,6 +735,10 @@ class ModelDefinitionPrinter {
 							«(definition.expression as BuiltinFunctionCall).getArgumentExpression('eps').pharmMLExpr»
 						</ResidualError>
 					</Standard>
+				«ELSEIF !(definition.expression instanceof BuiltinFunctionCall)»
+					<General symbId="«definition.name»">
+						«definition.expression.expressionAsAssignment»
+					</General>
 				«ENDIF»
 			</ContinuousData>
 		</ObservationModel>
@@ -976,20 +1022,20 @@ class ModelDefinitionPrinter {
 //			</ContinuousData>
 //		«ENDIF»
 //	'''	
-//	
-//	private def getInverseFunction(String linkFunction, String paramVar){
-//		switch(linkFunction){
-//			case "log": return '''
-//			<math:Uniop op="exp">
-//				«paramVar.print_ct_SymbolRef»
-//			</math:Uniop>
-//			'''
-//			case "identity": return '''
-//				«paramVar.print_ct_SymbolRef»
-//			'''
-//		}
-//	}
-//	
+	
+	private def getInverseFunction(Expression linkFunction, Expression paramVar){
+		switch(linkFunction){
+			BuiltinFunctionCall case linkFunction.func == "log": return '''
+			<math:Uniop op="exp">
+				«paramVar.pharmMLExpr»
+			</math:Uniop>
+			'''
+			BuiltinFunctionCall case linkFunction.func == "identity": return '''
+				«paramVar.pharmMLExpr»
+			'''
+		}
+	}
+	
 //	def getFunctionArgument(RandomList distn, String argName){
 //		if(distn.arguments.namedArguments != null){
 //			for(Argument arg : distn.arguments.namedArguments.arguments){
@@ -1010,83 +1056,79 @@ class ModelDefinitionPrinter {
 //		retVal
 //	}	
 //	
-//	private def print_mdef_CountObservations(SymbolDeclaration s) {
-//		var name = s.name
-//		val linkFunction = s.list.arguments.getAttribute(AttributeValidator::attr_link.name);
-//		val distn = s.list.arguments.getAttributeRandomList(AttributeValidator::attr_distrib.name);
-//		val paramVar = getFunctionArgument(distn, "lambda");
+	private def print_mdef_CountObservations(ListDefinition s) {
+		var name = s.name
+		val linkFunction = s.list.getAttributeExpression('link');
+		val distn = s.list.getAttributeExpression('distn');
+		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("lambda");
 //		var String tmpParamVar = null;
-//		if(isReference(paramVar)){
+//		if(paramVar ){
 //			tmpParamVar = paramVar.toStr
 //		}
-//		'''
-//			<Discrete>
-//				<CountData>
-//				«IF tmpParamVar != null»
-//						<!-- Note that this parameter is local to this block, but uses the same name
-//							as the lambda argument. The  --> 
-//						<SimpleParameter symbId="«tmpParamVar»">
-//						<ct:Assign>
-//							<math:Equation>
-//				«IF linkFunction.length > 0»
-//					«getInverseFunction(linkFunction, paramVar.toStr)»
-//				«ELSE»
-//					«paramVar.toStr.print_ct_SymbolRef»
-//				«ENDIF»
-//				</math:Equation>
-//				</ct:Assign>
-//				</SimpleParameter>
-//				«ENDIF»
-//				<CountVariable symbId="«name»"/>
-//				<PMF linkFunction="identity">
-//					«print_uncert_Distribution(distn)»
-//				</PMF>
-//				</CountData>
-//			</Discrete>
-//		'''
-//	}
-//	
-//	private def print_mdef_DiscreteObservations(SymbolDeclaration s) {
-//		var name = s.name
-//		val linkFunction = s.list.arguments.getAttribute(AttributeValidator::attr_link.name);
-//		val distn = s.list.arguments.getAttributeRandomList(AttributeValidator::attr_distrib.name);
-//		val paramVar = getFunctionArgument(distn, "probability");
-//		var String tmpParamVar = null;
-//		if(isReference(paramVar)){
-//			tmpParamVar = paramVar.toStr
-//		}
-//		val category = "cat1"
-//		'''
-//			<Discrete>
-//				<CategoricalData ordered="no">
-//				«IF tmpParamVar != null»
-//						<!-- Note that this parameter is local to this block, but uses the same name
-//							as the lambda argument. The  --> 
-//						<SimpleParameter symbId="«tmpParamVar»">
-//						<ct:Assign>
-//							<math:Equation>
-//				«IF linkFunction.length > 0»
-//					«getInverseFunction(linkFunction, paramVar.toStr)»
-//				«ELSE»
-//					«paramVar.toStr.print_ct_SymbolRef»
-//				«ENDIF»
-//				</math:Equation>
-//				</ct:Assign>
-//				</SimpleParameter>
-//				«ENDIF»
-//					<ListOfCategories>
-//						<Category symbId="«category»"/>
-//					</ListOfCategories>
-//					<CategoryVariable symbId="«name»"/>
-//				<PMF linkFunction="identity">
-//					«distn.printDiscreteDistribution(category)»
-//				</PMF>
-//				</CategoricalData>
-//			</Discrete>
-//		'''
-//	}
-//	
-//	
+		'''
+			<Discrete>
+				<CountData>
+				«IF paramVar != null»
+					<!-- Note that this parameter is local to this block, but uses the same name
+						as the lambda argument. --> 
+					<SimpleParameter symbId="«paramVar.convertToString»">
+					<ct:Assign>
+						<math:Equation>
+						«IF linkFunction != null»
+							«getInverseFunction(linkFunction, paramVar)»
+						«ELSE»
+							«paramVar.pharmMLExpr»
+						«ENDIF»
+						</math:Equation>
+					</ct:Assign>
+				</SimpleParameter>
+				«ENDIF»
+				<CountVariable symbId="«name»"/>
+				<PMF linkFunction="identity">
+					«distn.writeUncertMlDistribution»
+				</PMF>
+				</CountData>
+			</Discrete>
+		'''
+	}
+	
+	private def print_mdef_DiscreteObservations(ListDefinition s) {
+		var name = s.name
+		val linkFunction = s.list.getAttributeExpression('link');
+		val distn = s.list.getAttributeExpression('distn') as BuiltinFunctionCall
+		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("probability")
+		val category = "cat1"
+		'''
+			<Discrete>
+				<CategoricalData ordered="no">
+					«IF paramVar != null»
+						<!-- Note that this parameter is local to this block, but uses the same name
+							as the lambda argument.  --> 
+						<SimpleParameter symbId="«paramVar.convertToString»">
+							<ct:Assign>
+								<math:Equation>
+									«IF linkFunction != null»
+										«getInverseFunction(linkFunction, paramVar)»
+									«ELSE»
+										«paramVar.pharmMLExpr»
+									«ENDIF»
+								</math:Equation>
+							</ct:Assign>
+						</SimpleParameter>
+					«ENDIF»
+					<ListOfCategories>
+						<Category symbId="«category»"/>
+					</ListOfCategories>
+					<CategoryVariable symbId="«name»"/>
+					<PMF linkFunction="identity">
+						«printDiscreteDistribution(distn, category)»
+					</PMF>
+				</CategoricalData>
+			</Discrete>
+		'''
+	}
+	
+	
 //	private def print_mdef_CategoricalObservations(SymbolDeclaration s) {
 //		var name = s.name
 //		val categories = s.list.arguments.getAttributeExpression(AttributeValidator::attr_categories.name);

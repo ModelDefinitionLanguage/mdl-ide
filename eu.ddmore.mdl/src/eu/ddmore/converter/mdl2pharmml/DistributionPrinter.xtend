@@ -17,6 +17,7 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 class DistributionPrinter {
 	
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
+	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder
 	
 	@Data @FinalFieldsConstructor
 	static class UncertMlMapping{
@@ -39,6 +40,22 @@ class DistributionPrinter {
 							#{ 'mean' -> new UncertMlArgument('mean', 'rVal'),
 								'var' -> new UncertMlArgument('variance', 'prVal'),
 								'sd' -> new UncertMlArgument('stddev', 'prVal')
+							}
+		),
+		'Poisson' -> new UncertMlMapping('PoissonDistribution', 'http://www.uncertml.org/distributions/poisson',
+							#['lambda'],
+							#{ 'lambda' -> new UncertMlArgument('rate', 'prVal')
+							}
+		),
+		'Bernoulli' -> new UncertMlMapping('BernoulliDistribution', 'http://www.uncertml.org/distributions/poisson',
+							#['probability'],
+							#{ 'probability' -> new UncertMlArgument('probability', 'pVal')
+							}
+		),
+		'Binomial' -> new UncertMlMapping('BinomialDistribution', 'http://www.uncertml.org/distributions/poisson',
+							#['numberOfTrials', 'probabilityOfSuccess'],
+							#{ 'numberOfTrials' -> new UncertMlArgument('numberOfTrials', 'nVal'),
+								'probabilityOfSuccess' -> new UncertMlArgument('probabilityOfSuccess', 'pVal')
 							}
 		)
 	}
@@ -79,5 +96,49 @@ class DistributionPrinter {
 		''' 
 	}
 	
+	public def printDiscreteDistribution(BuiltinFunctionCall distnDef, String category){
+		val typeName = distnDef.func;
+		switch(typeName){
+			case "Bernoulli": distnDef.printBernoulliDistn(category)
+			case "Binomial": distnDef.printBinomialDistn
+			default: ''''''
+		}
+	}
+
+	public def printBernoulliDistn(BuiltinFunctionCall randomList, String category){
+		val mapping = pharmMLMapping.get(randomList.func)
+//		var typeName = randomList.func;
+//		val recognizedArgs = distribution_attrs.get(typeName);
+//		val attr = recognizedArgs.get(DistributionValidator::attr_p.name)
+//		val expr = randomList.arguments.namedArguments.arguments.get(0)
+		val expr = randomList.getArgumentExpression('probability')
+		val arg = 'probability'
+		'''
+			<BernoulliDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/3.0">
+				<categoryProb definition="">
+					<name>«category»</name>
+					«mapping.argMapping.get(arg).writeUncertmlArg(expr)»
+				</categoryProb>
+			</BernoulliDistribution>
+		'''
+	}
+
+	public def printBinomialDistn(BuiltinFunctionCall randomList){
+		val mapping = pharmMLMapping.get(randomList.func)
+//		var typeName = randomList.func;
+//		val recognizedArgs = distribution_attrs.get(typeName);
+//		val numTrials = randomList.arguments.getAttributeExpression(DistributionValidator::attr_numberOfTrials.name);
+//		val probs = randomList.arguments.getAttributeExpression(DistributionValidator::attr_probabilityOfSuccess.name);
+		val numTrials = randomList.getArgumentExpression('numberOfTrials')
+		val trialsArg = 'numberOfTrials'
+		val probs = randomList.getArgumentExpression('probabilityOfSuccess')
+		val probArg = 'probabilityOfSuccess'
+		'''
+			<BinomialDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/3.0">
+				«mapping.argMapping.get(trialsArg).writeUncertmlArg(numTrials)»
+				«mapping.argMapping.get(probArg).writeUncertmlArg(probs)»
+			</BinomialDistribution>
+		'''
+		}
 	
 }

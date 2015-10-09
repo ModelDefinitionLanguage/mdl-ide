@@ -61,8 +61,8 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
-"if (T>=TLAG) then GUT*KA
-else 0", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
+			"if (T>=TLAG) then GUT*KA else 0",
+			eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
 	}
 
 	@Test
@@ -114,13 +114,11 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 		
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
-"if (10<22==!true) then 10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))
-elseif (KA&&GUT||false) then if (T>=TLAG) then GUT*KA
-else 0
-else INF", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
+			"if (10<22==!true) then 10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))) elseif (KA&&GUT||false) then if (T>=TLAG) then GUT*KA else 0 else INF",
+			eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
 	}
 	
-		@Test
+	@Test
 	def void testConverter5(){
 		val mcl =  '''
 warfarin_PK_ODE_mdl = mdlObj (idv T) {
@@ -134,7 +132,7 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 		Assert::assertEquals("\"doo\"", eqn.expression.convertToString)
 	}
 
-		@Test
+	@Test
 	def void testConverter6(){
 		val mcl =  '''
 warfarin_PK_ODE_mdl = mdlObj (idv T) {
@@ -151,7 +149,7 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 		Assert::assertEquals("[KA,4,true,\"help\",log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))),1+2+3*4+5]", eqn.expression.convertToString)
 	}
 
-		@Test
+	@Test
 	def void testConverter7(){
 		val mcl =  '''
 warfarin_PK_ODE_mdl = dataObj {

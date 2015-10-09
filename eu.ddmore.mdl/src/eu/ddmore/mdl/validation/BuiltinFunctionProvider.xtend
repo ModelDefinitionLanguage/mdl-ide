@@ -108,6 +108,11 @@ class BuiltinFunctionProvider {
 						'lambda' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]
 					],
+		'Binomial' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
+						'probabilityOfSuccess' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'numberOfTrials' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ]
+					],
 		'Gamma' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
 						'shape' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'scale' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)

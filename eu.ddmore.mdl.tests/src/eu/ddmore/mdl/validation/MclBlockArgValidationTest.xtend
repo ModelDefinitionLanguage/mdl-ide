@@ -36,9 +36,7 @@ class MclBlockArgValidationTest {
 	@Test
 	def void testValidTaskBlockProps(){
 		val mcl = '''bar = taskObj{
-			OPTIMISE(target="NONMEM")<<
-				Any old text
-			>>
+			OPTIMISE{}
 		}'''.parse
 		
 		mcl.assertNoErrors

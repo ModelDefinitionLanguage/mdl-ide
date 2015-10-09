@@ -9,6 +9,7 @@ import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.IntegerLiteral
+import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
@@ -16,24 +17,25 @@ import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.StringLiteral
+import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
-import static eu.ddmore.converter.mdl2pharmml.Constants.*
-import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.validation.BlockDefinitionProvider
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.validation.ListDefinitionProvider
-import eu.ddmore.mdl.utils.MclUtils
+
+import static eu.ddmore.converter.mdl2pharmml.Constants.*
+
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.mdl.EnumExpression
 
 class PharmMLExpressionBuilder {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
-	extension MclUtils mu = new MclUtils 
+//	extension MclUtils mu = new MclUtils 
 	
 	static val GLOBAL_VAR = 'global'
 	
@@ -45,6 +47,7 @@ class PharmMLExpressionBuilder {
 		BlockDefinitionProvider::MDL_VAR_PARAMS -> 'pm',
 		BlockDefinitionProvider::MDL_STRUCT_PARAMS -> 'pm',
 		BlockDefinitionProvider::MDL_RND_VARS -> 'pm',
+		BlockDefinitionProvider::MDL_GRP_PARAMS -> 'pm',
 		BlockDefinitionProvider::COVARIATE_BLK_NAME -> 'cm',
 		BlockDefinitionProvider::IDV_BLK_NAME -> GLOBAL_VAR,
 		BlockDefinitionProvider::PARAM_STRUCT_BLK -> 'pm',
@@ -107,6 +110,12 @@ class PharmMLExpressionBuilder {
 		</Equation>
 	'''
 	
+	def getExpressionAsAssignment(Expression it)'''
+		<ct:Assign>
+			«expressionAsEquation»
+		</ct:Assign>
+	'''
+	
     def dispatch CharSequence getPharmMLExpr(Expression expr){
     	switch(expr){
     		OrExpression:
@@ -155,7 +164,9 @@ class PharmMLExpressionBuilder {
     		SymbolReference:{
     			getSymbolReference(expr)
     		}
-    			
+    		EnumExpression:{
+    			getEnumExpression(expr)
+    		}	
     	}
     }
 	
@@ -207,6 +218,7 @@ class PharmMLExpressionBuilder {
 	def getPharmMlFunction(String fName){
 		switch(fName){
 			case 'ln' : 'log'
+			case 'invLogit': 'logistic'
 			default: fName
 		}
 	}
@@ -305,6 +317,10 @@ class PharmMLExpressionBuilder {
 	
 	def getStringLiteral(StringLiteral it) '''
 		<ct:String>«value»</ct:String>
+	'''
+	
+	def getEnumExpression(EnumExpression it)'''
+		<ct:String>«enumValue»</ct:String>
 	'''
 	
 	def getIntegerLiteral(IntegerLiteral it) '''

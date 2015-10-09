@@ -204,6 +204,14 @@ class MclUtils {
 		retVal
 	}	
 	
+	def getMdlIndvParams(MclObject it){
+		val retVal = new ArrayList<Statement>
+		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS]){
+			retVal.addAll(stmt.nonBlockStatements)
+		}
+		retVal
+	}	
+	
 	def getModelPredictionBlocks(MclObject it){
 		blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]
 	}
@@ -222,7 +230,23 @@ class MclUtils {
 	}	
 
 	def List<Statement> getMdlCompartmentStatements(MclObject it){
-		Collections::emptyList
+		val retVal = new ArrayList<Statement>
+		for(b :  modelPredictionBlocks){
+			for(s : (b.body as BlockStatementBody).statements.filter[s|
+					switch(s){
+						BlockStatement:
+							s.identifier == BlockDefinitionProvider::MDL_CMT_BLK
+						default: false
+					}
+				]){
+				switch(s){
+					BlockStatement:{
+						retVal.addAll((s.body as BlockStatementBody).statements)
+					}
+				}
+			}
+		}
+		retVal
 	}
 
 	def getParamStructuralParams(MclObject it){
@@ -302,12 +326,6 @@ class MclUtils {
 		enumValue == 'observation'
 	}
 
-	def isCompartmentInput(MclObject model, SymbolDefinition testVar){
-		//@TODO: Finish this
-		false
-	}
-
-
 	def getDataColumnDefn(MclObject dataObj, String ... useValue){
 		val retVal = new ArrayList<ListDefinition>
 		for(divBlk : dataObj.blocks.filter[identifier == BlockDefinitionProvider::DIV_BLK_NAME]){
@@ -343,6 +361,33 @@ class MclUtils {
 
 		retVal
 	}
+
+	def getDataDerivedColumnDefinitions(MclObject it){
+		val retVal = new ArrayList<ListDefinition>
+		for(divBlk : blocks.filter[identifier == BlockDefinitionProvider::DATA_DERIV_BLK_NAME]){
+			if(divBlk.body instanceof BlockStatementBody){
+				for(divList : (divBlk.body as BlockStatementBody).statements){
+					switch(divList){
+						ListDefinition:{
+							retVal.add(divList)
+						}
+					}
+				}
+				
+			}
+		}
+
+		retVal
+	}
+
+//	def getDataMappingForDoseVariable(MclObject it, SymbolDefinition doseVar){
+//		val doseColumn = dataColumnDefinitions.findFirst[list.getAttributeEnumValue('use') == ListDefinitionProvider::AMT_USE_VALUE]
+//		val mappingAtt = doseColumn.list.getAttributeExpression(ListDefinitionProvider::DEFINE_ATT)
+//		if(mappingAtt != null){
+//			
+//		}
+//	}
+
 
 	def findMdlSymbolDefn(MclObject it, String symbolName){
 		for(blk : blocks){
@@ -385,6 +430,15 @@ class MclUtils {
 		retVal
 	}
 	
+	def getDataMappingValueFromSymbol(MappingExpression it, String symbolName){
+		for(mp : attList){
+			if(mp.rightOperand.getSingleSymbolRef.name == symbolName){
+				return mp.leftOperand
+			}
+		}
+		null
+	}
+	
 	def SymbolReference getMappedSymbol(MappingPair it){
 		val ro = rightOperand
 		switch(ro){
@@ -418,9 +472,9 @@ class MclUtils {
 	/**
 	 * Get symbol defn that owns cat defn
 	 */
-	def SymbolDefinition getSymbolDefnFromCatValRef(CategoryValueReference catValRef){
-        var catValDefn = catValRef.ref
-        EcoreUtil2.getContainerOfType(catValDefn, SymbolDefinition)
-	}
+        def SymbolDefinition getSymbolDefnFromCatValRef(CategoryValueReference catValRef){
+                var catValDefn = catValRef.ref
+                EcoreUtil2.getContainerOfType(catValDefn, SymbolDefinition)
+        }
 	
 }

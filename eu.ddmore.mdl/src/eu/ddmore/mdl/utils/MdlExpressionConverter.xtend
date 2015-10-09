@@ -14,6 +14,7 @@ import eu.ddmore.mdl.mdl.FuncArguments
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorLiteral
@@ -34,8 +35,14 @@ public class MdlExpressionConverter extends ExpressionConverter {
         INSTANCE.getString(funcArgs)
     }
 
-	def dispatch String getString(CategoricalDefinitionExpr defn)'''
-		withCategories {«FOR catValDefn : defn.categories SEPARATOR ', '»«catValDefn.getString»«ENDFOR»}'''
+    /**
+     * Override the method from the superclass so that strings are enclosed in double quotes when writing out MDL.
+     */
+    override dispatch String getString(StringLiteral exp)'''
+	"«exp.value»"'''
+
+    def dispatch String getString(CategoricalDefinitionExpr defn)'''
+        withCategories {«FOR catValDefn : defn.categories SEPARATOR ', '»«catValDefn.getString»«ENDFOR»}'''
 
     def dispatch String getString(CategoryValueDefinition catValDefn) {
         catValDefn.name + if (catValDefn.mappedTo != null) " when " + catValDefn.mappedTo.getString else ""
@@ -64,7 +71,7 @@ public class MdlExpressionConverter extends ExpressionConverter {
 		«FOR arg: exp.args SEPARATOR ', '»«arg.argument.getString»«ENDFOR»'''
 	
 	def dispatch String getString(WhenExpression exp)'''
-		«FOR w : exp.when SEPARATOR ' else '»«w.getString»«ENDFOR»«IF exp.other!=null» else «exp.other.getString»«ENDIF»'''
+		«FOR w : exp.when SEPARATOR ' else'»«w.getString»«ENDFOR»«IF exp.other!=null» else «exp.other.getString»«ENDIF»'''
 	
 	def dispatch String getString(WhenClause exp)'''
 		if («exp.cond.getString») then «exp.value.getString»'''

@@ -17,23 +17,9 @@ class MclParserTaskObj1Test {
 	
 	val static CODE_SNIPPET = '''
 nonmem_task = taskObj {
-	ESTIMATE(target="NONMEM")<<
-			; this is defined in INI format
-			[method]
-				algorithm=SAEM
-				typeIndPar=MAP
-				approximationSE=linear
-				seed=19245
-
-			[compute]
-			estimationSE=TRUE
-			estimationIndPar=TRUE
-			plotGraphs=TRUE
-	
-			[softwareSettings]
-			TOL=3
-			NOABORT=TRUE
-		>>
+	ESTIMATE{
+		conf : { target is MLXTRAN_CODE, version= "4.3.2", algo = "SAEM" }
+	}
 }
 		'''
 	

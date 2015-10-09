@@ -1,10 +1,15 @@
 package eu.ddmore.converter.mdl2pharmml
 
+import eu.ddmore.libpharmml.PharmMlFactory
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.utils.MclUtils
 import java.io.BufferedWriter
+import java.io.FileInputStream
 import java.io.FileReader
 import java.io.FileWriter
+import java.io.InputStream
+
+import static org.junit.Assert.*
 
 class ConverterTestHarness {
 
@@ -36,6 +41,26 @@ class ConverterTestHarness {
 		var out = new BufferedWriter(new FileWriter(destFile))
 		out.write(output.toString, 0, output.length)
 		out.close
+	}
+	
+	def void assertIsValid(String destFile){
+		var InputStream inputStream = null
+		try{
+			inputStream = new FileInputStream(destFile)
+	    	val libPharmML = PharmMlFactory.getInstance().createLibPharmML();
+			val res = libPharmML.createDomFromResource(inputStream);
+			val validator = libPharmML.getValidator();
+			val rpt = validator.createValidationReport(res);
+			val iter = rpt.errorIterator
+			while(iter.hasNext){
+				val error = iter.next
+				System.err.println(error.errorMsg)
+			}
+			assertTrue("PharmML is valid: " + destFile, rpt.isValid())
+		}
+		finally{
+			inputStream?.close();
+		}
 	}
 	
 }

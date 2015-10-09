@@ -16,6 +16,7 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.NamedFuncArguments
 
 class DomainObjectModelUtils {
 	
@@ -73,6 +74,16 @@ class DomainObjectModelUtils {
 				}
 			}
 			default: idx		
+		}
+	}
+	
+	static def getFunctionArgumentValue(BuiltinFunctionCall it, String argName){
+		val args = argList
+		switch(args){
+			NamedFuncArguments:{
+				args.arguments.findFirst[argumentName == argName]?.expression
+			}
+			default: null
 		}
 	}
 	

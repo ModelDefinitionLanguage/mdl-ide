@@ -13,12 +13,26 @@ import eu.ddmore.mdl.validation.MogValidator
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.EquationTypeDefinition
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.validation.BuiltinFunctionProvider
+import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.SubListExpression
+import eu.ddmore.mdl.validation.SublistDefinitionProvider
+import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.CategoryValueReference
+import eu.ddmore.mdl.mdl.MappingPair
 
 class ModellingStepsPrinter { 
 	
 	extension MclUtils mu = new MclUtils 
 	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder 
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+	extension SublistDefinitionProvider sldp = new SublistDefinitionProvider
+	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
+//	extension PKMacrosPrinter bmp = new PKMacrosPrinter
 
 	////////////////////////////////////////////////
 	// III Modelling Steps
@@ -72,7 +86,7 @@ class ModellingStepsPrinter {
 	////////////////////////////////////////////////
 	protected def print_msteps_EstimationStep(String stepId, Integer order, MclObject mObj, MclObject dObj, MclObject pObj, MclObject tObj)'''
 		<EstimationStep oid="«stepId»">
-«««			«dObj.print_mdef_ExternalDataSetReference»
+			«dObj.print_mdef_ExternalDataSetReference»
 			«pObj.print_msteps_ParametersToEstimate»
 			«tObj.print_msteps_EstimateOperations(order)»
 «««			«mObj.print_ct_variableAssignment»
@@ -80,6 +94,12 @@ class ModellingStepsPrinter {
 	'''
 		
 		
+	protected def print_mdef_ExternalDataSetReference(MclObject dObj)'''
+		<ExternalDataSetReference>
+			<ct:OidRef oidRef="«BLK_DS_NONMEM_DATASET»"/>
+		</ExternalDataSetReference>
+	'''
+
 	def writeParameterEstimate(Statement s, MclObject pObj){
 		val stmt = s
 		switch(stmt){
@@ -118,17 +138,6 @@ class ModellingStepsPrinter {
 					«stmt.writeParameterEstimate(pObj)»
 				«ENDIF»
 			«ENDFOR»
-«««				«IF b.structuralBlock != null»
-«««					«FOR p: b.structuralBlock.parameters»
-«««						«p.print_msteps_ParameterEstimation»
-«««					«ENDFOR»
-«««				«ENDIF»
-«««				«IF b.variabilityBlock != null»
-«««					«FOR p: b.variabilityBlock.parameters»
-«««						«p.print_msteps_ParameterEstimation»
-«««					«ENDFOR»
-«««				«ENDIF»
-«««			«ENDFOR»
 		</ParametersToEstimate>
 	'''	
 
@@ -142,9 +151,6 @@ class ModellingStepsPrinter {
 				if(s.list.getAttributeEnumValue('inputFormat') == 'nonmemFormat') {
 					var content = print_ds_NONMEM_DataSet(mObj, dObj);
 					res = res + print_ds_ExternalDataSet(content, "NONMEM", BLK_DS_NONMEM_DATASET);
-//				} else {
-//					var content = print_ds_DataSet(dObj, mObj);
-//					res = res + print_ds_ExternalDataSet(content, "Monolix", BLK_DS_MONOLIX_DATASET);
 				}
 			}
 		}
@@ -183,7 +189,38 @@ class ModellingStepsPrinter {
 					res = res + column.print_ds_DvMapping(dObj, mObj)
 			}
 		}
-		res = res + dObj.print_ds_DataSet(mObj);
+		for (column : dObj.dataDerivedColumnDefinitions) {
+			val use = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
+			switch(use){
+				case(ListDefinitionProvider::DOSE_TIME_USE_VALUE):{
+					res += column.writeDoseTimeMapping(dObj, mObj)
+				}
+			}
+		}
+		res += dObj.print_ds_DataSet(mObj);
+	}
+
+
+	def CharSequence writeDoseTimeMapping(ListDefinition column, MclObject dObj, MclObject mObj){
+		var idvCol = column.list.getAttributeExpression(ListDefinitionProvider::IDV_COL_ATT)
+		var amtCol = column.list.getAttributeExpression(ListDefinitionProvider::AMT_COL_ATT)
+		var mdlDtSymb = mObj.findMdlSymbolDefn(column.name)
+		'''
+		<ColumnMapping>
+			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«idvCol.convertToString»"/>
+			<Piecewise xmlns="«xmlns_ds»">
+				<math:Piece>
+					«mdlDtSymb.symbolReference»
+					<math:Condition>
+						<math:LogicBinop op="gt">
+							<ColumnRef columnIdRef="«amtCol.convertToString»"/>
+							<ct:Int>0</ct:Int>
+						</math:LogicBinop>
+					</math:Condition>
+				</math:Piece>
+			</Piecewise>
+		</ColumnMapping>
+		'''
 	}
 
 	def print_ds_AmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj)'''
@@ -264,144 +301,75 @@ class ModellingStepsPrinter {
 		  default: ''''''
 		}
 	}
+	
+	def hasNonCompartmentDosing(MclObject mdlObj, MappingExpression me){
+		me.attList.exists[
+			val mdlSymb = mdlObj.findMdlSymbolDefn(mappedSymbol.ref.name)
+			mdlSymb instanceof ListDefinition && (mdlSymb as ListDefinition).isAdministrationMacro
+		]
+		false
+	}
+	
 	protected def print_ds_StandardAmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj) {
 		val define = amtColumn.list.getAttributeExpression('define');
-//		val columnId = amtColumn.name;
-//		var res = '''''';
-//		var colMapping = ''''''
 		if (define == null) {
 			val varDefn = amtColumn.list.getAttributeExpression('variable');
 			writeSingleDoseMapping(mObj, amtColumn, varDefn)
-			// Reference or piecewise
-//			res = '''
-//				<ColumnMapping>
-//					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-//					<Piecewise xmlns="«xmlns_ds»">
-//						<math:Piece>
-//							«IF varDefn != null»
-//								«varDefn.pharmMLExpr»
-//							«ENDIF»
-//							<math:Condition>
-//								<math:LogicBinop op="gt">
-//									<ColumnRef columnIdRef="«columnId»"/>
-//									<ct:Int>0</ct:Int>
-//								</math:LogicBinop>
-//							</math:Condition>
-//						</math:Piece>
-//					</Piecewise>
-//				</ColumnMapping>
-//				'''
 		}
-		else { // Vector of pairs
+		else if(mObj.hasNonCompartmentDosing(define as MappingExpression)){
 			writeMultiDoseMapping(mObj, amtColumn, define)
-//			colMapping = switch(define){
-//				MappingExpression:{
-//					'''
-//					«FOR p : define.attList»
-//						«IF !mObj.isCompartmentInput(p.mappedSymbol.ref)»
-//							<math:Piece>
-//								«p.rightOperand.pharmMLExpr»
-//							   	<math:Condition>
-//							   		<math:LogicBinop op="and">
-//							   			<math:LogicBinop op="eq">
-//											<ColumnRef columnIdRef="«p.srcColumn.ref.name»"/>
-//								   			«p.leftOperand.pharmMLExpr»
-//										</math:LogicBinop>
-//							   			<math:LogicBinop op="gt">
-//											<ColumnRef columnIdRef="«columnId»"/>
-//								   			<ct:Int>0</ct:Int>
-//										</math:LogicBinop>
-//									</math:LogicBinop>
-//							   	</math:Condition>
-//							</math:Piece>
-//						«ENDIF»
-//					«ENDFOR» 
-//					'''
-//				}
-//				default:''
-			}
-//			val colMapping = '''
-//				«FOR p : pairs»
-//				«IF !mObj.isCompartmentInput(p)»
-//					<math:Piece>
-//						«p.name.localSymbolReference»
-//					   	<math:Condition>
-//					   		<math:LogicBinop op="and">
-//					   			<math:LogicBinop op="eq">
-//									<ColumnRef columnIdRef="«cmtCols.head.name»"/>
-//						   			«p.symbolRef»
-//								</math:LogicBinop>
-//					   			<math:LogicBinop op="gt">
-//									<ColumnRef columnIdRef="«columnId»"/>
-//						   			<ct:Int>0</ct:Int>
-//								</math:LogicBinop>
-//							</math:LogicBinop>
-//					   	</math:Condition>
-//					</math:Piece>
-//				«ENDIF»
-//				«ENDFOR» 
-//			  '''
-//			 res = '''
-//				«IF colMapping.length > 0»
-//				<ColumnMapping>
-//				    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
-//					<Piecewise xmlns="«xmlns_ds»">
-//						«colMapping»
-//					</Piecewise>
-//				</ColumnMapping>
-//				«ENDIF»
-//			 '''
-//		}
-//		res
+		}
 	}
 
 	def print_ds_TargetMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj){
-		// @TODO : fix this.
-		''''''
-//		val define = amtColumn.list.getAttributeExpression('define');
-//		val columnId = amtColumn.name;
-//		var toolMappingDefn = '''''';
-//		if (define != null) {
-//			// There really must be define in this case.
-//			val pairs = define.mappedSymbolRef
+		val define = amtColumn.list.getAttributeExpression('define');
+		var toolMappingDefn = '''''';
+		if (define != null) {
+			// There really must be define in this case.
+			switch(define){
+				MappingExpression:
+					toolMappingDefn += '''
+						«FOR me : define.attList»
+							«IF mObj.isCompartmentInput(me.mappedSymbol.ref)»
+								«mObj.printTargetMapping(me)»
+							«ENDIF»	
+						«ENDFOR»
+					'''
+			}
 //			toolMappingDefn = '''
 //			    «FOR p : pairs»
 //		    	   	«IF mObj.isCompartmentInput(p)»
-//«««		    	   		«p.printTargetMapping(p.value.expression, mObj)»
+//		    	   		«p.printTargetMapping(p.getDefineMappingExpression, mObj)»
 //		    	   	«ENDIF»
 //				«ENDFOR» 
 //			'''
-//		} else {
-//			// this is a bug as the language will be invalid if this is true.
-//		}
-//		'''
-//			«IF toolMappingDefn.length > 0»
-//			<ColumnMapping>
-//				<ds:ColumnRef columnIdRef="«columnId»"/>
-//				<ds:TargetMapping blkIdRef="sm">
-//					«toolMappingDefn»
-//				</ds:TargetMapping>
-//			</ColumnMapping>
-//			«ENDIF»
-//		'''
+		} else {
+			// this is a bug as the language will be invalid if this is true.
+		}
+		'''
+			«IF toolMappingDefn.length > 0»
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="«amtColumn.name»"/>
+				<ds:TargetMapping blkIdRef="sm">
+					«toolMappingDefn»
+				</ds:TargetMapping>
+			</ColumnMapping>
+			«ENDIF»
+		'''
+	}
+	
+	def boolean isAdministrationMacro(ListDefinition cmtDefn){
+		val type = cmtDefn.list.getAttributeEnumValue(ListDefinitionProvider::CMT_TYPE_ATT)
+		return type == 'depot' || type == 'input' || type == 'direct'
 	}
 
-	// @TODO: implement this	
-	def printTargetMapping(Expression expression, Expression valExpr, MclObject mObj)'''
-«««		«FOR block : mObj.getMdlCompartmentStatements»
-«««			«IF block.modelPredictionBlock != null»
-«««				«FOR ModelPredictionBlockStatement stmt : block.modelPredictionBlock.statements»
-«««					«IF stmt.pkMacroBlock != null »
-«««						«FOR pkstmt : stmt.pkMacroBlock.statements»
-«««							«IF pkstmt.variable != null && pkstmt.variable.isAdministrationMacro»
-«««								<ds:Map dataSymbol="«valExpr.toStr»" admNumber="«getAdmValue(pkstmt.variable.list)»"/>
-«««							«ENDIF»
-«««						«ENDFOR»
-«««					«ENDIF»
-«««				«ENDFOR»
-«««			«ENDIF»
-«««		«ENDFOR»
-	'''
+	def printTargetMapping(MclObject it, MappingPair expression){
+		val mdlDefn = findMdlSymbolDefn(expression.mappedSymbol.ref.name)
+		'''
+			<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«(mdlDefn as ListDefinition).list.getAttributeExpression('modelCmt').convertToString»"/>
+«««		<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«expression.leftOperand.convertToString»"/>
+		'''
+	}
 	
 	protected def print_ds_CategoricalMapping(ListDefinition column) {
 		var res = "";
@@ -512,23 +480,63 @@ class ModellingStepsPrinter {
 		}
 	}
 
+	def boolean isCovariateUsedInSublist(SubListExpression it, String covName){
+		val cov = getAttributeExpression('cov') as SymbolReference
+		cov != null && cov.ref.name == covName
+	}
+
+	def boolean isCatCovUsedInSublist(SubListExpression it, String covName){
+		val catVal = getAttributeExpression('catCov') as CategoryValueReference
+		val cov = catVal?.symbolDefnFromCatValRef
+		cov != null && cov.name == covName
+	}
+
+	def isCovUsedInIndivParams(ListDefinition it, MclObject mObj){
+		for(stmt : mObj.mdlIndvParams){
+			switch(stmt){
+				EquationTypeDefinition:{
+					if(stmt.expression instanceof BuiltinFunctionCall){
+						var funcExpr = stmt.expression as BuiltinFunctionCall
+						var namedArgList = funcExpr.argList as NamedFuncArguments 
+						val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
+						if(fixEff != null && !fixEff.expressions.isEmpty){
+							for(e : fixEff.expressions){
+								switch(e){
+									VectorElement:{
+										if(e.element instanceof SubListExpression &&
+											((e.element as SubListExpression).isCovariateUsedInSublist(name) ||
+											(e.element as SubListExpression).isCatCovUsedInSublist(name)))
+												return true
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		false
+	}
 	
 	def print_ds_DataSet(MclObject dObj, MclObject mObj) {
 		var res = "";
 		var k = 1;
+		val dosingToCompartmentMacro = dObj.dataColumnDefinitions.exists[
+				list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT) == ListDefinitionProvider::AMT_USE_VALUE &&
+				isDosingToCompartmentMacro(mObj)
+		]
 		for (column : dObj.dataColumnDefinitions) {
 			val columnType = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
-			var dosingToCompartmentMacro = false;
 			val columnId = column.name;
-			if(columnType == ListDefinitionProvider::AMT_USE_VALUE){
-				dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
-			}
+//			if(columnType == ListDefinitionProvider::AMT_USE_VALUE){
+//				dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
+//			}
 			var convertedColType = switch(columnType){
 				case(ListDefinitionProvider::COV_USE_VALUE),
 				case(ListDefinitionProvider::CATCOV_USE_VALUE):
-					if(isUsedInModel(column, mObj)) convertEnum(columnType, dosingToCompartmentMacro) else "undefined"
+					if(isUsedInModel(column, mObj)) convertEnum(columnType, dosingToCompartmentMacro, !column.isCovUsedInIndivParams(mObj)) else "undefined"
 				default:
-					convertEnum(columnType, dosingToCompartmentMacro)
+					convertEnum(columnType, dosingToCompartmentMacro, false)
 			}
 			val valueType = column.getValueType
 			res = res +
@@ -552,13 +560,16 @@ class ModellingStepsPrinter {
 	}
 	
 	
-	def convertEnum(String type, boolean isDosingToCompartmentMacro) {
+	def convertEnum(String type, boolean isDosingToCompartmentMacro, boolean isRegressor) {
 		switch (type) {
 			case ListDefinitionProvider::AMT_USE_VALUE     : "dose"
 			case ListDefinitionProvider::DVID_USE_VALUE   : "dvid"
 			case ListDefinitionProvider::VARLVL_USE_VALUE: "occasion"
-			case ListDefinitionProvider::CATCOV_USE_VALUE: "covariate"
+			case ListDefinitionProvider::COV_USE_VALUE,
+			case ListDefinitionProvider::CATCOV_USE_VALUE:
+				if(isRegressor) "reg" else "covariate"
 			case ListDefinitionProvider::CMT_USE_VALUE : if(isDosingToCompartmentMacro) 'adm' else 'cmt'
+			case ListDefinitionProvider::IGNORE_USE_VALUE: 'undefined'
 			default: type
 		}
 	}
@@ -573,6 +584,20 @@ class ModellingStepsPrinter {
 		false
 	}
 	
+
+	def isCompartmentInput(MclObject it, SymbolDefinition symb){
+		mdlCompartmentStatements.exists[s|
+			switch(s){
+				ListDefinition:{
+					s.name == symb.name && s.isAdministrationMacro
+				}
+					
+				default: false
+			}
+			
+		]
+	}
+
 	protected def getValueType(ListDefinition dataColumn) {
 		val useValue = dataColumn.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
 
@@ -638,37 +663,71 @@ class ModellingStepsPrinter {
 //			'''
 //		}
 //	}
-//	
-//	protected def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
-//		«FOR b: tObj.blocks»
-//			«IF b.estimateBlock != null»
-//				<Operation order="«order»" opType="«OPERATION_EST_POP»">
-//					«FOR s: b.estimateBlock.statements»
-//						«s.print_msteps_Property»
-//					«ENDFOR»
-//					«FOR s: b.estimateBlock.statements»
-//						«s.print_msteps_Algorithm»
-//					«ENDFOR»
-//				</Operation>
-//			«ENDIF»
-//		«ENDFOR»
-//	'''
-
-	def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
-		<Operation order="1" opType="estPop">
-			<Property name="target">
-				<ct:Assign>
-					<ct:String>MLXTRAN_CODE</ct:String>
-				</ct:Assign>	
-			</Property>
-			<Property name="version">
-				<ct:Assign>
-					<ct:String>4.3.2</ct:String>
-				</ct:Assign>	
-			</Property>
-			<Algorithm definition="SAEM"/>
-		</Operation>
+	
+	def writeConfiguration(Statement stmt){
+		switch(stmt){
+			ListDefinition:{
+				val targetExpr = stmt.list.getAttributeExpression('target')
+				val versionExpr = stmt.list.getAttributeExpression('version')
+				val algoExpr = stmt.list.getAttributeExpression('algo')
+				val tolExpr = stmt.list.getAttributeExpression('tol')
+				'''
+				«IF targetExpr != null»
+					«writeProperty('target', targetExpr)»
+				«ENDIF»
+				«IF versionExpr != null»
+					«writeProperty('version', versionExpr)»
+				«ENDIF»
+				«IF tolExpr != null»
+					«writeProperty('tol', tolExpr)»
+				«ENDIF»
+				«IF algoExpr != null»
+					<Algorithm definition="«algoExpr.convertToString»"/>
+				«ENDIF»
+				'''
+			}
+		}
+	}
+	
+	def writeProperty(String propName, Expression value)'''
+		<Property name="«propName»">
+			<ct:Assign>
+				«value.pharmMLExpr»
+			</ct:Assign>	
+		</Property>
 	'''
+	
+	protected def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
+		«FOR b: tObj.blocks»
+			«IF b.identifier == "ESTIMATE"»
+				<Operation order="«order»" opType="«OPERATION_EST_POP»">
+					«FOR s: b.nonBlockStatements»
+						«writeConfiguration(s)»
+«««						«s.print_msteps_Property»
+					«ENDFOR»
+«««					«FOR s: b.estimateBlock.statements»
+«««						«s.print_msteps_Algorithm»
+«««					«ENDFOR»
+				</Operation>
+			«ENDIF»
+		«ENDFOR»
+	'''
+
+//	def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
+//		<Operation order="1" opType="estPop">
+//			<Property name="target">
+//				<ct:Assign>
+//					<ct:String>MLXTRAN_CODE</ct:String>
+//				</ct:Assign>	
+//			</Property>
+//			<Property name="version">
+//				<ct:Assign>
+//					<ct:String>4.3.2</ct:String>
+//				</ct:Assign>	
+//			</Property>
+//			<Algorithm definition="SAEM"/>
+//		</Operation>
+//	'''
 
 
 

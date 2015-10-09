@@ -1,29 +1,17 @@
-package eu.ddmore.mdl
+# Categorical data (cumulative probabilities) model
+# PharmML Type1 equation for INDIVIDUAL_VARIABLES
+# inverse-logit transformation applied in MODEL_PREDICTION
+# cumulative probabilities calculated in MODEL_PREDICTION
+# link not specified in OBSERVATION definition
 
-import com.google.inject.Inject
-import eu.ddmore.mdl.mdl.Mcl
-import org.eclipse.xtext.junit4.InjectWith
-import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.util.ParseHelper
-import org.eclipse.xtext.junit4.validation.ValidationTestHelper
-import org.junit.Test
-import org.junit.runner.RunWith
-
-@RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
-class MclParserMogObj2Test {
-	@Inject extension ParseHelper<Mcl>
-	@Inject extension ValidationTestHelper
-	
-	val static CODE_SNIPPET = '''
 Categorical_DIST_dat = dataObj{
-   DECLARED_VARIABLES{ Y withCategories {c1, c2, c3, c0} }
+   DECLARED_VARIABLES{ Y withCategories {c0, c1, c2, c3} }
 	
    DATA_INPUT_VARIABLES{
       ID:{ use is id }
 	  TIME:{ use is ignore } # NOT USED IN MODEL
       CP:{ use is idv }
-      DV:{ use is dv, define= {Y.c1 when 0, Y.c2 when 1, Y.c3 when 2, Y.c0 when 3 } }
+      DV:{ use is dv, define= {Y.c0 when 0, Y.c1 when 1, Y.c2 when 2, Y.c3 when 3 } }
       MDV:{ use is mdv }
    }# end DATA_INPUT_VARIABLES
 
@@ -110,8 +98,8 @@ Categorical_DIST_mdl = mdlObj{
 } # end of model object
 
 Categorical_DIST_task = taskObj{
-	ESTIMATE{
-		conf : { target is MLXTRAN_CODE, version= "4.3.2", algo = "SAEM" }
+	ESTIMATE{ 
+		conf : {target is MLXTRAN_CODE, version = "4.3.2", algo = "SAEM" }
 	}
 }# end of task object
 
@@ -122,12 +110,4 @@ Categorical_DIST_mog = mogObj {
 			Categorical_DIST_par : { type is parObj }
 			Categorical_DIST_task : { type is taskObj }
 		}
-}		'''
-	
-	@Test
-	def void testParsing(){
-		CODE_SNIPPET.parse.assertNoErrors
-		
-	}
-	
 }

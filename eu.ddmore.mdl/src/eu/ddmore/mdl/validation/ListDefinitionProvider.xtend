@@ -33,6 +33,7 @@ class ListDefinitionProvider {
 	public static val VARIABLE_ATT = 'variable'
 	public static val COV_USE_VALUE = 'covariate'
 	public static val AMT_USE_VALUE = 'amt'
+	public static val IGNORE_USE_VALUE = 'ignore'
 	public static val OBS_USE_VALUE = 'dv'
 	public static val DVID_USE_VALUE = 'dvid'
 	public static val CATCOV_USE_VALUE = 'catCov'
@@ -40,20 +41,27 @@ class ListDefinitionProvider {
 	public static val ID_USE_VALUE = 'id'
 	public static val VARLVL_USE_VALUE = 'varLevel'
 	public static val CMT_USE_VALUE = 'cmt'
-	
+	public static val DOSE_TIME_USE_VALUE = 'doseTime'
+	public static val IDV_COL_ATT = 'idvColumn'
+	public static val AMT_COL_ATT = 'amtColumn'
+	public static val CMT_TYPE_ATT = 'type'
+	public static val OBS_TYPE_ATT = 'type'
+	public static val COUNT_OBS_VALUE = 'count'
+	public static val DISCRETE_OBS_VALUE = 'discrete'
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', 'ignore', VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
 	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
-	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo('cmpt', #{'depot', 'compartment', 'elimination', 'transfer', 'distribution', 'direct', 'input', 'effect'})
+	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{'depot', 'compartment', 'elimination', 'transfer', 'distribution', 'direct', 'input', 'effect'})
 	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
-	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{'categorical', 'count', 'discrete', 'tte'})
+	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{'categorical', COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, 'tte'})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'exact', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
+	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
 
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
@@ -181,8 +189,8 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefInfo ('doseTime', new ListTypeInfo("DoseTime", PrimitiveType.List),  #[
 						 new AttributeDefn(USE_ATT, null, true, DDV_USE_TYPE),
-						 new AttributeDefn('idvColumn', null, true, IDV_COL_TYPE.makeReference),
-						 new AttributeDefn('amtColumn', null, true, AMT_COL_TYPE.makeReference) 
+						 new AttributeDefn(IDV_COL_ATT, null, true, IDV_COL_TYPE.makeReference),
+						 new AttributeDefn(AMT_COL_ATT, null, true, AMT_COL_TYPE.makeReference) 
 						 ] 
 					)
 				)
@@ -213,20 +221,20 @@ class ListDefinitionProvider {
 		),
 		"COMPARTMENT" -> (
 			new BlockListDefinition => [
-				key = 'type'
+				key = CMT_TYPE_ATT
 				listDefns = newArrayList(
 					new ListDefInfo ('input', new ListTypeInfo("Input", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('ktr', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('mtt', null, true, MclTypeProvider::REAL_TYPE)
 						 ]
 					),
 					new ListDefInfo ('effect', new ListTypeInfo("Effect", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('keq', null, true, MclTypeProvider::REAL_TYPE)
 						 ]
 					),
 					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('ka', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('tlag', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('modelDur', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('modelRate', null, false, MclTypeProvider::REAL_TYPE),
@@ -234,31 +242,31 @@ class ListDefinitionProvider {
 						 ]
 					),
 					new ListDefInfo ('transfer', new ListTypeInfo("Transfer", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('kt', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference),
 						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
 						 ]
 					),
 					new ListDefInfo ('compartment', new ListTypeInfo("Compartment", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE)
+						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE)
 						 ]
 					),
 					new ListDefInfo ('elimination', new ListTypeInfo("Elimination", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('v', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('cl', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('k', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('vm', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('km', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
 					),
 					new ListDefInfo ('distribution', new ListTypeInfo("Distribution", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('kin', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('kout', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
 						 ]
 					),
 					new ListDefInfo ('direct', new ListTypeInfo("Direct", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('tlag', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
 						 ]
@@ -333,27 +341,55 @@ class ListDefinitionProvider {
 		),
 		"OBSERVATION" -> (
 			new BlockListDefinition => [
-				key = 'type'
+				key = OBS_TYPE_ATT
 				listDefns = newArrayList(
 					new ListDefInfo ('categorical', new EnumListTypeInfo("CatObs"),  #[
-						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
+						 new AttributeDefn(OBS_TYPE_ATT, null, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
 						 ]
 					),
 					new ListDefInfo ('count', new ListTypeInfo("CountObs", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE),
+						 new AttributeDefn(OBS_TYPE_ATT, null, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo ('discrete', new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE),
+					new ListDefInfo (DISCRETE_OBS_VALUE, new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
+						 new AttributeDefn(OBS_TYPE_ATT, null, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
 					new ListDefInfo ('tte', new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', null, true, OBS_TYPE_TYPE),
+						 new AttributeDefn(OBS_TYPE_ATT, null, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('hazard', null, true, MclTypeProvider::REAL_TYPE.makeReference),
 						 new AttributeDefn('event', null, true, TTE_EVENT_TYPE),
 						 new AttributeDefn('maxEvent', null, false, MclTypeProvider::REAL_TYPE)
+						 ]
+					)
+				)
+			]
+		),
+		"ESTIMATE" -> (
+			new BlockListDefinition => [
+				key = 'target'
+				listDefns = newArrayList(
+					new ListDefInfo (null, TARGET_TYPE,  #[
+						 new AttributeDefn('target', null, true,  TARGET_TYPE),
+						 new AttributeDefn('version', null, false, MclTypeProvider::STRING_TYPE),
+						 new AttributeDefn('algo', null, false, MclTypeProvider::STRING_TYPE),
+						 new AttributeDefn('tol', null, false, MclTypeProvider::REAL_TYPE)
+						 ]
+					)
+				)
+			]
+		),
+		"SIMULATE" -> (
+			new BlockListDefinition => [
+				key = 'target'
+				listDefns = newArrayList(
+					new ListDefInfo (null, TARGET_TYPE,  #[
+						 new AttributeDefn('target', null, true,  TARGET_TYPE),
+						 new AttributeDefn('version', null, false, MclTypeProvider::STRING_TYPE),
+						 new AttributeDefn('algo', null, false, MclTypeProvider::STRING_TYPE),
+						 new AttributeDefn('tol', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
 					)
 				)
