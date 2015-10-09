@@ -1,6 +1,5 @@
 # Binary data model
-# PharmML Type1 equation for INDIVIDUAL_VARIABLES
-# inverse-logit transformation applied in MODEL_PREDICTION
+# PharmML Type3 type=linear with trans=logit for INDIVIDUAL_VARIABLES
 # link=identity in OBSERVATION definition
 
 Bernoulli_DIST_dat = dataObj{
@@ -62,22 +61,17 @@ Bernoulli_DIST_mdl = mdlObj{
    }
    
    INDIVIDUAL_VARIABLES{
-      LP = BASE + POP_BETA*CP + eta_PPV_EVENT
+     logit(P1) = linear(trans is logit, pop=POP_BASEP, fixEff=[{coeff=POP_BETA, cov=CP}], ranEff=[eta_PPV_EVENT])
    }# end INDIVIDUAL_VARIABLES
 
-   MODEL_PREDICTION{
-	  P1 = 1/(1+exp(-LP))
-	  # P1 = invLogit(LP)
-   }# end MODEL_PREDICTION
-
    OBSERVATION{
-     Y : { type is discrete, distn = Binomial(probabilityOfSuccess=P1, numberOfTrials=1) }
+     Y : { type is discrete, distn = Bernoulli(probability=P1) }
    }# end ESTIMATION
 } # end of model object
 
 Bernoulli_DIST_task = taskObj{
 	ESTIMATE{ 
-		conf : {target is NMTRAN_CODE, version = "7.2", algo = "FOCE" }
+		conf : {target is MLXTRAN_CODE, version = "4.3.2", algo = "SAEM" }
 	}
 }# end of task object
 

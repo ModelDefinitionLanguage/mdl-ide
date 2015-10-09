@@ -88,10 +88,16 @@ class ModelDefinitionPrinter {
 		'''
 		<ModelDefinition xmlns="«xmlns_mdef»">
 			«mObj.print_mdef_VariabilityModel»
-			«mObj.print_mdef_CovariateModel»
+			«IF !mObj.mdlCovariateDefns.isEmpty»
+				«mObj.print_mdef_CovariateModel»
+			«ENDIF»
 			«mObj.print_mdef_ParameterModel(pObj)»
-			«mObj.writeStructuralModel»
-			«mObj.writeObservationModel»
+			«IF !mObj.modelPredictionBlocks.isEmpty»
+				«mObj.writeStructuralModel»
+			«ENDIF»
+			«IF !mObj.mdlObservations.isEmpty»
+				«mObj.writeObservationModel»
+			«ENDIF»
 		</ModelDefinition>
 		'''
 	}
@@ -643,16 +649,20 @@ class ModelDefinitionPrinter {
 		«ENDFOR»
 	'''
 	
-	def writeStructuralModel(MclObject mdlObject)'''
-		<StructuralModel blkId="sm">
-			«FOR blk : mdlObject.modelPredictionBlocks»
-				«IF blk.body instanceof BlockStatementBody»
-					«mdlObject.writeModelPredictionBlock(blk.body as BlockStatementBody)»
+	def writeStructuralModel(MclObject mdlObject){
+		'''
+			<StructuralModel blkId="sm">
+				«FOR blk : mdlObject.modelPredictionBlocks»
+					«IF blk.body instanceof BlockStatementBody»
+						«mdlObject.writeModelPredictionBlock(blk.body as BlockStatementBody)»
+					«ENDIF»
+				«ENDFOR»
+				«IF !mdlObject.mdlCompartmentStatements.isEmpty»
+					«mdlObject.mdlCompartmentStatements.writeCompartmentMacros»
 				«ENDIF»
-			«ENDFOR»
-			«mdlObject.mdlCompartmentStatements.writeCompartmentMacros»
-		</StructuralModel>
-	'''
+			</StructuralModel>
+		'''
+	}
 	
 	def writeCompartmentMacros(List<Statement> stmts){
 		'''
@@ -706,9 +716,10 @@ class ModelDefinitionPrinter {
 				case ListDefinitionProvider::COUNT_OBS_VALUE:
 					s.print_mdef_CountObservations
 				case ListDefinitionProvider::DISCRETE_OBS_VALUE:
-					s.print_mdef_DiscreteObservations.toString
+					s.print_mdef_DiscreteObservations
 	//				case CATEGORICAL_OBS: retVal = s.print_mdef_CategoricalObservations.toString
-	//				case TTE_OBS: retVal = s.print_mdef_TimeToEventObservations.toString
+				case ListDefinitionProvider::TTE_OBS_VALUE:
+					s.print_mdef_TimeToEventObservations
 				default: ''''''
 			}» 
 		</ObservationModel>
@@ -725,7 +736,7 @@ class ModelDefinitionPrinter {
 				«IF isStandardErrorDefinition(definition.expression)»
 					<Standard symbId="«definition.name»">
 						«IF (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null»
-							<Transformation>«(definition.expression as BuiltinFunctionCall).getArgumentExpression('trans').convertToString.getPharmMLTransFunc»</Tranformation>
+							<Transformation>«(definition.expression as BuiltinFunctionCall).getArgumentExpression('trans').convertToString.getPharmMLTransFunc»</Transformation>
 						«ENDIF»
 						<Output>
 							«(definition.expression as BuiltinFunctionCall).getArgumentExpression('prediction').pharmMLExpr»
@@ -1159,46 +1170,44 @@ class ModelDefinitionPrinter {
 //			</Discrete>
 //		'''
 //	}
-//
-//
-//	private def print_mdef_TimeToEventObservations(SymbolDeclaration s) {
-//		var name = s.name
-//		val haz = s.list.arguments.getAttributeExpression(AttributeValidator::attr_hazard.name);
-//		val event = s.list.arguments.getAttribute(AttributeValidator::attr_event.name);
-//		val maxEvent = s.list.arguments.getAttributeExpression(AttributeValidator::attr_max_event.name);
-//		'''
-//			<Discrete>
-//				<TimeToEventData>
-//					<EventVariable symbId="«name»"/>
-//					<HazardFunction symbId="«haz.toStr»">
-//						<ct:Assign>
-//							«haz.print_Math_Expr»
-//						</ct:Assign>
-//					</HazardFunction>
-//					«IF event != null»
-//						<Censoring censoringType="«event.getEventType»"/>
-//					«ENDIF»
-//					«IF maxEvent != null»
-//						<MaximumNumberEvents>
-//							<ct:Assign>
-//								«maxEvent.print_Math_Equation»
-//							</ct:Assign>
-//						</MaximumNumberEvents>
-//					«ENDIF»
-//				</TimeToEventData>
-//			</Discrete>
-//		'''
-//	}
-//	
-//	def getEventType(String eventType){
-//		switch(eventType){
-//			case EventType::EXACT.toString: '''rightCensored'''
-//			case EventType::INTERVAL_CENSORED.toString: '''intervalCensored'''
-//			default: ''''''
-//		}
-//	}
-//
-//
+
+
+	private def print_mdef_TimeToEventObservations(ListDefinition s) {
+		var name = s.name
+		val haz = s.list.getAttributeExpression('hazard');
+		val event = s.list.getAttributeEnumValue('event');
+		val maxEvent = s.list.getAttributeExpression('maxEvent');
+		'''
+			<Discrete>
+				<TimeToEventData>
+					<EventVariable symbId="«name»"/>
+					<HazardFunction symbId="«haz.convertToString»">
+						<ct:Assign>
+							«haz.pharmMLExpr»
+						</ct:Assign>
+					</HazardFunction>
+					«IF event != null»
+						<Censoring censoringType="«event.getEventType»"/>
+					«ENDIF»
+					«IF maxEvent != null»
+						<MaximumNumberEvents>
+							«maxEvent.expressionAsAssignment»
+						</MaximumNumberEvents>
+					«ENDIF»
+				</TimeToEventData>
+			</Discrete>
+		'''
+	}
+	
+	def getEventType(String eventType){
+		switch(eventType){
+			case 'exact': '''rightCensored'''
+			case 'intervalCensored': '''intervalCensored'''
+			default: ''''''
+		}
+	}
+
+
 //	private def print_mdef_StandardObservation(SymbolDeclaration s){
 //		var name = s.name
 //		val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);

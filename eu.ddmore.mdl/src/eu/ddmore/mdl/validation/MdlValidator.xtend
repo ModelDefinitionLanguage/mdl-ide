@@ -420,22 +420,24 @@ class MdlValidator extends AbstractMdlValidator {
 		if(mogObj.isMogObject){
 			val mogValidator = new MogValidator
 			mogValidator.buildMog(mogObj)
-			// assume has a data obj
-			mogValidator.validateCovariates[
-				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
-			]
-			mogValidator.validateObservations[
-				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
-			]
-			mogValidator.validateVariabilityLevels[
-				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
-			]
-			mogValidator.validateIndividualVariable[
-				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
-			]
-			mogValidator.validateDosing[
-				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
-			]
+			if(mogValidator.mdlObj != null && mogValidator.dataObj != null){
+				// assume has a data obj and mdl obj
+				mogValidator.validateCovariates[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateObservations[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateVariabilityLevels[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateIndividualVariable[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateDosing[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+			}
 		}
 	}
 	

@@ -17,7 +17,6 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 class DistributionPrinter {
 	
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
-	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder
 	
 	@Data @FinalFieldsConstructor
 	static class UncertMlMapping{

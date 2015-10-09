@@ -81,8 +81,8 @@ class MclUtils {
 	}
 
 	def getMdlCovariateDefns(MclObject mdlObj){
-		val retVal = new ArrayList<Statement>
-		mdlObj.blocks.filter[identifier == BlockDefinitionProvider::COVARIATE_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[retVal.add(it)]]
+		val retVal = new ArrayList<SymbolDefinition>
+		mdlObj.blocks.filter[identifier == BlockDefinitionProvider::COVARIATE_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[retVal.add(it as SymbolDefinition)]]
 		retVal
 	}	
 
@@ -215,12 +215,12 @@ class MclUtils {
 	}
 	
 	def getMdlObservations(MclObject it){
-		val retVal = new ArrayList<Statement>
+		val retVal = new ArrayList<SymbolDefinition>
 		for(obsStmt : blocks.filter[identifier == BlockDefinitionProvider::OBS_BLK_NAME]){
 			val body = obsStmt.body
 			switch(body){
 				BlockStatementBody:{
-					retVal.addAll(body.statements)
+					body.statements.forEach[retVal.add(it as SymbolDefinition)]
 				}
 			}
 		}

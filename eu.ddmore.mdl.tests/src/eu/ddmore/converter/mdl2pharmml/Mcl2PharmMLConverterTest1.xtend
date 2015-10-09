@@ -50,6 +50,11 @@ class Mcl2PharmMLConverterTest1 {
 	}
 
 	@Test
+	def void testUseCase2_1(){
+		validateConversion("UseCase2_1")
+	}
+
+	@Test
 	def void testUseCase2_5(){
 		validateConversion("UseCase2_5")
 	}
@@ -69,9 +74,24 @@ class Mcl2PharmMLConverterTest1 {
 		validateConversion("UseCase4_1")
 	}
 
-	@Test
+	@Ignore
 	def void testUseCase5(){
 		validateConversion("UseCase5")
+	}
+
+	@Ignore
+	def void testUseCase5_1(){
+		validateConversion("UseCase5_1")
+	}
+
+	@Ignore
+	def void testUseCase5_2(){
+		validateConversion("UseCase5_2")
+	}
+
+	@Ignore
+	def void testUseCase5_3(){
+		validateConversion("UseCase5_3")
 	}
 
 	@Test
@@ -87,6 +107,11 @@ class Mcl2PharmMLConverterTest1 {
 	@Test
 	def void testUseCase8(){
 		validateConversion("UseCase8")
+	}
+
+	@Test
+	def void testUseCase8_1(){
+		validateConversion("UseCase8_1")
 	}
 
 	@Test
@@ -120,6 +145,11 @@ class Mcl2PharmMLConverterTest1 {
 	}
 
 	@Test
+	def void testUseCase12_1(){
+		validateConversion("UseCase12_1")
+	}
+
+	@Test
 	def void testUseCase12_2(){
 		validateConversion("UseCase12_2")
 	}
@@ -130,21 +160,36 @@ class Mcl2PharmMLConverterTest1 {
 	}
 
 	@Ignore
+	def void testUseCase13_1(){
+		validateConversion("UseCase13_1")
+	}
+
+	@Test
 	def void testUseCase14(){
 		validateConversion("UseCase14")
 	}
 
-	@Ignore
+	@Test
+	def void testUseCase14_1(){
+		validateConversion("UseCase14_1")
+	}
+
+	@Test
+	def void testUseCase14_2(){
+		validateConversion("UseCase14_2")
+	}
+
+	@Test
 	def void testUseCase15(){
 		validateConversion("UseCase15")
 	}
 
-	@Ignore
+	@Test
 	def void testUseCase16(){
 		validateConversion("UseCase16")
 	}
 
-	@Ignore
+	@Test
 	def void testUseCase17(){
 		validateConversion("UseCase17")
 	}

@@ -596,11 +596,12 @@ public class MclTypeProvider {
 	
 	def TypeInfo getTypeOfList(ListDefinition it){
 		val listDefn = list.listDefinition
-		val type = listDefn?.listType
+		val type = listDefn?.listType ?: UNDEFINED_TYPE
 		switch(type){
 			EnumListTypeInfo:
 				getPopulatedType(listDefn)
 			ListTypeInfo: type
+			default: UNDEFINED_TYPE
 		}
 	}
 	

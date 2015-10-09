@@ -48,6 +48,8 @@ class ListDefinitionProvider {
 	public static val OBS_TYPE_ATT = 'type'
 	public static val COUNT_OBS_VALUE = 'count'
 	public static val DISCRETE_OBS_VALUE = 'discrete'
+	public static val TTE_OBS_VALUE = 'tte'
+	
 
 	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
 	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
@@ -55,7 +57,7 @@ class ListDefinitionProvider {
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
 	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{'depot', 'compartment', 'elimination', 'transfer', 'distribution', 'direct', 'input', 'effect'})
 	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
-	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{'categorical', COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, 'tte'})
+	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{'categorical', COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
@@ -347,7 +349,7 @@ class ListDefinitionProvider {
 						 new AttributeDefn(OBS_TYPE_ATT, null, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
 						 ]
 					),
-					new ListDefInfo ('count', new ListTypeInfo("CountObs", PrimitiveType.Real),  #[
+					new ListDefInfo (COUNT_OBS_VALUE, new ListTypeInfo("CountObs", PrimitiveType.Real),  #[
 						 new AttributeDefn(OBS_TYPE_ATT, null, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE)
 						 ]
@@ -357,7 +359,7 @@ class ListDefinitionProvider {
 						 new AttributeDefn('distn', null, true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo ('tte', new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
+					new ListDefInfo (TTE_OBS_VALUE, new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn(OBS_TYPE_ATT, null, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('hazard', null, true, MclTypeProvider::REAL_TYPE.makeReference),
 						 new AttributeDefn('event', null, true, TTE_EVENT_TYPE),
