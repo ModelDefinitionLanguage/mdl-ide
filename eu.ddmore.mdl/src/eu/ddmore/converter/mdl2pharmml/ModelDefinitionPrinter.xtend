@@ -51,12 +51,6 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 
 class ModelDefinitionPrinter {
-//	extension DistributionPrinter distrPrinter = DistributionPrinter::getInstance();
-//	extension CustomDistributionPrinter custDistPrinter
-//	extension PKMacrosPrinter pkPrinter = null;
-//	extension MathPrinter mathPrinter = null;
-//	extension ReferenceResolver resolver = null;
-
 	extension MclUtils mu = new MclUtils
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
@@ -67,19 +61,6 @@ class ModelDefinitionPrinter {
 	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter
 	extension PKMacrosPrinter pkp = new PKMacrosPrinter
 	
-//	private static val CONTINUOUS_OBS = "continuous"
-//	private static val COUNT_OBS = "count"
-//	private static val DISCRETE_OBS = "discrete"
-//	private static val CATEGORICAL_OBS = "categorical"
-//	private static val TTE_OBS = "tte"
-	
-	
-//	new(MathPrinter mathPrinter, ReferenceResolver resolver){
-//		this.mathPrinter = mathPrinter;
-//		this.resolver = resolver;
-//		this.custDistPrinter = new CustomDistributionPrinter(distrPrinter)
-//		pkPrinter = new PKMacrosPrinter(mathPrinter, resolver);
-//	}		
 	
 	//////////////////////////////////////
 	// I. Model Definition
@@ -161,12 +142,6 @@ class ModelDefinitionPrinter {
 		return model;
 	}
 	
-//	def print_VariabilityReference(String level)'''
-//		<ct:VariabilityReference>
-//			«level.print_ct_SymbolRef»
-//		</ct:VariabilityReference>
-//	'''
-    
     def List<SymbolDefinition> getCovariateDependencies(Expression expr){
     	expr.getSymbolReferences
     }

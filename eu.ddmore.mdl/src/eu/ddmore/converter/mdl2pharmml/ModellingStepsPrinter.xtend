@@ -25,6 +25,8 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.MappingPair
 import java.util.HashSet
+import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 
 class ModellingStepsPrinter { 
 	
@@ -207,9 +209,6 @@ class ModellingStepsPrinter {
 						// record that mapping to model found
 						saveMappedColumn(column.name)
 					}
-//					var categoricalMapping = column.print_ds_CategoricalMapping
-//					// @TODO: fix this
-//					res = res + mObj.print_ds_ColumnMapping(column, categoricalMapping)
 				}
 				case(ListDefinitionProvider::AMT_USE_VALUE):{
 					if(mObj.findMdlSymbolDefn(column.name) != null){
@@ -309,29 +308,6 @@ class ModellingStepsPrinter {
 					</Piecewise>
 				</ColumnMapping>
 				'''
-//				'''
-//				<MultipleDVMapping>
-//					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
-//					<Piecewise xmlns="«xmlns_mstep»">
-//						«FOR p : dataDefine.attList»
-//							<math:Piece>
-//							   	«mObj.findMdlSymbolDefn(p.mappedSymbol.ref.name).symbolRef»
-//«««						   	«IF p.key.expression.isCategoricalObs(mObj)»
-//«««						   		«p.key.expression.printCategoricalObsMapping(mObj)»
-//«««						   	«ELSEIF p.key.expression.isDiscreteBernoulliObs(mObj)»
-//«««						   		«printDiscreteBernoulliObsMapping»
-//«««						   	«ENDIF»
-//								<math:Condition>
-//									<math:LogicBinop op="eq">
-//									<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«p.srcColumn.ref.name»"/>
-//										«p.leftOperand.pharmMLExpr»
-//							   		</math:LogicBinop>
-//							   	</math:Condition>
-//							</math:Piece>
-//						«ENDFOR» 
-//					</Piecewise>
-//				</MultipleDVMapping>
-//				'''
 		  default: ''''''
 		}
 	}
@@ -398,22 +374,20 @@ class ModellingStepsPrinter {
 		'''
 	}
 	
-	protected def print_ds_CategoricalMapping(ListDefinition column) {
+	private def print_ds_CategoricalMapping(ListDefinition column) {
 		var res = "";
-		// @TODO implement this
-//		if (column.list != null) {
-//			val type = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
-//			if(!type.isCategorical) return "";
-//			val define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-//			if (define != null) {
-//				var pairs = define.getAttributePairs(AttributeValidator::attr_category.name,
-//					AttributeValidator::attr_value.name);
-//				for (pair : pairs)
-//					res = res + '''
-//						<ds:Map modelSymbol="«pair.key.toStr»" dataSymbol="«pair.value.toStr»"/>
-//					''';
-//			}
-//		}
+			val define = column.list.getAttributeExpression(ListDefinitionProvider::USE_ATT);
+			// get an EnumExpression here - use this to get the categories.
+			switch(define){
+				EnumExpression:{
+					val catDefnExpr = define.catDefn as CategoricalDefinitionExpr
+					for(catVal : catDefnExpr.categories){
+					res = res + '''
+						<ds:Map modelSymbol="«catVal.name»" dataSymbol="«catVal.mappedTo.convertToString»"/>
+						'''
+					}
+				}
+			}
 		if (res.length > 0)
 			res = '''
 				<ds:CategoryMapping>
@@ -577,9 +551,6 @@ class ModellingStepsPrinter {
 		for (column : dObj.dataColumnDefinitions) {
 			val columnType = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
 			val columnId = column.name;
-//			if(columnType == ListDefinitionProvider::AMT_USE_VALUE){
-//				dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
-//			}
 			val convertedColType = switch(columnType){
 				case(ListDefinitionProvider::COV_USE_VALUE),
 				case(ListDefinitionProvider::CATCOV_USE_VALUE):
@@ -679,40 +650,6 @@ class ModellingStepsPrinter {
 		return res;
 	}
 
-//	protected def print_msteps_ParameterEstimation(SymbolDeclaration s){
-//		if (s.name != null && s.list != null) {
-//			//Skip correlation definitions
-//			val type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name);
-//			if (type.equals(VariabilityType::COV.toString) || type.equals(VariabilityType::CORR.toString)) return "";
-//	
-//			val fixed = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
-//			var value = s.list.arguments.getAttributeExpression(AttributeValidator::attr_value.name);
-//			var lo = s.list.arguments.getAttributeExpression(AttributeValidator::attr_lo.name);
-//			var hi = s.list.arguments.getAttributeExpression(AttributeValidator::attr_hi.name);
-////			var estimate = "0".print_ct_Value;
-////			if (value != null)
-////				estimate = value.print_Math_Expr.toString();
-//			'''
-//				<ParameterEstimation>
-//					«print_ct_SymbolRef(s.name)»
-//					<InitialEstimate fixed="«fixed»">
-//							«value.print_Math_Equation»
-//					</InitialEstimate>
-//					«IF lo != null»
-//						<LowerBound>
-//							«lo.print_Math_Equation»
-//						</LowerBound>
-//					«ENDIF»
-//					«IF hi != null»
-//						<UpperBound>
-//							«hi.print_Math_Equation»
-//						</UpperBound>
-//					«ENDIF»
-//				</ParameterEstimation>
-//			'''
-//		}
-//	}
-	
 	def writeConfiguration(Statement stmt){
 		switch(stmt){
 			ListDefinition:{
@@ -752,31 +689,11 @@ class ModellingStepsPrinter {
 				<Operation order="«order»" opType="«OPERATION_EST_POP»">
 					«FOR s: b.nonBlockStatements»
 						«writeConfiguration(s)»
-«««						«s.print_msteps_Property»
 					«ENDFOR»
-«««					«FOR s: b.estimateBlock.statements»
-«««						«s.print_msteps_Algorithm»
-«««					«ENDFOR»
 				</Operation>
 			«ENDIF»
 		«ENDFOR»
 	'''
-
-//	def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
-//		<Operation order="1" opType="estPop">
-//			<Property name="target">
-//				<ct:Assign>
-//					<ct:String>MLXTRAN_CODE</ct:String>
-//				</ct:Assign>	
-//			</Property>
-//			<Property name="version">
-//				<ct:Assign>
-//					<ct:String>4.3.2</ct:String>
-//				</ct:Assign>	
-//			</Property>
-//			<Algorithm definition="SAEM"/>
-//		</Operation>
-//	'''
 
 
 
@@ -815,28 +732,4 @@ class ModellingStepsPrinter {
 //		return res;
 //	}
 	
-//	protected def print_msteps_Property(PropertyDeclaration s)'''
-//		«IF s.propertyName != null && s.expression != null»
-//			«IF !s.propertyName.argName.equals(PropertyValidator::attr_task_algo.name)»
-//				<Property name="«s.propertyName.argName»">
-//					«s.expression.print_Assign»
-//				</Property>
-//			«ENDIF»	
-//		«ENDIF»
-//	'''
-//	
-//	protected def print_msteps_Algorithm(PropertyDeclaration s)'''
-//		«IF s.propertyName != null && s.expression != null»
-//			«IF s.propertyName.argName.equals(PropertyValidator::attr_task_algo.name)»
-//				«IF s.expression.vector != null && s.expression.vector.expression != null &&
-//					s.expression.vector.expression.expressions != null »
-//					«FOR algoName: s.expression.vector.expression.expressions»
-//						«IF algoName != null»
-//							<Algorithm definition="«algoName.toStr»"/>
-//						«ENDIF»
-//					«ENDFOR»
-//				«ENDIF»
-//			«ENDIF»	
-//		«ENDIF»
-//	'''
 }
