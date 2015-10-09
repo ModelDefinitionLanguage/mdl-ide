@@ -49,6 +49,7 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.EnumExpression
 
 class ModelDefinitionPrinter {
 	extension MclUtils mu = new MclUtils
@@ -411,16 +412,6 @@ class ModelDefinitionPrinter {
 			«print_mdef_CollerationModel(mObj, pObj)»
 		</ParameterModel>
   	'''
-//  		statements = statements + mObj.print_mdef_CollerationModel(pObj); 
-//	  	if (statements.length > 0){
-//			'''
-//				<ParameterModel blkId="pm">
-//					«statements»
-//				</ParameterModel>
-//			''';
-//		}
-//	}
-	
 	
 	def writeGeneralIdv(EquationTypeDefinition it){
 		var funcExpr = expression as BuiltinFunctionCall
@@ -644,21 +635,6 @@ class ModelDefinitionPrinter {
 		«stmts.printCompartmentDefinitions»
 		«stmts.printMacros»
 		'''
-//							macros = macros + '''
-//			<PKmacros>
-//		'''
-//							
-//							for (s: st.pkMacroBlock.statements){
-//								if (s.variable != null)
-//									macros = macros + s.variable.print_PKMacros;
-//								if (s.list != null)
-//									macros = macros + s.list.print_PKMacros;
-//							}
-//							macros = macros + '''
-//			</PKmacros>
-//		'''
-							 
-//						}
 	}
 	
 	
@@ -692,7 +668,8 @@ class ModelDefinitionPrinter {
 					s.print_mdef_CountObservations
 				case ListDefinitionProvider::DISCRETE_OBS_VALUE:
 					s.print_mdef_DiscreteObservations
-	//				case CATEGORICAL_OBS: retVal = s.print_mdef_CategoricalObservations.toString
+				case ListDefinitionProvider::CATEGORICAL_OBS_VALUE:
+					s.print_mdef_CategoricalObservations
 				case ListDefinitionProvider::TTE_OBS_VALUE:
 					s.print_mdef_TimeToEventObservations
 				default: ''''''
@@ -1115,36 +1092,55 @@ class ModelDefinitionPrinter {
 	}
 	
 	
-//	private def print_mdef_CategoricalObservations(SymbolDeclaration s) {
-//		var name = s.name
-//		val categories = s.list.arguments.getAttributeExpression(AttributeValidator::attr_categories.name);
-//		val probabilities = s.list.arguments.getAttributeExpression(AttributeValidator::attr_probabilities.name);
-//		'''
-//			<Discrete>
-//				<CategoricalData>
-//					<ListOfCategories>
-//					«FOR cat : categories.vector.expression.expressions»
-//						<Category symbId="c«cat.toStr»"/>
-//					«ENDFOR»
-//					</ListOfCategories>
-//				<CategoryVariable symbId="«name»"/>
-//				«FOR i : 0 ..< categories.vector.expression.expressions.size»
-//					<ProbabilityAssignment>
-//						<Probability linkFunction="identity">
-//							<math:LogicBinop op="eq">
-//								<ct:SymbRef symbIdRef="«name»"/>
-//								<ct:SymbRef symbIdRef="c«categories.vector.expression.expressions.get(i).toStr»"/>
-//							</math:LogicBinop>
-//						</Probability>
-//						<ct:Assign>
-//							«probabilities.vector.expression.expressions.get(i).print_Math_Expr»
-//						</ct:Assign>
-//					</ProbabilityAssignment>
-//				«ENDFOR»
-//				</CategoricalData>
-//			</Discrete>
-//		'''
-//	}
+	private def print_mdef_CategoricalObservations(ListDefinition s) {
+//			val define = column.list.getAttributeExpression(ListDefinitionProvider::USE_ATT);
+//			// get an EnumExpression here - use this to get the categories.
+//			switch(define){
+//				EnumExpression:{
+//					val catDefnExpr = define.catDefn as CategoricalDefinitionExpr
+//					for(catVal : catDefnExpr.categories){
+//					res = res + '''
+//						<ds:Map modelSymbol="«catVal.name»" dataSymbol="«catVal.mappedTo.convertToString»"/>
+//						'''
+//					}
+//				}
+//			}
+		val categories = s.list.getAttributeExpression(ListDefinitionProvider::OBS_TYPE_ATT);
+		val listCats = new ArrayList<String>
+		val catVals = new HashMap<String, Expression>
+		switch(categories){
+			EnumExpression:{
+				val catDefnExpr = categories.catDefn as CategoricalDefinitionExpr
+				catDefnExpr.categories.forEach[
+					listCats.add(name)
+					catVals.put(name, mappedTo)
+				]
+			}
+		}
+		'''
+			<Discrete>
+				<CategoricalData>
+					<ListOfCategories>
+						«FOR cat : listCats»
+							<Category symbId="«cat»"/>
+						«ENDFOR»
+					</ListOfCategories>
+					<CategoryVariable symbId="«s.name»"/>
+					«FOR cat : listCats»
+						<ProbabilityAssignment>
+							<Probability linkFunction="identity">
+								<math:LogicBinop op="eq">
+									<ct:SymbRef symbIdRef="«s.name»"/>
+									<ct:SymbRef symbIdRef="«cat»"/>
+								</math:LogicBinop>
+							</Probability>
+							«catVals.get(cat).expressionAsAssignment»
+						</ProbabilityAssignment>
+					«ENDFOR»
+				</CategoricalData>
+			</Discrete>
+		'''
+	}
 
 
 	private def print_mdef_TimeToEventObservations(ListDefinition s) {

@@ -48,6 +48,7 @@ class ListDefinitionProvider {
 	public static val OBS_TYPE_ATT = 'type'
 	public static val COUNT_OBS_VALUE = 'count'
 	public static val DISCRETE_OBS_VALUE = 'discrete'
+	public static val CATEGORICAL_OBS_VALUE = 'categorical'
 	public static val TTE_OBS_VALUE = 'tte'
 	
 
@@ -57,7 +58,7 @@ class ListDefinitionProvider {
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
 	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{'depot', 'compartment', 'elimination', 'transfer', 'distribution', 'direct', 'input', 'effect'})
 	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
-	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{'categorical', COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
+	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{CATEGORICAL_OBS_VALUE, COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
@@ -345,7 +346,7 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = OBS_TYPE_ATT
 				listDefns = newArrayList(
-					new ListDefInfo ('categorical', new EnumListTypeInfo("CatObs"),  #[
+					new ListDefInfo (CATEGORICAL_OBS_VALUE, new EnumListTypeInfo("CatObs"),  #[
 						 new AttributeDefn(OBS_TYPE_ATT, null, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
 						 ]
 					),
