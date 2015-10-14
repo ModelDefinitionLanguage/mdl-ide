@@ -84,7 +84,7 @@ warfarin_T2E_exact_mdl = mdlObj{
 
 warfarin_T2E_exact_task = taskObj{
 	ESTIMATE{ 
-		conf : {target is MLXTRAN_CODE, version = "4.3.2", algo = "SAEM" }
+		set target is monolix, version = "4.3.2", algo is saem 
 	}
 }
 

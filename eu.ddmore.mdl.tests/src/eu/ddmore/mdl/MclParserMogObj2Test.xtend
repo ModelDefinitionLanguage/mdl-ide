@@ -111,7 +111,7 @@ Categorical_DIST_mdl = mdlObj{
 
 Categorical_DIST_task = taskObj{
 	ESTIMATE{
-		conf : { target is MLXTRAN_CODE, version= "4.3.2", algo = "SAEM" }
+		set target is monolix, version= "4.3.2", algo is saem
 	}
 }# end of task object
 

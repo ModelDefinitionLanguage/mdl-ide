@@ -158,7 +158,7 @@ warfarin_PK_BOV_mdl = mdlObj{
 warfarin_PK_BOV_task = taskObj{
 
       ESTIMATE {
-		conf : {target is MLXTRAN_CODE, version = "4.3.2", algo = "SAEM" }
+		set target is monolix, version = "4.3.2", algo is saem 
       }
 }# end of taskObj
 
