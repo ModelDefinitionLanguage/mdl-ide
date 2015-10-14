@@ -41,12 +41,15 @@ import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import java.util.Collections
 import java.util.HashSet
 import eu.ddmore.mdl.validation.ListDefinitionProvider.ListDefInfo
+import eu.ddmore.mdl.validation.PropertyDefinitionProvider
+import eu.ddmore.mdl.mdl.PropertyStatement
 
 public class MclTypeProvider {
 
 	extension BuiltinFunctionProvider typeProvider = new BuiltinFunctionProvider
 	extension ListDefinitionProvider listProvider = new ListDefinitionProvider
 	extension SublistDefinitionProvider subListProvider = new SublistDefinitionProvider
+	extension PropertyDefinitionProvider propProvider = new PropertyDefinitionProvider
 	
 
 	enum PrimitiveType {
@@ -527,12 +530,22 @@ public class MclTypeProvider {
 	}
 	
 	def dispatch TypeInfo typeFor(EnumExpression e){
-		val parent = EcoreUtil2.getContainerOfType(e, BuiltinFunctionCall)
-		if(parent != null){
-			e.typeOfFunctionBuiltinEnum
+		var Object parent = EcoreUtil2.getContainerOfType(e, BuiltinFunctionCall)
+		if(parent == null){
+			parent = EcoreUtil2.getContainerOfType(e, AttributeList)
 		}
-		else{
-			e.typeOfAttributeBuiltinEnum
+		if(parent == null){
+			parent = EcoreUtil2.getContainerOfType(e, PropertyStatement)
+		}
+		switch(parent){
+			BuiltinFunctionCall:
+				e.typeOfFunctionBuiltinEnum
+			AttributeList:
+				e.typeOfAttributeBuiltinEnum
+			PropertyStatement:
+				e.typeOfPropertyBuiltinEnum
+			default:
+				UNDEFINED_TYPE
 		}
 	}
 
@@ -774,6 +787,16 @@ public class MclTypeProvider {
 			}
 		}
 	}
+
+
+	def checkPropertyAttributeTyping(PropertyStatement stmt, ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
+		val attType = at.typeForProperty
+		switch(at){
+			ValuePair:
+				checkExpectedAndExpression(attType, at.expression, errorLambda)				
+		}
+	}
+
 
 	def checkSublistAttributeTyping(SubListExpression it, ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
 		val subListDefn = findSublistMatch

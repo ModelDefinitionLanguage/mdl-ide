@@ -17,11 +17,18 @@ import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.EnumExpression
 
 class DomainObjectModelUtils {
 	
 	static def getStatements(BlockStatement it){
-		(body as BlockStatementBody).statements
+		val b = body
+		switch(b){
+			BlockStatementBody:
+				b.statements
+			default:
+				Collections::emptyList
+		}
 	} 
 	
 	static def getBlockText(BlockStatement it){
@@ -32,6 +39,15 @@ class DomainObjectModelUtils {
 		if(eContainer instanceof BlockBody)	eContainer.eContainer
 		else eContainer
 	}
+	
+	
+	static def getOwningValuePair(Expression it){
+		EcoreUtil2.getContainerOfType(eContainer, ValuePair)
+	}
+	
+	static def getOwningBlock(EnumExpression it){
+		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+	} 
 	
 	static def getOwningBlock(SymbolDefinition it){
 		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)

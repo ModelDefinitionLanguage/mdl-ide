@@ -553,10 +553,6 @@ class ListDefinitionProvider {
 		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	} 
 	
-	def getOwningBlock(EnumExpression it){
-		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-	} 
-	
 	def getAttributeType(ListDefInfo it, String attName){
 		attributes.findFirst(ad | ad.name == attName)?.attType ?: MclTypeProvider::UNDEFINED_TYPE 
 	}

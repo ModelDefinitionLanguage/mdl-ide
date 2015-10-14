@@ -24,6 +24,8 @@ class BlockDefinitionProvider {
 	public static val PARAM_STRUCT_BLK = "STRUCTURAL"
 	public static val PARAM_VARIABILITY_BLK = "VARIABILITY"
 	public static val DATA_SRC_BLK = "SOURCE"
+	public static val ESTIMATE_BLK = "ESTIMATE" 
+	public static val SIMULATE_BLK = "SIMULATE" 
 	
 	
 	
@@ -43,7 +45,7 @@ class BlockDefinitionProvider {
 			PARAM_VARIABILITY_BLK -> false, "DECLARED_VARIABLES" -> false, PARAM_STRUCT_BLK -> false
 		},
 		MdlValidator::TASKOBJ -> #{
-			"ESTIMATE" -> false, "SIMULATE" -> false, "OPTIMISE" -> false
+			ESTIMATE_BLK -> false, SIMULATE_BLK -> false, "OPTIMISE" -> false
 		},
 		MdlValidator::MOGOBJ -> #{
 			MOG_OBJ_NAME -> true
