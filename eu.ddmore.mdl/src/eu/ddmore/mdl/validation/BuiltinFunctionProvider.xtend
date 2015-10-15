@@ -9,8 +9,8 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import java.util.Collections
 import java.util.HashMap
 import java.util.HashSet
 import java.util.List
@@ -23,7 +23,6 @@ import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import java.util.Collections
 
 class BuiltinFunctionProvider {
 	
@@ -52,14 +51,14 @@ class BuiltinFunctionProvider {
 	}
 
 	static class NamedArgFuncDefn implements FunctDefn{
-		PrimitiveTypeInfo returnType
+		TypeInfo returnType
 		Map<String, FunctionArgument> arguments	 
 		
 		override int getNumArgs(){
 			arguments.size
 		}
 		
-		override PrimitiveTypeInfo getReturnType(){
+		override TypeInfo getReturnType(){
 			returnType
 		}
 	}
@@ -100,6 +99,15 @@ class BuiltinFunctionProvider {
 						'var' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]
 					],
+		'LogNormal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
+						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ],
+					new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
+						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'var' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ]
+					],
 		'Bernoulli' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
 						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]
@@ -116,6 +124,26 @@ class BuiltinFunctionProvider {
 		'Gamma' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
 						'shape' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'scale' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ]
+					],
+		'NonParametric' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
+						'bins' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true),
+						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+					} ]
+					],
+		'MultiNonParametric' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE.makeVector arguments = #{
+						'bins' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector.makeVector, true),
+						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+					} ]
+					],
+		'Empirical' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
+						'data' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true),
+						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+					} ]
+					],
+		'MultiEmpirical' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE.makeVector arguments = #{
+						'data' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector.makeVector, true),
+						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
 					} ]
 					],
 		'linear' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
@@ -156,6 +184,14 @@ class BuiltinFunctionProvider {
 						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ] ],
+		'readVector' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE.makeVector arguments = #{
+						'src' -> new FunctionArgument(ListDefinitionProvider::PRIOR_SOURCE_TYPE, true),
+						'element' -> new FunctionArgument(MclTypeProvider::STRING_TYPE, true)
+					} ] ],
+		'readMatrix' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE.makeVector.makeVector arguments = #{
+						'src' -> new FunctionArgument(ListDefinitionProvider::PRIOR_SOURCE_TYPE, true),
+						'element' -> new FunctionArgument(MclTypeProvider::STRING_TYPE, true)
 					} ] ]
 	}
 

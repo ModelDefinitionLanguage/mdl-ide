@@ -59,6 +59,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public val static PARAMOBJ = 'parObj'
 	public val static MOGOBJ = 'mogObj'
 	public val static DESIGNOBJ = 'desObj'
+	public val static PRIOROBJ = 'priorObj'
 
 	extension BlockArgumentDefinitionProvider movh = new BlockArgumentDefinitionProvider
 	extension BlockDefinitionProvider blokHelper = new BlockDefinitionProvider
@@ -109,9 +110,7 @@ class MdlValidator extends AbstractMdlValidator {
 	// MOG validation
 	public static val MODEL_DATA_MISMATCH = "eu.ddmore.mdl.validation.mog.mismatch_mod_data"
 
-	private static val VALID_OBJECT_TYPES = #[ MDLOBJ, PARAMOBJ, TASKOBJ, DATAOBJ, MOGOBJ, DESIGNOBJ ]
-
-	def void setFoo(){}
+	private static val VALID_OBJECT_TYPES = #[ MDLOBJ, PARAMOBJ, TASKOBJ, DATAOBJ, MOGOBJ, DESIGNOBJ, PRIOROBJ ]
 
 	@Check
 	def validateMdlObjArguments(MclObject it){

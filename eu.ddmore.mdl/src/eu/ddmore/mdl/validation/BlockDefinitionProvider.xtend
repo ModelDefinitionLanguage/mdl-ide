@@ -52,11 +52,17 @@ class BlockDefinitionProvider {
 		},
 		MdlValidator::DESIGNOBJ -> #{
 			"DECLARED_VARIABLES" -> false, "ADMINISTRATION" -> true, "STUDY_DESIGN" -> true, "SAMPLING" -> false, "DESIGN_SPACES" -> false
+		},
+		MdlValidator::PRIOROBJ -> #{
+			"PRIOR_PARAMETERS" -> false, "NON_CANONICAL_DISTRIBUTION" -> false,
+			"PRIOR_DISTRIBUTION_DEFINITION" -> true
 		}
 	}
 
-	val static SubBlkData = #{
-		MDL_DEQ_BLK -> MDL_PRED_BLK_NAME, MDL_CMT_BLK -> MDL_PRED_BLK_NAME
+	val static Map<String, String> SubBlkData = #{
+		MDL_DEQ_BLK -> MDL_PRED_BLK_NAME, MDL_CMT_BLK -> MDL_PRED_BLK_NAME,
+		"PRIOR_SOURCE" -> "NON_CANONICAL_DISTRIBUTION",
+		"INPUT_PRIOR_DATA" -> "NON_CANONICAL_DISTRIBUTION" 
 	}
 	
 	new(){

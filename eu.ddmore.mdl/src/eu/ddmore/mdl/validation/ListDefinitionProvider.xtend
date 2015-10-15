@@ -56,6 +56,7 @@ class ListDefinitionProvider {
 	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
+	static val PRIOR_INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('priorInput', #{'RList'})
 	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{'depot', 'compartment', 'elimination', 'transfer', 'distribution', 'direct', 'input', 'effect'})
 	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
 	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{CATEGORICAL_OBS_VALUE, COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
@@ -73,6 +74,7 @@ class ListDefinitionProvider {
 	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", PrimitiveType.List)
 	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", PrimitiveType.List)
 	public static val DERIV_SAMPLING_TYPE = new ListTypeInfo("DerivedSampling", PrimitiveType.List)
+	public static val PRIOR_SOURCE_TYPE = new ListTypeInfo("PriorSource", PrimitiveType.List)
 
 	
 	// @TODO: need an addition set of validations to make sure that DVID is used if AMT has a define attribute
@@ -206,6 +208,17 @@ class ListDefinitionProvider {
 					new ListDefInfo (null, new ListTypeInfo("Source", PrimitiveType.List),  #[
 						 new AttributeDefn('file', null, true, MclTypeProvider::STRING_TYPE), new AttributeDefn('inputFormat', null, true, INPUT_FORMAT_TYPE),
 						 	new AttributeDefn('ignore', null, false, MclTypeProvider::STRING_TYPE) 
+						 ] 
+					)
+				)
+			]
+		),
+		"PRIOR_SOURCE" -> (
+			new BlockListDefinition => [
+				key = 'file'
+				listDefns = newArrayList(
+					new ListDefInfo (null, PRIOR_SOURCE_TYPE,  #[
+						 new AttributeDefn('file', null, true, MclTypeProvider::STRING_TYPE), new AttributeDefn('inputFormat', null, true, PRIOR_INPUT_FORMAT_TYPE)
 						 ] 
 					)
 				)
