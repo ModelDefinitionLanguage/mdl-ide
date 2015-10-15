@@ -87,8 +87,16 @@ class PropertyDefinitionProvider {
 	}
 
 
-	def getAttributeExpression(PropertyStatement it, String name){
+	def getPropertyExpression(PropertyStatement it, String name){
 		properties.findFirst[argumentName == name]?.expression
 	}
 
+	def getPropertyEnumValue(PropertyStatement it, String attName){
+		val enumExp = getPropertyExpression(attName)
+		switch(enumExp){
+			EnumExpression:
+				return enumExp.enumValue
+			default: null
+		}
+	}
 }

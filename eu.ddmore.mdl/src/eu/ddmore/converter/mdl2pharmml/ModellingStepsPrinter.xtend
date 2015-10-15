@@ -28,12 +28,16 @@ import java.util.HashSet
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CatValRefMappingExpression
+import eu.ddmore.mdl.mdl.PropertyStatement
+import eu.ddmore.mdl.validation.PropertyDefinitionProvider
+import eu.ddmore.mdl.mdl.MdlFactory
 
 class ModellingStepsPrinter { 
 	
 	extension MclUtils mu = new MclUtils 
 	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder 
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension SublistDefinitionProvider sldp = new SublistDefinitionProvider
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
 //	extension PKMacrosPrinter bmp = new PKMacrosPrinter
@@ -796,6 +800,24 @@ class ModellingStepsPrinter {
 		return res;
 	}
 
+
+	def convertTargetEnum(String enumValue){
+		switch(enumValue){
+			case("monolix"): "MLXTRAN_CODE"
+			case("nonmem"): "NMTRAN_CODE"
+			default: "ERROR!"
+		}
+	}
+
+	def convertAlgoEnum(String enumValue){
+		switch(enumValue){
+			case("saem"): "SAEM"
+			case("foce"): "FOCE"
+			case("fo"): "FO"
+			default: "ERROR!"
+		}
+	}
+
 	def writeConfiguration(Statement stmt){
 		switch(stmt){
 			ListDefinition:{
@@ -818,6 +840,26 @@ class ModellingStepsPrinter {
 				«ENDIF»
 				'''
 			}
+			PropertyStatement:{
+				val targetExpr = stmt.getPropertyEnumValue('target').convertTargetEnum
+				val versionExpr = stmt.getPropertyExpression('version')
+				val algoExpr = stmt.getPropertyEnumValue('algo').convertAlgoEnum
+//				val tolExpr = stmt.getPropertyExpression('tol')
+				'''
+				«IF targetExpr != null»
+					«writeProperty('target', targetExpr)»
+				«ENDIF»
+				«IF versionExpr != null»
+					«writeProperty('version', versionExpr)»
+				«ENDIF»
+«««				«IF tolExpr != null»
+«««					«writeProperty('tol', tolExpr)»
+«««				«ENDIF»
+				«IF algoExpr != null»
+					<Algorithm definition="«algoExpr»"/>
+				«ENDIF»
+				'''
+			}
 		}
 	}
 	
@@ -829,6 +871,12 @@ class ModellingStepsPrinter {
 		</Property>
 	'''
 	
+	def writeProperty(String propName, String exprStr){
+		val strExpr = MdlFactory::eINSTANCE.createStringLiteral
+		strExpr.value = exprStr
+		writeProperty(propName, strExpr) 
+	}
+
 	protected def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
 		«FOR b: tObj.blocks»
 			«IF b.identifier == "ESTIMATE"»
