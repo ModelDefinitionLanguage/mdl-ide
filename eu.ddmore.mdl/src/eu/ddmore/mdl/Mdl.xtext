@@ -61,7 +61,7 @@ EquationTypeDefinition:
 ;
 
 EquationDefinition returns EquationTypeDefinition:
-	{EquationDefinition} name = ID (vector?='[' ']')? (ASSIGN expression = Expression)? ';'?
+	{EquationDefinition} name = ID (vector?='[' ']'|matrix?='[[' ']]')? (ASSIGN expression = Expression)? ';'?
 ;
 
 EnumerationDefinition:
@@ -73,7 +73,7 @@ TransformedDefinition returns EquationTypeDefinition:
 ;
 
 RandomVariableDefinition:
-	name = ID "~" distn = BuiltinFunctionCall ';'?
+	name = ID (vector?='[' ']')? "~" distn = BuiltinFunctionCall ';'?
 ;
 
 ListDefinition:
@@ -247,11 +247,12 @@ Literal returns Expression:
 	IntegerLiteral |
 	StringLiteral |
 	BooleanLiteral |
-	VectorLiteral
+	VectorLiteral |
+	MatrixLiteral
 ;
 
 SymbolReference:
-	{SymbolReference} ref=[SymbolDefinition|ID]
+	{SymbolReference} ref=[SymbolDefinition|ID] ('[' indexExpr = Expression ']')?
 ;
 
 
@@ -301,6 +302,18 @@ StringLiteral returns Expression:
 //VectorElement returns Expression:
 //	{VectorElement} element+=Expression
 //;
+
+MatrixLiteral returns Expression:
+	{MatrixLiteral} '[[' rows += MatrixRow (=> ';' rows += MatrixRow)* ']]'
+;	
+
+MatrixRow returns Expression:
+	{MatrixRow} expressions += MatrixElement (=> ',' expressions += MatrixElement)*
+;
+
+MatrixElement returns Expression:
+	{MatrixElement} element=Expression
+;
 
 VectorLiteral returns Expression:
 	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'

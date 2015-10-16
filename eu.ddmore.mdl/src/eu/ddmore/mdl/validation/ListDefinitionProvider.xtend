@@ -213,12 +213,14 @@ class ListDefinitionProvider {
 				)
 			]
 		),
-		"PRIOR_SOURCE" -> (
+		BlockDefinitionProvider::PRIOR_SOURCE_BLK -> (
 			new BlockListDefinition => [
 				key = 'file'
 				listDefns = newArrayList(
 					new ListDefInfo (null, PRIOR_SOURCE_TYPE,  #[
-						 new AttributeDefn('file', null, true, MclTypeProvider::STRING_TYPE), new AttributeDefn('inputFormat', null, true, PRIOR_INPUT_FORMAT_TYPE)
+						 new AttributeDefn('file', null, true, MclTypeProvider::STRING_TYPE),
+						 new AttributeDefn('inputFormat', null, true, PRIOR_INPUT_FORMAT_TYPE),
+						 new AttributeDefn('format', null, true, getSublist(SublistDefinitionProvider::PRIOR_FORMAT_SUBLIST).makeVector)
 						 ] 
 					)
 				)

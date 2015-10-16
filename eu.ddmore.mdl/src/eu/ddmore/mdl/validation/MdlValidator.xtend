@@ -363,7 +363,7 @@ class MdlValidator extends AbstractMdlValidator {
 	def validateCompatibleTypes(EquationDefinition e){
 		// only check if there is an RHS to check 
 		if(e.expression != null)
-			if(e.isVector)
+			if(e.isVector || e.isMatrix)
 				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 			else
 				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
@@ -371,7 +371,10 @@ class MdlValidator extends AbstractMdlValidator {
 		
 	@Check
 	def validateCompatibleTypes(RandomVariableDefinition e){
-		checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
+		if(e.isVector)
+			checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+		else
+			checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
 	}
 		
 	@Check

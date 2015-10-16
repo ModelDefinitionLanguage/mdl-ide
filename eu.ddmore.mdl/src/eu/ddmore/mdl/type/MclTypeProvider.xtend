@@ -43,6 +43,9 @@ import java.util.HashSet
 import eu.ddmore.mdl.validation.ListDefinitionProvider.ListDefInfo
 import eu.ddmore.mdl.validation.PropertyDefinitionProvider
 import eu.ddmore.mdl.mdl.PropertyStatement
+import eu.ddmore.mdl.mdl.MatrixElement
+import eu.ddmore.mdl.mdl.MatrixLiteral
+import eu.ddmore.mdl.mdl.AnonymousListStatement
 
 public class MclTypeProvider {
 
@@ -509,7 +512,16 @@ public class MclTypeProvider {
 	def dispatch TypeInfo typeFor(Expression e){
 		switch(e){
 			SymbolReference:
-				e.ref.typeFor.makeReference
+				if(e.indexExpr == null)
+					e.ref.typeFor.makeReference
+				else{
+					val t = e.ref.typeFor
+					switch(t){
+						VectorTypeInfo:
+							t.elementType.makeReference
+						default: UNDEFINED_TYPE
+					}
+				}
 			CategoryValueReference:
 				e.ref.typeFor.makeReference
 			ParExpression: e.expr.typeFor
@@ -522,6 +534,10 @@ public class MclTypeProvider {
 			VectorLiteral:
 				if(e.expressions.isEmpty) MclTypeProvider.REAL_VECTOR_TYPE
 				else e.typeForArray
+			MatrixElement:
+				e.element.typeFor
+			MatrixLiteral:
+				MclTypeProvider.REAL_VECTOR_TYPE.makeVector
 			SubListExpression:
 				e.typeForSublist 
 			default:
@@ -532,7 +548,13 @@ public class MclTypeProvider {
 	def dispatch TypeInfo typeFor(EnumExpression e){
 		var Object parent = EcoreUtil2.getContainerOfType(e, BuiltinFunctionCall)
 		if(parent == null){
-			parent = EcoreUtil2.getContainerOfType(e, AttributeList)
+			parent = EcoreUtil2.getContainerOfType(e, SubListExpression)
+		}
+		if(parent == null){
+			parent = EcoreUtil2.getContainerOfType(e, ListDefinition)
+		}
+		if(parent == null){
+			parent = EcoreUtil2.getContainerOfType(e, AnonymousListStatement)
 		}
 		if(parent == null){
 			parent = EcoreUtil2.getContainerOfType(e, PropertyStatement)
@@ -540,8 +562,11 @@ public class MclTypeProvider {
 		switch(parent){
 			BuiltinFunctionCall:
 				e.typeOfFunctionBuiltinEnum
-			AttributeList:
+			ListDefinition,
+			AnonymousListStatement:
 				e.typeOfAttributeBuiltinEnum
+			SubListExpression:
+				parent.getTypeOfAttributeBuiltinEnum(e)
 			PropertyStatement:
 				e.typeOfPropertyBuiltinEnum
 			default:
@@ -569,12 +594,19 @@ public class MclTypeProvider {
 	def dispatch TypeInfo typeFor(SymbolDefinition sd){
 		switch(sd){
 			EquationDefinition:
-				if(sd.isVector) MclTypeProvider.REAL_VECTOR_TYPE else REAL_TYPE
+				if(sd.isVector)
+					MclTypeProvider.REAL_VECTOR_TYPE
+				else if(sd.isMatrix)
+					MclTypeProvider.REAL_VECTOR_TYPE.makeVector
+				else REAL_TYPE
 			ListDefinition:
 				getTypeOfList(sd)
 			TransformedDefinition,
-			ForwardDeclaration,
-			RandomVariableDefinition: typeTable.get(sd.eClass)
+			ForwardDeclaration:
+				typeTable.get(sd.eClass)
+//			RandomVariableDefinition: typeTable.get(sd.eClass)
+			RandomVariableDefinition:
+				if(sd.isVector) MclTypeProvider.REAL_VECTOR_TYPE else REAL_TYPE
 			EnumerationDefinition:{
 					val defn = sd.catDefn 
 					switch(defn){
@@ -655,6 +687,10 @@ public class MclTypeProvider {
 	
 	def checkExpectedPdf(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		checkExpectedAndExpression(PDF_TYPE, exp, errorLambda)
+	}
+
+	def checkExpectedPdfVector(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(PDF_TYPE.makeVector, exp, errorLambda)
 	}
 
 	def checkExpectedRealTransform(String transform, (TypeInfo, TypeInfo) => void errorLambda){

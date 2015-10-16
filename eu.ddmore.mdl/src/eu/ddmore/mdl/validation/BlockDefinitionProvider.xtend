@@ -26,7 +26,7 @@ class BlockDefinitionProvider {
 	public static val DATA_SRC_BLK = "SOURCE"
 	public static val ESTIMATE_BLK = "ESTIMATE" 
 	public static val SIMULATE_BLK = "SIMULATE" 
-	
+	public static val PRIOR_SOURCE_BLK = "PRIOR_SOURCE"
 	
 	
 	
@@ -61,7 +61,7 @@ class BlockDefinitionProvider {
 
 	val static Map<String, String> SubBlkData = #{
 		MDL_DEQ_BLK -> MDL_PRED_BLK_NAME, MDL_CMT_BLK -> MDL_PRED_BLK_NAME,
-		"PRIOR_SOURCE" -> "NON_CANONICAL_DISTRIBUTION",
+		PRIOR_SOURCE_BLK -> "NON_CANONICAL_DISTRIBUTION",
 		"INPUT_PRIOR_DATA" -> "NON_CANONICAL_DISTRIBUTION" 
 	}
 	
