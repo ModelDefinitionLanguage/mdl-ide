@@ -12,10 +12,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Ignore
+import java.io.File
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
 class Mcl2PharmMLConverterTest1 {
+	static val CONVERTED_OUTPUT_DIR="convertedFiles/"
+	static val USE_CASE_DIR="src/eu/ddmore/converter/mdl2pharmml/"
+	
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 
@@ -23,6 +27,8 @@ class Mcl2PharmMLConverterTest1 {
 	
 	@Before
 	def void setUp(){
+		val convertedDir = new File(CONVERTED_OUTPUT_DIR)
+		if(!convertedDir.exists) convertedDir.mkdir
 	}
 	
 	
@@ -31,10 +37,10 @@ class Mcl2PharmMLConverterTest1 {
 	}
 	
 	private def validateConversion(String useCaseName){
-		val mclFile = "src/eu/ddmore/converter/mdl2pharmml/" + useCaseName + ".mdl"
+		val mclFile = USE_CASE_DIR + useCaseName + ".mdl"
 		val mcl = readFile(mclFile).parse
 		mcl.assertNoErrors
-		val pharmMLFile = "convertedFiles/" + useCaseName + ".xml" 
+		val pharmMLFile = CONVERTED_OUTPUT_DIR + useCaseName + ".xml" 
 		mcl.convertTo(pharmMLFile)
 		assertIsValid(pharmMLFile)
 	} 
