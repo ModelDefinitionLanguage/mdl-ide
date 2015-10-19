@@ -36,7 +36,6 @@ class PKMacrosPrinter{
 	private val pk_attrs = newHashMap(
 		'modelCmt' -> "cmt",
 		'finput' -> "p",
-//		AttributeValidator::attr_tk0.name -> "Tk0",
 		'tlag' -> "Tlag",
 		'v' -> "V",
 		'cl' -> "CL",
@@ -61,13 +60,6 @@ class PKMacrosPrinter{
 					}
 				}
 			}
-//			if(s.variable != null && s.variable.list != null){
-//				var type = s.variable.list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
-//				if(type == PkMacroType::COMPARTMENT.toString){
-//					defns += '''<ct:Variable symbId="«s.variable.name»" symbolType="real"/>
-//					'''
-//				}
-//			}
 		}
 		return defns
 	}
@@ -164,11 +156,6 @@ class PKMacrosPrinter{
 		'''
 
 	
-//	def getAmtId(SymbolReference it, MclObject dObj){
-//		val symbDefn = ref
-//		dObj.getDataMappingForDoseVariable(symbDefn)
-//	}
-
 	//Convert MDL PK macro attributes to PharmML, type here is an MDL macro type
 	def print_PKAttributes(String type, AttributeList args){
 		var res = "";
@@ -246,81 +233,6 @@ class PKMacrosPrinter{
 			}
 				
 		}
-//		//Custom mapping
-//		//DEPOT, INPUT
-//		if (type.equals('depot') || type.equals('direct')){
-//			//type=depot|direct
-////			val modelCmt = args.getAttributeExpression('modelCmt')
-//			args.StoreCompartment
-////				if (modelCmt.equals("2"))
-//			attrExpressions.put("adm", modelCmt.writeAdm)
-//			val to = args.getAttributeExpression('to')
-//			if (to != null){
-//				var toCompartmentArgs = mObj.findCompartment(to as SymbolReference)
-//				if (toCompartmentArgs != null){
-//					var toCompartment_cmt = toCompartmentArgs.list.getAttributeExpression('modelCmt')
-//					attrExpressions.put("cmt", toCompartment_cmt.writeValue("cmt"))
-//				}
-//			}
-//		}
-//		if (type.equals('elimination')){
-//			val from = args.getAttributeExpression('from');
-//			val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
-//			if (fromCompartmentArgs != null){
-//				val fromCompartmentCmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt')
-//				attrExpressions.put("cmt", fromCompartmentCmt.writeValue("cmt"))
-//			}
-//		}
-//		//DISTRIBUTION
-//		if (type == 'distribution'){
-//			attrExpressions.put("cmt", null); //skip cmt attribute in peripheral macro
-//			val modelCmt = args.getAttributeExpression('modelCmt');
-//			val from = args.getAttributeExpression('from');
-//			var kin = args.getAttributeExpression('kin');
-//			val kout = args.getAttributeExpression('kout');
-//			if (from != null && (kin != null || kout != null)){
-//				val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
-//				if (fromCompartmentArgs != null){
-//					val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
-//					if (kin != null){
-//						val attr1 = "k" + fromCompartment_cmt.convertToString + modelCmt.convertToString;
-//						attrExpressions.put(attr1, kin.writeValue(attr1));
-//					}
-//					if (kout != null){
-//						val attr2 = "k" + modelCmt.convertToString + fromCompartment_cmt.convertToString;
-//						attrExpressions.put(attr2, kout.writeValue(attr2));
-//					}
-//				}
-//			}
-//		}
-//		//TRANSFER 
-//		if (type == 'transfer'){
-//			attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
-//			val modelCmt = args.getAttributeExpression('modelCmt')
-//			if (modelCmt != null){ 
-//				attrExpressions.put("to", modelCmt.writeValue("to")) //""to".print_Attr_Value(modelCmt.print_ct_Value));
-//			}
-//			val from = args.getAttributeExpression('from')
-//			if (from != null){
-//				val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
-//				if (fromCompartmentArgs != null){
-//					val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
-//					attrExpressions.put("from", fromCompartment_cmt.writeValue("from"))
-//				}
-//			}
-//		}
-//		//EFFECT
-//		if (type == "effect"){
-//			attrExpressions.put("cmt", null); //skip cmt attribute in transfer macro
-//			val from = args.getAttributeExpression('from');
-//			if (from != null){
-//				val fromCompartmentArgs = mObj.findCompartment(from as SymbolReference);
-//				if (fromCompartmentArgs != null){
-//					val fromCompartment_cmt = fromCompartmentArgs.list.getAttributeExpression('modelCmt');
-//					attrExpressions.put("cmt", fromCompartment_cmt.writeValue("cmt"))//"cmt".print_Attr_Value(fromCompartment_cmt.print_ct_Value));
-//				}
-//			}
-//		}
 		for (a: args.attributes){
 			var String attrName = null;
 			if (a.argumentName != null)
@@ -348,31 +260,10 @@ class PKMacrosPrinter{
 					}
 						
 				}
-//									if (s.variable.name.equals(to) && s.variable.list != null){
-//										var cmtMacroType = s.variable.list.arguments.getAttribute(AttributeValidator::attr_type_macro.name);
-//										if (cmtMacroType.equals(PkMacroType::COMPARTMENT.toString))
-//											return s.variable.list.arguments;
-//									}
-//								}
-//							}
-//						}
-//					}
 			}
 		return null;
 	}
 	
-//	protected def print_Attr_Value(String attrName, String value){
-//		return '''
-//		<Value argument="«attrName»">
-//				<ct:Assign>
-//					<Equation xmlns="«MATH_NS»">
-//						«value»
-//					</Equation>
-//				</ct:Assign>
-//			</Value>
-//		'''
-//	}
-
 	def writeValue(Expression value, String arg)'''
 		<Value argument="«arg»"> 
 			«value.expressionAsAssignment»
