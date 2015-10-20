@@ -119,7 +119,7 @@ warfarin_PK_ANALYTIC_mdl = mdlObj {
 
 warfarin_PK_ODE_task = taskObj {
 	ESTIMATE{ 
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 }
 } # end of task object
 

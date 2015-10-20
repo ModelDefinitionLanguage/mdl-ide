@@ -254,7 +254,7 @@ Hansson2013_mdl = mdlObj{
        
 Hansson2013_task = taskObj{
 	ESTIMATE{ 
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 	}
 }# end of task object
 

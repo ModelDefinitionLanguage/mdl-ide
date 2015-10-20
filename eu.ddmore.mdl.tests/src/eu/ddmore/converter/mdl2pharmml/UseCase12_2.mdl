@@ -77,7 +77,7 @@ Bernoulli_DIST_mdl = mdlObj{
 
 Bernoulli_DIST_task = taskObj{
 	ESTIMATE{ 
-		set target is nonmem, version = "7.2", algo is foce 
+		set algo is foce 
 	}
 }# end of task object
 

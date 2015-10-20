@@ -85,7 +85,7 @@ warfarin_T2E_interval_mdl = mdlObj{
 
 warfarin_T2E_interval_task = taskObj{
 	ESTIMATE{ 
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 	}
 }# end of task object
 

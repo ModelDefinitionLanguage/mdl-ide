@@ -22,7 +22,7 @@ class MclPropertyAttributeValidationTest {
 	def void testValidAttributes(){
 		val mcl = '''bar = taskObj {
 			ESTIMATE{
-				set target is monolix, version = "7.3", algo is saem
+				set algo is saem
 			}
 		}'''.parse
 		
@@ -33,13 +33,13 @@ class MclPropertyAttributeValidationTest {
 	def void testMissingMandatoryAttribute(){
 		val mcl = '''bar = taskObj {
 			ESTIMATE{
-				set version = "7.3", algo="SAEM"
+
 			}
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
 			MdlValidator::MANDATORY_PROP_MISSING,
-			"mandatory property 'target' is missing in block"
+			"mandatory property 'algo' is missing in block"
 		)
 	}
 

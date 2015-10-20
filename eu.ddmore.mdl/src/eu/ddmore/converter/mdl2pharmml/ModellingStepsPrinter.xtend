@@ -842,17 +842,17 @@ class ModellingStepsPrinter {
 				'''
 			}
 			PropertyStatement:{
-				val targetExpr = stmt.getPropertyEnumValue('target').convertTargetEnum
-				val versionExpr = stmt.getPropertyExpression('version')
-				val algoExpr = stmt.getPropertyEnumValue('algo').convertAlgoEnum
+//				val targetExpr = stmt.getPropertyEnumValue('target').convertTargetEnum
+//				val versionExpr = stmt.getPropertyExpression('version')
+				val algoExpr = stmt.getPropertyEnumValue('algo')?.convertAlgoEnum
 //				val tolExpr = stmt.getPropertyExpression('tol')
 				'''
-				«IF targetExpr != null»
-					«writeProperty('target', targetExpr)»
-				«ENDIF»
-				«IF versionExpr != null»
-					«writeProperty('version', versionExpr)»
-				«ENDIF»
+«««				«IF targetExpr != null»
+«««					«writeProperty('target', targetExpr)»
+«««				«ENDIF»
+«««				«IF versionExpr != null»
+«««					«writeProperty('version', versionExpr)»
+«««				«ENDIF»
 «««				«IF tolExpr != null»
 «««					«writeProperty('tol', tolExpr)»
 «««				«ENDIF»
