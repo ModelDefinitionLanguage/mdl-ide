@@ -14,6 +14,7 @@ import java.util.List
 import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.SymbolDefinition
 
 class PKMacrosPrinter{
 //	private static val MATH_NS = "http://www.pharmml.org/pharmml/0.6/Maths"; 
@@ -65,64 +66,243 @@ class PKMacrosPrinter{
 	}
 	
 	def printMacros(List<Statement> statements) {
-		var macros = ''''''
-		for (s : statements) {
-			switch(s){
-				ListDefinition:{
-					macros += s.print_PKMacros
-				}
-				AnonymousListStatement:
-					macros += s.list.print_PKMacros
-			}
-		}
+//		var macros = ''''''
+//		for (s : statements) {
+//			switch(s){
+//				ListDefinition:{
+//					macros += s.print_PKMacros
+//				}
+//				AnonymousListStatement:
+//					macros += s.list.print_PKMacros
+//			}
+//		}
 		'''
+		«statements.forEach[defineCompartments]»
 		<PKmacros>
-			«macros»
+			«FOR s : statements»
+				«s.writeMacro»
+			«ENDFOR»
 		</PKmacros>
 		'''
 
 	}
 	
+	val cmpNumMap = new HashMap<String, Integer>
+	int cmpNum = 0
 	
-//	val cmpNumMap = new HashMap<String, Integer>
-//	int cmpNum = 0
+	def storeCompartment(ListDefinition it){
+		cmpNum += 1
+		cmpNumMap.put(name, cmpNum)
+	}
 	
-//	def storeCompartment(ListDefinition it){
-//		cmpNum += 1
-//		cmpNumMap.put(name, cmpNum)
-//	}
+	def getCompartmentNum(SymbolDefinition it){
+		cmpNumMap.get(name)
+	}
 	
-//	def getCompartmentNum(SymbolDefinition it){
-//		cmpNumMap.get(name)
-//	}
+	
+	def defineCompartments(Statement stmt){
+		switch(stmt){
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'effect'),
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'compartment'),
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'distribution'):{
+				storeCompartment(stmt)
+				'''
+					<Variable symbId="«stmt.name»"/>
+				'''
+			}
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'direct'),
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'depot'):{
+				// defining adms
+				storeCompartment(stmt)
+				''''''
+			}
+		}
+	}
+	
+	def writeMacro(Statement stmt){
+		switch(stmt){
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'effect'):
+				stmt.writeEffect
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'compartment'):
+				stmt.writeCompartment
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'distribution'):
+				stmt.writeDistribution
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'direct'):
+				stmt.writeDirect
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'depot'):
+				stmt.writeDepot
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'transfer'):
+				stmt.writeTransfer
+			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'elimination'):
+				stmt.writeElimination
+		}
+	}
+	
+	
+	def writeCompartment(ListDefinition it)'''
+		<Compartment>
+			<Value argument="amount"> 
+				«symbolReference»
+			</Value>
+			«writeValue("cmt", compartmentNum)»
+		</Compartment>
+	'''
+	
+	def getMclObject(ListDefinition it){
+		EcoreUtil2.getContainerOfType(list, MclObject)
+	}
+	
+	def writeFromValue(ListDefinition it){
+		val from = list.getAttributeExpression('from');
+		if (from != null){
+			val fromCompartment = mclObject.findCompartment(from as SymbolReference);
+			writeValue('cmt', fromCompartment.compartmentNum)
+		}
+		else''''''
+	}
+	
+	def writeToValue(ListDefinition it){
+		val to = list.getAttributeExpression('to')
+		if (to != null){
+			var toCompartmentArgs = mclObject.findCompartment(to as SymbolReference)
+			if (toCompartmentArgs != null){
+				writeValue('cmt', toCompartmentArgs.compartmentNum)
+			}
+		}
+	}
+	
+	def writePeripheralKij(ListDefinition it){
+		var kin = list.getAttributeExpression('kin');
+		val from = list.getAttributeExpression('from');
+		if (from != null && kin != null){
+			val fromCompartmentArgs = mclObject.findCompartment(from as SymbolReference);
+			val fromCompartment_cmt = fromCompartmentArgs.compartmentNum
+			val attr1 = "k" + fromCompartment_cmt + compartmentNum
+			kin.writeValue(attr1) 
+		}
+	}
+	
+	def writePeripheralKji(ListDefinition it){
+		var kout = list.getAttributeExpression('kout');
+		val from = list.getAttributeExpression('from');
+		if (from != null && kout != null){
+			val fromCompartmentArgs = mclObject.findCompartment(from as SymbolReference);
+			val fromCompartment_cmt = fromCompartmentArgs.compartmentNum
+			val attr1 = "k" + compartmentNum + fromCompartment_cmt
+			kout.writeValue(attr1) 
+		}
+	}
+	
+	def writeEffect(ListDefinition it)'''
+		<Effect>
+			<Value argument="concentration"> 
+				«symbolReference»
+			</Value>
+			«writeValue("cmt", compartmentNum)»
+			«writeFromValue»
+		</Effect>
+	'''
+	
+	def writeDistribution(ListDefinition it)'''
+		<Compartment>
+			<Value argument="amount"> 
+				«symbolReference»
+			</Value>
+			«writeValue("cmt", compartmentNum)»
+			«writePeripheralKij»
+			«writePeripheralKji»
+		</Compartment>
+	'''
+	
+	def writeDirect(ListDefinition it)'''
+		<Compartment>
+			<Value argument="amount"> 
+				«symbolReference»
+			</Value>
+			«writeValue("cmt", compartmentNum)»
+		</Compartment>
+	'''
+	
+	def writeDepot(ListDefinition it)'''
+		<Compartment>
+			<Value argument="amount"> 
+				«symbolReference»
+			</Value>
+			«writeValue("cmt", compartmentNum)»
+		</Compartment>
+	'''
+	
+	def writeTransfer(ListDefinition it)'''
+		<Compartment>
+			<Value argument="amount"> 
+				«symbolReference»
+			</Value>
+			«writeValue("cmt", compartmentNum)»
+		</Compartment>
+	'''
+	
+	def writeElimination(ListDefinition it)'''
+		<Compartment>
+			<Value argument="amount"> 
+				«symbolReference»
+			</Value>
+			«writeValue("cmt", compartmentNum)»
+		</Compartment>
+	'''
 	
 	def print_PKMacros(ListDefinition s){
 		//Convert symbolName to 'amount' PharmML attribute
 		var retVal = ''''''
 		var content = '''''';
 		var type = s.list.getAttributeEnumValue('type')
+		switch(type){
+			case('effect'):{
+				content = content + '''
+					<Value argument="concentration"> 
+						«s.symbolReference»
+					</Value>
+				'''
+			}
+			case('compartment'),
+			case('distribution'):{
+				content = content + '''
+					<Value argument="amount"> 
+						«s.symbolReference»
+					</Value>
+				'''
+				storeCompartment(s)
+			}
+			case('direct'),
+			case('depot'):{
+				storeCompartment(s)
+				
+			}
+		}
+		
 		if (type == 'effect')
 			content = content + '''
 				<Value argument="concentration"> 
 					«s.symbolReference»
 				</Value>
 			'''
-		else if(type == 'compartment' || type == 'distribution')
+		else if(type == 'compartment' || type == 'distribution'){
 			content = content + '''
 				<Value argument="amount"> 
 					«s.symbolReference»
 				</Value>
 			'''
+			storeCompartment(s)
+		}
 		var macroType = pk_types.get(type);
 		if (macroType != null){
 			content += type.print_PKAttributes(s.list);
 			retVal += macroType.print_PKMacros(content);
 		}
-		if(type == 'transfer'){
-			// because a transfer is also a compartment it means that we need to also
-			// create a new compartment definition for it.
-			retVal += s.printImplicitCompartment()
-		}
+//		if(type == 'transfer'){
+//			// because a transfer is also a compartment it means that we need to also
+//			// create a new compartment definition for it.
+//			retVal += s.printImplicitCompartment()
+//		}
 		return retVal;
 	}
 	
@@ -164,9 +344,9 @@ class PKMacrosPrinter{
 		switch(type){
 			case('depot'),
 			case('direct'):{
-				val modelCmt = args.getAttributeExpression('modelCmt');
+//				val modelCmt = args.getAttributeExpression('modelCmt');
 		//				if (modelCmt.equals("2"))
-				attrExpressions.put("adm", modelCmt.writeAdm)
+//				attrExpressions.put("adm", modelCmt.writeAdm)
 				val to = args.getAttributeExpression('to')
 				if (to != null){
 					var toCompartmentArgs = mObj.findCompartment(to as SymbolReference)
@@ -267,6 +447,12 @@ class PKMacrosPrinter{
 	def writeValue(Expression value, String arg)'''
 		<Value argument="«arg»"> 
 			«value.expressionAsAssignment»
+		</Value>
+	'''
+
+	def writeValue( String arg, int value)'''
+		<Value argument="«arg»"> 
+			<ct:Int>«value»<ct:Int>
 		</Value>
 	'''
 
