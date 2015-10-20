@@ -106,12 +106,12 @@ warfarin_PK_Latent_mdl = mdlObj{
 
    COMPARTMENT{
       ##  Parameters = K12,K20,K23,K30,F1,ALAG1
-      GUT:     {type is depot, modelCmt=1, to=LATENT, ka=K12, tlag=ALAG1, finput=F1}
-      LATENT:  {type is compartment, modelCmt=2}
-            :: {type is elimination, modelCmt=2, from=LATENT, k=K20}
-            :: {type is transfer, modelCmt=2, from=LATENT, to=CENTRAL, kt=K23}
-      CENTRAL: {type is compartment, modelCmt=3}
-            :: {type is elimination, modelCmt=3, from=CENTRAL, k=K30}
+      GUT:     {type is depot, to=LATENT, ka=K12, tlag=ALAG1, finput=F1}
+      LATENT:  {type is compartment }
+            :: {type is elimination, from=LATENT, k=K20}
+            :: {type is transfer, from=LATENT, to=CENTRAL, kt=K23}
+      CENTRAL: {type is compartment }
+            :: {type is elimination, from=CENTRAL, k=K30}
    }# end COMPARTMENT
 
       F=CENTRAL/S3

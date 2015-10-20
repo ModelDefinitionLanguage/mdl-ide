@@ -40,7 +40,6 @@ class ModellingStepsPrinter {
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension SublistDefinitionProvider sldp = new SublistDefinitionProvider
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
-//	extension PKMacrosPrinter bmp = new PKMacrosPrinter
 
 	////////////////////////////////////////////////
 	// III Modelling Steps
@@ -216,11 +215,13 @@ class ModellingStepsPrinter {
 					}
 				}
 				case(ListDefinitionProvider::AMT_USE_VALUE):{
-					if(mObj.findMdlSymbolDefn(column.name) != null){
+//					Potential bug here. This is meant to ensure that no mapping
+//					is generated if no variables match. @TODO: fix this properly.
+//					if(mObj.findMdlSymbolDefn(column.name) != null){
 						res = res + column.print_ds_AmtMapping(dObj, mObj)
 						// record that mapping to model found
 						saveMappedColumn(column.name)
-					}
+//					}
 				}
 				case(ListDefinitionProvider::OBS_USE_VALUE):{
 					res = res + column.print_ds_DvMapping(dObj, mObj)
@@ -374,7 +375,7 @@ class ModellingStepsPrinter {
 	def printTargetMapping(MclObject it, MappingPair expression){
 		val mdlDefn = findMdlSymbolDefn(expression.mappedSymbol.ref.name)
 		'''
-			<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«(mdlDefn as ListDefinition).list.getAttributeExpression('modelCmt').convertToString»"/>
+			<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«PKMacrosPrinter::INSTANCE.getCompartmentNum(mdlDefn)»"/>
 «««		<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«expression.leftOperand.convertToString»"/>
 		'''
 	}

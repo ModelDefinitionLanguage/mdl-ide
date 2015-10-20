@@ -60,7 +60,7 @@ class ModelDefinitionPrinter {
 	extension PharmMLConverterUtils pcu = new PharmMLConverterUtils
 	extension SublistDefinitionProvider sdp = new SublistDefinitionProvider
 	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter
-	extension PKMacrosPrinter pkp = new PKMacrosPrinter
+	extension PKMacrosPrinter pkp = PKMacrosPrinter::INSTANCE
 	
 	
 	//////////////////////////////////////

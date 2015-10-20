@@ -226,22 +226,27 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = CMT_TYPE_ATT
 				listDefns = newArrayList(
-					new ListDefInfo ('input', new ListTypeInfo("Input", PrimitiveType.Real),  #[
+					new ListDefInfo ('direct', new ListTypeInfo("Direct", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('ktr', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('mtt', null, true, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('modelDur', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('tlag', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE)
 						 ]
 					),
 					new ListDefInfo ('effect', new ListTypeInfo("Effect", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('keq', null, true, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference),
+						 new AttributeDefn('keq', null, true, MclTypeProvider::REAL_TYPE)
 						 ]
 					),
 					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('ka', null, false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('tlag', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('modelDur', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('modelRate', null, false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('ktr', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('mtt', null, false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference),
+						 new AttributeDefn('ka', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('tlag', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('modelDur', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('ktr', 'mtt', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('mtt', 'ktr', false, MclTypeProvider::REAL_TYPE)
 						 ]
 					),
 					new ListDefInfo ('transfer', new ListTypeInfo("Transfer", PrimitiveType.Real),  #[
@@ -257,21 +262,17 @@ class ListDefinitionProvider {
 					),
 					new ListDefInfo ('elimination', new ListTypeInfo("Elimination", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference), new AttributeDefn('v', null, false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference),
+						 new AttributeDefn('v', null, false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('cl', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('k', null, false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('vm', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('km', null, false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('vm', 'km', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('km', 'vm', false, MclTypeProvider::REAL_TYPE)
 						 ]
 					),
 					new ListDefInfo ('distribution', new ListTypeInfo("Distribution", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('kin', null, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('kout', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('kin', null, true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('kout', null, true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('from', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
-						 ]
-					),
-					new ListDefInfo ('direct', new ListTypeInfo("Direct", PrimitiveType.Real),  #[
-						 new AttributeDefn(CMT_TYPE_ATT, null, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', null, false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('tlag', null, false, MclTypeProvider::REAL_TYPE), new AttributeDefn('finput', null, false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('to', null, true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
 						 ]
 					)
 				)
