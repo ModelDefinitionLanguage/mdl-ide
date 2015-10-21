@@ -26,6 +26,8 @@ import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.AnonymousListStatement
+import eu.ddmore.mdl.mdl.ListDefinition
 
 class ListDefinitionProvider {
 
@@ -112,8 +114,13 @@ class ListDefinitionProvider {
 		TypeInfo listType
 		List<AttributeDefn> attributes
 		List<Map<String, Boolean>> attributeSets
+		boolean isAnonymous
 		
 		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes){
+			this(keyValue, listType, attributes, false)
+		}
+		
+		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, boolean isListAnonymous){
 			this.keyValue = keyValue
 			this.listType = listType
 			this.attributes = attributes
@@ -123,6 +130,7 @@ class ListDefinitionProvider {
 			for(att : attributes){
 				onlySet.put(att.name, att.mandatory)
 			}
+			isAnonymous = isListAnonymous
 		}
 	}
 	
@@ -151,7 +159,8 @@ class ListDefinitionProvider {
 						 ],
 						 #[#{ USE_ATT -> true, DEFINE_ATT -> true },
 						 	#{ USE_ATT -> true, VARIABLE_ATT -> true }
-						 ]
+						 ],
+						 false
 					),
 					new ListDefInfo ('dv', new ListTypeInfo("Dv", PrimitiveType.List),  #[
 						 new AttributeDefn(USE_ATT, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, false, MclTypeProvider::MAPPING_TYPE),
@@ -159,7 +168,8 @@ class ListDefinitionProvider {
 						 ],
 						 #[#{ USE_ATT -> true, DEFINE_ATT -> true },
 						 	#{ USE_ATT -> true, VARIABLE_ATT -> true }
-						 ]
+						 ],
+						 false
 					),
 					new ListDefInfo (IDV_USE_VALUE, IDV_COL_TYPE,  #[
 						 new AttributeDefn(USE_ATT, true, USE_TYPE)
@@ -256,7 +266,8 @@ class ListDefinitionProvider {
 						 ],
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> false, 'tlag' -> false, 'finput' -> false }
-						 ]
+						 ],
+						 false
 					),
 					new ListDefInfo ('effect', new ListTypeInfo("Effect", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
@@ -265,7 +276,8 @@ class ListDefinitionProvider {
 						 ],
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'from' -> true, 'keq' -> true }
-						 ]
+						 ],
+						 false
 					),
 					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
@@ -280,14 +292,16 @@ class ListDefinitionProvider {
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ktr' -> true, 'mtt' -> true },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> true }
-						 ]
+						 ],
+						 false
 					),
 					new ListDefInfo ('transfer', new ListTypeInfo("Transfer", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('kt', true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('from', true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference),
 						 new AttributeDefn('to', true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference)
-						 ]
+						 ],
+						 true
 					),
 					new ListDefInfo ('compartment', new ListTypeInfo("Compartment", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE)
@@ -304,7 +318,8 @@ class ListDefinitionProvider {
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'from' -> true, 'v' -> false, 'k' -> true },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'from' -> true, 'v' -> false, 'cl' -> true },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'from' -> true, 'vm' -> true, 'km' -> true }
-						 ]
+						 ],
+						 true
 					),
 					new ListDefInfo ('distribution', new ListTypeInfo("Distribution", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
@@ -913,6 +928,28 @@ class ListDefinitionProvider {
 			else if(!attDefn.isCatMappingPossible && mappingExpr.catDefn != null){
 				unexpectedCatDefnErrorLambda.apply
 			}
+		}
+	}
+
+	def isAnonymousListExpected(AttributeList it){
+		val listDefn = matchingListDefn
+		if(listDefn != null){
+			listDefn.isAnonymous
+		}
+		else{
+			// is can't get the definition (presumably because the list is mal-formed) then give benefit of the doubt.
+			true
+		}
+	}
+
+	def isNamedListExpected(AttributeList it){
+		val listDefn = matchingListDefn
+		if(listDefn != null){
+			!listDefn.isAnonymous
+		}
+		else{
+			// is can't get the definition (presumably because the list is mal-formed) then give benefit of the doubt.
+			true
 		}
 	}
 

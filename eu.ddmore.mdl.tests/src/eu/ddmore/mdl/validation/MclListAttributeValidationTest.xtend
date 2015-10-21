@@ -144,7 +144,7 @@ class MclListAttributeValidationTest {
 		)
 	}
 
-	@Test
+	@Test  
 	def void testAnonymousCompartmentAttributesOK(){
 		val mcl = '''bar = mdlObj {
 			IDV{ T }
@@ -172,6 +172,69 @@ class MclListAttributeValidationTest {
 		}'''.parse
 		
 		mcl.assertNoErrors
+	}
+
+	@Test  
+	def void testInvalidAnonysation(){
+		val mcl = '''bar = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+				ID : { type is parameter, level=1 }
+			}
+			
+			STRUCTURAL_PARAMETERS{
+				KA
+				ALAG1
+				F1
+				V
+				CL
+			}
+			
+			MODEL_PREDICTION{
+	  			COMPARTMENT {
+					:: {type is compartment, modelCmt=2}
+   				}# end COMPARTMENT
+			} # end MODEL_PREDICTION
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.anonymousListStatement,
+			MdlValidator::LIST_NOT_NAMED,
+			"a list with this key cannot be anonymous in this context"
+		)
+	}
+
+	@Test  
+	def void testInvalidListNaming(){
+		val mcl = '''bar = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+				ID : { type is parameter, level=1 }
+			}
+			
+			STRUCTURAL_PARAMETERS{
+				KA
+				ALAG1
+				F1
+				V
+				CL
+			}
+			
+			MODEL_PREDICTION{
+	  			COMPARTMENT {
+					INPUT_KA : {type is depot, modelCmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
+					 CENTRAL : {type is compartment, modelCmt=2}
+                     FOO :  {type is elimination, modelCmt=2, from=CENTRAL, v=V, cl=CL}
+   				}# end COMPARTMENT
+				CONC=CENTRAL/V
+			} # end MODEL_PREDICTION
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::LIST_NOT_ANONYMOUS//,
+//			"a list with this key cannot have a name in this context"
+		)
 	}
 
 	@Test
