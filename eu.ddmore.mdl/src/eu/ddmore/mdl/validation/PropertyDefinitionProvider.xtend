@@ -14,6 +14,7 @@ import java.util.List
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 
 class PropertyDefinitionProvider {
 	
@@ -21,11 +22,11 @@ class PropertyDefinitionProvider {
 //	static val TARGET_ATT = new AttributeDefn('target', null, true, TARGET_TYPE)
 //	static val VERSION_ATT = new AttributeDefn('version', null, false, MclTypeProvider::STRING_TYPE)
 	static val ALGO_TYPE = new BuiltinEnumTypeInfo('estAlgo', #{'saem', 'foce', 'fo'})
-	static val ALGO_ATT = new AttributeDefn('algo', null, true, ALGO_TYPE)
+	static val ALGO_ATT = new AttributeDefn('algo', true, ALGO_TYPE)
 //	static val EST_OP_TYPE = new BuiltinEnumTypeInfo('estOp', #{'fim', 'estPop', 'estIndiv' })
 //	static val EST_OP_ATT = new AttributeDefn('operation', null, false, EST_OP_TYPE)
 	static val SOLVER_TYPE = new BuiltinEnumTypeInfo('solver', #{'stiff', 'nonStiff' })
-	static val SOLVER_ATT = new AttributeDefn('solver', null, false, SOLVER_TYPE)
+	static val SOLVER_ATT = new AttributeDefn('solver', false, SOLVER_TYPE)
 	
 	static val propertyDefns = #{
 //		BlockDefinitionProvider::ESTIMATE_BLK -> #[TARGET_ATT, EST_OP_ATT, VERSION_ATT, ALGO_ATT],
@@ -48,7 +49,7 @@ class PropertyDefinitionProvider {
 	}
 
 
-	def getTypeForProperty(ValuePair it){
+	def TypeInfo getTypeForProperty(ValuePair it){
 		matchingPropertyDefn?.attType ?: MclTypeProvider::UNDEFINED_TYPE
 	}
 

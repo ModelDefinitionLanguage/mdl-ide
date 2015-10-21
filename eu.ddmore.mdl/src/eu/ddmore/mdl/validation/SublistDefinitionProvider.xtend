@@ -14,22 +14,22 @@ class SublistDefinitionProvider {
 	public static val FIX_EFF_SUBLIST = "fixEffAtts"
 	
 	
-	static val COV = new AttributeDefn('cov', null, true, MclTypeProvider::REAL_TYPE.makeReference)
-	static val COEFF = new AttributeDefn('coeff', null, true, MclTypeProvider::REAL_TYPE.makeReference)
-	static val CAT_COV = new AttributeDefn('catCov', null, true, MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference)
+	static val COV = new AttributeDefn('cov', true, MclTypeProvider::REAL_TYPE.makeReference)
+	static val COEFF = new AttributeDefn('coeff', true, MclTypeProvider::REAL_TYPE.makeReference)
+	static val CAT_COV = new AttributeDefn('catCov', true, MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference)
 	
 	static val sublistDefns = #{
 		FIX_EFF_SUBLIST -> (new SublistTypeInfo(FIX_EFF_SUBLIST, #[COV, CAT_COV, COEFF], #[
 																   	#{COEFF.name -> true, COV.name -> true},
-																   		#{COEFF.name -> true, CAT_COV.name -> true}
+																   	#{COEFF.name -> true, CAT_COV.name -> true}
 																   ])),
-		INTERVENTION_SEQ_SUBLIST -> (new SublistTypeInfo(INTERVENTION_SEQ_SUBLIST, #[new AttributeDefn("interventionList", null, true, ListDefinitionProvider::ADMINISTRATION_TYPE.makeReference.makeVector),
-											new AttributeDefn("start", null, true, MclTypeProvider::REAL_TYPE.makeVector),
-											new AttributeDefn("end", null, true, MclTypeProvider::REAL_TYPE.makeVector)],
+		INTERVENTION_SEQ_SUBLIST -> (new SublistTypeInfo(INTERVENTION_SEQ_SUBLIST, #[new AttributeDefn("interventionList", true, ListDefinitionProvider::ADMINISTRATION_TYPE.makeReference.makeVector),
+											new AttributeDefn("start", true, MclTypeProvider::REAL_TYPE.makeVector),
+											new AttributeDefn("end", true, MclTypeProvider::REAL_TYPE.makeVector)],
 											#[#{'interventionList' -> true, 'start' -> false, 'end' -> false}])),
-		SAMPLING_SEQ_SUBLIST -> (new SublistTypeInfo(SAMPLING_SEQ_SUBLIST, #[new AttributeDefn("samplingList", null, true, ListDefinitionProvider::SAMPLING_TYPE.makeReference.makeVector),
-												new AttributeDefn("start", null, true, MclTypeProvider::REAL_TYPE.makeVector),
-												new AttributeDefn("end", null, true, MclTypeProvider::REAL_TYPE.makeVector)],
+		SAMPLING_SEQ_SUBLIST -> (new SublistTypeInfo(SAMPLING_SEQ_SUBLIST, #[new AttributeDefn("samplingList", true, ListDefinitionProvider::SAMPLING_TYPE.makeReference.makeVector),
+												new AttributeDefn("start", true, MclTypeProvider::REAL_TYPE.makeVector),
+												new AttributeDefn("end", true, MclTypeProvider::REAL_TYPE.makeVector)],
 												#[#{'samplingList' -> true, 'start' -> true, 'end' -> false}]))
 	}
 
@@ -38,6 +38,7 @@ class SublistDefinitionProvider {
 	}
 
 	def SublistTypeInfo findSublistMatch(SubListExpression sle){
+		// first look for subtype defns that have attributes that could possible math the subtype 
 		val attNames = sle.attributeNames
 		val candidateDefns = sublistDefns.values.filter(sl|
 			sl.attributes.exists(ad| 
@@ -46,6 +47,8 @@ class SublistDefinitionProvider {
 				)
 			)
 		)
+		// now go through the candidates and find the first one that matches the
+		// an argument set.
 		for(candDefn : candidateDefns){
 			for(nameSet : candDefn.nameSets){
 				val iter = attNames.iterator

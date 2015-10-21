@@ -107,6 +107,44 @@ class MclListAttributeValidationTest {
 	}
 
 	@Test
+	def void testUnexpectedAttributeCombination(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is cmt }
+				AMT : { use is amt, variable = D, define = { 0 in CMT as D } }
+			}
+			
+			SOURCE{	}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::UNRECOGNIZED_LIST_ATT,
+			"attribute 'variable' is not recognised in this context"
+		)
+	}
+
+	@Test
+	def void testMissingMandatoryAttributeWhenMoreThanOneAttSet(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is cmt }
+				AMT : { use is amt }
+			}
+			
+			SOURCE{	}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
+			MdlValidator::MANDATORY_LIST_ATT_MISSING,
+			"mandatory attribute 'variable'"
+		)
+	}
+
+	@Test
 	def void testAnonymousCompartmentAttributesOK(){
 		val mcl = '''bar = mdlObj {
 			IDV{ T }
