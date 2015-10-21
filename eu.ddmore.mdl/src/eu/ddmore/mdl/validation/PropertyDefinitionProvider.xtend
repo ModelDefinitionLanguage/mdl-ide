@@ -48,7 +48,7 @@ class PropertyDefinitionProvider {
 	}
 
 
-	def getTypeForProperty(ValuePair it){
+	def MclTypeProvider.TypeInfo getTypeForProperty(ValuePair it){
 		matchingPropertyDefn?.attType ?: MclTypeProvider::UNDEFINED_TYPE
 	}
 
