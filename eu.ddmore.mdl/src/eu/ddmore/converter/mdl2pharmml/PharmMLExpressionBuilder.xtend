@@ -334,7 +334,10 @@ class PharmMLExpressionBuilder {
 				"error:NotDefined"	
 		}
 		'''
-		<math:Constant op="«constType»"/>
+		<math:Binop op="times">
+			<ct:Real>1.0</ct:Real>
+			<math:Constant op="«constType»"/>
+		</math:Binop>
 		'''
 	}
 	

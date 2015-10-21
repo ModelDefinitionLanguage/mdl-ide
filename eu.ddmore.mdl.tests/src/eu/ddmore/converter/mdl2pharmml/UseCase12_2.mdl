@@ -56,7 +56,7 @@ Bernoulli_DIST_mdl = mdlObj{
    RANDOM_VARIABLE_DEFINITION(level=ID){
       eta_PPV_EVENT ~ Normal(mean=0, var=PPV_EVENT )
    }# end RANDOM_VARIABLE_DEFINITION
- 
+
    GROUP_VARIABLES{
 	  BASE = ln(POP_BASEP/(1-POP_BASEP))
    }
@@ -77,7 +77,7 @@ Bernoulli_DIST_mdl = mdlObj{
 
 Bernoulli_DIST_task = taskObj{
 	ESTIMATE{ 
-		conf : {target is NMTRAN_CODE, version = "7.2", algo = "FOCE" }
+		set algo is foce 
 	}
 }# end of task object
 

@@ -1,17 +1,16 @@
 # Time to event model
-# Exact time of event / censoring observed
+# Interval censoring specified
 # PharmML Type1 equation for GROUP_VARIABLES and INDIVIDUAL_VARIABLES
 # Hazard function specified in MODEL_PREDICTION 
 
-warfarin_T2E_exact_dat = dataObj{
-
-   DECLARED_VARIABLES{ Y; INPUT }
+warfarin_T2E_interval_dat = dataObj{
+   DECLARED_VARIABLES{Y}
 
    DATA_INPUT_VARIABLES{
       ID: {use is id}
       TIME: {use is idv}
       TRT: {use is covariate}
-      AMT: {use is ignore }
+      AMT: {use is ignore}
       RATE: {use is covariate}
       ADDL: {use is addl}
       II: {use is ii}
@@ -67,15 +66,18 @@ warfarin_T2E_exact_mdl = mdlObj{
 
    GROUP_VARIABLES{
 	  HAZTRT = POP_HBASE * TRT
-	  HBASE = POP_HBASE/365
    }
    
+   INDIVIDUAL_VARIABLES{
+	  HBASE = POP_HBASE/365
+  }# end INDIVIDUAL_VARIABLES
+
    MODEL_PREDICTION{
 	  HAZ = HBASE * (1+HAZTRT)
    }# end MODEL_PREDICTION
 
    OBSERVATION{
-     Y : {type is tte, hazard = HAZ, event is exact }
+     Y : {type is tte, hazard = HAZ, event is intervalCensored }
    }# end ESTIMATION
 
 } # end of model object
@@ -84,7 +86,7 @@ warfarin_T2E_exact_task = taskObj{
 	ESTIMATE{ 
 		set algo is saem 
 	}
-}# end of task object
+}
 
 warfarin_T2E_exact_mog = mogObj {
 	OBJECTS{

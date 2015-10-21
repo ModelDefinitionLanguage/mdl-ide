@@ -17,8 +17,9 @@ class MclParserTaskObj1Test {
 	
 	val static CODE_SNIPPET = '''
 nonmem_task = taskObj {
-	ESTIMATE{
-		conf : { target is MLXTRAN_CODE, version= "4.3.2", algo = "SAEM" }
+	ESTIMATE {
+«««		set target is monolix, version = "4.3.2", algo is saem
+		set algo is saem
 	}
 }
 		'''

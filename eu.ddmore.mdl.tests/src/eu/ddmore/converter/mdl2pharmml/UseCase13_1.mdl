@@ -1,29 +1,16 @@
-package eu.ddmore.mdl
+# Categorical data (cumulative probabilities) model
+# PharmML Type3 type=linear with trans=logit for INDIVIDUAL_VARIABLES
+# cumulative probabilities calculated in MODEL_PREDICTION
+# link not specified in OBSERVATION definition
 
-import com.google.inject.Inject
-import eu.ddmore.mdl.mdl.Mcl
-import org.eclipse.xtext.junit4.InjectWith
-import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.util.ParseHelper
-import org.eclipse.xtext.junit4.validation.ValidationTestHelper
-import org.junit.Test
-import org.junit.runner.RunWith
-
-@RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
-class MclParserMogObj2Test {
-	@Inject extension ParseHelper<Mcl>
-	@Inject extension ValidationTestHelper
-	
-	val static CODE_SNIPPET = '''
 Categorical_DIST_dat = dataObj{
-   DECLARED_VARIABLES{ Y withCategories {c1, c2, c3, c0} }
+   DECLARED_VARIABLES{ Y withCategories {c0, c1, c2, c3} }
 	
    DATA_INPUT_VARIABLES{
       ID:{ use is id }
 	  TIME:{ use is ignore } # NOT USED IN MODEL
       CP:{ use is idv }
-      DV:{ use is dv, define= {Y.c1 when 0, Y.c2 when 1, Y.c3 when 2, Y.c0 when 3 } }
+      DV:{ use is dv, define= {Y.c0 when 0, Y.c1 when 1, Y.c2 when 2, Y.c3 when 3 } }
       MDV:{ use is mdv }
    }# end DATA_INPUT_VARIABLES
 
@@ -81,22 +68,12 @@ Categorical_DIST_mdl = mdlObj{
    }
    
    INDIVIDUAL_VARIABLES{
-      indiv_B0 = general(grp=B0, ranEff = [eta_PPV_EVENT])
-      indiv_B1 = general(grp=B1, ranEff = [eta_PPV_EVENT])
-      indiv_B2 = general(grp=B2, ranEff = [eta_PPV_EVENT])
+      logit(P0) = linear(trans is logit, pop=B0, fixEff=[{coeff=Beta, cov=CP}], ranEff= [eta_PPV_EVENT])
+	  logit(P1) = linear(trans is logit, pop=B1, fixEff=[{coeff=Beta, cov=CP}], ranEff=[eta_PPV_EVENT])
+	  logit(P2) = linear(trans is logit, pop=B2, fixEff=[{coeff=Beta, cov=CP}], ranEff= [eta_PPV_EVENT])
    }# end INDIVIDUAL_VARIABLES
 
    MODEL_PREDICTION{
-	  EDRUG = Beta * CP
-	  
-	  A0 = indiv_B0 + EDRUG
-	  A1 = indiv_B1 + EDRUG
-	  A2 = indiv_B2 + EDRUG
-	  	  	  
-	  P0 = invLogit(A0)
-	  P1 = invLogit(A1)
-	  P2 = invLogit(A2)
-	  
 	  Prob0 = P0
 	  Prob1 = P1 - P0
 	  Prob2 = P2 - P1
@@ -110,24 +87,16 @@ Categorical_DIST_mdl = mdlObj{
 } # end of model object
 
 Categorical_DIST_task = taskObj{
-	ESTIMATE{
-		set algo is saem
+	ESTIMATE{ 
+		set algo is saem 
 	}
 }# end of task object
 
 Categorical_DIST_mog = mogObj {
-		OBJECTS{
-			Categorical_DIST_dat : { type is dataObj }
-			Categorical_DIST_mdl : { type is mdlObj }
-			Categorical_DIST_par : { type is parObj }
-			Categorical_DIST_task : { type is taskObj }
-		}
-}		'''
-	
-	@Test
-	def void testParsing(){
-		CODE_SNIPPET.parse.assertNoErrors
-		
+	OBJECTS{
+		Categorical_DIST_dat : { type is dataObj }
+		Categorical_DIST_mdl : { type is mdlObj }
+		Categorical_DIST_par : { type is parObj }
+		Categorical_DIST_task : { type is taskObj }
 	}
-	
 }

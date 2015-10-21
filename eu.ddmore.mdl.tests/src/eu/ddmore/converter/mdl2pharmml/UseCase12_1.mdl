@@ -1,6 +1,5 @@
 # Binary data model
-# PharmML Type1 equation for INDIVIDUAL_VARIABLES
-# inverse-logit transformation applied in MODEL_PREDICTION
+# PharmML Type3 type=linear with trans=logit for INDIVIDUAL_VARIABLES
 # link=identity in OBSERVATION definition
 
 Bernoulli_DIST_dat = dataObj{
@@ -56,15 +55,14 @@ Bernoulli_DIST_mdl = mdlObj{
    RANDOM_VARIABLE_DEFINITION(level=ID){
       eta_PPV_EVENT ~ Normal(mean=0, var=PPV_EVENT )
    }# end RANDOM_VARIABLE_DEFINITION
- 
-   INDIVIDUAL_VARIABLES{
-      logit(indiv_BASE) = linear(pop= POP_BASEP, ranEff=[eta_PPV_EVENT], trans is logit) 
-   }# end INDIVIDUAL_VARIABLES
 
-   MODEL_PREDICTION{
-  	  LP = logit(indiv_BASE) + POP_BETA*CP
-	  P1 = invLogit(LP)
-   }# end MODEL_PREDICTION
+   GROUP_VARIABLES{
+	  BASE = ln(POP_BASEP/(1-POP_BASEP))
+   }
+   
+   INDIVIDUAL_VARIABLES{
+     logit(P1) = linear(trans is logit, pop=POP_BASEP, fixEff=[{coeff=POP_BETA, cov=CP}], ranEff=[eta_PPV_EVENT])
+   }# end INDIVIDUAL_VARIABLES
 
    OBSERVATION{
      Y : { type is discrete, distn = Bernoulli(probability=P1) }

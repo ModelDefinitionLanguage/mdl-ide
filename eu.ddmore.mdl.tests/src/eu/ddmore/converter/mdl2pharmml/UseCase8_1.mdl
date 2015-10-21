@@ -1,6 +1,8 @@
 # Warfarin model with Between Occasion Variability (BOV)
 #
 # Uses ODEs. Transformation of WT covariate in COVARIATES block
+# Uses "general" type (Type 2 Gaussian) relationship for individual parameters 
+# 
 
 warfarin_PK_BOV_dat = dataObj{
   DECLARED_VARIABLES{GUT Y }
@@ -66,7 +68,7 @@ DECLARED_VARIABLES{eta_BOV_CL eta_BOV_V eta_BOV_KA eta_BOV_TLAG }
 } # end of parameter object
 
 warfarin_PK_BOV_mdl = mdlObj{
-   IDV { T }
+   IDV { TIME }
 
    COVARIATES{
 	WT
@@ -103,6 +105,14 @@ warfarin_PK_BOV_mdl = mdlObj{
       BSV_TLAG
    }# end VARIABILITY_PARAMETERS
 
+	GROUP_VARIABLES{
+      # Covariate model
+      GRPCL=ln(POP_CL) + BETA_CL_WT*logtWT  ## Type 1 - Equation type
+      GRPV=ln(POP_V) + BETA_V_WT*logtWT
+      GRPKA=ln(POP_KA)
+      GRPLG=ln(POP_TLAG)
+   }# end GROUP_VARIABLES
+   
    RANDOM_VARIABLE_DEFINITION(level=ID){
       eta_BSV_CL~ Normal(mean=0, var=BSV_CL)
       eta_BSV_V~ Normal(mean=0, var=BSV_V)
@@ -119,21 +129,21 @@ warfarin_PK_BOV_mdl = mdlObj{
 
    INDIVIDUAL_VARIABLES{
       # Individual parameters
-	    ln(CL) = linear( trans is ln, pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}] , ranEff = [eta_BSV_CL, eta_BOV_CL ])
-	    ln(V)  = linear( trans is ln, pop = POP_V, fixEff = [{coeff=BETA_V_WT, cov=logtWT}] , ranEff = [eta_BSV_V, eta_BOV_V] )
-	    ln(KA) = linear( trans is ln, pop = POP_KA, ranEff = [eta_BSV_KA, eta_BOV_KA] ) 
-	    ln(TLAG) = linear( trans is ln, pop = POP_TLAG, ranEff = [eta_BSV_TLAG, eta_BOV_TLAG] )
-      }# end INDIVIDUAL_VARIABLES
+	  ln(CL) =general(grp=GRPCL, ranEff=[eta_BSV_CL,eta_BOV_CL] ) ## Type 2 - Guassian with general covariate model
+	  ln(V) =general(grp=GRPV, ranEff=[eta_BSV_V,eta_BOV_V] )
+      ln(KA) = general(grp=GRPKA, ranEff=[eta_BSV_KA,eta_BOV_KA] )
+      ln(TLAG) = general(grp=GRPLG, ranEff=[eta_BSV_TLAG,eta_BOV_TLAG] )
+   }# end INDIVIDUAL_VARIABLES
 
-	MODEL_PREDICTION {
-		DEQ{
-			RATEIN = if(T >= TLAG) then GUT * KA 
+   MODEL_PREDICTION{
+	    DEQ {  
+			RATEIN = if(TIME >= TLAG) then GUT * KA 
 					 else 0
 			GUT : { deriv =(- RATEIN), init = 0, x0 = 0 }
-			CENTRAL : { deriv =(RATEIN - CL * CENTRAL / V), init = 0, x0 = 0 } 
-		}
+	        CENTRAL : { deriv =(RATEIN - CL * CENTRAL / V), init = 0, x0 = 0 } 
+	    } # end DEQ block
 	    CC = CENTRAL / V 
-	} # end MODEL_PREDICTION
+   }# end MODEL_PREDICTION
 
 	RANDOM_VARIABLE_DEFINITION(level=DV) {
 		EPS_Y ~ Normal(mean = 0, var = 1) 
@@ -146,10 +156,11 @@ warfarin_PK_BOV_mdl = mdlObj{
 } # end of model object
 
 warfarin_PK_BOV_task = taskObj{
-ESTIMATE{ 
+
+      ESTIMATE {
 		set algo is saem 
-}
-} # end of task object
+      }
+}# end of taskObj
 
 warfarin_PK_BOV_mog=mogObj{
 	OBJECTS{

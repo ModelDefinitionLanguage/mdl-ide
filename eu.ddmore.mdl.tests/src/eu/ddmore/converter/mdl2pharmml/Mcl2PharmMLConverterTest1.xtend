@@ -12,10 +12,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Ignore
+import java.io.File
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
 class Mcl2PharmMLConverterTest1 {
+	static val CONVERTED_OUTPUT_DIR="convertedFiles/"
+	static val USE_CASE_DIR="src/eu/ddmore/converter/mdl2pharmml/"
+	
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 
@@ -23,6 +27,8 @@ class Mcl2PharmMLConverterTest1 {
 	
 	@Before
 	def void setUp(){
+		val convertedDir = new File(CONVERTED_OUTPUT_DIR)
+		if(!convertedDir.exists) convertedDir.mkdir
 	}
 	
 	
@@ -31,10 +37,10 @@ class Mcl2PharmMLConverterTest1 {
 	}
 	
 	private def validateConversion(String useCaseName){
-		val mclFile = "src/eu/ddmore/converter/mdl2pharmml/" + useCaseName + ".mdl"
+		val mclFile = USE_CASE_DIR + useCaseName + ".mdl"
 		val mcl = readFile(mclFile).parse
 		mcl.assertNoErrors
-		val pharmMLFile = "convertedFiles/" + useCaseName + ".xml" 
+		val pharmMLFile = CONVERTED_OUTPUT_DIR + useCaseName + ".xml" 
 		mcl.convertTo(pharmMLFile)
 		assertIsValid(pharmMLFile)
 	} 
@@ -47,6 +53,11 @@ class Mcl2PharmMLConverterTest1 {
 	@Test
 	def void testUseCase2(){
 		validateConversion("UseCase2")
+	}
+
+	@Test
+	def void testUseCase2_1(){
+		validateConversion("UseCase2_1")
 	}
 
 	@Test
@@ -74,6 +85,21 @@ class Mcl2PharmMLConverterTest1 {
 		validateConversion("UseCase5")
 	}
 
+	@Ignore
+	def void testUseCase5_1(){
+		validateConversion("UseCase5_1")
+	}
+
+	@Ignore
+	def void testUseCase5_2(){
+		validateConversion("UseCase5_2")
+	}
+
+	@Ignore
+	def void testUseCase5_3(){
+		validateConversion("UseCase5_3")
+	}
+
 	@Test
 	def void testUseCase6(){
 		validateConversion("UseCase6")
@@ -87,6 +113,11 @@ class Mcl2PharmMLConverterTest1 {
 	@Test
 	def void testUseCase8(){
 		validateConversion("UseCase8")
+	}
+
+	@Test
+	def void testUseCase8_1(){
+		validateConversion("UseCase8_1")
 	}
 
 	@Test
@@ -120,31 +151,56 @@ class Mcl2PharmMLConverterTest1 {
 	}
 
 	@Test
+	def void testUseCase12_1(){
+		validateConversion("UseCase12_1")
+	}
+
+	@Test
 	def void testUseCase12_2(){
 		validateConversion("UseCase12_2")
 	}
 
-	@Ignore
+	@Test
 	def void testUseCase13(){
 		validateConversion("UseCase13")
 	}
 
-	@Ignore
+	@Test
+	def void testUseCaseMixedObs(){
+		validateConversion("UseCaseMixedObs")
+	}
+
+	@Test
+	def void testUseCase13_1(){
+		validateConversion("UseCase13_1")
+	}
+
+	@Test
 	def void testUseCase14(){
 		validateConversion("UseCase14")
 	}
 
-	@Ignore
+	@Test
+	def void testUseCase14_1(){
+		validateConversion("UseCase14_1")
+	}
+
+	@Test
+	def void testUseCase14_2(){
+		validateConversion("UseCase14_2")
+	}
+
+	@Test
 	def void testUseCase15(){
 		validateConversion("UseCase15")
 	}
 
-	@Ignore
+	@Test
 	def void testUseCase16(){
 		validateConversion("UseCase16")
 	}
 
-	@Ignore
+	@Test
 	def void testUseCase17(){
 		validateConversion("UseCase17")
 	}

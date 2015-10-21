@@ -1,6 +1,9 @@
 # Warfarin model
 # Covariate effects - categorical and covariate transformation
 # within the model in COVARIATES{ ... } block
+#
+## PharmML Type 1 equation specification of GROUP_VARIABLES and INDIVIDUAL_PARAMETERS
+#
 # Model as an ODE
 #
 
@@ -91,6 +94,13 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 		PPV_TLAG
 	} # end VARIABILITY_PARAMETERS 
 
+	GROUP_VARIABLES{
+		FAGECL = exp(BETA_CL_AGE * tAGE)
+		FSEXCL = if(SEX == SEX.female) then POP_FCL_FEM else 1
+		GRPCL = ln(POP_CL * FAGECL * FSEXCL ) + BETA_CL_WT * logtWT
+		GRPV = POP_V * (WT/70)^BETA_V_WT
+	}
+
 	RANDOM_VARIABLE_DEFINITION(level=ID) {
 		ETA_CL ~ Normal(mean = 0, sd = PPV_CL)
 		ETA_V ~ Normal(mean = 0, sd = PPV_V)
@@ -98,17 +108,11 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 		ETA_TLAG ~ Normal(mean = 0, sd = PPV_TLAG) # We define correlation here
 	} # end RANDOM_VARIABLE_DEFINITION 
 	
-	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    ln(CL) = linear( trans is ln, pop = POP_CL, fixEff = [
-	    	  {coeff = BETA_CL_WT, cov = logtWT},
-	    	  {coeff = POP_FCL_FEM, catCov = SEX.female },
-	    	  {coeff = BETA_CL_AGE, cov = tAGE}
-	    	  ], 
-			  ranEff = [ETA_CL] )
-	    ln(V) = linear( trans is ln, pop = POP_V, fixEff = [{coeff=BETA_V_WT, cov=logtWT}] , ranEff = [ETA_V] )
-	    ln(KA) = linear( trans is ln, pop = POP_KA, ranEff = [ETA_KA] )
-	    ln(TLAG) = linear( trans is ln, pop = POP_TLAG, ranEff = [ETA_TLAG] )
-
+	INDIVIDUAL_VARIABLES { # This maps to the "Type 1" individual parameter definition in PharmML
+		CL = exp(GRPCL + ETA_CL)
+		V = exp(GRPV + ETA_V)
+	    KA = exp(POP_KA + ETA_KA)
+	    TLAG = exp(POP_TLAG + ETA_TLAG)
 	} # end INDIVIDUAL_VARIABLES
 
 	
@@ -132,9 +136,9 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 } # end of model object
 
 warfarin_PK_ODE_task = taskObj {
-	ESTIMATE{ 
+	ESTIMATE {
 		set algo is saem 
-	}
+	} #end ESTIMATE sub block
 } # end of task object
 
 

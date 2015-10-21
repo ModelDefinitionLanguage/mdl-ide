@@ -43,6 +43,7 @@ import org.eclipse.xtext.validation.Check
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.utils.MclUtils
+import eu.ddmore.mdl.mdl.PropertyStatement
 
 //import org.eclipse.xtext.validation.Check
 
@@ -62,6 +63,7 @@ class MdlValidator extends AbstractMdlValidator {
 	extension BlockArgumentDefinitionProvider movh = new BlockArgumentDefinitionProvider
 	extension BlockDefinitionProvider blokHelper = new BlockDefinitionProvider
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
+	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension BuiltinFunctionProvider funcHelper = new BuiltinFunctionProvider
 	extension MclTypeProvider typeProvider = new MclTypeProvider
 	extension MclUtils mclUtils = new MclUtils
@@ -75,6 +77,8 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val MANDATORY_BLOCK_PROP_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockPropMissing"
 	
 	// List attribute validation
+	public static val UNRECOGNIZED_PROPERTY_ATT  = "eu.ddmore.mdl.validation.UnrecognisedProperty"
+	public static val MANDATORY_PROP_MISSING = "eu.ddmore.mdl.validation.MandatoryProputeMissing"
 	public static val UNRECOGNIZED_LIST_ATT = "eu.ddmore.mdl.validation.UnrecognisedAttribute"
 	public static val MANDATORY_LIST_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryAttributeMissing"
 	public static val MANDATORY_LIST_KEY_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryKeyAttributeMissing"
@@ -195,10 +199,40 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 
 	@Check
+	def validateProperties(BlockStatement it){
+		unusedMandatoryProperties.forEach[name| error("mandatory property '" + name + "' is missing in block.",
+				MdlPackage.eINSTANCE.blockStatement_Body, MANDATORY_PROP_MISSING, name) ]
+	}
+
+//	@Check
+//	def validateAttributeList(AttributeList it){
+//		if(isKeyAttributeDefined){
+//			unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
+//				MdlPackage.eINSTANCE.attributeList_Attributes, MANDATORY_LIST_ATT_MISSING, name) ]
+//		}		
+//		else{
+//			error("mandatory key attribute is missing in list.",
+//				MdlPackage.eINSTANCE.attributeList_Attributes, MANDATORY_LIST_KEY_ATT_MISSING, "")
+//		}
+//	}
+
+	@Check
 	def validateAttribute(ValuePair it){
-		if(eContainer instanceof AttributeList && !attributeRecognised){
-			error("attribute '" + attributeName + "' is not recognised in this context.",
-				MdlPackage.eINSTANCE.valuePair_ArgumentName, MdlValidator.UNRECOGNIZED_LIST_ATT, attributeName)
+		val parent = eContainer
+		switch(parent){
+			AttributeList:{
+				if(!attributeRecognised){
+					error("attribute '" + attributeName + "' is not recognised in this context.",
+							MdlPackage.eINSTANCE.valuePair_ArgumentName, MdlValidator.UNRECOGNIZED_LIST_ATT, attributeName)
+				}
+			}
+			PropertyStatement:{
+				if(!isPropertyKnown){
+					error("property '" + attributeName + "' is not recognised in this context.",
+							MdlPackage.eINSTANCE.valuePair_ArgumentName, MdlValidator.UNRECOGNIZED_PROPERTY_ATT, attributeName)
+				}
+			}
+			
 		}
 	}
 
@@ -390,6 +424,11 @@ class MdlValidator extends AbstractMdlValidator {
 					error("attribute '" + vp.attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
 							MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
 				])
+			PropertyStatement:
+				parent.checkPropertyAttributeTyping(vp, [e, a|
+					error("property '" + vp.attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
+							MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
+				])
 		}
 	}
 
@@ -420,22 +459,24 @@ class MdlValidator extends AbstractMdlValidator {
 		if(mogObj.isMogObject){
 			val mogValidator = new MogValidator
 			mogValidator.buildMog(mogObj)
-			// assume has a data obj
-			mogValidator.validateCovariates[
-				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
-			]
-			mogValidator.validateObservations[
-				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
-			]
-			mogValidator.validateVariabilityLevels[
-				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
-			]
-			mogValidator.validateIndividualVariable[
-				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
-			]
-			mogValidator.validateDosing[
-				errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
-			]
+			if(mogValidator.mdlObj != null && mogValidator.dataObj != null){
+				// assume has a data obj and mdl obj
+				mogValidator.validateCovariates[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateObservations[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateVariabilityLevels[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateIndividualVariable[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateDosing[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+			}
 		}
 	}
 	

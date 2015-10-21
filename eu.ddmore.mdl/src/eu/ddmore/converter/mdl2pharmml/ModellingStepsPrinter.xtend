@@ -24,15 +24,22 @@ import eu.ddmore.mdl.validation.SublistDefinitionProvider
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.MappingPair
+import java.util.HashSet
+import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
+import eu.ddmore.mdl.mdl.CatValRefMappingExpression
+import eu.ddmore.mdl.mdl.PropertyStatement
+import eu.ddmore.mdl.validation.PropertyDefinitionProvider
+import eu.ddmore.mdl.mdl.MdlFactory
 
 class ModellingStepsPrinter { 
 	
 	extension MclUtils mu = new MclUtils 
 	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder 
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension SublistDefinitionProvider sldp = new SublistDefinitionProvider
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
-//	extension PKMacrosPrinter bmp = new PKMacrosPrinter
 
 	////////////////////////////////////////////////
 	// III Modelling Steps
@@ -89,7 +96,6 @@ class ModellingStepsPrinter {
 			«dObj.print_mdef_ExternalDataSetReference»
 			«pObj.print_msteps_ParametersToEstimate»
 			«tObj.print_msteps_EstimateOperations(order)»
-«««			«mObj.print_ct_variableAssignment»
 		</EstimationStep>
 	'''
 		
@@ -163,30 +169,63 @@ class ModellingStepsPrinter {
 		</ExternalDataSet>
 	'''
 
+	var mappedColumns = new HashSet<String>
+	
+	private def saveMappedColumn(String colName){
+		mappedColumns.add(colName)
+	} 
+
+	private def isColumnMapped(String colName){
+		mappedColumns.contains(colName)
+	}
+
 	def print_ds_NONMEM_DataSet(MclObject mObj, MclObject dObj) {
 		var res = "";
 		for (column : dObj.dataColumnDefinitions) {
 			val use = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
 			switch(use){
 				case(ListDefinitionProvider::ID_USE_VALUE),
-				case(ListDefinitionProvider::VARLVL_USE_VALUE):
-					res += mObj.print_ds_MagicMapping(column)
-				case(ListDefinitionProvider::IDV_USE_VALUE):
-					res += mObj.writeIdvMapping(column)
-				case(ListDefinitionProvider::COV_USE_VALUE):
-					if(isUsedInModel(column, mObj))
-						res = res + mObj.print_ds_MagicMapping(column)
-				case(ListDefinitionProvider::CATCOV_USE_VALUE):{
-					if(isUsedInModel(column, mObj))
-						res = res + mObj.print_ds_CategoricalMagicMapping(column)
-//					var categoricalMapping = column.print_ds_CategoricalMapping
-//					// @TODO: fix this
-//					res = res + mObj.print_ds_ColumnMapping(column, categoricalMapping)
+				case(ListDefinitionProvider::VARLVL_USE_VALUE):{
+					if(mObj.mdlVariabilityLevels.exists[name == column.name]){
+						// only generate mapping if equivalent variable exists in model
+						res += mObj.print_ds_MagicMapping(column)
+						// record that mapping to model found
+						saveMappedColumn(column.name)
+					}
 				}
-				case(ListDefinitionProvider::AMT_USE_VALUE):
-					res = res + column.print_ds_AmtMapping(dObj, mObj)
-				case(ListDefinitionProvider::OBS_USE_VALUE):
+				case(ListDefinitionProvider::IDV_USE_VALUE):{
+					if(mObj.mdlIdv != null){
+						res += mObj.writeIdvMapping(column)
+						// record that mapping to model found
+						saveMappedColumn(column.name)
+					}
+				}
+				case(ListDefinitionProvider::COV_USE_VALUE):{
+					if(isCovariateUsedInModel(column, mObj)){
+						res = res + mObj.print_ds_MagicMapping(column)
+						// record that mapping to model found
+						saveMappedColumn(column.name)
+					}
+				}
+				case(ListDefinitionProvider::CATCOV_USE_VALUE):{
+					if(isCovariateUsedInModel(column, mObj)){
+						res = res + mObj.print_ds_CategoricalMagicMapping(column)
+						// record that mapping to model found
+						saveMappedColumn(column.name)
+					}
+				}
+				case(ListDefinitionProvider::AMT_USE_VALUE):{
+//					Potential bug here. This is meant to ensure that no mapping
+//					is generated if no variables match. @TODO: fix this properly.
+//					if(mObj.findMdlSymbolDefn(column.name) != null){
+						res = res + column.print_ds_AmtMapping(dObj, mObj)
+						// record that mapping to model found
+						saveMappedColumn(column.name)
+//					}
+				}
+				case(ListDefinitionProvider::OBS_USE_VALUE):{
 					res = res + column.print_ds_DvMapping(dObj, mObj)
+				}
 			}
 		}
 		for (column : dObj.dataDerivedColumnDefinitions) {
@@ -275,29 +314,6 @@ class ModellingStepsPrinter {
 					</Piecewise>
 				</ColumnMapping>
 				'''
-//				'''
-//				<MultipleDVMapping>
-//					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
-//					<Piecewise xmlns="«xmlns_mstep»">
-//						«FOR p : dataDefine.attList»
-//							<math:Piece>
-//							   	«mObj.findMdlSymbolDefn(p.mappedSymbol.ref.name).symbolRef»
-//«««						   	«IF p.key.expression.isCategoricalObs(mObj)»
-//«««						   		«p.key.expression.printCategoricalObsMapping(mObj)»
-//«««						   	«ELSEIF p.key.expression.isDiscreteBernoulliObs(mObj)»
-//«««						   		«printDiscreteBernoulliObsMapping»
-//«««						   	«ENDIF»
-//								<math:Condition>
-//									<math:LogicBinop op="eq">
-//									<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«p.srcColumn.ref.name»"/>
-//										«p.leftOperand.pharmMLExpr»
-//							   		</math:LogicBinop>
-//							   	</math:Condition>
-//							</math:Piece>
-//						«ENDFOR» 
-//					</Piecewise>
-//				</MultipleDVMapping>
-//				'''
 		  default: ''''''
 		}
 	}
@@ -336,13 +352,6 @@ class ModellingStepsPrinter {
 						«ENDFOR»
 					'''
 			}
-//			toolMappingDefn = '''
-//			    «FOR p : pairs»
-//		    	   	«IF mObj.isCompartmentInput(p)»
-//		    	   		«p.printTargetMapping(p.getDefineMappingExpression, mObj)»
-//		    	   	«ENDIF»
-//				«ENDFOR» 
-//			'''
 		} else {
 			// this is a bug as the language will be invalid if this is true.
 		}
@@ -366,27 +375,25 @@ class ModellingStepsPrinter {
 	def printTargetMapping(MclObject it, MappingPair expression){
 		val mdlDefn = findMdlSymbolDefn(expression.mappedSymbol.ref.name)
 		'''
-			<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«(mdlDefn as ListDefinition).list.getAttributeExpression('modelCmt').convertToString»"/>
+			<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«PKMacrosPrinter::INSTANCE.getCompartmentNum(mdlDefn)»"/>
 «««		<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«expression.leftOperand.convertToString»"/>
 		'''
 	}
 	
-	protected def print_ds_CategoricalMapping(ListDefinition column) {
+	private def print_ds_CategoricalMapping(ListDefinition column) {
 		var res = "";
-		// @TODO implement this
-//		if (column.list != null) {
-//			val type = column.list.arguments.getAttributeExpression(AttributeValidator::attr_type.name);
-//			if(!type.isCategorical) return "";
-//			val define = column.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
-//			if (define != null) {
-//				var pairs = define.getAttributePairs(AttributeValidator::attr_category.name,
-//					AttributeValidator::attr_value.name);
-//				for (pair : pairs)
-//					res = res + '''
-//						<ds:Map modelSymbol="«pair.key.toStr»" dataSymbol="«pair.value.toStr»"/>
-//					''';
-//			}
-//		}
+			val define = column.list.getAttributeExpression(ListDefinitionProvider::USE_ATT);
+			// get an EnumExpression here - use this to get the categories.
+			switch(define){
+				EnumExpression:{
+					val catDefnExpr = define.catDefn as CategoricalDefinitionExpr
+					for(catVal : catDefnExpr.categories){
+					res = res + '''
+						<ds:Map modelSymbol="«catVal.name»" dataSymbol="«catVal.mappedTo.convertToString»"/>
+						'''
+					}
+				}
+			}
 		if (res.length > 0)
 			res = '''
 				<ds:CategoryMapping>
@@ -429,16 +436,29 @@ class ModellingStepsPrinter {
 			<ColumnMapping>
 			    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
 				«mdlSymb.symbolReference»
-«««						«IF define.isCategoricalObs(mObj)»
-«««							«define.expression.printCategoricalObsMapping(mObj)»
-«««			    	   	«ELSEIF define.expression.isDiscreteBernoulliObs(mObj)»
-«««							«printDiscreteBernoulliObsMapping»
-«««			    	   	«ENDIF»
 			</ColumnMapping>
 		'''
 	}
 
+	def isCategoricalObs(SymbolDefinition symb){
+		if(symb instanceof ListDefinition){
+			(symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT) == ListDefinitionProvider::CATEGORICAL_OBS_VALUE
+		}
+		else false
+	}
+
+	def isDiscreteBernoulliObs(SymbolDefinition symb){
+		if(symb instanceof ListDefinition){
+			if((symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT) == ListDefinitionProvider::DISCRETE_OBS_VALUE){
+				val distnExpr =  (symb as ListDefinition).list.getAttributeExpression('distn')
+				distnExpr instanceof BuiltinFunctionCall && (distnExpr as BuiltinFunctionCall).func == 'Bernoulli'
+			}
+		}
+		else false
+	}
+
 	def writeMultipleObsMapping(MclObject mObj, ListDefinition column, Expression dataDefine){
+//		var mdlSymb = mObj.getMdlObservationVariableFromCatValRef(dataDefine as CatValRefMappingExpression)
 		switch(dataDefine){
 			MappingExpression:
 				'''
@@ -446,38 +466,190 @@ class ModellingStepsPrinter {
 					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
 					<Piecewise xmlns="«xmlns_mstep»">
 						«FOR p : dataDefine.attList»
-							<math:Piece>
-							   	«mObj.findMdlSymbolDefn(p.mappedSymbol.ref.name).symbolReference»
-«««						   	«IF p.key.expression.isCategoricalObs(mObj)»
-«««						   		«p.key.expression.printCategoricalObsMapping(mObj)»
-«««						   	«ELSEIF p.key.expression.isDiscreteBernoulliObs(mObj)»
-«««						   		«printDiscreteBernoulliObsMapping»
-«««						   	«ENDIF»
-								<math:Condition>
-									<math:LogicBinop op="eq">
-									<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«p.srcColumn.ref.name»"/>
-										«p.leftOperand.pharmMLExpr»
-							   		</math:LogicBinop>
-							   	</math:Condition>
-							</math:Piece>
+							«IF p.rightOperand instanceof SymbolReference»
+								«IF mObj.isDefinedInMdlObservations(p.mappedSymbol)»
+									<math:Piece>
+									   	«mObj.findMdlSymbolDefn(p.mappedSymbol.ref.name).symbolReference»
+										<math:Condition>
+											<math:LogicBinop op="eq">
+											<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«p.srcColumn.ref.name»"/>
+												«p.leftOperand.pharmMLExpr»
+									   		</math:LogicBinop>
+									   	</math:Condition>
+									</math:Piece>
+								«ENDIF»
+							«ELSEIF p.rightOperand instanceof CatValRefMappingExpression»
+								«IF mObj.isDefinedInMdlObservations((p.rightOperand as CatValRefMappingExpression).attLists.head.catRef)»
+									<math:Piece>
+										«IF mObj.findMdlSymbolDefn((p.rightOperand as CatValRefMappingExpression).attLists.head.catRef.symbolDefnFromCatValRef.name).isCategoricalObs»
+											«mObj.findMdlSymbolDefn((p.rightOperand as CatValRefMappingExpression).attLists.head.catRef.symbolDefnFromCatValRef.name).symbolReference»
+											«printCategoricalObsMapping(p.rightOperand)»
+«««												«ELSEIF mObj.findMdlSymbolDefn(cm.mappedTo.convertToString).isDiscreteBernoulliObs»
+«««													«printDiscreteBernoulliObsMapping»
+										«ENDIF»
+										<math:Condition>
+											<math:LogicBinop op="eq">
+											<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«p.srcColumn.ref.name»"/>
+												«p.leftOperand.pharmMLExpr»
+									   		</math:LogicBinop>
+									   	</math:Condition>
+									</math:Piece>
+								«ENDIF»
+							«ENDIF»
 						«ENDFOR» 
 					</Piecewise>
 				</MultipleDVMapping>
 				'''
-		  default: ''''''
+			CatValRefMappingExpression:{
+				val dataCatValRef = dataDefine.attLists.head.catRef
+				val mdlObsSymb =  mObj.findMdlSymbolDefn(dataCatValRef.symbolDefnFromCatValRef.name)
+				'''
+				«IF mObj.isDefinedInMdlObservations(dataCatValRef)»
+					<ColumnMapping>
+						<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
+							«mdlObsSymb.symbolReference»
+							«IF mdlObsSymb.isCategoricalObs»
+								«printCategoricalObsMapping(dataDefine)»
+«««							«ELSEIF mdlObsSymb.isDiscreteBernoulliObs»
+«««								«printDiscreteBernoulliObsMapping»
+							«ENDIF»
+					</ColumnMapping>
+				«ENDIF»
+				'''
+			}
+			default: ''''''
 		}
 	}
 
+//	def print_ds_DvMapping(ListDeclaration dvColumn, DataObject dObj, ModelObject mObj){
+//		val define = dvColumn.list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
+//		val columnId = dvColumn.name;
+//		if (define != null) {
+//			// Reference or mapped to data
+//			if (define.expression != null)
+//				return '''
+//					<ColumnMapping>
+//					    <ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+//						«define.expression.print_Math_Expr»
+//							«IF define.expression.isCategoricalObs(mObj)»
+//							«define.expression.printCategoricalObsMapping(mObj)»
+//			    	   	«ELSEIF define.expression.isDiscreteBernoulliObs(mObj)»
+//							«printDiscreteBernoulliObsMapping»
+//			    	   	«ENDIF»
+//					</ColumnMapping>
+//				  '''
+//			else { 
+//				val pairs = define.getAttributePairs(AttributeValidator::attr_pred.name,
+//					AttributeValidator::attr_predid.name);
+//				val dvidColId = dObj.getUseDvidColumn
+//				return '''
+//					<MultipleDVMapping>
+//						<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«columnId»"/>
+//						<Piecewise xmlns="«xmlns_mstep»">
+//							«FOR p : pairs»
+//							<math:Piece>
+//							   	«p.key.expression.print_Math_Expr»
+//							   	«IF p.key.expression.isCategoricalObs(mObj)»
+//							   		«p.key.expression.printCategoricalObsMapping(mObj)»
+//							   	«ELSEIF p.key.expression.isDiscreteBernoulliObs(mObj)»
+//							   		«printDiscreteBernoulliObsMapping»
+//							   	«ENDIF»
+//							   	<math:Condition>
+//							   		<math:LogicBinop op="eq">
+//							   			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«dvidColId»"/>
+//							   			«p.value.expression.print_Math_Expr»
+//							   		</math:LogicBinop>
+//							   	</math:Condition>
+//							</math:Piece>
+//					«ENDFOR» 
+//						</Piecewise>
+//					</MultipleDVMapping>
+//				  '''
+//			}
+//		}
+//	}
+
+	def printCategoricalObsMapping(Expression expression){
+//			val define = column.list.getAttributeExpression(ListDefinitionProvider::USE_ATT);
+//			// get an EnumExpression here - use this to get the categories.
+		switch(expression){
+			CatValRefMappingExpression:{
+				return '''
+				<ds:CategoryMapping>
+					«FOR catVal : expression.attLists»
+						<ds:Map modelSymbol="«catVal.catRef.ref.name»" dataSymbol="«catVal.mappedTo.convertToString»"/>
+					«ENDFOR»
+				</ds:CategoryMapping>
+				'''
+			}
+		}
+		
+//		val obsVar = expression.getSymbolReference
+//		val obsExpr = object.getMatchingObservationExpression(obsVar.symbolRef.name)
+//		// assume we have tested that this caregorical
+//		val catsExpr = obsExpr.list.arguments.getAttributeExpression(AttributeValidator::attr_categories.name) 
+//		'''
+//		<ds:CategoryMapping>
+//		«FOR cat : catsExpr.vector.expression.expressions»
+//			<ds:Map dataSymbol="«cat.toStr»" modelSymbol="c«cat.toStr»"/>
+//		«ENDFOR»
+//		</ds:CategoryMapping>
+//		'''
+	}
+	
+	
+//	def printDiscreteBernoulliObsMapping(){
+//		val cat = "cat1"
+//		val catDataValue = 1 
+//		'''
+//		<ds:CategoryMapping>
+//			<ds:Map dataSymbol="«catDataValue»" modelSymbol="«cat»"/>
+//		</ds:CategoryMapping>
+//		'''
+//	}
+
+	private def isDefinedInMdlObservations(MclObject it, Expression testExpr){
+		switch(testExpr){
+			SymbolReference:
+				mdlObservations.exists[name == testExpr?.ref.name]
+			CategoryValueReference:
+				mdlObservations.exists[name == testExpr?.symbolDefnFromCatValRef?.name]
+			default: false
+		} 
+	}
+	
+	private def isMultiObsMappingDefinedInMdlObs(MclObject it, Expression testExpr){
+		switch(testExpr){
+			MappingExpression:
+				for(p : testExpr.attList){
+					if(mdlObservations.exists[name == p.mappedSymbol.ref.name])
+						return true
+				}
+			CatValRefMappingExpression:
+				for(p : testExpr.attLists){
+					if(mdlObservations.exists[name == p.catRef.getSymbolDefnFromCatValRef.name])
+						return true
+				}
+			default: false
+		}
+	}
+	
 	def print_ds_DvMapping(ListDefinition dvColumn, MclObject dObj, MclObject mObj){
+		var CharSequence retVal = ''''''
 		val variable = dvColumn.list.getAttributeExpression('variable');
-		if (variable != null) {
+		if (variable != null && mObj.isDefinedInMdlObservations(variable)) {
 			// Reference or mapped to data
-			writeSingleObsMapping(mObj, dvColumn, variable)
+			retVal = writeSingleObsMapping(mObj, dvColumn, variable)
+			saveMappedColumn(dvColumn.name)
 		}
 		else { 
 			val define = dvColumn.list.getAttributeExpression(ListDefinitionProvider::DEFINE_ATT);
-			writeMultipleObsMapping(mObj, dvColumn, define)
+			if(mObj.isMultiObsMappingDefinedInMdlObs(define)){
+				retVal = writeMultipleObsMapping(mObj, dvColumn, define)
+				saveMappedColumn(dvColumn.name)
+			}
 		}
+		retVal
 	}
 
 	def boolean isCovariateUsedInSublist(SubListExpression it, String covName){
@@ -496,17 +668,19 @@ class ModellingStepsPrinter {
 			switch(stmt){
 				EquationTypeDefinition:{
 					if(stmt.expression instanceof BuiltinFunctionCall){
-						var funcExpr = stmt.expression as BuiltinFunctionCall
-						var namedArgList = funcExpr.argList as NamedFuncArguments 
-						val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
-						if(fixEff != null && !fixEff.expressions.isEmpty){
-							for(e : fixEff.expressions){
-								switch(e){
-									VectorElement:{
-										if(e.element instanceof SubListExpression &&
-											((e.element as SubListExpression).isCovariateUsedInSublist(name) ||
-											(e.element as SubListExpression).isCatCovUsedInSublist(name)))
-												return true
+						val funcExpr = stmt.expression as BuiltinFunctionCall
+						if(funcExpr.func == 'linear' || funcExpr.func == 'general'){
+							var namedArgList = funcExpr.argList as NamedFuncArguments 
+							val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
+							if(fixEff != null && !fixEff.expressions.isEmpty){
+								for(e : fixEff.expressions){
+									switch(e){
+										VectorElement:{
+											if(e.element instanceof SubListExpression &&
+												((e.element as SubListExpression).isCovariateUsedInSublist(name) ||
+												(e.element as SubListExpression).isCatCovUsedInSublist(name)))
+													return true
+										}
 									}
 								}
 							}
@@ -528,15 +702,12 @@ class ModellingStepsPrinter {
 		for (column : dObj.dataColumnDefinitions) {
 			val columnType = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
 			val columnId = column.name;
-//			if(columnType == ListDefinitionProvider::AMT_USE_VALUE){
-//				dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
-//			}
-			var convertedColType = switch(columnType){
+			val convertedColType = switch(columnType){
 				case(ListDefinitionProvider::COV_USE_VALUE),
 				case(ListDefinitionProvider::CATCOV_USE_VALUE):
-					if(isUsedInModel(column, mObj)) convertEnum(columnType, dosingToCompartmentMacro, !column.isCovUsedInIndivParams(mObj)) else "undefined"
+					if(isColumnMapped(column.name)) convertEnum(columnType, dosingToCompartmentMacro, !column.isCovUsedInIndivParams(mObj)) else "undefined"
 				default:
-					convertEnum(columnType, dosingToCompartmentMacro, false)
+					if(isColumnMapped(column.name)) convertEnum(columnType, dosingToCompartmentMacro, false) else 'undefined'
 			}
 			val valueType = column.getValueType
 			res = res +
@@ -555,8 +726,8 @@ class ModellingStepsPrinter {
 		'''
 	}
 	
-	def isUsedInModel(ListDefinition col, MclObject mdlObj){
-		mdlObj.findMdlSymbolDefn(col.name) != null
+	def isCovariateUsedInModel(ListDefinition col, MclObject mdlObj){
+		mdlObj.mdlCovariateDefns.exists[name == col.name]
 	}
 	
 	
@@ -630,40 +801,24 @@ class ModellingStepsPrinter {
 		return res;
 	}
 
-//	protected def print_msteps_ParameterEstimation(SymbolDeclaration s){
-//		if (s.name != null && s.list != null) {
-//			//Skip correlation definitions
-//			val type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name);
-//			if (type.equals(VariabilityType::COV.toString) || type.equals(VariabilityType::CORR.toString)) return "";
-//	
-//			val fixed = s.list.arguments.isAttributeTrue(AttributeValidator::attr_fix.name);
-//			var value = s.list.arguments.getAttributeExpression(AttributeValidator::attr_value.name);
-//			var lo = s.list.arguments.getAttributeExpression(AttributeValidator::attr_lo.name);
-//			var hi = s.list.arguments.getAttributeExpression(AttributeValidator::attr_hi.name);
-////			var estimate = "0".print_ct_Value;
-////			if (value != null)
-////				estimate = value.print_Math_Expr.toString();
-//			'''
-//				<ParameterEstimation>
-//					«print_ct_SymbolRef(s.name)»
-//					<InitialEstimate fixed="«fixed»">
-//							«value.print_Math_Equation»
-//					</InitialEstimate>
-//					«IF lo != null»
-//						<LowerBound>
-//							«lo.print_Math_Equation»
-//						</LowerBound>
-//					«ENDIF»
-//					«IF hi != null»
-//						<UpperBound>
-//							«hi.print_Math_Equation»
-//						</UpperBound>
-//					«ENDIF»
-//				</ParameterEstimation>
-//			'''
-//		}
-//	}
-	
+
+	def convertTargetEnum(String enumValue){
+		switch(enumValue){
+			case("monolix"): "MLXTRAN_CODE"
+			case("nonmem"): "NMTRAN_CODE"
+			default: "ERROR!"
+		}
+	}
+
+	def convertAlgoEnum(String enumValue){
+		switch(enumValue){
+			case("saem"): "SAEM"
+			case("foce"): "FOCE"
+			case("fo"): "FO"
+			default: "ERROR!"
+		}
+	}
+
 	def writeConfiguration(Statement stmt){
 		switch(stmt){
 			ListDefinition:{
@@ -686,6 +841,26 @@ class ModellingStepsPrinter {
 				«ENDIF»
 				'''
 			}
+			PropertyStatement:{
+//				val targetExpr = stmt.getPropertyEnumValue('target').convertTargetEnum
+//				val versionExpr = stmt.getPropertyExpression('version')
+				val algoExpr = stmt.getPropertyEnumValue('algo')?.convertAlgoEnum
+//				val tolExpr = stmt.getPropertyExpression('tol')
+				'''
+«««				«IF targetExpr != null»
+«««					«writeProperty('target', targetExpr)»
+«««				«ENDIF»
+«««				«IF versionExpr != null»
+«««					«writeProperty('version', versionExpr)»
+«««				«ENDIF»
+«««				«IF tolExpr != null»
+«««					«writeProperty('tol', tolExpr)»
+«««				«ENDIF»
+				«IF algoExpr != null»
+					<Algorithm definition="«algoExpr»"/>
+				«ENDIF»
+				'''
+			}
 		}
 	}
 	
@@ -697,37 +872,23 @@ class ModellingStepsPrinter {
 		</Property>
 	'''
 	
+	def writeProperty(String propName, String exprStr){
+		val strExpr = MdlFactory::eINSTANCE.createStringLiteral
+		strExpr.value = exprStr
+		writeProperty(propName, strExpr) 
+	}
+
 	protected def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
 		«FOR b: tObj.blocks»
 			«IF b.identifier == "ESTIMATE"»
 				<Operation order="«order»" opType="«OPERATION_EST_POP»">
 					«FOR s: b.nonBlockStatements»
 						«writeConfiguration(s)»
-«««						«s.print_msteps_Property»
 					«ENDFOR»
-«««					«FOR s: b.estimateBlock.statements»
-«««						«s.print_msteps_Algorithm»
-«««					«ENDFOR»
 				</Operation>
 			«ENDIF»
 		«ENDFOR»
 	'''
-
-//	def print_msteps_EstimateOperations(MclObject tObj, Integer order)'''
-//		<Operation order="1" opType="estPop">
-//			<Property name="target">
-//				<ct:Assign>
-//					<ct:String>MLXTRAN_CODE</ct:String>
-//				</ct:Assign>	
-//			</Property>
-//			<Property name="version">
-//				<ct:Assign>
-//					<ct:String>4.3.2</ct:String>
-//				</ct:Assign>	
-//			</Property>
-//			<Algorithm definition="SAEM"/>
-//		</Operation>
-//	'''
 
 
 
@@ -766,28 +927,4 @@ class ModellingStepsPrinter {
 //		return res;
 //	}
 	
-//	protected def print_msteps_Property(PropertyDeclaration s)'''
-//		«IF s.propertyName != null && s.expression != null»
-//			«IF !s.propertyName.argName.equals(PropertyValidator::attr_task_algo.name)»
-//				<Property name="«s.propertyName.argName»">
-//					«s.expression.print_Assign»
-//				</Property>
-//			«ENDIF»	
-//		«ENDIF»
-//	'''
-//	
-//	protected def print_msteps_Algorithm(PropertyDeclaration s)'''
-//		«IF s.propertyName != null && s.expression != null»
-//			«IF s.propertyName.argName.equals(PropertyValidator::attr_task_algo.name)»
-//				«IF s.expression.vector != null && s.expression.vector.expression != null &&
-//					s.expression.vector.expression.expressions != null »
-//					«FOR algoName: s.expression.vector.expression.expressions»
-//						«IF algoName != null»
-//							<Algorithm definition="«algoName.toStr»"/>
-//						«ENDIF»
-//					«ENDFOR»
-//				«ENDIF»
-//			«ENDIF»	
-//		«ENDIF»
-//	'''
 }

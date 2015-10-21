@@ -46,7 +46,7 @@ ForwardDeclaration:
 Statement:
 	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-	EnumerationDefinition
+	EnumerationDefinition|PropertyStatement
 ;
 
 
@@ -82,6 +82,10 @@ ListDefinition:
 
 AnonymousListStatement:
 	':' ':' list = AttributeList ';'?
+;
+
+PropertyStatement:
+	SET properties += ValuePair (=> ',' properties += ValuePair)* ';'?
 ;
 
 
@@ -314,6 +318,8 @@ QualifiedName:
 terminal CONSTANT:
 	'INF'
 ;
+
+terminal SET: 'set';
 
 terminal IN: 'in';
 

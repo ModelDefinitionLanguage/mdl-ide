@@ -254,7 +254,7 @@ Hansson2013_mdl = mdlObj{
        
 Hansson2013_task = taskObj{
 	ESTIMATE{ 
-		conf : {target is MLXTRAN_CODE, version = "4.3.2", algo = "SAEM" }
+		set algo is saem 
 	}
 }# end of task object
 
