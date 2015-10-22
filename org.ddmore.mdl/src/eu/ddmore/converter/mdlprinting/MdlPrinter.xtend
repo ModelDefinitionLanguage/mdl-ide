@@ -45,7 +45,7 @@ import org.ddmore.mdl.mdl.VarType
 import org.ddmore.mdl.mdl.VariabilityType
 import org.ddmore.mdl.mdl.Vector
 import org.ddmore.mdl.mdl.VectorExpression
-import org.ddmore.mdl.validation.PropertyValidator
+import org.ddmore.mdl.validation.SourceBlockAttributes
 import org.eclipse.xtext.xbase.lib.Pair
 import org.ddmore.mdl.mdl.TargetType
 
@@ -226,7 +226,7 @@ class MdlPrinter {
 		for (b: dataObject.blocks){
 			if (b.sourceBlock != null){
 				for (s: b.sourceBlock.statements){
-					if (s.propertyName.name.equals(PropertyValidator::attr_file.name) && s.expression != null)
+					if (s.propertyName.name.equals(SourceBlockAttributes::attr_file.name) && s.expression != null)
 						return s.expression.toStr;
 				}
 			} 
@@ -239,7 +239,7 @@ class MdlPrinter {
 		for (b: dataObject.blocks){
 			if (b.sourceBlock != null){
 				for (s: b.sourceBlock.statements){
-					if (s.propertyName.name.equals(PropertyValidator::attr_script.name) && s.expression != null)
+					if (s.propertyName.name.equals(SourceBlockAttributes::attr_script.name) && s.expression != null)
 						return s.expression.toStr;
 				}
 			} 

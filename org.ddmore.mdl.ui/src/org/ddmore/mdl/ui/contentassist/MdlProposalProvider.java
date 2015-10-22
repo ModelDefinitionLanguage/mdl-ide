@@ -20,7 +20,7 @@ import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.services.MdlGrammarAccess;
 import org.ddmore.mdl.ui.outline.Images;
 import org.ddmore.mdl.validation.AttributeValidator;
-import org.ddmore.mdl.validation.PropertyValidator;
+import org.ddmore.mdl.validation.SourceBlockAttributes;
 import org.ddmore.mdl.validation.UnitValidator;
 import org.ddmore.mdl.validation.Utils;
 import org.eclipse.emf.ecore.EObject;
@@ -131,7 +131,7 @@ public class MdlProposalProvider extends AbstractMdlProposalProvider {
 		if (model instanceof PropertyDeclarationImpl){
 			PropertyDeclaration property = (PropertyDeclaration)model;
 			//inputformat
-			if (property.getPropertyName().getName().equals(PropertyValidator.attr_inputformat.getName())){
+			if (property.getPropertyName().getName().equals(SourceBlockAttributes.attr_inputformat.getName())){
 				List<String> values = new ArrayList<String>();
 				for (InputFormatType value: InputFormatType.VALUES)
 					if (value != InputFormatType.NO_INPUT_FORMAT)

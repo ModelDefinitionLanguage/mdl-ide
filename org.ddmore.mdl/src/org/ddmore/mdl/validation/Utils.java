@@ -8,14 +8,70 @@ import java.util.Map;
 
 import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.domain.Variable;
-import org.ddmore.mdl.mdl.*;
-import org.ddmore.mdl.mdl.impl.*;
+import org.ddmore.mdl.mdl.Argument;
+import org.ddmore.mdl.mdl.Arguments;
+import org.ddmore.mdl.mdl.Category;
+import org.ddmore.mdl.mdl.CovariateDefinitionBlock;
+import org.ddmore.mdl.mdl.DataInputBlock;
+import org.ddmore.mdl.mdl.DataObject;
+import org.ddmore.mdl.mdl.EstimateTask;
+import org.ddmore.mdl.mdl.Expression;
+import org.ddmore.mdl.mdl.FunctionCall;
+import org.ddmore.mdl.mdl.ImportObjectBlock;
+import org.ddmore.mdl.mdl.ImportObjectStatement;
+import org.ddmore.mdl.mdl.IndividualVariablesBlock;
+import org.ddmore.mdl.mdl.MOGObject;
+import org.ddmore.mdl.mdl.MOGObjectBlock;
+import org.ddmore.mdl.mdl.Mcl;
+import org.ddmore.mdl.mdl.MclObject;
+import org.ddmore.mdl.mdl.ModelObject;
+import org.ddmore.mdl.mdl.ModelObjectBlock;
+import org.ddmore.mdl.mdl.ModelPredictionBlock;
+import org.ddmore.mdl.mdl.ModelPredictionBlockStatement;
+import org.ddmore.mdl.mdl.ObjectName;
+import org.ddmore.mdl.mdl.ObservationBlock;
+import org.ddmore.mdl.mdl.OdeBlock;
+import org.ddmore.mdl.mdl.ParameterObject;
+import org.ddmore.mdl.mdl.PkMacroBlock;
+import org.ddmore.mdl.mdl.PriorParametersBlock;
+import org.ddmore.mdl.mdl.RandomVariableDefinitionBlock;
+import org.ddmore.mdl.mdl.SimulateTask;
+import org.ddmore.mdl.mdl.SourceBlock;
+import org.ddmore.mdl.mdl.StructuralBlock;
+import org.ddmore.mdl.mdl.StructuralParametersBlock;
+import org.ddmore.mdl.mdl.SymbolDeclaration;
+import org.ddmore.mdl.mdl.SymbolName;
+import org.ddmore.mdl.mdl.TaskObject;
+import org.ddmore.mdl.mdl.VariabilityBlock;
+import org.ddmore.mdl.mdl.VariabilityDefinitionBlock;
+import org.ddmore.mdl.mdl.VariabilityParametersBlock;
+import org.ddmore.mdl.mdl.impl.CategoryImpl;
+import org.ddmore.mdl.mdl.impl.CovariateDefinitionBlockImpl;
+import org.ddmore.mdl.mdl.impl.DataDerivedBlockImpl;
+import org.ddmore.mdl.mdl.impl.DataInputBlockImpl;
+import org.ddmore.mdl.mdl.impl.DeclaredVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
+import org.ddmore.mdl.mdl.impl.FunctionCallImpl;
+import org.ddmore.mdl.mdl.impl.ImportObjectBlockImpl;
+import org.ddmore.mdl.mdl.impl.ImportObjectStatementImpl;
+import org.ddmore.mdl.mdl.impl.IndividualVariablesBlockImpl;
+import org.ddmore.mdl.mdl.impl.MclObjectImpl;
+import org.ddmore.mdl.mdl.impl.ModelPredictionBlockImpl;
+import org.ddmore.mdl.mdl.impl.ObservationBlockImpl;
+import org.ddmore.mdl.mdl.impl.OdeBlockImpl;
+import org.ddmore.mdl.mdl.impl.PkMacroBlockImpl;
+import org.ddmore.mdl.mdl.impl.PriorParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.RandomVariableDefinitionBlockImpl;
+import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
+import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
+import org.ddmore.mdl.mdl.impl.StructuralBlockImpl;
+import org.ddmore.mdl.mdl.impl.StructuralParametersBlockImpl;
+import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl;
+import org.ddmore.mdl.mdl.impl.SymbolNameImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityDefinitionBlockImpl;
+import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.types.MdlDataType;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 
@@ -145,26 +201,6 @@ public class Utils {
 		/*All objects*/
 //		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();
 		return "";
-	}
-	
-	//Locate data/script file in the MDL project
-	public static boolean isFileExist(EObject b, String filePath) {
-		return getFile(b, filePath).exists();
-	}
-	
-	//Locate data/script file in the MDL project
-	public static IFile getFile(EObject b, String filePath) {
-		String platformString = b.eResource().getURI().toPlatformString(true);
-		IFile modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(platformString));
-	    IProject project = modelFile.getProject();
-	    IContainer parent = modelFile.getParent();
-    	String p = filePath;
-		while (p.startsWith("../") && parent != null){
-			parent = parent.getParent();
-			p = p.substring(3);
-		}
-        IFile dataFile = project.getFile(parent.getProjectRelativePath() + "/" + p);
-		return dataFile;
 	}
 	
 	//Returns a list of MOGs declared in an MDL file

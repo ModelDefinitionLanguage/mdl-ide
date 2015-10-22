@@ -13,7 +13,6 @@ import java.util.List;
 import org.ddmore.mdl.domain.Attribute;
 import org.ddmore.mdl.mdl.DataObject;
 import org.ddmore.mdl.mdl.DataObjectBlock;
-import org.ddmore.mdl.mdl.InputFormatType;
 import org.ddmore.mdl.mdl.MclObject;
 import org.ddmore.mdl.mdl.MdlPackage;
 import org.ddmore.mdl.mdl.PropertyDeclaration;
@@ -23,10 +22,13 @@ import org.ddmore.mdl.mdl.TaskObjectBlock;
 import org.ddmore.mdl.mdl.impl.EstimateTaskImpl;
 import org.ddmore.mdl.mdl.impl.SimulateTaskImpl;
 import org.ddmore.mdl.mdl.impl.SourceBlockImpl;
-import org.ddmore.mdl.types.DefaultValues;
 import org.ddmore.mdl.types.MdlDataType;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
@@ -36,6 +38,9 @@ import org.eclipse.xtext.validation.EValidatorRegistrar;
 import com.google.inject.Inject;
 
 import eu.ddmore.converter.mdlprinting.MdlPrinter;
+
+import static org.ddmore.mdl.validation.SourceBlockAttributes.*;
+import static org.ddmore.mdl.validation.TaskObjectAttributes.*;
 
 public class PropertyValidator extends AbstractDeclarativeValidator{
 
@@ -62,14 +67,9 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Task object
-	//SIMUATE, ESTIMATE, EVALUATE, OPTIMIZE
-	final public static Attribute attr_task_algo = new Attribute("algo", MdlDataType.TYPE_VECTOR_STRING, false);
-	final public static Attribute attr_task_max = new Attribute("max", MdlDataType.TYPE_NAT, false);
-	final public static Attribute attr_task_sig = new Attribute("sig", MdlDataType.TYPE_NAT, false);
-	final public static Attribute attr_task_cov = new Attribute("cov", MdlDataType.TYPE_BOOLEAN, false);
-	final public static Attribute attr_task_simopt = new Attribute("simopt", MdlDataType.TYPE_VECTOR_STRING, false);
-	final public static Attribute attr_task_target = new Attribute("target", MdlDataType.TYPE_TARGET, false);
-	final public static Attribute attr_task_version = new Attribute("version", MdlDataType.TYPE_STRING, false);
+	//SIMULATE, ESTIMATE, EVALUATE, OPTIMIZE
+	// Defined in TaskObjectAttributes
+
 		
 	final public static List<Attribute> attrs_task_simulate = Arrays.asList(
 			attr_task_algo, attr_task_max, attr_task_sig, attr_task_cov, attr_task_simopt, attr_task_target, attr_task_version);
@@ -93,14 +93,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 //	final public static List<Attribute> attrs_task_model = Arrays.asList(attr_model_tolrel, attr_model_add, attr_model_remove);
 	
 	/*SOURCE*/
-	final public static Attribute attr_ignore = new Attribute("ignore", MdlDataType.TYPE_STRING, false);
-	final public static Attribute attr_inputformat = new Attribute("inputformat", MdlDataType.TYPE_INPUT_FORMAT, true, InputFormatType.NONMEM_FORMAT.toString());
-	final public static Attribute attr_delimiter = new Attribute("delimiter", MdlDataType.TYPE_STRING, false, ",");
-	final public static Attribute attr_header = new Attribute("header", MdlDataType.TYPE_BOOLEAN, false, "false");
-	final public static Attribute attr_file = new Attribute("file", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
-	final public static Attribute attr_script = new Attribute("script", MdlDataType.TYPE_STRING, true, DefaultValues.FILE_NAME);
-	final public static Attribute attr_skip = new Attribute("skip", MdlDataType.TYPE_NAT, false);
-	final public static Attribute attr_nrows = new Attribute("nrows", MdlDataType.TYPE_NAT, false);
+	// Defined in SourceBlockAttributes
 
 	final public static List<Attribute> attrs_source = Arrays.asList(attr_inputformat, attr_ignore, 
 			attr_delimiter, attr_file, attr_script, attr_header, attr_skip, attr_nrows);
@@ -248,7 +241,7 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 			if (p.getPropertyName().getName().equals(attr_file.getName()) || 
 				p.getPropertyName().getName().equals(attr_script.getName())) {
 				String dataPath = MdlPrinter.getInstance().toStr(p.getExpression());
-				IFile dataFile = Utils.getFile(b, dataPath);
+				IFile dataFile = getFile(b, dataPath);
 				if (!dataFile.exists()){
 					if (p.getPropertyName().getName().equals(attr_file.getName())){
 						warning(MSG_DATA_FILE_NOT_FOUND, 
@@ -266,7 +259,22 @@ public class PropertyValidator extends AbstractDeclarativeValidator{
 				}
 			}
 		}
-	}	
+	}
+	
+    //Locate data/script file in the MDL project
+    private static IFile getFile(EObject b, String filePath) {
+        String platformString = b.eResource().getURI().toPlatformString(true);
+        IFile modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile(Path.fromOSString(platformString));
+        IProject project = modelFile.getProject();
+        IContainer parent = modelFile.getParent();
+        String p = filePath;
+        while (p.startsWith("../") && parent != null){
+            parent = parent.getParent();
+            p = p.substring(3);
+        }
+        IFile dataFile = project.getFile(parent.getProjectRelativePath() + "/" + p);
+        return dataFile;
+    }
 	
 	private void checkData(PropertyDeclaration p, IFile dataFile){
 		MclObject mcl = Utils.getMclObject(p);

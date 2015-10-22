@@ -26,7 +26,7 @@ import org.ddmore.mdl.mdl.impl.DataInputBlockImpl
 import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
 import org.ddmore.mdl.types.DistributionType
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.validation.PropertyValidator
+import org.ddmore.mdl.validation.SourceBlockAttributes
 import org.ddmore.mdl.validation.Utils
 import org.eclipse.xtext.EcoreUtil2
 
@@ -203,7 +203,7 @@ class DataSetPrinter {
 			for (b : dObj.blocks) {
 				if (b.sourceBlock != null) {
 					for (s : b.sourceBlock.statements) {
-						if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) &&
+						if (s.propertyName.name.equals(SourceBlockAttributes::attr_inputformat.name) &&
 							s.expression != null) {
 							if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString)) {
 								var content = mog.print_ds_NONMEM_DataSet(mObj, dObj);
@@ -805,13 +805,13 @@ class DataSetPrinter {
 					var file = "";
 					var delimiter = "";
 					for (s : b.sourceBlock.statements) {
-						if (s.propertyName.name.equals(PropertyValidator::attr_file.name) && s.expression != null)
+						if (s.propertyName.name.equals(SourceBlockAttributes::attr_file.name) && s.expression != null)
 							file = s.expression.toStr;
-						if (s.propertyName.name.equals(PropertyValidator::attr_delimiter.name) && s.expression != null)
+						if (s.propertyName.name.equals(SourceBlockAttributes::attr_delimiter.name) && s.expression != null)
 							delimiter = s.expression.toStr;
 					}
 					if (file.length > 0) {
-						if(delimiter.length == 0) delimiter = PropertyValidator::attr_delimiter.defaultValue;
+						if(delimiter.length == 0) delimiter = SourceBlockAttributes::attr_delimiter.defaultValue;
 						val fileExtension = FilenameUtils::getExtension(file);
 						res = res + '''				
 							<ExternalFile oid="«BLK_DS_IMPORT_DATA»">
@@ -832,7 +832,7 @@ class DataSetPrinter {
 				for (b : dObj.blocks) {
 					if (b.sourceBlock != null) {
 						for (s : b.sourceBlock.statements) {
-							if (s.propertyName.name.equals(PropertyValidator::attr_inputformat.name) &&
+							if (s.propertyName.name.equals(SourceBlockAttributes::attr_inputformat.name) &&
 								s.expression != null) {
 								if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString))
 									oidRef = BLK_DS_NONMEM_DATASET;
