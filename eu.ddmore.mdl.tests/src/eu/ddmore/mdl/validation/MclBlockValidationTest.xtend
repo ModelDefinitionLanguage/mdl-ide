@@ -21,8 +21,7 @@ class MclBlockValidationTest {
 	@Test
 	def void testUnknownBlock(){
 		val mcl = '''foo = mdlObj {
-			DATA_INPUT_VARIABLES{
-			}
+			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 			
 			VARIABILITY_LEVELS{
 			}
@@ -44,6 +43,68 @@ class MclBlockValidationTest {
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
 			MdlValidator::MANDATORY_BLOCK_MISSING,
 			"mandatory block 'VARIABILITY_LEVELS' is missing in mdlObj 'foo'"
+		)
+	}
+
+	@Test
+	def void testFewerMinStatement(){
+		val mcl = '''foo = mdlObj {
+			VARIABILITY_LEVELS{
+			}
+			
+			IDV{}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.blockStatementBody,
+			MdlValidator::BLOCK_INCORRECT_STATEMENT_COUNT,
+			"block 'IDV' has fewer statements than the 1 expected"
+		)
+	}
+
+	@Test
+	def void testExceedMaxStatements(){
+		val mcl = '''foo = mdlObj {
+			VARIABILITY_LEVELS{
+			}
+			
+			IDV{ T; D}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.blockStatementBody,
+			MdlValidator::BLOCK_INCORRECT_STATEMENT_COUNT,
+			"block 'IDV' has more statements than the 1 expected"
+		)
+	}
+
+	@Test
+	def void testInvalidStatementTypeWithEqnRhs(){
+		val mcl = '''foo = mdlObj {
+			VARIABILITY_LEVELS{
+			}
+			
+			IDV{ T = 2}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+			MdlValidator::BLOCK_INVALID_STATEMENT_TYPE,
+			"block 'IDV' does not permit statements of this type"
+		)
+	}
+
+	@Test
+	def void testInvalidStatementTypeWithExpectedList(){
+		val mcl = '''foo = mdlObj {
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				T withCategories {foo, bar}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.enumerationDefinition,
+			MdlValidator::BLOCK_INVALID_STATEMENT_TYPE,
+			"block 'INDIVIDUAL_VARIABLES' does not permit statements of this type"
 		)
 	}
 

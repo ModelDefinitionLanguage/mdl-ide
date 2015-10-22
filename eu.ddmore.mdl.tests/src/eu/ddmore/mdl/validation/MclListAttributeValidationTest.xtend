@@ -26,7 +26,7 @@ class MclListAttributeValidationTest {
 				ID : { use is id }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
 		}'''.parse
 		
 		mcl.assertNoErrors
@@ -41,7 +41,7 @@ class MclListAttributeValidationTest {
 				ID : { variable = Y }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
@@ -59,7 +59,7 @@ class MclListAttributeValidationTest {
 				aCov : { use is covariate, categorical with {male, female} }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
 		}'''.parse
 		
 		//@TODO: Implement the correct validation to check that categories are not defined.
@@ -78,7 +78,7 @@ class MclListAttributeValidationTest {
 				aCov : { use is covariate, categories with {male when 1, female when 2} }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
@@ -100,7 +100,7 @@ class MclListAttributeValidationTest {
 				DT : { use is doseTime, idvColumn = TIME, amtColumn = AMT }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
 		}'''.parse
 		
 		mcl.assertNoErrors
@@ -116,7 +116,7 @@ class MclListAttributeValidationTest {
 				AMT : { use is amt, variable = D, define = { 0 in CMT as D } }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
@@ -135,7 +135,7 @@ class MclListAttributeValidationTest {
 				AMT : { use is amt }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
@@ -306,8 +306,7 @@ class MclListAttributeValidationTest {
 	def void testUnrecognizedAttribute2(){
 		val mcl = '''
 		foo = dataObj {
-			DATA_INPUT_VARIABLES{
-			}
+			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 
 			SOURCE{
 				foo : { file="aFile", inputformat is nonmem }
@@ -347,8 +346,7 @@ class MclListAttributeValidationTest {
 	def void testInvalidAttributeWithUnexpectedCatDefn(){
 		val mcl = '''
 		foo = dataObj {
-			DATA_INPUT_VARIABLES{
-			}
+			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 
 			SOURCE{
 				foo : { file="aFile", inputFormat is nonmemFormat withCategories { hello when 0, goodbye when 2 } }

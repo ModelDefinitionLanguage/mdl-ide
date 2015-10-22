@@ -155,8 +155,7 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	def void testConverter7(){
 		val mcl =  '''
 warfarin_PK_ODE_mdl = dataObj {
-	DATA_INPUT_VARIABLES{
-	} # end MODEL_PREDICTION
+	DATA_INPUT_VARIABLES{  foo : { use is ignore } } # end MODEL_PREDICTION
 	SOURCE{
 		file : { file="foo" }
 	}

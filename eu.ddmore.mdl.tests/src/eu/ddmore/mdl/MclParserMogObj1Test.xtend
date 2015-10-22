@@ -25,8 +25,8 @@ pobj = parObj {
 }
 
 dobj = dataObj {
-	DATA_INPUT_VARIABLES{}
-	SOURCE{}
+	DATA_INPUT_VARIABLES{  foo : { use is ignore } }
+	SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
 }
 
 tobj = taskObj {
@@ -34,10 +34,10 @@ tobj = taskObj {
 
 mgobj = mogObj {
 	OBJECTS{
-		mobj
-		pobj
-		dobj
-		tobj
+		mobj : { type is mdlObj }
+		pobj : { type is parObj }
+		dobj : { type is dataObj }
+		tobj : { type is taskObj }
 	}
 }
 		'''

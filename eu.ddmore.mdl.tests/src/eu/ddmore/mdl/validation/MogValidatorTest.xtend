@@ -50,10 +50,22 @@ class MogValidatorTest {
 					logWT = ln(WT/70)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		
@@ -89,10 +101,23 @@ class MogValidatorTest {
 					logWT = ln(WT/70)
 				}
 		}
+		
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -160,10 +185,22 @@ class MogValidatorTest {
 				COVARIATES{
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -178,6 +215,8 @@ class MogValidatorTest {
 		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
+				SEX : { use is catCov withCategories{male when 0, female when 1} }
+				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
@@ -193,10 +232,22 @@ class MogValidatorTest {
 					logWT = ln(70)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -308,17 +359,29 @@ class MogValidatorTest {
 				}
 		
 				RANDOM_VARIABLE_DEFINITION(level is DV){
-					EPS
+					EPS ~ Normal(mean=0, sd=1)
 				}
 		
 				OBSERVATION{
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -357,10 +420,22 @@ class MogValidatorTest {
 				   Y : {type is categorical withCategories{ c0 when Prob0, c1 when Prob1, c2 when Prob2, c3 when Prob3} } 
 			    }# end ESTIMATION
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -400,10 +475,22 @@ class MogValidatorTest {
 					Y : { type is count, distn = Poisson(lambda = F) }
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -446,10 +533,22 @@ class MogValidatorTest {
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -491,10 +590,22 @@ class MogValidatorTest {
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -531,7 +642,7 @@ class MogValidatorTest {
 				}
 		
 				RANDOM_VARIABLE_DEFINITION(level is DV){
-					EPS
+					EPS ~ Normal(mean=0, sd=1)
 				}
 		
 				OBSERVATION{
@@ -539,10 +650,22 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -584,10 +707,22 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -632,10 +767,22 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -672,7 +819,7 @@ class MogValidatorTest {
 				}
 		
 				RANDOM_VARIABLE_DEFINITION(level is DV){
-					EPS
+					EPS ~ Normal(mean = 0, sd = 1)
 				}
 		
 				OBSERVATION{
@@ -680,10 +827,22 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -720,17 +879,29 @@ class MogValidatorTest {
 				}
 		
 				RANDOM_VARIABLE_DEFINITION(level is DV){
-					EPS
+					EPS ~ Normal(mean=0, sd=1)
 				}
 		
 				OBSERVATION{
 					Z : { type is count, distn = Poisson(lambda=0.0) }
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -763,10 +934,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -796,10 +979,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -831,10 +1026,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -866,10 +1073,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -899,10 +1118,23 @@ class MogValidatorTest {
 		
 				IDV{ T }
 		}
+
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -929,10 +1161,23 @@ class MogValidatorTest {
 		
 				IDV{ T }
 		}
+
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -961,10 +1206,22 @@ class MogValidatorTest {
 		
 				IDV{ T }
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -992,10 +1249,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1028,10 +1297,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1045,6 +1326,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { Y }
 			DATA_INPUT_VARIABLES {
+				foo1 : { use is ignore }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
@@ -1063,10 +1345,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1101,10 +1395,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1139,10 +1445,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1173,10 +1491,23 @@ class MogValidatorTest {
 				}
 		
 		}
+
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1212,10 +1543,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1252,10 +1595,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1292,10 +1647,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1331,10 +1698,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1367,10 +1746,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse

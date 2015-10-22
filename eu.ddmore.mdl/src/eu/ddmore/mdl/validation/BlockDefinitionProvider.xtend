@@ -14,6 +14,8 @@ import eu.ddmore.mdl.mdl.MdlPackage
 import org.eclipse.emf.ecore.EClass
 import java.util.Set
 import java.util.HashMap
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import org.eclipse.xtext.EcoreUtil2
 
 class BlockDefinitionProvider {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"
@@ -42,22 +44,18 @@ class BlockDefinitionProvider {
 	static class StatementSpec{
 		EClass statementType
 		boolean expectHasRhs
-		int minNum
-		int maxNum
 		
-		new(EClass stmtType, int min, int max){
+		new(EClass stmtType){
 			statementType = stmtType
 			expectHasRhs = false
-			minNum = min
-			maxNum = max
 		}
 		
 		def dispatch boolean isValidStatement(Statement stmt){
-			stmt == statementType
+			stmt.eClass == statementType
 		}
 		
 		def dispatch boolean isValidStatement(EquationDefinition stmt){
-			if(stmt == statementType){
+			if(stmt.eClass == statementType){
 				(expectHasRhs && stmt.expression != null) || (!expectHasRhs && stmt.expression == null) 
 			}
 			else false
@@ -70,6 +68,8 @@ class BlockDefinitionProvider {
 		String name
 		int minNum
 		int maxNum
+		int minStmtNum
+		int maxStmtNum
 		List<StatementSpec> validStatementTypes
 
 		def boolean isMandatory(){
@@ -81,88 +81,97 @@ class BlockDefinitionProvider {
 	static val ep = MdlPackage::eINSTANCE 
 
 	val static Map<String, BlockSpec> BlkDefns = #{
-			COVARIATE_BLK_NAME -> new BlockSpec(COVARIATE_BLK_NAME, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.equationDefinition, false, 0, Integer.MAX_VALUE),
-				new StatementSpec(ep.equationDefinition, true, 0, Integer.MAX_VALUE),
-				new StatementSpec(ep.enumerationDefinition, 0, Integer.MAX_VALUE)
+			COVARIATE_BLK_NAME -> new BlockSpec(COVARIATE_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.enumerationDefinition)
 			]),
-			VAR_LVL_BLK_NAME -> new BlockSpec(VAR_LVL_BLK_NAME, 1, Integer.MAX_VALUE, #[new StatementSpec(ep.listDefinition, 1, Integer.MAX_VALUE)]),
-			MDL_STRUCT_PARAMS -> new BlockSpec(MDL_STRUCT_PARAMS, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.equationDefinition, false, 0, Integer.MAX_VALUE),
-				new StatementSpec(ep.equationDefinition, true, 0, Integer.MAX_VALUE)
+			VAR_LVL_BLK_NAME -> new BlockSpec(VAR_LVL_BLK_NAME, 1, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
 			]),
-			MDL_VAR_PARAMS -> new BlockSpec(MDL_VAR_PARAMS, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.equationDefinition, false, 0, Integer.MAX_VALUE),
-				new StatementSpec(ep.equationDefinition, true, 0, Integer.MAX_VALUE)
+			MDL_STRUCT_PARAMS -> new BlockSpec(MDL_STRUCT_PARAMS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
 			]),
-			MDL_RND_VARS -> new BlockSpec(MDL_RND_VARS, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.randomVariableDefinition, 0, Integer.MAX_VALUE)
+			MDL_VAR_PARAMS -> new BlockSpec(MDL_VAR_PARAMS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
 			]),
-			MDL_INDIV_PARAMS -> new BlockSpec(MDL_INDIV_PARAMS, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			MDL_RND_VARS -> new BlockSpec(MDL_RND_VARS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.randomVariableDefinition)
 			]),
-			MDL_PRED_BLK_NAME -> new BlockSpec(MDL_PRED_BLK_NAME, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.equationDefinition, false, 0, Integer.MAX_VALUE),
-				new StatementSpec(ep.equationDefinition, true, 0, Integer.MAX_VALUE)
+			MDL_INDIV_PARAMS -> new BlockSpec(MDL_INDIV_PARAMS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.transformedDefinition)
 			]),
-			OBS_BLK_NAME -> new BlockSpec(OBS_BLK_NAME, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.equationDefinition, false, 0, Integer.MAX_VALUE),
-				new StatementSpec(ep.equationDefinition, true, 0, Integer.MAX_VALUE),
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			MDL_PRED_BLK_NAME -> new BlockSpec(MDL_PRED_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
 			]),
-			MDL_GRP_PARAMS -> new BlockSpec(MDL_GRP_PARAMS, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.equationDefinition, false, 0, Integer.MAX_VALUE),
-				new StatementSpec(ep.equationDefinition, true, 0, Integer.MAX_VALUE)
+			OBS_BLK_NAME -> new BlockSpec(OBS_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.transformedDefinition),
+				new StatementSpec(ep.listDefinition)
 			]),
-			IDV_BLK_NAME -> new BlockSpec(IDV_BLK_NAME, 0, 1, #[
-				new StatementSpec(ep.equationDefinition, false, 1, 1)
+			MDL_GRP_PARAMS -> new BlockSpec(MDL_GRP_PARAMS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
 			]),
-			DIV_BLK_NAME -> new BlockSpec(DIV_BLK_NAME, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.listDefinition, 1, Integer.MAX_VALUE)
+			IDV_BLK_NAME -> new BlockSpec(IDV_BLK_NAME, 0, 1, 1, 1, #[
+				new StatementSpec(ep.equationDefinition, false)
 			]),
-			"DECLARED_VARIABLES" -> new BlockSpec("DECLARED_VARIABLES", 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.equationDefinition, false, 0, Integer.MAX_VALUE)
+			DIV_BLK_NAME -> new BlockSpec(DIV_BLK_NAME, 0, Integer.MAX_VALUE, 1, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
 			]),
-			"DATA_DERIVED_VARIABLES" -> new BlockSpec("DATA_DERIVED_VARIABLES", 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			"DECLARED_VARIABLES" -> new BlockSpec("DECLARED_VARIABLES", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.enumerationDefinition),
+				new StatementSpec(ep.equationDefinition, false)
 			]),
-			DATA_SRC_BLK -> new BlockSpec(DATA_SRC_BLK, 1, 1, #[
-				new StatementSpec(ep.listDefinition, false, 1, 1)
+			"DATA_DERIVED_VARIABLES" -> new BlockSpec("DATA_DERIVED_VARIABLES", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
 			]),
-			PARAM_VARIABILITY_BLK -> new BlockSpec(PARAM_VARIABILITY_BLK, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			DATA_SRC_BLK -> new BlockSpec(DATA_SRC_BLK, 1, 1, 1, 1, #[
+				new StatementSpec(ep.listDefinition, false)
 			]),
-			PARAM_STRUCT_BLK -> new BlockSpec(PARAM_STRUCT_BLK, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			PARAM_VARIABILITY_BLK -> new BlockSpec(PARAM_VARIABILITY_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
 			]),
-			ESTIMATE_BLK -> new BlockSpec(ESTIMATE_BLK, 0, 1, #[
-				new StatementSpec(ep.propertyStatement, 0, Integer.MAX_VALUE)
+			PARAM_STRUCT_BLK -> new BlockSpec(PARAM_STRUCT_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
 			]),
-			SIMULATE_BLK -> new BlockSpec(SIMULATE_BLK, 0, 1, #[
-				new StatementSpec(ep.propertyStatement, 0, Integer.MAX_VALUE)
+			ESTIMATE_BLK -> new BlockSpec(ESTIMATE_BLK, 0, 1, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.propertyStatement)
 			]),
-			MOG_OBJ_NAME -> new BlockSpec(MOG_OBJ_NAME, 0, 1, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			SIMULATE_BLK -> new BlockSpec(SIMULATE_BLK, 0, 1, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.propertyStatement)
 			]),
-			MDL_DEQ_BLK -> new BlockSpec(MDL_DEQ_BLK, 0, 1, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			MOG_OBJ_NAME -> new BlockSpec(MOG_OBJ_NAME, 1, 1, 4, 4, #[
+				new StatementSpec(ep.listDefinition)
 			]),
-			MDL_CMT_BLK -> new BlockSpec(MDL_CMT_BLK, 0, 1, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			MDL_DEQ_BLK -> new BlockSpec(MDL_DEQ_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition),
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
 			]),
-			"ADMINISTRATION" -> new BlockSpec("ADMINISTRATION", 1, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE),
-				new StatementSpec(ep.equationDefinition, true, 0, Integer.MAX_VALUE),
-				new StatementSpec(ep.equationDefinition, false, 0, Integer.MAX_VALUE)
+			MDL_CMT_BLK -> new BlockSpec(MDL_CMT_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition),
+				new StatementSpec(ep.anonymousListStatement)
 			]),
-			"STUDY_DESIGN" -> new BlockSpec("STUDY_DESIGN", 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			"ADMINISTRATION" -> new BlockSpec("ADMINISTRATION", 1, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition),
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.equationDefinition, false)
 			]),
-			"SAMPLING" -> new BlockSpec("SAMPLING", 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			"STUDY_DESIGN" -> new BlockSpec("STUDY_DESIGN", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.randomVariableDefinition),
+				new StatementSpec(ep.listDefinition)
 			]),
-			"DESIGN_SPACES" -> new BlockSpec("DESIGN_SPACES", 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.listDefinition, 0, Integer.MAX_VALUE)
+			"SAMPLING" -> new BlockSpec("SAMPLING", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
+			]),
+			"DESIGN_SPACES" -> new BlockSpec("DESIGN_SPACES", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
 			])
 	}	
 	
@@ -245,4 +254,32 @@ class BlockDefinitionProvider {
 		]
 	}	
 
+	def validateMaxBlocksStatementCounts(BlockStatementBody it, (String, int) => void errLambda){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val defn = BlkDefns.get(blk.identifier)
+		if(defn != null)
+			if(statements.size > defn.maxStmtNum){
+				errLambda.apply(blk.identifier, defn.maxStmtNum)
+			}		
+	}
+
+	def validateMinBlocksStatementCounts(BlockStatementBody it, (String, int) => void errLambda){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val defn = BlkDefns.get(blk.identifier)
+		if(defn != null)
+			if(statements.size < defn.minStmtNum){
+				errLambda.apply(blk.identifier, defn.minStmtNum)
+			}		
+	}
+
+	def validateExpectedStatementType(Statement it, (String) => void errLambda){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val defn = BlkDefns.get(blk.identifier)
+		if(defn != null){
+			for(stmtSpec : defn.validStatementTypes){
+				if(stmtSpec.isValidStatement(it)) return
+			}	
+			errLambda.apply(blk.identifier)
+		}
+	}
 }

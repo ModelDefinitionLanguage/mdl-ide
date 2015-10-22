@@ -164,10 +164,13 @@ class MclBuiltinFunctionValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
+			}
+			
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}], ranEff = [ETA_CL])
 			}
 		}'''.parse
@@ -300,10 +303,12 @@ class MclBuiltinFunctionValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
+			}
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, fixEff = {{coeff=BETA_CL_WT, covariate=logtWT}})
 			}
 			INDIVIDUAL_VARIABLES{
@@ -330,10 +335,13 @@ class MclBuiltinFunctionValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
+			}
+
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, ranEff = [ETA_CL])
 			}
 			INDIVIDUAL_VARIABLES{
@@ -354,11 +362,15 @@ class MclBuiltinFunctionValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				other
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
+			}
+			
+			
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, pop=other, fixEff = {{coeff=BETA_CL_WT, covariate=logtWT}}, ranEff = ETA_CL)
 			}
 
@@ -404,10 +416,12 @@ class MclBuiltinFunctionValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
+			}
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, fixEff = [{co=BETA_CL_WT, cov=logtWT}], ranEff = ETA_CL)
 			}
 		}'''.parse

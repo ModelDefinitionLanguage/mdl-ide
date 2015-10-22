@@ -46,6 +46,9 @@ import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.SymbolDefinition
 
 //import org.eclipse.xtext.validation.Check
 
@@ -101,6 +104,8 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val WRONG_PARENT_BLOCK = "eu.ddmore.mdl.validation.WrongParentBlock"
 	public static val MANDATORY_BLOCK_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockMissing"
 	public static val BLOCK_COUNT_EXCEEDED = "eu.ddmore.mdl.validation.BlockCountExceeded"
+	public static val BLOCK_INCORRECT_STATEMENT_COUNT = "eu.ddmore.mdl.validation.BlockIncorrrectStatementCount"
+	public static val BLOCK_INVALID_STATEMENT_TYPE = "eu.ddmore.mdl.validation.BlockInvalidStatementType"
 
 	// Validation of syntactic structures
 	public static val INCORRECT_STATEMENT_CONTEXT = "eu.ddmore.mdl.validation.IncorrectStatementContext"
@@ -177,6 +182,27 @@ class MdlValidator extends AbstractMdlValidator {
 		}
 	}
 
+	@Check
+	def validateBlockStatementCounts(BlockStatementBody it){
+		validateMinBlocksStatementCounts[blk, minLimit| error("block '" + blk + "' has fewer statements than the " + minLimit + " expected",
+					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_INCORRECT_STATEMENT_COUNT, blk)]
+		validateMaxBlocksStatementCounts[blk, maxLimit| error("block '" + blk + "' has more statements than the " + maxLimit + " expected",
+					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_INCORRECT_STATEMENT_COUNT, blk)]
+	}
+
+	@Check
+	def validateBlockStatementType(Statement it){
+		val feature = switch(it){
+			SymbolDefinition: MdlPackage.eINSTANCE.symbolDefinition_Name
+			AnonymousListStatement: MdlPackage.eINSTANCE.anonymousListStatement_List 
+			default: null
+		}
+		if(feature != null)
+			validateExpectedStatementType[blk| error("block '" + blk + "' does not permit statements of this type",
+						feature, BLOCK_INVALID_STATEMENT_TYPE, blk)]
+	}
+
+	
 
 	@Check
 	def validateBlockArgument(BlockArgument blkArg){
