@@ -23,6 +23,9 @@ class MclBlockValidationTest {
 		val mcl = '''foo = mdlObj {
 			DATA_INPUT_VARIABLES{
 			}
+			
+			VARIABILITY_LEVELS{
+			}
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
@@ -34,13 +37,30 @@ class MclBlockValidationTest {
 	@Test
 	def void testMissingMandatoryBlocks(){
 		val mcl = '''foo = mdlObj {
-			DATA_INPUT_VARIABLES{
+			`MODEL_PREDICTION {
 			}
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
 			MdlValidator::MANDATORY_BLOCK_MISSING,
 			"mandatory block 'VARIABILITY_LEVELS' is missing in mdlObj 'foo'"
+		)
+	}
+
+	@Test
+	def void testExceedMaxBlocks(){
+		val mcl = '''foo = mdlObj {
+			VARIABILITY_LEVELS{
+			}
+			
+			IDV{}
+			
+			IDV{}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::BLOCK_COUNT_EXCEEDED,
+			"block 'IDV' is used more than is allowed. A maximum of 1 blocks are allowed"
 		)
 	}
 
@@ -88,8 +108,6 @@ class MclBlockValidationTest {
 			}
 		}'''.parse
 		mcl.assertNoErrors
-//		mcl.assertNoErrors(MdlValidator::WRONG_PARENT_BLOCK)
-//		mcl.assertNoErrors(MdlValidator::WRONG_SUBBLOCK)
 	}
 
 

@@ -100,6 +100,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val WRONG_SUBBLOCK = "eu.ddmore.mdl.validation.WrongSubBlock"
 	public static val WRONG_PARENT_BLOCK = "eu.ddmore.mdl.validation.WrongParentBlock"
 	public static val MANDATORY_BLOCK_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockMissing"
+	public static val BLOCK_COUNT_EXCEEDED = "eu.ddmore.mdl.validation.BlockCountExceeded"
 
 	// Validation of syntactic structures
 	public static val INCORRECT_STATEMENT_CONTEXT = "eu.ddmore.mdl.validation.IncorrectStatementContext"
@@ -140,6 +141,9 @@ class MdlValidator extends AbstractMdlValidator {
 		// check if mandatory blocks missing
 		unusedMandatoryBlocks.forEach[blk, mand| error("mandatory block '" + blk + "' is missing in mdlObj '" + name + "'",
 					MdlPackage.eINSTANCE.mclObject_Blocks, MANDATORY_BLOCK_MISSING, blk) ]
+		// 		[expectedType, actualType |error("Expected " + expectedType.typeName + " type, but was " + actualType.typeName + ".", feature, INCOMPATIBLE_TYPES, expectedType.typeName) ]
+		validateBlocksCounts([blk, maxLimit| error("block '" + blk + "' is used more than is allowed. A maximum of " + maxLimit + " blocks are allowed",
+					MdlPackage.eINSTANCE.mclObject_Blocks, BLOCK_COUNT_EXCEEDED, blk) ])
 	}
 
 	@Check

@@ -13,6 +13,7 @@ import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.MdlPackage
 import org.eclipse.emf.ecore.EClass
 import java.util.Set
+import java.util.HashMap
 
 class BlockDefinitionProvider {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"
@@ -113,7 +114,7 @@ class BlockDefinitionProvider {
 				new StatementSpec(ep.equationDefinition, false, 0, Integer.MAX_VALUE),
 				new StatementSpec(ep.equationDefinition, true, 0, Integer.MAX_VALUE)
 			]),
-			IDV_BLK_NAME -> new BlockSpec(IDV_BLK_NAME, 0, Integer.MAX_VALUE, #[
+			IDV_BLK_NAME -> new BlockSpec(IDV_BLK_NAME, 0, 1, #[
 				new StatementSpec(ep.equationDefinition, false, 1, 1)
 			]),
 			DIV_BLK_NAME -> new BlockSpec(DIV_BLK_NAME, 0, Integer.MAX_VALUE, #[
@@ -227,6 +228,21 @@ class BlockDefinitionProvider {
 		mandatoryBlock
 	}
 	
-	
+	def validateBlocksCounts(MclObject it, (String, int) => void errLambda){
+		val blkCount = new HashMap<String, Integer>
+
+		blocks.forEach[
+			if(!blkCount.containsKey(identifier)) blkCount.put(identifier, 0)
+			blkCount.put(identifier, blkCount.get(identifier)+1) 
+		]
+		// now check if counts exceed maximums
+		blkCount.keySet.forEach[name|
+			val defn = BlkDefns.get(name)
+			if(defn != null){
+				if(blkCount.get(name) > defn.maxNum)
+					errLambda.apply(name, defn.maxNum)
+			}
+		]
+	}	
 
 }
