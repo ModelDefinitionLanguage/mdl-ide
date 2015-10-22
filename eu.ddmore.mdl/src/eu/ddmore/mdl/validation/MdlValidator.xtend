@@ -49,6 +49,7 @@ import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
+import eu.ddmore.mdl.mdl.BlockTextBody
 
 //import org.eclipse.xtext.validation.Check
 
@@ -106,6 +107,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val BLOCK_COUNT_EXCEEDED = "eu.ddmore.mdl.validation.BlockCountExceeded"
 	public static val BLOCK_INCORRECT_STATEMENT_COUNT = "eu.ddmore.mdl.validation.BlockIncorrrectStatementCount"
 	public static val BLOCK_INVALID_STATEMENT_TYPE = "eu.ddmore.mdl.validation.BlockInvalidStatementType"
+	public static val BLOCK_WRONG_BODY_TYPE = "eu.ddmore.mdl.validation.WrongBodyType"
 
 	// Validation of syntactic structures
 	public static val INCORRECT_STATEMENT_CONTEXT = "eu.ddmore.mdl.validation.IncorrectStatementContext"
@@ -188,6 +190,18 @@ class MdlValidator extends AbstractMdlValidator {
 					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_INCORRECT_STATEMENT_COUNT, blk)]
 		validateMaxBlocksStatementCounts[blk, maxLimit| error("block '" + blk + "' has more statements than the " + maxLimit + " expected",
 					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_INCORRECT_STATEMENT_COUNT, blk)]
+	}
+
+	@Check
+	def validateBlockBodyType(BlockStatementBody it){
+		validateBlockBodyType[blk| error("block '" + blk + "' cannot contain statements. It must define verbatim text block: '<<' '>>'",
+					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_WRONG_BODY_TYPE, blk)]
+	}
+
+	@Check
+	def validateBlockBodyType(BlockTextBody it){
+		validateBlockBodyType[blk| error("block '" + blk + "' cannot define a verbatim text block. It must contains statements delimitted by '{' '}'",
+					MdlPackage.eINSTANCE.blockTextBody_Text, BLOCK_WRONG_BODY_TYPE, blk)]
 	}
 
 	@Check

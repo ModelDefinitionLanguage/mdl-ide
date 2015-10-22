@@ -171,6 +171,22 @@ class MclBlockValidationTest {
 		mcl.assertNoErrors
 	}
 
+	@Test
+	def void testWrongBlockBodyType(){
+		val mcl = '''foo = mdlObj {
+			IDV{  T }
+			VARIABILITY_LEVELS{
+			}
+			MODEL_PREDICTION<<
+				fooBar
+			>>
+		}'''.parse
+		mcl.assertError(MdlPackage::eINSTANCE.blockTextBody,
+			MdlValidator::BLOCK_WRONG_BODY_TYPE,
+			"block '" + "MODEL_PREDICTION" + "' cannot define a verbatim text block. It must contains statements delimitted by '{' '}'"
+		)
+	}
+
 
 
 }

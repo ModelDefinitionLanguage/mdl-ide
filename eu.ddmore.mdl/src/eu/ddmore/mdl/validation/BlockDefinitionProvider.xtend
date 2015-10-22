@@ -16,6 +16,7 @@ import java.util.Set
 import java.util.HashMap
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.BlockTextBody
 
 class BlockDefinitionProvider {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"
@@ -70,7 +71,19 @@ class BlockDefinitionProvider {
 		int maxNum
 		int minStmtNum
 		int maxStmtNum
+		boolean isStmtBlk
 		List<StatementSpec> validStatementTypes
+
+		new (String name, int minNum, int maxNum, int minStmtNum, int maxStmtNum, List<StatementSpec> validStatementTypes){
+			this.name = name
+			this.minNum = minNum
+			this.maxNum = maxNum
+			this.minStmtNum = minStmtNum
+			this.maxStmtNum = maxStmtNum
+			this.isStmtBlk = true
+			this.validStatementTypes = validStatementTypes
+		}
+	
 
 		def boolean isMandatory(){
 			minNum > 0
@@ -282,4 +295,21 @@ class BlockDefinitionProvider {
 			errLambda.apply(blk.identifier)
 		}
 	}
+	
+	def validateBlockBodyType(BlockStatementBody it, (String) => void errLambda){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val defn = BlkDefns.get(blk.identifier)
+		if(defn != null){
+			if(!defn.isStmtBlk) errLambda.apply(blk.identifier)
+		}
+	}
+	
+	def validateBlockBodyType(BlockTextBody it, (String) => void errLambda){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val defn = BlkDefns.get(blk.identifier)
+		if(defn != null){
+			if(defn.isStmtBlk) errLambda.apply(blk.identifier)
+		}
+	}
+	
 }
