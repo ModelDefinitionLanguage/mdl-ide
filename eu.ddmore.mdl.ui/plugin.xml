@@ -219,12 +219,12 @@
     </extension>
  
    <!-- N.K. -->
-   <extension
+   <!--extension
          point="org.eclipse.xtext.builder.participant">
       <participant
             class="eu.ddmore.mdl.ui.MdlExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
       </participant>
-   </extension> 
+   </extension--> 
    
    <extension
             point="org.eclipse.ui.preferencePages">

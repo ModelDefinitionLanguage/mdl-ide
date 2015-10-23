@@ -44,6 +44,12 @@ import org.eclipse.xtext.validation.Check
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.mdl.PropertyStatement
+import eu.ddmore.mdl.mdl.AnonymousListStatement
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.SymbolDefinition
+import eu.ddmore.mdl.mdl.BlockTextBody
 
 //import org.eclipse.xtext.validation.Check
 
@@ -82,6 +88,8 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val UNRECOGNIZED_LIST_ATT = "eu.ddmore.mdl.validation.UnrecognisedAttribute"
 	public static val MANDATORY_LIST_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryAttributeMissing"
 	public static val MANDATORY_LIST_KEY_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryKeyAttributeMissing"
+	public static val LIST_NOT_ANONYMOUS = "eu.ddmore.mdl.validation.ListNotAnonymous"
+	public static val LIST_NOT_NAMED = "eu.ddmore.mdl.validation.ListNotNamed"
 
 	// Builtin Function validation
 	public static val UNRECOGNIZED_FUNCTION_NAME = "eu.ddmore.mdl.validation.function.named.UnrecognisedFunctionName"
@@ -96,6 +104,10 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val WRONG_SUBBLOCK = "eu.ddmore.mdl.validation.WrongSubBlock"
 	public static val WRONG_PARENT_BLOCK = "eu.ddmore.mdl.validation.WrongParentBlock"
 	public static val MANDATORY_BLOCK_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockMissing"
+	public static val BLOCK_COUNT_EXCEEDED = "eu.ddmore.mdl.validation.BlockCountExceeded"
+	public static val BLOCK_INCORRECT_STATEMENT_COUNT = "eu.ddmore.mdl.validation.BlockIncorrrectStatementCount"
+	public static val BLOCK_INVALID_STATEMENT_TYPE = "eu.ddmore.mdl.validation.BlockInvalidStatementType"
+	public static val BLOCK_WRONG_BODY_TYPE = "eu.ddmore.mdl.validation.WrongBodyType"
 
 	// Validation of syntactic structures
 	public static val INCORRECT_STATEMENT_CONTEXT = "eu.ddmore.mdl.validation.IncorrectStatementContext"
@@ -136,6 +148,9 @@ class MdlValidator extends AbstractMdlValidator {
 		// check if mandatory blocks missing
 		unusedMandatoryBlocks.forEach[blk, mand| error("mandatory block '" + blk + "' is missing in mdlObj '" + name + "'",
 					MdlPackage.eINSTANCE.mclObject_Blocks, MANDATORY_BLOCK_MISSING, blk) ]
+		// 		[expectedType, actualType |error("Expected " + expectedType.typeName + " type, but was " + actualType.typeName + ".", feature, INCOMPATIBLE_TYPES, expectedType.typeName) ]
+		validateBlocksCounts([blk, maxLimit| error("block '" + blk + "' is used more than is allowed. A maximum of " + maxLimit + " blocks are allowed",
+					MdlPackage.eINSTANCE.mclObject_Blocks, BLOCK_COUNT_EXCEEDED, blk) ])
 	}
 
 	@Check
@@ -169,6 +184,39 @@ class MdlValidator extends AbstractMdlValidator {
 		}
 	}
 
+	@Check
+	def validateBlockStatementCounts(BlockStatementBody it){
+		validateMinBlocksStatementCounts[blk, minLimit| error("block '" + blk + "' has fewer statements than the " + minLimit + " expected",
+					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_INCORRECT_STATEMENT_COUNT, blk)]
+		validateMaxBlocksStatementCounts[blk, maxLimit| error("block '" + blk + "' has more statements than the " + maxLimit + " expected",
+					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_INCORRECT_STATEMENT_COUNT, blk)]
+	}
+
+	@Check
+	def validateBlockBodyType(BlockStatementBody it){
+		validateBlockBodyType[blk| error("block '" + blk + "' cannot contain statements. It must define verbatim text block: '<<' '>>'",
+					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_WRONG_BODY_TYPE, blk)]
+	}
+
+	@Check
+	def validateBlockBodyType(BlockTextBody it){
+		validateBlockBodyType[blk| error("block '" + blk + "' cannot define a verbatim text block. It must contains statements delimitted by '{' '}'",
+					MdlPackage.eINSTANCE.blockTextBody_Text, BLOCK_WRONG_BODY_TYPE, blk)]
+	}
+
+	@Check
+	def validateBlockStatementType(Statement it){
+		val feature = switch(it){
+			SymbolDefinition: MdlPackage.eINSTANCE.symbolDefinition_Name
+			AnonymousListStatement: MdlPackage.eINSTANCE.anonymousListStatement_List 
+			default: null
+		}
+		if(feature != null)
+			validateExpectedStatementType[blk| error("block '" + blk + "' does not permit statements of this type",
+						feature, BLOCK_INVALID_STATEMENT_TYPE, blk)]
+	}
+
+	
 
 	@Check
 	def validateBlockArgument(BlockArgument blkArg){
@@ -195,6 +243,22 @@ class MdlValidator extends AbstractMdlValidator {
 		else{
 			error("mandatory key attribute is missing in list.",
 				MdlPackage.eINSTANCE.attributeList_Attributes, MANDATORY_LIST_KEY_ATT_MISSING, "")
+		}
+	}
+
+	@Check
+	def validateListAnonymisation(AnonymousListStatement it){
+		if(list.isNamedListExpected){
+			error("a list with this key cannot be anonymous in this context",
+				MdlPackage.eINSTANCE.anonymousListStatement_List, LIST_NOT_NAMED, "")
+		}
+	}
+
+	@Check
+	def validateListAnonymisation(ListDefinition it){
+		if(list.isAnonymousListExpected){
+			error("a list with this key cannot have a name in this context",
+				MdlPackage.eINSTANCE.listDefinition_List, LIST_NOT_ANONYMOUS, "")
 		}
 	}
 

@@ -260,7 +260,7 @@ Hansson2013_task = taskObj{
 
 warfarin_PK_ODE_mog = mogObj {
 	OBJECTS{
-		Hansson2013_data
+		Hansson2013_data : { type is dataObj }
 		Hansson2013_mdl : { type is mdlObj }
 		Hansson2013_par : { type is parObj }
 		Hansson2013_task : { type is taskObj }
