@@ -66,6 +66,7 @@ class ListDefinitionProvider {
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'exact', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
+	static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
 
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
@@ -280,6 +281,7 @@ class ListDefinitionProvider {
 					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('to', true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference),
+						 new AttributeDefn('target', true, DERIV_TYPE.makeReference),
 						 new AttributeDefn('ka', false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('tlag', false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('finput', false, MclTypeProvider::REAL_TYPE),
@@ -289,7 +291,11 @@ class ListDefinitionProvider {
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ktr' -> true, 'mtt' -> true },
-						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> true }
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> true },
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'tlag' -> false, 'finput' -> false },
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ktr' -> true, 'mtt' -> true },
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'modelDur' -> true }
 						 ],
 						 false
 					),
@@ -333,7 +339,19 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'deriv'
 				listDefns = newArrayList(
-					new ListDefInfo (null, new ListTypeInfo("Derivative", PrimitiveType.Deriv),  #[
+					new ListDefInfo (null, DERIV_TYPE,  #[
+						 new AttributeDefn('deriv', true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('wrt', false, MclTypeProvider::REAL_TYPE.makeReference)
+						 ]
+					)
+				)
+			]
+		),
+		"MODEL_PREDICTION" -> (
+			new BlockListDefinition => [
+				key = 'deriv'
+				listDefns = newArrayList(
+					new ListDefInfo (null, DERIV_TYPE,  #[
 						 new AttributeDefn('deriv', true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('wrt', false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]

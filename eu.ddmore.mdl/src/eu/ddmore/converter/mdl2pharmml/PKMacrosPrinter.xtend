@@ -54,8 +54,8 @@ class PKMacrosPrinter{
 		'kt' -> "kt",
 		'ka' -> "ka",
 		'vm' -> "Vm",
-		'km' -> "Km"//,
-//		AttributeValidator::attr_keq.name -> "ke0"
+		'km' -> "Km",
+		'target' -> 'target'
 	);
 
 	def writeVariable(SymbolDefinition it)'''
@@ -137,11 +137,16 @@ class PKMacrosPrinter{
 			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'compartment'):
 				stmt.writeCompartment
 			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'distribution'):
-				stmt.writeDistribution
+				stmt.writePeripheral
 			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'direct'):
-				stmt.writeDirect
+				stmt.writeIV
 			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'depot'):
-				stmt.writeDepot
+				if(stmt.list.getAttributeExpression('target') != null){
+					stmt.writeDepot
+				}
+				else{
+					stmt.writeAbsorption
+				}
 			AnonymousListStatement case(stmt.list.getAttributeEnumValue('type') == 'transfer'):
 				stmt.writeTransfer
 			AnonymousListStatement case(stmt.list.getAttributeEnumValue('type') == 'elimination'):
@@ -217,7 +222,7 @@ class PKMacrosPrinter{
 	}
 	
 	def writeAttribute(AttributeList it, String attName){
-		val expr = getAttributeExpression('attName')
+		val expr = getAttributeExpression(attName)
 		if(expr != null )
 			expr.writeValue(pk_attrs.get(attName))
 		else
@@ -235,7 +240,7 @@ class PKMacrosPrinter{
 		</Effect>
 	'''
 	
-	def writeDistribution(ListDefinition it)'''
+	def writePeripheral(ListDefinition it)'''
 		<Peripheral>
 			<Value argument="amount"> 
 				«symbolReference»
@@ -245,7 +250,7 @@ class PKMacrosPrinter{
 		</Peripheral>
 	'''
 	
-	def writeDirect(ListDefinition it)'''
+	def writeIV(ListDefinition it)'''
 		<IV>
 			«writeValue("adm", compartmentNum)»
 			«list.writeToValue»
@@ -255,7 +260,7 @@ class PKMacrosPrinter{
 		</IV>
 	'''
 	
-	def writeDepot(ListDefinition it)'''
+	def writeAbsorption(ListDefinition it)'''
 		<Absorption>
 			«writeValue("adm", compartmentNum)»
 			«list.writeToValue»
@@ -266,6 +271,19 @@ class PKMacrosPrinter{
 			«list.writeAttribute('ktr')»
 			«list.writeAttribute('mtt')»
 		</Absorption>
+	'''
+	
+	def writeDepot(ListDefinition it)'''
+		<Depot>
+			«writeValue("adm", compartmentNum)»
+			«list.writeAttribute('target')»
+			«list.writeAttribute('ka')»
+			«list.writeAttribute('tlag')»
+			«list.writeAttribute('finput')»
+			«list.writeAttribute('modelDur')»
+			«list.writeAttribute('ktr')»
+			«list.writeAttribute('mtt')»
+		</Depot>
 	'''
 	
 	def writeTransfer(AnonymousListStatement it)'''

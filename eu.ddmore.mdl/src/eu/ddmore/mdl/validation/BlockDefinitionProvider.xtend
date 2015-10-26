@@ -119,7 +119,8 @@ class BlockDefinitionProvider {
 			]),
 			MDL_PRED_BLK_NAME -> new BlockSpec(MDL_PRED_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.equationDefinition, false),
-				new StatementSpec(ep.equationDefinition, true)
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.listDefinition)
 			]),
 			OBS_BLK_NAME -> new BlockSpec(OBS_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.equationDefinition, true),

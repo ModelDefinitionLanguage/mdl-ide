@@ -15,7 +15,8 @@ warfarin_PK_BOV_dat = dataObj{
       WT : { use is covariate}
       AGE : { use is covariate }
       SEX : { use is catCov withCategories{male when 1, female when 2} }
-      AMT : { use is amt, variable = INPUT_KA  }
+      CMT : { use is cmt }
+      AMT : { use is amt, define = { 1 in CMT as INPUT_KA  } }
       OCC : { use is varLevel }
       DV : { use is dv, variable=Y }
       MDV : { use is mdv }
