@@ -2,7 +2,12 @@ package eu.ddmore.converter.mdl2pharmml
 
 import eu.ddmore.converter.mdlprinting.MdlPrinter
 import java.util.ArrayList
+import java.util.Collections
 import org.apache.commons.io.FilenameUtils
+import org.ddmore.mdl.mdl.AdditiveExpression
+import org.ddmore.mdl.mdl.AnyExpression
+import org.ddmore.mdl.mdl.Arguments
+import org.ddmore.mdl.mdl.CovariateDefinitionBlock
 import org.ddmore.mdl.mdl.DataObject
 import org.ddmore.mdl.mdl.Expression
 import org.ddmore.mdl.mdl.InputFormatType
@@ -13,12 +18,18 @@ import org.ddmore.mdl.mdl.ModelObject
 import org.ddmore.mdl.mdl.ModelPredictionBlockStatement
 import org.ddmore.mdl.mdl.NonContinuousType
 import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.impl.SymbolDeclarationImpl
 import org.ddmore.mdl.mdl.SymbolRef
 import org.ddmore.mdl.mdl.UseType
+import org.ddmore.mdl.mdl.OrExpression
+import org.ddmore.mdl.mdl.UnaryExpression
+import org.ddmore.mdl.mdl.Vector
+import org.ddmore.mdl.mdl.impl.DataInputBlockImpl
 import org.ddmore.mdl.types.DistributionType
 import org.ddmore.mdl.validation.AttributeValidator
-import org.ddmore.mdl.validation.PropertyValidator
+import org.ddmore.mdl.validation.SourceBlockAttributes
 import org.ddmore.mdl.validation.Utils
+import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
@@ -193,7 +204,7 @@ class DataSetPrinter {
 			for (b : dObj.blocks) {
 				if (b.sourceBlock != null) {
 					for (s : b.sourceBlock.statements) {
-						if (s.propertyName.argName.equals(PropertyValidator::attr_inputformat.name) &&
+						if (s.propertyName.argName.equals(SourceBlockAttributes::attr_inputformat.name) &&
 							s.expression != null) {
 							if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString)) {
 								var content = mog.print_ds_NONMEM_DataSet(mObj, dObj);
@@ -555,6 +566,168 @@ class DataSetPrinter {
 			return null;
 		}
 
+		def getCovariateFromModel(ModelObject mObj, SymbolDeclaration sd){
+			for(blk : mObj.blocks){
+				for(symbDec : blk.covariateBlock?.variables ?: Collections::emptyList){
+					if(symbDec.symbolName.name == sd.symbolName.name) return symbDec
+				}
+			}			
+		}
+
+		def java.util.List<List> getSubLists(AnyExpression expr){
+			val retVal = new ArrayList<List>
+			if(expr.list != null){
+				retVal.add(expr.list)
+			}
+			else{
+				expr.vector?.expression?.lists.forEach[retVal.add(it)]
+			}
+			retVal
+		}
+
+		def isUsedAsCovariateFixEff(SymbolDeclaration sd, ModelObject mObj){
+			// go through model object and see if we can identify 			
+			for(blk : mObj.blocks){
+				if(blk.individualVariablesBlock != null){
+					for(symbDec : blk.individualVariablesBlock.variables){
+						if(symbDec.list != null){
+							for(arg : symbDec.list.arguments?.namedArguments?.arguments ?: Collections::emptyList){
+								if(AttributeValidator::attr_fixEff.name == arg?.argumentName?.name){
+									// fixEff found
+									val subLists = arg.expression?.expression?.getSubLists ?: Collections::emptyList
+									for(subList : subLists){
+										// now look a matching cov
+										for(subListArg : subList?.arguments?.namedArguments?.arguments ?: Collections::emptyList){
+											if(AttributeValidator::attr_cov.name == subListArg?.argumentName?.name){
+												// match the cov att so lets see if it uses this var name
+												if(subListArg?.expression?.expression?.toStr?:"" == sd.symbolName.name) return true
+											}
+										}
+									}
+								}
+							}
+						}
+					}					
+				}
+			}
+			return false			
+		}
+
+		def isARegressor(SymbolDeclaration sd, ModelObject mObj){
+			// need to check if there are transforming covs and then test them
+			val transCovs = findTransformedCovariates(sd, mObj)
+			for(tc : transCovs){
+				if(isUsedAsCovariateFixEff(tc, mObj)) return false
+			}
+			// if no transformations found or none are covs then test this symbol itself
+			return !isUsedAsCovariateFixEff(sd, mObj)
+		}
+
+		def java.util.List<SymbolDeclaration> findTransformedCovariates(SymbolDeclaration sd, ModelObject mObj){
+			val retVal = new ArrayList<SymbolDeclaration>
+			val modelCovSymb = mObj.getCovariateFromModel(sd)
+			if(modelCovSymb != null){
+				val covBlk = EcoreUtil2.getContainerOfType(modelCovSymb, CovariateDefinitionBlock)
+				// store vars for dep checking
+//				val covMap = new HashMap<String, SymbolDeclaration>
+//				covBlk.variables.forEach[covMap.put(symbolName.name, it)]
+				// now go through each covariate and check whether it uses the search cov on the RHS. If
+				// so then it is a transforming covariate.
+				for(covDefn : covBlk.variables){
+					if(modelCovSymb.symbolName.name != covDefn.symbolName.name){
+						// check deps
+						if(covDefn.expression?.isSymbolFoundInCovExpression(modelCovSymb)){
+							// just check expressions
+							retVal.add(covDefn)
+						}
+						else if(covDefn.list?.isSymbolFoundInCovExpression(modelCovSymb)){
+							retVal.add(covDefn)
+						}
+					}
+				}
+			}
+			retVal
+		}
+
+		def boolean isSymbolFoundInCovExpression(OrExpression orExpr, SymbolDeclaration srchSymb){
+			for(andExpr : orExpr.expression){
+				for(logExpr : andExpr.expression){
+					if(logExpr.expression1.isSymbolFoundInCovExpression(srchSymb)) return true		
+					else if(logExpr.expression2?.isSymbolFoundInCovExpression(srchSymb)) return true		
+				}
+			}
+			false
+		}
+
+		def boolean isSymbolFoundInCovExpression(AnyExpression anyExpr, SymbolDeclaration srchSymb){
+			if(anyExpr.expression?.isSymbolFoundInCovExpression(srchSymb)) return true
+			if(anyExpr.list?.isSymbolFoundInCovExpression(srchSymb)) return true
+			if(anyExpr.vector?.isSymbolFoundInCovExpression(srchSymb)) return true
+			false
+		}
+
+		def boolean isSymbolFoundInCovExpression(List listExpr, SymbolDeclaration srchSymb){
+			if(listExpr.arguments?.isSymbolFoundInCovExpression(srchSymb)) return true
+			false
+		}
+
+		def boolean isSymbolFoundInCovExpression(Vector vectExpr, SymbolDeclaration srchSymb){
+			for(vExpr : vectExpr.expression?.expressions ?: Collections::emptyList){
+				if(vExpr.isSymbolFoundInCovExpression(srchSymb)) return true
+			}
+			for(vExpr : vectExpr.expression?.lists ?: Collections::emptyList){
+				if(vExpr.isSymbolFoundInCovExpression(srchSymb)) return true
+			}
+			false
+		}
+
+		def boolean isSymbolFoundInCovExpression(Expression expr, SymbolDeclaration srchSymb){
+			var retVal = false
+			if(isSymbolFoundInCovExpression(expr.expression, srchSymb)){
+				retVal = true
+			}
+			else if(expr.whenBranches != null){
+				val iter = expr.whenBranches.iterator
+				while(iter.hasNext && !retVal){
+					val wb = iter.next
+					if(isSymbolFoundInCovExpression(wb.expression, srchSymb)){
+						retVal = true
+					}
+				}
+			}
+			retVal
+		}
+
+		def boolean isSymbolFoundInCovExpression(AdditiveExpression addExpr, SymbolDeclaration srchSymb){
+			for(mulExpr : addExpr.expression){
+				for(powExpr : mulExpr.expression){
+					for(unExpr : powExpr.expression){
+						if(unExpr.isSymbolFoundInCovExpression(srchSymb)) return true
+					}
+				}
+			}
+			false
+		}
+		
+		def boolean isSymbolFoundInCovExpression(UnaryExpression unExpr, SymbolDeclaration srchSymb){
+			if(unExpr.expression?.isSymbolFoundInCovExpression(srchSymb)) return true
+			if(unExpr.parExpression?.expression?.isSymbolFoundInCovExpression(srchSymb)) return true
+			if(srchSymb.symbolName.name == unExpr.symbol?.name) return true							
+			if(unExpr.functionCall?.arguments?.isSymbolFoundInCovExpression(srchSymb)) return true
+			false
+		}
+
+		def boolean isSymbolFoundInCovExpression(Arguments argsExpr, SymbolDeclaration srchSymb){
+			for(arg : argsExpr.namedArguments?.arguments ?: Collections::emptyList){
+				if(arg.expression?.expression?.isSymbolFoundInCovExpression(srchSymb)) return true
+			}
+			for(arg : argsExpr.unnamedArguments?.arguments ?: Collections::emptyList){
+				if(arg.expression?.expression?.isSymbolFoundInCovExpression(srchSymb)) return true
+			}
+
+			false
+		}
+
 		protected def print_ds_DataSet(DataObject dObj, ModelObject mObj, MOGObject mog) {
 			var res = "";
 			var k = 1;
@@ -569,8 +742,11 @@ class DataSetPrinter {
 							dosingToCompartmentMacro = column.isDosingToCompartmentMacro(mObj)
 						}
 						var convertedColType = "undefined"
-						if (columnType != null && (UseType::ID.toString == columnType || column.isUsedInModel(mog, mObj))) {
-							convertedColType = column.convertEnum(dosingToCompartmentMacro);
+						if (columnType != null){
+							if(UseType::ID.toString == columnType || column.isUsedInModel(mog, mObj)) {
+								
+								convertedColType = column.convertEnum(dosingToCompartmentMacro, if(UseType::COVARIATE.toString == columnType) isARegressor(column, mObj) else false);
+							}
 						}
 						val valueType = column.getValueType
 						res = res +
@@ -603,12 +779,13 @@ class DataSetPrinter {
 	}
 	
 	//use option names
-	def convertEnum(ListDeclaration columnDefn, boolean isDosingToCompartmentMacro) {
+	def convertEnum(SymbolDeclaration columnDefn, boolean isDosingToCompartmentMacro, boolean isRegressor) {
 		val type = columnDefn.getColumnType
 		
 		switch (type) {
 			case UseType::AMT.toString     : "dose"
 			case UseType::DVID.toString   : "dvid"
+			case UseType::COVARIATE.toString: if(isRegressor) "reg" else "covariate"
 //			case UseType::CENS.toString    : "censoring"
 			case UseType::VARLEVEL.toString: "occasion"
 			//case UseType::ITYPE.toString   : "dvid"		//case UseType::OCC.toString     : "occasion"
@@ -643,13 +820,13 @@ class DataSetPrinter {
 					var file = "";
 					var delimiter = "";
 					for (s : b.sourceBlock.statements) {
-						if (s.propertyName.argName.equals(PropertyValidator::attr_file.name) && s.expression != null)
+						if (s.propertyName.argName.equals(SourceBlockAttributes::attr_file.name) && s.expression != null)
 							file = s.expression.toStr;
-						if (s.propertyName.argName.equals(PropertyValidator::attr_delimiter.name) && s.expression != null)
+						if (s.propertyName.argName.equals(SourceBlockAttributes::attr_delimiter.name) && s.expression != null)
 							delimiter = s.expression.toStr;
 					}
 					if (file.length > 0) {
-						if(delimiter.length == 0) delimiter = PropertyValidator::attr_delimiter.defaultValue;
+						if(delimiter.length == 0) delimiter = SourceBlockAttributes::attr_delimiter.defaultValue;
 						val fileExtension = FilenameUtils::getExtension(file);
 						res = res + '''				
 							<ExternalFile oid="«BLK_DS_IMPORT_DATA»">
@@ -670,7 +847,7 @@ class DataSetPrinter {
 				for (b : dObj.blocks) {
 					if (b.sourceBlock != null) {
 						for (s : b.sourceBlock.statements) {
-							if (s.propertyName.argName.equals(PropertyValidator::attr_inputformat.name) &&
+							if (s.propertyName.argName.equals(SourceBlockAttributes::attr_inputformat.name) &&
 								s.expression != null) {
 								if (s.expression.toStr.equals(InputFormatType::NONMEM_FORMAT.toString))
 									oidRef = BLK_DS_NONMEM_DATASET;

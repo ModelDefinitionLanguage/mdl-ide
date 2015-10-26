@@ -76,11 +76,6 @@ import org.ddmore.mdl.mdl.impl.VariabilityBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityDefinitionBlockImpl;
 import org.ddmore.mdl.mdl.impl.VariabilityParametersBlockImpl;
 import org.ddmore.mdl.types.MdlDataType;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 
@@ -210,26 +205,6 @@ public class Utils {
 		/*All objects*/
 //		if (obj instanceof TargetBlockImpl) return ((TargetBlock)obj).getIdentifier();
 		return "";
-	}
-	
-	//Locate data/script file in the MDL project
-	public static boolean isFileExist(EObject b, String filePath) {
-		return getFile(b, filePath).exists();
-	}
-	
-	//Locate data/script file in the MDL project
-	public static IFile getFile(EObject b, String filePath) {
-		String platformString = b.eResource().getURI().toPlatformString(true);
-		IFile modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(platformString));
-	    IProject project = modelFile.getProject();
-	    IContainer parent = modelFile.getParent();
-    	String p = filePath;
-		while (p.startsWith("../") && parent != null){
-			parent = parent.getParent();
-			p = p.substring(3);
-		}
-        IFile dataFile = project.getFile(parent.getProjectRelativePath() + "/" + p);
-		return dataFile;
 	}
 	
 	//Returns a list of MOGs declared in an MDL file
