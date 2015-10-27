@@ -26,6 +26,8 @@ import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.ConstantLiteral
+import eu.ddmore.mdl.mdl.CategoryValueReference
+import eu.ddmore.mdl.mdl.CategoryValueDefinition
 
 public class ExpressionConverter {
 	
@@ -137,6 +139,12 @@ public class ExpressionConverter {
 	
 	def static dispatch String getString(VectorElement exp)'''
 		«exp.element.getString»'''
+		
+	def static dispatch String getString(CategoryValueReference exp)'''
+		«exp.ref.getString»'''
+		
+	def static dispatch String getString(CategoryValueDefinition exp)'''
+		«exp.name»'''
 		
 
 //	def static dispatch String getString(VectorContent exp)'''

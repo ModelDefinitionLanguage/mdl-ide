@@ -26,6 +26,8 @@ import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.CategoryValueDefinition
+import eu.ddmore.mdl.mdl.ListDefinition
 
 class ListDefinitionProvider {
 
@@ -98,8 +100,8 @@ class ListDefinitionProvider {
 			return catMappingType != null && catMappingMandatory
 		}
 		
-		def isCatMappingOptional(){
-			return catMappingType != null && !catMappingMandatory
+		def isCatMappingForbidden(){
+			return catMappingType == null || (catMappingType != null && !catMappingMandatory)
 		}
 		
 		def isCatMappingPossible(){
@@ -425,8 +427,8 @@ class ListDefinitionProvider {
 						 new AttributeDefn('distn', true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo (DISCRETE_OBS_VALUE, new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
-						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
+					new ListDefInfo (DISCRETE_OBS_VALUE, new EnumListTypeInfo("DiscreteObs"),  #[
+						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, MclTypeProvider::UNDEFINED_TYPE, false),
 						 new AttributeDefn('distn', true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
@@ -933,18 +935,42 @@ class ListDefinitionProvider {
 	}
 
 	def checkCategoryDefinitionWellFormed(EnumPair ep, () => void unexpectedCatDefnErrorLambda, () => void missingCatErrorLambda){
-		if(ep.eContainer instanceof AttributeList){
-			val attList = ep.eContainer as AttributeList
-			val listDefn = attList.matchingListDefn
+		val attList = EcoreUtil2.getContainerOfType(ep.eContainer, ListDefinition)
+		if(attList != null){
+			val listDefn = attList.list.matchingListDefn
 			val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
-			val mappingExpr = ep.expression as EnumExpression
-			if(attDefn.isCatMappingMandatory && mappingExpr.catDefn == null){
-				missingCatErrorLambda.apply
-			}
-			else if(!attDefn.isCatMappingPossible && mappingExpr.catDefn != null){
-				unexpectedCatDefnErrorLambda.apply
+			if(ep.expression instanceof EnumExpression && attDefn != null){
+				val mappingExpr = ep.expression as EnumExpression
+				if(attDefn.isCatMappingPossible && mappingExpr.catDefn == null){
+					missingCatErrorLambda.apply
+				}
+				else if(!attDefn.isCatMappingPossible && mappingExpr.catDefn != null){
+					unexpectedCatDefnErrorLambda.apply
+				}
 			}
 		}
+	}
+	
+	def isMappingMandatory(CategoryValueDefinition it){
+		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
+		val ep = EcoreUtil2.getContainerOfType(eContainer, EnumPair)
+		val listDefn = attList?.matchingListDefn
+		if(listDefn != null && ep != null){
+			val attDefn = listDefn.getAttributeDefinition(ep.argumentName)
+			return attDefn.isCatMappingMandatory
+		}
+		false
+	}
+
+	def isMappingForbidden(CategoryValueDefinition it){
+		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
+		val ep = EcoreUtil2.getContainerOfType(eContainer, EnumPair)
+		val listDefn = attList?.matchingListDefn
+		if(listDefn != null && ep != null){
+			val attDefn = listDefn.getAttributeDefinition(ep.argumentName)
+			return attDefn.isCatMappingForbidden
+		}
+		false
 	}
 
 	def isAnonymousListExpected(AttributeList it){

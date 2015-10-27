@@ -418,9 +418,9 @@ class MdlValidator extends AbstractMdlValidator {
 		if(parentAt != null)
 			checkCategoryDefinitionWellFormed(parentAt,
 				[error("Unexpected category definition.", 
-					MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator.INVALID_CATEGORY_DEFINITION, "") ],
+					MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_CATEGORY_DEFINITION, "") ],
 				[error("Category definition is missing.", 
-					MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator.INVALID_CATEGORY_DEFINITION, "") ]
+					MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_CATEGORY_DEFINITION, "") ]
 			)
 	}
 		
@@ -512,8 +512,12 @@ class MdlValidator extends AbstractMdlValidator {
 			error("Cannot use category mappings in a statement.",
 					MdlPackage.eINSTANCE.categoryValueDefinition_MappedTo, INCORRECT_STATEMENT_CONTEXT, e.name)
 		}
-		else if(EcoreUtil2.getContainerOfType(e, AttributeList) != null && e.mappedTo == null){
-			error("A category definition in a list must have a mapping.",
+		else if(e.isMappingMandatory && e.mappedTo == null){
+			error("A category definition must have a mapping in this context.",
+					MdlPackage.eINSTANCE.categoryValueDefinition_Name, INCORRECT_LIST_CONTEXT, e.name)
+		}
+		else if(e.isMappingForbidden && e.mappedTo != null){
+			error("A category definition cannot have a mapping in this context.",
 					MdlPackage.eINSTANCE.categoryValueDefinition_Name, INCORRECT_LIST_CONTEXT, e.name)
 		}
 	}

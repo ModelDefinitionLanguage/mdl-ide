@@ -101,6 +101,7 @@ class BuiltinFunctionProvider {
 					} ]
 					],
 		'Bernoulli' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
+						'category' -> new FunctionArgument(MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
 						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]
 					],
@@ -109,6 +110,7 @@ class BuiltinFunctionProvider {
 					} ]
 					],
 		'Binomial' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
+						'successCategory' -> new FunctionArgument(MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
 						'probabilityOfSuccess' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'numberOfTrials' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]

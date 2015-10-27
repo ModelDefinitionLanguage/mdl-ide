@@ -122,7 +122,77 @@ class MclStatementValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
 			MdlValidator::INCORRECT_LIST_CONTEXT,
-			"A category definition in a list must have a mapping."
+			"A category definition must have a mapping in this context."
+		)
+	}
+
+	@Test
+	def void testValidCategoryDefnWithNoMappingsInList(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				PAIN : { type is discrete withCategories {mild}, distn=Bernoulli(category = PAIN.mild, probability=foo) }
+			}
+		}
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidDiscreteCategoryDefnWithNoMappingsInList(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			COVARIATES{
+				FOO withCategories { baa }
+			}
+
+			MODEL_PREDICTION{
+				foo
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				PAIN : { type is discrete, distn=Bernoulli(category = FOO.baa, probability=foo) }
+			}
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
+			MdlValidator::INVALID_CATEGORY_DEFINITION,
+			"Category definition is missing."
+		)
+	}
+
+	@Test
+	def void testInvalidCategoryDefnWithMappingsInList(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				PAIN : { type is discrete withCategories {mild when foo}, distn=Bernoulli(category=PAIN.mild, probability=foo) }
+			}
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::INCORRECT_LIST_CONTEXT,
+			"A category definition cannot have a mapping in this context."
 		)
 	}
 
