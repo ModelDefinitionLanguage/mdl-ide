@@ -30,7 +30,7 @@ class PropertyDefinitionProvider {
 	static val SOLVER_TYPE = new BuiltinEnumTypeInfo('solver', #{'stiff', 'nonStiff' })
 	static val SOLVER_ATT = new AttributeDefn('solver', false, SOLVER_TYPE)
 
-	static val propertyDefns = #{ BlockDefinitionProvider::ESTIMATE_BLK -> #[ALGO_ATT], BlockDefinitionProvider::SIMULATE_BLK -> #[SOLVER_ATT] }
+	static val Map<String, List<AttributeDefn>> propertyDefns = #{ BlockDefinitionProvider::ESTIMATE_BLK -> #[ALGO_ATT], BlockDefinitionProvider::SIMULATE_BLK -> #[SOLVER_ATT] }
 	
 /* the following was commented out inside propertyDefns declaration
  * 		BlockDefinitionProvider::ESTIMATE_BLK -> #[TARGET_ATT, EST_OP_ATT, VERSION_ATT, ALGO_ATT],
