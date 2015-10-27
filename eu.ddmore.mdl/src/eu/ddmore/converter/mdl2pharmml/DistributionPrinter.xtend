@@ -47,8 +47,10 @@ class DistributionPrinter {
 							}
 		),
 		'Bernoulli' -> new UncertMlMapping('BernoulliDistribution', 'http://www.uncertml.org/distributions/poisson',
-							#['probability'],
-							#{ 'probability' -> new UncertMlArgument('probability', 'pVal')
+							#['category', 'probability'],
+							#{ 
+								'category' -> new UncertMlArgument('name', 'ref'),
+								'probability' -> new UncertMlArgument('probability', 'pVal')
 							}
 		),
 		'Binomial' -> new UncertMlMapping('BinomialDistribution', 'http://www.uncertml.org/distributions/poisson',
@@ -95,28 +97,30 @@ class DistributionPrinter {
 		''' 
 	}
 	
-	public def printDiscreteDistribution(BuiltinFunctionCall distnDef, String category){
+	public def printDiscreteDistribution(BuiltinFunctionCall distnDef){
 		val typeName = distnDef.func;
 		switch(typeName){
-			case "Bernoulli": distnDef.printBernoulliDistn(category)
+			case "Bernoulli": distnDef.printBernoulliDistn
 			case "Binomial": distnDef.printBinomialDistn
 			default: ''''''
 		}
 	}
 
-	public def printBernoulliDistn(BuiltinFunctionCall randomList, String category){
+	public def printBernoulliDistn(BuiltinFunctionCall randomList){
 		val mapping = pharmMLMapping.get(randomList.func)
 //		var typeName = randomList.func;
 //		val recognizedArgs = distribution_attrs.get(typeName);
 //		val attr = recognizedArgs.get(DistributionValidator::attr_p.name)
 //		val expr = randomList.arguments.namedArguments.arguments.get(0)
-		val expr = randomList.getArgumentExpression('probability')
-		val arg = 'probability'
+		val catArg = 'category'
+		val probArg = 'probability'
+		val category = randomList.getArgumentExpression(catArg)
+		val expr = randomList.getArgumentExpression(probArg)
 		'''
 			<BernoulliDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/3.0">
 				<categoryProb definition="">
-					<name>«category»</name>
-					«mapping.argMapping.get(arg).writeUncertmlArg(expr)»
+					<name>«category.convertToString»</name>
+					«mapping.argMapping.get(probArg).writeUncertmlArg(expr)»
 				</categoryProb>
 			</BernoulliDistribution>
 		'''

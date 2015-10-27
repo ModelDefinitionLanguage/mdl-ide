@@ -3,6 +3,8 @@ package eu.ddmore.mdl.utils
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BooleanLiteral
+import eu.ddmore.mdl.mdl.CategoryValueDefinition
+import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.ConstantLiteral
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
@@ -21,7 +23,6 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
-
 import org.eclipse.emf.ecore.EObject
 
 public class ExpressionConverter {
@@ -136,6 +137,12 @@ public class ExpressionConverter {
 	
 	def dispatch String getString(VectorElement exp)'''
 		«exp.element.getString»'''
+		
+	def dispatch String getString(CategoryValueReference exp)'''
+		«exp.ref.getString»'''
+		
+	def dispatch String getString(CategoryValueDefinition exp)'''
+		«exp.name»'''
 		
 
 //	def static dispatch String getString(VectorContent exp)'''

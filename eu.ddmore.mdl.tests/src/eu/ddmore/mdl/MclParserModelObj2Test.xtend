@@ -55,10 +55,10 @@ warfarin_PK_ANALYTIC_mdl = mdlObj {
 	} # end RANDOM_VARIABLE_DEFINITION 
 	
 	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    ln(CL) = linear(pop = ln(POP_CL), fixEff = [{coeff=BETA_CL_WT , cov = logtWT }], ranEff = [ETA_CL])
-	    ln(V) = linear(pop = ln(POP_V), fixEff =  [{coeff=BETA_V_WT , cov = logtWT }] , ranEff = [ETA_V])
-	    ln(KA) = linear(pop = ln(POP_KA), ranEff = [ETA_KA])
-	    ln(TLAG) = linear(pop = ln(POP_TLAG), ranEff = [ETA_TLAG]) 
+	    ln(CL) = linear(trans is ln, pop=POP_CL, fixEff = [{coeff=BETA_CL_WT , cov = logtWT }], ranEff = [ETA_CL])
+	    ln(V) = linear(trans is ln, pop=POP_V, fixEff =  [{coeff=BETA_V_WT , cov = logtWT }] , ranEff = [ETA_V])
+	    ln(KA) = linear(trans is ln, pop=POP_KA, ranEff = [ETA_KA])
+	    ln(TLAG) = linear(trans is ln, pop=POP_TLAG, ranEff = [ETA_TLAG]) 
 	} # end INDIVIDUAL_VARIABLES
 	
 	MODEL_PREDICTION {

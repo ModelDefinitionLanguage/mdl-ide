@@ -50,6 +50,7 @@ import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.EnumExpression
+import java.util.Set
 
 class ModelDefinitionPrinter {
 	extension MclUtils mu = new MclUtils
@@ -1055,12 +1056,33 @@ class ModelDefinitionPrinter {
 		'''
 	}
 	
+	
+	private def getSuccessCategory(BuiltinFunctionCall it){
+		switch(func){
+			case "Bernoulli":
+				getArgumentExpression('category')
+			case "Binomial":
+				getArgumentExpression('successCategory')
+		}?.convertToString
+	}
+	
+	
+	private def createCategoriesOrderedBySuccess(Set<String> categories, String successCategory){
+		val retVal = new ArrayList<String>(categories.size)
+		retVal.add(successCategory)
+		retVal.addAll(categories.filter[it != successCategory])
+		retVal
+	}
+	
 	private def print_mdef_DiscreteObservations(ListDefinition s) {
 		var name = s.name
 		val linkFunction = s.list.getAttributeExpression('link');
 		val distn = s.list.getAttributeExpression('distn') as BuiltinFunctionCall
 		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("probability")
-		val category = "cat1"
+		val categories = s.list.getAttributeExpression(ListDefinitionProvider::OBS_TYPE_ATT);
+		val catVals = categories.categories
+		val catList = createCategoriesOrderedBySuccess(catVals.keySet, distn.successCategory)
+		
 		'''
 			<Discrete>
 				<CategoricalData ordered="no">
@@ -1080,17 +1102,47 @@ class ModelDefinitionPrinter {
 						</SimpleParameter>
 					«ENDIF»
 					<ListOfCategories>
-						<Category symbId="«category»"/>
+						«FOR cat : catList»
+							<Category symbId="«cat»"/>
+						«ENDFOR»
 					</ListOfCategories>
 					<CategoryVariable symbId="«name»"/>
 					<PMF linkFunction="identity">
-						«printDiscreteDistribution(distn, category)»
+						«printDiscreteDistribution(distn)»
 					</PMF>
 				</CategoricalData>
 			</Discrete>
 		'''
 	}
 	
+	
+//	private def getCategoryNames(Expression categories){
+//		val listCats = new ArrayList<String>
+//		val catVals = new HashMap<String, Expression>
+//		switch(categories){
+//			EnumExpression:{
+//				val catDefnExpr = categories.catDefn as CategoricalDefinitionExpr
+//				catDefnExpr.categories.forEach[
+//					listCats.add(name)
+//					catVals.put(name, mappedTo)
+//				]
+//			}
+//		}
+//		listCats
+//	}
+	
+	private def getCategories(Expression categories){
+		val catVals = new HashMap<String, Expression>
+		switch(categories){
+			EnumExpression:{
+				val catDefnExpr = categories.catDefn as CategoricalDefinitionExpr
+				catDefnExpr.categories.forEach[
+					catVals.put(name, mappedTo)
+				]
+			}
+		}
+		catVals
+	}
 	
 	private def print_mdef_CategoricalObservations(ListDefinition s) {
 //			val define = column.list.getAttributeExpression(ListDefinitionProvider::USE_ATT);
@@ -1106,27 +1158,28 @@ class ModelDefinitionPrinter {
 //				}
 //			}
 		val categories = s.list.getAttributeExpression(ListDefinitionProvider::OBS_TYPE_ATT);
-		val listCats = new ArrayList<String>
-		val catVals = new HashMap<String, Expression>
-		switch(categories){
-			EnumExpression:{
-				val catDefnExpr = categories.catDefn as CategoricalDefinitionExpr
-				catDefnExpr.categories.forEach[
-					listCats.add(name)
-					catVals.put(name, mappedTo)
-				]
-			}
-		}
+//		val listCats = new ArrayList<String>
+//		val catVals = new HashMap<String, Expression>
+//		switch(categories){
+//			EnumExpression:{
+//				val catDefnExpr = categories.catDefn as CategoricalDefinitionExpr
+//				catDefnExpr.categories.forEach[
+//					listCats.add(name)
+//					catVals.put(name, mappedTo)
+//				]
+//			}
+//		}
+		val catVals = categories.categories
 		'''
 			<Discrete>
 				<CategoricalData>
 					<ListOfCategories>
-						«FOR cat : listCats»
+						«FOR cat : catVals.keySet»
 							<Category symbId="«cat»"/>
 						«ENDFOR»
 					</ListOfCategories>
 					<CategoryVariable symbId="«s.name»"/>
-					«FOR cat : listCats»
+					«FOR cat : catVals.keySet»
 						<ProbabilityAssignment>
 							<Probability linkFunction="identity">
 								<math:LogicBinop op="eq">

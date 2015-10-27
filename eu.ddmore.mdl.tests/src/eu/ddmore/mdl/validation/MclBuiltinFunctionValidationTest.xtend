@@ -205,6 +205,29 @@ class MclBuiltinFunctionValidationTest {
 	}
 
 	@Test
+	def void testInValidLhsTransFunction(){
+		val mcl = '''bar = mdlObj {
+			
+			
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				exp(BETA_CL_WT) = 1
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.transformedDefinition,
+			MdlValidator::INVALID_LHS_FUNC,
+			"'exp' cannot be used as a transformation function on the LHS of an equation"
+		)
+	}
+
+	@Test
 	def void testInValidTypeUnnamedFunction(){
 		val mcl = '''bar = mdlObj {
 			

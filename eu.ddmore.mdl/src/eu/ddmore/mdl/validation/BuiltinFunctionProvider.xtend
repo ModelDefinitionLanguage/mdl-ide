@@ -24,6 +24,7 @@ import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import java.util.Collections
+import eu.ddmore.mdl.mdl.TransformedDefinition
 
 class BuiltinFunctionProvider {
 	
@@ -64,6 +65,9 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
+	
+	static val TRANSFORM_FUNCS = #{ 'ln', 'logit', 'probit' }
+	
 	static val TRANS_TYPE = new BuiltinEnumTypeInfo('type', #{'none', 'ln', 'logit', 'probit'})
 	
 	private static val Map<String, List<? extends FunctDefn>> functDefns = #{
@@ -101,6 +105,7 @@ class BuiltinFunctionProvider {
 					} ]
 					],
 		'Bernoulli' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
+						'category' -> new FunctionArgument(MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
 						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]
 					],
@@ -109,6 +114,7 @@ class BuiltinFunctionProvider {
 					} ]
 					],
 		'Binomial' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
+						'successCategory' -> new FunctionArgument(MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
 						'probabilityOfSuccess' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'numberOfTrials' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]
@@ -336,6 +342,15 @@ class BuiltinFunctionProvider {
 		}
 	}
 
+	def getArgumentEnumValue(BuiltinFunctionCall it, String attName){
+		val args = argList
+		switch(args){
+			NamedFuncArguments:
+				args.getArgumentEnumValue(attName)
+			default: null
+		}
+	}
+
 	def getArgumentExpression(NamedFuncArguments it, String attName){
 		arguments.findFirst[argumentName == attName]?.expression
 	}
@@ -383,5 +398,13 @@ class BuiltinFunctionProvider {
 		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
 		defnType
 	}
-		
+
+	def boolean isValidTransform(TransformedDefinition it){
+		isValidTransformFunction(transform)
+	}
+
+	def boolean isValidTransformFunction(String fName){
+		TRANSFORM_FUNCS.contains(fName)
+	}
+
 }

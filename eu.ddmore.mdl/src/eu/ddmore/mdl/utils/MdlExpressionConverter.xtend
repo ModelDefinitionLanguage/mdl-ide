@@ -44,7 +44,7 @@ public class MdlExpressionConverter extends ExpressionConverter {
     def dispatch String getString(CategoricalDefinitionExpr defn)'''
         withCategories {«FOR catValDefn : defn.categories SEPARATOR ', '»«catValDefn.getString»«ENDFOR»}'''
 
-    def dispatch String getString(CategoryValueDefinition catValDefn) {
+    def dispatch override String getString(CategoryValueDefinition catValDefn) {
         catValDefn.name + if (catValDefn.mappedTo != null) " when " + catValDefn.mappedTo.getString else ""
     }
     
@@ -54,7 +54,7 @@ public class MdlExpressionConverter extends ExpressionConverter {
     def dispatch String getString(CatValRefMapping catValRefMapping)'''
         «catValRefMapping.catRef.ref.getString» when «catValRefMapping.mappedTo.getString»'''
        
-    def dispatch String getString(CategoryValueReference catValRef)'''
+    def dispatch override String getString(CategoryValueReference catValRef)'''
         «catValRef.getSymbolDefnFromCatValRef.name».«catValRef.ref.getString»'''
 
 	override dispatch String getString(EnumExpression exp){

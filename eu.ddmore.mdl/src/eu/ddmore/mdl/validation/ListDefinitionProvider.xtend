@@ -26,6 +26,8 @@ import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.CategoryValueDefinition
+import eu.ddmore.mdl.mdl.ListDefinition
 
 class ListDefinitionProvider {
 
@@ -66,6 +68,7 @@ class ListDefinitionProvider {
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'exact', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
+	static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
 
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
@@ -97,8 +100,8 @@ class ListDefinitionProvider {
 			return catMappingType != null && catMappingMandatory
 		}
 		
-		def isCatMappingOptional(){
-			return catMappingType != null && !catMappingMandatory
+		def isCatMappingForbidden(){
+			return catMappingType == null || (catMappingType != null && !catMappingMandatory)
 		}
 		
 		def isCatMappingPossible(){
@@ -280,6 +283,7 @@ class ListDefinitionProvider {
 					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('to', true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference),
+						 new AttributeDefn('target', true, DERIV_TYPE.makeReference),
 						 new AttributeDefn('ka', false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('tlag', false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('finput', false, MclTypeProvider::REAL_TYPE),
@@ -289,7 +293,11 @@ class ListDefinitionProvider {
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ktr' -> true, 'mtt' -> true },
-						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> true }
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> true },
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'tlag' -> false, 'finput' -> false },
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ktr' -> true, 'mtt' -> true },
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'modelDur' -> true }
 						 ],
 						 false
 					),
@@ -333,7 +341,19 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'deriv'
 				listDefns = newArrayList(
-					new ListDefInfo (null, new ListTypeInfo("Derivative", PrimitiveType.Deriv),  #[
+					new ListDefInfo (null, DERIV_TYPE,  #[
+						 new AttributeDefn('deriv', true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('wrt', false, MclTypeProvider::REAL_TYPE.makeReference)
+						 ]
+					)
+				)
+			]
+		),
+		"MODEL_PREDICTION" -> (
+			new BlockListDefinition => [
+				key = 'deriv'
+				listDefns = newArrayList(
+					new ListDefInfo (null, DERIV_TYPE,  #[
 						 new AttributeDefn('deriv', true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('wrt', false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]
@@ -407,8 +427,8 @@ class ListDefinitionProvider {
 						 new AttributeDefn('distn', true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo (DISCRETE_OBS_VALUE, new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
-						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
+					new ListDefInfo (DISCRETE_OBS_VALUE, new EnumListTypeInfo("DiscreteObs"),  #[
+						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, MclTypeProvider::UNDEFINED_TYPE, false),
 						 new AttributeDefn('distn', true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
@@ -915,18 +935,42 @@ class ListDefinitionProvider {
 	}
 
 	def checkCategoryDefinitionWellFormed(EnumPair ep, () => void unexpectedCatDefnErrorLambda, () => void missingCatErrorLambda){
-		if(ep.eContainer instanceof AttributeList){
-			val attList = ep.eContainer as AttributeList
-			val listDefn = attList.matchingListDefn
+		val attList = EcoreUtil2.getContainerOfType(ep.eContainer, ListDefinition)
+		if(attList != null){
+			val listDefn = attList.list.matchingListDefn
 			val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
-			val mappingExpr = ep.expression as EnumExpression
-			if(attDefn.isCatMappingMandatory && mappingExpr.catDefn == null){
-				missingCatErrorLambda.apply
-			}
-			else if(!attDefn.isCatMappingPossible && mappingExpr.catDefn != null){
-				unexpectedCatDefnErrorLambda.apply
+			if(ep.expression instanceof EnumExpression && attDefn != null){
+				val mappingExpr = ep.expression as EnumExpression
+				if(attDefn.isCatMappingPossible && mappingExpr.catDefn == null){
+					missingCatErrorLambda.apply
+				}
+				else if(!attDefn.isCatMappingPossible && mappingExpr.catDefn != null){
+					unexpectedCatDefnErrorLambda.apply
+				}
 			}
 		}
+	}
+	
+	def isMappingMandatory(CategoryValueDefinition it){
+		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
+		val ep = EcoreUtil2.getContainerOfType(eContainer, EnumPair)
+		val listDefn = attList?.matchingListDefn
+		if(listDefn != null && ep != null){
+			val attDefn = listDefn.getAttributeDefinition(ep.argumentName)
+			return attDefn.isCatMappingMandatory
+		}
+		false
+	}
+
+	def isMappingForbidden(CategoryValueDefinition it){
+		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
+		val ep = EcoreUtil2.getContainerOfType(eContainer, EnumPair)
+		val listDefn = attList?.matchingListDefn
+		if(listDefn != null && ep != null){
+			val attDefn = listDefn.getAttributeDefinition(ep.argumentName)
+			return attDefn.isCatMappingForbidden
+		}
+		false
 	}
 
 	def isAnonymousListExpected(AttributeList it){

@@ -11,7 +11,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.junit.Assert
-
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.EnumerationDefinition
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
