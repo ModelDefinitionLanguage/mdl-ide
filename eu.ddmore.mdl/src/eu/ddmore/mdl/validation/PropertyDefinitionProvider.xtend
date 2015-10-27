@@ -11,10 +11,12 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.HashSet
 import java.util.List
+import java.util.Map
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.mdl.Statement
 
 class PropertyDefinitionProvider {
 	
@@ -38,13 +40,13 @@ class PropertyDefinitionProvider {
 		val attNames = new ArrayList<String>
 		val List<AttributeDefn> propDefns = propertyDefns.get(blkName)
 		if(propDefns != null) {
-			propDefns.forEach([at|attNames.add(at.name)])
+			propDefns.forEach([AttributeDefn at|attNames.add(at.name)])
 		}
 		attNames
 	}
 
 	def matchingPropertyDefn(ValuePair it){
-		propertyDefns.get(parentBlock.identifier)?.findFirst[p|p.name == argumentName]
+		propertyDefns.get(parentBlock.identifier)?.findFirst[AttributeDefn p|p.name == argumentName]
 	}
 
 
@@ -57,7 +59,7 @@ class PropertyDefinitionProvider {
 		val blockName = ee.owningBlock.identifier
 		val vp = ee.getOwningValuePair
 		val enumValue = ee.convertToString
-		val defnType = propertyDefns.get(blockName)?.findFirst[name == vp.argumentName]?.attType ?: MclTypeProvider::UNDEFINED_TYPE
+		val defnType = propertyDefns.get(blockName)?.findFirst[AttributeDefn p | p.name == vp.argumentName]?.attType ?: MclTypeProvider::UNDEFINED_TYPE
 		switch(defnType){
 			BuiltinEnumTypeInfo:
 				if(defnType.categories.exists[c|c == enumValue]) defnType else MclTypeProvider::UNDEFINED_TYPE
@@ -79,8 +81,8 @@ class PropertyDefinitionProvider {
 	def unusedMandatoryProperties(BlockStatement it){
 		val mandatoryProps = new HashSet<String>
 		val List<AttributeDefn> defns = (propertyDefns.get(identifier) ?: Collections.emptyList)
-		defns.filter[ad| ad.isMandatory].forEach[a|mandatoryProps.add(a.name)]
-		for(ps : statements.filter[s|s instanceof PropertyStatement]){
+		defns.filter[AttributeDefn ad| ad.isMandatory].forEach[AttributeDefn a|mandatoryProps.add(a.name)]
+		for(ps : statements.filter[Statement s|s instanceof PropertyStatement]){
 			for(a : (ps as PropertyStatement).properties){
 				mandatoryProps.remove(a.argumentName)
 			}
