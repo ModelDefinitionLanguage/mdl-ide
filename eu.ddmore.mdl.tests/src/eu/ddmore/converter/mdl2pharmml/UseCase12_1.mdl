@@ -65,7 +65,7 @@ Bernoulli_DIST_mdl = mdlObj{
    }# end INDIVIDUAL_VARIABLES
 
    OBSERVATION{
-     Y : { type is discrete withCategories {success, fail} , distn = Bernoulli(category=Y.success, probability=P1) }
+     Y : { type is discrete withCategories {fail, success} , distn = Bernoulli(category=Y.success, probability=P1) }
    }# end ESTIMATION
 } # end of model object
 

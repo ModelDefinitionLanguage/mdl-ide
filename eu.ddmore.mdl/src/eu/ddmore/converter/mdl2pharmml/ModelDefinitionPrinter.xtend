@@ -50,6 +50,7 @@ import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.EnumExpression
+import java.util.Set
 
 class ModelDefinitionPrinter {
 	extension MclUtils mu = new MclUtils
@@ -1055,6 +1056,24 @@ class ModelDefinitionPrinter {
 		'''
 	}
 	
+	
+	private def getSuccessCategory(BuiltinFunctionCall it){
+		switch(func){
+			case "Bernoulli":
+				getArgumentExpression('category')
+			case "Binomial":
+				getArgumentExpression('successCategory')
+		}?.convertToString
+	}
+	
+	
+	private def createCategoriesOrderedBySuccess(Set<String> categories, String successCategory){
+		val retVal = new ArrayList<String>(categories.size)
+		retVal.add(successCategory)
+		retVal.addAll(categories.filter[it != successCategory])
+		retVal
+	}
+	
 	private def print_mdef_DiscreteObservations(ListDefinition s) {
 		var name = s.name
 		val linkFunction = s.list.getAttributeExpression('link');
@@ -1062,6 +1081,8 @@ class ModelDefinitionPrinter {
 		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("probability")
 		val categories = s.list.getAttributeExpression(ListDefinitionProvider::OBS_TYPE_ATT);
 		val catVals = categories.categories
+		val catList = createCategoriesOrderedBySuccess(catVals.keySet, distn.successCategory)
+		
 		'''
 			<Discrete>
 				<CategoricalData ordered="no">
@@ -1081,7 +1102,7 @@ class ModelDefinitionPrinter {
 						</SimpleParameter>
 					«ENDIF»
 					<ListOfCategories>
-						«FOR cat : catVals.keySet»
+						«FOR cat : catList»
 							<Category symbId="«cat»"/>
 						«ENDFOR»
 					</ListOfCategories>
