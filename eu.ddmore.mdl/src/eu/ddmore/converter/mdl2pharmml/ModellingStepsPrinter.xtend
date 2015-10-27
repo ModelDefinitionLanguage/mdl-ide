@@ -447,12 +447,9 @@ class ModellingStepsPrinter {
 		else false
 	}
 
-	def isDiscreteBernoulliObs(SymbolDefinition symb){
+	def isDiscreteObs(SymbolDefinition symb){
 		if(symb instanceof ListDefinition){
-			if((symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT) == ListDefinitionProvider::DISCRETE_OBS_VALUE){
-				val distnExpr =  (symb as ListDefinition).list.getAttributeExpression('distn')
-				distnExpr instanceof BuiltinFunctionCall && (distnExpr as BuiltinFunctionCall).func == 'Bernoulli'
-			}
+			(symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT) == ListDefinitionProvider::DISCRETE_OBS_VALUE
 		}
 		else false
 	}
@@ -508,10 +505,8 @@ class ModellingStepsPrinter {
 					<ColumnMapping>
 						<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
 							«mdlObsSymb.symbolReference»
-							«IF mdlObsSymb.isCategoricalObs»
+							«IF mdlObsSymb.isCategoricalObs || mdlObsSymb.isDiscreteObs»
 								«printCategoricalObsMapping(dataDefine)»
-«««							«ELSEIF mdlObsSymb.isDiscreteBernoulliObs»
-«««								«printDiscreteBernoulliObsMapping»
 							«ENDIF»
 					</ColumnMapping>
 				«ENDIF»
