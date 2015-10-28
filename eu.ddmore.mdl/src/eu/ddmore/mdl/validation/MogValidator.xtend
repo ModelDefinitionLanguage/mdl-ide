@@ -174,10 +174,10 @@ class MogValidator {
 			if(mdlStmt instanceof SymbolDefinition){
 				val parStmt = paramObj.findMdlSymbolDefn(mdlStmt.name)
 				if(parStmt == null){
-					errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "parameter " + mdlStmt.name +" has no match in parObj");
+					errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "parameter '" + mdlStmt.name +"' has no match in parObj");
 				}
 				else if(!mdlStmt.typeFor.isCompatible(parStmt.typeFor)){
-					errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "parameter " + parStmt.name +" has an inconsistent type with its match in the parObj");
+					errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "parameter '" + parStmt.name +"' has an inconsistent type with its match in the parObj");
 				}
 			}
 		}

@@ -1806,8 +1806,8 @@ class MogValidatorTest {
 		}
 		p1 = parObj{
 			STRUCTURAL{
-				POP_CL = 1
-				POP_V = 2
+				POP_CL : {value= 1}
+				POP_V : { value = 2 }
 			}
 		}
 		
@@ -1864,7 +1864,7 @@ class MogValidatorTest {
 		}
 		p1 = parObj{
 			STRUCTURAL{
-				POP_CL = 1
+				POP_CL : { value= 1}
 			}
 		}
 		
@@ -1886,7 +1886,7 @@ class MogValidatorTest {
 	
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
 			MdlValidator::MODEL_DATA_MISMATCH,
-			"dosing variable Y has no match in mdlObj")
+			"parameter 'POP_V' has no match in parObj")
 	}
 
 	@Test
@@ -1923,11 +1923,11 @@ class MogValidatorTest {
 		}
 		p1 = parObj{
 			VARIABILITY{
-				POP_V = 2
+				POP_V : { value = 2, type is sd }
 			}
 			
 			STRUCTURAL{
-				POP_CL = 1
+				POP_CL: { value = 1 }
 			}
 		}
 		
@@ -1990,8 +1990,8 @@ class MogValidatorTest {
 			}
 			
 			STRUCTURAL{
-				POP_CL = 1
-				POP_V = 2
+				POP_CL: { value = 1 }
+				POP_V : { value = 2 }
 			}
 		}
 		
@@ -2051,8 +2051,8 @@ class MogValidatorTest {
 		}
 		p1 = parObj{
 			VARIABILITY{
-				POP_CL = 1
-				POP_V = 2
+				POP_CL: { value = 1, type is sd }
+				POP_V : { value = 2, type is sd }
 			}
 		}
 		
@@ -2109,7 +2109,7 @@ class MogValidatorTest {
 		}
 		p1 = parObj{
 			STRUCTURAL{
-				POP_CL = 1
+				POP_CL: { value = 1 }
 			}
 		}
 		
@@ -2168,11 +2168,11 @@ class MogValidatorTest {
 		}
 		p1 = parObj{
 			VARIABILITY{
-				POP_V = 2
+				POP_V : { value = 2, type is sd }
 			}
 			
 			STRUCTURAL{
-				POP_CL = 1
+				POP_CL : { value = 1 }
 			}
 		}
 		
@@ -2193,8 +2193,8 @@ class MogValidatorTest {
 		'''.parse
 	
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
-			MdlValidator::MODEL_DATA_MISMATCH,
-			"dosing variable Y has no match in mdlObj")
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"parameter 'POP_CL' is inconsistent match in the parObj, which is structural parameter")
 	}
 
 	@Test
@@ -2231,8 +2231,8 @@ class MogValidatorTest {
 		}
 		p1 = parObj{
 			VARIABILITY{
-				POP_CL = 1
-				POP_V = 2
+				POP_CL: { value = 1, type is sd }
+				POP_V : { value = 2, type is sd }
 			}
 			
 			STRUCTURAL{
