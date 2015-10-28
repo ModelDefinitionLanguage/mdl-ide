@@ -124,6 +124,10 @@ class MdlValidator extends AbstractMdlValidator {
 	// MOG validation
 	public static val MODEL_DATA_MISMATCH = "eu.ddmore.mdl.validation.mog.mismatch_mod_data"
 
+	// Warnings
+	public static val MASKING_PARAM_ASSIGNMENT = "eu.ddmore.mdl.validation.mog.paramValueMasked"
+
+
 	private static val VALID_OBJECT_TYPES = #[ MDLOBJ, PARAMOBJ, TASKOBJ, DATAOBJ, MOGOBJ, DESIGNOBJ ]
 
 	def void setFoo(){}
@@ -586,9 +590,19 @@ class MdlValidator extends AbstractMdlValidator {
 				mogValidator.validateDosing[
 					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
 				]
-				mogValidator.validateStructuralParameters[
+				mogValidator.validateStructuralParameters([
 					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				],
+				[
+					warningCode, errMsg| warning(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, warningCode, '')
 				]
+				) 
+				mogValidator.validateVariabilityParameters([
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				],
+				[
+					warningCode, errMsg| warning(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, warningCode, '')
+				])
 			}
 		}
 	}
