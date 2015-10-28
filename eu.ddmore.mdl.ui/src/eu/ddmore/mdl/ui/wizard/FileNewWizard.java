@@ -128,9 +128,11 @@ public class FileNewWizard extends Wizard implements INewWizard {
 	 */
 
 	private InputStream openContentStream() {
-		String contents =
-			"# New drug model";
-		return new ByteArrayInputStream(contents.getBytes());
+		InputStream retVal = this.getClass().getResourceAsStream("NewFileTemplate.mdl");
+		return retVal;
+//		String contents =
+//			"# New drug model";
+//		return new ByteArrayInputStream(contents.getBytes());
 	}
 
 	private void throwCoreException(String message) throws CoreException {
