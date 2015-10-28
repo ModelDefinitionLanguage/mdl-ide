@@ -14,6 +14,7 @@ import java.util.ArrayList
 import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.mdl.Statement
 
 class MogValidator {
 
@@ -83,6 +84,7 @@ class MogValidator {
 	// 8a) Dosing variables in the model must have type non-vector REAL.
 	// 9) All symbols in the model should be initialised at the end of assembly 
 	// 10) Dosing time match to a variable in model prediction
+	// 11) Check that eta in par object are defined in model. 
 	 
 	def validateCovariates((String, String) => void errorLambda){
 		val expectedMdlCovars = new ArrayList<SymbolDefinition>
@@ -166,5 +168,19 @@ class MogValidator {
 		}
 	}
 	
+	
+	def validateStructuralParameters((String, String) => void errorLambda){
+		for(mdlStmt : mdlObj.mdlStructuralParameters){
+			if(mdlStmt instanceof SymbolDefinition){
+				val parStmt = paramObj.findMdlSymbolDefn(mdlStmt.name)
+				if(parStmt == null){
+					errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "parameter " + mdlStmt.name +" has no match in parObj");
+				}
+				else if(!mdlStmt.typeFor.isCompatible(parStmt.typeFor)){
+					errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "parameter " + parStmt.name +" has an inconsistent type with its match in the parObj");
+				}
+			}
+		}
+	}
 	
 }

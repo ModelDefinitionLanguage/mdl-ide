@@ -586,6 +586,9 @@ class MdlValidator extends AbstractMdlValidator {
 				mogValidator.validateDosing[
 					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
 				]
+				mogValidator.validateStructuralParameters[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
 			}
 		}
 	}

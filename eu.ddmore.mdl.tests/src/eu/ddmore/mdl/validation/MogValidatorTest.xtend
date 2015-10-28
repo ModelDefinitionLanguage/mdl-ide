@@ -1772,4 +1772,492 @@ class MogValidatorTest {
 	}
 
 	
+	@Test
+	def void testValidModelStructParamMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			STRUCTURAL{
+				POP_CL = 1
+				POP_V = 2
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidModelStructParamMatchMissingParamMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			STRUCTURAL{
+				POP_CL = 1
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"dosing variable Y has no match in mdlObj")
+	}
+
+	@Test
+	def void testInvalidModelStructParamMatchWrongParamBlockMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+				POP_V = 2
+			}
+			
+			STRUCTURAL{
+				POP_CL = 1
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"dosing variable Y has no match in mdlObj")
+	}
+
+
+	@Test
+	def void testValidWithWarningMogModelStructParamMatchMaskedAssignmentinMdl(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL = 1
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+			}
+			
+			STRUCTURAL{
+				POP_CL = 1
+				POP_V = 2
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"dosing variable Y has no match in mdlObj")
+	}
+
+	@Test
+	def void testValidModelVarParamMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				VARIABILITY_PARAMETERS { 
+					POP_CL
+					POP_V
+				} 
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+				POP_CL = 1
+				POP_V = 2
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidModelStructVarMatchMissingParamMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				VARIABILITY_PARAMETERS { 
+					POP_CL
+					POP_V
+				} 
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			STRUCTURAL{
+				POP_CL = 1
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"dosing variable Y has no match in mdlObj")
+	}
+
+	@Test
+	def void testInvalidModelVarParamMatchWrongParamBlockMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				VARIABILITY_PARAMETERS { 
+					POP_CL
+					POP_V
+				} 
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+				POP_V = 2
+			}
+			
+			STRUCTURAL{
+				POP_CL = 1
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"dosing variable Y has no match in mdlObj")
+	}
+
+	@Test
+	def void testValidWithWarningMogModelVarParamMatchMaskedAssignmentinMdl(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				VARIABILITY_PARAMETERS { 
+					POP_CL = 1
+					POP_V
+				} 
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+				POP_CL = 1
+				POP_V = 2
+			}
+			
+			STRUCTURAL{
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"dosing variable Y has no match in mdlObj")
+	}
 }

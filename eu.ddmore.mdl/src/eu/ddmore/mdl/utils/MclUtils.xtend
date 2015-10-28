@@ -212,6 +212,22 @@ class MclUtils {
 		retVal
 	}	
 	
+	def getMdlStructuralParameters(MclObject it){
+		val retVal = new ArrayList<Statement>
+		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_STRUCT_PARAMS]){
+			retVal.addAll(stmt.nonBlockStatements)
+		}
+		retVal
+	}
+	
+	def getParamStructuralParameters(MclObject it){
+		val retVal = new ArrayList<Statement>
+		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_STRUCT_BLK]){
+			retVal.addAll(stmt.nonBlockStatements)
+		}
+		retVal
+	}
+	
 	def getModelPredictionBlocks(MclObject it){
 		blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]
 	}
