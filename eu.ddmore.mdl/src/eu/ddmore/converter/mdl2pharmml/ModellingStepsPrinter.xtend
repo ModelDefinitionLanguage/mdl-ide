@@ -703,7 +703,8 @@ class ModellingStepsPrinter {
 				case(ListDefinitionProvider::CATCOV_USE_VALUE):
 					if(isColumnMapped(column.name)) convertEnum(columnType, dosingToCompartmentMacro, !column.isCovUsedInIndivParams(mObj)) else "undefined"
 				default:
-					if(isColumnMapped(column.name)) convertEnum(columnType, dosingToCompartmentMacro, false) else 'undefined'
+//					if(isColumnMapped(column.name)) convertEnum(columnType, dosingToCompartmentMacro, false) else 'undefined'
+					convertEnum(columnType, dosingToCompartmentMacro, false)
 			}
 			val valueType = column.getValueType
 			res = res +
