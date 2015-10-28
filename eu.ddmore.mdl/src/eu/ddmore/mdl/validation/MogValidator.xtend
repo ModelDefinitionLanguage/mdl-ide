@@ -35,7 +35,12 @@ class MogValidator {
 		
 	}
 	
-	def getMdlObjectOfType(MclObject obj, String mdlType){
+	static def findMdlObject(MclObject obj, String name, String mdlType){
+		val mcl = EcoreUtil2.getContainerOfType(obj, Mcl)
+		mcl.objects.findFirst[mdlObjType == mdlType && it.name == name]
+	}
+
+	static def getMdlObjectOfType(MclObject obj, String mdlType){
 		val mcl = EcoreUtil2.getContainerOfType(obj, Mcl)
 		mcl.objects.findFirst[mdlObjType == mdlType]
 	}

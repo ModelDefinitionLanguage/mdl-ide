@@ -90,7 +90,7 @@ warfarin_T2E_exact_task = taskObj{
 
 warfarin_T2E_exact_mog = mogObj {
 	OBJECTS{
-		warfarin_T2E_exact_dat : { type is dataObj }
+		warfarin_T2E_interval_dat : { type is dataObj }
 		warfarin_T2E_exact_mdl : { type is mdlObj }
 		warfarin_T2E_exact_par : { type is parObj }
 		warfarin_T2E_exact_task : { type is taskObj }

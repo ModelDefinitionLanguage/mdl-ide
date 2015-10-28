@@ -123,6 +123,7 @@ class MdlValidator extends AbstractMdlValidator {
 
 	// MOG validation
 	public static val MODEL_DATA_MISMATCH = "eu.ddmore.mdl.validation.mog.mismatch_mod_data"
+	public static val MCLOBJ_REF_UNRESOLVED = "eu.ddmore.mdl.validation.mog.missingObj"
 
 	// Warnings
 	public static val MASKING_PARAM_ASSIGNMENT = "eu.ddmore.mdl.validation.mog.paramValueMasked"
@@ -569,11 +570,24 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 	
 	@Check
+	def validateObjectReferenceInMog(ListDefinition it){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		if(blk?.identifier == BlockDefinitionProvider::MOG_OBJ_NAME){
+			val mogObj = EcoreUtil2.getContainerOfType(eContainer, MclObject)
+			val objType = list.getAttributeEnumValue('type')
+			if(MogValidator::findMdlObject(mogObj, name, objType) == null){
+				error("the object '" + name + "' cannot be found",
+						MdlPackage.eINSTANCE.symbolDefinition_Name, MCLOBJ_REF_UNRESOLVED, name)
+			}
+		}
+	}
+	
+	@Check
 	def validateMog(MclObject mogObj){
 		if(mogObj.isMogObject){
 			val mogValidator = new MogValidator
 			mogValidator.buildMog(mogObj)
-			if(mogValidator.mdlObj != null && mogValidator.dataObj != null){
+			if(mogValidator.mdlObj != null && mogValidator.dataObj != null && mogValidator.paramObj != null && mogValidator.taskObj != null){
 				// assume has a data obj and mdl obj
 				mogValidator.validateCovariates[
 					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')

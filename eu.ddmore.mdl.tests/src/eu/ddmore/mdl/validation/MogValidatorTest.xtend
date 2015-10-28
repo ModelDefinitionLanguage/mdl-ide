@@ -149,10 +149,22 @@ class MogValidatorTest {
 					logWT
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -279,10 +291,22 @@ class MogValidatorTest {
 					SEX
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -319,6 +343,24 @@ class MogValidatorTest {
 				COVARIATES{
 					SEX withCategories{male, fem}
 				}
+		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
 		}
 				mog = mogObj{
 			OBJECTS{
@@ -2375,4 +2417,66 @@ class MogValidatorTest {
 			MdlValidator::MASKING_PARAM_ASSIGNMENT,
 			"value assigned to parameter 'POP_CL' in mdlObj is overridden by value in parObj")
 	}
+	
+		@Test
+	def void testInvalidDanglingObjectRefMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat, 
+			    		ignore = "#" } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			STRUCTURAL{
+				POP_CL : {value= 1}
+				POP_V : { value = 2 }
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				missing : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::MCLOBJ_REF_UNRESOLVED,
+			"the object 'missing' cannot be found")
+	}
+
+	
 }
