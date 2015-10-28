@@ -290,4 +290,21 @@ class MclStatementValidationTest {
 			Diagnostic::SYNTAX_DIAGNOSTIC)
 	}
 
+	@Test
+	def void testInValidVectorDefinition(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo[]
+			}# end MODEL_PREDICTION
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+			MdlValidator::UNSUPPORTED_FEATURE, "Vector symbol definitions are not supported in this version of the language")
+	}
+
 }

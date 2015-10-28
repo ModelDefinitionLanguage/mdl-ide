@@ -471,7 +471,7 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-		mcl.assertNoErrors
+		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition, MdlValidator::UNSUPPORTED_FEATURE)
 	}
 	
 	@Test

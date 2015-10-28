@@ -76,6 +76,7 @@ class MdlValidator extends AbstractMdlValidator {
 	extension MclUtils mclUtils = new MclUtils
 
 	public static val UNRECOGNISED_OBJECT_TYPE = "eu.ddmore.mdl.validation.UnrecognisedObjectType"
+	public static val UNSUPPORTED_FEATURE = "eu.ddmore.mdl.validation.UnsupportedFeature"
 
 	// Block arguments validation
 	public static val UNKNOWN_BLOCK_ARG_DECL = "eu.ddmore.mdl.validation.UnknownBlockArgDecl"
@@ -552,6 +553,14 @@ class MdlValidator extends AbstractMdlValidator {
 		else if(e.isMappingForbidden && e.mappedTo != null){
 			error("A category definition cannot have a mapping in this context.",
 					MdlPackage.eINSTANCE.categoryValueDefinition_Name, INCORRECT_LIST_CONTEXT, e.name)
+		}
+	}
+	
+	@Check
+	def validateNoVectorDefinitions(EquationDefinition it){
+		if(isVector){
+			error("Vector symbol definitions are not supported in this version of the language.",
+					MdlPackage.eINSTANCE.equationDefinition_Vector, UNSUPPORTED_FEATURE, name)
 		}
 	}
 	
