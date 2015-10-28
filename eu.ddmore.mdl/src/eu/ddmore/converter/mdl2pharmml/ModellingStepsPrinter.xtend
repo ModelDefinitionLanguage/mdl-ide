@@ -31,6 +31,7 @@ import eu.ddmore.mdl.mdl.CatValRefMappingExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.validation.PropertyDefinitionProvider
 import eu.ddmore.mdl.mdl.MdlFactory
+import eu.ddmore.mdl.mdl.EquationDefinition
 
 class ModellingStepsPrinter { 
 	
@@ -722,7 +723,15 @@ class ModellingStepsPrinter {
 	}
 	
 	def isCovariateUsedInModel(ListDefinition col, MclObject mdlObj){
-		mdlObj.mdlCovariateDefns.exists[name == col.name]
+		for(mCov : mdlObj.mdlCovariateDefns){
+			switch(mCov){
+				EquationDefinition case(mCov.name == col.name):
+					return mCov.expression == null
+				SymbolDefinition case(mCov.name == col.name):
+					return true
+			}
+		}
+		false
 	}
 	
 	
