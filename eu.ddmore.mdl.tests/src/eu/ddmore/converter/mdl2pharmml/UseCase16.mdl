@@ -240,13 +240,13 @@ Hansson2013_mdl = mdlObj{
    }
 
    OBSERVATION{
-      LNVEGF_obs = combinedError2(trans is ln, additive=0, proportional=POP_RES_VEGF_PROP, prediction=VEGF, eps=eps_RES_W)
+      ln(LNVEGF_obs) = combinedError2(trans is ln, additive=0, proportional=POP_RES_VEGF_PROP, prediction=VEGF, eps=eps_RES_W)
       
-      LNsVEGFR2_obs = combinedError2(trans is ln, additive=POP_RES_sVEGFR2_ADD, proportional=POP_RES_sVEGFR2_PROP, prediction=sVEGFR2, eps=eps_RES_W)
+      ln(LNsVEGFR2_obs) = combinedError2(trans is ln, additive=POP_RES_sVEGFR2_ADD, proportional=POP_RES_sVEGFR2_PROP, prediction=sVEGFR2, eps=eps_RES_W)
 
-      LNsVEGFR3_obs = combinedError2(trans is ln, additive=0, proportional=POP_RES_sVEGFR3_PROP, prediction=sVEGFR3, eps=eps_RES_W)
+      ln(LNsVEGFR3_obs) = combinedError2(trans is ln, additive=0, proportional=POP_RES_sVEGFR3_PROP, prediction=sVEGFR3, eps=eps_RES_W)
   	  
-       LNsKIT_obs = combinedError2(trans is ln, additive=0, proportional=POP_RES_sKIT_PROP, prediction=sKIT, eps=eps_RES_W)
+       ln(LNsKIT_obs) = combinedError2(trans is ln, additive=0, proportional=POP_RES_sKIT_PROP, prediction=sKIT, eps=eps_RES_W)
    }# end OBSERVATION
 
 } # end of model object

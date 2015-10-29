@@ -197,20 +197,74 @@ class MclUtils {
 	}
 
 	def getMdlPredictionVariables(MclObject it){
-		val retVal = new ArrayList<Statement>
-		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]){
-			retVal.addAll(stmt.nonBlockStatements)
-		}
-		retVal
+		getStatementsInBlock(BlockDefinitionProvider::MDL_PRED_BLK_NAME)
+//		val retVal = new ArrayList<Statement>
+//		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]){
+//			retVal.addAll(stmt.nonBlockStatements)
+//		}
+//		retVal
 	}	
 	
 	def getMdlIndvParams(MclObject it){
+		getStatementsInBlock(BlockDefinitionProvider::MDL_INDIV_PARAMS)
+//		val retVal = new ArrayList<Statement>
+//		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS]){
+//			retVal.addAll(stmt.nonBlockStatements)
+//		}
+//		retVal
+	}	
+	
+	def getMdlStructuralParameters(MclObject it){
+		getStatementsInBlock(BlockDefinitionProvider::MDL_STRUCT_PARAMS)
+//		val retVal = new ArrayList<Statement>
+//		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_STRUCT_PARAMS]){
+//			retVal.addAll(stmt.nonBlockStatements)
+//		}
+//		retVal
+	}
+	
+	def getMdlVariabilityParameters(MclObject it){
+		getStatementsInBlock(BlockDefinitionProvider::MDL_VAR_PARAMS)
+//		val retVal = new ArrayList<Statement>
+//		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_VAR_PARAMS]){
+//			retVal.addAll(stmt.nonBlockStatements)
+//		}
+//		retVal
+	}
+	
+	private def getStatementsInBlock(MclObject it, String blkName){
 		val retVal = new ArrayList<Statement>
-		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS]){
+		for(stmt : blocks.filter[identifier == blkName]){
 			retVal.addAll(stmt.nonBlockStatements)
 		}
 		retVal
-	}	
+	}
+	
+	def getParamVariabilityParameters(MclObject it){
+		getStatementsInBlock(BlockDefinitionProvider::PARAM_VARIABILITY_BLK)
+	}
+	
+	def isParVariabilityParam(Statement it){
+		isParentBlockAsNamed(BlockDefinitionProvider::PARAM_VARIABILITY_BLK)
+	}
+
+	def isParStructuralParam(Statement it){
+		isParentBlockAsNamed(BlockDefinitionProvider::PARAM_STRUCT_BLK)
+	}
+
+	private def isParentBlockAsNamed(Statement it, String name){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		blk?.identifier == name
+	}
+
+	def getParamStructuralParameters(MclObject it){
+		getStatementsInBlock(BlockDefinitionProvider::PARAM_STRUCT_BLK)
+//		val retVal = new ArrayList<Statement>
+//		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_STRUCT_BLK]){
+//			retVal.addAll(stmt.nonBlockStatements)
+//		}
+//		retVal
+	}
 	
 	def getModelPredictionBlocks(MclObject it){
 		blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]

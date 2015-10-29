@@ -6,6 +6,7 @@ import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import java.util.HashSet
+import eu.ddmore.mdl.mdl.EquationTypeDefinition
 
 class FunctionDefinitionPrinter {
 
@@ -251,7 +252,7 @@ class FunctionDefinitionPrinter {
 		'''
 			«FOR o: mdlObservations»
 				«switch(o){
-					EquationDefinition:{
+					EquationTypeDefinition:{
 						val rhsExpr = o.expression
 						switch(rhsExpr){
 							BuiltinFunctionCall:

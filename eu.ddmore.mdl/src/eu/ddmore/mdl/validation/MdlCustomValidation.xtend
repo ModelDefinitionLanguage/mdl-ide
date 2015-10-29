@@ -16,7 +16,7 @@ class MdlCustomValidation {
 		val call = EcoreUtil2.getContainerOfType(transArg.eContainer, BuiltinFunctionCall)
 		if(call != null && transDefn != null && transArg.argumentName == 'trans'){
 			val transExpr = transArg.expression
-			if(transExpr != null && isValidTransformFunction(transExpr.convertToString) && call.func == 'linear'){
+			if(transExpr != null && isValidTransformFunction(transExpr.convertToString) && transOnBothFuncs.contains(call.func)){
 				incompatibleTransforms.apply
 			}
 		}
