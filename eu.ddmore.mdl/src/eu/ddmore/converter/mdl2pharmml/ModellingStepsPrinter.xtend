@@ -650,7 +650,22 @@ class ModellingStepsPrinter {
 
 	def boolean isCovariateUsedInSublist(SubListExpression it, String covName){
 		val cov = getAttributeExpression('cov') as SymbolReference
-		cov != null && cov.ref.name == covName
+		var retVal = false
+		if(cov != null){
+			val covDefn = cov.ref
+			if(covDefn instanceof EquationDefinition){
+				if(covDefn.expression == null && covDefn.name == covName){
+					retVal = true
+				}
+				else if(covDefn.expression != null){
+					// this is a transformed cov so let's see if any dependencies match
+					for(depCov : covDefn.expression.covariateDependencies){
+						if(depCov.name == covName) return true
+					}
+				}
+			}
+		}
+		retVal
 	}
 
 	def boolean isCatCovUsedInSublist(SubListExpression it, String covName){
@@ -665,7 +680,7 @@ class ModellingStepsPrinter {
 				EquationTypeDefinition:{
 					if(stmt.expression instanceof BuiltinFunctionCall){
 						val funcExpr = stmt.expression as BuiltinFunctionCall
-						if(funcExpr.func == 'linear' || funcExpr.func == 'general'){
+						if(funcExpr.func == 'linear'){
 							var namedArgList = funcExpr.argList as NamedFuncArguments 
 							val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
 							if(fixEff != null && !fixEff.expressions.isEmpty){
