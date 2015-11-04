@@ -20,6 +20,7 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdl.mdl.ElseClause
 
 public class MdlExpressionConverter extends ExpressionConverter {
 	
@@ -78,6 +79,9 @@ public class MdlExpressionConverter extends ExpressionConverter {
 	
 	def dispatch String getString(ElifClause exp)'''
 		if («exp.cond.getString») then «exp.value.getString»'''
+
+	def dispatch String getString(ElseClause exp)'''
+		«exp.other.getString»'''
 
 	def dispatch String getString(VectorLiteral exp)'''
 		[«FOR e : exp.expressions SEPARATOR ','»«e.getString»«ENDFOR»]'''

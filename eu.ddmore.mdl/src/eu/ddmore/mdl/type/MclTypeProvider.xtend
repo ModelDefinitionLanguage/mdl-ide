@@ -459,6 +459,7 @@ public class MclTypeProvider {
 		ep.orExpression -> BOOL_TYPE,
 		ep.additiveExpression -> REAL_TYPE,
 		ep.multiplicativeExpression -> REAL_TYPE,
+		ep.powerExpression -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,
 		ep.randomVariableDefinition -> REAL_TYPE,
 		ep.forwardDeclaration -> REAL_TYPE,

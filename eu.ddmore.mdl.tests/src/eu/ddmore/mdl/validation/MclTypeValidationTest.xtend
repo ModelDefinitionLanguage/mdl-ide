@@ -1297,5 +1297,65 @@ warfarin_PK_v2_dat = dataObj{
 			"Expected ref:Real type, but was Int."
 		)
 	}
-	
+
+	@Test
+	def void testInValidIncompatibleElseExpression(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			INDIVIDUAL_VARIABLES{
+				BSA = if(true) then 1.0 else false
+			}
+			
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.elseClause,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was Boolean."
+		)
+	}
+
+	@Test
+	def void testInValidIncompatibleIfElseExpression(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			INDIVIDUAL_VARIABLES{
+				BSA = if(true) then 1.0 elseif(false) then false else 2.0
+			}
+			
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.elifClause,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was Boolean."
+		)
+	}
+
+	@Test
+	def void testInValidIncompatibleIfExpression(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			INDIVIDUAL_VARIABLES{
+				BSA = if(true) then true elseif(false) then 3.0 else 2.0
+			}
+			
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.whenClause,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was Boolean."
+		)
+	}
+
 }

@@ -50,6 +50,9 @@ import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.BlockTextBody
+import eu.ddmore.mdl.mdl.IfExprPart
+import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.ElseClause
 
 //import org.eclipse.xtext.validation.Check
 
@@ -423,10 +426,16 @@ class MdlValidator extends AbstractMdlValidator {
 	}
 		
 	@Check
-	def validateCompatibleTypes(WhenClause e){
+	def validateCompatibleTypes(IfExprPart e){
 		checkExpectedBoolean(e.cond, typeError(MdlPackage::eINSTANCE.ifExprPart_Cond))
 		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.ifExprPart_Value))
 	}
+		
+	@Check
+	def checkElseCompatibleTypes(ElseClause e){
+		checkExpectedReal(e.other, typeError(MdlPackage::eINSTANCE.elseClause_Other))
+	}
+		
 		
 	@Check
 	def validateCompatibleTypes(MappingPair e){

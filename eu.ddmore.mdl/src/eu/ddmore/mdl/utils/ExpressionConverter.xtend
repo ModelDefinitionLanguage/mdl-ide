@@ -24,6 +24,7 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
 import org.eclipse.emf.ecore.EObject
+import eu.ddmore.mdl.mdl.PowerExpression
 
 public class ExpressionConverter {
 
@@ -71,6 +72,10 @@ public class ExpressionConverter {
 	}
 	
 	def dispatch String getString(MultiplicativeExpression exp){
+		exp.leftOperand.getString + (exp.feature ?: "") + exp.rightOperand?.getString
+	}
+	
+	def dispatch String getString(PowerExpression exp){
 		exp.leftOperand.getString + (exp.feature ?: "") + exp.rightOperand?.getString
 	}
 	

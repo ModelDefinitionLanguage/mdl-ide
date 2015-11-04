@@ -192,10 +192,16 @@ OpAdd:
 	'+' | '-';
 
 MultiplicativeExpression returns Expression:
-	UnaryExpression (=>({MultiplicativeExpression.leftOperand=current} feature=OpMulti) rightOperand=UnaryExpression)*;
+	PowerExpression (=>({MultiplicativeExpression.leftOperand=current} feature=OpMulti) rightOperand=PowerExpression)*;
 
 OpMulti:
-	'*' | '^' | '/' | '%';
+	'*' | '/' | '%';
+
+PowerExpression returns Expression:
+	UnaryExpression (=>({PowerExpression.leftOperand=current} feature=OpPow) rightOperand=UnaryExpression)*;
+
+OpPow:
+	'^';
 
 UnaryExpression returns Expression:
 	{UnaryExpression} feature=OpUnary operand=PrimaryExpression
@@ -226,7 +232,8 @@ WhenExpression returns Expression:
 	 {WhenExpression}
 	 	when+=WhenClause
 	 	(=> when+=ElifClause)*
-		(=>ELSE other=Expression)?
+		(=>other=ElseClause)?
+//		(=>ELSE other=Expression)?
 	;
 
 IfExprPart:
@@ -239,6 +246,10 @@ WhenClause returns IfExprPart:
 
 ElifClause returns IfExprPart:
 	{ElifClause} ELSEIF '(' cond=Expression ')' => THEN value=Expression
+;
+
+ElseClause:
+	{ElseClause} ELSE other=Expression
 ;
 
 Literal returns Expression:

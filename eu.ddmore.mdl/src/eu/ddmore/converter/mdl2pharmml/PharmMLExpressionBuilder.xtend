@@ -31,6 +31,7 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.PowerExpression
 
 class PharmMLExpressionBuilder {
 	
@@ -132,6 +133,9 @@ class PharmMLExpressionBuilder {
     		}
     		MultiplicativeExpression:{
     			getMultiplicativeExpression(expr)
+    		}
+    		PowerExpression:{
+    			getPowerExpression(expr)
     		}
     		UnaryExpression:{
     			getUnaryExpression(expr)
@@ -255,6 +259,10 @@ class PharmMLExpressionBuilder {
 		getBinaryOperator(feature, leftOperand, rightOperand)
 	}
 	
+	def getPowerExpression(PowerExpression it){
+		getBinaryOperator(feature, leftOperand, rightOperand)
+	}
+	
 	def getAdditiveExpression(AdditiveExpression it){
 		getBinaryOperator(feature, leftOperand, rightOperand)
 	}
@@ -297,7 +305,7 @@ class PharmMLExpressionBuilder {
 			«ENDFOR»
 			«IF other != null»
 				<math:Piece>
-					«other.pharmMLExpr»
+					«other.other.pharmMLExpr»
 					<math:Condition>
 						<math:Otherwise/>
 					</math:Condition>
