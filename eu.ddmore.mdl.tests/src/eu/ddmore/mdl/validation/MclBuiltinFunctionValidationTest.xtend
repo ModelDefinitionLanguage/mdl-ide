@@ -37,6 +37,48 @@ class MclBuiltinFunctionValidationTest {
 	}
 
 	@Test
+	def void testValidMaxFunction(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			
+			COVARIATES{
+				sd
+				Rp1
+				th1
+				alpha
+				other
+		        kspow = max(0, sd/Rp1-th1)^alpha       # nmol/mL/day
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidMinFunction(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			
+			COVARIATES{
+				sd
+				Rp1
+				th1
+				alpha
+				other
+		        kspow = min(0, sd/Rp1-th1)^alpha       # nmol/mL/day
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
 	def void testFunctionWithNoArgs(){
 		val mcl = '''bar = mdlObj {
 			COVARIATES{

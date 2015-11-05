@@ -103,9 +103,9 @@ drugX_delAbs_1occ_v1_mdl = mdlObj{
       kel = CL/Vc
       ktr = (n+1)/MTT
       Dose = if (AMT>0) then AMT else 0# to be checked with the dataset!!!!!!!!!!!!!!!!!!!!!!!!!!
-	  #LNFAC = ln(2.5066)+(n+0.5)*ln(n)-n
-	  #F1 = 0
-	  #if (AMT>0) Dose  =  AMT	
+      
+      amin = min(Dose, n) # for testing purposes
+      amax = max(Dose, n) # for testing purposes
    }# end INDIVIDUAL_VARIABLES
 
    MODEL_PREDICTION{
