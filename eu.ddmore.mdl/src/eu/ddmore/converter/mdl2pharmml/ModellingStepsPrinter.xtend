@@ -703,6 +703,11 @@ class ModellingStepsPrinter {
 		false
 	}
 	
+	def getIgnoreLineSymbol(MclObject dObj){
+		val s = dObj.getDataSourceStmt
+		s.list.getAttributeExpression('ignore')?.convertToString
+	}
+	
 	def print_ds_DataSet(MclObject dObj, MclObject mObj) {
 		var res = "";
 		var k = 1;
@@ -728,10 +733,14 @@ class ModellingStepsPrinter {
 				'''
 			k = k + 1;
 		}
+		val ignoreLineSymb = dObj.ignoreLineSymbol
 		return '''
 			<DataSet xmlns="«xmlns_ds»">
 				<Definition>
 					«res»
+					«IF ignoreLineSymb != null»
+						<IgnoreLine symbol="«ignoreLineSymb»"/>
+					«ENDIF»
 				</Definition>
 				«dObj.print_ds_ExternalFile»
 			</DataSet>
@@ -835,6 +844,7 @@ class ModellingStepsPrinter {
 			case("saem"): "SAEM"
 			case("foce"): "FOCE"
 			case("fo"): "FO"
+			case("focei"): "FOCEI"
 			default: "ERROR!"
 		}
 	}

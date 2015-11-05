@@ -14,7 +14,6 @@ import java.util.List
 import java.util.Map
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import eu.ddmore.mdl.mdl.Statement
 
@@ -23,7 +22,7 @@ class PropertyDefinitionProvider {
 //	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'monolix', 'nonmem' })
 //	static val TARGET_ATT = new AttributeDefn('target', null, true, TARGET_TYPE)
 //	static val VERSION_ATT = new AttributeDefn('version', null, false, MclTypeProvider::STRING_TYPE)
-	static val ALGO_TYPE = new BuiltinEnumTypeInfo('estAlgo', #{'saem', 'foce', 'fo'})
+	static val ALGO_TYPE = new BuiltinEnumTypeInfo('estAlgo', #{'saem', 'foce', 'fo', 'focei'})
 	static val ALGO_ATT = new AttributeDefn('algo', true, ALGO_TYPE)
 //	static val EST_OP_TYPE = new BuiltinEnumTypeInfo('estOp', #{'fim', 'estPop', 'estIndiv' })
 //	static val EST_OP_ATT = new AttributeDefn('operation', null, false, EST_OP_TYPE)
@@ -58,7 +57,7 @@ class PropertyDefinitionProvider {
 	def getTypeOfPropertyBuiltinEnum(EnumExpression ee){
 		val blockName = ee.owningBlock.identifier
 		val vp = ee.getOwningValuePair
-		val enumValue = ee.convertToString
+		val enumValue = ee.enumValue
 		val defnType = propertyDefns.get(blockName)?.findFirst[AttributeDefn p | p.name == vp.argumentName]?.attType ?: MclTypeProvider::UNDEFINED_TYPE
 		switch(defnType){
 			BuiltinEnumTypeInfo:

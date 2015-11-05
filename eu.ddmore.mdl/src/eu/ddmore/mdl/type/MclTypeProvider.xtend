@@ -556,10 +556,12 @@ public class MclTypeProvider {
 			case('+'),
 			case('-'):{
 				val operandType = operand?.typeFor.underlyingType
-				if(operandType == INT_TYPE)
-					INT_TYPE
-				else if(operandType == REAL_TYPE)
-					REAL_TYPE
+//				if(operandType == INT_TYPE)
+//					INT_TYPE
+//				else if(operandType == REAL_TYPE)
+//					REAL_TYPE
+				if(operandType.isCompatible(INT_TYPE)) return INT_TYPE
+				else if(operandType.isCompatible(REAL_TYPE)) return REAL_TYPE
 				else UNDEFINED_TYPE
 			}
 			default:

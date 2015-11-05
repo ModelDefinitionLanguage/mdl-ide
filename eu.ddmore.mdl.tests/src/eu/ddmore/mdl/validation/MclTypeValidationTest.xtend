@@ -88,6 +88,51 @@ class MclTypeValidationTest {
 	}
 	
 	@Test
+	def void testValidWithNegativeDerivExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				DEQ{
+					B : { deriv = -C, init = 33 }
+					C : { deriv = 1, init = 33 }
+				}
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidWithSelfRefereingDerivExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				DEQ{
+					B : { deriv = B, init = 33 }
+				}
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
 	def void testInValidWithVarLvlExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {

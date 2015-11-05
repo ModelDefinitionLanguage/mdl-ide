@@ -95,6 +95,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val MANDATORY_LIST_KEY_ATT_MISSING = "eu.ddmore.mdl.validation.MandatoryKeyAttributeMissing"
 	public static val LIST_NOT_ANONYMOUS = "eu.ddmore.mdl.validation.ListNotAnonymous"
 	public static val LIST_NOT_NAMED = "eu.ddmore.mdl.validation.ListNotNamed"
+	public static val DUPLICATE_ATTRIBUTE_NAME = "eu.ddmore.mdl.validation.DuplicateArgumentName"
 
 	// Builtin Function validation
 	public static val UNRECOGNIZED_FUNCTION_NAME = "eu.ddmore.mdl.validation.function.named.UnrecognisedFunctionName"
@@ -575,6 +576,17 @@ class MdlValidator extends AbstractMdlValidator {
 		if(isVector){
 			error("Vector symbol definitions are not supported in this version of the language.",
 					MdlPackage.eINSTANCE.equationDefinition_Vector, UNSUPPORTED_FEATURE, name)
+		}
+	}
+	
+	
+	@Check
+	def validateDuplicateAttributes(ValuePair it){
+		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
+		if(attList.isAttributeDuplicated(it)){
+			error("List attribute '" + argumentName + "' is used more than once.",
+				MdlPackage.eINSTANCE.valuePair_ArgumentName, DUPLICATE_ATTRIBUTE_NAME, argumentName
+			)
 		}
 	}
 	

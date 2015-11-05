@@ -13,12 +13,12 @@ UC001_08_Holford_PK_DEQ_gen2Cov_libErr_Tlag_dat = dataObj{
 
    DATA_INPUT_VARIABLES{
       ID: {use is id}
-      TIME: {use is idv, use is covariate}
+      TIME: {use is idv}
       WT: {use is covariate}
       AMT: {use is amt, variable=GUT}
-      DVID: {use is dvid, use is covariate}
+      DVID: {use is dvid}
       DV: {use is dv, variable=CC_obs}
-      MDV: {use is mdv, use is covariate}
+      MDV: {use is mdv}
       LOGTWT: {use is covariate}
    }# end DATA_INPUT_VARIABLES
 

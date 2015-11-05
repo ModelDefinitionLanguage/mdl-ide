@@ -25,9 +25,9 @@ import org.eclipse.xtext.EcoreUtil2
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.Expression
 
 class ListDefinitionProvider {
 
@@ -606,7 +606,7 @@ class ListDefinitionProvider {
 					switch(att){
 						ValuePair case att.argumentName == blockDefn.key:{
 							if(at.keyValue != null){
-								val keyVal = att.expression.convertToString
+								val keyVal = att.expression.enumValue
 								keyVal == at.keyValue
 							}
 							else true
@@ -635,7 +635,7 @@ class ListDefinitionProvider {
 	
 	def TypeInfo getTypeOfAttributeBuiltinEnum(EnumExpression ee){
 		val blockName = ee.owningBlock.identifier
-		val enumValue = ee.convertToString
+		val enumValue = ee.enumValue
 		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
 		defnType
 	}
@@ -671,7 +671,7 @@ class ListDefinitionProvider {
 					switch(att){
 						ValuePair case att.argumentName == blockDefn.key:{
 							if(at.keyValue != null){
-								val keyVal = att.expression.convertToString
+								val keyVal = att.expression.enumValue
 								keyVal == at.keyValue
 							}
 							else true
@@ -720,7 +720,7 @@ class ListDefinitionProvider {
 					switch(att){
 						ValuePair case att.argumentName == blockDefn.key:{
 							if(at.keyValue != null){
-								val keyVal = att.expression.convertToString
+								val keyVal = att.expression.enumValue
 								keyVal == at.keyValue
 							}
 							else true
@@ -734,6 +734,16 @@ class ListDefinitionProvider {
 		}
 		unused
 	}
+
+
+	def isAttributeDuplicated(AttributeList owningList, ValuePair it){
+		if(owningList != null){
+			return owningList.attributes.filter[a| a.argumentName == argumentName].size > 1 
+		}
+		false
+	}
+	
+	
 //	// Method assumes that there is a key. Check for this first
 //	def getUnusedMandatoryAttributes(AttributeList it) {
 //		// expect AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
@@ -794,7 +804,7 @@ class ListDefinitionProvider {
 //		unused
 //	}
 	
-	def attributeExists(List<ValuePair> attributes, String queryName){
+	private def attributeExists(List<ValuePair> attributes, String queryName){
 		attributes.exists[attrib|
 			switch(attrib){
 				ValuePair case attrib.argumentName == queryName: true
@@ -802,6 +812,10 @@ class ListDefinitionProvider {
 				default: false
 			}
 		]
+	}
+	
+	def hasAttribute(AttributeList it, String name){
+		attributeExists(attributes, name)
 	}
 	
 	def getAttributeName(ValuePair attrib){
@@ -817,12 +831,12 @@ class ListDefinitionProvider {
 		attNames
 	}
 
-	def getAttributeValueString(ValuePair attrib){
-		switch(attrib){
-			ValuePair: attrib.expression?.convertToString
-//			CategoricalDefinitionExpr: attrib.convertToString
-		}
-	}
+//	def getAttributeValueString(ValuePair attrib){
+//		switch(attrib){
+//			ValuePair: attrib.expression?.convertToString
+////			CategoricalDefinitionExpr: attrib.convertToString
+//		}
+//	}
 
 	def attributeDefnExists(ListDefInfo it, ValuePair att){
 		attributes.exists[attrib|
@@ -839,10 +853,10 @@ class ListDefinitionProvider {
 //	}
 
 
-	// gets the key value of an attribute list
-	def getKeyValue(AttributeList attList, String key){
-		attList.attributes.findFirst[at | at.attributeName == key].attributeValueString
-	}
+//	// gets the key value of an attribute list
+//	def getKeyValue(AttributeList attList, String key){
+//		attList.attributes.findFirst[at | at.attributeName == key].attributeValueString
+//	}
 	
 	// gets a list definition based on a key value combination 
 	def getMatchingListDefn(AttributeList attList){
@@ -852,7 +866,7 @@ class ListDefinitionProvider {
 		listDefns.findFirst[defn|
 			for(a : attList.attributes){
 				if(blkDefn.key == a.attributeName)
-					if(defn.keyValue == null || defn.keyValue == a.attributeValueString){
+					if(defn.keyValue == null || defn.keyValue == a.expression.enumValue){
 						return true;
 					}
 			} 
@@ -880,12 +894,21 @@ class ListDefinitionProvider {
 
 	def getAttributeEnumValue(AttributeList it, String attName){
 		val enumExp = getAttributeExpression(attName)
-		switch(enumExp){
-			EnumExpression:
-				return enumExp.enumValue
-			default: null
-		}
+		enumExp?.enumValue
+//		switch(enumExp){
+//			EnumExpression:
+//				return enumExp.enumValue
+//			default: null
+//		}
 	}
+	
+	def getEnumValue(Expression expr){
+		if(expr instanceof EnumExpression){
+			return expr.enumValue
+		}
+		else null
+	}
+	
 
 	def Map<String, Boolean> findMatchingAttributeSet(AttributeList it, ListDefInfo defn){
 		// find the best matching att set
@@ -917,7 +940,7 @@ class ListDefinitionProvider {
 		// get key from parent list
 		if (attDefns.containsKey(parentBlock.identifier)) {
 			val blkDefn = attDefns.get(parentBlock.identifier)
-			val keyVal = parentList.getKeyValue(blkDefn.key)
+			val keyVal = parentList.getAttributeEnumValue(blkDefn.key)
 			val listDefn = blkDefn.getListDefnByKeyValue(keyVal)
 			if(listDefn != null){
 				// there is a listDefn so check if attribute is in list

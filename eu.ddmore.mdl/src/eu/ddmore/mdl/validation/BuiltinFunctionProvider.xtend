@@ -22,7 +22,6 @@ import org.eclipse.xtext.EcoreUtil2
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import java.util.Collections
 import eu.ddmore.mdl.mdl.TransformedDefinition
 
@@ -86,8 +85,8 @@ class BuiltinFunctionProvider {
 		'tan' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'floor' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'ceiling' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'min' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'max' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'min' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'max' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'abs' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'exp' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'seq' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_VECTOR_TYPE ] ],
@@ -369,6 +368,14 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
+	def isArgumentDuplicated(BuiltinFunctionCall owningFunc, ValuePair it){
+		val args = owningFunc.argList
+		if(args instanceof NamedFuncArguments){
+			return args.arguments.filter[a| a.argumentName == argumentName].size > 1
+		}
+		false
+	}
+	
 	
 	// The validator should check on a per argument basis is an argument name is valid.
 	def checkNamedArguments(ValuePair it, (String) => void unkArgError, (String) => void duplicateArgError){
@@ -394,7 +401,7 @@ class BuiltinFunctionProvider {
 	def TypeInfo getTypeOfFunctionBuiltinEnum(EnumExpression ee){
 		val funct = EcoreUtil2.getContainerOfType(ee, BuiltinFunctionCall)
 		val blockName = funct.func
-		val enumValue = ee.convertToString
+		val enumValue = ee.enumValue
 		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
 		defnType
 	}

@@ -6,17 +6,16 @@ import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import org.eclipse.xtext.EcoreUtil2
 
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-
 class MdlCustomValidation {
 
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider 
+	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
 
 	def checkNonTransformedIndiv(EquationDefinition transDefn, EnumPair transArg, () => void incompatibleTransforms) {
 		val call = EcoreUtil2.getContainerOfType(transArg.eContainer, BuiltinFunctionCall)
 		if(call != null && transDefn != null && transArg.argumentName == 'trans'){
 			val transExpr = transArg.expression
-			if(transExpr != null && isValidTransformFunction(transExpr.convertToString) && transOnBothFuncs.contains(call.func)){
+			if(transExpr != null && isValidTransformFunction(transExpr.enumValue) && transOnBothFuncs.contains(call.func)){
 				incompatibleTransforms.apply
 			}
 		}
@@ -55,7 +54,7 @@ class MdlCustomValidation {
 		if(call != null && transDefn != null && transArg.argumentName == 'trans'){
 			val transExpr = transArg.expression
 			if(transExpr != null && transOnBothFuncs.contains(call.func)){
-				val rhsTrans = transExpr.convertToString
+				val rhsTrans = transExpr.enumValue
 				if(transDefn.transform != rhsTrans){
 					incompatibleTransforms.apply(transDefn.transform, rhsTrans)
 				}
