@@ -23,7 +23,7 @@ class PropertyDefinitionProvider {
 //	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'monolix', 'nonmem' })
 //	static val TARGET_ATT = new AttributeDefn('target', null, true, TARGET_TYPE)
 //	static val VERSION_ATT = new AttributeDefn('version', null, false, MclTypeProvider::STRING_TYPE)
-	static val ALGO_TYPE = new BuiltinEnumTypeInfo('estAlgo', #{'saem', 'foce', 'fo'})
+	static val ALGO_TYPE = new BuiltinEnumTypeInfo('estAlgo', #{'saem', 'foce', 'fo', 'focei'})
 	static val ALGO_ATT = new AttributeDefn('algo', true, ALGO_TYPE)
 //	static val EST_OP_TYPE = new BuiltinEnumTypeInfo('estOp', #{'fim', 'estPop', 'estIndiv' })
 //	static val EST_OP_ATT = new AttributeDefn('operation', null, false, EST_OP_TYPE)

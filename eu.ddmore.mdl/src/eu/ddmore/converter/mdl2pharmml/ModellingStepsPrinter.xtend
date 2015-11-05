@@ -835,6 +835,7 @@ class ModellingStepsPrinter {
 			case("saem"): "SAEM"
 			case("foce"): "FOCE"
 			case("fo"): "FO"
+			case("focei"): "FOCEI"
 			default: "ERROR!"
 		}
 	}
