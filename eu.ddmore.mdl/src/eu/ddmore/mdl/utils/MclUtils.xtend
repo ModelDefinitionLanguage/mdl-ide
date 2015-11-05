@@ -590,7 +590,7 @@ class MclUtils {
     			for(w : expr.when){
     				retVal.addAll(w.symbolReferences)
     			}
-    			retVal.addAll(expr.other.symbolReferences)
+    			retVal.addAll(expr.other.other.symbolReferences)
     		}
     		VectorLiteral:{
     			for(v : expr.expressions){
