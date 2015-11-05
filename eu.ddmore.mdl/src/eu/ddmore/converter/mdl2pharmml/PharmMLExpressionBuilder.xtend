@@ -219,6 +219,7 @@ class PharmMLExpressionBuilder {
 		switch(fName){
 			case 'ln' : 'log'
 			case 'invLogit': 'logistic'
+			case 'lnFactorial': 'factln'
 			default: fName
 		}
 	}

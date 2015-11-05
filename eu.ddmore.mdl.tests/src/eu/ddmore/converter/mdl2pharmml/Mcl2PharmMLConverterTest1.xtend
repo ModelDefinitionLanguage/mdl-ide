@@ -220,4 +220,9 @@ class Mcl2PharmMLConverterTest1 {
 		validateConversion("UseCase104")
 	}
 
+	@Test
+	def void testUseCase105(){
+		validateConversion("UseCase105")
+	}
+
 }
