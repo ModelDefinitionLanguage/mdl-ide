@@ -369,6 +369,14 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
+	def isArgumentDuplicated(BuiltinFunctionCall owningFunc, ValuePair it){
+		val args = owningFunc.argList
+		if(args instanceof NamedFuncArguments){
+			return args.arguments.filter[a| a.argumentName == argumentName].size > 1
+		}
+		false
+	}
+	
 	
 	// The validator should check on a per argument basis is an argument name is valid.
 	def checkNamedArguments(ValuePair it, (String) => void unkArgError, (String) => void duplicateArgError){

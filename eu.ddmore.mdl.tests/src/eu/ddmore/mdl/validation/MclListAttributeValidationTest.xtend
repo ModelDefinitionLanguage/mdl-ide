@@ -144,6 +144,27 @@ class MclListAttributeValidationTest {
 		)
 	}
 
+	@Test
+	def void testInvalidDuplicateAttribute(){
+		val mcl = '''bar = dataObj {
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is cmt, use is cmt }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_ATTRIBUTE_NAME,
+			"List attribute 'use' is used more than once."
+		)
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_ATTRIBUTE_NAME,
+			"List attribute 'use' is used more than once."
+		)
+	}
+
 	@Test  
 	def void testAnonymousCompartmentAttributesOK(){
 		val mcl = '''bar = mdlObj {

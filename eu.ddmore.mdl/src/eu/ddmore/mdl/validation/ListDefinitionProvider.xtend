@@ -734,6 +734,16 @@ class ListDefinitionProvider {
 		}
 		unused
 	}
+
+
+	def isAttributeDuplicated(AttributeList owningList, ValuePair it){
+		if(owningList != null){
+			return owningList.attributes.filter[a| a.argumentName == argumentName].size > 1 
+		}
+		false
+	}
+	
+	
 //	// Method assumes that there is a key. Check for this first
 //	def getUnusedMandatoryAttributes(AttributeList it) {
 //		// expect AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
@@ -794,7 +804,7 @@ class ListDefinitionProvider {
 //		unused
 //	}
 	
-	def attributeExists(List<ValuePair> attributes, String queryName){
+	private def attributeExists(List<ValuePair> attributes, String queryName){
 		attributes.exists[attrib|
 			switch(attrib){
 				ValuePair case attrib.argumentName == queryName: true
@@ -802,6 +812,10 @@ class ListDefinitionProvider {
 				default: false
 			}
 		]
+	}
+	
+	def hasAttribute(AttributeList it, String name){
+		attributeExists(attributes, name)
 	}
 	
 	def getAttributeName(ValuePair attrib){
