@@ -260,7 +260,9 @@ class ListDefinitionProvider {
 				key = CMT_TYPE_ATT
 				listDefns = newArrayList(
 					new ListDefInfo ('direct', new ListTypeInfo("Direct", PrimitiveType.Real),  #[
-						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE),
+						 new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn('to', true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference),
 						 new AttributeDefn('modelDur', false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('tlag', false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('finput', false, MclTypeProvider::REAL_TYPE)

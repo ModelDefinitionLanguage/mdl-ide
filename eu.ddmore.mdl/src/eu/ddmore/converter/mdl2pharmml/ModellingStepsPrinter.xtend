@@ -319,21 +319,29 @@ class ModellingStepsPrinter {
 		}
 	}
 	
-	def hasNonCompartmentDosing(MclObject mdlObj, MappingExpression me){
+	def hasCompartmentDosing(MclObject mdlObj, MappingExpression me){
 		me.attList.exists[
 			val mdlSymb = mdlObj.findMdlSymbolDefn(mappedSymbol.ref.name)
 			mdlSymb instanceof ListDefinition && (mdlSymb as ListDefinition).isAdministrationMacro
 		]
-		false
+	}
+	
+	def hasCompartmentDosing(MclObject mdlObj, SymbolDefinition mappedSymbol){
+		val mdlSymb = mdlObj.findMdlSymbolDefn(mappedSymbol.name)
+		mdlSymb instanceof ListDefinition && (mdlSymb as ListDefinition).isAdministrationMacro
 	}
 	
 	protected def print_ds_StandardAmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj) {
 		val define = amtColumn.list.getAttributeExpression('define');
 		if (define == null) {
 			val varDefn = amtColumn.list.getAttributeExpression('variable');
-			writeSingleDoseMapping(mObj, amtColumn, varDefn)
+			if(varDefn instanceof SymbolReference){
+				if(!mObj.hasCompartmentDosing(varDefn.ref)){
+					writeSingleDoseMapping(mObj, amtColumn, varDefn)
+				}
+			}
 		}
-		else if(mObj.hasNonCompartmentDosing(define as MappingExpression)){
+		else if(!mObj.hasCompartmentDosing(define as MappingExpression)){
 			writeMultiDoseMapping(mObj, amtColumn, define)
 		}
 	}
@@ -354,7 +362,14 @@ class ModellingStepsPrinter {
 					'''
 			}
 		} else {
-			// this is a bug as the language will be invalid if this is true.
+			val varDefn = amtColumn.list.getAttributeExpression('variable');
+			if(varDefn instanceof SymbolReference){
+				toolMappingDefn += '''
+					«IF mObj.isCompartmentInput(varDefn.ref)»
+						«mObj.printTargetMapping(varDefn.ref)»
+					«ENDIF»
+				'''	
+			}
 		}
 		'''
 			«IF toolMappingDefn.length > 0»
@@ -377,7 +392,13 @@ class ModellingStepsPrinter {
 		val mdlDefn = findMdlSymbolDefn(expression.mappedSymbol.ref.name)
 		'''
 			<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«PKMacrosPrinter::INSTANCE.getCompartmentNum(mdlDefn)»"/>
-«««		<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«expression.leftOperand.convertToString»"/>
+		'''
+	}
+	
+	def printTargetMapping(MclObject it, SymbolDefinition mappedSymbol){
+		val mdlDefn = findMdlSymbolDefn(mappedSymbol.name)
+		'''
+			<ds:Map admNumber="«PKMacrosPrinter::INSTANCE.getCompartmentNum(mdlDefn)»"/>
 		'''
 	}
 	
