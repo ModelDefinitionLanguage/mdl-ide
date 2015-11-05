@@ -22,7 +22,6 @@ import org.eclipse.xtext.EcoreUtil2
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import java.util.Collections
 import eu.ddmore.mdl.mdl.TransformedDefinition
 
@@ -402,7 +401,7 @@ class BuiltinFunctionProvider {
 	def TypeInfo getTypeOfFunctionBuiltinEnum(EnumExpression ee){
 		val funct = EcoreUtil2.getContainerOfType(ee, BuiltinFunctionCall)
 		val blockName = funct.func
-		val enumValue = ee.convertToString
+		val enumValue = ee.enumValue
 		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
 		defnType
 	}

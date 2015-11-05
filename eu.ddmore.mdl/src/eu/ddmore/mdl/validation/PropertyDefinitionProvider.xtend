@@ -14,7 +14,6 @@ import java.util.List
 import java.util.Map
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import eu.ddmore.mdl.mdl.Statement
 
@@ -58,7 +57,7 @@ class PropertyDefinitionProvider {
 	def getTypeOfPropertyBuiltinEnum(EnumExpression ee){
 		val blockName = ee.owningBlock.identifier
 		val vp = ee.getOwningValuePair
-		val enumValue = ee.convertToString
+		val enumValue = ee.enumValue
 		val defnType = propertyDefns.get(blockName)?.findFirst[AttributeDefn p | p.name == vp.argumentName]?.attType ?: MclTypeProvider::UNDEFINED_TYPE
 		switch(defnType){
 			BuiltinEnumTypeInfo:
