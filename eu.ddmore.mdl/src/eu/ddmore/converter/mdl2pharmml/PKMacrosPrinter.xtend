@@ -77,16 +77,7 @@ class PKMacrosPrinter{
 	'''	
 	
 	def printMacros(List<Statement> statements) {
-//		var macros = ''''''
-//		for (s : statements) {
-//			switch(s){
-//				ListDefinition:{
-//					macros += s.print_PKMacros
-//				}
-//				AnonymousListStatement:
-//					macros += s.list.print_PKMacros
-//			}
-//		}
+		resetCompartments
 		'''
 		«statements.forEach[defineCompartments]»
 		<PKmacros>
@@ -95,11 +86,15 @@ class PKMacrosPrinter{
 			«ENDFOR»
 		</PKmacros>
 		'''
-
 	}
 	
 	val cmpNumMap = new HashMap<String, Integer>
-	int cmpNum = 0
+	var cmpNum = 0
+	
+	def resetCompartments(){
+		cmpNum = 0
+		cmpNumMap.clear
+	}
 	
 	def storeCompartment(ListDefinition it){
 		cmpNum += 1
