@@ -54,7 +54,7 @@ import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
  *
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
- @ComposedChecks(validators= #[BlockValidator])
+ @ComposedChecks(validators= #[BlockValidator, DataFileValidation])
 class MdlValidator extends AbstractMdlValidator {
 	public val static MDLOBJ = 'mdlObj'
 	public val static DATAOBJ = 'dataObj'
@@ -108,8 +108,6 @@ class MdlValidator extends AbstractMdlValidator {
 	// Warnings
 	public static val MASKING_PARAM_ASSIGNMENT = "eu.ddmore.mdl.validation.mog.paramValueMasked"
 
-
-	def void setFoo(){}
 
 	@Check
 	def validateAttributeList(AttributeList it){

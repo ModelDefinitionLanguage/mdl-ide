@@ -3,7 +3,7 @@ package eu.ddmore.mdl.validation
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.utils.MclUtils
-import org.eclipse.core.resources.IFile
+import java.io.File
 import org.eclipse.core.resources.ResourcesPlugin
 import org.eclipse.core.runtime.Path
 import org.eclipse.emf.ecore.EObject
@@ -17,9 +17,11 @@ class DataFileValidation extends AbstractMdlValidator  {
 	
 	override register(EValidatorRegistrar registrar){}
 	
-	public static val MSG_DATA_FILE_NOT_FOUND = "Cannot find data file: path may be incorrect"
+	public static val DATA_FILE_NOT_FOUND = "eu.ddmore.mdl.validation.source.file.unknown"
 	
-	
+	static val MSG_DATA_FILE_NOT_FOUND = "Cannot find data file: path may be incorrect."
+
+
 	@Check
 	//Check that data file exists in the project
 	def checkSourceFiles(ValuePair p){
@@ -28,14 +30,14 @@ class DataFileValidation extends AbstractMdlValidator  {
 		if(blk != null && blk.isDataSourceBlock && lst != null && p.argumentName == 'file'){
 			val dataPath = p.expression.stringValue
 			val dataFile = getFile(p, dataPath);
-				if (!dataFile.exists()){
-					warning(MSG_DATA_FILE_NOT_FOUND, 
-						MdlPackage.eINSTANCE.valuePair_Expression,
-						MSG_DATA_FILE_NOT_FOUND, dataPath);
-				} else {
-					//Data file found, check columns
+			if (dataFile == null || !dataFile.exists()){
+				warning(MSG_DATA_FILE_NOT_FOUND, 
+					MdlPackage.eINSTANCE.valuePair_Expression,
+					DATA_FILE_NOT_FOUND, dataPath);
+			} else {
+				//Data file found, check columns
 //					checkData(p, dataFile);
-				}
+			}
 //			if (p.getPropertyName().getArgName().equals(attr_file.getName()) || 
 //				p.getPropertyName().getArgName().equals(attr_script.getName())) {
 //				String dataPath = MdlPrinter.getInstance().toStr(p.getExpression());
@@ -60,18 +62,28 @@ class DataFileValidation extends AbstractMdlValidator  {
 	}
 	
     //Locate data/script file in the MDL project
-    static def IFile getFile(EObject b, String filePath) {
-        val platformString = b.eResource().getURI().toPlatformString(true);
-        val modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile(Path.fromOSString(platformString));
-        val project = modelFile.getProject();
-        var parent = modelFile.getParent();
-        var p = filePath;
-        while (p.startsWith("../") && parent != null){
-            parent = parent.getParent();
-            p = p.substring(3);
-        }
-        val dataFile = project.getFile(parent.getProjectRelativePath() + "/" + p);
-        return dataFile;
+    def File getFile(EObject b, String filePath) {
+    	val resource = b.eResource()
+        val platformString = resource.getURI().toPlatformString(true);
+        if(platformString != null){
+	        val modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile(Path.fromOSString(platformString));
+	        val project = modelFile.getProject();
+	        var parent = modelFile.getParent();
+	        var p = filePath;
+	        while (p.startsWith("../") && parent != null){
+	            parent = parent.getParent();
+	            p = p.substring(3);
+	        }
+	        val dataFile = project.getFile(parent.getProjectRelativePath() + "/" + p);
+	        return new File(dataFile.locationURI.getPath)
+	    }
+	    else{
+	    	val url = this.class.getResource(filePath)
+	    	if(url != null){
+		        return new File(url.path);
+	    	}
+	    }
+	    null
     }
 	
 //	private void checkData(PropertyDeclaration p, IFile dataFile){

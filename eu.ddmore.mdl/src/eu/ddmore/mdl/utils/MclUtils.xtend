@@ -113,8 +113,8 @@ class MclUtils {
 //			expression.convertToString == ListDefinitionProvider::OBS_USE_VALUE)]
 	}
 
-	def boolean isDataSourceBlock(Statement stmt){
-		stmt.parentBlock?.identifier == BlockDefinitionProvider::DATA_SRC_BLK
+	def boolean isDataSourceBlock(BlockStatement stmt){
+		stmt.identifier == BlockDefinitionProvider::DATA_SRC_BLK
 	}
 
 	def boolean isMatchingDataUse(ListDefinition it, String ... useValue){
