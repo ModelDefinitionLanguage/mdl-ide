@@ -7,11 +7,7 @@ import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.AttributeList
-import eu.ddmore.mdl.mdl.BlockArgument
-import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.BlockTextBody
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CatValRefMapping
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
@@ -20,7 +16,6 @@ import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingPair
@@ -34,7 +29,6 @@ import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedArgument
@@ -49,9 +43,9 @@ import eu.ddmore.mdl.utils.MclUtils
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.validation.ComposedChecks
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import org.eclipse.xtext.validation.ComposedChecks
 
 //import org.eclipse.xtext.validation.Check
 

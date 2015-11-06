@@ -18,6 +18,7 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.Statement
 
 class DomainObjectModelUtils {
 	
@@ -59,8 +60,12 @@ class DomainObjectModelUtils {
 	}
 
 	static def getParentBlock(ValuePair it){
-		EcoreUtil2.getContainerOfType(it, BlockStatement)
+		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 //		eContainer.eContainer.eContainer.eContainer as BlockStatement
+	}
+	
+	static def getParentBlock(Statement it){
+		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	}
 	
 	static def getParentList(ValuePair it){
@@ -131,4 +136,12 @@ class DomainObjectModelUtils {
 		}
 	}
 
+
+	static def getStippedQuotes(String str){
+		if(str.length == 2){
+			// only quotes so return empty string
+			""
+		}
+		else str.substring(1, str.length-2)
+	}
 }

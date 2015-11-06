@@ -28,6 +28,7 @@ import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.StringLiteral
 
 class ListDefinitionProvider {
 
@@ -627,6 +628,10 @@ class ListDefinitionProvider {
 		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	} 
 	
+	def getOwningListDefinition(ValuePair it){
+		EcoreUtil2.getContainerOfType(eContainer, ListDefinition)
+	} 
+	
 	def getAttributeType(ListDefInfo it, String attName){
 		attributes.findFirst(ad | ad.name == attName)?.attType ?: MclTypeProvider::UNDEFINED_TYPE 
 	}
@@ -904,12 +909,27 @@ class ListDefinitionProvider {
 //		}
 	}
 	
+	def getAttributeExpessionAsString(AttributeList it, String attName){
+		val expr = getAttributeExpression(attName)
+		if(expr instanceof StringLiteral){
+			return expr.value
+		}
+		return null
+	}
+
 	def getEnumValue(Expression expr){
 		if(expr instanceof EnumExpression){
 			return expr.enumValue
 		}
 		else null
 	}
+	
+	def getStringValue(Expression expr){
+		if(expr instanceof StringLiteral){
+			return expr.value
+		}
+		return null
+	} 
 	
 
 	def Map<String, Boolean> findMatchingAttributeSet(AttributeList it, ListDefInfo defn){
