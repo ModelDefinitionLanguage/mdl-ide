@@ -5,27 +5,36 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
+import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockArgument
 import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.BlockTextBody
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CatValRefMapping
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
+import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.ForwardDeclaration
+import eu.ddmore.mdl.mdl.IfExprPart
+import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
+import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
+import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SubListExpression
+import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedArgument
@@ -33,26 +42,16 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.utils.MclUtils
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.utils.MclUtils
-import eu.ddmore.mdl.mdl.PropertyStatement
-import eu.ddmore.mdl.mdl.AnonymousListStatement
-import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.Statement
-import eu.ddmore.mdl.mdl.SymbolDefinition
-import eu.ddmore.mdl.mdl.BlockTextBody
-import eu.ddmore.mdl.mdl.IfExprPart
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.ElseClause
+import org.eclipse.xtext.validation.ComposedChecks
 
 //import org.eclipse.xtext.validation.Check
 
@@ -61,6 +60,7 @@ import eu.ddmore.mdl.mdl.ElseClause
  *
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
+ @ComposedChecks(validators= #[BlockValidator])
 class MdlValidator extends AbstractMdlValidator {
 	public val static MDLOBJ = 'mdlObj'
 	public val static DATAOBJ = 'dataObj'
@@ -69,8 +69,6 @@ class MdlValidator extends AbstractMdlValidator {
 	public val static MOGOBJ = 'mogObj'
 	public val static DESIGNOBJ = 'desObj'
 
-	extension BlockArgumentDefinitionProvider movh = new BlockArgumentDefinitionProvider
-	extension BlockDefinitionProvider blokHelper = new BlockDefinitionProvider
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension BuiltinFunctionProvider funcHelper = new BuiltinFunctionProvider
@@ -78,14 +76,8 @@ class MdlValidator extends AbstractMdlValidator {
 	extension MclTypeProvider typeProvider = new MclTypeProvider
 	extension MclUtils mclUtils = new MclUtils
 
-	public static val UNRECOGNISED_OBJECT_TYPE = "eu.ddmore.mdl.validation.UnrecognisedObjectType"
 	public static val UNSUPPORTED_FEATURE = "eu.ddmore.mdl.validation.UnsupportedFeature"
 
-	// Block arguments validation
-	public static val UNKNOWN_BLOCK_ARG_DECL = "eu.ddmore.mdl.validation.UnknownBlockArgDecl"
-	public static val UNKNOWN_BLOCK_ARG_PROP = "eu.ddmore.mdl.validation.UnknownBlockArgProp"
-	public static val MANDATORY_BLOCK_ARG_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockArgMissing"
-	public static val MANDATORY_BLOCK_PROP_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockPropMissing"
 	
 	// List attribute validation
 	public static val UNRECOGNIZED_PROPERTY_ATT  = "eu.ddmore.mdl.validation.UnrecognisedProperty"
@@ -106,16 +98,6 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val INVALID_LHS_FUNC = "eu.ddmore.mdl.validation.function.invalid.lhs"
 	
 
-	// Block validation
-	public static val UNKNOWN_BLOCK = "eu.ddmore.mdl.validation.UnknownBlock"
-	public static val WRONG_SUBBLOCK = "eu.ddmore.mdl.validation.WrongSubBlock"
-	public static val WRONG_PARENT_BLOCK = "eu.ddmore.mdl.validation.WrongParentBlock"
-	public static val MANDATORY_BLOCK_MISSING = "eu.ddmore.mdl.validation.MandatoryBlockMissing"
-	public static val BLOCK_COUNT_EXCEEDED = "eu.ddmore.mdl.validation.BlockCountExceeded"
-	public static val BLOCK_INCORRECT_STATEMENT_COUNT = "eu.ddmore.mdl.validation.BlockIncorrrectStatementCount"
-	public static val BLOCK_INVALID_STATEMENT_TYPE = "eu.ddmore.mdl.validation.BlockInvalidStatementType"
-	public static val BLOCK_WRONG_BODY_TYPE = "eu.ddmore.mdl.validation.WrongBodyType"
-
 	// Validation of syntactic structures
 	public static val INCORRECT_STATEMENT_CONTEXT = "eu.ddmore.mdl.validation.IncorrectStatementContext"
 	public static val INCORRECT_LIST_CONTEXT = "eu.ddmore.mdl.validation.IncorrectListContext"
@@ -133,119 +115,8 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val MASKING_PARAM_ASSIGNMENT = "eu.ddmore.mdl.validation.mog.paramValueMasked"
 
 
-	private static val VALID_OBJECT_TYPES = #[ MDLOBJ, PARAMOBJ, TASKOBJ, DATAOBJ, MOGOBJ, DESIGNOBJ ]
-
 	def void setFoo(){}
 
-	@Check
-	def validateMdlObjArguments(MclObject it){
-		if (mdlObjType != null) {
-			if (!VALID_OBJECT_TYPES.contains(mdlObjType)) {
-				error("unrecognised object type '" + mdlObjType + "'", MdlPackage.eINSTANCE.mclObject_MdlObjType,
-					UNRECOGNISED_OBJECT_TYPE, mdlObjType)
-			}
-			blkArgs.unusedMandatoryObjVarDecl.forEach [ blk, mand |
-				error("mandatory argument '" + blk + "' is missing in " + mdlObjType + " '" + name + "'",
-					MdlPackage.eINSTANCE.mclObject_BlkArgs, MANDATORY_BLOCK_ARG_MISSING, blk)
-			]
-			blkArgs.unusedMandatoryPropertyArguments.forEach [ blk, mand |
-				error("mandatory property '" + blk + "' is missing in " + mdlObjType + " '" + name + "'",
-					MdlPackage.eINSTANCE.mclObject_BlkArgs, MANDATORY_BLOCK_PROP_MISSING, blk)
-			]
-		}
-	}
-	
-	@Check
-	def validateMdlObjectHasCorrectBlocks(MclObject it){
-		// check if mandatory blocks missing
-		unusedMandatoryBlocks.forEach[blk, mand| error("mandatory block '" + blk + "' is missing in mdlObj '" + name + "'",
-					MdlPackage.eINSTANCE.mclObject_Blocks, MANDATORY_BLOCK_MISSING, blk) ]
-		// 		[expectedType, actualType |error("Expected " + expectedType.typeName + " type, but was " + actualType.typeName + ".", feature, INCOMPATIBLE_TYPES, expectedType.typeName) ]
-		validateBlocksCounts([blk, maxLimit| error("block '" + blk + "' is used more than is allowed. A maximum of " + maxLimit + " blocks are allowed",
-					MdlPackage.eINSTANCE.mclObject_Blocks, BLOCK_COUNT_EXCEEDED, blk) ])
-	}
-
-	@Check
-	def validateMdlObjBlockArgs(BlockStatement it){
-		blkArgs.unusedMandatoryObjVarDecl.forEach[blk, mand| error("mandatory argument '" + blk + "' is missing in block '" + identifier + "'",
-					MdlPackage.eINSTANCE.blockStatement_BlkArgs, MANDATORY_BLOCK_ARG_MISSING, blk) ]
-		blkArgs.unusedMandatoryPropertyArguments.forEach[blk, mand| error("mandatory property '" + blk + "' is missing in block '" + identifier + "'",
-					MdlPackage.eINSTANCE.blockStatement_BlkArgs, MANDATORY_BLOCK_PROP_MISSING, blk) ]
-	}
-
-	@Check
-	def validateMdlObjBlocks(BlockStatement it){
-		val parent = parentOfBlockStatement
-		switch(parent){
-			MclObject case !isModelBlock:
-					error("block '" + identifier + "' cannot be used in an object of type " + parent.mdlObjType,
-						MdlPackage.eINSTANCE.blockStatement_Identifier, UNKNOWN_BLOCK, identifier)
-			BlockStatement: {
-				if (!isModelSubBlock) {
-					error("block '" + identifier + "' cannot be used as a sub-block",
-						MdlPackage.eINSTANCE.blockStatement_Identifier, WRONG_SUBBLOCK,
-						identifier)
-				} else if (!subBlockHasCorrectParent(parent)) {
-					// recognised sub-block but in the wrong place
-					error("sub-block '" + identifier + "' cannot be used in the '" + parent.identifier + "' block",
-						MdlPackage.eINSTANCE.blockStatement_Identifier,
-						WRONG_PARENT_BLOCK, identifier)
-				}
-			}
-				
-		}
-	}
-
-	@Check
-	def validateBlockStatementCounts(BlockStatementBody it){
-		validateMinBlocksStatementCounts[blk, minLimit| error("block '" + blk + "' has fewer statements than the " + minLimit + " expected",
-					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_INCORRECT_STATEMENT_COUNT, blk)]
-		validateMaxBlocksStatementCounts[blk, maxLimit| error("block '" + blk + "' has more statements than the " + maxLimit + " expected",
-					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_INCORRECT_STATEMENT_COUNT, blk)]
-	}
-
-	@Check
-	def validateBlockBodyType(BlockStatementBody it){
-		validateBlockBodyType[blk| error("block '" + blk + "' cannot contain statements. It must define verbatim text block: '<<' '>>'",
-					MdlPackage.eINSTANCE.blockStatementBody_Statements, BLOCK_WRONG_BODY_TYPE, blk)]
-	}
-
-	@Check
-	def validateBlockBodyType(BlockTextBody it){
-		validateBlockBodyType[blk| error("block '" + blk + "' cannot define a verbatim text block. It must contains statements delimitted by '{' '}'",
-					MdlPackage.eINSTANCE.blockTextBody_Text, BLOCK_WRONG_BODY_TYPE, blk)]
-	}
-
-	@Check
-	def validateBlockStatementType(Statement it){
-		val feature = switch(it){
-			SymbolDefinition: MdlPackage.eINSTANCE.symbolDefinition_Name
-			AnonymousListStatement: MdlPackage.eINSTANCE.anonymousListStatement_List 
-			default: null
-		}
-		if(feature != null)
-			validateExpectedStatementType[blk| error("block '" + blk + "' does not permit statements of this type",
-						feature, BLOCK_INVALID_STATEMENT_TYPE, blk)]
-	}
-
-	
-
-	@Check
-	def validateBlockArgument(BlockArgument blkArg){
-		if (blkArg.eContainer instanceof BlockArguments && (blkArg.eContainer.eContainer instanceof MclObject || blkArg.eContainer.eContainer instanceof BlockStatement)) {
-			switch (blkArg) {
-				ForwardDeclaration case !blkArg.isValidObjVarDecl: {
-					error("unrecognised variable declaration type '" + blkArg.declType + "'",
-						MdlPackage.eINSTANCE.forwardDeclaration_DeclType, UNKNOWN_BLOCK_ARG_DECL, blkArg.declType)
-				}
-				ValuePair case !blkArg.isValidBlkArgProperty: {
-					error("unrecognised property '" + blkArg.argumentName + "'",
-						MdlPackage.eINSTANCE.valuePair_ArgumentName, UNKNOWN_BLOCK_ARG_PROP, blkArg.argumentName)
-				}
-			}
-		}
-	}
-	
 	@Check
 	def validateAttributeList(AttributeList it){
 		if(isKeyAttributeDefined){

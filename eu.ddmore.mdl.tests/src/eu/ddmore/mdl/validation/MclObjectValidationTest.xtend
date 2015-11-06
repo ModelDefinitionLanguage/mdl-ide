@@ -40,10 +40,10 @@ class MclObjectValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			MdlValidator::UNKNOWN_BLOCK, "block 'VARIABILITY_LEVELS' cannot be used in an object of type foobar"
+			BlockValidator::UNKNOWN_BLOCK, "block 'VARIABILITY_LEVELS' cannot be used in an object of type foobar"
 		)
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
-			MdlValidator::UNRECOGNISED_OBJECT_TYPE,
+			BlockValidator::UNRECOGNISED_OBJECT_TYPE,
 			"unrecognised object type 'foobar'"
 		)
 	}

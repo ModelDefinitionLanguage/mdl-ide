@@ -28,7 +28,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			MdlValidator::UNKNOWN_BLOCK,
+			BlockValidator::UNKNOWN_BLOCK,
 			"block 'DATA_INPUT_VARIABLES' cannot be used in an object of type mdlObj"
 		)
 	}
@@ -41,7 +41,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
-			MdlValidator::MANDATORY_BLOCK_MISSING,
+			BlockValidator::MANDATORY_BLOCK_MISSING,
 			"mandatory block 'VARIABILITY_LEVELS' is missing in mdlObj 'foo'"
 		)
 	}
@@ -56,7 +56,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatementBody,
-			MdlValidator::BLOCK_INCORRECT_STATEMENT_COUNT,
+			BlockValidator::BLOCK_INCORRECT_STATEMENT_COUNT,
 			"block 'IDV' has fewer statements than the 1 expected"
 		)
 	}
@@ -71,7 +71,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatementBody,
-			MdlValidator::BLOCK_INCORRECT_STATEMENT_COUNT,
+			BlockValidator::BLOCK_INCORRECT_STATEMENT_COUNT,
 			"block 'IDV' has more statements than the 1 expected"
 		)
 	}
@@ -86,7 +86,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
-			MdlValidator::BLOCK_INVALID_STATEMENT_TYPE,
+			BlockValidator::BLOCK_INVALID_STATEMENT_TYPE,
 			"block 'IDV' does not permit statements of this type"
 		)
 	}
@@ -103,7 +103,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.enumerationDefinition,
-			MdlValidator::BLOCK_INVALID_STATEMENT_TYPE,
+			BlockValidator::BLOCK_INVALID_STATEMENT_TYPE,
 			"block 'INDIVIDUAL_VARIABLES' does not permit statements of this type"
 		)
 	}
@@ -120,7 +120,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
-			MdlValidator::BLOCK_COUNT_EXCEEDED,
+			BlockValidator::BLOCK_COUNT_EXCEEDED,
 			"block 'IDV' is used more than is allowed. A maximum of 1 blocks are allowed"
 		)
 	}
@@ -136,7 +136,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			MdlValidator::WRONG_SUBBLOCK,
+			BlockValidator::WRONG_SUBBLOCK,
 			"block 'MODEL_PREDICTION' cannot be used as a sub-block"
 		)
 	}
@@ -152,7 +152,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			MdlValidator::WRONG_PARENT_BLOCK,
+			BlockValidator::WRONG_PARENT_BLOCK,
 			"sub-block 'DEQ' cannot be used in the 'VARIABILITY_LEVELS' block"
 		)
 	}
@@ -182,7 +182,7 @@ class MclBlockValidationTest {
 			>>
 		}'''.parse
 		mcl.assertError(MdlPackage::eINSTANCE.blockTextBody,
-			MdlValidator::BLOCK_WRONG_BODY_TYPE,
+			BlockValidator::BLOCK_WRONG_BODY_TYPE,
 			"block '" + "MODEL_PREDICTION" + "' cannot define a verbatim text block. It must contains statements delimitted by '{' '}'"
 		)
 	}

@@ -10,6 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.validation.MdlValidator
+import eu.ddmore.mdl.validation.BlockValidator
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -76,7 +77,7 @@ class MclParserParamObj2Test {
 		'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
-			MdlValidator::BLOCK_INVALID_STATEMENT_TYPE,
+			BlockValidator::BLOCK_INVALID_STATEMENT_TYPE,
 			"block 'STRUCTURAL' does not permit statements of this type"
 		)
 	}
