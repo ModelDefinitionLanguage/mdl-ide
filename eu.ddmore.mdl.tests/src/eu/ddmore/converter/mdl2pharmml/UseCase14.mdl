@@ -75,7 +75,7 @@ warfarin_T2E_exact_mdl = mdlObj{
    }# end MODEL_PREDICTION
 
    OBSERVATION{
-     Y : {type is tte, hazard = HAZ, event is exact }
+     Y : {type is tte, hazard = HAZ }
    }# end ESTIMATION
 
 } # end of model object

@@ -364,6 +364,26 @@ class MclListAttributeValidationTest {
 	}
 
 	@Test
+	def void testValidTTE(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				HAZ = 1
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				Y : {type is tte, hazard = HAZ, event is intervalCensored }
+			}# end ESTIMATION
+		}
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
 	def void testInvalidAttributeWithUnexpectedCatDefn(){
 		val mcl = '''
 		foo = dataObj {

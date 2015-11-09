@@ -66,7 +66,7 @@ class ListDefinitionProvider {
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
-	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'exact', 'intervalCensored'})
+	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
 	static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
@@ -438,9 +438,14 @@ class ListDefinitionProvider {
 					new ListDefInfo (TTE_OBS_VALUE, new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('hazard', true, MclTypeProvider::REAL_TYPE.makeReference),
-						 new AttributeDefn('event', true, TTE_EVENT_TYPE),
+						 new AttributeDefn('event', false, TTE_EVENT_TYPE),
 						 new AttributeDefn('maxEvent', false, MclTypeProvider::REAL_TYPE)
-						 ]
+						 ],
+						 #[
+						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true },
+						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true, 'event' -> true, 'maxEvent' -> false }
+						 ],
+						 false
 					)
 				)
 			]
@@ -944,11 +949,12 @@ class ListDefinitionProvider {
 					matchCnt += 1
 				}
 			}
-			if(nameList.isEmpty){
-				// everything matched
-				return attSet
-			}
-			else if(matchCnt > maxMatchCnt){
+//			if(nameList.isEmpty){
+//				// everything matched
+//				return attSet
+//			}
+//			else 
+			if(matchCnt > maxMatchCnt){
 				// store best match to be returned a better one not found
 				maxMatchCnt = matchCnt
 				retVal = attSet
