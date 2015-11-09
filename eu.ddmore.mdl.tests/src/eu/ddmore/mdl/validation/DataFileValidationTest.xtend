@@ -22,7 +22,7 @@ class DataFileValidationTest {
 
 	@Test
 	def void testValidDataFile(){
-		val testFile = this.class.getResource("MclBlockArgValidationtest.xtend").path
+		val testFile = this.class.getResource("count.csv").path
 		val mcl = '''bar = dataObj {
 			
 			
