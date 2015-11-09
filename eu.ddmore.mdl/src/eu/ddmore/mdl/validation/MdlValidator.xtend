@@ -46,6 +46,8 @@ import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.ComposedChecks
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.mdl.RealLiteral
+import eu.ddmore.mdl.mdl.IntegerLiteral
 
 //import org.eclipse.xtext.validation.Check
 
@@ -91,6 +93,9 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val MANDATORY_NAMED_FUNC_ARG_MISSING = "eu.ddmore.mdl.validation.function.named.MandatoryArgMissing"
 	public static val INVALID_LHS_FUNC = "eu.ddmore.mdl.validation.function.invalid.lhs"
 	
+	// Number validation
+	public static val NUMBER_BEYOND_PRECISION_RANGE = "eu.ddmore.mdl.validation.number.beyondRange"
+
 
 	// Validation of syntactic structures
 	public static val INCORRECT_STATEMENT_CONTEXT = "eu.ddmore.mdl.validation.IncorrectStatementContext"
@@ -416,6 +421,14 @@ class MdlValidator extends AbstractMdlValidator {
 					MdlPackage.eINSTANCE.whenExpression_When, UNDER_DEFINED_IF_ELSE, '')
 			}
 		} 
+	}
+	
+	@Check
+	def validateRealInRange(RealLiteral it){
+		if(Double.isInfinite(value) || Double.isNaN(value)){
+			error("This real number is too large or small for MDL.",
+				MdlPackage.eINSTANCE.realLiteral_Value, NUMBER_BEYOND_PRECISION_RANGE, '')
+		}
 	}
 	
 	@Check

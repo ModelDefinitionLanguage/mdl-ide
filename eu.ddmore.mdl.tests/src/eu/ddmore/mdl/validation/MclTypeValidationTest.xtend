@@ -11,6 +11,7 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Ignore
+import org.eclipse.xtext.diagnostics.Diagnostic
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -39,6 +40,101 @@ class MclTypeValidationTest {
 		'''.parse
 		
 		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidScientificNotationEquationExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C = T
+				A = B + C - 22.02e-5
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInValidScientificNotationNumberAboveRange(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C = T
+				A = B + C - 22.02e555
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.realLiteral,
+			MdlValidator::NUMBER_BEYOND_PRECISION_RANGE,
+			"This real number is too large or small for MDL."
+		)
+	}
+	
+	@Ignore
+	// this is not caught properly. Need to work on it.
+	def void testInValidScientificNotationNumberBelowRange(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C = T
+				A = B + C - 22.02e-555777
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.realLiteral,
+			MdlValidator::NUMBER_BEYOND_PRECISION_RANGE,
+			"This real number is too large or small for MDL."
+		)
+	}
+	
+	@Test
+	def void testValidLargeIntegerBeyondRange(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C = T
+				A = B + C - 2220000000000000000000000000000000000000000000000000000000
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.integerLiteral, Diagnostic::SYNTAX_DIAGNOSTIC)
 	}
 	
 	@Test

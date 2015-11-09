@@ -32,8 +32,8 @@ warfarin_PK_ODE_par = parObj {
  	STRUCTURAL {
 		POP_CL : { value = 0.1, lo = 0.001 }
 		POP_V : { value = 8, lo = 0.001 } 
-		POP_KA : { value = 0.362, lo = 0.001 }
-		POP_TLAG : { value=1, lo=0.001, hi=10 }
+		POP_KA : { value = 0.362, lo = 1.03737e-33 }
+		POP_TLAG : { value=1, lo=0.001, hi=10E34 }
 		BETA_CL_WT : { value = 0.75, fix = true }
 		BETA_V_WT : { value = 1, fix = true } 
 		POP_F1 : { value = 1, fix=true }

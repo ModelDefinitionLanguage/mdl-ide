@@ -508,6 +508,7 @@ public class MclTypeProvider {
 	}
 	
 	def dispatch TypeInfo typeFor(Expression e){
+		if(e == null) return MclTypeProvider.UNDEFINED_TYPE 
 		switch(e){
 			SymbolReference:
 				e.ref.typeFor.makeReference
