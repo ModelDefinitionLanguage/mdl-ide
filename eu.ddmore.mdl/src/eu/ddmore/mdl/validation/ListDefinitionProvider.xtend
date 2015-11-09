@@ -296,11 +296,11 @@ class ListDefinitionProvider {
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ktr' -> true, 'mtt' -> true },
-						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> true },
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> true, 'tlag' -> false, 'finput' -> false },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'tlag' -> false, 'finput' -> false },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ktr' -> true, 'mtt' -> true },
-						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'modelDur' -> true }
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'modelDur' -> true, 'tlag' -> false, 'finput' -> false }
 						 ],
 						 false
 					),
