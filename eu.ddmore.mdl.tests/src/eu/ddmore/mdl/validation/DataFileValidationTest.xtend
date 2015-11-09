@@ -10,6 +10,8 @@ import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Before
+import java.io.File
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -20,6 +22,7 @@ class DataFileValidationTest {
 
 	@Test
 	def void testValidDataFile(){
+		val testFile = this.class.getResource("MclBlockArgValidationtest.xtend").path
 		val mcl = '''bar = dataObj {
 			
 			
@@ -28,7 +31,7 @@ class DataFileValidationTest {
 			}
 			
 			SOURCE{
-				srcFile : { file="MclBlockArgValidationtest.xtend", inputFormat is nonmemFormat }
+				srcFile : { file="«testFile»", inputFormat is nonmemFormat }
 			}
 			
 		}'''.parse

@@ -78,12 +78,16 @@ class DataFileValidation extends AbstractMdlValidator  {
 	        return new File(dataFile.locationURI.getPath)
 	    }
 	    else{
+	    	// this is a bit hacky and is mainly used for the non-eclipse plugin environment.
 	    	val url = this.class.getResource(filePath)
 	    	if(url != null){
 		        return new File(url.path);
 	    	}
+	    	else{
+	    		// if is null then assum the file is absolute and see if we can locate it that way.
+	    		return new File(filePath);
+	    	}
 	    }
-	    null
     }
 	
 //	private void checkData(PropertyDeclaration p, IFile dataFile){
