@@ -37,6 +37,25 @@ class MclBuiltinFunctionValidationTest {
 	}
 
 	@Test
+	def void testValidHyperblicTrigFunctions(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			MODEL_PREDICTION{
+				A = tanh(3.2)
+				B = cosh(3.2)
+				C = sinh(3.2)
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
 	def void testValidMaxFunction(){
 		val mcl = '''bar = mdlObj {
 			IDV{T}
