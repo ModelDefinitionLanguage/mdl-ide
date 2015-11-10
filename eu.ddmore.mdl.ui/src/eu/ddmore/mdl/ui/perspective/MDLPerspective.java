@@ -54,6 +54,7 @@ public class MDLPerspective implements IPerspectiveFactory {
         layout.addShowViewShortcut(IPageLayout.ID_EDITOR_AREA);
         layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 //        layout.addShowViewShortcut(IPageLayout.ID_PROGRESS_VIEW);
+        layout.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
         layout.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
 	}
 	
@@ -64,6 +65,8 @@ public class MDLPerspective implements IPerspectiveFactory {
 
         IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, .20f, editorArea);
         left.addView(IPageLayout.ID_PROJECT_EXPLORER);
+        IFolderLayout leftBottom = layout.createFolder("bottomLeft", IPageLayout.BOTTOM, .55f, "left");
+        leftBottom.addView(IPageLayout.ID_PROP_SHEET);
 
         IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, .75f, editorArea);
 //        bottom.addView(IPageLayout.ID_PROGRESS_VIEW);

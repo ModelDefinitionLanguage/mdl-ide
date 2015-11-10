@@ -529,8 +529,17 @@
           point="org.eclipse.ui.perspectives">
        <perspective
              class="eu.ddmore.mdl.ui.perspective.MDLPerspective"
-             id="eu.ddmore.mdl.ui.perspective.mdl"
-             name="MDL">
+             id="eu.ddmore.mdl.ui.perspective.MDL"
+             name="DDMoRe">
        </perspective>
+    </extension>
+    <extension
+          point="org.eclipse.ui.perspectiveExtensions">
+       <perspectiveExtension
+             targetID="org.eclipse.ui.resourcePerspective">
+          <perspectiveShortcut
+                id="eu.ddmore.mdl.ui.perspective.MDL">
+          </perspectiveShortcut>
+       </perspectiveExtension>
     </extension>
 </plugin>

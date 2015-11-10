@@ -10,8 +10,6 @@ import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Before
-import java.io.File
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -22,7 +20,9 @@ class DataFileValidationTest {
 
 	@Test
 	def void testValidDataFile(){
-		val testFile = this.class.getResource("count.csv").path
+//		val testFile = this.class.getResource("count.csv").file
+		val testFile = "src/eu/ddmore/mdl/validation/count.csv"
+//		System.err.println("Test path = " + testFile)
 		val mcl = '''bar = dataObj {
 			
 			
