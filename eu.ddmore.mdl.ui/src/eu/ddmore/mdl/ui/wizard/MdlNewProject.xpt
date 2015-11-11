@@ -29,7 +29,8 @@ dataObjectName = dataObj {
 	SOURCE {
 		# Define data file here
 		srcfile : {file = "nonmemDataFile.csv", 
-            inputFormat is nonmemFormat } 
+            inputFormat is nonmemFormat ,
+	    	ignore = "#" } 
 	}
 }
 
@@ -37,20 +38,21 @@ dataObjectName = dataObj {
 parameterObjectName = parObj {
 	DECLARED_VARIABLES{
 		# Variables referenced in the model are declared here.
-		ETA_CL
+		ETA_CL ETA_V
 	}
 
 	# By default a parameter is to be estimated if fix is omitted
  	STRUCTURAL {
  		# structural parameters
-		POP_CL : { value = 0.1, lo = 0.001, hi=1, fix = false }
+		POP_CL : { value = , lo = , hi= }
 		BETA_CL_WT : { value = 0.75, fix = true }
 		} # end STRUCTURAL
 	VARIABILITY {
 		# variability parameters
-		PPV_CL : { value = 0.1, type is sd }
+		PPV_CL : { value = , type is sd }
+		PPV_V : { value = , type is sd }
 		# Define correlation or covariance here
-		OMEGA : { parameter=[ETA_CL], value = [0.01], type is corr }
+		OMEGA : { parameter=[ETA_CL, ETA_V], value = [0.01], type is corr }
 	} # end VARIABILITY
 } # end of parameter object 
 
@@ -91,7 +93,7 @@ modelObjectName = mdlObj {
 
 	# Define group variables here
 	GROUP_VARIABLES{
-		# GRP_CL = ln(POP_CL) + BETA_CL_WT * logtWT
+		# GRP_CL = POP_CL * WT ^ BETA_CL_WT
 	}
 	
 	# Define individual parameters
@@ -99,7 +101,7 @@ modelObjectName = mdlObj {
 		# For maximum interoperability with a linear covariate model use this form.
 	    ln(CL) = linear( trans is ln, pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}] , ranEff = [ETA_CL] )
 	    # More flexible styles are available
-	    # CL = exp(GRPCL + ETA_CL)
+	    # CL = GRP_CL* exp(ETA_CL)
 	    
 	}
 
