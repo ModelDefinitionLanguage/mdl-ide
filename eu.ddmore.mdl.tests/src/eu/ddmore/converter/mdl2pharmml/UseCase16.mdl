@@ -27,7 +27,7 @@ Hansson2013_data = dataObj{
    }
    
    SOURCE{
-      srcFile : { file="BIOMARKER_simDATA.csv", inputFormat is nonmemFormat, ignore="#" }
+      srcFile : { file="BIOMARKER_simDATA.csv", inputFormat is nonmemFormat }
    }
 }
 

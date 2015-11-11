@@ -21,8 +21,7 @@ dataObjectName = dataObj {
 	SOURCE {
 		# Define data file here
 		srcfile : {file = "nonmemDataFile.csv", 
-            inputFormat is nonmemFormat ,
-	    	ignore = "#" } 
+            inputFormat is nonmemFormat  } 
 	}
 }
 

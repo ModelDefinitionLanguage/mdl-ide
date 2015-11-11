@@ -29,8 +29,7 @@ warfarin_PK_SSADDL_dat = dataObj{
 
    SOURCE{
       srcFile : {file="warfarin_conc_SSADDL.csv", 
-      			inputFormat is nonmemFormat,
-      			ignore="@"}
+      			inputFormat is nonmemFormat}
    }# end SOURCE
 } # end data object
 

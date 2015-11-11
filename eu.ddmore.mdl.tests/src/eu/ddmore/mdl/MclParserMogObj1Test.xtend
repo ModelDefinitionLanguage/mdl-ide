@@ -26,7 +26,7 @@ pobj = parObj {
 
 dobj = dataObj {
 	DATA_INPUT_VARIABLES{  foo : { use is ignore } }
-	SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+	SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 }
 
 tobj = taskObj {

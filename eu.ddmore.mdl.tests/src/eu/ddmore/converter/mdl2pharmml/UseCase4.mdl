@@ -23,8 +23,7 @@ warfarin_PK_IVPO_dat = dataObj {
 
    SOURCE{
       srcfile : { file="warfarin_infusion_oral.csv",
-      			  inputFormat is nonmemFormat,
-      			  ignore="@"}
+      			  inputFormat is nonmemFormat}
    }# end SOURCE
 } # end data object
 

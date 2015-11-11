@@ -20,8 +20,7 @@ warfarin_PK_Compartments_dat = dataObj {
 	
 	SOURCE {
 	    srcfile: {file = "warfarin_conc_cmt.csv",
-	    		  inputFormat is nonmemFormat,
-	    		  ignore = "#"} 
+	    		  inputFormat is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 

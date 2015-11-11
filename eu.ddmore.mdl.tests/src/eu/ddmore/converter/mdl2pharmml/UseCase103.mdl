@@ -25,8 +25,7 @@ UC001_08_Holford_PK_DEQ_gen2Cov_libErr_Tlag_dat = dataObj{
    SOURCE{
       myData: {
        file = "../Data/../data/warfarin_conc.csv",
-      inputFormat is nonmemFormat,
-      ignore="#"}
+      inputFormat is nonmemFormat}
    }# end SOURCE
 } # end data object
 

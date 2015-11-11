@@ -1103,7 +1103,7 @@ d1g=desObj{
 				DT : { use is doseTime, idvColumn = TIME, amtColumn = c2 }
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertNoErrors
@@ -1121,7 +1121,7 @@ d1g=desObj{
 			DATA_DERIVED_VARIABLES{
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertNoErrors
@@ -1138,7 +1138,7 @@ d1g=desObj{
 			DATA_DERIVED_VARIABLES{
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
@@ -1158,7 +1158,7 @@ d1g=desObj{
 			DATA_DERIVED_VARIABLES{
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
@@ -1179,7 +1179,7 @@ d1g=desObj{
 				DT : { use is doseTime, idvColumn = TIME, amtColumn = D + 0 - 2 }
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
@@ -1227,8 +1227,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1248,8 +1247,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1272,8 +1270,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1295,8 +1292,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1315,8 +1311,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1344,7 +1339,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 
 	SOURCE {
-	    SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } 
+	    SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } 
 	} # end SOURCE
 } # end data object
 		'''.parse

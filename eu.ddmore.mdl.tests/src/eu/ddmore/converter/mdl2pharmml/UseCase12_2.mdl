@@ -16,8 +16,7 @@ Bernoulli_DIST_dat = dataObj{
 
    	SOURCE {
 	    srdFile : {file = "binary.csv", 
-        	inputFormat is nonmemFormat, 
-	    ignore = "#" }
+        	inputFormat is nonmemFormat }
 	} # end SOURCE
 } # end data object
 

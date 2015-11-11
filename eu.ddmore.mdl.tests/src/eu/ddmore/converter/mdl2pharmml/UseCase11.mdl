@@ -15,8 +15,7 @@ Poisson_DIST_dat = dataObj{
 
    	SOURCE {
 	    srcFile : {file = "count.csv", 
-        	inputFormat is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 

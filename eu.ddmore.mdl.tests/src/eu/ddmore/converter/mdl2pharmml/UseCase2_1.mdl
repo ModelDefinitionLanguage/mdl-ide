@@ -19,7 +19,7 @@ warfarin_PK_ODE_dat = dataObj {
 	} # end DATA_INPUT_VARIABLES
 
 	SOURCE {
-	    srcFile : {file = "warfarin_conc_analytic.csv", inputFormat is nonmemFormat, ignore = "#" }
+	    srcFile : {file = "warfarin_conc_analytic.csv", inputFormat is nonmemFormat }
 	} # end SOURCE
 } # end data object
 

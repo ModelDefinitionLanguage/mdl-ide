@@ -26,7 +26,7 @@ class MclListAttributeValidationTest {
 				ID : { use is id }
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertNoErrors
@@ -41,7 +41,7 @@ class MclListAttributeValidationTest {
 				ID : { variable = Y }
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
@@ -59,7 +59,7 @@ class MclListAttributeValidationTest {
 				aCov : { use is covariate, categorical with {male, female} }
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		//@TODO: Implement the correct validation to check that categories are not defined.
@@ -78,7 +78,7 @@ class MclListAttributeValidationTest {
 				aCov : { use is covariate, categories with {male when 1, female when 2} }
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
@@ -100,7 +100,7 @@ class MclListAttributeValidationTest {
 				DT : { use is doseTime, idvColumn = TIME, amtColumn = AMT }
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertNoErrors
@@ -116,7 +116,7 @@ class MclListAttributeValidationTest {
 				AMT : { use is amt, variable = D, define = { 0 in CMT as D } }
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
@@ -135,7 +135,7 @@ class MclListAttributeValidationTest {
 				AMT : { use is amt }
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
@@ -152,7 +152,7 @@ class MclListAttributeValidationTest {
 				CMT : { use is cmt, use is cmt }
 			}
 			
-			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } }
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,

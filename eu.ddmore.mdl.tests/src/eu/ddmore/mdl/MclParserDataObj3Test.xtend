@@ -43,7 +43,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	
 	SOURCE {
-	    SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } 
+	    SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } 
 	} # end SOURCE
 } # end data object
 		'''
@@ -65,7 +65,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 
 	SOURCE {
-	    SrcFile : { file="warfarin_conc_sex.csv", inputformat  is nonmemFormat, ignore = "#" } 
+	    SrcFile : { file="warfarin_conc_sex.csv", inputformat  is nonmemFormat } 
 	} # end SOURCE
 } # end data object
 		'''.parse

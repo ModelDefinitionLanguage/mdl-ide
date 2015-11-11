@@ -21,8 +21,7 @@ warfarin_PK_BOV_dat = dataObj{
 
 	SOURCE {
 	    srcfile: {file = "warfarin_conc_bov_P4.csv",
-        		  inputFormat is nonmemFormat, 
-	    		  ignore = "#" }
+        		  inputFormat is nonmemFormat }
 	} # end SOURCE
 } # end data object
 

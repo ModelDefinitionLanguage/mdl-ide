@@ -36,8 +36,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -87,8 +86,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}
 			
@@ -135,8 +133,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}
 				
@@ -185,8 +182,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}
 				
@@ -232,8 +228,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -278,8 +273,7 @@ class MogValidatorTest {
 
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -331,8 +325,7 @@ class MogValidatorTest {
 
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}
 		
@@ -387,8 +380,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -442,8 +434,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -496,8 +487,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -554,8 +544,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -611,8 +600,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -670,8 +658,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -727,8 +714,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -787,8 +773,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -847,8 +832,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -907,8 +891,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -964,8 +947,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -1010,8 +992,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -1058,8 +1039,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -1105,8 +1085,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -1150,8 +1129,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1193,8 +1171,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1238,8 +1215,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1282,8 +1258,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1324,8 +1299,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1372,8 +1346,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1420,8 +1393,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1470,8 +1442,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1519,8 +1490,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1569,8 +1539,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1620,8 +1589,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1671,8 +1639,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1723,8 +1690,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1775,8 +1741,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1824,8 +1789,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1882,8 +1846,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1939,8 +1902,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1998,8 +1960,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -2062,8 +2023,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -2126,8 +2086,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -2184,8 +2143,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -2241,8 +2199,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -2300,8 +2257,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -2364,8 +2320,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -2428,8 +2383,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {

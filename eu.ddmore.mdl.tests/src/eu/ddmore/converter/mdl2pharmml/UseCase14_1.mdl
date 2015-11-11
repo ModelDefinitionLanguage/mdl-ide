@@ -36,8 +36,7 @@ warfarin_T2E_interval_dat = dataObj{
 
    SOURCE{
       srcFile : {file="warfarin_TTE_exact.csv",
-      			inputFormat is nonmemFormat,
-      			ignore="@"}
+      			inputFormat is nonmemFormat}
    }# end SOURCE
 } # end data object
 

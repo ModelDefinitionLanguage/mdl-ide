@@ -29,8 +29,7 @@ Categorical_DIST_dat = dataObj{
 
    	SOURCE {
 	    srcFile : {file = "category.csv", 
-        	inputFormat is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 

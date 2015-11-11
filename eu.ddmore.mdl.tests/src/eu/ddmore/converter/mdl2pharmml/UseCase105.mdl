@@ -15,8 +15,7 @@ drugX_delAbs_1occ_v1_dat = dataObj{
 
    SOURCE{
       srcfile: {file="drugX_PO_1occ_dataMDL_v1.csv",# simulated data
-      inputFormat is nonmemFormat,
-      ignore="@"}
+      inputFormat is nonmemFormat}
    }# end SOURCE
    
 } # end data object

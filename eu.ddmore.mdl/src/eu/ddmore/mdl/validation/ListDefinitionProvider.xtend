@@ -238,8 +238,8 @@ class ListDefinitionProvider {
 				key = 'file'
 				listDefns = newArrayList(
 					new ListDefInfo (null, new ListTypeInfo("Source", PrimitiveType.List),  #[
-						 new AttributeDefn('file', true, MclTypeProvider::STRING_TYPE), new AttributeDefn('inputFormat', true, INPUT_FORMAT_TYPE),
-						 	new AttributeDefn('ignore', false, MclTypeProvider::STRING_TYPE) 
+						 new AttributeDefn('file', true, MclTypeProvider::STRING_TYPE), new AttributeDefn('inputFormat', true, INPUT_FORMAT_TYPE)//,
+//						 	new AttributeDefn('ignore', false, MclTypeProvider::STRING_TYPE) 
 						 ] 
 					)
 				)
