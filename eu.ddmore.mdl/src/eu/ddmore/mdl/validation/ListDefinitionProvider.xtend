@@ -286,7 +286,7 @@ class ListDefinitionProvider {
 					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('to', true, ListDefinitionProvider.COMP_LIST_TYPE.makeReference),
-						 new AttributeDefn('target', true, DERIV_TYPE.makeReference),
+//						 new AttributeDefn('target', true, DERIV_TYPE.makeReference),
 						 new AttributeDefn('ka', false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('tlag', false, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('finput', false, MclTypeProvider::REAL_TYPE),
@@ -296,11 +296,11 @@ class ListDefinitionProvider {
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ktr' -> true, 'mtt' -> true },
-						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> true, 'tlag' -> false, 'finput' -> false },
-						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'tlag' -> false, 'finput' -> false },
-						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
-						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ktr' -> true, 'mtt' -> true },
-						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'modelDur' -> true, 'tlag' -> false, 'finput' -> false }
+						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> true, 'tlag' -> false, 'finput' -> false }//,
+//						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'tlag' -> false, 'finput' -> false },
+//						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
+//						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ktr' -> true, 'mtt' -> true },
+//						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'modelDur' -> true, 'tlag' -> false, 'finput' -> false }
 						 ],
 						 false
 					),
