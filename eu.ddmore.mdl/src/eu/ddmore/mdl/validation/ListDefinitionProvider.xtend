@@ -346,7 +346,7 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefInfo (null, DERIV_TYPE,  #[
 						 new AttributeDefn('deriv', true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('wrt', false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE)//, new AttributeDefn('wrt', false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]
 					)
 				)
@@ -358,7 +358,7 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefInfo (null, DERIV_TYPE,  #[
 						 new AttributeDefn('deriv', true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('wrt', false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE)//, new AttributeDefn('wrt', false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]
 					)
 				)
@@ -890,7 +890,7 @@ class ListDefinitionProvider {
 	def getAllMatchingListDefns(BlockStatement owningBlock, String attName){
 		val retVal = new ArrayList<AttributeDefn>
 		val blkDefn = attDefns.get(owningBlock.identifier)
-		for(ld : blkDefn.listDefns){
+		for(ld : blkDefn?.listDefns ?: Collections::emptyList){
 			ld.attributes.forEach[ad|
 				if(ad.name == attName) retVal.add(ad) 
 			]

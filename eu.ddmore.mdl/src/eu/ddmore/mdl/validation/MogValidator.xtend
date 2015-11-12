@@ -211,7 +211,7 @@ class MogValidator {
 					if(!mdlStmt.isAssigned) 
 						errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "parameter '" + mdlStmt.name +"' has no match in parObj");
 				}
-				if((parStmt as Statement).isParStructuralParam){
+				if(parStmt != null && (parStmt as Statement).isParStructuralParam){
 					errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "Parameter '" + mdlStmt.name +"' in mdlObj cannot match a structural parameter in the parObj");
 				}
 				else if(!mdlStmt.typeFor.isCompatible(parStmt.typeFor)){

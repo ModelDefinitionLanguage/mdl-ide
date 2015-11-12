@@ -34,7 +34,9 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 	override completeSymbolReference_Ref(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 //		lookupCrossReference(assignment.getTerminal() as CrossReference, context, acceptor);
 	}
-
+	
+	
+ 
 	override complete_IS(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		var node = context.lastCompleteNode
 		val owningBlock = EcoreUtil2.getContainerOfType(model, BlockStatement) 
