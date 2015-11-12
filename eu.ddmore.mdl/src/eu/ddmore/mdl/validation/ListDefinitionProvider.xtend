@@ -886,6 +886,18 @@ class ListDefinitionProvider {
 		]
 	}
 
+
+	def getAllMatchingListDefns(BlockStatement owningBlock, String attName){
+		val retVal = new ArrayList<AttributeDefn>
+		val blkDefn = attDefns.get(owningBlock.identifier)
+		for(ld : blkDefn.listDefns){
+			ld.attributes.forEach[ad|
+				if(ad.name == attName) retVal.add(ad) 
+			]
+		}
+		retVal
+	}
+
 	// gets a list definition based on its key 
 	def getListDefnByKeyValue(BlockListDefinition it, String keyValQuery){
 		listDefns.findFirst[defn|

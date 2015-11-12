@@ -46,7 +46,8 @@ class MdlLabelProvider extends DefaultEObjectLabelProvider {
     }
     
 	def image(MclObject e) {
-		return switch(e.mdlObjType){
+		return switch(e?.mdlObjType){
+			case null: null
 			case MdlValidator::MDLOBJ: imageHelper.getImage(getPath(MODEL_OBJ))
 			case MdlValidator::DATAOBJ: imageHelper.getImage(getPath(DATA_OBJ))
 			case MdlValidator::PARAMOBJ: imageHelper.getImage(getPath(PARAMETER_OBJ))

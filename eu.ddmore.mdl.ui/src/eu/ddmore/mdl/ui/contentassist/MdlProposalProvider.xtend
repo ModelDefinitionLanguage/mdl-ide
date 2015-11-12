@@ -8,6 +8,7 @@ import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
 import eu.ddmore.mdl.validation.ListDefinitionProvider
 import java.util.ArrayList
 import java.util.List
@@ -15,6 +16,8 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.jface.viewers.StyledString
 import org.eclipse.swt.graphics.Image
 import org.eclipse.xtext.Assignment
+import org.eclipse.xtext.CrossReference
+import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.RuleCall
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
@@ -28,15 +31,39 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
 
+	override completeSymbolReference_Ref(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+//		lookupCrossReference(assignment.getTerminal() as CrossReference, context, acceptor);
+	}
+
 	override complete_IS(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		val props = #['is']
-		addProposals(context, acceptor, props, null)
+		var node = context.lastCompleteNode
+		val owningBlock = EcoreUtil2.getContainerOfType(model, BlockStatement) 
+		while(node != null && owningBlock != null){
+			val nodeTxt = node.text
+			val matchingAtts = owningBlock.getAllMatchingListDefns(nodeTxt)
+			if(matchingAtts.exists[attType.theType == PrimitiveType.Enum ]){
+				addProposals(context, acceptor, #['is'], null)
+				node = null
+			}
+			else
+				node = node.nextSibling
+		}
 	}
 	
 	
 	override complete_ASSIGN(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		val props = #['=']
-		addProposals(context, acceptor, props, null)
+		var node = context.lastCompleteNode
+		val owningBlock = EcoreUtil2.getContainerOfType(model, BlockStatement) 
+		while(node != null && owningBlock != null){
+			val nodeTxt = node.text
+			val matchingAtts = owningBlock.getAllMatchingListDefns(nodeTxt)
+			if(matchingAtts.exists[attType.theType != PrimitiveType.Enum ]){
+				addProposals(context, acceptor, #['='], null)
+				node = null
+			}
+			else
+				node = node.nextSibling
+		}
 	}
 
 
@@ -57,7 +84,8 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 		for (String proposal: attributes){
 			val displayedString = new StyledString();
 			displayedString.append(proposal);
-			val p = doCreateProposal(proposal, displayedString, img, 1000, context);
+			val p = createCompletionProposal(proposal, displayedString, img, context)
+//			val p = doCreateProposal(proposal, displayedString, img, 1000, context)
 			acceptor.accept(p);
 		}
 	}

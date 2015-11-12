@@ -598,7 +598,8 @@ public class MclTypeProvider {
 			CategoryValueDefinition:{
 				val enumDefn = EcoreUtil2.getContainerOfType(sd.eContainer, SymbolDefinition)
 				val catDefn = EcoreUtil2.getContainerOfType(sd.eContainer, CategoricalDefinitionExpr)
-				new EnumTypeInfo(enumDefn.name, catDefn.getCategoryNames)
+				if(enumDefn != null && catDefn != null) new EnumTypeInfo(enumDefn.name, catDefn.getCategoryNames)
+				else UNDEFINED_TYPE
 			}
 			default:
 				UNDEFINED_TYPE
