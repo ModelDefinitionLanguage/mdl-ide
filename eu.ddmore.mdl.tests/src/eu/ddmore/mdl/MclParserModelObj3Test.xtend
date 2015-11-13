@@ -17,6 +17,8 @@ class MclParserModelObj3Test {
 	
 	val static CODE_SNIPPET = '''
 warfarin_PK_2Compartments_mdl = mdlObj {
+   IDV{T}
+	
    COVARIATES{
       WT
       logtWT = ln(WT/70)

@@ -31,6 +31,7 @@ class MogValidatorTest {
 		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				SEX : { use is catCov withCategories{male when 0, female when 1} }
 				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
@@ -40,6 +41,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 		
@@ -81,6 +83,7 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{GUT Y}
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				logWT : { use is covariate }
 				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
@@ -91,6 +94,7 @@ class MogValidatorTest {
 		}
 			
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 		
@@ -178,6 +182,7 @@ class MogValidatorTest {
 		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -187,6 +192,7 @@ class MogValidatorTest {
 		}
 				
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 		
@@ -223,6 +229,7 @@ class MogValidatorTest {
 		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				SEX : { use is catCov withCategories{male when 0, female when 1} }
 				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
@@ -232,6 +239,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 		
@@ -376,6 +384,7 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{ Y }
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				DV : { use is dv, variable = Y }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -384,6 +393,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -430,6 +440,7 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{ Y withCategories { c1, c0, c3, c2 } }
 		
 			DATA_INPUT_VARIABLES {
+    		T : { use is idv }
 		      DV:{ use is dv, define= {Y.c0 when 0, Y.c2 when 1, Y.c3 when 2, Y.c1 when 3 } }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -438,6 +449,8 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
+				
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -653,6 +666,7 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{ Y; Z }
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				DVID : { use is dvid }
 				DV : { use is dv, define = { 1 in DVID as Y, 2 in DVID as Z } }
 			} # end DATA_INPUT_VARIABLES
@@ -662,6 +676,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -886,6 +901,7 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{ Z }
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				DVID : { use is dvid }
 				DV : { use is dv, variable = Z }
 			} # end DATA_INPUT_VARIABLES
@@ -895,6 +911,8 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
+				
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -942,6 +960,7 @@ class MogValidatorTest {
 		
 			DATA_INPUT_VARIABLES {
 				ID : { use is id }
+				T : { use is idv }
 				DV : { use is dv, variable = Y }
 				OCC : { use is varLevel }
 			} # end DATA_INPUT_VARIABLES
@@ -951,6 +970,8 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
+				
 				VARIABILITY_LEVELS{
 					OCC : { type is parameter, level = 3 }
 					ID : { type is parameter, level = 2 }
@@ -1262,6 +1283,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 		
@@ -1295,6 +1317,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -1303,6 +1326,8 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
+				
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1342,6 +1367,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { Y }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				foo1 : { use is ignore }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -1350,6 +1376,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1389,6 +1416,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -1397,6 +1425,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1438,6 +1467,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -1446,6 +1476,8 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
+
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1585,6 +1617,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -1593,6 +1626,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1634,6 +1668,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D; CENTRAL; Y }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				CMT : { use is cmt }
 				AMT : { use is amt, define = { 1 in CMT as D, 2 in CMT as CENTRAL, 3 in CMT as Y } }
 			} # end DATA_INPUT_VARIABLES
@@ -1643,6 +1678,8 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
+				
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1785,6 +1822,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -1793,6 +1831,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1842,6 +1881,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -1850,6 +1890,8 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
+
 				VARIABILITY_LEVELS{
 				}
 				
@@ -2019,6 +2061,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -2027,6 +2070,8 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
+
 				VARIABILITY_LEVELS{
 				}
 				
@@ -2082,6 +2127,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -2090,6 +2136,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 				
@@ -2139,6 +2186,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -2147,6 +2195,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 				
@@ -2316,6 +2365,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -2324,6 +2374,7 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 				

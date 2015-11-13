@@ -22,6 +22,8 @@ class MclStatementValidationTest {
 	@Test
 	def void testValidStatementCategories(){
 		val mcl = '''foo = mdlObj {
+			IDV{T}
+
 			VARIABILITY_LEVELS{
 			}
 
@@ -87,6 +89,7 @@ class MclStatementValidationTest {
 	def void testValidCategoryDefnInList(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV { T }
 			VARIABILITY_LEVELS{
 			}
 
@@ -107,6 +110,8 @@ class MclStatementValidationTest {
 	def void testInValidCategoryDefnInList(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{T}
+
 			VARIABILITY_LEVELS{
 			}
 
@@ -130,6 +135,7 @@ class MclStatementValidationTest {
 	def void testValidCategoryDefnWithNoMappingsInList(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{T}
 			VARIABILITY_LEVELS{
 			}
 
@@ -150,6 +156,7 @@ class MclStatementValidationTest {
 	def void testInvalidDiscreteCategoryDefnWithNoMappingsInList(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{T}
 			VARIABILITY_LEVELS{
 			}
 
@@ -200,6 +207,8 @@ class MclStatementValidationTest {
 	def void testValidIfElseWithElse(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{T}
+
 			VARIABILITY_LEVELS{
 			}
 
@@ -217,6 +226,8 @@ class MclStatementValidationTest {
 	def void testValidIfElseWithElseIf(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{T}
+			
 			VARIABILITY_LEVELS{
 			}
 

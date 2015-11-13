@@ -167,6 +167,7 @@ obj1 = mdlObj{
 	def void testExpectedCategoryQualifiedLinking(){
 		val mcl = '''
 obj1 = mdlObj{
+	IDV{T}
 
    VARIABILITY_LEVELS{
 	DV : { level=1, type is observation }

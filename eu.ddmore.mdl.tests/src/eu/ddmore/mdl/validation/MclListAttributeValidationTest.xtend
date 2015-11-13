@@ -367,6 +367,8 @@ class MclListAttributeValidationTest {
 	def void testValidTTE(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{T}
+
 			VARIABILITY_LEVELS{
 			}
 
@@ -405,6 +407,8 @@ class MclListAttributeValidationTest {
 	def void testValidSubListDefinition(){
 		val mcl = '''
 foo = mdlObj {
+	IDV{T}
+
    COVARIATES{
    	  WT
    }# end COVARIATES

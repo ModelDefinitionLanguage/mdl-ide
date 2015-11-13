@@ -22,6 +22,8 @@ class MclIndexTest {
 	
 	val static CODE_SNIPPET = '''
 warfarin_PK_SEXAGE_mdl = mdlObj {
+	IDV{T}
+
 	COVARIATES{
 		WT
 		AGE
@@ -51,7 +53,7 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 
 	@Test
 	def void testExpectedEObjectDescriptions(){
-		CODE_SNIPPET.parse.assertExportedEObjectDescriptions("warfarin_PK_SEXAGE_mdl, warfarin_PK_SEXAGE_mdl.WT, warfarin_PK_SEXAGE_mdl.AGE, warfarin_PK_SEXAGE_mdl.SEX, warfarin_PK_SEXAGE_mdl.SEX.female, warfarin_PK_SEXAGE_mdl.SEX.male, warfarin_PK_SEXAGE_mdl.SEX.MISSING, warfarin_PK_SEXAGE_mdl.logtWT, warfarin_PK_SEXAGE_mdl.tAGE, warfarin_PK_SEXAGE_mdl.POP_FCL_FEM, warfarin_PK_SEXAGE_mdl.FSEXCL")
+		CODE_SNIPPET.parse.assertExportedEObjectDescriptions("warfarin_PK_SEXAGE_mdl, warfarin_PK_SEXAGE_mdl.T, warfarin_PK_SEXAGE_mdl.WT, warfarin_PK_SEXAGE_mdl.AGE, warfarin_PK_SEXAGE_mdl.SEX, warfarin_PK_SEXAGE_mdl.SEX.female, warfarin_PK_SEXAGE_mdl.SEX.male, warfarin_PK_SEXAGE_mdl.SEX.MISSING, warfarin_PK_SEXAGE_mdl.logtWT, warfarin_PK_SEXAGE_mdl.tAGE, warfarin_PK_SEXAGE_mdl.POP_FCL_FEM, warfarin_PK_SEXAGE_mdl.FSEXCL")
 	}
 	
 	def private assertExportedEObjectDescriptions(EObject o, CharSequence expected){
