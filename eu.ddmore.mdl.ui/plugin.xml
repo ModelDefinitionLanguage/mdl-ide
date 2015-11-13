@@ -483,7 +483,7 @@
        </includes>
     </viewerContentBinding>
  </extension>
-    <extension point="org.eclipse.ui.menus">
+    <!--extension point="org.eclipse.ui.menus">
 	    <menuContribution
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
 	        <command
@@ -497,7 +497,7 @@
 	 	    		</iterate>
  	            </visibleWhen>
 	        </command>
-		</menuContribution>
+		</menuContribution-->
 		<!--menuContribution
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
 	        <command
@@ -512,7 +512,7 @@
  	            </visibleWhen>
 	        </command>
 		</menuContribution-->
-	    <menuContribution locationURI="popup:#TextEditorContext?after=group.edit">
+	    <!--menuContribution locationURI="popup:#TextEditorContext?after=group.edit">
 	        <command
 	            commandId="eu.ddmore.mdl.ui.handler.ConvertToPharmML"
 	            style="push">
@@ -524,7 +524,7 @@
 	                </visibleWhen>
 	        </command>
 	    </menuContribution>
-	</extension>
+	</extension-->
     <extension
           point="org.eclipse.ui.perspectives">
        <perspective
