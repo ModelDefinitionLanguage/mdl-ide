@@ -509,7 +509,9 @@
 		<menuContribution
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
 	        <command
-	            commandId="eu.ddmore.mdl.ui.handler.NMTranToMDL_PE" style="push">
+               commandId="eu.ddmore.mdl.ui.handler.NMTranToMDL_PE"
+               label="NMTran to MDL"
+               style="push">
 	            <visibleWhen checkEnabled="false">
                 	<iterate>
 				       <adapt type="org.eclipse.core.resources.IResource">
