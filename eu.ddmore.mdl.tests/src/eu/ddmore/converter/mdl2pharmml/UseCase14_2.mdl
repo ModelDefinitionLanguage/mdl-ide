@@ -77,7 +77,7 @@ warfarin_T2E_interval_mdl = mdlObj{
    }# end MODEL_PREDICTION
 
    OBSERVATION{
-     Y : {type is tte, hazard = HAZ, event is intervalCensored, maxEvent=INF }
+     Y : {type is tte, hazard = HAZ, event is intervalCensored, maxEvent=inf }
    }# end ESTIMATION
 
 } # end of model object

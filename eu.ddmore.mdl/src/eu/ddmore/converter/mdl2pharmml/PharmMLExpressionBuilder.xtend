@@ -338,7 +338,9 @@ class PharmMLExpressionBuilder {
 	
 	def getConstantLiteral(ConstantLiteral it) {
 		val constType = switch(value){
-			case("INF"): "infinity"
+			case("inf"): "infinity"
+			case("exponentiale"): "exponentiale"
+			case("pi") : "pi"
 			default:
 				"error:NotDefined"	
 		}

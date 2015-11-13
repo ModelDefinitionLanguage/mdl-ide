@@ -23,14 +23,14 @@ drugX_delAbs_1occ_v1_dat = dataObj{
 drugX_delAbs_1occ_v1_par = parObj{
 
    STRUCTURAL{
-      pop_Vc: {value=10, lo=0, hi=INF}
-      pop_Vp: {value=30, lo=0, hi=INF}
-      pop_CL: {value=6, lo=0, hi=INF}
-      pop_Ka: {value=1.5, lo=0, hi=INF}
-      pop_Q: {value=10, lo=0, hi=INF}
+      pop_Vc: {value=10, lo=0, hi=inf}
+      pop_Vp: {value=30, lo=0, hi=inf}
+      pop_CL: {value=6, lo=0, hi=inf}
+      pop_Ka: {value=1.5, lo=0, hi=inf}
+      pop_Q: {value=10, lo=0, hi=inf}
 	  pop_MTT: {value=1, lo=0}
 	  pop_n: {value=9, lo=0}      
-      b: {value=.15, lo=0, hi=INF}
+      b: {value=.15, lo=0, hi=inf}
    }# end STRUCTURAL
 
    VARIABILITY{
