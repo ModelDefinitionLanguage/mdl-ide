@@ -73,15 +73,15 @@ TransformedDefinition returns EquationTypeDefinition:
 ;
 
 RandomVariableDefinition:
-	name = ID "~" distn = BuiltinFunctionCall ';'?
+	name = ID RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
 ;
 
 ListDefinition:
-	name = ID ":" list = AttributeList ';'?
+	name = ID LIST_ASSIGN list = AttributeList ';'?
 ;
 
 AnonymousListStatement:
-	':' ':' list = AttributeList ';'?
+	ANONYMOUS_PREFIX list = AttributeList ';'?
 ;
 
 PropertyStatement:
@@ -305,14 +305,6 @@ StringLiteral returns Expression:
 	{StringLiteral} value=STRING;
 
 
-//VectorLiteral returns Expression:
-//	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
-//;	
-//
-//VectorElement returns Expression:
-//	{VectorElement} element+=Expression
-//;
-
 VectorLiteral returns Expression:
 	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
 ;	
@@ -327,7 +319,7 @@ QualifiedName:
 
 
 terminal CONSTANT:
-	'INF'
+	'inf'|'pi'|'exponentiale'
 ;
 
 terminal SET: 'set';
@@ -337,6 +329,12 @@ terminal IN: 'in';
 terminal IS: 'is';
 
 terminal ASSIGN: '=';
+
+terminal RANDOM_ASSIGN : '~';
+
+terminal LIST_ASSIGN : ':';
+
+terminal ANONYMOUS_PREFIX : '::';
 
 terminal AS: 'as';
 

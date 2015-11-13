@@ -211,14 +211,16 @@ class MogValidator {
 					if(!mdlStmt.isAssigned) 
 						errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "parameter '" + mdlStmt.name +"' has no match in parObj");
 				}
-				if((parStmt as Statement).isParStructuralParam){
-					errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "Parameter '" + mdlStmt.name +"' in mdlObj cannot match a structural parameter in the parObj");
-				}
-				else if(!mdlStmt.typeFor.isCompatible(parStmt.typeFor)){
-					errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "parameter '" + parStmt.name +"' has an inconsistent type with its match in the parObj");
-				}
-				else if(mdlStmt.isAssigned){
-					warningLambda.apply(MdlValidator::MASKING_PARAM_ASSIGNMENT, "value assigned to parameter '" + parStmt.name +"' in mdlObj is overridden by value in parObj");
+				else{
+					if((parStmt as Statement).isParStructuralParam){
+						errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "Parameter '" + mdlStmt.name +"' in mdlObj cannot match a structural parameter in the parObj");
+					}
+					else if(!mdlStmt.typeFor.isCompatible(parStmt.typeFor)){
+						errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "parameter '" + parStmt.name +"' has an inconsistent type with its match in the parObj");
+					}
+					else if(mdlStmt.isAssigned){
+						warningLambda.apply(MdlValidator::MASKING_PARAM_ASSIGNMENT, "value assigned to parameter '" + parStmt.name +"' in mdlObj is overridden by value in parObj");
+					}
 				}
 			}
 		}

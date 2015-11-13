@@ -21,6 +21,7 @@ class MclObjectValidationTest {
 	@Test
 	def void testValidArgs(){
 		val mcl = '''bar = mdlObj{
+			IDV{T}
 			VARIABILITY_LEVELS{
 				ID : {type is parameter, level=2 }
 			}

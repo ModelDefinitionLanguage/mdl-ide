@@ -131,7 +131,7 @@ class BlockDefinitionProvider {
 				new StatementSpec(ep.equationDefinition, false),
 				new StatementSpec(ep.equationDefinition, true)
 			]),
-			IDV_BLK_NAME -> new BlockSpec(IDV_BLK_NAME, 0, 1, 1, 1, #[
+			IDV_BLK_NAME -> new BlockSpec(IDV_BLK_NAME, 1, 1, 1, 1, #[
 				new StatementSpec(ep.equationDefinition, false)
 			]),
 			DIV_BLK_NAME -> new BlockSpec(DIV_BLK_NAME, 0, Integer.MAX_VALUE, 1, Integer.MAX_VALUE, #[

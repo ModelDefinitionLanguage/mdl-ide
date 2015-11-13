@@ -216,7 +216,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testValidNamedFunction(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			
 			COVARIATES{
 				logtWT
@@ -317,7 +317,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testValidOverloadedNamedFunction(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			
 			COVARIATES{
 				logtWT
@@ -412,6 +412,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testNamedFunctionWithoutOptionalArg(){
 		val mcl = '''bar = mdlObj {
+			IDV{T}
 			COVARIATES{
 				logtWT
 			}

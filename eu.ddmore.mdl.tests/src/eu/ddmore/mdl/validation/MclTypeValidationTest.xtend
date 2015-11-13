@@ -150,7 +150,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < INF) then B^180 else 22
+				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < inf) then B^180 else 22
 			}
 			
 		} # end of model object
@@ -1396,6 +1396,7 @@ warfarin_PK_v2_dat = dataObj{
 	def void testValidObsWhenExpression(){
 		val mcl = '''
 		foo = mdlObj{
+				IDV{T}
 			VARIABILITY_LEVELS{
 			}
 

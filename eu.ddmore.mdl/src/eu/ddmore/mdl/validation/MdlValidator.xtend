@@ -26,6 +26,7 @@ import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
+import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SubListExpression
@@ -46,8 +47,6 @@ import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.ComposedChecks
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.mdl.RealLiteral
-import eu.ddmore.mdl.mdl.IntegerLiteral
 
 //import org.eclipse.xtext.validation.Check
 
@@ -56,7 +55,7 @@ import eu.ddmore.mdl.mdl.IntegerLiteral
  *
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
- @ComposedChecks(validators= #[BlockValidator, DataFileValidation])
+ @ComposedChecks(validators= #[BlockValidator, DataFileValidation, UnsupportedFeaturesValidator])
 class MdlValidator extends AbstractMdlValidator {
 	public val static MDLOBJ = 'mdlObj'
 	public val static DATAOBJ = 'dataObj'

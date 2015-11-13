@@ -110,7 +110,7 @@ class MdlCustomValidationTest {
 	@Test
 	def void testValidLhsTransLinearDefn(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			
 			COVARIATES{
 			}
@@ -129,7 +129,7 @@ class MdlCustomValidationTest {
 	@Test
 	def void testValidLhsNoneTransLinearDefn(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			
 			COVARIATES{
 			}
@@ -148,7 +148,7 @@ class MdlCustomValidationTest {
 	@Test
 	def void testValidLhsNoTransLinearDefn(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			
 			COVARIATES{
 			}
@@ -167,7 +167,7 @@ class MdlCustomValidationTest {
 	@Test
 	def void testValidLhsTransGeneralDefn(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			
 			COVARIATES{
 			}
@@ -186,7 +186,7 @@ class MdlCustomValidationTest {
 	@Test
 	def void testValidLhsNoTransGeneralDefn(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			
 			COVARIATES{
 			}
@@ -201,6 +201,5 @@ class MdlCustomValidationTest {
 		
 		mcl.assertNoErrors
 	}
-
 
 }
