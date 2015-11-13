@@ -50,6 +50,8 @@ class ListDefinitionProvider {
 	public static val AMT_COL_ATT = 'amtColumn'
 	public static val CMT_TYPE_ATT = 'type'
 	public static val OBS_TYPE_ATT = 'type'
+	public static val DERIV_TYPE_ATT = 'deriv'
+	public static val WRT_ATT = 'wrt'
 	public static val COUNT_OBS_VALUE = 'count'
 	public static val DISCRETE_OBS_VALUE = 'discrete'
 	public static val CATEGORICAL_OBS_VALUE = 'categorical'
@@ -342,11 +344,11 @@ class ListDefinitionProvider {
 		),
 		"DEQ" -> (
 			new BlockListDefinition => [
-				key = 'deriv'
+				key = DERIV_TYPE_ATT
 				listDefns = newArrayList(
 					new ListDefInfo (null, DERIV_TYPE,  #[
-						 new AttributeDefn('deriv', true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE)//, new AttributeDefn('wrt', false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(DERIV_TYPE_ATT, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]
 					)
 				)
@@ -354,11 +356,11 @@ class ListDefinitionProvider {
 		),
 		"MODEL_PREDICTION" -> (
 			new BlockListDefinition => [
-				key = 'deriv'
+				key = DERIV_TYPE_ATT
 				listDefns = newArrayList(
 					new ListDefInfo (null, DERIV_TYPE,  #[
-						 new AttributeDefn('deriv', true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE)//, new AttributeDefn('wrt', false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(DERIV_TYPE_ATT, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]
 					)
 				)
@@ -670,16 +672,16 @@ class ListDefinitionProvider {
 //		defnType
 //	}
 	
+	
 	def isKeyAttributeDefined(AttributeList it){
-				// expect AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
 		val parent = parentStatement
+		var found = false
 		if(attDefns.containsKey(parent.identifier)){
 			val iter = attributes.iterator
-			val expectedAttributes = new ArrayList<ListDefInfo>()
-			while(iter.hasNext && expectedAttributes.isEmpty){
+			while(iter.hasNext && !found){
 				val att = iter.next
 				val blockDefn = attDefns.get(parent.identifier)
-				expectedAttributes.addAll(blockDefn.listDefns.filter[at|
+				found = blockDefn.listDefns.exists[at|
 					switch(att){
 						ValuePair case att.argumentName == blockDefn.key:{
 							if(at.keyValue != null){
@@ -690,13 +692,38 @@ class ListDefinitionProvider {
 						}
 						default: false
 					}
-				])
+				]
 			}
-			return !expectedAttributes.isEmpty
 		}
-		true
+		return found
 	}
 	
+	def getKeyAttribute(AttributeList it){
+		val parent = parentStatement
+		var String retVal = null
+		if(attDefns.containsKey(parent.identifier)){
+			val iter = attributes.iterator
+			while(iter.hasNext && retVal == null){
+				val att = iter.next
+				val blockDefn = attDefns.get(parent.identifier)
+				if(blockDefn.listDefns.exists[at|
+					switch(att){
+						ValuePair case att.argumentName == blockDefn.key:{
+							if(at.keyValue != null){
+								val keyVal = att.expression.enumValue
+								keyVal == at.keyValue
+							}
+							else true
+						}
+						default: false
+					}
+				]){
+					retVal = blockDefn.key
+				}
+			}
+		}
+		return retVal
+	}
 
 
 	def Set<String> findUnusedMandatoryArguments(AttributeList sle, ListDefInfo listDefn){

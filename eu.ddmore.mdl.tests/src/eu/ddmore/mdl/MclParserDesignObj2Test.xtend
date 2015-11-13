@@ -10,6 +10,8 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.validation.UnsupportedFeaturesValidator
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -82,8 +84,11 @@ d1g=desObj{
 	
 	@Test
 	def void testParsing(){
-		CODE_SNIPPET.parse.assertNoErrors
-		
+		val mcl = CODE_SNIPPET.parse
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.mclObject, UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Objects of type 'desObj' are not currently supported for execution in R."
+		)
 	}
 	
 	@Test

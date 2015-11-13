@@ -33,7 +33,7 @@ class DataFileValidation extends AbstractMdlValidator  {
 			if (dataFile == null || !dataFile.exists()){
 				warning(MSG_DATA_FILE_NOT_FOUND, 
 					MdlPackage.eINSTANCE.valuePair_Expression,
-					DATA_FILE_NOT_FOUND, dataPath);
+					DATA_FILE_NOT_FOUND, dataPath)
 			} else {
 				//Data file found, check columns
 //					checkData(p, dataFile);
