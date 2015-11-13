@@ -1,36 +1,26 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import eu.ddmore.mdl.mdl.AdditiveExpression
-import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueReference
+import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
-import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
-import eu.ddmore.mdl.mdl.OrExpression
-import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
-import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
-import eu.ddmore.mdl.mdl.UnaryExpression
-import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.validation.BlockDefinitionProvider
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
@@ -41,6 +31,7 @@ import java.util.Comparator
 import java.util.HashMap
 import java.util.List
 import java.util.Map
+import java.util.Set
 import java.util.TreeMap
 import org.eclipse.xtext.EcoreUtil2
 
@@ -49,8 +40,6 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.mdl.EnumExpression
-import java.util.Set
 
 class ModelDefinitionPrinter {
 	extension MclUtils mu = new MclUtils
@@ -601,30 +590,70 @@ class ModelDefinitionPrinter {
 		expr != null && expr instanceof BuiltinFunctionCall
 	}
 	
-	def writeContinuousObservation(EquationTypeDefinition definition, int idx)'''
-		<ObservationModel blkId="om«idx»">
-			<ContinuousData>
-				«IF isStandardErrorDefinition(definition.expression)»
-					<Standard symbId="«definition.name»">
-						«IF (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null»
-							<Transformation>«(definition.expression as BuiltinFunctionCall).getArgumentExpression('trans').convertToString.getPharmMLTransFunc»</Transformation>
+	def isTransformedBothSides(EquationTypeDefinition definition){
+		definition instanceof TransformedDefinition &&
+		 definition.expression instanceof BuiltinFunctionCall &&
+		  (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null
+	}
+	
+	def isTransformedOnlyRhsSide(EquationTypeDefinition definition){
+		definition instanceof EquationDefinition &&
+		 definition.expression instanceof BuiltinFunctionCall &&
+		  (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null
+	}
+	
+	def writeContinuousObservation(EquationTypeDefinition definition, int idx){
+		val rhsExpr = definition.expression
+		if(rhsExpr instanceof BuiltinFunctionCall){
+			val predictionExpr = rhsExpr.getArgumentExpression('prediction')
+			'''
+				<ObservationModel blkId="om«idx»">
+					<ContinuousData>
+						«IF definition.isTransformedOnlyRhsSide»
+							<ct:Variable symbolType="real" symbId="«predictionExpr.singleSymbolRef?.name ?: "ERROR!"»">
+								<ct:Assign>
+									<math:Equation>
+										<math:Uniop op="log">
+											«predictionExpr.pharmMLExpr»
+										</math:Uniop>
+									</math:Equation>
+								</ct:Assign>
+							</ct:Variable>
 						«ENDIF»
-						<Output>
-							«(definition.expression as BuiltinFunctionCall).getArgumentExpression('prediction').pharmMLExpr»
-						</Output>
-						«writeStandardErrorModel(definition.expression as BuiltinFunctionCall)»
-						<ResidualError>
-							«(definition.expression as BuiltinFunctionCall).getArgumentExpression('eps').pharmMLExpr»
-						</ResidualError>
-					</Standard>
-				«ELSEIF !(definition.expression instanceof BuiltinFunctionCall)»
-					<General symbId="«definition.name»">
-						«definition.expression.expressionAsAssignment»
-					</General>
-				«ENDIF»
-			</ContinuousData>
-		</ObservationModel>
-	''' 
+						«IF isStandardErrorDefinition(definition.expression)»
+							<Standard symbId="«definition.name»">
+								«IF definition instanceof TransformedDefinition»
+									<Transformation>«definition.transform.pharmMLTransFunc»</Transformation>
+								«ENDIF»
+								<Output>
+									«IF definition.isTransformedOnlyRhsSide»
+										«predictionExpr.singleSymbolRef?.localSymbolReference ?: "ERROR!"»
+									«ELSE»
+										«predictionExpr.pharmMLExpr»
+									«ENDIF»
+								</Output>
+								«writeStandardErrorModel(rhsExpr)»
+								<ResidualError>
+									«rhsExpr.getArgumentExpression('eps').pharmMLExpr»
+								</ResidualError>
+							</Standard>
+						«ENDIF»
+					</ContinuousData>
+				</ObservationModel>
+			'''
+		}
+		else{
+			'''
+				<ObservationModel blkId="om«idx»">
+					<ContinuousData>
+						<General symbId="«definition.name»">
+							«definition.expression.expressionAsAssignment»
+						</General>
+					</ContinuousData>
+				</ObservationModel>
+			'''
+		}
+	} 
 	
 	private def writeStandardErrorModel(BuiltinFunctionCall it){
 		'''

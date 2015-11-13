@@ -32,8 +32,8 @@ class MdlCustomValidation {
 		}
 	}
 
-	static val transOnBothFuncs = #{ 'linear', 'combinedError1', 'combinedError2', 'additiveError', 'proportionalError' }
-	static val transOnLHSFuncs = #{ 'general' }
+	static val transOnBothFuncs = #{ 'linear'  }
+	static val transOnLHSFuncs = #{ 'general', 'combinedError1', 'combinedError2', 'additiveError', 'proportionalError' }
 	
 	def isValidRhsTransformPermitted(TransformedDefinition it) {
 		val expr = expression
