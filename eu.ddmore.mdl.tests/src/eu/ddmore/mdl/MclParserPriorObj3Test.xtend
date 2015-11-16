@@ -48,7 +48,7 @@ testprior = priorObj{
 		}
 	}
 
-	PRIOR_DISTRIBUTION_DEFINITION{
+	PRIOR_VARIABLE_DEFINITION{
 		 lnMU_V = ln(MU_V)
 		 mp[] ~ MultiNonParametric(bins=bins_k_v, probability=p_k)
 		 POP_K = mp[0]
@@ -73,7 +73,7 @@ testprior = priorObj{
 	@Test
 	def void testBlocks(){
 		val mcl = CODE_SNIPPET.parse
-		val Deque<String> expectedBlks = newLinkedList("PRIOR_PARAMETERS", "NON_CANONICAL_DISTRIBUTION", "PRIOR_DISTRIBUTION_DEFINITION");
+		val Deque<String> expectedBlks = newLinkedList("PRIOR_PARAMETERS", "NON_CANONICAL_DISTRIBUTION", "PRIOR_VARIABLE_DEFINITION");
 		for(blk : mcl.objects.last.blocks){
 			Assert::assertEquals(expectedBlks.pop, blk.identifier)
 		}
