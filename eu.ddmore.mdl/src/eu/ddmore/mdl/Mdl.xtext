@@ -73,15 +73,15 @@ TransformedDefinition returns EquationTypeDefinition:
 ;
 
 RandomVariableDefinition:
-	name = ID (vector?='[' ']')? "~" distn = BuiltinFunctionCall ';'?
+	name = ID (vector?='[' ']')? RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
 ;
 
 ListDefinition:
-	name = ID ":" list = AttributeList ';'?
+	name = ID LIST_ASSIGN list = AttributeList ';'?
 ;
 
 AnonymousListStatement:
-	':' ':' list = AttributeList ';'?
+	ANONYMOUS_PREFIX list = AttributeList ';'?
 ;
 
 PropertyStatement:
@@ -192,10 +192,16 @@ OpAdd:
 	'+' | '-';
 
 MultiplicativeExpression returns Expression:
-	UnaryExpression (=>({MultiplicativeExpression.leftOperand=current} feature=OpMulti) rightOperand=UnaryExpression)*;
+	PowerExpression (=>({MultiplicativeExpression.leftOperand=current} feature=OpMulti) rightOperand=PowerExpression)*;
 
 OpMulti:
-	'*' | '^' | '/' | '%';
+	'*' | '/' | '%';
+
+PowerExpression returns Expression:
+	UnaryExpression (=>({PowerExpression.leftOperand=current} feature=OpPow) rightOperand=UnaryExpression)*;
+
+OpPow:
+	'^';
 
 UnaryExpression returns Expression:
 	{UnaryExpression} feature=OpUnary operand=PrimaryExpression
@@ -226,7 +232,8 @@ WhenExpression returns Expression:
 	 {WhenExpression}
 	 	when+=WhenClause
 	 	(=> when+=ElifClause)*
-		(=>ELSE other=Expression)?
+		(=>other=ElseClause)?
+//		(=>ELSE other=Expression)?
 	;
 
 IfExprPart:
@@ -239,6 +246,10 @@ WhenClause returns IfExprPart:
 
 ElifClause returns IfExprPart:
 	{ElifClause} ELSEIF '(' cond=Expression ')' => THEN value=Expression
+;
+
+ElseClause:
+	{ElseClause} ELSE other=Expression
 ;
 
 Literal returns Expression:
@@ -295,14 +306,6 @@ StringLiteral returns Expression:
 	{StringLiteral} value=STRING;
 
 
-//VectorLiteral returns Expression:
-//	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
-//;	
-//
-//VectorElement returns Expression:
-//	{VectorElement} element+=Expression
-//;
-
 MatrixLiteral returns Expression:
 	{MatrixLiteral} '[[' rows += MatrixRow (=> ';' rows += MatrixRow)* ']]'
 ;	
@@ -329,7 +332,7 @@ QualifiedName:
 
 
 terminal CONSTANT:
-	'INF'
+	'inf'|'pi'|'exponentiale'
 ;
 
 terminal SET: 'set';
@@ -339,6 +342,12 @@ terminal IN: 'in';
 terminal IS: 'is';
 
 terminal ASSIGN: '=';
+
+terminal RANDOM_ASSIGN : '~';
+
+terminal LIST_ASSIGN : ':';
+
+terminal ANONYMOUS_PREFIX : '::';
 
 terminal AS: 'as';
 

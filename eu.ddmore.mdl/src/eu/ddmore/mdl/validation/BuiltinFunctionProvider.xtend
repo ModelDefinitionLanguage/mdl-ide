@@ -22,7 +22,7 @@ import org.eclipse.xtext.EcoreUtil2
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.TransformedDefinition
 
 class BuiltinFunctionProvider {
 	
@@ -63,6 +63,9 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
+	
+	static val TRANSFORM_FUNCS = #{ 'ln', 'logit', 'probit' }
+	
 	static val TRANS_TYPE = new BuiltinEnumTypeInfo('type', #{'none', 'ln', 'logit', 'probit'})
 	
 	private static val Map<String, List<? extends FunctDefn>> functDefns = #{
@@ -79,10 +82,13 @@ class BuiltinFunctionProvider {
 		'sin' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'cos' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'tan' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'sinh' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'cosh' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'tanh' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'floor' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'ceiling' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'min' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'max' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'min' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'max' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'abs' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'exp' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'seq' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_VECTOR_TYPE ] ],
@@ -109,6 +115,7 @@ class BuiltinFunctionProvider {
 					} ]
 					],
 		'Bernoulli' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
+						'category' -> new FunctionArgument(MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
 						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]
 					],
@@ -117,6 +124,7 @@ class BuiltinFunctionProvider {
 					} ]
 					],
 		'Binomial' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
+						'successCategory' -> new FunctionArgument(MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
 						'probabilityOfSuccess' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'numberOfTrials' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ]
@@ -372,6 +380,15 @@ class BuiltinFunctionProvider {
 		}
 	}
 
+	def getArgumentEnumValue(BuiltinFunctionCall it, String attName){
+		val args = argList
+		switch(args){
+			NamedFuncArguments:
+				args.getArgumentEnumValue(attName)
+			default: null
+		}
+	}
+
 	def getArgumentExpression(NamedFuncArguments it, String attName){
 		arguments.findFirst[argumentName == attName]?.expression
 	}
@@ -388,6 +405,14 @@ class BuiltinFunctionProvider {
 			}
 			default: null
 		}
+	}
+	
+	def isArgumentDuplicated(BuiltinFunctionCall owningFunc, ValuePair it){
+		val args = owningFunc.argList
+		if(args instanceof NamedFuncArguments){
+			return args.arguments.filter[a| a.argumentName == argumentName].size > 1
+		}
+		false
 	}
 	
 	
@@ -415,9 +440,17 @@ class BuiltinFunctionProvider {
 	def TypeInfo getTypeOfFunctionBuiltinEnum(EnumExpression ee){
 		val funct = EcoreUtil2.getContainerOfType(ee, BuiltinFunctionCall)
 		val blockName = funct.func
-		val enumValue = ee.convertToString
+		val enumValue = ee.enumValue
 		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
 		defnType
 	}
-		
+
+	def boolean isValidTransform(TransformedDefinition it){
+		isValidTransformFunction(transform)
+	}
+
+	def boolean isValidTransformFunction(String fName){
+		TRANSFORM_FUNCS.contains(fName)
+	}
+
 }

@@ -4,6 +4,19 @@ import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.MclObject
 import java.util.HashSet
 import java.util.Map
+import java.util.List
+import eu.ddmore.mdl.mdl.Statement
+
+import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.MdlPackage
+import org.eclipse.emf.ecore.EClass
+import java.util.Set
+import java.util.HashMap
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.BlockTextBody
 
 class BlockDefinitionProvider {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"
@@ -28,34 +41,180 @@ class BlockDefinitionProvider {
 	public static val SIMULATE_BLK = "SIMULATE" 
 	public static val PRIOR_SOURCE_BLK = "PRIOR_SOURCE"
 	
+	@Data @FinalFieldsConstructor
+	static class StatementSpec{
+		EClass statementType
+		boolean expectHasRhs
+		
+		new(EClass stmtType){
+			statementType = stmtType
+			expectHasRhs = false
+		}
+		
+		def dispatch boolean isValidStatement(Statement stmt){
+			stmt.eClass == statementType
+		}
+		
+		def dispatch boolean isValidStatement(EquationDefinition stmt){
+			if(stmt.eClass == statementType){
+				(expectHasRhs && stmt.expression != null) || (!expectHasRhs && stmt.expression == null) 
+			}
+			else false
+		}
+		
+	}
 	
+	@Data @FinalFieldsConstructor
+	static class BlockSpec{
+		String name
+		int minNum
+		int maxNum
+		int minStmtNum
+		int maxStmtNum
+		boolean isStmtBlk
+		List<StatementSpec> validStatementTypes
+
+		new (String name, int minNum, int maxNum, int minStmtNum, int maxStmtNum, List<StatementSpec> validStatementTypes){
+			this.name = name
+			this.minNum = minNum
+			this.maxNum = maxNum
+			this.minStmtNum = minStmtNum
+			this.maxStmtNum = maxStmtNum
+			this.isStmtBlk = true
+			this.validStatementTypes = validStatementTypes
+		}
 	
-	val static Map<String, Map<String, Boolean> > BlkData = #{
+
+		def boolean isMandatory(){
+			minNum > 0
+		}
+			
+	}
+	
+	static val ep = MdlPackage::eINSTANCE 
+
+	val static Map<String, BlockSpec> BlkDefns = #{
+			COVARIATE_BLK_NAME -> new BlockSpec(COVARIATE_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.enumerationDefinition)
+			]),
+			VAR_LVL_BLK_NAME -> new BlockSpec(VAR_LVL_BLK_NAME, 1, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
+			]),
+			MDL_STRUCT_PARAMS -> new BlockSpec(MDL_STRUCT_PARAMS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
+			]),
+			MDL_VAR_PARAMS -> new BlockSpec(MDL_VAR_PARAMS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
+			]),
+			MDL_RND_VARS -> new BlockSpec(MDL_RND_VARS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.randomVariableDefinition)
+			]),
+			MDL_INDIV_PARAMS -> new BlockSpec(MDL_INDIV_PARAMS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.transformedDefinition)
+			]),
+			MDL_PRED_BLK_NAME -> new BlockSpec(MDL_PRED_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.listDefinition)
+			]),
+			OBS_BLK_NAME -> new BlockSpec(OBS_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.transformedDefinition),
+				new StatementSpec(ep.listDefinition)
+			]),
+			MDL_GRP_PARAMS -> new BlockSpec(MDL_GRP_PARAMS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
+			]),
+			IDV_BLK_NAME -> new BlockSpec(IDV_BLK_NAME, 1, 1, 1, 1, #[
+				new StatementSpec(ep.equationDefinition, false)
+			]),
+			DIV_BLK_NAME -> new BlockSpec(DIV_BLK_NAME, 0, Integer.MAX_VALUE, 1, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
+			]),
+			"DECLARED_VARIABLES" -> new BlockSpec("DECLARED_VARIABLES", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.enumerationDefinition),
+				new StatementSpec(ep.equationDefinition, false)
+			]),
+			"DATA_DERIVED_VARIABLES" -> new BlockSpec("DATA_DERIVED_VARIABLES", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
+			]),
+			DATA_SRC_BLK -> new BlockSpec(DATA_SRC_BLK, 1, 1, 1, 1, #[
+				new StatementSpec(ep.listDefinition, false)
+			]),
+			PARAM_VARIABILITY_BLK -> new BlockSpec(PARAM_VARIABILITY_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
+			]),
+			PARAM_STRUCT_BLK -> new BlockSpec(PARAM_STRUCT_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
+			]),
+			ESTIMATE_BLK -> new BlockSpec(ESTIMATE_BLK, 0, 1, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.propertyStatement)
+			]),
+			SIMULATE_BLK -> new BlockSpec(SIMULATE_BLK, 0, 1, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.propertyStatement)
+			]),
+			MOG_OBJ_NAME -> new BlockSpec(MOG_OBJ_NAME, 1, 1, 4, 4, #[
+				new StatementSpec(ep.listDefinition)
+			]),
+			MDL_DEQ_BLK -> new BlockSpec(MDL_DEQ_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition),
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
+			]),
+			MDL_CMT_BLK -> new BlockSpec(MDL_CMT_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition),
+				new StatementSpec(ep.anonymousListStatement)
+			]),
+			"ADMINISTRATION" -> new BlockSpec("ADMINISTRATION", 1, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition),
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.equationDefinition, false)
+			]),
+			"STUDY_DESIGN" -> new BlockSpec("STUDY_DESIGN", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.randomVariableDefinition),
+				new StatementSpec(ep.listDefinition)
+			]),
+			"SAMPLING" -> new BlockSpec("SAMPLING", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
+			]),
+			"DESIGN_SPACES" -> new BlockSpec("DESIGN_SPACES", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.listDefinition)
+			])
+	}	
+	
+	val static Map<String, Set<String> > BlkData = #{
 		MdlValidator::MDLOBJ -> #{
-			COVARIATE_BLK_NAME -> false, VAR_LVL_BLK_NAME -> true, MDL_STRUCT_PARAMS -> false,
-			MDL_VAR_PARAMS -> false, MDL_RND_VARS -> false,
-			MDL_INDIV_PARAMS -> false, MDL_PRED_BLK_NAME -> false,
-			OBS_BLK_NAME -> false, MDL_GRP_PARAMS -> false, IDV_BLK_NAME -> false
+			COVARIATE_BLK_NAME, VAR_LVL_BLK_NAME, MDL_STRUCT_PARAMS,
+			MDL_VAR_PARAMS, MDL_RND_VARS,
+			MDL_INDIV_PARAMS, MDL_PRED_BLK_NAME,
+			OBS_BLK_NAME, MDL_GRP_PARAMS, IDV_BLK_NAME
 		},
 		MdlValidator::DATAOBJ -> #{
-			DIV_BLK_NAME -> true, "DECLARED_VARIABLES" -> false, "DATA_DERIVED_VARIABLES" -> false,
-			DATA_SRC_BLK -> true
+			DIV_BLK_NAME, "DECLARED_VARIABLES", "DATA_DERIVED_VARIABLES",
+			DATA_SRC_BLK
 		},
 		MdlValidator::PARAMOBJ -> #{
-			PARAM_VARIABILITY_BLK -> false, "DECLARED_VARIABLES" -> false, PARAM_STRUCT_BLK -> false
+			PARAM_VARIABILITY_BLK, "DECLARED_VARIABLES", PARAM_STRUCT_BLK
 		},
 		MdlValidator::TASKOBJ -> #{
-			ESTIMATE_BLK -> false, SIMULATE_BLK -> false, "OPTIMISE" -> false
+			ESTIMATE_BLK, SIMULATE_BLK//, "OPTIMISE"
 		},
 		MdlValidator::MOGOBJ -> #{
-			MOG_OBJ_NAME -> true
+			MOG_OBJ_NAME
 		},
 		MdlValidator::DESIGNOBJ -> #{
-			"DECLARED_VARIABLES" -> false, "ADMINISTRATION" -> true, "STUDY_DESIGN" -> true, "SAMPLING" -> false, "DESIGN_SPACES" -> false
+			"DECLARED_VARIABLES", "ADMINISTRATION", "STUDY_DESIGN", "SAMPLING", "DESIGN_SPACES"
 		},
 		MdlValidator::PRIOROBJ -> #{
-			"PRIOR_PARAMETERS" -> false, "NON_CANONICAL_DISTRIBUTION" -> false,
-			"PRIOR_DISTRIBUTION_DEFINITION" -> true
+			"PRIOR_PARAMETERS", "NON_CANONICAL_DISTRIBUTION",
+			"PRIOR_VARIABLE_DEFINITION"
 		}
 	}
 
@@ -72,7 +231,7 @@ class BlockDefinitionProvider {
 	def isModelBlock(BlockStatement it){
 		if(eContainer instanceof MclObject){
 			val objType = (eContainer as MclObject).mdlObjType
-			return BlkData.containsKey(objType) && BlkData.get(objType).containsKey(identifier)
+			return BlkData.containsKey(objType) && BlkData.get(objType).contains(identifier)
 		}
 		false
 	}
@@ -89,7 +248,7 @@ class BlockDefinitionProvider {
 		// map of just the mandatory blocks
 		val mandatoryBlock = new HashSet<String>
 		if(BlkData.containsKey(mdlObjType)){
-			mandatoryBlock.addAll(BlkData.get(mdlObjType).filter[blk, mand|mand].keySet)
+			mandatoryBlock.addAll(BlkData.get(mdlObjType).filter[blk| BlkDefns.get(blk).isMandatory])
 			for(blk : blocks){
 				// remove mandatory block if it exists
 				mandatoryBlock.remove(blk.identifier)
@@ -98,6 +257,66 @@ class BlockDefinitionProvider {
 		mandatoryBlock
 	}
 	
-	
+	def validateBlocksCounts(MclObject it, (String, int) => void errLambda){
+		val blkCount = new HashMap<String, Integer>
 
+		blocks.forEach[
+			if(!blkCount.containsKey(identifier)) blkCount.put(identifier, 0)
+			blkCount.put(identifier, blkCount.get(identifier)+1) 
+		]
+		// now check if counts exceed maximums
+		blkCount.keySet.forEach[name|
+			val defn = BlkDefns.get(name)
+			if(defn != null){
+				if(blkCount.get(name) > defn.maxNum)
+					errLambda.apply(name, defn.maxNum)
+			}
+		]
+	}	
+
+	def validateMaxBlocksStatementCounts(BlockStatementBody it, (String, int) => void errLambda){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val defn = BlkDefns.get(blk.identifier)
+		if(defn != null)
+			if(statements.size > defn.maxStmtNum){
+				errLambda.apply(blk.identifier, defn.maxStmtNum)
+			}		
+	}
+
+	def validateMinBlocksStatementCounts(BlockStatementBody it, (String, int) => void errLambda){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val defn = BlkDefns.get(blk.identifier)
+		if(defn != null)
+			if(statements.size < defn.minStmtNum){
+				errLambda.apply(blk.identifier, defn.minStmtNum)
+			}		
+	}
+
+	def validateExpectedStatementType(Statement it, (String) => void errLambda){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val defn = BlkDefns.get(blk.identifier)
+		if(defn != null){
+			for(stmtSpec : defn.validStatementTypes){
+				if(stmtSpec.isValidStatement(it)) return
+			}	
+			errLambda.apply(blk.identifier)
+		}
+	}
+	
+	def validateBlockBodyType(BlockStatementBody it, (String) => void errLambda){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val defn = BlkDefns.get(blk.identifier)
+		if(defn != null){
+			if(!defn.isStmtBlk) errLambda.apply(blk.identifier)
+		}
+	}
+	
+	def validateBlockBodyType(BlockTextBody it, (String) => void errLambda){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val defn = BlkDefns.get(blk.identifier)
+		if(defn != null){
+			if(defn.isStmtBlk) errLambda.apply(blk.identifier)
+		}
+	}
+	
 }

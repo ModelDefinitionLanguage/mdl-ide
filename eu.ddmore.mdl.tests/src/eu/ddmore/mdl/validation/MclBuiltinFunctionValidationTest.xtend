@@ -37,6 +37,67 @@ class MclBuiltinFunctionValidationTest {
 	}
 
 	@Test
+	def void testValidHyperblicTrigFunctions(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			MODEL_PREDICTION{
+				A = tanh(3.2)
+				B = cosh(3.2)
+				C = sinh(3.2)
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidMaxFunction(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			
+			COVARIATES{
+				sd
+				Rp1
+				th1
+				alpha
+				other
+		        kspow = max(0, sd/Rp1-th1)^alpha       # nmol/mL/day
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidMinFunction(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			
+			COVARIATES{
+				sd
+				Rp1
+				th1
+				alpha
+				other
+		        kspow = min(0, sd/Rp1-th1)^alpha       # nmol/mL/day
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
 	def void testFunctionWithNoArgs(){
 		val mcl = '''bar = mdlObj {
 			COVARIATES{
@@ -155,7 +216,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testValidNamedFunction(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			
 			COVARIATES{
 				logtWT
@@ -164,10 +225,13 @@ class MclBuiltinFunctionValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
+			}
+			
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}], ranEff = [ETA_CL])
 			}
 		}'''.parse
@@ -202,6 +266,29 @@ class MclBuiltinFunctionValidationTest {
 	}
 
 	@Test
+	def void testInValidLhsTransFunction(){
+		val mcl = '''bar = mdlObj {
+			
+			
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				exp(BETA_CL_WT) = 1
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.transformedDefinition,
+			MdlValidator::INVALID_LHS_FUNC,
+			"'exp' cannot be used as a transformation function on the LHS of an equation"
+		)
+	}
+
+	@Test
 	def void testInValidTypeUnnamedFunction(){
 		val mcl = '''bar = mdlObj {
 			
@@ -230,7 +317,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testValidOverloadedNamedFunction(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			
 			COVARIATES{
 				logtWT
@@ -300,10 +387,12 @@ class MclBuiltinFunctionValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
+			}
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, fixEff = {{coeff=BETA_CL_WT, covariate=logtWT}})
 			}
 			INDIVIDUAL_VARIABLES{
@@ -323,6 +412,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testNamedFunctionWithoutOptionalArg(){
 		val mcl = '''bar = mdlObj {
+			IDV{T}
 			COVARIATES{
 				logtWT
 			}
@@ -330,10 +420,13 @@ class MclBuiltinFunctionValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
+			}
+
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, ranEff = [ETA_CL])
 			}
 			INDIVIDUAL_VARIABLES{
@@ -354,11 +447,15 @@ class MclBuiltinFunctionValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				other
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
+			}
+			
+			
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, pop=other, fixEff = {{coeff=BETA_CL_WT, covariate=logtWT}}, ranEff = ETA_CL)
 			}
 
@@ -404,10 +501,12 @@ class MclBuiltinFunctionValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
+			}
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, fixEff = [{co=BETA_CL_WT, cov=logtWT}], ranEff = ETA_CL)
 			}
 		}'''.parse

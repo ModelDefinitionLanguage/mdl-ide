@@ -26,7 +26,7 @@ class MclListAttributeValidationTest {
 				ID : { use is id }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertNoErrors
@@ -41,7 +41,7 @@ class MclListAttributeValidationTest {
 				ID : { variable = Y }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
@@ -59,7 +59,7 @@ class MclListAttributeValidationTest {
 				aCov : { use is covariate, categorical with {male, female} }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		//@TODO: Implement the correct validation to check that categories are not defined.
@@ -78,7 +78,7 @@ class MclListAttributeValidationTest {
 				aCov : { use is covariate, categories with {male when 1, female when 2} }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
@@ -100,13 +100,72 @@ class MclListAttributeValidationTest {
 				DT : { use is doseTime, idvColumn = TIME, amtColumn = AMT }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertNoErrors
 	}
 
 	@Test
+	def void testUnexpectedAttributeCombination(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is cmt }
+				AMT : { use is amt, variable = D, define = { 0 in CMT as D } }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::UNRECOGNIZED_LIST_ATT,
+			"attribute 'variable' is not recognised in this context"
+		)
+	}
+
+	@Test
+	def void testMissingMandatoryAttributeWhenMoreThanOneAttSet(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is cmt }
+				AMT : { use is amt }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
+			MdlValidator::MANDATORY_LIST_ATT_MISSING,
+			"mandatory attribute 'variable'"
+		)
+	}
+
+	@Test
+	def void testInvalidDuplicateAttribute(){
+		val mcl = '''bar = dataObj {
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is cmt, use is cmt }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_ATTRIBUTE_NAME,
+			"List attribute 'use' is used more than once."
+		)
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_ATTRIBUTE_NAME,
+			"List attribute 'use' is used more than once."
+		)
+	}
+
+	@Test  
 	def void testAnonymousCompartmentAttributesOK(){
 		val mcl = '''bar = mdlObj {
 			IDV{ T }
@@ -134,6 +193,69 @@ class MclListAttributeValidationTest {
 		}'''.parse
 		
 		mcl.assertNoErrors
+	}
+
+	@Test  
+	def void testInvalidAnonysation(){
+		val mcl = '''bar = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+				ID : { type is parameter, level=1 }
+			}
+			
+			STRUCTURAL_PARAMETERS{
+				KA
+				ALAG1
+				F1
+				V
+				CL
+			}
+			
+			MODEL_PREDICTION{
+	  			COMPARTMENT {
+					:: {type is compartment, modelCmt=2}
+   				}# end COMPARTMENT
+			} # end MODEL_PREDICTION
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.anonymousListStatement,
+			MdlValidator::LIST_NOT_NAMED,
+			"a list with this key cannot be anonymous in this context"
+		)
+	}
+
+	@Test  
+	def void testInvalidListNaming(){
+		val mcl = '''bar = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+				ID : { type is parameter, level=1 }
+			}
+			
+			STRUCTURAL_PARAMETERS{
+				KA
+				ALAG1
+				F1
+				V
+				CL
+			}
+			
+			MODEL_PREDICTION{
+	  			COMPARTMENT {
+					INPUT_KA : {type is depot, modelCmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
+					 CENTRAL : {type is compartment, modelCmt=2}
+                     FOO :  {type is elimination, modelCmt=2, from=CENTRAL, v=V, cl=CL}
+   				}# end COMPARTMENT
+				CONC=CENTRAL/V
+			} # end MODEL_PREDICTION
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::LIST_NOT_ANONYMOUS//,
+//			"a list with this key cannot have a name in this context"
+		)
 	}
 
 	@Test
@@ -205,8 +327,7 @@ class MclListAttributeValidationTest {
 	def void testUnrecognizedAttribute2(){
 		val mcl = '''
 		foo = dataObj {
-			DATA_INPUT_VARIABLES{
-			}
+			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 
 			SOURCE{
 				foo : { file="aFile", inputformat is nonmem }
@@ -243,11 +364,32 @@ class MclListAttributeValidationTest {
 	}
 
 	@Test
+	def void testValidTTE(){
+		val mcl = '''
+		foo = mdlObj{
+			IDV{T}
+
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				HAZ = 1
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				Y : {type is tte, hazard = HAZ, event is intervalCensored }
+			}# end ESTIMATION
+		}
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
 	def void testInvalidAttributeWithUnexpectedCatDefn(){
 		val mcl = '''
 		foo = dataObj {
-			DATA_INPUT_VARIABLES{
-			}
+			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 
 			SOURCE{
 				foo : { file="aFile", inputFormat is nonmemFormat withCategories { hello when 0, goodbye when 2 } }
@@ -265,6 +407,8 @@ class MclListAttributeValidationTest {
 	def void testValidSubListDefinition(){
 		val mcl = '''
 foo = mdlObj {
+	IDV{T}
+
    COVARIATES{
    	  WT
    }# end COVARIATES

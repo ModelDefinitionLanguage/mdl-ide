@@ -21,12 +21,14 @@ class MclBlockValidationTest {
 	@Test
 	def void testUnknownBlock(){
 		val mcl = '''foo = mdlObj {
-			DATA_INPUT_VARIABLES{
+			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
+			
+			VARIABILITY_LEVELS{
 			}
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			MdlValidator::UNKNOWN_BLOCK,
+			BlockValidator::UNKNOWN_BLOCK,
 			"block 'DATA_INPUT_VARIABLES' cannot be used in an object of type mdlObj"
 		)
 	}
@@ -34,13 +36,92 @@ class MclBlockValidationTest {
 	@Test
 	def void testMissingMandatoryBlocks(){
 		val mcl = '''foo = mdlObj {
-			DATA_INPUT_VARIABLES{
+			`MODEL_PREDICTION {
 			}
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
-			MdlValidator::MANDATORY_BLOCK_MISSING,
+			BlockValidator::MANDATORY_BLOCK_MISSING,
 			"mandatory block 'VARIABILITY_LEVELS' is missing in mdlObj 'foo'"
+		)
+	}
+
+	@Test
+	def void testFewerMinStatement(){
+		val mcl = '''foo = mdlObj {
+			VARIABILITY_LEVELS{
+			}
+			
+			IDV{}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.blockStatementBody,
+			BlockValidator::BLOCK_INCORRECT_STATEMENT_COUNT,
+			"block 'IDV' has fewer statements than the 1 expected"
+		)
+	}
+
+	@Test
+	def void testExceedMaxStatements(){
+		val mcl = '''foo = mdlObj {
+			VARIABILITY_LEVELS{
+			}
+			
+			IDV{ T; D}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.blockStatementBody,
+			BlockValidator::BLOCK_INCORRECT_STATEMENT_COUNT,
+			"block 'IDV' has more statements than the 1 expected"
+		)
+	}
+
+	@Test
+	def void testInvalidStatementTypeWithEqnRhs(){
+		val mcl = '''foo = mdlObj {
+			VARIABILITY_LEVELS{
+			}
+			
+			IDV{ T = 2}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+			BlockValidator::BLOCK_INVALID_STATEMENT_TYPE,
+			"block 'IDV' does not permit statements of this type"
+		)
+	}
+
+	@Test
+	def void testInvalidStatementTypeWithExpectedList(){
+		val mcl = '''foo = mdlObj {
+			VARIABILITY_LEVELS{
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				T withCategories {foo, bar}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.enumerationDefinition,
+			BlockValidator::BLOCK_INVALID_STATEMENT_TYPE,
+			"block 'INDIVIDUAL_VARIABLES' does not permit statements of this type"
+		)
+	}
+
+	@Test
+	def void testExceedMaxBlocks(){
+		val mcl = '''foo = mdlObj {
+			VARIABILITY_LEVELS{
+			}
+			
+			IDV{}
+			
+			IDV{}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			BlockValidator::BLOCK_COUNT_EXCEEDED,
+			"block 'IDV' is used more than is allowed. A maximum of 1 blocks are allowed"
 		)
 	}
 
@@ -55,7 +136,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			MdlValidator::WRONG_SUBBLOCK,
+			BlockValidator::WRONG_SUBBLOCK,
 			"block 'MODEL_PREDICTION' cannot be used as a sub-block"
 		)
 	}
@@ -71,7 +152,7 @@ class MclBlockValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			MdlValidator::WRONG_PARENT_BLOCK,
+			BlockValidator::WRONG_PARENT_BLOCK,
 			"sub-block 'DEQ' cannot be used in the 'VARIABILITY_LEVELS' block"
 		)
 	}
@@ -88,8 +169,22 @@ class MclBlockValidationTest {
 			}
 		}'''.parse
 		mcl.assertNoErrors
-//		mcl.assertNoErrors(MdlValidator::WRONG_PARENT_BLOCK)
-//		mcl.assertNoErrors(MdlValidator::WRONG_SUBBLOCK)
+	}
+
+	@Test
+	def void testWrongBlockBodyType(){
+		val mcl = '''foo = mdlObj {
+			IDV{  T }
+			VARIABILITY_LEVELS{
+			}
+			MODEL_PREDICTION<<
+				fooBar
+			>>
+		}'''.parse
+		mcl.assertError(MdlPackage::eINSTANCE.blockTextBody,
+			BlockValidator::BLOCK_WRONG_BODY_TYPE,
+			"block '" + "MODEL_PREDICTION" + "' cannot define a verbatim text block. It must contains statements delimitted by '{' '}'"
+		)
 	}
 
 

@@ -1,17 +1,18 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import org.ddmore.mdl.mdl.SymbolDeclaration
-import org.ddmore.mdl.validation.AttributeValidator
-import static extension eu.ddmore.converter.mdl2pharmml.Constants.*
-import org.ddmore.mdl.validation.PropertyValidator
-import org.ddmore.mdl.mdl.PropertyDeclaration
 import org.ddmore.mdl.mdl.DataObject
-import org.ddmore.mdl.mdl.ParameterObject
-import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.MOGObject
-import org.ddmore.mdl.validation.Utils
 import org.ddmore.mdl.mdl.ModelObject
+import org.ddmore.mdl.mdl.ParameterObject
+import org.ddmore.mdl.mdl.PropertyDeclaration
+import org.ddmore.mdl.mdl.SymbolDeclaration
+import org.ddmore.mdl.mdl.TaskObject
 import org.ddmore.mdl.mdl.VariabilityType
+import org.ddmore.mdl.validation.AttributeValidator
+import org.ddmore.mdl.validation.TaskObjectAttributes
+import org.ddmore.mdl.validation.Utils
+
+import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 class ModellingStepsPrinter extends DataSetPrinter{ 
 	new(MathPrinter mathPrinter, ReferenceResolver resolver){
@@ -181,7 +182,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	
 	protected def print_msteps_Property(PropertyDeclaration s)'''
 		«IF s.propertyName != null && s.expression != null»
-			«IF !s.propertyName.argName.equals(PropertyValidator::attr_task_algo.name)»
+			«IF !s.propertyName.argName.equals(TaskObjectAttributes::attr_task_algo.name)»
 				<Property name="«s.propertyName.argName»">
 					«s.expression.print_Assign»
 				</Property>
@@ -191,7 +192,7 @@ class ModellingStepsPrinter extends DataSetPrinter{
 	
 	protected def print_msteps_Algorithm(PropertyDeclaration s)'''
 		«IF s.propertyName != null && s.expression != null»
-			«IF s.propertyName.argName.equals(PropertyValidator::attr_task_algo.name)»
+			«IF s.propertyName.argName.equals(TaskObjectAttributes::attr_task_algo.name)»
 				«IF s.expression.vector != null && s.expression.vector.expression != null &&
 					s.expression.vector.expression.expressions != null »
 					«FOR algoName: s.expression.vector.expression.expressions»

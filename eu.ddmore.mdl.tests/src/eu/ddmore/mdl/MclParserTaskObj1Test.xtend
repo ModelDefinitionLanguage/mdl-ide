@@ -18,7 +18,8 @@ class MclParserTaskObj1Test {
 	val static CODE_SNIPPET = '''
 nonmem_task = taskObj {
 	ESTIMATE {
-		set target is monolix, version = "4.3.2", algo is saem
+«««		set target is monolix, version = "4.3.2", algo is saem
+		set algo is saem
 	}
 }
 		'''

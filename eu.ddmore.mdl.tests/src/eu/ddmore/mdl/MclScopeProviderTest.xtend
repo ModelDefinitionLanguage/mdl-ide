@@ -16,6 +16,12 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.EnumerationDefinition
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.NamedFuncArguments
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -23,6 +29,8 @@ class MclScopeProviderTest {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	@Inject extension IScopeProvider
+	
+	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	
 	val static CODE_SNIPPET = '''
 warfarin_PK_SEXAGE_mdl2 = mdlObj {
@@ -101,8 +109,85 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 		]
 	}
 	
+	@Test
+	def void testExpectedCategoryDescriptions(){
+		val mcl = '''
+obj1 = mdlObj{
+
+   VARIABILITY_LEVELS{
+	DV : { level=1, type is observation }
+   }
+
+
+   MODEL_PREDICTION{
+	  P1 = 1
+   }# end MODEL_PREDICTION
+
+   OBSERVATION{
+     Y : { type is discrete withCategories { success, fail }, distn = Bernoulli(category=Y.success, probability=P1)}
+   }# end ESTIMATION
+} # end of model object
+		'''.parse
+		
+		val blkBody = (mcl.objects.head.blocks.last.body as BlockStatementBody)
+		val catStmt = blkBody.statements.last as ListDefinition
+		val funCall = catStmt.list.getAttributeExpression('distn') as BuiltinFunctionCall
+		val argExpr = (funCall.argList as NamedFuncArguments).arguments.head.expression 
+		argExpr.assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "DV, P1, Y")
+	}
+	
+	@Test
+	def void testExpectedCategoryDescriptionCatRefs(){
+		val mcl = '''
+obj1 = mdlObj{
+
+   VARIABILITY_LEVELS{
+	DV : { level=1, type is observation }
+   }
+
+
+   MODEL_PREDICTION{
+	  P1 = 1
+   }# end MODEL_PREDICTION
+
+   OBSERVATION{
+     Y : { type is discrete withCategories { success, fail }, distn = Bernoulli(category=success, probability=P1)}
+   }# end ESTIMATION
+} # end of model object
+		'''.parse
+		
+		val blkBody = (mcl.objects.head.blocks.last.body as BlockStatementBody)
+		val catStmt = blkBody.statements.last as ListDefinition
+		val funCall = catStmt.list.getAttributeExpression('distn') as BuiltinFunctionCall
+		val argExpr = (funCall.argList as NamedFuncArguments).arguments.head.expression 
+		argExpr.assertScope(MdlPackage::eINSTANCE.categoryValueReference_Ref, "success, fail, Y.success, Y.fail, obj1.Y.success, obj1.Y.fail")
+	}
+	
+	@Test
+	def void testExpectedCategoryQualifiedLinking(){
+		val mcl = '''
+obj1 = mdlObj{
+	IDV{T}
+
+   VARIABILITY_LEVELS{
+	DV : { level=1, type is observation }
+   }
+
+
+   MODEL_PREDICTION{
+	  P1 = 1
+   }# end MODEL_PREDICTION
+
+   OBSERVATION{
+     Y : { type is discrete withCategories { success, fail }, distn = Bernoulli(category=Y.success, probability=P1)}
+   }# end ESTIMATION
+} # end of model object
+		'''.parse
+		mcl.assertNoErrors
+		
+	}
+	
 	def private assertScope(EObject context, EReference reference, CharSequence expected){
-		context.assertNoErrors
 		Assert::assertEquals(expected.toString, context.getScope(reference).allElements.map[name].join(", "))
 	}
 	

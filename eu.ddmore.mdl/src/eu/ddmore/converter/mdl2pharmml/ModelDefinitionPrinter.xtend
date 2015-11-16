@@ -1,36 +1,26 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import eu.ddmore.mdl.mdl.AdditiveExpression
-import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueReference
+import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
-import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
-import eu.ddmore.mdl.mdl.OrExpression
-import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
-import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
-import eu.ddmore.mdl.mdl.UnaryExpression
-import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.validation.BlockDefinitionProvider
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
@@ -41,6 +31,7 @@ import java.util.Comparator
 import java.util.HashMap
 import java.util.List
 import java.util.Map
+import java.util.Set
 import java.util.TreeMap
 import org.eclipse.xtext.EcoreUtil2
 
@@ -49,7 +40,6 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.mdl.EnumExpression
 
 class ModelDefinitionPrinter {
 	extension MclUtils mu = new MclUtils
@@ -60,7 +50,7 @@ class ModelDefinitionPrinter {
 	extension PharmMLConverterUtils pcu = new PharmMLConverterUtils
 	extension SublistDefinitionProvider sdp = new SublistDefinitionProvider
 	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter
-	extension PKMacrosPrinter pkp = new PKMacrosPrinter
+	extension PKMacrosPrinter pkp = PKMacrosPrinter::INSTANCE
 	
 	
 	//////////////////////////////////////
@@ -143,88 +133,6 @@ class ModelDefinitionPrinter {
 		return model;
 	}
 	
-    def List<SymbolDefinition> getCovariateDependencies(Expression expr){
-    	expr.getSymbolReferences
-    }
-    
-    def dispatch List<SymbolDefinition> getSymbolReferences(Expression expr){
-    	val retVal = new ArrayList<SymbolDefinition>
-    	switch(expr){
-    		OrExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		AndExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		EqualityExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		RelationalExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		AdditiveExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		MultiplicativeExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		UnaryExpression:{
-    			retVal.addAll(expr.operand.symbolReferences)
-    		}
-    		ParExpression:{
-    			retVal.addAll(expr.expr.symbolReferences)
-    		}
-    		WhenExpression:{
-    			for(w : expr.when){
-    				retVal.addAll(w.symbolReferences)
-    			}
-    			retVal.addAll(expr.other.symbolReferences)
-    		}
-    		VectorLiteral:{
-    			for(v : expr.expressions){
-    				v.symbolReferences
-    			}
-    		}
-    		VectorElement:{
-    			expr.element.symbolReferences
-    		}
-    		SymbolReference:{
-    			retVal.add(expr.ref)
-    		}
-    			
-    	}
-    	retVal
-    }
-    
-    
-    def dispatch List<SymbolDefinition> getSymbolReferences(IfExprPart it){
-		value.symbolReferences    			
-    }
-    
-    def dispatch List<SymbolDefinition> getSymbolReferences(BuiltinFunctionCall it){
-    	val retVal = new ArrayList<SymbolDefinition>
-    	val a = argList
-    	switch(a){
-    		NamedFuncArguments:{
-    			for(arg : a.arguments){
-    				retVal.addAll(arg.expression.symbolReferences)
-    			}
-    		}
-    		UnnamedFuncArguments:{
-    			for(arg : a.args){
-    				retVal.addAll(arg.argument.symbolReferences)
-    			}
-    		}
-    	}
-    	retVal
-    }
-    
     def getCategoryDefinitions(Expression expr){
     	val retVal = new ArrayList<String>
     	switch(expr){
@@ -682,30 +590,70 @@ class ModelDefinitionPrinter {
 		expr != null && expr instanceof BuiltinFunctionCall
 	}
 	
-	def writeContinuousObservation(EquationTypeDefinition definition, int idx)'''
-		<ObservationModel blkId="om«idx»">
-			<ContinuousData>
-				«IF isStandardErrorDefinition(definition.expression)»
-					<Standard symbId="«definition.name»">
-						«IF (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null»
-							<Transformation>«(definition.expression as BuiltinFunctionCall).getArgumentExpression('trans').convertToString.getPharmMLTransFunc»</Transformation>
+	def isTransformedBothSides(EquationTypeDefinition definition){
+		definition instanceof TransformedDefinition &&
+		 definition.expression instanceof BuiltinFunctionCall &&
+		  (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null
+	}
+	
+	def isTransformedOnlyRhsSide(EquationTypeDefinition definition){
+		definition instanceof EquationDefinition &&
+		 definition.expression instanceof BuiltinFunctionCall &&
+		  (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null
+	}
+	
+	def writeContinuousObservation(EquationTypeDefinition definition, int idx){
+		val rhsExpr = definition.expression
+		if(rhsExpr instanceof BuiltinFunctionCall){
+			val predictionExpr = rhsExpr.getArgumentExpression('prediction')
+			'''
+				<ObservationModel blkId="om«idx»">
+					<ContinuousData>
+						«IF definition.isTransformedOnlyRhsSide»
+							<ct:Variable symbolType="real" symbId="«predictionExpr.singleSymbolRef?.name ?: "ERROR!"»">
+								<ct:Assign>
+									<math:Equation>
+										<math:Uniop op="log">
+											«predictionExpr.pharmMLExpr»
+										</math:Uniop>
+									</math:Equation>
+								</ct:Assign>
+							</ct:Variable>
 						«ENDIF»
-						<Output>
-							«(definition.expression as BuiltinFunctionCall).getArgumentExpression('prediction').pharmMLExpr»
-						</Output>
-						«writeStandardErrorModel(definition.expression as BuiltinFunctionCall)»
-						<ResidualError>
-							«(definition.expression as BuiltinFunctionCall).getArgumentExpression('eps').pharmMLExpr»
-						</ResidualError>
-					</Standard>
-				«ELSEIF !(definition.expression instanceof BuiltinFunctionCall)»
-					<General symbId="«definition.name»">
-						«definition.expression.expressionAsAssignment»
-					</General>
-				«ENDIF»
-			</ContinuousData>
-		</ObservationModel>
-	''' 
+						«IF isStandardErrorDefinition(definition.expression)»
+							<Standard symbId="«definition.name»">
+								«IF definition instanceof TransformedDefinition»
+									<Transformation>«definition.transform.pharmMLTransFunc»</Transformation>
+								«ENDIF»
+								<Output>
+									«IF definition.isTransformedOnlyRhsSide»
+										«predictionExpr.singleSymbolRef?.localSymbolReference ?: "ERROR!"»
+									«ELSE»
+										«predictionExpr.pharmMLExpr»
+									«ENDIF»
+								</Output>
+								«writeStandardErrorModel(rhsExpr)»
+								<ResidualError>
+									«rhsExpr.getArgumentExpression('eps').pharmMLExpr»
+								</ResidualError>
+							</Standard>
+						«ENDIF»
+					</ContinuousData>
+				</ObservationModel>
+			'''
+		}
+		else{
+			'''
+				<ObservationModel blkId="om«idx»">
+					<ContinuousData>
+						<General symbId="«definition.name»">
+							«definition.expression.expressionAsAssignment»
+						</General>
+					</ContinuousData>
+				</ObservationModel>
+			'''
+		}
+	} 
 	
 	private def writeStandardErrorModel(BuiltinFunctionCall it){
 		'''
@@ -1055,12 +1003,33 @@ class ModelDefinitionPrinter {
 		'''
 	}
 	
+	
+	private def getSuccessCategory(BuiltinFunctionCall it){
+		switch(func){
+			case "Bernoulli":
+				getArgumentExpression('category')
+			case "Binomial":
+				getArgumentExpression('successCategory')
+		}?.convertToString
+	}
+	
+	
+	private def createCategoriesOrderedBySuccess(Set<String> categories, String successCategory){
+		val retVal = new ArrayList<String>(categories.size)
+		retVal.add(successCategory)
+		retVal.addAll(categories.filter[it != successCategory])
+		retVal
+	}
+	
 	private def print_mdef_DiscreteObservations(ListDefinition s) {
 		var name = s.name
 		val linkFunction = s.list.getAttributeExpression('link');
 		val distn = s.list.getAttributeExpression('distn') as BuiltinFunctionCall
 		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("probability")
-		val category = "cat1"
+		val categories = s.list.getAttributeExpression(ListDefinitionProvider::OBS_TYPE_ATT);
+		val catVals = categories.categories
+		val catList = createCategoriesOrderedBySuccess(catVals.keySet, distn.successCategory)
+		
 		'''
 			<Discrete>
 				<CategoricalData ordered="no">
@@ -1080,17 +1049,47 @@ class ModelDefinitionPrinter {
 						</SimpleParameter>
 					«ENDIF»
 					<ListOfCategories>
-						<Category symbId="«category»"/>
+						«FOR cat : catList»
+							<Category symbId="«cat»"/>
+						«ENDFOR»
 					</ListOfCategories>
 					<CategoryVariable symbId="«name»"/>
 					<PMF linkFunction="identity">
-						«printDiscreteDistribution(distn, category)»
+						«printDiscreteDistribution(distn)»
 					</PMF>
 				</CategoricalData>
 			</Discrete>
 		'''
 	}
 	
+	
+//	private def getCategoryNames(Expression categories){
+//		val listCats = new ArrayList<String>
+//		val catVals = new HashMap<String, Expression>
+//		switch(categories){
+//			EnumExpression:{
+//				val catDefnExpr = categories.catDefn as CategoricalDefinitionExpr
+//				catDefnExpr.categories.forEach[
+//					listCats.add(name)
+//					catVals.put(name, mappedTo)
+//				]
+//			}
+//		}
+//		listCats
+//	}
+	
+	private def getCategories(Expression categories){
+		val catVals = new HashMap<String, Expression>
+		switch(categories){
+			EnumExpression:{
+				val catDefnExpr = categories.catDefn as CategoricalDefinitionExpr
+				catDefnExpr.categories.forEach[
+					catVals.put(name, mappedTo)
+				]
+			}
+		}
+		catVals
+	}
 	
 	private def print_mdef_CategoricalObservations(ListDefinition s) {
 //			val define = column.list.getAttributeExpression(ListDefinitionProvider::USE_ATT);
@@ -1106,27 +1105,28 @@ class ModelDefinitionPrinter {
 //				}
 //			}
 		val categories = s.list.getAttributeExpression(ListDefinitionProvider::OBS_TYPE_ATT);
-		val listCats = new ArrayList<String>
-		val catVals = new HashMap<String, Expression>
-		switch(categories){
-			EnumExpression:{
-				val catDefnExpr = categories.catDefn as CategoricalDefinitionExpr
-				catDefnExpr.categories.forEach[
-					listCats.add(name)
-					catVals.put(name, mappedTo)
-				]
-			}
-		}
+//		val listCats = new ArrayList<String>
+//		val catVals = new HashMap<String, Expression>
+//		switch(categories){
+//			EnumExpression:{
+//				val catDefnExpr = categories.catDefn as CategoricalDefinitionExpr
+//				catDefnExpr.categories.forEach[
+//					listCats.add(name)
+//					catVals.put(name, mappedTo)
+//				]
+//			}
+//		}
+		val catVals = categories.categories
 		'''
 			<Discrete>
 				<CategoricalData>
 					<ListOfCategories>
-						«FOR cat : listCats»
+						«FOR cat : catVals.keySet»
 							<Category symbId="«cat»"/>
 						«ENDFOR»
 					</ListOfCategories>
 					<CategoryVariable symbId="«s.name»"/>
-					«FOR cat : listCats»
+					«FOR cat : catVals.keySet»
 						<ProbabilityAssignment>
 							<Probability linkFunction="identity">
 								<math:LogicBinop op="eq">

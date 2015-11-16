@@ -38,8 +38,7 @@ warfarin_PK_v2_dat = dataObj{
 	
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 #		header = true  # or false
 #		skip =  0  ##  << integer >> Skips number of rows before header / data
 	} # end SOURCE

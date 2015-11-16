@@ -36,7 +36,7 @@ class MclBlockArgValidationTest {
 	@Test
 	def void testValidTaskBlockProps(){
 		val mcl = '''bar = taskObj{
-			OPTIMISE{
+			SIMULATE{
 			}
 		}'''.parse
 		
@@ -51,7 +51,7 @@ class MclBlockArgValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
-			MdlValidator::UNKNOWN_BLOCK_ARG_DECL,
+			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
 //		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
@@ -68,11 +68,11 @@ class MclBlockArgValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
-			MdlValidator::UNKNOWN_BLOCK_ARG_DECL,
+			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
 		mcl.assertNoErrors(MdlPackage::eINSTANCE.mclObject,
-			MdlValidator::MANDATORY_BLOCK_ARG_MISSING,
+			BlockValidator::MANDATORY_BLOCK_ARG_MISSING,
 			"mandatory argument 'idv' is missing in mdlObj 'bar'"
 		)
 	}
@@ -85,7 +85,7 @@ class MclBlockArgValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
-			MdlValidator::MANDATORY_BLOCK_ARG_MISSING,
+			BlockValidator::MANDATORY_BLOCK_ARG_MISSING,
 			"mandatory argument 'idv' is missing in mdlObj 'foo'"
 		)
 	}
@@ -98,7 +98,7 @@ class MclBlockArgValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
-			MdlValidator::UNKNOWN_BLOCK_ARG_PROP//,
+			BlockValidator::UNKNOWN_BLOCK_ARG_PROP//,
 //			"unrecognised property 'prop'"
 		)
 	}
@@ -111,15 +111,15 @@ class MclBlockArgValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
-			MdlValidator::UNKNOWN_BLOCK_ARG_PROP,
+			BlockValidator::UNKNOWN_BLOCK_ARG_PROP,
 			"unrecognised property 'prop'"
 		)
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
-			MdlValidator::MANDATORY_BLOCK_ARG_MISSING,
+			BlockValidator::MANDATORY_BLOCK_ARG_MISSING,
 			"mandatory argument 'idv' is missing in mdlObj 'bar'"
 		)
 		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
-			MdlValidator::UNKNOWN_BLOCK_ARG_DECL,
+			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
 	}
@@ -132,13 +132,13 @@ class MclBlockArgValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
-			MdlValidator::UNKNOWN_BLOCK_ARG_PROP,
+			BlockValidator::UNKNOWN_BLOCK_ARG_PROP,
 			"unrecognised property 'prop'"
 		)
 		mcl.assertNoErrors(MdlPackage::eINSTANCE.mclObject,
-			MdlValidator::MANDATORY_BLOCK_ARG_MISSING)
+			BlockValidator::MANDATORY_BLOCK_ARG_MISSING)
 		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
-			MdlValidator::UNKNOWN_BLOCK_ARG_DECL,
+			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
 	}
@@ -153,7 +153,7 @@ class MclBlockArgValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			MdlValidator::MANDATORY_BLOCK_PROP_MISSING,
+			BlockValidator::MANDATORY_BLOCK_PROP_MISSING,
 			"mandatory property 'level' is missing in block 'RANDOM_VARIABLE_DEFINITION'"
 		)
 	}
@@ -168,11 +168,11 @@ class MclBlockArgValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			MdlValidator::MANDATORY_BLOCK_PROP_MISSING,
+			BlockValidator::MANDATORY_BLOCK_PROP_MISSING,
 			"mandatory property 'level' is missing in block 'RANDOM_VARIABLE_DEFINITION'"
 		)
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
-			MdlValidator::UNKNOWN_BLOCK_ARG_PROP,
+			BlockValidator::UNKNOWN_BLOCK_ARG_PROP,
 			"unrecognised property 'prop'"
 		)
 	}

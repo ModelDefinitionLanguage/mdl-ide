@@ -31,16 +31,17 @@ class MogValidatorTest {
 		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				SEX : { use is catCov withCategories{male when 0, female when 1} }
 				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 		
@@ -50,10 +51,22 @@ class MogValidatorTest {
 					logWT = ln(WT/70)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		
@@ -70,17 +83,18 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{GUT Y}
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				logWT : { use is covariate }
 				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}
 			
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 		
@@ -89,10 +103,23 @@ class MogValidatorTest {
 					logWT = ln(WT/70)
 				}
 		}
+		
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -110,8 +137,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}
 				
@@ -124,10 +150,22 @@ class MogValidatorTest {
 					logWT
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -144,26 +182,39 @@ class MogValidatorTest {
 		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}
 				
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 		
 				COVARIATES{
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -178,14 +229,17 @@ class MogValidatorTest {
 		warfarin_PK_ODE_dat = dataObj {
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
+				SEX : { use is catCov withCategories{male when 0, female when 1} }
+				WT : { use is covariate }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 		
@@ -193,10 +247,22 @@ class MogValidatorTest {
 					logWT = ln(70)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -215,8 +281,7 @@ class MogValidatorTest {
 
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -228,10 +293,22 @@ class MogValidatorTest {
 					SEX
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -256,8 +333,7 @@ class MogValidatorTest {
 
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}
 		
@@ -268,6 +344,24 @@ class MogValidatorTest {
 				COVARIATES{
 					SEX withCategories{male, fem}
 				}
+		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				warfarin_PK_ODE_dat : { type is dataObj }
+				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
 		}
 				mog = mogObj{
 			OBJECTS{
@@ -290,15 +384,16 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{ Y }
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				DV : { use is dv, variable = Y }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -308,17 +403,29 @@ class MogValidatorTest {
 				}
 		
 				RANDOM_VARIABLE_DEFINITION(level is DV){
-					EPS
+					EPS ~ Normal(mean=0, sd=1)
 				}
 		
 				OBSERVATION{
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -333,15 +440,17 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{ Y withCategories { c1, c0, c3, c2 } }
 		
 			DATA_INPUT_VARIABLES {
+    		T : { use is idv }
 		      DV:{ use is dv, define= {Y.c0 when 0, Y.c2 when 1, Y.c3 when 2, Y.c1 when 3 } }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
+				
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -357,10 +466,22 @@ class MogValidatorTest {
 				   Y : {type is categorical withCategories{ c0 when Prob0, c1 when Prob1, c2 when Prob2, c3 when Prob3} } 
 			    }# end ESTIMATION
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -379,8 +500,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -400,10 +520,22 @@ class MogValidatorTest {
 					Y : { type is count, distn = Poisson(lambda = F) }
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -425,8 +557,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -446,10 +577,22 @@ class MogValidatorTest {
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -470,8 +613,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -491,10 +633,22 @@ class MogValidatorTest {
 					Y = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -512,16 +666,17 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{ Y; Z }
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				DVID : { use is dvid }
 				DV : { use is dv, define = { 1 in DVID as Y, 2 in DVID as Z } }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -531,7 +686,7 @@ class MogValidatorTest {
 				}
 		
 				RANDOM_VARIABLE_DEFINITION(level is DV){
-					EPS
+					EPS ~ Normal(mean=0, sd=1)
 				}
 		
 				OBSERVATION{
@@ -539,10 +694,22 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -562,8 +729,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -584,10 +750,22 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -610,8 +788,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -632,10 +809,22 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -658,8 +847,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -672,7 +860,7 @@ class MogValidatorTest {
 				}
 		
 				RANDOM_VARIABLE_DEFINITION(level is DV){
-					EPS
+					EPS ~ Normal(mean = 0, sd = 1)
 				}
 		
 				OBSERVATION{
@@ -680,10 +868,22 @@ class MogValidatorTest {
 					Z = additiveError(additive=1, prediction=F, eps=EPS)
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -701,16 +901,18 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{ Z }
 		
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				DVID : { use is dvid }
 				DV : { use is dv, variable = Z }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
+				
 				VARIABILITY_LEVELS{
 					DV : { type is observation, level = 1 }
 				}
@@ -720,17 +922,29 @@ class MogValidatorTest {
 				}
 		
 				RANDOM_VARIABLE_DEFINITION(level is DV){
-					EPS
+					EPS ~ Normal(mean=0, sd=1)
 				}
 		
 				OBSERVATION{
 					Z : { type is count, distn = Poisson(lambda=0.0) }
 				}
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -746,16 +960,18 @@ class MogValidatorTest {
 		
 			DATA_INPUT_VARIABLES {
 				ID : { use is id }
+				T : { use is idv }
 				DV : { use is dv, variable = Y }
 				OCC : { use is varLevel }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
+				IDV{T}
+				
 				VARIABILITY_LEVELS{
 					OCC : { type is parameter, level = 3 }
 					ID : { type is parameter, level = 2 }
@@ -763,10 +979,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -785,8 +1013,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -796,10 +1023,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -821,8 +1060,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -831,10 +1069,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -856,8 +1106,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		foo = mdlObj {
@@ -866,10 +1115,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				warfarin_PK_ODE_dat : { type is dataObj }
 				foo : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -889,8 +1150,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -899,10 +1159,23 @@ class MogValidatorTest {
 		
 				IDV{ T }
 		}
+
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -919,8 +1192,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -929,10 +1201,23 @@ class MogValidatorTest {
 		
 				IDV{ T }
 		}
+
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -951,8 +1236,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -961,10 +1245,22 @@ class MogValidatorTest {
 		
 				IDV{ T }
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -983,19 +1279,31 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1009,15 +1317,17 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
+				
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1028,10 +1338,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1045,14 +1367,16 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { Y }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
+				foo1 : { use is ignore }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1063,10 +1387,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1080,15 +1416,16 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1101,10 +1438,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1118,15 +1467,17 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
+
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1139,10 +1490,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1159,8 +1522,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1173,10 +1535,23 @@ class MogValidatorTest {
 				}
 		
 		}
+
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1196,8 +1571,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1212,10 +1586,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1231,15 +1617,16 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1252,10 +1639,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1269,16 +1668,18 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D; CENTRAL; Y }
 			DATA_INPUT_VARIABLES {
+				T : { use is idv }
 				CMT : { use is cmt }
 				AMT : { use is amt, define = { 1 in CMT as D, 2 in CMT as CENTRAL, 3 in CMT as Y } }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
+				
 				VARIABILITY_LEVELS{
 				}
 				
@@ -1292,10 +1693,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1314,8 +1727,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1331,10 +1743,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1354,8 +1778,7 @@ class MogValidatorTest {
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
-			       		inputFormat  is nonmemFormat, 
-			    		ignore = "#" } 
+			       		inputFormat  is nonmemFormat } 
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
@@ -1367,10 +1790,22 @@ class MogValidatorTest {
 				}
 		
 		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
 		mog = mogObj{
 			OBJECTS{
 				testData : { type is dataObj }
 				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
 			}
 		}
 		'''.parse
@@ -1378,6 +1813,674 @@ class MogValidatorTest {
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"dosing variable D has an inconsistent type with its match in the mdlObj")
+	}
+
+	
+	@Test
+	def void testValidModelStructParamMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				T : { use is idv }
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				IDV{T}
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			STRUCTURAL{
+				POP_CL : {value= 1}
+				POP_V : { value = 2 }
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidModelStructParamWithAssignmentInModelMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				T : { use is idv }
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				IDV{T}
+
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL = 1
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			STRUCTURAL{
+				POP_V : { value = 2 }
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidModelStructParamMatchMissingParamMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			STRUCTURAL{
+				POP_CL : { value= 1}
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"parameter 'POP_V' has no match in parObj")
+	}
+
+	@Test
+	def void testInvalidModelStructParamMatchWrongParamBlockMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+				POP_V : { value = 2, type is sd }
+			}
+			
+			STRUCTURAL{
+				POP_CL: { value = 1 }
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"Parameter 'POP_V' in mdlObj cannot match a variability parameter in the parObj")
+	}
+
+
+	@Test
+	def void testValidWithWarningMogModelStructParamMatchMaskedAssignmentinMdl(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				T : { use is idv }
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				IDV{T}
+
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL = 1
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+			}
+			
+			STRUCTURAL{
+				POP_CL: { value = 1 }
+				POP_V : { value = 2 }
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MASKING_PARAM_ASSIGNMENT,
+			"value assigned to parameter 'POP_CL' in mdlObj is overridden by value in parObj")
+	}
+
+	@Test
+	def void testValidModelVarParamMatchMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				T : { use is idv }
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				IDV{T}
+				VARIABILITY_LEVELS{
+				}
+				
+				VARIABILITY_PARAMETERS { 
+					POP_CL
+					POP_V
+				} 
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+				POP_CL: { value = 1, type is sd }
+				POP_V : { value = 2, type is sd }
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidModelVarParamWithAssignmentInModelMatch(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				T : { use is idv }
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				IDV{T}
+				VARIABILITY_LEVELS{
+				}
+				
+				VARIABILITY_PARAMETERS { 
+					POP_CL
+					POP_V = 1
+				} 
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+				POP_CL: { value = 1, type is sd }
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidModelVarParamsMatchMissingParamMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				VARIABILITY_PARAMETERS { 
+					POP_CL
+					POP_V
+				} 
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+				POP_CL: { value = 1, type is var }
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"parameter 'POP_V' has no match in parObj")
+	}
+
+	@Test
+	def void testInvalidModelVarParamMatchWrongParamBlockMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				VARIABILITY_PARAMETERS { 
+					POP_CL
+					POP_V
+				} 
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+				POP_V : { value = 2, type is sd }
+			}
+			
+			STRUCTURAL{
+				POP_CL : { value = 1 }
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MODEL_DATA_MISMATCH,
+			"Parameter 'POP_CL' in mdlObj cannot match a structural parameter in the parObj"
+			)
+	}
+
+	@Test
+	def void testValidWithWarningMogModelVarParamMatchMaskedAssignmentinMdl(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				T : { use is idv }
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				IDV{T}
+				VARIABILITY_LEVELS{
+				}
+				
+				VARIABILITY_PARAMETERS { 
+					POP_CL = 1
+					POP_V
+				} 
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			VARIABILITY{
+				POP_CL: { value = 1, type is sd }
+				POP_V : { value = 2, type is sd }
+			}
+			
+			STRUCTURAL{
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::MASKING_PARAM_ASSIGNMENT,
+			"value assigned to parameter 'POP_CL' in mdlObj is overridden by value in parObj")
+	}
+	
+		@Test
+	def void testInvalidDanglingObjectRefMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D }
+			DATA_INPUT_VARIABLES {
+				AMT : { use is amt, variable=D }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				VARIABILITY_LEVELS{
+				}
+				
+				STRUCTURAL_PARAMETERS { 
+					POP_CL
+					POP_V
+				} # end STRUCTURAL_PARAMETERS
+
+				MODEL_PREDICTION{
+					COMPARTMENT{
+				      D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
+				      CENTRAL:    {type is compartment, modelCmt=2}
+				             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+			         }
+				}
+		
+		}
+		p1 = parObj{
+			STRUCTURAL{
+				POP_CL : {value= 1}
+				POP_V : { value = 2 }
+			}
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				missing : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::MCLOBJ_REF_UNRESOLVED,
+			"the object 'missing' cannot be found")
 	}
 
 	

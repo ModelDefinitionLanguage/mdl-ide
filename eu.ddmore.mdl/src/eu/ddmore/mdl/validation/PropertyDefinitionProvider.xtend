@@ -11,42 +11,45 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.HashSet
 import java.util.List
+import java.util.Map
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.mdl.Statement
 
 class PropertyDefinitionProvider {
 	
-	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'monolix', 'nonmem' })
-	static val TARGET_ATT = new AttributeDefn('target', null, true, TARGET_TYPE)
-	static val VERSION_ATT = new AttributeDefn('version', null, false, MclTypeProvider::STRING_TYPE)
-	static val ALGO_TYPE = new BuiltinEnumTypeInfo('estAlgo', #{'saem', 'foce', 'fo'})
-	static val ALGO_ATT = new AttributeDefn('algo', null, false, ALGO_TYPE)
-	static val EST_OP_TYPE = new BuiltinEnumTypeInfo('estOp', #{'fim', 'estPop', 'estIndiv' })
-	static val EST_OP_ATT = new AttributeDefn('operation', null, false, EST_OP_TYPE)
+//	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'monolix', 'nonmem' })
+//	static val TARGET_ATT = new AttributeDefn('target', null, true, TARGET_TYPE)
+//	static val VERSION_ATT = new AttributeDefn('version', null, false, MclTypeProvider::STRING_TYPE)
+	static val ALGO_TYPE = new BuiltinEnumTypeInfo('estAlgo', #{'saem', 'foce', 'fo', 'focei'})
+	static val ALGO_ATT = new AttributeDefn('algo', true, ALGO_TYPE)
+//	static val EST_OP_TYPE = new BuiltinEnumTypeInfo('estOp', #{'fim', 'estPop', 'estIndiv' })
+//	static val EST_OP_ATT = new AttributeDefn('operation', null, false, EST_OP_TYPE)
 	static val SOLVER_TYPE = new BuiltinEnumTypeInfo('solver', #{'stiff', 'nonStiff' })
-	static val SOLVER_ATT = new AttributeDefn('solver', null, false, SOLVER_TYPE)
-	
-	static val propertyDefns = #{
-		BlockDefinitionProvider::ESTIMATE_BLK -> #[TARGET_ATT, EST_OP_ATT, VERSION_ATT, ALGO_ATT],
-		BlockDefinitionProvider::SIMULATE_BLK -> #[SOLVER_ATT, VERSION_ATT, TARGET_ATT]
-	}
+	static val SOLVER_ATT = new AttributeDefn('solver', false, SOLVER_TYPE)
 
+	static val Map<String, List<AttributeDefn>> propertyDefns = #{ BlockDefinitionProvider::ESTIMATE_BLK -> #[ALGO_ATT], BlockDefinitionProvider::SIMULATE_BLK -> #[SOLVER_ATT] }
+	
+/* the following was commented out inside propertyDefns declaration
+ * 		BlockDefinitionProvider::ESTIMATE_BLK -> #[TARGET_ATT, EST_OP_ATT, VERSION_ATT, ALGO_ATT],
+* 		BlockDefinitionProvider::SIMULATE_BLK -> #[SOLVER_ATT, VERSION_ATT, TARGET_ATT]
+*/
 	def List<String> getAttributeNames(String blkName){
 		val attNames = new ArrayList<String>
-		val propDefns = propertyDefns.get(blkName)
-		if(propDefns != null){
-			propDefns.forEach([at|attNames.add(at.name)])
+		val List<AttributeDefn> propDefns = propertyDefns.get(blkName)
+		if(propDefns != null) {
+			propDefns.forEach([AttributeDefn at|attNames.add(at.name)])
 		}
 		attNames
 	}
 
 	def matchingPropertyDefn(ValuePair it){
-		propertyDefns.get(parentBlock.identifier)?.findFirst[p|p.name == argumentName]
+		propertyDefns.get(parentBlock.identifier)?.findFirst[AttributeDefn p|p.name == argumentName]
 	}
 
 
-	def getTypeForProperty(ValuePair it){
+	def TypeInfo getTypeForProperty(ValuePair it){
 		matchingPropertyDefn?.attType ?: MclTypeProvider::UNDEFINED_TYPE
 	}
 
@@ -54,8 +57,8 @@ class PropertyDefinitionProvider {
 	def getTypeOfPropertyBuiltinEnum(EnumExpression ee){
 		val blockName = ee.owningBlock.identifier
 		val vp = ee.getOwningValuePair
-		val enumValue = ee.convertToString
-		val defnType = propertyDefns.get(blockName)?.findFirst[name == vp.argumentName]?.attType ?: MclTypeProvider::UNDEFINED_TYPE
+		val enumValue = ee.enumValue
+		val defnType = propertyDefns.get(blockName)?.findFirst[AttributeDefn p | p.name == vp.argumentName]?.attType ?: MclTypeProvider::UNDEFINED_TYPE
 		switch(defnType){
 			BuiltinEnumTypeInfo:
 				if(defnType.categories.exists[c|c == enumValue]) defnType else MclTypeProvider::UNDEFINED_TYPE
@@ -76,9 +79,9 @@ class PropertyDefinitionProvider {
 
 	def unusedMandatoryProperties(BlockStatement it){
 		val mandatoryProps = new HashSet<String>
-		val defns = (propertyDefns.get(identifier) ?: Collections.emptyList)
-		defns.filter[ad| ad.isMandatory].forEach[a|mandatoryProps.add(a.name)]
-		for(ps : statements.filter[s|s instanceof PropertyStatement]){
+		val List<AttributeDefn> defns = (propertyDefns.get(identifier) ?: Collections.emptyList)
+		defns.filter[AttributeDefn ad| ad.isMandatory].forEach[AttributeDefn a|mandatoryProps.add(a.name)]
+		for(ps : statements.filter[Statement s|s instanceof PropertyStatement]){
 			for(a : (ps as PropertyStatement).properties){
 				mandatoryProps.remove(a.argumentName)
 			}

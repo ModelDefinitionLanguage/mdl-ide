@@ -31,6 +31,7 @@ import eu.ddmore.mdl.mdl.CatValRefMappingExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.validation.PropertyDefinitionProvider
 import eu.ddmore.mdl.mdl.MdlFactory
+import eu.ddmore.mdl.mdl.EquationDefinition
 
 class ModellingStepsPrinter { 
 	
@@ -40,7 +41,6 @@ class ModellingStepsPrinter {
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension SublistDefinitionProvider sldp = new SublistDefinitionProvider
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
-//	extension PKMacrosPrinter bmp = new PKMacrosPrinter
 
 	////////////////////////////////////////////////
 	// III Modelling Steps
@@ -216,11 +216,13 @@ class ModellingStepsPrinter {
 					}
 				}
 				case(ListDefinitionProvider::AMT_USE_VALUE):{
-					if(mObj.findMdlSymbolDefn(column.name) != null){
+//					Potential bug here. This is meant to ensure that no mapping
+//					is generated if no variables match. @TODO: fix this properly.
+//					if(mObj.findMdlSymbolDefn(column.name) != null){
 						res = res + column.print_ds_AmtMapping(dObj, mObj)
 						// record that mapping to model found
 						saveMappedColumn(column.name)
-					}
+//					}
 				}
 				case(ListDefinitionProvider::OBS_USE_VALUE):{
 					res = res + column.print_ds_DvMapping(dObj, mObj)
@@ -317,21 +319,29 @@ class ModellingStepsPrinter {
 		}
 	}
 	
-	def hasNonCompartmentDosing(MclObject mdlObj, MappingExpression me){
+	def hasCompartmentDosing(MclObject mdlObj, MappingExpression me){
 		me.attList.exists[
 			val mdlSymb = mdlObj.findMdlSymbolDefn(mappedSymbol.ref.name)
 			mdlSymb instanceof ListDefinition && (mdlSymb as ListDefinition).isAdministrationMacro
 		]
-		false
+	}
+	
+	def hasCompartmentDosing(MclObject mdlObj, SymbolDefinition mappedSymbol){
+		val mdlSymb = mdlObj.findMdlSymbolDefn(mappedSymbol.name)
+		mdlSymb instanceof ListDefinition && (mdlSymb as ListDefinition).isAdministrationMacro
 	}
 	
 	protected def print_ds_StandardAmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj) {
 		val define = amtColumn.list.getAttributeExpression('define');
 		if (define == null) {
 			val varDefn = amtColumn.list.getAttributeExpression('variable');
-			writeSingleDoseMapping(mObj, amtColumn, varDefn)
+			if(varDefn instanceof SymbolReference){
+				if(!mObj.hasCompartmentDosing(varDefn.ref)){
+					writeSingleDoseMapping(mObj, amtColumn, varDefn)
+				}
+			}
 		}
-		else if(mObj.hasNonCompartmentDosing(define as MappingExpression)){
+		else if(!mObj.hasCompartmentDosing(define as MappingExpression)){
 			writeMultiDoseMapping(mObj, amtColumn, define)
 		}
 	}
@@ -352,7 +362,14 @@ class ModellingStepsPrinter {
 					'''
 			}
 		} else {
-			// this is a bug as the language will be invalid if this is true.
+			val varDefn = amtColumn.list.getAttributeExpression('variable');
+			if(varDefn instanceof SymbolReference){
+				toolMappingDefn += '''
+					«IF mObj.isCompartmentInput(varDefn.ref)»
+						«mObj.printTargetMapping(varDefn.ref)»
+					«ENDIF»
+				'''	
+			}
 		}
 		'''
 			«IF toolMappingDefn.length > 0»
@@ -374,8 +391,14 @@ class ModellingStepsPrinter {
 	def printTargetMapping(MclObject it, MappingPair expression){
 		val mdlDefn = findMdlSymbolDefn(expression.mappedSymbol.ref.name)
 		'''
-			<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«(mdlDefn as ListDefinition).list.getAttributeExpression('modelCmt').convertToString»"/>
-«««		<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«expression.leftOperand.convertToString»"/>
+			<ds:Map dataSymbol="«expression.leftOperand.convertToString»" admNumber="«PKMacrosPrinter::INSTANCE.getCompartmentNum(mdlDefn)»"/>
+		'''
+	}
+	
+	def printTargetMapping(MclObject it, SymbolDefinition mappedSymbol){
+		val mdlDefn = findMdlSymbolDefn(mappedSymbol.name)
+		'''
+			<ds:Map admNumber="«PKMacrosPrinter::INSTANCE.getCompartmentNum(mdlDefn)»"/>
 		'''
 	}
 	
@@ -446,12 +469,9 @@ class ModellingStepsPrinter {
 		else false
 	}
 
-	def isDiscreteBernoulliObs(SymbolDefinition symb){
+	def isDiscreteObs(SymbolDefinition symb){
 		if(symb instanceof ListDefinition){
-			if((symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT) == ListDefinitionProvider::DISCRETE_OBS_VALUE){
-				val distnExpr =  (symb as ListDefinition).list.getAttributeExpression('distn')
-				distnExpr instanceof BuiltinFunctionCall && (distnExpr as BuiltinFunctionCall).func == 'Bernoulli'
-			}
+			(symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT) == ListDefinitionProvider::DISCRETE_OBS_VALUE
 		}
 		else false
 	}
@@ -507,10 +527,8 @@ class ModellingStepsPrinter {
 					<ColumnMapping>
 						<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
 							«mdlObsSymb.symbolReference»
-							«IF mdlObsSymb.isCategoricalObs»
+							«IF mdlObsSymb.isCategoricalObs || mdlObsSymb.isDiscreteObs»
 								«printCategoricalObsMapping(dataDefine)»
-«««							«ELSEIF mdlObsSymb.isDiscreteBernoulliObs»
-«««								«printDiscreteBernoulliObsMapping»
 							«ENDIF»
 					</ColumnMapping>
 				«ENDIF»
@@ -653,7 +671,22 @@ class ModellingStepsPrinter {
 
 	def boolean isCovariateUsedInSublist(SubListExpression it, String covName){
 		val cov = getAttributeExpression('cov') as SymbolReference
-		cov != null && cov.ref.name == covName
+		var retVal = false
+		if(cov != null){
+			val covDefn = cov.ref
+			if(covDefn instanceof EquationDefinition){
+				if(covDefn.expression == null && covDefn.name == covName){
+					retVal = true
+				}
+				else if(covDefn.expression != null){
+					// this is a transformed cov so let's see if any dependencies match
+					for(depCov : covDefn.expression.covariateDependencies){
+						if(depCov.name == covName) return true
+					}
+				}
+			}
+		}
+		retVal
 	}
 
 	def boolean isCatCovUsedInSublist(SubListExpression it, String covName){
@@ -668,7 +701,7 @@ class ModellingStepsPrinter {
 				EquationTypeDefinition:{
 					if(stmt.expression instanceof BuiltinFunctionCall){
 						val funcExpr = stmt.expression as BuiltinFunctionCall
-						if(funcExpr.func == 'linear' || funcExpr.func == 'general'){
+						if(funcExpr.func == 'linear'){
 							var namedArgList = funcExpr.argList as NamedFuncArguments 
 							val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
 							if(fixEff != null && !fixEff.expressions.isEmpty){
@@ -691,6 +724,11 @@ class ModellingStepsPrinter {
 		false
 	}
 	
+	def getIgnoreLineSymbol(MclObject dObj){
+		val s = dObj.getDataSourceStmt
+		s.list.getAttributeExpression('ignore')?.convertToString
+	}
+	
 	def print_ds_DataSet(MclObject dObj, MclObject mObj) {
 		var res = "";
 		var k = 1;
@@ -706,7 +744,8 @@ class ModellingStepsPrinter {
 				case(ListDefinitionProvider::CATCOV_USE_VALUE):
 					if(isColumnMapped(column.name)) convertEnum(columnType, dosingToCompartmentMacro, !column.isCovUsedInIndivParams(mObj)) else "undefined"
 				default:
-					if(isColumnMapped(column.name)) convertEnum(columnType, dosingToCompartmentMacro, false) else 'undefined'
+//					if(isColumnMapped(column.name)) convertEnum(columnType, dosingToCompartmentMacro, false) else 'undefined'
+					convertEnum(columnType, dosingToCompartmentMacro, false)
 			}
 			val valueType = column.getValueType
 			res = res +
@@ -715,10 +754,14 @@ class ModellingStepsPrinter {
 				'''
 			k = k + 1;
 		}
+		val ignoreLineSymb = dObj.ignoreLineSymbol
 		return '''
 			<DataSet xmlns="«xmlns_ds»">
 				<Definition>
 					«res»
+					«IF ignoreLineSymb != null»
+						<IgnoreLine symbol="«ignoreLineSymb»"/>
+					«ENDIF»
 				</Definition>
 				«dObj.print_ds_ExternalFile»
 			</DataSet>
@@ -726,7 +769,15 @@ class ModellingStepsPrinter {
 	}
 	
 	def isCovariateUsedInModel(ListDefinition col, MclObject mdlObj){
-		mdlObj.mdlCovariateDefns.exists[name == col.name]
+		for(mCov : mdlObj.mdlCovariateDefns){
+			switch(mCov){
+				EquationDefinition case(mCov.name == col.name):
+					return mCov.expression == null
+				SymbolDefinition case(mCov.name == col.name):
+					return true
+			}
+		}
+		false
 	}
 	
 	
@@ -814,6 +865,7 @@ class ModellingStepsPrinter {
 			case("saem"): "SAEM"
 			case("foce"): "FOCE"
 			case("fo"): "FO"
+			case("focei"): "FOCEI"
 			default: "ERROR!"
 		}
 	}
@@ -841,17 +893,17 @@ class ModellingStepsPrinter {
 				'''
 			}
 			PropertyStatement:{
-				val targetExpr = stmt.getPropertyEnumValue('target').convertTargetEnum
-				val versionExpr = stmt.getPropertyExpression('version')
-				val algoExpr = stmt.getPropertyEnumValue('algo').convertAlgoEnum
+//				val targetExpr = stmt.getPropertyEnumValue('target').convertTargetEnum
+//				val versionExpr = stmt.getPropertyExpression('version')
+				val algoExpr = stmt.getPropertyEnumValue('algo')?.convertAlgoEnum
 //				val tolExpr = stmt.getPropertyExpression('tol')
 				'''
-				«IF targetExpr != null»
-					«writeProperty('target', targetExpr)»
-				«ENDIF»
-				«IF versionExpr != null»
-					«writeProperty('version', versionExpr)»
-				«ENDIF»
+«««				«IF targetExpr != null»
+«««					«writeProperty('target', targetExpr)»
+«««				«ENDIF»
+«««				«IF versionExpr != null»
+«««					«writeProperty('version', versionExpr)»
+«««				«ENDIF»
 «««				«IF tolExpr != null»
 «««					«writeProperty('tol', tolExpr)»
 «««				«ENDIF»

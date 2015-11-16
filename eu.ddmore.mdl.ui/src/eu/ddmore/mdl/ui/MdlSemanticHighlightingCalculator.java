@@ -11,6 +11,7 @@ import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightedPositionAcceptor;
 
 import eu.ddmore.mdl.mdl.BlockStatement;
 import eu.ddmore.mdl.mdl.EnumExpression;
+import eu.ddmore.mdl.mdl.MclObject;
 import eu.ddmore.mdl.mdl.MdlPackage;
 import eu.ddmore.mdl.mdl.ValuePair;
 
@@ -35,6 +36,12 @@ public class MdlSemanticHighlightingCalculator extends DefaultSemanticHighlighti
 		}
 		for (ValuePair g : EcoreUtil2.getAllContentsOfType(rootObject, ValuePair.class)) {
 			for (INode node : NodeModelUtils.findNodesForFeature(g, MdlPackage.Literals.VALUE_PAIR__ARGUMENT_NAME)) {
+				
+				acceptor.addPosition(node.getOffset(), node.getLength(), DefaultHighlightingConfiguration.KEYWORD_ID);
+			}
+		}
+		for (MclObject g : EcoreUtil2.getAllContentsOfType(rootObject, MclObject.class)) {
+			for (INode node : NodeModelUtils.findNodesForFeature(g, MdlPackage.Literals.MCL_OBJECT__MDL_OBJ_TYPE)) {
 				
 				acceptor.addPosition(node.getOffset(), node.getLength(), DefaultHighlightingConfiguration.KEYWORD_ID);
 			}

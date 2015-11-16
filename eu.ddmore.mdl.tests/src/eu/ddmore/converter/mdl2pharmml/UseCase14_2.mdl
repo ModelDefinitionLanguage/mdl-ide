@@ -11,7 +11,7 @@ warfarin_T2E_exact_dat = dataObj{
       ID: {use is id}
       TIME: {use is idv}
       TRT: {use is covariate}
-      AMT: {use is amt}
+      AMT: {use is ignore}
       RATE: {use is covariate}
       ADDL: {use is addl}
       II: {use is ii}
@@ -37,8 +37,7 @@ warfarin_T2E_exact_dat = dataObj{
 
    SOURCE{
       srcFile : {file="warfarin_TTE_exact.csv",
-      			inputFormat is nonmemFormat,
-      			ignore="@"}
+      			inputFormat is nonmemFormat}
    }# end SOURCE
 } # end data object
 
@@ -78,22 +77,22 @@ warfarin_T2E_interval_mdl = mdlObj{
    }# end MODEL_PREDICTION
 
    OBSERVATION{
-     Y : {type is tte, hazard = HAZ, event is intervalCensored, maxEvent=INF }
+     Y : {type is tte, hazard = HAZ, event is intervalCensored, maxEvent=inf }
    }# end ESTIMATION
 
 } # end of model object
 
 warfarin_T2E_interval_task = taskObj{
 	ESTIMATE{ 
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 	}
 }# end of task object
 
 warfarin_T2E_interval_mog = mogObj {
 	OBJECTS{
 		warfarin_T2E_exact_dat : { type is dataObj }
-		warfarin_T2E_exact_mdl : { type is mdlObj }
-		warfarin_T2E_exact_par : { type is parObj }
-		warfarin_T2E_exact_task : { type is taskObj }
+		warfarin_T2E_interval_mdl : { type is mdlObj }
+		warfarin_T2E_interval_par : { type is parObj }
+		warfarin_T2E_interval_task : { type is taskObj }
 	}
 }

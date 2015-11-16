@@ -21,6 +21,7 @@ class MclObjectValidationTest {
 	@Test
 	def void testValidArgs(){
 		val mcl = '''bar = mdlObj{
+			IDV{T}
 			VARIABILITY_LEVELS{
 				ID : {type is parameter, level=2 }
 			}
@@ -40,10 +41,10 @@ class MclObjectValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			MdlValidator::UNKNOWN_BLOCK, "block 'VARIABILITY_LEVELS' cannot be used in an object of type foobar"
+			BlockValidator::UNKNOWN_BLOCK, "block 'VARIABILITY_LEVELS' cannot be used in an object of type foobar"
 		)
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
-			MdlValidator::UNRECOGNISED_OBJECT_TYPE,
+			BlockValidator::UNRECOGNISED_OBJECT_TYPE,
 			"unrecognised object type 'foobar'"
 		)
 	}

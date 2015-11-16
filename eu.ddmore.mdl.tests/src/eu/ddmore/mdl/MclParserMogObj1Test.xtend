@@ -17,6 +17,7 @@ class MclParserMogObj1Test {
 	
 	val static CODE_SNIPPET = '''
 mobj = mdlObj {
+	IDV{T}
 	VARIABILITY_LEVELS{
 	} 
 }
@@ -25,8 +26,8 @@ pobj = parObj {
 }
 
 dobj = dataObj {
-	DATA_INPUT_VARIABLES{}
-	SOURCE{}
+	DATA_INPUT_VARIABLES{  foo : { use is idv } }
+	SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 }
 
 tobj = taskObj {
@@ -34,10 +35,10 @@ tobj = taskObj {
 
 mgobj = mogObj {
 	OBJECTS{
-		mobj
-		pobj
-		dobj
-		tobj
+		mobj : { type is mdlObj }
+		pobj : { type is parObj }
+		dobj : { type is dataObj }
+		tobj : { type is taskObj }
 	}
 }
 		'''

@@ -27,7 +27,7 @@ Hansson2013_data = dataObj{
    }
    
    SOURCE{
-      srcFile : { file="BIOMARKER_simDATA.csv", inputFormat is nonmemFormat, ignore="#" }
+      srcFile : { file="BIOMARKER_simDATA.csv", inputFormat is nonmemFormat }
    }
 }
 
@@ -229,9 +229,6 @@ Hansson2013_mdl = mdlObj{
        sVEGFR3 : {deriv=KIN3*(1-EFF3)-KOUT3*sVEGFR3, init=BM03, wrt=T}
        sKIT : {deriv= KINS*(1-EFFS)-KOUTS*sKIT, init=BM0S, wrt=T}
     }
-    
-       LNVEGF = ln(VEGF)
-       
    }# end MODEL_PREDICTION
 
  
@@ -246,7 +243,7 @@ Hansson2013_mdl = mdlObj{
 
       LNsVEGFR3_obs = combinedError2(trans is ln, additive=0, proportional=POP_RES_sVEGFR3_PROP, prediction=sVEGFR3, eps=eps_RES_W)
   	  
-       LNsKIT_obs = combinedError2(trans is ln, additive=0, proportional=POP_RES_sKIT_PROP, prediction=sKIT, eps=eps_RES_W)
+      LNsKIT_obs = combinedError2(trans is ln, additive=0, proportional=POP_RES_sKIT_PROP, prediction=sKIT, eps=eps_RES_W)
    }# end OBSERVATION
 
 } # end of model object
@@ -254,13 +251,13 @@ Hansson2013_mdl = mdlObj{
        
 Hansson2013_task = taskObj{
 	ESTIMATE{ 
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 	}
 }# end of task object
 
 warfarin_PK_ODE_mog = mogObj {
 	OBJECTS{
-		Hansson2013_data
+		Hansson2013_data : { type is dataObj }
 		Hansson2013_mdl : { type is mdlObj }
 		Hansson2013_par : { type is parObj }
 		Hansson2013_task : { type is taskObj }

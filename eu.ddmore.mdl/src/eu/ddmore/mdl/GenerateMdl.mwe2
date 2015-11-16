@@ -9,15 +9,13 @@ var file.extensions = "mdl"
 var projectName = "eu.ddmore.mdl"
 var runtimeProject = "../${projectName}"
 var generateXtendStub = true
+var generateStub = true
 var encoding = "UTF-8"
 
 Workflow {
     bean = StandaloneSetup {
             scanClassPath = false
             platformUri = "${runtimeProject}/.."
-            // The following two lines can be removed, if Xbase is not used.
-            //registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"
-            //registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
         }
     
         component = DirectoryCleaner {
@@ -100,7 +98,9 @@ Workflow {
                 fragment = builder.BuilderIntegrationFragment auto-inject {}
     
                 // generator API
-                fragment = generator.GeneratorFragment auto-inject {}
+                fragment = generator.GeneratorFragment auto-inject {
+                	generateJavaMain = true
+                }
     
                 // formatter API
                 fragment = formatting.FormatterFragment auto-inject {}
@@ -125,11 +125,11 @@ Workflow {
                 // generates junit test support classes into Generator#pathTestProject
                 fragment = junit.Junit4Fragment auto-inject {}
     
-//                // project wizard (optional)
-//                 fragment = projectWizard.SimpleProjectWizardFragment {
-//                      generatorProjectName = "${projectName}"
-//                      modelFileExtension = file.extensions
-//                 }
+                // project wizard (optional)
+                 fragment = projectWizard.SimpleProjectWizardFragment {
+                      generatorProjectName = "${projectName}.generator"
+                      fileExtension = file.extensions
+                 }
     
                 // rename refactoring
                 fragment = refactoring.RefactorElementNameFragment auto-inject {}

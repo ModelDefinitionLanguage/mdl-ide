@@ -31,6 +31,7 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.PowerExpression
 
 class PharmMLExpressionBuilder {
 	
@@ -133,6 +134,9 @@ class PharmMLExpressionBuilder {
     		MultiplicativeExpression:{
     			getMultiplicativeExpression(expr)
     		}
+    		PowerExpression:{
+    			getPowerExpression(expr)
+    		}
     		UnaryExpression:{
     			getUnaryExpression(expr)
     		}
@@ -219,6 +223,7 @@ class PharmMLExpressionBuilder {
 		switch(fName){
 			case 'ln' : 'log'
 			case 'invLogit': 'logistic'
+			case 'lnFactorial': 'factln'
 			default: fName
 		}
 	}
@@ -252,6 +257,10 @@ class PharmMLExpressionBuilder {
 	'''
 	
 	def getMultiplicativeExpression(MultiplicativeExpression it){
+		getBinaryOperator(feature, leftOperand, rightOperand)
+	}
+	
+	def getPowerExpression(PowerExpression it){
 		getBinaryOperator(feature, leftOperand, rightOperand)
 	}
 	
@@ -297,7 +306,7 @@ class PharmMLExpressionBuilder {
 			«ENDFOR»
 			«IF other != null»
 				<math:Piece>
-					«other.pharmMLExpr»
+					«other.other.pharmMLExpr»
 					<math:Condition>
 						<math:Otherwise/>
 					</math:Condition>
@@ -329,7 +338,9 @@ class PharmMLExpressionBuilder {
 	
 	def getConstantLiteral(ConstantLiteral it) {
 		val constType = switch(value){
-			case("INF"): "infinity"
+			case("inf"): "infinity"
+			case("exponentiale"): "exponentiale"
+			case("pi") : "pi"
 			default:
 				"error:NotDefined"	
 		}

@@ -14,6 +14,8 @@ import java.util.ArrayList
 import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.EquationTypeDefinition
 
 class MogValidator {
 
@@ -33,7 +35,12 @@ class MogValidator {
 		
 	}
 	
-	def getMdlObjectOfType(MclObject obj, String mdlType){
+	static def findMdlObject(MclObject obj, String name, String mdlType){
+		val mcl = EcoreUtil2.getContainerOfType(obj, Mcl)
+		mcl.objects.findFirst[mdlObjType == mdlType && it.name == name]
+	}
+
+	static def getMdlObjectOfType(MclObject obj, String mdlType){
 		val mcl = EcoreUtil2.getContainerOfType(obj, Mcl)
 		mcl.objects.findFirst[mdlObjType == mdlType]
 	}
@@ -74,15 +81,16 @@ class MogValidator {
 	// 1) All covariates (unless they have an RHS) must be matched to the data object - Done
 	// 1a) All covariates must be of the same type.  -Done
 	// 2) All observations must be matched to a data object - unless this is a simulation  - Done (ignore simulation case)
-	// 3) All uninitialised parameters in STRUCURAL_PARAMS must match STRUCTURAL in parObj
-	// 4) All unitinitialised parameters in VARIABILITY_PARAMETERS must match VARIABILITY in parObj
+	// 3) All uninitialised parameters in STRUCURAL_PARAMS must match STRUCTURAL in parObj - Done
+	// 4) All unitinitialised parameters in VARIABILITY_PARAMETERS must match VARIABILITY in parObj - Done
 	// 5) Variability levels of type parameter must be matched to dataObj. - Done
 	// 6) Variability parameters of type dv must be matched to data if an estimation (not simulation) - Done (ignore simulation case)
 	// 7) If IDV is specified in the model then it must match TIME in the data. - Done 
 	// 8) Dosing variables must be mapped to variables in to MODEL_PREDICTION block
-	// 8a) Dosing variables in the model must have type non-vector REAL.
+	// 8a) Dosing variables in the model must have type non-vector REAL.  - Done by checks preventing vector defns
 	// 9) All symbols in the model should be initialised at the end of assembly 
 	// 10) Dosing time match to a variable in model prediction
+	// 11) Check that eta in par object are defined in model. 
 	 
 	def validateCovariates((String, String) => void errorLambda){
 		val expectedMdlCovars = new ArrayList<SymbolDefinition>
@@ -166,5 +174,56 @@ class MogValidator {
 		}
 	}
 	
+	def boolean isAssigned(Statement stmt){
+		switch(stmt){
+			EquationTypeDefinition: stmt.expression != null
+			default: true
+		}
+	}
+	
+	
+	def validateStructuralParameters((String, String) => void errorLambda, (String, String) => void warningLambda){
+		for(mdlStmt : mdlObj.mdlStructuralParameters){
+			if(mdlStmt instanceof SymbolDefinition){
+				val parStmt = paramObj.findMdlSymbolDefn(mdlStmt.name)
+				if(parStmt == null){
+					if(!mdlStmt.isAssigned) 
+						errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "parameter '" + mdlStmt.name +"' has no match in parObj");
+				}
+				if((parStmt as Statement).isParVariabilityParam){
+					errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "Parameter '" + mdlStmt.name +"' in mdlObj cannot match a variability parameter in the parObj");
+				}
+				else if(!mdlStmt.typeFor.isCompatible(parStmt.typeFor)){
+					errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "parameter '" + parStmt.name +"' has an inconsistent type with its match in the parObj");
+				}
+				else if(mdlStmt.isAssigned){
+					warningLambda.apply(MdlValidator::MASKING_PARAM_ASSIGNMENT, "value assigned to parameter '" + parStmt.name +"' in mdlObj is overridden by value in parObj");
+				}
+			}
+		}
+	}
+	
+	def validateVariabilityParameters((String, String) => void errorLambda, (String, String) => void warningLambda){
+		for(mdlStmt : mdlObj.mdlVariabilityParameters){
+			if(mdlStmt instanceof SymbolDefinition){
+				val parStmt = paramObj.findMdlSymbolDefn(mdlStmt.name)
+				if(parStmt == null){
+					if(!mdlStmt.isAssigned) 
+						errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "parameter '" + mdlStmt.name +"' has no match in parObj");
+				}
+				else{
+					if((parStmt as Statement).isParStructuralParam){
+						errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "Parameter '" + mdlStmt.name +"' in mdlObj cannot match a structural parameter in the parObj");
+					}
+					else if(!mdlStmt.typeFor.isCompatible(parStmt.typeFor)){
+						errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "parameter '" + parStmt.name +"' has an inconsistent type with its match in the parObj");
+					}
+					else if(mdlStmt.isAssigned){
+						warningLambda.apply(MdlValidator::MASKING_PARAM_ASSIGNMENT, "value assigned to parameter '" + parStmt.name +"' in mdlObj is overridden by value in parObj");
+					}
+				}
+			}
+		}
+	}
 	
 }

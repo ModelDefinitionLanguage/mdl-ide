@@ -4,20 +4,19 @@
 # link=identity in OBSERVATION definition
 
 Bernoulli_DIST_dat = dataObj{
-   DECLARED_VARIABLES{ Y }
+   DECLARED_VARIABLES{ Y withCategories { success, fail } }
 	
    DATA_INPUT_VARIABLES{
       ID:{ use is id }
 	  TIME:{ use is ignore } # NOT USED IN MODEL
       CP:{ use is idv }
-      DV:{ use is dv, variable=Y }
+      DV:{ use is dv, define={ Y.success when 0, Y.fail when 1 } }
       MDV:{ use is mdv }
    }# end DATA_INPUT_VARIABLES
 
    	SOURCE {
 	    srdFile : {file = "binary.csv", 
-        	inputFormat is nonmemFormat, 
-	    ignore = "#" }
+        	inputFormat is nonmemFormat }
 	} # end SOURCE
 } # end data object
 
@@ -71,13 +70,13 @@ Bernoulli_DIST_mdl = mdlObj{
    }# end MODEL_PREDICTION
 
    OBSERVATION{
-     Y : { type is discrete, distn = Binomial(probabilityOfSuccess=P1, numberOfTrials=1) }
+     Y : { type is discrete withCategories { success, fail }, distn = Binomial(successCategory=Y.success, probabilityOfSuccess=P1, numberOfTrials=1) }
    }# end ESTIMATION
 } # end of model object
 
 Bernoulli_DIST_task = taskObj{
 	ESTIMATE{ 
-		set target is nonmem, version = "7.2", algo is foce 
+		set algo is foce 
 	}
 }# end of task object
 

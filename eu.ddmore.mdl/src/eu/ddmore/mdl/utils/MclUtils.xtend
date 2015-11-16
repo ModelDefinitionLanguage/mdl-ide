@@ -1,20 +1,35 @@
 package eu.ddmore.mdl.utils
 
+import eu.ddmore.mdl.mdl.AdditiveExpression
+import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CatValRefMappingExpression
+import eu.ddmore.mdl.mdl.CategoryValueReference
+import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
+import eu.ddmore.mdl.mdl.MultiplicativeExpression
+import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
+import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.UnaryExpression
+import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.validation.BlockDefinitionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
 import eu.ddmore.mdl.validation.MdlValidator
@@ -24,7 +39,6 @@ import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
-import eu.ddmore.mdl.mdl.CategoryValueReference
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -97,6 +111,10 @@ class MclUtils {
 		isMatchingDataUse(ListDefinitionProvider::OBS_USE_VALUE)
 //		list.attributes.exists[argumentName == ListDefinitionProvider::USE_TYPE.enumName && (
 //			expression.convertToString == ListDefinitionProvider::OBS_USE_VALUE)]
+	}
+
+	def boolean isDataSourceBlock(BlockStatement stmt){
+		stmt.identifier == BlockDefinitionProvider::DATA_SRC_BLK
 	}
 
 	def boolean isMatchingDataUse(ListDefinition it, String ... useValue){
@@ -195,20 +213,74 @@ class MclUtils {
 	}
 
 	def getMdlPredictionVariables(MclObject it){
-		val retVal = new ArrayList<Statement>
-		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]){
-			retVal.addAll(stmt.nonBlockStatements)
-		}
-		retVal
+		getStatementsInBlock(BlockDefinitionProvider::MDL_PRED_BLK_NAME)
+//		val retVal = new ArrayList<Statement>
+//		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]){
+//			retVal.addAll(stmt.nonBlockStatements)
+//		}
+//		retVal
 	}	
 	
 	def getMdlIndvParams(MclObject it){
+		getStatementsInBlock(BlockDefinitionProvider::MDL_INDIV_PARAMS)
+//		val retVal = new ArrayList<Statement>
+//		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS]){
+//			retVal.addAll(stmt.nonBlockStatements)
+//		}
+//		retVal
+	}	
+	
+	def getMdlStructuralParameters(MclObject it){
+		getStatementsInBlock(BlockDefinitionProvider::MDL_STRUCT_PARAMS)
+//		val retVal = new ArrayList<Statement>
+//		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_STRUCT_PARAMS]){
+//			retVal.addAll(stmt.nonBlockStatements)
+//		}
+//		retVal
+	}
+	
+	def getMdlVariabilityParameters(MclObject it){
+		getStatementsInBlock(BlockDefinitionProvider::MDL_VAR_PARAMS)
+//		val retVal = new ArrayList<Statement>
+//		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_VAR_PARAMS]){
+//			retVal.addAll(stmt.nonBlockStatements)
+//		}
+//		retVal
+	}
+	
+	private def getStatementsInBlock(MclObject it, String blkName){
 		val retVal = new ArrayList<Statement>
-		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS]){
+		for(stmt : blocks.filter[identifier == blkName]){
 			retVal.addAll(stmt.nonBlockStatements)
 		}
 		retVal
-	}	
+	}
+	
+	def getParamVariabilityParameters(MclObject it){
+		getStatementsInBlock(BlockDefinitionProvider::PARAM_VARIABILITY_BLK)
+	}
+	
+	def isParVariabilityParam(Statement it){
+		isParentBlockAsNamed(BlockDefinitionProvider::PARAM_VARIABILITY_BLK)
+	}
+
+	def isParStructuralParam(Statement it){
+		isParentBlockAsNamed(BlockDefinitionProvider::PARAM_STRUCT_BLK)
+	}
+
+	private def isParentBlockAsNamed(Statement it, String name){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		blk?.identifier == name
+	}
+
+	def getParamStructuralParameters(MclObject it){
+		getStatementsInBlock(BlockDefinitionProvider::PARAM_STRUCT_BLK)
+//		val retVal = new ArrayList<Statement>
+//		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_STRUCT_BLK]){
+//			retVal.addAll(stmt.nonBlockStatements)
+//		}
+//		retVal
+	}
 	
 	def getModelPredictionBlocks(MclObject it){
 		blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]
@@ -459,21 +531,108 @@ class MclUtils {
 		null
 	}
 	
-	def SymbolDefinition getSymbolDefnFromCatValRef(CategoryValueReference expr){
-		var SymbolDefinition retVal = null
-		var catValDefn = expr.ref
-		// now get symbol defn that owns cat defn
-		retVal = EcoreUtil2.getContainerOfType(catValDefn, SymbolDefinition)
-		retVal
-	}
-
 	def SymbolDefinition getSymbolDefnFromCatValRef(CatValRefMappingExpression expr){
 		var SymbolDefinition retVal = null
-		if(!expr.attLists.isEmpty){
-			var catValDefn = expr.attLists.head.catRef.ref
-			// now get symbol defn that owns cat defn
-			retVal = EcoreUtil2.getContainerOfType(catValDefn, SymbolDefinition)
+		if (!expr.attLists.isEmpty) {
+			retVal = getSymbolDefnFromCatValRef(expr.attLists.head.catRef)
 		}
 		retVal
 	}
+	
+	/**
+	 * Get symbol defn that owns cat defn
+	 */
+        def SymbolDefinition getSymbolDefnFromCatValRef(CategoryValueReference catValRef){
+                var catValDefn = catValRef.ref
+                EcoreUtil2.getContainerOfType(catValDefn, SymbolDefinition)
+        }
+	
+    def List<SymbolDefinition> getCovariateDependencies(Expression expr){
+    	val retVal = new ArrayList<SymbolDefinition> 
+    	expr.getSymbolReferences.forEach[ 
+    		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+    		if(blk?.identifier == BlockDefinitionProvider::COVARIATE_BLK_NAME) retVal.add(it)
+    	]
+    	retVal
+    }
+    
+	//     @TODO - Refactor this and put it somewhere line Domain utils 
+    def dispatch List<SymbolDefinition> getSymbolReferences(Expression expr){
+    	val retVal = new ArrayList<SymbolDefinition>
+    	switch(expr){
+    		OrExpression:{
+    			retVal.addAll(expr.leftOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand.symbolReferences)
+    		}
+    		AndExpression:{
+    			retVal.addAll(expr.leftOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand.symbolReferences)
+    		}
+    		EqualityExpression:{
+    			retVal.addAll(expr.leftOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand.symbolReferences)
+    		}
+    		RelationalExpression:{
+    			retVal.addAll(expr.leftOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand.symbolReferences)
+    		}
+    		AdditiveExpression:{
+    			retVal.addAll(expr.leftOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand.symbolReferences)
+    		}
+    		MultiplicativeExpression:{
+    			retVal.addAll(expr.leftOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand.symbolReferences)
+    		}
+    		UnaryExpression:{
+    			retVal.addAll(expr.operand.symbolReferences)
+    		}
+    		ParExpression:{
+    			retVal.addAll(expr.expr.symbolReferences)
+    		}
+    		WhenExpression:{
+    			for(w : expr.when){
+    				retVal.addAll(w.symbolReferences)
+    			}
+    			retVal.addAll(expr.other.other.symbolReferences)
+    		}
+    		VectorLiteral:{
+    			for(v : expr.expressions){
+    				v.symbolReferences
+    			}
+    		}
+    		VectorElement:{
+    			expr.element.symbolReferences
+    		}
+    		SymbolReference:{
+    			retVal.add(expr.ref)
+    		}
+    			
+    	}
+    	retVal
+    }
+    
+    
+    def dispatch List<SymbolDefinition> getSymbolReferences(IfExprPart it){
+		value.symbolReferences    			
+    }
+    
+    def dispatch List<SymbolDefinition> getSymbolReferences(BuiltinFunctionCall it){
+    	val retVal = new ArrayList<SymbolDefinition>
+    	val a = argList
+    	switch(a){
+    		NamedFuncArguments:{
+    			for(arg : a.arguments){
+    				retVal.addAll(arg.expression.symbolReferences)
+    			}
+    		}
+    		UnnamedFuncArguments:{
+    			for(arg : a.args){
+    				retVal.addAll(arg.argument.symbolReferences)
+    			}
+    		}
+    	}
+    	retVal
+    }
+    
 }

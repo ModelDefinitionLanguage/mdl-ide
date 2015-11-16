@@ -16,8 +16,7 @@ Poisson_DIST_dat = dataObj{
 
    	SOURCE {
 	    srcFile : {file = "count.csv", 
-        	inputFormat is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 
@@ -68,7 +67,7 @@ Poisson_DIST_mdl = mdlObj{
 
 Poisson_DIST_task = taskObj{
 	ESTIMATE{ 
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 	}
 }# end of task object
 

@@ -5,6 +5,8 @@ import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
+import java.util.HashSet
+import eu.ddmore.mdl.mdl.EquationTypeDefinition
 
 class FunctionDefinitionPrinter {
 
@@ -197,6 +199,7 @@ class FunctionDefinitionPrinter {
 		'proportionalError' -> #{'proportional' -> 'proportional', 'prediction' -> 'f'},
 		'combinedError1' -> #{'additive' -> 'additive', 'proportional' -> 'proportional', 'prediction' -> 'f'},
 		'combinedError2' -> #{'additive' -> 'additive', 'proportional' -> 'proportional', 'prediction' -> 'f'},
+		'combinedError2Log' -> #{'additive' -> 'additive', 'proportional' -> 'proportional', 'prediction' -> 'f'},
 		'powerError' -> #{'proportional' -> 'proportional', 'power' -> 'power', 'prediction' -> 'f'},
 		'combinedPowerError1' -> #{'additive' -> 'additive', 'proportional' -> 'proportional', 'power' -> 'power', 'prediction' -> 'f'}
 	}
@@ -244,22 +247,26 @@ class FunctionDefinitionPrinter {
 		standardArgumentLookup.get(standardErrorName)?.get(name) 
 	}
 
-	def print_FunctionDefinitions(MclObject it)'''
-		«FOR o: mdlObservations»
-			«switch(o){
-				EquationDefinition:{
-					val rhsExpr = o.expression
-					switch(rhsExpr){
-						BuiltinFunctionCall:
-							if(rhsExpr.isNamedArgFunction){
-								'''
-								«rhsExpr.pharmMLFuncDefn»
-								'''
-							}
+	def print_FunctionDefinitions(MclObject it){
+		val printed = new HashSet<String>
+		'''
+			«FOR o: mdlObservations»
+				«switch(o){
+					EquationTypeDefinition:{
+						val rhsExpr = o.expression
+						switch(rhsExpr){
+							BuiltinFunctionCall:
+								if(rhsExpr.isNamedArgFunction && !printed.contains(rhsExpr.func)){
+									printed.add(rhsExpr.func)	
+									'''
+										«rhsExpr.pharmMLFuncDefn»
+									'''
+								}
+						}
 					}
-				}
-			}»
-		«ENDFOR»
-	'''
+				}»
+			«ENDFOR»
+		'''
+	}
 	
 }

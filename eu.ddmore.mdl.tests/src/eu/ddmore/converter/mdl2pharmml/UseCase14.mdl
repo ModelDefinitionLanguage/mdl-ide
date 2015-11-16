@@ -5,13 +5,13 @@
 
 warfarin_T2E_exact_dat = dataObj{
 
-   DECLARED_VARIABLES{ Y }
+   DECLARED_VARIABLES{ Y; INPUT }
 
    DATA_INPUT_VARIABLES{
       ID: {use is id}
       TIME: {use is idv}
       TRT: {use is covariate}
-      AMT: {use is amt}
+      AMT: {use is ignore }
       RATE: {use is covariate}
       ADDL: {use is addl}
       II: {use is ii}
@@ -37,8 +37,7 @@ warfarin_T2E_exact_dat = dataObj{
 
    SOURCE{
       srcFile : {file="warfarin_TTE_exact.csv",
-      			inputFormat is nonmemFormat,
-      			ignore="@"}
+      			inputFormat is nonmemFormat}
    }# end SOURCE
 } # end data object
 
@@ -75,14 +74,14 @@ warfarin_T2E_exact_mdl = mdlObj{
    }# end MODEL_PREDICTION
 
    OBSERVATION{
-     Y : {type is tte, hazard = HAZ, event is exact }
+     Y : {type is tte, hazard = HAZ }
    }# end ESTIMATION
 
 } # end of model object
 
 warfarin_T2E_exact_task = taskObj{
 	ESTIMATE{ 
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 	}
 }# end of task object
 

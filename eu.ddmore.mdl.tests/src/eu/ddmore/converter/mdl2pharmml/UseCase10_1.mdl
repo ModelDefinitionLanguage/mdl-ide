@@ -20,8 +20,7 @@ warfarin_PK_Compartments_dat = dataObj {
 	
 	SOURCE {
 	    srcFile : {file = "warfarin_conc_cmt.csv", 
-            		inputFormat is nonmemFormat, 
-	    			ignore = "#"} 
+            		inputFormat is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 
@@ -159,7 +158,7 @@ warfarin_PK_2Compartments_v2_mdl = mdlObj{
 
 warfarin_PK_ODE_task = taskObj {
 	ESTIMATE{ 
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 	}
 } # end of task object
 

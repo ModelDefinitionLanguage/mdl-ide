@@ -12,14 +12,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import static extension eu.ddmore.mdl.utils.MdlExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
-class ExpressionConverterTest {
+class MdlExpressionConverterTest {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
@@ -61,8 +61,8 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
-"(GUT*KA) when T>=TLAG,
-0 otherwise", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
+			"if (T>=TLAG) then GUT*KA else 0",
+			eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
 	}
 
 	@Test
@@ -106,7 +106,7 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 			TLAG
 			RATEIN = if (10 < 22 == !true) then 10 * log(GUT/KA^2) / ( 1 - TLAG /(1 + sqrt(GUT)))
 			elseif(KA && GUT || false) then if(T >= TLAG) then GUT * KA else 0
-			else INF
+			else inf
 	} # end MODEL_PREDICTION
 	
 } # end of model object
@@ -114,13 +114,11 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 		
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
-"(10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT)))) when 10<22==!true,
-((GUT*KA) when T>=TLAG,
-0 otherwise) when KA&&GUT||false,
-INF otherwise", eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
+			"if (10<22==!true) then 10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))) elseif (KA&&GUT||false) then if (T>=TLAG) then GUT*KA else 0 else inf",
+			eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
 	}
 	
-		@Test
+	@Test
 	def void testConverter5(){
 		val mcl =  '''
 warfarin_PK_ODE_mdl = mdlObj (idv T) {
@@ -131,10 +129,10 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
-		Assert::assertEquals("doo", eqn.expression.convertToString)
+		Assert::assertEquals("\"doo\"", eqn.expression.convertToString)
 	}
 
-		@Test
+	@Test
 	def void testConverter6(){
 		val mcl =  '''
 warfarin_PK_ODE_mdl = mdlObj (idv T) {
@@ -148,15 +146,14 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
-		Assert::assertEquals("[KA,4,true,help,log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))),1+2+3*4+5]", eqn.expression.convertToString)
+		Assert::assertEquals("[KA,4,true,\"help\",log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))),1+2+3*4+5]", eqn.expression.convertToString)
 	}
 
-		@Test
+	@Test
 	def void testConverter7(){
 		val mcl =  '''
 warfarin_PK_ODE_mdl = dataObj {
-	DATA_INPUT_VARIABLES{
-	} # end MODEL_PREDICTION
+	DATA_INPUT_VARIABLES{  foo : { use is ignore } } # end MODEL_PREDICTION
 	SOURCE{
 		file : { file="foo" }
 	}
@@ -164,7 +161,7 @@ warfarin_PK_ODE_mdl = dataObj {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as ListDefinition
-		Assert::assertEquals("foo", (eqn.list.attributes.head as ValuePair).expression.convertToString)
+		Assert::assertEquals("\"foo\"", (eqn.list.attributes.head as ValuePair).expression.convertToString)
 	}
 
 	

@@ -19,7 +19,7 @@ warfarin_PK_ODE_dat = dataObj {
 	} # end DATA_INPUT_VARIABLES
 
 	SOURCE {
-	    srcFile : {file = "warfarin_conc_analytic.csv", inputFormat is nonmemFormat, ignore = "#" }
+	    srcFile : {file = "warfarin_conc_analytic.csv", inputFormat is nonmemFormat }
 	} # end SOURCE
 } # end data object
 
@@ -110,7 +110,7 @@ warfarin_PK_ANALYTIC_mdl = mdlObj {
 
 warfarin_PK_ODE_task = taskObj {
 	ESTIMATE {
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 	} #end ESTIMATE sub block
 } # end of task object
 

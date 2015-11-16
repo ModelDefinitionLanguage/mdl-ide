@@ -15,8 +15,7 @@ warfarin_PKPD_turnover_dat = dataObj{
 
    SOURCE{
       srcfile : {file="warfarin_conc_pca.csv", 
-      			 inputFormat is nonmemFormat,
-      			 ignore="#"}
+      			 inputFormat is nonmemFormat}
    }# end FILE
 } # end data object
 
@@ -164,7 +163,7 @@ warfarin_PKPD_turnover_mdl = mdlObj{
 
 warfarin_PKPD_turnover_task = taskObj {
 ESTIMATE{ 
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 }
 } # end of task object
 

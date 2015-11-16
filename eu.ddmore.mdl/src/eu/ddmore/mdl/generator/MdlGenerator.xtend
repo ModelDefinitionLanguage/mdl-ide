@@ -54,9 +54,9 @@ class MdlGenerator implements IGenerator {
     }
     
    def void performConvert(File src, File outputDirectory) {
-       val injector = new MdlStandaloneSetup().createInjectorAndDoEMFRegistration();
-       val XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet);
-       resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
+       val injector = new MdlStandaloneSetup().createInjectorAndDoEMFRegistration()
+       val XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet)
+       resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE)
 
        val Resource resource = resourceSet.getResource(URI.createURI("file:///" + src.absolutePath), true);
        val Mcl mcl = resource.getContents().get(0) as Mcl;

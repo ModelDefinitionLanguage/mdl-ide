@@ -10,6 +10,8 @@ import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Ignore
+import org.eclipse.xtext.diagnostics.Diagnostic
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -41,6 +43,101 @@ class MclTypeValidationTest {
 	}
 	
 	@Test
+	def void testValidScientificNotationEquationExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C = T
+				A = B + C - 22.02e-5
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInValidScientificNotationNumberAboveRange(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C = T
+				A = B + C - 22.02e555
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.realLiteral,
+			MdlValidator::NUMBER_BEYOND_PRECISION_RANGE,
+			"This real number is too large or small for MDL."
+		)
+	}
+	
+	@Ignore
+	// this is not caught properly. Need to work on it.
+	def void testInValidScientificNotationNumberBelowRange(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C = T
+				A = B + C - 22.02e-555777
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.realLiteral,
+			MdlValidator::NUMBER_BEYOND_PRECISION_RANGE,
+			"This real number is too large or small for MDL."
+		)
+	}
+	
+	@Test
+	def void testValidLargeIntegerBeyondRange(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C = T
+				A = B + C - 2220000000000000000000000000000000000000000000000000000000
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.integerLiteral, Diagnostic::SYNTAX_DIAGNOSTIC)
+	}
+	
+	@Test
 	def void testValidWhenEquationExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {
@@ -53,7 +150,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < INF) then B^180 else 22
+				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < inf) then B^180 else 22
 			}
 			
 		} # end of model object
@@ -78,6 +175,51 @@ class MclTypeValidationTest {
 				}
 				C
 				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidWithNegativeDerivExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				DEQ{
+					B : { deriv = -C, init = 33 }
+					C : { deriv = 1, init = 33 }
+				}
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidWithSelfRefereingDerivExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				DEQ{
+					B : { deriv = B, init = 33 }
+				}
 			}
 			
 		} # end of model object
@@ -405,7 +547,7 @@ class MclTypeValidationTest {
 		)
 	}
 	
-	@Test
+	@Ignore
 	def void testValidFunctionEquationExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {
@@ -413,14 +555,17 @@ class MclTypeValidationTest {
 			
 			VARIABILITY_LEVELS{
 			}
-		
 			
-			MODEL_PREDICTION{
-				log(B) = 26
+			GROUP_VARIABLES{
 				C
+			}
+		
+			INDIVIDUAL_VARIABLES{
+				log(B) = 26
 				log(A) =  exp(B) + C - 22
 			}
-			
+		
+		
 		} # end of model object
 		'''.parse
 		
@@ -493,6 +638,7 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
+//		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition, MdlValidator::UNSUPPORTED_FEATURE)
 		mcl.assertNoErrors
 	}
 	
@@ -654,7 +800,7 @@ class MclTypeValidationTest {
 			}
 			
 			STUDY_DESIGN{
-				Conc
+				Conc = 0
 			}
 			
 			SAMPLING{
@@ -864,8 +1010,7 @@ class MclTypeValidationTest {
 	def void testValidBuiltinEnum(){
 		val mcl = '''
 		foo = dataObj {
-			DATA_INPUT_VARIABLES{
-			}
+			DATA_INPUT_VARIABLES{  anOther : { use is ignore } }
 
 			SOURCE{
 				foo : { file="aFile", inputFormat is nonmemFormat }
@@ -939,8 +1084,7 @@ d1g=desObj{
 	def void testInvalidBuiltinEnum(){
 		val mcl = '''
 		foo = dataObj {
-			DATA_INPUT_VARIABLES{
-			}
+			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 
 			SOURCE{
 				foo : { file="aFile", inputFormat is foobar }
@@ -986,7 +1130,7 @@ d1g=desObj{
 				DT : { use is doseTime, idvColumn = TIME, amtColumn = c2 }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertNoErrors
@@ -1004,7 +1148,7 @@ d1g=desObj{
 			DATA_DERIVED_VARIABLES{
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertNoErrors
@@ -1021,7 +1165,7 @@ d1g=desObj{
 			DATA_DERIVED_VARIABLES{
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
@@ -1041,7 +1185,7 @@ d1g=desObj{
 			DATA_DERIVED_VARIABLES{
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
@@ -1062,7 +1206,7 @@ d1g=desObj{
 				DT : { use is doseTime, idvColumn = TIME, amtColumn = D + 0 - 2 }
 			}
 			
-			SOURCE{	}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
@@ -1110,8 +1254,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1131,8 +1274,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1155,8 +1297,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1178,8 +1319,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1198,8 +1338,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 	SOURCE {
 	    foo: {file = "warfarin_conc_sex.csv",
-        	inputFormat  is nonmemFormat, 
-	    	ignore = "#"} 
+        	inputFormat  is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1227,7 +1366,7 @@ warfarin_PK_v2_dat = dataObj{
 	}
 
 	SOURCE {
-	    SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } 
+	    SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } 
 	} # end SOURCE
 } # end data object
 		'''.parse
@@ -1284,6 +1423,7 @@ warfarin_PK_v2_dat = dataObj{
 	def void testValidObsWhenExpression(){
 		val mcl = '''
 		foo = mdlObj{
+				IDV{T}
 			VARIABILITY_LEVELS{
 			}
 
@@ -1321,5 +1461,65 @@ warfarin_PK_v2_dat = dataObj{
 			"Expected ref:Real type, but was Int."
 		)
 	}
-	
+
+	@Test
+	def void testInValidIncompatibleElseExpression(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			INDIVIDUAL_VARIABLES{
+				BSA = if(true) then 1.0 else false
+			}
+			
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.elseClause,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was Boolean."
+		)
+	}
+
+	@Test
+	def void testInValidIncompatibleIfElseExpression(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			INDIVIDUAL_VARIABLES{
+				BSA = if(true) then 1.0 elseif(false) then false else 2.0
+			}
+			
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.elifClause,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was Boolean."
+		)
+	}
+
+	@Test
+	def void testInValidIncompatibleIfExpression(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			INDIVIDUAL_VARIABLES{
+				BSA = if(true) then true elseif(false) then 3.0 else 2.0
+			}
+			
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.whenClause,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was Boolean."
+		)
+	}
+
 }

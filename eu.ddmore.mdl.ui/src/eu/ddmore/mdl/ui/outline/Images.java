@@ -8,7 +8,8 @@ package eu.ddmore.mdl.ui.outline;
 public class Images {
 	private static final String ICONS_PATH="diagona-icons-1.0/icons/16/";
 	
-	public static final String MDL = "019-mdl.png";
+//	public static final String MDL = "019-mdl.png";
+	public static final String MDL = "023.png";
 	public static final String TASK_OBJ ="152-task.png";
 	public static final String PARAMETER_OBJ ="153-parameter.png";
 	public static final String MODEL_OBJ ="154-model.png";
@@ -16,6 +17,9 @@ public class Images {
 	public static final String DATA_OBJ ="157-data.png";
 	public static final String MOG_OBJ ="160-tel.png";
 
+	public static final String BLOCK_STMT ="188.png";
+
+	
 	public static final String ATTRIBUTE ="012-attribute.png";
 	public static final String DISTRIBUTION_ATTRIBUTE = "011-distribution-attribute.png";
 	public static final String CONDITION ="044-question.png";
@@ -39,7 +43,8 @@ public class Images {
 	public static final String ATTRIBUTE_REFERENCE ="065-attr-reference.png";
 	public static final String LIST ="187-list.png";
 	public static final String TARGET ="196-target.png";
-	public static final String SYMBOL_DECLARATION = "175-variable.png";
+//	public static final String SYMBOL_DECLARATION = "175-variable.png";
+	public static final String SYMBOL_DECLARATION = "055-lambda.png";
 	public static final String FUNCTION_CALL_STATEMENT = "176-variable-mod.png";
 	public static final String RANDOM ="092-random.png";
 	public static final String DROP ="104-remove.png";

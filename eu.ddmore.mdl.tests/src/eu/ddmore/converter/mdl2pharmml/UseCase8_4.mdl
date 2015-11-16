@@ -15,14 +15,15 @@ warfarin_PK_BOV_dat = dataObj{
       WT : { use is covariate}
       AGE : { use is covariate }
       SEX : { use is catCov withCategories{male when 1, female when 2} }
-      AMT : { use is amt, variable = INPUT_KA  }
+      CMT : { use is cmt }
+      AMT : { use is amt, define = { 1 in CMT as INPUT_KA  } }
       OCC : { use is varLevel }
       DV : { use is dv, variable=Y }
       MDV : { use is mdv }
    }# end DATA_INPUT_VARIABLES
 
 	SOURCE {
-	  srcFile: {  file = "warfarin_conc_bov_P4.csv", inputFormat is nonmemFormat, ignore = "#"} 
+	  srcFile: {  file = "warfarin_conc_bov_P4.csv", inputFormat is nonmemFormat} 
 	} # end SOURCE
 } # end data object
 
@@ -159,7 +160,7 @@ warfarin_PK_BOV_mdl = mdlObj{
 
 warfarin_PK_BOV_task = taskObj{
 ESTIMATE{ 
-		set target is monolix, version = "4.3.2", algo is saem 
+		set algo is saem 
 }
 }# end of taskObj
 

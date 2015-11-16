@@ -462,6 +462,7 @@ public class MclTypeProvider {
 		ep.orExpression -> BOOL_TYPE,
 		ep.additiveExpression -> REAL_TYPE,
 		ep.multiplicativeExpression -> REAL_TYPE,
+		ep.powerExpression -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,
 		ep.randomVariableDefinition -> REAL_TYPE,
 		ep.forwardDeclaration -> REAL_TYPE,
@@ -510,6 +511,7 @@ public class MclTypeProvider {
 	}
 	
 	def dispatch TypeInfo typeFor(Expression e){
+		if(e == null) return MclTypeProvider.UNDEFINED_TYPE 
 		switch(e){
 			SymbolReference:
 				if(e.indexExpr == null)
@@ -580,10 +582,12 @@ public class MclTypeProvider {
 			case('+'),
 			case('-'):{
 				val operandType = operand?.typeFor.underlyingType
-				if(operandType == INT_TYPE)
-					INT_TYPE
-				else if(operandType == REAL_TYPE)
-					REAL_TYPE
+//				if(operandType == INT_TYPE)
+//					INT_TYPE
+//				else if(operandType == REAL_TYPE)
+//					REAL_TYPE
+				if(operandType.isCompatible(INT_TYPE)) return INT_TYPE
+				else if(operandType.isCompatible(REAL_TYPE)) return REAL_TYPE
 				else UNDEFINED_TYPE
 			}
 			default:
@@ -626,7 +630,8 @@ public class MclTypeProvider {
 			CategoryValueDefinition:{
 				val enumDefn = EcoreUtil2.getContainerOfType(sd.eContainer, SymbolDefinition)
 				val catDefn = EcoreUtil2.getContainerOfType(sd.eContainer, CategoricalDefinitionExpr)
-				new EnumTypeInfo(enumDefn.name, catDefn.getCategoryNames)
+				if(enumDefn != null && catDefn != null) new EnumTypeInfo(enumDefn.name, catDefn.getCategoryNames)
+				else UNDEFINED_TYPE
 			}
 			default:
 				UNDEFINED_TYPE

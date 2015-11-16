@@ -22,6 +22,8 @@ class MclStatementValidationTest {
 	@Test
 	def void testValidStatementCategories(){
 		val mcl = '''foo = mdlObj {
+			IDV{T}
+
 			VARIABILITY_LEVELS{
 			}
 
@@ -87,6 +89,7 @@ class MclStatementValidationTest {
 	def void testValidCategoryDefnInList(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV { T }
 			VARIABILITY_LEVELS{
 			}
 
@@ -107,6 +110,8 @@ class MclStatementValidationTest {
 	def void testInValidCategoryDefnInList(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{T}
+
 			VARIABILITY_LEVELS{
 			}
 
@@ -122,7 +127,79 @@ class MclStatementValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
 			MdlValidator::INCORRECT_LIST_CONTEXT,
-			"A category definition in a list must have a mapping."
+			"A category definition must have a mapping in this context."
+		)
+	}
+
+	@Test
+	def void testValidCategoryDefnWithNoMappingsInList(){
+		val mcl = '''
+		foo = mdlObj{
+			IDV{T}
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				PAIN : { type is discrete withCategories {mild}, distn=Bernoulli(category = PAIN.mild, probability=foo) }
+			}
+		}
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidDiscreteCategoryDefnWithNoMappingsInList(){
+		val mcl = '''
+		foo = mdlObj{
+			IDV{T}
+			VARIABILITY_LEVELS{
+			}
+
+			COVARIATES{
+				FOO withCategories { baa }
+			}
+
+			MODEL_PREDICTION{
+				foo
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				PAIN : { type is discrete, distn=Bernoulli(category = FOO.baa, probability=foo) }
+			}
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
+			MdlValidator::INVALID_CATEGORY_DEFINITION,
+			"Category definition is missing."
+		)
+	}
+
+	@Test
+	def void testInvalidCategoryDefnWithMappingsInList(){
+		val mcl = '''
+		foo = mdlObj{
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo
+			}# end MODEL_PREDICTION
+			
+			OBSERVATION{
+				PAIN : { type is discrete withCategories {mild when foo}, distn=Bernoulli(category=PAIN.mild, probability=foo) }
+			}
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::INCORRECT_LIST_CONTEXT,
+			"A category definition cannot have a mapping in this context."
 		)
 	}
 
@@ -130,6 +207,8 @@ class MclStatementValidationTest {
 	def void testValidIfElseWithElse(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{T}
+
 			VARIABILITY_LEVELS{
 			}
 
@@ -147,6 +226,8 @@ class MclStatementValidationTest {
 	def void testValidIfElseWithElseIf(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{T}
+			
 			VARIABILITY_LEVELS{
 			}
 
@@ -218,6 +299,26 @@ class MclStatementValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.categoricalDefinitionExpr,
 			Diagnostic::SYNTAX_DIAGNOSTIC)
+	}
+
+	@Test
+	def void testInValidVectorDefinition(){
+		val mcl = '''
+		foo = mdlObj{
+			IDV{T}
+			
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo[]
+			}# end MODEL_PREDICTION
+		}
+		'''.parse
+		
+//		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+//			MdlValidator::UNSUPPORTED_FEATURE, "Vector symbol definitions are not supported in this version of the language")
+		mcl.assertNoErrors
 	}
 
 }

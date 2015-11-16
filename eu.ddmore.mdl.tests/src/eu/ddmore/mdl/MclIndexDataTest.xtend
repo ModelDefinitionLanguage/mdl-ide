@@ -7,11 +7,10 @@ import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
-import org.junit.Test
-import org.junit.runner.RunWith
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.junit.Assert
-
+import org.junit.Test
+import org.junit.runner.RunWith
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -45,7 +44,7 @@ obj1 = dataObj{
 	}
 
 	SOURCE {
-	    SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat, ignore = "#" } 
+	    SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } 
 	} # end SOURCE
 }
 '''
