@@ -96,6 +96,8 @@ class BuiltinFunctionProvider {
 		'sum' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'mean' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'median' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
+		'inverse' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_MATRIX_TYPE] returnType = MclTypeProvider::REAL_MATRIX_TYPE ] ],
+		
 		'Normal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
 						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
@@ -153,6 +155,19 @@ class BuiltinFunctionProvider {
 						'data' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector.makeVector, true),
 						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
 					} ]
+					],
+		'MultivariateNormal' -> #[
+						new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE.makeVector arguments = #{
+							'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector.makeVector, true),
+							'cov' -> new FunctionArgument(MclTypeProvider::REAL_MATRIX_TYPE, true)
+						} ]
+					],
+		'matrix' -> #[
+						new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_MATRIX_TYPE arguments = #{
+							'vector' -> new FunctionArgument(MclTypeProvider::REAL_VECTOR_TYPE, true),
+							'ncol' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+							'byRow' -> new FunctionArgument(MclTypeProvider::BOOLEAN_TYPE, true)
+						} ]
 					],
 		'linear' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),

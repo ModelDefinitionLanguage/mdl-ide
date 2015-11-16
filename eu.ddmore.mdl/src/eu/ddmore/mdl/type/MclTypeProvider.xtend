@@ -430,6 +430,7 @@ public class MclTypeProvider {
 	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf)
 	public static val PMF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pmf)
 	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector
+	public static val REAL_MATRIX_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector.makeVector
 	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int).makeVector
 	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping)
 	public static val GENERIC_ENUM_VALUE_TYPE =  new GenericEnumTypeInfo
@@ -601,7 +602,7 @@ public class MclTypeProvider {
 				if(sd.isVector)
 					MclTypeProvider.REAL_VECTOR_TYPE
 				else if(sd.isMatrix)
-					MclTypeProvider.REAL_VECTOR_TYPE.makeVector
+					REAL_MATRIX_TYPE
 				else REAL_TYPE
 			ListDefinition:
 				getTypeOfList(sd)

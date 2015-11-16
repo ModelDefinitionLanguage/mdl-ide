@@ -643,6 +643,49 @@ class MclTypeValidationTest {
 	}
 	
 	@Test
+	def void testValidMatrixEquationExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B[[]]
+				A[[]] =  inverse(B)
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidMatrixLiteralEquationExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C
+				A[[]] =  [[ 20, C, B; 1, 2, 5.7 ]]
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
 	def void testInValidVectorEquationExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {
