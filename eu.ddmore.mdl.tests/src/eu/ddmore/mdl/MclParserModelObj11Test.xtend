@@ -34,10 +34,6 @@ warfarin_PK_ODE_mdl = mdlObj {
 		Z = &userFunc(arg1=1, arg2=2.0, arg3="foo") + 22.2
 	}
 
-	COVARIATES{
-		logtWT
-	}
-
 	VARIABILITY_LEVELS{
 		ID : { level=2, type is parameter }
 		DV : { level=1, type is observation }
