@@ -2,9 +2,14 @@ package eu.ddmore.mdl
 
 import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.validation.ListDefinitionProvider
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtext.junit4.InjectWith
@@ -15,13 +20,6 @@ import org.eclipse.xtext.scoping.IScopeProvider
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.EnumerationDefinition
-import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
-import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.validation.ListDefinitionProvider
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
-import eu.ddmore.mdl.mdl.NamedFuncArguments
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))

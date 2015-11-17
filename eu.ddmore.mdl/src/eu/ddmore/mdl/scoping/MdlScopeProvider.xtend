@@ -12,9 +12,6 @@ import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.scoping.IScope
 import org.eclipse.xtext.scoping.Scopes
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
-import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
-import eu.ddmore.mdl.mdl.CategoryValueDefinition
 
 /**
  * This class contains custom scoping description.

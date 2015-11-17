@@ -17,7 +17,7 @@ class MclParserMogObj3Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-Categorical_DIST_dat = dataObj{
+foo_dat = dataObj{
    DECLARED_VARIABLES{ Y withCategories {c1, c2, c3, c0} }
 	
    DATA_INPUT_VARIABLES{
@@ -34,7 +34,7 @@ Categorical_DIST_dat = dataObj{
 	} # end SOURCE
 } # end data object
 
-Categorical_DIST_par = parObj{
+foo_par = parObj{
    STRUCTURAL{
       #THETA
       Beta : {value=1,lo=0,hi=10}
@@ -50,72 +50,28 @@ Categorical_DIST_par = parObj{
 
 } # end of parameter object
 
-Categorical_DIST_mdl = mdlObj{
-   IDV{ CP }
-   
-   FUNCTIONS{
-   		foo = function(real arg1)
-   }
+foo_mdl = mdlObj{
+	IDV{ T }
+	
+	FUNCTIONS{
+	   	# declare a function that is obtained from another object. The return type of the function is given by it's name.
+	   	# In this case it is a real. If it were a vector or matric it would use [] or [[]] 
+		userFunc = function(int arg1, real arg2, string arg3)
+	}
+	
+	MODEL_PREDICTION{
+		# refer to a user defined function using the '&' so the parser knows to look for the definition
+		Z = &userFunc(arg1=1, arg2=2.0, arg3="foo") + 22.2
+	}
 
-   VARIABILITY_LEVELS{
-	ID : { level=2, type is parameter }
-	DV : { level=1, type is observation }
-   }
-
-   STRUCTURAL_PARAMETERS{
-      Beta
-      Lgt0
-	  Lgt1
-	  Lgt2
-   }# end STRUCTURAL_PARAMETERS
-
-   VARIABILITY_PARAMETERS{
-      PPV_EVENT
-   }# end VARIABILITY_PARAMETERS
-
-
-   RANDOM_VARIABLE_DEFINITION(level=ID){
-      eta_PPV_EVENT ~ Normal(mean=0, var=PPV_EVENT )
-   }# end RANDOM_VARIABLE_DEFINITION
-
-   GROUP_VARIABLES{
-	  B0 = Lgt0
-	  B1 = B0 + Lgt1
-	  B2 = B1 + Lgt2
-   }
-   
-   INDIVIDUAL_VARIABLES{
-      indiv_B0 = general(grp=B0, ranEff = [eta_PPV_EVENT])
-      indiv_B1 = general(grp=B1, ranEff = [eta_PPV_EVENT])
-      indiv_B2 = general(grp=B2, ranEff = [eta_PPV_EVENT])
-   }# end INDIVIDUAL_VARIABLES
-
-   MODEL_PREDICTION{
-	  EDRUG = Beta * CP
-	  
-	  X = &foo(arg1=2.0)
-	  
-	  A0 = indiv_B0 + EDRUG
-	  A1 = indiv_B1 + EDRUG
-	  A2 = indiv_B2 + EDRUG
-	  	  	  
-	  P0 = invLogit(A0)
-	  P1 = invLogit(A1)
-	  P2 = invLogit(A2)
-	  
-	  Prob0 = P0
-	  Prob1 = P1 - P0
-	  Prob2 = P2 - P1
-	  Prob3 = 1 - P2
-   }# end MODEL_PREDICTION
-
-   OBSERVATION{
-	   Y : {type is categorical withCategories{ c0 when Prob0, c1 when Prob1, c2 when Prob2, c3 when Prob3} } 
-    }# end ESTIMATION
+	VARIABILITY_LEVELS{
+		ID : { level=2, type is parameter }
+		DV : { level=1, type is observation }
+	} 
 
 } # end of model object
 
-Categorical_DIST_task = taskObj{
+foo_task = taskObj{
 	ESTIMATE{
 		set algo is saem
 	}
@@ -130,12 +86,12 @@ feg = funcObj {
 	}
 }
 
-Categorical_DIST_mog = mogObj {
+foo_mog = mogObj {
 		OBJECTS{
-			Categorical_DIST_dat : { type is dataObj }
-			Categorical_DIST_mdl : { type is mdlObj }
-			Categorical_DIST_par : { type is parObj }
-			Categorical_DIST_task : { type is taskObj }
+			foo_dat : { type is dataObj }
+			foo_mdl : { type is mdlObj }
+			foo_par : { type is parObj }
+			foo_task : { type is taskObj }
 			feg : { type is funcObj }
 		}
 }		'''
