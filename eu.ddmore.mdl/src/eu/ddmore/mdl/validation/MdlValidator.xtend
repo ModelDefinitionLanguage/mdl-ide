@@ -64,6 +64,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public val static MOGOBJ = 'mogObj'
 	public val static DESIGNOBJ = 'desObj'
 	public val static PRIOROBJ = 'priorObj'
+	public val static FUNCOBJ = 'funcObj'
 
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
@@ -230,20 +231,25 @@ class MdlValidator extends AbstractMdlValidator {
 
 	@Check
 	def validateFunctionArgument(ValuePair it){
-		if(eContainer instanceof NamedFuncArguments){
-			checkNamedArguments(
-				[fName| error("Unrecognised argument '" + argumentName + "'.",
-				MdlPackage.eINSTANCE.valuePair_ArgumentName, UNRECOGNIZED_FUNCTION_ARGUMENT_NAME, fName)],
-				[fName| error("Function argument '" + argumentName + "' occurs more than once.",
-				MdlPackage.eINSTANCE.valuePair_ArgumentName, MULTIPLE_IDENTICAL_FUNC_ARG, fName)]
-			)
+		val parentFunc = EcoreUtil2.getContainerOfType(eContainer, BuiltinFunctionCall)
+		if(parentFunc != null){
+			if(eContainer instanceof NamedFuncArguments){
+				checkNamedArguments(
+					[fName| error("Unrecognised argument '" + argumentName + "'.",
+					MdlPackage.eINSTANCE.valuePair_ArgumentName, UNRECOGNIZED_FUNCTION_ARGUMENT_NAME, fName)],
+					[fName| error("Function argument '" + argumentName + "' occurs more than once.",
+					MdlPackage.eINSTANCE.valuePair_ArgumentName, MULTIPLE_IDENTICAL_FUNC_ARG, fName)]
+				)
+			}
 		}
 	}
 
 	@Check
 	def validateNamedFunctionArguments(NamedFuncArguments it){
-		missingMandatoryArgumentNames.forEach[arg, mand| error("mandatory argument '" + arg + "' is missing.",
-					MdlPackage.eINSTANCE.namedFuncArguments_Arguments, MANDATORY_NAMED_FUNC_ARG_MISSING, arg) ]
+		val parentFunc = EcoreUtil2.getContainerOfType(eContainer, BuiltinFunctionCall)
+		if(parentFunc != null)
+			missingMandatoryArgumentNames.forEach[arg, mand| error("mandatory argument '" + arg + "' is missing.",
+						MdlPackage.eINSTANCE.namedFuncArguments_Arguments, MANDATORY_NAMED_FUNC_ARG_MISSING, arg) ]
 	}
 
 	// Type handling	

@@ -159,7 +159,7 @@ class BlockDefinitionProvider {
 			SIMULATE_BLK -> new BlockSpec(SIMULATE_BLK, 0, 1, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.propertyStatement)
 			]),
-			MOG_OBJ_NAME -> new BlockSpec(MOG_OBJ_NAME, 1, 1, 4, 4, #[
+			MOG_OBJ_NAME -> new BlockSpec(MOG_OBJ_NAME, 1, 1, 4, 5, #[
 				new StatementSpec(ep.listDefinition)
 			]),
 			MDL_DEQ_BLK -> new BlockSpec(MDL_DEQ_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
@@ -170,6 +170,9 @@ class BlockDefinitionProvider {
 			MDL_CMT_BLK -> new BlockSpec(MDL_CMT_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.listDefinition),
 				new StatementSpec(ep.anonymousListStatement)
+			]),
+			"FUNCTIONS" -> new BlockSpec("FUNCTIONS", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.userFunctionDefinition)
 			]),
 			"ADMINISTRATION" -> new BlockSpec("ADMINISTRATION", 1, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.listDefinition),
@@ -194,7 +197,10 @@ class BlockDefinitionProvider {
 			COVARIATE_BLK_NAME, VAR_LVL_BLK_NAME, MDL_STRUCT_PARAMS,
 			MDL_VAR_PARAMS, MDL_RND_VARS,
 			MDL_INDIV_PARAMS, MDL_PRED_BLK_NAME,
-			OBS_BLK_NAME, MDL_GRP_PARAMS, IDV_BLK_NAME
+			OBS_BLK_NAME, MDL_GRP_PARAMS, IDV_BLK_NAME, "FUNCTIONS"
+		},
+		MdlValidator::FUNCOBJ -> #{
+			"FUNCTIONS"
 		},
 		MdlValidator::DATAOBJ -> #{
 			DIV_BLK_NAME, "DECLARED_VARIABLES", "DATA_DERIVED_VARIABLES",

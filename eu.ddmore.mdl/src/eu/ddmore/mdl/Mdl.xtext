@@ -37,24 +37,27 @@ ForwardDeclaration:
 	{ForwardDeclaration}declType=ID name=ID
 ;
 
-//Statement:
-//	EquationDefinition|TransformedDefinition|ListDefinition|
-//	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-//	EnumerationDefinition //|DerivativeDefinition
-//;
-
 Statement:
 	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-	EnumerationDefinition|PropertyStatement
+	EnumerationDefinition|PropertyStatement|UserFunctionDefinition
 ;
 
 
 SymbolDefinition:
 	EquationDefinition | ListDefinition| ForwardDeclaration | RandomVariableDefinition | TransformedDefinition|
-	  EnumerationDefinition
+	  EnumerationDefinition|UserFunctionDefinition
 ;
 
+
+UserFunctionDefinition:
+	{UserFunctionDefinition} name = ID (vector?='[' ']'|matrix?='[[' ']]')? ASSIGN 'function' '(' argument=NamedArgumentDefinitions ')'
+			(BEGIN expression = Expression END)? ';'?
+;
+
+NamedArgumentDefinitions:
+	{NamedArgumentDefinitions} arguments += ForwardDeclaration (=> ',' arguments += ForwardDeclaration)* 
+;
 
 EquationTypeDefinition:
 	EquationDefinition|TransformedDefinition
@@ -125,7 +128,7 @@ EnumExpression returns Expression:
 
 MappingExpression returns Expression:
 	{MappingExpression} (BEGIN
-		(//attList+=MappingList (',' attList+=MappingList)* |
+		(
 			attList+=MappingPair (',' attList+=MappingPair)*
 		)
 	END)
@@ -218,6 +221,7 @@ PrimaryExpression returns Expression:
 	| CatValRefMappingExpression
 	| MappingExpression
 	| BuiltinFunctionCall
+	| UserFunctionCall
 	| WhenExpression
 	| ParExpression
 	| SubListExpression
@@ -274,6 +278,10 @@ CategoryValueReference:
 
 BuiltinFunctionCall returns Expression:
 	{BuiltinFunctionCall} func=ID '(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
+;
+
+UserFunctionCall returns Expression:
+	{UserFunctionCall} '&' ref=[UserFunctionDefinition|ID] '(' argList=(NamedFuncArguments)? ')'
 ;
 
 NamedFuncArguments returns FuncArguments:
