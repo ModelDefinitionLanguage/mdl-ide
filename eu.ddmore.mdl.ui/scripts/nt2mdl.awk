@@ -9,106 +9,22 @@
 # ;@MCL_" statements are used as MCL verbatim code
 # ;LIBLIST  specifies a library call (not currently supported by MDL-IDE)
 BEGIN {
-# Previous changes moved to end of file 27 Sep 2014
-# 30 September 2014 version 2.000 beta
-#   MDL updated for consistency with MCL Spec Draft 6 (MCL6) and MDL Library Draft 2.
-# 21 October 2014 version 2.001 beta
-#   MDL5 to MDLPRED6 conversion   
-# 22 October 2014 version 2.002 beta
-#   Fix units bug for model object parameter lists
-# 23 October 2014 version 2.003 beta
-#   Use Monolix variance=no if NONMEM OMEGA is SD
-# 04 March 2015 version 2.004 beta
-#   MDL6 for IOG Product4
-# 05 March 2015 version 2.005 beta
-#   piecewise function changed for multiple when
-# 06 March 2015 version 2.006 beta
-#   Bug fix for covariance/correlation in parameter object
-# 15 March 2015 version 2.007 beta
-#   Removed "+1-1" from lfactorial()
-#   Prototype MACRO sub-block
-# 16 March 2015 version 2.008 beta
-#   PKMACRO implementation
-# 31 March 2015 version 2.009 beta
-#   PKMACRO attributes all lower case
-#   Identical assignments of variables ignored
-#   Attributes for defining categorical variables changed to matrix format
-#   Matrix name not included in model object
-#   Model and data objects mangled into the Consortium Product 4 format
-# 01 April 2015 version 2.010 beta
-#   PKMACRO distribution rate constants bug fixed.
-#   COMPARTMENT sub-block replaces PKMACRO sub-block
-# 03 April 2015 version 2.011 beta
-#   Use of type=compartment no longer required for COMPARTMENT sub-block
-#   use=cmt variable define attribute created using COMPARTMENT sub-block names
-# 10 April 2015 version 2.012 beta
-#   Removed feature to remove identical assignments (breaks recursive random variable assignments)
-#   COMPARTMENT sub-block attribute cmt changed to modelCmt
-#   Separate type=compartment added to COMPARTMENT sub-block
-#   Random variable distribution changed from list to ~Normal()
-# 11 April 2015 version 2.013 beta
-#   Bug fix for VARIABILITY_LEVELS type attribute
-#   DECLARED_VARIABLES no longer uses comma separators
-#   mogobj OBJECTS and MAPPING blocks added
-#   OBSERVATION block output does not use piecewise or conditional statements
-#   Removed nmtran output of COMPARTMENTS because it showed nothing useful
-# 12 April 2015 version 2.014 beta
-#   Bizarre changes for Product 4
-#   IDV block added to model object
-#   MODEL_OUTPUT_VARIABLES block removed
-# 18 April 2015 version 2.015 beta
-#   MODEL_OUTPUT_VARIABLES block restored
-#   predId -> predID; /70kg -? /kg*70
-#   data_declare no longer includes model object category names
-#   if(bool) Y expr -> if (bool) then Y expr endif
-#   Product 4 matrix offdiagonal
-# 21 April 2015 version 2.016 beta
-#   Default options changed to MDLHELP=N and NMTRAN=N
-#   Bug fix for var and sd attributes in parameter object and RANDOM_VARIABLES_DEFINITION
-#   Bug fix for use=amt (empty link removed and type changed to continuous)
-#   @MCL macro
-#   PRED models include all data items as covariates except TIME
-#   predID -> predid
-# 22 April 2015 version 2.017 beta
-#   duplicate COMPARTMENT name bug fixed
-#   BOV parameters and code suppressed
-# 26 April 2015 version 2.018 beta
-#   =runif(seed) changed to ~Uniform(0,1,seed)
-#   Y1_obs -> Y if only one DV
-#   IDV selected from TIME then CONC then CP
-#   rate -> inputRate, tk0->inputDur
-# 04 May 2015 version 2.019 beta
-#   IDV declared as T if there is a DEQ block
-#   Simple ADVAN[5|7] translation to COMPARTMENT sub-block
-# 06 May 2015 version 2.020 beta
-#   Bug fix for ELSEBLOCK initialization
-# 16 May 2015 version 2.021 beta
-#   inputRate -> modelRate, inputDur -> modelDur
-#   predid -> predId
-# 18 May 2015 version 2.022 beta
-#   BLOCK SAME only used to remove variables when OCC data item exists (hasocc==1)
-#   Bug fix when TIME used as covariate with DEQ and ivd=T
-# 20 May 2015 version 2.023 beta
-#   Task properties object MODEL block removed from ispidgin conversions
-# 21 May 2015 version 2.024 beta
-# 16 June 2015 version 2.025 beta
-#   Transfer compartment 'ktr' changed to 'kt'
-# 23 June 2015 version 2.026 beta
-#   COMPARTMENT list for DEQ input compartments with input options (R, D, ALAG, F)
-#   A(*) translated to COMPARTMENT names for standard ADVANs
-# 25 June 2015 version 2.027 beta
-#   INDBLOCK pragma changed to MDLIND
-#   Bug fix for COMPARTMENT list for DEQ input compartments
-# 27 June 2015 version 2.028 beta
-#   Bug fix for model input variables ending in "T"
-#   Bug fix for RVD block when there is no use=id
-# 28 June 2015 version 2.029 beta
-#   Updated MCL pragmas (@MCL_",  @MCL_IGNORE, @MCL_COVARIATES)
-# 29 June 2015 version 2.030 beta
-# Missing value changed to 99 because of PharmML bug
+# Previous changes moved to end of file 27 Sep 2014, 09 Sep 2015
+# 14 Nov 2015 version 2.033 beta
+# MCL 7 Product 4.1 "new grammmar"
+# data object source has name
+# use is ... 
+# type is ...
+# no units or type=categorical, type=continuous
+# when otherwise -> if then else
+# no MODEL_OUTPUT_VARIABLES
+# no covariate use for special uses, target attribute to point to DEQ compartment, anonymous transfer compartment
+# depot attribute for input to DEQ compartment
+# ignore character ignored
 
-   version="2.030 beta"
+   version="2.033 MCL 7"
    print "# nt2mdl "version" Nick Holford n.holford@auckland.ac.nz"
+
 
 # Command line arguments
    ishelp=((index(toupper(MDLHELP),"Y")==1)) # Default is not to print MDL help as comments
@@ -126,24 +42,33 @@ BEGIN {
    ispidgin=((index(toupper(PIDGIN),"Y")==1)) # Simplified MDL for IOG  http://en.wikipedia.org/wiki/Pidgin
    # Initialize
    if (ispidgin) {
-      usedataname=0 
+      usedataname=1 
       usecovmatrix=0 
-      usefulltask=0 
       usetelobj=0
       useifelse=0
-      usetargetcode=0
+      usefulltask=0   # 0.5 #MCL 4.1 new grammar partial support for task and target code
+      usetargetcode=1
       useerrorexit=0
       usemcl5obj=0
       useonervd=0
       usedataidv=0
       usetaskmodel=0
-      usemdlout=1
+      usemdlout=0
+      usevarlist=0
+      useunits=0
+      usedvidcat=0   #MCL 4.1 new grammar does not support categories with dvid
+      useallcov=0 # use is covariate not allowed for amt, dv, evid
+      useelimname=0 # use named list for elimination compartment else use anonymous list
+      usetransfername=0 # use named list for transfer compartment else use anonymous list
+      usedeqto=0 # use to= to name DEQ compartment else use target=
+      usedeqdirect=0 # use direct for compartment type or depot if false
+      useignore=0 # use ignore character to drop data rows
    } else {
       usedataname=1
       usecovmatrix=1 
-      usefulltask=1
       usetelobj=1
       useifelse=1
+      usefulltask=1
       usetargetcode=1
       useerrorexit=1
       usemcl5obj=1  # use MCL 5 model and data object structure
@@ -151,6 +76,15 @@ BEGIN {
       usedataidv=0
       usetaskmodel=1
       usemdlout=1
+      usevarlist=1
+      useunits=1
+      usedvidcat=1
+      useallcov=1 # use is covariate allowed for all data variables
+      useelimname=1 # use named list for elimination compartment else use anonymous list
+      usetransfername=1 # use named list for transfer compartment else use anonymous list
+      usedeqto=1 # use to= to name DEQ compartment else use target=
+      usedeqdirect=1 # use direct for compartment type or depot if false
+      useignore=1 # use ignore character to drop data rows
    }
       ismcl5list=0
       if (ismcl5list) {
@@ -177,15 +111,17 @@ BEGIN {
    nestline=0; ncovline=0; nsimline=0; ntabline=0; nsubline=0; isverbatim=0
    nsubline=0; nmixline=0; nmodline=0; npriline=0; ntransline=0; ncmt=0; ndadt=0; nobsblock=0
    ninputline=0 # not currently in use (17 May 2014)
-   nazero=0; ifcount3=0; neq3line=0 ; ifcount4=0; neq4line=0; nabbline=0; nproline
+   nazero=0; ifcount3=0; neq3line=0 ; ifcount4=0; neq4line=0; nabbline=0; nproline=0
    neditline=0; ignorechar=""; nranline=0; ndeqline=0; nliblist=0; ntargetcode=0; ncorrlist=0
    condition=""; likelihood=""; reserror=""; hasamount=0; covmatnum=0
    estrecord=""; covrecord=""; advan_num=0; tran_num=0; tol_num=0; liketype=""; estrectype=""; estblocktype=""
    istask_estimate=0; istask_simulate=0; MLX_omega_type=""
    hasamt=0; hasrate=0; hascmt=0; hasadm=0; hasmdv=0; hasevid=0; hasdvid=0; hasocc=0; ndvid=0; wasflag=0
-   ismcl=0; ismclignore=0;ismclverbatim=0
+   ismcl=0; ismclignore=0;ismclverbatim=0; CMTNAME=""; DVIDNAME="";ncatdef=0
    zerocmt()
 
+# Logical operators
+   nlogic=split("== <= >= !=",LOGIC)
 
    #    $DATA
    #    [filename|*] [(format)] [IGNORE=c1] [NULL=c2]
@@ -209,7 +145,8 @@ BEGIN {
 
    idvname=""
    blockstart="{"; blockend="}"; showblockend=1
-   verbatimblockstart="{***"; verbatimblockend="***}"
+#   verbatimblockstart="{***"; verbatimblockend="***}"
+   verbatimblockstart="<<"; verbatimblockend=">>"
    objstart="{"; objend="}"
 
 
@@ -235,9 +172,10 @@ BEGIN {
 
    INPUTFORMAT="NMTRAN_CODE"
 
+   ELIMNAME=":" # MCL 7 compartment list name (ELIM would be better choice)
 
    # Data object
-   DAT_OBJ="dataobj"
+   DAT_OBJ="dataObj"
    DAT_DECLARE="DECLARED_VARIABLES"
    data_declare="   "DAT_DECLARE blockstart
 
@@ -247,7 +185,7 @@ BEGIN {
    DAT_DESIGN="DESIGN"
 
    # Parameter object
-   PAR_OBJ="parobj"
+   PAR_OBJ="parObj"
    PAR_MATRIX="matrix"
    PAR_DIAG="diag"
    PAR_SAME="same"
@@ -256,7 +194,7 @@ BEGIN {
    PAR_VARIABILITY="VARIABILITY"
 
    # Model Object
-   MDL_OBJ="mdlobj"
+   MDL_OBJ="mdlObj"
    if (usemcl5obj)
       MDL_INPUT="MODEL_INPUT_VARIABLES"
    else
@@ -295,7 +233,7 @@ BEGIN {
    LIBPARAM="output"
 
    # Task object
-   TSK_OBJ="taskobj"
+   TSK_OBJ="taskObj"
    TSK_DAT="DATA"
    TSK_PAR="PARAMETER"
 
@@ -314,7 +252,7 @@ BEGIN {
    TSK_SIM="SIMULATE"
    TSK_LIKE="LIKELIHOOD"
    TSK_COV="COVARIANCE"
-   if (usefulltask)
+   if (usefulltask==1)
       TSK_SOLVER="SOLVER"
    else
       TSK_SOLVER="MODEL"
@@ -322,10 +260,10 @@ BEGIN {
    TSK_GRF="GRAPHICS"
 
    # TEL object
-   TEL_OBJ="telobj"
+   TEL_OBJ="telObj"
 
    # MOG object
-   MOG_OBJ="mogobj"
+   MOG_OBJ="mogObj"
    MOG_OBJECTS="OBJECTS"
    MOG_MAPPING="MAPPING"
    
@@ -459,7 +397,6 @@ END {
 
    # Generate parameter list used by data object and model object
    makeparlist()
-   
    if (!ndeqline) {
       # Create CMT list using COMPARTMENT sub-block
       compartment_subblock()
@@ -1651,7 +1588,7 @@ function values(  i,units) {
          OMVAL[nomega]=$0
       }
 #if (OMVAL[nomega]!="SAME") print "values: OMEGA["nomega"]="OMEGA[nomega] " OMVAL["nomega"]="OMVAL[nomega] " isblockline="isblockline" $0=|"$0"|"
-      if (units!="")
+      if (useunits && units!="")
          OMUNITS[nomega]=", units="units
       else
          OMUNITS[nomega]=""
@@ -1829,6 +1766,9 @@ function data_object( i,j) {
 
    removeclash()
 
+# Find use=* cols
+   hascols()
+
    ndropline=0; ndataline=0; nignoreline=0; nacceptline=0; headerline=""
    data_options=""; head_offset="\n      "
    for (i=1; i<=ninput; i++) {
@@ -1980,8 +1920,8 @@ function data_object( i,j) {
       }
       file_list=file_indent "file=\""DATA[1]"\"" datasep
       file_indent="\n      "
-      file_list=file_list file_indent"inputformat=nonmemFormat" datasep
-      if (ignorechar!="") file_list=file_list  file_indent"ignore=\""ignorechar"\""
+      file_list=file_list file_indent"inputFormat is nonmemFormat"
+      if (useignore && ignorechar!="") file_list=file_list datasep file_indent"ignore=\""ignorechar"\""
       if (usedataname)
          data_code[++ndataline]="      myData"listconnect listname liststart file_list listend
       else
@@ -2028,8 +1968,6 @@ function data_object( i,j) {
          print $0
       }
    }
-   # Find use=* cols
-   hascols()
 }
 
 function parameter_object(   i,j,lastcovmatnum,covmatnum,covnamek,covnamekk,etaparlist,etavallist,etacorrtype,hascorreps,epsparlist,epsvallist,epscorrtype) {
@@ -2048,7 +1986,11 @@ function parameter_object(   i,j,lastcovmatnum,covmatnum,covnamek,covnamekk,etap
       for (i=1; i<=ntheta; i++) {
          if (THLO[i]!="") THLO[i]=", lo="THLO[i]
          if (THHI[i]!="") THHI[i]=", hi="THHI[i]
-         if (THUNITS[i]!="") THUNITS[i]=", units="THUNITS[i]
+         if (useunits) {
+            if (THUNITS[i]!="") THUNITS[i]=", units="THUNITS[i]
+         } else {
+            THUNITS[i]=""
+         }
          if (THVAL[i]!="") {
             parm_obj[++nparmobj]="      "THETA[i] listconnect listname liststart "value="simplify(THVAL[i]) THLO[i] THHI[i] THFIX[i] THUNITS[i] listend THCOM[i]
          }
@@ -2071,8 +2013,8 @@ function parameter_object(   i,j,lastcovmatnum,covmatnum,covnamek,covnamekk,etap
       parm_obj[++nparmobj]="   "PAR_VARIABILITY blockstart""
       if (ishelp) {
          if (iscovmatrix) parm_obj[++nparmobj]="# The "PAR_VARIABILITY" block has a more complex structure because it needs to express a lower triangular matrix of parameters and how they are related to each other."
-         parm_obj[++nparmobj]="# "PAR_VARIABILITY" parameters may be expressed with a type of \"SD\" which implies standard deviations on the diagonal and correlations"
-         parm_obj[++nparmobj]="# on the lower off diagonal elements or \"VAR\" which implies variances and covariances."
+         parm_obj[++nparmobj]="# "PAR_VARIABILITY" parameters may be expressed with a type of \"" TYPESD "\" which implies standard deviations on the diagonal and correlations"
+         parm_obj[++nparmobj]="# on the lower off diagonal elements or \"" TYPEVAR "\" which implies variances and covariances."
       }
 
       printparms(ETALEVEL)
@@ -2150,7 +2092,7 @@ function printcorr(covmatnum,etaparlist,etavallist,etacorrtype,hascorreps,epspar
          matnum=covmatnum-1
          netaparlist=split(substr(etaparlist,1,length(etaparlist)-1),ETAPARLIST,",")
          if (netaparlist) {
-            ppvparlist="params=["; nparlist=0
+            ppvparlist="parameter=["; nparlist=0
             for (i=1; i<=netaparlist; i++) {
                etapar=ETAPARLIST[i]
                gotpar=0
@@ -2164,15 +2106,15 @@ function printcorr(covmatnum,etaparlist,etavallist,etacorrtype,hascorreps,epspar
                   pat_declare=pat_declare etapar " "
                }
             }
-            #OMEGA : { parameters=[ETA_CL, ETA_V], value = [0.01], type = CORR }  From usecase 1
-            #OMEGA1 : {type=CORR, params=[ETA_CL, ETA_V, ETA_KA], value=[0.01, 0.01, 0.01]} From IOG product 4 discussions doc Apr 16
+            #OMEGA : { parameters=[ETA_CL, ETA_V], value = [0.01], type is corr }  From usecase 1
+            #OMEGA1 : {type is corr, parameter=[ETA_CL, ETA_V, ETA_KA], value=[0.01, 0.01, 0.01]} From IOG product 4 discussions doc Apr 16
             printcorr_rec(matnum,etacorrtype,ppvparlist,etavallist)
 
          }
          if (hascorreps) {
             nepsparlist=split(substr(epsparlist,1,length(epsparlist)-1),EPSPARLIST,",")
             if (!nepsparlist) return
-            ruvparlist="params=["; nparlist=0
+            ruvparlist="parameter=["; nparlist=0
             for (i=1; i<=nepsparlist; i++) {
                epspar=EPSPARLIST[i]
                gotpar=0
@@ -2188,11 +2130,11 @@ function printcorr(covmatnum,etaparlist,etavallist,etacorrtype,hascorreps,epspar
             }
             printcorr_rec(matnum,epscorrtype,ruvparlist,epsvallist)
          }
-         nparlist
+
 }
 
 function printcorr_rec(matnum,corrtype,parlist,vallist) {
-   parm_obj[++nparmobj]="      MATRIX_" matnum listconnect liststart "\n\t\ttype="corrtype",\n\t\t"substr(parlist,1,length(parlist)-1)"],\n\t\t"substr(vallist,1,length(vallist)-1)"]\n      " listend
+   parm_obj[++nparmobj]="      MATRIX_" matnum listconnect liststart "\n\t\ttype is "corrtype",\n\t\t"substr(parlist,1,length(parlist)-1)"],\n\t\t"substr(vallist,1,length(vallist)-1)"]\n      " listend
 }
 
 function printparms(level,       wasblock,lastnomblk,lastnomega,i,noffdiag) {
@@ -2229,11 +2171,11 @@ function printparms(level,       wasblock,lastnomblk,lastnomega,i,noffdiag) {
                         }
                         blockname="\"" PAR_STRUC NOMBLK[i] "\","
                         if (OMBLKSTD[NOMBLK[i]])
-                           blockvartype="SD"
+                           blockvartype=TYPESD
                         else
-                           blockvartype="VAR"
+                           blockvartype=TYPEVAR
 #parm_obj[++nparmobj]= "printparms: OMBLKSTD[NOMBLK["i"]]="OMBLKSTD[NOMBLK[i]]",blockvartype="blockvartype
-                        blockattributes=matrixnum blocktype "("blockname "type="blockvartype","
+                        blockattributes=matrixnum blocktype "("blockname "type is "blockvartype","
                      }
                      if ((OMBLKFIX[NOMBLK[i]])) {
                         blockattributes=blockattributes"fix=true"
@@ -2276,9 +2218,9 @@ function printparms(level,       wasblock,lastnomblk,lastnomega,i,noffdiag) {
                   else
                      omfixtext=""
                   if (OMSTD[i] || OMBLKSTD[NOMBLK[i]] )
-                     omvartext=", type="toupper(TYPESD)
+                     omvartext=", type is "TYPESD
                   else
-                     omvartext=", type="toupper(TYPEVAR)
+                     omvartext=", type is "TYPEVAR
 
 # Look for ", PPV_" etc. if found then this means this is a block with offdiagonal elements
                   if (LEVEL[i]==level) {
@@ -2322,10 +2264,10 @@ function printparms(level,       wasblock,lastnomblk,lastnomega,i,noffdiag) {
                         offdiag=$0
                         gsub(/ /,"",offdiag)
                         ncovname=split(offdiag,OFFDIAG,",")
-                        if (index(omvartext,"type=SD"))
-                           corrtype[level]="CORR"
+                        if (index(omvartext,"type is "TYPESD))
+                           corrtype[level]="corr"
                         else
-                           corrtype[level]="COV"
+                           corrtype[level]="cov"
                         if (level==ETALEVEL)
                            ranchars="eta_"
                         else if (level==EPSLEVEL)
@@ -2339,7 +2281,7 @@ function printparms(level,       wasblock,lastnomblk,lastnomega,i,noffdiag) {
                               for (kk=nblockrow;kk<=ncovname;kk++) {
                                  if (k!=kk) {
                                     covnamekk=OMEGA[kk+nblockoffset] #; gsub(/PPV_/,"",covnamekk); gsub(/RUV_/,"",covnamekk); gsub(/BOV_/,"",covnamekk)
-                                    CORRLIST[++ncorrlist]="CORR_"covnamek"_"covnamekk
+                                    CORRLIST[++ncorrlist]="corr_"covnamek"_"covnamekk
                                     CORR_RVS[ncorrlist,1]=ranchars covnamek; CORR_RVS[ncorrlist,2]=ranchars covnamekk
                                     CORRTYPE[ncorrlist]=corrtype[level]; CORRVALUE[ncorrlist]=offdiag; COVMATNUM[ncorrlist]=covmatnum
 #                                    parm_obj[++nparmobj]="      "CORRLIST[ncorrlist]": {hi=1.0, lo=-1.0, type="corrtype[level]", value="offdiag"}"
@@ -2455,7 +2397,7 @@ function model_object(   i,j,model_idv) {
          if (usemcl5obj) {
             model_obj[++nmodelobj]="# A name for each input data variable is required. Special uses of input data variables are indicated by the use attribute if the data variable name is not a standard name. Standard names may include ID, IDV, AMT, DV, MDV, etc. similar to standard data items recognized by NM-TRAN or Monolix. The type option is not required but may be useful as metadata. This kind of metadata (with an option to recode) could alternatively be specified in the data object."
          } else {
-            model_obj[++nmodelobj]="# Model input variables with the use=covariate."
+            model_obj[++nmodelobj]="# Model input variables with use is covariate."
          }
       }
       gsub(/=/," ",inputline)
@@ -2691,9 +2633,9 @@ function model_object(   i,j,model_idv) {
                      covnamekk=CORR_RVS[j,2]
                      if (index(covnamek,"eta_")==1)
                         #CORR_PPV_CL_V : {level=ID, rv1=ETA_CL, rv2=ETA_V, type=CORR}
-                        RVDCORR[ETALEVEL,j]="      "corrlistname": {rv1="covnamek", rv2="covnamekk", type="CORRTYPE[j] listend # ", level=ID}"
+                        RVDCORR[ETALEVEL,j]="      "corrlistname": {rv1="covnamek", rv2="covnamekk", type is "CORRTYPE[j] listend # ", level=ID}"
                      else {
-                        RVDCORR[EPSLEVEL,j]="      "corrlistname": {rv1="covnamek", rv2="covnamekk", type="CORRTYPE[j] listend # ", level=DV}"
+                        RVDCORR[EPSLEVEL,j]="      "corrlistname": {rv1="covnamek", rv2="covnamekk", type is "CORRTYPE[j] listend # ", level=DV}"
                         hascorreps=1
                      }
                   }
@@ -2990,7 +2932,7 @@ function model_object(   i,j,model_idv) {
             for (j=1; j<=ndvid; j++) {
 #print "nerrline: $2="$2 " YDVID["j"]="YDVID[j] 
 
-               if ($2==YDVID[j]) {
+               if ($2==YDVID[j] || $2=="ln("YDVID[j]")") {
                   sub(/^ *; *@MCL_\"/,"")
                   OBSBLOCK[++nobsblock]=$0
 #print "nerrline: OBSBLOCK["nobsblock"]="OBSBLOCK[nobsblock]
@@ -3259,11 +3201,11 @@ function model_object(   i,j,model_idv) {
                            print $0 comment
                      }
                   }
-               }
-            }
-         }
+               } # skipaline
+            } # ! sameline
+         } # isverbatim
       } # not NMTRAN
-   } # for 1
+   } # for i
 
 } # end mdl_object 
 
@@ -3335,7 +3277,7 @@ function makeparlist( i) {
 
 } # end makeparlist
 
-function findifthenelse(  i,j,tmp) {
+function findifthenelse(  i,j,tmp,ii) {
       
    tmp=$0; sub(/[ \t]*/,"",tmp) # comment line may have preceding whitespace
    if (tmp=="") return hadifblock
@@ -3356,6 +3298,8 @@ function findifthenelse(  i,j,tmp) {
       if (!match($0,/\{/)) { # if without then e.g. if (AMT>0) AMT=DOSE
          condition=substr($0,1,index($0,")"))
          sub(/ *if */,"",condition)
+         condition=fixcondition(condition)
+
          then=substr($0,index($0,")")+1)
          sub(/^ */,"",then)
          if (index(then,"Y"listconnect)) {
@@ -3374,8 +3318,15 @@ function findifthenelse(  i,j,tmp) {
 
 #         rhs=substr(then,1,index(then,ysep)-1)
 #print "ifelse: condition="condition" then="then" rhs="rhs
-#         print then " when " condition " otherwise "rhs
-         print lastoffset then " when " condition ";"
+#print then " when " condition " otherwise "rhs
+         ii=index(then,"=")
+         if (ii) {
+            lhsval=substr(then,1,ii-1)
+            then=substr(then,ii+1)
+         } else {
+            lhsval=""
+         }
+         print lastoffset lhsval " = if " condition " then " then ";"
 
          nifblock=0; isif=0
       }
@@ -3474,8 +3425,91 @@ function if2when( j,k,kk,then,rhs) {
 
 } # end of if2when
 
+function fixcondition(condition, i,j,k,catvar,catexp,rhs) {
+   for (i=1; i<=ncatdef; i++) {
+      catvar=CATDEF[i,1]
+      for (k=1; k<=nlogic; k++) {
+         catexp=catvar LOGIC[k]
+         if (j=index(condition,catexp)) {
+#            rhs=substr(condition,j+length(catvar)+2)
+#            rhs=substr(rhs,1,length(rhs)-1)
+#            if ( rhs+0==0 && rhs!="0") {
+#print "fixcondition: rhs=|"rhs"| condition="condition
+               condition=substr(condition,1,j-1) catexp catvar "." substr(condition,j+length(catvar)+2) 
+#            }
+         }
+      }
+   } # ncatdef loop
+   return condition
+}
 
-function whenotherwise(j,k,  condition,rhs,then,ii,ysep2,terminator) {
+function whenotherwise(j,k,  condition,rhs,then,ii,ysep2,terminator,lhsval,lhseq, iflink) {
+#print "whenotherwise: ysep="ysep"| IFBLOCK["j"]="IFBLOCK[j] "| THENBLOCK["j",",k"]="THENBLOCK[j,k] "| ELSEBLOCK["j",",k"]="ELSEBLOCK[j,k]
+   condition=IFBLOCK[j]
+   sub(/ *if */,"",condition)
+   sub(/ *\{ */,"",condition)
+   condition=fixcondition(condition)
+
+   rhs=ELSEBLOCK[j,k]
+   if (rhs=="") {
+      if (j==maxifblock)
+         terminator=";"
+      else
+         terminator=""
+   } else {
+      terminator=""
+      ELSEBLOCK[j,k]=""
+   }
+   ysep2=ysep
+#print "whenotherwise: ysep2="ysep2"| rhs="rhs
+   ii=index(rhs,ysep2)
+   if (ii==0) {
+      if (ysep2==":")
+         if (index(rhs,"=")) ysep2="="
+      else if (ysep2=="=")
+         if (index(rhs,":")) ysep2=":"
+   }
+   if (ysep2==":") {
+      ldelim=liststart
+      rdelim=listend
+   } else {
+      ldelim=""
+      rdelim=""
+   }
+#print "whenotherwise: ysep2="ysep2"| rhs="rhs
+   rhs=substr(rhs,index(rhs,ysep2)+1,length(rhs)-index(rhs,ysep2))
+   then=THENBLOCK[j,k]; gsub(/^ */,"",then)
+   if (then=="") return
+   ii=index(then,"=")
+   if (ii) {
+      lhsval=substr(then,1,ii-1)
+      then=substr(then,ii+1)
+   } else {
+      lhsval=""
+   }
+#print "whenotherwise: condition="condition " then="then " rhs="rhs" lhsval="lhsval
+
+   if (ysep2==":" && !index(then,ldelim))
+      printf("%s\n",lastoffset ldelim lhsval " = if " condition " then " then rdelim )
+   else {
+      if (lhsval=="")
+         lhseq="" 
+      else
+         lhseq=" = "
+#print "maxifblock="maxifblock" j="j " rhs="rhs
+      if (j==1) {
+         iflink=" if "
+      } else if (j<=maxifblock) {
+         iflink=" elseif "
+      }
+      printf("%s\n",lastoffset " " lhsval lhseq iflink condition " then " then terminator)
+   }
+   if (j==maxifblock && rhs!="") {
+      printf("%s\n",lastoffset "  else " rhs)
+   }
+}
+
+function whenotherwise_4_0(j,k,  condition,rhs,then,ii,ysep2,terminator) {
 #print "whenotherwise: ysep="ysep"| IFBLOCK["j"]="IFBLOCK[j] "| THENBLOCK["j",",k"]="THENBLOCK[j,k] "| ELSEBLOCK["j",",k"]="ELSEBLOCK[j,k]
    condition=IFBLOCK[j]
    sub(/ *if */,"",condition)
@@ -3522,6 +3556,7 @@ function whenotherwise(j,k,  condition,rhs,then,ii,ysep2,terminator) {
       }
    }
 }
+
 
 ###  LIBRARY sub-block
 #function	v_cl	v_k	v_cl	vss_cl	a_b
@@ -3654,20 +3689,28 @@ function compartment_subblock( ncmtline,dist,elim,i,j,np,par,npredargs,maxcmt,is
                  idepdest=substr(par,3)
               }
             }
-            cmt_line[++ncmtline]="      "CMT[i] listconnect  "  "  liststart "type=depot, modelCmt="i admtype ", to="CMT[idepdest]", ka=K"i idepdest LAG_CMT[i] F_CMT[i] listend 
+            cmt_line[++ncmtline]="      "CMT[i] listconnect  "  "  liststart "type is depot, modelCmt="i admtype ", to="CMT[idepdest]", ka=K"i idepdest LAG_CMT[i] F_CMT[i] listend 
             icmtdest=-99
             for (j=1; j <= nglmpar; j++ ) {
                par=GLMPAR[j]
                if (index(par,"K"i)) {
                   icmtdest=substr(par,3)
                   if (icmtdest==0) {
-                     cmt_line[++ncmtline]="             "          "     "  liststart "type=elimination, modelCmt="i", from="CMT[i]", k=K"i"0" listend
+                     if (useelimname)
+                        ELIMNAME="ELIM"i
+                     else
+                        ELIMNAME=":"
+                     cmt_line[++ncmtline]="        " ELIMNAME listconnect "   "  liststart "type is elimination, modelCmt="i", from="CMT[i]", k=K"i"0" listend
                   }
                }
             }
          } else if (i==icentral) {
-            cmt_line[++ncmtline]="      "CMT[icentral] listconnect   "   "  liststart "type=compartment, modelCmt="icentral listend
-            cmt_line[++ncmtline]="             "                   "     "  liststart "type=elimination, modelCmt="icentral", from="CMT[icentral]", k=K"icentral"0"  R_CMT[i] D_CMT[i] listend
+            cmt_line[++ncmtline]="      "CMT[icentral] listconnect   "   "  liststart "type is compartment, modelCmt="icentral listend
+            if (useelimname)
+               ELIMNAME="ELIM"i
+            else
+               ELIMNAME=":"
+            cmt_line[++ncmtline]="        " ELIMNAME listconnect "   "  liststart "type is elimination, modelCmt="icentral", from="CMT[icentral]", k=K"icentral"0"  R_CMT[i] D_CMT[i] listend
          } else {
             icmtdest=-99
             for (j=1; j <= nglmpar; j++ ) {
@@ -3675,9 +3718,18 @@ function compartment_subblock( ncmtline,dist,elim,i,j,np,par,npredargs,maxcmt,is
                if (index(par,"K"i)) {
                   icmtdest=substr(par,3)
                   if (icmtdest==0) {
-                     cmt_line[++ncmtline]="             "          "     "  liststart "type=elimination, modelCmt="i", from="CMT[i]", k=K"i"0" listend
+                     if (useelimname)
+                        ELIMNAME="ELIM"i
+                     else
+                        ELIMNAME=":"
+                     cmt_line[++ncmtline]="        " ELIMNAME listconnect "   "  liststart "type is elimination, modelCmt="i", from="CMT[i]", k=K"i"0" listend
                   } else {
-                     cmt_line[++ncmtline]="      "CMT[i] listconnect "   "  liststart "type=transfer, modelCmt="i", to="CMT[icmtdest]", from="CMT[i]", kt=K"i icmtdest listend
+                     if (usetransfername) {
+                        cmt_line[++ncmtline]="      "CMT[i] listconnect "   "  liststart "type is transfer, modelCmt="i", to="CMT[icmtdest]", from="CMT[i]", kt=K"i icmtdest listend
+                     } else {
+                        cmt_line[++ncmtline]="      "CMT[i] listconnect "   "  liststart "type is compartment, modelCmt="i listend
+                        cmt_line[++ncmtline]="        :"    listconnect "   "  liststart "type is transfer, modelCmt="i", to="CMT[icmtdest]", from="CMT[i]", kt=K"i icmtdest listend
+                     }
                   }
                }
             }
@@ -3821,15 +3873,15 @@ function compartment_subblock( ncmtline,dist,elim,i,j,np,par,npredargs,maxcmt,is
         if (hasrate && !ndeqline) {
            if (R_CMT[idepcmt]!= "") {
               DEPCMT[++ndepcmt]="INPUT_RATE"
-              cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type=direct, modelCmt="idepcmt admtype ", to=CENTRAL" R_CMT[idepcmt] LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
+              cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type is direct, modelCmt="idepcmt admtype ", to=CENTRAL" R_CMT[idepcmt] LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
            }
            if (D_CMT[idepcmt]!= "") {
               DEPCMT[++ndepcmt]="INPUT_DUR"
-              cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect " " liststart "type=direct, modelCmt="idepcmt admtype ", to=CENTRAL" D_CMT[idepcmt] LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
+              cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect " " liststart "type is direct, modelCmt="idepcmt admtype ", to=CENTRAL" D_CMT[idepcmt] LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
            }
            if (1==0) { # Not currently supported
               DEPCMT[++ndepcmt]="INPUT_KA"
-              cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect "  "liststart "type=depot, modelCmt="idepcmt admtype ", to=CENTRAL, ka=KA" LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
+              cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect "  "liststart "type is depot, modelCmt="idepcmt admtype ", to=CENTRAL, ka=KA" LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
            }
            #DEPCMT[++ndepcmt]="INPUT_BOK0"
            #cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type=direct, modelCmt="idepcmt admtype ", to=CENTRAL" LAG_CMT[idepcmt] F_CMT[idepcmt] listend
@@ -3842,7 +3894,14 @@ function compartment_subblock( ncmtline,dist,elim,i,j,np,par,npredargs,maxcmt,is
               else {
                  DEPCMT[ndepcmt]="INPUT_" CMT[idepcmt]
                  tocmt=CMT[idepcmt]
-                 typecmt="direct"
+                 if (usedeqdirect)
+                    typecmt="direct"
+                 else
+                    typecmt="depot"
+                 if (usedeqto)
+                    toname="to"
+                 else
+                    toname="target"
               }
            } else {
               if (options=="" || hasrate)
@@ -3851,28 +3910,29 @@ function compartment_subblock( ncmtline,dist,elim,i,j,np,par,npredargs,maxcmt,is
                  DEPCMT[ndepcmt]="INPUT_BOK0"
                  tocmt="CENTRAL"
                  typecmt="direct"
+                 toname="to"
               }
            }
-           if (tocmt!="") cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type="typecmt", modelCmt="idepcmt admtype ", to="tocmt options listend
+           if (tocmt!="") cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type is "typecmt", modelCmt="idepcmt admtype ", "toname"="tocmt options listend
            icentral=idepcmt-1
 #print "maxcmt: icentral="icentral
         }
 
         if (isdepot && (i==idepot || LAG_CMT[idepcmt]!="" || F_CMT[idepcmt]!="")) {
            DEPCMT[++ndepcmt]="INPUT_KA"
-           cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect "  "  liststart "type=depot, modelCmt="idepcmt admtype ", to=CENTRAL, ka=KA" LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
+           cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect "  "  liststart "type is depot, modelCmt="idepcmt admtype ", to=CENTRAL, ka=KA" LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
            if (hascmt) {
               icentral=++idepcmt
               if (R_CMT[idepcmt]!= "") {
                  DEPCMT[ndepcmt]="INPUT_RATE"
-                 cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type=direct, modelCmt="idepcmt admtype ", to=CENTRAL" R_CMT[idepcmt] LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
+                 cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type is direct, modelCmt="idepcmt admtype ", to=CENTRAL" R_CMT[idepcmt] LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
               }
               if (D_CMT[idepcmt]!= "") {
                  DEPCMT[ndepcmt]="INPUT_DUR"
-                 cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type=direct, modelCmt="idepcmt admtype ", to=CENTRAL" D_CMT[idepcmt] LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
+                 cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type is direct, modelCmt="idepcmt admtype ", to=CENTRAL" D_CMT[idepcmt] LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
               }
               DEPCMT[ndepcmt]="INPUT_BOK0"
-              cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type=direct, modelCmt="idepcmt admtype ", to=CENTRAL" LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
+              cmt_line[++ncmtline]="      "DEPCMT[ndepcmt] listconnect liststart "type is direct, modelCmt="idepcmt admtype ", to=CENTRAL" LAG_CMT[idepcmt] F_CMT[idepcmt] listend 
            } else
               icentral=idepcmt+1
         }
@@ -3890,35 +3950,39 @@ function compartment_subblock( ncmtline,dist,elim,i,j,np,par,npredargs,maxcmt,is
          # Elimination compartment
 
          if (icentral==0) icentral=1
-         cmt_line[++ncmtline]="      CENTRAL" listconnect "   "  liststart "type=compartment, modelCmt="icentral listend
-         cmt_line[++ncmtline]="             "           "     "  liststart "type=elimination, modelCmt="icentral", from=CENTRAL, " elim1 listend
+         cmt_line[++ncmtline]="      CENTRAL" listconnect "   "  liststart "type is compartment, modelCmt="icentral listend
+         if (useelimname)
+            ELIMNAME="ELIM"i
+         else
+            ELIMNAME=":"
+         cmt_line[++ncmtline]="        " ELIMNAME listconnect "   "  liststart "type is elimination, modelCmt="icentral", from=CENTRAL, " elim1 listend
          CMT[icentral]="CENTRAL"
 
          # Distribution compartments
          idistcmt=icentral
          if (advan_num==3 || advan_num==4) {
            if (tran_num==3 || tran_num==4) {
-              cmt_line[++ncmtline]="      PERIPHERAL" listconnect liststart "type=distribution, modelCmt="++idistcmt", from=CENTRAL, " dist2 listend
+              cmt_line[++ncmtline]="      PERIPHERAL" listconnect liststart "type is distribution, modelCmt="++idistcmt", from=CENTRAL, " dist2 listend
            } else if (tran_num==1) {
-              cmt_line[++ncmtline]="      PERIPHERAL" listconnect liststart "type=distribution, modelCmt="++idistcmt", from=CENTRAL, " dist21 listend
+              cmt_line[++ncmtline]="      PERIPHERAL" listconnect liststart "type is distribution, modelCmt="++idistcmt", from=CENTRAL, " dist21 listend
            }
            CMT[idistcmt]="PERIPHERAL"
          }
 
          if (advan_num==11 || advan_num==12) {
            if (tran_num==4) {
-              cmt_line[++ncmtline]="      SHALLOW" listconnect  "   " liststart "type=distribution, modelCmt="++idistcmt", from=CENTRAL, " dist2 listend
-              cmt_line[++ncmtline]="      DEEP" listconnect  "      " liststart "type=distribution, modelCmt="++idistcmt", from=CENTRAL, " dist3 listend
+              cmt_line[++ncmtline]="      SHALLOW" listconnect  "   " liststart "type is distribution, modelCmt="++idistcmt", from=CENTRAL, " dist2 listend
+              cmt_line[++ncmtline]="      DEEP" listconnect  "      " liststart "type is distribution, modelCmt="++idistcmt", from=CENTRAL, " dist3 listend
            } else if (tran_num==1) {
-              cmt_line[++ncmtline]="      SHALLOW" listconnect "   " liststart "type=distribution, modelCmt="++idistcmt", from=CENTRAL, " dist21 listend
-              cmt_line[++ncmtline]="      DEEP" listconnect "      " liststart "type=distribution, modelCmt="++idistcmt", from=CENTRAL, " dist31 listend
+              cmt_line[++ncmtline]="      SHALLOW" listconnect "   " liststart "type is distribution, modelCmt="++idistcmt", from=CENTRAL, " dist21 listend
+              cmt_line[++ncmtline]="      DEEP" listconnect "      " liststart "type is distribution, modelCmt="++idistcmt", from=CENTRAL, " dist31 listend
            }
            CMT[idistcmt-1]="SHALLOW"
            CMT[idistcmt]="DEEP"
          }
          if (F_CMT[0]!="") {
-            cmt_line[++ncmtline]="      OUTPUT" listconnect "    " liststart "type=compartment,  modelCmt="++idistcmt listend
-            cmt_line[++ncmtline]="            "           "      " liststart "type=transfer,  modelCmt="idistcmt", from=CENTRAL, to=OUTPUT, kt="koutput "*" F_CMT[0] listend
+            cmt_line[++ncmtline]="      OUTPUT" listconnect "    " liststart "type is compartment,  modelCmt="++idistcmt listend
+            cmt_line[++ncmtline]="            "           "      " liststart "type is transfer,  modelCmt="idistcmt", from=CENTRAL, to=OUTPUT, kt="koutput "*" F_CMT[0] listend
             CMT[idistcmt]="OUTPUT"
          }
          # ncmt defines list of names in CMT[] which are used for replacement of A(*) and for adding link to AMT in data object
@@ -4026,15 +4090,18 @@ function hascols() {
          else if (item=="CMT") {
             hascmt=1
             idepcmt="CMT"
+            CMTNAME="CMT"
          } else if (item=="ADM") {
             hasadm=1
+            CMTNAME="ADM"
          } else if (item=="MDV")
             hasmdv=1
          else if (item=="EVID")
             hasevid=1
-         else if (item=="DVID")
+         else if (item=="DVID") {
             hasdvid=1
-         else if (item=="OCC")
+            DVIDNAME="DVID"
+         } else if (item=="OCC")
             hasocc=1
          else if (item=="ID")
             hasid=1
@@ -4063,7 +4130,7 @@ function deq_subblock(  i) {
    gotlocation=0
    for (i=1; i<=ndeqline; i++) {
       $0=des_code[i]
-      if (!(i==1 && $0="")) {
+      if (!(i==1 && $0!="")) {
          if (translate()) {
             # check for unnecessary assignment e.g. C=A(1) -> C=C
             odevar=$0
@@ -4091,7 +4158,10 @@ function deq_subblock(  i) {
             deriv=$0
             if (AZERO[i]=="") {
                AZERO[i]=0
-               ode_init=""
+#               if (useinitzero)
+                  ode_init=""
+#               else
+#                 ode_init=", init=0"
             } else {
                ode_init=", init="AZERO[i]
             }
@@ -4116,7 +4186,11 @@ function deq_subblock(  i) {
 function open_target(target,location,relpos) {
    if (location=="") location="INLINE"
    ntargetcode=0
-   target_code[++ntargetcode]=MDL_TARGET"(target="target ",location=\"" location "\""relpos")" verbatimblockstart
+   if (usefulltask==1) {
+      target_code[++ntargetcode]=MDL_TARGET"(target="target ",location=\"" location "\""relpos")" verbatimblockstart
+   } else {
+      target_code[++ntargetcode]=MDL_TARGET"(target=\"NONMEM\")" verbatimblockstart
+  }
 }
 
 function close_target(destination, hadpos, comment) {
@@ -4518,7 +4592,7 @@ if (1==0) {
 
 
 
-   if (usefulltask && table_options!="") {
+   if (usefulltask==1 && table_options!="") {
       if (isnmtran) {
          task_obj[++ntaskobj]="   ## TABLE"
          task_obj[++ntaskobj]="   #"table_options
@@ -4529,13 +4603,17 @@ if (1==0) {
 
 #      if (ishelp) task_obj[++ntaskobj]="      # estimate (more options will typically be needed)"
       if (usefulltask) {
-         task_obj[++ntaskobj]="   "TSK_TASK " {"
-         task_obj[++ntaskobj]=""
-
-         task_obj[++ntaskobj]="      "TSK_EST " {"
-
+         if (usefulltask==1) {
+            task_obj[++ntaskobj]="   "TSK_TASK " {"
+            task_obj[++ntaskobj]=""
+            task_obj[++ntaskobj]="      "TSK_EST " {"
+         } else {
+            MDL_TARGET=TSK_EST
+         }
    
-         task_obj[++ntaskobj]="         method" listconnect listname liststart "\"" methopt "\"" listend
+         if (usefulltask==1) {
+            task_obj[++ntaskobj]="         method" listconnect listname liststart "\"" methopt "\"" listend
+         }
 
          # target code for ESTIMATE
          task_obj[++ntaskobj]="### start TARGET_CODE for "TSK_EST
@@ -4546,76 +4624,88 @@ if (1==0) {
             target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST " $0
          }
          close_target("task")
-         if (MLX_omega_type=="") MLX_omega_type="yes" # default for NM-TRAN is variance
-         open_target(MDL_MLXTRAN,"globalSettings","")
-            target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST    globalSettings={"
-            target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST      withVariance="MLX_omega_type","
-            target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST      settingsGraphics=\"%MLXPROJECT%/graphics.xmlx\","
-            target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST      settingsAlgorithms=\"%MLXPROJECT%/algorithms.xmlx\","
-            target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST      resultFolder=\"%MLXPROJECT%/results\"},"
-         close_target("task")
 
-         open_target(MDL_MLXTRAN,"estimatePopulationParameters",", after=true")
-            target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST   estimateIndividualParameters( method={conditionalMode} ),"
-            target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST   displayGraphics(),"
-         close_target("task")
-         
-         task_obj[++ntaskobj]="### end TARGET_CODE for "TSK_EST
+         if (usefulltask==1) {
 
-         if (showblockend) task_obj[++ntaskobj]="      "blockend"# end "TSK_EST
-
-         task_obj[++ntaskobj]=""
-         task_obj[++ntaskobj]="      "TSK_LIKE " {"
-         task_obj[++ntaskobj]="         method" listconnect listname liststart "\"" "standard" "\"" listend
-
-         task_obj[++ntaskobj]="### start TARGET_CODE for "TSK_LIKE
-         open_target(MDL_MLXTRAN,"estimatePopulationParameters",", after=true")
-            target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST    estimateLogLikelihood(method={linearization } ),"
-         close_target("task")
-         task_obj[++ntaskobj]="### end TARGET_CODE for "TSK_LIKE
-         
-         if (showblockend) task_obj[++ntaskobj]="      "blockend"# end "TSK_LIKE
-
-         if (ncovline) { 
-            task_obj[++ntaskobj]=""
-            task_obj[++ntaskobj]="      "TSK_COV " {"
-            task_obj[++ntaskobj]="         method" listconnect listname liststart "\"" "standard" "\"" listend
-
-            open_target(MDL_NMTRAN,"$COVARIANCE","")
-            task_obj[++ntaskobj]="### start TARGET_CODE for "TSK_COV
-            # target code for COVARIANCE
-            for (i=1; i<=ncovline; i++) {
-               $0=cov_code[i]
-               target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "COV " $0
-            }
+            if (MLX_omega_type=="") MLX_omega_type="yes" # default for NM-TRAN is variance
+            open_target(MDL_MLXTRAN,"globalSettings","")
+               target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST    globalSettings={"
+               target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST      withVariance="MLX_omega_type","
+               target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST      settingsGraphics=\"%MLXPROJECT%/graphics.xmlx\","
+               target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST      settingsAlgorithms=\"%MLXPROJECT%/algorithms.xmlx\","
+               target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST      resultFolder=\"%MLXPROJECT%/results\"},"
             close_target("task")
 
             open_target(MDL_MLXTRAN,"estimatePopulationParameters",", after=true")
-               target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST    estimateFisherInformationMatrix( method={linearization} ),"
+               target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST   estimateIndividualParameters( method={conditionalMode} ),"
+               target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST   displayGraphics(),"
             close_target("task")
+            
+            task_obj[++ntaskobj]="### end TARGET_CODE for "TSK_EST
 
-            task_obj[++ntaskobj]="### end TARGET_CODE for "TSK_COV
+            if (showblockend) task_obj[++ntaskobj]="      "blockend"# end "TSK_EST
 
-         if (showblockend) task_obj[++ntaskobj]="      "blockend"# end "TSK_COV
-         }
+            task_obj[++ntaskobj]=""
+            task_obj[++ntaskobj]="      "TSK_LIKE " {"
+            task_obj[++ntaskobj]="         method" listconnect listname liststart "\"" "standard" "\"" listend
 
-         task_obj[++ntaskobj]="   }# end of "TSK_TASK
+            task_obj[++ntaskobj]="### start TARGET_CODE for "TSK_LIKE
+            open_target(MDL_MLXTRAN,"estimatePopulationParameters",", after=true")
+               target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST    estimateLogLikelihood(method={linearization } ),"
+            close_target("task")
+            task_obj[++ntaskobj]="### end TARGET_CODE for "TSK_LIKE
+            
+            if (showblockend) task_obj[++ntaskobj]="      "blockend"# end "TSK_LIKE
+
+            if (ncovline) { 
+               task_obj[++ntaskobj]=""
+               task_obj[++ntaskobj]="      "TSK_COV " {"
+               task_obj[++ntaskobj]="         method" listconnect listname liststart "\"" "standard" "\"" listend
+
+               open_target(MDL_NMTRAN,"$COVARIANCE","")
+               task_obj[++ntaskobj]="### start TARGET_CODE for "TSK_COV
+               # target code for COVARIANCE
+               for (i=1; i<=ncovline; i++) {
+                  $0=cov_code[i]
+                  target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "COV " $0
+               }
+               close_target("task")
+
+               open_target(MDL_MLXTRAN,"estimatePopulationParameters",", after=true")
+                  target_code[++ntargetcode]=NMTRAN_VERBATIM_CHAR "EST    estimateFisherInformationMatrix( method={linearization} ),"
+               close_target("task")
+
+               task_obj[++ntaskobj]="### end TARGET_CODE for "TSK_COV
+
+               if (showblockend) task_obj[++ntaskobj]="      "blockend"# end "TSK_COV
+               task_obj[++ntaskobj]="   }# end of "TSK_TASK
+            } # isfulltask==1
+         } # isfulltask != 0
+
       } else { 
          # not usefulltask
          offset="   "
-         if (methopt=="FOCE  INTER") methopt="FOCEI"
-         task_obj[++ntaskobj]=offset TSK_EST " {"
-   		task_obj[++ntaskobj]=offset offset "target = NMTRAN_CODE"
-         if (ncovline) task_obj[++ntaskobj]=offset offset "cov = true" 
-         task_obj[++ntaskobj]=offset offset "algo = [ \""methopt"\" ]"
-#   		task_obj[++ntaskobj]=offset offset "target = MLXTRAN_CODE version = \"4.3.2\" algo = [ \"SAEM\" ]"
-         task_obj[++ntaskobj]=offset "} #end "TSK_EST" sub block"
-         if (usetaskmodel && (ndeqline || advan_num==10)) { 
-            task_obj[++ntaskobj]=""
-            task_obj[++ntaskobj]=offset TSK_SOLVER " " blockstart
-            task_obj[++ntaskobj]=offset offset "tolrel="tol_num
-            if (showblockend) task_obj[++ntaskobj]=offset blockend"# end "TSK_SOLVER" sub-block"
+         task_obj[++ntaskobj]=offset TSK_EST blockstart
+
+#This is handled by the DDMoRe R Package. If the target tool suppors the algorithm it's used, if not then a default is used.
+#   saem, foce, fo, focei
+#Stuart Moodie 5 Nov 2015
+
+         if (match(methopt,/saem *$/))
+            methalgo="saem"
+         else if (match(methopt,/ZERO *$/))
+            methalgo="fo"
+         else if (match(methopt,/FOCE *$/))
+            methalgo="foce"
+         else if (match(methopt,/FOCE *INTERACTION *$/)  || match(methopt,/FOCE *INTER *$/))
+            methalgo="focei"
+         else
+            methalgo=methopt
+         task_obj[++ntaskobj]=offset offset "set algo is "methalgo
+         if ((ndeqline || advan_num==10)) { 
+            # task_obj[++ntaskobj]=offset offset "TOL="tol_num
          }
+         task_obj[++ntaskobj]=offset blockend "# end "TSK_EST" sub block"
       } # end not usefulltask
 
       if (neditline) {
@@ -4625,7 +4715,7 @@ if (1==0) {
 
    }
 
-   if (usefulltask) {
+   if (usefulltask==1) {
       if (nsimline) {
 
          task_obj[++ntaskobj]="      "TSK_SIM " {"
@@ -4672,7 +4762,7 @@ if (1==0) {
          task_obj[++ntaskobj]="      "TSK_TARGET blockstart
          task_obj[++ntaskobj]=""
 
-         if (nproline) {
+         if (nproline && usefulltask==1) {
             open_target(MDL_NMTRAN,"$PROBLEM",", first=true")
             for (i=1; i<=nproline; i++) {
                $0=pro_code[i]
@@ -4780,10 +4870,10 @@ function tel_object() {
          tel_obj[++ntelobj]=mdlname"_mog="MOG_OBJ"{"
 
          tel_obj[++ntelobj]="\t"MOG_OBJECTS blockstart
-         tel_obj[++ntelobj]="\t\tdObj="mdlname"_dat"
-         tel_obj[++ntelobj]="\t\tpObj="mdlname"_par"
-         tel_obj[++ntelobj]="\t\tmObj="mdlname"_mdl"
-         tel_obj[++ntelobj]="\t\ttObj="mdlname"_task"
+         tel_obj[++ntelobj]="\t\t"mdlname"_mdl" listconnect liststart " type is "MDL_OBJ" " listend
+         tel_obj[++ntelobj]="\t\t"mdlname"_dat" listconnect liststart " type is "DAT_OBJ" " listend
+         tel_obj[++ntelobj]="\t\t"mdlname"_par" listconnect liststart " type is "PAR_OBJ" " listend
+         tel_obj[++ntelobj]="\t\t"mdlname"_task" listconnect liststart " type is "TSK_OBJ" " listend
          tel_obj[++ntelobj]="\t"blockend
 
 if (1==0) {
@@ -4842,27 +4932,29 @@ print ")"
 print "### End of R syntax checking code"
 }
 
-function data_type(isdata,isuse,item,alias,units, var_list,orgitem,j,adm,use,leveltype) {
-   orgitem=item; item=toupper(item); leveltype=""
+function data_type(isdata,isuse,item,alias,units, var_list,link_list,dv_list,cat_list,gotcatdef,orgitem,j,adm,use,leveltype) {
+   orgitem=item; item=toupper(item); leveltype=""; if (isdata) { cat_list="";CATEGORY[item]=""}
    if (item==idvname)
-      use="use=idv, "
+      use="use is idv" # use is covariate may be added with TIME
    else
-      use="use="tolower(item)", "
+      use="use is "tolower(item)
    if (item=="OCC"){
-      if (item!=idvname) use="use=varlevel, "
+      if (item!=idvname) use="use is varLevel"
+      if (useallcov) use=use ", use is covariate"
       var_list="type=categorical"
       if (!isdata) {
-         if (isleveltype) var_list="type=parameter"
+         if (isleveltype) var_list="type is parameter"
          var_list=var_list ", level="2 leveltype
       }
    } else if (item=="ID") {
-      var_list="type=categorical"
+      if (useallcov) use=use ", use is covariate"
+      var_list=", type=categorical"
       if (!isdata) {
-         if (isleveltype) var_list="type=parameter"
+         if (isleveltype) var_list="type is parameter"
          var_list=var_list ", level="2+hasocc
       }
    } else if (item=="TIME") {
-      if (item!=idvname) use="use=covariate, "      
+      if (useallcov) use=use ", use is covariate"
       var_list="type=continuous"
       if (units=="")
          timeunit="h"
@@ -4870,80 +4962,165 @@ function data_type(isdata,isuse,item,alias,units, var_list,orgitem,j,adm,use,lev
          timeunit=units
       units= ", units=\""timeunit"\""
    } else if (item=="MDV" || item=="EVID"){
+      if (item=="MDV") {
+       if (useallcov) use=use ", use is covariate"
+      } else {
+         use="use is ignore"
+         if (useallcov) use=use ", use is covariate"
+      }
       var_list="type=categorical"
    } else if (item=="CMT" || item=="ADM" ){
-      var_list= "type=categorical" linkcmtmdl(isdata,((isdata && !usemcl5obj) || (!isdata && usemcl5obj)),item)
+      if (!ismdlpred)
+         use="use is cmt"
+      else
+         use=""
+      if (useallcov) use=use ", use is covariate"
+      link_list=linkcmtmdl(isdata,((isdata && !usemcl5obj) || (!isdata && usemcl5obj)),item)
+      CMTNAME=item
+      var_list= "type=categorical" link_list
    } else if (item=="AMT"){
-      var_list= "type=continuous" linkcmtmdl(isdata,((isdata && !usemcl5obj) || (!isdata && usemcl5obj)),item)
+      link_list=linkcmtmdl(isdata,((isdata && !usemcl5obj) || (!isdata && usemcl5obj)),item)
+      var_list= "type=continuous" link_list
       if (units=="")
          doseunit="mg"
       else
          doseunit=units
       units= ", units=\""doseunit"\""
+      if (ismdlpred)
+         use="use is covariate"
+      else
+         if (useallcov) use=use "use is covariate"
    } else if (item=="II"){
       var_list="type=continuous"
       if (timeunit=="") timeunit="h"
       units= ", units=\""timeunit"\""
+      if (!ismdlpred)
+         use="use is ii"
+      else
+         use=""
+       if (useallcov) use=use ", use is covariate"
    } else if (item=="ADDL"){
       var_list="type=categorical"
+      if (!ismdlpred)
+         use="use is addl"
+      else
+         use=""
+       if (useallcov) use=use ", use is covariate"
    } else if (item=="SS" || match(item,/SS[1|2]/)==1 ){
+      use="use is ss"
       var_list="type=categorical"
-      use="use=ss, "
+      if (!ismdlpred)
+         use="use is ss"
+      else
+         use=""
+       if (useallcov) use=use ",use is covariate"
    } else if (item=="RATE"){
       var_list="type=continuous"
-      use="use=rate, "
+      if (!ismdlpred)
+         use="use is rate"
+      else
+         use=""
+       if (useallcov) use=use ", use is covariate"
    } else if (item=="DVID" || item=="YTYPE" || item=="ITYPE"){
       item="DVID"
+      use="use is dvid"
+      if (useallcov) use=use ",use is covariate"
       var_list="type=categorical"
+       jcatdef=0
+       for (j=1; j<=ncatdef; j++) {
+          if (CATDEF[j,1]==toupper(item)) jcatdef=j
+       }
+       if (!jcatdef) {
+         CATDEF[++ncatdef,1]=toupper(item)
+         CATDEF[ncatdef,2]="dosing,conc,PCA"
+         jcatdef=ncatdef
+      }
+      isconcPCA=(mdlname=="warfarin_pkpd_turnover" || index(mdlname,"UC003")) 
       if (isdata) { 
-         if (mdlname=="warfarin_pkpd_turnover" && iscatdefined) {
-            var_list=var_list "(dosing,conc,PCA), define=[{category=dosing,value=0},{category=conc,value=1},{category=PCA,value=2}]"
+         if (usedvidcat && isconcPCA && iscatdefined) {
+            var_list=var_list "("CATDEF[ncatdef,2]"), define=[{category=dosing,value=0},{category=conc,value=1},{category=PCA,value=2}]"
+            cat_list=" withCategories {dosing when 0, conc when 1, PCA when 2}"
             #data_declare=data_declare "dosing conc PCA"
          }
       } else {
-         if (mdlname=="warfarin_pkpd_turnover" && iscatdefined) var_list=var_list "(dosing,conc,PCA)"
+         if (usedvidcat && isconcPCA && iscatdefined) {
+             var_list=var_list "("CATDEF[jcatdef,2]")"
+             CATEGORY[toupper(item)]=CATDEF[jcatdef,2]
+         }
       } 
    } else if (item=="STUDY" || item=="STDY") {
-       if (item!=idvname) use="use=covariate, "
+       use="use is covariate"
        var_list="type=categorical"
-       if (isleveltype) var_list="type=parameter"
+       if (isleveltype) var_list="type is parameter"
        if (!isdata) var_list=var_list ", level="3+hasocc
    } else if (item=="DV") {
+       use="use is dv"
+       if (useallcov) use=use ", use is covariate"
        var_list="type=continuous"
        if (!isdata) {
-          if (isleveltype) var_list="type=observation"
+          if (isleveltype) var_list="type is observation"
           var_list=var_list ", level=1"
-       } else
-          var_list=var_list ", define="listdvmdl()
+       } else {
+          dv_list=", "listdvmdl()
+          var_list=var_list dv_list
+       }
    } else if (item=="SEX" || item=="M1F0" || item=="M0F1" || item=="GEN" || item=="GEND" ) {
-       if (item!=idvname) use="use=covariate, "
+       use="use is catCov"
        var_list="type=categorical"
+       jcatdef=0
+       for (j=1; j<=ncatdef; j++) {
+          if (CATDEF[j,1]==toupper(item)) jcatdef=j
+       }
+       if (!jcatdef) {
+          CATDEF[++ncatdef,1]=toupper(item)
+          CATDEF[ncatdef,2]="female,male,MISSING"
+          jcatef=ncatdef
+       }
        if (isdata) { 
           if (iscatdefined) {
-            var_list=var_list "(female,male,MISSING), define=[{category=female,value=0},{category=male,value=1},{category=MISSING,value=99}]"
+            var_list=var_list "("CATDEF[ncatdef,2]"), define=[{category=female,value=0},{category=male,value=1},{category=MISSING,value=99}]"
             #data_declare=data_declare "female male"
+            cat_list=" withCategories {female when 0, male when 1, MISSING when 99}"
           }
        } else {
-          if (iscatdefined) var_list=var_list "(female,male,MISSING)"
+          if (iscatdefined) {
+             var_list=var_list "("CATDEF[jcatdef,2]")"
+             CATEGORY[toupper(item)]=CATDEF[jcatdef,2]
+          }
        }
    } else if (item=="RACE") {
-       if (item!=idvname) use="use=covariate, "
+       use="use is catCov"
        var_list="type=categorical"
+       jcatdef=0
+       for (j=1; j<=ncatdef; j++) {
+          if (CATDEF[j,1]==toupper(item)) jcatdef=1
+       }
+       if (!jcatdef) {
+          CATDEF[++ncatdef,1]=toupper(item)
+          CATDEF[ncatdef,2]="white,black,other"
+          jcatdef=ncatdef
+       }
        if (isdata) {
-           if (iscatdefined) {
-              var_list=var_list "(white,black,other), define=[{category=white,value=1},{category=black,value=2},{category=other,value=seq(3,10,1)}]"
-              #data_declare=data_declare "white black other"
-           }
+         if (iscatdefined) {
+           var_list=var_list "(white,black,other), define=[{category=white,value=1},{category=black,value=2},{category=other,value=seq(3,10,1)}]"
+           #data_declare=data_declare "white black other"
+           cat_list=" withCategories {white when 1, black when 2, other when seq(3,10,1)}"
+         }
 
        } else {
-           if (iscatdefined) var_list=var_list "(white,black,other)"
+          if (iscatdefined) {
+             var_list=var_list "("CATDEF[jcatdef,2]")"
+             CATEGORY[toupper(item)]=CATDEF[jcatdef,2]
+          }
+
        }
    } else if (index(item,"WT")==1 || index(item,"BW")==1){
-       if (item!=idvname) use="use=covariate, "
+       use="use is covariate"
+       if (item!=idvname) use="use is covariate"
        var_list="type=continuous"
        units= ", units=\"kg\""
    } else if (index(item,"AGE")==1 || index(item,"PNA")==1){
-       use="use=covariate, "
+       use="use is covariate"
        var_list="type=continuous"
        if (item=="AGE" || item=="PNAY" || item=="PNA") 
          units="y" 
@@ -4951,12 +5128,25 @@ function data_type(isdata,isuse,item,alias,units, var_list,orgitem,j,adm,use,lev
          units="week"
        units= ", units=\""units"\""
    } else {
-       if (item!=idvname) use="use=covariate, "
+       if (item==idvname) {
+          if (useallcov) use=use ",use is covariate"
+       } else
+          use="use is covariate"
        var_list="type=continuous"
    }
-   if (isuse) var_list=use var_list
-   if (units!="" && !match(units,/, *units=/)) units=", units=\""units"\""
-   return item listconnect listname liststart var_list units listend
+   if (isdata) var_list=", "var_list
+   if (usevarlist) {
+      if (isuse) var_list=use var_list
+   } else {
+      if (isdata) var_list=use
+    }
+   if (useunits) {
+      if (units!="" && !match(units,/, *units=/)) units=", units=\""units"\""
+   } else {
+      units=""
+   }
+#print "data_type: useunits="useunits" units="units
+   return item listconnect listname liststart var_list link_list dv_list cat_list units listend
 }
 
 function getYDVID( ydvid,i,dvid, hasdvid, saverec) {
@@ -5023,15 +5213,16 @@ function listdvmdl(  i,predrec,listdv) {
         YDVID[1]="Y"
         sub(/Y1_obs/,"Y",data_declare)
      }
-     return YDVID[1]
+     return "variable="YDVID[1]
   }
-  listdv="["
+  listdv="define={"
    for (i=1; i<=ndvid; i++) {
-      listdv=listdv "{pred="YDVID[i]",predId="NDVID[i]"}"
+#      listdv=listdv "{pred="YDVID[i]",predId="NDVID[i]"}"
+      listdv=listdv NDVID[i] " in "DVIDNAME" as "YDVID[i]
 #      listdv=listdv "{pred="YDVID[i]",predid="i"}"
       if (i!=ndvid) listdv=listdv ","
    }
-   return listdv "]"
+   return listdv "}"
 }
 function linkcmtmdl(isdata,isuse,item, litem,adm,link_declare) {
    litem=tolower(item)
@@ -5046,19 +5237,25 @@ function linkcmtmdl(isdata,isuse,item, litem,adm,link_declare) {
       return adm
    }
    if (isuse) {
+# define = {1 in CMT as INPUT_KA}
       if (ncmt && advan_num) {
-         if (hascmt) {
-            adm="define=["
+         if (hascmt || hasadm) {
+            adm="define={"
             for (j=1; j<=ncmt; j++) {
                if (j<ncmt)
                   admdelim=","
                else
-                  admdelim="]"
-               adm=adm "{modelCmt="CMT[j]",dataCmt="j"}" admdelim
+                  admdelim="}"
+#               adm=adm "{modelCmt="CMT[j]",dataCmt="j"}" admdelim
+               adm=adm j" in "CMTNAME" as "CMT[j] admdelim
                link_declare=link_declare " "CMT[j]
             }
          } else {
-            adm="define="CMT[1] #[{modelCmt="CMT[1]",dataCmt=1}]"
+            if (hascmt || hasadm) {
+               adm="define={1 in "CMTNAME" as "CMT[1] "}"
+            } else {
+               adm="variable="CMT[1]
+            }
             link_declare=link_declare " "CMT[1]
          }
       }
@@ -5111,16 +5308,24 @@ function mdlvarcode( i,item,comment,isdata,mdlvar,model_idv) {
                model_obj[++nmodelobj]="      "mdlvar
             } else {
                if (mdlvarcovariates && index(mdlvar,"level=")==0) {
-                 if (ndeqline)
-                    model_idv="#####"  # Allow TIME to appear in COVARIATES block
-                 else
+                 if (ndeqline) {
+                    model_idv="#IDV#"  # Allow TIME to appear in COVARIATES block
+                    idvname="T"
+                 } else {
                     model_idv=idvname
+                 }
 #                  usemdlvar=!(index(mdlvar,model_idv listconnect) || index(mdlvar,"AMT"listconnect) || index(mdlvar,"RATE"listconnect) || index(mdlvar,"CMT"listconnect) || index(mdlvar,"SS"listconnect) || index(mdlvar,"ADDL"listconnect) || index(mdlvar,"II"listconnect) || index(mdlvar,"MDV"listconnect) || index(mdlvar,"EVID"listconnect) || index(mdlvar,"DVID"listconnect))
-                  usemdlvar=!(index(mdlvar,model_idv listconnect) || index(mdlvar,"AMT"listconnect) || index(mdlvar,"CMT"listconnect) || index(mdlvar,"SS"listconnect) || index(mdlvar,"ADDL"listconnect) || index(mdlvar,"II"listconnect) || index(mdlvar,"MDV"listconnect) || index(mdlvar,"EVID"listconnect) || index(mdlvar,"DVID"listconnect))
-                  if (ismdlpred || usemdlvar ) {
-#model_obj[++nmodelobj]="mdlvarcode:      "mdlvar " idvname="idvname " index="index(mdlvar,idvname listconnect)
+                  usemdlvar=!(index(mdlvar,model_idv listconnect) || index(mdlvar,"SS"listconnect) || index(mdlvar,"ADDL"listconnect) || index(mdlvar,"II"listconnect) || index(mdlvar,"EVID"listconnect)) 
+                  if (!useallcov && (index(mdlvar,"AMT"listconnect)==1 || index(mdlvar,"MDV"listconnect)==1 || index(mdlvar,"DV"listconnect)==1 || index(mdlvar,"DVID"listconnect)==1  || (index(mdlvar,"TIME"listconnect)==1 && idvname=="T"))) usemdlvar=0
+#model_obj[++nmodelobj]="mdlvarcode: usemdlvar="usemdlvar " ndeqline="ndeqline" ismdlpred="ismdlpred" mdlvar=|" mdlvar "| idvname=|"idvname "| model_idv="model_idv " index="index(mdlvar,idvname listconnect) " indext="index(mdlvar,"TIME" listconnect)
+                  if ((ismdlpred || usemdlvar) && index(mdlvar,idvname listconnect)!=1 && index(mdlvar,"MDV"listconnect)!=1 && index(mdlvar,"DVID"listconnect)!=1 && index(mdlvar,"RATE"listconnect)!=1 && index(mdlvar,"ADDL"listconnect)!=1 && index(mdlvar,"SS"listconnect)!=1 && index(mdlvar,"II"listconnect)!=1 && index(mdlvar,"EVID"listconnect)!=1 && index(mdlvar,"CMT"listconnect)!=1) {
 #model_obj[++nmodelobj]="mdlvarcode: ismdlpred="ismdlpred" usemdlvar="usemdlvar" model_idv="model_idv" ndeqline="ndeqline
-                    if (!(ismdlpred && index(mdlvar,idvname listconnect)==1)) model_obj[++nmodelobj]="      "mdlvar
+                    if (!usevarlist) {
+                       mdlvar=substr(mdlvar,1,index(mdlvar,listconnect)-1)
+#model_obj[++nmodelobj]="mdlvarcode:      "mdlvar " CATEGORY["toupper(mdlvar)"]="CATEGORY[toupper(mdlvar)]
+                       if (CATEGORY[toupper(mdlvar)]!="") mdlvar=mdlvar " withCategories {" CATEGORY[toupper(mdlvar)]"}"
+                    }
+                    model_obj[++nmodelobj]="      "mdlvar
                   }
                }
                if (mdlvarlevels && index(mdlvar,"level=")) {
@@ -5594,7 +5799,8 @@ function cmt_ido_subblock( ncmt,ncmtline,dist,elim,i,np,par,maxcmt,iscentral,ide
      }
 
      if (isdepot && (i==idepot || LAG_CMT[idepcmt]!="" || F_CMT[idepcmt]!="")) {
-        SUB_CMT[++ncmt]="    transfer_cmt["icentral"]" listconnect listname liststart "from=A["idepcmt"], kout=KA" listend
+        SUB_CMT[++ncmt]="    transfer_cmt["icentral"]" listconnect listname liststart "type is compartment, modelCMT="modelCmt listend
+        SUB_CMT[++ncmt]="    :" listconnect listname liststart "from=A["idepcmt"], kout=KA" listend
         cmt_line[++ncmtline]=SUB_CMT[ncmt]
      }
      #if (hascmt && maxcmt>idepot) cmt_line[++ncmtline]=comment "  }"
@@ -5880,3 +6086,99 @@ function cmt_ido_subblock( ncmt,ncmtline,dist,elim,i,np,par,maxcmt,iscentral,ide
 # 22 September 2014 version 1.053 beta
 # GAMLN(x) translated to lfactorial(x-1) so GAMLN(DV+1) becomes lfactorial(DV+1-1) i.e. lfactorial(DV)
 # Categorical defined code tidied up
+# 30 September 2014 version 2.000 beta
+#   MDL updated for consistency with MCL Spec Draft 6 (MCL6) and MDL Library Draft 2.
+# 21 October 2014 version 2.001 beta
+#   MDL5 to MDLPRED6 conversion   
+# 22 October 2014 version 2.002 beta
+#   Fix units bug for model object parameter lists
+# 23 October 2014 version 2.003 beta
+#   Use Monolix variance=no if NONMEM OMEGA is SD
+# 04 March 2015 version 2.004 beta
+#   MDL6 for IOG Product4
+# 05 March 2015 version 2.005 beta
+#   piecewise function changed for multiple when
+# 06 March 2015 version 2.006 beta
+#   Bug fix for covariance/correlation in parameter object
+# 15 March 2015 version 2.007 beta
+#   Removed "+1-1" from lfactorial()
+#   Prototype MACRO sub-block
+# 16 March 2015 version 2.008 beta
+#   PKMACRO implementation
+# 31 March 2015 version 2.009 beta
+#   PKMACRO attributes all lower case
+#   Identical assignments of variables ignored
+#   Attributes for defining categorical variables changed to matrix format
+#   Matrix name not included in model object
+#   Model and data objects mangled into the Consortium Product 4 format
+# 01 April 2015 version 2.010 beta
+#   PKMACRO distribution rate constants bug fixed.
+#   COMPARTMENT sub-block replaces PKMACRO sub-block
+# 03 April 2015 version 2.011 beta
+#   Use of type=compartment no longer required for COMPARTMENT sub-block
+#   use=cmt variable define attribute created using COMPARTMENT sub-block names
+# 10 April 2015 version 2.012 beta
+#   Removed feature to remove identical assignments (breaks recursive random variable assignments)
+#   COMPARTMENT sub-block attribute cmt changed to modelCmt
+#   Separate type=compartment added to COMPARTMENT sub-block
+#   Random variable distribution changed from list to ~Normal()
+# 11 April 2015 version 2.013 beta
+#   Bug fix for VARIABILITY_LEVELS type attribute
+#   DECLARED_VARIABLES no longer uses comma separators
+#   mogobj OBJECTS and MAPPING blocks added
+#   OBSERVATION block output does not use piecewise or conditional statements
+#   Removed nmtran output of COMPARTMENTS because it showed nothing useful
+# 12 April 2015 version 2.014 beta
+#   Bizarre changes for Product 4
+#   IDV block added to model object
+#   MODEL_OUTPUT_VARIABLES block removed
+# 18 April 2015 version 2.015 beta
+#   MODEL_OUTPUT_VARIABLES block restored
+#   predId -> predID; /70kg -? /kg*70
+#   data_declare no longer includes model object category names
+#   if(bool) Y expr -> if (bool) then Y expr endif
+#   Product 4 matrix offdiagonal
+# 21 April 2015 version 2.016 beta
+#   Default options changed to MDLHELP=N and NMTRAN=N
+#   Bug fix for var and sd attributes in parameter object and RANDOM_VARIABLES_DEFINITION
+#   Bug fix for use=amt (empty link removed and type changed to continuous)
+#   @MCL macro
+#   PRED models include all data items as covariates except TIME
+#   predID -> predid
+# 22 April 2015 version 2.017 beta
+#   duplicate COMPARTMENT name bug fixed
+#   BOV parameters and code suppressed
+# 26 April 2015 version 2.018 beta
+#   =runif(seed) changed to ~Uniform(0,1,seed)
+#   Y1_obs -> Y if only one DV
+#   IDV selected from TIME then CONC then CP
+#   rate -> inputRate, tk0->inputDur
+# 04 May 2015 version 2.019 beta
+#   IDV declared as T if there is a DEQ block
+#   Simple ADVAN[5|7] translation to COMPARTMENT sub-block
+# 06 May 2015 version 2.020 beta
+#   Bug fix for ELSEBLOCK initialization
+# 16 May 2015 version 2.021 beta
+#   inputRate -> modelRate, inputDur -> modelDur
+#   predid -> predId
+# 18 May 2015 version 2.022 beta
+#   BLOCK SAME only used to remove variables when OCC data item exists (hasocc==1)
+#   Bug fix when TIME used as covariate with DEQ and ivd=T
+# 20 May 2015 version 2.023 beta
+#   Task properties object MODEL block removed from ispidgin conversions
+# 21 May 2015 version 2.024 beta
+# 16 June 2015 version 2.025 beta
+#   Transfer compartment 'ktr' changed to 'kt'
+# 23 June 2015 version 2.026 beta
+#   COMPARTMENT list for DEQ input compartments with input options (R, D, ALAG, F)
+#   A(*) translated to COMPARTMENT names for standard ADVANs
+# 25 June 2015 version 2.027 beta
+#   INDBLOCK pragma changed to MDLIND
+#   Bug fix for COMPARTMENT list for DEQ input compartments
+# 27 June 2015 version 2.028 beta
+#   Bug fix for model input variables ending in "T"
+#   Bug fix for RVD block when there is no use=id
+# 28 June 2015 version 2.029 beta
+#   Updated MCL pragmas (@MCL_",  @MCL_IGNORE, @MCL_COVARIATES)
+# 29 June 2015 version 2.030 beta
+# Missing value changed to 99 because of PharmML bug

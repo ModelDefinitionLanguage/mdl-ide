@@ -21,8 +21,7 @@ dataObjectName = dataObj {
 	SOURCE {
 		# Define data file here
 		srcfile : {file = "nonmemDataFile.csv", 
-            inputFormat is nonmemFormat ,
-	    	ignore = "#" } 
+            inputFormat is nonmemFormat } 
 	}
 }
 
@@ -36,13 +35,13 @@ parameterObjectName = parObj {
 	# By default a parameter is to be estimated if fix is omitted
  	STRUCTURAL {
  		# structural parameters
-		POP_CL : { value = , lo = , hi= }
+		POP_CL : { value = 1, lo = 0, hi= 2}
 		BETA_CL_WT : { value = 0.75, fix = true }
 		} # end STRUCTURAL
 	VARIABILITY {
 		# variability parameters
-		PPV_CL : { value = , type is sd }
-		PPV_V : { value = , type is sd }
+		PPV_CL : { value = 1, type is sd }
+		PPV_V : { value = 1, type is sd }
 		# Define correlation or covariance here
 		OMEGA : { parameter=[ETA_CL, ETA_V], value = [0.01], type is corr }
 	} # end VARIABILITY

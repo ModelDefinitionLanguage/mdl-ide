@@ -2,6 +2,8 @@ package eu.ddmore.mdl.ui.wizard;
 
 import java.util.List;
 
+import org.eclipse.xtext.ui.XtextProjectHelper;
+
 import com.google.common.collect.ImmutableList;
 
 
@@ -31,7 +33,8 @@ public class NonJDTProjectCreator extends MdlProjectCreator {
 	protected String[] getBuilders(){
 		return new String[] {
 				"org.eclipse.pde.ManifestBuilder",
-				"org.eclipse.pde.SchemaBuilder"
+				"org.eclipse.pde.SchemaBuilder",
+				XtextProjectHelper.BUILDER_ID
 		};
 	}
 	

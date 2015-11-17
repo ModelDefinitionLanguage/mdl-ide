@@ -401,9 +401,18 @@
       <wizard
             category="org.eclipse.xtext.projectwiz"
             class="eu.ddmore.mdl.ui.MdlExecutableExtensionFactory:eu.ddmore.mdl.ui.wizard.MdlNewProjectWizard"
+            finalPerspective="eu.ddmore.mdl.ui.perspective.MDL"
             id="eu.ddmore.mdl.ui.wizard.MdlNewProjectWizard"
             name="MDL Project"
             project="true">
+      </wizard>
+      <wizard
+           category="eu.ddmore.mdl.ui.wizard"
+           class="eu.ddmore.mdl.ui.wizard.FileNewWizard"
+           finalPerspective="eu.ddmore.mdl.ui.perspective.MDL"
+           id="eu.ddmore.mdl.ui.wizard.FileNewWizard"
+           name="MDL File"
+           project="false">
       </wizard>
    </extension>
    	<!-- Rename Refactoring -->
