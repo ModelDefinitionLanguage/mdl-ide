@@ -10,11 +10,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.ui.editor.autoedit.DefaultAutoEditStrategyProvider;
-import org.eclipse.xtext.ui.editor.model.IResourceForEditorInputFactory;
-import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultSemanticHighlightingCalculator;
-import org.eclipse.xtext.ui.resource.IResourceSetProvider;
-import org.eclipse.xtext.ui.resource.SimpleResourceSetProvider;
 import org.eclipse.xtext.ui.wizard.IProjectCreator;
 
 import com.google.inject.Binder;
@@ -37,16 +33,16 @@ public class MdlUiModule extends eu.ddmore.mdl.ui.AbstractMdlUiModule {
         init();
     }
     
-    @Override
-    public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory(){
-    	return ResourceForIEditorInputFactory.class;
-    }
+//    @Override
+//    public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory(){
+//    	return ResourceForIEditorInputFactory.class;
+//    }
     
     
-    @Override
-    public Class<? extends IResourceSetProvider> bindIResourceSetProvider(){
-    	return SimpleResourceSetProvider.class;
-    }
+//    @Override
+//    public Class<? extends IResourceSetProvider> bindIResourceSetProvider(){
+//    	return SimpleResourceSetProvider.class;
+//    }
     
     @Override
     public Class<? extends IProjectCreator> bindIProjectCreator(){
