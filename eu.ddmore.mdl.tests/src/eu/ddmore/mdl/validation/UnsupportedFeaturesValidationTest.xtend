@@ -122,9 +122,41 @@ warfarin_design = desObj {
 			}
 		}'''.parse
 		
+		mcl.assertNoErrors
 		mcl.assertWarning(MdlPackage::eINSTANCE.valuePair,
 			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
 			"Derivative variables with an independent variable different to the model's IDV cannot be executed in R."
+		)
+	}
+
+	@Test
+	def void testWarningUnsupportedAttribute(){
+		val mcl = '''bar = mdlObj {
+			IDV{ T }
+			
+			COVARIATES{
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			MODEL_PREDICTION{
+				Y
+			}
+			
+			OBSERVATION{
+				o : { type is tte, hazard=Y, event is rightCensored, maxEvent = inf }
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.valuePair,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Attribute name 'event' is not currently supported for execution in R."
+		)
+		mcl.assertWarning(MdlPackage::eINSTANCE.valuePair,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Attribute name 'maxEvent' is not currently supported for execution in R."
 		)
 	}
 

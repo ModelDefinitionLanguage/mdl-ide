@@ -24,6 +24,14 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	static val unsupportedObjects = #{
 		MdlValidator::DESIGNOBJ
 	}
+	
+	
+	static val unsupportedAttributes = #{
+		BlockDefinitionProvider::OBS_BLK_NAME -> #{
+			ListDefinitionProvider::TTE_EVENT_ATT,
+			ListDefinitionProvider::TTE_MAX_EVENT_ATT									
+		}
+	}
 
 	@Check
 	//Check for unsupported object names
@@ -56,4 +64,18 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 		}
 	}
 	
+	
+	@Check
+	// Check for unsupported attribute names
+	def checkUnsupportedAttributes(ValuePair it){
+		val blk = owningBlock.identifier
+		val nm = attributeName
+		if(blk != null && nm != null){
+			if(unsupportedAttributes.get(blk)?.contains(nm)){
+				warning("Attribute name '" + nm + "' is not currently supported for execution in R.", 
+						MdlPackage.eINSTANCE.valuePair_ArgumentName,
+						FEATURE_NOT_SUPPORTED, nm)
+			}
+		}
+	}
 }

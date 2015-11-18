@@ -56,6 +56,8 @@ class ListDefinitionProvider {
 	public static val DISCRETE_OBS_VALUE = 'discrete'
 	public static val CATEGORICAL_OBS_VALUE = 'categorical'
 	public static val TTE_OBS_VALUE = 'tte'
+	public static val TTE_EVENT_ATT = 'event'
+	public static val TTE_MAX_EVENT_ATT = 'maxEvent'
 	
 
 	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
@@ -440,8 +442,8 @@ class ListDefinitionProvider {
 					new ListDefInfo (TTE_OBS_VALUE, new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('hazard', true, MclTypeProvider::REAL_TYPE.makeReference),
-						 new AttributeDefn('event', false, TTE_EVENT_TYPE),
-						 new AttributeDefn('maxEvent', false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn(TTE_EVENT_ATT, false, TTE_EVENT_TYPE),
+						 new AttributeDefn(TTE_MAX_EVENT_ATT, false, MclTypeProvider::REAL_TYPE)
 						 ],
 						 #[
 						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true },
