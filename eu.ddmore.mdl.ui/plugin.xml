@@ -63,10 +63,10 @@
             class="eu.ddmore.mdl.ui.MdlExecutableExtensionFactory:eu.ddmore.mdl.ui.handler.ConvertToPharmMLHandler_PE"
             commandId="eu.ddmore.mdl.ui.handler.ConvertToPharmML_PE">
       </handler>
-      <handler
+      <!--handler
             class="eu.ddmore.mdl.ui.MdlExecutableExtensionFactory:eu.ddmore.mdl.ui.handler.NMTranToMDLHandler_PE"
             commandId="eu.ddmore.mdl.ui.handler.NMTranToMDL_PE">
-      </handler>
+      </handler-->
       <!--handler
             class="eu.ddmore.mdl.ui.MdlExecutableExtensionFactory:eu.ddmore.mdl.ui.handler.ValidatePharmMLHandler_PE"
             commandId="eu.ddmore.mdl.ui.handler.ValidatePharmML_PE">
@@ -515,7 +515,7 @@
  	            </visibleWhen>
 	        </command>
 		</menuContribution-->
-		<menuContribution
+		<!--menuContribution
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
 	        <command
                commandId="eu.ddmore.mdl.ui.handler.NMTranToMDL_PE"
@@ -530,7 +530,7 @@
 	 	    		</iterate>
  	            </visibleWhen>
 	        </command>
-		</menuContribution>
+		</menuContribution-->
 		<!--menuContribution
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.edit">
 	        <command
