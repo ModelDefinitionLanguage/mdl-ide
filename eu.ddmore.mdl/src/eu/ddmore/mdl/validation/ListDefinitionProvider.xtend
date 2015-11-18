@@ -67,7 +67,7 @@ class ListDefinitionProvider {
 	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
 	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{CATEGORICAL_OBS_VALUE, COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
-	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
+	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes', 'covariate', 'catCov'})
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ,
@@ -528,6 +528,18 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'element'
 				listDefns = newArrayList(
+					new ListDefInfo ('catCov', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
+						 new AttributeDefn('catCov', true, MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference),
+						 new AttributeDefn('element', true, ELEMENT_TYPE),
+						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
+						 ]
+					),
+					new ListDefInfo ('covariate', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
+						 new AttributeDefn('covariate', true, MclTypeProvider::REAL_TYPE.makeReference),
+						 new AttributeDefn('element', true, ELEMENT_TYPE),
+						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
+						 ]
+					),
 					new ListDefInfo ('amount', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
 						 new AttributeDefn('admins', true, ADMINISTRATION_TYPE.makeVector),
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
@@ -560,7 +572,8 @@ class ListDefinitionProvider {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefInfo ('simple', SAMPLING_TYPE,  #[
-						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE), new AttributeDefn('outcome', true, MclTypeProvider::REAL_TYPE.makeReference),
+						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
+						 new AttributeDefn('outcome', true, MclTypeProvider::REAL_TYPE.makeReference),
 						 new AttributeDefn('sampleTime', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('numberSamples', false, MclTypeProvider::INT_TYPE.makeVector)
 						 ]

@@ -533,12 +533,12 @@ public class MclTypeProvider {
 			BuiltinFunctionCall:
 				e.functionType
 			VectorElement:
-				e.element.typeFor
+				e.element?.typeFor ?: MclTypeProvider.UNDEFINED_TYPE
 			VectorLiteral:
 				if(e.expressions.isEmpty) MclTypeProvider.REAL_VECTOR_TYPE
 				else e.typeForArray
 			MatrixElement:
-				e.element.typeFor
+				e.element?.typeFor ?: MclTypeProvider.UNDEFINED_TYPE
 			MatrixLiteral:
 				MclTypeProvider.REAL_VECTOR_TYPE.makeVector
 			SubListExpression:

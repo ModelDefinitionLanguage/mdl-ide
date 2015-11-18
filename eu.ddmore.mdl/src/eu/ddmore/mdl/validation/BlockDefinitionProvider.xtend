@@ -189,6 +189,30 @@ class BlockDefinitionProvider {
 			]),
 			"DESIGN_SPACES" -> new BlockSpec("DESIGN_SPACES", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.listDefinition)
+			]),
+			"DESIGN_PARAMETERS" -> new BlockSpec("DESIGN_PARAMETERS", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
+			]),
+			"PRIOR_PARAMETERS" -> new BlockSpec("PRIOR_PARAMETERS", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
+			]),
+			"NON_CANONICAL_DISTRIBUTION" -> new BlockSpec("NON_CANONICAL_DISTRIBUTION", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
+			]),
+			"PRIOR_VARIABLE_DEFINITION" -> new BlockSpec("PRIOR_VARIABLE_DEFINITION", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
+			]),
+			"INPUT_PRIOR_DATA" -> new BlockSpec("INPUT_PRIOR_DATA", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
+			]),
+			PRIOR_SOURCE_BLK -> new BlockSpec(PRIOR_SOURCE_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.equationDefinition, false),
+				new StatementSpec(ep.equationDefinition, true)
 			])
 	}	
 	
@@ -216,7 +240,8 @@ class BlockDefinitionProvider {
 			MOG_OBJ_NAME
 		},
 		MdlValidator::DESIGNOBJ -> #{
-			"DECLARED_VARIABLES", "ADMINISTRATION", "STUDY_DESIGN", "SAMPLING", "DESIGN_SPACES", COVARIATE_BLK_NAME
+			"DECLARED_VARIABLES", "ADMINISTRATION", "STUDY_DESIGN", "SAMPLING", "DESIGN_SPACES", COVARIATE_BLK_NAME,
+			"DESIGN_PARAMETERS"
 		},
 		MdlValidator::PRIOROBJ -> #{
 			"PRIOR_PARAMETERS", "NON_CANONICAL_DISTRIBUTION",
@@ -254,7 +279,9 @@ class BlockDefinitionProvider {
 		// map of just the mandatory blocks
 		val mandatoryBlock = new HashSet<String>
 		if(BlkData.containsKey(mdlObjType)){
-			mandatoryBlock.addAll(BlkData.get(mdlObjType).filter[blk| BlkDefns.get(blk).isMandatory])
+			mandatoryBlock.addAll(BlkData.get(mdlObjType).filter[b|
+				BlkDefns.get(b).isMandatory
+			])
 			for(blk : blocks){
 				// remove mandatory block if it exists
 				mandatoryBlock.remove(blk.identifier)

@@ -40,7 +40,8 @@ ForwardDeclaration:
 Statement:
 	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-	EnumerationDefinition|PropertyStatement|UserFunctionDefinition
+	EnumerationDefinition|PropertyStatement|UserFunctionDefinition|
+	CategoricalProbabilityAssign
 ;
 
 
@@ -73,6 +74,10 @@ EnumerationDefinition:
 
 TransformedDefinition returns EquationTypeDefinition:
 	{TransformedDefinition} transform = ID '(' name=ID ')' ASSIGN expression=Expression ';'?
+;
+
+CategoricalProbabilityAssign:
+	probFunc = ID '(' catRef=SymbolReference relOp='==' catValRef=CategoryValueReference ')' ASSIGN expression=Expression ';'?
 ;
 
 RandomVariableDefinition:
