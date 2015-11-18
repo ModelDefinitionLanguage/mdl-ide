@@ -40,6 +40,7 @@ class BlockDefinitionProvider {
 	public static val ESTIMATE_BLK = "ESTIMATE" 
 	public static val SIMULATE_BLK = "SIMULATE" 
 	public static val PRIOR_SOURCE_BLK = "PRIOR_SOURCE"
+	public static val DES_STUDY_DESIGN = "STUDY_DESIGN"
 	
 	@Data @FinalFieldsConstructor
 	static class StatementSpec{
@@ -97,7 +98,8 @@ class BlockDefinitionProvider {
 			COVARIATE_BLK_NAME -> new BlockSpec(COVARIATE_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.equationDefinition, false),
 				new StatementSpec(ep.equationDefinition, true),
-				new StatementSpec(ep.enumerationDefinition)
+				new StatementSpec(ep.enumerationDefinition),
+				new StatementSpec(ep.randomVariableDefinition)
 			]),
 			VAR_LVL_BLK_NAME -> new BlockSpec(VAR_LVL_BLK_NAME, 1, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.listDefinition)
@@ -179,10 +181,10 @@ class BlockDefinitionProvider {
 				new StatementSpec(ep.equationDefinition, true),
 				new StatementSpec(ep.equationDefinition, false)
 			]),
-			"STUDY_DESIGN" -> new BlockSpec("STUDY_DESIGN", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.equationDefinition, true),
-				new StatementSpec(ep.randomVariableDefinition),
-				new StatementSpec(ep.listDefinition)
+			DES_STUDY_DESIGN -> new BlockSpec(DES_STUDY_DESIGN, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+				new StatementSpec(ep.propertyStatement),
+				new StatementSpec(ep.listDefinition),
+				new StatementSpec(ep.categoricalProbabilityAssign)
 			]),
 			"SAMPLING" -> new BlockSpec("SAMPLING", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.listDefinition)
@@ -204,15 +206,15 @@ class BlockDefinitionProvider {
 			]),
 			"PRIOR_VARIABLE_DEFINITION" -> new BlockSpec("PRIOR_VARIABLE_DEFINITION", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.equationDefinition, false),
-				new StatementSpec(ep.equationDefinition, true)
+				new StatementSpec(ep.equationDefinition, true),
+				new StatementSpec(ep.randomVariableDefinition)
 			]),
 			"INPUT_PRIOR_DATA" -> new BlockSpec("INPUT_PRIOR_DATA", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.equationDefinition, false),
 				new StatementSpec(ep.equationDefinition, true)
 			]),
 			PRIOR_SOURCE_BLK -> new BlockSpec(PRIOR_SOURCE_BLK, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.equationDefinition, false),
-				new StatementSpec(ep.equationDefinition, true)
+				new StatementSpec(ep.listDefinition)
 			])
 	}	
 	

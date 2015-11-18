@@ -10,6 +10,7 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
 import eu.ddmore.mdl.mdl.MdlPackage
+import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -19,7 +20,7 @@ class UnsupportedFeaturesValidationTest {
 	
 
 
-	@Test
+	@Ignore
 	def void testDesignObjectUnsupported(){
 		val mcl = '''
 warfarin_design = desObj {
@@ -35,12 +36,24 @@ warfarin_design = desObj {
 
 	# wgt covariate is simulating
 
-	ADMINISTRATION{
-		# again there is some repetition here so allowing a variable defn here would be useful
+	DESIGN_PARAMETERS{
+		WT_MEAN = 85.5
+		WT_VAR = 19
 		doseStart = 0
 		doseEnd = 24
 		doseGap = 2
 		baseAmt = 2.5
+		epochStart = 0
+		epochEnd = 24
+«««		varlevel = bsv_lvl
+	}
+
+	COVARIATES{
+	    WT ~ Normal(mean=WT_MEAN, var=WT_VAR)
+	}
+
+	ADMINISTRATION{
+		# again there is some repetition here so allowing a variable defn here would be useful
 
 		# could use an adm type instead so do
 		dreg1 : { adm=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
@@ -50,13 +63,7 @@ warfarin_design = desObj {
 	}
 
 	STUDY_DESIGN{
-		WT_MEAN = 85.5
-		WT_VAR = 19
-	    WT ~ Normal(mean=WT_MEAN, var=WT_VAR)
 		# it would be helpful if I could put in some vars here to help make defn of similar vars easier.
-		epochStart = 0
-		epochEnd = 24
-		varlevel = bsv_lvl
 		arm1 : {
 		     	armSize = 10,
 		     	interventionSequence = [

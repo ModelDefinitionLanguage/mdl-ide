@@ -839,11 +839,14 @@ class MclTypeValidationTest {
 	def void testValidListVectorLiteral(){
 		val mcl = 	'''
 		d1g=desObj{
+			DECLARED_VARIABLES{
+				Conc
+			}
+			
 			ADMINISTRATION{
 			}
 			
-			STUDY_DESIGN{
-				Conc = 0
+			DESIGN_PARAMETERS{
 			}
 			
 			SAMPLING{
@@ -851,7 +854,7 @@ class MclTypeValidationTest {
 				pkwin2 : { type is simple, outcome=Conc, numberSamples = [0] }
 			}
 			DESIGN_SPACES{
-				DS3 : { samples=[pkwin1,pkwin2], element is numberTimes, discrete = [1] }
+				DS3 : { sample=[pkwin1,pkwin2], element is numberTimes, discrete = [1] }
 			}
 		}
 	'''.parse
@@ -1079,7 +1082,7 @@ d1g=desObj{
 	SAMPLING{
 	}
 	DESIGN_SPACES{
-		DS1 : { admins=[dose1], element is amount, discrete=[10,100,200] }
+		DS1 : { admin=[dose1], element is amount, discrete=[10,100,200] }
 	}
 	STUDY_DESIGN{
 	}
@@ -1104,15 +1107,15 @@ d1g=desObj{
 	}
 
 	STUDY_DESIGN{
-		totalSize=100
+		set totalSize=100
 		arm1 : {
 			armSize=100,
 			interventionSequence=[{
-				interventionList=[dose1]
+				admin=dose1
 			}],
 			samplingSequence=[{
-				samplingList=[pkwin1],
-				start=[0]
+				sample=pkwin1,
+				start=0
 				}
 			]
 		}

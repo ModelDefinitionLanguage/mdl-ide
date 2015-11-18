@@ -32,14 +32,16 @@ class SublistDefinitionProvider {
 																   	#{COEFF.name -> true, COV.name -> true},
 																   	#{COEFF.name -> true, CAT_COV.name -> true}
 																   ])),
-		INTERVENTION_SEQ_SUBLIST -> (new SublistTypeInfo(INTERVENTION_SEQ_SUBLIST, #[new AttributeDefn("interventionList", true, ListDefinitionProvider::ADMINISTRATION_TYPE.makeReference.makeVector),
-											new AttributeDefn("start", true, MclTypeProvider::REAL_TYPE.makeVector),
-											new AttributeDefn("end", true, MclTypeProvider::REAL_TYPE.makeVector)],
-											#[#{'interventionList' -> true, 'start' -> false, 'end' -> false}])),
-		SAMPLING_SEQ_SUBLIST -> (new SublistTypeInfo(SAMPLING_SEQ_SUBLIST, #[new AttributeDefn("samplingList", true, ListDefinitionProvider::SAMPLING_TYPE.makeReference.makeVector),
-												new AttributeDefn("start", true, MclTypeProvider::REAL_TYPE.makeVector),
-												new AttributeDefn("end", true, MclTypeProvider::REAL_TYPE.makeVector)],
-												#[#{'samplingList' -> true, 'start' -> true, 'end' -> false}])),
+		INTERVENTION_SEQ_SUBLIST -> (new SublistTypeInfo(INTERVENTION_SEQ_SUBLIST, #[
+											new AttributeDefn("admin", true,	ListDefinitionProvider::ADMINISTRATION_TYPE.makeReference),
+											new AttributeDefn("start", true, MclTypeProvider::REAL_TYPE),
+											new AttributeDefn("end", true, MclTypeProvider::REAL_TYPE)],
+											#[#{'admin' -> true, 'start' -> false, 'end' -> false}])),
+		SAMPLING_SEQ_SUBLIST -> (new SublistTypeInfo(SAMPLING_SEQ_SUBLIST, #[
+												new AttributeDefn("sample", true, ListDefinitionProvider::SAMPLING_TYPE.makeReference),
+												new AttributeDefn("start", true, MclTypeProvider::REAL_TYPE),
+												new AttributeDefn("end", true, MclTypeProvider::REAL_TYPE)],
+												#[#{'sample' -> true, 'start' -> true, 'end' -> false}])),
 		PRIOR_FORMAT_SUBLIST -> (new SublistTypeInfo(PRIOR_FORMAT_SUBLIST, #[new AttributeDefn("element", true, MclTypeProvider::STRING_TYPE),
 												new AttributeDefn("type", true, PRIOR_ELEMENT_TYPE_TYPE)],
 												#[#{'element' -> true, 'type' -> true}]))

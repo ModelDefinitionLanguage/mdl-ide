@@ -21,7 +21,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 
 
 	static val unsupportedObjects = #{
-		MdlValidator::DESIGNOBJ
+//		MdlValidator::DESIGNOBJ
 	}
 
 	@Check

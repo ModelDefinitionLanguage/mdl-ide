@@ -28,8 +28,17 @@ class PropertyDefinitionProvider {
 //	static val EST_OP_ATT = new AttributeDefn('operation', null, false, EST_OP_TYPE)
 	static val SOLVER_TYPE = new BuiltinEnumTypeInfo('solver', #{'stiff', 'nonStiff' })
 	static val SOLVER_ATT = new AttributeDefn('solver', false, SOLVER_TYPE)
+	static val ARM_SIZE_ATT = new AttributeDefn('armSize', false, MclTypeProvider::INT_TYPE)
+	static val TOTAL_SIZE_ATT = new AttributeDefn('totalSize', false, MclTypeProvider::INT_TYPE)
+	static val NUM_SAMPLES_ATT = new AttributeDefn('numberSamples', false, MclTypeProvider::INT_TYPE)
+	static val TOTAL_COST_ATT = new AttributeDefn('totalCost', false, MclTypeProvider::REAL_TYPE)
+	static val NUM_ARMS_ATT = new AttributeDefn('numberArms', false, MclTypeProvider::INT_TYPE)
 
-	static val Map<String, List<AttributeDefn>> propertyDefns = #{ BlockDefinitionProvider::ESTIMATE_BLK -> #[ALGO_ATT], BlockDefinitionProvider::SIMULATE_BLK -> #[SOLVER_ATT] }
+	static val Map<String, List<AttributeDefn>> propertyDefns = #{ 
+		BlockDefinitionProvider::ESTIMATE_BLK -> #[ALGO_ATT],
+		BlockDefinitionProvider::SIMULATE_BLK -> #[SOLVER_ATT],
+		BlockDefinitionProvider::DES_STUDY_DESIGN -> #[ARM_SIZE_ATT, TOTAL_SIZE_ATT, NUM_SAMPLES_ATT, TOTAL_COST_ATT, NUM_ARMS_ATT]
+	}
 	
 /* the following was commented out inside propertyDefns declaration
  * 		BlockDefinitionProvider::ESTIMATE_BLK -> #[TARGET_ATT, EST_OP_ATT, VERSION_ATT, ALGO_ATT],

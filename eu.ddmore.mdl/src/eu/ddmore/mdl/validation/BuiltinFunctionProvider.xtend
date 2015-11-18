@@ -92,6 +92,7 @@ class BuiltinFunctionProvider {
 		'abs' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'exp' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'seq' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_VECTOR_TYPE ] ],
+		'dseq' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::INT_TYPE, MclTypeProvider::INT_TYPE, MclTypeProvider::INT_TYPE] returnType = MclTypeProvider::INT_VECTOR_TYPE ] ],
 		'sqrt' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'sum' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'mean' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
