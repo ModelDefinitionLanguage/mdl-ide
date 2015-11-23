@@ -39,6 +39,7 @@ import org.eclipse.xtext.EcoreUtil2
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
+import eu.ddmore.mdl.mdl.PowerExpression
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -581,6 +582,10 @@ class MclUtils {
     			retVal.addAll(expr.rightOperand.symbolReferences)
     		}
     		MultiplicativeExpression:{
+    			retVal.addAll(expr.leftOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand.symbolReferences)
+    		}
+    		PowerExpression:{
     			retVal.addAll(expr.leftOperand.symbolReferences)
     			retVal.addAll(expr.rightOperand.symbolReferences)
     		}

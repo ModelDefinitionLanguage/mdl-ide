@@ -3,23 +3,9 @@
  */
 package eu.ddmore.mdl.generator
 
-import eu.ddmore.converter.mdl2pharmml.Mdl2Pharmml
-import eu.ddmore.mdl.MdlStandaloneSetup
-import eu.ddmore.mdl.mdl.Mcl
-import eu.ddmore.mdl.utils.MclUtils
-import java.io.File
-import java.io.FileWriter
-import java.io.IOException
-import org.apache.log4j.Logger
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
-import org.eclipse.xtext.generator.IFileSystemAccess;
-import org.eclipse.xtext.generator.IGenerator;
-import org.eclipse.xtext.parser.ParseException;
-import org.eclipse.xtext.resource.XtextResource;
-import org.eclipse.xtext.resource.XtextResourceSet;
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.xtext.generator.IFileSystemAccess
+import org.eclipse.xtext.generator.IGenerator
 
 /**
  * Generates code from your model files on save.

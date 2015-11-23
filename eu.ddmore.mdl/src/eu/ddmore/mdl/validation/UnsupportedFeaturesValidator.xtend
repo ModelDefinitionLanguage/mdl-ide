@@ -1,15 +1,14 @@
 package eu.ddmore.mdl.validation
 
-import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.utils.MclUtils
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdl.AttributeList
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
