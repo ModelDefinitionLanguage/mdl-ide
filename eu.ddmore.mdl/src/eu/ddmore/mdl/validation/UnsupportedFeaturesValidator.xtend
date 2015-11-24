@@ -1,14 +1,17 @@
 package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.AttributeList
+import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.utils.MclUtils
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.mdl.WhenExpression
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
@@ -52,6 +55,17 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 					}
 				}
 			}
+		}
+	}
+
+	@Check
+	def checkUnsupportedIfElse(ElseClause it){
+		if(other != null){
+			if(other instanceof WhenExpression){
+				warning("Nested conditional expression cannot be executed in R. Consider changing to 'elseif'.", 
+						MdlPackage.eINSTANCE.elseClause_Other,
+						FEATURE_NOT_SUPPORTED, 'else')
+			} 
 		}
 	}
 	

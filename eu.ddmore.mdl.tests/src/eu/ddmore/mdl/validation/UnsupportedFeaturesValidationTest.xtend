@@ -128,4 +128,27 @@ warfarin_design = desObj {
 		)
 	}
 
+	@Test
+	def void testWarningWhenElseFollowedByIf(){
+		val mcl = '''bar = mdlObj {
+			IDV{ T }
+			
+			COVARIATES{
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			MODEL_PREDICTION{
+				Y
+				X = if(Y < 0) then -1 else if(Y > 0) then 1 else 0
+			}
+		}'''.parse
+		
+		mcl.assertWarning(MdlPackage::eINSTANCE.elseClause,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Nested conditional expression cannot be executed in R. Consider changing to 'elseif'."
+		)
+	}
+
 }
