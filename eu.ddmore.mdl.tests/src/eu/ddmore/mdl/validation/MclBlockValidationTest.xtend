@@ -23,8 +23,6 @@ class MclBlockValidationTest {
 		val mcl = '''foo = mdlObj {
 			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 			
-			VARIABILITY_LEVELS{
-			}
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
@@ -42,7 +40,7 @@ class MclBlockValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
 			BlockValidator::MANDATORY_BLOCK_MISSING,
-			"mandatory block 'VARIABILITY_LEVELS' is missing in mdlObj 'foo'"
+			"mandatory block 'IDV' is missing in mdlObj 'foo'"
 		)
 	}
 
