@@ -213,7 +213,6 @@ class PharmMLExpressionBuilder {
 			case '>=',
 			case '==',
 			case '!=',
-			case '%',
 			case '!': true
 			default: false
 		}

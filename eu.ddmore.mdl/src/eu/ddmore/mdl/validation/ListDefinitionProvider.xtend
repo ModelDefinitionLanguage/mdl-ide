@@ -52,6 +52,7 @@ class ListDefinitionProvider {
 	public static val OBS_TYPE_ATT = 'type'
 	public static val DERIV_TYPE_ATT = 'deriv'
 	public static val WRT_ATT = 'wrt'
+	public static val DERIV_INIT_TIME_ATT = 'x0'
 	public static val COUNT_OBS_VALUE = 'count'
 	public static val DISCRETE_OBS_VALUE = 'discrete'
 	public static val CATEGORICAL_OBS_VALUE = 'categorical'
@@ -348,7 +349,7 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefInfo (null, DERIV_TYPE,  #[
 						 new AttributeDefn(DERIV_TYPE_ATT, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(DERIV_INIT_TIME_ATT, false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]
 					)
 				)
@@ -360,7 +361,7 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefInfo (null, DERIV_TYPE,  #[
 						 new AttributeDefn(DERIV_TYPE_ATT, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(DERIV_INIT_TIME_ATT, false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]
 					)
 				)

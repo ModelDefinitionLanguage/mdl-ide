@@ -129,6 +129,49 @@ warfarin_design = desObj {
 	}
 
 	@Test
+	def void testWarningWhenNonZerox0(){
+		val mcl = '''bar = mdlObj {
+			IDV{ T }
+			
+			COVARIATES{
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			MODEL_PREDICTION{
+				Y
+				X : { deriv = 1, x0 = 1.0 }
+			}
+		}'''.parse
+		
+		mcl.assertWarning(MdlPackage::eINSTANCE.valuePair,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Derivative variables with a non-zero initial time cannot be executed in R."
+		)
+	}
+
+	@Test
+	def void testNoWarningWhenZerox0(){
+		val mcl = '''bar = mdlObj {
+			IDV{ T }
+			
+			COVARIATES{
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			MODEL_PREDICTION{
+				Y
+				X : { deriv = 1, x0 = 0.0 }
+			}
+		}'''.parse
+		
+		mcl.assertNoIssues
+	}
+
+	@Test
 	def void testWarningWhenElseFollowedByIf(){
 		val mcl = '''bar = mdlObj {
 			IDV{ T }

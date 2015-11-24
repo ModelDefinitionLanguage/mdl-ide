@@ -440,8 +440,8 @@ class MogValidatorTest {
 			DECLARED_VARIABLES{ Y withCategories { c1, c0, c3, c2 } }
 		
 			DATA_INPUT_VARIABLES {
-    		T : { use is idv }
-		      DV:{ use is dv, define= {Y.c0 when 0, Y.c2 when 1, Y.c3 when 2, Y.c1 when 3 } }
+				T : { use is idv }
+				DV:{ use is dv, define= {Y.c0 when 0, Y.c2 when 1, Y.c3 when 2, Y.c1 when 3 } }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
