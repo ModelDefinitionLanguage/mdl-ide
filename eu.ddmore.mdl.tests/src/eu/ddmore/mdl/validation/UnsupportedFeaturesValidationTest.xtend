@@ -10,6 +10,7 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
 import eu.ddmore.mdl.mdl.MdlPackage
+import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -122,6 +123,7 @@ warfarin_design = desObj {
 			}
 		}'''.parse
 		
+		mcl.assertNoErrors
 		mcl.assertWarning(MdlPackage::eINSTANCE.valuePair,
 			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
 			"Derivative variables with an independent variable different to the model's IDV cannot be executed in R."
@@ -190,7 +192,38 @@ warfarin_design = desObj {
 		
 		mcl.assertWarning(MdlPackage::eINSTANCE.elseClause,
 			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
-			"Nested conditional expression cannot be executed in R. Consider changing to 'elseif'."
+			"Nested conditional expression cannot be executed in R. Consider changing to 'elseif'.")
+	}
+
+	@Ignore
+	// now removed so can't test this rather 
+	def void testWarningUnsupportedAttribute(){
+		val mcl = '''bar = mdlObj {
+			IDV{ T }
+			
+			COVARIATES{
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			MODEL_PREDICTION{
+				Y
+			}
+			
+			OBSERVATION{
+				o : { type is tte, hazard=Y, event is rightCensored, maxEvent = inf }
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.valuePair,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Attribute name 'event' is not currently supported for execution in R."
+		)
+		mcl.assertWarning(MdlPackage::eINSTANCE.valuePair,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Attribute name 'maxEvent' is not currently supported for execution in R."
 		)
 	}
 

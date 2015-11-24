@@ -57,6 +57,8 @@ class ListDefinitionProvider {
 	public static val DISCRETE_OBS_VALUE = 'discrete'
 	public static val CATEGORICAL_OBS_VALUE = 'categorical'
 	public static val TTE_OBS_VALUE = 'tte'
+	public static val TTE_EVENT_ATT = 'event'
+	public static val TTE_MAX_EVENT_ATT = 'maxEvent'
 	
 
 	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
