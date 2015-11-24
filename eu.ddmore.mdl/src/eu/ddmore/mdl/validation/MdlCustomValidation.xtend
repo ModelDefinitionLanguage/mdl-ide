@@ -39,7 +39,8 @@ class MdlCustomValidation {
 		val expr = expression
 		switch(expr){
 			BuiltinFunctionCall case(transOnBothFuncs.contains(expr.func)):{
-				expr.getArgumentEnumValue('trans')?.isValidTransformFunction
+				val transExpr = expr.getArgumentEnumValue('trans')
+				if(transExpr != null) transExpr.isValidTransformFunction else false
 			}
 				
 			BuiltinFunctionCall case(transOnLHSFuncs.contains(expr.func)):

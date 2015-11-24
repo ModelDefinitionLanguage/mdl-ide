@@ -74,7 +74,7 @@ class PropertyDefinitionProvider {
 
 
 	def isPropertyMandatory(ValuePair it){
-		matchingPropertyDefn?.isMandatory
+		if(matchingPropertyDefn != null) matchingPropertyDefn.isMandatory else false
 	}
 
 	def unusedMandatoryProperties(BlockStatement it){

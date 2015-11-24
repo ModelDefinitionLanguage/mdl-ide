@@ -305,6 +305,8 @@ class MclStatementValidationTest {
 	def void testInValidVectorDefinition(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{T}
+			
 			VARIABILITY_LEVELS{
 			}
 

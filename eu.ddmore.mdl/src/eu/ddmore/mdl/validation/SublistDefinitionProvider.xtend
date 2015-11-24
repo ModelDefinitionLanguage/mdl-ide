@@ -6,6 +6,13 @@ import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
 import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
 import java.util.ArrayList
 import java.util.List
+import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.mdl.EnumExpression
+
+import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+
 
 class SublistDefinitionProvider {
 	
@@ -80,6 +87,26 @@ class SublistDefinitionProvider {
 
 	def getAttributeExpression(SubListExpression sle, String name){
 		sle.attributes.findFirst[argumentName == name]?.expression
+	}
+
+	def getAttributeEnumValue(SubListExpression sle, String name){
+		val e = sle.getAttributeExpression(name)
+		switch(e){
+			
+		}
+	}
+
+	def TypeInfo getTypeOfAttributeBuiltinEnum(SubListExpression it, EnumExpression ee){
+		val vp = ee.getOwningValuePair
+		val enumValue = ee.convertToString
+		val SublistTypeInfo sublistType = findSublistMatch
+		val defnType = sublistType.attributes.findFirst[name == vp.argumentName]?.attType ?: MclTypeProvider::UNDEFINED_TYPE
+		switch(defnType){
+			BuiltinEnumTypeInfo:
+				if(defnType.categories.exists[c|c == enumValue]) defnType else MclTypeProvider::UNDEFINED_TYPE
+			default:
+				MclTypeProvider::UNDEFINED_TYPE
+		}
 	}
 
 }

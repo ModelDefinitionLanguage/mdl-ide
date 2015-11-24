@@ -9,8 +9,8 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import java.util.Collections
 import java.util.HashMap
 import java.util.HashSet
 import java.util.List
@@ -22,7 +22,6 @@ import org.eclipse.xtext.EcoreUtil2
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import java.util.Collections
 import eu.ddmore.mdl.mdl.TransformedDefinition
 
 class BuiltinFunctionProvider {
@@ -52,14 +51,14 @@ class BuiltinFunctionProvider {
 	}
 
 	static class NamedArgFuncDefn implements FunctDefn{
-		PrimitiveTypeInfo returnType
+		TypeInfo returnType
 		Map<String, FunctionArgument> arguments	 
 		
 		override int getNumArgs(){
 			arguments.size
 		}
 		
-		override PrimitiveTypeInfo getReturnType(){
+		override TypeInfo getReturnType(){
 			returnType
 		}
 	}
@@ -98,6 +97,15 @@ class BuiltinFunctionProvider {
 		'mean' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'median' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'Normal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
+						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ],
+					new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
+						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'var' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					} ]
+					],
+		'LogNormal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
 						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
 					} ],

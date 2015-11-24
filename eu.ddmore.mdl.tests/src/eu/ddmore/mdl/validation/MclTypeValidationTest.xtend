@@ -594,6 +594,32 @@ class MclTypeValidationTest {
 	}
 	
 	@Test
+	def void testValidLogNormalDistnFunctionExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+				ID : { type is parameter, level = 1 }
+			}
+		
+			STRUCTURAL_PARAMETERS{
+				POP_V
+				OMEGA_V
+			}
+		
+			RANDOM_VARIABLE_DEFINITION(level=ID){
+				foo ~ LogNormal(mean=ln(POP_V), var=OMEGA_V)
+			}
+			
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
 	def void testValidVectorEquationExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {

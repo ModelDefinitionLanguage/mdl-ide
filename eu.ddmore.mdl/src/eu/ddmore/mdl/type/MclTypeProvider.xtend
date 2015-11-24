@@ -43,6 +43,7 @@ import java.util.HashSet
 import eu.ddmore.mdl.validation.ListDefinitionProvider.ListDefInfo
 import eu.ddmore.mdl.validation.PropertyDefinitionProvider
 import eu.ddmore.mdl.mdl.PropertyStatement
+import eu.ddmore.mdl.mdl.AnonymousListStatement
 
 public class MclTypeProvider {
 
@@ -520,7 +521,7 @@ public class MclTypeProvider {
 			BuiltinFunctionCall:
 				e.functionType
 			VectorElement:
-				e.element.typeFor
+				e.element?.typeFor ?: MclTypeProvider.UNDEFINED_TYPE
 			VectorLiteral:
 				if(e.expressions.isEmpty) MclTypeProvider.REAL_VECTOR_TYPE
 				else e.typeForArray
@@ -534,7 +535,13 @@ public class MclTypeProvider {
 	def dispatch TypeInfo typeFor(EnumExpression e){
 		var Object parent = EcoreUtil2.getContainerOfType(e, BuiltinFunctionCall)
 		if(parent == null){
-			parent = EcoreUtil2.getContainerOfType(e, AttributeList)
+			parent = EcoreUtil2.getContainerOfType(e, SubListExpression)
+		}
+		if(parent == null){
+			parent = EcoreUtil2.getContainerOfType(e, ListDefinition)
+		}
+		if(parent == null){
+			parent = EcoreUtil2.getContainerOfType(e, AnonymousListStatement)
 		}
 		if(parent == null){
 			parent = EcoreUtil2.getContainerOfType(e, PropertyStatement)
@@ -542,8 +549,11 @@ public class MclTypeProvider {
 		switch(parent){
 			BuiltinFunctionCall:
 				e.typeOfFunctionBuiltinEnum
-			AttributeList:
+			ListDefinition,
+			AnonymousListStatement:
 				e.typeOfAttributeBuiltinEnum
+			SubListExpression:
+				parent.getTypeOfAttributeBuiltinEnum(e)
 			PropertyStatement:
 				e.typeOfPropertyBuiltinEnum
 			default:
