@@ -377,7 +377,8 @@ class MclListAttributeValidationTest {
 			}# end MODEL_PREDICTION
 			
 			OBSERVATION{
-				Y : {type is tte, hazard = HAZ, event is intervalCensored }
+				#Y : {type is tte, hazard = HAZ, event is intervalCensored }
+				Y : {type is tte, hazard = HAZ }
 			}# end ESTIMATION
 		}
 		'''.parse

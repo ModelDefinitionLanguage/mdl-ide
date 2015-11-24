@@ -2,8 +2,12 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumPair
+import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
@@ -25,10 +29,6 @@ import org.eclipse.xtext.EcoreUtil2
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
 import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.mdl.CategoryValueDefinition
-import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.StringLiteral
 
 class ListDefinitionProvider {
 
@@ -68,7 +68,7 @@ class ListDefinitionProvider {
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
-	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
+//	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
 	static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
@@ -439,13 +439,13 @@ class ListDefinitionProvider {
 					),
 					new ListDefInfo (TTE_OBS_VALUE, new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
-						 new AttributeDefn('hazard', true, MclTypeProvider::REAL_TYPE.makeReference),
-						 new AttributeDefn('event', false, TTE_EVENT_TYPE),
-						 new AttributeDefn('maxEvent', false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('hazard', true, MclTypeProvider::REAL_TYPE.makeReference)//,
+//						 new AttributeDefn('event', false, TTE_EVENT_TYPE),
+//						 new AttributeDefn('maxEvent', false, MclTypeProvider::REAL_TYPE)
 						 ],
 						 #[
-						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true },
-						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true, 'event' -> true, 'maxEvent' -> false }
+						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true }//,
+//						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true, 'event' -> true, 'maxEvent' -> false }
 						 ],
 						 false
 					)

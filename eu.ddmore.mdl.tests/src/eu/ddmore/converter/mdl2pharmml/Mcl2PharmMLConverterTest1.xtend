@@ -180,12 +180,12 @@ class Mcl2PharmMLConverterTest1 {
 		validateConversion("UseCase14")
 	}
 
-	@Test
+	@Ignore
 	def void testUseCase14_1(){
 		validateConversion("UseCase14_1")
 	}
 
-	@Test
+	@Ignore
 	def void testUseCase14_2(){
 		validateConversion("UseCase14_2")
 	}
