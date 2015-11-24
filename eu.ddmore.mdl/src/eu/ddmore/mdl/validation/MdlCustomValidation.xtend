@@ -5,12 +5,54 @@ import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import org.eclipse.xtext.EcoreUtil2
+import org.eclipse.xtext.validation.EValidatorRegistrar
+import org.eclipse.xtext.validation.Check
+import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.mdl.Statement
 
-class MdlCustomValidation {
+class MdlCustomValidation extends AbstractMdlValidator {
 
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider 
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
 
+	override register(EValidatorRegistrar registrar){}
+
+	@Check
+	def validateTransforms(TransformedDefinition it){
+		if(!isValidTransform){
+			error("'" + transform + "' cannot be used as a transformation function on the LHS of an equation",
+				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform)
+		}
+		if(!isLhsTransformPermitted || !isValidRhsTransformPermitted){
+			error("Use of a transformation function on the LHS of the equation is not permitted in this context",
+				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform)
+		}
+	}
+	
+	@Check
+	def validateIndividualParameterDefinitions(EnumPair it){
+		val stmt = EcoreUtil2.getContainerOfType(eContainer, Statement)
+		switch(stmt){
+			TransformedDefinition:
+				checkConsistentLinearTransformation(stmt, it,
+					[lhs, rhs| error("transformation used on LHS ('" + lhs + "') must match the RHS ('" + rhs + "')",
+						MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_LHS_FUNC, lhs)
+					]
+				)
+			EquationDefinition:
+				checkNonTransformedIndiv(stmt, it,
+					[error("no transformation used on the LHS, so cannot use on the RHS of the equation",
+						MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_LHS_FUNC, "")
+					]
+				)
+		}
+	}
+
+
+
+
+
+	
 	def checkNonTransformedIndiv(EquationDefinition transDefn, EnumPair transArg, () => void incompatibleTransforms) {
 		val call = EcoreUtil2.getContainerOfType(transArg.eContainer, BuiltinFunctionCall)
 		if(call != null && transDefn != null && transArg.argumentName == 'trans'){

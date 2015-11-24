@@ -28,7 +28,6 @@ import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.RelationalExpression
-import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
@@ -55,7 +54,7 @@ import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
  *
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
- @ComposedChecks(validators= #[BlockValidator, DataFileValidation, UnsupportedFeaturesValidator])
+ @ComposedChecks(validators= #[BlockValidator, DataFileValidation, UnsupportedFeaturesValidator, MdlCustomValidation])
 class MdlValidator extends AbstractMdlValidator {
 	public val static MDLOBJ = 'mdlObj'
 	public val static DATAOBJ = 'dataObj'
@@ -67,7 +66,6 @@ class MdlValidator extends AbstractMdlValidator {
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension BuiltinFunctionProvider funcHelper = new BuiltinFunctionProvider
-	extension MdlCustomValidation mcb = new MdlCustomValidation
 	extension MclTypeProvider typeProvider = new MclTypeProvider
 	extension MclUtils mclUtils = new MclUtils
 
@@ -175,37 +173,6 @@ class MdlValidator extends AbstractMdlValidator {
 				}
 			}
 			
-		}
-	}
-
-	@Check
-	def validateTransforms(TransformedDefinition it){
-		if(!isValidTransform){
-			error("'" + transform + "' cannot be used as a transformation function on the LHS of an equation",
-				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform)
-		}
-		if(!isLhsTransformPermitted || !isValidRhsTransformPermitted){
-			error("Use of a transformation function on the LHS of the equation is not permitted in this context",
-				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform)
-		}
-	}
-	
-	@Check
-	def validateIndividualParameterDefinitions(EnumPair it){
-		val stmt = EcoreUtil2.getContainerOfType(eContainer, Statement)
-		switch(stmt){
-			TransformedDefinition:
-				checkConsistentLinearTransformation(stmt, it,
-					[lhs, rhs| error("transformation used on LHS ('" + lhs + "') must match the RHS ('" + rhs + "')",
-						MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_LHS_FUNC, lhs)
-					]
-				)
-			EquationDefinition:
-				checkNonTransformedIndiv(stmt, it,
-					[error("no transformation used on the LHS, so cannot use on the RHS of the equation",
-						MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_LHS_FUNC, "")
-					]
-				)
 		}
 	}
 
