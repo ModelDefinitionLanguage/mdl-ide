@@ -255,4 +255,79 @@ class MdlCustomValidationTest {
 		)
 	}
 
+	@Test
+	def void testValidDataDefinitions(){
+		val mcl = '''
+warfarin_T2E_exact_dat = dataObj{
+
+   DECLARED_VARIABLES{ Y; INPUT }
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      TIME: {use is idv}
+      TRT: {use is covariate}
+      AMT: {use is amt, variable = INPUT }
+      RATE: {use is rate}
+      SS: {use is ss}
+      ADDL: {use is addl}
+      II: {use is ii}
+      WT: {use is covariate}
+      DVID: {use is dvid}
+      DV: {use is dv, variable=Y}
+      MDV: {use is mdv}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      srcFile : {file="warfarin_TTE_exact.csv",
+      			inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidMissingAmtDataDefinitions(){
+		val mcl = '''
+warfarin_T2E_exact_dat = dataObj{
+
+   DECLARED_VARIABLES{ Y; INPUT }
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      TIME: {use is idv}
+      TRT: {use is covariate}
+      AMT: {use is ignore }
+      RATE: {use is rate}
+      SS: {use is ss}
+      ADDL: {use is addl}
+      II: {use is ii}
+      WT: {use is covariate}
+      DVID: {use is dvid}
+      DV: {use is dv, variable=Y}
+      MDV: {use is mdv}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      srcFile : {file="warfarin_TTE_exact.csv",
+      			inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+		'''.parse
+
+		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::DEPENDENT_USE_MISSING,
+			"A data column of use 'amt' is required by this column definition with 'use is rate'.")
+		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::DEPENDENT_USE_MISSING,
+			"A data column of use 'amt' is required by this column definition with 'use is ss'.")
+		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::DEPENDENT_USE_MISSING,
+			"A data column of use 'amt' is required by this column definition with 'use is addl'.")
+		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::DEPENDENT_USE_MISSING,
+			"A data column of use 'amt' is required by this column definition with 'use is ii'.")
+	}
+
 }

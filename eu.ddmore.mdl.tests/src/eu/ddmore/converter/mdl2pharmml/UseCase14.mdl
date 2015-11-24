@@ -12,9 +12,9 @@ warfarin_T2E_exact_dat = dataObj{
       TIME: {use is idv}
       TRT: {use is covariate}
       AMT: {use is ignore }
-      RATE: {use is covariate}
-      ADDL: {use is addl}
-      II: {use is ii}
+      RATE: {use is ignore}
+      ADDL: {use is ignore}
+      II: {use is ignore}
       WT: {use is covariate}
       DVID: {use is dvid}
       DV: {use is dv, variable=Y}

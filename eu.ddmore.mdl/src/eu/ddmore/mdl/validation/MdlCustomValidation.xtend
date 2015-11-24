@@ -12,6 +12,10 @@ import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.mdl.impl.ListDefinitionImpl
+import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.ListDefinition
 
 class MdlCustomValidation extends AbstractMdlValidator {
 
@@ -113,6 +117,44 @@ class MdlCustomValidation extends AbstractMdlValidator {
 				}
 			}
 		}
+	}
+
+	static val UseDeps = #{
+		'rate' -> #{'amt'},
+		'ii' -> #{'ss', 'amt'},
+		'ss' -> #{ 'amt' },
+		'addl' -> #{ 'amt', 'ii' }
+	}
+
+
+	@Check
+	def validateDataUseHasDependecies(ListDefinitionImpl it){
+		val block = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		if(block.identifier == BlockDefinitionProvider::DIV_BLK_NAME){
+			val enumVal = list.getAttributeEnumValue('use')
+			if(enumVal != null && UseDeps.containsKey(enumVal)){
+				for(depUse : UseDeps.get(enumVal)){
+					if(!block.hasListWithUse(depUse)){
+						error("A data column of use '" + depUse + "' is required by this column definition with 'use is " + enumVal + "'.",
+							MdlPackage::eINSTANCE.listDefinition_List, MdlValidator::DEPENDENT_USE_MISSING, enumVal)
+					}
+				}
+			}
+		}
+	}
+	
+	
+	def hasListWithUse(BlockStatement it, String useValue){
+		val bdy = body
+		if(bdy instanceof BlockStatementBody){
+			for(stmt : bdy.statements){
+				if(stmt instanceof ListDefinition){
+					val useVal = stmt.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT)
+					if(useVal == useValue) return true
+				}
+			}
+		}
+		else false
 	}
 	
 }
