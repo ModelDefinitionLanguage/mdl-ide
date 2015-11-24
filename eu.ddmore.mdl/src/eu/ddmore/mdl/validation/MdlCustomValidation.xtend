@@ -9,11 +9,15 @@ import org.eclipse.xtext.validation.EValidatorRegistrar
 import org.eclipse.xtext.validation.Check
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.RelationalExpression
+import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
 
 class MdlCustomValidation extends AbstractMdlValidator {
 
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider 
-	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
+	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+	extension MclTypeProvider mtp = new MclTypeProvider 
 
 	override register(EValidatorRegistrar registrar){}
 
@@ -48,11 +52,17 @@ class MdlCustomValidation extends AbstractMdlValidator {
 		}
 	}
 
+	@Check
+	def validateCategoryRelations(RelationalExpression it){
+		val leftType = leftOperand?.typeFor
+		val rightType = rightOperand?.typeFor
+		if((leftType != null && leftType.theType == PrimitiveType.Enum)  || 
+			(rightType != null && rightType.theType == PrimitiveType.Enum)){
+			error("Cannot use inequality operators with categorical types", MdlPackage::eINSTANCE.relationalExpression_Feature,
+				MdlValidator::INVALID_ENUM_RELATION_OPERATOR, feature)
+		}
+	}
 
-
-
-
-	
 	def checkNonTransformedIndiv(EquationDefinition transDefn, EnumPair transArg, () => void incompatibleTransforms) {
 		val call = EcoreUtil2.getContainerOfType(transArg.eContainer, BuiltinFunctionCall)
 		if(call != null && transDefn != null && transArg.argumentName == 'trans'){

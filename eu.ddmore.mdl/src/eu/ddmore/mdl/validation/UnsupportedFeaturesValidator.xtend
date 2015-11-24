@@ -15,12 +15,16 @@ import eu.ddmore.mdl.mdl.ValuePair
 import java.util.Map
 import java.util.Set
 import java.util.Collections
+import eu.ddmore.mdl.mdl.EqualityExpression
+import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
 	extension MclUtils mu = new MclUtils
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension ConstantEvaluation ce = new ConstantEvaluation
+	extension MclTypeProvider mtp = new MclTypeProvider 
 	
 	override register(EValidatorRegistrar registrar){}
 	
@@ -113,6 +117,19 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 						MdlPackage.eINSTANCE.valuePair_ArgumentName,
 						FEATURE_NOT_SUPPORTED, nm)
 			}
+		}
+	}
+	
+	
+	@Check
+	def checkUnsupportedCategoryRelations(EqualityExpression it){
+		val leftType = leftOperand?.typeFor
+		val rightType = rightOperand?.typeFor
+		if((leftType != null && leftType.theType == PrimitiveType.Enum)  || 
+			(rightType != null && rightType.theType == PrimitiveType.Enum)){
+			warning("Equivalence operators with categorical types are not supported for execution in R.",
+				MdlPackage::eINSTANCE.equalityExpression_Feature,
+				FEATURE_NOT_SUPPORTED, feature)
 		}
 	}
 }

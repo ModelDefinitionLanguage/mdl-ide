@@ -202,4 +202,57 @@ class MdlCustomValidationTest {
 		mcl.assertNoErrors
 	}
 
+	@Test
+	def void testValidCategorialCovEquality(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			
+			COVARIATES{
+				sex withCategories { m, f }
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			GROUP_VARIABLES{
+				TSEX = if(sex == sex.f) then 1 else 0
+			}
+			
+			
+			INDIVIDUAL_VARIABLES{
+				BETA_CL_WT = general(grp=1, ranEff = [1])
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidCategorialCovInEquality(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			
+			COVARIATES{
+				sex withCategories { m, f }
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			GROUP_VARIABLES{
+				TSEX = if(sex <= sex.f) then 1 else 0
+			}
+			
+			
+			INDIVIDUAL_VARIABLES{
+				BETA_CL_WT = general(grp=1, ranEff = [1])
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.relationalExpression,
+			MdlValidator::INVALID_ENUM_RELATION_OPERATOR,
+			"Cannot use inequality operators with categorical types"
+		)
+	}
+
 }

@@ -107,6 +107,10 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val MODEL_DATA_MISMATCH = "eu.ddmore.mdl.validation.mog.mismatch_mod_data"
 	public static val MCLOBJ_REF_UNRESOLVED = "eu.ddmore.mdl.validation.mog.missingObj"
 
+
+	//Custom MDL checks
+	public static val INVALID_ENUM_RELATION_OPERATOR = "eu.ddmore.mdl.validation.custom.enum.relation.op"
+
 	// Warnings
 	public static val MASKING_PARAM_ASSIGNMENT = "eu.ddmore.mdl.validation.mog.paramValueMasked"
 
