@@ -19,6 +19,8 @@ import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.BlockStatement
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
@@ -145,4 +147,35 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 				FEATURE_NOT_SUPPORTED, feature)
 		}
 	}
+	
+
+	static val DataNamingLookup = #{
+		ListDefinitionProvider::AMT_USE_VALUE -> 'AMT',
+		ListDefinitionProvider::IDV_USE_VALUE -> 'TIME',
+		ListDefinitionProvider::ID_USE_VALUE -> 'ID',
+		ListDefinitionProvider::CMT_USE_VALUE -> 'CMT',
+		ListDefinitionProvider::RATE_USE_VALUE -> 'RATE',
+		ListDefinitionProvider::SS_USE_VALUE -> 'SS',
+		ListDefinitionProvider::II_USE_VALUE -> 'II',
+		ListDefinitionProvider::ADDL_USE_VALUE -> 'ADDL',
+		ListDefinitionProvider::MDV_USE_VALUE -> 'MDV',
+		ListDefinitionProvider::OBS_USE_VALUE -> 'DV'
+	} 
+	
+	
+	@Check
+	def checkUnsupportedColumnName(ListDefinition it){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		if(blk != null && blk.identifier == BlockDefinitionProvider::DIV_BLK_NAME){
+			// data mapping block
+			val useValue = list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT)
+			val expectedColumnName = DataNamingLookup.get(useValue)
+			if(expectedColumnName != null && expectedColumnName != name){
+				warning("Column definitions with use '" + useValue + "' must be named '" + expectedColumnName + "' otherwise execution in R will fail.",
+					MdlPackage::eINSTANCE.symbolDefinition_Name,
+					FEATURE_NOT_SUPPORTED, useValue)
+			}
+		}
+	}
+
 }

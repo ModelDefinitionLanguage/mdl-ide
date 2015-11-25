@@ -40,6 +40,11 @@ class ListDefinitionProvider {
 	public static val IGNORE_USE_VALUE = 'ignore'
 	public static val OBS_USE_VALUE = 'dv'
 	public static val DVID_USE_VALUE = 'dvid'
+	public static val RATE_USE_VALUE = 'rate'
+	public static val II_USE_VALUE = 'ii'
+	public static val SS_USE_VALUE = 'ss'
+	public static val ADDL_USE_VALUE = 'addl'
+	public static val MDV_USE_VALUE = 'mdv'
 	public static val CATCOV_USE_VALUE = 'catCov'
 	public static val IDV_USE_VALUE = 'idv'
 	public static val ID_USE_VALUE = 'id'
@@ -61,7 +66,9 @@ class ListDefinitionProvider {
 	public static val TTE_MAX_EVENT_ATT = 'maxEvent'
 	
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, MDV_USE_VALUE, IDV_USE_VALUE,
+		ID_USE_VALUE, RATE_USE_VALUE, IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, SS_USE_VALUE, II_USE_VALUE, ADDL_USE_VALUE
+	})
 	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})

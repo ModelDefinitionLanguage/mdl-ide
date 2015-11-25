@@ -289,4 +289,96 @@ warfarin_design = desObj {
 			"Equivalence operators with categorical types are not supported for execution in R.")
 	}
 
+	@Test
+	def void testSupportedColumnNamesDefinitions(){
+		val mcl = '''
+warfarin_T2E_exact_dat = dataObj{
+
+   DECLARED_VARIABLES{ Y; INPUT }
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      TIME: {use is idv}
+      TRT: {use is covariate}
+      AMT: {use is amt, variable = INPUT }
+      RATE: {use is rate}
+      SS: {use is ss}
+      ADDL: {use is addl}
+      II: {use is ii}
+      WT: {use is covariate}
+      DVID: {use is dvid}
+      DV: {use is dv, variable=Y}
+      MDV: {use is mdv}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      srcFile : {file="count.csv",
+      			inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertNoIssues
+	}
+
+
+	@Test
+	def void testUnsupportedColumnNamesDefinitions(){
+		val mcl = '''
+warfarin_T2E_exact_dat = dataObj{
+
+   DECLARED_VARIABLES{ Y; INPUT }
+
+   DATA_INPUT_VARIABLES{
+      IDA: {use is id}
+      TIMER: {use is idv}
+      TRT: {use is covariate}
+      AMTA: {use is amt, variable = INPUT }
+      RATEA: {use is rate}
+      SSA: {use is ss}
+      ADDLA: {use is addl}
+      IIA: {use is ii}
+      WT: {use is covariate}
+      DVIDA: {use is dvid}
+      DVA: {use is dv, variable=Y}
+      MDVA: {use is mdv}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      srcFile : {file="count.csv",
+      			inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolDefinition,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Column definitions with use 'id' must be named 'ID' otherwise execution in R will fail.")
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolDefinition,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Column definitions with use 'idv' must be named 'TIME' otherwise execution in R will fail.")
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolDefinition,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Column definitions with use 'amt' must be named 'AMT' otherwise execution in R will fail.")
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolDefinition,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Column definitions with use 'rate' must be named 'RATE' otherwise execution in R will fail.")
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolDefinition,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Column definitions with use 'ss' must be named 'SS' otherwise execution in R will fail.")
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolDefinition,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Column definitions with use 'addl' must be named 'ADDL' otherwise execution in R will fail.")
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolDefinition,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Column definitions with use 'ii' must be named 'II' otherwise execution in R will fail.")
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolDefinition,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Column definitions with use 'mdv' must be named 'MDV' otherwise execution in R will fail.")
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolDefinition,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Column definitions with use 'dv' must be named 'DV' otherwise execution in R will fail.")
+	}
+
 }
