@@ -79,6 +79,8 @@ class ListDefinitionProvider {
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
 	static val AMT_COL_TYPE = new ListTypeInfo("Amt", PrimitiveType.Real)
+	public static val CMT_COL_TYPE = new ListTypeInfo("Cmt", PrimitiveType.List)
+	public static val DVID_COL_TYPE = new ListTypeInfo("Dvid", PrimitiveType.List)
 	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration", PrimitiveType.List)
 	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", PrimitiveType.List)
 	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", PrimitiveType.List)
@@ -182,7 +184,7 @@ class ListDefinitionProvider {
 						 new AttributeDefn(USE_ATT, true, USE_TYPE)
 						 ] 
 					),
-					new ListDefInfo (CMT_USE_VALUE, new ListTypeInfo("Cmt", PrimitiveType.List),  #[
+					new ListDefInfo (CMT_USE_VALUE, CMT_COL_TYPE,  #[
 						 new AttributeDefn(USE_ATT, true, USE_TYPE)
 						 ] 
 					),
@@ -214,7 +216,7 @@ class ListDefinitionProvider {
 						 new AttributeDefn(USE_ATT, true, USE_TYPE)
 						 ] 
 					),
-					new ListDefInfo (DVID_USE_VALUE, new ListTypeInfo("Dvid", PrimitiveType.List),  #[
+					new ListDefInfo (DVID_USE_VALUE, DVID_COL_TYPE,  #[
 						 new AttributeDefn(USE_ATT, true, USE_TYPE)
 						 ] 
 					),

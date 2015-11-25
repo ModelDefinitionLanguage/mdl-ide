@@ -3,9 +3,11 @@ package eu.ddmore.mdl.validation
 import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.type.MclTypeProvider
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
@@ -17,11 +19,29 @@ class ListValidator extends AbstractMdlValidator {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
+	extension MclTypeProvider mtp = new MclTypeProvider
 	
-//	@Check
-//	def validateInReferenceCorrect(MappingExpression it){
-//		
-//	}
+	static val MappingToColumn = #{
+		ListDefinitionProvider::AMT_USE_VALUE -> ListDefinitionProvider::CMT_COL_TYPE,
+		ListDefinitionProvider::OBS_USE_VALUE -> ListDefinitionProvider::DVID_COL_TYPE
+	} 
+	
+	@Check
+	def validateInReferenceCorrect(MappingPair it){
+		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
+		if(attList != null){
+			// check use type
+			val useVal = attList.getAttributeEnumValue(ListDefinitionProvider::USE_ATT)
+			if(useVal != null){
+				val expectedSrcType = MappingToColumn.get(useVal) 
+				val srcColType = srcColumn?.ref?.typeFor
+				if(expectedSrcType != null && srcColType != null && !expectedSrcType.isCompatible(srcColType)){
+					error("Expected source column of type '" + expectedSrcType.typeName + "', but was '" + srcColType.typeName + "'.",
+						MdlPackage.eINSTANCE.mappingPair_SrcColumn, MdlValidator::INCOMPATIBLE_TYPES, srcColType.typeName)
+				}
+			}
+		}
+	}
 	
 	
 	@Check
