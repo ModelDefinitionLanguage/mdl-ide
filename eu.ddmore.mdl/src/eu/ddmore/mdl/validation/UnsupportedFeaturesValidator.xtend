@@ -18,6 +18,7 @@ import java.util.Collections
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
@@ -117,6 +118,18 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 						MdlPackage.eINSTANCE.valuePair_ArgumentName,
 						FEATURE_NOT_SUPPORTED, nm)
 			}
+		}
+	}
+	
+	static val UnsupportedFunctions = #{ 'tanh', 'sinh', 'cosh' }
+	
+	@Check
+	// Check for unsupported functions
+	def checkUnsupportedFunctions(BuiltinFunctionCall it){
+		if(UnsupportedFunctions.contains(func)){
+			warning("Function '" + func + "' is not currently supported for execution in R.", 
+					MdlPackage.eINSTANCE.builtinFunctionCall_Func,
+					FEATURE_NOT_SUPPORTED, func)
 		}
 	}
 	

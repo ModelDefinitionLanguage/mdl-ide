@@ -228,6 +228,40 @@ warfarin_design = desObj {
 	}
 
 	@Test
+	def void testWarningUnsupportedFunction(){
+		val mcl = '''bar = mdlObj {
+			IDV{ T }
+			
+			COVARIATES{
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			MODEL_PREDICTION{
+				Y = tanh(1.2)
+				Z = sinh(1.2)
+				A = cosh(1.2)
+			}
+			
+		}'''.parse
+		
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.builtinFunctionCall,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Function 'tanh' is not currently supported for execution in R."
+		)
+		mcl.assertWarning(MdlPackage::eINSTANCE.builtinFunctionCall,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Function 'sinh' is not currently supported for execution in R."
+		)
+		mcl.assertWarning(MdlPackage::eINSTANCE.builtinFunctionCall,
+			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+			"Function 'cosh' is not currently supported for execution in R."
+		)
+	}
+
+	@Test
 	def void testValidCategorialCovEquality(){
 		val mcl = '''bar = mdlObj {
 			IDV{T}
