@@ -7,8 +7,8 @@ Bernoulli_DIST_dat = dataObj{
 	
    DATA_INPUT_VARIABLES{
       ID:{ use is id }
-	  TIME:{ use is ignore } # NOT USED IN MODEL
-      CP:{ use is idv }
+	  TIME:{ use is idv } # NOT USED IN MODEL
+      CP:{ use is covariate }
       DV:{ use is dv, define={ Y.success when 0, Y.fail when 1 } }
       MDV:{ use is mdv }
    }# end DATA_INPUT_VARIABLES
@@ -34,7 +34,9 @@ Bernoulli_DIST_par = parObj{
 } # end of parameter object
 
 Bernoulli_DIST_mdl = mdlObj{
-   IDV{ CP }
+   IDV{ T }
+
+	COVARIATES{ CP }
 
    VARIABILITY_LEVELS{
 	ID : { level=2, type is parameter }

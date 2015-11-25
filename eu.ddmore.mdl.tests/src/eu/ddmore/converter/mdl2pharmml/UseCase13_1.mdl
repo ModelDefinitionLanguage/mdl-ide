@@ -8,8 +8,8 @@ Categorical_DIST_dat = dataObj{
 	
    DATA_INPUT_VARIABLES{
       ID:{ use is id }
-	  TIME:{ use is ignore } # NOT USED IN MODEL
-      CP:{ use is idv }
+	  TIME:{ use is idv } # NOT USED IN MODEL
+      CP:{ use is covariate }
       DV:{ use is dv, define= {Y.c0 when 0, Y.c1 when 1, Y.c2 when 2, Y.c3 when 3 } }
       MDV:{ use is mdv }
    }# end DATA_INPUT_VARIABLES
@@ -37,7 +37,9 @@ Categorical_DIST_par = parObj{
 } # end of parameter object
 
 Categorical_DIST_mdl = mdlObj{
-   IDV{ CP }
+   IDV{ T }
+
+	COVARIATES{ CP }
 
    VARIABILITY_LEVELS{
 	ID : { level=2, type is parameter }

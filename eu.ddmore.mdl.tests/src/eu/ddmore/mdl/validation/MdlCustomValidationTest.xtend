@@ -330,4 +330,59 @@ warfarin_T2E_exact_dat = dataObj{
 			"A data column of use 'amt' is required by this column definition with 'use is ii'.")
 	}
 
+	@Test
+	def void testValidCovariateFixedEff(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			COVARIATES{
+				W
+			}
+			
+			
+			STRUCTURAL_PARAMETERS{
+				BETA_W
+			}
+			
+			VARIABILITY_LEVELS{
+				ID : { level = 1, type is parameter}
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				BETA_CL_WT = linear(pop=1, fixEff=[{cov=W, coeff=BETA_W}], ranEff = [1])
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInValidNotCovariateFixedEff(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			COVARIATES{
+			#	W
+			}
+			
+			
+			STRUCTURAL_PARAMETERS{
+				BETA_W
+				W
+			}
+			
+			VARIABILITY_LEVELS{
+				ID : { level = 1, type is parameter}
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				BETA_CL_WT = linear(pop=1, fixEff=[{cov=W, coeff=BETA_W}], ranEff = [1])
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::INCOMPATIBLE_VARIABLE_REF,
+			"Attribute 'cov' expects a reference to a covariate. 'W' is not a covariate.")
+	}
+
 }

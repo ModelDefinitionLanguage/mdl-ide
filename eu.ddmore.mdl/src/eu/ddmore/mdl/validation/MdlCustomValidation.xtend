@@ -1,21 +1,24 @@
 package eu.ddmore.mdl.validation
 
+import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.mdl.TransformedDefinition
-import org.eclipse.xtext.EcoreUtil2
-import org.eclipse.xtext.validation.EValidatorRegistrar
-import org.eclipse.xtext.validation.Check
+import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MdlPackage
-import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.RelationalExpression
+import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.SubListExpression
+import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.TransformedDefinition
+import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.mdl.impl.ListDefinitionImpl
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
-import eu.ddmore.mdl.mdl.impl.ListDefinitionImpl
-import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.ListDefinition
+import org.eclipse.xtext.EcoreUtil2
+import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.validation.EValidatorRegistrar
 
 class MdlCustomValidation extends AbstractMdlValidator {
 
@@ -156,5 +159,28 @@ class MdlCustomValidation extends AbstractMdlValidator {
 		}
 		else false
 	}
+	
+	
+	@Check
+	// check that a covariate is used in the fixed eff sublist
+	def validateCovariateFixedEffect(ValuePair it){
+		if(attributeName == SublistDefinitionProvider::COV_ATT){
+			val expr = expression
+			if(expr instanceof SymbolReference){
+				val subList = EcoreUtil2.getContainerOfType(eContainer, SubListExpression)
+				if(subList != null && subList.typeFor.isCompatible(SublistDefinitionProvider::getSublist(SublistDefinitionProvider::FIX_EFF_SUBLIST))){
+					// now check reference variable belongs to covariates block
+					val refBlk = EcoreUtil2.getContainerOfType(expr.ref.eContainer, BlockStatement)
+					if(refBlk != null && refBlk.identifier != BlockDefinitionProvider::COVARIATE_BLK_NAME){
+						// ref cov is not in cov block so assume it not a covariate
+						error("Attribute '" + attributeName + "' expects a reference to a covariate. '" + expr.ref.name + "' is not a covariate.",
+							MdlPackage::eINSTANCE.valuePair_Expression,
+							MdlValidator::INCOMPATIBLE_VARIABLE_REF, expr.ref.name)
+					} 
+				}
+			}
+		}
+	}
+	
 	
 }
