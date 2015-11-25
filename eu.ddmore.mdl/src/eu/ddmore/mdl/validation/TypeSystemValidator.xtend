@@ -32,8 +32,7 @@ import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -41,6 +40,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension MclTypeProvider typeProvider = new MclTypeProvider
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	
 	// Type handling	
 	private def (TypeInfo, TypeInfo) => void typeError(EStructuralFeature feature){ 

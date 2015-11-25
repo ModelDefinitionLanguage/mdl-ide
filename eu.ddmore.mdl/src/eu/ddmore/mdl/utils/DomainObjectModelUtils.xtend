@@ -22,7 +22,7 @@ import eu.ddmore.mdl.mdl.Statement
 
 class DomainObjectModelUtils {
 	
-	static def getStatements(BlockStatement it){
+	def getStatements(BlockStatement it){
 		val b = body
 		switch(b){
 			BlockStatementBody:
@@ -32,57 +32,57 @@ class DomainObjectModelUtils {
 		}
 	} 
 	
-	static def getBlockText(BlockStatement it){
+	def getBlockText(BlockStatement it){
 		(body as BlockTextBody).text
 	} 
 
-	static def getParentOfBlockStatement(BlockStatement it){
+	def getParentOfBlockStatement(BlockStatement it){
 		if(eContainer instanceof BlockBody)	eContainer.eContainer
 		else eContainer
 	}
 	
 	
-	static def getOwningValuePair(Expression it){
+	def getOwningValuePair(Expression it){
 		EcoreUtil2.getContainerOfType(eContainer, ValuePair)
 	}
 	
-	static def getOwningBlock(EnumExpression it){
+	def getOwningBlock(EnumExpression it){
 		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	} 
 	
-	static def getOwningBlock(SymbolDefinition it){
+	def getOwningBlock(SymbolDefinition it){
 		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	}
 	
-	static def getParentStatement(AttributeList it){
+	def getParentStatement(AttributeList it){
 		EcoreUtil2.getContainerOfType(it, BlockStatement)
 //		eContainer.eContainer.eContainer as BlockStatement
 	}
 
-	static def getParentBlock(ValuePair it){
+	def getParentBlock(ValuePair it){
 		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 //		eContainer.eContainer.eContainer.eContainer as BlockStatement
 	}
 	
-	static def getParentBlock(Statement it){
+	def getParentBlock(Statement it){
 		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	}
 	
-	static def getParentList(ValuePair it){
+	def getParentList(ValuePair it){
 		EcoreUtil2.getContainerOfType(it, AttributeList)
 //		eContainer as AttributeList
 	}
 	
-	static def getParentFunction(ValuePair it){
+	def getParentFunction(ValuePair it){
 		EcoreUtil2.getContainerOfType(it, BuiltinFunctionCall)
 	}
 	
 	// for unnamed function arguments
-	static def getParentFunction(UnnamedArgument it){
+	def getParentFunction(UnnamedArgument it){
 		EcoreUtil2.getContainerOfType(it, BuiltinFunctionCall)
 	}
 	
-	static def getFuncArgNum(UnnamedArgument it){
+	def getFuncArgNum(UnnamedArgument it){
 		val argList = parentFunction.argList
 		var idx = -1;
 		switch(argList){
@@ -98,7 +98,7 @@ class DomainObjectModelUtils {
 		}
 	}
 	
-	static def getFunctionArgumentValue(BuiltinFunctionCall it, String argName){
+	def getFunctionArgumentValue(BuiltinFunctionCall it, String argName){
 		val args = argList
 		switch(args){
 			NamedFuncArguments:{
@@ -108,11 +108,11 @@ class DomainObjectModelUtils {
 		}
 	}
 	
-	static def getBlocksByName(MclObject mdlObj, String blkName){
+	def getBlocksByName(MclObject mdlObj, String blkName){
 		mdlObj.blocks.filter[identifier == blkName]
 	}
 
-	static def getStatementsFromBlock(BlockStatement it){
+	def getStatementsFromBlock(BlockStatement it){
 		val b = body
 		switch(b){
 			BlockStatementBody:
@@ -123,7 +123,7 @@ class DomainObjectModelUtils {
 			
 	}
 
-	static def getVectorElementAsSymbolReference(Expression expr){
+	def getVectorElementAsSymbolReference(Expression expr){
 		switch(expr){
 			VectorElement:{
 				val e = expr.element
@@ -137,7 +137,7 @@ class DomainObjectModelUtils {
 	}
 
 
-	static def getStippedQuotes(String str){
+	def getStippedQuotes(String str){
 		if(str.length == 2){
 			// only quotes so return empty string
 			""

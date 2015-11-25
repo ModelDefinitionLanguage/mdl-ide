@@ -37,12 +37,12 @@ import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
 import eu.ddmore.mdl.mdl.PowerExpression
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	
 	
 	def isMclObjectOfType(MclObject obj, String typeCode){

@@ -37,9 +37,9 @@ import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class ModelDefinitionPrinter {
 	extension MclUtils mu = new MclUtils
@@ -51,6 +51,7 @@ class ModelDefinitionPrinter {
 	extension SublistDefinitionProvider sdp = new SublistDefinitionProvider
 	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter
 	extension PKMacrosPrinter pkp = PKMacrosPrinter::INSTANCE
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	
 	
 	//////////////////////////////////////

@@ -27,10 +27,10 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
-
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class ListDefinitionProvider {
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 
 	public static val USE_ATT = 'use'
 	public static val DEFINE_ATT = 'define'

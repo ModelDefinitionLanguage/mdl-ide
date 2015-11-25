@@ -21,10 +21,11 @@ import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.TransformedDefinition
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class BuiltinFunctionProvider {
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	
 	interface FunctDefn{
 		def int getNumArgs()

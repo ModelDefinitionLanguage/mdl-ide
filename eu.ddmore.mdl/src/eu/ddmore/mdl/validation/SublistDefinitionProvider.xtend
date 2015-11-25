@@ -10,12 +10,14 @@ import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import eu.ddmore.mdl.mdl.EnumExpression
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class SublistDefinitionProvider {
 	
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+
+
 	public static val INTERVENTION_SEQ_SUBLIST = "intSeqAtts"
 	public static val SAMPLING_SEQ_SUBLIST = "sampSeqAtts"
 	public static val FIX_EFF_SUBLIST = "fixEffAtts"

@@ -13,11 +13,12 @@ import java.util.HashSet
 import java.util.List
 import java.util.Map
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class PropertyDefinitionProvider {
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	
 //	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'monolix', 'nonmem' })
 //	static val TARGET_ATT = new AttributeDefn('target', null, true, TARGET_TYPE)

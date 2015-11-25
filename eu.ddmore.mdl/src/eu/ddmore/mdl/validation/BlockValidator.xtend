@@ -15,8 +15,7 @@ import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class BlockValidator extends AbstractDeclarativeValidator{
 
@@ -24,6 +23,7 @@ class BlockValidator extends AbstractDeclarativeValidator{
 	
 	extension BlockArgumentDefinitionProvider movh = new BlockArgumentDefinitionProvider
 	extension BlockDefinitionProvider blokHelper = new BlockDefinitionProvider
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 
 	public static val UNRECOGNISED_OBJECT_TYPE = "eu.ddmore.mdl.validation.UnrecognisedObjectType"
 

@@ -13,15 +13,16 @@ import eu.ddmore.mdl.utils.MclUtils
 import java.util.ArrayList
 import org.eclipse.xtext.EcoreUtil2
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class MogValidator {
 
 	extension ListDefinitionProvider listProvider = new ListDefinitionProvider 
 	extension MclTypeProvider typeProvider = new MclTypeProvider 
 	extension MclUtils mclu = new MclUtils
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 
 
 
