@@ -245,7 +245,7 @@ WhenClause returns IfExprPart:
 ;
 
 ElifClause returns IfExprPart:
-	{ElifClause} ELSEIF '(' cond=Expression ')' => THEN value=Expression
+	{ElifClause} IF '(' cond=Expression ')' => THEN value=Expression
 ;
 
 ElseClause:
@@ -342,7 +342,7 @@ terminal IF: 'if';
 
 terminal THEN: 'then';
 
-terminal ELSEIF: 'elseif';
+//terminal ELSEIF: 'elseif';
 
 terminal ELSE: 'else';
 

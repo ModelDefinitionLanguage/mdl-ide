@@ -106,7 +106,7 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 			GUT
 			TLAG
 			RATEIN = if (10 < 22 == !true) then 10 * log(GUT/KA^2) / ( 1 - TLAG /(1 + sqrt(GUT)))
-			elseif(KA && GUT || false) then if(T >= TLAG) then GUT * KA else 0
+			if(KA && GUT || false) then if(T >= TLAG) then GUT * KA else 0
 			else inf
 	} # end MODEL_PREDICTION
 	

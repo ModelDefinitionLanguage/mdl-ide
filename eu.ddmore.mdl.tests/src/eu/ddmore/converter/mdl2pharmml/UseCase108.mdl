@@ -124,11 +124,11 @@ magni2000_mdl = mdlObj{
    		#		  else aVf+bVf*BSA
    				  
  		GROUP_ts = if (HSTATUS==1) then mtsn
-   			 	   elseif (HSTATUS==2) then mtso
+   			 	   if (HSTATUS==2) then mtso
    			 	   else mtsd
    			 
    		GROUP_F = if (HSTATUS==1) then mFn
-   				  elseif (HSTATUS==2) then mFo
+   				  if (HSTATUS==2) then mFo
    				  else mFd
    			
    		GROUP_V = if(FEMALE==0) then aVm+bVm*BSA

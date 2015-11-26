@@ -150,7 +150,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < inf) then B^180 else 22
+				A = if(B > 0 && false) then B + C - 22 if(C == B || 22 < inf) then B^180 else 22
 			}
 			
 		} # end of model object
@@ -174,7 +174,7 @@ class MclTypeValidationTest {
 					B : { deriv = C, init = 33 }
 				}
 				C
-				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
+				A = if(B > 0 && false) then B + C - 22 if(C == B || 22 < 0) then B^180 else 22
 			}
 			
 		} # end of model object
@@ -244,7 +244,7 @@ class MclTypeValidationTest {
 					B : { deriv = C, init = 33 }
 				}
 				C = ID
-				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
+				A = if(B > 0 && false) then B + C - 22 if(C == B || 22 < 0) then B^180 else 22
 			}
 			
 		} # end of model object
@@ -1229,7 +1229,7 @@ d1g=desObj{
 					B : { deriv = C > 0 && false, init = 33 }
 				}
 				C
-				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
+				A = if(B > 0 && false) then B + C - 22 if(C == B || 22 < 0) then B^180 else 22
 			}
 			
 		} # end of model object
@@ -1489,7 +1489,7 @@ warfarin_PK_v2_dat = dataObj{
 			}
 
 			INDIVIDUAL_VARIABLES{
-				BSA = if(true) then 1.0 elseif(false) then false else 2.0
+				BSA = if(true) then 1.0 if(false) then false else 2.0
 			}
 			
 		}
@@ -1509,7 +1509,7 @@ warfarin_PK_v2_dat = dataObj{
 			}
 
 			INDIVIDUAL_VARIABLES{
-				BSA = if(true) then true elseif(false) then 3.0 else 2.0
+				BSA = if(true) then true if(false) then 3.0 else 2.0
 			}
 			
 		}

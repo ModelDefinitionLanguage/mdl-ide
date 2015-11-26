@@ -232,7 +232,7 @@ class MclStatementValidationTest {
 			}
 
 			MODEL_PREDICTION{
-				foo = if(true) then 1 elseif(false) then 0
+				foo = if(true) then 1 if(false) then 0
 			}# end MODEL_PREDICTION
 			
 		}
