@@ -86,6 +86,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val INVALID_ENUM_RELATION_OPERATOR = "eu.ddmore.mdl.validation.custom.enum.relation.op"
 	public static val DEPENDENT_USE_MISSING = "eu.ddmore.mdl.validation.custom.dep.use.missing"
 	public static val INCOMPATIBLE_VARIABLE_REF = "eu.ddmore.mdl.validation.custom.incompatible.var.ref"
+	public static val DUPLICATE_UNIQUE_USE_VALUE = "eu.ddmore.mdl.validation.custom.duplicate.use"
 
 	// Warnings
 	public static val MASKING_PARAM_ASSIGNMENT = "eu.ddmore.mdl.validation.mog.paramValueMasked"

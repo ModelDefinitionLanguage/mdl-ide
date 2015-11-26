@@ -331,6 +331,77 @@ warfarin_T2E_exact_dat = dataObj{
 	}
 
 	@Test
+	def void testInvalidDuplicateUseDefinitions(){
+		val mcl = '''
+warfarin_T2E_exact_dat = dataObj{
+
+   DECLARED_VARIABLES{ Y; INPUT }
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      ID2: {use is id}
+      TIME: {use is idv}
+      TIME2: {use is idv}
+      TRT: {use is covariate}
+      AMT: {use is amt, variable = INPUT }
+      AMT2: {use is amt, variable = INPUT }
+      RATE: {use is rate}
+      RATE2: {use is rate}
+      SS: {use is ss}
+      SS2: {use is ss}
+      ADDL: {use is addl}
+      ADDL2: {use is addl}
+      II: {use is ii}
+      II2: {use is ii}
+      WT: {use is covariate}
+      DVID: {use is dvid}
+      DVID2: {use is dvid}
+      DV: {use is dv, variable=Y}
+      DV2: {use is dv, variable=Y}
+      MDV: {use is mdv}
+      MDV2: {use is mdv}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      srcFile : {file="warfarin_TTE_exact.csv",
+      			inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+		'''.parse
+
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_UNIQUE_USE_VALUE,
+			"Only one column definition can have a 'use' attribute set to 'amt'.")
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_UNIQUE_USE_VALUE,
+			"Only one column definition can have a 'use' attribute set to 'rate'.")
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_UNIQUE_USE_VALUE,
+			"Only one column definition can have a 'use' attribute set to 'ii'.")
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_UNIQUE_USE_VALUE,
+			"Only one column definition can have a 'use' attribute set to 'id'.")
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_UNIQUE_USE_VALUE,
+			"Only one column definition can have a 'use' attribute set to 'idv'.")
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_UNIQUE_USE_VALUE,
+			"Only one column definition can have a 'use' attribute set to 'ss'.")
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_UNIQUE_USE_VALUE,
+			"Only one column definition can have a 'use' attribute set to 'addl'.")
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_UNIQUE_USE_VALUE,
+			"Only one column definition can have a 'use' attribute set to 'dv'.")
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_UNIQUE_USE_VALUE,
+			"Only one column definition can have a 'use' attribute set to 'dvid'.")
+		mcl.assertError(MdlPackage::eINSTANCE.valuePair,
+			MdlValidator::DUPLICATE_UNIQUE_USE_VALUE,
+			"Only one column definition can have a 'use' attribute set to 'mdv'.")
+	}
+
+	@Test
 	def void testValidCovariateFixedEff(){
 		val mcl = '''bar = mdlObj {
 			IDV { T }
