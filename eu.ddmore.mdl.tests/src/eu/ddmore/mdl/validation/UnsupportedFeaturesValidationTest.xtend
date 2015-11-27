@@ -312,7 +312,7 @@ warfarin_T2E_exact_dat = dataObj{
    }# end DATA_INPUT_VARIABLES
 
    SOURCE{
-      srcFile : {file="count.csv",
+      srcFile : {file="src/eu/ddmore/mdl/validation/count.csv",
       			inputFormat is nonmemFormat}
    }# end SOURCE
 } # end data object
@@ -345,7 +345,7 @@ warfarin_T2E_exact_dat = dataObj{
    }# end DATA_INPUT_VARIABLES
 
    SOURCE{
-      srcFile : {file="count.csv",
+      srcFile : {file="src/eu/ddmore/mdl/validation/count.csv",
       			inputFormat is nonmemFormat}
    }# end SOURCE
 } # end data object
