@@ -137,8 +137,7 @@ warfarin_PKPD_turnover_mdl = mdlObj{
 
    MODEL_PREDICTION{
    DEQ{
-      RATEIN= if(T >= TLAG) then KA*GUT
-			  else 0
+      RATEIN= piecewise(piece=[{condition=T >= TLAG, value=KA*GUT}], otherwise=0)
 	  GUT : { deriv =(- RATEIN), init = 0, x0 = 0 }
 	  CENTRAL : { deriv =(RATEIN - CL * CENTRAL / V), init = 0, x0 = 0 } 
       CC=CENTRAL/V

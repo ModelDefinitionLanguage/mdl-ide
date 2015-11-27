@@ -94,8 +94,8 @@ warfarin_PK_ANALYTIC_mdl = mdlObj {
 	MODEL_PREDICTION {
 	    D # dosing variable
 	    k = CL/V
-	    CC = if ( T < TLAG) then 0
-	         else (D/V) * KA/(KA-k) * (exp(-k * (T - TLAG))- exp(-KA*(T-TLAG)) )
+	    CC = piecewise(piece=[{condition= ( T < TLAG), value=0}],
+	         			otherwise= (D/V) * KA/(KA-k) * (exp(-k * (T - TLAG))- exp(-KA*(T-TLAG)) ))
 	} # end MODEL_PREDICTION
 
 	RANDOM_VARIABLE_DEFINITION(level=DV){

@@ -32,11 +32,14 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.PowerExpression
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.validation.BuiltinFunctionProvider
+import eu.ddmore.mdl.mdl.SubListExpression
 
 class PharmMLExpressionBuilder {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
 	
 	static val GLOBAL_VAR = 'global'
 	
@@ -361,17 +364,48 @@ class PharmMLExpressionBuilder {
 		«ENDIF»
 	'''
     
+    private def getPieces(NamedFuncArguments it){
+    	val expr = getArgumentExpression('piece')
+    	if(expr instanceof VectorLiteral){
+    		for(ve : expr.expressions){
+    			
+    		}
+    		
+    	}
+    }
+    
+    
+//    private def writePiecewiseFunction(BuiltinFunctionCall it)'''
+//		<math:Piecewise>
+//			«FOR w : »
+//				«w.whenClause»
+//			«ENDFOR»
+//			«IF other != null»
+//				<math:Piece>
+//					«other.other.pharmMLExpr»
+//					<math:Condition>
+//						<math:Otherwise/>
+//					</math:Condition>
+//				</math:Piece>
+//			«ENDIF»
+//		</math:Piecewise>
+//    '''
+    
+    
     def dispatch CharSequence getPharmMLExpr(BuiltinFunctionCall it){
     	var retVal = ''''''
     	val a = argList
     	switch(a){
     		NamedFuncArguments:
-    			retVal += '''
-						<math:FunctionCall>
-							«func.localSymbolReference»
-							«a.namedArguments»
-						</math:FunctionCall>
-    			''' 
+//    			if(func == 'piecewise')
+//    				writePiecewiseFunction(it)
+//    			else
+	    			retVal += '''
+							<math:FunctionCall>
+								«func.localSymbolReference»
+								«a.namedArguments»
+							</math:FunctionCall>
+	    			''' 
     			
     		UnnamedFuncArguments:{
     			val opType = if(a.args.size > 1) "Binop" else "Uniop"

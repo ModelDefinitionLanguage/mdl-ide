@@ -123,16 +123,14 @@ magni2000_mdl = mdlObj{
    		#GROUP_V = if(FEMALE==FEMALE.no) then aVm+bVm*BSA
    		#		  else aVf+bVf*BSA
    				  
- 		GROUP_ts = if (HSTATUS==1) then mtsn
-   			 	   elseif (HSTATUS==2) then mtso
-   			 	   else mtsd
+ 		GROUP_ts = piecewise(piece=[{condition=(HSTATUS==1), value=mtsn},
+   			 	   {condition=(HSTATUS==2), value=mtso}], otherwise=mtsd)
    			 
-   		GROUP_F = if (HSTATUS==1) then mFn
-   				  elseif (HSTATUS==2) then mFo
-   				  else mFd
+   		GROUP_F = piecewise(piece=[{condition=(HSTATUS==1), value=mFn},
+   				  			{ condition=(HSTATUS==2), value=mFo}],
+   				  			otherwise=mFd)
    			
-   		GROUP_V = if(FEMALE==0) then aVm+bVm*BSA
-   				  else aVf+bVf*BSA
+   		GROUP_V = piecewise(piece=[{condition=FEMALE==0, value=aVm+bVm*BSA}], otherwise=aVf+bVf*BSA)
    	}
    	
    	INDIVIDUAL_VARIABLES{

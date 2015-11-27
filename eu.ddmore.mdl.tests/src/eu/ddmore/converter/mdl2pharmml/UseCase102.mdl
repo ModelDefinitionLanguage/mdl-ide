@@ -112,14 +112,13 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 
 	
 	MODEL_PREDICTION {
-		RATEIN = if(T >= TLAG) then GUT * KA 
-				 else 0
+		RATEIN = piecewise(piece=[{condition=T >= TLAG, value=GUT * KA }], otherwise=0)
 		GUT : { deriv =(- RATEIN), init = 0, x0 = 0 }
 		DEQ{
 			CENTRAL : { deriv =(RATEIN - CL * CENTRAL / V), init = 0, x0 = 0 }
 		} 
 	    CC = CENTRAL / V 
-	    FOO = if(GUT == CENTRAL) then GUT - CENTRAL else CENTRAL
+	    FOO = piecewise(piece=[{condition=GUT == CENTRAL, value=GUT - CENTRAL}], otherwise=CENTRAL)
 	} # end MODEL_PREDICTION
 	
 	RANDOM_VARIABLE_DEFINITION(level=DV) {

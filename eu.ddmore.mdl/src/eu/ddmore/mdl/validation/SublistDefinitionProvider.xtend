@@ -22,14 +22,20 @@ class SublistDefinitionProvider {
 	public static val INTERVENTION_SEQ_SUBLIST = "intSeqAtts"
 	public static val SAMPLING_SEQ_SUBLIST = "sampSeqAtts"
 	public static val FIX_EFF_SUBLIST = "fixEffAtts"
+	public static val PIECEWISE_SUBLIST = "pieceSubList"
 	public static val COV_ATT = 'cov'
 	public static val CATCOV_ATT = 'catCov'
 	
 	static val COV = new AttributeDefn(COV_ATT, true, MclTypeProvider::REAL_TYPE.makeReference)
 	static val COEFF = new AttributeDefn('coeff', true, MclTypeProvider::REAL_TYPE.makeReference)
 	static val CAT_COV = new AttributeDefn(CATCOV_ATT, true, MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference)
+	static val COND_ATT_TYPE = new AttributeDefn('condition', true, MclTypeProvider::BOOLEAN_TYPE)
+	static val VAL_ATT_TYPE = new AttributeDefn('value', true, MclTypeProvider::REAL_TYPE)
 	
 	static val Map<String, SublistTypeInfo> sublistDefns = #{
+		PIECEWISE_SUBLIST -> (new SublistTypeInfo(PIECEWISE_SUBLIST, #[COND_ATT_TYPE, VAL_ATT_TYPE], #[
+																   	#{COND_ATT_TYPE.name -> true, VAL_ATT_TYPE.name -> true}
+																   ])),
 		FIX_EFF_SUBLIST -> (new SublistTypeInfo(FIX_EFF_SUBLIST, #[COV, CAT_COV, COEFF], #[
 																   	#{COEFF.name -> true, COV.name -> true},
 																   	#{COEFF.name -> true, CAT_COV.name -> true}

@@ -219,7 +219,7 @@ class MclStatementValidationTest {
 		}
 		'''.parse
 		
-		mcl.assertNoErrors
+		mcl.assertError(MdlPackage::eINSTANCE.whenExpression, MdlValidator::UNSUPPORTED_FEATURE)
 	}
 
 	@Test
@@ -238,7 +238,7 @@ class MclStatementValidationTest {
 		}
 		'''.parse
 		
-		mcl.assertNoErrors
+		mcl.assertError(MdlPackage::eINSTANCE.whenExpression, MdlValidator::UNSUPPORTED_FEATURE)
 	}
 
 	@Test

@@ -40,7 +40,7 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 	} # end STRUCTURAL_PARAMETERS
 	
 	GROUP_VARIABLES{
-		FSEXCL = if(SEX == SEX.female) then POP_FCL_FEM  else 1
+		FSEXCL = piecewise(piece=[{condition=(SEX == SEX.female), value=POP_FCL_FEM}], otherwise=1)
 	}
 } # end of model object
 '''

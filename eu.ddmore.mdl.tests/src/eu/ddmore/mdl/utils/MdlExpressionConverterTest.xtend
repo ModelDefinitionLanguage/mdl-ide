@@ -15,6 +15,8 @@ import static extension eu.ddmore.mdl.utils.MdlExpressionConverter.convertToStri
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
+import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.validation.MdlValidator
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -43,7 +45,7 @@ warfarin_PK_ODE_mdl = mdlObj {
 } # end of model object
 		'''.parse
 		
-		mcl.assertNoErrors
+		mcl.assertError(MdlPackage::eINSTANCE.whenExpression, MdlValidator::UNSUPPORTED_FEATURE)
 	}
 
 	

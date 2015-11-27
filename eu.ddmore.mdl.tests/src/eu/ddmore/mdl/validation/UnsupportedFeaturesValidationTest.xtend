@@ -274,7 +274,7 @@ warfarin_design = desObj {
 			}
 			
 			GROUP_VARIABLES{
-				TSEX = if(sex == sex.f) then 1 else 0
+				TSEX = piecewise(piece=[{condition=sex == sex.f, value=1}], otherwise=0)
 			}
 			
 			
@@ -312,7 +312,7 @@ warfarin_T2E_exact_dat = dataObj{
    }# end DATA_INPUT_VARIABLES
 
    SOURCE{
-      srcFile : {file="count.csv",
+      srcFile : {file="src/eu/ddmore/mdl/validation/count.csv",
       			inputFormat is nonmemFormat}
    }# end SOURCE
 } # end data object
@@ -345,7 +345,7 @@ warfarin_T2E_exact_dat = dataObj{
    }# end DATA_INPUT_VARIABLES
 
    SOURCE{
-      srcFile : {file="count.csv",
+      srcFile : {file="src/eu/ddmore/mdl/validation/count.csv",
       			inputFormat is nonmemFormat}
    }# end SOURCE
 } # end data object
@@ -380,5 +380,51 @@ warfarin_T2E_exact_dat = dataObj{
 			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
 			"Column definitions with use 'dv' must be named 'DV' otherwise execution in R will fail.")
 	}
+
+	@Test
+	def void testValidIfElseWithElse(){
+		val mcl = '''
+		foo = mdlObj{
+			IDV{T}
+
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo = if(true) then 1 else 0
+			}# end MODEL_PREDICTION
+			
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.whenExpression,
+			MdlValidator::UNSUPPORTED_FEATURE,
+			"A conditional expression is not supported. Use a piecewise function instead."
+		)
+	}
+
+	@Test
+	def void testValidIfElseWithElseIf(){
+		val mcl = '''
+		foo = mdlObj{
+			IDV{T}
+			
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo = if(true) then 1 elseif(false) then 0
+			}# end MODEL_PREDICTION
+			
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.whenExpression,
+			MdlValidator::UNSUPPORTED_FEATURE,
+			"A conditional expression is not supported. Use a piecewise function instead."
+		)
+	}
+
+
 
 }

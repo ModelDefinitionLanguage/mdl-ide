@@ -517,5 +517,58 @@ class MclBuiltinFunctionValidationTest {
 		)
 	}
 	
+	@Test
+	def void testPiecewiseFunctionWithOtherwise(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			GROUP_VARIABLES{
+				a
+			}
+
+			INDIVIDUAL_VARIABLES{
+				Cl = piecewise(piece=[{condition = a > 0, value = 1},
+									{condition=a < 0, value = -1}],
+									 otherwise=0)
+			}
+			INDIVIDUAL_VARIABLES{
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+
+	@Test
+	def void testPiecewiseFunctionWithoutOtherwise(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+			
+			GROUP_VARIABLES{
+				a
+			}
+
+			INDIVIDUAL_VARIABLES{
+				Cl = piecewise(piece=[{condition = a > 0, value = 1},
+									{condition=a <= 0, value = -1}])
+			}
+			INDIVIDUAL_VARIABLES{
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
 
 }

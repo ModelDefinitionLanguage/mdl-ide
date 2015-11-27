@@ -178,4 +178,9 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 		}
 	}
 
+	@Check
+	def validateNoConditions(WhenExpression it){
+		error("A conditional expression is not supported. Use a piecewise function instead.",
+				MdlPackage.eINSTANCE.whenExpression_When, MdlValidator::UNSUPPORTED_FEATURE, "")
+	}
 }

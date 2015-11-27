@@ -102,7 +102,7 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 	} # end RANDOM_VARIABLE_DEFINITION 
 
 	GROUP_VARIABLES{
-		FCLSEX = if(SEX == SEX.female) then 1 else 0
+		FCLSEX = piecewise(piece=[{condition=SEX == SEX.female, value=1}], otherwise=0)
 	}
 
 	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
@@ -121,8 +121,7 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 	
 	MODEL_PREDICTION {
 	    DEQ {  
-			RATEIN = if(TIME >= TLAG) then GUT * KA 
-					 else 0
+			RATEIN = piecewise(piece=[{condition=TIME >= TLAG, value=GUT * KA }], otherwise=0)
 			GUT : { deriv =(- RATEIN), init = 0, x0 = 0 }
 	        CENTRAL : { deriv =(RATEIN - CL * CENTRAL / V), init = 0, x0 = 0 } 
 	    } # end DEQ block

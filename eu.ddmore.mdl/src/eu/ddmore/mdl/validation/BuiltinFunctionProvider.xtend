@@ -173,7 +173,13 @@ class BuiltinFunctionProvider {
 						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
 						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ] ]
+					} ] ],
+		'piecewise' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
+						'piece' -> new FunctionArgument(getSublist(SublistDefinitionProvider::PIECEWISE_SUBLIST).makeVector, true),
+						'otherwise' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, false)
+						}
+					]
+				]
 	}
 
 	val Map<String, Map<String, ? extends TypeInfo>> attEnumTypes

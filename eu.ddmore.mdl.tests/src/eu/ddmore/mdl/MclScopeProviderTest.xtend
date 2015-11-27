@@ -52,7 +52,7 @@ warfarin_PK_SEXAGE_mdl2 = mdlObj {
 	} # end STRUCTURAL_PARAMETERS
 	
 	GROUP_VARIABLES{
-		FSEXCL = if(SEX == SEX.female) then POP_FCL_FEM  else 1
+		FSEXCL = piecewise(piece=[{condition=(SEX == SEX.female), value=POP_FCL_FEM}], otherwise=1)
 	}
 } # end of model object
 
@@ -75,13 +75,13 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 	}
 
 	GROUP_VARIABLES{
-		FSEXCL = if(SEX == SEX.female) then POP_FCL_FEM  else 1
+		FSEXCL = piecewise(piece=[{condition=(SEX == SEX.female), value=POP_FCL_FEM}], otherwise=1)
 		TLAG
 	}
 	
 	MODEL_PREDICTION{
 		DEQ{
-			RATEIN = if(T >= TLAG) then GUT  else 0
+			RATEIN = piecewise(piece=[{condition=(T >= TLAG), value=GUT}], otherwise=0)
 			GUT : {deriv = (- RATEIN), init = 0, x0 = 0 }
 		}
 	}

@@ -101,7 +101,7 @@ drugX_delAbs_1occ_v1_mdl = mdlObj{
       kpc = Q/Vp
       kel = CL/Vc
       ktr = (n+1)/MTT
-      Dose = if (AMT>0) then AMT else 0# to be checked with the dataset!!!!!!!!!!!!!!!!!!!!!!!!!!
+      Dose = piecewise(piece=[{condition=(AMT>0), value=AMT}], otherwise=0) # to be checked with the dataset!!!!!!!!!!!!!!!!!!!!!!!!!!
       
       amin = min(Dose, n) # for testing purposes
       amax = max(Dose, n) # for testing purposes
@@ -111,8 +111,8 @@ drugX_delAbs_1occ_v1_mdl = mdlObj{
 
       DEQ{    
          # to be checked with the dataset:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-         Aader = if (T==0) then 0
-            else exp(ln(Dose) + ln(ktr) + n*ln(ktr*T) - ktr*T - lnFactorial(n)) - ka*Aa
+         Aader = piecewise(piece=[{condition= (T==0), value=0}],
+            			otherwise=exp(ln(Dose) + ln(ktr) + n*ln(ktr*T) - ktr*T - lnFactorial(n)) - ka*Aa)
           
          Aa: {deriv= Aader, init= 0}
          Ac: {deriv= ka*Aa-kel*Ac-kcp*Ac+kpc*Ap, init= 0}

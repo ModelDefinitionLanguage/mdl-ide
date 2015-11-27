@@ -215,7 +215,7 @@ class MdlCustomValidationTest {
 			}
 			
 			GROUP_VARIABLES{
-				TSEX = if(sex == sex.f) then 1 else 0
+				TSEX = piecewise(piece=[{condition=(sex == sex.f), value=1}], otherwise=0)
 			}
 			
 			
@@ -240,7 +240,7 @@ class MdlCustomValidationTest {
 			}
 			
 			GROUP_VARIABLES{
-				TSEX = if(sex <= sex.f) then 1 else 0
+				TSEX = piecewise(piece=[{condition=sex <= sex.f, value=1}], otherwise=0)
 			}
 			
 			

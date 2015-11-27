@@ -150,7 +150,9 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < inf) then B^180 else 22
+				A = piecewise(piece=[{condition=(B > 0 && false), value=B + C - 22},
+									{condition=(C == B || 22 < inf), value=B^180}],
+									otherwise=22)
 			}
 			
 		} # end of model object
@@ -174,7 +176,9 @@ class MclTypeValidationTest {
 					B : { deriv = C, init = 33 }
 				}
 				C
-				A = if(B > 0 && false) then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
+				A = piecewise(piece=[{condition=(B > 0 && false), value=B + C - 22},
+									{condition=(C == B || 22 < inf), value=B^180}],
+									otherwise=22)
 			}
 			
 		} # end of model object
@@ -292,7 +296,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				B = if(!true) then 0 else 1
+				B = piecewise(piece=[{condition=!true, value=0}], otherwise=1)
 			}
 			
 		} # end of model object
@@ -831,7 +835,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				V = if(SEX == SEX.male) then 1 else 0
+				V = piecewise(piece=[{condition=(SEX == SEX.female), value=1}], otherwise=0)
 			}
 			
 		} # end of model object
@@ -855,7 +859,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				V = if(SEX == 2) then 1 else 0
+				V = piecewise(piece=[{condition=SEX == 2, value=1}], otherwise=0)
 			}
 			
 		} # end of model object
@@ -883,7 +887,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				V = if(SEX == SEX2.male) then 1 else 0
+				V = piecewise(piece=[{condition=SEX == SEX2.male, value=1}], otherwise=0)
 			}
 			
 		} # end of model object
@@ -911,7 +915,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				V = if(SEX == SEX2.female2) then 1 else 0
+				V = piecewise(piece=[{condition=SEX == SEX2.female2, value=1}], otherwise=0)
 			}
 			
 		} # end of model object
@@ -939,7 +943,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				V = if(SEX == SEX2) then 1 else 0
+				V = piecewise(piece=[{condition=SEX == SEX2, value=1}], otherwise=0)
 			}
 			
 		} # end of model object
@@ -966,7 +970,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				V = if(2 == SEX) then 1 else 0
+				V = piecewise(piece=[{condition=2 == SEX, value=1}], otherwise=0)
 			}
 			
 		} # end of model object
@@ -993,7 +997,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				V = if(SEX == "2") then 1 else 0
+				V = piecewise(piece=[{condition=SEX == "2", value=1}], otherwise=0)
 			}
 			
 		} # end of model object
