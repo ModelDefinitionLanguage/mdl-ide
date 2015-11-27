@@ -115,7 +115,7 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 		
 		val eqn = mcl.objects.head.blocks.last.statements.last as EquationDefinition
 		Assert::assertEquals(
-			"if (10<22==!true) then 10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))) elseif (KA&&GUT||false) then if (T>=TLAG) then GUT*KA else 0 else inf",
+			"if (10<22==!true) then 10*log(GUT/KA^2)/(1-TLAG/(1+sqrt(GUT))) if (KA&&GUT||false) then if (T>=TLAG) then GUT*KA else 0 else inf",
 			eqn.expression.convertToString.replace("\r\n", "\n")) // The replace() is an attempt to cater for Windows/Mac line ending differences
 	}
 	

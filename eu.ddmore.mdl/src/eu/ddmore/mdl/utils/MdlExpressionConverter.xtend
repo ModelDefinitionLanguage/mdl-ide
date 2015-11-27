@@ -72,7 +72,7 @@ public class MdlExpressionConverter extends ExpressionConverter {
 		«FOR arg: exp.args SEPARATOR ', '»«arg.argument.getString»«ENDFOR»'''
 	
 	def dispatch String getString(WhenExpression exp)'''
-		«FOR w : exp.when SEPARATOR ' else'»«w.getString»«ENDFOR»«IF exp.other!=null» else «exp.other.getString»«ENDIF»'''
+		«FOR w : exp.when SEPARATOR ' '»«w.getString»«ENDFOR»«IF exp.other!=null» else «exp.other.getString»«ENDIF»'''
 	
 	def dispatch String getString(WhenClause exp)'''
 		if («exp.cond.getString») then «exp.value.getString»'''
