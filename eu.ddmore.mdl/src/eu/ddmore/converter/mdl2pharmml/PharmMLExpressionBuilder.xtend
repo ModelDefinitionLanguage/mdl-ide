@@ -5,6 +5,7 @@ import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BooleanLiteral
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.ConstantLiteral
+import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
@@ -14,9 +15,11 @@ import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
+import eu.ddmore.mdl.mdl.PowerExpression
 import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.StringLiteral
+import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
@@ -24,22 +27,21 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.validation.BlockDefinitionProvider
+import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.validation.SublistDefinitionProvider
+import java.util.ArrayList
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
-
-import eu.ddmore.mdl.mdl.EnumExpression
-import eu.ddmore.mdl.mdl.PowerExpression
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider
-import eu.ddmore.mdl.mdl.SubListExpression
 
 class PharmMLExpressionBuilder {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
+	extension SublistDefinitionProvider sle = new SublistDefinitionProvider
 	
 	static val GLOBAL_VAR = 'global'
 	
@@ -364,32 +366,57 @@ class PharmMLExpressionBuilder {
 		«ENDIF»
 	'''
     
-    private def getPieces(NamedFuncArguments it){
-    	val expr = getArgumentExpression('piece')
-    	if(expr instanceof VectorLiteral){
-    		for(ve : expr.expressions){
-    			
-    		}
-    		
+    private def getPieces(BuiltinFunctionCall it){
+    	val arg = argList
+    	val retVal = new ArrayList<SubListExpression>
+    	if(arg instanceof NamedFuncArguments){
+	    	val expr = getArgumentExpression('piece')
+	    	if(expr instanceof VectorLiteral){
+	    		expr.expressions.forEach[
+	    			if(it instanceof VectorElement){
+	    				val e = element
+	    				if(e instanceof SubListExpression){
+	    					retVal.add(e)
+    					}
+	    			}]
+	    	}
     	}
+    	retVal
     }
     
+    private def writePiece(SubListExpression it)'''
+    	<math:Piece>
+    		«getAttributeExpression('value').pharmMLExpr»
+    		<math:Condition>
+	    		«getAttributeExpression('condition').pharmMLExpr»
+    		</math:Condition>
+    	</math:Piece>
+    '''
+
+	private def getOtherwiseExpression(BuiltinFunctionCall it){
+    	val arg = argList
+    	if(arg instanceof NamedFuncArguments){
+	    	return getArgumentExpression('otherwise')
+    	}
+    	null
+	}
+
     
-//    private def writePiecewiseFunction(BuiltinFunctionCall it)'''
-//		<math:Piecewise>
-//			«FOR w : »
-//				«w.whenClause»
-//			«ENDFOR»
-//			«IF other != null»
-//				<math:Piece>
-//					«other.other.pharmMLExpr»
-//					<math:Condition>
-//						<math:Otherwise/>
-//					</math:Condition>
-//				</math:Piece>
-//			«ENDIF»
-//		</math:Piecewise>
-//    '''
+    private def writePiecewiseFunction(BuiltinFunctionCall it)'''
+		<math:Piecewise>
+			«FOR w : pieces»
+				«w.writePiece»
+			«ENDFOR»
+			«IF otherwiseExpression != null»
+				<math:Piece>
+					«otherwiseExpression.pharmMLExpr»
+					<math:Condition>
+						<math:Otherwise/>
+					</math:Condition>
+				</math:Piece>
+			«ENDIF»
+		</math:Piecewise>
+    '''
     
     
     def dispatch CharSequence getPharmMLExpr(BuiltinFunctionCall it){
@@ -397,9 +424,9 @@ class PharmMLExpressionBuilder {
     	val a = argList
     	switch(a){
     		NamedFuncArguments:
-//    			if(func == 'piecewise')
-//    				writePiecewiseFunction(it)
-//    			else
+    			if(func == 'piecewise')
+    				retVal += writePiecewiseFunction(it)
+    			else
 	    			retVal += '''
 							<math:FunctionCall>
 								«func.localSymbolReference»
