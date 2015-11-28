@@ -59,50 +59,50 @@ abstract class AbstractConvertToPharmMLHandler extends AbstractHandler implement
      */
     protected final Boolean doGenerateHandlingErrors(final IFile file, final Resource source) {
 
-        final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+//        final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+//
+//        final IProject project = file.getProject();
+//        final IFolder srcGenFolder = project.getFolder(Preferences.SRC_GEN_PREFIX);
+//        if (!srcGenFolder.exists() && (Preferences.SRC_GEN_PREFIX.length() > 0)) {
+//            try {
+//                srcGenFolder.create(true, true, new NullProgressMonitor());
+//            } catch (CoreException e) {
+//                LOGGER.error("Unable to create output folder for PharmML generation: " + srcGenFolder, e);
+//                MessageDialog.openError(shell, "Error",
+//                        "Internal error in attempting to create output folder for PharmML generation; see the log output for details.");
+//                return false;
+//            }
+//        }
+//
+//        final JavaIoFileSystemAccess fsa = fileAccessProvider.get();
+//        fsa.setOutputPath(srcGenFolder.getRawLocation().toString());
 
-        final IProject project = file.getProject();
-        final IFolder srcGenFolder = project.getFolder(Preferences.SRC_GEN_PREFIX);
-        if (!srcGenFolder.exists() && (Preferences.SRC_GEN_PREFIX.length() > 0)) {
-            try {
-                srcGenFolder.create(true, true, new NullProgressMonitor());
-            } catch (CoreException e) {
-                LOGGER.error("Unable to create output folder for PharmML generation: " + srcGenFolder, e);
-                MessageDialog.openError(shell, "Error",
-                        "Internal error in attempting to create output folder for PharmML generation; see the log output for details.");
-                return false;
-            }
-        }
-
-        final JavaIoFileSystemAccess fsa = fileAccessProvider.get();
-        fsa.setOutputPath(srcGenFolder.getRawLocation().toString());
-
-        if (generator != null) {
-            Mcl mcl = (Mcl) source.getContents().get(0);
-            MclUtils mu = new MclUtils();
-            if (mcl != null && mu.getMogObject(mcl) == null) { // No MOGs defined
-                MessageDialog.openError(shell, "Error", "PharmML generation error: no MOG found!");
-                return false;
-            }
-            try {
-                generator.doGenerate(source, fsa);
-            } catch (ParseException pex) {
-                MessageDialog.openError(shell, "Error", "PharmML generation error: " + pex.getMessage());
-                return false;
-            }
-            try {
-                srcGenFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
-            } catch (CoreException e) {
-                LOGGER.error("CoreException thrown while trying to convert to PharmML", e);
-                MessageDialog.openError(shell, "Error",
-                        "Internal error in attempting to convert to PharmML; see the log output for details.");
-                return false;
-            }
-
-            MessageDialog.openInformation(shell, "Information", "PharmML successfully generated to "
-                + srcGenFolder.getFile(file.getName().replaceAll("\\.mdl$", ".xml")).getFullPath());
-            return true;
-        }
+//        if (generator != null) {
+//            Mcl mcl = (Mcl) source.getContents().get(0);
+//            MclUtils mu = new MclUtils();
+//            if (mcl != null && mu.getMogObject(mcl) == null) { // No MOGs defined
+//                MessageDialog.openError(shell, "Error", "PharmML generation error: no MOG found!");
+//                return false;
+//            }
+//            try {
+//                generator.doGenerate(source, fsa);
+//            } catch (ParseException pex) {
+//                MessageDialog.openError(shell, "Error", "PharmML generation error: " + pex.getMessage());
+//                return false;
+//            }
+//            try {
+//                srcGenFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
+//            } catch (CoreException e) {
+//                LOGGER.error("CoreException thrown while trying to convert to PharmML", e);
+//                MessageDialog.openError(shell, "Error",
+//                        "Internal error in attempting to convert to PharmML; see the log output for details.");
+//                return false;
+//            }
+//
+//            MessageDialog.openInformation(shell, "Information", "PharmML successfully generated to "
+//                + srcGenFolder.getFile(file.getName().replaceAll("\\.mdl$", ".xml")).getFullPath());
+//            return true;
+//        }
         return false;
     }
 
