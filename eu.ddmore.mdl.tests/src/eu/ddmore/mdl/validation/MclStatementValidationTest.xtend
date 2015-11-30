@@ -317,7 +317,7 @@ class MclStatementValidationTest {
 		'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
-			MdlValidator::UNSUPPORTED_FEATURE, "Vector symbol definitions are not supported in this version of the language")
+			MdlValidator::UNUSED_FEATURE, "Vector symbol definitions are not supported in this version of the language")
 	}
 
 }

@@ -51,7 +51,7 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 	def void testParsing(){
 		val mcl = CODE_SNIPPET.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition, MdlValidator::UNSUPPORTED_FEATURE)
+		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition, MdlValidator::UNUSED_FEATURE)
 		
 	}
 

@@ -381,4 +381,121 @@ warfarin_T2E_exact_dat = dataObj{
 			"Column definitions with use 'dv' must be named 'DV' otherwise execution in R will fail.")
 	}
 
+
+	@Test
+	def void testExperimentalDiscreteFeature(){
+		val mcl = '''
+Bernoulli_DIST_mdl = mdlObj{
+   IDV{ CP }
+
+   VARIABILITY_LEVELS{
+	ID : { level=2, type is parameter }
+	DV : { level=1, type is observation }
+   }
+
+   STRUCTURAL_PARAMETERS{
+      POP_BASEP
+      POP_BETA
+   }# end STRUCTURAL_PARAMETERS
+
+   VARIABILITY_PARAMETERS{
+      PPV_EVENT
+   }# end VARIABILITY_PARAMETERS
+
+
+   RANDOM_VARIABLE_DEFINITION(level=ID){
+      eta_PPV_EVENT ~ Normal(mean=0, var=PPV_EVENT )
+   }# end RANDOM_VARIABLE_DEFINITION
+ 
+   INDIVIDUAL_VARIABLES{
+      logit(indiv_BASE) = linear(pop= POP_BASEP, ranEff=[eta_PPV_EVENT], trans is logit) 
+   }# end INDIVIDUAL_VARIABLES
+
+   MODEL_PREDICTION{
+  	  LP = logit(indiv_BASE) + POP_BETA*CP
+	  P1 = invLogit(LP)
+   }# end MODEL_PREDICTION
+
+   OBSERVATION{
+     Y : { type is discrete withCategories {success, fail} , distn = Bernoulli(category=Y.success, probability=P1) }
+   }# end ESTIMATION
+} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::EXPERIMENTAL_FEATURE,
+			"This is an experimental feature and may change in the future. Models using this feature may not be compatible with later versions of MDL.")
+	}
+
+	@Test
+	def void testExperimentalCategoricalFeature(){
+		val mcl = '''
+Categorical_DIST_mdl = mdlObj{
+   IDV{ CP }
+
+   VARIABILITY_LEVELS{
+	ID : { level=2, type is parameter }
+	DV : { level=1, type is observation }
+   }
+
+   STRUCTURAL_PARAMETERS{
+      Beta
+      Lgt0
+	  Lgt1
+	  Lgt2
+   }# end STRUCTURAL_PARAMETERS
+
+   VARIABILITY_PARAMETERS{
+      PPV_EVENT
+   }# end VARIABILITY_PARAMETERS
+
+
+   RANDOM_VARIABLE_DEFINITION(level=ID){
+      eta_PPV_EVENT ~ Normal(mean=0, var=PPV_EVENT )
+   }# end RANDOM_VARIABLE_DEFINITION
+
+   GROUP_VARIABLES{
+	  B0 = Lgt0
+	  B1 = B0 + Lgt1
+	  B2 = B1 + Lgt2
+   }
+   
+   INDIVIDUAL_VARIABLES{
+      indiv_B0 = general(grp=B0, ranEff = [eta_PPV_EVENT])
+      indiv_B1 = general(grp=B1, ranEff = [eta_PPV_EVENT])
+      indiv_B2 = general(grp=B2, ranEff = [eta_PPV_EVENT])
+   }# end INDIVIDUAL_VARIABLES
+
+   MODEL_PREDICTION{
+	  EDRUG = Beta * CP
+	  
+	  A0 = indiv_B0 + EDRUG
+	  A1 = indiv_B1 + EDRUG
+	  A2 = indiv_B2 + EDRUG
+	  	  	  
+	  P0 = invLogit(A0)
+	  P1 = invLogit(A1)
+	  P2 = invLogit(A2)
+	  
+	  Prob0 = P0
+	  Prob1 = P1 - P0
+	  Prob2 = P2 - P1
+	  Prob3 = 1 - P2
+   }# end MODEL_PREDICTION
+
+   OBSERVATION{
+	   Y : {type is categorical withCategories{ c0 when Prob0, c1 when Prob1, c2 when Prob2, c3 when Prob3} } 
+    }# end ESTIMATION
+
+} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+		mcl.assertWarning(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::EXPERIMENTAL_FEATURE,
+			"This is an experimental feature and may change in the future. Models using this feature may not be compatible with later versions of MDL.")
+	}
+
+
 }
