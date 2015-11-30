@@ -112,7 +112,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	@Check
 	// Check for unsupported attribute names
 	def checkUnsupportedAttributes(ValuePair it){
-		val blk = owningBlock.identifier
+		val blk = owningBlock?.identifier
 		val nm = attributeName
 		if(blk != null && nm != null){
 			if(unsupportedAttributes.get(blk)?.contains(nm)){
@@ -175,6 +175,17 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 					MdlPackage::eINSTANCE.symbolDefinition_Name,
 					FEATURE_NOT_SUPPORTED, useValue)
 			}
+		}
+	}
+
+	@Check
+	//Check for unsupported object names
+	def checkExperimentalFeature(ListDefinition it){
+		val attListType = typeOfList
+		if(attListType.typeName == ListDefinitionProvider::DISCRETE_LIST_TYPE.typeName || attListType.typeName == ListDefinitionProvider::CATEGORICAL_LIST_TYPE.typeName){
+			warning("This is an experimental feature and may change in the future. Models using this feature may not be compatible with later versions of MDL.",
+					MdlPackage::eINSTANCE.listDefinition_List,
+					MdlValidator::EXPERIMENTAL_FEATURE, "")
 		}
 	}
 

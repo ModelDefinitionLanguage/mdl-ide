@@ -82,6 +82,9 @@ class ListDefinitionProvider {
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
 	static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
+	public static val COUNT_LIST_TYPE = new ListTypeInfo("CountObs", PrimitiveType.Real) 
+	public static val DISCRETE_LIST_TYPE = new EnumListTypeInfo("DiscreteObs")
+	public static val CATEGORICAL_LIST_TYPE = new EnumListTypeInfo("CatObs")
 
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
@@ -435,21 +438,21 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = OBS_TYPE_ATT
 				listDefns = newArrayList(
-					new ListDefInfo (CATEGORICAL_OBS_VALUE, new EnumListTypeInfo("CatObs"),  #[
+					new ListDefInfo (CATEGORICAL_OBS_VALUE, CATEGORICAL_LIST_TYPE,  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
 						 ]
 					),
-					new ListDefInfo (COUNT_OBS_VALUE, new ListTypeInfo("CountObs", PrimitiveType.Real),  #[
+					new ListDefInfo (COUNT_OBS_VALUE, COUNT_LIST_TYPE,  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('distn', true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo (DISCRETE_OBS_VALUE, new EnumListTypeInfo("DiscreteObs"),  #[
+					new ListDefInfo (DISCRETE_OBS_VALUE, DISCRETE_LIST_TYPE,  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, MclTypeProvider::UNDEFINED_TYPE, false),
 						 new AttributeDefn('distn', true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo (TTE_OBS_VALUE, new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
+					new ListDefInfo (TTE_OBS_VALUE, new ListTypeInfo("TteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('hazard', true, MclTypeProvider::REAL_TYPE.makeReference)//,
 //						 new AttributeDefn('event', false, TTE_EVENT_TYPE),

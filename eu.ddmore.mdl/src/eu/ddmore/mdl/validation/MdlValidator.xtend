@@ -43,7 +43,8 @@ class MdlValidator extends AbstractMdlValidator {
 	extension BuiltinFunctionProvider funcHelper = new BuiltinFunctionProvider
 	extension MclUtils mclUtils = new MclUtils
 
-	public static val UNSUPPORTED_FEATURE = "eu.ddmore.mdl.validation.UnsupportedFeature"
+	public static val UNUSED_FEATURE = "eu.ddmore.mdl.validation.unused.feature"
+	public static val EXPERIMENTAL_FEATURE = "eu.ddmore.mdl.validation.experimental.feature"
 
 	
 	// List attribute validation
@@ -199,7 +200,7 @@ class MdlValidator extends AbstractMdlValidator {
 	def validateNoVectorDefinitions(EquationDefinition it){
 		if(isVector){
 			error("Vector symbol definitions are not supported in this version of the language.",
-					MdlPackage.eINSTANCE.equationDefinition_Vector, UNSUPPORTED_FEATURE, name)
+					MdlPackage.eINSTANCE.equationDefinition_Vector, eu.ddmore.mdl.validation.MdlValidator.UNUSED_FEATURE, name)
 		}
 	}
 	

@@ -4,19 +4,22 @@
  */
 package eu.ddmore.mdl.ui.contentassist
 
+import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EnumPair
-import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.validation.PropertyDefinitionProvider
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.jface.viewers.StyledString
 import org.eclipse.swt.graphics.Image
 import org.eclipse.xtext.Assignment
-import org.eclipse.xtext.CrossReference
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.RuleCall
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
@@ -30,6 +33,8 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
 class MdlProposalProvider extends AbstractMdlProposalProvider {
 
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
+	extension BuiltinFunctionProvider bfc = new BuiltinFunctionProvider
+	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 
 	override completeSymbolReference_Ref(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 //		lookupCrossReference(assignment.getTerminal() as CrossReference, context, acceptor);
@@ -68,17 +73,53 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 		}
 	}
 
+	private def createFuncEnumProposal(BuiltinFunctionCall fCall, EnumPair model, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
+		val enumType = bfc.getNamedArgumentType(model)
+		val attributes = new ArrayList<String>
+		if(enumType instanceof BuiltinEnumTypeInfo){
+			attributes.addAll((enumType as BuiltinEnumTypeInfo).expectedValues)
+		}
+		addProposals(context, acceptor, attributes, null);
+	} 
+
+
+	private def createListEnumProposal(EnumPair model, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
+		val parentBlock = model.getContainerOfType(BlockStatement)
+		val enumType = getTypeOfEnumAttribute(parentBlock.identifier, model.argumentName)
+		val attributes = new ArrayList<String>
+		if(enumType instanceof BuiltinEnumTypeInfo){
+			attributes.addAll((enumType as BuiltinEnumTypeInfo).expectedValues)
+		}
+		addProposals(context, acceptor, attributes, null);
+	} 
+
+	private def createPropertyEnumProposal(EnumPair model, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
+		val enumType = model.typeForProperty
+		val attributes = new ArrayList<String>
+		if(enumType instanceof BuiltinEnumTypeInfo){
+			attributes.addAll((enumType as BuiltinEnumTypeInfo).expectedValues)
+		}
+		addProposals(context, acceptor, attributes, null);
+	} 
 
 	override completeEnumPair_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		val parent = model.getContainerOfType(ListDefinition)
-		if(parent != null){
-			val parentBlock = model.getContainerOfType(BlockStatement)
-			val enumType = getTypeOfEnumAttribute(parentBlock.identifier, (model as EnumPair).argumentName)
-			val attributes = new ArrayList<String>
-			if(enumType instanceof BuiltinEnumTypeInfo){
-				attributes.addAll((enumType as BuiltinEnumTypeInfo).expectedValues)
+		val listParent = model.getContainerOfType(AttributeList)
+		if(model instanceof EnumPair){
+			if(listParent != null){
+				createListEnumProposal(model, context, acceptor)
 			}
-			addProposals(context, acceptor, attributes, null);
+			else{
+				val funcParent = model.getContainerOfType(BuiltinFunctionCall)
+				if(funcParent != null){
+						createFuncEnumProposal(funcParent, model, context, acceptor)
+				}
+				else{
+					val propParent = model.getContainerOfType(PropertyStatement)
+					if(propParent != null){
+						createPropertyEnumProposal(model, context, acceptor)
+					}
+				}
+			}
 		}
 	}
 	
