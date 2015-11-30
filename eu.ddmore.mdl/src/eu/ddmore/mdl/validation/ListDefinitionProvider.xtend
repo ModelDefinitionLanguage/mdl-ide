@@ -81,7 +81,7 @@ class ListDefinitionProvider {
 //	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
-	static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
+	public static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
 	public static val COUNT_LIST_TYPE = new ListTypeInfo("CountObs", PrimitiveType.Real) 
 	public static val DISCRETE_LIST_TYPE = new EnumListTypeInfo("DiscreteObs")
 	public static val CATEGORICAL_LIST_TYPE = new EnumListTypeInfo("CatObs")

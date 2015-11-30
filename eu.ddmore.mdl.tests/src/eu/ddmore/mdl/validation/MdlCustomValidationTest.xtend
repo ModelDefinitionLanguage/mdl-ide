@@ -456,4 +456,157 @@ warfarin_T2E_exact_dat = dataObj{
 			"Attribute 'cov' expects a reference to a covariate. 'W' is not a covariate.")
 	}
 
+	@Test
+	def void testValidNoCycle(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			COVARIATES{
+				W
+			}
+			
+			
+			STRUCTURAL_PARAMETERS{
+				BETA_W
+			}
+			
+			VARIABILITY_LEVELS{
+				ID : { level = 1, type is parameter}
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				BETA_CL_WT = linear(pop=1, fixEff=[{cov=W, coeff=BETA_W}], ranEff = [1])
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInValidCycleInFunction(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			COVARIATES{
+				W
+			}
+			
+			
+			STRUCTURAL_PARAMETERS{
+				BETA_W = BETA_CL_WT
+			}
+			
+			VARIABILITY_LEVELS{
+				ID : { level = 1, type is parameter}
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				BETA_CL_WT = linear(pop=1, fixEff=[{cov=W, coeff=BETA_W}], ranEff = [1])
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::INVALID_CYCLE,
+			"Symbol 'BETA_W' contains an expression that refers to itself.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::INVALID_CYCLE,
+			"Symbol 'BETA_CL_WT' contains an expression that refers to itself.")
+	}
+
+	@Test
+	def void testInValidCycleInExpr(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			COVARIATES{
+				W
+			}
+			
+			
+			STRUCTURAL_PARAMETERS{
+				BETA_W
+			}
+			
+			VARIABILITY_LEVELS{
+				ID : { level = 1, type is parameter}
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				BETA_CL_WT = 1 + 4 * ln(BETA_CL_WT)
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::INVALID_CYCLE,
+			"Symbol 'BETA_CL_WT' contains an expression that refers to itself.")
+	}
+
+	@Test
+	def void testInValidCycleInList(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			COVARIATES{
+				W
+			}
+			
+			
+			STRUCTURAL_PARAMETERS{
+				BETA_W
+			}
+			
+			VARIABILITY_LEVELS{
+				ID : { level = 1, type is parameter}
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				BETA_CL_WT = 1 + 4 * Y
+			}
+			
+			OBSERVATION{
+				Y : { type is tte, hazard = BETA_CL_WT }
+			}
+			
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::INVALID_CYCLE,
+			"Symbol 'BETA_CL_WT' contains an expression that refers to itself.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::INVALID_CYCLE,
+			"Symbol 'Y' contains an expression that refers to itself.")
+	}
+
+	@Test
+	def void testValidCycleInDeriv(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			COVARIATES{
+				W
+			}
+			
+			
+			STRUCTURAL_PARAMETERS{
+				BETA_W
+			}
+			
+			VARIABILITY_LEVELS{
+				ID : { level = 1, type is parameter}
+			}
+			
+			INDIVIDUAL_VARIABLES{
+				BETA_CL_WT = 1 + 4 * Y
+			}
+			
+			MODEL_PREDICTION{
+				Y : { deriv = -BETA_CL_WT }
+				RATE : { deriv = -RATE }
+			}
+			
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
 }

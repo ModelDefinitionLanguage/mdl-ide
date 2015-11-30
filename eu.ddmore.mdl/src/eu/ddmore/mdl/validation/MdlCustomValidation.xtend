@@ -21,13 +21,18 @@ import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.utils.MclUtils
+import eu.ddmore.mdl.mdl.SymbolDefinition
+import java.util.LinkedList
+import eu.ddmore.mdl.utils.DependencyWalker
+import java.util.HashSet
 
 class MdlCustomValidation extends AbstractMdlValidator {
 
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider 
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension MclTypeProvider mtp = new MclTypeProvider
-	extension MclUtils mu = new MclUtils 
+	extension MclUtils mu = new MclUtils
+	extension DependencyWalker dw = new DependencyWalker 
 
 	override register(EValidatorRegistrar registrar){}
 
@@ -227,6 +232,37 @@ class MdlCustomValidation extends AbstractMdlValidator {
 					error("Only one column definition can have a 'use' attribute set to '" + enumVal + "'.",
 						MdlPackage::eINSTANCE.valuePair_Expression,
 						MdlValidator::DUPLICATE_UNIQUE_USE_VALUE, enumVal)
+				}
+			}
+		}
+	}
+	
+	@Check
+	def validateReferenceNotCircular(SymbolDefinition it){
+		if(!isDerivativeDefinition){
+			val startVar = name
+			val stack = new LinkedList<SymbolDefinition>
+			val visited = new HashSet<String>
+			it.getSymbolReferences.forEach[stack.push(it)]
+			var cycle = false
+			while(!stack.isEmpty && !cycle){
+				val currRef = stack.pop
+				val alreadyVisited = !visited.add(currRef.name)
+				if(!alreadyVisited && !currRef.isDerivativeDefinition){
+					if(startVar == currRef.name){
+						// cycle detected!
+						cycle = true
+						error("Symbol '" + name + "' contains an expression that refers to itself.",
+								MdlPackage::eINSTANCE.symbolDefinition_Name,
+								MdlValidator::INVALID_CYCLE, name)
+					}
+					else{
+						val newRefs = currRef.getSymbolReferences
+						// skip derivatives from cycle detection
+						newRefs.forEach[
+							stack.push(it)
+						]
+					}
 				}
 			}
 		}
