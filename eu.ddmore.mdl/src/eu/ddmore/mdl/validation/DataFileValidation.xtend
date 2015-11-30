@@ -61,33 +61,28 @@ class DataFileValidation extends AbstractMdlValidator  {
 		}
 	}
 	
-    //Locate data/script file in the MDL project
+    /**
+     * Locate data/script file in the MDL project.
+     * Such file references are resolved against the directory in which the MDL file is present.
+     */
+    // The validation code is called from both the MDL IDE and from the command-line
+    // MDL->PharmML converter, each of which represents a file differently, hence
+    // the ugly need to derive the java.io.File object representing the MDL file
+    // in two different ways.
     def File getFile(EObject b, String filePath) {
     	val resource = b.eResource()
-        val platformString = resource.getURI().toPlatformString(true);
-        if(platformString != null){
-	        val modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile(Path.fromOSString(platformString));
-	        val project = modelFile.getProject();
-	        var parent = modelFile.getParent();
-	        var p = filePath;
-	        while (p.startsWith("../") && parent != null){
-	            parent = parent.getParent();
-	            p = p.substring(3);
-	        }
-	        val dataFile = project.getFile(parent.getProjectRelativePath() + "/" + p);
-	        return new File(dataFile.locationURI.getPath)
-	    }
-	    else{
-	    	// this is a bit hacky and is mainly used for the non-eclipse plugin environment.
-	    	val url = this.class.getResource(filePath)
-	    	if(url != null){
-		        return new File(url.path);
-	    	}
-	    	else{
-	    		// if is null then assum the file is absolute and see if we can locate it that way.
-	    		return new File(filePath);
-	    	}
-	    }
+    	
+        var File modelFile
+    	if (resource.URI.isPlatform) { // Triggered from 'internal' MDL IDE code
+            val platformString = resource.URI.toPlatformString(true)
+            val modelFileAsIFile = ResourcesPlugin.getWorkspace().root.getFile(Path.fromOSString(platformString))
+            modelFile = new File(modelFileAsIFile.locationURI.path) // Convert org.eclipse.core.resources.IFile to java.io.File
+    	} else { // Triggered from 'external' converter code
+            modelFile = new File(resource.URI.toFileString())
+    	}
+    	
+    	val dataFile = modelFile.parentFile.toPath().resolve(filePath).toFile().canonicalFile
+    	return dataFile
     }
 	
 //	private void checkData(PropertyDeclaration p, IFile dataFile){
