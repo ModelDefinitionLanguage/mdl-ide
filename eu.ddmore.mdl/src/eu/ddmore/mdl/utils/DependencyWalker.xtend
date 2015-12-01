@@ -86,7 +86,8 @@ class DependencyWalker {
     			for(w : expr.when){
     				retVal.addAll(w.symbolReferences)
     			}
-    			retVal.addAll(expr.other.other.symbolReferences)
+    			if(expr.other != null)
+    				retVal.addAll(expr.other.other.symbolReferences)
     		}
     		VectorLiteral:{
     			for(v : expr.expressions){
@@ -106,7 +107,10 @@ class DependencyWalker {
     
     
     def dispatch List<SymbolDefinition> getSymbolReferences(IfExprPart it){
-		value.symbolReferences    			
+    	val retVal = new ArrayList<SymbolDefinition>
+    	retVal.addAll(cond.symbolReferences)
+		retVal.addAll(value.symbolReferences)
+		retVal    			
     }
     
     def dispatch List<SymbolDefinition> getSymbolReferences(SubListExpression it){
