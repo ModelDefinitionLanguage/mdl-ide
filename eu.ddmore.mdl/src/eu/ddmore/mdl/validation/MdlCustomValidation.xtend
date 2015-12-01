@@ -337,4 +337,22 @@ class MdlCustomValidation extends AbstractMdlValidator {
 		}
 	}
 	
+	static val RESERVED_PREFIX = "MDL__" 
+	static val ReservedWord = #{ 'ordered' }
+	
+	@Check
+	def validateReservedNamesNotUsed(SymbolDefinition it){
+		if(name.startsWith(RESERVED_PREFIX)){
+			error("Variable names starting with '" + RESERVED_PREFIX + "' are reserved for internal use.",
+				MdlPackage::eINSTANCE.symbolDefinition_Name, MdlValidator::RESERVED_PREFIX_USED
+			)
+		}
+		else if(ReservedWord.contains(name)){
+			error("The keyword '" + name + "' is reserved for future use in MDL.",
+				MdlPackage::eINSTANCE.symbolDefinition_Name, MdlValidator::RESERVED_WORD_USED
+			)
+		}
+	}
+	
+	
 }

@@ -793,4 +793,80 @@ warfarin_T2E_exact_dat = dataObj{
 			"Variability Level definition 'd': this is an observation level and so should have a level value of 1.")
 	}
 
+	@Test
+	def void testUseReservedVariableAsPrefix(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			MODEL_PREDICTION{
+				MDL__foo = 1
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::RESERVED_PREFIX_USED,
+			"Variable names starting with 'MDL__' are reserved for internal use.")
+	}
+
+	@Test
+	def void testUseReservedVariableAsWord(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			MODEL_PREDICTION{
+				MDL__ = 1
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::RESERVED_PREFIX_USED,
+			"Variable names starting with 'MDL__' are reserved for internal use.")
+	}
+
+	@Test
+	def void testNotUseReservedVariablePrefix(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			
+			MODEL_PREDICTION{
+				MDL_ = 1
+			}
+			
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testUseReservedWord(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			MODEL_PREDICTION{
+				ordered = 1
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::RESERVED_WORD_USED,
+			"The keyword 'ordered' is reserved for future use in MDL.")
+	}
+
 }
