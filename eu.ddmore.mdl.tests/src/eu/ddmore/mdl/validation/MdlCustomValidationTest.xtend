@@ -609,4 +609,188 @@ warfarin_T2E_exact_dat = dataObj{
 		mcl.assertNoErrors
 	}
 
+	@Test
+	def void testValidVariabilityLevelDefinition1(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				ID : { level = 1, type is parameter}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidVariabilityLevelDefinition2(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidVariabilityLevelDefinition3(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 3, type is parameter}
+				b : { level = 2, type is parameter}
+				c : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidVariabilityLevelDefinition4(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 13, type is parameter}
+				b : { level = 21, type is parameter}
+				c : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidVariabilityLevelDefinition5(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				c : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidVariabilityLevelDefinition1(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 1, type is parameter}
+				b : { level = 2, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'a': an observation level is present so the level cannot be 1.")
+	}
+
+	@Test
+	def void testInvalidVariabilityLevelDefinition2(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 2, type is parameter}
+				c : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'a': the level value of 2 is used by another definition.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'b': the level value of 2 is used by another definition.")
+	}
+
+	@Test
+	def void testInvalidVariabilityLevelDefinition3(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = -2, type is parameter}
+				b : { level = 0, type is parameter}
+				c : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'a': level cannot be less than 1.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'b': level cannot be less than 1.")
+	}
+
+
+	@Test
+	def void testInvalidVariabilityLevelDefinition4(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 3, type is parameter}
+				b : { level = 1, type is parameter}
+				c : { level = 2, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'b': an observation level is present so the level cannot be 1.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'c': this is an observation level and so should have a level value of 1.")
+	}
+
+	@Test
+	def void testValidVariabilityLevelDefinition6(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidVariabilityLevelDefinition6(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 4, type is parameter}
+				b : { level = 3, type is parameter}
+				c : { level = 1, type is observation}
+				d : { level = 2, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'c': an observation definition already exists. There can be only one.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'd': an observation definition already exists. There can be only one.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'd': this is an observation level and so should have a level value of 1.")
+	}
+
 }

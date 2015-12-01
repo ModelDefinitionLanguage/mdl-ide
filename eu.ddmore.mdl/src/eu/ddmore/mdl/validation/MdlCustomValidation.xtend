@@ -25,6 +25,7 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import java.util.LinkedList
 import eu.ddmore.mdl.utils.DependencyWalker
 import java.util.HashSet
+import eu.ddmore.mdl.utils.ConstantEvaluation
 
 class MdlCustomValidation extends AbstractMdlValidator {
 
@@ -33,6 +34,7 @@ class MdlCustomValidation extends AbstractMdlValidator {
 	extension MclTypeProvider mtp = new MclTypeProvider
 	extension MclUtils mu = new MclUtils
 	extension DependencyWalker dw = new DependencyWalker 
+	extension ConstantEvaluation ce = new ConstantEvaluation 
 
 	override register(EValidatorRegistrar registrar){}
 
@@ -267,4 +269,72 @@ class MdlCustomValidation extends AbstractMdlValidator {
 			}
 		}
 	}
+	
+	
+	def findVarLevelDefnsOfType(BlockStatement blk, String type){
+		blk.nonBlockStatements.filter[l|
+			if(l instanceof ListDefinition)
+				l.list.getAttributeEnumValue(ListDefinitionProvider::VAR_LVL_TYPE_ATT) == type 
+			else false
+		]
+	}
+	
+	def getLevelValue(ListDefinition it){
+		list.getAttributeExpression(ListDefinitionProvider::VAR_LVL_LEVEL_ATT)?.evaluateMathsExpression?.intValue
+	}
+	
+	def isAnotherPresentWithSameLevel(BlockStatement blk, ListDefinition currDefn, int testLevel){
+		blk.nonBlockStatements.exists[l|
+			if(l instanceof ListDefinition)
+				l != currDefn && l.levelValue == testLevel  
+			else false
+		]
+	}
+	
+	@Check
+	def validateVariabilityLevels(ListDefinition it){
+		// what are the rules?
+		// no duplicate numbers
+		// number start at 1
+		// if observation type then this must be 1
+		// only one observation type permitted
+		val owningBlock = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		if(owningBlock?.identifier == BlockDefinitionProvider::VAR_LVL_BLK_NAME){
+			// check if permitted level value
+			if(levelValue < 1){
+				error("Variability Level definition '" + name + "': level cannot be less than 1.",
+					MdlPackage::eINSTANCE.listDefinition_List, MdlValidator::VARIABILITY_LEVELS_MALFORMED, name
+				)
+			}
+			if(owningBlock.isAnotherPresentWithSameLevel(it, levelValue)){
+				error("Variability Level definition '" + name + "': the level value of " + levelValue + " is used by another definition.",
+					MdlPackage::eINSTANCE.listDefinition_List, MdlValidator::VARIABILITY_LEVELS_MALFORMED, name
+				)
+			}
+			// check that this is an obs defn first then check for duplicates
+			if(list.getAttributeEnumValue(ListDefinitionProvider::VAR_LVL_TYPE_ATT) == ListDefinitionProvider::VAR_LVL_OBS_VALUE){
+				val obsDefns = owningBlock.findVarLevelDefnsOfType(ListDefinitionProvider::VAR_LVL_OBS_VALUE)
+				if(obsDefns.size > 1){
+					error("Variability Level definition '" + name + "': an observation definition already exists. There can be only one.",
+							MdlPackage::eINSTANCE.listDefinition_List, MdlValidator::VARIABILITY_LEVELS_MALFORMED, name
+					)
+				}
+				if(levelValue != 1){
+					error("Variability Level definition '" + name + "': this is an observation level and so should have a level value of 1.",
+							MdlPackage::eINSTANCE.listDefinition_List, MdlValidator::VARIABILITY_LEVELS_MALFORMED, name
+					)
+				}
+			}
+			else if(list.getAttributeEnumValue(ListDefinitionProvider::VAR_LVL_TYPE_ATT) == ListDefinitionProvider::VAR_LVL_PARAM_VALUE){
+				 if(levelValue == 1 && owningBlock.findVarLevelDefnsOfType(ListDefinitionProvider::VAR_LVL_OBS_VALUE).size > 0){
+				 	// this is level 1, but also obs blocks
+				 	error("Variability Level definition '" + name + "': an observation level is present so the level cannot be 1.",
+				 			MdlPackage::eINSTANCE.listDefinition_List, MdlValidator::VARIABILITY_LEVELS_MALFORMED, name
+				 	)
+				 }
+			}
+			
+		}
+	}
+	
 }

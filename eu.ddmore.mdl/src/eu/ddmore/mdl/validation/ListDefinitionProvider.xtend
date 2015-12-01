@@ -55,6 +55,8 @@ class ListDefinitionProvider {
 	public static val AMT_COL_ATT = 'amtColumn'
 	public static val CMT_TYPE_ATT = 'type'
 	public static val OBS_TYPE_ATT = 'type'
+	public static val VAR_LVL_TYPE_ATT = 'type'
+	public static val VAR_LVL_LEVEL_ATT = 'level'
 	public static val DERIV_TYPE_ATT = 'deriv'
 	public static val WRT_ATT = 'wrt'
 	public static val DERIV_INIT_TIME_ATT = 'x0'
@@ -64,13 +66,15 @@ class ListDefinitionProvider {
 	public static val TTE_OBS_VALUE = 'tte'
 	public static val TTE_EVENT_ATT = 'event'
 	public static val TTE_MAX_EVENT_ATT = 'maxEvent'
+	public static val VAR_LVL_PARAM_VALUE = 'parameter' 
+	public static val VAR_LVL_OBS_VALUE = 'observation' 
 	
 
 	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, MDV_USE_VALUE, IDV_USE_VALUE,
 		ID_USE_VALUE, RATE_USE_VALUE, IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, SS_USE_VALUE, II_USE_VALUE, ADDL_USE_VALUE
 	})
 	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
-	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
+	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{VAR_LVL_PARAM_VALUE, VAR_LVL_OBS_VALUE})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
 	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{'depot', 'compartment', 'elimination', 'transfer', 'distribution', 'direct', 'input', 'effect'})
 	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
@@ -267,7 +271,7 @@ class ListDefinitionProvider {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefInfo (null, new ListTypeInfo("VarLevel", PrimitiveType.List),  #[
-						 new AttributeDefn('type', true, VARIABILITY_TYPE_TYPE), new AttributeDefn('level', true, MclTypeProvider::INT_TYPE)
+						 new AttributeDefn(VAR_LVL_TYPE_ATT, true, VARIABILITY_TYPE_TYPE), new AttributeDefn(VAR_LVL_LEVEL_ATT, true, MclTypeProvider::INT_TYPE)
 						 ]
 					)
 				)
@@ -1084,8 +1088,8 @@ class ListDefinitionProvider {
 			listDefn.isAnonymous
 		}
 		else{
-			// is can't get the definition (presumably because the list is mal-formed) then give benefit of the doubt.
-			true
+			// is can't get the definition (presumably because the list is mal-formed) then assume no.
+			false
 		}
 	}
 
@@ -1095,8 +1099,8 @@ class ListDefinitionProvider {
 			!listDefn.isAnonymous
 		}
 		else{
-			// is can't get the definition (presumably because the list is mal-formed) then give benefit of the doubt.
-			true
+			// is can't get the definition (presumably because the list is mal-formed) then no.
+			false
 		}
 	}
 

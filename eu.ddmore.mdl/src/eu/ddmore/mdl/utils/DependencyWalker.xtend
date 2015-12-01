@@ -2,11 +2,11 @@ package eu.ddmore.mdl.utils
 
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
+import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
@@ -16,6 +16,7 @@ import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.PowerExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
+import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
@@ -26,8 +27,6 @@ import eu.ddmore.mdl.mdl.WhenExpression
 import java.util.ArrayList
 import java.util.Collections
 import java.util.List
-import eu.ddmore.mdl.mdl.AttributeList
-import eu.ddmore.mdl.mdl.SubListExpression
 
 class DependencyWalker {
 
