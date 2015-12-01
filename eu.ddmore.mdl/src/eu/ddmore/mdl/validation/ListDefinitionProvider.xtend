@@ -666,6 +666,16 @@ class ListDefinitionProvider {
 		attributes.findFirst(ad | ad.name == attName) 
 	}
 	
+	
+	def TypeInfo getAttributeType(ValuePair it){
+		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
+		if(attList != null){
+			val listDefn = attList.matchingListDefn
+			listDefn?.getAttributeType(attributeName) ?: MclTypeProvider::UNDEFINED_TYPE
+		}
+		else MclTypeProvider::UNDEFINED_TYPE
+	}
+	
 	def TypeInfo getTypeOfAttributeBuiltinEnum(EnumExpression ee){
 		val blockName = ee.owningBlock.identifier
 		val enumValue = ee.enumValue
