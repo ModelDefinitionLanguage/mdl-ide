@@ -26,6 +26,7 @@ import java.util.LinkedList
 import eu.ddmore.mdl.utils.DependencyWalker
 import java.util.HashSet
 import eu.ddmore.mdl.utils.ConstantEvaluation
+import eu.ddmore.mdl.mdl.CategoryValueDefinition
 
 class MdlCustomValidation extends AbstractMdlValidator {
 
@@ -338,7 +339,7 @@ class MdlCustomValidation extends AbstractMdlValidator {
 	}
 	
 	static val RESERVED_PREFIX = "MDL__" 
-	static val ReservedWord = #{ 'ordered' }
+	static val ReservedWord = #{ 'ordered', 'withOrderedCategories' }
 	
 	@Check
 	def validateReservedNamesNotUsed(SymbolDefinition it){
@@ -350,6 +351,20 @@ class MdlCustomValidation extends AbstractMdlValidator {
 		else if(ReservedWord.contains(name)){
 			error("The keyword '" + name + "' is reserved for future use in MDL.",
 				MdlPackage::eINSTANCE.symbolDefinition_Name, MdlValidator::RESERVED_WORD_USED
+			)
+		}
+	}
+	
+	@Check
+	def validateReservedNamesNotUsed(CategoryValueDefinition it){
+		if(name.startsWith(RESERVED_PREFIX)){
+			error("Variable names starting with '" + RESERVED_PREFIX + "' are reserved for internal use.",
+				MdlPackage::eINSTANCE.categoryValueDefinition_Name, MdlValidator::RESERVED_PREFIX_USED
+			)
+		}
+		else if(ReservedWord.contains(name)){
+			error("The keyword '" + name + "' is reserved for future use in MDL.",
+				MdlPackage::eINSTANCE.categoryValueDefinition_Name, MdlValidator::RESERVED_WORD_USED
 			)
 		}
 	}

@@ -869,4 +869,86 @@ warfarin_T2E_exact_dat = dataObj{
 			"The keyword 'ordered' is reserved for future use in MDL.")
 	}
 
+	@Test
+	def void testUseReservedWordInCategories(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			COVARIATES{
+				c withCategories { ordered, not }
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::RESERVED_WORD_USED,
+			"The keyword 'ordered' is reserved for future use in MDL.")
+	}
+
+	@Test
+	def void testUseReservedWord2(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			MODEL_PREDICTION{
+				withOrderedCategories = 1
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::RESERVED_WORD_USED,
+			"The keyword 'withOrderedCategories' is reserved for future use in MDL.")
+	}
+
+	@Test
+	def void testUseReservedWordInCategories2(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			COVARIATES{
+				c withCategories { withOrderedCategories, not }
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::RESERVED_WORD_USED,
+			"The keyword 'withOrderedCategories' is reserved for future use in MDL.")
+	}
+
+	@Test
+	def void testUseReservedWordInEnumList(){
+		val mcl = '''
+warfarin_T2E_exact_dat = dataObj{
+
+   DECLARED_VARIABLES{ Y; INPUT }
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      TIME: {use is idv}
+      TRT: {use is cotCov withCategories { ordered, other }}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      srcFile : {file="warfarin_TTE_exact.csv",
+      			inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::RESERVED_WORD_USED,
+			"The keyword 'ordered' is reserved for future use in MDL.")
+	}
+
 }
