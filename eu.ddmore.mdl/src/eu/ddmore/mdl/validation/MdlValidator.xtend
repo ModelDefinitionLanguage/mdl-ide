@@ -30,7 +30,7 @@ import org.eclipse.xtext.validation.ComposedChecks
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
  @ComposedChecks(validators= #[BlockValidator, DataFileValidation, UnsupportedFeaturesValidator, MdlCustomValidation,
- 								ListValidator, TypeSystemValidator, ValueSelectorValidator ])
+ 								ListValidator, TypeSystemValidator, ValueSelectorValidator, UnsupportedToolSpecificFeaturesValidator ])
 class MdlValidator extends AbstractMdlValidator {
 	public val static MDLOBJ = 'mdlObj'
 	public val static DATAOBJ = 'dataObj'
@@ -46,7 +46,8 @@ class MdlValidator extends AbstractMdlValidator {
 
 	public static val UNUSED_FEATURE = "eu.ddmore.mdl.validation.unused.feature"
 	public static val EXPERIMENTAL_FEATURE = "eu.ddmore.mdl.validation.experimental.feature"
-
+	public static val FEATURE_NOT_SUPPORTED_MONOLIX = "eu.ddmore.mdl.validation.unsupported.feature.monolix"
+	public static val FEATURE_NOT_SUPPORTED_NONMEM = "eu.ddmore.mdl.validation.unsupported.feature.nonmem"
 	
 	// List attribute validation
 	public static val UNRECOGNIZED_PROPERTY_ATT  = "eu.ddmore.mdl.validation.UnrecognisedProperty"
