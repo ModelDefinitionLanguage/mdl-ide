@@ -27,6 +27,8 @@ import eu.ddmore.mdl.mdl.WhenExpression
 import java.util.ArrayList
 import java.util.Collections
 import java.util.List
+import eu.ddmore.mdl.mdl.MappingExpression
+import eu.ddmore.mdl.mdl.MappingPair
 
 class DependencyWalker {
 
@@ -132,6 +134,23 @@ class DependencyWalker {
     	}
     	retVal
     }
+    
+    def dispatch List<SymbolDefinition> getSymbolReferences(MappingExpression it){
+    	val retVal = new ArrayList<SymbolDefinition>
+		for(att : it.attList){
+			retVal.addAll(att.symbolReferences)
+		}
+		retVal
+	}
+    
+    def dispatch List<SymbolDefinition> getSymbolReferences(MappingPair it){
+    	val retVal = new ArrayList<SymbolDefinition>
+    	retVal.addAll(leftOperand?.symbolReferences ?: Collections::emptyList)
+    	retVal.addAll(srcColumn?.symbolReferences ?: Collections::emptyList)
+    	retVal.addAll(rightOperand?.symbolReferences ?: Collections::emptyList)
+		retVal
+	}
+    
 
 	def dispatch List<SymbolDefinition> getSymbolReferences(AttributeList it){
     	val retVal = new ArrayList<SymbolDefinition>

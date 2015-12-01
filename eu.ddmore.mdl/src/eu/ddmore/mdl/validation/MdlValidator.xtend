@@ -29,7 +29,8 @@ import org.eclipse.xtext.validation.ComposedChecks
  *
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
- @ComposedChecks(validators= #[BlockValidator, DataFileValidation, UnsupportedFeaturesValidator, MdlCustomValidation, ListValidator, TypeSystemValidator])
+ @ComposedChecks(validators= #[BlockValidator, DataFileValidation, UnsupportedFeaturesValidator, MdlCustomValidation,
+ 								ListValidator, TypeSystemValidator, ValueSelectorValidator ])
 class MdlValidator extends AbstractMdlValidator {
 	public val static MDLOBJ = 'mdlObj'
 	public val static DATAOBJ = 'dataObj'
@@ -85,6 +86,9 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val MODEL_DATA_MISMATCH = "eu.ddmore.mdl.validation.mog.mismatch_mod_data"
 	public static val MCLOBJ_REF_UNRESOLVED = "eu.ddmore.mdl.validation.mog.missingObj"
 
+	// Selection value
+	public static val DUPLICATE_SELECTION_TEST_VALUE = "eu.ddmore.mdl.validation.selector.testvalue.duplicate"
+	public static val DUPLICATE_SELECTION_REF = "eu.ddmore.mdl.validation.selector.ref.duplicate"
 
 	//Custom MDL checks
 	public static val INVALID_ENUM_RELATION_OPERATOR = "eu.ddmore.mdl.validation.custom.enum.relation.op"
