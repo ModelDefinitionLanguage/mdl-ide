@@ -609,4 +609,346 @@ warfarin_T2E_exact_dat = dataObj{
 		mcl.assertNoErrors
 	}
 
+	@Test
+	def void testValidVariabilityLevelDefinition1(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				ID : { level = 1, type is parameter}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidVariabilityLevelDefinition2(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidVariabilityLevelDefinition3(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 3, type is parameter}
+				b : { level = 2, type is parameter}
+				c : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidVariabilityLevelDefinition4(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 13, type is parameter}
+				b : { level = 21, type is parameter}
+				c : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidVariabilityLevelDefinition5(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				c : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidVariabilityLevelDefinition1(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 1, type is parameter}
+				b : { level = 2, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'a': an observation level is present so the level cannot be 1.")
+	}
+
+	@Test
+	def void testInvalidVariabilityLevelDefinition2(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 2, type is parameter}
+				c : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'a': the level value of 2 is used by another definition.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'b': the level value of 2 is used by another definition.")
+	}
+
+	@Test
+	def void testInvalidVariabilityLevelDefinition3(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = -2, type is parameter}
+				b : { level = 0, type is parameter}
+				c : { level = 1, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'a': level cannot be less than 1.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'b': level cannot be less than 1.")
+	}
+
+
+	@Test
+	def void testInvalidVariabilityLevelDefinition4(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 3, type is parameter}
+				b : { level = 1, type is parameter}
+				c : { level = 2, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'b': an observation level is present so the level cannot be 1.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'c': this is an observation level and so should have a level value of 1.")
+	}
+
+	@Test
+	def void testValidVariabilityLevelDefinition6(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+			}
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidVariabilityLevelDefinition6(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 4, type is parameter}
+				b : { level = 3, type is parameter}
+				c : { level = 1, type is observation}
+				d : { level = 2, type is observation}
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'c': an observation definition already exists. There can be only one.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'd': an observation definition already exists. There can be only one.")
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::VARIABILITY_LEVELS_MALFORMED,
+			"Variability Level definition 'd': this is an observation level and so should have a level value of 1.")
+	}
+
+	@Test
+	def void testUseReservedVariableAsPrefix(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			MODEL_PREDICTION{
+				MDL__foo = 1
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::RESERVED_PREFIX_USED,
+			"Variable names starting with 'MDL__' are reserved for internal use.")
+	}
+
+	@Test
+	def void testUseReservedVariableAsWord(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			MODEL_PREDICTION{
+				MDL__ = 1
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::RESERVED_PREFIX_USED,
+			"Variable names starting with 'MDL__' are reserved for internal use.")
+	}
+
+	@Test
+	def void testNotUseReservedVariablePrefix(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			
+			MODEL_PREDICTION{
+				MDL_ = 1
+			}
+			
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testUseReservedWord(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			MODEL_PREDICTION{
+				ordered = 1
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::RESERVED_WORD_USED,
+			"The keyword 'ordered' is reserved for future use in MDL.")
+	}
+
+	@Test
+	def void testUseReservedWordInCategories(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			COVARIATES{
+				c withCategories { ordered, not }
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::RESERVED_WORD_USED,
+			"The keyword 'ordered' is reserved for future use in MDL.")
+	}
+
+	@Test
+	def void testUseReservedWord2(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			MODEL_PREDICTION{
+				withOrderedCategories = 1
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+			MdlValidator::RESERVED_WORD_USED,
+			"The keyword 'withOrderedCategories' is reserved for future use in MDL.")
+	}
+
+	@Test
+	def void testUseReservedWordInCategories2(){
+		val mcl = '''bar = mdlObj {
+			IDV { T }
+			
+			VARIABILITY_LEVELS{
+				a : { level = 2, type is parameter}
+				b : { level = 1, type is observation}
+			}
+			COVARIATES{
+				c withCategories { withOrderedCategories, not }
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::RESERVED_WORD_USED,
+			"The keyword 'withOrderedCategories' is reserved for future use in MDL.")
+	}
+
+	@Test
+	def void testUseReservedWordInEnumList(){
+		val mcl = '''
+warfarin_T2E_exact_dat = dataObj{
+
+   DECLARED_VARIABLES{ Y; INPUT }
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      TIME: {use is idv}
+      TRT: {use is cotCov withCategories { ordered, other }}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      srcFile : {file="warfarin_TTE_exact.csv",
+      			inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+			MdlValidator::RESERVED_WORD_USED,
+			"The keyword 'ordered' is reserved for future use in MDL.")
+	}
+
 }
