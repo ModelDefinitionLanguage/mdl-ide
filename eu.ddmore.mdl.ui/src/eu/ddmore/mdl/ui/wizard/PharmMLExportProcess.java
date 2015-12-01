@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -26,6 +27,8 @@ import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.FileSystemExporter;
 
 public class PharmMLExportProcess implements IRunnableWithProgress {
+    private final Logger LOG = Logger.getLogger(PharmMLExportProcess.class);
+
     private IPath path;
 
     private IProgressMonitor monitor;
@@ -385,6 +388,9 @@ public class PharmMLExportProcess implements IRunnableWithProgress {
             } else {
                 exportSpecifiedResources();
             }
+        } catch (Exception e) {
+            LOG.error(e, e);
+            throw(e);
         } finally {
             monitor.done();
         }

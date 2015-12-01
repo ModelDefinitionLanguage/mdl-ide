@@ -1,51 +1,32 @@
 package eu.ddmore.mdl.ui.wizard;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.Iterator;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
-import org.eclipse.xtext.generator.JavaIoFileSystemAccess;
 import org.eclipse.xtext.parser.ParseException;
-import org.eclipse.xtext.ui.resource.IResourceSetProvider;
+import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.resource.XtextResourceSet;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.google.inject.Injector;
 
 import eu.ddmore.converter.mdl2pharmml.Mdl2Pharmml;
-import eu.ddmore.mdl.generator.MdlGenerator;
-import eu.ddmore.mdl.generator.Preferences;
+import eu.ddmore.mdl.MdlStandaloneSetup;
 import eu.ddmore.mdl.mdl.Mcl;
+import eu.ddmore.mdl.mdl.MclObject;
 import eu.ddmore.mdl.utils.MclUtils;
 
 public class PharmMLExporter {
 
-//    @Inject
-//    private MdlGenerator generator;
-
-    @Inject
-    protected IResourceSetProvider resourceSetProvider;
-	
-	
-	private static final int DEFAULT_BUFFER_SIZE = 16*1024;
+    private static final int DEFAULT_BUFFER_SIZE = 16*1024;
 	
     /**
      *  Creates the specified file system directory at <code>destinationPath</code>.
@@ -53,8 +34,83 @@ public class PharmMLExporter {
      *  
      *  @param destinationPath location to which files will be written
      */
-    public void createFolder(IPath destinationPath) {
+    protected void createFolder(IPath destinationPath) {
         new File(destinationPath.toOSString()).mkdir();
+    }
+
+    /**
+     * Convert a MDL file to PharmML and write it to the specified file.
+     * 
+     * @param src - {@link IFile} identifying the MDL file to convert
+     * @param dest - {@link IPath} specifying the output file to which to write out the converted PharmML
+     * @throws IOException if an error occurred writing to the output file
+     */
+    private void performConvert(IFile src, IPath dest) throws IOException {
+
+        final Injector injector = new MdlStandaloneSetup().createInjectorAndDoEMFRegistration();
+        final XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
+        resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
+
+        final URI uri = URI.createURI(src.getRawLocationURI().toString());
+        final Resource resource = resourceSet.getResource(uri, true);
+
+
+        // TODO: Check for syntax errors and warnings, and semantic errors and warnings,
+        // and presumably display them to the user. Similar to MDLToPharmMLConverter
+        // and MDLValidator from converter.mdl project, but not sure if we can actually
+        // share the code between the two; the latter uses Converter Toolbox classes.
+
+        if (!resource.getErrors().isEmpty()) {
+            throw new ParseException("Unable to parse MDL file, it has syntax errors.");
+        }
+//        
+//        final EList<Diagnostic> errors = resource.getErrors();
+//        final EList<Diagnostic> warnings = resource.getWarnings();
+//        if (!warnings.isEmpty()) {
+//            LOG.warn(warnings.size() + " warning(s) encountered in parsing MDL file " + src.fullPath);
+//            for (Diagnostic w : warnings) {
+//                LOG.warn(w);
+//            }
+//        }
+//        if (!errors.isEmpty()) {
+//            LOG.error(errors.size() + " errors encountered in parsing MDL file " + src.fullPath);
+//            for (Diagnostic e : errors) {
+//                LOG.error(e);
+//            }
+//            throw new ParseException(String.format("Unable to parse MDL file %1$s; %2$d error(s) encountered; see the log output.",
+//                src.fullPath, errors.size()));
+//        }
+//
+       // validate the resource
+//        final IResourceValidator validator = injector.getInstance(IResourceValidator.class);
+//       List<Issue> list = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
+
+
+        final Mcl mcl = (Mcl) resource.getContents().get(0);
+        
+        final Iterable<MclObject> mogs = new MclUtils().getMogObjects(mcl);
+        
+        // TODO: We're currently making an assumption that there will be a single MOG
+        // in the provided file.  This should be fine for Product 4.
+        // This will be addressed under DDMORE-1221
+        Iterator<MclObject> mogsIt = mogs.iterator();
+        if (!mogsIt.hasNext()) {
+            throw new IllegalStateException("Must be (at least) one MOG defined in the provided MCL file: " + src); 
+        }
+        final MclObject mog = mogsIt.next();
+        
+
+        final Mdl2Pharmml xtendConverter = new Mdl2Pharmml();
+        
+        final CharSequence converted = xtendConverter.convertToPharmML(mog);
+        final IPath newDest = dest.removeFileExtension().addFileExtension("xml");
+        writeOutputFile(newDest, converted.toString());
+
+    }
+    
+    private void writeOutputFile(IPath outputDirectory, String text) throws IOException {
+        final File outputFile = outputDirectory.toFile();
+        FileUtils.writeStringToFile(outputFile, text);
     }
 
     /**
@@ -65,12 +121,11 @@ public class PharmMLExporter {
      *  @exception CoreException if the operation fails 
      *  @exception IOException if an I/O error occurs when writing files
      */
-    public void write(IResource resource, IPath destinationPath)
+    protected void write(IResource resource, IPath destinationPath)
             throws CoreException, IOException {
         if (resource.getType() == IResource.FILE) {
 //			writeFile((IFile) resource, destinationPath);
-        	MdlGenerator mg = new MdlGenerator();
-			mg.performConvert((IFile) resource, destinationPath);
+			performConvert((IFile) resource, destinationPath);
 		} else {
 			writeChildren((IContainer) resource, destinationPath);
 		}
@@ -79,7 +134,7 @@ public class PharmMLExporter {
     /**
      *  Exports the passed container's children
      */
-    protected void writeChildren(IContainer folder, IPath destinationPath)
+    private void writeChildren(IContainer folder, IPath destinationPath)
             throws CoreException, IOException {
         if (folder.isAccessible()) {
             IResource[] children = folder.members();
@@ -164,14 +219,14 @@ public class PharmMLExporter {
     /**
      *  Writes the passed resource to the specified location recursively
      */
-    protected void writeResource(IResource resource, IPath destinationPath)
+    private void writeResource(IResource resource, IPath destinationPath)
             throws CoreException, IOException {
         if (resource.getType() == IResource.FILE) {
-        	MdlGenerator mg = new MdlGenerator();
-			mg.performConvert((IFile) resource, destinationPath);
+			performConvert((IFile) resource, destinationPath);
 		} else {
             createFolder(destinationPath);
             writeChildren((IContainer) resource, destinationPath);
         }
     }
+    
 }
