@@ -16,7 +16,7 @@
 	<properties>
 	  <version.status>beta</version.status>
 	  <iog.product.name>Interoperability Group Product</iog.product.name>
-	  <iog.product.version>4</iog.product.version>
+	  <iog.product.version>4.1</iog.product.version>
 	</properties>
 
     <profiles>
