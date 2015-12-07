@@ -8,12 +8,12 @@
 		<relativePath>../eu.ddmore.mdleditor.build/pom.xml</relativePath>
 		<groupId>eu.ddmore</groupId>
 		<artifactId>eu.ddmore.parent</artifactId>
-		<version>1.3.0-SNAPSHOT</version>
+		<version>1.4.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>eu.ddmore.mdl.sdk.jre</artifactId>
 	<!-- Fix the version of this Feature - see comment within feature.xml -->
-	<version>1.0.3</version>
+	<version>1.4.0</version>
 	<packaging>eclipse-feature</packaging>
 
     <build>

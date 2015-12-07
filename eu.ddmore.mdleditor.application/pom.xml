@@ -8,7 +8,7 @@
 		<relativePath>../eu.ddmore.mdleditor.build/pom.xml</relativePath>
 		<groupId>eu.ddmore</groupId>
 		<artifactId>eu.ddmore.parent</artifactId>
-		<version>1.3.0-SNAPSHOT</version>
+		<version>1.4.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>eu.ddmore.mdleditor.application</artifactId>
@@ -16,7 +16,7 @@
 	<properties>
 	  <version.status>beta</version.status>
 	  <iog.product.name>Interoperability Group Product</iog.product.name>
-	  <iog.product.version>4</iog.product.version>
+	  <iog.product.version>5</iog.product.version>
 	</properties>
 
     <profiles>
@@ -92,5 +92,4 @@
       </build>
     </profile>
     </profiles>
-    
 </project>
