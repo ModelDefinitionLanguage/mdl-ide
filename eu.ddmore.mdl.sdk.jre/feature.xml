@@ -2,7 +2,7 @@
 <feature
       id="eu.ddmore.mdl.sdk.jre"
       label="%label"
-      version="1.0.3"
+      version="1.4.0"
       provider-name="%provider">
 	<!-- Note that the version number of this Feature is deliberately fixed (i.e. not having a .qualifier suffix)
 	     since otherwise the Feature will attempt to be updated each time an update is performed within the MDL IDE
