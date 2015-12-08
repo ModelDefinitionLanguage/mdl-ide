@@ -17,6 +17,7 @@
 	  <version.status>beta</version.status>
 	  <iog.product.name>Interoperability Group Product</iog.product.name>
 	  <iog.product.version>5</iog.product.version>
+        <release.version.number>${project.version}</release.version.number>
 	</properties>
 
     <profiles>
@@ -34,6 +35,7 @@
         <id>release</id>
         <properties>
            <build.status>Released</build.status>
+           <release.version.number>Demonstrator-1.3.0</release.version.number>
            <message>This build equates to the ${iog.product.name} ${iog.product.version} deliverable.</message>
         </properties>
       </profile>
@@ -53,7 +55,7 @@
                           <tasks>
                             <copy file="about.mappings" tofile="about.mappings.orig"/>
                             <replace file="about.mappings" 
-                                     token="@version@" value="${unqualifiedVersion}" />
+                                     token="@version@" value="${release.version.number}" />
                             <replace file="about.mappings" 
                                      token="@versionStatus@" value="${version.status}" />
                             <replace file="about.mappings" 
