@@ -135,7 +135,7 @@ class MdlCustomValidation extends AbstractMdlValidator {
 
 	static val UseDeps = #{
 		'rate' -> #{'amt'},
-		'ii' -> #{'ss', 'amt'},
+		'ii' -> #{'amt', 'addl' },
 		'ss' -> #{ 'amt' },
 		'addl' -> #{ 'amt', 'ii' }
 	}
