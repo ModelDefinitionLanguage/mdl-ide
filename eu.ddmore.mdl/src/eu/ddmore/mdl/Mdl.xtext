@@ -77,8 +77,14 @@ TransformedDefinition returns EquationTypeDefinition:
 ;
 
 CategoricalProbabilityAssign:
-	probFunc = ID '(' catRef=SymbolReference relOp='==' catValRef=CategoryValueReference ')' ASSIGN expression=Expression ';'?
+	(probFunc=ProbabilityFunction ASSIGN expression=Expression  |
+	transform = ID '(' probFunc=ProbabilityFunction ')' ASSIGN expression=Expression) ';'?
 ;
+
+ProbabilityFunction:
+	probFunc = ID '(' catRef=SymbolReference relOp=('=='|'<='|'>='|'<'|'>') catValRef=CategoryValueReference ')'
+;
+
 
 RandomVariableDefinition:
 	name = ID (vector?='[' ']')? RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
@@ -98,11 +104,12 @@ PropertyStatement:
 
 
 CategoricalDefinitionExpr returns Expression:
-	{CategoricalDefinitionExpr} WITH BEGIN categories += CategoryValueDefinition (=>',' categories += CategoryValueDefinition)* END  
+	{CategoricalDefinitionExpr} WITH BEGIN categories += CategoryValueDefinition (=>',' categories += CategoryValueDefinition)* END
+		(ASSIGN expression = Expression)?
 ;
 
 CategoryValueDefinition:
-	name = ID (WHEN mappedTo=Expression)?
+	name = ID (WHEN ordered?=ORDERED? mappedTo=Expression)?
 ;
 
 AttributeList:
@@ -379,6 +386,8 @@ terminal WHEN: 'when';
 terminal TRUE: 'true';
 
 terminal FALSE: 'false';
+
+terminal ORDERED: 'ordered';
 
 terminal STRING:
 	'"' (ESCAPE_SEQUENCE | !('\\' | '"'))* '"';

@@ -68,7 +68,7 @@ class ListDefinitionProvider {
 	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{CATEGORICAL_OBS_VALUE, COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes', 'covariate', 'catCov',
-																			'numberArms', 'armSize'
+																			'numberArms', 'armSize', 'parameter'
 																		})
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
@@ -502,10 +502,10 @@ class ListDefinitionProvider {
 		),
 		"ADMINISTRATION" -> (
 			new BlockListDefinition => [
-				key = 'adm'
+				key = 'input'
 				listDefns = newArrayList(
 					new ListDefInfo (null, ADMINISTRATION_TYPE,  #[
-						 new AttributeDefn('adm', true, MclTypeProvider::REAL_TYPE.makeReference) , new AttributeDefn('amount', true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('input', true, MclTypeProvider::REAL_TYPE.makeReference) , new AttributeDefn('amount', true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('doseTime', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('duration', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('start', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('end', false, MclTypeProvider::REAL_TYPE)
@@ -626,6 +626,18 @@ class ListDefinitionProvider {
 						 	#{ 'arm' -> true, 'element' -> true, 'range' ->true }
 						 ],
 						 false
+					),
+					new ListDefInfo ('parameter', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
+						 new AttributeDefn('element', true, ELEMENT_TYPE),
+						 new AttributeDefn('parameter', true, MclTypeProvider::REAL_TYPE.makeReference.makeVector),
+						 new AttributeDefn('discrete', false, MclTypeProvider::INT_TYPE.makeVector),
+						 new AttributeDefn('range', false, MclTypeProvider::INT_TYPE.makeVector)
+						 ],
+						 #[
+						 	#{ 'parameter' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'parameter' -> true, 'element' -> true, 'range' ->true }
+						 ],
+						 false
 					)
 				)
 			]
@@ -640,14 +652,26 @@ class ListDefinitionProvider {
 						 new AttributeDefn('sampleTime', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('numberTimes', false, MclTypeProvider::INT_TYPE),
 						 new AttributeDefn('numberSamples', false, MclTypeProvider::INT_TYPE.makeVector)
-						 ]
+						 ],
+						 #[
+						 	#{ 'type' -> true, 'outcome' -> true, 'sampleTime' ->false, 'numberTimes' ->false, 'numberSamples' ->false }
+						 ],
+						 false
 					),
-					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
-						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', true, SAMPLING_TYPE.makeVector)
-						 ]
-					),
+//					new ListDefInfo ('simple', SAMPLING_TYPE,  #[
+//						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
+//						 new AttributeDefn('outcome', true, MclTypeProvider::REAL_TYPE.makeReference),
+//						 new AttributeDefn('sampleTime', false, MclTypeProvider::REAL_TYPE.makeVector),
+//						 new AttributeDefn('numberTimes', false, MclTypeProvider::INT_TYPE),
+//						 new AttributeDefn('numberSamples', false, MclTypeProvider::INT_TYPE.makeVector)
+//						 ]
+//					),
+//					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
+//						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', true, SAMPLING_TYPE.makeVector)
+//						 ]
+//					),
 					new ListDefInfo('derived', DERIV_SAMPLING_TYPE, #[
-						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', true, CPLX_SAMPLING_TYPE.makeVector)
+						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', true, SAMPLING_TYPE.makeReference.makeVector)
 						 ]
 					)
 				)
