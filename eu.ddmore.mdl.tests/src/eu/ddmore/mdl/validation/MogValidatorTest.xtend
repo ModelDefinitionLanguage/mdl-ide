@@ -1267,7 +1267,7 @@ class MogValidatorTest {
 	
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
 			MdlValidator::MODEL_DATA_MISMATCH,
-			"individual variable T has no match in dataObj")
+			"independent variable T has no match in dataObj")
 	}
 
 	@Test

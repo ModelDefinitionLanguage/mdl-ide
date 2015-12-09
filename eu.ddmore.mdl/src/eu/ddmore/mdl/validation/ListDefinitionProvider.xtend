@@ -70,21 +70,21 @@ class ListDefinitionProvider {
 	public static val VAR_LVL_OBS_VALUE = 'observation' 
 	
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, MDV_USE_VALUE, IDV_USE_VALUE,
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('divUse', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, MDV_USE_VALUE, IDV_USE_VALUE,
 		ID_USE_VALUE, RATE_USE_VALUE, IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, SS_USE_VALUE, II_USE_VALUE, ADDL_USE_VALUE
 	})
-	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
-	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{VAR_LVL_PARAM_VALUE, VAR_LVL_OBS_VALUE})
+	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('ddvUse', #{'doseTime' })
+	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('varLvlType', #{VAR_LVL_PARAM_VALUE, VAR_LVL_OBS_VALUE})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
-	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{'depot', 'compartment', 'elimination', 'transfer', 'distribution', 'direct', 'input', 'effect'})
+	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo('compType', #{'depot', 'compartment', 'elimination', 'transfer', 'distribution', 'direct', 'effect'})
 	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
 	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{CATEGORICAL_OBS_VALUE, COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes'})
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 //	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
-	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
-	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
+	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('objType', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
+//	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
 	public static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
 	public static val COUNT_LIST_TYPE = new ListTypeInfo("CountObs", PrimitiveType.Real) 
 	public static val DISCRETE_LIST_TYPE = new EnumListTypeInfo("DiscreteObs")
@@ -389,12 +389,12 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefInfo ('corr', new ListTypeInfo("CovarMatrix", PrimitiveType.List),  #[
+					new ListDefInfo ('cov', new ListTypeInfo("CovarMatrix", PrimitiveType.List),  #[
 						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', true, MclTypeProvider::REAL_VECTOR_TYPE),
 						 new AttributeDefn('value', true, MclTypeProvider::REAL_VECTOR_TYPE)
 						 ]
 					),
-					new ListDefInfo ('cov', new ListTypeInfo("CorrMatrix", PrimitiveType.List),  #[
+					new ListDefInfo ('corr', new ListTypeInfo("CorrMatrix", PrimitiveType.List),  #[
 						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', true, MclTypeProvider::REAL_VECTOR_TYPE),
 						 new AttributeDefn('value', true, MclTypeProvider::REAL_VECTOR_TYPE)
 						 ]
@@ -431,7 +431,7 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefInfo (null, new ListTypeInfo("MdlObjInMog", PrimitiveType.Real),  #[
+					new ListDefInfo (null, new ListTypeInfo("MdlObjInMog", PrimitiveType.List),  #[
 						 new AttributeDefn('type', true, MOG_OBJ_TYPE_TYPE)
 						]
 					)
@@ -471,34 +471,34 @@ class ListDefinitionProvider {
 				)
 			]
 		),
-		"ESTIMATE" -> (
-			new BlockListDefinition => [
-				key = 'target'
-				listDefns = newArrayList(
-					new ListDefInfo (null, TARGET_TYPE,  #[
-						 new AttributeDefn('target', true,  TARGET_TYPE),
-						 new AttributeDefn('version', false, MclTypeProvider::STRING_TYPE),
-						 new AttributeDefn('algo', false, MclTypeProvider::STRING_TYPE),
-						 new AttributeDefn('tol', false, MclTypeProvider::REAL_TYPE)
-						 ]
-					)
-				)
-			]
-		),
-		"SIMULATE" -> (
-			new BlockListDefinition => [
-				key = 'target'
-				listDefns = newArrayList(
-					new ListDefInfo (null, TARGET_TYPE,  #[
-						 new AttributeDefn('target', true,  TARGET_TYPE),
-						 new AttributeDefn('version', false, MclTypeProvider::STRING_TYPE),
-						 new AttributeDefn('algo', false, MclTypeProvider::STRING_TYPE),
-						 new AttributeDefn('tol', false, MclTypeProvider::REAL_TYPE)
-						 ]
-					)
-				)
-			]
-		),
+//		"ESTIMATE" -> (
+//			new BlockListDefinition => [
+//				key = 'target'
+//				listDefns = newArrayList(
+//					new ListDefInfo (null, TARGET_TYPE,  #[
+//						 new AttributeDefn('target', true,  TARGET_TYPE),
+//						 new AttributeDefn('version', false, MclTypeProvider::STRING_TYPE),
+//						 new AttributeDefn('algo', false, MclTypeProvider::STRING_TYPE),
+//						 new AttributeDefn('tol', false, MclTypeProvider::REAL_TYPE)
+//						 ]
+//					)
+//				)
+//			]
+//		),
+//		"SIMULATE" -> (
+//			new BlockListDefinition => [
+//				key = 'target'
+//				listDefns = newArrayList(
+//					new ListDefInfo (null, TARGET_TYPE,  #[
+//						 new AttributeDefn('target', true,  TARGET_TYPE),
+//						 new AttributeDefn('version', false, MclTypeProvider::STRING_TYPE),
+//						 new AttributeDefn('algo', false, MclTypeProvider::STRING_TYPE),
+//						 new AttributeDefn('tol', false, MclTypeProvider::REAL_TYPE)
+//						 ]
+//					)
+//				)
+//			]
+//		),
 		"ADMINISTRATION" -> (
 			new BlockListDefinition => [
 				key = 'adm'

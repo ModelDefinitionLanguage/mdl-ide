@@ -107,7 +107,7 @@ class MclUtils {
 	}
 
 	def boolean isMatchingDataUse(ListDefinition it, String ... useValue){
-		list.attributes.exists[argumentName == ListDefinitionProvider::USE_TYPE.enumName &&	useValue.exists[uv | expression.convertToString == uv] ]
+		list.attributes.exists[argumentName == ListDefinitionProvider::USE_ATT && useValue.exists[uv | expression.convertToString == uv] ]
 	}
 
 	def getDataSourceStmt(MclObject it){
