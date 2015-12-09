@@ -402,6 +402,101 @@ warfarin_T2E_exact_dat = dataObj{
 	}
 
 	@Test
+	def void testValidNoSSWithAddlUseDefinitions(){
+		val mcl = '''
+warfarin_T2E_exact_dat = dataObj{
+
+   DECLARED_VARIABLES{ Y; INPUT }
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      TIME: {use is idv}
+      TRT: {use is covariate}
+      AMT: {use is amt, variable = INPUT }
+      RATE: {use is rate}
+      ADDL: {use is addl}
+      II: {use is ii}
+      WT: {use is covariate}
+      DVID: {use is dvid}
+      DV: {use is dv, variable=Y}
+      MDV: {use is mdv}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      srcFile : {file="warfarin_TTE_exact.csv",
+      			inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+		'''.parse
+
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidNoIIWithAddlUseDefinitions(){
+		val mcl = '''
+warfarin_T2E_exact_dat = dataObj{
+
+   DECLARED_VARIABLES{ Y; INPUT }
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      TIME: {use is idv}
+      TRT: {use is covariate}
+      AMT: {use is amt, variable = INPUT }
+      RATE: {use is rate}
+      ADDL: {use is addl}
+      WT: {use is covariate}
+      DVID: {use is dvid}
+      DV: {use is dv, variable=Y}
+      MDV: {use is mdv}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      srcFile : {file="warfarin_TTE_exact.csv",
+      			inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+		'''.parse
+
+		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::DEPENDENT_USE_MISSING,
+			"A data column of use 'ii' is required by this column definition with 'use is addl'.")
+	}
+
+	@Test
+	def void testInvalidNoAddWithIIUseDefinitions(){
+		val mcl = '''
+warfarin_T2E_exact_dat = dataObj{
+
+   DECLARED_VARIABLES{ Y; INPUT }
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      TIME: {use is idv}
+      TRT: {use is covariate}
+      AMT: {use is amt, variable = INPUT }
+      RATE: {use is rate}
+      II: {use is ii}
+      WT: {use is covariate}
+      DVID: {use is dvid}
+      DV: {use is dv, variable=Y}
+      MDV: {use is mdv}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      srcFile : {file="warfarin_TTE_exact.csv",
+      			inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+		'''.parse
+
+		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+			MdlValidator::DEPENDENT_USE_MISSING,
+			"A data column of use 'addl' is required by this column definition with 'use is ii'.")
+	}
+
+	@Test
 	def void testValidCovariateFixedEff(){
 		val mcl = '''bar = mdlObj {
 			IDV { T }
