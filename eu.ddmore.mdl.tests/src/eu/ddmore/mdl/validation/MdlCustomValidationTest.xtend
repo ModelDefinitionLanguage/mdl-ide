@@ -10,6 +10,7 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
 import eu.ddmore.mdl.mdl.MdlPackage
+import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -464,7 +465,7 @@ warfarin_T2E_exact_dat = dataObj{
 			"A data column of use 'ii' is required by this column definition with 'use is addl'.")
 	}
 
-	@Test
+	@Ignore
 	def void testInvalidNoAddWithIIUseDefinitions(){
 		val mcl = '''
 warfarin_T2E_exact_dat = dataObj{
