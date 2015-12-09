@@ -157,7 +157,7 @@ class MogValidator {
 			val mdlIdvName = (mdlOb as EquationDefinition).name
 			// idv does not need to have the same name
 			if(dataOb == null){ //} || dataOb.name != mdlIdvName){
-				errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "individual variable " + mdlIdvName +" has no match in dataObj");
+				errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "independent variable " + mdlIdvName +" has no match in dataObj");
 			}
 		}
 	}
