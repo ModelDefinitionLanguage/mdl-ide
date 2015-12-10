@@ -62,7 +62,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public val static TASKOBJ = 'taskObj'
 	public val static PARAMOBJ = 'parObj'
 	public val static MOGOBJ = 'mogObj'
-	public val static DESIGNOBJ = 'desObj'
+	public val static DESIGNOBJ = 'designObj'
 	public val static PRIOROBJ = 'priorObj'
 	public val static FUNCOBJ = 'funcObj'
 

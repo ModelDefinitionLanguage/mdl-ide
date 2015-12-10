@@ -20,7 +20,7 @@ class SublistDefinitionProvider {
 	public static val SAMPLING_SEQ_SUBLIST = "sampSeqAtts"
 	public static val FIX_EFF_SUBLIST = "fixEffAtts"
 	public static val PRIOR_FORMAT_SUBLIST = "priorFormat"
-	
+	public static val COMPLEX_COMBINATION_SUBLIST = "cplxCombSublist"
 	
 	static val COV = new AttributeDefn('cov', true, MclTypeProvider::REAL_TYPE.makeReference)
 	static val COEFF = new AttributeDefn('coeff', true, MclTypeProvider::REAL_TYPE.makeReference)
@@ -44,7 +44,11 @@ class SublistDefinitionProvider {
 												#[#{'sample' -> true, 'start' -> true, 'end' -> false}])),
 		PRIOR_FORMAT_SUBLIST -> (new SublistTypeInfo(PRIOR_FORMAT_SUBLIST, #[new AttributeDefn("element", true, MclTypeProvider::STRING_TYPE),
 												new AttributeDefn("type", true, PRIOR_ELEMENT_TYPE_TYPE)],
-												#[#{'element' -> true, 'type' -> true}]))
+												#[#{'element' -> true, 'type' -> true}])),
+		COMPLEX_COMBINATION_SUBLIST -> (new SublistTypeInfo(COMPLEX_COMBINATION_SUBLIST,
+												#[new AttributeDefn("sample", true, ListDefinitionProvider::SAMPLING_TYPE.makeReference),
+												new AttributeDefn("startTime", false, MclTypeProvider::REAL_TYPE)],
+												#[#{'sample' -> true, 'startTime' -> false}]))
 	}
 
 	def static getSublist(String name){

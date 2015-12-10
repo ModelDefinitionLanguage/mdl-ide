@@ -68,7 +68,7 @@ class ListDefinitionProvider {
 	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{CATEGORICAL_OBS_VALUE, COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes', 'covariate', 'catCov',
-																			'numberArms', 'armSize', 'parameter'
+																			'numberArms', 'armSize', 'parameter', 'doseTime'
 																		})
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
@@ -508,7 +508,8 @@ class ListDefinitionProvider {
 						 new AttributeDefn('input', true, MclTypeProvider::REAL_TYPE.makeReference) , new AttributeDefn('amount', true, MclTypeProvider::REAL_TYPE),
 						 new AttributeDefn('doseTime', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('duration', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('start', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('end', false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('start', false, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn('end', false, MclTypeProvider::REAL_TYPE)
 						 ]
 					)
 				)
@@ -532,110 +533,122 @@ class ListDefinitionProvider {
 				key = 'element'
 				listDefns = newArrayList(
 					new ListDefInfo ('catCov', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
-						 new AttributeDefn('catCov', true, MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference),
+						 new AttributeDefn('objRef', true, MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference),
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
 						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
-						 	#{ 'catCov' -> true, 'element' -> true, 'discrete' ->true },
-						 	#{ 'catCov' -> true, 'element' -> true, 'range' ->true }
+						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
 						 ],
 						 false
 					),
 					new ListDefInfo ('covariate', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
-						 new AttributeDefn('covariate', true, MclTypeProvider::REAL_TYPE.makeReference),
+						 new AttributeDefn('objRef', true, MclTypeProvider::REAL_TYPE.makeReference),
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
 						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
-						 	#{ 'covariate' -> true, 'element' -> true, 'discrete' ->true },
-						 	#{ 'covariate' -> true, 'element' -> true, 'range' ->true }
+						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
 						 ],
 						 false
 					),
 					new ListDefInfo ('amount', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
-						 new AttributeDefn('admin', true, ADMINISTRATION_TYPE.makeReference.makeVector),
+						 new AttributeDefn('objRef', true, ADMINISTRATION_TYPE.makeReference.makeVector),
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
 						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
-						 	#{ 'admin' -> true, 'element' -> true, 'discrete' ->true },
-						 	#{ 'admin' -> true, 'element' -> true, 'range' ->true }
+						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
+						 ],
+						 false
+					),
+					new ListDefInfo ('doseTime', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
+						 new AttributeDefn('objRef', true, ADMINISTRATION_TYPE.makeReference.makeVector),
+						 new AttributeDefn('element', true, ELEMENT_TYPE),
+						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
+						 ],
+						 #[
+						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
 						 ],
 						 false
 					),
 					new ListDefInfo ('duration', new ListTypeInfo("DesignSpaceDur", PrimitiveType.List),  #[
-						 new AttributeDefn('admin', true, ADMINISTRATION_TYPE.makeReference.makeVector),
+						 new AttributeDefn('objRef', true, ADMINISTRATION_TYPE.makeReference.makeVector),
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
 						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
-						 	#{ 'admin' -> true, 'element' -> true, 'discrete' ->true },
-						 	#{ 'admin' -> true, 'element' -> true, 'range' ->true }
+						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
 						 ],
 						 false
 					),
 					new ListDefInfo ('numberTimes', new ListTypeInfo("DesignSpaceNum", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('sample', true, SAMPLING_TYPE.makeReference.makeVector),
+						 new AttributeDefn('objRef', true, SAMPLING_TYPE.makeReference.makeVector),
 						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
-						 	#{ 'sample' -> true, 'element' -> true, 'discrete' ->true },
-						 	#{ 'sample' -> true, 'element' -> true, 'range' ->true }
+						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
 						 ],
 						 false
 					),
 					new ListDefInfo ('sampleTime', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('sample', true, SAMPLING_TYPE.makeReference.makeVector),
+						 new AttributeDefn('objRef', true, SAMPLING_TYPE.makeReference.makeVector),
 						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
 						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
-						 	#{ 'sample' -> true, 'element' -> true, 'discrete' ->true },
-						 	#{ 'sample' -> true, 'element' -> true, 'range' ->true }
+						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
 						 ],
 						 false
 					),
 					new ListDefInfo ('numberArms', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('arm', true, STUDY_DESIGN_LIST_TYPE.makeReference.makeVector),
+						 new AttributeDefn('objRef', true, STUDY_DESIGN_LIST_TYPE.makeReference.makeVector),
 						 new AttributeDefn('discrete', false, MclTypeProvider::INT_TYPE.makeVector),
 						 new AttributeDefn('range', false, MclTypeProvider::INT_TYPE.makeVector)
 						 ],
 						 #[
-						 	#{ 'arm' -> true, 'element' -> true, 'discrete' ->true },
-						 	#{ 'arm' -> true, 'element' -> true, 'range' ->true }
+						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
 						 ],
 						 false
 					),
 					new ListDefInfo ('armSize', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('arm', true, STUDY_DESIGN_LIST_TYPE.makeReference.makeVector),
+						 new AttributeDefn('objRef', true, STUDY_DESIGN_LIST_TYPE.makeReference.makeVector),
 						 new AttributeDefn('discrete', false, MclTypeProvider::INT_TYPE.makeVector),
 						 new AttributeDefn('range', false, MclTypeProvider::INT_TYPE.makeVector)
 						 ],
 						 #[
-						 	#{ 'arm' -> true, 'element' -> true, 'discrete' ->true },
-						 	#{ 'arm' -> true, 'element' -> true, 'range' ->true }
+						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
 						 ],
 						 false
 					),
 					new ListDefInfo ('parameter', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('parameter', true, MclTypeProvider::REAL_TYPE.makeReference.makeVector),
+						 new AttributeDefn('objRef', true, MclTypeProvider::REAL_TYPE.makeReference.makeVector),
 						 new AttributeDefn('discrete', false, MclTypeProvider::INT_TYPE.makeVector),
 						 new AttributeDefn('range', false, MclTypeProvider::INT_TYPE.makeVector)
 						 ],
 						 #[
-						 	#{ 'parameter' -> true, 'element' -> true, 'discrete' ->true },
-						 	#{ 'parameter' -> true, 'element' -> true, 'range' ->true }
+						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
+						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
 						 ],
 						 false
 					)
@@ -666,14 +679,17 @@ class ListDefinitionProvider {
 //						 new AttributeDefn('numberSamples', false, MclTypeProvider::INT_TYPE.makeVector)
 //						 ]
 //					),
-//					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
-//						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', true, SAMPLING_TYPE.makeVector)
-//						 ]
-//					),
-					new ListDefInfo('derived', DERIV_SAMPLING_TYPE, #[
-						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', true, SAMPLING_TYPE.makeReference.makeVector)
+					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
+						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
+						 new AttributeDefn('combination', true, getSublist(SublistDefinitionProvider::COMPLEX_COMBINATION_SUBLIST).makeVector),
+						 new AttributeDefn('numberTimes', false, MclTypeProvider::INT_TYPE)
 						 ]
-					)
+					)//,
+//					new ListDefInfo('derived', DERIV_SAMPLING_TYPE, #[
+//						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', true, SAMPLING_TYPE.makeReference.makeVector),
+//						 new AttributeDefn('numberTimes', false, MclTypeProvider::INT_TYPE)
+//						 ]
+//					)
 				)
 			]
 		)

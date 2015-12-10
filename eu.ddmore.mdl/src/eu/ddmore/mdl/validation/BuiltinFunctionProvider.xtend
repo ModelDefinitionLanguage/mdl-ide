@@ -98,6 +98,7 @@ class BuiltinFunctionProvider {
 		'mean' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'median' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
 		'inverse' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_MATRIX_TYPE] returnType = MclTypeProvider::REAL_MATRIX_TYPE ] ],
+		'toInt' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::INT_TYPE ] ],
 		
 		'Normal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
 						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
