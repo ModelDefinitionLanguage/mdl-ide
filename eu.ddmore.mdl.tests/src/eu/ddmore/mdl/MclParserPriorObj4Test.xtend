@@ -96,7 +96,7 @@ example332_mdl = mdlObj{
    
    VARIABILITY_LEVELS{
    	ID : {level = 2, type is parameter}
-   	DV : { level = 1, type is observaton } 
+   	DV : { level = 1, type is observation } 
    }
 
    STRUCTURAL_PARAMETERS{

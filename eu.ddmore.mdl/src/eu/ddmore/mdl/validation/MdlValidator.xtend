@@ -8,7 +8,6 @@ import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EnumerationDefinition
-import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
