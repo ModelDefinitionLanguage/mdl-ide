@@ -1,26 +1,25 @@
-# Warfarin model. Analytic solution and bolus dosing.
+# Warfarin model. Analytic solution and single oral dose.
 #
-# Model uses an analytic solution. Requires a dosing variable,
-#
+# Assumes dosing time is at TIME = 0
 
-warfarin_PK_ODE_dat = dataObj {
+warfarin_PK_ANALYTIC_dat = dataObj {
 	DECLARED_VARIABLES{D Y}
 
 	DATA_INPUT_VARIABLES {
 		ID : { use is id }
 		TIME : { use is idv }
-		DT : { use is covariate}
 		WT : { use is covariate }
-		AMT : { use is amt, variable  =  D }
+		## AMT doses to D rather than GUT (as in UseCase1)
+		AMT : { use is amt, variable = D } 
 		DVID : { use is dvid}
-		DV : { use is dv, variable  =  Y }
+		DV : { use is dv, variable = Y }
 		MDV : { use is mdv }
 		logtWT:{ use is covariate }  
 	} # end DATA_INPUT_VARIABLES
-
+	
 	SOURCE {
-	    srcfile: {file = "warfarin_conc_analytic.csv", 
-            	  inputFormat is nonmemFormat} 
+	    srcfile : {file = "warfarin_conc.csv", 
+            inputFormat is nonmemFormat  } 
 	} # end SOURCE
 } # end data object
 
@@ -32,7 +31,7 @@ warfarin_PK_ODE_par = parObj {
 		POP_CL : { value = 0.1, lo = 0.001 }
 		POP_V : { value = 8, lo = 0.001 } 
 		POP_KA : { value = 0.362, lo = 0.001 }
-		POP_TLAG : { value=1, lo=0.001, hi=10 }
+		POP_TLAG : { value=1, lo=0.001 }
 		BETA_CL_WT : { value = 0.75, fix = true }
 		BETA_V_WT : { value = 1, fix = true } 
 		RUV_PROP : { value = 0.1, lo = 0 }
@@ -50,16 +49,15 @@ warfarin_PK_ODE_par = parObj {
 warfarin_PK_ANALYTIC_mdl = mdlObj {
 	IDV { T }
 
+	## logtWT calculation in COVARIATES block supercedes data column of same name
+	COVARIATES{
+		WT
+		logtWT = ln(WT/70)
+	}
 	VARIABILITY_LEVELS{
 		ID : { level=2, type is parameter }
 		DV : { level=1, type is observation }
    }
-
-	COVARIATES{
-		DT
-		WT
-		logtWT = ln(WT/70)
-	}
 
 	STRUCTURAL_PARAMETERS {
 		POP_CL
@@ -96,8 +94,8 @@ warfarin_PK_ANALYTIC_mdl = mdlObj {
 	MODEL_PREDICTION {
 	    D # dosing variable
 	    k = CL/V
-	    CC = if ( T - DT < TLAG) then 0
-	         else (D/V) * KA/(KA-k) * (exp(-k * (T -DT-TLAG))- exp(-KA*(T-DT-TLAG)) )
+	    CC = if ( T < TLAG) then 0
+	         else (D/V) * KA/(KA-k) * (exp(-k * (T - TLAG))- exp(-KA*(T-TLAG)) )
 	} # end MODEL_PREDICTION
 
 	RANDOM_VARIABLE_DEFINITION(level=DV){
@@ -111,13 +109,13 @@ warfarin_PK_ANALYTIC_mdl = mdlObj {
 
 warfarin_PK_ODE_task = taskObj {
 	ESTIMATE{ 
-		set algo is saem 
+		set algo is saem
 }
 } # end of task object
 
 warfarin_PK_ODE_mog = mogObj {
 	OBJECTS{
-		warfarin_PK_ODE_dat : { type is dataObj }
+		warfarin_PK_ANALYTIC_dat : { type is dataObj }
 		warfarin_PK_ODE_par : { type is parObj }
 		warfarin_PK_ANALYTIC_mdl : { type is mdlObj }
 		warfarin_PK_ODE_task : { type is taskObj }

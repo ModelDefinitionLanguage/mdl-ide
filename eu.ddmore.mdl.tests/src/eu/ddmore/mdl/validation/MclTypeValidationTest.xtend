@@ -638,7 +638,7 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-//		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition, MdlValidator::UNSUPPORTED_FEATURE)
+//		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition, MdlValidator::UNUSED_FEATURE)
 		mcl.assertNoErrors
 	}
 	
@@ -838,7 +838,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidListVectorLiteral(){
 		val mcl = 	'''
-		d1g=desObj{
+		d1g=designObj{
 			DECLARED_VARIABLES{
 				Conc
 			}
@@ -854,7 +854,7 @@ class MclTypeValidationTest {
 				pkwin2 : { type is simple, outcome=Conc, numberSamples = [0] }
 			}
 			DESIGN_SPACES{
-				DS3 : { sample=[pkwin1,pkwin2], element is numberTimes, discrete = [1] }
+				DS3 : { objRef=[pkwin1,pkwin2], element is numberTimes, discrete = [1] }
 			}
 		}
 	'''.parse
@@ -1070,19 +1070,19 @@ class MclTypeValidationTest {
 	@Test
 	def void testValidIntVectorWithIntVector(){
 		val mcl = '''
-d1g=desObj{
+d1g=designObj{
 	DECLARED_VARIABLES{
 		Conc
 		Effect
 		Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {adm=Cmt, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {input=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	}
 	DESIGN_SPACES{
-		DS1 : { admin=[dose1], element is amount, discrete=[10,100,200] }
+		DS1 : { objRef=[dose1], element is amount, discrete=[10,100,200] }
 	}
 	STUDY_DESIGN{
 	}
@@ -1095,12 +1095,12 @@ d1g=desObj{
 	@Test
 	def void testValidMappingStructure(){
 		val mcl = '''
-d1g=desObj{
+d1g=designObj{
 	DECLARED_VARIABLES{
 		Conc; Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {adm=Cmt, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {input=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
@@ -1424,7 +1424,7 @@ warfarin_PK_v2_dat = dataObj{
 	@Test
 	def void testValidExpectedRefTypeAttribute(){
 		val mcl = '''
-		foo = desObj{
+		foo = designObj{
 			DECLARED_VARIABLES{
 				Conc
 				Effect
@@ -1434,7 +1434,7 @@ warfarin_PK_v2_dat = dataObj{
 			STUDY_DESIGN{}
 			
 			ADMINISTRATION{
-				dose1 : {adm=Cmt, amount=100, doseTime=[0], duration=[1]} 
+				dose1 : {input=Cmt, amount=100, doseTime=[0], duration=[1]} 
 			}
 		}
 		'''.parse
@@ -1446,21 +1446,21 @@ warfarin_PK_v2_dat = dataObj{
 	@Test
 	def void testInValidExpectedRefTypeAttributeNoRef(){
 		val mcl = '''
-		foo = desObj{
+		foo = designObj{
 			DECLARED_VARIABLES{
 			}
 
 			STUDY_DESIGN{}
 			
 			ADMINISTRATION{
-				dose1 : {adm=0.0, amount=100, doseTime=[0], duration=[1]} 
+				dose1 : {input=0.0, amount=100, doseTime=[0], duration=[1]} 
 			}
 		}
 		'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"attribute 'adm' expected value of type 'ref:Real' but was 'Real'.")
+			"attribute 'input' expected value of type 'ref:Real' but was 'Real'.")
 	}
 	
 

@@ -50,7 +50,7 @@ testprior = priorObj{
 
 	PRIOR_VARIABLE_DEFINITION{
 		lnMU_V = ln(MU_V)
-		POP_K_V[] ~ MultiNonParametric(bins=bins_k_v, probability=p_k) 
+«««		POP_K_V[] ~ MultiNonParametric(bins=bins_k_v, probability=p_k) 
 		invPOP_SIGMA2_RES ~ Empirical(data=data_SIGMA2_RES, probability=p_SIGMA2_RES) 
 
 		invOMEGA_V ~ Gamma(shape=a_OMEGA_V, scale=b_OMEGA_V)

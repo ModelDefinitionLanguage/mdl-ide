@@ -246,6 +246,7 @@ class ModellingStepsPrinter {
 		var amtCol = column.list.getAttributeExpression(ListDefinitionProvider::AMT_COL_ATT)
 		var mdlDtSymb = mObj.findMdlSymbolDefn(column.name)
 		'''
+		<!-- doseTime=«mdlDtSymb.name» -->
 		<ColumnMapping>
 			<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«idvCol.convertToString»"/>
 			<Piecewise xmlns="«xmlns_ds»">

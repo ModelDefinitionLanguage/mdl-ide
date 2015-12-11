@@ -21,10 +21,11 @@ import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.TransformedDefinition
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class BuiltinFunctionProvider {
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	
 	interface FunctDefn{
 		def int getNumArgs()
@@ -66,7 +67,7 @@ class BuiltinFunctionProvider {
 	
 	static val TRANSFORM_FUNCS = #{ 'ln', 'logit', 'probit' }
 	
-	static val TRANS_TYPE = new BuiltinEnumTypeInfo('type', #{'none', 'ln', 'logit', 'probit'})
+	static val TRANS_TYPE = new BuiltinEnumTypeInfo('transType', #{'none', 'ln', 'logit', 'probit'})
 	
 	private static val Map<String, List<? extends FunctDefn>> functDefns = #{
 		'log' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
@@ -144,7 +145,7 @@ class BuiltinFunctionProvider {
 					} ]
 					],
 		'MultiNonParametric' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE.makeVector arguments = #{
-						'bins' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector.makeVector, true),
+						'bins' -> new FunctionArgument(MclTypeProvider::REAL_MATRIX_TYPE, true),
 						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
 					} ]
 					],
@@ -214,7 +215,7 @@ class BuiltinFunctionProvider {
 						'src' -> new FunctionArgument(ListDefinitionProvider::PRIOR_SOURCE_TYPE, true),
 						'element' -> new FunctionArgument(MclTypeProvider::STRING_TYPE, true)
 					} ] ],
-		'readMatrix' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE.makeVector.makeVector arguments = #{
+		'readMatrix' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_MATRIX_TYPE arguments = #{
 						'src' -> new FunctionArgument(ListDefinitionProvider::PRIOR_SOURCE_TYPE, true),
 						'element' -> new FunctionArgument(MclTypeProvider::STRING_TYPE, true)
 					} ] ]

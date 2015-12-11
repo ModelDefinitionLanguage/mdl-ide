@@ -8,6 +8,8 @@ import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.validation.MdlValidator
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -49,8 +51,9 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 	def void testParsing(){
 		val mcl = CODE_SNIPPET.parse
 		
-//		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition, MdlValidator::UNSUPPORTED_FEATURE)
-		mcl.assertNoErrors		
+//		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition, MdlValidator::UNUSED_FEATURE)
+		mcl.assertNoErrors
+		
 	}
 
 	

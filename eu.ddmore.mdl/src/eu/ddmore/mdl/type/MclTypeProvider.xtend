@@ -687,6 +687,10 @@ public class MclTypeProvider {
 		checkExpectedAndExpression(MclTypeProvider.REAL_VECTOR_TYPE, exp, errorLambda)
 	}
 	
+	def checkExpectedMatrix(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(MclTypeProvider.REAL_MATRIX_TYPE, exp, errorLambda)
+	}
+	
 	def checkExpectedIntl(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		checkExpectedAndExpression(INT_TYPE, exp, errorLambda)
 	}

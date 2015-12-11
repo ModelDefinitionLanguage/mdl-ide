@@ -11,7 +11,6 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.MdlExpressionConverter.convertToString
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.ValuePair
@@ -23,6 +22,8 @@ class MdlExpressionConverterTest {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+
 	@Test
 	def void testValidExpressionSyntax(){
 		val mcl =  '''

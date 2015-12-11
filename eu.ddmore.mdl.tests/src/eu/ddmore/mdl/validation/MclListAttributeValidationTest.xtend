@@ -107,6 +107,92 @@ class MclListAttributeValidationTest {
 	}
 
 	@Test
+	def void testValidSrcColumn(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is cmt }
+				AMT : { use is amt, define = { 0 in CMT as D } }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidSrcDvColumn(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is dvid }
+				AMT : { use is dv, define = { 0 in CMT as D } }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
+		}'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidSrcColumn1(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is covariate }
+				AMT : { use is amt, define = { 0 in CMT as D } }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.mappingPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected source column of type 'List:Cmt', but was 'List:Covariate'.")
+	}
+
+	@Test
+	def void testInvalidSrcColumn2(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is dvid }
+				AMT : { use is amt, define = { 0 in CMT as D } }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.mappingPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected source column of type 'List:Cmt', but was 'List:Dvid'.")
+	}
+
+	@Test
+	def void testInvalidSrcDvColumn3(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is covariate }
+				AMT : { use is dv, define = { 0 in CMT as D } }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.mappingPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected source column of type 'List:Dvid', but was 'List:Covariate'.")
+	}
+
+	@Test
 	def void testUnexpectedAttributeCombination(){
 		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ D }
@@ -377,7 +463,8 @@ class MclListAttributeValidationTest {
 			}# end MODEL_PREDICTION
 			
 			OBSERVATION{
-				Y : {type is tte, hazard = HAZ, event is intervalCensored }
+				#Y : {type is tte, hazard = HAZ, event is intervalCensored }
+				Y : {type is tte, hazard = HAZ }
 			}# end ESTIMATION
 		}
 		'''.parse

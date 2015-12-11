@@ -3,50 +3,24 @@
  */
 package eu.ddmore.mdl.validation
 
-import eu.ddmore.mdl.mdl.AdditiveExpression
-import eu.ddmore.mdl.mdl.AndExpression
-import eu.ddmore.mdl.mdl.AnonymousListStatement
-import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
-import eu.ddmore.mdl.mdl.CatValRefMapping
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
-import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EnumerationDefinition
-import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
-import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
-import eu.ddmore.mdl.mdl.OrExpression
-import eu.ddmore.mdl.mdl.PropertyStatement
-import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RealLiteral
-import eu.ddmore.mdl.mdl.RelationalExpression
-import eu.ddmore.mdl.mdl.Statement
-import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.mdl.TransformedDefinition
-import eu.ddmore.mdl.mdl.UnaryExpression
-import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdl.VectorElement
-import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import eu.ddmore.mdl.utils.MclUtils
-import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.ComposedChecks
-
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 
 //import org.eclipse.xtext.validation.Check
 
@@ -55,7 +29,8 @@ import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
  *
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
- @ComposedChecks(validators= #[BlockValidator, DataFileValidation, UnsupportedFeaturesValidator])
+ @ComposedChecks(validators= #[BlockValidator, DataFileValidation, UnsupportedFeaturesValidator, MdlCustomValidation,
+ 								ListValidator, TypeSystemValidator, ValueSelectorValidator, UnsupportedToolSpecificFeaturesValidator ])
 class MdlValidator extends AbstractMdlValidator {
 	public val static MDLOBJ = 'mdlObj'
 	public val static DATAOBJ = 'dataObj'
@@ -69,12 +44,12 @@ class MdlValidator extends AbstractMdlValidator {
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension BuiltinFunctionProvider funcHelper = new BuiltinFunctionProvider
-	extension MdlCustomValidation mcb = new MdlCustomValidation
-	extension MclTypeProvider typeProvider = new MclTypeProvider
 	extension MclUtils mclUtils = new MclUtils
 
-	public static val UNSUPPORTED_FEATURE = "eu.ddmore.mdl.validation.UnsupportedFeature"
-
+	public static val UNUSED_FEATURE = "eu.ddmore.mdl.validation.unused.feature"
+	public static val EXPERIMENTAL_FEATURE = "eu.ddmore.mdl.validation.experimental.feature"
+	public static val FEATURE_NOT_SUPPORTED_MONOLIX = "eu.ddmore.mdl.validation.unsupported.feature.monolix"
+	public static val FEATURE_NOT_SUPPORTED_NONMEM = "eu.ddmore.mdl.validation.unsupported.feature.nonmem"
 	
 	// List attribute validation
 	public static val UNRECOGNIZED_PROPERTY_ATT  = "eu.ddmore.mdl.validation.UnrecognisedProperty"
@@ -106,41 +81,29 @@ class MdlValidator extends AbstractMdlValidator {
 
 	// Type validation
 	public static val INCOMPATIBLE_TYPES = "eu.ddmore.mdl.validation.IncompatibleTypes"
+	
+	// Expressions
+	public static val INVALID_CYCLE = "eu.ddmore.mdl.validation.cyclic.ref"
 
 	// MOG validation
 	public static val MODEL_DATA_MISMATCH = "eu.ddmore.mdl.validation.mog.mismatch_mod_data"
 	public static val MCLOBJ_REF_UNRESOLVED = "eu.ddmore.mdl.validation.mog.missingObj"
 
+	// Selection value
+	public static val DUPLICATE_SELECTION_TEST_VALUE = "eu.ddmore.mdl.validation.selector.testvalue.duplicate"
+	public static val DUPLICATE_SELECTION_REF = "eu.ddmore.mdl.validation.selector.ref.duplicate"
+
+	//Custom MDL checks
+	public static val INVALID_ENUM_RELATION_OPERATOR = "eu.ddmore.mdl.validation.custom.enum.relation.op"
+	public static val DEPENDENT_USE_MISSING = "eu.ddmore.mdl.validation.custom.dep.use.missing"
+	public static val INCOMPATIBLE_VARIABLE_REF = "eu.ddmore.mdl.validation.custom.incompatible.var.ref"
+	public static val DUPLICATE_UNIQUE_USE_VALUE = "eu.ddmore.mdl.validation.custom.duplicate.use"
+	public static val VARIABILITY_LEVELS_MALFORMED = "eu.ddmore.mdl.validation.custom.variability_levels.malformed"
+	public static val RESERVED_PREFIX_USED = "eu.ddmore.mdl.validation.custom.reserved.prefix.used"
+	public static val RESERVED_WORD_USED = "eu.ddmore.mdl.validation.custom.reserved.word.used"
+
 	// Warnings
 	public static val MASKING_PARAM_ASSIGNMENT = "eu.ddmore.mdl.validation.mog.paramValueMasked"
-
-	@Check
-	def validateAttributeList(AttributeList it){
-		if(isKeyAttributeDefined){
-			unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
-				MdlPackage.eINSTANCE.attributeList_Attributes, MANDATORY_LIST_ATT_MISSING, name) ]
-		}		
-		else{
-			error("mandatory key attribute is missing in list.",
-				MdlPackage.eINSTANCE.attributeList_Attributes, MANDATORY_LIST_KEY_ATT_MISSING, "")
-		}
-	}
-
-	@Check
-	def validateListAnonymisation(AnonymousListStatement it){
-		if(list.isNamedListExpected){
-			error("a list with this key cannot be anonymous in this context",
-				MdlPackage.eINSTANCE.anonymousListStatement_List, LIST_NOT_NAMED, "")
-		}
-	}
-
-	@Check
-	def validateListAnonymisation(ListDefinition it){
-		if(list.isAnonymousListExpected){
-			error("a list with this key cannot have a name in this context",
-				MdlPackage.eINSTANCE.listDefinition_List, LIST_NOT_ANONYMOUS, "")
-		}
-	}
 
 	@Check
 	def validateProperties(BlockStatement it){
@@ -159,57 +122,6 @@ class MdlValidator extends AbstractMdlValidator {
 //				MdlPackage.eINSTANCE.attributeList_Attributes, MANDATORY_LIST_KEY_ATT_MISSING, "")
 //		}
 //	}
-
-	@Check
-	def validateAttribute(ValuePair it){
-		val parent = eContainer
-		switch(parent){
-			AttributeList:{
-				if(!attributeRecognised){
-					error("attribute '" + attributeName + "' is not recognised in this context.",
-							MdlPackage.eINSTANCE.valuePair_ArgumentName, MdlValidator.UNRECOGNIZED_LIST_ATT, attributeName)
-				}
-			}
-			PropertyStatement:{
-				if(!isPropertyKnown){
-					error("property '" + attributeName + "' is not recognised in this context.",
-							MdlPackage.eINSTANCE.valuePair_ArgumentName, MdlValidator.UNRECOGNIZED_PROPERTY_ATT, attributeName)
-				}
-			}
-			
-		}
-	}
-
-	@Check
-	def validateTransforms(TransformedDefinition it){
-		if(!isValidTransform){
-			error("'" + transform + "' cannot be used as a transformation function on the LHS of an equation",
-				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform)
-		}
-		if(!isLhsTransformPermitted || !isValidRhsTransformPermitted){
-			error("Use of a transformation function on the LHS of the equation is not permitted in this context",
-				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform)
-		}
-	}
-	
-	@Check
-	def validateIndividualParameterDefinitions(EnumPair it){
-		val stmt = EcoreUtil2.getContainerOfType(eContainer, Statement)
-		switch(stmt){
-			TransformedDefinition:
-				checkConsistentLinearTransformation(stmt, it,
-					[lhs, rhs| error("transformation used on LHS ('" + lhs + "') must match the RHS ('" + rhs + "')",
-						MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_LHS_FUNC, lhs)
-					]
-				)
-			EquationDefinition:
-				checkNonTransformedIndiv(stmt, it,
-					[error("no transformation used on the LHS, so cannot use on the RHS of the equation",
-						MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_LHS_FUNC, "")
-					]
-				)
-		}
-	}
 
 	@Check
 	def validateFunctionCall(BuiltinFunctionCall it){
@@ -252,89 +164,6 @@ class MdlValidator extends AbstractMdlValidator {
 						MdlPackage.eINSTANCE.namedFuncArguments_Arguments, MANDATORY_NAMED_FUNC_ARG_MISSING, arg) ]
 	}
 
-	// Type handling	
-	private def (TypeInfo, TypeInfo) => void typeError(EStructuralFeature feature){ 
-		[expectedType, actualType |error("Expected " + expectedType.typeName + " type, but was " + actualType.typeName + ".", feature, INCOMPATIBLE_TYPES, expectedType.typeName) ]
-	}
-	
-			
-	@Check
-	def validateCompatibleTypes(AndExpression e){
-		checkBoolOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.andExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.andExpression_RightOperand))
-	}
-	
-	@Check
-	def validateCompatibleTypes(OrExpression e){
-		checkBoolOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.orExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.orExpression_RightOperand))
-	}
-	
-	@Check
-	def validateCompatibleTypes(EqualityExpression e){
-		checkRelationalOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.equalityExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.equalityExpression_RightOperand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(RelationalExpression e){
-		checkRelationalOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.relationalExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.relationalExpression_RightOperand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(AdditiveExpression e){
-		checkMathsOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.additiveExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.additiveExpression_RightOperand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(MultiplicativeExpression e){
-		checkMathsOp(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.multiplicativeExpression_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.multiplicativeExpression_RightOperand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(UnaryExpression e){
-		checkUnaryOp(e.feature, e.operand, typeError(MdlPackage::eINSTANCE.unaryExpression_Operand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(IfExprPart e){
-		checkExpectedBoolean(e.cond, typeError(MdlPackage::eINSTANCE.ifExprPart_Cond))
-		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.ifExprPart_Value))
-	}
-		
-	@Check
-	def checkElseCompatibleTypes(ElseClause e){
-		checkExpectedReal(e.other, typeError(MdlPackage::eINSTANCE.elseClause_Other))
-	}
-		
-		
-	@Check
-	def validateCompatibleTypes(MappingPair e){
-		checkAsOperator(e.leftOperand, e.rightOperand, typeError(MdlPackage::eINSTANCE.mappingPair_LeftOperand),
-			typeError(MdlPackage::eINSTANCE.mappingPair_RightOperand))
-	}
-		
-	@Check
-	def validateCompatibleTypes(CatValRefMapping e){
-		var parentAt = EcoreUtil2.getContainerOfType(e, EnumPair)
-		if(parentAt != null)
-			checkWhenOperator(parentAt, e.catRef, e.mappedTo, typeError(MdlPackage::eINSTANCE.catValRefMapping_CatRef),
-				typeError(MdlPackage::eINSTANCE.catValRefMapping_MappedTo)
-			)
-	}
-		
-	@Check
-	def validateCompatibleTypes(CategoryValueDefinition e){
-		var parentAt = EcoreUtil2.getContainerOfType(e, EnumPair)
-		if(parentAt != null)
-			checkWhenOperator(parentAt, e, typeError(MdlPackage::eINSTANCE.categoryValueDefinition_Name),
-				typeError(MdlPackage::eINSTANCE.categoryValueDefinition_MappedTo)
-			)
-	}
-		
 	@Check
 	def validateCategoryDefinitionWellFormed(EnumPair parentAt){
 		if(parentAt != null)
@@ -346,81 +175,6 @@ class MdlValidator extends AbstractMdlValidator {
 			)
 	}
 		
-	@Check
-	def validateCompatibleTypes(EquationDefinition e){
-		// only check if there is an RHS to check 
-		if(e.expression != null)
-			if(e.isVector || e.isMatrix)
-				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
-			else
-				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
-	}
-		
-	@Check
-	def validateCompatibleTypes(RandomVariableDefinition e){
-		if(e.isVector)
-			checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
-		else
-			checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
-	}
-		
-	@Check
-	def validateCompatibleTypes(TransformedDefinition e){
-		checkExpectedRealTransform(e.transform, typeError(MdlPackage::eINSTANCE.transformedDefinition_Transform))
-		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
-	}
-		
-	@Check
-	def validateCompatibleVectorElement(VectorElement e){
-		if(e.eContainer instanceof VectorLiteral){
-			val vect = e.eContainer as VectorLiteral
-			val vectType = vect.typeFor
-			val exprType = e.typeFor
-			if(!vectType.isCompatibleElement(exprType)){
-				error("Element type '" + exprType.typeName + "' is incompatible with vector type '" + vectType.typeName + "'.",
-					MdlPackage.eINSTANCE.vectorElement_Element, INCOMPATIBLE_TYPES, vectType.typeName)
-			}			
-		}
-	}
-	
-	
-	@Check
-	def validUnnamedFuctionArgumentType(UnnamedArgument it){
-		if(eContainer instanceof UnnamedFuncArguments){
-			checkFunctionArgumentTyping([e, a|
-				error("argument '" + (funcArgNum + 1) + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
-						MdlPackage.eINSTANCE.unnamedArgument_Argument, INCOMPATIBLE_TYPES, a.typeName)
-			])
-		}
-	}
-	
-	@Check
-	def validateListAttributeTypes(ValuePair vp){
-		val parent = vp.eContainer
-		switch(parent){
-			AttributeList:
-				parent.checkAttributeTyping(vp, [e, a|
-					error("attribute '" + vp.attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
-							MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
-				])
-			NamedFuncArguments:
-				vp.checkNamedFunctionArgumentTyping([e, a|
-					error("argument '" + vp.attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
-							MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
-				])
-			SubListExpression:
-				parent.checkSublistAttributeTyping(vp, [e, a|
-					error("attribute '" + vp.attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
-							MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
-				])
-			PropertyStatement:
-				parent.checkPropertyAttributeTyping(vp, [e, a|
-					error("property '" + vp.attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
-							MdlPackage.eINSTANCE.valuePair_Expression, INCOMPATIBLE_TYPES, a.typeName)
-				])
-		}
-	}
-
 	@Check
 	def validateIfElseWellFormed(WhenExpression e){
 		if(e.other == null){
@@ -459,20 +213,10 @@ class MdlValidator extends AbstractMdlValidator {
 //	def validateNoVectorDefinitions(EquationDefinition it){
 //		if(isVector){
 //			error("Vector symbol definitions are not supported in this version of the language.",
-//					MdlPackage.eINSTANCE.equationDefinition_Vector, UNSUPPORTED_FEATURE, name)
+//					MdlPackage.eINSTANCE.equationDefinition_Vector, eu.ddmore.mdl.validation.MdlValidator.UNUSED_FEATURE, name)
 //		}
 //	}
 	
-	
-	@Check
-	def validateDuplicateAttributes(ValuePair it){
-		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
-		if(attList.isAttributeDuplicated(it)){
-			error("List attribute '" + argumentName + "' is used more than once.",
-				MdlPackage.eINSTANCE.valuePair_ArgumentName, DUPLICATE_ATTRIBUTE_NAME, argumentName
-			)
-		}
-	}
 	
 	@Check
 	def validateObjectReferenceInMog(ListDefinition it){

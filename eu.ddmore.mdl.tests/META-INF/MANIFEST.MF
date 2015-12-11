@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: eu.ddmore.mdl.tests
 Bundle-Vendor: Leiden University
-Bundle-Version: 1.3.0.qualifier
+Bundle-Version: 1.4.0.qualifier
 Bundle-Copyright: Copyright (C) 2013, Leiden University. All rights reserved.
  Leiden University gratefully acknowledges the contributions of
  its partner Mango Business Solutions Limited for their design

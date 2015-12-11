@@ -10,24 +10,30 @@ import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import eu.ddmore.mdl.mdl.EnumExpression
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import java.util.Map
 
 class SublistDefinitionProvider {
 	
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+
+
 	public static val INTERVENTION_SEQ_SUBLIST = "intSeqAtts"
 	public static val SAMPLING_SEQ_SUBLIST = "sampSeqAtts"
 	public static val FIX_EFF_SUBLIST = "fixEffAtts"
 	public static val PRIOR_FORMAT_SUBLIST = "priorFormat"
 	public static val COMPLEX_COMBINATION_SUBLIST = "cplxCombSublist"
+
+	public static val COV_ATT = 'cov'
+	public static val CATCOV_ATT = 'catCov'
 	
 	static val COV = new AttributeDefn('cov', true, MclTypeProvider::REAL_TYPE.makeReference)
 	static val COEFF = new AttributeDefn('coeff', true, MclTypeProvider::REAL_TYPE.makeReference)
 	static val CAT_COV = new AttributeDefn('catCov', true, MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference)
 	static val PRIOR_ELEMENT_TYPE_TYPE = new BuiltinEnumTypeInfo('priorElementType', #{'matrix', 'vector'})
 	
-	static val sublistDefns = #{
+	static val Map<String, SublistTypeInfo> sublistDefns = #{
 		FIX_EFF_SUBLIST -> (new SublistTypeInfo(FIX_EFF_SUBLIST, #[COV, CAT_COV, COEFF], #[
 																   	#{COEFF.name -> true, COV.name -> true},
 																   	#{COEFF.name -> true, CAT_COV.name -> true}
@@ -51,7 +57,7 @@ class SublistDefinitionProvider {
 												#[#{'sample' -> true, 'startTime' -> false}]))
 	}
 
-	def static getSublist(String name){
+	def static SublistTypeInfo getSublist(String name){
 		return sublistDefns.get(name)
 	}
 

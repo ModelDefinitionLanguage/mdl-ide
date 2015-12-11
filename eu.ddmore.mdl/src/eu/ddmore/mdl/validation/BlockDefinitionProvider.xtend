@@ -101,7 +101,7 @@ class BlockDefinitionProvider {
 				new StatementSpec(ep.enumerationDefinition),
 				new StatementSpec(ep.randomVariableDefinition)
 			]),
-			VAR_LVL_BLK_NAME -> new BlockSpec(VAR_LVL_BLK_NAME, 1, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
+			VAR_LVL_BLK_NAME -> new BlockSpec(VAR_LVL_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.listDefinition)
 			]),
 			MDL_STRUCT_PARAMS -> new BlockSpec(MDL_STRUCT_PARAMS, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[

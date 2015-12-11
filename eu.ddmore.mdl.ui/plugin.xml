@@ -399,7 +399,7 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
-            category="org.eclipse.xtext.projectwiz"
+            category="eu.ddmore.mdl.ui.wizard.new.ddmore"
             class="eu.ddmore.mdl.ui.MdlExecutableExtensionFactory:eu.ddmore.mdl.ui.wizard.MdlNewProjectWizard"
             finalPerspective="eu.ddmore.mdl.ui.perspective.MDL"
             id="eu.ddmore.mdl.ui.wizard.MdlNewProjectWizard"
@@ -407,13 +407,20 @@
             project="true">
       </wizard>
       <wizard
-           category="eu.ddmore.mdl.ui.wizard"
+           category="eu.ddmore.mdl.ui.wizard.new.ddmore"
            class="eu.ddmore.mdl.ui.wizard.FileNewWizard"
            finalPerspective="eu.ddmore.mdl.ui.perspective.MDL"
            id="eu.ddmore.mdl.ui.wizard.FileNewWizard"
            name="MDL File"
            project="false">
       </wizard>
+      <category
+            id="eu.ddmore.mdl.ui.wizard.new.ddmore"
+            name="DDMoRe">
+      </category>
+      <primaryWizard
+            id="eu.ddmore.mdl.ui.wizard.MdlNewProjectWizard">
+      </primaryWizard>
    </extension>
    	<!-- Rename Refactoring -->
 	<extension point="org.eclipse.ui.handlers">
@@ -574,5 +581,18 @@
                 id="eu.ddmore.mdl.ui.perspective.MDL">
           </perspectiveShortcut>
        </perspectiveExtension>
+    </extension>
+    <extension
+          point="org.eclipse.ui.exportWizards">
+       <wizard
+             category="eu.ddmore.mdl.ui.exportwiz.ddmore"
+             class="eu.ddmore.mdl.ui.wizard.PharmMLExportWizard"
+             id="eu.ddmore.mdl.ui.wizard.export.pharmml"
+             name="PharmML Export">
+       </wizard>
+       <category
+             id="eu.ddmore.mdl.ui.exportwiz.ddmore"
+             name="DDMoRe">
+       </category>
     </extension>
 </plugin>

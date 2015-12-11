@@ -29,14 +29,14 @@ import eu.ddmore.mdl.validation.ListDefinitionProvider
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.PowerExpression
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class PharmMLExpressionBuilder {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
-//	extension MclUtils mu = new MclUtils 
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	
 	static val GLOBAL_VAR = 'global'
 	

@@ -3,23 +3,30 @@
 # Model uses an analytic solution. Requires a dosing variable,
 #
 
-warfarin_PK_ODE_dat = dataObj {
-	DECLARED_VARIABLES{Y}
+warfarin_PK_analytic_DerivedDT_dat = dataObj {
+	DECLARED_VARIABLES{D Y}
 
 	DATA_INPUT_VARIABLES {
 		ID : { use is id }
 		TIME : { use is idv }
-		DT : {use is covariate}
-		WT : {use is covariate }
-		D : { use is covariate}
+		WT : { use is covariate }
+		AMT : { use is amt, variable = D }
 		DVID : { use is dvid}
 		DV : { use is dv, variable = Y }
 		MDV : { use is mdv }
 		logtWT:{ use is covariate }  
 	} # end DATA_INPUT_VARIABLES
+	
+
+	DATA_DERIVED_VARIABLES{
+		# This is an idea of how to solve the dose time problem.  Like 'use is amt' we assume that the DT variable is
+		# only assigned when AMT > 0.  The typing ensured that the attributes reference a column with the correct 'use'.
+		DT : { use is doseTime, idvColumn=TIME, amtColumn=AMT }
+	}
 
 	SOURCE {
-	    srcFile : {file = "warfarin_conc_analytic.csv", inputFormat is nonmemFormat }
+	    srcfile : {file = "warfarin_conc.csv", 
+            inputFormat is nonmemFormat } 
 	} # end SOURCE
 } # end data object
 
@@ -42,7 +49,7 @@ warfarin_PK_ODE_par = parObj {
 		PPV_V : { value = 0.1, type is sd }
 		PPV_KA : { value = 0.1, type is sd }
 		PPV_TLAG : { value = 0.1, type is sd } 
-		OMEGA : { parameter=[ETA_CL, ETA_V], value = [0.01], type is corr }
+		OMEGA : { parameter = [ETA_CL, ETA_V], value = [0.01], type is corr }
 	} # end VARIABILITY
 } # end of parameter object 
 
@@ -55,8 +62,6 @@ warfarin_PK_ANALYTIC_mdl = mdlObj {
    }
 
 	COVARIATES{
-		DT
-		D
 		WT
 		logtWT = ln(WT/70)
 	}
@@ -87,13 +92,15 @@ warfarin_PK_ANALYTIC_mdl = mdlObj {
 	} # end RANDOM_VARIABLE_DEFINITION 
 	
 	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    ln(CL) = linear( trans is ln, pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}] , ranEff = [ETA_CL] )
-	    ln(V) = linear( trans is ln, pop = POP_V, fixEff = [{coeff=BETA_V_WT, cov=logtWT}] , ranEff = [ETA_V] )
-	    ln(KA) = linear( trans is ln, pop = POP_KA, ranEff = [ETA_KA] )
-	    ln(TLAG) = linear( trans is ln, pop = POP_TLAG, ranEff = [ETA_TLAG] )
+	    ln(CL) = linear( pop = POP_CL, trans is ln, fixEff = [{ coeff=BETA_CL_WT , cov = logtWT }], ranEff = [ETA_CL] )
+	    ln(V) = linear( pop = POP_V, trans is ln, fixEff =  [{coeff=BETA_V_WT , cov = logtWT }] , ranEff = [ETA_V] )
+	    ln(KA) = linear( pop = POP_KA, trans is ln, ranEff = [ETA_KA] )
+	    ln(TLAG) = linear( pop = POP_TLAG, trans is ln, ranEff = [ETA_TLAG] ) 
 	} # end INDIVIDUAL_VARIABLES
 	
 	MODEL_PREDICTION {
+	    D # dosing variable
+	    DT # dose time variable
 	    k = CL/V
 	    CC = if ( T - DT < TLAG) then 0
 	         else (D/V) * KA/(KA-k) * (exp(-k * (T -DT-TLAG))- exp(-KA*(T-DT-TLAG)) )
@@ -109,15 +116,14 @@ warfarin_PK_ANALYTIC_mdl = mdlObj {
 } # end of model object
 
 warfarin_PK_ODE_task = taskObj {
-	ESTIMATE {
-		set algo is saem 
-	} #end ESTIMATE sub block
+	ESTIMATE{ 
+		set algo is saem
+}
 } # end of task object
-
 
 warfarin_PK_ODE_mog = mogObj {
 	OBJECTS{
-		warfarin_PK_ODE_dat : { type is dataObj }
+		warfarin_PK_analytic_DerivedDT_dat : { type is dataObj }
 		warfarin_PK_ODE_par : { type is parObj }
 		warfarin_PK_ANALYTIC_mdl : { type is mdlObj }
 		warfarin_PK_ODE_task : { type is taskObj }

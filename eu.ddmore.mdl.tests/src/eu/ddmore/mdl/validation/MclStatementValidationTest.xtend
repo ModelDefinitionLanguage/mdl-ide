@@ -11,6 +11,7 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.eclipse.xtext.diagnostics.Diagnostic
+import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -301,7 +302,7 @@ class MclStatementValidationTest {
 			Diagnostic::SYNTAX_DIAGNOSTIC)
 	}
 
-	@Test
+	@Ignore
 	def void testInValidVectorDefinition(){
 		val mcl = '''
 		foo = mdlObj{
@@ -316,9 +317,8 @@ class MclStatementValidationTest {
 		}
 		'''.parse
 		
-//		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
-//			MdlValidator::UNSUPPORTED_FEATURE, "Vector symbol definitions are not supported in this version of the language")
-		mcl.assertNoErrors
+		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+			MdlValidator::UNUSED_FEATURE, "Vector symbol definitions are not supported in this version of the language")
 	}
 
 }

@@ -2,10 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: eu.ddmore.mdl
 Bundle-Vendor: Leiden University
-Bundle-Version: 1.3.0.qualifier
+Bundle-Version: 1.4.0.qualifier
 Bundle-SymbolicName: eu.ddmore.mdl; singleton:=true
 Bundle-ActivationPolicy: lazy
-Bundle-Copyright: Copyright (C) 2013, Leiden University. All rights reserved.Leiden University gratefully acknowledges the contributions ofits partner Mango Business Solutions Limited for their designwork and support.
+Bundle-Copyright: Copyright (C) 2013, Leiden University. All rights reserved.
+ Leiden University gratefully acknowledges the contributions of
+ its partner Mango Business Solutions Limited for their design
+ work and support.
 Bundle-License: http://www.gnu.org/licenses/lgpl-2.1.html;description=GNU Lesser General Public License version 2.1;link=http://www.gnu.org/licenses/lgpl-2.1.html
 Require-Bundle: org.eclipse.xtext.xbase;visibility:=reexport,
  org.eclipse.xtext.generator,

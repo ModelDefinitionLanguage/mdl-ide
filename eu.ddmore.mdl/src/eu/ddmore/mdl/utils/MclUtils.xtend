@@ -1,35 +1,21 @@
 package eu.ddmore.mdl.utils
 
-import eu.ddmore.mdl.mdl.AdditiveExpression
-import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CatValRefMappingExpression
 import eu.ddmore.mdl.mdl.CategoryValueReference
-import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.mdl.MultiplicativeExpression
-import eu.ddmore.mdl.mdl.NamedFuncArguments
-import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
-import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
-import eu.ddmore.mdl.mdl.UnaryExpression
-import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdl.VectorElement
-import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.validation.BlockDefinitionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
 import eu.ddmore.mdl.validation.MdlValidator
@@ -37,11 +23,14 @@ import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
 
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
+import eu.ddmore.mdl.type.MclTypeProvider
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension DependencyWalker dw = new DependencyWalker
+	extension MclTypeProvider mtp = new MclTypeProvider
 	
 	
 	def isMclObjectOfType(MclObject obj, String typeCode){
@@ -118,7 +107,7 @@ class MclUtils {
 	}
 
 	def boolean isMatchingDataUse(ListDefinition it, String ... useValue){
-		list.attributes.exists[argumentName == ListDefinitionProvider::USE_TYPE.enumName &&	useValue.exists[uv | expression.convertToString == uv] ]
+		list.attributes.exists[argumentName == ListDefinitionProvider::USE_ATT && useValue.exists[uv | expression.convertToString == uv] ]
 	}
 
 	def getDataSourceStmt(MclObject it){
@@ -556,83 +545,8 @@ class MclUtils {
     	retVal
     }
     
-	//     @TODO - Refactor this and put it somewhere line Domain utils 
-    def dispatch List<SymbolDefinition> getSymbolReferences(Expression expr){
-    	val retVal = new ArrayList<SymbolDefinition>
-    	switch(expr){
-    		OrExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		AndExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		EqualityExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		RelationalExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		AdditiveExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		MultiplicativeExpression:{
-    			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
-    		}
-    		UnaryExpression:{
-    			retVal.addAll(expr.operand.symbolReferences)
-    		}
-    		ParExpression:{
-    			retVal.addAll(expr.expr.symbolReferences)
-    		}
-    		WhenExpression:{
-    			for(w : expr.when){
-    				retVal.addAll(w.symbolReferences)
-    			}
-    			retVal.addAll(expr.other.other.symbolReferences)
-    		}
-    		VectorLiteral:{
-    			for(v : expr.expressions){
-    				v.symbolReferences
-    			}
-    		}
-    		VectorElement:{
-    			expr.element.symbolReferences
-    		}
-    		SymbolReference:{
-    			retVal.add(expr.ref)
-    		}
-    			
-    	}
-    	retVal
+    def isDerivativeDefinition(SymbolDefinition sd){
+    	val lstType = sd.typeFor
+    	lstType?.typeName == ListDefinitionProvider::DERIV_TYPE.typeName
     }
-    
-    
-    def dispatch List<SymbolDefinition> getSymbolReferences(IfExprPart it){
-		value.symbolReferences    			
-    }
-    
-    def dispatch List<SymbolDefinition> getSymbolReferences(BuiltinFunctionCall it){
-    	val retVal = new ArrayList<SymbolDefinition>
-    	val a = argList
-    	switch(a){
-    		NamedFuncArguments:{
-    			for(arg : a.arguments){
-    				retVal.addAll(arg.expression.symbolReferences)
-    			}
-    		}
-    		UnnamedFuncArguments:{
-    			for(arg : a.args){
-    				retVal.addAll(arg.argument.symbolReferences)
-    			}
-    		}
-    	}
-    	retVal
-    }
-    
 }

@@ -12,7 +12,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.validation.UnsupportedFeaturesValidator
-import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -21,14 +20,14 @@ class MclParserDesignObj2Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-d1g=desObj{
+d1g=designObj{
 	DECLARED_VARIABLES{
 		Conc
 		Effect
 		Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {adm=Cmt, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {input=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
@@ -44,38 +43,38 @@ d1g=desObj{
 		pdwin5 : { type is simple, outcome=Effect, sampleTime = [150]}
 		pdwin6 : { type is simple, outcome=Effect,numberSamples=[0] }
 	# Create sampling for PK and PD by stringing windows
-		sampPK : {  type is complex, combination=[pkwin1,pkwin2,pkwin3,pkwin4,pkwin5,pkwin6] }
-		sampPD : { type is complex, combination=[pdwin1,pdwin2,pdwin3,pdwin4,pdwin5,pdwin6] }
+«««		sampPK : {  type is complex, combination=[pkwin1,pkwin2,pkwin3,pkwin4,pkwin5,pkwin6] }
+«««		sampPD : { type is complex, combination=[pdwin1,pdwin2,pdwin3,pdwin4,pdwin5,pdwin6] }
 	# Create sampling for both responses by combining the PK and PD samples. Need to specify start/end so that the sampling are simultaneous
-		sampPKPD : {type is derived, combination=[sampPK,sampPD]}
+«««		sampPKPD : {type is complex, combination=[sampPK,sampPD]}
 	}
 	DESIGN_SPACES{
-		DS1 : { admin=[dose1], element is amount, discrete=[10,100,200] }
-		DS2 : { admin=[dose1], element is duration, range=[0.5, 2] }
-		DS3 : { sample=[pkwin1,pdwin1], element is numberTimes, discrete=[1,2] }
-		DS4 : { sample=[pkwin1,pdwin1], element is sampleTime, range=[0.25,2] }
-		DS5 : { sample=[pkwin2,pdwin2], element is numberTimes, discrete=[0,1]}
-		DS6 : { sample=[pkwin2,pdwin2], element is sampleTime, range=[12,16] }
-		DS7 : { sample=[pkwin3,pdwin3], element is numberTimes, discrete=[1,2] }
-		DS8 : { sample=[pkwin3,pdwin3], element is sampleTime, range=[24,36] }
-		DS9 : { sample=[pkwin4,pdwin4], element is numberTimes, discrete=[1,2] }
-		DS10 : { sample=[pkwin4,pdwin4], element is sampleTime, range=[48,144] }
-		DS11 : { sample=[pkwin5,pdwin5], element is numberTimes, discrete=[0,1]}
-		DS12 : { sample=[pkwin5,pdwin5], element is sampleTime, range=[144,156] }
-		DS13 : { sample=[pkwin6,pdwin6], element is numberTimes, discrete=[0,1]}
-		DS14 : { sample=[pkwin6,pdwin6], element is sampleTime, range=[168,180] }
-		#DS15 : { sample=[sampPK,sampPD], element is numberTimes, discrete=seq(4,8,1) }
+		DS1 : { objRef=[dose1], element is amount, discrete=[10,100,200] }
+		DS2 : { objRef=[dose1], element is duration, range=[0.5, 2] }
+		DS3 : { objRef=[pkwin1,pdwin1], element is numberTimes, discrete=[1,2] }
+		DS4 : { objRef=[pkwin1,pdwin1], element is sampleTime, range=[0.25,2] }
+		DS5 : { objRef=[pkwin2,pdwin2], element is numberTimes, discrete=[0,1]}
+		DS6 : { objRef=[pkwin2,pdwin2], element is sampleTime, range=[12,16] }
+		DS7 : { objRef=[pkwin3,pdwin3], element is numberTimes, discrete=[1,2] }
+		DS8 : { objRef=[pkwin3,pdwin3], element is sampleTime, range=[24,36] }
+		DS9 : { objRef=[pkwin4,pdwin4], element is numberTimes, discrete=[1,2] }
+		DS10 : { objRef=[pkwin4,pdwin4], element is sampleTime, range=[48,144] }
+		DS11 : { objRef=[pkwin5,pdwin5], element is numberTimes, discrete=[0,1]}
+		DS12 : { objRef=[pkwin5,pdwin5], element is sampleTime, range=[144,156] }
+		DS13 : { objRef=[pkwin6,pdwin6], element is numberTimes, discrete=[0,1]}
+		DS14 : { objRef=[pkwin6,pdwin6], element is sampleTime, range=[168,180] }
+		#DS15 : { objRef=[sampPK,sampPD], element is numberTimes, discrete=dseq(4,8,1) }
 	}
 	STUDY_DESIGN{
 		set totalSize=100
 		arm1 : {
 			armSize=100,
 			interventionSequence=[{
-				interventionList=[dose1]
+				admin=dose1
 			}],
 			samplingSequence=[{
-				samplingList=[pkwin5],
-				start=[0]
+				sample=pkwin5,
+				start=0
 				}
 			]
 		}
@@ -83,13 +82,13 @@ d1g=desObj{
 }
 		'''
 	
-	@Ignore
+	@Test
 	def void testParsing(){
 		val mcl = CODE_SNIPPET.parse
 		mcl.assertNoErrors
-		mcl.assertWarning(MdlPackage::eINSTANCE.mclObject, UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
-			"Objects of type 'desObj' are not currently supported for execution in R."
-		)
+//		mcl.assertWarning(MdlPackage::eINSTANCE.mclObject, UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
+//			"Objects of type 'desObj' are not currently supported for execution in R."
+//		)
 	}
 	
 	@Test

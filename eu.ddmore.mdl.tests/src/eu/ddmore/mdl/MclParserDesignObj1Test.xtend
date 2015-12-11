@@ -16,7 +16,7 @@ class MclParserDesignObj1Test {
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
-warfarin_design = desObj {
+warfarin_design = designObj {
 	DECLARED_VARIABLES{
 		bsv_lvl; GUT; oral1
 	}
@@ -30,14 +30,16 @@ warfarin_design = desObj {
 	# wgt covariate is simulating
 
 	DESIGN_PARAMETERS{
-		WT_MEAN = 85.5
-		WT_VAR = 19
+		# again there is some repetition here so allowing a variable defn here would be useful
 		doseStart = 0
 		doseEnd = 24
 		doseGap = 2
 		baseAmt = 2.5
+		WT_MEAN = 85.5
+		WT_VAR = 19
 		epochStart = 0
 		epochEnd = 24
+«««		varlevel = bsv_lvl
 	}
 
 	COVARIATES{
@@ -48,10 +50,10 @@ warfarin_design = desObj {
 	ADMINISTRATION{
 
 		# could use an adm type instead so do
-		dreg1 : { adm=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
-		dreg2 : { adm=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
-		dreg3 : { adm=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
-		dreg4 : { adm=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
+		dreg1 : { input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
+		dreg2 : { input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
+		dreg3 : { input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
+		dreg4 : { input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
 	}
 
 	STUDY_DESIGN{

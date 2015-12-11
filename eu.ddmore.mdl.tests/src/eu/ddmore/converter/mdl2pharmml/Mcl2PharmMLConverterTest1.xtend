@@ -61,8 +61,8 @@ class Mcl2PharmMLConverterTest1 {
 	}
 
 	@Test
-	def void testUseCase2_5(){
-		validateConversion("UseCase2_5")
+	def void testUseCase2_2(){
+		validateConversion("UseCase2_2")
 	}
 
 	@Test
@@ -180,12 +180,12 @@ class Mcl2PharmMLConverterTest1 {
 		validateConversion("UseCase14")
 	}
 
-	@Test
+	@Ignore
 	def void testUseCase14_1(){
 		validateConversion("UseCase14_1")
 	}
 
-	@Test
+	@Ignore
 	def void testUseCase14_2(){
 		validateConversion("UseCase14_2")
 	}
@@ -243,5 +243,15 @@ class Mcl2PharmMLConverterTest1 {
 	@Test
 	def void testUseCase108(){
 		validateConversion("UseCase108")
+	}
+	
+	@Test
+	def void testUseCase109(){
+		validateConversion("UseCase109")
+	}
+
+	@Test
+	def void testUseCase110(){
+		validateConversion("UseCase110")
 	}
 }

@@ -2,8 +2,12 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumPair
+import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
@@ -23,14 +27,10 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
-
-import static extension eu.ddmore.mdl.utils.DomainObjectModelUtils.*
-import eu.ddmore.mdl.mdl.CategoryValueDefinition
-import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.StringLiteral
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class ListDefinitionProvider {
+	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 
 	public static val USE_ATT = 'use'
 	public static val DEFINE_ATT = 'define'
@@ -40,6 +40,11 @@ class ListDefinitionProvider {
 	public static val IGNORE_USE_VALUE = 'ignore'
 	public static val OBS_USE_VALUE = 'dv'
 	public static val DVID_USE_VALUE = 'dvid'
+	public static val RATE_USE_VALUE = 'rate'
+	public static val II_USE_VALUE = 'ii'
+	public static val SS_USE_VALUE = 'ss'
+	public static val ADDL_USE_VALUE = 'addl'
+	public static val MDV_USE_VALUE = 'mdv'
 	public static val CATCOV_USE_VALUE = 'catCov'
 	public static val IDV_USE_VALUE = 'idv'
 	public static val ID_USE_VALUE = 'id'
@@ -50,17 +55,26 @@ class ListDefinitionProvider {
 	public static val AMT_COL_ATT = 'amtColumn'
 	public static val CMT_TYPE_ATT = 'type'
 	public static val OBS_TYPE_ATT = 'type'
+	public static val VAR_LVL_TYPE_ATT = 'type'
+	public static val VAR_LVL_LEVEL_ATT = 'level'
 	public static val DERIV_TYPE_ATT = 'deriv'
 	public static val WRT_ATT = 'wrt'
+	public static val DERIV_INIT_TIME_ATT = 'x0'
 	public static val COUNT_OBS_VALUE = 'count'
 	public static val DISCRETE_OBS_VALUE = 'discrete'
 	public static val CATEGORICAL_OBS_VALUE = 'categorical'
 	public static val TTE_OBS_VALUE = 'tte'
+	public static val TTE_EVENT_ATT = 'event'
+	public static val TTE_MAX_EVENT_ATT = 'maxEvent'
+	public static val VAR_LVL_PARAM_VALUE = 'parameter' 
+	public static val VAR_LVL_OBS_VALUE = 'observation' 
 	
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, 'mdv', IDV_USE_VALUE, ID_USE_VALUE, 'rate', IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, 'rate', 'ss', 'ii', 'addl'})
-	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('use', #{COV_USE_VALUE, 'doseTime' })
-	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{'parameter', 'observation'})
+	public static val USE_TYPE = new BuiltinEnumTypeInfo('divUse', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, MDV_USE_VALUE, IDV_USE_VALUE,
+		ID_USE_VALUE, RATE_USE_VALUE, IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, SS_USE_VALUE, II_USE_VALUE, ADDL_USE_VALUE
+	})
+	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('ddvUse', #{'doseTime' })
+	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('varLvlType', #{VAR_LVL_PARAM_VALUE, VAR_LVL_OBS_VALUE})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
 	static val PRIOR_INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('priorInput', #{'RList'})
 	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{'depot', 'compartment', 'elimination', 'transfer', 'distribution', 'direct', 'input', 'effect'})
@@ -71,16 +85,19 @@ class ListDefinitionProvider {
 																			'numberArms', 'armSize', 'parameter', 'doseTime'
 																		})
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
-	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
-	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('type', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ,
-																		MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ, MdlValidator::FUNCOBJ
-															})
-	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
-	static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
+//	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
+	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('objType', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
+//	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
+	public static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
+	public static val COUNT_LIST_TYPE = new ListTypeInfo("CountObs", PrimitiveType.Real) 
+	public static val DISCRETE_LIST_TYPE = new EnumListTypeInfo("DiscreteObs")
+	public static val CATEGORICAL_LIST_TYPE = new EnumListTypeInfo("CatObs")
 
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
 	static val AMT_COL_TYPE = new ListTypeInfo("Amt", PrimitiveType.Real)
+	public static val CMT_COL_TYPE = new ListTypeInfo("Cmt", PrimitiveType.List)
+	public static val DVID_COL_TYPE = new ListTypeInfo("Dvid", PrimitiveType.List)
 	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration", PrimitiveType.List)
 	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", PrimitiveType.List)
 	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", PrimitiveType.List)
@@ -186,7 +203,7 @@ class ListDefinitionProvider {
 						 new AttributeDefn(USE_ATT, true, USE_TYPE)
 						 ] 
 					),
-					new ListDefInfo (CMT_USE_VALUE, new ListTypeInfo("Cmt", PrimitiveType.List),  #[
+					new ListDefInfo (CMT_USE_VALUE, CMT_COL_TYPE,  #[
 						 new AttributeDefn(USE_ATT, true, USE_TYPE)
 						 ] 
 					),
@@ -218,7 +235,7 @@ class ListDefinitionProvider {
 						 new AttributeDefn(USE_ATT, true, USE_TYPE)
 						 ] 
 					),
-					new ListDefInfo (DVID_USE_VALUE, new ListTypeInfo("Dvid", PrimitiveType.List),  #[
+					new ListDefInfo (DVID_USE_VALUE, DVID_COL_TYPE,  #[
 						 new AttributeDefn(USE_ATT, true, USE_TYPE)
 						 ] 
 					),
@@ -272,7 +289,7 @@ class ListDefinitionProvider {
 				key = 'type'
 				listDefns = newArrayList(
 					new ListDefInfo (null, new ListTypeInfo("VarLevel", PrimitiveType.List),  #[
-						 new AttributeDefn('type', true, VARIABILITY_TYPE_TYPE), new AttributeDefn('level', true, MclTypeProvider::INT_TYPE)
+						 new AttributeDefn(VAR_LVL_TYPE_ATT, true, VARIABILITY_TYPE_TYPE), new AttributeDefn(VAR_LVL_LEVEL_ATT, true, MclTypeProvider::INT_TYPE)
 						 ]
 					)
 				)
@@ -368,7 +385,7 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefInfo (null, DERIV_TYPE,  #[
 						 new AttributeDefn(DERIV_TYPE_ATT, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(DERIV_INIT_TIME_ATT, false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]
 					)
 				)
@@ -380,7 +397,7 @@ class ListDefinitionProvider {
 				listDefns = newArrayList(
 					new ListDefInfo (null, DERIV_TYPE,  #[
 						 new AttributeDefn(DERIV_TYPE_ATT, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('x0', false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(DERIV_INIT_TIME_ATT, false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
 						 ]
 					)
 				)
@@ -390,12 +407,12 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefInfo ('corr', new ListTypeInfo("CovarMatrix", PrimitiveType.List),  #[
+					new ListDefInfo ('cov', new ListTypeInfo("CovarMatrix", PrimitiveType.List),  #[
 						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', true, MclTypeProvider::REAL_VECTOR_TYPE),
 						 new AttributeDefn('value', true, MclTypeProvider::REAL_VECTOR_TYPE)
 						 ]
 					),
-					new ListDefInfo ('cov', new ListTypeInfo("CorrMatrix", PrimitiveType.List),  #[
+					new ListDefInfo ('corr', new ListTypeInfo("CorrMatrix", PrimitiveType.List),  #[
 						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', true, MclTypeProvider::REAL_VECTOR_TYPE),
 						 new AttributeDefn('value', true, MclTypeProvider::REAL_VECTOR_TYPE)
 						 ]
@@ -432,7 +449,7 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = 'type'
 				listDefns = newArrayList(
-					new ListDefInfo (null, new ListTypeInfo("MdlObjInMog", PrimitiveType.Real),  #[
+					new ListDefInfo (null, new ListTypeInfo("MdlObjInMog", PrimitiveType.List),  #[
 						 new AttributeDefn('type', true, MOG_OBJ_TYPE_TYPE)
 						]
 					)
@@ -443,63 +460,63 @@ class ListDefinitionProvider {
 			new BlockListDefinition => [
 				key = OBS_TYPE_ATT
 				listDefns = newArrayList(
-					new ListDefInfo (CATEGORICAL_OBS_VALUE, new EnumListTypeInfo("CatObs"),  #[
+					new ListDefInfo (CATEGORICAL_OBS_VALUE, CATEGORICAL_LIST_TYPE,  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
 						 ]
 					),
-					new ListDefInfo (COUNT_OBS_VALUE, new ListTypeInfo("CountObs", PrimitiveType.Real),  #[
+					new ListDefInfo (COUNT_OBS_VALUE, COUNT_LIST_TYPE,  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('distn', true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo (DISCRETE_OBS_VALUE, new EnumListTypeInfo("DiscreteObs"),  #[
+					new ListDefInfo (DISCRETE_OBS_VALUE, DISCRETE_LIST_TYPE,  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, MclTypeProvider::UNDEFINED_TYPE, false),
 						 new AttributeDefn('distn', true, MclTypeProvider::PMF_TYPE)
 						 ]
 					),
-					new ListDefInfo (TTE_OBS_VALUE, new ListTypeInfo("DiscreteObs", PrimitiveType.Real),  #[
+					new ListDefInfo (TTE_OBS_VALUE, new ListTypeInfo("TteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
-						 new AttributeDefn('hazard', true, MclTypeProvider::REAL_TYPE.makeReference),
-						 new AttributeDefn('event', false, TTE_EVENT_TYPE),
-						 new AttributeDefn('maxEvent', false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('hazard', true, MclTypeProvider::REAL_TYPE.makeReference)//,
+//						 new AttributeDefn('event', false, TTE_EVENT_TYPE),
+//						 new AttributeDefn('maxEvent', false, MclTypeProvider::REAL_TYPE)
 						 ],
 						 #[
-						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true },
-						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true, 'event' -> true, 'maxEvent' -> false }
+						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true }//,
+//						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true, 'event' -> true, 'maxEvent' -> false }
 						 ],
 						 false
 					)
 				)
 			]
 		),
-		"ESTIMATE" -> (
-			new BlockListDefinition => [
-				key = 'target'
-				listDefns = newArrayList(
-					new ListDefInfo (null, TARGET_TYPE,  #[
-						 new AttributeDefn('target', true,  TARGET_TYPE),
-						 new AttributeDefn('version', false, MclTypeProvider::STRING_TYPE),
-						 new AttributeDefn('algo', false, MclTypeProvider::STRING_TYPE),
-						 new AttributeDefn('tol', false, MclTypeProvider::REAL_TYPE)
-						 ]
-					)
-				)
-			]
-		),
-		"SIMULATE" -> (
-			new BlockListDefinition => [
-				key = 'target'
-				listDefns = newArrayList(
-					new ListDefInfo (null, TARGET_TYPE,  #[
-						 new AttributeDefn('target', true,  TARGET_TYPE),
-						 new AttributeDefn('version', false, MclTypeProvider::STRING_TYPE),
-						 new AttributeDefn('algo', false, MclTypeProvider::STRING_TYPE),
-						 new AttributeDefn('tol', false, MclTypeProvider::REAL_TYPE)
-						 ]
-					)
-				)
-			]
-		),
+//		"ESTIMATE" -> (
+//			new BlockListDefinition => [
+//				key = 'target'
+//				listDefns = newArrayList(
+//					new ListDefInfo (null, TARGET_TYPE,  #[
+//						 new AttributeDefn('target', true,  TARGET_TYPE),
+//						 new AttributeDefn('version', false, MclTypeProvider::STRING_TYPE),
+//						 new AttributeDefn('algo', false, MclTypeProvider::STRING_TYPE),
+//						 new AttributeDefn('tol', false, MclTypeProvider::REAL_TYPE)
+//						 ]
+//					)
+//				)
+//			]
+//		),
+//		"SIMULATE" -> (
+//			new BlockListDefinition => [
+//				key = 'target'
+//				listDefns = newArrayList(
+//					new ListDefInfo (null, TARGET_TYPE,  #[
+//						 new AttributeDefn('target', true,  TARGET_TYPE),
+//						 new AttributeDefn('version', false, MclTypeProvider::STRING_TYPE),
+//						 new AttributeDefn('algo', false, MclTypeProvider::STRING_TYPE),
+//						 new AttributeDefn('tol', false, MclTypeProvider::REAL_TYPE)
+//						 ]
+//					)
+//				)
+//			]
+//		),
 		"ADMINISTRATION" -> (
 			new BlockListDefinition => [
 				key = 'input'
@@ -779,6 +796,16 @@ class ListDefinitionProvider {
 	
 	def getAttributeDefinition(ListDefInfo it, String attName){
 		attributes.findFirst(ad | ad.name == attName) 
+	}
+	
+	
+	def TypeInfo getAttributeType(ValuePair it){
+		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
+		if(attList != null){
+			val listDefn = attList.matchingListDefn
+			listDefn?.getAttributeType(attributeName) ?: MclTypeProvider::UNDEFINED_TYPE
+		}
+		else MclTypeProvider::UNDEFINED_TYPE
 	}
 	
 	def TypeInfo getTypeOfAttributeBuiltinEnum(EnumExpression ee){
@@ -1203,8 +1230,8 @@ class ListDefinitionProvider {
 			listDefn.isAnonymous
 		}
 		else{
-			// is can't get the definition (presumably because the list is mal-formed) then give benefit of the doubt.
-			true
+			// is can't get the definition (presumably because the list is mal-formed) then assume no.
+			false
 		}
 	}
 
@@ -1214,8 +1241,8 @@ class ListDefinitionProvider {
 			!listDefn.isAnonymous
 		}
 		else{
-			// is can't get the definition (presumably because the list is mal-formed) then give benefit of the doubt.
-			true
+			// is can't get the definition (presumably because the list is mal-formed) then no.
+			false
 		}
 	}
 
