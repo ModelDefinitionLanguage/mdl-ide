@@ -46,7 +46,7 @@ class MogValidator {
 	}
 
 	def buildMog(MclObject it){
-		val objDefns = getBlocksByName(BlockDefinitionProvider::MOG_OBJ_NAME)
+		val objDefns = getBlocksByName(BlockDefinitionTable::MOG_OBJ_NAME)
 		for(obj : objDefns){
 			if(obj.body instanceof BlockStatementBody){
 				for(stmt : (obj.body as BlockStatementBody).statements)

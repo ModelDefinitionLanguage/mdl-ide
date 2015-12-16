@@ -35,9 +35,9 @@ class PropertyDefinitionProvider {
 	static val NUM_ARMS_ATT = new AttributeDefn('numberArms', false, MclTypeProvider::INT_TYPE)
 
 	static val Map<String, List<AttributeDefn>> propertyDefns = #{ 
-		BlockDefinitionProvider::ESTIMATE_BLK -> #[ALGO_ATT],
-		BlockDefinitionProvider::SIMULATE_BLK -> #[SOLVER_ATT],
-		BlockDefinitionProvider::DES_STUDY_DESIGN -> #[ARM_SIZE_ATT, TOTAL_SIZE_ATT, NUM_SAMPLES_ATT, TOTAL_COST_ATT, NUM_ARMS_ATT]
+		BlockDefinitionTable::ESTIMATE_BLK -> #[ALGO_ATT],
+		BlockDefinitionTable::SIMULATE_BLK -> #[SOLVER_ATT],
+		BlockDefinitionTable::DES_STUDY_DESIGN -> #[ARM_SIZE_ATT, TOTAL_SIZE_ATT, NUM_SAMPLES_ATT, TOTAL_COST_ATT, NUM_ARMS_ATT]
 	}
 	
 /* the following was commented out inside propertyDefns declaration

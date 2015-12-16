@@ -33,7 +33,7 @@ class UnsupportedToolSpecificFeaturesValidator extends AbstractMdlValidator  {
 	@Check
 	def checkMonolixUnsupportedIdv(EquationTypeDefinition it){
 		val owningBlock = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		if(owningBlock != null && owningBlock.identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS){
+		if(owningBlock != null && owningBlock.identifier == BlockDefinitionTable::MDL_INDIV_PARAMS){
 			if(expression != null){
 				// check for explicit and general defns
 				if(isGeneralIdv){
@@ -66,7 +66,7 @@ class UnsupportedToolSpecificFeaturesValidator extends AbstractMdlValidator  {
 	@Check
 	def checkMonolixUnsupportedObs(EquationTypeDefinition it){
 		val owningBlock = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		if(owningBlock != null && owningBlock.identifier == BlockDefinitionProvider::OBS_BLK_NAME){
+		if(owningBlock != null && owningBlock.identifier == BlockDefinitionTable::OBS_BLK_NAME){
 			// check for explicit and general defns
 			if(expression != null && !isStandardResidualError){
 				warning("Only the pre-defined error models are currently supported by MONOLIX.", 

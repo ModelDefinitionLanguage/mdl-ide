@@ -208,7 +208,7 @@ class MdlValidator extends AbstractMdlValidator {
 	@Check
 	def validateObjectReferenceInMog(ListDefinition it){
 		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		if(blk?.identifier == BlockDefinitionProvider::MOG_OBJ_NAME){
+		if(blk?.identifier == BlockDefinitionTable::MOG_OBJ_NAME){
 			val mogObj = EcoreUtil2.getContainerOfType(eContainer, MclObject)
 			val objType = list.getAttributeEnumValue('type')
 			if(MogValidator::findMdlObject(mogObj, name, objType) == null){

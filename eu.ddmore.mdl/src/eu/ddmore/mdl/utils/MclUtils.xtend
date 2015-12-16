@@ -16,15 +16,14 @@ import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.validation.BlockDefinitionProvider
+import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.validation.BlockDefinitionTable
 import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.validation.ListDefinitionTable
 import eu.ddmore.mdl.validation.MdlValidator
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
-
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.validation.ListDefinitionTable
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -85,7 +84,7 @@ class MclUtils {
 
 	def getMdlCovariateDefns(MclObject mdlObj){
 		val retVal = new ArrayList<SymbolDefinition>
-		mdlObj.blocks.filter[identifier == BlockDefinitionProvider::COVARIATE_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[retVal.add(it as SymbolDefinition)]]
+		mdlObj.blocks.filter[identifier == BlockDefinitionTable::COVARIATE_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[retVal.add(it as SymbolDefinition)]]
 		retVal
 	}	
 
@@ -103,7 +102,7 @@ class MclUtils {
 	}
 
 	def boolean isDataSourceBlock(BlockStatement stmt){
-		stmt.identifier == BlockDefinitionProvider::DATA_SRC_BLK
+		stmt.identifier == BlockDefinitionTable::DATA_SRC_BLK
 	}
 
 	def boolean isMatchingDataUse(ListDefinition it, String ... useValue){
@@ -111,7 +110,7 @@ class MclUtils {
 	}
 
 	def getDataSourceStmt(MclObject it){
-		val blk = blocks.findFirst[identifier== BlockDefinitionProvider::DATA_SRC_BLK]
+		val blk = blocks.findFirst[identifier== BlockDefinitionTable::DATA_SRC_BLK]
 		val stmts = blk.getStatementsFromBlock
 		if(stmts.isEmpty) null
 		else{
@@ -147,7 +146,7 @@ class MclUtils {
 	
 	def getMdlIdv(MclObject it){
 		val retVal = new ArrayList<EquationDefinition>
-		blocks.filter[identifier == BlockDefinitionProvider::IDV_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[if(it instanceof EquationDefinition) retVal.add(it)]]
+		blocks.filter[identifier == BlockDefinitionTable::IDV_BLK_NAME].forEach[(body as BlockStatementBody).statements.forEach[if(it instanceof EquationDefinition) retVal.add(it)]]
 		if(retVal.empty) null
 		else retVal.head
 	}	
@@ -202,7 +201,7 @@ class MclUtils {
 	}
 
 	def getMdlPredictionVariables(MclObject it){
-		getStatementsInBlock(BlockDefinitionProvider::MDL_PRED_BLK_NAME)
+		getStatementsInBlock(BlockDefinitionTable::MDL_PRED_BLK_NAME)
 //		val retVal = new ArrayList<Statement>
 //		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]){
 //			retVal.addAll(stmt.nonBlockStatements)
@@ -211,7 +210,7 @@ class MclUtils {
 	}	
 	
 	def getMdlIndvParams(MclObject it){
-		getStatementsInBlock(BlockDefinitionProvider::MDL_INDIV_PARAMS)
+		getStatementsInBlock(BlockDefinitionTable::MDL_INDIV_PARAMS)
 //		val retVal = new ArrayList<Statement>
 //		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS]){
 //			retVal.addAll(stmt.nonBlockStatements)
@@ -220,7 +219,7 @@ class MclUtils {
 	}	
 	
 	def getMdlStructuralParameters(MclObject it){
-		getStatementsInBlock(BlockDefinitionProvider::MDL_STRUCT_PARAMS)
+		getStatementsInBlock(BlockDefinitionTable::MDL_STRUCT_PARAMS)
 //		val retVal = new ArrayList<Statement>
 //		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_STRUCT_PARAMS]){
 //			retVal.addAll(stmt.nonBlockStatements)
@@ -229,7 +228,7 @@ class MclUtils {
 	}
 	
 	def getMdlVariabilityParameters(MclObject it){
-		getStatementsInBlock(BlockDefinitionProvider::MDL_VAR_PARAMS)
+		getStatementsInBlock(BlockDefinitionTable::MDL_VAR_PARAMS)
 //		val retVal = new ArrayList<Statement>
 //		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::MDL_VAR_PARAMS]){
 //			retVal.addAll(stmt.nonBlockStatements)
@@ -246,15 +245,15 @@ class MclUtils {
 	}
 	
 	def getParamVariabilityParameters(MclObject it){
-		getStatementsInBlock(BlockDefinitionProvider::PARAM_VARIABILITY_BLK)
+		getStatementsInBlock(BlockDefinitionTable::PARAM_VARIABILITY_BLK)
 	}
 	
 	def isParVariabilityParam(Statement it){
-		isParentBlockAsNamed(BlockDefinitionProvider::PARAM_VARIABILITY_BLK)
+		isParentBlockAsNamed(BlockDefinitionTable::PARAM_VARIABILITY_BLK)
 	}
 
 	def isParStructuralParam(Statement it){
-		isParentBlockAsNamed(BlockDefinitionProvider::PARAM_STRUCT_BLK)
+		isParentBlockAsNamed(BlockDefinitionTable::PARAM_STRUCT_BLK)
 	}
 
 	private def isParentBlockAsNamed(Statement it, String name){
@@ -263,7 +262,7 @@ class MclUtils {
 	}
 
 	def getParamStructuralParameters(MclObject it){
-		getStatementsInBlock(BlockDefinitionProvider::PARAM_STRUCT_BLK)
+		getStatementsInBlock(BlockDefinitionTable::PARAM_STRUCT_BLK)
 //		val retVal = new ArrayList<Statement>
 //		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_STRUCT_BLK]){
 //			retVal.addAll(stmt.nonBlockStatements)
@@ -272,12 +271,12 @@ class MclUtils {
 	}
 	
 	def getModelPredictionBlocks(MclObject it){
-		blocks.filter[identifier == BlockDefinitionProvider::MDL_PRED_BLK_NAME]
+		blocks.filter[identifier == BlockDefinitionTable::MDL_PRED_BLK_NAME]
 	}
 	
 	def getMdlObservations(MclObject it){
 		val retVal = new ArrayList<SymbolDefinition>
-		for(obsStmt : blocks.filter[identifier == BlockDefinitionProvider::OBS_BLK_NAME]){
+		for(obsStmt : blocks.filter[identifier == BlockDefinitionTable::OBS_BLK_NAME]){
 			val body = obsStmt.body
 			switch(body){
 				BlockStatementBody:{
@@ -294,7 +293,7 @@ class MclUtils {
 			for(s : (b.body as BlockStatementBody).statements.filter[s|
 					switch(s){
 						BlockStatement:
-							s.identifier == BlockDefinitionProvider::MDL_CMT_BLK
+							s.identifier == BlockDefinitionTable::MDL_CMT_BLK
 						default: false
 					}
 				]){
@@ -310,7 +309,7 @@ class MclUtils {
 
 	def getParamStructuralParams(MclObject it){
 		val retVal = new ArrayList<Statement>
-		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_STRUCT_BLK]){
+		for(stmt : blocks.filter[identifier == BlockDefinitionTable::PARAM_STRUCT_BLK]){
 			val body = stmt.body
 			switch(body){
 				BlockStatementBody:{
@@ -323,7 +322,7 @@ class MclUtils {
 
 	def getParamVariabilityParams(MclObject it){
 		val retVal = new ArrayList<Statement>
-		for(stmt : blocks.filter[identifier == BlockDefinitionProvider::PARAM_VARIABILITY_BLK]){
+		for(stmt : blocks.filter[identifier == BlockDefinitionTable::PARAM_VARIABILITY_BLK]){
 			val body = stmt.body
 			switch(body){
 				BlockStatementBody:{
@@ -352,7 +351,7 @@ class MclUtils {
 
 	def getMdlVariabilityLevels(MclObject it){
 		val retVal = new ArrayList<ListDefinition>
-		for(obsStmt : blocks.filter[identifier == BlockDefinitionProvider::VAR_LVL_BLK_NAME]){
+		for(obsStmt : blocks.filter[identifier == BlockDefinitionTable::VAR_LVL_BLK_NAME]){
 			val body = obsStmt.body
 			switch(body){
 				BlockStatementBody:{
@@ -387,7 +386,7 @@ class MclUtils {
 
 	def getDataColumnDefn(MclObject dataObj, String ... useValue){
 		val retVal = new ArrayList<ListDefinition>
-		for(divBlk : dataObj.blocks.filter[identifier == BlockDefinitionProvider::DIV_BLK_NAME]){
+		for(divBlk : dataObj.blocks.filter[identifier == BlockDefinitionTable::DIV_BLK_NAME]){
 			if(divBlk.body instanceof BlockStatementBody){
 				for(divList : (divBlk.body as BlockStatementBody).statements){
 					switch(divList){
@@ -405,7 +404,7 @@ class MclUtils {
 	
 	def getDataColumnDefinitions(MclObject it){
 		val retVal = new ArrayList<ListDefinition>
-		for(divBlk : blocks.filter[identifier == BlockDefinitionProvider::DIV_BLK_NAME]){
+		for(divBlk : blocks.filter[identifier == BlockDefinitionTable::DIV_BLK_NAME]){
 			if(divBlk.body instanceof BlockStatementBody){
 				for(divList : (divBlk.body as BlockStatementBody).statements){
 					switch(divList){
@@ -423,7 +422,7 @@ class MclUtils {
 
 	def getDataDerivedColumnDefinitions(MclObject it){
 		val retVal = new ArrayList<ListDefinition>
-		for(divBlk : blocks.filter[identifier == BlockDefinitionProvider::DATA_DERIV_BLK_NAME]){
+		for(divBlk : blocks.filter[identifier == BlockDefinitionTable::DATA_DERIV_BLK_NAME]){
 			if(divBlk.body instanceof BlockStatementBody){
 				for(divList : (divBlk.body as BlockStatementBody).statements){
 					switch(divList){
@@ -540,7 +539,7 @@ class MclUtils {
     	val retVal = new ArrayList<SymbolDefinition> 
     	expr.getSymbolReferences.forEach[ 
     		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-    		if(blk?.identifier == BlockDefinitionProvider::COVARIATE_BLK_NAME) retVal.add(it)
+    		if(blk?.identifier == BlockDefinitionTable::COVARIATE_BLK_NAME) retVal.add(it)
     	]
     	retVal
     }

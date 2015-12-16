@@ -145,7 +145,7 @@ class MdlCustomValidation extends AbstractMdlValidator {
 	@Check
 	def validateDataUseHasDependecies(ListDefinitionImpl it){
 		val block = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		if(block.identifier == BlockDefinitionProvider::DIV_BLK_NAME){
+		if(block.identifier == BlockDefinitionTable::DIV_BLK_NAME){
 			val enumVal = list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 			if(enumVal != null && UseDeps.containsKey(enumVal)){
 				for(depUse : UseDeps.get(enumVal)){
@@ -183,7 +183,7 @@ class MdlCustomValidation extends AbstractMdlValidator {
 				if(subList != null && subList.typeFor.isCompatible(SublistDefinitionProvider::getSublist(SublistDefinitionProvider::FIX_EFF_SUBLIST))){
 					// now check reference variable belongs to covariates block
 					val refBlk = EcoreUtil2.getContainerOfType(expr.ref.eContainer, BlockStatement)
-					if(refBlk != null && refBlk.identifier != BlockDefinitionProvider::COVARIATE_BLK_NAME){
+					if(refBlk != null && refBlk.identifier != BlockDefinitionTable::COVARIATE_BLK_NAME){
 						// ref cov is not in cov block so assume it not a covariate
 						error("Attribute '" + attributeName + "' expects a reference to a covariate. '" + expr.ref.name + "' is not a covariate.",
 							MdlPackage::eINSTANCE.valuePair_Expression,
@@ -228,7 +228,7 @@ class MdlCustomValidation extends AbstractMdlValidator {
 	def validateUseValueNotDuplicated(ValuePair it){
 		val owningBlock = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 		val owningList = EcoreUtil2.getContainerOfType(eContainer, ListDefinition)
-		if(owningBlock != null && owningBlock.identifier == BlockDefinitionProvider::DIV_BLK_NAME &&
+		if(owningBlock != null && owningBlock.identifier == BlockDefinitionTable::DIV_BLK_NAME &&
 			owningList != null && attributeName == ListDefinitionTable::USE_ATT){
 			val enumVal = owningList.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 			if(UniqueUseValue.contains(enumVal)){
@@ -301,7 +301,7 @@ class MdlCustomValidation extends AbstractMdlValidator {
 		// if observation type then this must be 1
 		// only one observation type permitted
 		val owningBlock = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		if(owningBlock?.identifier == BlockDefinitionProvider::VAR_LVL_BLK_NAME){
+		if(owningBlock?.identifier == BlockDefinitionTable::VAR_LVL_BLK_NAME){
 			// check if permitted level value
 			if(levelValue < 1){
 				error("Variability Level definition '" + name + "': level cannot be less than 1.",

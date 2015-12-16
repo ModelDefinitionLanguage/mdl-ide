@@ -167,7 +167,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	@Check
 	def checkUnsupportedColumnName(ListDefinition it){
 		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		if(blk != null && blk.identifier == BlockDefinitionProvider::DIV_BLK_NAME){
+		if(blk != null && blk.identifier == BlockDefinitionTable::DIV_BLK_NAME){
 			// data mapping block
 			val useValue = list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 			val expectedColumnName = DataNamingLookup.get(useValue)

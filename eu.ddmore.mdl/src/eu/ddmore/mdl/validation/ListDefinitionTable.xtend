@@ -185,7 +185,7 @@ class ListDefinitionTable {
 				)
 			)
 		),
-		BlockDefinitionProvider::PRIOR_SOURCE_BLK -> (
+		BlockDefinitionTable::PRIOR_SOURCE_BLK -> (
 			new BlockListDefinition('file', newArrayList(
 					new ListDefInfo (null, PRIOR_SOURCE_TYPE,  #[
 						 new AttributeDefn('file', true, MclTypeProvider::STRING_TYPE),

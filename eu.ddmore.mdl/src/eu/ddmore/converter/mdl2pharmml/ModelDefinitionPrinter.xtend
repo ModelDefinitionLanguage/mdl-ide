@@ -21,10 +21,12 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.utils.MclUtils
-import eu.ddmore.mdl.validation.BlockDefinitionProvider
+import eu.ddmore.mdl.validation.BlockDefinitionTable
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.validation.ListDefinitionTable
 import eu.ddmore.mdl.validation.SublistDefinitionProvider
 import java.util.ArrayList
 import java.util.Comparator
@@ -39,8 +41,6 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
-import eu.ddmore.mdl.validation.ListDefinitionTable
 
 class ModelDefinitionPrinter {
 	extension MclUtils mu = new MclUtils
@@ -272,7 +272,7 @@ class ModelDefinitionPrinter {
 			«IF mObj != null»
 				«FOR b: mObj.blocks»
 «««				//STRUCTURAL_PARAMETERS
-					«IF b.identifier == BlockDefinitionProvider::MDL_STRUCT_PARAMS»
+					«IF b.identifier == BlockDefinitionTable::MDL_STRUCT_PARAMS»
 						«FOR stmt: b.getNonBlockStatements»
 							«switch(stmt){
 								EquationDefinition:
@@ -281,7 +281,7 @@ class ModelDefinitionPrinter {
 						«ENDFOR» 
 			  		«ENDIF»
 «««				//VARIABILITY_PARAMETERS
-					«IF b.identifier == BlockDefinitionProvider::MDL_VAR_PARAMS»
+					«IF b.identifier == BlockDefinitionTable::MDL_VAR_PARAMS»
 						«FOR stmt: b.getNonBlockStatements»
 							«switch(stmt){
 								EquationDefinition:
@@ -290,7 +290,7 @@ class ModelDefinitionPrinter {
 						«ENDFOR» 
 			  		«ENDIF»
 «««		  		GROUP_VARIABLES (covariate parameters)
-					«IF b.identifier == BlockDefinitionProvider::MDL_GRP_PARAMS»
+					«IF b.identifier == BlockDefinitionTable::MDL_GRP_PARAMS»
 						«FOR stmt: b.getNonBlockStatements»
 							«switch(stmt){
 								EquationDefinition:
@@ -299,7 +299,7 @@ class ModelDefinitionPrinter {
 						«ENDFOR» 
 			  		«ENDIF»
 «««				//RANDOM_VARIABLES_DEFINITION
-					«IF b.identifier == BlockDefinitionProvider::MDL_RND_VARS»
+					«IF b.identifier == BlockDefinitionTable::MDL_RND_VARS»
 						«FOR stmt: b.getNonBlockStatements»
 							«switch(stmt){
 								RandomVariableDefinition:{
@@ -309,7 +309,7 @@ class ModelDefinitionPrinter {
 						«ENDFOR» 
 					«ENDIF»
 «««		  		//INDIVIDUAL_VARIABLES
-					«IF b.identifier == BlockDefinitionProvider::MDL_INDIV_PARAMS»
+					«IF b.identifier == BlockDefinitionTable::MDL_INDIV_PARAMS»
 						«FOR stmt: b.getNonBlockStatements»
 							«switch(stmt){
 								EquationTypeDefinition:
@@ -504,7 +504,7 @@ class ModelDefinitionPrinter {
 		«FOR stmt : currBlkBody.statements»
 			«switch(stmt){
 				BlockStatement:
-					if(stmt.identifier == BlockDefinitionProvider::MDL_DEQ_BLK && stmt.body instanceof BlockStatementBody){
+					if(stmt.identifier == BlockDefinitionTable::MDL_DEQ_BLK && stmt.body instanceof BlockStatementBody){
 						'''
 						«mdlObject.writeModelPredictionBlock(stmt.body as BlockStatementBody)»
 						'''

@@ -10,8 +10,6 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import eu.ddmore.mdl.mdl.MdlPackage
-import eu.ddmore.mdl.validation.UnsupportedFeaturesValidator
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))

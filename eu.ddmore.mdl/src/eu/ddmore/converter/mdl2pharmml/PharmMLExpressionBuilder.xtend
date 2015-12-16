@@ -5,6 +5,7 @@ import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BooleanLiteral
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.ConstantLiteral
+import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
@@ -14,6 +15,7 @@ import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
+import eu.ddmore.mdl.mdl.PowerExpression
 import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.StringLiteral
@@ -24,14 +26,11 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
-import eu.ddmore.mdl.validation.BlockDefinitionProvider
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.validation.BlockDefinitionTable
 import eu.ddmore.mdl.validation.ListDefinitionProvider
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
-
-import eu.ddmore.mdl.mdl.EnumExpression
-import eu.ddmore.mdl.mdl.PowerExpression
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class PharmMLExpressionBuilder {
 	
@@ -41,19 +40,19 @@ class PharmMLExpressionBuilder {
 	static val GLOBAL_VAR = 'global'
 	
 	static val blockPharmMLModelMapping = #{
-		BlockDefinitionProvider::MDL_PRED_BLK_NAME -> 'sm',
-		BlockDefinitionProvider::MDL_DEQ_BLK -> 'sm',
-		BlockDefinitionProvider::MDL_CMT_BLK -> 'sm',
-		BlockDefinitionProvider::MDL_INDIV_PARAMS -> 'pm',
-		BlockDefinitionProvider::MDL_VAR_PARAMS -> 'pm',
-		BlockDefinitionProvider::MDL_STRUCT_PARAMS -> 'pm',
-		BlockDefinitionProvider::MDL_RND_VARS -> 'pm',
-		BlockDefinitionProvider::MDL_GRP_PARAMS -> 'pm',
-		BlockDefinitionProvider::COVARIATE_BLK_NAME -> 'cm',
-		BlockDefinitionProvider::IDV_BLK_NAME -> GLOBAL_VAR,
-		BlockDefinitionProvider::PARAM_STRUCT_BLK -> 'pm',
-		BlockDefinitionProvider::PARAM_VARIABILITY_BLK -> 'pm',
-		BlockDefinitionProvider::OBS_BLK_NAME-> 'om'
+		BlockDefinitionTable::MDL_PRED_BLK_NAME -> 'sm',
+		BlockDefinitionTable::MDL_DEQ_BLK -> 'sm',
+		BlockDefinitionTable::MDL_CMT_BLK -> 'sm',
+		BlockDefinitionTable::MDL_INDIV_PARAMS -> 'pm',
+		BlockDefinitionTable::MDL_VAR_PARAMS -> 'pm',
+		BlockDefinitionTable::MDL_STRUCT_PARAMS -> 'pm',
+		BlockDefinitionTable::MDL_RND_VARS -> 'pm',
+		BlockDefinitionTable::MDL_GRP_PARAMS -> 'pm',
+		BlockDefinitionTable::COVARIATE_BLK_NAME -> 'cm',
+		BlockDefinitionTable::IDV_BLK_NAME -> GLOBAL_VAR,
+		BlockDefinitionTable::PARAM_STRUCT_BLK -> 'pm',
+		BlockDefinitionTable::PARAM_VARIABILITY_BLK -> 'pm',
+		BlockDefinitionTable::OBS_BLK_NAME-> 'om'
 	}
 	
 	
@@ -69,10 +68,10 @@ class PharmMLExpressionBuilder {
 		val blkName = blk.identifier
 		val blkId = blockPharmMLModelMapping.get(blkName)
 		switch(blkName){
-			case BlockDefinitionProvider::VAR_LVL_BLK_NAME:
+			case BlockDefinitionTable::VAR_LVL_BLK_NAME:
 				if((it as ListDefinition).list.getAttributeEnumValue('type') == 'parameter') 'vm_mdl'
 				else 'vm_err'
-			case BlockDefinitionProvider::OBS_BLK_NAME:{
+			case BlockDefinitionTable::OBS_BLK_NAME:{
 				// number obs based on order in block.
 				var cntr = 1
 				for(obsStmt : blk.statements){
