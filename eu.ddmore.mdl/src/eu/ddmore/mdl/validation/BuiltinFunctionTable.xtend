@@ -9,8 +9,6 @@ import eu.ddmore.mdl.validation.BuiltinFunctionProvider.SimpleFuncDefn
 import java.util.List
 import java.util.Map
 
-import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
-
 class BuiltinFunctionTable {
 	
 	public static val TRANSFORM_FUNCS = #{ 'ln', 'logit', 'probit' }
@@ -123,7 +121,7 @@ class BuiltinFunctionTable {
 		'linear' -> #[ new NamedArgFuncDefn(MclTypeProvider::REAL_TYPE, #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'fixEff' -> new FunctionArgument(getSublist(FIX_EFF_SUBLIST).makeVector, false),
+						'fixEff' -> new FunctionArgument(SublistDefinitionTable::getSublist(SublistDefinitionTable::FIX_EFF_SUBLIST).makeVector, false),
 						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
 					} )
 					],

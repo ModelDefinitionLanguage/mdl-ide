@@ -2,8 +2,8 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.validation.BlockDefinitionProvider.BlockSpec
-import java.util.Map
 import eu.ddmore.mdl.validation.BlockDefinitionProvider.StatementSpec
+import java.util.Map
 import java.util.Set
 
 class BlockDefinitionTable {

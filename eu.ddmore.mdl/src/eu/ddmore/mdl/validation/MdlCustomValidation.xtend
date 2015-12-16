@@ -176,11 +176,11 @@ class MdlCustomValidation extends AbstractMdlValidator {
 	@Check
 	// check that a covariate is used in the fixed eff sublist
 	def validateCovariateFixedEffect(ValuePair it){
-		if(attributeName == SublistDefinitionProvider::COV_ATT){
+		if(attributeName == SublistDefinitionTable::COV_ATT){
 			val expr = expression
 			if(expr instanceof SymbolReference){
 				val subList = EcoreUtil2.getContainerOfType(eContainer, SubListExpression)
-				if(subList != null && subList.typeFor.isCompatible(SublistDefinitionProvider::getSublist(SublistDefinitionProvider::FIX_EFF_SUBLIST))){
+				if(subList != null && subList.typeFor.isCompatible(SublistDefinitionTable::getSublist(SublistDefinitionTable::FIX_EFF_SUBLIST))){
 					// now check reference variable belongs to covariates block
 					val refBlk = EcoreUtil2.getContainerOfType(expr.ref.eContainer, BlockStatement)
 					if(refBlk != null && refBlk.identifier != BlockDefinitionTable::COVARIATE_BLK_NAME){

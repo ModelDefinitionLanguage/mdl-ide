@@ -10,9 +10,6 @@ import eu.ddmore.mdl.validation.ListDefinitionProvider.BlockListDefinition
 import eu.ddmore.mdl.validation.ListDefinitionProvider.ListDefInfo
 import java.util.Map
 
-import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
-
-
 class ListDefinitionTable {
 	public static val USE_ATT = 'use'
 	public static val DEFINE_ATT = 'define'
@@ -190,7 +187,7 @@ class ListDefinitionTable {
 					new ListDefInfo (null, PRIOR_SOURCE_TYPE,  #[
 						 new AttributeDefn('file', true, MclTypeProvider::STRING_TYPE),
 						 new AttributeDefn('inputFormat', true, PRIOR_INPUT_FORMAT_TYPE),
-						 new AttributeDefn('format', true, getSublist(SublistDefinitionProvider::PRIOR_FORMAT_SUBLIST).makeVector)
+						 new AttributeDefn('format', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::PRIOR_FORMAT_SUBLIST).makeVector)
 						 ] 
 					)
 				)
@@ -430,8 +427,8 @@ class ListDefinitionTable {
 			new BlockListDefinition('interventionSequence', newArrayList(
 					new ListDefInfo (null, STUDY_DESIGN_LIST_TYPE,  #[
 						 new AttributeDefn('armSize', false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('interventionSequence', true, getSublist(INTERVENTION_SEQ_SUBLIST).makeVector),
-						 new AttributeDefn('samplingSequence', false, getSublist(SAMPLING_SEQ_SUBLIST).makeVector)
+						 new AttributeDefn('interventionSequence', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::INTERVENTION_SEQ_SUBLIST).makeVector),
+						 new AttributeDefn('samplingSequence', false, SublistDefinitionTable::getSublist(SublistDefinitionTable::SAMPLING_SEQ_SUBLIST).makeVector)
 						 ]
 					)
 				)
@@ -586,7 +583,7 @@ class ListDefinitionTable {
 //					),
 					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
 						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
-						 new AttributeDefn('combination', true, getSublist(SublistDefinitionProvider::COMPLEX_COMBINATION_SUBLIST).makeVector),
+						 new AttributeDefn('combination', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::COMPLEX_COMBINATION_SUBLIST).makeVector),
 						 new AttributeDefn('numberTimes', false, MclTypeProvider::INT_TYPE)
 						 ]
 					)//,

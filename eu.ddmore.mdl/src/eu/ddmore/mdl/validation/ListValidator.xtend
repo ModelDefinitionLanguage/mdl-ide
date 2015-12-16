@@ -2,6 +2,8 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.AttributeList
+import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MdlPackage
@@ -11,8 +13,6 @@ import eu.ddmore.mdl.type.MclTypeProvider
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.mdl.EnumPair
-import eu.ddmore.mdl.mdl.EnumExpression
 
 // validates attributes in lists, functions and properties
 class ListValidator extends AbstractMdlValidator {

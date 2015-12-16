@@ -22,7 +22,6 @@ import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
-
 class BuiltinFunctionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	
