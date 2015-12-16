@@ -12,10 +12,10 @@ import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class BlockValidator extends AbstractDeclarativeValidator{
 

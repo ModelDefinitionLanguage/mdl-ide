@@ -1,26 +1,26 @@
 package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.AttributeList
+import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.ElseClause
-import eu.ddmore.mdl.mdl.WhenExpression
-import eu.ddmore.mdl.utils.ConstantEvaluation
-import eu.ddmore.mdl.utils.MclUtils
-import org.eclipse.xtext.EcoreUtil2
-import org.eclipse.xtext.validation.Check
-import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.mdl.EqualityExpression
+import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.ValuePair
-import java.util.Map
-import java.util.Set
-import java.util.Collections
-import eu.ddmore.mdl.mdl.EqualityExpression
+import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
-import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.utils.ConstantEvaluation
+import eu.ddmore.mdl.utils.MclUtils
+import java.util.Collections
+import java.util.Map
+import java.util.Set
+import org.eclipse.xtext.EcoreUtil2
+import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.validation.EValidatorRegistrar
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
@@ -44,8 +44,8 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	static val Map<String, Set<String>> unsupportedAttributes = Collections::emptyMap
 //	#{
 //		BlockDefinitionProvider::OBS_BLK_NAME -> #{
-//			ListDefinitionProvider::TTE_EVENT_ATT,
-//			ListDefinitionProvider::TTE_MAX_EVENT_ATT									
+//			ListDefinitionTable::TTE_EVENT_ATT,
+//			ListDefinitionTable::TTE_MAX_EVENT_ATT									
 //		}
 //	}
 
@@ -61,7 +61,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
 	
 	private def validateWrt(AttributeList it){
-		val wrtExpr = getAttributeExpression(ListDefinitionProvider::WRT_ATT)
+		val wrtExpr = getAttributeExpression(ListDefinitionTable::WRT_ATT)
 		if(wrtExpr instanceof SymbolReference){
 			val mdlObj = EcoreUtil2::getContainerOfType(eContainer, MclObject)
 			val idvName = mdlObj?.mdlIdv?.name
@@ -74,7 +74,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	}
 	
 	private def validateInitTime(AttributeList it){
-		val x0Expr = getAttributeExpression(ListDefinitionProvider::DERIV_INIT_TIME_ATT)
+		val x0Expr = getAttributeExpression(ListDefinitionTable::DERIV_INIT_TIME_ATT)
 		if(x0Expr != null){
 			val x0Value = x0Expr.evaluateMathsExpression 
 			if(x0Value != null && x0Value.compareTo(PERMITTED_X0_VALUE) != 0){
@@ -88,7 +88,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	@Check
 	//Check for unsupported object names
 	def checkUnsupportedDifferentWrt(ValuePair it){
-		if(attributeName == ListDefinitionProvider::DERIV_TYPE_ATT){
+		if(attributeName == ListDefinitionTable::DERIV_TYPE_ATT){
 			val attList = EcoreUtil2::getContainerOfType(eContainer, AttributeList)
 			// check first that this is a well constructed derivative list in the correct block etc.
 			if(attList.isKeyAttributeDefined){
@@ -151,16 +151,16 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
 
 	static val DataNamingLookup = #{
-		ListDefinitionProvider::AMT_USE_VALUE -> 'AMT',
-		ListDefinitionProvider::IDV_USE_VALUE -> 'TIME',
-		ListDefinitionProvider::ID_USE_VALUE -> 'ID',
-		ListDefinitionProvider::CMT_USE_VALUE -> 'CMT',
-		ListDefinitionProvider::RATE_USE_VALUE -> 'RATE',
-		ListDefinitionProvider::SS_USE_VALUE -> 'SS',
-		ListDefinitionProvider::II_USE_VALUE -> 'II',
-		ListDefinitionProvider::ADDL_USE_VALUE -> 'ADDL',
-		ListDefinitionProvider::MDV_USE_VALUE -> 'MDV',
-		ListDefinitionProvider::OBS_USE_VALUE -> 'DV'
+		ListDefinitionTable::AMT_USE_VALUE -> 'AMT',
+		ListDefinitionTable::IDV_USE_VALUE -> 'TIME',
+		ListDefinitionTable::ID_USE_VALUE -> 'ID',
+		ListDefinitionTable::CMT_USE_VALUE -> 'CMT',
+		ListDefinitionTable::RATE_USE_VALUE -> 'RATE',
+		ListDefinitionTable::SS_USE_VALUE -> 'SS',
+		ListDefinitionTable::II_USE_VALUE -> 'II',
+		ListDefinitionTable::ADDL_USE_VALUE -> 'ADDL',
+		ListDefinitionTable::MDV_USE_VALUE -> 'MDV',
+		ListDefinitionTable::OBS_USE_VALUE -> 'DV'
 	} 
 	
 	
@@ -169,7 +169,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 		if(blk != null && blk.identifier == BlockDefinitionProvider::DIV_BLK_NAME){
 			// data mapping block
-			val useValue = list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT)
+			val useValue = list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 			val expectedColumnName = DataNamingLookup.get(useValue)
 			if(expectedColumnName != null && expectedColumnName != name){
 				warning("Column definitions with use '" + useValue + "' must be named '" + expectedColumnName + "' otherwise execution in R will fail.",
@@ -183,7 +183,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	//Check for unsupported object names
 	def checkExperimentalFeature(ListDefinition it){
 		val attListType = typeOfList
-		if(attListType.typeName == ListDefinitionProvider::DISCRETE_LIST_TYPE.typeName || attListType.typeName == ListDefinitionProvider::CATEGORICAL_LIST_TYPE.typeName){
+		if(attListType.typeName == ListDefinitionTable::DISCRETE_LIST_TYPE.typeName || attListType.typeName == ListDefinitionTable::CATEGORICAL_LIST_TYPE.typeName){
 			warning("This is an experimental feature and may change in the future. Models using this feature may not be compatible with later versions of MDL.",
 					MdlPackage::eINSTANCE.listDefinition_List,
 					MdlValidator::EXPERIMENTAL_FEATURE, "")

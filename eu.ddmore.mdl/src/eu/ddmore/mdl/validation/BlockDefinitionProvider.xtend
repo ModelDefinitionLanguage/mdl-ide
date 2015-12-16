@@ -1,22 +1,21 @@
 package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.BlockTextBody
+import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.MclObject
-import java.util.HashSet
-import java.util.Map
-import java.util.List
+import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.Statement
-
+import java.util.HashMap
+import java.util.HashSet
+import java.util.List
+import java.util.Map
+import java.util.Set
+import org.eclipse.emf.ecore.EClass
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.mdl.MdlPackage
-import org.eclipse.emf.ecore.EClass
-import java.util.Set
-import java.util.HashMap
-import eu.ddmore.mdl.mdl.BlockStatementBody
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.BlockTextBody
 
 class BlockDefinitionProvider {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"

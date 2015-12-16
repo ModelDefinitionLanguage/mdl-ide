@@ -1,23 +1,20 @@
 package eu.ddmore.mdl.validation
 
+import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
 import java.util.ArrayList
 import java.util.List
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
-import eu.ddmore.mdl.mdl.EnumExpression
-
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import java.util.Map
 
 class SublistDefinitionProvider {
 	
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
-
 
 	public static val INTERVENTION_SEQ_SUBLIST = "intSeqAtts"
 	public static val SAMPLING_SEQ_SUBLIST = "sampSeqAtts"
@@ -39,12 +36,12 @@ class SublistDefinitionProvider {
 																   	#{COEFF.name -> true, CAT_COV.name -> true}
 																   ])),
 		INTERVENTION_SEQ_SUBLIST -> (new SublistTypeInfo(INTERVENTION_SEQ_SUBLIST, #[
-											new AttributeDefn("admin", true,	ListDefinitionProvider::ADMINISTRATION_TYPE.makeReference),
+											new AttributeDefn("admin", true,	ListDefinitionTable::ADMINISTRATION_TYPE.makeReference),
 											new AttributeDefn("start", true, MclTypeProvider::REAL_TYPE),
 											new AttributeDefn("end", true, MclTypeProvider::REAL_TYPE)],
 											#[#{'admin' -> true, 'start' -> false, 'end' -> false}])),
 		SAMPLING_SEQ_SUBLIST -> (new SublistTypeInfo(SAMPLING_SEQ_SUBLIST, #[
-												new AttributeDefn("sample", true, ListDefinitionProvider::SAMPLING_TYPE.makeReference),
+												new AttributeDefn("sample", true, ListDefinitionTable::SAMPLING_TYPE.makeReference),
 												new AttributeDefn("start", true, MclTypeProvider::REAL_TYPE),
 												new AttributeDefn("end", true, MclTypeProvider::REAL_TYPE)],
 												#[#{'sample' -> true, 'start' -> true, 'end' -> false}])),
@@ -52,7 +49,7 @@ class SublistDefinitionProvider {
 												new AttributeDefn("type", true, PRIOR_ELEMENT_TYPE_TYPE)],
 												#[#{'element' -> true, 'type' -> true}])),
 		COMPLEX_COMBINATION_SUBLIST -> (new SublistTypeInfo(COMPLEX_COMBINATION_SUBLIST,
-												#[new AttributeDefn("sample", true, ListDefinitionProvider::SAMPLING_TYPE.makeReference),
+												#[new AttributeDefn("sample", true, ListDefinitionTable::SAMPLING_TYPE.makeReference),
 												new AttributeDefn("startTime", false, MclTypeProvider::REAL_TYPE)],
 												#[#{'sample' -> true, 'startTime' -> false}]))
 	}
@@ -115,7 +112,7 @@ class SublistDefinitionProvider {
 
 	def TypeInfo getTypeOfAttributeBuiltinEnum(SubListExpression it, EnumExpression ee){
 		val vp = ee.getOwningValuePair
-		val enumValue = ee.convertToString
+		val enumValue = ee.enumValue
 		val SublistTypeInfo sublistType = findSublistMatch
 		val defnType = sublistType.attributes.findFirst[name == vp.argumentName]?.attType ?: MclTypeProvider::UNDEFINED_TYPE
 		switch(defnType){

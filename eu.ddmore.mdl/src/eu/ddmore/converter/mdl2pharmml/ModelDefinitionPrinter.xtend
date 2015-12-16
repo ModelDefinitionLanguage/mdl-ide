@@ -40,6 +40,7 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.validation.ListDefinitionTable
 
 class ModelDefinitionPrinter {
 	extension MclUtils mu = new MclUtils
@@ -569,17 +570,17 @@ class ModelDefinitionPrinter {
 	}
 	
 	def writeDiscreteObservations(ListDefinition s, int idx) {
-		val type = s.list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT)
+		val type = s.list.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT)
 		'''
 		<ObservationModel blkId="om«idx»">
 			«switch type{
-				case ListDefinitionProvider::COUNT_OBS_VALUE:
+				case ListDefinitionTable::COUNT_OBS_VALUE:
 					s.print_mdef_CountObservations
-				case ListDefinitionProvider::DISCRETE_OBS_VALUE:
+				case ListDefinitionTable::DISCRETE_OBS_VALUE:
 					s.print_mdef_DiscreteObservations
-				case ListDefinitionProvider::CATEGORICAL_OBS_VALUE:
+				case ListDefinitionTable::CATEGORICAL_OBS_VALUE:
 					s.print_mdef_CategoricalObservations
-				case ListDefinitionProvider::TTE_OBS_VALUE:
+				case ListDefinitionTable::TTE_OBS_VALUE:
 					s.print_mdef_TimeToEventObservations
 				default: ''''''
 			}» 
@@ -1027,7 +1028,7 @@ class ModelDefinitionPrinter {
 		val linkFunction = s.list.getAttributeExpression('link');
 		val distn = s.list.getAttributeExpression('distn') as BuiltinFunctionCall
 		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("probability")
-		val categories = s.list.getAttributeExpression(ListDefinitionProvider::OBS_TYPE_ATT);
+		val categories = s.list.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
 		val catVals = categories.categories
 		val catList = createCategoriesOrderedBySuccess(catVals.keySet, distn.successCategory)
 		
@@ -1093,7 +1094,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	private def print_mdef_CategoricalObservations(ListDefinition s) {
-//			val define = column.list.getAttributeExpression(ListDefinitionProvider::USE_ATT);
+//			val define = column.list.getAttributeExpression(ListDefinitionTable::USE_ATT);
 //			// get an EnumExpression here - use this to get the categories.
 //			switch(define){
 //				EnumExpression:{
@@ -1105,7 +1106,7 @@ class ModelDefinitionPrinter {
 //					}
 //				}
 //			}
-		val categories = s.list.getAttributeExpression(ListDefinitionProvider::OBS_TYPE_ATT);
+		val categories = s.list.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
 //		val listCats = new ArrayList<String>
 //		val catVals = new HashMap<String, Expression>
 //		switch(categories){

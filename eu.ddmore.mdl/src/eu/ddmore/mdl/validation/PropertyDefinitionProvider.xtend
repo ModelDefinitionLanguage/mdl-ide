@@ -3,19 +3,18 @@ package eu.ddmore.mdl.validation
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
+import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
 import java.util.ArrayList
 import java.util.Collections
 import java.util.HashSet
 import java.util.List
 import java.util.Map
-
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
-import eu.ddmore.mdl.mdl.Statement
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class PropertyDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils

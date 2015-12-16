@@ -32,6 +32,7 @@ import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.validation.PropertyDefinitionProvider
 import eu.ddmore.mdl.mdl.MdlFactory
 import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.validation.ListDefinitionTable
 
 class ModellingStepsPrinter { 
 	
@@ -183,10 +184,10 @@ class ModellingStepsPrinter {
 	def print_ds_NONMEM_DataSet(MclObject mObj, MclObject dObj) {
 		var res = "";
 		for (column : dObj.dataColumnDefinitions) {
-			val use = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
+			val use = column.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
 			switch(use){
-				case(ListDefinitionProvider::ID_USE_VALUE),
-				case(ListDefinitionProvider::VARLVL_USE_VALUE):{
+				case(ListDefinitionTable::ID_USE_VALUE),
+				case(ListDefinitionTable::VARLVL_USE_VALUE):{
 					if(mObj.mdlVariabilityLevels.exists[name == column.name]){
 						// only generate mapping if equivalent variable exists in model
 						res += mObj.print_ds_MagicMapping(column)
@@ -194,28 +195,28 @@ class ModellingStepsPrinter {
 						saveMappedColumn(column.name)
 					}
 				}
-				case(ListDefinitionProvider::IDV_USE_VALUE):{
+				case(ListDefinitionTable::IDV_USE_VALUE):{
 					if(mObj.mdlIdv != null){
 						res += mObj.writeIdvMapping(column)
 						// record that mapping to model found
 						saveMappedColumn(column.name)
 					}
 				}
-				case(ListDefinitionProvider::COV_USE_VALUE):{
+				case(ListDefinitionTable::COV_USE_VALUE):{
 					if(isCovariateUsedInModel(column, mObj)){
 						res = res + mObj.print_ds_MagicMapping(column)
 						// record that mapping to model found
 						saveMappedColumn(column.name)
 					}
 				}
-				case(ListDefinitionProvider::CATCOV_USE_VALUE):{
+				case(ListDefinitionTable::CATCOV_USE_VALUE):{
 					if(isCovariateUsedInModel(column, mObj)){
 						res = res + mObj.print_ds_CategoricalMagicMapping(column)
 						// record that mapping to model found
 						saveMappedColumn(column.name)
 					}
 				}
-				case(ListDefinitionProvider::AMT_USE_VALUE):{
+				case(ListDefinitionTable::AMT_USE_VALUE):{
 //					Potential bug here. This is meant to ensure that no mapping
 //					is generated if no variables match. @TODO: fix this properly.
 //					if(mObj.findMdlSymbolDefn(column.name) != null){
@@ -224,15 +225,15 @@ class ModellingStepsPrinter {
 						saveMappedColumn(column.name)
 //					}
 				}
-				case(ListDefinitionProvider::OBS_USE_VALUE):{
+				case(ListDefinitionTable::OBS_USE_VALUE):{
 					res = res + column.print_ds_DvMapping(dObj, mObj)
 				}
 			}
 		}
 		for (column : dObj.dataDerivedColumnDefinitions) {
-			val use = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
+			val use = column.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
 			switch(use){
-				case(ListDefinitionProvider::DOSE_TIME_USE_VALUE):{
+				case(ListDefinitionTable::DOSE_TIME_USE_VALUE):{
 					res += column.writeDoseTimeMapping(dObj, mObj)
 				}
 			}
@@ -242,8 +243,8 @@ class ModellingStepsPrinter {
 
 
 	def CharSequence writeDoseTimeMapping(ListDefinition column, MclObject dObj, MclObject mObj){
-		var idvCol = column.list.getAttributeExpression(ListDefinitionProvider::IDV_COL_ATT)
-		var amtCol = column.list.getAttributeExpression(ListDefinitionProvider::AMT_COL_ATT)
+		var idvCol = column.list.getAttributeExpression(ListDefinitionTable::IDV_COL_ATT)
+		var amtCol = column.list.getAttributeExpression(ListDefinitionTable::AMT_COL_ATT)
 		var mdlDtSymb = mObj.findMdlSymbolDefn(column.name)
 		'''
 		<!-- doseTime=«mdlDtSymb.name» -->
@@ -385,7 +386,7 @@ class ModellingStepsPrinter {
 	}
 	
 	def boolean isAdministrationMacro(ListDefinition cmtDefn){
-		val type = cmtDefn.list.getAttributeEnumValue(ListDefinitionProvider::CMT_TYPE_ATT)
+		val type = cmtDefn.list.getAttributeEnumValue(ListDefinitionTable::CMT_TYPE_ATT)
 		return type == 'depot' || type == 'input' || type == 'direct'
 	}
 
@@ -405,7 +406,7 @@ class ModellingStepsPrinter {
 	
 	private def print_ds_CategoricalMapping(ListDefinition column) {
 		var res = "";
-			val define = column.list.getAttributeExpression(ListDefinitionProvider::USE_ATT);
+			val define = column.list.getAttributeExpression(ListDefinitionTable::USE_ATT);
 			// get an EnumExpression here - use this to get the categories.
 			switch(define){
 				EnumExpression:{
@@ -465,14 +466,14 @@ class ModellingStepsPrinter {
 
 	def isCategoricalObs(SymbolDefinition symb){
 		if(symb instanceof ListDefinition){
-			(symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT) == ListDefinitionProvider::CATEGORICAL_OBS_VALUE
+			(symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT) == ListDefinitionTable::CATEGORICAL_OBS_VALUE
 		}
 		else false
 	}
 
 	def isDiscreteObs(SymbolDefinition symb){
 		if(symb instanceof ListDefinition){
-			(symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionProvider::OBS_TYPE_ATT) == ListDefinitionProvider::DISCRETE_OBS_VALUE
+			(symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT) == ListDefinitionTable::DISCRETE_OBS_VALUE
 		}
 		else false
 	}
@@ -588,7 +589,7 @@ class ModellingStepsPrinter {
 //	}
 
 	def printCategoricalObsMapping(Expression expression){
-//			val define = column.list.getAttributeExpression(ListDefinitionProvider::USE_ATT);
+//			val define = column.list.getAttributeExpression(ListDefinitionTable::USE_ATT);
 //			// get an EnumExpression here - use this to get the categories.
 		switch(expression){
 			CatValRefMappingExpression:{
@@ -661,7 +662,7 @@ class ModellingStepsPrinter {
 			saveMappedColumn(dvColumn.name)
 		}
 		else { 
-			val define = dvColumn.list.getAttributeExpression(ListDefinitionProvider::DEFINE_ATT);
+			val define = dvColumn.list.getAttributeExpression(ListDefinitionTable::DEFINE_ATT);
 			if(mObj.isMultiObsMappingDefinedInMdlObs(define)){
 				retVal = writeMultipleObsMapping(mObj, dvColumn, define)
 				saveMappedColumn(dvColumn.name)
@@ -734,15 +735,15 @@ class ModellingStepsPrinter {
 		var res = "";
 		var k = 1;
 		val dosingToCompartmentMacro = dObj.dataColumnDefinitions.exists[
-				list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT) == ListDefinitionProvider::AMT_USE_VALUE &&
+				list.getAttributeEnumValue(ListDefinitionTable::USE_ATT) == ListDefinitionTable::AMT_USE_VALUE &&
 				isDosingToCompartmentMacro(mObj)
 		]
 		for (column : dObj.dataColumnDefinitions) {
-			val columnType = column.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
+			val columnType = column.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
 			val columnId = column.name;
 			val convertedColType = switch(columnType){
-				case(ListDefinitionProvider::COV_USE_VALUE),
-				case(ListDefinitionProvider::CATCOV_USE_VALUE):
+				case(ListDefinitionTable::COV_USE_VALUE),
+				case(ListDefinitionTable::CATCOV_USE_VALUE):
 					if(isColumnMapped(column.name)) convertEnum(columnType, dosingToCompartmentMacro, !column.isCovUsedInIndivParams(mObj)) else "undefined"
 				default:
 //					if(isColumnMapped(column.name)) convertEnum(columnType, dosingToCompartmentMacro, false) else 'undefined'
@@ -784,14 +785,14 @@ class ModellingStepsPrinter {
 	
 	def convertEnum(String type, boolean isDosingToCompartmentMacro, boolean isRegressor) {
 		switch (type) {
-			case ListDefinitionProvider::AMT_USE_VALUE     : "dose"
-			case ListDefinitionProvider::DVID_USE_VALUE   : "dvid"
-			case ListDefinitionProvider::VARLVL_USE_VALUE: "occasion"
-			case ListDefinitionProvider::COV_USE_VALUE,
-			case ListDefinitionProvider::CATCOV_USE_VALUE:
+			case ListDefinitionTable::AMT_USE_VALUE     : "dose"
+			case ListDefinitionTable::DVID_USE_VALUE   : "dvid"
+			case ListDefinitionTable::VARLVL_USE_VALUE: "occasion"
+			case ListDefinitionTable::COV_USE_VALUE,
+			case ListDefinitionTable::CATCOV_USE_VALUE:
 				if(isRegressor) "reg" else "covariate"
-			case ListDefinitionProvider::CMT_USE_VALUE : if(isDosingToCompartmentMacro) 'adm' else 'cmt'
-			case ListDefinitionProvider::IGNORE_USE_VALUE: 'undefined'
+			case ListDefinitionTable::CMT_USE_VALUE : if(isDosingToCompartmentMacro) 'adm' else 'cmt'
+			case ListDefinitionTable::IGNORE_USE_VALUE: 'undefined'
 			default: type
 		}
 	}
@@ -821,16 +822,16 @@ class ModellingStepsPrinter {
 	}
 
 	protected def getValueType(ListDefinition dataColumn) {
-		val useValue = dataColumn.list.getAttributeEnumValue(ListDefinitionProvider::USE_ATT);
+		val useValue = dataColumn.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
 
 		switch useValue {
-			case ListDefinitionProvider::ID_USE_VALUE: Constants::TYPE_INT
-			case ListDefinitionProvider::COV_USE_VALUE: Constants::TYPE_REAL
-			case ListDefinitionProvider::CATCOV_USE_VALUE: Constants::TYPE_INT
-			case ListDefinitionProvider::DVID_USE_VALUE: Constants::TYPE_INT
+			case ListDefinitionTable::ID_USE_VALUE: Constants::TYPE_INT
+			case ListDefinitionTable::COV_USE_VALUE: Constants::TYPE_REAL
+			case ListDefinitionTable::CATCOV_USE_VALUE: Constants::TYPE_INT
+			case ListDefinitionTable::DVID_USE_VALUE: Constants::TYPE_INT
 			case 'mdv': Constants::TYPE_INT
 			case 'cmt': Constants::TYPE_INT
-			case ListDefinitionProvider::VARLVL_USE_VALUE: Constants::TYPE_INT
+			case ListDefinitionTable::VARLVL_USE_VALUE: Constants::TYPE_INT
 			default: Constants::TYPE_REAL
 		}
 	}

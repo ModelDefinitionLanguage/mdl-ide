@@ -11,6 +11,8 @@ import eu.ddmore.mdl.type.MclTypeProvider
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.mdl.EnumPair
+import eu.ddmore.mdl.mdl.EnumExpression
 
 // validates attributes in lists, functions and properties
 class ListValidator extends AbstractMdlValidator {
@@ -22,8 +24,8 @@ class ListValidator extends AbstractMdlValidator {
 	extension MclTypeProvider mtp = new MclTypeProvider
 	
 	static val MappingToColumn = #{
-		ListDefinitionProvider::AMT_USE_VALUE -> ListDefinitionProvider::CMT_COL_TYPE,
-		ListDefinitionProvider::OBS_USE_VALUE -> ListDefinitionProvider::DVID_COL_TYPE
+		ListDefinitionTable::AMT_USE_VALUE -> ListDefinitionTable::CMT_COL_TYPE,
+		ListDefinitionTable::OBS_USE_VALUE -> ListDefinitionTable::DVID_COL_TYPE
 	} 
 	
 	@Check
@@ -31,7 +33,7 @@ class ListValidator extends AbstractMdlValidator {
 		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
 		if(attList != null){
 			// check use type
-			val useVal = attList.getAttributeEnumValue(ListDefinitionProvider::USE_ATT)
+			val useVal = attList.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 			if(useVal != null){
 				val expectedSrcType = MappingToColumn.get(useVal) 
 				val srcColType = srcColumn?.ref?.typeFor
@@ -101,5 +103,34 @@ class ListValidator extends AbstractMdlValidator {
 				MdlPackage.eINSTANCE.listDefinition_List, MdlValidator::LIST_NOT_ANONYMOUS, "")
 		}
 	}
+
+	@Check
+	def validateCategoryDefinitionWellFormed(EnumPair parentAt){
+		if(parentAt != null)
+			checkCategoryDefinitionWellFormed(parentAt,
+				[error("Unexpected category definition.", 
+					MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_CATEGORY_DEFINITION, "") ],
+				[error("Category definition is missing.", 
+					MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_CATEGORY_DEFINITION, "") ]
+			)
+	}
+		
+	def checkCategoryDefinitionWellFormed(EnumPair ep, () => void unexpectedCatDefnErrorLambda, () => void missingCatErrorLambda){
+		val attList = EcoreUtil2.getContainerOfType(ep.eContainer, ListDefinition)
+		if(attList != null){
+			val listDefn = attList.list.matchingListDefn
+			val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
+			if(ep.expression instanceof EnumExpression && attDefn != null){
+				val mappingExpr = ep.expression as EnumExpression
+				if(attDefn.isCatMappingPossible && mappingExpr.catDefn == null){
+					missingCatErrorLambda.apply
+				}
+				else if(!attDefn.isCatMappingPossible && mappingExpr.catDefn != null){
+					unexpectedCatDefnErrorLambda.apply
+				}
+			}
+		}
+	}
+	
 
 }

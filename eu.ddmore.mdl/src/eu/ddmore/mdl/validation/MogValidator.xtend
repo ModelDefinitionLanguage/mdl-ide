@@ -4,18 +4,17 @@ import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
+import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.utils.MclUtils
 import java.util.ArrayList
 import org.eclipse.xtext.EcoreUtil2
-
-import eu.ddmore.mdl.mdl.Statement
-import eu.ddmore.mdl.mdl.EquationTypeDefinition
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class MogValidator {
 
@@ -138,12 +137,12 @@ class MogValidator {
 					errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "variability level " + mdlOb.name +" has no match in dataObj");
 				}
 				else if(mdlOb.isParameterVarLevel){
-					if(!dataOb.isMatchingDataUse(ListDefinitionProvider::ID_USE_VALUE, ListDefinitionProvider::VARLVL_USE_VALUE)){
+					if(!dataOb.isMatchingDataUse(ListDefinitionTable::ID_USE_VALUE, ListDefinitionTable::VARLVL_USE_VALUE)){
 						errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "variability level " + mdlOb.name +" has an inconsistent type with its match in the dataObj");
 					}
 				}
 				else if(mdlOb.isObservationVarLevel)
-					if(!dataOb.isMatchingDataUse(ListDefinitionProvider::OBS_USE_VALUE)){
+					if(!dataOb.isMatchingDataUse(ListDefinitionTable::OBS_USE_VALUE)){
 						errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "variability level " + mdlOb.name +" has an inconsistent type with its match in the dataObj");
 					}
 			}

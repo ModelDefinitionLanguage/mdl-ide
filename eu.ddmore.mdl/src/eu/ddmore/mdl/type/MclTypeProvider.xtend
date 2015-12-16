@@ -1,7 +1,9 @@
 package eu.ddmore.mdl.type
 
+import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.EnumExpression
@@ -11,8 +13,11 @@ import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.MatrixElement
+import eu.ddmore.mdl.mdl.MatrixLiteral
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ParExpression
+import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
@@ -26,26 +31,18 @@ import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
+import eu.ddmore.mdl.validation.ListDefinitionProvider.ListDefInfo
+import eu.ddmore.mdl.validation.PropertyDefinitionProvider
 import eu.ddmore.mdl.validation.SublistDefinitionProvider
 import java.util.ArrayList
+import java.util.Collections
+import java.util.HashSet
 import java.util.List
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
-
-import static eu.ddmore.mdl.type.MclTypeProvider.*
-import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
-import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
-import java.util.Collections
-import java.util.HashSet
-import eu.ddmore.mdl.validation.ListDefinitionProvider.ListDefInfo
-import eu.ddmore.mdl.validation.PropertyDefinitionProvider
-import eu.ddmore.mdl.mdl.PropertyStatement
-import eu.ddmore.mdl.mdl.MatrixElement
-import eu.ddmore.mdl.mdl.MatrixLiteral
-import eu.ddmore.mdl.mdl.AnonymousListStatement
 
 public class MclTypeProvider {
 

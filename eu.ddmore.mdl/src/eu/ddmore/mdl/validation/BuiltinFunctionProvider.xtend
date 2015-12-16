@@ -4,12 +4,14 @@ import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.FuncArguments
 import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import java.util.Collections
 import java.util.HashMap
 import java.util.HashSet
@@ -17,12 +19,9 @@ import java.util.List
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
-import static eu.ddmore.mdl.validation.SublistDefinitionProvider.*
-
-import eu.ddmore.mdl.mdl.TransformedDefinition
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 class BuiltinFunctionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
@@ -32,6 +31,7 @@ class BuiltinFunctionProvider {
 		def TypeInfo getReturnType()
 	} 	
 
+	@Data @FinalFieldsConstructor
 	static class SimpleFuncDefn implements FunctDefn{
 		List<? extends TypeInfo> argTypes
 		TypeInfo returnType	 
@@ -45,12 +45,13 @@ class BuiltinFunctionProvider {
 		}
 	}
 
-	@Data
+	@Data @FinalFieldsConstructor
 	static class FunctionArgument{
 		TypeInfo expectedType
 		boolean mandatory
 	}
 
+	@Data @FinalFieldsConstructor
 	static class NamedArgFuncDefn implements FunctDefn{
 		TypeInfo returnType
 		Map<String, FunctionArgument> arguments	 
@@ -64,166 +65,11 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
-	
-	static val TRANSFORM_FUNCS = #{ 'ln', 'logit', 'probit' }
-	
-	static val TRANS_TYPE = new BuiltinEnumTypeInfo('transType', #{'none', 'ln', 'logit', 'probit'})
-	
-	private static val Map<String, List<? extends FunctDefn>> functDefns = #{
-		'log' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'log2' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'log10' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'ln' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'probit' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'logit' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'invLogit' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'invProbit' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'factorial' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'lnFactorial' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'sin' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'cos' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'tan' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'sinh' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'cosh' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'tanh' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'floor' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'ceiling' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'min' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'max' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'abs' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'exp' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'seq' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_VECTOR_TYPE ] ],
-		'dseq' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::INT_TYPE, MclTypeProvider::INT_TYPE, MclTypeProvider::INT_TYPE] returnType = MclTypeProvider::INT_VECTOR_TYPE ] ],
-		'sqrt' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'sum' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'mean' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'median' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE.makeVector] returnType = MclTypeProvider::REAL_TYPE ] ],
-		'inverse' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_MATRIX_TYPE] returnType = MclTypeProvider::REAL_MATRIX_TYPE ] ],
-		'toInt' -> #[ new SimpleFuncDefn => [ argTypes = #[MclTypeProvider::REAL_TYPE] returnType = MclTypeProvider::INT_TYPE ] ],
-		
-		'Normal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
-						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ],
-					new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
-						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'var' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ]
-					],
-		'LogNormal' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
-						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ],
-					new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
-						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'var' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ]
-					],
-		'Bernoulli' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
-						'category' -> new FunctionArgument(MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
-						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ]
-					],
-		'Poisson' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
-						'lambda' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ]
-					],
-		'Binomial' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PMF_TYPE arguments = #{
-						'successCategory' -> new FunctionArgument(MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
-						'probabilityOfSuccess' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'numberOfTrials' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ]
-					],
-		'Gamma' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
-						'shape' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'scale' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ]
-					],
-		'NonParametric' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
-						'bins' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true),
-						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
-					} ]
-					],
-		'MultiNonParametric' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE.makeVector arguments = #{
-						'bins' -> new FunctionArgument(MclTypeProvider::REAL_MATRIX_TYPE, true),
-						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
-					} ]
-					],
-		'Empirical' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE arguments = #{
-						'data' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true),
-						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
-					} ]
-					],
-		'MultiEmpirical' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE.makeVector arguments = #{
-						'data' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector.makeVector, true),
-						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
-					} ]
-					],
-		'MultivariateNormal' -> #[
-						new NamedArgFuncDefn => [ returnType = MclTypeProvider::PDF_TYPE.makeVector arguments = #{
-							'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector.makeVector, true),
-							'cov' -> new FunctionArgument(MclTypeProvider::REAL_MATRIX_TYPE, true)
-						} ]
-					],
-		'matrix' -> #[
-						new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_MATRIX_TYPE arguments = #{
-							'vector' -> new FunctionArgument(MclTypeProvider::REAL_VECTOR_TYPE, true),
-							'ncol' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-							'byRow' -> new FunctionArgument(MclTypeProvider::BOOLEAN_TYPE, true)
-						} ]
-					],
-		'linear' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'fixEff' -> new FunctionArgument(getSublist(FIX_EFF_SUBLIST).makeVector, false),
-						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
-					} ]
-					],
-		'general' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'grp' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
-					} ]
-					],
-		'combinedError1' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ] ],
-		'combinedError2' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ] ],
-		'additiveError' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ] ],
-		'proportionalError' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE arguments = #{
-						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
-					} ] ],
-		'readVector' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_TYPE.makeVector arguments = #{
-						'src' -> new FunctionArgument(ListDefinitionProvider::PRIOR_SOURCE_TYPE, true),
-						'element' -> new FunctionArgument(MclTypeProvider::STRING_TYPE, true)
-					} ] ],
-		'readMatrix' -> #[ new NamedArgFuncDefn => [ returnType = MclTypeProvider::REAL_MATRIX_TYPE arguments = #{
-						'src' -> new FunctionArgument(ListDefinitionProvider::PRIOR_SOURCE_TYPE, true),
-						'element' -> new FunctionArgument(MclTypeProvider::STRING_TYPE, true)
-					} ] ]
-	}
-
+	val Map<String, List<? extends FunctDefn>> functDefns
 	val Map<String, Map<String, ? extends TypeInfo>> attEnumTypes
 
 	new(){
+		functDefns = BuiltinFunctionTable::functDefns
 		attEnumTypes = new HashMap<String, Map<String, ? extends TypeInfo>>
 		buildEnumTypes
 	}
@@ -468,7 +314,7 @@ class BuiltinFunctionProvider {
 	}
 
 	def boolean isValidTransformFunction(String fName){
-		TRANSFORM_FUNCS.contains(fName)
+		BuiltinFunctionTable::TRANSFORM_FUNCS.contains(fName)
 	}
 
 }

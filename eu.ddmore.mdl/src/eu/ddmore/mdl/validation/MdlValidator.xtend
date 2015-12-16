@@ -6,7 +6,6 @@ package eu.ddmore.mdl.validation
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
-import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
@@ -163,17 +162,6 @@ class MdlValidator extends AbstractMdlValidator {
 						MdlPackage.eINSTANCE.namedFuncArguments_Arguments, MANDATORY_NAMED_FUNC_ARG_MISSING, arg) ]
 	}
 
-	@Check
-	def validateCategoryDefinitionWellFormed(EnumPair parentAt){
-		if(parentAt != null)
-			checkCategoryDefinitionWellFormed(parentAt,
-				[error("Unexpected category definition.", 
-					MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_CATEGORY_DEFINITION, "") ],
-				[error("Category definition is missing.", 
-					MdlPackage::eINSTANCE.valuePair_Expression, MdlValidator::INVALID_CATEGORY_DEFINITION, "") ]
-			)
-	}
-		
 	@Check
 	def validateIfElseWellFormed(WhenExpression e){
 		if(e.other == null){

@@ -23,8 +23,8 @@ import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
 
-import static extension eu.ddmore.mdl.utils.ExpressionConverter.*
 import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.validation.ListDefinitionTable
 
 class MclUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -91,15 +91,15 @@ class MclUtils {
 
 
 	def boolean isDataCovariate(ListDefinition it){
-		isMatchingDataUse(ListDefinitionProvider::COV_USE_VALUE, ListDefinitionProvider::CATCOV_USE_VALUE)
-//		list.attributes.exists[argumentName == ListDefinitionProvider::USE_TYPE.enumName && (
-//			expression.convertToString == ListDefinitionProvider::COV_USE_VALUE || expression.convertToString == ListDefinitionProvider::CATCOV_USE_VALUE)]
+		isMatchingDataUse(ListDefinitionTable::COV_USE_VALUE, ListDefinitionTable::CATCOV_USE_VALUE)
+//		list.attributes.exists[argumentName == ListDefinitionTable::USE_TYPE.enumName && (
+//			expression.convertToString == ListDefinitionTable::COV_USE_VALUE || expression.convertToString == ListDefinitionTable::CATCOV_USE_VALUE)]
 	}
 
 	def boolean isDataObservation(ListDefinition it){
-		isMatchingDataUse(ListDefinitionProvider::OBS_USE_VALUE)
-//		list.attributes.exists[argumentName == ListDefinitionProvider::USE_TYPE.enumName && (
-//			expression.convertToString == ListDefinitionProvider::OBS_USE_VALUE)]
+		isMatchingDataUse(ListDefinitionTable::OBS_USE_VALUE)
+//		list.attributes.exists[argumentName == ListDefinitionTable::USE_TYPE.enumName && (
+//			expression.convertToString == ListDefinitionTable::OBS_USE_VALUE)]
 	}
 
 	def boolean isDataSourceBlock(BlockStatement stmt){
@@ -107,7 +107,7 @@ class MclUtils {
 	}
 
 	def boolean isMatchingDataUse(ListDefinition it, String ... useValue){
-		list.attributes.exists[argumentName == ListDefinitionProvider::USE_ATT && useValue.exists[uv | expression.convertToString == uv] ]
+		list.attributes.exists[argumentName == ListDefinitionTable::USE_ATT && useValue.exists[uv | expression.enumValue == uv] ]
 	}
 
 	def getDataSourceStmt(MclObject it){
@@ -124,7 +124,7 @@ class MclUtils {
 	}
 
 	def getDataCovariateDefns(MclObject it){
-		getDataColumnDefn(ListDefinitionProvider::COV_USE_VALUE, ListDefinitionProvider::CATCOV_USE_VALUE)
+		getDataColumnDefn(ListDefinitionTable::COV_USE_VALUE, ListDefinitionTable::CATCOV_USE_VALUE)
 //		val retVal = new ArrayList<ListDefinition>
 //		dataObj.blocks.filter[identifier == BlockDefinitionProvider::DIV_BLK_NAME].forEach[(body as BlockStatementBody).statements.
 //			filter[st|
@@ -140,7 +140,7 @@ class MclUtils {
 	}
 	
 	def getDataIdv(MclObject it){
-		val idvs = getDataColumnDefn(ListDefinitionProvider::IDV_USE_VALUE)
+		val idvs = getDataColumnDefn(ListDefinitionTable::IDV_USE_VALUE)
 		if(idvs.empty) null
 		else idvs.head
 	}	
@@ -154,7 +154,7 @@ class MclUtils {
 	
 	def getDataObservations(MclObject it){
 		val retVal = new ArrayList<SymbolDefinition>
-		for(obsLst :getDataColumnDefn(ListDefinitionProvider::OBS_USE_VALUE)){
+		for(obsLst :getDataColumnDefn(ListDefinitionTable::OBS_USE_VALUE)){
 			val varRef = obsLst.list.getAttributeExpression('variable')
 			if(varRef != null){
 				retVal.add(varRef.singleSymbolRef) // expect a var ref here.
@@ -169,7 +169,7 @@ class MclUtils {
 
 	def getDataDosingVariables(MclObject it){
 		val retVal = new ArrayList<SymbolDefinition>
-		for(obsLst :getDataColumnDefn(ListDefinitionProvider::AMT_USE_VALUE)){
+		for(obsLst :getDataColumnDefn(ListDefinitionTable::AMT_USE_VALUE)){
 			val varRef = obsLst.list.getAttributeExpression('variable')
 			if(varRef != null){
 				retVal.add(varRef.singleSymbolRef) // expect a var ref here.
@@ -347,7 +347,7 @@ class MclUtils {
 	}
 
 	def getDataVariabilityLevels(MclObject it){
-		getDataColumnDefn(ListDefinitionProvider::ID_USE_VALUE, ListDefinitionProvider::VARLVL_USE_VALUE, ListDefinitionProvider::OBS_USE_VALUE)
+		getDataColumnDefn(ListDefinitionTable::ID_USE_VALUE, ListDefinitionTable::VARLVL_USE_VALUE, ListDefinitionTable::OBS_USE_VALUE)
 	}	
 
 	def getMdlVariabilityLevels(MclObject it){
@@ -440,8 +440,8 @@ class MclUtils {
 	}
 
 //	def getDataMappingForDoseVariable(MclObject it, SymbolDefinition doseVar){
-//		val doseColumn = dataColumnDefinitions.findFirst[list.getAttributeEnumValue('use') == ListDefinitionProvider::AMT_USE_VALUE]
-//		val mappingAtt = doseColumn.list.getAttributeExpression(ListDefinitionProvider::DEFINE_ATT)
+//		val doseColumn = dataColumnDefinitions.findFirst[list.getAttributeEnumValue('use') == ListDefinitionTable::AMT_USE_VALUE]
+//		val mappingAtt = doseColumn.list.getAttributeExpression(ListDefinitionTable::DEFINE_ATT)
 //		if(mappingAtt != null){
 //			
 //		}
@@ -547,6 +547,6 @@ class MclUtils {
     
     def isDerivativeDefinition(SymbolDefinition sd){
     	val lstType = sd.typeFor
-    	lstType?.typeName == ListDefinitionProvider::DERIV_TYPE.typeName
+    	lstType?.typeName == ListDefinitionTable::DERIV_TYPE.typeName
     }
 }

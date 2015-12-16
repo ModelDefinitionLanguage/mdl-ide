@@ -5,8 +5,8 @@ import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.ValuePair
-import java.util.HashSet
 import java.util.HashMap
+import java.util.HashSet
 import java.util.Map
 
 class BlockArgumentDefinitionProvider {
