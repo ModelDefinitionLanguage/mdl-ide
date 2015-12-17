@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.provider.ListDefinitionProvider
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	

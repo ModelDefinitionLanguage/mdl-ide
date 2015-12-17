@@ -1,4 +1,4 @@
-package eu.ddmore.mdl.validation
+package eu.ddmore.mdl.provider
 
 import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
@@ -8,6 +8,7 @@ import eu.ddmore.mdl.mdl.ValuePair
 import java.util.HashMap
 import java.util.HashSet
 import java.util.Map
+import eu.ddmore.mdl.validation.MdlValidator
 
 class BlockArgumentDefinitionProvider {
 	

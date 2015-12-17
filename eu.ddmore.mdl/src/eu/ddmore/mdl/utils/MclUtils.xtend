@@ -17,9 +17,9 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.validation.BlockDefinitionTable
-import eu.ddmore.mdl.validation.ListDefinitionProvider
-import eu.ddmore.mdl.validation.ListDefinitionTable
+import eu.ddmore.mdl.provider.BlockDefinitionTable
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.validation.MdlValidator
 import java.util.ArrayList
 import java.util.List

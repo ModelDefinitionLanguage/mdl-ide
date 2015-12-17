@@ -1,11 +1,11 @@
-package eu.ddmore.mdl.validation
+package eu.ddmore.mdl.provider
 
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider.FunctDefn
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider.FunctionArgument
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider.NamedArgFuncDefn
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider.SimpleFuncDefn
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider.FunctDefn
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider.FunctionArgument
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider.NamedArgFuncDefn
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider.SimpleFuncDefn
 import java.util.List
 import java.util.Map
 

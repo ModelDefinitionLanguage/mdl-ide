@@ -21,6 +21,9 @@ import java.util.Set
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionTable
+import eu.ddmore.mdl.provider.BlockDefinitionTable
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	

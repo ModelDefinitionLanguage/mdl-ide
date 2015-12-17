@@ -16,6 +16,8 @@ import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.provider.BlockArgumentDefinitionProvider
+import eu.ddmore.mdl.provider.BlockDefinitionProvider
 
 class BlockValidator extends AbstractDeclarativeValidator{
 

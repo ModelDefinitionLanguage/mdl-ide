@@ -1,9 +1,9 @@
-package eu.ddmore.mdl.validation
+package eu.ddmore.mdl.provider
 
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
-import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
+import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import java.util.Map
 
 class SublistDefinitionTable {

@@ -1,4 +1,4 @@
-package eu.ddmore.mdl.validation
+package eu.ddmore.mdl.provider
 
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.EnumExpression
@@ -9,7 +9,7 @@ import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
-import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
+import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import java.util.ArrayList
 import java.util.Collections
 import java.util.HashSet

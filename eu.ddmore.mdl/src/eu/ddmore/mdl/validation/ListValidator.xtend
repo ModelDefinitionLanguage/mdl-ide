@@ -13,6 +13,9 @@ import eu.ddmore.mdl.type.MclTypeProvider
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.PropertyDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionTable
 
 // validates attributes in lists, functions and properties
 class ListValidator extends AbstractMdlValidator {

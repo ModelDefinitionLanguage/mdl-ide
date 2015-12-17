@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.Path
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.provider.ListDefinitionProvider
 
 class DataFileValidation extends AbstractMdlValidator  {
 	

@@ -23,11 +23,11 @@ import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.utils.MclUtils
-import eu.ddmore.mdl.validation.BlockDefinitionTable
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider
-import eu.ddmore.mdl.validation.ListDefinitionProvider
-import eu.ddmore.mdl.validation.ListDefinitionTable
-import eu.ddmore.mdl.validation.SublistDefinitionProvider
+import eu.ddmore.mdl.provider.BlockDefinitionTable
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionTable
+import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import java.util.ArrayList
 import java.util.Comparator
 import java.util.HashMap

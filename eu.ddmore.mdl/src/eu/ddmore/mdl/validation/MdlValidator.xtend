@@ -19,6 +19,10 @@ import eu.ddmore.mdl.utils.MclUtils
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.ComposedChecks
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.PropertyDefinitionProvider
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider
+import eu.ddmore.mdl.provider.BlockDefinitionTable
 
 //import org.eclipse.xtext.validation.Check
 

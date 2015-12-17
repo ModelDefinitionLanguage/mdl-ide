@@ -6,7 +6,7 @@ import eu.ddmore.mdl.mdl.IntegerLiteral
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.SymbolReference
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import java.util.List
 import java.util.Map
 import org.eclipse.xtend.lib.annotations.Data

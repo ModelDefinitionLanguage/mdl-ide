@@ -15,6 +15,9 @@ import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.utils.MclUtils
 import java.util.ArrayList
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.provider.BlockDefinitionTable
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionTable
 
 class MogValidator {
 

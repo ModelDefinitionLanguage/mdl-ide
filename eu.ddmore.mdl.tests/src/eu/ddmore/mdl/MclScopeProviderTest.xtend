@@ -9,7 +9,7 @@ import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.NamedFuncArguments
-import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionProvider
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtext.junit4.InjectWith

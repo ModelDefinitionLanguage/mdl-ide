@@ -27,8 +27,8 @@ import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
-import eu.ddmore.mdl.validation.BlockDefinitionTable
-import eu.ddmore.mdl.validation.ListDefinitionProvider
+import eu.ddmore.mdl.provider.BlockDefinitionTable
+import eu.ddmore.mdl.provider.ListDefinitionProvider
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 

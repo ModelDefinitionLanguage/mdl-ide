@@ -16,9 +16,9 @@ import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
-import eu.ddmore.mdl.validation.BuiltinFunctionProvider
-import eu.ddmore.mdl.validation.ListDefinitionProvider
-import eu.ddmore.mdl.validation.PropertyDefinitionProvider
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.ecore.EObject

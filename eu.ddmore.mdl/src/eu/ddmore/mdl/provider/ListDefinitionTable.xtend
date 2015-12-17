@@ -1,14 +1,15 @@
-package eu.ddmore.mdl.validation
+package eu.ddmore.mdl.provider
 
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.EnumListTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.ListTypeInfo
 import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
-import eu.ddmore.mdl.validation.ListDefinitionProvider.AttributeDefn
-import eu.ddmore.mdl.validation.ListDefinitionProvider.BlockListDefinition
-import eu.ddmore.mdl.validation.ListDefinitionProvider.ListDefInfo
+import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
+import eu.ddmore.mdl.provider.ListDefinitionProvider.BlockListDefinition
+import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
 import java.util.Map
+import eu.ddmore.mdl.validation.MdlValidator
 
 class ListDefinitionTable {
 	public static val USE_ATT = 'use'
