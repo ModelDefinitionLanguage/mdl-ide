@@ -2,14 +2,14 @@ package eu.ddmore.mdl.provider
 
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.SublistTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import java.util.ArrayList
 import java.util.List
 import java.util.Map
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 class SublistDefinitionProvider {
 	
@@ -77,12 +77,12 @@ class SublistDefinitionProvider {
 		val vp = ee.getOwningValuePair
 		val enumValue = ee.enumValue
 		val SublistTypeInfo sublistType = findSublistMatch
-		val defnType = sublistType.attributes.findFirst[name == vp.argumentName]?.attType ?: MclTypeProvider::UNDEFINED_TYPE
+		val defnType = sublistType.attributes.findFirst[name == vp.argumentName]?.attType ?: TypeSystemProvider::UNDEFINED_TYPE
 		switch(defnType){
 			BuiltinEnumTypeInfo:
-				if(defnType.categories.exists[c|c == enumValue]) defnType else MclTypeProvider::UNDEFINED_TYPE
+				if(defnType.categories.exists[c|c == enumValue]) defnType else TypeSystemProvider::UNDEFINED_TYPE
 			default:
-				MclTypeProvider::UNDEFINED_TYPE
+				TypeSystemProvider::UNDEFINED_TYPE
 		}
 	}
 

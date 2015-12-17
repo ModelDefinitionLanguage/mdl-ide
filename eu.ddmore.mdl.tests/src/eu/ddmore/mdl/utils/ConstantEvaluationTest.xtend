@@ -20,7 +20,7 @@ class ConstantEvaluationTest {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 
-	extension MclUtils mu = new MclUtils
+	extension MdlUtils mu = new MdlUtils
 	extension ConstantEvaluation ce = new ConstantEvaluation	
 
 	@Test

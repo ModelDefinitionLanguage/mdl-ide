@@ -26,21 +26,21 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
 	override register(EValidatorRegistrar registrar){}
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
-	extension MclTypeProvider typeProvider = new MclTypeProvider
+	extension TypeSystemProvider typeProvider = new TypeSystemProvider
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	
 	// Type handling	

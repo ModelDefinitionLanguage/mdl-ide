@@ -1,10 +1,10 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.SublistTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.SublistTypeInfo
 import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import java.util.Map
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 class SublistDefinitionTable {
 	public static val INTERVENTION_SEQ_SUBLIST = "intSeqAtts"
@@ -16,9 +16,9 @@ class SublistDefinitionTable {
 	public static val COV_ATT = 'cov'
 	public static val CATCOV_ATT = 'catCov'
 	
-	static val COV = new AttributeDefn('cov', true, MclTypeProvider::REAL_TYPE.makeReference)
-	static val COEFF = new AttributeDefn('coeff', true, MclTypeProvider::REAL_TYPE.makeReference)
-	static val CAT_COV = new AttributeDefn('catCov', true, MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference)
+	static val COV = new AttributeDefn('cov', true, TypeSystemProvider::REAL_TYPE.makeReference)
+	static val COEFF = new AttributeDefn('coeff', true, TypeSystemProvider::REAL_TYPE.makeReference)
+	static val CAT_COV = new AttributeDefn('catCov', true, TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE.makeReference)
 	static val PRIOR_ELEMENT_TYPE_TYPE = new BuiltinEnumTypeInfo('priorElementType', #{'matrix', 'vector'})
 	
 	public static val Map<String, SublistTypeInfo> sublistDefns = #{
@@ -28,20 +28,20 @@ class SublistDefinitionTable {
 																   ])),
 		INTERVENTION_SEQ_SUBLIST -> (new SublistTypeInfo(INTERVENTION_SEQ_SUBLIST, #[
 											new AttributeDefn("admin", true,	ListDefinitionTable::ADMINISTRATION_TYPE.makeReference),
-											new AttributeDefn("start", true, MclTypeProvider::REAL_TYPE),
-											new AttributeDefn("end", true, MclTypeProvider::REAL_TYPE)],
+											new AttributeDefn("start", true, TypeSystemProvider::REAL_TYPE),
+											new AttributeDefn("end", true, TypeSystemProvider::REAL_TYPE)],
 											#[#{'admin' -> true, 'start' -> false, 'end' -> false}])),
 		SAMPLING_SEQ_SUBLIST -> (new SublistTypeInfo(SAMPLING_SEQ_SUBLIST, #[
 												new AttributeDefn("sample", true, ListDefinitionTable::SAMPLING_TYPE.makeReference),
-												new AttributeDefn("start", true, MclTypeProvider::REAL_TYPE),
-												new AttributeDefn("end", true, MclTypeProvider::REAL_TYPE)],
+												new AttributeDefn("start", true, TypeSystemProvider::REAL_TYPE),
+												new AttributeDefn("end", true, TypeSystemProvider::REAL_TYPE)],
 												#[#{'sample' -> true, 'start' -> true, 'end' -> false}])),
-		PRIOR_FORMAT_SUBLIST -> (new SublistTypeInfo(PRIOR_FORMAT_SUBLIST, #[new AttributeDefn("element", true, MclTypeProvider::STRING_TYPE),
+		PRIOR_FORMAT_SUBLIST -> (new SublistTypeInfo(PRIOR_FORMAT_SUBLIST, #[new AttributeDefn("element", true, TypeSystemProvider::STRING_TYPE),
 												new AttributeDefn("type", true, PRIOR_ELEMENT_TYPE_TYPE)],
 												#[#{'element' -> true, 'type' -> true}])),
 		COMPLEX_COMBINATION_SUBLIST -> (new SublistTypeInfo(COMPLEX_COMBINATION_SUBLIST,
 												#[new AttributeDefn("sample", true, ListDefinitionTable::SAMPLING_TYPE.makeReference),
-												new AttributeDefn("startTime", false, MclTypeProvider::REAL_TYPE)],
+												new AttributeDefn("startTime", false, TypeSystemProvider::REAL_TYPE)],
 												#[#{'sample' -> true, 'startTime' -> false}]))
 	}
 	

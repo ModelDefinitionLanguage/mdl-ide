@@ -24,7 +24,7 @@ import eu.ddmore.mdl.mdl.ElseClause
 
 public class MdlExpressionConverter extends ExpressionConverter {
 	
-    extension MclUtils mclUtils = new MclUtils
+    extension MdlUtils mclUtils = new MdlUtils
     
     private final static MdlExpressionConverter INSTANCE = new MdlExpressionConverter()
     

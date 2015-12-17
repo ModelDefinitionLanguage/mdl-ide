@@ -6,7 +6,6 @@ import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
-import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.validation.MogValidator
 
@@ -33,10 +32,11 @@ import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.mdl.MdlFactory
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.provider.ListDefinitionTable
+import eu.ddmore.mdl.utils.MdlUtils
 
 class ModellingStepsPrinter { 
 	
-	extension MclUtils mu = new MclUtils 
+	extension MdlUtils mu = new MdlUtils 
 	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder 
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider

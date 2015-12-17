@@ -2,7 +2,6 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.utils.MclUtils
 import java.io.File
 import org.eclipse.core.resources.ResourcesPlugin
 import org.eclipse.core.runtime.Path
@@ -10,10 +9,11 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.utils.MdlUtils
 
 class DataFileValidator extends AbstractMdlValidator  {
 	
-	extension MclUtils mu = new MclUtils
+	extension MdlUtils mu = new MdlUtils
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	
 	override register(EValidatorRegistrar registrar){}

@@ -9,9 +9,8 @@ import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import java.util.ArrayList
 import java.util.Collections
@@ -23,6 +22,7 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 class ListDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
@@ -171,7 +171,7 @@ class ListDefinitionProvider {
 	} 
 	
 	def getAttributeType(ListDefInfo it, String attName){
-		attributes.findFirst(ad | ad.name == attName)?.attType ?: MclTypeProvider::UNDEFINED_TYPE 
+		attributes.findFirst(ad | ad.name == attName)?.attType ?: TypeSystemProvider::UNDEFINED_TYPE 
 	}
 	
 	def getAttributeDefinition(ListDefInfo it, String attName){
@@ -183,15 +183,15 @@ class ListDefinitionProvider {
 		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
 		if(attList != null){
 			val listDefn = attList.matchingListDefn
-			listDefn?.getAttributeType(attributeName) ?: MclTypeProvider::UNDEFINED_TYPE
+			listDefn?.getAttributeType(attributeName) ?: TypeSystemProvider::UNDEFINED_TYPE
 		}
-		else MclTypeProvider::UNDEFINED_TYPE
+		else TypeSystemProvider::UNDEFINED_TYPE
 	}
 	
 	def TypeInfo getTypeOfAttributeBuiltinEnum(EnumExpression ee){
 		val blockName = ee.owningBlock.identifier
 		val enumValue = ee.enumValue
-		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
+		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: TypeSystemProvider::UNDEFINED_TYPE
 		defnType
 	}
 

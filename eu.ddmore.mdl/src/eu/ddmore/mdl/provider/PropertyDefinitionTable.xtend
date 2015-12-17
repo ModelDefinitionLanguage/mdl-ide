@@ -1,10 +1,10 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import java.util.List
 import java.util.Map
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 class PropertyDefinitionTable {
 	//	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'monolix', 'nonmem' })
@@ -16,11 +16,11 @@ class PropertyDefinitionTable {
 //	static val EST_OP_ATT = new AttributeDefn('operation', null, false, EST_OP_TYPE)
 	public static val SOLVER_TYPE = new BuiltinEnumTypeInfo('solver', #{'stiff', 'nonStiff' })
 	public static val SOLVER_ATT = new AttributeDefn('solver', false, SOLVER_TYPE)
-	public static val ARM_SIZE_ATT = new AttributeDefn('armSize', false, MclTypeProvider::INT_TYPE)
-	public static val TOTAL_SIZE_ATT = new AttributeDefn('totalSize', false, MclTypeProvider::INT_TYPE)
-	public static val NUM_SAMPLES_ATT = new AttributeDefn('numberSamples', false, MclTypeProvider::INT_TYPE)
-	public static val TOTAL_COST_ATT = new AttributeDefn('totalCost', false, MclTypeProvider::REAL_TYPE)
-	public static val NUM_ARMS_ATT = new AttributeDefn('numberArms', false, MclTypeProvider::INT_TYPE)
+	public static val ARM_SIZE_ATT = new AttributeDefn('armSize', false, TypeSystemProvider::INT_TYPE)
+	public static val TOTAL_SIZE_ATT = new AttributeDefn('totalSize', false, TypeSystemProvider::INT_TYPE)
+	public static val NUM_SAMPLES_ATT = new AttributeDefn('numberSamples', false, TypeSystemProvider::INT_TYPE)
+	public static val TOTAL_COST_ATT = new AttributeDefn('totalCost', false, TypeSystemProvider::REAL_TYPE)
+	public static val NUM_ARMS_ATT = new AttributeDefn('numberArms', false, TypeSystemProvider::INT_TYPE)
 
 	public static val Map<String, List<AttributeDefn>> propertyDefns = #{ 
 		BlockDefinitionTable::ESTIMATE_BLK -> #[ALGO_ATT],

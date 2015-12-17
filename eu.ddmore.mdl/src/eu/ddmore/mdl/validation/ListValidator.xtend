@@ -9,13 +9,13 @@ import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.type.MclTypeProvider
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 // validates attributes in lists, functions and properties
 class ListValidator extends AbstractMdlValidator {
@@ -24,7 +24,7 @@ class ListValidator extends AbstractMdlValidator {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
-	extension MclTypeProvider mtp = new MclTypeProvider
+	extension TypeSystemProvider mtp = new TypeSystemProvider
 	
 	static val MappingToColumn = #{
 		ListDefinitionTable::AMT_USE_VALUE -> ListDefinitionTable::CMT_COL_TYPE,

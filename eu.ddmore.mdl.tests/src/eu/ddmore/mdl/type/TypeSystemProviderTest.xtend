@@ -3,76 +3,76 @@ package eu.ddmore.mdl.type
 import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MdlFactory
-import eu.ddmore.mdl.type.MclTypeProvider.EnumTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.EnumTypeInfo
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
-class MclTypeProviderTest {
+class TypeSystemProviderTest {
 //	@Inject extension ParseHelper<Mcl>
 //	@Inject extension ValidationTestHelper
 	
-	extension MclTypeProvider th = new MclTypeProvider 
+	extension TypeSystemProvider th = new TypeSystemProvider 
 
 	@Test
 	def void testTypeExpectedFuncCallExpression(){
 		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
 		funcCall.func = 'ln'
-		funcCall.typeFor.assertEquals(MclTypeProvider::REAL_TYPE)
+		funcCall.typeFor.assertEquals(TypeSystemProvider::REAL_TYPE)
 	}
 
 	@Test
 	def void testTypeUnknownFuncCallExpression(){
 		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
 		funcCall.func = 'foobar'
-		MclTypeProvider::UNDEFINED_TYPE.assertEquals(funcCall.typeFor)
+		TypeSystemProvider::UNDEFINED_TYPE.assertEquals(funcCall.typeFor)
 	}
 
 	@Test
 	def void testTypeDistributionFuncCallExpression(){
 		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
 		funcCall.func = 'Normal'
-		MclTypeProvider::PDF_TYPE.assertEquals(funcCall.typeFor)
+		TypeSystemProvider::PDF_TYPE.assertEquals(funcCall.typeFor)
 	}
 
 	@Test
 	def void testStringLiteralExpression(){
 		val actual = MdlFactory::eINSTANCE.createStringLiteral
 		actual.value = 'foobar'
-		actual.typeFor.assertEquals(MclTypeProvider::STRING_TYPE)
+		actual.typeFor.assertEquals(TypeSystemProvider::STRING_TYPE)
 	}
 
 	@Test
 	def void testRealLiteralExpression(){
 		val actual = MdlFactory::eINSTANCE.createRealLiteral
 		actual.value = 1.0
-		actual.typeFor.assertEquals(MclTypeProvider::REAL_TYPE)
+		actual.typeFor.assertEquals(TypeSystemProvider::REAL_TYPE)
 	}
 
 	@Test
 	def void testIntegerLiteralExpression(){
 		val actual = MdlFactory::eINSTANCE.createIntegerLiteral
 		actual.value = 1
-		actual.typeFor.assertEquals(MclTypeProvider::INT_TYPE)
+		actual.typeFor.assertEquals(TypeSystemProvider::INT_TYPE)
 	}
 
 	@Test
 	def void testBooleanLiteralExpression(){
 		val actual = MdlFactory::eINSTANCE.createBooleanLiteral
 		actual.isTrue = true
-		actual.typeFor.assertEquals(MclTypeProvider::BOOL_TYPE)
+		actual.typeFor.assertEquals(TypeSystemProvider::BOOL_TYPE)
 	}
 
 	@Test
 	def void testVectorLiteralExpression(){
 		val actual = MdlFactory::eINSTANCE.createVectorLiteral
-		actual.typeFor.assertEquals(MclTypeProvider::REAL_VECTOR_TYPE)
+		actual.typeFor.assertEquals(TypeSystemProvider::REAL_VECTOR_TYPE)
 	}
 
 	@Test
@@ -118,7 +118,7 @@ class MclTypeProviderTest {
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(MclTypeProvider::REAL_TYPE) a.assertEquals(new EnumTypeInfo("tst", #{"tst2"}).makeReference)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(TypeSystemProvider::REAL_TYPE) a.assertEquals(new EnumTypeInfo("tst", #{"tst2"}).makeReference)]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
@@ -127,7 +127,7 @@ class MclTypeProviderTest {
 		val actual = createDummyEnumRef("tst", "tst1")
 		val rhs = MdlFactory::eINSTANCE.createRealLiteral
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(new EnumTypeInfo("tst", #{"tst1"}).makeReference) a.assertEquals(MclTypeProvider::REAL_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(new EnumTypeInfo("tst", #{"tst1"}).makeReference) a.assertEquals(TypeSystemProvider::REAL_TYPE)]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
@@ -135,8 +135,8 @@ class MclTypeProviderTest {
 	def void testRelationalOpWithNullRhs(){
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val Expression rhs = null
-		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| e.assertEquals(MclTypeProvider::REAL_TYPE) a.assertEquals(MclTypeProvider::UNDEFINED_TYPE)]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertEquals(MclTypeProvider::UNDEFINED_TYPE)]
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| e.assertEquals(TypeSystemProvider::REAL_TYPE) a.assertEquals(TypeSystemProvider::UNDEFINED_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertEquals(TypeSystemProvider::UNDEFINED_TYPE)]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
@@ -152,7 +152,7 @@ class MclTypeProviderTest {
 	def void testMathsOpWithString(){
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val Expression rhs = MdlFactory::eINSTANCE.createStringLiteral
-		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| a.assertEquals(MclTypeProvider::STRING_TYPE)]
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| a.assertEquals(TypeSystemProvider::STRING_TYPE)]
 		actual.checkMathsOp(rhs, errorFunc, errorFunc)
 	}
 
@@ -161,7 +161,7 @@ class MclTypeProviderTest {
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val Expression rhs = null
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertEquals(MclTypeProvider::UNDEFINED_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertEquals(TypeSystemProvider::UNDEFINED_TYPE)]
 		actual.checkMathsOp(rhs, errorFunc, failingErrorFunc)
 	}
 
@@ -178,7 +178,7 @@ class MclTypeProviderTest {
 		val Expression actual = MdlFactory::eINSTANCE.createBooleanLiteral
 		val Expression rhs = null
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertSame(MclTypeProvider::UNDEFINED_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertSame(TypeSystemProvider::UNDEFINED_TYPE)]
 		actual.checkBoolOp(rhs, errorFunc, failingErrorFunc)
 	}
 
@@ -192,7 +192,7 @@ class MclTypeProviderTest {
 	@Test
 	def void testUnaryOpBoolNullOperand(){
 		val Expression actual = null
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertSame(MclTypeProvider::UNDEFINED_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertSame(TypeSystemProvider::UNDEFINED_TYPE)]
 		'!'.checkUnaryOp(actual, failingErrorFunc)
 	}
 
@@ -206,7 +206,7 @@ class MclTypeProviderTest {
 	@Test
 	def void testUnaryOpRealNullOperand(){
 		val Expression actual = null
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertSame(MclTypeProvider::UNDEFINED_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| a.assertSame(TypeSystemProvider::UNDEFINED_TYPE)]
 		'+'.checkUnaryOp(actual, failingErrorFunc)
 	}
 

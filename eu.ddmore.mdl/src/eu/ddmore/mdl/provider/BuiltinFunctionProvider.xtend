@@ -7,9 +7,8 @@ import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import java.util.Collections
 import java.util.HashMap
@@ -20,6 +19,7 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 class BuiltinFunctionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
@@ -98,15 +98,15 @@ class BuiltinFunctionProvider {
 		val defns = functDefns.get(fName)
 		if(defns != null)
 			if(defns.size > 1)
-				MclTypeProvider::UNDEFINED_TYPE
+				TypeSystemProvider::UNDEFINED_TYPE
 			else
 				defns.head.returnType
 		else
-			MclTypeProvider::UNDEFINED_TYPE
+			TypeSystemProvider::UNDEFINED_TYPE
 	}
 	
 	def TypeInfo getFunctionType(BuiltinFunctionCall it){
-		findFuncDefn?.returnType ?: MclTypeProvider::UNDEFINED_TYPE
+		findFuncDefn?.returnType ?: TypeSystemProvider::UNDEFINED_TYPE
 	}
 	
 	def getNamedArgumentType(ValuePair vp){
@@ -114,9 +114,9 @@ class BuiltinFunctionProvider {
 		val defn = funcDefn.findFuncDefn
 		switch(defn){
 			NamedArgFuncDefn:
-				defn.arguments.get(vp.argumentName)?.expectedType ?: MclTypeProvider::UNDEFINED_TYPE
+				defn.arguments.get(vp.argumentName)?.expectedType ?: TypeSystemProvider::UNDEFINED_TYPE
 			default:
-				MclTypeProvider::UNDEFINED_TYPE
+				TypeSystemProvider::UNDEFINED_TYPE
 		}
 	}
 	
@@ -128,7 +128,7 @@ class BuiltinFunctionProvider {
 			SimpleFuncDefn case argIdx >= 0 && argIdx < defn.numArgs:
 				defn.argTypes.get(argIdx)
 			default:
-				MclTypeProvider::UNDEFINED_TYPE
+				TypeSystemProvider::UNDEFINED_TYPE
 		}
 	}
 	
@@ -257,7 +257,7 @@ class BuiltinFunctionProvider {
 		val funct = EcoreUtil2.getContainerOfType(ee, BuiltinFunctionCall)
 		val blockName = funct.func
 		val enumValue = ee.enumValue
-		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: MclTypeProvider::UNDEFINED_TYPE
+		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: TypeSystemProvider::UNDEFINED_TYPE
 		defnType
 	}
 

@@ -44,7 +44,7 @@ import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
-public class MclTypeProvider {
+public class TypeSystemProvider {
 
 	extension BuiltinFunctionProvider typeProvider = new BuiltinFunctionProvider
 	extension ListDefinitionProvider listProvider = new ListDefinitionProvider
@@ -509,7 +509,7 @@ public class MclTypeProvider {
 	}
 	
 	def dispatch TypeInfo typeFor(Expression e){
-		if(e == null) return MclTypeProvider.UNDEFINED_TYPE 
+		if(e == null) return TypeSystemProvider.UNDEFINED_TYPE 
 		switch(e){
 			SymbolReference:
 				if(e.indexExpr == null)
@@ -530,18 +530,18 @@ public class MclTypeProvider {
 			BuiltinFunctionCall:
 				e.functionType
 			VectorElement:
-				e.element?.typeFor ?: MclTypeProvider.UNDEFINED_TYPE
+				e.element?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
 			VectorLiteral:
-				if(e.expressions.isEmpty) MclTypeProvider.REAL_VECTOR_TYPE
+				if(e.expressions.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
 				else e.typeForArray
 			MatrixElement:
-				e.element?.typeFor ?: MclTypeProvider.UNDEFINED_TYPE
+				e.element?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
 			MatrixLiteral:
-				MclTypeProvider.REAL_VECTOR_TYPE.makeVector
+				TypeSystemProvider.REAL_VECTOR_TYPE.makeVector
 			SubListExpression:
 				e.typeForSublist 
 			default:
-				typeTable.get(e.eClass) ?: MclTypeProvider.UNDEFINED_TYPE
+				typeTable.get(e.eClass) ?: TypeSystemProvider.UNDEFINED_TYPE
 		}
 	}
 	
@@ -597,7 +597,7 @@ public class MclTypeProvider {
 		switch(sd){
 			EquationDefinition:
 				if(sd.isVector)
-					MclTypeProvider.REAL_VECTOR_TYPE
+					TypeSystemProvider.REAL_VECTOR_TYPE
 				else if(sd.isMatrix)
 					REAL_MATRIX_TYPE
 				else REAL_TYPE
@@ -608,7 +608,7 @@ public class MclTypeProvider {
 				typeTable.get(sd.eClass)
 //			RandomVariableDefinition: typeTable.get(sd.eClass)
 			RandomVariableDefinition:
-				if(sd.isVector) MclTypeProvider.REAL_VECTOR_TYPE else REAL_TYPE
+				if(sd.isVector) TypeSystemProvider.REAL_VECTOR_TYPE else REAL_TYPE
 			EnumerationDefinition:{
 					val defn = sd.catDefn 
 					switch(defn){
@@ -681,11 +681,11 @@ public class MclTypeProvider {
 	}
 	
 	def checkExpectedVector(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
-		checkExpectedAndExpression(MclTypeProvider.REAL_VECTOR_TYPE, exp, errorLambda)
+		checkExpectedAndExpression(TypeSystemProvider.REAL_VECTOR_TYPE, exp, errorLambda)
 	}
 	
 	def checkExpectedMatrix(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
-		checkExpectedAndExpression(MclTypeProvider.REAL_MATRIX_TYPE, exp, errorLambda)
+		checkExpectedAndExpression(TypeSystemProvider.REAL_MATRIX_TYPE, exp, errorLambda)
 	}
 	
 	def checkExpectedIntl(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){

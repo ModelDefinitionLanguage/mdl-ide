@@ -2,7 +2,6 @@ package eu.ddmore.converter.mdl2pharmml
 
 import eu.ddmore.libpharmml.PharmMlFactory
 import eu.ddmore.mdl.mdl.Mcl
-import eu.ddmore.mdl.utils.MclUtils
 import java.io.BufferedWriter
 import java.io.FileInputStream
 import java.io.FileReader
@@ -10,10 +9,11 @@ import java.io.FileWriter
 import java.io.InputStream
 
 import static org.junit.Assert.*
+import eu.ddmore.mdl.utils.MdlUtils
 
 class ConverterTestHarness {
 
-	extension MclUtils mu = new MclUtils
+	extension MdlUtils mu = new MdlUtils
 	extension Mdl2Pharmml mpc = new Mdl2Pharmml
 
 

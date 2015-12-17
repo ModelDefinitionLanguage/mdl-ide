@@ -16,7 +16,6 @@ import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
@@ -24,12 +23,13 @@ import eu.ddmore.mdl.validation.MdlValidator
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.type.TypeSystemProvider
 
-class MclUtils {
+class MdlUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	extension DependencyWalker dw = new DependencyWalker
-	extension MclTypeProvider mtp = new MclTypeProvider
+	extension TypeSystemProvider mtp = new TypeSystemProvider
 	
 	
 	def isMclObjectOfType(MclObject obj, String typeCode){

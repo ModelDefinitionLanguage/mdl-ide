@@ -13,9 +13,8 @@ import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.PrimitiveType
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
@@ -35,6 +34,7 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
 import static extension org.eclipse.xtext.EcoreUtil2.getContainerOfType
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 /**
  * see http://www.eclipse.org/Xtext/documentation.html#contentAssist on how to customize content assistant
@@ -44,7 +44,7 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
 	extension BuiltinFunctionProvider bfc = new BuiltinFunctionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
-	extension MclTypeProvider mtp = new MclTypeProvider
+	extension TypeSystemProvider mtp = new TypeSystemProvider
 
 	 public override void completeSymbolReference_Ref(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 	 	val owningObj = model.getContainerOfType(MclObject)
@@ -56,7 +56,7 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 	 							Expression:
 	 								model.typeFor
 	 							default:
-	 								MclTypeProvider::UNDEFINED_TYPE
+	 								eu.ddmore.mdl.type.TypeSystemProvider::UNDEFINED_TYPE
 							}
 	 	val booleanFilter = new Predicate<IEObjectDescription>()
 	 	{

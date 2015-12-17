@@ -1,7 +1,7 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import eu.ddmore.mdl.type.MclTypeProvider.TypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.PrimitiveType
 
 class PharmMLConverterUtils {
 	

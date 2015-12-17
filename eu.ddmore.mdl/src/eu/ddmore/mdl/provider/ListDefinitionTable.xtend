@@ -1,15 +1,15 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.EnumListTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.ListTypeInfo
-import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.EnumListTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.ListTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.PrimitiveType
 import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import eu.ddmore.mdl.provider.ListDefinitionProvider.BlockListDefinition
 import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
 import java.util.Map
 import eu.ddmore.mdl.validation.MdlValidator
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 class ListDefinitionTable {
 	public static val USE_ATT = 'use'
@@ -94,12 +94,12 @@ class ListDefinitionTable {
 						 ] 
 					),
 					new ListDefInfo('catCov', new EnumListTypeInfo("CatCovariate"), #[
-						 new AttributeDefn(USE_ATT, true, USE_TYPE, MclTypeProvider::INT_TYPE, true)
+						 new AttributeDefn(USE_ATT, true, USE_TYPE, TypeSystemProvider::INT_TYPE, true)
 						 ] 
 					),
 					new ListDefInfo ('amt', AMT_COL_TYPE,  #[
-						 new AttributeDefn(USE_ATT, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, false, MclTypeProvider::MAPPING_TYPE),
-						 new AttributeDefn(VARIABLE_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(USE_ATT, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, false, TypeSystemProvider::MAPPING_TYPE),
+						 new AttributeDefn(VARIABLE_ATT, false, TypeSystemProvider::REAL_TYPE.makeReference)
 						 ],
 						 #[#{ USE_ATT -> true, DEFINE_ATT -> true },
 						 	#{ USE_ATT -> true, VARIABLE_ATT -> true }
@@ -107,8 +107,8 @@ class ListDefinitionTable {
 						 false
 					),
 					new ListDefInfo ('dv', new ListTypeInfo("Dv", PrimitiveType.List),  #[
-						 new AttributeDefn(USE_ATT, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, false, MclTypeProvider::MAPPING_TYPE),
-						 new AttributeDefn(VARIABLE_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(USE_ATT, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, false, TypeSystemProvider::MAPPING_TYPE),
+						 new AttributeDefn(VARIABLE_ATT, false, TypeSystemProvider::REAL_TYPE.makeReference)
 						 ],
 						 #[#{ USE_ATT -> true, DEFINE_ATT -> true },
 						 	#{ USE_ATT -> true, VARIABLE_ATT -> true }
@@ -176,7 +176,7 @@ class ListDefinitionTable {
 		"SOURCE" -> (
 			new BlockListDefinition('file', newArrayList(
 					new ListDefInfo (null, new ListTypeInfo("Source", PrimitiveType.List),  #[
-						 new AttributeDefn('file', true, MclTypeProvider::STRING_TYPE), new AttributeDefn('inputFormat', true, INPUT_FORMAT_TYPE)//,
+						 new AttributeDefn('file', true, TypeSystemProvider::STRING_TYPE), new AttributeDefn('inputFormat', true, INPUT_FORMAT_TYPE)//,
 //						 	new AttributeDefn('ignore', false, MclTypeProvider::STRING_TYPE) 
 						 ] 
 					)
@@ -186,7 +186,7 @@ class ListDefinitionTable {
 		BlockDefinitionTable::PRIOR_SOURCE_BLK -> (
 			new BlockListDefinition('file', newArrayList(
 					new ListDefInfo (null, PRIOR_SOURCE_TYPE,  #[
-						 new AttributeDefn('file', true, MclTypeProvider::STRING_TYPE),
+						 new AttributeDefn('file', true, TypeSystemProvider::STRING_TYPE),
 						 new AttributeDefn('inputFormat', true, PRIOR_INPUT_FORMAT_TYPE),
 						 new AttributeDefn('format', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::PRIOR_FORMAT_SUBLIST).makeVector)
 						 ] 
@@ -197,7 +197,7 @@ class ListDefinitionTable {
 		"VARIABILITY_LEVELS" -> (
 			new BlockListDefinition('type', newArrayList(
 					new ListDefInfo (null, new ListTypeInfo("VarLevel", PrimitiveType.List),  #[
-						 new AttributeDefn(VAR_LVL_TYPE_ATT, true, VARIABILITY_TYPE_TYPE), new AttributeDefn(VAR_LVL_LEVEL_ATT, true, MclTypeProvider::INT_TYPE)
+						 new AttributeDefn(VAR_LVL_TYPE_ATT, true, VARIABILITY_TYPE_TYPE), new AttributeDefn(VAR_LVL_LEVEL_ATT, true, TypeSystemProvider::INT_TYPE)
 						 ]
 					)
 				)
@@ -207,11 +207,11 @@ class ListDefinitionTable {
 			new BlockListDefinition(CMT_TYPE_ATT, newArrayList(
 					new ListDefInfo ('direct', new ListTypeInfo("Direct", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE),
-						 new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
 						 new AttributeDefn('to', true, COMP_LIST_TYPE.makeReference),
-						 new AttributeDefn('modelDur', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('tlag', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('finput', false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('modelDur', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('tlag', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('finput', false, TypeSystemProvider::REAL_TYPE)
 						 ],
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> false, 'tlag' -> false, 'finput' -> false }
@@ -219,9 +219,9 @@ class ListDefinitionTable {
 						 false
 					),
 					new ListDefInfo ('effect', new ListTypeInfo("Effect", PrimitiveType.Real),  #[
-						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
 						 new AttributeDefn('from', true, COMP_LIST_TYPE.makeReference),
-						 new AttributeDefn('keq', true, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('keq', true, TypeSystemProvider::REAL_TYPE)
 						 ],
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'from' -> true, 'keq' -> true }
@@ -229,14 +229,14 @@ class ListDefinitionTable {
 						 false
 					),
 					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
-						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
 						 new AttributeDefn('to', true, COMP_LIST_TYPE.makeReference),
 //						 new AttributeDefn('target', true, DERIV_TYPE.makeReference),
-						 new AttributeDefn('ka', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('tlag', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('finput', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('modelDur', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('ktr', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('mtt', false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('ka', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('tlag', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('finput', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('modelDur', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('ktr', false, TypeSystemProvider::REAL_TYPE), new AttributeDefn('mtt', false, TypeSystemProvider::REAL_TYPE)
 						 ],
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
@@ -250,23 +250,23 @@ class ListDefinitionTable {
 						 false
 					),
 					new ListDefInfo ('transfer', new ListTypeInfo("Transfer", PrimitiveType.Real),  #[
-						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('kt', true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
+						 new AttributeDefn('kt', true, TypeSystemProvider::REAL_TYPE),
 						 new AttributeDefn('from', true, COMP_LIST_TYPE.makeReference),
 						 new AttributeDefn('to', true, COMP_LIST_TYPE.makeReference)
 						 ],
 						 true
 					),
 					new ListDefInfo ('compartment', new ListTypeInfo("Compartment", PrimitiveType.Real),  #[
-						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE)
+						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE)
 						 ]
 					),
 					new ListDefInfo ('elimination', new ListTypeInfo("Elimination", PrimitiveType.Real),  #[
-						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
 						 new AttributeDefn('from', true, COMP_LIST_TYPE.makeReference),
-						 new AttributeDefn('v', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('cl', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('k', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('vm', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('km', false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('v', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('cl', false, TypeSystemProvider::REAL_TYPE), new AttributeDefn('k', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('vm', false, TypeSystemProvider::REAL_TYPE), new AttributeDefn('km', false, TypeSystemProvider::REAL_TYPE)
 						 ],
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'from' -> true, 'v' -> false, 'k' -> true },
@@ -276,9 +276,9 @@ class ListDefinitionTable {
 						 true
 					),
 					new ListDefInfo ('distribution', new ListTypeInfo("Distribution", PrimitiveType.Real),  #[
-						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('kin', true, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('kout', true, MclTypeProvider::REAL_TYPE),
+						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
+						 new AttributeDefn('kin', true, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('kout', true, TypeSystemProvider::REAL_TYPE),
 						 new AttributeDefn('from', true, COMP_LIST_TYPE.makeReference)
 						 ]
 					)
@@ -288,8 +288,8 @@ class ListDefinitionTable {
 		"DEQ" -> (
 			new BlockListDefinition(DERIV_TYPE_ATT, newArrayList(
 					new ListDefInfo (null, DERIV_TYPE,  #[
-						 new AttributeDefn(DERIV_TYPE_ATT, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn(DERIV_INIT_TIME_ATT, false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(DERIV_TYPE_ATT, true, TypeSystemProvider::REAL_TYPE), new AttributeDefn('init', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn(DERIV_INIT_TIME_ATT, false, TypeSystemProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, TypeSystemProvider::REAL_TYPE.makeReference)
 						 ]
 					)
 				)
@@ -298,8 +298,8 @@ class ListDefinitionTable {
 		"MODEL_PREDICTION" -> (
 			new BlockListDefinition(DERIV_TYPE_ATT, newArrayList(
 					new ListDefInfo (null, DERIV_TYPE,  #[
-						 new AttributeDefn(DERIV_TYPE_ATT, true, MclTypeProvider::REAL_TYPE), new AttributeDefn('init', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn(DERIV_INIT_TIME_ATT, false, MclTypeProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, MclTypeProvider::REAL_TYPE.makeReference)
+						 new AttributeDefn(DERIV_TYPE_ATT, true, TypeSystemProvider::REAL_TYPE), new AttributeDefn('init', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn(DERIV_INIT_TIME_ATT, false, TypeSystemProvider::REAL_TYPE), new AttributeDefn(WRT_ATT, false, TypeSystemProvider::REAL_TYPE.makeReference)
 						 ]
 					)
 				)
@@ -308,25 +308,25 @@ class ListDefinitionTable {
 		"VARIABILITY" -> (
 			new BlockListDefinition('type', newArrayList(
 					new ListDefInfo ('cov', new ListTypeInfo("CovarMatrix", PrimitiveType.List),  #[
-						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', true, MclTypeProvider::REAL_VECTOR_TYPE),
-						 new AttributeDefn('value', true, MclTypeProvider::REAL_VECTOR_TYPE)
+						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', true, TypeSystemProvider::REAL_VECTOR_TYPE),
+						 new AttributeDefn('value', true, TypeSystemProvider::REAL_VECTOR_TYPE)
 						 ]
 					),
 					new ListDefInfo ('corr', new ListTypeInfo("CorrMatrix", PrimitiveType.List),  #[
-						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', true, MclTypeProvider::REAL_VECTOR_TYPE),
-						 new AttributeDefn('value', true, MclTypeProvider::REAL_VECTOR_TYPE)
+						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('parameter', true, TypeSystemProvider::REAL_VECTOR_TYPE),
+						 new AttributeDefn('value', true, TypeSystemProvider::REAL_VECTOR_TYPE)
 						 ]
 					),
 					new ListDefInfo ('sd', new ListTypeInfo("SDEstimate", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('value', true, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('lo', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('hi', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('fix', false, MclTypeProvider::BOOLEAN_TYPE)
+						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('value', true, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('lo', false, TypeSystemProvider::REAL_TYPE), new AttributeDefn('hi', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('fix', false, TypeSystemProvider::BOOLEAN_TYPE)
 						 ]
 					),
 					new ListDefInfo ('var', new ListTypeInfo("VarEstimate", PrimitiveType.Real),  #[
-						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('value', true, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('lo', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('hi', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('fix', false, MclTypeProvider::BOOLEAN_TYPE)
+						 new AttributeDefn('type', true, PARAM_VAR_TYPE_TYPE), new AttributeDefn('value', true, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('lo', false, TypeSystemProvider::REAL_TYPE), new AttributeDefn('hi', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('fix', false, TypeSystemProvider::BOOLEAN_TYPE)
 						 ]
 					)
 				)
@@ -335,9 +335,9 @@ class ListDefinitionTable {
 		"STRUCTURAL" -> (
 			new BlockListDefinition('value', newArrayList(
 					new ListDefInfo (null, new ListTypeInfo("StructuralEstimate", PrimitiveType.Real),  #[
-						 new AttributeDefn('value', true, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('lo', false, MclTypeProvider::REAL_TYPE), new AttributeDefn('hi', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('fix', false, MclTypeProvider::BOOLEAN_TYPE)
+						 new AttributeDefn('value', true, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('lo', false, TypeSystemProvider::REAL_TYPE), new AttributeDefn('hi', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('fix', false, TypeSystemProvider::BOOLEAN_TYPE)
 						 ]
 					)
 				)
@@ -355,22 +355,22 @@ class ListDefinitionTable {
 		"OBSERVATION" -> (
 			new BlockListDefinition(OBS_TYPE_ATT, newArrayList(
 					new ListDefInfo (CATEGORICAL_OBS_VALUE, CATEGORICAL_LIST_TYPE,  #[
-						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, MclTypeProvider::REAL_TYPE.makeReference, true)
+						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, TypeSystemProvider::REAL_TYPE.makeReference, true)
 						 ]
 					),
 					new ListDefInfo (COUNT_OBS_VALUE, COUNT_LIST_TYPE,  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
-						 new AttributeDefn('distn', true, MclTypeProvider::PMF_TYPE)
+						 new AttributeDefn('distn', true, TypeSystemProvider::PMF_TYPE)
 						 ]
 					),
 					new ListDefInfo (DISCRETE_OBS_VALUE, DISCRETE_LIST_TYPE,  #[
-						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, MclTypeProvider::UNDEFINED_TYPE, false),
-						 new AttributeDefn('distn', true, MclTypeProvider::PMF_TYPE)
+						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, TypeSystemProvider::UNDEFINED_TYPE, false),
+						 new AttributeDefn('distn', true, TypeSystemProvider::PMF_TYPE)
 						 ]
 					),
 					new ListDefInfo (TTE_OBS_VALUE, new ListTypeInfo("TteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
-						 new AttributeDefn('hazard', true, MclTypeProvider::REAL_TYPE.makeReference)//,
+						 new AttributeDefn('hazard', true, TypeSystemProvider::REAL_TYPE.makeReference)//,
 //						 new AttributeDefn('event', false, TTE_EVENT_TYPE),
 //						 new AttributeDefn('maxEvent', false, MclTypeProvider::REAL_TYPE)
 						 ],
@@ -414,11 +414,11 @@ class ListDefinitionTable {
 		"ADMINISTRATION" -> (
 			new BlockListDefinition('input', newArrayList(
 					new ListDefInfo (null, ADMINISTRATION_TYPE,  #[
-						 new AttributeDefn('input', true, MclTypeProvider::REAL_TYPE.makeReference) , new AttributeDefn('amount', true, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('doseTime', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('duration', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('start', false, MclTypeProvider::REAL_TYPE),
-						 new AttributeDefn('end', false, MclTypeProvider::REAL_TYPE)
+						 new AttributeDefn('input', true, TypeSystemProvider::REAL_TYPE.makeReference) , new AttributeDefn('amount', true, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('doseTime', false, TypeSystemProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('duration', false, TypeSystemProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('start', false, TypeSystemProvider::REAL_TYPE),
+						 new AttributeDefn('end', false, TypeSystemProvider::REAL_TYPE)
 						 ]
 					)
 				)
@@ -427,7 +427,7 @@ class ListDefinitionTable {
 		"STUDY_DESIGN" -> (
 			new BlockListDefinition('interventionSequence', newArrayList(
 					new ListDefInfo (null, STUDY_DESIGN_LIST_TYPE,  #[
-						 new AttributeDefn('armSize', false, MclTypeProvider::INT_TYPE),
+						 new AttributeDefn('armSize', false, TypeSystemProvider::INT_TYPE),
 						 new AttributeDefn('interventionSequence', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::INTERVENTION_SEQ_SUBLIST).makeVector),
 						 new AttributeDefn('samplingSequence', false, SublistDefinitionTable::getSublist(SublistDefinitionTable::SAMPLING_SEQ_SUBLIST).makeVector)
 						 ]
@@ -438,10 +438,10 @@ class ListDefinitionTable {
 		"DESIGN_SPACES" -> (
 			new BlockListDefinition('element', newArrayList(
 					new ListDefInfo ('catCov', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
-						 new AttributeDefn('objRef', true, MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference),
+						 new AttributeDefn('objRef', true, TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE.makeReference),
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
+						 new AttributeDefn('discrete', false, TypeSystemProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('range', false, TypeSystemProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
@@ -450,10 +450,10 @@ class ListDefinitionTable {
 						 false
 					),
 					new ListDefInfo ('covariate', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
-						 new AttributeDefn('objRef', true, MclTypeProvider::REAL_TYPE.makeReference),
+						 new AttributeDefn('objRef', true, TypeSystemProvider::REAL_TYPE.makeReference),
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
+						 new AttributeDefn('discrete', false, TypeSystemProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('range', false, TypeSystemProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
@@ -464,8 +464,8 @@ class ListDefinitionTable {
 					new ListDefInfo ('amount', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
 						 new AttributeDefn('objRef', true, ADMINISTRATION_TYPE.makeReference.makeVector),
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
+						 new AttributeDefn('discrete', false, TypeSystemProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('range', false, TypeSystemProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
@@ -476,8 +476,8 @@ class ListDefinitionTable {
 					new ListDefInfo ('doseTime', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
 						 new AttributeDefn('objRef', true, ADMINISTRATION_TYPE.makeReference.makeVector),
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
+						 new AttributeDefn('discrete', false, TypeSystemProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('range', false, TypeSystemProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
@@ -488,8 +488,8 @@ class ListDefinitionTable {
 					new ListDefInfo ('duration', new ListTypeInfo("DesignSpaceDur", PrimitiveType.List),  #[
 						 new AttributeDefn('objRef', true, ADMINISTRATION_TYPE.makeReference.makeVector),
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
+						 new AttributeDefn('discrete', false, TypeSystemProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('range', false, TypeSystemProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
@@ -500,8 +500,8 @@ class ListDefinitionTable {
 					new ListDefInfo ('numberTimes', new ListTypeInfo("DesignSpaceNum", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
 						 new AttributeDefn('objRef', true, SAMPLING_TYPE.makeReference.makeVector),
-						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
+						 new AttributeDefn('discrete', false, TypeSystemProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('range', false, TypeSystemProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
@@ -512,8 +512,8 @@ class ListDefinitionTable {
 					new ListDefInfo ('sampleTime', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
 						 new AttributeDefn('objRef', true, SAMPLING_TYPE.makeReference.makeVector),
-						 new AttributeDefn('discrete', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('range', false, MclTypeProvider::REAL_TYPE.makeVector)
+						 new AttributeDefn('discrete', false, TypeSystemProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('range', false, TypeSystemProvider::REAL_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
@@ -524,8 +524,8 @@ class ListDefinitionTable {
 					new ListDefInfo ('numberArms', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
 						 new AttributeDefn('objRef', true, STUDY_DESIGN_LIST_TYPE.makeReference.makeVector),
-						 new AttributeDefn('discrete', false, MclTypeProvider::INT_TYPE.makeVector),
-						 new AttributeDefn('range', false, MclTypeProvider::INT_TYPE.makeVector)
+						 new AttributeDefn('discrete', false, TypeSystemProvider::INT_TYPE.makeVector),
+						 new AttributeDefn('range', false, TypeSystemProvider::INT_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
@@ -536,8 +536,8 @@ class ListDefinitionTable {
 					new ListDefInfo ('armSize', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
 						 new AttributeDefn('objRef', true, STUDY_DESIGN_LIST_TYPE.makeReference.makeVector),
-						 new AttributeDefn('discrete', false, MclTypeProvider::INT_TYPE.makeVector),
-						 new AttributeDefn('range', false, MclTypeProvider::INT_TYPE.makeVector)
+						 new AttributeDefn('discrete', false, TypeSystemProvider::INT_TYPE.makeVector),
+						 new AttributeDefn('range', false, TypeSystemProvider::INT_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
@@ -547,9 +547,9 @@ class ListDefinitionTable {
 					),
 					new ListDefInfo ('parameter', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
-						 new AttributeDefn('objRef', true, MclTypeProvider::REAL_TYPE.makeReference.makeVector),
-						 new AttributeDefn('discrete', false, MclTypeProvider::INT_TYPE.makeVector),
-						 new AttributeDefn('range', false, MclTypeProvider::INT_TYPE.makeVector)
+						 new AttributeDefn('objRef', true, TypeSystemProvider::REAL_TYPE.makeReference.makeVector),
+						 new AttributeDefn('discrete', false, TypeSystemProvider::INT_TYPE.makeVector),
+						 new AttributeDefn('range', false, TypeSystemProvider::INT_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
@@ -564,10 +564,10 @@ class ListDefinitionTable {
 			new BlockListDefinition('type', newArrayList(
 					new ListDefInfo ('simple', SAMPLING_TYPE,  #[
 						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
-						 new AttributeDefn('outcome', true, MclTypeProvider::REAL_TYPE.makeReference),
-						 new AttributeDefn('sampleTime', false, MclTypeProvider::REAL_TYPE.makeVector),
-						 new AttributeDefn('numberTimes', false, MclTypeProvider::INT_TYPE),
-						 new AttributeDefn('numberSamples', false, MclTypeProvider::INT_TYPE.makeVector)
+						 new AttributeDefn('outcome', true, TypeSystemProvider::REAL_TYPE.makeReference),
+						 new AttributeDefn('sampleTime', false, TypeSystemProvider::REAL_TYPE.makeVector),
+						 new AttributeDefn('numberTimes', false, TypeSystemProvider::INT_TYPE),
+						 new AttributeDefn('numberSamples', false, TypeSystemProvider::INT_TYPE.makeVector)
 						 ],
 						 #[
 						 	#{ 'type' -> true, 'outcome' -> true, 'sampleTime' ->false, 'numberTimes' ->false, 'numberSamples' ->false }
@@ -585,7 +585,7 @@ class ListDefinitionTable {
 					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
 						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
 						 new AttributeDefn('combination', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::COMPLEX_COMBINATION_SUBLIST).makeVector),
-						 new AttributeDefn('numberTimes', false, MclTypeProvider::INT_TYPE)
+						 new AttributeDefn('numberTimes', false, TypeSystemProvider::INT_TYPE)
 						 ]
 					)//,
 //					new ListDefInfo('derived', DERIV_SAMPLING_TYPE, #[

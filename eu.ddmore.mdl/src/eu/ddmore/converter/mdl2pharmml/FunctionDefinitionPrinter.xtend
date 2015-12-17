@@ -3,13 +3,13 @@ package eu.ddmore.converter.mdl2pharmml
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import java.util.HashSet
+import eu.ddmore.mdl.utils.MdlUtils
 
 class FunctionDefinitionPrinter {
 
-	extension MclUtils mclUtil = new MclUtils
+	extension MdlUtils mclUtil = new MdlUtils
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
 //	extension PharmMLConverterUtils pcu = new PharmMLConverterUtils
 //	extension ListDefinitionProvider ldp = new ListDefinitionProvider

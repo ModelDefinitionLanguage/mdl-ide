@@ -1,16 +1,16 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.validation.MogValidator
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
+import eu.ddmore.mdl.utils.MdlUtils
 
 class Mdl2Pharmml {
 	static val mdlVersion = "6.0"
 	
 	extension MogValidator mv = new MogValidator
-	extension MclUtils mu = new MclUtils
+	extension MdlUtils mu = new MdlUtils
 	extension ModelDefinitionPrinter mdp = new ModelDefinitionPrinter
 	extension ModellingStepsPrinter msp = new ModellingStepsPrinter
 	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter

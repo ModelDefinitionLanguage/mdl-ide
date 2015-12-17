@@ -1,13 +1,13 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider.FunctDefn
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider.FunctionArgument
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider.NamedArgFuncDefn
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider.SimpleFuncDefn
 import java.util.List
 import java.util.Map
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 class BuiltinFunctionTable {
 	
@@ -16,154 +16,154 @@ class BuiltinFunctionTable {
 	public static val TRANS_TYPE = new BuiltinEnumTypeInfo('transType', #{'none', 'ln', 'logit', 'probit'})
 	
 	public static val Map<String, List<? extends FunctDefn>> functDefns = #{
-		'log' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'log2' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'log10' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'ln' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'probit' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'logit' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'invLogit' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'invProbit' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'factorial' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'lnFactorial' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'sin' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'cos' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'tan' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'sinh' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'cosh' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'tanh' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'floor' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'ceiling' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'min' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'max' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'abs' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'exp' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'seq' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE, MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_VECTOR_TYPE) ],
-		'dseq' -> #[ new SimpleFuncDefn(#[MclTypeProvider::INT_TYPE, MclTypeProvider::INT_TYPE, MclTypeProvider::INT_TYPE], MclTypeProvider::INT_VECTOR_TYPE) ],
-		'sqrt' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::REAL_TYPE) ],
-		'sum' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE.makeVector], MclTypeProvider::REAL_TYPE) ],
-		'mean' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE.makeVector], MclTypeProvider::REAL_TYPE) ],
-		'median' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE.makeVector], MclTypeProvider::REAL_TYPE) ],
-		'inverse' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_MATRIX_TYPE], MclTypeProvider::REAL_MATRIX_TYPE) ],
-		'toInt' -> #[ new SimpleFuncDefn(#[MclTypeProvider::REAL_TYPE], MclTypeProvider::INT_TYPE ) ],
+		'log' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE, TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'log2' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'log10' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'ln' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'probit' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'logit' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'invLogit' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'invProbit' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'factorial' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'lnFactorial' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'sin' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'cos' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'tan' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'sinh' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'cosh' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'tanh' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'floor' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'ceiling' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'min' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE, TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'max' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE, TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'abs' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'exp' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'seq' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE, TypeSystemProvider::REAL_TYPE, TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_VECTOR_TYPE) ],
+		'dseq' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::INT_TYPE, TypeSystemProvider::INT_TYPE, TypeSystemProvider::INT_TYPE], TypeSystemProvider::INT_VECTOR_TYPE) ],
+		'sqrt' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
+		'sum' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE.makeVector], TypeSystemProvider::REAL_TYPE) ],
+		'mean' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE.makeVector], TypeSystemProvider::REAL_TYPE) ],
+		'median' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE.makeVector], TypeSystemProvider::REAL_TYPE) ],
+		'inverse' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_MATRIX_TYPE], TypeSystemProvider::REAL_MATRIX_TYPE) ],
+		'toInt' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::INT_TYPE ) ],
 		
-		'Normal' -> #[ new NamedArgFuncDefn(MclTypeProvider::PDF_TYPE, #{
-						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+		'Normal' -> #[ new NamedArgFuncDefn(TypeSystemProvider::PDF_TYPE, #{
+						'mean' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'sd' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} ),
-					new NamedArgFuncDefn(MclTypeProvider::PDF_TYPE, #{
-						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'var' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					new NamedArgFuncDefn(TypeSystemProvider::PDF_TYPE, #{
+						'mean' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'var' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} )
 					],
-		'LogNormal' -> #[ new NamedArgFuncDefn(MclTypeProvider::PDF_TYPE, #{
-						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'sd' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+		'LogNormal' -> #[ new NamedArgFuncDefn(TypeSystemProvider::PDF_TYPE, #{
+						'mean' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'sd' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} ),
-					new NamedArgFuncDefn(MclTypeProvider::PDF_TYPE, #{
-						'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'var' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+					new NamedArgFuncDefn(TypeSystemProvider::PDF_TYPE, #{
+						'mean' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'var' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} )
 					],
-		'Bernoulli' -> #[ new NamedArgFuncDefn(MclTypeProvider::PMF_TYPE, #{
-						'category' -> new FunctionArgument(MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
-						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+		'Bernoulli' -> #[ new NamedArgFuncDefn(TypeSystemProvider::PMF_TYPE, #{
+						'category' -> new FunctionArgument(TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
+						'probability' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} )
 					],
-		'Poisson' -> #[ new NamedArgFuncDefn(MclTypeProvider::PMF_TYPE, #{
-						'lambda' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+		'Poisson' -> #[ new NamedArgFuncDefn(TypeSystemProvider::PMF_TYPE, #{
+						'lambda' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} )
 					],
-		'Binomial' -> #[ new NamedArgFuncDefn(MclTypeProvider::PMF_TYPE, #{
-						'successCategory' -> new FunctionArgument(MclTypeProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
-						'probabilityOfSuccess' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'numberOfTrials' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+		'Binomial' -> #[ new NamedArgFuncDefn(TypeSystemProvider::PMF_TYPE, #{
+						'successCategory' -> new FunctionArgument(TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE.makeReference, true),
+						'probabilityOfSuccess' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'numberOfTrials' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} )
 					],
-		'Gamma' -> #[ new NamedArgFuncDefn(MclTypeProvider::PDF_TYPE, #{
-						'shape' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'scale' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+		'Gamma' -> #[ new NamedArgFuncDefn(TypeSystemProvider::PDF_TYPE, #{
+						'shape' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'scale' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} )
 					],
-		'NonParametric' -> #[ new NamedArgFuncDefn(MclTypeProvider::PDF_TYPE, #{
-						'bins' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true),
-						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+		'NonParametric' -> #[ new NamedArgFuncDefn(TypeSystemProvider::PDF_TYPE, #{
+						'bins' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector, true),
+						'probability' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector, true)
 					} )
 					],
-		'MultiNonParametric' -> #[ new NamedArgFuncDefn(MclTypeProvider::PDF_TYPE.makeVector, #{
-						'bins' -> new FunctionArgument(MclTypeProvider::REAL_MATRIX_TYPE, true),
-						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+		'MultiNonParametric' -> #[ new NamedArgFuncDefn(TypeSystemProvider::PDF_TYPE.makeVector, #{
+						'bins' -> new FunctionArgument(TypeSystemProvider::REAL_MATRIX_TYPE, true),
+						'probability' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector, true)
 					} )
 					],
-		'Empirical' -> #[ new NamedArgFuncDefn(MclTypeProvider::PDF_TYPE, #{
-						'data' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true),
-						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+		'Empirical' -> #[ new NamedArgFuncDefn(TypeSystemProvider::PDF_TYPE, #{
+						'data' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector, true),
+						'probability' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector, true)
 					} )
 					],
-		'MultiEmpirical' -> #[ new NamedArgFuncDefn(MclTypeProvider::PDF_TYPE.makeVector, #{
-						'data' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector.makeVector, true),
-						'probability' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+		'MultiEmpirical' -> #[ new NamedArgFuncDefn(TypeSystemProvider::PDF_TYPE.makeVector, #{
+						'data' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector.makeVector, true),
+						'probability' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector, true)
 					} )
 					],
 		'MultivariateNormal' -> #[
-						new NamedArgFuncDefn(MclTypeProvider::PDF_TYPE.makeVector, #{
-							'mean' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector.makeVector, true),
-							'cov' -> new FunctionArgument(MclTypeProvider::REAL_MATRIX_TYPE, true)
+						new NamedArgFuncDefn(TypeSystemProvider::PDF_TYPE.makeVector, #{
+							'mean' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector.makeVector, true),
+							'cov' -> new FunctionArgument(TypeSystemProvider::REAL_MATRIX_TYPE, true)
 						} )
 					],
 		'matrix' -> #[
-						new NamedArgFuncDefn(MclTypeProvider::REAL_MATRIX_TYPE, #{
-							'vector' -> new FunctionArgument(MclTypeProvider::REAL_VECTOR_TYPE, true),
-							'ncol' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-							'byRow' -> new FunctionArgument(MclTypeProvider::BOOLEAN_TYPE, true)
+						new NamedArgFuncDefn(TypeSystemProvider::REAL_MATRIX_TYPE, #{
+							'vector' -> new FunctionArgument(TypeSystemProvider::REAL_VECTOR_TYPE, true),
+							'ncol' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+							'byRow' -> new FunctionArgument(TypeSystemProvider::BOOLEAN_TYPE, true)
 						} )
 					],
-		'linear' -> #[ new NamedArgFuncDefn(MclTypeProvider::REAL_TYPE, #{
+		'linear' -> #[ new NamedArgFuncDefn(TypeSystemProvider::REAL_TYPE, #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'pop' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
+						'pop' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
 						'fixEff' -> new FunctionArgument(SublistDefinitionTable::getSublist(SublistDefinitionTable::FIX_EFF_SUBLIST).makeVector, false),
-						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+						'ranEff' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector, true)
 					} )
 					],
-		'general' -> #[ new NamedArgFuncDefn(MclTypeProvider::REAL_TYPE, #{
+		'general' -> #[ new NamedArgFuncDefn(TypeSystemProvider::REAL_TYPE, #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'grp' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'ranEff' -> new FunctionArgument(MclTypeProvider::REAL_TYPE.makeVector, true)
+						'grp' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'ranEff' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector, true)
 					} )
 					],
-		'combinedError1' -> #[ new NamedArgFuncDefn(MclTypeProvider::REAL_TYPE, #{
+		'combinedError1' -> #[ new NamedArgFuncDefn(TypeSystemProvider::REAL_TYPE, #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+						'additive' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'proportional' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'prediction' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'eps' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} ) ],
-		'combinedError2' -> #[ new NamedArgFuncDefn(MclTypeProvider::REAL_TYPE, #{
+		'combinedError2' -> #[ new NamedArgFuncDefn(TypeSystemProvider::REAL_TYPE, #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+						'additive' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'proportional' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'prediction' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'eps' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} ) ],
-		'additiveError' -> #[ new NamedArgFuncDefn(MclTypeProvider::REAL_TYPE, #{
+		'additiveError' -> #[ new NamedArgFuncDefn(TypeSystemProvider::REAL_TYPE, #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'additive' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+						'additive' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'prediction' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'eps' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} ) ],
-		'proportionalError' -> #[ new NamedArgFuncDefn(MclTypeProvider::REAL_TYPE, #{
+		'proportionalError' -> #[ new NamedArgFuncDefn(TypeSystemProvider::REAL_TYPE, #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
-						'proportional' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'prediction' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true),
-						'eps' -> new FunctionArgument(MclTypeProvider::REAL_TYPE, true)
+						'proportional' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'prediction' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
+						'eps' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true)
 					} ) ],
-		'readVector' -> #[ new NamedArgFuncDefn(MclTypeProvider::REAL_TYPE.makeVector, #{
+		'readVector' -> #[ new NamedArgFuncDefn(TypeSystemProvider::REAL_TYPE.makeVector, #{
 						'src' -> new FunctionArgument(ListDefinitionTable::PRIOR_SOURCE_TYPE, true),
-						'element' -> new FunctionArgument(MclTypeProvider::STRING_TYPE, true)
+						'element' -> new FunctionArgument(TypeSystemProvider::STRING_TYPE, true)
 					} ) ],
-		'readMatrix' -> #[ new NamedArgFuncDefn(MclTypeProvider::REAL_MATRIX_TYPE, #{
+		'readMatrix' -> #[ new NamedArgFuncDefn(TypeSystemProvider::REAL_MATRIX_TYPE, #{
 						'src' -> new FunctionArgument(ListDefinitionTable::PRIOR_SOURCE_TYPE, true),
-						'element' -> new FunctionArgument(MclTypeProvider::STRING_TYPE, true)
+						'element' -> new FunctionArgument(TypeSystemProvider::STRING_TYPE, true)
 					} ) ]
 	}
 

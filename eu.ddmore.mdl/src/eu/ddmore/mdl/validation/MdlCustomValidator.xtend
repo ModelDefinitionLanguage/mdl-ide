@@ -17,11 +17,9 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.impl.ListDefinitionImpl
-import eu.ddmore.mdl.type.MclTypeProvider
-import eu.ddmore.mdl.type.MclTypeProvider.PrimitiveType
+import eu.ddmore.mdl.type.TypeSystemProvider.PrimitiveType
 import eu.ddmore.mdl.utils.ConstantEvaluation
 import eu.ddmore.mdl.utils.DependencyWalker
-import eu.ddmore.mdl.utils.MclUtils
 import java.util.Collections
 import java.util.HashSet
 import java.util.LinkedList
@@ -33,13 +31,15 @@ import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionTable
+import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.utils.MdlUtils
 
 class MdlCustomValidator extends AbstractMdlValidator {
 
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider 
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
-	extension MclTypeProvider mtp = new MclTypeProvider
-	extension MclUtils mu = new MclUtils
+	extension TypeSystemProvider mtp = new TypeSystemProvider
+	extension MdlUtils mu = new MdlUtils
 	extension DependencyWalker dw = new DependencyWalker 
 	extension ConstantEvaluation ce = new ConstantEvaluation 
 

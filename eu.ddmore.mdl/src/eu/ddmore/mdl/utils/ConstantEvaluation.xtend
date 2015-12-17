@@ -20,14 +20,14 @@ import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.WhenExpression
-import eu.ddmore.mdl.type.MclTypeProvider
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 class ConstantEvaluation {
 	
-	extension MclTypeProvider mtp = new MclTypeProvider
+	extension TypeSystemProvider mtp = new TypeSystemProvider
 	
 	def Double evaluateMathsExpression(Expression expr){
-		if(expr != null && MclTypeProvider::REAL_TYPE.isCompatible(expr.typeFor)){
+		if(expr != null && TypeSystemProvider::REAL_TYPE.isCompatible(expr.typeFor)){
 			switch(expr){
 	    		AdditiveExpression:{
 	    			getAdditiveExpression(expr)
@@ -67,7 +67,7 @@ class ConstantEvaluation {
 	
 	
 	def Boolean evaluateLogicalExpression(Expression expr){
-		if(expr != null && MclTypeProvider::BOOLEAN_TYPE.isCompatible(expr.typeFor)){
+		if(expr != null && TypeSystemProvider::BOOLEAN_TYPE.isCompatible(expr.typeFor)){
 			switch(expr){
     			OrExpression:
     				getOrExpression(expr)

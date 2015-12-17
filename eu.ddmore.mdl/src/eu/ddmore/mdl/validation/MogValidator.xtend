@@ -10,9 +10,7 @@ import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
-import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
-import eu.ddmore.mdl.utils.MclUtils
 import java.util.ArrayList
 import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.provider.BlockDefinitionTable
@@ -23,14 +21,16 @@ import org.eclipse.xtext.validation.EValidatorRegistrar
 import org.eclipse.xtext.validation.Check
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.utils.MdlUtils
 
 class MogValidator extends AbstractDeclarativeValidator {
 
 	override register(EValidatorRegistrar registrar){}
 
 	extension ListDefinitionProvider listProvider = new ListDefinitionProvider 
-	extension MclTypeProvider typeProvider = new MclTypeProvider 
-	extension MclUtils mclu = new MclUtils
+	extension TypeSystemProvider typeProvider = new TypeSystemProvider 
+	extension MdlUtils mclu = new MdlUtils
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 
 
