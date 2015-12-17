@@ -11,7 +11,7 @@ import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 
-class DataFileValidation extends AbstractMdlValidator  {
+class DataFileValidator extends AbstractMdlValidator  {
 	
 	extension MclUtils mu = new MclUtils
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider

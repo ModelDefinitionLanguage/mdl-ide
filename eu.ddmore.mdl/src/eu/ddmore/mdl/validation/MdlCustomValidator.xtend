@@ -34,7 +34,7 @@ import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionTable
 
-class MdlCustomValidation extends AbstractMdlValidator {
+class MdlCustomValidator extends AbstractMdlValidator {
 
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider 
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider

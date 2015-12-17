@@ -81,7 +81,7 @@ class DataFileValidationTest {
         val mcl = parse(mclText)
 		
 		mcl.assertNoErrors
-		mcl.assertWarning(MdlPackage.eINSTANCE.assignPair, DataFileValidation::DATA_FILE_NOT_FOUND,
+		mcl.assertWarning(MdlPackage.eINSTANCE.assignPair, DataFileValidator::DATA_FILE_NOT_FOUND,
 					"Cannot find data file: path may be incorrect.")
 	}
 
