@@ -18,8 +18,15 @@ import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
+import org.eclipse.xtext.validation.AbstractDeclarativeValidator
+import org.eclipse.xtext.validation.EValidatorRegistrar
+import org.eclipse.xtext.validation.Check
+import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.mdl.MdlPackage
 
-class MogValidator {
+class MogValidator extends AbstractDeclarativeValidator {
+
+	override register(EValidatorRegistrar registrar){}
 
 	extension ListDefinitionProvider listProvider = new ListDefinitionProvider 
 	extension MclTypeProvider typeProvider = new MclTypeProvider 
@@ -225,6 +232,58 @@ class MogValidator {
 						warningLambda.apply(MdlValidator::MASKING_PARAM_ASSIGNMENT, "value assigned to parameter '" + parStmt.name +"' in mdlObj is overridden by value in parObj");
 					}
 				}
+			}
+		}
+	}
+	
+	@Check
+	def validateObjectReferenceInMog(ListDefinition it){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		if(blk?.identifier == BlockDefinitionTable::MOG_OBJ_NAME){
+			val mogObj = EcoreUtil2.getContainerOfType(eContainer, MclObject)
+			val objType = list.getAttributeEnumValue('type')
+			if(MogValidator::findMdlObject(mogObj, name, objType) == null){
+				error("the object '" + name + "' cannot be found",
+						MdlPackage.eINSTANCE.symbolDefinition_Name, MdlValidator::MCLOBJ_REF_UNRESOLVED, name)
+			}
+		}
+	}
+	
+	@Check
+	def validateMog(MclObject mogObj){
+		if(mogObj.isMogObject){
+			val mogValidator = new MogValidator
+			mogValidator.buildMog(mogObj)
+			if(mogValidator.mdlObj != null && mogValidator.dataObj != null && mogValidator.paramObj != null && mogValidator.taskObj != null){
+				// assume has a data obj and mdl obj
+				mogValidator.validateCovariates[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateObservations[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateVariabilityLevels[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateIndividualVariable[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateDosing[
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				]
+				mogValidator.validateStructuralParameters([
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				],
+				[
+					warningCode, errMsg| warning(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, warningCode, '')
+				]
+				) 
+				mogValidator.validateVariabilityParameters([
+					errorCode, errMsg| error(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, errorCode, '')
+				],
+				[
+					warningCode, errMsg| warning(errMsg, MdlPackage.eINSTANCE.mclObject_Blocks, warningCode, '')
+				])
 			}
 		}
 	}

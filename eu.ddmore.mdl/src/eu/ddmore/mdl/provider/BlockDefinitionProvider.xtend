@@ -1,12 +1,9 @@
 package eu.ddmore.mdl.provider
 
 import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.BlockTextBody
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.Statement
-import java.util.HashMap
 import java.util.HashSet
 import java.util.List
 import java.util.Map
@@ -14,7 +11,6 @@ import java.util.Set
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import org.eclipse.xtext.EcoreUtil2
 
 class BlockDefinitionProvider {
 
@@ -108,67 +104,9 @@ class BlockDefinitionProvider {
 		}
 		mandatoryBlock
 	}
-	
-	def validateBlocksCounts(MclObject it, (String, int) => void errLambda){
-		val blkCount = new HashMap<String, Integer>
 
-		blocks.forEach[
-			if(!blkCount.containsKey(identifier)) blkCount.put(identifier, 0)
-			blkCount.put(identifier, blkCount.get(identifier)+1) 
-		]
-		// now check if counts exceed maximums
-		blkCount.keySet.forEach[name|
-			val defn = BlkDefns.get(name)
-			if(defn != null){
-				if(blkCount.get(name) > defn.maxNum)
-					errLambda.apply(name, defn.maxNum)
-			}
-		]
+
+	def getBlockDefn(String name){
+		BlkDefns.get(name)
 	}	
-
-	def validateMaxBlocksStatementCounts(BlockStatementBody it, (String, int) => void errLambda){
-		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		val defn = BlkDefns.get(blk.identifier)
-		if(defn != null)
-			if(statements.size > defn.maxStmtNum){
-				errLambda.apply(blk.identifier, defn.maxStmtNum)
-			}		
-	}
-
-	def validateMinBlocksStatementCounts(BlockStatementBody it, (String, int) => void errLambda){
-		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		val defn = BlkDefns.get(blk.identifier)
-		if(defn != null)
-			if(statements.size < defn.minStmtNum){
-				errLambda.apply(blk.identifier, defn.minStmtNum)
-			}		
-	}
-
-	def validateExpectedStatementType(Statement it, (String) => void errLambda){
-		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		val defn = BlkDefns.get(blk.identifier)
-		if(defn != null){
-			for(stmtSpec : defn.validStatementTypes){
-				if(stmtSpec.isValidStatement(it)) return
-			}	
-			errLambda.apply(blk.identifier)
-		}
-	}
-	
-	def validateBlockBodyType(BlockStatementBody it, (String) => void errLambda){
-		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		val defn = BlkDefns.get(blk.identifier)
-		if(defn != null){
-			if(!defn.isStmtBlk) errLambda.apply(blk.identifier)
-		}
-	}
-	
-	def validateBlockBodyType(BlockTextBody it, (String) => void errLambda){
-		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		val defn = BlkDefns.get(blk.identifier)
-		if(defn != null){
-			if(defn.isStmtBlk) errLambda.apply(blk.identifier)
-		}
-	}
-	
 }

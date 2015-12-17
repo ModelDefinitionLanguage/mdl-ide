@@ -6,7 +6,6 @@ import eu.ddmore.mdl.mdl.FuncArguments
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnnamedArgument
-import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.MclTypeProvider
 import eu.ddmore.mdl.type.MclTypeProvider.BuiltinEnumTypeInfo
@@ -151,7 +150,7 @@ class BuiltinFunctionProvider {
 		bestMatch
 	}
 	
-	private def findFuncDefn(BuiltinFunctionCall it){
+	public def findFuncDefn(BuiltinFunctionCall it){
 		val availableDefns = functDefns.get(func)
 		var FunctDefn retVal = null
 		if(availableDefns != null){
@@ -170,31 +169,6 @@ class BuiltinFunctionProvider {
 			}
 		}
 		retVal
-	}
-	
-	// precondition - this is a unnamed function 	
-	def checkUnnamedFunctionDefn(BuiltinFunctionCall it, (String) => void unkFuncErr, (String, int) => void incorrectNumArgsErr){
-		val FunctDefn funcDefn = findFuncDefn
-		if(funcDefn == null || !(funcDefn instanceof SimpleFuncDefn)){
-			unkFuncErr.apply(func)
-		}
-		else {
-			val funcArgList = argList
-			switch(funcArgList){
-				case funcArgList == null && funcDefn.numArgs != 0:
-					incorrectNumArgsErr.apply(func, funcDefn.numArgs)
-				UnnamedFuncArguments case funcArgList.args.size != funcDefn.numArgs:
-					incorrectNumArgsErr.apply(func, funcDefn.numArgs)
-				NamedFuncArguments: void
-			}
-		}
-	}
-	
-	def checkNamedFunctionDefn(BuiltinFunctionCall it, (String) => void unkFuncErr){
-		val funcDefn = findFuncDefn
-		if(funcDefn == null || !(funcDefn instanceof NamedArgFuncDefn)){
-			unkFuncErr.apply(func)
-		}
 	}
 	
 	// returns the set of mandatory arguments not set in a function or an
@@ -216,7 +190,7 @@ class BuiltinFunctionProvider {
 		eContainer as BuiltinFunctionCall
 	}
 	
-	private def getFunctionCall(ValuePair it){
+	public def getFunctionCall(ValuePair it){
 		eContainer.eContainer as BuiltinFunctionCall
 	}
 	
@@ -279,27 +253,6 @@ class BuiltinFunctionProvider {
 	}
 	
 	
-	// The validator should check on a per argument basis is an argument name is valid.
-	def checkNamedArguments(ValuePair it, (String) => void unkArgError, (String) => void duplicateArgError){
-		// assume that this is a named argument to a function
-		val funcDefn = functionCall.findFuncDefn
-		if(funcDefn != null && funcDefn instanceof NamedArgFuncDefn){
-			val namedFuncDefn = funcDefn as NamedArgFuncDefn
-			if(!namedFuncDefn.arguments.containsKey(argumentName)){
-				unkArgError.apply(argumentName)
-			}
-			else{
-				var instanceCount = 0
-				for(arg : (functionCall.argList as NamedFuncArguments).arguments)
-					// count args of same name
-					if(arg.argumentName == argumentName) instanceCount++
-					
-				if(instanceCount > 1) duplicateArgError.apply(argumentName) 
-			}
-			
-		}
-	}
-
 	def TypeInfo getTypeOfFunctionBuiltinEnum(EnumExpression ee){
 		val funct = EcoreUtil2.getContainerOfType(ee, BuiltinFunctionCall)
 		val blockName = funct.func
