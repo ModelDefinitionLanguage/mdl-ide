@@ -7,12 +7,12 @@ class EnumListTypeInfo extends ListTypeInfo {
 	val EnumTypeInfo underlyingEnum		
 
 	new(String listName, EnumTypeInfo underlyingEnum) {
-		super(listName, PrimitiveType.Enum)
+		super(listName)
 		this.underlyingEnum = underlyingEnum
 	}
 	
 	new(String listName) {
-		super(listName, PrimitiveType.Enum)
+		super(listName)
 		this.underlyingEnum = new GenericEnumTypeInfo
 	}
 	

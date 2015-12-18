@@ -1,12 +1,21 @@
 package eu.ddmore.mdl.type
 
 import org.eclipse.xtend.lib.annotations.Data
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
-@Data @FinalFieldsConstructor
+@Data
 class ListTypeInfo extends TypeInfo{
-	String name
-	PrimitiveType apparentType
+	val String name
+	val PrimitiveType secondaryType
+	
+	new(String name){
+		this.name = name
+		this.secondaryType = PrimitiveType.Undefined 
+	}
+	
+	new(String name, PrimitiveType secondaryType){
+		this.name = name
+		this.secondaryType = secondaryType 
+	}
 	
 	override getUnderlyingType(){
 		this
@@ -18,12 +27,7 @@ class ListTypeInfo extends TypeInfo{
 		switch(otherType){
 			ListTypeInfo:  this.name == otherType.name
 			PrimitiveTypeInfo:{
-				// @TODO: This breaks encapsulation. Create a more elegant solution that doesn't
-				// If other is primitive type then check compatibility
-				val compType = PrimitiveTypeInfo::compatibleTypes?.get(this.theType)
-				if(compType != null)
-					compType.contains(otherType.theType)
-				else false
+				PrimitiveTypeInfo::isPrimitiveCompatible(this.secondaryType, otherType.theType)
 			}
 				
 			default:
@@ -31,12 +35,17 @@ class ListTypeInfo extends TypeInfo{
 		}
 	}
 	
+	def getSecondaryType(){
+		secondaryType
+	}
+	
 	override isCompatibleElement(TypeInfo elementType){
 		false		
 	}
 	
 	override getTheType(){
-		apparentType
+//		apparentType.theType
+		PrimitiveType.List
 	}
 	
 	override getTypeName(){

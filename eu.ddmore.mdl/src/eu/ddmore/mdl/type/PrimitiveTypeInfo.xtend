@@ -24,12 +24,24 @@ class PrimitiveTypeInfo extends TypeInfo{
 	override boolean isCompatible(TypeInfo other){
 		// use underlying type in case it is a reference 
 		val otherType = other.underlyingType
-		val compType = compatibleTypes?.get(this.theType)
+		switch(otherType){
+			ListTypeInfo:
+				isPrimitiveCompatible(this.theType, otherType.secondaryType)
+			default:{
+				isPrimitiveCompatible(this.theType, otherType.theType)
+			}
+				
+		}
+	}
+	
+	static def isPrimitiveCompatible(PrimitiveType thisType, PrimitiveType otherType){
+		val compType = compatibleTypes?.get(thisType)
 		if(compType != null)
 			// check the underlying type in case this is a reference or some other form of indirection
-			compType.contains(otherType.theType)
+			compType.contains(otherType)
 		else false
 	}
+	
 	
 	override isCompatibleElement(TypeInfo elementType){
 		// no vectors in this class so always false
