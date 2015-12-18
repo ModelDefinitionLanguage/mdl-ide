@@ -1568,4 +1568,50 @@ warfarin_PK_v2_dat = dataObj{
 		)
 	}
 
+	@Test
+	def void testValidDerivativeSuperType(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				V : { deriv = -V }
+				COMPARTMENT{
+					IN : { type is direct, to = V }
+				}
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidCompartmentSuperType(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				V : { deriv = -V }
+				COMPARTMENT{
+					:: { type is elimination, from = V, cl=10 }
+				}
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
 }

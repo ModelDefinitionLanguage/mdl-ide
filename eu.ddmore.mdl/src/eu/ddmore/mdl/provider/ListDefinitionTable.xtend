@@ -10,6 +10,7 @@ import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
 import java.util.Map
 import eu.ddmore.mdl.validation.MdlValidator
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.type.ListSuperTypeInfo
 
 class ListDefinitionTable {
 	public static val USE_ATT = 'use'
@@ -68,12 +69,13 @@ class ListDefinitionTable {
 //	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('objType', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 //	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
-	public static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv)
+	public static val DERIV_SUPER_LIST = new ListSuperTypeInfo("DerivSuper") 
+	public static val DERIV_TYPE = new ListTypeInfo("Derivative", PrimitiveType.Deriv, DERIV_SUPER_LIST)
 	public static val COUNT_LIST_TYPE = new ListTypeInfo("CountObs", PrimitiveType.Real) 
 	public static val DISCRETE_LIST_TYPE = new EnumListTypeInfo("DiscreteObs")
 	public static val CATEGORICAL_LIST_TYPE = new EnumListTypeInfo("CatObs")
 
-	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
+	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real, DERIV_SUPER_LIST)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
 	static val AMT_COL_TYPE = new ListTypeInfo("Amt", PrimitiveType.Real)
 	public static val CMT_COL_TYPE = new ListTypeInfo("Cmt", PrimitiveType.List)
@@ -84,7 +86,6 @@ class ListDefinitionTable {
 	public static val DERIV_SAMPLING_TYPE = new ListTypeInfo("DerivedSampling", PrimitiveType.List)
 	public static val PRIOR_SOURCE_TYPE = new ListTypeInfo("PriorSource", PrimitiveType.List)
 	public static val STUDY_DESIGN_LIST_TYPE = new ListTypeInfo("StudyDesign", PrimitiveType.List)
-	
 	
 	public static val Map<String, BlockListDefinition> attributeDefnDefaults = #{ 
 		"DATA_INPUT_VARIABLES" -> (
@@ -208,7 +209,7 @@ class ListDefinitionTable {
 					new ListDefInfo ('direct', new ListTypeInfo("Direct", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE),
 						 new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
-						 new AttributeDefn('to', true, COMP_LIST_TYPE.makeReference),
+						 new AttributeDefn('to', true, DERIV_SUPER_LIST.makeReference),
 						 new AttributeDefn('modelDur', false, TypeSystemProvider::REAL_TYPE),
 						 new AttributeDefn('tlag', false, TypeSystemProvider::REAL_TYPE),
 						 new AttributeDefn('finput', false, TypeSystemProvider::REAL_TYPE)
@@ -220,7 +221,7 @@ class ListDefinitionTable {
 					),
 					new ListDefInfo ('effect', new ListTypeInfo("Effect", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
-						 new AttributeDefn('from', true, COMP_LIST_TYPE.makeReference),
+						 new AttributeDefn('from', true, DERIV_SUPER_LIST.makeReference),
 						 new AttributeDefn('keq', true, TypeSystemProvider::REAL_TYPE)
 						 ],
 						 #[
@@ -230,7 +231,7 @@ class ListDefinitionTable {
 					),
 					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
-						 new AttributeDefn('to', true, COMP_LIST_TYPE.makeReference),
+						 new AttributeDefn('to', true, DERIV_SUPER_LIST.makeReference),
 //						 new AttributeDefn('target', true, DERIV_TYPE.makeReference),
 						 new AttributeDefn('ka', false, TypeSystemProvider::REAL_TYPE),
 						 new AttributeDefn('tlag', false, TypeSystemProvider::REAL_TYPE),
@@ -252,18 +253,18 @@ class ListDefinitionTable {
 					new ListDefInfo ('transfer', new ListTypeInfo("Transfer", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
 						 new AttributeDefn('kt', true, TypeSystemProvider::REAL_TYPE),
-						 new AttributeDefn('from', true, COMP_LIST_TYPE.makeReference),
-						 new AttributeDefn('to', true, COMP_LIST_TYPE.makeReference)
+						 new AttributeDefn('from', true, DERIV_SUPER_LIST.makeReference),
+						 new AttributeDefn('to', true, DERIV_SUPER_LIST.makeReference)
 						 ],
 						 true
 					),
-					new ListDefInfo ('compartment', new ListTypeInfo("Compartment", PrimitiveType.Real),  #[
+					new ListDefInfo ('compartment', COMP_LIST_TYPE,  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE)
 						 ]
 					),
 					new ListDefInfo ('elimination', new ListTypeInfo("Elimination", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
-						 new AttributeDefn('from', true, COMP_LIST_TYPE.makeReference),
+						 new AttributeDefn('from', true, DERIV_SUPER_LIST.makeReference),
 						 new AttributeDefn('v', false, TypeSystemProvider::REAL_TYPE),
 						 new AttributeDefn('cl', false, TypeSystemProvider::REAL_TYPE), new AttributeDefn('k', false, TypeSystemProvider::REAL_TYPE),
 						 new AttributeDefn('vm', false, TypeSystemProvider::REAL_TYPE), new AttributeDefn('km', false, TypeSystemProvider::REAL_TYPE)
@@ -279,7 +280,7 @@ class ListDefinitionTable {
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
 						 new AttributeDefn('kin', true, TypeSystemProvider::REAL_TYPE),
 						 new AttributeDefn('kout', true, TypeSystemProvider::REAL_TYPE),
-						 new AttributeDefn('from', true, COMP_LIST_TYPE.makeReference)
+						 new AttributeDefn('from', true, DERIV_SUPER_LIST.makeReference)
 						 ]
 					)
 				)

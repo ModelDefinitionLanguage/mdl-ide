@@ -3,69 +3,50 @@ package eu.ddmore.mdl.type
 import org.eclipse.xtend.lib.annotations.Data
 
 @Data
-class ListTypeInfo extends TypeInfo{
-	val String name
+class ListTypeInfo extends AbstractListTypeInfo{
 	val PrimitiveType secondaryType
+	val ListSuperTypeInfo superType
 	
 	new(String name){
-		this.name = name
-		this.secondaryType = PrimitiveType.Undefined 
+		super(name)
+		this.secondaryType = PrimitiveType.Undefined
+		this.superType = null 
 	}
 	
 	new(String name, PrimitiveType secondaryType){
-		this.name = name
+		super(name)
 		this.secondaryType = secondaryType 
+		this.superType = null 
 	}
 	
-	override getUnderlyingType(){
-		this
+	new(String name, ListSuperTypeInfo superType){
+		super(name)
+		this.secondaryType = PrimitiveType.Undefined
+		this.superType = superType 
 	}
 	
-	override isCompatible(TypeInfo other){
-		// use underlying type in case it is a reference 
-		val otherType = other.underlyingType
-		switch(otherType){
-			ListTypeInfo:  this.name == otherType.name
-			PrimitiveTypeInfo:{
-				PrimitiveTypeInfo::isPrimitiveCompatible(this.secondaryType, otherType.theType)
-			}
-				
-			default:
-				false 
-		}
+	new(String name, PrimitiveType secondaryType, ListSuperTypeInfo superType){
+		super(name)
+		this.secondaryType = secondaryType 
+		this.superType = superType 
 	}
 	
-	def getSecondaryType(){
+	override getSecondaryType(){
 		secondaryType
 	}
 	
-	override isCompatibleElement(TypeInfo elementType){
-		false		
-	}
-	
-	override getTheType(){
-//		apparentType.theType
-		PrimitiveType.List
+	override getListSuperType() {
+		this.superType
 	}
 	
 	override getTypeName(){
 		"List:" + name
 	}
 	
-	override makeReference(){
-		new ReferenceTypeInfo(this)
-	}
-
-	override makeVector(){
-		new VectorTypeInfo(this);
-	}
-	
-	override isVector(){
-		false
-	}
-	
-	override isReference(){
-		false
+	override matchesList(AbstractListTypeInfo other) {
+		name == other.name
+			|| (listSuperType != null
+				&& listSuperType == other.listSuperType) 
 	}
 }
 
