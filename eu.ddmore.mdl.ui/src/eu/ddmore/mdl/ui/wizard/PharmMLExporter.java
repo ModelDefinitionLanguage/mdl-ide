@@ -26,7 +26,7 @@ import eu.ddmore.mdl.utils.MdlUtils;
 
 public class PharmMLExporter {
 
-    private static final int DEFAULT_BUFFER_SIZE = 16*1024;
+//    private static final int DEFAULT_BUFFER_SIZE = 16*1024;
 	
     /**
      *  Creates the specified file system directory at <code>destinationPath</code>.

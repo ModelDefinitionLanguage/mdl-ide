@@ -17,7 +17,7 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.impl.ListDefinitionImpl
-import eu.ddmore.mdl.type.TypeSystemProvider.PrimitiveType
+import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.utils.ConstantEvaluation
 import eu.ddmore.mdl.utils.DependencyWalker
 import java.util.Collections

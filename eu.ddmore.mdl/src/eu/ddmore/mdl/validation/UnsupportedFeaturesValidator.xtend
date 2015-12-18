@@ -11,7 +11,7 @@ import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.WhenExpression
-import eu.ddmore.mdl.type.TypeSystemProvider.PrimitiveType
+import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.utils.ConstantEvaluation
 import java.util.Collections
 import java.util.Map

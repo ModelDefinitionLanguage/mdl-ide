@@ -1,6 +1,6 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider.FunctDefn
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider.FunctionArgument
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider.NamedArgFuncDefn

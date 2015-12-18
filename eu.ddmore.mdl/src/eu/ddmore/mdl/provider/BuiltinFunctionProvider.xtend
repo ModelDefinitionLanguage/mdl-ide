@@ -7,8 +7,8 @@ import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
+import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import java.util.Collections
 import java.util.HashMap

@@ -1,9 +1,9 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.TypeSystemProvider.EnumListTypeInfo
-import eu.ddmore.mdl.type.TypeSystemProvider.ListTypeInfo
-import eu.ddmore.mdl.type.TypeSystemProvider.PrimitiveType
+import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.EnumListTypeInfo
+import eu.ddmore.mdl.type.ListTypeInfo
+import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import eu.ddmore.mdl.provider.ListDefinitionProvider.BlockListDefinition
 import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo

@@ -5,8 +5,8 @@ import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
+import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import java.util.ArrayList

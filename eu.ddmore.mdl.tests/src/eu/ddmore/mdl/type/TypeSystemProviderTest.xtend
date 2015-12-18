@@ -3,14 +3,15 @@ package eu.ddmore.mdl.type
 import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MdlFactory
-import eu.ddmore.mdl.type.TypeSystemProvider.EnumTypeInfo
+import eu.ddmore.mdl.type.EnumTypeInfo
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
-import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
+import eu.ddmore.mdl.type.TypeInfo
+import eu.ddmore.mdl.validation.TypeSystemValidator
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
@@ -19,6 +20,7 @@ class TypeSystemProviderTest {
 //	@Inject extension ValidationTestHelper
 	
 	extension TypeSystemProvider th = new TypeSystemProvider 
+	extension TypeSystemValidator tsv = new TypeSystemValidator
 
 	@Test
 	def void testTypeExpectedFuncCallExpression(){

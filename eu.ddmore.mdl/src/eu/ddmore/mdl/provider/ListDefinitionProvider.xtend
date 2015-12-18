@@ -9,8 +9,8 @@ import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
+import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import java.util.ArrayList
 import java.util.Collections
@@ -170,7 +170,7 @@ class ListDefinitionProvider {
 		EcoreUtil2.getContainerOfType(eContainer, ListDefinition)
 	} 
 	
-	def getAttributeType(ListDefInfo it, String attName){
+	def TypeInfo getAttributeType(ListDefInfo it, String attName){
 		attributes.findFirst(ad | ad.name == attName)?.attType ?: TypeSystemProvider::UNDEFINED_TYPE 
 	}
 	

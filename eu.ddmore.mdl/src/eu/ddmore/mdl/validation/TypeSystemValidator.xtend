@@ -26,7 +26,7 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.type.TypeSystemProvider.TypeInfo
+import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
@@ -34,6 +34,14 @@ import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.type.PrimitiveType
+import eu.ddmore.mdl.mdl.CategoryValueReference
+import eu.ddmore.mdl.type.GenericEnumTypeInfo
+import eu.ddmore.mdl.type.EnumTypeInfo
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider
+import eu.ddmore.mdl.provider.SublistDefinitionProvider
+import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -42,6 +50,9 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension TypeSystemProvider typeProvider = new TypeSystemProvider
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
+	extension SublistDefinitionProvider subListProvider = new SublistDefinitionProvider
+	extension PropertyDefinitionProvider propProvider = new PropertyDefinitionProvider
 	
 	// Type handling	
 	private def (TypeInfo, TypeInfo) => void typeError(EStructuralFeature feature){ 
@@ -203,6 +214,192 @@ class TypeSystemValidator extends AbstractMdlValidator {
 							MdlPackage.eINSTANCE.valuePair_Expression, MdlValidator::INCOMPATIBLE_TYPES, a.typeName)
 				])
 		}
+	}
+
+	def checkExpectedBoolean(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(TypeSystemProvider::BOOLEAN_TYPE, exp, errorLambda)
+	}
+	
+	def checkExpectedReal(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE, exp, errorLambda)
+	}
+	
+	def checkExpectedVector(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(TypeSystemProvider.REAL_VECTOR_TYPE, exp, errorLambda)
+	}
+	
+	def checkExpectedMatrix(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(TypeSystemProvider.REAL_MATRIX_TYPE, exp, errorLambda)
+	}
+	
+	def checkExpectedIntl(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(TypeSystemProvider::INT_TYPE, exp, errorLambda)
+	}
+	
+	def checkExpectedPdf(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE, exp, errorLambda)
+	}
+
+	def checkExpectedPdfVector(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeVector, exp, errorLambda)
+	}
+
+	def checkExpectedRealTransform(String transform, (TypeInfo, TypeInfo) => void errorLambda){
+		val actualType = transform.transformFunctionType
+		val expectedType = TypeSystemProvider::REAL_TYPE
+		if(actualType != expectedType)
+			errorLambda.apply(expectedType, actualType ?: TypeSystemProvider::UNDEFINED_TYPE)
+	}
+	
+	def checkExpectedString(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(TypeSystemProvider::STRING_TYPE, exp, errorLambda)
+	}
+	
+	def checkRelationalOp(Expression lhs, Expression rhs, (TypeInfo, TypeInfo) => void leftErrorLambda,
+			(TypeInfo, TypeInfo) => void rightErrorLambda){
+		val lhsType = lhs?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
+//		val rhsType = rhs?.typeFor?.theType ?: UNDEFINED_TYPE.theType
+		if(lhsType.theType == PrimitiveType.Enum){
+			checkExpectedAndExpression(lhsType, lhs, leftErrorLambda)
+			checkExpectedAndExpression(lhsType, rhs, rightErrorLambda)
+		}
+		else{
+			checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE, lhs, leftErrorLambda)
+			checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE, rhs, rightErrorLambda)
+		}
+		
+//		if(lhsType != REAL_TYPE.theType && lhsType != ENUM_TYPE.theType)
+//			leftErrorLambda.apply(PrimitiveType.Real, lhsType)
+//		if(rhsType != REAL_TYPE.theType && rhsType != ENUM_TYPE.theType)
+//			rightErrorLambda.apply(PrimitiveType.Real, rhsType)
+//		if(rhsType != lhsType)
+//			leftErrorLambda.apply(lhsType, rhsType)
+	}
+
+	def checkMathsOp(Expression lhs, Expression rhs, (TypeInfo, TypeInfo) => void leftErrorLambda,
+		(TypeInfo, TypeInfo) => void rightErrorLambda){
+		checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE, lhs, leftErrorLambda)
+		checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE, rhs, rightErrorLambda)
+	}
+
+	def checkBoolOp(Expression lhs, Expression rhs, (TypeInfo, TypeInfo) => void leftErrorLambda,
+				(TypeInfo, TypeInfo) => void rightErrorLambda){
+		checkExpectedAndExpression(TypeSystemProvider::BOOLEAN_TYPE, lhs, leftErrorLambda)
+		checkExpectedAndExpression(TypeSystemProvider::BOOLEAN_TYPE, rhs, rightErrorLambda)
+	}
+
+	def checkUnaryOp(String feature, Expression operand, (TypeInfo, TypeInfo) => void errorLambda){
+		if(feature == '!') checkExpectedAndExpression(TypeSystemProvider::BOOLEAN_TYPE, operand, errorLambda)
+		else checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE, operand, errorLambda)
+	}
+	
+	
+	def checkAsOperator(Expression lhs, Expression rhs,  (TypeInfo, TypeInfo) => void leftErrorLambda,
+				(TypeInfo, TypeInfo) => void rightErrorLambda){
+		checkExpectedAndExpression(TypeSystemProvider::INT_TYPE, lhs, leftErrorLambda)
+		if(rhs?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE == TypeSystemProvider::MAPPING_TYPE){
+			checkExpectedAndExpression(TypeSystemProvider::MAPPING_TYPE, rhs, rightErrorLambda)
+		}
+		else{
+			checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE.makeReference, rhs, rightErrorLambda)
+		}
+	}
+	
+	def checkWhenOperator(EnumPair at, CategoryValueReference lhs, Expression rhs,  (TypeInfo, TypeInfo) => void leftErrorLambda,
+				(TypeInfo, TypeInfo) => void rightErrorLambda){
+		checkExpectedEnumType(lhs, leftErrorLambda)
+		if(rhs != null){
+			validateCategoricalMappingType(at, rhs, rightErrorLambda)
+//			val attList = at.eContainer as AttributeList
+//			val listDefn = attList.matchingListDefn
+//			var expectedType = listDefn?.getCategoryMappingType(at.attributeName) ?: UNDEFINED_TYPE
+//			checkExpectedAndExpression(expectedType, rhs, rightErrorLambda)
+		}
+	}
+	
+	def checkWhenOperator(EnumPair at, CategoryValueDefinition catValDefn,  (TypeInfo, TypeInfo) => void leftErrorLambda,
+				(TypeInfo, TypeInfo) => void rightErrorLambda){
+		val actualType = catValDefn.typeFor
+		if(actualType.theType != PrimitiveType.Enum){
+			leftErrorLambda.apply(new GenericEnumTypeInfo, actualType)
+		}
+		if(catValDefn.mappedTo != null){
+			validateCategoricalMappingType(at, catValDefn.mappedTo, rightErrorLambda)
+//			val attList = at.eContainer as AttributeList
+//			val listDefn = attList.matchingListDefn
+//			var expectedType = listDefn?.getCategoryMappingType(at.attributeName) ?: UNDEFINED_TYPE
+//			checkExpectedAndExpression(expectedType, catValDefn.mappedTo, rightErrorLambda)
+		}
+	}
+
+	private  def void validateCategoricalMappingType(EnumPair at, Expression mappingExpr, (TypeInfo, TypeInfo) => void typeErrorLambda){
+		val attList = at.eContainer as AttributeList
+		val listDefn = attList.matchingListDefn
+		val attDefn = listDefn?.getAttributeDefinition(at.attributeName)
+		if(attDefn.isCatMappingPossible){
+			val expectedType = attDefn.catMappingType ?: TypeSystemProvider::UNDEFINED_TYPE
+			checkExpectedAndExpression(expectedType, mappingExpr, typeErrorLambda)
+		}
+	}
+
+	
+	def dispatch void checkExpectedAndExpression(EnumTypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
+		if(!expectedType.isCompatible(actualType)){
+			errorLambda.apply(expectedType, actualType)
+		} 
+	}
+	
+	def void checkExpectedEnumType(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
+		if(actualType.theType != PrimitiveType.Enum){
+			errorLambda.apply(new GenericEnumTypeInfo, actualType)
+		}
+	}
+	
+	def dispatch void checkExpectedAndExpression(TypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
+		if(!expectedType.isCompatible(actualType)){
+			errorLambda.apply(expectedType, actualType)
+		} 
+	}
+
+	def checkAttributeTyping(AttributeList attList, ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
+		val listDefn = attList.matchingListDefn
+		if(listDefn != null){
+			val attType = listDefn.getAttributeType(at.attributeName)
+			switch(at){
+				ValuePair:
+					checkExpectedAndExpression(attType, at.expression, errorLambda)				
+			}
+		}
+	}
+
+
+	def checkPropertyAttributeTyping(PropertyStatement stmt, ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
+		val attType = at.typeForProperty
+		switch(at){
+			ValuePair:
+				checkExpectedAndExpression(attType, at.expression, errorLambda)				
+		}
+	}
+
+
+	def checkSublistAttributeTyping(SubListExpression it, ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
+		val subListDefn = findSublistMatch
+
+		if(subListDefn != null){
+			val attDefn = subListDefn.attributes.findFirst[name == at.attributeName]
+			checkExpectedAndExpression(attDefn.attType, at.expression, errorLambda)
+		}
+	}
+
+	def checkNamedFunctionArgumentTyping(ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(at.namedArgumentType, at.expression, errorLambda)				
+	}
+
+	def checkFunctionArgumentTyping(UnnamedArgument at, (TypeInfo, TypeInfo) => void errorLambda){
+		checkExpectedAndExpression(at.unamedArgumentType, at.argument, errorLambda)				
 	}
 
 	

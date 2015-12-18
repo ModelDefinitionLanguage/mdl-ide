@@ -1,6 +1,6 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.type.TypeSystemProvider.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import java.util.List
 import java.util.Map
