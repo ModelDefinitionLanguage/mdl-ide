@@ -1666,11 +1666,11 @@ class MogValidatorTest {
 	def void testValidMultiDosingMatchMog(){
 		val mcl = '''
 		testData = dataObj {
-			DECLARED_VARIABLES { D; CENTRAL; Y }
+			DECLARED_VARIABLES { D; D2; Y }
 			DATA_INPUT_VARIABLES {
 				T : { use is idv }
 				CMT : { use is cmt }
-				AMT : { use is amt, define = { 1 in CMT as D, 2 in CMT as CENTRAL, 3 in CMT as Y } }
+				AMT : { use is amt, define = { 1 in CMT as D, 2 in CMT as D2, 3 in CMT as Y } }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
 			    foo : {file = "warfarin_conc.csv", 
@@ -1685,9 +1685,10 @@ class MogValidatorTest {
 				
 				MODEL_PREDICTION{
 					COMPARTMENT{
-						D:   {type is depot, modelCmt=1, to=CENTRAL, ka=1, tlag=1}
-				     	CENTRAL:    {type is compartment, modelCmt=2}
-			             ::   {type is elimination, modelCmt=2, from=CENTRAL, v=1, cl=1}
+						D:   {type is depot, to=CENTRAL, ka=1, tlag=1}
+						D2:   {type is direct, to=CENTRAL, tlag=1}
+						CENTRAL:    {type is compartment, modelCmt=2}
+			             ::   {type is elimination, from=CENTRAL, v=1, cl=1}
 						}
 					Y
 				}

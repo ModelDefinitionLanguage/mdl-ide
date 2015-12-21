@@ -76,16 +76,17 @@ class ListDefinitionTable {
 	public static val CATEGORICAL_LIST_TYPE = new EnumListTypeInfo("CatObs")
 
 	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real, DERIV_SUPER_LIST)
-	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
-	static val AMT_COL_TYPE = new ListTypeInfo("Amt", PrimitiveType.Real)
-	public static val CMT_COL_TYPE = new ListTypeInfo("Cmt", PrimitiveType.List)
-	public static val DVID_COL_TYPE = new ListTypeInfo("Dvid", PrimitiveType.List)
-	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration", PrimitiveType.List)
-	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", PrimitiveType.List)
-	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", PrimitiveType.List)
-	public static val DERIV_SAMPLING_TYPE = new ListTypeInfo("DerivedSampling", PrimitiveType.List)
-	public static val PRIOR_SOURCE_TYPE = new ListTypeInfo("PriorSource", PrimitiveType.List)
-	public static val STUDY_DESIGN_LIST_TYPE = new ListTypeInfo("StudyDesign", PrimitiveType.List)
+	static val IDV_COL_TYPE = new ListTypeInfo("Idv")
+	static val AMT_COL_TYPE = new ListTypeInfo("Amt")
+	public static val CMT_COL_TYPE = new ListTypeInfo("Cmt")
+	public static val DVID_COL_TYPE = new ListTypeInfo("Dvid")
+	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration")
+	public static val SAMPLING_SUPER_LIST = new ListSuperTypeInfo("DerivSuper") 
+	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", SAMPLING_SUPER_LIST)
+//	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", PrimitiveType.List)
+	public static val DERIV_SAMPLING_TYPE = new ListTypeInfo("DerivedSampling", SAMPLING_SUPER_LIST)
+	public static val PRIOR_SOURCE_TYPE = new ListTypeInfo("PriorSource")
+	public static val STUDY_DESIGN_LIST_TYPE = new ListTypeInfo("StudyDesign")
 	
 	public static val Map<String, BlockListDefinition> attributeDefnDefaults = #{ 
 		"DATA_INPUT_VARIABLES" -> (
@@ -583,17 +584,18 @@ class ListDefinitionTable {
 //						 new AttributeDefn('numberSamples', false, MclTypeProvider::INT_TYPE.makeVector)
 //						 ]
 //					),
-					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
+//					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
+//						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
+//						 new AttributeDefn('combination', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::SAMPLING_SEQ_SUBLIST).makeVector),
+//						 new AttributeDefn('numberTimes', false, TypeSystemProvider::INT_TYPE)
+//						 ]
+//					)//,
+					new ListDefInfo('derived', DERIV_SAMPLING_TYPE, #[
 						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
-						 new AttributeDefn('combination', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::COMPLEX_COMBINATION_SUBLIST).makeVector),
+						 new AttributeDefn('combination', true, SAMPLING_SUPER_LIST.makeReference.makeVector),
 						 new AttributeDefn('numberTimes', false, TypeSystemProvider::INT_TYPE)
 						 ]
-					)//,
-//					new ListDefInfo('derived', DERIV_SAMPLING_TYPE, #[
-//						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE), new AttributeDefn('combination', true, SAMPLING_TYPE.makeReference.makeVector),
-//						 new AttributeDefn('numberTimes', false, MclTypeProvider::INT_TYPE)
-//						 ]
-//					)
+					)
 				)
 			)
 		)
