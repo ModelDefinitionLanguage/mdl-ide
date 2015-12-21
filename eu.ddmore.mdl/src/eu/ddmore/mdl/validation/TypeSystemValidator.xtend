@@ -342,10 +342,13 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		}
 	}
 
-	
 	def dispatch void checkExpectedAndExpression(EnumTypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
-		if(!expectedType.isCompatible(actualType)){
+		var testActual = actualType
+		if(expectedType.isVector && !actualType.isVector){
+			testActual = actualType.makeVector
+		}
+		if(!expectedType.isCompatible(testActual)){
 			errorLambda.apply(expectedType, actualType)
 		} 
 	}
@@ -359,18 +362,21 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	
 	def dispatch void checkExpectedAndExpression(TypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
-		if(!expectedType.isCompatible(actualType)){
+		var testActual = actualType
+		if(expectedType.underlyingType.isVector && !actualType.underlyingType.isVector){
+			testActual = actualType.makeVector
+		}
+		if(!expectedType.isCompatible(testActual)){
 			errorLambda.apply(expectedType, actualType)
 		} 
 	}
 
 	def checkAttributeTyping(AttributeList attList, ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
 		val listDefn = attList.matchingListDefn
-		if(listDefn != null){
+		if(listDefn != null && at != null){
 			val attType = listDefn.getAttributeType(at.attributeName)
-			switch(at){
-				ValuePair:
-					checkExpectedAndExpression(attType, at.expression, errorLambda)				
+			if(at instanceof ValuePair){
+				checkExpectedAndExpression(attType, at.expression, errorLambda)				
 			}
 		}
 	}
@@ -378,9 +384,8 @@ class TypeSystemValidator extends AbstractMdlValidator {
 
 	def checkPropertyAttributeTyping(PropertyStatement stmt, ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
 		val attType = at.typeForProperty
-		switch(at){
-			ValuePair:
-				checkExpectedAndExpression(attType, at.expression, errorLambda)				
+		if(at instanceof ValuePair){
+			checkExpectedAndExpression(attType, at.expression, errorLambda)				
 		}
 	}
 
