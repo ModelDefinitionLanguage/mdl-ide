@@ -1718,6 +1718,62 @@ class MogValidatorTest {
 	}
 
 	@Test
+	def void testInvalidMultiDosingToCompMacroMog(){
+		val mcl = '''
+		testData = dataObj {
+			DECLARED_VARIABLES { D; CENTRAL; Y }
+			DATA_INPUT_VARIABLES {
+				T : { use is idv }
+				CMT : { use is cmt }
+				AMT : { use is amt, define = { 1 in CMT as D, 2 in CMT as CENTRAL, 3 in CMT as Y } }
+			} # end DATA_INPUT_VARIABLES
+			SOURCE {
+			    foo : {file = "warfarin_conc.csv", 
+			       		inputFormat  is nonmemFormat } 
+			} # end SOURCE
+		}		
+		testMdl = mdlObj {
+				IDV{T}
+				
+				VARIABILITY_LEVELS{
+				}
+				
+				MODEL_PREDICTION{
+					COMPARTMENT{
+						D:   {type is depot, to=CENTRAL, ka=1, tlag=1}
+						CENTRAL:    {type is compartment, modelCmt=2}
+			             ::   {type is elimination, from=CENTRAL, v=1, cl=1}
+						}
+					Y
+				}
+		
+		}
+		p1 = parObj{
+			
+		}
+		
+		t1 = taskObj{
+			ESTIMATE{
+				set algo is saem
+			}
+		}
+		
+		mog = mogObj{
+			OBJECTS{
+				testData : { type is dataObj }
+				testMdl : { type is mdlObj }
+				p1 : { type is parObj }
+				t1 : { type is taskObj }
+			}
+		}
+		'''.parse
+	
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"dosing variable 'CENTRAL' can only dose to a dosing compartment macro.")
+	}
+
+	@Test
 	def void testValidMultiDosingMisMatchMog(){
 		val mcl = '''
 		testData = dataObj {

@@ -54,6 +54,10 @@ class DomainObjectModelUtils {
 		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 	}
 	
+	def getOwningBlock(Statement it){
+		EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+	}
+	
 	def getParentStatement(AttributeList it){
 		EcoreUtil2.getContainerOfType(it, BlockStatement)
 //		eContainer.eContainer.eContainer as BlockStatement

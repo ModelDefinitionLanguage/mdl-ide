@@ -178,6 +178,11 @@ class MogValidator extends AbstractDeclarativeValidator {
 			if(stmt == null){
 				errorLambda.apply(MdlValidator::MODEL_DATA_MISMATCH, "dosing variable " + dataDose.name +" has no match in mdlObj");
 			}
+			else if(stmt.isMdlCompartmentMacro){
+				if(!stmt.isCmtDosingMacro){
+					errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "dosing variable '" + dataDose.name +"' can only dose to a dosing compartment macro.");
+				}
+			}
 			else if(!stmt.typeFor.isCompatible(dataDose.typeFor)){
 				errorLambda.apply(MdlValidator::INCOMPATIBLE_TYPES, "dosing variable " + dataDose.name +" has an inconsistent type with its match in the mdlObj");
 			}

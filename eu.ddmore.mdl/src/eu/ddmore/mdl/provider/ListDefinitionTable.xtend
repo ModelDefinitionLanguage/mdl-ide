@@ -50,6 +50,9 @@ class ListDefinitionTable {
 	public static val VAR_LVL_PARAM_VALUE = 'parameter' 
 	public static val VAR_LVL_OBS_VALUE = 'observation' 
 	
+	public static val CMT_DIRECT_VALUE = 'direct'
+	public static val CMT_DEPOT_VALUE = 'depot'
+	
 
 	public static val USE_TYPE = new BuiltinEnumTypeInfo('divUse', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, MDV_USE_VALUE, IDV_USE_VALUE,
 		ID_USE_VALUE, RATE_USE_VALUE, IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, SS_USE_VALUE, II_USE_VALUE, ADDL_USE_VALUE
@@ -58,7 +61,7 @@ class ListDefinitionTable {
 	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('varLvlType', #{VAR_LVL_PARAM_VALUE, VAR_LVL_OBS_VALUE})
 	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
 	static val PRIOR_INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('priorInput', #{'RList'})
-	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{'depot', 'compartment', 'elimination', 'transfer', 'distribution', 'direct', 'input', 'effect'})
+	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{CMT_DEPOT_VALUE, 'compartment', 'elimination', 'transfer', 'distribution', CMT_DIRECT_VALUE, 'effect'})
 	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
 	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{CATEGORICAL_OBS_VALUE, COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
 	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
@@ -207,7 +210,7 @@ class ListDefinitionTable {
 		),
 		"COMPARTMENT" -> (
 			new BlockListDefinition(CMT_TYPE_ATT, newArrayList(
-					new ListDefInfo ('direct', new ListTypeInfo("Direct", PrimitiveType.Real),  #[
+					new ListDefInfo (CMT_DIRECT_VALUE, new ListTypeInfo("Direct", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE),
 						 new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
 						 new AttributeDefn('to', true, DERIV_SUPER_LIST.makeReference),
@@ -230,7 +233,7 @@ class ListDefinitionTable {
 						 ],
 						 false
 					),
-					new ListDefInfo ('depot', new ListTypeInfo("Depot", PrimitiveType.Real),  #[
+					new ListDefInfo (CMT_DEPOT_VALUE, new ListTypeInfo("Depot", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
 						 new AttributeDefn('to', true, DERIV_SUPER_LIST.makeReference),
 //						 new AttributeDefn('target', true, DERIV_TYPE.makeReference),

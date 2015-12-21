@@ -548,4 +548,19 @@ class MdlUtils {
     	val lstType = sd.typeFor
     	lstType?.typeName == ListDefinitionTable::DERIV_TYPE.typeName
     }
+    
+    def isMdlCompartmentMacro(Statement it){
+    	owningBlock.identifier == BlockDefinitionTable::MDL_CMT_BLK
+    }
+    
+    static val dosingMacros = #{ ListDefinitionTable::CMT_DIRECT_VALUE, ListDefinitionTable::CMT_DEPOT_VALUE }
+    
+    def isCmtDosingMacro(Statement it){
+    	val stmt = it
+    	if(stmt instanceof ListDefinition){
+    		val macroType = stmt.list.getAttributeEnumValue(ListDefinitionTable::CMT_TYPE_ATT)
+    		dosingMacros.contains(macroType)   
+    	}
+    	else false
+    }
 }
