@@ -65,15 +65,24 @@ EquationTypeDefinition:
 ;
 
 EquationDefinition returns EquationTypeDefinition:
-	{EquationDefinition} name = ID (ASSIGN expression = Expression)? ';'?
-;
-
-EnumerationDefinition:
-	name = ID  catDefn=CategoricalDefinitionExpr ';'?
+	{EquationDefinition} name = ID typeSpec=TypeSpec? (ASSIGN expression = Expression)? ';'?
 ;
 
 TransformedDefinition returns EquationTypeDefinition:
 	{TransformedDefinition} transform = ID '(' name=ID ')' ASSIGN expression=Expression ';'?
+;
+
+RandomVariableDefinition:
+	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
+;
+
+TypeSpec:
+	{TypeSpec} typeName=TYPE_SPEC ('[' elementType=TypeSpec ']'|'[[' cellType=TypeSpec ']]')?
+;
+
+
+EnumerationDefinition:
+	name = ID  catDefn=CategoricalDefinitionExpr ';'?
 ;
 
 CategoricalProbabilityAssign:
@@ -85,10 +94,6 @@ ProbabilityFunction:
 	probFunc = ID '(' catRef=SymbolReference relOp=('=='|'<='|'>='|'<'|'>') catValRef=CategoryValueReference ')'
 ;
 
-
-RandomVariableDefinition:
-	name = ID RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
-;
 
 ListDefinition:
 	name = ID LIST_ASSIGN list = AttributeList ';'?
@@ -192,18 +197,12 @@ OpEquality:
 	'==' | '!=' ;
 
 RelationalExpression returns Expression:
-	RangeExpression
+	AdditiveExpression
 	(
-	 =>({RelationalExpression.leftOperand=current} feature=OpCompare) rightOperand=RangeExpression)*;
+	 =>({RelationalExpression.leftOperand=current} feature=OpCompare) rightOperand=AdditiveExpression)*;
 
 OpCompare:
 	'>=' | '<=' | '>' | '<' ;
-
-RangeExpression returns Expression:
-	AdditiveExpression (
-		=>({RangeExpression.begin=current} LIST_ASSIGN) end=AdditiveExpression
-	)*
-	;
 
 AdditiveExpression returns Expression:
 	MultiplicativeExpression (=>({AdditiveExpression.leftOperand=current} feature=OpAdd)
@@ -279,7 +278,7 @@ Literal returns Expression:
 	IntegerLiteral |
 	StringLiteral |
 	BooleanLiteral |
-//	VectorLiteral |
+	VectorLiteral |
 	MatrixLiteral
 ;
 
@@ -288,11 +287,13 @@ SymbolReference:
 ;
 
 IndexSpec:
-		{IndexSpec} indexExpr += IndexRange (',' indexExpr += IndexRange)? 
+		{IndexSpec} rowIdx = IndexRange? (',' colIdx = IndexRange?)? 
 			;
 
 IndexRange:
-		{IndexRange} (expr=Expression | all?=LIST_ASSIGN) 
+		{IndexRange} (
+			begin=Expression (LIST_ASSIGN end=Expression)?
+		)
 		;
 
 CategoryValueReference:
@@ -339,7 +340,7 @@ StringLiteral returns Expression:
 
 
 MatrixLiteral returns Expression:
-	{MatrixLiteral} '[' rows += MatrixRow (=> ';' rows += MatrixRow)* ']'
+	{MatrixLiteral} '[[' rows += MatrixRow (=> ';' rows += MatrixRow)* ']]'
 ;	
 
 MatrixRow returns Expression:
@@ -350,13 +351,13 @@ MatrixElement returns Expression:
 	{MatrixElement} cell=Expression
 ;
 
-//VectorLiteral returns Expression:
-//	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
-//;	
-//
-//VectorElement returns Expression:
-//	{VectorElement} element=Expression
-//;
+VectorLiteral returns Expression:
+	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
+;	
+
+VectorElement returns Expression:
+	{VectorElement} element=Expression
+;
 
 QualifiedName:
 	ID ('.' ID)
@@ -365,6 +366,10 @@ QualifiedName:
 
 terminal CONSTANT:
 	'inf'|'pi'|'exponentiale'
+;
+
+terminal TYPE_SPEC:
+	'::' + ('A'..'Z')('a'..'z'|'A'..'Z'| '0'..'9')+
 ;
 
 terminal SET: 'set';
