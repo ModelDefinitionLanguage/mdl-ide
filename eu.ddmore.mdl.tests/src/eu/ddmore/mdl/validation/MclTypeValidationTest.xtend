@@ -704,7 +704,7 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
+		mcl.assertError(MdlPackage::eINSTANCE.matrixElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Element type 'Boolean' is incompatible with vector type 'Vector:Real'."
 		)
@@ -779,7 +779,7 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
+		mcl.assertError(MdlPackage::eINSTANCE.matrixElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Element type 'Vector:Int' is incompatible with vector type 'Vector:Int'."
 		)
@@ -803,7 +803,7 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
+		mcl.assertError(MdlPackage::eINSTANCE.matrixElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Element type 'ref:vector:Real' is incompatible with vector type 'vector:Real'."
 		)
@@ -828,7 +828,7 @@ class MclTypeValidationTest {
 			}
 		}
 	'''.parse
-		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
+		mcl.assertError(MdlPackage::eINSTANCE.matrixElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Element type 'Real' is incompatible with vector type 'Vector:List:SimpleSampling'."
 		)

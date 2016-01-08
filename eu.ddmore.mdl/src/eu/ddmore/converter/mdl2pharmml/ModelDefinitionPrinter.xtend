@@ -19,14 +19,13 @@ import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
-import eu.ddmore.mdl.mdl.VectorElement
-import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.utils.MdlUtils
 import java.util.ArrayList
 import java.util.Comparator
 import java.util.HashMap
@@ -40,7 +39,6 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.utils.MdlUtils
 
 class ModelDefinitionPrinter {
 	extension MdlUtils mu = new MdlUtils
@@ -347,16 +345,16 @@ class ModelDefinitionPrinter {
 	}
 	
 	def writeFixedEffects(Expression expr){
-		val it = expr as VectorLiteral
+//		val it = expr as VectorLiteral
 		'''
-		«FOR el : expressions»
-			<Covariate>
-				«((el as VectorElement).element as SubListExpression).writeFixedEffectCovariate»
-				<FixedEffect>
-					«((el as VectorElement).element as SubListExpression).writeFixedEffectCoefficient»
-				</FixedEffect>
-			</Covariate>
-		«ENDFOR»
+«««		«FOR el : expressions»
+«««			<Covariate>
+«««				«((el as VectorElement).element as SubListExpression).writeFixedEffectCovariate»
+«««				<FixedEffect>
+«««					«((el as VectorElement).element as SubListExpression).writeFixedEffectCoefficient»
+«««				</FixedEffect>
+«««			</Covariate>
+«««		«ENDFOR»
 		'''
 		
 	}
@@ -404,40 +402,40 @@ class ModelDefinitionPrinter {
 	
 	
 	def writeRandomEffects(Expression expr)'''
-		«IF expr instanceof VectorLiteral»
-			«FOR e : (expr as VectorLiteral).expressions»
-				<RandomEffects>
-					«IF (e as VectorElement).element instanceof SymbolReference»
-						«(e as VectorElement).element.pharmMLExpr»
-					«ELSE»
-						<ERROR!>
-					«ENDIF»
-				</RandomEffects>
-			«ENDFOR»
-		«ENDIF»
+«««		«IF expr instanceof VectorLiteral»
+«««			«FOR e : (expr as VectorLiteral).expressions»
+«««				<RandomEffects>
+«««					«IF (e as VectorElement).element instanceof SymbolReference»
+«««						«(e as VectorElement).element.pharmMLExpr»
+«««					«ELSE»
+«««						<ERROR!>
+«««					«ENDIF»
+«««				</RandomEffects>
+«««			«ENDFOR»
+«««		«ENDIF»
 		'''
 	
 	def writeLinearIdv(EquationTypeDefinition it){
 		var funcExpr = expression as BuiltinFunctionCall
 		var namedArgList = funcExpr.argList as NamedFuncArguments 
-		val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
+//		val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
 		'''
-		<IndividualParameter symbId="«name»">
-			<GaussianModel>
-				«IF namedArgList.getArgumentExpression('trans') != null»
-					<Transformation>«namedArgList.getArgumentExpression('trans').convertToString.getPharmMLTransFunc»</Transformation>
-				«ENDIF»
-				<LinearCovariate>
-					<PopulationParameter>
-						«namedArgList.getArgumentExpression('pop').writeAssignment»
-					</PopulationParameter>
-					«IF fixEff != null && !fixEff.expressions.isEmpty »
-						«namedArgList.getArgumentExpression('fixEff').writeFixedEffects»
-					«ENDIF»
-				</LinearCovariate>
-				«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
-			</GaussianModel>
-		</IndividualParameter>
+«««		<IndividualParameter symbId="«name»">
+«««			<GaussianModel>
+«««				«IF namedArgList.getArgumentExpression('trans') != null»
+«««					<Transformation>«namedArgList.getArgumentExpression('trans').convertToString.getPharmMLTransFunc»</Transformation>
+«««				«ENDIF»
+«««				<LinearCovariate>
+«««					<PopulationParameter>
+«««						«namedArgList.getArgumentExpression('pop').writeAssignment»
+«««					</PopulationParameter>
+«««					«IF fixEff != null && !fixEff.expressions.isEmpty »
+«««						«namedArgList.getArgumentExpression('fixEff').writeFixedEffects»
+«««					«ENDIF»
+«««				</LinearCovariate>
+«««				«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
+«««			</GaussianModel>
+«««		</IndividualParameter>
 		''' 
 	}
 	
@@ -461,11 +459,11 @@ class ModelDefinitionPrinter {
 	}
 	
 	def writeVariableDefinition(EquationDefinition stmt)'''
-		<ct:Variable symbId="«stmt.name»" symbolType="«IF stmt.isVector»ERROR!«ELSE»real«ENDIF»">
-			«IF stmt.expression != null»
-				«stmt.expression.writeAssignment»
-			«ENDIF»
-		</ct:Variable>
+«««		<ct:Variable symbId="«stmt.name»" symbolType="«IF stmt.isVector»ERROR!«ELSE»real«ENDIF»">
+«««			«IF stmt.expression != null»
+«««				«stmt.expression.writeAssignment»
+«««			«ENDIF»
+«««		</ct:Variable>
 	'''
 	
 	
@@ -692,23 +690,23 @@ class ModelDefinitionPrinter {
 			for (s: pObj.getParamCorrelations){
 				val corrDefn = s as ListDefinition
 				val type = corrDefn.list.getAttributeEnumValue('type');
-				if (type == 'corr' || type == 'cov'){
-					val params = corrDefn.list.getAttributeExpression('parameter') as VectorLiteral
-					val values = corrDefn.list.getAttributeExpression('value') as VectorLiteral
-					var k = 0;
-					for(i : 1 .. params.expressions.size - 1){
-						for(j : 0 .. i -1){
-							val rv1 = params.expressions.get(j).vectorElementAsSymbolReference
-							val rv2 = params.expressions.get(i).vectorElementAsSymbolReference
-							if (k < values.expressions.size){
-								var value = values.expressions.get(k) as VectorElement;
-								k = k + 1;
-								val level = mObj.getLevel(rv1.ref);
-								model += print_mdef_Correlation(type, level, rv1, rv2, value.element)
-							}							
-						}
-					}
-				}
+//				if (type == 'corr' || type == 'cov'){
+//					val params = corrDefn.list.getAttributeExpression('parameter') as VectorLiteral
+//					val values = corrDefn.list.getAttributeExpression('value') as VectorLiteral
+//					var k = 0;
+//					for(i : 1 .. params.expressions.size - 1){
+//						for(j : 0 .. i -1){
+//							val rv1 = params.expressions.get(j).vectorElementAsSymbolReference
+//							val rv2 = params.expressions.get(i).vectorElementAsSymbolReference
+//							if (k < values.expressions.size){
+//								var value = values.expressions.get(k) as VectorElement;
+//								k = k + 1;
+//								val level = mObj.getLevel(rv1.ref);
+//								model += print_mdef_Correlation(type, level, rv1, rv2, value.element)
+//							}							
+//						}
+//					}
+//				}
 			} 
 //					for (i: 1..params.vector.expression.expressions.size - 1){
 //						for (j: 0..i - 1){

@@ -6,19 +6,19 @@ import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockTextBody
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.Expression
+import eu.ddmore.mdl.mdl.MatrixElement
+import eu.ddmore.mdl.mdl.MclObject
+import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.Statement
+import eu.ddmore.mdl.mdl.SymbolDefinition
+import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
-import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.MclObject
 import java.util.Collections
-import eu.ddmore.mdl.mdl.SymbolDefinition
-import eu.ddmore.mdl.mdl.VectorElement
-import eu.ddmore.mdl.mdl.SymbolReference
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.NamedFuncArguments
-import eu.ddmore.mdl.mdl.EnumExpression
-import eu.ddmore.mdl.mdl.Statement
+import org.eclipse.xtext.EcoreUtil2
 
 class DomainObjectModelUtils {
 	
@@ -129,8 +129,8 @@ class DomainObjectModelUtils {
 
 	def getVectorElementAsSymbolReference(Expression expr){
 		switch(expr){
-			VectorElement:{
-				val e = expr.element
+			MatrixElement:{
+				val e = expr.cell
 				switch(e){
 					SymbolReference: e as SymbolReference
 					default: null

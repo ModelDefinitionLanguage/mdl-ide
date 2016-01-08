@@ -5,10 +5,12 @@ import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.CatValRefMapping
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
+import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MdlPackage
@@ -24,24 +26,20 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdl.VectorElement
-import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.PropertyDefinitionProvider
+import eu.ddmore.mdl.provider.SublistDefinitionProvider
+import eu.ddmore.mdl.type.EnumTypeInfo
+import eu.ddmore.mdl.type.GenericEnumTypeInfo
+import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.provider.ListDefinitionProvider
-import eu.ddmore.mdl.type.TypeSystemProvider
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.type.PrimitiveType
-import eu.ddmore.mdl.mdl.CategoryValueReference
-import eu.ddmore.mdl.type.GenericEnumTypeInfo
-import eu.ddmore.mdl.type.EnumTypeInfo
-import eu.ddmore.mdl.provider.BuiltinFunctionProvider
-import eu.ddmore.mdl.provider.SublistDefinitionProvider
-import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -141,20 +139,20 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	def validateCompatibleTypes(EquationDefinition e){
 		// only check if there is an RHS to check 
 		if(e.expression != null)
-			if(e.isVector)
-				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
-			else if(e.isMatrix)
-				checkExpectedMatrix(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
-			else
+//			if(e.isVector)
+//				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
+//			else if(e.isMatrix)
+//				checkExpectedMatrix(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
+//			else
 				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 	}
 		
 	@Check
 	def validateCompatibleTypes(RandomVariableDefinition e){
 		if(e.distn != null){
-			if(e.isVector)
-				checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
-			else 
+//			if(e.isVector)
+//				checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+//			else 
 				checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
 		}
 	}
@@ -165,18 +163,18 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 	}
 		
-	@Check
-	def validateCompatibleVectorElement(VectorElement e){
-		if(e.eContainer instanceof VectorLiteral){
-			val vect = e.eContainer as VectorLiteral
-			val vectType = vect.typeFor
-			val exprType = e.typeFor
-			if(!vectType.isCompatibleElement(exprType)){
-				error("Element type '" + exprType.typeName + "' is incompatible with vector type '" + vectType.typeName + "'.",
-					MdlPackage.eINSTANCE.vectorElement_Element, MdlValidator::INCOMPATIBLE_TYPES, vectType.typeName)
-			}			
-		}
-	}
+//	@Check
+//	def validateCompatibleVectorElement(VectorElement e){
+//		if(e.eContainer instanceof VectorLiteral){
+//			val vect = e.eContainer as VectorLiteral
+//			val vectType = vect.typeFor
+//			val exprType = e.typeFor
+//			if(!vectType.isCompatibleElement(exprType)){
+//				error("Element type '" + exprType.typeName + "' is incompatible with vector type '" + vectType.typeName + "'.",
+//					MdlPackage.eINSTANCE.vectorElement_Element, MdlValidator::INCOMPATIBLE_TYPES, vectType.typeName)
+//			}			
+//		}
+//	}
 	
 	
 	@Check

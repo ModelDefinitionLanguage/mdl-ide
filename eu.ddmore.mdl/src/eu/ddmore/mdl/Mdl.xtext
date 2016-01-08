@@ -52,7 +52,7 @@ SymbolDefinition:
 
 
 UserFunctionDefinition:
-	{UserFunctionDefinition} name = ID (vector?='[' ']'|matrix?='[[' ']]')? ASSIGN 'function' '(' argument=NamedArgumentDefinitions ')'
+	{UserFunctionDefinition} name = ID ASSIGN 'function' '(' argument=NamedArgumentDefinitions ')'
 			(BEGIN expression = Expression END)? ';'?
 ;
 
@@ -65,7 +65,7 @@ EquationTypeDefinition:
 ;
 
 EquationDefinition returns EquationTypeDefinition:
-	{EquationDefinition} name = ID (vector?='[' ']'|matrix?='[[' ']]')? (ASSIGN expression = Expression)? ';'?
+	{EquationDefinition} name = ID (ASSIGN expression = Expression)? ';'?
 ;
 
 EnumerationDefinition:
@@ -87,7 +87,7 @@ ProbabilityFunction:
 
 
 RandomVariableDefinition:
-	name = ID (vector?='[' ']')? RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
+	name = ID RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
 ;
 
 ListDefinition:
@@ -192,12 +192,18 @@ OpEquality:
 	'==' | '!=' ;
 
 RelationalExpression returns Expression:
-	AdditiveExpression
+	RangeExpression
 	(
-	 =>({RelationalExpression.leftOperand=current} feature=OpCompare) rightOperand=AdditiveExpression)*;
+	 =>({RelationalExpression.leftOperand=current} feature=OpCompare) rightOperand=RangeExpression)*;
 
 OpCompare:
 	'>=' | '<=' | '>' | '<' ;
+
+RangeExpression returns Expression:
+	AdditiveExpression (
+		=>({RangeExpression.begin=current} LIST_ASSIGN) end=AdditiveExpression
+	)*
+	;
 
 AdditiveExpression returns Expression:
 	MultiplicativeExpression (=>({AdditiveExpression.leftOperand=current} feature=OpAdd)
@@ -249,7 +255,6 @@ WhenExpression returns Expression:
 	 	when+=WhenClause
 	 	(=> when+=ElifClause)*
 		(=>other=ElseClause)?
-//		(=>ELSE other=Expression)?
 	;
 
 IfExprPart:
@@ -274,14 +279,21 @@ Literal returns Expression:
 	IntegerLiteral |
 	StringLiteral |
 	BooleanLiteral |
-	VectorLiteral |
+//	VectorLiteral |
 	MatrixLiteral
 ;
 
 SymbolReference:
-	{SymbolReference} ref=[SymbolDefinition|ID] ('[' indexExpr = Expression ']')?
+	{SymbolReference} ref=[SymbolDefinition|ID] ('[' indexExpr = IndexSpec ']')?
 ;
 
+IndexSpec:
+		{IndexSpec} indexExpr += IndexRange (',' indexExpr += IndexRange)? 
+			;
+
+IndexRange:
+		{IndexRange} (expr=Expression | all?=LIST_ASSIGN) 
+		;
 
 CategoryValueReference:
 	{CategoryValueReference} ref=[CategoryValueDefinition|QualifiedName]
@@ -327,24 +339,24 @@ StringLiteral returns Expression:
 
 
 MatrixLiteral returns Expression:
-	{MatrixLiteral} '[[' rows += MatrixRow (=> ';' rows += MatrixRow)* ']]'
+	{MatrixLiteral} '[' rows += MatrixRow (=> ';' rows += MatrixRow)* ']'
 ;	
 
 MatrixRow returns Expression:
-	{MatrixRow} expressions += MatrixElement (=> ',' expressions += MatrixElement)*
+	{MatrixRow} cells += MatrixElement (=> ',' cells += MatrixElement)*
 ;
 
 MatrixElement returns Expression:
-	{MatrixElement} element=Expression
+	{MatrixElement} cell=Expression
 ;
 
-VectorLiteral returns Expression:
-	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
-;	
-
-VectorElement returns Expression:
-	{VectorElement} element=Expression
-;
+//VectorLiteral returns Expression:
+//	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
+//;	
+//
+//VectorElement returns Expression:
+//	{VectorElement} element=Expression
+//;
 
 QualifiedName:
 	ID ('.' ID)

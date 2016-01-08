@@ -9,6 +9,11 @@ import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.MappingExpression
+import eu.ddmore.mdl.mdl.MappingPair
+import eu.ddmore.mdl.mdl.MatrixElement
+import eu.ddmore.mdl.mdl.MatrixLiteral
+import eu.ddmore.mdl.mdl.MatrixRow
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
@@ -21,14 +26,10 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
-import eu.ddmore.mdl.mdl.VectorElement
-import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
 import java.util.ArrayList
 import java.util.Collections
 import java.util.List
-import eu.ddmore.mdl.mdl.MappingExpression
-import eu.ddmore.mdl.mdl.MappingPair
 
 class DependencyWalker {
 
@@ -89,13 +90,18 @@ class DependencyWalker {
     			if(expr.other != null)
     				retVal.addAll(expr.other?.other?.symbolReferences ?: Collections::emptyList)
     		}
-    		VectorLiteral:{
-    			for(v : expr.expressions){
+    		MatrixLiteral:{
+    			for(v : expr.rows){
     				retVal.addAll(v.symbolReferences)
     			}
     		}
-    		VectorElement:{
-    			retVal.addAll(expr.element?.symbolReferences ?: Collections::emptyList)
+    		MatrixRow:{
+    			for(v : expr.cells){
+    				retVal.addAll(v.symbolReferences)
+    			}
+    		}
+    		MatrixElement:{
+    			retVal.addAll(expr.cell?.symbolReferences ?: Collections::emptyList)
     		}
     		SymbolReference:{
     			if(expr.ref != null) retVal.add(expr.ref)

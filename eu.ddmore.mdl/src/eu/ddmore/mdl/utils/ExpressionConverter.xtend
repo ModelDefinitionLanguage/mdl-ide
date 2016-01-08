@@ -12,9 +12,11 @@ import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IntegerLiteral
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
+import eu.ddmore.mdl.mdl.MatrixElement
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
+import eu.ddmore.mdl.mdl.PowerExpression
 import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.StringLiteral
@@ -22,9 +24,7 @@ import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdl.VectorElement
 import org.eclipse.emf.ecore.EObject
-import eu.ddmore.mdl.mdl.PowerExpression
 
 public class ExpressionConverter {
 
@@ -140,8 +140,8 @@ public class ExpressionConverter {
 //		[«FOR e : exp.expressions SEPARATOR ','»«e.getString»«ENDFOR»]'''
 //	
 	
-	def dispatch String getString(VectorElement exp)'''
-		«exp.element.getString»'''
+	def dispatch String getString(MatrixElement exp)'''
+		«exp.cell.getString»'''
 		
 	def dispatch String getString(CategoryValueReference exp)'''
 		«exp.ref.getString»'''

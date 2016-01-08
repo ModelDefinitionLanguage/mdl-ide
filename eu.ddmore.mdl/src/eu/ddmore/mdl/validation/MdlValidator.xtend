@@ -13,7 +13,9 @@ import org.eclipse.xtext.validation.ComposedChecks
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
  @ComposedChecks(validators= #[BlockValidator, DataFileValidator, UnsupportedFeaturesValidator, MdlCustomValidator,
- 								ListValidator, TypeSystemValidator, ValueSelectorValidator, UnsupportedToolSpecificFeaturesValidator,
+ 								ListValidator,
+// 								TypeSystemValidator,
+ 								ValueSelectorValidator, UnsupportedToolSpecificFeaturesValidator,
  								BuiltinFunctionValidator, MogValidator, ExpressionValidator, StatementValidator, PropertyValidator ])
 class MdlValidator extends AbstractMdlValidator {
 	public val static MDLOBJ = 'mdlObj'

@@ -7,20 +7,21 @@ import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.ElifClause
+import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.FuncArguments
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
+import eu.ddmore.mdl.mdl.MatrixLiteral
+import eu.ddmore.mdl.mdl.MatrixRow
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
-import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
-import eu.ddmore.mdl.mdl.ElseClause
 
 public class MdlExpressionConverter extends ExpressionConverter {
 	
@@ -83,8 +84,11 @@ public class MdlExpressionConverter extends ExpressionConverter {
 	def dispatch String getString(ElseClause exp)'''
 		«exp.other.getString»'''
 
-	def dispatch String getString(VectorLiteral exp)'''
-		[«FOR e : exp.expressions SEPARATOR ','»«e.getString»«ENDFOR»]'''
+	def dispatch String getString(MatrixLiteral exp)'''
+		[«FOR e : exp.rows SEPARATOR ';'»«e.getString»«ENDFOR»]'''
+	
+	def dispatch String getString(MatrixRow exp)'''
+		[«FOR e : exp.cells SEPARATOR ','»«e.getString»«ENDFOR»]'''
 	
     override dispatch String getString(SubListExpression expr)'''
         {«FOR c : expr.attributes SEPARATOR ', '»«c.getString»«ENDFOR»}'''
