@@ -64,11 +64,15 @@ class PrimitiveTypeInfo extends TypeInfo{
 		new VectorTypeInfo(this);
 	}
 	
-	override isVector(){
-		false
+	override makeMatrix(){
+		new MatrixTypeInfo(this)
 	}
 	
-	override isReference(){
-		false
-	}
+//	override isVector(){
+//		false
+//	}
+//	
+//	override isReference(){
+//		false
+//	}
 }

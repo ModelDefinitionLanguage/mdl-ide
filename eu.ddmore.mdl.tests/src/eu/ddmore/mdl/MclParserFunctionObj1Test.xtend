@@ -19,8 +19,12 @@ class MclParserFunctionObj1Test {
 foo = funcObj {
 	FUNCTIONS{
 	   	# define a function. The return type of the function is given by it's name.
-	   	# In this case it is a real. If it were a vector or matric it would use [] or [[]] 
-		userFunc = function(int arg1, real arg2, string arg3) {
+	   	# In this case it is a real.  
+		userFunc::Function arg1::Int, arg2::Real, arg3::String {
+			# the function can contain only a single expression
+		    arg2 + arg1  # return types have to match type of func name
+		}
+		userFunc2::Function arg1::Int, arg2, arg3::String {
 			# the function can contain only a single expression
 		    arg2 + arg1  # return types have to match type of func name
 		}

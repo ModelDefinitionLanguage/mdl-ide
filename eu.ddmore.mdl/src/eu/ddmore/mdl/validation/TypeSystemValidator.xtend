@@ -40,6 +40,8 @@ import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.type.MatrixTypeInfo
+import eu.ddmore.mdl.type.VectorTypeInfo
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -135,25 +137,36 @@ class TypeSystemValidator extends AbstractMdlValidator {
 			)
 	}
 		
-	@Check
-	def validateCompatibleTypes(EquationDefinition e){
-		// only check if there is an RHS to check 
-		if(e.expression != null)
+//	@Check
+//	def validateCompatibleTypes(EquationDefinition e){
+//		// only check if there is an RHS to check 
+//		if(e.expression != null)
 //			if(e.isVector)
 //				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 //			else if(e.isMatrix)
 //				checkExpectedMatrix(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 //			else
-				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
-	}
+//				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
+//	}
 		
 	@Check
 	def validateCompatibleTypes(RandomVariableDefinition e){
 		if(e.distn != null){
+			val stmtType = e.typeFor
+			switch(stmtType){
+				MatrixTypeInfo:
+					checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeMatrix, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+				VectorTypeInfo:
+					checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeVector, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+//					checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+				default:
+					checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+//					checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+			}
 //			if(e.isVector)
 //				checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
 //			else 
-				checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+//				checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
 		}
 	}
 		
@@ -234,13 +247,13 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		checkExpectedAndExpression(TypeSystemProvider::INT_TYPE, exp, errorLambda)
 	}
 	
-	def checkExpectedPdf(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
-		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE, exp, errorLambda)
-	}
-
-	def checkExpectedPdfVector(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
-		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeVector, exp, errorLambda)
-	}
+//	def checkExpectedPdf(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+//		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE, exp, errorLambda)
+//	}
+//
+//	def checkExpectedPdfVector(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+//		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeVector, exp, errorLambda)
+//	}
 
 	def checkExpectedRealTransform(String transform, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = transform.transformFunctionType

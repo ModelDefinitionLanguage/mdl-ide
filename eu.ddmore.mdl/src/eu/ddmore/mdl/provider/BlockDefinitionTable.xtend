@@ -113,7 +113,7 @@ class BlockDefinitionTable {
 				new StatementSpec(ep.anonymousListStatement)
 			]),
 			"FUNCTIONS" -> new BlockSpec("FUNCTIONS", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.userFunctionDefinition)
+				new StatementSpec(ep.equationDefinition)
 			]),
 			"ADMINISTRATION" -> new BlockSpec("ADMINISTRATION", 1, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.listDefinition),

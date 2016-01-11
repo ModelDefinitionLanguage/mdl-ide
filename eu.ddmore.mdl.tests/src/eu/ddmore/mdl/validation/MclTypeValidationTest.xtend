@@ -632,7 +632,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B = 26
 				C
-				A[] =  [ 20, C, B]
+				A=  [ 20, C, B]
 			}
 			
 		} # end of model object
@@ -653,8 +653,8 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				B[[]]
-				A[[]] =  inverse(B)
+				B::Matrix
+				A =  inverse(B)
 			}
 			
 		} # end of model object
@@ -676,7 +676,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A[[]] =  [[ 20, C, B; 1, 2, 5.7 ]]
+				A =  [[ 20, C, B; 1, 2, 5.7 ]]
 			}
 			
 		} # end of model object
@@ -698,7 +698,7 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B = 26
 				C
-				A[] =  [ 20, true, B]
+				A =  [ 20, true, B]
 			}
 			
 		} # end of model object
@@ -710,30 +710,30 @@ class MclTypeValidationTest {
 		)
 	}
 	
-	@Test
-	def void testInValidVectorEquationDefinition(){
-		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlObj {
-			IDV{ T }
-
-			VARIABILITY_LEVELS{
-			}
-		
-			
-			MODEL_PREDICTION{
-				B = 26
-				C
-				A =  [ 20, C, B]
-			}
-			
-		} # end of model object
-		'''.parse
-		
-		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
-			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Real type, but was Vector:Real."
-		)
-	}
+//	@Test
+//	def void testInValidVectorEquationDefinition(){
+//		val mcl = '''
+//		warfarin_PK_SEXAGE_mdl = mdlObj {
+//			IDV{ T }
+//
+//			VARIABILITY_LEVELS{
+//			}
+//		
+//			
+//			MODEL_PREDICTION{
+//				B = 26
+//				C
+//				A =  [ 20, C, B]
+//			}
+//			
+//		} # end of model object
+//		'''.parse
+//		
+//		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+//			MdlValidator::INCOMPATIBLE_TYPES,
+//			"Expected Real type, but was Vector:Real."
+//		)
+//	}
 	
 	@Test
 	def void testInValidVectorLiteralIncompatibleEquationDefinition(){
@@ -751,7 +751,7 @@ class MclTypeValidationTest {
 				pkwin2 : { type is simple, outcome=Conc, numberSamples=[0] }
 			}
 			DESIGN_SPACES{
-				DS3[] = [pkwin1,pkwin2]
+				DS3 = [pkwin1,pkwin2]
 			}
 		}
 		'''.parse
@@ -773,7 +773,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				A[] =  [ [ 0 ], 20, 26]
+				A =  [ [ 0 ], 20, 26]
 			}
 			
 		} # end of model object
@@ -796,8 +796,8 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				A[] =  [ C, 20, 26]
-				C[] = [ 1, 2, 3]
+				A =  [ C, 20, 26]
+				C = [ 1, 2, 3]
 			}
 			
 		} # end of model object

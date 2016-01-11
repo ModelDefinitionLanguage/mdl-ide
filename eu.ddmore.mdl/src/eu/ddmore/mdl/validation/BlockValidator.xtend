@@ -6,20 +6,19 @@ import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockTextBody
-import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.provider.BlockArgumentDefinitionProvider
+import eu.ddmore.mdl.provider.BlockDefinitionProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import java.util.HashMap
+import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.provider.BlockArgumentDefinitionProvider
-import eu.ddmore.mdl.provider.BlockDefinitionProvider
-import org.eclipse.xtext.EcoreUtil2
-import java.util.HashMap
 
 class BlockValidator extends AbstractDeclarativeValidator{
 
@@ -59,10 +58,10 @@ class BlockValidator extends AbstractDeclarativeValidator{
 				error("unrecognised object type '" + mdlObjType + "'", MdlPackage.eINSTANCE.mclObject_MdlObjType,
 					UNRECOGNISED_OBJECT_TYPE, mdlObjType)
 			}
-			blkArgs.unusedMandatoryObjVarDecl.forEach [ blk, mand |
-				error("mandatory argument '" + blk + "' is missing in " + mdlObjType + " '" + name + "'",
-					MdlPackage.eINSTANCE.mclObject_BlkArgs, MANDATORY_BLOCK_ARG_MISSING, blk)
-			]
+//			blkArgs.unusedMandatoryObjVarDecl.forEach [ blk, mand |
+//				error("mandatory argument '" + blk + "' is missing in " + mdlObjType + " '" + name + "'",
+//					MdlPackage.eINSTANCE.mclObject_BlkArgs, MANDATORY_BLOCK_ARG_MISSING, blk)
+//			]
 			blkArgs.unusedMandatoryPropertyArguments.forEach [ blk, mand |
 				error("mandatory property '" + blk + "' is missing in " + mdlObjType + " '" + name + "'",
 					MdlPackage.eINSTANCE.mclObject_BlkArgs, MANDATORY_BLOCK_PROP_MISSING, blk)
@@ -72,8 +71,8 @@ class BlockValidator extends AbstractDeclarativeValidator{
 	
 	@Check
 	def validateMdlObjBlockArgs(BlockStatement it){
-		blkArgs.unusedMandatoryObjVarDecl.forEach[blk, mand| error("mandatory argument '" + blk + "' is missing in block '" + identifier + "'",
-					MdlPackage.eINSTANCE.blockStatement_BlkArgs, MANDATORY_BLOCK_ARG_MISSING, blk) ]
+//		blkArgs.unusedMandatoryObjVarDecl.forEach[blk, mand| error("mandatory argument '" + blk + "' is missing in block '" + identifier + "'",
+//					MdlPackage.eINSTANCE.blockStatement_BlkArgs, MANDATORY_BLOCK_ARG_MISSING, blk) ]
 		blkArgs.unusedMandatoryPropertyArguments.forEach[blk, mand| error("mandatory property '" + blk + "' is missing in block '" + identifier + "'",
 					MdlPackage.eINSTANCE.blockStatement_BlkArgs, MANDATORY_BLOCK_PROP_MISSING, blk) ]
 	}
@@ -139,10 +138,10 @@ class BlockValidator extends AbstractDeclarativeValidator{
 	def validateBlockArgument(BlockArgument blkArg){
 		if (blkArg.eContainer instanceof BlockArguments && (blkArg.eContainer.eContainer instanceof MclObject || blkArg.eContainer.eContainer instanceof BlockStatement)) {
 			switch (blkArg) {
-				ForwardDeclaration case !blkArg.isValidObjVarDecl: {
-					error("unrecognised variable declaration type '" + blkArg.declType + "'",
-						MdlPackage.eINSTANCE.forwardDeclaration_DeclType, UNKNOWN_BLOCK_ARG_DECL, blkArg.declType)
-				}
+//				ForwardDeclaration case !blkArg.isValidObjVarDecl: {
+//					error("unrecognised variable declaration type '" + blkArg.declType + "'",
+//						MdlPackage.eINSTANCE.forwardDeclaration_DeclType, UNKNOWN_BLOCK_ARG_DECL, blkArg.declType)
+//				}
 				ValuePair case !blkArg.isValidBlkArgProperty: {
 					error("unrecognised property '" + blkArg.argumentName + "'",
 						MdlPackage.eINSTANCE.valuePair_ArgumentName, UNKNOWN_BLOCK_ARG_PROP, blkArg.argumentName)

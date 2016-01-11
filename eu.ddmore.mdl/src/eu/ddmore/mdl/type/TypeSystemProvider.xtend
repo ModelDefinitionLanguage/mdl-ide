@@ -30,6 +30,9 @@ import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import java.util.HashSet
 import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.mdl.MatrixRow
+import eu.ddmore.mdl.mdl.TypeSpec
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.VectorLiteral
 
 public class TypeSystemProvider {
 
@@ -49,7 +52,7 @@ public class TypeSystemProvider {
 	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf)
 	public static val PMF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pmf)
 	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector
-	public static val REAL_MATRIX_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector.makeVector
+	public static val REAL_MATRIX_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeMatrix
 	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int).makeVector
 	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping)
 	public static val GENERIC_ENUM_VALUE_TYPE =  new GenericEnumTypeInfo
@@ -89,7 +92,7 @@ public class TypeSystemProvider {
 		else null
 	}
 	
-	def getTypeForArray(MatrixLiteral vl){
+	def getTypeForMatrix(MatrixLiteral vl){
 		// first type determines array type unless one of the other elements is a type
 		// that it could be promoted to. For example if the first element is an int
 		// and a later type is a Real the the type for the vector as a whole is a Real.
@@ -100,7 +103,7 @@ public class TypeSystemProvider {
 				for(c : e.cells){
 					val origType = e.typeFor
 					// check to see if amy non refs present. If so resulting array type will be non-ref
-					if(!origType.isReference) allRefs = false  
+					if(!(origType instanceof ReferenceTypeInfo)) allRefs = false  
 					val exprType = origType.underlyingType // just in case it is a reference
 					if(refType == null)
 						refType = exprType
@@ -109,6 +112,32 @@ public class TypeSystemProvider {
 						if(promotedType != null && refType != promotedType)
 							refType = promotedType
 					}
+				}
+			}
+		}
+		val arrayType = (refType ?: UNDEFINED_TYPE)
+		// if all the types are refs then reflect this in the vector type.
+		if(allRefs) arrayType.makeReference.makeMatrix else arrayType.makeMatrix
+	}
+	
+	def getTypeForArray(VectorLiteral vl){
+		// first type determines array type unless one of the other elements is a type
+		// that it could be promoted to. For example if the first element is an int
+		// and a later type is a Real the the type for the vector as a whole is a Real.
+		var TypeInfo refType = null
+		var allRefs = true
+		for(e : vl.expressions){
+			if(e instanceof VectorElement){
+				val origType = e.typeFor
+				// check to see if amy non refs present. If so resulting array type will be non-ref
+				if(!(origType instanceof ReferenceTypeInfo)) allRefs = false  
+				val exprType = origType.underlyingType // just in case it is a reference
+				if(refType == null)
+					refType = exprType
+				else{
+					val promotedType = refType.getRichestPromotableType(exprType)
+					if(promotedType != null && refType != promotedType)
+						refType = promotedType
 				}
 			}
 		}
@@ -144,15 +173,15 @@ public class TypeSystemProvider {
 //				e.typeOfBuiltinEnum
 			BuiltinFunctionCall:
 				e.functionType
-//			VectorElement:
-//				e.element?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
-//			VectorLiteral:
-//				if(e.expressions.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
-//				else e.typeForArray
+			VectorElement:
+				e.element?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
+			VectorLiteral:
+				if(e.expressions.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
+				else e.typeForArray
 			MatrixElement:
 				e.cell?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
 			MatrixLiteral:
-				TypeSystemProvider.REAL_VECTOR_TYPE.makeVector
+				TypeSystemProvider.REAL_VECTOR_TYPE.makeMatrix
 			SubListExpression:
 				e.typeForSublist 
 			default:
@@ -216,7 +245,20 @@ public class TypeSystemProvider {
 //				else if(sd.isMatrix)
 //					REAL_MATRIX_TYPE
 //				else REAL_TYPE
-				REAL_TYPE
+				{
+					if(sd.expression != null){
+						// type inferred from assigned type
+						sd.expression.typeFor
+					}
+					else{
+						// not assigned value so defaults to REAL unless
+						// an explicit type is declared
+						if(sd.typeSpec != null){
+							sd.typeSpec.typeFor
+						}
+						else REAL_TYPE
+					}
+				}
 			ListDefinition:
 				getTypeOfList(sd)
 			TransformedDefinition,
@@ -225,7 +267,20 @@ public class TypeSystemProvider {
 //			RandomVariableDefinition: typeTable.get(sd.eClass)
 			RandomVariableDefinition:
 //				if(sd.isVector) TypeSystemProvider.REAL_VECTOR_TYPE else REAL_TYPE
-				REAL_TYPE
+				{
+					if(sd.distn != null){
+						val distnType = sd.distn.typeFor
+						switch(distnType){
+							VectorTypeInfo case(distnType.elementType == PDF_TYPE): REAL_VECTOR_TYPE
+							MatrixTypeInfo case(distnType.elementType == PDF_TYPE): REAL_MATRIX_TYPE
+							PrimitiveTypeInfo case(distnType == PDF_TYPE): REAL_TYPE
+							default:
+								UNDEFINED_TYPE
+								
+						}
+					}
+					else UNDEFINED_TYPE
+				}
 			EnumerationDefinition:{
 					val defn = sd.catDefn 
 					switch(defn){
@@ -238,6 +293,43 @@ public class TypeSystemProvider {
 				UNDEFINED_TYPE
 		}
 	}
+	
+	def dispatch TypeInfo typeFor(TypeSpec it){
+		if(elementType != null && cellType != null){
+			typeFromSpecName(typeName)
+		}
+		else if(elementType != null){
+			if(typeName == '::Vector'){
+				val elType = elementType.typeFor
+				elType.makeVector
+			}
+			else UNDEFINED_TYPE
+		}
+		else if(cellType != null){
+			if(typeName == '::Matrix'){
+				val elType = elementType.typeFor
+				elType.makeVector
+			}
+			else UNDEFINED_TYPE
+		}
+		else UNDEFINED_TYPE
+	}
+	
+	static val specNameLookup = #{
+		'::Int' -> INT_TYPE,
+		'::Real' -> REAL_TYPE,
+		'::Pdf' -> PDF_TYPE,
+		'::String' -> STRING_TYPE,
+		'::Boolean' -> BOOLEAN_TYPE,
+		'::Vector' -> REAL_VECTOR_TYPE,
+		'::Matrix' -> REAL_MATRIX_TYPE
+	} 
+	
+	def typeFromSpecName(String specName){
+		val specType = specNameLookup.get(specName) ?: UNDEFINED_TYPE
+		specType	
+	}
+	
 	
 	def dispatch TypeInfo typeFor(CategoryValueDefinition sd){
 //		return new EnumTypeInfo(exp.name)

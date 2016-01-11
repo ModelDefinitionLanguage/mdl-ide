@@ -4,7 +4,7 @@ import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 	@Data @FinalFieldsConstructor
-class VectorTypeInfo extends TypeInfo{
+class MatrixTypeInfo extends TypeInfo{
 	PrimitiveType theType
 	TypeInfo elementType
 	
@@ -21,7 +21,7 @@ class VectorTypeInfo extends TypeInfo{
 		val otherType = other.underlyingType
 		switch(otherType){
 			// if both vectors then check type compatibility
-			VectorTypeInfo: elementType.isCompatible(otherType.elementType)
+			MatrixTypeInfo: elementType.isCompatible(otherType.elementType)
 			default: false
 		}
 	}
@@ -43,11 +43,11 @@ class VectorTypeInfo extends TypeInfo{
 	}
 	
 	override makeMatrix(){
-		new MatrixTypeInfo(this)
+		new MatrixTypeInfo(theType, elementType);
 	}
 	
 //	override isVector(){
-//		true
+//		false
 //	}
 //	
 //	override isReference(){

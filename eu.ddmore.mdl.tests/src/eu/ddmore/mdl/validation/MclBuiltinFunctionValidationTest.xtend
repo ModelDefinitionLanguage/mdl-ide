@@ -242,7 +242,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testInValidTypeNamedFunction(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{ T }
 			
 			COVARIATES{
 				logtWT
@@ -291,7 +291,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testInValidTypeUnnamedFunction(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{ T }
 			
 			COVARIATES{
 				logtWT
@@ -492,7 +492,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testInValidNamedFunctionSublistWronAttribsType(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{ T }
 			
 			COVARIATES{
 				logtWT

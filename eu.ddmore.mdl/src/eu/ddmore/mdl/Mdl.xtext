@@ -29,32 +29,32 @@ BlockArguments:
 ;
 
 BlockArgument:
-	ValuePair|ForwardDeclaration
+	ValuePair
 ;
 
 
 ForwardDeclaration:
-	{ForwardDeclaration}declType=ID name=ID
+	{ForwardDeclaration}name=ID typeSpec=TypeSpec?
 ;
 
 Statement:
 	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-	EnumerationDefinition|PropertyStatement|UserFunctionDefinition|
+	EnumerationDefinition|PropertyStatement|//UserFunctionDefinition|
 	CategoricalProbabilityAssign
 ;
 
 
 SymbolDefinition:
 	EquationDefinition | ListDefinition| ForwardDeclaration | RandomVariableDefinition | TransformedDefinition|
-	  EnumerationDefinition|UserFunctionDefinition
+	  EnumerationDefinition//|UserFunctionDefinition
 ;
 
 
-UserFunctionDefinition:
-	{UserFunctionDefinition} name = ID ASSIGN 'function' '(' argument=NamedArgumentDefinitions ')'
-			(BEGIN expression = Expression END)? ';'?
-;
+//UserFunctionDefinition:
+//	{UserFunctionDefinition} name = ID typeSpec=TypeSpec '(' argument=NamedArgumentDefinitions ')'
+//			(BEGIN expression = Expression END)? ';'?
+//;
 
 NamedArgumentDefinitions:
 	{NamedArgumentDefinitions} arguments += ForwardDeclaration (=> ',' arguments += ForwardDeclaration)* 
@@ -77,7 +77,13 @@ RandomVariableDefinition:
 ;
 
 TypeSpec:
-	{TypeSpec} typeName=TYPE_SPEC ('[' elementType=TypeSpec ']'|'[[' cellType=TypeSpec ']]')?
+	{TypeSpec} typeName=TYPE_SPEC ('[' elementType=TypeSpec ']'|'[[' cellType=TypeSpec ']]'| funcSpec=FunctionSpec)?
+;
+
+
+FunctionSpec:
+	{FunctionSpec} '(' argument=NamedArgumentDefinitions ')'
+			BEGIN expression = Expression END 
 ;
 
 
@@ -306,7 +312,7 @@ BuiltinFunctionCall returns Expression:
 ;
 
 UserFunctionCall returns Expression:
-	{UserFunctionCall} '&' ref=[UserFunctionDefinition|ID] '(' argList=(NamedFuncArguments)? ')'
+	{UserFunctionCall} '&' ref=[SymbolDefinition|ID] '(' argList=(NamedFuncArguments)? ')'
 ;
 
 NamedFuncArguments returns FuncArguments:

@@ -23,7 +23,7 @@ warfarin_PK_ODE_mdl = mdlObj {
 	FUNCTIONS{
 	   	# define a function. The return type of the function is given by it's name.
 	   	# In this case it is a real. If it were a vector or matric it would use [] or [[]] 
-		userFunc = function(int arg1, real arg2, string arg3)
+		userFunc::Function(int arg1, real arg2, string arg3)
 	}
 	
 	MODEL_PREDICTION{

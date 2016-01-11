@@ -39,7 +39,7 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 	}
 
 	MODEL_PREDICTION{
-		A[] = [1.0, 1.02, B0, B2]
+		A = [1.0, 1.02, B0, B2]
 	}# end MODEL_PREDICTION
 
 } # end of model object
