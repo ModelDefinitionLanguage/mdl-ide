@@ -304,7 +304,7 @@ class MclBuiltinFunctionValidationTest {
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
-				Cl[] = seq(true, 1, 2)
+				Cl = seq(true, 1, 2)
 			}
 		}'''.parse
 		

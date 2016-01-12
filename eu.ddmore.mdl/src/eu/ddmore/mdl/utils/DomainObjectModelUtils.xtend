@@ -8,7 +8,6 @@ import eu.ddmore.mdl.mdl.BlockTextBody
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.MatrixElement
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.Statement
@@ -17,6 +16,7 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.mdl.VectorElement
 import java.util.Collections
 import org.eclipse.xtext.EcoreUtil2
 
@@ -129,8 +129,8 @@ class DomainObjectModelUtils {
 
 	def getVectorElementAsSymbolReference(Expression expr){
 		switch(expr){
-			MatrixElement:{
-				val e = expr.cell
+			VectorElement:{
+				val e = expr.element
 				switch(e){
 					SymbolReference: e as SymbolReference
 					default: null

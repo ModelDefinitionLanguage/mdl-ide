@@ -41,10 +41,10 @@ testprior = priorObj{
 		}
 
 		INPUT_PRIOR_DATA{
-			bins_k_v[[]] = readMatrix(src=data, element="bins_k_v")
-			p_k[] = readVector(src=data, element="p_k")
-			p_SIGMA2_RES[] = readVector(src=data, element="p_SIGMA2_RES")
-			data_SIGMA2_RES[] = readVector(src=data, element="data_SIGMA2_RES")
+			bins_k_v = readMatrix(src=data, element="bins_k_v")
+			p_k = readVector(src=data, element="p_k")
+			p_SIGMA2_RES = readVector(src=data, element="p_SIGMA2_RES")
+			data_SIGMA2_RES = readVector(src=data, element="data_SIGMA2_RES")
 		}
 	}
 

@@ -185,7 +185,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 			val expr = expression
 			if(expr instanceof SymbolReference){
 				val subList = EcoreUtil2.getContainerOfType(eContainer, SubListExpression)
-				if(subList != null && subList.typeFor.isCompatible(SublistDefinitionTable::getSublist(SublistDefinitionTable::FIX_EFF_SUBLIST))){
+				if(subList != null && subList.typeFor.isCompatible(SublistDefinitionTable::instance.getSublist(SublistDefinitionTable::FIX_EFF_SUBLIST))){
 					// now check reference variable belongs to covariates block
 					val refBlk = EcoreUtil2.getContainerOfType(expr.ref.eContainer, BlockStatement)
 					if(refBlk != null && refBlk.identifier != BlockDefinitionTable::COVARIATE_BLK_NAME){

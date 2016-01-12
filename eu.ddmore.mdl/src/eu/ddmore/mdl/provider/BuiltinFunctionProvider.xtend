@@ -63,13 +63,17 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
-	val Map<String, List<? extends FunctDefn>> functDefns
+//	val Map<String, List<? extends FunctDefn>> functDefns
 	val Map<String, Map<String, ? extends TypeInfo>> attEnumTypes
 
 	new(){
-		functDefns = BuiltinFunctionTable::functDefns
+//		functDefns = BuiltinFunctionTable::getInstance.functDefns
 		attEnumTypes = new HashMap<String, Map<String, ? extends TypeInfo>>
 		buildEnumTypes
+	}
+	
+	private def Map<String, List<? extends FunctDefn>> getFunctDefns(){
+		BuiltinFunctionTable::getInstance.functDefns
 	}
 	
 	private def buildEnumTypes(){

@@ -29,6 +29,8 @@ import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
+import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.mdl.VectorElement
 
 class PharmMLExpressionBuilder {
 	
@@ -143,12 +145,12 @@ class PharmMLExpressionBuilder {
     		WhenExpression:{
     			expr.getWhenExpression
     		}
-//    		VectorLiteral:{
-//    			getVectorLiteralExpression(expr)
-//    		}
-//    		VectorElement:{
-//    			expr.element.pharmMLExpr
-//    		}
+    		VectorLiteral:{
+    			getVectorLiteralExpression(expr)
+    		}
+    		VectorElement:{
+    			expr.element.pharmMLExpr
+    		}
     		BooleanLiteral:{
     			getBooleanLiteral(expr)
     		}
@@ -225,15 +227,15 @@ class PharmMLExpressionBuilder {
 		}
 	}
 	
-//	def getVectorLiteralExpression(VectorLiteral it)'''
-//		<ct:Vector>
-//			<ct:VectorElements>
-//				«FOR e : expressions»
-//					«e.pharmMLExpr»
-//				«ENDFOR»
-//			</ct:VectorElements>
-//		</ct:Vector>
-//	'''
+	def getVectorLiteralExpression(VectorLiteral it)'''
+		<ct:Vector>
+			<ct:VectorElements>
+				«FOR e : expressions»
+					«e.pharmMLExpr»
+				«ENDFOR»
+			</ct:VectorElements>
+		</ct:Vector>
+	'''
 	
 	def getParExpression(ParExpression it)'''
 		«expr.pharmMLExpr»

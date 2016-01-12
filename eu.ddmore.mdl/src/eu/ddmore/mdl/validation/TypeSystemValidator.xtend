@@ -42,6 +42,8 @@ import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 import eu.ddmore.mdl.type.MatrixTypeInfo
 import eu.ddmore.mdl.type.VectorTypeInfo
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.VectorLiteral
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -176,18 +178,18 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
 	}
 		
-//	@Check
-//	def validateCompatibleVectorElement(VectorElement e){
-//		if(e.eContainer instanceof VectorLiteral){
-//			val vect = e.eContainer as VectorLiteral
-//			val vectType = vect.typeFor
-//			val exprType = e.typeFor
-//			if(!vectType.isCompatibleElement(exprType)){
-//				error("Element type '" + exprType.typeName + "' is incompatible with vector type '" + vectType.typeName + "'.",
-//					MdlPackage.eINSTANCE.vectorElement_Element, MdlValidator::INCOMPATIBLE_TYPES, vectType.typeName)
-//			}			
-//		}
-//	}
+	@Check
+	def validateCompatibleVectorElement(VectorElement e){
+		if(e.eContainer instanceof VectorLiteral){
+			val vect = e.eContainer as VectorLiteral
+			val vectType = vect.typeFor
+			val exprType = e.typeFor
+			if(!vectType.isCompatibleElement(exprType)){
+				error("Element type '" + exprType.typeName + "' is incompatible with vector type '" + vectType.typeName + "'.",
+					MdlPackage.eINSTANCE.vectorElement_Element, MdlValidator::INCOMPATIBLE_TYPES, vectType.typeName)
+			}			
+		}
+	}
 	
 	
 	@Check

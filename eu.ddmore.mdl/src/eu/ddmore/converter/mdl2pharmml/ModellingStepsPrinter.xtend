@@ -19,6 +19,8 @@ import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
@@ -703,19 +705,19 @@ class ModellingStepsPrinter {
 						val funcExpr = stmt.expression as BuiltinFunctionCall
 						if(funcExpr.func == 'linear'){
 							var namedArgList = funcExpr.argList as NamedFuncArguments 
-//							val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
-//							if(fixEff != null && !fixEff.expressions.isEmpty){
-//								for(e : fixEff.expressions){
-//									switch(e){
-//										VectorElement:{
-//											if(e.element instanceof SubListExpression &&
-//												((e.element as SubListExpression).isCovariateUsedInSublist(name) ||
-//												(e.element as SubListExpression).isCatCovUsedInSublist(name)))
-//													return true
-//										}
-//									}
-//								}
-//							}
+							val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
+							if(fixEff != null && !fixEff.expressions.isEmpty){
+								for(e : fixEff.expressions){
+									switch(e){
+										VectorElement:{
+											if(e.element instanceof SubListExpression &&
+												((e.element as SubListExpression).isCovariateUsedInSublist(name) ||
+												(e.element as SubListExpression).isCatCovUsedInSublist(name)))
+													return true
+										}
+									}
+								}
+							}
 						}
 					}
 				}

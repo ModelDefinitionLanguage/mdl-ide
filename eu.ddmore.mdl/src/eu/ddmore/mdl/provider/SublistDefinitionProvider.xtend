@@ -18,7 +18,7 @@ class SublistDefinitionProvider {
 	val Map<String, SublistTypeInfo> sublistDefns
 
 	new (){
-		sublistDefns = SublistDefinitionTable::sublistDefns
+		sublistDefns = SublistDefinitionTable::instance.sublistDefns
 	}
 
 	def SublistTypeInfo findSublistMatch(SubListExpression sle){

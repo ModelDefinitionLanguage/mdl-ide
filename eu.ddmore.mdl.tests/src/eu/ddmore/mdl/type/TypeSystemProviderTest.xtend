@@ -73,7 +73,7 @@ class TypeSystemProviderTest {
 
 	@Test
 	def void testVectorLiteralExpression(){
-		val actual = MdlFactory::eINSTANCE.createMatrixLiteral
+		val actual = MdlFactory::eINSTANCE.createVectorLiteral
 		actual.typeFor.assertEquals(TypeSystemProvider::REAL_VECTOR_TYPE)
 	}
 

@@ -250,7 +250,15 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'deriv' expected value of type 'Real' but was 'ref:List:VarLevel'."
+		)
+		mcl.assertError(MdlPackage::eINSTANCE.additiveExpression,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was ref:List:VarLevel."
+		)
+		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Expected Real type, but was ref:List:VarLevel."
 		)
@@ -642,7 +650,7 @@ class MclTypeValidationTest {
 		mcl.assertNoErrors
 	}
 	
-	@Test
+	@Ignore //matrix typing not supported yet
 	def void testValidMatrixEquationExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {
@@ -704,12 +712,37 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.matrixElement,
+		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Element type 'Boolean' is incompatible with vector type 'Vector:Int'."
+		)
+	}
+	
+	@Test
+	def void testInValidVectorEquationExpression2(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B = 26.0
+				C
+				A =  [ 20, true, B]
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Element type 'Boolean' is incompatible with vector type 'Vector:Real'."
 		)
 	}
-	
+
 //	@Test
 //	def void testInValidVectorEquationDefinition(){
 //		val mcl = '''
@@ -735,32 +768,6 @@ class MclTypeValidationTest {
 //		)
 //	}
 	
-	@Test
-	def void testInValidVectorLiteralIncompatibleEquationDefinition(){
-		val mcl = '''
-		d1g=desObj{
-			ADMINISTRATION{
-			}
-			
-			STUDY_DESIGN{
-				Conc
-			}
-			
-			SAMPLING{
-			 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5] }
-				pkwin2 : { type is simple, outcome=Conc, numberSamples=[0] }
-			}
-			DESIGN_SPACES{
-				DS3 = [pkwin1,pkwin2]
-			}
-		}
-		'''.parse
-		
-		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
-			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected vector:Real type, but was vector:ref:List:SimpleSampling."
-		)
-	}
 	
 	@Test
 	def void testInValidVectorNestedVectorEquationDefinition(){
@@ -779,9 +786,9 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.matrixElement,
+		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Element type 'Vector:Int' is incompatible with vector type 'Vector:Int'."
+			"Element type 'vector:Int' is incompatible with vector type 'vector:Int'."
 		)
 	}
 	
@@ -803,9 +810,9 @@ class MclTypeValidationTest {
 		} # end of model object
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.matrixElement,
+		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Element type 'ref:vector:Real' is incompatible with vector type 'vector:Real'."
+			"Element type 'ref:vector:Int' is incompatible with vector type 'vector:Int'."
 		)
 	}
 	
@@ -828,7 +835,7 @@ class MclTypeValidationTest {
 			}
 		}
 	'''.parse
-		mcl.assertError(MdlPackage::eINSTANCE.matrixElement,
+		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Element type 'Real' is incompatible with vector type 'Vector:List:SimpleSampling'."
 		)

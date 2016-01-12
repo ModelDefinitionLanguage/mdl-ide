@@ -11,8 +11,6 @@ import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.MatrixElement
-import eu.ddmore.mdl.mdl.MatrixLiteral
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
@@ -21,7 +19,10 @@ import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
+import eu.ddmore.mdl.mdl.TypeSpec
 import eu.ddmore.mdl.mdl.UnaryExpression
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
@@ -29,10 +30,6 @@ import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import java.util.HashSet
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.MatrixRow
-import eu.ddmore.mdl.mdl.TypeSpec
-import eu.ddmore.mdl.mdl.VectorElement
-import eu.ddmore.mdl.mdl.VectorLiteral
 
 public class TypeSystemProvider {
 
@@ -92,33 +89,33 @@ public class TypeSystemProvider {
 		else null
 	}
 	
-	def getTypeForMatrix(MatrixLiteral vl){
-		// first type determines array type unless one of the other elements is a type
-		// that it could be promoted to. For example if the first element is an int
-		// and a later type is a Real the the type for the vector as a whole is a Real.
-		var TypeInfo refType = null
-		var allRefs = true
-		for(e : vl.rows){
-			if(e instanceof MatrixRow){
-				for(c : e.cells){
-					val origType = e.typeFor
-					// check to see if amy non refs present. If so resulting array type will be non-ref
-					if(!(origType instanceof ReferenceTypeInfo)) allRefs = false  
-					val exprType = origType.underlyingType // just in case it is a reference
-					if(refType == null)
-						refType = exprType
-					else{
-						val promotedType = refType.getRichestPromotableType(exprType)
-						if(promotedType != null && refType != promotedType)
-							refType = promotedType
-					}
-				}
-			}
-		}
-		val arrayType = (refType ?: UNDEFINED_TYPE)
-		// if all the types are refs then reflect this in the vector type.
-		if(allRefs) arrayType.makeReference.makeMatrix else arrayType.makeMatrix
-	}
+//	def getTypeForMatrix(MatrixLiteral vl){
+//		// first type determines array type unless one of the other elements is a type
+//		// that it could be promoted to. For example if the first element is an int
+//		// and a later type is a Real the the type for the vector as a whole is a Real.
+//		var TypeInfo refType = null
+//		var allRefs = true
+//		for(e : vl.rows){
+//			if(e instanceof MatrixRow){
+//				for(c : e.cells){
+//					val origType = e.typeFor
+//					// check to see if amy non refs present. If so resulting array type will be non-ref
+//					if(!(origType instanceof ReferenceTypeInfo)) allRefs = false  
+//					val exprType = origType.underlyingType // just in case it is a reference
+//					if(refType == null)
+//						refType = exprType
+//					else{
+//						val promotedType = refType.getRichestPromotableType(exprType)
+//						if(promotedType != null && refType != promotedType)
+//							refType = promotedType
+//					}
+//				}
+//			}
+//		}
+//		val arrayType = (refType ?: UNDEFINED_TYPE)
+//		// if all the types are refs then reflect this in the vector type.
+//		if(allRefs) arrayType.makeReference.makeMatrix else arrayType.makeMatrix
+//	}
 	
 	def getTypeForArray(VectorLiteral vl){
 		// first type determines array type unless one of the other elements is a type
@@ -127,18 +124,16 @@ public class TypeSystemProvider {
 		var TypeInfo refType = null
 		var allRefs = true
 		for(e : vl.expressions){
-			if(e instanceof VectorElement){
-				val origType = e.typeFor
-				// check to see if amy non refs present. If so resulting array type will be non-ref
-				if(!(origType instanceof ReferenceTypeInfo)) allRefs = false  
-				val exprType = origType.underlyingType // just in case it is a reference
-				if(refType == null)
-					refType = exprType
-				else{
-					val promotedType = refType.getRichestPromotableType(exprType)
-					if(promotedType != null && refType != promotedType)
-						refType = promotedType
-				}
+			val origType = e.typeFor
+			// check to see if amy non refs present. If so resulting array type will be non-ref
+			if(!(origType instanceof ReferenceTypeInfo)) allRefs = false  
+			val exprType = origType.underlyingType // just in case it is a reference
+			if(refType == null)
+				refType = exprType
+			else{
+				val promotedType = refType.getRichestPromotableType(exprType)
+				if(promotedType != null && refType != promotedType)
+					refType = promotedType
 			}
 		}
 		val arrayType = (refType ?: UNDEFINED_TYPE)
@@ -178,10 +173,10 @@ public class TypeSystemProvider {
 			VectorLiteral:
 				if(e.expressions.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
 				else e.typeForArray
-			MatrixElement:
-				e.cell?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
-			MatrixLiteral:
-				TypeSystemProvider.REAL_VECTOR_TYPE.makeMatrix
+//			MatrixElement:
+//				e.cell?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
+//			MatrixLiteral:
+//				TypeSystemProvider.REAL_VECTOR_TYPE.makeMatrix
 			SubListExpression:
 				e.typeForSublist 
 			default:

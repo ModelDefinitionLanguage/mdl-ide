@@ -2136,7 +2136,7 @@ class MogValidatorTest {
 				}
 				
 				STRUCTURAL_PARAMETERS { 
-					POP_CL = 1
+					POP_CL = 1.0
 					POP_V
 				} # end STRUCTURAL_PARAMETERS
 
@@ -2439,7 +2439,7 @@ class MogValidatorTest {
 				}
 				
 				VARIABILITY_PARAMETERS { 
-					POP_CL = 1
+					POP_CL = 1.0
 					POP_V
 				} 
 
