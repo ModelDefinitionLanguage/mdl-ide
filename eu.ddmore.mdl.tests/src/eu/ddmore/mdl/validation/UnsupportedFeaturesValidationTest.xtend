@@ -234,7 +234,7 @@ warfarin_design = designObj {
 		)
 	}
 
-	@Test
+	@Ignore
 	def void testWarningUnsupportedFunction(){
 		val mcl = '''bar = mdlObj {
 			IDV{ T }

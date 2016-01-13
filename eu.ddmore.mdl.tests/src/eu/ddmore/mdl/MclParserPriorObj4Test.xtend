@@ -132,14 +132,14 @@ example332_mdl = mdlObj{
 
 		'''
 	
-	@Ignore
+	@Test
 	def void testParsing(){
 		CODE_SNIPPET.parse.assertNoErrors
 		
 	}
 	
-	@Test //need this to enable test initialisation with 1 ignore
-	def void testDummy(){
-	}
+//	@Test //need this to enable test initialisation with 1 ignore
+//	def void testDummy(){
+//	}
 	
 }

@@ -9,10 +9,12 @@ import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EqualityExpression
-import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
+import eu.ddmore.mdl.mdl.IndexRange
 import eu.ddmore.mdl.mdl.MappingPair
+import eu.ddmore.mdl.mdl.MatrixElement
+import eu.ddmore.mdl.mdl.MatrixLiteral
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
@@ -26,24 +28,24 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import eu.ddmore.mdl.type.EnumTypeInfo
 import eu.ddmore.mdl.type.GenericEnumTypeInfo
+import eu.ddmore.mdl.type.MatrixTypeInfo
 import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.type.VectorTypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.type.MatrixTypeInfo
-import eu.ddmore.mdl.type.VectorTypeInfo
-import eu.ddmore.mdl.mdl.VectorElement
-import eu.ddmore.mdl.mdl.VectorLiteral
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -180,8 +182,8 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		
 	@Check
 	def validateCompatibleVectorElement(VectorElement e){
-		if(e.eContainer instanceof VectorLiteral){
-			val vect = e.eContainer as VectorLiteral
+		val vect = e.eContainer
+		if(vect instanceof VectorLiteral){
 			val vectType = vect.typeFor
 			val exprType = e.typeFor
 			if(!vectType.isCompatibleElement(exprType)){
@@ -191,6 +193,32 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		}
 	}
 	
+	@Check
+	def validateCompatibleMatrixElement(MatrixElement e){
+		val vect = EcoreUtil2.getContainerOfType(e.eContainer, MatrixLiteral)
+		if(vect != null){
+			val vectType = vect.typeFor
+			val exprType = e.typeFor
+			if(!vectType.isCompatibleElement(exprType)){
+				error("Cell type '" + exprType.typeName + "' is incompatible with matrix type '" + vectType.typeName + "'.",
+					MdlPackage.eINSTANCE.matrixElement_Cell, MdlValidator::INCOMPATIBLE_TYPES, vectType.typeName)
+			}			
+		}
+	}
+	
+	@Check
+	def validateIndexSpecType(IndexRange it){
+		if(begin != null)
+			checkExpectedIntl(begin, [e, a|
+								error("Index value must be an 'Int' type, but was '" + a.typeName + "'.",
+								MdlPackage.eINSTANCE.indexRange_Begin, MdlValidator::INCOMPATIBLE_TYPES)
+								])
+		if(end != null)
+			checkExpectedIntl(begin, [e, a|
+								error("Index value must be an 'Int' type, but was '" + a.typeName + "'.",
+								MdlPackage.eINSTANCE.indexRange_End, MdlValidator::INCOMPATIBLE_TYPES)
+								])
+	}
 	
 	@Check
 	def validUnnamedFuctionArgumentType(UnnamedArgument it){

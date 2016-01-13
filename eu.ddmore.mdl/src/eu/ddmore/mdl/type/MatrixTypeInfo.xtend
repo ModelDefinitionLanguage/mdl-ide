@@ -31,7 +31,7 @@ class MatrixTypeInfo extends TypeInfo{
 	}
 	
 	override getTypeName(){
-		'vector:' + elementType.typeName
+		'matrix:' + elementType.typeName
 	}
 	
 	override makeReference(){

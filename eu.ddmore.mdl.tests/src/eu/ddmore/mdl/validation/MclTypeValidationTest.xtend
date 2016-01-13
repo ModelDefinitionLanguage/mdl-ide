@@ -555,31 +555,7 @@ class MclTypeValidationTest {
 		)
 	}
 	
-	@Ignore
-	def void testValidFunctionEquationExpression(){
-		val mcl = '''
-		warfarin_PK_SEXAGE_mdl = mdlObj {
-			IDV{ T }
-			
-			VARIABILITY_LEVELS{
-			}
-			
-			GROUP_VARIABLES{
-				C
-			}
-		
-			INDIVIDUAL_VARIABLES{
-				log(B) = 26
-				log(A) =  exp(B) + C - 22
-			}
-		
-		
-		} # end of model object
-		'''.parse
-		
-		mcl.assertNoErrors
-	}
-	
+
 	@Test
 	def void testValidDistnFunctionExpression(){
 		val mcl = '''
@@ -650,7 +626,7 @@ class MclTypeValidationTest {
 		mcl.assertNoErrors
 	}
 	
-	@Ignore //matrix typing not supported yet
+	@Test
 	def void testValidMatrixEquationExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {
@@ -672,6 +648,51 @@ class MclTypeValidationTest {
 	}
 	
 	@Test
+	def void testValidExplicitMatrixTyping(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B::Matrix[[::Real]]
+				A =  inverse(B)
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInvalidExplicitMatrixTyping(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B::Matrix[[::String]]
+				A =  inverse(B)
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.unnamedArgument,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument '1' expected value of type 'matrix:Real' but was 'ref:matrix:String'."
+		)
+	}
+	
+	@Test
 	def void testValidMatrixLiteralEquationExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {
@@ -685,6 +706,268 @@ class MclTypeValidationTest {
 				B
 				C
 				A =  [[ 20, C, B; 1, 2, 5.7 ]]
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidMatrixCellIndexing(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [[ 20, 2.2, 2.4; 1, 2, 5.7 ]]
+				C = ln(A[2, 2])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidMatrixSubMatrixIndexing1(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [[ 20, 2.2, 2.4; 1, 2, 5.7 ]]
+				C = inverse(A[1:2, 2])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidMatrixSubMatrixIndexing2(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [[ 20, 2.2, 2.4; 1, 2, 5.7 ]]
+				C = inverse(A[1:2, 2])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidMatrixSubMatrixIndexing3(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [[ 20, 2.2, 2.4; 1, 2, 5.7 ]]
+				C = inverse(A[1:2, 2:3])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidMatrixSubMatrixIndexing4(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [[ 20, 2.2, 2.4; 1, 2, 5.7 ]]
+				C = inverse(A[1:2, ])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidMatrixSubMatrixIndexing5(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [[ 20, 2.2, 2.4; 1, 2, 5.7 ]]
+				C = inverse(A[, 2:3])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidMatrixNonIntegerIndexing1(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [[ 20, 2.2, 2.4; 1, 2, 5.7 ]]
+				C = ln(A[1.3, 2])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.indexRange,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Index value must be an 'Int' type, but was 'Real'."
+		)
+	}
+	
+	@Test
+	def void testValidMatrixNonIntegerIndexing2(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [[ 20, 2.2, 2.4; 1, 2, 5.7 ]]
+				C = exp(A[1.3:3, 2])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.indexRange,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Index value must be an 'Int' type, but was 'Real'."
+		)
+	}
+	
+	@Test
+	def void testInValidMatrixLiteralIncompatibleTypes(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C = "foo"
+				A =  [[ 20, C, B; 1, 2, 5.7 ]]
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.matrixElement,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Cell type 'ref:String' is incompatible with matrix type 'matrix:Real'."
+		)
+	}
+	
+	@Test
+	def void testInValidMatrixInconsistentSize(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [[ 20, 2.1, 45; 1, 2]]
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.matrixLiteral,
+			MdlValidator::MATRIX_INCONSISTENT_ROW_SIZE,
+			"The rows in this matrix must be the same size."
+		)
+	}
+	
+	@Test
+	def void testValidEmptyMatrixLiteral(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A = [[]]
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidEmptyVectorLiteral(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A = []
 			}
 			
 		} # end of model object
@@ -743,30 +1026,232 @@ class MclTypeValidationTest {
 		)
 	}
 
-//	@Test
-//	def void testInValidVectorEquationDefinition(){
-//		val mcl = '''
-//		warfarin_PK_SEXAGE_mdl = mdlObj {
-//			IDV{ T }
-//
-//			VARIABILITY_LEVELS{
-//			}
-//		
-//			
-//			MODEL_PREDICTION{
-//				B = 26
-//				C
-//				A =  [ 20, C, B]
-//			}
-//			
-//		} # end of model object
-//		'''.parse
-//		
-//		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
-//			MdlValidator::INCOMPATIBLE_TYPES,
-//			"Expected Real type, but was Vector:Real."
-//		)
-//	}
+	@Test
+	def void testValidVectorSingleIndexing(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [ 20, 1.0, 2.0]
+				C = ln(A[1])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInValidVectorNonIntegerSingleIndexing(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [ 20, 1.0, 2.0]
+				C = ln(A[1.0])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.indexRange,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Index value must be an 'Int' type, but was 'Real'."
+		)
+	}
+	
+	@Test
+	def void testInValidVectorNonIntegerSingleIndexing2(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [ 20, 1.0, 2.0]
+				B = "S"
+				C = ln(A[B])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.indexRange,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Index value must be an 'Int' type, but was 'ref:String'."
+		)
+	}
+	
+	@Ignore("This behaviour is not supported. Expressions evaluate to Real at the moment.")
+	def void testValidIndexExpression1(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [ 20, 1.0, 2.0]
+				B = 20
+				C = ln(A[1 + 4 * B])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidIndexExpression2(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [ 20, 1.0, 2.0]
+				B = 20
+				C = ln(A[B])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	
+	@Test
+	def void testValidIndexExpression3(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [ 20, 1.0, 2.0]
+				B = 20
+				C = ln(A[toInt(1 + 4 * B)])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testValidVectorRangeIndexing(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A =  [ 20, 1.0, 2.0]
+				C = mean(A[1:2])
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	
+	@Test
+	def void testValidVectorTypeExplictDeclaration1(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A::Vector
+				C = mean(A)
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	
+	@Test
+	def void testValidVectorTypeExplictDeclaration2(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A::Vector[::Real]
+				C = mean(A)
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	
+	@Test
+	def void testInValidVectorTypeExplictDeclaration3(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				A::Vector[::String]
+				C = mean(A)
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.unnamedArgument,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument '1' expected value of type 'vector:Real' but was 'ref:vector:String'."
+		)
+	}
 	
 	
 	@Test

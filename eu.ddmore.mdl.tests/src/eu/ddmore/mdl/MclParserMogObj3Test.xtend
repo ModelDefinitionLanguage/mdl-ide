@@ -97,11 +97,11 @@ foo_mog = mogObj {
 		}
 }		'''
 	
-	@Ignore
-	def void testParsing(){
-		CODE_SNIPPET.parse.assertNoErrors(Diagnostic::SYNTAX_DIAGNOSTIC)
-		
-	}
+//	@Test
+//	def void testParsing(){
+//		CODE_SNIPPET.parse.assertNoErrors(Diagnostic::SYNTAX_DIAGNOSTIC)
+//		
+//	}
 	
 	@Test
 	// needed to stop initialisation failure

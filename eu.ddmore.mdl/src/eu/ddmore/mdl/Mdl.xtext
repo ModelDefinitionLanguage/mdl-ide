@@ -285,7 +285,7 @@ Literal returns Expression:
 	StringLiteral |
 	BooleanLiteral |
 	VectorLiteral |
-	DepMatrixLiteral
+	MatrixLiteral
 ;
 
 SymbolReference:
@@ -345,20 +345,20 @@ StringLiteral returns Expression:
 	{StringLiteral} value=STRING;
 
 
-DepMatrixLiteral returns Expression:
-	{DepMatrixLiteral} '[[' rows += DepMatrixRow (=> ';' rows += DepMatrixRow)* ']]'
+MatrixLiteral returns Expression:
+	{MatrixLiteral} '[[' (rows += MatrixRow (=> ';' rows += MatrixRow)*)? ']]'
 ;	
 
-DepMatrixRow returns Expression:
-	{DepMatrixRow} cells += DepMatrixElement (=> ',' cells += DepMatrixElement)*
+MatrixRow returns Expression:
+	{MatrixRow} cells += MatrixElement (=> ',' cells += MatrixElement)*
 ;
 
-DepMatrixElement returns Expression:
-	{DepMatrixElement} cell=Expression
+MatrixElement returns Expression:
+	{MatrixElement} cell=Expression
 ;
 
 VectorLiteral returns Expression:
-	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
+	{VectorLiteral} '[' (expressions += VectorElement (=> ',' expressions += VectorElement)*)? ']'
 ;	
 
 VectorElement returns Expression:

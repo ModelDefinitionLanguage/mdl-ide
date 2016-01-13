@@ -65,6 +65,7 @@ class MdlValidator extends AbstractMdlValidator {
 	
 	// Expressions
 	public static val INVALID_CYCLE = "eu.ddmore.mdl.validation.cyclic.ref"
+	public static val MATRIX_INCONSISTENT_ROW_SIZE = "eu.ddmore.mdl.validation.matrix.rowsize.notsame"
 
 	// MOG validation
 	public static val MODEL_DATA_MISMATCH = "eu.ddmore.mdl.validation.mog.mismatch_mod_data"
