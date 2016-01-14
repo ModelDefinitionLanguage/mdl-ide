@@ -20,6 +20,8 @@ import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.mdl.VectorLiteral
 
 class BuiltinFunctionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
@@ -228,6 +230,22 @@ class BuiltinFunctionProvider {
 
 	def getArgumentExpression(NamedFuncArguments it, String attName){
 		arguments.findFirst[argumentName == attName]?.expression
+	}
+
+	def getArgumentExpressionAsVector(NamedFuncArguments it, String attName){
+		val vp = arguments.findFirst[argumentName == attName]
+		if(vp != null && !(vp.expression instanceof VectorLiteral)){
+			val fact = MdlPackage.eINSTANCE.mdlFactory
+			val vect = fact.createVectorLiteral
+			val el = fact.createVectorElement
+			el.element = vp.expression
+			vect.expressions.add(el)
+			vp.expression = vect
+			vect
+		}
+		else{
+			vp?.expression
+		}
 	}
 
 	def getArgumentEnumValue(FuncArguments args, String argName){
