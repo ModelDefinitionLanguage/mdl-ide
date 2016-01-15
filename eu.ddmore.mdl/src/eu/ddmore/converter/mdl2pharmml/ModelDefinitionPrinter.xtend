@@ -420,7 +420,8 @@ class ModelDefinitionPrinter {
 	def writeLinearIdv(EquationTypeDefinition it){
 		var funcExpr = expression as BuiltinFunctionCall
 		var namedArgList = funcExpr.argList as NamedFuncArguments 
-		val fixEff = namedArgList.getArgumentExpressionAsVector('fixEff') as VectorLiteral
+//		val fixEff = namedArgList.getArgumentExpressionAsVector('fixEff') as VectorLiteral
+		val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
 		'''
 		<IndividualParameter symbId="«name»">
 			<GaussianModel>
@@ -432,10 +433,10 @@ class ModelDefinitionPrinter {
 						«namedArgList.getArgumentExpression('pop').writeAssignment»
 					</PopulationParameter>
 					«IF fixEff != null && !fixEff.expressions.isEmpty »
-						«namedArgList.getArgumentExpressionAsVector('fixEff').writeFixedEffects»
+						«namedArgList.getArgumentExpression('fixEff').writeFixedEffects»
 					«ENDIF»
 				</LinearCovariate>
-				«namedArgList.getArgumentExpressionAsVector('ranEff').writeRandomEffects»
+				«namedArgList.getArgumentExpression('ranEff').writeRandomEffects»
 			</GaussianModel>
 		</IndividualParameter>
 		''' 

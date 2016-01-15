@@ -10,6 +10,8 @@ import java.util.ArrayList
 import java.util.List
 import java.util.Map
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.mdl.ValuePair
+import org.eclipse.xtext.EcoreUtil2
 
 class SublistDefinitionProvider {
 	
@@ -73,6 +75,16 @@ class SublistDefinitionProvider {
 		}
 	}
 
+	def TypeInfo getSublistAttributeType(ValuePair vp){
+		val attList = EcoreUtil2.getContainerOfType(vp.eContainer, SubListExpression)
+		val subListDefn = attList.findSublistMatch
+		if(subListDefn != null){
+			val attDefn = subListDefn.attributes.findFirst[name == vp.argumentName]
+			attDefn?.attType ?: TypeSystemProvider::UNDEFINED_TYPE
+		}
+		else TypeSystemProvider::UNDEFINED_TYPE
+	}
+	
 	def TypeInfo getTypeOfAttributeBuiltinEnum(SubListExpression it, EnumExpression ee){
 		val vp = ee.getOwningValuePair
 		val enumValue = ee.enumValue
