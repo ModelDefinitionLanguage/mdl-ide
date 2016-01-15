@@ -1,6 +1,7 @@
 package eu.ddmore.mdl.type
 
 import eu.ddmore.mdl.mdl.AnonymousListStatement
+import eu.ddmore.mdl.mdl.ArgumentDefinition
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
@@ -9,8 +10,11 @@ import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.ForwardDeclaration
+import eu.ddmore.mdl.mdl.IndexSpec
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.MatrixElement
+import eu.ddmore.mdl.mdl.MatrixLiteral
+import eu.ddmore.mdl.mdl.MatrixRow
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
@@ -29,12 +33,8 @@ import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import java.util.HashSet
-import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.MatrixRow
-import eu.ddmore.mdl.mdl.MatrixElement
-import eu.ddmore.mdl.mdl.MatrixLiteral
 import java.util.List
-import eu.ddmore.mdl.mdl.IndexSpec
+import org.eclipse.xtext.EcoreUtil2
 
 public class TypeSystemProvider {
 
@@ -79,7 +79,6 @@ public class TypeSystemProvider {
 		ep.powerExpression -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,
 		ep.randomVariableDefinition -> REAL_TYPE,
-		ep.forwardDeclaration -> REAL_TYPE,
 		ep.mappingExpression -> MAPPING_TYPE,
 		ep.catValRefMappingExpression -> MAPPING_TYPE
 	}
@@ -257,10 +256,6 @@ public class TypeSystemProvider {
 			case('+'),
 			case('-'):{
 				val operandType = operand?.typeFor.underlyingType
-//				if(operandType == INT_TYPE)
-//					INT_TYPE
-//				else if(operandType == REAL_TYPE)
-//					REAL_TYPE
 				if(operandType.isCompatible(INT_TYPE)) return INT_TYPE
 				else if(operandType.isCompatible(REAL_TYPE)) return REAL_TYPE
 				else UNDEFINED_TYPE
@@ -273,11 +268,6 @@ public class TypeSystemProvider {
 	def dispatch TypeInfo typeFor(SymbolDefinition sd){
 		switch(sd){
 			EquationDefinition:
-//				if(sd.isVector)
-//					TypeSystemProvider.REAL_VECTOR_TYPE
-//				else if(sd.isMatrix)
-//					REAL_MATRIX_TYPE
-//				else REAL_TYPE
 				{
 					if(sd.expression != null){
 						// type inferred from assigned type
@@ -295,11 +285,9 @@ public class TypeSystemProvider {
 			ListDefinition:
 				getTypeOfList(sd)
 			TransformedDefinition,
-			ForwardDeclaration:
+			ArgumentDefinition:
 				typeTable.get(sd.eClass)
-//			RandomVariableDefinition: typeTable.get(sd.eClass)
 			RandomVariableDefinition:
-//				if(sd.isVector) TypeSystemProvider.REAL_VECTOR_TYPE else REAL_TYPE
 				{
 					if(sd.distn != null){
 						val distnType = sd.distn.typeFor

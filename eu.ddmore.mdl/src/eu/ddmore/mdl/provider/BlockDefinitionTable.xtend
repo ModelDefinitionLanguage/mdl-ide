@@ -164,9 +164,9 @@ class BlockDefinitionTable {
 			MDL_INDIV_PARAMS, MDL_PRED_BLK_NAME,
 			OBS_BLK_NAME, MDL_GRP_PARAMS, IDV_BLK_NAME, "FUNCTIONS"
 		},
-		MdlValidator::FUNCOBJ -> #{
-			"FUNCTIONS"
-		},
+//		MdlValidator::FUNCOBJ -> #{
+//			"FUNCTIONS"
+//		},
 		MdlValidator::DATAOBJ -> #{
 			DIV_BLK_NAME, "DECLARED_VARIABLES", "DATA_DERIVED_VARIABLES",
 			DATA_SRC_BLK

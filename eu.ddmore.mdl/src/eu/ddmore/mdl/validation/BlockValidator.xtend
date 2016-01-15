@@ -47,7 +47,7 @@ class BlockValidator extends AbstractDeclarativeValidator{
 
 	
 	static val VALID_OBJECT_TYPES = #[ MdlValidator::MDLOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DATAOBJ, MdlValidator::MOGOBJ,
-		MdlValidator::DESIGNOBJ, MdlValidator::PRIOROBJ, MdlValidator::FUNCOBJ
+		MdlValidator::DESIGNOBJ, MdlValidator::PRIOROBJ //, MdlValidator::FUNCOBJ
 	]
 
 

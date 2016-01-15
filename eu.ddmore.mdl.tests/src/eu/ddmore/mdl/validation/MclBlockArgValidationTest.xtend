@@ -50,7 +50,7 @@ class MclBlockArgValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
+		mcl.assertError(MdlPackage::eINSTANCE.argumentDefinition,
 			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
@@ -68,7 +68,7 @@ class MclBlockArgValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
+		mcl.assertError(MdlPackage::eINSTANCE.argumentDefinition,
 			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
@@ -119,7 +119,7 @@ class MclBlockArgValidationTest {
 			BlockValidator::MANDATORY_BLOCK_ARG_MISSING,
 			"mandatory argument 'idv' is missing in mdlObj 'bar'"
 		)
-		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
+		mcl.assertError(MdlPackage::eINSTANCE.argumentDefinition,
 			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
@@ -138,7 +138,7 @@ class MclBlockArgValidationTest {
 		)
 		mcl.assertNoErrors(MdlPackage::eINSTANCE.mclObject,
 			BlockValidator::MANDATORY_BLOCK_ARG_MISSING)
-		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
+		mcl.assertError(MdlPackage::eINSTANCE.argumentDefinition,
 			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
