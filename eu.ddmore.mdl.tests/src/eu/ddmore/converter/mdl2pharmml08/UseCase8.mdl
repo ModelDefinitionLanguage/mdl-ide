@@ -1,0 +1,160 @@
+# Warfarin model with Between Occasion Variability (BOV)
+#
+# Uses ODEs. Transformation of WT covariate in COVARIATES block
+
+warfarin_PK_BOV_dat = dataObj{
+  DECLARED_VARIABLES{GUT Y }
+
+  DATA_INPUT_VARIABLES{
+      ID : { use is id }  
+      TIME : { use is idv }
+      WT : { use is covariate }
+      AGE : { use is covariate }
+      SEX : { use is catCov withCategories {female when 1, male when 0} }
+      AMT : { use is amt, variable = GUT}
+      OCC : { use is varLevel }
+      DV : { use is dv, variable = Y }
+      MDV : { use is mdv }
+   }# end DATA_INPUT_VARIABLES
+
+	SOURCE {
+	    srcfile: {file = "warfarin_conc_bov_P4.csv",
+        		  inputFormat is nonmemFormat }
+	} # end SOURCE
+} # end data object
+
+warfarin_PK_BOV_par = parObj{
+DECLARED_VARIABLES{eta_BOV_CL eta_BOV_V eta_BOV_KA eta_BOV_TLAG }
+### Parameter object
+# The parameter object defines the numerical values of the parameters with optional constraints (lo and high values) and units.
+
+   STRUCTURAL{
+# The STRUCTURAL block define the structural model parameters.
+      #THETA
+      POP_CL:{value=0.1, lo=0.001} # L/h/70kg
+      POP_V:{value=8, lo=0.001} # L/70kg
+      POP_KA:{value=2, lo=0.001} # h-1
+      POP_TLAG:{value=1, lo=0.001} # h
+	  BETA_CL_WT : { value = 0.75, fix = true }
+	  BETA_V_WT : { value = 1, fix = true } 
+      RUV_PROP:{value=0.1, lo=0}
+      RUV_ADD:{value=0.224, lo=0} # mg/L
+   }# end STRUCTURAL
+
+   VARIABILITY{
+# The VARIABILITY block has a more complex structure because it needs to express a lower triangular matrix of parameters and how they are related to each other.
+# VARIABILITY parameters may be expressed with a type of "SD" which implies standard deviations on the diagonal and correlations
+# on the lower off diagonal elements or "VAR" which implies variances and covariances.
+      BSV_CL : { type  is var, value=0.1 }
+      BSV_V : { type  is var, value=0.1 }
+
+      BOV_CL : {type  is var, value=0.1, fix=true}
+      BOV_V : {type  is var, value=0.1, fix=true}
+
+      BSV_KA:{value=0.1, type  is var}
+      BSV_TLAG:{value=0.1, type  is var}
+
+      BOV_KA : {type  is var, value=0.1}
+      BOV_TLAG : {type  is var, value=0.1}
+
+      BOV_COV_CL_V : { type  is cov, parameter=[eta_BOV_CL, eta_BOV_V], value=[0.01]} 
+	  BOV_COV_KA_TLAG : { type  is cov, parameter=[eta_BOV_KA, eta_BOV_TLAG], value=[0.01] } 
+
+   }# end VARIABILITY
+
+} # end of parameter object
+
+warfarin_PK_BOV_mdl = mdlObj{
+   IDV { T }
+
+   COVARIATES{
+	WT
+	logtWT = ln(WT/70)
+   }
+
+   VARIABILITY_LEVELS{
+	ID : { level=3, type  is parameter }
+	OCC : { level=2, type  is parameter }
+   	DV : { level=1, type  is observation }
+   }
+
+   STRUCTURAL_PARAMETERS{
+      #THETA
+      POP_CL
+      POP_V
+      POP_KA
+      POP_TLAG
+	  BETA_CL_WT
+	  BETA_V_WT
+      RUV_PROP
+      RUV_ADD
+   }# end STRUCTURAL_PARAMETERS
+
+   VARIABILITY_PARAMETERS{
+      #OMEGA
+      BSV_CL
+      BSV_V
+      BOV_CL
+      BOV_V
+      BOV_KA
+      BOV_TLAG
+      BSV_KA
+      BSV_TLAG
+   }# end VARIABILITY_PARAMETERS
+
+   RANDOM_VARIABLE_DEFINITION(level=ID){
+      eta_BSV_CL~ Normal(mean=0, var=BSV_CL)
+      eta_BSV_V~ Normal(mean=0, var=BSV_V)
+      eta_BSV_KA~ Normal(mean=0, var=BSV_KA)
+      eta_BSV_TLAG~ Normal(mean=0, var=BSV_TLAG)
+   }# end RANDOM_VARIABLE_DEFINITION
+
+   RANDOM_VARIABLE_DEFINITION(level=OCC){
+      eta_BOV_CL~ Normal(mean=0, var=BOV_CL)
+      eta_BOV_V~ Normal(mean=0, var=BOV_V)
+      eta_BOV_KA~ Normal(mean=0, var=BOV_KA)
+      eta_BOV_TLAG~ Normal(mean=0, var=BOV_TLAG)
+   }# end RANDOM_VARIABLE_DEFINITION
+
+   INDIVIDUAL_VARIABLES{
+      # Individual parameters
+	    ln(CL) = linear( trans is ln, pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}] , ranEff = [eta_BSV_CL, eta_BOV_CL ])
+	    ln(V)  = linear( trans is ln, pop = POP_V, fixEff = [{coeff=BETA_V_WT, cov=logtWT}] , ranEff = [eta_BSV_V, eta_BOV_V] )
+	    ln(KA) = linear( trans is ln, pop = POP_KA, ranEff = [eta_BSV_KA, eta_BOV_KA] ) 
+	    ln(TLAG) = linear( trans is ln, pop = POP_TLAG, ranEff = [eta_BSV_TLAG, eta_BOV_TLAG] )
+      }# end INDIVIDUAL_VARIABLES
+
+	MODEL_PREDICTION {
+		DEQ{
+			RATEIN = if(T >= TLAG) then GUT * KA 
+					 else 0
+			GUT : { deriv =(- RATEIN), init = 0, x0 = 0 }
+			CENTRAL : { deriv =(RATEIN - CL * CENTRAL / V), init = 0, x0 = 0 } 
+		}
+	    CC = CENTRAL / V 
+	} # end MODEL_PREDICTION
+
+	RANDOM_VARIABLE_DEFINITION(level=DV) {
+		EPS_Y ~ Normal(mean = 0, var = 1) 
+	} # end RANDOM_VARIABLE_DEFINITION 
+	
+	OBSERVATION {
+	    Y = combinedError1(additive = RUV_ADD, proportional = RUV_PROP, eps = EPS_Y, prediction = CC )
+	} # end OBSERVATION
+
+} # end of model object
+
+warfarin_PK_BOV_task = taskObj{
+ESTIMATE{ 
+		set algo is saem 
+}
+} # end of task object
+
+warfarin_PK_BOV_mog=mogObj{
+	OBJECTS{
+		warfarin_PK_BOV_mdl : { type is mdlObj }
+		warfarin_PK_BOV_par : { type is parObj }
+		warfarin_PK_BOV_dat : { type is dataObj }
+		warfarin_PK_BOV_task : { type is taskObj }
+	}
+}

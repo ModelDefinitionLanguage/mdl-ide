@@ -1,0 +1,117 @@
+# Basic Warfarin model
+#
+# Model as an ODE and covariate already transformed.
+# IV Infusion.
+#
+
+warfarin_PK_INFUSION_dat = dataObj {
+	DECLARED_VARIABLES{ CENTRAL Y }
+	
+	DATA_INPUT_VARIABLES {
+		ID : { use is id }
+		TIME : { use is idv }
+		WT : { use is covariate }
+		AMT : { use is amt, variable = CENTRAL }
+		RATE : { use is rate }  # this is how we define the rate of infusion
+		DV : { use is dv, variable = Y }
+		logtWT : { use is covariate }
+	} # end DATA_INPUT_VARIABLES
+	
+	SOURCE {
+	    srcfile : {file = "warfarin_infusion.csv",
+            		inputFormat is nonmemFormat  }
+	} # end SOURCE
+} # end data object
+
+
+warfarin_PK_INFUSION_par = parObj {
+	DECLARED_VARIABLES{ETA_CL ETA_V}
+
+	# By default a parameter is to be estimated if fix is omitted
+ 	STRUCTURAL {
+		POP_CL : { value = 0.1, lo = 0.001 }
+		POP_V : { value = 8, lo = 0.001 } 
+		# we assume that this is value, lo, high
+		BETA_CL_WT : { value = 0.75, fix = true }
+		BETA_V_WT : { value = 1, fix = true } 
+		RUV_PROP : { value = 0.1, lo=0 }
+		RUV_ADD : { value = 0.1, lo=0 } 
+		} # end STRUCTURAL
+	VARIABILITY {
+		# Don't need to provide types. No longer needed.
+		PPV_CL : { value = 0.1, type is sd }
+		PPV_V : { value = 0.1, type is sd }
+		OMEGA : { parameter=[ETA_CL, ETA_V], value = [0.01], type is corr }
+	} # end VARIABILITY
+} # end of parameter object 
+
+
+warfarin_PK_INFUSION_mdl = mdlObj {
+	IDV { T }
+
+	COVARIATES{
+		logtWT
+		}
+
+	VARIABILITY_LEVELS{
+		ID : { level=2, type is parameter  }
+		DV : { level=1, type is observation }
+	}
+
+	STRUCTURAL_PARAMETERS {
+		POP_CL
+		POP_V
+		BETA_CL_WT
+		BETA_V_WT
+		RUV_PROP
+		RUV_ADD
+	} # end STRUCTURAL_PARAMETERS
+	
+	VARIABILITY_PARAMETERS {
+		PPV_CL
+		PPV_V
+	} # end VARIABILITY_PARAMETERS 
+	
+	RANDOM_VARIABLE_DEFINITION(level=ID) {
+		ETA_CL ~ Normal(mean = 0, sd = PPV_CL)
+		ETA_V ~ Normal(mean = 0, sd = PPV_V)
+	} # end RANDOM_VARIABLE_DEFINITION 
+
+	
+	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
+	    ln(CL) = linear( trans is ln, pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}] , ranEff = [ETA_CL] )
+	    ln(V) = linear( trans is ln, pop = POP_V, fixEff = [{coeff=BETA_V_WT, cov=logtWT}] , ranEff = [ETA_V] )
+	} # end INDIVIDUAL_VARIABLES
+
+	MODEL_PREDICTION {
+		DEQ{
+			CENTRAL : { deriv =(- CL * CENTRAL / V), init = 0, x0 = 0 } 
+		}
+	    CC = CENTRAL / V 
+	} # end MODEL_PREDICTION
+	
+	RANDOM_VARIABLE_DEFINITION(level=DV){
+		EPS_Y ~ Normal(mean = 0, var = 1) # This maps the standard error model in PharmML. The error model is predefined.
+	}
+
+	OBSERVATION {
+	    Y = combinedError1(additive = RUV_ADD, proportional = RUV_PROP, eps = EPS_Y, prediction = CC ) 
+	} # end OBSERVATION
+} # end of model object
+
+warfarin_PK_ODE_task = taskObj {
+	ESTIMATE{ 
+		set algo is saem 
+}
+} # end of task object
+
+
+
+warfarin_PK_ODE_mog = mogObj {
+	OBJECTS{
+		warfarin_PK_INFUSION_dat : { type is dataObj }
+		warfarin_PK_INFUSION_mdl : { type is mdlObj }
+		warfarin_PK_INFUSION_par : { type is parObj }
+		warfarin_PK_ODE_task : { type is taskObj }
+	}
+}

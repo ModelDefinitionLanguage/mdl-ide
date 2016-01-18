@@ -1,0 +1,103 @@
+# Categorical data (cumulative probabilities) model
+# PharmML Type3 type=linear with trans=logit for INDIVIDUAL_VARIABLES
+# cumulative probabilities calculated in MODEL_PREDICTION
+# link not specified in OBSERVATION definition
+
+Categorical_DIST_dat = dataObj{
+   DECLARED_VARIABLES{ Y withCategories {c0, c1, c2, c3} }
+	
+   DATA_INPUT_VARIABLES{
+      ID:{ use is id }
+	  TIME:{ use is idv } # NOT USED IN MODEL
+      CP:{ use is covariate }
+      DV:{ use is dv, define= {Y.c0 when 0, Y.c1 when 1, Y.c2 when 2, Y.c3 when 3 } }
+      MDV:{ use is mdv }
+   }# end DATA_INPUT_VARIABLES
+
+   	SOURCE {
+	    srcFile : {file = "category.csv", 
+        	inputFormat is nonmemFormat} 
+	} # end SOURCE
+} # end data object
+
+Categorical_DIST_par = parObj{
+   STRUCTURAL{
+      #THETA
+      Beta : {value=1,lo=0,hi=10}
+      Lgt0 : {value=-1.09861}
+	  Lgt1 : {value=1.09861}
+	  Lgt2 : {value=1.09861}
+   }# end STRUCTURAL
+
+   VARIABILITY{
+      #OMEGA
+      PPV_EVENT : {value=0.04 ,type is var}
+   }# end VARIABILITY
+
+} # end of parameter object
+
+Categorical_DIST_mdl = mdlObj{
+   IDV{ T }
+
+	COVARIATES{ CP }
+
+   VARIABILITY_LEVELS{
+	ID : { level=2, type is parameter }
+	DV : { level=1, type is observation }
+   }
+
+   STRUCTURAL_PARAMETERS{
+      Beta
+      Lgt0
+	  Lgt1
+	  Lgt2
+   }# end STRUCTURAL_PARAMETERS
+
+   VARIABILITY_PARAMETERS{
+      PPV_EVENT
+   }# end VARIABILITY_PARAMETERS
+
+
+   RANDOM_VARIABLE_DEFINITION(level=ID){
+      eta_PPV_EVENT ~ Normal(mean=0, var=PPV_EVENT )
+   }# end RANDOM_VARIABLE_DEFINITION
+
+   GROUP_VARIABLES{
+	  B0 = Lgt0
+	  B1 = B0 + Lgt1
+	  B2 = B1 + Lgt2
+   }
+   
+   INDIVIDUAL_VARIABLES{
+      logit(P0) = linear(trans is logit, pop=B0, fixEff=[{coeff=Beta, cov=CP}], ranEff= [eta_PPV_EVENT])
+	  logit(P1) = linear(trans is logit, pop=B1, fixEff=[{coeff=Beta, cov=CP}], ranEff=[eta_PPV_EVENT])
+	  logit(P2) = linear(trans is logit, pop=B2, fixEff=[{coeff=Beta, cov=CP}], ranEff= [eta_PPV_EVENT])
+   }# end INDIVIDUAL_VARIABLES
+
+   MODEL_PREDICTION{
+	  Prob0 = P0
+	  Prob1 = P1 - P0
+	  Prob2 = P2 - P1
+	  Prob3 = 1 - P2
+   }# end MODEL_PREDICTION
+
+   OBSERVATION{
+	   Y : {type is categorical withCategories{ c0 when Prob0, c1 when Prob1, c2 when Prob2, c3 when Prob3} } 
+    }# end ESTIMATION
+
+} # end of model object
+
+Categorical_DIST_task = taskObj{
+	ESTIMATE{ 
+		set algo is saem 
+	}
+}# end of task object
+
+Categorical_DIST_mog = mogObj {
+	OBJECTS{
+		Categorical_DIST_dat : { type is dataObj }
+		Categorical_DIST_mdl : { type is mdlObj }
+		Categorical_DIST_par : { type is parObj }
+		Categorical_DIST_task : { type is taskObj }
+	}
+}
