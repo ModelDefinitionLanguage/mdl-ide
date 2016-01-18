@@ -11,19 +11,19 @@ import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdl.provider.BlockDefinitionTable
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.type.PrimitiveType
+import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.ConstantEvaluation
+import eu.ddmore.mdl.utils.MdlUtils
 import java.util.Collections
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.provider.ListDefinitionProvider
-import eu.ddmore.mdl.provider.ListDefinitionTable
-import eu.ddmore.mdl.provider.BlockDefinitionTable
-import eu.ddmore.mdl.type.TypeSystemProvider
-import eu.ddmore.mdl.utils.MdlUtils
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	

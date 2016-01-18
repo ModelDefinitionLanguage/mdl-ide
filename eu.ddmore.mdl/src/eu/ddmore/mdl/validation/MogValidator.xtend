@@ -1,5 +1,6 @@
 package eu.ddmore.mdl.validation
 
+import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
@@ -8,21 +9,20 @@ import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
+import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
-import java.util.ArrayList
-import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
-import org.eclipse.xtext.validation.AbstractDeclarativeValidator
-import org.eclipse.xtext.validation.EValidatorRegistrar
-import org.eclipse.xtext.validation.Check
-import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.utils.MdlUtils
+import java.util.ArrayList
+import org.eclipse.xtext.EcoreUtil2
+import org.eclipse.xtext.validation.AbstractDeclarativeValidator
+import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.validation.EValidatorRegistrar
 
 class MogValidator extends AbstractDeclarativeValidator {
 

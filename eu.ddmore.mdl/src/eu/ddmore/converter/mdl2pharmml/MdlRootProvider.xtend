@@ -1,10 +1,10 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import eu.ddmore.mdl.mdl.MclObject
-import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.mdl.Mcl
-import eu.ddmore.mdl.validation.MdlValidator
+import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.utils.MdlUtils
+import eu.ddmore.mdl.validation.MdlValidator
+import org.eclipse.xtext.EcoreUtil2
 
 class MdlRootProvider {
 	

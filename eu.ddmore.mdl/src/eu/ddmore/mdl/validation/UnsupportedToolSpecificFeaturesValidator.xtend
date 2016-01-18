@@ -4,10 +4,10 @@ import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.provider.BlockDefinitionTable
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.provider.BlockDefinitionTable
 
 class UnsupportedToolSpecificFeaturesValidator extends AbstractMdlValidator  {
 	

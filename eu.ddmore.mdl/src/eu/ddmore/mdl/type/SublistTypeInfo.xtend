@@ -1,11 +1,11 @@
 package eu.ddmore.mdl.type
 
+import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
+import java.util.ArrayList
+import java.util.List
+import java.util.Map
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import java.util.List
-import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
-import java.util.Map
-import java.util.ArrayList
 
 @Data @FinalFieldsConstructor
 class SublistTypeInfo extends TypeInfo {

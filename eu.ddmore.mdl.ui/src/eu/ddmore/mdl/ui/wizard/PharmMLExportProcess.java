@@ -2,7 +2,6 @@ package eu.ddmore.mdl.ui.wizard;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,8 +22,6 @@ import org.eclipse.jface.operation.ModalContext;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.IOverwriteQuery;
-import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
-import org.eclipse.ui.internal.wizards.datatransfer.FileSystemExporter;
 
 public class PharmMLExportProcess implements IRunnableWithProgress {
     private final Logger LOG = Logger.getLogger(PharmMLExportProcess.class);

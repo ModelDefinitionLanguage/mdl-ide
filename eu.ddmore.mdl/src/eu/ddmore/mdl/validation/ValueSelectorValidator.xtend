@@ -7,10 +7,10 @@ import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.utils.ConstantEvaluation
+import eu.ddmore.mdl.utils.MdlUtils
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.utils.MdlUtils
 
 class ValueSelectorValidator extends AbstractMdlValidator {
 

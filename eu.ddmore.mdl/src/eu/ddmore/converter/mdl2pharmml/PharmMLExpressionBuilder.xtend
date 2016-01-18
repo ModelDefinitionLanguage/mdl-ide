@@ -23,14 +23,14 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
-import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.VectorElement
 
 class PharmMLExpressionBuilder {
 	

@@ -1,8 +1,8 @@
 package eu.ddmore.mdl.type
 
+import java.util.Collections
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import java.util.Collections
 
 @Data @FinalFieldsConstructor
 class GenericEnumTypeInfo extends EnumTypeInfo{

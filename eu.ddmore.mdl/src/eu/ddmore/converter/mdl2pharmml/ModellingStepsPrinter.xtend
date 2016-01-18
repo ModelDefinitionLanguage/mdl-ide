@@ -11,6 +11,7 @@ import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
+import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlFactory
 import eu.ddmore.mdl.mdl.NamedFuncArguments
@@ -27,34 +28,11 @@ import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import eu.ddmore.mdl.utils.MdlUtils
-import eu.ddmore.mdl.validation.MogValidator
 import java.util.HashSet
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.mdl.EquationTypeDefinition
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
-import eu.ddmore.mdl.mdl.NamedFuncArguments
-import eu.ddmore.mdl.provider.BuiltinFunctionProvider
-import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.VectorElement
-import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.provider.SublistDefinitionProvider
-import eu.ddmore.mdl.mdl.SymbolReference
-import eu.ddmore.mdl.mdl.CategoryValueReference
-import eu.ddmore.mdl.mdl.MappingPair
-import java.util.HashSet
-import eu.ddmore.mdl.mdl.EnumExpression
-import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
-import eu.ddmore.mdl.mdl.CatValRefMappingExpression
-import eu.ddmore.mdl.mdl.PropertyStatement
-import eu.ddmore.mdl.provider.PropertyDefinitionProvider
-import eu.ddmore.mdl.mdl.MdlFactory
-import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.provider.ListDefinitionTable
-import eu.ddmore.mdl.utils.MdlUtils
-import eu.ddmore.mdl.mdl.Mcl
 
 class ModellingStepsPrinter { 
 	

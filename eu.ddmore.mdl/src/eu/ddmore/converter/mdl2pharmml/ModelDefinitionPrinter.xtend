@@ -21,12 +21,14 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
+import eu.ddmore.mdl.type.VectorTypeInfo
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.utils.MdlUtils
 import java.util.ArrayList
 import java.util.Comparator
 import java.util.HashMap
@@ -40,8 +42,6 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.utils.MdlUtils
-import eu.ddmore.mdl.type.VectorTypeInfo
 
 class ModelDefinitionPrinter {
 	extension MdlUtils mu = new MdlUtils

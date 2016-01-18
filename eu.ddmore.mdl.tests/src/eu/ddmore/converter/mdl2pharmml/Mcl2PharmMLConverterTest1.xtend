@@ -3,16 +3,16 @@ package eu.ddmore.converter.mdl2pharmml
 import com.google.inject.Inject
 import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
+import java.io.File
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Ignore
-import java.io.File
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))

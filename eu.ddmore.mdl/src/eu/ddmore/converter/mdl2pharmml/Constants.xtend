@@ -3,7 +3,7 @@ package eu.ddmore.converter.mdl2pharmml
 final class Constants {
 	public static val writtenVersion     = "0.6.1";
 	public static val urlVersion     = "0.6";
-	public static val baseURL            = "http://www.pharmml.org/pharmml/" + eu.ddmore.converter.mdl2pharmml.Constants.urlVersion;
+	public static val baseURL            = "http://www.pharmml.org/pharmml/" + Constants.urlVersion;
 
 	public static val xsi                = "http://www.w3.org/2001/XMLSchema-instance"; 
 	public static val xsi_schemaLocation = baseURL + "/PharmML " + baseURL + "/PharmML";

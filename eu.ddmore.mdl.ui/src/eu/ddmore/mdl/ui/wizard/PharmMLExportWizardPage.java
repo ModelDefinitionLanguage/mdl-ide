@@ -14,7 +14,6 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.eclipse.core.internal.resources.Project;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -41,7 +40,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardExportResourcesPage;
-import org.eclipse.ui.internal.wizards.datatransfer.FileSystemExportOperation;
 
 
 public class PharmMLExportWizardPage extends WizardExportResourcesPage {

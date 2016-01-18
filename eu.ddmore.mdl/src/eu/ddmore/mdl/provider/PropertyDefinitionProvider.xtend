@@ -5,16 +5,16 @@ import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
-import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import java.util.ArrayList
 import java.util.Collections
 import java.util.HashSet
 import java.util.List
 import java.util.Map
-import eu.ddmore.mdl.type.TypeSystemProvider
 
 class PropertyDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils

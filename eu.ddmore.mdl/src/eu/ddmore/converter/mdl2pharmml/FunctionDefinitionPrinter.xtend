@@ -4,8 +4,8 @@ import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
-import java.util.HashSet
 import eu.ddmore.mdl.utils.MdlUtils
+import java.util.HashSet
 
 class FunctionDefinitionPrinter {
 
