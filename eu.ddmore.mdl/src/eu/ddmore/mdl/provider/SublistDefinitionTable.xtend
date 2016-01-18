@@ -16,12 +16,12 @@ class SublistDefinitionTable {
 	public static val COV_ATT = 'cov'
 	public static val CATCOV_ATT = 'catCov'
 	
-	static val COV = new AttributeDefn('cov', true, TypeSystemProvider::REAL_TYPE.makeReference)
-	static val COEFF = new AttributeDefn('coeff', true, TypeSystemProvider::REAL_TYPE.makeReference)
-	static val CAT_COV = new AttributeDefn('catCov', true, TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE.makeReference)
-	static val PRIOR_ELEMENT_TYPE_TYPE = new BuiltinEnumTypeInfo('priorElementType', #{'matrix', 'vector'})
+	val COV = new AttributeDefn('cov', true, TypeSystemProvider::REAL_TYPE.makeReference)
+	val COEFF = new AttributeDefn('coeff', true, TypeSystemProvider::REAL_TYPE.makeReference)
+	val CAT_COV = new AttributeDefn('catCov', true, TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE.makeReference)
+	val PRIOR_ELEMENT_TYPE_TYPE = new BuiltinEnumTypeInfo('priorElementType', #{'matrix', 'vector'})
 	
-	public static val Map<String, SublistTypeInfo> sublistDefns = #{
+	val Map<String, SublistTypeInfo> sublistDefns = #{
 		FIX_EFF_SUBLIST -> (new SublistTypeInfo(FIX_EFF_SUBLIST, #[COV, CAT_COV, COEFF], #[
 																   	#{COEFF.name -> true, COV.name -> true},
 																   	#{COEFF.name -> true, CAT_COV.name -> true}
@@ -45,8 +45,20 @@ class SublistDefinitionTable {
 												#[#{'sample' -> true, 'startTime' -> false}]))
 	}
 	
-	def static SublistTypeInfo getSublist(String name){
+	static var SublistDefinitionTable anInstance
+	
+	public static def getInstance(){
+		if(anInstance == null){
+			anInstance = new SublistDefinitionTable
+		}
+		anInstance
+	}  	
+	
+	def SublistTypeInfo getSublist(String name){
 		return sublistDefns.get(name)
 	}
 
+	def getSublistDefns(){
+		sublistDefns
+	}
 }

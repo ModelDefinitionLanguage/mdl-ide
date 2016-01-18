@@ -13,7 +13,9 @@ import org.eclipse.xtext.validation.ComposedChecks
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
  @ComposedChecks(validators= #[BlockValidator, DataFileValidator, UnsupportedFeaturesValidator, MdlCustomValidator,
- 								ListValidator, TypeSystemValidator, ValueSelectorValidator, UnsupportedToolSpecificFeaturesValidator,
+ 								ListValidator,
+ 								TypeSystemValidator,
+ 								ValueSelectorValidator, UnsupportedToolSpecificFeaturesValidator,
  								BuiltinFunctionValidator, MogValidator, ExpressionValidator, StatementValidator, PropertyValidator ])
 class MdlValidator extends AbstractMdlValidator {
 	public val static MDLOBJ = 'mdlObj'
@@ -23,7 +25,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public val static MOGOBJ = 'mogObj'
 	public val static DESIGNOBJ = 'designObj'
 	public val static PRIOROBJ = 'priorObj'
-	public val static FUNCOBJ = 'funcObj'
+//	public val static FUNCOBJ = 'funcObj'
 
 	public static val UNUSED_FEATURE = "eu.ddmore.mdl.validation.unused.feature"
 	public static val EXPERIMENTAL_FEATURE = "eu.ddmore.mdl.validation.experimental.feature"
@@ -63,6 +65,7 @@ class MdlValidator extends AbstractMdlValidator {
 	
 	// Expressions
 	public static val INVALID_CYCLE = "eu.ddmore.mdl.validation.cyclic.ref"
+	public static val MATRIX_INCONSISTENT_ROW_SIZE = "eu.ddmore.mdl.validation.matrix.rowsize.notsame"
 
 	// MOG validation
 	public static val MODEL_DATA_MISMATCH = "eu.ddmore.mdl.validation.mog.mismatch_mod_data"

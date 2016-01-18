@@ -6,6 +6,8 @@ import eu.ddmore.mdl.mdl.WhenExpression
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.mdl.MatrixLiteral
+import eu.ddmore.mdl.mdl.MatrixRow
 
 class ExpressionValidator extends AbstractDeclarativeValidator{
 
@@ -26,6 +28,20 @@ class ExpressionValidator extends AbstractDeclarativeValidator{
 		if(Double.isInfinite(value) || Double.isNaN(value)){
 			error("This real number is too large or small for MDL.",
 				MdlPackage.eINSTANCE.realLiteral_Value, MdlValidator::NUMBER_BEYOND_PRECISION_RANGE, '')
+		}
+	}
+	
+	@Check
+	def validateMatrixUniform(MatrixLiteral it){
+		var rowSize = -1
+		for(r : rows){
+			if(r instanceof MatrixRow){
+				if(rowSize != -1 && rowSize != r.cells.size)
+					error("The rows in this matrix must be the same size.",
+						MdlPackage.eINSTANCE.matrixLiteral_Rows, MdlValidator::MATRIX_INCONSISTENT_ROW_SIZE, '')
+				else
+					rowSize = r.cells.size 
+			}
 		}
 	}
 	

@@ -39,11 +39,15 @@ class ReferenceTypeInfo extends TypeInfo{
 		new VectorTypeInfo(this);
 	}
 	
-	override isVector(){
-		false
+	override makeMatrix(){
+		new MatrixTypeInfo(this)
 	}
 	
-	override isReference(){
-		true
-	}
+//	override isVector(){
+//		false
+//	}
+//	
+//	override isReference(){
+//		true
+//	}
 }

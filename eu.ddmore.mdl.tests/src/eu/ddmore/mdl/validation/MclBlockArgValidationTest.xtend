@@ -43,14 +43,14 @@ class MclBlockArgValidationTest {
 		mcl.assertNoErrors
 	}
 
-	@Test
+	@Ignore // not supported now
 	def void testUnknownBlockArg(){
 		val mcl = '''bar = mdlObj ( foo T ){
 			VARIABILITY_LEVELS{
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
+		mcl.assertError(MdlPackage::eINSTANCE.argumentDefinition,
 			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
@@ -60,14 +60,15 @@ class MclBlockArgValidationTest {
 //		)
 	}
 
-	@Test
+	@Ignore
+	// not supported now
 	def void testUnknownBlockArgWithOptionIdv(){
 		val mcl = '''bar = mdlObj ( foo T ){
 			VARIABILITY_LEVELS{
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
+		mcl.assertError(MdlPackage::eINSTANCE.argumentDefinition,
 			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
@@ -90,7 +91,7 @@ class MclBlockArgValidationTest {
 		)
 	}
 
-	@Test
+	@Ignore // not supported now
 	def void testUnknownBlockArgProp(){
 		val mcl = '''bar = mdlObj ( idv T, prop = "value" ){
 			VARIABILITY_LEVELS{
@@ -118,13 +119,13 @@ class MclBlockArgValidationTest {
 			BlockValidator::MANDATORY_BLOCK_ARG_MISSING,
 			"mandatory argument 'idv' is missing in mdlObj 'bar'"
 		)
-		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
+		mcl.assertError(MdlPackage::eINSTANCE.argumentDefinition,
 			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
 	}
 
-	@Test
+	@Ignore // not supported now
 	def void testUnknownBlockArgPropAndMandBlockArgOptionalIdv(){
 		val mcl = '''bar = mdlObj ( foo T, prop = "value" ){
 			VARIABILITY_LEVELS{
@@ -137,13 +138,13 @@ class MclBlockArgValidationTest {
 		)
 		mcl.assertNoErrors(MdlPackage::eINSTANCE.mclObject,
 			BlockValidator::MANDATORY_BLOCK_ARG_MISSING)
-		mcl.assertError(MdlPackage::eINSTANCE.forwardDeclaration,
+		mcl.assertError(MdlPackage::eINSTANCE.argumentDefinition,
 			BlockValidator::UNKNOWN_BLOCK_ARG_DECL,
 			"unrecognised variable declaration type 'foo'"
 		)
 	}
 
-	@Test
+	@Ignore // not supported now
 	def void testUnusedBlockArgProps(){
 		val mcl = '''bar = mdlObj ( idv T ){
 			VARIABILITY_LEVELS{

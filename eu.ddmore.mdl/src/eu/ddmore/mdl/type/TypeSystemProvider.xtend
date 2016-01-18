@@ -1,6 +1,7 @@
 package eu.ddmore.mdl.type
 
 import eu.ddmore.mdl.mdl.AnonymousListStatement
+import eu.ddmore.mdl.mdl.ArgumentDefinition
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
@@ -9,10 +10,11 @@ import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.ForwardDeclaration
+import eu.ddmore.mdl.mdl.IndexSpec
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MatrixElement
 import eu.ddmore.mdl.mdl.MatrixLiteral
+import eu.ddmore.mdl.mdl.MatrixRow
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
@@ -21,6 +23,7 @@ import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
+import eu.ddmore.mdl.mdl.TypeSpec
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
@@ -30,6 +33,7 @@ import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import java.util.HashSet
+import java.util.List
 import org.eclipse.xtext.EcoreUtil2
 
 public class TypeSystemProvider {
@@ -50,7 +54,7 @@ public class TypeSystemProvider {
 	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf)
 	public static val PMF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pmf)
 	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector
-	public static val REAL_MATRIX_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector.makeVector
+	public static val REAL_MATRIX_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeMatrix
 	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int).makeVector
 	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping)
 	public static val GENERIC_ENUM_VALUE_TYPE =  new GenericEnumTypeInfo
@@ -75,7 +79,6 @@ public class TypeSystemProvider {
 		ep.powerExpression -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,
 		ep.randomVariableDefinition -> REAL_TYPE,
-		ep.forwardDeclaration -> REAL_TYPE,
 		ep.mappingExpression -> MAPPING_TYPE,
 		ep.catValRefMappingExpression -> MAPPING_TYPE
 	}
@@ -90,16 +93,21 @@ public class TypeSystemProvider {
 		else null
 	}
 	
-	def getTypeForArray(VectorLiteral vl){
+	def getTypeForMatrix(MatrixLiteral vl){
+		val retVal = getTypeForArrayOfElements(vl.rows)
+		retVal.makeMatrix
+	}
+	
+	private def getTypeForArrayOfElements(List<Expression> elements){
 		// first type determines array type unless one of the other elements is a type
 		// that it could be promoted to. For example if the first element is an int
 		// and a later type is a Real the the type for the vector as a whole is a Real.
 		var TypeInfo refType = null
 		var allRefs = true
-		for(e : vl.expressions){
+		for(e : elements){
 			val origType = e.typeFor
 			// check to see if amy non refs present. If so resulting array type will be non-ref
-			if(!origType.isReference) allRefs = false  
+			if(!(origType instanceof ReferenceTypeInfo)) allRefs = false  
 			val exprType = origType.underlyingType // just in case it is a reference
 			if(refType == null)
 				refType = exprType
@@ -111,7 +119,37 @@ public class TypeSystemProvider {
 		}
 		val arrayType = (refType ?: UNDEFINED_TYPE)
 		// if all the types are refs then reflect this in the vector type.
-		if(allRefs) arrayType.makeReference.makeVector else arrayType.makeVector
+		if(allRefs) arrayType.makeReference else arrayType
+	}
+	
+	def getTypeForMatrixRow(MatrixRow vl){
+		getTypeForArrayOfElements(vl.cells)
+	}
+
+	def getTypeForArray(VectorLiteral vl){
+		val arrayType = getTypeForArrayOfElements(vl.expressions)
+		arrayType.makeVector
+//		// first type determines array type unless one of the other elements is a type
+//		// that it could be promoted to. For example if the first element is an int
+//		// and a later type is a Real the the type for the vector as a whole is a Real.
+//		var TypeInfo refType = null
+//		var allRefs = true
+//		for(e : vl.expressions){
+//			val origType = e.typeFor
+//			// check to see if amy non refs present. If so resulting array type will be non-ref
+//			if(!(origType instanceof ReferenceTypeInfo)) allRefs = false  
+//			val exprType = origType.underlyingType // just in case it is a reference
+//			if(refType == null)
+//				refType = exprType
+//			else{
+//				val promotedType = refType.getRichestPromotableType(exprType)
+//				if(promotedType != null && refType != promotedType)
+//					refType = promotedType
+//			}
+//		}
+//		val arrayType = (refType ?: UNDEFINED_TYPE)
+//		// if all the types are refs then reflect this in the vector type.
+//		if(allRefs) arrayType.makeReference.makeVector else arrayType.makeVector
 	}
 	
 	def TypeInfo getTypeForSublist(SubListExpression e){
@@ -120,20 +158,42 @@ public class TypeSystemProvider {
 		return subListType
 	}
 	
+	
+	private def isSingleVectorElement(IndexSpec it){
+		rowIdx != null && rowIdx.begin != null && rowIdx.end == null
+	}
+	
+	private def isSingleMatrixElement(IndexSpec it){
+		rowIdx != null && rowIdx.begin != null && rowIdx.end == null &&
+		colIdx != null && colIdx.begin != null && colIdx.end == null
+	}
+	
+	private def getTypeOfSymbolRef(SymbolReference e){
+		if(e.indexExpr == null)
+			e.ref.typeFor.makeReference
+		else{
+			val t = e.ref.typeFor
+			switch(t){
+				VectorTypeInfo:
+					if(e.indexExpr.isSingleVectorElement)
+						t.elementType.makeReference
+					else t.makeReference
+				MatrixTypeInfo:{
+					if(e.indexExpr.isSingleMatrixElement)
+						t.elementType.makeReference
+					else t.makeReference
+				}
+				
+				default: UNDEFINED_TYPE
+			}
+		}
+	}
+	
 	def dispatch TypeInfo typeFor(Expression e){
 		if(e == null) return TypeSystemProvider.UNDEFINED_TYPE 
 		switch(e){
 			SymbolReference:
-				if(e.indexExpr == null)
-					e.ref.typeFor.makeReference
-				else{
-					val t = e.ref.typeFor
-					switch(t){
-						VectorTypeInfo:
-							t.elementType.makeReference
-						default: UNDEFINED_TYPE
-					}
-				}
+				e.typeOfSymbolRef
 			CategoryValueReference:
 				e.ref.typeFor.makeReference
 			ParExpression: e.expr.typeFor
@@ -147,9 +207,13 @@ public class TypeSystemProvider {
 				if(e.expressions.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
 				else e.typeForArray
 			MatrixElement:
-				e.element?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
+				e.cell?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
+			MatrixRow:
+				if(e.cells.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
+				else e.typeForMatrixRow
 			MatrixLiteral:
-				TypeSystemProvider.REAL_VECTOR_TYPE.makeVector
+				if(e.rows.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
+				else e.typeForMatrix
 			SubListExpression:
 				e.typeForSublist 
 			default:
@@ -192,10 +256,6 @@ public class TypeSystemProvider {
 			case('+'),
 			case('-'):{
 				val operandType = operand?.typeFor.underlyingType
-//				if(operandType == INT_TYPE)
-//					INT_TYPE
-//				else if(operandType == REAL_TYPE)
-//					REAL_TYPE
 				if(operandType.isCompatible(INT_TYPE)) return INT_TYPE
 				else if(operandType.isCompatible(REAL_TYPE)) return REAL_TYPE
 				else UNDEFINED_TYPE
@@ -208,19 +268,40 @@ public class TypeSystemProvider {
 	def dispatch TypeInfo typeFor(SymbolDefinition sd){
 		switch(sd){
 			EquationDefinition:
-				if(sd.isVector)
-					TypeSystemProvider.REAL_VECTOR_TYPE
-				else if(sd.isMatrix)
-					REAL_MATRIX_TYPE
-				else REAL_TYPE
+				{
+					if(sd.expression != null){
+						// type inferred from assigned type
+						sd.expression.typeFor
+					}
+					else{
+						// not assigned value so defaults to REAL unless
+						// an explicit type is declared
+						if(sd.typeSpec != null){
+							sd.typeSpec.typeFor
+						}
+						else REAL_TYPE
+					}
+				}
 			ListDefinition:
 				getTypeOfList(sd)
 			TransformedDefinition,
-			ForwardDeclaration:
+			ArgumentDefinition:
 				typeTable.get(sd.eClass)
-//			RandomVariableDefinition: typeTable.get(sd.eClass)
 			RandomVariableDefinition:
-				if(sd.isVector) TypeSystemProvider.REAL_VECTOR_TYPE else REAL_TYPE
+				{
+					if(sd.distn != null){
+						val distnType = sd.distn.typeFor
+						switch(distnType){
+							VectorTypeInfo case(distnType.elementType == PDF_TYPE): REAL_VECTOR_TYPE
+							MatrixTypeInfo case(distnType.elementType == PDF_TYPE): REAL_MATRIX_TYPE
+							PrimitiveTypeInfo case(distnType == PDF_TYPE): REAL_TYPE
+							default:
+								UNDEFINED_TYPE
+								
+						}
+					}
+					else UNDEFINED_TYPE
+				}
 			EnumerationDefinition:{
 					val defn = sd.catDefn 
 					switch(defn){
@@ -233,6 +314,43 @@ public class TypeSystemProvider {
 				UNDEFINED_TYPE
 		}
 	}
+	
+	def dispatch TypeInfo typeFor(TypeSpec it){
+		if(elementType == null && cellType == null){
+			typeFromSpecName(typeName)
+		}
+		else if(elementType != null){
+			if(typeName == '::Vector'){
+				val elType = elementType.typeFor
+				elType.makeVector
+			}
+			else UNDEFINED_TYPE
+		}
+		else if(cellType != null){
+			if(typeName == '::Matrix'){
+				val elType = cellType.typeFor
+				elType.makeMatrix
+			}
+			else UNDEFINED_TYPE
+		}
+		else UNDEFINED_TYPE
+	}
+	
+	static val specNameLookup = #{
+		'::Int' -> INT_TYPE,
+		'::Real' -> REAL_TYPE,
+		'::Pdf' -> PDF_TYPE,
+		'::String' -> STRING_TYPE,
+		'::Boolean' -> BOOLEAN_TYPE,
+		'::Vector' -> REAL_VECTOR_TYPE,
+		'::Matrix' -> REAL_MATRIX_TYPE
+	} 
+	
+	def typeFromSpecName(String specName){
+		val specType = specNameLookup.get(specName) ?: UNDEFINED_TYPE
+		specType	
+	}
+	
 	
 	def dispatch TypeInfo typeFor(CategoryValueDefinition sd){
 //		return new EnumTypeInfo(exp.name)

@@ -41,16 +41,16 @@ testprior = priorObj{
 		}
 
 		INPUT_PRIOR_DATA{
-			bins_k_v[[]] = readMatrix(src=data, element="bins_k_v")
-			p_k[] = readVector(src=data, element="p_k")
-			p_SIGMA2_RES[] = readVector(src=data, element="p_SIGMA2_RES")
-			data_SIGMA2_RES[] = readVector(src=data, element="data_SIGMA2_RES")
+			bins_k_v = readMatrix(src=data, element="bins_k_v")
+			p_k = readVector(src=data, element="p_k")
+			p_SIGMA2_RES = readVector(src=data, element="p_SIGMA2_RES")
+			data_SIGMA2_RES = readVector(src=data, element="data_SIGMA2_RES")
 		}
 	}
 
 	PRIOR_VARIABLE_DEFINITION{
 		 lnMU_V = ln(MU_V)
-		 mp[] ~ MultiNonParametric(bins=bins_k_v, probability=p_k)
+		 mp ~ MultiNonParametric(bins=bins_k_v, probability=p_k)
 		 POP_K = mp[0]
 		 POP_V = mp[1]
 		invPOP_SIGMA2_RES ~ Empirical(data=data_SIGMA2_RES, probability=p_SIGMA2_RES) 

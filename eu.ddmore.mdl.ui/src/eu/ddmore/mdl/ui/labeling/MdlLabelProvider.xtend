@@ -35,8 +35,9 @@ class MdlLabelProvider extends DefaultEObjectLabelProvider {
 		ele.transform + '(' + ele.name + ')'
 	}
 
+	// @TODO: Fix for matrices
 	def text(EquationDefinition ele) {
-		ele.name + if(ele.isVector) '[]' else ''
+		ele.name //+ if(ele.isVector) '[]' else ''
 	}
 
 	@Inject IImageHelper imageHelper;

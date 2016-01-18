@@ -24,7 +24,7 @@ example332_pri = priorObj{
 	   MU_POP_V = 8
  
  # <<<< Matrix definition ?>>>
-	   SIGMA_POP_P[[]] = [[1,0.1;
+	   SIGMA_POP_P = [[1,0.1;
 	   						0.1,1]]
  		
 	   # prior on "OMEGA"
@@ -32,7 +32,7 @@ example332_pri = priorObj{
 	   b_OMEGA_T = 0.3      
         
 # <<<< Matrix definition ?>>>  // alternate
-	   R[[]] = matrix(vector=[1,0.1,0.1,1], ncol=2, byRow=true)
+	   R = matrix(vector=[1,0.1,0.1,1], ncol=2, byRow=true)
 	   rho = 2
         
         # prior on "SIGMA"
@@ -48,8 +48,8 @@ example332_pri = priorObj{
 	   lMU_POP_V = ln(MU_POP_V)
 	    
 # <<<< Creating a vector: v = c(el1,el2) ?>>>  
-	   lMU_POP_P[] = [lMU_POP_K, lMU_POP_V] 
-	   lPOP_P[] ~ MultivariateNormal(mean=lMU_POP_P, cov=SIGMA_POP_P)
+	   lMU_POP_P = [lMU_POP_K, lMU_POP_V] 
+	   lPOP_P ~ MultivariateNormal(mean=lMU_POP_P, cov=SIGMA_POP_P)
 	 	
 # <<<< Accessing vector elements: el1 = v[1] ?>>> 
 	   POP_K = exp(lPOP_P[1])
@@ -59,10 +59,10 @@ example332_pri = priorObj{
 #	   invOMEGA_P ~ Wishart(scaleMatrix=R, nu=rho)
 	# SLM not sure about this. Should wishard return a matrix?
 	# Creating a dummy matrix to keep the inverse function happy
-	   invOMEGA_P [[]]
+	   invOMEGA_P::Matrix
 
 # <<<< the inverse(matrix) operator does not exist in the current version>>> 
-	   OMEGA_P[[]] = inverse(invOMEGA_P)
+	   OMEGA_P = inverse(invOMEGA_P)
 		
 	   TAU_T ~ Gamma(shape=a_OMEGA_T, scale=b_OMEGA_T)
 	   OMEGA_T = 1/TAU_T 
@@ -101,16 +101,16 @@ example332_mdl = mdlObj{
 
    STRUCTURAL_PARAMETERS{
 	   POP_T
-	   lPOP_P[]
+	   lPOP_P::Vector
    }# end STRUCTURAL_PARAMETERS
 
    VARIABILITY_PARAMETERS{
 	   OMEGA_T
-	   OMEGA_P[[]]
+	   OMEGA_P::Matrix
    }# end VARIABILITY_PARAMETERS
 
    RANDOM_VARIABLE_DEFINITION(level=ID) {
-	   lP[] ~ MultivariateNormal(mean=lPOP_P, cov=OMEGA_P) 
+	   lP ~ MultivariateNormal(mean=lPOP_P, cov=OMEGA_P) 
 	   eta_T ~ Normal(mean=0, var=OMEGA_T)
    }# end RANDOM_VARIABLE_DEFINITION
 
@@ -136,5 +136,9 @@ example332_mdl = mdlObj{
 		CODE_SNIPPET.parse.assertNoErrors
 		
 	}
+	
+//	@Test //need this to enable test initialisation with 1 ignore
+//	def void testDummy(){
+//	}
 	
 }

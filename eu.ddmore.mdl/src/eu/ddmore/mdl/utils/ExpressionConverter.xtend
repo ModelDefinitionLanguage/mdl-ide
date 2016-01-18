@@ -15,6 +15,7 @@ import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
+import eu.ddmore.mdl.mdl.PowerExpression
 import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.StringLiteral
@@ -24,7 +25,6 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
 import org.eclipse.emf.ecore.EObject
-import eu.ddmore.mdl.mdl.PowerExpression
 
 public class ExpressionConverter {
 

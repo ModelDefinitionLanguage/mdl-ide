@@ -193,7 +193,7 @@ class ListDefinitionTable {
 					new ListDefInfo (null, PRIOR_SOURCE_TYPE,  #[
 						 new AttributeDefn('file', true, TypeSystemProvider::STRING_TYPE),
 						 new AttributeDefn('inputFormat', true, PRIOR_INPUT_FORMAT_TYPE),
-						 new AttributeDefn('format', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::PRIOR_FORMAT_SUBLIST).makeVector)
+						 new AttributeDefn('format', true, SublistDefinitionTable::instance.getSublist(SublistDefinitionTable::PRIOR_FORMAT_SUBLIST).makeVector)
 						 ] 
 					)
 				)
@@ -433,8 +433,8 @@ class ListDefinitionTable {
 			new BlockListDefinition('interventionSequence', newArrayList(
 					new ListDefInfo (null, STUDY_DESIGN_LIST_TYPE,  #[
 						 new AttributeDefn('armSize', false, TypeSystemProvider::INT_TYPE),
-						 new AttributeDefn('interventionSequence', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::INTERVENTION_SEQ_SUBLIST).makeVector),
-						 new AttributeDefn('samplingSequence', false, SublistDefinitionTable::getSublist(SublistDefinitionTable::SAMPLING_SEQ_SUBLIST).makeVector)
+						 new AttributeDefn('interventionSequence', true, SublistDefinitionTable::instance.getSublist(SublistDefinitionTable::INTERVENTION_SEQ_SUBLIST).makeVector),
+						 new AttributeDefn('samplingSequence', false, SublistDefinitionTable::instance.getSublist(SublistDefinitionTable::SAMPLING_SEQ_SUBLIST).makeVector)
 						 ]
 					)
 				)

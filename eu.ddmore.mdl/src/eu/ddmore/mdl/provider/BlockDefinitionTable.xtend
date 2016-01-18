@@ -113,7 +113,7 @@ class BlockDefinitionTable {
 				new StatementSpec(ep.anonymousListStatement)
 			]),
 			"FUNCTIONS" -> new BlockSpec("FUNCTIONS", 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
-				new StatementSpec(ep.userFunctionDefinition)
+				new StatementSpec(ep.equationDefinition)
 			]),
 			"ADMINISTRATION" -> new BlockSpec("ADMINISTRATION", 1, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[
 				new StatementSpec(ep.listDefinition),
@@ -164,9 +164,9 @@ class BlockDefinitionTable {
 			MDL_INDIV_PARAMS, MDL_PRED_BLK_NAME,
 			OBS_BLK_NAME, MDL_GRP_PARAMS, IDV_BLK_NAME, "FUNCTIONS"
 		},
-		MdlValidator::FUNCOBJ -> #{
-			"FUNCTIONS"
-		},
+//		MdlValidator::FUNCOBJ -> #{
+//			"FUNCTIONS"
+//		},
 		MdlValidator::DATAOBJ -> #{
 			DIV_BLK_NAME, "DECLARED_VARIABLES", "DATA_DERIVED_VARIABLES",
 			DATA_SRC_BLK

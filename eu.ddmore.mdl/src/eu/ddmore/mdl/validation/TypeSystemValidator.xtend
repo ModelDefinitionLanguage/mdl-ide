@@ -5,12 +5,16 @@ import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.CatValRefMapping
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
+import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EqualityExpression
-import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
+import eu.ddmore.mdl.mdl.IndexRange
 import eu.ddmore.mdl.mdl.MappingPair
+import eu.ddmore.mdl.mdl.MatrixElement
+import eu.ddmore.mdl.mdl.MatrixLiteral
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
@@ -26,22 +30,22 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.PropertyDefinitionProvider
+import eu.ddmore.mdl.provider.SublistDefinitionProvider
+import eu.ddmore.mdl.type.EnumTypeInfo
+import eu.ddmore.mdl.type.GenericEnumTypeInfo
+import eu.ddmore.mdl.type.MatrixTypeInfo
+import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.type.VectorTypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.provider.ListDefinitionProvider
-import eu.ddmore.mdl.type.TypeSystemProvider
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.type.PrimitiveType
-import eu.ddmore.mdl.mdl.CategoryValueReference
-import eu.ddmore.mdl.type.GenericEnumTypeInfo
-import eu.ddmore.mdl.type.EnumTypeInfo
-import eu.ddmore.mdl.provider.BuiltinFunctionProvider
-import eu.ddmore.mdl.provider.SublistDefinitionProvider
-import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -137,25 +141,36 @@ class TypeSystemValidator extends AbstractMdlValidator {
 			)
 	}
 		
-	@Check
-	def validateCompatibleTypes(EquationDefinition e){
-		// only check if there is an RHS to check 
-		if(e.expression != null)
-			if(e.isVector)
-				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
-			else if(e.isMatrix)
-				checkExpectedMatrix(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
-			else
-				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
-	}
+//	@Check
+//	def validateCompatibleTypes(EquationDefinition e){
+//		// only check if there is an RHS to check 
+//		if(e.expression != null)
+//			if(e.isVector)
+//				checkExpectedVector(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
+//			else if(e.isMatrix)
+//				checkExpectedMatrix(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
+//			else
+//				checkExpectedReal(e.expression, typeError(MdlPackage::eINSTANCE.equationTypeDefinition_Expression))
+//	}
 		
 	@Check
 	def validateCompatibleTypes(RandomVariableDefinition e){
 		if(e.distn != null){
-			if(e.isVector)
-				checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
-			else 
-				checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+			val stmtType = e.typeFor
+			switch(stmtType){
+				MatrixTypeInfo:
+					checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeMatrix, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+				VectorTypeInfo:
+					checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeVector, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+//					checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+				default:
+					checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+//					checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+			}
+//			if(e.isVector)
+//				checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+//			else 
+//				checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
 		}
 	}
 		
@@ -167,8 +182,8 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		
 	@Check
 	def validateCompatibleVectorElement(VectorElement e){
-		if(e.eContainer instanceof VectorLiteral){
-			val vect = e.eContainer as VectorLiteral
+		val vect = e.eContainer
+		if(vect instanceof VectorLiteral){
 			val vectType = vect.typeFor
 			val exprType = e.typeFor
 			if(!vectType.isCompatibleElement(exprType)){
@@ -178,6 +193,32 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		}
 	}
 	
+	@Check
+	def validateCompatibleMatrixElement(MatrixElement e){
+		val vect = EcoreUtil2.getContainerOfType(e.eContainer, MatrixLiteral)
+		if(vect != null){
+			val vectType = vect.typeFor
+			val exprType = e.typeFor
+			if(!vectType.isCompatibleElement(exprType)){
+				error("Cell type '" + exprType.typeName + "' is incompatible with matrix type '" + vectType.typeName + "'.",
+					MdlPackage.eINSTANCE.matrixElement_Cell, MdlValidator::INCOMPATIBLE_TYPES, vectType.typeName)
+			}			
+		}
+	}
+	
+	@Check
+	def validateIndexSpecType(IndexRange it){
+		if(begin != null)
+			checkExpectedIntl(begin, [e, a|
+								error("Index value must be an 'Int' type, but was '" + a.typeName + "'.",
+								MdlPackage.eINSTANCE.indexRange_Begin, MdlValidator::INCOMPATIBLE_TYPES)
+								])
+		if(end != null)
+			checkExpectedIntl(begin, [e, a|
+								error("Index value must be an 'Int' type, but was '" + a.typeName + "'.",
+								MdlPackage.eINSTANCE.indexRange_End, MdlValidator::INCOMPATIBLE_TYPES)
+								])
+	}
 	
 	@Check
 	def validUnnamedFuctionArgumentType(UnnamedArgument it){
@@ -236,13 +277,13 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		checkExpectedAndExpression(TypeSystemProvider::INT_TYPE, exp, errorLambda)
 	}
 	
-	def checkExpectedPdf(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
-		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE, exp, errorLambda)
-	}
-
-	def checkExpectedPdfVector(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
-		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeVector, exp, errorLambda)
-	}
+//	def checkExpectedPdf(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+//		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE, exp, errorLambda)
+//	}
+//
+//	def checkExpectedPdfVector(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+//		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeVector, exp, errorLambda)
+//	}
 
 	def checkExpectedRealTransform(String transform, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = transform.transformFunctionType
@@ -344,11 +385,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 
 	def dispatch void checkExpectedAndExpression(EnumTypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
-		var testActual = actualType
-		if(expectedType.isVector && !actualType.isVector){
-			testActual = actualType.makeVector
-		}
-		if(!expectedType.isCompatible(testActual)){
+		if(!expectedType.isCompatible(actualType)){
 			errorLambda.apply(expectedType, actualType)
 		} 
 	}
@@ -363,7 +400,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	def dispatch void checkExpectedAndExpression(TypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
 		var testActual = actualType
-		if(expectedType.underlyingType.isVector && !actualType.underlyingType.isVector){
+		if(expectedType.underlyingType instanceof VectorTypeInfo && !(actualType.underlyingType instanceof VectorTypeInfo)){
 			testActual = actualType.makeVector
 		}
 		if(!expectedType.isCompatible(testActual)){

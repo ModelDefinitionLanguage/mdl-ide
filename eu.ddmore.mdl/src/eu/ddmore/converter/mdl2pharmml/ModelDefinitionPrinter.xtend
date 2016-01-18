@@ -41,6 +41,7 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.utils.MdlUtils
+import eu.ddmore.mdl.type.VectorTypeInfo
 
 class ModelDefinitionPrinter {
 	extension MdlUtils mu = new MdlUtils
@@ -462,7 +463,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	def writeVariableDefinition(EquationDefinition stmt)'''
-		<ct:Variable symbId="«stmt.name»" symbolType="«IF stmt.isVector»ERROR!«ELSE»real«ENDIF»">
+		<ct:Variable symbId="«stmt.name»" symbolType="«IF stmt instanceof VectorTypeInfo»ERROR!«ELSE»real«ENDIF»">
 			«IF stmt.expression != null»
 				«stmt.expression.writeAssignment»
 			«ENDIF»

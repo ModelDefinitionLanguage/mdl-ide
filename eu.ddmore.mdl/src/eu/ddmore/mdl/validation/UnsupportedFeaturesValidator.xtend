@@ -127,7 +127,8 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 		}
 	}
 	
-	static val UnsupportedFunctions = #{ 'tanh', 'sinh', 'cosh', 'floor', 'mean' }
+//	static val UnsupportedFunctions = #{ 'tanh', 'sinh', 'cosh', 'floor', 'mean' }
+	static val Set<String> UnsupportedFunctions = #{ }
 	
 	@Check
 	// Check for unsupported functions

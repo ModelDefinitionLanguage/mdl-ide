@@ -50,7 +50,8 @@ warfarin_PK_ODE_mdl = mdlObj {
 	@Test
 	def void testConverter1(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlObj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV{T}
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -69,7 +70,8 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	@Test
 	def void testConverter2(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlObj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV{T}
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -86,7 +88,8 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	@Test
 	def void testConverter3(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlObj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV{T}
 	MODEL_PREDICTION {
 			RATEIN = 10 < 22 == true
 	} # end MODEL_PREDICTION
@@ -100,7 +103,8 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	@Test
 	def void testConverter4(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlObj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV{T}
 	MODEL_PREDICTION {
 			KA
 			GUT
@@ -122,7 +126,8 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	@Test
 	def void testConverter5(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlObj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV{T}
 	MODEL_PREDICTION {
 			RATEIN = "doo"
 	} # end MODEL_PREDICTION
@@ -136,7 +141,8 @@ warfarin_PK_ODE_mdl = mdlObj (idv T) {
 	@Test
 	def void testConverter6(){
 		val mcl =  '''
-warfarin_PK_ODE_mdl = mdlObj (idv T) {
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV{T}
 	MODEL_PREDICTION {
 			KA
 			GUT

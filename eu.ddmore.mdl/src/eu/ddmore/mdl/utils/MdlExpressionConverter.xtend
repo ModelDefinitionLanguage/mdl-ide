@@ -7,6 +7,7 @@ import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.ElifClause
+import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.Expression
@@ -20,7 +21,6 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
-import eu.ddmore.mdl.mdl.ElseClause
 
 public class MdlExpressionConverter extends ExpressionConverter {
 	

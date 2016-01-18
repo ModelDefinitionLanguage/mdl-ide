@@ -29,51 +29,63 @@ BlockArguments:
 ;
 
 BlockArgument:
-	ValuePair|ForwardDeclaration
+	ValuePair
 ;
 
-
-ForwardDeclaration:
-	{ForwardDeclaration}declType=ID name=ID
-;
 
 Statement:
 	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-	EnumerationDefinition|PropertyStatement|UserFunctionDefinition|
+	EnumerationDefinition|PropertyStatement|
 	CategoricalProbabilityAssign
 ;
 
 
 SymbolDefinition:
-	EquationDefinition | ListDefinition| ForwardDeclaration | RandomVariableDefinition | TransformedDefinition|
-	  EnumerationDefinition|UserFunctionDefinition
+	EquationDefinition | ListDefinition| ArgumentDefinition | RandomVariableDefinition | TransformedDefinition|
+	  EnumerationDefinition
 ;
 
 
-UserFunctionDefinition:
-	{UserFunctionDefinition} name = ID (vector?='[' ']'|matrix?='[[' ']]')? ASSIGN 'function' '(' argument=NamedArgumentDefinitions ')'
-			(BEGIN expression = Expression END)? ';'?
+FuncArgDefns:
+	{FuncArgDefns} arguments += ArgumentDefinition (=> ',' arguments += ArgumentDefinition)* 
 ;
 
-NamedArgumentDefinitions:
-	{NamedArgumentDefinitions} arguments += ForwardDeclaration (=> ',' arguments += ForwardDeclaration)* 
+ArgumentDefinition:
+	{ArgumentDefinition}name=ID typeSpec=TypeSpec?
 ;
+
+
 
 EquationTypeDefinition:
 	EquationDefinition|TransformedDefinition
 ;
 
 EquationDefinition returns EquationTypeDefinition:
-	{EquationDefinition} name = ID (vector?='[' ']'|matrix?='[[' ']]')? (ASSIGN expression = Expression)? ';'?
-;
-
-EnumerationDefinition:
-	name = ID  catDefn=CategoricalDefinitionExpr ';'?
+	{EquationDefinition} name = ID typeSpec=TypeSpec? (ASSIGN expression = Expression)? ';'?
 ;
 
 TransformedDefinition returns EquationTypeDefinition:
 	{TransformedDefinition} transform = ID '(' name=ID ')' ASSIGN expression=Expression ';'?
+;
+
+RandomVariableDefinition:
+	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
+;
+
+TypeSpec:
+	{TypeSpec} typeName=TYPE_SPEC ('[' elementType=TypeSpec ']'|'[[' cellType=TypeSpec ']]'| funcSpec=FunctionSpec)?
+;
+
+
+FunctionSpec:
+	{FunctionSpec} '(' argument=FuncArgDefns ')'
+			'returns' expression = Expression 
+;
+
+
+EnumerationDefinition:
+	name = ID  catDefn=CategoricalDefinitionExpr ';'?
 ;
 
 CategoricalProbabilityAssign:
@@ -85,10 +97,6 @@ ProbabilityFunction:
 	probFunc = ID '(' catRef=SymbolReference relOp=('=='|'<='|'>='|'<'|'>') catValRef=CategoryValueReference ')'
 ;
 
-
-RandomVariableDefinition:
-	name = ID (vector?='[' ']')? RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
-;
 
 ListDefinition:
 	name = ID LIST_ASSIGN list = AttributeList ';'?
@@ -249,7 +257,6 @@ WhenExpression returns Expression:
 	 	when+=WhenClause
 	 	(=> when+=ElifClause)*
 		(=>other=ElseClause)?
-//		(=>ELSE other=Expression)?
 	;
 
 IfExprPart:
@@ -279,9 +286,18 @@ Literal returns Expression:
 ;
 
 SymbolReference:
-	{SymbolReference} ref=[SymbolDefinition|ID] ('[' indexExpr = Expression ']')?
+	{SymbolReference} ref=[SymbolDefinition|ID] ('[' indexExpr = IndexSpec ']')?
 ;
 
+IndexSpec:
+		{IndexSpec} rowIdx = IndexRange? (',' colIdx = IndexRange?)? 
+			;
+
+IndexRange:
+		{IndexRange} (
+			begin=Expression (LIST_ASSIGN end=Expression)?
+		)
+		;
 
 CategoryValueReference:
 	{CategoryValueReference} ref=[CategoryValueDefinition|QualifiedName]
@@ -293,7 +309,7 @@ BuiltinFunctionCall returns Expression:
 ;
 
 UserFunctionCall returns Expression:
-	{UserFunctionCall} '&' ref=[UserFunctionDefinition|ID] '(' argList=(NamedFuncArguments)? ')'
+	{UserFunctionCall} '&' ref=[SymbolDefinition|ID] '(' argList=(NamedFuncArguments)? ')'
 ;
 
 NamedFuncArguments returns FuncArguments:
@@ -327,19 +343,19 @@ StringLiteral returns Expression:
 
 
 MatrixLiteral returns Expression:
-	{MatrixLiteral} '[[' rows += MatrixRow (=> ';' rows += MatrixRow)* ']]'
+	{MatrixLiteral} '[[' (rows += MatrixRow (=> ';' rows += MatrixRow)*)? ']]'
 ;	
 
 MatrixRow returns Expression:
-	{MatrixRow} expressions += MatrixElement (=> ',' expressions += MatrixElement)*
+	{MatrixRow} cells += MatrixElement (=> ',' cells += MatrixElement)*
 ;
 
 MatrixElement returns Expression:
-	{MatrixElement} element=Expression
+	{MatrixElement} cell=Expression
 ;
 
 VectorLiteral returns Expression:
-	{VectorLiteral} '[' expressions += VectorElement (=> ',' expressions += VectorElement)* ']'
+	{VectorLiteral} '[' (expressions += VectorElement (=> ',' expressions += VectorElement)*)? ']'
 ;	
 
 VectorElement returns Expression:
@@ -353,6 +369,10 @@ QualifiedName:
 
 terminal CONSTANT:
 	'inf'|'pi'|'exponentiale'
+;
+
+terminal TYPE_SPEC:
+	'::' + ('A'..'Z')('a'..'z'|'A'..'Z'| '0'..'9')+
 ;
 
 terminal SET: 'set';

@@ -15,7 +15,7 @@ class BuiltinFunctionTable {
 	
 	public static val TRANS_TYPE = new BuiltinEnumTypeInfo('transType', #{'none', 'ln', 'logit', 'probit'})
 	
-	public static val Map<String, List<? extends FunctDefn>> functDefns = #{
+	val Map<String, List<? extends FunctDefn>> functDefns = #{
 		'log' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE, TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
 		'log2' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
 		'log10' -> #[ new SimpleFuncDefn(#[TypeSystemProvider::REAL_TYPE], TypeSystemProvider::REAL_TYPE) ],
@@ -121,7 +121,7 @@ class BuiltinFunctionTable {
 		'linear' -> #[ new NamedArgFuncDefn(TypeSystemProvider::REAL_TYPE, #{
 						'trans' -> new FunctionArgument(TRANS_TYPE, false),
 						'pop' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE, true),
-						'fixEff' -> new FunctionArgument(SublistDefinitionTable::getSublist(SublistDefinitionTable::FIX_EFF_SUBLIST).makeVector, false),
+						'fixEff' -> new FunctionArgument(SublistDefinitionTable::instance.getSublist(SublistDefinitionTable::FIX_EFF_SUBLIST).makeVector, false),
 						'ranEff' -> new FunctionArgument(TypeSystemProvider::REAL_TYPE.makeVector, true)
 					} )
 					],
@@ -167,5 +167,17 @@ class BuiltinFunctionTable {
 					} ) ]
 	}
 
+	private static var BuiltinFunctionTable anInstance
+
+	static def getInstance(){
+		if(anInstance == null){
+			anInstance = new BuiltinFunctionTable
+		}
+		anInstance
+	} 
+
+	def Map<String, List<? extends FunctDefn>> getFunctDefns(){
+		functDefns
+	} 
 
 }
