@@ -103,11 +103,18 @@ class DistributionPrinter {
 	
 	public def printDiscreteDistribution(BuiltinFunctionCall distnDef){
 		val typeName = distnDef.func;
-		switch(typeName){
+		val distn = switch(typeName){
 			case "Bernoulli": distnDef.printBernoulliDistn
 			case "Binomial": distnDef.printBinomialDistn
 			default: ''''''
 		}
+		'''
+		<Distribution>
+			<UncertML>
+				«distn»
+			</UncertML>
+		</Distribution>
+		'''
 	}
 
 	public def printBernoulliDistn(BuiltinFunctionCall randomList){

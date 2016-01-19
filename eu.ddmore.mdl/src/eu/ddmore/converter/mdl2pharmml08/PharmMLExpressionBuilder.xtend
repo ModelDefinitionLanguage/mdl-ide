@@ -27,8 +27,6 @@ import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.validation.BlockDefinitionProvider
 import eu.ddmore.mdl.validation.ListDefinitionProvider
 
-import static eu.ddmore.converter.mdl2pharmml08.Constants.*
-
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.PowerExpression
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
@@ -113,7 +111,7 @@ class PharmMLExpressionBuilder {
 	
 	def getExpressionAsAssignment(Expression it)'''
 		<ct:Assign>
-			«expressionAsEquation»
+			«pharmMLExpr»
 		</ct:Assign>
 	'''
 	
@@ -335,9 +333,9 @@ class PharmMLExpressionBuilder {
 		<ct:Int>«value»</ct:Int>
 	'''
 	
-	def getConstantLiteral(ConstantLiteral it) {
+	def getCommonConstantLiteral(ConstantLiteral it) {
 		val constType = switch(value){
-			case("inf"): "infinity"
+//			case("inf"): "infinity"
 			case("exponentiale"): "exponentiale"
 			case("pi") : "pi"
 			default:
@@ -349,6 +347,14 @@ class PharmMLExpressionBuilder {
 			<math:Constant op="«constType»"/>
 		</math:Binop>
 		'''
+	}
+	
+	private def getConstantLiteral(ConstantLiteral it){
+		switch(value){
+			case("inf"): "<ct:plusInf/>"
+			default:
+					commonConstantLiteral
+		}
 	}
 	
 	def getRealLiteral(RealLiteral it)'''

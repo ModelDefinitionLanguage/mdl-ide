@@ -54,30 +54,25 @@ class ModellingStepsPrinter {
 		var res = "";
 		var dependencies = ""; 
 		if (mObj != null && dObj != null && pObj != null && tObj != null) {
-//			res = res + dObj.print_ds_TargetTool;
-			res = res + print_ds_TargetDataSet(mObj, dObj);
 			var index = 1;
-
 			for (b: tObj.blocks){
-//				if ((b.estimateBlock != null) || (b.simulateBlock != null)){
-					var stepType = BLK_ESTIM_STEP;
-//					if (b.simulateBlock != null) stepType = BLK_SIMUL_STEP;
-//					if (stepType.equals(BLK_ESTIM_STEP)){
-						res = res + print_msteps_EstimationStep(stepType + index, index, mObj, dObj, pObj, tObj);
-//					} else {
-//						res = res + print_msteps_SimulationStep(stepType + index, index, mObj, dObj, pObj, tObj);
-//					}
-					dependencies  = dependencies +
-					'''
-					<mstep:Step>
-						<ct:OidRef oidRef="«stepType + index»"/>
-					</mstep:Step>
-					'''
-					index  = index + 1;
-//				}
+				var stepType = BLK_ESTIM_STEP;
+				res = res + print_msteps_EstimationStep(stepType + index, index, mObj, dObj, pObj, tObj);
+				dependencies  = dependencies +
+				'''
+				<mstep:Step>
+					<ct:OidRef oidRef="«stepType + index»"/>
+				</mstep:Step>
+				'''
+				index  = index + 1;
 			}
 		}
 		'''
+		<TrialDesign xmlns="http://www.pharmml.org/pharmml/0.8/TrialDesign">
+			«IF mObj != null && dObj != null»
+				«print_ds_TargetDataSet(mObj, dObj)»
+			«ENDIF»
+		</TrialDesign>
 		<ModellingSteps xmlns="«xmlns_mstep»">
 			«res»
 			«IF dependencies.length > 0»
@@ -116,16 +111,16 @@ class ModellingStepsPrinter {
 				<ParameterEstimation>
 					«paramVar.getSymbolReference»
 					<InitialEstimate fixed="«stmt.list.getAttributeExpression('fix')?.convertToString ?: 'false'»">
-						«stmt.list.getAttributeExpression('value').expressionAsEquation»
+						«stmt.list.getAttributeExpression('value').pharmMLExpr»
 					</InitialEstimate>
 					«IF stmt.list.getAttributeExpression('lo') != null»
 						<LowerBound>
-							«stmt.list.getAttributeExpression('lo').expressionAsEquation»
+							«stmt.list.getAttributeExpression('lo').pharmMLExpr»
 						</LowerBound>
 					«ENDIF»
 					«IF stmt.list.getAttributeExpression('hi') != null»
 						<UpperBound>
-							«stmt.list.getAttributeExpression('hi').expressionAsEquation»
+							«stmt.list.getAttributeExpression('hi').pharmMLExpr»
 						</UpperBound>
 					«ENDIF»
 				</ParameterEstimation>
@@ -484,7 +479,7 @@ class ModellingStepsPrinter {
 				'''
 				<MultipleDVMapping>
 					<ColumnRef xmlns="«xmlns_ds»" columnIdRef="«column.name»"/>
-					<Piecewise xmlns="«xmlns_mstep»">
+					<Piecewise>
 						«FOR p : dataDefine.attList»
 							«IF p.rightOperand instanceof SymbolReference»
 								«IF mObj.isDefinedInMdlObservations(p.mappedSymbol)»
@@ -593,11 +588,11 @@ class ModellingStepsPrinter {
 		switch(expression){
 			CatValRefMappingExpression:{
 				return '''
-				<ds:CategoryMapping>
+				<math:CategoryMapping>
 					«FOR catVal : expression.attLists»
 						<ds:Map modelSymbol="«catVal.catRef.ref.name»" dataSymbol="«catVal.mappedTo.convertToString»"/>
 					«ENDFOR»
-				</ds:CategoryMapping>
+				</math:CategoryMapping>
 				'''
 			}
 		}

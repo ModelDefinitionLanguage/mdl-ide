@@ -325,7 +325,7 @@ class ModelDefinitionPrinter {
 		<IndividualParameter symbId="«name»">
 			<StructuredModel>
 				«IF trans!= null»
-					<Transformation>«trans»</Transformation>
+					<Transformation type="«trans»"/>
 				«ENDIF»
 				<GeneralCovariate>
 					«namedArgList.getArgumentExpression('grp').writeAssignment»
@@ -461,9 +461,7 @@ class ModelDefinitionPrinter {
 	
 	def writeAssignZero()'''
 		<ct:Assign>
-			<Equation xmlns="«xmlns_math»">
-				<ct:Int>0</ct:Int>
-			</Equation>
+			<ct:Int>0</ct:Int>
 		</ct:Assign>	
 	'''
 	
@@ -649,24 +647,20 @@ class ModelDefinitionPrinter {
 		'''
 		<ErrorModel>
 			<ct:Assign>
-				<Equation xmlns="«xmlns_math»">
-					<FunctionCall>
-						<ct:SymbRef symbIdRef="«standardErrorName»"/>
-						«FOR vp : getNamedArguments»
-							«IF getStandardErrorArgument(vp.argumentName) != null»
-								<FunctionArgument symbId="«getStandardErrorArgument(vp.argumentName)»">
-									«IF !(vp.expression instanceof SymbolReference)»
-										<Equation xmlns="«xmlns_math»">
-											«vp.expression.pharmMLExpr»
-										</Equation>
-									«ELSE»
-										«vp.expression.pharmMLExpr»
-									«ENDIF»
-								</FunctionArgument>
-							«ENDIF»
-						«ENDFOR»
-					</FunctionCall>
-				</Equation>
+				<math:FunctionCall>
+					<ct:SymbRef symbIdRef="«standardErrorName»"/>
+					«FOR vp : getNamedArguments»
+						«IF getStandardErrorArgument(vp.argumentName) != null»
+							<math:FunctionArgument symbId="«getStandardErrorArgument(vp.argumentName)»">
+								«IF !(vp.expression instanceof SymbolReference)»
+									«vp.expression.pharmMLExpr»
+								«ELSE»
+									«vp.expression.pharmMLExpr»
+								«ENDIF»
+							</math:FunctionArgument>
+						«ENDIF»
+					«ENDFOR»
+				</math:FunctionCall>
 			</ct:Assign>
 		</ErrorModel>
 		'''
@@ -766,19 +760,17 @@ class ModelDefinitionPrinter {
 					<!-- Note that this parameter is local to this block, but uses the same name
 						as the lambda argument. --> 
 					<PopulationParameter symbId="«paramVar.convertToString»">
-					<ct:Assign>
-						<math:Equation>
-						«IF linkFunction != null»
-							«getInverseFunction(linkFunction, paramVar)»
-						«ELSE»
-							«paramVar.pharmMLExpr»
-						«ENDIF»
-						</math:Equation>
-					</ct:Assign>
-				</PopulationParameter>
+						<ct:Assign>
+							«IF linkFunction != null»
+								«getInverseFunction(linkFunction, paramVar)»
+							«ELSE»
+								«paramVar.pharmMLExpr»
+							«ENDIF»
+						</ct:Assign>
+					</PopulationParameter>
 				«ENDIF»
 				<CountVariable symbId="«name»"/>
-				<PMF linkFunction="identity">
+				<PMF transform="identity">
 					«distn.writeUncertMlDistribution»
 				</PMF>
 				</CountData>
@@ -821,13 +813,11 @@ class ModelDefinitionPrinter {
 							as the lambda argument.  --> 
 						<PopulationParameter symbId="«paramVar.convertToString»">
 							<ct:Assign>
-								<math:Equation>
-									«IF linkFunction != null»
-										«getInverseFunction(linkFunction, paramVar)»
-									«ELSE»
-										«paramVar.pharmMLExpr»
-									«ENDIF»
-								</math:Equation>
+								«IF linkFunction != null»
+									«getInverseFunction(linkFunction, paramVar)»
+								«ELSE»
+									«paramVar.pharmMLExpr»
+								«ENDIF»
 							</ct:Assign>
 						</PopulationParameter>
 					«ENDIF»
@@ -837,7 +827,7 @@ class ModelDefinitionPrinter {
 						«ENDFOR»
 					</ListOfCategories>
 					<CategoryVariable symbId="«name»"/>
-					<PMF linkFunction="identity">
+					<PMF transform="identity">
 						«printDiscreteDistribution(distn)»
 					</PMF>
 				</CategoricalData>
