@@ -1,16 +1,16 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.EnumListTypeInfo
-import eu.ddmore.mdl.type.ListTypeInfo
-import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import eu.ddmore.mdl.provider.ListDefinitionProvider.BlockListDefinition
 import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
-import java.util.Map
-import eu.ddmore.mdl.validation.MdlValidator
-import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.EnumListTypeInfo
 import eu.ddmore.mdl.type.ListSuperTypeInfo
+import eu.ddmore.mdl.type.ListTypeInfo
+import eu.ddmore.mdl.type.PrimitiveType
+import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.validation.MdlValidator
+import java.util.Map
 
 class ListDefinitionTable {
 	public static val USE_ATT = 'use'

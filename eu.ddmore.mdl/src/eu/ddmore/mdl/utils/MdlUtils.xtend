@@ -19,6 +19,7 @@ import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
+import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.validation.MdlValidator
 import java.util.ArrayList
 import java.util.List

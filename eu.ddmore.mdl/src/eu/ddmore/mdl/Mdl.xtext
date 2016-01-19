@@ -33,32 +33,29 @@ BlockArgument:
 ;
 
 
-ForwardDeclaration:
-	{ForwardDeclaration}name=ID typeSpec=TypeSpec?
-;
-
 Statement:
 	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-	EnumerationDefinition|PropertyStatement|//UserFunctionDefinition|
+	EnumerationDefinition|PropertyStatement|
 	CategoricalProbabilityAssign
 ;
 
 
 SymbolDefinition:
-	EquationDefinition | ListDefinition| ForwardDeclaration | RandomVariableDefinition | TransformedDefinition|
-	  EnumerationDefinition//|UserFunctionDefinition
+	EquationDefinition | ListDefinition| ArgumentDefinition | RandomVariableDefinition | TransformedDefinition|
+	  EnumerationDefinition
 ;
 
 
-//UserFunctionDefinition:
-//	{UserFunctionDefinition} name = ID typeSpec=TypeSpec '(' argument=NamedArgumentDefinitions ')'
-//			(BEGIN expression = Expression END)? ';'?
-//;
-
-NamedArgumentDefinitions:
-	{NamedArgumentDefinitions} arguments += ForwardDeclaration (=> ',' arguments += ForwardDeclaration)* 
+FuncArgDefns:
+	{FuncArgDefns} arguments += ArgumentDefinition (=> ',' arguments += ArgumentDefinition)* 
 ;
+
+ArgumentDefinition:
+	{ArgumentDefinition}name=ID typeSpec=TypeSpec?
+;
+
+
 
 EquationTypeDefinition:
 	EquationDefinition|TransformedDefinition
@@ -83,8 +80,8 @@ TypeSpec:
 
 
 FunctionSpec:
-	{FunctionSpec} '(' argument=NamedArgumentDefinitions ')'
-			BEGIN expression = Expression END 
+	{FunctionSpec} '(' argument=FuncArgDefns ')'
+			'returns' expression = Expression 
 ;
 
 

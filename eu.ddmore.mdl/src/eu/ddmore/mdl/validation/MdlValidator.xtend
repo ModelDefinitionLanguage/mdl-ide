@@ -27,7 +27,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public val static MOGOBJ = 'mogObj'
 	public val static DESIGNOBJ = 'designObj'
 	public val static PRIOROBJ = 'priorObj'
-	public val static FUNCOBJ = 'funcObj'
+//	public val static FUNCOBJ = 'funcObj'
 
 	public static val UNUSED_FEATURE = "eu.ddmore.mdl.validation.unused.feature"
 	public static val EXPERIMENTAL_FEATURE = "eu.ddmore.mdl.validation.experimental.feature"

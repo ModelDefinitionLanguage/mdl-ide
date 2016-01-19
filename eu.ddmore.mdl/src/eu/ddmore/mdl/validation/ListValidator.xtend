@@ -9,13 +9,13 @@ import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionTable
+import eu.ddmore.mdl.provider.PropertyDefinitionProvider
+import eu.ddmore.mdl.type.TypeSystemProvider
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.provider.ListDefinitionProvider
-import eu.ddmore.mdl.provider.PropertyDefinitionProvider
-import eu.ddmore.mdl.provider.ListDefinitionTable
-import eu.ddmore.mdl.type.TypeSystemProvider
 
 // validates attributes in lists, functions and properties
 class ListValidator extends AbstractMdlValidator {

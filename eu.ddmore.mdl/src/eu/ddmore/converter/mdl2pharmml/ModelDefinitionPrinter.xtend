@@ -420,6 +420,7 @@ class ModelDefinitionPrinter {
 	def writeLinearIdv(EquationTypeDefinition it){
 		var funcExpr = expression as SymbolReference
 		var namedArgList = funcExpr.argList as NamedFuncArguments 
+//		val fixEff = namedArgList.getArgumentExpressionAsVector('fixEff') as VectorLiteral
 		val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
 		'''
 		<IndividualParameter symbId="«name»">

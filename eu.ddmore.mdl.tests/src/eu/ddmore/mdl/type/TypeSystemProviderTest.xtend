@@ -3,15 +3,13 @@ package eu.ddmore.mdl.type
 import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MdlFactory
-import eu.ddmore.mdl.type.EnumTypeInfo
+import eu.ddmore.mdl.validation.TypeSystemValidator
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
-import eu.ddmore.mdl.type.TypeInfo
-import eu.ddmore.mdl.validation.TypeSystemValidator
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))

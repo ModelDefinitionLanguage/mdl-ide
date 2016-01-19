@@ -5,6 +5,7 @@ package eu.ddmore.mdl.formatting
 
 import org.eclipse.xtext.formatting.impl.AbstractDeclarativeFormatter
 import org.eclipse.xtext.formatting.impl.FormattingConfig
+
 // import com.google.inject.Inject;
 // import eu.ddmore.mdl.services.MdlGrammarAccess
 

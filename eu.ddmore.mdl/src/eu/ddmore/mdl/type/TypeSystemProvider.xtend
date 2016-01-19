@@ -8,7 +8,6 @@ import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.ForwardDeclaration
 import eu.ddmore.mdl.mdl.IndexSpec
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MatrixElement
@@ -35,6 +34,7 @@ import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.provider.ListDefinitionTable
+import eu.ddmore.mdl.mdl.ArgumentDefinition
 
 public class TypeSystemProvider {
 
@@ -79,7 +79,6 @@ public class TypeSystemProvider {
 		ep.powerExpression -> REAL_TYPE,
 		ep.transformedDefinition -> REAL_TYPE,
 		ep.randomVariableDefinition -> REAL_TYPE,
-		ep.forwardDeclaration -> REAL_TYPE,
 		ep.mappingExpression -> MAPPING_TYPE,
 		ep.catValRefMappingExpression -> MAPPING_TYPE
 	}
@@ -260,10 +259,6 @@ public class TypeSystemProvider {
 			case('+'),
 			case('-'):{
 				val operandType = operand?.typeFor.underlyingType
-//				if(operandType == INT_TYPE)
-//					INT_TYPE
-//				else if(operandType == REAL_TYPE)
-//					REAL_TYPE
 				if(operandType.isCompatible(INT_TYPE)) return INT_TYPE
 				else if(operandType.isCompatible(REAL_TYPE)) return REAL_TYPE
 				else UNDEFINED_TYPE
@@ -276,11 +271,6 @@ public class TypeSystemProvider {
 	def dispatch TypeInfo typeFor(SymbolDefinition sd){
 		switch(sd){
 			EquationDefinition:
-//				if(sd.isVector)
-//					TypeSystemProvider.REAL_VECTOR_TYPE
-//				else if(sd.isMatrix)
-//					REAL_MATRIX_TYPE
-//				else REAL_TYPE
 				{
 					if(sd.expression != null){
 						// type inferred from assigned type
@@ -298,11 +288,9 @@ public class TypeSystemProvider {
 			ListDefinition:
 				getTypeOfList(sd)
 			TransformedDefinition,
-			ForwardDeclaration:
+			ArgumentDefinition:
 				typeTable.get(sd.eClass)
-//			RandomVariableDefinition: typeTable.get(sd.eClass)
 			RandomVariableDefinition:
-//				if(sd.isVector) TypeSystemProvider.REAL_VECTOR_TYPE else REAL_TYPE
 				{
 					if(sd.distn != null){
 						val distnType = sd.distn.typeFor

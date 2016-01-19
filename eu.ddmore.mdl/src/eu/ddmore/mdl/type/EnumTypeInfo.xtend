@@ -1,9 +1,9 @@
 package eu.ddmore.mdl.type
 
+import java.util.HashSet
+import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import java.util.Set
-import java.util.HashSet
 
 @Data @FinalFieldsConstructor
 class EnumTypeInfo extends PrimitiveTypeInfo{

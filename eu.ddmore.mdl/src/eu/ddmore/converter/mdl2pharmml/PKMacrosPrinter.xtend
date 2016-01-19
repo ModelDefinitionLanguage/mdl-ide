@@ -1,5 +1,7 @@
 package eu.ddmore.converter.mdl2pharmml
 
+import eu.ddmore.mdl.mdl.AnonymousListStatement
+import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
@@ -7,12 +9,10 @@ import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.utils.MdlUtils
 import java.util.HashMap
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.AnonymousListStatement
-import eu.ddmore.mdl.mdl.AttributeList
-import eu.ddmore.mdl.utils.MdlUtils
 
 class PKMacrosPrinter{
 //	private static val MATH_NS = "http://www.pharmml.org/pharmml/0.6/Maths"; 

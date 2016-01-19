@@ -1,10 +1,10 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
+import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider
 import java.util.List
 import java.util.Map
-import eu.ddmore.mdl.type.TypeSystemProvider
 
 class PropertyDefinitionTable {
 	//	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'monolix', 'nonmem' })

@@ -10,6 +10,7 @@ import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
+import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlFactory
 import eu.ddmore.mdl.mdl.NamedFuncArguments
@@ -26,7 +27,6 @@ import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import eu.ddmore.mdl.utils.MdlUtils
-import eu.ddmore.mdl.validation.MogValidator
 import java.util.HashSet
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
@@ -36,6 +36,7 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 class ModellingStepsPrinter { 
 	
 	extension MdlUtils mu = new MdlUtils 
+	extension MdlRootProvider mrp = new MdlRootProvider
 	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder 
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
@@ -45,11 +46,11 @@ class ModellingStepsPrinter {
 	////////////////////////////////////////////////
 	// III Modelling Steps
 	////////////////////////////////////////////////
-	def print_msteps_ModellingSteps(MogValidator validator){
-		var mObj = validator.mdlObj
-		var pObj = validator.paramObj
-		var dObj = validator.dataObj
-		var tObj = validator.taskObj
+	def print_msteps_ModellingSteps(Mcl it){
+		var mObj = mdlObj
+		var pObj = paramObj
+		var dObj = dataObj
+		var tObj = taskObj
 
 		var res = "";
 		var dependencies = ""; 

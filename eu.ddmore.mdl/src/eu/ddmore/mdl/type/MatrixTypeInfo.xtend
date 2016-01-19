@@ -3,7 +3,7 @@ package eu.ddmore.mdl.type
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
-	@Data @FinalFieldsConstructor
+@Data @FinalFieldsConstructor
 class MatrixTypeInfo extends TypeInfo{
 	PrimitiveType theType
 	TypeInfo elementType

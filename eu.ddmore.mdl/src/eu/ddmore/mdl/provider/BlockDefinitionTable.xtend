@@ -3,9 +3,9 @@ package eu.ddmore.mdl.provider
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.provider.BlockDefinitionProvider.BlockSpec
 import eu.ddmore.mdl.provider.BlockDefinitionProvider.StatementSpec
+import eu.ddmore.mdl.validation.MdlValidator
 import java.util.Map
 import java.util.Set
-import eu.ddmore.mdl.validation.MdlValidator
 
 class BlockDefinitionTable {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"
@@ -164,9 +164,9 @@ class BlockDefinitionTable {
 			MDL_INDIV_PARAMS, MDL_PRED_BLK_NAME,
 			OBS_BLK_NAME, MDL_GRP_PARAMS, IDV_BLK_NAME, "FUNCTIONS"
 		},
-		MdlValidator::FUNCOBJ -> #{
-			"FUNCTIONS"
-		},
+//		MdlValidator::FUNCOBJ -> #{
+//			"FUNCTIONS"
+//		},
 		MdlValidator::DATAOBJ -> #{
 			DIV_BLK_NAME, "DECLARED_VARIABLES", "DATA_DERIVED_VARIABLES",
 			DATA_SRC_BLK

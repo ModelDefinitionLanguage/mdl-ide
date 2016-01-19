@@ -11,6 +11,7 @@ import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import java.util.ArrayList
 import java.util.Collections
@@ -22,7 +23,6 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.type.TypeSystemProvider
 
 class ListDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils

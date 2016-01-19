@@ -3,18 +3,18 @@ package eu.ddmore.mdl.utils
 import com.google.inject.Inject
 import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.Mcl
+import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
+import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension eu.ddmore.mdl.utils.MdlExpressionConverter.convertToString
-import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.ValuePair
-import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))

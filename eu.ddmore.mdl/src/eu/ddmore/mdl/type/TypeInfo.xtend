@@ -2,7 +2,6 @@ package eu.ddmore.mdl.type
 
 import org.eclipse.xtend.lib.annotations.Data
 
-
 @Data
 abstract class TypeInfo{
 		def abstract PrimitiveType getTheType()

@@ -1,10 +1,10 @@
 package eu.ddmore.mdl.provider
 
+import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.SublistTypeInfo
-import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
-import java.util.Map
 import eu.ddmore.mdl.type.TypeSystemProvider
+import java.util.Map
 
 class SublistDefinitionTable {
 	public static val INTERVENTION_SEQ_SUBLIST = "intSeqAtts"

@@ -1,9 +1,9 @@
 package eu.ddmore.mdl.type
 
-import org.eclipse.xtend.lib.annotations.Data
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import java.util.Map
 import java.util.Set
+import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 @Data @FinalFieldsConstructor
 class PrimitiveTypeInfo extends TypeInfo{

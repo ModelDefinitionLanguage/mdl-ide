@@ -1,13 +1,13 @@
 package eu.ddmore.mdl.validation
 
+import eu.ddmore.mdl.mdl.MatrixLiteral
+import eu.ddmore.mdl.mdl.MatrixRow
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.mdl.MatrixLiteral
-import eu.ddmore.mdl.mdl.MatrixRow
 
 class ExpressionValidator extends AbstractDeclarativeValidator{
 
