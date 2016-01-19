@@ -1,6 +1,5 @@
 package eu.ddmore.converter.mdl2pharmml
 
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CatValRefMappingExpression
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueReference
@@ -701,8 +700,8 @@ class ModellingStepsPrinter {
 		for(stmt : mObj.mdlIndvParams){
 			switch(stmt){
 				EquationTypeDefinition:{
-					if(stmt.expression instanceof BuiltinFunctionCall){
-						val funcExpr = stmt.expression as BuiltinFunctionCall
+					if(stmt.expression instanceof SymbolReference){
+						val funcExpr = stmt.expression as SymbolReference
 						if(funcExpr.func == 'linear'){
 							var namedArgList = funcExpr.argList as NamedFuncArguments 
 							val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral

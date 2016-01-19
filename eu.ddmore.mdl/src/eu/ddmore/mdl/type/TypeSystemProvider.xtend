@@ -1,7 +1,6 @@
 package eu.ddmore.mdl.type
 
 import eu.ddmore.mdl.mdl.AnonymousListStatement
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.CategoryValueReference
@@ -10,7 +9,11 @@ import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ForwardDeclaration
+import eu.ddmore.mdl.mdl.IndexSpec
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.MatrixElement
+import eu.ddmore.mdl.mdl.MatrixLiteral
+import eu.ddmore.mdl.mdl.MatrixRow
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
@@ -29,12 +32,9 @@ import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import java.util.HashSet
-import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.MatrixRow
-import eu.ddmore.mdl.mdl.MatrixElement
-import eu.ddmore.mdl.mdl.MatrixLiteral
 import java.util.List
-import eu.ddmore.mdl.mdl.IndexSpec
+import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.provider.ListDefinitionTable
 
 public class TypeSystemProvider {
 
@@ -200,8 +200,8 @@ public class TypeSystemProvider {
 			ParExpression: e.expr.typeFor
 //			EnumExpression:
 //				e.typeOfBuiltinEnum
-			BuiltinFunctionCall:
-				e.functionType
+//			BuiltinFunctionCall:
+//				e.functionType
 			VectorElement:
 				e.element?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
 			VectorLiteral:
@@ -223,7 +223,8 @@ public class TypeSystemProvider {
 	}
 	
 	def dispatch TypeInfo typeFor(EnumExpression e){
-		var Object parent = EcoreUtil2.getContainerOfType(e, BuiltinFunctionCall)
+//		var Object parent = EcoreUtil2.getContainerOfType(e, BuiltinFunctionCall)
+		var Object parent = EcoreUtil2.getContainerOfType(e, SymbolReference)
 		if(parent == null){
 			parent = EcoreUtil2.getContainerOfType(e, SubListExpression)
 		}
@@ -237,8 +238,10 @@ public class TypeSystemProvider {
 			parent = EcoreUtil2.getContainerOfType(e, PropertyStatement)
 		}
 		switch(parent){
-			BuiltinFunctionCall:
+			SymbolReference:
 				e.typeOfFunctionBuiltinEnum
+//			BuiltinFunctionCall:
+//				e.typeOfFunctionBuiltinEnum
 			ListDefinition,
 			AnonymousListStatement:
 				e.typeOfAttributeBuiltinEnum
@@ -414,4 +417,9 @@ public class TypeSystemProvider {
 		UNDEFINED_TYPE
 	}
 	
+    def isDerivativeDefinition(SymbolDefinition sd){
+    	val lstType = sd.typeFor
+    	lstType?.typeName == ListDefinitionTable::DERIV_TYPE.typeName
+    }
+    
 }

@@ -1,14 +1,15 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.FuncArguments
 import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import java.util.Collections
 import java.util.HashMap
@@ -19,10 +20,11 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.utils.MdlUtils
 
 class BuiltinFunctionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension MdlUtils mu = new MdlUtils
 	
 	interface FunctDefn{
 		def int getNumArgs()
@@ -109,7 +111,7 @@ class BuiltinFunctionProvider {
 			TypeSystemProvider::UNDEFINED_TYPE
 	}
 	
-	def TypeInfo getFunctionType(BuiltinFunctionCall it){
+	def TypeInfo getFunctionType(SymbolReference it){
 		findFuncDefn?.returnType ?: TypeSystemProvider::UNDEFINED_TYPE
 	}
 	
@@ -154,7 +156,11 @@ class BuiltinFunctionProvider {
 		bestMatch
 	}
 	
-	public def findFuncDefn(BuiltinFunctionCall it){
+	def isFunctionName(String name){
+		functDefns.containsKey(name)
+	}
+	
+	public def findFuncDefn(SymbolReference it){
 		val availableDefns = functDefns.get(func)
 		var FunctDefn retVal = null
 		if(availableDefns != null){
@@ -191,20 +197,20 @@ class BuiltinFunctionProvider {
 	
 	
 	private def getFunctionCall(NamedFuncArguments it){
-		eContainer as BuiltinFunctionCall
+		eContainer as SymbolReference
 	}
 	
 	public def getFunctionCall(ValuePair it){
-		eContainer.eContainer as BuiltinFunctionCall
+		eContainer.eContainer as SymbolReference
 	}
 	
-	def isNamedArgFunction(BuiltinFunctionCall it){
+	def isNamedArgFunction(SymbolReference it){
 		val funcDefn = functDefns.get(func)
 		funcDefn != null && funcDefn.head instanceof NamedArgFuncDefn
 	}
 	
 	
-	def getNamedArguments(BuiltinFunctionCall it){
+	def getNamedArguments(SymbolReference it){
 		val args = argList
 		switch(args){
 			NamedFuncArguments:	args.arguments
@@ -212,7 +218,7 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
-	def getArgumentExpression(BuiltinFunctionCall it, String attName){
+	def getArgumentExpression(SymbolReference it, String attName){
 		val args = argList
 		switch(args){
 			NamedFuncArguments:
@@ -221,7 +227,7 @@ class BuiltinFunctionProvider {
 		}
 	}
 
-	def getArgumentEnumValue(BuiltinFunctionCall it, String attName){
+	def getArgumentEnumValue(SymbolReference it, String attName){
 		val args = argList
 		switch(args){
 			NamedFuncArguments:
@@ -248,7 +254,7 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
-	def isArgumentDuplicated(BuiltinFunctionCall owningFunc, ValuePair it){
+	def isArgumentDuplicated(SymbolReference owningFunc, ValuePair it){
 		val args = owningFunc.argList
 		if(args instanceof NamedFuncArguments){
 			return args.arguments.filter[a| a.argumentName == argumentName].size > 1
@@ -258,7 +264,7 @@ class BuiltinFunctionProvider {
 	
 	
 	def TypeInfo getTypeOfFunctionBuiltinEnum(EnumExpression ee){
-		val funct = EcoreUtil2.getContainerOfType(ee, BuiltinFunctionCall)
+		val funct = EcoreUtil2.getContainerOfType(ee, SymbolReference)
 		val blockName = funct.func
 		val enumValue = ee.enumValue
 		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: TypeSystemProvider::UNDEFINED_TYPE

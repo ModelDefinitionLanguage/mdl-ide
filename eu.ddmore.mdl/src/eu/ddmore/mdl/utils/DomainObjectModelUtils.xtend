@@ -5,7 +5,6 @@ import eu.ddmore.mdl.mdl.BlockBody
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockTextBody
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MclObject
@@ -78,12 +77,12 @@ class DomainObjectModelUtils {
 	}
 	
 	def getParentFunction(ValuePair it){
-		EcoreUtil2.getContainerOfType(it, BuiltinFunctionCall)
+		EcoreUtil2.getContainerOfType(it, SymbolReference)
 	}
 	
 	// for unnamed function arguments
 	def getParentFunction(UnnamedArgument it){
-		EcoreUtil2.getContainerOfType(it, BuiltinFunctionCall)
+		EcoreUtil2.getContainerOfType(it, SymbolReference)
 	}
 	
 	def getFuncArgNum(UnnamedArgument it){
@@ -102,7 +101,7 @@ class DomainObjectModelUtils {
 		}
 	}
 	
-	def getFunctionArgumentValue(BuiltinFunctionCall it, String argName){
+	def getFunctionArgumentValue(SymbolReference it, String argName){
 		val args = argList
 		switch(args){
 			NamedFuncArguments:{

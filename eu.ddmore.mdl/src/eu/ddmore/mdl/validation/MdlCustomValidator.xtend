@@ -3,7 +3,6 @@ package eu.ddmore.mdl.validation
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EquationDefinition
@@ -17,22 +16,22 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.impl.ListDefinitionImpl
+import eu.ddmore.mdl.provider.BlockDefinitionTable
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionTable
+import eu.ddmore.mdl.provider.SublistDefinitionTable
 import eu.ddmore.mdl.type.PrimitiveType
+import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.ConstantEvaluation
 import eu.ddmore.mdl.utils.DependencyWalker
+import eu.ddmore.mdl.utils.MdlUtils
 import java.util.Collections
 import java.util.HashSet
 import java.util.LinkedList
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.provider.BlockDefinitionTable
-import eu.ddmore.mdl.provider.ListDefinitionTable
-import eu.ddmore.mdl.provider.BuiltinFunctionProvider
-import eu.ddmore.mdl.provider.ListDefinitionProvider
-import eu.ddmore.mdl.provider.SublistDefinitionTable
-import eu.ddmore.mdl.type.TypeSystemProvider
-import eu.ddmore.mdl.utils.MdlUtils
 
 class MdlCustomValidator extends AbstractMdlValidator {
 
@@ -88,7 +87,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	}
 
 	def checkNonTransformedIndiv(EquationDefinition transDefn, EnumPair transArg, () => void incompatibleTransforms) {
-		val call = EcoreUtil2.getContainerOfType(transArg.eContainer, BuiltinFunctionCall)
+		val call = EcoreUtil2.getContainerOfType(transArg.eContainer, SymbolReference)
 		if(call != null && transDefn != null && transArg.argumentName == 'trans'){
 			val transExpr = transArg.expression
 			if(transExpr != null && isValidTransformFunction(transExpr.enumValue) && transOnBothFuncs.contains(call.func)){
@@ -100,8 +99,8 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	def isLhsTransformPermitted(TransformedDefinition it) {
 		val expr = expression
 		switch(expr){
-			BuiltinFunctionCall case(transOnBothFuncs.contains(expr.func)),
-			BuiltinFunctionCall case(transOnLHSFuncs.contains(expr.func)):
+			SymbolReference case(transOnBothFuncs.contains(expr.func)),
+			SymbolReference case(transOnLHSFuncs.contains(expr.func)):
 				true
 			default:
 				false
@@ -114,12 +113,12 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	def isValidRhsTransformPermitted(TransformedDefinition it) {
 		val expr = expression
 		switch(expr){
-			BuiltinFunctionCall case(transOnBothFuncs.contains(expr.func)):{
+			SymbolReference case(transOnBothFuncs.contains(expr.func)):{
 				val transExpr = expr.getArgumentEnumValue('trans')
 				if(transExpr != null) transExpr.isValidTransformFunction else false
 			}
 				
-			BuiltinFunctionCall case(transOnLHSFuncs.contains(expr.func)):
+			SymbolReference case(transOnLHSFuncs.contains(expr.func)):
 				true
 			default:
 				false
@@ -127,7 +126,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	}
 	
 	def checkConsistentLinearTransformation(TransformedDefinition transDefn, EnumPair transArg, (String, String) => void incompatibleTransforms) {
-		val call = EcoreUtil2.getContainerOfType(transArg.eContainer, BuiltinFunctionCall)
+		val call = EcoreUtil2.getContainerOfType(transArg.eContainer, SymbolReference)
 		if(call != null && transDefn != null && transArg.argumentName == 'trans'){
 			val transExpr = transArg.expression
 			if(transExpr != null && transOnBothFuncs.contains(call.func)){

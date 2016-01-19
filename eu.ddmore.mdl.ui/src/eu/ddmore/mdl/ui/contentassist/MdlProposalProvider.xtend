@@ -7,17 +7,19 @@ package eu.ddmore.mdl.ui.contentassist
 import com.google.common.base.Predicate
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EnumPair
+import eu.ddmore.mdl.mdl.EquationTypeDefinition
+import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
+import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.PrimitiveType
+import eu.ddmore.mdl.type.TypeSystemProvider
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.ecore.EObject
@@ -32,9 +34,6 @@ import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
 
 import static extension org.eclipse.xtext.EcoreUtil2.getContainerOfType
-import eu.ddmore.mdl.mdl.EquationTypeDefinition
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.type.TypeSystemProvider
 
 /**
  * see http://www.eclipse.org/Xtext/documentation.html#contentAssist on how to customize content assistant
@@ -56,7 +55,7 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 	 							Expression:
 	 								model.typeFor
 	 							default:
-	 								eu.ddmore.mdl.type.TypeSystemProvider::UNDEFINED_TYPE
+	 								TypeSystemProvider::UNDEFINED_TYPE
 							}
 	 	val booleanFilter = new Predicate<IEObjectDescription>()
 	 	{
@@ -119,14 +118,14 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 		}
 	}
 
-	private def createFuncEnumProposal(BuiltinFunctionCall fCall, EnumPair model, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
-		val enumType = bfc.getNamedArgumentType(model)
-		val attributes = new ArrayList<String>
-		if(enumType instanceof BuiltinEnumTypeInfo){
-			attributes.addAll((enumType as BuiltinEnumTypeInfo).expectedValues)
-		}
-		addProposals(context, acceptor, attributes, null);
-	} 
+//	private def createFuncEnumProposal(BuiltinFunctionCall fCall, EnumPair model, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
+//		val enumType = bfc.getNamedArgumentType(model)
+//		val attributes = new ArrayList<String>
+//		if(enumType instanceof BuiltinEnumTypeInfo){
+//			attributes.addAll((enumType as BuiltinEnumTypeInfo).expectedValues)
+//		}
+//		addProposals(context, acceptor, attributes, null);
+//	} 
 
 
 	private def createListEnumProposal(EnumPair model, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
@@ -155,17 +154,17 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 				createListEnumProposal(model, context, acceptor)
 			}
 			else{
-				val funcParent = model.getContainerOfType(BuiltinFunctionCall)
-				if(funcParent != null){
-						createFuncEnumProposal(funcParent, model, context, acceptor)
-				}
-				else{
+//				val funcParent = model.getContainerOfType(BuiltinFunctionCall)
+//				if(funcParent != null){
+//						createFuncEnumProposal(funcParent, model, context, acceptor)
+//				}
+//				else{
 					val propParent = model.getContainerOfType(PropertyStatement)
 					if(propParent != null){
 						createPropertyEnumProposal(model, context, acceptor)
 					}
 				}
-			}
+//			}
 		}
 	}
 	

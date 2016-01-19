@@ -2,7 +2,6 @@ package eu.ddmore.converter.mdl2pharmml
 
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.EnumExpression
@@ -21,12 +20,14 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
+import eu.ddmore.mdl.type.VectorTypeInfo
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.utils.MdlUtils
 import java.util.ArrayList
 import java.util.Comparator
 import java.util.HashMap
@@ -40,8 +41,6 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.utils.MdlUtils
-import eu.ddmore.mdl.type.VectorTypeInfo
 
 class ModelDefinitionPrinter {
 	extension MdlUtils mu = new MdlUtils
@@ -257,7 +256,7 @@ class ModelDefinitionPrinter {
 		
 	def writeUncertMlDistribution(Expression functionCall){
 		switch(functionCall){
-			BuiltinFunctionCall:
+			SymbolReference:
 				functionCall.writeUncertmlDist
 			default:
 				''''''
@@ -325,7 +324,7 @@ class ModelDefinitionPrinter {
   	'''
 	
 	def writeGeneralIdv(EquationTypeDefinition it){
-		var funcExpr = expression as BuiltinFunctionCall
+		var funcExpr = expression as SymbolReference
 		var namedArgList = funcExpr.argList as NamedFuncArguments
 		val trans = switch(it){
 			TransformedDefinition:
@@ -419,7 +418,7 @@ class ModelDefinitionPrinter {
 		'''
 	
 	def writeLinearIdv(EquationTypeDefinition it){
-		var funcExpr = expression as BuiltinFunctionCall
+		var funcExpr = expression as SymbolReference
 		var namedArgList = funcExpr.argList as NamedFuncArguments 
 		val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
 		'''
@@ -452,9 +451,9 @@ class ModelDefinitionPrinter {
 	def writeIndividualParameter(EquationTypeDefinition it){
 		val expr = it.expression
 		switch(expr){
-			BuiltinFunctionCall case(expr.func == 'general'):
+			SymbolReference case(expr.func == 'general'):
 				writeGeneralIdv
-			BuiltinFunctionCall case(expr.func == 'linear'):
+			SymbolReference case(expr.func == 'linear'):
 				writeLinearIdv
 			default:
 				writeExplicitIdv			
@@ -590,24 +589,24 @@ class ModelDefinitionPrinter {
 	}
 	
 	def isStandardErrorDefinition(Expression expr){
-		expr != null && expr instanceof BuiltinFunctionCall
+		expr != null && expr instanceof SymbolReference
 	}
 	
 	def isTransformedBothSides(EquationTypeDefinition definition){
 		definition instanceof TransformedDefinition &&
-		 definition.expression instanceof BuiltinFunctionCall &&
-		  (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null
+		 definition.expression instanceof SymbolReference &&
+		  (definition.expression as SymbolReference).getArgumentExpression('trans') != null
 	}
 	
 	def isTransformedOnlyRhsSide(EquationTypeDefinition definition){
 		definition instanceof EquationDefinition &&
-		 definition.expression instanceof BuiltinFunctionCall &&
-		  (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null
+		 definition.expression instanceof SymbolReference &&
+		  (definition.expression as SymbolReference).getArgumentExpression('trans') != null
 	}
 	
 	def writeContinuousObservation(EquationTypeDefinition definition, int idx){
 		val rhsExpr = definition.expression
-		if(rhsExpr instanceof BuiltinFunctionCall){
+		if(rhsExpr instanceof SymbolReference){
 			val predictionExpr = rhsExpr.getArgumentExpression('prediction')
 			'''
 				<ObservationModel blkId="om«idx»">
@@ -658,7 +657,7 @@ class ModelDefinitionPrinter {
 		}
 	} 
 	
-	private def writeStandardErrorModel(BuiltinFunctionCall it){
+	private def writeStandardErrorModel(SymbolReference it){
 		'''
 		<ErrorModel>
 			<ct:Assign>
@@ -939,12 +938,12 @@ class ModelDefinitionPrinter {
 	
 	private def getInverseFunction(Expression linkFunction, Expression paramVar){
 		switch(linkFunction){
-			BuiltinFunctionCall case linkFunction.func == "log": return '''
+			SymbolReference case linkFunction.func == "log": return '''
 			<math:Uniop op="exp">
 				«paramVar.pharmMLExpr»
 			</math:Uniop>
 			'''
-			BuiltinFunctionCall case linkFunction.func == "identity": return '''
+			SymbolReference case linkFunction.func == "identity": return '''
 				«paramVar.pharmMLExpr»
 			'''
 		}
@@ -974,7 +973,7 @@ class ModelDefinitionPrinter {
 		var name = s.name
 		val linkFunction = s.list.getAttributeExpression('link');
 		val distn = s.list.getAttributeExpression('distn');
-		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("lambda");
+		val paramVar = (distn as SymbolReference).getFunctionArgumentValue("lambda");
 //		var String tmpParamVar = null;
 //		if(paramVar ){
 //			tmpParamVar = paramVar.toStr
@@ -1007,7 +1006,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	
-	private def getSuccessCategory(BuiltinFunctionCall it){
+	private def getSuccessCategory(SymbolReference it){
 		switch(func){
 			case "Bernoulli":
 				getArgumentExpression('category')
@@ -1027,8 +1026,8 @@ class ModelDefinitionPrinter {
 	private def print_mdef_DiscreteObservations(ListDefinition s) {
 		var name = s.name
 		val linkFunction = s.list.getAttributeExpression('link');
-		val distn = s.list.getAttributeExpression('distn') as BuiltinFunctionCall
-		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("probability")
+		val distn = s.list.getAttributeExpression('distn') as SymbolReference
+		val paramVar = (distn as SymbolReference).getFunctionArgumentValue("probability")
 		val categories = s.list.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
 		val catVals = categories.categories
 		val catList = createCategoriesOrderedBySuccess(catVals.keySet, distn.successCategory)
@@ -1222,7 +1221,7 @@ class ModelDefinitionPrinter {
 //			<«tag» symbId="«st.name»"«IF printType» symbolType="«TYPE_REAL»"«ENDIF»>
 //			«IF expr != null»
 //				«switch(expr){
-//					BuiltinFunctionCall:
+//					SymbolReference:
 //						expr.print_List
 //					default:
 //						expr.writeAssignment

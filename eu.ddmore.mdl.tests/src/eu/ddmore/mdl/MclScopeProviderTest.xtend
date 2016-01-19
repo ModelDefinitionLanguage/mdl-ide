@@ -3,12 +3,12 @@ package eu.ddmore.mdl
 import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
@@ -129,7 +129,8 @@ obj1 = mdlObj{
 		
 		val blkBody = (mcl.objects.head.blocks.last.body as BlockStatementBody)
 		val catStmt = blkBody.statements.last as ListDefinition
-		val funCall = catStmt.list.getAttributeExpression('distn') as BuiltinFunctionCall
+		val funCall = catStmt.list.getAttributeExpression('distn') as SymbolReference
+//		val funCall = catStmt.list.getAttributeExpression('distn') as BuiltinFunctionCall
 		val argExpr = (funCall.argList as NamedFuncArguments).arguments.head.expression 
 		argExpr.assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "DV, P1, Y")
 	}
@@ -156,7 +157,7 @@ obj1 = mdlObj{
 		
 		val blkBody = (mcl.objects.head.blocks.last.body as BlockStatementBody)
 		val catStmt = blkBody.statements.last as ListDefinition
-		val funCall = catStmt.list.getAttributeExpression('distn') as BuiltinFunctionCall
+		val funCall = catStmt.list.getAttributeExpression('distn') as SymbolReference
 		val argExpr = (funCall.argList as NamedFuncArguments).arguments.head.expression 
 		argExpr.assertScope(MdlPackage::eINSTANCE.categoryValueReference_Ref, "success, fail, Y.success, Y.fail, obj1.Y.success, obj1.Y.fail")
 	}

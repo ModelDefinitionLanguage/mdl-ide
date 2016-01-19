@@ -1,23 +1,24 @@
 package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.provider.BlockDefinitionTable
+import eu.ddmore.mdl.utils.MdlUtils
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.provider.BlockDefinitionTable
 
 class UnsupportedToolSpecificFeaturesValidator extends AbstractMdlValidator  {
 	
 	override register(EValidatorRegistrar registrar){}
 	
-	
+	extension MdlUtils mu = new MdlUtils
 	
 	def isGeneralIdv(EquationTypeDefinition it){
 		val eq = expression
-		if(eq instanceof BuiltinFunctionCall){
+		if(eq instanceof SymbolReference){
 			eq.func == 'general'
 		}
 		else false
@@ -25,7 +26,7 @@ class UnsupportedToolSpecificFeaturesValidator extends AbstractMdlValidator  {
 	
 	def isExplicitIdv(EquationTypeDefinition it){
 		val eq = expression
-		if(eq instanceof BuiltinFunctionCall){
+		if(eq instanceof SymbolReference){
 			eq.func != 'linear' && eq.func != 'general'
 		}
 		else true
@@ -58,7 +59,7 @@ class UnsupportedToolSpecificFeaturesValidator extends AbstractMdlValidator  {
 
 	def isStandardResidualError(EquationTypeDefinition it){
 		val eq = expression
-		if(eq instanceof BuiltinFunctionCall){
+		if(eq instanceof SymbolReference){
 			StandardErrorFuctions.contains(eq.func)
 		}
 		else false

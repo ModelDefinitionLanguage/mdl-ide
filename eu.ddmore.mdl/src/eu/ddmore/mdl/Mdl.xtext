@@ -73,7 +73,8 @@ TransformedDefinition returns EquationTypeDefinition:
 ;
 
 RandomVariableDefinition:
-	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
+//	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
+	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = Expression ';'?
 ;
 
 TypeSpec:
@@ -97,7 +98,7 @@ CategoricalProbabilityAssign:
 ;
 
 ProbabilityFunction:
-	probFunc = ID '(' catRef=SymbolReference relOp=('=='|'<='|'>='|'<'|'>') catValRef=CategoryValueReference ')'
+	probFunc = 'P' '(' catRef=SymbolReference relOp=('=='|'<='|'>='|'<'|'>') catValRef=CategoryValueReference ')'
 ;
 
 
@@ -243,8 +244,8 @@ PrimaryExpression returns Expression:
 	| CategoryValueReference
 	| CatValRefMappingExpression
 	| MappingExpression
-	| BuiltinFunctionCall
-	| UserFunctionCall
+//	| BuiltinFunctionCall
+//	| UserFunctionCall
 	| WhenExpression
 	| ParExpression
 	| SubListExpression
@@ -289,7 +290,7 @@ Literal returns Expression:
 ;
 
 SymbolReference:
-	{SymbolReference} ref=[SymbolDefinition|ID] ('[' indexExpr = IndexSpec ']')?
+	{SymbolReference} ref=[SymbolDefinition|ID] ('[' indexExpr = IndexSpec ']'|'(' argList=(UnnamedFuncArguments | NamedFuncArguments)? ')')?
 ;
 
 IndexSpec:
@@ -307,13 +308,13 @@ CategoryValueReference:
 ;
 
 
-BuiltinFunctionCall returns Expression:
-	{BuiltinFunctionCall} func=ID '(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
-;
+//BuiltinFunctionCall returns Expression:
+//	{BuiltinFunctionCall} func=ID '(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
+//;
 
-UserFunctionCall returns Expression:
-	{UserFunctionCall} '&' ref=[SymbolDefinition|ID] '(' argList=(NamedFuncArguments)? ')'
-;
+//UserFunctionCall returns Expression:
+//	{UserFunctionCall} '&' ref=[SymbolDefinition|ID] '(' argList=(NamedFuncArguments)? ')'
+//;
 
 NamedFuncArguments returns FuncArguments:
 	{NamedFuncArguments} arguments += ValuePair (=> ',' arguments += ValuePair)* 

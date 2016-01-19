@@ -2,7 +2,6 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.ListDefinition
@@ -11,19 +10,19 @@ import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdl.provider.BlockDefinitionTable
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.type.PrimitiveType
+import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.ConstantEvaluation
+import eu.ddmore.mdl.utils.MdlUtils
 import java.util.Collections
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.provider.ListDefinitionProvider
-import eu.ddmore.mdl.provider.ListDefinitionTable
-import eu.ddmore.mdl.provider.BlockDefinitionTable
-import eu.ddmore.mdl.type.TypeSystemProvider
-import eu.ddmore.mdl.utils.MdlUtils
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
@@ -132,10 +131,11 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
 	@Check
 	// Check for unsupported functions
-	def checkUnsupportedFunctions(BuiltinFunctionCall it){
+	def checkUnsupportedFunctions(SymbolReference it){
 		if(UnsupportedFunctions.contains(func)){
 			warning("Function '" + func + "' is not currently supported for execution in R.", 
-					MdlPackage.eINSTANCE.builtinFunctionCall_Func,
+//					MdlPackage.eINSTANCE.builtinFunctionCall_Func,
+					MdlPackage.eINSTANCE.symbolDefinition_Name,
 					FEATURE_NOT_SUPPORTED, func)
 		}
 	}

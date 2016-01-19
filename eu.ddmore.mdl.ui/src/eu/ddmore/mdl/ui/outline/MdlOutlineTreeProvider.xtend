@@ -7,12 +7,9 @@ import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockTextBody
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.ListDefinition
-import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.SymbolDefinition
-import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
@@ -69,15 +66,15 @@ class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	def _isLeaf(ValuePair vp) { true }
 
 
-	def _createChildren(IOutlineNode parentNode, BuiltinFunctionCall fc){
-		val args = fc.argList
-		switch(args){
-			NamedFuncArguments:
-				args.arguments.forEach[createNode(parentNode, it)]
-			UnnamedFuncArguments:
-				args.args.forEach[createNode(parentNode, it)]
-		}
-	}
+//	def _createChildren(IOutlineNode parentNode, BuiltinFunctionCall fc){
+//		val args = fc.argList
+//		switch(args){
+//			NamedFuncArguments:
+//				args.arguments.forEach[createNode(parentNode, it)]
+//			UnnamedFuncArguments:
+//				args.args.forEach[createNode(parentNode, it)]
+//		}
+//	}
 
 	def _createChildren(IOutlineNode parentNode, BlockStatement blk){
 		val body = blk.body

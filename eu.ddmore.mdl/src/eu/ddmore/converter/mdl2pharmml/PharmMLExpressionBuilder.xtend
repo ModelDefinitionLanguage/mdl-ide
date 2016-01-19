@@ -3,7 +3,6 @@ package eu.ddmore.converter.mdl2pharmml
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BooleanLiteral
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.ConstantLiteral
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
@@ -23,19 +22,21 @@ import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
+import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
-import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdl.utils.MdlUtils
 
 class PharmMLExpressionBuilder {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension MdlUtils mu = new MdlUtils
 	
 	static val GLOBAL_VAR = 'global'
 	
@@ -361,7 +362,7 @@ class PharmMLExpressionBuilder {
 		«ENDIF»
 	'''
     
-    def dispatch CharSequence getPharmMLExpr(BuiltinFunctionCall it){
+    def dispatch CharSequence getPharmMLExpr(SymbolReference it){
     	var retVal = ''''''
     	val a = argList
     	switch(a){

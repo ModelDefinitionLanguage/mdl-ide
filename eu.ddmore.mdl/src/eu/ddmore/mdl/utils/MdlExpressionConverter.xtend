@@ -1,6 +1,5 @@
 package eu.ddmore.mdl.utils
 
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.CatValRefMapping
 import eu.ddmore.mdl.mdl.CatValRefMappingExpression
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
@@ -62,8 +61,8 @@ public class MdlExpressionConverter extends ExpressionConverter {
         exp.enumValue + (if (exp.catDefn != null) " " + exp.catDefn.getString else "")
 	}
 	
-	def dispatch String getString(BuiltinFunctionCall exp)'''
-		«exp.func»(«exp.argList.getString»)'''
+//	def dispatch String getString(BuiltinFunctionCall exp)'''
+//		«exp.func»(«exp.argList.getString»)'''
 
     def dispatch String getString(NamedFuncArguments exp)'''
         «FOR arg: exp.arguments SEPARATOR ', '»«arg.getString»«ENDFOR»'''

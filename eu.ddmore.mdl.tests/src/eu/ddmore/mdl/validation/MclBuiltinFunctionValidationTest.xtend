@@ -110,7 +110,7 @@ class MclBuiltinFunctionValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
 			MdlValidator::INCORRECT_NUM_FUNC_ARGS,
 			"Function 'ln' has the wrong number of arguments. Expected 1."
 		)
@@ -129,7 +129,7 @@ class MclBuiltinFunctionValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
 			MdlValidator::UNRECOGNIZED_FUNCTION_NAME,
 			"Named argument function 'ln' is not recognised."
 		)
@@ -148,7 +148,7 @@ class MclBuiltinFunctionValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
 			MdlValidator::INCORRECT_NUM_FUNC_ARGS,
 			"Function 'ln' has the wrong number of arguments. Expected 1."
 		)
@@ -168,7 +168,7 @@ class MclBuiltinFunctionValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
 			MdlValidator::UNRECOGNIZED_FUNCTION_NAME,
 			"Simple function 'blah' is not recognised."
 		)
@@ -188,7 +188,7 @@ class MclBuiltinFunctionValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
 			MdlValidator::UNRECOGNIZED_FUNCTION_NAME,
 			"Simple function 'cov' is not recognised."
 		)
@@ -207,7 +207,7 @@ class MclBuiltinFunctionValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
 			MdlValidator::UNRECOGNIZED_FUNCTION_NAME,
 			"Simple function 'foo' is not recognised."
 		)
@@ -347,7 +347,7 @@ class MclBuiltinFunctionValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
 			MdlValidator::UNRECOGNIZED_FUNCTION_NAME,
 			"Simple function 'linear' is not recognised."
 		)
@@ -483,7 +483,7 @@ class MclBuiltinFunctionValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
 			MdlValidator::UNRECOGNIZED_FUNCTION_NAME,
 			"Simple function 'linear' is not recognised."
 		)

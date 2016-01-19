@@ -254,15 +254,15 @@ warfarin_design = designObj {
 		}'''.parse
 		
 		mcl.assertNoErrors
-		mcl.assertWarning(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolReference,
 			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
 			"Function 'tanh' is not currently supported for execution in R."
 		)
-		mcl.assertWarning(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolReference,
 			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
 			"Function 'sinh' is not currently supported for execution in R."
 		)
-		mcl.assertWarning(MdlPackage::eINSTANCE.builtinFunctionCall,
+		mcl.assertWarning(MdlPackage::eINSTANCE.symbolReference,
 			UnsupportedFeaturesValidator::FEATURE_NOT_SUPPORTED,
 			"Function 'cosh' is not currently supported for execution in R."
 		)

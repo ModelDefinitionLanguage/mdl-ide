@@ -16,7 +16,9 @@ import org.eclipse.xtext.validation.ComposedChecks
  								ListValidator,
  								TypeSystemValidator,
  								ValueSelectorValidator, UnsupportedToolSpecificFeaturesValidator,
- 								BuiltinFunctionValidator, MogValidator, ExpressionValidator, StatementValidator, PropertyValidator ])
+ 								BuiltinFunctionValidator, 
+ 								MogValidator, 
+ 								ExpressionValidator, StatementValidator, PropertyValidator ])
 class MdlValidator extends AbstractMdlValidator {
 	public val static MDLOBJ = 'mdlObj'
 	public val static DATAOBJ = 'dataObj'

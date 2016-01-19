@@ -3,6 +3,7 @@
  */
 package eu.ddmore.mdl;
 
+import org.eclipse.xtext.linking.ILinkingService;
 import org.eclipse.xtext.scoping.IGlobalScopeProvider;
 
 /**
@@ -15,5 +16,10 @@ public class MdlRuntimeModule extends eu.ddmore.mdl.AbstractMdlRuntimeModule {
 	  return NullGlobalScopeProvider.class;
 	}
 
+	@Override
+	public Class<? extends ILinkingService> bindILinkingService() {
+		return MdlLinkingService.class;
+	}
 
+	
 }

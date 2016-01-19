@@ -23,13 +23,12 @@ import eu.ddmore.mdl.validation.MdlValidator
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.type.TypeSystemProvider
 
 class MdlUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	extension DependencyWalker dw = new DependencyWalker
-	extension TypeSystemProvider mtp = new TypeSystemProvider
+//	extension TypeSystemProvider mtp = new TypeSystemProvider
 	
 	
 	def isMclObjectOfType(MclObject obj, String typeCode){
@@ -544,11 +543,6 @@ class MdlUtils {
     	retVal
     }
     
-    def isDerivativeDefinition(SymbolDefinition sd){
-    	val lstType = sd.typeFor
-    	lstType?.typeName == ListDefinitionTable::DERIV_TYPE.typeName
-    }
-    
     def isMdlCompartmentMacro(Statement it){
     	owningBlock.identifier == BlockDefinitionTable::MDL_CMT_BLK
     }
@@ -563,4 +557,9 @@ class MdlUtils {
     	}
     	else false
     }
+
+	def func(SymbolReference it){
+		ref.name
+	}
+
 }

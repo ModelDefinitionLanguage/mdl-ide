@@ -24,22 +24,29 @@ class TypeSystemProviderTest {
 
 	@Test
 	def void testTypeExpectedFuncCallExpression(){
-		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
-		funcCall.func = 'ln'
+		val funcCall = MdlFactory::eINSTANCE.createSymbolReference
+		funcCall.ref = MdlFactory::eINSTANCE.createEquationDefinition
+		funcCall.ref.name = 'ln'
 		funcCall.typeFor.assertEquals(TypeSystemProvider::REAL_TYPE)
 	}
 
 	@Test
 	def void testTypeUnknownFuncCallExpression(){
-		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
-		funcCall.func = 'foobar'
+//		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
+//		funcCall.func = 'foobar'
+		val funcCall = MdlFactory::eINSTANCE.createSymbolReference
+		funcCall.ref = MdlFactory::eINSTANCE.createEquationDefinition
+		funcCall.ref.name = 'foobar'
 		TypeSystemProvider::UNDEFINED_TYPE.assertEquals(funcCall.typeFor)
 	}
 
 	@Test
 	def void testTypeDistributionFuncCallExpression(){
-		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
-		funcCall.func = 'Normal'
+//		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
+//		funcCall.func = 'Normal'
+		val funcCall = MdlFactory::eINSTANCE.createSymbolReference
+		funcCall.ref = MdlFactory::eINSTANCE.createEquationDefinition
+		funcCall.ref.name = 'Normal'
 		TypeSystemProvider::PDF_TYPE.assertEquals(funcCall.typeFor)
 	}
 
