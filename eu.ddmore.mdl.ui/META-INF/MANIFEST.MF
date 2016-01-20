@@ -27,7 +27,7 @@ Import-Package: eu.ddmore.libpharmml;version="0.4.0.SNAPSHOT",
  org.apache.commons.io;version="2.0.1",
  org.apache.log4j,
  org.eclipse.ui.console
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: eu.ddmore.mdl.ui.contentassist,
  eu.ddmore.mdl.ui.contentassist.antlr,
  eu.ddmore.mdl.ui.internal,

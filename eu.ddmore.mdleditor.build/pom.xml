@@ -12,16 +12,16 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jacoco.version>0.6.0.201210061924</jacoco.version>
+		<jacoco.version>0.7.5.201505241946</jacoco.version>
 		<mvn.clean.plugin.version>2.4.1</mvn.clean.plugin.version>
 
 		<!-- Tycho -->
-		<tycho.version>0.22.0</tycho.version>
-		<tycho.extras.version>0.22.0</tycho.extras.version>
+		<tycho.version>0.23.1</tycho.version>
+		<tycho.extras.version>0.23.1</tycho.extras.version>
 		<tycho.repo.url>https://oss.sonatype.org/content/groups/public/</tycho.repo.url>
 		<!-- Xtext and Xtend -->
 		<xtend.repo.url>http://build.eclipse.org/common/xtend/maven/</xtend.repo.url>
-		<xtend.version>2.7.3</xtend.version>
+		<xtend.version>2.8.4</xtend.version>
 		<fornax.repo.url>https://projects.itemis.de/nexus/content/groups/public/</fornax.repo.url>
 		<fornax.version>3.4.0</fornax.version>
         <xtext.version>${xtend.version}</xtext.version>

@@ -41,6 +41,6 @@ Export-Package: eu.ddmore.converter.mdl2pharmml,
  eu.ddmore.mdl.type,
  eu.ddmore.mdl.utils,
  eu.ddmore.mdl.validation
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: eu.ddmore.mdl.mdl,
  org.apache.log4j
