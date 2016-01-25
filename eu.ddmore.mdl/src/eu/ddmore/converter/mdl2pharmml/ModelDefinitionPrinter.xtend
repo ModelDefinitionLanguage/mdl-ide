@@ -41,6 +41,7 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class ModelDefinitionPrinter {
 	extension MdlUtils mu = new MdlUtils
@@ -256,7 +257,7 @@ class ModelDefinitionPrinter {
 		
 	def writeUncertMlDistribution(Expression functionCall){
 		switch(functionCall){
-			SymbolReference:
+			BuiltinFunctionCall:
 				functionCall.writeUncertmlDist
 			default:
 				''''''
@@ -324,7 +325,7 @@ class ModelDefinitionPrinter {
   	'''
 	
 	def writeGeneralIdv(EquationTypeDefinition it){
-		var funcExpr = expression as SymbolReference
+		var funcExpr = expression as BuiltinFunctionCall
 		var namedArgList = funcExpr.argList as NamedFuncArguments
 		val trans = switch(it){
 			TransformedDefinition:
@@ -418,7 +419,7 @@ class ModelDefinitionPrinter {
 		'''
 	
 	def writeLinearIdv(EquationTypeDefinition it){
-		var funcExpr = expression as SymbolReference
+		var funcExpr = expression as BuiltinFunctionCall
 		var namedArgList = funcExpr.argList as NamedFuncArguments 
 //		val fixEff = namedArgList.getArgumentExpressionAsVector('fixEff') as VectorLiteral
 		val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral
@@ -596,18 +597,18 @@ class ModelDefinitionPrinter {
 	def isTransformedBothSides(EquationTypeDefinition definition){
 		definition instanceof TransformedDefinition &&
 		 definition.expression instanceof SymbolReference &&
-		  (definition.expression as SymbolReference).getArgumentExpression('trans') != null
+		  (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null
 	}
 	
 	def isTransformedOnlyRhsSide(EquationTypeDefinition definition){
 		definition instanceof EquationDefinition &&
 		 definition.expression instanceof SymbolReference &&
-		  (definition.expression as SymbolReference).getArgumentExpression('trans') != null
+		  (definition.expression as BuiltinFunctionCall).getArgumentExpression('trans') != null
 	}
 	
 	def writeContinuousObservation(EquationTypeDefinition definition, int idx){
 		val rhsExpr = definition.expression
-		if(rhsExpr instanceof SymbolReference){
+		if(rhsExpr instanceof BuiltinFunctionCall){
 			val predictionExpr = rhsExpr.getArgumentExpression('prediction')
 			'''
 				<ObservationModel blkId="om«idx»">
@@ -658,7 +659,7 @@ class ModelDefinitionPrinter {
 		}
 	} 
 	
-	private def writeStandardErrorModel(SymbolReference it){
+	private def writeStandardErrorModel(BuiltinFunctionCall it){
 		'''
 		<ErrorModel>
 			<ct:Assign>
@@ -974,7 +975,7 @@ class ModelDefinitionPrinter {
 		var name = s.name
 		val linkFunction = s.list.getAttributeExpression('link');
 		val distn = s.list.getAttributeExpression('distn');
-		val paramVar = (distn as SymbolReference).getFunctionArgumentValue("lambda");
+		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("lambda");
 //		var String tmpParamVar = null;
 //		if(paramVar ){
 //			tmpParamVar = paramVar.toStr
@@ -1007,7 +1008,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	
-	private def getSuccessCategory(SymbolReference it){
+	private def getSuccessCategory(BuiltinFunctionCall it){
 		switch(func){
 			case "Bernoulli":
 				getArgumentExpression('category')
@@ -1027,8 +1028,8 @@ class ModelDefinitionPrinter {
 	private def print_mdef_DiscreteObservations(ListDefinition s) {
 		var name = s.name
 		val linkFunction = s.list.getAttributeExpression('link');
-		val distn = s.list.getAttributeExpression('distn') as SymbolReference
-		val paramVar = (distn as SymbolReference).getFunctionArgumentValue("probability")
+		val distn = s.list.getAttributeExpression('distn') as BuiltinFunctionCall
+		val paramVar = (distn as BuiltinFunctionCall).getFunctionArgumentValue("probability")
 		val categories = s.list.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
 		val catVals = categories.categories
 		val catList = createCategoriesOrderedBySuccess(catVals.keySet, distn.successCategory)

@@ -32,6 +32,7 @@ import java.util.LinkedList
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class MdlCustomValidator extends AbstractMdlValidator {
 
@@ -113,7 +114,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	def isValidRhsTransformPermitted(TransformedDefinition it) {
 		val expr = expression
 		switch(expr){
-			SymbolReference case(transOnBothFuncs.contains(expr.func)):{
+			BuiltinFunctionCall case(transOnBothFuncs.contains(expr.func)):{
 				val transExpr = expr.getArgumentEnumValue('trans')
 				if(transExpr != null) transExpr.isValidTransformFunction else false
 			}

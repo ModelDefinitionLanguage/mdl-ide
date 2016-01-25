@@ -37,13 +37,13 @@ Statement:
 	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
 	EnumerationDefinition|PropertyStatement|
-	CategoricalProbabilityAssign
+	CategoricalProbabilityAssign|FunctionDefinition
 ;
 
 
 SymbolDefinition:
 	EquationDefinition | ListDefinition| ArgumentDefinition | RandomVariableDefinition | TransformedDefinition|
-	  EnumerationDefinition
+	  EnumerationDefinition|FunctionDefinition
 ;
 
 
@@ -65,6 +65,11 @@ EquationDefinition returns EquationTypeDefinition:
 	{EquationDefinition} name = ID typeSpec=TypeSpec? (ASSIGN expression = Expression)? ';'?
 ;
 
+FunctionDefinition:
+	{FunctionDefinition} name=ID funcSpec=FunctionSpec 
+;
+
+
 TransformedDefinition returns EquationTypeDefinition:
 	{TransformedDefinition} transform = ID '(' name=ID ')' ASSIGN expression=Expression ';'?
 ;
@@ -75,12 +80,11 @@ RandomVariableDefinition:
 ;
 
 TypeSpec:
-	{TypeSpec} typeName=TYPE_SPEC ('[' elementType=TypeSpec ']'|'[[' cellType=TypeSpec ']]'| funcSpec=FunctionSpec)?
+	{TypeSpec} typeName=TYPE_SPEC ('[' elementType=TypeSpec ']'|'[[' cellType=TypeSpec ']]')? //| funcSpec=FunctionSpec)?
 ;
 
-
 FunctionSpec:
-	{FunctionSpec} '(' argument=FuncArgDefns ')'
+	{FunctionSpec} typeName=TYPE_SPEC '(' argument=FuncArgDefns ')'
 			'returns' expression = Expression 
 ;
 
@@ -241,7 +245,7 @@ PrimaryExpression returns Expression:
 	| CategoryValueReference
 	| CatValRefMappingExpression
 	| MappingExpression
-//	| BuiltinFunctionCall
+	| BuiltinFunctionCall
 //	| UserFunctionCall
 	| WhenExpression
 	| ParExpression
@@ -287,7 +291,7 @@ Literal returns Expression:
 ;
 
 SymbolReference:
-	{SymbolReference} ref=[SymbolDefinition|ID] ('[' indexExpr = IndexSpec ']'|'(' argList=(UnnamedFuncArguments | NamedFuncArguments)? ')')?
+	{SymbolReference} ref=[SymbolDefinition|ID] ('[' indexExpr = IndexSpec ']')?
 ;
 
 IndexSpec:
@@ -305,9 +309,9 @@ CategoryValueReference:
 ;
 
 
-//BuiltinFunctionCall returns Expression:
-//	{BuiltinFunctionCall} func=ID '(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
-//;
+BuiltinFunctionCall returns Expression:
+	{BuiltinFunctionCall} func=[FunctionDefinition|ID] =>'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
+;
 
 //UserFunctionCall returns Expression:
 //	{UserFunctionCall} '&' ref=[SymbolDefinition|ID] '(' argList=(NamedFuncArguments)? ')'

@@ -31,6 +31,7 @@ import eu.ddmore.mdl.utils.DomainObjectModelUtils
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.mdl.utils.MdlUtils
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class PharmMLExpressionBuilder {
 	
@@ -362,7 +363,7 @@ class PharmMLExpressionBuilder {
 		«ENDIF»
 	'''
     
-    def dispatch CharSequence getPharmMLExpr(SymbolReference it){
+    def dispatch CharSequence getPharmMLExpr(BuiltinFunctionCall it){
     	var retVal = ''''''
     	val a = argList
     	switch(a){
@@ -377,7 +378,7 @@ class PharmMLExpressionBuilder {
     		UnnamedFuncArguments:{
     			val opType = if(a.args.size > 1) "Binop" else "Uniop"
     			retVal += '''
-    					<math:«opType» op="«func.pharmMlFunction»">
+    					<math:«opType» op="«func.name.pharmMlFunction»">
     						«a.unnamedArguments»
     					</math:«opType»>	
     					'''

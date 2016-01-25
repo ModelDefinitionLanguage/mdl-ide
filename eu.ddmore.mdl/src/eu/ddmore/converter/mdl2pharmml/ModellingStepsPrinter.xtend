@@ -32,6 +32,7 @@ import java.util.HashSet
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class ModellingStepsPrinter { 
 	
@@ -701,8 +702,8 @@ class ModellingStepsPrinter {
 		for(stmt : mObj.mdlIndvParams){
 			switch(stmt){
 				EquationTypeDefinition:{
-					if(stmt.expression instanceof SymbolReference){
-						val funcExpr = stmt.expression as SymbolReference
+					if(stmt.expression instanceof BuiltinFunctionCall){
+						val funcExpr = stmt.expression as BuiltinFunctionCall
 						if(funcExpr.func == 'linear'){
 							var namedArgList = funcExpr.argList as NamedFuncArguments 
 							val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral

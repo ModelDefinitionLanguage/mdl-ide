@@ -18,6 +18,7 @@ import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
 import java.util.Collections
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class DomainObjectModelUtils {
 	
@@ -77,12 +78,12 @@ class DomainObjectModelUtils {
 	}
 	
 	def getParentFunction(ValuePair it){
-		EcoreUtil2.getContainerOfType(it, SymbolReference)
+		EcoreUtil2.getContainerOfType(it, BuiltinFunctionCall)
 	}
 	
 	// for unnamed function arguments
 	def getParentFunction(UnnamedArgument it){
-		EcoreUtil2.getContainerOfType(it, SymbolReference)
+		EcoreUtil2.getContainerOfType(it, BuiltinFunctionCall)
 	}
 	
 	def getFuncArgNum(UnnamedArgument it){
@@ -101,7 +102,7 @@ class DomainObjectModelUtils {
 		}
 	}
 	
-	def getFunctionArgumentValue(SymbolReference it, String argName){
+	def getFunctionArgumentValue(BuiltinFunctionCall it, String argName){
 		val args = argList
 		switch(args){
 			NamedFuncArguments:{
