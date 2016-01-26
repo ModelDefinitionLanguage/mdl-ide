@@ -1,7 +1,6 @@
 package eu.ddmore.mdl.utils
 
 import com.google.inject.Inject
-import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.Mcl
@@ -15,9 +14,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension eu.ddmore.mdl.utils.MdlExpressionConverter.convertToString
+import eu.ddmore.mdl.MdlAndLibInjectorProvider
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
+@InjectWith(typeof(MdlAndLibInjectorProvider))
 class MdlExpressionConverterTest {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper

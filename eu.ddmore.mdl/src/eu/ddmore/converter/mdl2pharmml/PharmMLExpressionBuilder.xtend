@@ -3,6 +3,7 @@ package eu.ddmore.converter.mdl2pharmml
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BooleanLiteral
+import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.ConstantLiteral
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
@@ -28,10 +29,9 @@ import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.utils.MdlUtils
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
-import eu.ddmore.mdl.utils.MdlUtils
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class PharmMLExpressionBuilder {
 	
@@ -370,7 +370,7 @@ class PharmMLExpressionBuilder {
     		NamedFuncArguments:
     			retVal += '''
 						<math:FunctionCall>
-							«func.localSymbolReference»
+							«func.name.localSymbolReference»
 							«a.namedArguments»
 						</math:FunctionCall>
     			''' 

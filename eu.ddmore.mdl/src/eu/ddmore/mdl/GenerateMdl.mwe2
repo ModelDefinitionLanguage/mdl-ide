@@ -4,7 +4,8 @@ import org.eclipse.emf.mwe.utils.*
 import org.eclipse.xtext.generator.*
 import org.eclipse.xtext.ui.generator.*
 
-var grammarURI = "src/eu/ddmore/mdl/Mdl.xtext"
+//var grammarURI = "src/eu/ddmore/mdl/Mdl.xtext"
+var grammarURI = "classpath:/eu/ddmore/mdl/Mdl.xtext"
 var file.extensions = "mdl"
 var projectName = "eu.ddmore.mdl"
 var runtimeProject = "../${projectName}"
@@ -14,8 +15,10 @@ var encoding = "UTF-8"
 
 Workflow {
     bean = StandaloneSetup {
-            scanClassPath = false
+            scanClassPath = true
             platformUri = "${runtimeProject}/.."
+	    	registerGeneratedEPackage = "eu.ddmore.mdl.mdllib.mdlLib.MdlLibPackage"
+    		registerGenModelFile = "platform:/resource/eu.ddmore.mdl.mdllib/model/generated/MdlLib.genmodel"
         }
     
         component = DirectoryCleaner {
@@ -134,11 +137,11 @@ Workflow {
                 // rename refactoring
                 fragment = refactoring.RefactorElementNameFragment auto-inject {}
     
-                // provides the necessary bindings for java types integration
-                fragment = types.TypesGeneratorFragment auto-inject {}
+//                // provides the necessary bindings for java types integration
+//                fragment = types.TypesGeneratorFragment auto-inject {}
     
-                // generates the required bindings only if the grammar inherits from Xbase
-                fragment = xbase.XbaseGeneratorFragment auto-inject {}
+//                // generates the required bindings only if the grammar inherits from Xbase
+//                fragment = xbase.XbaseGeneratorFragment auto-inject {}
     
                 // provides a preference page for template proposals
                 fragment = templates.CodetemplatesGeneratorFragment auto-inject {}

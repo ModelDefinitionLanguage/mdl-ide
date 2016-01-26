@@ -1,0 +1,54 @@
+// Custom
+type TransType _enum;
+type GenericEnum _enum;
+type FixEffectSublist _sublist;
+
+func ln (x::Real) returns ::Real;
+func exp (x::Real) returns ::Real;
+
+func Normal named
+				(mean::Real,
+				sd::Real,
+				var::Real
+			)
+			sig (mean, sd),
+				(mean, var)
+			returns ::Pdf;
+func Bernoulli named (
+						category::GenericEnum, // need to require a reference here
+						probability:Real
+					} )
+					returns ::Pmf;
+func MultivariateNormal named
+			(
+				mean::Vector,
+				cov::Matrix
+			)
+			returns ::Vector[::Pdf],
+	matrix named
+			(
+				vector::Vector,
+				ncol::Real,
+				byRow::Boolean
+			)
+			returns ::Matrix,
+	linear named
+			( 
+				trans::TransType,
+				pop::Real,
+				fixEff::Vector[::FixEffectSublist],
+				ranEff::Vector
+			)
+			sig(trans?, pop, fixEff?, ranEff) 
+			returns ::Real,
+	combinedError1 named
+			( 
+				trans::TransType,
+				additive::Real,
+				proportional::Real,
+				prediction::Real,
+				eps::Real
+			)
+			sig(trans?, additive, proportional, prediction, eps)
+			returns ::Real
+	;

@@ -1,7 +1,6 @@
 package eu.ddmore.mdl.utils
 
 import com.google.inject.Inject
-import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.Mcl
 import org.eclipse.xtext.diagnostics.Diagnostic
@@ -13,9 +12,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static org.junit.Assert.*
+import eu.ddmore.mdl.MdlAndLibInjectorProvider
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
+@InjectWith(typeof(MdlAndLibInjectorProvider))
 class ConstantEvaluationTest {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper

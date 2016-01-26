@@ -1,6 +1,5 @@
 package eu.ddmore.mdl.type
 
-import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MdlFactory
 import eu.ddmore.mdl.validation.TypeSystemValidator
@@ -10,9 +9,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
+import eu.ddmore.mdl.MdlAndLibInjectorProvider
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
+@InjectWith(typeof(MdlAndLibInjectorProvider))
 class TypeSystemProviderTest {
 //	@Inject extension ParseHelper<Mcl>
 //	@Inject extension ValidationTestHelper

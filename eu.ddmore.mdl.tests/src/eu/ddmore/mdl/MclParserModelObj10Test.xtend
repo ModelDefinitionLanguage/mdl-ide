@@ -10,10 +10,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
+@InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserModelObj10Test {
-	@Inject extension ParseHelper<Mcl>
+//	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
+	@Inject extension LibraryTestHelper<Mcl>
 	
 	val static CODE_SNIPPET = '''
 Bernoulli_DIST_mdl = mdlObj{
@@ -59,7 +60,7 @@ Bernoulli_DIST_mdl = mdlObj{
 	
 	@Test
 	def void testParsing(){
-		val mcl = CODE_SNIPPET.parse
+		val mcl = CODE_SNIPPET.loadLibAndParse
 		
 		mcl.assertNoErrors
 		

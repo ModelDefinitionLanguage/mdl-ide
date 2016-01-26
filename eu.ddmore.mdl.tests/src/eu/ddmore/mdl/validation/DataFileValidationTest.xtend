@@ -2,7 +2,6 @@ package eu.ddmore.mdl.validation
 
 import com.google.inject.Inject
 import com.google.inject.Provider
-import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MdlPackage
 import java.io.File
@@ -18,9 +17,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.MdlAndLibInjectorProvider
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
+@InjectWith(typeof(MdlAndLibInjectorProvider))
 class DataFileValidationTest {
     
 	@Inject extension ParseHelper<Mcl>

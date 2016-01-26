@@ -1,7 +1,6 @@
 package eu.ddmore.mdl.validation
 
 import com.google.inject.Inject
-import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MdlPackage
 import org.eclipse.xtext.diagnostics.Diagnostic
@@ -12,9 +11,10 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.MdlAndLibInjectorProvider
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
+@InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclTypeValidationTest {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper

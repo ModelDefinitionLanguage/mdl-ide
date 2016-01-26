@@ -1,7 +1,8 @@
 grammar eu.ddmore.mdl.Mdl
-generate mdl "http://www.ddmore.eu/mdl/Mdl"
+generate mdl "http://eu.ddmore.mdl/mdl/Mdl"
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+import "http://eu.ddmore.mdl.mdllib/mdl/mdllib/MdlLib" as lib
 
 Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
@@ -310,7 +311,7 @@ CategoryValueReference:
 
 
 BuiltinFunctionCall returns Expression:
-	{BuiltinFunctionCall} func=[FunctionDefinition|ID] =>'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
+	{BuiltinFunctionCall} func=[lib::FunctionDefnBody] =>'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
 ;
 
 //UserFunctionCall returns Expression:

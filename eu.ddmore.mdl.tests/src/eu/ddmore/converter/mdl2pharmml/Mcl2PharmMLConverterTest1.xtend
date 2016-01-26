@@ -1,7 +1,6 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import com.google.inject.Inject
-import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
 import java.io.File
 import org.eclipse.xtext.junit4.InjectWith
@@ -13,9 +12,10 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.MdlAndLibInjectorProvider
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
+@InjectWith(typeof(MdlAndLibInjectorProvider))
 class Mcl2PharmMLConverterTest1 {
 	static val CONVERTED_OUTPUT_DIR="convertedFiles/"
 	static val USE_CASE_DIR="src/eu/ddmore/converter/mdl2pharmml/"

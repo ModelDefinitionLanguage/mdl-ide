@@ -10,7 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
+@InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserTaskObj1Test {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper

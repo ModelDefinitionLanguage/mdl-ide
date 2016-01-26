@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
+@InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclScopeProviderTest {
 	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
