@@ -50,44 +50,44 @@ class DependencyWalker {
     	switch(expr){
     		OrExpression:{
     			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand?.symbolReferences ?: Collections::emptyList)
     		}
     		AndExpression:{
     			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand?.symbolReferences ?: Collections::emptyList)
     		}
     		EqualityExpression:{
     			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand?.symbolReferences ?: Collections::emptyList)
     		}
     		RelationalExpression:{
     			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand?.symbolReferences ?: Collections::emptyList)
     		}
     		AdditiveExpression:{
     			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand?.symbolReferences ?: Collections::emptyList)
     		}
     		MultiplicativeExpression:{
     			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand?.symbolReferences ?: Collections::emptyList)
     		}
     		PowerExpression:{
     			retVal.addAll(expr.leftOperand.symbolReferences)
-    			retVal.addAll(expr.rightOperand.symbolReferences)
+    			retVal.addAll(expr.rightOperand?.symbolReferences ?: Collections::emptyList)
     		}
     		UnaryExpression:{
-    			retVal.addAll(expr.operand.symbolReferences)
+    			retVal.addAll(expr.operand?.symbolReferences ?: Collections::emptyList)
     		}
     		ParExpression:{
-    			retVal.addAll(expr.expr.symbolReferences)
+    			retVal.addAll(expr.expr?.symbolReferences ?: Collections::emptyList)
     		}
     		WhenExpression:{
     			for(w : expr.when){
     				retVal.addAll(w.symbolReferences)
     			}
     			if(expr.other != null)
-    				retVal.addAll(expr.other.other.symbolReferences)
+    				retVal.addAll(expr.other?.other?.symbolReferences ?: Collections::emptyList)
     		}
     		VectorLiteral:{
     			for(v : expr.expressions){

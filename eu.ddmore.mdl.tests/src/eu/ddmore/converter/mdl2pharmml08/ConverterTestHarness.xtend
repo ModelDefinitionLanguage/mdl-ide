@@ -5,6 +5,12 @@ import eu.ddmore.mdl.utils.MclUtils
 import java.io.BufferedWriter
 import java.io.FileReader
 import java.io.FileWriter
+import java.io.InputStream
+import java.io.FileInputStream
+import eu.ddmore.libpharmml.PharmMlFactory
+
+import static org.junit.Assert.*
+
 
 class ConverterTestHarness {
 
@@ -38,24 +44,24 @@ class ConverterTestHarness {
 		out.close
 	}
 	
-//	def void assertIsValid(String destFile){
-//		var InputStream inputStream = null
-//		try{
-//			inputStream = new FileInputStream(destFile)
-//	    	val libPharmML = PharmMlFactory.getInstance().createLibPharmML();
-//			val res = libPharmML.createDomFromResource(inputStream);
-//			val validator = libPharmML.getValidator();
-//			val rpt = validator.createValidationReport(res);
-//			val iter = rpt.errorIterator
-//			while(iter.hasNext){
-//				val error = iter.next
-//				System.err.println(error.errorMsg)
-//			}
-//			assertTrue("PharmML is valid: " + destFile, rpt.isValid())
-//		}
-//		finally{
-//			inputStream?.close();
-//		}
-//	}
+	def void assertIsValid(String destFile){
+		var InputStream inputStream = null
+		try{
+			inputStream = new FileInputStream(destFile)
+	    	val libPharmML = PharmMlFactory.getInstance().createLibPharmML();
+			val res = libPharmML.createDomFromResource(inputStream);
+			val validator = libPharmML.getValidator();
+			val rpt = validator.createValidationReport(res);
+			val iter = rpt.errorIterator
+			while(iter.hasNext){
+				val error = iter.next
+				System.err.println(error.errorMsg)
+			}
+			assertTrue("PharmML is valid: " + destFile, rpt.isValid())
+		}
+		finally{
+			inputStream?.close();
+		}
+	}
 	
 }
