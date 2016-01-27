@@ -1,11 +1,14 @@
 package eu.ddmore.converter.mdl2pharmml08
 
 import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.utils.MclUtils
 import eu.ddmore.mdl.validation.BuiltinFunctionProvider
 import java.util.HashSet
+import static extension eu.ddmore.converter.mdl2pharmml08.Constants.*
+
 
 class FunctionDefinitionPrinter {
 
@@ -16,7 +19,7 @@ class FunctionDefinitionPrinter {
 
 	static val functionDefinitions = #{
 		'additiveError' -> '''
-    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.8/CommonTypes"
+    <ct:FunctionDefinition xmlns="«xmlns_ct»"
     	symbolType="real"
     	symbId="additiveError">
         <ct:Description>Constant or additive error model</ct:Description>
@@ -29,7 +32,7 @@ class FunctionDefinitionPrinter {
     </ct:FunctionDefinition>
 		''',
 		'proportionalError' -> '''
-    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.8/CommonTypes" 
+    <ct:FunctionDefinition xmlns="«xmlns_ct»" 
     	symbolType="real"
     	symbId="proportionalError">
         <ct:Description>Proportional or constant CV (CVV)</ct:Description>
@@ -37,7 +40,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
             <Assign>
-                <Binop op="times" xmlns="http://www.pharmml.org/pharmml/0.8/Maths">
+                <Binop op="times" xmlns="«xmlns_math»">
                     <ct:SymbRef symbIdRef="proportional"/>
                     <ct:SymbRef symbIdRef="f"/>
                 </Binop>
@@ -46,7 +49,7 @@ class FunctionDefinitionPrinter {
     </ct:FunctionDefinition>
 		''',
 		'combinedError1' -> '''
-    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.8/CommonTypes"
+    <ct:FunctionDefinition xmlns="«xmlns_ct»"
     	symbId="combinedError1"
     	symbolType="real">
         <Description>Combined additive ad proportional for 1 epsilon</Description>
@@ -55,7 +58,7 @@ class FunctionDefinitionPrinter {
         <FunctionArgument symbolType="real" symbId="f"/>
         <Definition>
             <Assign>
-                <Binop op="plus" xmlns="http://www.pharmml.org/pharmml/0.8/Maths">
+                <Binop op="plus" xmlns="«xmlns_math»">
                     <ct:SymbRef symbIdRef="additive"/>
                     <Binop op="times">
                         <ct:SymbRef symbIdRef="proportional"/>
@@ -68,7 +71,7 @@ class FunctionDefinitionPrinter {
 		''',
 		'combinedError2' -> '''
     <!-- SQRT(PROP**2+ADD**2*F**2) -->
-    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.8/CommonTypes" 
+    <ct:FunctionDefinition xmlns="«xmlns_ct»" 
     	symbolType="real"
     	symbId="combinedError2">
         <ct:Description>Combined additive ad proportional for 1 epsilon</ct:Description>
@@ -77,7 +80,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
             <Assign>
-                <Uniop op="sqrt" xmlns="http://www.pharmml.org/pharmml/0.8/Maths">
+                <Uniop op="sqrt" xmlns="«xmlns_math»">
                     <Binop op="plus">
                         <Binop op="power">
                             <ct:SymbRef symbIdRef="proportional"/>
@@ -101,7 +104,7 @@ class FunctionDefinitionPrinter {
 		''',
 		'combinedError2Log' -> '''
     <!-- SQRT(PROP**2 + (ADD/F)**2) -->
-    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.8/CommonTypes" 
+    <ct:FunctionDefinition xmlns="«xmlns_ct»" 
     	symbolType="real"
     	symbId="combinedError2Log">
         <ct:Description>Combined additive ad proportional for 1 epsilon where prediction is log transformed</ct:Description>
@@ -110,7 +113,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
             <Assign>
-                <Uniop op="sqrt" xmlns="http://www.pharmml.org/pharmml/0.8/Maths">
+                <Uniop op="sqrt" xmlns="«xmlns_math»">
                     <Binop op="plus">
                         <Binop op="times">
                             <ct:SymbRef symbIdRef="proportional"/>
@@ -130,7 +133,7 @@ class FunctionDefinitionPrinter {
     </ct:FunctionDefinition>
 		''',
 		'powerError' -> '''
-    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.8/CommonTypes"
+    <ct:FunctionDefinition xmlns="«xmlns_ct»"
     	symbolType="real"
     	symbId="powerError">
         <ct:Description>Power error model</ct:Description>
@@ -139,7 +142,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
             <Assign>
-                <Binop op="times" xmlns="http://www.pharmml.org/pharmml/0.8/Maths">
+                <Binop op="times" xmlns="«xmlns_math»">
                     <ct:SymbRef symbIdRef="proportional"/>
                     <Binop op="power">
                         <ct:SymbRef symbIdRef="f"/>
@@ -151,7 +154,7 @@ class FunctionDefinitionPrinter {
     </ct:FunctionDefinition>
 		''',
 		'combinedPowerError1' -> '''
-    <ct:FunctionDefinition xmlns="http://www.pharmml.org/pharmml/0.8/CommonTypes"
+    <ct:FunctionDefinition xmlns="«xmlns_ct»"
     	symbId="combinedPowerError1"
     	symbolType="real">
         <ct:Description>Combined additive and power error model for 1 epsilon.</ct:Description>
@@ -161,7 +164,7 @@ class FunctionDefinitionPrinter {
         <ct:FunctionArgument symbolType="real" symbId="f"/>
         <ct:Definition>
             <Assign>
-                <Binop op="plus" xmlns="http://www.pharmml.org/pharmml/0.8/Maths">
+                <Binop op="plus" xmlns="«xmlns_math»">
                     <ct:SymbRef symbIdRef="additive"/>
                     <Binop op="times">
                         <ct:SymbRef symbIdRef="proportional"/>

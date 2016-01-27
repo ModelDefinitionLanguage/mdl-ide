@@ -1,8 +1,8 @@
 package eu.ddmore.converter.mdl2pharmml08
 
 final class Constants {
-	public static val writtenVersion     = "0.8";
-	public static val urlVersion     = "0.8";
+	public static val writtenVersion     = "0.7.3";
+	public static val urlVersion     = "0.7";
 	public static val baseURL            = "http://www.pharmml.org/pharmml/" + urlVersion;
 
 	public static val xsi                = "http://www.w3.org/2001/XMLSchema-instance"; 

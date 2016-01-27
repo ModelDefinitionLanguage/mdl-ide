@@ -68,7 +68,7 @@ class ModellingStepsPrinter {
 			}
 		}
 		'''
-		<TrialDesign xmlns="http://www.pharmml.org/pharmml/0.8/TrialDesign">
+		<TrialDesign xmlns="«xmlns_design»">
 			«IF mObj != null && dObj != null»
 				«print_ds_TargetDataSet(mObj, dObj)»
 			«ENDIF»
