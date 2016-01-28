@@ -13,24 +13,28 @@ import org.junit.runner.RunWith
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserModelObj12Test {
-	@Inject extension ParseHelper<Mcl>
+	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
 warfarin_PK_ODE_mdl = mdlObj {
 	IDV{ T }
 	
+	MODEL_PREDICTION{
+		AVAR::Real
+	}
+	
 	FUNCTIONS{
 	   	# define a function. The return type of the function is given by it's name.
 	   	# In this case it is a real. If it were a vector or matric it would use [] or [[]] 
-		userFunc::Function(arg1::Int, arg2::Real, arg3::String) returns
+		userFunc::Function(arg1::Int, arg2::Real, arg3::String)::Real =
 			# the function can contain only a single expression
 		    arg2 * arg1  # return type is Real
 	}
 	
 	MODEL_PREDICTION{
 		# refer to a user defined function as a normal function
-		Z = &userFunc(arg1=1, arg2=2.0, arg3="foo") + 22.2
+		Z = userFunc(1, ln(2.0), "foo") + 22.2
 	}
 
 	VARIABILITY_LEVELS{
@@ -41,14 +45,14 @@ warfarin_PK_ODE_mdl = mdlObj {
 }
 		'''
 	
-	@Ignore
+	@Test
 	def void testParsing(){
-		val mdl = CODE_SNIPPET.parse
+		val mdl = CODE_SNIPPET.loadLibAndParse
 		mdl.assertNoErrors
 	}
 	
-	@Test
-	// needed to stop initialisation failure
-	def void testDummy(){
-	}
+//	@Test
+//	// needed to stop initialisation failure
+//	def void testDummy(){
+//	}
 }

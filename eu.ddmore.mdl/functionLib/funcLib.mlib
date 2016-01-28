@@ -13,12 +13,15 @@ func Normal named
 			)
 			sig (mean, sd),
 				(mean, var)
-			returns ::Pdf;
-func Bernoulli named (
-						category::GenericEnum, // need to require a reference here
-						probability:Real
-					} )
-					returns ::Pmf;
+			returns ::Pdf
+			;
+func Bernoulli named
+				(
+					category::GenericEnum, // need to require a reference here
+					probability::Real
+				)
+				returns ::Pmf
+			;
 func MultivariateNormal named
 			(
 				mean::Vector,

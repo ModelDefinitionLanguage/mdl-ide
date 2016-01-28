@@ -5,7 +5,7 @@ package eu.ddmore.mdl.scoping
 
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.mdl.SymbolDefinition
+import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtext.EcoreUtil2
@@ -26,8 +26,8 @@ class MdlScopeProvider extends AbstractDeclarativeScopeProvider {
 	// Solution is to revise grammar to have only one type of symbol ref and to allow qualified var refs.
 	// This allows enum references but will also need to be careful to exclude references to other mdl objects
 
-	def scope_SymbolReference_ref(Expression context, EReference reference){
-		val parentScope = context.eContainer.findDeclarationsInContext(context)
+//	def scope_SymbolReference_ref(Expression context, EReference reference){
+//		val parentScope = context.eContainer.findDeclarationsInContext(context)
 //		val listDefn = EcoreUtil2.getContainerOfType(context.eContainer, ListDefinition)
 //		if(listDefn != null){
 //			val catDefn = EcoreUtil2.getAllContentsOfType(listDefn, CategoricalDefinitionExpr)?.head
@@ -35,9 +35,9 @@ class MdlScopeProvider extends AbstractDeclarativeScopeProvider {
 //				return Scopes::scopeFor(catDefn.categories, parentScope)
 //			}
 //		}
-		
-		parentScope
-	}
+//		
+//		parentScope
+//	}
 
 //	def scope_CategoryValueReference_ref(Expression context, EReference reference){
 //		// get list defn
@@ -64,13 +64,13 @@ class MdlScopeProvider extends AbstractDeclarativeScopeProvider {
 //		retVal
 //	}
 
-	def dispatch IScope findDeclarationsInContext(EObject container, EObject o) {
-		container.eContainer.findDeclarationsInContext(o.eContainer)
-	}
-
-	def dispatch IScope findDeclarationsInContext(MclObject m, EObject o) {
-		val retVal = Scopes::scopeFor(EcoreUtil2.getAllContentsOfType(m, SymbolDefinition))
-		retVal
-	}
+//	def dispatch IScope findDeclarationsInContext(EObject container, EObject o) {
+//		container.eContainer.findDeclarationsInContext(o.eContainer)
+//	}
+//
+//	def dispatch IScope findDeclarationsInContext(MclObject m, EObject o) {
+//		val retVal = Scopes::scopeFor(EcoreUtil2.getAllContentsOfType(m, SymbolDefinition))
+//		retVal
+//	}
 
 }

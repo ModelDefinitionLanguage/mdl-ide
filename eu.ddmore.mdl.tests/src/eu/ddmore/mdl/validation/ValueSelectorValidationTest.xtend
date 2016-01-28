@@ -39,50 +39,50 @@ class ValueSelectorValidationTest {
 		mcl.assertNoErrors
 	}
 
-	@Test
-	def void testInValidValueSelectionDefnAndSrcSame() {
-		val mclText = '''bar = dataObj {
-			DECLARED_VARIABLES { Ad }
-			
-			DATA_INPUT_VARIABLES{
-		      AMT: {use is amt, define={1 in AMT as Ad}}
-			}
-			
-			SOURCE{
-				srcFile : { file="count.csv", inputFormat is nonmemFormat }
-			}
-			
-		}'''
-		
-		val mcl = mclText.parse
-		
-		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
-			MdlValidator::INVALID_CYCLE,
-			"Symbol 'AMT' contains an expression that refers to itself.")
-	}
-
-	@Test
-	def void testInValidValueSelectionTgtAndSrcSame() {
-		val mclText = '''bar = dataObj {
-			DECLARED_VARIABLES { Ad }
-			
-			DATA_INPUT_VARIABLES{
-			  CMT : { use is cmt }
-		      AMT: {use is amt, define={1 in CMT as AMT}}
-			}
-			
-			SOURCE{
-				srcFile : { file="count.csv", inputFormat is nonmemFormat }
-			}
-			
-		}'''
-		
-		val mcl = mclText.parse
-		
-		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
-			MdlValidator::INVALID_CYCLE,
-			"Symbol 'AMT' contains an expression that refers to itself.")
-	}
+//	@Test
+//	def void testInValidValueSelectionDefnAndSrcSame() {
+//		val mclText = '''bar = dataObj {
+//			DECLARED_VARIABLES { Ad }
+//			
+//			DATA_INPUT_VARIABLES{
+//		      AMT: {use is amt, define={1 in AMT as Ad}}
+//			}
+//			
+//			SOURCE{
+//				srcFile : { file="count.csv", inputFormat is nonmemFormat }
+//			}
+//			
+//		}'''
+//		
+//		val mcl = mclText.parse
+//		
+//		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+//			MdlValidator::INVALID_CYCLE,
+//			"Symbol 'AMT' contains an expression that refers to itself.")
+//	}
+//
+//	@Test
+//	def void testInValidValueSelectionTgtAndSrcSame() {
+//		val mclText = '''bar = dataObj {
+//			DECLARED_VARIABLES { Ad }
+//			
+//			DATA_INPUT_VARIABLES{
+//			  CMT : { use is cmt }
+//		      AMT: {use is amt, define={1 in CMT as AMT}}
+//			}
+//			
+//			SOURCE{
+//				srcFile : { file="count.csv", inputFormat is nonmemFormat }
+//			}
+//			
+//		}'''
+//		
+//		val mcl = mclText.parse
+//		
+//		mcl.assertError(MdlPackage::eINSTANCE.symbolDefinition,
+//			MdlValidator::INVALID_CYCLE,
+//			"Symbol 'AMT' contains an expression that refers to itself.")
+//	}
 
 
 	@Test

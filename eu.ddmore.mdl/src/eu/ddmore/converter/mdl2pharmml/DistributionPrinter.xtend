@@ -13,7 +13,6 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.mdl.utils.MdlUtils
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class DistributionPrinter {
 	
@@ -84,7 +83,7 @@ class DistributionPrinter {
 		}
 	}
 
-	def writeUncertmlDist(BuiltinFunctionCall it){
+	def writeUncertmlDist(SymbolReference it){
 		val mapping = pharmMLMapping.get(func)
 		// assume checked that named argument
 		val nargs = argList as NamedFuncArguments
@@ -99,7 +98,7 @@ class DistributionPrinter {
 		''' 
 	}
 	
-	public def printDiscreteDistribution(BuiltinFunctionCall distnDef){
+	public def printDiscreteDistribution(SymbolReference distnDef){
 		val typeName = distnDef.func;
 		switch(typeName){
 			case "Bernoulli": distnDef.printBernoulliDistn
@@ -108,7 +107,7 @@ class DistributionPrinter {
 		}
 	}
 
-	public def printBernoulliDistn(BuiltinFunctionCall randomList){
+	public def printBernoulliDistn(SymbolReference randomList){
 		val mapping = pharmMLMapping.get(randomList.func)
 //		var typeName = randomList.func;
 //		val recognizedArgs = distribution_attrs.get(typeName);
@@ -128,7 +127,7 @@ class DistributionPrinter {
 		'''
 	}
 
-	public def printBinomialDistn(BuiltinFunctionCall randomList){
+	public def printBinomialDistn(SymbolReference randomList){
 		val mapping = pharmMLMapping.get(randomList.func)
 //		var typeName = randomList.func;
 //		val recognizedArgs = distribution_attrs.get(typeName);

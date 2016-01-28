@@ -21,7 +21,6 @@ import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.utils.MdlUtils
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class BuiltinFunctionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
@@ -112,7 +111,7 @@ class BuiltinFunctionProvider {
 			TypeSystemProvider::UNDEFINED_TYPE
 	}
 	
-	def TypeInfo getFunctionType(BuiltinFunctionCall it){
+	def TypeInfo getFunctionType(SymbolReference it){
 		findFuncDefn?.returnType ?: TypeSystemProvider::UNDEFINED_TYPE
 	}
 	
@@ -161,7 +160,7 @@ class BuiltinFunctionProvider {
 		functDefns.containsKey(name)
 	}
 	
-	public def findFuncDefn(BuiltinFunctionCall it){
+	public def findFuncDefn(SymbolReference it){
 		val availableDefns = functDefns.get(func)
 		var FunctDefn retVal = null
 		if(availableDefns != null){
@@ -198,20 +197,20 @@ class BuiltinFunctionProvider {
 	
 	
 	private def getFunctionCall(NamedFuncArguments it){
-		eContainer as BuiltinFunctionCall
+		eContainer as SymbolReference
 	}
 	
 	public def getFunctionCall(ValuePair it){
-		eContainer.eContainer as BuiltinFunctionCall
+		eContainer.eContainer as SymbolReference
 	}
 	
-	def isNamedArgFunction(BuiltinFunctionCall it){
+	def isNamedArgFunction(SymbolReference it){
 		val funcDefn = functDefns.get(func)
 		funcDefn != null && funcDefn.head instanceof NamedArgFuncDefn
 	}
 	
 	
-	def getNamedArguments(BuiltinFunctionCall it){
+	def getNamedArguments(SymbolReference it){
 		val args = argList
 		switch(args){
 			NamedFuncArguments:	args.arguments
@@ -219,7 +218,7 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
-	def getArgumentExpression(BuiltinFunctionCall it, String attName){
+	def getArgumentExpression(SymbolReference it, String attName){
 		val args = argList
 		switch(args){
 			NamedFuncArguments:
@@ -228,7 +227,7 @@ class BuiltinFunctionProvider {
 		}
 	}
 
-	def getArgumentEnumValue(BuiltinFunctionCall it, String attName){
+	def getArgumentEnumValue(SymbolReference it, String attName){
 		val args = argList
 		switch(args){
 			NamedFuncArguments:
@@ -255,7 +254,7 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
-	def isArgumentDuplicated(BuiltinFunctionCall owningFunc, ValuePair it){
+	def isArgumentDuplicated(SymbolReference owningFunc, ValuePair it){
 		val args = owningFunc.argList
 		if(args instanceof NamedFuncArguments){
 			return args.arguments.filter[a| a.argumentName == argumentName].size > 1

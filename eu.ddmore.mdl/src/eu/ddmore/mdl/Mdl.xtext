@@ -38,23 +38,40 @@ Statement:
 	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
 	EnumerationDefinition|PropertyStatement|
-	CategoricalProbabilityAssign|FunctionDefinition
+	CategoricalProbabilityAssign//|UserFunctionDefinition
 ;
 
 
-SymbolDefinition:
-	EquationDefinition | ListDefinition| ArgumentDefinition | RandomVariableDefinition | TransformedDefinition|
-	  EnumerationDefinition|FunctionDefinition
+MdlSymbolDefinition returns lib::SymbolDefinition:
+	EquationDefinition | ListDefinition | RandomVariableDefinition | TransformedDefinition|
+	EnumerationDefinition
 ;
 
 
-FuncArgDefns:
-	{FuncArgDefns} arguments += ArgumentDefinition (=> ',' arguments += ArgumentDefinition)* 
+FuncUnnamedArgDefns returns lib::FuncArgs:
+	{lib::FuncArgs} arguments+=FuncArgumentDefinition (',' arguments+=FuncArgumentDefinition)*
 ;
 
-ArgumentDefinition:
-	{ArgumentDefinition}name=ID typeSpec=TypeSpec?
+FuncArgumentDefinition returns lib::FuncArgumentDefinition:
+	{FuncArgumentDefinition} name=ID typeSpec=TypeSpec 
 ;
+
+//FuncArgumentDefinition returns lib::FuncArgumentDefinition:
+//	TestFunctionArgumentDefinition 
+//;
+//
+//TestFunctionArgumentDefinition returns SymbolDefinition:
+//	{TestFunctionArgumentDefinition} name=ID typeSpec=TypeSpec
+//;
+
+
+//FuncArgDefns returns lib:FuncArgs:
+//	{FuncArgDefns} arguments += ArgumentDefinition (=> ',' arguments += ArgumentDefinition)* 
+//;
+
+//ArgumentDefinition:
+//	{ArgumentDefinition} name=ID typeSpec=TypeSpec?
+//;
 
 
 
@@ -66,8 +83,16 @@ EquationDefinition returns EquationTypeDefinition:
 	{EquationDefinition} name = ID typeSpec=TypeSpec? (ASSIGN expression = Expression)? ';'?
 ;
 
-FunctionDefinition:
-	{FunctionDefinition} name=ID funcSpec=FunctionSpec 
+//UserFunctionDefinition:
+//	{UserFunctionDefinition} defn=MdlFunctionDefinition  BEGIN expression = Expression END ';'?
+//;
+
+//MdlFunctionDefinition returns lib::FunctionDefnBody:
+//	{lib::FunctionDefnBody} name=ID returnType=TypeSpec '(' argument=FuncUnnamedArgDefns? ')'
+//;
+
+FunctionSpec returns lib::FunctionSpec:
+	{lib::FunctionSpec}  '(' argument=FuncUnnamedArgDefns? ')' returnType=TypeSpec 
 ;
 
 
@@ -80,15 +105,17 @@ RandomVariableDefinition:
 	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = Expression ';'?
 ;
 
-TypeSpec:
-	{TypeSpec} typeName=TYPE_SPEC ('[' elementType=TypeSpec ']'|'[[' cellType=TypeSpec ']]')? //| funcSpec=FunctionSpec)?
+TypeSpec returns lib::TypeSpec:
+	{lib::TypeSpec} ANONYMOUS_PREFIX =>typeName = [lib::TypeDefinition|ID] ('[' elementType=TypeSpec ']'|'[[' cellType=TypeSpec ']]'| functionSpec=FunctionSpec)?
 ;
 
-FunctionSpec:
-	{FunctionSpec} typeName=TYPE_SPEC '(' argument=FuncArgDefns ')'
-			'returns' expression = Expression 
-;
+//TypeDefinition returns lib::TypeDefinition:
+//	{lib::TypeDefinition} ANONYMOUS_PREFIX name=ID class=TypeClass
+//;
 
+//enum TypeClass returns lib::TypeClass:
+//		ENUM='_enum'| SUBLIST='_sublist'| SCALAR='_scalar'|VECTOR='_vector'|MATRIX='_matrix' 
+//;
 
 EnumerationDefinition:
 	name = ID  catDefn=CategoricalDefinitionExpr ';'?
@@ -246,7 +273,7 @@ PrimaryExpression returns Expression:
 	| CategoryValueReference
 	| CatValRefMappingExpression
 	| MappingExpression
-	| BuiltinFunctionCall
+//	| BuiltinFunctionCall
 //	| UserFunctionCall
 	| WhenExpression
 	| ParExpression
@@ -292,7 +319,7 @@ Literal returns Expression:
 ;
 
 SymbolReference:
-	{SymbolReference} ref=[SymbolDefinition|ID] ('[' indexExpr = IndexSpec ']')?
+	{SymbolReference} ref=[lib::SymbolDefinition|ID] ('[' indexExpr = IndexSpec ']'|'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')')?
 ;
 
 IndexSpec:
@@ -310,9 +337,10 @@ CategoryValueReference:
 ;
 
 
-BuiltinFunctionCall returns Expression:
-	{BuiltinFunctionCall} func=[lib::FunctionDefnBody] =>'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
-;
+//BuiltinFunctionCall returns Expression:
+//	{BuiltinFunctionCall} func=[lib::FunctionDefnBody] =>'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
+//	{BuiltinFunctionCall} func=[SymbolDefinition] =>'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
+//;
 
 //UserFunctionCall returns Expression:
 //	{UserFunctionCall} '&' ref=[SymbolDefinition|ID] '(' argList=(NamedFuncArguments)? ')'
@@ -377,9 +405,9 @@ terminal CONSTANT:
 	'inf'|'pi'|'exponentiale'
 ;
 
-terminal TYPE_SPEC:
-	'::' + ('A'..'Z')('a'..'z'|'A'..'Z'| '0'..'9')+
-;
+//terminal TYPE_NAME:
+//	'::' + ('A'..'Z')('a'..'z'|'A'..'Z'| '0'..'9')+
+//;
 
 terminal SET: 'set';
 

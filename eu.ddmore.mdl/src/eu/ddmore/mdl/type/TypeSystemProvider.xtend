@@ -18,23 +18,22 @@ import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
-import eu.ddmore.mdl.mdl.TypeSpec
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
+import eu.ddmore.mdl.mdllib.mdlLib.TypeSpec
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
+import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.provider.ListDefinitionTable
-import eu.ddmore.mdl.mdl.ArgumentDefinition
 
 public class TypeSystemProvider {
 
@@ -287,8 +286,8 @@ public class TypeSystemProvider {
 				}
 			ListDefinition:
 				getTypeOfList(sd)
-			TransformedDefinition,
-			ArgumentDefinition:
+			TransformedDefinition:
+//			ArgumentDefinition:
 				typeTable.get(sd.eClass)
 			RandomVariableDefinition:
 				{
@@ -320,7 +319,7 @@ public class TypeSystemProvider {
 	
 	def dispatch TypeInfo typeFor(TypeSpec it){
 		if(elementType == null && cellType == null){
-			typeFromSpecName(typeName)
+			typeFromSpecName(typeName.name)
 		}
 		else if(elementType != null){
 			if(typeName == '::Vector'){

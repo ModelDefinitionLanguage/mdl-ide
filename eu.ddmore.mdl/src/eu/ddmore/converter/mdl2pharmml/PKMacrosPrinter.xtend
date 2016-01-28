@@ -6,8 +6,8 @@ import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.Statement
-import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.utils.MdlUtils
 import java.util.HashMap

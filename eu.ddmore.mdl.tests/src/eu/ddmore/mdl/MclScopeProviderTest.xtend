@@ -20,7 +20,6 @@ import org.eclipse.xtext.scoping.IScopeProvider
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -130,8 +129,8 @@ obj1 = mdlObj{
 		
 		val blkBody = (mcl.objects.head.blocks.last.body as BlockStatementBody)
 		val catStmt = blkBody.statements.last as ListDefinition
-//		val funCall = catStmt.list.getAttributeExpression('distn') as SymbolReference
-		val funCall = catStmt.list.getAttributeExpression('distn') as BuiltinFunctionCall
+		val funCall = catStmt.list.getAttributeExpression('distn') as SymbolReference
+//		val funCall = catStmt.list.getAttributeExpression('distn') as BuiltinFunctionCall
 		val argExpr = (funCall.argList as NamedFuncArguments).arguments.head.expression 
 		argExpr.assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "DV, P1, Y")
 	}
@@ -158,7 +157,7 @@ obj1 = mdlObj{
 		
 		val blkBody = (mcl.objects.head.blocks.last.body as BlockStatementBody)
 		val catStmt = blkBody.statements.last as ListDefinition
-		val funCall = catStmt.list.getAttributeExpression('distn') as BuiltinFunctionCall
+		val funCall = catStmt.list.getAttributeExpression('distn') as SymbolReference
 		val argExpr = (funCall.argList as NamedFuncArguments).arguments.head.expression 
 		argExpr.assertScope(MdlPackage::eINSTANCE.categoryValueReference_Ref, "success, fail, Y.success, Y.fail, obj1.Y.success, obj1.Y.fail")
 	}

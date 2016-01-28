@@ -17,10 +17,10 @@ import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
@@ -32,7 +32,6 @@ import java.util.HashSet
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class ModellingStepsPrinter { 
 	
@@ -702,8 +701,8 @@ class ModellingStepsPrinter {
 		for(stmt : mObj.mdlIndvParams){
 			switch(stmt){
 				EquationTypeDefinition:{
-					if(stmt.expression instanceof BuiltinFunctionCall){
-						val funcExpr = stmt.expression as BuiltinFunctionCall
+					if(stmt.expression instanceof SymbolReference){
+						val funcExpr = stmt.expression as SymbolReference
 						if(funcExpr.func == 'linear'){
 							var namedArgList = funcExpr.argList as NamedFuncArguments 
 							val fixEff = namedArgList.getArgumentExpression('fixEff') as VectorLiteral

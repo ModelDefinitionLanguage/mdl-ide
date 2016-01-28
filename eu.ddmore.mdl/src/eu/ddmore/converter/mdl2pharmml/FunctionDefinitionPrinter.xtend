@@ -6,7 +6,6 @@ import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.utils.MdlUtils
 import java.util.HashSet
 import eu.ddmore.mdl.mdl.SymbolReference
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 
 class FunctionDefinitionPrinter {
 
@@ -221,11 +220,11 @@ class FunctionDefinitionPrinter {
 //		retVal
 //	}
 
-	def getPharmMLFuncDefn(BuiltinFunctionCall it){
+	def getPharmMLFuncDefn(SymbolReference it){
 		functionDefinitions.get(standardErrorName)
 	}
 
-	def String getStandardErrorName(BuiltinFunctionCall it){
+	def String getStandardErrorName(SymbolReference it){
 		val defn = standardErrorFunctionMappingTable.get(func)
 		if(defn != null){
 			// is a standard error function
@@ -243,7 +242,7 @@ class FunctionDefinitionPrinter {
 //		standardArgumentLookup.get(standardErrorName)?.containsKey(name) 
 //	}
 
-	def getStandardErrorArgument(BuiltinFunctionCall it, String name){
+	def getStandardErrorArgument(SymbolReference it, String name){
 		standardArgumentLookup.get(standardErrorName)?.get(name) 
 	}
 
@@ -255,9 +254,9 @@ class FunctionDefinitionPrinter {
 					EquationTypeDefinition:{
 						val rhsExpr = o.expression
 						switch(rhsExpr){
-							BuiltinFunctionCall:
+							SymbolReference:
 								if(rhsExpr.isNamedArgFunction && !printed.contains(rhsExpr.func)){
-									printed.add(rhsExpr.func.name)	
+									printed.add(rhsExpr.func)	
 									'''
 										«rhsExpr.pharmMLFuncDefn»
 									'''

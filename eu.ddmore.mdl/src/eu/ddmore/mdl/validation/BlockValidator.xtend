@@ -1,6 +1,5 @@
 package eu.ddmore.mdl.validation
 
-import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.BlockArgument
 import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
@@ -9,7 +8,6 @@ import eu.ddmore.mdl.mdl.BlockTextBody
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.Statement
-import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.provider.BlockArgumentDefinitionProvider
 import eu.ddmore.mdl.provider.BlockDefinitionProvider
@@ -120,17 +118,17 @@ class BlockValidator extends AbstractDeclarativeValidator{
 					MdlPackage.eINSTANCE.blockTextBody_Text, BLOCK_WRONG_BODY_TYPE, blk)]
 	}
 
-	@Check
-	def validateBlockStatementType(Statement it){
-		val feature = switch(it){
-			SymbolDefinition: MdlPackage.eINSTANCE.symbolDefinition_Name
-			AnonymousListStatement: MdlPackage.eINSTANCE.anonymousListStatement_List 
-			default: null
-		}
-		if(feature != null)
-			validateExpectedStatementType[blk| error("block '" + blk + "' does not permit statements of this type",
-						feature, BLOCK_INVALID_STATEMENT_TYPE, blk)]
-	}
+//	@Check
+//	def validateBlockStatementType(Statement it){
+//		val feature = switch(it){
+//			SymbolDefinition: MdlPackage.eINSTANCE.symbolDefinition_Name
+//			AnonymousListStatement: MdlPackage.eINSTANCE.anonymousListStatement_List 
+//			default: null
+//		}
+//		if(feature != null)
+//			validateExpectedStatementType[blk| error("block '" + blk + "' does not permit statements of this type",
+//						feature, BLOCK_INVALID_STATEMENT_TYPE, blk)]
+//	}
 
 	
 

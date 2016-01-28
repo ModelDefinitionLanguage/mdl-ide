@@ -129,16 +129,16 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 //	static val UnsupportedFunctions = #{ 'tanh', 'sinh', 'cosh', 'floor', 'mean' }
 	static val Set<String> UnsupportedFunctions = #{ }
 	
-	@Check
-	// Check for unsupported functions
-	def checkUnsupportedFunctions(SymbolReference it){
-		if(UnsupportedFunctions.contains(func)){
-			warning("Function '" + func + "' is not currently supported for execution in R.", 
-//					MdlPackage.eINSTANCE.builtinFunctionCall_Func,
-					MdlPackage.eINSTANCE.symbolDefinition_Name,
-					FEATURE_NOT_SUPPORTED, func)
-		}
-	}
+//	@Check
+//	// Check for unsupported functions
+//	def checkUnsupportedFunctions(SymbolReference it){
+//		if(UnsupportedFunctions.contains(func)){
+//			warning("Function '" + func + "' is not currently supported for execution in R.", 
+////					MdlPackage.eINSTANCE.builtinFunctionCall_Func,
+//					MdlPackage.eINSTANCE.symbolDefinition_Name,
+//					FEATURE_NOT_SUPPORTED, func)
+//		}
+//	}
 	
 	
 	@Check
@@ -168,20 +168,20 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	} 
 	
 	
-	@Check
-	def checkUnsupportedColumnName(ListDefinition it){
-		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		if(blk != null && blk.identifier == BlockDefinitionTable::DIV_BLK_NAME){
-			// data mapping block
-			val useValue = list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
-			val expectedColumnName = DataNamingLookup.get(useValue)
-			if(expectedColumnName != null && expectedColumnName != name){
-				warning("Column definitions with use '" + useValue + "' must be named '" + expectedColumnName + "' otherwise execution in R will fail.",
-					MdlPackage::eINSTANCE.symbolDefinition_Name,
-					FEATURE_NOT_SUPPORTED, useValue)
-			}
-		}
-	}
+//	@Check
+//	def checkUnsupportedColumnName(ListDefinition it){
+//		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+//		if(blk != null && blk.identifier == BlockDefinitionTable::DIV_BLK_NAME){
+//			// data mapping block
+//			val useValue = list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
+//			val expectedColumnName = DataNamingLookup.get(useValue)
+//			if(expectedColumnName != null && expectedColumnName != name){
+//				warning("Column definitions with use '" + useValue + "' must be named '" + expectedColumnName + "' otherwise execution in R will fail.",
+//					MdlPackage::eINSTANCE.symbolDefinition_Name,
+//					FEATURE_NOT_SUPPORTED, useValue)
+//			}
+//		}
+//	}
 
 	@Check
 	//Check for unsupported object names

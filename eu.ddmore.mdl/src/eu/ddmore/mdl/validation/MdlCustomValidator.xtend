@@ -11,11 +11,11 @@ import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.impl.ListDefinitionImpl
+import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
@@ -32,7 +32,7 @@ import java.util.LinkedList
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
+import eu.ddmore.mdl.mdllib.mdlLib.MdlLibPackage
 
 class MdlCustomValidator extends AbstractMdlValidator {
 
@@ -114,7 +114,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	def isValidRhsTransformPermitted(TransformedDefinition it) {
 		val expr = expression
 		switch(expr){
-			BuiltinFunctionCall case(transOnBothFuncs.contains(expr.func)):{
+			SymbolReference case(transOnBothFuncs.contains(expr.func)):{
 				val transExpr = expr.getArgumentEnumValue('trans')
 				if(transExpr != null) transExpr.isValidTransformFunction else false
 			}
@@ -262,7 +262,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 						// cycle detected!
 						cycle = true
 						error("Symbol '" + name + "' contains an expression that refers to itself.",
-								MdlPackage::eINSTANCE.symbolDefinition_Name,
+								MdlLibPackage::eINSTANCE.symbolDefinition_Name,
 								MdlValidator::INVALID_CYCLE, name)
 					}
 					else{
@@ -352,12 +352,12 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	def validateReservedNamesNotUsed(SymbolDefinition it){
 		if(name.startsWith(RESERVED_PREFIX)){
 			error("Variable names starting with '" + RESERVED_PREFIX + "' are reserved for internal use.",
-				MdlPackage::eINSTANCE.symbolDefinition_Name, MdlValidator::RESERVED_PREFIX_USED
+				MdlLibPackage::eINSTANCE.symbolDefinition_Name, MdlValidator::RESERVED_PREFIX_USED
 			)
 		}
 		else if(ReservedWord.contains(name)){
 			error("The keyword '" + name + "' is reserved for future use in MDL.",
-				MdlPackage::eINSTANCE.symbolDefinition_Name, MdlValidator::RESERVED_WORD_USED
+				MdlLibPackage::eINSTANCE.symbolDefinition_Name, MdlValidator::RESERVED_WORD_USED
 			)
 		}
 	}

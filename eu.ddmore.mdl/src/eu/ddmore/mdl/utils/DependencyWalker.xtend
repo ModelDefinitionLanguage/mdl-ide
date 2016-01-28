@@ -17,12 +17,12 @@ import eu.ddmore.mdl.mdl.PowerExpression
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.SubListExpression
-import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
 import java.util.ArrayList
 import java.util.Collections
 import java.util.List

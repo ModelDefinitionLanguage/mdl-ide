@@ -3,7 +3,6 @@ package eu.ddmore.converter.mdl2pharmml
 import eu.ddmore.mdl.mdl.AdditiveExpression
 import eu.ddmore.mdl.mdl.AndExpression
 import eu.ddmore.mdl.mdl.BooleanLiteral
-import eu.ddmore.mdl.mdl.BuiltinFunctionCall
 import eu.ddmore.mdl.mdl.ConstantLiteral
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
@@ -19,13 +18,13 @@ import eu.ddmore.mdl.mdl.PowerExpression
 import eu.ddmore.mdl.mdl.RealLiteral
 import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.StringLiteral
-import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
@@ -363,14 +362,14 @@ class PharmMLExpressionBuilder {
 		«ENDIF»
 	'''
     
-    def dispatch CharSequence getPharmMLExpr(BuiltinFunctionCall it){
+    def dispatch CharSequence getPharmMLExpr(SymbolReference it){
     	var retVal = ''''''
     	val a = argList
     	switch(a){
     		NamedFuncArguments:
     			retVal += '''
 						<math:FunctionCall>
-							«func.name.localSymbolReference»
+							«func.localSymbolReference»
 							«a.namedArguments»
 						</math:FunctionCall>
     			''' 
@@ -378,7 +377,7 @@ class PharmMLExpressionBuilder {
     		UnnamedFuncArguments:{
     			val opType = if(a.args.size > 1) "Binop" else "Uniop"
     			retVal += '''
-    					<math:«opType» op="«func.name.pharmMlFunction»">
+    					<math:«opType» op="«func.pharmMlFunction»">
     						«a.unnamedArguments»
     					</math:«opType»>	
     					'''
