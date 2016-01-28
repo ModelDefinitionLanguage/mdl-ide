@@ -2,9 +2,38 @@
 type TransType _enum;
 type GenericEnum _enum;
 type FixEffectSublist _sublist;
+type PriorSource _enum;
 
+func log (x::Real, y::Real) returns ::Real;
+func log2 (x::Real) returns ::Real;
+func log10 (x::Real) returns ::Real;
 func ln (x::Real) returns ::Real;
+func probit (x::Real) returns ::Real;
+func logit (x::Real) returns ::Real;
+func invLogit (x::Real) returns ::Real;
+func invProbit (x::Real) returns ::Real;
+func factorial (x::Real) returns ::Real;
+func lnFactorial (x::Real) returns ::Real;
+func sin (x::Real) returns ::Real;
+func cos (x::Real) returns ::Real;
+func tan (x::Real) returns ::Real;
+func sinh (x::Real) returns ::Real;
+func cosh (x::Real) returns ::Real;
+func tanh (x::Real) returns ::Real;
+func floor (x::Real) returns ::Real;
+func ceiling (x::Real) returns ::Real;
+func min (x::Real, y::Real) returns ::Real;
+func max (x::Real, y::Real) returns ::Real;
+func abs (x::Real) returns ::Real;
 func exp (x::Real) returns ::Real;
+func seq (x::Real, y::Real, z::Real) returns ::Vector;
+func dseq (x::Int, y::Int, z::Int) returns ::Vector[::Int];
+func sqrt (x::Real) returns ::Real;
+func sum (x::Vector) returns ::Real;
+func mean (x::Vector) returns ::Real;
+func median (x::Vector) returns ::Real;
+func inverse (x::Matrix) returns ::Matrix;
+func toInt (x::Real) returns ::Int;
 
 func Normal named
 				(mean::Real,
@@ -15,43 +44,144 @@ func Normal named
 				(mean, var)
 			returns ::Pdf
 			;
+func LogNormal named
+		(
+			mean::Real,
+			sd::Real,
+			var::Real
+		)
+		sig(mean, sd),
+			(mean, var)
+		returns ::Pdf;
 func Bernoulli named
 				(
-					category::GenericEnum, // need to require a reference here
+					category::Reference[::GenericEnum], // need to require a reference here
 					probability::Real
 				)
 				returns ::Pmf
 			;
+func	 Poisson named
+			(
+				lambda::Real
+			)
+			returns ::Pmf;
+func Binomial named
+			(
+				successCategory ::Reference[::GenericEnum],
+				probabilityOfSuccess::Real,
+				numberOfTrials::Real
+			)
+			returns ::Pmf;
+func	 Gamma named
+			(
+				shape::Real,
+				scale::Real
+			)
+			returns ::Pdf;
+func NonParametric named
+			(
+				bins::Vector,
+				probability::Vector
+			)
+			returns ::Pdf;
+func MultiNonParametric named
+			(
+				bins::Matrix,
+				probability::Vector
+			)
+			returns ::Vector[::Pdf];
+func Empirical named
+			(
+				data::Vector,
+				probability::Vector
+			)
+			returns ::Pdf;
+func MultiEmpirical named
+			(
+				data::Matrix,
+				probability::Vector
+			)	
+			returns ::Vector[::Pdf];		
 func MultivariateNormal named
 			(
 				mean::Vector,
 				cov::Matrix
 			)
 			returns ::Vector[::Pdf],
-	matrix named
-			(
-				vector::Vector,
-				ncol::Real,
-				byRow::Boolean
-			)
-			returns ::Matrix,
-	linear named
-			( 
+matrix named
+		(
+			vector::Vector,
+			ncol::Real,
+			byRow::Boolean
+		)
+		returns ::Matrix,
+linear named
+		( 
+			trans::TransType,
+			pop::Real,
+			fixEff::Vector[::FixEffectSublist],
+			ranEff::Vector
+		)
+		sig(trans?, pop, fixEff?, ranEff) 
+		returns ::Real,
+general named (
 				trans::TransType,
-				pop::Real,
-				fixEff::Vector[::FixEffectSublist],
-				ranEff::Vector
+				grp::Real,
+				ranEff::Vector[::Real]
 			)
-			sig(trans?, pop, fixEff?, ranEff) 
+			sig(trans?, grp, ranEff) 
 			returns ::Real,
-	combinedError1 named
-			( 
-				trans::TransType,
-				additive::Real,
-				proportional::Real,
-				prediction::Real,
-				eps::Real
+combinedError1 named
+		( 
+			trans::TransType,
+			additive::Real,
+			proportional::Real,
+			prediction::Real,
+			eps::Real
+		)
+		sig(trans?, additive, proportional, prediction, eps)
+		returns ::Real
+;
+func combinedError2 named
+		( 
+			trans::TransType,
+			additive::Real,
+			proportional::Real,
+			prediction::Real,
+			eps::Real
+		)
+		sig(trans?, additive, proportional, prediction, eps)
+		returns ::Real
+;
+func additiveError named
+		( 
+			trans::TransType,
+			additive::Real,
+			prediction::Real,
+			eps::Real
+		)
+		sig(trans?, additive, prediction, eps)
+		returns ::Real
+;
+func proportionalError named
+		( 
+			trans::TransType,
+			proportional::Real,
+			prediction::Real,
+			eps::Real
+		)
+		sig(trans?, proportional, prediction, eps)
+		returns ::Real
+;
+func readVector named
+			(
+				src::PriorSource,
+				element::String
 			)
-			sig(trans?, additive, proportional, prediction, eps)
-			returns ::Real
-	;
+			returns ::Vector;
+func readMatrix named
+			(
+				src::PriorSource,
+				element::String
+			)
+			returns ::Matrix;
