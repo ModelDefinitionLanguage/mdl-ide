@@ -15,7 +15,8 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.impl.ListDefinitionImpl
-import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
+import eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage
+import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
@@ -32,7 +33,6 @@ import java.util.LinkedList
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.mdllib.mdlLib.MdlLibPackage
 
 class MdlCustomValidator extends AbstractMdlValidator {
 

@@ -10,7 +10,7 @@ import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.Statement
-import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
+import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable

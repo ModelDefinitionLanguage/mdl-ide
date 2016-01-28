@@ -22,7 +22,7 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
-import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
+import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
 import java.util.ArrayList
 import java.util.Collections
 import java.util.List

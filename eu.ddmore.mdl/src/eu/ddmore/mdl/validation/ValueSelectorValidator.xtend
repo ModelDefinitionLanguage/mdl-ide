@@ -5,7 +5,7 @@ import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MdlPackage
-import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
+import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
 import eu.ddmore.mdl.utils.ConstantEvaluation
 import eu.ddmore.mdl.utils.MdlUtils
 import org.eclipse.xtext.EcoreUtil2

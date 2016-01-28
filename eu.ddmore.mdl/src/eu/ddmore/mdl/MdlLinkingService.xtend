@@ -1,16 +1,16 @@
 package eu.ddmore.mdl
 
 import com.google.inject.Inject
-import org.eclipse.xtext.linking.impl.DefaultLinkingService
-import org.eclipse.xtext.resource.IContainer
-import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import eu.ddmore.mdl.mdl.SymbolReference
+import java.util.Collections
+import java.util.List
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
-import org.eclipse.xtext.nodemodel.INode
-import java.util.List
+import org.eclipse.xtext.linking.impl.DefaultLinkingService
 import org.eclipse.xtext.linking.impl.IllegalNodeException
-import java.util.Collections
+import org.eclipse.xtext.nodemodel.INode
+import org.eclipse.xtext.resource.IContainer
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 
 class MdlLinkingService extends DefaultLinkingService {
 	

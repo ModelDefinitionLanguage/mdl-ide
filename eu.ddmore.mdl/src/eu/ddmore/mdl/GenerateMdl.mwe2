@@ -17,8 +17,8 @@ Workflow {
     bean = StandaloneSetup {
             scanClassPath = true
             platformUri = "${runtimeProject}/.."
-	    	registerGeneratedEPackage = "eu.ddmore.mdl.mdllib.mdlLib.MdlLibPackage"
-    		registerGenModelFile = "platform:/resource/eu.ddmore.mdl.mdllib/model/generated/MdlLib.genmodel"
+	    	registerGeneratedEPackage = "eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage"
+    		registerGenModelFile = "platform:/resource/eu.ddmore.mdl.mdllib/model/custom/MdlLib.genmodel"
         }
     
         component = DirectoryCleaner {

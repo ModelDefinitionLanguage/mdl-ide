@@ -3,14 +3,6 @@
  */
 package eu.ddmore.mdl.scoping
 
-import eu.ddmore.mdl.mdl.Expression
-import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.EReference
-import org.eclipse.xtext.EcoreUtil2
-import org.eclipse.xtext.scoping.IScope
-import org.eclipse.xtext.scoping.Scopes
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
 
 /**

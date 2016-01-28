@@ -2,10 +2,10 @@ package eu.ddmore.converter.mdl2pharmml
 
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.MclObject
+import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.utils.MdlUtils
 import java.util.HashSet
-import eu.ddmore.mdl.mdl.SymbolReference
 
 class FunctionDefinitionPrinter {
 

@@ -9,8 +9,8 @@ import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockTextBody
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.PropertyStatement
-import eu.ddmore.mdl.mdl.SymbolDefinition
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
 

@@ -3,6 +3,8 @@
 */
 package eu.ddmore.mdl.ui.labeling
 
+import org.eclipse.xtext.ui.label.DefaultDescriptionLabelProvider
+
 //import org.eclipse.xtext.resource.IEObjectDescription
 
 /**
@@ -10,7 +12,7 @@ package eu.ddmore.mdl.ui.labeling
  * 
  * see http://www.eclipse.org/Xtext/documentation.html#labelProvider
  */
-class MdlDescriptionLabelProvider extends org.eclipse.xtext.ui.label.DefaultDescriptionLabelProvider {
+class MdlDescriptionLabelProvider extends DefaultDescriptionLabelProvider {
 
 	// Labels and icons can be computed like this:
 	

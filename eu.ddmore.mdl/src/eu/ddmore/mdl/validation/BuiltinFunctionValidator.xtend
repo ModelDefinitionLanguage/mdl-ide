@@ -2,18 +2,18 @@ package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.NamedFuncArguments
+import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider.FunctDefn
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider.NamedArgFuncDefn
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider.SimpleFuncDefn
+import eu.ddmore.mdl.utils.MdlUtils
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.mdl.SymbolReference
-import eu.ddmore.mdl.utils.MdlUtils
 
 class BuiltinFunctionValidator extends AbstractDeclarativeValidator{
 

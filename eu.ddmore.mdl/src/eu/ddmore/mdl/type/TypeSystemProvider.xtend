@@ -23,8 +23,8 @@ import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdllib.mdlLib.SymbolDefinition
-import eu.ddmore.mdl.mdllib.mdlLib.TypeSpec
+import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
+import eu.ddmore.mdl.mdllib.mdllib.TypeSpec
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
