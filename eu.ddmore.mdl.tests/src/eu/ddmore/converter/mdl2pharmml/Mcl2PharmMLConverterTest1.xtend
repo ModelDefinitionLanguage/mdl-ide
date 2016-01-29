@@ -1,18 +1,18 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import com.google.inject.Inject
+import eu.ddmore.mdl.LibraryTestHelper
+import eu.ddmore.mdl.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
 import java.io.File
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import eu.ddmore.mdl.MdlAndLibInjectorProvider
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -20,7 +20,7 @@ class Mcl2PharmMLConverterTest1 {
 	static val CONVERTED_OUTPUT_DIR="convertedFiles/"
 	static val USE_CASE_DIR="src/eu/ddmore/converter/mdl2pharmml/"
 	
-	@Inject extension ParseHelper<Mcl>
+	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 
 	extension ConverterTestHarness cth = new ConverterTestHarness

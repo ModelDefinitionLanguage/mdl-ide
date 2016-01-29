@@ -1,5 +1,6 @@
 package eu.ddmore.mdl.validation
 
+import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
@@ -22,6 +23,7 @@ import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage
 
 class MogValidator extends AbstractDeclarativeValidator {
 
@@ -240,18 +242,18 @@ class MogValidator extends AbstractDeclarativeValidator {
 		}
 	}
 	
-//	@Check
-//	def validateObjectReferenceInMog(ListDefinition it){
-//		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-//		if(blk?.identifier == BlockDefinitionTable::MOG_OBJ_NAME){
-//			val mogObj = EcoreUtil2.getContainerOfType(eContainer, MclObject)
-//			val objType = list.getAttributeEnumValue('type')
-//			if(MogValidator::findMdlObject(mogObj, name, objType) == null){
-//				error("the object '" + name + "' cannot be found",
-//						MdlPackage.eINSTANCE.symbolDefinition_Name, MdlValidator::MCLOBJ_REF_UNRESOLVED, name)
-//			}
-//		}
-//	}
+	@Check
+	def validateObjectReferenceInMog(ListDefinition it){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		if(blk?.identifier == BlockDefinitionTable::MOG_OBJ_NAME){
+			val mogObj = EcoreUtil2.getContainerOfType(eContainer, MclObject)
+			val objType = list.getAttributeEnumValue('type')
+			if(MogValidator::findMdlObject(mogObj, name, objType) == null){
+				error("the object '" + name + "' cannot be found",
+						MdlLibPackage.eINSTANCE.symbolDefinition_Name, MdlValidator::MCLOBJ_REF_UNRESOLVED, name)
+			}
+		}
+	}
 	
 	@Check
 	def validateMog(MclObject mogObj){

@@ -5,10 +5,7 @@ Bundle-Vendor: Leiden University
 Bundle-Version: 1.4.0.qualifier
 Bundle-SymbolicName: eu.ddmore.mdl; singleton:=true
 Bundle-ActivationPolicy: lazy
-Bundle-Copyright: Copyright (C) 2013, Leiden University. All rights reserved.
- Leiden University gratefully acknowledges the contributions of
- its partner Mango Business Solutions Limited for their design
- work and support.
+Bundle-Copyright: Copyright (C) 2013, Leiden University. All rights reserved.Leiden University gratefully acknowledges the contributions ofits partner Mango Business Solutions Limited for their designwork and support.
 Bundle-License: http://www.gnu.org/licenses/lgpl-2.1.html;description=GNU Lesser General Public License version 2.1;link=http://www.gnu.org/licenses/lgpl-2.1.html
 Require-Bundle: org.eclipse.xtext.xbase;visibility:=reexport,
  org.eclipse.xtext.generator,
@@ -19,13 +16,13 @@ Require-Bundle: org.eclipse.xtext.xbase;visibility:=reexport,
  org.eclipse.xtext.util,
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
- org.eclipse.xtext.xbase.lib,
  org.antlr.runtime,
  org.eclipse.xtext.common.types,
  org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional,
  org.eclipse.core.resources;bundle-version="3.9.1",
  org.eclipse.core.runtime;bundle-version="3.8.0",
- eu.ddmore.mdl.mdllib;bundle-version="1.0.0"
+ eu.ddmore.mdl.mdllib;bundle-version="1.0.0";visibility:=reexport,
+ org.eclipse.xtext.xbase.lib
 Export-Package: eu.ddmore.converter.mdl2pharmml,
  eu.ddmore.mdl,
  eu.ddmore.mdl.formatting,
@@ -44,5 +41,4 @@ Export-Package: eu.ddmore.converter.mdl2pharmml,
  eu.ddmore.mdl.utils,
  eu.ddmore.mdl.validation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: eu.ddmore.mdl.mdl,
- org.apache.log4j
+Import-Package: org.apache.log4j

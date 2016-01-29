@@ -13,11 +13,12 @@ import org.junit.runner.RunWith
 
 import static org.junit.Assert.*
 import eu.ddmore.mdl.MdlAndLibInjectorProvider
+import eu.ddmore.mdl.LibraryTestHelper
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class ConstantEvaluationTest {
-	@Inject extension ParseHelper<Mcl>
+	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 
 	extension MdlUtils mu = new MdlUtils

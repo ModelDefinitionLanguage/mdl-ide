@@ -9,7 +9,11 @@ class LibraryTestHelper<T extends EObject> {
 	@Inject extension ParseHelper<T>	
 	@Inject extension MdlLib
 
-	def loadLibAndParse(CharSequence p) {
+//	def loadLibAndParse(CharSequence p) {
+//		p.parse(loadLib)
+//	}
+	
+	def parse(CharSequence p) {
 		p.parse(loadLib)
 	}
 	

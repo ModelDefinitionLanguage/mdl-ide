@@ -4,7 +4,7 @@
 <plugin>
   <extension point="org.eclipse.emf.ecore.generated_package">
     <package 
-       uri = "http://www.ddmore.eu/mdl/Mdl" 
+       uri = "http://eu.ddmore.mdl/mdl/Mdl" 
        class = "eu.ddmore.mdl.mdl.MdlPackage"
        genModel = "model/generated/Mdl.genmodel" /> 
 	

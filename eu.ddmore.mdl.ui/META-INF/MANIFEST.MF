@@ -23,16 +23,51 @@ Require-Bundle: eu.ddmore.mdl;visibility:=reexport,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.xpand,
- eu.ddmore.mdl.mdllib;bundle-version="1.0.0",
  eu.ddmore.mdl.mdllib.ui;bundle-version="1.0.0"
 Import-Package: eu.ddmore.libpharmml;version="0.4.0.SNAPSHOT",
  org.apache.commons.io;version="2.0.1",
  org.apache.log4j,
  org.eclipse.ui.console
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: eu.ddmore.mdl.ui.contentassist,
- eu.ddmore.mdl.ui.contentassist.antlr,
- eu.ddmore.mdl.ui.internal,
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: eu.ddmore.mdl.ui;
+  uses:="org.osgi.framework,
+   com.google.inject,
+   org.eclipse.xtext.ui,
+   org.eclipse.core.resources,
+   org.eclipse.xtext.ui.guice,
+   org.eclipse.ui.plugin",
+ eu.ddmore.mdl.ui.contentassist;
+  uses:="org.eclipse.emf.ecore,
+   org.eclipse.swt.graphics,
+   org.eclipse.xtext.ui.editor.contentassist,
+   org.eclipse.xtext",
+ eu.ddmore.mdl.ui.contentassist.antlr;
+  uses:="eu.ddmore.mdl.ui.contentassist.antlr.internal,
+   eu.ddmore.mdl.services,
+   org.eclipse.xtext.ui.codetemplates.ui.partialEditing,
+   org.eclipse.xtext.ui.editor.contentassist.antlr.internal,
+   org.eclipse.xtext,
+   org.eclipse.xtext.ui.editor.contentassist.antlr",
+ eu.ddmore.mdl.ui.contentassist.antlr.internal;
+  uses:="eu.ddmore.mdl.services,
+   org.eclipse.xtext.ui.editor.contentassist.antlr.internal,
+   org.antlr.runtime,
+   org.eclipse.xtext",
+ eu.ddmore.mdl.ui.handler;uses:="org.eclipse.core.runtime,org.eclipse.xtext.ui.resource,org.eclipse.core.commands",
+ eu.ddmore.mdl.ui.internal;uses:="org.osgi.framework,com.google.inject,org.eclipse.ui.plugin",
+ eu.ddmore.mdl.ui.labeling;
+  uses:="org.eclipse.swt.graphics,
+   eu.ddmore.mdl.mdl,
+   org.eclipse.xtext.ui.label,
+   org.eclipse.emf.edit.ui.provider,
+   eu.ddmore.mdl.mdllib.mdllib",
+ eu.ddmore.mdl.ui.outline;
+  uses:="org.eclipse.xtext.ui.editor.outline.impl,
+   org.eclipse.xtext.ui.editor.outline,
+   eu.ddmore.mdl.mdl,
+   eu.ddmore.mdl.mdllib.mdllib",
+ eu.ddmore.mdl.ui.perspective;uses:="org.eclipse.ui,org.eclipse.ui.console",
  eu.ddmore.mdl.ui.preference;x-friends:="eu.ddmore.mdl.tests",
- eu.ddmore.mdl.ui.quickfix
+ eu.ddmore.mdl.ui.quickfix;uses:="org.eclipse.xtext.validation,org.eclipse.xtext.ui.editor.quickfix",
+ eu.ddmore.mdl.ui.wizard;uses:="org.eclipse.core.runtime,org.eclipse.xtext.ui.wizard,org.eclipse.core.resources"
 Bundle-Activator: eu.ddmore.mdl.ui.internal.MdlActivator

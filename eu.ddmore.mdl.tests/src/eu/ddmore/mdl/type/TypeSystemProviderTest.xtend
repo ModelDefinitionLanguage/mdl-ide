@@ -14,7 +14,7 @@ import eu.ddmore.mdl.MdlAndLibInjectorProvider
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class TypeSystemProviderTest {
-//	@Inject extension ParseHelper<Mcl>
+//	@Inject extension LibraryTestHelper<Mcl>
 //	@Inject extension ValidationTestHelper
 	
 	extension TypeSystemProvider th = new TypeSystemProvider 

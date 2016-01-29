@@ -4,9 +4,7 @@ import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.Mcl
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -47,7 +45,7 @@ warfarin_PK_ODE_mdl = mdlObj {
 	
 	@Test
 	def void testParsing(){
-		val mdl = CODE_SNIPPET.loadLibAndParse
+		val mdl = CODE_SNIPPET.parse
 		mdl.assertNoErrors
 	}
 	

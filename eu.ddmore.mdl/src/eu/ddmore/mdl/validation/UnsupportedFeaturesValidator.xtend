@@ -21,6 +21,9 @@ import java.util.Set
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.provider.BlockDefinitionTable
+import eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
@@ -166,20 +169,20 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	} 
 	
 	
-//	@Check
-//	def checkUnsupportedColumnName(ListDefinition it){
-//		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-//		if(blk != null && blk.identifier == BlockDefinitionTable::DIV_BLK_NAME){
-//			// data mapping block
-//			val useValue = list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
-//			val expectedColumnName = DataNamingLookup.get(useValue)
-//			if(expectedColumnName != null && expectedColumnName != name){
-//				warning("Column definitions with use '" + useValue + "' must be named '" + expectedColumnName + "' otherwise execution in R will fail.",
-//					MdlPackage::eINSTANCE.symbolDefinition_Name,
-//					FEATURE_NOT_SUPPORTED, useValue)
-//			}
-//		}
-//	}
+	@Check
+	def checkUnsupportedColumnName(ListDefinition it){
+		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		if(blk != null && blk.identifier == BlockDefinitionTable::DIV_BLK_NAME){
+			// data mapping block
+			val useValue = list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
+			val expectedColumnName = DataNamingLookup.get(useValue)
+			if(expectedColumnName != null && expectedColumnName != name){
+				warning("Column definitions with use '" + useValue + "' must be named '" + expectedColumnName + "' otherwise execution in R will fail.",
+					MdlLibPackage::eINSTANCE.symbolDefinition_Name,
+					FEATURE_NOT_SUPPORTED, useValue)
+			}
+		}
+	}
 
 	@Check
 	//Check for unsupported object names

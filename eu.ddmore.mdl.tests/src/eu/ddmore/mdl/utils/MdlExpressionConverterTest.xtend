@@ -15,11 +15,12 @@ import org.junit.runner.RunWith
 
 import static extension eu.ddmore.mdl.utils.MdlExpressionConverter.convertToString
 import eu.ddmore.mdl.MdlAndLibInjectorProvider
+import eu.ddmore.mdl.LibraryTestHelper
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MdlExpressionConverterTest {
-	@Inject extension ParseHelper<Mcl>
+	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils

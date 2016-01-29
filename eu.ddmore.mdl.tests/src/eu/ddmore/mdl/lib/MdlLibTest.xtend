@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MdlLibTest {
 	@Inject extension ParseHelper<Mcl> ph
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension LibraryTestHelper<Mcl> lh
 	@Inject extension ValidationTestHelper
 
 	@Inject extension MdlLib
@@ -72,7 +72,7 @@ Bernoulli_DIST_mdl = mdlObj{
 
 	@Test 
 	def void testLib() {
-		CODE_SNIPPET.loadLibAndParse.assertNoErrors
+		lh.parse(CODE_SNIPPET).assertNoErrors
 	}
 
 	@Inject

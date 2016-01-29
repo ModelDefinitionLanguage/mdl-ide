@@ -30,7 +30,7 @@ public class MdlUiModule extends eu.ddmore.mdl.ui.AbstractMdlUiModule {
 
     public MdlUiModule(AbstractUIPlugin plugin) {
         super(plugin);
-        init();
+//        init();
     }
     
 //    @Override
@@ -62,18 +62,18 @@ public class MdlUiModule extends eu.ddmore.mdl.ui.AbstractMdlUiModule {
         binder.bind(DefaultSemanticHighlightingCalculator.class).to(MdlSemanticHighlightingCalculator.class);
     }
 
-    public void init() {
-        if (System.getProperty(MIF_ENCRYPTION_KEY) != null) {
-            try {
-                // FIXME expecting MIF_ENCRYPTION_KEY to contain the path relative to the CWD
-                URL url = new URL("file:/" + System.getProperty("user.dir") + "/" + System.getProperty(MIF_ENCRYPTION_KEY));
-                LOG.debug(String.format("%s property was set to %s", MIF_ENCRYPTION_KEY, url));
-                System.setProperty(MIF_ENCRYPTION_KEY, url.toExternalForm());
-            } catch (MalformedURLException e) {
-                LOG.error(String.format("%s property was set to and invalid URL", MIF_ENCRYPTION_KEY), e);
-            }
-        } else {
-            LOG.warn(String.format("%s property was not set", MIF_ENCRYPTION_KEY));
-        }
-    }
+//    public void init() {
+//        if (System.getProperty(MIF_ENCRYPTION_KEY) != null) {
+//            try {
+//                // FIXME expecting MIF_ENCRYPTION_KEY to contain the path relative to the CWD
+//                URL url = new URL("file:/" + System.getProperty("user.dir") + "/" + System.getProperty(MIF_ENCRYPTION_KEY));
+//                LOG.debug(String.format("%s property was set to %s", MIF_ENCRYPTION_KEY, url));
+//                System.setProperty(MIF_ENCRYPTION_KEY, url.toExternalForm());
+//            } catch (MalformedURLException e) {
+//                LOG.error(String.format("%s property was set to and invalid URL", MIF_ENCRYPTION_KEY), e);
+//            }
+//        } else {
+//            LOG.warn(String.format("%s property was not set", MIF_ENCRYPTION_KEY));
+//        }
+//    }
 }
