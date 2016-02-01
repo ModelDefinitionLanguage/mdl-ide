@@ -21,6 +21,7 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
+import java.util.ArrayList
 
 class BuiltinFunctionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
@@ -54,7 +55,20 @@ class BuiltinFunctionProvider {
 	@Data @FinalFieldsConstructor
 	static class NamedArgFuncDefn implements FunctDefn{
 		TypeInfo returnType
-		Map<String, FunctionArgument> arguments	 
+		Map<String, TypeInfo> arguments
+		List<Map<String, Boolean>> signatures
+		
+		new(TypeInfo returnType, Map<String, FunctionArgument> arguments){
+			this.returnType = returnType
+			this.arguments = new HashMap<String, TypeInfo>
+			this.signatures = new ArrayList<Map<String, Boolean>>
+			for(key : arguments.keySet){
+				val map = new HashMap<String, Boolean>
+				map.put(key, true)
+				this.signatures.add(map)
+				this.arguments.put(key, arguments.get(key).expectedType)
+			}
+		}
 		
 		override int getNumArgs(){
 			arguments.size
@@ -74,7 +88,7 @@ class BuiltinFunctionProvider {
 		buildEnumTypes
 	}
 	
-	private def Map<String, List<? extends FunctDefn>> getFunctDefns(){
+	private def Map<String, ? extends FunctDefn> getFunctDefns(){
 		BuiltinFunctionTable::getInstance.functDefns
 	}
 	
@@ -82,20 +96,20 @@ class BuiltinFunctionProvider {
 		for(blkName : functDefns.keySet){
 			val valueMap = new HashMap<String, BuiltinEnumTypeInfo>
 			attEnumTypes.put(blkName, valueMap)
-			val bd = functDefns.get(blkName)
-			for(a : bd){
+			val a = functDefns.get(blkName)
+//			for(a : bd){
 				if(a instanceof NamedArgFuncDefn){
 					val nfd = a as NamedArgFuncDefn 
-				for(att : nfd.arguments.values){
-					if(att.expectedType instanceof BuiltinEnumTypeInfo){
-						val builtinType = att.expectedType as BuiltinEnumTypeInfo
-						for(v : builtinType.expectedValues){
-							valueMap.put(v, builtinType)
+					for(att : nfd.arguments.values){
+						if(att instanceof BuiltinEnumTypeInfo){
+							val builtinType = att as BuiltinEnumTypeInfo
+							for(v : builtinType.expectedValues){
+								valueMap.put(v, builtinType)
+							}
 						}
 					}
 				}
-				}
-			}
+//			}
 		}
 		attEnumTypes
 	} 
@@ -103,10 +117,11 @@ class BuiltinFunctionProvider {
 	def getTransformFunctionType(String fName){
 		val defns = functDefns.get(fName)
 		if(defns != null)
-			if(defns.size > 1)
-				TypeSystemProvider::UNDEFINED_TYPE
-			else
-				defns.head.returnType
+//			if(defns.size > 1)
+//				TypeSystemProvider::UNDEFINED_TYPE
+//			else
+//				defns.head.returnType
+				defns.returnType
 		else
 			TypeSystemProvider::UNDEFINED_TYPE
 	}
@@ -120,7 +135,7 @@ class BuiltinFunctionProvider {
 		val defn = funcDefn.findFuncDefn
 		switch(defn){
 			NamedArgFuncDefn:
-				defn.arguments.get(vp.argumentName)?.expectedType ?: TypeSystemProvider::UNDEFINED_TYPE
+				defn.arguments.get(vp.argumentName) ?: TypeSystemProvider::UNDEFINED_TYPE
 			default:
 				TypeSystemProvider::UNDEFINED_TYPE
 		}
@@ -138,15 +153,14 @@ class BuiltinFunctionProvider {
 		}
 	}
 	
-	// precindition is that this is a list of NamedFuncDefns
-	private def chooseBestMatchingArguments(NamedFuncArguments it, List<? extends FunctDefn> availableDefns){
+	// precondition is that this is a list of NamedFuncDefns
+	private def chooseBestMatchingArguments(NamedFuncArguments it, NamedArgFuncDefn availableDefns){
 		var matchCount = 0;
-		var FunctDefn bestMatch = availableDefns.head
-		for(fd : availableDefns){
+		var Map<String, Boolean> bestMatch = availableDefns.signatures.head
+		for(fd : availableDefns.signatures){
 			var currMatchCount = 0
-			val nfd = fd as NamedArgFuncDefn
 			for(vp : arguments){
-				if(nfd.arguments.containsKey(vp.argumentName)) currMatchCount++
+				if(fd.containsKey(vp.argumentName)) currMatchCount++
 			}
 			if(currMatchCount > matchCount){
 				bestMatch = fd
@@ -161,24 +175,26 @@ class BuiltinFunctionProvider {
 	}
 	
 	public def findFuncDefn(SymbolReference it){
-		val availableDefns = functDefns.get(func)
-		var FunctDefn retVal = null
-		if(availableDefns != null){
-			val firstDefn = availableDefns.head
-			retVal = switch(firstDefn){
-				SimpleFuncDefn: firstDefn
-				NamedArgFuncDefn
-					case availableDefns.size == 1: firstDefn
-					case availableDefns.size > 1:{
-						if(argList == null) firstDefn
-						else if(argList instanceof NamedFuncArguments){
-							(argList as NamedFuncArguments).chooseBestMatchingArguments(availableDefns)
-						}
-						else null
-					}
-			}
-		}
-		retVal
+		functDefns.get(func)
+//		val availableDefns = functDefns.get(func)
+//		var FunctDefn retVal = null
+//		if(availableDefns != null){
+//			val firstDefn = availableDefns
+//			retVal = switch(firstDefn){
+//				SimpleFuncDefn: firstDefn
+//				NamedArgFuncDefn
+//					case firstDefn.signatures.size == 1: firstDefn
+//				NamedArgFuncDefn
+//					case firstDefn.signatures.size > 1:{
+//						if(argList == null) firstDefn
+//						else if(argList instanceof NamedFuncArguments){
+//							(argList as NamedFuncArguments).chooseBestMatchingArguments(firstDefn)
+//						}
+//						else null
+//					}
+//			}
+//		}
+//		retVal
 	}
 	
 	// returns the set of mandatory arguments not set in a function or an
@@ -186,15 +202,15 @@ class BuiltinFunctionProvider {
 	def getMissingMandatoryArgumentNames(NamedFuncArguments it){
 		val Set<String> mandatoryArgs = new HashSet<String>
 		val funcDefn = functionCall.findFuncDefn
-		if(funcDefn != null && funcDefn instanceof NamedArgFuncDefn){
+		if(funcDefn instanceof NamedArgFuncDefn){
+			val signature = chooseBestMatchingArguments(funcDefn)
 			// store all the mandatory argument names
-			(funcDefn as NamedArgFuncDefn).arguments.forEach[arg, fa| if(fa.isMandatory) mandatoryArgs.add(arg) ]
+			funcDefn.arguments.forEach[arg, fa| val mand = signature.get(arg) if(mand != null && mand) mandatoryArgs.add(arg) ]
 			// remove those that are used
 			arguments.forEach[vp| mandatoryArgs.remove(vp.argumentName)]
 		}
 		mandatoryArgs
 	}
-	
 	
 	private def getFunctionCall(NamedFuncArguments it){
 		eContainer as SymbolReference
@@ -206,7 +222,7 @@ class BuiltinFunctionProvider {
 	
 	def isNamedArgFunction(SymbolReference it){
 		val funcDefn = functDefns.get(func)
-		funcDefn != null && funcDefn.head instanceof NamedArgFuncDefn
+		funcDefn != null && funcDefn instanceof NamedArgFuncDefn
 	}
 	
 	
