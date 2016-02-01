@@ -1,20 +1,21 @@
 package eu.ddmore.mdl.validation
 
 import com.google.inject.Inject
-import eu.ddmore.mdl.LibraryTestHelper
-import eu.ddmore.mdl.MdlAndLibInjectorProvider
+import eu.ddmore.mdl.MdlInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
-import eu.ddmore.mdl.mdl.MdlPackage
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
+import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
+import static org.junit.Assert.*
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.mdl.MdlPackage
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlAndLibInjectorProvider))
+@InjectWith(typeof(MdlInjectorProvider))
 class MclBuiltinFunctionValidationTest {
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension ParseHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 
@@ -339,6 +340,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testNamedFunctionWithNoArgs(){
 		val mcl = '''bar = mdlObj {
+			IDV{T}
 			VARIABILITY_LEVELS{
 			}
 
@@ -356,6 +358,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testNamedFunctionWithWrongArg(){
 		val mcl = '''bar = mdlObj {
+			IDV{T}
 			COVARIATES{
 				logtWT
 			}
@@ -367,7 +370,7 @@ class MclBuiltinFunctionValidationTest {
 				POP_CL
 				BETA_CL_WT
 				ETA_CL
-				Cl = linear(pop = POP_CL, wrong = {{coeff=BETA_CL_WT, covariate=logtWT}}, ranEff = [ETA_CL])
+				Cl = linear(pop = POP_CL, wrong = [{coeff=BETA_CL_WT, covariate=logtWT}], ranEff = [ETA_CL])
 			}
 		}'''.parse
 		
@@ -380,6 +383,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testInvalidNamedFunctionWithMissingArg(){
 		val mcl = '''bar = mdlObj {
+			IDV{T}
 			COVARIATES{
 				logtWT
 			}
@@ -393,12 +397,13 @@ class MclBuiltinFunctionValidationTest {
 				ETA_CL
 			}
 			INDIVIDUAL_VARIABLES{
-				Cl = linear(pop = POP_CL, fixEff = {{coeff=BETA_CL_WT, covariate=logtWT}})
+				Cl = linear(pop = POP_CL, fixEff = [{coeff=BETA_CL_WT, cov=logtWT}])
 			}
 			INDIVIDUAL_VARIABLES{
 			}
 		}'''.parse
 		
+		assertEquals("expected error num", 1, mcl.validate.size)
 //		mcl.assertError(MdlPackage::eINSTANCE.builtinFunctionCall,
 //			MdlValidator::INCORRECT_NUM_FUNC_ARGS,
 //			"Function 'linear' has the wrong number of arguments. Expected 3."
@@ -407,6 +412,65 @@ class MclBuiltinFunctionValidationTest {
 			MdlValidator::MANDATORY_NAMED_FUNC_ARG_MISSING,
 			"Mandatory argument 'ranEff' is missing."
 		)
+		
+	}
+
+	@Test
+	def void testInvalidNamedOverloadedFunctionWithMissingArg(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+				ID : { type is parameter, level=1 }
+			}
+			
+			GROUP_VARIABLES{
+				POP_CL
+				BETA_CL_WT
+			}
+			RANDOM_VARIABLE_DEFINITION(level=ID){
+				ETA_CL ~ Normal(var=POP_CL)
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.namedFuncArguments,
+			MdlValidator::MANDATORY_NAMED_FUNC_ARG_MISSING,
+			"Mandatory argument 'mean' is missing."
+		)
+		assertEquals("expected error num", 1, mcl.validate.size)
+		
+	}
+
+	@Test
+	def void testInvalidNamedOverloadedFunctionWithMissingArg2(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			COVARIATES{
+				logtWT
+			}
+			
+			VARIABILITY_LEVELS{
+				ID : { level=1, type is parameter }
+			}
+			
+			GROUP_VARIABLES{
+				POP_CL
+				BETA_CL_WT
+			}
+			RANDOM_VARIABLE_DEFINITION(level=ID){
+				ETA_CL ~ Normal(mean=POP_CL)
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.namedFuncArguments,
+			MdlValidator::MANDATORY_NAMED_FUNC_ARG_MISSING,
+			"Mandatory argument 'sd' is missing."
+		)
+		assertEquals("expected error num", 1, mcl.validate.size)
+		
 	}
 
 	@Test
@@ -439,7 +503,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testNamedFunctionWithDuplicateArg(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			COVARIATES{
 				logtWT
 			}
@@ -456,7 +520,7 @@ class MclBuiltinFunctionValidationTest {
 			
 			
 			INDIVIDUAL_VARIABLES{
-				Cl = linear(pop = POP_CL, pop=other, fixEff = {{coeff=BETA_CL_WT, covariate=logtWT}}, ranEff = ETA_CL)
+				Cl = linear(pop = POP_CL, pop=other, fixEff = {coeff=BETA_CL_WT, covariate=logtWT}, ranEff = ETA_CL)
 			}
 
 		}'''.parse
@@ -474,6 +538,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testNamedFunctionWithUnnamedArgs(){
 		val mcl = '''bar = mdlObj {
+			IDV{T}
 			COVARIATES{
 				other
 				foo = linear(10, 20, 30)

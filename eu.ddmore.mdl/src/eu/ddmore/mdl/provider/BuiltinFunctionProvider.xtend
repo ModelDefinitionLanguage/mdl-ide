@@ -62,12 +62,12 @@ class BuiltinFunctionProvider {
 			this.returnType = returnType
 			this.arguments = new HashMap<String, TypeInfo>
 			this.signatures = new ArrayList<Map<String, Boolean>>
+			val map = new HashMap<String, Boolean>
 			for(key : arguments.keySet){
-				val map = new HashMap<String, Boolean>
-				map.put(key, true)
-				this.signatures.add(map)
+				map.put(key, arguments.get(key).mandatory)
 				this.arguments.put(key, arguments.get(key).expectedType)
 			}
+			this.signatures.add(map)
 		}
 		
 		override int getNumArgs(){
