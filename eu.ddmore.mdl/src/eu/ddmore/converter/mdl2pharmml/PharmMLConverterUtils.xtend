@@ -2,6 +2,7 @@ package eu.ddmore.converter.mdl2pharmml
 
 import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeInfo
+import eu.ddmore.mdl.mdl.TransformedDefinition
 
 class PharmMLConverterUtils {
 	
@@ -20,6 +21,9 @@ class PharmMLConverterUtils {
 		}
 	}
 	
+	def getPharmMLTransFunc(TransformedDefinition mclName){
+		getPharmMLTransFunc(mclName.transform.name)
+	}
 	def getPharmMLTransFunc(String mclName){
 		switch(mclName){
 			case('ln'): 'log'
@@ -27,5 +31,6 @@ class PharmMLConverterUtils {
 				mclName
 		}
 	}
+	
 	
 }

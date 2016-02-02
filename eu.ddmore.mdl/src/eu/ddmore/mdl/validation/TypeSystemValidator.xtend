@@ -46,6 +46,7 @@ import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.mdllib.mdllib.FunctionDefnBody
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -285,8 +286,8 @@ class TypeSystemValidator extends AbstractMdlValidator {
 //		checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeVector, exp, errorLambda)
 //	}
 
-	def checkExpectedRealTransform(String transform, (TypeInfo, TypeInfo) => void errorLambda){
-		val actualType = transform.transformFunctionType
+	def checkExpectedRealTransform(FunctionDefnBody transform, (TypeInfo, TypeInfo) => void errorLambda){
+		val actualType = transform.funcDefn?.returnType ?: TypeSystemProvider::UNDEFINED_TYPE
 		val expectedType = TypeSystemProvider::REAL_TYPE
 		if(actualType != expectedType)
 			errorLambda.apply(expectedType, actualType ?: TypeSystemProvider::UNDEFINED_TYPE)

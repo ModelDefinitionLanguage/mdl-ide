@@ -11,11 +11,12 @@ import org.junit.Test
 import static org.junit.Assert.*
 import org.junit.runner.RunWith
 import eu.ddmore.mdl.mdl.MdlPackage
+import eu.ddmore.mdl.LibraryTestHelper
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
 class MclBuiltinFunctionValidationTest {
-	@Inject extension ParseHelper<Mcl>
+	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 

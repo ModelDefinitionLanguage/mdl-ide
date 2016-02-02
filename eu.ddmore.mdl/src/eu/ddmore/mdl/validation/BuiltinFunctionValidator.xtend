@@ -71,7 +71,7 @@ class BuiltinFunctionValidator extends AbstractDeclarativeValidator{
 		val funcDefn = functionCall.findFuncDefn
 		if(funcDefn != null && funcDefn instanceof NamedArgFuncDefn){
 			val namedFuncDefn = funcDefn as NamedArgFuncDefn
-			if(!namedFuncDefn.arguments.containsKey(argumentName)){
+			if(!namedFuncDefn.hasArgument(argumentName)){
 				unkArgError.apply(argumentName)
 			}
 			else{

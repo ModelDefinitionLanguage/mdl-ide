@@ -1,5 +1,5 @@
 // Custom
-type TransType _enum;
+type TransType _enum (ln, logit, probit);
 type GenericEnum _enum;
 type FixEffectSublist _sublist;
 type PriorSource _enum;

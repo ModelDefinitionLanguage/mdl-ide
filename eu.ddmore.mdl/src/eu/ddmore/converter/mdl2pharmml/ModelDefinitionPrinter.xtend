@@ -328,7 +328,7 @@ class ModelDefinitionPrinter {
 		var namedArgList = funcExpr.argList as NamedFuncArguments
 		val trans = switch(it){
 			TransformedDefinition:
-				getPharmMLTransFunc(transform)
+				getPharmMLTransFunc(transform.name)
 			default: null
 		} 
 		'''
@@ -426,7 +426,7 @@ class ModelDefinitionPrinter {
 		<IndividualParameter symbId="«name»">
 			<GaussianModel>
 				«IF namedArgList.getArgumentExpression('trans') != null»
-					<Transformation>«namedArgList.getArgumentExpression('trans').convertToString.getPharmMLTransFunc»</Transformation>
+					<Transformation>«namedArgList.getArgumentEnumValue('trans').getPharmMLTransFunc»</Transformation>
 				«ENDIF»
 				<LinearCovariate>
 					<PopulationParameter>
@@ -626,7 +626,7 @@ class ModelDefinitionPrinter {
 						«IF isStandardErrorDefinition(definition.expression)»
 							<Standard symbId="«definition.name»">
 								«IF definition instanceof TransformedDefinition»
-									<Transformation>«definition.transform.pharmMLTransFunc»</Transformation>
+									<Transformation>«definition.pharmMLTransFunc»</Transformation>
 								«ENDIF»
 								<Output>
 									«IF definition.isTransformedOnlyRhsSide»

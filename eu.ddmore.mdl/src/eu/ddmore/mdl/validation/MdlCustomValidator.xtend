@@ -49,11 +49,11 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	def validateTransforms(TransformedDefinition it){
 		if(!isValidTransform){
 			error("'" + transform + "' cannot be used as a transformation function on the LHS of an equation",
-				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform)
+				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform.name)
 		}
 		if(!isLhsTransformPermitted || !isValidRhsTransformPermitted){
 			error("Use of a transformation function on the LHS of the equation is not permitted in this context",
-				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform)
+				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform.name)
 		}
 	}
 	
@@ -133,7 +133,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 			if(transExpr != null && transOnBothFuncs.contains(call.func)){
 				val rhsTrans = transExpr.enumValue
 				if(transDefn.transform != rhsTrans){
-					incompatibleTransforms.apply(transDefn.transform, rhsTrans)
+					incompatibleTransforms.apply(transDefn.transform.name, rhsTrans)
 				}
 			}
 		}

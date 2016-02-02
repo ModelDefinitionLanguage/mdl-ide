@@ -97,7 +97,7 @@ FunctionSpec returns lib::FunctionSpec:
 
 
 TransformedDefinition returns EquationTypeDefinition:
-	{TransformedDefinition} transform = ID '(' name=ID ')' ASSIGN expression=Expression ';'?
+	{TransformedDefinition} transform = [lib::FunctionDefnBody] '(' name=ID ')' ASSIGN expression=Expression ';'?
 ;
 
 RandomVariableDefinition:

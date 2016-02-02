@@ -1,17 +1,22 @@
 package eu.ddmore.mdl.provider
 
 import eu.ddmore.mdl.mdl.EnumExpression
+import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.FuncArguments
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.mdllib.mdllib.FunctionDefnBody
+import eu.ddmore.mdl.mdllib.mdllib.NamedFuncArgs
+import eu.ddmore.mdl.mdllib.mdllib.UnnamedFuncArgs
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.utils.MdlLibUtils
 import eu.ddmore.mdl.utils.MdlUtils
+import java.util.ArrayList
 import java.util.Collections
 import java.util.HashMap
 import java.util.HashSet
@@ -21,29 +26,69 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
-import java.util.ArrayList
 
 class BuiltinFunctionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	extension MdlUtils mu = new MdlUtils
 	
-	interface FunctDefn{
-		def int getNumArgs()
-		def TypeInfo getReturnType()
-	} 	
+	static abstract class FunctDefn{
+		extension MdlLibUtils mlu = new MdlLibUtils
 
-	@Data @FinalFieldsConstructor
-	static class SimpleFuncDefn implements FunctDefn{
-		List<? extends TypeInfo> argTypes
-		TypeInfo returnType	 
+		val FunctionDefnBody funcBody
 
-		override int getNumArgs(){
-			argTypes.size
+//		def int getNumArgs()
+//		def TypeInfo getReturnType()
+
+		new(FunctionDefnBody funcBody){
+			this.funcBody = funcBody
+		}
+
+		def int getNumArgs(){
+//			argTypes.size
+			funcBody.funcSpec.argument.arguments.size
 		}
 		
-		override TypeInfo getReturnType(){
-			returnType
+		def TypeInfo getReturnType(){
+			funcBody.funcSpec.returnType.typeInfo
 		}
+		
+		def protected getFuncDefn(){
+			funcBody
+		}
+		
+		def abstract TypeInfo getArgumentType(String argName)
+		
+		def abstract boolean hasArgument(String argName)
+		
+	} 	
+
+	static class SimpleFuncDefn extends FunctDefn{
+		extension MdlLibUtils mlu = new MdlLibUtils
+
+//		List<? extends TypeInfo> argTypes
+//		TypeInfo returnType	 
+
+		new(FunctionDefnBody funcBody){
+			super(funcBody)
+		}
+
+		
+		def List<? extends TypeInfo> getArgTypes(){
+			val retVal = new ArrayList<TypeInfo>()
+			funcDefn.funcSpec.argument.arguments.forEach[
+				retVal.add(typeSpec.typeInfo)
+			]
+			retVal
+		}
+		
+		override getArgumentType(String argName){
+			TypeSystemProvider::UNDEFINED_TYPE
+		}
+		
+		override hasArgument(String argName){
+			false
+		}
+		
 	}
 
 	@Data @FinalFieldsConstructor
@@ -52,79 +97,108 @@ class BuiltinFunctionProvider {
 		boolean mandatory
 	}
 
-	@Data @FinalFieldsConstructor
-	static class NamedArgFuncDefn implements FunctDefn{
-		TypeInfo returnType
-		Map<String, TypeInfo> arguments
-		List<Map<String, Boolean>> signatures
+//	@Data @FinalFieldsConstructor
+	static class NamedArgFuncDefn extends FunctDefn{
+//		TypeInfo returnType
+//		Map<String, TypeInfo> arguments
+//		List<Map<String, Boolean>> signatures
+		extension MdlLibUtils mlu = new MdlLibUtils
+
+//		new(TypeInfo returnType, Map<String, FunctionArgument> arguments){
+//			this.returnType = returnType
+//			this.arguments = new HashMap<String, TypeInfo>
+//			this.signatures = new ArrayList<Map<String, Boolean>>
+//			val map = new HashMap<String, Boolean>
+//			for(key : arguments.keySet){
+//				map.put(key, arguments.get(key).mandatory)
+//				this.arguments.put(key, arguments.get(key).expectedType)
+//			}
+//			this.signatures.add(map)
+//		}
+
+		new(FunctionDefnBody funcBody){
+			super(funcBody)
+		}
 		
-		new(TypeInfo returnType, Map<String, FunctionArgument> arguments){
-			this.returnType = returnType
-			this.arguments = new HashMap<String, TypeInfo>
-			this.signatures = new ArrayList<Map<String, Boolean>>
-			val map = new HashMap<String, Boolean>
-			for(key : arguments.keySet){
-				map.put(key, arguments.get(key).mandatory)
-				this.arguments.put(key, arguments.get(key).expectedType)
+		def protected Map<String, TypeInfo> getArguments(){
+			val retVal = new HashMap<String, TypeInfo>
+			val namedArgs = funcDefn.funcSpec.argument as NamedFuncArgs
+			for(arg : namedArgs.arguments){
+				retVal.put(arg.name, arg.typeSpec.typeInfo)
 			}
-			this.signatures.add(map)
+			retVal
 		}
 		
-		override int getNumArgs(){
-			arguments.size
+		def List<Map<String, Boolean>> getSignatures(){
+			val retVal = new ArrayList<Map<String, Boolean>>
+			val funcArg = funcDefn.funcSpec.argument
+			if(funcArg instanceof NamedFuncArgs){
+				for(sigList : funcArg.sigLists){
+					val sigMap = new HashMap<String, Boolean>
+					for(argRef : sigList.argRefs){
+						sigMap.put(argRef.argRef.name, !argRef.optional) 
+					}
+					retVal.add(sigMap)
+				}
+			}
+			retVal
 		}
-		
-		override TypeInfo getReturnType(){
-			returnType
+
+		override getArgumentType(String argName){
+			arguments.get(argName) ?: TypeSystemProvider::UNDEFINED_TYPE
+		}
+
+		override hasArgument(String argName){
+			arguments.containsKey(argName)
 		}
 	}
 	
 //	val Map<String, List<? extends FunctDefn>> functDefns
-	val Map<String, Map<String, ? extends TypeInfo>> attEnumTypes
+//	val Map<String, Map<String, ? extends TypeInfo>> attEnumTypes
 
-	new(){
-//		functDefns = BuiltinFunctionTable::getInstance.functDefns
-		attEnumTypes = new HashMap<String, Map<String, ? extends TypeInfo>>
-		buildEnumTypes
-	}
+//	new(){
+////		functDefns = BuiltinFunctionTable::getInstance.functDefns
+//		attEnumTypes = new HashMap<String, Map<String, ? extends TypeInfo>>
+//		buildEnumTypes
+//	}
 	
-	private def Map<String, ? extends FunctDefn> getFunctDefns(){
-		BuiltinFunctionTable::getInstance.functDefns
-	}
+//	private def Map<String, ? extends FunctDefn> getFunctDefns(){
+//		BuiltinFunctionTable::getInstance.functDefns
+//	}
 	
-	private def buildEnumTypes(){
-		for(blkName : functDefns.keySet){
-			val valueMap = new HashMap<String, BuiltinEnumTypeInfo>
-			attEnumTypes.put(blkName, valueMap)
-			val a = functDefns.get(blkName)
-//			for(a : bd){
-				if(a instanceof NamedArgFuncDefn){
-					val nfd = a as NamedArgFuncDefn 
-					for(att : nfd.arguments.values){
-						if(att instanceof BuiltinEnumTypeInfo){
-							val builtinType = att as BuiltinEnumTypeInfo
-							for(v : builtinType.expectedValues){
-								valueMap.put(v, builtinType)
-							}
-						}
-					}
-				}
-//			}
-		}
-		attEnumTypes
-	} 
+//	private def buildEnumTypes(){
+//		for(blkName : functDefns.keySet){
+//			val valueMap = new HashMap<String, BuiltinEnumTypeInfo>
+//			attEnumTypes.put(blkName, valueMap)
+//			val a = functDefns.get(blkName)
+////			for(a : bd){
+//				if(a instanceof NamedArgFuncDefn){
+//					val nfd = a as NamedArgFuncDefn 
+//					for(att : nfd.arguments.values){
+//						if(att instanceof BuiltinEnumTypeInfo){
+//							val builtinType = att as BuiltinEnumTypeInfo
+//							for(v : builtinType.expectedValues){
+//								valueMap.put(v, builtinType)
+//							}
+//						}
+//					}
+//				}
+////			}
+//		}
+//		attEnumTypes
+//	} 
 
-	def getTransformFunctionType(String fName){
-		val defns = functDefns.get(fName)
-		if(defns != null)
-//			if(defns.size > 1)
-//				TypeSystemProvider::UNDEFINED_TYPE
-//			else
-//				defns.head.returnType
-				defns.returnType
-		else
-			TypeSystemProvider::UNDEFINED_TYPE
-	}
+//	def getTransformFunctionType(String fName){
+//		val defns = functDefns.get(fName)
+//		if(defns != null)
+////			if(defns.size > 1)
+////				TypeSystemProvider::UNDEFINED_TYPE
+////			else
+////				defns.head.returnType
+//				defns.returnType
+//		else
+//			TypeSystemProvider::UNDEFINED_TYPE
+//	}
 	
 	def TypeInfo getFunctionType(SymbolReference it){
 		findFuncDefn?.returnType ?: TypeSystemProvider::UNDEFINED_TYPE
@@ -170,12 +244,28 @@ class BuiltinFunctionProvider {
 		bestMatch
 	}
 	
-	def isFunctionName(String name){
-		functDefns.containsKey(name)
-	}
+//	def isFunctionName(String name){
+//		functDefns.containsKey(name)
+//	}
 	
-	public def findFuncDefn(SymbolReference it){
-		functDefns.get(func)
+	public def getFuncDefn(FunctionDefnBody fDefn){
+		val argSpec = fDefn.funcSpec.argument
+		switch(argSpec){
+			UnnamedFuncArgs:
+				new SimpleFuncDefn(fDefn)
+			NamedFuncArgs:
+				new NamedArgFuncDefn(fDefn)
+			default: null
+		}
+	}
+
+
+	public def findFuncDefn(SymbolReference fDefn){
+		if(fDefn instanceof FunctionDefnBody){
+			fDefn.funcDefn
+		}
+		else null
+//		functDefns.get(func)
 //		val availableDefns = functDefns.get(func)
 //		var FunctDefn retVal = null
 //		if(availableDefns != null){
@@ -221,7 +311,7 @@ class BuiltinFunctionProvider {
 	}
 	
 	def isNamedArgFunction(SymbolReference it){
-		val funcDefn = functDefns.get(func)
+		val funcDefn = findFuncDefn//functDefns.get(func)
 		funcDefn != null && funcDefn instanceof NamedArgFuncDefn
 	}
 	
@@ -281,18 +371,23 @@ class BuiltinFunctionProvider {
 	
 	def TypeInfo getTypeOfFunctionBuiltinEnum(EnumExpression ee){
 		val funct = EcoreUtil2.getContainerOfType(ee, SymbolReference)
-		val blockName = funct.func
-		val enumValue = ee.enumValue
-		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: TypeSystemProvider::UNDEFINED_TYPE
-		defnType
+		val vp = EcoreUtil2.getContainerOfType(ee, EnumPair)
+//		val blockName = funct.func
+//		val enumValue = ee.enumValue
+//		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: TypeSystemProvider::UNDEFINED_TYPE
+//		defnType
+		val fDefn = funct.findFuncDefn
+		fDefn.getArgumentType(vp.argumentName)
+		null
 	}
 
 	def boolean isValidTransform(TransformedDefinition it){
-		isValidTransformFunction(transform)
+		isValidTransformFunction(transform?.name)
 	}
 
 	def boolean isValidTransformFunction(String fName){
-		BuiltinFunctionTable::TRANSFORM_FUNCS.contains(fName)
+		if(fName != null) BuiltinFunctionTable::TRANSFORM_FUNCS.contains(fName)
+		else false
 	}
 
 }
