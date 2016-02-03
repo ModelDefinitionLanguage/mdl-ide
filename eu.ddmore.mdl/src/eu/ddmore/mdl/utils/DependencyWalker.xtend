@@ -7,10 +7,12 @@ import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
+import eu.ddmore.mdl.mdl.IndexRange
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
+import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
 import eu.ddmore.mdl.mdl.ParExpression
 import eu.ddmore.mdl.mdl.PowerExpression
@@ -19,6 +21,7 @@ import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
+import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenExpression
@@ -95,7 +98,8 @@ class DependencyWalker {
     			retVal.addAll(expr.element?.symbolReferences ?: Collections::emptyList)
     		}
     		SymbolReference:{
-    			if(expr.ref != null) retVal.add(expr.ref)
+//    			if(expr.ref != null) retVal.add(expr.ref)
+    			if(expr.ref != null) retVal.addAll(expr.ref.symbolReferences)
     		}
     			
     	}
@@ -118,23 +122,38 @@ class DependencyWalker {
 		retVal
     }
     
-//    def dispatch List<SymbolDefinition> getSymbolReferences(BuiltinFunctionCall it){
-//    	val retVal = new ArrayList<SymbolDefinition>
-//    	val a = argList
-//    	switch(a){
-//    		NamedFuncArguments:{
-//    			for(arg : a.arguments){
-//    				retVal.addAll(arg.expression?.symbolReferences ?: Collections::emptyList)
-//    			}
-//    		}
-//    		UnnamedFuncArguments:{
-//    			for(arg : a.args){
-//    				retVal.addAll(arg.argument?.symbolReferences ?: Collections::emptyList)
-//    			}
-//    		}
-//    	}
-//    	retVal
-//    }
+    def dispatch List<SymbolDefinition> getSymbolReferences(SymbolReference it){
+    	val retVal = new ArrayList<SymbolDefinition>
+    	retVal.add(ref)
+    	if(argList != null){
+	    	val a = argList
+	    	switch(a){
+	    		NamedFuncArguments:{
+	    			for(arg : a.arguments){
+	    				retVal.addAll(arg.expression?.symbolReferences ?: Collections::emptyList)
+	    			}
+	    		}
+	    		UnnamedFuncArguments:{
+	    			for(arg : a.args){
+	    				retVal.addAll(arg.argument?.symbolReferences ?: Collections::emptyList)
+	    			}
+	    		}
+	    	}
+    	}
+    	if(indexExpr != null){
+    		retVal.addAll(indexExpr.rowIdx?.defsFromIndex ?: Collections::emptyList)
+    		retVal.addAll(indexExpr.colIdx?.defsFromIndex ?: Collections::emptyList)
+    	}
+    	retVal
+    }
+    
+    def private getDefsFromIndex(IndexRange it){
+    	val retVal = new ArrayList<SymbolDefinition>
+   		retVal.addAll(begin.symbolReferences ?: Collections::emptyList)
+   		retVal.addAll(end?.symbolReferences ?: Collections::emptyList)
+   		retVal
+    }
+    
     
     def dispatch List<SymbolDefinition> getSymbolReferences(MappingExpression it){
     	val retVal = new ArrayList<SymbolDefinition>

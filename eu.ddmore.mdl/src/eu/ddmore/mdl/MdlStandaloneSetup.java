@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EPackage;
 
 import com.google.inject.Injector;
 
-import eu.ddmore.mdl.mdl.MdlPackage;
 import eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage;
 
 /**

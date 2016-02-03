@@ -1,8 +1,8 @@
 // Custom
-type TransType _enum (ln, logit, probit);
-type GenericEnum _enum;
-type FixEffectSublist _sublist;
-type PriorSource _enum;
+type transType _enum (none, ln, logit, probit);
+type GenericEnum _category;
+type fixEffAtts _sublist;
+type PriorSource _list;
 
 func log (x::Real, y::Real) returns ::Real;
 func log2 (x::Real) returns ::Real;
@@ -117,15 +117,15 @@ matrix named
 		returns ::Matrix,
 linear named
 		( 
-			trans::TransType,
+			trans::transType,
 			pop::Real,
-			fixEff::Vector[::FixEffectSublist],
+			fixEff::Vector[::fixEffAtts],
 			ranEff::Vector
 		)
 		sig(trans?, pop, fixEff?, ranEff) 
 		returns ::Real,
 general named (
-				trans::TransType,
+				trans::transType,
 				grp::Real,
 				ranEff::Vector[::Real]
 			)
@@ -133,7 +133,7 @@ general named (
 			returns ::Real,
 combinedError1 named
 		( 
-			trans::TransType,
+			trans::transType,
 			additive::Real,
 			proportional::Real,
 			prediction::Real,
@@ -144,7 +144,7 @@ combinedError1 named
 ;
 func combinedError2 named
 		( 
-			trans::TransType,
+			trans::transType,
 			additive::Real,
 			proportional::Real,
 			prediction::Real,
@@ -155,7 +155,7 @@ func combinedError2 named
 ;
 func additiveError named
 		( 
-			trans::TransType,
+			trans::transType,
 			additive::Real,
 			prediction::Real,
 			eps::Real
@@ -165,7 +165,7 @@ func additiveError named
 ;
 func proportionalError named
 		( 
-			trans::TransType,
+			trans::transType,
 			proportional::Real,
 			prediction::Real,
 			eps::Real

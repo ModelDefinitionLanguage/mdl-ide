@@ -1,20 +1,21 @@
 package eu.ddmore.mdl.validation
 
 import com.google.inject.Inject
-import eu.ddmore.mdl.MdlInjectorProvider
+import eu.ddmore.mdl.LibraryTestHelper
+import eu.ddmore.mdl.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
+import eu.ddmore.mdl.mdl.MdlPackage
+import org.eclipse.xtext.diagnostics.Diagnostic
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
-import static org.junit.Assert.*
 import org.junit.runner.RunWith
-import eu.ddmore.mdl.mdl.MdlPackage
-import eu.ddmore.mdl.LibraryTestHelper
+
+import static org.junit.Assert.*
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlInjectorProvider))
+@InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclBuiltinFunctionValidationTest {
 	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
@@ -159,6 +160,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testUnrecognisedFunction(){
 		val mcl = '''bar = mdlObj {
+			IDV{T}
 			COVARIATES{
 				other
 				cov = blah(other, 2)
@@ -171,8 +173,7 @@ class MclBuiltinFunctionValidationTest {
 		}'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
-			MdlValidator::UNRECOGNIZED_FUNCTION_NAME,
-			"Simple function 'blah' is not recognised."
+			Diagnostic::LINKING_DIAGNOSTIC
 		)
 	}
 
@@ -180,6 +181,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testUnrecognisedFunctionSameSymbolName(){
 		val mcl = '''bar = mdlObj {
+			IDV{T}
 			COVARIATES{
 				other
 				cov = cov(other, 2)
@@ -190,15 +192,30 @@ class MclBuiltinFunctionValidationTest {
 			}
 		}'''.parse
 		
+		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
+			MdlValidator::INVALID_CYCLE,
+			"Symbol 'cov' contains an expression that refers to itself."
+		)
 		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
 			MdlValidator::UNRECOGNIZED_FUNCTION_NAME,
 			"Simple function 'cov' is not recognised."
 		)
+		mcl.assertError(MdlPackage::eINSTANCE.unnamedArgument,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument '1' expected value of type 'Undefined' but was 'ref:Real'."
+		)
+		mcl.assertError(MdlPackage::eINSTANCE.unnamedArgument,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument '2' expected value of type 'Undefined' but was 'Int'."
+		)
+//		mcl.assertNoErrors
+//		assertEquals("expected error num", 4, mcl.validate.size)
 	}
 
 	@Test
 	def void testUnrecognisedFunctionOtherSymbolName(){
 		val mcl = '''bar = mdlObj {
+			IDV{T}
 			COVARIATES{
 				other
 				cov = foo(other, 2)
@@ -213,6 +230,44 @@ class MclBuiltinFunctionValidationTest {
 			MdlValidator::UNRECOGNIZED_FUNCTION_NAME,
 			"Simple function 'foo' is not recognised."
 		)
+		mcl.assertError(MdlPackage::eINSTANCE.unnamedArgument,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument '1' expected value of type 'Undefined' but was 'ref:Real'."
+		)
+		mcl.assertError(MdlPackage::eINSTANCE.unnamedArgument,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument '2' expected value of type 'Undefined' but was 'Int'."
+		)
+		assertEquals("expected error num", 3, mcl.validate.size)
+	}
+
+	@Test
+	def void testUnrecognisedNamedFunctionOtherSymbolName(){
+		val mcl = '''bar = mdlObj {
+			IDV{T}
+			COVARIATES{
+				other
+				cov = foo(arg1=other, arg2=2)
+				foo = exp(22)
+			}
+			
+			VARIABILITY_LEVELS{
+			}
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.symbolReference,
+			MdlValidator::UNRECOGNIZED_FUNCTION_NAME,
+			"Named argument function 'foo' is not recognised."
+		)
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument 'arg1' expected value of type 'Undefined' but was 'ref:Real'."
+		)
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"argument 'arg2' expected value of type 'Undefined' but was 'Int'."
+		)
+		assertEquals("expected error num", 3, mcl.validate.size)
 	}
 
 	@Test
@@ -270,7 +325,7 @@ class MclBuiltinFunctionValidationTest {
 	@Test
 	def void testInValidLhsTransFunction(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{T}
 			
 			COVARIATES{
 				logtWT

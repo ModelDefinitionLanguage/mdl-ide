@@ -23,14 +23,16 @@ import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
+import eu.ddmore.mdl.mdllib.mdllib.FunctionDefnBody
 import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
-import eu.ddmore.mdl.mdllib.mdllib.TypeSpec
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
+import eu.ddmore.mdl.utils.CycleDetectionUtils
+import eu.ddmore.mdl.utils.MdlLibUtils
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
@@ -41,8 +43,8 @@ public class TypeSystemProvider {
 	extension ListDefinitionProvider listProvider = new ListDefinitionProvider
 	extension SublistDefinitionProvider subListProvider = new SublistDefinitionProvider
 	extension PropertyDefinitionProvider propProvider = new PropertyDefinitionProvider
-	
-
+	extension CycleDetectionUtils cdu = new CycleDetectionUtils	
+	extension MdlLibUtils mlu = new MdlLibUtils
 	
 	public static val UNDEFINED_TYPE = new PrimitiveTypeInfo(PrimitiveType.Undefined)
 	public static val INT_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int)
@@ -168,24 +170,31 @@ public class TypeSystemProvider {
 	}
 	
 	private def getTypeOfSymbolRef(SymbolReference e){
-		if(e.indexExpr == null)
-			e.ref.typeFor.makeReference
-		else{
-			val t = e.ref.typeFor
-			switch(t){
-				VectorTypeInfo:
-					if(e.indexExpr.isSingleVectorElement)
-						t.elementType.makeReference
-					else t.makeReference
-				MatrixTypeInfo:{
-					if(e.indexExpr.isSingleMatrixElement)
-						t.elementType.makeReference
-					else t.makeReference
+//		// check if ref and defn the same. If so this will cause a cycle.
+//		val defn = EcoreUtil2.getContainerOfType(e.eContainer, SymbolDefinition)
+//		var TypeInfo retVal = UNDEFINED_TYPE
+//		if(defn != e.ref){ 
+//			retVal =
+				if(e.indexExpr == null)
+					e.ref.typeFor.makeReference
+				else{
+					val t = e.ref.typeFor
+					switch(t){
+						VectorTypeInfo:
+							if(e.indexExpr.isSingleVectorElement)
+								t.elementType.makeReference
+							else t.makeReference
+						MatrixTypeInfo:{
+							if(e.indexExpr.isSingleMatrixElement)
+								t.elementType.makeReference
+							else t.makeReference
+						}
+						
+						default: UNDEFINED_TYPE
+					}
 				}
-				
-				default: UNDEFINED_TYPE
-			}
-		}
+//		}
+//		retVal
 	}
 	
 	def dispatch TypeInfo typeFor(Expression e){
@@ -268,18 +277,22 @@ public class TypeSystemProvider {
 	}
 	
 	def dispatch TypeInfo typeFor(SymbolDefinition sd){
-		switch(sd){
+		val retVal = switch(sd){
 			EquationDefinition:
 				{
 					if(sd.expression != null){
 						// type inferred from assigned type
-						sd.expression.typeFor
+						if(sd.hasNonDerivCycle([], [!it.isDerivativeDefinition]))
+							// can't infer type if cycle in definition
+							UNDEFINED_TYPE
+						else
+							sd.expression.typeFor
 					}
 					else{
 						// not assigned value so defaults to REAL unless
 						// an explicit type is declared
 						if(sd.typeSpec != null){
-							sd.typeSpec.typeFor
+							sd.typeSpec.typeInfo
 						}
 						else REAL_TYPE
 					}
@@ -292,14 +305,19 @@ public class TypeSystemProvider {
 			RandomVariableDefinition:
 				{
 					if(sd.distn != null){
-						val distnType = sd.distn.typeFor
-						switch(distnType){
-							VectorTypeInfo case(distnType.elementType == PDF_TYPE): REAL_VECTOR_TYPE
-							MatrixTypeInfo case(distnType.elementType == PDF_TYPE): REAL_MATRIX_TYPE
-							PrimitiveTypeInfo case(distnType == PDF_TYPE): REAL_TYPE
-							default:
-								UNDEFINED_TYPE
-								
+						if(sd.hasNonDerivCycle([], [!it.isDerivativeDefinition]))
+							// can't infer type if cycle in definition
+							UNDEFINED_TYPE
+						else{
+							val distnType = sd.distn.typeFor.underlyingType
+							switch(distnType){
+								VectorTypeInfo case(distnType.elementType == PDF_TYPE): REAL_VECTOR_TYPE
+								MatrixTypeInfo case(distnType.elementType == PDF_TYPE): REAL_MATRIX_TYPE
+								PrimitiveTypeInfo case(distnType == PDF_TYPE): REAL_TYPE
+								default:
+									UNDEFINED_TYPE
+									
+							}
 						}
 					}
 					else UNDEFINED_TYPE
@@ -312,31 +330,36 @@ public class TypeSystemProvider {
 						default: UNDEFINED_TYPE							
 					}
 				}
+			FunctionDefnBody:
+				sd.funcDefn.returnType
 			default:
 				UNDEFINED_TYPE
 		}
+		// strip off any reference as this is a var definition an so cannot be a ref by definition.
+		retVal.underlyingType
 	}
 	
-	def dispatch TypeInfo typeFor(TypeSpec it){
-		if(elementType == null && cellType == null){
-			typeFromSpecName(typeName.name)
-		}
-		else if(elementType != null){
-			if(typeName == '::Vector'){
-				val elType = elementType.typeFor
-				elType.makeVector
-			}
-			else UNDEFINED_TYPE
-		}
-		else if(cellType != null){
-			if(typeName == '::Matrix'){
-				val elType = cellType.typeFor
-				elType.makeMatrix
-			}
-			else UNDEFINED_TYPE
-		}
-		else UNDEFINED_TYPE
-	}
+//	def dispatch TypeInfo typeFor(TypeSpec it){
+		
+//		if(elementType == null && cellType == null){
+//			typeFromSpecName(typeName.name)
+//		}
+//		else if(elementType != null){
+//			if(typeName == '::Vector'){
+//				val elType = elementType.typeFor
+//				elType.makeVector
+//			}
+//			else UNDEFINED_TYPE
+//		}
+//		else if(cellType != null){
+//			if(typeName == '::Matrix'){
+//				val elType = cellType.typeFor
+//				elType.makeMatrix
+//			}
+//			else UNDEFINED_TYPE
+//		}
+//		else UNDEFINED_TYPE
+//	}
 	
 	static val specNameLookup = #{
 		'::Int' -> INT_TYPE,
@@ -405,8 +428,11 @@ public class TypeSystemProvider {
 	}
 	
     def isDerivativeDefinition(SymbolDefinition sd){
-    	val lstType = sd.typeFor
-    	lstType?.typeName == ListDefinitionTable::DERIV_TYPE.typeName
+    	if(sd instanceof ListDefinition){
+    		// this avoid a recursion as cycle detection is done for other symb defn types.
+	    	val lstType = sd.typeFor
+    		lstType?.typeName == ListDefinitionTable::DERIV_TYPE.typeName
+    	}
     }
-    
+
 }

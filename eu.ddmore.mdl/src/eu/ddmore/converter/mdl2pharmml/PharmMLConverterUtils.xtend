@@ -1,8 +1,8 @@
 package eu.ddmore.converter.mdl2pharmml
 
+import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeInfo
-import eu.ddmore.mdl.mdl.TransformedDefinition
 
 class PharmMLConverterUtils {
 	

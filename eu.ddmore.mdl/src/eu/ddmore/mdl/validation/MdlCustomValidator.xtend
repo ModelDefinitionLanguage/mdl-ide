@@ -25,11 +25,9 @@ import eu.ddmore.mdl.provider.SublistDefinitionTable
 import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.ConstantEvaluation
-import eu.ddmore.mdl.utils.DependencyWalker
+import eu.ddmore.mdl.utils.CycleDetectionUtils
 import eu.ddmore.mdl.utils.MdlUtils
 import java.util.Collections
-import java.util.HashSet
-import java.util.LinkedList
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
@@ -40,15 +38,16 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension TypeSystemProvider mtp = new TypeSystemProvider
 	extension MdlUtils mu = new MdlUtils
-	extension DependencyWalker dw = new DependencyWalker 
+//	extension DependencyWalker dw = new DependencyWalker 
 	extension ConstantEvaluation ce = new ConstantEvaluation 
+	extension CycleDetectionUtils cdu = new CycleDetectionUtils
 
 	override register(EValidatorRegistrar registrar){}
 
 	@Check
 	def validateTransforms(TransformedDefinition it){
 		if(!isValidTransform){
-			error("'" + transform + "' cannot be used as a transformation function on the LHS of an equation",
+			error("'" + transform.name + "' cannot be used as a transformation function on the LHS of an equation",
 				MdlPackage::eINSTANCE.transformedDefinition_Transform, MdlValidator::INVALID_LHS_FUNC, transform.name)
 		}
 		if(!isLhsTransformPermitted || !isValidRhsTransformPermitted){
@@ -132,7 +131,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 			val transExpr = transArg.expression
 			if(transExpr != null && transOnBothFuncs.contains(call.func)){
 				val rhsTrans = transExpr.enumValue
-				if(transDefn.transform != rhsTrans){
+				if(transDefn.transform?.name != rhsTrans){
 					incompatibleTransforms.apply(transDefn.transform.name, rhsTrans)
 				}
 			}
@@ -247,35 +246,42 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	}
 	
 	@Check
-	def validateReferenceNotCircular(SymbolDefinition it){
-		if(!isDerivativeDefinition){
-			val startVar = name
-			val stack = new LinkedList<SymbolDefinition>
-			val visited = new HashSet<String>
-			it.getSymbolReferences.forEach[stack.push(it)]
-			var cycle = false
-			while(!stack.isEmpty && !cycle){
-				val currRef = stack.pop
-				val alreadyVisited = !visited.add(currRef.name)
-				if(!alreadyVisited && !currRef.isDerivativeDefinition){
-					if(startVar == currRef.name){
-						// cycle detected!
-						cycle = true
-						error("Symbol '" + name + "' contains an expression that refers to itself.",
+	def validateReferenceNotCircular(SymbolDefinition sd){
+		hasNonDerivCycle(sd, [error("Symbol '" + sd.name + "' contains an expression that refers to itself.",
 								MdlLibPackage::eINSTANCE.symbolDefinition_Name,
-								MdlValidator::INVALID_CYCLE, name)
-					}
-					else{
-						val newRefs = currRef.getSymbolReferences
-						// skip derivatives from cycle detection
-						newRefs.forEach[
-							stack.push(it)
-						]
-					}
-				}
-			}
-		}
+								MdlValidator::INVALID_CYCLE, name)], [!it.isDerivativeDefinition])
 	}
+	
+//	@Check
+//	def validateReferenceNotCircular(SymbolDefinition it){
+//		if(!isDerivativeDefinition){
+//			val startVar = name
+//			val stack = new LinkedList<SymbolDefinition>
+//			val visited = new HashSet<String>
+//			it.getSymbolReferences.forEach[stack.push(it)]
+//			var cycle = false
+//			while(!stack.isEmpty && !cycle){
+//				val currRef = stack.pop
+//				val alreadyVisited = !visited.add(currRef.name)
+//				if(!alreadyVisited && !currRef.isDerivativeDefinition){
+//					if(startVar == currRef.name){
+//						// cycle detected!
+//						cycle = true
+//						error("Symbol '" + name + "' contains an expression that refers to itself.",
+//								MdlLibPackage::eINSTANCE.symbolDefinition_Name,
+//								MdlValidator::INVALID_CYCLE, name)
+//					}
+//					else{
+//						val newRefs = currRef.getSymbolReferences
+//						// skip derivatives from cycle detection
+//						newRefs.forEach[
+//							stack.push(it)
+//						]
+//					}
+//				}
+//			}
+//		}
+//	}
 	
 	
 	def findVarLevelDefnsOfType(BlockStatement blk, String type){

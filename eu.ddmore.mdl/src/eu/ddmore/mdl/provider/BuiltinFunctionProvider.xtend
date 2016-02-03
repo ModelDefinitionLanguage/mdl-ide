@@ -100,7 +100,7 @@ class BuiltinFunctionProvider {
 //	@Data @FinalFieldsConstructor
 	static class NamedArgFuncDefn extends FunctDefn{
 //		TypeInfo returnType
-//		Map<String, TypeInfo> arguments
+		val Map<String, TypeInfo> arguments
 //		List<Map<String, Boolean>> signatures
 		extension MdlLibUtils mlu = new MdlLibUtils
 
@@ -118,27 +118,42 @@ class BuiltinFunctionProvider {
 
 		new(FunctionDefnBody funcBody){
 			super(funcBody)
+			arguments = new HashMap<String, TypeInfo>
+			val namedArgs = funcDefn.funcSpec.argument as NamedFuncArgs
+			namedArgs.arguments.forEach[
+				arguments.put(name, typeSpec.typeInfo)
+			]
 		}
 		
-		def protected Map<String, TypeInfo> getArguments(){
-			val retVal = new HashMap<String, TypeInfo>
-			val namedArgs = funcDefn.funcSpec.argument as NamedFuncArgs
-			for(arg : namedArgs.arguments){
-				retVal.put(arg.name, arg.typeSpec.typeInfo)
-			}
-			retVal
-		}
+//		def protected Map<String, TypeInfo> getArguments(){
+//			val retVal = new HashMap<String, TypeInfo>
+//			val namedArgs = funcDefn.funcSpec.argument as NamedFuncArgs
+//			for(arg : namedArgs.arguments){
+//				retVal.put(arg.name, arg.typeSpec.typeInfo)
+//			}
+//			retVal
+//		}
 		
 		def List<Map<String, Boolean>> getSignatures(){
 			val retVal = new ArrayList<Map<String, Boolean>>
 			val funcArg = funcDefn.funcSpec.argument
 			if(funcArg instanceof NamedFuncArgs){
-				for(sigList : funcArg.sigLists){
+				if(funcArg.sigLists.isEmpty){
+					// no siglist so assume all args mandatory
 					val sigMap = new HashMap<String, Boolean>
-					for(argRef : sigList.argRefs){
-						sigMap.put(argRef.argRef.name, !argRef.optional) 
+					for(arg : funcArg.arguments){
+						sigMap.put(arg.name, true) 
 					}
 					retVal.add(sigMap)
+				}
+				else{
+					for(sigList : funcArg.sigLists){
+						val sigMap = new HashMap<String, Boolean>
+						for(argRef : sigList.argRefs){
+							sigMap.put(argRef.argRef.name, !argRef.optional) 
+						}
+						retVal.add(sigMap)
+					}
 				}
 			}
 			retVal
@@ -209,7 +224,7 @@ class BuiltinFunctionProvider {
 		val defn = funcDefn.findFuncDefn
 		switch(defn){
 			NamedArgFuncDefn:
-				defn.arguments.get(vp.argumentName) ?: TypeSystemProvider::UNDEFINED_TYPE
+				defn.getArgumentType(vp.argumentName)
 			default:
 				TypeSystemProvider::UNDEFINED_TYPE
 		}
@@ -261,8 +276,9 @@ class BuiltinFunctionProvider {
 
 
 	public def findFuncDefn(SymbolReference fDefn){
-		if(fDefn instanceof FunctionDefnBody){
-			fDefn.funcDefn
+		val ref = fDefn.ref
+		if(ref instanceof FunctionDefnBody){
+			ref.funcDefn
 		}
 		else null
 //		functDefns.get(func)
@@ -378,7 +394,6 @@ class BuiltinFunctionProvider {
 //		defnType
 		val fDefn = funct.findFuncDefn
 		fDefn.getArgumentType(vp.argumentName)
-		null
 	}
 
 	def boolean isValidTransform(TransformedDefinition it){

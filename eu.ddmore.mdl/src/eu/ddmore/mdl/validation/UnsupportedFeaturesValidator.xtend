@@ -1,6 +1,7 @@
 package eu.ddmore.mdl.validation
 
 import eu.ddmore.mdl.mdl.AttributeList
+import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.ListDefinition
@@ -9,6 +10,8 @@ import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage
+import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.type.PrimitiveType
@@ -21,9 +24,6 @@ import java.util.Set
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.mdl.BlockStatement
-import eu.ddmore.mdl.provider.BlockDefinitionTable
-import eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	

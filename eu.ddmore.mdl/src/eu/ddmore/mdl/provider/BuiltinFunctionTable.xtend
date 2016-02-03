@@ -1,13 +1,5 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.provider.BuiltinFunctionProvider.FunctDefn
-import eu.ddmore.mdl.provider.BuiltinFunctionProvider.FunctionArgument
-import eu.ddmore.mdl.provider.BuiltinFunctionProvider.NamedArgFuncDefn
-import eu.ddmore.mdl.provider.BuiltinFunctionProvider.SimpleFuncDefn
-import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.TypeSystemProvider
-import java.util.Map
-
 class BuiltinFunctionTable {
 	
 	public static val TRANSFORM_FUNCS = #{ 'ln', 'logit', 'probit' }

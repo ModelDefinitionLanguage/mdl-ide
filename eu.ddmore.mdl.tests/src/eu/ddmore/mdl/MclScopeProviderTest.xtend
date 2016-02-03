@@ -14,10 +14,10 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.eclipse.xtext.scoping.IScopeProvider
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -96,7 +96,7 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 		
 	}
 
-	@Test
+	@Ignore("Not sure how useful this is with external libraries")
 	def void testExpectedEObjectDescriptions(){
 		val grpBlk = CODE_SNIPPET.parse.objects.last.blocks.last as BlockStatement
 		((grpBlk.body as BlockStatementBody).statements.last as EquationDefinition).expression =>  [
@@ -107,7 +107,7 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 		]
 	}
 	
-	@Test
+	@Ignore("Not sure how useful this is with external libraries")
 	def void testExpectedCategoryDescriptions(){
 		val mcl = '''
 obj1 = mdlObj{

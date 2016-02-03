@@ -1,15 +1,16 @@
 package eu.ddmore.mdl.type
 
+import eu.ddmore.mdl.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MdlFactory
 import eu.ddmore.mdl.validation.TypeSystemValidator
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
-import eu.ddmore.mdl.MdlAndLibInjectorProvider
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -25,10 +26,10 @@ class TypeSystemProviderTest {
 		val funcCall = MdlFactory::eINSTANCE.createSymbolReference
 		funcCall.ref = MdlFactory::eINSTANCE.createEquationDefinition
 		funcCall.ref.name = 'ln'
-		funcCall.typeFor.assertEquals(TypeSystemProvider::REAL_TYPE)
+		funcCall.typeFor.assertEquals(TypeSystemProvider::REAL_TYPE.makeReference)
 	}
 
-	@Test
+	@Ignore("This test is no longer relevant as the function call is now a valid symb ref an it will have a type.")
 	def void testTypeUnknownFuncCallExpression(){
 //		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
 //		funcCall.func = 'foobar'
@@ -38,7 +39,7 @@ class TypeSystemProviderTest {
 		TypeSystemProvider::UNDEFINED_TYPE.assertEquals(funcCall.typeFor)
 	}
 
-	@Test
+	@Ignore("Not a meaningful test singe using external library.")
 	def void testTypeDistributionFuncCallExpression(){
 //		val funcCall = MdlFactory::eINSTANCE.createBuiltinFunctionCall
 //		funcCall.func = 'Normal'

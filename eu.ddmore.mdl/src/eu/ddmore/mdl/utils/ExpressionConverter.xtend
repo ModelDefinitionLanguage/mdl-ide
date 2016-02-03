@@ -86,9 +86,8 @@ public class ExpressionConverter {
 	def dispatch String getString(ParExpression exp)'''
 		(«exp.expr.getString»)'''
 		
-	def dispatch String getString(SymbolReference exp){
-		exp.ref.name
-	}
+	def dispatch String getString(SymbolReference exp)'''
+		«exp.ref.name»«IF exp.argList != null»(«exp.argList.getString»)«ENDIF»'''
 	
 //	def static dispatch String getString(BuiltinFunctionCall exp)'''
 //		«exp.func»(«exp.argList.getString»)'''
