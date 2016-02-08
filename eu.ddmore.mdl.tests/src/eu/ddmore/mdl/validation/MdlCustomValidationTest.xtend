@@ -5,7 +5,7 @@ import eu.ddmore.mdl.LibraryTestHelper
 import eu.ddmore.mdl.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MdlPackage
-import eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage
+import eu.ddmore.mdllib.mdllib.MdlLibPackage
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper

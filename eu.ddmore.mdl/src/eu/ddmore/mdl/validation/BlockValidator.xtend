@@ -10,11 +10,11 @@ import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage
-import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
 import eu.ddmore.mdl.provider.BlockArgumentDefinitionProvider
 import eu.ddmore.mdl.provider.BlockDefinitionProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdllib.mdllib.MdlLibPackage
+import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.HashMap
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator

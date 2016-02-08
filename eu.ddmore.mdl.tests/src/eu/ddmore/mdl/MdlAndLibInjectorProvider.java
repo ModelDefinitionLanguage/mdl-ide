@@ -5,7 +5,7 @@ package eu.ddmore.mdl;
 
 import com.google.inject.Injector;
 
-import eu.ddmore.mdl.mdllib.MdlLibInjectorProvider;
+import eu.ddmore.mdllib.MdlLibInjectorProvider;
 
 public class MdlAndLibInjectorProvider extends MdlInjectorProvider{ 
 

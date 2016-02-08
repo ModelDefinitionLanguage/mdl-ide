@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import com.google.inject.Injector;
 
-import eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage;
+import eu.ddmore.mdllib.mdllib.MdlLibPackage;
 
 /**
  * Initialization support for running Xtext languages 
@@ -22,8 +22,8 @@ public class MdlStandaloneSetup extends MdlStandaloneSetupGenerated{
 
     @Override
     public void register(Injector injector) {
-        if (!EPackage.Registry.INSTANCE.containsKey("http://eu.ddmore.mdl.mdllib/mdl/mdllib/MdlLib")) {
-            EPackage.Registry.INSTANCE.put("http://eu.ddmore.mdl.mdllib/mdl/mdllib/MdlLib", MdlLibPackage.eINSTANCE);
+        if (!EPackage.Registry.INSTANCE.containsKey("http://eu.ddmore.mdllib/mdllib/MdlLib")) {
+            EPackage.Registry.INSTANCE.put("http://eu.ddmore.mdllib/mdllib/MdlLib", MdlLibPackage.eINSTANCE);
         }
         super.register(injector);
     }

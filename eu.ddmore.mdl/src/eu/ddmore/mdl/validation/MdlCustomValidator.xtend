@@ -15,8 +15,6 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.impl.ListDefinitionImpl
-import eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage
-import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
@@ -27,6 +25,8 @@ import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.ConstantEvaluation
 import eu.ddmore.mdl.utils.CycleDetectionUtils
 import eu.ddmore.mdl.utils.MdlUtils
+import eu.ddmore.mdllib.mdllib.MdlLibPackage
+import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.Collections
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check

@@ -8,14 +8,14 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdllib.mdllib.FunctionDefnBody
-import eu.ddmore.mdl.mdllib.mdllib.NamedFuncArgs
-import eu.ddmore.mdl.mdllib.mdllib.UnnamedFuncArgs
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.utils.MdlLibUtils
 import eu.ddmore.mdl.utils.MdlUtils
+import eu.ddmore.mdllib.mdllib.FunctionDefnBody
+import eu.ddmore.mdllib.mdllib.NamedFuncArgs
+import eu.ddmore.mdllib.mdllib.UnnamedFuncArgs
 import java.util.ArrayList
 import java.util.Collections
 import java.util.HashMap

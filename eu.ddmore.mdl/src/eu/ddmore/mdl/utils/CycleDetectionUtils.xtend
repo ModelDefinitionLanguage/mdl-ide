@@ -1,6 +1,6 @@
 package eu.ddmore.mdl.utils
 
-import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
+import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.HashSet
 import java.util.LinkedList
 

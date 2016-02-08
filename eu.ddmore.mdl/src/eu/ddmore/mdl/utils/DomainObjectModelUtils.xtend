@@ -15,7 +15,7 @@ import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
-import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
+import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.Collections
 import org.eclipse.xtext.EcoreUtil2
 

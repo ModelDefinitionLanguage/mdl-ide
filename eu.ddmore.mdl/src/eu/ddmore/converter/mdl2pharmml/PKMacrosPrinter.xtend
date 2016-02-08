@@ -7,9 +7,9 @@ import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.SymbolReference
-import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.utils.MdlUtils
+import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.HashMap
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2

@@ -1,7 +1,7 @@
 package eu.ddmore.mdl.lib
 
 import com.google.inject.Inject
-import eu.ddmore.mdl.mdllib.scoping.MdlLibLib
+import eu.ddmore.mdllib.scoping.MdlLibLib
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 

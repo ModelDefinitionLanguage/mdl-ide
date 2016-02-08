@@ -23,8 +23,6 @@ import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdllib.mdllib.FunctionDefnBody
-import eu.ddmore.mdl.mdllib.mdllib.SymbolDefinition
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
@@ -33,6 +31,8 @@ import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import eu.ddmore.mdl.utils.CycleDetectionUtils
 import eu.ddmore.mdl.utils.MdlLibUtils
+import eu.ddmore.mdllib.mdllib.FunctionDefnBody
+import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2

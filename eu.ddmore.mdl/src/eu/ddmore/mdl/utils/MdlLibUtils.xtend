@@ -1,19 +1,19 @@
 package eu.ddmore.mdl.utils
 
-import eu.ddmore.mdl.mdllib.mdllib.TypeClass
-import eu.ddmore.mdl.mdllib.mdllib.TypeDefinition
-import eu.ddmore.mdl.mdllib.mdllib.TypeSpec
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.SublistDefinitionTable
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdllib.mdllib.TypeClass
+import eu.ddmore.mdllib.mdllib.TypeDefinition
+import eu.ddmore.mdllib.mdllib.TypeSpec
 import java.util.HashSet
 import java.util.Map
 
 class MdlLibUtils {
 
-	val Map<String, TypeInfo> listDefns = #{
+	val Map<String, ? extends TypeInfo> listDefns = #{
 		ListDefinitionTable::PRIOR_SOURCE_TYPE.name -> ListDefinitionTable::PRIOR_SOURCE_TYPE
 	}
 	

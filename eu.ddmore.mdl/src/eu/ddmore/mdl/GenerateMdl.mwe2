@@ -15,10 +15,21 @@ var encoding = "UTF-8"
 
 Workflow {
     bean = StandaloneSetup {
-            scanClassPath = true
+//            scanClassPath = true
+
+    		resourceSet = org.eclipse.xtext.resource.XtextResourceSet:theResourceSet {}
+
             platformUri = "${runtimeProject}/.."
-	    	registerGeneratedEPackage = "eu.ddmore.mdl.mdllib.mdllib.MdlLibPackage"
-    		registerGenModelFile = "platform:/resource/eu.ddmore.mdl.mdllib/model/custom/MdlLib.genmodel"
+    	
+    		// add mappings from platform:/resource to classpath:/
+	    	uriMap = {
+	    		from = "platform:/resource/eu.ddmore.mdllib/"
+//	    		to = "classpath:/"
+	    		to = "../../../../../mdlfunclib/eu.ddmore.mdllib/"
+	    	}
+    		
+	    	registerGeneratedEPackage = "eu.ddmore.mdllib.mdllib.MdlLibPackage"
+    		registerGenModelFile = "platform:/resource/eu.ddmore.mdllib/model/custom/MdlLib.genmodel"
         }
     
         component = DirectoryCleaner {
@@ -46,9 +57,11 @@ Workflow {
 	    	encoding = encoding
             //mergeManifest = false
             language = auto-inject {
+                forcedResourceSet = theResourceSet
+    
                 uri = grammarURI
                 fileExtensions = file.extensions
-    
+                
                 // Java API to access grammar elements (required by several other fragments)
                 fragment = grammarAccess.GrammarAccessFragment auto-inject {}
     

@@ -5,7 +5,7 @@ import com.google.inject.Provider
 import eu.ddmore.mdl.LibraryTestHelper
 import eu.ddmore.mdl.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
-import eu.ddmore.mdl.mdllib.mdllib.Library
+import eu.ddmore.mdllib.mdllib.Library
 import java.util.Collections
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
