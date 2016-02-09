@@ -24,8 +24,8 @@ Workflow {
     		// add mappings from platform:/resource to classpath:/
 	    	uriMap = {
 	    		from = "platform:/resource/eu.ddmore.mdllib/"
-//	    		to = "classpath:/"
-	    		to = "../../../../../mdlfunclib/eu.ddmore.mdllib/"
+	    		to = "classpath:"
+//	    		to = "../../../../../mdlfunclib/eu.ddmore.mdllib/"
 	    	}
     		
 	    	registerGeneratedEPackage = "eu.ddmore.mdllib.mdllib.MdlLibPackage"
