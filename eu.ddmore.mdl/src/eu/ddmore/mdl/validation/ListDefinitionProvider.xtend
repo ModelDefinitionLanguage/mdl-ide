@@ -90,7 +90,7 @@ class ListDefinitionProvider {
 	public static val DISCRETE_LIST_TYPE = new EnumListTypeInfo("DiscreteObs")
 	public static val CATEGORICAL_LIST_TYPE = new EnumListTypeInfo("CatObs")
 
-	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
+	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.List)
 	static val IDV_COL_TYPE = new ListTypeInfo("Idv", PrimitiveType.List)
 	static val AMT_COL_TYPE = new ListTypeInfo("Amt", PrimitiveType.Real)
 	public static val CMT_COL_TYPE = new ListTypeInfo("Cmt", PrimitiveType.List)

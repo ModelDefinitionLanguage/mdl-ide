@@ -149,6 +149,19 @@ class MclTypeProviderTest {
 	}
 
 	@Test
+	def void testMathsBinaryOpWithRefReciprocal(){
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createEquationDefinition
+		defn.name = "AReal"
+		ref.ref = defn
+		val value = MdlFactory::eINSTANCE.createRealLiteral
+		value.value = 1.0
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		value.checkMathsOp(ref, errorFunc, errorFunc)
+		ref.checkMathsOp(value, errorFunc, errorFunc)
+	}
+
+	@Test
 	def void testMathsOpWithString(){
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
 		val Expression rhs = MdlFactory::eINSTANCE.createStringLiteral

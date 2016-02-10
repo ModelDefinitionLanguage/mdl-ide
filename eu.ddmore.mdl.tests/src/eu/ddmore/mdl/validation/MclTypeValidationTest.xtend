@@ -1521,4 +1521,39 @@ warfarin_PK_v2_dat = dataObj{
 		)
 	}
 
+	@Test
+	def void testInvalidCompartmentUsage(){
+		val mcl = '''
+warfarin_PK_Compartments_mdl = mdlObj {
+	IDV { T }
+
+	VARIABILITY_LEVELS{
+		ID : { level=2, type is parameter  }
+		DV : { level=1, type is observation }
+	}
+
+	
+	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
+	    CL = 1
+	    V = 1
+	    KA = 1
+	    TLAG = 1
+	    F1 = 1
+	} # end INDIVIDUAL_VARIABLES
+
+	MODEL_PREDICTION{
+	  COMPARTMENT {
+		INPUT_KA:   {type is depot, modelCmt=1, to=TESTVAR, ka=KA, tlag=TLAG, finput=F1}
+	   }# end COMPARTMENT
+      TESTVAR = 1
+	} # end MODEL_PREDICTION
+
+} # end of model object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'to' expected value of type 'ref:List:Compartment' but was 'ref:Real'."
+		)
+	}
 }
