@@ -340,10 +340,10 @@ class TypeSystemValidator extends AbstractMdlValidator {
 				(TypeInfo, TypeInfo) => void rightErrorLambda){
 		checkExpectedAndExpression(TypeSystemProvider::INT_TYPE, lhs, leftErrorLambda)
 		if(rhs?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE == TypeSystemProvider::MAPPING_TYPE){
-			checkExpectedAndExpression(TypeSystemProvider::MAPPING_TYPE, rhs, rightErrorLambda)
+			checkArgumentMatchesAndExpression(TypeSystemProvider::MAPPING_TYPE, rhs, rightErrorLambda)
 		}
 		else{
-			checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE.makeReference, rhs, rightErrorLambda)
+			checkArgumentMatchesAndExpression(TypeSystemProvider::REAL_TYPE.makeReference, rhs, rightErrorLambda)
 		}
 	}
 	
@@ -380,7 +380,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		val attDefn = listDefn?.getAttributeDefinition(at.attributeName)
 		if(attDefn.isCatMappingPossible){
 			val expectedType = attDefn.catMappingType ?: TypeSystemProvider::UNDEFINED_TYPE
-			checkExpectedAndExpression(expectedType, mappingExpr, typeErrorLambda)
+			checkArgumentMatchesAndExpression(expectedType, mappingExpr, typeErrorLambda)
 		}
 	}
 
@@ -401,10 +401,21 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	def dispatch void checkExpectedAndExpression(TypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
 		var testActual = actualType
+//		if(expectedType.underlyingType instanceof VectorTypeInfo && !(actualType.underlyingType instanceof VectorTypeInfo)){
+//			testActual = actualType.makeVector
+//		}
+		if(!expectedType.isCompatible(testActual)){
+			errorLambda.apply(expectedType, actualType)
+		} 
+	}
+
+	def checkArgumentMatchesAndExpression(TypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
+		var testActual = actualType
 		if(expectedType.underlyingType instanceof VectorTypeInfo && !(actualType.underlyingType instanceof VectorTypeInfo)){
 			testActual = actualType.makeVector
 		}
-		if(!expectedType.isCompatible(testActual)){
+		if(!expectedType.isArgumentCompatible(testActual)){
 			errorLambda.apply(expectedType, actualType)
 		} 
 	}
@@ -414,7 +425,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		if(listDefn != null && at != null){
 			val attType = listDefn.getAttributeType(at.attributeName)
 			if(at instanceof ValuePair){
-				checkExpectedAndExpression(attType, at.expression, errorLambda)				
+				checkArgumentMatchesAndExpression(attType, at.expression, errorLambda)				
 			}
 		}
 	}
@@ -423,7 +434,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	def checkPropertyAttributeTyping(PropertyStatement stmt, ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
 		val attType = at.typeForProperty
 		if(at instanceof ValuePair){
-			checkExpectedAndExpression(attType, at.expression, errorLambda)				
+			checkArgumentMatchesAndExpression(attType, at.expression, errorLambda)				
 		}
 	}
 
@@ -433,16 +444,16 @@ class TypeSystemValidator extends AbstractMdlValidator {
 
 		if(subListDefn != null){
 			val attDefn = subListDefn.attributes.findFirst[name == at.attributeName]
-			checkExpectedAndExpression(attDefn.attType, at.expression, errorLambda)
+			checkArgumentMatchesAndExpression(attDefn.attType, at.expression, errorLambda)
 		}
 	}
 
 	def checkNamedFunctionArgumentTyping(ValuePair at, (TypeInfo, TypeInfo) => void errorLambda){
-		checkExpectedAndExpression(at.namedArgumentType, at.expression, errorLambda)				
+		checkArgumentMatchesAndExpression(at.namedArgumentType, at.expression, errorLambda)				
 	}
 
 	def checkFunctionArgumentTyping(UnnamedArgument at, (TypeInfo, TypeInfo) => void errorLambda){
-		checkExpectedAndExpression(at.unamedArgumentType, at.argument, errorLambda)				
+		checkArgumentMatchesAndExpression(at.unamedArgumentType, at.argument, errorLambda)				
 	}
 
 	

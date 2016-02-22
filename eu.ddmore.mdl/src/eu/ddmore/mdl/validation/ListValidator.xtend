@@ -40,7 +40,11 @@ class ListValidator extends AbstractMdlValidator {
 			if(useVal != null){
 				val expectedSrcType = MappingToColumn.get(useVal) 
 				val srcColType = srcColumn?.ref?.typeFor
-				if(expectedSrcType != null && srcColType != null && !expectedSrcType.isCompatible(srcColType)){
+//				if(expectedSrcType != null && srcColType != null && !expectedSrcType.isCompatible(srcColType)){
+//					error("Expected source column of type '" + expectedSrcType.typeName + "', but was '" + srcColType.typeName + "'.",
+//						MdlPackage.eINSTANCE.mappingPair_SrcColumn, MdlValidator::INCOMPATIBLE_TYPES, srcColType.typeName)
+//				}
+				if(expectedSrcType != null && srcColType != null && !expectedSrcType.isArgumentCompatible(srcColType)){
 					error("Expected source column of type '" + expectedSrcType.typeName + "', but was '" + srcColType.typeName + "'.",
 						MdlPackage.eINSTANCE.mappingPair_SrcColumn, MdlValidator::INCOMPATIBLE_TYPES, srcColType.typeName)
 				}

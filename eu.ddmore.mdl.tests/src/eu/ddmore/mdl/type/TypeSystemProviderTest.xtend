@@ -11,15 +11,24 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
+import eu.ddmore.mdl.provider.ListDefinitionProvider
+import eu.ddmore.mdl.provider.ListDefinitionTable
+import org.junit.Before
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class TypeSystemProviderTest {
 //	@Inject extension LibraryTestHelper<Mcl>
 //	@Inject extension ValidationTestHelper
+	var incompatible = false
 	
 	extension TypeSystemProvider th = new TypeSystemProvider 
 	extension TypeSystemValidator tsv = new TypeSystemValidator
+
+	@Before
+	def void setUp(){
+		incompatible = false
+	}
 
 	@Test
 	def void testTypeExpectedFuncCallExpression(){
@@ -154,6 +163,182 @@ class TypeSystemProviderTest {
 		val Expression rhs = MdlFactory::eINSTANCE.createRealLiteral
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
 		actual.checkMathsOp(rhs, errorFunc, errorFunc)
+	}
+
+	@Test
+	def void testMathsOpReciprocalRef(){
+		val value = MdlFactory::eINSTANCE.createRealLiteral
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createEquationDefinition
+		defn.name = "AReal"
+		ref.ref = defn
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		value.checkMathsOp(ref, errorFunc, errorFunc)
+		ref.checkMathsOp(value, errorFunc, errorFunc)
+	}
+
+	@Test
+	def void testRefWithRealExpressionCompatible(){
+		val value = MdlFactory::eINSTANCE.createRealLiteral
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE.makeReference, value, errorFunc)
+	}
+
+	@Test
+	def void testRefWithRealRef(){
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createEquationDefinition
+		defn.name = "AReal"
+		ref.ref = defn
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE.makeReference, ref, errorFunc)				
+	}
+
+	@Test
+	def void testRefWithIntRef(){
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createEquationDefinition
+		defn.name = "AReal"
+		val intLit = MdlFactory::eINSTANCE.createIntegerLiteral
+		intLit.value = 1 
+		defn.expression = intLit
+		ref.ref = defn
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE.makeReference, ref, errorFunc)				
+	}
+
+	@Test
+	def void testRealWithRef(){
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createEquationDefinition
+		defn.name = "AReal"
+		ref.ref = defn
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE, ref, errorFunc)				
+	}
+
+	@Test
+	def void testCompRefWithRealCompatible(){
+		val testType = new ListTypeInfo("testType", PrimitiveType.Real)
+		val value = MdlFactory::eINSTANCE.createRealLiteral
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkExpectedAndExpression(testType.makeReference, value, errorFunc)				
+	}
+
+	@Test
+	def void testCompRefWithRealRefCompatible(){
+		val testType = new ListTypeInfo("testType", PrimitiveType.Real)
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createEquationDefinition
+		defn.name = "AReal"
+		ref.ref = defn
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkExpectedAndExpression(testType.makeReference, ref, errorFunc)				
+	}
+
+	@Test
+	def void testCompatibleRealWithCompRef(){
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createListDefinition
+		defn.name = "AList"
+		defn.list = MdlFactory::eINSTANCE.createAttributeList
+		defn.list.attributes.add(MdlFactory::eINSTANCE.createEnumPair => [argumentName = "type"
+									expression = buildEnum("compartment")
+									])
+		val blk = MdlFactory::eINSTANCE.createBlockStatement
+		blk.identifier = "COMPARTMENT"
+		val bdy = MdlFactory::eINSTANCE.createBlockStatementBody
+		bdy.statements.add(defn)
+		blk.body = bdy
+		ref.ref = defn
+		
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE, ref, errorFunc)				
+	}
+
+	def create result: MdlFactory::eINSTANCE.createEnumExpression buildEnum(String enumVal){
+		result.enumValue = enumVal
+	}
+
+
+	@Test
+	def void testArgumentRefWithRealIncompatible(){
+		val value = MdlFactory::eINSTANCE.createRealLiteral
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a|  incompatible = true ]
+		checkArgumentMatchesAndExpression(TypeSystemProvider::REAL_TYPE.makeReference, value, errorFunc)
+		assertTrue("Incompatible", incompatible)
+	}
+
+	@Test
+	def void testArgumentRefWithRealRef(){
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createEquationDefinition
+		defn.name = "AReal"
+		ref.ref = defn
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkArgumentMatchesAndExpression(TypeSystemProvider::REAL_TYPE.makeReference, ref, errorFunc)				
+	}
+
+	@Test
+	def void testArgumentRefWithIntRef(){
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createEquationDefinition
+		defn.name = "AReal"
+		val intLit = MdlFactory::eINSTANCE.createIntegerLiteral
+		intLit.value = 1 
+		defn.expression = intLit
+		ref.ref = defn
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkArgumentMatchesAndExpression(TypeSystemProvider::REAL_TYPE.makeReference, ref, errorFunc)				
+	}
+
+	@Test
+	def void testArgumentRealWithRef(){
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createEquationDefinition
+		defn.name = "AReal"
+		ref.ref = defn
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkArgumentMatchesAndExpression(TypeSystemProvider::REAL_TYPE, ref, errorFunc)				
+	}
+
+	@Test
+	def void testArgumentCompRefWithRealIncompatible(){
+		val value = MdlFactory::eINSTANCE.createRealLiteral
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| incompatible = true]
+		checkArgumentMatchesAndExpression(ListDefinitionTable::COMP_LIST_TYPE.makeReference, value, errorFunc)				
+		assertTrue("Incompatible", incompatible)
+	}
+
+	@Test
+	def void testArgumentCompRefWithRealRefIncompatible(){
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createEquationDefinition
+		defn.name = "AReal"
+		ref.ref = defn
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| incompatible = true]
+		checkArgumentMatchesAndExpression(ListDefinitionTable::COMP_LIST_TYPE.makeReference, ref, errorFunc)				
+		assertTrue("Incompatible", incompatible)
+	}
+
+	@Test
+	def void testArgumentCompatibleRealWithCompRef(){
+		val ref = MdlFactory::eINSTANCE.createSymbolReference
+		val defn = MdlFactory::eINSTANCE.createListDefinition
+		defn.name = "AList"
+		defn.list = MdlFactory::eINSTANCE.createAttributeList
+		defn.list.attributes.add(MdlFactory::eINSTANCE.createEnumPair => [argumentName = "type"
+									expression = buildEnum("compartment")
+									])
+		val blk = MdlFactory::eINSTANCE.createBlockStatement
+		blk.identifier = "COMPARTMENT"
+		val bdy = MdlFactory::eINSTANCE.createBlockStatementBody
+		bdy.statements.add(defn)
+		blk.body = bdy
+		ref.ref = defn
+		
+		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
+		checkArgumentMatchesAndExpression(TypeSystemProvider::REAL_TYPE, ref, errorFunc)				
 	}
 
 	@Test

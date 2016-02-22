@@ -1991,6 +1991,8 @@ warfarin_PK_v2_dat = dataObj{
 	def void testInValidRhsObsWhenExpression(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV{ T }
+			
 			VARIABILITY_LEVELS{
 			}
 

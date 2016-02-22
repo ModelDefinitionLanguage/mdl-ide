@@ -16,11 +16,13 @@ class ReferenceTypeInfo extends TypeInfo{
 	}
 	
 	override boolean isCompatible(TypeInfo otherType){
-		switch(otherType){
-			// if both refs then check type compatibility otherwise ref -> non-ref is incompatible 
-			ReferenceTypeInfo: elementType.isCompatible(otherType.elementType)
-			default: false
-		}
+		elementType.isCompatible(otherType.underlyingType)
+//		switch(otherType){
+//			// reciprocal. use underlying types to test compatibility
+//			// if both refs then check type compatibility otherwise ref -> non-ref is incompatible 
+//			ReferenceTypeInfo: elementType.isCompatible(otherType.elementType)
+//			default: false
+//		}
 	}
 	
 	override isCompatibleElement(TypeInfo otherElementType){

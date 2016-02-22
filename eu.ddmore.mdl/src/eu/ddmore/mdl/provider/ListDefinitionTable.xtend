@@ -78,9 +78,9 @@ class ListDefinitionTable {
 	public static val DISCRETE_LIST_TYPE = new EnumListTypeInfo("DiscreteObs")
 	public static val CATEGORICAL_LIST_TYPE = new EnumListTypeInfo("CatObs")
 
-	static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real, DERIV_SUPER_LIST)
-	static val IDV_COL_TYPE = new ListTypeInfo("Idv")
-	static val AMT_COL_TYPE = new ListTypeInfo("Amt")
+	public static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real, DERIV_SUPER_LIST)
+	public static val IDV_COL_TYPE = new ListTypeInfo("Idv")
+	public static val AMT_COL_TYPE = new ListTypeInfo("Amt")
 	public static val CMT_COL_TYPE = new ListTypeInfo("Cmt")
 	public static val DVID_COL_TYPE = new ListTypeInfo("Dvid")
 	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration")

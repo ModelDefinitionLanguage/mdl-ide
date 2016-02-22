@@ -435,4 +435,20 @@ public class TypeSystemProvider {
     	}
     }
 
+	def boolean isArgumentCompatible(TypeInfo argType, TypeInfo valueType){
+		switch(argType){
+			ListTypeInfo:
+				// arg is list so check underlying type or value matches
+				argType == valueType.underlyingType
+			ReferenceTypeInfo:
+				// is ref so check if value is ref and that underlying types match
+				if(valueType instanceof ReferenceTypeInfo)
+					// check that underlying tyes are argument compatible
+					isArgumentCompatible(argType.underlyingType, valueType.underlyingType)
+				else false
+			default:
+				// no special case handling so check for expression compatibility
+				argType.isCompatible(valueType)
+		}
+	}
 }
