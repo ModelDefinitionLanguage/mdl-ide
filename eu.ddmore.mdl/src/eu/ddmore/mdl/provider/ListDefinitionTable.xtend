@@ -86,7 +86,7 @@ class ListDefinitionTable {
 	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration")
 	public static val SAMPLING_SUPER_LIST = new ListSuperTypeInfo("SamplingSuper") 
 	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", SAMPLING_SUPER_LIST)
-//	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", PrimitiveType.List)
+	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", SAMPLING_SUPER_LIST)
 	public static val DERIV_SAMPLING_TYPE = new ListTypeInfo("DerivedSampling", SAMPLING_SUPER_LIST)
 	public static val PRIOR_SOURCE_TYPE = new ListTypeInfo("PriorSource")
 	public static val STUDY_DESIGN_LIST_TYPE = new ListTypeInfo("StudyDesign")
@@ -587,17 +587,17 @@ class ListDefinitionTable {
 //						 new AttributeDefn('numberSamples', false, MclTypeProvider::INT_TYPE.makeVector)
 //						 ]
 //					),
-//					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
-//						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
-//						 new AttributeDefn('combination', true, SublistDefinitionTable::getSublist(SublistDefinitionTable::SAMPLING_SEQ_SUBLIST).makeVector),
-//						 new AttributeDefn('numberTimes', false, TypeSystemProvider::INT_TYPE)
-//						 ]
-//					)//,
+					new ListDefInfo('complex', CPLX_SAMPLING_TYPE, #[
+						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
+						 new AttributeDefn('combination', true, SublistDefinitionTable::instance.getSublist(SublistDefinitionTable::SAMPLING_SEQ_SUBLIST).makeVector),
+						 new AttributeDefn('numberTimes', false, TypeSystemProvider::INT_TYPE)
+						 ]
+					),
 					new ListDefInfo('derived', DERIV_SAMPLING_TYPE, #[
 						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
-						 new AttributeDefn('combination', true, SublistDefinitionTable::instance.getSublist(SublistDefinitionTable::COMPLEX_COMBINATION_SUBLIST).makeVector)
-//						 new AttributeDefn('combination', true, SAMPLING_SUPER_LIST.makeReference.makeVector),
-//						 new AttributeDefn('numberTimes', false, TypeSystemProvider::INT_TYPE)
+//						 new AttributeDefn('combination', true, SublistDefinitionTable::instance.getSublist(SublistDefinitionTable::SAMPLING_SEQ_SUBLIST).makeVector)
+						 new AttributeDefn('combination', true, SAMPLING_SUPER_LIST.makeReference.makeVector),
+						 new AttributeDefn('numberTimes', false, TypeSystemProvider::INT_TYPE)
 						 ]
 					)
 				)

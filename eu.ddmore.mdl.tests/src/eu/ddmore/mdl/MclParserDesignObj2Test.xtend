@@ -43,7 +43,7 @@ d1g=designObj{
 		sampPK : {  type is derived, combination=[pkwin1,pkwin2,pkwin3,pkwin4,pkwin5,pkwin6] }
 		sampPD : { type is derived, combination=[pdwin1,pdwin2,pdwin3,pdwin4,pdwin5,pdwin6] }
 	# Create sampling for both responses by combining the PK and PD samples. Need to specify start/end so that the sampling are simultaneous
-		sampPKPD : {type is derived, combination=[sampPK,sampPD]}
+		sampPKPD : {type is complex, combination=[{sample=sampPK, start=0},{sample=sampPD, start=0}]}
 	}
 	DESIGN_SPACES{
 		DS1 : { objRef=[dose1], element is amount, discrete=[10,100,200] }

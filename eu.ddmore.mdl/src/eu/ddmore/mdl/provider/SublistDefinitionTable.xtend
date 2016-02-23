@@ -11,7 +11,7 @@ class SublistDefinitionTable {
 	public static val SAMPLING_SEQ_SUBLIST = "sampSeqAtts"
 	public static val FIX_EFF_SUBLIST = "fixEffAtts"
 	public static val PRIOR_FORMAT_SUBLIST = "priorFormat"
-	public static val COMPLEX_COMBINATION_SUBLIST = "cplxCombSublist"
+//	public static val COMPLEX_COMBINATION_SUBLIST = "cplxCombSublist"
 
 	public static val COV_ATT = 'cov'
 	public static val CATCOV_ATT = 'catCov'
@@ -35,15 +35,15 @@ class SublistDefinitionTable {
 												new AttributeDefn("sample", true, ListDefinitionTable::SAMPLING_SUPER_LIST.makeReference),
 												new AttributeDefn("start", true, TypeSystemProvider::REAL_TYPE),
 												new AttributeDefn("end", true, TypeSystemProvider::REAL_TYPE)],
-												#[#{'sample' -> true, 'start' -> true, 'end' -> false}])),
+												#[#{'sample' -> true, 'start' -> false, 'end' -> false}])),
 		PRIOR_FORMAT_SUBLIST -> (new SublistTypeInfo(PRIOR_FORMAT_SUBLIST, #[new AttributeDefn("element", true, TypeSystemProvider::STRING_TYPE),
 												new AttributeDefn("type", true, PRIOR_ELEMENT_TYPE_TYPE)],
-												#[#{'element' -> true, 'type' -> true}])),
-		COMPLEX_COMBINATION_SUBLIST -> (new SublistTypeInfo(COMPLEX_COMBINATION_SUBLIST,
-												#[new AttributeDefn("sample", true, ListDefinitionTable::SAMPLING_SUPER_LIST.makeReference),
-												new AttributeDefn("startTime", false, TypeSystemProvider::REAL_TYPE),
-												new AttributeDefn("endTime", false, TypeSystemProvider::REAL_TYPE)],
-												#[#{'sample' -> true, 'startTime' -> false, 'endTime' -> false}]))
+												#[#{'element' -> true, 'type' -> true}])) //,
+//		COMPLEX_COMBINATION_SUBLIST -> (new SublistTypeInfo(COMPLEX_COMBINATION_SUBLIST,
+//												#[new AttributeDefn("sample", true, ListDefinitionTable::SAMPLING_SUPER_LIST.makeReference),
+//												new AttributeDefn("startTime", false, TypeSystemProvider::REAL_TYPE),
+//												new AttributeDefn("endTime", false, TypeSystemProvider::REAL_TYPE)],
+//												#[#{'sample' -> true, 'startTime' -> false, 'endTime' -> false}]))
 	}
 	
 	static var SublistDefinitionTable anInstance

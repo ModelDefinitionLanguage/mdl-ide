@@ -2284,7 +2284,7 @@ d1g=designObj{
 		sampPK : {  type is derived, combination=[pkwin1,pkwin2,pkwin3,pkwin4,pkwin5,pkwin6] }
 		sampPD : { type is derived, combination=[pdwin1,pdwin2,pdwin3,pdwin4,pdwin5,pdwin6] }
 	# Create sampling for both responses by combining the PK and PD samples. Need to specify start/end so that the sampling are simultaneous
-		sampPKPD : {type is derived, combination=[sampPK,sampPD]}
+		sampPKPD : {type is complex, combination=[{sample=sampPK},{sample=sampPD}]}
 	}
 	DESIGN_SPACES{
 		DS1 : { objRef=dose1, element is amount, discrete=[10,100,200] }
@@ -2310,11 +2310,10 @@ d1g=designObj{
 			interventionSequence={
 				admin=dose1
 			},
-			samplingSequence=[{
+			samplingSequence={
 				sample=pkwin5,
 				start=0
-				}
-			]
+			}
 		}
 	}
 }		'''.parse
