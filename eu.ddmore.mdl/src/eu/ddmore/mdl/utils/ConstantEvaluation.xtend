@@ -7,7 +7,6 @@ import eu.ddmore.mdl.mdl.ConstantLiteral
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.IntegerLiteral
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
@@ -21,6 +20,7 @@ import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdllib.mdllib.Expression
 
 class ConstantEvaluation {
 	

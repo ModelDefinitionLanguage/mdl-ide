@@ -9,7 +9,6 @@ import eu.ddmore.mdl.mdl.ElifClause
 import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumPair
-import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.FuncArguments
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
@@ -20,6 +19,7 @@ import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.mdl.WhenClause
 import eu.ddmore.mdl.mdl.WhenExpression
+import eu.ddmore.mdllib.mdllib.Expression
 
 public class MdlExpressionConverter extends ExpressionConverter {
 	

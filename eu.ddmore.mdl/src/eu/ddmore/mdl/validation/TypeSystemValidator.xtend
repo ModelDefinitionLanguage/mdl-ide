@@ -9,7 +9,6 @@ import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.EqualityExpression
-import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IfExprPart
 import eu.ddmore.mdl.mdl.IndexRange
 import eu.ddmore.mdl.mdl.MappingPair
@@ -42,11 +41,17 @@ import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.type.VectorTypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.FunctionDefnBody
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdllib.mdllib.FunctionSpec
+import eu.ddmore.mdl.utils.MdlLibUtils
+import eu.ddmore.mdllib.mdllib.MdlLibPackage
+import eu.ddmore.mdllib.mdllib.TypeSpec
+import eu.ddmore.mdllib.TypeDefinitionProvider
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -58,6 +63,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
 	extension SublistDefinitionProvider subListProvider = new SublistDefinitionProvider
 	extension PropertyDefinitionProvider propProvider = new PropertyDefinitionProvider
+	extension MdlLibUtils mlu = new MdlLibUtils
 	
 	// Type handling	
 	private def (TypeInfo, TypeInfo) => void typeError(EStructuralFeature feature){ 
@@ -255,6 +261,31 @@ class TypeSystemValidator extends AbstractMdlValidator {
 					error("property '" + vp.attributeName + "' expected value of type '" + e.typeName + "' but was '" + a.typeName + "'.",
 							MdlPackage.eINSTANCE.valuePair_Expression, MdlValidator::INCOMPATIBLE_TYPES, a.typeName)
 				])
+		}
+	}
+
+	@Check
+	def validateFunctionBodyAndReturnCompatible(FunctionSpec it){
+		val expectedRtnType = returnType.typeInfo
+		checkExpectedAndExpression(expectedRtnType, body, 
+			[e, a|
+					error("Expected function return type of '" + e.typeName + "' but expression was of type '" + a.typeName + "'.",
+							MdlLibPackage.eINSTANCE.functionSpec_Body, MdlValidator::INCOMPATIBLE_TYPES, a.typeName)
+			]
+		)
+	}
+
+	@Check
+	def validateTypeSpecWellFormed(TypeSpec it){
+		if(typeName.name == TypeDefinitionProvider::FUNCTION_TYPE && functionSpec == null){
+			error("You must define a function specification when using the type name 'Function'.",
+					MdlLibPackage.eINSTANCE.typeSpec_TypeName, 
+					MdlValidator::MALFORMED_TYPE_SPEC, typeName.name)
+		}
+		if(typeName.name != TypeDefinitionProvider::FUNCTION_TYPE && functionSpec != null){
+			error("You must use the type name 'Function' to define a function specification.",
+					MdlLibPackage.eINSTANCE.typeSpec_TypeName, 
+					MdlValidator::MALFORMED_TYPE_SPEC, typeName.name)
 		}
 	}
 

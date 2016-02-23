@@ -6,7 +6,6 @@ import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.BlockTextBody
 import eu.ddmore.mdl.mdl.EnumExpression
-import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.Statement
@@ -15,6 +14,7 @@ import eu.ddmore.mdl.mdl.UnnamedArgument
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.mdl.VectorElement
+import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.Collections
 import org.eclipse.xtext.EcoreUtil2

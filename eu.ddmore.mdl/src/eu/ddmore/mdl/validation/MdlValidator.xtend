@@ -64,6 +64,7 @@ class MdlValidator extends AbstractMdlValidator {
 
 	// Type validation
 	public static val INCOMPATIBLE_TYPES = "eu.ddmore.mdl.validation.IncompatibleTypes"
+	public static val MALFORMED_TYPE_SPEC = "eu.ddmore.mdl.validation.MalformedTypeSpec"
 	
 	// Expressions
 	public static val INVALID_CYCLE = "eu.ddmore.mdl.validation.cyclic.ref"

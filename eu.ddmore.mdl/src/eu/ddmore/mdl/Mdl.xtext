@@ -92,7 +92,7 @@ EquationDefinition returns EquationTypeDefinition:
 //;
 
 FunctionSpec returns lib::FunctionSpec:
-	{lib::FunctionSpec}  '(' argument=FuncUnnamedArgDefns? ')' returnType=TypeSpec 
+	{lib::FunctionSpec}  '(' argument=FuncUnnamedArgDefns? ')' returnType=TypeSpec IS body=Expression
 ;
 
 
@@ -144,7 +144,7 @@ PropertyStatement:
 ;
 
 
-CategoricalDefinitionExpr returns Expression:
+CategoricalDefinitionExpr returns lib::Expression:
 	{CategoricalDefinitionExpr} WITH BEGIN categories += CategoryValueDefinition (=>',' categories += CategoryValueDefinition)* END
 		(ASSIGN expression = Expression)?
 ;
@@ -175,11 +175,11 @@ AttributeName:
 	ID
 ;
 
-EnumExpression returns Expression:
+EnumExpression returns lib::Expression:
 	{EnumExpression}enumValue=ID  (catDefn=CategoricalDefinitionExpr)?
 ;
 
-MappingExpression returns Expression:
+MappingExpression returns lib::Expression:
 	{MappingExpression} (BEGIN
 		(
 			attList+=MappingPair (',' attList+=MappingPair)*
@@ -187,11 +187,11 @@ MappingExpression returns Expression:
 	END)
 ;
 
-SubListExpression returns Expression:
+SubListExpression returns lib::Expression:
 	{SubListExpression} BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END 
 ;
 
-CatValRefMappingExpression returns Expression:
+CatValRefMappingExpression returns lib::Expression:
 	{CatValRefMappingExpression}(BEGIN
 		attLists+=CatValRefMapping (',' attLists+=CatValRefMapping)*
 	END)
@@ -209,30 +209,34 @@ MappingPair:
 //	BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
 //;
 
-Expression:
+//CommExpr returns lib::Expression:
+//	Expression
+//	;
+
+Expression returns lib::Expression:
 	OrExpression
 ;
 
-OrExpression returns Expression:
+OrExpression returns lib::Expression:
 	AndExpression (=>({OrExpression.leftOperand=current} feature=OpOr) rightOperand=AndExpression)*;
 
 OpOr:
 	'||';
 
-AndExpression returns Expression:
+AndExpression returns lib::Expression:
 	EqualityExpression (=>({AndExpression.leftOperand=current} feature=OpAnd) rightOperand=EqualityExpression)*;
 
 OpAnd:
 	'&&';
 
-EqualityExpression returns Expression:
+EqualityExpression returns lib::Expression:
 	RelationalExpression (=>({EqualityExpression.leftOperand=current} feature=OpEquality)
 	rightOperand=RelationalExpression)*;
 
 OpEquality:
 	'==' | '!=' ;
 
-RelationalExpression returns Expression:
+RelationalExpression returns lib::Expression:
 	AdditiveExpression
 	(
 	 =>({RelationalExpression.leftOperand=current} feature=OpCompare) rightOperand=AdditiveExpression)*;
@@ -240,26 +244,26 @@ RelationalExpression returns Expression:
 OpCompare:
 	'>=' | '<=' | '>' | '<' ;
 
-AdditiveExpression returns Expression:
+AdditiveExpression returns lib::Expression:
 	MultiplicativeExpression (=>({AdditiveExpression.leftOperand=current} feature=OpAdd)
 	rightOperand=MultiplicativeExpression)*;
 
 OpAdd:
 	'+' | '-';
 
-MultiplicativeExpression returns Expression:
+MultiplicativeExpression returns lib::Expression:
 	PowerExpression (=>({MultiplicativeExpression.leftOperand=current} feature=OpMulti) rightOperand=PowerExpression)*;
 
 OpMulti:
 	'*' | '/' | '%';
 
-PowerExpression returns Expression:
+PowerExpression returns lib::Expression:
 	UnaryExpression (=>({PowerExpression.leftOperand=current} feature=OpPow) rightOperand=UnaryExpression)*;
 
 OpPow:
 	'^';
 
-UnaryExpression returns Expression:
+UnaryExpression returns lib::Expression:
 	{UnaryExpression} feature=OpUnary operand=PrimaryExpression
 	| PrimaryExpression
 	;
@@ -267,7 +271,7 @@ UnaryExpression returns Expression:
 OpUnary:
 	"!" | "-" | "+";
 
-PrimaryExpression returns Expression:
+PrimaryExpression returns lib::Expression:
 	Literal
 	| SymbolReference 
 	| CategoryValueReference
@@ -281,11 +285,11 @@ PrimaryExpression returns Expression:
 	;
 
 
-ParExpression returns Expression:
+ParExpression returns lib::Expression:
 	{ParExpression} '(' expr=Expression ')'
 ;
 
-WhenExpression returns Expression:
+WhenExpression returns lib::Expression:
 	 {WhenExpression}
 	 	when+=WhenClause
 	 	(=> when+=ElifClause)*
@@ -308,7 +312,7 @@ ElseClause:
 	{ElseClause} ELSE other=Expression
 ;
 
-Literal returns Expression:
+Literal returns lib::Expression:
 	RealLiteral |
 	ConstantLiteral|
 	IntegerLiteral |
@@ -337,12 +341,12 @@ CategoryValueReference:
 ;
 
 
-//BuiltinFunctionCall returns Expression:
+//BuiltinFunctionCall returns lib::Expression:
 //	{BuiltinFunctionCall} func=[lib::FunctionDefnBody] =>'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
 //	{BuiltinFunctionCall} func=[SymbolDefinition] =>'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
 //;
 
-//UserFunctionCall returns Expression:
+//UserFunctionCall returns lib::Expression:
 //	{UserFunctionCall} '&' ref=[SymbolDefinition|ID] '(' argList=(NamedFuncArguments)? ')'
 //;
 
@@ -359,40 +363,40 @@ UnnamedArgument:
 ;
 
 
-BooleanLiteral returns Expression :
+BooleanLiteral returns lib::Expression:
 	{BooleanLiteral} (FALSE | isTrue?=TRUE);
 
 
-RealLiteral returns Expression :
+RealLiteral returns lib::Expression:
 	{RealLiteral} value=FLOAT;
 
-ConstantLiteral returns Expression :
+ConstantLiteral returns lib::Expression:
 	{ConstantLiteral} value=CONSTANT;
 
-IntegerLiteral returns Expression :
+IntegerLiteral returns lib::Expression:
 	{IntegerLiteral} value=INTEGER;
 
-StringLiteral returns Expression:
+StringLiteral returns lib::Expression:
 	{StringLiteral} value=STRING;
 
 
-MatrixLiteral returns Expression:
+MatrixLiteral returns lib::Expression:
 	{MatrixLiteral} '[[' (rows += MatrixRow (=> ';' rows += MatrixRow)*)? ']]'
 ;	
 
-MatrixRow returns Expression:
+MatrixRow returns lib::Expression:
 	{MatrixRow} cells += MatrixElement (=> ',' cells += MatrixElement)*
 ;
 
-MatrixElement returns Expression:
+MatrixElement returns lib::Expression:
 	{MatrixElement} cell=Expression
 ;
 
-VectorLiteral returns Expression:
+VectorLiteral returns lib::Expression:
 	{VectorLiteral} '[' (expressions += VectorElement (=> ',' expressions += VectorElement)*)? ']'
 ;	
 
-VectorElement returns Expression:
+VectorElement returns lib::Expression:
 	{VectorElement} element=Expression
 ;
 

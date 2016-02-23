@@ -12,7 +12,6 @@ import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.utils.MdlLibUtils
-import eu.ddmore.mdl.utils.MdlUtils
 import eu.ddmore.mdllib.mdllib.FunctionDefnBody
 import eu.ddmore.mdllib.mdllib.NamedFuncArgs
 import eu.ddmore.mdllib.mdllib.UnnamedFuncArgs
@@ -29,7 +28,6 @@ import org.eclipse.xtext.EcoreUtil2
 
 class BuiltinFunctionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
-	extension MdlUtils mu = new MdlUtils
 	
 	static abstract class FunctDefn{
 		extension MdlLibUtils mlu = new MdlLibUtils

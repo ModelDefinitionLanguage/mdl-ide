@@ -1,19 +1,18 @@
 package eu.ddmore.mdl.type
 
 import eu.ddmore.mdl.MdlAndLibInjectorProvider
-import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.MdlFactory
+import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.validation.TypeSystemValidator
+import eu.ddmore.mdllib.mdllib.Expression
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
+import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
-import eu.ddmore.mdl.provider.ListDefinitionProvider
-import eu.ddmore.mdl.provider.ListDefinitionTable
-import org.junit.Before
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))

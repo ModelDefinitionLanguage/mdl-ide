@@ -7,7 +7,6 @@ import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
-import eu.ddmore.mdl.mdl.Expression
 import eu.ddmore.mdl.mdl.IndexSpec
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MatrixElement
@@ -31,11 +30,13 @@ import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import eu.ddmore.mdl.utils.CycleDetectionUtils
 import eu.ddmore.mdl.utils.MdlLibUtils
+import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.FunctionDefnBody
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.FuncArgumentDefinition
 
 public class TypeSystemProvider {
 
@@ -332,6 +333,8 @@ public class TypeSystemProvider {
 				}
 			FunctionDefnBody:
 				sd.funcDefn.returnType
+			FuncArgumentDefinition:
+				sd.typeSpec.typeInfo
 			default:
 				UNDEFINED_TYPE
 		}
