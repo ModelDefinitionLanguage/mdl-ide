@@ -84,7 +84,7 @@ class ListDefinitionTable {
 	public static val CMT_COL_TYPE = new ListTypeInfo("Cmt")
 	public static val DVID_COL_TYPE = new ListTypeInfo("Dvid")
 	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration")
-	public static val SAMPLING_SUPER_LIST = new ListSuperTypeInfo("DerivSuper") 
+	public static val SAMPLING_SUPER_LIST = new ListSuperTypeInfo("SamplingSuper") 
 	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", SAMPLING_SUPER_LIST)
 //	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", PrimitiveType.List)
 	public static val DERIV_SAMPLING_TYPE = new ListTypeInfo("DerivedSampling", SAMPLING_SUPER_LIST)
@@ -595,8 +595,9 @@ class ListDefinitionTable {
 //					)//,
 					new ListDefInfo('derived', DERIV_SAMPLING_TYPE, #[
 						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),
-						 new AttributeDefn('combination', true, SAMPLING_SUPER_LIST.makeReference.makeVector),
-						 new AttributeDefn('numberTimes', false, TypeSystemProvider::INT_TYPE)
+						 new AttributeDefn('combination', true, SublistDefinitionTable::instance.getSublist(SublistDefinitionTable::COMPLEX_COMBINATION_SUBLIST).makeVector)
+//						 new AttributeDefn('combination', true, SAMPLING_SUPER_LIST.makeReference.makeVector),
+//						 new AttributeDefn('numberTimes', false, TypeSystemProvider::INT_TYPE)
 						 ]
 					)
 				)

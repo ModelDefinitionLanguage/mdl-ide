@@ -107,8 +107,14 @@ func MultivariateNormal named
 				mean::Vector,
 				cov::Matrix
 			)
-			returns ::Vector[::Pdf],
-matrix named
+			returns ::Vector[::Pdf];
+func Wishart named
+			(
+				scaleMatrix::Matrix,
+				nu::Real
+			)
+			returns ::Matrix[[::Pdf]];
+func matrix named
 		(
 			vector::Vector,
 			ncol::Real,
