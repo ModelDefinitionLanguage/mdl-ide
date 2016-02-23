@@ -15,6 +15,8 @@ import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdllib.mdllib.FunctionSpec
+import eu.ddmore.mdl.mdl.EquationDefinition
 
 class BuiltinFunctionValidator extends AbstractDeclarativeValidator{
 
@@ -28,7 +30,7 @@ class BuiltinFunctionValidator extends AbstractDeclarativeValidator{
 		val ref = sr.ref
 		if(ref instanceof FunctionDefnBody){
 			if(sr.argList == null || sr.argList instanceof UnnamedFuncArguments){
-				ref.checkUnnamedFunctionDefn(sr.argList,
+				checkUnnamedFunctionDefn(ref.name, ref.funcSpec, sr.argList,
 					[fName| error("Simple function '" + fName + "' is not recognised.",
 	//					MdlPackage.eINSTANCE.builtinFunctionCall_Func, MdlValidator::UNRECOGNIZED_FUNCTION_NAME, fName)],
 						MdlPackage.eINSTANCE.symbolReference_Ref, MdlValidator::UNRECOGNIZED_FUNCTION_NAME, fName)],
@@ -45,14 +47,28 @@ class BuiltinFunctionValidator extends AbstractDeclarativeValidator{
 			}
 		}
 		else if(sr.argList != null){
-			// this looks like a function but is not linked to a library function so this func call is invalid
-			if(sr.argList instanceof UnnamedFuncArguments){
-				error("Simple function '" + ref.name + "' is not recognised.",
-						MdlPackage.eINSTANCE.symbolReference_Ref, MdlValidator::UNRECOGNIZED_FUNCTION_NAME, ref.name)
+			var foundFunc = false
+			// this looks like a function but is not linked to a library function so this could be a user defined func
+			if(ref instanceof EquationDefinition){
+				if(sr.argList instanceof UnnamedFuncArguments && ref.typeSpec != null && ref.typeSpec.functionSpec != null){
+					checkUnnamedFunctionDefn(ref.name, ref.typeSpec.functionSpec, sr.argList,
+						[fName| error("Simple function '" + fName + "' is not recognised.",
+							MdlPackage.eINSTANCE.symbolReference_Ref, MdlValidator::UNRECOGNIZED_FUNCTION_NAME, fName)],
+							 [fName, eArgNum | error("Function '" + fName + "' has the wrong number of arguments. Expected " + eArgNum + ".",
+							MdlPackage.eINSTANCE.symbolReference_ArgList, MdlValidator::INCORRECT_NUM_FUNC_ARGS, fName)]
+							)
+					foundFunc = true
+				}
 			}
-			else{
-				error("Named argument function '" + ref.name + "' is not recognised.",
-						MdlPackage.eINSTANCE.symbolReference_ArgList, MdlValidator::UNRECOGNIZED_FUNCTION_NAME, ref.name)
+			if(!foundFunc){
+				if(sr.argList instanceof UnnamedFuncArguments){
+					error("Simple function '" + ref.name + "' is not recognised.",
+							MdlPackage.eINSTANCE.symbolReference_Ref, MdlValidator::UNRECOGNIZED_FUNCTION_NAME, ref.name)
+				}
+				else{
+					error("Named argument function '" + ref.name + "' is not recognised.",
+							MdlPackage.eINSTANCE.symbolReference_ArgList, MdlValidator::UNRECOGNIZED_FUNCTION_NAME, ref.name)
+				}
 			}
 		}
 	}
@@ -88,7 +104,7 @@ class BuiltinFunctionValidator extends AbstractDeclarativeValidator{
 		val ref = functionCall.ref
 		if(ref instanceof FunctionDefnBody){
 			// assume that this is a named argument to a function
-			val funcDefn = ref.funcDefn
+			val funcDefn = ref.funcSpec.funcDefn
 			if(funcDefn != null && funcDefn instanceof NamedArgFuncDefn){
 				val namedFuncDefn = funcDefn as NamedArgFuncDefn
 				if(!namedFuncDefn.hasArgument(argumentName)){
@@ -108,25 +124,25 @@ class BuiltinFunctionValidator extends AbstractDeclarativeValidator{
 	}
 
 	// precondition - this is a unnamed function 	
-	def checkUnnamedFunctionDefn(FunctionDefnBody ref, FuncArguments argList, (String) => void unkFuncErr, (String, int) => void incorrectNumArgsErr){
+	def checkUnnamedFunctionDefn(String name, FunctionSpec ref, FuncArguments argList, (String) => void unkFuncErr, (String, int) => void incorrectNumArgsErr){
 		val FunctDefn funcDefn = ref.funcDefn
 		if(funcDefn == null || !(funcDefn instanceof SimpleFuncDefn)){
-			unkFuncErr.apply(ref.name)
+			unkFuncErr.apply(name)
 		}
 		else {
 			val funcArgList = argList
 			switch(funcArgList){
 				case funcArgList == null && funcDefn.numArgs != 0:
-					incorrectNumArgsErr.apply(ref.name, funcDefn.numArgs)
+					incorrectNumArgsErr.apply(name, funcDefn.numArgs)
 				UnnamedFuncArguments case funcArgList.args.size != funcDefn.numArgs:
-					incorrectNumArgsErr.apply(ref.name, funcDefn.numArgs)
+					incorrectNumArgsErr.apply(name, funcDefn.numArgs)
 				NamedFuncArguments: void
 			}
 		}
 	}
 	
 	def checkNamedFunctionDefn(FunctionDefnBody ref, (String) => void unkFuncErr){
-		val funcDefn = ref.funcDefn
+		val funcDefn = ref.funcSpec.funcDefn
 		if(funcDefn == null || !(funcDefn instanceof NamedArgFuncDefn)){
 			unkFuncErr.apply(ref.name)
 		}

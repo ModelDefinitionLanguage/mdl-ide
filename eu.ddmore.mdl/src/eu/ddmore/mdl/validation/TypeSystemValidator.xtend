@@ -318,7 +318,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 //	}
 
 	def checkExpectedRealTransform(FunctionDefnBody transform, (TypeInfo, TypeInfo) => void errorLambda){
-		val actualType = transform.funcDefn?.returnType ?: TypeSystemProvider::UNDEFINED_TYPE
+		val actualType = transform.funcSpec.funcDefn?.returnType ?: TypeSystemProvider::UNDEFINED_TYPE
 		val expectedType = TypeSystemProvider::REAL_TYPE
 		if(actualType != expectedType)
 			errorLambda.apply(expectedType, actualType ?: TypeSystemProvider::UNDEFINED_TYPE)

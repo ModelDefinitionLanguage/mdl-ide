@@ -25,6 +25,8 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdllib.mdllib.FunctionSpec
 
 class BuiltinFunctionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
@@ -32,22 +34,24 @@ class BuiltinFunctionProvider {
 	static abstract class FunctDefn{
 		extension MdlLibUtils mlu = new MdlLibUtils
 
-		val FunctionDefnBody funcBody
+		val FunctionSpec funcBody
 
 //		def int getNumArgs()
 //		def TypeInfo getReturnType()
 
-		new(FunctionDefnBody funcBody){
+		new(FunctionSpec funcBody){
 			this.funcBody = funcBody
 		}
 
 		def int getNumArgs(){
 //			argTypes.size
-			funcBody.funcSpec.argument.arguments.size
+			if(funcBody.argument != null)
+				funcBody.argument.arguments.size
+			else 0
 		}
 		
 		def TypeInfo getReturnType(){
-			funcBody.funcSpec.returnType.typeInfo
+			funcBody.returnType.typeInfo
 		}
 		
 		def protected getFuncDefn(){
@@ -66,14 +70,14 @@ class BuiltinFunctionProvider {
 //		List<? extends TypeInfo> argTypes
 //		TypeInfo returnType	 
 
-		new(FunctionDefnBody funcBody){
+		new(FunctionSpec funcBody){
 			super(funcBody)
 		}
 
 		
 		def List<? extends TypeInfo> getArgTypes(){
 			val retVal = new ArrayList<TypeInfo>()
-			funcDefn.funcSpec.argument.arguments.forEach[
+			funcDefn.argument?.arguments.forEach[
 				retVal.add(typeSpec.typeInfo)
 			]
 			retVal
@@ -114,10 +118,10 @@ class BuiltinFunctionProvider {
 //			this.signatures.add(map)
 //		}
 
-		new(FunctionDefnBody funcBody){
+		new(FunctionSpec funcBody){
 			super(funcBody)
 			arguments = new HashMap<String, TypeInfo>
-			val namedArgs = funcDefn.funcSpec.argument as NamedFuncArgs
+			val namedArgs = funcDefn.argument as NamedFuncArgs
 			namedArgs.arguments.forEach[
 				arguments.put(name, typeSpec.typeInfo)
 			]
@@ -134,7 +138,7 @@ class BuiltinFunctionProvider {
 		
 		def List<Map<String, Boolean>> getSignatures(){
 			val retVal = new ArrayList<Map<String, Boolean>>
-			val funcArg = funcDefn.funcSpec.argument
+			val funcArg = funcDefn.argument
 			if(funcArg instanceof NamedFuncArgs){
 				if(funcArg.sigLists.isEmpty){
 					// no siglist so assume all args mandatory
@@ -261,22 +265,32 @@ class BuiltinFunctionProvider {
 //		functDefns.containsKey(name)
 //	}
 	
-	public def getFuncDefn(FunctionDefnBody fDefn){
-		val argSpec = fDefn.funcSpec.argument
-		switch(argSpec){
-			UnnamedFuncArgs:
-				new SimpleFuncDefn(fDefn)
-			NamedFuncArgs:
-				new NamedArgFuncDefn(fDefn)
-			default: null
+	public def getFuncDefn(FunctionSpec fDefn){
+		val argSpec = fDefn.argument
+		if(argSpec == null){
+			new SimpleFuncDefn(fDefn)
+		}
+		else{
+			switch(argSpec){
+				UnnamedFuncArgs:
+					new SimpleFuncDefn(fDefn)
+				NamedFuncArgs:
+					new NamedArgFuncDefn(fDefn)
+				default: null
+			}
 		}
 	}
-
 
 	public def findFuncDefn(SymbolReference fDefn){
 		val ref = fDefn.ref
 		if(ref instanceof FunctionDefnBody){
-			ref.funcDefn
+			ref.funcSpec.funcDefn
+		}
+		else if(ref instanceof EquationDefinition){
+			if(ref.typeSpec != null && ref.typeSpec.functionSpec != null){
+				ref.typeSpec.functionSpec.funcDefn
+			}
+			else null
 		}
 		else null
 //		functDefns.get(func)

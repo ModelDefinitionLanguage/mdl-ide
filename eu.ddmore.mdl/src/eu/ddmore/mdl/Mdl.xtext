@@ -48,32 +48,13 @@ MdlSymbolDefinition returns lib::SymbolDefinition:
 ;
 
 
-FuncUnnamedArgDefns returns lib::FuncArgs:
-	{lib::FuncArgs} arguments+=FuncArgumentDefinition (',' arguments+=FuncArgumentDefinition)*
+FuncUnnamedArgDefns returns lib::UnnamedFuncArgs:
+	{lib::UnnamedFuncArgs} arguments+=FuncArgumentDefinition (',' arguments+=FuncArgumentDefinition)*
 ;
 
 FuncArgumentDefinition returns lib::FuncArgumentDefinition:
-	{FuncArgumentDefinition} name=ID typeSpec=TypeSpec 
+	{lib::FuncArgumentDefinition} name=ID typeSpec=TypeSpec 
 ;
-
-//FuncArgumentDefinition returns lib::FuncArgumentDefinition:
-//	TestFunctionArgumentDefinition 
-//;
-//
-//TestFunctionArgumentDefinition returns SymbolDefinition:
-//	{TestFunctionArgumentDefinition} name=ID typeSpec=TypeSpec
-//;
-
-
-//FuncArgDefns returns lib:FuncArgs:
-//	{FuncArgDefns} arguments += ArgumentDefinition (=> ',' arguments += ArgumentDefinition)* 
-//;
-
-//ArgumentDefinition:
-//	{ArgumentDefinition} name=ID typeSpec=TypeSpec?
-//;
-
-
 
 EquationTypeDefinition:
 	EquationDefinition|TransformedDefinition
@@ -82,14 +63,6 @@ EquationTypeDefinition:
 EquationDefinition returns EquationTypeDefinition:
 	{EquationDefinition} name = ID typeSpec=TypeSpec? (ASSIGN expression = Expression)? ';'?
 ;
-
-//UserFunctionDefinition:
-//	{UserFunctionDefinition} defn=MdlFunctionDefinition  BEGIN expression = Expression END ';'?
-//;
-
-//MdlFunctionDefinition returns lib::FunctionDefnBody:
-//	{lib::FunctionDefnBody} name=ID returnType=TypeSpec '(' argument=FuncUnnamedArgDefns? ')'
-//;
 
 FunctionSpec returns lib::FunctionSpec:
 	{lib::FunctionSpec}  '(' argument=FuncUnnamedArgDefns? ')' returnType=TypeSpec IS body=Expression
@@ -108,14 +81,6 @@ RandomVariableDefinition:
 TypeSpec returns lib::TypeSpec:
 	{lib::TypeSpec} ANONYMOUS_PREFIX =>typeName = [lib::TypeDefinition|ID] ('[' elementType=TypeSpec ']'|'[[' cellType=TypeSpec ']]'| functionSpec=FunctionSpec)?
 ;
-
-//TypeDefinition returns lib::TypeDefinition:
-//	{lib::TypeDefinition} ANONYMOUS_PREFIX name=ID class=TypeClass
-//;
-
-//enum TypeClass returns lib::TypeClass:
-//		ENUM='_enum'| SUBLIST='_sublist'| SCALAR='_scalar'|VECTOR='_vector'|MATRIX='_matrix' 
-//;
 
 EnumerationDefinition:
 	name = ID  catDefn=CategoricalDefinitionExpr ';'?
@@ -204,14 +169,6 @@ CatValRefMapping:
 MappingPair:
 	leftOperand=OrExpression IN srcColumn=SymbolReference  AS rightOperand=OrExpression
 ;
-
-//MappingList:
-//	BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
-//;
-
-//CommExpr returns lib::Expression:
-//	Expression
-//	;
 
 Expression returns lib::Expression:
 	OrExpression
@@ -340,15 +297,6 @@ CategoryValueReference:
 	{CategoryValueReference} ref=[CategoryValueDefinition|QualifiedName]
 ;
 
-
-//BuiltinFunctionCall returns lib::Expression:
-//	{BuiltinFunctionCall} func=[lib::FunctionDefnBody] =>'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
-//	{BuiltinFunctionCall} func=[SymbolDefinition] =>'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')'
-//;
-
-//UserFunctionCall returns lib::Expression:
-//	{UserFunctionCall} '&' ref=[SymbolDefinition|ID] '(' argList=(NamedFuncArguments)? ')'
-//;
 
 NamedFuncArguments returns FuncArguments:
 	{NamedFuncArguments} arguments += ValuePair (=> ',' arguments += ValuePair)* 

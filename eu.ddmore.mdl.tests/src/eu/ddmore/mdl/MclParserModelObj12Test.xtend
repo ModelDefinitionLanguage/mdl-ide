@@ -18,10 +18,6 @@ class MclParserModelObj12Test {
 warfarin_PK_ODE_mdl = mdlObj {
 	IDV{ T }
 	
-	MODEL_PREDICTION{
-		AVAR::Real
-	}
-	
 	FUNCTIONS{
 	   	# define a function. The return type of the function is given by it's name.
 	   	# In this case it is a real. If it were a vector or matric it would use [] or [[]] 
@@ -32,7 +28,7 @@ warfarin_PK_ODE_mdl = mdlObj {
 	
 	MODEL_PREDICTION{
 		# refer to a user defined function as a normal function
-		#Z = userFunc(1, ln(2.0), "foo") + 22.2
+		Z = userFunc(1, ln(2.0), "foo") + 22.2
 	}
 
 	VARIABILITY_LEVELS{

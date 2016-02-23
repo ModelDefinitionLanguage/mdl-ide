@@ -247,4 +247,121 @@ warfarin_PK_ODE_mdl = mdlObj {
 			MdlValidator::MALFORMED_TYPE_SPEC,
 			"You must define a function specification when using the type name 'Function'.")
 	}
+
+	@Test
+	def void testValidReturnType(){
+		val mdl = '''
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV{ T }
+	
+	FUNCTIONS{
+	   	# define a function. The return type of the function is given by it's name.
+	   	# In this case it is a real. If it were a vector or matric it would use [] or [[]] 
+		userFunc::Function(arg1::Int, arg2::Real)::Real is
+			# the function can contain only a single expression
+		    arg2 * arg1  # return type is Real
+	}
+	
+	MODEL_PREDICTION{
+		# refer to a user defined function as a normal function
+		Z = userFunc(1, ln(2.0)) + 22.2
+	}
+
+	VARIABILITY_LEVELS{
+		ID : { level=2, type is parameter }
+	} 
+} # end of model object
+'''.parse
+		
+		mdl.assertNoErrors
+	}
+
+	@Test
+	def void testValidCallNoArgs(){
+		val mdl = '''
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV{ T }
+	
+	FUNCTIONS{
+	   	# define a function. The return type of the function is given by it's name.
+	   	# In this case it is a real. If it were a vector or matric it would use [] or [[]] 
+		userFunc::Function()::Real is
+			# the function can contain only a single expression
+		    pi
+	}
+	
+	MODEL_PREDICTION{
+		# refer to a user defined function as a normal function
+		Z = userFunc() + 22.2
+	}
+
+	VARIABILITY_LEVELS{
+		ID : { level=2, type is parameter }
+	} 
+} # end of model object
+'''.parse
+		
+		mdl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidReturnType(){
+		val mdl = '''
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV{ T }
+	
+	FUNCTIONS{
+	   	# define a function. The return type of the function is given by it's name.
+	   	# In this case it is a real. If it were a vector or matric it would use [] or [[]] 
+		userFunc::Function()::String is
+			# the function can contain only a single expression
+		    "A String"
+	}
+	
+	MODEL_PREDICTION{
+		# refer to a user defined function as a normal function
+		Z = userFunc() + 22.2
+	}
+
+	VARIABILITY_LEVELS{
+		ID : { level=2, type is parameter }
+	} 
+} # end of model object
+'''.parse
+		
+		mdl.assertError(MdlPackage::eINSTANCE.additiveExpression,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was ref:String.")
+	}
+
+	@Test
+	def void testInvalidIncorrectArgNums(){
+		val mdl = '''
+warfarin_PK_ODE_mdl = mdlObj {
+	IDV{ T }
+	
+	FUNCTIONS{
+	   	# define a function. The return type of the function is given by it's name.
+	   	# In this case it is a real. If it were a vector or matric it would use [] or [[]] 
+		userFunc::Function()::Real is
+			# the function can contain only a single expression
+		    21
+	}
+	
+	MODEL_PREDICTION{
+		# refer to a user defined function as a normal function
+		Z = userFunc(1)
+	}
+
+	VARIABILITY_LEVELS{
+		ID : { level=2, type is parameter }
+	} 
+} # end of model object
+'''.parse
+		
+		mdl.assertError(MdlPackage::eINSTANCE.symbolReference,
+			MdlValidator::INCORRECT_NUM_FUNC_ARGS,
+			"Function 'userFunc' has the wrong number of arguments. Expected 0.")
+	}
+
 }

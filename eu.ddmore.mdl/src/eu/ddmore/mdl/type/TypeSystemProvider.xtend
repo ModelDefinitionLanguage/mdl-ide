@@ -31,12 +31,12 @@ import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import eu.ddmore.mdl.utils.CycleDetectionUtils
 import eu.ddmore.mdl.utils.MdlLibUtils
 import eu.ddmore.mdllib.mdllib.Expression
+import eu.ddmore.mdllib.mdllib.FuncArgumentDefinition
 import eu.ddmore.mdllib.mdllib.FunctionDefnBody
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.FuncArgumentDefinition
 
 public class TypeSystemProvider {
 
@@ -293,7 +293,11 @@ public class TypeSystemProvider {
 						// not assigned value so defaults to REAL unless
 						// an explicit type is declared
 						if(sd.typeSpec != null){
-							sd.typeSpec.typeInfo
+							if(sd.typeSpec.functionSpec != null){
+								// need to get the function return type
+								sd.typeSpec.functionSpec.returnType.typeInfo
+							}
+							else sd.typeSpec.typeInfo
 						}
 						else REAL_TYPE
 					}
@@ -332,7 +336,7 @@ public class TypeSystemProvider {
 					}
 				}
 			FunctionDefnBody:
-				sd.funcDefn.returnType
+				sd?.funcSpec?.funcDefn.returnType ?: UNDEFINED_TYPE
 			FuncArgumentDefinition:
 				sd.typeSpec.typeInfo
 			default:
