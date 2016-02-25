@@ -17,9 +17,9 @@ import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.WhenClause
-import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdllib.mdllib.Expression
+import eu.ddmore.mdl.mdl.IfExpression
+import eu.ddmore.mdl.mdl.IfClause
 
 public class MdlExpressionConverter extends ExpressionConverter {
 	
@@ -70,17 +70,17 @@ public class MdlExpressionConverter extends ExpressionConverter {
 	def dispatch String getString(UnnamedFuncArguments exp)'''
 		«FOR arg: exp.args SEPARATOR ', '»«arg.argument.getString»«ENDFOR»'''
 	
-	def dispatch String getString(WhenExpression exp)'''
-		«FOR w : exp.when SEPARATOR ' else'»«w.getString»«ENDFOR»«IF exp.other!=null» else «exp.other.getString»«ENDIF»'''
+	def dispatch String getString(IfExpression exp)'''
+		«FOR w : exp.ifelseClause SEPARATOR ' else'»«w.getString»«ENDFOR»«IF exp.elseClause!=null» else «exp.elseClause.getString»«ENDIF»'''
 	
-	def dispatch String getString(WhenClause exp)'''
+	def dispatch String getString(IfClause exp)'''
 		if («exp.cond.getString») then «exp.value.getString»'''
 	
 	def dispatch String getString(ElifClause exp)'''
 		if («exp.cond.getString») then «exp.value.getString»'''
 
 	def dispatch String getString(ElseClause exp)'''
-		«exp.other.getString»'''
+		«exp.value.getString»'''
 
 	def dispatch String getString(VectorLiteral exp)'''
 		[«FOR e : exp.expressions SEPARATOR ','»«e.getString»«ENDFOR»]'''

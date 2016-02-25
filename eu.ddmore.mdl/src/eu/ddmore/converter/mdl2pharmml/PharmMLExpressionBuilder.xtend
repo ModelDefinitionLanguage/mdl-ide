@@ -22,7 +22,6 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
@@ -31,6 +30,7 @@ import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
+import eu.ddmore.mdl.mdl.IfExpression
 
 class PharmMLExpressionBuilder {
 	
@@ -143,7 +143,7 @@ class PharmMLExpressionBuilder {
     		ParExpression:{
     			getParExpression(expr)
     		}
-    		WhenExpression:{
+    		IfExpression:{
     			expr.getWhenExpression
     		}
     		VectorLiteral:{
@@ -299,14 +299,14 @@ class PharmMLExpressionBuilder {
 		«ENDIF»
 	'''
 	
-	def getWhenExpression(WhenExpression it)'''
+	def getWhenExpression(IfExpression it)'''
 		<math:Piecewise>
-			«FOR w : when»
+			«FOR w : ifelseClause»
 				«w.whenClause»
 			«ENDFOR»
-			«IF other != null»
+			«IF elseClause != null»
 				<math:Piece>
-					«other.other.pharmMLExpr»
+					«elseClause.value.pharmMLExpr»
 					<math:Condition>
 						<math:Otherwise/>
 					</math:Condition>

@@ -6,6 +6,7 @@ import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.IfExprPart
+import eu.ddmore.mdl.mdl.IfExpression
 import eu.ddmore.mdl.mdl.IndexRange
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingExpression
@@ -23,7 +24,6 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.UnnamedFuncArguments
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
-import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.ArrayList
@@ -82,12 +82,12 @@ class DependencyWalker {
     		ParExpression:{
     			retVal.addAll(expr.expr?.symbolReferences ?: Collections::emptyList)
     		}
-    		WhenExpression:{
-    			for(w : expr.when){
+    		IfExpression:{
+    			for(w : expr.ifelseClause){
     				retVal.addAll(w.symbolReferences)
     			}
-    			if(expr.other != null)
-    				retVal.addAll(expr.other?.other?.symbolReferences ?: Collections::emptyList)
+    			if(expr.elseClause != null)
+    				retVal.addAll(expr.elseClause?.value?.symbolReferences ?: Collections::emptyList)
     		}
     		VectorLiteral:{
     			for(v : expr.expressions){

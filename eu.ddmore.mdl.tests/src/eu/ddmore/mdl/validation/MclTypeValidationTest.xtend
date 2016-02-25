@@ -2065,7 +2065,7 @@ warfarin_PK_v2_dat = dataObj{
 		}
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.whenClause,
+		mcl.assertError(MdlPackage::eINSTANCE.ifClause,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Expected Real type, but was Boolean."
 		)

@@ -234,9 +234,8 @@ PrimaryExpression returns lib::Expression:
 	| CategoryValueReference
 	| CatValRefMappingExpression
 	| MappingExpression
-//	| BuiltinFunctionCall
-//	| UserFunctionCall
-	| WhenExpression
+	| IfExpression
+	| PiecewiseExpression
 	| ParExpression
 	| SubListExpression
 	;
@@ -246,19 +245,27 @@ ParExpression returns lib::Expression:
 	{ParExpression} '(' expr=Expression ')'
 ;
 
-WhenExpression returns lib::Expression:
-	 {WhenExpression}
-	 	when+=WhenClause
-	 	(=> when+=ElifClause)*
-		(=>other=ElseClause)?
+IfExpression returns lib::Expression:
+	 {IfExpression}
+	 	ifelseClause+=IfClause
+	 	(=> ifelseClause+=ElifClause)*
+		(=>elseClause=ElseClause)?
 	;
 
-IfExprPart:
-	WhenClause | ElifClause
+PiecewiseExpression returns lib::Expression:
+	{PiecewiseExpression} 'piecewise' BEGIN BEGIN when+=PWClause (=>';' when+=PWClause)* (';' 'otherwise' otherwise=Expression )?  END END
 ;
 
-WhenClause returns IfExprPart:
-	{WhenClause} IF '(' cond=Expression ')' => THEN value=Expression
+PWClause:
+	value=Expression WHEN test=Expression
+;
+
+IfExprPart:
+	IfClause | ElifClause
+;
+
+IfClause returns IfExprPart:
+	{IfClause} IF '(' cond=Expression ')' => THEN value=Expression
 ;
 
 ElifClause returns IfExprPart:
@@ -266,7 +273,7 @@ ElifClause returns IfExprPart:
 ;
 
 ElseClause:
-	{ElseClause} ELSE other=Expression
+	{ElseClause} ELSE value=Expression
 ;
 
 Literal returns lib::Expression:

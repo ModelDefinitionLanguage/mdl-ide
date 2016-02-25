@@ -245,6 +245,7 @@ class MclStatementValidationTest {
 	def void testInValidIfElseOneClause(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV {T}
 			VARIABILITY_LEVELS{
 			}
 
@@ -255,9 +256,9 @@ class MclStatementValidationTest {
 		}
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.whenExpression,
+		mcl.assertError(MdlPackage::eINSTANCE.ifExpression,
 			MdlValidator::UNDER_DEFINED_IF_ELSE,
-			"More than one condition or an else statement is required in this expression."
+			"More than one condition or an else clause is required in this expression."
 		)
 	}
 
@@ -265,6 +266,7 @@ class MclStatementValidationTest {
 	def void testInValidIfElseWithNestedOneClauseIf(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV {T}
 			VARIABILITY_LEVELS{
 			}
 
@@ -275,9 +277,9 @@ class MclStatementValidationTest {
 		}
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.whenExpression,
+		mcl.assertError(MdlPackage::eINSTANCE.ifExpression,
 			MdlValidator::UNDER_DEFINED_IF_ELSE,
-			"More than one condition or an else statement is required in this expression."
+			"More than one condition or an else clause is required in this expression."
 		)
 	}
 
@@ -285,6 +287,7 @@ class MclStatementValidationTest {
 	def void testInValidMissingCategories(){
 		val mcl = '''
 		foo = mdlObj{
+			IDV {T}
 			VARIABILITY_LEVELS{
 			}
 
@@ -319,6 +322,66 @@ class MclStatementValidationTest {
 		mcl.assertNoErrors		
 //		mcl.assertError(MdlPackage::eINSTANCE.equationDefinition,
 //			MdlValidator::UNUSED_FEATURE, "Vector symbol definitions are not supported in this version of the language")
+	}
+
+	@Test
+	def void testValidPiecewiseWithOtherwise(){
+		val mcl = '''
+		foo = mdlObj{
+			IDV{T}
+
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo = piecewise{{ 1 when true ; otherwise 0 }}
+			}# end MODEL_PREDICTION
+			
+		}
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testValidPiecewiseWithAdditionWhen(){
+		val mcl = '''
+		foo = mdlObj{
+			IDV{T}
+			
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo = piecewise{{ 1 when true; 0 when false }}
+			}# end MODEL_PREDICTION
+			
+		}
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidPiecewiseOnlyOneClause(){
+		val mcl = '''
+		foo = mdlObj{
+			IDV {T}
+			
+			VARIABILITY_LEVELS{
+			}
+
+			MODEL_PREDICTION{
+				foo = piecewise {{ 1 when true }}
+			}# end MODEL_PREDICTION
+			
+		}
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.piecewiseExpression,
+			MdlValidator::UNDER_DEFINED_IF_ELSE,
+			"More than one condition or an otherwise clause is required in this piecewise expression."
+		)
 	}
 
 }

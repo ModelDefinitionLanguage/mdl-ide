@@ -120,7 +120,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		
 	@Check
 	def checkElseCompatibleTypes(ElseClause e){
-		checkExpectedReal(e.other, typeError(MdlPackage::eINSTANCE.elseClause_Other))
+		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.elseClause_Value))
 	}
 		
 		

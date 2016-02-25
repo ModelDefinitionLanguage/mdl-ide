@@ -8,6 +8,7 @@ import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EqualityExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.IfExprPart
+import eu.ddmore.mdl.mdl.IfExpression
 import eu.ddmore.mdl.mdl.IntegerLiteral
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.OrExpression
@@ -18,7 +19,6 @@ import eu.ddmore.mdl.mdl.RelationalExpression
 import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.UnaryExpression
-import eu.ddmore.mdl.mdl.WhenExpression
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdllib.mdllib.Expression
 
@@ -44,7 +44,7 @@ class ConstantEvaluation {
 	    		ParExpression:{
 	   				expr.expr.evaluateMathsExpression
 	    		}
-	    		WhenExpression:{
+	    		IfExpression:{
 	    			getWhenExpression(expr)
 	    		}
 	    		RealLiteral:{
@@ -239,15 +239,15 @@ class ConstantEvaluation {
 		evaluateBinaryLogicalOp(feature, leftOperand, rightOperand)
 	}
 		
-	def getWhenExpression(WhenExpression it){
-		for( w : when){
+	def getWhenExpression(IfExpression it){
+		for( w : ifelseClause){
 			if(w instanceof IfExprPart){
 				if(w.cond.evaluateLogicalExpression){
 					return w.value.evaluateMathsExpression
 				}
 			}
 		}
-		return other.other.evaluateMathsExpression
+		return elseClause.value.evaluateMathsExpression
 	}
 	
 	def getStringLiteral(StringLiteral it){
