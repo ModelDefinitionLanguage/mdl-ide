@@ -31,6 +31,8 @@ import eu.ddmore.mdllib.mdllib.SymbolDefinition
 
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.mdl.mdl.IfExpression
+import eu.ddmore.mdl.mdl.PiecewiseExpression
+import eu.ddmore.mdl.mdl.PWClause
 
 class PharmMLExpressionBuilder {
 	
@@ -144,7 +146,10 @@ class PharmMLExpressionBuilder {
     			getParExpression(expr)
     		}
     		IfExpression:{
-    			expr.getWhenExpression
+    			expr.getIfExpression
+    		}
+    		PiecewiseExpression:{
+    			expr.getPiecewiseExpression
     		}
     		VectorLiteral:{
     			getVectorLiteralExpression(expr)
@@ -299,10 +304,35 @@ class PharmMLExpressionBuilder {
 		«ENDIF»
 	'''
 	
-	def getWhenExpression(IfExpression it)'''
+	def getPiecewiseExpression(PiecewiseExpression it)'''
+		<math:Piecewise>
+			«FOR w : when»
+				«w.whenClause»
+			«ENDFOR»
+			«IF otherwise != null»
+				<math:Piece>
+					«otherwise.pharmMLExpr»
+					<math:Condition>
+						<math:Otherwise/>
+					</math:Condition>
+				</math:Piece>
+			«ENDIF»
+		</math:Piecewise>
+	'''
+	
+	def getWhenClause(PWClause it)'''
+		<math:Piece>
+			«value.pharmMLExpr»
+			<math:Condition>
+				«cond.pharmMLExpr»
+			</math:Condition>
+		</math:Piece>
+	'''
+	
+	def getIfExpression(IfExpression it)'''
 		<math:Piecewise>
 			«FOR w : ifelseClause»
-				«w.whenClause»
+				«w.ifElseClause»
 			«ENDFOR»
 			«IF elseClause != null»
 				<math:Piece>
@@ -315,7 +345,7 @@ class PharmMLExpressionBuilder {
 		</math:Piecewise>
 	'''
 	
-	def getWhenClause(IfExprPart it)'''
+	def getIfElseClause(IfExprPart it)'''
 		<math:Piece>
 			«value.pharmMLExpr»
 			<math:Condition>

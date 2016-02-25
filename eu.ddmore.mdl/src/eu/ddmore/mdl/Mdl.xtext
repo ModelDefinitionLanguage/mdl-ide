@@ -257,7 +257,7 @@ PiecewiseExpression returns lib::Expression:
 ;
 
 PWClause:
-	value=Expression WHEN test=Expression
+	value=Expression WHEN cond=Expression
 ;
 
 IfExprPart:
