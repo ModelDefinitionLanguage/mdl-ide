@@ -1,0 +1,149 @@
+# D:\Apps\nt2mdl\MDL7_demo\work_12_NOV\warfarin_PRED_NM_foce.mdl
+# nt2mdl 2.033 MCL 7 Nick Holford n.holford@auckland.ac.nz
+
+
+warfarin_PRED_dat = dataObj{
+
+   DECLARED_VARIABLES{CONC_obs DOSE }
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      TIME: {use is idv}
+      WT: {use is covariate}
+      AMT: {use is amt, variable = DOSE}
+      DVID: {use is dvid}
+      DV: {use is dv, variable=CONC_obs}
+      MDV: {use is mdv}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      myData: {
+       file = "../data/warfarin_conc.csv",
+      inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+
+warfarin_PRED_par = parObj{
+
+   DECLARED_VARIABLES{eta_PPV_CL eta_PPV_V }
+
+   STRUCTURAL{
+      POP_CL: {value=0.1, lo=0.001}
+      POP_V: {value=8, lo=0.001}
+      POP_KA: {value=2, lo=0.001}
+      POP_TLAG: {value=1, lo=0.001}
+   }# end STRUCTURAL
+
+   VARIABILITY{
+      PPV_CL: {value=0.1, type is var}
+      PPV_V: {value=0.1, type is var}
+      PPV_KA: {value=0.1, type is var}
+      PPV_TLAG: {value=0.1, type is var}
+      RUV_PROP: {value=0.01, type is var}
+      RUV_ADD: {value=0.05, type is var}
+
+# Matrix off-diagonal values
+      MATRIX_1: {
+      type is cov,
+      parameter=[eta_PPV_CL,eta_PPV_V],
+      value=[0.01]
+      }
+
+   }# end VARIABILITY
+
+} # end of parameter object
+
+warfarin_PRED_mdl = mdlObj{
+
+   IDV{TIME}
+   COVARIATES{
+      WT
+   }# end COVARIATES
+
+   VARIABILITY_LEVELS{
+      ID: {type is parameter, level=2}
+      DV: {type is observation, level=1}
+   }# end VARIABILITY_LEVELS
+
+   STRUCTURAL_PARAMETERS{
+      POP_CL
+      POP_V
+      POP_KA
+      POP_TLAG
+   }# end STRUCTURAL_PARAMETERS
+
+   VARIABILITY_PARAMETERS{
+      PPV_CL
+      PPV_V
+      PPV_KA
+      PPV_TLAG
+      RUV_PROP
+      RUV_ADD
+   }# end VARIABILITY_PARAMETERS
+
+   GROUP_VARIABLES{
+      # Group Variables
+      GRPCL=POP_CL*(WT/70)^0.75
+      GRPV=POP_V*WT/70
+      GRPKA=POP_KA
+      GRPLG=POP_TLAG
+      # Individual Variables
+   }# end GROUP_VARIABLES
+
+
+   RANDOM_VARIABLE_DEFINITION (level=ID) {
+      eta_PPV_CL ~ Normal(mean=0, var=PPV_CL)
+      eta_PPV_V ~ Normal(mean=0, var=PPV_V)
+      eta_PPV_KA ~ Normal(mean=0, var=PPV_KA)
+      eta_PPV_TLAG ~ Normal(mean=0, var=PPV_TLAG)
+
+
+   }# end RANDOM_VARIABLE_DEFINITION (level=ID)
+
+   RANDOM_VARIABLE_DEFINITION (level=DV) {
+      eps_RUV_PROP ~ Normal(mean=0, var=RUV_PROP)
+      eps_RUV_ADD ~ Normal(mean=0, var=RUV_ADD)
+   }# end RANDOM_VARIABLE_DEFINITION (level=DV)
+
+   INDIVIDUAL_VARIABLES{
+      CL=GRPCL*exp(eta_PPV_CL)
+      V=GRPV*exp(eta_PPV_V)
+      KA=GRPKA*exp(eta_PPV_KA)
+      TLAG=GRPLG*exp(eta_PPV_TLAG)
+      K=CL/V
+
+   }# end INDIVIDUAL_VARIABLES
+
+   MODEL_PREDICTION{
+   	   DOSE
+       TNOW =  if (TIME<=TLAG) then 0
+        else TIME-TLAG
+       CONC =  if (TIME<=TLAG) then 0
+        else DOSE*KA/(V*(KA-K))*(exp(-K*TNOW) - exp(-KA*TNOW))
+   }# end MODEL_PREDICTION
+
+   OBSERVATION{
+      CONC_obs = CONC*(1+eps_RUV_PROP)+eps_RUV_ADD
+   }# end OBSERVATION
+
+
+} # end of model object
+
+warfarin_PRED_task = taskObj{
+
+   ESTIMATE{
+      set algo is focei
+   }# end ESTIMATE sub block
+
+}# end of task object
+
+#Modelling object group
+
+warfarin_PRED_mog=mogObj{
+   OBJECTS{
+      warfarin_PRED_mdl: { type is mdlObj }
+      warfarin_PRED_dat: { type is dataObj }
+      warfarin_PRED_par: { type is parObj }
+      warfarin_PRED_task: { type is taskObj }
+   }
+}
