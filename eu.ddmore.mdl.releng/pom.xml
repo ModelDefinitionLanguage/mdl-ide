@@ -12,7 +12,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>../eu.ddmore.mdl</module>
 		<module>../eu.ddmore.mdl.ui</module>
 		<module>../eu.ddmore.mdl.tests</module>
-		<module>../eu.ddmore.mdl.sdk</module>
+		<module>../eu.ddmore.mdl.sdk.jre</module>
 		<module>../eu.ddmore.mdl.updatesite</module>
 	</modules>
 
@@ -32,6 +32,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<id>Xtext Update Site</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/modeling/tmf/xtext/updates/releases/${xtext.version}/</url>
+		</repository>
+		<repository>
+			<id>libPharmML Repo</id>
+			<layout>p2</layout>
+			<url>http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.4.4-b1</url>
 		</repository>
 	</repositories>
 	<build>

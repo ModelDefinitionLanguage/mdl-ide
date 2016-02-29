@@ -24,7 +24,7 @@ Require-Bundle: eu.ddmore.mdl;visibility:=reexport,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.xpand
-Import-Package: eu.ddmore.libpharmml;version="0.4.0.SNAPSHOT",
+Import-Package: eu.ddmore.libpharmml;version="0.4.4",
  org.apache.commons.io;version="2.0.1",
  org.apache.log4j,
  org.eclipse.ui.console
