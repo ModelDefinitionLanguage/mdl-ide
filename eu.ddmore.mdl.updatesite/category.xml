@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/eu.ddmore.mdl.sdk.jre_1.4.0.jar" id="eu.ddmore.mdl.sdk.jre" version="1.4.0">
+      <category name="eu.ddmore.mdl"/>
+   </feature>
+   <category-def name="eu.ddmore.mdl" label="MDL Language"/>
+</site>
