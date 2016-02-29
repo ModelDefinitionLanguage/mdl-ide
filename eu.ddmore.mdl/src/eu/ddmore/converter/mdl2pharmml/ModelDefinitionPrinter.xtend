@@ -23,7 +23,7 @@ import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
-import eu.ddmore.mdl.type.VectorTypeInfo
+import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.utils.MdlUtils
 import eu.ddmore.mdllib.mdllib.Expression
@@ -44,6 +44,7 @@ import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 
 class ModelDefinitionPrinter {
 	extension MdlUtils mu = new MdlUtils
+	extension TypeSystemProvider tsp = new TypeSystemProvider
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
 	extension PharmMLExpressionBuilder peb = new PharmMLExpressionBuilder 
@@ -462,7 +463,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	def writeVariableDefinition(EquationDefinition stmt)'''
-		<ct:Variable symbId="«stmt.name»" symbolType="«IF stmt instanceof VectorTypeInfo»ERROR!«ELSE»real«ENDIF»">
+		<ct:Variable symbId="«stmt.name»" symbolType="«IF stmt.typeFor.isVector»ERROR!«ELSE»real«ENDIF»">
 			«IF stmt.expression != null»
 				«stmt.expression.writeAssignment»
 			«ENDIF»

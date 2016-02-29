@@ -1,0 +1,164 @@
+# nt2mdl 2.031 MCL 7 Nick Holford n.holford@auckland.ac.nz
+
+# Model based on:
+#  Holford NHG. The visual predictive check � superiority to standard diagnostic (Rorschach) plots [www.page-meeting.org/?abstract=738]. PAGE. 2005;14
+# Data obtained from:
+#  O'Reilly RA, Aggeler PM, Leong LS. Studies of the coumarin anticoagulant drugs: The pharmacodynamics of warfarin in man. Journal of Clinical Investigation 1963;42(10):1542-1551
+#  O'Reilly RA, Aggeler PM. Studies on coumarin anticoagulant drugs Initiation of warfarin therapy without a loading dose. Circulation 1968;38:169-177
+
+UC001_09_Holford_PK_DEQ_genCov_genErr_Tlag_dat = dataObj{
+
+   DECLARED_VARIABLES{CC_obs  INPUT_GUT}
+
+   DATA_INPUT_VARIABLES{
+      ID: {use is id}
+      TIME: {use is idv}
+      WT: {use is covariate}
+      CMT : { use is cmt }
+      AMT: {use is amt, define = { 1 in CMT as INPUT_GUT }}
+      DVID: {use is dvid}
+      DV: {use is dv, variable=CC_obs}
+      MDV: {use is ignore}
+      LOGTWT: {use is covariate}
+   }# end DATA_INPUT_VARIABLES
+
+   SOURCE{
+      myData: {
+      file="../data/warfarin_conc.csv",
+      inputFormat is nonmemFormat}
+   }# end SOURCE
+} # end data object
+
+UC001_09_Holford_PK_DEQ_genCov_genErr_Tlag_par = parObj{
+
+   DECLARED_VARIABLES{eta_PPV_CL eta_PPV_V }
+
+   STRUCTURAL{
+      POP_CL: {value=0.1, lo=0.001}
+      POP_V: {value=8, lo=0.001}
+      POP_KA: {value=0.362, lo=0.001}
+      POP_TLAG: {value=1, lo=0.001}
+      POP_BETA_CL_WT: {value=0.75 ,fix=true}
+      POP_BETA_V_WT: {value=1 ,fix=true}
+   }# end STRUCTURAL
+
+   VARIABILITY{
+      PPV_CL: {value=0.1, type is sd}
+      PPV_V: {value=0.1, type is sd}
+      PPV_KA: {value=0.1, type is sd}
+      PPV_TLAG: {value=0, type is sd, fix=true}
+      RUV_PROP: {value=0.01, type is var}
+      RUV_ADD: {value=0.01, type is var}
+
+# Matrix off-diagonal values
+      MATRIX_1: {
+		type is corr,
+		parameter=[eta_PPV_CL,eta_PPV_V],
+		value=[0.01]
+      }
+
+   }# end VARIABILITY
+
+} # end of parameter object
+
+UC001_09_Holford_PK_DEQ_genCov_genErr_Tlag_mdl = mdlObj{
+
+   IDV{T}
+   COVARIATES{
+      WT
+      LOGTWT
+   }# end COVARIATES
+
+   VARIABILITY_LEVELS{
+      ID: {type is parameter, level=2}
+      DV: {type is observation, level=1}
+   }# end VARIABILITY_LEVELS
+
+   STRUCTURAL_PARAMETERS{
+      POP_CL
+      POP_V
+      POP_KA
+      POP_TLAG
+      POP_BETA_CL_WT
+      POP_BETA_V_WT
+   }# end STRUCTURAL_PARAMETERS
+
+   VARIABILITY_PARAMETERS{
+      PPV_CL
+      PPV_V
+      PPV_KA
+      PPV_TLAG
+      RUV_PROP
+      RUV_ADD
+   }# end VARIABILITY_PARAMETERS
+
+   GROUP_VARIABLES{
+      GRP_CL=POP_CL*(WT/70)^POP_BETA_CL_WT
+      GRP_V=POP_V*(WT/70)^POP_BETA_V_WT
+      GRP_KA=POP_KA
+      GRP_TLAG=POP_TLAG
+   }# end GROUP_VARIABLES
+
+
+   RANDOM_VARIABLE_DEFINITION (level=ID) {
+      eta_PPV_CL ~ Normal(mean=0, sd=PPV_CL)
+      eta_PPV_V ~ Normal(mean=0, sd=PPV_V)
+      eta_PPV_KA ~ Normal(mean=0, sd=PPV_KA)
+      eta_PPV_TLAG ~ Normal(mean=0, sd=PPV_TLAG)
+
+
+   }# end RANDOM_VARIABLE_DEFINITION (level=ID)
+
+   RANDOM_VARIABLE_DEFINITION (level=DV) {
+      eps_RUV_PROP ~ Normal(mean=0, var=RUV_PROP)
+      eps_RUV_ADD ~ Normal(mean=0, var=RUV_ADD)
+   }# end RANDOM_VARIABLE_DEFINITION (level=DV)
+
+   INDIVIDUAL_VARIABLES{
+      CL=GRP_CL*exp(eta_PPV_CL)
+      V=GRP_V*exp(eta_PPV_V)
+      KA=GRP_KA*exp(eta_PPV_KA)
+      TLAG=GRP_TLAG*exp(eta_PPV_TLAG)
+      F1=1
+      S2=V
+
+   }# end INDIVIDUAL_VARIABLES
+
+   MODEL_PREDICTION{
+
+   COMPARTMENT{
+      INPUT_GUT: {type is depot, modelCmt=1, target=CENTRAL, tlag = TLAG, finput=F1}
+   }# end COMPARTMENT
+
+   DEQ{
+      CENTRAL: {deriv= -CL*CENTRAL/V}
+   }# end DEQ
+   
+      CC=CENTRAL/V
+   }# end MODEL_PREDICTION
+
+   OBSERVATION{
+      CC_obs = CC*(1+eps_RUV_PROP)+eps_RUV_ADD
+   }# end OBSERVATION
+
+
+} # end of model object
+
+UC001_09_Holford_PK_DEQ_genCov_genErr_Tlag_task = taskObj{
+
+   ESTIMATE{
+      set algo is foce
+   }# end ESTIMATE sub block
+
+}# end of task object
+
+#Modelling object group
+
+UC001_09_Holford_PK_DEQ_genCov_genErr_Tlag_mog=mogObj{
+	OBJECTS{
+		UC001_09_Holford_PK_DEQ_genCov_genErr_Tlag_mdl: { type is mdlObj }
+		UC001_09_Holford_PK_DEQ_genCov_genErr_Tlag_dat: { type is dataObj }
+		UC001_09_Holford_PK_DEQ_genCov_genErr_Tlag_par: { type is parObj }
+		UC001_09_Holford_PK_DEQ_genCov_genErr_Tlag_task: { type is taskObj }
+	}
+}

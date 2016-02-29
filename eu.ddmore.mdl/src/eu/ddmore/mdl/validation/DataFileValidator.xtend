@@ -81,8 +81,9 @@ class DataFileValidator extends AbstractMdlValidator  {
     	} else { // Triggered from 'external' converter code
             modelFile = new File(resource.URI.toFileString())
     	}
-    	
-    	val dataFile = modelFile.parentFile.toPath().resolve(filePath).toFile().canonicalFile
+    	val java.nio.file.Path pf = if(modelFile.parentFile == null) java.nio.file.Paths.get(".") else modelFile.parentFile.toPath()
+//    	val dataFile = modelFile.parentFile.toPath().resolve(filePath).toFile().canonicalFile
+    	val dataFile = pf.resolve(filePath).toFile().canonicalFile
     	return dataFile
     }
 	

@@ -458,4 +458,20 @@ public class TypeSystemProvider {
 				argType.isCompatible(valueType)
 		}
 	}
+	
+		def isVector(TypeInfo ti){
+		if(ti instanceof VectorTypeInfo) true
+		else false
+	}
+	
+	def isReference(TypeInfo ti){
+		if(ti instanceof ReferenceTypeInfo) true
+		else false
+	}
+	
+	def isMatrix(TypeInfo ti){
+		if(ti instanceof MatrixTypeInfo) true
+		else false
+	}
+	
 }

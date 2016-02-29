@@ -24,6 +24,7 @@ Require-Bundle: org.eclipse.xtext.xbase;visibility:=reexport,
  eu.ddmore.mdllib;visibility:=reexport,
  org.eclipse.xtext.xbase.lib
 Export-Package: eu.ddmore.converter.mdl2pharmml,
+ eu.ddmore.converter.mdl2pharmml08,
  eu.ddmore.mdl,
  eu.ddmore.mdl.formatting,
  eu.ddmore.mdl.generator,

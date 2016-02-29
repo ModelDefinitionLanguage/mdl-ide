@@ -32,7 +32,6 @@
 			<PopulationParameter symbId = "PPV_EVENT"/>
 			<RandomVariable symbId="eta_PPV_EVENT">
 				<ct:VariabilityReference>
-					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -49,22 +48,17 @@
 			</RandomVariable>
 			<PopulationParameter symbId = "B0">
 				<ct:Assign>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="Lgt0"/>
 				</ct:Assign>
 			</PopulationParameter>
 			<PopulationParameter symbId = "B1">
 				<ct:Assign>
 					<math:Binop op="plus">
-						<ct:SymbRef blkIdRef="pm" symbIdRef="B0"/>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="Lgt1"/>
 					</math:Binop>
 				</ct:Assign>
 			</PopulationParameter>
 			<PopulationParameter symbId = "B2">
 				<ct:Assign>
 					<math:Binop op="plus">
-						<ct:SymbRef blkIdRef="pm" symbIdRef="B1"/>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="Lgt2"/>
 					</math:Binop>
 				</ct:Assign>
 			</PopulationParameter>
@@ -74,18 +68,14 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="B0"/>
 							</ct:Assign>
 						</PopulationValue>
 						<Covariate>
-							<ct:SymbRef blkIdRef="cm" symbIdRef="CP"/>
 							<FixedEffect>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="Beta"/>
 							</FixedEffect>
 						</Covariate>
 					</LinearCovariate>
 					<RandomEffects>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_PPV_EVENT"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -95,18 +85,14 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="B1"/>
 							</ct:Assign>
 						</PopulationValue>
 						<Covariate>
-							<ct:SymbRef blkIdRef="cm" symbIdRef="CP"/>
 							<FixedEffect>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="Beta"/>
 							</FixedEffect>
 						</Covariate>
 					</LinearCovariate>
 					<RandomEffects>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_PPV_EVENT"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -116,18 +102,14 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="B2"/>
 							</ct:Assign>
 						</PopulationValue>
 						<Covariate>
-							<ct:SymbRef blkIdRef="cm" symbIdRef="CP"/>
 							<FixedEffect>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="Beta"/>
 							</FixedEffect>
 						</Covariate>
 					</LinearCovariate>
 					<RandomEffects>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_PPV_EVENT"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -135,22 +117,17 @@
 		<StructuralModel blkId="sm">
 			<ct:Variable symbId="Prob0" symbolType="real">
 				<ct:Assign>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="P0"/>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="Prob1" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="minus">
-						<ct:SymbRef blkIdRef="pm" symbIdRef="P1"/>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="P0"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="Prob2" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="minus">
-						<ct:SymbRef blkIdRef="pm" symbIdRef="P2"/>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="P1"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
@@ -158,7 +135,6 @@
 				<ct:Assign>
 					<math:Binop op="minus">
 						<ct:Int>1</ct:Int>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="P2"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
@@ -181,7 +157,6 @@
 							</math:LogicBinop>
 						</Probability>
 						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob3"/>
 						</ct:Assign>
 					</ProbabilityAssignment>
 					<ProbabilityAssignment>
@@ -192,7 +167,6 @@
 							</math:LogicBinop>
 						</Probability>
 						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob0"/>
 						</ct:Assign>
 					</ProbabilityAssignment>
 					<ProbabilityAssignment>
@@ -203,7 +177,6 @@
 							</math:LogicBinop>
 						</Probability>
 						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob1"/>
 						</ct:Assign>
 					</ProbabilityAssignment>
 					<ProbabilityAssignment>
@@ -214,7 +187,6 @@
 							</math:LogicBinop>
 						</Probability>
 						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob2"/>
 						</ct:Assign>
 					</ProbabilityAssignment>
 				</CategoricalData>

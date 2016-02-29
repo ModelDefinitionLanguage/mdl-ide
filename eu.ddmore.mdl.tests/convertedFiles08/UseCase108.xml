@@ -39,11 +39,9 @@
 							<math:Binop op="times">
 								<math:Binop op="times">
 									<math:Binop op="power">
-										<ct:SymbRef blkIdRef="cm" symbIdRef="WEIGHT"/>
 										<ct:Real>0.425</ct:Real>
 									</math:Binop>
 									<math:Binop op="power">
-										<ct:SymbRef blkIdRef="cm" symbIdRef="HEIGHT"/>
 										<ct:Real>0.725</ct:Real>
 									</math:Binop>
 								</math:Binop>
@@ -87,105 +85,85 @@
 			<PopulationParameter symbId = "GROUP_tl">
 				<ct:Assign>
 					<math:Binop op="plus">
-						<ct:SymbRef blkIdRef="pm" symbIdRef="atl"/>
 						<math:Binop op="times">
-							<ct:SymbRef blkIdRef="pm" symbIdRef="btl"/>
-							<ct:SymbRef blkIdRef="cm" symbIdRef="AGE"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
 			</PopulationParameter>
 			<PopulationParameter symbId = "GROUP_ts">
 				<ct:Assign>
-					<ct:Piecewise>
+					<math:Piecewise>
 						<math:Piece>
-							<ct:SymbRef blkIdRef="pm" symbIdRef="mtsn"/>
 							<math:Condition>
 								<math:LogicBinop op="eq">
-									<ct:SymbRef blkIdRef="cm" symbIdRef="HSTATUS"/>
 									<ct:Int>1</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
 						</math:Piece>
 						<math:Piece>
-							<ct:SymbRef blkIdRef="pm" symbIdRef="mtso"/>
 							<math:Condition>
 								<math:LogicBinop op="eq">
-									<ct:SymbRef blkIdRef="cm" symbIdRef="HSTATUS"/>
 									<ct:Int>2</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
 						</math:Piece>
 						<math:Piece>
-							<ct:SymbRef blkIdRef="pm" symbIdRef="mtsd"/>
 							<math:Condition>
 								<math:Otherwise/>
 							</math:Condition>
 						</math:Piece>
-					</ct:Piecewise>
+					</math:Piecewise>
 				</ct:Assign>
 			</PopulationParameter>
 			<PopulationParameter symbId = "GROUP_F">
 				<ct:Assign>
-					<ct:Piecewise>
+					<math:Piecewise>
 						<math:Piece>
-							<ct:SymbRef blkIdRef="pm" symbIdRef="mFn"/>
 							<math:Condition>
 								<math:LogicBinop op="eq">
-									<ct:SymbRef blkIdRef="cm" symbIdRef="HSTATUS"/>
 									<ct:Int>1</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
 						</math:Piece>
 						<math:Piece>
-							<ct:SymbRef blkIdRef="pm" symbIdRef="mFo"/>
 							<math:Condition>
 								<math:LogicBinop op="eq">
-									<ct:SymbRef blkIdRef="cm" symbIdRef="HSTATUS"/>
 									<ct:Int>2</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
 						</math:Piece>
 						<math:Piece>
-							<ct:SymbRef blkIdRef="pm" symbIdRef="mFd"/>
 							<math:Condition>
 								<math:Otherwise/>
 							</math:Condition>
 						</math:Piece>
-					</ct:Piecewise>
+					</math:Piecewise>
 				</ct:Assign>
 			</PopulationParameter>
 			<PopulationParameter symbId = "GROUP_V">
 				<ct:Assign>
-					<ct:Piecewise>
+					<math:Piecewise>
 						<math:Piece>
 							<math:Binop op="plus">
-								<ct:SymbRef blkIdRef="pm" symbIdRef="aVm"/>
 								<math:Binop op="times">
-									<ct:SymbRef blkIdRef="pm" symbIdRef="bVm"/>
-									<ct:SymbRef blkIdRef="cm" symbIdRef="BSA"/>
 								</math:Binop>
 							</math:Binop>
 							<math:Condition>
 								<math:LogicBinop op="eq">
-									<ct:SymbRef blkIdRef="cm" symbIdRef="FEMALE"/>
 									<ct:Int>0</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
 						</math:Piece>
 						<math:Piece>
 							<math:Binop op="plus">
-								<ct:SymbRef blkIdRef="pm" symbIdRef="aVf"/>
 								<math:Binop op="times">
-									<ct:SymbRef blkIdRef="pm" symbIdRef="bVf"/>
-									<ct:SymbRef blkIdRef="cm" symbIdRef="BSA"/>
 								</math:Binop>
 							</math:Binop>
 							<math:Condition>
 								<math:Otherwise/>
 							</math:Condition>
 						</math:Piece>
-					</ct:Piecewise>
+					</math:Piecewise>
 				</ct:Assign>
 			</PopulationParameter>
 			<IndividualParameter symbId="ts_IND">
@@ -193,12 +171,10 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="GROUP_ts"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_ts"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -207,12 +183,10 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="GROUP_F"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_F"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -221,12 +195,10 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="GROUP_tl"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_tl"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -235,18 +207,15 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
-								<ct:SymbRef blkIdRef="pm" symbIdRef="GROUP_V"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_V"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
 			<RandomVariable symbId="eta_ts">
 				<ct:VariabilityReference>
-					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -263,7 +232,6 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_F">
 				<ct:VariabilityReference>
-					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -280,7 +248,6 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_tl">
 				<ct:VariabilityReference>
-					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -297,7 +264,6 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_V">
 				<ct:VariabilityReference>
-					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -314,7 +280,6 @@
 			</RandomVariable>
 			<RandomVariable symbId="EPS">
 				<ct:VariabilityReference>
-					<ct:SymbRef blkIdRef="vm_err" symbIdRef="DV"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -443,22 +408,18 @@
 		<StructuralModel blkId="sm">
 			<ct:Variable symbId="ts_PRED" symbolType="real">
 				<ct:Assign>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="ts_IND"/>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="F_PRED" symbolType="real">
 				<ct:Assign>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="F_IND"/>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="tl_PRED" symbolType="real">
 				<ct:Assign>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="tl_IND"/>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="V_PRED" symbolType="real">
 				<ct:Assign>
-					<ct:SymbRef blkIdRef="pm" symbIdRef="V_IND"/>
 				</ct:Assign>
 			</ct:Variable>
 		</StructuralModel>
@@ -466,20 +427,17 @@
 			<ContinuousData>
 				<Standard symbId="Y1">
 					<Output>
-						<ct:SymbRef blkIdRef="sm" symbIdRef="ts_PRED"/>
 					</Output>
 					<ErrorModel>
 						<ct:Assign>
 							<math:FunctionCall>
 								<ct:SymbRef symbIdRef="additiveError"/>
 								<math:FunctionArgument symbId="additive">
-									<ct:SymbRef blkIdRef="pm" symbIdRef="ADD_SMALL"/>
 								</math:FunctionArgument>
 							</math:FunctionCall>
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="EPS"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>
@@ -488,20 +446,17 @@
 			<ContinuousData>
 				<Standard symbId="Y2">
 					<Output>
-						<ct:SymbRef blkIdRef="sm" symbIdRef="F_PRED"/>
 					</Output>
 					<ErrorModel>
 						<ct:Assign>
 							<math:FunctionCall>
 								<ct:SymbRef symbIdRef="additiveError"/>
 								<math:FunctionArgument symbId="additive">
-									<ct:SymbRef blkIdRef="pm" symbIdRef="ADD_SMALL"/>
 								</math:FunctionArgument>
 							</math:FunctionCall>
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="EPS"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>
@@ -510,20 +465,17 @@
 			<ContinuousData>
 				<Standard symbId="Y3">
 					<Output>
-						<ct:SymbRef blkIdRef="sm" symbIdRef="tl_PRED"/>
 					</Output>
 					<ErrorModel>
 						<ct:Assign>
 							<math:FunctionCall>
 								<ct:SymbRef symbIdRef="additiveError"/>
 								<math:FunctionArgument symbId="additive">
-									<ct:SymbRef blkIdRef="pm" symbIdRef="ADD_SMALL"/>
 								</math:FunctionArgument>
 							</math:FunctionCall>
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="EPS"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>
@@ -532,20 +484,17 @@
 			<ContinuousData>
 				<Standard symbId="Y4">
 					<Output>
-						<ct:SymbRef blkIdRef="sm" symbIdRef="V_PRED"/>
 					</Output>
 					<ErrorModel>
 						<ct:Assign>
 							<math:FunctionCall>
 								<ct:SymbRef symbIdRef="additiveError"/>
 								<math:FunctionArgument symbId="additive">
-									<ct:SymbRef blkIdRef="pm" symbIdRef="ADD_SMALL"/>
 								</math:FunctionArgument>
 							</math:FunctionCall>
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
-						<ct:SymbRef blkIdRef="pm" symbIdRef="EPS"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>
