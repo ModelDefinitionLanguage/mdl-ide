@@ -339,8 +339,13 @@ class BuiltinFunctionProvider {
 	}
 	
 	def isNamedArgFunction(SymbolReference it){
-		val funcDefn = findFuncDefn//functDefns.get(func)
+		val funcDefn = findFuncDefn
 		funcDefn != null && funcDefn instanceof NamedArgFuncDefn
+	}
+	
+	def isFunction(SymbolReference it){
+		val funcDefn = findFuncDefn
+		funcDefn != null
 	}
 	
 	
