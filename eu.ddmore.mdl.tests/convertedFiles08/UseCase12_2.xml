@@ -25,6 +25,7 @@
 			<PopulationParameter symbId = "PPV_EVENT"/>
 			<RandomVariable symbId="eta_PPV_EVENT">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -43,8 +44,10 @@
 				<ct:Assign>
 					<math:Uniop op="log">
 						<math:Binop op="divide">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="POP_BASEP"/>
 							<math:Binop op="minus">
 								<ct:Int>1</ct:Int>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_BASEP"/>
 							</math:Binop>
 						</math:Binop>
 					</math:Uniop>	
@@ -54,9 +57,13 @@
 				<ct:Assign>
 					<math:Binop op="plus">
 						<math:Binop op="plus">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="BASE"/>
 							<math:Binop op="times">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_BETA"/>
+								<ct:SymbRef  symbIdRef="CP"/>
 							</math:Binop>
 						</math:Binop>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_PPV_EVENT"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
@@ -70,6 +77,7 @@
 							<ct:Int>1</ct:Int>
 							<math:Uniop op="exp">
 								<math:Uniop op="minus">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="LP"/>
 								</math:Uniop>
 							</math:Uniop>	
 						</math:Binop>

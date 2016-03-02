@@ -29,15 +29,17 @@ import eu.ddmore.mdl.utils.MdlUtils
 import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
 
-import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.mdl.mdl.IfExpression
 import eu.ddmore.mdl.mdl.PiecewiseExpression
 import eu.ddmore.mdl.mdl.PWClause
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider
+import eu.ddmore.mdl.mdl.CategoryValueReference
 
 class PharmMLExpressionBuilder {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
 	extension MdlUtils mu = new MdlUtils
 	
 	static val GLOBAL_VAR = 'global'
@@ -96,8 +98,15 @@ class PharmMLExpressionBuilder {
 	}
 	
 	def getSymbolReference(SymbolReference it){
-		ref.getSymbolReference
+		if(isFunction)
+			functionCall
+		else ref.getSymbolReference
 	}
+	
+	def getCategoryValueReference(CategoryValueReference it)'''
+		<ct:CatRef catIdRef="«ref.name»"/>
+	'''
+	
 	
 	def getLocalSymbolReference(SymbolReference it){
 		ref.getLocalSymbolReference
@@ -119,7 +128,7 @@ class PharmMLExpressionBuilder {
 		</ct:Assign>
 	'''
 	
-    def dispatch CharSequence getPharmMLExpr(Expression expr){
+    def CharSequence getPharmMLExpr(Expression expr){
     	switch(expr){
     		OrExpression:
     			getOrExpression(expr)
@@ -175,6 +184,9 @@ class PharmMLExpressionBuilder {
     		}
     		EnumExpression:{
     			getEnumExpression(expr)
+    		}
+    		CategoryValueReference:{
+    			getCategoryValueReference(expr)
     		}	
     	}
     }
@@ -305,7 +317,7 @@ class PharmMLExpressionBuilder {
 	'''
 	
 	def getPiecewiseExpression(PiecewiseExpression it)'''
-		<math:Piecewise>
+		<ct:Piecewise>
 			«FOR w : when»
 				«w.whenClause»
 			«ENDFOR»
@@ -317,7 +329,7 @@ class PharmMLExpressionBuilder {
 					</math:Condition>
 				</math:Piece>
 			«ENDIF»
-		</math:Piecewise>
+		</ct:Piecewise>
 	'''
 	
 	def getWhenClause(PWClause it)'''
@@ -330,7 +342,7 @@ class PharmMLExpressionBuilder {
 	'''
 	
 	def getIfExpression(IfExpression it)'''
-		<math:Piecewise>
+		<ct:Piecewise>
 			«FOR w : ifelseClause»
 				«w.ifElseClause»
 			«ENDFOR»
@@ -342,7 +354,7 @@ class PharmMLExpressionBuilder {
 					</math:Condition>
 				</math:Piece>
 			«ENDIF»
-		</math:Piecewise>
+		</ct:Piecewise>
 	'''
 	
 	def getIfElseClause(IfExprPart it)'''
@@ -400,7 +412,7 @@ class PharmMLExpressionBuilder {
 		«ENDIF»
 	'''
     
-    def dispatch CharSequence getPharmMLExpr(SymbolReference it){
+    private def CharSequence getFunctionCall(SymbolReference it){
     	var retVal = ''''''
     	val a = argList
     	switch(a){

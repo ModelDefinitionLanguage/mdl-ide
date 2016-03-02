@@ -127,7 +127,7 @@ UC001_09_Holford_PK_DEQ_genCov_genErr_Tlag_mdl = mdlObj{
    MODEL_PREDICTION{
 
    COMPARTMENT{
-      INPUT_GUT: {type is depot, modelCmt=1, target=CENTRAL, tlag = TLAG, finput=F1}
+      INPUT_GUT: {type is direct, modelCmt=1, to=CENTRAL, tlag = TLAG, finput=F1}
    }# end COMPARTMENT
 
    DEQ{

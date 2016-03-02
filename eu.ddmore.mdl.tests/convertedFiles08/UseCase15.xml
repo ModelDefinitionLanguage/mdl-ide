@@ -61,6 +61,7 @@
 			<PopulationParameter symbId = "PPV_TLAG"/>
 			<RandomVariable symbId="ETA_CL">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -77,6 +78,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="ETA_V">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -93,6 +95,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="ETA_KA">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -109,6 +112,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="ETA_TLAG">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -129,14 +133,18 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_CL"/>
 							</ct:Assign>
 						</PopulationValue>
 						<Covariate>
+							<ct:SymbRef blkIdRef="cm" symbIdRef="logtWT"/>
 							<FixedEffect>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_CL_WT"/>
 							</FixedEffect>
 						</Covariate>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_CL"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -146,14 +154,18 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_V"/>
 							</ct:Assign>
 						</PopulationValue>
 						<Covariate>
+							<ct:SymbRef blkIdRef="cm" symbIdRef="logtWT"/>
 							<FixedEffect>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="BETA_V_WT"/>
 							</FixedEffect>
 						</Covariate>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_V"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -163,10 +175,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_KA"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_KA"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -176,45 +190,56 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_TLAG"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_TLAG"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
 			<IndividualParameter symbId="ALAG1">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="TLAG"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="F1">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_P1"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="S3">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="V"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="K12">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="KA"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="K20">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_K1"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="K23">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_KT"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="K30">
 				<ct:Assign>
 					<math:Binop op="divide">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="CL"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="V"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<RandomVariable symbId="EPS_Y">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_err" symbIdRef="DV"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -252,11 +277,14 @@
 			<ct:Variable symbId="F" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="divide">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="CENTRAL"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="S3"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="CC" symbolType="real">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="sm" symbIdRef="F"/>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="LATENT" symbolType="real"/>
@@ -271,14 +299,17 @@
 					</Value>
 					<Value argument="ka"> 
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="K12"/>
 						</ct:Assign>
 					</Value>
 					<Value argument="Tlag"> 
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="ALAG1"/>
 						</ct:Assign>
 					</Value>
 					<Value argument="p"> 
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="F1"/>
 						</ct:Assign>
 					</Value>
 				</Absorption>
@@ -296,6 +327,7 @@
 					</Value>
 					<Value argument="k"> 
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="K20"/>
 						</ct:Assign>
 					</Value>
 				</Elimination>
@@ -308,6 +340,7 @@
 					</Value>
 					<Value argument="kt"> 
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="K23"/>
 						</ct:Assign>
 					</Value>
 				</Transfer>
@@ -325,6 +358,7 @@
 					</Value>
 					<Value argument="k"> 
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="K30"/>
 						</ct:Assign>
 					</Value>
 				</Elimination>
@@ -334,21 +368,26 @@
 			<ContinuousData>
 				<Standard symbId="Y">
 					<Output>
+						<ct:SymbRef blkIdRef="sm" symbIdRef="CC"/>
 					</Output>
 					<ErrorModel>
 						<ct:Assign>
 							<math:FunctionCall>
 								<ct:SymbRef symbIdRef="combinedError1"/>
 								<math:FunctionArgument symbId="additive">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="RUV_ADD"/>
 								</math:FunctionArgument>
 								<math:FunctionArgument symbId="proportional">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="RUV_PROP"/>
 								</math:FunctionArgument>
 								<math:FunctionArgument symbId="f">
+									<ct:SymbRef blkIdRef="sm" symbIdRef="CC"/>
 								</math:FunctionArgument>
 							</math:FunctionCall>
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="EPS_Y"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>

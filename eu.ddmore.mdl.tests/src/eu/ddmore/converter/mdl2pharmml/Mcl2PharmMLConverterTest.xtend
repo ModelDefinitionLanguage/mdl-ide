@@ -1,4 +1,4 @@
-package eu.ddmore.converter.mdl2pharmml08
+package eu.ddmore.converter.mdl2pharmml
 
 import com.google.inject.Inject
 import eu.ddmore.mdl.LibraryTestHelper
@@ -10,14 +10,15 @@ import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
-class Mcl2PharmMLConverterTest1 {
-	static val CONVERTED_OUTPUT_DIR="convertedFiles08/"
-	static val USE_CASE_DIR="src/eu/ddmore/converter/mdl2pharmml08/"
+class Mcl2PharmMLConverterTest {
+	static val CONVERTED_OUTPUT_DIR="convertedFiles/"
+	static val USE_CASE_DIR="src/eu/ddmore/converter/mdl2pharmml/"
 	
 	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
@@ -44,6 +45,11 @@ class Mcl2PharmMLConverterTest1 {
 		assertIsValid(pharmMLFile)
 	} 
 	
+//	@Test
+//	def void testDummy(){
+//	}
+
+
 	@Test
 	def void testUseCase1(){
 		validateConversion("UseCase1")
@@ -84,17 +90,17 @@ class Mcl2PharmMLConverterTest1 {
 		validateConversion("UseCase5")
 	}
 
-	@Test
+	@Ignore("Not supported by PharmML 0.6")
 	def void testUseCase5_1(){
 		validateConversion("UseCase5_1")
 	}
 
-	@Test
+	@Ignore("Not supported by PharmML 0.6")
 	def void testUseCase5_2(){
 		validateConversion("UseCase5_2")
 	}
 
-	@Test
+	@Ignore("Not supported by PharmML 0.6")
 	def void testUseCase5_3(){
 		validateConversion("UseCase5_3")
 	}
@@ -179,12 +185,12 @@ class Mcl2PharmMLConverterTest1 {
 		validateConversion("UseCase14")
 	}
 
-	@Test
+	@Ignore("Not supported by Current MDL")
 	def void testUseCase14_1(){
 		validateConversion("UseCase14_1")
 	}
 
-	@Test
+	@Ignore("Not supported by Current MDL")
 	def void testUseCase14_2(){
 		validateConversion("UseCase14_2")
 	}
@@ -252,10 +258,5 @@ class Mcl2PharmMLConverterTest1 {
 	@Test
 	def void testUseCase110(){
 		validateConversion("UseCase110")
-	}
-
-	@Test
-	def void testUseCase111(){
-		validateConversion("UseCase111")
 	}
 }

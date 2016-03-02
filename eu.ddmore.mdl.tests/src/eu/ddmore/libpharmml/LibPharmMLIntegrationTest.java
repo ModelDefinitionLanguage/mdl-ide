@@ -8,7 +8,6 @@ import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**

@@ -12,7 +12,9 @@ import org.eclipse.xtext.validation.ComposedChecks
  *
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
- @ComposedChecks(validators= #[BlockValidator, DataFileValidator, UnsupportedFeaturesValidator, MdlCustomValidator,
+ @ComposedChecks(validators= #[BlockValidator, 
+ 								DataFileValidator,
+ 								UnsupportedFeaturesValidator, MdlCustomValidator,
  								ListValidator,
  								TypeSystemValidator,
  								ValueSelectorValidator, UnsupportedToolSpecificFeaturesValidator,

@@ -36,11 +36,12 @@
 					<Transformation>
 					    <TransformedCovariate symbId="DDU"/>
 						<ct:Assign>
-							<math:Piecewise>
+							<ct:Piecewise>
 								<math:Piece>
 									<ct:Int>1</ct:Int>
 									<math:Condition>
 										<math:LogicBinop op="gt">
+											<ct:SymbRef blkIdRef="cm" symbIdRef="DDUR"/>
 											<ct:Int>2</ct:Int>
 										</math:LogicBinop>
 									</math:Condition>
@@ -51,7 +52,7 @@
 										<math:Otherwise/>
 									</math:Condition>
 								</math:Piece>
-							</math:Piecewise>
+							</ct:Piecewise>
 						</ct:Assign>
 					</Transformation>
 				</Continuous>
@@ -61,11 +62,12 @@
 					<Transformation>
 					    <TransformedCovariate symbId="PHASE"/>
 						<ct:Assign>
-							<math:Piecewise>
+							<ct:Piecewise>
 								<math:Piece>
 									<ct:Int>1</ct:Int>
 									<math:Condition>
 										<math:LogicBinop op="gt">
+											<ct:SymbRef blkIdRef="cm" symbIdRef="STUD"/>
 											<ct:Int>30</ct:Int>
 										</math:LogicBinop>
 									</math:Condition>
@@ -76,7 +78,7 @@
 										<math:Otherwise/>
 									</math:Condition>
 								</math:Piece>
-							</math:Piecewise>
+							</ct:Piecewise>
 						</ct:Assign>
 					</Transformation>
 				</Continuous>
@@ -111,44 +113,55 @@
 			<PopulationParameter symbId = "SIGMA"/>
 			<PopulationParameter symbId = "POP_PAN0">
 				<ct:Assign>
-					<math:Piecewise>
+					<ct:Piecewise>
 						<math:Piece>
 							<math:Binop op="times">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="PAN0_II"/>
 								<math:Binop op="plus">
 									<ct:Int>1</ct:Int>
 									<math:Binop op="times">
+										<ct:SymbRef blkIdRef="pm" symbIdRef="PAN0_CHRON"/>
+										<ct:SymbRef blkIdRef="cm" symbIdRef="DDU"/>
 									</math:Binop>
 								</math:Binop>
 							</math:Binop>
 							<math:Condition>
 								<math:LogicBinop op="eq">
+									<ct:SymbRef blkIdRef="cm" symbIdRef="PHASE"/>
 									<ct:Int>0</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
 						</math:Piece>
 						<math:Piece>
 							<math:Binop op="times">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="PAN0_III"/>
 								<math:Binop op="plus">
 									<ct:Int>1</ct:Int>
 									<math:Binop op="times">
+										<ct:SymbRef blkIdRef="pm" symbIdRef="PAN0_CHRON"/>
+										<ct:SymbRef blkIdRef="cm" symbIdRef="DDU"/>
 									</math:Binop>
 								</math:Binop>
 							</math:Binop>
 							<math:Condition>
 								<math:LogicBinop op="eq">
+									<ct:SymbRef blkIdRef="cm" symbIdRef="PHASE"/>
 									<ct:Int>1</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
 						</math:Piece>
-					</math:Piecewise>
+					</ct:Piecewise>
 				</ct:Assign>
 			</PopulationParameter>
 			<PopulationParameter symbId = "POP_PMAX">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="TVPMAX"/>
 						<math:Binop op="plus">
 							<ct:Int>1</ct:Int>
 							<math:Binop op="times">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="PMAX_PHASEIII"/>
+								<ct:SymbRef blkIdRef="cm" symbIdRef="PHASE"/>
 							</math:Binop>
 						</math:Binop>
 					</math:Binop>
@@ -156,13 +169,15 @@
 			</PopulationParameter>
 			<PopulationParameter symbId = "CHOSP">
 				<ct:Assign>
-					<math:Piecewise>
+					<ct:Piecewise>
 						<math:Piece>
 							<math:Binop op="plus">
 								<ct:Int>1</ct:Int>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="THETA_HOSP"/>
 							</math:Binop>
 							<math:Condition>
 								<math:LogicBinop op="eq">
+									<ct:SymbRef blkIdRef="cm" symbIdRef="HOSP"/>
 									<ct:Int>0</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
@@ -173,16 +188,20 @@
 								<math:Otherwise/>
 							</math:Condition>
 						</math:Piece>
-					</math:Piecewise>
+					</ct:Piecewise>
 				</ct:Assign>
 			</PopulationParameter>
 			<PopulationParameter symbId = "POP_ERROR">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="CHOSP"/>
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="TVERROR"/>
 							<math:Binop op="plus">
 								<ct:Int>1</ct:Int>
 								<math:Binop op="times">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="THETA_US"/>
+									<ct:SymbRef blkIdRef="cm" symbIdRef="US"/>
 								</math:Binop>
 							</math:Binop>
 						</math:Binop>
@@ -191,6 +210,7 @@
 			</PopulationParameter>
 			<RandomVariable symbId="ETA_PAN0">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -207,6 +227,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="ETA_PMAX">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -223,6 +244,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="ETA_AUC50">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -239,6 +261,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="ETA_ERROR">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -256,19 +279,25 @@
 			<IndividualParameter symbId="PAN0">
 				<ct:Assign>
 					<math:Binop op="plus">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="POP_PAN0"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_PAN0"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="PMAX">
 				<ct:Assign>
 					<math:Binop op="plus">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="POP_PMAX"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_PMAX"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="AUC50">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="POP_AUC50"/>
 						<math:Uniop op="exp">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_AUC50"/>
 						</math:Uniop>	
 					</math:Binop>
 				</ct:Assign>
@@ -276,13 +305,16 @@
 			<IndividualParameter symbId="ERROR">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="POP_ERROR"/>
 						<math:Uniop op="exp">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="ETA_ERROR"/>
 						</math:Uniop>	
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<RandomVariable symbId="EPS_SIGMA">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_err" symbIdRef="DV"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -322,14 +354,18 @@
 			<ct:Variable symbId="PMOD" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="PMAX"/>
 						<math:Binop op="minus">
 							<ct:Int>1</ct:Int>
 							<math:Uniop op="exp">
 								<math:Binop op="power">
 									<math:Uniop op="minus">
 										<math:Binop op="divide">
+											<ct:SymbRef  symbIdRef="TIME"/>
+											<ct:SymbRef blkIdRef="pm" symbIdRef="TD"/>
 										</math:Binop>
 									</math:Uniop>
+									<ct:SymbRef blkIdRef="pm" symbIdRef="POW"/>
 								</math:Binop>
 							</math:Uniop>	
 						</math:Binop>
@@ -338,24 +374,26 @@
 			</ct:Variable>
 			<ct:Variable symbId="FT" symbolType="real">
 				<ct:Assign>
-					<math:Piecewise>
+					<ct:Piecewise>
 						<math:Piece>
 							<ct:Int>1</ct:Int>
 							<math:Condition>
 								<math:LogicBinop op="gt">
+									<ct:SymbRef  symbIdRef="TIME"/>
 									<ct:Int>42</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
 						</math:Piece>
 						<math:Piece>
 							<math:Binop op="divide">
+								<ct:SymbRef  symbIdRef="TIME"/>
 								<ct:Int>42</ct:Int>
 							</math:Binop>
 							<math:Condition>
 								<math:Otherwise/>
 							</math:Condition>
 						</math:Piece>
-					</math:Piecewise>
+					</ct:Piecewise>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="EFF" symbolType="real">
@@ -363,23 +401,31 @@
 					<math:Binop op="times">
 						<math:Binop op="divide">
 							<math:Binop op="times">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="EMAX"/>
+								<ct:SymbRef blkIdRef="cm" symbIdRef="AUC"/>
 							</math:Binop>
 							<math:Binop op="plus">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="AUC50"/>
+								<ct:SymbRef blkIdRef="cm" symbIdRef="AUC"/>
 							</math:Binop>
 						</math:Binop>
+						<ct:SymbRef blkIdRef="sm" symbIdRef="FT"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="EMOD" symbolType="real">
 				<ct:Assign>
-					<math:Piecewise>
+					<ct:Piecewise>
 						<math:Piece>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="EFF"/>
 							<math:Condition>
 								<math:LogicBinop op="and">
 									<math:LogicBinop op="gt">
+										<ct:SymbRef  symbIdRef="TIME"/>
 										<ct:Int>0</ct:Int>
 									</math:LogicBinop>
 									<math:LogicBinop op="gt">
+										<ct:SymbRef blkIdRef="cm" symbIdRef="AUC"/>
 										<ct:Int>0</ct:Int>
 									</math:LogicBinop>
 								</math:LogicBinop>
@@ -391,19 +437,22 @@
 								<math:Otherwise/>
 							</math:Condition>
 						</math:Piece>
-					</math:Piecewise>
+					</ct:Piecewise>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="PANSS_total" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="times">
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="PAN0"/>
 							<math:Binop op="minus">
 								<ct:Int>1</ct:Int>
+								<ct:SymbRef blkIdRef="sm" symbIdRef="PMOD"/>
 							</math:Binop>
 						</math:Binop>
 						<math:Binop op="minus">
 							<ct:Int>1</ct:Int>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="EMOD"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
@@ -413,17 +462,20 @@
 			<ContinuousData>
 				<Standard symbId="Y">
 					<Output>
+						<ct:SymbRef blkIdRef="sm" symbIdRef="PANSS_total"/>
 					</Output>
 					<ErrorModel>
 						<ct:Assign>
 							<math:FunctionCall>
 								<ct:SymbRef symbIdRef="additiveError"/>
 								<math:FunctionArgument symbId="additive">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="ERROR"/>
 								</math:FunctionArgument>
 							</math:FunctionCall>
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="EPS_SIGMA"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>

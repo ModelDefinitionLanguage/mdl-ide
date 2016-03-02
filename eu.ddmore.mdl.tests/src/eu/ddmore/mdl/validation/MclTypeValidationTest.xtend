@@ -11,7 +11,11 @@ import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Ignore
 import org.junit.Test
+import static org.junit.Assert.*
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.mdl.BlockStatementBody
+import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.type.TypeSystemProvider
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -19,6 +23,7 @@ class MclTypeValidationTest {
 	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
+	extension TypeSystemProvider tsp = new TypeSystemProvider
 
 	@Test
 	def void testValidNumericalEquationExpression(){
@@ -138,7 +143,7 @@ class MclTypeValidationTest {
 	}
 	
 	@Test
-	def void testValidWhenEquationExpression(){
+	def void testValidIfEquationExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
@@ -157,10 +162,20 @@ class MclTypeValidationTest {
 		'''.parse
 		
 		mcl.assertNoErrors
+		val blkBody = mcl.objects.head.blocks.last.body
+		if(blkBody instanceof BlockStatementBody){
+			val stmt = blkBody.statements.last
+			if(stmt instanceof EquationDefinition){
+				assertEquals("expected lhs type", stmt.typeFor, TypeSystemProvider::REAL_TYPE)
+				assertEquals("expected rhs type", stmt.expression.typeFor, TypeSystemProvider::REAL_TYPE)
+			}
+			else fail("Test not formulated as expected")
+		}
+		else fail("Test not formulated as expected")
 	}
 	
 	@Test
-	def void testValidWithDerivExpression(){
+	def void testValidIfDerivExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
@@ -181,6 +196,81 @@ class MclTypeValidationTest {
 		'''.parse
 		
 		mcl.assertNoErrors
+		val blkBody = mcl.objects.head.blocks.last.body
+		if(blkBody instanceof BlockStatementBody){
+			val stmt = blkBody.statements.last
+			if(stmt instanceof EquationDefinition){
+				assertEquals("expected lhs type", stmt.typeFor, TypeSystemProvider::REAL_TYPE)
+				assertEquals("expected rhs type", stmt.expression.typeFor, TypeSystemProvider::REAL_TYPE)
+			}
+			else fail("Test not formulated as expected")
+		}
+		else fail("Test not formulated as expected")
+	}
+	
+	@Test
+	def void testValidPiecewiseEquationExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C
+				A = piecewise{{ B + C - 22 when (B > 0 && false); B^180 when (C == B || 22 < inf); otherwise 22 }}
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+		val blkBody = mcl.objects.head.blocks.last.body
+		if(blkBody instanceof BlockStatementBody){
+			val stmt = blkBody.statements.last
+			if(stmt instanceof EquationDefinition){
+				assertEquals("expected lhs type", stmt.typeFor, TypeSystemProvider::REAL_TYPE)
+				assertEquals("expected rhs type", stmt.expression.typeFor, TypeSystemProvider::REAL_TYPE)
+			}
+			else fail("Test not formulated as expected")
+		}
+		else fail("Test not formulated as expected")
+	}
+	
+	@Test
+	def void testValidWithDerivExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				DEQ{
+					B : { deriv = C, init = 33 }
+				}
+				C
+				A = piecewise{{ B + C - 22 when (B > 0 && false); B^180 when (C == B || 22 < inf); otherwise 22 }}			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoErrors
+		val blkBody = mcl.objects.head.blocks.last.body
+		if(blkBody instanceof BlockStatementBody){
+			val stmt = blkBody.statements.last
+			if(stmt instanceof EquationDefinition){
+				assertEquals("expected lhs type", stmt.typeFor, TypeSystemProvider::REAL_TYPE)
+				assertEquals("expected rhs type", stmt.expression.typeFor, TypeSystemProvider::REAL_TYPE)
+			}
+			else fail("Test not formulated as expected")
+		}
+		else fail("Test not formulated as expected")
 	}
 	
 	@Test
@@ -402,7 +492,7 @@ class MclTypeValidationTest {
 	}
 	
 	@Test
-	def void testInvalidWhenEquationExpression(){
+	def void testInvalidIfEquationExpression(){
 		val mcl = '''
 		warfarin_PK_SEXAGE_mdl = mdlObj {
 			IDV{ T }
@@ -414,15 +504,94 @@ class MclTypeValidationTest {
 			MODEL_PREDICTION{
 				B
 				C
-				A = if(B > 0 && "false") then B + C - 22 if(C == B || 22 < 0) then B^180 else 22
+				A = if("false") then B + C - 22 elseif(C == B || 22 < 0) then B^180 else 22
 			}
 			
 		} # end of model object
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.andExpression,
+		mcl.assertNoError(Diagnostic.SYNTAX_DIAGNOSTIC)
+		mcl.assertError(MdlPackage::eINSTANCE.ifExprPart,
 			MdlValidator::INCOMPATIBLE_TYPES,
 			"Expected Boolean type, but was String."
+		)
+	}
+	
+	@Test
+	def void testInvalidWhenConditionExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C
+				A = piecewise{{ B when "false"; B^180 when (C == B || 22 < 0); otherwise 22 }}
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoError(Diagnostic.SYNTAX_DIAGNOSTIC)
+		mcl.assertError(MdlPackage::eINSTANCE.PWClause,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Boolean type, but was String."
+		)
+	}
+	
+	@Test
+	def void testInvalidWhenValueExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C
+				A = piecewise{{ "B" when A > 0; B^180 when (C == B || 22 < 0); otherwise 22 }}
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoError(Diagnostic.SYNTAX_DIAGNOSTIC)
+		mcl.assertError(MdlPackage::eINSTANCE.PWClause,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was String."
+		)
+	}
+	
+	@Test
+	def void testInvalidOtherwiseValueExpression(){
+		val mcl = '''
+		warfarin_PK_SEXAGE_mdl = mdlObj {
+			IDV{ T }
+			
+			VARIABILITY_LEVELS{
+			}
+		
+			
+			MODEL_PREDICTION{
+				B
+				C
+				A = piecewise{{ B when B < C; (C == B || 22 < 0) when B^180; otherwise "A String" }}
+			}
+			
+		} # end of model object
+		'''.parse
+		
+		mcl.assertNoError(Diagnostic.SYNTAX_DIAGNOSTIC)
+		mcl.assertError(MdlPackage::eINSTANCE.PWClause,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"Expected Real type, but was Boolean."
 		)
 	}
 	

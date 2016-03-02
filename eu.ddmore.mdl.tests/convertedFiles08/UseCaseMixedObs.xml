@@ -38,6 +38,7 @@
 			<PopulationParameter symbId = "PPV_EVENT"/>
 			<RandomVariable symbId="eta_PPV_EVENT">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -54,17 +55,22 @@
 			</RandomVariable>
 			<PopulationParameter symbId = "B0">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="Lgt0"/>
 				</ct:Assign>
 			</PopulationParameter>
 			<PopulationParameter symbId = "B1">
 				<ct:Assign>
 					<math:Binop op="plus">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="B0"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Lgt1"/>
 					</math:Binop>
 				</ct:Assign>
 			</PopulationParameter>
 			<PopulationParameter symbId = "B2">
 				<ct:Assign>
 					<math:Binop op="plus">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="B1"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Lgt2"/>
 					</math:Binop>
 				</ct:Assign>
 			</PopulationParameter>
@@ -72,9 +78,11 @@
 				<StructuredModel>
 					<GeneralCovariate>
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="B0"/>
 						</ct:Assign>
 					</GeneralCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_PPV_EVENT"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -82,9 +90,11 @@
 				<StructuredModel>
 					<GeneralCovariate>
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="B1"/>
 						</ct:Assign>
 					</GeneralCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_PPV_EVENT"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -92,14 +102,17 @@
 				<StructuredModel>
 					<GeneralCovariate>
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="B2"/>
 						</ct:Assign>
 					</GeneralCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_PPV_EVENT"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
 			<RandomVariable symbId="EPS_Y">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_err" symbIdRef="DV"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -119,58 +132,74 @@
 			<ct:Variable symbId="EDRUG" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Beta"/>
+						<ct:SymbRef  symbIdRef="CP"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="A0" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="plus">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="indiv_B0"/>
+						<ct:SymbRef blkIdRef="sm" symbIdRef="EDRUG"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="A1" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="plus">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="indiv_B1"/>
+						<ct:SymbRef blkIdRef="sm" symbIdRef="EDRUG"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="A2" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="plus">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="indiv_B2"/>
+						<ct:SymbRef blkIdRef="sm" symbIdRef="EDRUG"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="P0" symbolType="real">
 				<ct:Assign>
 					<math:Uniop op="logistic">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="A0"/>
 					</math:Uniop>	
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="P1" symbolType="real">
 				<ct:Assign>
 					<math:Uniop op="logistic">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="A1"/>
 					</math:Uniop>	
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="P2" symbolType="real">
 				<ct:Assign>
 					<math:Uniop op="logistic">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="A2"/>
 					</math:Uniop>	
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="Prob0" symbolType="real">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="sm" symbIdRef="P0"/>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="Prob1" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="minus">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="P1"/>
+						<ct:SymbRef blkIdRef="sm" symbIdRef="P0"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="Prob2" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="minus">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="P2"/>
+						<ct:SymbRef blkIdRef="sm" symbIdRef="P1"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
@@ -178,6 +207,7 @@
 				<ct:Assign>
 					<math:Binop op="minus">
 						<ct:Int>1</ct:Int>
+						<ct:SymbRef blkIdRef="sm" symbIdRef="P2"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
@@ -186,6 +216,7 @@
 			<ContinuousData>
 				<Standard symbId="Y">
 					<Output>
+						<ct:SymbRef blkIdRef="sm" symbIdRef="EDRUG"/>
 					</Output>
 					<ErrorModel>
 						<ct:Assign>
@@ -198,6 +229,7 @@
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="EPS_Y"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>
@@ -206,32 +238,12 @@
 			<Discrete>
 				<CategoricalData>
 					<ListOfCategories>
-						<Category symbId="mild"/>
-						<Category symbId="severe"/>
 						<Category symbId="missing"/>
 						<Category symbId="moderate"/>
+						<Category symbId="mild"/>
+						<Category symbId="severe"/>
 					</ListOfCategories>
 					<CategoryVariable symbId="PAIN"/>
-					<ProbabilityAssignment>
-						<Probability linkFunction="identity">
-							<math:LogicBinop op="eq">
-								<ct:SymbRef symbIdRef="PAIN"/>
-								<ct:SymbRef symbIdRef="mild"/>
-							</math:LogicBinop>
-						</Probability>
-						<ct:Assign>
-						</ct:Assign>
-					</ProbabilityAssignment>
-					<ProbabilityAssignment>
-						<Probability linkFunction="identity">
-							<math:LogicBinop op="eq">
-								<ct:SymbRef symbIdRef="PAIN"/>
-								<ct:SymbRef symbIdRef="severe"/>
-							</math:LogicBinop>
-						</Probability>
-						<ct:Assign>
-						</ct:Assign>
-					</ProbabilityAssignment>
 					<ProbabilityAssignment>
 						<Probability linkFunction="identity">
 							<math:LogicBinop op="eq">
@@ -240,6 +252,7 @@
 							</math:LogicBinop>
 						</Probability>
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob3"/>
 						</ct:Assign>
 					</ProbabilityAssignment>
 					<ProbabilityAssignment>
@@ -250,6 +263,29 @@
 							</math:LogicBinop>
 						</Probability>
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob1"/>
+						</ct:Assign>
+					</ProbabilityAssignment>
+					<ProbabilityAssignment>
+						<Probability linkFunction="identity">
+							<math:LogicBinop op="eq">
+								<ct:SymbRef symbIdRef="PAIN"/>
+								<ct:SymbRef symbIdRef="mild"/>
+							</math:LogicBinop>
+						</Probability>
+						<ct:Assign>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob0"/>
+						</ct:Assign>
+					</ProbabilityAssignment>
+					<ProbabilityAssignment>
+						<Probability linkFunction="identity">
+							<math:LogicBinop op="eq">
+								<ct:SymbRef symbIdRef="PAIN"/>
+								<ct:SymbRef symbIdRef="severe"/>
+							</math:LogicBinop>
+						</Probability>
+						<ct:Assign>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob2"/>
 						</ct:Assign>
 					</ProbabilityAssignment>
 				</CategoricalData>

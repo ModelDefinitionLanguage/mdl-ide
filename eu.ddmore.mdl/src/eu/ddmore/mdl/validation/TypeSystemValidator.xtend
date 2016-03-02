@@ -52,6 +52,8 @@ import eu.ddmore.mdl.utils.MdlLibUtils
 import eu.ddmore.mdllib.mdllib.MdlLibPackage
 import eu.ddmore.mdllib.mdllib.TypeSpec
 import eu.ddmore.mdllib.TypeDefinitionProvider
+import eu.ddmore.mdl.mdl.PWClause
+import eu.ddmore.mdl.mdl.PiecewiseExpression
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -119,8 +121,21 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	}
 		
 	@Check
-	def checkElseCompatibleTypes(ElseClause e){
+	def validateElseCompatibleTypes(ElseClause e){
 		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.elseClause_Value))
+	}
+		
+	@Check
+	def validateCompatibleTypes(PWClause e){
+		checkExpectedBoolean(e.cond, typeError(MdlPackage::eINSTANCE.PWClause_Cond))
+		checkExpectedReal(e.value, typeError(MdlPackage::eINSTANCE.PWClause_Value))
+	}
+		
+	@Check
+	def validateOtherwiseCompatibleTypes(PiecewiseExpression e){
+		if(e.otherwise != null){
+			checkExpectedReal(e.otherwise, typeError(MdlPackage::eINSTANCE.piecewiseExpression_Otherwise))
+		}
 	}
 		
 		

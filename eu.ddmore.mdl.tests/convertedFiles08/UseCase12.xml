@@ -25,6 +25,7 @@
 			<PopulationParameter symbId = "PPV_EVENT"/>
 			<RandomVariable symbId="eta_PPV_EVENT">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -45,10 +46,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_BASEP"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_PPV_EVENT"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -58,8 +61,11 @@
 				<ct:Assign>
 					<math:Binop op="plus">
 						<math:Uniop op="logit">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="indiv_BASE"/>
 						</math:Uniop>	
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="POP_BETA"/>
+							<ct:SymbRef  symbIdRef="CP"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
@@ -67,6 +73,7 @@
 			<ct:Variable symbId="P1" symbolType="real">
 				<ct:Assign>
 					<math:Uniop op="logistic">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="LP"/>
 					</math:Uniop>	
 				</ct:Assign>
 			</ct:Variable>
@@ -78,6 +85,7 @@
 						as the lambda argument.  --> 
 					<PopulationParameter symbId="P1">
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="P1"/>
 						</ct:Assign>
 					</PopulationParameter>
 					<ListOfCategories>

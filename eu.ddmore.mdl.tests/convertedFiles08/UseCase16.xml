@@ -86,6 +86,7 @@
 			<PopulationParameter symbId = "SIGMA_RES_W"/>
 			<RandomVariable symbId="eta_BM0">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -102,6 +103,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_BM02">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -118,6 +120,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_BM03">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -134,6 +137,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_BM0S">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -150,6 +154,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_MRT_VEGFs">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -166,6 +171,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_MRT_sKIT">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -182,6 +188,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_IC50">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -198,6 +205,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_IC502">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -214,6 +222,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_IC503">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -230,6 +239,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_IC50S">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -246,6 +256,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_TVSLP">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -262,6 +273,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_TVSLPS">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -282,10 +294,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_BM0"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_BM0"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -295,10 +309,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_BM02"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_BM02"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -308,10 +324,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_BM03"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_BM03"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -321,27 +339,33 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_BM0S"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_BM0S"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
 			<IndividualParameter symbId="IMAX1">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_IMAX"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="IMAX2">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_IMAX"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="IMAX3">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_IMAX"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="IMAXS">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_IMAX"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="IC50">
@@ -350,10 +374,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_IC50"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_IC50"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -363,10 +389,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_IC50"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_IC502"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -376,10 +404,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_IC50"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_IC503"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -389,19 +419,23 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_IC50"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_IC50S"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
 			<IndividualParameter symbId="HILL">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_HILL"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="HILL2">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="POP_HILL2"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="MRT1">
@@ -410,10 +444,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_MRT"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_MRT_VEGFs"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -423,10 +459,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_MRT2"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_MRT_VEGFs"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -436,10 +474,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_MRT3"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_MRT_VEGFs"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -449,16 +489,19 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="POP_MRTS"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_MRT_sKIT"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
 			<IndividualParameter symbId="TVSLP">
 				<ct:Assign>
 					<math:Binop op="divide">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="POP_TVSLP"/>
 						<ct:Int>1000</ct:Int>
 					</math:Binop>
 				</ct:Assign>
@@ -469,16 +512,19 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="TVSLP"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_TVSLP"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
 			<IndividualParameter symbId="TVSLPS">
 				<ct:Assign>
 					<math:Binop op="divide">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="POP_TVSLP"/>
 						<ct:Int>1000</ct:Int>
 					</math:Binop>
 				</ct:Assign>
@@ -489,10 +535,12 @@
 					<LinearCovariate>
 						<PopulationValue>
 							<ct:Assign>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="TVSLPS"/>
 							</ct:Assign>
 						</PopulationValue>
 					</LinearCovariate>
 					<RandomEffects>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eta_TVSLPS"/>
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
@@ -500,6 +548,7 @@
 				<ct:Assign>
 					<math:Binop op="divide">
 						<ct:Int>1</ct:Int>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="MRT1"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
@@ -507,6 +556,7 @@
 				<ct:Assign>
 					<math:Binop op="divide">
 						<ct:Int>1</ct:Int>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="MRT2"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
@@ -514,6 +564,7 @@
 				<ct:Assign>
 					<math:Binop op="divide">
 						<ct:Int>1</ct:Int>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="MRT3"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
@@ -521,23 +572,29 @@
 				<ct:Assign>
 					<math:Binop op="divide">
 						<ct:Int>1</ct:Int>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="MRTS"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="KIN2">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="BM02"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="KOUT2"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="KIN3">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="BM03"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="KOUT3"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<RandomVariable symbId="eps_RES_W">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_err" symbIdRef="DV"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -559,15 +616,20 @@
 			<ct:Variable symbId="AUC" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="divide">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="DOSE"/>
+						<ct:SymbRef blkIdRef="cm" symbIdRef="CL"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="DP1" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="BM0"/>
 						<math:Binop op="plus">
 							<ct:Int>1</ct:Int>
 							<math:Binop op="times">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="DPSLP"/>
+								<ct:SymbRef  symbIdRef="T"/>
 							</math:Binop>
 						</math:Binop>
 					</math:Binop>
@@ -576,9 +638,12 @@
 			<ct:Variable symbId="DPS" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="BM0S"/>
 						<math:Binop op="plus">
 							<ct:Int>1</ct:Int>
 							<math:Binop op="times">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="DPSLPS"/>
+								<ct:SymbRef  symbIdRef="T"/>
 							</math:Binop>
 						</math:Binop>
 					</math:Binop>
@@ -587,12 +652,16 @@
 			<ct:Variable symbId="KIN" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="DP1"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="KOUT"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:Variable symbId="KINS" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="DPS"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="KOUTS"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
@@ -600,13 +669,20 @@
 				<ct:Assign>
 					<math:Binop op="divide">
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="IMAX1"/>
 							<math:Binop op="power">
+								<ct:SymbRef blkIdRef="sm" symbIdRef="AUC"/>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="HILL"/>
 							</math:Binop>
 						</math:Binop>
 						<math:Binop op="plus">
 							<math:Binop op="power">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="IC50"/>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="HILL"/>
 							</math:Binop>
 							<math:Binop op="power">
+								<ct:SymbRef blkIdRef="sm" symbIdRef="AUC"/>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="HILL"/>
 							</math:Binop>
 						</math:Binop>
 					</math:Binop>
@@ -616,13 +692,20 @@
 				<ct:Assign>
 					<math:Binop op="divide">
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="IMAX2"/>
 							<math:Binop op="power">
+								<ct:SymbRef blkIdRef="sm" symbIdRef="AUC"/>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="HILL2"/>
 							</math:Binop>
 						</math:Binop>
 						<math:Binop op="plus">
 							<math:Binop op="power">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="IC502"/>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="HILL2"/>
 							</math:Binop>
 							<math:Binop op="power">
+								<ct:SymbRef blkIdRef="sm" symbIdRef="AUC"/>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="HILL2"/>
 							</math:Binop>
 						</math:Binop>
 					</math:Binop>
@@ -632,8 +715,12 @@
 				<ct:Assign>
 					<math:Binop op="divide">
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="IMAX3"/>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="AUC"/>
 						</math:Binop>
 						<math:Binop op="plus">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="IC503"/>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="AUC"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
@@ -642,8 +729,12 @@
 				<ct:Assign>
 					<math:Binop op="divide">
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="IMAXS"/>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="AUC"/>
 						</math:Binop>
 						<math:Binop op="plus">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="IC50S"/>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="AUC"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
@@ -651,12 +742,16 @@
 			<ct:DerivativeVariable symbId="VEGF" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="minus">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="KIN"/>
 						<math:Binop op="times">
 							<math:Binop op="times">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="KOUT"/>
 								<math:Binop op="minus">
 									<ct:Int>1</ct:Int>
+									<ct:SymbRef blkIdRef="sm" symbIdRef="EFF"/>
 								</math:Binop>
 							</math:Binop>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="VEGF"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
@@ -666,6 +761,7 @@
 				<ct:InitialCondition>
 					<ct:InitialValue>
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="BM0"/>
 						</ct:Assign>
 					</ct:InitialValue>
 					<ct:InitialTime>
@@ -679,19 +775,25 @@
 				<ct:Assign>
 					<math:Binop op="minus">
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="KIN2"/>
 							<math:Binop op="minus">
 								<ct:Int>1</ct:Int>
+								<ct:SymbRef blkIdRef="sm" symbIdRef="EFF2"/>
 							</math:Binop>
 						</math:Binop>
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="KOUT2"/>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="sVEGFR2"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
 				<ct:IndependentVariable>
+					<ct:SymbRef  symbIdRef="T"/>
 				</ct:IndependentVariable>
 				<ct:InitialCondition>
 					<ct:InitialValue>
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="BM02"/>
 						</ct:Assign>
 					</ct:InitialValue>
 					<ct:InitialTime>
@@ -705,19 +807,25 @@
 				<ct:Assign>
 					<math:Binop op="minus">
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="KIN3"/>
 							<math:Binop op="minus">
 								<ct:Int>1</ct:Int>
+								<ct:SymbRef blkIdRef="sm" symbIdRef="EFF3"/>
 							</math:Binop>
 						</math:Binop>
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="KOUT3"/>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="sVEGFR3"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
 				<ct:IndependentVariable>
+					<ct:SymbRef  symbIdRef="T"/>
 				</ct:IndependentVariable>
 				<ct:InitialCondition>
 					<ct:InitialValue>
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="BM03"/>
 						</ct:Assign>
 					</ct:InitialValue>
 					<ct:InitialTime>
@@ -731,19 +839,25 @@
 				<ct:Assign>
 					<math:Binop op="minus">
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="sm" symbIdRef="KINS"/>
 							<math:Binop op="minus">
 								<ct:Int>1</ct:Int>
+								<ct:SymbRef blkIdRef="sm" symbIdRef="EFFS"/>
 							</math:Binop>
 						</math:Binop>
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="KOUTS"/>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="sKIT"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
 				<ct:IndependentVariable>
+					<ct:SymbRef  symbIdRef="T"/>
 				</ct:IndependentVariable>
 				<ct:InitialCondition>
 					<ct:InitialValue>
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="BM0S"/>
 						</ct:Assign>
 					</ct:InitialValue>
 					<ct:InitialTime>
@@ -759,6 +873,7 @@
 				<ct:Variable symbolType="real" symbId="VEGF">
 					<ct:Assign>
 						<math:Uniop op="log">
+							<ct:SymbRef blkIdRef="sm" symbIdRef="VEGF"/>
 						</math:Uniop>
 					</ct:Assign>
 				</ct:Variable>
@@ -774,13 +889,16 @@
 									<ct:Int>0</ct:Int>
 								</math:FunctionArgument>
 								<math:FunctionArgument symbId="proportional">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="POP_RES_VEGF_PROP"/>
 								</math:FunctionArgument>
 								<math:FunctionArgument symbId="f">
+									<ct:SymbRef blkIdRef="sm" symbIdRef="VEGF"/>
 								</math:FunctionArgument>
 							</math:FunctionCall>
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eps_RES_W"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>
@@ -790,6 +908,7 @@
 				<ct:Variable symbolType="real" symbId="sVEGFR2">
 					<ct:Assign>
 						<math:Uniop op="log">
+							<ct:SymbRef blkIdRef="sm" symbIdRef="sVEGFR2"/>
 						</math:Uniop>
 					</ct:Assign>
 				</ct:Variable>
@@ -802,15 +921,19 @@
 							<math:FunctionCall>
 								<ct:SymbRef symbIdRef="combinedError2Log"/>
 								<math:FunctionArgument symbId="additive">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="POP_RES_sVEGFR2_ADD"/>
 								</math:FunctionArgument>
 								<math:FunctionArgument symbId="proportional">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="POP_RES_sVEGFR2_PROP"/>
 								</math:FunctionArgument>
 								<math:FunctionArgument symbId="f">
+									<ct:SymbRef blkIdRef="sm" symbIdRef="sVEGFR2"/>
 								</math:FunctionArgument>
 							</math:FunctionCall>
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eps_RES_W"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>
@@ -820,6 +943,7 @@
 				<ct:Variable symbolType="real" symbId="sVEGFR3">
 					<ct:Assign>
 						<math:Uniop op="log">
+							<ct:SymbRef blkIdRef="sm" symbIdRef="sVEGFR3"/>
 						</math:Uniop>
 					</ct:Assign>
 				</ct:Variable>
@@ -835,13 +959,16 @@
 									<ct:Int>0</ct:Int>
 								</math:FunctionArgument>
 								<math:FunctionArgument symbId="proportional">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="POP_RES_sVEGFR3_PROP"/>
 								</math:FunctionArgument>
 								<math:FunctionArgument symbId="f">
+									<ct:SymbRef blkIdRef="sm" symbIdRef="sVEGFR3"/>
 								</math:FunctionArgument>
 							</math:FunctionCall>
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eps_RES_W"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>
@@ -851,6 +978,7 @@
 				<ct:Variable symbolType="real" symbId="sKIT">
 					<ct:Assign>
 						<math:Uniop op="log">
+							<ct:SymbRef blkIdRef="sm" symbIdRef="sKIT"/>
 						</math:Uniop>
 					</ct:Assign>
 				</ct:Variable>
@@ -866,13 +994,16 @@
 									<ct:Int>0</ct:Int>
 								</math:FunctionArgument>
 								<math:FunctionArgument symbId="proportional">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="POP_RES_sKIT_PROP"/>
 								</math:FunctionArgument>
 								<math:FunctionArgument symbId="f">
+									<ct:SymbRef blkIdRef="sm" symbIdRef="sKIT"/>
 								</math:FunctionArgument>
 							</math:FunctionCall>
 						</ct:Assign>
 					</ErrorModel>
 					<ResidualError>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="eps_RES_W"/>
 					</ResidualError>
 				</Standard>
 			</ContinuousData>

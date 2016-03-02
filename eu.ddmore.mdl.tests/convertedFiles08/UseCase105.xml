@@ -46,7 +46,9 @@
 			<PopulationParameter symbId = "grp_Vc">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="pop_Vc"/>
 						<math:Binop op="divide">
+							<ct:SymbRef blkIdRef="cm" symbIdRef="WT"/>
 							<ct:Int>70</ct:Int>
 						</math:Binop>
 					</math:Binop>
@@ -54,6 +56,7 @@
 			</PopulationParameter>
 			<RandomVariable symbId="eta_Vc">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -70,6 +73,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_Vp">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -86,6 +90,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="eta_CL">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_mdl" symbIdRef="ID"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -102,6 +107,7 @@
 			</RandomVariable>
 			<RandomVariable symbId="epsilon_Cc">
 				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_err" symbIdRef="DV"/>
 				</ct:VariabilityReference>
 				<Distribution>
 					<UncertML>
@@ -119,7 +125,9 @@
 			<IndividualParameter symbId="Vc">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="grp_Vc"/>
 						<math:Uniop op="exp">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="eta_Vc"/>
 						</math:Uniop>	
 					</math:Binop>
 				</ct:Assign>
@@ -127,7 +135,9 @@
 			<IndividualParameter symbId="Vp">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="pop_Vp"/>
 						<math:Uniop op="exp">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="eta_Vp"/>
 						</math:Uniop>	
 					</math:Binop>
 				</ct:Assign>
@@ -135,42 +145,54 @@
 			<IndividualParameter symbId="CL">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="pop_CL"/>
 						<math:Uniop op="exp">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="eta_CL"/>
 						</math:Uniop>	
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="ka">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="pop_Ka"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="Q">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="pop_Q"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="MTT">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="pop_MTT"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="n">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="pm" symbIdRef="pop_n"/>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="kcp">
 				<ct:Assign>
 					<math:Binop op="divide">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Q"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Vc"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="kpc">
 				<ct:Assign>
 					<math:Binop op="divide">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Q"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Vp"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="kel">
 				<ct:Assign>
 					<math:Binop op="divide">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="CL"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Vc"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
@@ -178,17 +200,21 @@
 				<ct:Assign>
 					<math:Binop op="divide">
 						<math:Binop op="plus">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="n"/>
 							<ct:Int>1</ct:Int>
 						</math:Binop>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="MTT"/>
 					</math:Binop>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="Dose">
 				<ct:Assign>
-					<math:Piecewise>
+					<ct:Piecewise>
 						<math:Piece>
+							<ct:SymbRef blkIdRef="cm" symbIdRef="AMT"/>
 							<math:Condition>
 								<math:LogicBinop op="gt">
+									<ct:SymbRef blkIdRef="cm" symbIdRef="AMT"/>
 									<ct:Int>0</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
@@ -199,18 +225,22 @@
 								<math:Otherwise/>
 							</math:Condition>
 						</math:Piece>
-					</math:Piecewise>
+					</ct:Piecewise>
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="amin">
 				<ct:Assign>
 					<math:Binop op="min">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Dose"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="n"/>
 					</math:Binop>	
 				</ct:Assign>
 			</IndividualParameter>
 			<IndividualParameter symbId="amax">
 				<ct:Assign>
 					<math:Binop op="max">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Dose"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="n"/>
 					</math:Binop>	
 				</ct:Assign>
 			</IndividualParameter>
@@ -218,11 +248,12 @@
 		<StructuralModel blkId="sm">
 			<ct:Variable symbId="Aader" symbolType="real">
 				<ct:Assign>
-					<math:Piecewise>
+					<ct:Piecewise>
 						<math:Piece>
 							<ct:Int>0</ct:Int>
 							<math:Condition>
 								<math:LogicBinop op="eq">
+									<ct:SymbRef  symbIdRef="T"/>
 									<ct:Int>0</ct:Int>
 								</math:LogicBinop>
 							</math:Condition>
@@ -235,36 +266,47 @@
 											<math:Binop op="plus">
 												<math:Binop op="plus">
 													<math:Uniop op="log">
+														<ct:SymbRef blkIdRef="pm" symbIdRef="Dose"/>
 													</math:Uniop>	
 													<math:Uniop op="log">
+														<ct:SymbRef blkIdRef="pm" symbIdRef="ktr"/>
 													</math:Uniop>	
 												</math:Binop>
 												<math:Binop op="times">
+													<ct:SymbRef blkIdRef="pm" symbIdRef="n"/>
 													<math:Uniop op="log">
 														<math:Binop op="times">
+															<ct:SymbRef blkIdRef="pm" symbIdRef="ktr"/>
+															<ct:SymbRef  symbIdRef="T"/>
 														</math:Binop>
 													</math:Uniop>	
 												</math:Binop>
 											</math:Binop>
 											<math:Binop op="times">
+												<ct:SymbRef blkIdRef="pm" symbIdRef="ktr"/>
+												<ct:SymbRef  symbIdRef="T"/>
 											</math:Binop>
 										</math:Binop>
 										<math:Uniop op="factln">
+											<ct:SymbRef blkIdRef="pm" symbIdRef="n"/>
 										</math:Uniop>	
 									</math:Binop>
 								</math:Uniop>	
 								<math:Binop op="times">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="ka"/>
+									<ct:SymbRef blkIdRef="sm" symbIdRef="Aa"/>
 								</math:Binop>
 							</math:Binop>
 							<math:Condition>
 								<math:Otherwise/>
 							</math:Condition>
 						</math:Piece>
-					</math:Piecewise>
+					</ct:Piecewise>
 				</ct:Assign>
 			</ct:Variable>
 			<ct:DerivativeVariable symbId="Aa" symbolType="real">
 				<ct:Assign>
+					<ct:SymbRef blkIdRef="sm" symbIdRef="Aader"/>
 				</ct:Assign>
 				<ct:IndependentVariable>
 					<ct:SymbRef symbIdRef="T"/>
@@ -288,14 +330,22 @@
 						<math:Binop op="minus">
 							<math:Binop op="minus">
 								<math:Binop op="times">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="ka"/>
+									<ct:SymbRef blkIdRef="sm" symbIdRef="Aa"/>
 								</math:Binop>
 								<math:Binop op="times">
+									<ct:SymbRef blkIdRef="pm" symbIdRef="kel"/>
+									<ct:SymbRef blkIdRef="sm" symbIdRef="Ac"/>
 								</math:Binop>
 							</math:Binop>
 							<math:Binop op="times">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="kcp"/>
+								<ct:SymbRef blkIdRef="sm" symbIdRef="Ac"/>
 							</math:Binop>
 						</math:Binop>
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="kpc"/>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="Ap"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
@@ -319,8 +369,12 @@
 				<ct:Assign>
 					<math:Binop op="minus">
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="kcp"/>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="Ac"/>
 						</math:Binop>
 						<math:Binop op="times">
+							<ct:SymbRef blkIdRef="pm" symbIdRef="kpc"/>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="Ap"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
@@ -343,6 +397,8 @@
 			<ct:Variable symbId="Cc" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="divide">
+						<ct:SymbRef blkIdRef="sm" symbIdRef="Ac"/>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="Vc"/>
 					</math:Binop>
 				</ct:Assign>
 			</ct:Variable>
@@ -352,7 +408,10 @@
 				<General symbId="Cc_obs">
 					<ct:Assign>
 						<math:Binop op="plus">
+							<ct:SymbRef blkIdRef="sm" symbIdRef="Cc"/>
 							<math:Binop op="times">
+								<ct:SymbRef blkIdRef="pm" symbIdRef="b"/>
+								<ct:SymbRef blkIdRef="pm" symbIdRef="epsilon_Cc"/>
 							</math:Binop>
 						</math:Binop>
 					</ct:Assign>

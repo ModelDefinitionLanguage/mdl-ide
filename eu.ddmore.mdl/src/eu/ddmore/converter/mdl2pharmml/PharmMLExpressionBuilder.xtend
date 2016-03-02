@@ -33,11 +33,13 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 import eu.ddmore.mdl.mdl.IfExpression
 import eu.ddmore.mdl.mdl.PiecewiseExpression
 import eu.ddmore.mdl.mdl.PWClause
+import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 
 class PharmMLExpressionBuilder {
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider 
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
 	extension MdlUtils mu = new MdlUtils
 	
 	static val GLOBAL_VAR = 'global'
@@ -96,7 +98,9 @@ class PharmMLExpressionBuilder {
 	}
 	
 	def getSymbolReference(SymbolReference it){
-		ref.getSymbolReference
+		if(isFunction)
+			functionCall
+		else ref.getSymbolReference
 	}
 	
 	def getLocalSymbolReference(SymbolReference it){
@@ -119,7 +123,7 @@ class PharmMLExpressionBuilder {
 		</ct:Assign>
 	'''
 	
-    def dispatch CharSequence getPharmMLExpr(Expression expr){
+    def CharSequence getPharmMLExpr(Expression expr){
     	switch(expr){
     		OrExpression:
     			getOrExpression(expr)
@@ -392,7 +396,7 @@ class PharmMLExpressionBuilder {
 		«ENDIF»
 	'''
     
-    def dispatch CharSequence getPharmMLExpr(SymbolReference it){
+    private def CharSequence getFunctionCall(SymbolReference it){
     	var retVal = ''''''
     	val a = argList
     	switch(a){

@@ -6,7 +6,7 @@
 warfarin_PK_IVPO_dat = dataObj {
 	DECLARED_VARIABLES{
 		INPUT_KA
-		CENTRAL
+		DC
 		Y
 	}
 
@@ -14,7 +14,7 @@ warfarin_PK_IVPO_dat = dataObj {
       ID: {use is id}
       TIME: {use is idv}
       WT: {use is covariate}
-      AMT: {use is amt, define= {1 in CMT as INPUT_KA, 2 in CMT as CENTRAL} }
+      AMT: {use is amt, define= {1 in CMT as INPUT_KA, 2 in CMT as DC} }
       RATE: {use is rate}
       CMT: {use is cmt}
       DV: {use is dv, variable=Y}
@@ -105,6 +105,7 @@ warfarin_PK_IVPO_mdl = mdlObj {
 	MODEL_PREDICTION{
 	  COMPARTMENT {
 		INPUT_KA:   {type is depot, modelCmt=1, to=CENTRAL, ka=KA, tlag=ALAG1, finput=F1}
+		DC : { type is direct, to = CENTRAL }
 		CENTRAL:    {type is compartment, modelCmt=2}
                ::     {type is elimination, modelCmt=2, from=CENTRAL, v=V, cl=CL}
    }# end COMPARTMENT

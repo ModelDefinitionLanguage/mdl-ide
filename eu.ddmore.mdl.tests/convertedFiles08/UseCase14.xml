@@ -27,12 +27,15 @@
 			<PopulationParameter symbId = "HAZTRT">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="POP_HBASE"/>
+						<ct:SymbRef blkIdRef="cm" symbIdRef="TRT"/>
 					</math:Binop>
 				</ct:Assign>
 			</PopulationParameter>
 			<PopulationParameter symbId = "HBASE">
 				<ct:Assign>
 					<math:Binop op="divide">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="POP_HBASE"/>
 						<ct:Int>365</ct:Int>
 					</math:Binop>
 				</ct:Assign>
@@ -42,8 +45,10 @@
 			<ct:Variable symbId="HAZ" symbolType="real">
 				<ct:Assign>
 					<math:Binop op="times">
+						<ct:SymbRef blkIdRef="pm" symbIdRef="HBASE"/>
 						<math:Binop op="plus">
 							<ct:Int>1</ct:Int>
+							<ct:SymbRef blkIdRef="pm" symbIdRef="HAZTRT"/>
 						</math:Binop>
 					</math:Binop>
 				</ct:Assign>
@@ -55,6 +60,7 @@
 					<EventVariable symbId="Y"/>
 					<HazardFunction symbId="HAZ">
 						<ct:Assign>
+							<ct:SymbRef blkIdRef="sm" symbIdRef="HAZ"/>
 						</ct:Assign>
 					</HazardFunction>
 				</TimeToEventData>

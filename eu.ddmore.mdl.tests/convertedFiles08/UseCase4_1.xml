@@ -272,7 +272,7 @@
 						<ct:Int>1</ct:Int>
 					</Value>
 					<Value argument="cmt"> 
-						<ct:Int>2</ct:Int>
+						<ct:Int>3</ct:Int>
 					</Value>
 					<Value argument="ka"> 
 						<ct:Assign>
@@ -290,17 +290,25 @@
 						</ct:Assign>
 					</Value>
 				</Absorption>
+				<IV>
+					<Value argument="adm"> 
+						<ct:Int>2</ct:Int>
+					</Value>
+					<Value argument="cmt"> 
+						<ct:Int>3</ct:Int>
+					</Value>
+				</IV>
 				<Compartment>
 					<Value argument="amount"> 
 						<ct:SymbRef blkIdRef="sm" symbIdRef="CENTRAL"/>
 					</Value>
 					<Value argument="cmt"> 
-						<ct:Int>2</ct:Int>
+						<ct:Int>3</ct:Int>
 					</Value>
 				</Compartment>
 				<Elimination>
 					<Value argument="cmt"> 
-						<ct:Int>2</ct:Int>
+						<ct:Int>3</ct:Int>
 					</Value>
 					<Value argument="V"> 
 						<ct:Assign>
@@ -358,6 +366,7 @@
 				<ds:ColumnRef columnIdRef="AMT"/>
 				<ds:TargetMapping blkIdRef="sm">
 					<ds:Map dataSymbol="1" admNumber="1"/>
+					<ds:Map dataSymbol="2" admNumber="2"/>
 				</ds:TargetMapping>
 			</ColumnMapping>
 			<ColumnMapping>

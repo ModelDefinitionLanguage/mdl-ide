@@ -1,4 +1,4 @@
-package eu.ddmore.converter.mdl2pharmml
+package eu.ddmore.converter.mdl2pharmml08
 
 import com.google.inject.Inject
 import eu.ddmore.mdl.LibraryTestHelper
@@ -12,12 +12,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
-class Mcl2PharmMLConverterTest1 {
-	static val CONVERTED_OUTPUT_DIR="convertedFiles/"
-	static val USE_CASE_DIR="src/eu/ddmore/converter/mdl2pharmml/"
+class Mcl2PharmMLConverterTest {
+	static val CONVERTED_OUTPUT_DIR="convertedFiles08/"
+	static val USE_CASE_DIR="src/eu/ddmore/converter/mdl2pharmml08/"
 	
 	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
@@ -44,11 +45,6 @@ class Mcl2PharmMLConverterTest1 {
 		assertIsValid(pharmMLFile)
 	} 
 	
-	@Test
-	def void testDummy(){
-	}
-
-
 	@Test
 	def void testUseCase1(){
 		validateConversion("UseCase1")
@@ -89,7 +85,7 @@ class Mcl2PharmMLConverterTest1 {
 		validateConversion("UseCase5")
 	}
 
-	@Test
+	@Ignore("Currently invalid MDL")
 	def void testUseCase5_1(){
 		validateConversion("UseCase5_1")
 	}
@@ -184,12 +180,12 @@ class Mcl2PharmMLConverterTest1 {
 		validateConversion("UseCase14")
 	}
 
-	@Test
+	@Ignore("Not supported at present")
 	def void testUseCase14_1(){
 		validateConversion("UseCase14_1")
 	}
 
-	@Test
+	@Ignore("Not supported at present")
 	def void testUseCase14_2(){
 		validateConversion("UseCase14_2")
 	}
