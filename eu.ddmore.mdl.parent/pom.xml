@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- Parent POM for all MDL Editor sub-projects -->
+	<groupId>eu.ddmore</groupId>
+	<artifactId>eu.ddmore.mdl.parent</artifactId>
+	<version>1.4.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jacoco.version>0.6.0.201210061924</jacoco.version>
+		<mvn.clean.plugin.version>2.4.1</mvn.clean.plugin.version>
+
+		<!-- Tycho -->
+		<tycho.version>0.22.0</tycho.version>
+		<tycho.extras.version>0.22.0</tycho.extras.version>
+		<tycho.repo.url>https://oss.sonatype.org/content/groups/public/</tycho.repo.url>
+		<!-- Xtext and Xtend -->
+		<xtend.repo.url>http://build.eclipse.org/common/xtend/maven/</xtend.repo.url>
+		<xtend.version>2.7.3</xtend.version>
+		<fornax.repo.url>https://projects.itemis.de/nexus/content/groups/public/</fornax.repo.url>
+		<fornax.version>3.4.0</fornax.version>
+        <xtext.version>${xtend.version}</xtext.version>
+		<antlr.version>3.2</antlr.version>
+		<!-- Sonar -->
+		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<sonar.jacoco.reportPath>${project.basedir}/../eu.ddmore.mdleditor.build/target/jacoco/jacoco.exec</sonar.jacoco.reportPath>
+		<sonar.surefire.reportsPath>../${project.artifactId}.tests/target/surefire-reports/</sonar.surefire.reportsPath>
+		<sonar.skippedModules>*.tests</sonar.skippedModules>
+		<sonar.skipDesign>true</sonar.skipDesign>
+
+        <!-- A URL where the p2 repository will be published, the value is set in feature.xml of the mdl-ide-dependencies feature -->
+        <sf.publish.location>http://sourceforge.net/projects/ddmore/files/update/ddmore-tools</sf.publish.location>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <properties>
+                 <p2.repository.url>${sf.publish.location}/latest/ci/</p2.repository.url>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>release</id>
+            <properties>
+                 <version.no-snapshot>1.4.0</version.no-snapshot>
+                 <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/release/</p2.repository.url>
+            </properties>
+        </profile>
+    </profiles>
+    
+	<repositories>
+		<repository>
+			<id>xtend</id>
+			<url>${xtend.repo.url}</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>fornax.plugin.repository</id>
+			<name>Fornax Plugin Repository</name>
+			<url>${fornax.repo.url}</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>xtend</id>
+			<url>${xtend.repo.url}</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>tycho</id>
+			<url>${tycho.repo.url}</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/resources/</directory>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>${mvn.clean.plugin.version}</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${basedir}/xtend-gen</directory>
+							<includes>
+								<include>**</include>
+							</includes>
+						</fileset>
+						<fileset>
+							<directory>${basedir}/test-gen</directory>
+							<includes>
+								<include>**</include>
+							</includes>
+						</fileset>
+						<fileset>
+							<directory>${basedir}/META-INF</directory>
+							<includes>
+								<include>MANIFEST.MF_gen</include>
+							</includes>
+						</fileset>
+						<fileset>
+							<directory>${basedir}</directory>
+							<includes>
+								<include>plugin.xml_gen</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+			<!-- Code coverage -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>org.eclipse.*</exclude>
+						<exclude>org.apache.*</exclude>
+						<exclude>org.osgi.*</exclude>
+						<exclude>org.ops4j.*</exclude>
+						<exclude>org.junit.*</exclude>
+						<exclude>com.google.*</exclude>
+						<exclude>com.ibm.*</exclude>
+						<exclude>com.sun.*</exclude>
+					</excludes>
+					<destFile>${sonar.jacoco.reportPath}</destFile>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<target>
+						<artifact>
+							<groupId>eu.ddmore</groupId>
+							<artifactId>eu.ddmore.mdleditor.target</artifactId>
+							<!-- we can't use project.version because it doesn't work for eu.ddmore.mdl.sdk.jre feature which version is fixed to '1.0.2' -->
+							<version>1.4.0-SNAPSHOT</version>
+						</artifact>
+					</target>
+					<environments>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<!-- To support tests on linux box -->
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<!-- uncomment if you want to build products for other platforms as 
+							well <environment> <os>linux</os> <ws>gtk</ws> <arch>x86</arch> </environment> 
+							<environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> </environment> -->
+					</environments>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+            
+                <plugin>
+                    <!-- Populating feature.properties with appropriate update site url which is different for CI and RELEASE builds -->
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>update-feature-properties-process-resources</id>
+                            <configuration>
+                                <tasks>
+                                    <copy file="feature.properties"
+                                        tofile="feature.properties.orig" />
+                                    <replace file="feature.properties"
+                                        token="@UPDATEURL@" value="${p2.repository.url}" />
+                                </tasks>
+                            </configuration>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>update-feature-properties-revert-changes</id>
+                            <configuration>
+                                <tasks>
+                                    <move file="feature.properties.orig"
+                                        tofile="feature.properties"
+                                        overwrite="true" />
+                                </tasks>
+                            </configuration>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-compiler-plugin</artifactId>
+					<version>${tycho.version}</version>
+					<configuration>
+						<compilerArguments>
+							<inlineJSR />
+							<enableJavadoc />
+							<encoding>UTF-8</encoding>
+						</compilerArguments>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-packaging-plugin</artifactId>
+					<version>${tycho.version}</version>
+					<configuration>
+						<format>'v'yyyyMMdd-HHmm</format>
+					</configuration>
+				</plugin>
+				<!-- plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-surefire-plugin</artifactId>
+					<version>${tycho.version}</version>
+					<configuration>
+						<product>org.eclipse.sdk.ide</product>
+						<application>org.eclipse.ui.ide.workbench</application>
+					</configuration>
+				</plugin-->
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-source-plugin</artifactId>
+					<version>${tycho.version}</version>
+					<configuration>
+						<strictSrcIncludes>false</strictSrcIncludes>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-p2-director-plugin</artifactId>
+					<version>${tycho.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-p2-repository-plugin</artifactId>
+					<version>${tycho.version}</version>
+                    <configuration>
+                        <includeAllDependencies>true</includeAllDependencies>
+                    </configuration>
+				</plugin>
+
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.fornax.toolsupport
+										</groupId>
+										<artifactId>
+											fornax-oaw-m2-plugin
+										</artifactId>
+										<versionRange>
+											[3.4.0,)
+										</versionRange>
+										<goals>
+											<goal>run-workflow</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-antrun-plugin
+										</artifactId>
+										<versionRange>
+											[1.3,)
+										</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+	                            <pluginExecution>
+	                                <pluginExecutionFilter>
+	                                    <groupId>org.jacoco</groupId>
+	                                    <artifactId>jacoco-maven-plugin</artifactId>
+	                                    <versionRange>[0.6.0.201210061924,)</versionRange>
+	                                    <goals>
+	                                        <goal>prepare-agent</goal>
+	                                    </goals>
+	                                </pluginExecutionFilter>
+	                                <action>
+	                                    <ignore />
+	                                </action>
+	                            </pluginExecution> 
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<url>http://ddmore.eu/</url>
+	<name>Drug Disease Model Resources Framework</name>
+	<description>The Drug Disease Model Resources (DDMoRe) consortium builds and maintains a universally applicable, open source, model based framework, intended as the gold standard for future collaborative drug and disease Modelling &amp; Simulation.</description>
+</project> 
