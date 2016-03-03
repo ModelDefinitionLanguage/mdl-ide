@@ -5,38 +5,31 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<relativePath>../eu.ddmore.mdleditor.build/pom.xml</relativePath>
+		<relativePath>../eu.ddmore.mdl.parent/pom.xml</relativePath>
 		<groupId>eu.ddmore</groupId>
-		<artifactId>eu.ddmore.parent</artifactId>
+		<artifactId>eu.ddmore.mdl.parent</artifactId>
 		<version>1.4.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>eu.ddmore.mdl.ui</artifactId>
 	<packaging>eclipse-plugin</packaging>
 	
-    <dependencies>
-        <dependency>
-            <groupId>eu.ddmore</groupId>
-            <artifactId>eu.ddmore.mdl</artifactId>
-        </dependency>
-    </dependencies>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.eclipse.xtend</groupId>
-                <artifactId>xtend-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
-    <dependencyManagement>
-    	<dependencies>
-    		<dependency>
-    			<groupId>eu.ddmore</groupId>
-    			<artifactId>eu.ddmore.mdl</artifactId>
-    			<version>1.4.0-SNAPSHOT</version>
-    		</dependency>
-    	</dependencies>
-    </dependencyManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>gen-clean</id>
+						<phase>clean</phase>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.xtend</groupId>
+				<artifactId>xtend-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project> 
