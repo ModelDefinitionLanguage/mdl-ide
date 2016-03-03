@@ -9,12 +9,12 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>../../eu.ddmore.mdleditor.target</module>
-		<module>../../eu.ddmore.mdl</module>
-		<module>../../eu.ddmore.mdl.ui</module>
+		<!-- module>../../eu.ddmore.mdl</module>
+		<module>../../eu.ddmore.mdl.ui</module-->
 		<module>../../eu.ddmore.mdleditor.application</module>
-		<module>../../eu.ddmore.mdl.tests</module>
+		<!-- module>../../eu.ddmore.mdl.tests</module-->
 		<module>../../eu.ddmore.mdl.sdk</module>
-		<module>../../eu.ddmore.mdl.sdk.jre</module>
+		<!-- module>../../eu.ddmore.mdl.sdk.jre</module -->
         <module>../../eu.ddmore.mdl.ide.feature</module>
 		<module>../../eu.ddmore.mdleditor.site</module>
 	</modules>
