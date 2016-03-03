@@ -12,31 +12,32 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jacoco.version>0.6.0.201210061924</jacoco.version>
+		<!-- jacoco.version>0.6.0.201210061924</jacoco.version -->
 		<mvn.clean.plugin.version>2.4.1</mvn.clean.plugin.version>
 
 		<!-- Tycho -->
-		<tycho.version>0.22.0</tycho.version>
-		<tycho.extras.version>0.22.0</tycho.extras.version>
+		<tycho.version>0.24.0</tycho.version>
+		<tycho.extras.version>0.24.0</tycho.extras.version>
 		<tycho.repo.url>https://oss.sonatype.org/content/groups/public/</tycho.repo.url>
 		<!-- Xtext and Xtend -->
 		<xtend.repo.url>http://build.eclipse.org/common/xtend/maven/</xtend.repo.url>
-		<xtend.version>2.7.3</xtend.version>
+		<xtend.version>2.8.4</xtend.version>
 		<fornax.repo.url>https://projects.itemis.de/nexus/content/groups/public/</fornax.repo.url>
 		<fornax.version>3.4.0</fornax.version>
         <xtext.version>${xtend.version}</xtext.version>
 		<antlr.version>3.2</antlr.version>
 		<!-- Sonar -->
-		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+		<!-- sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPath>${project.basedir}/../eu.ddmore.mdl.aggregator/target/jacoco/jacoco.exec</sonar.jacoco.reportPath>
 		<sonar.surefire.reportsPath>../${project.artifactId}.tests/target/surefire-reports/</sonar.surefire.reportsPath>
 		<sonar.skippedModules>*.tests</sonar.skippedModules>
-		<sonar.skipDesign>true</sonar.skipDesign>
+		<sonar.skipDesign>true</sonar.skipDesign-->
 
         <!-- A URL where the p2 repository will be published, the value is set in feature.xml of the mdl-ide-dependencies feature -->
         <sf.publish.location>http://sourceforge.net/projects/ddmore/files/update/ddmore-tools</sf.publish.location>
-    </properties>
+ 		<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
+     </properties>
 
     <profiles>
         <profile>
@@ -58,10 +59,15 @@
     </profiles>
     
 	<repositories>
-		<repository>
+		<!-- repository>
 			<id>xtend</id>
 			<url>${xtend.repo.url}</url>
-		</repository>
+		</repository-->
+        <!-- repository>
+            <id>mars</id>
+            <url>${mars-repo.url}</url>
+            <layout>p2</layout>
+        </repository-->
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -69,11 +75,11 @@
 			<name>Fornax Plugin Repository</name>
 			<url>${fornax.repo.url}</url>
 		</pluginRepository>
-		<pluginRepository>
+		<!-- pluginRepository>
 			<id>xtend</id>
 			<url>${xtend.repo.url}</url>
-		</pluginRepository>
-		<pluginRepository>
+		</pluginRepository-->
+		<!-- pluginRepository>
 			<id>tycho</id>
 			<url>${tycho.repo.url}</url>
 			<releases>
@@ -82,7 +88,7 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</pluginRepository>
+		</pluginRepository-->
 	</pluginRepositories>
 
 	<build>
@@ -137,7 +143,7 @@
 			</plugin>
 
 			<!-- Code coverage -->
-			<plugin>
+			<!-- plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>${jacoco.version}</version>
@@ -161,7 +167,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin-->
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
@@ -354,7 +360,7 @@
 										<ignore></ignore>
 									</action>
 								</pluginExecution>
-	                            <pluginExecution>
+	                            <!-- pluginExecution>
 	                                <pluginExecutionFilter>
 	                                    <groupId>org.jacoco</groupId>
 	                                    <artifactId>jacoco-maven-plugin</artifactId>
@@ -366,7 +372,7 @@
 	                                <action>
 	                                    <ignore />
 	                                </action>
-	                            </pluginExecution> 
+	                            </pluginExecution--> 
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
