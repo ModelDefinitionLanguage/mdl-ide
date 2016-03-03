@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1457043980">
+<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1457044765">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.feature.group" version="3.11.2.v20160212-1500"/>
@@ -76,24 +76,6 @@
 <unit id="org.mockito" version="1.9.5.v201311280930"/>
 <unit id="org.slf4j.api" version="1.7.2.v20121108-1250"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
-<repository location="http://download.eclipse.org/uomo/0.6/kepler/repository/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="de.walware.3rdparty.lucene.feature.group" version="4.7.2.b201407011730sw"/>
-<unit id="de.walware.eutils.autorun.feature.group" version="1.0.0.b201404250840E38sw"/>
-<unit id="de.walware.ecommons.e.feature.group" version="1.5.0.b201407171807E43sw"/>
-<unit id="de.walware.ecommons.edb.feature.group" version="0.3.0.b201407171807E43sw"/>
-<unit id="de.walware.ecommons.ltk.feature.group" version="2.3.0.b201407171807E43sw"/>
-<unit id="de.walware.rj.eclient.feature.group" version="2.0.1.b201406211200"/>
-<unit id="de.walware.rj.core.feature.group" version="2.0.1.b201406211200"/>
-<unit id="de.walware.statet.r.feature.group" version="3.4.0.b201407171807E43sw"/>
-<unit id="de.walware.statet.rtm.ftable.feature.group" version="1.0.1.b201407171807E43sw"/>
-<unit id="de.walware.statet.rtm.ggplot.feature.group" version="1.0.1.b201407171807E43sw"/>
-<unit id="de.walware.statet.r.sweave.feature.group" version="3.4.0.b201407171807E43sw"/>
-<repository location="http://download.walware.de/eclipse-4.4/site-statet-03.04.00/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.6.1.v20160208-1043"/>
