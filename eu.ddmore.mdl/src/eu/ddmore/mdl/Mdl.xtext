@@ -74,7 +74,6 @@ TransformedDefinition returns EquationTypeDefinition:
 ;
 
 RandomVariableDefinition:
-//	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
 	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = Expression ';'?
 ;
 
@@ -97,8 +96,34 @@ ProbabilityFunction:
 
 
 ListDefinition:
-	name = ID LIST_ASSIGN list = AttributeList ';'?
+	name = ID LIST_ASSIGN list = (AttributeList|ListPiecewiseExpression) ';'?
 ;
+
+ListPiecewiseExpression returns AbstractAttributeList:
+	{ListPiecewiseExpression} 'piecewise' BEGIN BEGIN when+=PWClause (=>';' when+=PWClause)* (';' 'otherwise' otherwise=AttributeList )?  END END
+;
+
+ListPWClause:
+	{ListPWClause} value=AttributeList WHEN cond=Expression
+;
+
+//ListIfExprPart:
+//	IfClause | ElifClause
+//;
+//
+//ListIfClause returns ListIfExprPart:
+//	{ListIfClause} IF '(' cond=Expression ')' => THEN value=AttributeList
+//;
+//
+//ListElifClause returns ListIfExprPart:
+//	{ListElifClause} ELSEIF '(' cond=Expression ')' => THEN value=AttributeList
+//;
+//
+//ListElseClause:
+//	{ListElseClause} ELSE value=AttributeList
+//;
+
+
 
 AnonymousListStatement:
 	ANONYMOUS_PREFIX list = AttributeList ';'?
@@ -118,8 +143,8 @@ CategoryValueDefinition:
 	name = ID (WHEN ordered?=ORDERED? mappedTo=Expression)?
 ;
 
-AttributeList:
-	BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
+AttributeList returns AbstractAttributeList:
+	{AttributeList} BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
 ;
 
 ValuePair:

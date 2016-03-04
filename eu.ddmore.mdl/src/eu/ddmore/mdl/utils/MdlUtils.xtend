@@ -23,6 +23,7 @@ import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.AttributeList
 
 class MdlUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -88,13 +89,13 @@ class MdlUtils {
 	}	
 
 
-	def boolean isDataCovariate(ListDefinition it){
+	def boolean isDataCovariate(AttributeList it){
 		isMatchingDataUse(ListDefinitionTable::COV_USE_VALUE, ListDefinitionTable::CATCOV_USE_VALUE)
 //		list.attributes.exists[argumentName == ListDefinitionTable::USE_TYPE.enumName && (
 //			expression.convertToString == ListDefinitionTable::COV_USE_VALUE || expression.convertToString == ListDefinitionTable::CATCOV_USE_VALUE)]
 	}
 
-	def boolean isDataObservation(ListDefinition it){
+	def boolean isDataObservation(AttributeList it){
 		isMatchingDataUse(ListDefinitionTable::OBS_USE_VALUE)
 //		list.attributes.exists[argumentName == ListDefinitionTable::USE_TYPE.enumName && (
 //			expression.convertToString == ListDefinitionTable::OBS_USE_VALUE)]
@@ -104,8 +105,8 @@ class MdlUtils {
 		stmt.identifier == BlockDefinitionTable::DATA_SRC_BLK
 	}
 
-	def boolean isMatchingDataUse(ListDefinition it, String ... useValue){
-		list.attributes.exists[argumentName == ListDefinitionTable::USE_ATT && useValue.exists[uv | expression.enumValue == uv] ]
+	def boolean isMatchingDataUse(AttributeList it, String ... useValue){
+		attributes.exists[argumentName == ListDefinitionTable::USE_ATT && useValue.exists[uv | expression.enumValue == uv] ]
 	}
 
 	def getDataSourceStmt(MclObject it){
