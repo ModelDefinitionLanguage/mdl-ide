@@ -39,7 +39,7 @@ class VectorTypeInfo extends TypeInfo{
 	}
 	
 	override makeVector(){
-		new VectorTypeInfo(theType, elementType);
+		new VectorTypeInfo(this);
 	}
 	
 	override makeMatrix(){

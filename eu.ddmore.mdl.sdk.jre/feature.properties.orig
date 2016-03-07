@@ -1,0 +1,61 @@
+description=Bundling of a JRE with the MDL IDE.
+updateLabel=DDMoRe Tools: MDL IDE Embedded JRE
+updateUrl=http://sourceforge.net/projects/ddmore/files/update/ddmore-tools/latest/ci/
+provider=Mango Business Solutions Ltd
+label=DDMoRe Tools: MDL IDE Embedded JRE
+licenseUrl=license.html
+license=Mango Solutions Software User Agreement \
+\n\
+\n\
+May 26, 2015 \
+\n\
+\n\
+Usage Of Content \
+\n\
+\n\
+THIS PRODUCT CONTAINS MANGO SOLUTIONS AND/OR THIRD PARTY SOFTWARE, DOCUMENTATION, INFORMATION AND/OR OTHER MATERIALS (COLLECTIVELY "CONTENT"). USE OF THE CONTENT IS GOVERNED BY THE TERMS AND CONDITIONS OF THIS AGREEMENT AND/OR THE TERMS AND CONDITIONS OF LICENSE AGREEMENTS OR NOTICES INDICATED OR REFERENCED BELOW. BY USING THE CONTENT, YOU AGREE THAT YOUR USE OF THE CONTENT IS GOVERNED BY THIS AGREEMENT AND/OR THE TERMS AND CONDITIONS OF ANY APPLICABLE LICENSE AGREEMENTS OR NOTICES INDICATED OR REFERENCED BELOW. IF YOU DO NOT AGREE TO THE TERMS AND CONDITIONS OF THIS AGREEMENT AND THE TERMS AND CONDITIONS OF ANY APPLICABLE LICENSE AGREEMENTS OR NOTICES INDICATED OR REFERENCED BELOW, THEN YOU MAY NOT USE THE CONTENT. \
+\n\
+\n\
+Applicable Licenses \
+\n\
+\n\
+Unless otherwise indicated, all Content in this Product made available by Mango Solutions is provided to you under the terms and conditions of the following license. \
+\n\
+\n\
+ The Clear BSD License \
+\n\
+\n\
+ Copyright (c) 2014-2015 Mango Business Solutions Ltd, Chippenham, Wiltshire, UK \
+\n\
+\n\
+ All rights reserved. \
+\n\
+\n\
+Redistribution and use in source and binary forms, with or without modification, are permitted (subject to the limitations in the disclaimer below) provided that the following conditions are met: \
+\n\
+* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. \
+\n\
+* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. \
+\n\
+* Neither the name of Mango Business Solutions Ltd nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. \
+\n\
+\n\
+NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. \
+\n\
+\n\
+Content includes, but is not limited to, source code, object code, documentation and other files maintained on Mango servers and/ or in the DDMoRe git repository ("Repository") and made available as downloadable archives ("Downloads"). \
+\n\
+\n\
+IT IS YOUR OBLIGATION TO READ AND ACCEPT ALL SUCH TERMS AND CONDITIONS PRIOR TO USE OF THE CONTENT. If no About, Feature License, or Feature Update License is provided, please contact Mango Solutions to determine what terms and conditions govern the Content. \
+\n\
+\n\
+The Abouts, Feature Licenses, and Feature Update Licenses may refer to the Eclipse Public License Version 1.0 ("EPL") or other license agreements, notices or terms and conditions. Some of these other license agreements may include (but are not limited to): \
+ \u2022Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX (available at http://java.com/license) \
+ \u2022Apache Software License 2.0 (available at http://www.apache.org/licenses/LICENSE-2.0) \
+ \u2022Mozilla Public License Version 1.1 (available at http://www.mozilla.org/MPL/MPL-1.1.html) \
+ \u2022GNU Lesser General Public License 2.1 (available at http://www.gnu.org/licenses/lgpl-2.1.html)
+copyright=Copyright (C) 2015, Mango Business Solutions. All rights reserved. \
+\n\
+\n\
+This feature provides JRE installation used by the DDMoRe MDL IDE. \
+For copyright information of the included JRE please refer to "jre/COPYRIGHT" file located in home directory of this Eclipse instance.
