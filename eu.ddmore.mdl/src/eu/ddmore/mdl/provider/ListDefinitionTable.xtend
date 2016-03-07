@@ -16,6 +16,7 @@ class ListDefinitionTable {
 	public static val USE_ATT = 'use'
 	public static val DEFINE_ATT = 'define'
 	public static val VARIABLE_ATT = 'variable'
+	public static val INTERP_ATT = 'interp'
 	public static val COV_USE_VALUE = 'covariate'
 	public static val AMT_USE_VALUE = 'amt'
 	public static val IGNORE_USE_VALUE = 'ignore'
@@ -68,6 +69,7 @@ class ListDefinitionTable {
 	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes', 'covariate', 'catCov',
 																			'numberArms', 'armSize', 'parameter', 'doseTime'
 																		})
+//	static val INTERP_TYPE = new BuiltinEnumTypeInfo('interpType', #{ 'constant', 'nearest', 'linear', 'spline', 'pchip', 'cubic', 'lastValue' })
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 //	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
 	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('objType', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
@@ -95,8 +97,12 @@ class ListDefinitionTable {
 		"DATA_INPUT_VARIABLES" -> (
 			new BlockListDefinition(USE_ATT, newArrayList(
 					new ListDefInfo('covariate', new ListTypeInfo("Covariate", PrimitiveType.Real),#[
-						 new AttributeDefn(USE_ATT, true, USE_TYPE)
-						 ] 
+						 new AttributeDefn(USE_ATT, true, USE_TYPE)//, new AttributeDefn(INTERP_ATT, false, INTERP_TYPE)
+						 ]//,
+//						 #[
+////						 	#{ USE_ATT -> true, INTERP_ATT -> false }
+//						 ],
+//						 false
 					),
 					new ListDefInfo('catCov', new EnumListTypeInfo("CatCovariate"), #[
 						 new AttributeDefn(USE_ATT, true, USE_TYPE, TypeSystemProvider::INT_TYPE, true)

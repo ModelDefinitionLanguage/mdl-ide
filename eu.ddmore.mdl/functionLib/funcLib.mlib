@@ -1,4 +1,4 @@
-// Custom
+// Custom Types
 type transType _enum (none, ln, logit, probit);
 type GenericEnum _category;
 type fixEffAtts _sublist;
@@ -32,13 +32,18 @@ func sqrt (x::Real) returns ::Real;
 func sum (x::Vector) returns ::Real;
 func mean (x::Vector) returns ::Real;
 func median (x::Vector) returns ::Real;
-func inverse (x::Matrix) returns ::Matrix;
 func toInt (x::Real) returns ::Int;
-func asVector(x::Matrix) returns ::Vector;
-func rep(x::Vector, times::Int) returns ::Vector; 
-func rToMatrix(rows::Vector[::Vector[::Real]]) returns ::Matrix;
-func cToMatrix(cols::Vector[::Vector[::Real]]) returns ::Matrix;
+func rep(x::Vector, times::Int) returns ::Vector;
 
+// Matrix functions
+func toMatrixByRow(rows::Vector[::Vector[::Real]]) returns ::Matrix;
+func toMatrixByCol(cols::Vector[::Vector[::Real]]) returns ::Matrix;
+func asVector(x::Matrix) returns ::Vector;
+func inverse(x::Matrix) returns ::Matrix;
+func transpose(x::Matrix) returns ::Matrix;
+func diagonal(x::Vector) returns ::Matrix;
+
+// Named functions
 func Normal named
 				(mean::Real,
 				sd::Real,

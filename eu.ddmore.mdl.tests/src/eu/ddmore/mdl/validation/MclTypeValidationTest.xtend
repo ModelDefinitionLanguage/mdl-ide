@@ -2535,7 +2535,7 @@ testprior = priorObj{
 		INPUT_PRIOR_DATA{
 			bins_k::Vector[::Real]
 			bins_v::Vector[::Real]
-			bins_k_v= rToMatrix([bins_k, bins_v])
+			bins_k_v= toMatrixByRow([bins_k, bins_v])
 		}
 	}
 }
