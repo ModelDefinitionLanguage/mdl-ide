@@ -1443,7 +1443,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				A =  [ [ 0 ], 20, 26]
+				A =  [ 20, [ 0 ], 26]
 			}
 			
 		} # end of model object
@@ -1466,7 +1466,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				A =  [ C, 20, 26]
+				A =  [ 20, C, 26]
 				C = [ 1, 2, 3]
 			}
 			
@@ -2490,6 +2490,7 @@ d1g=designObj{
 		mcl.assertNoErrors
 	}
 
+	@Test
 	def void testInvalidCompartmentUsage(){
 		val mcl = '''
 warfarin_PK_Compartments_mdl = mdlObj {
@@ -2521,8 +2522,26 @@ warfarin_PK_Compartments_mdl = mdlObj {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"attribute 'to' expected value of type 'ref:List:Compartment' but was 'ref:Real'."
+			"attribute 'to' expected value of type 'ref:ListSubtype:DerivSuper' but was 'ref:Int'."
 		)
+	}
+
+	@Test
+	def void testVectorOfVector(){
+		val mcl = '''
+testprior = priorObj{
+
+	NON_CANONICAL_DISTRIBUTION{
+		INPUT_PRIOR_DATA{
+			bins_k::Vector[::Real]
+			bins_v::Vector[::Real]
+			bins_k_v= rToMatrix([bins_k, bins_v])
+		}
+	}
+}
+		'''.parse
+		
+		mcl.assertNoErrors
 	}
 }
 

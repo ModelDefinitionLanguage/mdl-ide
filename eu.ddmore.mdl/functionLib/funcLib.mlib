@@ -34,6 +34,10 @@ func mean (x::Vector) returns ::Real;
 func median (x::Vector) returns ::Real;
 func inverse (x::Matrix) returns ::Matrix;
 func toInt (x::Real) returns ::Int;
+func asVector(x::Matrix) returns ::Vector;
+func rep(x::Vector, times::Int) returns ::Vector; 
+func rToMatrix(rows::Vector[::Vector[::Real]]) returns ::Matrix;
+func cToMatrix(cols::Vector[::Vector[::Real]]) returns ::Matrix;
 
 func Normal named
 				(mean::Real,
@@ -95,6 +99,7 @@ func Empirical named
 				data::Vector,
 				probability::Vector
 			)
+			sig(data, probability?)
 			returns ::Pdf;
 func MultiEmpirical named
 			(
