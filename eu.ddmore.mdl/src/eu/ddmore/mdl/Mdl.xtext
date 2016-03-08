@@ -99,8 +99,12 @@ ListDefinition:
 	name = ID LIST_ASSIGN list = (AttributeList|ListPiecewiseExpression) ';'?
 ;
 
-ListPiecewiseExpression returns AbstractAttributeList:
-	{ListPiecewiseExpression} 'piecewise' BEGIN BEGIN when+=PWClause (=>';' when+=PWClause)* (';' 'otherwise' otherwise=AttributeList )?  END END
+AbstractAttributeList:
+	AttributeList|ListPiecewiseExpression
+;
+
+ListPiecewiseExpression:
+	{ListPiecewiseExpression} 'piecewise' BEGIN BEGIN when+=ListPWClause (=>';' when+=ListPWClause)* (';' 'otherwise' otherwise=AttributeList )?  END END
 ;
 
 ListPWClause:
@@ -143,7 +147,7 @@ CategoryValueDefinition:
 	name = ID (WHEN ordered?=ORDERED? mappedTo=Expression)?
 ;
 
-AttributeList returns AbstractAttributeList:
+AttributeList:
 	{AttributeList} BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
 ;
 

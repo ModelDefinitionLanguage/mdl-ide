@@ -174,7 +174,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 		if(blk != null && blk.identifier == BlockDefinitionTable::DIV_BLK_NAME){
 			// data mapping block
-			val useValue = list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
+			val useValue = firstAttributeList.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 			val expectedColumnName = DataNamingLookup.get(useValue)
 			if(expectedColumnName != null && expectedColumnName != name){
 				warning("Column definitions with use '" + useValue + "' must be named '" + expectedColumnName + "' otherwise execution in R will fail.",

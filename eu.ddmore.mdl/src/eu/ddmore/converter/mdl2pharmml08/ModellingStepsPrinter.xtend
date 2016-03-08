@@ -112,17 +112,17 @@ class ModellingStepsPrinter {
 				'''
 				<ParameterEstimation>
 					«paramVar.getSymbolReference»
-					<InitialEstimate fixed="«stmt.list.getAttributeExpression('fix')?.convertToString ?: 'false'»">
-						«stmt.list.getAttributeExpression('value').pharmMLExpr»
+					<InitialEstimate fixed="«stmt.firstAttributeList.getAttributeExpression('fix')?.convertToString ?: 'false'»">
+						«stmt.firstAttributeList.getAttributeExpression('value').pharmMLExpr»
 					</InitialEstimate>
-					«IF stmt.list.getAttributeExpression('lo') != null»
+					«IF stmt.firstAttributeList.getAttributeExpression('lo') != null»
 						<LowerBound>
-							«stmt.list.getAttributeExpression('lo').pharmMLExpr»
+							«stmt.firstAttributeList.getAttributeExpression('lo').pharmMLExpr»
 						</LowerBound>
 					«ENDIF»
-					«IF stmt.list.getAttributeExpression('hi') != null»
+					«IF stmt.firstAttributeList.getAttributeExpression('hi') != null»
 						<UpperBound>
-							«stmt.list.getAttributeExpression('hi').pharmMLExpr»
+							«stmt.firstAttributeList.getAttributeExpression('hi').pharmMLExpr»
 						</UpperBound>
 					«ENDIF»
 				</ParameterEstimation>
@@ -138,7 +138,7 @@ class ModellingStepsPrinter {
 				«stmt.writeParameterEstimate(pObj)»
 			«ENDFOR»
 			«FOR stmt: pObj.paramVariabilityParams»
-				«IF (stmt as ListDefinition).list.getAttributeEnumValue('type') != 'corr' && (stmt as ListDefinition).list.getAttributeEnumValue('type') != 'cov'»
+				«IF (stmt as ListDefinition).firstAttributeList.getAttributeEnumValue('type') != 'corr' && (stmt as ListDefinition).firstAttributeList.getAttributeEnumValue('type') != 'cov'»
 					«stmt.writeParameterEstimate(pObj)»
 				«ENDIF»
 			«ENDFOR»
@@ -152,7 +152,7 @@ class ModellingStepsPrinter {
 			val s = dObj.dataSourceStmt
 				// get first statement
 			if (s != null){
-				if(s.list.getAttributeEnumValue('inputFormat') == 'nonmemFormat') {
+				if(s.firstAttributeList.getAttributeEnumValue('inputFormat') == 'nonmemFormat') {
 					var content = print_ds_NONMEM_DataSet(mObj, dObj);
 					res = res + print_ds_ExternalDataSet(content, "NONMEM", BLK_DS_NONMEM_DATASET);
 				}
@@ -180,7 +180,7 @@ class ModellingStepsPrinter {
 	def print_ds_NONMEM_DataSet(MclObject mObj, MclObject dObj) {
 		var res = "";
 		for (column : dObj.dataColumnDefinitions) {
-			val use = column.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
+			val use = column.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
 			switch(use){
 				case(ListDefinitionTable::ID_USE_VALUE),
 				case(ListDefinitionTable::VARLVL_USE_VALUE):{
@@ -227,7 +227,7 @@ class ModellingStepsPrinter {
 			}
 		}
 		for (column : dObj.dataDerivedColumnDefinitions) {
-			val use = column.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
+			val use = column.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
 			switch(use){
 				case(ListDefinitionTable::DOSE_TIME_USE_VALUE):{
 					res += column.writeDoseTimeMapping(dObj, mObj)
@@ -239,8 +239,8 @@ class ModellingStepsPrinter {
 
 
 	def CharSequence writeDoseTimeMapping(ListDefinition column, MclObject dObj, MclObject mObj){
-		var idvCol = column.list.getAttributeExpression(ListDefinitionTable::IDV_COL_ATT)
-		var amtCol = column.list.getAttributeExpression(ListDefinitionTable::AMT_COL_ATT)
+		var idvCol = column.firstAttributeList.getAttributeExpression(ListDefinitionTable::IDV_COL_ATT)
+		var amtCol = column.firstAttributeList.getAttributeExpression(ListDefinitionTable::AMT_COL_ATT)
 		var mdlDtSymb = mObj.findMdlSymbolDefn(column.name)
 		'''
 		<!-- doseTime=«mdlDtSymb.name» -->
@@ -330,9 +330,9 @@ class ModellingStepsPrinter {
 	}
 	
 	protected def print_ds_StandardAmtMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj) {
-		val define = amtColumn.list.getAttributeExpression('define');
+		val define = amtColumn.firstAttributeList.getAttributeExpression('define');
 		if (define == null) {
-			val varDefn = amtColumn.list.getAttributeExpression('variable');
+			val varDefn = amtColumn.firstAttributeList.getAttributeExpression('variable');
 			if(varDefn instanceof SymbolReference){
 				if(!mObj.hasCompartmentDosing(varDefn.ref)){
 					writeSingleDoseMapping(mObj, amtColumn, varDefn)
@@ -345,7 +345,7 @@ class ModellingStepsPrinter {
 	}
 
 	def print_ds_TargetMapping(ListDefinition amtColumn, MclObject dObj, MclObject mObj){
-		val define = amtColumn.list.getAttributeExpression('define');
+		val define = amtColumn.firstAttributeList.getAttributeExpression('define');
 		var toolMappingDefn = '''''';
 		if (define != null) {
 			// There really must be define in this case.
@@ -360,7 +360,7 @@ class ModellingStepsPrinter {
 					'''
 			}
 		} else {
-			val varDefn = amtColumn.list.getAttributeExpression('variable');
+			val varDefn = amtColumn.firstAttributeList.getAttributeExpression('variable');
 			if(varDefn instanceof SymbolReference){
 				toolMappingDefn += '''
 					«IF mObj.isCompartmentInput(varDefn.ref)»
@@ -382,7 +382,7 @@ class ModellingStepsPrinter {
 	}
 	
 	def boolean isAdministrationMacro(ListDefinition cmtDefn){
-		val type = cmtDefn.list.getAttributeEnumValue(ListDefinitionTable::CMT_TYPE_ATT)
+		val type = cmtDefn.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::CMT_TYPE_ATT)
 		return type == 'depot' || type == 'input' || type == 'direct'
 	}
 
@@ -402,7 +402,7 @@ class ModellingStepsPrinter {
 	
 	private def print_ds_CategoricalMapping(ListDefinition column) {
 		var res = "";
-			val define = column.list.getAttributeExpression(ListDefinitionTable::USE_ATT);
+			val define = column.firstAttributeList.getAttributeExpression(ListDefinitionTable::USE_ATT);
 			// get an EnumExpression here - use this to get the categories.
 			switch(define){
 				EnumExpression:{
@@ -462,14 +462,14 @@ class ModellingStepsPrinter {
 
 	def isCategoricalObs(SymbolDefinition symb){
 		if(symb instanceof ListDefinition){
-			(symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT) == ListDefinitionTable::CATEGORICAL_OBS_VALUE
+			(symb as ListDefinition).firstAttributeList.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT) == ListDefinitionTable::CATEGORICAL_OBS_VALUE
 		}
 		else false
 	}
 
 	def isDiscreteObs(SymbolDefinition symb){
 		if(symb instanceof ListDefinition){
-			(symb as ListDefinition).list.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT) == ListDefinitionTable::DISCRETE_OBS_VALUE
+			(symb as ListDefinition).firstAttributeList.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT) == ListDefinitionTable::DISCRETE_OBS_VALUE
 		}
 		else false
 	}
@@ -651,14 +651,14 @@ class ModellingStepsPrinter {
 	
 	def print_ds_DvMapping(ListDefinition dvColumn, MclObject dObj, MclObject mObj){
 		var CharSequence retVal = ''''''
-		val variable = dvColumn.list.getAttributeExpression('variable');
+		val variable = dvColumn.firstAttributeList.getAttributeExpression('variable');
 		if (variable != null && mObj.isDefinedInMdlObservations(variable)) {
 			// Reference or mapped to data
 			retVal = writeSingleObsMapping(mObj, dvColumn, variable)
 			saveMappedColumn(dvColumn.name)
 		}
 		else { 
-			val define = dvColumn.list.getAttributeExpression(ListDefinitionTable::DEFINE_ATT);
+			val define = dvColumn.firstAttributeList.getAttributeExpression(ListDefinitionTable::DEFINE_ATT);
 			if(mObj.isMultiObsMappingDefinedInMdlObs(define)){
 				retVal = writeMultipleObsMapping(mObj, dvColumn, define)
 				saveMappedColumn(dvColumn.name)
@@ -724,18 +724,18 @@ class ModellingStepsPrinter {
 	
 	def getIgnoreLineSymbol(MclObject dObj){
 		val s = dObj.getDataSourceStmt
-		s.list.getAttributeExpression('ignore')?.convertToString
+		s.firstAttributeList.getAttributeExpression('ignore')?.convertToString
 	}
 	
 	def print_ds_DataSet(MclObject dObj, MclObject mObj) {
 		var res = "";
 		var k = 1;
 		val dosingToCompartmentMacro = dObj.dataColumnDefinitions.exists[
-				list.getAttributeEnumValue(ListDefinitionTable::USE_ATT) == ListDefinitionTable::AMT_USE_VALUE &&
+				firstAttributeList.getAttributeEnumValue(ListDefinitionTable::USE_ATT) == ListDefinitionTable::AMT_USE_VALUE &&
 				isDosingToCompartmentMacro(mObj)
 		]
 		for (column : dObj.dataColumnDefinitions) {
-			val columnType = column.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
+			val columnType = column.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
 			val columnId = column.name;
 			val convertedColType = switch(columnType){
 				case(ListDefinitionTable::COV_USE_VALUE),
@@ -794,7 +794,7 @@ class ModellingStepsPrinter {
 	}
 	
 	def boolean isDosingToCompartmentMacro(ListDefinition amtColumn, MclObject mObj){
-		val define = amtColumn.list.getAttributeExpression('define');
+		val define = amtColumn.firstAttributeList.getAttributeExpression('define');
 	
 		val mappedSymbol = define.getMappedSymbolRef
 		for(symb : mappedSymbol){
@@ -818,7 +818,7 @@ class ModellingStepsPrinter {
 	}
 
 	protected def getValueType(ListDefinition dataColumn) {
-		val useValue = dataColumn.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
+		val useValue = dataColumn.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::USE_ATT);
 
 		switch useValue {
 			case ListDefinitionTable::ID_USE_VALUE: Constants::TYPE_INT
@@ -836,7 +836,7 @@ class ModellingStepsPrinter {
 		var res = "";
 		val s = dObj.getDataSourceStmt
 		var file = "";
-		file = s.list.getAttributeExpression('file').convertToString
+		file = s.firstAttributeList.getAttributeExpression('file').convertToString
 		if (file.length > 0) {
 			res = res + '''				
 				<ExternalFile oid="«BLK_DS_IMPORT_DATA»">
@@ -871,10 +871,10 @@ class ModellingStepsPrinter {
 	def writeConfiguration(Statement stmt){
 		switch(stmt){
 			ListDefinition:{
-				val targetExpr = stmt.list.getAttributeExpression('target')
-				val versionExpr = stmt.list.getAttributeExpression('version')
-				val algoExpr = stmt.list.getAttributeExpression('algo')
-				val tolExpr = stmt.list.getAttributeExpression('tol')
+				val targetExpr = stmt.firstAttributeList.getAttributeExpression('target')
+				val versionExpr = stmt.firstAttributeList.getAttributeExpression('version')
+				val algoExpr = stmt.firstAttributeList.getAttributeExpression('algo')
+				val tolExpr = stmt.firstAttributeList.getAttributeExpression('tol')
 				'''
 				«IF targetExpr != null»
 					«writeProperty('target', targetExpr)»

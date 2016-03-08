@@ -20,6 +20,7 @@ import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.utils.MdlUtils
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -29,6 +30,7 @@ class MclScopeProviderTest {
 	@Inject extension IScopeProvider
 	
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
+	extension MdlUtils mu = new MdlUtils
 	
 	val static CODE_SNIPPET = '''
 warfarin_PK_SEXAGE_mdl2 = mdlObj {
@@ -129,7 +131,7 @@ obj1 = mdlObj{
 		
 		val blkBody = (mcl.objects.head.blocks.last.body as BlockStatementBody)
 		val catStmt = blkBody.statements.last as ListDefinition
-		val funCall = catStmt.list.getAttributeExpression('distn') as SymbolReference
+		val funCall = catStmt.firstAttributeList.getAttributeExpression('distn') as SymbolReference
 //		val funCall = catStmt.list.getAttributeExpression('distn') as BuiltinFunctionCall
 		val argExpr = (funCall.argList as NamedFuncArguments).arguments.head.expression 
 		argExpr.assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "DV, P1, Y")
@@ -157,7 +159,7 @@ obj1 = mdlObj{
 		
 		val blkBody = (mcl.objects.head.blocks.last.body as BlockStatementBody)
 		val catStmt = blkBody.statements.last as ListDefinition
-		val funCall = catStmt.list.getAttributeExpression('distn') as SymbolReference
+		val funCall = catStmt.firstAttributeList.getAttributeExpression('distn') as SymbolReference
 		val argExpr = (funCall.argList as NamedFuncArguments).arguments.head.expression 
 		argExpr.assertScope(MdlPackage::eINSTANCE.categoryValueReference_Ref, "success, fail, Y.success, Y.fail, obj1.Y.success, obj1.Y.fail")
 	}

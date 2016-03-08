@@ -1,11 +1,13 @@
 package eu.ddmore.mdl.utils
 
+import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.BlockStatementBody
 import eu.ddmore.mdl.mdl.CatValRefMappingExpression
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.ListPiecewiseExpression
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.Mcl
@@ -23,7 +25,6 @@ import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.AttributeList
 
 class MdlUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -153,13 +154,13 @@ class MdlUtils {
 	
 	def getDataObservations(MclObject it){
 		val retVal = new ArrayList<SymbolDefinition>
-		for(obsLst :getDataColumnDefn(ListDefinitionTable::OBS_USE_VALUE)){
-			val varRef = obsLst.list.getAttributeExpression('variable')
+		for(dataLst :getDataColumnDefn(ListDefinitionTable::OBS_USE_VALUE)){
+			val varRef = dataLst.firstAttributeList.getAttributeExpression('variable')
 			if(varRef != null){
 				retVal.add(varRef.singleSymbolRef) // expect a var ref here.
 			}
 			else{
-				val defineRef = obsLst.list.getAttributeExpression('define')
+				val defineRef = dataLst.firstAttributeList.getAttributeExpression('define')
 				retVal.addAll(defineRef.mappedSymbolRef)
 			}
 		}
@@ -168,13 +169,13 @@ class MdlUtils {
 
 	def getDataDosingVariables(MclObject it){
 		val retVal = new ArrayList<SymbolDefinition>
-		for(obsLst :getDataColumnDefn(ListDefinitionTable::AMT_USE_VALUE)){
-			val varRef = obsLst.list.getAttributeExpression('variable')
+		for(dataLst :getDataColumnDefn(ListDefinitionTable::AMT_USE_VALUE)){
+			val varRef = dataLst.firstAttributeList.getAttributeExpression('variable')
 			if(varRef != null){
 				retVal.add(varRef.singleSymbolRef) // expect a var ref here.
 			}
 			else{
-				val defineRef = obsLst.list.getAttributeExpression('define')
+				val defineRef = dataLst.firstAttributeList.getAttributeExpression('define')
 				retVal.addAll(defineRef.mappedSymbolRef)
 			}
 		}
@@ -337,7 +338,7 @@ class MdlUtils {
 		paramVariabilityParams.filter[s|
 			switch(s){
 				ListDefinition:{
-					val varType = s.list.getAttributeEnumValue('type')
+					val varType = s.firstAttributeList.getAttributeEnumValue('type')
 					varType == 'corr' || varType == 'cov'
 				}
 				default: false
@@ -375,12 +376,12 @@ class MdlUtils {
 	}
 
 	def isParameterVarLevel(ListDefinition it){
-		val enumValue = list.getAttributeEnumValue("type")
+		val enumValue = firstAttributeList.getAttributeEnumValue("type")
 		enumValue == 'parameter'
 	}
 
 	def isObservationVarLevel(ListDefinition it){
-		val enumValue = list.getAttributeEnumValue("type")
+		val enumValue = firstAttributeList.getAttributeEnumValue("type")
 		enumValue == 'observation'
 	}
 
@@ -390,7 +391,7 @@ class MdlUtils {
 			if(divBlk.body instanceof BlockStatementBody){
 				for(divList : (divBlk.body as BlockStatementBody).statements){
 					switch(divList){
-						ListDefinition case(divList.isMatchingDataUse(useValue)):{
+						ListDefinition case(divList.firstAttributeList.isMatchingDataUse(useValue)):{
 							retVal.add(divList)
 						}
 					}
@@ -553,7 +554,7 @@ class MdlUtils {
     def isCmtDosingMacro(Statement it){
     	val stmt = it
     	if(stmt instanceof ListDefinition){
-    		val macroType = stmt.list.getAttributeEnumValue(ListDefinitionTable::CMT_TYPE_ATT)
+    		val macroType = stmt.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::CMT_TYPE_ATT)
     		dosingMacros.contains(macroType)   
     	}
     	else false
@@ -561,6 +562,37 @@ class MdlUtils {
 
 	def func(SymbolReference it){
 		ref.name
+	}
+	
+	def getFirstAttributeList(ListDefinition it){
+		val l = list
+		switch(l){
+			AttributeList:
+				l
+			ListPiecewiseExpression:
+				l.listsFromPiecewise.head
+		}
+	}
+
+	def getAttributeLists(ListDefinition it){
+		val l = list
+		val retVal = new ArrayList<AttributeList>
+		switch(l){
+			AttributeList:
+				retVal.add(l)
+			ListPiecewiseExpression:
+				retVal.addAll(l.listsFromPiecewise)
+		}
+		retVal
+	}
+	
+	def getListsFromPiecewise(ListPiecewiseExpression it){
+		val retVal = new ArrayList<AttributeList>
+		when.forEach[ retVal.add(value) ]
+		if(otherwise != null)
+			retVal.add(it.otherwise)
+			
+		retVal
 	}
 
 }

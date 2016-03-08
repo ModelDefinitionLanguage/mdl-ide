@@ -14,7 +14,6 @@ import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.SymbolReference
 import eu.ddmore.mdl.mdl.TransformedDefinition
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.mdl.impl.ListDefinitionImpl
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
@@ -147,15 +146,15 @@ class MdlCustomValidator extends AbstractMdlValidator {
 
 
 	@Check
-	def validateDataUseHasDependecies(ListDefinitionImpl it){
+	def validateDataUseHasDependecies(AttributeList it){
 		val block = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
 		if(block.identifier == BlockDefinitionTable::DIV_BLK_NAME){
-			val enumVal = list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
+			val enumVal = getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 			if(enumVal != null && UseDeps.containsKey(enumVal)){
 				for(depUse : UseDeps.get(enumVal)){
 					if(!block.hasListWithUse(depUse)){
 						error("A data column of use '" + depUse + "' is required by this column definition with 'use is " + enumVal + "'.",
-							MdlPackage::eINSTANCE.listDefinition_List, MdlValidator::DEPENDENT_USE_MISSING, enumVal)
+							MdlPackage::eINSTANCE.attributeList_Attributes, MdlValidator::DEPENDENT_USE_MISSING, enumVal)
 					}
 				}
 			}
@@ -163,12 +162,12 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	}
 	
 	
-	def hasListWithUse(BlockStatement it, String useValue){
+	private def hasListWithUse(BlockStatement it, String useValue){
 		val bdy = body
 		if(bdy instanceof BlockStatementBody){
 			for(stmt : bdy.statements){
 				if(stmt instanceof ListDefinition){
-					val useVal = stmt.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
+					val useVal = stmt.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 					if(useVal == useValue) return true
 				}
 			}
@@ -217,7 +216,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	def isDuplicateUse(BlockStatement owningBlock, AttributeList refList, ValuePair queryUse){
 		for (stmt : owningBlock.nonBlockStatements){
 			if(stmt instanceof ListDefinition){
-				val matchExpr = stmt.list.getAttributeExpression(ListDefinitionTable::USE_ATT)
+				val matchExpr = stmt.firstAttributeList.getAttributeExpression(ListDefinitionTable::USE_ATT)
 				val enumVal = queryUse.expression.enumValue
 				if(matchExpr != queryUse.expression &&  enumVal != null && enumVal == matchExpr.enumValue){
 					return true
@@ -234,9 +233,9 @@ class MdlCustomValidator extends AbstractMdlValidator {
 		val owningList = EcoreUtil2.getContainerOfType(eContainer, ListDefinition)
 		if(owningBlock != null && owningBlock.identifier == BlockDefinitionTable::DIV_BLK_NAME &&
 			owningList != null && attributeName == ListDefinitionTable::USE_ATT){
-			val enumVal = owningList.list.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
+			val enumVal = owningList.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 			if(UniqueUseValue.contains(enumVal)){
-				if(owningBlock.isDuplicateUse(owningList.list, it)){
+				if(owningBlock.isDuplicateUse(owningList.firstAttributeList, it)){
 					error("Only one column definition can have a 'use' attribute set to '" + enumVal + "'.",
 						MdlPackage::eINSTANCE.valuePair_Expression,
 						MdlValidator::DUPLICATE_UNIQUE_USE_VALUE, enumVal)
@@ -287,13 +286,19 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	def findVarLevelDefnsOfType(BlockStatement blk, String type){
 		blk.nonBlockStatements.filter[l|
 			if(l instanceof ListDefinition)
-				l.list.getAttributeEnumValue(ListDefinitionTable::VAR_LVL_TYPE_ATT) == type 
+				l.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::VAR_LVL_TYPE_ATT) == type 
 			else false
 		]
 	}
 	
 	def getLevelValue(ListDefinition it){
-		list.getAttributeExpression(ListDefinitionTable::VAR_LVL_LEVEL_ATT)?.evaluateMathsExpression?.intValue
+		val valExpr = firstAttributeList.getAttributeExpression(ListDefinitionTable::VAR_LVL_LEVEL_ATT)
+		if(valExpr != null){
+			val i = valExpr.evaluateMathsExpression
+			if(i != null) i.intValue
+			else Integer.MIN_VALUE
+		}
+		else Integer.MIN_VALUE
 	}
 	
 	def isAnotherPresentWithSameLevel(BlockStatement blk, ListDefinition currDefn, int testLevel){
@@ -325,7 +330,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 				)
 			}
 			// check that this is an obs defn first then check for duplicates
-			if(list.getAttributeEnumValue(ListDefinitionTable::VAR_LVL_TYPE_ATT) == ListDefinitionTable::VAR_LVL_OBS_VALUE){
+			if(firstAttributeList.getAttributeEnumValue(ListDefinitionTable::VAR_LVL_TYPE_ATT) == ListDefinitionTable::VAR_LVL_OBS_VALUE){
 				val obsDefns = owningBlock.findVarLevelDefnsOfType(ListDefinitionTable::VAR_LVL_OBS_VALUE)
 				if(obsDefns.size > 1){
 					error("Variability Level definition '" + name + "': an observation definition already exists. There can be only one.",
@@ -338,7 +343,7 @@ class MdlCustomValidator extends AbstractMdlValidator {
 					)
 				}
 			}
-			else if(list.getAttributeEnumValue(ListDefinitionTable::VAR_LVL_TYPE_ATT) == ListDefinitionTable::VAR_LVL_PARAM_VALUE){
+			else if(firstAttributeList.getAttributeEnumValue(ListDefinitionTable::VAR_LVL_TYPE_ATT) == ListDefinitionTable::VAR_LVL_PARAM_VALUE){
 				 if(levelValue == 1 && owningBlock.findVarLevelDefnsOfType(ListDefinitionTable::VAR_LVL_OBS_VALUE).size > 0){
 				 	// this is level 1, but also obs blocks
 				 	error("Variability Level definition '" + name + "': an observation level is present so the level cannot be 1.",

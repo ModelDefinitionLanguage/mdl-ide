@@ -37,6 +37,10 @@ import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.AttributeList
+import eu.ddmore.mdl.mdl.ListPiecewiseExpression
+import eu.ddmore.mdl.mdl.AbstractAttributeList
+import java.util.ArrayList
 
 public class TypeSystemProvider {
 
@@ -406,8 +410,8 @@ public class TypeSystemProvider {
 		catNames
 	}
 	
-	def TypeInfo getTypeOfList(ListDefinition it){
-		val listDefn = list.listDefinition
+	def dispatch TypeInfo typeFor(AttributeList it){
+		val listDefn = listDefinition
 		val type = listDefn?.listType ?: UNDEFINED_TYPE
 		switch(type){
 			EnumListTypeInfo:
@@ -417,15 +421,59 @@ public class TypeSystemProvider {
 		}
 	}
 	
-	def TypeInfo getPopulatedType(ListDefinition it, ListDefInfo listDefn){
-		for(att : list.attributes){
+	def dispatch TypeInfo typeFor(ListPiecewiseExpression it){
+		val valueList = new ArrayList<AbstractAttributeList>
+		when.forEach[
+			valueList.add(it.value)
+		]
+		if(otherwise != null)
+			valueList.add(otherwise)
+		valueList.commonListType
+	}
+	
+	
+	def TypeInfo getCommonListType(List<AbstractAttributeList> attList){
+		var TypeInfo superType = null
+		for(att : attList){
+			val listType = att.typeFor
+			// check if ListTypeInfo if not then no common type
+			if(listType instanceof ListTypeInfo){
+				if(superType == null){
+					// expect to initialise this on first iteration
+					// use super type if there is one if not then use list type
+					superType = listType.superType ?: listType
+				}
+				else{
+					// expect to evaluate this on subsequent iterns
+					if(superType != listType.superType && superType != listType){
+						// check to see that no equivalent super type and not the same list type.
+						// if so then abort
+						return UNDEFINED_TYPE
+					}
+				}
+			}
+			else return UNDEFINED_TYPE
+			
+		}
+		// need to check for null here because attribute list could be empty
+		superType ?: UNDEFINED_TYPE
+	}
+	
+	
+	def TypeInfo getTypeOfList(ListDefinition it){
+		it.list.typeFor
+	}
+	
+	private def TypeInfo getPopulatedType(AttributeList it, ListDefInfo listDefn){
+		for(att : attributes){
 			val expr = att.expression
 			switch(expr){
 				EnumExpression case expr.catDefn != null:
 					if(expr.catDefn instanceof CategoricalDefinitionExpr){
 						val catNames = (expr.catDefn as CategoricalDefinitionExpr).getCategoryNames
 						if(listDefn.listType instanceof EnumListTypeInfo){
-							return (listDefn.listType as EnumListTypeInfo).populateType(new EnumTypeInfo(name, catNames))	
+							val sd = EcoreUtil2.getContainerOfType(eContainer, SymbolDefinition)
+							return (listDefn.listType as EnumListTypeInfo).populateType(new EnumTypeInfo(sd.name, catNames))	
 						}
 						else{
 							return UNDEFINED_TYPE

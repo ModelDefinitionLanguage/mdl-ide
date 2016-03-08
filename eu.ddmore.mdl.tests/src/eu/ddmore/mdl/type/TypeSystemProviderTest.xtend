@@ -240,10 +240,11 @@ class TypeSystemProviderTest {
 		val ref = MdlFactory::eINSTANCE.createSymbolReference
 		val defn = MdlFactory::eINSTANCE.createListDefinition
 		defn.name = "AList"
-		defn.list = MdlFactory::eINSTANCE.createAttributeList
-		defn.list.attributes.add(MdlFactory::eINSTANCE.createEnumPair => [argumentName = "type"
+		val attList = MdlFactory::eINSTANCE.createAttributeList 
+		attList.attributes.add(MdlFactory::eINSTANCE.createEnumPair => [argumentName = "type"
 									expression = buildEnum("compartment")
 									])
+		defn.list = attList 
 		val blk = MdlFactory::eINSTANCE.createBlockStatement
 		blk.identifier = "COMPARTMENT"
 		val bdy = MdlFactory::eINSTANCE.createBlockStatementBody
@@ -325,10 +326,11 @@ class TypeSystemProviderTest {
 		val ref = MdlFactory::eINSTANCE.createSymbolReference
 		val defn = MdlFactory::eINSTANCE.createListDefinition
 		defn.name = "AList"
-		defn.list = MdlFactory::eINSTANCE.createAttributeList
-		defn.list.attributes.add(MdlFactory::eINSTANCE.createEnumPair => [argumentName = "type"
+		val attList = MdlFactory::eINSTANCE.createAttributeList
+		attList.attributes.add(MdlFactory::eINSTANCE.createEnumPair => [argumentName = "type"
 									expression = buildEnum("compartment")
 									])
+		defn.list = attList
 		val blk = MdlFactory::eINSTANCE.createBlockStatement
 		blk.identifier = "COMPARTMENT"
 		val bdy = MdlFactory::eINSTANCE.createBlockStatementBody

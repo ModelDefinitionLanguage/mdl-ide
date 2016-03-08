@@ -1,10 +1,8 @@
 package eu.ddmore.mdl.validation
 
-import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumPair
-import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.PropertyStatement
@@ -16,6 +14,9 @@ import eu.ddmore.mdl.type.TypeSystemProvider
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.mdl.AnonymousListStatement
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.utils.MdlUtils
 
 // validates attributes in lists, functions and properties
 class ListValidator extends AbstractMdlValidator {
@@ -25,6 +26,7 @@ class ListValidator extends AbstractMdlValidator {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension TypeSystemProvider mtp = new TypeSystemProvider
+	extension MdlUtils mu = new MdlUtils
 	
 	static val MappingToColumn = #{
 		ListDefinitionTable::AMT_USE_VALUE -> ListDefinitionTable::CMT_COL_TYPE,
@@ -105,9 +107,11 @@ class ListValidator extends AbstractMdlValidator {
 
 	@Check
 	def validateListAnonymisation(ListDefinition it){
-		if(list.isAnonymousListExpected){
-			error("a list with this key cannot have a name in this context",
-				MdlPackage.eINSTANCE.listDefinition_List, MdlValidator::LIST_NOT_ANONYMOUS, "")
+		for(list : getAttributeLists){
+			if(list.isAnonymousListExpected){
+				error("a list with this key cannot have a name in this context",
+					MdlPackage.eINSTANCE.listDefinition_List, MdlValidator::LIST_NOT_ANONYMOUS, "")
+			}
 		}
 	}
 
@@ -123,9 +127,9 @@ class ListValidator extends AbstractMdlValidator {
 	}
 		
 	def checkCategoryDefinitionWellFormed(EnumPair ep, () => void unexpectedCatDefnErrorLambda, () => void missingCatErrorLambda){
-		val attList = EcoreUtil2.getContainerOfType(ep.eContainer, ListDefinition)
+		val attList = EcoreUtil2.getContainerOfType(ep.eContainer, AttributeList)
 		if(attList != null){
-			val listDefn = attList.list.matchingListDefn
+			val listDefn = attList.matchingListDefn
 			val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
 			if(ep.expression instanceof EnumExpression && attDefn != null){
 				val mappingExpr = ep.expression as EnumExpression

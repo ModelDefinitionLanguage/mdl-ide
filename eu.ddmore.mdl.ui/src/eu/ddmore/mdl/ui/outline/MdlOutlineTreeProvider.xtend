@@ -13,6 +13,8 @@ import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
+import eu.ddmore.mdl.utils.MdlUtils
+import eu.ddmore.mdl.mdl.AttributeList
 
 /**
  * Customization of the default outline structure.
@@ -20,6 +22,8 @@ import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
  * see http://www.eclipse.org/Xtext/documentation.html#outline
  */
 class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
+	
+	extension MdlUtils mu = new MdlUtils
 	
 //	@Inject IImageHelper imageHelper;
 
@@ -92,7 +96,11 @@ class MdlOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 
 	def _createChildren(IOutlineNode parentNode, ListDefinition list){
-		list.list.attributes.forEach[createNode(parentNode, it)]
+		list.attributeLists.forEach[createNode(parentNode, it)]
+	}
+
+	def _createChildren(IOutlineNode parentNode, AttributeList list){
+		list.attributes.forEach[createNode(parentNode, it)]
 	}
 
 }

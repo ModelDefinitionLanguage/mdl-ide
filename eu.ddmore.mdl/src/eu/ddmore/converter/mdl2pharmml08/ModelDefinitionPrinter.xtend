@@ -83,11 +83,11 @@ class ModelDefinitionPrinter {
 		for(stmt : mObj.mdlVariabilityLevels){
 			switch(stmt){
 				ListDefinition:{
-					if(stmt.list.getAttributeEnumValue('type') == 'parameter'){
-						vm_mdl_vars.put(stmt.name, stmt.list.getAttributeExpression('level').convertToInteger)
+					if(stmt.firstAttributeList.getAttributeEnumValue('type') == 'parameter'){
+						vm_mdl_vars.put(stmt.name, stmt.firstAttributeList.getAttributeExpression('level').convertToInteger)
 					}
 					else{
-						vm_err_vars.put(stmt.name, stmt.list.getAttributeExpression('level').convertToInteger)
+						vm_err_vars.put(stmt.name, stmt.firstAttributeList.getAttributeExpression('level').convertToInteger)
 					}
 				}
 			}	
@@ -474,16 +474,16 @@ class ModelDefinitionPrinter {
 	
 	def writeDerivativeDefinition(ListDefinition stmt, EquationDefinition defaultWrt)'''
 		<ct:DerivativeVariable symbId="«stmt.name»" symbolType="real">
-			«stmt.list.getAttributeExpression("deriv").writeAssignment»
+			«stmt.firstAttributeList.getAttributeExpression("deriv").writeAssignment»
 			<ct:IndependentVariable>
-				«stmt.list.getAttributeExpression("wrt")?.pharmMLExpr ?: defaultWrt.writeDefaultWrt»
+				«stmt.firstAttributeList.getAttributeExpression("wrt")?.pharmMLExpr ?: defaultWrt.writeDefaultWrt»
 			</ct:IndependentVariable>
 			<ct:InitialCondition>
 				<ct:InitialValue>
-					«stmt.list.getAttributeExpression("init")?.writeAssignment ?: writeAssignZero »
+					«stmt.firstAttributeList.getAttributeExpression("init")?.writeAssignment ?: writeAssignZero »
 				</ct:InitialValue>
 				<ct:InitialTime>
-					«stmt.list.getAttributeExpression("x0")?.writeAssignment ?: writeAssignZero »
+					«stmt.firstAttributeList.getAttributeExpression("x0")?.writeAssignment ?: writeAssignZero »
 				</ct:InitialTime>
 			</ct:InitialCondition>
 		</ct:DerivativeVariable>
@@ -560,7 +560,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	def writeDiscreteObservations(ListDefinition s, int idx) {
-		val type = s.list.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT)
+		val type = s.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT)
 		'''
 		<ObservationModel blkId="om«idx»">
 			«switch type{
@@ -675,10 +675,10 @@ class ModelDefinitionPrinter {
 		var model = "";
 			for (s: pObj.getParamCorrelations){
 				val corrDefn = s as ListDefinition
-				val type = corrDefn.list.getAttributeEnumValue('type');
+				val type = corrDefn.firstAttributeList.getAttributeEnumValue('type');
 				if (type == 'corr' || type == 'cov'){
-					val params = corrDefn.list.getAttributeExpression('parameter') as VectorLiteral
-					val values = corrDefn.list.getAttributeExpression('value') as VectorLiteral
+					val params = corrDefn.firstAttributeList.getAttributeExpression('parameter') as VectorLiteral
+					val values = corrDefn.firstAttributeList.getAttributeExpression('value') as VectorLiteral
 					var k = 0;
 					for(i : 1 .. params.expressions.size - 1){
 						for(j : 0 .. i -1){
@@ -752,8 +752,8 @@ class ModelDefinitionPrinter {
 	
 	private def print_mdef_CountObservations(ListDefinition s) {
 		var name = s.name
-		val linkFunction = s.list.getAttributeExpression('link');
-		val distn = s.list.getAttributeExpression('distn');
+		val linkFunction = s.firstAttributeList.getAttributeExpression('link');
+		val distn = s.firstAttributeList.getAttributeExpression('distn');
 		val paramVar = (distn as SymbolReference).getFunctionArgumentValue("lambda");
 //		var String tmpParamVar = null;
 //		if(paramVar ){
@@ -804,10 +804,10 @@ class ModelDefinitionPrinter {
 	
 	private def print_mdef_DiscreteObservations(ListDefinition s) {
 		var name = s.name
-		val linkFunction = s.list.getAttributeExpression('link');
-		val distn = s.list.getAttributeExpression('distn') as SymbolReference
+		val linkFunction = s.firstAttributeList.getAttributeExpression('link');
+		val distn = s.firstAttributeList.getAttributeExpression('distn') as SymbolReference
 		val paramVar = (distn as SymbolReference).getFunctionArgumentValue("probability")
-		val categories = s.list.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
+		val categories = s.firstAttributeList.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
 		val catVals = categories.categories
 		val catList = createCategoriesOrderedBySuccess(catVals.keySet, distn.successCategory)
 		
@@ -867,7 +867,7 @@ class ModelDefinitionPrinter {
 //					}
 //				}
 //			}
-		val categories = s.list.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
+		val categories = s.firstAttributeList.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
 //		val listCats = new ArrayList<String>
 //		val catVals = new HashMap<String, Expression>
 //		switch(categories){
@@ -908,9 +908,9 @@ class ModelDefinitionPrinter {
 
 	private def print_mdef_TimeToEventObservations(ListDefinition s) {
 		var name = s.name
-		val haz = s.list.getAttributeExpression('hazard');
-		val event = s.list.getAttributeEnumValue('event');
-		val maxEvent = s.list.getAttributeExpression('maxEvent');
+		val haz = s.firstAttributeList.getAttributeExpression('hazard');
+		val event = s.firstAttributeList.getAttributeEnumValue('event');
+		val maxEvent = s.firstAttributeList.getAttributeExpression('maxEvent');
 		'''
 			<Discrete>
 				<TimeToEventData>
