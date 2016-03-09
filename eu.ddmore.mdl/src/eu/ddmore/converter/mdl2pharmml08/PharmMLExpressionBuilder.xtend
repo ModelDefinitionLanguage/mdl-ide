@@ -34,6 +34,7 @@ import eu.ddmore.mdl.mdl.PiecewiseExpression
 import eu.ddmore.mdl.mdl.PWClause
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.mdl.CategoryValueReference
+import eu.ddmore.mdl.utils.BlockUtils
 
 class PharmMLExpressionBuilder {
 	
@@ -41,6 +42,7 @@ class PharmMLExpressionBuilder {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
 	extension MdlUtils mu = new MdlUtils
+	extension BlockUtils bu = new BlockUtils
 	
 	static val GLOBAL_VAR = 'global'
 	

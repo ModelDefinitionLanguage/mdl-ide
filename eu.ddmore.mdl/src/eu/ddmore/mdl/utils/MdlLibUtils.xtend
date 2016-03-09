@@ -1,15 +1,21 @@
 package eu.ddmore.mdl.utils
 
+import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.SublistDefinitionTable
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdllib.mdllib.Library
+import eu.ddmore.mdllib.mdllib.ObjectDefinition
 import eu.ddmore.mdllib.mdllib.TypeClass
 import eu.ddmore.mdllib.mdllib.TypeDefinition
 import eu.ddmore.mdllib.mdllib.TypeSpec
+import java.util.ArrayList
 import java.util.HashSet
+import java.util.List
 import java.util.Map
+import org.eclipse.xtext.EcoreUtil2
 
 class MdlLibUtils {
 
@@ -98,58 +104,22 @@ class MdlLibUtils {
 		new BuiltinEnumTypeInfo(name, enumVals)
 	}
 	
+	def Library getLibraryForObject(MclObject obj){
+		EcoreUtil2.getContainerOfType(obj.objId, Library)
+	}
 	
-//	def TypeInfo getTypeInfo(TypeSpec it){
-//		val typeName = typeName.name
-//		switch(typeName){
-//			case 'Int':
-//				TypeSystemProvider::INT_TYPE
-//			case 'Real':
-//				TypeSystemProvider::REAL_TYPE
-//			case 'Boolean':
-//				TypeSystemProvider::BOOLEAN_TYPE
-//			case 'String':
-//				TypeSystemProvider::STRING_TYPE
-//			case 'Vector':
-//				if(elementType != null && functionSpec == null){
-//					// element type specified and well formed
-//					val elType = elementType.typeInfo
-//					if(elType == TypeSystemProvider::UNDEFINED_TYPE) TypeSystemProvider::UNDEFINED_TYPE
-//					else elType.makeVector
-//				}
-//				else if(elementType == null && functionSpec == null){
-//					// no element spec and well formed so default to Real 
-//					TypeSystemProvider::REAL_VECTOR_TYPE
-//				}
-//				else TypeSystemProvider::UNDEFINED_TYPE
-//			case 'Matrix':
-//				if(elementType != null && functionSpec == null){
-//					// element type specified and well formed
-//					val elType = elementType.typeInfo
-//					if(elType == TypeSystemProvider::UNDEFINED_TYPE) TypeSystemProvider::UNDEFINED_TYPE
-//					else elType.makeMatrix
-//				}
-//				else if(elementType == null && functionSpec == null){
-//					// no element spec and well formed so default to Real 
-//					TypeSystemProvider::REAL_MATRIX_TYPE
-//				}
-//				else TypeSystemProvider::UNDEFINED_TYPE
-//			case 'Reference':
-//				if(elementType != null && functionSpec == null){
-//					// element type specified and well formed
-//					val elType = elementType.typeInfo
-//					if(elType == TypeSystemProvider::UNDEFINED_TYPE) TypeSystemProvider::UNDEFINED_TYPE
-//					else elType.makeReference
-//				}
-//				else if(elementType == null && functionSpec == null){
-//					// no element spec and well formed so default to Real 
-//					TypeSystemProvider::REAL_TYPE.makeReference
-//				}
-//				else TypeSystemProvider::UNDEFINED_TYPE
-//			default:
-//				TypeSystemProvider::UNDEFINED_TYPE
-//		} 
-//	}
-	
-	
+	def List<String> getMandatoryBlockNamesForObject(Library it, ObjectDefinition objDefn){
+		val retVal = new ArrayList<String>
+		containDefns.filter[
+			parentRef.name == objDefn.name
+		].forEach[
+			blkRefs.forEach[ 
+				if(minNum > 0)
+					retVal.add(it.name)
+			]
+		]
+		
+		retVal
+	}
+
 }

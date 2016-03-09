@@ -104,6 +104,14 @@ Bernoulli_DIST_mdl = mdlObj{
 		val codeSnippet = '''
 			type Real _scalar;
 			
+			object mdlObj;
+			
+			block IDV (1,1) statements (1,1) _eqnDefn;
+			block VARIABILITY_LEVELS (1,1) statements (1,) _listDefn;
+			block GROUP_VARIABLES (1,1) statements (1, ) _eqnDefn+;
+			
+			container mdlObj has VARIABILITY_LEVELS, GROUP_VARIABLES, IDV;
+						
 			func ln (x::Real) returns ::Real;
 		'''
 		firstLang.load(new StringInputStream(codeSnippet), Collections::emptyMap)

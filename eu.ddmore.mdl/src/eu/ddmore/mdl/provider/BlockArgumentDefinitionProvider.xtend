@@ -6,9 +6,12 @@ import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.validation.MdlValidator
 import java.util.HashSet
+import eu.ddmore.mdl.utils.BlockUtils
 
 class BlockArgumentDefinitionProvider {
 	
+	extension BlockUtils bu = new BlockUtils
+
 	static val OBJECT_ARG = "ObjectArg"
 	
 	// Block arguments can no longer contain forward declarations.

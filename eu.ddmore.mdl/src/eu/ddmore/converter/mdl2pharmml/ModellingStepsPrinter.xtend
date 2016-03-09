@@ -32,6 +32,7 @@ import java.util.HashSet
 import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.utils.BlockUtils
 
 class ModellingStepsPrinter { 
 	
@@ -42,6 +43,7 @@ class ModellingStepsPrinter {
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension SublistDefinitionProvider sldp = new SublistDefinitionProvider
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
+	extension BlockUtils bu = new BlockUtils
 
 	////////////////////////////////////////////////
 	// III Modelling Steps

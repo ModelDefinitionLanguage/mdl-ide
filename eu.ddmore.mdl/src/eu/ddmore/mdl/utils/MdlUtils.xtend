@@ -30,6 +30,7 @@ class MdlUtils {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 	extension DependencyWalker dw = new DependencyWalker
+	extension BlockUtils bu = new BlockUtils
 //	extension TypeSystemProvider mtp = new TypeSystemProvider
 	
 	

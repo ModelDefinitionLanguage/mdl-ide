@@ -3,8 +3,10 @@ package eu.ddmore.mdl.type
 import eu.ddmore.mdl.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.MdlFactory
 import eu.ddmore.mdl.provider.ListDefinitionTable
+import eu.ddmore.mdl.utils.BlockUtils
 import eu.ddmore.mdl.validation.TypeSystemValidator
 import eu.ddmore.mdllib.mdllib.Expression
+import eu.ddmore.mdllib.mdllib.MdlLibFactory
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.junit.Before
@@ -23,6 +25,7 @@ class TypeSystemProviderTest {
 	
 	extension TypeSystemProvider th = new TypeSystemProvider 
 	extension TypeSystemValidator tsv = new TypeSystemValidator
+	extension BlockUtils bu = new BlockUtils
 
 	@Before
 	def void setUp(){
@@ -246,7 +249,9 @@ class TypeSystemProviderTest {
 									])
 		defn.list = attList 
 		val blk = MdlFactory::eINSTANCE.createBlockStatement
-		blk.identifier = "COMPARTMENT"
+		val blkDefn = MdlLibFactory.eINSTANCE.createBlockDefinition
+		blkDefn.name = "COMPARTMENT"
+		blk.blkId = blkDefn
 		val bdy = MdlFactory::eINSTANCE.createBlockStatementBody
 		bdy.statements.add(defn)
 		blk.body = bdy
@@ -332,7 +337,9 @@ class TypeSystemProviderTest {
 									])
 		defn.list = attList
 		val blk = MdlFactory::eINSTANCE.createBlockStatement
-		blk.identifier = "COMPARTMENT"
+		val blkDefn = MdlLibFactory.eINSTANCE.createBlockDefinition
+		blkDefn.name = "COMPARTMENT"
+		blk.blkId = blkDefn
 		val bdy = MdlFactory::eINSTANCE.createBlockStatementBody
 		bdy.statements.add(defn)
 		blk.body = bdy

@@ -18,16 +18,17 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.LibraryTestHelper
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class DataFileValidationTest {
     
-	@Inject extension ParseHelper<Mcl>
+	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
-	@Inject
-    private Provider<XtextResourceSet> resourceSetProvider;
+//	@Inject
+//    private Provider<XtextResourceSet> resourceSetProvider;
     
     @Rule
     public TemporaryFolder workingFolder = new TemporaryFolder();
@@ -90,7 +91,7 @@ class DataFileValidationTest {
         // has actually been read in from a file, so the data file reference
         // can be resolved against it
         // Doesn't matter that the MDL file doesn't actually exist, for these tests
-        parse(mclText, URI.createFileURI(new File(dataFile.parentFile, "myfile.mdl").toString()), resourceSetProvider.get())
+        parse(mclText, URI.createFileURI(new File(dataFile.parentFile, "myfile.mdl").toString()))
     }
 
 }

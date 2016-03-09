@@ -33,6 +33,7 @@ import static eu.ddmore.converter.mdl2pharmml08.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
 import eu.ddmore.converter.mdl2pharmml.MdlRootProvider
+import eu.ddmore.mdl.utils.BlockUtils
 
 class ModellingStepsPrinter { 
 	
@@ -43,6 +44,7 @@ class ModellingStepsPrinter {
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension SublistDefinitionProvider sldp = new SublistDefinitionProvider
 	extension BuiltinFunctionProvider bfp = new BuiltinFunctionProvider
+	extension BlockUtils bu = new BlockUtils
 
 	////////////////////////////////////////////////
 	// III Modelling Steps

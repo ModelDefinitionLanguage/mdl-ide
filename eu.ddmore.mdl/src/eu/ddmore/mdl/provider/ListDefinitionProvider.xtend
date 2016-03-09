@@ -23,9 +23,11 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.utils.BlockUtils
 
 class ListDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension BlockUtils bu = new BlockUtils
 
 
 	

@@ -12,12 +12,12 @@ import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.utils.BlockUtils
 import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.ArrayList
@@ -41,9 +41,9 @@ import static extension org.eclipse.xtext.EcoreUtil2.getContainerOfType
 class MdlProposalProvider extends AbstractMdlProposalProvider {
 
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
-	extension BuiltinFunctionProvider bfc = new BuiltinFunctionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension TypeSystemProvider mtp = new TypeSystemProvider
+	extension BlockUtils bu = new BlockUtils
 
 	 public override void completeSymbolReference_Ref(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 	 	val owningObj = model.getContainerOfType(MclObject)

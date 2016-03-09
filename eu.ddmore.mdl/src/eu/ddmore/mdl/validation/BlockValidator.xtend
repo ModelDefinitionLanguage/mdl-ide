@@ -20,11 +20,14 @@ import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.utils.BlockUtils
+import eu.ddmore.mdllib.mdllib.BlockDefinition
 
 class BlockValidator extends AbstractDeclarativeValidator{
 
 	override register(EValidatorRegistrar registrar){}
 	
+	extension BlockUtils blkUtils = new BlockUtils
 	extension BlockArgumentDefinitionProvider movh = new BlockArgumentDefinitionProvider
 	extension BlockDefinitionProvider blokHelper = new BlockDefinitionProvider
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
@@ -56,7 +59,7 @@ class BlockValidator extends AbstractDeclarativeValidator{
 	def validateMdlObjArguments(MclObject it){
 		if (mdlObjType != null) {
 			if (!VALID_OBJECT_TYPES.contains(mdlObjType)) {
-				error("unrecognised object type '" + mdlObjType + "'", MdlPackage.eINSTANCE.mclObject_MdlObjType,
+				error("unrecognised object type '" + mdlObjType + "'", MdlPackage.eINSTANCE.mclObject_ObjId,
 					UNRECOGNISED_OBJECT_TYPE, mdlObjType)
 			}
 //			blkArgs.unusedMandatoryObjVarDecl.forEach [ blk, mand |
@@ -82,18 +85,18 @@ class BlockValidator extends AbstractDeclarativeValidator{
 	def validateMdlObjBlocks(BlockStatement it){
 		val parent = parentOfBlockStatement
 		switch(parent){
-			MclObject case !isModelBlock:
+			MclObject case parent.mdlObjType != null && !isModelBlock:
 					error("block '" + identifier + "' cannot be used in an object of type " + parent.mdlObjType,
-						MdlPackage.eINSTANCE.blockStatement_Identifier, UNKNOWN_BLOCK, identifier)
+						MdlPackage.eINSTANCE.blockStatement_BlkId, UNKNOWN_BLOCK, identifier)
 			BlockStatement: {
 				if (!isModelSubBlock) {
 					error("block '" + identifier + "' cannot be used as a sub-block",
-						MdlPackage.eINSTANCE.blockStatement_Identifier, WRONG_SUBBLOCK,
+						MdlPackage.eINSTANCE.blockStatement_BlkId, WRONG_SUBBLOCK,
 						identifier)
 				} else if (!subBlockHasCorrectParent(parent)) {
 					// recognised sub-block but in the wrong place
 					error("sub-block '" + identifier + "' cannot be used in the '" + parent.identifier + "' block",
-						MdlPackage.eINSTANCE.blockStatement_Identifier,
+						MdlPackage.eINSTANCE.blockStatement_BlkId,
 						WRONG_PARENT_BLOCK, identifier)
 				}
 			}
@@ -163,25 +166,25 @@ class BlockValidator extends AbstractDeclarativeValidator{
 
 	
 	def validateBlocksCounts(MclObject it, (String, int) => void errLambda){
-		val blkCount = new HashMap<String, Integer>
+		val blkCount = new HashMap<BlockDefinition, Integer>
 
 		blocks.forEach[
-			if(!blkCount.containsKey(identifier)) blkCount.put(identifier, 0)
-			blkCount.put(identifier, blkCount.get(identifier)+1) 
+			if(!blkCount.containsKey(blkId)) blkCount.put(blkId, 0)
+			blkCount.put(blkId, blkCount.get(blkId)+1) 
 		]
 		// now check if counts exceed maximums
-		blkCount.keySet.forEach[name|
-			val defn = getBlockDefn(name)
+		blkCount.keySet.forEach[blkDefn|
+			val defn = getBlockDefn(blkDefn)
 			if(defn != null){
-				if(blkCount.get(name) > defn.maxNum)
-					errLambda.apply(name, defn.maxNum)
+				if(blkCount.get(blkDefn) > defn.maxNum)
+					errLambda.apply(blkDefn.name, defn.maxNum)
 			}
 		]
 	}	
 
 	def validateMaxBlocksStatementCounts(BlockStatementBody it, (String, int) => void errLambda){
 		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		val defn = getBlockDefn(blk.identifier)
+		val defn = getBlockDefn(blk.blkId)
 		if(defn != null)
 			if(statements.size > defn.maxStmtNum){
 				errLambda.apply(blk.identifier, defn.maxStmtNum)
@@ -190,7 +193,7 @@ class BlockValidator extends AbstractDeclarativeValidator{
 
 	def validateMinBlocksStatementCounts(BlockStatementBody it, (String, int) => void errLambda){
 		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		val defn = getBlockDefn(blk.identifier)
+		val defn = getBlockDefn(blk.blkId)
 		if(defn != null)
 			if(statements.size < defn.minStmtNum){
 				errLambda.apply(blk.identifier, defn.minStmtNum)
@@ -199,7 +202,7 @@ class BlockValidator extends AbstractDeclarativeValidator{
 
 	def validateExpectedStatementType(Statement it, (String) => void errLambda){
 		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		val defn = getBlockDefn(blk.identifier)
+		val defn = getBlockDefn(blk.blkId)
 		if(defn != null){
 			for(stmtSpec : defn.validStatementTypes){
 				if(stmtSpec.isValidStatement(it)) return
@@ -210,7 +213,7 @@ class BlockValidator extends AbstractDeclarativeValidator{
 	
 	def validateBlockBodyType(BlockStatementBody it, (String) => void errLambda){
 		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		val defn = getBlockDefn(blk.identifier)
+		val defn = getBlockDefn(blk.blkId)
 		if(defn != null){
 			if(!defn.isStmtBlk) errLambda.apply(blk.identifier)
 		}
@@ -218,7 +221,7 @@ class BlockValidator extends AbstractDeclarativeValidator{
 	
 	def validateBlockBodyType(BlockTextBody it, (String) => void errLambda){
 		val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
-		val defn = getBlockDefn(blk.identifier)
+		val defn = getBlockDefn(blk.blkId)
 		if(defn != null){
 			if(defn.isStmtBlk) errLambda.apply(blk.identifier)
 		}

@@ -41,6 +41,7 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.utils.BlockUtils
 
 class ModelDefinitionPrinter {
 	extension MdlUtils mu = new MdlUtils
@@ -54,6 +55,7 @@ class ModelDefinitionPrinter {
 	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter
 	extension PKMacrosPrinter pkp = PKMacrosPrinter::INSTANCE
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension BlockUtils bu = new BlockUtils
 	
 	
 	//////////////////////////////////////

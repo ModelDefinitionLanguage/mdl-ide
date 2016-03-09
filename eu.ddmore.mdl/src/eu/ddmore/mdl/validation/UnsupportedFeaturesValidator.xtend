@@ -4,6 +4,7 @@ import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.ElseClause
 import eu.ddmore.mdl.mdl.EqualityExpression
+import eu.ddmore.mdl.mdl.IfExpression
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.MdlPackage
@@ -14,6 +15,7 @@ import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.utils.BlockUtils
 import eu.ddmore.mdl.utils.ConstantEvaluation
 import eu.ddmore.mdl.utils.MdlUtils
 import eu.ddmore.mdllib.mdllib.MdlLibPackage
@@ -23,7 +25,6 @@ import java.util.Set
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.mdl.IfExpression
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
@@ -31,6 +32,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension ConstantEvaluation ce = new ConstantEvaluation
 	extension TypeSystemProvider mtp = new TypeSystemProvider 
+	extension BlockUtils bu = new BlockUtils
 	
 	override register(EValidatorRegistrar registrar){}
 	
@@ -57,7 +59,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	def checkUnsupported(MclObject it){
 		if(unsupportedObjects.contains(mdlObjType)){
 			warning("Objects of type '" + mdlObjType + "' are not currently supported for execution in R.", 
-					MdlPackage.eINSTANCE.mclObject_MdlObjType,
+					MdlPackage.eINSTANCE.mclObject_ObjId,
 					FEATURE_NOT_SUPPORTED, name)
 		}			
 	}

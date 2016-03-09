@@ -21,6 +21,9 @@ class MclBlockValidationTest {
 	@Test
 	def void testUnknownBlock(){
 		val mcl = '''foo = mdlObj {
+			IDV{T}
+			
+			
 			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 			
 		}'''.parse

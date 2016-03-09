@@ -25,6 +25,7 @@ import org.eclipse.xtext.validation.AbstractDeclarativeValidator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 import eu.ddmore.mdl.mdl.AttributeList
+import eu.ddmore.mdl.utils.BlockUtils
 
 class MogValidator extends AbstractDeclarativeValidator {
 
@@ -34,6 +35,7 @@ class MogValidator extends AbstractDeclarativeValidator {
 	extension TypeSystemProvider typeProvider = new TypeSystemProvider 
 	extension MdlUtils mclu = new MdlUtils
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension BlockUtils bu = new BlockUtils
 
 
 
@@ -47,12 +49,12 @@ class MogValidator extends AbstractDeclarativeValidator {
 		
 	}
 	
-	static def findMdlObject(MclObject obj, String name, String mdlType){
+	def findMdlObject(MclObject obj, String name, String mdlType){
 		val mcl = EcoreUtil2.getContainerOfType(obj, Mcl)
 		mcl.objects.findFirst[mdlObjType == mdlType && it.name == name]
 	}
 
-	static def getMdlObjectOfType(MclObject obj, String mdlType){
+	def getMdlObjectOfType(MclObject obj, String mdlType){
 		val mcl = EcoreUtil2.getContainerOfType(obj, Mcl)
 		mcl.objects.findFirst[mdlObjType == mdlType]
 	}
@@ -249,7 +251,7 @@ class MogValidator extends AbstractDeclarativeValidator {
 		if(blk?.identifier == BlockDefinitionTable::MOG_OBJ_NAME){
 			val mogObj = EcoreUtil2.getContainerOfType(eContainer, MclObject)
 			val objType = firstAttributeList.getAttributeEnumValue('type')
-			if(MogValidator::findMdlObject(mogObj, name, objType) == null){
+			if(findMdlObject(mogObj, name, objType) == null){
 				error("the object '" + name + "' cannot be found",
 						MdlLibPackage.eINSTANCE.symbolDefinition_Name, MdlValidator::MCLOBJ_REF_UNRESOLVED, name)
 			}

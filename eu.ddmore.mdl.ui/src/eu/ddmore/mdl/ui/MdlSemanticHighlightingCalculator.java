@@ -23,7 +23,7 @@ public class MdlSemanticHighlightingCalculator extends DefaultSemanticHighlighti
 		EObject rootObject = resource.getParseResult().getRootASTElement();
 		
 		for (BlockStatement g : EcoreUtil2.getAllContentsOfType(rootObject, BlockStatement.class)) {
-			for (INode node : NodeModelUtils.findNodesForFeature(g, MdlPackage.Literals.BLOCK_STATEMENT__IDENTIFIER)) {
+			for (INode node : NodeModelUtils.findNodesForFeature(g, MdlPackage.Literals.BLOCK_STATEMENT__BLK_ID)) {
 				
 				acceptor.addPosition(node.getOffset(), node.getLength(), DefaultHighlightingConfiguration.KEYWORD_ID);
 			}
@@ -41,7 +41,7 @@ public class MdlSemanticHighlightingCalculator extends DefaultSemanticHighlighti
 			}
 		}
 		for (MclObject g : EcoreUtil2.getAllContentsOfType(rootObject, MclObject.class)) {
-			for (INode node : NodeModelUtils.findNodesForFeature(g, MdlPackage.Literals.MCL_OBJECT__MDL_OBJ_TYPE)) {
+			for (INode node : NodeModelUtils.findNodesForFeature(g, MdlPackage.Literals.MCL_OBJECT__OBJ_ID)) {
 				
 				acceptor.addPosition(node.getOffset(), node.getLength(), DefaultHighlightingConfiguration.KEYWORD_ID);
 			}

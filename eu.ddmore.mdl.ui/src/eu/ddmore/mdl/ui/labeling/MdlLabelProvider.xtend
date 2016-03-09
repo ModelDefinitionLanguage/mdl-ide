@@ -18,6 +18,7 @@ import org.eclipse.xtext.ui.IImageHelper
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider
 
 import static eu.ddmore.mdl.ui.outline.Images.*
+import eu.ddmore.mdl.utils.BlockUtils
 
 /**
  * Provides labels for a EObjects.
@@ -25,6 +26,8 @@ import static eu.ddmore.mdl.ui.outline.Images.*
  * see http://www.eclipse.org/Xtext/documentation.html#labelProvider
  */
 class MdlLabelProvider extends DefaultEObjectLabelProvider {
+
+	extension BlockUtils bu = new BlockUtils
 
 	@Inject
 	new(AdapterFactoryLabelProvider delegate) {

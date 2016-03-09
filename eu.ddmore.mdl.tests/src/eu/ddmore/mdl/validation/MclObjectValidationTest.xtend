@@ -10,6 +10,7 @@ import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.eclipse.xtext.diagnostics.Diagnostic
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -40,13 +41,14 @@ class MclObjectValidationTest {
 			}
 		}'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
-			BlockValidator::UNKNOWN_BLOCK, "block 'VARIABILITY_LEVELS' cannot be used in an object of type foobar"
-		)
-		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
-			BlockValidator::UNRECOGNISED_OBJECT_TYPE,
-			"unrecognised object type 'foobar'"
-		)
+//		mcl.assertError(MdlPackage::eINSTANCE.blockStatement,
+//			BlockValidator::UNKNOWN_BLOCK, "block 'VARIABILITY_LEVELS' has unknown object type"
+//		)
+//		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
+//			BlockValidator::UNRECOGNISED_OBJECT_TYPE,
+//			"unrecognised object type 'foobar'"
+//		)
+		mcl.assertError(MdlPackage::eINSTANCE.mclObject, Diagnostic.LINKING_DIAGNOSTIC)
 	}
 
 

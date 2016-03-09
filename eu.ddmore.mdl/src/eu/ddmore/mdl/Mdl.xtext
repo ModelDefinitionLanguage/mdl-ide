@@ -8,11 +8,11 @@ Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
 MclObject returns MclObject:
-	name=ID ASSIGN mdlObjType=ID blkArgs=BlockArguments BEGIN blocks += BlockStatement* END;
+	name=ID ASSIGN objId=[lib::ObjectDefinition] blkArgs=BlockArguments BEGIN blocks += BlockStatement* END;
 
 
 BlockStatement:
-	identifier = ID blkArgs=BlockArguments body=(BlockStatementBody|BlockTextBody)
+	blkId = [lib::BlockDefinition] blkArgs=BlockArguments body=(BlockStatementBody|BlockTextBody)
 ;
 
 BlockStatementBody returns BlockBody:

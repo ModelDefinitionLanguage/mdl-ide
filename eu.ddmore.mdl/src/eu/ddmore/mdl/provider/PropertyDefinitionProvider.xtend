@@ -15,9 +15,11 @@ import java.util.Collections
 import java.util.HashSet
 import java.util.List
 import java.util.Map
+import eu.ddmore.mdl.utils.BlockUtils
 
 class PropertyDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension BlockUtils bu = new BlockUtils
 	
 	val Map<String, List<AttributeDefn>> propertyDefns
 	
