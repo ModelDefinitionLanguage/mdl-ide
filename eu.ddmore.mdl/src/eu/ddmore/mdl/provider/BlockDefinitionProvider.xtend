@@ -16,6 +16,7 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.xtend.lib.annotations.Data
+import eu.ddmore.mdllib.mdllib.ObjectDefinition
 
 class BlockDefinitionProvider {
 
@@ -103,30 +104,36 @@ class BlockDefinitionProvider {
 	extension BlockUtils bu = new BlockUtils
 	extension MdlLibUtils mlu = new MdlLibUtils 
 
-	val Map<String, Set<String> > BlkData
-	val Map<String, String> SubBlkData
+//	val Map<String, Set<String> > BlkData
+//	val Map<String, String> SubBlkData
 //	val Map<String, BlockSpec> BlkDefns
 	
 	new(){
-		BlkData = BlockDefinitionTable::BlkData
-		SubBlkData =  BlockDefinitionTable::SubBlkData
+//		BlkData = BlockDefinitionTable::BlkData
+//		SubBlkData =  BlockDefinitionTable::SubBlkData
 //		BlkDefns = BlockDefinitionTable::BlkDefns
 	}
 	
-	def isModelBlock(BlockStatement it){
-		if(eContainer instanceof MclObject){
-			val objType = (eContainer as MclObject).mdlObjType
-			return BlkData.containsKey(objType) && BlkData.get(objType).contains(identifier)
+	def isModelBlock(BlockStatement bs){
+		val obj = bs.eContainer
+		if(obj instanceof MclObject){
+			val objType = obj.objId
+			return objType.canContainBlock(bs.blkId)
+//			return BlkData.containsKey(objType) && BlkData.get(objType).contains(identifier)
 		}
 		false
 	}
 	
-	def isModelSubBlock(BlockStatement it){
-		SubBlkData.containsKey(identifier)
+	def isModelSubBlock(BlockStatement bs, MclObject mo){
+//		SubBlkData.containsKey(identifier)
+		!mo.objId.containmentDefnForObj.blkRefs.exists[
+			name == bs.blkId.name
+		]
 	}
 	
 	def subBlockHasCorrectParent(BlockStatement it, BlockStatement parent){
-		SubBlkData.containsKey(identifier) && SubBlkData.get(identifier) == parent.identifier
+		return parent.blkId.canContainBlock(blkId)
+//		SubBlkData.containsKey(identifier) && SubBlkData.get(identifier) == parent.identifier
 	}
 	
 	

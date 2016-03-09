@@ -16,6 +16,9 @@ import java.util.HashSet
 import java.util.List
 import java.util.Map
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdllib.mdllib.BlockDefinition
+import eu.ddmore.mdllib.mdllib.ContainmentDefn
+import eu.ddmore.mdllib.mdllib.BlockContainer
 
 class MdlLibUtils {
 
@@ -120,6 +123,23 @@ class MdlLibUtils {
 		]
 		
 		retVal
+	}
+
+	def ContainmentDefn getContainmentDefnForObj(BlockContainer od){
+		val lib = od.eContainer as Library
+		lib.containDefns.findFirst[
+			parentRef.name == od.name
+		]
+	}
+
+	def boolean canContainBlock(BlockContainer it, BlockDefinition blkDefn){
+		val cd = containmentDefnForObj
+		if(cd != null){
+			cd.blkRefs.exists[
+				name == blkDefn.name
+			]
+		}
+		else false
 	}
 
 }

@@ -89,7 +89,8 @@ class BlockValidator extends AbstractDeclarativeValidator{
 					error("block '" + identifier + "' cannot be used in an object of type " + parent.mdlObjType,
 						MdlPackage.eINSTANCE.blockStatement_BlkId, UNKNOWN_BLOCK, identifier)
 			BlockStatement: {
-				if (!isModelSubBlock) {
+				val owningObject = EcoreUtil2.getContainerOfType(eContainer, MclObject)
+				if (!isModelSubBlock(owningObject)) {
 					error("block '" + identifier + "' cannot be used as a sub-block",
 						MdlPackage.eINSTANCE.blockStatement_BlkId, WRONG_SUBBLOCK,
 						identifier)
