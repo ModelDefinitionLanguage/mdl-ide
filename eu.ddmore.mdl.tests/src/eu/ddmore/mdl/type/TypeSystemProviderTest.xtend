@@ -3,7 +3,6 @@ package eu.ddmore.mdl.type
 import eu.ddmore.mdl.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.MdlFactory
 import eu.ddmore.mdl.provider.ListDefinitionTable
-import eu.ddmore.mdl.utils.BlockUtils
 import eu.ddmore.mdl.validation.TypeSystemValidator
 import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.MdlLibFactory
@@ -25,7 +24,6 @@ class TypeSystemProviderTest {
 	
 	extension TypeSystemProvider th = new TypeSystemProvider 
 	extension TypeSystemValidator tsv = new TypeSystemValidator
-	extension BlockUtils bu = new BlockUtils
 
 	@Before
 	def void setUp(){

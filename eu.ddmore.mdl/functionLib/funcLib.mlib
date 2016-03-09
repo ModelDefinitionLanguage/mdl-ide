@@ -3,6 +3,7 @@ type transType _enum (none, ln, logit, probit);
 type GenericEnum _category;
 type fixEffAtts _sublist;
 type PriorSource _list;
+type VarLevel _list alt Real;
 
 
 object mdlObj;
@@ -18,7 +19,7 @@ block COVARIATES (0,) statements (0,) _eqnDefn, _eqnDefn+, _enumDefn, _rvDefn;
 block VARIABILITY_LEVELS (0,) statements (0,) _listDefn;
 block STRUCTURAL_PARAMETERS (0,) statements (0,) _eqnDefn, _eqnDefn+;
 block VARIABILITY_PARAMETERS (0,) statements (0,) _eqnDefn, _eqnDefn+;
-block RANDOM_VARIABLE_DEFINITION (0,) statements (0,) _rvDefn;
+block RANDOM_VARIABLE_DEFINITION (0,) arguments level::VarLevel statements (0,) _rvDefn;
 block INDIVIDUAL_VARIABLES (0,) statements (0,) _eqnDefn+, _transDefn;
 block MODEL_PREDICTION (0,) statements (0,) _eqnDefn, _eqnDefn+, _listDefn;
 block OBSERVATION (0,) statements (0,) _eqnDefn+, _transDefn, _listDefn;

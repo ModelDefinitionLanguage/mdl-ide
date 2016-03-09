@@ -125,6 +125,19 @@ class MdlLibUtils {
 		retVal
 	}
 
+	
+	def List<String> getMandatoryArgumentNames(BlockDefinition it){
+		val retVal = new ArrayList<String>
+		arguments.filter[
+			optional == false
+		].forEach[
+			retVal.add(it.name)
+		]
+		
+		retVal
+	}
+
+
 	def ContainmentDefn getContainmentDefnForObj(BlockContainer od){
 		val lib = od.eContainer as Library
 		lib.containDefns.findFirst[
