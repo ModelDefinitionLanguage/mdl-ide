@@ -145,6 +145,7 @@ class MclBlockValidationTest {
 	@Test
 	def void testWrongParentBlock(){
 		val mcl = '''foo = mdlObj {
+			IDV{ T }
 			VARIABILITY_LEVELS{
 				DEQ{}
 			}

@@ -1,12 +1,5 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.mdl.MdlPackage
-import eu.ddmore.mdl.provider.BlockDefinitionProvider.BlockSpec
-import eu.ddmore.mdl.provider.BlockDefinitionProvider.StatementSpec
-import eu.ddmore.mdl.validation.MdlValidator
-import java.util.Map
-import java.util.Set
-
 class BlockDefinitionTable {
 	public static val COVARIATE_BLK_NAME = "COVARIATES"
 	public static val OBS_BLK_NAME = "OBSERVATION"
@@ -31,7 +24,7 @@ class BlockDefinitionTable {
 	public static val PRIOR_SOURCE_BLK = "PRIOR_SOURCE"
 	public static val DES_STUDY_DESIGN = "STUDY_DESIGN"
 	
-	static val ep = MdlPackage::eINSTANCE 
+//	static val ep = MdlPackage::eINSTANCE 
 
 //	public val static Map<String, BlockSpec> BlkDefns = #{
 //			COVARIATE_BLK_NAME -> new BlockSpec(COVARIATE_BLK_NAME, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, #[

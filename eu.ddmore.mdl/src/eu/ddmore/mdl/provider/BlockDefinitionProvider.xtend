@@ -12,11 +12,8 @@ import eu.ddmore.mdllib.mdllib.StatementType
 import eu.ddmore.mdllib.mdllib.StatementTypeDefn
 import java.util.ArrayList
 import java.util.List
-import java.util.Map
-import java.util.Set
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.xtend.lib.annotations.Data
-import eu.ddmore.mdllib.mdllib.ObjectDefinition
 
 class BlockDefinitionProvider {
 
