@@ -1,211 +1,226 @@
 // Custom Types
-type transType _enum (none, ln, logit, probit);
-type GenericEnum _category;
-type fixEffAtts _sublist;
-type PriorSource _list;
-type VarLevel _list alt Real;
+_type transType _enum (none, ln, logit, probit);
+_type GenericEnum _category;
+_type fixEffAtts _sublist;
+_type priorFormat _sublist;
+_list PriorSource _atts file::String, inputFormat::priorInput, format::priorFormat
+		_sig(file, inputFormat, format);
+_list VarLevel _atts type::varLvlType, level::Int
+	_sig(type, level);
+
+_type divUse _enum (covariate, amt, dv, dvid, cmt, mdv, idv, id, rate, ignore, varLevel, catCov, ss, ii, addl);
+_type ddvUse _enum (doseTime);
+_type varLvlType _enum (parameter, observation);
+_type input _enum (nonmemFormat);
+_type priorInput _enum (RList);
+_type cmtType _enum (depot, compartment, elimination, transfer, distribution, direct, effect);
+_type varType _enum (cov, corr);
+_type obstype _enum (categorical, count, discrete, tte);
+_type sampletype _enum (simple, complex, derived);
+_type sampleelement _enum (amount, duration, sampleTime, numberTimes, covariate, catCov, numberArms, armSize, parameter, dosTime);
+_type objType _enum (mdlObj, dataObj, parObj, taskObj, designObj, priorObj);
 
 
-object mdlObj;
-object dataObj;
-object priorObj;
-object taskObj;
-object designObj;
-object parObj;
-object mogObj;
+_object mdlObj;
+_object dataObj;
+_object priorObj;
+_object taskObj;
+_object designObj;
+_object parObj;
+_object mogObj;
 
 
-block COVARIATES (0,) statements (0,) _eqnDefn, _eqnDefn+, _enumDefn, _rvDefn;
-block VARIABILITY_LEVELS (0,) statements (0,) _listDefn;
-block STRUCTURAL_PARAMETERS (0,) statements (0,) _eqnDefn, _eqnDefn+;
-block VARIABILITY_PARAMETERS (0,) statements (0,) _eqnDefn, _eqnDefn+;
-block RANDOM_VARIABLE_DEFINITION (0,) arguments level::VarLevel statements (0,) _rvDefn;
-block INDIVIDUAL_VARIABLES (0,) statements (0,) _eqnDefn+, _transDefn;
-block MODEL_PREDICTION (0,) statements (0,) _eqnDefn, _eqnDefn+, _listDefn;
-block OBSERVATION (0,) statements (0,) _eqnDefn+, _transDefn, _listDefn;
-block GROUP_VARIABLES (0,) statements (0,) _eqnDefn+, _eqnDefn;
-block IDV (1,1) statements (1,1) _eqnDefn;
-block DATA_INPUT_VARIABLES (0,) statements (1,) _listDefn;
-block DECLARED_VARIABLES (0,) statements (,) _eqnDefn, _enumDefn;
-block DATA_DERIVED_VARIABLES (0,) statements (,) _listDefn;
-block SOURCE (1,1) statements (1,1) _listDefn;
-block STRUCTURAL (,) statements (,) _listDefn;
-block VARIABILITY (,) statements (,) _listDefn;
-block ESTIMATE (,1) statements (,) _propStmt;
-block SIMULATE (,1) statements (,) _propStmt;
-block OBJECTS (1,1) statements (4,5) _listDefn;
-block DEQ (,) statements (,) _listDefn, _eqnDefn, _eqnDefn+;
-block COMPARTMENT (,) statements (,) _listDefn, _anonList;
-block FUNCTIONS (,) statements (,) _eqnDefn;
-block ADMINISTRATION (1, ) statements (,) _listDefn, _eqnDefn, _eqnDefn+;
-block STUDY_DESIGN (,) statements (,) _listDefn;
-block SAMPLING (,) statements (,) _listDefn;
-block DESIGN_SPACES (,) statements (,) _listDefn;
-block DESIGN_PARAMETERS (,) statements (,) _eqnDefn, _eqnDefn+;
-block PRIOR_PARAMETERS (,) statements (,) _eqnDefn, _eqnDefn+;
-block NON_CANONICAL_DISTRIBUTION (,) statements (,) _eqnDefn, _eqnDefn+;
-block PRIOR_VARIABLE_DEFINITION (,) statements (,) _eqnDefn, _eqnDefn+, _rvDefn;
-block INPUT_PRIOR_DATA (,) statements (,) _eqnDefn, _eqnDefn+;
-block PRIOR_SOURCE (,) statements (,) _listDefn;
+_block COVARIATES (0,) _statements (0,) _eqnDefn, _eqnDefn+, _enumDefn, _rvDefn;
+_block VARIABILITY_LEVELS (0,) _statements (0,) _listDefn;
+_block STRUCTURAL_PARAMETERS (0,) _statements (0,) _eqnDefn, _eqnDefn+;
+_block VARIABILITY_PARAMETERS (0,) _statements (0,) _eqnDefn, _eqnDefn+;
+_block RANDOM_VARIABLE_DEFINITION (0,) _arguments level::VarLevel _statements (0,) _rvDefn;
+_block INDIVIDUAL_VARIABLES (0,) _statements (0,) _eqnDefn+, _transDefn;
+_block MODEL_PREDICTION (0,) _statements (0,) _eqnDefn, _eqnDefn+, _listDefn;
+_block OBSERVATION (0,) _statements (0,) _eqnDefn+, _transDefn, _listDefn;
+_block GROUP_VARIABLES (0,) _statements (0,) _eqnDefn+, _eqnDefn;
+_block IDV (1,1) _statements (1,1) _eqnDefn;
+_block DATA_INPUT_VARIABLES (0,) _statements (1,) _listDefn;
+_block DECLARED_VARIABLES (0,) _statements (,) _eqnDefn, _enumDefn;
+_block DATA_DERIVED_VARIABLES (0,) _statements (,) _listDefn;
+_block SOURCE (1,1) _statements (1,1) _listDefn;
+_block STRUCTURAL (,) _statements (,) _listDefn;
+_block VARIABILITY (,) _statements (,) _listDefn;
+_block ESTIMATE (,1) _statements (,) _propStmt;
+_block SIMULATE (,1) _statements (,) _propStmt;
+_block OBJECTS (1,1) _statements (4,5) _listDefn;
+_block DEQ (,) _statements (,) _listDefn, _eqnDefn, _eqnDefn+;
+_block COMPARTMENT (,) _statements (,) _listDefn, _anonList;
+_block FUNCTIONS (,) _statements (,) _eqnDefn;
+_block ADMINISTRATION (1, ) _statements (,) _listDefn, _eqnDefn, _eqnDefn+;
+_block STUDY_DESIGN (,) _statements (,) _listDefn;
+_block SAMPLING (,) _statements (,) _listDefn;
+_block DESIGN_SPACES (,) _statements (,) _listDefn;
+_block DESIGN_PARAMETERS (,) _statements (,) _eqnDefn, _eqnDefn+;
+_block PRIOR_PARAMETERS (,) _statements (,) _eqnDefn, _eqnDefn+;
+_block NON_CANONICAL_DISTRIBUTION (,) _statements (,) _eqnDefn, _eqnDefn+;
+_block PRIOR_VARIABLE_DEFINITION (,) _statements (,) _eqnDefn, _eqnDefn+, _rvDefn;
+_block INPUT_PRIOR_DATA (,) _statements (,) _eqnDefn, _eqnDefn+;
+_block PRIOR_SOURCE (,) _statements (,) _listDefn;
 
 
-container mdlObj has COVARIATES, VARIABILITY_LEVELS, STRUCTURAL_PARAMETERS, VARIABILITY_PARAMETERS, RANDOM_VARIABLE_DEFINITION,
+_container mdlObj _has COVARIATES, VARIABILITY_LEVELS, STRUCTURAL_PARAMETERS, VARIABILITY_PARAMETERS, RANDOM_VARIABLE_DEFINITION,
 					INDIVIDUAL_VARIABLES, MODEL_PREDICTION, OBSERVATION, GROUP_VARIABLES, IDV, FUNCTIONS;
-container dataObj has DATA_INPUT_VARIABLES, DECLARED_VARIABLES, DATA_DERIVED_VARIABLES, SOURCE;
-container parObj has VARIABILITY, DECLARED_VARIABLES, STRUCTURAL;
-container taskObj has ESTIMATE, SIMULATE;
-container mogObj has OBJECTS;
-container designObj has DECLARED_VARIABLES, ADMINISTRATION, STUDY_DESIGN, SAMPLING, DESIGN_SPACES, COVARIATES, DESIGN_PARAMETERS;
-container priorObj has PRIOR_PARAMETERS, NON_CANONICAL_DISTRIBUTION, PRIOR_VARIABLE_DEFINITION;
-container MODEL_PREDICTION has DEQ, COMPARTMENT;
-container NON_CANONICAL_DISTRIBUTION has PRIOR_SOURCE, INPUT_PRIOR_DATA;
+_container dataObj _has DATA_INPUT_VARIABLES, DECLARED_VARIABLES, DATA_DERIVED_VARIABLES, SOURCE;
+_container parObj _has VARIABILITY, DECLARED_VARIABLES, STRUCTURAL;
+_container taskObj _has ESTIMATE, SIMULATE;
+_container mogObj _has OBJECTS;
+_container designObj _has DECLARED_VARIABLES, ADMINISTRATION, STUDY_DESIGN, SAMPLING, DESIGN_SPACES, COVARIATES, DESIGN_PARAMETERS;
+_container priorObj _has PRIOR_PARAMETERS, NON_CANONICAL_DISTRIBUTION, PRIOR_VARIABLE_DEFINITION;
+_container MODEL_PREDICTION _has DEQ, COMPARTMENT;
+_container NON_CANONICAL_DISTRIBUTION _has PRIOR_SOURCE, INPUT_PRIOR_DATA;
 
 
 
-func log (x::Real, y::Real) returns ::Real;
-func log2 (x::Real) returns ::Real;
-func log10 (x::Real) returns ::Real;
-func ln (x::Real) returns ::Real;
-func probit (x::Real) returns ::Real;
-func logit (x::Real) returns ::Real;
-func invLogit (x::Real) returns ::Real;
-func invProbit (x::Real) returns ::Real;
-func factorial (x::Real) returns ::Real;
-func lnFactorial (x::Real) returns ::Real;
-func sin (x::Real) returns ::Real;
-func cos (x::Real) returns ::Real;
-func tan (x::Real) returns ::Real;
-func sinh (x::Real) returns ::Real;
-func cosh (x::Real) returns ::Real;
-func tanh (x::Real) returns ::Real;
-func floor (x::Real) returns ::Real;
-func ceiling (x::Real) returns ::Real;
-func min (x::Real, y::Real) returns ::Real;
-func max (x::Real, y::Real) returns ::Real;
-func abs (x::Real) returns ::Real;
-func exp (x::Real) returns ::Real;
-func seq (x::Real, y::Real, z::Real) returns ::Vector;
-func dseq (x::Int, y::Int, z::Int) returns ::Vector[::Int];
-func sqrt (x::Real) returns ::Real;
-func sum (x::Vector) returns ::Real;
-func mean (x::Vector) returns ::Real;
-func median (x::Vector) returns ::Real;
-func toInt (x::Real) returns ::Int;
-func rep(x::Vector, times::Int) returns ::Vector;
+_func log (x::Real, y::Real) _returns ::Real;
+_func log2 (x::Real) _returns ::Real;
+_func log10 (x::Real) _returns ::Real;
+_func ln (x::Real) _returns ::Real;
+_func probit (x::Real) _returns ::Real;
+_func logit (x::Real) _returns ::Real;
+_func invLogit (x::Real) _returns ::Real;
+_func invProbit (x::Real) _returns ::Real;
+_func factorial (x::Real) _returns ::Real;
+_func lnFactorial (x::Real) _returns ::Real;
+_func sin (x::Real) _returns ::Real;
+_func cos (x::Real) _returns ::Real;
+_func tan (x::Real) _returns ::Real;
+_func sinh (x::Real) _returns ::Real;
+_func cosh (x::Real) _returns ::Real;
+_func tanh (x::Real) _returns ::Real;
+_func floor (x::Real) _returns ::Real;
+_func ceiling (x::Real) _returns ::Real;
+_func min (x::Real, y::Real) _returns ::Real;
+_func max (x::Real, y::Real) _returns ::Real;
+_func abs (x::Real) _returns ::Real;
+_func exp (x::Real) _returns ::Real;
+_func seq (x::Real, y::Real, z::Real) _returns ::Vector;
+_func dseq (x::Int, y::Int, z::Int) _returns ::Vector[::Int];
+_func sqrt (x::Real) _returns ::Real;
+_func sum (x::Vector) _returns ::Real;
+_func mean (x::Vector) _returns ::Real;
+_func median (x::Vector) _returns ::Real;
+_func toInt (x::Real) _returns ::Int;
+_func rep(x::Vector, times::Int) _returns ::Vector;
 
 // Matrix functions
-func toMatrixByRow(rows::Vector[::Vector[::Real]]) returns ::Matrix;
-func toMatrixByCol(cols::Vector[::Vector[::Real]]) returns ::Matrix;
-func asVector(x::Matrix) returns ::Vector;
-func inverse(x::Matrix) returns ::Matrix;
-func transpose(x::Matrix) returns ::Matrix;
-func diagonal(x::Vector) returns ::Matrix;
+_func toMatrixByRow(rows::Vector[::Vector[::Real]]) _returns ::Matrix;
+_func toMatrixByCol(cols::Vector[::Vector[::Real]]) _returns ::Matrix;
+_func asVector(x::Matrix) _returns ::Vector;
+_func inverse(x::Matrix) _returns ::Matrix;
+_func transpose(x::Matrix) _returns ::Matrix;
+_func diagonal(x::Vector) _returns ::Matrix;
 
 // Named functions
-func Normal named
+_func Normal _named
 				(mean::Real,
 				sd::Real,
 				var::Real
 			)
-			sig (mean, sd),
+			_sig (mean, sd),
 				(mean, var)
-			returns ::Pdf
+			_returns ::Pdf
 			;
-func LogNormal named
+_func LogNormal _named
 		(
 			mean::Real,
 			sd::Real,
 			var::Real
 		)
-		sig(mean, sd),
+		_sig(mean, sd),
 			(mean, var)
-		returns ::Pdf;
-func Bernoulli named
+		_returns ::Pdf;
+_func Bernoulli _named
 				(
 					category::Reference[::GenericEnum], // need to require a reference here
 					probability::Real
 				)
-				returns ::Pmf
+				_returns ::Pmf
 			;
-func	 Poisson named
+_func	 Poisson _named
 			(
 				lambda::Real
 			)
-			returns ::Pmf;
-func Binomial named
+			_returns ::Pmf;
+_func Binomial _named
 			(
 				successCategory ::Reference[::GenericEnum],
 				probabilityOfSuccess::Real,
 				numberOfTrials::Real
 			)
-			returns ::Pmf;
-func	 Gamma named
+			_returns ::Pmf;
+_func	 Gamma _named
 			(
 				shape::Real,
 				scale::Real
 			)
-			returns ::Pdf;
-func NonParametric named
+			_returns ::Pdf;
+_func NonParametric _named
 			(
 				bins::Vector,
 				probability::Vector
 			)
-			returns ::Pdf;
-func MultiNonParametric named
+			_returns ::Pdf;
+_func MultiNonParametric _named
 			(
 				bins::Matrix,
 				probability::Vector
 			)
-			returns ::Vector[::Pdf];
-func Empirical named
+			_returns ::Vector[::Pdf];
+_func Empirical _named
 			(
 				data::Vector,
 				probability::Vector
 			)
-			sig(data, probability?)
-			returns ::Pdf;
-func MultiEmpirical named
+			_sig(data, probability?)
+			_returns ::Pdf;
+_func MultiEmpirical _named
 			(
 				data::Matrix,
 				probability::Vector
 			)	
-			returns ::Vector[::Pdf];		
-func MultivariateNormal named
+			_returns ::Vector[::Pdf];		
+_func MultivariateNormal _named
 			(
 				mean::Vector,
 				cov::Matrix
 			)
-			returns ::Vector[::Pdf];
-func Wishart named
+			_returns ::Vector[::Pdf];
+_func Wishart _named
 			(
 				scaleMatrix::Matrix,
 				nu::Real
 			)
-			returns ::Matrix[[::Pdf]];
-func matrix named
+			_returns ::Matrix[[::Pdf]];
+_func matrix _named
 		(
 			vector::Vector,
 			ncol::Real,
 			byRow::Boolean
 		)
-		returns ::Matrix,
-linear named
+		_returns ::Matrix,
+linear _named
 		( 
 			trans::transType,
 			pop::Real,
 			fixEff::Vector[::fixEffAtts],
 			ranEff::Vector
 		)
-		sig(trans?, pop, fixEff?, ranEff) 
-		returns ::Real,
-general named (
+		_sig(trans?, pop, fixEff?, ranEff) 
+		_returns ::Real,
+general _named (
 				trans::transType,
 				grp::Real,
 				ranEff::Vector[::Real]
 			)
-			sig(trans?, grp, ranEff) 
-			returns ::Real,
-combinedError1 named
+			_sig(trans?, grp, ranEff) 
+			_returns ::Real,
+combinedError1 _named
 		( 
 			trans::transType,
 			additive::Real,
@@ -213,10 +228,10 @@ combinedError1 named
 			prediction::Real,
 			eps::Real
 		)
-		sig(trans?, additive, proportional, prediction, eps)
-		returns ::Real
+		_sig(trans?, additive, proportional, prediction, eps)
+		_returns ::Real
 ;
-func combinedError2 named
+_func combinedError2 _named
 		( 
 			trans::transType,
 			additive::Real,
@@ -224,38 +239,38 @@ func combinedError2 named
 			prediction::Real,
 			eps::Real
 		)
-		sig(trans?, additive, proportional, prediction, eps)
-		returns ::Real
+		_sig(trans?, additive, proportional, prediction, eps)
+		_returns ::Real
 ;
-func additiveError named
+_func additiveError _named
 		( 
 			trans::transType,
 			additive::Real,
 			prediction::Real,
 			eps::Real
 		)
-		sig(trans?, additive, prediction, eps)
-		returns ::Real
+		_sig(trans?, additive, prediction, eps)
+		_returns ::Real
 ;
-func proportionalError named
+_func proportionalError _named
 		( 
 			trans::transType,
 			proportional::Real,
 			prediction::Real,
 			eps::Real
 		)
-		sig(trans?, proportional, prediction, eps)
-		returns ::Real
+		_sig(trans?, proportional, prediction, eps)
+		_returns ::Real
 ;
-func readVector named
+_func readVector _named
 			(
 				src::PriorSource,
 				element::String
 			)
-			returns ::Vector;
-func readMatrix named
+			_returns ::Vector;
+_func readMatrix _named
 			(
 				src::PriorSource,
 				element::String
 			)
-			returns ::Matrix;
+			_returns ::Matrix;

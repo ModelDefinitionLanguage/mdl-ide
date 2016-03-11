@@ -3,7 +3,6 @@ package eu.ddmore.mdl.provider
 import eu.ddmore.mdl.mdl.BlockArguments
 import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.utils.BlockUtils
 import eu.ddmore.mdl.utils.MdlLibUtils
 import org.eclipse.xtext.EcoreUtil2
 

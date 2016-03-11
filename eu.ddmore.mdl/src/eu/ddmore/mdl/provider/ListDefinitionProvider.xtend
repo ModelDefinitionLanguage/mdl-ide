@@ -37,28 +37,28 @@ class ListDefinitionProvider {
 //		String depAtt // other att that must be present
 		boolean mandatory
 		TypeInfo attType
-		TypeInfo catMappingType
-		boolean catMappingMandatory
+//		TypeInfo catMappingType
+//		boolean catMappingMandatory
 		
 //		new(String name, String depAtt, boolean mand, TypeInfo attType){
 //			this(name, depAtt, mand, attType, null, false)
 //		}
 		
-		new(String name, boolean mand, TypeInfo attType){
-			this(name, mand, attType, null, false)
-		}
+//		new(String name, boolean mand, TypeInfo attType){
+//			this(name, mand, attType, null, false)
+//		}
 		
-		def isCatMappingMandatory(){
-			return catMappingType != null && catMappingMandatory
-		}
-		
-		def isCatMappingForbidden(){
-			return catMappingType == null || (catMappingType != null && !catMappingMandatory)
-		}
-		
-		def isCatMappingPossible(){
-			return catMappingType != null
-		}
+//		def isCatMappingMandatory(){
+//			return catMappingType != null && catMappingMandatory
+//		}
+//		
+//		def isCatMappingForbidden(){
+//			return catMappingType == null || (catMappingType != null && !catMappingMandatory)
+//		}
+//		
+//		def isCatMappingPossible(){
+//			return catMappingType != null
+//		}
 	}
 	
 	@Data @FinalFieldsConstructor
@@ -68,12 +68,23 @@ class ListDefinitionProvider {
 		List<AttributeDefn> attributes
 		List<Map<String, Boolean>> attributeSets
 		boolean isAnonymous
+		String catAttribute
+		TypeInfo catMappingType
+		boolean catMappingMandatory
 		
 		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes){
-			this(keyValue, listType, attributes, false)
+			this(keyValue, listType, attributes, false, null, null, false)
 		}
 		
-		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, boolean isListAnonymous){
+		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, List<Map<String, Boolean>> attributeSets){
+			this(keyValue, listType, attributes, attributeSets, false, null, null, false)
+		}
+
+		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, String catAtt, TypeInfo catType, boolean catMapMand){
+			this(keyValue, listType, attributes, false, catAtt, catType, catMapMand)
+		}
+
+		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, boolean isListAnonymous, String catAtt, TypeInfo catType, boolean catMapMand){
 			this.keyValue = keyValue
 			this.listType = listType
 			this.attributes = attributes
@@ -84,6 +95,20 @@ class ListDefinitionProvider {
 				onlySet.put(att.name, att.mandatory)
 			}
 			isAnonymous = isListAnonymous
+			this.catAttribute = catAtt
+			this.catMappingType = catType
+			this.catMappingMandatory = catMapMand
+		}
+		def isCatMappingMandatory(String attName){
+			return attName == catAttribute && catMappingType != null && catMappingMandatory
+		}
+		
+		def isCatMappingForbidden(String attName){
+			return attName == catAttribute && catMappingType == null || (catMappingType != null && !catMappingMandatory)
+		}
+		
+		def isCatMappingPossible(String attName){
+			return attName == catAttribute && catMappingType != null
 		}
 	}
 	
@@ -572,8 +597,7 @@ class ListDefinitionProvider {
 		val ep = EcoreUtil2.getContainerOfType(eContainer, EnumPair)
 		val listDefn = attList?.matchingListDefn
 		if(listDefn != null && ep != null){
-			val attDefn = listDefn.getAttributeDefinition(ep.argumentName)
-			return attDefn.isCatMappingMandatory
+			return listDefn.isCatMappingMandatory(ep.argumentName)
 		}
 		false
 	}
@@ -583,8 +607,7 @@ class ListDefinitionProvider {
 		val ep = EcoreUtil2.getContainerOfType(eContainer, EnumPair)
 		val listDefn = attList?.matchingListDefn
 		if(listDefn != null && ep != null){
-			val attDefn = listDefn.getAttributeDefinition(ep.argumentName)
-			return attDefn.isCatMappingForbidden
+			return listDefn.isCatMappingForbidden(ep.argumentName)
 		}
 		false
 	}

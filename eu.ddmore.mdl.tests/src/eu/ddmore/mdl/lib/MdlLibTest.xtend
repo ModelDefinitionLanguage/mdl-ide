@@ -102,17 +102,17 @@ Bernoulli_DIST_mdl = mdlObj{
 		
 		val firstLang = resourceSet.createResource(URI.createURI("sample.mlib"))
 		val codeSnippet = '''
-			type Real _scalar;
+			_type Real _real;
 			
-			object mdlObj;
+			_object mdlObj;
 			
-			block IDV (1,1) statements (1,1) _eqnDefn;
-			block VARIABILITY_LEVELS (1,1) statements (1,) _listDefn;
-			block GROUP_VARIABLES (1,1) statements (1, ) _eqnDefn+;
+			_block IDV (1,1) _statements (1,1) _eqnDefn;
+			_block VARIABILITY_LEVELS (1,1) _statements (1,) _listDefn;
+			_block GROUP_VARIABLES (1,1) _statements (1, ) _eqnDefn+;
 			
-			container mdlObj has VARIABILITY_LEVELS, GROUP_VARIABLES, IDV;
+			_container mdlObj _has VARIABILITY_LEVELS, GROUP_VARIABLES, IDV;
 						
-			func ln (x::Real) returns ::Real;
+			_func ln (x::Real) _returns ::Real;
 		'''
 		firstLang.load(new StringInputStream(codeSnippet), Collections::emptyMap)
 	

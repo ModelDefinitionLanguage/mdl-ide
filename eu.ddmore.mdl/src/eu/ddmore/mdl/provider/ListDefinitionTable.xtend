@@ -105,8 +105,8 @@ class ListDefinitionTable {
 //						 false
 					),
 					new ListDefInfo('catCov', new EnumListTypeInfo("CatCovariate"), #[
-						 new AttributeDefn(USE_ATT, true, USE_TYPE, TypeSystemProvider::INT_TYPE, true)
-						 ] 
+						 new AttributeDefn(USE_ATT, true, USE_TYPE)
+						 ], 'use', TypeSystemProvider::INT_TYPE, true
 					),
 					new ListDefInfo ('amt', AMT_COL_TYPE,  #[
 						 new AttributeDefn(USE_ATT, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, false, TypeSystemProvider::MAPPING_TYPE),
@@ -114,8 +114,7 @@ class ListDefinitionTable {
 						 ],
 						 #[#{ USE_ATT -> true, DEFINE_ATT -> true },
 						 	#{ USE_ATT -> true, VARIABLE_ATT -> true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('dv', new ListTypeInfo("Dv", PrimitiveType.List),  #[
 						 new AttributeDefn(USE_ATT, true, USE_TYPE), new AttributeDefn(DEFINE_ATT, false, TypeSystemProvider::MAPPING_TYPE),
@@ -123,8 +122,7 @@ class ListDefinitionTable {
 						 ],
 						 #[#{ USE_ATT -> true, DEFINE_ATT -> true },
 						 	#{ USE_ATT -> true, VARIABLE_ATT -> true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo (IDV_USE_VALUE, IDV_COL_TYPE,  #[
 						 new AttributeDefn(USE_ATT, true, USE_TYPE)
@@ -226,8 +224,7 @@ class ListDefinitionTable {
 						 ],
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'to' -> true, 'modelDur' -> false, 'tlag' -> false, 'finput' -> false }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('effect', new ListTypeInfo("Effect", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
@@ -236,8 +233,7 @@ class ListDefinitionTable {
 						 ],
 						 #[
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'from' -> true, 'keq' -> true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo (CMT_DEPOT_VALUE, new ListTypeInfo("Depot", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
@@ -257,8 +253,7 @@ class ListDefinitionTable {
 //						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ka' -> true, 'tlag' -> false, 'finput' -> false },
 //						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'ktr' -> true, 'mtt' -> true },
 //						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'target' -> true, 'modelDur' -> true, 'tlag' -> false, 'finput' -> false }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('transfer', new ListTypeInfo("Transfer", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
@@ -266,7 +261,8 @@ class ListDefinitionTable {
 						 new AttributeDefn('from', true, DERIV_SUPER_LIST.makeReference),
 						 new AttributeDefn('to', true, DERIV_SUPER_LIST.makeReference)
 						 ],
-						 true
+						 true,
+						 null, null, false
 					),
 					new ListDefInfo ('compartment', COMP_LIST_TYPE,  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE)
@@ -284,7 +280,8 @@ class ListDefinitionTable {
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'from' -> true, 'v' -> false, 'cl' -> true },
 						 	#{ CMT_TYPE_ATT -> true, 'modelCmt' -> false, 'from' -> true, 'vm' -> true, 'km' -> true }
 						 ],
-						 true
+						 true,
+						 null, null, false
 					),
 					new ListDefInfo ('distribution', new ListTypeInfo("Distribution", PrimitiveType.Real),  #[
 						 new AttributeDefn(CMT_TYPE_ATT, true, COMP_TYPE_TYPE), new AttributeDefn('modelCmt', false, TypeSystemProvider::INT_TYPE),
@@ -366,8 +363,9 @@ class ListDefinitionTable {
 		"OBSERVATION" -> (
 			new BlockListDefinition(OBS_TYPE_ATT, newArrayList(
 					new ListDefInfo (CATEGORICAL_OBS_VALUE, CATEGORICAL_LIST_TYPE,  #[
-						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, TypeSystemProvider::REAL_TYPE.makeReference, true)
-						 ]
+						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE)
+						 ],
+						 OBS_TYPE_ATT, TypeSystemProvider::REAL_TYPE.makeReference, true
 					),
 					new ListDefInfo (COUNT_OBS_VALUE, COUNT_LIST_TYPE,  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
@@ -375,9 +373,10 @@ class ListDefinitionTable {
 						 ]
 					),
 					new ListDefInfo (DISCRETE_OBS_VALUE, DISCRETE_LIST_TYPE,  #[
-						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE, TypeSystemProvider::UNDEFINED_TYPE, false),
+						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
 						 new AttributeDefn('distn', true, TypeSystemProvider::PMF_TYPE)
-						 ]
+						 ],
+						 OBS_TYPE_ATT, TypeSystemProvider::UNDEFINED_TYPE, false
 					),
 					new ListDefInfo (TTE_OBS_VALUE, new ListTypeInfo("TteObs", PrimitiveType.Real),  #[
 						 new AttributeDefn(OBS_TYPE_ATT, true, OBS_TYPE_TYPE),
@@ -388,8 +387,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true }//,
 //						 	#{ OBS_TYPE_ATT -> true, 'hazard' -> true, 'event' -> true, 'maxEvent' -> false }
-						 ],
-						 false
+						 ]
 					)
 				)
 			)
@@ -457,8 +455,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
 						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('covariate', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
 						 new AttributeDefn('objRef', true, TypeSystemProvider::REAL_TYPE.makeReference),
@@ -469,8 +466,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
 						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('amount', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
 						 new AttributeDefn('objRef', true, ADMINISTRATION_TYPE.makeReference.makeVector),
@@ -481,8 +477,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
 						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('doseTime', new ListTypeInfo("DesignSpaceAmt", PrimitiveType.List),  #[
 						 new AttributeDefn('objRef', true, ADMINISTRATION_TYPE.makeReference.makeVector),
@@ -493,8 +488,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
 						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('duration', new ListTypeInfo("DesignSpaceDur", PrimitiveType.List),  #[
 						 new AttributeDefn('objRef', true, ADMINISTRATION_TYPE.makeReference.makeVector),
@@ -505,8 +499,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
 						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('numberTimes', new ListTypeInfo("DesignSpaceNum", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
@@ -517,8 +510,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
 						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('sampleTime', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
@@ -529,8 +521,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
 						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('numberArms', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
@@ -541,8 +532,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
 						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('armSize', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
@@ -553,8 +543,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
 						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
-						 ],
-						 false
+						 ]
 					),
 					new ListDefInfo ('parameter', new ListTypeInfo("DesignSpaceSample", PrimitiveType.List),  #[
 						 new AttributeDefn('element', true, ELEMENT_TYPE),
@@ -565,8 +554,7 @@ class ListDefinitionTable {
 						 #[
 						 	#{ 'objRef' -> true, 'element' -> true, 'discrete' ->true },
 						 	#{ 'objRef' -> true, 'element' -> true, 'range' ->true }
-						 ],
-						 false
+						 ]
 					)
 				)
 			)
@@ -582,8 +570,7 @@ class ListDefinitionTable {
 						 ],
 						 #[
 						 	#{ 'type' -> true, 'outcome' -> true, 'sampleTime' ->false, 'numberTimes' ->false, 'numberSamples' ->false }
-						 ],
-						 false
+						 ]
 					),
 //					new ListDefInfo ('simple', SAMPLING_TYPE,  #[
 //						 new AttributeDefn('type', true, SAMPLING_TYPE_TYPE),

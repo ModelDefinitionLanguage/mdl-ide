@@ -423,9 +423,8 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	private  def void validateCategoricalMappingType(EnumPair at, Expression mappingExpr, (TypeInfo, TypeInfo) => void typeErrorLambda){
 		val attList = at.eContainer as AttributeList
 		val listDefn = attList.matchingListDefn
-		val attDefn = listDefn?.getAttributeDefinition(at.attributeName)
-		if(attDefn.isCatMappingPossible){
-			val expectedType = attDefn.catMappingType ?: TypeSystemProvider::UNDEFINED_TYPE
+		if(listDefn.isCatMappingPossible(at.attributeName)){
+			val expectedType = listDefn.catMappingType ?: TypeSystemProvider::UNDEFINED_TYPE
 			checkArgumentMatchesAndExpression(expectedType, mappingExpr, typeErrorLambda)
 		}
 	}

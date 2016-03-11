@@ -26,31 +26,41 @@ class MdlLibUtils {
 		ListDefinitionTable::PRIOR_SOURCE_TYPE.name -> ListDefinitionTable::PRIOR_SOURCE_TYPE
 	}
 	
-	def private getScalarType(TypeSpec it){
-		val typeName = typeName.name
-		switch(typeName){
-			case 'Int':
-				TypeSystemProvider::INT_TYPE
-			case 'Real':
-				TypeSystemProvider::REAL_TYPE
-			case 'Boolean':
-				TypeSystemProvider::BOOLEAN_TYPE
-			case 'String':
-				TypeSystemProvider::STRING_TYPE
-			case 'Pdf':
-				TypeSystemProvider::PDF_TYPE
-			case 'Pmf':
-				TypeSystemProvider::PMF_TYPE
-			default:
-				TypeSystemProvider::UNDEFINED_TYPE
-		}
-	}
+//	def private getScalarType(TypeSpec it){
+//		val typeName = typeName.name
+//		switch(typeName){
+//			case 'Int':
+//				TypeSystemProvider::INT_TYPE
+//			case 'Real':
+//				TypeSystemProvider::REAL_TYPE
+//			case 'Boolean':
+//				TypeSystemProvider::BOOLEAN_TYPE
+//			case 'String':
+//				TypeSystemProvider::STRING_TYPE
+//			case 'Pdf':
+//				TypeSystemProvider::PDF_TYPE
+//			case 'Pmf':
+//				TypeSystemProvider::PMF_TYPE
+//			default:
+//				TypeSystemProvider::UNDEFINED_TYPE
+//		}
+//	}
 
 	def TypeInfo getTypeInfo(TypeSpec it){
 		val typeClass = typeName.typeClass
 		switch(typeClass){
-			case TypeClass.SCALAR:
-				scalarType
+			case TypeClass.INT:
+				TypeSystemProvider::INT_TYPE
+			case TypeClass.REAL:
+				TypeSystemProvider::REAL_TYPE
+			case TypeClass.BOOLEAN:
+				TypeSystemProvider::BOOLEAN_TYPE
+			case TypeClass.STRING:
+				TypeSystemProvider::STRING_TYPE
+			case TypeClass.PDF:
+				TypeSystemProvider::PDF_TYPE
+			case TypeClass.PMF:
+				TypeSystemProvider::PMF_TYPE
 			case TypeClass.VECTOR:
 				if(elementType != null && cellType == null && functionSpec == null){
 					// element type specified and well formed
@@ -102,7 +112,7 @@ class MdlLibUtils {
 	
 	def private createBuiltinEnum(TypeDefinition it){
 		val enumVals = new HashSet<String>
-		enumArgs.forEach[enumVals.add(it)]
+		enumArgs.forEach[enumVals.add(name)]
 		
 		new BuiltinEnumTypeInfo(name, enumVals)
 	}

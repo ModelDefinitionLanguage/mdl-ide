@@ -22,7 +22,7 @@ class MdlLibUtilsTest {
 		val spec = MdlLibFactory.eINSTANCE.createTypeSpec
 		val realTypeDefn = MdlLibFactory.eINSTANCE.createTypeDefinition
 		realTypeDefn.name = 'Real' 
-		realTypeDefn.typeClass = TypeClass.SCALAR
+		realTypeDefn.typeClass = TypeClass.REAL
 		spec.typeName = realTypeDefn
 		spec
 	}
@@ -32,7 +32,7 @@ class MdlLibUtilsTest {
 		val spec = MdlLibFactory.eINSTANCE.createTypeSpec
 		val realTypeDefn = MdlLibFactory.eINSTANCE.createTypeDefinition
 		realTypeDefn.name = 'Int' 
-		realTypeDefn.typeClass = TypeClass.SCALAR
+		realTypeDefn.typeClass = TypeClass.INT
 		spec.typeName = realTypeDefn
 		spec
 	}
@@ -65,7 +65,7 @@ class MdlLibUtilsTest {
 		val spec = MdlLibFactory.eINSTANCE.createTypeSpec
 		val realTypeDefn = MdlLibFactory.eINSTANCE.createTypeDefinition
 		realTypeDefn.name = 'String' 
-		realTypeDefn.typeClass = TypeClass.SCALAR
+		realTypeDefn.typeClass = TypeClass.STRING
 		spec.typeName = realTypeDefn
 		spec
 	}
@@ -96,7 +96,7 @@ class MdlLibUtilsTest {
 		val spec = MdlLibFactory.eINSTANCE.createTypeSpec
 		val realTypeDefn = MdlLibFactory.eINSTANCE.createTypeDefinition
 		realTypeDefn.name = 'Boolean' 
-		realTypeDefn.typeClass = TypeClass.SCALAR
+		realTypeDefn.typeClass = TypeClass.BOOLEAN
 		spec.typeName = realTypeDefn
 		val actualTypeInfo = spec.typeInfo
 		assertEquals("expectedType", TypeSystemProvider::BOOLEAN_TYPE, actualTypeInfo)
