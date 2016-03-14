@@ -63,7 +63,7 @@ class ListDefinitionProvider {
 	
 	@Data @FinalFieldsConstructor
 	static class ListDefInfo {
-		val String keyValue
+//		val String keyValue
 		TypeInfo listType
 		List<AttributeDefn> attributes
 		List<Map<String, Boolean>> attributeSets
@@ -77,7 +77,8 @@ class ListDefinitionProvider {
 		}
 		
 		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, List<Map<String, Boolean>> attributeSets){
-			this(keyValue, listType, attributes, attributeSets, false, null, null, false)
+//			this(keyValue, listType, attributes, attributeSets, false, null, null, false)
+			this(listType, attributes, attributeSets, false, null, null, false)
 		}
 
 		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, String catAtt, TypeInfo catType, boolean catMapMand){
@@ -85,7 +86,7 @@ class ListDefinitionProvider {
 		}
 
 		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, boolean isListAnonymous, String catAtt, TypeInfo catType, boolean catMapMand){
-			this.keyValue = keyValue
+//			this.keyValue = keyValue
 			this.listType = listType
 			this.attributes = attributes
 			attributeSets = new ArrayList<Map<String, Boolean>>()
@@ -99,6 +100,19 @@ class ListDefinitionProvider {
 			this.catMappingType = catType
 			this.catMappingMandatory = catMapMand
 		}
+
+		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, List<Map<String, Boolean>> attributeSets, boolean isListAnonymous){
+//			this.keyValue = keyValue
+			this.listType = listType
+			this.attributes = attributes
+			this.attributeSets = attributeSets
+			this.isAnonymous = isListAnonymous
+			this.catAttribute = null
+			this.catMappingType = null
+			this.catMappingMandatory = false
+		}
+
+
 		def isCatMappingMandatory(String attName){
 			return attName == catAttribute && catMappingType != null && catMappingMandatory
 		}
@@ -112,10 +126,43 @@ class ListDefinitionProvider {
 		}
 	}
 	
-	@Data @FinalFieldsConstructor
 	static class BlockListDefinition {
-		String key
-		List<ListDefInfo> listDefns
+		val String _key
+		val Map<String, ListDefInfo> _listDefns
+		val ListDefInfo _sglListDefn
+
+
+		new(String key, Map<String, ListDefInfo> _ld){
+			_key = key
+			_listDefns = _ld
+			_sglListDefn = null
+		}
+		
+		new(String key, ListDefInfo sdl){
+			_key = key
+			_listDefns = Collections::emptyMap
+			_sglListDefn = sdl
+		}
+
+		def List<ListDefInfo> getListDefns(){
+			if(_sglListDefn != null){
+				newArrayList(_sglListDefn)
+			}
+			else
+				new ArrayList<ListDefInfo>(this._listDefns.values)
+		}
+		
+		def getKey(){
+			_key
+		}
+	
+		def ListDefInfo getListDefnByValue(String attVal) {
+			if(_sglListDefn != null){
+				_sglListDefn
+			}
+			else _listDefns.get(attVal)
+		}
+
 	}
 
 	// owning block -> key attribute -> key value -> attributes associated with key
@@ -142,7 +189,7 @@ class ListDefinitionProvider {
 		attDefns = newAttDefn
 		buildEnumTypes
 	}
-
+	
 	private def buildEnumTypes(){
 		for(blkName : attDefns.keySet){
 			val valueMap = new HashMap<String, BuiltinEnumTypeInfo>
@@ -170,18 +217,21 @@ class ListDefinitionProvider {
 			while(iter.hasNext && expectedAttributes.isEmpty){
 				val att = iter.next
 				val blockDefn = attDefns.get(parent.identifier)
-				expectedAttributes.addAll(blockDefn.listDefns.filter[at|
-					switch(att){
-						ValuePair case att.argumentName == blockDefn.key:{
-							if(at.keyValue != null){
-								val keyVal = att.expression.enumValue
-								keyVal == at.keyValue
-							}
-							else true
-						}
-						default: false
-					}
-				])
+				val keyVal = att.expression.enumValue
+				val ld = blockDefn.getListDefnByValue(keyVal)
+				if(ld != null) expectedAttributes.add(ld)
+//				expectedAttributes.addAll(blockDefn.listDefns.filter[at|
+//					switch(att){
+//						ValuePair case att.argumentName == blockDefn.key:{
+//							if(blockDefn.keyValue != null){
+//								val keyVal = att.expression.enumValue
+//								keyVal == blockDefn
+//							}
+//							else true
+//						}
+//						default: false
+//					}
+//				])
 			}
 			return expectedAttributes.head
 		}
@@ -249,18 +299,22 @@ class ListDefinitionProvider {
 			while(iter.hasNext && !found){
 				val att = iter.next
 				val blockDefn = attDefns.get(parent.identifier)
-				found = blockDefn.listDefns.exists[at|
-					switch(att){
-						ValuePair case att.argumentName == blockDefn.key:{
-							if(at.keyValue != null){
-								val keyVal = att.expression.enumValue
-								keyVal == at.keyValue
-							}
-							else true
-						}
-						default: false
-					}
-				]
+				val keyVal = att.expression.enumValue
+				found = att.argumentName == blockDefn.key &&
+					blockDefn.getListDefnByKeyValue(keyVal) != null 
+//				
+//				found = blockDefn.listDefns.exists[at|
+//					switch(att){
+//						ValuePair case att.argumentName == blockDefn.key:{
+//							if(at.keyValue != null){
+//								val keyVal = att.expression.enumValue
+//								keyVal == at.keyValue
+//							}
+//							else true
+//						}
+//						default: false
+//					}
+//				]
 			}
 		}
 		return found
@@ -274,20 +328,26 @@ class ListDefinitionProvider {
 			while(iter.hasNext && retVal == null){
 				val att = iter.next
 				val blockDefn = attDefns.get(parent.identifier)
-				if(blockDefn.listDefns.exists[at|
-					switch(att){
-						ValuePair case att.argumentName == blockDefn.key:{
-							if(at.keyValue != null){
-								val keyVal = att.expression.enumValue
-								keyVal == at.keyValue
-							}
-							else true
-						}
-						default: false
-					}
-				]){
-					retVal = blockDefn.key
-				}
+				val keyVal = att.expression.enumValue
+				if(att.argumentName == blockDefn.key &&
+					blockDefn.getListDefnByKeyValue(keyVal) != null){
+						retVal = att.argumentName
+				} 
+				
+//				if(blockDefn.listDefns.exists[at|
+//					switch(att){
+//						ValuePair case att.argumentName == blockDefn.key:{
+//							if(at.keyValue != null){
+//								val keyVal = att.expression.enumValue
+//								keyVal == at.keyValue
+//							}
+//							else true
+//						}
+//						default: false
+//					}
+//				]){
+//					retVal = blockDefn.key
+//				}
 			}
 		}
 		return retVal
@@ -323,18 +383,21 @@ class ListDefinitionProvider {
 			while(iter.hasNext && expectedAttributes.isEmpty){
 				val att = iter.next
 				val blockDefn = attDefns.get(parent.identifier)
-				expectedAttributes.addAll(blockDefn.listDefns.filter[at| 
-					switch(att){
-						ValuePair case att.argumentName == blockDefn.key:{
-							if(at.keyValue != null){
-								val keyVal = att.expression.enumValue
-								keyVal == at.keyValue
-							}
-							else true
-						}
-						default: false
-					}
-				])
+				val keyVal = att.expression.enumValue
+				val ld = blockDefn.getListDefnByValue(keyVal)
+				if(ld != null) expectedAttributes.add(ld)
+//				expectedAttributes.addAll(blockDefn.listDefns.filter[at| 
+//					switch(att){
+//						ValuePair case att.argumentName == blockDefn.key:{
+//							if(at.keyValue != null){
+//								val keyVal = att.expression.enumValue
+//								keyVal == at.keyValue
+//							}
+//							else true
+//						}
+//						default: false
+//					}
+//				])
 			}
 			val listDefinition = expectedAttributes.head
 			unused.addAll(findUnusedMandatoryArguments(listDefinition))
@@ -466,19 +529,24 @@ class ListDefinitionProvider {
 //	}
 	
 	// gets a list definition based on a key value combination 
-	def getMatchingListDefn(AttributeList attList){
+	def ListDefInfo getMatchingListDefn(AttributeList attList){
 		val owningBlock = EcoreUtil2.getContainerOfType(attList.eContainer, BlockStatement)
 		val blkDefn = attDefns.get(owningBlock.identifier)
-		val listDefns = blkDefn?.listDefns ?: Collections.emptyList
-		listDefns.findFirst[defn|
+//		val listDefns = blkDefn?.listDefns ?: Collections.emptyList
+//		listDefns.findFirst[defn|
 			for(a : attList.attributes){
-				if(blkDefn.key == a.attributeName)
-					if(defn.keyValue == null || defn.keyValue == a.expression.enumValue){
-						return true;
-					}
+				if(a.argumentName == blkDefn.key){
+					val lstDefn = blkDefn.getListDefnByValue(a.expression.enumValue)
+					if(lstDefn != null) return lstDefn
+				}
+//				if(blkDefn.key == a.attributeName)
+//					if(defn.keyValue == null || defn.keyValue == a.expression.enumValue){
+//						return true;
+//					}
 			} 
-			false
-		]
+//			false
+//		]
+		null
 	}
 
 
@@ -495,16 +563,18 @@ class ListDefinitionProvider {
 
 	// gets a list definition based on its key 
 	def getListDefnByKeyValue(BlockListDefinition it, String keyValQuery){
-		listDefns.findFirst[defn|
-			// if keyValue is null then there can only be one list defn in the block
-			// so we match it without comparing key values
-			defn.keyValue == null || defn.keyValue == keyValQuery
-		]
+		getListDefnByValue(keyValQuery)
+//		listDefns.findFirst[defn|
+//			// if keyValue is null then there can only be one list defn in the block
+//			// so we match it without comparing key values
+//			defn.keyValue == null || defn.keyValue == keyValQuery
+//		]
 	}
 
 	def	getListDefnByBlockAndKeyValue(String blockName, String keyValQuery){
 		val blkDefn = attDefns.get(blockName)
-		blkDefn?.listDefns.findFirst[defn| defn.keyValue == keyValQuery ]
+		blkDefn.getListDefnByValue(keyValQuery)
+//		blkDefn?.listDefns.findFirst[defn| defn.keyValue == keyValQuery ]
 	}
 	
 	def getAttributeExpression(AttributeList it, String attName){

@@ -9,3 +9,4 @@ _type Vector _vector;
 _type Matrix _matrix;
 _type Function _function;
 _type Reference _reference;
+_type Mapping _mapping;

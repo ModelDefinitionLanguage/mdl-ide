@@ -3,10 +3,6 @@ _type transType _enum (none, ln, logit, probit);
 _type GenericEnum _category;
 _type fixEffAtts _sublist;
 _type priorFormat _sublist;
-_list PriorSource _atts file::String, inputFormat::priorInput, format::priorFormat
-		_sig(file, inputFormat, format);
-_list VarLevel _atts type::varLvlType, level::Int
-	_sig(type, level);
 
 _type divUse _enum (covariate, amt, dv, dvid, cmt, mdv, idv, id, rate, ignore, varLevel, catCov, ss, ii, addl);
 _type ddvUse _enum (doseTime);
@@ -19,6 +15,31 @@ _type obstype _enum (categorical, count, discrete, tte);
 _type sampletype _enum (simple, complex, derived);
 _type sampleelement _enum (amount, duration, sampleTime, numberTimes, covariate, catCov, numberArms, armSize, parameter, dosTime);
 _type objType _enum (mdlObj, dataObj, parObj, taskObj, designObj, priorObj);
+
+// Data object lists
+_list Covariate _alt Real _atts use::divUse _sig (use);  
+_list CatCovariate _atts use::divUse _cat use::Int _sig (use);  
+_list Amt _atts use::divUse, define::Mapping, variable::Reference[::Real] _sig (use, define), (use, variable);
+_list Dv _atts use::divUse, define::Mapping, variable::Reference[::Real] _sig (use, define), (use, variable);
+_list Idv _atts use::divUse _sig(use);
+_list Cmt _atts use::divUse _sig(use);
+_list Id _atts use::divUse _sig(use);
+_list DataVarLevel _atts use::divUse _sig(use);
+_list Mdv _atts use::divUse _sig(use);
+_list rate _atts use::divUse _sig(use);
+_list ss _atts use::divUse _sig(use);
+_list ii _atts use::divUse _sig(use);
+_list addl _atts use::divUse _sig(use);
+_list Dvid _atts use::divUse _sig(use);
+_list ignore _atts use::divUse _sig(use);
+_list Source _atts file::String, inputFormat::input _sig(file, inputFormat);
+
+
+_list PriorSource _atts file::String, inputFormat::priorInput, format::priorFormat
+		_sig(file, inputFormat, format);
+_list VarLevel _atts type::varLvlType, level::Int
+	_sig(type, level);
+
 
 
 _object mdlObj;
