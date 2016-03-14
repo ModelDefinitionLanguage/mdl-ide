@@ -1,6 +1,8 @@
 package eu.ddmore.mdl.type
 
+import eu.ddmore.mdl.mdl.AbstractAttributeList
 import eu.ddmore.mdl.mdl.AnonymousListStatement
+import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.CategoryValueReference
@@ -9,6 +11,7 @@ import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.IndexSpec
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.ListPiecewiseExpression
 import eu.ddmore.mdl.mdl.MatrixElement
 import eu.ddmore.mdl.mdl.MatrixLiteral
 import eu.ddmore.mdl.mdl.MatrixRow
@@ -23,8 +26,8 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
+import eu.ddmore.mdl.provider.ListDefInfo
 import eu.ddmore.mdl.provider.ListDefinitionProvider
-import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
@@ -34,13 +37,10 @@ import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.FuncArgumentDefinition
 import eu.ddmore.mdllib.mdllib.FunctionDefnBody
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
+import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.mdl.AttributeList
-import eu.ddmore.mdl.mdl.ListPiecewiseExpression
-import eu.ddmore.mdl.mdl.AbstractAttributeList
-import java.util.ArrayList
 
 public class TypeSystemProvider {
 

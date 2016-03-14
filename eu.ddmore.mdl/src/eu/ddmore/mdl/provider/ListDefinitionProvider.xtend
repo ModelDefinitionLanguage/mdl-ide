@@ -11,6 +11,7 @@ import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.utils.BlockUtils
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdllib.mdllib.Expression
 import java.util.ArrayList
@@ -20,10 +21,7 @@ import java.util.HashSet
 import java.util.List
 import java.util.Map
 import java.util.Set
-import org.eclipse.xtend.lib.annotations.Data
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.utils.BlockUtils
 
 class ListDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
@@ -31,139 +29,8 @@ class ListDefinitionProvider {
 
 
 	
-	@Data @FinalFieldsConstructor
-	static class AttributeDefn{
-		String name
-//		String depAtt // other att that must be present
-		boolean mandatory
-		TypeInfo attType
-//		TypeInfo catMappingType
-//		boolean catMappingMandatory
-		
-//		new(String name, String depAtt, boolean mand, TypeInfo attType){
-//			this(name, depAtt, mand, attType, null, false)
-//		}
-		
-//		new(String name, boolean mand, TypeInfo attType){
-//			this(name, mand, attType, null, false)
-//		}
-		
-//		def isCatMappingMandatory(){
-//			return catMappingType != null && catMappingMandatory
-//		}
-//		
-//		def isCatMappingForbidden(){
-//			return catMappingType == null || (catMappingType != null && !catMappingMandatory)
-//		}
-//		
-//		def isCatMappingPossible(){
-//			return catMappingType != null
-//		}
-	}
 	
-	@Data @FinalFieldsConstructor
-	static class ListDefInfo {
-//		val String keyValue
-		TypeInfo listType
-		List<AttributeDefn> attributes
-		List<Map<String, Boolean>> attributeSets
-		boolean isAnonymous
-		String catAttribute
-		TypeInfo catMappingType
-		boolean catMappingMandatory
-		
-		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes){
-			this(keyValue, listType, attributes, false, null, null, false)
-		}
-		
-		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, List<Map<String, Boolean>> attributeSets){
-//			this(keyValue, listType, attributes, attributeSets, false, null, null, false)
-			this(listType, attributes, attributeSets, false, null, null, false)
-		}
-
-		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, String catAtt, TypeInfo catType, boolean catMapMand){
-			this(keyValue, listType, attributes, false, catAtt, catType, catMapMand)
-		}
-
-		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, boolean isListAnonymous, String catAtt, TypeInfo catType, boolean catMapMand){
-//			this.keyValue = keyValue
-			this.listType = listType
-			this.attributes = attributes
-			attributeSets = new ArrayList<Map<String, Boolean>>()
-			val onlySet = new HashMap<String, Boolean>
-			attributeSets.add(onlySet)
-			for(att : attributes){
-				onlySet.put(att.name, att.mandatory)
-			}
-			isAnonymous = isListAnonymous
-			this.catAttribute = catAtt
-			this.catMappingType = catType
-			this.catMappingMandatory = catMapMand
-		}
-
-		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, List<Map<String, Boolean>> attributeSets, boolean isListAnonymous){
-//			this.keyValue = keyValue
-			this.listType = listType
-			this.attributes = attributes
-			this.attributeSets = attributeSets
-			this.isAnonymous = isListAnonymous
-			this.catAttribute = null
-			this.catMappingType = null
-			this.catMappingMandatory = false
-		}
-
-
-		def isCatMappingMandatory(String attName){
-			return attName == catAttribute && catMappingType != null && catMappingMandatory
-		}
-		
-		def isCatMappingForbidden(String attName){
-			return attName == catAttribute && catMappingType == null || (catMappingType != null && !catMappingMandatory)
-		}
-		
-		def isCatMappingPossible(String attName){
-			return attName == catAttribute && catMappingType != null
-		}
-	}
 	
-	static class BlockListDefinition {
-		val String _key
-		val Map<String, ListDefInfo> _listDefns
-		val ListDefInfo _sglListDefn
-
-
-		new(String key, Map<String, ListDefInfo> _ld){
-			_key = key
-			_listDefns = _ld
-			_sglListDefn = null
-		}
-		
-		new(String key, ListDefInfo sdl){
-			_key = key
-			_listDefns = Collections::emptyMap
-			_sglListDefn = sdl
-		}
-
-		def List<ListDefInfo> getListDefns(){
-			if(_sglListDefn != null){
-				newArrayList(_sglListDefn)
-			}
-			else
-				new ArrayList<ListDefInfo>(this._listDefns.values)
-		}
-		
-		def getKey(){
-			_key
-		}
-	
-		def ListDefInfo getListDefnByValue(String attVal) {
-			if(_sglListDefn != null){
-				_sglListDefn
-			}
-			else _listDefns.get(attVal)
-		}
-
-	}
 
 	// owning block -> key attribute -> key value -> attributes associated with key
 
