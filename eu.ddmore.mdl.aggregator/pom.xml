@@ -18,6 +18,7 @@
 		<module>../eu.ddmore.mdl.ui</module>
 		<module>../eu.ddmore.mdl.tests</module>
 		<module>../eu.ddmore.mdl.sdk.jre</module>
+		<module>../eu.ddmore.mdl.updatesite</module>
   </modules>
   
 </project>

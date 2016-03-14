@@ -198,15 +198,21 @@
 							<ws>win32</ws>
 							<arch>x86</arch>
 						</environment>
-						<!-- To support tests on linux box -->
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
 							<arch>x86_64</arch>
 						</environment>
-						<!-- uncomment if you want to build products for other platforms as 
-							well <environment> <os>linux</os> <ws>gtk</ws> <arch>x86</arch> </environment> 
-							<environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> </environment> -->
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment> 
+					        <environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
 					</environments>
 				</configuration>
 			</plugin>
@@ -299,11 +305,11 @@
 						<strictSrcIncludes>false</strictSrcIncludes>
 					</configuration>
 				</plugin>
-				<plugin>
+				<!-- plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-p2-director-plugin</artifactId>
 					<version>${tycho.version}</version>
-				</plugin>
+				</plugin-->
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-p2-repository-plugin</artifactId>
@@ -452,6 +458,25 @@
 	                                    <phase>clean</phase>
 	                            </execution>
 	                    </executions>
+	            </plugin>
+	            <plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-p2-director-plugin</artifactId>
+					<version>${tycho.version}</version>
+					<executions>
+						<execution>
+							<id>materialize-products</id>
+							<goals>
+								<goal>materialize-products</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>archive-products</id>
+							<goals>
+								<goal>archive-products</goal>
+							</goals>
+						</execution>
+					</executions>
 	            </plugin>
 			</plugins>
 		</pluginManagement>
