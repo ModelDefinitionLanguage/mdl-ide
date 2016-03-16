@@ -416,7 +416,7 @@ class MclListAttributeValidationTest {
 			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 
 			SOURCE{
-				foo : { file="aFile", inputformat is nonmem }
+				foo2 : { file="aFile", inputformat is nonmem }
 			}
 		} # end of model object
 		'''.parse

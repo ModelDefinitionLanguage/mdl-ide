@@ -1482,7 +1482,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidInconsistentVectorLiteral(){
 		val mcl = 	'''
-		d1g=desObj{
+		d1g=designObj{
 			STUDY_DESIGN{}
 			
 			
@@ -1500,7 +1500,7 @@ class MclTypeValidationTest {
 	'''.parse
 		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Element type 'Real' is incompatible with vector type 'Vector:List:SimpleSampling'."
+			"Element type 'Real' is incompatible with vector type 'vector:List:SimpleSamplingList'."
 		)
 	}
 	
@@ -1803,7 +1803,7 @@ d1g=designObj{
 			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 
 			SOURCE{
-				foo : { file="aFile", inputFormat is foobar }
+				foo2 : { file="aFile", inputFormat is foobar }
 			}
 		} # end of model object
 		'''.parse

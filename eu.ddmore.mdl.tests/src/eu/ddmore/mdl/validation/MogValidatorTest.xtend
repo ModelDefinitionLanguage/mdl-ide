@@ -2304,6 +2304,7 @@ class MogValidatorTest {
 		testData = dataObj {
 			DECLARED_VARIABLES { D }
 			DATA_INPUT_VARIABLES {
+				TIME : { use is idv }
 				AMT : { use is amt, variable=D }
 			} # end DATA_INPUT_VARIABLES
 			SOURCE {
@@ -2312,6 +2313,8 @@ class MogValidatorTest {
 			} # end SOURCE
 		}		
 		testMdl = mdlObj {
+				IDV{T}
+			
 				VARIABILITY_LEVELS{
 				}
 				

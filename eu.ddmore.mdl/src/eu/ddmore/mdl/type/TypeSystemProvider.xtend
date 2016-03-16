@@ -57,6 +57,7 @@ public class TypeSystemProvider {
 	public static val REAL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real)
 	public static val STRING_TYPE = new PrimitiveTypeInfo(PrimitiveType.String)
 	public static val BOOL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean)
+	public static val DERIV_TYPE = new PrimitiveTypeInfo(PrimitiveType.Deriv)
 	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf)
 	public static val PMF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pmf)
 	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector
@@ -64,6 +65,7 @@ public class TypeSystemProvider {
 	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int).makeVector
 	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping)
 	public static val GENERIC_ENUM_VALUE_TYPE =  new GenericEnumTypeInfo
+	static val DERIV_LIST_TYPE_NAME = 'List:DerivList' 
 	
 	
 	static val ep = MdlPackage::eINSTANCE 
@@ -488,7 +490,7 @@ public class TypeSystemProvider {
     	if(sd instanceof ListDefinition){
     		// this avoid a recursion as cycle detection is done for other symb defn types.
 	    	val lstType = sd.typeFor
-    		lstType?.typeName == ListDefinitionTable::DERIV_TYPE.typeName
+    		lstType?.typeName == DERIV_LIST_TYPE_NAME
     	}
     }
 

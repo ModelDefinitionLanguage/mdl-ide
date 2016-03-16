@@ -10,3 +10,4 @@ _type Matrix _matrix;
 _type Function _function;
 _type Reference _reference;
 _type Mapping _mapping;
+_type Undefined _undef;

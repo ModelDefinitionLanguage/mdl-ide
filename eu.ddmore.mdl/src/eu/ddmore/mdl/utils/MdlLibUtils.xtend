@@ -19,12 +19,16 @@ import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdllib.mdllib.BlockDefinition
 import eu.ddmore.mdllib.mdllib.ContainmentDefn
 import eu.ddmore.mdllib.mdllib.BlockContainer
+import eu.ddmore.mdllib.mdllib.ListTypeDefinition
+import eu.ddmore.mdl.type.ListTypeInfo
+import eu.ddmore.mdl.type.ListSuperTypeInfo
+import eu.ddmore.mdl.type.EnumListTypeInfo
 
 class MdlLibUtils {
 
-	val Map<String, ? extends TypeInfo> listDefns = #{
-		ListDefinitionTable::PRIOR_SOURCE_TYPE.name -> ListDefinitionTable::PRIOR_SOURCE_TYPE
-	}
+//	val Map<String, ? extends TypeInfo> listDefns = #{
+//		ListDefinitionTable::PRIOR_SOURCE_TYPE.name -> ListDefinitionTable::PRIOR_SOURCE_TYPE
+//	}
 	
 //	def private getScalarType(TypeSpec it){
 //		val typeName = typeName.name
@@ -46,21 +50,79 @@ class MdlLibUtils {
 //		}
 //	}
 
+
+	def TypeInfo getTypeInfo(TypeDefinition it){
+		val typeClass = typeClass
+		val td = it
+		switch(td){
+			ListTypeDefinition:
+				switch(typeClass){
+					case TypeClass.LIST:{
+						if(td.isIsSuper){
+							new ListSuperTypeInfo(td.name)
+						}
+						else if(td.isEnumList){
+							new EnumListTypeInfo(td.name)
+						}
+						else{
+							val altTypeInfo = td.altType?.typeInfo
+							if(td.superRef != null && altTypeInfo != null)
+								new ListTypeInfo(td.name, altTypeInfo.theType, new ListSuperTypeInfo(td.superRef.name))
+							else if(td.superRef == null && td.altType != null) new ListTypeInfo(td.name, altTypeInfo.theType)
+							else if(td.superRef != null && td.altType == null)
+								new ListTypeInfo(td.name, new ListSuperTypeInfo(td.superRef.name))
+							else
+								new ListTypeInfo(td.name)
+						}
+					}
+				default:
+					TypeSystemProvider::UNDEFINED_TYPE
+				}
+			TypeDefinition:
+				switch(typeClass){
+					case TypeClass.INT:
+						TypeSystemProvider::INT_TYPE
+					case TypeClass.REAL:
+						TypeSystemProvider::REAL_TYPE
+					case TypeClass.BOOLEAN:
+						TypeSystemProvider::BOOLEAN_TYPE
+					case TypeClass.STRING:
+						TypeSystemProvider::STRING_TYPE
+					case TypeClass.PDF:
+						TypeSystemProvider::PDF_TYPE
+					case TypeClass.PMF:
+						TypeSystemProvider::PMF_TYPE
+					case TypeClass.ENUM:
+						createBuiltinEnum(it)
+					case TypeClass.SUBLIST:
+						SublistDefinitionTable::instance.getSublist(name) ?: TypeSystemProvider::UNDEFINED_TYPE
+					case TypeClass.CATEGORY:
+						TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE
+					case TypeClass.DERIV:
+						TypeSystemProvider::DERIV_TYPE
+					case TypeClass.MAPPING:
+						TypeSystemProvider::MAPPING_TYPE 
+					default:
+						TypeSystemProvider::UNDEFINED_TYPE
+				}
+		}
+	}
+
 	def TypeInfo getTypeInfo(TypeSpec it){
 		val typeClass = typeName.typeClass
 		switch(typeClass){
-			case TypeClass.INT:
-				TypeSystemProvider::INT_TYPE
-			case TypeClass.REAL:
-				TypeSystemProvider::REAL_TYPE
-			case TypeClass.BOOLEAN:
-				TypeSystemProvider::BOOLEAN_TYPE
-			case TypeClass.STRING:
-				TypeSystemProvider::STRING_TYPE
-			case TypeClass.PDF:
-				TypeSystemProvider::PDF_TYPE
-			case TypeClass.PMF:
-				TypeSystemProvider::PMF_TYPE
+//			case TypeClass.INT:
+//				TypeSystemProvider::INT_TYPE
+//			case TypeClass.REAL:
+//				TypeSystemProvider::REAL_TYPE
+//			case TypeClass.BOOLEAN:
+//				TypeSystemProvider::BOOLEAN_TYPE
+//			case TypeClass.STRING:
+//				TypeSystemProvider::STRING_TYPE
+//			case TypeClass.PDF:
+//				TypeSystemProvider::PDF_TYPE
+//			case TypeClass.PMF:
+//				TypeSystemProvider::PMF_TYPE
 			case TypeClass.VECTOR:
 				if(elementType != null && cellType == null && functionSpec == null){
 					// element type specified and well formed
@@ -97,16 +159,16 @@ class MdlLibUtils {
 					TypeSystemProvider::REAL_TYPE.makeReference
 				}
 				else TypeSystemProvider::UNDEFINED_TYPE
-			case TypeClass.ENUM:
-				createBuiltinEnum(typeName)
-			case TypeClass.SUBLIST:
-				SublistDefinitionTable::instance.getSublist(typeName.name) ?: TypeSystemProvider::UNDEFINED_TYPE
-			case TypeClass.CATEGORY:
-				TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE 
-			case TypeClass.LIST:
-				listDefns.get(typeName.name) ?: TypeSystemProvider::UNDEFINED_TYPE
+//			case TypeClass.ENUM:
+//				createBuiltinEnum(typeName)
+//			case TypeClass.SUBLIST:
+//				SublistDefinitionTable::instance.getSublist(typeName.name) ?: TypeSystemProvider::UNDEFINED_TYPE
+//			case TypeClass.CATEGORY:
+//				TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE 
+//			case TypeClass.LIST:
+//				listDefns.get(typeName.name) ?: TypeSystemProvider::UNDEFINED_TYPE
 			default:
-				TypeSystemProvider::UNDEFINED_TYPE
+				typeName.typeInfo
 		} 
 	}
 	

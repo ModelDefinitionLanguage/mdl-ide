@@ -129,8 +129,8 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 
 
 	private def createListEnumProposal(EnumPair model, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
-		val parentBlock = model.getContainerOfType(BlockStatement)
-		val enumType = getTypeOfEnumAttribute(parentBlock.identifier, model.argumentName)
+//		val parentBlock = model.getContainerOfType(BlockStatement)
+		val enumType = getAttributeType(model)
 		val attributes = new ArrayList<String>
 		if(enumType instanceof BuiltinEnumTypeInfo){
 			attributes.addAll((enumType as BuiltinEnumTypeInfo).expectedValues)

@@ -14,13 +14,25 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
+import eu.ddmore.mdllib.mdllib.BlockDefinition
+import eu.ddmore.mdllib.mdllib.TypeDefinition
+import eu.ddmore.mdllib.mdllib.TypeSpec
+import eu.ddmore.mdllib.mdllib.Library
+import eu.ddmore.mdl.LibraryTestHelper
+import com.google.inject.Inject
+import org.eclipse.xtext.junit4.util.ParseHelper
+import eu.ddmore.mdllib.mdllib.ListTypeDefinition
+import eu.ddmore.mdl.lib.MdlLib
+import eu.ddmore.mdllib.MdlLibInjectorProvider
+import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlAndLibInjectorProvider))
+@InjectWith(typeof(MdlLibInjectorProvider))
 class TypeSystemProviderTest {
-//	@Inject extension LibraryTestHelper<Mcl>
-//	@Inject extension ValidationTestHelper
+	@Inject extension ParseHelper<Library>
+	@Inject extension ValidationTestHelper
 	var incompatible = false
+	var Library testLibraryFixture
 	
 	extension TypeSystemProvider th = new TypeSystemProvider 
 	extension TypeSystemValidator tsv = new TypeSystemValidator
@@ -28,6 +40,45 @@ class TypeSystemProviderTest {
 	@Before
 	def void setUp(){
 		incompatible = false
+		testLibraryFixture = '''
+			_type Real _real;
+			_type Int _int;
+			_type cmtType _enum (depot, compartment, elimination, transfer, distribution, direct, effect);
+			
+			_list Compartment _alt Real
+					_atts  type::cmtType, modelCmt::Int
+					_sig (type, modelCmt?);
+					
+			_object mdlObj;
+			
+			_block COMPARTMENT (,) _statements (,) _listDefn, _anonList
+				_list _key=type cmtType.compartment->Compartment;
+
+			_container mdlObj _has COMPARTMENT;
+						
+			_func ln (x::Real) _returns ::Real;
+		'''.parse
+	}
+
+	def createBlockDefinition(String blkName){
+		testLibraryFixture.blockDefns.findFirst[
+			name == blkName
+		]
+	}
+
+
+	def createListDefinition(String lstName){
+		testLibraryFixture.typeDefns.findFirst[
+			if(it instanceof ListTypeDefinition){
+				name == lstName
+			}
+			else false
+		]
+	}
+
+	@Test
+	def void testFixtureCorrect(){
+		testLibraryFixture.assertNoErrors
 	}
 
 	@Test
@@ -247,9 +298,9 @@ class TypeSystemProviderTest {
 									])
 		defn.list = attList 
 		val blk = MdlFactory::eINSTANCE.createBlockStatement
-		val blkDefn = MdlLibFactory.eINSTANCE.createBlockDefinition
-		blkDefn.name = "COMPARTMENT"
-		blk.blkId = blkDefn
+//		val blkDefn = MdlLibFactory.eINSTANCE.createBlockDefinition
+//		blkDefn.name = "COMPARTMENT"
+		blk.blkId = createBlockDefinition("COMPARTMENT")
 		val bdy = MdlFactory::eINSTANCE.createBlockStatementBody
 		bdy.statements.add(defn)
 		blk.body = bdy
@@ -335,11 +386,9 @@ class TypeSystemProviderTest {
 									])
 		defn.list = attList
 		val blk = MdlFactory::eINSTANCE.createBlockStatement
-		val blkDefn = MdlLibFactory.eINSTANCE.createBlockDefinition
-		blkDefn.name = "COMPARTMENT"
-		blk.blkId = blkDefn
 		val bdy = MdlFactory::eINSTANCE.createBlockStatementBody
 		bdy.statements.add(defn)
+		blk.blkId = createBlockDefinition("COMPARTMENT")
 		blk.body = bdy
 		ref.ref = defn
 		

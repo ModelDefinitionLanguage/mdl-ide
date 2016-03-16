@@ -5,6 +5,7 @@ import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.utils.MdlLibUtils
 import org.eclipse.xtext.EcoreUtil2
+import java.util.Collections
 
 class BlockArgumentDefinitionProvider {
 	
@@ -100,7 +101,8 @@ class BlockArgumentDefinitionProvider {
 //				parentName = parent.identifier
 //			}
 //		}
-		val unused = parent.blkId.mandatoryArgumentNames
+		if(parent != null){
+			val unused = parent.blkId.mandatoryArgumentNames
 //		if(blkArgPropNames.containsKey(objectName) && blkArgPropNames.get(objectName).containsKey(parentName)){
 //			unused.addAll(blkArgPropNames.get(objectName).get(parentName).filter[key, mand| mand==true].keySet);
 			for(arg : args){
@@ -109,7 +111,9 @@ class BlockArgumentDefinitionProvider {
 				}
 			}
 //		} 
-		unused
+			unused
+		}
+		else Collections::emptyList
 	}
 	
 	def isValidBlkArgProperty(ValuePair vp) {

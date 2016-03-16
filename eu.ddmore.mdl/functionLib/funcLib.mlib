@@ -10,13 +10,14 @@ _type varLvlType _enum (parameter, observation);
 _type input _enum (nonmemFormat);
 _type priorInput _enum (RList);
 _type cmtType _enum (depot, compartment, elimination, transfer, distribution, direct, effect);
-_type varType _enum (cov, corr);
+_type varType _enum (cov, corr, sd, var);
 _type obstype _enum (categorical, count, discrete, tte);
 _type sampletype _enum (simple, complex, derived);
-_type sampleelement _enum (amount, duration, sampleTime, numberTimes, covariate, catCov, numberArms, armSize, parameter, dosTime);
+_type sampleelement _enum (amount, duration, sampleTime, numberTimes, covariate, catCov, numberArms, armSize, parameter, doseTime);
 _type objType _enum (mdlObj, dataObj, parObj, taskObj, designObj, priorObj);
 
-// Data object lists
+// Data inpout variables
+//_list Covariate _alt Real _atts use::divUse, interp::Reference[::Function(x::Real, x0::Real, x1::Real, y0::Real, y1::Real)::Real] _sig (use);  
 _list Covariate _alt Real _atts use::divUse _sig (use);  
 _list CatCovariate _atts use::divUse _cat use::Int _sig (use);  
 _list Amt _atts use::divUse, define::Mapping, variable::Reference[::Real] _sig (use, define), (use, variable);
@@ -32,16 +33,136 @@ _list ii _atts use::divUse _sig(use);
 _list addl _atts use::divUse _sig(use);
 _list Dvid _atts use::divUse _sig(use);
 _list ignore _atts use::divUse _sig(use);
+
+// data derived variables
+_list DoseTime _atts use::ddvUse, idvColumn::Reference[::Idv], amtColumn::Reference[::Amt]
+	_sig (use, idvColumn, amtColumn);
+
+// Source
 _list Source _atts file::String, inputFormat::input _sig(file, inputFormat);
 
 
-_list PriorSource _atts file::String, inputFormat::priorInput, format::priorFormat
+// Priors
+_list PriorSource _atts file::String, inputFormat::priorInput, format::Vector[::priorFormat]
 		_sig(file, inputFormat, format);
+		
+	
+// Model
+	
 _list VarLevel _atts type::varLvlType, level::Int
 	_sig(type, level);
+_list DerivSuper _super;
+_list DerivList _alt Deriv _extends DerivSuper _atts deriv::Real, init::Real, x0::Real, wrt::Reference[::Real]
+	_sig(deriv, init?, x0?, wrt?);
+
+
+// Compartments
+
+_list CmtDirect _alt Real _atts type::cmtType, modelCmt::Int, to::Reference[::DerivSuper],
+		modelDur::Real, tlag::Real, finput::Real
+		_sig(type, modelCmt?, to, modelDur?, tlag?, finput?);
+
+_list Effect _alt Real _atts type::cmtType, modelCmt::Int, from::Reference[::DerivSuper], keq::Real
+			_sig (type, modelCmt?, from, keq);
+			
+_list Depot _alt Real _atts type::cmtType, modelCmt::Int, to::Reference[::DerivSuper], ka::Real,
+						modelDur::Real, tlag::Real, finput::Real, ktr::Real, mtt::Real
+			_sig (type, modelCmt?, to, ka, tlag?, finput?),
+				 (type, modelCmt?, to, ktr, mtt),
+				 (type, modelCmt?, to, modelDur, tlag?, finput?);
+
+_list Transfer _anon _atts type::cmtType, modelCmt::Int, to::Reference[::DerivSuper], from::Reference[::DerivSuper], kt::Real
+			_sig (type, modelCmt?, to, from, kt);
+
+_list Compartment _alt Real _extends DerivSuper
+		_atts  type::cmtType, modelCmt::Int
+		_sig (type, modelCmt?);
+		
+_list Elimination _anon _atts type::cmtType, modelCmt::Int, from::Reference[::DerivSuper], v::Real,
+								cl::Real, k::Real, vm::Real, km::Real
+				_sig (type, modelCmt?, from, v?, k),
+					 (type, modelCmt?, from, v?, cl),
+					 (type, modelCmt?, from, vm, km);
+					 
+_list Distribution _atts type::cmtType, modelCmt::Int, from::Reference[::DerivSuper],
+								kin::Real, kout::Real
+				_sig(type, modelCmt?, kin, kout, from);
 
 
 
+	 
+// Observations
+_list CatObs _atts type::obstype _cat type::Reference[::Real] _sig(type);
+_list CountObs _alt Real _atts type::obstype, distn::Pmf _sig(type, distn);
+_list DiscreteObs _atts type::obstype, distn::Pmf _cat type::Undefined? _sig(type, distn);
+_list TteObs _alt Real _atts type::obstype, hazard::Reference[::Real] _sig(type, hazard);
+
+// Parameter obj variability & Structural
+_list CovarMatrix _atts type::varType, parameter::Vector, value::Vector
+					_sig(type, parameter, value);
+_list CorrMatrix _atts type::varType, parameter::Vector, value::Vector
+					_sig(type, parameter, value);
+_list SDEstimate _alt Real _atts type::varType, value::Real, lo::Real, hi::Real, fix::Boolean
+					_sig(type, value, lo?, hi?, fix?);
+_list VarEstimate _alt Real  _atts type::varType, value::Real, lo::Real, hi::Real, fix::Boolean
+					_sig(type, value, lo?, hi?, fix?);
+_list StructuralEstimate _alt Real _atts value::Real, lo::Real, hi::Real, fix::Boolean
+					_sig(value, lo?, hi?, fix?);
+
+//MOG Objects
+_list MdlObjInMog _atts type::objType _sig(type);
+
+// Design Objects
+_list Administration _atts input::Reference[::Real], amount::Real, doseTime::Vector, duration::Vector, start::Real, end::Real
+						_sig (input, amount, doseTime?, duration?, start?, end?) ;
+
+_type intSeqAtts _sublist;
+_type sampSeqAtts _sublist; 
+_list StudyDesign _atts armSize::Int, interventionSequence::Vector[::intSeqAtts], samplingSequence::Vector[::sampSeqAtts]
+		_sig (armSize?, interventionSequence, samplingSequence?);
+
+_list SamplingSuper _super;
+
+_list DesignSpaceCatCov _atts objRef::GenericEnum, element::sampleelement, discrete::Vector, range::Vector
+						_sig (objRef, element, discrete),
+							(objRef, element, range);
+_list DesignSpaceCov _atts objRef::Reference[::Real], element::sampleelement, discrete::Vector, range::Vector
+						_sig (objRef, element, discrete),
+							(objRef, element, range);
+_list DesignSpaceAmt _atts objRef::Vector[::Reference[::Administration]], element::sampleelement, discrete::Vector, range::Vector
+						_sig (objRef, element, discrete),
+							(objRef, element, range);
+_list DesignSpaceDoseTime _atts objRef::Vector[::Reference[::Administration]], element::sampleelement, discrete::Vector, range::Vector
+						_sig (objRef, element, discrete),
+							(objRef, element, range);
+_list DesignSpaceDuration _atts objRef::Vector[::Reference[::Administration]], element::sampleelement, discrete::Vector, range::Vector
+						_sig (objRef, element, discrete),
+							(objRef, element, range);
+_list DesignSpaceNumTimes _atts objRef::Vector[::Reference[::SamplingSuper]], element::sampleelement, discrete::Vector, range::Vector
+						_sig (objRef, element, discrete),
+							(objRef, element, range);
+_list DesignSpaceSampleTimes _atts objRef::Vector[::Reference[::SamplingSuper]], element::sampleelement, discrete::Vector, range::Vector
+						_sig (objRef, element, discrete),
+							(objRef, element, range);
+_list DesignSpaceNumArms _atts objRef::Vector[::Reference[::StudyDesign]], element::sampleelement, discrete::Vector, range::Vector
+						_sig (objRef, element, discrete),
+							(objRef, element, range);
+_list DesignSpaceArmSize _atts objRef::Vector[::Reference[::StudyDesign]], element::sampleelement, discrete::Vector, range::Vector
+						_sig (objRef, element, discrete),
+							(objRef, element, range);
+_list DesignSpaceParam _atts objRef::Vector[::Reference[::Real]], element::sampleelement, discrete::Vector, range::Vector
+						_sig (objRef, element, discrete),
+							(objRef, element, range);
+
+_list SimpleSamplingList _extends SamplingSuper _atts type::sampletype, outcome::Reference[::Real], sampleTime::Vector,
+								numberTimes::Int, numberSamples::Vector[::Int]
+							_sig(type, outcome, sampleTime?, numberTimes?, numberSamples?);
+_list ComplexSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::sampSeqAtts], numberTimes::Int
+							_sig(type,combination, numberTimes?);
+_list DerivedSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::Reference[::SamplingSuper]],
+														numberTimes::Int
+							_sig(type,combination, numberTimes?);
+	 
 _object mdlObj;
 _object dataObj;
 _object priorObj;
@@ -52,37 +173,87 @@ _object mogObj;
 
 
 _block COVARIATES (0,) _statements (0,) _eqnDefn, _eqnDefn+, _enumDefn, _rvDefn;
-_block VARIABILITY_LEVELS (0,) _statements (0,) _listDefn;
+
+_block VARIABILITY_LEVELS (0,) _statements (0,) _listDefn
+	_list _key=type VarLevel;
+	
 _block STRUCTURAL_PARAMETERS (0,) _statements (0,) _eqnDefn, _eqnDefn+;
+
 _block VARIABILITY_PARAMETERS (0,) _statements (0,) _eqnDefn, _eqnDefn+;
+
 _block RANDOM_VARIABLE_DEFINITION (0,) _arguments level::VarLevel _statements (0,) _rvDefn;
+
 _block INDIVIDUAL_VARIABLES (0,) _statements (0,) _eqnDefn+, _transDefn;
-_block MODEL_PREDICTION (0,) _statements (0,) _eqnDefn, _eqnDefn+, _listDefn;
-_block OBSERVATION (0,) _statements (0,) _eqnDefn+, _transDefn, _listDefn;
+
+_block MODEL_PREDICTION (0,) _statements (0,) _eqnDefn, _eqnDefn+, _listDefn
+	_list _key=deriv DerivList;
+	
+_block OBSERVATION (0,) _statements (0,) _eqnDefn+, _transDefn, _listDefn
+		_list _key=type obstype.count->CountObs, obstype.categorical->CatObs, obstype.discrete->DiscreteObs, obstype.tte->TteObs
+		;
 _block GROUP_VARIABLES (0,) _statements (0,) _eqnDefn+, _eqnDefn;
+
 _block IDV (1,1) _statements (1,1) _eqnDefn;
-_block DATA_INPUT_VARIABLES (0,) _statements (1,) _listDefn;
+
+_block DATA_INPUT_VARIABLES (0,) _statements (1,) _listDefn
+	_list _key=use divUse.covariate -> Covariate, divUse.catCov -> CatCovariate,
+								divUse.cmt -> Cmt, divUse.cmt->Cmt, divUse.amt -> Amt, divUse.ii -> ii, divUse.addl -> addl,
+								divUse.id -> Id, divUse.idv -> Idv, divUse.varLevel -> DataVarLevel, divUse.mdv -> Mdv,
+								divUse.rate -> rate, divUse.ignore -> ignore, divUse.dvid -> Dvid;
+								
 _block DECLARED_VARIABLES (0,) _statements (,) _eqnDefn, _enumDefn;
-_block DATA_DERIVED_VARIABLES (0,) _statements (,) _listDefn;
-_block SOURCE (1,1) _statements (1,1) _listDefn;
-_block STRUCTURAL (,) _statements (,) _listDefn;
-_block VARIABILITY (,) _statements (,) _listDefn;
+
+_block DATA_DERIVED_VARIABLES (0,) _statements (,) _listDefn
+	_list _key=use ddvUse.doseTime->DoseTime;
+_block SOURCE (1,1) _statements (1,1) _listDefn
+		_list _key=file Source;
+		
+_block STRUCTURAL (,) _statements (,) _listDefn
+	_list _key=value StructuralEstimate;
+
+_block VARIABILITY (,) _statements (,) _listDefn
+	_list _key=type varType.cov->CovarMatrix, varType.corr->CorrMatrix, varType.sd -> SDEstimate, varType.var -> VarEstimate;
+	
 _block ESTIMATE (,1) _statements (,) _propStmt;
 _block SIMULATE (,1) _statements (,) _propStmt;
-_block OBJECTS (1,1) _statements (4,5) _listDefn;
-_block DEQ (,) _statements (,) _listDefn, _eqnDefn, _eqnDefn+;
-_block COMPARTMENT (,) _statements (,) _listDefn, _anonList;
+
+_block OBJECTS (1,1) _statements (4,5) _listDefn
+		_list _key=type MdlObjInMog;
+		
+_block DEQ (,) _statements (,) _listDefn, _eqnDefn, _eqnDefn+
+	_list _key=deriv DerivList;
+	
+_block COMPARTMENT (,) _statements (,) _listDefn, _anonList
+	_list _key=type cmtType.depot->Depot, cmtType.direct->CmtDirect, cmtType.effect->Effect, 
+				cmtType.transfer->Transfer, cmtType.compartment->Compartment, cmtType.elimination->Elimination,
+				cmtType.distribution->Distribution;
+				
 _block FUNCTIONS (,) _statements (,) _eqnDefn;
-_block ADMINISTRATION (1, ) _statements (,) _listDefn, _eqnDefn, _eqnDefn+;
-_block STUDY_DESIGN (,) _statements (,) _listDefn;
-_block SAMPLING (,) _statements (,) _listDefn;
-_block DESIGN_SPACES (,) _statements (,) _listDefn;
+
+_block ADMINISTRATION (1, ) _statements (,) _listDefn, _eqnDefn, _eqnDefn+
+	_list _key=input Administration;
+	
+_block STUDY_DESIGN (,) _statements (,) _listDefn
+		_list _key=interventionSequence StudyDesign;
+
+_block SAMPLING (,) _statements (,) _listDefn
+		_list _key=type sampletype.simple->SimpleSamplingList, sampletype.complex->ComplexSamplingList,
+					sampletype.derived->DerivedSamplingList;
+
+_block DESIGN_SPACES (,) _statements (,) _listDefn
+		_list _key=element sampleelement.catCov->DesignSpaceCatCov, sampleelement.covariate->DesignSpaceCov, sampleelement.amount->DesignSpaceAmt,
+								sampleelement.doseTime -> DesignSpaceDoseTime, sampleelement.duration->DesignSpaceDuration,
+								sampleelement.numberTimes->DesignSpaceNumTimes, sampleelement.sampleTime->DesignSpaceSampleTimes,
+								sampleelement.numberArms->DesignSpaceNumArms, sampleelement.armSize->DesignSpaceArmSize,
+								sampleelement.parameter->DesignSpaceParam;
+
 _block DESIGN_PARAMETERS (,) _statements (,) _eqnDefn, _eqnDefn+;
 _block PRIOR_PARAMETERS (,) _statements (,) _eqnDefn, _eqnDefn+;
 _block NON_CANONICAL_DISTRIBUTION (,) _statements (,) _eqnDefn, _eqnDefn+;
 _block PRIOR_VARIABLE_DEFINITION (,) _statements (,) _eqnDefn, _eqnDefn+, _rvDefn;
 _block INPUT_PRIOR_DATA (,) _statements (,) _eqnDefn, _eqnDefn+;
-_block PRIOR_SOURCE (,) _statements (,) _listDefn;
+_block PRIOR_SOURCE (,) _statements (,) _listDefn
+	_list _key=file PriorSource;
 
 
 _container mdlObj _has COVARIATES, VARIABILITY_LEVELS, STRUCTURAL_PARAMETERS, VARIABILITY_PARAMETERS, RANDOM_VARIABLE_DEFINITION,
