@@ -46,7 +46,22 @@ _list Source _atts file::String, inputFormat::input _sig(file, inputFormat);
 _list PriorSource _atts file::String, inputFormat::priorInput, format::Vector[::priorFormat]
 		_sig(file, inputFormat, format);
 		
-	
+// Individual Parameters
+_type IndivTypeType _enum (linear, general);
+
+_list IndivAbstractList _alt Real _super;
+
+_list IndivParamLinear _alt Real _extends IndivAbstractList
+		_atts type::IndivTypeType, trans::transType,
+				pop::Real, fixEff::Vector[::fixEffAtts], ranEff::Vector
+		_sig(type, trans?, pop, fixEff?, ranEff);
+		
+_list IndivParamGeneral _alt Real _extends IndivAbstractList
+		_atts type::IndivTypeType, trans::transType, grp::Real,
+				ranEff::Vector[::Real]
+			_sig(type, trans?, grp, ranEff); 
+
+
 // Model
 	
 _list VarLevel _atts type::varLvlType, level::Int
@@ -183,7 +198,8 @@ _block VARIABILITY_PARAMETERS (0,) _statements (0,) _eqnDefn, _eqnDefn+;
 
 _block RANDOM_VARIABLE_DEFINITION (0,) _arguments level::VarLevel _statements (0,) _rvDefn;
 
-_block INDIVIDUAL_VARIABLES (0,) _statements (0,) _eqnDefn+, _transDefn;
+_block INDIVIDUAL_VARIABLES (0,) _statements (0,) _eqnDefn+, _transDefn, _listDefn
+	_list _key=type IndivTypeType.linear->IndivParamLinear, IndivTypeType.general -> IndivParamGeneral;
 
 _block MODEL_PREDICTION (0,) _statements (0,) _eqnDefn, _eqnDefn+, _listDefn
 	_list _key=deriv DerivList;

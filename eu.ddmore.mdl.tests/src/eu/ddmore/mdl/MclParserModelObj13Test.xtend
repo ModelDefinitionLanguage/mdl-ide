@@ -13,7 +13,7 @@ import eu.ddmore.mdl.utils.BlockUtils
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
-class MclParserModelObj1Test {
+class MclParserModelObj13Test {
 	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 
@@ -59,7 +59,9 @@ warfarin_PK_ODE_mdl = mdlObj {
 
 	
 	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    CL: { type is linear, trans is ln, pop=POP_CL, fixEff = {coeff=BETA_CL_WT, cov=logtWT} , ranEff = ETA_CL }
+	    CL : piecewise {{ { type is linear, trans is ln, pop=POP_CL, fixEff = {coeff=BETA_CL_WT, cov=logtWT} , ranEff = ETA_CL }
+	    		when (POP_CL > 0);
+	    		otherwise { type is general, trans is ln, grp=POP_CL, ranEff = ETA_CL } }}
 	    V : { type is linear, trans is ln, pop=POP_V, fixEff = {coeff=BETA_V_WT, cov=logtWT} , ranEff = ETA_V }
 	    KA : { type is linear, trans is ln, pop=POP_KA, ranEff = ETA_KA }
 	    TLAG : { type is linear, trans is ln, pop=POP_TLAG, ranEff = ETA_TLAG } 

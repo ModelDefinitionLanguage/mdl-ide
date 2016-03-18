@@ -5,11 +5,16 @@ import org.eclipse.xtend.lib.annotations.Data
 @Data
 abstract class AbstractListTypeInfo extends TypeInfo{
 	val String name
+	val PrimitiveType secondaryType
 	
 	protected new(String name){
-		this.name = name
+		this(name, PrimitiveType.Undefined)
 	}
 	
+	protected new(String name, PrimitiveType secondaryType){
+		this.name = name
+		this.secondaryType = secondaryType 
+	}
 	
 	override getUnderlyingType(){
 		this
@@ -31,7 +36,9 @@ abstract class AbstractListTypeInfo extends TypeInfo{
 		}
 	}
 	
-	def abstract PrimitiveType getSecondaryType()
+	def getSecondaryType(){
+		secondaryType
+	}
 	
 	def abstract ListSuperTypeInfo getListSuperType()
 	

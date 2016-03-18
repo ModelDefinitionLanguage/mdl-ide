@@ -1,12 +1,18 @@
 package eu.ddmore.mdl.utils
 
 import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.SublistDefinitionTable
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.EnumListTypeInfo
+import eu.ddmore.mdl.type.ListSuperTypeInfo
+import eu.ddmore.mdl.type.ListTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdllib.mdllib.BlockContainer
+import eu.ddmore.mdllib.mdllib.BlockDefinition
+import eu.ddmore.mdllib.mdllib.ContainmentDefn
 import eu.ddmore.mdllib.mdllib.Library
+import eu.ddmore.mdllib.mdllib.ListTypeDefinition
 import eu.ddmore.mdllib.mdllib.ObjectDefinition
 import eu.ddmore.mdllib.mdllib.TypeClass
 import eu.ddmore.mdllib.mdllib.TypeDefinition
@@ -14,15 +20,7 @@ import eu.ddmore.mdllib.mdllib.TypeSpec
 import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
-import java.util.Map
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdllib.mdllib.BlockDefinition
-import eu.ddmore.mdllib.mdllib.ContainmentDefn
-import eu.ddmore.mdllib.mdllib.BlockContainer
-import eu.ddmore.mdllib.mdllib.ListTypeDefinition
-import eu.ddmore.mdl.type.ListTypeInfo
-import eu.ddmore.mdl.type.ListSuperTypeInfo
-import eu.ddmore.mdl.type.EnumListTypeInfo
 
 class MdlLibUtils {
 
@@ -59,7 +57,10 @@ class MdlLibUtils {
 				switch(typeClass){
 					case TypeClass.LIST:{
 						if(td.isIsSuper){
-							new ListSuperTypeInfo(td.name)
+							if(td.altType != null)
+								new ListSuperTypeInfo(td.name, td.altType.typeInfo.theType)
+							else
+								new ListSuperTypeInfo(td.name)
 						}
 						else if(td.isEnumList){
 							new EnumListTypeInfo(td.name)
@@ -67,10 +68,10 @@ class MdlLibUtils {
 						else{
 							val altTypeInfo = td.altType?.typeInfo
 							if(td.superRef != null && altTypeInfo != null)
-								new ListTypeInfo(td.name, altTypeInfo.theType, new ListSuperTypeInfo(td.superRef.name))
+								new ListTypeInfo(td.name, altTypeInfo.theType, td.superRef.typeInfo)
 							else if(td.superRef == null && td.altType != null) new ListTypeInfo(td.name, altTypeInfo.theType)
 							else if(td.superRef != null && td.altType == null)
-								new ListTypeInfo(td.name, new ListSuperTypeInfo(td.superRef.name))
+								new ListTypeInfo(td.name, td.superRef.typeInfo)
 							else
 								new ListTypeInfo(td.name)
 						}
