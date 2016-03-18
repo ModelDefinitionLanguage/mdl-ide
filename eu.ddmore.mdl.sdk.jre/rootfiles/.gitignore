@@ -1,2 +1,0 @@
-# Force the bin directory of the bundled JREs to be included
-!bin/

@@ -6,12 +6,11 @@ class ListSuperTypeInfo extends AbstractListTypeInfo{
 		super(name)
 	}
 	
+	new(String name, PrimitiveType secondaryType){
+		super(name, secondaryType)
+	}
 	override matchesList(AbstractListTypeInfo other) {
 		name == other.listSuperType?.name
-	}
-	
-	override getSecondaryType() {
-		PrimitiveType.Undefined
 	}
 	
 	override getTypeName() {

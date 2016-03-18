@@ -4,36 +4,37 @@ import org.eclipse.xtend.lib.annotations.Data
 
 @Data
 class ListTypeInfo extends AbstractListTypeInfo{
-	val PrimitiveType secondaryType
 	val ListSuperTypeInfo superType
 	
 	new(String name){
-		super(name)
-		this.secondaryType = PrimitiveType.Undefined
-		this.superType = null 
+		this(name, PrimitiveType.Undefined, null)
 	}
 	
 	new(String name, PrimitiveType secondaryType){
-		super(name)
-		this.secondaryType = secondaryType 
-		this.superType = null 
+		this(name, secondaryType, null)
 	}
 	
-	new(String name, ListSuperTypeInfo superType){
-		super(name)
-		this.secondaryType = PrimitiveType.Undefined
-		this.superType = superType 
+	new(String name, TypeInfo superType){
+		this(name, PrimitiveType.Undefined, superType)
 	}
 	
-	new(String name, PrimitiveType secondaryType, ListSuperTypeInfo superType){
-		super(name)
-		this.secondaryType = secondaryType 
-		this.superType = superType 
+	new(String name, PrimitiveType secondaryType, TypeInfo superType){
+		super(name, secondaryType)
+		if(superType != null){
+			if(superType instanceof ListSuperTypeInfo){
+				this.superType = superType
+			}
+			else{
+				this.superType = null
+				throw new IllegalArgumentException("Expect list supertype")
+			}
+		}
+		else this.superType = null
 	}
 	
-	override getSecondaryType(){
-		secondaryType
-	}
+//	override getSecondaryType(){
+//		secondaryType
+//	}
 	
 	override getListSuperType() {
 		this.superType
