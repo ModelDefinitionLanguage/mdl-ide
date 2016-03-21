@@ -82,7 +82,7 @@ warfarin_PK_ODE_mdl = mdlObj {
 	}
 
 	OBSERVATION {
-	    Y = combinedError1(additive = RUV_ADD, proportional = RUV_PROP, eps = EPS_Y, prediction = CC) 
+	    Y : { type is combinedError1, additive = RUV_ADD, proportional = RUV_PROP, eps = EPS_Y, prediction = CC } 
 	} # end OBSERVATION
 } # end of model object
 		'''
