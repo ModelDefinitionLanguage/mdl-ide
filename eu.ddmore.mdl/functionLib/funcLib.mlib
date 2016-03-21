@@ -26,7 +26,7 @@ _type sampletype _enum (simple, complex, derived);
 _type sampleelement _enum (amount, duration, sampleTime, numberTimes, covariate, catCov, numberArms, armSize, parameter, doseTime);
 _type objType _enum (mdlObj, dataObj, parObj, taskObj, designObj, priorObj);
 
-// Data inpout variables
+// Data input variables
 //_list Covariate _alt Real _atts use::divUse, interp::Reference[::Function(x::Real, x0::Real, x1::Real, y0::Real, y1::Real)::Real] _sig (use);  
 _list Covariate _alt Real _atts use::divUse _sig (use);  
 _list CatCovariate _atts use::divUse _cat use::Int _sig (use);  
