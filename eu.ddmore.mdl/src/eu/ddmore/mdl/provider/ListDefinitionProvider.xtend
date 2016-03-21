@@ -8,10 +8,15 @@ import eu.ddmore.mdl.mdl.EnumPair
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.ValuePair
+import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.ListTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.utils.MdlLibUtils
+import eu.ddmore.mdllib.mdllib.BlockDefinition
 import eu.ddmore.mdllib.mdllib.Expression
+import eu.ddmore.mdllib.mdllib.Library
 import java.util.ArrayList
 import java.util.Collections
 import java.util.HashSet
@@ -19,12 +24,6 @@ import java.util.List
 import java.util.Map
 import java.util.Set
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
-import eu.ddmore.mdllib.mdllib.BlockDefinition
-import eu.ddmore.mdl.type.ListTypeInfo
-import eu.ddmore.mdllib.mdllib.Library
-import eu.ddmore.mdllib.mdllib.ListTypeDefinition
-import eu.ddmore.mdl.utils.MdlLibUtils
 
 class ListDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils

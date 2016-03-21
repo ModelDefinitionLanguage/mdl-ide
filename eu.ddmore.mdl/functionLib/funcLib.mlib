@@ -185,7 +185,11 @@ _list ComplexSamplingList _extends SamplingSuper _atts type::sampletype, combina
 _list DerivedSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::Reference[::SamplingSuper]],
 														numberTimes::Int
 							_sig(type,combination, numberTimes?);
-	 
+_type estAlgo _enum(saem, foce, fo, focei);
+_type solverType _enum(stiff, nonStiff);							
+							
+_prop algo::estAlgo, solver::solverType, armSize::Int, totalSize::Int, numberSamples::Int, totalCost::Real, numberArms::Int;
+
 _object mdlObj;
 _object dataObj;
 _object priorObj;
@@ -238,8 +242,10 @@ _block STRUCTURAL (,) _statements (,) _listDefn
 _block VARIABILITY (,) _statements (,) _listDefn
 	_list _key=type varType.cov->CovarMatrix, varType.corr->CorrMatrix, varType.sd -> SDEstimate, varType.var -> VarEstimate;
 	
-_block ESTIMATE (,1) _statements (,) _propStmt;
-_block SIMULATE (,1) _statements (,) _propStmt;
+_block ESTIMATE (,1) _statements (,) _propStmt
+		_prop algo;
+_block SIMULATE (,1) _statements (,) _propStmt
+		_prop solver?;
 
 _block OBJECTS (1,1) _statements (4,5) _listDefn
 		_list _key=type MdlObjInMog;
@@ -258,6 +264,7 @@ _block ADMINISTRATION (1, ) _statements (,) _listDefn, _eqnDefn, _eqnDefn+
 	_list _key=input Administration;
 	
 _block STUDY_DESIGN (,) _statements (,) _listDefn
+		_prop armSize?, totalSize?, numberSamples?, totalCost?, numberArms?
 		_list _key=interventionSequence StudyDesign;
 
 _block SAMPLING (,) _statements (,) _listDefn
