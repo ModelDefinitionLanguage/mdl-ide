@@ -1,41 +1,39 @@
 package eu.ddmore.mdl.type
 
-import eu.ddmore.mdl.MdlAndLibInjectorProvider
+import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.MdlFactory
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.validation.TypeSystemValidator
+import eu.ddmore.mdllib.MdlLibInjectorProvider
 import eu.ddmore.mdllib.mdllib.Expression
-import eu.ddmore.mdllib.mdllib.MdlLibFactory
+import eu.ddmore.mdllib.mdllib.Library
+import eu.ddmore.mdllib.mdllib.ListTypeDefinition
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
+import org.eclipse.xtext.junit4.util.ParseHelper
+import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
-import eu.ddmore.mdllib.mdllib.BlockDefinition
-import eu.ddmore.mdllib.mdllib.TypeDefinition
-import eu.ddmore.mdllib.mdllib.TypeSpec
-import eu.ddmore.mdllib.mdllib.Library
-import eu.ddmore.mdl.LibraryTestHelper
-import com.google.inject.Inject
-import org.eclipse.xtext.junit4.util.ParseHelper
-import eu.ddmore.mdllib.mdllib.ListTypeDefinition
-import eu.ddmore.mdl.lib.MdlLib
-import eu.ddmore.mdllib.MdlLibInjectorProvider
-import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlLibInjectorProvider))
 class TypeSystemProviderTest {
 	@Inject extension ParseHelper<Library>
 	@Inject extension ValidationTestHelper
+
+	val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real)
+
 	var incompatible = false
 	var Library testLibraryFixture
 	
 	extension TypeSystemProvider th = new TypeSystemProvider 
 	extension TypeSystemValidator tsv = new TypeSystemValidator
+
+
 
 	@Before
 	def void setUp(){
@@ -360,7 +358,7 @@ class TypeSystemProviderTest {
 	def void testArgumentCompRefWithRealIncompatible(){
 		val value = MdlFactory::eINSTANCE.createRealLiteral
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| incompatible = true]
-		checkArgumentMatchesAndExpression(ListDefinitionTable::COMP_LIST_TYPE.makeReference, value, errorFunc)				
+		checkArgumentMatchesAndExpression(COMP_LIST_TYPE.makeReference, value, errorFunc)				
 		assertTrue("Incompatible", incompatible)
 	}
 
@@ -371,7 +369,7 @@ class TypeSystemProviderTest {
 		defn.name = "AReal"
 		ref.ref = defn
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| incompatible = true]
-		checkArgumentMatchesAndExpression(ListDefinitionTable::COMP_LIST_TYPE.makeReference, ref, errorFunc)				
+		checkArgumentMatchesAndExpression(COMP_LIST_TYPE.makeReference, ref, errorFunc)				
 		assertTrue("Incompatible", incompatible)
 	}
 

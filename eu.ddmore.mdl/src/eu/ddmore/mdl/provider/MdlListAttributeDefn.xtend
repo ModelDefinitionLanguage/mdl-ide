@@ -21,9 +21,9 @@ class MdlListAttributeDefn{
 		_lad.name
 	}
 	
-	def boolean isMandatory(){
-		!_lad.isOptional
-	}
+//	def boolean isMandatory(){
+//		!_lad.isOptional
+//	}
 	
 	
 	def TypeInfo getAttType(){

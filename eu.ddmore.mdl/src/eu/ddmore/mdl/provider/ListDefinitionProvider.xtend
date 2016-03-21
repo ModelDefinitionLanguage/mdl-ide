@@ -20,9 +20,15 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.xtext.EcoreUtil2
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdllib.mdllib.BlockDefinition
+import eu.ddmore.mdl.type.ListTypeInfo
+import eu.ddmore.mdllib.mdllib.Library
+import eu.ddmore.mdllib.mdllib.ListTypeDefinition
+import eu.ddmore.mdl.utils.MdlLibUtils
 
 class ListDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension MdlLibUtils mlu = new MdlLibUtils
 //	extension BlockUtils bu = new BlockUtils
 
 
@@ -452,6 +458,19 @@ class ListDefinitionProvider {
 			]
 		}
 		retVal
+	}
+	
+	
+	def TypeInfo getListDefinitionByTypeName(BlockDefinition bd, String lstTypeName){
+		val lib = EcoreUtil2.getContainerOfType(bd.eContainer, Library)
+		val retVal = lib.typeDefns.findFirst[
+			name == lstTypeName
+		]
+		val ti = retVal?.typeInfo
+		if(ti instanceof ListTypeInfo){
+			ti
+		}
+		else null
 	}
 
 	// gets a list definition based on its key 

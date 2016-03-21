@@ -17,6 +17,7 @@ import org.eclipse.xtext.validation.EValidatorRegistrar
 import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.utils.MdlUtils
+import eu.ddmore.mdl.mdl.BlockStatement
 
 // validates attributes in lists, functions and properties
 class ListValidator extends AbstractMdlValidator {
@@ -40,7 +41,10 @@ class ListValidator extends AbstractMdlValidator {
 			// check use type
 			val useVal = attList.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 			if(useVal != null){
-				val expectedSrcType = MappingToColumn.get(useVal) 
+//				val expectedSrcType = MappingToColumn.get(useVal) 
+				val expectedSrcTypeName = MappingToColumn.get(useVal) 
+				val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+				val expectedSrcType = blk.blkId.getListDefinitionByTypeName(expectedSrcTypeName)
 				val srcColType = srcColumn?.ref?.typeFor
 //				if(expectedSrcType != null && srcColType != null && !expectedSrcType.isCompatible(srcColType)){
 //					error("Expected source column of type '" + expectedSrcType.typeName + "', but was '" + srcColType.typeName + "'.",

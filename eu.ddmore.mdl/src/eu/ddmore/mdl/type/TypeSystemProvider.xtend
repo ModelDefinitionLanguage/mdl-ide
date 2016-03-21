@@ -28,7 +28,6 @@ import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefInfo
 import eu.ddmore.mdl.provider.ListDefinitionProvider
-import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import eu.ddmore.mdl.utils.CycleDetectionUtils

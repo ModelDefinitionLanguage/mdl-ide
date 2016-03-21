@@ -1,5 +1,6 @@
 package eu.ddmore.mdl.provider
 
+import eu.ddmore.mdl.mdl.BlockStatement
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.SubListExpression
 import eu.ddmore.mdl.mdl.ValuePair
@@ -8,31 +9,53 @@ import eu.ddmore.mdl.type.SublistTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdllib.mdllib.Library
+import eu.ddmore.mdllib.mdllib.SubListTypeDefinition
 import java.util.ArrayList
 import java.util.List
-import java.util.Map
 import org.eclipse.xtext.EcoreUtil2
 
 class SublistDefinitionProvider {
 	
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
 
-	val Map<String, SublistTypeInfo> sublistDefns
+//	val Map<String, SublistTypeInfo> sublistDefns
 
-	new (){
-		sublistDefns = SublistDefinitionTable::instance.sublistDefns
-	}
+//	new (){
+//		sublistDefns = SublistDefinitionTable::instance.sublistDefns
+//	}
 
 	def SublistTypeInfo findSublistMatch(SubListExpression sle){
+		val blk = EcoreUtil2.getContainerOfType(sle.eContainer, BlockStatement)
+		val lib = EcoreUtil2.getContainerOfType(blk.blkId.eContainer, Library)
 		// first look for subtype defns that have attributes that could possible math the subtype 
 		val attNames = sle.attributeNames
-		val candidateDefns = sublistDefns.values.filter(sl|
-			sl.attributes.exists(ad| 
-				attNames.exists(attName| 
-					ad.name == attName
-				)
-			)
-		)
+		
+		val candidateDefns = new ArrayList<SublistTypeInfo>
+		lib.typeDefns.forEach[td|
+			if(td instanceof SubListTypeDefinition){
+				if(td.attributes.exists[at|
+					attNames.exists[an| an == at.name] 
+					]){
+					candidateDefns.add(new SublistTypeInfo(td))
+				} 
+			}
+		]
+//		sublistDefns.values.filter(sl|
+//			sl.attributes.exists(ad| 
+//				attNames.exists(attName| 
+//					ad.name == attName
+//				)
+//			)
+//		)
+		
+//		val candidateDefns = sublistDefns.values.filter(sl|
+//			sl.attributes.exists(ad| 
+//				attNames.exists(attName| 
+//					ad.name == attName
+//				)
+//			)
+//		)
 		// now go through the candidates and find the first one that matches the
 		// an argument set.
 		for(candDefn : candidateDefns){

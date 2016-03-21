@@ -36,6 +36,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
 	override register(EValidatorRegistrar registrar){}
 	
+	public static val WRT_ATT = 'wrt'
 	private static val PERMITTED_X0_VALUE = 0.0
 
 	public static val FEATURE_NOT_SUPPORTED = "eu.ddmore.mdl.validation.unsupported.feature"
@@ -134,14 +135,14 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
 //	@Check
 //	// Check for unsupported functions
-//	def checkUnsupportedFunctions(SymbolReference it){
-//		if(UnsupportedFunctions.contains(func)){
-//			warning("Function '" + func + "' is not currently supported for execution in R.", 
+	def checkUnsupportedFunctions(SymbolReference it){
+		if(UnsupportedFunctions.contains(func)){
+			warning("Function '" + func + "' is not currently supported for execution in R.", 
 ////					MdlPackage.eINSTANCE.builtinFunctionCall_Func,
-//					MdlPackage.eINSTANCE.symbolDefinition_Name,
-//					FEATURE_NOT_SUPPORTED, func)
-//		}
-//	}
+					MdlPackage.eINSTANCE.symbolReference_Ref,
+					FEATURE_NOT_SUPPORTED, func)
+		}
+	}
 	
 	
 	@Check
@@ -190,7 +191,7 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	//Check for unsupported object names
 	def checkExperimentalFeature(ListDefinition it){
 		val attListType = typeOfList
-		if(attListType.typeName == ListDefinitionTable::DISCRETE_LIST_TYPE.typeName || attListType.typeName == ListDefinitionTable::CATEGORICAL_LIST_TYPE.typeName){
+		if(attListType.typeName == ListDefinitionTable::DISCRETE_LIST_TYPE || attListType.typeName == ListDefinitionTable::CATEGORICAL_LIST_TYPE){
 			warning("This is an experimental feature and may change in the future. Models using this feature may not be compatible with later versions of MDL.",
 					MdlPackage::eINSTANCE.listDefinition_List,
 					MdlValidator::EXPERIMENTAL_FEATURE, "")

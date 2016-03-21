@@ -1,19 +1,21 @@
 package eu.ddmore.mdl.utils
 
 import eu.ddmore.mdl.mdl.MclObject
-import eu.ddmore.mdl.provider.SublistDefinitionTable
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.EnumListTypeInfo
 import eu.ddmore.mdl.type.ListSuperTypeInfo
 import eu.ddmore.mdl.type.ListTypeInfo
+import eu.ddmore.mdl.type.SublistTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdllib.mdllib.AbstractTypeDefinition
 import eu.ddmore.mdllib.mdllib.BlockContainer
 import eu.ddmore.mdllib.mdllib.BlockDefinition
 import eu.ddmore.mdllib.mdllib.ContainmentDefn
 import eu.ddmore.mdllib.mdllib.Library
 import eu.ddmore.mdllib.mdllib.ListTypeDefinition
 import eu.ddmore.mdllib.mdllib.ObjectDefinition
+import eu.ddmore.mdllib.mdllib.SubListTypeDefinition
 import eu.ddmore.mdllib.mdllib.TypeClass
 import eu.ddmore.mdllib.mdllib.TypeDefinition
 import eu.ddmore.mdllib.mdllib.TypeSpec
@@ -49,7 +51,7 @@ class MdlLibUtils {
 //	}
 
 
-	def TypeInfo getTypeInfo(TypeDefinition it){
+	def TypeInfo getTypeInfo(AbstractTypeDefinition it){
 		val typeClass = typeClass
 		val td = it
 		switch(td){
@@ -79,6 +81,14 @@ class MdlLibUtils {
 				default:
 					TypeSystemProvider::UNDEFINED_TYPE
 				}
+			SubListTypeDefinition:
+				switch(typeClass){
+					case TypeClass.SUBLIST:
+						createSublistType(td)
+					default:
+						TypeSystemProvider::UNDEFINED_TYPE
+				}
+				
 			TypeDefinition:
 				switch(typeClass){
 					case TypeClass.INT:
@@ -94,9 +104,7 @@ class MdlLibUtils {
 					case TypeClass.PMF:
 						TypeSystemProvider::PMF_TYPE
 					case TypeClass.ENUM:
-						createBuiltinEnum(it)
-					case TypeClass.SUBLIST:
-						SublistDefinitionTable::instance.getSublist(name) ?: TypeSystemProvider::UNDEFINED_TYPE
+						createBuiltinEnum(td)
 					case TypeClass.CATEGORY:
 						TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE
 					case TypeClass.DERIV:
@@ -173,7 +181,11 @@ class MdlLibUtils {
 		} 
 	}
 	
-	def private createBuiltinEnum(TypeDefinition it){
+	def private SublistTypeInfo createSublistType(SubListTypeDefinition it){
+		new SublistTypeInfo(it)
+	}
+	
+	def private BuiltinEnumTypeInfo createBuiltinEnum(TypeDefinition it){
 		val enumVals = new HashSet<String>
 		enumArgs.forEach[enumVals.add(name)]
 		

@@ -623,7 +623,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidNamedFunctionSublistArgumentType(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{ T }
 			
 			COVARIATES{
 				logtWT
@@ -632,10 +632,12 @@ class MclTypeValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				POP_CL
 				BETA_CL_WT
-				ETA_CL
+				ETA_CL			}
+			
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, fixEff = BETA_CL_WT, ranEff = ETA_CL)
 			}
 		}'''.parse

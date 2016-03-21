@@ -1,8 +1,18 @@
 // Custom Types
 _type transType _enum (none, ln, logit, probit);
 _type GenericEnum _category;
-_type fixEffAtts _sublist;
-_type priorFormat _sublist;
+_sublist fixEffAtts _atts cov::Reference[::Real], catCov::Reference[::GenericEnum], coeff::Reference[::Real]
+					_sig (cov, coeff), (catCov, coeff);
+					
+_type priorElementType _enum(matrix, vector);					
+_sublist priorFormat _atts element::String, type::priorElementType
+					_sig (element, type);
+
+_sublist intSeqAtts _atts admin::Reference[::Administration], start::Real, end::Real
+					_sig (admin, start?, end?);
+
+_sublist sampSeqAtts _atts sample::Reference[::SamplingSuper], start::Real, end::Real
+					_sig (sample, start?, end?);
 
 _type divUse _enum (covariate, amt, dv, dvid, cmt, mdv, idv, id, rate, ignore, varLevel, catCov, ss, ii, addl);
 _type ddvUse _enum (doseTime);
@@ -131,8 +141,6 @@ _list MdlObjInMog _atts type::objType _sig(type);
 _list Administration _atts input::Reference[::Real], amount::Real, doseTime::Vector, duration::Vector, start::Real, end::Real
 						_sig (input, amount, doseTime?, duration?, start?, end?) ;
 
-_type intSeqAtts _sublist;
-_type sampSeqAtts _sublist; 
 _list StudyDesign _atts armSize::Int, interventionSequence::Vector[::intSeqAtts], samplingSequence::Vector[::sampSeqAtts]
 		_sig (armSize?, interventionSequence, samplingSequence?);
 
@@ -348,12 +356,14 @@ _func Bernoulli _named
 					category::Reference[::GenericEnum], // need to require a reference here
 					probability::Real
 				)
+				_sig (category, probability)
 				_returns ::Pmf
 			;
 _func	 Poisson _named
 			(
 				lambda::Real
 			)
+			_sig (lambda)
 			_returns ::Pmf;
 _func Binomial _named
 			(
@@ -361,24 +371,28 @@ _func Binomial _named
 				probabilityOfSuccess::Real,
 				numberOfTrials::Real
 			)
+			_sig(successCategory, probabilityOfSuccess, numberOfTrials)
 			_returns ::Pmf;
 _func	 Gamma _named
 			(
 				shape::Real,
 				scale::Real
 			)
+			_sig(shape, scale)
 			_returns ::Pdf;
 _func NonParametric _named
 			(
 				bins::Vector,
 				probability::Vector
 			)
+			_sig (bins, probability)
 			_returns ::Pdf;
 _func MultiNonParametric _named
 			(
 				bins::Matrix,
 				probability::Vector
 			)
+			_sig (bins, probability)
 			_returns ::Vector[::Pdf];
 _func Empirical _named
 			(
@@ -392,18 +406,21 @@ _func MultiEmpirical _named
 				data::Matrix,
 				probability::Vector
 			)	
+			_sig (data, probability)
 			_returns ::Vector[::Pdf];		
 _func MultivariateNormal _named
 			(
 				mean::Vector,
 				cov::Matrix
 			)
+			_sig (mean, cov)
 			_returns ::Vector[::Pdf];
 _func Wishart _named
 			(
 				scaleMatrix::Matrix,
 				nu::Real
 			)
+			_sig (scaleMatrix, nu)
 			_returns ::Matrix[[::Pdf]];
 _func matrix _named
 		(
@@ -411,6 +428,7 @@ _func matrix _named
 			ncol::Real,
 			byRow::Boolean
 		)
+		_sig (vector, ncol, byRow)
 		_returns ::Matrix,
 linear _named
 		( 
@@ -475,10 +493,12 @@ _func readVector _named
 				src::PriorSource,
 				element::String
 			)
+			_sig(src, element)
 			_returns ::Vector;
 _func readMatrix _named
 			(
 				src::PriorSource,
 				element::String
 			)
+			_sig(src, element)
 			_returns ::Matrix;

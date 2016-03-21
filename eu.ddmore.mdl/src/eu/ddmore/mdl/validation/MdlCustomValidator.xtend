@@ -18,9 +18,9 @@ import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
-import eu.ddmore.mdl.provider.SublistDefinitionTable
 import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.utils.BlockUtils
 import eu.ddmore.mdl.utils.ConstantEvaluation
 import eu.ddmore.mdl.utils.CycleDetectionUtils
 import eu.ddmore.mdl.utils.MdlUtils
@@ -30,7 +30,6 @@ import java.util.Collections
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdl.utils.BlockUtils
 
 class MdlCustomValidator extends AbstractMdlValidator {
 
@@ -44,6 +43,10 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	extension BlockUtils bu = new BlockUtils
 
 	override register(EValidatorRegistrar registrar){}
+
+	public static val COV_ATT = 'cov'
+	public static val FIX_EFF_SUBLIST = "Sublist:fixEffAtts"
+
 
 	@Check
 	def validateTransforms(TransformedDefinition it){
@@ -181,11 +184,11 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	@Check
 	// check that a covariate is used in the fixed eff sublist
 	def validateCovariateFixedEffect(ValuePair it){
-		if(attributeName == SublistDefinitionTable::COV_ATT){
+		if(attributeName == COV_ATT){
 			val expr = expression
 			if(expr instanceof SymbolReference){
 				val subList = EcoreUtil2.getContainerOfType(eContainer, SubListExpression)
-				if(subList != null && subList.typeFor.isCompatible(SublistDefinitionTable::instance.getSublist(SublistDefinitionTable::FIX_EFF_SUBLIST))){
+				if(subList != null && subList.typeFor.typeName == FIX_EFF_SUBLIST){
 					// now check reference variable belongs to covariates block
 					val refBlk = EcoreUtil2.getContainerOfType(expr.ref.eContainer, BlockStatement)
 					if(refBlk != null && refBlk.identifier != BlockDefinitionTable::COVARIATE_BLK_NAME){

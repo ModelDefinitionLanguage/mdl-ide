@@ -1,19 +1,10 @@
 package eu.ddmore.mdl.provider
 
-import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.EnumListTypeInfo
-import eu.ddmore.mdl.type.ListSuperTypeInfo
-import eu.ddmore.mdl.type.ListTypeInfo
-import eu.ddmore.mdl.type.PrimitiveType
-import eu.ddmore.mdl.type.TypeSystemProvider
-import eu.ddmore.mdl.validation.MdlValidator
-import java.util.Map
-
 class ListDefinitionTable {
 	public static val USE_ATT = 'use'
 	public static val DEFINE_ATT = 'define'
-	public static val VARIABLE_ATT = 'variable'
-	public static val INTERP_ATT = 'interp'
+//	public static val VARIABLE_ATT = 'variable'
+//	public static val INTERP_ATT = 'interp'
 	public static val COV_USE_VALUE = 'covariate'
 	public static val AMT_USE_VALUE = 'amt'
 	public static val IGNORE_USE_VALUE = 'ignore'
@@ -43,47 +34,54 @@ class ListDefinitionTable {
 	public static val DISCRETE_OBS_VALUE = 'discrete'
 	public static val CATEGORICAL_OBS_VALUE = 'categorical'
 	public static val TTE_OBS_VALUE = 'tte'
-	public static val TTE_EVENT_ATT = 'event'
-	public static val TTE_MAX_EVENT_ATT = 'maxEvent'
+//	public static val TTE_EVENT_ATT = 'event'
+//	public static val TTE_MAX_EVENT_ATT = 'maxEvent'
 	public static val VAR_LVL_PARAM_VALUE = 'parameter' 
 	public static val VAR_LVL_OBS_VALUE = 'observation' 
+	
+	public static val CMT_COL_TYPE = "Cmt"
+	public static val DVID_COL_TYPE = "Dvid"
+	
 	
 	public static val CMT_DIRECT_VALUE = 'direct'
 	public static val CMT_DEPOT_VALUE = 'depot'
 	
+	public static val DISCRETE_LIST_TYPE = "List:DiscreteObs"
+	public static val CATEGORICAL_LIST_TYPE = "List:CatObs"
+	
 
-	public static val USE_TYPE = new BuiltinEnumTypeInfo('divUse', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, MDV_USE_VALUE, IDV_USE_VALUE,
-		ID_USE_VALUE, RATE_USE_VALUE, IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, SS_USE_VALUE, II_USE_VALUE, ADDL_USE_VALUE
-	})
-	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('ddvUse', #{'doseTime' })
-	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('varLvlType', #{VAR_LVL_PARAM_VALUE, VAR_LVL_OBS_VALUE})
-	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
-	static val PRIOR_INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('priorInput', #{'RList'})
-	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{CMT_DEPOT_VALUE, 'compartment', 'elimination', 'transfer', 'distribution', CMT_DIRECT_VALUE, 'effect'})
-	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
-	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{CATEGORICAL_OBS_VALUE, COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
-	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
-	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes', 'covariate', 'catCov',
-																			'numberArms', 'armSize', 'parameter', 'doseTime'
-																		})
+//	public static val USE_TYPE = new BuiltinEnumTypeInfo('divUse', #{COV_USE_VALUE, AMT_USE_VALUE, OBS_USE_VALUE, DVID_USE_VALUE, CMT_USE_VALUE, MDV_USE_VALUE, IDV_USE_VALUE,
+//		ID_USE_VALUE, RATE_USE_VALUE, IGNORE_USE_VALUE, VARLVL_USE_VALUE, CATCOV_USE_VALUE, SS_USE_VALUE, II_USE_VALUE, ADDL_USE_VALUE
+//	})
+//	static val DDV_USE_TYPE = new BuiltinEnumTypeInfo('ddvUse', #{'doseTime' })
+//	static val VARIABILITY_TYPE_TYPE = new BuiltinEnumTypeInfo('varLvlType', #{VAR_LVL_PARAM_VALUE, VAR_LVL_OBS_VALUE})
+//	static val INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('input', #{'nonmemFormat'})
+//	static val PRIOR_INPUT_FORMAT_TYPE = new BuiltinEnumTypeInfo('priorInput', #{'RList'})
+//	static val COMP_TYPE_TYPE = new BuiltinEnumTypeInfo(CMT_TYPE_ATT, #{CMT_DEPOT_VALUE, 'compartment', 'elimination', 'transfer', 'distribution', CMT_DIRECT_VALUE, 'effect'})
+//	static val PARAM_VAR_TYPE_TYPE = new BuiltinEnumTypeInfo('vartype', #{'cov', 'corr','sd', 'var'})
+//	static val OBS_TYPE_TYPE = new BuiltinEnumTypeInfo('obstype', #{CATEGORICAL_OBS_VALUE, COUNT_OBS_VALUE, DISCRETE_OBS_VALUE, TTE_OBS_VALUE})
+//	static val SAMPLING_TYPE_TYPE = new BuiltinEnumTypeInfo('sampletype', #{'simple', 'complex', 'derived'})
+//	static val ELEMENT_TYPE = new BuiltinEnumTypeInfo('sampleelement', #{'amount', 'duration', 'sampleTime', 'numberTimes', 'covariate', 'catCov',
+//																			'numberArms', 'armSize', 'parameter', 'doseTime'
+//																		})
 //	static val INTERP_TYPE = new BuiltinEnumTypeInfo('interpType', #{ 'constant', 'nearest', 'linear', 'spline', 'pchip', 'cubic', 'lastValue' })
 //	static val LINK_FUNC_TYPE = new BuiltinEnumTypeInfo('linkFunc', #{'identity', 'ln', 'logit', 'probit'})
 //	static val TTE_EVENT_TYPE = new BuiltinEnumTypeInfo('tteEvent', #{'rightCensored', 'intervalCensored'})
 //	static val MOG_OBJ_TYPE_TYPE = new BuiltinEnumTypeInfo('objType', #{ MdlValidator::MDLOBJ, MdlValidator::DATAOBJ, MdlValidator::PARAMOBJ, MdlValidator::TASKOBJ, MdlValidator::DESIGNOBJ })
 //	static val TARGET_TYPE = new BuiltinEnumTypeInfo('target', #{'MLXTRAN_CODE', 'NMTRAN_CODE'})
-	public static val DERIV_SUPER_LIST = new ListSuperTypeInfo("DerivSuper") 
-	public static val DERIV_TYPE = new ListTypeInfo("DerivList", PrimitiveType.Deriv, DERIV_SUPER_LIST)
+//	public static val DERIV_SUPER_LIST = new ListSuperTypeInfo("DerivSuper") 
+//	public static val DERIV_TYPE = new ListTypeInfo("DerivList", PrimitiveType.Deriv, DERIV_SUPER_LIST)
 //	public static val COUNT_LIST_TYPE = new ListTypeInfo("CountObs", PrimitiveType.Real) 
-	public static val DISCRETE_LIST_TYPE = new EnumListTypeInfo("DiscreteObs")
-	public static val CATEGORICAL_LIST_TYPE = new EnumListTypeInfo("CatObs")
-
-	public static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real, DERIV_SUPER_LIST)
+//	public static val DISCRETE_LIST_TYPE = new EnumListTypeInfo("DiscreteObs")
+//	public static val CATEGORICAL_LIST_TYPE = new EnumListTypeInfo("CatObs")
+//
+//	public static val COMP_LIST_TYPE = new ListTypeInfo("Compartment", PrimitiveType.Real, DERIV_SUPER_LIST)
 //	public static val IDV_COL_TYPE = new ListTypeInfo("Idv")
 //	public static val AMT_COL_TYPE = new ListTypeInfo("Amt")
-	public static val CMT_COL_TYPE = new ListTypeInfo("Cmt")
-	public static val DVID_COL_TYPE = new ListTypeInfo("Dvid")
-	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration")
-	public static val SAMPLING_SUPER_LIST = new ListSuperTypeInfo("SamplingSuper") 
+//	public static val CMT_COL_TYPE = new ListTypeInfo("Cmt")
+//	public static val DVID_COL_TYPE = new ListTypeInfo("Dvid")
+//	public static val ADMINISTRATION_TYPE = new ListTypeInfo("Administration")
+//	public static val SAMPLING_SUPER_LIST = new ListSuperTypeInfo("SamplingSuper") 
 //	public static val SAMPLING_TYPE = new ListTypeInfo("SimpleSampling", SAMPLING_SUPER_LIST)
 //	public static val CPLX_SAMPLING_TYPE = new ListTypeInfo("ComplexSampling", SAMPLING_SUPER_LIST)
 //	public static val DERIV_SAMPLING_TYPE = new ListTypeInfo("DerivedSampling", SAMPLING_SUPER_LIST)
