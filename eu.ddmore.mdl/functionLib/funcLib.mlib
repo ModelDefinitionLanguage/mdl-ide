@@ -273,6 +273,8 @@ _block ESTIMATE (,1) _statements (,) _propStmt
 _block SIMULATE (,1) _statements (,) _propStmt
 		_prop solver?;
 
+_block TARGET_SETTINGS (,)  _arguments target::String, settingsFile::Vector[::String]? _statements (,) _propStmt _prop _free;
+
 _block OBJECTS (1,1) _statements (4,5) _listDefn
 		_list _key=type MdlObjInMog;
 		
@@ -323,6 +325,8 @@ _container designObj _has DECLARED_VARIABLES, ADMINISTRATION, STUDY_DESIGN, SAMP
 _container priorObj _has PRIOR_PARAMETERS, NON_CANONICAL_DISTRIBUTION, PRIOR_VARIABLE_DEFINITION;
 _container MODEL_PREDICTION _has DEQ, COMPARTMENT;
 _container NON_CANONICAL_DISTRIBUTION _has PRIOR_SOURCE, INPUT_PRIOR_DATA;
+_container ESTIMATE _has TARGET_SETTINGS;
+_container SIMULATE _has TARGET_SETTINGS;
 
 
 

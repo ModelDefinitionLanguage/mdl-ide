@@ -70,7 +70,8 @@ class ListValidator extends AbstractMdlValidator {
 				}
 			}
 			PropertyStatement:{
-				if(!isPropertyKnown){
+				val blk = EcoreUtil2.getContainerOfType(parent.eContainer, BlockStatement)
+				if(!blk.blkId.isFreeProps && !isPropertyKnown){
 					error("property '" + attributeName + "' is not recognised in this context.",
 							MdlPackage.eINSTANCE.valuePair_ArgumentName, MdlValidator.UNRECOGNIZED_PROPERTY_ATT, attributeName)
 				}

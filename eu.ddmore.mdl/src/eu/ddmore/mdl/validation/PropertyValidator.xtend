@@ -15,8 +15,10 @@ class PropertyValidator extends AbstractDeclarativeValidator{
 	
 	@Check
 	def validateProperties(BlockStatement it){
-		unusedMandatoryProperties.forEach[name| error("mandatory property '" + name + "' is missing in block.",
-				MdlPackage.eINSTANCE.blockStatement_Body,MdlValidator::MANDATORY_PROP_MISSING, name) ]
+		if(!blkId.isFreeProps){
+			unusedMandatoryProperties.forEach[name| error("mandatory property '" + name + "' is missing in block.",
+					MdlPackage.eINSTANCE.blockStatement_Body,MdlValidator::MANDATORY_PROP_MISSING, name) ]
+		}
 	}
 
 	
