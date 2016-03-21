@@ -185,6 +185,10 @@ _list ComplexSamplingList _extends SamplingSuper _atts type::sampletype, combina
 _list DerivedSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::Reference[::SamplingSuper]],
 														numberTimes::Int
 							_sig(type,combination, numberTimes?);
+
+_type covArgEnumType _enum(constant, idvDependent, occDependent); 
+
+							
 _type estAlgo _enum(saem, foce, fo, focei);
 _type solverType _enum(stiff, nonStiff);							
 							
@@ -199,7 +203,9 @@ _object parObj;
 _object mogObj;
 
 
-_block COVARIATES (0,) _statements (0,) _eqnDefn, _eqnDefn+, _enumDefn, _rvDefn;
+_block COVARIATES (0,)
+	_arguments  type::covArgEnumType?
+	_statements (0,) _eqnDefn, _eqnDefn+, _enumDefn, _rvDefn;
 
 _block VARIABILITY_LEVELS (0,) _statements (0,) _listDefn
 	_list _key=type VarLevel;

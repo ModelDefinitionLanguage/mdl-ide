@@ -23,7 +23,7 @@ class MclParserModelObj13Test {
 warfarin_PK_ODE_mdl = mdlObj {
 	IDV{ T }
 	
-	COVARIATES{
+	COVARIATES(type is constant){
 		logtWT
 	}
 

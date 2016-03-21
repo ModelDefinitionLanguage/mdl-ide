@@ -2,7 +2,6 @@ package eu.ddmore.mdl.type
 
 import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.MdlFactory
-import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.validation.TypeSystemValidator
 import eu.ddmore.mdllib.MdlLibInjectorProvider
 import eu.ddmore.mdllib.mdllib.Expression
