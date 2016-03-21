@@ -62,7 +62,8 @@ warfarin_PK_ODE_mdl = mdlObj {
 	    CL : piecewise {{ { type is linear, trans is ln, pop=POP_CL, fixEff = {coeff=BETA_CL_WT, cov=logtWT} , ranEff = ETA_CL }
 	    		when (POP_CL > 0);
 	    		otherwise { type is general, trans is ln, grp=POP_CL, ranEff = ETA_CL } }}
-	    V : { type is linear, trans is ln, pop=POP_V, fixEff = {coeff=BETA_V_WT, cov=logtWT} , ranEff = ETA_V }
+	    V : if(POP_CL >0) then { type is linear, trans is ln, pop=POP_V, fixEff = {coeff=BETA_V_WT, cov=logtWT} , ranEff = ETA_V }
+	    	else { type is general, trans is ln, grp=POP_CL, ranEff = ETA_CL } 
 	    KA : { type is linear, trans is ln, pop=POP_KA, ranEff = ETA_KA }
 	    TLAG : { type is linear, trans is ln, pop=POP_TLAG, ranEff = ETA_TLAG } 
 	} # end INDIVIDUAL_VARIABLES

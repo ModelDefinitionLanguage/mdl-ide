@@ -11,6 +11,7 @@ import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.IndexSpec
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.ListIfExpression
 import eu.ddmore.mdl.mdl.ListPiecewiseExpression
 import eu.ddmore.mdl.mdl.MatrixElement
 import eu.ddmore.mdl.mdl.MatrixLiteral
@@ -429,6 +430,16 @@ public class TypeSystemProvider {
 		]
 		if(otherwise != null)
 			valueList.add(otherwise)
+		valueList.commonListType
+	}
+	
+	def dispatch TypeInfo typeFor(ListIfExpression it){
+		val valueList = new ArrayList<AbstractAttributeList>
+		ifelseClause.forEach[
+			valueList.add(value)
+		]
+		if(elseClause != null)
+			valueList.add(elseClause.value)
 		valueList.commonListType
 	}
 	

@@ -96,11 +96,11 @@ ProbabilityFunction:
 
 
 ListDefinition:
-	name = ID LIST_ASSIGN list = (AttributeList|ListPiecewiseExpression) ';'?
+	name = ID LIST_ASSIGN list = (AttributeList|ListPiecewiseExpression|ListIfExpression) ';'?
 ;
 
 AbstractAttributeList:
-	AttributeList|ListPiecewiseExpression
+	AttributeList|ListPiecewiseExpression|ListIfExpression
 ;
 
 ListPiecewiseExpression:
@@ -111,21 +111,28 @@ ListPWClause:
 	{ListPWClause} value=AttributeList WHEN cond=Expression
 ;
 
-//ListIfExprPart:
-//	IfClause | ElifClause
-//;
-//
-//ListIfClause returns ListIfExprPart:
-//	{ListIfClause} IF '(' cond=Expression ')' => THEN value=AttributeList
-//;
-//
-//ListElifClause returns ListIfExprPart:
-//	{ListElifClause} ELSEIF '(' cond=Expression ')' => THEN value=AttributeList
-//;
-//
-//ListElseClause:
-//	{ListElseClause} ELSE value=AttributeList
-//;
+ListIfExpression:
+	 {ListIfExpression}
+	 	ifelseClause+=ListIfClause
+	 	(=> ifelseClause+=ListElifClause)*
+		(=>elseClause=ListElseClause)?
+	;
+
+ListIfExprPart:
+	ListIfClause | ListElifClause
+;
+
+ListIfClause returns ListIfExprPart:
+	{ListIfClause} IF '(' cond=Expression ')' => THEN value=AttributeList
+;
+
+ListElifClause returns ListIfExprPart:
+	{ListElifClause} ELSEIF '(' cond=Expression ')' => THEN value=AttributeList
+;
+
+ListElseClause:
+	{ListElseClause} ELSE value=AttributeList
+;
 
 
 
