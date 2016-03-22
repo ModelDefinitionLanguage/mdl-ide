@@ -135,15 +135,17 @@ class ListValidator extends AbstractMdlValidator {
 		val attList = EcoreUtil2.getContainerOfType(ep.eContainer, AttributeList)
 		if(attList != null){
 			val listDefn = attList.matchingListDefn
-//			val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
-			val mappingExpr = ep.expression
-			if(mappingExpr instanceof EnumExpression){//} && attDefn != null){
-//				val mappingExpr = ep.expression as EnumExpression
-				if(listDefn.isCatMappingPossible(ep.argumentName) && mappingExpr.catDefn == null){
-					missingCatErrorLambda.apply
-				}
-				else if(!listDefn.isCatMappingPossible(ep.argumentName) && mappingExpr.catDefn != null){
-					unexpectedCatDefnErrorLambda.apply
+			if(listDefn != null){
+//				val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
+				val mappingExpr = ep.expression
+				if(mappingExpr instanceof EnumExpression){//} && attDefn != null){
+//					val mappingExpr = ep.expression as EnumExpression
+					if(listDefn.isCatMappingPossible(ep.argumentName) && mappingExpr.catDefn == null){
+						missingCatErrorLambda.apply
+					}
+					else if(!listDefn.isCatMappingPossible(ep.argumentName) && mappingExpr.catDefn != null){
+						unexpectedCatDefnErrorLambda.apply
+					}
 				}
 			}
 		}

@@ -5,9 +5,6 @@ _sublist fixEffAtts _atts cov::Reference[::Real], catCov::Reference[::GenericEnu
 					_sig (cov, coeff), (catCov, coeff);
 					
 _type priorElementType _enum(matrix, vector);					
-_sublist priorFormat _atts element::String, type::priorElementType
-					_sig (element, type);
-
 _sublist intSeqAtts _atts admin::Reference[::Administration], start::Real, end::Real
 					_sig (admin, start?, end?);
 
@@ -18,7 +15,7 @@ _type divUse _enum (covariate, amt, dv, dvid, cmt, mdv, idv, id, rate, ignore, v
 _type ddvUse _enum (doseTime);
 _type varLvlType _enum (parameter, observation);
 _type input _enum (nonmemFormat);
-_type priorInput _enum (RList);
+_type priorInput _enum (RList, csv);
 _type cmtType _enum (depot, compartment, elimination, transfer, distribution, direct, effect);
 _type varType _enum (cov, corr, sd, var);
 _type obstype _enum (combinedError1, combinedError2, additive, proportional, categorical, count, discrete, tte);
@@ -53,9 +50,18 @@ _list DoseTime _atts use::ddvUse, idvColumn::Reference[::Idv], amtColumn::Refere
 _list Source _atts file::String, inputFormat::input _sig(file, inputFormat);
 
 
+//_sublist CsvColsSublist _atts colNum::Vector[::Int], vector::Reference[::Vector], matrix::Reference[::Matrix]
+//						_sig (colNum, vector), (colNum, matrix)
+//						;
+_sublist priorFormat _atts element::String, type::priorElementType
+					_sig (element, type);
+
 // Priors
-_list PriorSource _atts file::String, inputFormat::priorInput, format::Vector[::priorFormat]
+_list PriorTabularSource _super;
+_list PriorSourceRList _atts file::String, inputFormat::priorInput, format::Vector[::priorFormat]
 		_sig(file, inputFormat, format);
+_list PriorSourceCsv _extends PriorTabularSource _atts file::String, inputFormat::priorInput, column::Vector[::String]
+		_sig(file, inputFormat, column);
 		
 // Individual Parameters
 _type IndivTypeType _enum (linear, general);
@@ -313,7 +319,7 @@ _block NON_CANONICAL_DISTRIBUTION (,) _statements (,) _eqnDefn, _eqnDefn+;
 _block PRIOR_VARIABLE_DEFINITION (,) _statements (,) _eqnDefn, _eqnDefn+, _rvDefn;
 _block INPUT_PRIOR_DATA (,) _statements (,) _eqnDefn, _eqnDefn+;
 _block PRIOR_SOURCE (,) _statements (,) _listDefn
-	_list _key=file PriorSource;
+	_list _key=inputFormat  priorInput.RList->PriorSourceRList, priorInput.csv->PriorSourceCsv;
 
 
 _container mdlObj _has COVARIATES, VARIABILITY_LEVELS, STRUCTURAL_PARAMETERS, VARIABILITY_PARAMETERS, RANDOM_VARIABLE_DEFINITION,
@@ -374,6 +380,10 @@ _func diagonal(x::Vector) _returns ::Matrix;
 _func linearInterp(x::Real, t0::Real, x0::Real, t1::Real, x1::Real) _returns ::Real;
 _func constInterp(x::Real, t0::Real, x0::Real, t1::Real, x1::Real) _returns ::Real;
 _func lastValueInterp(x::Real, t0::Real, x0::Real, t1::Real, x1::Real) _returns ::Real;
+_func nearestInterp(x::Real, t0::Real, x0::Real, t1::Real, x1::Real) _returns ::Real;
+_func cubicInterp(x::Real, t0::Real, x0::Real, t1::Real, x1::Real) _returns ::Real;
+_func pchipInterp(x::Real, t0::Real, x0::Real, t1::Real, x1::Real) _returns ::Real;
+_func splineInterp(x::Real, t0::Real, x0::Real, t1::Real, x1::Real) _returns ::Real;
 
 // Named functions
 _func Normal _named
@@ -533,15 +543,30 @@ _func proportionalError _named
 ;
 _func readVector _named
 			(
-				src::PriorSource,
+				src::PriorSourceRList,
 				element::String
 			)
 			_sig(src, element)
 			_returns ::Vector;
 _func readMatrix _named
 			(
-				src::PriorSource,
+				src::PriorSourceRList,
 				element::String
 			)
 			_sig(src, element)
 			_returns ::Matrix;
+_func readVectorFromTable _named
+			(
+				src::PriorTabularSource,
+				column::Vector[::String]
+			)
+			_sig(src, column)
+			_returns ::Vector;
+_func readMatrixFromTable _named
+			(
+				src::PriorTabularSource,
+				column::Vector[::String]
+			)
+			_sig(src, column)
+			_returns ::Matrix;
+			
