@@ -3,6 +3,7 @@ package eu.ddmore.mdl.utils
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.EnumListTypeInfo
+import eu.ddmore.mdl.type.FunctionTypeInfo
 import eu.ddmore.mdl.type.ListSuperTypeInfo
 import eu.ddmore.mdl.type.ListTypeInfo
 import eu.ddmore.mdl.type.SublistTypeInfo
@@ -12,6 +13,7 @@ import eu.ddmore.mdllib.mdllib.AbstractTypeDefinition
 import eu.ddmore.mdllib.mdllib.BlockContainer
 import eu.ddmore.mdllib.mdllib.BlockDefinition
 import eu.ddmore.mdllib.mdllib.ContainmentDefn
+import eu.ddmore.mdllib.mdllib.FunctionDefnBody
 import eu.ddmore.mdllib.mdllib.Library
 import eu.ddmore.mdllib.mdllib.ListTypeDefinition
 import eu.ddmore.mdllib.mdllib.ObjectDefinition
@@ -23,6 +25,7 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdllib.mdllib.FunctionSpec
 
 class MdlLibUtils {
 
@@ -168,6 +171,14 @@ class MdlLibUtils {
 					TypeSystemProvider::REAL_TYPE.makeReference
 				}
 				else TypeSystemProvider::UNDEFINED_TYPE
+			case TypeClass.FUNCTION:
+				if(argSpecs != null && rtnSpec != null){
+					val argList = new ArrayList<TypeInfo>
+					argSpecs.forEach[a|
+						argList.add(a.typeInfo)
+					]
+					new FunctionTypeInfo(argList, rtnSpec.typeInfo)
+				}
 //			case TypeClass.ENUM:
 //				createBuiltinEnum(typeName)
 //			case TypeClass.SUBLIST:
@@ -179,6 +190,14 @@ class MdlLibUtils {
 			default:
 				typeName.typeInfo
 		} 
+	}
+	
+	def getTypeInfo(FunctionSpec it){
+		val argList = new ArrayList<TypeInfo>
+		argument.arguments.forEach[a|
+			argList.add(a.typeSpec.typeInfo)
+		]
+		new FunctionTypeInfo(argList, returnType.typeInfo)
 	}
 	
 	def private SublistTypeInfo createSublistType(SubListTypeDefinition it){

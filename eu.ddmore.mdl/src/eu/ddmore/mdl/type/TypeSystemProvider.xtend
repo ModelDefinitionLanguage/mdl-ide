@@ -41,6 +41,7 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.FunctionReference
 
 public class TypeSystemProvider {
 
@@ -206,11 +207,32 @@ public class TypeSystemProvider {
 //		retVal
 	}
 	
+	def getTypeOfFunctionRef(SymbolDefinition ref){
+		switch(ref){
+			FunctionDefnBody:
+				ref?.funcSpec?.typeInfo.makeReference ?: UNDEFINED_TYPE
+			EquationDefinition:{
+				if(ref.typeSpec != null){
+					if(ref.typeSpec.functionSpec != null){
+						// need to get the function return type
+						ref?.typeSpec?.functionSpec?.typeInfo.makeReference ?: UNDEFINED_TYPE
+					}
+					else UNDEFINED_TYPE
+				}
+				else UNDEFINED_TYPE
+			}
+			default:
+			  UNDEFINED_TYPE
+		}
+	}
+	
 	def dispatch TypeInfo typeFor(Expression e){
-		if(e == null) return TypeSystemProvider.UNDEFINED_TYPE 
+		if(e == null) return UNDEFINED_TYPE 
 		switch(e){
 			SymbolReference:
 				e.typeOfSymbolRef
+			FunctionReference:
+				e.ref?.typeOfFunctionRef
 			CategoryValueReference:
 				e.ref.typeFor.makeReference
 			ParExpression: e.expr.typeFor
@@ -219,22 +241,22 @@ public class TypeSystemProvider {
 //			BuiltinFunctionCall:
 //				e.functionType
 			VectorElement:
-				e.element?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
+				e.element?.typeFor ?: UNDEFINED_TYPE
 			VectorLiteral:
-				if(e.expressions.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
+				if(e.expressions.isEmpty) REAL_VECTOR_TYPE
 				else e.typeForArray
 			MatrixElement:
-				e.cell?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
+				e.cell?.typeFor ?: UNDEFINED_TYPE
 			MatrixRow:
-				if(e.cells.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
+				if(e.cells.isEmpty) REAL_VECTOR_TYPE
 				else e.typeForMatrixRow
 			MatrixLiteral:
-				if(e.rows.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
+				if(e.rows.isEmpty) REAL_VECTOR_TYPE
 				else e.typeForMatrix
 			SubListExpression:
 				e.typeForSublist 
 			default:
-				typeTable.get(e.eClass) ?: TypeSystemProvider.UNDEFINED_TYPE
+				typeTable.get(e.eClass) ?: UNDEFINED_TYPE
 		}
 	}
 	

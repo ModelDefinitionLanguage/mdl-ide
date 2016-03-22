@@ -2545,6 +2545,45 @@ testprior = priorObj{
 		
 		mcl.assertNoErrors
 	}
+
+
+	@Test
+	def void testValidFunctionRef(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataObj{
+	DATA_INPUT_VARIABLES {
+		W : { use is covariate, interp=&linearInterp } 
+	}
+	SOURCE {
+	    foo: {file = "warfarin_conc_sex.csv",
+        	inputFormat  is nonmemFormat} 
+	} # end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInvalidFunctionRef(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataObj{
+	DATA_INPUT_VARIABLES {
+		W : { use is covariate, interp=&ln } 
+	}
+	SOURCE {
+	    foo: {file = "warfarin_conc_sex.csv",
+        	inputFormat  is nonmemFormat} 
+	} # end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'interp' expected value of type 'ref:Function(Real,Real,Real,Real,Real)::Real' but was 'ref:Function(Real)::Real'."
+		)
+	}
+	
 }
 
 

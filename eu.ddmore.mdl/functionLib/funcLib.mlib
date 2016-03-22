@@ -28,7 +28,8 @@ _type objType _enum (mdlObj, dataObj, parObj, taskObj, designObj, priorObj);
 
 // Data input variables
 //_list Covariate _alt Real _atts use::divUse, interp::Reference[::Function(x::Real, x0::Real, x1::Real, y0::Real, y1::Real)::Real] _sig (use);  
-_list Covariate _alt Real _atts use::divUse _sig (use);  
+_list Covariate _alt Real _atts use::divUse, interp::Reference[::Function(::Real, ::Real, ::Real, ::Real, ::Real)::Real]
+							_sig (use, interp?);  
 _list CatCovariate _atts use::divUse _cat use::Int _sig (use);  
 _list Amt _atts use::divUse, define::Mapping, variable::Reference[::Real] _sig (use, define), (use, variable);
 _list Dv _atts use::divUse, define::Mapping, variable::Reference[::Real] _sig (use, define), (use, variable);
@@ -317,7 +318,7 @@ _block PRIOR_SOURCE (,) _statements (,) _listDefn
 
 _container mdlObj _has COVARIATES, VARIABILITY_LEVELS, STRUCTURAL_PARAMETERS, VARIABILITY_PARAMETERS, RANDOM_VARIABLE_DEFINITION,
 					INDIVIDUAL_VARIABLES, MODEL_PREDICTION, OBSERVATION, GROUP_VARIABLES, IDV, FUNCTIONS;
-_container dataObj _has DATA_INPUT_VARIABLES, DECLARED_VARIABLES, DATA_DERIVED_VARIABLES, SOURCE;
+_container dataObj _has DATA_INPUT_VARIABLES, DECLARED_VARIABLES, DATA_DERIVED_VARIABLES, SOURCE, FUNCTIONS;
 _container parObj _has VARIABILITY, DECLARED_VARIABLES, STRUCTURAL;
 _container taskObj _has ESTIMATE, SIMULATE;
 _container mogObj _has OBJECTS;
@@ -368,6 +369,11 @@ _func asVector(x::Matrix) _returns ::Vector;
 _func inverse(x::Matrix) _returns ::Matrix;
 _func transpose(x::Matrix) _returns ::Matrix;
 _func diagonal(x::Vector) _returns ::Matrix;
+
+// interpolation functions
+_func linearInterp(x::Real, t0::Real, x0::Real, t1::Real, x1::Real) _returns ::Real;
+_func constInterp(x::Real, t0::Real, x0::Real, t1::Real, x1::Real) _returns ::Real;
+_func lastValueInterp(x::Real, t0::Real, x0::Real, t1::Real, x1::Real) _returns ::Real;
 
 // Named functions
 _func Normal _named

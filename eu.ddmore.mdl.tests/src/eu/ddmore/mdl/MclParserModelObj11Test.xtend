@@ -27,6 +27,9 @@ warfarin_PK_ODE_mdl = mdlObj {
 		    arg2 * arg1  # return type is Real
 	}
 
+   MODEL_PREDICTION{
+	  P1 = userFunc(0, 1.2, "A")
+   }# end MODEL_PREDICTION
 } # end of model object
 		'''
 	

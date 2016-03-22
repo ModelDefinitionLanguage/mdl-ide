@@ -266,7 +266,8 @@ OpUnary:
 
 PrimaryExpression returns lib::Expression:
 	Literal
-	| SymbolReference 
+	| SymbolReference
+	| FunctionReference
 	| CategoryValueReference
 	| CatValRefMappingExpression
 	| MappingExpression
@@ -324,6 +325,10 @@ Literal returns lib::Expression:
 
 SymbolReference:
 	{SymbolReference} ref=[lib::SymbolDefinition|ID] ('[' indexExpr = IndexSpec ']'|'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')')?
+;
+
+FunctionReference:
+	{FunctionReference} '&'ref=[lib::SymbolDefinition]
 ;
 
 IndexSpec:
