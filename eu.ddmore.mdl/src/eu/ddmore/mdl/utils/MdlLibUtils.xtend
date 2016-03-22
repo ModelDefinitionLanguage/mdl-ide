@@ -13,7 +13,7 @@ import eu.ddmore.mdllib.mdllib.AbstractTypeDefinition
 import eu.ddmore.mdllib.mdllib.BlockContainer
 import eu.ddmore.mdllib.mdllib.BlockDefinition
 import eu.ddmore.mdllib.mdllib.ContainmentDefn
-import eu.ddmore.mdllib.mdllib.FunctionDefnBody
+import eu.ddmore.mdllib.mdllib.FunctionSpec
 import eu.ddmore.mdllib.mdllib.Library
 import eu.ddmore.mdllib.mdllib.ListTypeDefinition
 import eu.ddmore.mdllib.mdllib.ObjectDefinition
@@ -25,7 +25,6 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdllib.mdllib.FunctionSpec
 
 class MdlLibUtils {
 
