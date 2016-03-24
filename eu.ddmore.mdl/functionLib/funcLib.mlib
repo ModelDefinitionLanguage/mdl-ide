@@ -1,3 +1,6 @@
+// Test definitions.Only used for test purposes and is out of date.  Designed to test core language features
+// rather than test the language as a whole. Tests that do this should be run against the production specification.  
+
 // Custom Types
 _type transType _enum (none, ln, logit, probit);
 _type GenericEnum _category;
