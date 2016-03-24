@@ -25,6 +25,7 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.type.GenericEnumTypeInfo
 
 class MdlLibUtils {
 
@@ -108,7 +109,7 @@ class MdlLibUtils {
 					case TypeClass.ENUM:
 						createBuiltinEnum(td)
 					case TypeClass.CATEGORY:
-						TypeSystemProvider::GENERIC_ENUM_VALUE_TYPE
+						createGenericEnumType(td)
 					case TypeClass.DERIV:
 						TypeSystemProvider::DERIV_TYPE
 					case TypeClass.MAPPING:
@@ -117,6 +118,10 @@ class MdlLibUtils {
 						TypeSystemProvider::UNDEFINED_TYPE
 				}
 		}
+	}
+	
+	def createGenericEnumType(TypeDefinition td) {
+		new GenericEnumTypeInfo()
 	}
 
 	def TypeInfo getTypeInfo(TypeSpec it){

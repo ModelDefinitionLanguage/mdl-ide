@@ -2493,6 +2493,31 @@ d1g=designObj{
 	}
 
 	@Test
+	def void testValidGenericEnumValueAttribute(){
+		val mcl = '''
+d1g=designObj{
+	DECLARED_VARIABLES{
+		Conc
+		Effect
+		Cmt
+	}
+	ADMINISTRATION{
+		dose1 : {input=Cmt, amount=100, doseTime=0, duration=1} 
+	}
+	
+	COVARIATES{
+		catCovar withCategories { foo, bar }
+	}
+	
+	DESIGN_SPACES{
+		DS1 : { objRef=catCovar.foo, element is catCov, range=[0.1, 1.0] }
+	}
+}		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
 	def void testInvalidCompartmentUsage(){
 		val mcl = '''
 warfarin_PK_Compartments_mdl = mdlObj {

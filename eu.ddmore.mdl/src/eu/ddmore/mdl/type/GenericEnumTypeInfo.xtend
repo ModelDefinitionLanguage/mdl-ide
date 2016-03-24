@@ -14,7 +14,7 @@ class GenericEnumTypeInfo extends EnumTypeInfo{
 	}
 	
 	override isCompatible(TypeInfo otherType){
-		switch(otherType){
+		switch(otherType.underlyingType){
 			EnumTypeInfo: true
 			default: false 
 		}
