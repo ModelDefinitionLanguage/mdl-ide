@@ -11,9 +11,9 @@ import org.junit.runner.RunWith
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserModelObj10Test {
-//	@Inject extension LibraryTestHelper<Mcl>
+//	@Inject extension MdlTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension MdlTestHelper<Mcl>
 	
 	val static CODE_SNIPPET = '''
 Bernoulli_DIST_mdl = mdlObj{

@@ -19,6 +19,10 @@ import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider
 
 import static eu.ddmore.mdl.ui.outline.Images.*
 import eu.ddmore.mdl.utils.BlockUtils
+import eu.ddmore.mdllib.mdllib.FunctionDefnBody
+import eu.ddmore.mdl.type.TypeSystemProvider
+import eu.ddmore.mdl.mdl.RandomVariableDefinition
+import eu.ddmore.mdl.mdl.ListDefinition
 
 /**
  * Provides labels for a EObjects.
@@ -28,6 +32,7 @@ import eu.ddmore.mdl.utils.BlockUtils
 class MdlLabelProvider extends DefaultEObjectLabelProvider {
 
 	extension BlockUtils bu = new BlockUtils
+	extension TypeSystemProvider tsu = new TypeSystemProvider
 
 	@Inject
 	new(AdapterFactoryLabelProvider delegate) {
@@ -35,12 +40,27 @@ class MdlLabelProvider extends DefaultEObjectLabelProvider {
 	}
 
 	def text(TransformedDefinition ele) {
-		ele.transform + '(' + ele.name + ')'
+		ele.transform.name + '(' + ele.name + ')' + ele.printType
 	}
 
-	// @TODO: Fix for matrices
+	private def printType(SymbolDefinition it){
+		"::" + typeFor?.typeName ?: "<error!>"
+	}
+
 	def text(EquationDefinition ele) {
-		ele.name //+ if(ele.isVector) '[]' else ''
+		ele.name + ele.printType()
+	}
+
+	def text(RandomVariableDefinition ele) {
+		ele.name + ele.printType()
+	}
+
+	def text(ListDefinition ele) {
+		ele.name + ele.printType()
+	}
+
+	def text(BlockStatement it) {
+		blkId?.name ?: '<undefined>'
 	}
 
 	@Inject IImageHelper imageHelper;

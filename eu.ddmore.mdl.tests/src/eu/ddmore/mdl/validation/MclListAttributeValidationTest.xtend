@@ -123,6 +123,24 @@ class MclListAttributeValidationTest {
 	}
 
 	@Test
+	def void testInvalidUnrecognisedKeyValue(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is cm }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
+			MdlValidator::LIST_KEY_VAL_UNRECOGNISED,
+			"Attribute list key value 'cm' is not recognised."
+		);
+	}
+
+	@Test
 	def void testValidSrcDvColumn(){
 		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ D }

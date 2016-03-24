@@ -184,8 +184,8 @@ class ListDefinitionProvider {
 //	}
 	
 	
-	def isKeyAttributeDefined(AttributeList it){
-		val parent = parentStatement
+	def isKeyAttributeDefined(BlockStatement parent, AttributeList it){
+//		val parent = parentStatement
 		attributes.exists[parent.blkId.keyAttName == argumentName]
 //		var found = false
 //		if(attDefns.containsKey(parent.identifier)){
@@ -214,8 +214,8 @@ class ListDefinitionProvider {
 //		return found
 	}
 	
-	def getKeyAttribute(AttributeList it){
-		val parent = parentStatement
+	def getKeyAttribute(BlockStatement parent, AttributeList it){
+//		val parent = parentStatement
 		parent.blkId.keyAttName
 //		var String retVal = null
 //		if(attDefns.containsKey(parent.identifier)){

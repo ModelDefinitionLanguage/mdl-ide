@@ -1,15 +1,25 @@
+_type Int _int;
+_type Real _real;
+_type Boolean _bool;
+_type String _str;
+_type Pdf _pdf;
+_type Pmf _pmf;
+_type Deriv _deriv;
+_type Vector _vector;
+_type Matrix _matrix;
+_type Function _function;
+_type Reference _reference;
+_type Mapping _mapping;
+_type Undefined _undef;
+_type GenericEnum _category;
+
+
 // Custom Types
 _type transType _enum (none, ln, logit, probit);
-_type GenericEnum _category;
 _sublist fixEffAtts _atts cov::Reference[::Real], catCov::Reference[::GenericEnum], coeff::Reference[::Real]
 					_sig (cov, coeff), (catCov, coeff);
 					
 _type priorElementType _enum(matrix, vector);					
-_sublist intSeqAtts _atts admin::Reference[::Administration], start::Real, end::Real
-					_sig (admin, start?, end?);
-
-_sublist sampSeqAtts _atts sample::Reference[::SamplingSuper], start::Real, end::Real
-					_sig (sample, start?, end?);
 
 _type divUse _enum (covariate, amt, dv, dvid, cmt, mdv, idv, id, rate, ignore, varLevel, catCov, ss, ii, addl);
 _type ddvUse _enum (doseTime);
@@ -19,7 +29,7 @@ _type priorInput _enum (RList, csv);
 _type cmtType _enum (depot, compartment, elimination, transfer, distribution, direct, effect);
 _type varType _enum (cov, corr, sd, var);
 _type obstype _enum (combinedError1, combinedError2, additive, proportional, categorical, count, discrete, tte);
-_type sampletype _enum (simple, complex, derived);
+_type sampletype _enum (simple, combi);
 _type sampleelement _enum (amount, duration, sampleTime, numberTimes, covariate, catCov, numberArms, armSize, parameter, doseTime);
 _type objType _enum (mdlObj, dataObj, parObj, taskObj, designObj, priorObj);
 
@@ -68,55 +78,57 @@ _type IndivTypeType _enum (linear, general);
 
 _list IndivAbstractList _alt Real _super;
 
+_sublist EtaFreeRanEffSublist _atts var::Real, sd::Real, varLvl::VarLevel _sig(var, varLvl), (sd, varLvl);
+
 _list IndivParamLinear _alt Real _extends IndivAbstractList
 		_atts type::IndivTypeType, trans::transType,
-				pop::Real, fixEff::Vector[::fixEffAtts], ranEff::Vector
-		_sig(type, trans?, pop, fixEff?, ranEff);
+				pop::Real, fixEff::Vector[::fixEffAtts], ranEff::Vector, omega::Vector[::EtaFreeRanEffSublist]
+		_sig(type, trans?, pop, fixEff?, ranEff), (type, trans?, pop, fixEff?, omega);
 		
 _list IndivParamGeneral _alt Real _extends IndivAbstractList
 		_atts type::IndivTypeType, trans::transType, grp::Real,
-				ranEff::Vector[::Real]
-			_sig(type, trans?, grp, ranEff); 
+				ranEff::Vector[::Real], omega::Vector[::EtaFreeRanEffSublist]
+			_sig(type, trans?, grp, ranEff), (type, trans?, grp, omega); 
 
 
 // Model
 	
 _list VarLevel _atts type::varLvlType, level::Int
 	_sig(type, level);
-_list DerivSuper _super;
-_list DerivList _alt Deriv _extends DerivSuper _atts deriv::Real, init::Real, x0::Real, wrt::Reference[::Real]
+_list DosingTarget _super;
+_list DerivList _alt Deriv _extends DosingTarget _atts deriv::Real, init::Real, x0::Real, wrt::Reference[::Real]
 	_sig(deriv, init?, x0?, wrt?);
 
 
 // Compartments
 
-_list CmtDirect _alt Real _atts type::cmtType, modelCmt::Int, to::Reference[::DerivSuper],
+_list CmtDirect _alt Real _atts type::cmtType, modelCmt::Int, to::Reference[::DosingTarget],
 		modelDur::Real, tlag::Real, finput::Real
 		_sig(type, modelCmt?, to, modelDur?, tlag?, finput?);
 
-_list Effect _alt Real _atts type::cmtType, modelCmt::Int, from::Reference[::DerivSuper], keq::Real
+_list Effect _alt Real _atts type::cmtType, modelCmt::Int, from::Reference[::DosingTarget], keq::Real
 			_sig (type, modelCmt?, from, keq);
 			
-_list Depot _alt Real _atts type::cmtType, modelCmt::Int, to::Reference[::DerivSuper], ka::Real,
+_list Depot _alt Real _atts type::cmtType, modelCmt::Int, to::Reference[::DosingTarget], ka::Real,
 						modelDur::Real, tlag::Real, finput::Real, ktr::Real, mtt::Real
 			_sig (type, modelCmt?, to, ka, tlag?, finput?),
 				 (type, modelCmt?, to, ktr, mtt),
 				 (type, modelCmt?, to, modelDur, tlag?, finput?);
 
-_list Transfer _anon _atts type::cmtType, modelCmt::Int, to::Reference[::DerivSuper], from::Reference[::DerivSuper], kt::Real
+_list Transfer _anon _atts type::cmtType, modelCmt::Int, to::Reference[::DosingTarget], from::Reference[::DosingTarget], kt::Real
 			_sig (type, modelCmt?, to, from, kt);
 
-_list Compartment _alt Real _extends DerivSuper
+_list Compartment _alt Real _extends DosingTarget
 		_atts  type::cmtType, modelCmt::Int
 		_sig (type, modelCmt?);
 		
-_list Elimination _anon _atts type::cmtType, modelCmt::Int, from::Reference[::DerivSuper], v::Real,
+_list Elimination _anon _atts type::cmtType, modelCmt::Int, from::Reference[::DosingTarget], v::Real,
 								cl::Real, k::Real, vm::Real, km::Real
 				_sig (type, modelCmt?, from, v?, k),
 					 (type, modelCmt?, from, v?, cl),
 					 (type, modelCmt?, from, vm, km);
 					 
-_list Distribution _atts type::cmtType, modelCmt::Int, from::Reference[::DerivSuper],
+_list Distribution _atts type::cmtType, modelCmt::Int, from::Reference[::DosingTarget],
 								kin::Real, kout::Real
 				_sig(type, modelCmt?, kin, kout, from);
 
@@ -126,20 +138,20 @@ _list Distribution _atts type::cmtType, modelCmt::Int, from::Reference[::DerivSu
 // Observations
 _list continuousErrorList _super;
 _list combinedError1List _alt Real _extends continuousErrorList
-	_atts type::obstype, trans::transType, additive::Real, proportional::Real, prediction::Real, eps::Real
-		_sig(type, trans?, additive, proportional, prediction, eps)
+	_atts type::obstype, trans::transType, additive::Real, proportional::Real, prediction::Real, eps::Real, varLvl::VarLevel
+		_sig(type, trans?, additive, proportional, prediction, eps), (type, trans?, additive, proportional, prediction, varLvl)
 	;
 _list combinedError2List _alt Real _extends continuousErrorList
-	_atts type::obstype, trans::transType, additive::Real, proportional::Real, prediction::Real, eps::Real
-		_sig(type, trans?, additive, proportional, prediction, eps)
+	_atts type::obstype, trans::transType, additive::Real, proportional::Real, prediction::Real, eps::Real, varLvl::VarLevel
+		_sig(type, trans?, additive, proportional, prediction, eps), (type, trans?, additive, proportional, prediction, varLvl)
 	;
 _list additiveErrorList _alt Real _extends continuousErrorList
-	_atts type::obstype, trans::transType, additive::Real, prediction::Real, eps::Real
-		_sig(type, trans?, additive, prediction, eps)
+	_atts type::obstype, trans::transType, additive::Real, prediction::Real, eps::Real, varLvl::VarLevel
+		_sig(type, trans?, additive, prediction, eps), (type, trans?, additive, prediction, varLvl)
 	;
 _list proportionalErrorList _extends continuousErrorList
-	_atts type::obstype, trans::transType, proportional::Real, prediction::Real, eps::Real
-	_sig(type, trans?, proportional, prediction, eps)
+	_atts type::obstype, trans::transType, proportional::Real, prediction::Real, eps::Real, varLvl::VarLevel
+	_sig(type, trans?, proportional, prediction, eps), (type, trans?, proportional, prediction, varLvl)
 	;
 _list CatObs _atts type::obstype _cat type::Reference[::Real] _sig(type);
 _list CountObs _alt Real _atts type::obstype, distn::Pmf _sig(type, distn);
@@ -161,14 +173,33 @@ _list StructuralEstimate _alt Real _atts value::Real, lo::Real, hi::Real, fix::B
 //MOG Objects
 _list MdlObjInMog _atts type::objType _sig(type);
 
+_type AdminTypeType _enum (simple, combi, resetAll, reset);
+
 // Design Objects
-_list Administration _atts input::Reference[::Real], amount::Real, doseTime::Vector, duration::Vector, start::Real, end::Real
-						_sig (input, amount, doseTime?, duration?, start?, end?) ;
+_list AdminSuperList _super;
+_list AdminSimpleList _extends AdminSuperList _atts type::AdminTypeType, input::Reference[::Real], amount::Real,
+						rate::Vector, steadyState::Boolean, p::Real, doseTime::Vector, duration::Vector,
+						dosingInterval::Real, nDoses::Int, start::Real, end::Real
+						_sig (type, input, amount, p?, doseTime?, duration?, start?, end?, rate?, dosingInterval?, nDoses?),
+							(type, input, amount, steadyState, dosingInterval?, nDoses?) ;
+						
+_list AdminComplexList _extends AdminSuperList _atts type::AdminTypeType, combination::Vector[::AdminSuperList], start::Vector, end::Vector
+						_sig (type, combination, start?, end?) ;
+_list AdminResetAllList _extends AdminSuperList _atts type::AdminTypeType, resetTime::Real, value::Real, start::Vector
+						_sig (type, resetTime?, value?, start?) ;
+_list AdminResetList _extends AdminSuperList _atts type::AdminTypeType, variable::Vector[::Reference[::Real]], resetTime::Real, value::Real, start::Vector
+						_sig (type, variable, resetTime?, value?, start?) ;
 
-_list StudyDesign _atts armSize::Int, interventionSequence::Vector[::intSeqAtts], samplingSequence::Vector[::sampSeqAtts]
-		_sig (armSize?, interventionSequence, samplingSequence?);
+_sublist intSeqAtts _atts admin::Vector[::Reference[::AdminSuperList]], start::Vector
+					_sig (admin, start?);
 
-_list SamplingSuper _super;
+_sublist sampSeqAtts _atts sample::Vector[::Reference[::SamplingSuper]], start::Vector
+					_sig (sample, start?);
+_sublist OccSeqSubList _atts occasion::Vector, level::Reference[::VarLevel], start::Vector
+					_sig (occasion, level, start?);
+_list StudyDesign _atts armSize::Int, sameTimes::Boolean, 
+						occasionSequence::Vector[::OccSeqSubList], interventionSequence::intSeqAtts, samplingSequence::sampSeqAtts
+		_sig (interventionSequence, samplingSequence?, occasionSequence?, armSize?, sameTimes?);
 
 _list DesignSpaceCatCov _atts objRef::GenericEnum, element::sampleelement, discrete::Vector, range::Vector
 						_sig (objRef, element, discrete),
@@ -176,13 +207,13 @@ _list DesignSpaceCatCov _atts objRef::GenericEnum, element::sampleelement, discr
 _list DesignSpaceCov _atts objRef::Reference[::Real], element::sampleelement, discrete::Vector, range::Vector
 						_sig (objRef, element, discrete),
 							(objRef, element, range);
-_list DesignSpaceAmt _atts objRef::Vector[::Reference[::Administration]], element::sampleelement, discrete::Vector, range::Vector
+_list DesignSpaceAmt _atts objRef::Vector[::Reference[::AdminSimpleList]], element::sampleelement, discrete::Vector, range::Vector
 						_sig (objRef, element, discrete),
 							(objRef, element, range);
-_list DesignSpaceDoseTime _atts objRef::Vector[::Reference[::Administration]], element::sampleelement, discrete::Vector, range::Vector
+_list DesignSpaceDoseTime _atts objRef::Vector[::Reference[::AdminSimpleList]], element::sampleelement, discrete::Vector, range::Vector
 						_sig (objRef, element, discrete),
 							(objRef, element, range);
-_list DesignSpaceDuration _atts objRef::Vector[::Reference[::Administration]], element::sampleelement, discrete::Vector, range::Vector
+_list DesignSpaceDuration _atts objRef::Vector[::Reference[::AdminSimpleList]], element::sampleelement, discrete::Vector, range::Vector
 						_sig (objRef, element, discrete),
 							(objRef, element, range);
 _list DesignSpaceNumTimes _atts objRef::Vector[::Reference[::SamplingSuper]], element::sampleelement, discrete::Vector, range::Vector
@@ -201,22 +232,34 @@ _list DesignSpaceParam _atts objRef::Vector[::Reference[::Real]], element::sampl
 						_sig (objRef, element, discrete),
 							(objRef, element, range);
 
+_list SamplingSuper _super;
+
 _list SimpleSamplingList _extends SamplingSuper _atts type::sampletype, outcome::Reference[::Real], sampleTime::Vector,
-								numberTimes::Int, numberSamples::Vector[::Int]
-							_sig(type, outcome, sampleTime?, numberTimes?, numberSamples?);
-_list ComplexSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::sampSeqAtts], numberTimes::Int
-							_sig(type,combination, numberTimes?);
+								numberTimes::Int, deltaTime::Real, blq::Real, ulq::Real, numberSamples::Vector[::Int]
+							_sig(type, outcome, sampleTime, numberTimes?, numberSamples?, deltaTime?, blq?, ulq?);
+//_list ComplexSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::sampSeqAtts], numberTimes::Int
+//							_sig(type,combination, numberTimes?);
 _list DerivedSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::Reference[::SamplingSuper]],
-														numberTimes::Int
-							_sig(type,combination, numberTimes?);
+														numberTimes::Int, start::Real, relative::Boolean
+							_sig(type,combination, numberTimes?, start?, relative?);
 
 _type covArgEnumType _enum(constant, idvDependent, occDependent); 
 
 							
 _type estAlgo _enum(saem, foce, fo, focei);
 _type solverType _enum(stiff, nonStiff);							
-							
+_type OptAlgoType _enum(simplex, fw);
+
 _prop algo::estAlgo, solver::solverType, armSize::Int, totalSize::Int, numberSamples::Int, totalCost::Real, numberArms::Int;
+
+_prop optAlgo::OptAlgoType, fim::String, previousFim::String, graphOnly::Boolean, typeIError::Real, powerComparison::Boolean, 
+		nSubjectsComparison::Boolean,
+		equivalenceRange::Vector, powerEquivalence::Boolean, nSubjectsEquivalence::Boolean, typeIIError::Real,
+		graphLogical::Boolean, logLogical::Boolean, namesDataX::Vector[::String], namesDataY::Vector[::String],
+		graphInfA::Vector, graphSupA::Vector, subjectsOpt::Boolean, lowerA::Vector, upperA::Vector, iterPrint::Boolean,
+		simplexParameter::Real, maxIter::Int, rcTol::Real,identicalTimes::Boolean, features::Vector[::sampleelement];
+		
+_prop amount::Real, duration::Real, sampleTime::Real, numberTimes::Int, doseTime::Real;
 
 _object mdlObj;
 _object dataObj;
@@ -270,16 +313,29 @@ _block DATA_DERIVED_VARIABLES (0,) _statements (,) _listDefn
 _block SOURCE (1,1) _statements (1,1) _listDefn
 		_list _key=file Source;
 		
-_block STRUCTURAL (,) _statements (,) _listDefn
+_block STRUCTURAL (,) _statements (,) _listDefn, _eqnDefn+
 	_list _key=value StructuralEstimate;
 
-_block VARIABILITY (,) _statements (,) _listDefn
+_block VARIABILITY (,) _statements (,) _listDefn, _eqnDefn+
 	_list _key=type varType.cov->CovarMatrix, varType.corr->CorrMatrix, varType.sd -> SDEstimate, varType.var -> VarEstimate;
 	
 _block ESTIMATE (,1) _statements (,) _propStmt
 		_prop algo;
 _block SIMULATE (,1) _statements (,) _propStmt
 		_prop solver?;
+_block EVALUATE (,1) _statements (,) _propStmt
+		_prop graphOnly?, fim?, previousFim?, typeIError?, typeIIError?, powerEquivalence?, powerComparison?, nSubjectsComparison?, equivalenceRange?,
+				nSubjectsEquivalence?, graphLogical?, logLogical?, namesDataX?, namesDataY?, graphInfA?, graphSupA?, subjectsOpt?, lowerA?, upperA?,
+				iterPrint?, simplexParameter?, maxIter?, rcTol?, identicalTimes?, features?,
+				armSize?, amount?, totalSize?, numberSamples?, totalCost?, numberArms?, duration?, sampleTime?,
+				numberTimes?, numberArms?, armSize?, doseTime?;
+				
+_block OPTIMISE (,1) _statements (,) _propStmt
+		_prop optAlgo?, graphOnly?, fim?, previousFim?, typeIError?, typeIIError?, powerEquivalence?, powerComparison?, nSubjectsComparison?, equivalenceRange?,
+				nSubjectsEquivalence?, graphLogical?, logLogical?, namesDataX?, namesDataY?, graphInfA?, graphSupA?, subjectsOpt?, lowerA?, upperA?,
+				iterPrint?, simplexParameter?, maxIter?, rcTol?, identicalTimes?, features?,
+				armSize?, amount?, totalSize?, numberSamples?, totalCost?, numberArms?, duration?, sampleTime?,
+				numberTimes?, numberArms?, armSize?, doseTime?;
 
 _block TARGET_SETTINGS (,)  _arguments target::String, settingsFile::Vector[::String]? _statements (,) _propStmt _prop _free;
 
@@ -296,16 +352,19 @@ _block COMPARTMENT (,) _statements (,) _listDefn, _anonList
 				
 _block FUNCTIONS (,) _statements (,) _eqnDefn;
 
-_block ADMINISTRATION (1, ) _statements (,) _listDefn, _eqnDefn, _eqnDefn+
-	_list _key=input Administration;
+_block ADMINISTRATION (1, ) _statements (,) _listDefn
+	_list _key=type AdminTypeType.simple->AdminSimpleList, AdminTypeType.combi->AdminComplexList, AdminTypeType.resetAll->AdminResetAllList,
+						AdminTypeType.reset->AdminResetList;
+
+_block ACTION (, ) _statements (,) _listDefn
+	_list _key=type AdminTypeType.resetAll->AdminResetAllList, AdminTypeType.reset->AdminResetList;
 	
 _block STUDY_DESIGN (,) _statements (,) _listDefn
 		_prop armSize?, totalSize?, numberSamples?, totalCost?, numberArms?
 		_list _key=interventionSequence StudyDesign;
 
 _block SAMPLING (,) _statements (,) _listDefn
-		_list _key=type sampletype.simple->SimpleSamplingList, sampletype.complex->ComplexSamplingList,
-					sampletype.derived->DerivedSamplingList;
+		_list _key=type sampletype.simple->SimpleSamplingList, sampletype.combi->DerivedSamplingList;
 
 _block DESIGN_SPACES (,) _statements (,) _listDefn
 		_list _key=element sampleelement.catCov->DesignSpaceCatCov, sampleelement.covariate->DesignSpaceCov, sampleelement.amount->DesignSpaceAmt,
@@ -327,14 +386,16 @@ _container mdlObj _has COVARIATES, VARIABILITY_LEVELS, STRUCTURAL_PARAMETERS, VA
 					INDIVIDUAL_VARIABLES, MODEL_PREDICTION, OBSERVATION, GROUP_VARIABLES, IDV, FUNCTIONS;
 _container dataObj _has DATA_INPUT_VARIABLES, DECLARED_VARIABLES, DATA_DERIVED_VARIABLES, SOURCE, FUNCTIONS;
 _container parObj _has VARIABILITY, DECLARED_VARIABLES, STRUCTURAL;
-_container taskObj _has ESTIMATE, SIMULATE;
+_container taskObj _has ESTIMATE, SIMULATE, OPTIMISE, EVALUATE;
 _container mogObj _has OBJECTS;
-_container designObj _has DECLARED_VARIABLES, ADMINISTRATION, STUDY_DESIGN, SAMPLING, DESIGN_SPACES, COVARIATES, DESIGN_PARAMETERS;
+_container designObj _has DECLARED_VARIABLES, ADMINISTRATION, ACTION, STUDY_DESIGN, SAMPLING, DESIGN_SPACES, COVARIATES, DESIGN_PARAMETERS;
 _container priorObj _has PRIOR_PARAMETERS, NON_CANONICAL_DISTRIBUTION, PRIOR_VARIABLE_DEFINITION;
 _container MODEL_PREDICTION _has DEQ, COMPARTMENT;
 _container NON_CANONICAL_DISTRIBUTION _has PRIOR_SOURCE, INPUT_PRIOR_DATA;
 _container ESTIMATE _has TARGET_SETTINGS;
 _container SIMULATE _has TARGET_SETTINGS;
+_container EVALUATE _has TARGET_SETTINGS;
+_container OPTIMISE _has TARGET_SETTINGS;
 
 
 

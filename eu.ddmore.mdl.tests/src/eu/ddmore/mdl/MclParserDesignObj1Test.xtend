@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserDesignObj1Test {
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension MdlTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
@@ -49,51 +49,40 @@ warfarin_design = designObj {
 	ADMINISTRATION{
 
 		# could use an adm type instead so do
-		dreg1 : { input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
-		dreg2 : { input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
-		dreg3 : { input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
-		dreg4 : { input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
+		dreg1 : { type is simple, input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
+		dreg2 : { type is simple, input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
+		dreg3 : { type is simple, input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
+		dreg4 : { type is simple, input=GUT, doseTime=seq(doseStart, doseEnd, doseGap), amount=baseAmt*0, start=doseStart, end=doseEnd}
 	}
 
 	STUDY_DESIGN{
 		arm1 : {
 		     	armSize = 10,
-		     	interventionSequence = [
-		       	{
+		     	interventionSequence = {
 		       		admin = dreg1,
-		       		start = epochStart,
-		       		end = epochEnd
+		       		start = [epochStart, epochEnd]
 		      	}
-		     ]
 		}
 		arm2 : {
 		     armSize = 20,
-		     interventionSequence = [
-		     	{
+		     interventionSequence = {
 		     		admin = dreg2,
-		       		start = epochStart,
-		       		end = epochEnd}
-		     ]
+		       		start = [epochStart, epochEnd]
+		     }
 		}
 		arm3 : {
 		     armSize = 20,
-		     interventionSequence = [
-		     	{
+		     interventionSequence = {
 			       admin = dreg3,
-			       start = epochStart,
-			       end = epochEnd
-			     }
-		     ]
+			       start = [epochStart, epochEnd]
+			 }
 		}
 		arm4 : {
 		     armSize = 20,
-		     interventionSequence = [
-		     	{
+		     interventionSequence = {
 			       admin = dreg4,
-			       start = epochStart,
-			       end = epochEnd
-			     }
-		     ]
+			       start = [epochStart, epochEnd]
+			 }
 		}
 	}
 }

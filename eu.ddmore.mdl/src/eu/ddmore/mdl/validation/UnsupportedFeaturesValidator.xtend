@@ -95,9 +95,10 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	//Check for unsupported object names
 	def checkUnsupportedDifferentWrt(ValuePair it){
 		if(attributeName == ListDefinitionTable::DERIV_TYPE_ATT){
+			val blk = EcoreUtil2::getContainerOfType(eContainer, BlockStatement)
 			val attList = EcoreUtil2::getContainerOfType(eContainer, AttributeList)
 			// check first that this is a well constructed derivative list in the correct block etc.
-			if(attList.isKeyAttributeDefined){
+			if(blk != null && attList != null && blk.isKeyAttributeDefined(attList)){
 				validateWrt(attList)
 				validateInitTime(attList)
 			}
@@ -122,7 +123,8 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 		val blk = owningBlock?.identifier
 		val nm = attributeName
 		if(blk != null && nm != null){
-			if(unsupportedAttributes.get(blk)?.contains(nm)){
+			val attMap = unsupportedAttributes.get(blk)
+			if(attMap != null && attMap.contains(nm)){
 				warning("Attribute name '" + nm + "' is not currently supported for execution in R.", 
 						MdlPackage.eINSTANCE.valuePair_ArgumentName,
 						FEATURE_NOT_SUPPORTED, nm)

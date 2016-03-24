@@ -18,6 +18,7 @@ import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.utils.MdlUtils
 import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.provider.BlockListDefinition
 
 // validates attributes in lists, functions and properties
 class ListValidator extends AbstractMdlValidator {
@@ -92,14 +93,24 @@ class ListValidator extends AbstractMdlValidator {
 	
 	@Check
 	def validateAttributeList(AttributeList it){
-		if(isKeyAttributeDefined){
-			unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
-				MdlPackage.eINSTANCE.attributeList_Attributes, MdlValidator::MANDATORY_LIST_ATT_MISSING, name) ]
-		}		
-		else{
-			error("mandatory key attribute is missing in list.",
-				MdlPackage.eINSTANCE.attributeList_Attributes, MdlValidator::MANDATORY_LIST_KEY_ATT_MISSING, "")
+		val owningBlock = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		if(owningBlock != null){
+			if(owningBlock.isKeyAttributeDefined(it)){
+				val keyVal = getAttributeEnumValue(owningBlock.blkId.keyAttName)
+				if(BlockListDefinition::create(owningBlock).getListDefnByKeyValue(keyVal) == null){
+					error("Attribute list key value '" + keyVal + "' is not recognised.",
+						MdlPackage.eINSTANCE.attributeList_Attributes, MdlValidator::LIST_KEY_VAL_UNRECOGNISED, "")
+				}
+				else
+					unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
+						MdlPackage.eINSTANCE.attributeList_Attributes, MdlValidator::MANDATORY_LIST_ATT_MISSING, name) ]
+			}		
+			else{
+				error("mandatory key attribute is missing in list.",
+					MdlPackage.eINSTANCE.attributeList_Attributes, MdlValidator::MANDATORY_LIST_KEY_ATT_MISSING, "")
+			}
 		}
+		
 	}
 
 	@Check

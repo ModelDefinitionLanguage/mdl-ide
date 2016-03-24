@@ -6,6 +6,7 @@ import java.util.List
 import java.util.Map
 import eu.ddmore.mdllib.mdllib.BlockDefinition
 import java.util.HashMap
+import eu.ddmore.mdl.mdl.BlockStatement
 
 class BlockListDefinition {
 //	extension ListDefinitionProvider ldp = new ListDefinitionProvider
@@ -14,6 +15,12 @@ class BlockListDefinition {
 	val Map<String, ListDefInfo> _listDefns
 	val ListDefInfo _sglListDefn
 
+
+	static def create(BlockStatement bs){
+		if(bs != null){
+			new BlockListDefinition(bs.blkId)
+		}
+	}
 
 	new(BlockDefinition bd){
 		_key = bd.keyAttName
