@@ -26,7 +26,7 @@ abstract class AbstractListTypeInfo extends TypeInfo{
 		// use underlying type in case it is a reference 
 		val otherType = other.underlyingType
 		switch(otherType){
-			ListTypeInfo:  otherType.matchesList(this)
+			AbstractListTypeInfo:  otherType.matchesList(this)
 			PrimitiveTypeInfo:{
 				PrimitiveTypeInfo::isPrimitiveCompatible(this.secondaryType, otherType.theType)
 			}
