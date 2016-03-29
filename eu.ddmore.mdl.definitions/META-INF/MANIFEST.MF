@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: MDL Definitions
+Bundle-SymbolicName: eu.ddmore.mdl.definitions
+Bundle-Version: 1.0.0.qualifier
