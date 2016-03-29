@@ -639,29 +639,6 @@
 					</math:Piece>
 				</Piecewise>
 			</ColumnMapping>
-			<MultipleDVMapping>
-				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DV"/>
-				<Piecewise>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om1" symbIdRef="CP_obs"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DVID"/>
-								<ct:Int>1</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om2" symbIdRef="PCA_obs"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DVID"/>
-								<ct:Int>2</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-				</Piecewise>
-			</MultipleDVMapping>
 			<DataSet xmlns="http://www.pharmml.org/pharmml/0.8/Dataset">
 				<Definition>
 					<Column columnId="ID" columnType="id" valueType="int" columnNum="1"/>

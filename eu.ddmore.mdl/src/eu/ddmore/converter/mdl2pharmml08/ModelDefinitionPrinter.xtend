@@ -135,12 +135,12 @@ class ModelDefinitionPrinter {
 		return model;
 	}
 	
-    def getCategoryDefinitions(Expression expr){
+    def getCategoryDefinitions(CategoricalDefinitionExpr expr){
     	val retVal = new ArrayList<String>
-    	switch(expr){
-    		CategoricalDefinitionExpr:
+//    	switch(expr){
+//    		CategoricalDefinitionExpr:
     			expr.categories.forEach[retVal.add(name)]
-    	}
+//    	}
     	retVal
     }
     

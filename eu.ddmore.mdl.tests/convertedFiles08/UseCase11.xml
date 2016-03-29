@@ -78,31 +78,6 @@
 				</ct:Assign>
 			</ct:Variable>
 		</StructuralModel>
-		<ObservationModel blkId="om1">
-			<Discrete>
-				<CountData>
-				<!-- Note that this parameter is local to this block, but uses the same name
-					as the lambda argument. --> 
-				<PopulationParameter symbId="LAMBDA">
-					<ct:Assign>
-						<ct:SymbRef blkIdRef="sm" symbIdRef="LAMBDA"/>
-					</ct:Assign>
-				</PopulationParameter>
-				<CountVariable symbId="Y"/>
-				<PMF transform="identity">
-					<Distribution>
-						<UncertML>
-							<PoissonDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/poisson">
-								<rate>
-									<var varId="LAMBDA"/>
-								</rate>
-							</PoissonDistribution>
-						</UncertML>
-					</Distribution>
-				</PMF>
-				</CountData>
-			</Discrete>
-		</ObservationModel>
 	</ModelDefinition>
 	<TrialDesign xmlns="http://www.pharmml.org/pharmml/0.8/TrialDesign">
 		<ExternalDataSet toolName="NONMEM" oid="nm_ds">
@@ -113,10 +88,6 @@
 			<ColumnMapping>
 				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="CP"/>
 				<ct:SymbRef  symbIdRef="CP"/>
-			</ColumnMapping>
-			<ColumnMapping>
-			    <ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DV"/>
-				<ct:SymbRef blkIdRef="om1" symbIdRef="Y"/>
 			</ColumnMapping>
 			<DataSet xmlns="http://www.pharmml.org/pharmml/0.8/Dataset">
 				<Definition>

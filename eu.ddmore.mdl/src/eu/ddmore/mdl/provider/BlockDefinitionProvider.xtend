@@ -48,8 +48,8 @@ class BlockDefinitionProvider {
 			switch(st){
 				case StatementType.ANON_LIST_STMT:
 					stmtClass.anonymousListStatement
-				case StatementType.CAT_PROP_ASSIGN:
-					stmtClass.categoricalProbabilityAssign
+//				case StatementType.CAT_PROP_ASSIGN:
+//					stmtClass.categoricalProbabilityAssign
 				case StatementType.ENUM_DEFN:
 					stmtClass.enumerationDefinition
 				case StatementType.EQN_DEFN:

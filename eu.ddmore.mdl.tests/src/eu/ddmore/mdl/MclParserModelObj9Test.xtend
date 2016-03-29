@@ -41,8 +41,12 @@ Poisson_DIST_mdl = mdlObj{
       logLAMBDA=ln(POP_BASECOUNT) + POP_BETA*CP + eta_PPV_EVENT
    }# end INDIVIDUAL_VARIABLES
 
+   RANDOM_VARIABLE_DEFINITION(level=DV){
+   		Y withCategories {success, fail } ~ Poisson(lambda = logLAMBDA)
+   }
+
    OBSERVATION{
-	  Y : { type is count, distn = Poisson(lambda = logLAMBDA) }
+	  :: { type is count, variable = Y}
    }# end ESTIMATION
 
 } # end of model object

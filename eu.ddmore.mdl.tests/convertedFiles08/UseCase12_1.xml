@@ -80,38 +80,6 @@
 				</StructuredModel>
 			</IndividualParameter>
 		</ParameterModel>
-		<ObservationModel blkId="om1">
-			<Discrete>
-				<CategoricalData ordered="no">
-					<!-- Note that this parameter is local to this block, but uses the same name
-						as the lambda argument.  --> 
-					<PopulationParameter symbId="P1">
-						<ct:Assign>
-							<ct:SymbRef blkIdRef="pm" symbIdRef="P1"/>
-						</ct:Assign>
-					</PopulationParameter>
-					<ListOfCategories>
-						<Category symbId="success"/>
-						<Category symbId="fail"/>
-					</ListOfCategories>
-					<CategoryVariable symbId="Y"/>
-					<PMF transform="identity">
-						<Distribution>
-							<UncertML>
-								<BernoulliDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/3.0">
-									<categoryProb definition="">
-										<name>success</name>
-										<probability>
-											<var varId="P1"/>
-										</probability>
-									</categoryProb>
-								</BernoulliDistribution>
-							</UncertML>
-						</Distribution>
-					</PMF>
-				</CategoricalData>
-			</Discrete>
-		</ObservationModel>
 	</ModelDefinition>
 	<TrialDesign xmlns="http://www.pharmml.org/pharmml/0.8/TrialDesign">
 		<ExternalDataSet toolName="NONMEM" oid="nm_ds">
@@ -126,14 +94,6 @@
 			<ColumnMapping>
 				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="CP"/>
 				<ct:SymbRef blkIdRef="cm" symbIdRef="CP"/>
-			</ColumnMapping>
-			<ColumnMapping>
-				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DV"/>
-					<ct:SymbRef blkIdRef="om1" symbIdRef="Y"/>
-					<math:CategoryMapping>
-						<ds:Map modelSymbol="success" dataSymbol="0"/>
-						<ds:Map modelSymbol="fail" dataSymbol="1"/>
-					</math:CategoryMapping>
 			</ColumnMapping>
 			<DataSet xmlns="http://www.pharmml.org/pharmml/0.8/Dataset">
 				<Definition>

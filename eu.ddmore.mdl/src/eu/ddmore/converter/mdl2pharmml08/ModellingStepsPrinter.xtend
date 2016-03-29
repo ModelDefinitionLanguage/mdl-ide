@@ -628,9 +628,19 @@ class ModellingStepsPrinter {
 	private def isDefinedInMdlObservations(MclObject it, Expression testExpr){
 		switch(testExpr){
 			SymbolReference:
-				mdlObservations.exists[name == testExpr?.ref.name]
+				//@TODO fix this for new obs types 
+				mdlObservations.exists[o|
+					if(o instanceof SymbolDefinition)
+						o.name == testExpr?.ref.name
+					else false
+				]
 			CategoryValueReference:
-				mdlObservations.exists[name == testExpr?.symbolDefnFromCatValRef?.name]
+				//@TODO fix this for new obs types 
+				mdlObservations.exists[o|
+					if(o instanceof SymbolDefinition)
+						o.name == testExpr?.symbolDefnFromCatValRef?.name
+					else false
+				]
 			default: false
 		} 
 	}
@@ -639,12 +649,22 @@ class ModellingStepsPrinter {
 		switch(testExpr){
 			MappingExpression:
 				for(p : testExpr.attList){
-					if(mdlObservations.exists[name == p.mappedSymbol.ref.name])
+				//@TODO fix this for new obs types 
+					if(mdlObservations.exists[o|
+						if(o instanceof SymbolDefinition)
+							name == p.mappedSymbol?.ref?.name
+						else false
+					])
 						return true
 				}
 			CatValRefMappingExpression:
 				for(p : testExpr.attLists){
-					if(mdlObservations.exists[name == p.catRef.getSymbolDefnFromCatValRef.name])
+				//@TODO fix this for new obs types 
+					if(mdlObservations.exists[o|
+						if(o instanceof SymbolDefinition)
+							name == p.catRef.getSymbolDefnFromCatValRef.name
+						else false
+					])
 						return true
 				}
 			default: false

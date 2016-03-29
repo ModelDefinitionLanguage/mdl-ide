@@ -85,31 +85,6 @@
 				</ct:Assign>
 			</ct:Variable>
 		</StructuralModel>
-		<ObservationModel blkId="om1">
-			<Discrete>
-				<CategoricalData ordered="no">
-					<ListOfCategories>
-						<Category symbId="success"/>
-						<Category symbId="fail"/>
-					</ListOfCategories>
-					<CategoryVariable symbId="Y"/>
-					<PMF transform="identity">
-						<Distribution>
-							<UncertML>
-								<BinomialDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/3.0">
-									<numberOfTrials>
-										<nVal>1</nVal>
-									</numberOfTrials>
-									<probabilityOfSuccess>
-										<var varId="P1"/>
-									</probabilityOfSuccess>
-								</BinomialDistribution>
-							</UncertML>
-						</Distribution>
-					</PMF>
-				</CategoricalData>
-			</Discrete>
-		</ObservationModel>
 	</ModelDefinition>
 	<TrialDesign xmlns="http://www.pharmml.org/pharmml/0.8/TrialDesign">
 		<ExternalDataSet toolName="NONMEM" oid="nm_ds">
@@ -120,14 +95,6 @@
 			<ColumnMapping>
 				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="CP"/>
 				<ct:SymbRef  symbIdRef="CP"/>
-			</ColumnMapping>
-			<ColumnMapping>
-				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DV"/>
-					<ct:SymbRef blkIdRef="om1" symbIdRef="Y"/>
-					<math:CategoryMapping>
-						<ds:Map modelSymbol="success" dataSymbol="0"/>
-						<ds:Map modelSymbol="fail" dataSymbol="1"/>
-					</math:CategoryMapping>
 			</ColumnMapping>
 			<DataSet xmlns="http://www.pharmml.org/pharmml/0.8/Dataset">
 				<Definition>

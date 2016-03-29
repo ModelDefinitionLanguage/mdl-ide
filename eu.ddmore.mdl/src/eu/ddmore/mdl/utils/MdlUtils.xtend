@@ -277,12 +277,12 @@ class MdlUtils {
 	}
 	
 	def getMdlObservations(MclObject it){
-		val retVal = new ArrayList<SymbolDefinition>
+		val retVal = new ArrayList<Statement>
 		for(obsStmt : blocks.filter[identifier == BlockDefinitionTable::OBS_BLK_NAME]){
 			val body = obsStmt.body
 			switch(body){
 				BlockStatementBody:{
-					body.statements.forEach[retVal.add(it as SymbolDefinition)]
+					body.statements.forEach[retVal.add(it as Statement)]
 				}
 			}
 		}

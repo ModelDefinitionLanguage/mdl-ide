@@ -184,63 +184,6 @@
 				</ct:Assign>
 			</ct:Variable>
 		</StructuralModel>
-		<ObservationModel blkId="om1">
-			<Discrete>
-				<CategoricalData>
-					<ListOfCategories>
-						<Category symbId="c1"/>
-						<Category symbId="c2"/>
-						<Category symbId="c0"/>
-						<Category symbId="c3"/>
-					</ListOfCategories>
-					<CategoryVariable symbId="Y"/>
-					<ProbabilityAssignment>
-						<Probability linkFunction="identity">
-							<math:LogicBinop op="eq">
-								<ct:SymbRef symbIdRef="Y"/>
-								<ct:SymbRef symbIdRef="c1"/>
-							</math:LogicBinop>
-						</Probability>
-						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob1"/>
-						</ct:Assign>
-					</ProbabilityAssignment>
-					<ProbabilityAssignment>
-						<Probability linkFunction="identity">
-							<math:LogicBinop op="eq">
-								<ct:SymbRef symbIdRef="Y"/>
-								<ct:SymbRef symbIdRef="c2"/>
-							</math:LogicBinop>
-						</Probability>
-						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob2"/>
-						</ct:Assign>
-					</ProbabilityAssignment>
-					<ProbabilityAssignment>
-						<Probability linkFunction="identity">
-							<math:LogicBinop op="eq">
-								<ct:SymbRef symbIdRef="Y"/>
-								<ct:SymbRef symbIdRef="c0"/>
-							</math:LogicBinop>
-						</Probability>
-						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob0"/>
-						</ct:Assign>
-					</ProbabilityAssignment>
-					<ProbabilityAssignment>
-						<Probability linkFunction="identity">
-							<math:LogicBinop op="eq">
-								<ct:SymbRef symbIdRef="Y"/>
-								<ct:SymbRef symbIdRef="c3"/>
-							</math:LogicBinop>
-						</Probability>
-						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob3"/>
-						</ct:Assign>
-					</ProbabilityAssignment>
-				</CategoricalData>
-			</Discrete>
-		</ObservationModel>
 	</ModelDefinition>
 	<TrialDesign xmlns="http://www.pharmml.org/pharmml/0.8/TrialDesign">
 		<ExternalDataSet toolName="NONMEM" oid="nm_ds">
@@ -251,16 +194,6 @@
 			<ColumnMapping>
 				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="CP"/>
 				<ct:SymbRef  symbIdRef="CP"/>
-			</ColumnMapping>
-			<ColumnMapping>
-				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DV"/>
-					<ct:SymbRef blkIdRef="om1" symbIdRef="Y"/>
-					<math:CategoryMapping>
-						<ds:Map modelSymbol="c0" dataSymbol="0"/>
-						<ds:Map modelSymbol="c1" dataSymbol="1"/>
-						<ds:Map modelSymbol="c2" dataSymbol="2"/>
-						<ds:Map modelSymbol="c3" dataSymbol="3"/>
-					</math:CategoryMapping>
 			</ColumnMapping>
 			<DataSet xmlns="http://www.pharmml.org/pharmml/0.8/Dataset">
 				<Definition>

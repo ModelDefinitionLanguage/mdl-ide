@@ -1019,47 +1019,6 @@
 				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="TIME"/>
 				<ct:SymbRef  symbIdRef="T"/>
 			</ColumnMapping>
-			<MultipleDVMapping>
-				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DV"/>
-				<Piecewise>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om1" symbIdRef="LNVEGF_obs"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="FLAG"/>
-								<ct:Int>5</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om2" symbIdRef="LNsVEGFR2_obs"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="FLAG"/>
-								<ct:Int>6</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om3" symbIdRef="LNsVEGFR3_obs"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="FLAG"/>
-								<ct:Int>7</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om4" symbIdRef="LNsKIT_obs"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="FLAG"/>
-								<ct:Int>8</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-				</Piecewise>
-			</MultipleDVMapping>
 			<ColumnMapping>
 				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DOS"/>
 				<Piecewise xmlns="http://www.pharmml.org/pharmml/0.8/Dataset">

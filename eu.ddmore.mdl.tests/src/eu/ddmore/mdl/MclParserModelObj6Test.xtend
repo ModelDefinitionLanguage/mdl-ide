@@ -71,11 +71,19 @@ warfarin_PK_SEXAGE_mdl = mdlObj {
 		Prob3 = 1 - P2
 	}# end MODEL_PREDICTION
 
+	RANDOM_VARIABLE_DEFINITION(level=DV){
+		PAIN withCategories { mild, moderate, severe, missing} ~ Categorical(probability=[Prob0, Prob1, Prob2, Prob3])
+		TENDERNESS withCategories {mild, moderate, severe, missing} ~ Categorical(probability=[Prob0, Prob1, Prob2, Prob3])
+ 	}
+
+
 	OBSERVATION{
+		:: { type is categorical, variable = PAIN }
+		:: { type is categorical, variable = TENDERNESS }
 		# 11) Now use category definitions to describe categorical observations
-		PAIN : { type is categorical withCategories {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} }
+		# PAIN : { type is categorical withCategories {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} }
 		
-		TENDERNESS : { type is categorical withCategories {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} } 
+		# TENDERNESS : { type is categorical withCategories {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} } 
 	}
 } # end of model object
 '''

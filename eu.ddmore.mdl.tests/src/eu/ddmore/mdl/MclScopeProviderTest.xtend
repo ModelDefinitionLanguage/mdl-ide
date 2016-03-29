@@ -25,7 +25,7 @@ import eu.ddmore.mdl.utils.MdlUtils
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclScopeProviderTest {
-	@Inject extension MdlTestHelper<Mcl>
+	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	@Inject extension IScopeProvider
 	

@@ -101,8 +101,13 @@ Categorical_DIST_mdl = mdlObj{
 	  Prob3 = 1 - P2
    }# end MODEL_PREDICTION
 
+	RANDOM_VARIABLE_DEFINITION(level=DV){
+		Y withCategories{c0, c1, c2, c3} ~ Categorical(probability=[Prob0, Prob1, Prob2, Prob3])
+	}
+
+
    OBSERVATION{
-	   Y : {type is categorical withCategories{ c0 when Prob0, c1 when Prob1, c2 when Prob2, c3 when Prob3} } 
+	   :: { type is categorical, variable=Y }
     }# end ESTIMATION
 
 } # end of model object

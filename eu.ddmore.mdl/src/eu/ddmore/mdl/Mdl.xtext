@@ -37,8 +37,8 @@ BlockArgument:
 Statement:
 	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-	EnumerationDefinition|PropertyStatement|
-	CategoricalProbabilityAssign//|UserFunctionDefinition
+	EnumerationDefinition|PropertyStatement //|
+//	CategoricalProbabilityAssign//|UserFunctionDefinition
 ;
 
 
@@ -74,7 +74,9 @@ TransformedDefinition returns EquationTypeDefinition:
 ;
 
 RandomVariableDefinition:
-	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = Expression ';'?
+	(name = ID|  transform = ID '(' name=ID ')') RANDOM_ASSIGN distn = Expression ';'?
+//	(name = ID|  transform = ID '(' name=ID ')') 
+//		(WITH BEGIN catDefns+=CategoryValueDefinitionNoMapping (',' catDefns+=CategoryValueDefinitionNoMapping)* END)? RANDOM_ASSIGN distn = Expression ';'?
 ;
 
 TypeSpec returns lib::TypeSpec:
@@ -82,17 +84,17 @@ TypeSpec returns lib::TypeSpec:
 ;
 
 EnumerationDefinition:
-	name = ID  catDefn=CategoricalDefinitionExpr ';'?
+	name = ID  catDefn=CategoricalDefinitionExpr (RANDOM_ASSIGN distn = Expression)? ';'?
 ;
 
-CategoricalProbabilityAssign:
-	(probFunc=ProbabilityFunction ASSIGN expression=Expression  |
-	transform = ID '(' probFunc=ProbabilityFunction ')' ASSIGN expression=Expression) ';'?
-;
+//CategoricalProbabilityAssign:
+//	(probFunc=ProbabilityFunction ASSIGN expression=Expression  |
+//	transform = ID '(' probFunc=ProbabilityFunction ')' ASSIGN expression=Expression) ';'?
+//;
 
-ProbabilityFunction:
-	probFunc = 'P' '(' catRef=SymbolReference relOp=('=='|'<='|'>='|'<'|'>') catValRef=CategoryValueReference ')'
-;
+//ProbabilityFunction:
+//	probFunc = 'P' '(' catRef=SymbolReference relOp=('=='|'<='|'>='|'<'|'>') catValRef=CategoryValueReference ')'
+//;
 
 
 ListDefinition:
@@ -145,13 +147,25 @@ PropertyStatement:
 ;
 
 
-CategoricalDefinitionExpr returns lib::Expression:
+CategoricalDefinitionExpr:
 	{CategoricalDefinitionExpr} WITH BEGIN categories += CategoryValueDefinition (=>',' categories += CategoryValueDefinition)* END
-		(ASSIGN expression = Expression)?
+//		(ASSIGN expression = Expression)?
 ;
 
+
+//CategoryValueDefinition:
+//	CategoryValueDefinitionNoMapping | CategoryValueDefinitionWithMapping
+//;
+
+//CategoryValueDefinitionNoMapping:
+//	{CategoryValueDefinitionNoMapping}name = ID
+//;
+
+
+//CategoryValueDefinitionWithMapping:
 CategoryValueDefinition:
-	name = ID (WHEN ordered?=ORDERED? mappedTo=Expression)?
+	{CategoryValueDefinition}name = ID (WHEN mappedTo=Expression)?
+//	{CategoryValueDefinitionWithMapping}name = ID (WHEN mappedTo=Expression)?
 ;
 
 AttributeList:

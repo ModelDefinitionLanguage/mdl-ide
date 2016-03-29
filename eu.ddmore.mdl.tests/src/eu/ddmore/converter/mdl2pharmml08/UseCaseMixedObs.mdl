@@ -100,12 +100,13 @@ Categorical_DIST_mdl = mdlObj{
 
 	RANDOM_VARIABLE_DEFINITION(level=DV){
 	    EPS_Y ~ Normal(mean = 0, var = 1) # This maps the standard error model in PharmML. The error model is predefined.
+	    PAIN withCategories {mild, moderate, severe, missing} ~ Categorical(probability = [Prob0, Prob1, Prob2, Prob3])
 	}
 	
 
    OBSERVATION{
    	    Y = additiveError(additive=1, prediction=EDRUG, eps=EPS_Y)
-		PAIN : { type is categorical withCategories {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} }
+		:: { type is categorical, variable=PAIN }  # withCategories {mild when Prob0, moderate when Prob1, severe when Prob2, missing when Prob3} }
     }# end ESTIMATION
 
 } # end of model object

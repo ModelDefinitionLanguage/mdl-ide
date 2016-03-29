@@ -63,8 +63,12 @@ Poisson_DIST_mdl = mdlObj{
   	LAMBDA = exp(lnLAMBDA)
    }
 
+	RANDOM_VARIABLE_DEFINITION(level=DV){
+		Y withCategories {success, fail } ~ Poisson(lambda = LAMBDA)
+	}
+
    OBSERVATION{
-	  Y : { type is count, distn = Poisson(lambda = LAMBDA) }
+	  :: { type is count, variable=Y }
    }# end ESTIMATION
 
 } # end of model object

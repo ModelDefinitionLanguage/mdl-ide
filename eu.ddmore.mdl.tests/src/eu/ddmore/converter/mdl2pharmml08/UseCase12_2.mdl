@@ -69,9 +69,16 @@ Bernoulli_DIST_mdl = mdlObj{
 	  # P1 = invLogit(LP)
    }# end MODEL_PREDICTION
 
+	RANDOM_VARIABLE_DEFINITION(level=DV){
+		Y withCategories{success, fail} ~ Binomial(probabilityOfSuccess=P1, numberOfTrials=1)
+	}
+
    OBSERVATION{
-     Y : { type is discrete withCategories { success, fail }, distn = Binomial(successCategory=Y.success, probabilityOfSuccess=P1, numberOfTrials=1) }
-   }# end ESTIMATION
+     :: { type is discrete, variable=Y }
+   }
+   #OBSERVATION{
+   #  Y : { type is discrete withCategories { success, fail }, distn = Binomial(successCategory=Y.success, probabilityOfSuccess=P1, numberOfTrials=1) }
+   #}
 } # end of model object
 
 Bernoulli_DIST_task = taskObj{

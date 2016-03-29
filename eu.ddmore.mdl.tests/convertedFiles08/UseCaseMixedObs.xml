@@ -234,63 +234,6 @@
 				</Standard>
 			</ContinuousData>
 		</ObservationModel>
-		<ObservationModel blkId="om2">
-			<Discrete>
-				<CategoricalData>
-					<ListOfCategories>
-						<Category symbId="missing"/>
-						<Category symbId="moderate"/>
-						<Category symbId="mild"/>
-						<Category symbId="severe"/>
-					</ListOfCategories>
-					<CategoryVariable symbId="PAIN"/>
-					<ProbabilityAssignment>
-						<Probability linkFunction="identity">
-							<math:LogicBinop op="eq">
-								<ct:SymbRef symbIdRef="PAIN"/>
-								<ct:SymbRef symbIdRef="missing"/>
-							</math:LogicBinop>
-						</Probability>
-						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob3"/>
-						</ct:Assign>
-					</ProbabilityAssignment>
-					<ProbabilityAssignment>
-						<Probability linkFunction="identity">
-							<math:LogicBinop op="eq">
-								<ct:SymbRef symbIdRef="PAIN"/>
-								<ct:SymbRef symbIdRef="moderate"/>
-							</math:LogicBinop>
-						</Probability>
-						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob1"/>
-						</ct:Assign>
-					</ProbabilityAssignment>
-					<ProbabilityAssignment>
-						<Probability linkFunction="identity">
-							<math:LogicBinop op="eq">
-								<ct:SymbRef symbIdRef="PAIN"/>
-								<ct:SymbRef symbIdRef="mild"/>
-							</math:LogicBinop>
-						</Probability>
-						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob0"/>
-						</ct:Assign>
-					</ProbabilityAssignment>
-					<ProbabilityAssignment>
-						<Probability linkFunction="identity">
-							<math:LogicBinop op="eq">
-								<ct:SymbRef symbIdRef="PAIN"/>
-								<ct:SymbRef symbIdRef="severe"/>
-							</math:LogicBinop>
-						</Probability>
-						<ct:Assign>
-							<ct:SymbRef blkIdRef="sm" symbIdRef="Prob2"/>
-						</ct:Assign>
-					</ProbabilityAssignment>
-				</CategoricalData>
-			</Discrete>
-		</ObservationModel>
 	</ModelDefinition>
 	<TrialDesign xmlns="http://www.pharmml.org/pharmml/0.8/TrialDesign">
 		<ExternalDataSet toolName="NONMEM" oid="nm_ds">
@@ -302,35 +245,6 @@
 				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="CP"/>
 				<ct:SymbRef  symbIdRef="CP"/>
 			</ColumnMapping>
-			<MultipleDVMapping>
-				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DV"/>
-				<Piecewise>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om1" symbIdRef="Y"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DVID"/>
-								<ct:Int>1</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-					<math:Piece>
-						<ct:SymbRef blkIdRef="om2" symbIdRef="PAIN"/>
-						<math:CategoryMapping>
-							<ds:Map modelSymbol="mild" dataSymbol="1"/>
-							<ds:Map modelSymbol="moderate" dataSymbol="2"/>
-							<ds:Map modelSymbol="severe" dataSymbol="2"/>
-							<ds:Map modelSymbol="missing" dataSymbol="2"/>
-						</math:CategoryMapping>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DVID"/>
-								<ct:Int>2</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-				</Piecewise>
-			</MultipleDVMapping>
 			<DataSet xmlns="http://www.pharmml.org/pharmml/0.8/Dataset">
 				<Definition>
 					<Column columnId="ID" columnType="id" valueType="int" columnNum="1"/>

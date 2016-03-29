@@ -148,7 +148,6 @@ public class ExpressionConverter {
 	def dispatch String getString(CategoryValueDefinition exp)'''
 		«exp.name»'''
 		
-
 //	def static dispatch String getString(VectorContent exp)'''
 //		«FOR e : exp.expressions SEPARATOR ','»
 //			«e.getString»«ENDFOR»'''

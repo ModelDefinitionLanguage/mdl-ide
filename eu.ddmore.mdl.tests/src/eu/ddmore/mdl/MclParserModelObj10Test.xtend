@@ -51,8 +51,13 @@ Bernoulli_DIST_mdl = mdlObj{
 	  # P1 = invLogit(LP)
    }# end MODEL_PREDICTION
 
+	RANDOM_VARIABLE_DEFINITION(level=DV){
+		Y withCategories { success, fail } ~ Bernoulli(probability=P1)
+	}
+
+
    OBSERVATION{
-     Y : { type is discrete withCategories { success, fail }, distn = Bernoulli(category=Y.success, probability=P1)}
+     :: { type is discrete, variable=Y }
    }# end ESTIMATION
 } # end of model object
 '''

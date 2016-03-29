@@ -581,47 +581,6 @@
 				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="FEMALE"/>
 				<ct:SymbRef blkIdRef="cm" symbIdRef="FEMALE"/>
 			</ColumnMapping>
-			<MultipleDVMapping>
-				<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DV"/>
-				<Piecewise>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om1" symbIdRef="Y1"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DVID"/>
-								<ct:Int>1</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om2" symbIdRef="Y2"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DVID"/>
-								<ct:Int>2</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om3" symbIdRef="Y3"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DVID"/>
-								<ct:Int>3</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-					<math:Piece>
-					   	<ct:SymbRef blkIdRef="om4" symbIdRef="Y4"/>
-						<math:Condition>
-							<math:LogicBinop op="eq">
-							<ColumnRef xmlns="http://www.pharmml.org/pharmml/0.8/Dataset" columnIdRef="DVID"/>
-								<ct:Int>4</ct:Int>
-					   		</math:LogicBinop>
-					   	</math:Condition>
-					</math:Piece>
-				</Piecewise>
-			</MultipleDVMapping>
 			<DataSet xmlns="http://www.pharmml.org/pharmml/0.8/Dataset">
 				<Definition>
 					<Column columnId="ID" columnType="id" valueType="int" columnNum="1"/>
