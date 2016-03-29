@@ -31,7 +31,7 @@ _type input _enum (nonmemFormat);
 _type priorInput _enum (RList, csv);
 _type cmtType _enum (depot, compartment, elimination, transfer, distribution, direct, effect);
 _type varType _enum (cov, corr, sd, var);
-_type obstype _enum (combinedError1, combinedError2, additive, proportional, categorical, count, discrete, tte);
+_type obstype _enum (combinedError1, combinedError2, additive, proportional, categorical, count, discrete, tte, continuous);
 _type sampletype _enum (simple, combi);
 _type sampleelement _enum (amount, duration, sampleTime, numberTimes, covariate, catCov, numberArms, armSize, parameter, doseTime);
 _type objType _enum (mdlObj, dataObj, parObj, taskObj, designObj, priorObj);
@@ -135,8 +135,6 @@ _list Distribution _atts type::cmtType, modelCmt::Int, from::Reference[::DosingT
 								kin::Real, kout::Real
 				_sig(type, modelCmt?, kin, kout, from);
 
-
-
 	 
 // Observations
 _list continuousErrorList _super;
@@ -160,6 +158,8 @@ _list CatObs _anon _atts type::obstype, variable::GenericEnum _sig(type, variabl
 _list CountObs _anon _atts type::obstype, variable::GenericEnum _sig(type, variable);
 _list DiscreteObs _anon _atts type::obstype, variable::GenericEnum _sig(type, variable);
 _list TteObs _alt Real _atts type::obstype, hazard::Reference[::Real] _sig(type, hazard);
+_list ContinuousObsList _anon _extends continuousErrorList _atts type::obstype, variable::Real _sig(type, variable);
+
 
 // Parameter obj variability & Structural
 _list CovarMatrix _atts type::varType, parameter::Vector, value::Vector
@@ -286,6 +286,11 @@ _block VARIABILITY_PARAMETERS (0,) _statements (0,) _eqnDefn, _eqnDefn+;
 
 _block RANDOM_VARIABLE_DEFINITION (0,) _arguments level::VarLevel _statements (0,) _rvDefn, _enumDefn;
 
+_block POPULATION_PARAMETERS (,) _statements(,) _eqnDefn+, _anonList _list _key=type
+			 obstype.count->CountObs, obstype.categorical->CatObs, obstype.discrete->DiscreteObs,
+			 obstype.continuous -> ContinuousObsList
+			 ;
+
 _block INDIVIDUAL_VARIABLES (0,) _statements (0,) _eqnDefn+, _transDefn, _listDefn
 	_list _key=type IndivTypeType.linear->IndivParamLinear, IndivTypeType.general -> IndivParamGeneral;
 
@@ -295,7 +300,8 @@ _block MODEL_PREDICTION (0,) _statements (0,) _eqnDefn, _eqnDefn+, _listDefn
 _block OBSERVATION (0,) _statements (0,) _eqnDefn+, _transDefn, _listDefn, _anonList
 		_list _key=type obstype.count->CountObs, obstype.categorical->CatObs, obstype.discrete->DiscreteObs, obstype.tte->TteObs,
 						obstype.combinedError1->combinedError1List, obstype.combinedError2->combinedError2List,
-						obstype.additive->additiveErrorList, obstype.proportional->proportionalErrorList
+						obstype.additive->additiveErrorList, obstype.proportional->proportionalErrorList,
+						obstype.continuous -> ContinuousObsList
 		;
 
 _block GROUP_VARIABLES (0,) _statements (0,) _eqnDefn+, _eqnDefn;
@@ -386,7 +392,7 @@ _block PRIOR_SOURCE (,) _statements (,) _listDefn
 
 
 _container mdlObj _has COVARIATES, VARIABILITY_LEVELS, STRUCTURAL_PARAMETERS, VARIABILITY_PARAMETERS, RANDOM_VARIABLE_DEFINITION,
-					INDIVIDUAL_VARIABLES, MODEL_PREDICTION, OBSERVATION, GROUP_VARIABLES, IDV, FUNCTIONS;
+					INDIVIDUAL_VARIABLES, MODEL_PREDICTION, OBSERVATION, GROUP_VARIABLES, IDV, FUNCTIONS, POPULATION_PARAMETERS;
 _container dataObj _has DATA_INPUT_VARIABLES, DECLARED_VARIABLES, DATA_DERIVED_VARIABLES, SOURCE, FUNCTIONS;
 _container parObj _has VARIABILITY, DECLARED_VARIABLES, STRUCTURAL;
 _container taskObj _has ESTIMATE, SIMULATE, OPTIMISE, EVALUATE;
