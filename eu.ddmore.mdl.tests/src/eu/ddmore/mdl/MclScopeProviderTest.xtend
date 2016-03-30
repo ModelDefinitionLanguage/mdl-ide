@@ -137,25 +137,41 @@ obj1 = mdlObj{
 		argExpr.assertScope(MdlPackage::eINSTANCE.symbolReference_Ref, "DV, P1, Y")
 	}
 	
-	@Test
+	@Ignore
 	def void testExpectedCategoryDescriptionCatRefs(){
 		val mcl = '''
-obj1 = mdlObj{
-
-   VARIABILITY_LEVELS{
-	DV : { level=1, type is observation }
-   }
-
-
-   MODEL_PREDICTION{
-	  P1 = 1
-   }# end MODEL_PREDICTION
-
-   OBSERVATION{
-     Y : { type is discrete withCategories { success, fail }, distn = Bernoulli(category=success, probability=P1)}
-   }# end ESTIMATION
-} # end of model object
-		'''.parse
+obj1 = dataObj{
+	DECLARED_VARIABLES{
+		Y X withCategories { cat1, cat2 } 
+	}
+	
+	
+	DATA_INPUT_VARIABLES{
+		DVID : { use is dvid }
+		DV : { use is dv, define = { 1 in DVID as Y, 2 in DVID as { X.cat1 when 1, X.cat2 when 2 } } }
+	}
+	
+	SOURCE{
+		foo2 : { file="aFile", inputFormat is nonmemFormat }
+	}	
+}		'''.parse
+//		val mcl = '''
+//obj1 = mdlObj{
+//
+//   VARIABILITY_LEVELS{
+//	DV : { level=1, type is observation }
+//   }
+//
+//
+//   MODEL_PREDICTION{
+//	  P1 = 1
+//   }# end MODEL_PREDICTION
+//
+//   OBSERVATION{
+//     Y : { type is discrete withCategories { success, fail }, distn = Bernoulli(category=success, probability=P1)}
+//   }# end ESTIMATION
+//} # end of model object
+//		'''.parse
 		
 		val blkBody = (mcl.objects.head.blocks.last.body as BlockStatementBody)
 		val catStmt = blkBody.statements.last as ListDefinition
@@ -166,23 +182,40 @@ obj1 = mdlObj{
 	
 	@Test
 	def void testExpectedCategoryQualifiedLinking(){
+//		val mcl = '''
+//obj1 = mdlObj{
+//	IDV{T}
+//
+//   VARIABILITY_LEVELS{
+//	DV : { level=1, type is observation }
+//   }
+//
+//
+//   MODEL_PREDICTION{
+//	  P1 = 1
+//   }# end MODEL_PREDICTION
+//
+//   OBSERVATION{
+//     Y : { type is discrete withCategories { success, fail }, distn = Bernoulli(category=Y.success, probability=P1)}
+//   }# end ESTIMATION
+//} # end of model object
+//		'''.parse
 		val mcl = '''
-obj1 = mdlObj{
-	IDV{T}
-
-   VARIABILITY_LEVELS{
-	DV : { level=1, type is observation }
-   }
-
-
-   MODEL_PREDICTION{
-	  P1 = 1
-   }# end MODEL_PREDICTION
-
-   OBSERVATION{
-     Y : { type is discrete withCategories { success, fail }, distn = Bernoulli(category=Y.success, probability=P1)}
-   }# end ESTIMATION
-} # end of model object
+obj1 = dataObj{
+	DECLARED_VARIABLES{
+		Y X withCategories { cat1, cat2 } 
+	}
+	
+	
+	DATA_INPUT_VARIABLES{
+		DVID : { use is dvid }
+		DV : { use is dv, define = { 1 in DVID as Y, 2 in DVID as { X.cat1 when 1, X.cat2 when 2 } } }
+	}
+	
+	SOURCE{
+		foo2 : { file="aFile", inputFormat is nonmemFormat }
+	}	
+}
 		'''.parse
 		mcl.assertNoErrors
 		

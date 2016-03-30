@@ -3,6 +3,9 @@
  */
 package eu.ddmore.mdl;
 
+import org.eclipse.xtext.scoping.IGlobalScopeProvider;
+import eu.ddmore.mdl.scoping.MdlImportURIGlobalScopeProvider;
+
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
@@ -18,5 +21,11 @@ public class MdlRuntimeModule extends eu.ddmore.mdl.AbstractMdlRuntimeModule {
 //		return MdlLinkingService.class;
 //	}
 
+	@Override
+	public Class<? extends IGlobalScopeProvider> bindIGlobalScopeProvider()
+	{
+	    return MdlImportURIGlobalScopeProvider.class;
+//	    return ImportUriGlobalScopeProvider.class;
+	}
 	
 }

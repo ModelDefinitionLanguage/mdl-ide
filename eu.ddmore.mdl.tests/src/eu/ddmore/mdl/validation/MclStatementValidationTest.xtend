@@ -11,6 +11,7 @@ import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -88,20 +89,33 @@ class MclStatementValidationTest {
 	@Test
 	def void testValidCategoryDefnInList(){
 		val mcl = '''
-		foo = mdlObj{
-			IDV { T }
-			VARIABILITY_LEVELS{
+		foo = dataObj {
+			DECLARED_VARIABLES{ bar::Int }
+			
+			DATA_INPUT_VARIABLES{
+				foo : { use is catCov withCategories {mild when bar} }
 			}
 
-			MODEL_PREDICTION{
-				foo
-			}# end MODEL_PREDICTION
-			
-			OBSERVATION{
-				PAIN : { type is categorical withCategories {mild when foo} }
+			SOURCE{
+				foo2 : { file="aFile", inputFormat is nonmemFormat }
 			}
-		}
+		} # end of model object
 		'''.parse
+//		val mcl = '''
+//		foo = mdlObj{
+//			IDV { T }
+//			VARIABILITY_LEVELS{
+//			}
+//
+//			MODEL_PREDICTION{
+//				foo
+//			}# end MODEL_PREDICTION
+//			
+//			OBSERVATION{
+//				PAIN : { type is categorical withCategories {mild when foo} }
+//			}
+//		}
+//		'''.parse
 		
 		mcl.assertNoErrors
 	}
@@ -109,29 +123,41 @@ class MclStatementValidationTest {
 	@Test
 	def void testInValidCategoryDefnInList(){
 		val mcl = '''
-		foo = mdlObj{
-			IDV{T}
-
-			VARIABILITY_LEVELS{
-			}
-
-			MODEL_PREDICTION{
-				foo
-			}# end MODEL_PREDICTION
+		foo = dataObj {
+			DECLARED_VARIABLES{ bar::Int }
 			
-			OBSERVATION{
-				PAIN : { type is categorical withCategories {mild} }
+			DATA_INPUT_VARIABLES{
+				foo : { use is catCov withCategories {mild} }
 			}
-		}
+
+			SOURCE{
+				foo2 : { file="aFile", inputFormat is nonmemFormat }
+			}
+		} # end of model object
 		'''.parse
-		
+//		val mcl = '''
+//		foo = mdlObj{
+//			IDV{T}
+//
+//			VARIABILITY_LEVELS{
+//			}
+//
+//			MODEL_PREDICTION{
+//				foo
+//			}# end MODEL_PREDICTION
+//			
+//			OBSERVATION{
+//				PAIN : { type is categorical withCategories {mild} }
+//			}
+//		}
+//		'''.parse
 		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
 			MdlValidator::INCORRECT_LIST_CONTEXT,
 			"A category definition must have a mapping in this context."
 		)
 	}
 
-	@Test
+	@Ignore
 	def void testValidCategoryDefnWithNoMappingsInList(){
 		val mcl = '''
 		foo = mdlObj{
@@ -152,7 +178,7 @@ class MclStatementValidationTest {
 		mcl.assertNoErrors
 	}
 
-	@Test
+	@Ignore
 	def void testInvalidDiscreteCategoryDefnWithNoMappingsInList(){
 		val mcl = '''
 		foo = mdlObj{
@@ -180,7 +206,7 @@ class MclStatementValidationTest {
 		)
 	}
 
-	@Test
+	@Ignore
 	def void testInvalidCategoryDefnWithMappingsInList(){
 		val mcl = '''
 		foo = mdlObj{

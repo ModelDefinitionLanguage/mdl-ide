@@ -447,18 +447,31 @@ class MclListAttributeValidationTest {
 
 	@Test
 	def void testInValidMissingWithCats(){
+//		val mcl = '''
+//		foo = mdlObj{
+//			IDV{T}
+//			
+//			VARIABILITY_LEVELS{
+//			}
+//
+//			MODEL_PREDICTION{
+//			}# end MODEL_PREDICTION
+//			
+//			OBSERVATION{
+//				PAIN : { type is categorical }
+//			}
+//		}
+//		'''.parse
 		val mcl = '''
-		foo = mdlObj{
-			VARIABILITY_LEVELS{
+		foo = dataObj {
+			DATA_INPUT_VARIABLES{
+				foo : { use is catCov }
 			}
 
-			MODEL_PREDICTION{
-			}# end MODEL_PREDICTION
-			
-			OBSERVATION{
-				PAIN : { type is categorical }
+			SOURCE{
+				foo2 : { file="aFile", inputformat is nonmem }
 			}
-		}
+		} # end of model object
 		'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.enumPair,

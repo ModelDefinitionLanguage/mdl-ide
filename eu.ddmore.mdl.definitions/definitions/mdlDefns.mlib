@@ -33,7 +33,7 @@ _type cmtType _enum (depot, compartment, elimination, transfer, distribution, di
 _type varType _enum (cov, corr, sd, var);
 _type obstype _enum (combinedError1, combinedError2, additive, proportional, categorical, count, discrete, tte, continuous);
 _type sampletype _enum (simple, combi);
-_type sampleelement _enum (amount, duration, sampleTime, numberTimes, covariate, catCov, numberArms, armSize, parameter, doseTime);
+_type sampleelement _enum (amount, duration, sampleTime, numberTimes, covariate, /*catCov, */ numberArms, armSize, parameter, doseTime);
 _type objType _enum (mdlObj, dataObj, parObj, taskObj, designObj, priorObj);
 
 // Data input variables
@@ -204,9 +204,9 @@ _list StudyDesign _atts armSize::Int, sameTimes::Boolean,
 						occasionSequence::Vector[::OccSeqSubList], interventionSequence::intSeqAtts, samplingSequence::sampSeqAtts
 		_sig (interventionSequence, samplingSequence?, occasionSequence?, armSize?, sameTimes?);
 
-_list DesignSpaceCatCov _atts objRef::GenericEnum, element::sampleelement, discrete::Vector, range::Vector
-						_sig (objRef, element, discrete),
-							(objRef, element, range);
+//_list DesignSpaceCatCov _atts objRef::GenericEnum, element::sampleelement, discrete::Vector, range::Vector
+//						_sig (objRef, element, discrete),
+//							(objRef, element, range);
 _list DesignSpaceCov _atts objRef::Reference[::Real], element::sampleelement, discrete::Vector, range::Vector
 						_sig (objRef, element, discrete),
 							(objRef, element, range);
@@ -243,7 +243,7 @@ _list SimpleSamplingList _extends SamplingSuper _atts type::sampletype, outcome:
 //_list ComplexSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::sampSeqAtts], numberTimes::Int
 //							_sig(type,combination, numberTimes?);
 _list DerivedSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::Reference[::SamplingSuper]],
-														numberTimes::Int, start::Real, relative::Boolean
+														numberTimes::Int, start::Vector[::Real], relative::Boolean
 							_sig(type,combination, numberTimes?, start?, relative?);
 
 _type covArgEnumType _enum(constant, idvDependent); //, occDependent); 
@@ -376,7 +376,8 @@ _block SAMPLING (,) _statements (,) _listDefn
 		_list _key=type sampletype.simple->SimpleSamplingList, sampletype.combi->DerivedSamplingList;
 
 _block DESIGN_SPACES (,) _statements (,) _listDefn
-		_list _key=element sampleelement.catCov->DesignSpaceCatCov, sampleelement.covariate->DesignSpaceCov, sampleelement.amount->DesignSpaceAmt,
+		_list _key=element //sampleelement.catCov->DesignSpaceCatCov, 
+							sampleelement.covariate->DesignSpaceCov, sampleelement.amount->DesignSpaceAmt,
 								sampleelement.doseTime -> DesignSpaceDoseTime, sampleelement.duration->DesignSpaceDuration,
 								sampleelement.numberTimes->DesignSpaceNumTimes, sampleelement.sampleTime->DesignSpaceSampleTimes,
 								sampleelement.numberArms->DesignSpaceNumArms, sampleelement.armSize->DesignSpaceArmSize,

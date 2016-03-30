@@ -24,13 +24,10 @@ class DataFileValidationTest {
 	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
-//	@Inject
-//    private Provider<XtextResourceSet> resourceSetProvider;
-    
     @Rule
     public TemporaryFolder workingFolder = new TemporaryFolder();
     
-    private File dataFile;
+    var File dataFile;
 	
 	@Before
 	def void setUp() {

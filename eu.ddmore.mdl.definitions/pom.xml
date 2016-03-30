@@ -1,22 +1,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>eu.ddmore.mdl</groupId>
-  <artifactId>eu.ddmore.mdl.definitions</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   
-   <packaging>eclipse-plugin</packaging>
+  	<parent>
+		<relativePath>../eu.ddmore.mdleditor.build/pom.xml</relativePath>
+		<groupId>eu.ddmore</groupId>
+		<artifactId>eu.ddmore.parent</artifactId>
+		<version>1.4.0-SNAPSHOT</version>
+	</parent>
+  
+  <artifactId>eu.ddmore.mdl.definitions</artifactId>
+  <packaging>eclipse-plugin</packaging>
    
-	<properties>
-	  <tycho-version>0.24.0</tycho-version>
-	</properties>
-
 	<build>
 	  <plugins>
 	    <plugin>
 	      <groupId>org.eclipse.tycho</groupId>
 	      <artifactId>tycho-maven-plugin</artifactId>
-	      <version>${tycho-version}</version>
-	      <extensions>true</extensions>
+	      <!-- version>${tycho-version}</version>
+	      <extensions>true</extensions-->
 	    </plugin>
 	  </plugins>
 	</build>

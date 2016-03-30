@@ -11,6 +11,7 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -462,8 +463,12 @@ class MogValidatorTest {
 				  Prob3 = 1 - sum([Prob0, Prob1, Prob2]) 
 			   }# end MODEL_PREDICTION
 			
+			   RANDOM_VARIABLE_DEFINITION(level=DV){
+			   		Y withCategories{ c0, c1, c2, c3} ~ Categorical(probability=[Prob0, Prob1, Prob2, Prob3])
+			   }
+			
 			   OBSERVATION{
-				   Y : {type is categorical withCategories{ c0 when Prob0, c1 when Prob1, c2 when Prob2, c3 when Prob3} } 
+				   :: { type is categorical, variable=Y } 
 			    }# end ESTIMATION
 		}
 		p1 = parObj{
@@ -894,7 +899,7 @@ class MogValidatorTest {
 		)
 	}
 
-	@Test
+	@Ignore("need to implement RV typing properly")
 	def void testValidDiscreteType(){
 		val mcl = '''
 		warfarin_PK_ODE_dat = dataObj {
@@ -923,10 +928,11 @@ class MogValidatorTest {
 		
 				RANDOM_VARIABLE_DEFINITION(level is DV){
 					EPS ~ Normal(mean=0, sd=1)
+					Z ~ Poisson(lambda=0.0)
 				}
 		
 				OBSERVATION{
-					Z : { type is count, distn = Poisson(lambda=0.0) }
+					:: { type is count, variable=Z }
 				}
 		}
 		p1 = parObj{
