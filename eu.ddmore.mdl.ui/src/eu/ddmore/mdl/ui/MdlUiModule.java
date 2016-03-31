@@ -3,7 +3,6 @@
  */
 package eu.ddmore.mdl.ui;
 
-import org.apache.log4j.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.ui.editor.autoedit.DefaultAutoEditStrategyProvider;
@@ -21,9 +20,9 @@ import eu.ddmore.mdl.ui.wizard.NonJDTProjectCreator;
  */
 public class MdlUiModule extends eu.ddmore.mdl.ui.AbstractMdlUiModule {
 
-    private static final Logger LOG = Logger.getLogger(MdlUiModule.class);
-
-    private static final String MIF_ENCRYPTION_KEY = "mif.encryption.key";
+//    private static final Logger LOG = Logger.getLogger(MdlUiModule.class);
+//
+//    private static final String MIF_ENCRYPTION_KEY = "mif.encryption.key";
 
     public MdlUiModule(AbstractUIPlugin plugin) {
         super(plugin);

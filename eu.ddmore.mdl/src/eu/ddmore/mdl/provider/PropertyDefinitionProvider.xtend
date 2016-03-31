@@ -58,7 +58,7 @@ class PropertyDefinitionProvider {
 		val defnType = blockName.propRefs.findFirst[p | p.propRef.name == vp.argumentName]?.propRef.propType.typeInfo ?: TypeSystemProvider::UNDEFINED_TYPE
 		switch(defnType){
 			BuiltinEnumTypeInfo:
-				if(defnType.categories.exists[c|c == enumValue]) defnType else TypeSystemProvider::UNDEFINED_TYPE
+				if(defnType.containsValue(enumValue)) defnType else TypeSystemProvider::UNDEFINED_TYPE
 			default:
 				TypeSystemProvider::UNDEFINED_TYPE
 		}

@@ -63,7 +63,7 @@ class MdlLibUtils {
 					case TypeClass.LIST:{
 						if(td.isIsSuper){
 							if(td.altType != null)
-								new ListSuperTypeInfo(td.name, td.altType.typeInfo.theType)
+								new ListSuperTypeInfo(td.name, td.altType.typeInfo.typeClass)
 							else
 								new ListSuperTypeInfo(td.name)
 						}
@@ -73,8 +73,8 @@ class MdlLibUtils {
 						else{
 							val altTypeInfo = td.altType?.typeInfo
 							if(td.superRef != null && altTypeInfo != null)
-								new ListTypeInfo(td.name, altTypeInfo.theType, td.superRef.typeInfo)
-							else if(td.superRef == null && td.altType != null) new ListTypeInfo(td.name, altTypeInfo.theType)
+								new ListTypeInfo(td.name, altTypeInfo.typeClass, td.superRef.typeInfo)
+							else if(td.superRef == null && td.altType != null) new ListTypeInfo(td.name, altTypeInfo.typeClass)
 							else if(td.superRef != null && td.altType == null)
 								new ListTypeInfo(td.name, td.superRef.typeInfo)
 							else

@@ -1,24 +1,21 @@
 package eu.ddmore.mdl.type
 
-import org.eclipse.xtend.lib.annotations.Data
-
-@Data
 class ListTypeInfo extends AbstractListTypeInfo{
 	val ListSuperTypeInfo superType
 	
 	new(String name){
-		this(name, PrimitiveType.Undefined, null)
+		this(name, TypeInfoClass.Undefined, null)
 	}
 	
-	new(String name, PrimitiveType secondaryType){
+	new(String name, TypeInfoClass secondaryType){
 		this(name, secondaryType, null)
 	}
 	
 	new(String name, TypeInfo superType){
-		this(name, PrimitiveType.Undefined, superType)
+		this(name, TypeInfoClass.Undefined, superType)
 	}
 	
-	new(String name, PrimitiveType secondaryType, TypeInfo superType){
+	new(String name, TypeInfoClass secondaryType, TypeInfo superType){
 		super(name, secondaryType)
 		if(superType != null){
 			if(superType instanceof ListSuperTypeInfo){
@@ -32,9 +29,9 @@ class ListTypeInfo extends AbstractListTypeInfo{
 		else this.superType = null
 	}
 	
-//	override getSecondaryType(){
-//		secondaryType
-//	}
+	def getSuperType(){
+		this.superType
+	}
 	
 	override getListSuperType() {
 		this.superType
@@ -45,9 +42,10 @@ class ListTypeInfo extends AbstractListTypeInfo{
 	}
 	
 	override matchesList(AbstractListTypeInfo other) {
-		name == other.name
-			|| (listSuperType != null
-				&& listSuperType == other.listSuperType) 
+		other != null
+		 	&& (name == other.name
+				|| (listSuperType != null
+					&& listSuperType == other.listSuperType)) 
 	}
 }
 

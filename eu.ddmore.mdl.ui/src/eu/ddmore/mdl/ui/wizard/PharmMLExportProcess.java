@@ -32,13 +32,13 @@ public class PharmMLExportProcess implements IRunnableWithProgress {
 
     private PharmMLExporter exporter = new PharmMLExporter();
 
-    private List resourcesToExport;
+    private List<IResource> resourcesToExport;
 
     private IOverwriteQuery overwriteCallback;
 
     private IResource resource;
 
-    private List errorTable = new ArrayList(1);
+    private List<IStatus> errorTable = new ArrayList<IStatus>(1);
 
     //The constants for the overwrite 3 state
     private static final int OVERWRITE_NOT_SET = 0;
@@ -70,7 +70,7 @@ public class PharmMLExportProcess implements IRunnableWithProgress {
      *  export specific resources with a common parent resource (affects container
      *  directory creation)
      */
-    public PharmMLExportProcess(IResource res, List resources,
+    public PharmMLExportProcess(IResource res, List<IResource> resources,
             String destinationPath, IOverwriteQuery overwriteImplementor) {
         this(res, destinationPath, overwriteImplementor);
         resourcesToExport = resources;
@@ -108,7 +108,7 @@ public class PharmMLExportProcess implements IRunnableWithProgress {
      */
     protected int countSelectedResources() throws CoreException {
         int result = 0;
-        Iterator resources = resourcesToExport.iterator();
+        Iterator<IResource> resources = resourcesToExport.iterator();
 
         while (resources.hasNext()) {
 			result += countChildrenOf((IResource) resources.next());
@@ -253,7 +253,7 @@ public class PharmMLExportProcess implements IRunnableWithProgress {
      *	resourcesToExport collection
      */
     protected void exportSpecifiedResources() throws InterruptedException {
-        Iterator resources = resourcesToExport.iterator();
+        Iterator<IResource> resources = resourcesToExport.iterator();
         IPath initPath = (IPath) path.clone();
 
         while (resources.hasNext()) {
@@ -333,7 +333,7 @@ public class PharmMLExportProcess implements IRunnableWithProgress {
      *  @param resources java.util.List
      *  @param child org.eclipse.core.resources.IResource
      */
-    protected boolean isDescendent(List resources, IResource child) {
+    protected boolean isDescendent(List<IResource> resources, IResource child) {
         if (child.getType() == IResource.PROJECT) {
 			return false;
 		}

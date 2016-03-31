@@ -1,15 +1,19 @@
 package eu.ddmore.mdl.type
 
-import org.eclipse.xtend.lib.annotations.Data
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.xtend.lib.annotations.ToString
 
-@Data @FinalFieldsConstructor
+@ToString
 class MatrixTypeInfo extends TypeInfo{
-	PrimitiveType theType
-	TypeInfo elementType
+	val TypeInfoClass typeClass
+	val TypeInfo elementType
 	
 	new(TypeInfo elementType){
-		this(PrimitiveType.Vector, elementType)
+		typeClass = TypeInfoClass.Matrix
+		this.elementType = elementType
+	}
+	
+	def getElementType(){
+		this.elementType
 	}
 	
 	override getUnderlyingType(){
@@ -45,13 +49,30 @@ class MatrixTypeInfo extends TypeInfo{
 	override makeMatrix(){
 		new MatrixTypeInfo(this);
 	}
+
+
+	// equality is based on the list name
+	override boolean equals(Object other){
+		var retVal = false
+		if(other !== null){
+			if(this !== other){
+				if(other instanceof MatrixTypeInfo){
+					retVal = this.elementType == other.elementType
+				}
+			}
+			else retVal = true
+		}
+		retVal
+	}
+
+	override int hashCode() {
+	    val int prime = 31
+	    var result = prime + if(this.elementType== null)  0 else this.elementType.hashCode()
+	    result
+	}
 	
-//	override isVector(){
-//		false
-//	}
-//	
-//	override isReference(){
-//		false
-//	}
+	override getTypeClass() {
+		this.typeClass
+	}
 }
 

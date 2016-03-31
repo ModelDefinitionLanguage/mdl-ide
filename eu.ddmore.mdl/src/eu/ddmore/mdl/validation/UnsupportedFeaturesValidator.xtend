@@ -13,7 +13,6 @@ import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
-import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.BlockUtils
 import eu.ddmore.mdl.utils.ConstantEvaluation
@@ -25,6 +24,7 @@ import java.util.Set
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.type.TypeInfoClass
 
 class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	
@@ -151,8 +151,8 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	def checkUnsupportedCategoryRelations(EqualityExpression it){
 		val leftType = leftOperand?.typeFor
 		val rightType = rightOperand?.typeFor
-		if((leftType != null && leftType.theType == PrimitiveType.Enum)  || 
-			(rightType != null && rightType.theType == PrimitiveType.Enum)){
+		if((leftType != null && leftType.typeClass == TypeInfoClass.Enum)  || 
+			(rightType != null && rightType.typeClass == TypeInfoClass.Enum)){
 			warning("Equivalence operators with categorical types are not supported for execution in R.",
 				MdlPackage::eINSTANCE.equalityExpression_Feature,
 				FEATURE_NOT_SUPPORTED, feature)

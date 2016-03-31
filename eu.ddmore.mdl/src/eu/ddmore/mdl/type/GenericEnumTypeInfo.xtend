@@ -1,12 +1,9 @@
 package eu.ddmore.mdl.type
 
 import java.util.Collections
-import org.eclipse.xtend.lib.annotations.Data
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
-@Data @FinalFieldsConstructor
 class GenericEnumTypeInfo extends EnumTypeInfo{
-	static val GENERIC_ENUM_TYPE_NAME = "generic"
+	public static val GENERIC_ENUM_TYPE_NAME = "generic"
 	
 	
 	new(){
@@ -14,10 +11,13 @@ class GenericEnumTypeInfo extends EnumTypeInfo{
 	}
 	
 	override isCompatible(TypeInfo otherType){
-		switch(otherType.underlyingType){
-			EnumTypeInfo: true
-			default: false 
+		if(otherType != null){
+			switch(otherType.underlyingType){
+				EnumTypeInfo: true
+				default: false 
+			}
 		}
+		else false
 	}
 	
 }

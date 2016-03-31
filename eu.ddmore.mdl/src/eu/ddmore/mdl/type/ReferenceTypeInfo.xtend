@@ -1,28 +1,28 @@
 package eu.ddmore.mdl.type
 
-import org.eclipse.xtend.lib.annotations.Data
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.xtend.lib.annotations.ToString
 
-@Data @FinalFieldsConstructor
+@ToString
 class ReferenceTypeInfo extends TypeInfo{
-	TypeInfo elementType
+	val TypeInfo elementType
+	
+	
+	new(TypeInfo refElement){
+		this.elementType = refElement
+	}
 	
 	override getUnderlyingType(){
 		elementType
 	}
 	
-	override getTheType(){
-		elementType.theType
+	override getTypeClass(){
+//		TypeInfoClass.Reference
+		//@TODO: This is wrong. Should really return the class of the ref type. But this break everything just now.
+		this.underlyingType.typeClass
 	}
 	
 	override boolean isCompatible(TypeInfo otherType){
-		elementType.isCompatible(otherType.underlyingType)
-//		switch(otherType){
-//			// reciprocal. use underlying types to test compatibility
-//			// if both refs then check type compatibility otherwise ref -> non-ref is incompatible 
-//			ReferenceTypeInfo: elementType.isCompatible(otherType.elementType)
-//			default: false
-//		}
+		elementType.isCompatible(otherType?.underlyingType)
 	}
 	
 	override isCompatibleElement(TypeInfo otherElementType){
@@ -44,12 +44,24 @@ class ReferenceTypeInfo extends TypeInfo{
 	override makeMatrix(){
 		new MatrixTypeInfo(this)
 	}
-	
-//	override isVector(){
-//		false
-//	}
-//	
-//	override isReference(){
-//		true
-//	}
+
+	// equality is based on the elementType
+	override boolean equals(Object other){
+		var retVal = false
+		if(other !== null){
+			if(this !== other){
+				if(other instanceof ReferenceTypeInfo){
+					retVal = this.elementType == other.elementType
+				}
+			}
+			else retVal = true
+		}
+		retVal
+	}
+
+	override int hashCode() {
+	    val int prime = 31
+	    var result = prime + if(this.elementType == null)  0 else this.elementType.hashCode()
+	    result
+	}
 }

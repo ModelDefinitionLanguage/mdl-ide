@@ -18,7 +18,6 @@ import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
-import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.BlockUtils
 import eu.ddmore.mdl.utils.ConstantEvaluation
@@ -30,6 +29,7 @@ import java.util.Collections
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.type.TypeInfoClass
 
 class MdlCustomValidator extends AbstractMdlValidator {
 
@@ -83,8 +83,8 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	def validateCategoryRelations(RelationalExpression it){
 		val leftType = leftOperand?.typeFor
 		val rightType = rightOperand?.typeFor
-		if((leftType != null && leftType.theType == PrimitiveType.Enum)  || 
-			(rightType != null && rightType.theType == PrimitiveType.Enum)){
+		if((leftType != null && leftType.typeClass == TypeInfoClass.Enum)  || 
+			(rightType != null && rightType.typeClass == TypeInfoClass.Enum)){
 			error("Cannot use inequality operators with categorical types", MdlPackage::eINSTANCE.relationalExpression_Feature,
 				MdlValidator::INVALID_ENUM_RELATION_OPERATOR, feature)
 		}

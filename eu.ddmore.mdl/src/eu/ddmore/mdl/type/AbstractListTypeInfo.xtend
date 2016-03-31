@@ -1,17 +1,17 @@
 package eu.ddmore.mdl.type
 
-import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.ToString
 
-@Data
+@ToString
 abstract class AbstractListTypeInfo extends TypeInfo{
 	val String name
-	val PrimitiveType secondaryType
+	val TypeInfoClass secondaryType
 	
 	protected new(String name){
-		this(name, PrimitiveType.Undefined)
+		this(name, TypeInfoClass.Undefined)
 	}
 	
-	protected new(String name, PrimitiveType secondaryType){
+	protected new(String name, TypeInfoClass secondaryType){
 		this.name = name
 		this.secondaryType = secondaryType 
 	}
@@ -23,17 +23,24 @@ abstract class AbstractListTypeInfo extends TypeInfo{
 	abstract def boolean matchesList(AbstractListTypeInfo other)
 	
 	override isCompatible(TypeInfo other){
-		// use underlying type in case it is a reference 
-		val otherType = other.underlyingType
-		switch(otherType){
-			AbstractListTypeInfo:  otherType.matchesList(this)
-			PrimitiveTypeInfo:{
-				PrimitiveTypeInfo::isPrimitiveCompatible(this.secondaryType, otherType.theType)
+		if(other != null){
+			// use underlying type in case it is a reference 
+			val otherType = other.underlyingType
+			switch(otherType){
+				AbstractListTypeInfo:  otherType.matchesList(this)
+				PrimitiveTypeInfo:{
+					PrimitiveTypeInfo::isPrimitiveCompatible(this.secondaryType, otherType.typeClass)
+				}
+					
+				default:
+					false 
 			}
-				
-			default:
-				false 
 		}
+		else false
+	}
+	
+	def protected getName(){
+		this.name
 	}
 	
 	def getSecondaryType(){
@@ -46,8 +53,8 @@ abstract class AbstractListTypeInfo extends TypeInfo{
 		false		
 	}
 	
-	override getTheType(){
-		PrimitiveType.List
+	override getTypeClass(){
+		TypeInfoClass.List
 	}
 	
 	override makeReference(){
@@ -62,12 +69,24 @@ abstract class AbstractListTypeInfo extends TypeInfo{
 		new MatrixTypeInfo(this)
 	}
 	
-//	override isVector(){
-//		false
-//	}
-//	
-//	override isReference(){
-//		false
-//	}
+	// equality is based on the list name
+	override boolean equals(Object other){
+		var retVal = false
+		if(other !== null){
+			if(this !== other){
+				if(other instanceof AbstractListTypeInfo){
+					retVal = this.name == other.name
+				}
+			}
+			else retVal = true
+		}
+		retVal
+	}
+
+	override int hashCode() {
+	    val int prime = 31
+	    var result = prime + if(this.name== null)  0 else this.name.hashCode()
+	    result
+	}
 }
 

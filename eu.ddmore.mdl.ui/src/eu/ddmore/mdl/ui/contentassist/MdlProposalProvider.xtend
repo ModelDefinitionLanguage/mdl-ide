@@ -15,9 +15,8 @@ import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.PrimitiveType
+import eu.ddmore.mdl.type.TypeInfoClass
 import eu.ddmore.mdl.type.TypeSystemProvider
-import eu.ddmore.mdl.utils.BlockUtils
 import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.ArrayList
@@ -43,7 +42,6 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension TypeSystemProvider mtp = new TypeSystemProvider
-	extension BlockUtils bu = new BlockUtils
 
 	 public override void completeSymbolReference_Ref(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 	 	val owningObj = model.getContainerOfType(MclObject)
@@ -93,7 +91,7 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 		while(node != null && owningBlock != null){
 			val nodeTxt = node.text
 			val matchingAtts = owningBlock.getAllMatchingListDefns(nodeTxt)
-			if(matchingAtts.exists[attType.theType == PrimitiveType.Enum ]){
+			if(matchingAtts.exists[attType.typeClass == TypeInfoClass.Enum ]){
 				addProposals(context, acceptor, #['is'], null)
 				node = null
 			}
@@ -109,7 +107,7 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 		while(node != null && owningBlock != null){
 			val nodeTxt = node.text
 			val matchingAtts = owningBlock.getAllMatchingListDefns(nodeTxt)
-			if(matchingAtts.exists[attType.theType != PrimitiveType.Enum ]){
+			if(matchingAtts.exists[attType.typeClass != TypeInfoClass.Enum ]){
 				addProposals(context, acceptor, #['='], null)
 				node = null
 			}

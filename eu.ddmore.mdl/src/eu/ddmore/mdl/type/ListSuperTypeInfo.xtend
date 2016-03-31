@@ -6,7 +6,7 @@ class ListSuperTypeInfo extends AbstractListTypeInfo{
 		super(name)
 	}
 	
-	new(String name, PrimitiveType secondaryType){
+	new(String name, TypeInfoClass secondaryType){
 		super(name, secondaryType)
 	}
 	override matchesList(AbstractListTypeInfo other) {

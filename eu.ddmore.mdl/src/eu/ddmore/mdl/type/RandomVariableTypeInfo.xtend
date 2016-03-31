@@ -2,12 +2,15 @@ package eu.ddmore.mdl.type
 
 import eu.ddmore.mdl.type.TypeInfo
 
+import org.eclipse.xtend.lib.annotations.Data
+
+@Data // using this to get an equals implementation on all the fields
 class RandomVariableTypeInfo extends TypeInfo {
 	
 	
 	
-	override getTheType() {
-		PrimitiveType.RandomVariable
+	override getTypeClass() {
+		TypeInfoClass.RandomVariable
 	}
 	
 	override getUnderlyingType() {

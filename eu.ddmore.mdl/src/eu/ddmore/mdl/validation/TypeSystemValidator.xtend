@@ -36,7 +36,6 @@ import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import eu.ddmore.mdl.type.EnumTypeInfo
 import eu.ddmore.mdl.type.GenericEnumTypeInfo
 import eu.ddmore.mdl.type.MatrixTypeInfo
-import eu.ddmore.mdl.type.PrimitiveType
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.type.VectorTypeInfo
@@ -54,6 +53,7 @@ import eu.ddmore.mdllib.mdllib.TypeSpec
 import eu.ddmore.mdllib.TypeDefinitionProvider
 import eu.ddmore.mdl.mdl.PWClause
 import eu.ddmore.mdl.mdl.PiecewiseExpression
+import eu.ddmore.mdl.type.TypeInfoClass
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -347,7 +347,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 			(TypeInfo, TypeInfo) => void rightErrorLambda){
 		val lhsType = lhs?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
 //		val rhsType = rhs?.typeFor?.theType ?: UNDEFINED_TYPE.theType
-		if(lhsType.theType == PrimitiveType.Enum){
+		if(lhsType.typeClass == TypeInfoClass.Enum){
 			checkExpectedAndExpression(lhsType, lhs, leftErrorLambda)
 			checkExpectedAndExpression(lhsType, rhs, rightErrorLambda)
 		}
@@ -408,7 +408,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	def checkWhenOperator(EnumPair at, CategoryValueDefinition catValDefn,  (TypeInfo, TypeInfo) => void leftErrorLambda,
 				(TypeInfo, TypeInfo) => void rightErrorLambda){
 		val actualType = catValDefn.typeFor
-		if(actualType.theType != PrimitiveType.Enum){
+		if(actualType.typeClass != TypeInfoClass.Enum){
 			leftErrorLambda.apply(new GenericEnumTypeInfo, actualType)
 		}
 		if(catValDefn.mappedTo != null){
@@ -438,7 +438,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	
 	def void checkExpectedEnumType(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
-		if(actualType.theType != PrimitiveType.Enum){
+		if(actualType.typeClass != TypeInfoClass.Enum){
 			errorLambda.apply(new GenericEnumTypeInfo, actualType)
 		}
 	}

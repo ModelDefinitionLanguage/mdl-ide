@@ -155,7 +155,7 @@ class ListDefinitionProvider {
 				val enumType = listDefn.getAttributeType(vp.argumentName)
 				if(enumType instanceof BuiltinEnumTypeInfo){
 					val enumValue = ee.enumValue
-					return if(enumType.categories.contains(enumValue)) enumType else TypeSystemProvider::UNDEFINED_TYPE
+					return if(enumType.containsValue(enumValue)) enumType else TypeSystemProvider::UNDEFINED_TYPE
 				}
 			} 
 		}

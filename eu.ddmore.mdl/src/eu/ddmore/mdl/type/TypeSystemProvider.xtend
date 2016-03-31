@@ -52,19 +52,19 @@ public class TypeSystemProvider {
 	extension CycleDetectionUtils cdu = new CycleDetectionUtils	
 	extension MdlLibUtils mlu = new MdlLibUtils
 	
-	public static val UNDEFINED_TYPE = new PrimitiveTypeInfo(PrimitiveType.Undefined)
-	public static val INT_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int)
-	public static val BOOLEAN_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean)
-	public static val REAL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real)
-	public static val STRING_TYPE = new PrimitiveTypeInfo(PrimitiveType.String)
-	public static val BOOL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean)
-	public static val DERIV_TYPE = new PrimitiveTypeInfo(PrimitiveType.Deriv)
-	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf)
-	public static val PMF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pmf)
-	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector
-	public static val REAL_MATRIX_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeMatrix
-	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int).makeVector
-	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping)
+	public static val UNDEFINED_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Undefined)
+	public static val INT_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Int)
+	public static val BOOLEAN_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Boolean)
+	public static val REAL_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Real)
+	public static val STRING_TYPE = new PrimitiveTypeInfo(TypeInfoClass.String)
+	public static val BOOL_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Boolean)
+	public static val DERIV_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Deriv)
+	public static val PDF_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Pdf)
+	public static val PMF_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Pmf)
+	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Real).makeVector
+	public static val REAL_MATRIX_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Real).makeMatrix
+	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Int).makeVector
+	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(TypeInfoClass.Mapping)
 	public static val GENERIC_ENUM_VALUE_TYPE =  new GenericEnumTypeInfo
 	static val DERIV_LIST_TYPE_NAME = 'List:DerivList' 
 	
@@ -97,9 +97,9 @@ public class TypeSystemProvider {
 	// returns the richest type if they are different or null if they are the same
 	// of the types are incompatible.
 	def getRichestPromotableType(TypeInfo refType, TypeInfo otherType){
-		if(refType.theType == PrimitiveType.Real && otherType.theType == PrimitiveType.Int)
+		if(refType.typeClass == TypeInfoClass.Real && otherType.typeClass == TypeInfoClass.Int)
 			refType
-		else if(refType.theType == PrimitiveType.Int && otherType.theType == PrimitiveType.Real)
+		else if(refType.typeClass == TypeInfoClass.Int && otherType.typeClass == TypeInfoClass.Real)
 			otherType
 		else null
 	}

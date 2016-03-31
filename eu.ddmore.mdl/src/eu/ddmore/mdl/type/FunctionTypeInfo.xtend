@@ -3,19 +3,22 @@ package eu.ddmore.mdl.type
 import eu.ddmore.mdl.type.TypeInfo
 import java.util.List
 
+import org.eclipse.xtend.lib.annotations.Data
+
+@Data // using this to get an equals implementation on all the fields
 class FunctionTypeInfo extends TypeInfo {
-	val PrimitiveType theType
+	val TypeInfoClass typeClass
 	val List<TypeInfo> argTypes
 	val TypeInfo rtnType
 	
 	new(List<TypeInfo> argTypes, TypeInfo rtnType){
-		this.theType = PrimitiveType.Function
+		this.typeClass = TypeInfoClass.Function
 		this.argTypes = argTypes
 		this.rtnType = rtnType
 	}
 	
-	override getTheType() {
-		this.theType
+	override getTypeClass() {
+		this.typeClass
 	}
 	
 	override getUnderlyingType() {

@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -311,7 +312,8 @@ public class PharmMLExportWizardPage extends WizardExportResourcesPage {
      *	@return boolean
      */
     public boolean finish() {
-        List resourcesToExport = getWhiteCheckedResources();
+        @SuppressWarnings("unchecked")
+		List<IResource> resourcesToExport = getWhiteCheckedResources();
         if (!ensureTargetIsValid(new File(getDestinationValue()))) {
 			return false;
 		}

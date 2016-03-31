@@ -364,12 +364,6 @@ class MogValidatorTest {
 				t1 : { type is taskObj }
 			}
 		}
-				mog = mogObj{
-			OBJECTS{
-				warfarin_PK_ODE_dat : { type is dataObj }
-				foo : { type is mdlObj }
-			}
-		}
 		'''.parse
 	
 		mcl.assertError(MdlPackage::eINSTANCE.mclObject,
