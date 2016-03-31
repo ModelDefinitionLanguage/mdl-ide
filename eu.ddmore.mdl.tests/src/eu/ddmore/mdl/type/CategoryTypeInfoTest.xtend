@@ -10,31 +10,28 @@ import static org.junit.Assert.*
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
-class EnumListTypeInfoTest {
+class CategoryTypeInfoTest {
 	val static TEST_NAME = "foo"
-	val static TEST_ENUM_NAME = "foofoo"
 	val static TEST_CATAGS = newHashSet("cat1", "cat2")
 	val static TEST_ALT_CATAGS = newHashSet("cat11", "cat12")
-	val static String EXPECTED_TYPE_NAME = "List:" + TEST_NAME
-	val static TypeInfoClass EXPECTED_TYPE_CLASS = TypeInfoClass.List
+	val static String EXPECTED_TYPE_NAME = "Category:" + TEST_NAME
+	val static TypeInfoClass EXPECTED_TYPE_CLASS = TypeInfoClass.Category
 	
-	var EnumListTypeInfo testInstance
-	var EnumListTypeInfo equivTestInstance
-	var EnumListTypeInfo equivDiffCatsTestInstance
-	var EnumListTypeInfo nonEquivTestInstance
-	var EnumTypeInfo equivEnumInstance
-	var EnumTypeInfo nonEquivEnumInstance
-	var EnumTypeInfo testUnderlyingEnum
+	var CategoryTypeInfo testInstance
+	var CategoryTypeInfo equivTestInstance
+	var CategoryTypeInfo equivDiffCatsTestInstance
+	var CategoryTypeInfo nonEquivTestInstance
+	var CategoryListTypeInfo equivNumListInstance
+	var CategoryListTypeInfo nonEquivNumListInstance
 	
 	@Before
 	def void setUp(){
-		this.testUnderlyingEnum = new EnumTypeInfo(TEST_ENUM_NAME, TEST_CATAGS)
-		testInstance = new EnumListTypeInfo(TEST_NAME, testUnderlyingEnum)
-		equivTestInstance = new EnumListTypeInfo(TEST_NAME, new EnumTypeInfo(TEST_ENUM_NAME, TEST_CATAGS))
-		this.nonEquivTestInstance = new EnumListTypeInfo("bar", new EnumTypeInfo(TEST_ENUM_NAME, TEST_CATAGS))
-		equivDiffCatsTestInstance = new EnumListTypeInfo(TEST_NAME)
-		equivEnumInstance = new EnumTypeInfo(TEST_ENUM_NAME, TEST_CATAGS)
-		nonEquivEnumInstance = new EnumTypeInfo("AltTestEnumList", TEST_ALT_CATAGS)
+		testInstance = new CategoryTypeInfo(TEST_NAME, TEST_CATAGS)
+		equivTestInstance = new CategoryTypeInfo(TEST_NAME, TEST_CATAGS)
+		this.nonEquivTestInstance = new CategoryTypeInfo("bar", TEST_CATAGS)
+		equivDiffCatsTestInstance = new CategoryTypeInfo(TEST_NAME, TEST_ALT_CATAGS)
+		equivNumListInstance = new CategoryListTypeInfo("TestEnumList", this.testInstance)
+		nonEquivNumListInstance = new CategoryListTypeInfo("AltTestEnumList", this.nonEquivTestInstance)
 	}
 	
 	@Test
@@ -46,7 +43,7 @@ class EnumListTypeInfoTest {
 	def void testEqualsSameDiffInstance(){
 		assertEquals("same", testInstance, this.equivTestInstance)
 		assertNotEquals("not same", testInstance, this.nonEquivTestInstance)
-		assertEquals("same", testInstance, this.equivDiffCatsTestInstance)
+		assertNotEquals("not same", testInstance, this.equivDiffCatsTestInstance)
 	}
 	
 	@Test
@@ -78,7 +75,7 @@ class EnumListTypeInfoTest {
 	
 	@Test
 	def void testExpectedCategories(){
-		assertEquals(testUnderlyingEnum, this.testInstance.underlyingEnum)
+		assertEquals(TEST_CATAGS, this.testInstance.categories)
 	}
 	@Test
 	def void testIsCompatible(){
@@ -89,8 +86,8 @@ class EnumListTypeInfoTest {
 	@Test
 	def void testIsCompatibleWithEnumListType(){
 		assertTrue(this.testInstance.isCompatible(this.testInstance))
-		assertTrue(this.testInstance.isCompatible(this.equivEnumInstance))
-		assertFalse(this.testInstance.isCompatible(this.nonEquivEnumInstance))
+		assertTrue(this.testInstance.isCompatible(this.equivNumListInstance))
+		assertFalse(this.testInstance.isCompatible(this.	nonEquivNumListInstance))
 	}
 	
 	@Test

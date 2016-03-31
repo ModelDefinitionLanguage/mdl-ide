@@ -1,19 +1,17 @@
 package eu.ddmore.mdl.type
 
-import java.util.Collections
-
-class GenericEnumTypeInfo extends EnumTypeInfo{
+class GeneralCategoryTypeInfo extends AbstractCategoryTypeInfo {
 	public static val GENERIC_ENUM_TYPE_NAME = "generic"
 	
 	
 	new(){
-		super(GENERIC_ENUM_TYPE_NAME, Collections::emptySet)
+		super(GENERIC_ENUM_TYPE_NAME)
 	}
 	
 	override isCompatible(TypeInfo otherType){
 		if(otherType != null){
 			switch(otherType.underlyingType){
-				EnumTypeInfo: true
+				CategoryTypeInfo: true
 				default: false 
 			}
 		}

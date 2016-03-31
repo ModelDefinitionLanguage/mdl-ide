@@ -7,32 +7,39 @@ import java.util.Collections
 import org.eclipse.xtend.lib.annotations.ToString
 
 @ToString
-class EnumTypeInfo extends TypeInfo{
+abstract class AbstractCategoryTypeInfo extends TypeInfo{
 	val TypeInfoClass typeClass
 	val String enumName
-	val Set<String> categories = new HashSet<String>
+	val Set<String> categories
 	
-	new(String name, Set<String> categories){
-		this.typeClass = TypeInfoClass.Enum
+	protected new(String name){
+		this.typeClass = TypeInfoClass.Category
 		enumName = name
-		this.categories.addAll(categories)
+		this.categories = Collections::emptySet
 	}
 	
-	override isCompatible(TypeInfo otherType){
-		if(this === otherType) return true
-		switch(otherType){
-			EnumTypeInfo: this.enumName == otherType.enumName
-				&& isCompatibleCategories(otherType)
-			EnumListTypeInfo:
-				this.isCompatible(otherType.underlyingEnum)
-			ReferenceTypeInfo:
-				this.isCompatible(otherType.underlyingType)
-			default: false 
-		}
+	protected new(String name, Set<String> categories){
+		this.typeClass = TypeInfoClass.Category
+		enumName = name
+		this.categories = new HashSet<String>(categories)
 	}
 	
+//	override isCompatible(TypeInfo otherType){
+//		if(this === otherType) return true
+//		switch(otherType){
+//			AbstractCategoryTypeInfo: this.enumName == otherType.enumName
+//							&& isCompatibleCategories(otherType)
+//			ReferenceTypeInfo:
+//				this.isCompatible(otherType.underlyingType)
+//			default: false 
+//		}
+//	}
 	
-	def boolean isCompatibleCategories(EnumTypeInfo otherType){
+	def String getEnumName(){
+		this.enumName
+	}
+	
+	def boolean isCompatibleCategories(AbstractCategoryTypeInfo otherType){
 		for(cat : categories){
 			if(!otherType.categories.exists[it == cat]) return false
 		}
@@ -43,12 +50,12 @@ class EnumTypeInfo extends TypeInfo{
 		this.typeClass
 	}
 	
-	def protected getCategories(){
+	def getCategories(){
 		Collections::unmodifiableSet(this.categories);
 	}
 	
 	override getTypeName(){
-		"Enum:" + enumName
+		"Category:" + enumName
 	}
 	
 	override isCompatibleElement(TypeInfo elementType){
@@ -77,8 +84,9 @@ class EnumTypeInfo extends TypeInfo{
 		var retVal = false
 		if(other !== null){
 			if(this !== other){
-				if(other instanceof EnumTypeInfo){
+				if(other instanceof AbstractCategoryTypeInfo){
 					retVal = this.enumName == other.enumName
+								&& isCompatibleCategories(other)
 				}
 			}
 			else retVal = true

@@ -1,11 +1,9 @@
 package eu.ddmore.mdl.type
 
-import eu.ddmore.mdl.type.TypeInfo
 import java.util.List
+import org.eclipse.xtend.lib.annotations.ToString
 
-import org.eclipse.xtend.lib.annotations.Data
-
-@Data // using this to get an equals implementation on all the fields
+@ToString
 class FunctionTypeInfo extends TypeInfo {
 	val TypeInfoClass typeClass
 	val List<TypeInfo> argTypes
@@ -66,4 +64,26 @@ class FunctionTypeInfo extends TypeInfo {
 		new MatrixTypeInfo(this)
 	}
 	
+	override boolean equals(Object other){
+		var retVal = false
+		if(other !== null){
+			if(this !== other){
+				if(other instanceof FunctionTypeInfo){
+					retVal = this.typeClass == other.typeClass
+								&& this.rtnType == other.rtnType
+								&& this.argTypes == other.argTypes
+				}
+			}
+			else retVal = true
+		}
+		retVal
+	}
+
+	override int hashCode() {
+    	val prime = 31;
+    	var result = prime + if(this.typeClass == null)  0 else this.typeClass.hashCode()
+    	result = prime * result + if(this.rtnType == null)  0 else this.rtnType.hashCode()
+    	result = prime * result + if(this.argTypes == null)  0 else this.argTypes.hashCode()
+    	return result;
+	}
 }

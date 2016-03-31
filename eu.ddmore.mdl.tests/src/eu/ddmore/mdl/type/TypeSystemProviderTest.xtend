@@ -17,6 +17,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
+import java.util.List
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlLibInjectorProvider))
@@ -148,51 +149,64 @@ class TypeSystemProviderTest {
 		actual.checkRelationalOp(rhs, errorFunc, errorFunc)
 	}
 
-	def createDummyEnumRef(String enumType, String enumValue){
+	def createDummyEnumRef(String enumType, List<String> categories, String catValue){
 		val actual = MdlFactory::eINSTANCE.createCategoryValueReference
-		val lhsDefn = MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val enumDefn = MdlFactory::eINSTANCE.createEnumerationDefinition
 		enumDefn.name = enumType
 		val catDefnExpr = MdlFactory::eINSTANCE.createCategoricalDefinitionExpr
-		catDefnExpr.categories.add(lhsDefn)
+		for(cat : categories){
+			val lhsDefn = MdlFactory::eINSTANCE.createCategoryValueDefinition
+			lhsDefn.name = cat
+			catDefnExpr.categories.add(lhsDefn)
+			if(cat == catValue){
+				actual.ref = lhsDefn 
+			}
+		}
 		enumDefn.catDefn = catDefnExpr
-		lhsDefn.name = enumValue
-		actual.ref = lhsDefn 
 		actual
 	}
 
 	@Test
 	def void testRelationalOpWithEnums(){
-		val actual = createDummyEnumRef("tst", "tst1")
-		val rhs = createDummyEnumRef("tst", "tst1") MdlFactory::eINSTANCE.createCategoryValueDefinition
+		val actual = createDummyEnumRef("tst", #["tst1"], "tst1")
+		val rhs = createDummyEnumRef("tst", #["tst1"], "tst1")
+//		MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
 		actual.checkRelationalOp(rhs, errorFunc, errorFunc)
 	}
 
 	@Test
 	def void testRelationalOpWithIncompatibleEnums(){
-		val actual = createDummyEnumRef("tst", "tst1")
-		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
+		val actual = createDummyEnumRef("tst", #["tst1", "tst2"], "tst1")
+		val rhs = createDummyEnumRef("tst", #["tst1", "tst2"], "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(new EnumTypeInfo("tst", #{"tst1"}).makeReference) a.assertEquals(new EnumTypeInfo("tst", #{"tst2"}).makeReference)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a|
+			e.assertEquals(new CategoryValueTypeInfo(new CategoryTypeInfo("tst", #{"tst1", "tst2"}), "tst1"))
+			a.assertEquals(new CategoryValueTypeInfo(new CategoryTypeInfo("tst", #{"tst1", "tst2"}), "tst2").makeReference)
+		]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
 	@Test
 	def void testRelationalOpWithNumAndEnum(){
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
-		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
+		val rhs = createDummyEnumRef("tst", #["tst2"], "tst2")
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(TypeSystemProvider::REAL_TYPE) a.assertEquals(new EnumTypeInfo("tst", #{"tst2"}).makeReference)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a|
+			e.assertEquals(TypeSystemProvider::REAL_TYPE) a.assertEquals(new CategoryValueTypeInfo(new CategoryTypeInfo("tst", #{"tst2"}), "tst2").makeReference)
+		]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
 	@Test
 	def void testRelationalOpWithEnumandNum(){
-		val actual = createDummyEnumRef("tst", "tst1")
+		val actual = createDummyEnumRef("tst", #["tst1"], "tst1")
 		val rhs = MdlFactory::eINSTANCE.createRealLiteral
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(new EnumTypeInfo("tst", #{"tst1"}).makeReference) a.assertEquals(TypeSystemProvider::REAL_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a|
+			e.assertEquals(new CategoryValueTypeInfo(new CategoryTypeInfo("tst", #{"tst1"}), "tst1"))
+			a.assertEquals(TypeSystemProvider::REAL_TYPE)
+		]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 

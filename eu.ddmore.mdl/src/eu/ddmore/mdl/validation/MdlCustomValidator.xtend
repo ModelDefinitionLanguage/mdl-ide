@@ -83,8 +83,8 @@ class MdlCustomValidator extends AbstractMdlValidator {
 	def validateCategoryRelations(RelationalExpression it){
 		val leftType = leftOperand?.typeFor
 		val rightType = rightOperand?.typeFor
-		if((leftType != null && leftType.typeClass == TypeInfoClass.Enum)  || 
-			(rightType != null && rightType.typeClass == TypeInfoClass.Enum)){
+		if((leftType != null && leftType.typeClass == TypeInfoClass.Category)  || 
+			(rightType != null && rightType.typeClass == TypeInfoClass.Category)){
 			error("Cannot use inequality operators with categorical types", MdlPackage::eINSTANCE.relationalExpression_Feature,
 				MdlValidator::INVALID_ENUM_RELATION_OPERATOR, feature)
 		}

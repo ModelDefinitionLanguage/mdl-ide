@@ -1,16 +1,16 @@
 package eu.ddmore.mdl.type
 
-class EnumListTypeInfo extends ListTypeInfo {
-	val EnumTypeInfo underlyingEnum		
+class CategoryListTypeInfo extends ListTypeInfo {
+	val CategoryTypeInfo underlyingEnum		
 
-	new(String listName, EnumTypeInfo underlyingEnum) {
+	new(String listName, CategoryTypeInfo underlyingEnum) {
 		super(listName)
 		this.underlyingEnum = underlyingEnum
 	}
 	
 	new(String listName) {
 		super(listName)
-		this.underlyingEnum = new GenericEnumTypeInfo
+		this.underlyingEnum = new UndefinedCategoryTypeInfo
 	}
 	
 	def getUnderlyingEnum(){
@@ -19,15 +19,15 @@ class EnumListTypeInfo extends ListTypeInfo {
 	
 	override isCompatible(TypeInfo otherType){
 		switch(otherType){
-			EnumTypeInfo:
+			CategoryTypeInfo:
 				 underlyingEnum.isCompatible(otherType)
 			default:
 				super.isCompatible(otherType)
 		}
 	}
 	
-	def EnumListTypeInfo populateType(EnumTypeInfo realEnum){
-		new EnumListTypeInfo(this.name, realEnum)
+	def CategoryListTypeInfo populateType(CategoryTypeInfo realEnum){
+		new CategoryListTypeInfo(this.name, realEnum)
 	}
 }
 

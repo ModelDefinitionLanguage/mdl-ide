@@ -65,7 +65,7 @@ public class TypeSystemProvider {
 	public static val REAL_MATRIX_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Real).makeMatrix
 	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Int).makeVector
 	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(TypeInfoClass.Mapping)
-	public static val GENERIC_ENUM_VALUE_TYPE =  new GenericEnumTypeInfo
+	public static val GENERIC_ENUM_VALUE_TYPE =  new GeneralCategoryTypeInfo
 	static val DERIV_LIST_TYPE_NAME = 'List:DerivList' 
 	
 	
@@ -361,7 +361,7 @@ public class TypeSystemProvider {
 					val defn = sd.catDefn 
 					switch(defn){
 						CategoricalDefinitionExpr:
-							new EnumTypeInfo(sd.name, defn.getCategoryNames)
+							new CategoryTypeInfo(sd.name, defn.getCategoryNames)
 						default: UNDEFINED_TYPE							
 					}
 				}
@@ -415,20 +415,26 @@ public class TypeSystemProvider {
 	
 	
 	def dispatch TypeInfo typeFor(CategoryValueDefinition sd){
-//		return new EnumTypeInfo(exp.name)
-		switch(sd){
-			CategoryValueDefinition:{
-				val enumDefn = EcoreUtil2.getContainerOfType(sd.eContainer, SymbolDefinition)
-				val catDefn = EcoreUtil2.getContainerOfType(sd.eContainer, CategoricalDefinitionExpr)
-				if(enumDefn != null && catDefn != null) new EnumTypeInfo(enumDefn.name, catDefn.getCategoryNames)
-				else UNDEFINED_TYPE
+		if(sd instanceof CategoryValueDefinition){
+			val enumDefn = EcoreUtil2.getContainerOfType(sd.eContainer, SymbolDefinition)
+			val catDefn = EcoreUtil2.getContainerOfType(sd.eContainer, CategoricalDefinitionExpr)
+			if(enumDefn != null && catDefn != null){
+				val catType = enumDefn.typeFor
+				return switch(catType){
+					CategoryTypeInfo:
+						new CategoryValueTypeInfo(catType, sd.name)
+					CategoryListTypeInfo:
+						new CategoryValueTypeInfo(catType.underlyingEnum, sd.name)
+					default:
+						UNDEFINED_TYPE
+				} 
 			}
-			default:
-				UNDEFINED_TYPE
+			
 		}
+		UNDEFINED_TYPE
 	}
 	
-	def getCategoryNames(CategoricalDefinitionExpr catDefn){
+	private def getCategoryNames(CategoricalDefinitionExpr catDefn){
 		val catNames = new HashSet<String>
 		catDefn.categories.forEach[catNames.add(name)]
 		catNames
@@ -438,7 +444,7 @@ public class TypeSystemProvider {
 		val listDefn = listDefinition
 		val type = listDefn?.listType ?: UNDEFINED_TYPE
 		switch(type){
-			EnumListTypeInfo:
+			CategoryListTypeInfo:
 				getPopulatedType(listDefn)
 			ListTypeInfo: type
 			default: UNDEFINED_TYPE
@@ -505,9 +511,9 @@ public class TypeSystemProvider {
 				EnumExpression case expr.catDefn != null:
 					if(expr.catDefn instanceof CategoricalDefinitionExpr){
 						val catNames = (expr.catDefn as CategoricalDefinitionExpr).getCategoryNames
-						if(listDefn.listType instanceof EnumListTypeInfo){
+						if(listDefn.listType instanceof CategoryListTypeInfo){
 							val sd = EcoreUtil2.getContainerOfType(eContainer, SymbolDefinition)
-							return (listDefn.listType as EnumListTypeInfo).populateType(new EnumTypeInfo(sd.name, catNames))	
+							return (listDefn.listType as CategoryListTypeInfo).populateType(new CategoryTypeInfo(sd.name, catNames))	
 						}
 						else{
 							return UNDEFINED_TYPE

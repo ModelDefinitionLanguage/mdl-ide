@@ -91,7 +91,7 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 		while(node != null && owningBlock != null){
 			val nodeTxt = node.text
 			val matchingAtts = owningBlock.getAllMatchingListDefns(nodeTxt)
-			if(matchingAtts.exists[attType.typeClass == TypeInfoClass.Enum ]){
+			if(matchingAtts.exists[attType.typeClass == TypeInfoClass.Builtin ]){
 				addProposals(context, acceptor, #['is'], null)
 				node = null
 			}
@@ -107,7 +107,7 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 		while(node != null && owningBlock != null){
 			val nodeTxt = node.text
 			val matchingAtts = owningBlock.getAllMatchingListDefns(nodeTxt)
-			if(matchingAtts.exists[attType.typeClass != TypeInfoClass.Enum ]){
+			if(matchingAtts.exists[attType.typeClass != TypeInfoClass.Builtin ]){
 				addProposals(context, acceptor, #['='], null)
 				node = null
 			}

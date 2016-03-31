@@ -10,21 +10,21 @@ import static org.junit.Assert.*
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlInjectorProvider))
-class GenericEnumTypeInfoTest {
-	val static TEST_NAME = GenericEnumTypeInfo::GENERIC_ENUM_TYPE_NAME
-	val static String EXPECTED_TYPE_NAME = "Enum:" + TEST_NAME
-	val static TypeInfoClass EXPECTED_TYPE_CLASS = TypeInfoClass.Enum
+class GenereralCategoryTypeInfoTest {
+	val static TEST_NAME = GeneralCategoryTypeInfo::GENERIC_ENUM_TYPE_NAME
+	val static String EXPECTED_TYPE_NAME = "Category:" + TEST_NAME
+	val static TypeInfoClass EXPECTED_TYPE_CLASS = TypeInfoClass.Category
 	val static TEST_CATAGS = newHashSet("cat1", "cat2")
 	
-	var GenericEnumTypeInfo testInstance
-	var GenericEnumTypeInfo equivTestInstance
-	var EnumTypeInfo enumTestInstance
+	var GeneralCategoryTypeInfo testInstance
+	var GeneralCategoryTypeInfo equivTestInstance
+	var CategoryTypeInfo enumTestInstance
 	
 	@Before
 	def void setUp(){
-		testInstance = new GenericEnumTypeInfo()
-		equivTestInstance = new GenericEnumTypeInfo()
-		enumTestInstance = new EnumTypeInfo(TEST_NAME, TEST_CATAGS)
+		testInstance = new GeneralCategoryTypeInfo()
+		equivTestInstance = new GeneralCategoryTypeInfo()
+		enumTestInstance = new CategoryTypeInfo(TEST_NAME, TEST_CATAGS)
 	}
 	
 	@Test
@@ -64,13 +64,8 @@ class GenericEnumTypeInfoTest {
 	
 	@Test
 	def void testIsCompatible(){
-		assertTrue(this.testInstance.isCompatible(this.testInstance))
-		assertTrue(this.testInstance.isCompatible(this.equivTestInstance))
-	}
-	
-	@Test
-	def void testIsCompatibleWithEnumListType(){
-		assertTrue(this.testInstance.isCompatible(this.testInstance))
+		assertFalse(this.testInstance.isCompatible(this.testInstance))
+		assertFalse(this.testInstance.isCompatible(this.equivTestInstance))
 	}
 	
 	@Test
@@ -92,8 +87,9 @@ class GenericEnumTypeInfoTest {
 	
 	@Test
 	def void testIsCompatibleWithRefType(){
-		assertTrue(this.testInstance.isCompatible(this.testInstance.makeReference))
-		assertTrue(this.testInstance.isCompatible(this.equivTestInstance.makeReference))
+		assertFalse(this.testInstance.isCompatible(this.testInstance.makeReference))
+		assertFalse(this.testInstance.isCompatible(this.equivTestInstance.makeReference))
+		assertTrue(this.testInstance.isCompatible(enumTestInstance.makeReference))
 	}
 	
 	

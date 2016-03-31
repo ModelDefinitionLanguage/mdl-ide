@@ -1582,7 +1582,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Enum:SEX type, but was Int."
+			"Expected Category:SEX type, but was Int."
 		)
 	}
 	
@@ -1610,7 +1610,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Enum:SEX type, but was ref:Enum:SEX2."
+			"Expected Category:SEX type, but was Category:SEX2:male."
 		)
 	}
 	
@@ -1638,7 +1638,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Enum:SEX type, but was ref:Enum:SEX2."
+			"Expected Category:SEX type, but was Category:SEX2:female2."
 		)
 	}
 	
@@ -1666,7 +1666,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Enum:SEX type, but was ref:Enum:SEX2."
+			"Expected Category:SEX type, but was ref:Category:SEX2."
 		)
 	}
 	
@@ -1693,7 +1693,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Real type, but was ref:Enum:SEX."
+			"Expected Real type, but was ref:Category:SEX."
 		)
 	}
 	
@@ -1720,7 +1720,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Enum:SEX type, but was String."
+			"Expected Category:SEX type, but was String."
 		)
 	}
 	

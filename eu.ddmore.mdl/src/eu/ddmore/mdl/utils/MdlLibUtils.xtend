@@ -2,7 +2,6 @@ package eu.ddmore.mdl.utils
 
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.EnumListTypeInfo
 import eu.ddmore.mdl.type.FunctionTypeInfo
 import eu.ddmore.mdl.type.ListSuperTypeInfo
 import eu.ddmore.mdl.type.ListTypeInfo
@@ -25,7 +24,8 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
-import eu.ddmore.mdl.type.GenericEnumTypeInfo
+import eu.ddmore.mdl.type.GeneralCategoryTypeInfo
+import eu.ddmore.mdl.type.CategoryListTypeInfo
 
 class MdlLibUtils {
 
@@ -68,7 +68,7 @@ class MdlLibUtils {
 								new ListSuperTypeInfo(td.name)
 						}
 						else if(td.isEnumList){
-							new EnumListTypeInfo(td.name)
+							new CategoryListTypeInfo(td.name)
 						}
 						else{
 							val altTypeInfo = td.altType?.typeInfo
@@ -109,7 +109,7 @@ class MdlLibUtils {
 					case TypeClass.ENUM:
 						createBuiltinEnum(td)
 					case TypeClass.CATEGORY:
-						createGenericEnumType(td)
+						createGeneralCategoryType(td)
 					case TypeClass.DERIV:
 						TypeSystemProvider::DERIV_TYPE
 					case TypeClass.MAPPING:
@@ -120,8 +120,8 @@ class MdlLibUtils {
 		}
 	}
 	
-	def createGenericEnumType(TypeDefinition td) {
-		new GenericEnumTypeInfo()
+	def createGeneralCategoryType(TypeDefinition td) {
+		new GeneralCategoryTypeInfo()
 	}
 
 	def TypeInfo getTypeInfo(TypeSpec it){

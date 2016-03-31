@@ -33,8 +33,6 @@ import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
-import eu.ddmore.mdl.type.EnumTypeInfo
-import eu.ddmore.mdl.type.GenericEnumTypeInfo
 import eu.ddmore.mdl.type.MatrixTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
@@ -54,6 +52,9 @@ import eu.ddmore.mdllib.TypeDefinitionProvider
 import eu.ddmore.mdl.mdl.PWClause
 import eu.ddmore.mdl.mdl.PiecewiseExpression
 import eu.ddmore.mdl.type.TypeInfoClass
+import eu.ddmore.mdl.type.GeneralCategoryTypeInfo
+import eu.ddmore.mdl.type.CategoryTypeInfo
+import eu.ddmore.mdl.type.CategoryValueTypeInfo
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -343,25 +344,29 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		checkExpectedAndExpression(TypeSystemProvider::STRING_TYPE, exp, errorLambda)
 	}
 	
+	def checkExpectedCategoryValueMatches(CategoryTypeInfo catType, CategoryValueTypeInfo catValType, (TypeInfo, TypeInfo) => void errorLambda){
+		if(catType != catValType.owningCategory)
+		  // assume that linking has taken care of ensuring that the value is correct
+			errorLambda.apply(catType, catValType)
+	}
+	
 	def checkRelationalOp(Expression lhs, Expression rhs, (TypeInfo, TypeInfo) => void leftErrorLambda,
 			(TypeInfo, TypeInfo) => void rightErrorLambda){
 		val lhsType = lhs?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
-//		val rhsType = rhs?.typeFor?.theType ?: UNDEFINED_TYPE.theType
-		if(lhsType.typeClass == TypeInfoClass.Enum){
-			checkExpectedAndExpression(lhsType, lhs, leftErrorLambda)
-			checkExpectedAndExpression(lhsType, rhs, rightErrorLambda)
+		val rhsType = rhs?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
+		if(lhsType.underlyingType instanceof CategoryTypeInfo && rhsType.underlyingType instanceof CategoryValueTypeInfo){
+			checkExpectedCategoryValueMatches(lhsType.underlyingType as CategoryTypeInfo, rhsType.underlyingType as CategoryValueTypeInfo, leftErrorLambda)
+		}
+		else if(rhsType.underlyingType instanceof CategoryTypeInfo && lhsType.underlyingType instanceof CategoryValueTypeInfo){
+			checkExpectedCategoryValueMatches(rhsType.underlyingType as CategoryTypeInfo, lhsType.underlyingType as CategoryValueTypeInfo, rightErrorLambda)
+		}
+		else if(lhsType.underlyingType instanceof CategoryTypeInfo || lhsType.underlyingType instanceof CategoryValueTypeInfo){
+			checkExpectedAndExpression(lhsType.underlyingType, rhs, rightErrorLambda)
 		}
 		else{
 			checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE, lhs, leftErrorLambda)
 			checkExpectedAndExpression(TypeSystemProvider::REAL_TYPE, rhs, rightErrorLambda)
 		}
-		
-//		if(lhsType != REAL_TYPE.theType && lhsType != ENUM_TYPE.theType)
-//			leftErrorLambda.apply(PrimitiveType.Real, lhsType)
-//		if(rhsType != REAL_TYPE.theType && rhsType != ENUM_TYPE.theType)
-//			rightErrorLambda.apply(PrimitiveType.Real, rhsType)
-//		if(rhsType != lhsType)
-//			leftErrorLambda.apply(lhsType, rhsType)
 	}
 
 	def checkMathsOp(Expression lhs, Expression rhs, (TypeInfo, TypeInfo) => void leftErrorLambda,
@@ -408,8 +413,8 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	def checkWhenOperator(EnumPair at, CategoryValueDefinition catValDefn,  (TypeInfo, TypeInfo) => void leftErrorLambda,
 				(TypeInfo, TypeInfo) => void rightErrorLambda){
 		val actualType = catValDefn.typeFor
-		if(actualType.typeClass != TypeInfoClass.Enum){
-			leftErrorLambda.apply(new GenericEnumTypeInfo, actualType)
+		if(actualType.typeClass != TypeInfoClass.CategoryValue){
+			leftErrorLambda.apply(new GeneralCategoryTypeInfo, actualType)
 		}
 		if(catValDefn.mappedTo != null){
 			validateCategoricalMappingType(at, catValDefn.mappedTo, rightErrorLambda)
@@ -429,7 +434,7 @@ class TypeSystemValidator extends AbstractMdlValidator {
 		}
 	}
 
-	def dispatch void checkExpectedAndExpression(EnumTypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
+	def dispatch void checkExpectedAndExpression(CategoryTypeInfo expectedType, Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
 		if(!expectedType.isCompatible(actualType)){
 			errorLambda.apply(expectedType, actualType)
@@ -438,8 +443,8 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	
 	def void checkExpectedEnumType(Expression exp, (TypeInfo, TypeInfo) => void errorLambda){
 		val actualType = exp?.typeFor ?: TypeSystemProvider::UNDEFINED_TYPE
-		if(actualType.typeClass != TypeInfoClass.Enum){
-			errorLambda.apply(new GenericEnumTypeInfo, actualType)
+		if(actualType.typeClass != TypeInfoClass.Category){
+			errorLambda.apply(new GeneralCategoryTypeInfo, actualType)
 		}
 	}
 	

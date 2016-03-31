@@ -151,8 +151,8 @@ class UnsupportedFeaturesValidator extends AbstractMdlValidator  {
 	def checkUnsupportedCategoryRelations(EqualityExpression it){
 		val leftType = leftOperand?.typeFor
 		val rightType = rightOperand?.typeFor
-		if((leftType != null && leftType.typeClass == TypeInfoClass.Enum)  || 
-			(rightType != null && rightType.typeClass == TypeInfoClass.Enum)){
+		if((leftType != null && leftType.typeClass == TypeInfoClass.Category)  || 
+			(rightType != null && rightType.typeClass == TypeInfoClass.Category)){
 			warning("Equivalence operators with categorical types are not supported for execution in R.",
 				MdlPackage::eINSTANCE.equalityExpression_Feature,
 				FEATURE_NOT_SUPPORTED, feature)
