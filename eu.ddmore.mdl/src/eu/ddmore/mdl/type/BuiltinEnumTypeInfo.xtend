@@ -44,7 +44,7 @@ class BuiltinEnumTypeInfo extends TypeInfo{
 		this.typeClass
 	}
 	
-	def protected getCategories(){
+	def getCategories(){
 		Collections::unmodifiableSet(this.categories);
 	}
 	
