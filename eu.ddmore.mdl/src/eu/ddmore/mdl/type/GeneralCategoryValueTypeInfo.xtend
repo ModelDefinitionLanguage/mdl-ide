@@ -14,7 +14,9 @@ class GeneralCategoryValueTypeInfo extends CategoryValueTypeInfo {
 			CategoryValueTypeInfo:
 				true
 			ReferenceTypeInfo:
-				isCompatible(otherType.underlyingType)
+				this.isCompatible(otherType.underlyingType)
+			RandomVariableTypeInfo:
+				this.isCompatible(otherType.rvType)
 			default:
 				false
 		}

@@ -27,6 +27,7 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.type.RandomVariableTypeInfo
 
 class MdlLibUtils {
 
@@ -190,6 +191,18 @@ class MdlLibUtils {
 					]
 					new FunctionTypeInfo(argList, rtnSpec.typeInfo)
 				}
+			case TypeClass.RV:
+				if(elementType != null && cellType == null && functionSpec == null){
+					// element type specified and well formed
+					val elType = elementType.typeInfo
+					if(elType == TypeSystemProvider::UNDEFINED_TYPE) TypeSystemProvider::UNDEFINED_TYPE
+					else new RandomVariableTypeInfo(elType)
+				}
+				else if(elementType == null && cellType == null && functionSpec == null){
+					// no element spec and well formed so default to Real 
+					new RandomVariableTypeInfo(TypeSystemProvider::REAL_TYPE)
+				}
+				else TypeSystemProvider::UNDEFINED_TYPE
 //			case TypeClass.ENUM:
 //				createBuiltinEnum(typeName)
 //			case TypeClass.SUBLIST:

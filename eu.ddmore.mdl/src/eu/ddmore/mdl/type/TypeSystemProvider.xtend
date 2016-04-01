@@ -179,32 +179,32 @@ public class TypeSystemProvider {
 		colIdx != null && colIdx.begin != null && colIdx.end == null
 	}
 	
-	private def getTypeOfSymbolRef(SymbolReference e){
-//		// check if ref and defn the same. If so this will cause a cycle.
-//		val defn = EcoreUtil2.getContainerOfType(e.eContainer, SymbolDefinition)
-//		var TypeInfo retVal = UNDEFINED_TYPE
-//		if(defn != e.ref){ 
-//			retVal =
-				if(e.indexExpr == null)
-					e.ref.typeFor.makeReference
-				else{
-					val t = e.ref.typeFor
-					switch(t){
-						VectorTypeInfo:
-							if(e.indexExpr.isSingleVectorElement)
-								t.elementType.makeReference
-							else t.makeReference
-						MatrixTypeInfo:{
-							if(e.indexExpr.isSingleMatrixElement)
-								t.elementType.makeReference
-							else t.makeReference
-						}
-						
-						default: UNDEFINED_TYPE
-					}
-				}
-//		}
-//		retVal
+	private def TypeInfo getTypeOfSymbolRef(SymbolReference e){
+		if(e.indexExpr == null)
+			e.ref.typeFor.makeReference
+		else{
+			val t = e.ref.typeFor
+			t.getIndexedTypeInfo(e)
+		}
+	}
+	
+	private def TypeInfo getIndexedTypeInfo(TypeInfo effectiveSymbType, SymbolReference e){
+		val t = effectiveSymbType
+		switch(t){
+			RandomVariableTypeInfo:
+				t.rvType.getIndexedTypeInfo(e)
+			VectorTypeInfo:
+				if(e.indexExpr.isSingleVectorElement)
+					t.elementType.makeReference
+				else t.makeReference
+			MatrixTypeInfo:{
+				if(e.indexExpr.isSingleMatrixElement)
+					t.elementType.makeReference
+				else t.makeReference
+			}
+			
+			default: UNDEFINED_TYPE
+		}
 	}
 	
 	def getTypeOfFunctionRef(SymbolDefinition ref){
@@ -346,9 +346,10 @@ public class TypeSystemProvider {
 						else{
 							val distnType = sd.distn.typeFor.underlyingType
 							switch(distnType){
-								VectorTypeInfo case(distnType.elementType == PDF_TYPE): REAL_VECTOR_TYPE
-								MatrixTypeInfo case(distnType.elementType == PDF_TYPE): REAL_MATRIX_TYPE
-								PrimitiveTypeInfo case(distnType == PDF_TYPE): REAL_TYPE
+								VectorTypeInfo case(distnType.elementType == PDF_TYPE): new RandomVariableTypeInfo(REAL_VECTOR_TYPE)
+								MatrixTypeInfo case(distnType.elementType == PDF_TYPE): new RandomVariableTypeInfo(REAL_MATRIX_TYPE)
+								PrimitiveTypeInfo case(distnType == PDF_TYPE): new RandomVariableTypeInfo(REAL_TYPE)
+								PrimitiveTypeInfo case(distnType == PMF_TYPE): new RandomVariableTypeInfo(INT_TYPE)
 								default:
 									UNDEFINED_TYPE
 									
@@ -360,8 +361,15 @@ public class TypeSystemProvider {
 			EnumerationDefinition:{
 					val defn = sd.catDefn 
 					switch(defn){
-						CategoricalDefinitionExpr:
-							new CategoryTypeInfo(sd.name, defn.getCategoryNames)
+						CategoricalDefinitionExpr:{
+							val catType = new CategoryTypeInfo(sd.name, defn.getCategoryNames)
+							if(sd.distn != null)
+								if(sd.distn.typeFor.underlyingType == PMF_TYPE)
+									new RandomVariableTypeInfo(catType)
+								else UNDEFINED_TYPE
+							else catType
+							
+						}
 						default: UNDEFINED_TYPE							
 					}
 				}

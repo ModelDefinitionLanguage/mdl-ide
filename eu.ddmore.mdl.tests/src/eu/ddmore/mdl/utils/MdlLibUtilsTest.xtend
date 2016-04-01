@@ -11,6 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static org.junit.Assert.assertEquals
+import eu.ddmore.mdl.type.RandomVariableTypeInfo
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -42,6 +43,30 @@ class MdlLibUtilsTest {
 		val typeDefn = MdlLibFactory.eINSTANCE.createTypeDefinition
 		typeDefn.name = 'Vector' 
 		typeDefn.typeClass = TypeClass.VECTOR
+		spec.typeName = typeDefn
+		if(elementSpec != null){
+			spec.elementType =  elementSpec
+		}
+		spec
+	}
+
+	private def createReferenceTypeSpec(TypeSpec elementSpec){
+		val spec = MdlLibFactory.eINSTANCE.createTypeSpec
+		val typeDefn = MdlLibFactory.eINSTANCE.createTypeDefinition
+		typeDefn.name = 'Reference' 
+		typeDefn.typeClass = TypeClass.REFERENCE
+		spec.typeName = typeDefn
+		if(elementSpec != null){
+			spec.elementType =  elementSpec
+		}
+		spec
+	}
+
+	private def createRandomVariableTypeSpec(TypeSpec elementSpec){
+		val spec = MdlLibFactory.eINSTANCE.createTypeSpec
+		val typeDefn = MdlLibFactory.eINSTANCE.createTypeDefinition
+		typeDefn.name = 'RandomVariable' 
+		typeDefn.typeClass = TypeClass.RV
 		spec.typeName = typeDefn
 		if(elementSpec != null){
 			spec.elementType =  elementSpec
@@ -181,6 +206,35 @@ class MdlLibUtilsTest {
 		assertEquals("expectedType", TypeSystemProvider::STRING_TYPE.makeMatrix.makeMatrix, actualTypeInfo)
 	}
 
+	@Test
+	def void testReferenceType(){
+		val actualTypeInfo = createReferenceTypeSpec(createStringTypeSpec).typeInfo
+		assertEquals("expectedType", TypeSystemProvider::STRING_TYPE.makeReference, actualTypeInfo)
+	}
 
+	@Test
+	def void testReferenceDefaultType(){
+		val actualTypeInfo = createReferenceTypeSpec(null).typeInfo
+		assertEquals("expectedType", TypeSystemProvider::REAL_TYPE.makeReference, actualTypeInfo)
+	}
+
+	@Test
+	def void testRandomVariableRealType(){
+		val actualTypeInfo = createRandomVariableTypeSpec(createRealTypeSpec).typeInfo
+		assertEquals("expectedType", new RandomVariableTypeInfo(TypeSystemProvider::REAL_TYPE), actualTypeInfo)
+	}
+
+	
+	@Test
+	def void testRandomVariableIntType(){
+		val actualTypeInfo = createRandomVariableTypeSpec(createIntTypeSpec).typeInfo
+		assertEquals("expectedType", new RandomVariableTypeInfo(TypeSystemProvider::INT_TYPE), actualTypeInfo)
+	}
+
+	@Test
+	def void testRandomVariableDefaultType(){
+		val actualTypeInfo = createRandomVariableTypeSpec(null).typeInfo
+		assertEquals("expectedType", new RandomVariableTypeInfo(TypeSystemProvider::REAL_TYPE), actualTypeInfo)
+	}
 
 }

@@ -20,14 +20,21 @@ class MatrixTypeInfo extends TypeInfo{
 		this
 	}
 	
-	override boolean isCompatible(TypeInfo other){
+	override boolean isCompatible(TypeInfo otherType){
 		// use underlying type in case it is a reference 
-		val otherType = other.underlyingType
-		switch(otherType){
-			// if both vectors then check type compatibility
-			MatrixTypeInfo: elementType.isCompatible(otherType.elementType)
-			default: false
+//		val otherType = other.underlyingType
+		if(otherType != null){
+			switch(otherType){
+				// if both vectors then check type compatibility
+				MatrixTypeInfo: elementType.isCompatible(otherType.elementType)
+				ReferenceTypeInfo:
+					this.isCompatible(otherType.underlyingType)
+				RandomVariableTypeInfo:
+					this.isCompatible(otherType.rvType)
+				default: false
+			}
 		}
+		else false
 	}
 	
 	override isCompatibleElement(TypeInfo otherElementType){

@@ -42,7 +42,7 @@ Poisson_DIST_mdl = mdlObj{
    }# end INDIVIDUAL_VARIABLES
 
    RANDOM_VARIABLE_DEFINITION(level=DV){
-   		Y withCategories {success, fail } ~ Poisson(lambda = logLAMBDA)
+   		Y ~ Poisson(lambda = logLAMBDA)
    }
 
    OBSERVATION{

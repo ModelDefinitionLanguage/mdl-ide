@@ -145,7 +145,7 @@ class Mcl2PharmMLConverterTest {
 		validateConversion("UseCase10_1")
 	}
 
-	@Test
+	@Ignore("Not compatible with Product 5.1. Since this version of PharmML is obsolte will not test this.")
 	def void testUseCase11(){
 		validateConversion("UseCase11")
 	}

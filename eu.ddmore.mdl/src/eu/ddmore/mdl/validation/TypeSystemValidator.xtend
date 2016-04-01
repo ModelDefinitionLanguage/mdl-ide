@@ -55,6 +55,7 @@ import eu.ddmore.mdl.type.TypeInfoClass
 import eu.ddmore.mdl.type.GeneralCategoryTypeInfo
 import eu.ddmore.mdl.type.CategoryTypeInfo
 import eu.ddmore.mdl.type.CategoryValueTypeInfo
+import eu.ddmore.mdl.type.RandomVariableTypeInfo
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
@@ -180,20 +181,29 @@ class TypeSystemValidator extends AbstractMdlValidator {
 	def validateCompatibleTypes(RandomVariableDefinition e){
 		if(e.distn != null){
 			val stmtType = e.typeFor
-			switch(stmtType){
-				MatrixTypeInfo:
-					checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeMatrix, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
-				VectorTypeInfo:
-					checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeVector, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
-//					checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
-				default:
-					checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
-//					checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+			if(stmtType instanceof RandomVariableTypeInfo){
+				val distType = e.distn.typeFor
+				if(distType.isCompatible(TypeSystemProvider::PDF_TYPE)){
+					switch(stmtType.underlyingType.typeClass){
+						case(TypeInfoClass.Matrix):
+							checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeMatrix, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+						case(TypeInfoClass.Vector):
+							checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE.makeVector, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+						default:
+							checkExpectedAndExpression(TypeSystemProvider::PDF_TYPE, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+					}
+				}
+				else if(distType.isCompatible(TypeSystemProvider::PMF_TYPE)){
+					switch(stmtType.rvType){
+						case(TypeInfoClass.Matrix):
+							checkExpectedAndExpression(TypeSystemProvider::PMF_TYPE.makeMatrix, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+						case(TypeInfoClass.Vector):
+							checkExpectedAndExpression(TypeSystemProvider::PMF_TYPE.makeVector, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+						default:
+							checkExpectedAndExpression(TypeSystemProvider::PMF_TYPE, e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
+					}
+				}
 			}
-//			if(e.isVector)
-//				checkExpectedPdfVector(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
-//			else 
-//				checkExpectedPdf(e.distn, typeError(MdlPackage::eINSTANCE.randomVariableDefinition_Distn))
 		}
 	}
 		

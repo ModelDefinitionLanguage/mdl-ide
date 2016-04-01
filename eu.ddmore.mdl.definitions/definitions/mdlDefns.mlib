@@ -16,6 +16,7 @@ _type Mapping _mapping;
 _type Undefined _undef;
 _type GenericEnum _category;
 _type GenericCategoryValue _categoryValue;
+_type RandomVariable _rv;
 
 
 // Custom Types
@@ -86,12 +87,12 @@ _sublist EtaFreeRanEffSublist _atts var::Real, sd::Real, varLvl::VarLevel _sig(v
 
 _list IndivParamLinear _alt Real _extends IndivAbstractList
 		_atts type::IndivTypeType, trans::transType,
-				pop::Real, fixEff::Vector[::fixEffAtts], ranEff::Vector, omega::Vector[::EtaFreeRanEffSublist]
+				pop::Real, fixEff::Vector[::fixEffAtts], ranEff::Vector[::RandomVariable], omega::Vector[::EtaFreeRanEffSublist]
 		_sig(type, trans?, pop, fixEff?, ranEff), (type, trans?, pop, fixEff?, omega);
 		
 _list IndivParamGeneral _alt Real _extends IndivAbstractList
 		_atts type::IndivTypeType, trans::transType, grp::Real,
-				ranEff::Vector[::Real], omega::Vector[::EtaFreeRanEffSublist]
+				ranEff::Vector[::RandomVariable], omega::Vector[::EtaFreeRanEffSublist]
 			_sig(type, trans?, grp, ranEff), (type, trans?, grp, omega); 
 
 
@@ -140,26 +141,26 @@ _list Distribution _atts type::cmtType, modelCmt::Int, from::Reference[::DosingT
 // Observations
 _list continuousErrorList _super;
 _list combinedError1List _alt Real _extends continuousErrorList
-	_atts type::obstype, trans::transType, additive::Real, proportional::Real, prediction::Real, eps::Real, varLvl::VarLevel
+	_atts type::obstype, trans::transType, additive::Real, proportional::Real, prediction::Real, eps::RandomVariable[::Real], varLvl::VarLevel
 		_sig(type, trans?, additive, proportional, prediction, eps), (type, trans?, additive, proportional, prediction, varLvl)
 	;
 _list combinedError2List _alt Real _extends continuousErrorList
-	_atts type::obstype, trans::transType, additive::Real, proportional::Real, prediction::Real, eps::Real, varLvl::VarLevel
+	_atts type::obstype, trans::transType, additive::Real, proportional::Real, prediction::Real, eps::RandomVariable[::Real], varLvl::VarLevel
 		_sig(type, trans?, additive, proportional, prediction, eps), (type, trans?, additive, proportional, prediction, varLvl)
 	;
 _list additiveErrorList _alt Real _extends continuousErrorList
-	_atts type::obstype, trans::transType, additive::Real, prediction::Real, eps::Real, varLvl::VarLevel
+	_atts type::obstype, trans::transType, additive::Real, prediction::Real, eps::RandomVariable[::Real], varLvl::VarLevel
 		_sig(type, trans?, additive, prediction, eps), (type, trans?, additive, prediction, varLvl)
 	;
 _list proportionalErrorList _extends continuousErrorList
-	_atts type::obstype, trans::transType, proportional::Real, prediction::Real, eps::Real, varLvl::VarLevel
+	_atts type::obstype, trans::transType, proportional::Real, prediction::Real, eps::RandomVariable[::Real], varLvl::VarLevel
 	_sig(type, trans?, proportional, prediction, eps), (type, trans?, proportional, prediction, varLvl)
 	;
-_list CatObs _anon _atts type::obstype, variable::GenericEnum _sig(type, variable);
-_list CountObs _anon _atts type::obstype, variable::GenericEnum _sig(type, variable);
-_list DiscreteObs _anon _atts type::obstype, variable::GenericEnum _sig(type, variable);
+_list CatObs _anon _atts type::obstype, variable::RandomVariable[::GenericEnum] _sig(type, variable);
+_list CountObs _anon _atts type::obstype, variable::RandomVariable[::Int] _sig(type, variable);
+_list DiscreteObs _anon _atts type::obstype, variable::RandomVariable[::GenericEnum] _sig(type, variable);
 _list TteObs _alt Real _atts type::obstype, hazard::Reference[::Real] _sig(type, hazard);
-_list ContinuousObsList _anon _extends continuousErrorList _atts type::obstype, variable::Real _sig(type, variable);
+_list ContinuousObsList _anon _extends continuousErrorList _atts type::obstype, variable::RandomVariable[::Real] _sig(type, variable);
 
 
 // Parameter obj variability & Structural
@@ -567,14 +568,14 @@ linear _named
 			trans::transType,
 			pop::Real,
 			fixEff::Vector[::fixEffAtts],
-			ranEff::Vector
+			ranEff::Vector[::RandomVariable]
 		)
 		_sig(trans?, pop, fixEff?, ranEff) 
 		_returns ::Real,
 general _named (
 				trans::transType,
 				grp::Real,
-				ranEff::Vector[::Real]
+				ranEff::Vector[::RandomVariable]
 			)
 			_sig(trans?, grp, ranEff) 
 			_returns ::Real,
@@ -584,7 +585,7 @@ combinedError1 _named
 			additive::Real,
 			proportional::Real,
 			prediction::Real,
-			eps::Real
+			eps::RandomVariable[::Real]
 		)
 		_sig(trans?, additive, proportional, prediction, eps)
 		_returns ::Real
@@ -595,7 +596,7 @@ _func combinedError2 _named
 			additive::Real,
 			proportional::Real,
 			prediction::Real,
-			eps::Real
+			eps::RandomVariable[::Real]
 		)
 		_sig(trans?, additive, proportional, prediction, eps)
 		_returns ::Real
@@ -605,7 +606,7 @@ _func additiveError _named
 			trans::transType,
 			additive::Real,
 			prediction::Real,
-			eps::Real
+			eps::RandomVariable[::Real]
 		)
 		_sig(trans?, additive, prediction, eps)
 		_returns ::Real
@@ -615,7 +616,7 @@ _func proportionalError _named
 			trans::transType,
 			proportional::Real,
 			prediction::Real,
-			eps::Real
+			eps::RandomVariable[::Real]
 		)
 		_sig(trans?, proportional, prediction, eps)
 		_returns ::Real

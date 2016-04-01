@@ -17,6 +17,8 @@ class CategoryTypeInfo extends AbstractCategoryTypeInfo {
 							&& isCompatibleCategories(otherType)
 			CategoryListTypeInfo:
 				this.isCompatible(otherType.underlyingEnum)
+			RandomVariableTypeInfo:
+				this.isCompatible(otherType.rvType)
 			ReferenceTypeInfo:
 				this.isCompatible(otherType.underlyingType)
 			default: false 

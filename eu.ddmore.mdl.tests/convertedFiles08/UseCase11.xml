@@ -55,6 +55,20 @@
 					</RandomEffects>
 				</StructuredModel>
 			</IndividualParameter>
+			<RandomVariable symbId="Y">
+				<ct:VariabilityReference>
+					<ct:SymbRef blkIdRef="vm_err" symbIdRef="DV"/>
+				</ct:VariabilityReference>
+				<Distribution>
+					<UncertML>
+						<PoissonDistribution xmlns="http://www.uncertml.org/3.0" definition="http://www.uncertml.org/distributions/poisson">
+							<rate>
+								<var varId="LAMBDA"/>
+							</rate>
+						</PoissonDistribution>
+					</UncertML>
+				</Distribution>
+			</RandomVariable>
 		</ParameterModel>
 		<StructuralModel blkId="sm">
 			<ct:Variable symbId="lnLAMBDA" symbolType="real">

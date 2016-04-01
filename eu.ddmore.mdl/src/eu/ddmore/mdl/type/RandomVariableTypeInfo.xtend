@@ -1,24 +1,39 @@
 package eu.ddmore.mdl.type
 
-import eu.ddmore.mdl.type.TypeInfo
+import org.eclipse.xtend.lib.annotations.ToString
+import com.google.common.base.Preconditions
 
-import org.eclipse.xtend.lib.annotations.Data
-
-@Data // using this to get an equals implementation on all the fields
+@ToString
 class RandomVariableTypeInfo extends TypeInfo {
+	val TypeInfo rvType 
 	
-	
+	new(TypeInfo rvType){
+		Preconditions.checkArgument(rvType != null && rvType.class != RandomVariableTypeInfo)
+		this.rvType = rvType
+	}
 	
 	override getTypeClass() {
 		TypeInfoClass.RandomVariable
 	}
 	
+	def getRvType(){
+		this.rvType
+	}
+	
 	override getUnderlyingType() {
-		return this
+		this
 	}
 	
 	override isCompatible(TypeInfo otherType) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+		if(otherType != null){
+			switch(otherType){
+				RandomVariableTypeInfo:
+					this.rvType.isCompatible(otherType.rvType)
+				default:
+					this.rvType.isCompatible(otherType.underlyingType)
+			}
+		}
+		else false
 	}
 	
 	override isCompatibleElement(TypeInfo otherType) {
@@ -30,7 +45,7 @@ class RandomVariableTypeInfo extends TypeInfo {
 	}
 	
 	override getTypeName() {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+		"RV:" + rvType.typeName
 	}
 	
 	override makeVector() {
@@ -41,4 +56,22 @@ class RandomVariableTypeInfo extends TypeInfo {
 		new MatrixTypeInfo(this)
 	}
 	
+	override boolean equals(Object other){
+		var retVal = false
+		if(other !== null){
+			if(this !== other){
+				if(other instanceof RandomVariableTypeInfo){
+					retVal = this.rvType == other.rvType
+				}
+			}
+			else retVal = true
+		}
+		retVal
+	}
+
+	override int hashCode() {
+	    val int prime = 31
+	    var result = prime + if(this.rvType== null)  0 else this.rvType.hashCode()
+	    result
+	}
 }

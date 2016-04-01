@@ -64,7 +64,7 @@ Poisson_DIST_mdl = mdlObj{
    }
 
 	RANDOM_VARIABLE_DEFINITION(level=DV){
-		Y withCategories {success, fail } ~ Poisson(lambda = LAMBDA)
+		Y ~ Poisson(lambda = LAMBDA)
 	}
 
    OBSERVATION{

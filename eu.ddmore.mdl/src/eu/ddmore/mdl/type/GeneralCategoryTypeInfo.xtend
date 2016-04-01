@@ -14,8 +14,12 @@ class GeneralCategoryTypeInfo extends AbstractCategoryTypeInfo {
 	
 	override isCompatible(TypeInfo otherType){
 		if(otherType != null){
-			switch(otherType.underlyingType){
+			switch(otherType){
 				CategoryTypeInfo: true
+				ReferenceTypeInfo:
+					this.isCompatible(otherType.underlyingType)
+				RandomVariableTypeInfo:
+					this.isCompatible(otherType.rvType)
 				default: false 
 			}
 		}

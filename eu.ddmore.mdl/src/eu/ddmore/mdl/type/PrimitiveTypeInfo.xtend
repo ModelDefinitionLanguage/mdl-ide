@@ -29,13 +29,17 @@ class PrimitiveTypeInfo extends TypeInfo{
 		this.typeClass
 	}
 	
-	override boolean isCompatible(TypeInfo other){
-		if(other != null){
+	override boolean isCompatible(TypeInfo otherType){
+		if(otherType != null){
 			// use underlying type in case it is a reference 
-			val otherType = other.underlyingType
+//			val otherType = other.underlyingType
 			switch(otherType){
 				AbstractListTypeInfo:
 					isPrimitiveCompatible(this.getTypeClass, otherType.secondaryType)
+				RandomVariableTypeInfo:
+					isCompatible(otherType.rvType)
+				ReferenceTypeInfo:
+					isCompatible(otherType.underlyingType)
 				default:{
 					isPrimitiveCompatible(this.getTypeClass, otherType.typeClass)
 				}
