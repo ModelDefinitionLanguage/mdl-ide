@@ -15,11 +15,12 @@ _type Reference _reference;
 _type Mapping _mapping;
 _type Undefined _undef;
 _type GenericEnum _category;
+_type GenericCategoryValue _categoryValue;
 
 
 // Custom Types
 _type transType _enum (none, ln, logit, probit);
-_sublist fixEffAtts _atts cov::Reference[::Real], catCov::Reference[::GenericEnum], coeff::Reference[::Real]
+_sublist fixEffAtts _atts cov::Reference[::Real], catCov::Reference[::GenericCategoryValue], coeff::Reference[::Real]
 					_sig (cov, coeff), (catCov, coeff);
 					
 _type priorElementType _enum(matrix, vector);					

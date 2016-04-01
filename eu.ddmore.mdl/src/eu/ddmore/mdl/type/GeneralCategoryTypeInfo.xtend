@@ -4,6 +4,10 @@ class GeneralCategoryTypeInfo extends AbstractCategoryTypeInfo {
 	public static val GENERIC_ENUM_TYPE_NAME = "generic"
 	
 	
+	new(String name){
+		super(name)
+	}
+
 	new(){
 		super(GENERIC_ENUM_TYPE_NAME)
 	}
