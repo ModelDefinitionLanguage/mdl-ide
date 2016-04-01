@@ -1,16 +1,10 @@
 package eu.ddmore.mdl.scoping;
 
-import static java.util.Collections.emptyList;
-
-import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.eclipse.core.runtime.preferences.IScope;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.scoping.impl.ImportNormalizer;
-import org.eclipse.xtext.scoping.impl.ImportUriGlobalScopeProvider;
 import org.eclipse.xtext.scoping.impl.ImportedNamespaceAwareLocalScopeProvider;
 
 import com.google.common.collect.Lists;

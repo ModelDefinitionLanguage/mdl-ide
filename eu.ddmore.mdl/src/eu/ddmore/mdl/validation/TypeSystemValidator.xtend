@@ -18,6 +18,8 @@ import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.MultiplicativeExpression
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.OrExpression
+import eu.ddmore.mdl.mdl.PWClause
+import eu.ddmore.mdl.mdl.PiecewiseExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.RandomVariableDefinition
 import eu.ddmore.mdl.mdl.RelationalExpression
@@ -33,29 +35,26 @@ import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
-import eu.ddmore.mdl.type.MatrixTypeInfo
+import eu.ddmore.mdl.type.CategoryTypeInfo
+import eu.ddmore.mdl.type.CategoryValueTypeInfo
+import eu.ddmore.mdl.type.GeneralCategoryTypeInfo
+import eu.ddmore.mdl.type.RandomVariableTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
+import eu.ddmore.mdl.type.TypeInfoClass
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.type.VectorTypeInfo
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.utils.MdlLibUtils
+import eu.ddmore.mdllib.TypeDefinitionProvider
 import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.FunctionDefnBody
+import eu.ddmore.mdllib.mdllib.FunctionSpec
+import eu.ddmore.mdllib.mdllib.MdlLibPackage
+import eu.ddmore.mdllib.mdllib.TypeSpec
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
-import eu.ddmore.mdllib.mdllib.FunctionSpec
-import eu.ddmore.mdl.utils.MdlLibUtils
-import eu.ddmore.mdllib.mdllib.MdlLibPackage
-import eu.ddmore.mdllib.mdllib.TypeSpec
-import eu.ddmore.mdllib.TypeDefinitionProvider
-import eu.ddmore.mdl.mdl.PWClause
-import eu.ddmore.mdl.mdl.PiecewiseExpression
-import eu.ddmore.mdl.type.TypeInfoClass
-import eu.ddmore.mdl.type.GeneralCategoryTypeInfo
-import eu.ddmore.mdl.type.CategoryTypeInfo
-import eu.ddmore.mdl.type.CategoryValueTypeInfo
-import eu.ddmore.mdl.type.RandomVariableTypeInfo
 
 class TypeSystemValidator extends AbstractMdlValidator {
 	
