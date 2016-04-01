@@ -486,8 +486,8 @@ _func matrix _named
 			byRow::Boolean
 		)
 		_sig (vector, ncol, byRow)
-		_returns ::Matrix,
-linear _named
+		_returns ::Matrix;
+_func linear _named
 		( 
 			trans::transType,
 			pop::Real,
@@ -495,15 +495,15 @@ linear _named
 			ranEff::Vector
 		)
 		_sig(trans?, pop, fixEff?, ranEff) 
-		_returns ::Real,
-general _named (
+		_returns ::Real;
+_func general _named (
 				trans::transType,
 				grp::Real,
 				ranEff::Vector[::Real]
 			)
 			_sig(trans?, grp, ranEff) 
-			_returns ::Real,
-combinedError1 _named
+			_returns ::Real;
+_func combinedError1 _named
 		( 
 			trans::transType,
 			additive::Real,
