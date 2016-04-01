@@ -241,7 +241,7 @@ _list SamplingSuper _super;
 
 _list SimpleSamplingList _extends SamplingSuper _atts type::sampletype, outcome::Reference[::Real], sampleTime::Vector,
 								numberTimes::Int, deltaTime::Real, blq::Real, ulq::Real, numberSamples::Vector[::Int]
-							_sig(type, outcome, sampleTime, numberTimes?, numberSamples?, deltaTime?, blq?, ulq?);
+							_sig(type, outcome, sampleTime?, numberTimes?, numberSamples?, deltaTime?, blq?, ulq?);
 //_list ComplexSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::sampSeqAtts], numberTimes::Int
 //							_sig(type,combination, numberTimes?);
 _list DerivedSamplingList _extends SamplingSuper _atts type::sampletype, combination::Vector[::Reference[::SamplingSuper]],
