@@ -9,98 +9,42 @@ import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.StringLiteral
 import eu.ddmore.mdl.mdl.ValuePair
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
+import eu.ddmore.mdl.type.ListTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.utils.MdlLibUtils
+import eu.ddmore.mdllib.mdllib.BlockDefinition
 import eu.ddmore.mdllib.mdllib.Expression
+import eu.ddmore.mdllib.mdllib.Library
 import java.util.ArrayList
 import java.util.Collections
-import java.util.HashMap
 import java.util.HashSet
 import java.util.List
 import java.util.Map
 import java.util.Set
-import org.eclipse.xtend.lib.annotations.Data
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.EcoreUtil2
 
 class ListDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension MdlLibUtils mlu = new MdlLibUtils
+//	extension BlockUtils bu = new BlockUtils
 
 
 	
-	@Data @FinalFieldsConstructor
-	static class AttributeDefn{
-		String name
-//		String depAtt // other att that must be present
-		boolean mandatory
-		TypeInfo attType
-		TypeInfo catMappingType
-		boolean catMappingMandatory
-		
-//		new(String name, String depAtt, boolean mand, TypeInfo attType){
-//			this(name, depAtt, mand, attType, null, false)
-//		}
-		
-		new(String name, boolean mand, TypeInfo attType){
-			this(name, mand, attType, null, false)
-		}
-		
-		def isCatMappingMandatory(){
-			return catMappingType != null && catMappingMandatory
-		}
-		
-		def isCatMappingForbidden(){
-			return catMappingType == null || (catMappingType != null && !catMappingMandatory)
-		}
-		
-		def isCatMappingPossible(){
-			return catMappingType != null
-		}
-	}
 	
-	@Data @FinalFieldsConstructor
-	static class ListDefInfo {
-		val String keyValue
-		TypeInfo listType
-		List<AttributeDefn> attributes
-		List<Map<String, Boolean>> attributeSets
-		boolean isAnonymous
-		
-		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes){
-			this(keyValue, listType, attributes, false)
-		}
-		
-		new(String keyValue, TypeInfo listType, List<AttributeDefn> attributes, boolean isListAnonymous){
-			this.keyValue = keyValue
-			this.listType = listType
-			this.attributes = attributes
-			attributeSets = new ArrayList<Map<String, Boolean>>()
-			val onlySet = new HashMap<String, Boolean>
-			attributeSets.add(onlySet)
-			for(att : attributes){
-				onlySet.put(att.name, att.mandatory)
-			}
-			isAnonymous = isListAnonymous
-		}
-	}
 	
-	@Data @FinalFieldsConstructor
-	static class BlockListDefinition {
-		String key
-		List<ListDefInfo> listDefns
-	}
 
 	// owning block -> key attribute -> key value -> attributes associated with key
 
-	val Map<String, BlockListDefinition> attDefns
-	val Map<String, Map<String, ? extends TypeInfo>> attEnumTypes
+//	val Map<String, BlockListDefinition> attDefns
+//	val Map<String, Map<String, ? extends TypeInfo>> attEnumTypes
 
 	new(){
-		attDefns = ListDefinitionTable::attributeDefnDefaults
-//		attEnumTypes = attributeEnumTypeDefaults
-		attEnumTypes = new HashMap<String, Map<String, ? extends TypeInfo>>
-		buildEnumTypes
+//		attDefns = ListDefinitionTable::attributeDefnDefaults
+////		attEnumTypes = attributeEnumTypeDefaults
+//		attEnumTypes = new HashMap<String, Map<String, ? extends TypeInfo>>
+//		buildEnumTypes
 	}
 
 //	new(Map<String, BlockListDefinition>  ad, Map<String, Map<String, ? extends TypeInfo>> enumTypes){
@@ -111,54 +55,65 @@ class ListDefinitionProvider {
 //	}
 
 
-	def void setAttDefns(Map<String, Map<String, ? extends TypeInfo>> newAttDefn){
-		attDefns = newAttDefn
-		buildEnumTypes
-	}
+//	def void setAttDefns(Map<String, Map<String, ? extends TypeInfo>> newAttDefn){
+//		attDefns = newAttDefn
+//		buildEnumTypes
+//	}
+//	
+//	private def buildEnumTypes(){
+//		for(blkName : attDefns.keySet){
+//			val valueMap = new HashMap<String, BuiltinEnumTypeInfo>
+//			attEnumTypes.put(blkName, valueMap)
+//			val bd = attDefns.get(blkName)
+//			for(a : bd.listDefns){
+//				for(att : a.attributes){
+//					if(att.attType instanceof BuiltinEnumTypeInfo){
+//						val builtinType = att.attType as BuiltinEnumTypeInfo
+//						for(v : builtinType.expectedValues){
+//							valueMap.put(v, builtinType)
+//						}
+//					}
+//				}
+//			}
+//		}
+//		attEnumTypes
+//	} 
 
-	private def buildEnumTypes(){
-		for(blkName : attDefns.keySet){
-			val valueMap = new HashMap<String, BuiltinEnumTypeInfo>
-			attEnumTypes.put(blkName, valueMap)
-			val bd = attDefns.get(blkName)
-			for(a : bd.listDefns){
-				for(att : a.attributes){
-					if(att.attType instanceof BuiltinEnumTypeInfo){
-						val builtinType = att.attType as BuiltinEnumTypeInfo
-						for(v : builtinType.expectedValues){
-							valueMap.put(v, builtinType)
-						}
-					}
-				}
-			}
-		}
-		attEnumTypes
-	} 
+
+	private def ValuePair getKeyValuePair(BlockStatement bs, AttributeList al){
+		al.attributes.findFirst[argumentName == bs.blkId.keyAttName]
+	}
 
 	def ListDefInfo getListDefinition(AttributeList it){
 		val parent = parentStatement
-		if(attDefns.containsKey(parent.identifier)){
-			val iter = attributes.iterator
-			val expectedAttributes = new ArrayList<ListDefInfo>()
-			while(iter.hasNext && expectedAttributes.isEmpty){
-				val att = iter.next
-				val blockDefn = attDefns.get(parent.identifier)
-				expectedAttributes.addAll(blockDefn.listDefns.filter[at|
-					switch(att){
-						ValuePair case att.argumentName == blockDefn.key:{
-							if(at.keyValue != null){
-								val keyVal = att.expression.enumValue
-								keyVal == at.keyValue
-							}
-							else true
-						}
-						default: false
-					}
-				])
-			}
-			return expectedAttributes.head
-		}
-		null
+		val blkDefn = new BlockListDefinition(parent.blkId)
+		val keyAtt = parent.getKeyValuePair(it)
+		blkDefn.getListDefnByValue(keyAtt.expression.enumValue)
+//		if(attDefns.containsKey(parent.identifier)){
+//			val iter = attributes.iterator
+//			val expectedAttributes = new ArrayList<ListDefInfo>()
+//			while(iter.hasNext && expectedAttributes.isEmpty){
+//				val att = iter.next
+//				val blockDefn = attDefns.get(parent.identifier)
+//				val keyVal = att.expression.enumValue
+//				val ld = blockDefn.getListDefnByValue(keyVal)
+//				if(ld != null) expectedAttributes.add(ld)
+////				expectedAttributes.addAll(blockDefn.listDefns.filter[at|
+////					switch(att){
+////						ValuePair case att.argumentName == blockDefn.key:{
+////							if(blockDefn.keyValue != null){
+////								val keyVal = att.expression.enumValue
+////								keyVal == blockDefn
+////							}
+////							else true
+////						}
+////						default: false
+////					}
+////				])
+//			}
+//			return expectedAttributes.head
+//		}
+//		null
 	}	
 	
 
@@ -171,11 +126,13 @@ class ListDefinitionProvider {
 	} 
 	
 	def TypeInfo getAttributeType(ListDefInfo it, String attName){
-		attributes.findFirst(ad | ad.name == attName)?.attType ?: TypeSystemProvider::UNDEFINED_TYPE 
+		attributes.findFirst[ad | 
+			ad.name == attName
+		]?.attType ?: TypeSystemProvider::UNDEFINED_TYPE 
 	}
 	
 	def getAttributeDefinition(ListDefInfo it, String attName){
-		attributes.findFirst(ad | ad.name == attName) 
+		attributes.findFirst[ad | ad.name == attName] 
 	}
 	
 	
@@ -189,22 +146,35 @@ class ListDefinitionProvider {
 	}
 	
 	def TypeInfo getTypeOfAttributeBuiltinEnum(EnumExpression ee){
-		val blockName = ee.owningBlock.identifier
-		val enumValue = ee.enumValue
-		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: TypeSystemProvider::UNDEFINED_TYPE
-		defnType
-	}
-
-	def getTypeOfEnumAttribute(String blockName, String attributeName){
-		val defns = attDefns.get(blockName)
-		for(lst :defns.listDefns){
-			val attDefn = lst.attributes.findFirst[a | a.name == attributeName]
-			if(attDefn != null){
-				return attDefn.attType
+//		val blockName = ee.owningBlock.blkId
+		val attList = EcoreUtil2.getContainerOfType(ee.eContainer, AttributeList)
+		if(attList != null){
+			val listDefn = getListDefinition(attList)
+			if(listDefn != null){
+				val vp = EcoreUtil2.getContainerOfType(ee.eContainer, ValuePair)
+				val enumType = listDefn.getAttributeType(vp.argumentName)
+				if(enumType instanceof BuiltinEnumTypeInfo){
+					val enumValue = ee.enumValue
+					return if(enumType.containsValue(enumValue)) enumType else TypeSystemProvider::UNDEFINED_TYPE
+				}
 			} 
 		}
-		null
+		TypeSystemProvider::UNDEFINED_TYPE
+//		val enumValue = ee.enumValue
+//		val defnType = attEnumTypes.get(blockName)?.get(enumValue) ?: TypeSystemProvider::UNDEFINED_TYPE
+//		defnType
 	}
+
+//	def getTypeOfEnumAttribute(String blockName, String attributeName){
+//		val defns = attDefns.get(blockName)
+//		for(lst :defns.listDefns){
+//			val attDefn = lst.attributes.findFirst[a | a.name == attributeName]
+//			if(attDefn != null){
+//				return attDefn.attType
+//			} 
+//		}
+//		null
+//	}
 
 //	def getTypeOfBuiltinEnum(Attribute att){
 //		val blockName = att.owningBlock.identifier
@@ -214,56 +184,68 @@ class ListDefinitionProvider {
 //	}
 	
 	
-	def isKeyAttributeDefined(AttributeList it){
-		val parent = parentStatement
-		var found = false
-		if(attDefns.containsKey(parent.identifier)){
-			val iter = attributes.iterator
-			while(iter.hasNext && !found){
-				val att = iter.next
-				val blockDefn = attDefns.get(parent.identifier)
-				found = blockDefn.listDefns.exists[at|
-					switch(att){
-						ValuePair case att.argumentName == blockDefn.key:{
-							if(at.keyValue != null){
-								val keyVal = att.expression.enumValue
-								keyVal == at.keyValue
-							}
-							else true
-						}
-						default: false
-					}
-				]
-			}
-		}
-		return found
+	def isKeyAttributeDefined(BlockStatement parent, AttributeList it){
+//		val parent = parentStatement
+		attributes.exists[parent.blkId.keyAttName == argumentName]
+//		var found = false
+//		if(attDefns.containsKey(parent.identifier)){
+//			val iter = attributes.iterator
+//			while(iter.hasNext && !found){
+//				val att = iter.next
+//				val blockDefn = attDefns.get(parent.identifier)
+//				val keyVal = att.expression.enumValue
+//				found = att.argumentName == blockDefn.key &&
+//					blockDefn.getListDefnByKeyValue(keyVal) != null 
+////				
+////				found = blockDefn.listDefns.exists[at|
+////					switch(att){
+////						ValuePair case att.argumentName == blockDefn.key:{
+////							if(at.keyValue != null){
+////								val keyVal = att.expression.enumValue
+////								keyVal == at.keyValue
+////							}
+////							else true
+////						}
+////						default: false
+////					}
+////				]
+//			}
+//		}
+//		return found
 	}
 	
-	def getKeyAttribute(AttributeList it){
-		val parent = parentStatement
-		var String retVal = null
-		if(attDefns.containsKey(parent.identifier)){
-			val iter = attributes.iterator
-			while(iter.hasNext && retVal == null){
-				val att = iter.next
-				val blockDefn = attDefns.get(parent.identifier)
-				if(blockDefn.listDefns.exists[at|
-					switch(att){
-						ValuePair case att.argumentName == blockDefn.key:{
-							if(at.keyValue != null){
-								val keyVal = att.expression.enumValue
-								keyVal == at.keyValue
-							}
-							else true
-						}
-						default: false
-					}
-				]){
-					retVal = blockDefn.key
-				}
-			}
-		}
-		return retVal
+	def getKeyAttribute(BlockStatement parent, AttributeList it){
+//		val parent = parentStatement
+		parent.blkId.keyAttName
+//		var String retVal = null
+//		if(attDefns.containsKey(parent.identifier)){
+//			val iter = attributes.iterator
+//			while(iter.hasNext && retVal == null){
+//				val att = iter.next
+//				val blockDefn = attDefns.get(parent.identifier)
+//				val keyVal = att.expression.enumValue
+//				if(att.argumentName == blockDefn.key &&
+//					blockDefn.getListDefnByKeyValue(keyVal) != null){
+//						retVal = att.argumentName
+//				} 
+//				
+////				if(blockDefn.listDefns.exists[at|
+////					switch(att){
+////						ValuePair case att.argumentName == blockDefn.key:{
+////							if(at.keyValue != null){
+////								val keyVal = att.expression.enumValue
+////								keyVal == at.keyValue
+////							}
+////							else true
+////						}
+////						default: false
+////					}
+////				]){
+////					retVal = blockDefn.key
+////				}
+//			}
+//		}
+//		return retVal
 	}
 
 
@@ -289,28 +271,34 @@ class ListDefinitionProvider {
 	def getUnusedMandatoryAttributes(AttributeList it) {
 		// expect AttributeList->ListDefinition|AnaonolymousListStatement->BlockStatement
 		val parent = parentStatement
-		val unused = new HashSet
-		if(attDefns.containsKey(parent.identifier)){
+		val unused = new HashSet<String>
+		val blockDefn = new BlockListDefinition(parent.blkId)
+		if(attributes.exists[argumentName == parent.blkId.keyAttName]){
+			// key present
 			val iter = attributes.iterator
 			var expectedAttributes = new ArrayList<ListDefInfo>()
 			while(iter.hasNext && expectedAttributes.isEmpty){
 				val att = iter.next
-				val blockDefn = attDefns.get(parent.identifier)
-				expectedAttributes.addAll(blockDefn.listDefns.filter[at| 
-					switch(att){
-						ValuePair case att.argumentName == blockDefn.key:{
-							if(at.keyValue != null){
-								val keyVal = att.expression.enumValue
-								keyVal == at.keyValue
-							}
-							else true
-						}
-						default: false
-					}
-				])
+				val keyVal = att.expression.enumValue
+				val ld = blockDefn.getListDefnByValue(keyVal)
+				if(ld != null) expectedAttributes.add(ld)
+//				expectedAttributes.addAll(blockDefn.listDefns.filter[at| 
+//					switch(att){
+//						ValuePair case att.argumentName == blockDefn.key:{
+//							if(at.keyValue != null){
+//								val keyVal = att.expression.enumValue
+//								keyVal == at.keyValue
+//							}
+//							else true
+//						}
+//						default: false
+//					}
+//				])
 			}
-			val listDefinition = expectedAttributes.head
-			unused.addAll(findUnusedMandatoryArguments(listDefinition))
+			if(!expectedAttributes.isEmpty){
+				val listDefinition = expectedAttributes.head
+				unused.addAll(findUnusedMandatoryArguments(listDefinition))
+			}
 		}
 		unused
 	}
@@ -439,25 +427,30 @@ class ListDefinitionProvider {
 //	}
 	
 	// gets a list definition based on a key value combination 
-	def getMatchingListDefn(AttributeList attList){
+	def ListDefInfo getMatchingListDefn(AttributeList attList){
 		val owningBlock = EcoreUtil2.getContainerOfType(attList.eContainer, BlockStatement)
-		val blkDefn = attDefns.get(owningBlock.identifier)
-		val listDefns = blkDefn?.listDefns ?: Collections.emptyList
-		listDefns.findFirst[defn|
+		val blkDefn = new BlockListDefinition(owningBlock.blkId)
+//		val listDefns = blkDefn?.listDefns ?: Collections.emptyList
+//		listDefns.findFirst[defn|
 			for(a : attList.attributes){
-				if(blkDefn.key == a.attributeName)
-					if(defn.keyValue == null || defn.keyValue == a.expression.enumValue){
-						return true;
-					}
+				if(a.argumentName == blkDefn.key){
+					val lstDefn = blkDefn.getListDefnByValue(a.expression.enumValue)
+					if(lstDefn != null) return lstDefn
+				}
+//				if(blkDefn.key == a.attributeName)
+//					if(defn.keyValue == null || defn.keyValue == a.expression.enumValue){
+//						return true;
+//					}
 			} 
-			false
-		]
+//			false
+//		]
+		null
 	}
 
 
 	def getAllMatchingListDefns(BlockStatement owningBlock, String attName){
-		val retVal = new ArrayList<AttributeDefn>
-		val blkDefn = attDefns.get(owningBlock.identifier)
+		val retVal = new ArrayList<MdlListAttributeDefn>
+		val blkDefn = new BlockListDefinition(owningBlock.blkId)
 		for(ld : blkDefn?.listDefns ?: Collections::emptyList){
 			ld.attributes.forEach[ad|
 				if(ad.name == attName) retVal.add(ad) 
@@ -465,20 +458,35 @@ class ListDefinitionProvider {
 		}
 		retVal
 	}
+	
+	
+	def TypeInfo getListDefinitionByTypeName(BlockDefinition bd, String lstTypeName){
+		val lib = EcoreUtil2.getContainerOfType(bd.eContainer, Library)
+		val retVal = lib.typeDefns.findFirst[
+			name == lstTypeName
+		]
+		val ti = retVal?.typeInfo
+		if(ti instanceof ListTypeInfo){
+			ti
+		}
+		else null
+	}
 
 	// gets a list definition based on its key 
 	def getListDefnByKeyValue(BlockListDefinition it, String keyValQuery){
-		listDefns.findFirst[defn|
-			// if keyValue is null then there can only be one list defn in the block
-			// so we match it without comparing key values
-			defn.keyValue == null || defn.keyValue == keyValQuery
-		]
+		getListDefnByValue(keyValQuery)
+//		listDefns.findFirst[defn|
+//			// if keyValue is null then there can only be one list defn in the block
+//			// so we match it without comparing key values
+//			defn.keyValue == null || defn.keyValue == keyValQuery
+//		]
 	}
 
-	def	getListDefnByBlockAndKeyValue(String blockName, String keyValQuery){
-		val blkDefn = attDefns.get(blockName)
-		blkDefn?.listDefns.findFirst[defn| defn.keyValue == keyValQuery ]
-	}
+//	def	getListDefnByBlockAndKeyValue(String blockName, String keyValQuery){
+//		val blkDefn = attDefns.get(blockName)
+//		blkDefn.getListDefnByValue(keyValQuery)
+////		blkDefn?.listDefns.findFirst[defn| defn.keyValue == keyValQuery ]
+//	}
 	
 	def getAttributeExpression(AttributeList it, String attName){
 		attributes.findFirst[argumentName == attName]?.expression
@@ -546,8 +554,10 @@ class ListDefinitionProvider {
 	def isAttributeRecognised(ValuePair it){
 		// expect Attribute->AttributeList->ListDefInfo|AnaonolymousListStatement->BlockStatement
 		// get key from parent list
-		if (attDefns.containsKey(parentBlock.identifier)) {
-			val blkDefn = attDefns.get(parentBlock.identifier)
+		val parent = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		val attList = EcoreUtil2.getContainerOfType(eContainer, AttributeList)
+		if (attList.attributes.exists[parent.blkId.keyAttName == argumentName]) {
+			val blkDefn = new BlockListDefinition(parent.blkId)
 			val keyVal = parentList.getAttributeEnumValue(blkDefn.key)
 			val listDefn = blkDefn.getListDefnByKeyValue(keyVal)
 			if(listDefn != null){
@@ -570,8 +580,7 @@ class ListDefinitionProvider {
 		val ep = EcoreUtil2.getContainerOfType(eContainer, EnumPair)
 		val listDefn = attList?.matchingListDefn
 		if(listDefn != null && ep != null){
-			val attDefn = listDefn.getAttributeDefinition(ep.argumentName)
-			return attDefn.isCatMappingMandatory
+			return listDefn.isCatMappingMandatory(ep.argumentName)
 		}
 		false
 	}
@@ -581,8 +590,7 @@ class ListDefinitionProvider {
 		val ep = EcoreUtil2.getContainerOfType(eContainer, EnumPair)
 		val listDefn = attList?.matchingListDefn
 		if(listDefn != null && ep != null){
-			val attDefn = listDefn.getAttributeDefinition(ep.argumentName)
-			return attDefn.isCatMappingForbidden
+			return listDefn.isCatMappingForbidden(ep.argumentName)
 		}
 		false
 	}

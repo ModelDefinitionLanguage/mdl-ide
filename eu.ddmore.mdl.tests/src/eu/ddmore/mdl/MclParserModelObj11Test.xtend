@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserModelObj11Test {
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension MdlTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
@@ -27,6 +27,9 @@ warfarin_PK_ODE_mdl = mdlObj {
 		    arg2 * arg1  # return type is Real
 	}
 
+   MODEL_PREDICTION{
+	  P1 = userFunc(0, 1.2, "A")
+   }# end MODEL_PREDICTION
 } # end of model object
 		'''
 	

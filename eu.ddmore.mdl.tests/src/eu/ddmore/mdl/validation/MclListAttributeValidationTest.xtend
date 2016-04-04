@@ -123,6 +123,24 @@ class MclListAttributeValidationTest {
 	}
 
 	@Test
+	def void testInvalidUnrecognisedKeyValue(){
+		val mcl = '''bar = dataObj {
+			DECLARED_VARIABLES{ D }
+			
+			DATA_INPUT_VARIABLES{
+				CMT : { use is cm }
+			}
+			
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
+		}'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
+			MdlValidator::LIST_KEY_VAL_UNRECOGNISED,
+			"Attribute list key value 'cm' is not recognised."
+		);
+	}
+
+	@Test
 	def void testValidSrcDvColumn(){
 		val mcl = '''bar = dataObj {
 			DECLARED_VARIABLES{ D }
@@ -416,7 +434,7 @@ class MclListAttributeValidationTest {
 			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 
 			SOURCE{
-				foo : { file="aFile", inputformat is nonmem }
+				foo2 : { file="aFile", inputformat is nonmem }
 			}
 		} # end of model object
 		'''.parse
@@ -429,18 +447,31 @@ class MclListAttributeValidationTest {
 
 	@Test
 	def void testInValidMissingWithCats(){
+//		val mcl = '''
+//		foo = mdlObj{
+//			IDV{T}
+//			
+//			VARIABILITY_LEVELS{
+//			}
+//
+//			MODEL_PREDICTION{
+//			}# end MODEL_PREDICTION
+//			
+//			OBSERVATION{
+//				PAIN : { type is categorical }
+//			}
+//		}
+//		'''.parse
 		val mcl = '''
-		foo = mdlObj{
-			VARIABILITY_LEVELS{
+		foo = dataObj {
+			DATA_INPUT_VARIABLES{
+				foo : { use is catCov }
 			}
 
-			MODEL_PREDICTION{
-			}# end MODEL_PREDICTION
-			
-			OBSERVATION{
-				PAIN : { type is categorical }
+			SOURCE{
+				foo2 : { file="aFile", inputformat is nonmem }
 			}
-		}
+		} # end of model object
 		'''.parse
 		
 		mcl.assertError(MdlPackage::eINSTANCE.enumPair,
@@ -532,7 +563,7 @@ foo = mdlObj {
    }# end RANDOM_VARIABLE_DEFINITION (level=ID)
 
    INDIVIDUAL_VARIABLES{
-      CL = linear(pop = POP_CL, fixEff = [{coeff=POP_BETA_CL_WT, cov=WT}] , ranEff = [eta_PPV_CL])
+      CL : { type is linear, pop = POP_CL, fixEff = [{coeff=POP_BETA_CL_WT, cov=WT}] , ranEff = [eta_PPV_CL] }
    }# end INDIVIDUAL_VARIABLES
 } 
 		'''.parse

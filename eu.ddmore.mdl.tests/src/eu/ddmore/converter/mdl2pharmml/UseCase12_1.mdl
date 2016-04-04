@@ -65,9 +65,13 @@ Bernoulli_DIST_mdl = mdlObj{
      logit(P1) = linear(trans is logit, pop=POP_BASEP, fixEff=[{coeff=POP_BETA, cov=CP}], ranEff=[eta_PPV_EVENT])
    }# end INDIVIDUAL_VARIABLES
 
+	RANDOM_VARIABLE_DEFINITION(level=DV){
+		Y withCategories{success, fail} ~ Bernoulli(probability=P1)
+	}
+
    OBSERVATION{
-     Y : { type is discrete withCategories {fail, success} , distn = Bernoulli(category=Y.success, probability=P1) }
-   }# end ESTIMATION
+     :: { type is discrete, variable=Y }
+   }
 } # end of model object
 
 Bernoulli_DIST_task = taskObj{

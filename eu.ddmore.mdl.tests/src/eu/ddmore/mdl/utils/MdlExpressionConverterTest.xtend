@@ -23,6 +23,7 @@ class MdlExpressionConverterTest {
 	@Inject extension ValidationTestHelper
 	
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension MdlUtils mu = new MdlUtils
 
 	@Test
 	def void testValidExpressionSyntax(){
@@ -168,7 +169,7 @@ warfarin_PK_ODE_mdl = dataObj {
 } # end of model object
 		'''.parse
 		val eqn = mcl.objects.head.blocks.last.statements.last as ListDefinition
-		Assert::assertEquals("\"foo\"", (eqn.list.attributes.head as ValuePair).expression.convertToString)
+		Assert::assertEquals("\"foo\"", (eqn.firstAttributeList.attributes.head as ValuePair).expression.convertToString)
 	}
 
 	

@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: MDL Language Definitions
+Bundle-SymbolicName: eu.ddmore.mdl.definitions
+Bundle-Version: 1.4.0.qualifier
+Bundle-Vendor: Pfizer Inc

@@ -5,10 +5,12 @@ import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.utils.MdlUtils
 import eu.ddmore.mdl.validation.MdlValidator
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.utils.BlockUtils
 
 class MdlRootProvider {
 	
 	extension MdlUtils mu = new MdlUtils
+	extension BlockUtils bu = new BlockUtils
 	
 	def getMdlObjectOfType(MclObject obj, String mdlType){
 		val mcl = EcoreUtil2.getContainerOfType(obj, Mcl)

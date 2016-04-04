@@ -9,12 +9,15 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.utils.BlockUtils
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserModelObj1Test {
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension MdlTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
+
+	extension BlockUtils bu = new BlockUtils
 	
 	val static CODE_SNIPPET = '''
 warfarin_PK_ODE_mdl = mdlObj {
@@ -56,10 +59,10 @@ warfarin_PK_ODE_mdl = mdlObj {
 
 	
 	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
-	    ln(CL) = linear(trans is ln, pop=POP_CL, fixEff = {coeff=BETA_CL_WT, cov=logtWT} , ranEff = ETA_CL )
-	    ln(V) = linear(trans is ln, pop=POP_V, fixEff = {coeff=BETA_V_WT, cov=logtWT} , ranEff = ETA_V )
-	    ln(KA) = linear(trans is ln, pop=POP_KA, ranEff = ETA_KA)
-	    ln(TLAG) = linear(trans is ln, pop=POP_TLAG, ranEff = ETA_TLAG) 
+	    CL: { type is linear, trans is ln, pop=POP_CL, fixEff = {coeff=BETA_CL_WT, cov=logtWT} , ranEff = ETA_CL }
+	    V : { type is linear, trans is ln, pop=POP_V, fixEff = {coeff=BETA_V_WT, cov=logtWT} , ranEff = ETA_V }
+	    KA : { type is linear, trans is ln, pop=POP_KA, ranEff = ETA_KA }
+	    TLAG : { type is linear, trans is ln, pop=POP_TLAG, ranEff = ETA_TLAG } 
 	} # end INDIVIDUAL_VARIABLES
 
 	MODEL_PREDICTION {

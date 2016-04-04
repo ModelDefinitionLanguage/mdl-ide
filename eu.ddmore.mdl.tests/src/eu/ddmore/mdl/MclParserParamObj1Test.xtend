@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserParamObj1Test {
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension MdlTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''

@@ -1,6 +1,8 @@
 package eu.ddmore.mdl.type
 
+import eu.ddmore.mdl.mdl.AbstractAttributeList
 import eu.ddmore.mdl.mdl.AnonymousListStatement
+import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueDefinition
 import eu.ddmore.mdl.mdl.CategoryValueReference
@@ -9,6 +11,8 @@ import eu.ddmore.mdl.mdl.EnumerationDefinition
 import eu.ddmore.mdl.mdl.EquationDefinition
 import eu.ddmore.mdl.mdl.IndexSpec
 import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.mdl.ListIfExpression
+import eu.ddmore.mdl.mdl.ListPiecewiseExpression
 import eu.ddmore.mdl.mdl.MatrixElement
 import eu.ddmore.mdl.mdl.MatrixLiteral
 import eu.ddmore.mdl.mdl.MatrixRow
@@ -23,9 +27,8 @@ import eu.ddmore.mdl.mdl.UnaryExpression
 import eu.ddmore.mdl.mdl.VectorElement
 import eu.ddmore.mdl.mdl.VectorLiteral
 import eu.ddmore.mdl.provider.BuiltinFunctionProvider
+import eu.ddmore.mdl.provider.ListDefInfo
 import eu.ddmore.mdl.provider.ListDefinitionProvider
-import eu.ddmore.mdl.provider.ListDefinitionProvider.ListDefInfo
-import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.provider.SublistDefinitionProvider
 import eu.ddmore.mdl.utils.CycleDetectionUtils
@@ -34,9 +37,11 @@ import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.FuncArgumentDefinition
 import eu.ddmore.mdllib.mdllib.FunctionDefnBody
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
+import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
+import eu.ddmore.mdl.mdl.FunctionReference
 
 public class TypeSystemProvider {
 
@@ -47,19 +52,21 @@ public class TypeSystemProvider {
 	extension CycleDetectionUtils cdu = new CycleDetectionUtils	
 	extension MdlLibUtils mlu = new MdlLibUtils
 	
-	public static val UNDEFINED_TYPE = new PrimitiveTypeInfo(PrimitiveType.Undefined)
-	public static val INT_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int)
-	public static val BOOLEAN_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean)
-	public static val REAL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real)
-	public static val STRING_TYPE = new PrimitiveTypeInfo(PrimitiveType.String)
-	public static val BOOL_TYPE = new PrimitiveTypeInfo(PrimitiveType.Boolean)
-	public static val PDF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pdf)
-	public static val PMF_TYPE = new PrimitiveTypeInfo(PrimitiveType.Pmf)
-	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeVector
-	public static val REAL_MATRIX_TYPE = new PrimitiveTypeInfo(PrimitiveType.Real).makeMatrix
-	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(PrimitiveType.Int).makeVector
-	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(PrimitiveType.Mapping)
-	public static val GENERIC_ENUM_VALUE_TYPE =  new GenericEnumTypeInfo
+	public static val UNDEFINED_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Undefined)
+	public static val INT_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Int)
+	public static val BOOLEAN_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Boolean)
+	public static val REAL_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Real)
+	public static val STRING_TYPE = new PrimitiveTypeInfo(TypeInfoClass.String)
+	public static val BOOL_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Boolean)
+	public static val DERIV_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Deriv)
+	public static val PDF_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Pdf)
+	public static val PMF_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Pmf)
+	public static val REAL_VECTOR_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Real).makeVector
+	public static val REAL_MATRIX_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Real).makeMatrix
+	public static val INT_VECTOR_TYPE = new PrimitiveTypeInfo(TypeInfoClass.Int).makeVector
+	public static val MAPPING_TYPE =  new PrimitiveTypeInfo(TypeInfoClass.Mapping)
+	public static val GENERIC_ENUM_VALUE_TYPE =  new GeneralCategoryTypeInfo
+	static val DERIV_LIST_TYPE_NAME = 'List:DerivList' 
 	
 	
 	static val ep = MdlPackage::eINSTANCE 
@@ -90,9 +97,9 @@ public class TypeSystemProvider {
 	// returns the richest type if they are different or null if they are the same
 	// of the types are incompatible.
 	def getRichestPromotableType(TypeInfo refType, TypeInfo otherType){
-		if(refType.theType == PrimitiveType.Real && otherType.theType == PrimitiveType.Int)
+		if(refType.typeClass == TypeInfoClass.Real && otherType.typeClass == TypeInfoClass.Int)
 			refType
-		else if(refType.theType == PrimitiveType.Int && otherType.theType == PrimitiveType.Real)
+		else if(refType.typeClass == TypeInfoClass.Int && otherType.typeClass == TypeInfoClass.Real)
 			otherType
 		else null
 	}
@@ -172,39 +179,60 @@ public class TypeSystemProvider {
 		colIdx != null && colIdx.begin != null && colIdx.end == null
 	}
 	
-	private def getTypeOfSymbolRef(SymbolReference e){
-//		// check if ref and defn the same. If so this will cause a cycle.
-//		val defn = EcoreUtil2.getContainerOfType(e.eContainer, SymbolDefinition)
-//		var TypeInfo retVal = UNDEFINED_TYPE
-//		if(defn != e.ref){ 
-//			retVal =
-				if(e.indexExpr == null)
-					e.ref.typeFor.makeReference
-				else{
-					val t = e.ref.typeFor
-					switch(t){
-						VectorTypeInfo:
-							if(e.indexExpr.isSingleVectorElement)
-								t.elementType.makeReference
-							else t.makeReference
-						MatrixTypeInfo:{
-							if(e.indexExpr.isSingleMatrixElement)
-								t.elementType.makeReference
-							else t.makeReference
-						}
-						
-						default: UNDEFINED_TYPE
+	private def TypeInfo getTypeOfSymbolRef(SymbolReference e){
+		if(e.indexExpr == null)
+			e.ref.typeFor.makeReference
+		else{
+			val t = e.ref.typeFor
+			t.getIndexedTypeInfo(e)
+		}
+	}
+	
+	private def TypeInfo getIndexedTypeInfo(TypeInfo effectiveSymbType, SymbolReference e){
+		val t = effectiveSymbType
+		switch(t){
+			RandomVariableTypeInfo:
+				t.rvType.getIndexedTypeInfo(e)
+			VectorTypeInfo:
+				if(e.indexExpr.isSingleVectorElement)
+					t.elementType.makeReference
+				else t.makeReference
+			MatrixTypeInfo:{
+				if(e.indexExpr.isSingleMatrixElement)
+					t.elementType.makeReference
+				else t.makeReference
+			}
+			
+			default: UNDEFINED_TYPE
+		}
+	}
+	
+	def getTypeOfFunctionRef(SymbolDefinition ref){
+		switch(ref){
+			FunctionDefnBody:
+				ref?.funcSpec?.typeInfo.makeReference ?: UNDEFINED_TYPE
+			EquationDefinition:{
+				if(ref.typeSpec != null){
+					if(ref.typeSpec.functionSpec != null){
+						// need to get the function return type
+						ref?.typeSpec?.functionSpec?.typeInfo.makeReference ?: UNDEFINED_TYPE
 					}
+					else UNDEFINED_TYPE
 				}
-//		}
-//		retVal
+				else UNDEFINED_TYPE
+			}
+			default:
+			  UNDEFINED_TYPE
+		}
 	}
 	
 	def dispatch TypeInfo typeFor(Expression e){
-		if(e == null) return TypeSystemProvider.UNDEFINED_TYPE 
+		if(e == null) return UNDEFINED_TYPE 
 		switch(e){
 			SymbolReference:
 				e.typeOfSymbolRef
+			FunctionReference:
+				e.ref?.typeOfFunctionRef
 			CategoryValueReference:
 				e.ref.typeFor.makeReference
 			ParExpression: e.expr.typeFor
@@ -213,22 +241,22 @@ public class TypeSystemProvider {
 //			BuiltinFunctionCall:
 //				e.functionType
 			VectorElement:
-				e.element?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
+				e.element?.typeFor ?: UNDEFINED_TYPE
 			VectorLiteral:
-				if(e.expressions.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
+				if(e.expressions.isEmpty) REAL_VECTOR_TYPE
 				else e.typeForArray
 			MatrixElement:
-				e.cell?.typeFor ?: TypeSystemProvider.UNDEFINED_TYPE
+				e.cell?.typeFor ?: UNDEFINED_TYPE
 			MatrixRow:
-				if(e.cells.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
+				if(e.cells.isEmpty) REAL_VECTOR_TYPE
 				else e.typeForMatrixRow
 			MatrixLiteral:
-				if(e.rows.isEmpty) TypeSystemProvider.REAL_VECTOR_TYPE
+				if(e.rows.isEmpty) REAL_VECTOR_TYPE
 				else e.typeForMatrix
 			SubListExpression:
 				e.typeForSublist 
 			default:
-				typeTable.get(e.eClass) ?: TypeSystemProvider.UNDEFINED_TYPE
+				typeTable.get(e.eClass) ?: UNDEFINED_TYPE
 		}
 	}
 	
@@ -318,9 +346,10 @@ public class TypeSystemProvider {
 						else{
 							val distnType = sd.distn.typeFor.underlyingType
 							switch(distnType){
-								VectorTypeInfo case(distnType.elementType == PDF_TYPE): REAL_VECTOR_TYPE
-								MatrixTypeInfo case(distnType.elementType == PDF_TYPE): REAL_MATRIX_TYPE
-								PrimitiveTypeInfo case(distnType == PDF_TYPE): REAL_TYPE
+								VectorTypeInfo case(distnType.elementType == PDF_TYPE): new RandomVariableTypeInfo(REAL_VECTOR_TYPE)
+								MatrixTypeInfo case(distnType.elementType == PDF_TYPE): new RandomVariableTypeInfo(REAL_MATRIX_TYPE)
+								PrimitiveTypeInfo case(distnType == PDF_TYPE): new RandomVariableTypeInfo(REAL_TYPE)
+								PrimitiveTypeInfo case(distnType == PMF_TYPE): new RandomVariableTypeInfo(INT_TYPE)
 								default:
 									UNDEFINED_TYPE
 									
@@ -332,8 +361,15 @@ public class TypeSystemProvider {
 			EnumerationDefinition:{
 					val defn = sd.catDefn 
 					switch(defn){
-						CategoricalDefinitionExpr:
-							new EnumTypeInfo(sd.name, defn.getCategoryNames)
+						CategoricalDefinitionExpr:{
+							val catType = new CategoryTypeInfo(sd.name, defn.getCategoryNames)
+							if(sd.distn != null)
+								if(sd.distn.typeFor.underlyingType == PMF_TYPE)
+									new RandomVariableTypeInfo(catType)
+								else UNDEFINED_TYPE
+							else catType
+							
+						}
 						default: UNDEFINED_TYPE							
 					}
 				}
@@ -387,45 +423,105 @@ public class TypeSystemProvider {
 	
 	
 	def dispatch TypeInfo typeFor(CategoryValueDefinition sd){
-//		return new EnumTypeInfo(exp.name)
-		switch(sd){
-			CategoryValueDefinition:{
-				val enumDefn = EcoreUtil2.getContainerOfType(sd.eContainer, SymbolDefinition)
-				val catDefn = EcoreUtil2.getContainerOfType(sd.eContainer, CategoricalDefinitionExpr)
-				if(enumDefn != null && catDefn != null) new EnumTypeInfo(enumDefn.name, catDefn.getCategoryNames)
-				else UNDEFINED_TYPE
+		if(sd instanceof CategoryValueDefinition){
+			val enumDefn = EcoreUtil2.getContainerOfType(sd.eContainer, SymbolDefinition)
+			val catDefn = EcoreUtil2.getContainerOfType(sd.eContainer, CategoricalDefinitionExpr)
+			if(enumDefn != null && catDefn != null){
+				val catType = enumDefn.typeFor
+				return switch(catType){
+					CategoryTypeInfo:
+						new CategoryValueTypeInfo(catType, sd.name)
+					CategoryListTypeInfo:
+						new CategoryValueTypeInfo(catType.underlyingEnum, sd.name)
+					default:
+						UNDEFINED_TYPE
+				} 
 			}
-			default:
-				UNDEFINED_TYPE
+			
 		}
+		UNDEFINED_TYPE
 	}
 	
-	def getCategoryNames(CategoricalDefinitionExpr catDefn){
+	private def getCategoryNames(CategoricalDefinitionExpr catDefn){
 		val catNames = new HashSet<String>
 		catDefn.categories.forEach[catNames.add(name)]
 		catNames
 	}
 	
-	def TypeInfo getTypeOfList(ListDefinition it){
-		val listDefn = list.listDefinition
+	def dispatch TypeInfo typeFor(AttributeList it){
+		val listDefn = listDefinition
 		val type = listDefn?.listType ?: UNDEFINED_TYPE
 		switch(type){
-			EnumListTypeInfo:
+			CategoryListTypeInfo:
 				getPopulatedType(listDefn)
 			ListTypeInfo: type
 			default: UNDEFINED_TYPE
 		}
 	}
 	
-	def TypeInfo getPopulatedType(ListDefinition it, ListDefInfo listDefn){
-		for(att : list.attributes){
+	def dispatch TypeInfo typeFor(ListPiecewiseExpression it){
+		val valueList = new ArrayList<AbstractAttributeList>
+		when.forEach[
+			valueList.add(it.value)
+		]
+		if(otherwise != null)
+			valueList.add(otherwise)
+		valueList.commonListType
+	}
+	
+	def dispatch TypeInfo typeFor(ListIfExpression it){
+		val valueList = new ArrayList<AbstractAttributeList>
+		ifelseClause.forEach[
+			valueList.add(value)
+		]
+		if(elseClause != null)
+			valueList.add(elseClause.value)
+		valueList.commonListType
+	}
+	
+	
+	def TypeInfo getCommonListType(List<AbstractAttributeList> attList){
+		var TypeInfo superType = null
+		for(att : attList){
+			val listType = att.typeFor
+			// check if ListTypeInfo if not then no common type
+			if(listType instanceof ListTypeInfo){
+				if(superType == null){
+					// expect to initialise this on first iteration
+					// use super type if there is one if not then use list type
+					superType = listType.superType ?: listType
+				}
+				else{
+					// expect to evaluate this on subsequent iterns
+					if(superType != listType.superType && superType != listType){
+						// check to see that no equivalent super type and not the same list type.
+						// if so then abort
+						return UNDEFINED_TYPE
+					}
+				}
+			}
+			else return UNDEFINED_TYPE
+			
+		}
+		// need to check for null here because attribute list could be empty
+		superType ?: UNDEFINED_TYPE
+	}
+	
+	
+	def TypeInfo getTypeOfList(ListDefinition it){
+		it.list.typeFor
+	}
+	
+	private def TypeInfo getPopulatedType(AttributeList it, ListDefInfo listDefn){
+		for(att : attributes){
 			val expr = att.expression
 			switch(expr){
 				EnumExpression case expr.catDefn != null:
 					if(expr.catDefn instanceof CategoricalDefinitionExpr){
 						val catNames = (expr.catDefn as CategoricalDefinitionExpr).getCategoryNames
-						if(listDefn.listType instanceof EnumListTypeInfo){
-							return (listDefn.listType as EnumListTypeInfo).populateType(new EnumTypeInfo(name, catNames))	
+						if(listDefn.listType instanceof CategoryListTypeInfo){
+							val sd = EcoreUtil2.getContainerOfType(eContainer, SymbolDefinition)
+							return (listDefn.listType as CategoryListTypeInfo).populateType(new CategoryTypeInfo(sd.name, catNames))	
 						}
 						else{
 							return UNDEFINED_TYPE
@@ -440,7 +536,7 @@ public class TypeSystemProvider {
     	if(sd instanceof ListDefinition){
     		// this avoid a recursion as cycle detection is done for other symb defn types.
 	    	val lstType = sd.typeFor
-    		lstType?.typeName == ListDefinitionTable::DERIV_TYPE.typeName
+    		lstType?.typeName == DERIV_LIST_TYPE_NAME
     	}
     }
 

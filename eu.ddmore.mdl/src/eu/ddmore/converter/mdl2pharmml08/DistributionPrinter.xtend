@@ -1,6 +1,5 @@
 package eu.ddmore.converter.mdl2pharmml08
 
-import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdl.mdl.IntegerLiteral
 import eu.ddmore.mdl.mdl.NamedFuncArguments
 import eu.ddmore.mdl.mdl.RealLiteral

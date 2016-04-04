@@ -5,53 +5,60 @@ import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.Statement
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.provider.ListDefinitionProvider.AttributeDefn
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
 import eu.ddmore.mdl.type.TypeInfo
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.utils.MdlLibUtils
 import java.util.ArrayList
-import java.util.Collections
 import java.util.HashSet
 import java.util.List
-import java.util.Map
 
 class PropertyDefinitionProvider {
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension MdlLibUtils mlu = new MdlLibUtils
 	
-	val Map<String, List<AttributeDefn>> propertyDefns
+//	val Map<String, List<AttributeDefn>> propertyDefns
 	
-	new(){
-		propertyDefns = PropertyDefinitionTable::propertyDefns
-	}
+//	new(){
+//		propertyDefns = PropertyDefinitionTable::propertyDefns
+//	}
 
-	def List<String> getAttributeNames(String blkName){
+
+//	private def List<PropertyReference> getPropertyDefns(BlockDefinition it){
+//		propRefs ?: Collections::emptyList
+//	}
+
+	def List<String> getAttributeNames(BlockStatement blkName){
 		val attNames = new ArrayList<String>
-		val List<AttributeDefn> propDefns = propertyDefns.get(blkName)
-		if(propDefns != null) {
-			propDefns.forEach([AttributeDefn at|attNames.add(at.name)])
-		}
+		val propDefns = blkName.blkId.propRefs
+		propDefns.forEach([attNames.add(propRef.name)])
+		
+//		val List<AttributeDefn> propDefns = propertyDefns.get(blkName)
+//		if(propDefns != null) {
+//			propDefns.forEach([AttributeDefn at|attNames.add(at.name)])
+//		}
 		attNames
 	}
 
 	def matchingPropertyDefn(ValuePair it){
-		propertyDefns.get(parentBlock.identifier)?.findFirst[AttributeDefn p|p.name == argumentName]
+		parentBlock.blkId.propRefs.findFirst[p|p.propRef.name == argumentName]
 	}
 
 
 	def TypeInfo getTypeForProperty(ValuePair it){
-		matchingPropertyDefn?.attType ?: TypeSystemProvider::UNDEFINED_TYPE
+		matchingPropertyDefn?.propRef.propType.typeInfo ?: TypeSystemProvider::UNDEFINED_TYPE
 	}
 
 
 	def getTypeOfPropertyBuiltinEnum(EnumExpression ee){
-		val blockName = ee.owningBlock.identifier
+		val blockName = ee.owningBlock.blkId
 		val vp = ee.getOwningValuePair
 		val enumValue = ee.enumValue
-		val defnType = propertyDefns.get(blockName)?.findFirst[AttributeDefn p | p.name == vp.argumentName]?.attType ?: TypeSystemProvider::UNDEFINED_TYPE
+		val defnType = blockName.propRefs.findFirst[p | p.propRef.name == vp.argumentName]?.propRef.propType.typeInfo ?: TypeSystemProvider::UNDEFINED_TYPE
 		switch(defnType){
 			BuiltinEnumTypeInfo:
-				if(defnType.categories.exists[c|c == enumValue]) defnType else TypeSystemProvider::UNDEFINED_TYPE
+				if(defnType.containsValue(enumValue)) defnType else TypeSystemProvider::UNDEFINED_TYPE
 			default:
 				TypeSystemProvider::UNDEFINED_TYPE
 		}
@@ -64,13 +71,13 @@ class PropertyDefinitionProvider {
 
 
 	def isPropertyMandatory(ValuePair it){
-		if(matchingPropertyDefn != null) matchingPropertyDefn.isMandatory else false
+		if(matchingPropertyDefn != null) !matchingPropertyDefn.isOptional else false
 	}
 
 	def unusedMandatoryProperties(BlockStatement it){
 		val mandatoryProps = new HashSet<String>
-		val List<AttributeDefn> defns = (propertyDefns.get(identifier) ?: Collections.emptyList)
-		defns.filter[AttributeDefn ad| ad.isMandatory].forEach[AttributeDefn a|mandatoryProps.add(a.name)]
+		val defns = blkId.propRefs
+		defns.filter[ad| !ad.isOptional].forEach[a|mandatoryProps.add(a.propRef.name)]
 		for(ps : statements.filter[Statement s|s instanceof PropertyStatement]){
 			for(a : (ps as PropertyStatement).properties){
 				mandatoryProps.remove(a.argumentName)

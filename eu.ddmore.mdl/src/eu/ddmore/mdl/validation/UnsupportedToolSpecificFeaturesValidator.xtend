@@ -9,12 +9,14 @@ import eu.ddmore.mdl.utils.MdlUtils
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.utils.BlockUtils
 
 class UnsupportedToolSpecificFeaturesValidator extends AbstractMdlValidator  {
 	
 	override register(EValidatorRegistrar registrar){}
 	
 	extension MdlUtils mu = new MdlUtils
+	extension BlockUtils bu = new BlockUtils
 	
 	def isGeneralIdv(EquationTypeDefinition it){
 		val eq = expression

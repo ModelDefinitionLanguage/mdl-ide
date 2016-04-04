@@ -1,32 +1,82 @@
 package eu.ddmore.mdl.type
 
-import eu.ddmore.mdl.MdlAndLibInjectorProvider
+import com.google.inject.Inject
 import eu.ddmore.mdl.mdl.MdlFactory
-import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.validation.TypeSystemValidator
+import eu.ddmore.mdllib.MdlLibInjectorProvider
 import eu.ddmore.mdllib.mdllib.Expression
+import eu.ddmore.mdllib.mdllib.Library
+import eu.ddmore.mdllib.mdllib.ListTypeDefinition
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
+import org.eclipse.xtext.junit4.util.ParseHelper
+import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import static extension org.junit.Assert.*
+import java.util.List
 
 @RunWith(typeof(XtextRunner))
-@InjectWith(typeof(MdlAndLibInjectorProvider))
+@InjectWith(typeof(MdlLibInjectorProvider))
 class TypeSystemProviderTest {
-//	@Inject extension LibraryTestHelper<Mcl>
-//	@Inject extension ValidationTestHelper
+	@Inject extension ParseHelper<Library>
+	@Inject extension ValidationTestHelper
+
+	val COMP_LIST_TYPE = new ListTypeInfo("Compartment", TypeInfoClass.Real)
+
 	var incompatible = false
+	var Library testLibraryFixture
 	
 	extension TypeSystemProvider th = new TypeSystemProvider 
 	extension TypeSystemValidator tsv = new TypeSystemValidator
 
+
+
 	@Before
 	def void setUp(){
 		incompatible = false
+		testLibraryFixture = '''
+			_type Real _real;
+			_type Int _int;
+			_type cmtType _enum (depot, compartment, elimination, transfer, distribution, direct, effect);
+			
+			_list Compartment _alt Real
+					_atts  type::cmtType, modelCmt::Int
+					_sig (type, modelCmt?);
+					
+			_object mdlObj;
+			
+			_block COMPARTMENT (,) _statements (,) _listDefn, _anonList
+				_list _key=type cmtType.compartment->Compartment;
+
+			_container mdlObj _has COMPARTMENT;
+						
+			_func ln (x::Real) _returns ::Real;
+		'''.parse
+	}
+
+	def createBlockDefinition(String blkName){
+		testLibraryFixture.blockDefns.findFirst[
+			name == blkName
+		]
+	}
+
+
+	def createListDefinition(String lstName){
+		testLibraryFixture.typeDefns.findFirst[
+			if(it instanceof ListTypeDefinition){
+				name == lstName
+			}
+			else false
+		]
+	}
+
+	@Test
+	def void testFixtureCorrect(){
+		testLibraryFixture.assertNoErrors
 	}
 
 	@Test
@@ -99,51 +149,64 @@ class TypeSystemProviderTest {
 		actual.checkRelationalOp(rhs, errorFunc, errorFunc)
 	}
 
-	def createDummyEnumRef(String enumType, String enumValue){
+	def createDummyEnumRef(String enumType, List<String> categories, String catValue){
 		val actual = MdlFactory::eINSTANCE.createCategoryValueReference
-		val lhsDefn = MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val enumDefn = MdlFactory::eINSTANCE.createEnumerationDefinition
 		enumDefn.name = enumType
 		val catDefnExpr = MdlFactory::eINSTANCE.createCategoricalDefinitionExpr
-		catDefnExpr.categories.add(lhsDefn)
+		for(cat : categories){
+			val lhsDefn = MdlFactory::eINSTANCE.createCategoryValueDefinition
+			lhsDefn.name = cat
+			catDefnExpr.categories.add(lhsDefn)
+			if(cat == catValue){
+				actual.ref = lhsDefn 
+			}
+		}
 		enumDefn.catDefn = catDefnExpr
-		lhsDefn.name = enumValue
-		actual.ref = lhsDefn 
 		actual
 	}
 
 	@Test
 	def void testRelationalOpWithEnums(){
-		val actual = createDummyEnumRef("tst", "tst1")
-		val rhs = createDummyEnumRef("tst", "tst1") MdlFactory::eINSTANCE.createCategoryValueDefinition
+		val actual = createDummyEnumRef("tst", #["tst1"], "tst1")
+		val rhs = createDummyEnumRef("tst", #["tst1"], "tst1")
+//		MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
 		actual.checkRelationalOp(rhs, errorFunc, errorFunc)
 	}
 
 	@Test
 	def void testRelationalOpWithIncompatibleEnums(){
-		val actual = createDummyEnumRef("tst", "tst1")
-		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
+		val actual = createDummyEnumRef("tst", #["tst1", "tst2"], "tst1")
+		val rhs = createDummyEnumRef("tst", #["tst1", "tst2"], "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(new EnumTypeInfo("tst", #{"tst1"}).makeReference) a.assertEquals(new EnumTypeInfo("tst", #{"tst2"}).makeReference)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a|
+			e.assertEquals(new CategoryValueTypeInfo(new CategoryTypeInfo("tst", #{"tst1", "tst2"}), "tst1"))
+			a.assertEquals(new CategoryValueTypeInfo(new CategoryTypeInfo("tst", #{"tst1", "tst2"}), "tst2").makeReference)
+		]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
 	@Test
 	def void testRelationalOpWithNumAndEnum(){
 		val Expression actual = MdlFactory::eINSTANCE.createRealLiteral
-		val rhs = createDummyEnumRef("tst", "tst2") MdlFactory::eINSTANCE.createCategoryValueDefinition
+		val rhs = createDummyEnumRef("tst", #["tst2"], "tst2")
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(TypeSystemProvider::REAL_TYPE) a.assertEquals(new EnumTypeInfo("tst", #{"tst2"}).makeReference)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a|
+			e.assertEquals(TypeSystemProvider::REAL_TYPE) a.assertEquals(new CategoryValueTypeInfo(new CategoryTypeInfo("tst", #{"tst2"}), "tst2").makeReference)
+		]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
 	@Test
 	def void testRelationalOpWithEnumandNum(){
-		val actual = createDummyEnumRef("tst", "tst1")
+		val actual = createDummyEnumRef("tst", #["tst1"], "tst1")
 		val rhs = MdlFactory::eINSTANCE.createRealLiteral
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
-		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a| e.assertEquals(new EnumTypeInfo("tst", #{"tst1"}).makeReference) a.assertEquals(TypeSystemProvider::REAL_TYPE)]
+		val (TypeInfo, TypeInfo) => void failingErrorFunc = [e, a|
+			e.assertEquals(new CategoryValueTypeInfo(new CategoryTypeInfo("tst", #{"tst1"}), "tst1"))
+			a.assertEquals(TypeSystemProvider::REAL_TYPE)
+		]
 		actual.checkRelationalOp(rhs, errorFunc, failingErrorFunc)
 	}
 
@@ -218,7 +281,7 @@ class TypeSystemProviderTest {
 
 	@Test
 	def void testCompRefWithRealCompatible(){
-		val testType = new ListTypeInfo("testType", PrimitiveType.Real)
+		val testType = new ListTypeInfo("testType", TypeInfoClass.Real)
 		val value = MdlFactory::eINSTANCE.createRealLiteral
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| fail("should not call me!")]
 		checkExpectedAndExpression(testType.makeReference, value, errorFunc)				
@@ -226,7 +289,7 @@ class TypeSystemProviderTest {
 
 	@Test
 	def void testCompRefWithRealRefCompatible(){
-		val testType = new ListTypeInfo("testType", PrimitiveType.Real)
+		val testType = new ListTypeInfo("testType", TypeInfoClass.Real)
 		val ref = MdlFactory::eINSTANCE.createSymbolReference
 		val defn = MdlFactory::eINSTANCE.createEquationDefinition
 		defn.name = "AReal"
@@ -240,12 +303,15 @@ class TypeSystemProviderTest {
 		val ref = MdlFactory::eINSTANCE.createSymbolReference
 		val defn = MdlFactory::eINSTANCE.createListDefinition
 		defn.name = "AList"
-		defn.list = MdlFactory::eINSTANCE.createAttributeList
-		defn.list.attributes.add(MdlFactory::eINSTANCE.createEnumPair => [argumentName = "type"
+		val attList = MdlFactory::eINSTANCE.createAttributeList 
+		attList.attributes.add(MdlFactory::eINSTANCE.createEnumPair => [argumentName = "type"
 									expression = buildEnum("compartment")
 									])
+		defn.list = attList 
 		val blk = MdlFactory::eINSTANCE.createBlockStatement
-		blk.identifier = "COMPARTMENT"
+//		val blkDefn = MdlLibFactory.eINSTANCE.createBlockDefinition
+//		blkDefn.name = "COMPARTMENT"
+		blk.blkId = createBlockDefinition("COMPARTMENT")
 		val bdy = MdlFactory::eINSTANCE.createBlockStatementBody
 		bdy.statements.add(defn)
 		blk.body = bdy
@@ -305,7 +371,7 @@ class TypeSystemProviderTest {
 	def void testArgumentCompRefWithRealIncompatible(){
 		val value = MdlFactory::eINSTANCE.createRealLiteral
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| incompatible = true]
-		checkArgumentMatchesAndExpression(ListDefinitionTable::COMP_LIST_TYPE.makeReference, value, errorFunc)				
+		checkArgumentMatchesAndExpression(COMP_LIST_TYPE.makeReference, value, errorFunc)				
 		assertTrue("Incompatible", incompatible)
 	}
 
@@ -316,7 +382,7 @@ class TypeSystemProviderTest {
 		defn.name = "AReal"
 		ref.ref = defn
 		val (TypeInfo, TypeInfo) => void errorFunc = [e, a| incompatible = true]
-		checkArgumentMatchesAndExpression(ListDefinitionTable::COMP_LIST_TYPE.makeReference, ref, errorFunc)				
+		checkArgumentMatchesAndExpression(COMP_LIST_TYPE.makeReference, ref, errorFunc)				
 		assertTrue("Incompatible", incompatible)
 	}
 
@@ -325,14 +391,15 @@ class TypeSystemProviderTest {
 		val ref = MdlFactory::eINSTANCE.createSymbolReference
 		val defn = MdlFactory::eINSTANCE.createListDefinition
 		defn.name = "AList"
-		defn.list = MdlFactory::eINSTANCE.createAttributeList
-		defn.list.attributes.add(MdlFactory::eINSTANCE.createEnumPair => [argumentName = "type"
+		val attList = MdlFactory::eINSTANCE.createAttributeList
+		attList.attributes.add(MdlFactory::eINSTANCE.createEnumPair => [argumentName = "type"
 									expression = buildEnum("compartment")
 									])
+		defn.list = attList
 		val blk = MdlFactory::eINSTANCE.createBlockStatement
-		blk.identifier = "COMPARTMENT"
 		val bdy = MdlFactory::eINSTANCE.createBlockStatementBody
 		bdy.statements.add(defn)
+		blk.blkId = createBlockDefinition("COMPARTMENT")
 		blk.body = bdy
 		ref.ref = defn
 		

@@ -29,6 +29,12 @@ import eu.ddmore.mdllib.mdllib.SymbolDefinition
 import java.util.ArrayList
 import java.util.Collections
 import java.util.List
+import eu.ddmore.mdl.mdl.PiecewiseExpression
+import eu.ddmore.mdl.mdl.PWClause
+import eu.ddmore.mdl.mdl.ListPiecewiseExpression
+import eu.ddmore.mdl.mdl.ListPWClause
+import eu.ddmore.mdl.mdl.ListIfExpression
+import eu.ddmore.mdl.mdl.ListIfExprPart
 
 class DependencyWalker {
 
@@ -89,6 +95,13 @@ class DependencyWalker {
     			if(expr.elseClause != null)
     				retVal.addAll(expr.elseClause?.value?.symbolReferences ?: Collections::emptyList)
     		}
+    		PiecewiseExpression:{
+    			for(w : expr.when){
+    				retVal.addAll(w.symbolReferences)
+    			}
+    			if(expr.otherwise != null)
+    				retVal.addAll(expr.otherwise?.symbolReferences ?: Collections::emptyList)
+    		}
     		VectorLiteral:{
     			for(v : expr.expressions){
     				retVal.addAll(v.symbolReferences)
@@ -106,8 +119,48 @@ class DependencyWalker {
     	retVal
     }
     
-    
     def dispatch List<SymbolDefinition> getSymbolReferences(IfExprPart it){
+    	val retVal = new ArrayList<SymbolDefinition>
+    	retVal.addAll(cond.symbolReferences)
+		retVal.addAll(value.symbolReferences)
+		retVal    			
+    }
+    
+    def dispatch List<SymbolDefinition> getSymbolReferences(ListPiecewiseExpression expr){
+    	val retVal = new ArrayList<SymbolDefinition>
+		for(w : expr.when){
+			retVal.addAll(w.symbolReferences)
+		}
+		if(expr.otherwise != null)
+			retVal.addAll(expr.otherwise?.symbolReferences ?: Collections::emptyList)
+		retVal    			
+    }
+    
+    def dispatch List<SymbolDefinition> getSymbolReferences(ListIfExpression expr){
+    	val retVal = new ArrayList<SymbolDefinition>
+		for(w : expr.ifelseClause){
+			retVal.addAll(w.symbolReferences)
+		}
+		if(expr.elseClause != null)
+			retVal.addAll(expr.elseClause?.value?.symbolReferences ?: Collections::emptyList)
+		retVal    			
+    }
+    
+    def dispatch List<SymbolDefinition> getSymbolReferences(ListIfExprPart it){
+    	val retVal = new ArrayList<SymbolDefinition>
+    	retVal.addAll(cond.symbolReferences)
+		retVal.addAll(value.symbolReferences)
+		retVal    			
+    }
+    
+    def dispatch List<SymbolDefinition> getSymbolReferences(ListPWClause it){
+    	val retVal = new ArrayList<SymbolDefinition>
+    	retVal.addAll(cond.symbolReferences)
+		retVal.addAll(value.symbolReferences)
+		retVal    			
+    }
+    
+    def dispatch List<SymbolDefinition> getSymbolReferences(PWClause it){
     	val retVal = new ArrayList<SymbolDefinition>
     	retVal.addAll(cond.symbolReferences)
 		retVal.addAll(value.symbolReferences)

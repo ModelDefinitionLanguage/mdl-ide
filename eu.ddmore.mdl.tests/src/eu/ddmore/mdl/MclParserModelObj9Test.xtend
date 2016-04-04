@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserModelObj9Test {
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension MdlTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
 	val static CODE_SNIPPET = '''
@@ -41,8 +41,12 @@ Poisson_DIST_mdl = mdlObj{
       logLAMBDA=ln(POP_BASECOUNT) + POP_BETA*CP + eta_PPV_EVENT
    }# end INDIVIDUAL_VARIABLES
 
+   RANDOM_VARIABLE_DEFINITION(level=DV){
+   		Y ~ Poisson(lambda = logLAMBDA)
+   }
+
    OBSERVATION{
-	  Y : { type is count, distn = Poisson(lambda = logLAMBDA) }
+	  :: { type is count, variable = Y}
    }# end ESTIMATION
 
 } # end of model object

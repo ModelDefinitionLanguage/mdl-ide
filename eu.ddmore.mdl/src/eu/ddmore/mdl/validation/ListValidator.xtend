@@ -1,10 +1,8 @@
 package eu.ddmore.mdl.validation
 
-import eu.ddmore.mdl.mdl.AnonymousListStatement
 import eu.ddmore.mdl.mdl.AttributeList
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EnumPair
-import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MdlPackage
 import eu.ddmore.mdl.mdl.PropertyStatement
@@ -16,6 +14,11 @@ import eu.ddmore.mdl.type.TypeSystemProvider
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import eu.ddmore.mdl.mdl.AnonymousListStatement
+import eu.ddmore.mdl.mdl.ListDefinition
+import eu.ddmore.mdl.utils.MdlUtils
+import eu.ddmore.mdl.mdl.BlockStatement
+import eu.ddmore.mdl.provider.BlockListDefinition
 
 // validates attributes in lists, functions and properties
 class ListValidator extends AbstractMdlValidator {
@@ -25,6 +28,7 @@ class ListValidator extends AbstractMdlValidator {
 	extension ListDefinitionProvider ldp = new ListDefinitionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension TypeSystemProvider mtp = new TypeSystemProvider
+	extension MdlUtils mu = new MdlUtils
 	
 	static val MappingToColumn = #{
 		ListDefinitionTable::AMT_USE_VALUE -> ListDefinitionTable::CMT_COL_TYPE,
@@ -38,7 +42,10 @@ class ListValidator extends AbstractMdlValidator {
 			// check use type
 			val useVal = attList.getAttributeEnumValue(ListDefinitionTable::USE_ATT)
 			if(useVal != null){
-				val expectedSrcType = MappingToColumn.get(useVal) 
+//				val expectedSrcType = MappingToColumn.get(useVal) 
+				val expectedSrcTypeName = MappingToColumn.get(useVal) 
+				val blk = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+				val expectedSrcType = blk.blkId.getListDefinitionByTypeName(expectedSrcTypeName)
 				val srcColType = srcColumn?.ref?.typeFor
 //				if(expectedSrcType != null && srcColType != null && !expectedSrcType.isCompatible(srcColType)){
 //					error("Expected source column of type '" + expectedSrcType.typeName + "', but was '" + srcColType.typeName + "'.",
@@ -64,7 +71,8 @@ class ListValidator extends AbstractMdlValidator {
 				}
 			}
 			PropertyStatement:{
-				if(!isPropertyKnown){
+				val blk = EcoreUtil2.getContainerOfType(parent.eContainer, BlockStatement)
+				if(!blk.blkId.isFreeProps && !isPropertyKnown){
 					error("property '" + attributeName + "' is not recognised in this context.",
 							MdlPackage.eINSTANCE.valuePair_ArgumentName, MdlValidator.UNRECOGNIZED_PROPERTY_ATT, attributeName)
 				}
@@ -85,14 +93,24 @@ class ListValidator extends AbstractMdlValidator {
 	
 	@Check
 	def validateAttributeList(AttributeList it){
-		if(isKeyAttributeDefined){
-			unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
-				MdlPackage.eINSTANCE.attributeList_Attributes, MdlValidator::MANDATORY_LIST_ATT_MISSING, name) ]
-		}		
-		else{
-			error("mandatory key attribute is missing in list.",
-				MdlPackage.eINSTANCE.attributeList_Attributes, MdlValidator::MANDATORY_LIST_KEY_ATT_MISSING, "")
+		val owningBlock = EcoreUtil2.getContainerOfType(eContainer, BlockStatement)
+		if(owningBlock != null){
+			if(owningBlock.isKeyAttributeDefined(it)){
+				val keyVal = getAttributeEnumValue(owningBlock.blkId.keyAttName)
+				if(BlockListDefinition::create(owningBlock).getListDefnByKeyValue(keyVal) == null){
+					error("Attribute list key value '" + keyVal + "' is not recognised.",
+						MdlPackage.eINSTANCE.attributeList_Attributes, MdlValidator::LIST_KEY_VAL_UNRECOGNISED, "")
+				}
+				else
+					unusedMandatoryAttributes.forEach[name| error("mandatory attribute '" + name + "' is missing in list.",
+						MdlPackage.eINSTANCE.attributeList_Attributes, MdlValidator::MANDATORY_LIST_ATT_MISSING, name) ]
+			}		
+			else{
+				error("mandatory key attribute is missing in list.",
+					MdlPackage.eINSTANCE.attributeList_Attributes, MdlValidator::MANDATORY_LIST_KEY_ATT_MISSING, "")
+			}
 		}
+		
 	}
 
 	@Check
@@ -105,9 +123,11 @@ class ListValidator extends AbstractMdlValidator {
 
 	@Check
 	def validateListAnonymisation(ListDefinition it){
-		if(list.isAnonymousListExpected){
-			error("a list with this key cannot have a name in this context",
-				MdlPackage.eINSTANCE.listDefinition_List, MdlValidator::LIST_NOT_ANONYMOUS, "")
+		for(list : getAttributeLists){
+			if(list.isAnonymousListExpected){
+				error("a list with this key cannot have a name in this context",
+					MdlPackage.eINSTANCE.listDefinition_List, MdlValidator::LIST_NOT_ANONYMOUS, "")
+			}
 		}
 	}
 
@@ -123,17 +143,20 @@ class ListValidator extends AbstractMdlValidator {
 	}
 		
 	def checkCategoryDefinitionWellFormed(EnumPair ep, () => void unexpectedCatDefnErrorLambda, () => void missingCatErrorLambda){
-		val attList = EcoreUtil2.getContainerOfType(ep.eContainer, ListDefinition)
+		val attList = EcoreUtil2.getContainerOfType(ep.eContainer, AttributeList)
 		if(attList != null){
-			val listDefn = attList.list.matchingListDefn
-			val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
-			if(ep.expression instanceof EnumExpression && attDefn != null){
-				val mappingExpr = ep.expression as EnumExpression
-				if(attDefn.isCatMappingPossible && mappingExpr.catDefn == null){
-					missingCatErrorLambda.apply
-				}
-				else if(!attDefn.isCatMappingPossible && mappingExpr.catDefn != null){
-					unexpectedCatDefnErrorLambda.apply
+			val listDefn = attList.matchingListDefn
+			if(listDefn != null){
+//				val attDefn = listDefn?.getAttributeDefinition(ep.argumentName)
+				val mappingExpr = ep.expression
+				if(mappingExpr instanceof EnumExpression){//} && attDefn != null){
+//					val mappingExpr = ep.expression as EnumExpression
+					if(listDefn.isCatMappingPossible(ep.argumentName) && mappingExpr.catDefn == null){
+						missingCatErrorLambda.apply
+					}
+					else if(!listDefn.isCatMappingPossible(ep.argumentName) && mappingExpr.catDefn != null){
+						unexpectedCatDefnErrorLambda.apply
+					}
 				}
 			}
 		}

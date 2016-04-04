@@ -8,11 +8,11 @@ Mcl hidden(WS, ML_COMMENT, SL_COMMENT):
 	objects+=MclObject*;
 
 MclObject returns MclObject:
-	name=ID ASSIGN mdlObjType=ID blkArgs=BlockArguments BEGIN blocks += BlockStatement* END;
+	name=ID ASSIGN objId=[lib::ObjectDefinition] blkArgs=BlockArguments BEGIN blocks += BlockStatement* END;
 
 
 BlockStatement:
-	identifier = ID blkArgs=BlockArguments body=(BlockStatementBody|BlockTextBody)
+	blkId = [lib::BlockDefinition] blkArgs=BlockArguments body=(BlockStatementBody|BlockTextBody)
 ;
 
 BlockStatementBody returns BlockBody:
@@ -37,8 +37,8 @@ BlockArgument:
 Statement:
 	EquationTypeDefinition|ListDefinition|
 	RandomVariableDefinition|BlockStatement|AnonymousListStatement|
-	EnumerationDefinition|PropertyStatement|
-	CategoricalProbabilityAssign//|UserFunctionDefinition
+	EnumerationDefinition|PropertyStatement //|
+//	CategoricalProbabilityAssign//|UserFunctionDefinition
 ;
 
 
@@ -74,8 +74,9 @@ TransformedDefinition returns EquationTypeDefinition:
 ;
 
 RandomVariableDefinition:
-//	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = BuiltinFunctionCall ';'?
-	(name = ID|  transform = ID '(' name=ID ')')  RANDOM_ASSIGN distn = Expression ';'?
+	(name = ID|  transform = ID '(' name=ID ')') RANDOM_ASSIGN distn = Expression ';'?
+//	(name = ID|  transform = ID '(' name=ID ')') 
+//		(WITH BEGIN catDefns+=CategoryValueDefinitionNoMapping (',' catDefns+=CategoryValueDefinitionNoMapping)* END)? RANDOM_ASSIGN distn = Expression ';'?
 ;
 
 TypeSpec returns lib::TypeSpec:
@@ -83,22 +84,59 @@ TypeSpec returns lib::TypeSpec:
 ;
 
 EnumerationDefinition:
-	name = ID  catDefn=CategoricalDefinitionExpr ';'?
+	name = ID  catDefn=CategoricalDefinitionExpr (RANDOM_ASSIGN distn = Expression)? ';'?
 ;
 
-CategoricalProbabilityAssign:
-	(probFunc=ProbabilityFunction ASSIGN expression=Expression  |
-	transform = ID '(' probFunc=ProbabilityFunction ')' ASSIGN expression=Expression) ';'?
-;
+//CategoricalProbabilityAssign:
+//	(probFunc=ProbabilityFunction ASSIGN expression=Expression  |
+//	transform = ID '(' probFunc=ProbabilityFunction ')' ASSIGN expression=Expression) ';'?
+//;
 
-ProbabilityFunction:
-	probFunc = 'P' '(' catRef=SymbolReference relOp=('=='|'<='|'>='|'<'|'>') catValRef=CategoryValueReference ')'
-;
+//ProbabilityFunction:
+//	probFunc = 'P' '(' catRef=SymbolReference relOp=('=='|'<='|'>='|'<'|'>') catValRef=CategoryValueReference ')'
+//;
 
 
 ListDefinition:
-	name = ID LIST_ASSIGN list = AttributeList ';'?
+	name = ID LIST_ASSIGN list = (AttributeList|ListPiecewiseExpression|ListIfExpression) ';'?
 ;
+
+AbstractAttributeList:
+	AttributeList|ListPiecewiseExpression|ListIfExpression
+;
+
+ListPiecewiseExpression:
+	{ListPiecewiseExpression} 'piecewise' BEGIN BEGIN when+=ListPWClause (=>';' when+=ListPWClause)* (';' 'otherwise' otherwise=AttributeList )?  END END
+;
+
+ListPWClause:
+	{ListPWClause} value=AttributeList WHEN cond=Expression
+;
+
+ListIfExpression:
+	 {ListIfExpression}
+	 	ifelseClause+=ListIfClause
+	 	(=> ifelseClause+=ListElifClause)*
+		(=>elseClause=ListElseClause)?
+	;
+
+ListIfExprPart:
+	ListIfClause | ListElifClause
+;
+
+ListIfClause returns ListIfExprPart:
+	{ListIfClause} IF '(' cond=Expression ')' => THEN value=AttributeList
+;
+
+ListElifClause returns ListIfExprPart:
+	{ListElifClause} ELSEIF '(' cond=Expression ')' => THEN value=AttributeList
+;
+
+ListElseClause:
+	{ListElseClause} ELSE value=AttributeList
+;
+
+
 
 AnonymousListStatement:
 	ANONYMOUS_PREFIX list = AttributeList ';'?
@@ -109,17 +147,29 @@ PropertyStatement:
 ;
 
 
-CategoricalDefinitionExpr returns lib::Expression:
+CategoricalDefinitionExpr:
 	{CategoricalDefinitionExpr} WITH BEGIN categories += CategoryValueDefinition (=>',' categories += CategoryValueDefinition)* END
-		(ASSIGN expression = Expression)?
+//		(ASSIGN expression = Expression)?
 ;
 
+
+//CategoryValueDefinition:
+//	CategoryValueDefinitionNoMapping | CategoryValueDefinitionWithMapping
+//;
+
+//CategoryValueDefinitionNoMapping:
+//	{CategoryValueDefinitionNoMapping}name = ID
+//;
+
+
+//CategoryValueDefinitionWithMapping:
 CategoryValueDefinition:
-	name = ID (WHEN ordered?=ORDERED? mappedTo=Expression)?
+	{CategoryValueDefinition}name = ID (WHEN mappedTo=Expression)?
+//	{CategoryValueDefinitionWithMapping}name = ID (WHEN mappedTo=Expression)?
 ;
 
 AttributeList:
-	BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
+	{AttributeList} BEGIN attributes += ValuePair (=> ',' attributes += ValuePair)*  END
 ;
 
 ValuePair:
@@ -230,7 +280,8 @@ OpUnary:
 
 PrimaryExpression returns lib::Expression:
 	Literal
-	| SymbolReference 
+	| SymbolReference
+	| FunctionReference
 	| CategoryValueReference
 	| CatValRefMappingExpression
 	| MappingExpression
@@ -288,6 +339,10 @@ Literal returns lib::Expression:
 
 SymbolReference:
 	{SymbolReference} ref=[lib::SymbolDefinition|ID] ('[' indexExpr = IndexSpec ']'|'(' argList=(UnnamedFuncArguments	| NamedFuncArguments)? ')')?
+;
+
+FunctionReference:
+	{FunctionReference} '&'ref=[lib::SymbolDefinition]
 ;
 
 IndexSpec:

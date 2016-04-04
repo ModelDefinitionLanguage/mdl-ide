@@ -41,6 +41,7 @@ import static eu.ddmore.converter.mdl2pharmml.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToInteger
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
+import eu.ddmore.mdl.utils.BlockUtils
 
 class ModelDefinitionPrinter {
 	extension MdlUtils mu = new MdlUtils
@@ -54,6 +55,7 @@ class ModelDefinitionPrinter {
 	extension FunctionDefinitionPrinter fdp = new FunctionDefinitionPrinter
 	extension PKMacrosPrinter pkp = PKMacrosPrinter::INSTANCE
 	extension DomainObjectModelUtils domu = new DomainObjectModelUtils
+	extension BlockUtils bu = new BlockUtils
 	
 	
 	//////////////////////////////////////
@@ -86,11 +88,11 @@ class ModelDefinitionPrinter {
 		for(stmt : mObj.mdlVariabilityLevels){
 			switch(stmt){
 				ListDefinition:{
-					if(stmt.list.getAttributeEnumValue('type') == 'parameter'){
-						vm_mdl_vars.put(stmt.name, stmt.list.getAttributeExpression('level').convertToInteger)
+					if(stmt.firstAttributeList.getAttributeEnumValue('type') == 'parameter'){
+						vm_mdl_vars.put(stmt.name, stmt.firstAttributeList.getAttributeExpression('level').convertToInteger)
 					}
 					else{
-						vm_err_vars.put(stmt.name, stmt.list.getAttributeExpression('level').convertToInteger)
+						vm_err_vars.put(stmt.name, stmt.firstAttributeList.getAttributeExpression('level').convertToInteger)
 					}
 				}
 			}	
@@ -136,12 +138,12 @@ class ModelDefinitionPrinter {
 		return model;
 	}
 	
-    def getCategoryDefinitions(Expression expr){
+    def getCategoryDefinitions(CategoricalDefinitionExpr expr){
     	val retVal = new ArrayList<String>
-    	switch(expr){
-    		CategoricalDefinitionExpr:
+//    	switch(expr){
+//    		CategoricalDefinitionExpr:
     			expr.categories.forEach[retVal.add(name)]
-    	}
+//    	}
     	retVal
     }
     
@@ -486,16 +488,16 @@ class ModelDefinitionPrinter {
 	
 	def writeDerivativeDefinition(ListDefinition stmt, EquationDefinition defaultWrt)'''
 		<ct:DerivativeVariable symbId="«stmt.name»" symbolType="real">
-			«stmt.list.getAttributeExpression("deriv").writeAssignment»
+			«stmt.firstAttributeList.getAttributeExpression("deriv").writeAssignment»
 			<ct:IndependentVariable>
-				«stmt.list.getAttributeExpression("wrt")?.pharmMLExpr ?: defaultWrt.writeDefaultWrt»
+				«stmt.firstAttributeList.getAttributeExpression("wrt")?.pharmMLExpr ?: defaultWrt.writeDefaultWrt»
 			</ct:IndependentVariable>
 			<ct:InitialCondition>
 				<ct:InitialValue>
-					«stmt.list.getAttributeExpression("init")?.writeAssignment ?: writeAssignZero »
+					«stmt.firstAttributeList.getAttributeExpression("init")?.writeAssignment ?: writeAssignZero »
 				</ct:InitialValue>
 				<ct:InitialTime>
-					«stmt.list.getAttributeExpression("x0")?.writeAssignment ?: writeAssignZero »
+					«stmt.firstAttributeList.getAttributeExpression("x0")?.writeAssignment ?: writeAssignZero »
 				</ct:InitialTime>
 			</ct:InitialCondition>
 		</ct:DerivativeVariable>
@@ -572,7 +574,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	def writeDiscreteObservations(ListDefinition s, int idx) {
-		val type = s.list.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT)
+		val type = s.firstAttributeList.getAttributeEnumValue(ListDefinitionTable::OBS_TYPE_ATT)
 		'''
 		<ObservationModel blkId="om«idx»">
 			«switch type{
@@ -693,10 +695,10 @@ class ModelDefinitionPrinter {
 		var model = "";
 			for (s: pObj.getParamCorrelations){
 				val corrDefn = s as ListDefinition
-				val type = corrDefn.list.getAttributeEnumValue('type');
+				val type = corrDefn.firstAttributeList.getAttributeEnumValue('type');
 				if (type == 'corr' || type == 'cov'){
-					val params = corrDefn.list.getAttributeExpression('parameter') as VectorLiteral
-					val values = corrDefn.list.getAttributeExpression('value') as VectorLiteral
+					val params = corrDefn.firstAttributeList.getAttributeExpression('parameter') as VectorLiteral
+					val values = corrDefn.firstAttributeList.getAttributeExpression('value') as VectorLiteral
 					var k = 0;
 					for(i : 1 .. params.expressions.size - 1){
 						for(j : 0 .. i -1){
@@ -824,7 +826,7 @@ class ModelDefinitionPrinter {
 //						//MODEL_PREDICTION
 //						if (st.variable != null){
 //								if (st.variable.list != null){
-//									if (st.variable.list.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name) != null){
+//									if (st.variable.firstAttributeList.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name) != null){
 //										variables = variables + '''«st.variable.print_SymbolDeclaration("ct:DerivativeVariable", true)»''';	
 //									}
 //								} else {
@@ -836,7 +838,7 @@ class ModelDefinitionPrinter {
 //						if (st.odeBlock != null){
 //							for (s: st.odeBlock.variables){
 //								if (s.list != null){
-//									if (s.list.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name) != null){
+//									if (s.firstAttributeList.arguments.getAttributeExpression(AttributeValidator::attr_deriv.name) != null){
 //										variables = variables + '''«s.print_SymbolDeclaration("ct:DerivativeVariable", true)»''';	
 //									}
 //								} else {
@@ -861,7 +863,7 @@ class ModelDefinitionPrinter {
 ////								if (s.variable != null)
 ////									macros = macros + s.variable.print_PKMacros;
 ////								if (s.list != null)
-////									macros = macros + s.list.print_PKMacros;
+////									macros = macros + s.firstAttributeList.print_PKMacros;
 ////							}
 ////							macros = macros + '''
 ////			</PKmacros>
@@ -913,7 +915,7 @@ class ModelDefinitionPrinter {
 //	def print_mdef_ObservationModel(SymbolDeclaration s){
 //		var retVal = ''''''
 //		if(s.list != null){
-//			val type = s.list.arguments.getAttribute(AttributeValidator::attr_type.name)
+//			val type = s.firstAttributeList.arguments.getAttribute(AttributeValidator::attr_type.name)
 //			switch type{
 //				case CONTINUOUS_OBS: retVal = s.print_mdef_StandardObservation.toString
 //				case COUNT_OBS: retVal = s.print_mdef_CountObservations.toString
@@ -973,8 +975,8 @@ class ModelDefinitionPrinter {
 //	
 	private def print_mdef_CountObservations(ListDefinition s) {
 		var name = s.name
-		val linkFunction = s.list.getAttributeExpression('link');
-		val distn = s.list.getAttributeExpression('distn');
+		val linkFunction = s.firstAttributeList.getAttributeExpression('link');
+		val distn = s.firstAttributeList.getAttributeExpression('distn');
 		val paramVar = (distn as SymbolReference).getFunctionArgumentValue("lambda");
 //		var String tmpParamVar = null;
 //		if(paramVar ){
@@ -1027,10 +1029,10 @@ class ModelDefinitionPrinter {
 	
 	private def print_mdef_DiscreteObservations(ListDefinition s) {
 		var name = s.name
-		val linkFunction = s.list.getAttributeExpression('link');
-		val distn = s.list.getAttributeExpression('distn') as SymbolReference
+		val linkFunction = s.firstAttributeList.getAttributeExpression('link');
+		val distn = s.firstAttributeList.getAttributeExpression('distn') as SymbolReference
 		val paramVar = (distn as SymbolReference).getFunctionArgumentValue("probability")
-		val categories = s.list.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
+		val categories = s.firstAttributeList.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
 		val catVals = categories.categories
 		val catList = createCategoriesOrderedBySuccess(catVals.keySet, distn.successCategory)
 		
@@ -1096,7 +1098,7 @@ class ModelDefinitionPrinter {
 	}
 	
 	private def print_mdef_CategoricalObservations(ListDefinition s) {
-//			val define = column.list.getAttributeExpression(ListDefinitionTable::USE_ATT);
+//			val define = column.firstAttributeList.getAttributeExpression(ListDefinitionTable::USE_ATT);
 //			// get an EnumExpression here - use this to get the categories.
 //			switch(define){
 //				EnumExpression:{
@@ -1108,7 +1110,7 @@ class ModelDefinitionPrinter {
 //					}
 //				}
 //			}
-		val categories = s.list.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
+		val categories = s.firstAttributeList.getAttributeExpression(ListDefinitionTable::OBS_TYPE_ATT);
 //		val listCats = new ArrayList<String>
 //		val catVals = new HashMap<String, Expression>
 //		switch(categories){
@@ -1149,9 +1151,9 @@ class ModelDefinitionPrinter {
 
 	private def print_mdef_TimeToEventObservations(ListDefinition s) {
 		var name = s.name
-		val haz = s.list.getAttributeExpression('hazard');
-		val event = s.list.getAttributeEnumValue('event');
-		val maxEvent = s.list.getAttributeExpression('maxEvent');
+		val haz = s.firstAttributeList.getAttributeExpression('hazard');
+		val event = s.firstAttributeList.getAttributeEnumValue('event');
+		val maxEvent = s.firstAttributeList.getAttributeExpression('maxEvent');
 		'''
 			<Discrete>
 				<TimeToEventData>
@@ -1185,10 +1187,10 @@ class ModelDefinitionPrinter {
 
 //	private def print_mdef_StandardObservation(SymbolDeclaration s){
 //		var name = s.name
-//		val error = s.list.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
-//		val prediction = s.list.arguments.getAttribute(AttributeValidator::attr_prediction_ref.name);
-//		val eps = s.list.arguments.getAttribute(AttributeValidator::attr_eps.name);
-//		val transfn = s.list.arguments.getAttribute(AttributeValidator::attr_trans.name);
+//		val error = s.firstAttributeList.arguments.getAttributeExpression(AttributeValidator::attr_error.name);
+//		val prediction = s.firstAttributeList.arguments.getAttribute(AttributeValidator::attr_prediction_ref.name);
+//		val eps = s.firstAttributeList.arguments.getAttribute(AttributeValidator::attr_eps.name);
+//		val transfn = s.firstAttributeList.arguments.getAttribute(AttributeValidator::attr_trans.name);
 //		'''
 //			<ContinuousData>
 //				<Standard symbId="«name»">
@@ -1247,7 +1249,7 @@ class ModelDefinitionPrinter {
 //			} else {
 //				val define = list.arguments.getAttributeExpression(AttributeValidator::attr_define.name);
 //				if (define.list != null) 
-//					assign = '''«define.list.print_Categorical»'''
+//					assign = '''«define.firstAttributeList.print_Categorical»'''
 //			}
 //		} else {
 //			//Derivative variables	

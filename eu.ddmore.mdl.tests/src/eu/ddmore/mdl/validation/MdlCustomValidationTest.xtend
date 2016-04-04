@@ -318,16 +318,16 @@ warfarin_T2E_exact_dat = dataObj{
 } # end data object
 		'''.parse
 
-		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
 			MdlValidator::DEPENDENT_USE_MISSING,
 			"A data column of use 'amt' is required by this column definition with 'use is rate'.")
-		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
 			MdlValidator::DEPENDENT_USE_MISSING,
 			"A data column of use 'amt' is required by this column definition with 'use is ss'.")
-		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
 			MdlValidator::DEPENDENT_USE_MISSING,
 			"A data column of use 'amt' is required by this column definition with 'use is addl'.")
-		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
 			MdlValidator::DEPENDENT_USE_MISSING,
 			"A data column of use 'amt' is required by this column definition with 'use is ii'.")
 	}
@@ -461,7 +461,7 @@ warfarin_T2E_exact_dat = dataObj{
 } # end data object
 		'''.parse
 
-		mcl.assertError(MdlPackage::eINSTANCE.listDefinition,
+		mcl.assertError(MdlPackage::eINSTANCE.attributeList,
 			MdlValidator::DEPENDENT_USE_MISSING,
 			"A data column of use 'ii' is required by this column definition with 'use is addl'.")
 	}

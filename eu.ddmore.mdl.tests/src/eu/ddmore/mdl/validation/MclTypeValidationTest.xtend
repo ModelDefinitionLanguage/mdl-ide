@@ -623,7 +623,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidNamedFunctionSublistArgumentType(){
 		val mcl = '''bar = mdlObj {
-			
+			IDV{ T }
 			
 			COVARIATES{
 				logtWT
@@ -632,10 +632,12 @@ class MclTypeValidationTest {
 			VARIABILITY_LEVELS{
 			}
 			
-			INDIVIDUAL_VARIABLES{
+			GROUP_VARIABLES{
 				POP_CL
 				BETA_CL_WT
-				ETA_CL
+				ETA_CL			}
+			
+			INDIVIDUAL_VARIABLES{
 				Cl = linear(pop = POP_CL, fixEff = BETA_CL_WT, ranEff = ETA_CL)
 			}
 		}'''.parse
@@ -1443,7 +1445,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				A =  [ [ 0 ], 20, 26]
+				A =  [ 20, [ 0 ], 26]
 			}
 			
 		} # end of model object
@@ -1466,7 +1468,7 @@ class MclTypeValidationTest {
 		
 			
 			MODEL_PREDICTION{
-				A =  [ C, 20, 26]
+				A =  [ 20, C, 26]
 				C = [ 1, 2, 3]
 			}
 			
@@ -1482,7 +1484,7 @@ class MclTypeValidationTest {
 	@Test
 	def void testInValidInconsistentVectorLiteral(){
 		val mcl = 	'''
-		d1g=desObj{
+		d1g=designObj{
 			STUDY_DESIGN{}
 			
 			
@@ -1500,7 +1502,7 @@ class MclTypeValidationTest {
 	'''.parse
 		mcl.assertError(MdlPackage::eINSTANCE.vectorElement,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Element type 'Real' is incompatible with vector type 'Vector:List:SimpleSampling'."
+			"Element type 'Real' is incompatible with vector type 'vector:List:SimpleSamplingList'."
 		)
 	}
 	
@@ -1521,7 +1523,7 @@ class MclTypeValidationTest {
 			
 			SAMPLING{
 			 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5] }
-				pkwin2 : { type is simple, outcome=Conc, numberSamples = [0] }
+				pkwin2 : { type is simple, outcome=Conc, numberSamples = [0], sampleTime = 0 }
 			}
 			DESIGN_SPACES{
 				DS3 : { objRef=[pkwin1,pkwin2], element is numberTimes, discrete = [1] }
@@ -1580,7 +1582,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Enum:SEX type, but was Int."
+			"Expected Category:SEX type, but was Int."
 		)
 	}
 	
@@ -1608,7 +1610,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Enum:SEX type, but was ref:Enum:SEX2."
+			"Expected Category:SEX type, but was Category:SEX2:male."
 		)
 	}
 	
@@ -1636,7 +1638,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Enum:SEX type, but was ref:Enum:SEX2."
+			"Expected Category:SEX type, but was Category:SEX2:female2."
 		)
 	}
 	
@@ -1664,7 +1666,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Enum:SEX type, but was ref:Enum:SEX2."
+			"Expected Category:SEX type, but was ref:Category:SEX2."
 		)
 	}
 	
@@ -1691,7 +1693,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected Real type, but was ref:Enum:SEX."
+			"Expected Real type, but was ref:Category:SEX."
 		)
 	}
 	
@@ -1718,7 +1720,7 @@ class MclTypeValidationTest {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.equalityExpression,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Enum:SEX type, but was String."
+			"Expected Category:SEX type, but was String."
 		)
 	}
 	
@@ -1747,7 +1749,7 @@ d1g=designObj{
 		Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {input=Cmt, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {type is simple, input=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	}
@@ -1762,7 +1764,7 @@ d1g=designObj{
 		mcl.assertNoErrors()
 	}
 	
-	@Test
+	@Ignore("Seems to have been modified so does test mapping.")
 	def void testValidMappingStructure(){
 		val mcl = '''
 d1g=designObj{
@@ -1770,7 +1772,7 @@ d1g=designObj{
 		Conc; Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {input=Cmt, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {type is simple, input=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
@@ -1803,7 +1805,7 @@ d1g=designObj{
 			DATA_INPUT_VARIABLES{  foo : { use is ignore } }
 
 			SOURCE{
-				foo : { file="aFile", inputFormat is foobar }
+				foo2 : { file="aFile", inputFormat is foobar }
 			}
 		} # end of model object
 		'''.parse
@@ -2104,7 +2106,7 @@ warfarin_PK_v2_dat = dataObj{
 			STUDY_DESIGN{}
 			
 			ADMINISTRATION{
-				dose1 : {input=Cmt, amount=100, doseTime=[0], duration=[1]} 
+				dose1 : {type is simple, input=Cmt, amount=100, doseTime=[0], duration=[1]} 
 			}
 		}
 		'''.parse
@@ -2123,7 +2125,7 @@ warfarin_PK_v2_dat = dataObj{
 			STUDY_DESIGN{}
 			
 			ADMINISTRATION{
-				dose1 : {input=0.0, amount=100, doseTime=[0], duration=[1]} 
+				dose1 : {type is simple, input=0.0, amount=100, doseTime=[0], duration=[1]} 
 			}
 		}
 		'''.parse
@@ -2135,7 +2137,7 @@ warfarin_PK_v2_dat = dataObj{
 	
 
 	
-	@Test
+	@Ignore
 	def void testValidObsWhenExpression(){
 		val mcl = '''
 		foo = mdlObj{
@@ -2159,24 +2161,23 @@ warfarin_PK_v2_dat = dataObj{
 	@Test
 	def void testInValidRhsObsWhenExpression(){
 		val mcl = '''
-		foo = mdlObj{
-			IDV{ T }
+		bar = dataObj {
+			DECLARED_VARIABLES{ D; E }
 			
-			VARIABILITY_LEVELS{
+			DATA_INPUT_VARIABLES{
+				CMT : { use is cmt }
+				AMT : { use is amt, define = {1.0 in CMT as D, 2 in CMT as E } }
 			}
-
-			MODEL_PREDICTION{
-			}# end MODEL_PREDICTION
+			DATA_DERIVED_VARIABLES{
+			}
 			
-			OBSERVATION{
-				PAIN : { type is categorical withCategories {mild when 0} }
-			}
+			SOURCE{  SrcFile : { file="warfarin_conc_sex.csv", inputFormat  is nonmemFormat } }
 		}
 		'''.parse
 		
-		mcl.assertError(MdlPackage::eINSTANCE.categoryValueDefinition,
+		mcl.assertError(MdlPackage::eINSTANCE.mappingPair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"Expected ref:Real type, but was Int."
+			"Expected Int type, but was Real."
 		)
 	}
 
@@ -2296,40 +2297,17 @@ d1g=designObj{
 		Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {input=Cmt, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {type is simple, input=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
-		pkwin2 : { type is simple, outcome=Conc, numberSamples=[0] }
+		pkwin2 : { type is simple, outcome=Conc, numberSamples=[0], sampleTime = 30 }
 		pkwin3 : { type is simple, outcome=Conc, sampleTime = [30]}
-	 	pkwin4 : { type is simple, outcome=Conc, sampleTime = [49]}
-		pkwin5 : { type is simple, outcome=Conc, numberSamples=[0]}
-		pkwin6 : { type is simple, outcome=Conc, sampleTime = [180]}
-		pdwin1 : { type is simple, outcome=Effect, sampleTime = [0.5,2]}
-		pdwin2 : { type is simple, outcome=Effect, sampleTime = [14]}
-		pdwin3 : { type is simple, outcome=Effect, numberSamples=[0]}
-	 	pdwin4 : { type is simple, outcome=Effect, sampleTime = [110]}
-		pdwin5 : { type is simple, outcome=Effect, sampleTime = [150]}
-		pdwin6 : { type is simple, outcome=Effect,numberSamples=[0] }
 	# Create sampling for PK and PD by stringing windows
-		sampPK : {  type is derived, combination=[pkwin1,pkwin2,pkwin3,pkwin4,pkwin5,pkwin6] }
-		sampPD : { type is derived, combination=[pdwin1,pdwin2,pdwin3,pdwin4,pdwin5,pdwin6] }
+		sampPK : {  type is combi, combination=[pkwin1,pkwin2] }
+		sampPD : { type is combi, combination=[pkwin1,pkwin3] }
 	# Create sampling for both responses by combining the PK and PD samples. Need to specify start/end so that the sampling are simultaneous
-		sampPKPD : {type is derived, combination=[sampPK,sampPD]}
-	}
-	STUDY_DESIGN{
-		set totalSize=100
-		arm1 : {
-			armSize=100,
-			interventionSequence=[{
-				admin=dose1
-			}],
-			samplingSequence=[{
-				sample=pkwin5,
-				start=0
-				}
-			]
-		}
+		sampPKPD : {type is combi, combination=[sampPK,sampPD]}
 	}
 }		'''.parse
 		
@@ -2346,57 +2324,14 @@ d1g=designObj{
 		Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {input=Cmt, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {type is simple, input=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
-		pkwin2 : { type is simple, outcome=Conc, numberSamples=[0] }
-		pkwin3 : { type is simple, outcome=Conc, sampleTime = [30]}
-	 	pkwin4 : { type is simple, outcome=Conc, sampleTime = [49]}
-		pkwin5 : { type is simple, outcome=Conc, numberSamples=[0]}
-		pkwin6 : { type is simple, outcome=Conc, sampleTime = [180]}
-		pdwin1 : { type is simple, outcome=Effect, sampleTime = [0.5,2]}
-		pdwin2 : { type is simple, outcome=Effect, sampleTime = [14]}
-		pdwin3 : { type is simple, outcome=Effect, numberSamples=[0]}
-	 	pdwin4 : { type is simple, outcome=Effect, sampleTime = [110]}
-		pdwin5 : { type is simple, outcome=Effect, sampleTime = [150]}
-		pdwin6 : { type is simple, outcome=Effect,numberSamples=[0] }
+		pkwin2 : { type is simple, outcome=Conc, numberSamples=[0], sampleTime=0 }
 	# Create sampling for PK and PD by stringing windows
-		sampPK : {  type is derived, combination=[pkwin1,pkwin2,pkwin3,pkwin4,pkwin5,pkwin6] }
-		sampPD : { type is derived, combination=[pdwin1,pdwin2,pdwin3,pdwin4,pdwin5,pdwin6] }
-	# Create sampling for both responses by combining the PK and PD samples. Need to specify start/end so that the sampling are simultaneous
-		sampPKPD : {type is derived, combination=[sampPK,sampPD]}
-	}
-	DESIGN_SPACES{
-		DS1 : { objRef=[dose1], element is amount, discrete=[10,100,200] }
-		DS2 : { objRef=[dose1], element is duration, range=[0.5, 2] }
-		DS3 : { objRef=[pkwin1,pdwin1], element is numberTimes, discrete=[1,2] }
-		DS4 : { objRef=[pkwin1,pdwin1], element is sampleTime, range=[0.25,2] }
-		DS5 : { objRef=[pkwin2,pdwin2], element is numberTimes, discrete=[0,1]}
-		DS6 : { objRef=[pkwin2,pdwin2], element is sampleTime, range=[12,16] }
-		DS7 : { objRef=[pkwin3,pdwin3], element is numberTimes, discrete=[1,2] }
-		DS8 : { objRef=[pkwin3,pdwin3], element is sampleTime, range=[24,36] }
-		DS9 : { objRef=[pkwin4,pdwin4], element is numberTimes, discrete=[1,2] }
-		DS10 : { objRef=[pkwin4,pdwin4], element is sampleTime, range=[48,144] }
-		DS11 : { objRef=[pkwin5,pdwin5], element is numberTimes, discrete=[0,1]}
-		DS12 : { objRef=[pkwin5,pdwin5], element is sampleTime, range=[144,156] }
-		DS13 : { objRef=[pkwin6,pdwin6], element is numberTimes, discrete=[0,1]}
-		DS14 : { objRef=[pkwin6,pdwin6], element is sampleTime, range=[168,180] }
-		DS15 : { objRef=[sampPK,sampPD], element is numberTimes, discrete=dseq(4,8,1) }
-	}
-	STUDY_DESIGN{
-		set totalSize=100
-		arm1 : {
-			armSize=100,
-			interventionSequence=[{
-				admin=dose1
-			}],
-			samplingSequence=[{
-				sample=pkwin5,
-				start=0
-				}
-			]
-		}
+		sampPK : {  type is combi, combination=[pkwin1,pkwin2] }
+		sampPD : { type is combi, combination=[pkwin1,pkwin2] }
 	}
 }		'''.parse
 		
@@ -2434,62 +2369,42 @@ d1g=designObj{
 		Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {input=Cmt, amount=100, doseTime=0, duration=1} 
+		dose1 : { type is simple, input=Cmt, amount=100, doseTime=0, duration=1} 
 	}
 	SAMPLING{
-	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
-		pkwin2 : { type is simple, outcome=Conc, numberSamples=0 }
-		pkwin3 : { type is simple, outcome=Conc, sampleTime = [30]}
-	 	pkwin4 : { type is simple, outcome=Conc, sampleTime = [49]}
-		pkwin5 : { type is simple, outcome=Conc, numberSamples=[0]}
-		pkwin6 : { type is simple, outcome=Conc, sampleTime = [180]}
-		pdwin1 : { type is simple, outcome=Effect, sampleTime = [0.5,2]}
-		pdwin2 : { type is simple, outcome=Effect, sampleTime = [14]}
-		pdwin3 : { type is simple, outcome=Effect, numberSamples=[0]}
-	 	pdwin4 : { type is simple, outcome=Effect, sampleTime = [110]}
-		pdwin5 : { type is simple, outcome=Effect, sampleTime = [150]}
-		pdwin6 : { type is simple, outcome=Effect,numberSamples=[0] }
-	# Create sampling for PK and PD by stringing windows
-		sampPK : {  type is derived, combination=[pkwin1,pkwin2,pkwin3,pkwin4,pkwin5,pkwin6] }
-		sampPD : { type is derived, combination=[pdwin1,pdwin2,pdwin3,pdwin4,pdwin5,pdwin6] }
-	# Create sampling for both responses by combining the PK and PD samples. Need to specify start/end so that the sampling are simultaneous
-		sampPKPD : {type is complex, combination=[{sample=sampPK},{sample=sampPD}]}
-	}
-	DESIGN_SPACES{
-		DS1 : { objRef=dose1, element is amount, discrete=[10,100,200] }
-		DS2 : { objRef=[dose1], element is duration, range=[0.5, 2] }
-		DS3 : { objRef=[pkwin1,pdwin1], element is numberTimes, discrete=[1,2] }
-		DS4 : { objRef=[pkwin1,pdwin1], element is sampleTime, range=[0.25,2] }
-		DS5 : { objRef=[pkwin2,pdwin2], element is numberTimes, discrete=[0,1]}
-		DS6 : { objRef=[pkwin2,pdwin2], element is sampleTime, range=[12,16] }
-		DS7 : { objRef=[pkwin3,pdwin3], element is numberTimes, discrete=[1,2] }
-		DS8 : { objRef=[pkwin3,pdwin3], element is sampleTime, range=[24,36] }
-		DS9 : { objRef=[pkwin4,pdwin4], element is numberTimes, discrete=[1,2] }
-		DS10 : { objRef=[pkwin4,pdwin4], element is sampleTime, range=[48,144] }
-		DS11 : { objRef=[pkwin5,pdwin5], element is numberTimes, discrete=[0,1]}
-		DS12 : { objRef=[pkwin5,pdwin5], element is sampleTime, range=[144,156] }
-		DS13 : { objRef=[pkwin6,pdwin6], element is numberTimes, discrete=[0,1]}
-		DS14 : { objRef=[pkwin6,pdwin6], element is sampleTime, range=[168,180] }
-		DS15 : { objRef=[sampPK,sampPD], element is numberTimes, discrete=dseq(4,8,1) }
-	}
-	STUDY_DESIGN{
-		set totalSize=100
-		arm1 : {
-			armSize=100,
-			interventionSequence={
-				admin=dose1
-			},
-			samplingSequence={
-				sample=pkwin5,
-				start=0
-			}
-		}
+		pkwin2 : { type is simple, outcome=Conc, numberSamples=0, sampleTime=30 }
 	}
 }		'''.parse
 		
 		mcl.assertNoErrors
 	}
 
+	@Ignore("Not supported by language now.")
+	def void testValidGenericEnumValueAttribute(){
+		val mcl = '''
+d1g=designObj{
+	DECLARED_VARIABLES{
+		Conc
+		Effect
+		Cmt
+	}
+	ADMINISTRATION{
+		dose1 : {type is simple, input=Cmt, amount=100, doseTime=0, duration=1} 
+	}
+	
+	COVARIATES{
+		catCovar withCategories { foo, bar }
+	}
+	
+	DESIGN_SPACES{
+		DS1 : { objRef=catCovar.foo, element is catCov, range=[0.1, 1.0] }
+	}
+}		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+	@Test
 	def void testInvalidCompartmentUsage(){
 		val mcl = '''
 warfarin_PK_Compartments_mdl = mdlObj {
@@ -2501,7 +2416,7 @@ warfarin_PK_Compartments_mdl = mdlObj {
 	}
 
 	
-	INDIVIDUAL_VARIABLES { # This maps to the "Type 3" individual parameter definition in PharmML
+	INDIVIDUAL_VARIABLES {
 	    CL = 1
 	    V = 1
 	    KA = 1
@@ -2521,9 +2436,66 @@ warfarin_PK_Compartments_mdl = mdlObj {
 		
 		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
 			MdlValidator::INCOMPATIBLE_TYPES,
-			"attribute 'to' expected value of type 'ref:List:Compartment' but was 'ref:Real'."
+			"attribute 'to' expected value of type 'ref:ListSubtype:DosingTarget' but was 'ref:Int'."
 		)
 	}
+
+	@Test
+	def void testVectorOfVector(){
+		val mcl = '''
+testprior = priorObj{
+
+	NON_CANONICAL_DISTRIBUTION{
+		INPUT_PRIOR_DATA{
+			bins_k::Vector[::Real]
+			bins_v::Vector[::Real]
+			bins_k_v= toMatrixByRow([bins_k, bins_v])
+		}
+	}
+}
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+
+
+	@Test
+	def void testValidFunctionRef(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataObj{
+	DATA_INPUT_VARIABLES {
+		W : { use is covariate, interp=&linearInterp } 
+	}
+	SOURCE {
+	    foo: {file = "warfarin_conc_sex.csv",
+        	inputFormat  is nonmemFormat} 
+	} # end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertNoErrors
+	}
+	
+	@Test
+	def void testInvalidFunctionRef(){
+		val mcl = '''
+warfarin_PK_v2_dat = dataObj{
+	DATA_INPUT_VARIABLES {
+		W : { use is covariate, interp=&ln } 
+	}
+	SOURCE {
+	    foo: {file = "warfarin_conc_sex.csv",
+        	inputFormat  is nonmemFormat} 
+	} # end SOURCE
+} # end data object
+		'''.parse
+		
+		mcl.assertError(MdlPackage::eINSTANCE.assignPair,
+			MdlValidator::INCOMPATIBLE_TYPES,
+			"attribute 'interp' expected value of type 'ref:Function(Real,Real,Real,Real,Real)::Real' but was 'ref:Function(Real)::Real'."
+		)
+	}
+	
 }
 
 

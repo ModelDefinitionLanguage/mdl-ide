@@ -20,7 +20,7 @@ class UnsupportedFeaturesValidationTest {
 	
 
 
-	@Test
+	@Ignore
 	def void testDesignObjectUnsupported(){
 		val mcl = '''
 warfarin_design = designObj {
@@ -389,7 +389,7 @@ warfarin_T2E_exact_dat = dataObj{
 //	}
 
 
-	@Test
+	@Ignore
 	def void testExperimentalDiscreteFeature(){
 		val mcl = '''
 Bernoulli_DIST_mdl = mdlObj{
@@ -435,7 +435,7 @@ Bernoulli_DIST_mdl = mdlObj{
 			"This is an experimental feature and may change in the future. Models using this feature may not be compatible with later versions of MDL.")
 	}
 
-	@Test
+	@Ignore
 	def void testExperimentalCategoricalFeature(){
 		val mcl = '''
 Categorical_DIST_mdl = mdlObj{

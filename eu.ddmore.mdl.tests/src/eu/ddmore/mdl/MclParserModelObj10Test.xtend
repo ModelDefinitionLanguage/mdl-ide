@@ -11,9 +11,9 @@ import org.junit.runner.RunWith
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserModelObj10Test {
-//	@Inject extension LibraryTestHelper<Mcl>
+//	@Inject extension MdlTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension MdlTestHelper<Mcl>
 	
 	val static CODE_SNIPPET = '''
 Bernoulli_DIST_mdl = mdlObj{
@@ -51,8 +51,13 @@ Bernoulli_DIST_mdl = mdlObj{
 	  # P1 = invLogit(LP)
    }# end MODEL_PREDICTION
 
+	RANDOM_VARIABLE_DEFINITION(level=DV){
+		Y withCategories { success, fail } ~ Bernoulli(probability=P1)
+	}
+
+
    OBSERVATION{
-     Y : { type is discrete withCategories { success, fail }, distn = Bernoulli(category=Y.success, probability=P1)}
+     :: { type is discrete, variable=Y }
    }# end ESTIMATION
 } # end of model object
 '''

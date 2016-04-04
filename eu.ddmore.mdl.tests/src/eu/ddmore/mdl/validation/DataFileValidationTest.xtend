@@ -1,7 +1,7 @@
 package eu.ddmore.mdl.validation
 
 import com.google.inject.Inject
-import com.google.inject.Provider
+import eu.ddmore.mdl.LibraryTestHelper
 import eu.ddmore.mdl.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MdlPackage
@@ -11,9 +11,7 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.TemporaryFolder
 import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
-import org.eclipse.xtext.resource.XtextResourceSet
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,16 +21,13 @@ import org.junit.runner.RunWith
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class DataFileValidationTest {
     
-	@Inject extension ParseHelper<Mcl>
+	@Inject extension LibraryTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
-	@Inject
-    private Provider<XtextResourceSet> resourceSetProvider;
-    
     @Rule
     public TemporaryFolder workingFolder = new TemporaryFolder();
     
-    private File dataFile;
+    var File dataFile;
 	
 	@Before
 	def void setUp() {
@@ -90,7 +85,7 @@ class DataFileValidationTest {
         // has actually been read in from a file, so the data file reference
         // can be resolved against it
         // Doesn't matter that the MDL file doesn't actually exist, for these tests
-        parse(mclText, URI.createFileURI(new File(dataFile.parentFile, "myfile.mdl").toString()), resourceSetProvider.get())
+        parse(mclText, URI.createFileURI(new File(dataFile.parentFile, "myfile.mdl").toString()))
     }
 
 }

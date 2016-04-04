@@ -20,7 +20,8 @@ Require-Bundle: eu.ddmore.mdl,
  org.apache.servicemix.bundles.xerces;bundle-version="2.11.0",
  eu.ddmore.mdllib.tests,
  eu.ddmore.mdllib,
- org.eclipse.xtext.xbase.lib
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.emf.ecore
 Import-Package: org.apache.commons.io;version="2.0.1",
  org.apache.log4j;version="1.2.15",
  org.eclipse.xtext.junit4,

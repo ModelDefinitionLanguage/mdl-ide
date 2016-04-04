@@ -45,6 +45,7 @@ class MdlValidator extends AbstractMdlValidator {
 	public static val LIST_NOT_ANONYMOUS = "eu.ddmore.mdl.validation.ListNotAnonymous"
 	public static val LIST_NOT_NAMED = "eu.ddmore.mdl.validation.ListNotNamed"
 	public static val DUPLICATE_ATTRIBUTE_NAME = "eu.ddmore.mdl.validation.DuplicateArgumentName"
+	public static val LIST_KEY_VAL_UNRECOGNISED = "eu.ddmore.mdl.validation.Unrecognised.Key.Value"
 
 	// Builtin Function validation
 	public static val UNRECOGNIZED_FUNCTION_NAME = "eu.ddmore.mdl.validation.function.named.UnrecognisedFunctionName"

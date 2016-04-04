@@ -66,11 +66,11 @@ class PKMacrosPrinter{
 	def printCompartmentDefinitions(List<Statement> statements)'''
 		«FOR s : statements»
 			«switch(s){
-				ListDefinition case(s.list.getAttributeEnumValue('type') == 'compartment'):
+				ListDefinition case(s.firstAttributeList.getAttributeEnumValue('type') == 'compartment'):
 					s.writeVariable
-				ListDefinition case(s.list.getAttributeEnumValue('type') == 'effect'):
+				ListDefinition case(s.firstAttributeList.getAttributeEnumValue('type') == 'effect'):
 					s.writeVariable
-				ListDefinition case(s.list.getAttributeEnumValue('type') == 'distribution'):
+				ListDefinition case(s.firstAttributeList.getAttributeEnumValue('type') == 'distribution'):
 					s.writeVariable
 			}»
 		«ENDFOR»
@@ -108,16 +108,16 @@ class PKMacrosPrinter{
 	
 	def defineCompartments(Statement stmt){
 		switch(stmt){
-			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'effect'),
-			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'compartment'),
-			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'distribution'):{
+			ListDefinition case(stmt.firstAttributeList.getAttributeEnumValue('type') == 'effect'),
+			ListDefinition case(stmt.firstAttributeList.getAttributeEnumValue('type') == 'compartment'),
+			ListDefinition case(stmt.firstAttributeList.getAttributeEnumValue('type') == 'distribution'):{
 				storeCompartment(stmt)
 				'''
 					<Variable symbId="«stmt.name»"/>
 				'''
 			}
-			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'direct'),
-			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'depot'):{
+			ListDefinition case(stmt.firstAttributeList.getAttributeEnumValue('type') == 'direct'),
+			ListDefinition case(stmt.firstAttributeList.getAttributeEnumValue('type') == 'depot'):{
 				// defining adms
 				storeCompartment(stmt)
 				''''''
@@ -127,16 +127,16 @@ class PKMacrosPrinter{
 	
 	def writeMacro(Statement stmt){
 		switch(stmt){
-			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'effect'):
+			ListDefinition case(stmt.firstAttributeList.getAttributeEnumValue('type') == 'effect'):
 				stmt.writeEffect
-			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'compartment'):
+			ListDefinition case(stmt.firstAttributeList.getAttributeEnumValue('type') == 'compartment'):
 				stmt.writeCompartment
-			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'distribution'):
+			ListDefinition case(stmt.firstAttributeList.getAttributeEnumValue('type') == 'distribution'):
 				stmt.writePeripheral
-			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'direct'):
+			ListDefinition case(stmt.firstAttributeList.getAttributeEnumValue('type') == 'direct'):
 				stmt.writeIV
-			ListDefinition case(stmt.list.getAttributeEnumValue('type') == 'depot'):
-				if(stmt.list.getAttributeExpression('target') != null){
+			ListDefinition case(stmt.firstAttributeList.getAttributeEnumValue('type') == 'depot'):
+				if(stmt.firstAttributeList.getAttributeExpression('target') != null){
 					stmt.writeDepot
 				}
 				else{
@@ -195,8 +195,8 @@ class PKMacrosPrinter{
 	}
 	
 	def writePeripheralKij(ListDefinition it){
-		var kin = list.getAttributeExpression('kin');
-		val from = list.getAttributeExpression('from');
+		var kin = firstAttributeList.getAttributeExpression('kin');
+		val from = firstAttributeList.getAttributeExpression('from');
 		if (from != null && kin != null){
 			val fromCompartmentArgs = mclObject.findCompartment(from as SymbolReference);
 			val fromCompartment_cmt = fromCompartmentArgs.compartmentNum
@@ -206,8 +206,8 @@ class PKMacrosPrinter{
 	}
 	
 	def writePeripheralKji(ListDefinition it){
-		var kout = list.getAttributeExpression('kout');
-		val from = list.getAttributeExpression('from');
+		var kout = firstAttributeList.getAttributeExpression('kout');
+		val from = firstAttributeList.getAttributeExpression('from');
 		if (from != null && kout != null){
 			val fromCompartmentArgs = mclObject.findCompartment(from as SymbolReference);
 			val fromCompartment_cmt = fromCompartmentArgs.compartmentNum
@@ -230,8 +230,8 @@ class PKMacrosPrinter{
 				«symbolReference»
 			</Value>
 			«writeValue("cmt", compartmentNum)»
-			«list.writeFromValue»
-			«list.getAttributeExpression('keq').writeValue('ke0')»
+			«firstAttributeList.writeFromValue»
+			«firstAttributeList.getAttributeExpression('keq').writeValue('ke0')»
 		</Effect>
 	'''
 	
@@ -248,36 +248,36 @@ class PKMacrosPrinter{
 	def writeIV(ListDefinition it)'''
 		<IV>
 			«writeValue("adm", compartmentNum)»
-			«list.writeToValue»
-			«list.writeAttribute('modelDur')»
-			«list.writeAttribute('tlag')»
-			«list.writeAttribute('finput')»
+			«firstAttributeList.writeToValue»
+			«firstAttributeList.writeAttribute('modelDur')»
+			«firstAttributeList.writeAttribute('tlag')»
+			«firstAttributeList.writeAttribute('finput')»
 		</IV>
 	'''
 	
 	def writeAbsorption(ListDefinition it)'''
 		<Absorption>
 			«writeValue("adm", compartmentNum)»
-			«list.writeToValue»
-			«list.writeAttribute('ka')»
-			«list.writeAttribute('tlag')»
-			«list.writeAttribute('finput')»
-			«list.writeAttribute('modelDur')»
-			«list.writeAttribute('ktr')»
-			«list.writeAttribute('mtt')»
+			«firstAttributeList.writeToValue»
+			«firstAttributeList.writeAttribute('ka')»
+			«firstAttributeList.writeAttribute('tlag')»
+			«firstAttributeList.writeAttribute('finput')»
+			«firstAttributeList.writeAttribute('modelDur')»
+			«firstAttributeList.writeAttribute('ktr')»
+			«firstAttributeList.writeAttribute('mtt')»
 		</Absorption>
 	'''
 	
 	def writeDepot(ListDefinition it)'''
 		<Depot>
 			«writeValue("adm", compartmentNum)»
-			«list.writeAttribute('target')»
-			«list.writeAttribute('ka')»
-			«list.writeAttribute('tlag')»
-			«list.writeAttribute('finput')»
-			«list.writeAttribute('modelDur')»
-			«list.writeAttribute('ktr')»
-			«list.writeAttribute('mtt')»
+			«firstAttributeList.writeAttribute('target')»
+			«firstAttributeList.writeAttribute('ka')»
+			«firstAttributeList.writeAttribute('tlag')»
+			«firstAttributeList.writeAttribute('finput')»
+			«firstAttributeList.writeAttribute('modelDur')»
+			«firstAttributeList.writeAttribute('ktr')»
+			«firstAttributeList.writeAttribute('mtt')»
 		</Depot>
 	'''
 	
@@ -486,7 +486,7 @@ class PKMacrosPrinter{
 		for (s: mObj.mdlCompartmentStatements){
 			switch(s){
 				ListDefinition:{
-					if(s.name == to.ref.name && s.list.getAttributeEnumValue('type') == 'compartment') return s
+					if(s.name == to.ref.name && s.firstAttributeList.getAttributeEnumValue('type') == 'compartment') return s
 				}
 					
 			}

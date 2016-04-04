@@ -12,11 +12,10 @@ import eu.ddmore.mdl.mdl.EquationTypeDefinition
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.PropertyStatement
 import eu.ddmore.mdl.mdl.ValuePair
-import eu.ddmore.mdl.provider.BuiltinFunctionProvider
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.PropertyDefinitionProvider
 import eu.ddmore.mdl.type.BuiltinEnumTypeInfo
-import eu.ddmore.mdl.type.PrimitiveType
+import eu.ddmore.mdl.type.TypeInfoClass
 import eu.ddmore.mdl.type.TypeSystemProvider
 import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
@@ -41,7 +40,6 @@ import static extension org.eclipse.xtext.EcoreUtil2.getContainerOfType
 class MdlProposalProvider extends AbstractMdlProposalProvider {
 
 	extension ListDefinitionProvider listHelper = new ListDefinitionProvider
-	extension BuiltinFunctionProvider bfc = new BuiltinFunctionProvider
 	extension PropertyDefinitionProvider pdp = new PropertyDefinitionProvider
 	extension TypeSystemProvider mtp = new TypeSystemProvider
 
@@ -93,7 +91,7 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 		while(node != null && owningBlock != null){
 			val nodeTxt = node.text
 			val matchingAtts = owningBlock.getAllMatchingListDefns(nodeTxt)
-			if(matchingAtts.exists[attType.theType == PrimitiveType.Enum ]){
+			if(matchingAtts.exists[attType.typeClass == TypeInfoClass.Builtin ]){
 				addProposals(context, acceptor, #['is'], null)
 				node = null
 			}
@@ -109,7 +107,7 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 		while(node != null && owningBlock != null){
 			val nodeTxt = node.text
 			val matchingAtts = owningBlock.getAllMatchingListDefns(nodeTxt)
-			if(matchingAtts.exists[attType.theType != PrimitiveType.Enum ]){
+			if(matchingAtts.exists[attType.typeClass != TypeInfoClass.Builtin ]){
 				addProposals(context, acceptor, #['='], null)
 				node = null
 			}
@@ -129,8 +127,8 @@ class MdlProposalProvider extends AbstractMdlProposalProvider {
 
 
 	private def createListEnumProposal(EnumPair model, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
-		val parentBlock = model.getContainerOfType(BlockStatement)
-		val enumType = getTypeOfEnumAttribute(parentBlock.identifier, model.argumentName)
+//		val parentBlock = model.getContainerOfType(BlockStatement)
+		val enumType = getAttributeType(model)
 		val attributes = new ArrayList<String>
 		if(enumType instanceof BuiltinEnumTypeInfo){
 			attributes.addAll((enumType as BuiltinEnumTypeInfo).expectedValues)

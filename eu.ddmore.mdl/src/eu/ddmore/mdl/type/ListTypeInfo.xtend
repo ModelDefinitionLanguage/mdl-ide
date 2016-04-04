@@ -1,38 +1,36 @@
 package eu.ddmore.mdl.type
 
-import org.eclipse.xtend.lib.annotations.Data
-
-@Data
 class ListTypeInfo extends AbstractListTypeInfo{
-	val PrimitiveType secondaryType
 	val ListSuperTypeInfo superType
 	
 	new(String name){
-		super(name)
-		this.secondaryType = PrimitiveType.Undefined
-		this.superType = null 
+		this(name, TypeInfoClass.Undefined, null)
 	}
 	
-	new(String name, PrimitiveType secondaryType){
-		super(name)
-		this.secondaryType = secondaryType 
-		this.superType = null 
+	new(String name, TypeInfoClass secondaryType){
+		this(name, secondaryType, null)
 	}
 	
-	new(String name, ListSuperTypeInfo superType){
-		super(name)
-		this.secondaryType = PrimitiveType.Undefined
-		this.superType = superType 
+	new(String name, TypeInfo superType){
+		this(name, TypeInfoClass.Undefined, superType)
 	}
 	
-	new(String name, PrimitiveType secondaryType, ListSuperTypeInfo superType){
-		super(name)
-		this.secondaryType = secondaryType 
-		this.superType = superType 
+	new(String name, TypeInfoClass secondaryType, TypeInfo superType){
+		super(name, secondaryType)
+		if(superType != null){
+			if(superType instanceof ListSuperTypeInfo){
+				this.superType = superType
+			}
+			else{
+				this.superType = null
+				throw new IllegalArgumentException("Expect list supertype")
+			}
+		}
+		else this.superType = null
 	}
 	
-	override getSecondaryType(){
-		secondaryType
+	def getSuperType(){
+		this.superType
 	}
 	
 	override getListSuperType() {
@@ -44,9 +42,10 @@ class ListTypeInfo extends AbstractListTypeInfo{
 	}
 	
 	override matchesList(AbstractListTypeInfo other) {
-		name == other.name
-			|| (listSuperType != null
-				&& listSuperType == other.listSuperType) 
+		other != null
+		 	&& (name == other.name
+				|| (listSuperType != null
+					&& listSuperType == other.listSuperType)) 
 	}
 }
 

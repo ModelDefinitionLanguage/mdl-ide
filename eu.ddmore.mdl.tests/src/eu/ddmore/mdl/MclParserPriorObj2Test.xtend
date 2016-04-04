@@ -9,13 +9,16 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.utils.BlockUtils
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserPriorObj2Test {
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension MdlTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 	
+	extension BlockUtils bu = new BlockUtils
+
 	val static CODE_SNIPPET = '''
 testprior = priorObj{
 	PRIOR_PARAMETERS{

@@ -1,8 +1,8 @@
 package eu.ddmore.converter.mdl2pharmml
 
 import com.google.inject.Inject
-import eu.ddmore.mdl.LibraryTestHelper
 import eu.ddmore.mdl.MdlAndLibInjectorProvider
+import eu.ddmore.mdl.MdlTestHelper
 import eu.ddmore.mdl.mdl.Mcl
 import java.io.File
 import org.eclipse.xtext.junit4.InjectWith
@@ -20,7 +20,7 @@ class Mcl2PharmMLConverterTest {
 	static val CONVERTED_OUTPUT_DIR="convertedFiles/"
 	static val USE_CASE_DIR="src/eu/ddmore/converter/mdl2pharmml/"
 	
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension MdlTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
 
 	extension ConverterTestHarness cth = new ConverterTestHarness
@@ -145,7 +145,7 @@ class Mcl2PharmMLConverterTest {
 		validateConversion("UseCase10_1")
 	}
 
-	@Test
+	@Ignore("Not compatible with Product 5.1. Since this version of PharmML is obsolte will not test this.")
 	def void testUseCase11(){
 		validateConversion("UseCase11")
 	}

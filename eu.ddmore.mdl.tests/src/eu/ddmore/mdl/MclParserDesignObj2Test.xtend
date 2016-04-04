@@ -9,12 +9,15 @@ import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import eu.ddmore.mdl.utils.BlockUtils
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
 class MclParserDesignObj2Test {
-	@Inject extension LibraryTestHelper<Mcl>
+	@Inject extension MdlTestHelper<Mcl>
 	@Inject extension ValidationTestHelper
+
+	extension BlockUtils bu = new BlockUtils
 	
 	val static CODE_SNIPPET = '''
 d1g=designObj{
@@ -24,26 +27,26 @@ d1g=designObj{
 		Cmt
 	}
 	ADMINISTRATION{
-		dose1 : {input=Cmt, amount=100, doseTime=[0], duration=[1]} 
+		dose1 : {type is simple, input=Cmt, amount=100, doseTime=[0], duration=[1]} 
 	}
 	SAMPLING{
 	 	pkwin1 : { type is simple, outcome=Conc, sampleTime = [0.5,2] }
-		pkwin2 : { type is simple, outcome=Conc, numberSamples=[0] }
+		pkwin2 : { type is simple, outcome=Conc, sampleTime=[0] }
 		pkwin3 : { type is simple, outcome=Conc, sampleTime = [30]}
 	 	pkwin4 : { type is simple, outcome=Conc, sampleTime = [49]}
-		pkwin5 : { type is simple, outcome=Conc, numberSamples=[0]}
+		pkwin5 : { type is simple, outcome=Conc, sampleTime=[0]}
 		pkwin6 : { type is simple, outcome=Conc, sampleTime = [180]}
 		pdwin1 : { type is simple, outcome=Effect, sampleTime = [0.5,2]}
 		pdwin2 : { type is simple, outcome=Effect, sampleTime = [14]}
-		pdwin3 : { type is simple, outcome=Effect, numberSamples=[0]}
+		pdwin3 : { type is simple, outcome=Effect, sampleTime=[0]}
 	 	pdwin4 : { type is simple, outcome=Effect, sampleTime = [110]}
 		pdwin5 : { type is simple, outcome=Effect, sampleTime = [150]}
-		pdwin6 : { type is simple, outcome=Effect,numberSamples=[0] }
+		pdwin6 : { type is simple, outcome=Effect,sampleTime=[0] }
 	# Create sampling for PK and PD by stringing windows
-		sampPK : {  type is derived, combination=[pkwin1,pkwin2,pkwin3,pkwin4,pkwin5,pkwin6] }
-		sampPD : { type is derived, combination=[pdwin1,pdwin2,pdwin3,pdwin4,pdwin5,pdwin6] }
+		sampPK : {  type is combi, combination=[pkwin1,pkwin2,pkwin3,pkwin4,pkwin5,pkwin6] }
+		sampPD : { type is combi, combination=[pdwin1,pdwin2,pdwin3,pdwin4,pdwin5,pdwin6] }
 	# Create sampling for both responses by combining the PK and PD samples. Need to specify start/end so that the sampling are simultaneous
-		sampPKPD : {type is complex, combination=[{sample=sampPK, start=0},{sample=sampPD, start=0}]}
+		sampPKPD : {type is combi, combination=[sampPK, sampPD], start=0  }
 	}
 	DESIGN_SPACES{
 		DS1 : { objRef=[dose1], element is amount, discrete=[10,100,200] }
@@ -66,14 +69,13 @@ d1g=designObj{
 		set totalSize=100
 		arm1 : {
 			armSize=100,
-			interventionSequence=[{
+			interventionSequence={
 				admin=dose1
-			}],
-			samplingSequence=[{
+			},
+			samplingSequence={
 				sample=pkwin5,
 				start=0
 				}
-			]
 		}
 	}
 }
