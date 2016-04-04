@@ -1,6 +1,0 @@
-Place resources files such as images in this folder.
-Make sure they are under a package structure that matches the src structure.
-Specifically, do not place files directly at the top-level since they will then be placed into the jar file at the top level and this can cause problems.
-
-
-NOTE: Do not delete this file until this directory has some actual content, since Git cannot deal with empty directories. 

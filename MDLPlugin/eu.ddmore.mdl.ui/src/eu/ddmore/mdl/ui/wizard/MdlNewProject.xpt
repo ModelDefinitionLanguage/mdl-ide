@@ -1,4 +1,0 @@
-«IMPORT eu::ddmore::mdl::ui::wizard»
-
-«DEFINE main FOR MdlProjectInfo»
-«ENDDEFINE»
