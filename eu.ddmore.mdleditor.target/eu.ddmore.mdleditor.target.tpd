@@ -1,0 +1,99 @@
+target "MDL Editor Target" with source requirements  
+  
+location "http://download.eclipse.org/releases/mars/" eclipse-mars {  
+org.eclipse.jdt.feature.group
+org.eclipse.draw2d.feature.group
+org.eclipse.uml2.feature.group
+org.eclipse.xsd.feature.group
+org.eclipse.emf.ecore.feature.group
+org.eclipse.emf.sdk.feature.group
+org.eclipse.emf.ecore.xcore.feature.group
+org.eclipse.emf.ecore.xcore.sdk.feature.group
+org.eclipse.emf.common.feature.group
+org.eclipse.emf.compare.feature.group
+org.eclipse.emf.codegen.ecore.feature.group
+org.eclipse.emf.validation.feature.group
+org.eclipse.emf.mwe2.language.sdk.feature.group
+org.eclipse.emf.mwe2.runtime.sdk.feature.group
+org.eclipse.emf.mwe.core.feature.group
+org.eclipse.emf.mwe.sdk.feature.group
+org.eclipse.ecf.core.feature.feature.group
+org.eclipse.ecf.filetransfer.feature.feature.group
+org.eclipse.ecf.provider.generic.feature.feature.group
+org.eclipse.ecf.sharedobject.feature.feature.group
+org.eclipse.e4.rcp.feature.group
+org.eclipse.help.feature.group
+org.eclipse.platform.feature.group
+org.eclipse.equinox.executable.feature.group
+org.eclipse.rcp.feature.group
+org.eclipse.rcp.sdk.id
+org.eclipse.equinox.core.sdk.feature.group
+org.eclipse.equinox.p2.rcp.feature.feature.group
+org.eclipse.equinox.sdk.feature.group
+org.eclipse.xpand.feature.group
+org.eclipse.xpand.sdk.feature.group
+org.eclipse.xpand.ui.feature.group
+org.eclipse.xtend.feature.group
+org.eclipse.xtend.dependencies.feature.group
+org.eclipse.xtend.typesystem.emf.feature.group
+org.eclipse.xtend.sdk.feature.group
+org.eclipse.xtend.ui.feature.group
+org.eclipse.xtend.typesystem.uml2.feature.group
+org.eclipse.xtend.typesystem.xsd.feature.group
+org.eclipse.xtext.sdk.feature.group
+org.eclipse.xtext.runtime.feature.group
+org.eclipse.xtext.ui.feature.group
+org.eclipse.xtext.xtext.ui.feature.group
+} 
+
+location "http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/" ddmore-deps {  
+eu.ddmore.mdl-ide-dependencies.feature.feature.group
+} 
+
+location "http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/" orbit-tools-deps {  
+org.apache.xerces
+org.apache.xml.serializer
+org.objectweb.asm
+org.objectweb.asm.commons
+org.objectweb.asm.analysis
+org.objectweb.asm.tree
+org.objectweb.asm.util
+org.objectweb.asm.xml
+org.apache.commons.codec
+org.apache.commons.io
+org.apache.log4j
+org.apache.xml.resolver
+com.google.inject
+com.google.guava
+org.hamcrest.core
+org.hamcrest.integration
+org.hamcrest.library
+org.hamcrest
+org.hamcrest.text
+org.objenesis
+org.junit
+org.mockito
+org.slf4j.api
+} 
+
+location "http://download.eclipse.org/uomo/0.6/kepler/repository/" kepler-repo {  
+	org.eclipse.uomo.feature.feature.group
+} 
+
+location "http://download.walware.de/eclipse-4.4/site-statet-03.04.00/" walware-repo {  
+	de.walware.3rdparty.lucene.feature.group
+	de.walware.eutils.autorun.feature.group
+	de.walware.ecommons.e.feature.group
+	de.walware.ecommons.edb.feature.group
+	de.walware.ecommons.ltk.feature.group
+	de.walware.rj.eclient.feature.group
+	de.walware.rj.core.feature.group
+	de.walware.statet.r.feature.group
+	de.walware.statet.rtm.ftable.feature.group
+	de.walware.statet.rtm.ggplot.feature.group
+	de.walware.statet.r.sweave.feature.group
+} 
+
+location "http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7-1" libpharmml-repo {  
+eu.ddmore.libpharmml.feature.feature.group
+} 
