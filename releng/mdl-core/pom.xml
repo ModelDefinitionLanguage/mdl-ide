@@ -10,7 +10,7 @@
 	<modules>
 		<module>../../eu.ddmore.mdleditor.build</module>
 		<module>../../eu.ddmore.mdleditor.target</module>
-		<module>../../eu.ddmore.mdl</module>
+		<!--module>../../eu.ddmore.mdl</module-->
 	</modules>
 
 	<url>http://ddmore.eu/</url>
