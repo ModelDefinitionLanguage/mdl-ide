@@ -2,7 +2,7 @@
 <feature
       id="eu.ddmore.mdl.sdk"
       label="%label"
-      version="1.4.0.qualifier"
+      version="1.5.0.qualifier"
       provider-name="%provider">
 
    <description>

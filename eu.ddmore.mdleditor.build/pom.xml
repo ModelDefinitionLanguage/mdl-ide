@@ -7,7 +7,7 @@
 	<!-- Parent POM for all MDL Editor sub-projects -->
 	<groupId>eu.ddmore</groupId>
 	<artifactId>eu.ddmore.parent</artifactId>
-	<version>1.4.0-SNAPSHOT</version>
+	<version>1.5.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -16,12 +16,12 @@
 		<mvn.clean.plugin.version>2.4.1</mvn.clean.plugin.version>
 
 		<!-- Tycho -->
-		<tycho.version>0.22.0</tycho.version>
-		<tycho.extras.version>0.22.0</tycho.extras.version>
+		<tycho.version>0.24.0</tycho.version>
+		<tycho.extras.version>0.24.0</tycho.extras.version>
 		<tycho.repo.url>https://oss.sonatype.org/content/groups/public/</tycho.repo.url>
 		<!-- Xtext and Xtend -->
 		<xtend.repo.url>http://build.eclipse.org/common/xtend/maven/</xtend.repo.url>
-		<xtend.version>2.7.3</xtend.version>
+		<xtend.version>2.9.1</xtend.version>
 		<fornax.repo.url>https://projects.itemis.de/nexus/content/groups/public/</fornax.repo.url>
 		<fornax.version>3.4.0</fornax.version>
         <xtext.version>${xtend.version}</xtext.version>
@@ -62,10 +62,10 @@
 			<id>xtend</id>
 			<url>${xtend.repo.url}</url>
 		</repository>
-		<repository>
+		<!-- repository>
 			<id>repo.mdlteam.ddmore.eu</id>
 			<url>s3://repo.mdlteam.ddmore.eu/snapshot</url>
-		</repository>
+		</repository-->
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>

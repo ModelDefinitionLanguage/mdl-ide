@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="DDMoRe MDL IDE Demonstrator" uid="eu.ddmore.mdleditor" id="eu.ddmore.mdleditor.application.product" application="org.eclipse.ui.ide.workbench" version="1.4.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="DDMoRe MDL IDE Demonstrator" uid="eu.ddmore.mdleditor" id="eu.ddmore.mdleditor.application.product" application="org.eclipse.ui.ide.workbench" version="1.5.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/eu.ddmore.mdleditor.application/icons/about_image.png"/>
@@ -15,11 +15,14 @@
 
    <launcherArgs>
       <programArgs>--launcher.XXMaxPermSize
-256M</programArgs>
+256M
+      </programArgs>
       <vmArgs>-XX:MaxPermSize=256m
 -Xms40m
--Xmx512m</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+-Xmx512m
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
    </launcherArgs>
 
    <windowImages/>
@@ -71,7 +74,6 @@ It is your obligation to read and accept all such terms and conditions prior to 
    </features>
 
    <configurations>
-      <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.cm" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
@@ -79,6 +81,7 @@ It is your obligation to read and accept all such terms and conditions prior to 
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
       <plugin id="org.ops4j.pax.configmanager" autoStart="true" startLevel="2" />
       <plugin id="org.ops4j.pax.logging.pax-logging-api" autoStart="true" startLevel="2" />
       <plugin id="org.ops4j.pax.logging.pax-logging-service" autoStart="true" startLevel="3" />
