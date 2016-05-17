@@ -69,6 +69,9 @@
 			        <products>
 			          <product>
 			            <id>eu.ddmore.mdleditor</id>
+			            <rootFolders>
+			            	<macosx>MdlIde.app</macosx>
+			            </rootFolders>
 			          </product>
 			        </products>
 			      </configuration>
