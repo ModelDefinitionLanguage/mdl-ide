@@ -27,6 +27,7 @@
 
    <windowImages/>
 
+
    <launcher name="mdl_ide">
       <solaris/>
       <win useIco="false">
@@ -34,13 +35,16 @@
       </win>
    </launcher>
 
+
    <vm>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</windows>
    </vm>
 
    <license>
         <text>
-   Leiden University Software User Agreement
+   Copyright Leiden University 2015 and Pfizer Ltd 2015-16
+
+Leiden University Software User Agreement
  
 May 26, 2015
 
@@ -87,5 +91,16 @@ It is your obligation to read and accept all such terms and conditions prior to 
       <plugin id="org.ops4j.pax.logging.pax-logging-service" autoStart="true" startLevel="3" />
       <property name="mif.encryption.key" value="MIF-encryption-key-ddmore.key" />
    </configurations>
+
+   <repositories>
+      <repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-editor/snapshot/" enabled="true" />
+   </repositories>
+
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
 
 </product>
