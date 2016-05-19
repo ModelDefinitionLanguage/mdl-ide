@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="eu.ddmore.mdl.sdk.jre"
+      label="%label"
+      version="1.0.5"
+      provider-name="%provider">
+	<!-- Note that the version number of this Feature is deliberately fixed (i.e. not having a .qualifier suffix)
+	     since otherwise the Feature will attempt to be updated each time an update is performed within the MDL IDE
+	     and this will fail due to the JRE being in use (by the MDL IDE itself) and thus not replaceable by the
+	     update process (even if the JRE hasn't physically changed; the contents of a Feature are always replaced
+	     by the P2 update). -->
+	     
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseUrl">
+      %license
+   </license>
+
+
+   <requires>
+      <import plugin="org.ops4j.pax.configmanager"/>
+      <import plugin="org.eclipse.equinox.cm"/>
+   </requires>
+
+</feature>

@@ -189,7 +189,7 @@
 							<groupId>eu.ddmore</groupId>
 							<artifactId>eu.ddmore.mdleditor.target</artifactId>
 							<!-- we can't use project.version because it doesn't work for eu.ddmore.mdl.sdk.jre feature which version is fixed to '1.0.2' -->
-							<version>1.4.0-SNAPSHOT</version>
+							<version>1.5.0-SNAPSHOT</version>
 						</artifact>
 					</target>
 					<environments>

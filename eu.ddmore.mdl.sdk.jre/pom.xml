@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<relativePath>../eu.ddmore.mdleditor.build/pom.xml</relativePath>
+		<groupId>eu.ddmore</groupId>
+		<artifactId>eu.ddmore.parent</artifactId>
+		<version>1.5.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>eu.ddmore.mdl.sdk.jre</artifactId>
+	<!-- Fix the version of this Feature - see comment within feature.xml -->
+	<version>1.0.5</version>
+	<packaging>eclipse-feature</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!-- Populating feature.properties with appropriate update 
+                    site url which is different for CI and RELEASE builds -->
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>update-feature-properties-process-resources</id>
+                        <phase>process-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>update-feature-properties-revert-changes</id>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
