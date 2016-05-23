@@ -27,14 +27,12 @@
 
    <windowImages/>
 
-
    <launcher name="mdl_ide">
       <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</windows>
@@ -93,7 +91,7 @@ It is your obligation to read and accept all such terms and conditions prior to 
    </configurations>
 
    <repositories>
-      <repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-editor/snapshot/" enabled="true" />
+      <repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-editor/test/" enabled="true" />
    </repositories>
 
    <preferencesInfo>
