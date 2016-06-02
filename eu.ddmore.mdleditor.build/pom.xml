@@ -71,10 +71,6 @@
 			<id>xtend</id>
 			<url>${xtend.repo.url}</url>
 		</repository>
-		<!-- repository>
-			<id>repo.mdlteam.ddmore.eu</id>
-			<url>s3://repo.mdlteam.ddmore.eu/snapshot</url>
-		</repository-->
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>

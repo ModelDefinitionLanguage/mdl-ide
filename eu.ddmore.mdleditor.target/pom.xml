@@ -12,6 +12,62 @@
 	</parent>
 
 	<artifactId>eu.ddmore.mdleditor.target</artifactId>
-	<packaging>eclipse-target-definition</packaging>
+	<!-- packaging>eclipse-target-definition</packaging-->
+	<packaging>pom</packaging>
+	
+	<properties>
+		<platform-version-name>mars</platform-version-name>
+		<targetPlatform.repository.p2>http://mbarbero.github.io/fr.obeo.releng.targetplatform/p2/</targetPlatform.repository.p2>
+		<targetPlatform.application.name>fr.obeo.releng.targetplatform.targetPlatform.converter</targetPlatform.application.name>
+		<targetPlatform.application.args>eu.ddmore.mdleditor.target.tpd</targetPlatform.application.args>
+		<targetPlatform.application.feature>fr.obeo.releng.targetplatform-feature</targetPlatform.application.feature>
+	</properties>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho.extras</groupId>
+				<artifactId>tycho-eclipserun-plugin</artifactId>
+				<version>${tycho.extras.version}</version>
+				<configuration>
+					<repositories>
+						<repository>
+							<id>${platform-version-name}</id>
+							<layout>p2</layout>
+							<url>http://download.eclipse.org/releases/${platform-version-name}</url>
+						</repository>
+						<repository>
+							<id>targetplatform</id>
+							<layout>p2</layout>
+							<url>${targetPlatform.repository.p2}</url>
+						</repository>
+					</repositories>
+					<appArgLine>-consoleLog -application ${targetPlatform.application.name} ${targetPlatform.application.args}</appArgLine>
+					<!-- Set dependencies to launch the application -->
+					<dependencies>
+						<dependency>
+							<artifactId>${targetPlatform.application.feature}</artifactId>
+							<type>eclipse-feature</type>
+						</dependency>
+						<dependency>
+							<artifactId>org.eclipse.equinox.p2.sdk</artifactId>
+							<type>eclipse-feature</type>
+						</dependency>
+					</dependencies>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>eclipse-run</goal>
+						</goals>
+						<!-- The phase validate rebuild the targetplatform before to compile/test... 
+							@see https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html -->
+						<phase>validate</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project> 
