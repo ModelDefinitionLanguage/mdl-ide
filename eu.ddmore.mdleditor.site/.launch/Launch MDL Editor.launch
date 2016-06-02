@@ -131,6 +131,7 @@
 <setEntry value="org.eclipse.equinox.weaving.sdk:default"/>
 <setEntry value="org.eclipse.help:default"/>
 <setEntry value="org.eclipse.jdt:default"/>
+<setEntry value="org.eclipse.jgit:default"/>
 <setEntry value="org.eclipse.platform:default"/>
 <setEntry value="org.eclipse.rcp.source:default"/>
 <setEntry value="org.eclipse.rcp:default"/>

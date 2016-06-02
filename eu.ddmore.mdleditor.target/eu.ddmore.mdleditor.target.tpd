@@ -44,6 +44,8 @@ org.eclipse.xtext.sdk.feature.group
 org.eclipse.xtext.runtime.feature.group
 org.eclipse.xtext.ui.feature.group
 org.eclipse.xtext.xtext.ui.feature.group
+org.eclipse.egit.feature.group
+org.eclipse.jgit.feature.group
 } 
 
 location "http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/" ddmore-deps {  

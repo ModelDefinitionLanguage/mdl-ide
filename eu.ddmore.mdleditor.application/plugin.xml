@@ -6,10 +6,6 @@
          point="org.eclipse.core.runtime.products">
       <product name="DDMoRe MDL IDE Demonstrator" application="org.eclipse.ui.ide.workbench" description="%aboutText">
          <property
-               name="applicationCSS"
-               value="platform:/plugin/eu.ddmore.mdleditor.application/css/default.css">
-         </property>
-         <property
                name="cssTheme"
                value="org.eclipse.e4.ui.css.theme.e4_default">
          </property>
