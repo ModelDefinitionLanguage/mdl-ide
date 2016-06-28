@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="MDL Editor Target" sequenceNumber="1467037727">
+<target name="MDL Editor Target" sequenceNumber="1467152139">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.jdt.feature.group" version="3.11.2.v20160212-1500"/>
@@ -104,11 +104,11 @@
       <repository id="libpharmml-repo" location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7-1"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.5.0.v20160627-1422"/>
+      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.5.0.v20160628-2208"/>
       <repository id="mdlplugin-repo" location="http://sourceforge.net/projects/ddmore/files/update/mdl-plugin/snapshot"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdllib.sdk.feature.group" version="1.2.2.201605202253"/>
+      <unit id="eu.ddmore.mdllib.sdk.feature.group" version="1.2.2.201606281153"/>
       <repository id="mdllibplugin-repo" location="http://sourceforge.net/projects/ddmore/files/update/mdllib-plugin/snapshot"/>
     </location>
   </locations>
