@@ -52,7 +52,7 @@
             <id>release</id>
             <properties>
                  <version.no-snapshot>1.5.0</version.no-snapshot>
-                 <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/release/</p2.repository.url>
+                 <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/</p2.repository.url>
             </properties>
         </profile>
     </profiles>
