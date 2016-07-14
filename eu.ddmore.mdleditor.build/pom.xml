@@ -7,7 +7,7 @@
 	<!-- Parent POM for all MDL Editor sub-projects -->
 	<groupId>eu.ddmore</groupId>
 	<artifactId>eu.ddmore.parent</artifactId>
-	<version>1.5.0-SNAPSHOT</version>
+	<version>1.6.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -51,8 +51,8 @@
         <profile>
             <id>release</id>
             <properties>
-                 <version.no-snapshot>1.5.0</version.no-snapshot>
-                 <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/release/</p2.repository.url>
+                 <version.no-snapshot>1.6.0</version.no-snapshot>
+                 <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/</p2.repository.url>
             </properties>
         </profile>
     </profiles>
@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>eu.ddmore</groupId>
 			<artifactId>eu.ddmore.mdl.feature</artifactId>
-			<version>1.5.0-SNAPSHOT</version>
+			<version>1.6.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	
@@ -199,7 +199,7 @@
 							<groupId>eu.ddmore</groupId>
 							<artifactId>eu.ddmore.mdleditor.target</artifactId>
 							<!-- we can't use project.version because it doesn't work for eu.ddmore.mdl.sdk.jre feature which version is fixed to '1.0.2' -->
-							<version>1.5.0-SNAPSHOT</version>
+							<version>1.6.0-SNAPSHOT</version>
 						</artifact>
 					</target>
 					<environments>

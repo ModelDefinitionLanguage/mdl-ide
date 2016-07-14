@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="DDMoRe MDL IDE Demonstrator" uid="eu.ddmore.mdleditor" id="eu.ddmore.mdleditor.application.product" application="org.eclipse.ui.ide.workbench" version="1.5.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="DDMoRe MDL IDE Demonstrator" uid="eu.ddmore.mdleditor" id="eu.ddmore.mdleditor.application.product" application="org.eclipse.ui.ide.workbench" version="1.6.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/eu.ddmore.mdleditor.application/icons/about_image.png"/>
