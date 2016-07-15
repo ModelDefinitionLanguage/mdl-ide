@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1459774191">
+<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1459774197">
 <locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150702-1200"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
+<repository location="http://download.eclipse.org/uomo/0.6/kepler/repository/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="de.walware.3rdparty.lucene.feature.group" version="4.7.2.b201407011730sw"/>
+<unit id="de.walware.eutils.autorun.feature.group" version="1.0.0.b201404250840E38sw"/>
+<unit id="de.walware.ecommons.e.feature.group" version="1.5.0.b201407171807E43sw"/>
+<unit id="de.walware.ecommons.edb.feature.group" version="0.3.0.b201407171807E43sw"/>
+<unit id="de.walware.ecommons.ltk.feature.group" version="2.3.0.b201407171807E43sw"/>
+<unit id="de.walware.rj.eclient.feature.group" version="2.0.1.b201406211200"/>
+<unit id="de.walware.rj.core.feature.group" version="2.0.1.b201406211200"/>
+<unit id="de.walware.statet.r.feature.group" version="3.4.0.b201407171807E43sw"/>
+<unit id="de.walware.statet.rtm.ftable.feature.group" version="1.0.1.b201407171807E43sw"/>
+<unit id="de.walware.statet.rtm.ggplot.feature.group" version="1.0.1.b201407171807E43sw"/>
+<unit id="de.walware.statet.r.sweave.feature.group" version="3.4.0.b201407171807E43sw"/>
+<repository location="http://download.walware.de/eclipse-4.4/site-statet-03.04.00/"/>
+</location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.feature.group" version="3.11.2.v20160212-1500"/>
 <unit id="org.eclipse.draw2d.feature.group" version="3.10.1.201508170204"/>
@@ -48,8 +70,8 @@
 <repository location="http://download.eclipse.org/releases/mars/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150702-1200"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/"/>
+<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.0.v20160418-1445"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7-1"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.xerces" version="2.9.0.v201101211617"/>
@@ -78,26 +100,12 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
-<repository location="http://download.eclipse.org/uomo/0.6/kepler/repository/"/>
+<unit id="eu.ddmore.mdl.feature.feature.group" version="1.5.0.v20160715-1709"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-plugin/1.5.0"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="de.walware.3rdparty.lucene.feature.group" version="4.7.2.b201407011730sw"/>
-<unit id="de.walware.eutils.autorun.feature.group" version="1.0.0.b201404250840E38sw"/>
-<unit id="de.walware.ecommons.e.feature.group" version="1.5.0.b201407171807E43sw"/>
-<unit id="de.walware.ecommons.edb.feature.group" version="0.3.0.b201407171807E43sw"/>
-<unit id="de.walware.ecommons.ltk.feature.group" version="2.3.0.b201407171807E43sw"/>
-<unit id="de.walware.rj.eclient.feature.group" version="2.0.1.b201406211200"/>
-<unit id="de.walware.rj.core.feature.group" version="2.0.1.b201406211200"/>
-<unit id="de.walware.statet.r.feature.group" version="3.4.0.b201407171807E43sw"/>
-<unit id="de.walware.statet.rtm.ftable.feature.group" version="1.0.1.b201407171807E43sw"/>
-<unit id="de.walware.statet.rtm.ggplot.feature.group" version="1.0.1.b201407171807E43sw"/>
-<unit id="de.walware.statet.r.sweave.feature.group" version="3.4.0.b201407171807E43sw"/>
-<repository location="http://download.walware.de/eclipse-4.4/site-statet-03.04.00/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.0.v20160418-1445"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7-1"/>
+<unit id="eu.ddmore.mdllib.sdk.feature.group" version="1.2.2.201607151651"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mdllib-plugin/1.2.2"/>
 </location>
 </locations>
 </target>
