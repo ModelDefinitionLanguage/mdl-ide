@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="MDL Editor Target" sequenceNumber="1469201375">
+<target name="MDL Editor Target" sequenceNumber="1469452845">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.jdt.feature.group" version="3.11.2.v20160212-1500"/>
@@ -100,11 +100,11 @@
       <repository id="walware-repo" location="http://download.walware.de/eclipse-4.4/site-statet-03.04.00/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.0.v20160418-1445"/>
-      <repository id="libpharmml-repo" location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7-1"/>
+      <unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.2.v20160722-1606"/>
+      <repository id="libpharmml-repo" location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7.2"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.0.v20160722-1522"/>
+      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.0.v20160725-1255"/>
       <repository id="mdlplugin-repo" location="http://sourceforge.net/projects/ddmore/files/update/mdl-plugin/snapshot"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
