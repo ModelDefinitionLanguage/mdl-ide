@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1459774201">
+<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1459774205">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150702-1200"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
 <repository location="http://download.eclipse.org/uomo/0.6/kepler/repository/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150702-1200"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="de.walware.3rdparty.lucene.feature.group" version="4.7.2.b201407011730sw"/>
@@ -70,10 +70,6 @@
 <repository location="http://download.eclipse.org/releases/mars/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.0.v20160418-1445"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7-1"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.xerces" version="2.9.0.v201101211617"/>
 <unit id="org.apache.xml.serializer" version="2.7.1.v201005080400"/>
 <unit id="org.objectweb.asm" version="5.0.1.v201404251740"/>
@@ -100,12 +96,16 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.mdl.feature.feature.group" version="1.5.0.v20160722-1410"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-plugin/1.5.0"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="eu.ddmore.mdllib.sdk.feature.group" version="1.2.2.201607221359"/>
 <repository location="http://sourceforge.net/projects/ddmore/files/update/mdllib-plugin/1.2.2"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.4.v20160728-1027"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7.4"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="eu.ddmore.mdl.feature.feature.group" version="1.5.0.v20160728-1612"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-plugin/1.5.0"/>
 </location>
 </locations>
 </target>
