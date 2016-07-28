@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1459774193">
+<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1459774194">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
@@ -96,8 +96,8 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.3.v20160727-1224"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7.3"/>
+<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.4.v20160728-1027"/>
+<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7.4"/>
 </location>
 </locations>
 </target>
