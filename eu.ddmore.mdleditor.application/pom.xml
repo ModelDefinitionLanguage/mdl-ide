@@ -35,7 +35,7 @@
         <id>release</id>
         <properties>
            <build.status>Released</build.status>
-           <release.version.number>Demonstrator-1.3.0</release.version.number>
+           <release.version.number>Demonstrator-2.0.0</release.version.number>
            <message>This build equates to the ${iog.product.name} ${iog.product.version} deliverable.</message>
         </properties>
       </profile>
