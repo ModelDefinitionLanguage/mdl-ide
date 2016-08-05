@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1459774205">
+<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1459774207">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
-<repository location="http://download.eclipse.org/uomo/0.6/kepler/repository/"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150702-1200"/>
 <repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
+<repository location="http://download.eclipse.org/uomo/0.6/kepler/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="de.walware.3rdparty.lucene.feature.group" version="4.7.2.b201407011730sw"/>
@@ -104,7 +104,7 @@
 <repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7.4"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.mdl.feature.feature.group" version="1.5.0.v20160728-1612"/>
+<unit id="eu.ddmore.mdl.feature.feature.group" version="1.5.0.v20160805-1335"/>
 <repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-plugin/1.5.0"/>
 </location>
 </locations>
