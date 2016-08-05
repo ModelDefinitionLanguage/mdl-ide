@@ -14,7 +14,6 @@
 	<artifactId>eu.ddmore.mdleditor.application</artifactId>
 	<packaging>eclipse-plugin</packaging>
 	<properties>
-	  <version.status>beta</version.status>
 	  <iog.product.name>Interoperability Group Product</iog.product.name>
 	  <iog.product.version>5</iog.product.version>
         <release.version.number>${project.version}</release.version.number>
@@ -56,8 +55,6 @@
                             <copy file="about.mappings" tofile="about.mappings.orig"/>
                             <replace file="about.mappings" 
                                      token="@version@" value="${release.version.number}" />
-                            <replace file="about.mappings" 
-                                     token="@versionStatus@" value="${version.status}" />
                             <replace file="about.mappings" 
                                      token="@buildStatus@" value="${build.status}" />
                             <replace file="about.mappings" 
