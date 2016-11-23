@@ -17,6 +17,7 @@
 	
 	<properties>
 		<platform-version-name>mars</platform-version-name>
+		<platform-version-version>201602261000</platform-version-version>
 		<targetPlatform.repository.p2>http://mbarbero.github.io/fr.obeo.releng.targetplatform/p2/</targetPlatform.repository.p2>
 		<targetPlatform.application.name>fr.obeo.releng.targetplatform.targetPlatform.converter</targetPlatform.application.name>
 		<targetPlatform.application.args>eu.ddmore.mdleditor.target.tpd</targetPlatform.application.args>
@@ -35,7 +36,7 @@
 						<repository>
 							<id>${platform-version-name}</id>
 							<layout>p2</layout>
-							<url>http://download.eclipse.org/releases/${platform-version-name}</url>
+							<url>http://download.eclipse.org/releases/${platform-version-name}/${platform-version-version}</url>
 						</repository>
 						<repository>
 							<id>targetplatform</id>

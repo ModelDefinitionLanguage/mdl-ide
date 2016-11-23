@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="MDL Editor Target" sequenceNumber="1470042836">
+<target name="MDL Editor Target" sequenceNumber="1479931093">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.jdt.feature.group" version="3.11.2.v20160212-1500"/>
@@ -49,11 +49,7 @@
       <unit id="org.eclipse.xtext.xtext.ui.feature.group" version="2.9.1.v201512180746"/>
       <unit id="org.eclipse.egit.feature.group" version="4.1.1.201511131810-r"/>
       <unit id="org.eclipse.jgit.feature.group" version="4.1.1.201511131810-r"/>
-      <repository id="eclipse-mars" location="http://download.eclipse.org/releases/mars/"/>
-    </location>
-    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150702-1200"/>
-      <repository id="ddmore-deps" location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/"/>
+      <repository id="mars" location="http://download.eclipse.org/releases/mars/201602261000/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.apache.xerces" version="2.9.0.v201101211617"/>
@@ -100,16 +96,12 @@
       <repository id="walware-repo" location="http://download.walware.de/eclipse-4.4/site-statet-03.04.00/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.4.v20160728-1027"/>
-      <repository id="libpharmml-repo" location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7.4"/>
+      <unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.1.0.v20160909-0915"/>
+      <repository id="ddmore-deps" location="http://downloads.mdl.community/repository/mdl-ide-dependencies/releases/0.1.0.v20160909-0915/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.0.v20160801-0906"/>
-      <repository id="mdlplugin-repo" location="http://sourceforge.net/projects/ddmore/files/update/mdl-plugin/snapshot"/>
-    </location>
-    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdllib.sdk.feature.group" version="1.3.0.201607221138"/>
-      <repository id="mdllibplugin-repo" location="http://sourceforge.net/projects/ddmore/files/update/mdllib-plugin/snapshot"/>
+      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.0.v20161123-1935"/>
+      <repository id="mdlplugin-repo" location="http://downloads.mdl.community/repository/mdleditor/releases/1.6.0.v20161123-1935"/>
     </location>
   </locations>
 </target>

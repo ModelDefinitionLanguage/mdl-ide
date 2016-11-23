@@ -91,7 +91,7 @@ It is your obligation to read and accept all such terms and conditions prior to 
    </configurations>
 
    <repositories>
-      <repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-editor/test/" enabled="true" />
+      <repository location="http://downloads.mdl.community/repository/mdl-ide/updates/1.6/" enabled="true" />
    </repositories>
 
    <preferencesInfo>
