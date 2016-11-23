@@ -1,103 +1,107 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1459774194">
-<locations>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
-<repository location="http://download.eclipse.org/uomo/0.6/kepler/repository/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.0.1.v20150702-1200"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="de.walware.3rdparty.lucene.feature.group" version="4.7.2.b201407011730sw"/>
-<unit id="de.walware.eutils.autorun.feature.group" version="1.0.0.b201404250840E38sw"/>
-<unit id="de.walware.ecommons.e.feature.group" version="1.5.0.b201407171807E43sw"/>
-<unit id="de.walware.ecommons.edb.feature.group" version="0.3.0.b201407171807E43sw"/>
-<unit id="de.walware.ecommons.ltk.feature.group" version="2.3.0.b201407171807E43sw"/>
-<unit id="de.walware.rj.eclient.feature.group" version="2.0.1.b201406211200"/>
-<unit id="de.walware.rj.core.feature.group" version="2.0.1.b201406211200"/>
-<unit id="de.walware.statet.r.feature.group" version="3.4.0.b201407171807E43sw"/>
-<unit id="de.walware.statet.rtm.ftable.feature.group" version="1.0.1.b201407171807E43sw"/>
-<unit id="de.walware.statet.rtm.ggplot.feature.group" version="1.0.1.b201407171807E43sw"/>
-<unit id="de.walware.statet.r.sweave.feature.group" version="3.4.0.b201407171807E43sw"/>
-<repository location="http://download.walware.de/eclipse-4.4/site-statet-03.04.00/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.jdt.feature.group" version="3.11.2.v20160212-1500"/>
-<unit id="org.eclipse.draw2d.feature.group" version="3.10.1.201508170204"/>
-<unit id="org.eclipse.uml2.feature.group" version="5.1.2.v20160201-0816"/>
-<unit id="org.eclipse.xsd.feature.group" version="2.11.0.v20160208-0841"/>
-<unit id="org.eclipse.emf.ecore.feature.group" version="2.11.2.v20160208-0816"/>
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.11.2.v20160208-0841"/>
-<unit id="org.eclipse.emf.ecore.xcore.feature.group" version="1.3.2.v20160209-0349"/>
-<unit id="org.eclipse.emf.ecore.xcore.sdk.feature.group" version="1.3.2.v20160209-0349"/>
-<unit id="org.eclipse.emf.common.feature.group" version="2.11.1.v20160208-0816"/>
-<unit id="org.eclipse.emf.compare.feature.group" version="3.1.1.201509120604"/>
-<unit id="org.eclipse.emf.codegen.ecore.feature.group" version="2.11.1.v20160208-0841"/>
-<unit id="org.eclipse.emf.validation.feature.group" version="1.9.0.201505312255"/>
-<unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.8.3.v201512160634"/>
-<unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="2.8.3.v201512160556"/>
-<unit id="org.eclipse.emf.mwe.core.feature.group" version="1.3.13.v201512160556"/>
-<unit id="org.eclipse.emf.mwe.sdk.feature.group" version="1.3.13.v201512160556"/>
-<unit id="org.eclipse.ecf.core.feature.feature.group" version="1.2.0.v20151130-0157"/>
-<unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="3.12.0.v20151130-0157"/>
-<unit id="org.eclipse.ecf.provider.generic.feature.feature.group" version="1.0.0.v20151130-0157"/>
-<unit id="org.eclipse.ecf.sharedobject.feature.feature.group" version="1.0.0.v20151130-0157"/>
-<unit id="org.eclipse.e4.rcp.feature.group" version="1.4.1.v20160212-1350"/>
-<unit id="org.eclipse.help.feature.group" version="2.1.2.v20160212-1500"/>
-<unit id="org.eclipse.platform.feature.group" version="4.5.2.v20160212-1500"/>
-<unit id="org.eclipse.equinox.executable.feature.group" version="3.6.200.v20150602-1417"/>
-<unit id="org.eclipse.rcp.feature.group" version="4.5.2.v20160212-1500"/>
-<unit id="org.eclipse.rcp.sdk.id" version="4.5.2.M20160212-1500"/>
-<unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.11.2.v20160128-1406"/>
-<unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="1.2.101.v20150826-1318"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="3.11.2.v20160202-2102"/>
-<unit id="org.eclipse.xpand.feature.group" version="2.1.0.v201505260349"/>
-<unit id="org.eclipse.xpand.sdk.feature.group" version="2.1.0.v201505260349"/>
-<unit id="org.eclipse.xpand.ui.feature.group" version="2.1.0.v201505260349"/>
-<unit id="org.eclipse.xtend.feature.group" version="2.1.0.v201505260349"/>
-<unit id="org.eclipse.xtend.dependencies.feature.group" version="2.1.0.v201505260349"/>
-<unit id="org.eclipse.xtend.typesystem.emf.feature.group" version="2.1.0.v201505260349"/>
-<unit id="org.eclipse.xtend.sdk.feature.group" version="2.9.1.v201512180746"/>
-<unit id="org.eclipse.xtend.ui.feature.group" version="2.1.0.v201505260349"/>
-<unit id="org.eclipse.xtend.typesystem.uml2.feature.group" version="2.1.0.v201505260349"/>
-<unit id="org.eclipse.xtend.typesystem.xsd.feature.group" version="2.1.0.v201505260349"/>
-<unit id="org.eclipse.xtext.sdk.feature.group" version="2.9.1.v201512180746"/>
-<unit id="org.eclipse.xtext.runtime.feature.group" version="2.9.1.v201512180746"/>
-<unit id="org.eclipse.xtext.ui.feature.group" version="2.9.1.v201512180746"/>
-<unit id="org.eclipse.xtext.xtext.ui.feature.group" version="2.9.1.v201512180746"/>
-<repository location="http://download.eclipse.org/releases/mars/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.apache.xerces" version="2.9.0.v201101211617"/>
-<unit id="org.apache.xml.serializer" version="2.7.1.v201005080400"/>
-<unit id="org.objectweb.asm" version="5.0.1.v201404251740"/>
-<unit id="org.objectweb.asm.commons" version="5.0.1.v201404251740"/>
-<unit id="org.objectweb.asm.analysis" version="5.0.1.v201404251740"/>
-<unit id="org.objectweb.asm.tree" version="5.0.1.v201404251740"/>
-<unit id="org.objectweb.asm.util" version="5.0.1.v201404251740"/>
-<unit id="org.objectweb.asm.xml" version="5.0.1.v201404251740"/>
-<unit id="org.apache.commons.codec" version="1.6.0.v201305230611"/>
-<unit id="org.apache.commons.io" version="2.2.0.v201405211200"/>
-<unit id="org.apache.log4j" version="1.2.15.v201012070815"/>
-<unit id="org.apache.xml.resolver" version="1.2.0.v201005080400"/>
-<unit id="com.google.inject" version="3.0.0.v201312141243"/>
-<unit id="com.google.guava" version="15.0.0.v201403281430"/>
-<unit id="org.hamcrest.core" version="1.3.0.v201303031735"/>
-<unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
-<unit id="org.hamcrest.library" version="1.3.0.v201305281000"/>
-<unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
-<unit id="org.objenesis" version="1.0.0.v201105211943"/>
-<unit id="org.junit" version="4.11.0.v201303080030"/>
-<unit id="org.mockito" version="1.9.5.v201311280930"/>
-<unit id="org.slf4j.api" version="1.7.2.v20121108-1250"/>
-<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.4.v20160728-1027"/>
-<repository location="http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7.4"/>
-</location>
-</locations>
+<?pde?>
+<!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
+<target name="MDL Editor Target" sequenceNumber="1479934280">
+  <locations>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.jdt.feature.group" version="3.11.2.v20160212-1500"/>
+      <unit id="org.eclipse.draw2d.feature.group" version="3.10.1.201508170204"/>
+      <unit id="org.eclipse.uml2.feature.group" version="5.1.2.v20160201-0816"/>
+      <unit id="org.eclipse.xsd.feature.group" version="2.11.0.v20160208-0841"/>
+      <unit id="org.eclipse.emf.ecore.feature.group" version="2.11.2.v20160208-0816"/>
+      <unit id="org.eclipse.emf.sdk.feature.group" version="2.11.2.v20160208-0841"/>
+      <unit id="org.eclipse.emf.ecore.xcore.feature.group" version="1.3.2.v20160209-0349"/>
+      <unit id="org.eclipse.emf.ecore.xcore.sdk.feature.group" version="1.3.2.v20160209-0349"/>
+      <unit id="org.eclipse.emf.common.feature.group" version="2.11.1.v20160208-0816"/>
+      <unit id="org.eclipse.emf.compare.feature.group" version="3.1.1.201509120604"/>
+      <unit id="org.eclipse.emf.codegen.ecore.feature.group" version="2.11.1.v20160208-0841"/>
+      <unit id="org.eclipse.emf.validation.feature.group" version="1.9.0.201505312255"/>
+      <unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.8.3.v201512160634"/>
+      <unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="2.8.3.v201512160556"/>
+      <unit id="org.eclipse.emf.mwe.core.feature.group" version="1.3.13.v201512160556"/>
+      <unit id="org.eclipse.emf.mwe.sdk.feature.group" version="1.3.13.v201512160556"/>
+      <unit id="org.eclipse.ecf.core.feature.feature.group" version="1.2.0.v20151130-0157"/>
+      <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="3.12.0.v20151130-0157"/>
+      <unit id="org.eclipse.ecf.provider.generic.feature.feature.group" version="1.0.0.v20151130-0157"/>
+      <unit id="org.eclipse.ecf.sharedobject.feature.feature.group" version="1.0.0.v20151130-0157"/>
+      <unit id="org.eclipse.e4.rcp.feature.group" version="1.4.1.v20160212-1350"/>
+      <unit id="org.eclipse.help.feature.group" version="2.1.2.v20160212-1500"/>
+      <unit id="org.eclipse.platform.feature.group" version="4.5.2.v20160212-1500"/>
+      <unit id="org.eclipse.equinox.executable.feature.group" version="3.6.200.v20150602-1417"/>
+      <unit id="org.eclipse.rcp.feature.group" version="4.5.2.v20160212-1500"/>
+      <unit id="org.eclipse.rcp.sdk.id" version="4.5.2.M20160212-1500"/>
+      <unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.11.2.v20160128-1406"/>
+      <unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="1.2.101.v20150826-1318"/>
+      <unit id="org.eclipse.equinox.sdk.feature.group" version="3.11.2.v20160202-2102"/>
+      <unit id="org.eclipse.xpand.feature.group" version="2.1.0.v201505260349"/>
+      <unit id="org.eclipse.xpand.sdk.feature.group" version="2.1.0.v201505260349"/>
+      <unit id="org.eclipse.xpand.ui.feature.group" version="2.1.0.v201505260349"/>
+      <unit id="org.eclipse.xtend.feature.group" version="2.1.0.v201505260349"/>
+      <unit id="org.eclipse.xtend.dependencies.feature.group" version="2.1.0.v201505260349"/>
+      <unit id="org.eclipse.xtend.typesystem.emf.feature.group" version="2.1.0.v201505260349"/>
+      <unit id="org.eclipse.xtend.sdk.feature.group" version="2.9.1.v201512180746"/>
+      <unit id="org.eclipse.xtend.ui.feature.group" version="2.1.0.v201505260349"/>
+      <unit id="org.eclipse.xtend.typesystem.uml2.feature.group" version="2.1.0.v201505260349"/>
+      <unit id="org.eclipse.xtend.typesystem.xsd.feature.group" version="2.1.0.v201505260349"/>
+      <unit id="org.eclipse.xtext.sdk.feature.group" version="2.9.1.v201512180746"/>
+      <unit id="org.eclipse.xtext.runtime.feature.group" version="2.9.1.v201512180746"/>
+      <unit id="org.eclipse.xtext.ui.feature.group" version="2.9.1.v201512180746"/>
+      <unit id="org.eclipse.xtext.xtext.ui.feature.group" version="2.9.1.v201512180746"/>
+      <unit id="org.eclipse.egit.feature.group" version="4.1.1.201511131810-r"/>
+      <unit id="org.eclipse.jgit.feature.group" version="4.1.1.201511131810-r"/>
+      <repository id="mars" location="http://download.eclipse.org/releases/mars/201602261000/"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.apache.xerces" version="2.9.0.v201101211617"/>
+      <unit id="org.apache.xml.serializer" version="2.7.1.v201005080400"/>
+      <unit id="org.objectweb.asm" version="5.0.1.v201404251740"/>
+      <unit id="org.objectweb.asm.commons" version="5.0.1.v201404251740"/>
+      <unit id="org.objectweb.asm.analysis" version="5.0.1.v201404251740"/>
+      <unit id="org.objectweb.asm.tree" version="5.0.1.v201404251740"/>
+      <unit id="org.objectweb.asm.util" version="5.0.1.v201404251740"/>
+      <unit id="org.objectweb.asm.xml" version="5.0.1.v201404251740"/>
+      <unit id="org.apache.commons.codec" version="1.6.0.v201305230611"/>
+      <unit id="org.apache.commons.io" version="2.2.0.v201405211200"/>
+      <unit id="org.apache.log4j" version="1.2.15.v201012070815"/>
+      <unit id="org.apache.xml.resolver" version="1.2.0.v201005080400"/>
+      <unit id="com.google.inject" version="3.0.0.v201312141243"/>
+      <unit id="com.google.guava" version="15.0.0.v201403281430"/>
+      <unit id="org.hamcrest.core" version="1.3.0.v201303031735"/>
+      <unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
+      <unit id="org.hamcrest.library" version="1.3.0.v201305281000"/>
+      <unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
+      <unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
+      <unit id="org.objenesis" version="1.0.0.v201105211943"/>
+      <unit id="org.junit" version="4.11.0.v201303080030"/>
+      <unit id="org.mockito" version="1.9.5.v201311280930"/>
+      <unit id="org.slf4j.api" version="1.7.2.v20121108-1250"/>
+      <repository id="orbit-tools-deps" location="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.uomo.feature.feature.group" version="0.6.0"/>
+      <repository id="kepler-repo" location="http://download.eclipse.org/uomo/0.6/kepler/repository/"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="de.walware.3rdparty.lucene.feature.group" version="4.7.2.b201407011730sw"/>
+      <unit id="de.walware.eutils.autorun.feature.group" version="1.0.0.b201404250840E38sw"/>
+      <unit id="de.walware.ecommons.e.feature.group" version="1.5.0.b201407171807E43sw"/>
+      <unit id="de.walware.ecommons.edb.feature.group" version="0.3.0.b201407171807E43sw"/>
+      <unit id="de.walware.ecommons.ltk.feature.group" version="2.3.0.b201407171807E43sw"/>
+      <unit id="de.walware.rj.eclient.feature.group" version="2.0.1.b201406211200"/>
+      <unit id="de.walware.rj.core.feature.group" version="2.0.1.b201406211200"/>
+      <unit id="de.walware.statet.r.feature.group" version="3.4.0.b201407171807E43sw"/>
+      <unit id="de.walware.statet.rtm.ftable.feature.group" version="1.0.1.b201407171807E43sw"/>
+      <unit id="de.walware.statet.rtm.ggplot.feature.group" version="1.0.1.b201407171807E43sw"/>
+      <unit id="de.walware.statet.r.sweave.feature.group" version="3.4.0.b201407171807E43sw"/>
+      <repository id="walware-repo" location="http://download.walware.de/eclipse-4.4/site-statet-03.04.00/"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="eu.ddmore.mdl-ide-dependencies.feature.feature.group" version="0.1.0.v20160909-0915"/>
+      <repository id="ddmore-deps" location="http://downloads.mdl.community/repository/mdl-ide-dependencies/releases/0.1.0.v20160909-0915/"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.0.v20161123-1935"/>
+      <repository id="mdlplugin-repo" location="http://downloads.mdl.community/repository/mdleditor/releases/1.6.0.v20161123-1935"/>
+    </location>
+  </locations>
 </target>

@@ -1,6 +1,6 @@
 target "MDL Editor Target" with source requirements  
   
-location "http://download.eclipse.org/releases/mars/" eclipse-mars {  
+location "http://download.eclipse.org/releases/mars/201602261000/" mars {  
 org.eclipse.jdt.feature.group
 org.eclipse.draw2d.feature.group
 org.eclipse.uml2.feature.group
@@ -44,10 +44,8 @@ org.eclipse.xtext.sdk.feature.group
 org.eclipse.xtext.runtime.feature.group
 org.eclipse.xtext.ui.feature.group
 org.eclipse.xtext.xtext.ui.feature.group
-} 
-
-location "http://sourceforge.net/projects/ddmore/files/update/mdl-ide-dependencies/0.0.1/release/" ddmore-deps {  
-eu.ddmore.mdl-ide-dependencies.feature.feature.group
+org.eclipse.egit.feature.group
+org.eclipse.jgit.feature.group
 } 
 
 location "http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/" orbit-tools-deps {  
@@ -94,6 +92,20 @@ location "http://download.walware.de/eclipse-4.4/site-statet-03.04.00/" walware-
 	de.walware.statet.r.sweave.feature.group
 } 
 
-location "http://sourceforge.net/projects/ddmore/files/update/libpharmml/0.7-1" libpharmml-repo {  
-eu.ddmore.libpharmml.feature.feature.group
+location "http://downloads.mdl.community/repository/mdl-ide-dependencies/releases/0.1.0.v20160909-0915/" ddmore-deps {  
+	eu.ddmore.mdl-ide-dependencies.feature.feature.group
 } 
+
+//location "http://downloads.mdl.community/repository/libpharmml/releases/0.7.4.v20161122-2223/" libpharmml-repo {  
+//	eu.ddmore.libpharmml.feature.feature.group
+//} 
+//
+//location "http://downloads.mdl.community/repository/mdllib/releases/1.3.0.v20161121-2237/" mdllib-repo {
+//	eu.ddmore.mdllib.sdk.feature.group
+//}
+
+location "http://downloads.mdl.community/repository/mdleditor/releases/1.6.0.v20161123-1935" mdlplugin-repo {  
+	eu.ddmore.mdl.feature.feature.group
+} 
+
+

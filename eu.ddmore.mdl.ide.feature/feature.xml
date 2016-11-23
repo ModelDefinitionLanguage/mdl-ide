@@ -111,6 +111,14 @@
          id="org.eclipse.ecf.core.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.egit"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.jgit"
+         version="0.0.0"/>
+
    <plugin
          id="org.eclipse.equinox.p2.ui"
          download-size="0"

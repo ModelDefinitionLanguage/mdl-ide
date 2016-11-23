@@ -34,11 +34,11 @@
 		<sonar.skippedModules>*.tests</sonar.skippedModules>
 		<sonar.skipDesign>true</sonar.skipDesign>
 
-        <!-- A URL where the p2 repository will be published, the value is set in feature.xml of the mdl-ide feature -->
+        <!-- A URL where the p2 repository will be published, the value is set in feature.xml of the mdl-ide-dependencies feature -->
         <sf.publish.location>http://sourceforge.net/projects/ddmore/files/update/ddmore-tools</sf.publish.location>
     </properties>
 
-    <profiles>
+    <!--profiles>
         <profile>
             <id>ci</id>
             <properties>
@@ -51,19 +51,19 @@
         <profile>
             <id>release</id>
             <properties>
-                 <version.no-snapshot>1.6.0</version.no-snapshot>
-                 <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/</p2.repository.url>
+                 <version.no-snapshot>1.4.0</version.no-snapshot>
+                 <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/release/</p2.repository.url>
             </properties>
         </profile>
-    </profiles>
+    </profiles-->
     
-	<dependencies>
+	<!-- dependencies>
 		<dependency>
 			<groupId>eu.ddmore</groupId>
 			<artifactId>eu.ddmore.mdl.feature</artifactId>
 			<version>1.6.0-SNAPSHOT</version>
 		</dependency>
-	</dependencies>
+	</dependencies-->
 	
 	
 	<repositories>
@@ -71,10 +71,6 @@
 			<id>xtend</id>
 			<url>${xtend.repo.url}</url>
 		</repository>
-		<!-- repository>
-			<id>repo.mdlteam.ddmore.eu</id>
-			<url>s3://repo.mdlteam.ddmore.eu/snapshot</url>
-		</repository-->
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
