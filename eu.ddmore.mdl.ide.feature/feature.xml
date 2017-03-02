@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="eu.ddmore.mdl.ide.feature"
-      label="%label"
+      label="MDL IDE Feature"
       version="1.6.0.qualifier"
-      provider-name="%provider">
+      provider-name="DDMoRe">
 
    <description>
       %description
@@ -18,9 +18,7 @@
    </license>
 
    <url>
-      <!-- Externalized url doesn't pass the Feature Editor validation,
-      don't commit removal of url="%updateUrl"-->
-      <update label="%updateLabel" url="%updateUrl"/>
+      <update label="MDL Community Update Site" url="http://downloads.mdl.community"/>
    </url>
 
    <includes
@@ -117,6 +115,10 @@
 
    <includes
          id="org.eclipse.jgit"
+         version="0.0.0"/>
+
+   <includes
+         id="eu.ddmore.mdl.converter.pharmml.feature"
          version="0.0.0"/>
 
    <plugin
