@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="MDL Editor Target" sequenceNumber="1488412493">
+<target name="MDL Editor Target" sequenceNumber="1510163481">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.jdt.feature.group" version="3.11.2.v20160212-1500"/>
@@ -100,12 +100,12 @@
       <repository id="ddmore-deps" location="http://downloads.mdl.community/repository/mdl-ide-dependencies/releases/0.1.0.v20160909-0915/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.1.v20170301-1515"/>
-      <repository id="mdlplugin-repo" location="http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.1.v20170301-1515"/>
+      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.1"/>
+      <repository id="mdlplugin-repo" location="http://downloads.mdl.community/repository/mdleditor/releases/1.6.1"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdl.converter.pharmml.feature.feature.group" version="1.0.0.v20170301-2332"/>
-      <repository id="mdl2pharmml-plugin" location="http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.0.v20170301-2332"/>
+      <unit id="eu.ddmore.mdl.converter.pharmml.feature.feature.group" version="1.0.0"/>
+      <repository id="mdl2pharmml-plugin" location="http://downloads.mdl.community/repository/mdl2pharmml/releases/1.0.0"/>
     </location>
   </locations>
 </target>
