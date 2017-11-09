@@ -2,7 +2,7 @@
 <feature
       id="eu.ddmore.mdl.ide.feature"
       label="MDL IDE Feature"
-      version="1.6.0.qualifier"
+      version="1.6.1.qualifier"
       provider-name="DDMoRe">
 
    <description>
@@ -18,7 +18,7 @@
    </license>
 
    <url>
-      <update label="MDL Community Update Site" url="http://downloads.mdl.community"/>
+      <update label="MDL Community Update Site" url="http://downloads.mdl.community/repository/mdl-ide/updates"/>
    </url>
 
    <includes
@@ -71,10 +71,6 @@
 
    <includes
          id="eu.ddmore.mdl.sdk"
-         version="0.0.0"/>
-
-   <includes
-         id="eu.ddmore.mdl.sdk.jre"
          version="0.0.0"/>
 
    <includes

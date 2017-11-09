@@ -96,19 +96,11 @@ location "http://downloads.mdl.community/repository/mdl-ide-dependencies/release
 	eu.ddmore.mdl-ide-dependencies.feature.feature.group
 } 
 
-//location "http://downloads.mdl.community/repository/libpharmml/releases/0.7.4.v20161122-2223/" libpharmml-repo {  
-//	eu.ddmore.libpharmml.feature.feature.group
-//} 
-//
-//location "http://downloads.mdl.community/repository/mdllib/releases/1.3.0.v20161121-2237/" mdllib-repo {
-//	eu.ddmore.mdllib.sdk.feature.group
-//}
-
-location "http://downloads.mdl.community/repository/mdleditor/releases/1.6.1" mdlplugin-repo {  
+location "http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20171109-2105/" mdlplugin-repo {  
 	eu.ddmore.mdl.feature.feature.group
 } 
 
-location "http://downloads.mdl.community/repository/mdl2pharmml/releases/1.0.0" mdl2pharmml-plugin {  
+location "http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.1.v20171109-2242" mdl2pharmml-plugin {  
 	eu.ddmore.mdl.converter.pharmml.feature.feature.group
 } 
 

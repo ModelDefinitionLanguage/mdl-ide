@@ -7,136 +7,33 @@
 	<!-- Parent POM for all MDL Editor sub-projects -->
 	<groupId>eu.ddmore</groupId>
 	<artifactId>eu.ddmore.parent</artifactId>
-	<version>1.6.0-SNAPSHOT</version>
+	<version>1.6.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jacoco.version>0.6.0.201210061924</jacoco.version>
-		<mvn.clean.plugin.version>2.4.1</mvn.clean.plugin.version>
 
 	    <maven.compiler.source>1.8</maven.compiler.source>
 	    <maven.compiler.target>1.8</maven.compiler.target>
     	<!-- Tycho -->
 		<tycho.version>1.0.0</tycho.version>
 		<tycho.extras.version>1.0.0</tycho.extras.version>
-		<!-- Xtext and Xtend -->
-		<xtend.version>2.9.1</xtend.version>
-		<fornax.version>3.4.0</fornax.version>
-        <xtext.version>${xtend.version}</xtext.version>
-		<antlr.version>3.2</antlr.version>
-		<!-- Sonar -->
-		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<sonar.jacoco.reportPath>${project.basedir}/../eu.ddmore.mdleditor.build/target/jacoco/jacoco.exec</sonar.jacoco.reportPath>
-		<sonar.surefire.reportsPath>../${project.artifactId}.tests/target/surefire-reports/</sonar.surefire.reportsPath>
-		<sonar.skippedModules>*.tests</sonar.skippedModules>
-		<sonar.skipDesign>true</sonar.skipDesign>
 
-        <!-- A URL where the p2 repository will be published, the value is set in feature.xml of the mdl-ide-dependencies feature -->
-        <sf.publish.location>http://sourceforge.net/projects/ddmore/files/update/ddmore-tools</sf.publish.location>
     </properties>
 
-    <!--profiles>
-        <profile>
-            <id>ci</id>
-            <properties>
-                 <p2.repository.url>${sf.publish.location}/latest/ci/</p2.repository.url>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>release</id>
-            <properties>
-                 <version.no-snapshot>1.4.0</version.no-snapshot>
-                 <p2.repository.url>${sf.publish.location}/${version.no-snapshot}/release/</p2.repository.url>
-            </properties>
-        </profile>
-    </profiles-->
-    
-	<!-- dependencies>
-		<dependency>
-			<groupId>eu.ddmore</groupId>
-			<artifactId>eu.ddmore.mdl.feature</artifactId>
-			<version>1.6.0-SNAPSHOT</version>
-		</dependency>
-	</dependencies-->
-	
 	<build>
-		<resources>
+<!-- 		<resources>
 			<resource>
 				<directory>${basedir}/resources/</directory>
 			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>${mvn.clean.plugin.version}</version>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>${basedir}/xtend-gen</directory>
-							<includes>
-								<include>**</include>
-							</includes>
-						</fileset>
-						<fileset>
-							<directory>${basedir}/test-gen</directory>
-							<includes>
-								<include>**</include>
-							</includes>
-						</fileset>
-						<fileset>
-							<directory>${basedir}/META-INF</directory>
-							<includes>
-								<include>MANIFEST.MF_gen</include>
-							</includes>
-						</fileset>
-						<fileset>
-							<directory>${basedir}</directory>
-							<includes>
-								<include>plugin.xml_gen</include>
-							</includes>
-						</fileset>
-					</filesets>
-				</configuration>
-			</plugin>
-
+		</resources-->
+ 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.7.0</version>
 			</plugin>
 
-			<!-- Code coverage -->
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
-				<configuration>
-					<excludes>
-						<exclude>org.eclipse.*</exclude>
-						<exclude>org.apache.*</exclude>
-						<exclude>org.osgi.*</exclude>
-						<exclude>org.ops4j.*</exclude>
-						<exclude>org.junit.*</exclude>
-						<exclude>com.google.*</exclude>
-						<exclude>com.ibm.*</exclude>
-						<exclude>com.sun.*</exclude>
-					</excludes>
-					<destFile>${sonar.jacoco.reportPath}</destFile>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
@@ -148,13 +45,13 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
-					<pomDependencies>consider</pomDependencies>
+					<!-- pomDependencies>consider</pomDependencies-->
 					<target>
 						<artifact>
 							<groupId>eu.ddmore</groupId>
 							<artifactId>eu.ddmore.mdleditor.target</artifactId>
 							<!-- we can't use project.version because it doesn't work for eu.ddmore.mdl.sdk.jre feature which version is fixed to '1.0.2' -->
-							<version>1.6.0-SNAPSHOT</version>
+							<version>1.6.1-SNAPSHOT</version>
 						</artifact>
 					</target>
 					<environments>
@@ -168,15 +65,21 @@
 							<ws>win32</ws>
 							<arch>x86</arch>
 						</environment>
-						<!-- To support tests on linux box -->
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
 							<arch>x86_64</arch>
 						</environment>
-						<!-- uncomment if you want to build products for other platforms as 
-							well <environment> <os>linux</os> <ws>gtk</ws> <arch>x86</arch> </environment> 
-							<environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> </environment> -->
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment> 
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
 					</environments>
 				</configuration>
 			</plugin>
@@ -350,84 +253,6 @@
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.fornax.toolsupport</groupId>
-					<artifactId>fornax-oaw-m2-plugin</artifactId>
-					<version>${fornax.version}</version>
-					<configuration>
-						<workflowDescriptor>file://${basedir}/src/eu/ddmore/mdl/GenerateMdl.mwe2</workflowDescriptor>
-						<workflowEngine>mwe2</workflowEngine>
-						<jvmSettings>
-							<fork>true</fork>
-							<jvmArgs>
-								<jvmArg>-Xms100m</jvmArg>
-								<jvmArg>-Xmx500m</jvmArg>
-							</jvmArgs>
-						</jvmSettings>
-						<force>true</force>
-						<outletSrcDir>src-gen</outletSrcDir>
-					</configuration>
-					<executions>
-						<execution>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>run-workflow</goal>
-							</goals>
-						</execution>
-					</executions>
-					<dependencies>
-					<dependency>
-						<groupId>org.eclipse.xtext</groupId>
-						<artifactId>org.eclipse.xtext.xtext</artifactId>
-						<version>${xtext.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.eclipse.xtext</groupId>
-						<artifactId>org.eclipse.xtext.xbase</artifactId>
-						<version>${xtext.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.eclipse.equinox</groupId>
-						<artifactId>common</artifactId>
-						<version>3.6.200-v20130402-1505</version>
-					</dependency>
-						<dependency>
-							<groupId>org.antlr</groupId>
-							<artifactId>antlr-runtime</artifactId>
-							<version>${antlr.version}</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.xtend</groupId>
-					<artifactId>xtend-maven-plugin</artifactId>
-					<version>${xtend.version}</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>compile</goal>
-								<goal>testCompile</goal>
-							</goals>
-							<configuration>
-								<outputDirectory>${basedir}/xtend-gen</outputDirectory>
-								<testOutputDirectory>${basedir}/xtend-gen</testOutputDirectory>
-							</configuration>
-						</execution>
-					</executions>
-
-					<dependencies>
-						<dependency>
-							<groupId>org.eclipse.xtend</groupId>
-							<artifactId>org.eclipse.xtend.lib</artifactId>
-							<version>${xtend.version}</version>
-						</dependency>
-						<dependency>
-							<groupId>org.antlr</groupId>
-							<artifactId>antlr-runtime</artifactId>
-							<version>${antlr.version}</version>
-						</dependency>
-					</dependencies>
 				</plugin>
 			</plugins>
 		</pluginManagement>
