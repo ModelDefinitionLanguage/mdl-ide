@@ -96,7 +96,7 @@ location "http://downloads.mdl.community/repository/mdl-ide-dependencies/release
 	eu.ddmore.mdl-ide-dependencies.feature.feature.group
 } 
 
-location "http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20171109-2105/" mdlplugin-repo {  
+location "http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20171109-2329/" mdlplugin-repo {  
 	eu.ddmore.mdl.feature.feature.group
 } 
 
