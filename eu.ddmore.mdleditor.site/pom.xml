@@ -15,98 +15,204 @@
   <packaging>eclipse-repository</packaging>
 
 	<properties>
-		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+		<repo.id>mdl-ide</repo.id>
+	    <ftp.url>scp://ec2-user@downloads.mdl.community</ftp.url>
+	    <remote.repo.base.location>/var/www/html/repository</remote.repo.base.location>
+	    <!-- Relative path to the repo being uploaded -->
+	    <repo.path>${project.build.directory}/repository/</repo.path>
+	    <products.path>${project.build.directory}/products/</products.path>
 	</properties>
 
 	<profiles>
-	    <profile>
-	        <id>release-updatesite</id>
-	        <activation>
-	            <activeByDefault>false</activeByDefault>
-	        </activation>
-	        
-	        <properties>
-	            <!-- local source directory for rsync (read from this directory) -->
-	            <rsync.remote.dir>stumoodie@frs.sourceforge.net:/home/frs/project/ddmore/update/mdl-editor/test/</rsync.remote.dir> 
-	            <!-- remote rsync host -->
-	            <rsync.local.dir>target/repository/</rsync.local.dir>
-	            <!-- pass "-n" to perform a trial run with no changes made -->
-	            <dryrun></dryrun>
-	        </properties>
-	        
-	        <build>
-	            <plugins>
-	                <plugin>
-	                    <artifactId>maven-antrun-plugin</artifactId>
-	                    <version>${maven-antrun-plugin.version}</version>
-	                    <executions>
-	                        <execution>
-	                            <id>update-local-repository</id>
-	                            <phase>prepare-package</phase>
-	                            <configuration>
-	                                <target>
-	                                    <ant antfile="${basedir}/rsync.ant"
-	                                    target="rsync-update">
-	                                    </ant>
-	                                </target>
-	                            </configuration>
-	                            <goals>
-	                                <goal>run</goal>
-	                            </goals>
-	                        </execution>
-	                        
-	                        <execution>
-	                            <id>deploy-repository</id>
-	                            <phase>verify</phase>
-	                            <configuration>
-	                                <target>
-	                                    <ant antfile="${basedir}/rsync.ant"
-	                                    target="rsync-commit">
-	                                    </ant>
-	                                </target>
-	                            </configuration>
-	                            <goals>
-	                                <goal>run</goal>
-	                            </goals>
-	                        </execution>
-	                    </executions>
-	                </plugin>
-	 
-	            </plugins>
-	        </build>
-	    </profile>
-	</profiles>
+	  <!-- This profile is used to upload the repo -->
+	  <profile>
+	   <id>uploadSnapshot</id>
+	   <properties>
+	    <!-- Properties relative to the
+	    distant host where to upload the repo -->
+	    <ftp.toDir>${remote.repo.base.location}/${repo.id}/snapshots/${qualifiedVersion}</ftp.toDir>
+	   </properties>
+	
+	   <build>
+	    <plugins>
+	     <!-- Upload the repo to the server -->
+	     <plugin>
+	      <groupId>org.codehaus.mojo</groupId>
+	      <artifactId>wagon-maven-plugin</artifactId>
+	      <version>1.0</version>
+	      <executions>
+	       <execution>
+	        <id>upload-repo</id>
+	        <phase>install</phase>
+	        <goals>
+	         <goal>upload</goal>
+	        </goals>
+	        <configuration>
+	         <fromDir>${repo.path}</fromDir>
+	         <includes>**</includes>
+	         <toDir>${ftp.toDir}</toDir>
+	         <url>${ftp.url}</url>
+	         <serverId>downloads-site-repository</serverId>
+	         <!-- Points to your settings.xml
+	         where the connection settings are
+	          stored as shown below -->
+	         <!-- <server> -->
+	         <!-- <id>p2Repo</id> -->
+	         <!-- <username>username</username> -->
+	         <!-- <password>password</password> -->
+	         <!-- </server> -->
+	        </configuration>
+	       </execution>
+	      </executions>
+	     </plugin>
+	    </plugins>
+	   </build>
+	  </profile>
+	  
+	  <profile>
+	   <id>uploadRelease</id>
+	   <properties>
+	    <!-- Properties relative to the
+	    distant host where to upload the repo -->
+	    <ftp.toDir>${remote.repo.base.location}/${repo.id}/releases/${qualifiedVersion}</ftp.toDir>
+	   </properties>
+	
+	   <build>
+	    <plugins>
+	     <!-- Upload the repo to the server -->
+	     <plugin>
+	      <groupId>org.codehaus.mojo</groupId>
+	      <artifactId>wagon-maven-plugin</artifactId>
+	      <version>1.0</version>
+	      <executions>
+	       <execution>
+	        <id>upload-repo</id>
+	        <phase>install</phase>
+	        <goals>
+	         <goal>upload</goal>
+	        </goals>
+	        <configuration>
+	         <fromDir>${repo.path}</fromDir>
+	         <includes>**</includes>
+	         <toDir>${ftp.toDir}</toDir>
+	         <url>${ftp.url}</url>
+	         <serverId>downloads-site-repository</serverId>
+	         <!-- Points to your settings.xml
+	         where the connection settings are
+	          stored as shown below -->
+	         <!-- <server> -->
+	         <!-- <id>p2Repo</id> -->
+	         <!-- <username>username</username> -->
+	         <!-- <password>password</password> -->
+	         <!-- </server> -->
+	        </configuration>
+	       </execution>
+	      </executions>
+	     </plugin>
+	    </plugins>
+	   </build>
+	  </profile>
+	  
+	  <!-- This profile is used to upload the products -->
+	  <profile>
+	   <id>uploadDevProducts</id>
+	   <properties>
+	    <!-- Properties relative to the
+	    distant host where to upload the repo -->
+	    <ftp.toDir>${remote.repo.base.location}/${repo.id}/dev-products/${qualifiedVersion}</ftp.toDir>
+	   </properties>
+	
+	   <build>
+	    <plugins>
+	     <!-- Upload the repo to the server -->
+	     <plugin>
+	      <groupId>org.codehaus.mojo</groupId>
+	      <artifactId>wagon-maven-plugin</artifactId>
+	      <version>1.0</version>
+	      <executions>
+	       <execution>
+	        <id>upload-repo</id>
+	        <phase>install</phase>
+	        <goals>
+	         <goal>upload</goal>
+	        </goals>
+	        <configuration>
+	         <fromDir>${products.path}</fromDir>
+	         <includes>*.zip</includes>
+	         <toDir>${ftp.toDir}</toDir>
+	         <url>${ftp.url}</url>
+	         <serverId>downloads-site-repository</serverId>
+	         <!-- Points to your settings.xml
+	         where the connection settings are
+	          stored as shown below -->
+	         <!-- <server> -->
+	         <!-- <id>p2Repo</id> -->
+	         <!-- <username>username</username> -->
+	         <!-- <password>password</password> -->
+	         <!-- </server> -->
+	        </configuration>
+	       </execution>
+	      </executions>
+	     </plugin>
+	    </plugins>
+	   </build>
+	  </profile>
+	  
+	  <profile>
+	   <id>uploadProducts</id>
+	   <properties>
+	    <!-- Properties relative to the
+	    distant host where to upload the repo -->
+	    <ftp.toDir>${remote.repo.base.location}/${repo.id}/products/${qualifiedVersion}</ftp.toDir>
+	   </properties>
+	
+	   <build>
+	    <plugins>
+	     <!-- Upload the repo to the server -->
+	     <plugin>
+	      <groupId>org.codehaus.mojo</groupId>
+	      <artifactId>wagon-maven-plugin</artifactId>
+	      <version>1.0</version>
+	      <executions>
+	       <execution>
+	        <id>upload-repo</id>
+	        <phase>install</phase>
+	        <goals>
+	         <goal>upload</goal>
+	        </goals>
+	        <configuration>
+	         <fromDir>${products.path}</fromDir>
+	         <includes>*.zip</includes>
+	         <toDir>${ftp.toDir}</toDir>
+	         <url>${ftp.url}</url>
+	         <serverId>downloads-site-repository</serverId>
+	         <!-- Points to your settings.xml
+	         where the connection settings are
+	          stored as shown below -->
+	         <!-- <server> -->
+	         <!-- <id>p2Repo</id> -->
+	         <!-- <username>username</username> -->
+	         <!-- <password>password</password> -->
+	         <!-- </server> -->
+	        </configuration>
+	       </execution>
+	      </executions>
+	     </plugin>
+	    </plugins>
+	   </build>
+	  </profile>
+	 </profiles>
+
 
     <build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>2.10</version>
+			</extension>
+		</extensions>
 		<plugins>
-			<!--plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<configuration>
-					<environments>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment> 
-							<os>win32</os> 
-							<ws>win32</ws> 
-							<arch>x86</arch> 
-						</environment>
-						<environment>
-	                        <os>linux</os>
-	                        <ws>gtk</ws>
-	                        <arch>x86_64</arch>
-	                    </environment>
-                        <environment>
-	                       <os>macosx</os>
-	                       <ws>cocoa</ws>
-	                       <arch>x86_64</arch>
-                        </environment>
-					</environments>
-				</configuration>
-			</plugin-->
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-p2-director-plugin</artifactId>
