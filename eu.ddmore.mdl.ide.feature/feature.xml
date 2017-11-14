@@ -117,6 +117,10 @@
          id="eu.ddmore.mdl.converter.pharmml.feature"
          version="0.0.0"/>
 
+   <includes
+         id="eu.ddmore.mdl.sdk.jre"
+         version="0.0.0"/>
+
    <plugin
          id="org.eclipse.equinox.p2.ui"
          download-size="0"
