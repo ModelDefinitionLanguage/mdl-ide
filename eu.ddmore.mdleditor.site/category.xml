@@ -6,9 +6,6 @@
    <feature id="eu.ddmore.mdl.sdk" version="0.0.0">
       <category name="eu.ddmore.mdleditor.tools"/>
    </feature>
-   <feature id="eu.ddmore.mdl.sdk.jre" version="0.0.0">
-      <category name="eu.ddmore.mdleditor.tools"/>
-   </feature>
    <feature id="eu.ddmore.mdl.ide.feature" version="0.0.0">
       <category name="eu.ddmore.mdleditor.tools"/>
    </feature>
