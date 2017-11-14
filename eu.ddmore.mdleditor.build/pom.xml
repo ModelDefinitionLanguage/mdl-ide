@@ -7,7 +7,7 @@
 	<!-- Parent POM for all MDL Editor sub-projects -->
 	<groupId>eu.ddmore</groupId>
 	<artifactId>eu.ddmore.parent</artifactId>
-	<version>1.6.1-SNAPSHOT</version>
+	<version>1.7.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -50,7 +50,7 @@
 							<groupId>eu.ddmore</groupId>
 							<artifactId>eu.ddmore.mdleditor.target</artifactId>
 							<!-- we can't use project.version because it doesn't work for eu.ddmore.mdl.sdk.jre feature which version is fixed to '1.0.2' -->
-							<version>1.6.1-SNAPSHOT</version>
+							<version>1.7.0-SNAPSHOT</version>
 						</artifact>
 					</target>
 					<environments>
@@ -146,14 +146,14 @@
 						</compilerArguments>
 					</configuration>
 				</plugin>
-				<plugin>
+				<!-- plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-packaging-plugin</artifactId>
 					<version>${tycho.version}</version>
 					<configuration>
 						<format>'v'yyyyMMdd-HHmm</format>
 					</configuration>
-				</plugin>
+				</plugin-->
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-surefire-plugin</artifactId>
