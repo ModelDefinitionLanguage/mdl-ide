@@ -10,10 +10,10 @@
 	</parent>
 
 	<artifactId>eu.ddmore.mdleditor.target</artifactId>
-	<!-- packaging>eclipse-target-definition</packaging-->
-	<packaging>pom</packaging>
+	<packaging>eclipse-target-definition</packaging>
+	<!-- packaging>pom</packaging-->
 	
-	<properties>
+	<!-- properties>
 		<platform-version-name>mars</platform-version-name>
 		<platform-version-version>201602261000</platform-version-version>
 		<targetPlatform.repository.p2>http://mbarbero.github.io/fr.obeo.releng.targetplatform/p2/</targetPlatform.repository.p2>
@@ -42,9 +42,9 @@
 							<url>${targetPlatform.repository.p2}</url>
 						</repository>
 					</repositories>
-					<appArgLine>-consoleLog -application ${targetPlatform.application.name} ${targetPlatform.application.args}</appArgLine>
+					<appArgLine>-consoleLog -application ${targetPlatform.application.name} ${targetPlatform.application.args}</appArgLine-->
 					<!-- Set dependencies to launch the application -->
-					<dependencies>
+					<!-- dependencies>
 						<dependency>
 							<artifactId>${targetPlatform.application.feature}</artifactId>
 							<type>eclipse-feature</type>
@@ -59,14 +59,14 @@
 					<execution>
 						<goals>
 							<goal>eclipse-run</goal>
-						</goals>
+						</goals-->
 						<!-- The phase validate rebuild the targetplatform before to compile/test... 
 							@see https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html -->
-						<phase>validate</phase>
+						<!--  phase>validate</phase>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
-	</build>
+	</build-->
 
 </project> 

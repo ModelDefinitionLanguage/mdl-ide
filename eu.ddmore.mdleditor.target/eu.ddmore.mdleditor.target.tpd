@@ -1,6 +1,6 @@
 target "MDL Editor Target" with source requirements  
   
-location "http://download.eclipse.org/releases/mars/201602261000/" mars {  
+location "http://download.eclipse.org/releases/oxygen/201710111001/" mars {  
 org.eclipse.jdt.feature.group
 org.eclipse.draw2d.feature.group
 org.eclipse.uml2.feature.group
@@ -10,12 +10,17 @@ org.eclipse.emf.sdk.feature.group
 org.eclipse.emf.ecore.xcore.feature.group
 org.eclipse.emf.ecore.xcore.sdk.feature.group
 org.eclipse.emf.common.feature.group
+org.eclipse.emf.common.ui.feature.group
+org.eclipse.emf.databinding.edit.feature.group
+org.eclipse.emf.databinding.feature.group
+org.eclipse.emf.edit.feature.group
+org.eclipse.emf.edit.ui.feature.group
 org.eclipse.emf.compare.feature.group
 org.eclipse.emf.codegen.ecore.feature.group
 org.eclipse.emf.validation.feature.group
 org.eclipse.emf.mwe2.language.sdk.feature.group
 org.eclipse.emf.mwe2.runtime.sdk.feature.group
-org.eclipse.emf.mwe.core.feature.group
+//org.eclipse.emf.mwe.core.feature.group
 org.eclipse.emf.mwe.sdk.feature.group
 org.eclipse.ecf.core.feature.feature.group
 org.eclipse.ecf.filetransfer.feature.feature.group
@@ -48,48 +53,54 @@ org.eclipse.egit.feature.group
 org.eclipse.jgit.feature.group
 } 
 
-location "http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/" orbit-tools-deps {  
-org.apache.xerces
-org.apache.xml.serializer
-org.objectweb.asm
-org.objectweb.asm.commons
-org.objectweb.asm.analysis
-org.objectweb.asm.tree
-org.objectweb.asm.util
-org.objectweb.asm.xml
-org.apache.commons.codec
-org.apache.commons.io
-org.apache.log4j
-org.apache.xml.resolver
-com.google.inject
-com.google.guava
-org.hamcrest.core
-org.hamcrest.integration
-org.hamcrest.library
-org.hamcrest
-org.hamcrest.text
-org.objenesis
-org.junit
-org.mockito
-org.slf4j.api
-} 
+//location "http://download.eclipse.org/tools/orbit/downloads/drops/R20170919201930/" orbit-tools-deps {  
+//org.apache.xerces
+//org.apache.xml.serializer
+//org.objectweb.asm
+//org.objectweb.asm.commons
+//org.objectweb.asm.analysis
+//org.objectweb.asm.tree
+//org.objectweb.asm.util
+//org.objectweb.asm.xml
+//org.apache.commons.codec
+//org.apache.commons.io
+//org.apache.log4j
+//org.apache.xml.resolver
+//com.google.inject
+//com.google.guava
+//org.hamcrest.core
+//org.hamcrest.integration
+//org.hamcrest.library
+//org.hamcrest
+//org.hamcrest.text
+//org.objenesis
+//org.junit
+//org.mockito
+//org.slf4j.api
+//} 
 
-location "http://download.eclipse.org/uomo/0.6/kepler/repository/" kepler-repo {  
-	org.eclipse.uomo.feature.feature.group
-} 
-
-location "http://download.walware.de/eclipse-4.4/site-statet-03.04.00/" walware-repo {  
-	de.walware.3rdparty.lucene.feature.group
-	de.walware.eutils.autorun.feature.group
-	de.walware.ecommons.e.feature.group
-	de.walware.ecommons.edb.feature.group
-	de.walware.ecommons.ltk.feature.group
-	de.walware.rj.eclient.feature.group
-	de.walware.rj.core.feature.group
-	de.walware.statet.r.feature.group
-	de.walware.statet.rtm.ftable.feature.group
-	de.walware.statet.rtm.ggplot.feature.group
-	de.walware.statet.r.sweave.feature.group
+location "http://download.walware.de/eclipse-4.6/" walware-repo {  
+de.walware.3rdparty.commons.dbcp2.feature.group
+de.walware.3rdparty.commons.pool.feature.group
+de.walware.3rdparty.jsch.feature.group
+de.walware.3rdparty.lucene.feature.group
+de.walware.3rdparty.snakeyaml.feature.group
+de.walware.ecommons.databinding.core
+de.walware.ecommons.debug.core
+de.walware.ecommons.debug.ui
+de.walware.ecommons.e.feature.group
+de.walware.ecommons.edb.feature.group
+de.walware.ecommons.ltk.feature.group
+de.walware.eutils.autonature.feature.group
+de.walware.eutils.autorun.feature.group
+de.walware.eutils.yaml.feature.group
+de.walware.rj.core.feature.group
+de.walware.rj.eclient.feature.group
+de.walware.statet.r.feature.group
+de.walware.statet.r.sweave.feature.group
+de.walware.statet.redocs.wikitext.r.feature.group
+de.walware.statet.rtm.ftable.feature.group
+de.walware.statet.rtm.ggplot.feature.group
 } 
 
 location "http://downloads.mdl.community/repository/mdl-ide-dependencies/releases/0.1.0.v20160909-0915/" ddmore-deps {  
