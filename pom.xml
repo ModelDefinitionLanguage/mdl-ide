@@ -20,12 +20,16 @@
 
     </properties>
 
+    	<modules>
+		<module>eu.ddmore.mdleditor.target</module>
+		<module>eu.ddmore.mdleditor.application</module>
+		<module>eu.ddmore.mdl.sdk</module>
+		<module>eu.ddmore.mdl.sdk.jre</module>
+		<module>eu.ddmore.mdl.ide.feature</module>
+		<module>eu.ddmore.mdleditor.site</module>
+	</modules>
+
 	<build>
-<!-- 		<resources>
-			<resource>
-				<directory>${basedir}/resources/</directory>
-			</resource>
-		</resources-->
  		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
