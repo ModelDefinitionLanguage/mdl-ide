@@ -1,0 +1,8 @@
+# Disable conversion of txt files for rootfiles as these are platform specific.
+* -text
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.exe binary
+*.dll binary
