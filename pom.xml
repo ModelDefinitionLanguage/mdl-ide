@@ -53,7 +53,8 @@
 						<artifact>
 							<groupId>eu.ddmore</groupId>
 							<artifactId>eu.ddmore.mdleditor.target</artifactId>
-							<!-- we can't use project.version because it doesn't work for eu.ddmore.mdl.sdk.jre feature which version is fixed to '1.0.2' -->
+							<!-- we can't use project.version because it doesn't work for eu.ddmore.mdl.sdk.jre feature which version is fixed to '1.0.2'
+							     If the sdk.jre was a separate project with a different parent then this would avoid this issue. -->
 							<version>1.7.0-SNAPSHOT</version>
 						</artifact>
 					</target>
