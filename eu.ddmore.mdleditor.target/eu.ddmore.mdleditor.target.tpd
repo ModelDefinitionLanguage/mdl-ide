@@ -111,7 +111,7 @@ location "http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v2
 	eu.ddmore.mdl.feature.feature.group
 } 
 
-location "http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.1.v20171109-2242" mdl2pharmml-plugin {  
+location "http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.1.v20180207-0945" mdl2pharmml-plugin {  
 	eu.ddmore.mdl.converter.pharmml.feature.feature.group
 } 
 
