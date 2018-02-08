@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="MDL Editor Target" sequenceNumber="1517997594">
+<target name="MDL Editor Target" sequenceNumber="1518023250">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.jdt.feature.group" version="3.13.1.v20171009-0410"/>
@@ -88,8 +88,8 @@
       <repository id="mdlplugin-repo" location="http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20171109-2329/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdl.converter.pharmml.feature.feature.group" version="1.0.1.v20180207-0945"/>
-      <repository id="mdl2pharmml-plugin" location="http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.1.v20180207-0945"/>
+      <unit id="eu.ddmore.mdl.converter.pharmml.feature.feature.group" version="1.0.1.v20180207-1701"/>
+      <repository id="mdl2pharmml-plugin" location="http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.1.v20180207-1701"/>
     </location>
   </locations>
 </target>
