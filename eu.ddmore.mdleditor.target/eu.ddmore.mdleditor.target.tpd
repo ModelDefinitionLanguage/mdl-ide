@@ -1,6 +1,6 @@
 target "MDL Editor Target" with source requirements  
   
-location "http://download.eclipse.org/releases/oxygen/201710111001/" mars {  
+location "http://download.eclipse.org/releases/oxygen/" oxygen-repo {  
 org.eclipse.jdt.feature.group
 org.eclipse.draw2d.feature.group
 org.eclipse.uml2.feature.group
@@ -107,11 +107,11 @@ location "http://downloads.mdl.community/repository/mdl-ide-dependencies/release
 	eu.ddmore.mdl-ide-dependencies.feature.feature.group
 } 
 
-location "http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20171109-2329/" mdlplugin-repo {  
+location "http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20180213-1845/" mdlplugin-repo {  
 	eu.ddmore.mdl.feature.feature.group
 } 
 
-location "http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.1.v20180207-1701" mdl2pharmml-plugin {  
+location "http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.2.v20180213-1245/" mdl2pharmml-plugin {  
 	eu.ddmore.mdl.converter.pharmml.feature.feature.group
 } 
 

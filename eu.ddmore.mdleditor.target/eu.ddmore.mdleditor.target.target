@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="MDL Editor Target" sequenceNumber="1518023250">
+<target name="MDL Editor Target" sequenceNumber="1518526310">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.eclipse.jdt.feature.group" version="3.13.1.v20171009-0410"/>
+      <unit id="org.eclipse.jdt.feature.group" version="3.13.2.v20171130-0906"/>
       <unit id="org.eclipse.draw2d.feature.group" version="3.10.100.201606061308"/>
       <unit id="org.eclipse.uml2.feature.group" version="5.3.0.v20170605-1616"/>
       <unit id="org.eclipse.xsd.feature.group" version="2.13.0.v20170609-0928"/>
@@ -28,15 +28,15 @@
       <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="3.13.8.v20170715-2257"/>
       <unit id="org.eclipse.ecf.provider.generic.feature.feature.group" version="1.0.0.v20170110-1317"/>
       <unit id="org.eclipse.ecf.sharedobject.feature.feature.group" version="1.0.0.v20170110-1317"/>
-      <unit id="org.eclipse.e4.rcp.feature.group" version="1.6.1.v20170928-1359"/>
-      <unit id="org.eclipse.help.feature.group" version="2.2.101.v20171009-0410"/>
-      <unit id="org.eclipse.platform.feature.group" version="4.7.1.v20171009-0410"/>
-      <unit id="org.eclipse.equinox.executable.feature.group" version="3.7.1.v20170928-1359"/>
-      <unit id="org.eclipse.rcp.feature.group" version="4.7.1.v20171009-0410"/>
-      <unit id="org.eclipse.rcp.sdk.id" version="4.7.1.M20171009-0410"/>
+      <unit id="org.eclipse.e4.rcp.feature.group" version="1.6.2.v20171129-0543"/>
+      <unit id="org.eclipse.help.feature.group" version="2.2.102.v20171130-0510"/>
+      <unit id="org.eclipse.platform.feature.group" version="4.7.2.v20171130-0510"/>
+      <unit id="org.eclipse.equinox.executable.feature.group" version="3.7.2.v20171108-1834"/>
+      <unit id="org.eclipse.rcp.feature.group" version="4.7.2.v20171130-0510"/>
+      <unit id="org.eclipse.rcp.sdk.id" version="4.7.2.M20171130-0510"/>
       <unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.13.1.v20170928-1321"/>
-      <unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="1.3.1.v20170928-1405"/>
-      <unit id="org.eclipse.equinox.sdk.feature.group" version="3.13.1.v20170928-1405"/>
+      <unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="1.3.2.v20171108-1343"/>
+      <unit id="org.eclipse.equinox.sdk.feature.group" version="3.13.2.v20171108-1834"/>
       <unit id="org.eclipse.xpand.feature.group" version="2.2.0.v201605260315"/>
       <unit id="org.eclipse.xpand.sdk.feature.group" version="2.2.0.v201605260315"/>
       <unit id="org.eclipse.xpand.ui.feature.group" version="2.2.0.v201605260315"/>
@@ -51,9 +51,9 @@
       <unit id="org.eclipse.xtext.runtime.feature.group" version="2.12.0.v20170519-1412"/>
       <unit id="org.eclipse.xtext.ui.feature.group" version="2.12.0.v20170519-1412"/>
       <unit id="org.eclipse.xtext.xtext.ui.feature.group" version="2.12.0.v20170519-1412"/>
-      <unit id="org.eclipse.egit.feature.group" version="4.8.0.201706111038-r"/>
-      <unit id="org.eclipse.jgit.feature.group" version="4.8.0.201706111038-r"/>
-      <repository id="mars" location="http://download.eclipse.org/releases/oxygen/201710111001/"/>
+      <unit id="org.eclipse.egit.feature.group" version="4.9.2.201712150930-r"/>
+      <unit id="org.eclipse.jgit.feature.group" version="4.9.2.201712150930-r"/>
+      <repository id="oxygen-repo" location="http://download.eclipse.org/releases/oxygen/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="de.walware.3rdparty.commons.dbcp2.feature.group" version="2.1.1.b201509231400sw"/>
@@ -84,12 +84,12 @@
       <repository id="ddmore-deps" location="http://downloads.mdl.community/repository/mdl-ide-dependencies/releases/0.1.0.v20160909-0915/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.2.v20171109-2329"/>
-      <repository id="mdlplugin-repo" location="http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20171109-2329/"/>
+      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.2.v20180213-1212"/>
+      <repository id="mdlplugin-repo" location="http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20180213-1212/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdl.converter.pharmml.feature.feature.group" version="1.0.1.v20180207-1701"/>
-      <repository id="mdl2pharmml-plugin" location="http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.1.v20180207-1701"/>
+      <unit id="eu.ddmore.mdl.converter.pharmml.feature.feature.group" version="1.0.2.v20180213-1245"/>
+      <repository id="mdl2pharmml-plugin" location="http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.2.v20180213-1245/"/>
     </location>
   </locations>
 </target>
