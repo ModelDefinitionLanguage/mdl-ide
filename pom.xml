@@ -7,7 +7,7 @@
 	<!-- Parent POM for all MDL Editor sub-projects -->
 	<groupId>eu.ddmore</groupId>
 	<artifactId>eu.ddmore.parent</artifactId>
-	<version>1.7.0-SNAPSHOT</version>
+	<version>1.7.0</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -55,7 +55,7 @@
 							<artifactId>eu.ddmore.mdleditor.target</artifactId>
 							<!-- we can't use project.version because it doesn't work for eu.ddmore.mdl.sdk.jre feature which version is fixed to '1.0.2'
 							     If the sdk.jre was a separate project with a different parent then this would avoid this issue. -->
-							<version>1.7.0-SNAPSHOT</version>
+							<version>1.7.0</version>
 						</artifact>
 					</target>
 					<environments>
@@ -258,6 +258,11 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
+				<plugin>
+				  <groupId>org.eclipse.tycho</groupId>  
+				  <artifactId>tycho-versions-plugin</artifactId>  
+				  <version>${tycho.version}</version>  
+				</plugin> 
 			</plugins>
 		</pluginManagement>
 	</build>
