@@ -107,11 +107,11 @@ location "http://downloads.mdl.community/repository/mdl-ide-dependencies/release
 	eu.ddmore.mdl-ide-dependencies.feature.feature.group
 } 
 
-location "http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20180213-1845/" mdlplugin-repo {  
+location "http://downloads.mdl.community/repository/mdleditor/releases/1.6.2/" mdlplugin-repo {  
 	eu.ddmore.mdl.feature.feature.group
 } 
 
-location "http://downloads.mdl.community/repository/mdl2pharmml/snapshots/1.0.2.v20180213-1245/" mdl2pharmml-plugin {  
+location "http://downloads.mdl.community/repository/mdl2pharmml/releases/1.0.2/" mdl2pharmml-plugin {  
 	eu.ddmore.mdl.converter.pharmml.feature.feature.group
 } 
 
