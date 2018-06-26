@@ -7,7 +7,7 @@
 	<!-- Parent POM for all MDL Editor sub-projects -->
 	<groupId>eu.ddmore</groupId>
 	<artifactId>eu.ddmore.parent</artifactId>
-	<version>1.7.0</version>
+	<version>1.7.1</version>
 	<packaging>pom</packaging>
 
 	<properties>
