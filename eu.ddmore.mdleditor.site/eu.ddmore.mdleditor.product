@@ -17,6 +17,8 @@
       <programArgs>--launcher.XXMaxPermSize
 256M
       </programArgs>
+      <programArgsMac>-vm ../Eclipse/jre/bin/java
+      </programArgsMac>
       <vmArgs>-Xms40m
 -Xmx512m
       </vmArgs>
@@ -26,12 +28,13 @@
 
    <windowImages/>
 
+
    <launcher name="mdl_ide">
-      <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
       <linux include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</linux>
@@ -42,7 +45,7 @@
 
    <license>
         <text>
-   Copyright Leiden University 2015 and Pfizer Ltd 2015-16
+   Copyright Leiden University 2015, Pfizer Ltd 2015-16, DDMoRe Foundation 2016-18
 
 Leiden University Software User Agreement
  
@@ -93,6 +96,8 @@ It is your obligation to read and accept all such terms and conditions prior to 
    </configurations>
 
    <repositories>
+      <repository location="http://downloads.mdl.community/repository/mdl-ide/updates/1.7/" enabled="true" />
+      <repository location="http://downloads.mdl.community/repository/mdl-ide/updates/1.7/" enabled="true" />
       <repository location="http://downloads.mdl.community/repository/mdl-ide/updates/1.7/" enabled="true" />
    </repositories>
 
