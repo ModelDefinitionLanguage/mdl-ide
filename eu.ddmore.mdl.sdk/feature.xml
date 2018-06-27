@@ -2,7 +2,7 @@
 <feature
       id="eu.ddmore.mdl.sdk"
       label="%label"
-      version="1.7.1"
+      version="1.7.2.qualifier"
       provider-name="%provider">
 
    <requires>
